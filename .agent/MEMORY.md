@@ -12,6 +12,10 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - Build bootstrap validation: `make build` or `python -m compileall -q src`.
 - OpenAlex smoke: `python scripts/smoke/openalex.py` after editable install.
 - ROR smoke: `python scripts/smoke/ror.py` after editable install.
+- Build/update institutions: `python scripts/build_institutions.py`; it reads
+  `OPENALEX_API_KEY` (or local alias `OPEN_ALEX_API_KEY`) from ignored `.env`.
+- S1.2 machine acceptance: `python scripts/check_s1_2.py`; add
+  `--require-owner-review` only after all 100 review rows are signed off.
 
 ## Conventions (naming, IDs, paths, timezones: store UTC; CI cron is UTC)
 - Python package uses the `src/atlas/` layout and requires Python >=3.11.
@@ -32,12 +36,21 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   delayed; the 60-day inactivity disablement is documented for public repos.
 - Pages was enabled after the owner made the repository public. Manual run
   `42092058401` succeeded and the live placeholder returned HTTP 200.
+- The 2026-11-05 registry has 4,637 unique OpenAlex institutions, including
+  explicit UC/CSU/private-university supplements; all 4,637 ROR IDs matched
+  ROR dump v2.15 (`10.5281/zenodo.23500708`).
+- S1.2 machine acceptance covers UC 10/10, CSU 23/23 campus records (22
+  universities after the 2026 Cal Poly/Cal Maritime integration), and the
+  default major-private set 11/11. Owner top-100 review remains 0/100.
 
 ## Data locations and sizes (what's committed vs. gitignored; how to inspect)
 - `data/raw/`, `data/interim/`, and `data/logs/` contents are ignored.
 - API request rows and per-run cost summaries append to
   `data/logs/api_usage.jsonl` through `atlas.util.cost.ApiCostLogger`.
 - `data/processed/` may contain reviewed, slim outputs; inspect Parquet with DuckDB.
+- `data/processed/institutions.parquet` is the slim registry; the editable
+  owner queue is `data/processed/institution_review_top100.csv`, and QC is in
+  `docs/institutions_qc.md`. Raw OpenAlex/ROR inputs and count caches are ignored.
 - Test fixtures belong in `tests/fixtures/` and must stay at or below 200 records.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
@@ -52,6 +65,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   use cursor paging for large works pulls and read live cost metadata/headers.
 - ROR v2 currently returns schema 2.1; California locations use country `US`
   plus subdivision code `CA`, and list/search pages contain 20 records.
+- Do not rely on a region-filtered institution pull alone for required-system
+  coverage; check explicit expected lists and supplement by name when absent.
 
 ## Automation
 - `.github/workflows/ci.yml` runs lint, tests, and the build on pushes, pull

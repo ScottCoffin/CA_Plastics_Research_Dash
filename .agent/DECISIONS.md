@@ -4,6 +4,27 @@ ADR-style decisions belong here with date, alternatives, rationale, and decision
 owner. Unanswered items continue to use the defaults in `spec.md` Part G and
 remain listed in `QUESTIONS.md`.
 
+## ADR-004 - 2026-11-05 - California institution registry and review queue
+
+- **Decision:** Seed institutions with exact OpenAlex
+  `geo.region:California`, then explicitly verify and supplement the official
+  10 UC campuses, 23 CSU campus records (22 integrated universities), and an
+  11-institution major-private default set. Join every known ROR ID to the
+  checksum-verified versioned ROR dump. Apply deterministic name/lineage/type
+  rules, then `config/institution_overrides.csv`. Rank the owner review queue
+  with 10-target OpenAlex `search=plastic` grouped counts; preserve owner review columns on
+  reruns and do not treat this heuristic as the later corpus query.
+- **Alternatives:** Trust the geographic seed without explicit coverage;
+  exhaustively page the mutable ROR API; hand-type all 4,000+ rows; use total
+  works rather than a plastics-specific review priority; overwrite the owner
+  queue on every build.
+- **Rationale:** Live retrieval required 23 supplements to satisfy system
+  coverage. ROR v2.15 matched every known ID reproducibly, and the generated
+  top-100 queue concentrates human review where plastics work is most common.
+  The owner-review gate remains explicit and is not agent-signable.
+- **Decided by:** Build agent under S1.2; owner confirmation of the private-set
+  default and all 100 review rows remains requested in `QUESTIONS.md`.
+
 ## ADR-003 — 2026-11-05 — Institution API retrieval and usage accounting
 
 - **Decision:** Use OpenAlex `geo.region:California` to seed California

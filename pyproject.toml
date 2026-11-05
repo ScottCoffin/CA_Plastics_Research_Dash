@@ -10,7 +10,9 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "License pending owner confirmation" }
 authors = [{ name = "Scott Coffin" }]
-dependencies = []
+dependencies = [
+  "pyarrow>=17",
+]
 
 [project.optional-dependencies]
 dev = [

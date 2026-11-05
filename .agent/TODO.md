@@ -9,7 +9,7 @@ Check off only when the task Definition of Done and acceptance check in
 
 ## S1 Reference data
 - [x] **S1.1** OpenAlex/ROR smoke tests and API cost logger. Acceptance: exact working filters, costs, URL limits, and pagination documented.
-- [ ] **S1.2** California institution registry and ROR join. Acceptance: systems covered and top 100 plastic-work institutions reviewed. `owner: review`
+- [ ] **S1.2** California institution registry and ROR join. Agent implementation and machine acceptance complete: 4,637 institutions; UC 10/10, CSU 23/23, major-private default 11/11; required owner review is 0/100. Acceptance: systems covered and top 100 plastic-work institutions reviewed. `owner: fill data/processed/institution_review_top100.csv`
 - [ ] **S1.3** California land and 3-nm-water polygons. Acceptance: known-point tests pass; browser asset <1 MB.
 - [ ] **S1.4** California gazetteer and ambiguity blacklist. Acceptance: lookup tests pass and blacklist rationale is documented.
 - [ ] **S1.5** Versioned plastics query config and count estimate. Acceptance: count logged and G-1/G-2 recorded. `owner: decisions`

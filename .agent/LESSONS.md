@@ -1,5 +1,18 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-05 - Institution coverage and resumable review
+- An exact OpenAlex `geo.region:California` seed is necessary but not a
+  sufficient coverage assertion. Compare against explicit official UC/CSU
+  lists and supplement missing required records by bounded institution search.
+- The shared anonymous OpenAlex budget can be exhausted by other users on the
+  network. Validate the local key before a production pull; the builder accepts
+  both `OPENALEX_API_KEY` and the owner's local `OPEN_ALEX_API_KEY` alias.
+- Use the checksum-verified ROR dump for bulk joining. Resume interrupted
+  Zenodo downloads with HTTP ranges rather than restarting a large transfer.
+- A generated human-review CSV is state, not disposable output. Preserve owner
+  columns by stable OpenAlex ID on rebuild and keep S1.2 unchecked until all
+  100 rows contain both an owner type and review date.
+
 ## 2026-11-05 — OpenAlex and ROR live contracts
 - OpenAlex's exact institution-region value is `California`, not `CA`.
   `institutions.id` and `authorships.institutions.id` matched the same works,

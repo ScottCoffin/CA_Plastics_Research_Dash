@@ -72,3 +72,24 @@ Official documentation checked 2026-11-05:
 
 Acceptance rerun: `python scripts/smoke/openalex.py` completed successfully on
 2026-11-05; output and usage logs are generated in ignored local paths.
+
+## S1.2 institution-registry observations (2026-11-05)
+
+- The production pull cached 4,614 unique records from exact
+  `geo.region:California`, then bounded name searches supplied 23 required
+  campus records absent from that seed. Explicit official-system coverage is
+  therefore checked independently of the geographic pull.
+- Broad `search=plastic` grouped counts produced review candidates. Grouping a
+  100-ID batch returned 74 external-collaborator groups and only 26 target
+  groups in a diagnostic, so the production ranking uses 10 target IDs per
+  authenticated request. Returned target-group counts are exact for those
+  targets. This query remains a review-priority heuristic pending S1.5.
+- The main authenticated acquisition run used 274 requests, 1,971 credits,
+  and USD 0.1971. A subsequent supplementation/count run used 48 requests,
+  461 credits, and USD 0.0461. A corrected 10-target ranking refresh used
+  4,641 credits and USD 0.4641; pacing retries raised its logged request count
+  to 801 without adding cost. Every request is recorded in the ignored usage
+  log without the API key.
+- Anonymous access returned `429` when the IP-shared daily budget was already
+  exhausted. Production builds should validate and use the local key; the
+  builder supports `OPENALEX_API_KEY` and local alias `OPEN_ALEX_API_KEY`.

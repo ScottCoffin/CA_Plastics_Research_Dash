@@ -55,3 +55,19 @@ Official documentation checked 2026-11-05:
 
 Acceptance rerun: `python scripts/smoke/ror.py` completed successfully on
 2026-11-05; output and usage logs are generated in ignored local paths.
+
+## S1.2 data-dump join (2026-11-05)
+
+- The build resolved Zenodo concept record `6347574` to ROR release v2.15,
+  DOI `10.5281/zenodo.23500708`, file
+  `v2.15-2026-10-20-ror-data.zip`, MD5
+  `5522990688eb1b94811a8145e131b41e`.
+- The checksum-verified dump matched all 4,637 known ROR IDs in the final
+  OpenAlex registry. The ZIP is ignored raw input; only the slim joined
+  Parquet is committed.
+- The downloader retains a partial `.tmp` file and resumes with an HTTP Range
+  request after a connection reset. It verifies the advertised checksum before
+  loading JSON.
+- Dump retrieval follows the official ROR/Zenodo instructions at
+  <https://ror.readme.io/docs/zenodo>. ROR metadata remains CC0; GeoNames-derived
+  location fields require CC BY 3.0 attribution.
