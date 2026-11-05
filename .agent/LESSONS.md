@@ -1,5 +1,18 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-05 — GitHub Actions and Pages scaffold
+- GitHub Pages creation returned HTTP 422 because the current plan does not
+  support Pages for this private repository. Resolving that requires an owner
+  decision under G-7: change visibility after the license decision, upgrade the
+  plan, or choose alternate hosting.
+- GitHub documents the 60-day scheduled-workflow inactivity disablement for
+  public repositories. Scheduled workflows run only from the default branch and
+  may be delayed or dropped, so S0.2 uses off-peak minutes plus a watchdog.
+- The Job_Scraper reference is AGPL-3.0 while this repository's license remains
+  pending. Reuse its documented concepts, not its workflow code.
+- Validate workflow syntax locally with `actionlint`; live execution still
+  requires the files to be present on the default branch.
+
 ## 2026-11-05 — Bootstrap environment
 - GNU Make is not on PATH, but Rtools provides
   `C:\rtools45\usr\bin\make.exe`; direct Python equivalents also work.

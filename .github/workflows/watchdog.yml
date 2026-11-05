@@ -1,0 +1,58 @@
+name: Workflow watchdog
+
+on:
+  schedule:
+    - cron: "47 11 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  watchdog:
+    name: Recover a missed Pages build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Dispatch Pages build when stale
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          workflow="build_deploy.yml"
+          last_run="$(gh -R "$REPOSITORY" run list \
+            --workflow "$workflow" \
+            --limit 1 \
+            --json createdAt,status \
+            --jq '.[0] // {}')"
+          status="$(jq -r '.status // "missing"' <<<"$last_run")"
+          created_at="$(jq -r '.createdAt // ""' <<<"$last_run")"
+
+          if [[ "$status" == "in_progress" || "$status" == "queued" ]]; then
+            echo "$workflow is already $status; no dispatch needed."
+            exit 0
+          fi
+
+          if [[ -n "$created_at" ]]; then
+            age_hours="$(CREATED_AT="$created_at" python3 - <<'PY'
+          import os
+          from datetime import datetime, timezone
+
+          created = datetime.fromisoformat(os.environ["CREATED_AT"].replace("Z", "+00:00"))
+          print(int((datetime.now(timezone.utc) - created).total_seconds() / 3600))
+          PY
+          )"
+            if (( age_hours < 25 )); then
+              echo "$workflow ran ${age_hours}h ago; no dispatch needed."
+              exit 0
+            fi
+            echo "$workflow is stale (${age_hours}h since its last run)."
+          else
+            echo "$workflow has no recorded run."
+          fi
+
+          gh -R "$REPOSITORY" workflow run "$workflow" --ref "$DEFAULT_BRANCH"
+          echo "Dispatched $workflow on $DEFAULT_BRANCH."

@@ -23,5 +23,6 @@ are in `spec.md` Part B; the roadmap and acceptance checks are in Part E.
 2. Update memory files in the order required by `spec.md` B4.
 3. Overwrite `HANDOFF.md`; append one line to `SESSION_LOG.md`.
 4. Commit as `S<stage>.<task>: <summary>`; push only if configured.
-5. Report completed work, the next task, and owner actions, then stop.
-
+5. Report completed work, the next task, owner actions, and a copy-paste prompt
+   for the next fresh agent that asks that agent to provide its successor prompt.
+   Then stop.

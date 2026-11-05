@@ -19,4 +19,6 @@ answers. Add an answer and date without deleting the original question.
 | G-12 | Confirm disclaimer wording and affiliation statement. | Independent; not official OEHHA/State product | Open |
 | G-13 | Include out-of-state federal recipients sampling in California? | Yes; `ca_led=false` | Open |
 | G-14 | Confirm repository size and data-branch strategy. | Slim main-branch data; large intermediates outside Git | Open |
-
+| S0.2-A | How should the private repository be hosted when its current plan does not support GitHub Pages? | Keep it private and leave Pages blocked until G-7 is resolved; do not change visibility automatically | Open — owner action |
+| S0.2-B | When should automated repository commits be enabled? | Leave `ENABLE_DATA_COMMITS` unset until the owner approves keepalive and future data commits | Open — owner action |
+| S0.2-C | When will the OpenAlex credential be added? | Leave `OPENALEX_API_KEY` unset and never commit it | Open — owner action before authenticated OpenAlex work |
