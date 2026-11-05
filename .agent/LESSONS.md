@@ -1,5 +1,15 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-05 - Broad plastic search is not a pollution corpus
+- The top-100 institution mix included many hospitals, neuroscience and
+  immunology institutes, physics and astronomy units, and technology companies.
+  The owner's inference is that literal OpenAlex `search=plastic` is matching
+  plasticity, plastic surgery, and plastic deformation; underlying works were
+  not checked during this review.
+- Keep those counts only as S1.2 review-priority metadata. Before any public
+  leaderboard uses them, S1.5 must tighten the versioned query or restrict it
+  with validated OpenAlex topics and measure the result.
+
 ## 2026-11-05 - Institution coverage and resumable review
 - An exact OpenAlex `geo.region:California` seed is necessary but not a
   sufficient coverage assertion. Compare against explicit official UC/CSU

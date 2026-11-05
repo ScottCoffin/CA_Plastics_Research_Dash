@@ -20,10 +20,12 @@ remain listed in `QUESTIONS.md`.
   queue on every build.
 - **Rationale:** Live retrieval required 23 supplements to satisfy system
   coverage. ROR v2.15 matched every known ID reproducibly, and the generated
-  top-100 queue concentrates human review where plastics work is most common.
-  The owner-review gate remains explicit and is not agent-signable.
-- **Decided by:** Build agent under S1.2; owner confirmation of the private-set
-  default and all 100 review rows remains requested in `QUESTIONS.md`.
+  top-100 queue concentrated human review on the largest broad-query counts.
+  The owner reviewed all 100 rows and supplied 22 type corrections. Institution
+  types also indicate that `search=plastic` captures non-pollution meanings, so
+  its counts remain review heuristics and must not become leaderboard values.
+- **Decided by:** Build agent under S1.2; owner completed the top-100 review on
+  2026-11-05. Query retuning remains assigned to S1.5.
 
 ## ADR-003 — 2026-11-05 — Institution API retrieval and usage accounting
 

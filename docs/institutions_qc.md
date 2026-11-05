@@ -11,24 +11,26 @@ to the versioned ROR data dump.
 - ROR IDs matched in the dump: **4,637**
 - ROR release: **v2.15** (10.5281/zenodo.23500708)
 - OpenAlex authenticated: **true**
-- This build's API requests: **801**; OpenAlex credits: **4641.0**; cost:
-  **USD 0.4641**. Zero-cost retries were included in the request count.
-- Plastic-work review ranking: broad OpenAlex `search=plastic` grouped count; this is
-  a review-priority heuristic, not the later versioned corpus query or classifier.
+- This build's API requests: **2**; OpenAlex credits: **1.0**; cost: **USD 0.0001**
+- Plastic-work review ranking: broad OpenAlex `search=plastic` grouped count; this
+  can include plasticity, plastic surgery, and plastic deformation. The owner inferred
+  this risk from institution types rather than checking the underlying works.
+  Treat it only as a review-priority heuristic; do not use it as a plastic-pollution
+  leaderboard until the S1.5 versioned query or an OpenAlex topic restriction is applied.
 
 ## Counts per atlas type
 
 | atlas_type | count |
 |---|---:|
-| CSU | 29 |
-| UC | 74 |
+| CSU | 30 |
+| UC | 78 |
 | community-college | 50 |
-| company | 2,234 |
-| federal | 16 |
-| local-agency | 82 |
-| nonprofit/NGO | 1,805 |
+| company | 2,235 |
+| federal | 24 |
+| local-agency | 81 |
+| nonprofit/NGO | 1,788 |
 | other-public | 1 |
-| private | 339 |
+| private | 343 |
 | state-agency | 7 |
 
 ## Coverage checks
@@ -37,8 +39,7 @@ to the versioned ROR data dump.
 - CSU: all 23 campus records are present and typed `CSU`; these represent
   22 universities after the fall-2026 Cal Poly/Cal Maritime integration.
 - Major private-university default set: 11 present and typed `private`.
-- Top-100 review queue: `data/processed/institution_review_top100.csv`.
-  Fill `owner_atlas_type`, `owner_reviewed_at`, and optional `owner_notes`.
+- Top-100 review queue: `data/processed/institution_review_top100.csv`; owner review complete for **100/100** rows.
 
 ## Rebuild and acceptance
 
@@ -48,8 +49,8 @@ py -3.14 scripts/check_s1_2.py
 py -3.14 scripts/check_s1_2.py --require-owner-review
 ```
 
-The final command intentionally fails until all 100 owner-review rows contain
-both `owner_atlas_type` and `owner_reviewed_at`.
+The final command requires all 100 owner-review rows to contain both
+`owner_atlas_type` and `owner_reviewed_at`; the current count is shown above.
 
 ## Institutions with missing region
 
@@ -63,10 +64,11 @@ None. The exact OpenAlex region seed populated all output rows.
 | csu-lineage-or-name | 29 |
 | education-default-private | 339 |
 | federal-name | 16 |
-| government-fallback-local | 73 |
-| local-agency-name | 9 |
+| government-fallback-local | 72 |
+| local-agency-name | 7 |
+| manual-override | 22 |
 | organization-type-company | 2,015 |
-| organization-type-nonprofit | 1,805 |
+| organization-type-nonprofit | 1,786 |
 | public-education-name | 1 |
 | state-agency-name | 7 |
 | uc-lineage-or-name | 74 |

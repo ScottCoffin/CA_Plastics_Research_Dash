@@ -41,7 +41,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   ROR dump v2.15 (`10.5281/zenodo.23500708`).
 - S1.2 machine acceptance covers UC 10/10, CSU 23/23 campus records (22
   universities after the 2026 Cal Poly/Cal Maritime integration), and the
-  default major-private set 11/11. Owner top-100 review remains 0/100.
+  default major-private set 11/11. Owner top-100 review is complete 100/100;
+  22 corrected types are durable overrides in `config/institution_overrides.csv`.
 
 ## Data locations and sizes (what's committed vs. gitignored; how to inspect)
 - `data/raw/`, `data/interim/`, and `data/logs/` contents are ignored.
@@ -67,6 +68,10 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   plus subdivision code `CA`, and list/search pages contain 20 records.
 - Do not rely on a region-filtered institution pull alone for required-system
   coverage; check explicit expected lists and supplement by name when absent.
+- The S1.2 ranking query is literal OpenAlex `search=plastic`; owner review
+  suggests it includes plasticity, plastic surgery, and plastic deformation.
+  Do not publish its counts as a pollution leaderboard; S1.5 must retune or
+  restrict the versioned query before downstream use.
 
 ## Automation
 - `.github/workflows/ci.yml` runs lint, tests, and the build on pushes, pull

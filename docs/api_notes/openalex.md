@@ -84,6 +84,12 @@ Acceptance rerun: `python scripts/smoke/openalex.py` completed successfully on
   groups in a diagnostic, so the production ranking uses 10 target IDs per
   authenticated request. Returned target-group counts are exact for those
   targets. This query remains a review-priority heuristic pending S1.5.
+- Owner review found that roughly half of the leading institutions were
+  hospitals, neuroscience/immunology institutes, physics/astronomy units, or
+  technology companies. The owner inferred, without checking the underlying
+  works, that `search=plastic` includes plasticity, plastic surgery, and plastic
+  deformation. Do not use these counts as a pollution-research leaderboard;
+  S1.5 must test a tighter query or an OpenAlex topic restriction.
 - The main authenticated acquisition run used 274 requests, 1,971 credits,
   and USD 0.1971. A subsequent supplementation/count run used 48 requests,
   461 credits, and USD 0.0461. A corrected 10-target ranking refresh used

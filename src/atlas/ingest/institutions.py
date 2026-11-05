@@ -827,6 +827,13 @@ def write_outputs(
     missing = [row for row in rows if not row["region"]]
     ror_linked = sum(bool(row["ror_id"]) for row in rows)
     ror_joined = sum(bool(row["ror_status"]) for row in rows)
+    owner_reviewed = sum(
+        bool(
+            review.get("owner_atlas_type", "").strip()
+            and review.get("owner_reviewed_at", "").strip()
+        )
+        for review in existing_review.values()
+    )
 
     lines = [
         "# California institution registry QC",
@@ -847,8 +854,11 @@ def write_outputs(
             f"**{usage['credits_total']}**; cost: "
             f"**USD {float(usage['cost_usd_total']):.4f}**"
         ),
-        "- Plastic-work review ranking: broad OpenAlex `search=plastic` grouped count; this is",
-        "  a review-priority heuristic, not the later versioned corpus query or classifier.",
+        "- Plastic-work review ranking: broad OpenAlex `search=plastic` grouped count; this",
+        "  can include plasticity, plastic surgery, and plastic deformation. The owner inferred",
+        "  this risk from institution types rather than checking the underlying works.",
+        "  Treat it only as a review-priority heuristic; do not use it as a plastic-pollution",
+        "  leaderboard until the S1.5 versioned query or an OpenAlex topic restriction is applied.",
         "",
         "## Counts per atlas type",
         "",
@@ -865,8 +875,8 @@ def write_outputs(
             "- Major private-university default set: "
             f"{len(MAJOR_PRIVATE_UNIVERSITIES)} present and typed `private`."
         ),
-        "- Top-100 review queue: `data/processed/institution_review_top100.csv`.",
-        "  Fill `owner_atlas_type`, `owner_reviewed_at`, and optional `owner_notes`.",
+        "- Top-100 review queue: `data/processed/institution_review_top100.csv`; "
+        f"owner review complete for **{owner_reviewed}/100** rows.",
         "",
         "## Rebuild and acceptance",
         "",
@@ -876,8 +886,8 @@ def write_outputs(
         "py -3.14 scripts/check_s1_2.py --require-owner-review",
         "```",
         "",
-        "The final command intentionally fails until all 100 owner-review rows contain",
-        "both `owner_atlas_type` and `owner_reviewed_at`.",
+        "The final command requires all 100 owner-review rows to contain both",
+        "`owner_atlas_type` and `owner_reviewed_at`; the current count is shown above.",
         "",
         "## Institutions with missing region",
         "",
