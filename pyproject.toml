@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ca-plastics-atlas"
+version = "0.0.0"
+description = "California plastics research, monitoring, and funding atlas"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "License pending owner confirmation" }
+authors = [{ name = "Scott Coffin" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pre-commit>=4.0",
+  "pytest>=8.0",
+  "ruff>=0.11",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
