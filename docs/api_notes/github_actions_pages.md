@@ -21,15 +21,19 @@ Sources:
 
 ## Live repository checks
 
-- The default branch is `main`; the repository is private and the authenticated user has admin
-  permission.
+- The default branch is `main`; the repository is public and the authenticated user has admin
+  permission. The owner confirmed that it should remain public.
 - Actions are enabled for all actions. The default `GITHUB_TOKEN` permission is read-only, so
   workflows request only their required write permissions explicitly.
-- The Pages API returned HTTP 404 before S0.2, meaning Pages was not configured.
-- Creating a Pages site with `build_type=workflow` returned HTTP 422: the current
-  plan does not support GitHub Pages for this private repository. The repository
-  must remain private until the owner resolves G-7 and the license decision.
-- No repository Actions secrets or variables were configured before S0.2.
+- Before the visibility change, creating a Pages site with `build_type=workflow`
+  returned HTTP 422 because the plan did not support Pages for the private
+  repository. After the owner made it public, the same request succeeded.
+- The Pages API reports `build_type=workflow`, public access, and the account
+  custom-domain URL `http://scottcoff.in/CA_Plastics_Research_Dash/`. HTTPS was
+  tested directly and served the page successfully.
+- Repository configuration names were verified without reading secret values:
+  `OPENALEX_API_KEY` exists and `ENABLE_DATA_COMMITS` is exactly lowercase
+  `true`, matching the workflow guard.
 - GitHub release metadata showed current major releases `checkout@v7`, `setup-python@v7`,
   `configure-pages@v6`, `upload-pages-artifact@v5`, and `deploy-pages@v5`.
 
@@ -44,8 +48,12 @@ Commit `3f5e832` was pushed to `main` on 2026-11-05.
 - Manual watchdog run `42088690263` succeeded and correctly detected that the
   Pages workflow was already running.
 - Push Pages run `42088635490` and manual Pages run `42088689403` both failed in
-  `configure-pages` because the Pages site does not exist. This matches the prior
-  HTTP 422 plan restriction; no deployment or live URL was created.
-
-A live Pages URL cannot be verified until the owner changes the plan, visibility, or hosting
-choice.
+  `configure-pages` before the owner resolved the private-repository plan
+  restriction and Pages was enabled.
+- Pages was created through the API with `build_type=workflow` after the
+  repository became public.
+- Manual Pages run `42092058401` for commit `8a80fca` succeeded: both the build
+  and deploy jobs completed successfully.
+- `https://scottcoff.in/CA_Plastics_Research_Dash/` returned HTTP 200 with
+  `text/html; charset=utf-8`; the expected title and placeholder text were both
+  present.

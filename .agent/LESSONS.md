@@ -1,5 +1,14 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-05 — GitHub Pages live acceptance
+- Changing the repository to public removed the plan restriction, but Pages
+  still had to be created explicitly with `build_type=workflow` before the
+  deployment could pass `configure-pages`.
+- The Pages API reports the account custom-domain URL
+  `https://scottcoff.in/CA_Plastics_Research_Dash/`; verify that URL's status
+  and expected page content, not only the Actions conclusion.
+- Manual run `42092058401` built and deployed the site successfully.
+
 ## 2026-11-05 — GitHub Actions and Pages scaffold
 - GitHub Pages creation returned HTTP 422 because the current plan does not
   support Pages for this private repository. Resolving that requires an owner

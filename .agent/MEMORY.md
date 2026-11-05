@@ -22,13 +22,14 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 ## Key decisions (links to DECISIONS.md IDs)
 - ADR-001: use official Pages actions, a daily off-peak deploy, a stale-run
   watchdog, and an opt-in monthly keepalive commit.
-- No owner-confirmed product decisions yet; Part G defaults remain in use.
+- ADR-002: keep the repository public, use GitHub Actions Pages, enable guarded
+  repository writes, and use MIT for code plus CC BY for eligible derived data.
 
 ## Verified API facts (one line each; details in docs/api_notes/)
 - GitHub Actions schedules use the default branch, default to UTC, and may be
   delayed; the 60-day inactivity disablement is documented for public repos.
-- The Pages API rejects this private repository under the current plan (HTTP
-  422); details are in `docs/api_notes/github_actions_pages.md`.
+- Pages was enabled after the owner made the repository public. Manual run
+  `42092058401` succeeded and the live placeholder returned HTTP 200.
 
 ## Data locations and sizes (what's committed vs. gitignored; how to inspect)
 - `data/raw/`, `data/interim/`, and `data/logs/` contents are ignored.
@@ -39,8 +40,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.
 - Do not treat Part D research claims as live API contracts without smoke tests.
 - Do not copy from reuse candidates before recording and confirming their licenses.
-- The current GitHub plan cannot host Pages from this private repository; do not
-  change visibility while G-7 and the license choice remain open.
+- Pages must be configured with `build_type=workflow` before the deploy workflow
+  can pass `configure-pages`; the live URL uses the account custom domain.
 
 ## Automation
 - `.github/workflows/ci.yml` runs lint, tests, and the build on pushes, pull
@@ -48,9 +49,10 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - `build_deploy.yml` publishes `site/` on pushes, manual dispatches, and daily at
   10:15 UTC; `watchdog.yml` checks at 11:47 UTC and redispatches after 25 hours.
 - `keepalive.yml` runs monthly at 09:42 UTC. It commits only when the repository
-  variable `ENABLE_DATA_COMMITS` is exactly `true`.
+  variable `ENABLE_DATA_COMMITS` is exactly `true`; the owner enabled it.
 - User-managed Actions configuration names are listed, without values, in
   `docs/SECRETS.md`.
+- Live Pages URL: `https://scottcoff.in/CA_Plastics_Research_Dash/`.
 
 ## Current model versions and metrics (one line per model)
 - None; classifiers are not implemented.
