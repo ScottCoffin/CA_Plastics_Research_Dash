@@ -1,5 +1,19 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-05 — OpenAlex and ROR live contracts
+- OpenAlex's exact institution-region value is `California`, not `CA`.
+  `institutions.id` and `authorships.institutions.id` matched the same works,
+  but the shorter documented spelling is canonical for new code.
+- OpenAlex rejects a 101-value institution OR filter even when its URL is far
+  below the separate 8,190-byte GET limit; keep ID batches at 100 or fewer.
+- Anonymous OpenAlex calls can initialize a cursor but need an API key to
+  follow it. Basic paging is sufficient only for bounded result sets under the
+  10,000-result ceiling.
+- ROR v2 schema 2.1 uses `country_code=US` and
+  `country_subdivision_code=CA`; do not expect the combined code `US-CA`.
+- ROR emits no billing credits. Log its request count with zero cost so a run's
+  cross-source accounting remains complete.
+
 ## 2026-11-05 — GitHub Pages live acceptance
 - Changing the repository to public removed the plan restriction, but Pages
   still had to be created explicitly with `build_type=workflow` before the

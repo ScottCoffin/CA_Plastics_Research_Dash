@@ -10,6 +10,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - Test: `make test` or `python -m pytest`.
 - Lint: `make lint` or run Ruff check and format-check directly.
 - Build bootstrap validation: `make build` or `python -m compileall -q src`.
+- OpenAlex smoke: `python scripts/smoke/openalex.py` after editable install.
+- ROR smoke: `python scripts/smoke/ror.py` after editable install.
 
 ## Conventions (naming, IDs, paths, timezones: store UTC; CI cron is UTC)
 - Python package uses the `src/atlas/` layout and requires Python >=3.11.
@@ -33,6 +35,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 
 ## Data locations and sizes (what's committed vs. gitignored; how to inspect)
 - `data/raw/`, `data/interim/`, and `data/logs/` contents are ignored.
+- API request rows and per-run cost summaries append to
+  `data/logs/api_usage.jsonl` through `atlas.util.cost.ApiCostLogger`.
 - `data/processed/` may contain reviewed, slim outputs; inspect Parquet with DuckDB.
 - Test fixtures belong in `tests/fixtures/` and must stay at or below 200 records.
 
@@ -42,6 +46,12 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - Do not copy from reuse candidates before recording and confirming their licenses.
 - Pages must be configured with `build_type=workflow` before the deploy workflow
   can pass `configure-pages`; the live URL uses the account custom domain.
+- OpenAlex California institutions use exact filter `geo.region:California`;
+  new works code should use `institutions.id`, at most 100 OR values per batch.
+- OpenAlex list/filter calls observed 2026-11-05 cost 1 credit/USD 0.0001;
+  use cursor paging for large works pulls and read live cost metadata/headers.
+- ROR v2 currently returns schema 2.1; California locations use country `US`
+  plus subdivision code `CA`, and list/search pages contain 20 records.
 
 ## Automation
 - `.github/workflows/ci.yml` runs lint, tests, and the build on pushes, pull

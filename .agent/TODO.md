@@ -8,7 +8,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [x] **S0.2** CI lint/test, Pages placeholder deploy, keepalive, watchdog, and commit guard. Pages uses GitHub Actions; manual run `42092058401` succeeded; the placeholder was verified live at `https://scottcoff.in/CA_Plastics_Research_Dash/`; configuration names are documented. Acceptance: push deploys; manual dispatch works; secret names documented. `owner inputs complete: public visibility; ENABLE_DATA_COMMITS; OPENALEX_API_KEY`
 
 ## S1 Reference data
-- [ ] **S1.1** OpenAlex/ROR smoke tests and API cost logger. Acceptance: exact working filters, costs, URL limits, and pagination documented.
+- [x] **S1.1** OpenAlex/ROR smoke tests and API cost logger. Acceptance: exact working filters, costs, URL limits, and pagination documented.
 - [ ] **S1.2** California institution registry and ROR join. Acceptance: systems covered and top 100 plastic-work institutions reviewed. `owner: review`
 - [ ] **S1.3** California land and 3-nm-water polygons. Acceptance: known-point tests pass; browser asset <1 MB.
 - [ ] **S1.4** California gazetteer and ambiguity blacklist. Acceptance: lookup tests pass and blacklist rationale is documented.
