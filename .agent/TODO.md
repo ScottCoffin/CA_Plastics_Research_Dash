@@ -5,7 +5,7 @@ Check off only when the task Definition of Done and acceptance check in
 
 ## S0 Bootstrap
 - [x] **S0.1** Repository skeleton, tooling, memory files, and roadmap. Acceptance: `make test`; all `.agent` files exist; this roadmap is present. `owner: license choice`
-- [ ] **S0.2** CI lint/test, Pages placeholder deploy, keepalive, watchdog, and commit guard. Implementation and local checks complete; live Pages acceptance is blocked because the current GitHub plan does not support Pages for this private repository. Acceptance: push deploys; manual dispatch works; secret names documented. `owner: resolve G-7 hosting/visibility or plan; OPENALEX_API_KEY`
+- [ ] **S0.2** CI lint/test, Pages placeholder deploy, keepalive, watchdog, and commit guard. Implementation, local checks, push CI, and manual dispatch are verified; live Pages acceptance is blocked because the current GitHub plan does not support Pages for this private repository. Acceptance: push deploys; manual dispatch works; secret names documented. `owner: resolve G-7 hosting/visibility or plan; OPENALEX_API_KEY`
 
 ## S1 Reference data
 - [ ] **S1.1** OpenAlex/ROR smoke tests and API cost logger. Acceptance: exact working filters, costs, URL limits, and pagination documented.

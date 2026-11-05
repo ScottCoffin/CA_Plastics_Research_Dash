@@ -33,5 +33,19 @@ Sources:
 - GitHub release metadata showed current major releases `checkout@v7`, `setup-python@v7`,
   `configure-pages@v6`, `upload-pages-artifact@v5`, and `deploy-pages@v5`.
 
-Live workflow execution must be checked after the S0.2 commit reaches the default branch. A live
-Pages URL cannot be verified until the owner changes the plan, visibility, or hosting choice.
+## Live workflow checks
+
+Commit `3f5e832` was pushed to `main` on 2026-11-05.
+
+- Push CI run `42088635662` succeeded.
+- Manual CI run `42088690046` succeeded, including lint, tests, and build.
+- Manual keepalive run `42088689050` succeeded and made no commit because
+  `ENABLE_DATA_COMMITS` was not set to `true`.
+- Manual watchdog run `42088690263` succeeded and correctly detected that the
+  Pages workflow was already running.
+- Push Pages run `42088635490` and manual Pages run `42088689403` both failed in
+  `configure-pages` because the Pages site does not exist. This matches the prior
+  HTTP 422 plan restriction; no deployment or live URL was created.
+
+A live Pages URL cannot be verified until the owner changes the plan, visibility, or hosting
+choice.

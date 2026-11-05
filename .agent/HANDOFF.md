@@ -9,8 +9,11 @@
 
 ## State of the repo
 - Run local checks with `C:\rtools45\usr\bin\make.exe test`, `lint`, and `build`.
+- Push and manual CI passed for `3f5e832`; manual keepalive and watchdog also
+  passed. The keepalive guard correctly made no commit while its variable is unset.
 - The automation implementation is complete, but S0.2 remains unchecked because
-  live Pages acceptance is blocked by the private repository's current plan.
+  push and manual Pages runs fail at `configure-pages`: the private repository's
+  current plan cannot enable Pages, so no live URL exists.
 - Inspect external status with `gh run list --limit 20` and
   `gh api repos/ScottCoffin/CA_Plastics_Research_Dash/pages`.
 

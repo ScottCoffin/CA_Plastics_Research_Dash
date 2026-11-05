@@ -3,4 +3,4 @@
 | Date | Task | Outcome | Commit |
 |---|---|---|---|
 | 2026-11-05 | S0.1 | Completed; test/lint/build pass | `024fc66` |
-| 2026-11-05 | S0.2 | Implementation complete; live Pages blocked by private-repo plan | pending |
+| 2026-11-05 | S0.2 | Implementation and Actions checks complete; live Pages blocked by private-repo plan | `3f5e832` |
