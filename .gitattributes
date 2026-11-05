@@ -7,4 +7,6 @@
 *.md text eol=lf
 *.html text eol=lf
 *.csv text eol=lf
+*.geojson text eol=lf
+*.parquet binary
 Makefile text eol=lf

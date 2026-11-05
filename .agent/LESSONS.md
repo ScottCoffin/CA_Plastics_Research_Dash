@@ -1,5 +1,18 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-05 - Land masks and CDFW polygon packaging
+- A legal state-boundary polygon is not a land-only mask: the tested Census
+  state feature included offshore jurisdiction and swallowed the intended
+  `state_waters` result. Use a coastline-following land polygon and test the
+  land/water/none precedence with known offshore points.
+- CDFW ds3158's hosted ArcGIS feature layer is a line. The official ZIP ships
+  `ds3158.gdb` (line) and `ds3158_alt.gdb` with the analysis-ready
+  `ds3158_poly` multipolygon. Do not construct a replacement polygon from the
+  line when the distributed polygon is available.
+- Full-resolution polygon GeoJSON was unnecessarily large because of dense
+  coordinates. GeoParquet preserves the geometry compactly; reserve simplified
+  GeoJSON for the browser.
+
 ## 2026-11-05 - Broad plastic search is not a pollution corpus
 - The top-100 institution mix included many hospitals, neuroscience and
   immunology institutes, physics and astronomy units, and technology companies.

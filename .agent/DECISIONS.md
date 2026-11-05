@@ -4,6 +4,25 @@ ADR-style decisions belong here with date, alternatives, rationale, and decision
 owner. Unanswered items continue to use the defaults in `spec.md` Part G and
 remain listed in `QUESTIONS.md`.
 
+## ADR-005 - 2026-11-05 - California land and state-waters geometry
+
+- **Decision:** Use the Natural Earth 1:10m Admin 1 `US-CA` feature as the
+  land-only polygon and the official CDFW ds3158 `ds3158_poly` feature as the
+  three-nautical-mile state-waters polygon. Store unsimplified geometry as
+  GeoParquet for the pipeline and publish a topology-preserving, 0.002-degree
+  simplified combined GeoJSON for the browser. Classify land before water at
+  shared shoreline boundaries.
+- **Alternatives:** Use a Census legal state boundary as the land polygon;
+  derive water by buffering a coastline; use CDFW's line-only ArcGIS layer;
+  keep the 22 MB full-resolution water geometry as text GeoJSON.
+- **Rationale:** A legal state boundary included offshore jurisdiction and
+  mislabeled the known one-mile point as land. Natural Earth is public domain
+  and follows the coastline, while CDFW's CC BY 4.0 distribution includes the
+  polygon it recommends for analysis. GeoParquet retains all 565,997 source
+  coordinates compactly; the 306,997-byte browser asset is below the 1 MB cap.
+- **Decided by:** Build agent from live source/license verification and S1.3
+  known-point acceptance tests.
+
 ## ADR-004 - 2026-11-05 - California institution registry and review queue
 
 - **Decision:** Seed institutions with exact OpenAlex

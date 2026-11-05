@@ -16,6 +16,10 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   `OPENALEX_API_KEY` (or local alias `OPEN_ALEX_API_KEY`) from ignored `.env`.
 - S1.2 machine acceptance: `python scripts/check_s1_2.py`; add
   `--require-owner-review` only after all 100 review rows are signed off.
+- Build geography: `python scripts/build_geography.py`; use `--land-archive`
+  and `--cdfw-archive` for already-downloaded official source archives.
+- Geography smoke/acceptance: `python scripts/smoke/geography.py` and
+  `python scripts/check_s1_3.py`.
 
 ## Conventions (naming, IDs, paths, timezones: store UTC; CI cron is UTC)
 - Python package uses the `src/atlas/` layout and requires Python >=3.11.
@@ -43,6 +47,9 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   universities after the 2026 Cal Poly/Cal Maritime integration), and the
   default major-private set 11/11. Owner top-100 review is complete 100/100;
   22 corrected types are durable overrides in `config/institution_overrides.csv`.
+- Natural Earth Admin 1 version 5.1.1 is public domain and supplies the CA
+  land polygon; official CDFW ds3158 is CC BY 4.0 and its `ds3158_alt.gdb`
+  contains the recommended `ds3158_poly` state-waters multipolygon.
 
 ## Data locations and sizes (what's committed vs. gitignored; how to inspect)
 - `data/raw/`, `data/interim/`, and `data/logs/` contents are ignored.
@@ -53,6 +60,9 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   owner queue is `data/processed/institution_review_top100.csv`, and QC is in
   `docs/institutions_qc.md`. Raw OpenAlex/ROR inputs and count caches are ignored.
 - Test fixtures belong in `tests/fixtures/` and must stay at or below 200 records.
+- Full-resolution geography is in `data/processed/geo/*.parquet`; the simplified
+  two-feature browser payload is `site/assets/ca_boundaries.geojson` (306,997
+  bytes at S1.3 completion).
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.
@@ -72,6 +82,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   suggests it includes plasticity, plastic surgery, and plastic deformation.
   Do not publish its counts as a pollution leaderboard; S1.5 must retune or
   restrict the versioned query before downstream use.
+- Do not use a legal state-boundary polygon as a land mask: it can include
+  offshore jurisdiction and hide the CDFW `state_waters` classification.
 
 ## Automation
 - `.github/workflows/ci.yml` runs lint, tests, and the build on pushes, pull
