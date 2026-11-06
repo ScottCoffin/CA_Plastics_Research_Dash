@@ -73,6 +73,11 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - S1.4 stores the reproducible GeoNames California subset in
   `data/processed/gazetteer_ca.sqlite`; use `atlas.geo.gazetteer.lookup()` for
   exact normalized names, curated aliases, and explicit blacklist enforcement.
+- S1.5 query rendering and cache validation are in `atlas.query`; the ignored
+  cache is `data/interim/openalex_query_counts.json` and must carry both the
+  query version and rendered query. The 2026-11-06 UTC count for the
+  owner-supplied candidate was 98,118 works; the positive control without
+  exclusions was 100,335.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.
@@ -98,6 +103,9 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   committed subset rule is `country_code=US and admin1_code=CA`. Keep its raw
   ZIP ignored, preserve GeoNames credit, and do not treat blacklisted common
   words or regional centroids as sampling evidence without later context.
+- The S1.5 count is a timestamped design estimate, not dashboard data. The
+  candidate remains `owner_supplied_candidate` until the owner reviews the
+  bounded precision examples and promotes it for downstream ingestion.
 
 ## Automation
 - `.github/workflows/ci.yml` runs lint, tests, and the build on pushes, pull

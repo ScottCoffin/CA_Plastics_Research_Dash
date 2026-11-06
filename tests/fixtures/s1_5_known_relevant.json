@@ -1,0 +1,22 @@
+[
+  {
+    "id": "https://openalex.org/W3104558585",
+    "title": "Microplastics in glaciers of the Tibetan Plateau: Evidence for the long-range transport of microplastics",
+    "basis": "literature-informed microplastics/environment anchor"
+  },
+  {
+    "id": "https://openalex.org/W3084664411",
+    "title": "Microplastics in Food: A Review on Analytical Methods and Challenges",
+    "basis": "literature-informed food and analytical-methods anchor"
+  },
+  {
+    "id": "https://openalex.org/W4322619704",
+    "title": "Interactions of Microplastics with Pesticides in Soils and Their Ecotoxicological Implications",
+    "basis": "literature-informed soil and ecotoxicology anchor"
+  },
+  {
+    "id": "https://openalex.org/W3196209586",
+    "title": "A Review of Human Exposure to Microplastics and Insights Into Microplastics as Obesogens",
+    "basis": "literature-informed human-exposure anchor"
+  }
+]

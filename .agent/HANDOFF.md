@@ -1,72 +1,77 @@
-# Handoff - 2026-11-05 - task S1.4
+# Handoff — 2026-11-06 — task S1.5
 
 ## Done
-- Verified the official GeoNames U.S. extract and CC BY 4.0 terms with
-  `scripts/smoke/geonames.py`; recorded the observed contract in
-  `docs/api_notes/geonames.md`, `docs/SOURCES.md`, and `docs/REUSE.md`.
-- Added reproducible `scripts/build_gazetteer.py`, which downloads ignored
-  `data/raw/geonames_us.zip` and writes the committed
-  `data/processed/gazetteer_ca.sqlite` subset. The 2026-11-05 build contains
-  127,963 features and 187,760 normalized name variants.
-- Added `atlas.geo.gazetteer.lookup()` and `is_blacklisted()`, curated water
-  and regional aliases in `config/gazetteer_ca.csv`, and the explicit common
-  word exclusion list in `config/gazetteer_blacklist.csv`.
-- Added the blacklist rationale, fixture-based unit tests, and
-  `scripts/check_s1_4.py`. S1.4 is checked off; S1.5 was not started.
+
+- Completed S1.5 only; `.agent/TODO.md` now checks off S1.5 and S2.1 was not started.
+- Added `src/atlas/query.py` for YAML-driven rendering, complete OpenAlex filter
+  encoding, and versioned count-cache validation.
+- Added `scripts/smoke/query_s1_5.py`, `scripts/check_s1_5.py`, focused tests,
+  and the four-work recall fixture.
+- Ran the authenticated count/audit at 2026-11-06T06:44:00Z: 98,118 candidate
+  works, 100,335 without exclusions, six requests, 60 credits, USD 0.0060.
+- Recorded the bounded title/abstract audit in `docs/query_audit_s1_5.md`:
+  20/22 precision sample matches and 4/4 recall anchors.
+- Updated `docs/METHODS.md`, `docs/api_notes/openalex.md`, `docs/REUSE.md`, and
+  the B4 memory/decision/lesson records. The candidate remains inactive.
 
 ## State of the repo
-- Rebuild: `py -3.14 scripts/build_gazetteer.py`.
-- Smoke source/license: `py -3.14 scripts/smoke/geonames.py`.
-- Acceptance: `py -3.14 scripts/check_s1_4.py`.
-- Full suite: `C:\rtools45\usr\bin\make.exe PYTHON="py -3.14" test`
-  passes (29 tests). Ruff check/format, compileall, and `git diff --check`
-  also pass.
-- `lookup()` returns only exact normalized GeoNames/curated matches. The
-  blacklist applies first; alias/region centroids are candidates for later
-  context-aware classification, not sampling evidence.
+
+- Acceptance: `py -3.14 scripts/check_s1_5.py` passes.
+- Full tests: `C:\rtools45\usr\bin\make.exe PYTHON="py -3.14" test` passes
+  (32 tests). Ruff check/format and `git diff --check` pass.
+- Re-run the live estimate with `py -3.14 scripts/smoke/query_s1_5.py`;
+  ignored outputs are under `data/interim/` and `data/logs/`.
+- The working tree also contains pre-existing owner/concurrent changes in
+  `.agent/QUESTIONS.md` (G-6), `docs/AWARDS_DATA.md`, the S1.2 review data and
+  QC, S1.3 geography assets, and the S1.4 gazetteer. Do not stage those files.
 
 ## Next task (suggested)
-- S1.5: finish the versioned plastics-query configuration and count estimate.
-  First read the required agent files and only the S1 task/source rows; then
-  inspect the owner-supplied `plastic-v2-candidate` preparation; finally run
-  only the required S1.5 smoke/count/precision work and its acceptance checks.
+
+- S2.1: build the incremental, resumable OpenAlex works ingester. First read
+  the required `.agent` files and only Part B, the S2 stage entry, and named
+  Part D rows; then design the fixture/high-water-mark contract and run its
+  acceptance checks. Do not begin it in this handoff session.
 
 ## Gotchas the next agent must know
-- GeoNames `US.zip` is an upstream daily snapshot. Raw inputs remain ignored;
-  preserve its CC BY 4.0 attribution if publishing derivative lookup data.
-- The source may contain alternate spellings that normalize to the same key;
-  the builder deduplicates each `(geonames_id, normalized_name)` deterministically.
-- Never use a blacklist exclusion or a regional alias centroid as a silent
-  final geocode. Later stages must require context or a reviewed override.
-- Do not alter the S1.2 review data, S1.3 geography assets, or owner-supplied
-  S1.5 preparation while doing unrelated work.
+
+- `config/queries.yml` is still `status: owner_supplied_candidate`; do not
+  silently promote it to active. The owner must review the precision examples
+  and approve promotion before downstream ingestion relies on it.
+- Count caches are invalid unless both `query_version` and `rendered_query`
+  match. The works identifier filter is `openalex_id`, not bare `id`.
+- The broad S1.2 `search=plastic` ranking remains review metadata only.
+- G-6 and `docs/AWARDS_DATA.md` are owner/concurrent work; preserve them.
 
 ## Needs owner input
-- No new owner action is required for S1.4.
-- G-6 and `docs/AWARDS_DATA.md` remain owner/concurrent work outside this task.
+
+- Review `docs/query_audit_s1_5.md` and decide whether to promote
+  `plastic-v2-candidate` for downstream use; no promotion was made here.
+- Continue the separate G-6 State Water Board awards decision documented in
+  `docs/AWARDS_DATA.md`.
 
 ## Files that are large or unsafe to read whole
-- `data/processed/gazetteer_ca.sqlite` (about 30 MB) -> inspect with SQLite:
-  `py -3.14 -c "import sqlite3; c=sqlite3.connect('data/processed/gazetteer_ca.sqlite'); print(c.execute('select count(*) from feature').fetchone())"`.
-- `data/raw/geonames_us.zip` is ignored -> rebuild through
-  `scripts/build_gazetteer.py`, not by printing its records.
-- `spec.md` -> read only Part B, the selected Part E stage, and named Part D
-  source rows.
+
+- `data/processed/institutions.parquet` → inspect selected columns with
+  PyArrow/DuckDB; preserve the owner-reviewed registry.
+- `data/processed/gazetteer_ca.sqlite` → inspect with SQLite count queries;
+  do not print the database.
+- `data/interim/openalex_query_counts.json` and
+  `data/interim/s1_5_audit.json` → ignored generated evidence; inspect with
+  bounded JSON summaries.
+- `spec.md` → read only Part B, the selected stage entry, and named Part D rows.
 
 ## Prompt for the next fresh agent
+
 You are a build agent for
 `C:\Users\Scott.Coffin\R_new\CA_Plastics_Research_Dash`. Follow Part B of
 `spec.md` exactly. Read the required `.agent` files, inspect
 `git log --oneline -15` and `git status`, and complete exactly the first
-unchecked task, S1.5; do not start S2.1. Read only Part B, the S1 stage entry,
-and the Part D source rows named by S1.5. Preserve all pre-existing
+unchecked task, S2.1; do not start S2.2. Read only Part B, the S2 stage entry,
+and the Part D source rows named by S2.1. Preserve all pre-existing
 owner/concurrent changes, including `.agent/QUESTIONS.md` (G-6),
 `docs/AWARDS_DATA.md`, the completed S1.2 institution-review data, the S1.3
-geography assets, and the completed S1.4 gazetteer. Treat the owner-supplied
-`plastic-v2-candidate` material in `config/queries.yml`, `config/taxonomy.yml`,
-and `docs/query_design_v2.md` as S1.5 input: verify and complete only the S1.5
-requirements, with no unrelated query redesign. Run the S1.5 acceptance check
-and `make test`, update all B4 records in order, commit and push only S1.5
-changes if configured, and stop before S2.1. End by reporting owner actions
-and providing a copy-paste prompt for the next fresh agent that explicitly
-repeats this successor-prompt requirement.
+geography assets, the completed S1.4 gazetteer, and the S1.5 candidate query
+work. Run the S2.1 acceptance check and `make test`, update all B4 records in
+order, commit and push only S2.1 changes if configured, and stop before S2.2.
+End by reporting owner actions and providing a copy-paste prompt for the next
+fresh agent that explicitly repeats this successor-prompt requirement.

@@ -65,6 +65,23 @@ remain listed in `QUESTIONS.md`.
 - **Decided by:** Build agent under S1.2; owner completed the top-100 review on
   2026-11-05. Query retuning remains assigned to S1.5.
 
+## ADR-004 — 2026-11-06 — Versioned plastics query rendering and cache identity
+
+- **Decision:** Render the S1.5 OpenAlex Boolean expression from
+  `config/queries.yml` structured term lists, percent-encode the complete
+  `title_and_abstract.search` filter, and accept a count cache only when both
+  `query_version` and `rendered_query` match. Keep the owner-supplied query in
+  candidate status until promotion review.
+- **Alternatives:** Reuse a flat count cache; duplicate the terms in Python;
+  promote the candidate automatically after the first count.
+- **Rationale:** Query identity must travel with every estimate so a changed
+  term, qualifier, exclusion, or field scope cannot silently reuse old counts.
+  The bounded audit found 20/22 sampled matches relevant by title/abstract and
+  4/4 literature-informed anchors included, but this is not the later gold-set
+  review.
+- **Decided by:** Build agent from the S1.5 acceptance run; owner promotion is
+  still required.
+
 ## ADR-003 — 2026-11-05 — Institution API retrieval and usage accounting
 
 - **Decision:** Use OpenAlex `geo.region:California` to seed California

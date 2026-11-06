@@ -52,6 +52,24 @@ The logger at `src/atlas/util/cost.py` records one redacted JSONL request row
 and one run summary in `data/logs/api_usage.jsonl`. Query-string credentials
 are redacted, and arbitrary response bodies and headers are not stored.
 
+## S1.5 query filter observations (2026-11-06)
+
+- The owner-supplied Boolean expression is accepted in a fully encoded
+  `title_and_abstract.search:` filter. The response meta count was **98,118**
+  with the configured mechanical exclusions and **100,335** with those
+  exclusions removed. The difference is a behavior check, not a relevance
+  estimate.
+- A count-only request uses `per_page=1` and `group_by=publication_year`; the
+  response returned a non-empty group and exposed the count in `meta.count`.
+  The six-request S1.5 audit reported 60 credits and USD 0.0060 from response
+  headers/meta cost fields.
+- Recall spot checking combined the query with `openalex_id:W...|W...`; the
+  four literature-informed anchors all matched. This field is valid for work
+  ID filters; bare `id` is not.
+- The estimate and the bounded UCSF/SLAC/global title/abstract precision audit
+  are recorded in `docs/query_audit_s1_5.md`. The candidate remains inactive
+  pending owner promotion review.
+
 ## Rate, license, and documentation evidence
 
 - OpenAlex documents a free anonymous daily budget and a larger free-key daily

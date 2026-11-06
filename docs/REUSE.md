@@ -8,6 +8,11 @@ repository; no OpenAlex or ROR client code was copied.
 S1.2's institution builder, classification rules, owner-review workflow, and
 acceptance check were implemented in this repository; no external code was copied.
 
+S1.5's query renderer, cache validation, smoke runner, and acceptance check
+were implemented in this repository. PyYAML is a declared runtime dependency
+used only to parse the repository's local YAML configuration; no external code
+was copied.
+
 | Repository/source | URL | License | Reused material | Adaptation and attribution |
 |---|---|---|---|---|
 | Job_Scraper | https://github.com/ScottCoffin/Job_Scraper | AGPL-3.0 | Watchdog and opt-in commit-guard concepts | Inspected as the documented owner pattern; independently reimplemented for this repository without copying workflow code. |

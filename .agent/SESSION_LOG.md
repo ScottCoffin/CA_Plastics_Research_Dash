@@ -11,3 +11,4 @@
 | 2026-11-05 | S1.3 | Completed; land/state-waters polygons and known-point acceptance pass | `68828c3` |
 | 2026-11-05 | S1.5 prep | Integrated owner-supplied candidate query/taxonomy evidence; no live query run | `b25c2df` |
 | 2026-11-05 | S1.4 | Completed; GeoNames SQLite subset, aliases, blacklist, tests, and acceptance pass | pending commit |
+| 2026-11-06 | S1.5 | Completed; versioned query renderer/cache, live count, precision/recall audit, tests, and acceptance pass | `2e92a5c` |

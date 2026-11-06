@@ -1,5 +1,17 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-06 - Versioned OpenAlex query audit
+- OpenAlex accepts the candidate Boolean expression through a fully encoded
+  `filter=title_and_abstract.search:` value; the 2026-11-06 run returned
+  98,118 works with exclusions and 100,335 without them. Trust response cost
+  metadata and headers: six bounded requests used 60 credits and USD 0.0060.
+- A generic `microfiber` can still be a biomedical false positive when paired
+  with a configured context such as `synthetic`; title/abstract screening is
+  therefore useful before owner promotion, but it is not a replacement for a
+  later gold set.
+- OpenAlex's works identifier filter is `openalex_id`, not `id`; use the
+  server's valid-field list when extending recall spot checks.
+
 ## 2026-11-05 - GeoNames normalization and local lookup
 - GeoNames country dumps are UTF-8, tab-delimited 19-field records; for U.S.
   records the California administrative code is `CA`. Filter both
