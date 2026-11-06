@@ -1,5 +1,43 @@
-version: 0
-status: placeholder
-environments: []
-disciplines: []
+version: plastic-taxonomy-v1-candidate
+status: owner_supplied_candidate
 
+environments:
+  - marine
+  - freshwater
+  - beach_and_coastal
+  - soil_and_agriculture
+  - wastewater
+  - air
+  - food_and_drink
+
+disciplines:
+  - occurrence_and_monitoring
+  - analytical_methods
+  - fate_transport_and_sorption
+  - wastewater_and_treatment
+  - ecotoxicology_and_trophic_transfer
+  - human_exposure_and_health_risk
+
+domain_tags:
+  - id: occurrence_and_monitoring
+    seed_concepts: [abundance, accumulation, occurrence, monitoring, beach, ocean]
+  - id: analytical_methods
+    seed_concepts: [identification, quantification, characterization, sediment]
+  - id: fate_transport_and_sorption
+    seed_concepts: [transport, degradation, adsorption, sorption, porous media]
+  - id: wastewater_and_treatment
+    seed_concepts: [wastewater, wastewater treatment plant, treatment, effluent]
+  - id: ecotoxicology_and_trophic_transfer
+    seed_concepts: [ingestion, zooplankton, mussels, shellfish, coral, fish, food web]
+  - id: soil_and_agriculture
+    seed_concepts: [soil, agriculture, crop, plant, terrestrial]
+  - id: human_exposure_and_health_risk
+    seed_concepts: [ingestion, inhalation, dermal, estimated daily intake, BPA, phthalates]
+  - id: air
+    seed_concepts: [airborne, atmosphere, aerosol, deposition, inhalation]
+
+provenance:
+  supplied_by: owner external query agent
+  supplied_on: 2026-11-05
+  evidence_status: literature-derived seeds; not classifier labels or validated rules
+  details: docs/query_design_v2.md

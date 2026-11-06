@@ -47,6 +47,11 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   universities after the 2026 Cal Poly/Cal Maritime integration), and the
   default major-private set 11/11. Owner top-100 review is complete 100/100;
   22 corrected types are durable overrides in `config/institution_overrides.csv`.
+- Owner-supplied S1.5 query design is recorded as
+  `plastic-v2-candidate` in `config/queries.yml`; generic microfiber, tire-wear,
+  and plastic-waste terms require context, mechanical microplasticity phrases
+  are excluded, and the cache contract includes query version plus rendered
+  query. External counts are unverified design snapshots, not dashboard data.
 - Natural Earth Admin 1 version 5.1.1 is public domain and supplies the CA
   land polygon; official CDFW ds3158 is CC BY 4.0 and its `ds3158_alt.gdb`
   contains the recommended `ds3158_poly` state-waters multipolygon.

@@ -1,5 +1,19 @@
 # Handoff - 2026-11-05 - task S1.3
 
+## Owner-supplied S1.5 design update
+- After S1.3, the owner supplied external-agent query research and directed
+  that it be incorporated without another paper-verification or OpenAlex run.
+- `config/queries.yml` now contains `plastic-v2-candidate`: 16 core terms,
+  three context-qualified generic terms, seven tier-2 terms, five mechanical
+  exclusions, the candidate OpenAlex expression, and the versioned-cache
+  contract.
+- `config/taxonomy.yml` now contains eight literature-derived candidate domain
+  tags. `docs/query_design_v2.md` records the supplied collision findings,
+  benchmark snapshots, limitations, and required S1.5 follow-through.
+- The supplied counts are explicitly unverified design snapshots. S1.5 remains
+  unchecked, S1.4 remains the next roadmap task, and no production query code
+  or S1.2 institution data was intentionally changed by this update.
+
 ## Done
 - Verified Natural Earth Admin 1 v5.1.1 as a public-domain land source and
   CDFW ds3158 as CC BY 4.0; recorded the live contracts in
@@ -44,7 +58,7 @@
   smoke scripts accept an already-downloaded official archive so a transient
   resolver issue does not require changing sources.
 - Do not retune the broad S1.2 OpenAlex `search=plastic` query during S1.4;
-  query retuning remains S1.5 work.
+  `plastic-v2-candidate` promotion and query-code integration remain S1.5 work.
 - GNU Make is not on PATH; use the Rtools absolute path shown above.
 
 ## Needs owner input
