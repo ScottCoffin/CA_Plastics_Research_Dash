@@ -22,6 +22,11 @@ S2.2's OpenAlex normalization, C3 table schemas, California flag derivation,
 QC report, fixture, and acceptance check were implemented in this repository
 using the already-declared PyArrow dependency; no external code was copied.
 
+S2.3's provisional labeler and facet rules were implemented independently from
+the repository's `config/queries.yml` and `config/taxonomy.yml`.  The
+Trendspotter entry below was inspected for the documented MIT license and
+facet approach, but no Trendspotter source code or data was copied.
+
 | Repository/source | URL | License | Reused material | Adaptation and attribution |
 |---|---|---|---|---|
 | Job_Scraper | https://github.com/ScottCoffin/Job_Scraper | AGPL-3.0 | Watchdog and opt-in commit-guard concepts | Inspected as the documented owner pattern; independently reimplemented for this repository without copying workflow code. |

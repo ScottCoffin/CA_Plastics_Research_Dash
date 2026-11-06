@@ -1,77 +1,63 @@
-# Handoff - 2026-11-06 - task S2.3 (budget checkpoint)
+# Handoff - 2026-11-06 - task S2.3
 
 ## Done
-- No S2.3 production code, tests, fixtures, outputs, roadmap completion, or
-  commit was made. The session stopped before implementation because the
-  workflow budget was nearly exhausted.
-- Confirmed the S2.3 boundary: a separate deterministic `work_labels` Parquet
-  must join normalized works to raw OpenAlex records by `work_id`, preserving
-  the S2.2 normalized schema and the owner-reviewed institution registry.
-- Confirmed the repository-owned inputs: `config/queries.yml` supplies ordered
-  core, qualified, tier-2, and exclusion rules, and `config/taxonomy.yml`
-  supplies ordered multi-label domain seeds. The candidate remains
-  `owner_supplied_candidate` and unpromoted.
+- Implemented deterministic S2.3 labeling in `src/atlas/nlp/labels.py`.
+- Added `scripts/label_works.py` and `scripts/check_s2_3.py`.
+- Added the <=200-work fixture `tests/fixtures/s2_3_openalex_works.json` and
+  focused tests in `tests/test_labels.py`.
+- Labels are one sorted row per normalized work, written to a separate
+  `work_labels.parquet` output. Rules apply exclusions first, then core,
+  qualified-context, and tier-2 terms from `config/queries.yml`.
+- Raw OpenAlex topics are joined by `work_id` for display names; missing raw
+  works and missing topic entries are retained and counted in the QC report.
+- Domain and matrix facets are provisional, local, and deterministic. The
+  owner-supplied `plastic-v2-candidate` remains unpromoted; labels use
+  `label_source=rule`, nullable `confidence`, and
+  `plastic-v2-candidate-rule-v1`.
+- Documented the independent implementation and MIT Trendspotter inspection
+  in `docs/REUSE.md` and `docs/api_notes/labels.md`.
+- Updated B4 records in order: `.agent/TODO.md`, `.agent/MEMORY.md`,
+  `.agent/DECISIONS.md`, `.agent/LESSONS.md`, `.agent/QUESTIONS.md`,
+  `docs/api_notes/labels.md`, and `docs/REUSE.md`.
 
 ## State of the repo
-- S2.2 remains the last completed task (`8fdb15a`, `S2.2: finalize session
-  log`). Its earlier acceptance was `py -3.14 scripts/check_s2_2.py`; no S2.3
-  acceptance or full-suite rerun was performed in this budget-limited session.
-- Pre-existing protected changes remain untouched: `.agent/QUESTIONS.md`,
-  `data/processed/institution_review_top100.csv`,
-  `data/processed/institutions.parquet`, `docs/institutions_qc.md`, untracked
-  `docs/AWARDS_DATA.md`, and untracked `agent_docs/`.
-- This handoff is the only modification in this checkpoint and is uncommitted.
+- Focused acceptance: `py -3.14 scripts/check_s2_3.py` passes.
+- Full suite: `C:\rtools45\usr\bin\make.exe PYTHON="py -3.14" test` passes
+  (40 tests).
+- Ruff check/format, `make build`, and `git diff --check` pass.
+- No S2.4 workflow, schedule, commit guard, or rate-limit work was started.
+- Candidate promotion and later validation remain owner decisions; no owner
+  action is required to use this local provisional layer.
 
 ## Next task (suggested)
-- S2.3: implement provisional deterministic rule-based relevance and
-  multi-label domain tagging; do not start S2.4.
-- First, inspect the exact Part D Trendspotter reuse row and license only far
-  enough to decide whether copying is needed; record either licensed reuse or
-  independent local implementation in `docs/REUSE.md`.
-- Then add `src/atlas/nlp/` labeling code plus a CLI, <=200-record fixture,
-  focused tests, and `scripts/check_s2_3.py`. Assert sorted one-row-per-work
-  labels, deterministic reruns, rule ordering, provenance, coverage
-  reconciliation, and protected-artifact immutability.
-- Finally, run focused checks, `C:\rtools45\usr\bin\make.exe PYTHON=\"py -3.14\" test`,
-  Ruff, build/compile, and `git diff --check`; perform B4 in order, commit and
-  push only S2.3, then provide a successor prompt that repeats this requirement.
+- S2.4: add the daily works workflow with guarded output commits and resumable
+  rate-limit handling. First inspect the workflow conventions, then implement
+  only S2.4, run its simulated 429 acceptance, and provide the next successor
+  prompt.
 
 ## Gotchas the next agent must know
-- Normalize retains topic IDs only; raw OpenAlex is required for topic display
-  names and primary-topic names. Missing raw/topic rows must be retained and
-  counted, never silently dropped.
-- Exclusions must override inclusions; qualified terms require their configured
-  context; tier-2 chemicals are distinct from core. Use nullable `confidence`,
-  not a calibrated score claim.
-- The local taxonomy/query configurations are owner-supplied candidate inputs,
-  not validated classifiers. Keep `label_source=rule` and do not promote
-  `plastic-v2-candidate`.
+- Do not infer CA sampling from author affiliations; S2.3 leaves
+  `ca_sampled=unclear` for the later classifier stage.
+- Normalized works retain topic IDs only; raw OpenAlex JSON is needed for topic
+  display names. Never drop a work because its raw/topic join is missing.
+- The configured query and taxonomy are owner-supplied candidate inputs, not a
+  validated classifier. Do not promote `plastic-v2-candidate` automatically.
+- Trendspotter is MIT-licensed, but no external code was copied; preserve the
+  independent local implementation unless a later task explicitly changes it.
 
 ## Needs owner input
-- None to implement the local provisional rules. Promotion/validation of the
-  candidate remains an owner decision outside S2.3.
+- None for S2.3. Promotion/validation remains an owner-gated later decision.
 
 ## Files that are large or unsafe to read whole
 - `data/processed/institutions.parquet` -> inspect selected columns with
   PyArrow/DuckDB; preserve the owner-reviewed registry.
-- `data/raw/openalex_works/` -> inspect bounded snapshot metadata only; raw
-  responses are ignored and may become large.
+- `data/raw/openalex_works/` -> inspect bounded snapshot metadata only.
 - `data/interim/works_raw.parquet` -> inspect schema and bounded rows with
   PyArrow/DuckDB; do not load the full corpus into context.
 
 ## Prompt for the next fresh agent
 
-You are a build agent for
-`C:\Users\Scott.Coffin\R_new\CA_Plastics_Research_Dash`. Follow Part B of
-`spec.md` exactly. Read the required `.agent` files, inspect
-`git log --oneline -15` and `git status`, and complete exactly the first
-unchecked task, S2.3; do not start S2.4. Preserve all pre-existing
-owner/concurrent changes, including the reviewed institution data, geography,
-gazetteer, awards notes, S2.1 implementation, and S2.2 normalization. Implement
-deterministic rule-based `work_labels` from normalized plus raw OpenAlex works;
-preserve the candidate as unpromoted, use nullable uncalibrated confidence,
-and visibly count missing raw/topic rows. Run the S2.3 acceptance check and
-`make test`, update all B4 records in order, commit and push only S2.3 changes
-if configured, and stop before S2.4. End by reporting owner actions and
-providing a copy-paste prompt for the next fresh agent that explicitly repeats
-this successor-prompt requirement.
+Continue exactly S2.4 from `.agent/HANDOFF.md`; preserve existing dirty files,
+do not revisit or modify completed S2.3, and provide a copy-paste successor
+prompt in your final handoff. Use the lowest-cost available worker model and
+do not use any Sol models.

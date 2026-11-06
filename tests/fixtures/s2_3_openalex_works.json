@@ -1,0 +1,47 @@
+[
+  {
+    "id": "https://openalex.org/W9000000201",
+    "title": "Microplastics in California estuaries",
+    "abstract_inverted_index": {"Microplastics": [0], "occur": [1], "in": [2], "California": [3], "estuaries": [4]},
+    "type": "article",
+    "topics": [{"id": "https://openalex.org/T2001", "display_name": "Environmental science"}],
+    "primary_topic": {"id": "https://openalex.org/T2001", "display_name": "Environmental science"},
+    "authorships": []
+  },
+  {
+    "id": "https://openalex.org/W9000000202",
+    "title": "Microfiber shedding from laundry",
+    "abstract_inverted_index": {"Microfiber": [0], "shedding": [1], "from": [2], "laundry": [3]},
+    "type": "article",
+    "topics": [{"id": "https://openalex.org/T2002", "display_name": "Wastewater treatment"}],
+    "primary_topic": {"id": "https://openalex.org/T2002", "display_name": "Wastewater treatment"},
+    "authorships": []
+  },
+  {
+    "id": "https://openalex.org/W9000000203",
+    "title": "Microfiber strain mechanics",
+    "abstract_inverted_index": {"Microfiber": [0], "strain": [1], "mechanics": [2]},
+    "type": "article",
+    "topics": [{"id": "https://openalex.org/T2003", "display_name": "Materials science"}],
+    "primary_topic": {"id": "https://openalex.org/T2003", "display_name": "Materials science"},
+    "authorships": []
+  },
+  {
+    "id": "https://openalex.org/W9000000204",
+    "title": "Microplastic strain deformation of crystals",
+    "abstract_inverted_index": {"Microplastic": [0], "strain": [1], "deformation": [2], "of": [3], "crystals": [4]},
+    "type": "article",
+    "topics": [{"id": "https://openalex.org/T2004", "display_name": "Materials science"}],
+    "primary_topic": {"id": "https://openalex.org/T2004", "display_name": "Materials science"},
+    "authorships": []
+  },
+  {
+    "id": "https://openalex.org/W9000000205",
+    "title": "Plastic additives and BPA in wastewater",
+    "abstract_inverted_index": {"Plastic": [0], "additives": [1], "and": [2], "BPA": [3], "in": [4], "wastewater": [5]},
+    "type": "article",
+    "topics": [{"id": "https://openalex.org/T2005", "display_name": "Water science"}],
+    "primary_topic": {"id": "https://openalex.org/T2005", "display_name": "Water science"},
+    "authorships": []
+  }
+]

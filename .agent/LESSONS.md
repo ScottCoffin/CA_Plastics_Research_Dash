@@ -1,5 +1,15 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-06 - Provisional work-label joins and rule ordering
+- Join normalized work IDs back to raw OpenAlex records for topic display
+  names; retain every normalized work when raw or topic rows are missing and
+  reconcile both counts in the QC report.
+- Apply exclusions before inclusions, require configured context for qualified
+  terms, and keep tier-2 chemicals distinct from core. A nullable confidence
+  field avoids implying calibrated probabilities for candidate rules.
+- The Trendspotter reuse entry is MIT-licensed, but S2.3 uses an independent
+  local facet implementation and copies no external code.
+
 ## 2026-11-06 - C3 normalization and California flags
 - Keep the owner-reviewed institution registry immutable during works
   normalization. Emit a separate normalized institution table and retain raw

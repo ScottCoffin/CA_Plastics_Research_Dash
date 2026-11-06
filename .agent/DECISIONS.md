@@ -4,6 +4,22 @@ ADR-style decisions belong here with date, alternatives, rationale, and decision
 owner. Unanswered items continue to use the defaults in `spec.md` Part G and
 remain listed in `QUESTIONS.md`.
 
+## ADR-009 - 2026-11-06 - Deterministic provisional work labels
+
+- **Decision:** Emit a separate sorted `work_labels` Parquet from normalized
+  works joined to raw OpenAlex topic metadata. Apply exclusions before core,
+  qualified, and tier-2 query rules; use taxonomy seeds and independent local
+  matrix facets for provisional multi-label tags.
+- **Alternatives:** Infer topic names from normalized IDs alone; drop works
+  with missing raw/topic rows; promote the owner-supplied candidate as a
+  validated classifier; copy Trendspotter source code.
+- **Rationale:** Normalization intentionally retains topic IDs only, so raw
+  records are required for display names. Retaining and counting missing joins
+  makes coverage visible. The candidate is not validated, and the MIT
+  Trendspotter approach was sufficient without copying code.
+- **Decided by:** Build agent under the S2.3 implementation contract; owner
+  promotion remains outside this task.
+
 ## ADR-008 - 2026-11-06 - Separate normalized institution output
 
 - **Decision:** Normalize each S2.1 work object into C3-shaped works,

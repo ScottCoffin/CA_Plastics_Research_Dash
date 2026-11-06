@@ -95,6 +95,15 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   It preserves the reviewed registry, adds `ca_led` and `ca_any_author`, and
   writes `docs/normalization_qc.md`; `make qc` falls back to the committed
   S2.2 fixture when ignored live raw works are absent.
+- S2.3 labels are implemented in `atlas.nlp.labels` and written as a separate
+  one-row-per-work `work_labels.parquet`. Ordered exclusions, core terms,
+  qualified context terms, and tier-2 terms come from the owner-supplied
+  `config/queries.yml`; provisional domain and matrix facets use
+  `config/taxonomy.yml` plus independent local seeds. Raw OpenAlex topics are
+  joined by work ID for display names, and missing raw/topic rows remain in the
+  output and are counted in the QC report. `label_source=rule`, nullable
+  `confidence`, and `plastic-v2-candidate-rule-v1` keep the candidate
+  unpromoted.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.

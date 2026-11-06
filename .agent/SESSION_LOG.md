@@ -14,3 +14,4 @@
 | 2026-11-06 | S1.5 | Completed; versioned query renderer/cache, live count, precision/recall audit, tests, and acceptance pass | `cb2ef4f` |
 | 2026-11-06 | S2.1 | Completed; resumable OpenAlex works ingester, filter smoke, fixture, tests, and acceptance pass | `15321be` |
 | 2026-11-06 | S2.2 | Completed; C3 normalization, CA flags, QC report, fixture, tests, and acceptance pass | `7c80e60` |
+| 2026-11-06 | S2.3 | Completed; deterministic provisional labels, topic joins, coverage QC, fixture, tests, and acceptance pass | pending commit |

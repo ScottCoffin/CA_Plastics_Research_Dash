@@ -17,7 +17,7 @@ Check off only when the task Definition of Done and acceptance check in
 ## S2 Works ingestion
 - [x] **S2.1** Incremental, resumable OpenAlex ingester. Acceptance: reruns dedupe; high-water mark, usage log, and <=200-work fixture exist. Acceptance check: `py -3.14 scripts/check_s2_1.py`; full suite: `make test`.
 - [x] **S2.2** Normalize works, authorships, authors, institutions, and CA flags. Acceptance: C3 schemas and QC report; `py -3.14 scripts/check_s2_2.py` and `make qc` pass.
-- [ ] **S2.3** Provisional rule-based relevance and domain tags. Acceptance: labels populated and coverage logged.
+- [x] **S2.3** Provisional rule-based relevance and domain tags. Acceptance: labels populated and coverage logged. `py -3.14 scripts/check_s2_3.py`; `make test`, Ruff, build, and `git diff --check` pass. Candidate remains unpromoted.
 - [ ] **S2.4** Daily works workflow with commit and budget guards. Acceptance: CI schedule succeeds and simulated rate limit resumes.
 
 ## S3 MVP front end
