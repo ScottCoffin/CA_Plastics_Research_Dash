@@ -10,7 +10,7 @@ answers. Add an answer and date without deleting the original question.
 | G-3 | Include CA-led human-health work with no CA sampling? | Yes, via `ca_led` | Yes | Answered 2026-11-05 |
 | G-4 | How should sampling beyond California's 3-nm waters be classified? | Partial/not CA-sampled; filterable | Partial/not CA-sampled; filterable | Answered 2026-11-05 |
 | G-5 | What time horizons should works and grants use? | All works, last 10 emphasized; grants last 15 FY | All works, last 10 emphasized; grants last 15 FY | Answered 2026-11-05 |
-| G-6 | Where are State Water Board research awards published? | Investigate; defer without machine-readable source | — | Open |
+| G-6 | Where are State Water Board research awards published? | Investigate; defer without machine-readable source |  See docs\AWARDS_DATA.md for details   | Open |
 | G-7 | Confirm repo name, hosting, code license, and data license. | Separate repo; MIT code; CC BY derived data pending review | `CA_Plastics_Research_Dash`, public GitHub Pages; MIT code; CC BY derived data pending upstream review | Answered 2026-11-05; source reviews remain |
 | G-8 | May OA full text be cached and snippets published? | Gitignored cache only; short snippets | Gitignored cache only; short snippets | Answered 2026-11-05 |
 | G-9 | Confirm F1 acceptance thresholds. | Use proposed thresholds | Use proposed thresholds | Answered 2026-11-05 |

@@ -1,101 +1,101 @@
 review_rank,openalex_id,display_name,plastic_work_count,proposed_atlas_type,owner_atlas_type,owner_reviewed_at,owner_notes
-1,I84218800,"University of California, Davis",8618,UC,UC,11/5/2026,
-2,I97018004,Stanford University,8597,private,private,11/5/2026,
-3,I95457486,"University of California, Berkeley",8570,UC,UC,11/5/2026,
-4,I161318765,"University of California, Los Angeles",7384,UC,UC,11/5/2026,
-5,I36258959,University of California San Diego,6794,UC,UC,11/5/2026,
-6,I180670191,"University of California, San Francisco",5062,UC,UC,11/5/2026,UCSF; see #28 (UCSF Medical Center) for roll-up. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-7,I1282311441,Lawrence Livermore National Laboratory,4406,federal,federal,11/5/2026,"DOE/NNSA national lab, government-owned and contractor-operated; classed federal."
-8,I1174212,University of Southern California,4223,private,private,11/5/2026,
-9,I204250578,"University of California, Irvine",3987,UC,UC,11/5/2026,
-10,I4210137306,Stanford Medicine,3539,private,private,11/5/2026,CORRECTION (proposed nonprofit/NGO): Stanford University medical school/health umbrella; roll up to #2. Stanford Health Care (#93) is a separate hospital nonprofit. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-11,I122411786,California Institute of Technology,3348,private,private,11/5/2026,Manages JPL (#19) for NASA.
-12,I154570441,"University of California, Santa Barbara",2641,UC,UC,11/5/2026,
-13,I103635307,"University of California, Riverside",2492,UC,UC,11/5/2026,
-14,I2803209242,University of California System,1503,UC,UC,11/5/2026,"System-level/umbrella record, not a campus; do not count as separate institution in leaderboard; consider roll-up or exclusion."
-15,I185103710,"University of California, Santa Cruz",1480,UC,UC,11/5/2026,
-16,I149919469,California Polytechnic State University,1293,CSU,CSU,11/5/2026,Cal Poly San Luis Obispo.
-17,I150209017,Scripps Institution of Oceanography,1022,UC,UC,11/5/2026,"Unit of UC San Diego (#5); roll up for leaderboard, keep separate for marine/ocean domain filter."
-18,I2801935854,SLAC National Accelerator Laboratory,945,federal,federal,11/5/2026,DOE Office of Science lab operated by Stanford University; classed federal. See #2/#88. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-19,I1334627681,Jet Propulsion Laboratory,909,federal,federal,11/5/2026,CORRECTION (proposed nonprofit/NGO): NASA federally funded R&D center managed by Caltech (#11); classed federal. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-20,I26538001,San Diego State University,840,CSU,CSU,11/5/2026,
-21,I1282927834,Cedars-Sinai Medical Center,764,nonprofit/NGO,nonprofit/NGO,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-22,I123431417,Scripps Research Institute,729,nonprofit/NGO,nonprofit/NGO,11/5/2026,Scripps Research (La Jolla); unrelated to Scripps Institution of Oceanography (#17) or Scripps Health (#45). Avoid name-based merges. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-23,I4210160527,University of California Davis Medical Center,726,UC,UC,11/5/2026,UC Davis Health/medical center; roll up to #1; overlaps #90. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-24,I26347476,Loma Linda University,557,private,private,11/5/2026,Loma Linda University; see #32.
-25,I51504820,San Jose State University,551,CSU,CSU,11/5/2026,
-26,I156087764,"University of California, Merced",469,UC,UC,11/5/2026,
-27,I1307098950,Salk Institute for Biological Studies,466,nonprofit/NGO,nonprofit/NGO,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-28,I4210110664,University of California San Francisco Medical Center,427,UC,UC,11/5/2026,UCSF Health medical center; roll up to #6. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-29,I63533367,General Atomics (United States),401,company,company,11/5/2026,Also operates a DOE user facility; classed company. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-30,I1336910626,Children's Hospital Los Angeles,373,nonprofit/NGO,nonprofit/NGO,11/5/2026,Independent nonprofit hospital; USC-affiliated teaching hospital. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-31,I1301076528,City Of Hope National Medical Center,335,nonprofit/NGO,nonprofit/NGO,11/5/2026,"CORRECTION (proposed local-agency): City of Hope is a private nonprofit cancer center, not a city agency. Duplicate of #46: merge. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches."
-32,I1293502524,Loma Linda University Medical Center,315,nonprofit/NGO,nonprofit/NGO,11/5/2026,Part of Loma Linda University Health; roll up with #24 or keep as health-system record. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-33,I1343180700,Intel (United States),312,company,company,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-34,I157638225,"California State University, Northridge",312,CSU,CSU,11/5/2026,
-35,I1343052199,Kaiser Permanente,308,nonprofit/NGO,nonprofit/NGO,11/5/2026,Integrated health system (nonprofit plan plus physician groups); classification approximate. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-36,I1298353152,SRI International,282,nonprofit/NGO,nonprofit/NGO,11/5/2026,Independent nonprofit research institute (materials/chemistry works may be relevant). Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-37,I71838634,San Francisco State University,282,CSU,CSU,11/5/2026,
-38,I188891513,Sanford Burnham Prebys Medical Discovery Institute,272,nonprofit/NGO,nonprofit/NGO,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-39,I4210165985,Harbor–UCLA Medical Center,267,local-agency,local-agency,11/5/2026,CORRECTION (proposed nonprofit/NGO): LA County Dept of Health Services hospital; UCLA-affiliated. Ambiguous (county vs UC-affiliated); follow up if it matters. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-40,I204866599,VA Palo Alto Health Care System,257,federal,federal,11/5/2026,CORRECTION (proposed nonprofit/NGO): US Dept of Veterans Affairs facility. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-41,I4405256501,Space Sciences Laboratory,245,UC,UC,11/5/2026,UC Berkeley organized research unit; roll up to #3. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-42,I1315708478,San Francisco VA Medical Center,241,federal,federal,11/5/2026,CORRECTION (proposed nonprofit/NGO): US Dept of Veterans Affairs facility; UCSF-affiliated. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-43,I59897056,"California State University, Long Beach",241,CSU,CSU,11/5/2026,
-44,I4210140558,Western Regional Research Center,239,federal,federal,11/5/2026,"CORRECTION (proposed local-agency): USDA Agricultural Research Service center (Albany, CA)."
-45,I4210146328,Scripps Clinic,231,nonprofit/NGO,nonprofit/NGO,11/5/2026,Scripps Health system; unrelated to Scripps Institution of Oceanography (#17) or Scripps Research (#22). Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-46,I4210110459,City of Hope,227,nonprofit/NGO,nonprofit/NGO,11/5/2026,"CORRECTION (proposed local-agency): private nonprofit, not a city agency. Duplicate of #31: merge. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches."
-47,I1291425158,Google (United States),216,company,company,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-48,I35364215,Naval Postgraduate School,212,federal,federal,11/5/2026,US Navy/DoD graduate university (Monterey).
-49,I4210099595,VA San Diego Healthcare System,209,federal,federal,11/5/2026,CORRECTION (proposed nonprofit/NGO): US Dept of Veterans Affairs facility. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-50,I160856358,University of San Diego,204,private,private,11/5/2026,
-51,I67328108,"California State University, Fresno",204,CSU,CSU,11/5/2026,
-52,I142934699,"California State University, Fullerton",203,CSU,CSU,11/5/2026,
-53,I119942576,University of the Pacific,200,private,private,11/5/2026,
-54,I76766440,University of San Francisco,199,private,private,11/5/2026,
-55,I4210156876,VA Greater Los Angeles Healthcare System,196,federal,federal,11/5/2026,CORRECTION (proposed nonprofit/NGO): US Dept of Veterans Affairs facility. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-56,I1335486098,Electric Power Research Institute,193,nonprofit/NGO,nonprofit/NGO,11/5/2026,Independent nonprofit (HQ Palo Alto); some works may be from non-California sites.
-57,I16269868,Santa Clara University,192,private,private,11/5/2026,
-58,I1320553840,Amgen (United States),186,company,company,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-59,I93393672,Western University of Health Sciences,182,private,private,11/5/2026,
-60,I98947143,California State Polytechnic University,180,CSU,CSU,11/5/2026,Name ambiguous: likely Cal Poly Pomona; confirm OpenAlex record. Distinct from Cal Poly SLO (#16) and Cal Poly Humboldt (#69).
-61,I4210090748,San Joaquin Valley Agricultural Sciences Center,179,federal,federal,11/5/2026,"CORRECTION (proposed nonprofit/NGO): USDA Agricultural Research Service center (Parlier, CA)."
-62,I27825529,California State University Los Angeles,178,CSU,CSU,11/5/2026,
-63,I4405266016,Hopkins Marine Station,164,private,private,11/5/2026,"CORRECTION (proposed nonprofit/NGO): Stanford University marine station; roll up to #2, keep separate for marine domain filter."
-64,I35566140,Loyola Marymount University,158,private,private,11/5/2026,
-65,I1324840837,Hewlett-Packard (United States),157,company,company,11/5/2026,Ambiguous: HP Inc. vs Hewlett Packard Enterprise vs HP Labs; follow up if it matters. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-66,I127339247,California State University System,156,CSU,CSU,11/5/2026,"System-level/Chancellor's Office record, not a campus; do not count as a separate institution."
-67,I53012624,Joint BioEnergy Institute,151,federal,federal,11/5/2026,CORRECTION (proposed nonprofit/NGO): DOE Bioenergy Research Center led by Lawrence Berkeley National Laboratory (UC-managed DOE lab). Ambiguous (federal vs UC); follow up.
-68,I1295908608,San Francisco General Hospital,147,local-agency,local-agency,11/5/2026,CORRECTION (proposed nonprofit/NGO): City and County of San Francisco public hospital; UCSF-affiliated. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-69,I192389796,Cal Poly Humboldt,147,CSU,CSU,11/5/2026,
-70,I4210096636,"University of California, Irvine Medical Center",145,UC,UC,11/5/2026,UC Irvine Health medical center; roll up to #9. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-71,I1321430492,Gladstone Institutes,128,nonprofit/NGO,nonprofit/NGO,11/5/2026,Independent institute; UCSF-affiliated. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-72,I4210085935,IBM Research - Almaden,128,company,company,11/5/2026,CORRECTION (proposed nonprofit/NGO): IBM corporate research laboratory. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-73,I4210087384,Rady Children's Hospital-San Diego,128,nonprofit/NGO,nonprofit/NGO,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-74,I2800935791,UC San Diego Health System,127,UC,UC,11/5/2026,UC San Diego Health; roll up to #5; overlaps #89. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-75,I43522216,"California State University, Sacramento",123,CSU,CSU,11/5/2026,
-76,I100191712,Pepperdine University,120,private,private,11/5/2026,
-77,I181998121,Bechtel (United States),120,company,company,11/5/2026,
-78,I2801272649,Ronald Reagan UCLA Medical Center,120,UC,UC,11/5/2026,CORRECTION (proposed nonprofit/NGO): UCLA Health hospital; roll up to #4; overlaps #87. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-79,I4210117038,USC Norris Comprehensive Cancer Center,119,private,private,11/5/2026,CORRECTION (proposed nonprofit/NGO): USC (Keck Medicine) cancer center; roll up to #8. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-80,I4210133819,Beckman Laser Institute and Medical Clinic,119,UC,UC,11/5/2026,CORRECTION (proposed nonprofit/NGO): UC Irvine research institute with affiliated clinic; roll up to #9; follow up if the clinic should be separate. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-81,I36053171,"California State University, Chico",118,CSU,CSU,11/5/2026,
-82,I1316194761,Museum of Vertebrate Zoology,117,UC,UC,11/5/2026,CORRECTION (proposed nonprofit/NGO): UC Berkeley museum/research unit; roll up to #3. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-83,I169540460,The Aerospace Corporation,117,nonprofit/NGO,nonprofit/NGO,11/5/2026,Nonprofit operating a federally funded R&D center; classed nonprofit.
-84,I1333577951,California Department of Fish and Wildlife,115,state-agency,state-agency,11/5/2026,
-85,I1319261023,Monterey Bay Aquarium Research Institute,112,nonprofit/NGO,nonprofit/NGO,11/5/2026,Private nonprofit research institute (Moss Landing); distinct from Moss Landing Marine Laboratories (#99).
-86,I1337826666,Buck Institute for Research on Aging,112,nonprofit/NGO,nonprofit/NGO,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-87,I2801403999,UCLA Medical Center,107,UC,UC,11/5/2026,CORRECTION (proposed nonprofit/NGO): UCLA Health; likely duplicate of #78; roll up to #4. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-88,I4210094059,Kavli Institute for Particle Astrophysics and Cosmology,107,private,private,11/5/2026,CORRECTION (proposed nonprofit/NGO): joint Stanford/SLAC institute; classed private (Stanford). Alternative: federal via SLAC (#18); follow up. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-89,I4210132395,University of California San Diego Medical Center,107,UC,UC,11/5/2026,UC San Diego Health; overlaps #74. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-90,I4210160856,UC Davis Health,107,UC,UC,11/5/2026,UC Davis Health; roll up to #1; overlaps #23. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-91,I4210127875,Nvidia (United States),106,company,company,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-92,I1311191458,La Jolla Institute for Immunology,104,nonprofit/NGO,nonprofit/NGO,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-93,I4210105015,Stanford Health Care,101,nonprofit/NGO,nonprofit/NGO,11/5/2026,Separate nonprofit health system affiliated with Stanford; roll up to #2 optional. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-94,I4210095419,Carnegie Department of Plant Biology,100,nonprofit/NGO,nonprofit/NGO,11/5/2026,Carnegie Institution for Science plant biology department (on Stanford campus). Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-95,I4210096972,Los Angeles Medical Center,100,nonprofit/NGO,nonprofit/NGO,11/5/2026,AMBIGUOUS: name matches several hospitals; verify OpenAlex record before relying on type. Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-96,I4210148676,U.S. Salinity Laboratory,97,federal,federal,11/5/2026,USDA Agricultural Research Service lab (Riverside).
-97,I4210114444,Meta (United States),95,company,company,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-98,I4210118014,Chevron (United States),95,company,company,11/5/2026,Relevance check: possible non-pollution 'plastic/plasticity/plastic surgery' matches.
-99,I95850191,Moss Landing Marine Laboratories,94,CSU,CSU,11/5/2026,CORRECTION (proposed nonprofit/NGO): CSU-affiliated marine lab administered by San Jose State; roll up to #25 or keep separate for marine domain filter.
-100,I43369023,"California State University, San Bernardino",91,CSU,CSU,11/5/2026,
+1,I84218800,"University of California, Davis",8618,UC,,,
+2,I97018004,Stanford University,8597,private,,,
+3,I95457486,"University of California, Berkeley",8570,UC,,,
+4,I161318765,"University of California, Los Angeles",7384,UC,,,
+5,I36258959,University of California San Diego,6794,UC,,,
+6,I180670191,"University of California, San Francisco",5062,UC,,,
+7,I1282311441,Lawrence Livermore National Laboratory,4406,federal,,,
+8,I1174212,University of Southern California,4223,private,,,
+9,I204250578,"University of California, Irvine",3987,UC,,,
+10,I4210137306,Stanford Medicine,3539,private,,,
+11,I122411786,California Institute of Technology,3348,private,,,
+12,I154570441,"University of California, Santa Barbara",2641,UC,,,
+13,I103635307,"University of California, Riverside",2492,UC,,,
+14,I2803209242,University of California System,1503,UC,,,
+15,I185103710,"University of California, Santa Cruz",1480,UC,,,
+16,I149919469,California Polytechnic State University,1293,CSU,,,
+17,I150209017,Scripps Institution of Oceanography,1022,UC,,,
+18,I2801935854,SLAC National Accelerator Laboratory,945,federal,,,
+19,I1334627681,Jet Propulsion Laboratory,909,federal,,,
+20,I1282927834,Cedars-Sinai Medical Center,764,nonprofit/NGO,,,
+21,I123431417,Scripps Research Institute,729,nonprofit/NGO,,,
+22,I4210160527,University of California Davis Medical Center,726,UC,,,
+23,I1307098950,Salk Institute for Biological Studies,466,nonprofit/NGO,,,
+24,I4210110664,University of California San Francisco Medical Center,427,UC,,,
+25,I63533367,General Atomics (United States),401,company,,,
+26,I1336910626,Children's Hospital Los Angeles,373,nonprofit/NGO,,,
+27,I1301076528,City Of Hope National Medical Center,335,nonprofit/NGO,,,
+28,I1293502524,Loma Linda University Medical Center,315,nonprofit/NGO,,,
+29,I4405256501,Space Sciences Laboratory,245,UC,,,
+30,I4210140558,Western Regional Research Center,239,federal,,,
+31,I67328108,"California State University, Fresno",204,CSU,,,
+32,I1335486098,Electric Power Research Institute,193,nonprofit/NGO,,,
+33,I93393672,Western University of Health Sciences,182,private,,,
+34,I98947143,California State Polytechnic University,180,CSU,,,
+35,I4210090748,San Joaquin Valley Agricultural Sciences Center,179,federal,,,
+36,I4405266016,Hopkins Marine Station,164,private,,,
+37,I53012624,Joint BioEnergy Institute,151,federal,,,
+38,I192389796,Cal Poly Humboldt,147,other-public,,,
+39,I4210096636,"University of California, Irvine Medical Center",145,UC,,,
+40,I1321430492,Gladstone Institutes,128,nonprofit/NGO,,,
+41,I4210087384,Rady Children's Hospital-San Diego,128,nonprofit/NGO,,,
+42,I2800935791,UC San Diego Health System,127,UC,,,
+43,I181998121,Bechtel (United States),120,company,,,
+44,I2801272649,Ronald Reagan UCLA Medical Center,120,UC,,,
+45,I4210117038,USC Norris Comprehensive Cancer Center,119,private,,,
+46,I4210133819,Beckman Laser Institute and Medical Clinic,119,UC,,,
+47,I1316194761,Museum of Vertebrate Zoology,117,UC,,,
+48,I1333577951,California Department of Fish and Wildlife,115,state-agency,,,
+49,I1319261023,Monterey Bay Aquarium Research Institute,112,nonprofit/NGO,,,
+50,I1337826666,Buck Institute for Research on Aging,112,nonprofit/NGO,,,
+51,I2801403999,UCLA Medical Center,107,UC,,,
+52,I4210094059,Kavli Institute for Particle Astrophysics and Cosmology,107,private,,,
+53,I4210132395,University of California San Diego Medical Center,107,UC,,,
+54,I4210160856,UC Davis Health,107,UC,,,
+55,I4210127875,Nvidia (United States),106,company,,,
+56,I1311191458,La Jolla Institute for Immunology,104,nonprofit/NGO,,,
+57,I4210105015,Stanford Health Care,101,nonprofit/NGO,,,
+58,I4210095419,Carnegie Department of Plant Biology,100,nonprofit/NGO,,,
+59,I4210096972,Los Angeles Medical Center,100,nonprofit/NGO,,,
+60,I4210148676,U.S. Salinity Laboratory,97,federal,,,
+61,I4210114444,Meta (United States),95,company,,,
+62,I4210118014,Chevron (United States),95,company,,,
+63,I95850191,Moss Landing Marine Laboratories,94,CSU,,,
+64,I1301553790,J. Craig Venter Institute,89,nonprofit/NGO,,,
+65,I4210095401,Loma Linda University Health Care,87,nonprofit/NGO,,,
+66,I1296080982,Naval Medical Center San Diego,84,nonprofit/NGO,,,
+67,I4210116300,Orthopaedic Hospital,84,nonprofit/NGO,,,
+68,I4210147380,California Northstate University,84,other-public,,,
+69,I4405269264,Stanford Cardiovascular Institute,82,nonprofit/NGO,,,
+70,I1304278710,Children's Hospital of Orange County,80,nonprofit/NGO,,,
+71,I1334016132,Lucile Packard Children's Hospital,78,nonprofit/NGO,,,
+72,I872248612,Claremont Colleges,76,private,,,
+73,I172039944,Dominican University of California,72,UC,,,
+74,I1306409833,Adobe Systems (United States),70,company,,,
+75,I118839592,"California State University, Bakersfield",69,CSU,,,
+76,I99418890,San Francisco Bay University,69,private,,,
+77,I872623138,Search for Extraterrestrial Intelligence,68,nonprofit/NGO,,,
+78,I11006740,Southern California Coastal Water Research Project,66,nonprofit/NGO,,,
+79,I173498003,Palo Alto Research Center,66,nonprofit/NGO,,,
+80,I4405270452,Saban Research Institute,66,nonprofit/NGO,,,
+81,I138285227,Agilent Technologies (United States),64,company,,,
+82,I4405278674,Institute for Integrative Genome Biology,63,UC,,,
+83,I1327551190,Zoological Society of San Diego,62,nonprofit/NGO,,,
+84,I4210112098,National University,62,private,,,
+85,I4210108215,VA West Los Angeles Medical Center,61,nonprofit/NGO,,,
+86,I4210103356,Shriners Hospitals for Children - Northern California,60,nonprofit/NGO,,,
+87,I1342924430,LAC+USC Medical Center,59,nonprofit/NGO,,,
+88,I4389425283,State of California,59,state-agency,,,
+89,I4210156491,VA Northern California Health Care System,58,nonprofit/NGO,,,
+90,I4405259940,Kavli Institute for Theoretical Physics,56,UC,,,
+91,I1294537935,Point Blue Conservation Science,55,nonprofit/NGO,,,
+92,I2801025900,Natural History Museum of Los Angeles County,55,nonprofit/NGO,,,
+93,I2801022843,Santa Clara Valley Medical Center,54,nonprofit/NGO,,,
+94,I4210097936,Terasaki Foundation,51,nonprofit/NGO,,,
+95,I4210142140,Walt Disney (United States),49,company,,,
+96,I4210153776,Apple (United States),49,company,,,
+97,I2799798094,UCLA Health,47,nonprofit/NGO,,,
+98,I2800035258,Ionis Pharmaceuticals (United States),47,company,,,
+99,I2802549562,Rancho Los Amigos National Rehabilitation Center,47,nonprofit/NGO,,,
+100,I4405279711,Center for Plant Cell Biology,47,UC,,,
