@@ -12,4 +12,4 @@
 | 2026-11-05 | S1.5 prep | Integrated owner-supplied candidate query/taxonomy evidence; no live query run | `b25c2df` |
 | 2026-11-05 | S1.4 | Completed; GeoNames SQLite subset, aliases, blacklist, tests, and acceptance pass | pending commit |
 | 2026-11-06 | S1.5 | Completed; versioned query renderer/cache, live count, precision/recall audit, tests, and acceptance pass | `cb2ef4f` |
-| 2026-11-06 | S2.1 | Completed; resumable OpenAlex works ingester, filter smoke, fixture, tests, and acceptance pass | pending commit |
+| 2026-11-06 | S2.1 | Completed; resumable OpenAlex works ingester, filter smoke, fixture, tests, and acceptance pass | `15321be` |
