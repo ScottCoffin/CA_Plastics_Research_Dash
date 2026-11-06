@@ -1,5 +1,18 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-06 - C3 normalization and California flags
+- Keep the owner-reviewed institution registry immutable during works
+  normalization. Emit a separate normalized institution table and retain raw
+  unresolved links so missing coverage is measurable rather than silently
+  dropped.
+- `ca_led` is a resolved-registry test on the first authorship, while
+  `ca_any_author` is true when any authorship has a resolved California
+  institution. Affiliation text is useful for an unresolved-CA QC warning but
+  is not sufficient evidence for either flag.
+- `make qc` can use the committed four-work S2.2 fixture when the ignored live
+  raw table is absent, keeping the acceptance path reproducible without API
+  calls.
+
 ## 2026-11-06 - Resumable OpenAlex works ingestion
 - OpenAlex publication-date windows are accepted for the works endpoint, while
   `from_updated_date` returned HTTP 429 Plan upgrade required on the available

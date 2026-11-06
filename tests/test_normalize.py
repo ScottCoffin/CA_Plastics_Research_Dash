@@ -1,0 +1,62 @@
+import json
+from pathlib import Path
+
+import pyarrow.parquet as pq
+
+from atlas.ingest.normalize import normalize_fixture
+
+FIXTURE = Path(__file__).parent / "fixtures" / "s2_2_openalex_works.json"
+INSTITUTIONS = Path("data/processed/institutions.parquet")
+
+
+def test_normalization_outputs_c3_tables_and_flags(tmp_path: Path) -> None:
+    result = normalize_fixture(
+        FIXTURE,
+        institution_path=INSTITUTIONS,
+        output_dir=tmp_path / "processed",
+        qc_path=tmp_path / "normalization_qc.md",
+        generated_at="test",
+    )
+    assert json.loads(FIXTURE.read_text(encoding="utf-8"))[0]["title"]
+    works = pq.read_table(result.output_dir / "works.parquet").to_pylist()
+    assert len(works) == 4
+    assert {row["work_id"] for row in works} == {
+        "W9000000101",
+        "W9000000102",
+        "W9000000103",
+        "W9000000104",
+    }
+    assert works[0]["abstract"] == "Microplastics occur in California estuaries"
+    by_id = {row["work_id"]: row for row in works}
+    assert by_id["W9000000101"]["ca_led"] is True
+    assert by_id["W9000000102"]["ca_led"] is False
+    assert by_id["W9000000102"]["ca_any_author"] is True
+    assert result.metrics == {
+        "source_work_rows": 4,
+        "works": 4,
+        "authorships": 6,
+        "authors": 4,
+        "institutions": 3,
+        "missing_affiliations": 2,
+        "null_author_ids": 2,
+        "unresolved_institution_links": 2,
+        "ca_affiliation_without_resolved_institution": 1,
+        "ca_led_works": 1,
+        "ca_any_author_works": 2,
+    }
+    report = result.qc_path.read_text(encoding="utf-8")
+    assert "Authorships with missing raw affiliation | 2" in report
+
+
+def test_normalization_preserves_unresolved_institution_rows(tmp_path: Path) -> None:
+    result = normalize_fixture(
+        FIXTURE,
+        institution_path=INSTITUTIONS,
+        output_dir=tmp_path / "processed",
+        qc_path=tmp_path / "normalization_qc.md",
+    )
+    rows = pq.read_table(result.output_dir / "institutions.parquet").to_pylist()
+    by_id = {row["inst_id"]: row for row in rows}
+    assert by_id["I84218800"]["ca_flag"] is True
+    assert by_id["I99999992"]["ca_flag"] is False
+    assert by_id["I99999991"]["atlas_type"] == "other"

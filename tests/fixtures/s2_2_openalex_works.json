@@ -1,0 +1,105 @@
+[
+  {
+    "id": "https://openalex.org/W9000000101",
+    "doi": "https://doi.org/10.5555/ca-plastics-101",
+    "title": "Microplastics in California estuaries",
+    "abstract_inverted_index": {"Microplastics": [0], "occur": [1], "in": [2], "California": [3], "estuaries": [4]},
+    "publication_date": "2023-04-12",
+    "publication_year": 2023,
+    "updated_date": "2024-01-10",
+    "type": "article",
+    "primary_location": {"source": {"display_name": "Journal of Coastal Science"}, "landing_page_url": "https://example.org/101", "license": "cc-by"},
+    "open_access": {"is_oa": true, "oa_status": "gold", "oa_url": "https://example.org/101"},
+    "best_oa_location": {"license": "cc-by", "pdf_url": "https://example.org/101.pdf"},
+    "topics": [{"id": "https://openalex.org/T1001", "display_name": "Environmental science", "score": 0.91}],
+    "primary_topic": {"id": "https://openalex.org/T1001", "display_name": "Environmental science"},
+    "cited_by_count": 12,
+    "authorships": [
+      {
+        "author_position": "first",
+        "is_corresponding": true,
+        "author": {"id": "https://openalex.org/A9000000101", "display_name": "Alice California", "orcid": "https://orcid.org/0000-0001-0000-0101"},
+        "institutions": [{"id": "https://openalex.org/I84218800", "ror": "https://ror.org/05rrcem69", "display_name": "University of California, Davis", "country_code": "US", "lineage": ["https://openalex.org/I84218800"], "type": "education"}],
+        "raw_affiliation_strings": ["University of California, Davis, Davis, CA, USA"]
+      },
+      {
+        "author_position": "last",
+        "is_corresponding": false,
+        "author": {"display_name": "Unresolved coauthor"},
+        "institutions": [],
+        "raw_affiliation_strings": []
+      }
+    ]
+  },
+  {
+    "id": "https://openalex.org/W9000000102",
+    "doi": "https://doi.org/10.5555/ca-plastics-102",
+    "title": "Plastic particles in stormwater",
+    "abstract_inverted_index": {"Plastic": [0], "particles": [1], "in": [2], "stormwater": [3]},
+    "publication_date": "2024-08-01",
+    "publication_year": 2024,
+    "updated_date": "2024-08-14",
+    "type": "article",
+    "primary_location": {"source": {"display_name": "Water Research Notes"}, "landing_page_url": "https://example.org/102"},
+    "open_access": {"is_oa": false, "oa_status": "closed"},
+    "topics": [{"id": "https://openalex.org/T1002", "display_name": "Water science", "score": 0.83}],
+    "primary_topic": {"id": "https://openalex.org/T1002", "display_name": "Water science"},
+    "cited_by_count": 3,
+    "authorships": [
+      {
+        "author_position": "first",
+        "is_corresponding": false,
+        "author": {"id": "https://openalex.org/A9000000102", "display_name": "Bob Oregon"},
+        "institutions": [{"id": "https://openalex.org/I99999991", "display_name": "Oregon Water Institute", "country_code": "US", "geo": {"city": "Portland", "region": "Oregon"}}],
+        "raw_affiliation_strings": ["Oregon Water Institute, Portland, OR, USA"]
+      },
+      {
+        "author_position": "last",
+        "is_corresponding": true,
+        "author": {"id": "https://openalex.org/A9000000103", "display_name": "Carol Davis"},
+        "institutions": [{"id": "https://openalex.org/I84218800", "display_name": "University of California, Davis", "country_code": "US"}],
+        "raw_affiliation_strings": ["University of California, Davis, CA, USA"]
+      }
+    ]
+  },
+  {
+    "id": "https://openalex.org/W9000000103",
+    "title": "Nanoplastics and aquatic exposure",
+    "publication_date": "2024-11-20",
+    "publication_year": 2024,
+    "updated_date": "2024-12-02",
+    "type": "article",
+    "primary_location": {"source": {"display_name": "Aquatic Exposure Reports"}},
+    "open_access": {"is_oa": false, "oa_status": "closed"},
+    "cited_by_count": 0,
+    "authorships": [
+      {
+        "author_position": "first",
+        "is_corresponding": false,
+        "author": {"id": "https://openalex.org/A9000000104", "display_name": "Dana Field"},
+        "institutions": [{"id": "https://openalex.org/I99999992", "display_name": "Unknown California Lab", "country_code": "US", "geo": {"city": "Unknown", "region": "California"}}],
+        "raw_affiliation_strings": ["Unknown California Lab, California, USA"]
+      }
+    ]
+  },
+  {
+    "id": "https://openalex.org/W9000000104",
+    "title": "Marine debris monitoring methods",
+    "publication_date": "2025-02-03",
+    "publication_year": 2025,
+    "updated_date": "2025-02-19",
+    "type": "review",
+    "primary_location": {"source": {"display_name": "Methods in Marine Science"}},
+    "open_access": {"is_oa": false, "oa_status": "closed"},
+    "cited_by_count": 1,
+    "authorships": [
+      {
+        "author_position": "first",
+        "is_corresponding": false,
+        "author": {},
+        "institutions": [],
+        "raw_affiliation_strings": []
+      }
+    ]
+  }
+]

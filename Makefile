@@ -1,6 +1,6 @@
 PYTHON ?= python
 
-.PHONY: setup test lint build all
+.PHONY: setup test lint build qc all
 
 setup:
 	$(PYTHON) -m pip install -e ".[dev]"
@@ -15,5 +15,7 @@ lint:
 build:
 	$(PYTHON) -m compileall -q src
 
-all: lint test build
+qc:
+	$(PYTHON) scripts/normalize_openalex.py
 
+all: lint test build

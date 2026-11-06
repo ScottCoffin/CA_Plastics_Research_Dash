@@ -89,6 +89,12 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   `from_updated_date` is implemented as an opt-in mode but the 2026-11-06
   free-plan smoke returned HTTP 429 Plan upgrade required. The four-record
   synthetic fixture is `tests/fixtures/s2_1_openalex_works.json`.
+- S2.2 normalization is implemented in `atlas.ingest.normalize` and writes
+  C3-shaped `works.parquet`, `authorships.parquet`, `authors.parquet`, and a
+  separate normalized `institutions.parquet` below `data/processed/normalized/`.
+  It preserves the reviewed registry, adds `ca_led` and `ca_any_author`, and
+  writes `docs/normalization_qc.md`; `make qc` falls back to the committed
+  S2.2 fixture when ignored live raw works are absent.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.

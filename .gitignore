@@ -30,9 +30,13 @@ data/interim/*
 !data/interim/.gitkeep
 data/logs/*
 !data/logs/.gitkeep
+data/processed/normalized/
 
 # Downloaded full text and local model artifacts
 *.pdf
 *.tei.xml
 models/
 
+# codex-workflow-managed-start
+.codex_workflow_hidden_resources/
+# codex-workflow-managed-end

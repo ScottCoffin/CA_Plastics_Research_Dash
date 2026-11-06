@@ -1,0 +1,600 @@
+"""Normalize OpenAlex work records into the processed C3 tables.
+
+The normalizer deliberately keeps the reviewed institution registry as an
+input.  Its generated institution table is written below a separate output
+directory so a works refresh cannot overwrite owner-reviewed registry state.
+"""
+
+from __future__ import annotations
+
+import csv
+import json
+import re
+import tempfile
+from collections import defaultdict
+from collections.abc import Iterable, Mapping, Sequence
+from dataclasses import dataclass
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
+
+import pyarrow as pa
+import pyarrow.parquet as pq
+
+WORKS_SCHEMA = pa.schema(
+    [
+        ("work_id", pa.string()),
+        ("doi", pa.string()),
+        ("title", pa.string()),
+        ("abstract", pa.string()),
+        ("year", pa.int64()),
+        ("pub_date", pa.string()),
+        ("type", pa.string()),
+        ("journal", pa.string()),
+        ("is_oa", pa.bool_()),
+        ("oa_status", pa.string()),
+        ("oa_url", pa.string()),
+        ("license", pa.string()),
+        ("openalex_topics", pa.list_(pa.string())),
+        ("primary_topic", pa.string()),
+        ("cited_by_count", pa.int64()),
+        ("first_seen", pa.string()),
+        ("last_updated", pa.string()),
+        ("ca_led", pa.bool_()),
+        ("ca_any_author", pa.bool_()),
+    ]
+)
+
+AUTHORSHIPS_SCHEMA = pa.schema(
+    [
+        ("work_id", pa.string()),
+        ("author_id", pa.string()),
+        ("author_name", pa.string()),
+        ("position", pa.string()),
+        ("is_corresponding", pa.bool_()),
+        ("institution_ids", pa.list_(pa.string())),
+        ("raw_affiliation", pa.string()),
+    ]
+)
+
+AUTHORS_SCHEMA = pa.schema(
+    [
+        ("author_id", pa.string()),
+        ("name", pa.string()),
+        ("orcid", pa.string()),
+        ("ca_works_count", pa.int64()),
+        ("first_year", pa.int64()),
+        ("last_year", pa.int64()),
+        ("domain_tags", pa.list_(pa.string())),
+        ("override_flags", pa.list_(pa.string())),
+    ]
+)
+
+INSTITUTIONS_SCHEMA = pa.schema(
+    [
+        ("inst_id", pa.string()),
+        ("ror", pa.string()),
+        ("name", pa.string()),
+        ("city", pa.string()),
+        ("region", pa.string()),
+        ("lat", pa.float64()),
+        ("lon", pa.float64()),
+        ("ror_types", pa.list_(pa.string())),
+        ("atlas_type", pa.string()),
+        ("parent_system", pa.string()),
+        ("ca_flag", pa.bool_()),
+    ]
+)
+
+
+@dataclass(frozen=True)
+class NormalizationResult:
+    """Paths and QC metrics produced by one deterministic normalization run."""
+
+    output_dir: Path
+    qc_path: Path
+    metrics: dict[str, int]
+
+
+def compact_id(value: object) -> str:
+    """Return an OpenAlex or ROR identifier without its URL prefix."""
+
+    text = str(value or "").rstrip("/")
+    return text.rsplit("/", 1)[-1] if text else ""
+
+
+def _string(value: object) -> str:
+    return str(value).strip() if value is not None else ""
+
+
+def _number(value: object) -> int | None:
+    try:
+        return int(value) if value is not None and value != "" else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _float(value: object) -> float | None:
+    try:
+        return float(value) if value is not None and value != "" else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _compact_ids(values: object) -> list[str]:
+    if not isinstance(values, Sequence) or isinstance(values, (str, bytes)):
+        return []
+    return list(dict.fromkeys(compact_id(value) for value in values if compact_id(value)))
+
+
+def _abstract_from_inverted_index(value: object) -> str:
+    if isinstance(value, str):
+        return value
+    if not isinstance(value, Mapping):
+        return ""
+    words: dict[int, str] = {}
+    for token, positions in value.items():
+        if not isinstance(positions, Sequence) or isinstance(positions, (str, bytes)):
+            continue
+        for position in positions:
+            try:
+                words[int(position)] = str(token)
+            except (TypeError, ValueError):
+                continue
+    return " ".join(words[index] for index in sorted(words))
+
+
+def _topic_ids(work: Mapping[str, Any]) -> list[str]:
+    topics = work.get("topics")
+    if not isinstance(topics, Sequence) or isinstance(topics, (str, bytes)):
+        return []
+    return list(
+        dict.fromkeys(
+            compact_id(topic.get("id"))
+            for topic in topics
+            if isinstance(topic, Mapping) and compact_id(topic.get("id"))
+        )
+    )
+
+
+def _source(work: Mapping[str, Any]) -> Mapping[str, Any]:
+    location = work.get("primary_location")
+    source = location.get("source") if isinstance(location, Mapping) else None
+    return source if isinstance(source, Mapping) else {}
+
+
+def _location(work: Mapping[str, Any]) -> Mapping[str, Any]:
+    location = work.get("best_oa_location") or work.get("primary_location")
+    return location if isinstance(location, Mapping) else {}
+
+
+def _author_position(index: int, total: int, value: object) -> str:
+    position = _string(value).casefold()
+    if position in {"first", "middle", "last"}:
+        return position
+    if index == 0:
+        return "first"
+    if index == total - 1:
+        return "last"
+    return "middle"
+
+
+def _looks_california(value: str) -> bool:
+    text = value.casefold()
+    return "california" in text or bool(re.search(r"(?<![a-z])ca(?![a-z])", text))
+
+
+def _read_registry(path: str | Path) -> dict[str, dict[str, Any]]:
+    table = pq.read_table(path)
+    result: dict[str, dict[str, Any]] = {}
+    for row in table.to_pylist():
+        inst_id = compact_id(row.get("openalex_id"))
+        if not inst_id:
+            continue
+        region = _string(row.get("region"))
+        country = _string(row.get("country_code"))
+        result[inst_id] = {
+            "inst_id": inst_id,
+            "ror": _string(row.get("ror_id")),
+            "name": _string(row.get("display_name")),
+            "city": _string(row.get("city")),
+            "region": region,
+            "lat": _float(row.get("latitude")),
+            "lon": _float(row.get("longitude")),
+            "ror_types": [str(value) for value in (row.get("ror_types") or [])],
+            "atlas_type": _string(row.get("atlas_type")) or "other",
+            "parent_system": (
+                compact_id((row.get("lineage") or [])[0])
+                if len(row.get("lineage") or []) > 1
+                else ""
+            ),
+            "ca_flag": region.casefold() == "california" and country.casefold() in {"", "us"},
+        }
+    return result
+
+
+def _load_overrides(path: str | Path) -> dict[str, list[str]]:
+    overrides: dict[str, list[str]] = defaultdict(list)
+    if not Path(path).exists():
+        return overrides
+    with Path(path).open(newline="", encoding="utf-8") as stream:
+        for row in csv.DictReader(stream):
+            author_id = compact_id(row.get("author_id"))
+            action = _string(row.get("action"))
+            if author_id and action:
+                target = compact_id(row.get("target_author_id"))
+                overrides[author_id].append(f"{action}:{target}" if target else action)
+    return overrides
+
+
+def _raw_institution_row(
+    institution: Mapping[str, Any], registry_row: Mapping[str, Any] | None
+) -> dict[str, Any] | None:
+    inst_id = compact_id(institution.get("id"))
+    if not inst_id:
+        return None
+    if registry_row:
+        return dict(registry_row)
+    geo = institution.get("geo")
+    geo = geo if isinstance(geo, Mapping) else {}
+    types = institution.get("ror_types") or institution.get("types") or institution.get("type")
+    if isinstance(types, str):
+        types = [types] if types else []
+    return {
+        "inst_id": inst_id,
+        "ror": compact_id(institution.get("ror")),
+        "name": _string(institution.get("display_name")),
+        "city": _string(geo.get("city") or institution.get("city")),
+        "region": _string(geo.get("region") or institution.get("region")),
+        "lat": _float(geo.get("latitude") or institution.get("latitude")),
+        "lon": _float(geo.get("longitude") or institution.get("longitude")),
+        "ror_types": [str(value) for value in types if value] if isinstance(types, list) else [],
+        "atlas_type": "other",
+        "parent_system": (
+            compact_id((institution.get("lineage") or [])[0])
+            if len(institution.get("lineage") or []) > 1
+            else ""
+        ),
+        "ca_flag": False,
+    }
+
+
+def _atomic_write_table(path: Path, rows: Iterable[Mapping[str, Any]], schema: pa.Schema) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    table = pa.Table.from_pylist(list(rows), schema=schema)
+    with tempfile.NamedTemporaryFile(
+        mode="wb", suffix=".parquet", prefix=f".{path.stem}-", dir=path.parent, delete=False
+    ) as stream:
+        temporary = Path(stream.name)
+    try:
+        pq.write_table(table, temporary, compression="zstd")
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def _atomic_write_text(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        mode="w", encoding="utf-8", newline="\n", dir=path.parent, delete=False
+    ) as stream:
+        temporary = Path(stream.name)
+        stream.write(text)
+    try:
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) -> str:
+    rows = [
+        ("Source raw work rows", metrics["source_work_rows"]),
+        ("Normalized unique works", metrics["works"]),
+        ("Authorship rows", metrics["authorships"]),
+        ("Authors with non-null IDs", metrics["authors"]),
+        ("Linked/raw institution rows", metrics["institutions"]),
+        ("Authorships with missing raw affiliation", metrics["missing_affiliations"]),
+        ("Authorships with null author IDs", metrics["null_author_ids"]),
+        ("Unresolved institution links", metrics["unresolved_institution_links"]),
+        (
+            "Works with CA-like affiliation but no resolved CA institution",
+            metrics["ca_affiliation_without_resolved_institution"],
+        ),
+        ("Works with ca_led=true", metrics["ca_led_works"]),
+        ("Works with ca_any_author=true", metrics["ca_any_author_works"]),
+    ]
+    lines = [
+        "# OpenAlex normalization QC",
+        "",
+        f"Generated at (UTC): `{generated_at}`",
+        f"Source: `{source}`",
+        "",
+        "The normalizer treats the reviewed California institution registry as "
+        "the authoritative resolved-CA set. `ca_led` is true only when the "
+        "first authorship has a resolved CA registry institution; `ca_any_author` "
+        "is true when any authorship does. A CA-like unresolved affiliation is "
+        "reported when its affiliation contains `California` or a standalone "
+        "`CA` token but no resolved CA institution is linked for that work.",
+        "",
+        "| Check | Count |",
+        "|---|---:|",
+    ]
+    lines.extend(f"| {label} | {value} |" for label, value in rows)
+    lines.extend(
+        [
+            "",
+            "This report is generated by `make qc`; when no ignored live raw table "
+            "is present, the command uses the committed S2.2 fixture as a safe "
+            "development fallback.",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def normalize_records(
+    records: Iterable[Mapping[str, Any]],
+    *,
+    institution_path: str | Path,
+    output_dir: str | Path,
+    qc_path: str | Path,
+    source: str,
+    author_overrides_path: str | Path = "config/author_overrides.csv",
+    generated_at: str | None = None,
+) -> NormalizationResult:
+    """Normalize raw OpenAlex work objects into C3-shaped Parquet tables."""
+
+    registry = _read_registry(institution_path)
+    overrides = _load_overrides(author_overrides_path)
+    work_rows: dict[str, Mapping[str, Any]] = {}
+    source_count = 0
+    for record in records:
+        source_count += 1
+        work_id = compact_id(record.get("id"))
+        if work_id:
+            work_rows[work_id] = record
+
+    works: list[dict[str, Any]] = []
+    authorships: list[dict[str, Any]] = []
+    institution_rows: dict[str, dict[str, Any]] = {}
+    author_state: dict[str, dict[str, Any]] = {}
+    missing_affiliations = 0
+    null_author_ids = 0
+    unresolved_links = 0
+    ca_affiliation_without_resolved: set[str] = set()
+
+    for work_id in sorted(work_rows):
+        work = work_rows[work_id]
+        raw_authorships = work.get("authorships") or []
+        if not isinstance(raw_authorships, Sequence) or isinstance(raw_authorships, (str, bytes)):
+            raw_authorships = []
+        work_ca_led = False
+        work_ca_any = False
+        work_ca_like = False
+        work_resolved_ca = False
+        total_authors = len(raw_authorships)
+
+        for index, raw_authorship in enumerate(raw_authorships):
+            if not isinstance(raw_authorship, Mapping):
+                continue
+            author = raw_authorship.get("author")
+            author = author if isinstance(author, Mapping) else {}
+            author_id = compact_id(author.get("id"))
+            author_name = _string(author.get("display_name"))
+            institution_values = raw_authorship.get("institutions") or []
+            if not isinstance(institution_values, Sequence) or isinstance(
+                institution_values, (str, bytes)
+            ):
+                institution_values = []
+            institution_ids: list[str] = []
+            for institution in institution_values:
+                if not isinstance(institution, Mapping):
+                    continue
+                inst_id = compact_id(institution.get("id"))
+                if not inst_id:
+                    continue
+                institution_ids.append(inst_id)
+                if inst_id not in registry:
+                    unresolved_links += 1
+                row = _raw_institution_row(institution, registry.get(inst_id))
+                if row:
+                    institution_rows[inst_id] = row
+            institution_ids = list(dict.fromkeys(institution_ids))
+            raw_affiliation_values = raw_authorship.get("raw_affiliation_strings")
+            if isinstance(raw_affiliation_values, Sequence) and not isinstance(
+                raw_affiliation_values, (str, bytes)
+            ):
+                raw_affiliation = " | ".join(
+                    _string(value) for value in raw_affiliation_values if value
+                )
+            else:
+                raw_affiliation = _string(raw_authorship.get("raw_affiliation"))
+            if not raw_affiliation:
+                missing_affiliations += 1
+            if not author_id:
+                null_author_ids += 1
+
+            resolved_ca = any(
+                registry.get(inst_id, {}).get("ca_flag") for inst_id in institution_ids
+            )
+            ca_like = _looks_california(raw_affiliation)
+            work_ca_any = work_ca_any or resolved_ca
+            work_resolved_ca = work_resolved_ca or resolved_ca
+            work_ca_like = work_ca_like or ca_like
+            position = _author_position(index, total_authors, raw_authorship.get("author_position"))
+            if position == "first" and resolved_ca:
+                work_ca_led = True
+            authorships.append(
+                {
+                    "work_id": work_id,
+                    "author_id": author_id,
+                    "author_name": author_name,
+                    "position": position,
+                    "is_corresponding": bool(raw_authorship.get("is_corresponding", False)),
+                    "institution_ids": institution_ids,
+                    "raw_affiliation": raw_affiliation,
+                }
+            )
+
+            if author_id:
+                state = author_state.setdefault(
+                    author_id,
+                    {
+                        "author_id": author_id,
+                        "name": author_name,
+                        "orcid": _string(author.get("orcid")),
+                        "works": set(),
+                        "ca_works": set(),
+                        "years": [],
+                    },
+                )
+                state["name"] = state["name"] or author_name
+                state["orcid"] = state["orcid"] or _string(author.get("orcid"))
+                state["works"].add(work_id)
+                if resolved_ca:
+                    state["ca_works"].add(work_id)
+                year = _number(work.get("publication_year"))
+                if year is not None:
+                    state["years"].append(year)
+
+        if work_ca_like and not work_resolved_ca:
+            ca_affiliation_without_resolved.add(work_id)
+        location = _location(work)
+        open_access = work.get("open_access")
+        open_access = open_access if isinstance(open_access, Mapping) else {}
+        primary_topic = work.get("primary_topic")
+        primary_topic = primary_topic if isinstance(primary_topic, Mapping) else {}
+        pub_year = _number(work.get("publication_year"))
+        works.append(
+            {
+                "work_id": work_id,
+                "doi": _string(work.get("doi")),
+                "title": _string(work.get("title")),
+                "abstract": _abstract_from_inverted_index(work.get("abstract_inverted_index")),
+                "year": pub_year,
+                "pub_date": _string(work.get("publication_date")),
+                "type": _string(work.get("type")),
+                "journal": _string(_source(work).get("display_name")),
+                "is_oa": bool(open_access.get("is_oa", work.get("is_oa", False))),
+                "oa_status": _string(open_access.get("oa_status")),
+                "oa_url": _string(
+                    open_access.get("oa_url")
+                    or location.get("landing_page_url")
+                    or location.get("pdf_url")
+                ),
+                "license": _string(location.get("license")),
+                "openalex_topics": _topic_ids(work),
+                "primary_topic": compact_id(primary_topic.get("id")),
+                "cited_by_count": _number(work.get("cited_by_count")) or 0,
+                "first_seen": _string(work.get("fetched_at_utc")),
+                "last_updated": _string(work.get("updated_date")),
+                "ca_led": work_ca_led,
+                "ca_any_author": work_ca_any,
+            }
+        )
+
+    authors = []
+    for author_id in sorted(author_state):
+        state = author_state[author_id]
+        years = state["years"]
+        authors.append(
+            {
+                "author_id": author_id,
+                "name": state["name"],
+                "orcid": state["orcid"],
+                "ca_works_count": len(state["ca_works"]),
+                "first_year": min(years) if years else None,
+                "last_year": max(years) if years else None,
+                "domain_tags": [],
+                "override_flags": overrides.get(author_id, []),
+            }
+        )
+
+    metrics = {
+        "source_work_rows": source_count,
+        "works": len(works),
+        "authorships": len(authorships),
+        "authors": len(authors),
+        "institutions": len(institution_rows),
+        "missing_affiliations": missing_affiliations,
+        "null_author_ids": null_author_ids,
+        "unresolved_institution_links": unresolved_links,
+        "ca_affiliation_without_resolved_institution": len(ca_affiliation_without_resolved),
+        "ca_led_works": sum(bool(row["ca_led"]) for row in works),
+        "ca_any_author_works": sum(bool(row["ca_any_author"]) for row in works),
+    }
+    output = Path(output_dir)
+    _atomic_write_table(output / "works.parquet", works, WORKS_SCHEMA)
+    _atomic_write_table(output / "authorships.parquet", authorships, AUTHORSHIPS_SCHEMA)
+    _atomic_write_table(output / "authors.parquet", authors, AUTHORS_SCHEMA)
+    _atomic_write_table(
+        output / "institutions.parquet",
+        (institution_rows[key] for key in sorted(institution_rows)),
+        INSTITUTIONS_SCHEMA,
+    )
+    qc = Path(qc_path)
+    _atomic_write_text(
+        qc,
+        _qc_markdown(
+            metrics,
+            generated_at=generated_at or datetime.now(UTC).replace(microsecond=0).isoformat(),
+            source=source,
+        ),
+    )
+    return NormalizationResult(output, qc, metrics)
+
+
+def normalize_raw_parquet(
+    raw_path: str | Path,
+    *,
+    institution_path: str | Path,
+    output_dir: str | Path,
+    qc_path: str | Path,
+    author_overrides_path: str | Path = "config/author_overrides.csv",
+    generated_at: str | None = None,
+) -> NormalizationResult:
+    """Read S2.1's raw Parquet and normalize each embedded work JSON object."""
+
+    table = pq.read_table(raw_path, columns=["raw_json", "fetched_at_utc"])
+    records = []
+    for row in table.to_pylist():
+        record = json.loads(row["raw_json"])
+        if not isinstance(record, dict):
+            raise ValueError("raw_json must contain an OpenAlex work object")
+        record["fetched_at_utc"] = row.get("fetched_at_utc") or ""
+        records.append(record)
+    return normalize_records(
+        records,
+        institution_path=institution_path,
+        output_dir=output_dir,
+        qc_path=qc_path,
+        source=str(raw_path),
+        author_overrides_path=author_overrides_path,
+        generated_at=generated_at,
+    )
+
+
+def normalize_fixture(
+    fixture_path: str | Path,
+    *,
+    institution_path: str | Path,
+    output_dir: str | Path,
+    qc_path: str | Path,
+    author_overrides_path: str | Path = "config/author_overrides.csv",
+    generated_at: str | None = "fixture",
+) -> NormalizationResult:
+    """Normalize a committed JSON fixture without contacting OpenAlex."""
+
+    payload = json.loads(Path(fixture_path).read_text(encoding="utf-8"))
+    if not isinstance(payload, list) or len(payload) > 200:
+        raise ValueError("S2.2 fixture must be a JSON list of at most 200 works")
+    records = [record for record in payload if isinstance(record, Mapping)]
+    return normalize_records(
+        records,
+        institution_path=institution_path,
+        output_dir=output_dir,
+        qc_path=qc_path,
+        source=str(fixture_path),
+        author_overrides_path=author_overrides_path,
+        generated_at=generated_at,
+    )

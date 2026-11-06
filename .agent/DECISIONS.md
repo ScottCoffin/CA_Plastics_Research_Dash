@@ -4,6 +4,24 @@ ADR-style decisions belong here with date, alternatives, rationale, and decision
 owner. Unanswered items continue to use the defaults in `spec.md` Part G and
 remain listed in `QUESTIONS.md`.
 
+## ADR-008 - 2026-11-06 - Separate normalized institution output
+
+- **Decision:** Normalize each S2.1 work object into C3-shaped works,
+  authorships, authors, and institution tables under
+  `data/processed/normalized/`. Use the reviewed California institution
+  registry as the resolved-CA authority, keep unresolved raw institution rows
+  with `ca_flag=false`, and derive `ca_led` from the first authorship plus
+  `ca_any_author` from any resolved CA affiliation.
+- **Alternatives:** Overwrite the owner-reviewed `institutions.parquet`; drop
+  unresolved coauthor institutions; infer California membership from raw
+  affiliation text alone.
+- **Rationale:** The existing registry contains owner-reviewed classifications
+  and must remain intact. Retaining unresolved links makes QC visible without
+  turning an affiliation-text heuristic into a resolved CA flag. The separate
+  output directory supports repeatable live normalization and fixture-based CI.
+- **Decided by:** Build agent under the S2.2 implementation contract; owner
+  review is not required for this deterministic schema/QC choice.
+
 ## ADR-007 - 2026-11-06 - Resumable OpenAlex works ingestion
 
 - **Decision:** Implement S2.1 with year-window backfills and inclusive

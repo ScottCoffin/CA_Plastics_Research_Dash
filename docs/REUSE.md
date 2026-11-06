@@ -18,6 +18,10 @@ writer, high-water state, smoke runner, fixture, and acceptance check were
 implemented in this repository using Python standard-library HTTP plus the
 already-declared PyArrow dependency; no external code was copied.
 
+S2.2's OpenAlex normalization, C3 table schemas, California flag derivation,
+QC report, fixture, and acceptance check were implemented in this repository
+using the already-declared PyArrow dependency; no external code was copied.
+
 | Repository/source | URL | License | Reused material | Adaptation and attribution |
 |---|---|---|---|---|
 | Job_Scraper | https://github.com/ScottCoffin/Job_Scraper | AGPL-3.0 | Watchdog and opt-in commit-guard concepts | Inspected as the documented owner pattern; independently reimplemented for this repository without copying workflow code. |
