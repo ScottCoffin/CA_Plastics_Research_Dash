@@ -1,0 +1,30 @@
+[
+  {
+    "id": "https://openalex.org/W9000000001",
+    "title": "Microplastics in California estuaries",
+    "publication_date": "2023-04-12",
+    "publication_year": 2023,
+    "updated_date": "2024-01-10"
+  },
+  {
+    "id": "https://openalex.org/W9000000002",
+    "title": "Plastic particles in stormwater",
+    "publication_date": "2024-08-01",
+    "publication_year": 2024,
+    "updated_date": "2024-08-14"
+  },
+  {
+    "id": "https://openalex.org/W9000000003",
+    "title": "Marine debris monitoring methods",
+    "publication_date": "2024-11-20",
+    "publication_year": 2024,
+    "updated_date": "2024-12-02"
+  },
+  {
+    "id": "https://openalex.org/W9000000004",
+    "title": "Nanoplastics and aquatic exposure",
+    "publication_date": "2025-02-03",
+    "publication_year": 2025,
+    "updated_date": "2025-02-19"
+  }
+]

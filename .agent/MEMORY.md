@@ -78,6 +78,17 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   query version and rendered query. The 2026-11-06 UTC count for the
   owner-supplied candidate was 98,118 works; the positive control without
   exclusions was 100,335.
+- S2.1 works ingestion is implemented in `atlas.ingest.openalex`; the live
+  command is `py -3.14 scripts/ingest_openalex.py --start-year YYYY --end-year
+  YYYY --allow-candidate`. It batches CA institution IDs at 100, follows
+  cursor pages, snapshots raw responses under ignored `data/raw/openalex_works/`,
+  and atomically merges deduplicated rows into ignored
+  `data/interim/works_raw.parquet`.
+- The S2.1 default high-water field is inclusive `publication_date`; rerunning
+  the boundary date is intentional and deduplication makes it idempotent.
+  `from_updated_date` is implemented as an opt-in mode but the 2026-11-06
+  free-plan smoke returned HTTP 429 Plan upgrade required. The four-record
+  synthetic fixture is `tests/fixtures/s2_1_openalex_works.json`.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.

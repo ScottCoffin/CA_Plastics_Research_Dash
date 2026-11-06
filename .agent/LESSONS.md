@@ -1,5 +1,15 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-06 - Resumable OpenAlex works ingestion
+- OpenAlex publication-date windows are accepted for the works endpoint, while
+  `from_updated_date` returned HTTP 429 Plan upgrade required on the available
+  free access level. Use inclusive publication-date rereads by default and
+  deduplicate by stable OpenAlex work ID.
+- A cursor must be followed separately for every <=100-institution batch and
+  year window. Write raw snapshots and the merged Parquet output before
+  advancing the high-water mark so an interrupted run can safely repeat its
+  boundary.
+
 ## 2026-11-06 - Versioned OpenAlex query audit
 - OpenAlex accepts the candidate Boolean expression through a fully encoded
   `filter=title_and_abstract.search:` value; the 2026-11-06 run returned

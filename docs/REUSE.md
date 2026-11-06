@@ -13,6 +13,11 @@ were implemented in this repository. PyYAML is a declared runtime dependency
 used only to parse the repository's local YAML configuration; no external code
 was copied.
 
+S2.1's OpenAlex works ingester, cursor/date filter handling, raw snapshot
+writer, high-water state, smoke runner, fixture, and acceptance check were
+implemented in this repository using Python standard-library HTTP plus the
+already-declared PyArrow dependency; no external code was copied.
+
 | Repository/source | URL | License | Reused material | Adaptation and attribution |
 |---|---|---|---|---|
 | Job_Scraper | https://github.com/ScottCoffin/Job_Scraper | AGPL-3.0 | Watchdog and opt-in commit-guard concepts | Inspected as the documented owner pattern; independently reimplemented for this repository without copying workflow code. |

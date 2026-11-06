@@ -15,7 +15,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [x] **S1.5** Versioned plastics query config and count estimate. Owner-supplied `plastic-v2-candidate` terms, exclusions, collision notes, taxonomy seeds, G-1/G-2 choices, and cache-version contract are recorded. Remaining acceptance: implement config rendering/cache invalidation, smoke-test encoding/cost, run and timestamp the count estimate, and complete precision/recall spot checks before activation. `owner: terms supplied; promotion review remains`
 
 ## S2 Works ingestion
-- [ ] **S2.1** Incremental, resumable OpenAlex ingester. Acceptance: reruns dedupe; high-water mark, usage log, and <=200-work fixture exist.
+- [x] **S2.1** Incremental, resumable OpenAlex ingester. Acceptance: reruns dedupe; high-water mark, usage log, and <=200-work fixture exist. Acceptance check: `py -3.14 scripts/check_s2_1.py`; full suite: `make test`.
 - [ ] **S2.2** Normalize works, authorships, authors, institutions, and CA flags. Acceptance: C3 schemas and QC report.
 - [ ] **S2.3** Provisional rule-based relevance and domain tags. Acceptance: labels populated and coverage logged.
 - [ ] **S2.4** Daily works workflow with commit and budget guards. Acceptance: CI schedule succeeds and simulated rate limit resumes.

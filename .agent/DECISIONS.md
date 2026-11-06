@@ -4,6 +4,26 @@ ADR-style decisions belong here with date, alternatives, rationale, and decision
 owner. Unanswered items continue to use the defaults in `spec.md` Part G and
 remain listed in `QUESTIONS.md`.
 
+## ADR-007 - 2026-11-06 - Resumable OpenAlex works ingestion
+
+- **Decision:** Implement S2.1 with year-window backfills and inclusive
+  publication-date incrementals by default. Batch California institution IDs
+  in groups of at most 100, follow cursor pagination, preserve each response
+  as an ignored raw JSON snapshot, and atomically merge a deduplicated
+  `data/interim/works_raw.parquet` before advancing the high-water mark. Keep
+  `from_updated_date` available as an explicit mode for plans that support
+  OpenAlex daily sync.
+- **Alternatives:** Use offset paging; overwrite the raw table on each run;
+  advance state before the output write; depend on updated-since for every
+  account; store response bodies in Git.
+- **Rationale:** OpenAlex accepted the bounded publication-date smoke request
+  but returned HTTP 429 Plan upgrade required for `from_updated_date` on the
+  available free access level. Inclusive date rereads are safe because stable
+  OpenAlex IDs are merged idempotently, and atomic output/state writes make a
+  failed run resumable.
+- **Decided by:** Build agent under the S2.1 implementation contract; the
+  owner may enable updated-since after confirming an eligible OpenAlex plan.
+
 ## ADR-006 - 2026-11-05 - Lightweight California GeoNames gazetteer
 
 - **Decision:** Build a committed SQLite lookup database from the official

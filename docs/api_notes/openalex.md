@@ -117,3 +117,21 @@ Acceptance rerun: `python scripts/smoke/openalex.py` completed successfully on
 - Anonymous access returned `429` when the IP-shared daily budget was already
   exhausted. Production builds should validate and use the local key; the
   builder supports `OPENALEX_API_KEY` and local alias `OPEN_ALEX_API_KEY`.
+
+## S2.1 incremental-filter smoke (2026-11-06)
+
+The committed smoke runner is `scripts/smoke/openalex_incremental_s2_1.py`.
+It sent bounded `GET /works` requests for institution `I97018004`, with
+`per-page=1` and `cursor=*`, and logged redacted request records to
+`data/logs/api_usage.jsonl`.
+
+- `institutions.id:I97018004,from_publication_date:2024-01-01,to_publication_date:2024-12-31`
+  returned HTTP 200, `meta.count=22,943`, and cursor metadata.
+- `institutions.id:I97018004,from_updated_date:2024-01-01` returned HTTP 429
+  with the message that daily sync requires the Member+ or Partner plan. This
+  is a plan limitation, not a syntax failure; S2.1 therefore defaults to
+  inclusive publication-date rereads and keeps updated-since opt-in.
+- The ingester batches `institutions.id` values at 100 or fewer, follows each
+  cursor, snapshots response JSON under ignored `data/raw/openalex_works/`,
+  and writes `data/interim/works_raw.parquet` plus its high-water mark only
+  after a successful merge.
