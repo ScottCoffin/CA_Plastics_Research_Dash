@@ -1,5 +1,18 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-05 - GeoNames normalization and local lookup
+- GeoNames country dumps are UTF-8, tab-delimited 19-field records; for U.S.
+  records the California administrative code is `CA`. Filter both
+  `country_code=US` and `admin1_code=CA`, rather than using a loose bounding
+  box that can include neighboring-state names.
+- Different GeoNames alternate spellings can normalize to the same text. Keep
+  one deterministic display spelling per `(geonames_id, normalized_name)` to
+  preserve the unique SQLite index and make Windows rebuilds atomic only after
+  explicitly closing the SQLite connection.
+- Exact matching alone is not safe for common words. Keep the explicit,
+  documented blacklist ahead of both source and curated-alias lookup; region
+  centroids are gate candidates, not evidence that a study sampled there.
+
 ## 2026-11-05 - Land masks and CDFW polygon packaging
 - A legal state-boundary polygon is not a land-only mask: the tested Census
   state feature included offshore jurisdiction and swallowed the intended

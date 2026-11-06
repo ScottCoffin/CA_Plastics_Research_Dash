@@ -1,4 +1,9 @@
-version: 0
-status: placeholder
-sources: []
-
+version: 1
+sources:
+  - id: geonames_us_ca
+    name: GeoNames U.S. extract, California subset
+    url: https://download.geonames.org/export/dump/US.zip
+    access: public static ZIP; upstream is updated daily
+    license: CC BY 4.0
+    subset_rule: country_code=US and admin1_code=CA
+    last_verified: 2026-11-05

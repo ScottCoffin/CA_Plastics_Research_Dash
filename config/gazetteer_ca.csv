@@ -1,2 +1,9 @@
 name,alias,feature_type,latitude,longitude,geonames_id,notes
-
+San Francisco Bay,SF Bay|San Francisco Estuary,H.BAY,37.77493,-122.41942,5391959,Curated short and estuary aliases.
+Monterey Bay,Monterey Bay National Marine Sanctuary,H.BAY,36.8,-121.9,5374363,Sanctuary label resolves to bay centroid pending polygon work.
+Southern California Bight,SoCal Bight,L.RGN,33.5,-118.5,,Curated regional water-body alias; use only as a region candidate.
+Santa Barbara Channel,Santa Barbara Channel,H.CHN,34.35,-119.65,5392985,Common channel name.
+Humboldt Bay,Humboldt Bay,H.BAY,40.77,-124.2,5563832,Named northern California estuary.
+Sacramento-San Joaquin Delta,California Delta,L.RGN,38.05,-121.55,,Curated region; deliberately excludes ambiguous alias the Delta.
+Central Valley,California Central Valley,L.RGN,37.3,-120.2,5332921,Curated regional alias.
+Salton Sea,Salton Sea,H.LK,33.3,-115.83,5391295,Named inland water body.

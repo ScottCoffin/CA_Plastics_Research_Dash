@@ -4,6 +4,25 @@ ADR-style decisions belong here with date, alternatives, rationale, and decision
 owner. Unanswered items continue to use the defaults in `spec.md` Part G and
 remain listed in `QUESTIONS.md`.
 
+## ADR-006 - 2026-11-05 - Lightweight California GeoNames gazetteer
+
+- **Decision:** Build a committed SQLite lookup database from the official
+  GeoNames `US.zip` extract, retaining records where `country_code=US` and
+  `admin1_code=CA`. Normalize exact names and alternates for lookup, layer a
+  small reviewed alias CSV ahead of GeoNames results, and reject an explicit
+  common-word ambiguity blacklist before either lookup.
+- **Alternatives:** Run GeoNames web-service calls during classification; ship
+  a worldwide or U.S.-wide gazetteer; use a full Elasticsearch/Mordecai stack;
+  allow all exact place-name matches and solve ambiguity only downstream.
+- **Rationale:** The static CC BY 4.0 source is reproducible and avoids an API
+  credential/rate dependency in CI. The California subset is adequate for the
+  first gate while curated water and regional aliases cover high-value local
+  names. Exact blacklisting prevents obvious false-positive geographic gates;
+  it remains intentionally narrow so later context-aware work can recover
+  legitimate places.
+- **Decided by:** Build agent from S1.4 source/license smoke verification and
+  acceptance tests. GeoNames attribution remains required for derived data.
+
 ## ADR-005 - 2026-11-05 - California land and state-waters geometry
 
 - **Decision:** Use the Natural Earth 1:10m Admin 1 `US-CA` feature as the

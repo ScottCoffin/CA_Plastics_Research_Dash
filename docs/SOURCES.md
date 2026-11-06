@@ -7,3 +7,4 @@ are recorded here. Detailed observed contracts are in `docs/api_notes/`.
 |---|---|---|---|---|
 | Natural Earth 1:10m Admin 1 v5.1.1 | Active for California land polygon | Public static archive; refresh when upstream version changes | Public domain | 2026-11-05 |
 | CDFW ds3158 three-nautical-mile limit | Active; use `ds3158_poly` from official archive | Public static archive; upstream cadence irregular | CC BY 4.0 | 2026-11-05 |
+| GeoNames U.S. extract, California subset | Active; 127,963-feature SQLite subset filters `US.zip` to `country_code=US`, `admin1_code=CA` | Public static ZIP; upstream updated daily | CC BY 4.0; credit GeoNames | 2026-11-05 |

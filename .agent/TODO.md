@@ -11,7 +11,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [x] **S1.1** OpenAlex/ROR smoke tests and API cost logger. Acceptance: exact working filters, costs, URL limits, and pagination documented.
 - [x] **S1.2** California institution registry and ROR join. Acceptance complete: 4,637 institutions; UC 10/10, CSU 23/23, major-private default 11/11; owner review 100/100; 22 owner type corrections are applied through `config/institution_overrides.csv`.
 - [x] **S1.3** California land and 3-nm-water polygons. Acceptance complete: four known-point tests pass; 306,997-byte browser asset is <1 MB; full-resolution GeoParquet assets retain 565,997 source coordinates.
-- [ ] **S1.4** California gazetteer and ambiguity blacklist. Acceptance: lookup tests pass and blacklist rationale is documented.
+- [x] **S1.4** California gazetteer and ambiguity blacklist. Acceptance complete: 127,963 GeoNames California features and 187,760 normalized variants in SQLite; lookup tests and documented explicit blacklist pass.
 - [ ] **S1.5** Versioned plastics query config and count estimate. Owner-supplied `plastic-v2-candidate` terms, exclusions, collision notes, taxonomy seeds, G-1/G-2 choices, and cache-version contract are recorded. Remaining acceptance: implement config rendering/cache invalidation, smoke-test encoding/cost, run and timestamp the count estimate, and complete precision/recall spot checks before activation. `owner: terms supplied; promotion review remains`
 
 ## S2 Works ingestion

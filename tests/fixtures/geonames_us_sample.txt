@@ -1,0 +1,4 @@
+5389489	Sacramento	Sacramento	Sacramento,City of Sacramento	38.58157	-121.4944	P	PPLA2	US		CA	067			525041		8	America/Los_Angeles	2025-01-01
+5391959	San Francisco Bay	San Francisco Bay	SF Bay,San Francisco Estuary	37.77493	-122.41942	H	BAY	US		CA	075			0		0	America/Los_Angeles	2025-01-01
+5378538	Orange	Orange	City of Orange	33.78779	-117.85311	P	PPL	US		CA	059			139911		57	America/Los_Angeles	2025-01-01
+5268240	Madison	Madison		43.07305	-89.40123	P	PPLA	US		WI	025			269897		267	America/Chicago	2025-01-01

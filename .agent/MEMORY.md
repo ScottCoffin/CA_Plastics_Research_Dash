@@ -20,6 +20,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   and `--cdfw-archive` for already-downloaded official source archives.
 - Geography smoke/acceptance: `python scripts/smoke/geography.py` and
   `python scripts/check_s1_3.py`.
+- Gazetteer source smoke/build/acceptance: `python scripts/smoke/geonames.py`,
+  `python scripts/build_gazetteer.py`, and `python scripts/check_s1_4.py`.
 
 ## Conventions (naming, IDs, paths, timezones: store UTC; CI cron is UTC)
 - Python package uses the `src/atlas/` layout and requires Python >=3.11.
@@ -68,6 +70,9 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - Full-resolution geography is in `data/processed/geo/*.parquet`; the simplified
   two-feature browser payload is `site/assets/ca_boundaries.geojson` (306,997
   bytes at S1.3 completion).
+- S1.4 stores the reproducible GeoNames California subset in
+  `data/processed/gazetteer_ca.sqlite`; use `atlas.geo.gazetteer.lookup()` for
+  exact normalized names, curated aliases, and explicit blacklist enforcement.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.
@@ -89,6 +94,10 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   restrict the versioned query before downstream use.
 - Do not use a legal state-boundary polygon as a land mask: it can include
   offshore jurisdiction and hide the CDFW `state_waters` classification.
+- GeoNames `US.zip` is CC BY 4.0 and uses 19 UTF-8 tab-delimited fields; the
+  committed subset rule is `country_code=US and admin1_code=CA`. Keep its raw
+  ZIP ignored, preserve GeoNames credit, and do not treat blacklisted common
+  words or regional centroids as sampling evidence without later context.
 
 ## Automation
 - `.github/workflows/ci.yml` runs lint, tests, and the build on pushes, pull
