@@ -272,3 +272,16 @@ remain listed in `QUESTIONS.md`.
   repeated human restarts unnecessary, while task-scoped verification and Git
   boundaries retain the protections that motivated the original protocol.
 - **Decided by:** Owner authorization to establish continuous orchestration.
+
+## ADR-016 -- 2026-11-06 -- Luna-first bounded task-agent delegation
+
+- **Decision:** When a selected route or explicit instruction authorizes task
+  agents, use Luna roles by default and send a file-scoped context capsule.
+  Escalate to a higher-intelligence executor only for a documented exceptional
+  difficulty or risk.
+- **Alternatives:** Delegate every task at the main agent's intelligence level;
+  or give each worker the repository's full documentation and history.
+- **Rationale:** Bounded Luna assignments minimize repeated context ingestion
+  and token use while retaining an explicit escalation path for rare work that
+  needs stronger reasoning.
+- **Decided by:** Owner instruction during continuous-goal setup.

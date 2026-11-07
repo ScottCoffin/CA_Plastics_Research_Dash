@@ -17,6 +17,14 @@
   branch when the dependency graph permits it.
 - Follow the route selected by the user-level workflow instructions. Light is
   the default; use Medium or Heavy only when the user selects it.
+- When delegation is authorized, use Luna task agents by default. Use a
+  higher-intelligence executor only for an exceptional task whose difficulty
+  or risk is documented before dispatch.
+- Give every task agent a bounded context capsule: name the exact task,
+  owned files, required contract sections, preserved interfaces, and
+  verification commands. Instruct it to read only that context and any direct
+  dependency it must inspect; do not send agents through broad repository or
+  documentation intake for a narrow assignment.
 
 Read `.agent/README.md`, `.agent/HANDOFF.md`, and the selected task contract
 before editing. Keep acceptance checks, full-suite verification, durable

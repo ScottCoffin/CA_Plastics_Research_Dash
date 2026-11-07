@@ -22,6 +22,10 @@ verification, documentation, or commits. The full mandatory rules are in
 - Smoke-test every `[VERIFY]` dependency and add `docs/api_notes/` evidence.
 - Make scripts idempotent, incremental, resumable, tested, and secret-free.
 - Check licenses in `docs/REUSE.md` before copying third-party code.
+- When delegation is authorized, use Luna task agents unless exceptional
+  difficulty or risk justifies a documented higher-intelligence executor.
+  Give each agent exact file ownership, contract sections, interfaces to
+  preserve, and checks to run; require it to ingest only that bounded context.
 
 ## Browser smoke checks with Playwright
 
