@@ -2,11 +2,13 @@
 
 ## Current State
 
-S4.3 annotation tooling is complete. `atlas.nlp.annotation` and the workflow
-CLI provide gated CSV template export/import and per-label Cohen's kappa
-reports; see `docs/S4_3_VERIFICATION.md`. The implementation has synthetic
-acceptance only. No real labels, adjudications, or real agreement metrics were
-created. S4.1 approval and S4.2 representative sampling gates remain pending.
+S4.4 evaluation tooling is complete against the dummy-predictor DoD.
+`atlas.nlp.eval` and `scripts/evaluate.py` provide per-class/per-label metrics,
+calibration, error analysis, and JSON; deterministic synthetic evidence is in
+`docs/EVAL_synthetic_v1.md`. No corpus performance is claimed. S4.3 annotation
+tooling remains complete with synthetic acceptance only; no real labels,
+adjudications, or agreement metrics were created. S4.1 approval and S4.2
+representative sampling gates remain pending.
 
 S4.1 has a reviewed `guide_v1` draft with matching hash, but owner approval is
 pending and annotation remains unauthorized. S4.2 has fixture-only splits (2
@@ -25,10 +27,15 @@ full-data performance evidence.
 - Verification details and human milestones are in
   `docs/S4_3_VERIFICATION.md`.
 
+- S4.4: accepted focused and reproducibility checks, full 83-test suite, Ruff
+  check/format, and `git diff --check` passed. G-9 thresholds are answered.
+  Synthetic evaluation output is not corpus evidence.
+
 ## Next Entry Point
 
-S4.3 is sealed. Continue at the next dependency-satisfied roadmap task after
-re-reading `.agent/TODO.md` and `.agent/HANDOFF.md`. Human annotation still
-requires S4.1-A approval and an authorized representative split; do not treat
-synthetic values as gold labels or metrics. S4.2 and S3.6 remain open under
-their documented data and owner gates.
+S4.4 is sealed. Continue with S6.1, the independent license-aware OA full-text
+locator. S5 implementation may begin only where it does not claim trained or
+validated performance; classifier acceptance still requires approved S4.1
+guide and representative adjudicated gold. Do not treat synthetic values as
+gold labels or metrics. S4.2 and S3.6 remain open under their documented data
+and owner gates.

@@ -25,3 +25,4 @@
 | 2026-11-07 | S4.1 partial | Draft `guide_v1`, independent edge-case review, and preparation checks recorded; exact guide hash presented for owner approval; no annotation authorized | pending commit |
 | 2026-11-07 | S4.2 partial | Deterministic fixture sampling/splits and author-group isolation verified; production sample remains gated on authorized export and leak-hit source | pending commit |
 | 2026-11-06 | S4.3 | Tooling complete; synthetic CSV round-trip, Cohen's kappa, 15 focused tests and 71-test suite pass; human annotation gates remain pending | pending commit |
+| 2026-11-06 | S4.4 | Evaluation harness complete; synthetic reproducibility, full 83-test suite, Ruff, and diff checks pass; corpus metrics remain gated | pending commit |

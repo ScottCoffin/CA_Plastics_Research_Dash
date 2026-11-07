@@ -32,7 +32,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S4.1** Versioned labeling guide. Draft `guide_v1` and preparation checks are recorded in `docs/LABELING_GUIDE.md`, `docs/LABELING_GUIDE_REVIEW.md`, and `docs/LABELING_GUIDE_VERIFICATION.md`; owner approval is pending (S4.1-A). Acceptance: edge cases covered and `guide_v1` approved. `owner: approval`
 - [ ] **S4.2** Stratified sample, leak test, and frozen splits. Label-independent sample/split preparation may proceed while S4.1 approval is pending; do not annotate or claim representative-corpus coverage from the four-work fixture. Acceptance: split IDs committed and test set isolated.
 - [x] **S4.3** Annotation workflow, importer, and agreement stats. Tooling acceptance: CSV round-trip and per-label Cohen's kappa report work; human annotation remains pending guide approval and a representative sample.
-- [ ] **S4.4** Reproducible evaluation harness. Acceptance: dummy predictor produces all reports. `owner: thresholds`
+- [x] **S4.4** Reproducible evaluation harness. Dummy predictor produces per-class/per-label metrics, calibration plot, error-analysis table, and machine-readable output reproducibly; synthetic-only evidence is in `docs/EVAL_synthetic_v1.md`. G-9 thresholds are answered; no corpus-performance claim is made.
 
 ## S5 Classifiers
 - [ ] **S5.1** Plastic-relevance rules plus SetFit. Acceptance: G-9 targets met or gap and labeling plan documented.
@@ -44,7 +44,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S5.7** Candidate-pool leak-test report. Acceptance: widening decision recorded. `owner: decision`
 
 ## S6 Full text
-- [ ] **S6.1** License-aware OA full-text locator. Acceptance: XML/PDF/none coverage report.
+- [ ] **S6.1** License-aware OA full-text locator. Acceptance: XML/PDF/none coverage report. Next independent eligible task; do not wait for S5 gold-data gates.
 - [ ] **S6.2** Europe PMC JATS section parser. Acceptance: tests on 10 fixture articles.
 - [ ] **S6.3** GROBID PDF extraction and fallback. Acceptance: 30-PDF spot check and failure rate.
 - [ ] **S6.4** Full-text CA-sampling enrichment. Acceptance: abstract-vs-full-text performance delta.

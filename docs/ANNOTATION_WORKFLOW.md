@@ -1,5 +1,34 @@
 # S4.3 annotation workflow
 
+## S4.4 evaluation
+
+`src/atlas/nlp/eval.py` evaluates one canonical, adjudicated gold row per work
+against one prediction per work. It reports precision, recall, and F1 by class
+for plastic relevance, plastic tier, California sampling, and study type; each
+configured domain tag is scored as a binary label. Missing classes remain
+`undefined` and zero-support tags are marked as lacking positive support.
+When probabilities are present, it emits a reliability diagram and binned
+observed rates. Optional boolean `gazetteer_gate` predictions produce gate
+recall for gold `ca_sampled` values `yes` or `partial`.
+
+Example after a validated, adjudicated gold JSON is prepared:
+
+```powershell
+py -3.14 scripts/evaluate.py --gold curation/gold_works.json --predictions model_predictions.json `
+  --split dev --model-version rules-v1 --data-snapshot works-2026-11-06 `
+  --output docs/EVAL_rules-v1.md --plot docs/EVAL_rules-v1_calibration.png
+```
+
+Development uses `--split dev`; it is the only appropriate split for threshold
+selection and error analysis. Test access requires `--split test --final-test`;
+this reports frozen final performance and must not influence development. The
+harness refuses duplicate work IDs, unresolved or duplicate gold rows, split
+misalignment, prediction ID mismatch, invalid classes, incomplete probabilities,
+and missing model/data provenance. Use an adjudicated gold release: independent
+annotator CSV imports are not evaluation truth until disagreements are resolved.
+The synthetic acceptance output is in `docs/EVAL_synthetic_v1.md` and contains
+no corpus labels or performance claims.
+
 The workflow exports one CSV per annotator from `curation/splits_v1.csv`, validates returned CSVs against those frozen work IDs and split assignments, and computes pairwise Cohen's kappa summaries. It does not produce labels, suggestions, or adjudication decisions. The `guide_v1` approval/hash gate is checked by the command line before export, import, or report generation.
 
 ## Gate and held-out handling

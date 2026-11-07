@@ -1,0 +1,248 @@
+{
+  "calibration": [
+    {
+      "count": 7,
+      "mean_probability": 0.2,
+      "observed_rate": 0.14285714285714285
+    },
+    {
+      "count": 5,
+      "mean_probability": 0.8,
+      "observed_rate": 1.0
+    }
+  ],
+  "data_snapshot": "synthetic-fixture-v1",
+  "domain_tags": {
+    "air": {
+      "f1": null,
+      "fn": 0,
+      "fp": 0,
+      "precision": null,
+      "recall": null,
+      "support": 0,
+      "tp": 0
+    },
+    "analytical_methods": {
+      "f1": null,
+      "fn": 0,
+      "fp": 0,
+      "precision": null,
+      "recall": null,
+      "support": 0,
+      "tp": 0
+    },
+    "ecotoxicology_and_trophic_transfer": {
+      "f1": null,
+      "fn": 0,
+      "fp": 0,
+      "precision": null,
+      "recall": null,
+      "support": 0,
+      "tp": 0
+    },
+    "fate_transport_and_sorption": {
+      "f1": null,
+      "fn": 0,
+      "fp": 0,
+      "precision": null,
+      "recall": null,
+      "support": 0,
+      "tp": 0
+    },
+    "human_exposure_and_health_risk": {
+      "f1": null,
+      "fn": 0,
+      "fp": 0,
+      "precision": null,
+      "recall": null,
+      "support": 0,
+      "tp": 0
+    },
+    "occurrence_and_monitoring": {
+      "f1": 0.9090909090909091,
+      "fn": 1,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 0.8333333333333334,
+      "support": 6,
+      "tp": 5
+    },
+    "soil_and_agriculture": {
+      "f1": null,
+      "fn": 0,
+      "fp": 0,
+      "precision": null,
+      "recall": null,
+      "support": 0,
+      "tp": 0
+    },
+    "wastewater_and_treatment": {
+      "f1": null,
+      "fn": 0,
+      "fp": 0,
+      "precision": null,
+      "recall": null,
+      "support": 0,
+      "tp": 0
+    }
+  },
+  "errors": [
+    {
+      "domain_tag_fn": [],
+      "domain_tag_fp": [],
+      "fields": [
+        "plastic_related",
+        "plastic_tier"
+      ],
+      "split": "dev",
+      "work_id": "synthetic:000"
+    },
+    {
+      "domain_tag_fn": [
+        "occurrence_and_monitoring"
+      ],
+      "domain_tag_fp": [],
+      "fields": [],
+      "split": "dev",
+      "work_id": "synthetic:002"
+    }
+  ],
+  "gazetteer_gate_recall": null,
+  "interpretation": "Metrics describe the supplied split only. Synthetic metrics are not corpus performance. Test results are final-only and must not guide development.",
+  "metrics": {
+    "ca_sampled": {
+      "classes": {
+        "no": {
+          "f1": 1.0,
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 6,
+          "tp": 6
+        },
+        "partial": {
+          "f1": null,
+          "fn": 0,
+          "fp": 0,
+          "precision": null,
+          "recall": null,
+          "support": 0,
+          "tp": 0
+        },
+        "unclear": {
+          "f1": null,
+          "fn": 0,
+          "fp": 0,
+          "precision": null,
+          "recall": null,
+          "support": 0,
+          "tp": 0
+        },
+        "yes": {
+          "f1": 1.0,
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 6,
+          "tp": 6
+        }
+      },
+      "f1": 1.0,
+      "positive_class": "yes",
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "plastic_related": {
+      "classes": {
+        "false": {
+          "f1": 0.923076923076923,
+          "fn": 0,
+          "fp": 1,
+          "precision": 0.8571428571428571,
+          "recall": 1.0,
+          "support": 6,
+          "tp": 6
+        },
+        "true": {
+          "f1": 0.9090909090909091,
+          "fn": 1,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 0.8333333333333334,
+          "support": 6,
+          "tp": 5
+        }
+      },
+      "f1": 0.9090909090909091,
+      "positive_class": "true",
+      "precision": 1.0,
+      "recall": 0.8333333333333334
+    },
+    "plastic_tier": {
+      "classes": {
+        "chemicals-in-plastics": {
+          "f1": null,
+          "fn": 0,
+          "fp": 0,
+          "precision": null,
+          "recall": null,
+          "support": 0,
+          "tp": 0
+        },
+        "core": {
+          "f1": 0.9090909090909091,
+          "fn": 1,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 0.8333333333333334,
+          "support": 6,
+          "tp": 5
+        },
+        "none": {
+          "f1": 0.923076923076923,
+          "fn": 0,
+          "fp": 1,
+          "precision": 0.8571428571428571,
+          "recall": 1.0,
+          "support": 6,
+          "tp": 6
+        }
+      }
+    },
+    "study_type": {
+      "classes": {
+        "field": {
+          "f1": 1.0,
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 6,
+          "tp": 6
+        },
+        "review": {
+          "f1": 1.0,
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 6,
+          "tp": 6
+        }
+      }
+    }
+  },
+  "model_version": "dummy-v1",
+  "n": 12,
+  "schema_version": "evaluation_v1",
+  "split": "dev",
+  "thresholds": {
+    "ca_sampled_yes_precision": 0.85,
+    "ca_sampled_yes_recall": 0.8,
+    "domain_tag_f1": 0.7,
+    "gazetteer_gate_recall": 0.95,
+    "plastic_related_f1": 0.9
+  }
+}

@@ -35,3 +35,10 @@ kappa reporting pass synthetic acceptance. No real annotations were created.
 S4.1 approval, an authorized representative sample, double annotation of at
 least 20%, adjudication, and a real agreement report remain human operational
 milestones; see `docs/S4_3_VERIFICATION.md`.
+
+S4.4 evaluation tooling is complete against its dummy-predictor DoD. The
+reproducible synthetic report includes per-class/per-label metrics, calibration,
+error analysis, and JSON; see `docs/EVAL_synthetic_v1.md`. No corpus performance
+is claimed. G-9 thresholds are answered. S5 classifier training/evaluation
+remains gated on approved `guide_v1` and representative adjudicated gold data;
+S6.1 full-text location is the next independent eligible task.
