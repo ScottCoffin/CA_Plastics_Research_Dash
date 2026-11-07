@@ -1,0 +1,32 @@
+{
+  "gazetteer_hit_source": null,
+  "leak_test_rows": 0,
+  "limitations": "Counts reflect the supplied local snapshot only; no claim of representative corpus coverage.",
+  "pool_rows": 2,
+  "requested_leak_test_size": 100,
+  "requested_pool_sample_size": 500,
+  "seed": 42042,
+  "selection_contract": "label-independent; no provisional/model labels read",
+  "snapshot_status": "fixture_only",
+  "source_snapshot": [
+    {
+      "path": "data/processed/normalized/works.parquet",
+      "sha256": "7329414c0c94378d1e465c4bb6bfec942682f8df48b9971201f882796b5eee61"
+    },
+    {
+      "path": "data/processed/normalized/authorships.parquet",
+      "sha256": "87ec8f47a59b72e24b0914d433888eea20d19d1f7253e6dfe69c51e914aa5528"
+    },
+    {
+      "path": "data/processed/normalized/institutions.parquet",
+      "sha256": "7c26ed6024b9c21ada33faec1c3b948b7ee97897a83d7bb690460a0ffc5947fe"
+    }
+  ],
+  "split_counts": {
+    "dev": 0,
+    "test": 1,
+    "train": 1
+  },
+  "split_file_sha256": "e515286ddf9b5b5e92db1d38dbffbb9cea8cf2c333967b3776e3a624e9b59388",
+  "version": "splits_v1"
+}

@@ -23,7 +23,9 @@ promotion remains an owner decision and separate from this checkpoint.
 
 S4.1 has a reviewed `guide_v1` draft and matching review hash recorded in
 `docs/LABELING_GUIDE_REVIEW.md`; owner approval remains pending, so S4.1 stays
-unchecked and annotation is not authorized. S4.2 label-independent sample/split
-preparation is eligible meanwhile; the four-work fixture is not representative
-corpus evidence. Separately, after owner query review and an authorized bounded
+unchecked and annotation is not authorized. S4.2 has a partial evidence
+checkpoint in `docs/S4_2_VERIFICATION.md`: 2 fixture pool rows (train 1, dev 0,
+test 1), zero leak rows, and verified author-group isolation. S4.2 remains
+unchecked because the fixture is not representative and no versioned leak-hit
+source exists. Separately, after owner query review and an authorized bounded
 export, rerun full-data C5 and close S3.6 only when acceptance is met.

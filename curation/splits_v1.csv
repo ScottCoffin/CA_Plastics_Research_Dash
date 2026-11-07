@@ -1,0 +1,3 @@
+work_id,sample_role,split,year_bin,journal_type,matrix,oa_status,institution_type,author_group
+W9000000101,pool,test,2020-2024,article,marine,gold,uc,08773ac088430413db9f472c70607727250627c29e56e9f7ff6ba2225740cf71
+W9000000102,pool,train,2020-2024,article,freshwater,closed,uc+other,3d431c98dddeb8abfd95e0556ac7928a96f768b05487f88fe5d8a023dd9cf6b7
