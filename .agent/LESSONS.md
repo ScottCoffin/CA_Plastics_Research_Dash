@@ -9,6 +9,15 @@
   markers keyboard-accessible and route their institution IDs through the
   existing Experts URL-hash state so the drawer/filter behavior stays shared.
 
+## 2026-11-06 -- S3.5 About freshness
+- Read refresh time and displayed counts from `build_metadata.json`, not the
+  index row counts. Treat the `fixture` sentinel as example data and use an
+  explicit unavailable state for absent metadata; the committed fixture is not
+  a live refresh.
+- For browser regression, cover the About view and the Institutions-to-Experts
+  path through the existing hash filter and researcher drawer. Missing
+  `/favicon.ico` requests were harmless in this smoke.
+
 ## 2026-11-06 - Slim static-site exports
 - Keep index rows limited to filter/list fields and load abstracts and other
   detail on author click. A separate metadata file with raw and gzip sizes

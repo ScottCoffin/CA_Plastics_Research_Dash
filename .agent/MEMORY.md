@@ -137,6 +137,11 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   and map markers link back to the Experts hash filter; institutions without
   coordinates remain visible in the leaderboard and are reported below the map.
   Acceptance is `py -3.14 scripts/check_s3_4.py`.
+- S3.5 adds the About/Methods content, G-12 disclaimer, correction route, and
+  freshness/counts from `build_metadata.json`. The literal `fixture` timestamp
+  is identified as example data; missing refresh/count values display as
+  unavailable. Acceptance and independent Chromium evidence are in
+  `docs/S3_5_VERIFICATION.md`; browser smoke had only harmless favicon 404s.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.

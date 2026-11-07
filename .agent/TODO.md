@@ -25,7 +25,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [x] **S3.2** Accessible, mobile app shell and stub tabs. Acceptance complete: single-file responsive shell loads the S3.1 fixture/real-data contract, preserves filters in the URL hash, supports keyboard tab navigation and CSV export, and includes Monitoring/Funding stubs.
 - [x] **S3.3** Experts filters, virtualized list, and detail drawer. Acceptance complete: hash-shareable tag/institution/year/CA-basis/OA filters, bounded virtual rows, lazy researcher drawer, browser screenshot smoke, and full suite pass. Performance and browser evidence are in `docs/S3_3_VERIFICATION.md`.
 - [x] **S3.4** Institution leaderboard, sparklines, and clustered map. Acceptance complete: qualifying tagged-work institutions render with type chips, all-time/five-year trends, a coordinate-aware clustered map, and links into Experts.
-- [ ] **S3.5** About/Methods and freshness metadata. Acceptance: last refresh and disclaimer display.
+- [x] **S3.5** About/Methods and freshness metadata. Acceptance complete: the About view shows metadata-based refresh time and counts, Methods, the G-12 disclaimer, and correction path; fixture and unavailable metadata have explicit fallbacks. `py -3.14 scripts/check_s3_5.py`, prior S3.2-S3.4 checks, 49-test suite, Ruff, and `git diff --check` pass. Independent Chromium verified About and the Institutions-to-Experts drawer path at desktop/mobile sizes; only harmless favicon 404s occurred. Evidence: `docs/S3_5_VERIFICATION.md`.
 - [ ] **S3.6** Pages deployment and performance pass. Acceptance: metrics logged; DuckDB-Wasm used only by recorded decision.
 
 ## S4 Gold set

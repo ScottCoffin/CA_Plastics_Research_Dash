@@ -99,6 +99,10 @@
       .empty { padding: 1.25rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; }
       .stub { display: grid; place-items: center; min-height: 12rem; padding: 1rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; background: #fbfdfd; }
       .about-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+      .about-methods { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+      .about-methods .card { display: grid; align-content: start; gap: 0.45rem; }
+      .about-methods p, .about-methods ul { margin: 0; }
+      .about-methods ul { padding-left: 1.2rem; }
       .stat { padding: 0.8rem; border-radius: 0.5rem; background: #e9f3f1; }
       .stat dt { color: var(--muted); font-size: 0.8rem; }
       .stat dd { margin: 0.2rem 0 0; color: var(--brand-dark); font-size: 1.35rem; font-weight: 750; }
@@ -117,6 +121,7 @@
       @media (max-width: 45rem) {
         .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .about-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .about-methods { grid-template-columns: 1fr; }
         .institutions-layout { grid-template-columns: 1fr; }
       }
       @media (max-width: 30rem) {
@@ -209,9 +214,33 @@
       <section id="panel-about" class="panel" role="tabpanel" aria-labelledby="tab-about" tabindex="0" hidden>
         <h2>About this snapshot</h2>
         <p class="panel-intro">The app is a static, client-side shell. It reads generated JSON and does not query OpenAlex from your browser.</p>
+        <p id="about-freshness" class="data-note">Loading snapshot metadata…</p>
         <dl id="about-stats" class="about-grid"></dl>
         <p class="notice"><strong>Interpretation note:</strong> provisional labels are screening metadata, not a validated pollution leaderboard. Confirm the linked source work before drawing conclusions.</p>
-        <p>Data schema: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/SITE_DATA.md">S3.1 site data contract</a>. Methods and governance will be expanded as later roadmap tasks are completed.</p>
+        <div class="about-methods">
+          <section class="card" aria-labelledby="about-sources-heading">
+            <h3 id="about-sources-heading">Sources and snapshot</h3>
+            <p>OpenAlex supplies the work and affiliation metadata in this static export. The owner-supplied <code>plastic-v2-candidate</code> query remains inactive; broad <code>search=plastic</code> counts are review-priority metadata, not the published corpus.</p>
+            <p>The refresh time is the export build time in <code>build_metadata.json</code>, not an update time for each source record. “Fixture snapshot loaded” means the committed example data is shown.</p>
+          </section>
+          <section class="card" aria-labelledby="about-definitions-heading">
+            <h3 id="about-definitions-heading">Definitions</h3>
+            <p><strong>Plastic-related:</strong> work about plastic debris or particles, plastic litter, microfibers, tire-wear particles, or plastic-pollution policy. Chemicals in plastics are a separately flagged Tier 2 scope.</p>
+            <p><strong>CA-led:</strong> the first author’s affiliation resolves to a California institution. <strong>CA-sampled:</strong> sample collection or deployed monitoring took place in California land or state waters. A California affiliation does not by itself mean sampling happened in California.</p>
+            <p>California state waters use a three-nautical-mile polygon derived from NOAA’s offshore maritime-limit line and clipped through the CDFW dataset. It is not a legal depiction of maritime limits.</p>
+          </section>
+          <section class="card" aria-labelledby="about-limits-heading">
+            <h3 id="about-limits-heading">Limitations</h3>
+            <p>Plastic-related and topic labels are provisional, rule-based screening metadata. A held-out gold set and evaluation are later roadmap work, so no validated precision or recall is available yet.</p>
+            <p>OpenAlex coverage and affiliation records may be incomplete or incorrect, and author profiles can split one person’s works or combine different people. Institution location does not identify a study’s sampling location.</p>
+          </section>
+          <section class="card" aria-labelledby="about-corrections-heading">
+            <h3 id="about-corrections-heading">Corrections and source work</h3>
+            <p>For a correction or profile-removal request, <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">open a data-correction issue</a>. Include the OpenAlex ID, DOI or source URL when available, the field in question, and the proposed correction. Changes are reviewed for a later snapshot; the project does not alter the upstream OpenAlex record.</p>
+          </section>
+        </div>
+        <p class="notice"><strong>Disclaimer:</strong> Independent project; not an official OEHHA or State product.</p>
+        <p>Full methods: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/METHODS.md" target="_blank" rel="noreferrer">docs/METHODS.md</a>. Data schema: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/SITE_DATA.md" target="_blank" rel="noreferrer">S3.1 site data contract</a>. Upstream catalogue: <a href="https://openalex.org/" target="_blank" rel="noreferrer">OpenAlex</a>.</p>
       </section>
 
       <footer>Static snapshot for exploration; accessibility and data quality are being improved in staged releases.</footer>
@@ -473,11 +502,39 @@
           $("institution-list").querySelectorAll(".institution-expert-link").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId)));
           clusterMap(filtered);
         }
+        function aboutViewModel(metadata, index) {
+          const current = metadata && typeof metadata === "object" ? metadata : {};
+          const indexData = index && typeof index === "object" ? index : {};
+          const counts = current.counts && typeof current.counts === "object" ? current.counts : {};
+          const generatedAt = typeof current.generated_at === "string" ? current.generated_at.trim() : "";
+          const isFixture = generatedAt === "fixture";
+          const refreshText = isFixture
+            ? "Fixture snapshot loaded — committed fixture data, not a current refresh."
+            : generatedAt
+              ? `Last refresh (UTC): ${generatedAt}`
+              : "Refresh time unavailable";
+          const formatCount = (value) =>
+            Number.isSafeInteger(value) && value >= 0 ? new Intl.NumberFormat().format(value) : "Unavailable";
+          const stats = [
+            ["Authors", counts.authors],
+            ["Works", counts.works],
+            ["Institutions", counts.institutions],
+            ["California institutions", counts.ca_institutions],
+            ["Labeled works", counts.labeled_works]
+          ].map(([label, value]) => ({ label, value: formatCount(value) }));
+          stats.push({
+            label: "Schema",
+            value: current.schema_version || indexData.schema_version || "Unavailable"
+          });
+          return { isFixture, refreshText, stats };
+        }
         function renderAbout() {
-          const counts = state.data.index.counts || {};
-          const metadata = state.data.metadata || {};
-          $("generated-at").textContent = metadata.generated_at && metadata.generated_at !== "fixture" ? `Last refresh: ${metadata.generated_at}` : "Fixture snapshot loaded";
-          $("about-stats").innerHTML = [["Authors", counts.authors], ["Works", counts.works], ["Institutions", counts.institutions], ["California institutions", counts.ca_institutions], ["Labeled works", counts.labeled_works], ["Schema", metadata.schema_version || state.data.index.schema_version || "s3.1"]].map(([label, value]) => `<div class="stat"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("");
+          const view = aboutViewModel(state.data.metadata, state.data.index);
+          $("generated-at").textContent = view.refreshText;
+          $("about-freshness").textContent = view.refreshText;
+          $("about-stats").innerHTML = view.stats
+            .map(({ label, value }) => `<div class="stat"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`)
+            .join("");
         }
         function updateViews() {
           applyControls();

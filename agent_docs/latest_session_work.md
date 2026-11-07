@@ -2,29 +2,27 @@
 
 ## Detailed Current State
 
-S3.4 is complete and pushed. `site/index.html` now contains the qualifying
-institution leaderboard, type chips, all-time/latest-five-year counts,
-sparklines, a dependency-free clustered California map, and links into the
-existing Experts filter. The authoritative task handoff is
-`.agent/HANDOFF.md`; the next unchecked task is S3.5.
+S3.5 adds the About/Methods content, G-12 disclaimer, correction route, and
+freshness/counts from `build_metadata.json`. The fixture timestamp is identified
+as example data. The implementation and acceptance evidence are documented in
+`docs/S3_5_VERIFICATION.md`; `.agent/HANDOFF.md` is the task-level entry point.
 
-The repository protocol now uses one atomic roadmap checkpoint per task while
-allowing a single chat or Goal-mode run to continue across checkpoints. Each
-task must still be accepted, documented, committed, and pushed separately.
+S3.5 is sealed in this Git checkpoint. S3.6 has not started.
+Each roadmap task remains a separate acceptance, documentation, and Git
+checkpoint, even when work continues in one Goal-mode run.
 
 ## Verification
 
-- `py -3.14 scripts/check_s3_4.py` passes with three qualifying fixture
-  institutions.
-- `py -3.14 scripts/check_s3_3.py` and `scripts/check_s3_2.py` pass.
-- The full suite passes with 47 tests; Ruff, compileall, and `git diff --check`
-  pass.
-- WSL Chromium verified the Institutions tab, type chip, map marker, Experts
-  link, and the preserved S3.3 researcher drawer.
+- S3.5 acceptance and the S3.2-S3.4 regression checks passed.
+- The full suite passed with 49 tests; Ruff and `git diff --check` passed.
+- Independent Chromium verified the About content, freshness and counts,
+  Institutions-to-Experts filtered drawer path, and 390x844 layout. The browser
+  logged only harmless `/favicon.ico` 404s.
+- The live ISO timestamp and missing metadata cases were exercised by the Node
+  renderer harness; browser smoke used the committed fixture.
 
 ## Next Entry Point
 
-Continue with S3.5 from `.agent/HANDOFF.md`: implement About/Methods content
-and generated freshness metadata, run its acceptance and the full suite, update
-the B4 records, and commit/push only S3.5. Then re-read `.agent/TODO.md` and
-continue to the next eligible checkpoint unless a pause condition applies.
+After the S3.5 Git handoff, continue with S3.6 from `.agent/HANDOFF.md`: read
+its contract, verify the Pages deployment, and record the C5 performance ladder
+metrics. Use DuckDB-Wasm only if a measured need supports that decision.

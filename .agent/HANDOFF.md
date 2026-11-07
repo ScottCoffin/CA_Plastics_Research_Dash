@@ -1,51 +1,45 @@
-# Handoff - 2026-11-06 - task S3.4
+# Handoff - 2026-11-06 - task S3.5
 
 ## Done
-- Extended `site/index.html` with the Institutions leaderboard, type filter
-  chips, all-time/latest-five-year tagged-work counts, accessible sparklines,
-  and a dependency-free coordinate-aware clustered map.
-- Added leaderboard and map-marker links that write the existing Experts
-  institution hash filter, preserving S3.3 filters, virtual rows, and the lazy
-  researcher drawer.
-- Added `scripts/check_s3_4.py`, `tests/test_s3_4.py`, and
-  `docs/S3_4_VERIFICATION.md`; updated the S3.4 TODO, durable memory,
-  decision, and lesson records.
+- Added the About/Methods view, G-12 disclaimer, data-correction route, and
+  metadata-backed freshness and counts. Full methods are in `docs/METHODS.md`;
+  rendered acceptance evidence is in `docs/S3_5_VERIFICATION.md`.
+- Fixture timestamp and counts come from `build_metadata.json`; fixture and
+  unavailable cases are labeled explicitly. Do not interpret the fixture as a
+  current data refresh.
+- The S3.5 acceptance, S3.2-S3.4 regression checks, 49-test suite, Ruff, and
+  `git diff --check` passed. Independent Chromium verified About, the
+  Institutions-to-Experts filtered drawer path, and 390x844 layout. The only
+  browser errors were harmless `/favicon.ico` 404s.
 
 ## State of the repo
-- `py -3.14 scripts/check_s3_4.py` passes (3 fixture institutions qualify).
-- `py -3.14 scripts/check_s3_3.py` and `py -3.14 scripts/check_s3_2.py` pass.
-- `C:\rtools45\usr\bin\make.exe PYTHON="py -3.14" test` passes (47 tests).
-- Ruff check/format, compileall, and `git diff --check` pass.
-- WSL Node 20.20.2/Chromium smoke passed: Institutions tab, UC type chip,
-  map marker, Experts link, and Alice's S3.3 drawer. The only console entries
-  were expected missing `favicon.ico` requests.
+- S3.5 is verified. The main agent owns the narrow S3.5 commit and push; confirm
+  its final commit and clean/synchronized status before continuing.
+- Recheck with `py -3.14 scripts/check_s3_5.py` and
+  `C:\rtools45\usr\bin\make.exe PYTHON="py -3.14" test` if the implementation
+  changes after this verification.
 
-## Next task
-S3.5: add the About/Methods content and generated freshness metadata. Start by
-reading the S3.5 contract in `spec.md`, inspect `docs/METHODS.md` and the S3.1
-build metadata, then preserve the S3.3/S3.4 tab and hash behavior. Seal S3.5 as
-its own checkpoint before continuing to the next eligible task.
+## Next task (suggested)
+S3.6: verify the Pages deployment and record the performance ladder metrics.
+First read the S3.6 contract in `spec.md`, then inspect the deployed result and
+measure the current static site against C5. Consider DuckDB-Wasm only if the
+recorded performance decision supports it.
 
 ## Gotchas the next agent must know
-- The site is dependency-free and must be served over HTTP for JSON fetches.
-- The Institutions view counts only `plastic_related === true`; this keeps the
-  old broad S1.2 `search=plastic` heuristic out of the public leaderboard.
-- Institutions without coordinates stay in the leaderboard and are reported
-  below the map; only valid California coordinates receive map markers.
-- Playwright runs in WSL; use an explicit named session and
-  `--browser=chromium`. Missing `favicon.ico` produces harmless console 404s.
-- Do not promote the inactive `plastic-v2-candidate` query.
+- The `fixture` value is a deliberate sentinel, not a timestamp; live refresh
+  time and counts come from export build metadata.
+- Browser smoke used the committed fixture. Live ISO and missing metadata cases
+  were covered by the Node renderer harness rather than browser fetch
+  interception.
+- Playwright produced two expected favicon 404s; data loaded and no other
+  browser warnings were reported.
+- S3.6 remains unchecked in `.agent/TODO.md`; do not begin it before S3.5's
+  narrow Git handoff is complete.
 
 ## Needs owner input
-- None for S3.5; existing owner questions remain in `.agent/QUESTIONS.md`.
+- None for S3.6 is recorded in this handoff; check `.agent/QUESTIONS.md` for
+  existing owner-gated roadmap tasks.
 
 ## Files that are large or unsafe to read whole
 - `data/processed/*.parquet` -> inspect with DuckDB or targeted PyArrow schema.
 - `site/data/authors/*.json` -> inspect one author document at a time.
-
-## Continuous-goal continuation
-Continue with S3.5 from `.agent/HANDOFF.md`; read the S3.5 contract and
-`docs/METHODS.md`, implement About/Methods and generated freshness metadata,
-preserve S3.3/S3.4 behavior, run the acceptance and full suite, update B4
-records, and commit/push only S3.5. Then re-read `.agent/TODO.md` and continue
-to the next eligible task unless a documented pause condition applies.
