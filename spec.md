@@ -1,6 +1,6 @@
 CA Plastics Research Atlas — Agent Build Specification
-Working title: CA Plastics Research Atlas (ca-plastics-atlas)Owner / product lead: Scott CoffinAudience: autonomous or semi-autonomous IDE coding agents (one session at a time) and the human product ownerSpec status: v1.0. Written 2026-11-05. Every external-API detail not marked (verified in research) must be smoke-tested by the agent before it is relied on and recorded in docs/api_notes/.
-How to read this spec. Part A is the product. Part B is the operating protocol every agent session must follow (memory, handoff, tool requests). Part C is the architecture and data model. Part D is the source and reuse registry. Part E is the staged roadmap, where each stage is split into session-sized tasks. Part F covers quality, evaluation and ethics. Part G lists open decisions that need the human owner.Epistemic labels used throughout: [V] = verified in the research phase, with citation; [GK] = general knowledge, not verified for this project; [INF] = inference or design choice; [VERIFY] = the agent must test it before use.
+Working title: CA Plastics Research Atlas (ca-plastics-atlas)Owner / product lead: Scott CoffinAudience: autonomous or semi-autonomous IDE coding agents operating through atomic task checkpoints and the human product ownerSpec status: v1.0. Written 2026-11-05. Every external-API detail not marked (verified in research) must be smoke-tested by the agent before it is relied on and recorded in docs/api_notes/.
+How to read this spec. Part A is the product. Part B is the operating protocol every task checkpoint must follow (memory, handoff, tool requests). Part C is the architecture and data model. Part D is the source and reuse registry. Part E is the staged roadmap, where each stage is split into checkpoint-sized tasks. Part F covers quality, evaluation and ethics. Part G lists open decisions that need the human owner.Epistemic labels used throughout: [V] = verified in the research phase, with citation; [GK] = general knowledge, not verified for this project; [INF] = inference or design choice; [VERIFY] = the agent must test it before use.
 
 PART A — PRODUCT
 A1. Purpose
@@ -59,9 +59,9 @@ A4. Non-goals (v1)
 •	No scraping behind logins.
 
 PART B — AGENT OPERATING PROTOCOL (MANDATORY)
-The project is built piece-wise by many short agent sessions. Context overload and compaction are the main failure modes. The rules below keep each session small and every handoff lossless.
+The project is built piece-wise through atomic task checkpoints. Context overload, compaction, and mixed-task commits are the main failure modes. The rules below keep each checkpoint small and every handoff lossless while allowing one continuous chat or Goal-mode run to complete multiple checkpoints.
 B1. Core rules
-1.	One task per session. Take the first unchecked task in .agent/TODO.md whose dependencies are met. Finish it to its Definition of Done (DoD), run its acceptance check, update memory, commit, and end the session. Do not start the next task, even if context remains.
+1.	One task per atomic checkpoint. Take the first unchecked task in .agent/TODO.md whose dependencies are met. Finish it to its Definition of Done (DoD), run its acceptance check, update memory, and commit/push only that task before starting another. A continuous chat or Goal-mode run may then select the next eligible task. If an owner-gated task blocks, record it and continue another dependency-satisfied branch when one exists.
 2.	Smallest context that works. Never cat large data files. Use head, wc -l, DuckDB DESCRIBE/LIMIT, or schema printouts. Redirect verbose tool or API output to scratch/ (gitignored) and write only a ≤20-line summary into memory or docs.
 3.	No silent assumptions. If a decision isn't in DECISIONS.md or this spec, record it as a question in .agent/QUESTIONS.md and use the stated default. Do not block unless the item is marked 🔴 BLOCKING.
 4.	Verify before relying. Anything tagged [VERIFY] needs a smoke test script in scripts/smoke/ and a dated note in docs/api_notes/<source>.md (endpoint, parameters used, sample response shape, rate limits, license or terms observed). If reality contradicts this spec, the note wins. Add a lesson to LESSONS.md and update the spec-derived tasks.
@@ -86,20 +86,21 @@ docs/
   api_notes/           # one file per external source (verified behaviours)
   REUSE.md             # table of reused repos: URL, license, what was reused, adaptation notes
   SOURCES.md           # registry of data sources with status
-Keep each memory file short (target ≤200 lines; split or archive older entries into .agent/archive/ when longer). MEMORY.md is the only file every session must read in full.
-B3. Session start checklist (≤5 minutes of reading)
-1.	Read .agent/README.md (30 lines), then MEMORY.md, HANDOFF.md, TODO.md.
-2.	Skim QUESTIONS.md for answers from the owner since the last session.
-3.	git log --oneline -15 and git status.
-4.	Read only the spec sections for your task: Part B, the stage entry in Part E, and any source rows in Part D that the task names.
-5.	Confirm the task, its dependencies, and its DoD in TODO.md. If a dependency is unmet, pick the next eligible task or record the block.
-B4. Session end checklist
+Keep each memory file short (target ≤200 lines; split or archive older entries into .agent/archive/ when longer). MEMORY.md is the only file every new goal or chat must read in full; re-read it after compaction or outside edits.
+B3. Goal entry and task-boundary checklist (≤5 minutes of reading)
+1.	On goal/chat entry, read .agent/README.md, MEMORY.md, HANDOFF.md, and TODO.md. At later task boundaries, re-read HANDOFF.md and TODO.md; re-read MEMORY.md after compaction or outside edits.
+2.	Skim QUESTIONS.md for owner answers since the previous checkpoint.
+3.	Run git log --oneline -15 and git status at every task boundary.
+4.	Read only the spec sections for the selected task: Part B, its Part E stage entry, and any Part D source rows it names.
+5.	Confirm the task, dependencies, and DoD in TODO.md. If it is blocked, record the block and select another dependency-satisfied task when possible.
+B4. Atomic task checkpoint checklist
 1.	Run the task's acceptance check and the full unit test suite (make test).
 2.	Update, in this order: TODO.md (check off), MEMORY.md (new durable facts only), DECISIONS.md, LESSONS.md, QUESTIONS.md, docs/api_notes/*, docs/REUSE.md.
 3.	Overwrite HANDOFF.md using the template below.
 4.	Append one line to SESSION_LOG.md.
 5.	Commit with message S<stage>.<task>: <summary>. Push if configured.
-6.	Stop. Final message to the user: what was done, what is next, what the owner must do (if anything).
+6.	Confirm the worktree contains only known unrelated work. Report what was done, what is next, and any owner action.
+7.	If a continuous goal is active, return to B3 and begin the next eligible task. Otherwise stop with a resumable continuation prompt. Pause only for a blocking owner decision, required permission, genuine blocker, explicit user pause, or roadmap completion.
 HANDOFF.md template
 # Handoff — <date> — task <ID>
 ## Done
@@ -350,7 +351,7 @@ Design inspiration only
 Note on GitHub Actions: scheduled workflows only run on the default branch, and in public repositories are automatically disabled after 60 days of no repository activity 82. They use UTC by default and can run as often as every 5 minutes 83. Implement keepalive.yml and the watchdog, and document the failure mode in LESSONS.md.
 
 PART E — STAGED ROADMAP
-Legend. Session = one agent working session ending in a discrete handoff. IDs are S<stage>.<task>. 🧑 = owner action required. Every task's final step is B4. Approximate effort: S (<1 h), M (1–3 h), L (3–6 h) of agent time.
+Legend. Checkpoint = one roadmap task ending in a discrete verified handoff and narrow commit. One chat or Goal-mode run may complete multiple checkpoints sequentially. IDs are S<stage>.<task>. 🧑 = owner action required. Every task's final step is B4. Approximate effort: S (<1 h), M (1–3 h), L (3–6 h) of agent time.
 Dependency overview
 S0 ─ S1 ─ S2 ─ S3 (MVP live, OpenAlex topics only)
               ├─ S4 (gold set) ─ S5 (classifiers) ─ S9 (linking)
@@ -446,7 +447,7 @@ Goal. Answer Question 2.
 ID	Task	DoD / acceptance	Size
 S7.1	Registry schema + seed config/datasets.yml from D2 (NCEI, SF Bay/5 Gyres, RMP/CD3, CEDEN, drinking water, Moore literature dataset, MDMAP, OPC strategy-listed efforts). Include access tier and provenance links	≥15 entries with verified URLs and a last_checked date	M
 S7.2	API/portal smoke tests per source; docs/api_notes/* entries; decide Tier A vs B per source	Each source has: access method, format, license, update frequency, field map	M
-S7.3	Tier-A ingesters (one session per 1–2 sources): NCEI (clip to CA; contributor fields), SF Bay XLSX (SampleID join), MDMAP (API), drinking-water dataset if public. Normalize to samples schema, unit harmonization (concentration units, size classes), method fields informed by SCCWRP standards	Samples table with polygon flags; QC report (units, missing coords, duplicates); fixtures + tests	L×2–3
+S7.3	Tier-A ingesters (one checkpoint per 1–2 sources): NCEI (clip to CA; contributor fields), SF Bay XLSX (SampleID join), MDMAP (API), drinking-water dataset if public. Normalize to samples schema, unit harmonization (concentration units, size classes), method fields informed by SCCWRP standards	Samples table with polygon flags; QC report (units, missing coords, duplicates); fixtures + tests	L×2–3
 S7.4	Paper-linked data discovery: DataCite /dois relationship queries from CA works' DOIs; GROBID/XML data-availability extraction → datasets rows with tier D/B	Precision spot-check on 50 links	M
 S7.5	Monitoring tab: registry table, map of samples (clustered, filters), data-gaps heatmap (matrix × region × year), "contributor in CA?" filter	Perf budget met; links to source and citation text displayed	L
 S7.6	Watch list: statewide pilot monitoring (planned 2027) and CEDEN 2.0 microplastics module as tracked future sources with a check script	A weekly "has anything changed?" check writes to docs/SOURCES.md	S
@@ -595,15 +596,16 @@ APPENDIX 2 — Starter MEMORY.md skeleton
 ## Data locations and sizes (what's committed vs. gitignored; how to inspect)
 ## Known pitfalls (top 10; details in LESSONS.md)
 ## Current model versions and metrics (one line per model)
-APPENDIX 3 — Session prompt template for the human to paste
-You are a build agent for the CA Plastics Research Atlas. Follow Part B of SPEC.md.
+APPENDIX 3 — Continuous goal prompt template
+You are the continuous build agent for the CA Plastics Research Atlas. Follow Part B of SPEC.md.
 1) Read .agent/README.md, MEMORY.md, HANDOFF.md, TODO.md.
-2) Do exactly ONE task: the first unchecked, dependency-satisfied task.
+2) Complete one atomic checkpoint at a time: the first unchecked, dependency-satisfied task. After it is verified, documented, committed, and pushed when configured, continue to the next eligible task.
 3) Verify [VERIFY] items by smoke test and write docs/api_notes/.
 4) Keep context small: never cat large files; inspect with head/duckdb.
-5) Update memory files, write HANDOFF.md, commit, and STOP.
+5) Update memory files, write HANDOFF.md, and make a narrow commit for every checkpoint. Never mix adjacent tasks.
 6) If a tool/skill/MCP would materially speed this up, add it to .agent/TOOL_REQUESTS.md and tell me.
-Task: <paste ID, e.g., S1.2>
+7) Pause only when an owner decision blocks every eligible path, permission is required, a genuine blocker remains, I ask you to pause, or the roadmap is complete.
+Starting task: <paste ID, e.g., S3.5>
 References
 1.	Three Nautical Mile State Maritime Limit - R7 - CDFW [ds3158] – Data.CA.gov. Retrieved 2026-11-05, from https://data.ca.gov/dataset/three-nautical-mile-state-maritime-limit-r7-cdfw-ds31581
 2.	Three Nautical Mile State Maritime Limit - R7 - CDFW [ds3158] | California State Geoportal. Retrieved 2026-11-05, from https://gis-california.opendata.arcgis.com/datasets/CDFW::three-nautical-mile-state-maritime-limit-r7-cdfw-ds3158/about

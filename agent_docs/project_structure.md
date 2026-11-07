@@ -23,13 +23,13 @@
 - `docs/` contains methods, source/reuse/secret notes, QC reports, and dated
   API verification notes under `docs/api_notes/`.
 - `tests/` contains pytest tests and bounded JSON/text fixtures.
-- `site/` contains the current static Pages placeholder plus the S3.1 static
-  data payloads under `site/data/`; the full atlas UI is planned for later
-  roadmap stages.
+- `site/` contains the S3 static atlas shell, Experts and Institutions views,
+  and deterministic static data payloads under `site/data/`.
 - `.github/workflows/` contains CI, Pages build/deploy, keepalive, and
   watchdog workflows.
-- `.agent/` contains the task protocol, roadmap, handoff, questions,
-  decisions, lessons, and session records.
+- `AGENTS.md` contains the repository-level continuous-checkpoint contract.
+- `.agent/` contains the canonical task protocol, roadmap, current handoff,
+  questions, decisions, lessons, and checkpoint records.
 
 ## Modules and Responsibilities
 
@@ -45,9 +45,9 @@
   authorships, authors, and institutions tables with QC metrics and
   California flags. Its generated institution output is separate from the
   reviewed registry input.
-- The static site currently proves deployment of a placeholder and has the
-  S3.1 compact data contract; the roadmap assigns the application shell,
-  filters, maps, and publication views to later S3 tasks.
+- The static site consumes the S3.1 compact data contract and implements the
+  app shell, Experts filters/detail drawer, and Institutions leaderboard/map.
+  Remaining S3 tasks add methods/freshness and deployment performance evidence.
 
 ## Main Interfaces and Integration Boundaries
 
@@ -70,6 +70,6 @@
 
 Pytest tests cover package behavior, query construction and cache validation,
 API cost logging, institution classification, geography, gazetteer lookup,
-OpenAlex ingestion, and normalization. Stage-specific checks are exposed as
-`scripts/check_s1_2.py` through `scripts/check_s2_2.py`; smoke tests cover the
-external APIs and source archives.
+OpenAlex ingestion, normalization, static exports, and S3 UI contracts.
+Stage-specific checks are exposed through `scripts/check_s3_4.py`; smoke tests
+cover external APIs, source archives, and browser behavior where required.

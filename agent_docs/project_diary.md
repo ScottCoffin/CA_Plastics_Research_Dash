@@ -10,4 +10,10 @@
   counted rather than dropping works.
 - Specialized workflow roles attempted unsupported `gpt-6-luna`; explicit
   `gpt-5.6-luna` was also rejected by the active collaboration API. Ordinary
-  workers were moved to the supported lower-cost `gpt-5.6-terra` fallback.
+  workers were moved to the supported lower-cost `gpt-5.6-terra` fallback in
+  that earlier interface. The current interface exposes the installed
+  specialized roles again; route selection still controls whether to use them.
+- 2026-11-06: Roadmap safety now attaches to an atomic task checkpoint rather
+  than a fresh chat. Continuous Goal-mode execution may advance across tasks
+  only after each task is independently verified, documented, committed, and
+  pushed when configured.

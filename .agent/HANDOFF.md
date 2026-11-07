@@ -20,11 +20,11 @@
   map marker, Experts link, and Alice's S3.3 drawer. The only console entries
   were expected missing `favicon.ico` requests.
 
-## Next task (suggested)
+## Next task
 S3.5: add the About/Methods content and generated freshness metadata. Start by
 reading the S3.5 contract in `spec.md`, inspect `docs/METHODS.md` and the S3.1
-build metadata, then preserve the S3.3/S3.4 tab and hash behavior. Stop before
-S3.6.
+build metadata, then preserve the S3.3/S3.4 tab and hash behavior. Seal S3.5 as
+its own checkpoint before continuing to the next eligible task.
 
 ## Gotchas the next agent must know
 - The site is dependency-free and must be served over HTTP for JSON fetches.
@@ -43,8 +43,9 @@ S3.6.
 - `data/processed/*.parquet` -> inspect with DuckDB or targeted PyArrow schema.
 - `site/data/authors/*.json` -> inspect one author document at a time.
 
-## Successor prompt
-Continue exactly S3.5 from `.agent/HANDOFF.md`; read the S3.5 contract and
+## Continuous-goal continuation
+Continue with S3.5 from `.agent/HANDOFF.md`; read the S3.5 contract and
 `docs/METHODS.md`, implement About/Methods and generated freshness metadata,
 preserve S3.3/S3.4 behavior, run the acceptance and full suite, update B4
-records, commit and push only S3.5, then stop before S3.6.
+records, and commit/push only S3.5. Then re-read `.agent/TODO.md` and continue
+to the next eligible task unless a documented pause condition applies.

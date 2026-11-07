@@ -259,3 +259,16 @@ remain listed in `QUESTIONS.md`.
   dependency-free schematic avoids tile-provider terms and network failures in
   the static MVP while retaining a clear path to a richer map in S3.6.
 - **Decided by:** Build agent under the S3.4 task contract.
+
+## ADR-015 -- 2026-11-06 -- Continuous execution through atomic checkpoints
+
+- **Decision:** Replace the mandatory fresh-session boundary with an atomic
+  roadmap checkpoint. A continuous chat or Goal-mode run may complete multiple
+  tasks sequentially, but every task retains its own acceptance, B4 updates,
+  narrow commit, and push before the next task begins.
+- **Alternatives:** Require a human to start a fresh chat after every task; or
+  allow one long unstructured implementation spanning multiple roadmap items.
+- **Rationale:** Durable checkpoint files and automatic context compaction make
+  repeated human restarts unnecessary, while task-scoped verification and Git
+  boundaries retain the protections that motivated the original protocol.
+- **Decided by:** Owner authorization to establish continuous orchestration.

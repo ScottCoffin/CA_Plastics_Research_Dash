@@ -1,17 +1,22 @@
 # Agent Protocol
 
-This repository is implemented one task per session. The full mandatory rules
-are in `spec.md` Part B; the roadmap and acceptance checks are in Part E.
+This repository is implemented one task per atomic checkpoint. A single chat
+or Goal-mode run may complete multiple checkpoints without mixing their edits,
+verification, documentation, or commits. The full mandatory rules are in
+`spec.md` Part B; the roadmap and acceptance checks are in Part E.
 
-## Start every session
-1. Read this file, `MEMORY.md`, `HANDOFF.md`, and `TODO.md`.
-2. Skim `QUESTIONS.md` for owner answers.
-3. Run `git log --oneline -15` and `git status --short`.
+## Enter a goal or start a task checkpoint
+1. On goal/chat entry, read this file, `MEMORY.md`, `HANDOFF.md`, and `TODO.md`.
+2. At later task boundaries, re-read `HANDOFF.md`, `TODO.md`, owner-answer
+   changes in `QUESTIONS.md`, and `MEMORY.md` after compaction or outside edits.
+3. Run `git log --oneline -15` and `git status --short` at every boundary.
 4. Read only Part B, the selected Part E stage, and named Part D sources.
-5. Take the first unchecked task whose dependencies are met.
+5. Take the first unchecked dependency-satisfied task. If an owner-gated task
+   blocks, record it and take another eligible branch when one exists.
 
 ## Working rules
-- Complete exactly one roadmap task and stop.
+- Complete exactly one roadmap task per checkpoint; seal it before beginning
+  another task.
 - Keep large data and verbose output out of context and Git.
 - Record unstated choices in `QUESTIONS.md`; use the documented default.
 - Smoke-test every `[VERIFY]` dependency and add `docs/api_notes/` evidence.
@@ -52,11 +57,14 @@ browser tooling runs in WSL, not the Windows PowerShell Node installation:
    deliberate artifacts under `output/playwright/`; do not commit CLI session
    logs or `.playwright-cli/` captures.
 
-## End every session
+## Seal every task checkpoint
 1. Run the task acceptance check and `make test`.
 2. Update memory files in the order required by `spec.md` B4.
 3. Overwrite `HANDOFF.md`; append one line to `SESSION_LOG.md`.
 4. Commit as `S<stage>.<task>: <summary>`; push only if configured.
-5. Report completed work, the next task, owner actions, and a copy-paste prompt
-   for the next fresh agent that asks that agent to provide its successor prompt.
-   Then stop.
+5. Confirm the worktree contains only known unrelated work, then report the
+   checkpoint result and any owner actions.
+6. If a continuous goal is active, return to the boundary checklist and begin
+   the next eligible task. Otherwise provide a resumable continuation prompt.
+7. Pause only for a blocking owner decision, required permission, genuine
+   blocker, explicit user pause, or roadmap completion.

@@ -167,3 +167,10 @@
   HTTP server is required for fetch-based static payloads.
 - Keep deliberate screenshots under ignored `output/playwright/`; do not add
   Playwright session captures or CLI logs to the repository.
+
+## 2026-11-06 -- Continuous roadmap orchestration
+- A fresh chat is not the safety boundary; the atomic checkpoint is. Keep each
+  task's acceptance, documentation, commit, and push isolated even when one
+  Goal-mode run continues across several tasks.
+- `.agent/` is the task-level source of truth. Keep `agent_docs/` concise and
+  synchronized so Medium or Heavy intake does not replay stale milestones.

@@ -3,22 +3,23 @@
 ## Goal
 
 Complete the staged CA Plastics Research Atlas roadmap one dependency-satisfied
-task per session.
+atomic checkpoint at a time inside a continuous Goal-mode run.
 
 ## Overall Progress
 
-S0 through S2.4 are complete. S2.4 adds the guarded daily OpenAlex works
-workflow, typed rate-limit/budget deferral, and optional generated-output
-commits. S3.1 is complete; S3.2 is the next unchecked dependency-satisfied
-task.
+S0 through S2.4 and S3.1 through S3.4 are complete. The static atlas now has
+deterministic slim exports, an accessible app shell, Experts filters and lazy
+details, and an institution leaderboard with sparklines and a clustered map.
 
 ## Current Position
 
-`py -3.14 scripts/check_s3_1.py`, the full Python test suite, Ruff, build, and
-`git diff --check` pass. No owner input is required for S3.1. OpenAlex query
-promotion remains intentionally separate from this workflow.
+S3.4 was sealed at `f5877c3`, with its session record at `ecce431`; the worktree
+was clean and synchronized with `origin/main` when continuous orchestration was
+enabled. No owner input is required for S3.5. OpenAlex query promotion remains
+intentionally separate from this workflow.
 
 ## Next Milestone
 
-Implement exactly S3.2: build the accessible mobile app shell and stub tabs,
-loading the fixture and real site data, and stop before S3.3.
+Complete S3.5 as its own checkpoint: add About/Methods content and generated
+freshness metadata while preserving S3.3/S3.4 behavior. Then select the next
+eligible roadmap task under the continuous-goal contract.

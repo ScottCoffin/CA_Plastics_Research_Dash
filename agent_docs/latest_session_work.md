@@ -2,30 +2,29 @@
 
 ## Detailed Current State
 
-S3.1 was completed from `.agent/HANDOFF.md`. The daily workflow is in
-`.github/workflows/ingest_works.yml`; `atlas.ingest.daily` and
-`scripts/run_daily_works.py` defer expected OpenAlex 429/budget stops without
-advancing state. The workflow normalizes/labels only after a successful pull
-and commits generated outputs only under the exact `ENABLE_DATA_COMMITS=true`
-guard. S3.1 adds `src/atlas/build/export_site.py`, the
-`scripts/build_export_site.py` wrapper, the schema contract in
-`docs/SITE_DATA.md`, and committed fixture site payloads under `site/data/`.
+S3.4 is complete and pushed. `site/index.html` now contains the qualifying
+institution leaderboard, type chips, all-time/latest-five-year counts,
+sparklines, a dependency-free clustered California map, and links into the
+existing Experts filter. The authoritative task handoff is
+`.agent/HANDOFF.md`; the next unchecked task is S3.5.
+
+The repository protocol now uses one atomic roadmap checkpoint per task while
+allowing a single chat or Goal-mode run to continue across checkpoints. Each
+task must still be accepted, documented, committed, and pushed separately.
 
 ## Verification
 
-- `py -3.14 scripts/check_s2_4.py` passes, including simulated 429 and budget
-  stops, unchanged high-water state, and a successful subsequent run.
-- `py -3.14 -m pytest -q` passes (40 tests).
-- Ruff check/format, `py -3.14 -m compileall -q src`, and `git diff --check`
+- `py -3.14 scripts/check_s3_4.py` passes with three qualifying fixture
+  institutions.
+- `py -3.14 scripts/check_s3_3.py` and `scripts/check_s3_2.py` pass.
+- The full suite passes with 47 tests; Ruff, compileall, and `git diff --check`
   pass.
-- Hosted bounded smoke run `42321442943` completed successfully with
-  `max_credits=0`; the expected budget defer skipped normalization, labeling,
-  and commits.
-- `py -3.14 scripts/check_s3_1.py` passes; the full suite has 41 tests and the
-  fixture site payload is 3,678 bytes gzip.
+- WSL Chromium verified the Institutions tab, type chip, map marker, Experts
+  link, and the preserved S3.3 researcher drawer.
 
 ## Next Entry Point
 
-Resume with S3.2: build the accessible mobile app shell and stub tabs from the
-S3.1 site-data contract, run its acceptance and full suite, update the B4
-records, commit/push only S3.2, and stop before S3.3.
+Continue with S3.5 from `.agent/HANDOFF.md`: implement About/Methods content
+and generated freshness metadata, run its acceptance and the full suite, update
+the B4 records, and commit/push only S3.5. Then re-read `.agent/TODO.md` and
+continue to the next eligible checkpoint unless a pause condition applies.

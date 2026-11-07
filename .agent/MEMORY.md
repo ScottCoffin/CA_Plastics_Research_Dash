@@ -35,7 +35,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - `index.json` contains slim work/author rows, `authors/<author_id>.json`
   contains full work details, and institution summaries/maps plus
   year/type/tag aggregates are separate payloads. Missing labels remain null.
-- Each agent session completes exactly one dependency-satisfied task.
+- Each atomic checkpoint completes exactly one dependency-satisfied task. A
+  continuous Goal-mode run may seal multiple checkpoints sequentially.
 
 ## Key decisions (links to DECISIONS.md IDs)
 - ADR-001: use official Pages actions, a daily off-peak deploy, a stale-run
