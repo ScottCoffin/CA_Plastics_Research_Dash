@@ -19,3 +19,4 @@
 | 2026-11-06 | S3.1 | Completed; deterministic static-site exporter, schema/size contract, fixture payloads, acceptance, and full suite | pending commit |
 | 2026-11-06 | S3.2 | Completed; accessible responsive app shell, hash filters, keyboard tabs, CSV export, stub tabs, acceptance, and full suite | `b701058` |
 | 2026-11-06 | S3.3 | Completed; Experts filters, virtualized list, researcher drawer, browser screenshot smoke, acceptance, and full suite | pending commit |
+| 2026-11-06 | S3.4 | Completed; institution leaderboard, sparklines, type chips, clustered map, Experts links, acceptance, and full suite | `f5877c3` |
