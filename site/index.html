@@ -63,6 +63,28 @@
       .result-line { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin: 1rem 0 0.65rem; }
       .result-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
       .cards { display: grid; gap: 0.65rem; }
+      .institution-toolbar { display: grid; gap: 0.65rem; margin: 1.25rem 0; }
+      .chip-button { border: 1px solid #8da7af; border-radius: 999px; padding: 0.28rem 0.6rem; color: #24445a; background: #fff; font-size: 0.82rem; }
+      .chip-button[aria-pressed="true"] { border-color: var(--brand); color: #fff; background: var(--brand); }
+      .institution-type-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+      .institutions-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr); gap: 1rem; align-items: start; }
+      .institution-card { display: grid; gap: 0.5rem; }
+      .institution-card .card-header { align-items: start; }
+      .institution-stats { display: flex; flex-wrap: wrap; gap: 0.45rem 1rem; margin: 0; color: var(--muted); font-size: 0.9rem; }
+      .institution-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+      .institution-expert-link { border: 1px solid var(--brand); border-radius: 0.35rem; padding: 0.38rem 0.6rem; color: var(--brand-dark); background: #fff; font-weight: 700; }
+      .sparkline { display: block; width: 100%; max-width: 13rem; height: 2.2rem; overflow: visible; }
+      .sparkline polyline { fill: none; stroke: var(--brand); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+      .sparkline circle { fill: var(--brand); }
+      .institution-map-panel { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
+      .institution-map { position: relative; min-height: 25rem; overflow: hidden; border: 1px solid #b8ced0; border-radius: 0.45rem; background: linear-gradient(145deg, #e7f3f2, #f8fbf9 57%, #e6f0e5); }
+      .institution-map::before { content: "California coordinates · schematic view"; position: absolute; inset: 0.55rem auto auto 0.65rem; color: #536879; font-size: 0.75rem; }
+      .institution-map-marker { position: absolute; z-index: 1; display: grid; place-items: center; min-width: 2.35rem; min-height: 2.35rem; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 999px; padding: 0.2rem; color: #fff; background: var(--brand); box-shadow: 0 0 0 1px #075a46, 0 0.15rem 0.35rem rgb(23 50 77 / 28%); font-size: 0.75rem; font-weight: 800; }
+      .institution-map-marker[data-cluster="true"] { background: #c45100; box-shadow: 0 0 0 1px #8e3900, 0 0.15rem 0.35rem rgb(23 50 77 / 28%); }
+      .institution-map-marker:hover { z-index: 2; }
+      .map-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.8rem; margin-top: 0.6rem; color: var(--muted); font-size: 0.8rem; }
+      .map-legend span::before { content: ""; display: inline-block; width: 0.7rem; height: 0.7rem; margin-right: 0.25rem; border-radius: 50%; background: var(--brand); vertical-align: -0.05rem; }
+      .map-legend span.cluster::before { background: #c45100; }
       .virtual-list { position: relative; height: min(42rem, 70vh); overflow: auto; contain: strict; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
       .virtual-spacer { position: relative; width: 100%; }
       .virtual-row { position: absolute; left: 0; right: 0; padding: 0.35rem; }
@@ -95,6 +117,7 @@
       @media (max-width: 45rem) {
         .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .about-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .institutions-layout { grid-template-columns: 1fr; }
       }
       @media (max-width: 30rem) {
         .header-inner, .page-main { width: min(100% - 1rem, 74rem); }
@@ -156,8 +179,21 @@
 
       <section id="panel-institutions" class="panel" role="tabpanel" aria-labelledby="tab-institutions" tabindex="0" hidden>
         <h2>Institutions</h2>
-        <p class="panel-intro">Institution summaries are loaded from the same S3.1 export used by the Experts view.</p>
-        <div id="institution-list" class="cards" aria-live="polite"></div>
+        <p class="panel-intro">Tagged-work volume is a descriptive count from the same S3.1 export used by the Experts view; it is not a quality ranking.</p>
+        <div class="institution-toolbar">
+          <div id="institution-type-chips" class="institution-type-chips" role="group" aria-label="Filter institutions by type"></div>
+          <p id="institution-count" class="result-count" role="status" aria-live="polite">Loading institutions…</p>
+        </div>
+        <div class="institutions-layout">
+          <div id="institution-list" class="cards" aria-live="polite"></div>
+          <div class="institution-map-panel">
+            <h3>California institution map</h3>
+            <p class="data-note">Markers are clustered when coordinates are close. Select a marker to open the matching Experts filter.</p>
+            <div id="institution-map" class="institution-map" role="group" aria-label="Clustered map of California institutions"></div>
+            <div class="map-legend" aria-label="Map legend"><span>Institution marker</span><span class="cluster">Cluster</span></div>
+            <p id="institution-map-note" class="data-note"></p>
+          </div>
+        </div>
       </section>
 
       <section id="panel-monitoring" class="panel" role="tabpanel" aria-labelledby="tab-monitoring" tabindex="0" hidden>
@@ -191,7 +227,7 @@
           metadata: "data/build_metadata.json"
         };
         const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
-        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", data: null, filteredAuthors: [], virtual: { rowHeight: 174, overscan: 4 } };
+        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", institutionViewType: "", data: null, filteredAuthors: [], virtual: { rowHeight: 174, overscan: 4 } };
         const $ = (id) => document.getElementById(id);
 
         function escapeHtml(value) {
@@ -366,9 +402,76 @@
           $("drawer-backdrop").hidden = true;
           if (state.drawerPrevious && typeof state.drawerPrevious.focus === "function") state.drawerPrevious.focus();
         }
+        function taggedWork(work) {
+          return work && work.plastic_related === true;
+        }
+        function institutionMetrics(institution) {
+          const works = (state.data.index.works || []).filter((work) => (work.institution_ids || []).includes(institution.inst_id) && taggedWork(work));
+          const years = works.map((work) => Number(work.year)).filter(Number.isFinite);
+          const latestYear = years.length ? Math.max(...years) : null;
+          const firstYear = years.length ? Math.min(...years) : null;
+          const byYear = new Map();
+          years.forEach((year) => byYear.set(year, (byYear.get(year) || 0) + 1));
+          const trendYears = firstYear === null ? [] : Array.from({ length: latestYear - firstYear + 1 }, (_, index) => firstYear + index);
+          const series = trendYears.map((year) => byYear.get(year) || 0);
+          const recentCutoff = latestYear === null ? null : latestYear - 4;
+          return { institution, works, taggedCount: works.length, recentCount: recentCutoff === null ? 0 : years.filter((year) => year >= recentCutoff).length, trendYears, series };
+        }
+        function sparkline(metric) {
+          const values = metric.series;
+          if (!values.length) return '<span class="data-note">No yearly trend</span>';
+          const max = Math.max(...values, 1);
+          const width = 120;
+          const height = 28;
+          const points = values.map((value, index) => `${values.length === 1 ? width / 2 : (index / (values.length - 1)) * width},${height - (value / max) * (height - 4) - 2}`).join(" ");
+          const label = `${metric.institution.name}: ${values.join(", ")} tagged works by year`;
+          return `<svg class="sparkline" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(label)}"><polyline points="${points}"></polyline>${values.map((value, index) => { const x = values.length === 1 ? width / 2 : (index / (values.length - 1)) * width; const y = height - (value / max) * (height - 4) - 2; return `<circle cx="${x}" cy="${y}" r="2.2"></circle>`; }).join("")}</svg>`;
+        }
+        function institutionExpertLink(institutionId) {
+          return `<button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institutionId)}">View experts</button>`;
+        }
+        function openInstitutionExperts(institutionId) {
+          state.institution = institutionId;
+          state.tab = "experts";
+          writeHash();
+          updateViews();
+          $("expert-list").focus({ preventScroll: true });
+        }
+        function clusterMap(metrics) {
+          const mapped = metrics.filter((metric) => metric.institution.ca_flag && Number.isFinite(Number(metric.institution.lat)) && Number.isFinite(Number(metric.institution.lon)));
+          const groups = new Map();
+          mapped.forEach((metric) => {
+            const x = Math.max(3, Math.min(97, ((Number(metric.institution.lon) + 125) / 11) * 100));
+            const y = Math.max(7, Math.min(95, ((42.5 - Number(metric.institution.lat)) / 11) * 100));
+            const key = `${Math.floor(x / 7)}:${Math.floor(y / 7)}`;
+            const group = groups.get(key) || { metrics: [], x: 0, y: 0 };
+            group.metrics.push(metric); group.x += x; group.y += y; groups.set(key, group);
+          });
+          const markers = [...groups.values()].map((group) => {
+            const count = group.metrics.reduce((sum, metric) => sum + metric.taggedCount, 0);
+            const x = group.x / group.metrics.length;
+            const y = group.y / group.metrics.length;
+            const clustered = group.metrics.length > 1;
+            const label = clustered ? `${group.metrics.length} institutions, ${count} tagged works` : `${group.metrics[0].institution.name}, ${count} tagged works`;
+            const ids = group.metrics.map((metric) => metric.institution.inst_id).join(",");
+            return `<button class="institution-map-marker" type="button" data-cluster="${clustered}" data-institution-id="${escapeHtml(clustered ? group.metrics[0].institution.inst_id : ids)}" style="left:${x}%;top:${y}%" aria-label="${escapeHtml(label)}">${escapeHtml(clustered ? group.metrics.length : count)}</button>`;
+          }).join("");
+          $("institution-map").innerHTML = markers || '<p class="empty">No California institutions with coordinates match this filter.</p>';
+          $("institution-map").querySelectorAll(".institution-map-marker").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId.split(",")[0])));
+          const withoutCoordinates = metrics.filter((metric) => metric.institution.ca_flag && (!Number.isFinite(Number(metric.institution.lat)) || !Number.isFinite(Number(metric.institution.lon)))).length;
+          $("institution-map-note").textContent = `${mapped.length} California institution${mapped.length === 1 ? "" : "s"} mapped${withoutCoordinates ? `; ${withoutCoordinates} qualifying institution${withoutCoordinates === 1 ? "" : "s"} lack coordinates.` : "."}`;
+        }
         function renderInstitutions() {
-          const institutions = state.data.institutions.institutions || [];
-          $("institution-list").innerHTML = institutions.length ? institutions.map((institution) => `<article class="card"><div class="card-header"><h3>${escapeHtml(institution.name)}</h3><span class="chip">${institution.ca_flag ? "California" : escapeHtml(institution.region || "Other")}</span></div><p class="card-meta">${escapeHtml(institution.atlas_type)} · ${escapeHtml(institution.work_count)} works · ${escapeHtml(institution.author_count)} authors${institution.city ? ` · ${escapeHtml(institution.city)}` : ""}</p><div class="chips">${(institution.domain_tags || []).map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("")}</div></article>`).join("") : '<p class="empty">No institutions are present in this snapshot.</p>';
+          const all = (state.data.institutions.institutions || []).map(institutionMetrics).filter((metric) => metric.taggedCount > 0);
+          const types = [...new Set(all.map((metric) => metric.institution.atlas_type || "other"))].sort();
+          const selected = state.institutionViewType;
+          const filtered = all.filter((metric) => !selected || (metric.institution.atlas_type || "other") === selected).sort((a, b) => b.taggedCount - a.taggedCount || b.recentCount - a.recentCount || String(a.institution.name).localeCompare(String(b.institution.name)));
+          $("institution-type-chips").innerHTML = [`<button class="chip-button institution-type-chip" type="button" data-institution-type="" aria-pressed="${selected === ""}">All types</button>`, ...types.map((type) => `<button class="chip-button institution-type-chip" type="button" data-institution-type="${escapeHtml(type)}" aria-pressed="${selected === type}">${escapeHtml(type)}</button>`)].join("");
+          $("institution-count").textContent = `${filtered.length} qualifying institution${filtered.length === 1 ? "" : "s"} shown`;
+          $("institution-list").innerHTML = filtered.length ? filtered.map((metric) => { const institution = metric.institution; const tags = (institution.domain_tags || []).map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join(""); return `<article class="card institution-card"><div class="card-header"><h3>${escapeHtml(institution.name)}</h3><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div><p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p>${sparkline(metric)}${tags ? `<div class="chips" aria-label="Institution tags">${tags}</div>` : ""}<div class="institution-actions">${institutionExpertLink(institution.inst_id)}</div></article>`; }).join("") : '<p class="empty">No qualifying institutions match this type filter.</p>';
+          $("institution-type-chips").querySelectorAll(".institution-type-chip").forEach((button) => button.addEventListener("click", () => { state.institutionViewType = button.dataset.institutionType; renderInstitutions(); }));
+          $("institution-list").querySelectorAll(".institution-expert-link").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId)));
+          clusterMap(filtered);
         }
         function renderAbout() {
           const counts = state.data.index.counts || {};

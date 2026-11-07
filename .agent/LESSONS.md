@@ -1,5 +1,14 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-06 -- S3.4 institution view
+- Reuse the S3.1 slim index for institution metrics: filter to
+  `plastic_related === true`, derive the latest-five-year window from the
+  dataset's latest year, and retain institutions without coordinates in the
+  leaderboard rather than silently dropping them.
+- A dependency-free grid clusterer is enough for the static MVP. Keep map
+  markers keyboard-accessible and route their institution IDs through the
+  existing Experts URL-hash state so the drawer/filter behavior stays shared.
+
 ## 2026-11-06 - Slim static-site exports
 - Keep index rows limited to filter/list fields and load abstracts and other
   detail on author click. A separate metadata file with raw and gzip sizes

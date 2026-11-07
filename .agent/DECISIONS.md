@@ -241,3 +241,21 @@ remain listed in `QUESTIONS.md`.
   contract without adding bundle or license cost.
 - **Decided by:** Build agent under the S3.3 task contract; revisit if the
   full-data performance ladder in S3.6 shows the static export exceeds budget.
+
+## ADR-014 -- 2026-11-06 -- Dependency-free Institutions map and leaderboard
+
+- **Decision:** Derive institution metrics from the shared slim work index,
+  counting only `plastic_related === true` works. Render all qualifying
+  institutions in a type-filterable leaderboard with all-time and latest-five-
+  year counts, and draw a small SVG sparkline from the indexed work years.
+  Render California institutions with coordinates in a client-side grid-
+  clustered map; marker and leaderboard actions write the existing Experts
+  institution hash filter.
+- **Alternatives:** Publish a second institution metrics payload; rank by the
+  broad S1.2 `search=plastic` heuristic; add a third-party tile/map runtime.
+- **Rationale:** The S3.1 index already contains deterministic work and
+  institution joins, so deriving metrics avoids duplicated state and preserves
+  the warning that provisional labels describe volume, not quality. A
+  dependency-free schematic avoids tile-provider terms and network failures in
+  the static MVP while retaining a clear path to a richer map in S3.6.
+- **Decided by:** Build agent under the S3.4 task contract.

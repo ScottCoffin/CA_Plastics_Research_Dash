@@ -130,6 +130,12 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   accessible drawer with works, affiliations, links, and a GitHub correction
   link. Acceptance is `py -3.14 scripts/check_s3_3.py`; browser/screenshot
   evidence is in `docs/S3_3_VERIFICATION.md`.
+- S3.4 extends the Institutions tab with a tagged-work leaderboard, all-time
+  and latest-five-year counts, accessible SVG sparklines, institution-type
+  chips, and a dependency-free coordinate-aware grid-clustered map. Leaderboard
+  and map markers link back to the Experts hash filter; institutions without
+  coordinates remain visible in the leaderboard and are reported below the map.
+  Acceptance is `py -3.14 scripts/check_s3_4.py`.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.
