@@ -25,10 +25,14 @@ python -m ruff format --check .
 python -m compileall -q src
 ```
 
+The daily works refresh is also runnable locally with
+`py -3.14 scripts/run_daily_works.py --start-year YYYY --allow-candidate`.
+HTTP 429 and configured budget stops defer cleanly; GitHub Actions commits
+generated outputs only when `ENABLE_DATA_COMMITS=true`.
+
 Agents must follow `spec.md` Part B and start with `.agent/README.md`.
 
 ## License
 
 The owner must confirm the code and derived-data licenses. See `LICENSE` and
 question G-7 in `.agent/QUESTIONS.md`.
-

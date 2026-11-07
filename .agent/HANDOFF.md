@@ -1,63 +1,34 @@
-# Handoff - 2026-11-06 - task S2.3
+# Handoff - 2026-11-06 - task S2.4
 
 ## Done
-- Implemented deterministic S2.3 labeling in `src/atlas/nlp/labels.py`.
-- Added `scripts/label_works.py` and `scripts/check_s2_3.py`.
-- Added the <=200-work fixture `tests/fixtures/s2_3_openalex_works.json` and
-  focused tests in `tests/test_labels.py`.
-- Labels are one sorted row per normalized work, written to a separate
-  `work_labels.parquet` output. Rules apply exclusions first, then core,
-  qualified-context, and tier-2 terms from `config/queries.yml`.
-- Raw OpenAlex topics are joined by `work_id` for display names; missing raw
-  works and missing topic entries are retained and counted in the QC report.
-- Domain and matrix facets are provisional, local, and deterministic. The
-  owner-supplied `plastic-v2-candidate` remains unpromoted; labels use
-  `label_source=rule`, nullable `confidence`, and
-  `plastic-v2-candidate-rule-v1`.
-- Documented the independent implementation and MIT Trendspotter inspection
-  in `docs/REUSE.md` and `docs/api_notes/labels.md`.
-- Updated B4 records in order: `.agent/TODO.md`, `.agent/MEMORY.md`,
-  `.agent/DECISIONS.md`, `.agent/LESSONS.md`, `.agent/QUESTIONS.md`,
-  `docs/api_notes/labels.md`, and `docs/REUSE.md`.
+- Added `.github/workflows/ingest_works.yml` with a daily UTC schedule,
+  manual bounded dispatch, serialized data commits, and the exact
+  `ENABLE_DATA_COMMITS == 'true'` write guard.
+- Added typed `OpenAlexRateLimitError` and `OpenAlexBudgetError`. Expected
+  429/budget stops preserve existing output and high-water state; the next
+  inclusive publication-date run resumes safely.
+- Added `atlas.ingest.daily.run_daily_ingest`, `scripts/run_daily_works.py`,
+  optional `OPENALEX_MAX_CREDITS`/`OPENALEX_MAX_COST_USD` ceilings, and
+  `scripts/check_s2_4.py`.
+- Documented the workflow in `docs/api_notes/openalex.md`, `docs/SECRETS.md`,
+  and the B4 records.
 
-## State of the repo
-- Focused acceptance: `py -3.14 scripts/check_s2_3.py` passes.
-- Full suite: `C:\rtools45\usr\bin\make.exe PYTHON="py -3.14" test` passes
-  (40 tests).
-- Ruff check/format, `make build`, and `git diff --check` pass.
-- No S2.4 workflow, schedule, commit guard, or rate-limit work was started.
-- Candidate promotion and later validation remain owner decisions; no owner
-  action is required to use this local provisional layer.
+## Verification
+- `py -3.14 scripts/check_s2_4.py` passes, including simulated 429/budget
+  deferral, unchanged high-water state, and successful subsequent resume.
+- `py -3.14 -m pytest -q` passes (40 tests).
+- Ruff check/format, compileall, and `git diff --check` pass.
+- A live scheduled run still requires the workflow to execute on GitHub Actions;
+  no API key value was read or committed.
 
-## Next task (suggested)
-- S2.4: add the daily works workflow with guarded output commits and resumable
-  rate-limit handling. First inspect the workflow conventions, then implement
-  only S2.4, run its simulated 429 acceptance, and provide the next successor
-  prompt.
-
-## Gotchas the next agent must know
-- Do not infer CA sampling from author affiliations; S2.3 leaves
-  `ca_sampled=unclear` for the later classifier stage.
-- Normalized works retain topic IDs only; raw OpenAlex JSON is needed for topic
-  display names. Never drop a work because its raw/topic join is missing.
-- The configured query and taxonomy are owner-supplied candidate inputs, not a
-  validated classifier. Do not promote `plastic-v2-candidate` automatically.
-- Trendspotter is MIT-licensed, but no external code was copied; preserve the
-  independent local implementation unless a later task explicitly changes it.
-
-## Needs owner input
-- None for S2.3. Promotion/validation remains an owner-gated later decision.
-
-## Files that are large or unsafe to read whole
-- `data/processed/institutions.parquet` -> inspect selected columns with
-  PyArrow/DuckDB; preserve the owner-reviewed registry.
-- `data/raw/openalex_works/` -> inspect bounded snapshot metadata only.
-- `data/interim/works_raw.parquet` -> inspect schema and bounded rows with
-  PyArrow/DuckDB; do not load the full corpus into context.
+## Next task
+S3.1: export slim site data and aggregates. Preserve the current workflow and
+do not start S3.2 in the same session.
 
 ## Prompt for the next fresh agent
 
-Continue exactly S2.4 from `.agent/HANDOFF.md`; preserve existing dirty files,
-do not revisit or modify completed S2.3, and provide a copy-paste successor
-prompt in your final handoff. Use the lowest-cost available worker model and
-do not use any Sol models.
+Continue exactly S3.1 from `.agent/HANDOFF.md`; preserve unrelated files, read
+the S3.1 contract in `spec.md`, implement only the site-data exporter and
+aggregates, run its acceptance plus the full suite, update B4 records, commit
+and push only S3.1, and stop before S3.2. If directing a bounded worker, use a
+Luna worker only.

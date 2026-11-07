@@ -4,6 +4,22 @@ ADR-style decisions belong here with date, alternatives, rationale, and decision
 owner. Unanswered items continue to use the defaults in `spec.md` Part G and
 remain listed in `QUESTIONS.md`.
 
+## ADR-010 - 2026-11-06 - Guarded daily works refresh
+
+- **Decision:** Schedule `.github/workflows/ingest_works.yml` daily and allow
+  manual bounded dispatches. Treat OpenAlex HTTP 429 responses and optional
+  per-run credit/USD ceilings as clean deferred outcomes; do not advance the
+  high-water mark or generated outputs until a run completes. Commit generated
+  outputs only when `ENABLE_DATA_COMMITS` is exactly `true`.
+- **Alternatives:** Retry a daily-budget 429 until the job fails; advance state
+  after partial pages; commit on every scheduled run; make the guard implicit.
+- **Rationale:** OpenAlex's daily budget may be exhausted by the shared
+  account/network, and inclusive publication-date rereads are idempotent. A
+  visible clean defer preserves resumability while the exact repository guard
+  prevents an unexpected write-capable workflow.
+- **Decided by:** Build agent under the S2.4 implementation contract; owner may
+  adjust the schedule or budget variables later.
+
 ## ADR-009 - 2026-11-06 - Deterministic provisional work labels
 
 - **Decision:** Emit a separate sorted `work_labels` Parquet from normalized

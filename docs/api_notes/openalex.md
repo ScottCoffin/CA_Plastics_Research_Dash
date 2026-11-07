@@ -135,3 +135,17 @@ It sent bounded `GET /works` requests for institution `I97018004`, with
   cursor, snapshots response JSON under ignored `data/raw/openalex_works/`,
   and writes `data/interim/works_raw.parquet` plus its high-water mark only
   after a successful merge.
+
+## S2.4 daily workflow (2026-11-06)
+
+`scripts/run_daily_works.py` and `.github/workflows/ingest_works.yml` perform
+the scheduled refresh. A typed HTTP 429 response, or an optional
+`OPENALEX_MAX_CREDITS`/`OPENALEX_MAX_COST_USD` ceiling, returns a clean deferred
+status and leaves the prior Parquet/high-water state unchanged. The next run
+re-reads the inclusive boundary and deduplicates by OpenAlex work ID. The
+workflow normalizes and labels only after success, and force-adds those named
+outputs only when `ENABLE_DATA_COMMITS` is exactly `true`.
+
+Acceptance: `py -3.14 scripts/check_s2_4.py` simulates both a 429 and a budget
+stop, verifies the high-water digest is unchanged, and verifies a subsequent
+run reports success.

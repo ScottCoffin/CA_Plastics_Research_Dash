@@ -32,6 +32,8 @@ def main() -> None:
     parser.add_argument("--usage-log", type=Path, default=Path("data/logs/api_usage.jsonl"))
     parser.add_argument("--per-page", type=int, default=100)
     parser.add_argument("--max-pages", type=int)
+    parser.add_argument("--max-credits", type=float)
+    parser.add_argument("--max-cost-usd", type=float)
     parser.add_argument("--allow-candidate", action="store_true")
     args = parser.parse_args()
 
@@ -62,6 +64,8 @@ def main() -> None:
             per_page=args.per_page,
             max_pages=args.max_pages,
             allow_candidate=args.allow_candidate,
+            max_credits=args.max_credits,
+            max_cost_usd=args.max_cost_usd,
         )
     print(result)
 

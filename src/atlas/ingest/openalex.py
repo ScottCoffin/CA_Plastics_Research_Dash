@@ -44,6 +44,22 @@ RAW_SCHEMA = pa.schema(
 )
 
 
+class OpenAlexRateLimitError(RuntimeError):
+    """A run should stop and retry on a later scheduled invocation."""
+
+    status_code = 429
+
+    def __init__(self, message: str, *, retry_after: str | None = None) -> None:
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
+class OpenAlexBudgetError(RuntimeError):
+    """The configured per-run credit or dollar ceiling was reached."""
+
+    status_code = 429
+
+
 @dataclass(frozen=True)
 class OpenAlexPaths:
     """Filesystem paths for the S2.1 state and generated outputs."""
@@ -184,9 +200,12 @@ def _request_json(
             message = str(body.get("message") or body.get("error") or "request rejected")
             if error.code in {400, 401, 403, 404}:
                 raise RuntimeError(f"OpenAlex returned HTTP {error.code}: {message}") from error
-            if error.code == 429 and "Plan upgrade required" in message:
-                raise RuntimeError(
-                    f"OpenAlex filter is unavailable on this plan: {message}"
+            if error.code == 429:
+                raise OpenAlexRateLimitError(
+                    f"OpenAlex returned HTTP 429: {message}",
+                    retry_after=str(headers.get("Retry-After"))
+                    if headers.get("Retry-After") is not None
+                    else None,
                 ) from error
             if attempt + 1 == attempts:
                 raise RuntimeError(
@@ -385,6 +404,8 @@ def ingest_live(
     per_page: int = DEFAULT_PER_PAGE,
     max_pages: int | None = None,
     allow_candidate: bool = False,
+    max_credits: float | None = None,
+    max_cost_usd: float | None = None,
     run_id: str | None = None,
 ) -> dict[str, Any]:
     """Run a backfill or inclusive publication/update-date incremental pull."""
@@ -405,6 +426,10 @@ def ingest_live(
         raise ValueError("start_year must not be after end_year")
     if updated_since and (start_year is not None or end_year is not None):
         raise ValueError("updated_since cannot be combined with a year backfill")
+    if max_credits is not None and max_credits < 0:
+        raise ValueError("max_credits must be non-negative")
+    if max_cost_usd is not None and max_cost_usd < 0:
+        raise ValueError("max_cost_usd must be non-negative")
 
     state = read_high_water_mark(paths.high_water_mark)
     if start_year is None and not updated_since and state:
@@ -442,6 +467,16 @@ def ingest_live(
                         per_page=per_page,
                     )
                     body = _request_json(url, logger=logger)
+                    if (
+                        max_credits is not None
+                        and logger.credits_total > type(logger.credits_total)(str(max_credits))
+                    ) or (
+                        max_cost_usd is not None
+                        and logger.cost_usd_total > type(logger.cost_usd_total)(str(max_cost_usd))
+                    ):
+                        raise OpenAlexBudgetError(
+                            "OpenAlex per-run budget exceeded; outputs were not advanced"
+                        )
                     request_number += 1
                     _write_snapshot(
                         _snapshot_path(paths.raw_dir, actual_run_id, request_number),

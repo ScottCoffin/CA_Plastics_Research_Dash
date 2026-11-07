@@ -104,6 +104,13 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   output and are counted in the QC report. `label_source=rule`, nullable
   `confidence`, and `plastic-v2-candidate-rule-v1` keep the candidate
   unpromoted.
+- S2.4's `.github/workflows/ingest_works.yml` runs daily at 10:17 UTC and on
+  manual dispatch. `scripts/run_daily_works.py` treats OpenAlex HTTP 429 and
+  configured credit/USD ceilings as deferred, preserving the prior output and
+  high-water state so the next inclusive run resumes safely. Generated outputs
+  are force-added only when the repository variable `ENABLE_DATA_COMMITS` is
+  exactly `true`; optional `OPENALEX_MAX_CREDITS` and
+  `OPENALEX_MAX_COST_USD` variables bound a run.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.

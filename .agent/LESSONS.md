@@ -1,5 +1,12 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-06 - Guarded daily works refresh
+- A daily-budget HTTP 429 is an expected scheduling outcome, not a reason to
+  advance state or fail the whole workflow. Raise a typed rate-limit error,
+  preserve the inclusive high-water boundary, and let the next run retry.
+- Keep the write guard exact (`ENABLE_DATA_COMMITS == "true"`) and force-add
+  only the named generated outputs; raw snapshots and API logs remain ignored.
+
 ## 2026-11-06 - Provisional work-label joins and rule ordering
 - Join normalized work IDs back to raw OpenAlex records for topic display
   names; retain every normalized work when raw or topic rows are missing and
