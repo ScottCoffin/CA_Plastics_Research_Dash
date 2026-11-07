@@ -3,53 +3,323 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A static atlas of plastic-related research connected to California.">
     <title>CA Plastics Research Atlas</title>
     <style>
       :root {
         color-scheme: light;
+        --ink: #17324d;
+        --muted: #536879;
+        --brand: #075a46;
+        --brand-dark: #043e32;
+        --surface: #ffffff;
+        --canvas: #eef6f7;
+        --line: #c8d8dc;
+        --focus: #c45100;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        color: #17324d;
-        background: #eef6f7;
+        color: var(--ink);
+        background: var(--canvas);
       }
-      body {
-        min-height: 100vh;
-        margin: 0;
-        display: grid;
-        place-items: center;
+      * { box-sizing: border-box; }
+      body { margin: 0; min-width: 18rem; line-height: 1.5; }
+      a { color: var(--brand-dark); }
+      button, input, select { font: inherit; }
+      button, select, input { min-height: 2.75rem; }
+      button { cursor: pointer; }
+      :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+      .skip-link {
+        position: absolute; left: 0.75rem; top: 0.75rem; z-index: 5;
+        transform: translateY(-150%); padding: 0.6rem 0.8rem; border-radius: 0.35rem;
+        color: #fff; background: var(--brand-dark);
       }
-      main {
-        width: min(42rem, calc(100% - 3rem));
-        padding: 3rem;
-        border-radius: 1rem;
-        background: #fff;
-        box-shadow: 0 1rem 3rem rgb(23 50 77 / 12%);
+      .skip-link:focus { transform: translateY(0); }
+      .site-header { color: #fff; background: var(--brand-dark); }
+      .header-inner, .page-main { width: min(74rem, calc(100% - 2rem)); margin: 0 auto; }
+      .header-inner { padding: 1.25rem 0 1rem; }
+      .eyebrow { margin: 0; color: #bfe8d9; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      h1 { margin: 0.25rem 0 0.4rem; font-size: clamp(1.65rem, 5vw, 2.5rem); line-height: 1.1; }
+      .tagline { max-width: 50rem; margin: 0; color: #e3f4ef; }
+      .header-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-top: 1rem; color: #d1eee5; font-size: 0.9rem; }
+      .status-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.6rem; border-radius: 999px; color: #083d31; background: #d9f2e9; font-weight: 700; }
+      .status-pill[data-state="error"] { color: #6b2100; background: #ffe3d3; }
+      .page-main { padding: 1rem 0 3rem; }
+      .tabs { display: flex; gap: 0.35rem; overflow-x: auto; padding: 0.25rem; border-bottom: 1px solid var(--line); }
+      .tab { flex: 0 0 auto; border: 0; border-bottom: 3px solid transparent; padding: 0.75rem 0.85rem; color: var(--muted); background: transparent; font-weight: 700; }
+      .tab[aria-selected="true"] { border-bottom-color: var(--brand); color: var(--brand-dark); background: #e1f1ee; }
+      .panel { margin-top: 1rem; padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid var(--line); border-radius: 0.75rem; background: var(--surface); box-shadow: 0 0.5rem 1.75rem rgb(23 50 77 / 7%); }
+      .panel[hidden] { display: none; }
+      h2 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 3vw, 1.65rem); }
+      h3 { margin: 0; font-size: 1.05rem; }
+      .panel-intro { margin-top: 0; color: var(--muted); }
+      .data-note { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.9rem; }
+      .controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; align-items: end; margin: 1.25rem 0; }
+      .field { display: flex; flex-direction: column; gap: 0.3rem; }
+      .field label { font-size: 0.85rem; font-weight: 700; }
+      .field input, .field select { width: 100%; padding: 0.55rem 0.65rem; border: 1px solid #8da7af; border-radius: 0.35rem; color: var(--ink); background: #fff; }
+      .button-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+      .button { border: 1px solid var(--brand); border-radius: 0.35rem; padding: 0.55rem 0.75rem; color: #fff; background: var(--brand); font-weight: 700; }
+      .button.secondary { color: var(--brand-dark); background: #fff; }
+      .result-line { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin: 1rem 0 0.65rem; }
+      .result-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
+      .cards { display: grid; gap: 0.65rem; }
+      .card { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
+      .card-header { display: flex; justify-content: space-between; gap: 0.75rem; }
+      .card-header h3 { color: var(--brand-dark); }
+      .card-meta { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
+      .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.55rem; }
+      .chip { display: inline-block; padding: 0.18rem 0.45rem; border-radius: 999px; color: #24445a; background: #e6eff2; font-size: 0.78rem; }
+      .empty { padding: 1.25rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; }
+      .stub { display: grid; place-items: center; min-height: 12rem; padding: 1rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; background: #fbfdfd; }
+      .about-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+      .stat { padding: 0.8rem; border-radius: 0.5rem; background: #e9f3f1; }
+      .stat dt { color: var(--muted); font-size: 0.8rem; }
+      .stat dd { margin: 0.2rem 0 0; color: var(--brand-dark); font-size: 1.35rem; font-weight: 750; }
+      .notice { margin: 0.75rem 0; padding: 0.7rem 0.85rem; border-left: 0.3rem solid var(--brand); color: #254658; background: #edf7f4; }
+      footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.85rem; }
+      @media (max-width: 45rem) {
+        .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .about-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
-      h1 {
-        margin-top: 0;
-        line-height: 1.1;
-      }
-      p {
-        line-height: 1.6;
-      }
-      .status {
-        display: inline-block;
-        padding: 0.35rem 0.7rem;
-        border-radius: 999px;
-        color: #075a46;
-        background: #dff6ed;
-        font-weight: 700;
+      @media (max-width: 30rem) {
+        .header-inner, .page-main { width: min(100% - 1rem, 74rem); }
+        .controls, .about-grid { grid-template-columns: 1fr; }
+        .button-row { display: grid; grid-template-columns: 1fr 1fr; }
+        .button-row .button { width: 100%; }
       }
     </style>
   </head>
   <body>
-    <main>
-      <p class="status">Bootstrap in progress</p>
-      <h1>CA Plastics Research Atlas</h1>
-      <p>
-        This placeholder confirms that the static site deployment works. The public atlas of
-        California plastic-related research, monitoring data, and funding will be built in later
-        roadmap stages.
-      </p>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <p class="eyebrow">California research atlas</p>
+        <h1>CA Plastics Research Atlas</h1>
+        <p class="tagline">A transparent starting point for finding plastic-related research connected to California.</p>
+        <div class="header-meta">
+          <span id="load-status" class="status-pill" role="status" aria-live="polite">Loading data…</span>
+          <span id="generated-at">Preparing the latest static snapshot</span>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="page-main">
+      <nav class="tabs" aria-label="Atlas sections" role="tablist">
+        <button class="tab" id="tab-experts" type="button" role="tab" aria-selected="true" aria-controls="panel-experts" data-tab="experts">Experts</button>
+        <button class="tab" id="tab-institutions" type="button" role="tab" aria-selected="false" aria-controls="panel-institutions" data-tab="institutions" tabindex="-1">Institutions</button>
+        <button class="tab" id="tab-monitoring" type="button" role="tab" aria-selected="false" aria-controls="panel-monitoring" data-tab="monitoring" tabindex="-1">Monitoring</button>
+        <button class="tab" id="tab-funding" type="button" role="tab" aria-selected="false" aria-controls="panel-funding" data-tab="funding" tabindex="-1">Funding</button>
+        <button class="tab" id="tab-about" type="button" role="tab" aria-selected="false" aria-controls="panel-about" data-tab="about" tabindex="-1">About</button>
+      </nav>
+
+      <section id="panel-experts" class="panel" role="tabpanel" aria-labelledby="tab-experts" tabindex="0">
+        <h2>Experts</h2>
+        <p class="panel-intro">Browse the author index from the latest static export. Use the filters to narrow the starting list.</p>
+        <form id="expert-filters" class="controls" novalidate>
+          <div class="field"><label for="expert-search">Search name or ID</label><input id="expert-search" name="search" type="search" autocomplete="off" placeholder="e.g. California"></div>
+          <div class="field"><label for="year-filter">Publication year</label><select id="year-filter" name="year"><option value="">All years</option></select></div>
+          <div class="field"><label for="tag-filter">Domain or matrix tag</label><select id="tag-filter" name="tag"><option value="">All tags</option></select></div>
+          <div class="field"><label for="ca-filter">California connection</label><select id="ca-filter" name="ca"><option value="">Any connection</option><option value="ca">Has California works</option><option value="none">No California works</option></select></div>
+        </form>
+        <div class="button-row" aria-label="Expert actions">
+          <button id="reset-filters" class="button secondary" type="button">Reset filters</button>
+          <button id="export-csv" class="button" type="button">Export filtered CSV</button>
+        </div>
+        <div class="result-line"><p id="expert-count" class="result-count" role="status" aria-live="polite">Loading experts…</p></div>
+        <div id="expert-list" class="cards" aria-live="polite"></div>
+      </section>
+
+      <section id="panel-institutions" class="panel" role="tabpanel" aria-labelledby="tab-institutions" tabindex="0" hidden>
+        <h2>Institutions</h2>
+        <p class="panel-intro">Institution summaries are loaded from the same S3.1 export used by the Experts view.</p>
+        <div id="institution-list" class="cards" aria-live="polite"></div>
+      </section>
+
+      <section id="panel-monitoring" class="panel" role="tabpanel" aria-labelledby="tab-monitoring" tabindex="0" hidden>
+        <h2>Monitoring</h2>
+        <div class="stub"><div><h3>Monitoring catalogue coming next</h3><p>This reserved tab will connect verified California plastics monitoring sources in Stage 7.</p></div></div>
+      </section>
+
+      <section id="panel-funding" class="panel" role="tabpanel" aria-labelledby="tab-funding" tabindex="0" hidden>
+        <h2>Funding</h2>
+        <div class="stub"><div><h3>Funding catalogue coming next</h3><p>This reserved tab will connect grants and solicitations in Stage 8.</p></div></div>
+      </section>
+
+      <section id="panel-about" class="panel" role="tabpanel" aria-labelledby="tab-about" tabindex="0" hidden>
+        <h2>About this snapshot</h2>
+        <p class="panel-intro">The app is a static, client-side shell. It reads generated JSON and does not query OpenAlex from your browser.</p>
+        <dl id="about-stats" class="about-grid"></dl>
+        <p class="notice"><strong>Interpretation note:</strong> provisional labels are screening metadata, not a validated pollution leaderboard. Confirm the linked source work before drawing conclusions.</p>
+        <p>Data schema: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/SITE_DATA.md">S3.1 site data contract</a>. Methods and governance will be expanded as later roadmap tasks are completed.</p>
+      </section>
+
+      <footer>Static snapshot for exploration; accessibility and data quality are being improved in staged releases.</footer>
     </main>
+
+    <script>
+      (() => {
+        "use strict";
+        const DATA_FILES = {
+          index: "data/index.json",
+          institutions: "data/institutions.json",
+          aggregates: "data/aggregates.json",
+          metadata: "data/build_metadata.json"
+        };
+        const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
+        const state = { tab: "experts", search: "", year: "", tag: "", ca: "", data: null };
+        const $ = (id) => document.getElementById(id);
+
+        function escapeHtml(value) {
+          return String(value ?? "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[character]));
+        }
+        function readHash() {
+          const [tabPart, queryPart = ""] = window.location.hash.replace(/^#/, "").split("?");
+          state.tab = VALID_TABS.includes(tabPart) ? tabPart : "experts";
+          const params = new URLSearchParams(queryPart);
+          state.search = params.get("search") || "";
+          state.year = params.get("year") || "";
+          state.tag = params.get("tag") || "";
+          state.ca = ["", "ca", "none"].includes(params.get("ca") || "") ? (params.get("ca") || "") : "";
+        }
+        function writeHash() {
+          const params = new URLSearchParams();
+          if (state.search) params.set("search", state.search);
+          if (state.year) params.set("year", state.year);
+          if (state.tag) params.set("tag", state.tag);
+          if (state.ca) params.set("ca", state.ca);
+          const next = `#${state.tab}${params.toString() ? `?${params.toString()}` : ""}`;
+          if (window.location.hash !== next) window.history.replaceState(null, "", next);
+        }
+        function selectTab(tab, moveFocus = false) {
+          state.tab = VALID_TABS.includes(tab) ? tab : "experts";
+          document.querySelectorAll("[role=tab]").forEach((button) => {
+            const selected = button.dataset.tab === state.tab;
+            button.setAttribute("aria-selected", String(selected));
+            button.tabIndex = selected ? 0 : -1;
+          });
+          document.querySelectorAll("[role=tabpanel]").forEach((panel) => {
+            panel.hidden = panel.id !== `panel-${state.tab}`;
+          });
+          writeHash();
+          if (moveFocus) $(`tab-${state.tab}`).focus();
+        }
+        function populateFilters() {
+          const years = new Set();
+          const tags = new Set();
+          state.data.index.works.forEach((work) => {
+            if (work.year !== null && work.year !== undefined) years.add(String(work.year));
+            [...(work.domain_tags || []), ...(work.facet_tags || [])].forEach((tag) => tags.add(tag));
+          });
+          $("year-filter").innerHTML = '<option value="">All years</option>' + [...years].sort().reverse().map((year) => `<option value="${escapeHtml(year)}">${escapeHtml(year)}</option>`).join("");
+          $("tag-filter").innerHTML = '<option value="">All tags</option>' + [...tags].sort().map((tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(tag)}</option>`).join("");
+        }
+        function applyControls() {
+          $("expert-search").value = state.search;
+          $("year-filter").value = state.year;
+          $("tag-filter").value = state.tag;
+          $("ca-filter").value = state.ca;
+        }
+        function filteredAuthors() {
+          const authors = state.data.index.authors || [];
+          const works = state.data.index.works || [];
+          const byId = new Map(authors.map((author) => [author.author_id, author]));
+          const relevantWorks = works.filter((work) => {
+            if (state.year && String(work.year) !== state.year) return false;
+            const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])];
+            return !state.tag || tags.includes(state.tag);
+          });
+          const relevantIds = new Set(relevantWorks.flatMap((work) => work.author_ids || []));
+          return authors.filter((author) => {
+            const haystack = `${author.name} ${author.author_id}`.toLowerCase();
+            if (state.search && !haystack.includes(state.search.toLowerCase())) return false;
+            if ((state.year || state.tag) && !relevantIds.has(author.author_id)) return false;
+            if (state.ca === "ca" && !(author.ca_works_count > 0)) return false;
+            if (state.ca === "none" && author.ca_works_count > 0) return false;
+            return true;
+          });
+        }
+        function renderExperts() {
+          const authors = filteredAuthors();
+          $("expert-count").textContent = `${authors.length} expert${authors.length === 1 ? "" : "s"} shown`;
+          $("expert-list").innerHTML = authors.length ? authors.map((author) => {
+            const tags = (author.domain_tags || []).map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("");
+            const years = author.first_year && author.last_year ? `${author.first_year}–${author.last_year}` : "Year unavailable";
+            return `<article class="card"><div class="card-header"><h3>${escapeHtml(author.name || "Unnamed author")}</h3><span class="chip">${escapeHtml(author.work_count)} works</span></div><p class="card-meta">${escapeHtml(author.author_id)} · ${escapeHtml(years)} · ${author.ca_works_count > 0 ? "California connection" : "No California works"}</p>${tags ? `<div class="chips" aria-label="Domain tags">${tags}</div>` : ""}</article>`;
+          }).join("") : '<p class="empty">No experts match these filters. Try resetting one of the selections.</p>';
+        }
+        function renderInstitutions() {
+          const institutions = state.data.institutions.institutions || [];
+          $("institution-list").innerHTML = institutions.length ? institutions.map((institution) => `<article class="card"><div class="card-header"><h3>${escapeHtml(institution.name)}</h3><span class="chip">${institution.ca_flag ? "California" : escapeHtml(institution.region || "Other")}</span></div><p class="card-meta">${escapeHtml(institution.atlas_type)} · ${escapeHtml(institution.work_count)} works · ${escapeHtml(institution.author_count)} authors${institution.city ? ` · ${escapeHtml(institution.city)}` : ""}</p><div class="chips">${(institution.domain_tags || []).map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("")}</div></article>`).join("") : '<p class="empty">No institutions are present in this snapshot.</p>';
+        }
+        function renderAbout() {
+          const counts = state.data.index.counts || {};
+          const metadata = state.data.metadata || {};
+          $("generated-at").textContent = metadata.generated_at && metadata.generated_at !== "fixture" ? `Last refresh: ${metadata.generated_at}` : "Fixture snapshot loaded";
+          $("about-stats").innerHTML = [["Authors", counts.authors], ["Works", counts.works], ["Institutions", counts.institutions], ["California institutions", counts.ca_institutions], ["Labeled works", counts.labeled_works], ["Schema", metadata.schema_version || state.data.index.schema_version || "s3.1"]].map(([label, value]) => `<div class="stat"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("");
+        }
+        function updateViews() {
+          applyControls();
+          renderExperts();
+          renderInstitutions();
+          renderAbout();
+          selectTab(state.tab);
+        }
+        function setLoadStatus(message, isError = false) {
+          const status = $("load-status");
+          status.textContent = message;
+          status.dataset.state = isError ? "error" : "ready";
+        }
+        async function loadData() {
+          try {
+            const entries = await Promise.all(Object.entries(DATA_FILES).map(async ([key, path]) => {
+              const response = await fetch(path, { cache: "no-cache" });
+              if (!response.ok) throw new Error(`${path} returned HTTP ${response.status}`);
+              return [key, await response.json()];
+            }));
+            state.data = Object.fromEntries(entries);
+            if (!state.data.index || !Array.isArray(state.data.index.authors) || !Array.isArray(state.data.index.works)) throw new Error("index.json does not match the S3.1 contract");
+            populateFilters();
+            updateViews();
+            setLoadStatus("Data loaded");
+          } catch (error) {
+            setLoadStatus("Data unavailable", true);
+            $("expert-count").textContent = "The static data could not be loaded.";
+            $("expert-list").innerHTML = `<p class="empty">${escapeHtml(error.message)}<br>Run the site through a web server and rebuild the S3.1 data export.</p>`;
+          }
+        }
+        function onFilterChange() {
+          state.search = $("expert-search").value.trim();
+          state.year = $("year-filter").value;
+          state.tag = $("tag-filter").value;
+          state.ca = $("ca-filter").value;
+          writeHash();
+          renderExperts();
+        }
+        document.querySelectorAll("[role=tab]").forEach((button, index, buttons) => {
+          button.addEventListener("click", () => selectTab(button.dataset.tab));
+          button.addEventListener("keydown", (event) => {
+            if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+            event.preventDefault();
+            const next = event.key === "Home" ? 0 : event.key === "End" ? buttons.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + buttons.length) % buttons.length;
+            buttons[next].focus();
+          });
+        });
+        ["expert-search", "year-filter", "tag-filter", "ca-filter"].forEach((id) => {
+          $(id).addEventListener("input", onFilterChange);
+          $(id).addEventListener("change", onFilterChange);
+        });
+        $("reset-filters").addEventListener("click", () => { state.search = state.year = state.tag = state.ca = ""; writeHash(); updateViews(); $("expert-search").focus(); });
+        $("export-csv").addEventListener("click", () => {
+          if (!state.data) return;
+          const header = ["author_id", "name", "work_count", "ca_works_count", "first_year", "last_year", "domain_tags", "institution_ids"];
+          const rows = filteredAuthors().map((author) => [author.author_id, author.name, author.work_count, author.ca_works_count, author.first_year, author.last_year, (author.domain_tags || []).join(";"), (author.institution_ids || []).join(";")]);
+          const csv = [header, ...rows].map((row) => row.map((value) => `"${String(value ?? "").replaceAll('"', '""')}"`).join(",")).join("\n");
+          const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+          const link = document.createElement("a"); link.href = url; link.download = "ca-plastics-atlas-experts.csv"; link.click(); URL.revokeObjectURL(url);
+        });
+        window.addEventListener("hashchange", () => { readHash(); if (state.data) updateViews(); });
+        readHash();
+        loadData();
+      })();
+    </script>
   </body>
 </html>

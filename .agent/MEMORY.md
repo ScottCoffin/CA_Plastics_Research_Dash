@@ -117,6 +117,12 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   are force-added only when the repository variable `ENABLE_DATA_COMMITS` is
   exactly `true`; optional `OPENALEX_MAX_CREDITS` and
   `OPENALEX_MAX_COST_USD` variables bound a run.
+- S3.2's `site/index.html` is a dependency-free, responsive app shell. It loads
+  `site/data/index.json`, `institutions.json`, `aggregates.json`, and
+  `build_metadata.json`; Experts filters are encoded in the URL hash, tab
+  navigation supports keyboard arrows/Home/End, and the filtered author index
+  exports CSV. Monitoring and Funding are intentionally reserved stub tabs for
+  later stages. `scripts/check_s3_2.py` validates the shell/data contract.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.

@@ -34,3 +34,10 @@ py -3.14 scripts/check_s3_1.py
 The acceptance script uses the committed S2.2 fixture and checks deterministic
 ordering, complete author-detail joins, aggregate counts, California map
 features, and the payload budget without contacting OpenAlex.
+
+## S3.2 browser consumer
+
+`site/index.html` consumes the four top-level JSON files with relative browser
+fetches, so the same shell serves the committed fixture and a later real-data
+export without a client build step. The Experts filter state is kept in the URL
+hash; Monitoring and Funding are reserved stubs until their ingestion stages.

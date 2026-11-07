@@ -1,40 +1,36 @@
-# Handoff - 2026-11-06 - task S3.1
+# Handoff - 2026-11-06 - task S3.2
 
 ## Done
-- Added `.github/workflows/ingest_works.yml` with a daily UTC schedule,
-  manual bounded dispatch, serialized data commits, and the exact
-  `ENABLE_DATA_COMMITS == 'true'` write guard.
-- Added typed `OpenAlexRateLimitError` and `OpenAlexBudgetError`. Expected
-  429/budget stops preserve existing output and high-water state; the next
-  inclusive publication-date run resumes safely.
-- Added `atlas.ingest.daily.run_daily_ingest`, `scripts/run_daily_works.py`,
-  optional `OPENALEX_MAX_CREDITS`/`OPENALEX_MAX_COST_USD` ceilings, and
-  `scripts/check_s2_4.py`.
-- Documented the workflow in `docs/api_notes/openalex.md`, `docs/SECRETS.md`,
-  and the B4 records.
+- Replaced the Pages placeholder with a dependency-free single-file app shell
+  in `site/index.html`.
+- The shell loads the S3.1 `index.json`, `institutions.json`,
+  `aggregates.json`, and `build_metadata.json` payloads; renders Experts and
+  Institutions; and provides explicit Monitoring and Funding stubs plus About.
+- Experts filters are persisted in the URL hash, native tabs support keyboard
+  arrow/Home/End navigation, and the filtered author index exports CSV.
+- Added `scripts/check_s3_2.py` and `tests/test_site_shell.py`; documented the
+  design in ADR-012 and the independent implementation in `docs/REUSE.md`.
 
 ## Verification
-- `py -3.14 scripts/check_s2_4.py` passes, including simulated 429/budget
-  deferral, unchanged high-water state, and successful subsequent resume.
-- `py -3.14 -m pytest -q` passes (40 tests).
+- `py -3.14 scripts/check_s3_2.py` passes: five accessible tabs, hash/CSV
+  hooks, responsive marker, and non-empty S3.1 fixture payloads.
+- `py -3.14 -m pytest -q` passes with 43 tests.
 - Ruff check/format, compileall, and `git diff --check` pass.
-- Hosted bounded smoke `42321442943` completed successfully on GitHub Actions
-  with `max_credits=0` and the expected `budget_exceeded` defer; no API key
-  value was read or committed.
-- `py -3.14 scripts/check_s3_1.py` passes; `py -3.14 -m pytest -q` passes with
-  41 tests; Ruff, compileall, and `git diff --check` pass. The committed
-  fixture site payload is 3,678 bytes gzip.
+- A local static HTTP server returned the shell and `/data/index.json` with the
+  expected fixture schema and author records. The bundled Playwright wrapper
+  could not run in this environment because its current package requires Node
+  20 while the available Node is 18; no browser result is claimed.
 
 ## Next task
-S3.2: build the accessible mobile app shell and stub tabs from the S3.1 data
-contract. Preserve the current workflow and do not start S3.3 in the same
-session.
+S3.3: implement the Experts filters, virtualized list, researcher detail
+drawer, works list, and report-an-error link. Preserve this shell and do not
+start S3.4 in the same session.
 
 ## Prompt for the next fresh agent
 
-Continue exactly S3.2 from `.agent/HANDOFF.md`; preserve unrelated files, read
-the S3.2 contract in `spec.md` and the S3.1 data contract in
-`docs/SITE_DATA.md`, implement only the accessible app shell and stub tabs, run
-its acceptance plus the full suite, update B4 records, commit and push only
-S3.2, and stop before S3.3. If directing a bounded worker, use a
+Continue exactly S3.3 from `.agent/HANDOFF.md`; preserve unrelated files, read
+the S3.3 contract in `spec.md` and the S3.1 data contract in
+`docs/SITE_DATA.md`, build on the existing accessible shell without starting
+S3.4, run the S3.3 acceptance plus the full suite, update B4 records, commit
+and push only S3.3, and stop before S3.4. If directing a bounded worker, use a
 Luna worker only.

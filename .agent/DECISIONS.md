@@ -4,6 +4,21 @@ ADR-style decisions belong here with date, alternatives, rationale, and decision
 owner. Unanswered items continue to use the defaults in `spec.md` Part G and
 remain listed in `QUESTIONS.md`.
 
+## ADR-012 - 2026-11-06 - Dependency-free S3.2 app shell
+
+- **Decision:** Keep the MVP shell as one responsive `site/index.html` with
+  native HTML controls and browser `fetch()` calls to the S3.1 JSON contract.
+  Persist the Experts filter state in the URL hash, provide keyboard-operable
+  tabs and CSV export, and reserve Monitoring and Funding as explicit stubs.
+- **Alternatives:** Add a client framework/bundler; ship a Python runtime to
+  the browser; omit filters until the Experts task.
+- **Rationale:** The existing static Pages artifact can serve the fixture and
+  future generated data without a build dependency, while native controls make
+  the shell usable on keyboard and narrow screens. Detailed drawers,
+  virtualization, maps, and domain-specific tabs remain scoped to S3.3-S3.5.
+- **Decided by:** Build agent under the S3.2 contract; owner may revise the
+  client design in later MVP tasks.
+
 ## ADR-011 - 2026-11-06 - Static site export contract
 
 - **Decision:** Build compact, deterministic JSON from the normalized C3

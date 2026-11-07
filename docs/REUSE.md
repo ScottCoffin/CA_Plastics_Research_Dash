@@ -27,6 +27,10 @@ the repository's `config/queries.yml` and `config/taxonomy.yml`.  The
 Trendspotter entry below was inspected for the documented MIT license and
 facet approach, but no Trendspotter source code or data was copied.
 
+S3.2's app shell was implemented independently in one static HTML file. The
+Job_Scraper triage structure named in the specification was not copied; its
+license remains documented below as a pattern that was inspected only.
+
 | Repository/source | URL | License | Reused material | Adaptation and attribution |
 |---|---|---|---|---|
 | Job_Scraper | https://github.com/ScottCoffin/Job_Scraper | AGPL-3.0 | Watchdog and opt-in commit-guard concepts | Inspected as the documented owner pattern; independently reimplemented for this repository without copying workflow code. |
