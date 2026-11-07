@@ -17,9 +17,10 @@
 - `py -3.14 -m pytest -q` passes with 43 tests.
 - Ruff check/format, compileall, and `git diff --check` pass.
 - A local static HTTP server returned the shell and `/data/index.json` with the
-  expected fixture schema and author records. The bundled Playwright wrapper
-  could not run in this environment because its current package requires Node
-  20 while the available Node is 18; no browser result is claimed.
+  expected fixture schema and author records. The environment now uses WSL
+  Node 20.20.2 and has the Playwright Chromium binary installed; the bundled
+  wrapper successfully launches with `--browser=chromium`. Full browser
+  acceptance remains part of the later UI tasks.
 
 ## Next task
 S3.3: implement the Experts filters, virtualized list, researcher detail
