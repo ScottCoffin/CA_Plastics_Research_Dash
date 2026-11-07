@@ -142,6 +142,13 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   is identified as example data; missing refresh/count values display as
   unavailable. Acceptance and independent Chromium evidence are in
   `docs/S3_5_VERIFICATION.md`; browser smoke had only harmless favicon 404s.
+- S3.6 partial evidence is in `docs/S3_6_VERIFICATION.md`: Pages run 42334138365
+  deployed commit 226df54 successfully and live HTTP returned 200. Fixture-only
+  C5 run: 3,403 gzip bytes; 5-context Chromium FCP median/max 44/80 ms, render
+  75.1/124.1 ms, and 20/20 exact expected-author filters at median/max
+  14.2/15.9 ms. No representative export exists; the 98,118 S1.5 count is only
+  an estimate. Keep S3.6 unchecked pending owner query review and authorized
+  bounded export; do not promote the inactive candidate to create a benchmark.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.

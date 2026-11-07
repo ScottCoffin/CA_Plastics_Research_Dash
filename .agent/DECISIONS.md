@@ -285,3 +285,15 @@ remain listed in `QUESTIONS.md`.
   and token use while retaining an explicit escalation path for rare work that
   needs stronger reasoning.
 - **Decided by:** Owner instruction during continuous-goal setup.
+
+## ADR-017 -- 2026-11-07 -- Defer browser database escalation until representative performance evidence
+
+- **Decision:** Keep the static JSON implementation and do not add DuckDB-Wasm
+  based on the four-work fixture. Keep S3.6 unchecked until C5 is measured on a
+  representative export.
+- **Alternatives:** Add DuckDB-Wasm based on the remote count estimate, or treat
+  fixture timing as full-corpus evidence.
+- **Rationale:** Fixture payload and response times pass C5, but the fixture is
+  not representative and the 98,118 S1.5 count is not downloaded data. An
+  authorized export requires owner query review first.
+- **Decided by:** Build agent under the S3.6 partial evidence checkpoint.

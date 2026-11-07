@@ -3,25 +3,25 @@
 ## Goal
 
 Complete the staged CA Plastics Research Atlas roadmap one dependency-satisfied
-atomic checkpoint at a time inside a continuous Goal-mode run.
+atomic checkpoint at a time.
 
 ## Overall Progress
 
-S0 through S2.4 and S3.1 through S3.5 are implemented and verified; S3.5 is
-sealed in this Git checkpoint. The static atlas now has
-deterministic slim exports, an accessible app shell, Experts filters and lazy
-details, an institution leaderboard with sparklines and a clustered map, and an
-About/Methods view with snapshot freshness metadata.
+S0 through S2.4 and S3.1 through S3.5 are implemented and verified. S3.6 has a
+partial evidence checkpoint: Pages deployment and fixture C5 budgets pass, but
+the full-data performance DoD remains unmet. The static atlas has deterministic
+slim exports, an accessible shell, Experts filters and lazy details, an
+institution leaderboard/map, and About/Methods content.
 
 ## Current Position
 
-S3.5 acceptance is complete and sealed in this Git checkpoint.
-No S3.6 work has started. OpenAlex query promotion remains intentionally
-separate from this workflow.
+S3.6 partial evidence is recorded in `docs/S3_6_VERIFICATION.md`. It remains
+unchecked until representative full-data performance is measured. Query
+promotion remains an owner decision and separate from this checkpoint.
 
 ## Next Milestone
 
-Complete S3.6 as its own checkpoint: verify the Pages deployment, record the
-performance ladder metrics, and use DuckDB-Wasm only if the measured need is
-documented. Preserve one-task checkpoint boundaries under the continuous-goal
-contract.
+S4.1 guide drafting is dependency-eligible: cover the required edge cases and
+evidence quoting, then obtain owner approval before freezing `guide_v1`.
+Separately, after owner query review and an authorized bounded export, rerun
+full-data C5 and close S3.6 only when acceptance is met.

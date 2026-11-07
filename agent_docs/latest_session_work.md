@@ -1,28 +1,23 @@
 # Latest Session Work
 
-## Detailed Current State
+## Current State
 
-S3.5 adds the About/Methods content, G-12 disclaimer, correction route, and
-freshness/counts from `build_metadata.json`. The fixture timestamp is identified
-as example data. The implementation and acceptance evidence are documented in
-`docs/S3_5_VERIFICATION.md`; `.agent/HANDOFF.md` is the task-level entry point.
-
-S3.5 is sealed in this Git checkpoint. S3.6 has not started.
-Each roadmap task remains a separate acceptance, documentation, and Git
-checkpoint, even when work continues in one Goal-mode run.
+S3.6 deployment and fixture performance evidence is recorded in
+`docs/S3_6_VERIFICATION.md`. Pages run 42334138365 deployed successfully and
+direct live checks passed. The four-work fixture meets C5 budgets, but no
+representative export is available, so S3.6 remains unchecked.
 
 ## Verification
 
-- S3.5 acceptance and the S3.2-S3.4 regression checks passed.
-- The full suite passed with 49 tests; Ruff and `git diff --check` passed.
-- Independent Chromium verified the About content, freshness and counts,
-  Institutions-to-Experts filtered drawer path, and 390x844 layout. The browser
-  logged only harmless `/favicon.ico` 404s.
-- The live ISO timestamp and missing metadata cases were exercised by the Node
-  renderer harness; browser smoke used the committed fixture.
+- `py -3.14 scripts/measure_s3_6.py` passed: 5 Chromium contexts and 20/20
+  expected filter matches; all reported performance values are fixture-only.
+- Both Pages Actions jobs succeeded; direct live HTTP and build metadata checks
+  passed.
+- Full-data C5 remains an open gate pending owner query review and an authorized
+  bounded representative export. See `.agent/HANDOFF.md`.
 
 ## Next Entry Point
 
-After the S3.5 Git handoff, continue with S3.6 from `.agent/HANDOFF.md`: read
-its contract, verify the Pages deployment, and record the C5 performance ladder
-metrics. Use DuckDB-Wasm only if a measured need supports that decision.
+S4.1 guide drafting is the next eligible work. Cover the required edge cases,
+then obtain owner approval before freezing `guide_v1`. Keep S3.6 open until
+full-data performance is measured.
