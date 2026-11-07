@@ -2,37 +2,33 @@
 
 ## Current State
 
-S4.1 has a draft `guide_v1` plus independent review and bounded consistency
-checks. The review SHA-256 is
-`A88B164F67CB60249064A13A529FC21762023037DAF444CDD30B7FCF33481C15`, matching
-the current guide. Owner approval is pending; S4.1 remains unchecked and no
-annotation is authorized. S4.2 has deterministic label-independent sampling,
-fixture splits, and author-group isolation documented in
-`docs/S4_2_VERIFICATION.md`. The two fixture pool rows split train 1, dev 0,
-test 1; leak rows are 0 because no versioned hit source was supplied. The
-fixture is not representative corpus evidence and S4.2 remains unchecked.
+S4.3 annotation tooling is complete. `atlas.nlp.annotation` and the workflow
+CLI provide gated CSV template export/import and per-label Cohen's kappa
+reports; see `docs/S4_3_VERIFICATION.md`. The implementation has synthetic
+acceptance only. No real labels, adjudications, or real agreement metrics were
+created. S4.1 approval and S4.2 representative sampling gates remain pending.
 
-Prior S3.6 deployment and fixture performance evidence remains in
-`docs/S3_6_VERIFICATION.md`. Pages run 42334138365 deployed successfully and
-direct live checks passed; full-data performance remains open.
+S4.1 has a reviewed `guide_v1` draft with matching hash, but owner approval is
+pending and annotation remains unauthorized. S4.2 has fixture-only splits (2
+pool rows, train 1/dev 0/test 1, zero leak rows) and remains incomplete until
+an authorized representative export and versioned leak-hit source exist.
+S3.6 likewise remains open pending query approval, representative export, and
+full-data performance evidence.
 
 ## Verification
 
-- Independent review accepted the guide after the initial relevance gate was
-  clarified to include chemicals-in-plastics subjects; see
-  `docs/LABELING_GUIDE_VERIFICATION.md`.
-- `Get-FileHash docs/LABELING_GUIDE.md -Algorithm SHA256` matched the review
-  artifact hash above.
-- `py -3.14 scripts/check_s4_2.py` passed; 7 focused tests and the full 56-test
-  suite passed; Ruff check/format and `git diff --check` passed.
-- S3.6 fixture measurement and live deployment checks are recorded in
-  `docs/S3_6_VERIFICATION.md`; full-data C5 remains an open gate pending owner
-  query review and authorized representative export. See `.agent/HANDOFF.md`.
+- `py -3.14 -m pytest tests/test_annotation.py`: 15 passed.
+- `py -3.14 scripts/check_s4_3.py`: synthetic round-trip passed and pending
+  `guide_v1` approval gate was rejected as expected.
+- Full `py -3.14 -m pytest`: 71 passed.
+- Ruff check/format check and `git diff --check`: passed.
+- Verification details and human milestones are in
+  `docs/S4_3_VERIFICATION.md`.
 
 ## Next Entry Point
 
-S4.3 annotation roundtrip/import/agreement tooling may use synthetic labels;
-human gold annotation remains gated on explicit S4.1-A approval. Keep S4.2
-unchecked until an authorized representative export and versioned gazetteer-hit
-source produce the planned pool and leak-test samples. Keep S3.6 open until
-full-data performance is measured.
+S4.3 is sealed. Continue at the next dependency-satisfied roadmap task after
+re-reading `.agent/TODO.md` and `.agent/HANDOFF.md`. Human annotation still
+requires S4.1-A approval and an authorized representative split; do not treat
+synthetic values as gold labels or metrics. S4.2 and S3.6 remain open under
+their documented data and owner gates.

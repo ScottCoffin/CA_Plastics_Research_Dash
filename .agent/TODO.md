@@ -31,7 +31,7 @@ Check off only when the task Definition of Done and acceptance check in
 ## S4 Gold set
 - [ ] **S4.1** Versioned labeling guide. Draft `guide_v1` and preparation checks are recorded in `docs/LABELING_GUIDE.md`, `docs/LABELING_GUIDE_REVIEW.md`, and `docs/LABELING_GUIDE_VERIFICATION.md`; owner approval is pending (S4.1-A). Acceptance: edge cases covered and `guide_v1` approved. `owner: approval`
 - [ ] **S4.2** Stratified sample, leak test, and frozen splits. Label-independent sample/split preparation may proceed while S4.1 approval is pending; do not annotate or claim representative-corpus coverage from the four-work fixture. Acceptance: split IDs committed and test set isolated.
-- [ ] **S4.3** Annotation workflow, importer, and agreement stats. Acceptance: round-trip and Cohen's kappa work.
+- [x] **S4.3** Annotation workflow, importer, and agreement stats. Tooling acceptance: CSV round-trip and per-label Cohen's kappa report work; human annotation remains pending guide approval and a representative sample.
 - [ ] **S4.4** Reproducible evaluation harness. Acceptance: dummy predictor produces all reports. `owner: thresholds`
 
 ## S5 Classifiers

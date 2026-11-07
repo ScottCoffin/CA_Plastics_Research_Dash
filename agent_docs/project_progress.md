@@ -29,3 +29,9 @@ test 1), zero leak rows, and verified author-group isolation. S4.2 remains
 unchecked because the fixture is not representative and no versioned leak-hit
 source exists. Separately, after owner query review and an authorized bounded
 export, rerun full-data C5 and close S3.6 only when acceptance is met.
+
+S4.3 tooling is complete: gated CSV round-trip/import and per-label Cohen's
+kappa reporting pass synthetic acceptance. No real annotations were created.
+S4.1 approval, an authorized representative sample, double annotation of at
+least 20%, adjudication, and a real agreement report remain human operational
+milestones; see `docs/S4_3_VERIFICATION.md`.

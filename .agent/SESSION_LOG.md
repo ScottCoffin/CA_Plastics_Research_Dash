@@ -24,3 +24,4 @@
 | 2026-11-07 | S3.6 partial | Pages deployment and fixture C5 measurements verified; full-data performance DoD remains unmet pending approved query and representative export | pending commit |
 | 2026-11-07 | S4.1 partial | Draft `guide_v1`, independent edge-case review, and preparation checks recorded; exact guide hash presented for owner approval; no annotation authorized | pending commit |
 | 2026-11-07 | S4.2 partial | Deterministic fixture sampling/splits and author-group isolation verified; production sample remains gated on authorized export and leak-hit source | pending commit |
+| 2026-11-06 | S4.3 | Tooling complete; synthetic CSV round-trip, Cohen's kappa, 15 focused tests and 71-test suite pass; human annotation gates remain pending | pending commit |

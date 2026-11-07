@@ -192,3 +192,4 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 ## Current model versions and metrics (one line per model)
 - None; classifiers are not implemented.
 - S4.2 sampling in `atlas.nlp.sampling` is label-independent; shared author groups stay in one split, while gazetteer-hit leak candidates stay test-only. `docs/S4_2_VERIFICATION.md` records fixture-only counts and hashes. A representative export and leak-hit source remain required; S4.1 approval is pending and annotation is not authorized.
+- S4.3 annotation tooling in `atlas.nlp.annotation` provides gated CSV template export/import and per-label Cohen's kappa reports. `docs/S4_3_VERIFICATION.md` records synthetic-only acceptance; owner approval of `guide_v1`, representative data, double annotation, and adjudication remain operational milestones.
