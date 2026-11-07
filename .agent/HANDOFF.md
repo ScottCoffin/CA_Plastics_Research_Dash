@@ -1,10 +1,10 @@
-# Handoff - 2026-11-07 - S6.2 complete; S6.3 next
+# Handoff - 2026-11-07 - S6.3 complete; S7.1 next
 
 ## Done
-- Implemented Europe PMC JATS parsing in `src/atlas/fulltext/jats.py`, a license-gated fetch/cache interface in `src/atlas/fulltext/cache.py`, and a local parser CLI.
-- Acceptance passes on ten real CC BY article fragments and ten synthetic edge fixtures. Provenance records attribution, DOI/source URLs, metadata and selected-copy XML license evidence, and source hashes. Full XML is only in ignored local cache; committed real snippets are bounded to two excerpts of 180 characters per article.
-- Parser/cache security regression tests reject internal DTD subsets, including one hidden between comment tokens resembling CDATA delimiters; external DTDs are not resolved. Focused and full checks pass: 148 tests, Ruff lint/format, and `git diff --check`.
-- Complete local XML parsing found target sections in 9/10 selected articles (Methods 8, Study Area 1, Sampling 4, Data Availability 7); fixture-set counts are not corpus estimates.
+- Implemented GROBID TEI extraction and bounded pdfminer fallback/cache in `src/atlas/fulltext/grobid.py`, with focused acceptance and 30-PDF spot-check scripts.
+- S6.3 spot check processed 30 selected Frontiers CC BY PDFs with per-copy license evidence and PDF hashes. Text review matched all 16 extracted target headings and evidence prefixes against source PDF text. This is a convenience sample; visual PDF layout was not assessed and it is not candidate-corpus performance.
+- GROBID technical failure rate was 0/30. It returned no target sections for 21/30; pdfminer recovered targets for 6 of those, leaving 15 final no-target records (13 reviews, 2 editorials). Two PDFs were rejected before caching because their own copy lacked a CC BY statement.
+- Focused acceptance, full 163-test suite, Ruff check/format, and `git diff --check` pass.
 
 ## State of the repo
 - S6.2 is complete. S6.1 remains unchecked pending candidate-corpus XML/PDF/none coverage; its synthetic fixture is not corpus evidence.
@@ -12,7 +12,7 @@
 - Preserve the unrelated README URL edit. The S6.2 `docs/REUSE.md` entry is part of this checkpoint.
 
 ## Next task
-- S6.3: implement GROBID PDF extraction and fallback; use a 30-PDF spot check and report extraction failure rate. It is independent of S6.1 corpus coverage.
+- S6.4 requires an abstract-vs-full-text evaluation delta and real gold subset; do not fabricate corpus metrics. Continue with independent S7.1 registry schema and at least 15 verified seed entries. First read its exact contract and preserve S6.3's sample-scope caveats.
 
 ## Gotchas
 - Do not claim corpus-wide section recall from the ten selected articles.

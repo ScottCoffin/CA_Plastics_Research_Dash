@@ -12,6 +12,7 @@ license = { text = "License pending owner confirmation" }
 authors = [{ name = "Scott Coffin" }]
 dependencies = [
   "defusedxml>=0.7.1",
+  "pdfminer.six>=20231228",
   "geopandas>=1.0",
   "pyarrow>=17",
   "pyogrio>=0.11",

@@ -47,9 +47,14 @@ candidate corpus is available for the required coverage report. The S1.5 count
 estimate is not a corpus. S6.2 JATS parsing can proceed independently using ten
 license-safe fixtures under its contract.
 
-S6.2 is now complete: ten real CC BY JATS excerpts and ten synthetic edge
-fixtures pass. License provenance is recorded per article, and full XML stays
-in the ignored local cache. Parsing the ten complete selected XML documents
-found target sections in 9/10; this is fixture-set evidence only. S6.3
-GROBID PDF extraction and fallback is the next independent S6 task and needs
-a 30-PDF spot check. S6.1 remains open pending candidate-corpus coverage.
+S6.2 is complete: ten real CC BY JATS excerpts and ten synthetic edge fixtures
+pass; full XML stays in the ignored local cache. Parsing ten selected XML
+documents found target sections in 9/10, fixture-set evidence only. S6.3 is
+complete: a 30-PDF licensed convenience sample had zero technical GROBID
+failures, 21 GROBID no-target outcomes, six pdfminer recoveries, and 15 final
+no-target outcomes (13 reviews, two editorials). All 16 extracted target
+headings/evidence prefixes matched source PDF text. This is not visual PDF QA
+or corpus performance. S6.1 remains open pending candidate-corpus coverage.
+S7.1 registry schema and at least 15 verified seed entries is the next
+independent eligible task; S6.4 still requires real gold for an evaluation
+delta.

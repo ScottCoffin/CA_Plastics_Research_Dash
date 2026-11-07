@@ -43,6 +43,18 @@ derived from selected CC BY Europe PMC copies; their author, DOI, article URL,
 exact selected-copy license text, and full-source hashes are recorded in
 `docs/api_notes/europepmc_s6_2_fixture_provenance.json`.
 
+S6.3's GROBID REST adapter, TEI section mapping, pdfminer.six fallback, and
+derived-output cache were implemented independently; no GROBID source code or
+model data was copied. GROBID itself is distributed under Apache-2.0, as stated
+in its [official license documentation](https://grobid.readthedocs.io/en/latest/License/).
+PDF processing remains gated by the selected PDF copy's S6.1 license decision.
+The 30-PDF spot check used selected Frontiers publisher copies only after both
+their Europe PMC XML license block and the PDF's own CC BY statement matched.
+Two candidates lacking a CC BY statement were rejected before caching. Source
+hashes, license evidence, extraction outcomes, and the text-level accuracy
+check are recorded in `docs/api_notes/s6_3_pdf_spotcheck.json`; full PDFs remain
+in ignored `data/raw` storage.
+
 | Repository/source | URL | License | Reused material | Adaptation and attribution |
 |---|---|---|---|---|
 | Job_Scraper | https://github.com/ScottCoffin/Job_Scraper | AGPL-3.0 | Watchdog and opt-in commit-guard concepts | Inspected as the documented owner pattern; independently reimplemented for this repository without copying workflow code. |

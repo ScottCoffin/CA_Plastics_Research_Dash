@@ -1,5 +1,8 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-07 -- S6.3 PDF extraction evidence
+- Report GROBID transport/technical failures separately from successful processing that found no target sections. In the 30-PDF convenience sample, GROBID had zero technical failures but 21 no-target results; pdfminer recovered six and 15 remained empty, mostly reviews/editorials. Heading and excerpt text checks do not establish visual PDF accuracy or candidate-corpus performance.
+
 ## 2026-11-07 -- S6.2 JATS entity handling
 - Reject internal DTD subsets with XML-aware parsing; token scanning can be fooled by comment text resembling CDATA delimiters. Preserve external DOCTYPE declarations without resolving them, and test both the parser and cache persistence boundary.
 

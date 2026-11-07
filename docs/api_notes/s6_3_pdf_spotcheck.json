@@ -1,0 +1,1146 @@
+{
+  "task": "S6.3",
+  "status": "processed_30_spotcheck_complete",
+  "target_count": 30,
+  "processor_version": "s6.3-pdf-sections-v3",
+  "processed_count": 30,
+  "candidate_count": 59,
+  "attempted_count": 32,
+  "search_query": "OPEN_ACCESS:Y AND (microplastic OR nanoplastic OR plastic pollution) AND DOI:10.3389*",
+  "search_urls": [
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=OPEN_ACCESS%3AY+AND+%28microplastic+OR+nanoplastic+OR+plastic+pollution%29+AND+DOI%3A10.3389%2A&format=json&pageSize=30&cursorMark=%2A&resultType=core",
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=OPEN_ACCESS%3AY+AND+%28microplastic+OR+nanoplastic+OR+plastic+pollution%29+AND+DOI%3A10.3389%2A&format=json&pageSize=30&cursorMark=AoIIQLUeuCg1NTY2ODAyOA%3D%3D&resultType=core"
+  ],
+  "grobid_runtime": {
+    "health_check": "HTTP 200 true",
+    "image": "grobid/grobid:0.9.1-crf",
+    "image_digest": "sha256:223957791ac2bbe48609dcc58a689b16b60baeae13a8734ef440ae6bfb38f4cd",
+    "container": "ca-plastics-s6-3-grobid",
+    "memory_gb": 4
+  },
+  "sample_bias": "Convenience sample selected in Europe PMC relevance order from a microplastic-related CC BY/CC0 query and limited to Frontiers DOIs with direct publisher PDFs. The sample is not random or representative of all PDFs or the project candidate corpus; its 2026-heavy result set overrepresents review articles.",
+  "grobid_failure_rate": 0.0,
+  "grobid_non_target_or_error_rate": 0.7,
+  "grobid_technical_failure_rate": 0.0,
+  "grobid_no_target_sections_rate": 0.7,
+  "grobid_failure_categories": {
+    "no_target_sections": 21,
+    "": 9
+  },
+  "pdfminer_fallback_count": 21,
+  "no_target_sections_count": 15,
+  "grobid_no_target_reviews_count": 14,
+  "manual_accuracy_review": {
+    "records_reviewed": 30,
+    "documents_with_target_output": 15,
+    "target_heading_matches": 16,
+    "evidence_prefix_matches": 16,
+    "documents_with_no_target_output": 15,
+    "no_target_publication_types": {
+      "review": 13,
+      "editorial": 2
+    },
+    "review_scope": "All extracted target headings and first 40 normalized evidence characters were checked against text extracted from the same selected PDF hash. No-target records were reviewed by GROBID/fallback outcome and Europe PMC publication type. This is a text-level spot check; PDF visual layout was not assessed."
+  },
+  "acquisition_or_processing_failures": [
+    {
+      "pmcid": "PMC12518344",
+      "doi": "10.3389/fpls.2025.1666047",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2025.1666047/pdf",
+      "failure_category": "PDFExtractionError",
+      "reason": "selected PDF itself contains no recognized CC BY license statement"
+    },
+    {
+      "pmcid": "PMC13725550",
+      "doi": "10.3389/fendo.2026.1940055",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/endocrinology/articles/10.3389/fendo.2026.1940055/pdf",
+      "failure_category": "PDFExtractionError",
+      "reason": "selected PDF itself contains no recognized CC BY license statement"
+    }
+  ],
+  "records": [
+    {
+      "pmcid": "PMC13482089",
+      "doi": "10.3389/fpls.2026.1906511",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Fate, transport, and biological impacts of microplastics in agricultural soil-wheat systems: from soil movement to food safety.",
+      "authors": "Sarfraz U, Ma Q, Zhu M, Ding J, Li C, Guo W, Zhu X.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fpls.2026.1906511/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2026.1906511/pdf",
+      "pdf_sha256": "98624c0a8af11b4f3365b94d63b64d2778bee39001da4d14e9586086b20fb91b",
+      "pdf_bytes": 1601728,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13482089.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13236904",
+      "doi": "10.3389/fpubh.2026.1762893",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Microplastic induced cascades of multiple cell death pathways: inflammation, immune imbalance, and cancer susceptibility.",
+      "authors": "Du J, Wang M, Wang C.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fpubh.2026.1762893/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2026.1762893/pdf",
+      "pdf_sha256": "775c635b1fd1ddad7b159ea21dd572dafe0561472af20cbcdd6fad646c9d58e8",
+      "pdf_bytes": 575388,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13236904.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13246403",
+      "doi": "10.3389/fnut.2026.1831474",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Global research trends and mechanistic pathways linking micro- and nano plastics exposure to metabolic health: a bibliometric and evidence-mapping analysis (2013-2025).",
+      "authors": "Khang Wen G, Balan SS, Ahmad NA, Zainal Abidin A, Othman F, Naomi R.",
+      "publication_types": [
+        "Systematic Review",
+        "systematic-review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fnut.2026.1831474/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2026.1831474/pdf",
+      "pdf_sha256": "ba3d1fb925fc476aaa52ac89cb35dce183a09d025bf79b61fcc41137e896d9eb",
+      "pdf_bytes": 2271181,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13246403.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "",
+      "sections": {
+        "methods": [
+          {
+            "title": "Methods",
+            "evidence": "This study conducted a bibliometric analysis of publications indexed in Scopus and Web of Science Core Collection (WoS) between 2013 and 2025. Bibliometrix/Biblioshiny and VOSviewe"
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "methods",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13586777",
+      "doi": "10.3389/ftox.2026.1908508",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Organ-specific apoptotic pathways induced by micro- and nanoplastics: a systematic review of &lt;i&gt;in vitro&lt;/i&gt; toxicological evidence.",
+      "authors": "Messina LM, Scuto MC, Lupo G, Lombardo CMG, Ledda C, Trovato Salinaro A.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/ftox.2026.1908508/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/toxicology/articles/10.3389/ftox.2026.1908508/pdf",
+      "pdf_sha256": "0f40d7d38f4d90e54a03c86add57b5b83028b58c4df5e1f21471d571d5033413",
+      "pdf_bytes": 4904642,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13586777.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13712325",
+      "doi": "10.3389/fmicb.2026.1875310",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Microplastics as evolving particle-chemical-microbial interfaces: plastisphere ecology, ecotoxicity, and safety-informed remediation.",
+      "authors": "Jiao H, Fodah AEM, Schagerl M, Yang B, Ali SS.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fmicb.2026.1875310/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2026.1875310/pdf",
+      "pdf_sha256": "1f07169c26343bfae9bd024a3199fa45d0ddb695cb9000e420d86de75ad5f324",
+      "pdf_bytes": 1702675,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13712325.pdf",
+      "extractor": "grobid",
+      "grobid_failure_category": "",
+      "fallback_status": "",
+      "sections": {
+        "sampling": [
+          {
+            "title": "Sampling design and size cut-off define the observable particle population",
+            "evidence": "Sampling introduces the first major source of uncertainty because the amount and size distribution of particles recovered depend on sampled volume or mass, mesh or filter cut-off, "
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "sampling",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13687666",
+      "doi": "10.3389/ftox.2026.1878370",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Microplastics at the 'roof of the Americas': widespread presence in snow on Mount Aconcagua, Central Andes, Argentina.",
+      "authors": "Ríos JM, Horie Y, Masiokas MH, Cargnelutti DE.",
+      "publication_types": [
+        "research-article",
+        "Journal Article"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/ftox.2026.1878370/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/toxicology/articles/10.3389/ftox.2026.1878370/pdf",
+      "pdf_sha256": "e87108d3b39d443db900e877afa838dcc6b4498160264045f47fa89655db2972",
+      "pdf_bytes": 4314205,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13687666.pdf",
+      "extractor": "grobid",
+      "grobid_failure_category": "",
+      "fallback_status": "",
+      "sections": {
+        "study_area": [
+          {
+            "title": "Study area and sampling",
+            "evidence": "Mount Aconcagua is located in the Central Andes region of Argentina, at 32 ° 39ʼS and 69 ° 59ʼW and belongs to Aconcagua Provincial Park. Ecosystems surrounding Mt. Aconcagua inclu"
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "study_area",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13407274",
+      "doi": "10.3389/fimmu.2026.1862512",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Osteoimmunological impacts of micro/nanoplastics: systemic translocation, inflammatory responses, and bone remodeling disruption.",
+      "authors": "Fan J, Li J, Hao C, Hui Y.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fimmu.2026.1862512/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/immunology/articles/10.3389/fimmu.2026.1862512/pdf",
+      "pdf_sha256": "6c7baadce2a86a138b69f0fc9c71f384fad654d5fe71ecd8b07d0e8a1ce27cdd",
+      "pdf_bytes": 1661169,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13407274.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13680218",
+      "doi": "10.3389/fpubh.2026.1975500",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Governance of dietary microplastic exposure risk in marine ranching in the context of climate change.",
+      "authors": "Zheng S, Yu L, Li S, Liu X.",
+      "publication_types": [
+        "research-article",
+        "Journal Article"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fpubh.2026.1975500/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2026.1975500/pdf",
+      "pdf_sha256": "2958b1dac8cda46a39c2c7c0c5a80eda6f8fd37bb0b7918bc00d0ac103f6ac73",
+      "pdf_bytes": 1182091,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13680218.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "",
+      "sections": {
+        "data_availability": [
+          {
+            "title": "Data availability statement",
+            "evidence": "The original contributions presented in the study are included in the article/supplementary material, further inquiries can be directed to the corresponding author."
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "data_availability",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC12661513",
+      "doi": "10.3389/fpls.2025.1718582",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Editorial: Impact of microplastics on soil health and plant physiology in agricultural ecosystems.",
+      "authors": "Singh S, Naeem M, Großkinsky DK, Avasthe R, Freitas H, Babu S.",
+      "publication_types": [
+        "Editorial"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fpls.2025.1718582/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2025.1718582/pdf",
+      "pdf_sha256": "5f9ca5a703e12a3f2721b94ad429375d3aaa57de6b44ddbbe4f0b41645986cc8",
+      "pdf_bytes": 291840,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC12661513.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: editorial",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13630785",
+      "doi": "10.3389/fmicb.2026.1912851",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Microplastics and intI1 antibiotic resistance-associated marker in rural water systems: an exploratory GIS-based environmental assessment.",
+      "authors": "Gautam S, Rakshith BL, Joy J, Jacob A, Subith D, A A, Asirvatham LG, Jose D, Min B.",
+      "publication_types": [
+        "research-article",
+        "Journal Article"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fmicb.2026.1912851/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2026.1912851/pdf",
+      "pdf_sha256": "fa4eb7a45c940bd9e3a0c93f1f131655eec75370797770f5cb30c9e98c4d73e0",
+      "pdf_bytes": 14365286,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13630785.pdf",
+      "extractor": "grobid",
+      "grobid_failure_category": "",
+      "fallback_status": "",
+      "sections": {
+        "study_area": [
+          {
+            "title": "Study area and sampling design",
+            "evidence": "The study area lies in Madavarayapuram village of Coimbatore district, Tamil Nadu, India in the Noyyal River Basin (10.93-10.95 • N Latitude, 76.73-76.75 • E Longitude) as given in"
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "study_area",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13021847",
+      "doi": "10.3389/fcell.2026.1778576",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Microplastic exposure and human health risks across the life cycle: a focus on reproduction, development, and aging.",
+      "authors": "Liu G, Shi T, Tang S, Huang X, Liu X.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fcell.2026.1778576/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/cell-and-developmental-biology/articles/10.3389/fcell.2026.1778576/pdf",
+      "pdf_sha256": "2594269a9a41f9549f3e869ed4bbf8affdf2b5df2951b849e82f113db78945a2",
+      "pdf_bytes": 3760303,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13021847.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13243243",
+      "doi": "10.3389/fphar.2026.1824052",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Protective effects of multi-strain probiotics against polystyrene nanoplastic-induced parotid gland toxicity: role of NRF2/HO-1 and NF-κB pathways.",
+      "authors": "Kozan G, Üstündağ H, Kara A.",
+      "publication_types": [
+        "research-article",
+        "Journal Article"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fphar.2026.1824052/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2026.1824052/pdf",
+      "pdf_sha256": "4770151b1568f1b943275d5af05512f45e05e9712e50a78e67bfb908c55eba90",
+      "pdf_bytes": 3580093,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13243243.pdf",
+      "extractor": "grobid",
+      "grobid_failure_category": "",
+      "fallback_status": "",
+      "sections": {
+        "sampling": [
+          {
+            "title": "Sample collection and processing",
+            "evidence": "After 35 days of treatment, all animals were fasted for 12 h before sample collection. Rats were anesthetized with an intraperitoneal injection of xylazine (4 mg/kg; Rompun, Bayer)"
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "sampling",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13229879",
+      "doi": "10.3389/fpubh.2026.1812477",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Detection of microplastics in bladder wash fluid obtained after cystoscopy in patients diagnosed with bladder cancer.",
+      "authors": "Yılmaz B, Ataman M, Tuna A.",
+      "publication_types": [
+        "research-article",
+        "Journal Article",
+        "Observational Study"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fpubh.2026.1812477/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2026.1812477/pdf",
+      "pdf_sha256": "5dd9a00f5eaf188c373ebe1364e8f641f1418b16f4284b90543b357427877f6d",
+      "pdf_bytes": 419273,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13229879.pdf",
+      "extractor": "grobid",
+      "grobid_failure_category": "",
+      "fallback_status": "",
+      "sections": {
+        "methods": [
+          {
+            "title": "Materials and methods",
+            "evidence": "This retrospective observational study was conducted after ethical commitee approval was obtained from Osmaniye Korkut Ata University (Approval number: OKU.KKO.FR.0024 08/01/2025) "
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "methods",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13222664",
+      "doi": "10.3389/ftox.2026.1833046",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Entangled stressors: a review on the interactions between microplastics and climate change in aquatic ecosystems.",
+      "authors": "Lebepe J, Buthelezi NM, Manganyi MC.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/ftox.2026.1833046/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/toxicology/articles/10.3389/ftox.2026.1833046/pdf",
+      "pdf_sha256": "697074c9827e20a8327c64853a6ac5c9187a6a9fa9b1cb90879b8565f7279bbb",
+      "pdf_bytes": 2342908,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13222664.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC12675269",
+      "doi": "10.3389/ftox.2025.1619096",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Overall effects of microplastics on brain.",
+      "authors": "Fang SJ, Yin ZD, Li LF, Cai Q, Zheng PF, Chen LZ.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/ftox.2025.1619096/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/toxicology/articles/10.3389/ftox.2025.1619096/pdf",
+      "pdf_sha256": "daf3f703e5a27e09e42097b510dfafbd3c0194b06af948f9f635fbfecf200967",
+      "pdf_bytes": 780019,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC12675269.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13590715",
+      "doi": "10.3389/fmicb.2026.1862201",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "The dual role of biochar in modulating microplastic effects on soil nitrogen.",
+      "authors": "Zhang Y, Hussain K, Tang X, Lan T, Yan C, Li Y, Wu Y, Li J, Gao X.",
+      "publication_types": [
+        "research-article",
+        "Journal Article"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fmicb.2026.1862201/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2026.1862201/pdf",
+      "pdf_sha256": "8a4deb76577599d70a1d908b69d63b88a08510dc3f7d892fcfaf912f783c8836",
+      "pdf_bytes": 2691423,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13590715.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "",
+      "sections": {
+        "data_availability": [
+          {
+            "title": "Data availability statement",
+            "evidence": "The datasets presented in this article are not readily available."
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "data_availability",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13547079",
+      "doi": "10.3389/fdmed.2026.1849048",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Assessing the environmental impact of clear aligner therapy: a scoping review.",
+      "authors": "Pai S, Ahuja D, Mv A, Pt HK, Singh A.",
+      "publication_types": [
+        "Systematic Review",
+        "systematic-review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fdmed.2026.1849048/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/dental-medicine/articles/10.3389/fdmed.2026.1849048/pdf",
+      "pdf_sha256": "1c945998221a3de1db36cacf09f66861910ffcab6ffb9f361bceba5fbba47977",
+      "pdf_bytes": 489802,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13547079.pdf",
+      "extractor": "grobid",
+      "grobid_failure_category": "",
+      "fallback_status": "",
+      "sections": {
+        "methods": [
+          {
+            "title": "Materials and methods",
+            "evidence": "This scoping review was conducted in accordance with the Preferred Reporting Items for Systematic Reviews and Meta-Analyses Extension for Scoping Reviews (PRISMA-ScR) guidelines (1"
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "methods",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC12702878",
+      "doi": "10.3389/fnins.2025.1691461",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "From environment to brain: the role of microplastics in neurobehavioral disorders.",
+      "authors": "Zhang S, Wu J, Wu M, Qin Y, Zhu N, Shen Y, Chen R, Chen Z.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fnins.2025.1691461/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2025.1691461/pdf",
+      "pdf_sha256": "68cfde4031d4bcec26e1ec2c04a91ac5ccff35419a1099e0b82ae8fe9a97e2fc",
+      "pdf_bytes": 1946839,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC12702878.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC12950594",
+      "doi": "10.3389/falgy.2026.1758940",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Silent invaders: the role of MPs on epithelium inflammation and damage in airway diseases.",
+      "authors": "Bondi B, Nicola S, Di Marco F, Chiappori S, Brussino L, De Ferrari L, Riccio AM, Braido F, Bagnasco D.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/falgy.2026.1758940/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/allergy/articles/10.3389/falgy.2026.1758940/pdf",
+      "pdf_sha256": "5294cfb22ddec69f310a59edd6c21fbbc7a3ffd00d1566bedf35f497e78db473",
+      "pdf_bytes": 748825,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC12950594.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13061382",
+      "doi": "10.3389/ftox.2026.1723092",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Micro- and nanoplastics influences in Parkinson's disease: lessons from human stem cell models.",
+      "authors": "Muhammad KN, Woodlief T, Wu X.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/ftox.2026.1723092/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/toxicology/articles/10.3389/ftox.2026.1723092/pdf",
+      "pdf_sha256": "be5a7e866d8585b62fd79d8cab80ec5f01bb0ce60c3cf80a6cf55fa2d01b5076",
+      "pdf_bytes": 2660718,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13061382.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13061387",
+      "doi": "10.3389/ftox.2026.1768236",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Micro/nanoplastics pollution: emerging challenges for aquatic animals and food crops.",
+      "authors": "Kundu S, Kumar N, Kumar P, Ps B, Singh AK, Godse D, Reddy KS.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/ftox.2026.1768236/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/toxicology/articles/10.3389/ftox.2026.1768236/pdf",
+      "pdf_sha256": "e721025e7921ef8c2c2911a909f33d8579bb87c81fa2b8fc19a705e5ad757be4",
+      "pdf_bytes": 3136765,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13061387.pdf",
+      "extractor": "grobid",
+      "grobid_failure_category": "",
+      "fallback_status": "",
+      "sections": {
+        "methods": [
+          {
+            "title": "Methodology",
+            "evidence": "The present review paper addresses micro/nanoplastics (MNPs) pollution in aquatic animals and rice crops. A comprehensive literature search was conducted using electronic databases"
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "methods",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13128419",
+      "doi": "10.3389/fphys.2026.1808330",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Triple threat: a review on nanoplastic ecotoxicity, pollutant co-exposures, and climate change in freshwater organisms.",
+      "authors": "Ale A, Andrade VS, Bertrand L, Gutierrez MF.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fphys.2026.1808330/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2026.1808330/pdf",
+      "pdf_sha256": "f10b7acd33eb4a50921e71437f9e6639d7365105bce8945225c8b364b062ae8d",
+      "pdf_bytes": 7944269,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13128419.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13684328",
+      "doi": "10.3389/fmicb.2026.1998868",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Effects of typical emerging pollutants on biological treatment systems: processes, mechanisms, and recovery strategies.",
+      "authors": "Ren X, Song A, Shang D, Li H.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fmicb.2026.1998868/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2026.1998868/pdf",
+      "pdf_sha256": "160d2e20b93f50e8a9ceb358ee6a8c1649ba8a6956157921a11845db350b7b8b",
+      "pdf_bytes": 1636552,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13684328.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13047061",
+      "doi": "10.3389/fcimb.2026.1781149",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Microplastics enhance the risk of cross-genus dissemination of carbapenemase resistance plasmids in ICU patients.",
+      "authors": "Ni Y, Zhang J, Peng C, Yang Y, Lin Y, Li Z.",
+      "publication_types": [
+        "research-article",
+        "Journal Article"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fcimb.2026.1781149/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/cellular-and-infection-microbiology/articles/10.3389/fcimb.2026.1781149/pdf",
+      "pdf_sha256": "16e3cd019456b38a700e3e01854065820671cd5c38e71ebd700533341cb771be",
+      "pdf_bytes": 2386581,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13047061.pdf",
+      "extractor": "grobid",
+      "grobid_failure_category": "",
+      "fallback_status": "",
+      "sections": {
+        "sampling": [
+          {
+            "title": "Sample collection and bacterial isolation",
+            "evidence": "This study was approved by the Ethics Committee of Shandong Provincial Third Hospital (approval number: KYLL-2023096). All procedures involving human samples were conducted in comp"
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "sampling",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13215649",
+      "doi": "10.3389/ftox.2026.1851245",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Microplastic contamination in remote mountain lakes of the americas: a baseline assessment from Patagonia and Northern California.",
+      "authors": "Alfonso MB, Scordo F, Seitz C, Arias AH, Ronda AC, Mavo Manstretta GM, Chandra S, Perillo GME, Piccolo MC.",
+      "publication_types": [
+        "research-article",
+        "Journal Article"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/ftox.2026.1851245/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/toxicology/articles/10.3389/ftox.2026.1851245/pdf",
+      "pdf_sha256": "f5461ff7b0202ba8122ecc39461f55f275c75dab6b36bd704c1b3ab09d33daaf",
+      "pdf_bytes": 3372039,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13215649.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "",
+      "sections": {
+        "data_availability": [
+          {
+            "title": "Data availability statement",
+            "evidence": "The original contributions presented in the study are included in the article/Supplementary Material, further inquiries can be directed to the corresponding author."
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "data_availability",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13014385",
+      "doi": "10.3389/fpls.2026.1772615",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Micro- and nanoplastics-induced stress in plants: uptake, physiological disruption, and toxicity mechanisms.",
+      "authors": "Arshad M, Li G, Ahmad I, Shoaib M, Hussain T, Chi G, Asif M, Zhou Y, Li H, Wu J, Zhang S.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fpls.2026.1772615/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2026.1772615/pdf",
+      "pdf_sha256": "2161ddc15e03041ab2617b6ed2314b3b7342b2a084d31bd9c78d88f3a3d401d3",
+      "pdf_bytes": 3131759,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13014385.pdf",
+      "extractor": "grobid",
+      "grobid_failure_category": "",
+      "fallback_status": "",
+      "sections": {
+        "methods": [
+          {
+            "title": "Methodology",
+            "evidence": "This review synthesizes current evidence on the phytotoxicity of micro-and nanoplastics (M/NPs), analyzing their uptake pathways, tissue-level accumulation, and subsequent physiolo"
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "methods",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13013334",
+      "doi": "10.3389/fpubh.2026.1786204",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Public awareness, knowledge gaps, and health anxiety concerning microplastics in human blood: a cross-sectional survey of Indian adults.",
+      "authors": "AlShahrani AM, Kumari A, Behera AK, Ahmad SR.",
+      "publication_types": [
+        "research-article",
+        "Journal Article"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fpubh.2026.1786204/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2026.1786204/pdf",
+      "pdf_sha256": "bebc72a4e25df6191040167ff6766b604a4d68880bf419bd5c4a30f57391950d",
+      "pdf_bytes": 2417812,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13013334.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "",
+      "sections": {
+        "methods": [
+          {
+            "title": "Methods",
+            "evidence": "This cross-sectional survey (September 2023–March 2025) involved 1,200 Indian adults using stratified sampling across age, gender, education, income, and urban/rural residence. A v"
+          }
+        ],
+        "data_availability": [
+          {
+            "title": "Data availability statement",
+            "evidence": "The original contributions presented in the study are included in the article/supplementary material, further inquiries can be directed to the corresponding authors."
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "methods",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        },
+        {
+          "section": "data_availability",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC12616133",
+      "doi": "10.3389/fpubh.2025.1681776",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Impact of micro- and nanoplastics exposure on human health: focus on neurological effects from ingestion.",
+      "authors": "Bhattacharyya S, Greer ML, Salehi M.",
+      "publication_types": [
+        "review-article",
+        "Review",
+        "Journal Article"
+      ],
+      "article_classification": "review",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY). The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fpubh.2025.1681776/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2025.1681776/pdf",
+      "pdf_sha256": "3b07c17f437946e7c074fcfdea2cfc50e69af85dd02715c0f0f2ec5c017f1155",
+      "pdf_bytes": 625571,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC12616133.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: review",
+      "source_text_match_checks": []
+    },
+    {
+      "pmcid": "PMC13533754",
+      "doi": "10.3389/fnut.2026.1812387",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Bacterial-microplastic interaction can affect disinfection efficiency of methods routinely used in the food industry.",
+      "authors": "Movsesijan T, Gawin N, Gruber N, Ploszczanski L, Zafiu C, Mikuni-Mester P.",
+      "publication_types": [
+        "research-article",
+        "Journal Article"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fnut.2026.1812387/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2026.1812387/pdf",
+      "pdf_sha256": "2360fb9e7f6f85021c84c239a4aaf0b78758f8c87521fa45d5f72199b19bfd22",
+      "pdf_bytes": 5265838,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13533754.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "",
+      "sections": {
+        "data_availability": [
+          {
+            "title": "Data availability statement",
+            "evidence": "The datasets presented in this study can be found in online reposi- tories. The names of the repository/repositories and accession number(s) can be found at: https://doi.org/10.528"
+          }
+        ]
+      },
+      "manual_accuracy_review": "all reported target headings and excerpt prefixes found in the hash-matched selected PDF text",
+      "source_text_match_checks": [
+        {
+          "section": "data_availability",
+          "heading_in_selected_pdf_text": true,
+          "excerpt_prefix_in_selected_pdf_text": true
+        }
+      ]
+    },
+    {
+      "pmcid": "PMC13337942",
+      "doi": "10.3389/fmicb.2026.1897934",
+      "processor_version": "s6.3-pdf-sections-v3",
+      "title": "Editorial: The role of gut microbiota in mediating the physiological and pathological effects of pollutant exposure in aquatic animals.",
+      "authors": "Hong Y.",
+      "publication_types": [
+        "Editorial"
+      ],
+      "article_classification": "original_or_other",
+      "license": "cc by",
+      "xml_license_blocks": [
+        "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "pdf_license_text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY)",
+      "article_url": "https://www.frontiersin.org/articles/10.3389/fmicb.2026.1897934/full",
+      "selected_pdf_url": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2026.1897934/pdf",
+      "pdf_sha256": "6ec17a418075ee743c5b1809f34e1940223ad9d78008bdf5b20c7b3ba3dda580",
+      "pdf_bytes": 98333,
+      "ignored_local_pdf": "data/raw/fulltext_cache/pdf_spotcheck/PMC13337942.pdf",
+      "extractor": "pdfminer",
+      "grobid_failure_category": "no_target_sections",
+      "fallback_status": "no_target_sections",
+      "sections": {},
+      "manual_accuracy_review": "no target output from GROBID or fallback; source classification: editorial",
+      "source_text_match_checks": []
+    }
+  ],
+  "notes": [
+    "The search follows at most two 30-record cursor pages.",
+    "Processing stops at 30 verified PDFs.",
+    "The selected PDF and its XML copy must both carry CC BY license evidence.",
+    "PDF requests reject redirects and non-public DNS resolutions.",
+    "The GROBID endpoint is restricted to 127.0.0.1:8070.",
+    "Full PDFs and GROBID TEI stay in ignored data/raw caches.",
+    "The report contains hashes and short evidence snippets."
+  ],
+  "grobid_metrics": {
+    "technical_failure_rate": 0.0,
+    "non_target_or_error_rate": 0.7,
+    "no_target_heading_rate": 0.7,
+    "technical_failure_count": 0,
+    "no_target_heading_count": 21,
+    "target_extracted_count": 9,
+    "pdfminer_fallback_count": 21,
+    "no_output_after_fallback_count": 15,
+    "no_output_after_fallback_rate": 0.5
+  }
+}
