@@ -1,0 +1,12 @@
+{
+  "fetched": 240,
+  "incremental_field": "publication_date",
+  "last_publication_date": "2026-11-04",
+  "last_run_id": "openalex-works-20261107T162830Z",
+  "last_successful_run_utc": "2026-11-07T16:28:30.626496+00:00",
+  "last_updated_date": "2026-11-07",
+  "mode": "publication_date",
+  "requests": 47,
+  "rows_written": 194,
+  "schema_version": 1
+}
