@@ -1,0 +1,241 @@
+[
+  {
+    "article_id": "PMC13543028",
+    "pmcid": "PMC13543028",
+    "doi": "10.1039/d6ay00142d",
+    "title": "Development of a YOLO-guided automated (microplastic) particle analysis workflow.",
+    "authors": "Xie J, Gowen A, Xu JL.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13543028",
+    "attribution": "Xie J, Gowen A, Xu JL. Development of a YOLO-guided automated (microplastic) particle analysis workflow. Europe PMC record https://europepmc.org/articles/PMC13543028.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13543028</article-id></article-meta></front><body><sec><title>Materials and methods</title><p>Four types of pristine MPs with different particle morphologies were used as reference particles in this study. These included polyamide 6 (nylon) fragments (15–20 µm in maximum</p></sec><sec sec-type=\"data-availability\"><title>Data availability</title><p>All data and code, and a demo video could be accessed through: https://drive.google.com/drive/folders/1g3lnhXggQYbZrCQPiHk1EXdFZ2zKLQO4?usp=sharing . Supplementary information</p></sec></body></article>",
+    "has_nested_section_structure": false,
+    "expected_sections": [
+      {
+        "target": "methods",
+        "section_id": "",
+        "title": "Materials and methods"
+      },
+      {
+        "target": "data_availability",
+        "section_id": "",
+        "title": "Data availability"
+      }
+    ],
+    "expected_fallback": ""
+  },
+  {
+    "article_id": "PMC13608240",
+    "pmcid": "PMC13608240",
+    "doi": "10.3390/jox16050163",
+    "title": "Current Evidence Linking Microplastic Exposure and Reproductive Cancers.",
+    "authors": "Rais B, Vafa A, Dayel FFB, Rashid S.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13608240",
+    "attribution": "Rais B, Vafa A, Dayel FFB, Rashid S. Current Evidence Linking Microplastic Exposure and Reproductive Cancers. Europe PMC record https://europepmc.org/articles/PMC13608240.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13608240</article-id></article-meta></front><body /></article>",
+    "has_nested_section_structure": false,
+    "expected_sections": [],
+    "expected_fallback": "no_target_sections"
+  },
+  {
+    "article_id": "PMC13572291",
+    "pmcid": "PMC13572291",
+    "doi": "10.3389/fnut.2026.1869140",
+    "title": "Effect of different chitosan molecular weights on microplastic excretion.",
+    "authors": "Liu D, Morikawa S, Izumi R, Kurozumi S, Kiyose M, Shimizu M.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13572291",
+    "attribution": "Liu D, Morikawa S, Izumi R, Kurozumi S, Kiyose M, Shimizu M. Effect of different chitosan molecular weights on microplastic excretion. Europe PMC record https://europepmc.org/articles/PMC13572291.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13572291</article-id></article-meta></front><body><sec><title>Methods</title><p>Sprague–Dawley rats were fed a diet containing MPs with an average particle size of 50 μm.</p></sec><sec id=\"s5\" sec-type=\"data-availability\"><title>Data availability statement</title><p>The original contributions presented in the study are publicly available. This data can be found here: https://www.ncbi.nlm.nih.gov/sra/PRJNA149718 .</p></sec></body></article>",
+    "has_nested_section_structure": false,
+    "expected_sections": [
+      {
+        "target": "methods",
+        "section_id": "",
+        "title": "Methods"
+      },
+      {
+        "target": "data_availability",
+        "section_id": "s5",
+        "title": "Data availability statement"
+      }
+    ],
+    "expected_fallback": ""
+  },
+  {
+    "article_id": "PMC13683851",
+    "pmcid": "PMC13683851",
+    "doi": "10.1016/j.isci.2026.117727",
+    "title": "Real-time intelligence framework for microplastic monitoring and coastal resilience.",
+    "authors": "Nishter Z, Gang L, Zahid A, Naveed WA, Gul R, Hameed A, Khan WU, Elzein IM.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13683851",
+    "attribution": "Nishter Z, Gang L, Zahid A, Naveed WA, Gul R, Hameed A, Khan WU, Elzein IM. Real-time intelligence framework for microplastic monitoring and coastal resilience. Europe PMC record https://europepmc.org/articles/PMC13683851.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13683851</article-id></article-meta></front><body><sec id=\"sec9\"><title>STAR★Methods</title><p>This study did not involve human participants, animals, plants, microbial strains, cell lines, or primary cell cultures. Therefore, institutional approval related to human or</p><sec id=\"sec9.3\"><title>Method details</title><sec id=\"sec9.3.1\"><title>Study area and experimental design</title><p>The integrated monitoring system was implemented in five strategically located coastal locations that reflect the types of the surrounding environment as well as pollution levels</p></sec></sec></sec></body></article>",
+    "has_nested_section_structure": true,
+    "expected_sections": [
+      {
+        "target": "methods",
+        "section_id": "sec9",
+        "title": "STAR★Methods"
+      },
+      {
+        "target": "study_area",
+        "section_id": "sec9.3.1",
+        "title": "Study area and experimental design"
+      }
+    ],
+    "expected_fallback": ""
+  },
+  {
+    "article_id": "PMC13578043",
+    "pmcid": "PMC13578043",
+    "doi": "10.1007/s00128-026-04326-8",
+    "title": "Microplastic Occurrence and Polymer Confirmation in Five Houston Urban Waterways.",
+    "authors": "Umurhan Y, Limbu TB, Phan T.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13578043",
+    "attribution": "Umurhan Y, Limbu TB, Phan T. Microplastic Occurrence and Polymer Confirmation in Five Houston Urban Waterways. Europe PMC record https://europepmc.org/articles/PMC13578043.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13578043</article-id></article-meta></front><body><sec id=\"Sec2\"><title>Materials and Methods</title><p>Sample processing followed a rapid oxidative digestion and sieve-based workflow adapted from freshwater microplastic methods (Nayebi et al. 2023 ; Sharma et al. 2024 ). Organic</p><sec id=\"Sec3\"><title>Study Design and Sample Collection</title><p>Five surface-water sites were selected within the Houston metropolitan area: Brays Bayou, Buffalo Bayou, Greens Bayou, the San Jacinto River, and Vince Bayou (Table 1 ). The sites</p></sec></sec></body></article>",
+    "has_nested_section_structure": true,
+    "expected_sections": [
+      {
+        "target": "methods",
+        "section_id": "Sec2",
+        "title": "Materials and Methods"
+      },
+      {
+        "target": "sampling",
+        "section_id": "Sec3",
+        "title": "Study Design and Sample Collection"
+      }
+    ],
+    "expected_fallback": ""
+  },
+  {
+    "article_id": "PMC13590715",
+    "pmcid": "PMC13590715",
+    "doi": "10.3389/fmicb.2026.1862201",
+    "title": "The dual role of biochar in modulating microplastic effects on soil nitrogen.",
+    "authors": "Zhang Y, Hussain K, Tang X, Lan T, Yan C, Li Y, Wu Y, Li J, Gao X.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13590715",
+    "attribution": "Zhang Y, Hussain K, Tang X, Lan T, Yan C, Li Y, Wu Y, Li J, Gao X. The dual role of biochar in modulating microplastic effects on soil nitrogen. Europe PMC record https://europepmc.org/articles/PMC13590715.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13590715</article-id></article-meta></front><body><sec id=\"sec2\" sec-type=\"materials|methods\"><title>Material and method</title><p>Soil samples were collected from Zhongjiang County, Deyang City, Sichuan Province, to conduct this experiment. The soil collection site exhibits a temperate climate characterized</p></sec><sec id=\"sec18\" sec-type=\"data-availability\"><title>Data availability statement</title><p>The datasets presented in this article are not readily available. Requests to access the datasets should be directed to Yanyan Zhang, yanyan.zhang2@mail.mcgill.ca .</p></sec></body></article>",
+    "has_nested_section_structure": false,
+    "expected_sections": [
+      {
+        "target": "methods",
+        "section_id": "sec2",
+        "title": "Material and method"
+      },
+      {
+        "target": "data_availability",
+        "section_id": "sec18",
+        "title": "Data availability statement"
+      }
+    ],
+    "expected_fallback": ""
+  },
+  {
+    "article_id": "PMC13630796",
+    "pmcid": "PMC13630796",
+    "doi": "10.1007/s10646-026-03181-x",
+    "title": "Microplastic toxicity in marine microalgae: an ecotoxicological synthesis of experimental biological responses.",
+    "authors": "Santos NGR, Pinho KFB, Reis ICS, Luvizotto-Santos R, Jorge MB.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13630796",
+    "attribution": "Santos NGR, Pinho KFB, Reis ICS, Luvizotto-Santos R, Jorge MB. Microplastic toxicity in marine microalgae: an ecotoxicological synthesis of experimental biological responses. Europe PMC record https://europepmc.org/articles/PMC13630796.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13630796</article-id></article-meta></front><body><sec id=\"Sec2\"><title>Materials and methods</title><p>A systematic literature search was conducted using two major scientific databases, Web of Science and Scopus. These platforms were selected due to their comprehensive coverage of</p></sec><sec id=\"notes3\"><title>Data availability</title><p>All data generated or analyzed during this study are included in this article and its supplementary information files. The dataset used for bibliometric characterization and</p></sec></body></article>",
+    "has_nested_section_structure": false,
+    "expected_sections": [
+      {
+        "target": "methods",
+        "section_id": "Sec2",
+        "title": "Materials and methods"
+      },
+      {
+        "target": "data_availability",
+        "section_id": "notes3",
+        "title": "Data availability"
+      }
+    ],
+    "expected_fallback": ""
+  },
+  {
+    "article_id": "PMC13239238",
+    "pmcid": "PMC13239238",
+    "doi": "10.1155/sci5/4994729",
+    "title": "Microplastic Contamination in Salted Dried Beef.",
+    "authors": "de Freitas BS, Guimarães GDA, Perotti GF, de Moraes BR, Ando RA, Hattori GY, Sant'Anna BS.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13239238",
+    "attribution": "de Freitas BS, Guimarães GDA, Perotti GF, de Moraes BR, Ando RA, Hattori GY, Sant'Anna BS. Microplastic Contamination in Salted Dried Beef. Europe PMC record https://europepmc.org/articles/PMC13239238.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13239238</article-id></article-meta></front><body><sec id=\"sec-0002\"><title>2. Materials and Methods</title><sec id=\"sec-0003\"><title>2.1. Sample Collection and Processing</title><p>Six brands of salted dried beef sold in the municipalities of Itacoatiara and Parintins, in the state of Amazonas, Brazil, were selected, with three brands from each location. For</p></sec></sec><sec id=\"sec-0015\" sec-type=\"data-availability\"><title>Data Availability Statement</title><p>The data that support the findings of this study are available from the corresponding author upon reasonable request.</p></sec></body></article>",
+    "has_nested_section_structure": true,
+    "expected_sections": [
+      {
+        "target": "sampling",
+        "section_id": "sec-0003",
+        "title": "2.1. Sample Collection and Processing"
+      },
+      {
+        "target": "data_availability",
+        "section_id": "sec-0015",
+        "title": "Data Availability Statement"
+      }
+    ],
+    "expected_fallback": ""
+  },
+  {
+    "article_id": "PMC13400951",
+    "pmcid": "PMC13400951",
+    "doi": "10.1016/j.mex.2026.104031",
+    "title": "A method for microplastic extraction from ornithogenic soils.",
+    "authors": "Reaves M, Ruffell H, O'Neill T, Gaw S.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13400951",
+    "attribution": "Reaves M, Ruffell H, O'Neill T, Gaw S. A method for microplastic extraction from ornithogenic soils. Europe PMC record https://europepmc.org/articles/PMC13400951.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13400951</article-id></article-meta></front><body><sec id=\"sec3\"><title>Method details</title><p>The chemicals used for the digestion methods trialled were as follows: ultra-pure water (ASTM type I water, &gt; 18.2 MΩ) sourced from a Sartorius Arium® pro filtration system fitted</p><sec id=\"sec4\"><title>Sample collection</title><p>Soil samples were collected from two active Adélie penguin colonies located at Cape Bird (77°10′S 166°41′E) and Cape Hallett (72°19′S 170°13′E), Antarctica, during the austral</p></sec></sec></body></article>",
+    "has_nested_section_structure": true,
+    "expected_sections": [
+      {
+        "target": "methods",
+        "section_id": "sec3",
+        "title": "Method details"
+      },
+      {
+        "target": "sampling",
+        "section_id": "sec4",
+        "title": "Sample collection"
+      }
+    ],
+    "expected_fallback": ""
+  },
+  {
+    "article_id": "PMC13680302",
+    "pmcid": "PMC13680302",
+    "doi": "10.1007/s10661-026-16079-2",
+    "title": "Microplastic contamination in surface water and sediments of Lake Canaçari, Central Amazon, during the dry season.",
+    "authors": "Guimarães GDA, da Fonseca RV, de Moraes BR, Ando RA, de Azevedo Rodrigues IJ, Perotti GF, Sant'Anna BS, Hattori GY.",
+    "license": "cc by",
+    "source_url": "https://europepmc.org/articles/PMC13680302",
+    "attribution": "Guimarães GDA, da Fonseca RV, de Moraes BR, Ando RA, de Azevedo Rodrigues IJ, Perotti GF, Sant'Anna BS, Hattori GY. Microplastic contamination in surface water and sediments of Lake Canaçari, Central Amazon, during the dry season. Europe PMC record https://europepmc.org/articles/PMC13680302.",
+    "xml": "<article><front><article-meta><article-id pub-id-type=\"pmc\">PMC13680302</article-id></article-meta></front><body><sec id=\"Sec2\"><title>Materials and methods</title><p>Surface water and sediment samples were analyzed using a stereomicroscope (Leica, EZ4) with magnifications ranging from 13 × to 56 ×. Images of the particles were captured using a</p><sec id=\"Sec3\"><title>Sample collection and processing</title><p>Samples were collected in October 2022 during the Amazonian dry season, corresponding to the low-water phase (Marengo &amp; Espinoza, 2016 ). During this period, lower water levels</p></sec></sec></body></article>",
+    "has_nested_section_structure": true,
+    "expected_sections": [
+      {
+        "target": "methods",
+        "section_id": "Sec2",
+        "title": "Materials and methods"
+      },
+      {
+        "target": "sampling",
+        "section_id": "Sec3",
+        "title": "Sample collection and processing"
+      }
+    ],
+    "expected_fallback": ""
+  }
+]

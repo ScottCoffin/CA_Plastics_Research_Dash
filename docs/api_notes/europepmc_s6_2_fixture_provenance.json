@@ -1,0 +1,329 @@
+{
+  "candidate_discovery_search_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=TITLE%3Amicroplastic+AND+OPEN_ACCESS%3AY&format=json&pageSize=100&resultType=core",
+  "metadata_search_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+  "text_endpoint": "https://www.ebi.ac.uk/europepmc/webservices/rest/{PMCID}/fullTextXML",
+  "fixture_policy": "At most two target-section excerpts per source work, at most 180 chars each; no full article XML committed.",
+  "articles": [
+    {
+      "pmcid": "PMC13543028",
+      "doi": "10.1039/d6ay00142d",
+      "title": "Development of a YOLO-guided automated (microplastic) particle analysis workflow.",
+      "authors": "Xie J, Gowen A, Xu JL.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "https://creativecommons.org/licenses/by/3.0/ This article is licensed under a Creative Commons Attribution 3.0 Unported Licence . You can use material from this article in other publications without requesting further permissions from the RSC, provided that the correct acknowledgement is given."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13543028/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13543028",
+      "doi_url": "https://doi.org/10.1039/d6ay00142d",
+      "fulltext_sha256": "58ef2d6af5ece9fed345b958d06ab491c83927a9c0abf22814d8aa7ae10ee0db",
+      "fulltext_bytes_local_ignored_cache": 171602,
+      "fixture_targets": [
+        "methods",
+        "data_availability"
+      ],
+      "full_article_target_section_counts": {
+        "methods": 1,
+        "study_area": 0,
+        "sampling": 0,
+        "data_availability": 1
+      },
+      "full_article_fallback": "",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 2
+    },
+    {
+      "pmcid": "PMC13608240",
+      "doi": "10.3390/jox16050163",
+      "title": "Current Evidence Linking Microplastic Exposure and Reproductive Cancers.",
+      "authors": "Rais B, Vafa A, Dayel FFB, Rashid S.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ Licensee MDPI, Basel, Switzerland. This article is an open access article distributed under the terms and conditions of the Creative Commons Attribution (CC BY) license ."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13608240/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13608240",
+      "doi_url": "https://doi.org/10.3390/jox16050163",
+      "fulltext_sha256": "348f10f615e51eb3953086ac5ce8e1229909cd14b2e6c93a0aeb88b015c30610",
+      "fulltext_bytes_local_ignored_cache": 237909,
+      "fixture_targets": [],
+      "full_article_target_section_counts": {
+        "methods": 0,
+        "study_area": 0,
+        "sampling": 0,
+        "data_availability": 0
+      },
+      "full_article_fallback": "no_target_sections",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 0
+    },
+    {
+      "pmcid": "PMC13572291",
+      "doi": "10.3389/fnut.2026.1869140",
+      "title": "Effect of different chitosan molecular weights on microplastic excretion.",
+      "authors": "Liu D, Morikawa S, Izumi R, Kurozumi S, Kiyose M, Shimizu M.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13572291/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13572291",
+      "doi_url": "https://doi.org/10.3389/fnut.2026.1869140",
+      "fulltext_sha256": "9e0bd45b9f5410e2be06427e3ac9f8f8fddf1e1e154ce83970f4a8c9645703bc",
+      "fulltext_bytes_local_ignored_cache": 131417,
+      "fixture_targets": [
+        "methods",
+        "data_availability"
+      ],
+      "full_article_target_section_counts": {
+        "methods": 2,
+        "study_area": 0,
+        "sampling": 0,
+        "data_availability": 1
+      },
+      "full_article_fallback": "",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 2
+    },
+    {
+      "pmcid": "PMC13683851",
+      "doi": "10.1016/j.isci.2026.117727",
+      "title": "Real-time intelligence framework for microplastic monitoring and coastal resilience.",
+      "authors": "Nishter Z, Gang L, Zahid A, Naveed WA, Gul R, Hameed A, Khan WU, Elzein IM.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/)."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13683851/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13683851",
+      "doi_url": "https://doi.org/10.1016/j.isci.2026.117727",
+      "fulltext_sha256": "98786d37f25af51cef2f28cbca8e1402756d7904c5af593da878a6e5a59c3b67",
+      "fulltext_bytes_local_ignored_cache": 146207,
+      "fixture_targets": [
+        "methods",
+        "study_area"
+      ],
+      "full_article_target_section_counts": {
+        "methods": 2,
+        "study_area": 1,
+        "sampling": 0,
+        "data_availability": 2
+      },
+      "full_article_fallback": "",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 2
+    },
+    {
+      "pmcid": "PMC13578043",
+      "doi": "10.1007/s00128-026-04326-8",
+      "title": "Microplastic Occurrence and Polymer Confirmation in Five Houston Urban Waterways.",
+      "authors": "Umurhan Y, Limbu TB, Phan T.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/ ."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13578043/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13578043",
+      "doi_url": "https://doi.org/10.1007/s00128-026-04326-8",
+      "fulltext_sha256": "f075bda18b5a6a024bb7abb0a655cf2cd0defe26b7e7bc9367928efa1d52e5f3",
+      "fulltext_bytes_local_ignored_cache": 48743,
+      "fixture_targets": [
+        "methods",
+        "sampling"
+      ],
+      "full_article_target_section_counts": {
+        "methods": 1,
+        "study_area": 0,
+        "sampling": 1,
+        "data_availability": 0
+      },
+      "full_article_fallback": "",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 2
+    },
+    {
+      "pmcid": "PMC13590715",
+      "doi": "10.3389/fmicb.2026.1862201",
+      "title": "The dual role of biochar in modulating microplastic effects on soil nitrogen.",
+      "authors": "Zhang Y, Hussain K, Tang X, Lan T, Yan C, Li Y, Wu Y, Li J, Gao X.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13590715/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13590715",
+      "doi_url": "https://doi.org/10.3389/fmicb.2026.1862201",
+      "fulltext_sha256": "8fa84e448dbd0bcfdcb6fbd11210c0d6bc3a4159e8bd14d0dfbd7c6817615448",
+      "fulltext_bytes_local_ignored_cache": 145490,
+      "fixture_targets": [
+        "methods",
+        "data_availability"
+      ],
+      "full_article_target_section_counts": {
+        "methods": 1,
+        "study_area": 0,
+        "sampling": 0,
+        "data_availability": 1
+      },
+      "full_article_fallback": "",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 2
+    },
+    {
+      "pmcid": "PMC13630796",
+      "doi": "10.1007/s10646-026-03181-x",
+      "title": "Microplastic toxicity in marine microalgae: an ecotoxicological synthesis of experimental biological responses.",
+      "authors": "Santos NGR, Pinho KFB, Reis ICS, Luvizotto-Santos R, Jorge MB.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/ ."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13630796/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13630796",
+      "doi_url": "https://doi.org/10.1007/s10646-026-03181-x",
+      "fulltext_sha256": "6e89057cfa760943d5cd629f5cc6a7d27503db700e54c28034c549c27eab96b3",
+      "fulltext_bytes_local_ignored_cache": 135165,
+      "fixture_targets": [
+        "methods",
+        "data_availability"
+      ],
+      "full_article_target_section_counts": {
+        "methods": 1,
+        "study_area": 0,
+        "sampling": 0,
+        "data_availability": 2
+      },
+      "full_article_fallback": "",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 2
+    },
+    {
+      "pmcid": "PMC13239238",
+      "doi": "10.1155/sci5/4994729",
+      "title": "Microplastic Contamination in Salted Dried Beef.",
+      "authors": "de Freitas BS, Guimarães GDA, Perotti GF, de Moraes BR, Ando RA, Hattori GY, Sant'Anna BS.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ This is an open access article under the terms of the https://creativecommons.org/licenses/by/4.0/ License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13239238/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13239238",
+      "doi_url": "https://doi.org/10.1155/sci5/4994729",
+      "fulltext_sha256": "8dc9e10e67f5c873510d6e6022edabdb06792ec6aeaf4c8d59f0be0e0a3af5ae",
+      "fulltext_bytes_local_ignored_cache": 138712,
+      "fixture_targets": [
+        "sampling",
+        "data_availability"
+      ],
+      "full_article_target_section_counts": {
+        "methods": 0,
+        "study_area": 0,
+        "sampling": 1,
+        "data_availability": 1
+      },
+      "full_article_fallback": "",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 2
+    },
+    {
+      "pmcid": "PMC13400951",
+      "doi": "10.1016/j.mex.2026.104031",
+      "title": "A method for microplastic extraction from ornithogenic soils.",
+      "authors": "Reaves M, Ruffell H, O'Neill T, Gaw S.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/)."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13400951/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13400951",
+      "doi_url": "https://doi.org/10.1016/j.mex.2026.104031",
+      "fulltext_sha256": "714a3762d1ab6fc6d59397e774effd691aabc4193fb2d52dbf39a33c310ccf6a",
+      "fulltext_bytes_local_ignored_cache": 59305,
+      "fixture_targets": [
+        "methods",
+        "sampling"
+      ],
+      "full_article_target_section_counts": {
+        "methods": 3,
+        "study_area": 0,
+        "sampling": 1,
+        "data_availability": 2
+      },
+      "full_article_fallback": "",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 2
+    },
+    {
+      "pmcid": "PMC13680302",
+      "doi": "10.1007/s10661-026-16079-2",
+      "title": "Microplastic contamination in surface water and sediments of Lake Canaçari, Central Amazon, during the dry season.",
+      "authors": "Guimarães GDA, da Fonseca RV, de Moraes BR, Ando RA, de Azevedo Rodrigues IJ, Perotti GF, Sant'Anna BS, Hattori GY.",
+      "metadata_license": "cc by",
+      "metadata_license_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMCID%3APMC13543028+OR+PMCID%3APMC13608240+OR+PMCID%3APMC13572291+OR+PMCID%3APMC13683851+OR+PMCID%3APMC13578043+OR+PMCID%3APMC13590715+OR+PMCID%3APMC13630796+OR+PMCID%3APMC13239238+OR+PMCID%3APMC13400951+OR+PMCID%3APMC13680302&format=json&pageSize=20&resultType=core",
+      "selected_copy_jats_license_blocks": [
+        "https://creativecommons.org/licenses/by/4.0/ Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article's Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/ ."
+      ],
+      "fulltext_source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13680302/fullTextXML",
+      "attribution_url": "https://europepmc.org/articles/PMC13680302",
+      "doi_url": "https://doi.org/10.1007/s10661-026-16079-2",
+      "fulltext_sha256": "53858d981643ec447b9b60005a2e9a5e00899be28be021482e38c6fc7919408e",
+      "fulltext_bytes_local_ignored_cache": 169376,
+      "fixture_targets": [
+        "methods",
+        "sampling"
+      ],
+      "full_article_target_section_counts": {
+        "methods": 1,
+        "study_area": 0,
+        "sampling": 1,
+        "data_availability": 0
+      },
+      "full_article_fallback": "",
+      "fixture_snippet_char_limit": 180,
+      "fixture_snippet_count": 2
+    }
+  ],
+  "rejected_license_candidates": [
+    {
+      "pmcid": "PMC13611549",
+      "metadata_license": "cc by",
+      "selected_copy_license_blocks": [
+        {
+          "href": "",
+          "text": "Licensee MDPI, Basel, Switzerland. This article is an open access article distributed under the terms and conditions of the Creative Commons Attribution (CC BY) license ."
+        }
+      ],
+      "reason": "selected-copy XML license did not confirm CC0/CC BY"
+    },
+    {
+      "pmcid": "PMC13691542",
+      "metadata_license": "cc by",
+      "selected_copy_license_blocks": [
+        {
+          "href": "",
+          "text": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY) . The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journ"
+        }
+      ],
+      "reason": "selected-copy XML license did not confirm CC0/CC BY"
+    }
+  ],
+  "full_article_target_coverage": {
+    "methods": 8,
+    "study_area": 1,
+    "sampling": 4,
+    "data_availability": 7
+  },
+  "articles_with_any_target": 9,
+  "articles_without_target_sections": [
+    "PMC13608240"
+  ]
+}

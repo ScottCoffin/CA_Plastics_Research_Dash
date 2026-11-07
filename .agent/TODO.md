@@ -45,7 +45,7 @@ Check off only when the task Definition of Done and acceptance check in
 
 ## S6 Full text
 - [ ] **S6.1** License-aware OA full-text locator. Tooling and deterministic synthetic acceptance are implemented; the 8-row fixture reports 2 XML, 4 PDF, and 2 none (25%, 50%, 25%). The required candidate-corpus XML/PDF/none coverage report remains unmet because no downloaded production candidate corpus is available; the S1.5 count estimate is not a corpus. Do not close S6.1 or present fixture counts as corpus coverage. S6.2 parser work may proceed independently on ten license-safe article fixtures per its contract.
-- [ ] **S6.2** Europe PMC JATS section parser. Acceptance: tests on 10 fixture articles.
+- [x] **S6.2** Europe PMC JATS section parser. Acceptance: ten real-article fragments plus ten synthetic edge fixtures pass `py -3.14 scripts/check_s6_2.py`; provenance confirms CC BY metadata and selected-copy XML license blocks. Full-text extraction from the ten complete local articles found target sections in 9/10, a fixture-set result only. Verification: 148 tests, Ruff, and `git diff --check` pass.
 - [ ] **S6.3** GROBID PDF extraction and fallback. Acceptance: 30-PDF spot check and failure rate.
 - [ ] **S6.4** Full-text CA-sampling enrichment. Acceptance: abstract-vs-full-text performance delta.
 

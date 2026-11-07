@@ -46,3 +46,10 @@ fixture (2 XML, 4 PDF, 2 none), but remains unchecked because no downloaded
 candidate corpus is available for the required coverage report. The S1.5 count
 estimate is not a corpus. S6.2 JATS parsing can proceed independently using ten
 license-safe fixtures under its contract.
+
+S6.2 is now complete: ten real CC BY JATS excerpts and ten synthetic edge
+fixtures pass. License provenance is recorded per article, and full XML stays
+in the ignored local cache. Parsing the ten complete selected XML documents
+found target sections in 9/10; this is fixture-set evidence only. S6.3
+GROBID PDF extraction and fallback is the next independent S6 task and needs
+a 30-PDF spot check. S6.1 remains open pending candidate-corpus coverage.

@@ -154,9 +154,13 @@ def test_unresolved_and_kappa_edge_cases(tmp_path: Path) -> None:
     assert empty["double_annotated_works"] == 0
 
 
-def test_real_cli_gate_rejects_pending_guide() -> None:
+def test_cli_gate_rejects_pending_guide(tmp_path: Path) -> None:
+    guide = tmp_path / "pending_guide.md"
+    review = tmp_path / "pending_review.md"
+    guide.write_text("**Status:** pending owner review\n", encoding="utf-8")
+    review.write_text("- Decision: Pending\n", encoding="utf-8")
     with pytest.raises(ValueError, match="not approved"):
-        require_frozen_guide("docs/LABELING_GUIDE.md", "docs/LABELING_GUIDE_REVIEW.md")
+        require_frozen_guide(guide, review)
 
 
 def _write_approved_pair(tmp_path: Path, owner: str, date: str) -> tuple[Path, Path]:

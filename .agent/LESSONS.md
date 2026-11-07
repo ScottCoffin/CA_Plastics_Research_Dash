@@ -1,5 +1,8 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-07 -- S6.2 JATS entity handling
+- Reject internal DTD subsets with XML-aware parsing; token scanning can be fooled by comment text resembling CDATA delimiters. Preserve external DOCTYPE declarations without resolving them, and test both the parser and cache persistence boundary.
+
 ## 2026-11-06 -- S3.4 institution view
 - Reuse the S3.1 slim index for institution metrics: filter to
   `plastic_related === true`, derive the latest-five-year window from the

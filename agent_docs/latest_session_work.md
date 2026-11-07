@@ -2,6 +2,13 @@
 
 ## Current State
 
+S6.2 is complete and sealed. The Europe PMC JATS parser/cache acceptance
+passed on ten license-attributed real article fragments and ten synthetic
+edge fixtures. Ten complete selected documents yielded target sections in
+9/10, a fixture-set result only. S6.3 GROBID and fallback is next and requires
+a 30-PDF spot check. S6.1 remains unchecked pending actual candidate-corpus
+coverage; do not infer it from synthetic counts.
+
 S6.1 locator tooling is implemented and verified on a synthetic eight-row
 fixture: 2 XML, 4 PDF, and 2 none (25%, 50%, 25%). These are not candidate
 corpus coverage. No downloaded production candidate corpus is available, so

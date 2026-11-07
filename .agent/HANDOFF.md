@@ -1,20 +1,20 @@
-# Handoff - 2026-11-06 - S6.1 partial; S6.2 eligible
+# Handoff - 2026-11-07 - S6.2 complete; S6.3 next
 
 ## Done
-- Implemented S6.1 metadata-only Europe PMC XML/PDF/none selection, copy-specific license provenance, and conservative processing/storage decisions in `src/atlas/fulltext/__init__.py` and `scripts/locate_fulltext.py`.
-- Added `scripts/check_s6_1.py`, six focused locator tests, an eight-row synthetic fixture, and verification/API notes. Trusted repository path and exact PMCID license evidence, PDF selected-copy evidence, unsafe URL handling, and missing/restricted license cases are covered.
-- Acceptance passed: full suite 89, Ruff check and format, `git diff --check`, and one bounded Europe PMC smoke returned HTTP 200 with XML content type. No article text was saved.
-- S6.1 remains unchecked. The fixture reports 2 XML, 4 PDF, and 2 none (25%, 50%, 25%), but no downloaded candidate corpus is available. The S1.5 query estimate is not a corpus, so the required candidate-corpus coverage report remains outstanding.
+- Implemented Europe PMC JATS parsing in `src/atlas/fulltext/jats.py`, a license-gated fetch/cache interface in `src/atlas/fulltext/cache.py`, and a local parser CLI.
+- Acceptance passes on ten real CC BY article fragments and ten synthetic edge fixtures. Provenance records attribution, DOI/source URLs, metadata and selected-copy XML license evidence, and source hashes. Full XML is only in ignored local cache; committed real snippets are bounded to two excerpts of 180 characters per article.
+- Parser/cache security regression tests reject internal DTD subsets, including one hidden between comment tokens resembling CDATA delimiters; external DTDs are not resolved. Focused and full checks pass: 148 tests, Ruff lint/format, and `git diff --check`.
+- Complete local XML parsing found target sections in 9/10 selected articles (Methods 8, Study Area 1, Sampling 4, Data Availability 7); fixture-set counts are not corpus estimates.
 
 ## State of the repo
-- S6.1 locator tooling is implemented and synthetic behavior is verified, but its coverage DoD is incomplete pending a candidate corpus.
-- S4.1 `guide_v1` was approved and frozen by Scott Coffin on 2026-11-07; see `docs/LABELING_GUIDE_REVIEW.md`. S4.2 representative data/leak-hit source and annotation authorization remain pending; S3.6 full-data performance remains open.
-- Preserve the unrelated existing `README.md` edit.
+- S6.2 is complete. S6.1 remains unchecked pending candidate-corpus XML/PDF/none coverage; its synthetic fixture is not corpus evidence.
+- S4.2 representative split/leak evidence and S3.6 representative performance remain open. S4.1 guide approval is recorded.
+- Preserve the unrelated README URL edit. The S6.2 `docs/REUSE.md` entry is part of this checkpoint.
 
-## Next task (suggested)
-- S6.2: implement the Europe PMC JATS section parser against ten license-safe article fixtures, as specified by the task contract. It may proceed independently of S6.1 production-corpus coverage; confirm each fixture's copy license and attribution.
+## Next task
+- S6.3: implement GROBID PDF extraction and fallback; use a 30-PDF spot check and report extraction failure rate. It is independent of S6.1 corpus coverage.
 
 ## Gotchas
-- Do not mark S6.1 complete or present synthetic percentages as production-corpus coverage.
-- S5 acceptance still requires representative adjudicated gold after approved `guide_v1`; do not report synthetic values as model performance.
+- Do not claim corpus-wide section recall from the ten selected articles.
+- Check each selected-copy license before processing or caching full text; cache only in the ignored raw-data directory.
 - Keep test data final-only for evaluation.

@@ -31,6 +31,18 @@ S3.2's app shell was implemented independently in one static HTML file. The
 Job_Scraper triage structure named in the specification was not copied; its
 license remains documented below as a pattern that was inspected only.
 
+S6.2's JATS section matching and XML handling were implemented independently
+with `defusedxml` plus a small local JATS entity mapper. The
+`atlas.fulltext.cache` interface independently implements cache-first reuse,
+age and format checks, and request throttling after reviewing pyEuropePMC's
+FullTextClient documentation (checked 2026-11-06). Its [repository LICENSE](https://github.com/JonasHeinickeBio/pyEuropePMC/blob/main/LICENSE)
+is MIT; no source code was copied. The cache also requires a current S6.1
+permission decision, exact source binding, SHA-256 integrity, matching PMCID,
+and a selected-copy JATS license block. Ten short JATS evidence fragments are
+derived from selected CC BY Europe PMC copies; their author, DOI, article URL,
+exact selected-copy license text, and full-source hashes are recorded in
+`docs/api_notes/europepmc_s6_2_fixture_provenance.json`.
+
 | Repository/source | URL | License | Reused material | Adaptation and attribution |
 |---|---|---|---|---|
 | Job_Scraper | https://github.com/ScottCoffin/Job_Scraper | AGPL-3.0 | Watchdog and opt-in commit-guard concepts | Inspected as the documented owner pattern; independently reimplemented for this repository without copying workflow code. |
