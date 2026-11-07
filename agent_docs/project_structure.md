@@ -23,8 +23,9 @@
 - `docs/` contains methods, source/reuse/secret notes, QC reports, and dated
   API verification notes under `docs/api_notes/`.
 - `tests/` contains pytest tests and bounded JSON/text fixtures.
-- `site/` contains the current static Pages placeholder; the full atlas UI is
-  planned for later roadmap stages.
+- `site/` contains the current static Pages placeholder plus the S3.1 static
+  data payloads under `site/data/`; the full atlas UI is planned for later
+  roadmap stages.
 - `.github/workflows/` contains CI, Pages build/deploy, keepalive, and
   watchdog workflows.
 - `.agent/` contains the task protocol, roadmap, handoff, questions,
@@ -44,9 +45,9 @@
   authorships, authors, and institutions tables with QC metrics and
   California flags. Its generated institution output is separate from the
   reviewed registry input.
-- The static site currently proves deployment of a placeholder; the roadmap
-  assigns the data export, application shell, filters, maps, and publication
-  views to later S3 tasks.
+- The static site currently proves deployment of a placeholder and has the
+  S3.1 compact data contract; the roadmap assigns the application shell,
+  filters, maps, and publication views to later S3 tasks.
 
 ## Main Interfaces and Integration Boundaries
 

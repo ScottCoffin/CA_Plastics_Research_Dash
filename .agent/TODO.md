@@ -21,7 +21,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [x] **S2.4** Daily works workflow with commit and budget guards. Acceptance complete: `.github/workflows/ingest_works.yml` schedules a guarded refresh, simulated 429/budget stops preserve the high-water mark for the next run, and generated outputs commit only when `ENABLE_DATA_COMMITS=true`. `py -3.14 scripts/check_s2_4.py`; CI/local suite pass; hosted bounded smoke `42321442943` completed successfully with the expected budget defer.
 
 ## S3 MVP front end
-- [ ] **S3.1** Export slim site data and aggregates. Acceptance: schemas and payload sizes documented; budget met or exception explained.
+- [x] **S3.1** Export slim site data and aggregates. Acceptance complete: deterministic slim index, per-author details, institution/map payloads, year/type/tag aggregates, schema documentation, and gzip payload sizes are recorded; fixture payload is below the 3 MB C5 target.
 - [ ] **S3.2** Accessible, mobile app shell and stub tabs. Acceptance: fixture and real data load.
 - [ ] **S3.3** Experts filters, virtualized list, and detail drawer. Acceptance: full-data performance measured and screenshot test passes.
 - [ ] **S3.4** Institution leaderboard, sparklines, and clustered map. Acceptance: all qualifying institutions render and link to experts.

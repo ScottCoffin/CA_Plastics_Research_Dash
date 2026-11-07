@@ -4,6 +4,22 @@ ADR-style decisions belong here with date, alternatives, rationale, and decision
 owner. Unanswered items continue to use the defaults in `spec.md` Part G and
 remain listed in `QUESTIONS.md`.
 
+## ADR-011 - 2026-11-06 - Static site export contract
+
+- **Decision:** Build compact, deterministic JSON from the normalized C3
+  tables. Keep filter/list fields in `site/data/index.json`, split complete
+  author records into `authors/<author_id>.json`, and publish separate
+  institution, GeoJSON map, and year/type/tag aggregate payloads. Record raw
+  and gzip byte sizes in `build_metadata.json`.
+- **Alternatives:** Ship Parquet to the browser; put every abstract in the
+  index; combine all details into one large JSON document; calculate
+  aggregates in the client.
+- **Rationale:** The split keeps the initial payload within the C5 budget and
+  gives S3.2 stable filter/list data while preserving click-time detail.
+  Deterministic ordering makes generated site data reviewable and reproducible.
+- **Decided by:** Build agent under the S3.1 implementation contract; the
+  owner may revise the client contract during S3.2.
+
 ## ADR-010 - 2026-11-06 - Guarded daily works refresh
 
 - **Decision:** Schedule `.github/workflows/ingest_works.yml` daily and allow

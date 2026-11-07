@@ -1,5 +1,12 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-06 - Slim static-site exports
+- Keep index rows limited to filter/list fields and load abstracts and other
+  detail on author click. A separate metadata file with raw and gzip sizes
+  makes the C5 payload budget auditable without browser tooling.
+- Build aggregates from the same slim work rows used by the index, and keep
+  missing S2.3 labels as null rather than silently reclassifying works.
+
 ## 2026-11-06 - Guarded daily works refresh
 - A daily-budget HTTP 429 is an expected scheduling outcome, not a reason to
   advance state or fail the whole workflow. Raise a typed rate-limit error,
