@@ -228,3 +228,16 @@ remain listed in `QUESTIONS.md`.
   and no new third-party workflow dependency.
 - **Decided by:** Build agent under the S0.2 implementation contract; owner may
   revise the cadence later.
+
+## ADR-013 -- 2026-11-06 -- Bounded client-side Experts rendering
+
+- **Decision:** Keep the S3.3 Experts view dependency-free and virtualize the
+  fixed-height list with a 174px row slot and four-row overscan. Load researcher
+  detail JSON only after an explicit selection.
+- **Alternatives:** Render every author card eagerly; add a client-side query
+  dependency; or defer the drawer to a later stage.
+- **Rationale:** The S3.1 export already provides deterministic per-author
+  documents, so bounded DOM work and lazy fetches meet the MVP performance
+  contract without adding bundle or license cost.
+- **Decided by:** Build agent under the S3.3 task contract; revisit if the
+  full-data performance ladder in S3.6 shows the static export exceeds budget.

@@ -1,37 +1,41 @@
-# Handoff - 2026-11-06 - task S3.2
+# Handoff - 2026-11-06 - task S3.3
 
 ## Done
-- Replaced the Pages placeholder with a dependency-free single-file app shell
-  in `site/index.html`.
-- The shell loads the S3.1 `index.json`, `institutions.json`,
-  `aggregates.json`, and `build_metadata.json` payloads; renders Experts and
-  Institutions; and provides explicit Monitoring and Funding stubs plus About.
-- Experts filters are persisted in the URL hash, native tabs support keyboard
-  arrow/Home/End navigation, and the filtered author index exports CSV.
-- Added `scripts/check_s3_2.py` and `tests/test_site_shell.py`; documented the
-  design in ADR-012 and the independent implementation in `docs/REUSE.md`.
+- Extended `site/index.html` with hash-shareable Experts filters for tag,
+  institution type/institution, year range, CA basis, and OA availability.
+- Added bounded virtual rendering (fixed 174px slots with four-row overscan)
+  and accessible researcher detail drawer with lazy per-author JSON loading,
+  works, affiliation history, links, and report-an-error link.
+- Added `scripts/check_s3_3.py`, `tests/test_s3_3.py`, and
+  `docs/S3_3_VERIFICATION.md`; browser screenshot is under ignored
+  `output/playwright/s3_3-experts.png`.
+- Updated `.gitignore` and B4 records for the local screenshot artifact and
+  S3.3 decision/lesson.
 
-## Verification
-- `py -3.14 scripts/check_s3_2.py` passes: five accessible tabs, hash/CSV
-  hooks, responsive marker, and non-empty S3.1 fixture payloads.
-- `py -3.14 -m pytest -q` passes with 43 tests.
+## State of the repo
+- `py -3.14 scripts/check_s3_3.py` passes.
+- `py -3.14 scripts/check_s3_2.py` passes.
+- `C:\rtools45\usr\bin\make.exe PYTHON="py -3.14" test` passes (45 tests).
 - Ruff check/format, compileall, and `git diff --check` pass.
-- A local static HTTP server returned the shell and `/data/index.json` with the
-  expected fixture schema and author records. The environment now uses WSL
-  Node 20.20.2 and has the Playwright Chromium binary installed; the bundled
-  wrapper successfully launches with `--browser=chromium`. Full browser
-  acceptance remains part of the later UI tasks.
+- Playwright smoke through WSL Node 20.20.2/Chromium passed: CA-led filter,
+  Alice drawer, work title, correction link, and screenshot.
 
-## Next task
-S3.3: implement the Experts filters, virtualized list, researcher detail
-drawer, works list, and report-an-error link. Preserve this shell and do not
-start S3.4 in the same session.
+## Next task (suggested)
+S3.4: implement the Institutions leaderboard, sparklines, institution-type
+chips, clustered map, and links into the Experts view. Start by reading the
+S3.4 contract in `spec.md`, preserve the S3.3 drawer/filter behavior, and stop
+before S3.5.
 
-## Prompt for the next fresh agent
+## Gotchas the next agent must know
+- The site is dependency-free and must be served over HTTP for JSON fetches.
+- Playwright runs in WSL; use an explicit named session and `--browser=chromium`.
+- The Experts author summary derives tags and basis from indexed work rows;
+  missing `ca_sampled` remains distinct from `ca-affiliated`.
+- Do not promote the inactive `plastic-v2-candidate` query.
 
-Continue exactly S3.3 from `.agent/HANDOFF.md`; preserve unrelated files, read
-the S3.3 contract in `spec.md` and the S3.1 data contract in
-`docs/SITE_DATA.md`, build on the existing accessible shell without starting
-S3.4, run the S3.3 acceptance plus the full suite, update B4 records, commit
-and push only S3.3, and stop before S3.4. If directing a bounded worker, use a
-Luna worker only.
+## Needs owner input
+- None for S3.4; existing owner questions remain in `.agent/QUESTIONS.md`.
+
+## Files that are large or unsafe to read whole
+- `data/processed/*.parquet` -> inspect with DuckDB or targeted PyArrow schema.
+- `site/data/authors/*.json` -> inspect one author document at a time.

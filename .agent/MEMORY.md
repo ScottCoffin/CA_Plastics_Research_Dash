@@ -123,6 +123,13 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   navigation supports keyboard arrows/Home/End, and the filtered author index
   exports CSV. Monitoring and Funding are intentionally reserved stub tabs for
   later stages. `scripts/check_s3_2.py` validates the shell/data contract.
+- S3.3 extends `site/index.html` with hash-shareable Experts filters for tags,
+  institution type/institution, year range, CA basis, and OA status. The list
+  uses a fixed-height viewport with 174px virtual row slots and four-row
+  overscan; author details load lazily from `site/data/authors/<id>.json` in an
+  accessible drawer with works, affiliations, links, and a GitHub correction
+  link. Acceptance is `py -3.14 scripts/check_s3_3.py`; browser/screenshot
+  evidence is in `docs/S3_3_VERIFICATION.md`.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.

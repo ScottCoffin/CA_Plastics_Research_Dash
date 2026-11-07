@@ -25,6 +25,7 @@ Thumbs.db
 # Scratch and generated caches
 scratch/
 .playwright-cli/
+output/playwright/
 data/raw/*
 !data/raw/.gitkeep
 data/interim/*

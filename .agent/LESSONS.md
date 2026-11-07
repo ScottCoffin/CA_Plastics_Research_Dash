@@ -151,3 +151,10 @@
   `src` from `pyproject.toml`, so a clean `make test` imports the package.
 - `gh` 2.89.0 is installed, so S0.2 can inspect and trigger GitHub Actions after
   repository authentication and permissions are confirmed.
+
+## 2026-11-06 -- S3.3 browser acceptance
+- The WSL Playwright wrapper is reliable with an explicit named session and
+  `--json`; use Node 20.20.2 plus the installed Chromium browser. A local WSL
+  HTTP server is required for fetch-based static payloads.
+- Keep deliberate screenshots under ignored `output/playwright/`; do not add
+  Playwright session captures or CLI logs to the repository.

@@ -53,6 +53,7 @@
       .panel-intro { margin-top: 0; color: var(--muted); }
       .data-note { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.9rem; }
       .controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; align-items: end; margin: 1.25rem 0; }
+      .controls.expert-controls { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       .field { display: flex; flex-direction: column; gap: 0.3rem; }
       .field label { font-size: 0.85rem; font-weight: 700; }
       .field input, .field select { width: 100%; padding: 0.55rem 0.65rem; border: 1px solid #8da7af; border-radius: 0.35rem; color: var(--ink); background: #fff; }
@@ -62,9 +63,14 @@
       .result-line { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin: 1rem 0 0.65rem; }
       .result-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
       .cards { display: grid; gap: 0.65rem; }
+      .virtual-list { position: relative; height: min(42rem, 70vh); overflow: auto; contain: strict; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
+      .virtual-spacer { position: relative; width: 100%; }
+      .virtual-row { position: absolute; left: 0; right: 0; padding: 0.35rem; }
+      .virtual-row > .card { min-height: 10rem; }
       .card { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
       .card-header { display: flex; justify-content: space-between; gap: 0.75rem; }
       .card-header h3 { color: var(--brand-dark); }
+      .expert-link { border: 0; padding: 0; color: var(--brand-dark); background: transparent; font: inherit; font-weight: 700; text-align: left; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.15em; }
       .card-meta { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
       .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.55rem; }
       .chip { display: inline-block; padding: 0.18rem 0.45rem; border-radius: 999px; color: #24445a; background: #e6eff2; font-size: 0.78rem; }
@@ -75,6 +81,16 @@
       .stat dt { color: var(--muted); font-size: 0.8rem; }
       .stat dd { margin: 0.2rem 0 0; color: var(--brand-dark); font-size: 1.35rem; font-weight: 750; }
       .notice { margin: 0.75rem 0; padding: 0.7rem 0.85rem; border-left: 0.3rem solid var(--brand); color: #254658; background: #edf7f4; }
+      .drawer-backdrop[hidden], .drawer[hidden] { display: none; }
+      .drawer-backdrop { position: fixed; inset: 0; z-index: 10; background: rgb(4 62 50 / 42%); }
+      .drawer { position: fixed; z-index: 11; inset: 0 0 0 auto; width: min(38rem, 100%); overflow-y: auto; padding: 1.25rem; border-left: 1px solid var(--line); background: var(--surface); box-shadow: -0.5rem 0 2rem rgb(23 50 77 / 18%); }
+      .drawer-header { display: flex; justify-content: space-between; gap: 1rem; align-items: start; }
+      .drawer-close { border: 1px solid var(--brand); border-radius: 0.35rem; padding: 0.4rem 0.65rem; color: var(--brand-dark); background: #fff; }
+      .detail-meta { color: var(--muted); }
+      .works-list { display: grid; gap: 0.65rem; padding: 0; list-style: none; }
+      .work-detail { padding: 0.75rem; border: 1px solid var(--line); border-radius: 0.45rem; }
+      .work-detail p { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
+      .work-links { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 0.45rem; }
       footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.85rem; }
       @media (max-width: 45rem) {
         .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -114,19 +130,29 @@
       <section id="panel-experts" class="panel" role="tabpanel" aria-labelledby="tab-experts" tabindex="0">
         <h2>Experts</h2>
         <p class="panel-intro">Browse the author index from the latest static export. Use the filters to narrow the starting list.</p>
-        <form id="expert-filters" class="controls" novalidate>
+        <form id="expert-filters" class="controls expert-controls" novalidate>
           <div class="field"><label for="expert-search">Search name or ID</label><input id="expert-search" name="search" type="search" autocomplete="off" placeholder="e.g. California"></div>
-          <div class="field"><label for="year-filter">Publication year</label><select id="year-filter" name="year"><option value="">All years</option></select></div>
+          <div class="field"><label for="institution-type-filter">Institution type</label><select id="institution-type-filter" name="institution_type"><option value="">All institution types</option></select></div>
+          <div class="field"><label for="institution-filter">Institution</label><select id="institution-filter" name="institution"><option value="">All institutions</option></select></div>
           <div class="field"><label for="tag-filter">Domain or matrix tag</label><select id="tag-filter" name="tag"><option value="">All tags</option></select></div>
-          <div class="field"><label for="ca-filter">California connection</label><select id="ca-filter" name="ca"><option value="">Any connection</option><option value="ca">Has California works</option><option value="none">No California works</option></select></div>
+          <div class="field"><label for="year-from">From year</label><input id="year-from" name="year_from" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
+          <div class="field"><label for="year-to">To year</label><input id="year-to" name="year_to" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
+          <div class="field"><label for="ca-basis-filter">CA basis</label><select id="ca-basis-filter" name="ca_basis"><option value="">Any CA basis</option><option value="ca-led">CA-led</option><option value="ca-sampled">CA-sampled</option><option value="both">Both</option><option value="ca-affiliated">CA-affiliated</option><option value="none">No CA basis</option></select></div>
+          <div class="field"><label for="oa-filter">OA availability</label><select id="oa-filter" name="oa"><option value="">Any OA status</option><option value="oa">Has OA work</option><option value="closed">No OA work</option></select></div>
         </form>
         <div class="button-row" aria-label="Expert actions">
           <button id="reset-filters" class="button secondary" type="button">Reset filters</button>
           <button id="export-csv" class="button" type="button">Export filtered CSV</button>
         </div>
         <div class="result-line"><p id="expert-count" class="result-count" role="status" aria-live="polite">Loading experts…</p></div>
-        <div id="expert-list" class="cards" aria-live="polite"></div>
+        <div id="expert-list" class="virtual-list" role="list" aria-label="Experts" aria-live="polite"><div id="expert-spacer" class="virtual-spacer"><div id="expert-rows"></div></div></div>
       </section>
+
+      <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+      <aside id="researcher-drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+        <div class="drawer-header"><div><p class="eyebrow">Researcher detail</p><h2 id="drawer-title">Researcher</h2></div><button id="drawer-close" class="drawer-close" type="button">Close</button></div>
+        <div id="drawer-content"><p class="detail-meta">Select an expert to load their works.</p></div>
+      </aside>
 
       <section id="panel-institutions" class="panel" role="tabpanel" aria-labelledby="tab-institutions" tabindex="0" hidden>
         <h2>Institutions</h2>
@@ -165,7 +191,7 @@
           metadata: "data/build_metadata.json"
         };
         const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
-        const state = { tab: "experts", search: "", year: "", tag: "", ca: "", data: null };
+        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", data: null, filteredAuthors: [], virtual: { rowHeight: 174, overscan: 4 } };
         const $ = (id) => document.getElementById(id);
 
         function escapeHtml(value) {
@@ -176,16 +202,24 @@
           state.tab = VALID_TABS.includes(tabPart) ? tabPart : "experts";
           const params = new URLSearchParams(queryPart);
           state.search = params.get("search") || "";
-          state.year = params.get("year") || "";
+          state.institutionType = params.get("institution_type") || "";
+          state.institution = params.get("institution") || "";
           state.tag = params.get("tag") || "";
-          state.ca = ["", "ca", "none"].includes(params.get("ca") || "") ? (params.get("ca") || "") : "";
+          state.yearFrom = params.get("year_from") || "";
+          state.yearTo = params.get("year_to") || "";
+          state.caBasis = params.get("ca_basis") || "";
+          state.oa = ["", "oa", "closed"].includes(params.get("oa") || "") ? (params.get("oa") || "") : "";
         }
         function writeHash() {
           const params = new URLSearchParams();
           if (state.search) params.set("search", state.search);
-          if (state.year) params.set("year", state.year);
+          if (state.institutionType) params.set("institution_type", state.institutionType);
+          if (state.institution) params.set("institution", state.institution);
           if (state.tag) params.set("tag", state.tag);
-          if (state.ca) params.set("ca", state.ca);
+          if (state.yearFrom) params.set("year_from", state.yearFrom);
+          if (state.yearTo) params.set("year_to", state.yearTo);
+          if (state.caBasis) params.set("ca_basis", state.caBasis);
+          if (state.oa) params.set("oa", state.oa);
           const next = `#${state.tab}${params.toString() ? `?${params.toString()}` : ""}`;
           if (window.location.hash !== next) window.history.replaceState(null, "", next);
         }
@@ -205,39 +239,74 @@
         function populateFilters() {
           const years = new Set();
           const tags = new Set();
+          const types = new Set();
+          const institutions = new Map();
           state.data.index.works.forEach((work) => {
             if (work.year !== null && work.year !== undefined) years.add(String(work.year));
             [...(work.domain_tags || []), ...(work.facet_tags || [])].forEach((tag) => tags.add(tag));
           });
-          $("year-filter").innerHTML = '<option value="">All years</option>' + [...years].sort().reverse().map((year) => `<option value="${escapeHtml(year)}">${escapeHtml(year)}</option>`).join("");
+          (state.data.institutions.institutions || []).forEach((institution) => {
+            types.add(institution.atlas_type || "other");
+            institutions.set(institution.inst_id, institution);
+          });
+          $("institution-type-filter").innerHTML = '<option value="">All institution types</option>' + [...types].sort().map((type) => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`).join("");
+          $("institution-filter").innerHTML = '<option value="">All institutions</option>' + [...institutions.values()].sort((a, b) => String(a.name).localeCompare(String(b.name))).map((institution) => `<option value="${escapeHtml(institution.inst_id)}">${escapeHtml(institution.name)}</option>`).join("");
           $("tag-filter").innerHTML = '<option value="">All tags</option>' + [...tags].sort().map((tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(tag)}</option>`).join("");
         }
         function applyControls() {
           $("expert-search").value = state.search;
-          $("year-filter").value = state.year;
+          $("institution-type-filter").value = state.institutionType;
+          $("institution-filter").value = state.institution;
           $("tag-filter").value = state.tag;
-          $("ca-filter").value = state.ca;
+          $("year-from").value = state.yearFrom;
+          $("year-to").value = state.yearTo;
+          $("ca-basis-filter").value = state.caBasis;
+          $("oa-filter").value = state.oa;
+        }
+        function institutionById(id) {
+          return (state.data.institutions.institutions || []).find((institution) => institution.inst_id === id) || null;
+        }
+        function workBasis(work) {
+          if (work.ca_basis) return String(work.ca_basis);
+          const led = Boolean(work.ca_led);
+          const sampled = Boolean(work.ca_sampled || work.ca_setting === "sampled");
+          if (led && sampled) return "both";
+          if (led) return "ca-led";
+          if (sampled) return "ca-sampled";
+          if (work.ca_any_author) return "ca-affiliated";
+          return "none";
+        }
+        function authorSummary(author) {
+          const works = (state.data.index.works || []).filter((work) => (author.work_ids || []).includes(work.work_id));
+          const tags = [...new Set(works.flatMap((work) => [...(work.domain_tags || []), ...(work.facet_tags || [])]))].sort();
+          const institutionIds = [...new Set(works.flatMap((work) => work.institution_ids || []).concat(author.institution_ids || []))];
+          const institutionRows = institutionIds.map(institutionById).filter(Boolean);
+          const types = [...new Set(institutionRows.map((institution) => institution.atlas_type || "other"))];
+          const caInstitutions = institutionRows.filter((institution) => institution.ca_flag);
+          const bases = new Set(works.map(workBasis));
+          const basis = bases.has("both") || (bases.has("ca-led") && bases.has("ca-sampled")) ? "both" : bases.has("ca-led") ? "ca-led" : bases.has("ca-sampled") ? "ca-sampled" : bases.has("ca-affiliated") ? "ca-affiliated" : "none";
+          const years = works.map((work) => Number(work.year)).filter(Number.isFinite);
+          const latest = years.length ? Math.max(...years) : null;
+          const recentCount = latest === null ? 0 : works.filter((work) => Number(work.year) >= latest - 4).length;
+          return { ...author, works, tags, institutionRows, types, caInstitutions, basis, recentCount, latest };
         }
         function filteredAuthors() {
-          const authors = state.data.index.authors || [];
-          const works = state.data.index.works || [];
-          const byId = new Map(authors.map((author) => [author.author_id, author]));
-          const relevantWorks = works.filter((work) => {
-            if (state.year && String(work.year) !== state.year) return false;
-            const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])];
-            return !state.tag || tags.includes(state.tag);
-          });
-          const relevantIds = new Set(relevantWorks.flatMap((work) => work.author_ids || []));
+          const authors = (state.data.index.authors || []).map(authorSummary);
           return authors.filter((author) => {
             const haystack = `${author.name} ${author.author_id}`.toLowerCase();
             if (state.search && !haystack.includes(state.search.toLowerCase())) return false;
-            if ((state.year || state.tag) && !relevantIds.has(author.author_id)) return false;
-            if (state.ca === "ca" && !(author.ca_works_count > 0)) return false;
-            if (state.ca === "none" && author.ca_works_count > 0) return false;
+            if (state.institutionType && !author.types.includes(state.institutionType)) return false;
+            if (state.institution && !author.institutionRows.some((institution) => institution.inst_id === state.institution)) return false;
+            if (state.tag && !author.tags.includes(state.tag)) return false;
+            if (state.yearFrom && !author.works.some((work) => Number(work.year) >= Number(state.yearFrom))) return false;
+            if (state.yearTo && !author.works.some((work) => Number(work.year) <= Number(state.yearTo))) return false;
+            if (state.caBasis && author.basis !== state.caBasis) return false;
+            if (state.oa === "oa" && !author.works.some((work) => work.is_oa)) return false;
+            if (state.oa === "closed" && !author.works.every((work) => !work.is_oa)) return false;
             return true;
-          });
+          }).sort((a, b) => (b.ca_works_count || 0) - (a.ca_works_count || 0) || (b.work_count || 0) - (a.work_count || 0) || String(a.name).localeCompare(String(b.name)));
         }
-        function renderExperts() {
+        function renderLegacyExperts() {
           const authors = filteredAuthors();
           $("expert-count").textContent = `${authors.length} expert${authors.length === 1 ? "" : "s"} shown`;
           $("expert-list").innerHTML = authors.length ? authors.map((author) => {
@@ -245,6 +314,57 @@
             const years = author.first_year && author.last_year ? `${author.first_year}–${author.last_year}` : "Year unavailable";
             return `<article class="card"><div class="card-header"><h3>${escapeHtml(author.name || "Unnamed author")}</h3><span class="chip">${escapeHtml(author.work_count)} works</span></div><p class="card-meta">${escapeHtml(author.author_id)} · ${escapeHtml(years)} · ${author.ca_works_count > 0 ? "California connection" : "No California works"}</p>${tags ? `<div class="chips" aria-label="Domain tags">${tags}</div>` : ""}</article>`;
           }).join("") : '<p class="empty">No experts match these filters. Try resetting one of the selections.</p>';
+        }
+        function renderExperts() {
+          const authors = filteredAuthors();
+          state.filteredAuthors = authors;
+          $("expert-count").textContent = `${authors.length} expert${authors.length === 1 ? "" : "s"} shown`;
+          const spacer = $("expert-spacer");
+          spacer.style.height = `${Math.max(authors.length * state.virtual.rowHeight, authors.length ? 1 : 0)}px`;
+          renderVirtualRows();
+          if (!authors.length) $("expert-rows").innerHTML = '<p class="empty">No experts match these filters. Try resetting one of the selections.</p>';
+        }
+        function renderVirtualRows() {
+          const list = $("expert-list");
+          const rows = $("expert-rows");
+          if (!state.filteredAuthors.length) { rows.innerHTML = ""; return; }
+          const start = Math.max(0, Math.floor(list.scrollTop / state.virtual.rowHeight) - state.virtual.overscan);
+          const end = Math.min(state.filteredAuthors.length, Math.ceil((list.scrollTop + list.clientHeight) / state.virtual.rowHeight) + state.virtual.overscan);
+          rows.innerHTML = state.filteredAuthors.slice(start, end).map((author, offset) => {
+            const index = start + offset;
+            const tags = (author.tags || []).slice(0, 8).map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("");
+            const years = author.first_year && author.last_year ? `${author.first_year}–${author.last_year}` : "Year unavailable";
+            const affiliation = author.caInstitutions.length ? author.caInstitutions.map((institution) => institution.name).join(", ") : "No California affiliation";
+            return `<article class="virtual-row" role="listitem" style="transform:translateY(${index * state.virtual.rowHeight}px)"><div class="card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></div><p class="card-meta">${escapeHtml(affiliation)} · ${escapeHtml(years)} · ${escapeHtml(author.recentCount)} in recent 5 years · ${escapeHtml(author.basis)}</p>${author.orcid ? `<p class="card-meta"><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID</a></p>` : ""}${tags ? `<div class="chips" aria-label="Domain tags">${tags}</div>` : ""}</div></article>`;
+          }).join("");
+          rows.querySelectorAll(".expert-link").forEach((button) => button.addEventListener("click", () => openDrawer(button.dataset.authorId)));
+        }
+        async function openDrawer(authorId) {
+          const drawer = $("researcher-drawer");
+          state.drawerPrevious = document.activeElement;
+          drawer.hidden = false;
+          $("drawer-backdrop").hidden = false;
+          $("drawer-content").innerHTML = '<p class="detail-meta">Loading researcher details…</p>';
+          $("drawer-close").focus();
+          try {
+            const response = await fetch(`data/authors/${encodeURIComponent(authorId)}.json`, { cache: "no-cache" });
+            if (!response.ok) throw new Error(`author detail returned HTTP ${response.status}`);
+            const detail = await response.json();
+            const author = detail.author || {};
+            const works = detail.works || [];
+            const institutionIds = [...new Set(works.flatMap((work) => work.institution_ids || []))];
+            const institutions = institutionIds.map(institutionById).filter(Boolean);
+            const coauthorIds = [...new Set(works.flatMap((work) => (work.author_ids || []).filter((id) => id !== authorId)))];
+            $("drawer-title").textContent = author.name || "Researcher";
+            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}<h3>Affiliation history</h3><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p><h3>Co-author institutions</h3><p class="detail-meta">${coauthorIds.length ? escapeHtml(coauthorIds.join(", ")) : "No co-author IDs recorded."}</p><h3>Works</h3><ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="chips">${tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
+          } catch (error) {
+            $("drawer-content").innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
+          }
+        }
+        function closeDrawer() {
+          $("researcher-drawer").hidden = true;
+          $("drawer-backdrop").hidden = true;
+          if (state.drawerPrevious && typeof state.drawerPrevious.focus === "function") state.drawerPrevious.focus();
         }
         function renderInstitutions() {
           const institutions = state.data.institutions.institutions || [];
@@ -288,9 +408,13 @@
         }
         function onFilterChange() {
           state.search = $("expert-search").value.trim();
-          state.year = $("year-filter").value;
+          state.institutionType = $("institution-type-filter").value;
+          state.institution = $("institution-filter").value;
           state.tag = $("tag-filter").value;
-          state.ca = $("ca-filter").value;
+          state.yearFrom = $("year-from").value;
+          state.yearTo = $("year-to").value;
+          state.caBasis = $("ca-basis-filter").value;
+          state.oa = $("oa-filter").value;
           writeHash();
           renderExperts();
         }
@@ -303,19 +427,23 @@
             buttons[next].focus();
           });
         });
-        ["expert-search", "year-filter", "tag-filter", "ca-filter"].forEach((id) => {
+        ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter"].forEach((id) => {
           $(id).addEventListener("input", onFilterChange);
           $(id).addEventListener("change", onFilterChange);
         });
-        $("reset-filters").addEventListener("click", () => { state.search = state.year = state.tag = state.ca = ""; writeHash(); updateViews(); $("expert-search").focus(); });
+        $("expert-list").addEventListener("scroll", () => window.requestAnimationFrame(renderVirtualRows), { passive: true });
+        $("reset-filters").addEventListener("click", () => { state.search = state.institutionType = state.institution = state.tag = state.yearFrom = state.yearTo = state.caBasis = state.oa = ""; writeHash(); updateViews(); $("expert-search").focus(); });
         $("export-csv").addEventListener("click", () => {
           if (!state.data) return;
-          const header = ["author_id", "name", "work_count", "ca_works_count", "first_year", "last_year", "domain_tags", "institution_ids"];
-          const rows = filteredAuthors().map((author) => [author.author_id, author.name, author.work_count, author.ca_works_count, author.first_year, author.last_year, (author.domain_tags || []).join(";"), (author.institution_ids || []).join(";")]);
+          const header = ["author_id", "name", "work_count", "ca_works_count", "first_year", "last_year", "ca_basis", "domain_tags", "institution_ids"];
+          const rows = filteredAuthors().map((author) => [author.author_id, author.name, author.work_count, author.ca_works_count, author.first_year, author.last_year, author.basis, (author.tags || []).join(";"), (author.institution_ids || []).join(";")]);
           const csv = [header, ...rows].map((row) => row.map((value) => `"${String(value ?? "").replaceAll('"', '""')}"`).join(",")).join("\n");
           const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
           const link = document.createElement("a"); link.href = url; link.download = "ca-plastics-atlas-experts.csv"; link.click(); URL.revokeObjectURL(url);
         });
+        $("drawer-close").addEventListener("click", closeDrawer);
+        $("drawer-backdrop").addEventListener("click", closeDrawer);
+        document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !$("researcher-drawer").hidden) closeDrawer(); });
         window.addEventListener("hashchange", () => { readHash(); if (state.data) updateViews(); });
         readHash();
         loadData();

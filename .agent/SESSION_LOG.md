@@ -18,3 +18,4 @@
 | 2026-11-06 | S2.4 | Completed; guarded daily workflow, typed 429/budget deferral, output commit guard, hosted smoke, and acceptance pass | `b3a315c` (implementation `3c31bd0`, smoke-input `4307477`) |
 | 2026-11-06 | S3.1 | Completed; deterministic static-site exporter, schema/size contract, fixture payloads, acceptance, and full suite | pending commit |
 | 2026-11-06 | S3.2 | Completed; accessible responsive app shell, hash filters, keyboard tabs, CSV export, stub tabs, acceptance, and full suite | `b701058` |
+| 2026-11-06 | S3.3 | Completed; Experts filters, virtualized list, researcher drawer, browser screenshot smoke, acceptance, and full suite | pending commit |
