@@ -15,4 +15,4 @@
 | 2026-11-06 | S2.1 | Completed; resumable OpenAlex works ingester, filter smoke, fixture, tests, and acceptance pass | `15321be` |
 | 2026-11-06 | S2.2 | Completed; C3 normalization, CA flags, QC report, fixture, tests, and acceptance pass | `7c80e60` |
 | 2026-11-06 | S2.3 | Completed; deterministic provisional labels, topic joins, coverage QC, fixture, tests, and acceptance pass | `2ea7253` |
-| 2026-11-06 | S2.4 | Completed; guarded daily workflow, typed 429/budget deferral, output commit guard, and acceptance pass | pending commit |
+| 2026-11-06 | S2.4 | Completed; guarded daily workflow, typed 429/budget deferral, output commit guard, hosted smoke, and acceptance pass | `b3a315c` (implementation `3c31bd0`, smoke-input `4307477`) |
