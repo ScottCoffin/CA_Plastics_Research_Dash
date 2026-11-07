@@ -44,7 +44,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S5.7** Candidate-pool leak-test report. Acceptance: widening decision recorded. `owner: decision`
 
 ## S6 Full text
-- [ ] **S6.1** License-aware OA full-text locator. Acceptance: XML/PDF/none coverage report. Next independent eligible task; do not wait for S5 gold-data gates.
+- [ ] **S6.1** License-aware OA full-text locator. Tooling and deterministic synthetic acceptance are implemented; the 8-row fixture reports 2 XML, 4 PDF, and 2 none (25%, 50%, 25%). The required candidate-corpus XML/PDF/none coverage report remains unmet because no downloaded production candidate corpus is available; the S1.5 count estimate is not a corpus. Do not close S6.1 or present fixture counts as corpus coverage. S6.2 parser work may proceed independently on ten license-safe article fixtures per its contract.
 - [ ] **S6.2** Europe PMC JATS section parser. Acceptance: tests on 10 fixture articles.
 - [ ] **S6.3** GROBID PDF extraction and fallback. Acceptance: 30-PDF spot check and failure rate.
 - [ ] **S6.4** Full-text CA-sampling enrichment. Acceptance: abstract-vs-full-text performance delta.

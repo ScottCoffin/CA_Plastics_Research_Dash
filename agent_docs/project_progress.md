@@ -41,4 +41,8 @@ reproducible synthetic report includes per-class/per-label metrics, calibration,
 error analysis, and JSON; see `docs/EVAL_synthetic_v1.md`. No corpus performance
 is claimed. G-9 thresholds are answered. S5 classifier training/evaluation
 remains gated on approved `guide_v1` and representative adjudicated gold data;
-S6.1 full-text location is the next independent eligible task.
+S6.1 locator tooling is implemented and verified on an eight-row synthetic
+fixture (2 XML, 4 PDF, 2 none), but remains unchecked because no downloaded
+candidate corpus is available for the required coverage report. The S1.5 count
+estimate is not a corpus. S6.2 JATS parsing can proceed independently using ten
+license-safe fixtures under its contract.

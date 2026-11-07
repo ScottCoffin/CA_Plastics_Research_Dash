@@ -1,0 +1,69 @@
+{
+  "candidates": [
+    {"work_id": "W9000000101", "is_oa": true, "oa_url": "https://example.org/101", "license": "cc-by"},
+    {"work_id": "W9000000102", "is_oa": true, "oa_url": "https://example.org/102", "license": "cc-by-4.0"},
+    {"work_id": "W9000000103", "is_oa": true, "oa_url": "https://example.org/103", "license": "cc-by"},
+    {"work_id": "W9000000104", "is_oa": true, "oa_url": "https://example.org/104", "license": "cc-by"},
+    {"work_id": "W9000000105", "is_oa": true, "oa_url": "https://example.org/105", "license": "cc-by"},
+    {"work_id": "W9000000106", "is_oa": true, "oa_url": "https://example.org/106", "license": "cc-by"},
+    {"work_id": "W9000000107", "is_oa": true, "oa_url": "https://example.org/107", "license": ""},
+    {"work_id": "W9000000108", "is_oa": false, "oa_url": "", "license": "cc-by"}
+  ],
+  "raw": {
+    "W9000000101": {
+      "id": "https://openalex.org/W9000000101",
+      "ids": {"pmcid": "PMC8123456"},
+      "open_access": {"is_oa": true},
+      "best_oa_location": {"license": "all-rights-reserved", "pdf_url": "https://publisher.example/101.pdf"},
+      "locations": [
+        {"landing_page_url": "https://publisher.example/101", "license": "all-rights-reserved"},
+        {"landing_page_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8123456/", "license": "cc-by-4.0"}
+      ]
+    },
+    "W9000000102": {
+      "id": "https://openalex.org/W9000000102",
+      "ids": {},
+      "open_access": {"is_oa": true},
+      "best_oa_location": {"license": "cc-by", "pdf_url": "https://example.org/102.pdf", "landing_page_url": "https://example.org/102"}
+    },
+    "W9000000103": {
+      "id": "https://openalex.org/W9000000103",
+      "ids": {"pmcid": "PMC8123458"},
+      "open_access": {"is_oa": true},
+      "best_oa_location": {"license": "cc-by", "pdf_url": "https://publisher.example/103.pdf"},
+      "locations": [
+        {"landing_page_url": "https://publisher.example/103", "license": "cc-by"}
+      ]
+    },
+    "W9000000104": {
+      "id": "https://openalex.org/W9000000104",
+      "ids": {},
+      "open_access": {"is_oa": true},
+      "best_oa_location": {"pdf_url": "https://example.org/104.pdf"}
+    },
+    "W9000000105": {
+      "id": "https://openalex.org/W9000000105",
+      "ids": {},
+      "open_access": {"is_oa": true},
+      "best_oa_location": {"license": "all-rights-reserved", "pdf_url": "https://example.org/105.pdf"}
+    },
+    "W9000000106": {
+      "id": "https://openalex.org/W9000000106",
+      "ids": {},
+      "open_access": {"is_oa": true},
+      "best_oa_location": {"pdf_url": "https://example.org/106.pdf"}
+    },
+    "W9000000107": {
+      "id": "https://openalex.org/W9000000107",
+      "ids": {},
+      "open_access": {"is_oa": true},
+      "best_oa_location": {"pdf_url": "http://localhost/private.pdf"}
+    },
+    "W9000000108": {
+      "id": "https://openalex.org/W9000000108",
+      "ids": {},
+      "open_access": {"is_oa": false},
+      "best_oa_location": {"license": "cc-by", "pdf_url": "https://example.org/108.pdf"}
+    }
+  }
+}

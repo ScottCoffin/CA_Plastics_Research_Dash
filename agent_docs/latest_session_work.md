@@ -2,6 +2,13 @@
 
 ## Current State
 
+S6.1 locator tooling is implemented and verified on a synthetic eight-row
+fixture: 2 XML, 4 PDF, and 2 none (25%, 50%, 25%). These are not candidate
+corpus coverage. No downloaded production candidate corpus is available, so
+S6.1 remains unchecked until the required corpus report can be generated. The
+S1.5 estimate is not a corpus. S6.2 is independently eligible with ten
+license-safe article fixtures.
+
 S4.4 evaluation tooling is complete against the dummy-predictor DoD.
 `atlas.nlp.eval` and `scripts/evaluate.py` provide per-class/per-label metrics,
 calibration, error analysis, and JSON; deterministic synthetic evidence is in

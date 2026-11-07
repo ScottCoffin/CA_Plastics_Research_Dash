@@ -26,3 +26,4 @@
 | 2026-11-07 | S4.2 partial | Deterministic fixture sampling/splits and author-group isolation verified; production sample remains gated on authorized export and leak-hit source | pending commit |
 | 2026-11-06 | S4.3 | Tooling complete; synthetic CSV round-trip, Cohen's kappa, 15 focused tests and 71-test suite pass; human annotation gates remain pending | pending commit |
 | 2026-11-06 | S4.4 | Evaluation harness complete; synthetic reproducibility, full 83-test suite, Ruff, and diff checks pass; corpus metrics remain gated | pending commit |
+| 2026-11-06 | S6.1 partial | License-aware metadata locator and synthetic acceptance implemented; full 89-test suite, Ruff, diff check, and bounded Europe PMC HTTP 200 smoke pass. Eight synthetic rows (2 XML, 4 PDF, 2 none) are not candidate-corpus coverage; S6.1 remains unchecked pending corpus | pending commit |
