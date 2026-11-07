@@ -1,21 +1,26 @@
-# Handoff - 2026-11-07 - task S3.6 partial
+# Handoff - 2026-11-07 - task S4.1 partial
+
+## Prior S3.6 checkpoint
+- Pages deployment and four-work fixture C5 measurements are recorded in `docs/S3_6_VERIFICATION.md`; the live check passed and the fixture is below the C5 payload target.
+- S3.6 remains unchecked because no representative work export exists. The 98,118 S1.5 count is an estimate, not downloaded data. Resume only after S1.5-A is answered and a bounded export is authorized; do not activate the candidate to manufacture a benchmark.
 
 ## Done
-- Verified Pages Actions run [42334138365](https://github.com/ScottCoffin/CA_Plastics_Research_Dash/actions/runs/42334138365): both artifact build and deploy jobs succeeded for commit `226df545da8b4e26442db830f342a0f41a6a3674`.
-- Direct live checks returned HTTP 200 for the site (52,038 bytes; 0.237 s) and matching fixture metadata. The deployed site reports 4 authors, 4 works, 3 institutions, 1 CA institution, and 4 labeled works.
-- `py -3.14 scripts/measure_s3_6.py` passed against the committed four-work fixture: 5 cold Chromium contexts (145.0.7632.6), FCP median/max 44/80 ms; meaningful render 75.1/124.1 ms; 20/20 searches returned exactly the expected author, filter median/max 14.2/15.9 ms. The event listener synchronously calls `renderExperts()`; measuring row/count on the next animation frame captures its updated output.
-- Fixture gzip payload is 3,403 bytes, below C5's 3 MB target. These measurements are fixture-only; they do not establish representative or full-corpus performance.
+- Prepared `docs/LABELING_GUIDE.md` as a work-level `guide_v1` draft with plastic relevance/tier, California sampling, multi-label domains, evidence and source constraints, adjudication, and required edge cases.
+- Independent review accepted the guide after clarification that chemicals-in-plastics subjects, including primary 6PPD-quinone exposure, pass the initial relevance gate. The guide explicitly says this at the first decision in Section 1; the bounded example is recorded in `docs/LABELING_GUIDE_VERIFICATION.md`.
+- Verified the exact review artifact hash: `A88B164F67CB60249064A13A529FC21762023037DAF444CDD30B7FCF33481C15`.
+- Owner checklist and reply instructions are in `docs/LABELING_GUIDE_REVIEW.md`; S4.1-A in `.agent/QUESTIONS.md` asks for approval and date or an exact requested revision.
 
-## State and remaining gate
-- S3.6 is deliberately still unchecked in `.agent/TODO.md`. No representative work export exists; the only normalized export is the four-work fixture. The 98,118 S1.5 count is a remote estimate, not downloaded data. Full-data performance DoD remains unmet.
-- Do not activate `plastic-v2-candidate` to manufacture a benchmark. The owner query promotion/review question is recorded as S1.5-A in `.agent/QUESTIONS.md`. After an approved query and authorized bounded run under the existing OpenAlex credit guard, export that corpus, rerun C5, and update the decision/evidence before checking S3.6.
-- No measured fixture need supports DuckDB-Wasm. Existing pre-aggregation, split index/detail payloads, and row virtualization pass fixture budgets; revisit later C5 ladder options only with representative measurements.
-- Commit and push this S3.6 partial evidence checkpoint only. Preserve the pre-existing unrelated `README.md` edit; it is not part of the checkpoint.
+## State and gates
+- S4.1 remains unchecked. Approval and freezing `guide_v1` are still required before annotation; no annotation, gold adjudication, or guide freeze occurred.
+- S4.2 label-independent sample/split preparation is eligible while approval is pending. It must isolate test records and must not use the four-work fixture as evidence of a representative corpus.
+- S3.6 remains open pending approved query promotion, authorized representative export, and full-data performance measurement. The fixture-only evidence does not satisfy that gate.
+- Preserve the unrelated pre-existing `README.md` edit; it is not part of the S4.1 checkpoint.
 
 ## Next eligible work
-- S4.1 guide drafting is dependency-eligible. Draft `docs/LABELING_GUIDE.md` per the S4.1 contract, cover required edge cases and evidence quoting, then request owner approval for the frozen `guide_v1`. Do not mark S4.1 complete before approval.
+- Continue S4.2 sample/split preparation under its contract, without annotation or gold labels. Keep S4.1 owner approval pending and return to freeze the reviewed guide only after an explicit owner decision.
+- S3.6 can resume separately after S1.5-A is answered and a representative export is authorized.
 
-## Verification
-- `py -3.14 scripts/measure_s3_6.py` passed.
-- GitHub run inspection and direct live HTTP/metadata checks passed as recorded in `docs/S3_6_VERIFICATION.md`.
-- S3.6 full-data performance gate remains open. Rerun after representative export is available.
+## Verification and release
+- Independent labeling-guide review passed with no finding after the initial relevance-gate clarification.
+- `Get-FileHash docs/LABELING_GUIDE.md -Algorithm SHA256` matched the review hash above.
+- This is a draft/handoff checkpoint, not S4.1 acceptance. Commit only the guide, its review/verification artifacts, and S4.1 roadmap/handoff records; exclude `README.md` and S3 files.

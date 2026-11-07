@@ -22,3 +22,4 @@
 | 2026-11-06 | S3.4 | Completed; institution leaderboard, sparklines, type chips, clustered map, Experts links, acceptance, and full suite | `f5877c3` |
 | 2026-11-06 | S3.5 | Implementation and acceptance complete; 49 tests, Ruff, Chromium desktop/mobile and regression path pass; sealed in this Git checkpoint | sealed in this Git checkpoint |
 | 2026-11-07 | S3.6 partial | Pages deployment and fixture C5 measurements verified; full-data performance DoD remains unmet pending approved query and representative export | pending commit |
+| 2026-11-07 | S4.1 partial | Draft `guide_v1`, independent edge-case review, and preparation checks recorded; exact guide hash presented for owner approval; no annotation authorized | pending commit |

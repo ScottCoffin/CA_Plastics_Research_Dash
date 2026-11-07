@@ -29,8 +29,8 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S3.6** Pages deployment and performance pass. Acceptance: metrics logged; DuckDB-Wasm used only by recorded decision.
 
 ## S4 Gold set
-- [ ] **S4.1** Versioned labeling guide. Acceptance: edge cases covered and `guide_v1` approved. `owner: approval`
-- [ ] **S4.2** Stratified sample, leak test, and frozen splits. Acceptance: split IDs committed and test set isolated.
+- [ ] **S4.1** Versioned labeling guide. Draft `guide_v1` and preparation checks are recorded in `docs/LABELING_GUIDE.md`, `docs/LABELING_GUIDE_REVIEW.md`, and `docs/LABELING_GUIDE_VERIFICATION.md`; owner approval is pending (S4.1-A). Acceptance: edge cases covered and `guide_v1` approved. `owner: approval`
+- [ ] **S4.2** Stratified sample, leak test, and frozen splits. Label-independent sample/split preparation may proceed while S4.1 approval is pending; do not annotate or claim representative-corpus coverage from the four-work fixture. Acceptance: split IDs committed and test set isolated.
 - [ ] **S4.3** Annotation workflow, importer, and agreement stats. Acceptance: round-trip and Cohen's kappa work.
 - [ ] **S4.4** Reproducible evaluation harness. Acceptance: dummy predictor produces all reports. `owner: thresholds`
 

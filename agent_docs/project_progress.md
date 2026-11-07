@@ -21,7 +21,9 @@ promotion remains an owner decision and separate from this checkpoint.
 
 ## Next Milestone
 
-S4.1 guide drafting is dependency-eligible: cover the required edge cases and
-evidence quoting, then obtain owner approval before freezing `guide_v1`.
-Separately, after owner query review and an authorized bounded export, rerun
-full-data C5 and close S3.6 only when acceptance is met.
+S4.1 has a reviewed `guide_v1` draft and matching review hash recorded in
+`docs/LABELING_GUIDE_REVIEW.md`; owner approval remains pending, so S4.1 stays
+unchecked and annotation is not authorized. S4.2 label-independent sample/split
+preparation is eligible meanwhile; the four-work fixture is not representative
+corpus evidence. Separately, after owner query review and an authorized bounded
+export, rerun full-data C5 and close S3.6 only when acceptance is met.
