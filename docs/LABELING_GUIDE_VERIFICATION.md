@@ -1,6 +1,6 @@
 # S4.1 guide preparation checks
 
-This note records bounded source and example consistency checks for the pending `guide_v1` draft. It is not an owner approval or completion of S4.1.
+This note records bounded source and edge-case consistency checks for `guide_v1`. Owner approval was recorded 2026-11-07 in `docs/LABELING_GUIDE_REVIEW.md`; together with the checks below, this completes S4.1 only. It does not establish representative data, annotation, gold labels, or corpus performance.
 
 ## Contract sources checked
 
@@ -25,4 +25,4 @@ This note records bounded source and example consistency checks for the pending 
 | Abstract studies only 6PPD-quinone exposure as its primary subject | Passes the initial relevance gate; `plastic_related=true`, `chemicals-in-plastics`; not core from a chemical mention alone | The first gate explicitly includes tier-2 subjects; G-1 tier separation and candidate tier terms agree. |
 | Work is about environmental synthetic textile microfibers | `plastic_related=true`, `core` | G-2 plus query qualification; generic/optical microfiber remains negative. |
 
-These are policy examples, not labels assigned to corpus records. No gold records were opened beyond the CSV header and no annotation, approval, or guide freeze occurred.
+These are policy examples, not labels assigned to corpus records. No gold records were opened beyond the CSV header, and no annotation or adjudication occurred. The guide edge-case DoD and explicit owner approval are complete; representative-data and annotation gates remain open.

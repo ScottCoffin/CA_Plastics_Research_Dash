@@ -21,9 +21,10 @@ promotion remains an owner decision and separate from this checkpoint.
 
 ## Next Milestone
 
-S4.1 has a reviewed `guide_v1` draft and matching review hash recorded in
-`docs/LABELING_GUIDE_REVIEW.md`; owner approval remains pending, so S4.1 stays
-unchecked and annotation is not authorized. S4.2 has a partial evidence
+S4.1 `guide_v1` was approved and frozen by Scott Coffin on 2026-11-07; the
+approved hash and edge-case verification are recorded in
+`docs/LABELING_GUIDE_REVIEW.md` and `docs/LABELING_GUIDE_VERIFICATION.md`. S4.1
+is complete. Representative sampling and annotation authorization remain open. S4.2 has a partial evidence
 checkpoint in `docs/S4_2_VERIFICATION.md`: 2 fixture pool rows (train 1, dev 0,
 test 1), zero leak rows, and verified author-group isolation. S4.2 remains
 unchecked because the fixture is not representative and no versioned leak-hit
@@ -32,9 +33,8 @@ export, rerun full-data C5 and close S3.6 only when acceptance is met.
 
 S4.3 tooling is complete: gated CSV round-trip/import and per-label Cohen's
 kappa reporting pass synthetic acceptance. No real annotations were created.
-S4.1 approval, an authorized representative sample, double annotation of at
-least 20%, adjudication, and a real agreement report remain human operational
-milestones; see `docs/S4_3_VERIFICATION.md`.
+an authorized representative sample, double annotation of at least 20%,
+adjudication, and a real agreement report remain human operational milestones; see `docs/S4_3_VERIFICATION.md`.
 
 S4.4 evaluation tooling is complete against its dummy-predictor DoD. The
 reproducible synthetic report includes per-class/per-label metrics, calibration,

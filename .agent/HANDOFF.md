@@ -8,7 +8,7 @@
 
 ## State of the repo
 - S6.1 locator tooling is implemented and synthetic behavior is verified, but its coverage DoD is incomplete pending a candidate corpus.
-- S4.1 owner approval and S4.2 representative data/leak-hit source remain pending; S3.6 full-data performance remains open.
+- S4.1 `guide_v1` was approved and frozen by Scott Coffin on 2026-11-07; see `docs/LABELING_GUIDE_REVIEW.md`. S4.2 representative data/leak-hit source and annotation authorization remain pending; S3.6 full-data performance remains open.
 - Preserve the unrelated existing `README.md` edit.
 
 ## Next task (suggested)

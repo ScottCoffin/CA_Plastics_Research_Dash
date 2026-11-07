@@ -14,11 +14,12 @@ S4.4 evaluation tooling is complete against the dummy-predictor DoD.
 calibration, error analysis, and JSON; deterministic synthetic evidence is in
 `docs/EVAL_synthetic_v1.md`. No corpus performance is claimed. S4.3 annotation
 tooling remains complete with synthetic acceptance only; no real labels,
-adjudications, or agreement metrics were created. S4.1 approval and S4.2
+adjudications, or agreement metrics were created. S4.1 owner approval is complete; S4.2
 representative sampling gates remain pending.
 
-S4.1 has a reviewed `guide_v1` draft with matching hash, but owner approval is
-pending and annotation remains unauthorized. S4.2 has fixture-only splits (2
+S4.1 `guide_v1` was approved and frozen by Scott Coffin on 2026-11-07; the
+approved hash is recorded in `docs/LABELING_GUIDE_REVIEW.md`. Representative
+sampling and annotation authorization remain separate open gates. S4.2 has fixture-only splits (2
 pool rows, train 1/dev 0/test 1, zero leak rows) and remains incomplete until
 an authorized representative export and versioned leak-hit source exist.
 S3.6 likewise remains open pending query approval, representative export, and

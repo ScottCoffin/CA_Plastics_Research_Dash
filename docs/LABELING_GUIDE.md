@@ -1,8 +1,8 @@
-# Human Labeling Guide — `guide_v1` (draft for owner approval)
+# Human Labeling Guide — `guide_v1` (approved and frozen)
 
-**Status:** pending owner approval; not frozen and not authorized for gold-set annotation.
+**Status:** approved; frozen as `guide_v1`.
 **Scope:** work-level labels for the S4 gold set.
-**Approval record:** complete `docs/LABELING_GUIDE_REVIEW.md`; after approval, record the date and freeze this exact content as `guide_v1` before assigning any annotation.  A substantive change after approval requires a new guide version and review.
+**Approval record:** Owner Scott Coffin approved this exact policy on 2026-11-07; see `docs/LABELING_GUIDE_REVIEW.md`. A substantive change requires a new guide version and review.
 
 This guide turns the project definitions in `spec.md` A2 and C3–C4 into repeatable human decisions. It does not approve or promote the provisional `plastic-v2-candidate` query or `plastic-taxonomy-v1-candidate` taxonomy. Current rules and taxonomy seed concepts are candidate screening aids; annotators decide from the work evidence under this guide.
 

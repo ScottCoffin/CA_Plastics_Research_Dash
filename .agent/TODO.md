@@ -29,8 +29,8 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S3.6** Pages deployment and performance pass. Acceptance: metrics logged; DuckDB-Wasm used only by recorded decision.
 
 ## S4 Gold set
-- [ ] **S4.1** Versioned labeling guide. Draft `guide_v1` and preparation checks are recorded in `docs/LABELING_GUIDE.md`, `docs/LABELING_GUIDE_REVIEW.md`, and `docs/LABELING_GUIDE_VERIFICATION.md`; owner approval is pending (S4.1-A). Acceptance: edge cases covered and `guide_v1` approved. `owner: approval`
-- [ ] **S4.2** Stratified sample, leak test, and frozen splits. Label-independent sample/split preparation may proceed while S4.1 approval is pending; do not annotate or claim representative-corpus coverage from the four-work fixture. Acceptance: split IDs committed and test set isolated.
+- [x] **S4.1** Versioned labeling guide. Edge-case checks are recorded in `docs/LABELING_GUIDE_VERIFICATION.md`; owner Scott Coffin approved and froze `guide_v1` on 2026-11-07. Acceptance: required edge cases covered and explicit approval recorded; approved guide hash is in `docs/LABELING_GUIDE_REVIEW.md`. This does not authorize representative sampling or annotation.
+- [ ] **S4.2** Stratified sample, leak test, and frozen splits. Label-independent sample/split preparation may proceed; do not annotate or claim representative-corpus coverage from the four-work fixture. Acceptance: split IDs committed and test set isolated.
 - [x] **S4.3** Annotation workflow, importer, and agreement stats. Tooling acceptance: CSV round-trip and per-label Cohen's kappa report work; human annotation remains pending guide approval and a representative sample.
 - [x] **S4.4** Reproducible evaluation harness. Dummy predictor produces per-class/per-label metrics, calibration plot, error-analysis table, and machine-readable output reproducibly; synthetic-only evidence is in `docs/EVAL_synthetic_v1.md`. G-9 thresholds are answered; no corpus-performance claim is made.
 
