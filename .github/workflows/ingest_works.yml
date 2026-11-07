@@ -13,6 +13,14 @@ on:
         description: "Optional last publication year for a bounded bootstrap"
         required: false
         type: string
+      max_credits:
+        description: "Optional credit ceiling for a safe manual smoke run"
+        required: false
+        type: string
+      max_cost_usd:
+        description: "Optional USD ceiling for a safe manual smoke run"
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -51,8 +59,8 @@ jobs:
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           START_YEAR: ${{ inputs.start_year }}
           END_YEAR: ${{ inputs.end_year }}
-          OPENALEX_MAX_CREDITS: ${{ vars.OPENALEX_MAX_CREDITS }}
-          OPENALEX_MAX_COST_USD: ${{ vars.OPENALEX_MAX_COST_USD }}
+          OPENALEX_MAX_CREDITS: ${{ inputs.max_credits || vars.OPENALEX_MAX_CREDITS }}
+          OPENALEX_MAX_COST_USD: ${{ inputs.max_cost_usd || vars.OPENALEX_MAX_COST_USD }}
         run: |
           set -euo pipefail
           args=(--allow-candidate)
