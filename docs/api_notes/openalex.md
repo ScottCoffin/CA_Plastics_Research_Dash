@@ -148,4 +148,6 @@ outputs only when `ENABLE_DATA_COMMITS` is exactly `true`.
 
 Acceptance: `py -3.14 scripts/check_s2_4.py` simulates both a 429 and a budget
 stop, verifies the high-water digest is unchanged, and verifies a subsequent
-run reports success.
+run reports success. Hosted bounded smoke `42321442943` (manual dispatch with
+`max_credits=0`) completed successfully and recorded the expected
+`budget_exceeded` defer.

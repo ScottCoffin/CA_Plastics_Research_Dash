@@ -16,6 +16,9 @@ guard.
 - `py -3.14 -m pytest -q` passes (40 tests).
 - Ruff check/format, `py -3.14 -m compileall -q src`, and `git diff --check`
   pass.
+- Hosted bounded smoke run `42321442943` completed successfully with
+  `max_credits=0`; the expected budget defer skipped normalization, labeling,
+  and commits.
 
 ## Next Entry Point
 

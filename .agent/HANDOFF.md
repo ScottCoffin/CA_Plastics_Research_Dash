@@ -18,8 +18,9 @@
   deferral, unchanged high-water state, and successful subsequent resume.
 - `py -3.14 -m pytest -q` passes (40 tests).
 - Ruff check/format, compileall, and `git diff --check` pass.
-- A live scheduled run still requires the workflow to execute on GitHub Actions;
-  no API key value was read or committed.
+- Hosted bounded smoke `42321442943` completed successfully on GitHub Actions
+  with `max_credits=0` and the expected `budget_exceeded` defer; no API key
+  value was read or committed.
 
 ## Next task
 S3.1: export slim site data and aggregates. Preserve the current workflow and
