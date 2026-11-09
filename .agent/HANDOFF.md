@@ -18,3 +18,19 @@
 - Do not claim corpus-wide section recall from the ten selected articles.
 - Check each selected-copy license before processing or caching full text; cache only in the ignored raw-data directory.
 - Keep test data final-only for evaluation.
+
+# Handoff - 2026-11-09 - SPK-7 complete; AT-1 next
+
+## SPK-7 measured cost and budget checkpoint
+
+### Done
+- Closed SPK-7/G-COST against `79301e720d2e375c85b7f70774dc13856a274f50`; owner authorized free-only account use, and the 100-call benchmark completed successfully.
+- The response metadata total is USD 0.026; the provider's post-run allowance decrement implies USD 0.028. The discrepancy remains explicit and the S2.1 budget guard accounts conservatively. Full and conservative totals are in `docs/api_notes/openalex_costs.md`.
+- Final acceptance recorded 199 tests, Ruff, and a network-forbidden rerun. HTTP 500 without credit/accounting metadata stops before retry or output advancement; known-credit HTTP 500 bounded retry remains accepted.
+
+### State and next
+- AT-1 is still under review: query-v2 rendering/cache invalidation and precision/recall audit are unfinished. The independent candidate-promotion decision and S3.6 representative live-data performance evidence remain open.
+- Continue with AT-1 after resolving its recorded review findings; do not activate/promote the candidate or claim S3.6 complete from the SPK-7 measurement.
+
+### Files changed for this closure
+- `.agent/TODO.md`, `.agent/QUESTIONS.md`, `.agent/MEMORY.md`, `.agent/SESSION_LOG.md`, `.agent/HANDOFF.md`, and `agent_docs/project_progress.md`.

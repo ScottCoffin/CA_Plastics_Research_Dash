@@ -43,6 +43,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   watchdog, and an opt-in monthly keepalive commit.
 - ADR-002: keep the repository public, use GitHub Actions Pages, enable guarded
   repository writes, and use MIT for code plus CC BY for eligible derived data.
+- SPK-7/G-COST: 2026-11-09 OpenAlex measurement recorded 100/100 calls; free-only owner authorization; 10,000-credit/USD 1.00 daily account limit and USD 0.25 local stop. Response metadata totaled USD 0.026 while the provider balance decrement implied USD 0.028; budget guard charges conservatively and retains the discrepancy. See `docs/api_notes/openalex_costs.md` and commit `79301e7`.
 
 ## Verified API facts (one line each; details in docs/api_notes/)
 - GitHub Actions schedules use the default branch, default to UTC, and may be

@@ -1,5 +1,23 @@
 # Project Progress
 
+## 2026-11-09 Checkpoint
+
+SPK-7 is complete at `79301e7` (full hash:
+`79301e720d2e375c85b7f70774dc13856a274f50`). The 100-call benchmark and
+measured S2.1 budget guard are documented in
+`docs/api_notes/openalex_costs.md`; the owner confirmed free-only authorization.
+Response metadata summed to USD 0.026 while the post-run provider balance
+decrement implied USD 0.028. The guard uses the conservative higher accounting
+and the discrepancy remains explicit. HTTP 500 without credit accounting stops
+before retry or output advancement; known-credit HTTP 500 bounded retry is
+accepted. The checkpoint verification records 199 tests and Ruff, with the
+final rerun network-forbidden.
+
+AT-1 remains next and under review: query-v2 rendering/cache invalidation and
+precision/recall audit are unfinished. The owner’s independent candidate
+promotion decision and S3.6 live-data performance evidence remain open.
+
+
 ## Goal
 
 Complete the staged CA Plastics Research Atlas roadmap one dependency-satisfied

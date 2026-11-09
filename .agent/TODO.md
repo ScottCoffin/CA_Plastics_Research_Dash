@@ -6,6 +6,7 @@ Check off only when the task Definition of Done and acceptance check in
 ## S0 Bootstrap
 - [x] **S0.1** Repository skeleton, tooling, memory files, and roadmap. Acceptance: `make test`; all `.agent` files exist; this roadmap is present. `owner: license choice`
 - [x] **S0.2** CI lint/test, Pages placeholder deploy, keepalive, watchdog, and commit guard. Pages uses GitHub Actions; manual run `42092058401` succeeded; the placeholder was verified live at `https://scottcoff.in/CA_Plastics_Research_Dash/`; configuration names are documented. Acceptance: push deploys; manual dispatch works; secret names documented. `owner inputs complete: public visibility; ENABLE_DATA_COMMITS; OPENALEX_API_KEY`
+- [x] **SPK-7** Cost measurement. Adoption: L0. Depends: S0.2, owner-provided API key. Acceptance: 100-call 2026-11-09 measurement and S2.1 budget guard are recorded in `docs/api_notes/openalex_costs.md`; `config/budget.yml` supplies measured account limits. Meta cost USD 0.026 vs. conservative/account-decrement USD 0.028 discrepancy retained; owner authorized free-only use. `79301e7`.
 
 ## S1 Reference data
 - [x] **S1.1** OpenAlex/ROR smoke tests and API cost logger. Acceptance: exact working filters, costs, URL limits, and pagination documented.
