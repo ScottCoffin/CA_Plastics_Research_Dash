@@ -45,3 +45,12 @@
 
 ### Next
 - S7.1 is the next independent unchecked roadmap task. AT-1 remains unchecked pending human labels, precision/noise-term review, repeat audit, and promotion decision.
+
+## S7.1 monitoring registry reconciliation - 2026-11-09
+
+### Done
+- Reconciled the existing S7.1 implementation at `46e58e7`; no source work was repeated. The registry contains 24 records and 15 distinct eligible seed identities, with provenance, tier, URL, and `last_checked` evidence recorded in `docs/S7_1_VERIFICATION.md`.
+- Registry source files are unchanged from the accepted implementation commit. Acceptance and verification are recorded there; this checkpoint closes the roadmap record only.
+
+### Next
+- S7.2 is the next dependency-satisfied task: source smoke tests and tier decisions, documenting access method, format, license, update frequency, and field maps. The earlier SPK-1..4 paths are gated on owner decisions; AT-2 remains blocked by incomplete AT-1.

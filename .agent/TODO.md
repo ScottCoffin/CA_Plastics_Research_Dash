@@ -51,7 +51,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S6.4** Full-text CA-sampling enrichment. Acceptance: abstract-vs-full-text performance delta.
 
 ## S7 Monitoring data
-- [ ] **S7.1** Monitoring registry schema and >=15 verified seed entries. Acceptance: provenance, tier, URL, and `last_checked` recorded.
+- [x] **S7.1** Monitoring registry schema and >=15 verified seed entries. Acceptance: provenance, tier, URL, and `last_checked` recorded.
 - [ ] **S7.2** Monitoring source smoke tests and tier decisions. Acceptance: access, format, license, frequency, and field maps documented.
 - [ ] **S7.3** Tier-A ingesters and normalization. Acceptance: polygon flags, units QC, duplicate QC, fixtures, and tests.
 - [ ] **S7.4** DataCite and full-text dataset discovery. Acceptance: 50-link precision spot check.
