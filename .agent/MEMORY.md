@@ -7,7 +7,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 
 ## How to run (commands)
 - Install: `make setup` or `python -m pip install -e ".[dev]"`.
-- Test: `make test` or `python -m pytest`.
+- Test: `make test` or `python -m pytest` (local Windows invocation: Known pitfalls, first bullet).
 - Lint: `make lint` or run Ruff check and format-check directly.
 - Build bootstrap validation: `make build` or `python -m compileall -q src`.
 - OpenAlex smoke: `python scripts/smoke/openalex.py` after editable install.
@@ -152,7 +152,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   bounded export; do not promote the inactive candidate to create a benchmark.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
-- GNU Make is not on PATH, but Rtools provides `C:\rtools45\usr\bin\make.exe`.
+- GNU Make is not on PATH; call Rtools as `/c/rtools45/usr/bin/make.exe PYTHON="py -3.14" APPDATA="$APPDATA" USERPROFILE="$USERPROFILE" <target>`. The Rtools shell drops APPDATA (pytest/ruff live in user site-packages) and USERPROFILE (matplotlib home), giving false `No module named pytest` or `test_eval` failures; bare `python` is 3.15 without deps.
 - Do not treat Part D research claims as live API contracts without smoke tests.
 - Do not copy from reuse candidates before recording and confirming their licenses.
 - Pages must be configured with `build_type=workflow` before the deploy workflow

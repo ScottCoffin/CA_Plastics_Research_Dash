@@ -26,6 +26,9 @@
   dependency it must inspect; do not send agents through broad repository or
   documentation intake for a narrow assignment.
 
+Claude Code sessions: start with `CLAUDE.md`. It maps the Luna/Terra/Sol roles
+onto Claude agents and lists the verified local commands and cheap read paths.
+
 Read `.agent/README.md`, `.agent/HANDOFF.md`, and the selected task contract
 before editing. Keep acceptance checks, full-suite verification, durable
 handoffs, narrow commits, and failure visibility intact at every checkpoint.

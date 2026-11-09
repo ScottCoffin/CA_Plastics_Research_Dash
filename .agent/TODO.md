@@ -1,7 +1,7 @@
 # TODO (roadmap)
 
 Check off only when the task Definition of Done and acceptance check in
-`spec.md` Part E are met. `owner` marks tasks with required human action.
+`spec.md` Part E are met. `owner` marks tasks with required human action. On this Windows checkout, `make <target>` means the Rtools invocation in `.agent/MEMORY.md` Known pitfalls (`py -3.14` plus APPDATA/USERPROFILE passthrough).
 
 ## S0 Bootstrap
 - [x] **S0.1** Repository skeleton, tooling, memory files, and roadmap. Acceptance: `make test`; all `.agent` files exist; this roadmap is present. `owner: license choice`
