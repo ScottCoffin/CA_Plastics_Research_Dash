@@ -61,3 +61,45 @@ in ignored `data/raw` storage.
 | Natural Earth Admin 1 v5.1.1 | https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/ | Public domain | California land geometry | Selected the `US-CA` feature; retained unsimplified GeoParquet and generated a simplified browser copy. Source recorded despite attribution not being required. |
 | CDFW ds3158 | https://data.ca.gov/@california-department-of-fish-and-wildlife/three-nautical-mile-state-maritime-limit-r7-cdfw-ds31581 | CC BY 4.0 | California three-nautical-mile state-waters geometry | Used the official `ds3158_poly` layer, retained unsimplified GeoParquet, and embedded source/license attribution in generated features. |
 | GeoNames U.S. extract | https://download.geonames.org/export/dump/US.zip | CC BY 4.0 | California place-name subset and feature coordinates | Filtered official U.S. records to `country_code=US` and `admin1_code=CA` into a 127,963-feature SQLite database; retain GeoNames credit and link in downstream attribution. |
+
+## Add-on A1 licence ledger (sections 0 and 7)
+
+This ledger lists the external tools and projects named in add-on A1 §§0 and 7. It records only licences stated there, except for the required bibliometrix treatment below. An unknown licence is not permission to reuse code.
+
+| Name | Licence recorded | Add-on context |
+|---|---|---|
+| OpenAlex | UNKNOWN - needs SPK-7 | §0 untrusted-response example; SPK-7 cost and budget spike |
+| GitHub Pages | UNKNOWN - needs SPK-1 | SPK-1 hosting comparison |
+| Actions runners | UNKNOWN - needs SPK-1 | §7 public repository runner-budget note |
+| Cloudflare R2 | UNKNOWN - needs SPK-1 | SPK-1 hosting comparison |
+| Cloudflare Pages | UNKNOWN - needs SPK-1 | SPK-1 single-file hosting limit |
+| curl | UNKNOWN - needs SPK-1 | SPK-1 range-request and header checks |
+| head | UNKNOWN - needs SPK-1 | §0 compact local inspection command |
+| Headless-browser measurement | UNKNOWN - needs SPK-3 | §0 tool request; SPK-3 interaction measurements |
+| DuckDB (CLI, CI writer, and DuckDB-Wasm) | UNKNOWN - needs SPK-2 | §0 tool request; SPK-2 writer/browser compatibility |
+| zstd | UNKNOWN - needs SPK-2 | SPK-2 Parquet compression option |
+| Observable Framework | UNKNOWN - needs SPK-3 | SPK-3 shell bake-off |
+| Node.js | UNKNOWN - needs SPK-3 | §0 tool request; SPK-3 Framework runtime |
+| Python | UNKNOWN - needs SPK-5 | SPK-5 comparison implementation |
+| R | UNKNOWN - needs SPK-5 | §0 tool request; SPK-5 bibliometrix adapter |
+| Mosaic | UNKNOWN - needs SPK-4 | SPK-4 facet comparison |
+| Arrow | UNKNOWN - needs SPK-4 | SPK-4 data transfer |
+| DESTINY | UNKNOWN - needs SPK-4 | SPK-4 reference; concepts only, no code |
+| bibliometrix | GPL-3 | SPK-5 adapter and parity check |
+| SciPy | UNKNOWN - needs SPK-5 | SPK-5 comparison implementation |
+| Biblioshiny | UNKNOWN - needs SPK-5 | SPK-5 out-of-scope tools |
+| Biblio AI | UNKNOWN - needs SPK-5 | SPK-5 out-of-scope tools |
+| TALL | UNKNOWN - needs SPK-5 | SPK-5 out-of-scope tools |
+| contentanalysis | UNKNOWN - needs SPK-5 | SPK-5 out-of-scope tools |
+| Gemini API | UNKNOWN - needs SPK-5 | SPK-5 out-of-scope tool reference |
+| VOSviewer Online | UNKNOWN - needs SPK-6 | SPK-6 embed spike |
+| npm | UNKNOWN - needs SPK-6 | SPK-6 build commands |
+| Plot | UNKNOWN - needs SPK-6 | SPK-6 fallback network-chart option |
+| D3 | UNKNOWN - needs SPK-6 | SPK-6 fallback network-chart option |
+
+Rules from §0 and the L6 licence gate:
+
+- Copy/vendor only MIT, BSD, ISC, or Apache-2.0 code, as allowed by §0.
+- Do not copy GPL/AGPL code.
+- Treat bibliometrix as GPL-3; it may run only as a separate process.
+- No DESTINY code; concepts only.

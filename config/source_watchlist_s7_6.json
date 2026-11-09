@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "statewide_plastics_pilot_2027",
+      "name": "California statewide plastics monitoring pilot",
+      "reason": "OPC describes a SWAMP-supported statewide pilot planned for 2027; public data availability is not established.",
+      "next_review": "2027-01-15",
+      "url": "https://opc.ca.gov/2026/06/june-16-2026-council-meeting-summary",
+      "status": "manual_review",
+      "tier": "C"
+    },
+    {
+      "id": "ceden_2_microplastics",
+      "name": "CEDEN 2.0 microplastics module",
+      "reason": "CEDEN says microplastics data types will be added over time; implementation and data availability need confirmation.",
+      "next_review": "2027-01-15",
+      "url": "https://ceden.org/",
+      "status": "manual_review",
+      "tier": "C"
+    }
+  ]
+}

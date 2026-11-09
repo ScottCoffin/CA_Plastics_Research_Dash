@@ -4,6 +4,7 @@ A public, auto-updating atlas of California plastic-related researchers,
 monitoring data, and research funding. The project is in bootstrap development;
 `spec.md` is the product and implementation specification.
 
+https://scottcoff.in/CA_Plastics_Research_Dash/
 ## Development
 
 Requires Python 3.11 or newer.

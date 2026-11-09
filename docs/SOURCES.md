@@ -51,3 +51,16 @@ the global NCEI archive identity. RMP/CD3, CEDEN, Moore drinking-water, the
 planned statewide pilot, SWAMP/SPoT, and California Coastal Cleanup Day are
 also excluded. See the verification note for evidence and reasons. S7.2 will
 check endpoint access and terms before any ingestion decision.
+
+## Future-source watch (S7.6)
+
+<!-- S7.6 WATCHLIST START -->
+
+Weekly metadata-only checks. HTTP status, validators, and limited response metadata do not establish data availability, quality, or reuse rights.
+
+| Source | Reason / next review | URL | Last checked | Observed status / change | Tier |
+|---|---|---|---|---|---|
+| California statewide plastics monitoring pilot | OPC describes a SWAMP-supported statewide pilot planned for 2027; public data availability is not established. / 2027-01-15 | [https://opc.ca.gov/2026/06/june-16-2026-council-meeting-summary](https://opc.ca.gov/2026/06/june-16-2026-council-meeting-summary) | 2026-11-09T22:09:18+00:00 | 200; baseline; manual review | C |
+| CEDEN 2.0 microplastics module | CEDEN says microplastics data types will be added over time; implementation and data availability need confirmation. / 2027-01-15 | [https://ceden.org/](https://ceden.org/) | 2026-11-09T22:09:18+00:00 | None; baseline; manual review | C |
+
+<!-- S7.6 WATCHLIST END -->

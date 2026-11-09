@@ -26,6 +26,12 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
 
+      - name: Check Markdown links
+        run: python scripts/check_doc_links.py
+
+      - name: Check Add-on A1 scaffold
+        run: python scripts/check_a1_scaffold.py
+
       - name: Install development dependencies
         run: python -m pip install -e ".[dev]"
 

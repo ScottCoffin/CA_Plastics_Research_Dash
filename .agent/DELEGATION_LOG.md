@@ -1,0 +1,21 @@
+# Delegation Log
+
+Owner authorized execution on 2026-11-07. Budget: at most 18 fresh worker
+sessions and $0 incremental paid API/model or external-service spend.
+
+| ts | task-id | model | reason | outcome | est. cost/usage if available |
+|---|---|---|---|---|---|
+| 2026-11-07T11:33:01-08:00 | L1 attempt 1 | gpt-6-luna | Initial mechanical TODO insertion | Review failed: SPK-7 was mapped to unrelated Query regression; SPK-5/SPK-6 dependencies were over-constrained | 1 session; tokens unavailable on Pro |
+| 2026-11-07T11:40:22-08:00 | L1 attempt 2 | gpt-6-luna | Correct the review findings from attempt 1 | Accepted: transparent SPK-7 acceptance gap and corrected spike dependencies; focused diff check passed | 1 session; tokens unavailable on Pro |
+| 2026-11-07T11:46:25-08:00 | L2 attempt 1 | gpt-6-luna | Add and verify adoption gates | Accepted: 18 adoption flags and exactly 14 L2/L3 owner-decision gates | 1 session; tokens unavailable on Pro |
+| 2026-11-07T11:59:00-08:00 | L3 attempt 1 | gpt-6-luna | Copy and map the open conflict register | Review failed: C4, C6, and C7 lacked affected base-task IDs; heading spacing also needed correction | 1 session; tokens unavailable on Pro |
+| 2026-11-07T12:05:17-08:00 | L3 attempt 2 | gpt-6-luna | Correct conflict mapping and Markdown findings | Accepted: C1-C15 are open, concretely mapped, and copied without changing prior ADRs | 1 session; tokens unavailable on Pro |
+| 2026-11-07T12:14:45-08:00 | L4 attempt 1 | gpt-6-luna | Add open add-on decisions and defaults | Accepted: A1-D1..D7 match section 11 and proceed with defaults while unanswered | 1 session; tokens unavailable on Pro |
+| 2026-11-07T12:25:04-08:00 | L5 attempt 1 | gpt-6-luna | Transcribe Appendix A query and version constant | Accepted: literal query file and exact constant; compile and diff checks passed | 1 session; tokens unavailable on Pro |
+| 2026-11-07T12:39:10-08:00 | L6 attempt 1 | gpt-6-luna | Extend the reuse and licence ledger | Accepted: sections 0/7 tools are listed without unstated licence claims and required prohibitions are explicit | 1 session; tokens unavailable on Pro |
+| 2026-11-07T12:52:44-08:00 | L7 attempt 1 | gpt-6-luna | Add reciprocal spec links and offline link lint | Accepted: local-target checker passes, negative fixture fails, and existing CI commands remain | 1 session; tokens unavailable on Pro |
+| 2026-11-07T13:03:02-08:00 | L8 attempt 1 | gpt-6-luna | Add acceptance and fixture scaffolding | Accepted: 11 exact empty stubs, four zero-row fixture placeholders, narrow ignores, and offline scaffold checks | 1 session; tokens unavailable on Pro |
+| 2026-11-07T13:15:14-08:00 | L9 attempt 1 | gpt-6-luna | Final formatting and consistency pass | Review failed: blank lines still split the session-log Markdown table into headerless fragments | 1 session; tokens unavailable on Pro |
+| 2026-11-07T13:18:35-08:00 | L9 attempt 2 | gpt-6-luna | Correct the session-log formatting finding | Review failed: session log was fixed, but final CI-equivalent review found both new checker scripts fail Ruff format-check; two-review stop applies | 1 session; tokens unavailable on Pro |
+| 2026-11-09T07:35:20-08:00 | L9 resume attempt 1 | gpt-6-luna | Owner-authorized formatter-only resume | Review failed: formatting passed, but scaffold validation rejected pytest-generated `__pycache__` as an unexpected stub entry | 1 session; tokens unavailable on Pro |
+| 2026-11-09T07:40:58-08:00 | L9 resume attempt 2 | gpt-6-luna | Correct the generated-cache scaffold finding | Accepted: scoped cache handling, full lint/format, 178 tests, link/scaffold checks, build, and diff check passed | 1 session; tokens unavailable on Pro |

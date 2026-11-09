@@ -1,4 +1,7 @@
 CA Plastics Research Atlas — Agent Build Specification
+
+Change log (2026-11-07): Added the [Analytics and Data-Serving Layer add-on specification](docs/add_on_spec.md).
+
 Working title: CA Plastics Research Atlas (ca-plastics-atlas)Owner / product lead: Scott CoffinAudience: autonomous or semi-autonomous IDE coding agents operating through atomic task checkpoints and the human product ownerSpec status: v1.0. Written 2026-11-05. Every external-API detail not marked (verified in research) must be smoke-tested by the agent before it is relied on and recorded in docs/api_notes/.
 How to read this spec. Part A is the product. Part B is the operating protocol every task checkpoint must follow (memory, handoff, tool requests). Part C is the architecture and data model. Part D is the source and reuse registry. Part E is the staged roadmap, where each stage is split into checkpoint-sized tasks. Part F covers quality, evaluation and ethics. Part G lists open decisions that need the human owner.Epistemic labels used throughout: [V] = verified in the research phase, with citation; [GK] = general knowledge, not verified for this project; [INF] = inference or design choice; [VERIFY] = the agent must test it before use.
 

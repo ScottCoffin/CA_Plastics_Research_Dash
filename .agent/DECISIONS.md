@@ -297,3 +297,110 @@ remain listed in `QUESTIONS.md`.
   not representative and the 98,118 S1.5 count is not downloaded data. An
   authorized export requires owner query review first.
 - **Decided by:** Build agent under the S3.6 partial evidence checkpoint.
+
+## Add-on A1 open conflicts (L3 register)
+
+### Add-on A1 C1
+
+- **Conflict:** Base S3.2 single-file vs. Framework
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Decided by SPK-3. If Framework is chosen, S3.2 is implemented in it (guardrails in AT-5); the single-file app is the documented fallback
+- **Status:** Open
+- **Affected base tasks:** S3.2–S3.5
+
+### Add-on A1 C2
+
+- **Conflict:** R vs. Python runtimes
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** R is confined to one monthly job (AT-7); interface is CSV/Parquet. Bibliometrix has 34 imports including igraph, shiny, plotly and tidytext 3, so cache packages (setup-r-dependencies caches the library 4). Drop R if gate G-R fails
+- **Status:** Open
+- **Affected base tasks:** S11.2
+
+### Add-on A1 C3
+
+- **Conflict:** Schema mismatch
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Bibliometrix expects WoS-style tags. Its README says convert2df can take OpenAlex JSON/XML objects via openalexR 5, but its vignette lists no OpenAlex source 6. Build an adapter from our Parquet; skip analyses needing parsed cited references
+- **Status:** Open
+- **Affected base tasks:** S11.2
+
+### Add-on A1 C4
+
+- **Conflict:** Two sets of counts
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Counts come only from DuckDB (AT-3). R may output structure (clusters, curves), never counts shown to users
+- **Status:** Open
+- **Affected base tasks:** S3.1, S11.2
+
+### Add-on A1 C5
+
+- **Conflict:** Licences vs. base G-7 (MIT)
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Bibliometrix is GPL-3 per CRAN 7 and DESCRIPTION 3 though its README says MIT 5. Treat as GPL-3: separate process, no code copied. Others are permissive: openalexR MIT 3, Mosaic BSD-3 3, VOSviewer Online MIT 8, Framework ISC 9, ASReview Apache-2.0 10
+- **Status:** Open
+- **Affected base tasks:** S3.2–S3.5, S11.2
+
+### Add-on A1 C6
+
+- **Conflict:** DESTINY code
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Excluded: its UI is AGPL-3.0, Keycloak-gated and API-backed 11; its updater is FastAPI, PostgreSQL and Azure Blob Storage 12. Ideas only (bit-masks, compact payloads, human-over-model precedence)
+- **Status:** Open
+- **Affected base tasks:** S3.6
+
+### Add-on A1 C7
+
+- **Conflict:** Two DuckDB-Wasm builds on a page
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Framework's SQL blocks use DuckDB-Wasm 1.29.0, aligned with DuckDB 1.1.1, not changeable for SQL blocks 13. One DuckDB stack per page; CI Parquet must be readable by it (SPK-2)
+- **Status:** Open
+- **Affected base tasks:** S3.2-S3.6
+
+### Add-on A1 C8
+
+- **Conflict:** ASReview vs. S4.2 test set
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Active-learning ranking biases a labelled set. Use ASReview (active-learning screening with a Simulate mode 14) for training-pool labelling only; the frozen test set is drawn separately at random, stratified, and never ranked
+- **Status:** Open
+- **Affected base tasks:** S4.2, S4.3
+
+### Add-on A1 C9
+
+- **Conflict:** Base C5 "Explore only if needed" vs. add-on Explore page
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Explore (AT-6) is optional and lazy-loaded; the main page never loads WASM
+- **Status:** Open
+- **Affected base tasks:** S3.6
+
+### Add-on A1 C10
+
+- **Conflict:** API budget
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Only ingestion calls OpenAlex. Institution rankings in steady state are computed from local tables, not group_by calls
+- **Status:** Open
+- **Affected base tasks:** S1.1, S1.2, S2.1–S2.4
+
+### Add-on A1 C11
+
+- **Conflict:** OpenAlex changes under you
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Archive own releases: each quarterly public snapshot "replaces the bucket contents in place" 15
+- **Status:** Open
+- **Affected base tasks:** S10.3
+
+### Add-on A1 C12
+
+- **Conflict:** Maps vs. facets
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** A VOSviewer iframe cannot share state with facets; pre-render maps per tag × year slice
+- **Status:** Open
+- **Affected base tasks:** S3.6, S11.2
+
+### Add-on A1 C13
+
+- **Conflict:** Per-entity pages
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Framework parameterized routes create one file per parameter value 16. Don't generate per-researcher pages: Pages has a 10-minute deploy timeout 17 and Cloudflare Pages a 20,000-file limit 18. Use JSON shards + a detail drawer
+- **Status:** Open
+- **Affected base tasks:** S3.1, S3.2–S3.5
+
+### Add-on A1 C14
+
+- **Conflict:** Heavy work in the site build
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** Framework loaders run at build time, only if the output is referenced and not cached 19. Pipelines run outside the build; loaders only read artifacts
+- **Status:** Open
+- **Affected base tasks:** S3.1, S3.2–S3.5
+
+### Add-on A1 C15
+
+- **Conflict:** Nondeterminism
+- **Rule text (copied verbatim from docs/add_on_spec.md §6):** UMAP/BERTopic: fix random_state (BERTopic's example sets one 20), store coordinates per release, recompute quarterly
+- **Status:** Open
+- **Affected base tasks:** S10.3, S11.2

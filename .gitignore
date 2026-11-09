@@ -42,3 +42,8 @@ models/
 # codex-workflow-managed-start
 .codex_workflow_hidden_resources/
 # codex-workflow-managed-end
+
+# Add-on A1 release bundles and large local Parquet; keep slim fixtures versioned.
+release/
+# Large local Parquet files must use the .large.parquet suffix.
+*.large.parquet
