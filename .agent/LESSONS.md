@@ -1,5 +1,12 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-09 -- S7.3 monitoring source rights and QC
+- Keep current package-level license metadata, resource-level license fields,
+  historical source notes, and fetch outcomes distinct. A public listing or
+  successful local read does not resolve reuse rights. Until clarified, keep
+  raw/normalized data local and ignored; commit aggregate QC and conflict
+  categories only, while retaining row-level diagnostics solely in ignored QC.
+
 ## 2026-11-07 -- S6.3 PDF extraction evidence
 - Report GROBID transport/technical failures separately from successful processing that found no target sections. In the 30-PDF convenience sample, GROBID had zero technical failures but 21 no-target results; pdfminer recovered six and 15 remained empty, mostly reviews/editorials. Heading and excerpt text checks do not establish visual PDF accuracy or candidate-corpus performance.
 

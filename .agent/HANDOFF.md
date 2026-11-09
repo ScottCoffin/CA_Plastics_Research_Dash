@@ -1,16 +1,17 @@
-# Handoff - 2026-11-09 - S7.2 complete; S7.3 next
+# Handoff - 2026-11-09 - S7.3 partial; S7.4 next
 
 ## Done
-- Completed S7.2 source verification for all 15 eligible identities. Access method, observed format, license/reuse decision, update frequency, tier rationale, and field-map status are recorded in `docs/api_notes/monitoring_sources_s7_2.json` and summarized in `docs/S7_2_VERIFICATION.md`.
-- Confirmed only SF Bay / 5 Gyres as Tier A. The sample and particle sheets join by `SampleID`; preserve particle count and sample volume separately. Defer concentration, size class, and mesh normalization to S7.3. No XLSX or raw source file is committed.
-- Verification: 11 focused tests; network-blocked full suite 226 passed; Ruff check/format and `git diff --check` passed.
+- Implemented local SF Bay / 5 Gyres workbook normalization in `src/atlas/ingest/monitoring/sfbay.py` and CLI `scripts/ingest_s7_3_sfbay.py`; synthetic fixture tests cover SampleID joins, canonical matrix/unit handling, polygon flags, duplicate conflicts, and deterministic output.
+- Reviewed local private QC: 315 sample rows / 314 selected identities, 44,226 particle rows, 63 concentrations computed / 251 null, 15 invalid volume values on raw rows / 14 after unique selection, and one duplicate-conflict category. Full per-row diagnostics remain in ignored QC only; committed evidence contains aggregate counts/categories.
+- Focused 10 tests and full offline 232-test suite, Ruff, and diff checks passed per local execution and independent tester review. `openpyxl` is declared as a dependency.
+- Source rights remain unresolved: current package metadata reports ODC BY, resource-level license is empty, historical S7.2 recorded CC BY 4.0, and the official resource redirect returned HTTP 403. No source or normalized data is committed or published. S7.3 remains unchecked; see `docs/S7_3_VERIFICATION.md` and question S7.3-A.
 
 ## State of the repo
-- S7.2 is complete locally. Only SF Bay / 5 Gyres has cleared access, reuse, and field-map requirements for ingestion. The other Tier A candidates were downgraded or left unresolved; no automatic ingest is authorized by these records.
-- Run `py -3.14 scripts/check_s7_2.py` for offline evidence validation.
+- S7.3 is partial and local-only. Do not treat public availability or package metadata as owner/legal approval to publish raw or normalized data. Other sources remain below Tier A or unresolved.
+- The S7.3 workbook path/hash, ignored output contract, and command are recorded in `docs/S7_3_VERIFICATION.md`. Existing S7.2 offline checker remains `py -3.14 scripts/check_s7_2.py`; do not run `--smoke-urls` during offline verification.
 
 ## Next task (suggested)
-- S7.3: (1) review `spec.md` S7.3 and the S7.2 field map; (2) implement the cleared SF Bay / 5 Gyres source with polygon flags, unit and duplicate QC; (3) add fixtures and tests, keeping other sources deferred until their access, reuse, and mapping are cleared.
+- S7.4: DataCite and full-text discovery with the 50-link precision spot check may proceed if current TODO dependencies allow. Do not start S7.5 from synthetic/fake monitoring outputs. Return to S7.3 only after the owner clarifies the conflicting license evidence and any remaining acceptance gaps.
 
 ---
 

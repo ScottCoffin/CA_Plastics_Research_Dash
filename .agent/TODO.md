@@ -53,7 +53,7 @@ Check off only when the task Definition of Done and acceptance check in
 ## S7 Monitoring data
 - [x] **S7.1** Monitoring registry schema and >=15 verified seed entries. Acceptance: provenance, tier, URL, and `last_checked` recorded.
 - [x] **S7.2** Monitoring source smoke tests and tier decisions. Acceptance complete: all 15 eligible identities have access, format, license, cadence, tier rationale, and field-map status documented; SF Bay / 5 Gyres is the only cleared Tier A source. See `docs/S7_2_VERIFICATION.md` and `docs/api_notes/monitoring_sources_s7_2.json`.
-- [ ] **S7.3** Tier-A ingesters and normalization. Acceptance: polygon flags, units QC, duplicate QC, fixtures, and tests.
+- [ ] **S7.3** Tier-A ingesters and normalization. Acceptance: polygon flags, units QC, duplicate QC, fixtures, and tests. Partial local-only SF Bay / 5 Gyres implementation and QC are recorded in `docs/S7_3_VERIFICATION.md`; rights clarification remains open in `QUESTIONS.md` (S7.3-A), so do not publish source or normalized data.
 - [ ] **S7.4** DataCite and full-text dataset discovery. Acceptance: 50-link precision spot check.
 - [ ] **S7.5** Monitoring table, sample map, and gaps view. Acceptance: performance budget met and source citations shown.
 - [ ] **S7.6** Future-source watch list and weekly checks. Acceptance: changes update `docs/SOURCES.md`.

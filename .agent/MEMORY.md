@@ -191,6 +191,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - Live Pages URL: `https://scottcoff.in/CA_Plastics_Research_Dash/`.
 
 ## Current model versions and metrics (one line per model)
+- S7.3 has a partial local-only SF Bay / 5 Gyres normalizer and QC record in `docs/S7_3_VERIFICATION.md`; keep it unchecked while reuse terms are unresolved. Current package metadata reports ODC BY, the resource license is empty, the official resource redirect returns HTTP 403, and the older S7.2 note says CC BY 4.0. Never publish raw or normalized rows without owner clarification. Ignored QC may retain row-level diagnostics, but committed evidence must use aggregates and conflict categories.
 - None; classifiers are not implemented.
 - S4.2 sampling in `atlas.nlp.sampling` is label-independent; shared author groups stay in one split, while gazetteer-hit leak candidates stay test-only. `docs/S4_2_VERIFICATION.md` records fixture-only counts and hashes. A representative export and leak-hit source remain required. S4.1 `guide_v1` approval is recorded 2026-11-07; representative-data and annotation authorization remain separate gates.
 - S4.3 annotation tooling in `atlas.nlp.annotation` provides gated CSV template export/import and per-label Cohen's kappa reports. `docs/S4_3_VERIFICATION.md` records synthetic-only acceptance; representative data, double annotation, and adjudication remain operational milestones after `guide_v1` approval.
