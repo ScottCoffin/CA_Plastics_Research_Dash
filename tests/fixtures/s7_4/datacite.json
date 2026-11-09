@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "id": "10.5281/zenodo.1234567",
+      "attributes": {
+        "doi": "10.5281/zenodo.1234567",
+        "titles": [{"title": "Example California microplastic dataset"}],
+        "types": {"resourceTypeGeneral": "Dataset"},
+        "url": "https://zenodo.org/doi/10.5281/zenodo.1234567",
+        "relatedIdentifiers": [
+          {
+            "relatedIdentifier": "10.1000/example.paper",
+            "relatedIdentifierType": "DOI",
+            "relationType": "IsSupplementTo"
+          }
+        ]
+      }
+    }
+  ]
+}

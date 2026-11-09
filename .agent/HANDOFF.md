@@ -1,3 +1,19 @@
+# Handoff - 2026-11-09 - S7.4 complete; S7.3 partial
+
+## S7.4 DataCite and full-text dataset discovery
+
+### Done
+- Added DataCite DOI candidate discovery, bounded caller-supplied JATS data-availability extraction, a CLI, fixtures, and an audited 50-record candidate review. The extractor can use a known article DOI supplied by its caller; callers must pass that DOI for typed relation matching. Duplicate DOI mentions are deduplicated.
+- Acceptance review: 5 positive, 40 negative, and 5 unresolved DOI candidates. Resolved precision is 5/45 = 11.1%; conservative positive share across all 50 is 5/50 = 10.0%. The five positive DOI candidates represent three apparent dataset families after version-family review.
+- These are candidate-level agent review labels, not owner labels or 50 verified paper-to-dataset links. Historical per-record query membership was not retained and is explicitly disclosed; future collection records per-result query membership and hashes. No dataset payloads are fetched and no candidates are auto-ingested.
+- Focused tests (5), full suite (237), Ruff, and diff checks were accepted by the executor/tester. See `docs/S7_4_VERIFICATION.md` and `docs/api_notes/datacite_s7_4.md`.
+
+### State and next
+- S7.4 is complete. S7.3 remains partial/local-only pending the unresolved SF Bay / 5 Gyres rights question; no monitoring source or normalized data is published.
+- S7.5's contract is the Monitoring tab with registry table/map/gaps view and performance/citation acceptance. The roadmap and Part E contract show no S7.3 dependency, but implementation must use verified/cleared inputs and must not use synthetic monitoring outputs as live evidence. S7.6's future-source watch list/check script also has no listed S7.3 dependency. Do not start a successor in this closure.
+
+---
+
 # Handoff - 2026-11-09 - S7.3 partial; S7.4 next
 
 ## Done
