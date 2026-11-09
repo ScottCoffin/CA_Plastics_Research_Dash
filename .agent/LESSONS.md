@@ -1,5 +1,8 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-09 -- S7.5 monitoring publication and runtime
+- Keep registry catalogue output separate from observations: unknown contributors remain unknown, and an empty public sample view is not a data-gap claim. Private previews must resolve outside the public site tree, including aliases. The focused browser-logic regression runs through pytest and requires Node.js 20+ on PATH; install/version pinning belongs with S10 environment hardening.
+
 ## 2026-11-09 -- S7.3 monitoring source rights and QC
 - Keep current package-level license metadata, resource-level license fields,
   historical source notes, and fetch outcomes distinct. A public listing or

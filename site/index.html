@@ -82,6 +82,16 @@
       .institution-map-marker { position: absolute; z-index: 1; display: grid; place-items: center; min-width: 2.35rem; min-height: 2.35rem; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 999px; padding: 0.2rem; color: #fff; background: var(--brand); box-shadow: 0 0 0 1px #075a46, 0 0.15rem 0.35rem rgb(23 50 77 / 28%); font-size: 0.75rem; font-weight: 800; }
       .institution-map-marker[data-cluster="true"] { background: #c45100; box-shadow: 0 0 0 1px #8e3900, 0 0.15rem 0.35rem rgb(23 50 77 / 28%); }
       .institution-map-marker:hover { z-index: 2; }
+      .monitoring-layout { display: grid; gap: 1rem; }
+      .monitoring-map { position: relative; min-height: 20rem; overflow: hidden; border: 1px solid #b8ced0; border-radius: 0.45rem; background: linear-gradient(145deg, #e7f3f2, #f8fbf9 57%, #e6f0e5); }
+      .monitoring-map::before { content: "California sample locations · schematic view"; position: absolute; inset: 0.55rem auto auto 0.65rem; color: #536879; font-size: 0.75rem; }
+      .monitoring-marker { position: absolute; z-index: 1; display: grid; place-items: center; min-width: 2.25rem; min-height: 2.25rem; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 999px; padding: 0.2rem; color: #fff; background: var(--brand); box-shadow: 0 0 0 1px #075a46; font-size: 0.75rem; font-weight: 800; }
+      .monitoring-marker[data-cluster="true"] { background: #c45100; }
+      .monitoring-table-wrap { overflow-x: auto; }
+      .monitoring-table, .gaps-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+      .monitoring-table th, .monitoring-table td, .gaps-table th, .gaps-table td { padding: 0.55rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+      .monitoring-table th, .gaps-table th { background: #edf5f4; }
+      .gaps-cell { text-align: center !important; font-variant-numeric: tabular-nums; }
       .map-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.8rem; margin-top: 0.6rem; color: var(--muted); font-size: 0.8rem; }
       .map-legend span::before { content: ""; display: inline-block; width: 0.7rem; height: 0.7rem; margin-right: 0.25rem; border-radius: 50%; background: var(--brand); vertical-align: -0.05rem; }
       .map-legend span.cluster::before { background: #c45100; }
@@ -203,7 +213,22 @@
 
       <section id="panel-monitoring" class="panel" role="tabpanel" aria-labelledby="tab-monitoring" tabindex="0" hidden>
         <h2>Monitoring</h2>
-        <div class="stub"><div><h3>Monitoring catalogue coming next</h3><p>This reserved tab will connect verified California plastics monitoring sources in Stage 7.</p></div></div>
+        <p id="monitoring-status" class="panel-intro">Loading verified source catalogue…</p>
+        <p id="monitoring-quality-note" class="notice"></p>
+        <form id="monitoring-filters" class="controls" aria-label="Filter monitoring sources and samples">
+          <div class="field"><label for="monitoring-tier">Access tier</label><select id="monitoring-tier"><option value="">All tiers</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+          <div class="field"><label for="monitoring-search">Source or steward</label><input id="monitoring-search" type="search" autocomplete="off"></div>
+          <div class="field"><label for="monitoring-contributor">Contributor in California</label><select id="monitoring-contributor"><option value="">All / unknown</option><option value="true">Yes</option><option value="false">No</option></select></div>
+          <div class="field"><label for="monitoring-matrix">Sample matrix</label><select id="monitoring-matrix"><option value="">All matrices</option></select></div>
+          <div class="field"><label for="monitoring-year">Sample year</label><select id="monitoring-year"><option value="">All years</option></select></div>
+          <div class="field"><label for="monitoring-region">Sample region</label><select id="monitoring-region"><option value="">All regions</option><option value="land">California land</option><option value="state_waters">California state waters</option><option value="outside">Outside California polygons</option><option value="unknown">Unknown location</option></select></div>
+        </form>
+        <section aria-labelledby="monitoring-sources-heading"><h3 id="monitoring-sources-heading">Source registry</h3><p id="monitoring-source-count" class="result-count" role="status" aria-live="polite"></p><div id="monitoring-sources" class="monitoring-table-wrap"></div></section>
+        <div class="monitoring-layout">
+          <section class="institution-map-panel" aria-labelledby="monitoring-map-heading"><h3 id="monitoring-map-heading">Sample map</h3><p id="monitoring-map-note" class="data-note"></p><div id="monitoring-map" class="monitoring-map" role="group" aria-label="Clustered sample locations"></div></section>
+          <section aria-labelledby="monitoring-gaps-heading"><h3 id="monitoring-gaps-heading">Data coverage by matrix, region and year</h3><p id="monitoring-gaps-note" class="data-note"></p><div id="monitoring-gaps" class="monitoring-table-wrap"></div></section>
+          <section aria-labelledby="monitoring-samples-heading"><h3 id="monitoring-samples-heading">Sample observations</h3><div id="monitoring-samples" class="monitoring-table-wrap"></div></section>
+        </div>
       </section>
 
       <section id="panel-funding" class="panel" role="tabpanel" aria-labelledby="tab-funding" tabindex="0" hidden>
@@ -246,6 +271,74 @@
       <footer>Static snapshot for exploration; accessibility and data quality are being improved in staged releases.</footer>
     </main>
 
+    <script id="monitoring-view-helpers">
+      const monitoringView = Object.freeze({
+        unknownMatrix: "__unknown__",
+        unknownYear: "__unknown__",
+        matrix(sample) {
+          const value = sample && typeof sample.matrix === "string" ? sample.matrix.trim() : "";
+          return value || null;
+        },
+        year(sample) {
+          const value = sample && typeof sample.date === "string" ? sample.date.trim() : "";
+          if (/^\d{4}$/.test(value)) return value;
+          const parts = /^(\d{4})-(\d{2})-(\d{2})(?:T.*)?$/.exec(value);
+          if (!parts || !Number.isFinite(Date.parse(value))) return null;
+          const [year, month, day] = parts.slice(1).map(Number);
+          const calendarDate = new Date(0);
+          calendarDate.setUTCHours(0, 0, 0, 0);
+          calendarDate.setUTCFullYear(year, month - 1, day);
+          if (calendarDate.getUTCFullYear() !== year || calendarDate.getUTCMonth() !== month - 1 || calendarDate.getUTCDate() !== day) return null;
+          return value.slice(0, 4);
+        },
+        coordinates(sample) {
+          if (!sample || typeof sample !== "object") return null;
+          const rawLat = sample.lat;
+          const rawLon = sample.lon;
+          if ([rawLat, rawLon].some((value) => value === null || value === undefined || !["number", "string"].includes(typeof value) || (typeof value === "string" && !value.trim()))) return null;
+          const lat = Number(rawLat);
+          const lon = Number(rawLon);
+          if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) return null;
+          return [lat, lon];
+        },
+        region(sample) {
+          if (sample.in_ca_land === true) return "land";
+          if (sample.in_ca_state_waters === true) return "state_waters";
+          if (sample.in_ca_land === false && sample.in_ca_state_waters === false) return "outside";
+          return "unknown";
+        },
+        displayValue(value, fallback) {
+          return value === null || value === undefined ? fallback : String(value);
+        },
+        filterOptions(samples) {
+          const matrices = samples.map((sample) => monitoringView.matrix(sample));
+          const years = samples.map((sample) => monitoringView.year(sample));
+          return {
+            matrices: [...new Set(matrices.filter(Boolean))].sort(),
+            years: [...new Set(years.filter(Boolean))].sort(),
+            hasUnknownMatrix: matrices.includes(null),
+            hasUnknownYear: years.includes(null)
+          };
+        },
+        locatedSamples(samples) {
+          return samples.map((row) => ({ row, coordinates: monitoringView.coordinates(row) })).filter((item) => item.coordinates !== null);
+        },
+        filterSamples(samples, allowedDatasetIds, filters) {
+          return samples.filter((sample) => {
+            if (!allowedDatasetIds.has(sample.dataset_id)) return false;
+            const matrix = monitoringView.matrix(sample);
+            if (filters.matrix === monitoringView.unknownMatrix && matrix !== null) return false;
+            if (filters.matrix && filters.matrix !== monitoringView.unknownMatrix && matrix !== filters.matrix) return false;
+            const year = monitoringView.year(sample);
+            if (filters.year === monitoringView.unknownYear && year !== null) return false;
+            if (filters.year && filters.year !== monitoringView.unknownYear && year !== filters.year) return false;
+            if (filters.region && monitoringView.region(sample) !== filters.region) return false;
+            if (filters.contributor && String(sample.contributor_in_ca) !== filters.contributor) return false;
+            return true;
+          });
+        }
+      });
+    </script>
     <script>
       (() => {
         "use strict";
@@ -253,10 +346,11 @@
           index: "data/index.json",
           institutions: "data/institutions.json",
           aggregates: "data/aggregates.json",
-          metadata: "data/build_metadata.json"
+          metadata: "data/build_metadata.json",
+          monitoring: "data/monitoring.json"
         };
         const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
-        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", institutionViewType: "", data: null, filteredAuthors: [], virtual: { rowHeight: 174, overscan: 4 } };
+        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", institutionViewType: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, data: null, filteredAuthors: [], virtual: { rowHeight: 174, overscan: 4 } };
         const $ = (id) => document.getElementById(id);
 
         function escapeHtml(value) {
@@ -502,6 +596,65 @@
           $("institution-list").querySelectorAll(".institution-expert-link").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId)));
           clusterMap(filtered);
         }
+        function filteredMonitoringSamples() {
+          const payload = state.data.monitoring;
+          const f = state.monitoringFilters;
+          const eligible = new Set((payload.datasets || []).filter((row) => {
+            if (f.tier && row.access_tier !== f.tier) return false;
+            const text = `${row.name} ${row.steward}`.toLowerCase();
+            if (f.search && !text.includes(f.search.toLowerCase())) return false;
+            if (f.contributor && String(row.contributor_in_ca) !== f.contributor) return false;
+            return true;
+          }).map((row) => row.id));
+          return monitoringView.filterSamples(payload.samples || [], eligible, f);
+        }
+        function renderMonitoring() {
+          const payload = state.data.monitoring;
+          if (!payload || payload.schema_version !== "s7.5") throw new Error("monitoring.json does not match the S7.5 contract");
+          const localPreview = payload.publication_mode === "private_preview";
+          const f = state.monitoringFilters;
+          $("monitoring-tier").value = f.tier;
+          $("monitoring-search").value = f.search;
+          $("monitoring-contributor").value = f.contributor;
+          const datasets = (payload.datasets || []).filter((row) => (!f.tier || row.access_tier === f.tier) && (!f.search || `${row.name} ${row.steward}`.toLowerCase().includes(f.search.toLowerCase())) && (!f.contributor || String(row.contributor_in_ca) === f.contributor));
+          const filterOptions = monitoringView.filterOptions(payload.samples || []);
+          const { matrices, years, hasUnknownMatrix, hasUnknownYear } = filterOptions;
+          $("monitoring-matrix").innerHTML = '<option value="">All matrices</option>' + matrices.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("") + (hasUnknownMatrix ? `<option value="${monitoringView.unknownMatrix}">Unknown matrix</option>` : "");
+          $("monitoring-year").innerHTML = '<option value="">All years</option>' + years.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("") + (hasUnknownYear ? `<option value="${monitoringView.unknownYear}">Unknown date</option>` : "");
+          $("monitoring-matrix").value = f.matrix;
+          $("monitoring-year").value = f.year;
+          $("monitoring-region").value = f.region;
+          $("monitoring-status").textContent = localPreview
+            ? `Private local preview · ${payload.sample_count} observations · rights remain unresolved; this payload must not be published.`
+            : `Public catalogue · ${(payload.datasets || []).filter((row) => row.seed_eligible).length} verified seed entries and ${(payload.datasets || []).filter((row) => !row.seed_eligible).length} discovery records · ${payload.sample_count} cleared sample observations.`;
+          $("monitoring-quality-note").textContent = localPreview
+            ? "Local QC rows are shown only for private review. Coordinate points and values describe this single source sample; they do not establish statewide monitoring coverage or comparable concentrations."
+            : "Registry entries describe sources and programs, not confirmed sample coverage. No cleared monitoring observations are available for this public snapshot, so absence here is not evidence of a data gap.";
+          $("monitoring-source-count").textContent = `${datasets.length} source record${datasets.length === 1 ? "" : "s"} shown · contributor location is unknown unless explicitly recorded`;
+          $("monitoring-sources").innerHTML = datasets.length ? `<table class="monitoring-table"><thead><tr><th>Source</th><th>Steward / tier</th><th>Matrix and region</th><th>Format / cadence</th><th>License</th><th>Checked</th><th>Citations</th></tr></thead><tbody>${datasets.map((row) => `<tr><th scope="row">${escapeHtml(row.name)}<br><small>${row.seed_eligible ? "Verified registry seed" : "Discovery record; not in seed count"} · ${escapeHtml(row.entity_type)} · ${escapeHtml(row.status)}</small></th><td>${escapeHtml(row.steward)}<br>Tier ${escapeHtml(row.access_tier)} · contributor in CA: ${row.contributor_in_ca === true ? "yes" : row.contributor_in_ca === false ? "no" : "unknown"}</td><td>${escapeHtml((row.sample_matrix || []).join(", "))}<br>${escapeHtml(row.region)}</td><td>${escapeHtml((row.format || []).join(", "))}<br>${escapeHtml(row.cadence)}</td><td>${escapeHtml(row.license)}</td><td>${escapeHtml(row.last_checked || "unknown")}</td><td><a href="${escapeHtml(row.url)}" target="_blank" rel="noreferrer">Source</a> · <a href="${escapeHtml(row.provenance_url)}" target="_blank" rel="noreferrer">Evidence</a><br>${escapeHtml(row.citation)}</td></tr>`).join("")}</tbody></table>` : '<p class="empty">No source records match these filters.</p>';
+          const samples = filteredMonitoringSamples();
+          const located = monitoringView.locatedSamples(samples);
+          const groups = new Map();
+          located.forEach(({ row, coordinates }) => {
+            const [lat, lon] = coordinates;
+            const x = Math.max(4, Math.min(96, ((lon + 125) / 11) * 100));
+            const y = Math.max(8, Math.min(94, ((42.5 - lat) / 11) * 100));
+            const key = `${Math.floor(x / 6)}:${Math.floor(y / 6)}`;
+            const group = groups.get(key) || { rows: [], x: 0, y: 0 };
+            group.rows.push(row); group.x += x; group.y += y; groups.set(key, group);
+          });
+          const map = [...groups.values()].map((group) => { const clustered = group.rows.length > 1; const row = group.rows[0]; const label = clustered ? `${group.rows.length} samples` : `${monitoringView.matrix(row) || "Unknown matrix"}; ${monitoringView.year(row) ? row.date : "Unknown date"}; ${row.method || "method unknown"}`; return `<button class="monitoring-marker" data-cluster="${clustered}" style="left:${group.x / group.rows.length}%;top:${group.y / group.rows.length}%" aria-label="${escapeHtml(label)}">${group.rows.length}</button>`; }).join("");
+          $("monitoring-map").innerHTML = map || '<p class="empty">No valid sample coordinates are available for this filter.</p>';
+          $("monitoring-map-note").textContent = `${samples.length} observations match; ${located.length} have valid coordinate pairs. Markers are schematic clusters, not a navigable base map.`;
+          $("monitoring-gaps-note").textContent = samples.length
+            ? `Observed sample counts in the ${localPreview ? "private local preview" : "public data"} only. Blank cells do not imply absence of monitoring.`
+            : "No sample rows are available for a measurement-based gap assessment. Registry topic/region descriptions are not counted as observations.";
+          const counts = new Map();
+          samples.forEach((row) => { const year = monitoringView.year(row) || "Unknown date"; const matrix = monitoringView.matrix(row) || "Unknown matrix"; const key = `${matrix}\u0000${monitoringView.region(row)}\u0000${year}`; counts.set(key, (counts.get(key) || 0) + 1); });
+          const keys = [...counts.keys()].sort();
+          $("monitoring-gaps").innerHTML = keys.length ? `<table class="gaps-table"><thead><tr><th>Matrix</th><th>Region</th><th>Year</th><th>Samples</th></tr></thead><tbody>${keys.map((key) => { const [matrix, region, year] = key.split("\u0000"); return `<tr><th scope="row">${escapeHtml(matrix)}</th><td>${escapeHtml(region.replaceAll("_", " "))}</td><td>${escapeHtml(year)}</td><td class="gaps-cell">${counts.get(key)}</td></tr>`; }).join("")}</tbody></table>` : '<p class="empty">No sample-derived coverage cells are available.</p>';
+          $("monitoring-samples").innerHTML = samples.length ? `<table class="monitoring-table"><thead><tr><th>Date</th><th>Matrix / region</th><th>Method</th><th>Count / concentration</th><th>Citation</th></tr></thead><tbody>${samples.slice(0, 500).map((row) => { const source = payload.datasets.find((dataset) => dataset.id === row.dataset_id); const dateLabel = monitoringView.year(row) ? row.date : "Unknown date"; const matrixLabel = monitoringView.matrix(row) || "Unknown matrix"; return `<tr><td>${escapeHtml(dateLabel)}</td><td>${escapeHtml(matrixLabel)} / ${escapeHtml(monitoringView.region(row).replaceAll("_", " "))}</td><td>${escapeHtml(row.method || "unknown")}</td><td>${escapeHtml(monitoringView.displayValue(row.particle_count, "unknown"))} particles · ${escapeHtml(monitoringView.displayValue(row.concentration_value, "not available"))} ${escapeHtml(row.concentration_unit || "")}</td><td>${escapeHtml(row.citation || source?.citation || "Citation unavailable")}${source ? ` · <a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">source</a>` : ""}</td></tr>`; }).join("")}</tbody></table>${samples.length > 500 ? `<p class="data-note">Showing first 500 of ${samples.length} matching rows for browser responsiveness.</p>` : ""}` : '<p class="empty">No sample observations are available in this snapshot.</p>';
+        }
         function aboutViewModel(metadata, index) {
           const current = metadata && typeof metadata === "object" ? metadata : {};
           const indexData = index && typeof index === "object" ? index : {};
@@ -540,6 +693,7 @@
           applyControls();
           renderExperts();
           renderInstitutions();
+          renderMonitoring();
           renderAbout();
           selectTab(state.tab);
         }
@@ -557,6 +711,7 @@
             }));
             state.data = Object.fromEntries(entries);
             if (!state.data.index || !Array.isArray(state.data.index.authors) || !Array.isArray(state.data.index.works)) throw new Error("index.json does not match the S3.1 contract");
+            if (!state.data.monitoring || state.data.monitoring.schema_version !== "s7.5") throw new Error("monitoring.json does not match the S7.5 contract");
             populateFilters();
             updateViews();
             setLoadStatus("Data loaded");
@@ -592,6 +747,10 @@
           $(id).addEventListener("change", onFilterChange);
         });
         $("expert-list").addEventListener("scroll", () => window.requestAnimationFrame(renderVirtualRows), { passive: true });
+        ["monitoring-tier", "monitoring-search", "monitoring-contributor", "monitoring-matrix", "monitoring-year", "monitoring-region"].forEach((id) => {
+          $(id).addEventListener("input", () => { const f = state.monitoringFilters; f.tier = $("monitoring-tier").value; f.search = $("monitoring-search").value.trim(); f.contributor = $("monitoring-contributor").value; f.matrix = $("monitoring-matrix").value; f.year = $("monitoring-year").value; f.region = $("monitoring-region").value; renderMonitoring(); });
+          $(id).addEventListener("change", () => { const f = state.monitoringFilters; f.tier = $("monitoring-tier").value; f.search = $("monitoring-search").value.trim(); f.contributor = $("monitoring-contributor").value; f.matrix = $("monitoring-matrix").value; f.year = $("monitoring-year").value; f.region = $("monitoring-region").value; renderMonitoring(); });
+        });
         $("reset-filters").addEventListener("click", () => { state.search = state.institutionType = state.institution = state.tag = state.yearFrom = state.yearTo = state.caBasis = state.oa = ""; writeHash(); updateViews(); $("expert-search").focus(); });
         $("export-csv").addEventListener("click", () => {
           if (!state.data) return;

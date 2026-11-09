@@ -1,16 +1,23 @@
-# Handoff - 2026-11-09 - S7.4 complete; S7.3 partial
+# Handoff - 2026-11-09 - S7.5 partial; S7.6 next
 
-## S7.4 DataCite and full-text dataset discovery
+## S7.5 monitoring table, sample map, and gaps view
 
 ### Done
-- Added DataCite DOI candidate discovery, bounded caller-supplied JATS data-availability extraction, a CLI, fixtures, and an audited 50-record candidate review. The extractor can use a known article DOI supplied by its caller; callers must pass that DOI for typed relation matching. Duplicate DOI mentions are deduplicated.
-- Acceptance review: 5 positive, 40 negative, and 5 unresolved DOI candidates. Resolved precision is 5/45 = 11.1%; conservative positive share across all 50 is 5/50 = 10.0%. The five positive DOI candidates represent three apparent dataset families after version-family review.
-- These are candidate-level agent review labels, not owner labels or 50 verified paper-to-dataset links. Historical per-record query membership was not retained and is explicitly disclosed; future collection records per-result query membership and hashes. No dataset payloads are fetched and no candidates are auto-ingested.
-- Focused tests (5), full suite (237), Ruff, and diff checks were accepted by the executor/tester. See `docs/S7_4_VERIFICATION.md` and `docs/api_notes/datacite_s7_4.md`.
+- Added the public monitoring catalogue and Monitoring tab registry, filters, schematic clustered sample map, and matrix/region/year sample coverage view. Source/provenance links and citations are displayed; public unknowns remain unknown.
+- Public export contains 24 source records (15 verified seeds and 9 discovery records) and zero sample observations. Local private review used 314 observations; the acceptance browser run rendered 314 samples / 277 valid coordinate pairs, including 37 valid-coordinate unknown-matrix rows. The Unknown matrix filter returned 240 rows / 206 valid coordinates; zero particle counts and malformed-date unknown behavior are retained in runtime regressions.
+- Executor recorded six focused tests, runtime CI wrapper, full 243-test suite, Ruff, and diff checks as passing. Tester accepted focused/runtime checks and browser results (desktop 314 ms / mobile 277 ms; 37 unknown-matrix rows with valid coordinates). See `docs/S7_5_VERIFICATION.md`.
+- Public JSON is zero-observation and private preview output is constrained outside `site/`, including path aliases. The verification record discloses the initial transient private write and that whether the already-bound local server read it was not verified; the public payload was restored immediately. No external read or absence of external read is claimed.
 
 ### State and next
-- S7.4 is complete. S7.3 remains partial/local-only pending the unresolved SF Bay / 5 Gyres rights question; no monitoring source or normalized data is published.
-- S7.5's contract is the Monitoring tab with registry table/map/gaps view and performance/citation acceptance. The roadmap and Part E contract show no S7.3 dependency, but implementation must use verified/cleared inputs and must not use synthetic monitoring outputs as live evidence. S7.6's future-source watch list/check script also has no listed S7.3 dependency. Do not start a successor in this closure.
+- S7.5 remains unchecked/partial because rights-cleared observations are unavailable; public sample map and measurement-based coverage acceptance remain unmet. Do not treat the ignored local preview as public data or statewide coverage.
+- S7.6 is the next independent eligible task: implement the future-source watch list and weekly check updates to `docs/SOURCES.md`. S7.3 rights remain unresolved. Node.js 20+ is required by the focused pytest runtime wrapper; record environment pinning for S10 rather than expanding this checkpoint.
+
+### Verification commands
+- `py -3.14 scripts/build_monitoring_export.py`
+- `py -3.14 scripts/check_s7_5.py --check-private-preview`
+- `py -3.14 -m pytest tests/test_monitoring_s7_5.py tests/test_monitoring_view_runtime.py -q`
+- `py -3.14 -m ruff check ...` and `py -3.14 -m ruff format --check ...` on task-owned modules
+- `git diff --check`
 
 ---
 

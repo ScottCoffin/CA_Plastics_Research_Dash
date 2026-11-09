@@ -1,0 +1,813 @@
+{
+  "coverage_basis": "no cleared public sample rows",
+  "datasets": [
+    {
+      "access_method": "Public map portal; filter/export selected records or collection; intermittent cloud-migration delays reported by NCEI",
+      "access_tier": "B",
+      "cadence": "Quarterly, as reported in the peer-reviewed database description",
+      "citation": "Official NCEI product and accession metadata; NCEI says data are free to access and use and advises reviewing source metadata and protocols before comparing observations.",
+      "contributor_in_ca": null,
+      "entity_type": "dataset",
+      "evidence_excerpt": "Global NOAA archive contains harmonized microplastic records; source records retain original methods and metadata.",
+      "format": [
+        "CSV",
+        "JSON",
+        "GeoJSON"
+      ],
+      "id": "noaa_ncei_marine_microplastics",
+      "last_checked": "2026-11-07",
+      "license": "Unknown per source record; NCEI states access and use are free, but source license and attribution can vary; review archive metadata",
+      "measurement_status": "catalogue_only",
+      "name": "NOAA NCEI Global Marine Microplastics Database",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "Official NCEI product and accession metadata; NCEI says data are free to access and use and advises reviewing source metadata and protocols before comparing observations.",
+      "provenance_type": "dataset_record",
+      "provenance_url": "https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc%3ANCEI-Marine-Microplastics",
+      "region": "Global marine; California coverage not asserted until spatial query",
+      "sample_matrix": [
+        "marine surface water",
+        "marine water column",
+        "seafloor sediment"
+      ],
+      "seed_eligible": true,
+      "status": "active global archive; NCEI page warns cloud migration may cause temporary access delays; California coverage must be spatially screened",
+      "steward": "NOAA National Centers for Environmental Information",
+      "url": "https://www.ncei.noaa.gov/products/microplastics"
+    },
+    {
+      "access_method": "Public NCEI accession page links directly to HTTPS and FTP downloads",
+      "access_tier": "A",
+      "cadence": "One-time 2018 collection; accession metadata says archive update frequency is as needed",
+      "citation": "NCEI accession page documents public access, 50 confirmed particles, the 2018 collection period, bivalve matrices, methods, and a direct data download.",
+      "contributor_in_ca": null,
+      "entity_type": "dataset",
+      "evidence_excerpt": null,
+      "format": [
+        "Excel"
+      ],
+      "id": "ncei_sf_bay_bivalves_2018",
+      "last_checked": "2026-11-07",
+      "license": "Unknown in accession metadata; citation is required and record-level source terms should be reviewed",
+      "measurement_status": "catalogue_only",
+      "name": "NCEI San Francisco Bay mussel and clam microplastics accession 0290836",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "NCEI accession page documents public access, 50 confirmed particles, the 2018 collection period, bivalve matrices, methods, and a direct data download.",
+      "provenance_type": "dataset_record",
+      "provenance_url": "https://www.ncei.noaa.gov/metadata/granule/geoportal/rest/metadata/item/NCEI-Marine-Microplastics.0290836/html",
+      "region": "San Francisco Bay, California",
+      "sample_matrix": [
+        "mussel tissue",
+        "clam tissue"
+      ],
+      "seed_eligible": false,
+      "status": "Public, completed accession-level dataset; 50 confirmed microplastic particles reported",
+      "steward": "NOAA National Centers for Environmental Information; data collected by study authors",
+      "url": "https://www.ncei.noaa.gov/metadata/granule/geoportal/rest/metadata/item/NCEI-Marine-Microplastics.0290836/html"
+    },
+    {
+      "access_method": "Public CA Open Data resource downloads and dataset API",
+      "access_tier": "A",
+      "cadence": "Irregular; dataset metadata reports irregular updates",
+      "citation": "Official State of California dataset record says 5 resources, public access, CC BY, irregular updates, and an XLSX with SampleID-linked particle data.",
+      "contributor_in_ca": null,
+      "entity_type": "dataset",
+      "evidence_excerpt": "California record lists stormwater, treated wastewater, surface water, sediment and prey-fish collection efforts with SampleID-linked particle data.",
+      "format": [
+        "XLSX",
+        "PDF"
+      ],
+      "id": "sf_bay_5gyres_microplastics",
+      "last_checked": "2026-11-07",
+      "license": "Creative Commons Attribution (CC BY); confirm resource-level terms when downloading",
+      "measurement_status": "catalogue_only",
+      "name": "SF Bay and Adjacent Sanctuaries Microplastic and Microparticle Project",
+      "plastic_classes": [
+        "microplastics",
+        "microparticles"
+      ],
+      "provenance_note": "Official State of California dataset record says 5 resources, public access, CC BY, irregular updates, and an XLSX with SampleID-linked particle data.",
+      "provenance_type": "dataset_record",
+      "provenance_url": "https://publish.data.ca.gov/dataset/microplastic-and-microparticle-data-from-surface-water-san-francisco-bay-and-adjacent-sanctuari",
+      "region": "San Francisco Bay, adjacent sanctuaries, and nearby coastal waters",
+      "sample_matrix": [
+        "stormwater",
+        "treated wastewater effluent",
+        "surface water",
+        "sediment",
+        "prey fish"
+      ],
+      "seed_eligible": true,
+      "status": "published regional project dataset",
+      "steward": "San Francisco Estuary Institute and 5 Gyres Institute; published by OPC",
+      "url": "https://publish.data.ca.gov/dataset/microplastic-and-microparticle-data-from-surface-water-san-francisco-bay-and-adjacent-sanctuari"
+    },
+    {
+      "access_method": "Program pages and Regional Monitoring Program data tools; no unauthenticated bulk endpoint verified",
+      "access_tier": "B",
+      "cadence": "Program is ongoing; source-specific microplastics cadence not stated",
+      "citation": "SFEI's official RMP microplastics strategy describes the monitoring focus; the S7.2 source smoke must determine whether CD3 microplastics records can be separated and exported.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": null,
+      "format": [
+        "web portal",
+        "unknown for microplastics subset"
+      ],
+      "id": "sf_bay_rmp_cd3_microplastics",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for the microplastics subset; review dataset metadata before reuse",
+      "measurement_status": "catalogue_only",
+      "name": "San Francisco Bay Regional Monitoring Program microplastics and CD3 records",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "SFEI's official RMP microplastics strategy describes the monitoring focus; the S7.2 source smoke must determine whether CD3 microplastics records can be separated and exported.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://www.sfei.org/sites/default/files/events/MPWG%20Strategy%20Revision%20April%202024_Final.pdf",
+      "region": "San Francisco Bay and connected tributaries",
+      "sample_matrix": [
+        "water",
+        "sediment",
+        "biota",
+        "channelized creek storm events"
+      ],
+      "seed_eligible": false,
+      "status": "Active regional monitoring program; microplastics subset and CD3 exportability require S7.2 review",
+      "steward": "San Francisco Estuary Institute and RMP participants",
+      "url": "https://www.sfei.org/programs/cw/microplastics"
+    },
+    {
+      "access_method": "Public CEDEN query tools; web services documentation describes authenticated API access",
+      "access_tier": "B",
+      "cadence": "Provider-dependent; no single network refresh schedule",
+      "citation": "CEDEN's official analyte lookup includes anthropogenic synthetic foam under microdebris/plastic; presence of the analyte vocabulary does not establish California sample coverage.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": null,
+      "format": [
+        "web query",
+        "CSV or tabular export; API response format requires smoke test"
+      ],
+      "id": "ceden_microdebris",
+      "last_checked": "2026-11-07",
+      "license": "Unknown and provider-dependent; retain source record rights",
+      "measurement_status": "catalogue_only",
+      "name": "California Environmental Data Exchange Network microdebris records",
+      "plastic_classes": [
+        "microdebris",
+        "unknown"
+      ],
+      "provenance_note": "CEDEN's official analyte lookup includes anthropogenic synthetic foam under microdebris/plastic; presence of the analyte vocabulary does not establish California sample coverage.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://ceden.org/CEDEN_Checker/Checker/DisplayCEDENLookUp.php?List=AnalyteLookUp",
+      "region": "California statewide",
+      "sample_matrix": [
+        "water",
+        "sediment",
+        "tissue",
+        "habitat",
+        "toxicity; source-specific"
+      ],
+      "seed_eligible": false,
+      "status": "Statewide water-quality data exchange; plastic-related analyte terms appear in the lookup, actual row coverage requires query",
+      "steward": "California Water Boards and CEDEN data providers",
+      "url": "https://ceden.org/"
+    },
+    {
+      "access_method": "Program requirements, methods, and reporting information on official page; no public bulk observation download confirmed",
+      "access_tier": "C",
+      "cadence": "Statutory testing/reporting period; source-specific reporting cadence must be checked against current orders",
+      "citation": "Official Water Board page documents standardized microplastics testing requirements and methods; the page is not itself an observation dataset.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": "State Water Board documents statutory microplastics testing and reporting for California public water systems.",
+      "format": [
+        "web page",
+        "PDF methods"
+      ],
+      "id": "ca_drinking_water_microplastics",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for reported observations; review the eventual dataset record",
+      "measurement_status": "catalogue_only",
+      "name": "California SB 1422 drinking-water microplastics monitoring and reporting",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "Official Water Board page documents standardized microplastics testing requirements and methods; the page is not itself an observation dataset.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://waterboards.ca.gov/drinking_water/certlic/drinkingwater/microplastics.html",
+      "region": "California public water systems",
+      "sample_matrix": [
+        "source water",
+        "treated drinking water"
+      ],
+      "seed_eligible": true,
+      "status": "Statutory monitoring and reporting program; public sample dataset endpoint not confirmed",
+      "steward": "State Water Resources Control Board; public water systems and accredited laboratories",
+      "url": "https://waterboards.ca.gov/drinking_water/certlic/drinkingwater/microplastics.html"
+    },
+    {
+      "access_method": "Public CA Open Data landing page/resource links; do not treat alpha or mock rows as field observations",
+      "access_tier": "D",
+      "cadence": "Alpha resource; no observation refresh cadence established",
+      "citation": "EPA workshop slide deck describes the portal as including peer-reviewed drinking-water studies and accredited-lab data; the CA Open Data item is alpha and must be inspected for mock/template records before any use.",
+      "contributor_in_ca": null,
+      "entity_type": "literature_dataset",
+      "evidence_excerpt": null,
+      "format": [
+        "CSV or template resources; confirm current resource inventory"
+      ],
+      "id": "moore_drinking_water_open_data",
+      "last_checked": "2026-11-07",
+      "license": "CC BY per CA Open Data metadata reported by the portal; verify current resource-level terms",
+      "measurement_status": "catalogue_only",
+      "name": "Moore Institute Microplastics in Drinking Water Open Data resource",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "EPA workshop slide deck describes the portal as including peer-reviewed drinking-water studies and accredited-lab data; the CA Open Data item is alpha and must be inspected for mock/template records before any use.",
+      "provenance_type": "literature_secondary",
+      "provenance_url": "https://www.epa.gov/system/files/documents/2024-05/2023_11_29_epa-trash-free-water_coffin-for-erg-508.pdf",
+      "region": "California drinking water; resource coverage is not yet validated",
+      "sample_matrix": [
+        "drinking water",
+        "literature-reported tap water",
+        "literature-reported bottled water"
+      ],
+      "seed_eligible": false,
+      "status": "Alpha resource; literature and accredited-lab coverage is described, but the portal also labels alpha/mock templates; inspect rows before treating as observations",
+      "steward": "Moore Institute for Plastic Pollution Research; California Water Boards",
+      "url": "https://data.ca.gov/dataset/e7624fce-c058-4fa1-a29f-2594d8f8f160"
+    },
+    {
+      "access_method": "Public MDMAP data map; filter locations/date and export selected data",
+      "access_tier": "B",
+      "cadence": "Partner monitoring intervals vary; program recommends repeated site surveys, source-specific schedule must be retained",
+      "citation": "NOAA identifies MDMAP as public shoreline debris data with standardized survey methods; it targets visible macrodebris, not microplastic concentrations.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": "Greater Farallones volunteers conducted monthly MDMAP surveys at four California beaches from 2012 to 2018.",
+      "format": [
+        "web portal",
+        "export formats to verify in S7.2"
+      ],
+      "id": "noaa_mdmap",
+      "last_checked": "2026-11-07",
+      "license": "Unknown/record-level rights; inspect NOAA dataset metadata and citation instructions",
+      "measurement_status": "catalogue_only",
+      "name": "NOAA Marine Debris Monitoring and Assessment Project",
+      "plastic_classes": [
+        "macrodebris",
+        "microdebris proxy only"
+      ],
+      "provenance_note": "NOAA identifies MDMAP as public shoreline debris data with standardized survey methods; it targets visible macrodebris, not microplastic concentrations.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://marinedebris.noaa.gov/monitoring/collecting-marine-debris-data",
+      "region": "U.S. shorelines, including California",
+      "sample_matrix": [
+        "shoreline debris survey"
+      ],
+      "seed_eligible": true,
+      "status": "Active public shoreline macrodebris program",
+      "steward": "NOAA Marine Debris Program",
+      "url": "https://marinedebris.noaa.gov/our-work/monitoring/marine-debris-monitoring-and-assessment-project"
+    },
+    {
+      "access_method": "Public meeting staff report; monitoring observations not yet available",
+      "access_tier": "C",
+      "cadence": "Pilot sampling planned for one to two years beginning 2027-28",
+      "citation": "OPC staff report recommends up to $2.5M, identifies SWAMP/SPoT as a platform, and states pilot implementation begins in 2027-28; no grantee or data endpoint is yet identified.",
+      "contributor_in_ca": null,
+      "entity_type": "planned_program",
+      "evidence_excerpt": null,
+      "format": [
+        "PDF"
+      ],
+      "id": "statewide_plastics_pilot",
+      "last_checked": "2026-11-07",
+      "license": "Not applicable to planning report; future observation license unknown",
+      "measurement_status": "catalogue_only",
+      "name": "OPC and SWAMP statewide plastics monitoring pilot",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "OPC staff report recommends up to $2.5M, identifies SWAMP/SPoT as a platform, and states pilot implementation begins in 2027-28; no grantee or data endpoint is yet identified.",
+      "provenance_type": "planning_record",
+      "provenance_url": "https://opc.ca.gov/wp-content/uploads/2026/06/Item-6c-Plastics-Monitoring-508.pdf",
+      "region": "California aquatic ecosystems",
+      "sample_matrix": [
+        "freshwater",
+        "sediment; additional matrices may be scoped"
+      ],
+      "seed_eligible": false,
+      "status": "Approved planning and pilot funding; sampling implementation planned for 2027-28",
+      "steward": "California Ocean Protection Council and State Water Resources Control Board",
+      "url": "https://opc.ca.gov/wp-content/uploads/2026/06/Item-6c-Plastics-Monitoring-508.pdf"
+    },
+    {
+      "access_method": "Program page links to CEDEN query and reports; no plastics-specific records verified",
+      "access_tier": "C",
+      "cadence": "Annual sediment sampling at established sites, per SWAMP program sources",
+      "citation": "SPoT is a relevant platform for the approved future statewide pilot, but current SPoT monitoring is sediment contaminants/toxicity and must not be presented as plastic measurements.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": null,
+      "format": [
+        "CEDEN query",
+        "PDF reports"
+      ],
+      "id": "swamp_spot_context",
+      "last_checked": "2026-11-07",
+      "license": "Unknown/provider-dependent for underlying CEDEN records",
+      "measurement_status": "catalogue_only",
+      "name": "SWAMP Stream Pollution Trends Monitoring Program",
+      "plastic_classes": [
+        "unknown"
+      ],
+      "provenance_note": "SPoT is a relevant platform for the approved future statewide pilot, but current SPoT monitoring is sediment contaminants/toxicity and must not be presented as plastic measurements.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://www.waterboards.ca.gov/water_issues/programs/swamp/spot/",
+      "region": "California streams and large watersheds",
+      "sample_matrix": [
+        "stream sediment",
+        "toxicity test organisms",
+        "habitat"
+      ],
+      "seed_eligible": false,
+      "status": "Active statewide sediment contaminant program; existing routine analyte list is not a plastics dataset",
+      "steward": "State Water Resources Control Board; Marine Pollution Studies Laboratory at Granite Canyon",
+      "url": "https://www.waterboards.ca.gov/water_issues/programs/swamp/spot/"
+    },
+    {
+      "access_method": "SCCWRP program data portal and program-cycle datasets; source-specific export needs smoke test",
+      "access_tier": "B",
+      "cadence": "Bight surveys run on approximately five-year cycles; plastics element schedule varies by cycle",
+      "citation": "SCCWRP describes an ongoing multi-organization program and reports that new statewide methods are being tested for microplastics in Bight habitats.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": "SCCWRP describes a regional multi-organization Bight monitoring program and cycle-based data portal.",
+      "format": [
+        "web data portal",
+        "static databases"
+      ],
+      "id": "socal_bight_microplastics",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for individual survey datasets; inspect portal metadata",
+      "measurement_status": "catalogue_only",
+      "name": "Southern California Bight Regional Monitoring Program plastics monitoring",
+      "plastic_classes": [
+        "microplastics",
+        "macrodebris"
+      ],
+      "provenance_note": "SCCWRP describes an ongoing multi-organization program and reports that new statewide methods are being tested for microplastics in Bight habitats.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://www.sccwrp.org/about/research-areas/regional-monitoring/southern-california-bight-regional-monitoring-program/",
+      "region": "Southern California Bight, Point Conception to U.S.-Mexico border",
+      "sample_matrix": [
+        "sediment",
+        "shellfish",
+        "shoreline and aquatic habitats"
+      ],
+      "seed_eligible": true,
+      "status": "Ongoing regional program; microplastics monitoring began in 2023",
+      "steward": "Southern California Coastal Water Research Project and participating agencies",
+      "url": "https://www.sccwrp.org/about/research-areas/regional-monitoring/southern-california-bight-regional-monitoring-program/"
+    },
+    {
+      "access_method": "SCCWRP page describes Bight ArcGIS open-data portal and older static databases; dataset-specific link must be confirmed",
+      "access_tier": "B",
+      "cadence": "One Bight 2013 survey; dataset publication cadence not applicable",
+      "citation": "SCCWRP's official component page identifies a Bight '13 benthic plastic type dataset; the exact record and reuse terms remain a S7.2 check.",
+      "contributor_in_ca": null,
+      "entity_type": "dataset",
+      "evidence_excerpt": "SCCWRP identifies Bight 2013 benthic plastic type and size data from sediment grab samples.",
+      "format": [
+        "ArcGIS Open Data",
+        "static database; dataset-specific format unknown"
+      ],
+      "id": "bight_2013_benthic_plastic",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for this individual dataset",
+      "measurement_status": "catalogue_only",
+      "name": "Bight 2013 benthic plastic type dataset",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "SCCWRP's official component page identifies a Bight '13 benthic plastic type dataset; the exact record and reuse terms remain a S7.2 check.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://www.sccwrp.org/bight-components-test/",
+      "region": "Southern California Bight",
+      "sample_matrix": [
+        "benthic sediment grab samples"
+      ],
+      "seed_eligible": true,
+      "status": "Historical program-cycle dataset identified by SCCWRP; plastics rows and download need S7.2 verification",
+      "steward": "Southern California Coastal Water Research Project and Bight participants",
+      "url": "https://www.sccwrp.org/bight-components-test/"
+    },
+    {
+      "access_method": "Public project description; sample-level dataset access not stated",
+      "access_tier": "B",
+      "cadence": "Multi-year project (2023-2026); current project page does not specify a repeat interval",
+      "citation": "California Sea Grant and NOAA sanctuary sources describe the funded study and planned matrices; this is a project record, not evidence that its observations are already public.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": "California Sea Grant reports nearly 25,000 particles identified across rivers, beaches, coastal waters and marine wildlife.",
+      "format": [
+        "web project page",
+        "future data format unknown"
+      ],
+      "id": "monterey_bay_watershed_to_whales",
+      "last_checked": "2026-11-07",
+      "license": "Unknown; no data release terms identified",
+      "measurement_status": "catalogue_only",
+      "name": "From Watershed to Whales Monterey Bay microplastics study",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "California Sea Grant and NOAA sanctuary sources describe the funded study and planned matrices; this is a project record, not evidence that its observations are already public.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://montereybay.noaa.gov/science/research/microplastics.html",
+      "region": "Greater Monterey Bay watershed and coastal ecosystem",
+      "sample_matrix": [
+        "river water",
+        "adjacent beach sand",
+        "nearshore ocean water",
+        "forage fish",
+        "krill",
+        "blue whale fecal material"
+      ],
+      "seed_eligible": true,
+      "status": "Funded field study; public sample-level release not located",
+      "steward": "California Marine Sanctuary Foundation and project partners",
+      "url": "https://caseagrant.ucsd.edu/our-work/research-projects/watershed-whales-tracking-source-and-transport-microplastics-greater"
+    },
+    {
+      "access_method": "Public California Sea Grant project report; no sample-level dataset endpoint verified",
+      "access_tier": "B",
+      "cadence": "One-time retrospective specimen study across eight decadal periods, 1940-present",
+      "citation": "California Sea Grant project page names the study and reports results from 353 processed fish specimens; public specimen-level records were not confirmed.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": "California Sea Grant reports processing 353 museum fish specimens and findings from historical California collections.",
+      "format": [
+        "PDF project record",
+        "future data format unknown"
+      ],
+      "id": "nhmla_plastics_past_present",
+      "last_checked": "2026-11-07",
+      "license": "Unknown; no dataset license or public observation files identified",
+      "measurement_status": "catalogue_only",
+      "name": "Plastics Past and Present California marine fish specimens",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "California Sea Grant project page names the study and reports results from 353 processed fish specimens; public specimen-level records were not confirmed.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://caseagrant.ucsd.edu/our-work/research-projects/plastics-past-and-present-understanding-historical-trends-microplastic",
+      "region": "California marine food webs",
+      "sample_matrix": [
+        "archived marine fish gut contents"
+      ],
+      "seed_eligible": true,
+      "status": "Funded two-year research project (2023-2025); sample-level release not located",
+      "steward": "Natural History Museum of Los Angeles County and California Sea Grant",
+      "url": "https://caseagrant.ucsd.edu/our-work/research-projects/plastics-past-and-present-understanding-historical-trends-microplastic"
+    },
+    {
+      "access_method": "Public technical report abstract; full report/data download location not yet verified",
+      "access_tier": "D",
+      "cadence": "One-time study",
+      "citation": "SCCWRP report metadata identifies measured microplastics concentrations across water, bed sediment, and fish; registry inclusion is secondary evidence until source data and terms are confirmed.",
+      "contributor_in_ca": null,
+      "entity_type": "literature_dataset",
+      "evidence_excerpt": "SCCWRP report describes microplastic concentrations measured in water, bed sediment and fish in Los Angeles and San Gabriel Rivers.",
+      "format": [
+        "PDF abstract"
+      ],
+      "id": "la_san_gabriel_rivers_sccwrp_1389",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for report-derived data; do not redistribute without source terms",
+      "measurement_status": "catalogue_only",
+      "name": "Los Angeles and San Gabriel Rivers multimedia microplastics study",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "SCCWRP report metadata identifies measured microplastics concentrations across water, bed sediment, and fish; registry inclusion is secondary evidence until source data and terms are confirmed.",
+      "provenance_type": "literature_secondary",
+      "provenance_url": "https://ftp.sccwrp.org/pub/download/DOCUMENTS/TechnicalReports/1389_Abstract.pdf",
+      "region": "Los Angeles and San Gabriel River watersheds",
+      "sample_matrix": [
+        "surface water",
+        "bed sediment",
+        "fish"
+      ],
+      "seed_eligible": true,
+      "status": "Published technical report; source-level result files require follow-up",
+      "steward": "Southern California Coastal Water Research Project",
+      "url": "https://ftp.sccwrp.org/pub/download/DOCUMENTS/TechnicalReports/1389_Abstract.pdf"
+    },
+    {
+      "access_method": "Public interactive app; article states supporting data can be viewed and downloaded",
+      "access_tier": "B",
+      "cadence": "One-time field study",
+      "citation": "California Sea Grant page confirms seven monitored Southern California biofilters and storm sampling; the article data-availability statement identifies this SCCWRP app as the data view/download.",
+      "contributor_in_ca": null,
+      "entity_type": "dataset",
+      "evidence_excerpt": "SCCWRP-linked study reports paired influent and effluent samples at seven Southern California installations.",
+      "format": [
+        "web app",
+        "download format to verify"
+      ],
+      "id": "socal_stormwater_biofilter_microplastics",
+      "last_checked": "2026-11-07",
+      "license": "Unknown; article/app license and data terms must be reviewed",
+      "measurement_status": "catalogue_only",
+      "name": "Southern California stormwater biofilter microplastics field dataset",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "California Sea Grant page confirms seven monitored Southern California biofilters and storm sampling; the article data-availability statement identifies this SCCWRP app as the data view/download.",
+      "provenance_type": "dataset_record",
+      "provenance_url": "https://caseagrant.ucsd.edu/our-work/research-projects/field-monitoring-microplastics-loading-and-accumulation-low-impact",
+      "region": "Seven Southern California biofiltration installations",
+      "sample_matrix": [
+        "paired stormwater influent",
+        "biofilter effluent"
+      ],
+      "seed_eligible": true,
+      "status": "Published dataset; online visualization and download reported by article authors",
+      "steward": "SCCWRP, Southern California Stormwater Monitoring Coalition, and study partners",
+      "url": "https://sccwrp.shinyapps.io/bmp_microplastics_shiny/"
+    },
+    {
+      "access_method": "Public project report; sample-level data endpoint not identified",
+      "access_tier": "B",
+      "cadence": "Three-year methods project; Year 1 field sampling described",
+      "citation": "SCCWRP states four stormwater collection methods were used at Los Angeles County sites; program evidence does not imply a public sample-level dataset.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": null,
+      "format": [
+        "web page",
+        "reports not yet linked"
+      ],
+      "id": "stormwater_collection_method_evaluation",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for any underlying sample data",
+      "measurement_status": "catalogue_only",
+      "name": "California stormwater microplastics sample-collection method evaluation",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "SCCWRP states four stormwater collection methods were used at Los Angeles County sites; program evidence does not imply a public sample-level dataset.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://www.sccwrp.org/news/year-1-sampling-completed-for-study-evaluating-collection-methods-for-microplastics-in-stormwater/",
+      "region": "Los Angeles County stormwater sites",
+      "sample_matrix": [
+        "wet-weather stormwater"
+      ],
+      "seed_eligible": false,
+      "status": "Field method study; first season reported complete",
+      "steward": "SCCWRP, University of California Riverside, and project partners",
+      "url": "https://www.sccwrp.org/news/year-1-sampling-completed-for-study-evaluating-collection-methods-for-microplastics-in-stormwater/"
+    },
+    {
+      "access_method": "Clean Swell mobile app; TIDES data-system access described by OPC strategy, bulk download not verified",
+      "access_tier": "B",
+      "cadence": "Ongoing volunteer submissions and annual International Coastal Cleanup",
+      "citation": "Ocean Conservancy describes item-level litter recording via Clean Swell; OPC strategy identifies TIDES as a public data system. Data export rights and fields remain to verify.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": null,
+      "format": [
+        "mobile app",
+        "web data system; export format unknown"
+      ],
+      "id": "ocean_conservancy_tides_cleanswell",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for observations; app availability is not a data reuse license",
+      "measurement_status": "catalogue_only",
+      "name": "Ocean Conservancy Clean Swell shoreline debris records",
+      "plastic_classes": [
+        "macrodebris"
+      ],
+      "provenance_note": "Ocean Conservancy describes item-level litter recording via Clean Swell; OPC strategy identifies TIDES as a public data system. Data export rights and fields remain to verify.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://oceanconservancy.org/trash-free-seas/international-coastal-cleanup/cleanswell/",
+      "region": "Global shorelines and waterways, including California contributions",
+      "sample_matrix": [
+        "shoreline and waterway litter observations"
+      ],
+      "seed_eligible": false,
+      "status": "Public global citizen-science trash data system; California subset and export schema need verification",
+      "steward": "Ocean Conservancy and volunteer contributors",
+      "url": "https://oceanconservancy.org/trash-free-seas/international-coastal-cleanup/cleanswell/"
+    },
+    {
+      "access_method": "Public annual county-level summary webpage and historical year pages",
+      "access_tier": "A",
+      "cadence": "Annual event and annual result summary",
+      "citation": "Coastal Commission publishes all-trash volunteer and weight summaries, but this page does not separate plastic observations; retained as context and excluded from the plastics seed minimum.",
+      "contributor_in_ca": null,
+      "entity_type": "dataset",
+      "evidence_excerpt": null,
+      "format": [
+        "HTML table"
+      ],
+      "id": "california_coastal_cleanup_day",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for the annual summary and underlying records",
+      "measurement_status": "catalogue_only",
+      "name": "California Coastal Cleanup Day annual debris summaries",
+      "plastic_classes": [
+        "macrodebris"
+      ],
+      "provenance_note": "Coastal Commission publishes all-trash volunteer and weight summaries, but this page does not separate plastic observations; retained as context and excluded from the plastics seed minimum.",
+      "provenance_type": "dataset_record",
+      "provenance_url": "https://www.coastal.ca.gov/publiced/ccd/ccd.html",
+      "region": "California counties and participating cleanup sites",
+      "sample_matrix": [
+        "beach",
+        "inland waterway",
+        "schoolyard and community cleanup debris"
+      ],
+      "seed_eligible": false,
+      "status": "Annual public aggregate results; item-level sample data not represented on the results page",
+      "steward": "California Coastal Commission and local partners",
+      "url": "https://www.coastal.ca.gov/publiced/ccd/stats/2025.html"
+    },
+    {
+      "access_method": "Public California Sea Grant project page and executive-summary download; raw sample-level file not identified",
+      "access_tier": "B",
+      "cadence": "One project, field sampling at 19 households and one shared laundry room",
+      "citation": "California Sea Grant reports San Francisco Bay-region dryer exhaust sampling and source-pathway findings; this is microplastic source monitoring and is not an ambient-water concentration record.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": "California Sea Grant reports sampling dryer exhaust at 19 households and one shared laundry facility.",
+      "format": [
+        "HTML project page",
+        "PDF executive summary"
+      ],
+      "id": "bay_area_clothes_dryer_microfibers",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for underlying measurements; project page and downloadable report terms should be checked before reuse",
+      "measurement_status": "catalogue_only",
+      "name": "San Francisco Bay clothes-dryer microfiber emissions study",
+      "plastic_classes": [
+        "microfibers"
+      ],
+      "provenance_note": "California Sea Grant reports San Francisco Bay-region dryer exhaust sampling and source-pathway findings; this is microplastic source monitoring and is not an ambient-water concentration record.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://caseagrant.ucsd.edu/our-work/research-projects/investigation-assess-clothes-dryers-source-microplastic-pollution-and",
+      "region": "San Francisco Bay region",
+      "sample_matrix": [
+        "dryer exhaust lint",
+        "controlled filter captures"
+      ],
+      "seed_eligible": true,
+      "status": "Field study with published project results; source-pathway measurements, not ambient-water samples",
+      "steward": "San Francisco Estuary Institute and California Sea Grant project partners",
+      "url": "https://caseagrant.ucsd.edu/our-work/research-projects/investigation-assess-clothes-dryers-source-microplastic-pollution-and"
+    },
+    {
+      "access_method": "Public California Sea Grant project page and executive-summary download; raw result file not identified",
+      "access_tier": "B",
+      "cadence": "One study at 18 rain gardens and similar stormwater systems",
+      "citation": "California Sea Grant reports soil sampling at 18 Los Angeles County stormwater systems and laboratory experiments; registry inclusion does not mean sample-level records are openly downloadable.",
+      "contributor_in_ca": null,
+      "entity_type": "program",
+      "evidence_excerpt": "California Sea Grant reports field soil sampling at 18 Los Angeles County stormwater systems.",
+      "format": [
+        "HTML project page",
+        "PDF executive summary"
+      ],
+      "id": "la_bmp_microplastic_retention",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for underlying measurements; review the data source terms before reuse",
+      "measurement_status": "catalogue_only",
+      "name": "Los Angeles County stormwater BMP microplastic retention study",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "California Sea Grant reports soil sampling at 18 Los Angeles County stormwater systems and laboratory experiments; registry inclusion does not mean sample-level records are openly downloadable.",
+      "provenance_type": "official_program",
+      "provenance_url": "https://caseagrant.ucsd.edu/our-work/research-projects/design-factors-affecting-microplastic-retention-removal-and-generation",
+      "region": "Los Angeles County",
+      "sample_matrix": [
+        "biofilter soil at multiple depths",
+        "laboratory runoff experiments"
+      ],
+      "seed_eligible": true,
+      "status": "Field study with published project results; sample-level release not identified",
+      "steward": "University of California Los Angeles and California Sea Grant project partners",
+      "url": "https://caseagrant.ucsd.edu/our-work/research-projects/design-factors-affecting-microplastic-retention-removal-and-generation"
+    },
+    {
+      "access_method": "Catalog lists view/download, but DataZoo guest-form terms restrict scholarly use, require owner contact before publication, and prohibit redistribution without permission; no agreement acceptance or download performed",
+      "access_tier": "B",
+      "cadence": "One-time August 2009 cruise dataset",
+      "citation": "California Current LTER catalog describes manta-net collection, measurement fields, a reference station off San Diego, a 560-row table, and guest-form use restrictions; California coordinate rows remain to be screened.",
+      "contributor_in_ca": null,
+      "entity_type": "dataset",
+      "evidence_excerpt": "The catalog describes North Pacific Gyre and California Current measurements and a reference station off San Diego; its table has 560 rows.",
+      "format": [
+        "tabular dataset",
+        "560 rows and 13 columns"
+      ],
+      "id": "cce_lter_seaplex_microplastic_particle_type",
+      "last_checked": "2026-11-07",
+      "license": "No general license established; guest-form terms state scholarly use only, owner contact before publication, and no redistribution without permission",
+      "measurement_status": "catalogue_only",
+      "name": "California Current Ecosystem LTER SEAPLEX microplastic particle type measurements",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "California Current LTER catalog describes manta-net collection, measurement fields, a reference station off San Diego, a 560-row table, and guest-form use restrictions; California coordinate rows remain to be screened.",
+      "provenance_type": "dataset_record",
+      "provenance_url": "https://oceaninformatics.ucsd.edu/datazoo/catalogs/ccelter/datasets/218",
+      "region": "North Pacific Gyre and California Current; reference station off San Diego, California (record-level California subset unverified)",
+      "sample_matrix": [
+        "manta-net surface water samples",
+        "recovered microplastic particles"
+      ],
+      "seed_eligible": true,
+      "status": "Published 560-record dataset; catalog describes North Pacific Gyre and California Current and a California reference station, but coordinate rows are not yet screened",
+      "steward": "California Current Ecosystem Long Term Ecological Research site",
+      "url": "https://oceaninformatics.ucsd.edu/datazoo/catalogs/ccelter/datasets/218"
+    },
+    {
+      "access_method": "Public SCCWRP technical report; secondary report-derived observations, no separate row-level file located",
+      "access_tier": "D",
+      "cadence": "One-time screening study",
+      "citation": "Report summary identifies measured microplastic levels and compositions at selected coastal California wastewater treatment plants, including biosolids.",
+      "contributor_in_ca": null,
+      "entity_type": "literature_dataset",
+      "evidence_excerpt": "SCCWRP report describes measured microplastic levels and compositions at selected coastal California wastewater treatment plants.",
+      "format": [
+        "PDF technical report"
+      ],
+      "id": "california_wastewater_treatment_microplastics_sccwrp_1378",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for report-derived data; review SCCWRP terms before reuse",
+      "measurement_status": "catalogue_only",
+      "name": "California coastal wastewater treatment plant microplastics study",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "Report summary identifies measured microplastic levels and compositions at selected coastal California wastewater treatment plants, including biosolids.",
+      "provenance_type": "literature_secondary",
+      "provenance_url": "https://ftp.sccwrp.org/pub/download/DOCUMENTS/TechnicalReports/1378_MicroplasticsWastewaterPlants.pdf",
+      "region": "Coastal California",
+      "sample_matrix": [
+        "wastewater process samples",
+        "biosolids"
+      ],
+      "seed_eligible": true,
+      "status": "Published screening study with measurements from selected coastal California treatment plants",
+      "steward": "Southern California Coastal Water Research Project",
+      "url": "https://ftp.sccwrp.org/pub/download/DOCUMENTS/TechnicalReports/1378_MicroplasticsWastewaterPlants.pdf"
+    },
+    {
+      "access_method": "Public SCCWRP report on completed assessment; draft manuscripts submitted, no row-level download confirmed",
+      "access_tier": "D",
+      "cadence": "One Bight '23 cycle assessment",
+      "citation": "SCCWRP describes the completed Bight '23 regional measurement assessment for sediment and shellfish tissue; this is a separate 2023 cycle from the Bight '13 dataset.",
+      "contributor_in_ca": null,
+      "entity_type": "literature_dataset",
+      "evidence_excerpt": "SCCWRP reports completed Bight 2023 measurements in sediment and shellfish tissue.",
+      "format": [
+        "HTML report"
+      ],
+      "id": "bight_23_microplastics_sediment_shellfish",
+      "last_checked": "2026-11-07",
+      "license": "Unknown for underlying measurements; no data release terms identified",
+      "measurement_status": "catalogue_only",
+      "name": "Southern California Bight 2023 sediment and shellfish microplastics assessment",
+      "plastic_classes": [
+        "microplastics"
+      ],
+      "provenance_note": "SCCWRP describes the completed Bight '23 regional measurement assessment for sediment and shellfish tissue; this is a separate 2023 cycle from the Bight '13 dataset.",
+      "provenance_type": "literature_secondary",
+      "provenance_url": "https://www.sccwrp.org/bight-23-leverages-harmonized-measurement-methods-to-monitor-microplastics-regionally/",
+      "region": "Southern California coastal ocean",
+      "sample_matrix": [
+        "seafloor sediment",
+        "shellfish tissue"
+      ],
+      "seed_eligible": true,
+      "status": "Completed regional field assessment; findings described in submitted draft manuscripts",
+      "steward": "Southern California Coastal Water Research Project and Bight '23 participants",
+      "url": "https://www.sccwrp.org/bight-23-leverages-harmonized-measurement-methods-to-monitor-microplastics-regionally/"
+    }
+  ],
+  "generated_at": "2026-11-09T21:51:16.831889+00:00",
+  "publication_mode": "public_catalogue",
+  "sample_count": 0,
+  "samples": [],
+  "schema_version": "s7.5"
+}
