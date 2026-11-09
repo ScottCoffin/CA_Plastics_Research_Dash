@@ -89,3 +89,20 @@ The USD 0.002 mismatch between response metadata sum and provider budget
 decrement is accounted for conservatively by charging each response at the
 higher of the two measured cost bases. Do not claim the post-run status is a
 pre-run balance.
+
+The AT-1 status call is an account-usage observation, not a metered request.
+Its sanitized record preserves daily budget/usage/remaining values, credit
+limits/usage/remaining values, prepaid and one-time balances, and reset time,
+with `request_cost_known: false`; no zero request cost is invented. The local
+metered-request subtotal excludes only the exact `/rate-limit` endpoint. This
+classification preserves historical unknown status rows as diagnostics while
+ordinary unknown-cost request rows continue to fail closed. AT-1 requires a
+fresh valid provider snapshot before any sampling request and stops on malformed
+status data or nonzero paid balances.
+
+OpenAlex documents the `/rate-limit` response with `resets_at` and
+`resets_in_seconds` (see its [rate limit and authentication guide](https://help.openalex.org/api/authentication/)).
+The AT-1 adapter accepts that wire field; the older sanitized artifact's
+`resets_in_seconds_at_capture` label is treated as an annotation, not a required
+provider field. When no countdown is returned, the audit derives it from the
+UTC observation clock and `resets_at`, while retaining the freshness bound.

@@ -162,6 +162,55 @@ class ApiCostLogger:
                 "output advancement"
             )
 
+    def record_account_balance_snapshot(
+        self,
+        *,
+        url: str,
+        status_code: int,
+        snapshot: Mapping[str, object] | None,
+        diagnostics: Mapping[str, object] | None = None,
+    ) -> None:
+        """Persist a sanitized provider balance observation, never as request cost."""
+        if self._closed:
+            raise RuntimeError("cannot record a request after the run summary")
+        self.request_count += 1
+        fields = {
+            name: str(snapshot[name]) if isinstance(snapshot[name], Decimal) else snapshot[name]
+            for name in (
+                "daily_budget_usd",
+                "daily_used_usd",
+                "daily_remaining_usd",
+                "credits_limit",
+                "credits_used",
+                "credits_remaining",
+                "prepaid_remaining_usd",
+                "onetime_credits_balance",
+                "onetime_credits_remaining",
+                "resets_at",
+                "resets_in_seconds",
+                "resets_in_seconds_at_capture",
+                "reset_seconds_source",
+            )
+            if snapshot is not None and name in snapshot
+        }
+        self._append(
+            {
+                "record_type": "request",
+                "timestamp_utc": datetime.now(UTC).isoformat(),
+                "run_id": self.run_id,
+                "source": "openalex",
+                "endpoint_type": "account_balance_snapshot",
+                "method": "GET",
+                "url": redact_url(url),
+                "status_code": status_code,
+                "request_cost_known": False,
+                "credits_known": False,
+                "cost_known": False,
+                "account_balance": fields,
+                "schema_diagnostics": dict(diagnostics or {}),
+            }
+        )
+
     @property
     def request_metrics(self) -> tuple[dict[str, object], ...]:
         """Return sanitized per-attempt accounting values collected by this logger."""

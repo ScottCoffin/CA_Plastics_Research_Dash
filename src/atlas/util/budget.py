@@ -9,6 +9,7 @@ from datetime import UTC, date, datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import yaml
 
@@ -177,6 +178,12 @@ def daily_logged_usage(
             if not isinstance(record, dict):
                 continue
             if record.get("record_type") != "request" or record.get("source") != "openalex":
+                continue
+            # The documented authenticated /rate-limit endpoint reports account
+            # usage, not the charge for this HTTP request. Exclude only that
+            # exact provider endpoint from the metered-request subtotal; retain
+            # its original ledger row as diagnostic evidence.
+            if urlsplit(str(record.get("url", ""))).path.rstrip("/") == "/rate-limit":
                 continue
             if _utc_day(record.get("timestamp_utc"), line_number=line_number) != selected_day:
                 continue

@@ -34,3 +34,14 @@
 
 ### Files changed for this closure
 - `.agent/TODO.md`, `.agent/QUESTIONS.md`, `.agent/MEMORY.md`, `.agent/SESSION_LOG.md`, `.agent/HANDOFF.md`, and `agent_docs/project_progress.md`.
+
+## AT-1 partial checkpoint - 2026-11-09
+
+### Done
+- Kept the production ranking/cache on legacy `search=plastic`; added explicit audit-mode v2 counts with query/version/cache identity checks and alias rejection.
+- Added a bounded, resumable sample runner with validated free-only status preflight and durable partial outputs. The accepted 20-stratum sample has 405 rows / 354 unique works, 51 repeated-ID rows, eight short strata and a 95-row gap; all four baseline counts are within 10%.
+- Owner decision: retain the available 405 rows with blank labels, no supplements, no query or institution changes, and the 500-work gate still open. No candidate promotion.
+- Network-blocked full suite: 222 passed; Ruff and format checks passed.
+
+### Next
+- S7.1 is the next independent unchecked roadmap task. AT-1 remains unchecked pending human labels, precision/noise-term review, repeat audit, and promotion decision.

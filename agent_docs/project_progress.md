@@ -76,3 +76,5 @@ or corpus performance. S6.1 remains open pending candidate-corpus coverage.
 S7.1 registry schema and at least 15 verified seed entries is the next
 independent eligible task; S6.4 still requires real gold for an evaluation
 delta.
+
+AT-1 partial checkpoint (2026-11-09): explicit audit mode leaves legacy production ranking/cache as default and validates audit cache identity/path separation. The bounded runner saved the owner-approved top-20 sample (405 rows, 354 unique works, 51 repeated-ID rows, 95-row shortfall across eight strata), with four count baselines within 10%; it used 24 metered requests, 240 credits and USD 0.024 accounted cost plus one status snapshot. The owner chose no supplements/query changes and left the 500-work gate open. Labels remain blank and candidate promotion is pending. Network-blocked full suite passed (222); see `docs/QUERY_AUDIT.md`. AT-1 remains unchecked; next independent roadmap task is S7.1.

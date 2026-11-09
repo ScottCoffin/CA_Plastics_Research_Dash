@@ -19,7 +19,7 @@ import zipfile
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import pyarrow as pa
 import pyarrow.parquet as pq
@@ -471,60 +471,109 @@ def plastic_work_counts(
     *,
     authenticated: bool,
     refresh: bool = False,
+    query_mode: Literal["legacy", "audit"] = "legacy",
+    query_version: str | None = None,
+    query_path: Path | None = None,
+    audit_cache_path: Path | None = None,
 ) -> dict[str, int]:
-    """Rank institutions using broad OpenAlex ``search=plastic`` work counts.
+    """Count institution works with the production query or an opted-in audit query.
 
     Grouped queries include external collaborators, so authenticated builds use
     only 10 target IDs per request. A returned target group's count is exact for
     that target; omitted targets are below the API's top-100 groups for their
     small batch and cannot plausibly enter the statewide review leaders.
+
+    The default retains the existing broad ``search=plastic`` ranking. The
+    candidate query is available only with ``query_mode="audit"`` and explicit
+    version, query, and separate cache paths; it cannot silently become active.
     """
 
-    cached: dict[str, int] = {}
-    if path.exists() and not refresh:
-        cached = {
-            key: int(value) for key, value in json.loads(path.read_text(encoding="utf-8")).items()
-        }
-        missing = [key for key in institution_ids if key not in cached]
-        if not missing:
-            return cached
-        if authenticated:
-            for institution_id in missing:
-                url = _openalex_url(
-                    "/works",
-                    {
-                        "filter": f"institutions.id:{institution_id}",
-                        "search": "plastic",
-                        "per_page": 1,
-                    },
-                )
-                body, _ = _request_json(url, source="openalex", logger=logger)
-                cached[institution_id] = int(body["meta"]["count"])
-            path.write_text(json.dumps(cached, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-            return cached
+    if query_mode not in {"legacy", "audit"}:
+        raise ValueError(f"unsupported institution-count query mode: {query_mode!r}")
+    unique_ids = list(dict.fromkeys(institution_ids))
+    active_path = path
+    query_config: str | None = None
+    field: str | None = None
+    if query_mode == "audit":
+        if not query_version or query_path is None or audit_cache_path is None:
+            raise ValueError(
+                "audit mode requires explicit query_version, query_path, and audit_cache_path"
+            )
+        if query_path.resolve() == path.resolve() or audit_cache_path.resolve() == path.resolve():
+            raise ValueError("audit query and cache paths must be separate from production paths")
+        if query_path.resolve() == audit_cache_path.resolve():
+            raise ValueError("audit query and cache paths must resolve to different files")
+        query_config = query_path.read_text(encoding="utf-8").strip()
+        field, separator, expression = query_config.partition(":")
+        if not separator or field != "title_and_abstract.search" or not expression:
+            raise ValueError("audit query must use the title_and_abstract.search filter")
+        active_path = audit_cache_path
 
-    preliminary = dict.fromkeys(institution_ids, 0)
+    def valid_count(value: object) -> bool:
+        return type(value) is int and value >= 0
+
+    if active_path.exists() and not refresh:
+        try:
+            payload = json.loads(active_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            payload = None
+        if query_mode == "audit":
+            if (
+                isinstance(payload, dict)
+                and payload.get("query_version") == query_version
+                and payload.get("query") == query_config
+                and isinstance(payload.get("counts"), dict)
+                and all(
+                    isinstance(key, str) and valid_count(value)
+                    for key, value in payload["counts"].items()
+                )
+                and all(key in payload["counts"] for key in unique_ids)
+            ):
+                return {key: payload["counts"][key] for key in unique_ids}
+        elif (
+            isinstance(payload, dict)
+            and all(isinstance(key, str) and valid_count(value) for key, value in payload.items())
+            and all(key in payload for key in unique_ids)
+        ):
+            return {key: payload[key] for key in unique_ids}
+
+    preliminary = dict.fromkeys(unique_ids, 0)
     batch_size = 10 if authenticated else 50
-    for offset in range(0, len(institution_ids), batch_size):
-        batch = institution_ids[offset : offset + batch_size]
-        url = _openalex_url(
-            "/works",
-            {
-                "filter": f"institutions.id:{'|'.join(batch)}",
-                "search": "plastic",
-                "group_by": "institutions.id",
-                "per_page": 100,
-            },
-        )
+    for offset in range(0, len(unique_ids), batch_size):
+        batch = unique_ids[offset : offset + batch_size]
+        params: dict[str, object] = {
+            "filter": f"{field}:{query_config.partition(':')[2]},institutions.id:{'|'.join(batch)}"
+            if query_mode == "audit"
+            else f"institutions.id:{'|'.join(batch)}",
+            "group_by": "institutions.id",
+            "per_page": 100,
+        }
+        if query_mode == "legacy":
+            params["search"] = "plastic"
+            url = _openalex_url("/works", params)
+        else:
+            filter_value = str(params.pop("filter"))
+            encoded_filter = urllib.parse.quote(filter_value, safe="")
+            url = f"{OPENALEX_BASE}/works?filter={encoded_filter}&{urllib.parse.urlencode(params)}"
         body, _ = _request_json(url, source="openalex", logger=logger)
         wanted = set(batch)
         for group in body.get("group_by", []):
             key = _compact_openalex_id(group.get("key"))
             if key in wanted:
-                preliminary[key] = int(group.get("count", 0))
+                count = group.get("count")
+                if not valid_count(count):
+                    raise ValueError(f"OpenAlex returned an invalid work count for {key!r}")
+                preliminary[key] = count
 
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(preliminary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    active_path.parent.mkdir(parents=True, exist_ok=True)
+    cache: dict[str, object] = preliminary
+    if query_mode == "audit":
+        cache = {
+            "query_version": query_version,
+            "query": query_config,
+            "counts": preliminary,
+        }
+    active_path.write_text(json.dumps(cache, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return preliminary
 
 

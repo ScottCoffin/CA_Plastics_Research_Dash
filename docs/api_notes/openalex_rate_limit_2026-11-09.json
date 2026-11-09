@@ -1,21 +1,24 @@
-{
-  "source_class": "provider_response",
-  "source_url": "https://api.openalex.org/rate-limit",
-  "capture_date": "2026-11-09",
-  "captured_after_benchmark_run_id": "openalex-bench-5c9fe4e0487b",
-  "captured_by": "worker authenticated status query",
-  "http_status": 200,
-  "account_or_key_fields_removed": true,
-  "rate_limit": {
-    "daily_budget_usd": 1.0,
-    "daily_remaining_usd": 0.972,
-    "credits_limit": 10000,
-    "credits_used": 280,
-    "credits_remaining": 9720,
-    "prepaid_remaining_usd": 0.0,
-    "onetime_credits_balance": 0,
-    "onetime_credits_remaining": 0,
-    "resets_at": "2026-11-10T00:00:00.000Z",
-    "resets_in_seconds_at_capture": 30154
-  }
+﻿{
+    "source_class":  "provider_response",
+    "source_url":  "https://api.openalex.org/rate-limit",
+    "capture_date":  "2026-11-09",
+    "captured_after_benchmark_run_id":  "openalex-bench-5c9fe4e0487b",
+    "captured_by":  "worker authenticated status query",
+    "http_status":  200,
+    "account_or_key_fields_removed":  true,
+    "rate_limit":  {
+                       "daily_budget_usd":  1.0,
+                       "daily_remaining_usd":  0.972,
+                       "credits_limit":  10000,
+                       "credits_used":  280,
+                       "credits_remaining":  9720,
+                       "prepaid_remaining_usd":  0.0,
+                       "onetime_credits_balance":  0,
+                       "onetime_credits_remaining":  0,
+                       "resets_at":  "2026-11-10T00:00:00.000Z"
+                   },
+    "derived_annotations":  {
+                                "historical_reset_countdown_seconds":  30154,
+                                "provenance":  "Retained from the prior sanitized artifact; raw provider body was not retained, so this is not asserted as a wire field."
+                            }
 }

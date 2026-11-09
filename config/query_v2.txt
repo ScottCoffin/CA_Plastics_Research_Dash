@@ -1,0 +1,9 @@
+title_and_abstract.search:(
+ microplastic OR nanoplastic OR "micro-plastic" OR "nano-plastic" OR "micro-sized plastic" OR "microsized plastics"
+ OR "plastic pollution" OR "plastic debris" OR "plastic litter" OR "marine debris" OR "marine litter"
+ OR "plastic particles" OR "plastic fragments" OR "plastic ingestion" OR "resin pellet" OR "plastic pellet"
+ OR (microfiber AND (textile OR laundry OR synthetic OR plastic OR wastewater OR polyester))
+ OR ("tire wear" AND (particles OR microplastic OR runoff OR 6PPD OR stormwater OR pollution OR toxicity))
+ OR ("plastic waste" AND (ocean OR marine OR river OR soil OR environment OR pollution OR leakage)))
+ NOT ("microplastic strain" OR "microplastic deformation" OR "internal friction"
+      OR "plastic behaviour of crystals" OR "plastic behavior of crystals")

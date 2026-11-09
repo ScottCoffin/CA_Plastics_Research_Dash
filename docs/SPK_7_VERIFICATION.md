@@ -40,3 +40,19 @@ planned-request bound before a request, and counts same-day OpenAlex records in
 its local usage log across reruns. This is a conservative local guard, not a
 provider account-balance guarantee; the currently in-flight request can exceed
 its reserve before a response exposes its actual charge.
+
+The authenticated `/rate-limit` call is recorded as an
+`account_balance_snapshot` with `request_cost_known: false`; it is not treated
+as a zero-cost request. The local metered-request subtotal excludes only the
+exact `/rate-limit` endpoint, including the historical unknown-cost row, while
+leaving that diagnostic ledger entry intact. A fresh valid snapshot is required
+before AT-1 requests continue, and nonzero prepaid or one-time balance or an
+invalid snapshot stops the run.
+
+AT-1 validates freshness against its injected UTC clock before any works request:
+`resets_at` must be timezone-aware and within a 26-hour daily window, allowing
+at most five minutes of clock skew. OpenAlex documents the wire countdown as
+`resets_in_seconds`; when that field is absent, AT-1 derives a local countdown
+from `resets_at` and its observation clock. Any supplied countdown must be
+finite, bounded to the same window, and agree with the reset timestamp within
+five minutes. Historical fixtures use a fixed injected clock.

@@ -154,6 +154,41 @@ def test_daily_usage_normalizes_timezone_and_ignores_other_event_rows(tmp_path: 
     assert credits == Decimal(1)
 
 
+def test_rate_limit_snapshot_is_preserved_but_excluded_from_request_subtotal(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "status-ledger.jsonl"
+    historical_unknown = {
+        "record_type": "request",
+        "source": "openalex",
+        "timestamp_utc": "2026-11-09T12:00:00Z",
+        "url": "https://api.openalex.org/rate-limit",
+        "credits": 0,
+        "cost_usd": 0,
+        "credits_known": False,
+        "cost_known": False,
+    }
+    metered = {
+        **historical_unknown,
+        "url": "https://api.openalex.org/works?filter=x",
+        "credits": 2,
+        "credits_known": True,
+        "cost_known": False,
+    }
+    path.write_text(
+        "\n".join(json.dumps(row) for row in (historical_unknown, metered)) + "\n",
+        encoding="utf-8",
+    )
+    costs, credits = daily_logged_usage(
+        path,
+        cost_per_credit_usd=Decimal("0.0001"),
+        day=date(2026, 11, 9),
+    )
+    assert costs == Decimal("0.0002")
+    assert credits == Decimal(2)
+    assert len(path.read_text(encoding="utf-8").splitlines()) == 2
+
+
 @pytest.mark.parametrize(
     "timestamp",
     ["2026-11-09T12:00:00", "not-a-timestamp"],

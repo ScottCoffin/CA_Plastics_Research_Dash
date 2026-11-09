@@ -1,0 +1,183 @@
+{
+  "baseline_relative_drift": {
+    "SLAC": 0.0,
+    "UC Davis": 0.007751937984496138,
+    "UCSF": 0.0,
+    "global": 0.002140280070934919
+  },
+  "baseline_within_10_percent": {
+    "SLAC": true,
+    "UC Davis": true,
+    "UCSF": true,
+    "global": true
+  },
+  "baselines": {
+    "SLAC": 2,
+    "UC Davis": 130,
+    "UCSF": 25,
+    "global": 98328
+  },
+  "collection_status": "partial_with_shortfalls_or_pending_strata",
+  "duplicate_work_id_rows": 51,
+  "expected_baselines": {
+    "SLAC": 2,
+    "UC Davis": 129,
+    "UCSF": 25,
+    "global": 98118
+  },
+  "http_filter_accepted": true,
+  "label_status": "blank for owner/colleague review; no labels inferred",
+  "labelled_rows": 0,
+  "metered_accounted_cost_usd_this_run": "0.024",
+  "metered_credits_this_run": "240",
+  "per_institution": {
+    "I103635307": {
+      "matching_work_count": 100,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I1174212": {
+      "matching_work_count": 47,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I122411786": {
+      "matching_work_count": 21,
+      "sampled_rows": 21,
+      "shortfall": 4,
+      "status": "complete"
+    },
+    "I1282311441": {
+      "matching_work_count": 4,
+      "sampled_rows": 4,
+      "shortfall": 21,
+      "status": "complete"
+    },
+    "I1282927834": {
+      "matching_work_count": 5,
+      "sampled_rows": 5,
+      "shortfall": 20,
+      "status": "complete"
+    },
+    "I1334627681": {
+      "matching_work_count": 10,
+      "sampled_rows": 10,
+      "shortfall": 15,
+      "status": "complete"
+    },
+    "I149919469": {
+      "matching_work_count": 22,
+      "sampled_rows": 22,
+      "shortfall": 3,
+      "status": "complete"
+    },
+    "I150209017": {
+      "matching_work_count": 68,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I154570441": {
+      "matching_work_count": 67,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I161318765": {
+      "matching_work_count": 84,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I180670191": {
+      "matching_work_count": 25,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I185103710": {
+      "matching_work_count": 38,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I204250578": {
+      "matching_work_count": 32,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I2801935854": {
+      "matching_work_count": 2,
+      "sampled_rows": 2,
+      "shortfall": 23,
+      "status": "complete"
+    },
+    "I2803209242": {
+      "matching_work_count": 22,
+      "sampled_rows": 22,
+      "shortfall": 3,
+      "status": "complete"
+    },
+    "I36258959": {
+      "matching_work_count": 95,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I4210137306": {
+      "matching_work_count": 19,
+      "sampled_rows": 19,
+      "shortfall": 6,
+      "status": "complete"
+    },
+    "I84218800": {
+      "matching_work_count": 130,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I95457486": {
+      "matching_work_count": 94,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    },
+    "I97018004": {
+      "matching_work_count": 153,
+      "sampled_rows": 25,
+      "shortfall": 0,
+      "status": "complete"
+    }
+  },
+  "progress_cache": "data\\interim\\at1_query_v2_audit_progress.json",
+  "query": "title_and_abstract.search:(\n microplastic OR nanoplastic OR \"micro-plastic\" OR \"nano-plastic\" OR \"micro-sized plastic\" OR \"microsized plastics\"\n OR \"plastic pollution\" OR \"plastic debris\" OR \"plastic litter\" OR \"marine debris\" OR \"marine litter\"\n OR \"plastic particles\" OR \"plastic fragments\" OR \"plastic ingestion\" OR \"resin pellet\" OR \"plastic pellet\"\n OR (microfiber AND (textile OR laundry OR synthetic OR plastic OR wastewater OR polyester))\n OR (\"tire wear\" AND (particles OR microplastic OR runoff OR 6PPD OR stormwater OR pollution OR toxicity))\n OR (\"plastic waste\" AND (ocean OR marine OR river OR soil OR environment OR pollution OR leakage)))\n NOT (\"microplastic strain\" OR \"microplastic deformation\" OR \"internal friction\"\n      OR \"plastic behaviour of crystals\" OR \"plastic behavior of crystals\")",
+  "query_sha256": "9dec9aee329199d21fb90dc3dc144622edc957e6e0ed6d227e54981e4bf2dbb1",
+  "query_version": "plastic-v2",
+  "rate_limit_preflight": {
+    "credits_limit": "10000",
+    "credits_remaining": "9610",
+    "credits_used": "390",
+    "daily_budget_usd": "1",
+    "daily_remaining_usd": "0.961",
+    "daily_used_usd": "0.039",
+    "onetime_credits_balance": "0",
+    "onetime_credits_remaining": "0",
+    "prepaid_remaining_usd": "0",
+    "resets_at": "2026-11-10T00:00:00+00:00",
+    "resets_in_seconds_at_capture": "21322"
+  },
+  "request_count_this_run": 25,
+  "run_id": "at1-audit-87d70778231e",
+  "sample_csv": "docs\\QUERY_AUDIT_REVIEW.csv",
+  "sample_row_target": 500,
+  "sample_rows": 405,
+  "sample_shortfall_rows": 95,
+  "sample_strata_completed": 20,
+  "sample_strata_pending": 0,
+  "sample_strata_target": 20,
+  "timestamp_utc": "2026-11-09T18:05:03.089151+00:00",
+  "unique_work_ids": 354
+}
