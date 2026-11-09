@@ -1,0 +1,367 @@
+{
+  "checked": "2026-11-09",
+  "limits": {
+    "max_requests": 50,
+    "max_bytes_per_file": 10000000,
+    "requests_made": 21,
+    "max_single_file_bytes": 1589496,
+    "paid_or_authenticated_services": false,
+    "terms_accepted": false,
+    "anti_bot_bypass": false,
+    "max_content_length_observed": 3271174
+  },
+  "tier_a_rule": "machine accessible AND plastic relevant AND license cleared AND documented source-to-canonical field map; unresolved normalization fields remain explicit unknown/deferred",
+  "sources": [
+    {
+      "id": "noaa_ncei_marine_microplastics",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "landing page; portal supports user-selected CSV/JSON/GeoJSON exports, no bounded row export parsed"
+      },
+      "access_method": "Public map portal; filter/export selected records or collection; intermittent cloud-migration delays reported by NCEI",
+      "observed_format": [
+        "CSV",
+        "JSON",
+        "GeoJSON"
+      ],
+      "license_decision": "Public access/use stated; source-record license and attribution vary; no auto-ingest",
+      "update_frequency": "Quarterly per database paper; verify live release metadata",
+      "tier_decision": "B",
+      "tier_reason": "No general source-level license and canonical field map not sample-verified.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "sf_bay_5gyres_microplastics",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "CKAN metadata plus actual XLSX fetched (1,589,496 bytes) and parsed; 6 workbook sheets"
+      },
+      "access_method": "Public CA Open Data resource downloads and dataset API",
+      "observed_format": [
+        "XLSX",
+        "PDF"
+      ],
+      "license_decision": "CC BY 4.0; State catalog says public access and unrestricted public use",
+      "update_frequency": "Irregular per catalog; workbook resource updated 2026-09-30",
+      "tier_decision": "A",
+      "tier_reason": "Public CC BY XLSX; actual sample and particle sheets parsed, source-to-canonical sample mapping recorded; concentration harmonization is deferred to S7.3.",
+      "field_map": {
+        "status": "observed; raw sheet headers and sample rows inspected",
+        "sheet_model": {
+          "manta": "sample metadata; includes Volume.L and Count; does not contain SampleMatrix",
+          "Particle Data": "particle detail; contains SampleMatrix source code, particle dimensions, type and morphology; joined by SampleID"
+        },
+        "source_matrix_mapping": {
+          "raw_code": "manta",
+          "canonical_matrix": "surface water",
+          "basis": "California Open Data resource describes particle data for surface water, sediment, effluent, storm water, and fish; this manta row records a 5Gyres Manta Trawl and PositionWaterColumn=Surface. The observed source code is retained separately."
+        },
+        "canonical_mapping": {
+          "sample_id": "manta.SampleID",
+          "date": "manta.SampleDate",
+          "lat": "manta.ActualLatitude, fallback manta.Latitude",
+          "lon": "manta.ActualLongitude, fallback manta.Longitude",
+          "matrix": "Particle Data.SampleMatrix source code manta mapped to surface water as above",
+          "method": "manta.CollectionDeviceName",
+          "particle_count": "manta.Count",
+          "sample_volume_l": "manta.Volume.L (observed in same sample row; no join needed)",
+          "concentration_value": "deferred / null pending S7.3 unit and denominator harmonization",
+          "concentration_unit": "deferred / null",
+          "particle_length_mm": "Particle Data.Length.mm",
+          "particle_width_mm": "Particle Data.Width.mm",
+          "size_class": "unknown / deferred; do not infer from dimensions or MatrixName",
+          "mesh_um": "unknown / deferred; no mapped source field",
+          "plastic_type": "Particle Data.PlasticType",
+          "morphology": "Particle Data.MorphologicalCategory",
+          "particle_sheet_join": "SampleID"
+        },
+        "unmapped_or_deferred": [
+          "size_class",
+          "mesh_um",
+          "concentration_value",
+          "concentration_unit"
+        ]
+      },
+      "workbook_provenance": {
+        "sha256": "8fc7c636413e8030d9648d295c3263fe3dbf30a04c64c765e267cb71611d2684",
+        "verified_existing_path": "C:/Users/Scott.Coffin/Downloads/2020-09-11_microparticledata.xlsx",
+        "downloaded_during_repair": false
+      }
+    },
+    {
+      "id": "ca_drinking_water_microplastics",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "State Water Board program page only; no public observation export located"
+      },
+      "access_method": "Program requirements, methods, and reporting information on official page; no public bulk observation download confirmed",
+      "observed_format": [
+        "web page",
+        "PDF methods"
+      ],
+      "license_decision": "Unknown for observations; no auto-ingest",
+      "update_frequency": "SB 1422 phase-one schedule, not dataset refresh cadence",
+      "tier_decision": "C",
+      "tier_reason": "Program workflow references data.ca.gov submission, but no public dataset endpoint confirmed.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "noaa_mdmap",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "NOAA project landing page; API/export documentation not probed to record-level rows"
+      },
+      "access_method": "Public MDMAP data map; filter locations/date and export selected data",
+      "observed_format": [
+        "web portal",
+        "export formats to verify in S7.2"
+      ],
+      "license_decision": "Unknown record-level rights; no auto-ingest",
+      "update_frequency": "Monthly partner survey cadence is historical; current export cadence unknown",
+      "tier_decision": "B",
+      "tier_reason": "Program documented but no terms-cleared row-level sample parsed.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "socal_bight_microplastics",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "SCCWRP program landing page; survey datasets require separate selection"
+      },
+      "access_method": "SCCWRP program data portal and program-cycle datasets; source-specific export needs smoke test",
+      "observed_format": [
+        "web data portal",
+        "static databases"
+      ],
+      "license_decision": "Unknown per individual survey dataset; no auto-ingest",
+      "update_frequency": "Approximately five-year program cycles",
+      "tier_decision": "B",
+      "tier_reason": "Portal data and plastic-specific extract not established.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "bight_2013_benthic_plastic",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "SCCWRP landing page; dataset-specific file not verified"
+      },
+      "access_method": "SCCWRP page describes Bight ArcGIS open-data portal and older static databases; dataset-specific link must be confirmed",
+      "observed_format": [
+        "ArcGIS Open Data",
+        "static database; dataset-specific format unknown"
+      ],
+      "license_decision": "Unknown; no auto-ingest",
+      "update_frequency": "One-time Bight 2013 cycle",
+      "tier_decision": "B",
+      "tier_reason": "Actual row-level data file and license not verified.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "monterey_bay_watershed_to_whales",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "California Sea Grant project page; no row-level sample file identified"
+      },
+      "access_method": "Public project description; sample-level dataset access not stated",
+      "observed_format": [
+        "web project page",
+        "future data format unknown"
+      ],
+      "license_decision": "Unknown; no auto-ingest",
+      "update_frequency": "One-time study; no refresh cadence",
+      "tier_decision": "B",
+      "tier_reason": "Results page only; no mappable sample table.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "nhmla_plastics_past_present",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "California Sea Grant project page; underlying specimen data not located"
+      },
+      "access_method": "Public California Sea Grant project report; no sample-level dataset endpoint verified",
+      "observed_format": [
+        "PDF project record",
+        "future data format unknown"
+      ],
+      "license_decision": "Unknown; no auto-ingest",
+      "update_frequency": "Retrospective one-time study",
+      "tier_decision": "B",
+      "tier_reason": "Published project evidence only.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "la_san_gabriel_rivers_sccwrp_1389",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "PDF abstract (148,856 bytes); secondary evidence, no row-level data"
+      },
+      "access_method": "Public technical report abstract; full report/data download location not yet verified",
+      "observed_format": [
+        "PDF abstract"
+      ],
+      "license_decision": "Unknown report-derived data; no auto-ingest",
+      "update_frequency": "One-time report",
+      "tier_decision": "D",
+      "tier_reason": "Secondary report is not a primary sample endpoint.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "socal_stormwater_biofilter_microplastics",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 202,
+        "landing_or_payload": "Shiny app returned HTTP 202 HTML; no data payload parsed"
+      },
+      "access_method": "Public interactive app; article states supporting data can be viewed and downloaded",
+      "observed_format": [
+        "web app",
+        "download format to verify"
+      ],
+      "license_decision": "Unknown; no auto-ingest",
+      "update_frequency": "Study-specific; refresh cadence unknown",
+      "tier_decision": "B",
+      "tier_reason": "App acceptance response is not evidence of dataset access.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "bay_area_clothes_dryer_microfibers",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "California Sea Grant project page; no row-level data file identified"
+      },
+      "access_method": "Public California Sea Grant project page and executive-summary download; raw sample-level file not identified",
+      "observed_format": [
+        "HTML project page",
+        "PDF executive summary"
+      ],
+      "license_decision": "Unknown; no auto-ingest",
+      "update_frequency": "One-time study",
+      "tier_decision": "B",
+      "tier_reason": "Project summary only.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "la_bmp_microplastic_retention",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "California Sea Grant project page; no row-level data file identified"
+      },
+      "access_method": "Public California Sea Grant project page and executive-summary download; raw result file not identified",
+      "observed_format": [
+        "HTML project page",
+        "PDF executive summary"
+      ],
+      "license_decision": "Unknown; no auto-ingest",
+      "update_frequency": "One-time study",
+      "tier_decision": "B",
+      "tier_reason": "Project summary only.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "cce_lter_seaplex_microplastic_particle_type",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "Catalog page; dataset behind guest terms; no agreement or download attempted"
+      },
+      "access_method": "Catalog lists view/download, but DataZoo guest-form terms restrict scholarly use, require owner contact before publication, and prohibit redistribution without permission; no agreement acceptance or download performed",
+      "observed_format": [
+        "tabular dataset",
+        "560 rows and 13 columns"
+      ],
+      "license_decision": "Restricted guest terms: scholarly use, contact before publication, no redistribution; no auto-ingest",
+      "update_frequency": "One-time August 2009 cruise",
+      "tier_decision": "B",
+      "tier_reason": "Terms prohibit reuse absent owner interaction; canonical mapping and CA-coordinate screen not verified.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "california_wastewater_treatment_microplastics_sccwrp_1378",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "PDF technical report (3,271,174 bytes); secondary evidence"
+      },
+      "access_method": "Public SCCWRP technical report; secondary report-derived observations, no separate row-level file located",
+      "observed_format": [
+        "PDF technical report"
+      ],
+      "license_decision": "Unknown for report-derived observations; no auto-ingest",
+      "update_frequency": "One-time screening study",
+      "tier_decision": "D",
+      "tier_reason": "Report is not row-level data.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    },
+    {
+      "id": "bight_23_microplastics_sediment_shellfish",
+      "smoke": {
+        "checked": "2026-11-09",
+        "http_status": 200,
+        "landing_or_payload": "SCCWRP HTML report; no row-level download confirmed"
+      },
+      "access_method": "Public SCCWRP report on completed assessment; draft manuscripts submitted, no row-level download confirmed",
+      "observed_format": [
+        "HTML report"
+      ],
+      "license_decision": "Unknown; no auto-ingest",
+      "update_frequency": "One Bight 2023 assessment cycle",
+      "tier_decision": "D",
+      "tier_reason": "Secondary report evidence only.",
+      "field_map": {
+        "status": "unmapped; no actual row-level sample parsed",
+        "canonical_mapping": "No source fields verified. Do not populate canonical samples until a public source file is identified, permission is clear, and fields are inspected."
+      }
+    }
+  ]
+}

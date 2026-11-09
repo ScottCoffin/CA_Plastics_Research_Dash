@@ -1,0 +1,42 @@
+{
+  "source": "https://data.cnra.ca.gov/dataset/78ac95ac-9665-4e53-aea6-ad0762055cce/resource/4e6aaf6f-7055-484b-84f4-3a66df294f27/download/2020-09-11_microparticledata.xlsx",
+  "license": "CC BY 4.0; attribution required",
+  "workbook_sha256": "8fc7c636413e8030d9648d295c3263fe3dbf30a04c64c765e267cb71611d2684",
+  "sheets": {
+    "manta": {
+      "headers": [
+        "SampleID", "StationCode", "SampleDate", "ActualLatitude", "ActualLongitude",
+        "Datum", "Volume.L", "Count", "ProjectCode", "EventCode", "ProtocolCode",
+        "AgencyCode", "SampleComments", "LocationCode", "GeometryShape", "CollectionTime",
+        "CollectionMethodCode", "SampleType", "CollectionDeviceName", "CollectionDepth",
+        "UnitCollectionDepth", "Replicate", "PositionWaterColumn", "LabCollectionComments"
+      ],
+      "row": {
+        "SampleID": "CB4-Manta-16Nov2017",
+        "SampleDate": "2017-11-16",
+        "ActualLatitude": 37.92291,
+        "ActualLongitude": -122.43303,
+        "Volume.L": 102764.135670286,
+        "Count": 630,
+        "CollectionDeviceName": "5Gyres Manta Trawl",
+        "PositionWaterColumn": "Surface"
+      }
+    },
+    "Particle Data": {
+      "headers": [
+        "SampleMatrix", "SampleID", "PlasticType", "MorphologicalCategory", "Color",
+        "Length.mm", "Width.mm", "MatrixName"
+      ],
+      "row": {
+        "SampleMatrix": "manta",
+        "SampleID": "CB4-Manta-16Nov2017",
+        "PlasticType": "Polyethylene/polypropylene copolymer",
+        "MorphologicalCategory": "Fiber",
+        "Color": "Light Blue",
+        "Length.mm": 2.427,
+        "Width.mm": 0.037,
+        "MatrixName": "samplewater, particulate, >125 to 355 um"
+      }
+    }
+  }
+}

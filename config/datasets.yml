@@ -10,7 +10,7 @@ datasets:
     region: Global marine; California coverage not asserted until spatial query
     sample_matrix: [marine surface water, marine water column, seafloor sediment]
     plastic_classes: [microplastics]
-    access_tier: A
+    access_tier: B
     url: https://www.ncei.noaa.gov/products/microplastics
     access_method: Public map portal; filter/export selected records or collection; intermittent cloud-migration delays reported by NCEI
     format: [CSV, JSON, GeoJSON]
@@ -163,7 +163,7 @@ datasets:
     region: U.S. shorelines, including California
     sample_matrix: [shoreline debris survey]
     plastic_classes: [macrodebris, microdebris proxy only]
-    access_tier: A
+    access_tier: B
     url: https://marinedebris.noaa.gov/our-work/monitoring/marine-debris-monitoring-and-assessment-project
     access_method: Public MDMAP data map; filter locations/date and export selected data
     format: [web portal, export formats to verify in S7.2]
@@ -347,7 +347,7 @@ datasets:
     region: Seven Southern California biofiltration installations
     sample_matrix: [paired stormwater influent, biofilter effluent]
     plastic_classes: [microplastics]
-    access_tier: A
+    access_tier: B
     url: https://sccwrp.shinyapps.io/bmp_microplastics_shiny/
     access_method: Public interactive app; article states supporting data can be viewed and downloaded
     format: [web app, download format to verify]

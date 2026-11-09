@@ -1,3 +1,21 @@
+# Handoff - 2026-11-09 - S7.2 complete; S7.3 next
+
+## Done
+- Completed S7.2 source verification for all 15 eligible identities. Access method, observed format, license/reuse decision, update frequency, tier rationale, and field-map status are recorded in `docs/api_notes/monitoring_sources_s7_2.json` and summarized in `docs/S7_2_VERIFICATION.md`.
+- Confirmed only SF Bay / 5 Gyres as Tier A. The sample and particle sheets join by `SampleID`; preserve particle count and sample volume separately. Defer concentration, size class, and mesh normalization to S7.3. No XLSX or raw source file is committed.
+- Verification: 11 focused tests; network-blocked full suite 226 passed; Ruff check/format and `git diff --check` passed.
+
+## State of the repo
+- S7.2 is complete locally. Only SF Bay / 5 Gyres has cleared access, reuse, and field-map requirements for ingestion. The other Tier A candidates were downgraded or left unresolved; no automatic ingest is authorized by these records.
+- Run `py -3.14 scripts/check_s7_2.py` for offline evidence validation.
+
+## Next task (suggested)
+- S7.3: (1) review `spec.md` S7.3 and the S7.2 field map; (2) implement the cleared SF Bay / 5 Gyres source with polygon flags, unit and duplicate QC; (3) add fixtures and tests, keeping other sources deferred until their access, reuse, and mapping are cleared.
+
+---
+
+## Prior handoff context
+
 # Handoff - 2026-11-07 - S6.3 complete; S7.1 next
 
 ## Done
