@@ -19,6 +19,10 @@ DEFAULT_USAGE_LOG = Path("data/logs/api_usage.jsonl")
 _SENSITIVE_QUERY_FIELDS = frozenset({"api_key", "apikey", "access_token", "key", "token"})
 
 
+class OpenAlexUsageMetadataError(ValueError):
+    """A successful OpenAlex response omitted or malformed required credit usage."""
+
+
 def redact_url(url: str) -> str:
     """Return *url* with common credential query parameters redacted."""
 
@@ -44,6 +48,16 @@ def _header(headers: Mapping[str, object], name: str) -> object | None:
     return next((value for key, value in headers.items() if key.casefold() == wanted), None)
 
 
+def _valid_measure(value: object) -> bool:
+    if value in (None, ""):
+        return False
+    try:
+        number = Decimal(str(value))
+    except (InvalidOperation, TypeError, ValueError):
+        return False
+    return number.is_finite() and number >= 0
+
+
 class ApiCostLogger:
     """Write one JSONL record per request and one aggregate per completed run."""
 
@@ -55,6 +69,7 @@ class ApiCostLogger:
         self.request_count = 0
         self.credits_total = Decimal(0)
         self.cost_usd_total = Decimal(0)
+        self._request_metrics: list[dict[str, object]] = []
         self._closed = False
         self._summary: dict[str, object] | None = None
 
@@ -73,6 +88,8 @@ class ApiCostLogger:
         status_code: int,
         credits: int | float | str = 0,
         cost_usd: int | float | str = 0,
+        credits_known: bool = True,
+        cost_known: bool = True,
     ) -> None:
         """Append a request record and update this run's in-memory totals."""
 
@@ -83,6 +100,16 @@ class ApiCostLogger:
         self.request_count += 1
         self.credits_total += credit_value
         self.cost_usd_total += cost_value
+        self._request_metrics.append(
+            {
+                "source": source,
+                "status_code": status_code,
+                "credits": credit_value,
+                "cost_usd": cost_value,
+                "credits_known": credits_known,
+                "cost_known": cost_known,
+            }
+        )
         self._append(
             {
                 "record_type": "request",
@@ -94,6 +121,8 @@ class ApiCostLogger:
                 "status_code": status_code,
                 "credits": float(credit_value),
                 "cost_usd": float(cost_value),
+                "credits_known": credits_known,
+                "cost_known": cost_known,
             }
         )
 
@@ -111,14 +140,32 @@ class ApiCostLogger:
         meta = body.get("meta", {}) if body else {}
         if not isinstance(meta, Mapping):
             meta = {}
+        credit_header = _header(headers, "X-RateLimit-Credits-Used")
+        cost_value = meta.get("cost_usd")
+        credits_known = credit_header not in (None, "")
+        cost_known = cost_value not in (None, "")
+        credits_known = credits_known and _valid_measure(credit_header)
+        cost_known = cost_known and _valid_measure(cost_value)
         self.record(
             source="openalex",
             method=method,
             url=url,
             status_code=status_code,
-            credits=_header(headers, "X-RateLimit-Credits-Used") or 0,
-            cost_usd=meta.get("cost_usd", 0),
+            credits=credit_header if credits_known else 0,
+            cost_usd=cost_value if cost_known else 0,
+            credits_known=credits_known,
+            cost_known=cost_known,
         )
+        if not credits_known:
+            raise OpenAlexUsageMetadataError(
+                "OpenAlex response omitted valid credit usage; stopping before retry or "
+                "output advancement"
+            )
+
+    @property
+    def request_metrics(self) -> tuple[dict[str, object], ...]:
+        """Return sanitized per-attempt accounting values collected by this logger."""
+        return tuple(dict(record) for record in self._request_metrics)
 
     def close(self) -> dict[str, object]:
         """Append and return the aggregate run summary; repeated calls are harmless."""

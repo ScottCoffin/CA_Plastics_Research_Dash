@@ -17,6 +17,7 @@ import urllib.request
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
@@ -24,7 +25,12 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from atlas.query import load_query_config, openalex_filter
-from atlas.util.cost import ApiCostLogger
+from atlas.util.budget import (
+    conservative_request_cost,
+    daily_logged_usage,
+    resolve_openalex_budget,
+)
+from atlas.util.cost import ApiCostLogger, OpenAlexUsageMetadataError
 
 OPENALEX_BASE = "https://api.openalex.org"
 USER_AGENT = "CA-Plastics-Research-Atlas/0.1 (S2.1 works ingester; contact via GitHub)"
@@ -212,6 +218,8 @@ def _request_json(
                     f"OpenAlex request failed after {attempts} attempts: {message}"
                 ) from error
             time.sleep(2**attempt)
+        except OpenAlexUsageMetadataError:
+            raise
         except (OSError, ValueError) as error:
             if attempt + 1 == attempts:
                 raise RuntimeError(f"OpenAlex request failed after {attempts} attempts") from error
@@ -406,6 +414,7 @@ def ingest_live(
     allow_candidate: bool = False,
     max_credits: float | None = None,
     max_cost_usd: float | None = None,
+    budget_path: str | Path = "config/budget.yml",
     run_id: str | None = None,
 ) -> dict[str, Any]:
     """Run a backfill or inclusive publication/update-date incremental pull."""
@@ -426,10 +435,9 @@ def ingest_live(
         raise ValueError("start_year must not be after end_year")
     if updated_since and (start_year is not None or end_year is not None):
         raise ValueError("updated_since cannot be combined with a year backfill")
-    if max_credits is not None and max_credits < 0:
-        raise ValueError("max_credits must be non-negative")
-    if max_cost_usd is not None and max_cost_usd < 0:
-        raise ValueError("max_cost_usd must be non-negative")
+    budget = resolve_openalex_budget(
+        budget_path, max_cost_usd=max_cost_usd, max_credits=max_credits
+    )
 
     state = read_high_water_mark(paths.high_water_mark)
     if start_year is None and not updated_since and state:
@@ -443,6 +451,11 @@ def ingest_live(
     fetched_at = datetime.now(UTC).isoformat()
     new_rows: list[dict[str, Any]] = []
     request_number = 0
+    prior_day_cost, prior_day_credits = daily_logged_usage(
+        paths.usage_log, cost_per_credit_usd=budget.cost_per_credit_usd
+    )
+    conservative_cost_total = Decimal(0)
+    credits_total = Decimal(0)
     with ApiCostLogger(actual_run_id, paths.usage_log) as logger:
         for batch in chunks(list(institution_ids)):
             windows: list[tuple[str | None, str | None]]
@@ -457,6 +470,12 @@ def ingest_live(
                 cursor = "*"
                 page_count = 0
                 while cursor:
+                    reserve_error = budget.reserve_error(
+                        cost_usd=prior_day_cost + conservative_cost_total,
+                        credits=prior_day_credits + credits_total,
+                    )
+                    if reserve_error:
+                        raise OpenAlexBudgetError(f"{reserve_error}; outputs were not advanced")
                     url = build_works_url(
                         config,
                         batch,
@@ -466,17 +485,36 @@ def ingest_live(
                         cursor=cursor,
                         per_page=per_page,
                     )
+                    prior_request_count = len(logger.request_metrics)
                     body = _request_json(url, logger=logger)
-                    if (
-                        max_credits is not None
-                        and logger.credits_total > type(logger.credits_total)(str(max_credits))
-                    ) or (
-                        max_cost_usd is not None
-                        and logger.cost_usd_total > type(logger.cost_usd_total)(str(max_cost_usd))
-                    ):
-                        raise OpenAlexBudgetError(
-                            "OpenAlex per-run budget exceeded; outputs were not advanced"
+                    attempts = logger.request_metrics[prior_request_count:]
+                    if not attempts:
+                        raise OpenAlexUsageMetadataError(
+                            "OpenAlex request returned without accounting records"
                         )
+                    response_credits = Decimal(0)
+                    for attempt_record in attempts:
+                        if attempt_record["credits_known"] is not True:
+                            raise OpenAlexUsageMetadataError(
+                                "OpenAlex request has unknown credit usage; "
+                                "outputs were not advanced"
+                            )
+                        attempt_credits = Decimal(str(attempt_record["credits"]))
+                        attempt_cost = conservative_request_cost(
+                            attempt_record["cost_usd"] if attempt_record["cost_known"] else None,
+                            attempt_credits,
+                            budget.cost_per_credit_usd,
+                            meta_cost_known=attempt_record["cost_known"] is True,
+                        )
+                        response_credits += attempt_credits
+                        conservative_cost_total += attempt_cost
+                    credits_total += response_credits
+                    overrun_error = budget.actual_error(
+                        cost_usd=prior_day_cost + conservative_cost_total,
+                        credits=prior_day_credits + credits_total,
+                    )
+                    if overrun_error:
+                        raise OpenAlexBudgetError(f"{overrun_error}; outputs were not advanced")
                     request_number += 1
                     _write_snapshot(
                         _snapshot_path(paths.raw_dir, actual_run_id, request_number),
@@ -521,5 +559,7 @@ def ingest_live(
         "fetched": len(new_rows),
         "rows_written": len(merged),
         "requests": request_number,
+        "accounted_cost_usd": float(conservative_cost_total),
+        "credits": float(credits_total),
         "high_water": high_water,
     }

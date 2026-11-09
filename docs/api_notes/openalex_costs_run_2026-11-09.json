@@ -1,0 +1,20 @@
+{
+  "run_id": "openalex-bench-5c9fe4e0487b",
+  "source": "sanitized benchmark CLI completion output and ignored usage log",
+  "captured_date": "2026-11-09",
+  "planned_calls": 100,
+  "completed_calls": 100,
+  "request_count_in_ignored_log": 100,
+  "per_call_latency_persisted_in_original_log": false,
+  "latency_provenance": "per-endpoint aggregates copied from the completed CLI output; no per-call latency reconstructed",
+  "conservative_accounted_cost_usd": 0.028,
+  "accounted_cost_usd_provenance": "derived as max(meta_cost_usd, credits * 0.0001) per endpoint; the observed provider limit was 10000 credits for USD 1.00",
+  "endpoint_results": {
+    "filter_only_list": {"calls": 20, "credits": 20, "meta_cost_usd": 0.002, "latency_ms_mean": 506.227, "latency_ms_max": 948.593},
+    "search_filter_count": {"calls": 20, "credits": 200, "meta_cost_usd": 0.02, "latency_ms_mean": 409.749, "latency_ms_max": 723.566},
+    "group_by": {"calls": 20, "credits": 20, "meta_cost_usd": 0.002, "latency_ms_mean": 254.087, "latency_ms_max": 457.475},
+    "singleton": {"calls": 20, "credits": 20, "meta_cost_usd": 0.0, "latency_ms_mean": 381.525, "latency_ms_max": 554.044},
+    "page_200": {"calls": 20, "credits": 20, "meta_cost_usd": 0.002, "latency_ms_mean": 2047.787, "latency_ms_max": 3982.391}
+  },
+  "totals": {"credits": 280, "meta_cost_usd": 0.026, "weighted_latency_ms_mean": 719.875, "max_latency_ms": 3982.391}
+}

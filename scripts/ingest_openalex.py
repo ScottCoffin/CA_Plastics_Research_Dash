@@ -24,6 +24,7 @@ def main() -> None:
         "--institution-parquet", type=Path, default=Path("data/processed/institutions.parquet")
     )
     parser.add_argument("--config", type=Path, default=Path("config/queries.yml"))
+    parser.add_argument("--budget", type=Path, default=Path("config/budget.yml"))
     parser.add_argument("--raw-dir", type=Path, default=Path("data/raw/openalex_works"))
     parser.add_argument("--output", type=Path, default=Path("data/interim/works_raw.parquet"))
     parser.add_argument(
@@ -66,6 +67,7 @@ def main() -> None:
             allow_candidate=args.allow_candidate,
             max_credits=args.max_credits,
             max_cost_usd=args.max_cost_usd,
+            budget_path=args.budget,
         )
     print(result)
 

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from atlas.util.cost import ApiCostLogger, redact_url
+from atlas.util.cost import ApiCostLogger, OpenAlexUsageMetadataError, redact_url
 
 
 def read_jsonl(path: Path) -> list[dict[str, object]]:
@@ -60,3 +60,38 @@ def test_logger_rejects_records_after_summary(tmp_path: Path) -> None:
             url="https://api.ror.org/v2/organizations",
             status_code=200,
         )
+
+
+def test_success_response_missing_credit_is_marked_unknown_and_fails_closed(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "missing_credit.jsonl"
+    with pytest.raises(OpenAlexUsageMetadataError, match="credit usage"):
+        with ApiCostLogger("missing-credit", path) as logger:
+            logger.record_openalex_response(
+                method="GET",
+                url="https://api.openalex.org/works",
+                status_code=200,
+                headers={},
+                body={"meta": {"cost_usd": 0}},
+            )
+    rows = read_jsonl(path)
+    assert rows[0]["credits"] == 0
+    assert rows[0]["credits_known"] is False
+    assert rows[0]["cost_known"] is True
+
+
+def test_missing_cost_is_explicit_and_credits_remain_available(tmp_path: Path) -> None:
+    path = tmp_path / "missing_cost.jsonl"
+    with ApiCostLogger("missing-cost", path) as logger:
+        logger.record_openalex_response(
+            method="GET",
+            url="https://api.openalex.org/works",
+            status_code=200,
+            headers={"X-RateLimit-Credits-Used": "1"},
+            body={"meta": {}},
+        )
+    row = read_jsonl(path)[0]
+    assert row["credits"] == 1
+    assert row["credits_known"] is True
+    assert row["cost_known"] is False

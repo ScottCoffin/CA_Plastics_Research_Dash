@@ -1,0 +1,16 @@
+# SPK-7 measurements completed 2026-11-09; verify policy before reuse.
+measurement_status: complete_100_calls
+provider: openalex
+daily_ceiling_usd: 1.0
+abort_threshold_usd: 0.25
+daily_ceiling_credits: 10000
+abort_threshold_credits: 2500
+measurement_date: 2026-11-09
+measurement_run_id: openalex-bench-5c9fe4e0487b
+measurement_calls: 100
+measurement_meta_cost_usd: 0.026
+measurement_credits_used: 280
+measurement_conservative_cost_usd: 0.028
+cost_per_credit_usd: 0.0001
+planned_request_reserve_usd: 0.001
+planned_request_reserve_credits: 10
