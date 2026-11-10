@@ -1,6 +1,6 @@
 PYTHON ?= python
 
-.PHONY: setup test lint build qc all
+.PHONY: setup test lint build qc all reproduce
 
 setup:
 	$(PYTHON) -m pip install -e ".[dev]"
@@ -17,5 +17,8 @@ build:
 
 qc:
 	$(PYTHON) scripts/normalize_openalex.py
+
+reproduce:
+	$(PYTHON) scripts/rebuild_from_fixtures.py
 
 all: lint test build

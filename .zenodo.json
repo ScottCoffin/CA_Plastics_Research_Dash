@@ -1,0 +1,28 @@
+{
+  "upload_type": "software",
+  "title": "CA Plastics Research Atlas",
+  "description": "<p>The CA Plastics Research Atlas is an open research dashboard that tracks plastic-related research and funding connected to California. This repository contains the pipeline code, query and taxonomy definitions, gold and split files, and the reproducibility package (fixture rebuild, documented live rebuild, and versioned release snapshot).</p><p>Code and configuration are released under the MIT licence, subject to the owner's confirmation recorded in LICENSE. Derived data (site payloads, curation files, and the release snapshot) are released under CC BY 4.0. Third-party rows keep their upstream terms as recorded in docs/REUSE.md.</p>",
+  "creators": [
+    {
+      "name": "Coffin, Scott"
+    }
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "keywords": [
+    "microplastics",
+    "plastics",
+    "California",
+    "research atlas",
+    "bibliometrics",
+    "funding",
+    "open data",
+    "reproducibility"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://plastiverse.live/",
+      "relation": "isSupplementTo"
+    }
+  ]
+}
