@@ -115,6 +115,24 @@ pytest sessions share a temp root and cause spurious failures (LESSONS).
 
 The lead alone edits `.agent/*`, `spec.md`, `AGENTS.md`, and `CLAUDE.md`.
 
+## Overnight mode (owner says "I am going to sleep")
+Treat the phrase as standing authorization to keep sealing checkpoints with no
+check-ins, within everything else in this file.
+1. Work continuously in dependency order. Prefer tasks whose acceptance needs no
+   human action. Skip tasks marked `owner:` or `Gated on owner decision` and
+   tasks whose last step is human review or labelling. Live API calls that the
+   task itself authorizes are fine; never spend paid credits.
+2. Seal every checkpoint fully (gate, `.agent` updates, narrow commit, push) so
+   that stopping at any point loses nothing.
+3. When only human-gated work remains, or a blocker stops every path, assume the
+   owner will not answer within the prompt-cache window. Then:
+   a. Overwrite `.agent/HANDOFF.md` with the state, an "Owner actions" list (each
+      item answerable in one line), and the next eligible tasks once each is answered.
+   b. Overwrite `.agent/RESUME_PROMPT.md` with a short paste-ready prompt for a
+      fresh orchestrator: it names the checkpoint to resume, which files to read
+      (Session entry steps only), and the first task to run.
+   c. End with a message giving the owner actions and that prompt verbatim.
+
 ## Safety
 Never reset, clean, stash, or overwrite unrelated work. Do not read `.env` or
 print secrets. Do not deploy, change secrets, or add dependencies without
