@@ -42,7 +42,7 @@ product failure was observed.
   “View experts” → Experts filtered by `I84218800` → Alice California drawer.
   The drawer showed its work and report-an-error link.
 - At 390×844, the About cards stack and the document width remains 390 px.
-  The tab strip is horizontally scrollable. Screenshot: [mobile About](../output/playwright/s3_5_about_mobile.png).
+  The tab strip is horizontally scrollable. Screenshot (local, gitignored): `output/playwright/s3_5_about_mobile.png`.
 
 ### Limitations and residual risk
 
