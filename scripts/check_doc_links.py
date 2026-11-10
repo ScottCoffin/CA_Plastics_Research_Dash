@@ -22,6 +22,11 @@ _SKIP_DIRS = {
     "__pycache__",
     "node_modules",
     "venv",
+    # Ignored working areas (never committed); third-party Markdown lands here.
+    ".playwright-cli",
+    "data",
+    "output",
+    "scratch",
 }
 
 
