@@ -1,39 +1,36 @@
-# Handoff - 2026-11-10 - Overnight run finished; only owner-gated work remains
+# Handoff - 2026-11-10 (evening) - S7.6, S10.4, SPK-1 closed; only owner-gated work remains
 
 ## State
-- Completed overnight (all pushed; full suite 650 passed, 9 skipped): SPK-2,
-  SPK-3, SPK-4 (gates G-PARQ, G-SHELL, G-FACET decided), S8.2–S8.6 (NIH, NSF,
-  USAspending, Sea Grant, OPC/Delta + cross-source dedupe), S8.9 (open-calls
-  panel), S8.10 (Funding awards UI, `site/data/grants.json`), S9.1 (17 work-grant
-  links), S9.2 (work-dataset links UI), S10.1 (status page + drift alarms),
-  S11.4 (Atom feed). Partial: SPK-1 (Pages leg done), S10.4 (CI green blocked by S7.6).
-- Earlier the same day: Add-on A2 integration, EM-1, EM-2 (partial), S8.1.
-- CI is red only on the owner's committed S7.6 test (`tests/test_source_watch_s7_6.py`:
-  import order + one failing test). The owner's uncommitted S7.6 WIP fixes it locally.
-- Gate rule added: also run the checks in a clean `git worktree` and confirm CI after
-  pushing (ignored local files had hidden CI failures).
+- Closed this session: S7.6 (owner WIP + request-time `Last-Modified` digest fix,
+  `96d09e5`), S10.4 (CI green on `96d09e5`), SPK-1 (R2 leg measured at
+  `https://data.plastiverse.live/spk1/`: all 206, 1.57 MB read of a 99 MB file;
+  `docs/SPK_1_HOSTING.md`). Fixes: S8.9 test pinned to a date (`--today`); S2.4 daily
+  ingestion now defers on a 429 that lacks a credit header (the 2026-11-10 run went red).
+- Owner confirmed defaults: S8.6-A, S8.10-A, S9.1-A, S9.1-B, S9.2-A, TODO-A. AT-1-A:
+  the 405-row sample is approved as the audit set (labels still blank).
+- The listed idle `python -` PIDs no longer exist; nothing was killed.
+- Worktree: `docs/SOURCES.md` and `docs/api_notes/source_watch_s7_6.json` hold one
+  live watch run (2026-11-10, pre-fix false "changed"). They are not committed; the weekly workflow
+  rewrites them. Untracked `data/processed/p{5,25,100}.parquet` are the owner's R2
+  upload copies; they are safe to delete and must not be committed.
 
 ## Owner actions (one line each; reply in QUESTIONS.md or chat)
-1. Commit the S7.6 WIP (`src/atlas/source_watchlist.py`, `tests/test_source_watch_s7_6.py`) → CI green, then check off S10.4.
-2. SPK-1 R2: do the 5 steps in `docs/SPK_1_HOSTING.md` and give the bucket URL, or answer "skip R2".
-3. AT-1: label the 405-row audit sample (`docs/QUERY_AUDIT.md`); unblocks AT-2 → AT-3 → AT-4 → AT-5 / EM-5+.
-4. S1.5-A: promote `plastic-v2-candidate` (or revise it); unblocks real-data site, S3.6, S4.2, S6.1.
-5. EM-3 / S4: start gold-set annotation under `guide_v2`; unblocks S5.x and EM-4.
-6. S7.3-A: reuse terms for the SF Bay / 5 Gyres data; unblocks S7.3 and S7.5.
-7. S8.7: which years of NOAA Marine Debris awards. S8.8: State Water Board funding guidance (`docs/AWARDS_DATA.md`).
-8. Quick confirms (defaults in use): TODO-A (re-check S6.2/S6.3?), S8.6-A, S8.10-A, S9.1-A, S9.1-B (COAST phrase), S9.2-A.
-9. Later sign-offs: S9.3 profile review, S10.2 governance, S10.3 archive choice.
-10. Housekeeping: idle `python -` processes (PIDs 32200, 45096, 22944, 37256) from stuck heredocs; killing them was not permitted to the agent.
+1. Domain: move the Pages site to `plastiverse.live`? If yes, set the repo's Pages custom domain plus Cloudflare A records (see chat), then tell the agent so it can update URLs. If no, add `https://scottcoff.in` to the R2 CORS `AllowedOrigins`.
+2. AT-1: fill `review_label` (relevant / not_relevant) and `reviewer` in `docs/QUERY_AUDIT_REVIEW.csv` (405 rows; ~2-3 h), optionally `noise_terms`.
+3. S1.5-A: after 2, decide whether to promote `plastic-v2-candidate` (the precision estimate from 2 informs it).
+4. EM-3/S4 annotation: waits on 3 (no representative corpus to sample yet); nothing to do now.
+5. S7.3-A: pick a license for SF Bay / 5 Gyres data: "ODC-BY, publish with attribution", "CC BY 4.0", or "ask SFEI first".
+6. S8.7: NOAA Marine Debris award years (default proposal: FY2015–present). S8.8: State Water Board funding: ingest, curate by hand, or defer.
+7. Later sign-offs: S9.3 profile review, S10.2 governance checklist, S10.3 archive choice (Zenodo vs GitHub release).
 
 ## Next eligible once answered
-- After 1: check off S10.4.
-- After 2: run `spikes/spk1_hosting/measure.py` against R2 → close SPK-1.
-- After 3: AT-1 → AT-2 → AT-3, then AT-4 (all spike gates are decided) → EM-5, EM-7, EM-16..18.
-- After 4: S3.6 performance on real data, S4.2, S6.1 coverage, real-data exports (feed and grants unaffected).
-- After 5: S5.1–S5.7, EM-4, EM-8, EM-11.
-- Optional, no gate: S11.1 (stlite fallback; low value now that G-SHELL = Framework).
+- After 1: update site URLs / R2 origin; re-run `spikes/spk1_hosting/measure.py --origin <site origin>`.
+- After 2: AT-1 precision report → AT-2 → AT-3 → AT-4 → AT-5, EM-5, EM-7, EM-16..18.
+- After 3: S3.6 on real data, S4.2, S6.1 coverage; then 4 → S5.x, EM-4, EM-8, EM-11.
+- After 5: S7.3, S7.5. After 6: S8.7, S8.8.
+- Optional, no gate: S11.1 (low value now that G-SHELL = Framework).
 
 ## Verification commands
-- Full gate per CLAUDE.md, plus the clean-worktree run; acceptance scripts `scripts/check_<task>.py` for every task above.
+- Full gate per CLAUDE.md, plus the clean-worktree run and CI after push.
 
 Older handoff entries: `.agent/archive/HANDOFF_history.md`.

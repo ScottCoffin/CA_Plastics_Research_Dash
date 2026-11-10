@@ -224,3 +224,17 @@ silently untracked and ruff skipped the directory (11 hidden E501s). Fixed by
 anchoring to `/build/`. Never run `scripts/build_export_site.py` as a check:
 it rewrites public `site/data/` from the current processed data. Use
 `scripts/check_s3_1.py`.
+
+## Wall-clock dates in tests and watch scripts
+`test_open_calls_s8_9` broke on 2026-11-10 because the script used the real date
+and a fixture deadline passed; scripts that filter by date take `--today`, and
+tests pin it. `scripts/check_source_watch_s7_6.py` is the live watch, not an
+offline check: it rewrites `docs/SOURCES.md` and the watch JSON. Run only the
+pytest file offline. A watch digest must exclude headers servers generate per
+request (opc.ca.gov sends `Last-Modified` equal to `Date`).
+
+## Playwright route globs do not cross `/` in query strings
+`ctx.route("https://x/page.html*")` missed `page.html?base=https://...`, so the
+real (522) origin was fetched and the probe hung for 10 minutes. Match with a
+predicate (`lambda url: url.split("?")[0] == prefix`) and use short timeouts
+while debugging.

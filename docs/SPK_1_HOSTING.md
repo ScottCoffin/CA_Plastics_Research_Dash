@@ -31,22 +31,36 @@ itself served 100 MB with ranges, but A1 keeps the 25 MB threshold for
 Cloudflare portability, and git and Pages artifacts are a poor home for large
 binaries.
 
-## R2 leg (pending owner steps; the agent never handles Cloudflare credentials)
+## Cloudflare R2 (`https://data.plastiverse.live/spk1/`, measured 2026-11-10 UTC)
 
-1. Create an R2 bucket (for example `atlas-data`) in the account that owns `scottcoff.in`.
-2. Connect a custom domain to the bucket (for example `data.scottcoff.in`;
-   production access requires a custom domain on a zone in the same account).
-3. Add this CORS policy to the bucket:
-   ```json
-   [{"AllowedOrigins": ["https://scottcoff.in"], "AllowedMethods": ["GET", "HEAD"],
-     "AllowedHeaders": ["Range"], "ExposeHeaders": ["Content-Range", "Content-Length", "Accept-Ranges", "ETag"],
-     "MaxAgeSeconds": 3600}]
-   ```
-4. Upload `p5/p25/p100.parquet` (regenerate with
-   `py -3.14 spikes/spk1_hosting/make_parquet.py <dir>`) to `spk1/` in the bucket.
-5. Tell the agent the base URL. It will then run
-   `py -3.14 spikes/spk1_hosting/measure.py --base https://data.scottcoff.in/spk1/ --probe <Pages probe URL>?base=https://data.scottcoff.in/spk1/`
-   after one more opt-in Pages deploy, which tests cross-origin lazy reads.
+The owner created the bucket, connected the custom domain `data.plastiverse.live`,
+set CORS, and uploaded the files (the agent never handled Cloudflare credentials).
+The uploads are regenerated files, so their sizes differ slightly from the Pages copies.
 
-SPK-1 stays unchecked until the R2 leg is measured. The Pages-only decision
-already stands for files of 25 MB or less.
+| File | Size | HEAD | `Range: bytes=0-1023` | `Range: bytes=-8` | CORS (`Origin: https://plastiverse.live`) | count / filtered agg (ms) | Parquet transfer for both queries |
+|---|---:|---|---|---|---|---|---|
+| p5 | 4,941,420 | 200, `Accept-Ranges: bytes`, ETag | 206 `0-1023/4941420` | 206 | allowed; exposes `Content-Range,Content-Length,Accept-Ranges,ETag` | 1,943 / 238 | 4 requests, 42,605 B |
+| p25 | 24,704,942 | 200 | 206 | 206 | allowed | 146 / 1,402 | 16 requests, 440,239 B |
+| p100 | 98,805,090 | 200 | 206 | 206 | allowed | 264 / 5,243 | 55 requests, 1,566,051 B |
+
+- Every browser Parquet response was a 206; no 200 full-file fallback occurred.
+- Cross-origin reads were measured from `https://plastiverse.live`, which the bucket
+  allows. That origin hosts no site (Cloudflare 522), so the harness served the local
+  `probe.html` there by Playwright request interception (`--serve-origin-probe`):
+  `py -3.14 spikes/spk1_hosting/measure.py --base https://data.plastiverse.live/spk1/ --origin https://plastiverse.live --probe "https://plastiverse.live/spk1-probe.html?base=https://data.plastiverse.live/spk1/" --serve-origin-probe`.
+  The browser still applies real CORS against R2; only the HTML document is local.
+- Headless Chromium on the owner's desktop network; single run; timings are indicative
+  (the first count includes DuckDB-Wasm warm-up).
+- The bucket's CORS policy currently allows only `https://plastiverse.live`. The Atlas
+  is served from `https://scottcoff.in/CA_Plastics_Research_Dash/` (GitHub Pages user
+  domain), and preflights from that origin return 403. Before any production file
+  moves to R2, add `https://scottcoff.in` to `AllowedOrigins` (or move the site to
+  plastiverse.live); re-run the command above with `--origin https://scottcoff.in`
+  (no `--serve-origin-probe` needed once a page is deployed there).
+
+## Result
+
+SPK-1 is closed. G-HOST stands: GitHub Pages serves every Parquet file of 25 MB or
+less. Cloudflare R2 at `data.plastiverse.live` is a verified scale lever for larger
+files: it serves 206 range reads with exposed headers, and DuckDB-Wasm read 1.6% of a
+99 MB file. The CORS origin above is the one configuration step before production use.

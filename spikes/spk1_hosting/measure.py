@@ -13,6 +13,7 @@ import argparse
 import json
 import urllib.error
 import urllib.request
+from pathlib import Path
 from typing import Any
 
 NAMES = ("p5", "p25", "p100")
@@ -58,13 +59,25 @@ def header_checks(base: str, origin: str) -> dict[str, Any]:
     return results
 
 
-def probe(probe_url: str) -> dict[str, Any]:
+def probe(probe_url: str, serve_origin: str | None = None) -> dict[str, Any]:
+    """Run probe.html; with ``serve_origin``, serve the local copy at that origin.
+
+    Interception lets a bucket be measured cross-origin from an origin its CORS
+    policy allows without deploying the page there.
+    """
     from playwright.sync_api import sync_playwright
 
     events: list[dict[str, Any]] = []
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
         context = browser.new_context()
+        if serve_origin:
+            html = (Path(__file__).parent / "probe.html").read_text(encoding="utf-8")
+            prefix = probe_url.split("?", 1)[0]
+            context.route(
+                lambda url: url.split("?", 1)[0] == prefix,
+                lambda route: route.fulfill(status=200, content_type="text/html", body=html),
+            )
 
         def on_response(response) -> None:  # type: ignore[no-untyped-def]
             if ".parquet" in response.url:
@@ -99,10 +112,15 @@ def main() -> int:
     parser.add_argument("--base", required=True)
     parser.add_argument("--probe")
     parser.add_argument("--origin", default="https://scottcoff.in")
+    parser.add_argument(
+        "--serve-origin-probe",
+        action="store_true",
+        help="serve the local probe.html at the --probe URL instead of fetching it",
+    )
     args = parser.parse_args()
     report: dict[str, Any] = {"base": args.base, "headers": header_checks(args.base, args.origin)}
     if args.probe:
-        report["probe"] = probe(args.probe)
+        report["probe"] = probe(args.probe, args.origin if args.serve_origin_probe else None)
     print(json.dumps(report, indent=2))
     return 0
 

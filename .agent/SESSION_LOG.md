@@ -74,3 +74,4 @@
 | 2026-11-10 | S9.2 | Work-dataset links (1 DataCite link), drawer/registry evidence display, opt-in export; site payloads unchanged | this commit |
 | 2026-11-10 | S11.4 | Atom digest feed (2 papers + 30 awards) rebuilt on deploy; lead added a future-date cutoff | this commit |
 | 2026-11-10 | Overnight handoff | All ungated tasks done; HANDOFF owner actions + RESUME_PROMPT written; REUSE spike licences; MEMORY gate line | this commit |
+| 2026-11-10 | S7.6, S10.4, SPK-1 | S7.6 watch fix + CI green (96d09e5); S8.9 test date pinned; R2 leg measured at data.plastiverse.live; owner defaults confirmed | this commit |
