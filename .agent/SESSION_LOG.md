@@ -62,3 +62,4 @@
 | 2026-11-10 | SPK-4 | Bit-mask vs Mosaic at 30k/100k × 5 runs: bit-masks win cold start and meet budgets with exact counts; G-FACET = bit-masks main page; Mosaic correctness to AT-6 | this commit |
 | 2026-11-10 | S8.2 | NIH RePORTER ingester (CA + terms-only sweeps, backfill/incremental, defer pattern); live backfill 196 grants; 505 tests pass | this commit |
 | 2026-11-10 | S10.4 partial + CI repair | Lock/Dependabot/SECURITY.md; fixed CI-only failures (S3.5 link to ignored file; untracked A1 release .gitkeep); CI now fails only on owner S7.6 WIP test/lint | this commit |
+| 2026-11-10 | S8.4 | USAspending ingester with pagination ceiling defer, CA sweeps, bulk path, noise notes; live backfill 66 grants; 537 tests pass | this commit |
