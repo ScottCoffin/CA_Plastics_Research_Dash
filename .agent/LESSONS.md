@@ -211,3 +211,9 @@ full gate once after they finish.
 `cmd | tail -1 && git commit` takes the exit status of `tail`, so a failing
 check still commits (it happened with check_doc_links during SPK-1). Redirect
 to a file and test the command's own status, or use `set -o pipefail`.
+
+## Local gates miss CI-only failures; check CI after pushing
+CI ran red from e410e03 onward (a link to an ignored screenshot, and a fixture
+`.gitkeep` hidden by the `release/` ignore rule) while every local gate passed,
+because the ignored files exist locally. Before sealing, run the checks in a
+clean `git worktree add --detach <tmp> HEAD`, and confirm the CI run after pushing.

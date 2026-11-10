@@ -101,7 +101,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S10.2** Governance, license, privacy, corrections, dictionary, and citation. Acceptance: owner checklist sign-off. `owner: sign-off`
 - [ ] **AT-10** Release pipeline (replaces S10.3). Adoption: L3. Depends: AT-3. Acceptance test (§9): Release; Licence audit; No abstracts. Gated on owner decision.
 - [ ] **S10.3** Fixture rebuild and versioned reproducibility release. Acceptance: tagged snapshot archived as chosen. `owner: archive choice`
-- [ ] **S10.4** Dependency, security, notification, and secret-rotation hardening. Acceptance: CI passes and docs are current.
+- [ ] **S10.4** Dependency, security, notification, and secret-rotation hardening. Acceptance: CI passes and docs are current. Partial 2026-11-10: universal lock `requirements/lock.txt` (CI installs with `-c`, verified on ubuntu/3.11 run 42765937416), Dependabot, `docs/SECURITY.md`, `py -3.14 scripts/check_s10_4.py`. CI stays red only because the committed S7.6 test (`tests/test_source_watch_s7_6.py`: import order + one failing test) is fixed in the owner's uncommitted S7.6 WIP; check off once that lands and CI is green.
 
 ## EM Evidence Map and Related Resources (Add-on A2)
 Contract: [`docs/add_on_spec_2.md`](../docs/add_on_spec_2.md) §§3–9. Conflicts: `DECISIONS.md` A2-C1..C15; defaults: `QUESTIONS.md` A2-D1..D11 and A2-INT-1..3. EM-1..EM-4 and EM-15 sit in S4/S5. Every view carries the A2 §0 rule 2 caption; counts come only from DuckDB (EAT-5).

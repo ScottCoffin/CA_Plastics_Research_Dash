@@ -61,6 +61,8 @@ Never open `data/`, `output/`, `scratch/`, `site/data/*.json`, `.playwright-cli/
   A2-D/INT and A2-C register IDs exist once and that EM dependencies are listed in order in TODO).
 - Task acceptance: `py -3.14 scripts/check_s<stage>_<task>.py` (also `check_at1.py`).
 - **Full gate** = links + scaffold + lint + test + build + `git diff --check`.
+  Then run links, scaffolds and pytest in a clean `git worktree` of HEAD
+  (ignored files hide CI failures), and confirm the CI run after pushing.
   Baseline on 2026-11-09: 243 tests passed.
 - Verification stays offline. Never pass `--smoke-urls` or run `scripts/smoke/*`
   unless the task authorizes live calls; they spend API credits.
