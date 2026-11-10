@@ -1,0 +1,15 @@
+PortalID,GrantID,Status,AgencyDept,Title,Purpose,Description,Categories,ApplicationDeadline,GrantURL,EstAvailFunds
+P-001,G-001,active,Test Agency A,Microplastics in Coastal Waters Research,Research,Funds research on microplastic pollution in estuaries,Environment & Water,2027-03-31 23:59:00,https://example.test/grants/1,2000000
+P-002,G-002,forecasted,Test Agency B,Marine Debris Cleanup Grants,Cleanup,Removal of marine debris and litter from shorelines,Environment & Water; Parks & Recreation,Ongoing,https://example.test/grants/2,
+P-003,G-003,active,Test Agency C,Packaging Innovation Challenge,Innovation,Reduce single-use packaging in retail,Environment & Water,2026-12-15 17:00:00,https://example.test/grants/3,500000
+P-004,G-004,active,Test Agency D,Affordable Housing Predevelopment Loans,Housing,Housing units for low income households,Housing,2027-01-10 23:59:00,https://example.test/grants/4,10000000
+P-005,G-005,closed,Test Agency A,Plastic Pollution Prevention Grant (closed),Prevention,Plastic pollution prevention projects,Environment & Water,2027-05-01 23:59:00,https://example.test/grants/5,750000
+P-006,G-006,active,Test Agency B,Trash Capture Equipment Grant,Equipment,Storm drain trash capture devices,Environment & Water,2020-06-30 23:59:00,https://example.test/grants/6,300000
+P-007,G-007,active,Test Agency C,Plastic Recycling Infrastructure,Infrastructure,Facilities for plastic recycling,Environment & Water,2026-11-09 23:59:00,https://example.test/grants/7,
+P-008,G-008,active,Test Agency D,Microplastic strain deformation modelling,Research,Mechanical strain deformation of microplastic composites,Education,2027-02-01 23:59:00,https://example.test/grants/8,
+P-009,G-009,active,Test Agency A,Water Quality Monitoring,Monitoring,Monitoring of nutrient levels,Environment & Water,,https://example.test/grants/9,
+P-010,G-010,active,Test Agency B,Ocean Plastic Litter Survey,Survey,Surveys of plastic litter on beaches,Environment & Water,Ongoing,https://example.test/grants/10,
+P-011,G-011,forecasted,Test Agency C,Community Clean Air Grants,Air,Air quality improvements in neighborhoods,Environment & Water,2027-02-15 23:59:00,https://example.test/grants/11,
+P-012,G-012,active,Test Agency D,Microfiber Textile Laundry Filters,Research,Reduce microfiber release from textile laundry,Environment & Water,2027-04-30 23:59:00,https://example.test/grants/12,1000000
+P-013,G-013,active,Test Agency A,Litter Reduction Along Highways,Cleanup,Highway litter removal projects,Environment & Water,2027-06-30 23:59:00,https://example.test/grants/13,
+P-014,G-014,active,Test Agency B,Ongoing Library Services,Library,Public library operating support,Education,Ongoing,https://example.test/grants/14,

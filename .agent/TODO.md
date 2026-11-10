@@ -88,7 +88,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S8.6** State funder sources and pass-through dedupe. Acceptance: overlap report and manual-curation path.
 - [ ] **S8.7** NOAA Marine Debris awards. Acceptance: CA awards captured for owner-confirmed period. `owner: years`
 - [ ] **S8.8** State Water Board funding investigation/implementation. Acceptance: ingest, curate, or defer decision. `owner: guidance`
-- [ ] **S8.9** California Grants Portal open-calls panel. Acceptance: relevant open calls and deadlines display.
+- [x] **S8.9** California Grants Portal open-calls panel. Acceptance: relevant open calls and deadlines display. Complete 2026-11-10: `atlas.ingest.grants.open_calls` + `scripts/build_open_calls.py` → `site/data/open_calls.json`, refreshed on every deploy (defer keeps the last JSON); Funding tab panel with deadlines and an empty state (browser-smoked). Live: 0 open plastic calls of 153 open after a precision fix. `py -3.14 scripts/check_s8_9.py`.
 - [ ] **S8.10** Funding filters, charts, chains, and links. Acceptance: performance met and amount caveats shown.
 
 ## S9 Linking

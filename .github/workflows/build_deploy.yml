@@ -44,6 +44,13 @@ jobs:
           python spikes/spk1_hosting/make_parquet.py site/spikes/spk1
           cp spikes/spk1_hosting/probe.html site/spikes/spk1/probe.html
 
+      # S8.9 open funding calls. A failed fetch defers (keeps the last JSON) and never fails the build.
+      - name: Refresh open funding calls
+        continue-on-error: true
+        run: |
+          python -m pip install --quiet -c requirements/lock.txt -e .
+          python scripts/build_open_calls.py
+
       - name: Upload static site
         uses: actions/upload-pages-artifact@v5
         with:

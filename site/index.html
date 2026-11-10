@@ -106,6 +106,8 @@
       .card-meta { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
       .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.55rem; }
       .chip { display: inline-block; padding: 0.18rem 0.45rem; border-radius: 999px; color: #24445a; background: #e6eff2; font-size: 0.78rem; }
+      .open-calls-list { margin: 0.75rem 0 0; padding-left: 1.25rem; }
+      .open-calls-list li + li { margin-top: 0.75rem; }
       .empty { padding: 1.25rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; }
       .stub { display: grid; place-items: center; min-height: 12rem; padding: 1rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; background: #fbfdfd; }
       .about-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; margin: 1rem 0; }
@@ -233,7 +235,12 @@
 
       <section id="panel-funding" class="panel" role="tabpanel" aria-labelledby="tab-funding" tabindex="0" hidden>
         <h2>Funding</h2>
-        <div class="stub"><div><h3>Funding catalogue coming next</h3><p>This reserved tab will connect grants and solicitations in Stage 8.</p></div></div>
+        <section aria-labelledby="open-calls-heading" class="open-calls">
+          <h3 id="open-calls-heading">Open funding calls</h3>
+          <p class="data-note">Source: California Grants Portal (public domain), refreshed daily; calls are opportunities, not awards. <a href="https://data.ca.gov/dataset/california-grants-portal" target="_blank" rel="noreferrer">Dataset</a></p>
+          <p id="open-calls-status" class="result-count" role="status" aria-live="polite"></p>
+          <div id="open-calls"></div>
+        </section>
       </section>
 
       <section id="panel-about" class="panel" role="tabpanel" aria-labelledby="tab-about" tabindex="0" hidden>
@@ -382,6 +389,40 @@
           const next = `#${state.tab}${params.toString() ? `?${params.toString()}` : ""}`;
           if (window.location.hash !== next) window.history.replaceState(null, "", next);
         }
+        let openCallsRequest = null;
+        function loadOpenCalls() {
+          if (!openCallsRequest) {
+            openCallsRequest = fetch("data/open_calls.json", { cache: "no-cache" })
+              .then((response) => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+              })
+              .catch((error) => {
+                openCallsRequest = null;
+                throw error;
+              });
+          }
+          return openCallsRequest;
+        }
+        function renderOpenCalls(payload) {
+          const calls = Array.isArray(payload.calls) ? payload.calls : [];
+          $("open-calls-status").textContent = `${calls.length} open ${calls.length === 1 ? "call" : "calls"} in the latest snapshot`;
+          $("open-calls").innerHTML = calls.length
+            ? `<ul class="open-calls-list" aria-label="Open plastic-related funding calls">${calls.map((call) => {
+                const title = call.url ? `<a href="${escapeHtml(call.url)}" target="_blank" rel="noreferrer">${escapeHtml(call.title)}</a>` : escapeHtml(call.title);
+                return `<li>${title}<br><small>${escapeHtml(call.agency)} · Deadline: ${escapeHtml(call.deadline)} · Status: ${escapeHtml(call.status)}</small></li>`;
+              }).join("")}</ul>`
+            : '<p class="empty">No open plastic-related calls right now</p>';
+        }
+        function showOpenCalls() {
+          $("open-calls-status").textContent = "Loading open calls…";
+          loadOpenCalls()
+            .then(renderOpenCalls)
+            .catch(() => {
+              $("open-calls-status").textContent = "";
+              $("open-calls").innerHTML = '<p class="empty">Open calls could not be loaded right now.</p>';
+            });
+        }
         function selectTab(tab, moveFocus = false) {
           state.tab = VALID_TABS.includes(tab) ? tab : "experts";
           document.querySelectorAll("[role=tab]").forEach((button) => {
@@ -393,6 +434,7 @@
             panel.hidden = panel.id !== `panel-${state.tab}`;
           });
           writeHash();
+          if (state.tab === "funding") showOpenCalls();
           if (moveFocus) $(`tab-${state.tab}`).focus();
         }
         function populateFilters() {
