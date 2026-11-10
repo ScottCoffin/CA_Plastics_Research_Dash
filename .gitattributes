@@ -10,3 +10,5 @@
 *.geojson text eol=lf
 *.parquet binary
 Makefile text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
