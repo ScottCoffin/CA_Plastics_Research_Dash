@@ -69,3 +69,4 @@
 | 2026-11-10 | S10.1 | Status page + drift alarms + run-history log; lead fixed spend matching (since job start), works_added floor, `/build/` ignore anchor, export_site format; 565 tests | this commit |
 | 2026-11-10 | S8.6 | OPC/Delta adapters, cross-source dedupe (593→514 clusters) + overlap report, manual curation CSV; COAST/SCC gaps documented | this commit |
 | 2026-11-10 | S8.5 | Sea Grant scraper; 14 relevant projects; all 5 OPC microplastics projects cross-checked | this commit |
+| 2026-11-10 | S9.1 | Work-grant links: 17 exact award-ID links, all spot-checked (0 incorrect); questions S9.1-A/B with defaults | this commit |
