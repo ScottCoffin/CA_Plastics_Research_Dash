@@ -79,3 +79,4 @@
 | 2026-11-10 | S8.7 | NOAA Marine Debris awards FY2015+ via USAspending ALN 11.999 (22 awards, 8 new) | this commit |
 | 2026-11-10 | S7.3 | SF Bay / 5 Gyres closed: owner CC BY 4.0; license object on outputs; REUSE row | this commit |
 | 2026-11-10 | S7.5 | 314 cleared SF Bay / 5 Gyres observations public; clearance file gates publication | this commit |
+| 2026-11-10 | S8.8 | SWRCB awards via FAAST public search (2 awarded rows; contacts never stored) | this commit |

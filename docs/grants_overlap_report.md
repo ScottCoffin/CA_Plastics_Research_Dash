@@ -12,13 +12,14 @@ git-ignored `data/interim/grants/grants_dedupe_map.csv`.
 | nih_reporter | 196 | 126 |
 | nsf_awards | 316 | 309 |
 | state_funders | 1 | 1 |
-| usaspending | 66 | 64 |
+| swrcb_faast | 2 | 2 |
+| usaspending | 74 | 72 |
 
-- Input rows: 593
-- Clusters (awards): 514
+- Input rows: 603
+- Clusters (awards): 524
 - Multi-record clusters: 37
 - Rows folded into another cluster's representative: 79
-- Map rows written: 593
+- Map rows written: 603
 - Map covers every input row: True
 
 ## Matching rule
@@ -45,7 +46,7 @@ Each multi-record cluster counts once per distinct source pair it contains.
 
 | records per cluster | clusters |
 |---:|---:|
-| 1 | 477 |
+| 1 | 487 |
 | 2 | 16 |
 | 3 | 9 |
 | 4 | 4 |

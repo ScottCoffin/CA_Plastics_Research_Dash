@@ -46,6 +46,9 @@ AMOUNT_BASIS: dict[str, str] = {
     ),
     "ca_sea_grant": ("Sea Grant amount as announced. Most award records report no amount."),
     "opc_council": "Amount as approved by the Ocean Protection Council (staff summary).",
+    "swrcb_faast": (
+        "FAAST requested funds for an awarded proposal. The executed agreement amount may differ."
+    ),
     "delta_science_tracker": "Amount as reported by the Delta Science Tracker.",
     "scc_board": "Amount as reported by the State Coastal Conservancy.",
     "state_funders": "Amount as reported in the state funder export. Some are 'up to' caps.",
