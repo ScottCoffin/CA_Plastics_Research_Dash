@@ -37,3 +37,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-10T10:00:00-08:00 | S8.3 | claude-haiku (haiku-developer) | NSF ingester | Hit turn limit once; resumed; stopped at self-imposed 60-request cap; lead ran full live workload | 2 sessions; ~120K subagent tokens |
 | 2026-11-10T10:45:00-08:00 | S10.1 | claude-haiku (haiku-developer) | Status page, history log, drift, workflow steps | Accepted with lead fixes (spend window, floor, ignore rule) | 1 session; ~90K subagent tokens |
 | 2026-11-10T11:15:00-08:00 | S8.6 | claude-haiku (haiku-developer) | State funder adapters + dedupe | Accepted; lead renamed curation file (spec name collides with S0.1 label set) | 1 session; ~151K subagent tokens |
+| 2026-11-10T11:40:00-08:00 | S8.5 | claude-haiku (haiku-developer) | Robots-compliant scraper + cross-check | Hit turn limit once; resumed to finish tests/check/note; accepted | 2 sessions; ~134K+ subagent tokens |
