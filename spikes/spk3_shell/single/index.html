@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SPK-3 shell bench (single file)</title>
+<style>
+body { font: 13px system-ui, sans-serif; margin: 12px; }
+#facets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 12px; }
+#table { height: 360px; overflow: auto; position: relative; border: 1px solid #ccc; font: 12px monospace; }
+#table .row { position: absolute; left: 0; right: 0; height: 24px; line-height: 24px; white-space: nowrap; overflow: hidden; padding: 0 6px; box-sizing: border-box; }
+#map { height: 120px; border: 1px dashed #888; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
+</style>
+</head>
+<body>
+<h1>Atlas shell bench (single file)</h1>
+<div id="facets">
+  <div data-facet="yf"><label>Year from <input type="range" min="2000" max="2026" step="1" value="2000"></label></div>
+  <div data-facet="yt"><label>Year to <input type="range" min="2000" max="2026" step="1" value="2026"></label></div>
+  <div data-facet="domain"></div>
+  <div data-facet="facet"></div>
+  <div data-facet="inst"></div>
+  <div data-facet="ca"></div>
+  <div data-facet="oa"></div>
+</div>
+<div id="status" data-seq="0" data-n="0">loading</div>
+<div id="counts"></div>
+<div id="chart"></div>
+<div id="map">Map placeholder</div>
+<div id="table"><div class="spacer"></div></div>
+<script>
+const DOMAIN = ["ecotox", "policy", "health", "fate", "monitoring", "recycling", "biodegradation", "sources"];
+const FACET = ["ca-science", "water", "air", "soil", "food", "policy-brief"];
+const INST = ["any", "academic", "government", "industry", "ngo", "unknown"];
+const CA = ["any", "led", "any_author", "not_led"];
+const YEARS = Array.from({length: 27}, (_, i) => 2000 + i);
+const ROW_H = 24;
+const WIN = 100;
+const fmt = (r) => `${r.work_id} | ${r.year} | ${r.title} | ${(r.domain_tags ?? []).join(",")} | ${r.institution_type ?? "unknown"} | oa=${r.oa ?? false}`;
+const $ = (s) => document.querySelector(s);
+const ds = new URLSearchParams(location.search).get("ds") ?? "syn30k";
+const tbl = $("#table");
+let rows = [];
+let list = [];
+let seq = 0;
+
+const checkBoxes = (f, label, items) => {
+  $(`[data-facet=${f}]`).innerHTML = `<div>${label}</div>` +
+    items.map((t) => `<label><input type="checkbox" value="${t}"> ${t}</label>`).join(" ");
+};
+checkBoxes("domain", "Domain tags", DOMAIN);
+checkBoxes("facet", "Facet tags", FACET);
+$("[data-facet=inst]").innerHTML = `<label>Institution type <select>${INST.map((v) => `<option>${v}</option>`).join("")}</select></label>`;
+$("[data-facet=ca]").innerHTML = `<label>CA basis <select>${CA.map((v) => `<option>${v}</option>`).join("")}</select></label>`;
+$("[data-facet=oa]").innerHTML = `<label><input type="checkbox"> Open access only</label>`;
+
+function readState() {
+  const checked = (f) => [...document.querySelectorAll(`[data-facet=${f}] input[type=checkbox]`)]
+    .filter((e) => e.checked).map((e) => e.value);
+  return {
+    yf: Number($("[data-facet=yf] input").value),
+    yt: Number($("[data-facet=yt] input").value),
+    dom: checked("domain"),
+    fac: checked("facet"),
+    inst: $("[data-facet=inst] select").value,
+    ca: $("[data-facet=ca] select").value,
+    oa: $("[data-facet=oa] input").checked,
+  };
+}
+
+function filterRows(s) {
+  return rows.filter((r) => r.year >= s.yf && r.year <= s.yt
+    && (!s.dom.length || (r.domain_tags ?? []).some((t) => s.dom.includes(t)))
+    && (!s.fac.length || (r.facet_tags ?? []).some((t) => s.fac.includes(t)))
+    && (s.inst === "any" || (r.institution_type ?? "unknown") === s.inst)
+    && (s.ca === "any" || (s.ca === "led" && r.ca_led) || (s.ca === "any_author" && r.ca_any_author) || (s.ca === "not_led" && !r.ca_led))
+    && (!s.oa || r.oa === true));
+}
+
+function drawChart(data) {
+  const W = 700, H = 150, P = 24;
+  const max = Math.max(1, ...data.map((d) => d.n));
+  const bw = W / data.length;
+  const bars = data.map((d, i) => {
+    const h = (d.n / max) * (H - P);
+    return `<rect x="${i * bw + 1}" y="${H - P - h}" width="${bw - 2}" height="${h}"><title>${d.year}: ${d.n}</title></rect>`;
+  }).join("");
+  $("#chart").innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${bars}</svg>`;
+}
+
+function drawTable() {
+  const start = Math.min(Math.floor(tbl.scrollTop / ROW_H), Math.max(0, list.length - WIN));
+  const end = Math.min(list.length, start + WIN);
+  tbl.querySelector(".spacer").style.height = `${list.length * ROW_H}px`;
+  tbl.querySelectorAll(".row").forEach((n) => n.remove());
+  for (let i = start; i < end; i++) {
+    const d = document.createElement("div");
+    d.className = "row";
+    d.style.top = `${i * ROW_H}px`;
+    d.textContent = fmt(list[i]);
+    tbl.appendChild(d);
+  }
+}
+
+function update() {
+  list = filterRows(readState());
+  const tagCounts = {};
+  const bins = new Map(YEARS.map((y) => [y, 0]));
+  for (const r of list) {
+    if (bins.has(r.year)) bins.set(r.year, bins.get(r.year) + 1);
+    for (const t of [...(r.domain_tags ?? []), ...(r.facet_tags ?? [])]) tagCounts[t] = (tagCounts[t] ?? 0) + 1;
+  }
+  $("#counts").textContent = [...DOMAIN, ...FACET].map((t) => `${t}:${tagCounts[t] ?? 0}`).join(" ");
+  drawChart([...bins].map(([year, n]) => ({year, n})));
+  drawTable();
+  const st = $("#status");
+  st.textContent = `${list.length} of ${rows.length} works match`;
+  st.dataset.n = list.length;
+  st.dataset.seq = ++seq;
+  if (window.__ttiMs === undefined) window.__ttiMs = performance.now();
+}
+
+$("#facets").addEventListener("input", update);
+tbl.addEventListener("scroll", drawTable);
+fetch(`/data/${ds}.json`).then((r) => r.json()).then((d) => {
+  rows = d.works;
+  update();
+});
+</script>
+</body>
+</html>

@@ -63,3 +63,4 @@
 | 2026-11-10 | S8.2 | NIH RePORTER ingester (CA + terms-only sweeps, backfill/incremental, defer pattern); live backfill 196 grants; 505 tests pass | this commit |
 | 2026-11-10 | S10.4 partial + CI repair | Lock/Dependabot/SECURITY.md; fixed CI-only failures (S3.5 link to ignored file; untracked A1 release .gitkeep); CI now fails only on owner S7.6 WIP test/lint | this commit |
 | 2026-11-10 | S8.4 | USAspending ingester with pagination ceiling defer, CA sweeps, bulk path, noise notes; live backfill 66 grants; 537 tests pass | this commit |
+| 2026-11-10 | SPK-3 + SPK-2 | Shell bake-off (clean lead re-run): G-SHELL = Framework 1.13.4; SPK-2 part (a) 5/5 so SPK-2 complete | this commit |

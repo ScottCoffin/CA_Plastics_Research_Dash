@@ -1,0 +1,12 @@
+{
+  "name": "spk3-shell-framework",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "observable build",
+    "dev": "observable preview"
+  },
+  "dependencies": {
+    "@observablehq/framework": "1.13.4"
+  }
+}
