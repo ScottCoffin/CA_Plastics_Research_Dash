@@ -156,9 +156,15 @@ def test_unusable_csv_is_deferred(tmp_path, query_config):
 
 def test_script_writes_deterministic_json_from_local_csv(tmp_path, capsys):
     output = tmp_path / "open_calls.json"
-    assert build_main(["--csv", str(FIXTURE), "--output", str(output)]) == 0
+    assert (
+        build_main(["--csv", str(FIXTURE), "--output", str(output), "--today", TODAY.isoformat()])
+        == 0
+    )
     first = output.read_bytes()
-    assert build_main(["--csv", str(FIXTURE), "--output", str(output)]) == 0
+    assert (
+        build_main(["--csv", str(FIXTURE), "--output", str(output), "--today", TODAY.isoformat()])
+        == 0
+    )
     payload = json.loads(output.read_text(encoding="utf-8"))
     assert len(payload["calls"]) == 7
     assert b"\r\n" not in first

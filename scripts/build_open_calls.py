@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -33,11 +33,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--config", type=Path, default=Path("config/queries.yml"))
     parser.add_argument("--output", type=Path, default=Path("site/data/open_calls.json"))
+    parser.add_argument(
+        "--today", type=date.fromisoformat, default=None, help="override the CA date (tests)"
+    )
     args = parser.parse_args(argv)
 
     now = datetime.now(UTC)
     # Calendar day in California (UTC-8, standard time), so deadlines today stay open.
-    today = now.astimezone(timezone(timedelta(hours=-8))).date()
+    today = args.today or now.astimezone(timezone(timedelta(hours=-8))).date()
     summary = refresh(
         output=args.output,
         query_config=_load_yaml(args.config),
