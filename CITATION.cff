@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "CA Plastics Research Atlas"
+abstract: >-
+  Static, client-side atlas of California-connected plastic-pollution research
+  built from public OpenAlex bibliographic metadata, with provisional screening
+  labels, public grant records, and rights-cleared monitoring observations.
+type: software
+authors:
+  - family-names: Coffin
+    given-names: Scott
+keywords:
+  - microplastics
+  - plastic pollution
+  - California
+  - bibliometrics
+  - OpenAlex
+url: "https://plastiverse.live/"
+repository-code: "https://github.com/ScottCoffin/CA_Plastics_Research_Dash"
+license: MIT
