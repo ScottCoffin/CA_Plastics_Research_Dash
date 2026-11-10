@@ -12,7 +12,13 @@ import yaml
 DEFAULT_REGISTRY_PATH = Path("config/datasets.yml")
 TIERS = {"A", "B", "C", "D"}
 ENTITY_TYPES = {"dataset", "program", "literature_dataset", "planned_program"}
-PROVENANCE_TYPES = {"dataset_record", "official_program", "literature_secondary", "planning_record"}
+PROVENANCE_TYPES = {
+    "dataset_record",
+    "official_program",
+    "literature_secondary",
+    "planning_record",
+    "journal_article_si",
+}
 
 
 class RegistryValidationError(ValueError):

@@ -25,6 +25,8 @@ PRIVATE_SAMPLE_FIELDS = (
     "method",
     "concentration_value",
     "concentration_unit",
+    "deposition_rate_value",
+    "deposition_rate_unit",
     "particle_count",
     "in_ca_land",
     "in_ca_state_waters",

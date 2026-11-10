@@ -20,7 +20,8 @@ def test_s7_1_seed_registry_has_at_least_15_verified_distinct_sources() -> None:
     assert len({entry["id"] for entry in eligible}) == len(eligible)
     assert len({entry["url"] for entry in eligible}) == len(eligible)
     assert len({entry["underlying_dataset_id"] for entry in eligible}) == len(eligible)
-    assert all(entry["last_checked"].isoformat() == "2026-11-07" for entry in eligible)
+    # S7.1 seeds were checked 2026-11-07; later owner-supplied sources carry their own date.
+    assert all(entry["last_checked"].isoformat() >= "2026-11-07" for entry in eligible)
     assert all(entry["provenance_url"].startswith("https://") for entry in eligible)
     assert all(entry["verification_url"].startswith("https://") for entry in eligible)
     assert all(entry["evidence_excerpt"] and entry["evidence_identity"] for entry in eligible)

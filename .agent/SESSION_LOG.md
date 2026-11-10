@@ -80,3 +80,4 @@
 | 2026-11-10 | S7.3 | SF Bay / 5 Gyres closed: owner CC BY 4.0; license object on outputs; REUSE row | this commit |
 | 2026-11-10 | S7.5 | 314 cleared SF Bay / 5 Gyres observations public; clearance file gates publication | this commit |
 | 2026-11-10 | S8.8 | SWRCB awards via FAAST public search (2 awarded rows; contacts never stored) | this commit |
+| 2026-11-10 | S7.7 | Sierra snow literature rows (40) published; S7.8 CEDEN task added | this commit |

@@ -9,3 +9,11 @@ cleared:
       San Francisco Estuary Institute and 5 Gyres Institute, SF Bay and Adjacent
       Sanctuaries Microplastic and Microparticle Project (published by OPC on the
       California Natural Resources Agency Open Data portal); CC BY 4.0
+  karapetrova2026_sierra_snow:
+    license: fair-use-factual-values
+    license_url: https://doi.org/10.1021/acs.est.6c02757
+    basis: owner determination 2026-11-10 (factual values from freely available SI, cited; QUESTIONS SIERRA-A)
+    attribution: >-
+      Karapetrova A, Cowger W, Brahney J, et al. Event-Scale Deposition of Atmospheric
+      Microplastics in Snowfall of the Sierra Nevada in North America. Environ. Sci.
+      Technol. 2026. doi:10.1021/acs.est.6c02757 (SI Tables S1-S2)

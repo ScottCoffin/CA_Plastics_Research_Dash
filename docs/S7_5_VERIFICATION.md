@@ -116,3 +116,19 @@ source hashes and license-evidence objects stay local.
 S7.5 acceptance (performance budget met; source links and citation text displayed;
 map, filters and gaps view on cleared observations) is met. A2-C4 still applies: EM-8
 and EM-11 will reuse the gaps component.
+
+## Literature-derived rows: Sierra Nevada snow (2026-11-10)
+
+`curation/monitoring/karapetrova2026_sierra_snow.csv` holds the 40 per-sample values
+from Karapetrova et al. 2026 (ES&T, doi:10.1021/acs.est.6c02757), SI Table S2 (p. S18),
+with site coordinates from Table S1. The SI is freely available; the owner cleared reuse
+of the factual values with citation (QUESTIONS SIERRA-A). The values were transcribed
+and then checked twice: against the rendered page, and cell by cell against the PDF
+text layer (40/40 identical). The SI text says "43 samples (Table S2)", but the table
+lists 40 rows (Pear Lake 3B is absent); the Atlas carries the 40 listed rows.
+`atlas.ingest.monitoring.literature` maps them to the display schema: concentration in
+particles/L, plus the new optional `deposition_rate_value`/`deposition_rate_unit`
+(particles/m2/day; absent for snow-pit layers). `date` is the sampling month for CUES
+fresh snow and the year 2024 otherwise; the SI gives only January-July 2024. The UI
+year parser now accepts `YYYY-MM`. The public payload is 354 observations (314 + 40),
+316,016 bytes; a browser smoke test showed 317 located rows, 19 gap cells and no errors.

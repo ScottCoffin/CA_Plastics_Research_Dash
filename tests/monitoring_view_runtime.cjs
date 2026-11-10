@@ -38,7 +38,8 @@ const result = JSON.parse(vm.runInContext(`JSON.stringify((() => {
     year2020Ids: view.filterSamples(rows, allowed, { ...noFilters, year: "2020" }).map((row) => row.id),
     zeroValues: [view.displayValue(rows[0].particle_count, "unknown"), view.displayValue(rows[0].concentration_value, "not available")],
     zeroMatrix: view.matrix({ matrix: "  " }),
-    invalidYears: [view.year({ date: null }), view.year({ date: "not-a-date" }), view.year({ date: "2020-02-31" })]
+    invalidYears: [view.year({ date: null }), view.year({ date: "not-a-date" }), view.year({ date: "2020-02-31" }), view.year({ date: "2024-13" })],
+    partialYears: [view.year({ date: "2024" }), view.year({ date: "2024-01" }), view.year({ date: "2024-12" })]
   };
 })())`, context));
 
@@ -51,5 +52,6 @@ assert.deepEqual(result.unknownDateIds, ["blank-matrix-bad-date", "missing-matri
 assert.deepEqual(result.year2020Ids, ["zero-coordinate", "null-coordinate", "missing-coordinate", "blank-coordinate", "nonfinite-coordinate", "latitude-out-of-range", "longitude-out-of-range"]);
 assert.deepEqual(result.zeroValues, ["0", "0"]);
 assert.equal(result.zeroMatrix, null);
-assert.deepEqual(result.invalidYears, [null, null, null]);
+assert.deepEqual(result.invalidYears, [null, null, null, null]);
+assert.deepEqual(result.partialYears, ["2024", "2024", "2024"]);
 console.log("Monitoring view runtime checks passed: coordinates, zero values, unknown matrices and dates.");

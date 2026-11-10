@@ -105,7 +105,7 @@ def test_committed_clearance_file_lists_only_the_owner_cleared_source() -> None:
     from atlas.build.monitoring import load_publication_clearances
 
     cleared = load_publication_clearances()
-    assert set(cleared) == {"sf_bay_5gyres_microplastics"}
+    assert set(cleared) == {"sf_bay_5gyres_microplastics", "karapetrova2026_sierra_snow"}
     assert cleared["sf_bay_5gyres_microplastics"]["license"] == "CC-BY-4.0"
 
 

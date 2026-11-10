@@ -19,6 +19,7 @@ from atlas.build.monitoring import (
     require_private_output_outside_site,
     write_monitoring_payload,
 )
+from atlas.ingest.monitoring.literature import load_curated_samples
 
 DEFAULT_SAMPLES = Path("data/processed/normalized/sf_bay_5gyres/samples.json")
 
@@ -52,7 +53,10 @@ def main() -> None:
     if args.private_preview:
         output = require_private_output_outside_site(output)
     with_rows = args.private_preview or args.public_samples
-    rows = json.loads(args.samples.read_text(encoding="utf-8")) if with_rows else None
+    rows = None
+    if with_rows:
+        # Local normalized rows (S7.3) plus committed literature-derived rows.
+        rows = json.loads(args.samples.read_text(encoding="utf-8")) + load_curated_samples()
     payload = build_monitoring_payload(
         load_registry(),
         samples=rows,

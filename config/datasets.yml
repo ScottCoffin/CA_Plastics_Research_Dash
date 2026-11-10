@@ -69,6 +69,31 @@ datasets:
     provenance_note: Official State of California dataset record says 5 resources, public access, CC BY, irregular updates, and an XLSX with SampleID-linked particle data.
     last_checked: 2026-11-07
 
+  - id: karapetrova2026_sierra_snow
+    seed_eligible: true
+    underlying_dataset_id: karapetrova2026_sierra_snow
+    name: Sierra Nevada snowfall and dry deposition microplastics (Karapetrova et al. 2026)
+    steward: University of California, Riverside and coauthors; values from the article's Supporting Information
+    entity_type: dataset
+    status: published study values (literature-derived, curated from SI Tables S1-S2)
+    region: Eastern Sierra Nevada (Inyo National Forest, Mammoth CUES site) and Sequoia National Park (Pear Lake)
+    sample_matrix: [fresh snow, snowpack pit layers, dry atmospheric deposition]
+    plastic_classes: [microplastics]
+    access_tier: B
+    url: https://pubs.acs.org/doi/10.1021/acs.est.6c02757
+    access_method: Values transcribed from the freely available Supporting Information PDF and checked against the rendered pages
+    format: [PDF]
+    cadence: One-time study (January-July 2024 sampling)
+    license: Factual values reused with citation under fair use (owner determination 2026-11-10); article text and figures not reproduced
+    provenance_type: journal_article_si
+    provenance_url: https://doi.org/10.1021/acs.est.6c02757
+    evidence_excerpt: "Table S2 lists per-sample concentrations (p/L, ug/L) and deposition rates (p/m2/day, ug/m2/day) for 40 samples at 7 sites (Table S1)."
+    evidence_identity: "Independent peer-reviewed study of atmospheric microplastic deposition in Sierra Nevada snow."
+    verification_url: https://pubs.acs.org/doi/10.1021/acs.est.6c02757
+    provenance_note: Karapetrova A, Cowger W, Brahney J, et al. Event-Scale Deposition of Atmospheric Microplastics in Snowfall of the Sierra Nevada in North America. Environ. Sci. Technol. 2026. doi:10.1021/acs.est.6c02757
+    contributor_in_ca: true
+    last_checked: 2026-11-10
+
   - id: sf_bay_rmp_cd3_microplastics
     seed_eligible: false
     name: San Francisco Bay Regional Monitoring Program microplastics and CD3 records
