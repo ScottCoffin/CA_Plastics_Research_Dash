@@ -7,6 +7,11 @@ on:
   schedule:
     - cron: "15 10 * * *"
   workflow_dispatch:
+    inputs:
+      spk1_parquet:
+        description: "SPK-1 only: add synthetic 5/25/100 MB Parquet + probe page under /spikes/spk1/"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -28,6 +33,16 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v6
+
+      # SPK-1 hosting spike (owner-authorized 2026-11-09). Opt-in on manual
+      # dispatch only; files exist only in this artifact and disappear on the
+      # next normal deploy.
+      - name: Add SPK-1 synthetic Parquet (opt-in)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.spk1_parquet }}
+        run: |
+          python -m pip install --quiet "pyarrow==17.0.0"
+          python spikes/spk1_hosting/make_parquet.py site/spikes/spk1
+          cp spikes/spk1_hosting/probe.html site/spikes/spk1/probe.html
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@v5

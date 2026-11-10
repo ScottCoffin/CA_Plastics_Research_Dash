@@ -1,0 +1,41 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>SPK-1 hosting probe</title>
+<pre id="out">running…</pre>
+<script type="module">
+// SPK-1: lazy HTTP reads of hosted Parquet with DuckDB-Wasm (pinned).
+// Usage: probe.html?base=<absolute URL of the directory holding pNN.parquet>
+import * as duckdb from "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/+esm";
+
+const base = new URLSearchParams(location.search).get("base") || new URL(".", location.href).href;
+const out = document.getElementById("out");
+const results = [];
+const bundle = await duckdb.selectBundle(duckdb.getJsDelivrBundles());
+const workerUrl = URL.createObjectURL(
+  new Blob([`importScripts("${bundle.mainWorker}");`], { type: "text/javascript" }),
+);
+const db = new duckdb.AsyncDuckDB(new duckdb.VoidLogger(), new Worker(workerUrl));
+await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
+const conn = await db.connect();
+for (const name of ["p5", "p25", "p100"]) {
+  const url = new URL(`${name}.parquet`, base).href;
+  const row = { name, url };
+  try {
+    await db.registerFileURL(`${name}.parquet`, url, duckdb.DuckDBDataProtocol.HTTP, false);
+    let t = performance.now();
+    row.count = Number((await conn.query(`SELECT count(*) AS n FROM '${name}.parquet'`)).toArray()[0].n);
+    row.count_ms = Math.round(performance.now() - t);
+    t = performance.now();
+    const agg = await conn.query(
+      `SELECT year, count(*) AS n FROM '${name}.parquet' WHERE tag = 3 GROUP BY year ORDER BY year LIMIT 3`,
+    );
+    row.agg_rows = agg.numRows;
+    row.agg_ms = Math.round(performance.now() - t);
+  } catch (error) {
+    row.error = String(error);
+  }
+  results.push(row);
+}
+out.textContent = JSON.stringify(results, null, 2);
+window.__spk1 = results;
+</script>
