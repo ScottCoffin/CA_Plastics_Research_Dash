@@ -1,0 +1,99 @@
+[
+  {
+    "source": "SYNTH_FUNDER_A",
+    "raw": {
+      "source_award_id": "SYNTH-0001",
+      "title": "  Microplastic abundance in California beach sediments  ",
+      "abstract": "Synthetic record. Surveys microplastic occurrence along coastal beaches.",
+      "pi_names": ["Test Investigator One", "Test Investigator Two"],
+      "org": "Synthetic State University",
+      "org_ror": "https://ror.org/00synth001",
+      "org_state": "ca",
+      "start": "2024-07-01",
+      "end": "2027-06-30",
+      "amount": "$250,000.00",
+      "currency": "usd",
+      "funder": "Synthetic Funder A",
+      "program": "Synthetic Program Alpha",
+      "funder_chain": ["Synthetic Pass-Through Agency", "Synthetic State Sea Grant"],
+      "url": "https://example.invalid/grants/SYNTH-0001"
+    }
+  },
+  {
+    "source": "SYNTH_FUNDER_A",
+    "raw": {
+      "source_award_id": "SYNTH-0002",
+      "title": "Municipal pension administration review",
+      "pi_names": [],
+      "org": "Synthetic Office of Records",
+      "org_state": "NY",
+      "start": "2025",
+      "end": "2026-06",
+      "amount": "1,200"
+    }
+  },
+  {
+    "source": "SYNTH_FUNDER_B",
+    "raw": {
+      "source_award_id": "SYNTH-0003",
+      "title": "Plastic debris transport in urban stormwater",
+      "abstract": "Synthetic record. Monitors microplastic loads in stormwater outfalls.",
+      "funder": "Synthetic Funder B",
+      "start": "2025-01-15"
+    }
+  },
+  {
+    "source": "SYNTH_FUNDER_B",
+    "raw": {
+      "source_award_id": "SYNTH-0004",
+      "title": "Wastewater treatment plant effluent screening",
+      "abstract": "Synthetic record. Tests microplastic removal in treatment plant effluent.",
+      "org_state": "CA",
+      "amount": 0
+    }
+  },
+  {
+    "source": "SYNTH_PASS_THROUGH",
+    "raw": {
+      "source_award_id": "SYNTH-0005",
+      "title": "Coastal habitat restoration planning",
+      "org_state": "CA",
+      "funder_chain": ["Synthetic Pass-Through Agency", "Synthetic State Sea Grant"],
+      "amount": "$75,500"
+    }
+  },
+  {
+    "source": "SYNTH_PASS_THROUGH",
+    "raw": {
+      "source_award_id": "SYNTH-0006",
+      "title": "Regional water quality monitoring network",
+      "org_state": "OR",
+      "start": "2023-10",
+      "end": "2024-09",
+      "currency": "USD"
+    }
+  },
+  {
+    "source": "SYNTH_FUNDER_C",
+    "raw": {
+      "source_award_id": "SYNTH-0007",
+      "title": "Textile microfiber shedding from laundering",
+      "abstract": "Synthetic record. Quantifies microfiber release from synthetic textiles.",
+      "org": "Synthetic Research Institute",
+      "org_ror": "https://ror.org/00synth007",
+      "org_state": "",
+      "amount": "18750.5",
+      "program": "Synthetic Program Gamma"
+    }
+  },
+  {
+    "source": "SYNTH_FUNDER_C",
+    "raw": {
+      "source_award_id": "SYNTH-0008",
+      "title": "Fellowship support for early-career researchers",
+      "pi_names": ["Test Investigator Three"],
+      "org_state": "CA",
+      "end": "2029-12-31"
+    }
+  }
+]

@@ -80,7 +80,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S7.6** Future-source watch list and weekly checks. Acceptance: changes update `docs/SOURCES.md`.
 
 ## S8 Grants
-- [ ] **S8.1** Grant schema, normalization, and classifier reuse. Acceptance: C3 schema tests.
+- [x] **S8.1** Grant schema, normalization, and classifier reuse. Acceptance: C3 schema tests. Complete 2026-11-09: `docs/S8_1_VERIFICATION.md`; `py -3.14 scripts/check_s8_1.py`. Relevance and tags use provisional S2.3 rules until the S5.1 classifier exists.
 - [ ] **S8.2** NIH RePORTER ingester. Acceptance: backfill, incremental path, fixture, and usage notes.
 - [ ] **S8.3** NSF ingester. Acceptance: documented parameters, backfill, increment, and fixture.
 - [ ] **S8.4** USAspending ingester. Acceptance: pagination, bulk backfill, and keyword-noise notes.

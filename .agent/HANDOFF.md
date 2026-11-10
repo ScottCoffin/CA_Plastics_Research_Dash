@@ -1,4 +1,4 @@
-# Handoff - 2026-11-09 - EM-1 complete; EM-2 partial; remaining tasks need owner input
+# Handoff - 2026-11-09 - EM-1 complete; EM-2 partial; S8.1 complete; remaining tasks need owner input
 
 ## EM-1 Add-on A2 vocabularies and Need Ledger
 
@@ -10,6 +10,7 @@
 - Earlier this session: A2 integration (`35a2f95`), budget test date fix (`4b2154f`), and owner acceptance of all pending defaults (ADR-DEFAULTS-2026-11-09).
 
 ### State and next
+- S8.1 is complete (`docs/S8_1_VERIFICATION.md`). Next eligible: S8.2 NIH RePORTER ingester (public API, no key; the task authorizes live smoke calls). S8.3–S8.5 follow the same pattern.
 - Owner actions: run the quote check on local PDFs; shorten the N2.9 and N4.1 quotes (>30 words) in the XLSX, then run `build_need_ledger.py`; answer EM-1-A (approve the addendum).
 - SPK-1..SPK-4 are eligible but need owner authorization for new dependencies (DuckDB-Wasm, Mosaic, Observable Framework/Node) and for live hosting tests (Pages deploy of synthetic Parquet, Cloudflare R2). They were not started.
 - EM-2 partial (`docs/EM_2_VERIFICATION.md`): layer, EAT-12 and offshore rule are done; it stays unchecked until S5.4 (region derivation on works) and EM-9/EM-11 (disclaimer wiring). The owner should confirm CDFW ds3158 as the state-waters source (A2-D11).
@@ -18,6 +19,6 @@
 
 ### Verification commands
 - `py -3.14 scripts/check_em1.py`; `py -3.14 -m pytest -q tests/test_rwqcb_em2.py`
-- Full gate: links + A1/A2 scaffolds + `make lint test build` (407 passed, 9 skipped) + `git diff --check`
+- Full gate: links + A1/A2 scaffolds + `make lint test build` (471 passed, 9 skipped) + `git diff --check`
 
 Older handoff entries: `.agent/archive/HANDOFF_history.md`.
