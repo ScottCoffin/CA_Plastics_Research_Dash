@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SPK-4 bit-mask facets</title>
+<style>
+  body { font: 13px system-ui, sans-serif; margin: 8px; }
+  fieldset { display: inline-block; vertical-align: top; margin: 4px; max-height: 240px; overflow: auto; }
+  label { display: block; white-space: nowrap; }
+  .c { color: #666; }
+</style>
+</head>
+<body>
+<h3>SPK-4 bit-mask facets</h3>
+<div id="status">loading...</div>
+<div id="facets"></div>
+<script type="module">
+// Test harness for run_spike.py. window.spike is published only after the
+// first full render, so its presence means the landing page is ready.
+import { BitmaskIndex } from './facets.js';
+
+const N = new URLSearchParams(location.search).get('n') || '30000';
+const base = `data/n${N}/`;
+const sel = {};          // facet -> [labels]
+const boxes = new Map(); // "facet|label" -> {input, span}
+let last = { total: 0, counts: {} };
+let index;
+
+function mutate(op) {
+  if (op.type === 'clear') {
+    for (const k of Object.keys(sel)) delete sel[k];
+    return;
+  }
+  const list = sel[op.facet] ?? [];
+  const i = list.indexOf(op.label);
+  if (i >= 0) list.splice(i, 1); else list.push(op.label);
+  if (list.length) sel[op.facet] = list; else delete sel[op.facet];
+}
+
+function refresh() {
+  last = index.counts(sel);
+  for (const [key, { input, span }] of boxes) {
+    const [facet, label] = [key.slice(0, key.indexOf('|')), key.slice(key.indexOf('|') + 1)];
+    span.textContent = last.counts[key];
+    input.checked = (sel[facet] ?? []).includes(label);
+  }
+  document.getElementById('status').textContent = `${last.total} of ${index.N} works match`;
+}
+
+function apply(op) {
+  const t0 = performance.now();
+  mutate(op);
+  refresh();
+  return performance.now() - t0;
+}
+
+function setState(state) {
+  const t0 = performance.now();
+  for (const k of Object.keys(sel)) delete sel[k];
+  for (const [k, v] of Object.entries(state)) if (v.length) sel[k] = [...v];
+  refresh();
+  return performance.now() - t0;
+}
+
+function buildUI(facets) {
+  const root = document.getElementById('facets');
+  for (const [facet, labels] of Object.entries(facets)) {
+    const fs = document.createElement('fieldset');
+    fs.innerHTML = `<legend>${facet}</legend>`;
+    for (const { label } of labels) {
+      const row = document.createElement('label');
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.addEventListener('change', () => apply({ type: 'toggle', facet, label }));
+      const span = document.createElement('span');
+      span.className = 'c';
+      row.append(input, ` ${label} `, span);
+      fs.append(row);
+      boxes.set(`${facet}|${label}`, { input, span });
+    }
+    root.append(fs);
+  }
+}
+
+const [facets] = await Promise.all([
+  fetch(`${base}facets.json`).then((r) => r.json()),
+  fetch(`${base}works_index.json`).then((r) => r.json()),
+]);
+buildUI(facets);
+index = await BitmaskIndex.load(base);
+refresh();
+window.spike = {
+  firstRenderMs: performance.now(),
+  apply,
+  setState,
+  counts: () => last.counts,
+};
+</script>
+</body>
+</html>

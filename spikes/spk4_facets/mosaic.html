@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SPK-4 Mosaic crossfilter facets</title>
+<style>
+  body { font: 13px system-ui, sans-serif; margin: 8px; }
+  fieldset { display: inline-block; vertical-align: top; margin: 4px; max-height: 240px; overflow: auto; }
+  label { display: block; white-space: nowrap; }
+  .c { color: #666; }
+</style>
+</head>
+<body>
+<h3>SPK-4 Mosaic crossfilter facets</h3>
+<div id="status">loading...</div>
+<div id="facets"></div>
+<script type="importmap">
+{
+  "imports": {
+    "@uwdata/mosaic-core": "https://cdn.jsdelivr.net/npm/@uwdata/mosaic-core@0.34.1/+esm",
+    "@uwdata/mosaic-sql": "https://cdn.jsdelivr.net/npm/@uwdata/mosaic-sql@0.34.1/+esm"
+  }
+}
+</script>
+<script type="module">
+// Same 20 facets as bitmask.html, implemented with Mosaic's crossfilter Selection,
+// one MosaicClient per facet, and DuckDB-Wasm querying a Parquet table.
+// Each count query carries a seq tag so stale results are ignored.
+import { Coordinator, MosaicClient, Selection, wasmConnector } from '@uwdata/mosaic-core';
+import { sql } from '@uwdata/mosaic-sql';
+
+const N = new URLSearchParams(location.search).get('n') || '30000';
+const base = `data/n${N}/`;
+const state = { seq: 0, waiting: false, t0: 0, resolve: null, counts: {} };
+const current = {};     // facet -> [labels]
+const lastApplied = {}; // facet -> JSON of labels last pushed to the selection
+const spans = new Map();
+let facets;
+let names;
+let clients = [];
+let selection;
+
+const quote = (v) => `'${String(v).replace(/'/g, "''")}'`;
+
+function kindOf(facet) {
+  if (facet === 'compartment') return 'multi';
+  if (facet === 'year') return 'num';
+  if (facets[facet].length === 1 && facets[facet][0].label === 'yes') return 'bool';
+  return 'cat';
+}
+
+function labelSql(facet, label) {
+  switch (kindOf(facet)) {
+    case 'multi': return `comp_${label} = true`;
+    case 'bool': return `${facet} = true`;
+    case 'num': return `${facet} = ${Number(label)}`;
+    default: return `${facet} = ${quote(label)}`;
+  }
+}
+
+function clauseFor(facet, labels) {
+  const predicate = labels.length
+    ? sql([`(${labels.map((l) => labelSql(facet, l)).join(' OR ')})`])
+    : null;
+  const client = clients.find((c) => c.facet === facet);
+  return { source: client, clients: new Set([client]), fields: [], value: labels, predicate };
+}
+
+class FacetClient extends MosaicClient {
+  constructor(facet, labels, sel) {
+    super(sel);
+    this.facet = facet;
+    this.labels = labels;
+    this.doneSeq = -1;
+  }
+
+  query() {
+    // noSkip: the active (last updated) clause must not blank this client's query.
+    // Own-facet clauses are still excluded because clause.clients holds this client.
+    const filter = this.filterBy?.predicate(this, true) ?? [];
+    const where = filter.filter(Boolean).map(String);
+    const cols = this.labels.map((l, i) => `count(*) FILTER (WHERE ${labelSql(this.facet, l.label)}) AS l${i}`);
+    return `SELECT ${state.seq} AS seq, ${cols.join(', ')} FROM works` +
+      (where.length ? ` WHERE ${where.join(' AND ')}` : '');
+  }
+
+  queryResult(data) {
+    const row = data.get(0);
+    if (Number(row.seq) === state.seq) {
+      this.labels.forEach((l, i) => {
+        const key = `${this.facet}|${l.label}`;
+        const v = Number(row[`l${i}`]);
+        state.counts[key] = v;
+        spans.get(key).textContent = v;
+      });
+      this.doneSeq = state.seq;
+      checkDone();
+    }
+    return this;
+  }
+
+  queryError(error) {
+    console.error(error);
+    return this;
+  }
+}
+
+function checkDone() {
+  if (state.waiting && clients.every((c) => c.doneSeq === state.seq)) {
+    state.waiting = false;
+    state.resolve(performance.now() - state.t0);
+  }
+}
+
+// Push changed facet clauses, then bump seq and requery every client.
+async function runUpdate(t0) {
+  for (const f of names) {
+    const labels = current[f] ?? [];
+    const key = JSON.stringify(labels);
+    if (lastApplied[f] !== key) {
+      lastApplied[f] = key;
+      selection.update(clauseFor(f, labels));
+    }
+  }
+  // Selection.update emits; Param._value (read by predicate()) is only written when the
+  // emitter flushes. Yield one macrotask so queries are built from the new clauses.
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  state.seq += 1;
+  state.t0 = t0;
+  return new Promise((resolve) => {
+    state.resolve = resolve;
+    state.waiting = true;
+    for (const c of clients) c.requestQuery();
+  });
+}
+
+function syncBoxes() {
+  for (const [key, { input }] of boxes) {
+    const [facet, label] = [key.slice(0, key.indexOf('|')), key.slice(key.indexOf('|') + 1)];
+    input.checked = (current[facet] ?? []).includes(label);
+  }
+}
+const boxes = new Map();
+
+async function apply(op) {
+  const t0 = performance.now();
+  if (op.type === 'clear') {
+    for (const k of Object.keys(current)) delete current[k];
+  } else {
+    const list = current[op.facet] ?? [];
+    const i = list.indexOf(op.label);
+    if (i >= 0) list.splice(i, 1); else list.push(op.label);
+    current[op.facet] = list;
+  }
+  const ms = await runUpdate(t0);
+  syncBoxes();
+  return ms;
+}
+
+async function setState(s) {
+  const t0 = performance.now();
+  for (const f of names) current[f] = s[f] ? [...s[f]] : [];
+  const ms = await runUpdate(t0);
+  syncBoxes();
+  return ms;
+}
+
+function buildUI() {
+  const root = document.getElementById('facets');
+  for (const facet of names) {
+    const fs = document.createElement('fieldset');
+    fs.innerHTML = `<legend>${facet}</legend>`;
+    for (const { label } of facets[facet]) {
+      const row = document.createElement('label');
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.addEventListener('change', () => apply({ type: 'toggle', facet, label }));
+      const span = document.createElement('span');
+      span.className = 'c';
+      row.append(input, ` ${label} `, span);
+      fs.append(row);
+      const key = `${facet}|${label}`;
+      spans.set(key, span);
+      boxes.set(key, { input });
+    }
+    root.append(fs);
+  }
+}
+
+facets = await (await fetch(`${base}facets.json`)).json();
+names = Object.keys(facets);
+buildUI();
+
+const connector = wasmConnector();
+const coord = new Coordinator(connector);
+const db = await connector.getDuckDB();
+const parquet = new Uint8Array(await (await fetch(`${base}works.parquet`)).arrayBuffer());
+db.registerFileBuffer('works.parquet', parquet);
+await coord.exec([`CREATE TABLE works AS SELECT * FROM read_parquet('works.parquet')`]);
+
+selection = Selection.crossfilter();
+clients = names.map((f) => new FacetClient(f, facets[f], selection));
+for (const c of clients) coord.connect(c);
+
+await runUpdate(performance.now());
+window.spike = {
+  firstRenderMs: performance.now(),
+  apply,
+  setState,
+  counts: () => ({ ...state.counts }),
+};
+document.getElementById('status').textContent = `Mosaic ready (${names.length} facets)`;
+</script>
+</body>
+</html>

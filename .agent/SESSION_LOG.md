@@ -59,3 +59,4 @@
 | 2026-11-09 | EM-1 follow-up | Quote regression 69/70 (+1 accepted exception) vs Zotero PDFs; checker handles elisions and one layout interruption; N2.9/N4.1 shortened (N3.2 source typo accepted as owner exception); guide_v2 approved; A2-D11 confirmed; SPK-1..4 authorized; gate 477 passed | this commit |
 | 2026-11-10 | SPK-1 partial | Opt-in Pages deploy of 5/25/100 MB synthetic Parquet: 206 + CORS *, lazy DuckDB-Wasm reads (1.2 MB for 100 MB); G-HOST = Pages only ≤25 MB; R2 leg pending owner | this commit |
 | 2026-11-10 | SPK-2 partial | Parquet writer×option×DuckDB-Wasm matrix all 15/15 (lead re-ran); G-PARQ = DuckDB 1.1.1 + zstd; Framework leg deferred to SPK-3 | this commit |
+| 2026-11-10 | SPK-4 | Bit-mask vs Mosaic at 30k/100k × 5 runs: bit-masks win cold start and meet budgets with exact counts; G-FACET = bit-masks main page; Mosaic correctness to AT-6 | this commit |
