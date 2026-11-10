@@ -1,0 +1,243 @@
+# Add-on A2 keyword rules (EM-1; docs/add_on_spec_2.md §4 "Derived keyword
+# flags" and product_type). Rules are candidates: EM-4 applies them and
+# spot-checks precision per flag (A2-C15). Rows whose cell_rule relies on a
+# weak flag stay at low rule_confidence until EM-13.
+#
+# Semantics (implemented in EM-4; validated offline in tests/test_a2_keyword_rules.py):
+# - Text = title + " " + abstract, Unicode-normalized, matched case-insensitively.
+# - A rule fires when at least one `any` pattern matches AND, if
+#   `require_any` is present, at least one of those also matches, AND no
+#   `exclude` pattern matches.
+# - Patterns are Python regular expressions; \b word boundaries are explicit.
+# - A product_type subtype also sets its parent (taxonomy product_type_parents);
+#   a work naming only a parent gets only the parent.
+version: a2-keyword-rules-v1-candidate
+status: em1_draft_unvalidated
+fields: [title, abstract]
+
+keyword_flags:
+  kw_particle_characterization:
+    any:
+      - '\bpolymer (type|identification|composition)s?\b'
+      - '\b(particle|polymer) (shape|morpholog\w*|colou?r|size distribution)s?\b'
+      - '\b(ft-?ir|µ-?ftir|micro-?ftir|raman|py-?gc-?ms|pyrolysis)\b'
+      - '\b(fragments?|fibers?|fibres?|films?|foams?|pellets?) and (fragments?|fibers?|fibres?|films?|foams?|pellets?)\b'
+      - '\bcharacteri[sz](ation|ed|e) of (the )?(micro|nano)?plastics?\b'
+    notes: N1.5 types and characteristics.
+  kw_food_seafood:
+    any:
+      - '\b(seafood|shellfish|bivalves?|mussels?|oysters?|clams?|scallops?|crabs?|shrimp|prawns?)\b'
+      - '\b(commercial(ly)?|edible|market|retail) (fish|species)\b'
+      - '\b(sport ?fish|sportfish|fish fillets?|fish muscle|edible tissue)\b'
+      - '\bfood (items?|products?|chain safety)\b'
+    notes: N1.7 human-health relevance via fish and shellfish.
+  kw_equity_ej_tribal:
+    any:
+      - '\benvironmental (justice|equity|racism)\b'
+      - '\b(disadvantaged|underserved|frontline|overburdened|low-income) communit(y|ies)\b'
+      - '\b(tribal|tribes?|indigenous|native american|first nations?)\b'
+      - '\b(disproportionate(ly)? (impact|burden|exposure)\w*)\b'
+      - '\b(equity|equitable)\b'
+    exclude:
+      - '\bequity (stake|market|investor)s?\b'
+    notes: N1.8 disproportionate impacts, equity and tribal engagement.
+  kw_seasonal:
+    any:
+      - '\bseason(al|ality|ally|s)?\b'
+      - '\b(wet|dry|rainy|storm) seasons?\b'
+      - '\b(winter|summer|spring|autumn|fall) (and|versus|vs\.?) (winter|summer|spring|autumn|fall)\b'
+      - '\b(first flush|storm events?|post-storm)\b'
+    notes: N2.7 regional comparison and seasonality.
+  kw_temporal:
+    any:
+      - '\b(temporal|long-term|multi-?year|decadal|interannual) (trends?|changes?|variation|patterns?|monitoring|record)\b'
+      - '\btime[- ]series\b'
+      - '\btrends? (over|across) (time|years|decades)\b'
+      - '\b(sediment|ice) cores?\b'
+      - '\b(baseline|before and after|before-after|pre- and post-)\b'
+    notes: N3.2 temporal trends; M3 macroplastic baseline, trends and policy effect.
+  kw_small_particles:
+    any:
+      - '\bsmall (micro)?plastics?\b'
+      - '\bsmall(er)? (microplastic )?particles?\b'
+      - '\b(< ?|less than |below |under )(20|10|5|1) ?(µm|μm|um|micro(n|met(er|re))s?)\b'
+      - '\b(nanoplastics?|submicron|sub-micron|sub-?µm)\b'
+      - '\bsize detection limits?\b'
+    notes: N1.9 and N4.2 small particles.
+  kw_fibers:
+    any:
+      - '\b(micro)?fib(er|re)s?\b'
+      - '\b(textile|synthetic|polyester|acrylic|nylon) (fib(er|re)s?|microfib(er|re)s?)\b'
+      - '\bfibrous\b'
+    exclude:
+      - '\b(dietary|optical|carbon|glass|muscle|nerve) fib(er|re)s?\b'
+      - '\bfib(er|re)-reinforced\b'
+    notes: N1.9 and N4.2 fibers.
+  kw_tire_wear:
+    any:
+      - '\b(tire|tyre)s?\b'
+      - '\b(tire|tyre)[- ](wear|road wear|tread|rubber)( particles?)?\b'
+      - '\b(twp|trwp)s?\b'
+      - '\b6ppd(-q| quinone)?\b'
+    require_any:
+      - '\b(particles?|wear|debris|runoff|stormwater|road|rubber|abrasion|6ppd)\b'
+    exclude:
+      - '\b(tire|tyre) (pressure|inflation|manufacturing defects?)\b'
+    notes: N4.2 tire-wear particles. Matches vehicle tires only in particle/runoff context.
+  kw_cost_accreditation:
+    any:
+      - '\b(analytical|analysis|sampling|monitoring|laboratory|per-sample|labou?r) costs?\b'
+      - '\bcost[- ](effective|efficient) (methods?|approach\w*|monitoring|analys[ie]s|screening)\b'
+      - '\b(accredit\w*|certif(ied|ication) (laborator|method)\w*)\b'
+      - '\b(laboratory|analytical) capacity\b'
+      - '\b(sample throughput|analytical throughput|turnaround times?)\b'
+    notes: N4.4 laboratory capacity and cost.
+  kw_persistence_degradation:
+    any:
+      - '\b(persisten(ce|t)|half-?li(fe|ves))\b'
+      - '\b(degrad\w*|weathering|weathered|fragmentation|biodegrad\w*|photo-?oxidat\w*|photodegrad\w*)\b'
+      - '\b(lifetime|longevity) (in|of) (the )?environment\b'
+    notes: DC1 persistence and degradation (listing criterion).
+  kw_mobility_transport:
+    any:
+      - '\b(mobility|mobile)\b'
+      - '\b(long-range|global|atmospheric|riverine|oceanic) (transport|distribution|dispersal)\b'
+      - '\b(transport\w*|dispers\w*|migrat\w*) of (micro|nano)?plastics?\b'
+      - '\b(remote|pristine|polar|arctic|antarctic|deep-sea) (regions?|areas?|environments?|sites?)\b'
+    exclude:
+      - '\bchemical migration\b'
+      - '\bmigrat\w* (of|from) (additives?|chemicals?|monomers?|plasticizers?)\b'
+    notes: DC2 mobility and global distribution. Chemical migration is base Tier 2, outside V-9.
+  kw_water_column:
+    any:
+      - '\bwater[- ]column\b'
+      - '\b(depth|vertical)[- ](profiles?|resolved|distribution|stratified)\b'
+      - '\b(subsurface|sub-surface|mid-?water|deep water|pelagic) (samples?|sampling|waters?|concentrations?|layers?)\b'
+      - '\b(niskin bottles?|in-situ pumps?|ctd rosette)\b'
+    notes: N1.11 depth-resolved concentrations.
+  kw_realistic_particles:
+    any:
+      - '\benvironmentally (realistic|relevant) (particles?|microplastics?|mixtures?|concentrations?|exposure)\b'
+      - '\b(weathered|aged|irregular|field-collected|environmentally aged) (micro|nano)?plastics?\b'
+      - '\b(fragments?|fibers?|fibres?) (rather than|instead of|versus|vs\.?) (spheres?|beads?)\b'
+      - '\b(polydisperse|heterogeneous) (particles?|mixtures?)\b'
+    notes: N1.10 toxicity data for environmentally realistic particles.
+  kw_hydrodynamic_transport:
+    any:
+      - '\bhydrodynamic\w*\b'
+      - '\b(flow|current|tidal|wave|turbulen\w*|discharge) (conditions?|regimes?|velocit\w*|forcing|driven)\b'
+      - '\b(settling|resuspension|deposition) (velocit\w*|rates?|dynamics)\b'
+      - '\b(flume|particle tracking|lagrangian)\b'
+    notes: N2.8 transport under different hydrodynamic conditions.
+  kw_landfill_recycling:
+    any:
+      - '\blandfills?\b'
+      - '\b(leachate)\b'
+      - '\brecycl(ing|ers?) (facilit(y|ies)|centers?|centres?|plants?|operations?)\b'
+      - '\b(material recovery facilit(y|ies)|mrfs?|waste transfer stations?)\b'
+    notes: N2.9 landfills and recycling centers as sources.
+  kw_ballast_water:
+    any:
+      - '\bballast(-| )?water\b'
+      - '\bballast tanks?\b'
+    notes: N2.10 ship ballast water as a pathway.
+  kw_source_identification:
+    any:
+      - '\bsource (identification|apportionment|attribution|tracking|tracing|fingerprint\w*)\b'
+      - '\b(fingerprint\w*|chemical markers?|tracers?) (of|for) (sources?|origin)\b'
+      - '\bidentif\w* (the )?(sources?|origins?) of\b'
+    notes: N4.5 source-identification methods.
+  kw_data_standards:
+    any:
+      - '\bdata (standards?|harmoni[sz]ation|reporting (standards?|guidelines?)|sharing|interoperab\w*)\b'
+      - '\b(minimum (data|reporting) (elements?|requirements?|information))\b'
+      - '\b(fair data|fair principles|controlled vocabular(y|ies)|data dictionar(y|ies)|ontolog(y|ies))\b'
+      - '\b(standardi[sz]ed (reporting|protocols?|methods?)|harmoni[sz]ed (methods?|protocols?))\b'
+    notes: N4.6 unified data standards and minimum data elements.
+  kw_pmc_trash_composition:
+    any:
+      - '\bplastic material coefficients?\b'
+      - '\bpmc\b'
+      - '\b(trash|litter|debris|waste) (composition|characteri[sz]ation|audits?)\b'
+      - '\bplastic (fraction|content|share) of (trash|litter|debris|waste)\b'
+    notes: M4 Plastic Material Coefficient (PMC) pilot.
+  kw_trash_monitoring_methods:
+    any:
+      - '\b(trash|litter|macro-?debris|macroplastic|marine debris) (monitoring|assessment|survey|quantification) (methods?|protocols?)\b'
+      - '\b(trash assessment|visual (trash|litter) assessment|rapid trash assessment)\b'
+      - '\b(mdmap|tracking california.?s trash|clean ?swell|debris tracker)\b'
+      - '\b(method|protocol) (harmoni[sz]ation|comparison|intercomparison) for (trash|litter|debris)\b'
+    notes: M5 harmonizing macroplastic and trash monitoring methods.
+
+product_type:
+  artificial_turf_infill:
+    any: ['\b(artificial|synthetic) (turf|grass) (infill|crumb)\b', '\bcrumb rubber\b', '\b(turf|pitch) infill\b']
+  paints_coatings:
+    any: ['\b(paints?|coatings?|varnish\w*|lacquers?)\b']
+    require_any: ['\b(micro|nano)?plastics?\b', '\bparticles?\b', '\bshed\w*\b', '\bpolymer\w*\b']
+    exclude: ['\bpaint(ed)? (thin section|mark)\w*\b']
+  laundry_dish_detergents:
+    any: ['\b(detergents?|laundry (products?|pods?|capsules?)|dishwash\w* (products?|tablets?|pods?))\b']
+  detergent_insoluble_polymers:
+    any: ['\binsoluble polymers?\b']
+    require_any: ['\bdetergents?\b', '\blaundry\b', '\bclean\w* products?\b']
+  detergent_fragrance_microcapsules:
+    any: ['\b(fragrance|perfume|scent) (micro)?capsules?\b', '\bmicro-?encapsulat\w* fragrance\b']
+  detergent_water_soluble_polymers:
+    any: ['\b(water-soluble polymers?|polyvinyl alcohol|pva|pvoh)\b']
+    require_any: ['\bdetergents?\b', '\blaundry\b', '\bdishwash\w*\b', '\bpods?\b', '\bfilms?\b']
+  plastic_film_mulch:
+    any: ['\b(plastic|polyethylene|pe|biodegradable) (film )?mulch\w*\b', '\bmulch(ing)? films?\b']
+  cigarette_filters:
+    any: ['\bcigarette (butts?|filters?)\b', '\bcellulose acetate filters?\b']
+  food_contact_articles:
+    any: ['\bfood[- ]contact (materials?|articles?|plastics?)\b', '\bfood packaging\b']
+  food_contact_baby_bottles:
+    any: ['\b(baby|infant|feeding) bottles?\b']
+  food_contact_beverage_bottles:
+    any: ['\b(bottled water|beverage bottles?|bottle caps?|pet bottles?|plastic bottles?)\b']
+  food_contact_films:
+    any: ['\b(cling (wrap|film)s?|plastic wrap|food (wrap|film)s?)\b']
+  food_contact_wrappers:
+    any: ['\b(snack|candy|confectionery|food) wrappers?\b']
+  food_contact_ps_foam:
+    any: ['\b(polystyrene|eps|styrofoam) (foam )?(foodware|containers?|cups?|takeaway|take-out|clamshells?)\b', '\bfoam (foodware|food containers?|cups?)\b']
+  food_contact_tea_bags:
+    any: ['\btea ?bags?\b']
+  childrens_toys:
+    any: ['\b(children.?s|kids.?|plastic) toys?\b']
+  agricultural_other:
+    any: ['\b(greenhouse films?|silage (films?|wrap)|irrigation (tubing|tape)|polymer-coated fertili[sz]ers?|controlled-release fertili[sz]ers?|seed coatings?)\b']
+  aquaculture_gear:
+    any: ['\b(aquaculture|mariculture|oyster farm\w*|mussel farm\w*) (gear|ropes?|nets?|cages?|buoys?|floats?|equipment)\b', '\b(ghost|derelict) (fishing )?(gear|nets?)\b']
+  artificial_turf_blades:
+    any: ['\b(artificial|synthetic) (turf|grass) (blades?|fib(er|re)s?)\b']
+  personal_care_leave_on:
+    any: ['\b(cosmetics?|leave-on|lotions?|sunscreens?|make-?up)\b']
+    require_any: ['\b(micro|nano)?plastics?\b', '\bmicrobeads?\b', '\bpolymers?\b']
+  personal_care_wipes:
+    any: ['\b(wet|baby|flushable|cleansing) wipes?\b']
+  building_materials:
+    any: ['\b(building|construction) materials?\b', '\b(insulation|roofing|pipes?|sealants?|vinyl flooring)\b']
+    require_any: ['\b(micro|nano)?plastics?\b', '\bparticles?\b', '\bshed\w*\b']
+  cleaning_other:
+    any: ['\b(cleaning|scouring|abrasive) (products?|pads?|sponges?|agents?)\b', '\bmelamine (foam|sponges?)\b']
+  furniture_foams:
+    any: ['\b(furniture|upholstery|mattress) foams?\b', '\bpolyurethane foam\b']
+  glitter:
+    any: ['\bglitter\b']
+  motor_vehicle_foams:
+    any: ['\b(vehicle|automotive|car) (seat )?foams?\b']
+  ppe_masks:
+    any: ['\b(face ?masks?|surgical masks?|disposable masks?|n95|personal protective equipment|ppe)\b']
+    require_any: ['\b(micro|nano)?plastics?\b', '\bfib(er|re)s?\b', '\bparticles?\b', '\bdebris\b', '\blitter\b']
+  floral_foam:
+    any: ['\bfloral foam\b', '\boasis foam\b']
+  geotextiles:
+    any: ['\bgeo-?(textiles?|membranes?|synthetics?)\b']
+  balloons_toys:
+    any: ['\bballoons?\b']
+  plastic_bags:
+    any: ['\b(plastic|grocery|carrier|shopping|single-use) bags?\b']
+  silicone_cookware:
+    any: ['\bsilicone (cookware|bakeware|baking|kitchen\w*|moulds?|molds?|utensils?)\b']

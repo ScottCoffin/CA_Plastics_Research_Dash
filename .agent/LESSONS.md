@@ -199,3 +199,10 @@
   Goal-mode run continues across several tasks.
 - `.agent/` is the task-level source of truth. Keep `agent_docs/` concise and
   synchronized so Medium or Heavy intake does not replay stale milestones.
+
+## Parallel workers must not run full pytest sessions at the same time
+Concurrent pytest processes share the `pytest-of-<user>` basetemp root; one
+session's old-directory cleanup can remove another's live `tmp_path`, producing
+a one-off failure (seen in `tests/test_fulltext_cache.py` during EM-1, not
+reproducible in 5 solo runs). Let workers run focused tests; the lead runs the
+full gate once after they finish.

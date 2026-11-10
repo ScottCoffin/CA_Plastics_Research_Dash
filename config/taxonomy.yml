@@ -41,3 +41,170 @@ provenance:
   supplied_on: 2026-11-05
   evidence_status: literature-derived seeds; not classifier labels or validated rules
   details: docs/query_design_v2.md
+
+# Add-on A2 vocabularies (docs/add_on_spec_2.md §3-§4; EM-1). Values are copied
+# from the add-on. Consumers that predate A2 read only domain_tags, so this block
+# does not change S2.3 rule outputs. A2-C1: discipline = topic (multi-label);
+# study_type = design (single primary label, A2-D1).
+add_on_a2:
+  version: a2-vocab-v1-candidate
+  status: em1_draft
+  source: docs/add_on_spec_2.md
+  study_type:
+    single_label: true
+    secondary_field: study_type_secondary  # hidden; optional (A2-D1)
+    test_system_values: [in_vivo, in_vitro, other]  # exposure_lab_toxicity only
+    values:
+      - field_occurrence
+      - source_emission
+      - pathway_load
+      - fate_transport
+      - exposure_lab_toxicity
+      - mesocosm_semifield
+      - human_exposure_health
+      - method_development
+      - modelling_risk
+      - mitigation_eval
+      - policy_social
+      - review_synthesis
+      - data_resource
+      - perspective_guidance
+      - unclear_other  # always needs_review
+    openalex_review_prior: review_synthesis  # type = 'review' is a prior, never the label
+  compartment:
+    - surface_water
+    - sediment
+    - biota
+    - air
+    - indoor_air
+    - indoor_dust
+    - soil
+    - wastewater_stream
+    - stormwater_stream
+    - drinking_water
+    - food
+    - human_tissue
+  waterbody_type:
+    - coastal_subembayment
+    - estuary
+    - nearshore
+    - offshore
+    - river_stream
+    - lake_reservoir
+    - groundwater
+  pathway:
+    - urban_runoff_stormwater
+    - wastewater
+    - agricultural_runoff
+    - atmospheric_deposition
+    - direct_discharge_litter
+    - indoor_release
+  source_category:
+    - vehicle_tires
+    - textiles
+    - single_use_foodware_packaging
+    - agriculture
+    - fisheries_aquaculture
+    - preproduction_pellets
+    - consumer_product_other
+  product_type:
+    # DTSC Table 1 (parents carry subtypes; a work naming only a parent gets the parent)
+    - artificial_turf_infill
+    - paints_coatings
+    - laundry_dish_detergents
+    - detergent_insoluble_polymers
+    - detergent_fragrance_microcapsules
+    - detergent_water_soluble_polymers
+    - plastic_film_mulch
+    - cigarette_filters
+    - food_contact_articles
+    - food_contact_baby_bottles
+    - food_contact_beverage_bottles
+    - food_contact_films
+    - food_contact_wrappers
+    - food_contact_ps_foam
+    - food_contact_tea_bags
+    - childrens_toys
+    # DTSC Table A1
+    - agricultural_other
+    - aquaculture_gear
+    - artificial_turf_blades
+    - personal_care_leave_on
+    - personal_care_wipes
+    - building_materials
+    - cleaning_other
+    - furniture_foams
+    - glitter
+    - motor_vehicle_foams
+    - ppe_masks
+    - floral_foam
+    - geotextiles
+    - balloons_toys
+    # DTSC footnote 1
+    - plastic_bags
+    - silicone_cookware
+  product_type_parents:
+    laundry_dish_detergents:
+      - detergent_insoluble_polymers
+      - detergent_fragrance_microcapsules
+      - detergent_water_soluble_polymers
+    food_contact_articles:
+      - food_contact_baby_bottles
+      - food_contact_beverage_bottles
+      - food_contact_films
+      - food_contact_wrappers
+      - food_contact_ps_foam
+      - food_contact_tea_bags
+  size_class:
+    values: [macro, micro, nano, unspecified]
+    rule: every micro rule includes nano  # nano (<1 um) is within micro (Monitoring Strategy)
+  size_subclass:  # optional (A2-D9); only when a work reports its size range
+    - nano_1_100nm
+    - submicron_100nm_1um
+    - small_micro_1_100um
+    - large_micro_100um_5mm
+  rwqcb_region:
+    - "1"  # North Coast
+    - "2"  # San Francisco Bay
+    - "3"  # Central Coast
+    - "4"  # Los Angeles
+    - "5"  # Central Valley
+    - "6"  # Lahontan
+    - "7"  # Colorado River
+    - "8"  # Santa Ana
+    - "9"  # San Diego
+    - offshore_state_waters
+    - offshore_or_unassigned
+    - statewide_unspecified
+  policy_driver: [OPC-2022, MON-2026, DTSC-SCP, LEG]
+  keyword_flags:  # booleans produced by rules (config/a2_keyword_rules.yml); used in cell_rule
+    - kw_particle_characterization
+    - kw_food_seafood
+    - kw_equity_ej_tribal
+    - kw_seasonal
+    - kw_temporal
+    - kw_small_particles
+    - kw_fibers
+    - kw_tire_wear
+    - kw_cost_accreditation
+    - kw_persistence_degradation
+    - kw_mobility_transport
+    - kw_water_column
+    - kw_realistic_particles
+    - kw_hydrodynamic_transport
+    - kw_landfill_recycling
+    - kw_ballast_water
+    - kw_source_identification
+    - kw_data_standards
+    - kw_pmc_trash_composition
+    - kw_trash_monitoring_methods
+  # A2-C2: base matrix -> framework compartment / waterbody_type. [INF] mapping;
+  # a base value maps to every listed value, and EM-4 refines per work.
+  matrix_map:
+    marine: {compartment: [surface_water], waterbody_type: [coastal_subembayment, estuary, nearshore, offshore]}
+    freshwater: {compartment: [surface_water], waterbody_type: [river_stream, lake_reservoir]}
+    beach_and_coastal: {compartment: [sediment], waterbody_type: [nearshore]}
+    soil_and_agriculture: {compartment: [soil], waterbody_type: []}
+    wastewater: {compartment: [wastewater_stream], waterbody_type: []}
+    air: {compartment: [air], waterbody_type: []}
+    food_and_drink: {compartment: [food, drinking_water], waterbody_type: []}

@@ -93,7 +93,9 @@ read** (exact paths and line ranges; quote spec text inline rather than sending
 the worker to `spec.md`); interfaces to preserve; the acceptance check and
 full-gate commands copied from above; forbidden actions (editing `.agent/*`,
 `spec.md` or `CLAUDE.md`, commits, network, dependency changes, `.env`); and a
-report of at most 15 lines.
+report of at most 15 lines. When workers run in parallel, have them run only
+focused tests. The lead runs the full suite once afterwards, because concurrent
+pytest sessions share a temp root and cause spurious failures (LESSONS).
 
 ## Checkpoint seal (spec.md B4)
 1. Acceptance check and full gate pass. Never bypass a failing gate.

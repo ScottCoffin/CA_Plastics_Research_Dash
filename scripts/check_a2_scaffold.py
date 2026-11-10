@@ -28,6 +28,8 @@ EXPECTED_STUBS = {
     "test_eat11_group_headers_once.py": ("EAT-11", ("EM-11",)),
     "test_eat12_regional_layer.py": ("EAT-12", ("EM-2",)),
 }
+# Stubs that EM-1 replaced with real offline tests. Only these may hold test functions.
+IMPLEMENTED_STUBS = {"test_eat02_roster_rows_sourced.py", "test_eat10_ledger_roster.py"}
 EXPECTED_PLACEHOLDERS = {
     Path("ledger/.gitkeep"),
     Path("taxonomy/.gitkeep"),
@@ -95,6 +97,13 @@ def is_placeholder_stub(path: Path) -> bool:
     return skip_calls == 1
 
 
+def has_test_function(path: Path) -> bool:
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    return any(
+        isinstance(node, ast.FunctionDef) and node.name.startswith("test_") for node in tree.body
+    )
+
+
 def check_stubs() -> None:
     if not ACCEPTANCE_DIR.is_dir():
         fail(f"missing acceptance directory: {ACCEPTANCE_DIR.relative_to(ROOT)}")
@@ -118,7 +127,10 @@ def check_stubs() -> None:
 
     for name, (eat_id, owners) in sorted(EXPECTED_STUBS.items()):
         path = ACCEPTANCE_DIR / name
-        if not is_placeholder_stub(path):
+        if name in IMPLEMENTED_STUBS:
+            if not has_test_function(path):
+                fail(f"implemented acceptance test must define a test function: {name}")
+        elif not is_placeholder_stub(path):
             fail(f"acceptance stub must be a docstring-only placeholder that skips: {name}")
         docstring = ast.get_docstring(ast.parse(path.read_text(encoding="utf-8"))) or ""
         if not re.search(rf"\b{re.escape(eat_id)}\b", docstring):

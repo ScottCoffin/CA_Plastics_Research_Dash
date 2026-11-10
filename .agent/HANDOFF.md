@@ -1,25 +1,22 @@
-# Handoff - 2026-11-09 - Add-on A2 integration; defaults accepted; EM-1 / SPK spikes next
+# Handoff - 2026-11-09 - EM-1 complete; next eligible tasks need owner input
 
-## Add-on A2 (`docs/add_on_spec_2.md`) integrated into the plan
+## EM-1 Add-on A2 vocabularies and Need Ledger
 
 ### Done
-- `.agent/TODO.md`: EM-1..EM-18 scheduled by dependency (EM-1, EM-3 in S4; EM-2, EM-4, EM-15 in S5; the rest in the new "EM Evidence Map and Related Resources (Add-on A2)" section after S10). Each line carries the A2 level, dependencies, DoD, mapped EAT tests and size. S11.2 is marked superseded by EM-8; S7.5 notes A2-C4.
-- `.agent/DECISIONS.md`: ADR-A2-OWNER (owner determinations from the A2 preamble) and the A2-C1..C15 register (verbatim resolutions, task mapping, all Open).
-- `.agent/QUESTIONS.md`: A2-D1..D11 with spec defaults, plus A2-INT-1 (XLSX vs CSV ledger), A2-INT-2 (EM-2 "S5 geo" = S5.4; layer fetch may proceed as partial work), and A2-INT-3 (E0–E3 adopted).
-- `spec.md`: change-log entry, A3.3a tab note, S4/S5 extension notes, S7.5/S11.2 row notes, and a Part G pointer. `docs/add_on_spec_2.md` has a reciprocal base-spec link.
-- `docs/REUSE.md`: A2 source and licence ledger (25 rows; unstated terms recorded as `unknown`).
-- Scaffold: `tests/acceptance/add_on_a2/` (12 EAT stubs, skipped), `tests/fixtures/add_on_a2/` placeholders, `scripts/check_a2_scaffold.py` (also validates EM/A2-D/A2-INT/A2-C IDs and EM dependency order in TODO), and a CI step.
-- `CLAUDE.md`, `AGENTS.md`, `MEMORY.md` updated with A2 pointers and the `[E]` → lead/`sonnet-reviewer` mapping.
+- A2 vocabularies added to `config/taxonomy.yml` (`add_on_a2`); candidate keyword rules (20 flags, 32 product types) in `config/a2_keyword_rules.yml`, with tests.
+- `atlas.evidence.need_ledger` + `scripts/build_need_ledger.py`: XLSX → deterministic `config/need_ledger.csv` and `docs/need_ledger_qc.md`. 70/70 roster rows, zero hard errors, taxonomy cross-check passes (EAT-2 and EAT-10 are now real tests).
+- `atlas.evidence.quote_check` + `scripts/check_need_ledger_quotes.py`: local-only check of quotes against the owner's PDFs (skips without PDFs).
+- `docs/LABELING_GUIDE_A2_ADDENDUM.md`: draft `guide_v2` addendum. The lead fixed its offshore wording to match `guide_v1` §3 (`partial`).
+- Earlier this session: A2 integration (`35a2f95`), budget test date fix (`4b2154f`), and owner acceptance of all pending defaults (ADR-DEFAULTS-2026-11-09).
 
 ### State and next
-- Owner accepted all pending defaults on 2026-11-09 (ADR-DEFAULTS-2026-11-09): SPK-1..SPK-4 are now eligible, and L3 stays gated. The clock-dependent budget test was fixed separately in `4b2154f`.
-- Next eligible A2 task: EM-1 (depends on S4.1, done). Its keyword rules are `[E]`. EM-2 has a partial pre-S5.4 path (A2-INT-2). EM-5/EM-6 are blocked by owner-gated AT-4/AT-10.
-- EAT-8's "no Minderoo anywhere" grep must exclude the governance docs that record the exclusion (A2 spec, `.agent/*`, `docs/REUSE.md`).
-- Owner WIP in `src/atlas/source_watchlist.py` and `tests/test_source_watch_s7_6.py` was left untouched.
+- Owner actions: run the quote check on local PDFs; shorten the N2.9 and N4.1 quotes (>30 words) in the XLSX, then run `build_need_ledger.py`; answer EM-1-A (approve the addendum).
+- SPK-1..SPK-4 are eligible but need owner authorization for new dependencies (DuckDB-Wasm, Mosaic, Observable Framework/Node) and for live hosting tests (Pages deploy of synthetic Parquet, Cloudflare R2). They were not started.
+- EM-3 waits for EM-1-A approval plus labelling. EM-15 is an owner-run R script. EM-2's partial path (fetch the Regional Board layer, EAT-12) needs live network calls, which no task has authorized yet.
+- S7.6 is owner WIP (`src/atlas/source_watchlist.py`, `tests/test_source_watch_s7_6.py`) and was left unstaged.
 
 ### Verification commands
-- `py -3.14 scripts/check_doc_links.py`; `py -3.14 scripts/check_a1_scaffold.py`; `py -3.14 scripts/check_a2_scaffold.py`
-- `/c/rtools45/usr/bin/make.exe PYTHON="py -3.14" APPDATA="$APPDATA" USERPROFILE="$USERPROFILE" lint test build` (all pass after `4b2154f`)
-- `git diff --check`
+- `py -3.14 scripts/check_em1.py`
+- Full gate: links + A1/A2 scaffolds + `make lint test build` (367 passed, 10 skipped) + `git diff --check`
 
 Older handoff entries: `.agent/archive/HANDOFF_history.md`.
