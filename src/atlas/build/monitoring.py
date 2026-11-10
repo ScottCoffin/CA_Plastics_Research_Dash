@@ -8,10 +8,13 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from atlas.dataset_discovery import canonical_doi
 from atlas.ingest.monitoring.registry import load_registry
 
 SCHEMA_VERSION = "s7.5"
+PUBLICATION_PATH = Path("config/monitoring_publication.yml")
 PRIVATE_SAMPLE_FIELDS = (
     "sample_id",
     "dataset_id",
@@ -91,30 +94,54 @@ def _attach_linked_works(
             ]
 
 
+def load_publication_clearances(path: Path = PUBLICATION_PATH) -> dict[str, dict[str, Any]]:
+    """Return ``{dataset_id: clearance}`` for datasets whose rows may be published."""
+    payload = yaml.safe_load(path.read_text(encoding="utf-8")) if path.exists() else None
+    cleared = (payload or {}).get("cleared") or {}
+    if not isinstance(cleared, dict):
+        raise ValueError(f"{path}: 'cleared' must be a mapping")
+    for dataset_id, entry in cleared.items():
+        missing = [key for key in ("license", "basis", "attribution") if not (entry or {}).get(key)]
+        if missing:
+            raise ValueError(f"{path}: clearance for {dataset_id} lacks {missing}")
+    return cleared
+
+
 def build_monitoring_payload(
     registry: dict[str, Any],
     *,
     samples: list[dict[str, Any]] | None = None,
     private_preview: bool = False,
+    clearances: Mapping[str, Mapping[str, Any]] | None = None,
     generated_at: str | None = None,
     work_links: Sequence[Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Build a source-catalogue payload; include rows only for explicit private preview.
+    """Build the monitoring payload.
 
-    Public output always has zero observations. Private previews are tagged and
-    restricted to a small display schema so the local QC payload cannot leak.
+    Without samples the output is the zero-observation public catalogue. Samples
+    are published only when every row's dataset has a recorded clearance
+    (``clearances``, from ``config/monitoring_publication.yml``); otherwise they
+    need explicit private-preview mode, which is tagged and kept out of ``site/``.
+    Both modes keep only the small display schema, so QC detail cannot leak.
     ``work_links`` (S9.2 rows) is optional; without it no ``linked_works`` keys are added.
     """
     rows = samples or []
+    cleared = dict(clearances or {})
+    if private_preview and cleared:
+        raise ValueError("choose private preview or cleared publication, not both")
     if rows and not private_preview:
-        raise PermissionError("sample observations require explicit private-preview mode")
+        uncleared = sorted({str(row.get("dataset_id")) for row in rows} - set(cleared))
+        if not cleared or uncleared:
+            raise PermissionError(
+                f"sample observations without a publication clearance: {uncleared or 'all'}"
+            )
     if private_preview and not rows:
         raise ValueError("private preview requested but no local samples were supplied")
     datasets = [_public_dataset(row) for row in registry["datasets"]]
     if work_links:
         _attach_linked_works(datasets, list(registry["datasets"]), work_links)
     dataset_ids = {row["id"] for row in datasets}
-    if private_preview:
+    if rows:
         unknown = sorted({row.get("dataset_id") for row in rows} - dataset_ids)
         if unknown:
             raise ValueError(f"sample rows reference unknown registry datasets: {unknown}")
@@ -123,18 +150,33 @@ def build_monitoring_payload(
             for row in sorted(rows, key=lambda row: str(row.get("sample_id", "")))
         ]
         for dataset in datasets:
-            if any(row.get("dataset_id") == dataset["id"] for row in samples_out):
+            if not any(row.get("dataset_id") == dataset["id"] for row in samples_out):
+                continue
+            if private_preview:
                 dataset["measurement_status"] = "private_local_preview_rights_unresolved"
+                continue
+            clearance = cleared[dataset["id"]]
+            dataset["measurement_status"] = "published_rights_cleared"
+            dataset["publication_license"] = {
+                "id": clearance["license"],
+                "url": clearance.get("license_url"),
+                "basis": clearance["basis"],
+            }
+            dataset["citation"] = clearance["attribution"]
     else:
         samples_out = []
+    if private_preview:
+        mode, basis = "private_preview", "local preview observations only"
+    elif samples_out:
+        mode, basis = "public_cleared", "rights-cleared observations from listed datasets only"
+    else:
+        mode, basis = "public_catalogue", "no cleared public sample rows"
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": generated_at or datetime.now(UTC).isoformat(),
-        "publication_mode": "private_preview" if private_preview else "public_catalogue",
+        "publication_mode": mode,
         "sample_count": len(samples_out),
-        "coverage_basis": "local preview observations only"
-        if private_preview
-        else "no cleared public sample rows",
+        "coverage_basis": basis,
         "datasets": datasets,
         "samples": samples_out,
     }
@@ -144,7 +186,9 @@ def write_monitoring_payload(payload: dict[str, Any], path: str | Path) -> Path:
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
     return target
 
@@ -160,6 +204,20 @@ def require_private_output_outside_site(
     return target
 
 
-def build_public_export(output: str | Path = "site/data/monitoring.json") -> Path:
-    """Build the default public source catalogue, never local measurements."""
-    return write_monitoring_payload(build_monitoring_payload(load_registry()), output)
+def build_public_export(
+    output: str | Path = "site/data/monitoring.json",
+    *,
+    samples_path: str | Path | None = None,
+) -> Path:
+    """Build the public payload: the catalogue plus rows from cleared datasets only.
+
+    ``samples_path`` (a normalized S7.3 ``samples.json``) is optional; without it
+    the output is the zero-observation catalogue.
+    """
+    rows = None
+    clearances = None
+    if samples_path is not None:
+        rows = json.loads(Path(samples_path).read_text(encoding="utf-8"))
+        clearances = load_publication_clearances()
+    payload = build_monitoring_payload(load_registry(), samples=rows, clearances=clearances)
+    return write_monitoring_payload(payload, output)

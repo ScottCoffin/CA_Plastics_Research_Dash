@@ -1,4 +1,10 @@
-"""Build public catalogue-only or an ignored local monitoring preview."""
+"""Build the public monitoring payload or an ignored local preview.
+
+Default: zero-observation public catalogue. ``--public-samples`` adds normalized
+rows, but only for datasets cleared in ``config/monitoring_publication.yml``; any
+row from an uncleared dataset stops the build. ``--private-preview`` writes all
+local rows outside ``site/`` for review.
+"""
 
 from __future__ import annotations
 
@@ -8,25 +14,34 @@ from pathlib import Path
 
 from atlas.build.monitoring import (
     build_monitoring_payload,
+    load_publication_clearances,
     load_registry,
     require_private_output_outside_site,
     write_monitoring_payload,
 )
 
+DEFAULT_SAMPLES = Path("data/processed/normalized/sf_bay_5gyres/samples.json")
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path)
-    parser.add_argument(
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
         "--private-preview",
         action="store_true",
         help="include ignored local samples and mark the payload private/rights-unresolved",
     )
+    mode.add_argument(
+        "--public-samples",
+        action="store_true",
+        help="publish rows from rights-cleared datasets (config/monitoring_publication.yml)",
+    )
     parser.add_argument(
         "--samples",
         type=Path,
-        default=Path("data/processed/normalized/sf_bay_5gyres/samples.json"),
-        help="local S7.3 sample JSON used only with --private-preview",
+        default=DEFAULT_SAMPLES,
+        help="local S7.3 sample JSON used with --private-preview or --public-samples",
     )
     args = parser.parse_args()
     output = args.output or (
@@ -36,9 +51,13 @@ def main() -> None:
     )
     if args.private_preview:
         output = require_private_output_outside_site(output)
-    rows = json.loads(args.samples.read_text(encoding="utf-8")) if args.private_preview else None
+    with_rows = args.private_preview or args.public_samples
+    rows = json.loads(args.samples.read_text(encoding="utf-8")) if with_rows else None
     payload = build_monitoring_payload(
-        load_registry(), samples=rows, private_preview=args.private_preview
+        load_registry(),
+        samples=rows,
+        private_preview=args.private_preview,
+        clearances=load_publication_clearances() if args.public_samples else None,
     )
     target = write_monitoring_payload(payload, output)
     print(

@@ -51,8 +51,62 @@ def test_public_payload_keeps_citations_and_never_includes_sample_rows() -> None
 
 
 def test_public_mode_rejects_measurements_without_explicit_private_flag() -> None:
-    with pytest.raises(PermissionError, match="private-preview"):
+    with pytest.raises(PermissionError, match="publication clearance"):
         build_monitoring_payload(registry(), samples=[{"sample_id": "synthetic"}])
+
+
+CLEARANCE = {
+    "example": {
+        "license": "CC-BY-4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "basis": "owner determination (test)",
+        "attribution": "Example steward; CC BY 4.0",
+    }
+}
+
+
+def _sample(dataset_id: str = "example") -> dict:
+    return {
+        "sample_id": "s-1",
+        "dataset_id": dataset_id,
+        "lat": 37.7,
+        "lon": -122.4,
+        "date": "2020-01-01",
+        "matrix": "surface water",
+        "particle_count": 3,
+        "qc": {"private": True},
+        "license_evidence": {"name": "x"},
+    }
+
+
+def test_cleared_dataset_rows_publish_with_license_and_display_schema_only() -> None:
+    payload = build_monitoring_payload(registry(), samples=[_sample()], clearances=CLEARANCE)
+    assert payload["publication_mode"] == "public_cleared"
+    assert payload["sample_count"] == 1
+    assert set(payload["samples"][0]) <= set(PRIVATE_SAMPLE_FIELDS)
+    dataset = payload["datasets"][0]
+    assert dataset["measurement_status"] == "published_rights_cleared"
+    assert dataset["publication_license"]["id"] == "CC-BY-4.0"
+    assert dataset["citation"] == "Example steward; CC BY 4.0"
+
+
+def test_rows_from_an_uncleared_dataset_block_the_whole_public_build() -> None:
+    reg = registry()
+    reg["datasets"].append({**reg["datasets"][0], "id": "other"})
+    with pytest.raises(PermissionError, match="other"):
+        build_monitoring_payload(reg, samples=[_sample(), _sample("other")], clearances=CLEARANCE)
+    with pytest.raises(ValueError, match="not both"):
+        build_monitoring_payload(
+            registry(), samples=[_sample()], private_preview=True, clearances=CLEARANCE
+        )
+
+
+def test_committed_clearance_file_lists_only_the_owner_cleared_source() -> None:
+    from atlas.build.monitoring import load_publication_clearances
+
+    cleared = load_publication_clearances()
+    assert set(cleared) == {"sf_bay_5gyres_microplastics"}
+    assert cleared["sf_bay_5gyres_microplastics"]["license"] == "CC-BY-4.0"
 
 
 def test_private_preview_is_tagged_and_strips_qc_only_fields() -> None:

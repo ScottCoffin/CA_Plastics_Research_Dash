@@ -1,0 +1,11 @@
+# Datasets whose sample observations may appear in public site/data/monitoring.json.
+# Only the lead adds entries, and only with a recorded owner rights decision.
+cleared:
+  sf_bay_5gyres_microplastics:
+    license: CC-BY-4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    basis: owner determination 2026-11-10 (QUESTIONS S7.3-A)
+    attribution: >-
+      San Francisco Estuary Institute and 5 Gyres Institute, SF Bay and Adjacent
+      Sanctuaries Microplastic and Microparticle Project (published by OPC on the
+      California Natural Resources Agency Open Data portal); CC BY 4.0

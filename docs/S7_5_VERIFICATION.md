@@ -90,3 +90,29 @@ performance check are implemented. S7.5 remains partial because no
 rights-cleared monitoring observations can be included in the public build;
 the public sample map and measurement-based coverage view therefore remain
 empty. Do not present the local preview as public data or statewide coverage.
+
+## Public observations (2026-11-10)
+
+After the owner set the SF Bay / 5 Gyres license to CC BY 4.0 (QUESTIONS S7.3-A),
+`config/monitoring_publication.yml` lists that dataset as cleared, with the license,
+basis and attribution. `py -3.14 scripts/build_monitoring_export.py --public-samples`
+publishes rows only for cleared datasets; a row from any other dataset stops the build
+(`PermissionError`), and private preview and cleared publication cannot be combined.
+Published rows keep only the display fields (`PRIVATE_SAMPLE_FIELDS`); QC detail,
+source hashes and license-evidence objects stay local.
+
+- `site/data/monitoring.json`: `public_cleared`, 24 registry records, 314 observations,
+  276,244 bytes raw. The cleared registry row shows `published_rights_cleared`, its
+  `publication_license` (CC-BY-4.0, basis) and the attribution as its citation.
+- `py -3.14 scripts/check_s7_5.py --check-private-preview` checks both modes: cleared
+  rows only, display schema only, no private keys, size under 400 KB in cleared mode.
+- Headless Chromium against a local `http.server` of `site/` (single run): status
+  "314 cleared sample observations"; the caveat names the cleared source, its license
+  and the citation; 277 of 314 rows have valid coordinates; the gaps table has 16
+  matrix × region × year cells; the year filter 2017 gives 237 rows; no console errors.
+- The sample table renders all 314 rows on one page. Paging it would shorten the tab;
+  it is not needed to meet the budget.
+
+S7.5 acceptance (performance budget met; source links and citation text displayed;
+map, filters and gaps view on cleared observations) is met. A2-C4 still applies: EM-8
+and EM-11 will reuse the gaps component.
