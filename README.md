@@ -5,6 +5,24 @@ monitoring data, and research funding. The project is in bootstrap development;
 `spec.md` is the product and implementation specification.
 
 https://plastiverse.live/ (formerly https://scottcoff.in/CA_Plastics_Research_Dash/, which redirects)
+
+## Labelling the query audit sample (AT-1)
+
+A local Streamlit app steps through the 354 works in `docs/QUERY_AUDIT_REVIEW.csv`
+so they can be labelled for the search-query precision audit. It needs Streamlit
+(`py -3.14 -m pip install streamlit` if it is missing). From the repository root:
+
+```powershell
+py -3.14 -m streamlit run scripts/review_query_audit_app.py
+```
+
+The app opens at http://localhost:8501. Enter your initials in the sidebar, then mark
+each work **Relevant**, **Not relevant** or **Unsure**. A noise term (the word that
+pulled in an off-topic work, such as "plasticity") is optional. Every click saves to
+`docs/QUERY_AUDIT_REVIEW.csv`, so you can stop and resume at any time. A label covers
+every row of the same work. The default view shows only unlabelled works; choose
+**Show: All** to revisit earlier labels. Details: `docs/QUERY_AUDIT.md`.
+
 ## Development
 
 Requires Python 3.11 or newer.
