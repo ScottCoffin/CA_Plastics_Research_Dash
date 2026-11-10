@@ -123,5 +123,5 @@ Contract: [`docs/add_on_spec_2.md`](../docs/add_on_spec_2.md) §§3–9. Conflic
 - [ ] **S11.1** Optional stlite fallback reading shared outputs. Acceptance: static runtime and Pyodide compatibility tested.
 - [ ] **S11.2** Optional evidence-map heatmaps. Superseded by Add-on A2 EM-8 (A2-C5); do not implement separately.
 - [ ] **S11.3** Optional local-model review assist; never run in CI.
-- [ ] **S11.4** Optional scheduled paper/award digest.
+- [x] **S11.4** Optional scheduled paper/award digest. Complete 2026-11-10 as an Atom feed (`site/feed.xml`, no email): built from public site payloads by `scripts/build_feed.py` on every daily deploy; deterministic; future-dated awards skipped; `<link rel=alternate>` + About link. `py -3.14 scripts/check_s11_4.py`.
 - [ ] **S11.5** Optional Plastiverse and ToMEx cross-listing. `owner: lead`

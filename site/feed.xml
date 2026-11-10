@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://scottcoff.in/CA_Plastics_Research_Dash/</id>
+  <title>CA Plastics Research Atlas: new papers and awards</title>
+  <subtitle>Newly indexed California-connected plastic research papers and newly recorded awards. Summaries only; open the source for details.</subtitle>
+  <link rel="self" type="application/atom+xml" href="https://scottcoff.in/CA_Plastics_Research_Dash/feed.xml" />
+  <link rel="alternate" type="text/html" href="https://scottcoff.in/CA_Plastics_Research_Dash/" />
+  <updated>2026-09-20T00:00:00Z</updated>
+  <author>
+    <name>CA Plastics Research Atlas</name>
+  </author>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/b1ebcae495f23797</id>
+    <title>Translational Exposomics Infrastructure for Alzheimer's Disease: A Scalable Platform for Environmental Biomarker Discovery Across NIA-Funded Centers</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11445882" />
+    <updated>2026-09-20T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIA · Recipient: YALE UNIVERSITY · Amount: USD 607,490 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/53467018ea19f037</id>
+    <title>Prenatal PFAS-Microplastics Mixtures and Early Neurodevelopment: multi-omics informed biological mechanisms</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11421105" />
+    <updated>2026-09-11T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: UNIVERSITY OF HAWAII AT MANOA · Amount: USD 715,080 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/1b92f7f3b98a898f</id>
+    <title>Determining the Role of Air Pollution in Alzheimers Disease Mechanisms and Pathology</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11606635" />
+    <updated>2026-09-10T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NINDS · Recipient: WASHINGTON UNIVERSITY · Amount: USD 531,356 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/f4572b0ffddd2ff0</id>
+    <title>Microplastics, Pesticides and Prostate Cancer Risk</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11429293" />
+    <updated>2026-09-04T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NCI · Recipient: NEW YORK UNIVERSITY SCHOOL OF MEDICINE · Amount: USD 387,731 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/d45228077a54782b</id>
+    <title>Advanced Respirometry System for Expanding Research and Educational Capacity in Biomedical Sciences at University of Arkansas – Fort Smith</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11364020" />
+    <updated>2026-09-04T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIGMS · Recipient: UNIVERSITY OF ARKANSAS - FORT SMITH · Amount: USD 132,867 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/5dd22c3eb3886e36</id>
+    <title>Pathophysiologic impacts of tire and road wear particles in healthy and inflamed Lungs</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11367023" />
+    <updated>2026-09-04T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: WEST VIRGINIA UNIVERSITY · Amount: USD 756,930 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/ff8357471c0c9cd0</id>
+    <title>When Plastic Meets Flow: Mechanobiological Consequences of Microplastic Exposure on the Endothelium</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11360537" />
+    <updated>2026-09-01T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: UNIVERSITY OF CENTRAL FLORIDA · Amount: USD 442,580 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/f785daf95cb8ec47</id>
+    <title>REU Site: Interdisciplinary Research on Plastic Pollution</title>
+    <link rel="alternate" type="text/html" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2548483" />
+    <updated>2026-09-01T00:00:00Z</updated>
+    <summary type="text">Funder: NSF · Recipient: University of Missouri-Columbia · Amount: USD 411,181 · Amount basis: NSF estimatedTotalAmt, the anticipated total award value. Not fundsObligatedAmt. Life-of-award or current-year basis not verified.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/ed4df062ea059b14</id>
+    <title>ERI: HYBRID PHYSICS-INFORMED AND DATA-DRIVEN MODELING AND VIBRATION CONTROL OF VARIABLE-MASS ROTATING MACHINERY -THIS ENGINEERING RESEARCH INITIATION (ERI) GRANT WILL FUND RESEARCH RELATED TO HIGH-SPE</title>
+    <link rel="alternate" type="text/html" href="https://www.usaspending.gov/award/ASST_NON_2547889_049" />
+    <updated>2026-09-01T00:00:00Z</updated>
+    <summary type="text">Funder: National Science Foundation &gt; National Science Foundation · Recipient: PRESIDENT AND BOARD OF TRUSTEES OF SANTA CLARA COLLEGE · Amount: USD 199,977 · Amount basis: USAspending Award Amount, the obligated total as the award record reports it. It may cover obligations to date.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/84a569a9893b77c8</id>
+    <title>ERI: Hybrid Physics-Informed and Data-Driven Modeling and Vibration Control of Variable-Mass Rotating Machinery</title>
+    <link rel="alternate" type="text/html" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2547889" />
+    <updated>2026-09-01T00:00:00Z</updated>
+    <summary type="text">Funder: NSF · Recipient: Santa Clara University · Amount: USD 199,977 · Amount basis: NSF estimatedTotalAmt, the anticipated total award value. Not fundsObligatedAmt. Life-of-award or current-year basis not verified.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/6eec080e6e4fe6a8</id>
+    <title>The Effect of Micro(nano)plastics Accumulation on Waste Removal from the CNS via Cerebrospinal Fluid Transport</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11370757" />
+    <updated>2026-09-01T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIA · Recipient: UNIVERSITY OF NEW MEXICO HEALTH SCIS CTR · Amount: USD 305,000 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/5268e8004f194916</id>
+    <title>Placental translocation and toxicity of environmentally relevant nanoplastics</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11605864" />
+    <updated>2026-09-01T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: NEW JERSEY INSTITUTE OF TECHNOLOGY · Amount: USD 759,977 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/43aa083529c83c11</id>
+    <title>Mechanism of Nanoplastics Induced Gastrointestinal Neurogenic Inflammation</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11437134" />
+    <updated>2026-09-01T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIDDK · Recipient: EMORY UNIVERSITY · Amount: USD 90,000 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/17811bba0d822290</id>
+    <title>Clothing Laundry Exposure to Airborne Nanoplastics and Microplastics Awareness Program (CLEANMAP)</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11431907" />
+    <updated>2026-09-01T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIOSH · Recipient: TEMPLE UNIV OF THE COMMONWEALTH · Amount: USD 556,573 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/005b160e8254ca3b</id>
+    <title>CAREER: Aqueous Click Functionalization of Nanocellulose  for Scalable Production of Property Programmable Plastics</title>
+    <link rel="alternate" type="text/html" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2540003" />
+    <updated>2026-09-01T00:00:00Z</updated>
+    <summary type="text">Funder: NSF · Recipient: University of Washington · Amount: USD 598,776 · Amount basis: NSF estimatedTotalAmt, the anticipated total award value. Not fundsObligatedAmt. Life-of-award or current-year basis not verified.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/fa1d7c24a653da5d</id>
+    <title>Toxins in Tandem: Defining Dose-Response and Renal Functional Impairment from Micro- and Nano-Plastic and Arsenic Co-Exposure</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11452091" />
+    <updated>2026-08-15T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: UNIVERSITY OF NEW MEXICO HEALTH SCIS CTR · Amount: USD 152,500 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/4e2c48b2b310fbb7</id>
+    <title>Equipment: MRI: Track 1 Acquisition of an inductively coupled plasma mass spectrometer (ICP-MS) to strengthen interdisciplinary environmental research at American University</title>
+    <link rel="alternate" type="text/html" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2509979" />
+    <updated>2026-08-15T00:00:00Z</updated>
+    <summary type="text">Funder: NSF · Recipient: American University · Amount: USD 311,425 · Amount basis: NSF estimatedTotalAmt, the anticipated total award value. Not fundsObligatedAmt. Life-of-award or current-year basis not verified.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/53bb27e853407913</id>
+    <title>High-Speed Automated Analysis of Sub-20 µm Microplastics by Photothermal Infrared Spectroscopy</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11312399" />
+    <updated>2026-08-13T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: PHOTOTHERMAL SPECTROSCOPY CORP. · Amount: USD 1,022,908 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/758ac0583c3f3319</id>
+    <title>Exploring Nanoplastics Neurological Effects by Tackling Lipid Mechanisms and Glial Inflammation</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11439656" />
+    <updated>2026-08-10T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: UNIVERSITY OF NEW MEXICO HEALTH SCIS CTR · Amount: USD 419,375 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/db068515a07644f5</id>
+    <title>Surveying type I nuclear receptor activation by environmental toxins</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11454899" />
+    <updated>2026-08-07T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: OHIO UNIVERSITY ATHENS · Amount: USD 404,163 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/9fa3a6bfd52050e1</id>
+    <title>Microplastic biodistribution and impact on mental health during inflammatory bowel disease</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11374032" />
+    <updated>2026-08-07T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: UNIVERSITY OF SOUTH CAROLINA AT COLUMBIA · Amount: USD 140,048 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/8c868468f8dbae85</id>
+    <title>Cardiac Effects of Weathered Microplastics</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11424551" />
+    <updated>2026-08-07T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: MORGAN STATE UNIVERSITY · Amount: USD 142,399 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/d7d6e91683d23655</id>
+    <title>Determining Microplastic Exposure from Clear Aligner Therapy: An In Vivo, Longitudinal Study in Orthodontic Patients</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11348741" />
+    <updated>2026-08-01T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIDCR · Recipient: UNIV OF NORTH CAROLINA CHAPEL HILL · Amount: USD 444,319 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/b3430185a5f2e709</id>
+    <title>SBIR PHASE II: NOVEL CAGED UREA AS A NITROGEN COMPOST -THE BROADER/COMMERCIAL IMPACT OF THIS SMALL BUSINESS INNOVATION RESEARCH (SBIR) PHASE II PROJECT IS THROUGH THE DEVELOPMENT OF A HIGH-EFFICIENCY</title>
+    <link rel="alternate" type="text/html" href="https://www.usaspending.gov/award/ASST_NON_2534874_049" />
+    <updated>2026-08-01T00:00:00Z</updated>
+    <summary type="text">Funder: National Science Foundation &gt; National Science Foundation · Recipient: AGTEC INNOVATIONS, INC. · Amount: USD 1,121,696 · Amount basis: USAspending Award Amount, the obligated total as the award record reports it. It may cover obligations to date.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/acf0b0d8f7816888</id>
+    <title>Advances in toxicological mechanisms through interdisciplinary research</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11465317" />
+    <updated>2026-08-01T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: UNIV OF ARKANSAS FOR MED SCIS · Amount: USD 7,500 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/9c2e3f426fc6e437</id>
+    <title>SBIR Phase II: Novel Caged Urea as a Nitrogen Compost</title>
+    <link rel="alternate" type="text/html" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2534874" />
+    <updated>2026-08-01T00:00:00Z</updated>
+    <summary type="text">Funder: NSF · Recipient: AGTEC INNOVATIONS INC · Amount: USD 1,121,696 · Amount basis: NSF estimatedTotalAmt, the anticipated total award value. Not fundsObligatedAmt. Life-of-award or current-year basis not verified.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/5f2d9eca1465dfe9</id>
+    <title>MRI Track 1: Microplastics Instrumentation for Environmental, Engineering, and Health Research and Education</title>
+    <link rel="alternate" type="text/html" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2510332" />
+    <updated>2026-08-01T00:00:00Z</updated>
+    <summary type="text">Funder: NSF · Recipient: University of Maine · Amount: USD 465,907 · Amount basis: NSF estimatedTotalAmt, the anticipated total award value. Not fundsObligatedAmt. Life-of-award or current-year basis not verified.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/582dc0ac365d3415</id>
+    <title>Role of Environmental Weathering and Gastrointestinal Digestion on the Bioavailability and Toxicity of Microplastic and Cadmium Mixtures - A Platform for Undergraduate Interdisciplinary Training Ph 2</title>
+    <link rel="alternate" type="text/html" href="https://reporter.nih.gov/project-details/11361366" />
+    <updated>2026-08-01T00:00:00Z</updated>
+    <summary type="text">Funder: NIH &gt; NIEHS · Recipient: OKLAHOMA STATE UNIVERSITY STILLWATER · Amount: USD 554,848 · Amount basis: NIH RePORTER award_amount, reported as the fiscal-year total cost. Not verified as life-of-award.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/33b995beb25460a3</id>
+    <title>Acquisition of a Quadrupole ICP Mass Spectrometer for the Skidaway Institute of Oceanography</title>
+    <link rel="alternate" type="text/html" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2601258" />
+    <updated>2026-08-01T00:00:00Z</updated>
+    <summary type="text">Funder: NSF · Recipient: University of Georgia Research Foundation Inc · Amount: USD 467,175 · Amount basis: NSF estimatedTotalAmt, the anticipated total award value. Not fundsObligatedAmt. Life-of-award or current-year basis not verified.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/award/08336d4f9ed9a426</id>
+    <title>Bio-Impermeable TPU Copolymers: ML-Guided Design for Predictive  Biocircular Materials Engineering</title>
+    <link rel="alternate" type="text/html" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2609279" />
+    <updated>2026-08-01T00:00:00Z</updated>
+    <summary type="text">Funder: NSF · Recipient: Michigan State University · Amount: USD 540,690 · Amount basis: NSF estimatedTotalAmt, the anticipated total award value. Not fundsObligatedAmt. Life-of-award or current-year basis not verified.</summary>
+    <category term="award" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/work/W9000000102</id>
+    <title>Plastic particles in stormwater</title>
+    <link rel="alternate" type="text/html" href="https://openalex.org/W9000000102" />
+    <updated>2024-01-01T00:00:00Z</updated>
+    <summary type="text">Authors: Bob Oregon, Carol Davis · Year 2024 · Type: article · Institutions on record: 2</summary>
+    <category term="paper" />
+  </entry>
+  <entry>
+    <id>tag:scottcoff.in,2026:ca-plastics-atlas/work/W9000000101</id>
+    <title>Microplastics in California estuaries</title>
+    <link rel="alternate" type="text/html" href="https://openalex.org/W9000000101" />
+    <updated>2023-01-01T00:00:00Z</updated>
+    <summary type="text">Authors: Alice California · Year 2023 · Type: article · Institutions on record: 1</summary>
+    <category term="paper" />
+  </entry>
+</feed>
