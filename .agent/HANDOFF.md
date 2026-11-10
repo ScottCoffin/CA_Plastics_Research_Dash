@@ -1,4 +1,4 @@
-# Handoff - 2026-11-09 - EM-1 complete; next eligible tasks need owner input
+# Handoff - 2026-11-09 - EM-1 complete; EM-2 partial; remaining tasks need owner input
 
 ## EM-1 Add-on A2 vocabularies and Need Ledger
 
@@ -12,11 +12,12 @@
 ### State and next
 - Owner actions: run the quote check on local PDFs; shorten the N2.9 and N4.1 quotes (>30 words) in the XLSX, then run `build_need_ledger.py`; answer EM-1-A (approve the addendum).
 - SPK-1..SPK-4 are eligible but need owner authorization for new dependencies (DuckDB-Wasm, Mosaic, Observable Framework/Node) and for live hosting tests (Pages deploy of synthetic Parquet, Cloudflare R2). They were not started.
-- EM-3 waits for EM-1-A approval plus labelling. EM-15 is an owner-run R script. EM-2's partial path (fetch the Regional Board layer, EAT-12) needs live network calls, which no task has authorized yet.
+- EM-2 partial (`docs/EM_2_VERIFICATION.md`): layer, EAT-12 and offshore rule are done; it stays unchecked until S5.4 (region derivation on works) and EM-9/EM-11 (disclaimer wiring). The owner should confirm CDFW ds3158 as the state-waters source (A2-D11).
+- EM-3 waits for EM-1-A approval plus labelling. EM-15 is an owner-run R script.
 - S7.6 is owner WIP (`src/atlas/source_watchlist.py`, `tests/test_source_watch_s7_6.py`) and was left unstaged.
 
 ### Verification commands
-- `py -3.14 scripts/check_em1.py`
-- Full gate: links + A1/A2 scaffolds + `make lint test build` (367 passed, 10 skipped) + `git diff --check`
+- `py -3.14 scripts/check_em1.py`; `py -3.14 -m pytest -q tests/test_rwqcb_em2.py`
+- Full gate: links + A1/A2 scaffolds + `make lint test build` (407 passed, 9 skipped) + `git diff --check`
 
 Older handoff entries: `.agent/archive/HANDOFF_history.md`.

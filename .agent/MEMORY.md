@@ -48,7 +48,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 
 - EM-1 complete 2026-11-09 (`docs/EM_1_VERIFICATION.md`): A2 vocabularies live in `config/taxonomy.yml` `add_on_a2`; candidate keyword rules are in `config/a2_keyword_rules.yml`; `config/need_ledger.csv` is generated from the owner XLSX by `scripts/build_need_ledger.py` (`--check` in CI-style gates). The quote regression is local-only (`scripts/check_need_ledger_quotes.py --pdf-dir --map`) and has not yet run on real PDFs.
 
-## Verified API facts (one line each; details in docs/api_notes/)
+## Verified API facts
+- Regional Water Board layer (EM-2, 2026-11-09): FeatureServer/1 GeoJSON query returns 9 features (`rb` 1-9) in one request. `atlas.geo.rwqcb.assign_region` adds the offshore rule against S1.3 CDFW state waters. The committed asset is `data/processed/geo/rwqcb_regions.parquet` (simplified about 20 m). See `docs/api_notes/rwqcb_regions.md`. (one line each; details in docs/api_notes/)
 - GitHub Actions schedules use the default branch, default to UTC, and may be
   delayed; the 60-day inactivity disablement is documented for public repos.
 - Pages was enabled after the owner made the repository public. Manual run

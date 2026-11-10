@@ -29,7 +29,11 @@ EXPECTED_STUBS = {
     "test_eat12_regional_layer.py": ("EAT-12", ("EM-2",)),
 }
 # Stubs that EM-1 replaced with real offline tests. Only these may hold test functions.
-IMPLEMENTED_STUBS = {"test_eat02_roster_rows_sourced.py", "test_eat10_ledger_roster.py"}
+IMPLEMENTED_STUBS = {
+    "test_eat02_roster_rows_sourced.py",
+    "test_eat10_ledger_roster.py",
+    "test_eat12_regional_layer.py",
+}
 EXPECTED_PLACEHOLDERS = {
     Path("ledger/.gitkeep"),
     Path("taxonomy/.gitkeep"),
