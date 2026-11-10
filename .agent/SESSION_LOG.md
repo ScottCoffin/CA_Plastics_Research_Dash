@@ -71,3 +71,4 @@
 | 2026-11-10 | S8.5 | Sea Grant scraper; 14 relevant projects; all 5 OPC microplastics projects cross-checked | this commit |
 | 2026-11-10 | S9.1 | Work-grant links: 17 exact award-ID links, all spot-checked (0 incorrect); questions S9.1-A/B with defaults | this commit |
 | 2026-11-10 | S8.10 | Funding awards UI + grants export (514 grants); perf ≤64 ms; lead all-tab smoke clean | this commit |
+| 2026-11-10 | S9.2 | Work-dataset links (1 DataCite link), drawer/registry evidence display, opt-in export; site payloads unchanged | this commit |

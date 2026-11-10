@@ -325,6 +325,33 @@
       <footer>Static snapshot for exploration; accessibility and data quality are being improved in staged releases.</footer>
     </main>
 
+    <script id="work-dataset-view-helpers">
+      function workDatasetEscape(value) {
+        return String(value ?? "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[character]));
+      }
+      function workDatasetEvidenceLabel(type) {
+        const labels = { "DataCite-relation": "DataCite relation", "DAS-match": "Data availability statement" };
+        return labels[type] || "Unrecognized evidence";
+      }
+      function workDatasetsHtml(work) {
+        const datasets = Array.isArray(work?.datasets) ? work.datasets : [];
+        if (!datasets.length) return "";
+        const items = datasets.map((dataset) => {
+          const doi = workDatasetEscape(dataset.doi);
+          const relation = dataset.relation ? ` · relation: ${workDatasetEscape(dataset.relation)}` : "";
+          return `<li><a href="https://doi.org/${doi}" target="_blank" rel="noreferrer">${doi}</a> <span class="chip">Evidence: ${workDatasetEscape(workDatasetEvidenceLabel(dataset.evidence_type))}</span>${relation}</li>`;
+        }).join("");
+        return `<div class="work-datasets"><p><strong>Datasets</strong></p><ul>${items}</ul></div>`;
+      }
+      function workLinkedWorksHtml(row) {
+        const linked = Array.isArray(row?.linked_works) ? row.linked_works : [];
+        if (!linked.length) return "";
+        const works = new Set(linked.map((item) => item.work_id)).size;
+        const types = [...new Set(linked.map((item) => workDatasetEvidenceLabel(item.evidence_type)))].sort();
+        return `<br><small>Linked works: ${works} (${workDatasetEscape(types.join(", "))})</small>`;
+      }
+      const workDatasetView = Object.freeze({ datasetsHtml: workDatasetsHtml, linkedWorksHtml: workLinkedWorksHtml });
+    </script>
     <script id="monitoring-view-helpers">
       const monitoringView = Object.freeze({
         unknownMatrix: "__unknown__",
@@ -886,7 +913,7 @@
             const institutions = institutionIds.map(institutionById).filter(Boolean);
             const coauthorIds = [...new Set(works.flatMap((work) => (work.author_ids || []).filter((id) => id !== authorId)))];
             $("drawer-title").textContent = author.name || "Researcher";
-            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}<h3>Affiliation history</h3><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p><h3>Co-author institutions</h3><p class="detail-meta">${coauthorIds.length ? escapeHtml(coauthorIds.join(", ")) : "No co-author IDs recorded."}</p><h3>Works</h3><ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="chips">${tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
+            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}<h3>Affiliation history</h3><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p><h3>Co-author institutions</h3><p class="detail-meta">${coauthorIds.length ? escapeHtml(coauthorIds.join(", ")) : "No co-author IDs recorded."}</p><h3>Works</h3><ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="chips">${tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
           } catch (error) {
             $("drawer-content").innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
           }
@@ -1002,7 +1029,7 @@
             ? "Local QC rows are shown only for private review. Coordinate points and values describe this single source sample; they do not establish statewide monitoring coverage or comparable concentrations."
             : "Registry entries describe sources and programs, not confirmed sample coverage. No cleared monitoring observations are available for this public snapshot, so absence here is not evidence of a data gap.";
           $("monitoring-source-count").textContent = `${datasets.length} source record${datasets.length === 1 ? "" : "s"} shown · contributor location is unknown unless explicitly recorded`;
-          $("monitoring-sources").innerHTML = datasets.length ? `<table class="monitoring-table"><thead><tr><th>Source</th><th>Steward / tier</th><th>Matrix and region</th><th>Format / cadence</th><th>License</th><th>Checked</th><th>Citations</th></tr></thead><tbody>${datasets.map((row) => `<tr><th scope="row">${escapeHtml(row.name)}<br><small>${row.seed_eligible ? "Verified registry seed" : "Discovery record; not in seed count"} · ${escapeHtml(row.entity_type)} · ${escapeHtml(row.status)}</small></th><td>${escapeHtml(row.steward)}<br>Tier ${escapeHtml(row.access_tier)} · contributor in CA: ${row.contributor_in_ca === true ? "yes" : row.contributor_in_ca === false ? "no" : "unknown"}</td><td>${escapeHtml((row.sample_matrix || []).join(", "))}<br>${escapeHtml(row.region)}</td><td>${escapeHtml((row.format || []).join(", "))}<br>${escapeHtml(row.cadence)}</td><td>${escapeHtml(row.license)}</td><td>${escapeHtml(row.last_checked || "unknown")}</td><td><a href="${escapeHtml(row.url)}" target="_blank" rel="noreferrer">Source</a> · <a href="${escapeHtml(row.provenance_url)}" target="_blank" rel="noreferrer">Evidence</a><br>${escapeHtml(row.citation)}</td></tr>`).join("")}</tbody></table>` : '<p class="empty">No source records match these filters.</p>';
+          $("monitoring-sources").innerHTML = datasets.length ? `<table class="monitoring-table"><thead><tr><th>Source</th><th>Steward / tier</th><th>Matrix and region</th><th>Format / cadence</th><th>License</th><th>Checked</th><th>Citations</th></tr></thead><tbody>${datasets.map((row) => `<tr><th scope="row">${escapeHtml(row.name)}<br><small>${row.seed_eligible ? "Verified registry seed" : "Discovery record; not in seed count"} · ${escapeHtml(row.entity_type)} · ${escapeHtml(row.status)}</small>${workDatasetView.linkedWorksHtml(row)}</th><td>${escapeHtml(row.steward)}<br>Tier ${escapeHtml(row.access_tier)} · contributor in CA: ${row.contributor_in_ca === true ? "yes" : row.contributor_in_ca === false ? "no" : "unknown"}</td><td>${escapeHtml((row.sample_matrix || []).join(", "))}<br>${escapeHtml(row.region)}</td><td>${escapeHtml((row.format || []).join(", "))}<br>${escapeHtml(row.cadence)}</td><td>${escapeHtml(row.license)}</td><td>${escapeHtml(row.last_checked || "unknown")}</td><td><a href="${escapeHtml(row.url)}" target="_blank" rel="noreferrer">Source</a> · <a href="${escapeHtml(row.provenance_url)}" target="_blank" rel="noreferrer">Evidence</a><br>${escapeHtml(row.citation)}</td></tr>`).join("")}</tbody></table>` : '<p class="empty">No source records match these filters.</p>';
           const samples = filteredMonitoringSamples();
           const located = monitoringView.locatedSamples(samples);
           const groups = new Map();

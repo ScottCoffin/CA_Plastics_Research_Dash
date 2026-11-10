@@ -121,8 +121,32 @@ def _work_payload(
     }
 
 
-def _full_work_payload(row: Mapping[str, Any], slim: Mapping[str, Any]) -> dict[str, Any]:
+def _datasets_by_work(rows: Sequence[Mapping[str, Any]]) -> dict[str, list[dict[str, str]]]:
+    """Group S9.2 work-dataset links by work; each entry is ``{doi, relation, evidence_type}``."""
+    grouped: defaultdict[str, list[dict[str, str]]] = defaultdict(list)
+    for row in rows:
+        work_id = _text(row.get("work_id"))
+        doi = _text(row.get("dataset_doi"))
+        if work_id and doi:
+            grouped[work_id].append(
+                {
+                    "doi": doi,
+                    "relation": _text(row.get("relation_type")),
+                    "evidence_type": _text(row.get("evidence_type")),
+                }
+            )
     return {
+        work_id: sorted(items, key=lambda item: (item["doi"], item["evidence_type"]))
+        for work_id, items in grouped.items()
+    }
+
+
+def _full_work_payload(
+    row: Mapping[str, Any],
+    slim: Mapping[str, Any],
+    datasets: Sequence[Mapping[str, str]] = (),
+) -> dict[str, Any]:
+    payload = {
         **dict(slim),
         "doi": _text(row.get("doi")),
         "abstract": _text(row.get("abstract")),
@@ -136,6 +160,10 @@ def _full_work_payload(row: Mapping[str, Any], slim: Mapping[str, Any]) -> dict[
         "primary_topic": _text(row.get("primary_topic")),
         "last_updated": _text(row.get("last_updated")),
     }
+    # Additive: the key is omitted entirely for works without dataset links.
+    if datasets:
+        payload["datasets"] = [dict(item) for item in datasets]
+    return payload
 
 
 def _write_author_details(
@@ -193,6 +221,7 @@ def export_site(
     authorships_path: str | Path,
     institutions_path: str | Path,
     labels_path: str | Path | None = None,
+    work_dataset_links_path: str | Path | None = None,
     output_dir: str | Path = "site/data",
     generated_at: str | None = None,
 ) -> ExportResult:
@@ -209,6 +238,9 @@ def export_site(
     institution_rows = _read(institutions_path)
     label_rows = _read(labels_path, required=False) if labels_path else []
     labels = {_text(row.get("work_id")): row for row in label_rows if _text(row.get("work_id"))}
+    # S9.2 links are opt-in: without a path, author payloads are byte-identical to before.
+    link_rows = _read(work_dataset_links_path, required=False) if work_dataset_links_path else []
+    datasets_by_work = _datasets_by_work(link_rows)
 
     authors_by_work: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
     works_by_author: defaultdict[str, list[str]] = defaultdict(list)
@@ -236,7 +268,11 @@ def export_site(
         if _text(row.get("work_id"))
     ]
     full_work_by_id = {
-        _text(row.get("work_id")): _full_work_payload(row, slim_works[index])
+        _text(row.get("work_id")): _full_work_payload(
+            row,
+            slim_works[index],
+            datasets_by_work.get(_text(row.get("work_id")), ()),
+        )
         for index, row in enumerate(
             sorted(
                 (item for item in works_rows if _text(item.get("work_id"))),

@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping, Sequence
 from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
+from atlas.dataset_discovery import canonical_doi
 from atlas.ingest.monitoring.registry import load_registry
 
 SCHEMA_VERSION = "s7.5"
@@ -64,17 +66,44 @@ def _public_dataset(entry: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _attach_linked_works(
+    datasets: list[dict[str, Any]],
+    registry_rows: list[dict[str, Any]],
+    work_links: Sequence[Mapping[str, Any]],
+) -> None:
+    """Add ``linked_works`` to registry rows whose URL or provenance DOI matches a link.
+
+    Matching uses canonical DOIs only; rows without a matching link keep no key.
+    """
+    by_doi: dict[str, set[tuple[str, str]]] = {}
+    for link in work_links:
+        doi = canonical_doi(str(link.get("dataset_doi") or ""))
+        work_id = str(link.get("work_id") or "")
+        evidence = str(link.get("evidence_type") or "")
+        if doi and work_id and evidence:
+            by_doi.setdefault(doi, set()).add((work_id, evidence))
+    for dataset, entry in zip(datasets, registry_rows, strict=True):
+        dois = {canonical_doi(str(entry.get(field) or "")) for field in ("url", "provenance_url")}
+        pairs = sorted({pair for doi in dois if doi for pair in by_doi.get(doi, set())})
+        if pairs:
+            dataset["linked_works"] = [
+                {"work_id": work_id, "evidence_type": evidence} for work_id, evidence in pairs
+            ]
+
+
 def build_monitoring_payload(
     registry: dict[str, Any],
     *,
     samples: list[dict[str, Any]] | None = None,
     private_preview: bool = False,
     generated_at: str | None = None,
+    work_links: Sequence[Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Build a source-catalogue payload; include rows only for explicit private preview.
 
     Public output always has zero observations. Private previews are tagged and
     restricted to a small display schema so the local QC payload cannot leak.
+    ``work_links`` (S9.2 rows) is optional; without it no ``linked_works`` keys are added.
     """
     rows = samples or []
     if rows and not private_preview:
@@ -82,6 +111,8 @@ def build_monitoring_payload(
     if private_preview and not rows:
         raise ValueError("private preview requested but no local samples were supplied")
     datasets = [_public_dataset(row) for row in registry["datasets"]]
+    if work_links:
+        _attach_linked_works(datasets, list(registry["datasets"]), work_links)
     dataset_ids = {row["id"] for row in datasets}
     if private_preview:
         unknown = sorted({row.get("dataset_id") for row in rows} - dataset_ids)

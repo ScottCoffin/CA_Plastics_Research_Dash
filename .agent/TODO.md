@@ -93,7 +93,7 @@ Check off only when the task Definition of Done and acceptance check in
 
 ## S9 Linking
 - [x] **S9.1** Evidence-backed work-to-grant links. Acceptance: 50-link precision spot check; uncertain links omitted. Complete 2026-11-10: `atlas.link.work_grants` → `data/processed/work_grant_links.parquet`; 17 exact OpenAlex-award links (NIH 15 via RePORTER core-number lookup, NSF 2); all 17 spot-checked (fewer than 50 exist): 9 correct, 0 incorrect, 8 unclear (centre/co-PI awards the work acknowledges) → precision 100% of decided; `docs/S9_1_SPOTCHECK.md`. Acknowledgement/fixed-string matchers implemented; 0 matches (no acknowledgement text cached; COAST phrase unknown, S9.1-B).
-- [ ] **S9.2** Work-to-dataset links in profiles and registry. Acceptance: evidence type displays.
+- [x] **S9.2** Work-to-dataset links in profiles and registry. Acceptance: evidence type displays. Complete 2026-11-10: `atlas.link.work_datasets` → `data/processed/work_dataset_links.parquet` (DataCite relations for 185 work DOIs: 1 link; 14 non-paper relations held out, S9.2-A); drawer "Datasets" sub-list and registry "Linked works" with evidence badges (Node runtime test); export changes are opt-in, so the committed fixture payloads are unchanged. `py -3.14 scripts/check_s9_2.py`.
 - [ ] **S9.3** Expert badges and profile/network polish. Acceptance: 10 profiles reviewed. `owner: review`
 
 ## S10 Hardening
