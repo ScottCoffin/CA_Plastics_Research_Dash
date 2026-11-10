@@ -234,7 +234,7 @@ def test_daily_usage_rejects_missing_or_empty_request_measurement(
     path = tmp_path / "missing-metric.jsonl"
     path.write_text(json.dumps(row) + "\n", encoding="utf-8")
     with pytest.raises(ValueError):
-        daily_logged_usage(path, cost_per_credit_usd=Decimal("0.0001"))
+        daily_logged_usage(path, cost_per_credit_usd=Decimal("0.0001"), day=date(2026, 11, 9))
 
 
 def test_ingest_reserves_before_each_request_and_reruns_count_prior_usage(
