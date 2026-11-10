@@ -3,7 +3,9 @@
 ## Continuous roadmap execution
 
 - Treat `.agent/TODO.md` as the canonical roadmap and `spec.md` Part B as the
-  operating contract.
+  operating contract. Add-on task contracts live in `docs/add_on_spec.md`
+  (A1: SPK/AT tasks) and `docs/add_on_spec_2.md` (A2: EM tasks); their
+  conflicts and defaults are in `.agent/DECISIONS.md` and `.agent/QUESTIONS.md`.
 - Complete one dependency-satisfied roadmap task at a time as an atomic
   checkpoint. Do not mix implementation or commits from adjacent tasks.
 - A single chat or Goal-mode run may complete multiple checkpoints. After a

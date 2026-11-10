@@ -404,3 +404,61 @@ remain listed in `QUESTIONS.md`.
 - **Rule text (copied verbatim from docs/add_on_spec.md §6):** UMAP/BERTopic: fix random_state (BERTopic's example sets one 20), store coordinates per release, recompute quarterly
 - **Status:** Open
 - **Affected base tasks:** S10.3, S11.2
+
+## ADR-A2-OWNER: Add-on A2 owner determinations (2026-11-09)
+
+- **Context:** `docs/add_on_spec_2.md` (Add-on A2) records owner determinations
+  dated 2026-11-09 and says they are logged in `docs/DECISIONS.md`. This repo's
+  decision log is `.agent/DECISIONS.md`; this entry is that log.
+- **Decision (copied from the A2 preamble, [OWNER] where marked):**
+  - ToMEx DOI list comes from PSSDplusplus dataset `tomex2` (column `DOI`
+    [OWNER]); scope is the aquatic-organisms database; ToMEx 3.0 is added later.
+  - The Minderoo Plastic Health Map is not included anywhere (EAT-8).
+  - Regional Water Board boundaries come from the hosted feature service (A2 §4),
+    treated as openly licensed with a mandatory accuracy disclaimer [OWNER].
+  - Plastic Pollution Coalition / Global Plastic Laws is link-only; no
+    integration and no outreach [OWNER].
+  - The Solutions-track policy panel (EM-17) and DTSC timeline (EM-18) are included.
+  - The link-out launch set (A2 §8, LO-1..LO-12) is accepted.
+  - Block D covers DTSC's narrowed categories plus the broader initial list; the
+    ten added ledger rows (N1.9–N1.11, N2.8–N2.10, N4.5, N4.6, M4, M5) are included.
+  - The August 2026 SFEI report (#1289) is the canonical Monitoring Strategy [OWNER].
+- **Consequence:** A2 replaces base S11.2 with EM-8 and extends S4/S5 with new
+  label fields. It reuses A1 AT-3, AT-4 and AT-10 without changing any A1 gate.
+- **Decided by:** Owner (Scott Coffin), recorded at A2 integration.
+
+## Add-on A2 open conflicts (register)
+
+Resolution text is copied verbatim from `docs/add_on_spec_2.md` §2. Each entry is
+an adopted rule that downstream EM tasks must implement; status stays Open until
+the implementing task's acceptance passes.
+
+| ID | Issue | Resolution (verbatim) | Implementing / affected tasks | Status |
+|---|---|---|---|---|
+| A2-C1 | discipline overlaps study_type = method_development | discipline = topic (multi-label); study_type = design (single). Report collinearity. | EM-1, EM-4; S5.5 | Open |
+| A2-C2 | Base matrix ≠ framework compartments | Add compartment[], waterbody_type[]; map matrix in taxonomy.yml. | EM-1; S7.3 matrix field | Open |
+| A2-C3 | Base size_class is on samples only | Add works-level size_class[] (§4). | EM-1, EM-4 | Open |
+| A2-C4 | Base S7.5 gaps heatmap overlaps V-9, V-2 | Keep S7.5; share one heatmap component. | S7.5, EM-8, EM-9, EM-11 | Open |
+| A2-C5 | Base S11.2 | Replaced by EM-8. | S11.2 → EM-8 | Open |
+| A2-C6 | A1 C12: iframes cannot share facet state | Client-side bit-set facets (AT-4). | AT-4, EM-5 | Open |
+| A2-C7 | Gold-set load (κ ≥ 0.7) | Extend existing gold works (EM-3); weak fields ship "experimental". | EM-3; S4.2, S4.3 | Open |
+| A2-C8 | Source text reuse | Paraphrase, short quotes, links. The Monitoring Strategy states image permission only (one-time use in this publication only 4); no text licence was found. | EM-1, EM-11, EM-14 | Open |
+| A2-C9 | Monitoring Strategy excludes drinking water | Block X extension rows. | EM-1, EM-11 | Open |
+| A2-C10 | Regional layer has no licence text in its metadata | Owner-determined open use plus disclaimer (§4). | EM-2, EM-9, EM-14; REUSE.md | Open |
+| A2-C11 | ToMEx loads in R (A1 allows R only if gated) | EM-15 is a one-off owner-run export; R is not added to CI. | EM-15; A1 C2/SPK-5 unaffected | Open |
+| A2-C12 | source_category explodes with DTSC products | Coarse source_category plus rule-based product_type[] (§4). | EM-1, EM-4 | Open |
+| A2-C13 | Several microplastic and nanoplastic definitions in play | Definitions crosswalk in METHODS (§4). | EM-14; docs/METHODS.md | Open |
+| A2-C14 | DTSC sub-rows vs works tagged only at parent level | group_id column and parent product_type values (§6.3). | EM-1, EM-11 (EAT-11) | Open |
+| A2-C15 | Many keyword flags with unknown precision | Each flag gets a spot-check in EM-4; rows relying on weak flags stay low rule confidence. | EM-4, EM-13 | Open |
+
+## ADR-DEFAULTS-2026-11-09: Owner accepts all pending defaults
+
+- **Decision:** The owner accepted the stated default for every open question
+  with a pending answer: S1.5-A, S7.3-A, A1-D1..D7, A2-D1..D11 and A2-INT-1..3
+  (`.agent/QUESTIONS.md`). G-6 keeps its existing owner pointer.
+- **Consequences:** A1-D1 ("L0 + L1 now; L2 after spikes; L3 optional") makes
+  SPK-1..SPK-4 eligible now; AT-4, AT-5, AT-6 and AT-11 follow their spike gates
+  (G-HOST, G-PARQ, G-SHELL, G-FACET). L3 tasks (SPK-5, SPK-6, AT-7..AT-10) stay
+  optional and gated. S1.5-A and S7.3-A defaults keep the query candidate inactive
+  and SF Bay / 5 Gyres data unpublished. A2 levels E0-E3 are adopted (A2-INT-3).
+- **Decided by:** Owner instruction, 2026-11-09.

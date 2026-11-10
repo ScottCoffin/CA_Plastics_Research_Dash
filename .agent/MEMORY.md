@@ -44,6 +44,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - ADR-002: keep the repository public, use GitHub Actions Pages, enable guarded
   repository writes, and use MIT for code plus CC BY for eligible derived data.
 - SPK-7/G-COST: 2026-11-09 OpenAlex measurement recorded 100/100 calls; free-only owner authorization; 10,000-credit/USD 1.00 daily account limit and USD 0.25 local stop. Response metadata totaled USD 0.026 while the provider balance decrement implied USD 0.028; budget guard charges conservatively and retains the discrepancy. See `docs/api_notes/openalex_costs.md` and commit `79301e7`.
+- Add-on A2 (`docs/add_on_spec_2.md`, integrated 2026-11-09): EM-1..EM-18 in TODO (S4/S5 plus the EM section; S11.2 superseded by EM-8); ADR-A2-OWNER and A2-C1..C15 in DECISIONS; A2-D1..D11 and A2-INT-1..3 in QUESTIONS; ledger in REUSE.md; scaffold `scripts/check_a2_scaffold.py`. The ledger source is the companion XLSX (70 rows, 20 cols). All pending defaults were accepted 2026-11-09 (ADR-DEFAULTS-2026-11-09): A1 L2 spikes SPK-1..4 are eligible, L3 stays gated, and EM-1 is eligible. EAT-8's Minderoo grep must exclude the governance docs that record the exclusion.
 
 ## Verified API facts (one line each; details in docs/api_notes/)
 - GitHub Actions schedules use the default branch, default to UTC, and may be

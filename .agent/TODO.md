@@ -1,7 +1,7 @@
 # TODO (roadmap)
 
 Check off only when the task Definition of Done and acceptance check in
-`spec.md` Part E are met. `owner` marks tasks with required human action. On this Windows checkout, `make <target>` means the Rtools invocation in `.agent/MEMORY.md` Known pitfalls (`py -3.14` plus APPDATA/USERPROFILE passthrough).
+`spec.md` Part E are met. `owner` marks tasks with required human action. Add-on A1 tasks (SPK/AT) and Add-on A2 tasks (EM) are interleaved by dependency; their contracts are `docs/add_on_spec.md` §9 and `docs/add_on_spec_2.md` §9. On this Windows checkout, `make <target>` means the Rtools invocation in `.agent/MEMORY.md` Known pitfalls (`py -3.14` plus APPDATA/USERPROFILE passthrough).
 
 ## S0 Bootstrap
 - [x] **S0.1** Repository skeleton, tooling, memory files, and roadmap. Acceptance: `make test`; all `.agent` files exist; this roadmap is present. `owner: license choice`
@@ -18,25 +18,25 @@ Check off only when the task Definition of Done and acceptance check in
 - [x] **S1.5** Versioned plastics query config and count estimate. Owner-supplied `plastic-v2-candidate` terms, exclusions, collision notes, taxonomy seeds, G-1/G-2 choices, and cache-version contract are recorded. Remaining acceptance: implement config rendering/cache invalidation, smoke-test encoding/cost, run and timestamp the count estimate, and complete precision/recall spot checks before activation. `owner: terms supplied; promotion review remains`
 
 ## S2 Works ingestion
-- [ ] **AT-11** CI guards for S2 (extends S2.4 and S10.1). Adoption: L2. Depends: AT-1, AT-2. Acceptance test (§9): Base-spec regression. Gated on owner decision.
+- [ ] **AT-11** CI guards for S2 (extends S2.4 and S10.1). Adoption: L2. Depends: AT-1, AT-2. Acceptance test (§9): Base-spec regression. L2 adopted (A1-D1); eligible once its spike gates are decided.
 - [x] **S2.1** Incremental, resumable OpenAlex ingester. Acceptance: reruns dedupe; high-water mark, usage log, and <=200-work fixture exist. Acceptance check: `py -3.14 scripts/check_s2_1.py`; full suite: `make test`.
 - [x] **S2.2** Normalize works, authorships, authors, institutions, and CA flags. Acceptance: C3 schemas and QC report; `py -3.14 scripts/check_s2_2.py` and `make qc` pass.
 - [x] **S2.3** Provisional rule-based relevance and domain tags. Acceptance: labels populated and coverage logged. `py -3.14 scripts/check_s2_3.py`; `make test`, Ruff, build, and `git diff --check` pass. Candidate remains unpromoted.
 - [x] **S2.4** Daily works workflow with commit and budget guards. Acceptance complete: `.github/workflows/ingest_works.yml` schedules a guarded refresh, simulated 429/budget stops preserve the high-water mark for the next run, and generated outputs commit only when `ENABLE_DATA_COMMITS=true`. `py -3.14 scripts/check_s2_4.py`; CI/local suite pass; hosted bounded smoke `42321442943` completed successfully with the expected budget defer.
-- [ ] **SPK-1** Hosting spike. Adoption: L2. Depends: S0.2. Acceptance test (§9): Landing first load. Gated on owner decision.
-- [ ] **SPK-2** Parquet compatibility spike. Adoption: L2. Depends: S0.2. Acceptance test (§9): Parquet compatibility. Gated on owner decision.
-- [ ] **SPK-3** Shell bake-off. Adoption: L2. Depends: S2.2 or synthetic fixture. Acceptance test (§9): Landing first load. Gated on owner decision.
-- [ ] **SPK-4** Facet method. Adoption: L2. Depends: S2.2 or synthetic fixture. Acceptance test (§9): Facet latency. Gated on owner decision.
+- [ ] **SPK-1** Hosting spike. Adoption: L2. Depends: S0.2. Acceptance test (§9): Landing first load. Eligible: A1-D1 default accepted 2026-11-09 (L2 spikes run now).
+- [ ] **SPK-2** Parquet compatibility spike. Adoption: L2. Depends: S0.2. Acceptance test (§9): Parquet compatibility. Eligible: A1-D1 default accepted 2026-11-09 (L2 spikes run now).
+- [ ] **SPK-3** Shell bake-off. Adoption: L2. Depends: S2.2 or synthetic fixture. Acceptance test (§9): Landing first load. Eligible: A1-D1 default accepted 2026-11-09 (L2 spikes run now).
+- [ ] **SPK-4** Facet method. Adoption: L2. Depends: S2.2 or synthetic fixture. Acceptance test (§9): Facet latency. Eligible: A1-D1 default accepted 2026-11-09 (L2 spikes run now).
 - [ ] **AT-3** SQL analytics. Adoption: L1. Depends: S2.2, AT-2. Acceptance test (§9): Weights; Base-spec regression.
 
 ## S3 MVP front end
-- [ ] **AT-4** Serving bundle builder and facet module (replaces S3.1). Adoption: L2. Depends: SPK-1, SPK-2, SPK-3, SPK-4, AT-3. Acceptance test (§9): Landing first load; Facet latency; Parquet compatibility; No abstracts. Gated on owner decision.
+- [ ] **AT-4** Serving bundle builder and facet module (replaces S3.1). Adoption: L2. Depends: SPK-1, SPK-2, SPK-3, SPK-4, AT-3. Acceptance test (§9): Landing first load; Facet latency; Parquet compatibility; No abstracts. L2 adopted (A1-D1); eligible once its spike gates are decided.
 - [x] **S3.1** Export slim site data and aggregates. Acceptance complete: deterministic slim index, per-author details, institution/map payloads, year/type/tag aggregates, schema documentation, and gzip payload sizes are recorded; fixture payload is below the 3 MB C5 target.
 - [x] **S3.2** Accessible, mobile app shell and stub tabs. Acceptance complete: single-file responsive shell loads the S3.1 fixture/real-data contract, preserves filters in the URL hash, supports keyboard tab navigation and CSV export, and includes Monitoring/Funding stubs.
 - [x] **S3.3** Experts filters, virtualized list, and detail drawer. Acceptance complete: hash-shareable tag/institution/year/CA-basis/OA filters, bounded virtual rows, lazy researcher drawer, browser screenshot smoke, and full suite pass. Performance and browser evidence are in `docs/S3_3_VERIFICATION.md`.
 - [x] **S3.4** Institution leaderboard, sparklines, and clustered map. Acceptance complete: qualifying tagged-work institutions render with type chips, all-time/five-year trends, a coordinate-aware clustered map, and links into Experts.
 - [x] **S3.5** About/Methods and freshness metadata. Acceptance complete: the About view shows metadata-based refresh time and counts, Methods, the G-12 disclaimer, and correction path; fixture and unavailable metadata have explicit fallbacks. `py -3.14 scripts/check_s3_5.py`, prior S3.2-S3.4 checks, 49-test suite, Ruff, and `git diff --check` pass. Independent Chromium verified About and the Institutions-to-Experts drawer path at desktop/mobile sizes; only harmless favicon 404s occurred. Evidence: `docs/S3_5_VERIFICATION.md`.
-- [ ] **AT-5** Site shell (conditional replacement of S3.2-S3.5). Adoption: L2. Depends: SPK-3, AT-4. Acceptance test (§9): Landing first load; Base-spec regression. Gated on owner decision.
+- [ ] **AT-5** Site shell (conditional replacement of S3.2-S3.5). Adoption: L2. Depends: SPK-3, AT-4. Acceptance test (§9): Landing first load; Base-spec regression. L2 adopted (A1-D1); eligible once its spike gates are decided.
 - [ ] **S3.6** Pages deployment and performance pass. Acceptance: metrics logged; DuckDB-Wasm used only by recorded decision.
 
 ## S4 Gold set
@@ -44,12 +44,15 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S4.2** Stratified sample, leak test, and frozen splits. Label-independent sample/split preparation may proceed; do not annotate or claim representative-corpus coverage from the four-work fixture. Acceptance: split IDs committed and test set isolated.
 - [x] **S4.3** Annotation workflow, importer, and agreement stats. Tooling acceptance: CSV round-trip and per-label Cohen's kappa report work; human annotation remains pending guide approval and a representative sample.
 - [x] **S4.4** Reproducible evaluation harness. Dummy predictor produces per-class/per-label metrics, calibration plot, error-analysis table, and machine-readable output reproducibly; synthetic-only evidence is in `docs/EVAL_synthetic_v1.md`. G-9 thresholds are answered; no corpus-performance claim is made.
+- [ ] **EM-1** Vocabularies in `config/taxonomy.yml` (study_type §3, facets, full product_type list, all 20 keyword flags §4); LABELING_GUIDE update; ingest the companion ledger XLSX and validate it against the §6.3 schema and 70-row roster; keyword rules; local-only quote regression against the owner's PDFs (PDFs never committed). Add-on A2 level: E0. Depends: S4.1. DoD: existing study_type diffed if present (map old → new, never overwrite human labels); roster test passes; 13/14 discrepancy recorded. Acceptance tests (A2 §9): EAT-2, EAT-10. Size: M. Tier: [E] higher-tier model (lead implements; `sonnet-reviewer` reviews). Ledger format default: `QUESTIONS.md` A2-INT-1.
+- [ ] **EM-3** Extend the gold set with the new A2 labels; double-label 20%. Add-on A2 level: E0. Depends: EM-1. DoD: κ per field; weak fields "experimental". Acceptance tests (A2 §9): none named (κ report). Size: L. `owner: labeling` (G-10 labelers; ≥ 40 gold examples per study_type value [INF]).
 
 ## S5 Classifiers
 - [ ] **S5.1** Plastic-relevance rules plus SetFit. Acceptance: G-9 targets met or gap and labeling plan documented.
 - [ ] **S5.2** Gazetteer gate and measured toponym extractor. Acceptance: recall with CI and NER decision documented.
 - [ ] **S5.3** Sampling-vs-mention classifier. Acceptance: per-class held-out metrics and model registration.
 - [ ] **S5.4** Geocoding, polygon logic, and `ca_sampled` aggregation. Acceptance: test confusion matrix documented.
+- [ ] **EM-2** Fetch the Regional Board feature service as GeoJSON; §4 acceptance checks; offshore rule; record the state-waters polygon source; derive `rwqcb_region`. Add-on A2 level: E2. Depends: S5.4 ("S5 geo"). DoD: nine features, four point checks pass; disclaimer wired into V-2, V-9a, About; REUSE.md entry [OWNER]. Acceptance tests (A2 §9): EAT-12. Size: S. The task authorizes the live layer fetch. Partial pre-S5.4 work allowed per `QUESTIONS.md` A2-INT-2; owner confirms the state-waters source (A2-D11).
 - [ ] **S5.5** Multi-label domain tagging and author aggregation. Acceptance: per-tag F1; weak tags merged or experimental.
 - [ ] **S5.6** CPU classification workflow and override precedence. Acceptance: CI runtime stated and precedence tested.
 - [ ] **S5.7** Candidate-pool leak-test report. Acceptance: widening decision recorded. `owner: decision`
@@ -57,8 +60,10 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **SPK-6** Maps spike. Adoption: L3. Depends: AT-3, S5.5. Acceptance test (§9): Base-spec regression. Gated on owner decision.
 - [ ] **AT-7** Bibliometrix job (G-R gated; replaces part of S11.2). Adoption: L3. Depends: SPK-5, S5.5. Acceptance test (§9): R gate (if kept). Gated on owner decision.
 - [ ] **AT-8** Maps (replaces part of S11.2). Adoption: L3. Depends: SPK-6, AT-3. Acceptance test (§9): Base-spec regression. Gated on owner decision.
-- [ ] **AT-6** Explore page (optional). Adoption: L2. Depends: SPK-1, SPK-2, SPK-4, AT-5. Acceptance test (§9): Landing first load; Facet latency; Parquet compatibility. Gated on owner decision.
+- [ ] **AT-6** Explore page (optional). Adoption: L2. Depends: SPK-1, SPK-2, SPK-4, AT-5. Acceptance test (§9): Landing first load; Facet latency; Parquet compatibility. L2 adopted (A1-D1); eligible once its spike gates are decided.
 - [ ] **AT-9** Embedding map and taxonomy QA (optional). Adoption: L3. Depends: S5. Acceptance test (§9): Base-spec regression. Gated on owner decision.
+- [ ] **EM-4** Rules and SetFit per A2 field; keyword flags with spot-check precision; collinearity report (A2-C1). Add-on A2 level: E0. Depends: EM-3, S5. DoD: per-field F1 in METHODS. Acceptance tests (A2 §9): EAT-6. Size: M.
+- [ ] **EM-15** ToMEx DOI crosswalk: owner-run R script (`PSSDplusplus::tomex2`); normalize DOIs; commit only a DOI list plus package-version and source-release stamps (v2.0.1, 2026-06-30); feeds V-9e. Later: ToMEx 3.0. Add-on A2 level: E2. Depends: EM-1. DoD: script prints nrow and names(); match rate reported; UI states aquatic-only. Acceptance tests (A2 §9): none named. Size: S. `owner: run R script`. R never enters CI (A2-C11).
 
 ## S6 Full text
 - [ ] **S6.1** License-aware OA full-text locator. Tooling and deterministic synthetic acceptance are implemented; the 8-row fixture reports 2 XML, 4 PDF, and 2 none (25%, 50%, 25%). The required candidate-corpus XML/PDF/none coverage report remains unmet because no downloaded production candidate corpus is available; the S1.5 count estimate is not a corpus. Do not close S6.1 or present fixture counts as corpus coverage. S6.2 parser work may proceed independently on ten license-safe article fixtures per its contract.
@@ -71,7 +76,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [x] **S7.2** Monitoring source smoke tests and tier decisions. Acceptance complete: all 15 eligible identities have access, format, license, cadence, tier rationale, and field-map status documented; SF Bay / 5 Gyres is the only cleared Tier A source. See `docs/S7_2_VERIFICATION.md` and `docs/api_notes/monitoring_sources_s7_2.json`.
 - [ ] **S7.3** Tier-A ingesters and normalization. Acceptance: polygon flags, units QC, duplicate QC, fixtures, and tests. Partial local-only SF Bay / 5 Gyres implementation and QC are recorded in `docs/S7_3_VERIFICATION.md`; rights clarification remains open in `QUESTIONS.md` (S7.3-A), so do not publish source or normalized data.
 - [x] **S7.4** DataCite and full-text dataset discovery. Acceptance: 50-link precision spot check complete; see `docs/S7_4_VERIFICATION.md`. Reviewed 50 real DOI candidate records: 5 positive, 40 negative, 5 unresolved; resolved precision 5/45 (11.1%), conservative all-candidate positive share 5/50 (10.0%). Five positives represent three apparent dataset families; candidates are not verified paper links or owner labels, and nothing is auto-ingested.
-- [ ] **S7.5** Monitoring table, sample map, and gaps view. Partial: cited 24-record registry, filters, clustered sample view, honest empty public state, and local 314-row preview performance are implemented and verified; rights-cleared observations remain unavailable, so public map/measurement coverage acceptance is unmet. See `docs/S7_5_VERIFICATION.md`.
+- [ ] **S7.5** Monitoring table, sample map, and gaps view. Partial: cited 24-record registry, filters, clustered sample view, honest empty public state, and local 314-row preview performance are implemented and verified; rights-cleared observations remain unavailable, so public map/measurement coverage acceptance is unmet. See `docs/S7_5_VERIFICATION.md`. A2-C4: keep S7.5 and share one heatmap component with EM-8/EM-11.
 - [ ] **S7.6** Future-source watch list and weekly checks. Acceptance: changes update `docs/SOURCES.md`.
 
 ## S8 Grants
@@ -98,9 +103,25 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S10.3** Fixture rebuild and versioned reproducibility release. Acceptance: tagged snapshot archived as chosen. `owner: archive choice`
 - [ ] **S10.4** Dependency, security, notification, and secret-rotation hardening. Acceptance: CI passes and docs are current.
 
+## EM Evidence Map and Related Resources (Add-on A2)
+Contract: [`docs/add_on_spec_2.md`](../docs/add_on_spec_2.md) §§3–9. Conflicts: `DECISIONS.md` A2-C1..C15; defaults: `QUESTIONS.md` A2-D1..D11 and A2-INT-1..3. EM-1..EM-4 and EM-15 sit in S4/S5. Every view carries the A2 §0 rule 2 caption; counts come only from DuckDB (EAT-5).
+- [ ] **EM-5** Evidence Map shell, shared drawer, related-resources strip. Add-on A2 level: E1. Depends: AT-4. DoD: payload budget met. Acceptance tests (A2 §9): EAT-5, EAT-8. Size: M. Blocked while AT-4 is owner-gated.
+- [ ] **EM-7** V-4 trend panel. Add-on A2 level: E1. Depends: AT-3, SPK-7. DoD: query-version-keyed cache. Acceptance tests (A2 §9): EAT-5. Size: S.
+- [ ] **EM-6** V-3 pipeline flow diagram (ROSES template). Add-on A2 level: E1. Depends: AT-10. DoD: numbers match methods card. Acceptance tests (A2 §9): EAT-4. Size: S. Blocked while AT-10 is owner-gated.
+- [ ] **EM-8** V-1 evidence matrix (replaces base S11.2; shares the S7.5 heatmap component, A2-C4). Add-on A2 level: E1. Depends: EM-4, EM-5. DoD: cells match DuckDB on fixture. Acceptance tests (A2 §9): EAT-1, EAT-5. Size: M.
+- [ ] **EM-9** V-2 sampled-location atlas with regional disclaimer. Add-on A2 level: E2. Depends: EM-2. DoD: only sampled points. Acceptance tests (A2 §9): EAT-5. Size: M.
+- [ ] **EM-10** V-5 review overlay. Add-on A2 level: E2. Depends: EM-8. DoD: parameters in config (A2-D4). Acceptance tests (A2 §9): none named. Size: S.
+- [ ] **EM-11** V-9 Need Ledger aggregator and UI (V-9a–c, V-9f incl. group headers); evaluate `cell_rule` expressions; concordance report `docs/needs_concordance.md`. Add-on A2 level: E3. Depends: EM-1, EM-4, EM-5. DoD: per-row rule tests; DuckDB function check passes on the pinned version. Acceptance tests (A2 §9): EAT-3, EAT-5, EAT-11. Size: L. Tier: [E] higher-tier model (lead implements; `sonnet-reviewer` reviews).
+- [ ] **EM-12** V-9d layers (datasets, awards). Add-on A2 level: E3. Depends: S7, S8, EM-11. DoD: counts match registry. Acceptance tests (A2 §9): EAT-5. Size: M. Awards layer after S8 (A2-D7).
+- [ ] **EM-13** Validation: ≥ 20 need cells reviewed by owner or expert; precision spot-check; set `rule_confidence`. Add-on A2 level: E3. Depends: EM-11. DoD: confidence set. Acceptance tests (A2 §9): none named. Size: M. `owner: review` (A2-D6).
+- [ ] **EM-16** Related Resources tab, `config/linkouts.yml` registry (LO-1..LO-12), weekly HTTP-status link checker. Add-on A2 level: E2. Depends: EM-5. DoD: registry validates; broken-link test passes. Acceptance tests (A2 §9): EAT-7, EAT-8, EAT-9. Size: M. Link-out only: never ingest, mirror or scrape.
+- [ ] **EM-17** Policy panel Part A (22 OPC early actions → Global Plastic Laws topics). Add-on A2 level: E3. Depends: EM-16. DoD: mapping owner-reviewed; disclaimers shown. Acceptance tests (A2 §9): EAT-8, EAT-9. Size: S. `owner: review`.
+- [ ] **EM-18** DTSC regulatory timeline (Part B), curated `config/dtsc_timeline.yml`, link-checked. Add-on A2 level: E3. Depends: EM-16. DoD: dates as DTSC states them; non-regulation caveat shown. Acceptance tests (A2 §9): EAT-7. Size: S.
+- [ ] **EM-14** METHODS, definitions crosswalk (A2-C13), disclaimers, disclosures (A2-D8). Add-on A2 level: E3. Depends: all other EM tasks. DoD: owner review. Acceptance tests (A2 §9): EAT-8. Size: S. `owner: review`.
+
 ## S11 Fallback/extras
 - [ ] **S11.1** Optional stlite fallback reading shared outputs. Acceptance: static runtime and Pyodide compatibility tested.
-- [ ] **S11.2** Optional evidence-map heatmaps.
+- [ ] **S11.2** Optional evidence-map heatmaps. Superseded by Add-on A2 EM-8 (A2-C5); do not implement separately.
 - [ ] **S11.3** Optional local-model review assist; never run in CI.
 - [ ] **S11.4** Optional scheduled paper/award digest.
 - [ ] **S11.5** Optional Plastiverse and ToMEx cross-listing. `owner: lead`

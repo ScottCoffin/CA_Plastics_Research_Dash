@@ -51,7 +51,9 @@ Never open `data/`, `output/`, `scratch/`, `site/data/*.json`, `.playwright-cli/
   `No module named pytest` errors or a false `test_eval` failure.
 - Direct equivalents: `py -3.14 -m pytest -q`, `py -3.14 -m ruff check .`,
   `py -3.14 -m ruff format --check .`, `py -3.14 -m compileall -q src`.
-- CI pre-steps: `py -3.14 scripts/check_doc_links.py` and `py -3.14 scripts/check_a1_scaffold.py`.
+- CI pre-steps: `py -3.14 scripts/check_doc_links.py`, `py -3.14 scripts/check_a1_scaffold.py`
+  and `py -3.14 scripts/check_a2_scaffold.py` (A2 also checks that EM-1..18,
+  A2-D/INT and A2-C register IDs exist once and that EM dependencies are listed in order in TODO).
 - Task acceptance: `py -3.14 scripts/check_s<stage>_<task>.py` (also `check_at1.py`).
 - **Full gate** = links + scaffold + lint + test + build + `git diff --check`.
   Baseline on 2026-11-09: 243 tests passed.
@@ -70,6 +72,11 @@ Never open `data/`, `output/`, `scratch/`, `site/data/*.json`, `.playwright-cli/
 
 - Retry ladder: one fresh Haiku correction per failed review. A second failure
   stops that task and escalates.
+- Add-on A2 tasks tagged `[E]` (EM-1 keyword rules, EM-11) are pre-escalated:
+  the lead implements and `sonnet-reviewer` reviews. Haiku may still take their
+  bounded sub-parts (validators, fixtures, tests).
+- Add-on A2 says "docs/DECISIONS.md" and writes paths as `docs\...`; the real log
+  is `.agent/DECISIONS.md` (ADR-A2-OWNER, A2-C1..C15), and paths use `/`.
 - Do not spawn workers for edits to one doc or one config file, `.agent/`
   updates, or commits. A cold worker re-reads context, so doing these inline is cheaper.
 - Run workers in parallel only on disjoint file sets, at most 3 at a time.

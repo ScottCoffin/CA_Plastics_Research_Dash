@@ -1,6 +1,7 @@
 CA Plastics Research Atlas — Agent Build Specification
 
 Change log (2026-11-07): Added the [Analytics and Data-Serving Layer add-on specification](docs/add_on_spec.md).
+Change log (2026-11-09): Added the [Evidence Map, study_type, Need Ledger (V-9), Related Resources and Policy Panel add-on specification (Add-on A2)](docs/add_on_spec_2.md). It replaces S11.2 with EM-8, extends S4 and S5 with new label fields, adds the Evidence Map and Related Resources tabs, and reuses Add-on A1 AT-3, AT-4 and AT-10 without changing any A1 gate. Tasks EM-1..EM-18 are scheduled in `.agent/TODO.md`; A2 conflicts are in `.agent/DECISIONS.md` (A2-C1..C15) and its decisions in `.agent/QUESTIONS.md` (A2-D1..D11). Where A2 and this spec overlap, A2's register governs the named tasks.
 
 Working title: CA Plastics Research Atlas (ca-plastics-atlas)Owner / product lead: Scott CoffinAudience: autonomous or semi-autonomous IDE coding agents operating through atomic task checkpoints and the human product ownerSpec status: v1.0. Written 2026-11-05. Every external-API detail not marked (verified in research) must be smoke-tested by the agent before it is relied on and recorded in docs/api_notes/.
 How to read this spec. Part A is the product. Part B is the operating protocol every task checkpoint must follow (memory, handoff, tool requests). Part C is the architecture and data model. Part D is the source and reuse registry. Part E is the staged roadmap, where each stage is split into checkpoint-sized tasks. Part F covers quality, evaluation and ethics. Part G lists open decisions that need the human owner.Epistemic labels used throughout: [V] = verified in the research phase, with citation; [GK] = general knowledge, not verified for this project; [INF] = inference or design choice; [VERIFY] = the agent must test it before use.
@@ -53,6 +54,7 @@ A3.3 Tab "Funding" (Question 3)
 •	A pass-through chain field (e.g., OPC → California Sea Grant → a CSU campus), de-duplicated on the lowest-level project ID.
 •	A separate "open funding calls" panel from the California Grants Portal. That portal lists grants offered, as a CSV updated daily with a public-domain license 4, so it is not an awards source.
 •	Link awards to resulting papers and datasets where evidence exists (Stage 9).
+A3.3a Tabs added by [Add-on A2](docs/add_on_spec_2.md): "Evidence Map" (V-1..V-5, the V-9 Need Ledger, policy panel and DTSC timeline; A2 §§5–7) and "Related Resources" (link-out registry only; A2 §8). Tab order: Experts & Institutions · Monitoring Data · Funding · Evidence Map · Related Resources · About/Methods. Evidence-map views show research volume, never quality, effect or sufficiency (A2 §0).
 A3.4 Tab "About / Methods / Data quality"
 Definitions, source list with last-refresh timestamps, classifier performance (precision/recall on the held-out gold set), known limitations, how to submit corrections, citation and license info, and a disclaimer. Scott's personal site states that his views do not represent the State of California or its agencies, per the page (disclaimer on scottcoff.in 5). The dashboard must carry an explicit disclaimer that it is an independent project and not an official OEHHA or State product, unless the owner decides otherwise (G-12).
 A4. Non-goals (v1)
@@ -417,6 +419,7 @@ S4.2	Sampling plan: stratified sample of ~400–600 pool works (by year, journal
 S4.3	Annotation tooling: either (a) a spreadsheet template + importer or (b) a locally-run annotation app [request tool, B5]; double-annotate ≥20% of items; compute Cohen's κ per label	Importer round-trips; agreement report script nlp/eval_agreement.py	M
 S4.4	Eval harness nlp/eval.py: precision/recall/F1 per label and per class, calibration plot, error-analysis table written to docs/EVAL_<version>.md. Define target thresholds with the owner 🧑 (G-9)	Harness runs on a dummy predictor; metrics reproducible	M
 
+Add-on A2 extension: EM-1 (vocabularies, Need Ledger roster) and EM-3 (gold-set extension, 20% double-labelled) add study_type, compartment, waterbody_type, pathway, source_category, product_type, size_class and rwqcb_region labels; see [Add-on A2](docs/add_on_spec_2.md) §§3–4 and §9.
 Owner effort: roughly 6–12 hours of labelling spread over weeks; the agent should provide pre-annotated suggestions (rules output) to speed review, clearly marked as suggestions, to reduce effort without biasing the held-out test set (suggestions are not shown for test items) [INF].
 
 STAGE 5 — Classifiers (≈6 sessions)
@@ -431,6 +434,7 @@ S5.5	Domain tagging multi-label (SetFit) over the taxonomy; author-level aggrega
 S5.6	Inference in CI (classify.yml): CPU-only, uses frozen models; writes work_labels and review_queue.csv; merges overrides_works.csv last	CI run completes within a stated time budget; override precedence unit-tested	M
 S5.7	Leak-test report: how many CA-sampled papers have no CA-affiliated author? Decide whether to widen the candidate pool 🧑	Report in docs/EVAL_leak_test.md; decision in DECISIONS.md	S
 
+Add-on A2 extension: EM-2 (Regional Water Board layer and offshore rule; after S5.4), EM-4 (per-field rules/SetFit and keyword flags; after S5) and EM-15 (owner-run ToMEx DOI crosswalk; R stays out of CI); see [Add-on A2](docs/add_on_spec_2.md) §§4 and 9.
 Milestone M2: dashboard shows validated ca_basis, ca_sampled, domain tags; the About page lists precision/recall.
 
 STAGE 6 — Open-access full-text enrichment (≈4 sessions)
@@ -452,7 +456,7 @@ S7.1	Registry schema + seed config/datasets.yml from D2 (NCEI, SF Bay/5 Gyres, R
 S7.2	API/portal smoke tests per source; docs/api_notes/* entries; decide Tier A vs B per source	Each source has: access method, format, license, update frequency, field map	M
 S7.3	Tier-A ingesters (one checkpoint per 1–2 sources): NCEI (clip to CA; contributor fields), SF Bay XLSX (SampleID join), MDMAP (API), drinking-water dataset if public. Normalize to samples schema, unit harmonization (concentration units, size classes), method fields informed by SCCWRP standards	Samples table with polygon flags; QC report (units, missing coords, duplicates); fixtures + tests	L×2–3
 S7.4	Paper-linked data discovery: DataCite /dois relationship queries from CA works' DOIs; GROBID/XML data-availability extraction → datasets rows with tier D/B	Precision spot-check on 50 links	M
-S7.5	Monitoring tab: registry table, map of samples (clustered, filters), data-gaps heatmap (matrix × region × year), "contributor in CA?" filter	Perf budget met; links to source and citation text displayed	L
+S7.5	Monitoring tab: registry table, map of samples (clustered, filters), data-gaps heatmap (matrix × region × year), "contributor in CA?" filter	Perf budget met; links to source and citation text displayed	L Add-on A2 C4: keep this view and share one heatmap component with EM-8/EM-11.
 S7.6	Watch list: statewide pilot monitoring (planned 2027) and CEDEN 2.0 microplastics module as tracked future sources with a check script	A weekly "has anything changed?" check writes to docs/SOURCES.md	S
 
 Cautions: NCEI is global and heterogeneous. Preserve the data-quality tier and contributor/citation fields rather than blending silently. Sample-level numbers from different methods are not directly comparable; show the method fields next to values. Never present registry inclusion as an endorsement of data quality.
@@ -495,7 +499,7 @@ STAGE 11 — Fallback and extras (as needed)
 
 ID	Task	Notes
 S11.1	stlite fallback app reading the same JSON/Parquet; port facets and tables from the Trendspotter layout where license allows (MIT [V])	Must run as static files; test Pyodide package compatibility early (e.g., plotly/altair version issues documented for stlite)
-S11.2	Evidence-map views: matrix × discipline heatmap of works (EviAtlas-style)	Optional
+S11.2	Evidence-map views: matrix × discipline heatmap of works (EviAtlas-style)	Superseded by Add-on A2 EM-8 (A2 C5); do not implement separately
 S11.3	Optional local-model reviewer assist for the review queue (open-weight model run locally, never in CI)	Only if label throughput becomes a bottleneck
 S11.4	RSS/email digest of new CA-plastic-centric papers and new awards	Optional, via a scheduled workflow
 S11.5	Cross-listing with Plastiverse and ToMEx-style resources	Owner-led
@@ -545,6 +549,7 @@ G-11	Should the Monitoring tab include literature-derived datasets (e.g., Moore 
 G-12	Dashboard disclaimer wording and affiliation statement	Independent project; not an official OEHHA/State product
 G-13	Should federal awards include out-of-state recipients that sample in California?	Yes, flagged; ca_led=false
 G-14	Acceptable GitHub repo size/branch strategy for data (C6)?	Slim data in the main branch; large intermediates outside git
+Add-on decisions: A1-D1..D7 ([Add-on A1](docs/add_on_spec.md) §11) and A2-D1..D11 ([Add-on A2](docs/add_on_spec_2.md) §10) are tracked with their defaults in `.agent/QUESTIONS.md`.
 
 
 APPENDIX 1 — Starter TODO.md (agents paste this in S0.1)
