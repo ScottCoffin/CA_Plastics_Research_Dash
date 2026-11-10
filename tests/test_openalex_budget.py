@@ -481,3 +481,51 @@ def test_http_500_with_known_credits_retries_with_bounded_attempts(
         assert logger.request_count == 2
         assert logger.credits_total == Decimal(2)
         assert [row["cost_known"] for row in logger.request_metrics] == [False, True]
+
+
+def test_http_429_without_credit_defers_as_rate_limit_without_retry(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("OPENALEX_MAX_COST_USD", raising=False)
+    monkeypatch.delenv("OPENALEX_MAX_CREDITS", raising=False)
+    budget_path = tmp_path / "budget.yml"
+    write_budget(budget_path)
+    paths = OpenAlexPaths(
+        raw_dir=tmp_path / "raw",
+        output_parquet=tmp_path / "works.parquet",
+        high_water_mark=tmp_path / "water.json",
+        usage_log=tmp_path / "api_usage.jsonl",
+    )
+    paths.output_parquet.write_bytes(b"existing-output")
+    prior_high_water = {"schema_version": 1, "last_run_id": "prior"}
+    paths.high_water_mark.write_text(json.dumps(prior_high_water), encoding="utf-8")
+    calls = 0
+
+    def fake_urlopen(request, timeout):
+        nonlocal calls
+        calls += 1
+        headers = Message()
+        headers["Retry-After"] = "60"
+        raise urllib.error.HTTPError(
+            request.full_url, 429, "Too Many Requests", headers, io.BytesIO(b"")
+        )
+
+    monkeypatch.setattr(openalex.urllib.request, "urlopen", fake_urlopen)
+    with pytest.raises(openalex.OpenAlexRateLimitError) as error:
+        openalex.ingest_live(
+            config_path="config/queries.yml",
+            institution_ids=["I1"],
+            paths=paths,
+            start_year=2024,
+            end_year=2024,
+            allow_candidate=True,
+            budget_path=budget_path,
+            run_id="http429-unknown-test",
+        )
+    assert calls == 1
+    assert error.value.retry_after == "60"
+    assert paths.output_parquet.read_bytes() == b"existing-output"
+    assert json.loads(paths.high_water_mark.read_text(encoding="utf-8")) == prior_high_water
+    rows = [json.loads(line) for line in paths.usage_log.read_text(encoding="utf-8").splitlines()]
+    request = next(row for row in rows if row["record_type"] == "request")
+    assert request["status_code"] == 429 and request["credits_known"] is False

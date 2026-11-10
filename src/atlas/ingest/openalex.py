@@ -200,9 +200,15 @@ def _request_json(
                 body = {}
             if not isinstance(body, dict):
                 body = {}
-            logger.record_openalex_response(
-                method="GET", url=url, status_code=error.code, headers=headers, body=body
-            )
+            try:
+                logger.record_openalex_response(
+                    method="GET", url=url, status_code=error.code, headers=headers, body=body
+                )
+            except OpenAlexUsageMetadataError:
+                # A rejected 429 carries no credit header (seen 2026-11-10). The row is
+                # logged; the 429 below already stops the run as deferred, unretried.
+                if error.code != 429:
+                    raise
             message = str(body.get("message") or body.get("error") or "request rejected")
             if error.code in {400, 401, 403, 404}:
                 raise RuntimeError(f"OpenAlex returned HTTP {error.code}: {message}") from error
