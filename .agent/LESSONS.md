@@ -206,3 +206,8 @@ session's old-directory cleanup can remove another's live `tmp_path`, producing
 a one-off failure (seen in `tests/test_fulltext_cache.py` during EM-1, not
 reproducible in 5 solo runs). Let workers run focused tests; the lead runs the
 full gate once after they finish.
+
+## Do not pipe gate commands through `tail` when chaining with `&&`
+`cmd | tail -1 && git commit` takes the exit status of `tail`, so a failing
+check still commits (it happened with check_doc_links during SPK-1). Redirect
+to a file and test the command's own status, or use `set -o pipefail`.

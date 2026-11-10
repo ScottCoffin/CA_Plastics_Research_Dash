@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SPK-2 DuckDB-Wasm Parquet check</title>
+</head>
+<body>
+<p>SPK-2 plain DuckDB-Wasm page. Version is taken from the <code>ver</code> query parameter.</p>
+<script type="module">
+// Loads one pinned @duckdb/duckdb-wasm release from jsDelivr using the
+// documented bundle selection and worker-from-blob pattern, then exposes
+// window.init(), window.runFile() and window.ready for run_spike.py.
+const ver = new URLSearchParams(location.search).get("ver");
+window.status_ = { ver, ready: false, error: null };
+
+async function init() {
+  const t0 = performance.now();
+  const duckdb = await import(`https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${ver}/+esm`);
+  const bundles = duckdb.getJsDelivrBundles();
+  const bundle = await duckdb.selectBundle(bundles);
+  const workerUrl = URL.createObjectURL(
+    new Blob([`importScripts("${bundle.mainWorker}");`], { type: "text/javascript" })
+  );
+  const worker = new Worker(workerUrl);
+  const logger = new duckdb.ConsoleLogger();
+  const db = new duckdb.AsyncDuckDB(logger, worker);
+  await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
+  URL.revokeObjectURL(workerUrl);
+  const conn = await db.connect();
+  await conn.query("SET TimeZone='UTC'");
+  return { duckdb, db, conn, initMs: performance.now() - t0, bundleMain: bundle.mainModule };
+}
+
+const CHECKS = [
+  ["count", "SELECT CAST(COUNT(*) AS VARCHAR) AS v FROM read_parquet('{f}')"],
+  ["sum_year", "SELECT CAST(SUM(year) AS VARCHAR) AS v FROM read_parquet('{f}')"],
+  ["ecotox_contains", "SELECT CAST(COUNT(*) FILTER (WHERE list_contains(tags, 'ecotox')) AS VARCHAR) AS v FROM read_parquet('{f}')"],
+  ["unnest_tags", "SELECT CAST(COUNT(*) AS VARCHAR) AS v FROM (SELECT UNNEST(tags) AS t FROM read_parquet('{f}'))"],
+  ["max_published", "SELECT CAST(MAX(published) AS VARCHAR) AS v FROM read_parquet('{f}')"],
+  ["max_updated", "SELECT CAST(MAX(updated) AS VARCHAR) AS v FROM read_parquet('{f}')"],
+  ["null_ca_led", "SELECT CAST(COUNT(*) FILTER (WHERE ca_led IS NULL) AS VARCHAR) AS v FROM read_parquet('{f}')"],
+  ["true_ca_led", "SELECT CAST(COUNT(*) FILTER (WHERE ca_led) AS VARCHAR) AS v FROM read_parquet('{f}')"],
+  ["rio_title_count", "SELECT CAST(COUNT(*) FILTER (WHERE title LIKE '%Río%') AS VARCHAR) AS v FROM read_parquet('{f}')"],
+  ["um_title_count", "SELECT CAST(COUNT(*) FILTER (WHERE title LIKE '%µm%') AS VARCHAR) AS v FROM read_parquet('{f}')"],
+  ["title_W000000", "SELECT title AS v FROM read_parquet('{f}') WHERE work_id = 'W000000'"],
+  ["title_W000001", "SELECT title AS v FROM read_parquet('{f}') WHERE work_id = 'W000001'"],
+  ["tags_W000003", "SELECT CAST(tags AS VARCHAR) AS v FROM read_parquet('{f}') WHERE work_id = 'W000003'"],
+  ["inst_ids_W000003", "SELECT CAST(inst_ids AS VARCHAR) AS v FROM read_parquet('{f}') WHERE work_id = 'W000003'"],
+  ["select_star_limit5_rows", "SELECT CAST(COUNT(*) AS VARCHAR) AS v FROM (SELECT * FROM read_parquet('{f}') LIMIT 5)"],
+];
+
+// Runs every check against one registered file. Each check returns a single
+// VARCHAR cell so comparison with the writer-side expected strings is exact.
+window.runFile = async (state, fileUrl, name, expected) => {
+  const { db, conn } = state;
+  const t0 = performance.now();
+  await db.registerFileURL(name, fileUrl, state.duckdb.DuckDBDataProtocol.HTTP, false);
+  const results = [];
+  let firstMs = null;
+  for (const [check, template] of CHECKS) {
+    const sql = template.replaceAll("{f}", name);
+    const t1 = performance.now();
+    const rec = { check, expected: expected[check] ?? null, got: null, pass: false, error: null, ms: null };
+    try {
+      const table = await conn.query(sql);
+      const row = table.toArray()[0];
+      rec.got = row && row.v !== null ? String(row.v) : null;
+      rec.pass = rec.got === rec.expected;
+    } catch (e) {
+      rec.error = String(e && e.message ? e.message : e);
+    }
+    rec.ms = Math.round(performance.now() - t1);
+    if (firstMs === null) firstMs = rec.ms;
+    results.push(rec);
+  }
+  return { file: name, load_ms_total: Math.round(performance.now() - t0), first_query_ms: firstMs, checks: results };
+};
+
+window.init = async () => {
+  try {
+    window.state = await init();
+    window.status_.ready = true;
+    window.status_.initMs = Math.round(window.state.initMs);
+    window.status_.bundle = window.state.bundleMain;
+    window.status_.duckdbVersion = (await window.state.conn.query("SELECT version() AS v")).toArray()[0].v;
+  } catch (e) {
+    window.status_.error = String(e && e.message ? e.message : e);
+  }
+  window.ready = true;
+};
+window.init();
+</script>
+</body>
+</html>
