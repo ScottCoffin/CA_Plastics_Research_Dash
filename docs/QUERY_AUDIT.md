@@ -162,3 +162,18 @@ Offline verification with network sockets blocked and both API-key environment a
 
 ### Next
 - Continue at S7.1, the next independent unchecked roadmap task. AT-2 and AT-11 remain dependency-blocked by AT-1; do not promote `plastic-v2-candidate`.
+
+## Labelling the sample (owner)
+
+Run the local review app from the repository root:
+
+```bash
+py -3.14 -m streamlit run scripts/review_query_audit_app.py
+```
+
+It opens in the browser at http://localhost:8501. Enter your initials in the sidebar,
+then label each work Relevant, Not relevant or Unsure; optional noise terms record the
+word that pulled in an off-topic work. Each click saves to `docs/QUERY_AUDIT_REVIEW.csv`.
+One label covers all rows of the same `work_id` (354 works across 405 rows). The
+default "Unlabeled" view moves to the next unlabelled work; "Show: All" revisits
+earlier labels. Label helpers: `atlas.query_audit_review`.
