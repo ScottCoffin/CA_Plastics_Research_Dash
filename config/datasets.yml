@@ -60,7 +60,7 @@ datasets:
     access_method: Public CA Open Data resource downloads and dataset API
     format: [XLSX, PDF]
     cadence: Irregular; dataset metadata reports irregular updates
-    license: Creative Commons Attribution (CC BY); confirm resource-level terms when downloading
+    license: CC BY 4.0 (owner determination 2026-11-10; current package metadata says ODC BY, also attribution)
     provenance_type: dataset_record
     provenance_url: https://publish.data.ca.gov/dataset/microplastic-and-microparticle-data-from-surface-water-san-francisco-bay-and-adjacent-sanctuari
     evidence_excerpt: "California record lists stormwater, treated wastewater, surface water, sediment and prey-fish collection efforts with SampleID-linked particle data."

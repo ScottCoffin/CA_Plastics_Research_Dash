@@ -28,7 +28,19 @@ LICENSE_EVIDENCE = {
     "scope": "package metadata; resource-level license field is empty",
     "status": "observed in current official CKAN metadata; differs from S7.2 CC BY 4.0 note",
 }
-ATTRIBUTION = "SFEI and 5 Gyres; California Open Data package (ODC BY; see license evidence)"
+# Owner determination 2026-11-10 (QUESTIONS S7.3-A). The observed package metadata
+# (ODC BY) stays in LICENSE_EVIDENCE; both are attribution licenses.
+PUBLICATION_LICENSE = {
+    "id": "CC-BY-4.0",
+    "name": "Creative Commons Attribution 4.0 International",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "basis": "owner determination 2026-11-10 (QUESTIONS S7.3-A)",
+}
+ATTRIBUTION = (
+    "San Francisco Estuary Institute and 5 Gyres Institute, SF Bay and Adjacent "
+    "Sanctuaries Microplastic and Microparticle Project (published by OPC on the "
+    "California Natural Resources Agency Open Data portal); CC BY 4.0"
+)
 MATRIX_MAP = {"manta": "surface water"}
 POLYMER_RE = re.compile(
     r"\bpoly(?:ethylene|propylene|ester|amide|styrene|vinyl|urethane|acrylic)\b",
@@ -115,6 +127,7 @@ def normalize_rows(
                 "morphology": row.get("MorphologicalCategory"),
                 "color": row.get("Color"),
                 "citation": ATTRIBUTION,
+                "license": PUBLICATION_LICENSE,
                 "license_evidence": LICENSE_EVIDENCE,
             }
         )
@@ -279,6 +292,7 @@ def normalize_rows(
                 "dataset_id": DATASET_ID,
                 "source_sha256": source_sha256,
                 "source_url": SOURCE_URL,
+                "license": PUBLICATION_LICENSE,
                 "license_evidence": LICENSE_EVIDENCE,
                 "source_sheet": sheet,
                 "lat": lat,
@@ -342,6 +356,7 @@ def normalize_rows(
             "dataset_id": DATASET_ID,
             "source_sha256": source_sha256,
             "source_url": SOURCE_URL,
+            "license": PUBLICATION_LICENSE,
             "license_evidence": LICENSE_EVIDENCE,
             "citation": ATTRIBUTION,
             "qc": dict(sorted(qc.items())),

@@ -64,16 +64,20 @@ structured package-license evidence.
   The ignored QC output retains per-row diagnostics for local review. This
   committed report records only aggregate counts and conflict categories.
 
-## Partial checkpoint status
+## Checkpoint status (closed 2026-11-10)
 
-This is partial S7.3 evidence for the cleared SF Bay / 5 Gyres source. The
-normalizer and synthetic-fixture coverage are implemented, and local QC has
-been reviewed, but source rights are unresolved: current package metadata says
-ODC BY while the resource-level license is empty, unlike the historical S7.2
-CC BY 4.0 observation. The official resource redirect returned HTTP 403.
-No legal interpretation is inferred, and no raw or normalized data is
-published or committed. S7.3 remains unchecked pending owner clarification of
-reuse terms and any remaining source acceptance requirements.
+The owner determined on 2026-11-10 that the SF Bay / 5 Gyres data are CC BY 4.0
+(QUESTIONS S7.3-A). Every sample, particle and QC output now carries a
+`license` object (`CC-BY-4.0`, basis: owner determination) alongside the
+unchanged observed `license_evidence` (package metadata ODC BY; resource field
+empty). Both are attribution licenses, so the attribution string names SFEI,
+5 Gyres, OPC and the CNRA Open Data portal. Re-running the normalizer on the
+same hash-matched workbook gave identical QC counts (314 samples, 44,226
+particle rows). Acceptance (polygon flags, units QC, duplicate QC, fixtures,
+tests) was already met; the rights decision was the last open item. Raw
+workbook and particle rows remain local; S7.5 publishes display fields only.
+The other S7.3 candidates (NCEI, MDMAP, drinking water) are below Tier A per
+S7.2 and are not ingested.
 
 ## Run locally
 
