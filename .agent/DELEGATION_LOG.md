@@ -42,3 +42,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-10T12:40:00-08:00 | S8.10 | claude-haiku (haiku-developer) | Grants export + Funding UI | Accepted; lead reviewed shared hooks and ran all-tab browser smoke | 1 session; ~123K subagent tokens |
 | 2026-11-10T13:20:00-08:00 | S9.2 | claude-haiku (haiku-developer) | Dataset links + UI display | Accepted; lead browser smoke clean | 1 session; ~126K subagent tokens |
 | 2026-11-10T13:50:00-08:00 | S11.4 | claude-haiku (haiku-developer) | Atom feed + deploy step | Accepted with lead future-date fix | 1 session; ~68K subagent tokens |
+| 2026-11-10T16:40:00-08:00 | S8.7 | claude-haiku (haiku-developer) | USAspending ALN 11.999 program mode | Accepted after one resume (turn limit); lead reviewed grants.json delta (+8, -0) | 2 sessions; ~101K subagent tokens |

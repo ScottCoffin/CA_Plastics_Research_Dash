@@ -1,0 +1,90 @@
+{
+  "description": "Synthetic USAspending spending_by_award records shaped like the program-number (ALN 11.999) search results, S8.7. Award IDs follow the public NOAA pattern; descriptions and amounts are invented for tests. No live response is stored here.",
+  "endpoint": "https://api.usaspending.gov/api/v2/search/spending_by_award/",
+  "results": [
+    {
+      "internal_id": 900000001,
+      "Award ID": "NA16NOS9990035",
+      "Recipient Name": "SYNTHETIC CA UNIVERSITY A",
+      "Start Date": "2016-06-01",
+      "End Date": "2019-05-31",
+      "Award Amount": 250000.0,
+      "Awarding Agency": "Department of Commerce",
+      "Awarding Sub Agency": "National Oceanic and Atmospheric Administration",
+      "Description": "SYNTHETIC TEST RECORD: marine debris removal and monitoring along the coast.",
+      "Place of Performance State Code": "CA",
+      "Recipient State Code": "CA",
+      "generated_internal_id": "ASST_NON_NA16NOS9990035_1305"
+    },
+    {
+      "internal_id": 900000002,
+      "Award ID": "NA19NOS9990086",
+      "Recipient Name": "SYNTHETIC CA REGENTS B",
+      "Start Date": "2019-09-01",
+      "End Date": "2022-08-31",
+      "Award Amount": 480000.0,
+      "Awarding Agency": "Department of Commerce",
+      "Awarding Sub Agency": "National Oceanic and Atmospheric Administration",
+      "Description": "SYNTHETIC TEST RECORD: integrated modeling of microplastics transport in coastal waters.",
+      "Place of Performance State Code": "CA",
+      "Recipient State Code": "CA",
+      "generated_internal_id": "ASST_NON_NA19NOS9990086_1305"
+    },
+    {
+      "internal_id": 900000003,
+      "Award ID": "NA21NOS9990101",
+      "Recipient Name": "SYNTHETIC OUT-OF-STATE C",
+      "Start Date": "2021-01-01",
+      "End Date": "2023-12-31",
+      "Award Amount": 95000.0,
+      "Awarding Agency": "Department of Commerce",
+      "Awarding Sub Agency": "National Oceanic and Atmospheric Administration",
+      "Description": "SYNTHETIC TEST RECORD: marine debris survey, recipient outside California, work in California.",
+      "Place of Performance State Code": "CA",
+      "Recipient State Code": "OR",
+      "generated_internal_id": "ASST_NON_NA21NOS9990101_1305"
+    },
+    {
+      "internal_id": 900000004,
+      "Award ID": "NA26NOS9990200",
+      "Recipient Name": "SYNTHETIC CA NONPROFIT D",
+      "Start Date": "2025-10-01",
+      "End Date": "2027-09-30",
+      "Award Amount": 120000.0,
+      "Awarding Agency": "Department of Commerce",
+      "Awarding Sub Agency": "National Oceanic and Atmospheric Administration",
+      "Description": "",
+      "Place of Performance State Code": "CA",
+      "Recipient State Code": "CA",
+      "generated_internal_id": "ASST_NON_NA26NOS9990200_1305"
+    },
+    {
+      "internal_id": 900000005,
+      "Award ID": "NA13NOS9990002",
+      "Recipient Name": "SYNTHETIC CA AGENCY E",
+      "Start Date": "2012-03-01",
+      "End Date": "2015-02-28",
+      "Award Amount": 60000.0,
+      "Awarding Agency": "Department of Commerce",
+      "Awarding Sub Agency": "National Oceanic and Atmospheric Administration",
+      "Description": "SYNTHETIC TEST RECORD: pre-FY2015 award whose period runs into FY2015.",
+      "Place of Performance State Code": null,
+      "Recipient State Code": "CA",
+      "generated_internal_id": "ASST_NON_NA13NOS9990002_1305"
+    },
+    {
+      "internal_id": 900000006,
+      "Award ID": "NA18NOS9990150",
+      "Recipient Name": "SYNTHETIC CA ORGANIZATION F",
+      "Start Date": "2018-04-01",
+      "End Date": "2020-03-31",
+      "Award Amount": null,
+      "Awarding Agency": "Department of Commerce",
+      "Awarding Sub Agency": "National Oceanic and Atmospheric Administration",
+      "Description": "SYNTHETIC TEST RECORD: amount not reported.",
+      "Place of Performance State Code": "CA",
+      "Recipient State Code": "CA",
+      "generated_internal_id": "ASST_NON_NA18NOS9990150_1305"
+    }
+  ]
+}

@@ -167,3 +167,28 @@ Only counts are recorded here. The records themselves are not committed.
 - The meaning of `Award Amount`.
 - The bulk CSV column names, and whether a real bulk archive loads at all.
 - Whether a non-empty query above 10,000 rows errors or truncates.
+
+## Program-number mode (S8.7)
+
+Verified live 2026-11-10: `program_numbers` = `["11.999"]` (NOAA Marine Debris
+Program) with `award_type_codes` 02-05, a `time_period` window, and a CA location
+filter returns results. The ALN filter needs no keyword. Pages are read as in S8.4.
+
+- `--program 11.999 --start-fy 2015` (default end: current FY, here FY2027) runs two
+  sweeps, `ca_recipient` and `ca_pop`, over one window 2014-10-01 to 2027-09-30. The
+  earlier probe ended 2026-09-30 and returned 20 pop-sweep results.
+- Rows merge into the same `usaspending.parquet` and state file as keyword mode, with
+  provenance tags `program_11.999:<sweep>`. A separate parquet would make
+  `dedupe.cluster_rows` raise on a duplicate `grant_key`. `source` and `grant_key` are
+  unchanged, so one award found by both modes is one row.
+- `program` stays `Awarding Sub Agency`, so rows are identical across modes.
+- `Recipient State Code` is null on the live rows, including the recipient-sweep
+  rows. The sweep tag, not `org_state`, is the CA evidence. `org_state` is `None`
+  for all program rows and `ca_led` is `None` for all of them.
+- Live run 2026-11-10 (`--program 11.999 --start-fy 2015`): 2 requests, status ok.
+  Records fetched: `ca_recipient` 21, `ca_pop` 20. Unique awards 22 (19 in both
+  sweeps, 2 recipient-only, 1 pop-only). All 22 are FY2016-FY2026 and all 22 are in
+  `grants.json`; 14 are `plastic_related` true. The dedupe found 0 cross-source
+  clusters for these rows.
+- Not verified: whether the time filter is overlap-based beyond the 2014-10-01 floor.
+  Kept rows all end on or after 2014-10-01, which is the only overlap evidence.

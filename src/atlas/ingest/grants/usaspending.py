@@ -14,6 +14,12 @@ separate entry.  The noise findings behind the term set are recorded in
 ``--bulk`` (backfill only) downloads the award CSV archive for one fiscal year and
 filters it locally.  It is implemented but has only been exercised with fakes, and
 its CSV column names are unverified.  See the same note.
+
+Program mode (S8.7) (``run_program_ingest``) fetches every award under one assistance
+listing number (for NOAA Marine Debris Program, ALN 11.999) over a fixed window, in
+the same two CA sweeps.  Its rows go into the same ``usaspending`` table and state file
+as keyword mode, under their own provenance tags.  They must not go into a second
+parquet: ``dedupe.cluster_rows`` rejects a ``grant_key`` that appears in two tables.
 """
 
 from __future__ import annotations
@@ -104,6 +110,10 @@ BULK_COLUMNS: Mapping[str, str] = {
     "Awarding Sub Agency": "awarding_sub_agency_name",
     "Description": "prime_award_base_transaction_description",
 }
+# S8.7 program mode.  ALN 11.999 is the NOAA Marine Debris Program (verified 2026-11-10).
+NOAA_MDP_ALN = "11.999"
+PROGRAM_NUMBER_PATTERN = re.compile(r"^\d{2}\.\d{3}$")
+PROGRAM_START_FY = 2015
 
 Transport = Callable[[str, Mapping[str, Any]], tuple[int, str]]
 Downloader = Callable[[str, Path], None]
@@ -149,17 +159,50 @@ def build_filters(
     }
 
 
-def build_body(
-    sweep: str, fiscal_year: int, page: int, page_size: int = PAGE_SIZE
-) -> dict[str, Any]:
+def _search_body(filters: Mapping[str, Any], page: int, page_size: int) -> dict[str, Any]:
     return {
-        "filters": build_filters(sweep, fiscal_year),
+        "filters": dict(filters),
         "fields": list(FIELDS),
         "page": page,
         "limit": page_size,
         "sort": "Award ID",
         "order": "asc",
     }
+
+
+def build_body(
+    sweep: str, fiscal_year: int, page: int, page_size: int = PAGE_SIZE
+) -> dict[str, Any]:
+    return _search_body(build_filters(sweep, fiscal_year), page, page_size)
+
+
+def program_window(start_fy: int, end_fy: int) -> tuple[date, date]:
+    """Return the first day of ``start_fy`` and the last day of ``end_fy``."""
+
+    if end_fy < start_fy:
+        raise ValueError(f"end_fy {end_fy} is before start_fy {start_fy}")
+    return fiscal_year_bounds(start_fy)[0], fiscal_year_bounds(end_fy)[1]
+
+
+def build_program_filters(
+    program_number: str, sweep: str, start: date, end: date
+) -> dict[str, Any]:
+    """Filters for one program-number sweep.  No keywords: every award under the ALN counts."""
+
+    if sweep not in SWEEP_LOCATION_FILTERS:
+        raise ValueError(f"unknown sweep: {sweep!r}")
+    if not PROGRAM_NUMBER_PATTERN.match(program_number):
+        raise ValueError(f"not an assistance listing number: {program_number!r}")
+    return {
+        "program_numbers": [program_number],
+        "time_period": [{"start_date": start.isoformat(), "end_date": end.isoformat()}],
+        "award_type_codes": list(AWARD_TYPE_CODES),
+        SWEEP_LOCATION_FILTERS[sweep]: [dict(CA_LOCATION)],
+    }
+
+
+def program_tag(program_number: str, sweep: str) -> str:
+    return f"program_{program_number}:{sweep}"
 
 
 def plan_units(
@@ -229,19 +272,19 @@ class UsaspendingClient:
         raise UsaspendingHTTPError("retries exhausted")  # pragma: no cover - loop returns
 
 
-def fetch_unit(
+def _fetch_pages(
     client: UsaspendingClient,
+    make_body: Callable[[int, int], dict[str, Any]],
     *,
-    fiscal_year: int,
-    sweep: str,
-    page_size: int = PAGE_SIZE,
-    max_pages: int = MAX_PAGES,
+    label: str,
+    page_size: int,
+    max_pages: int,
 ) -> list[dict[str, Any]]:
-    """Fetch every page of one sweep for one fiscal year, following ``page_metadata.hasNext``."""
+    """Read pages in order for one unit, following ``page_metadata.hasNext``."""
 
     records: list[dict[str, Any]] = []
     for page in range(1, max_pages + 1):
-        payload = client.post(SEARCH_PATH, build_body(sweep, fiscal_year, page, page_size))
+        payload = client.post(SEARCH_PATH, make_body(page, page_size))
         results = payload.get("results")
         meta = payload.get("page_metadata")
         has_next = meta.get("hasNext") if isinstance(meta, Mapping) else None
@@ -252,7 +295,26 @@ def fetch_unit(
         records.extend(results)
         if not has_next:
             return records
-    raise PageCapExceeded(f"{fiscal_year}:{sweep} has more pages after page {max_pages}")
+    raise PageCapExceeded(f"{label} has more pages after page {max_pages}")
+
+
+def fetch_unit(
+    client: UsaspendingClient,
+    *,
+    fiscal_year: int,
+    sweep: str,
+    page_size: int = PAGE_SIZE,
+    max_pages: int = MAX_PAGES,
+) -> list[dict[str, Any]]:
+    """Fetch every page of one sweep for one fiscal year, following ``page_metadata.hasNext``."""
+
+    return _fetch_pages(
+        client,
+        lambda page, size: build_body(sweep, fiscal_year, page, size),
+        label=f"{fiscal_year}:{sweep}",
+        page_size=page_size,
+        max_pages=max_pages,
+    )
 
 
 _DATE_TEXT = re.compile(r"(\d{4}-\d{2}-\d{2})")
@@ -517,6 +579,120 @@ def run_ingest(
         state_path=state_path,
         state=state,
         completed=completed,
+        stamp=stamp,
+        requests=client.requests,
+    )
+    return summary
+
+
+def program_dry_run_plan(
+    *,
+    program_number: str,
+    start_fy: int,
+    end_fy: int,
+    max_requests: int,
+    page_size: int = PAGE_SIZE,
+) -> dict[str, Any]:
+    """Describe the first-page request per sweep.  No network calls and no writes."""
+
+    start, end = program_window(start_fy, end_fy)
+    requests = [
+        {
+            "unit": program_tag(program_number, sweep),
+            "path": SEARCH_PATH,
+            "first_page": _search_body(
+                build_program_filters(program_number, sweep, start, end), 1, page_size
+            ),
+        }
+        for sweep in SWEEPS
+    ]
+    return {
+        "mode": "program",
+        "program_number": program_number,
+        "window": {"start_date": start.isoformat(), "end_date": end.isoformat()},
+        "units": len(requests),
+        "max_requests": max_requests,
+        "requests": requests[:max_requests],
+    }
+
+
+def run_program_ingest(
+    *,
+    program_number: str,
+    output: Path,
+    state_path: Path,
+    query_config: Mapping[str, Any],
+    taxonomy: Mapping[str, Any],
+    transport: Transport,
+    max_requests: int,
+    start_fy: int = PROGRAM_START_FY,
+    end_fy: int,
+    now: datetime | None = None,
+    page_size: int = PAGE_SIZE,
+    max_pages: int = MAX_PAGES,
+    sleep: Callable[[float], None] = time.sleep,
+    clock: Callable[[], float] = time.monotonic,
+) -> dict[str, Any]:
+    """Fetch every award under ``program_number`` for FY ``start_fy``..``end_fy``, both CA sweeps.
+
+    The window is fixed, so both sweeps are fetched on every run.  Status and failure
+    handling follow ``run_ingest``.  Rows merge into ``output`` (the keyword-mode table)
+    under ``program_<ALN>:<sweep>`` provenance tags, so keyword rows are left alone.
+    """
+
+    start, end = program_window(start_fy, end_fy)
+    state = load_state(state_path)
+    client = UsaspendingClient(transport, max_requests=max_requests, sleep=sleep, clock=clock)
+    summary: dict[str, Any] = {
+        "mode": "program",
+        "program_number": program_number,
+        "status": "ok",
+        "reason": "",
+        "window": {"start_date": start.isoformat(), "end_date": end.isoformat()},
+        "units_planned": len(SWEEPS),
+        "units_completed": 0,
+        "records_fetched": {},
+        "skipped_invalid": 0,
+        "requests": 0,
+        "max_requests": max_requests,
+        "rows_written": None,
+    }
+    results: list[UnitResult] = []
+    try:
+        for sweep in SWEEPS:
+            records = _fetch_pages(
+                client,
+                lambda page, size, sweep=sweep: _search_body(
+                    build_program_filters(program_number, sweep, start, end), page, size
+                ),
+                label=program_tag(program_number, sweep),
+                page_size=page_size,
+                max_pages=max_pages,
+            )
+            tag = program_tag(program_number, sweep)
+            summary["records_fetched"][tag] = len(records)
+            rows, skipped = normalize_records(records, query_config=query_config, taxonomy=taxonomy)
+            results.append(UnitResult(tag, rows, skipped))
+    except BudgetExhausted as error:
+        summary.update(status="partial", reason=str(error))
+    except UsaspendingError as error:
+        summary.update(status="deferred", reason=str(error), requests=client.requests)
+        return summary
+
+    summary["requests"] = client.requests
+    summary["units_completed"] = len(results)
+    summary["skipped_invalid"] = sum(unit.skipped for unit in results)
+    if not results:
+        return summary
+    stamp = (now or datetime.now(UTC)).isoformat()
+    summary["rows_written"] = _apply_results(
+        mode="program",
+        status=summary["status"],
+        results=results,
+        output=output,
+        state_path=state_path,
+        state=state,
+        completed=_completed_for_terms(state),
         stamp=stamp,
         requests=client.requests,
     )

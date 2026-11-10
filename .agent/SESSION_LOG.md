@@ -76,3 +76,4 @@
 | 2026-11-10 | Overnight handoff | All ungated tasks done; HANDOFF owner actions + RESUME_PROMPT written; REUSE spike licences; MEMORY gate line | this commit |
 | 2026-11-10 | S7.6, S10.4, SPK-1 | S7.6 watch fix + CI green (96d09e5); S8.9 test date pinned; R2 leg measured at data.plastiverse.live; owner defaults confirmed | this commit |
 | 2026-11-10 | Domain move | Site on plastiverse.live; feed links updated (ids frozen); R2 CORS verified from live origin | this commit |
+| 2026-11-10 | S8.7 | NOAA Marine Debris awards FY2015+ via USAspending ALN 11.999 (22 awards, 8 new) | this commit |
