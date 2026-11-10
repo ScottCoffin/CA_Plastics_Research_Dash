@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install fixture test runner
-        run: python -m pip install pytest
+        run: python -m pip install -c requirements/lock.txt pytest
       - name: Run fixture checks
         run: python -m pytest tests/test_source_watch_s7_6.py -q
       - name: Check public source metadata
