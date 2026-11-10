@@ -1,0 +1,539 @@
+{
+ "description": "Live NIH RePORTER v2 projects/search capture (2026-11-10), trimmed to mapped fields. Public data.",
+ "endpoint": "https://api.reporter.nih.gov/v2/projects/search",
+ "criteria": {
+  "fiscal_years": [
+   2024
+  ],
+  "advanced_text_search": {
+   "operator": "advanced",
+   "search_field": "projecttitle,abstracttext,terms",
+   "search_text": "\"microplastic\" OR \"nanoplastic\" OR \"micro-plastic\" OR \"nano-plastic\" OR \"micro-sized plastic\" OR \"microsized plastics\" OR \"plastic pollution\" OR \"plastic debris\" OR \"plastic litter\" OR \"marine debris\" OR \"marine litter\" OR \"plastic particles\" OR \"plastic fragments\" OR \"plastic ingestion\" OR \"resin pellet\" OR \"plastic pellet\""
+  }
+ },
+ "meta_total": 17,
+ "results": [
+  {
+   "appl_id": 10732582,
+   "project_num": "1P01ES035526-01",
+   "core_project_num": "P01ES035526",
+   "project_title": "Lake Ontario Center for Microplastics and Human Health in a Changing Environment",
+   "abstract_text": "ABSTRACT: Human health is inextricably tied to the Great Lakes, which hold 20% of the Earth’s surface\nfreshwater. Climate change is impacting the Lakes, altering water temperature, pH, storm frequency, ice cover,\nand precipitation. Human debris, including plastic, also impacts the Lakes and those who rely on it. Plastic enters\nthe Lakes as microplastic (MP; particles <5 mm) or as macrodebris that may degrade to MP. There are significant\nknowledge gaps about the cycle of plastic in the Lakes, but MPs have been found in all lake habitats, throughout\nthe food chain, and in tap water. The potential human health effects of Lake-associated exposure to MP are\nvastly understudied. How MP inputs and impacts will be affected by climate change is also unknown. Addressing\nsuch complex problems requires engaging diverse community partners and a multidisciplinary systems science\napproach. The over-arching goal of the Lake Ontario Center for Microplastics and Human Health in a Changing\nEnvironment is to prevent negative human health impacts of MP in the context of climate change in the Great Lakes\nby engaging diverse partners in research, promoting environmental health literacy, and promoting solutions.\nBecause the Lake Ontario region is representative of the Great Lakes basin, our work will be broadly transferable.\nOur innovative approach assesses plastics as they exist in the environment: as mixtures of post-consumer plastic\npolymers, degraded by the environment, and covered with biofilm. A major challenge of MP research is\nstandardization of materials and methods, which we address with a novel Materials and Metrology Core that\nsupports and is integral to all 3 research projects. Project 1 will holistically assess projected climate\nchange impacts on plastic input, degradation, ecotoxicity, and microorganisms in plastic-associated biofilms.\nProject 1 culminates in modeling to predict future input, fate and transport of microplastics in Lake Ontario.\nProject 2 will build on Project 1’s foundation to assess the potential for dermal and lung exposure to MPs by\nleveraging nanomembrane technologies to analyze mammalian cytotoxicity and bioactivity of natural and\nexperimental particle mixtures in combination with variation in temperature and availability of metals and\npersistent organic pollutants. Project 3 extends the investigation to the whole organism by using the\namphibian Xenopus to rigorously assess the biodistribution of MPs and impacts on development, fitness,\nimmune homeostasis and antiviral immunity, under varied conditions of temperature. Given the high degree of\nevolutionary conservation of vertebrate physiology, the outcomes from this study are very relevant to human\nhealth. Our Community Engagement Core involves diverse partners in all aspects of the Center, including\ncommunity science, direct action, development and dissemination of materials, and building partners’ capacity\nto promote solutions. Our Administrative Core coordinates across two institutions (the University of Rochester\nand the Rochester Institute of Technology), supports multidirectional communication with external stakeholders,\noversees our Plan for Enhancing Diverse Perspectives, and evaluates progress toward Center goals.",
+   "principal_investigators": [
+    {
+     "full_name": "Katrina S Korfmacher",
+     "first_name": "Katrina",
+     "last_name": "Korfmacher",
+     "is_contact_pi": true
+    },
+    {
+     "full_name": "Anna Christina Tyler",
+     "first_name": "Anna",
+     "last_name": "Tyler",
+     "is_contact_pi": false
+    }
+   ],
+   "organization": {
+    "org_name": "UNIVERSITY OF ROCHESTER",
+    "org_state": "NY",
+    "org_city": "ROCHESTER"
+   },
+   "project_start_date": "2024-03-11T00:00:00",
+   "project_end_date": "2029-02-28T00:00:00",
+   "award_amount": 614061,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10732582"
+  },
+  {
+   "appl_id": 10732587,
+   "project_num": "1P01ES035526-01",
+   "core_project_num": "P01ES035526",
+   "project_title": "Investigating Environmental Microplastic Particles and Pollutant Interactions in a Changing Environment",
+   "abstract_text": "Abstract – Project 2 \nThe objectives of Project #2 are to improve our understanding of human exposure to environmental microplastics \nand to learn how persistent organic pollutants (POPs) and metal ions interact with microplastics to modify toxicity. \nMicroplastics are ubiquitous environmental pollutants. Though humans are chronically exposed to microplastics, \nthe literature pertaining to mammalian health risks is sparse. The preponderance of literature focuses on \nenumerating the size, shape and color of environmental microplastics and on examining the toxicity of \ncommercial pure plastic particles, principally polystyrene microspheres, on aquatic organisms. Studies find that \nmicroplastic toxicity increases with decreasing microplastic size, however, collecting environmental microplastic \n<100 ìm in diameter for testing is challenging, so it is rarely done. Recently, we showed that nanomembrane \nfilter technology is able to filter microplastics in size ranges that are smaller than is typically feasible and is more \nlikely to breech epithelial barriers to interact directly with cells. Furthermore, it is known that environmental \nmicroplastics adsorb POPs and/or metal pollutants, yet little is fundamentally understood about how \nmicroplastic/pollutant interactions may alter toxicity. This project seeks to remedy these knowledge gaps by \nenumerating the presence of microplastics <100 ìm in diameter in Lake Ontario water and in airborne Lake \nspray and testing the microplastic enriched in the retentate for cytotoxicity/bioactivity including aryl hydrocarbon \nreceptor activity and endocrine disrupting properties. We will investigate microplastic interactions with POPs \nand metals that are abundant in Lake Ontario as a function of temperature to account for seasonal variations. \nThe overall hypothesis of this project is that filtered debris from Lake Ontario water and airborne Lake spray \nwill exhibit biological activity and that pollutant-MP interactions will alter bioactivity depending on MP \ncomposition and temperature.",
+   "principal_investigators": [
+    {
+     "full_name": "Lisa A DeLouise",
+     "first_name": "Lisa",
+     "last_name": "DeLouise",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "UNIVERSITY OF ROCHESTER",
+    "org_state": "NY",
+    "org_city": "ROCHESTER"
+   },
+   "project_start_date": "2024-03-11T00:00:00",
+   "project_end_date": "2029-02-28T00:00:00",
+   "award_amount": 218694,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10732587"
+  },
+  {
+   "appl_id": 10732588,
+   "project_num": "1P01ES035526-01",
+   "core_project_num": "P01ES035526",
+   "project_title": "Biodistribution and biological impact assessment of micro-plastics water contaminants using a sensitive and reliable Xenopus experimental platform",
+   "abstract_text": "This research proposal addresses growing concerns about small plastic debris (0.1ƒÝm to 5 mm) or \nMicroplastics (MPs) that have become major pollutants of aquatic ecosystems worldwide and pose serious \nthreats to human health. We propose to leverage a comparative biology approach using the amphibian \nXenopus laevis to define the biodistribution of representative environmentally relevant virgin and \nexperimentally aged MPs; and determine how postembryonic exposure to these MPs can induce \nperturbations of development, fitness, immune homeostasis, chronic inflammation, and poorer \nantimicrobial immunity that are exacerbated at higher water temperature. \nOur rationale to leverage X. laevis is that (1) it is a reliable, extensively characterized and widely recognized \nmodel of human perinatal and biomedical research; (2) because the post-embryonic development of X. laevis \ntadpoles is external and not protected by the maternal environment, the immune system differentiation is \nparticularly sensitive to perturbations by water pollutant such as MPs; (3) X. laevis wide thermotolerance is \nideal for exploring the influence of temperature on MP biodistribution and biological activity; (4) it is cost \neffective to expose tadpoles in large numbers to MPs; and (5) X. laevis immune system is remarkably similar to \nthat of humans and we have convincingly established X. laevis as a human health relevant experimental \norganism to reveal deleterious effects of developmental exposure to water pollutants. \nTo test the hypothesis that developmental exposure to MPs induces perturbations of development, \nfitness, immune homeostasis, chronic inflammation and poorer antiviral immunity that are exacerbated \nat higher water temperature, we will determine: (1) the biodistribution of environmentally-relevant virgin and \nexperimentally aged MPs in exposed tadpoles, by visualizing and quantifying the transit, dissemination and \naccumulation of different types, doses, sizes and treatments of MPs in exposed tadpoles; (2) the effect of \nwater temperature on MP's biodistribution, by comparing the changes in biodistribution and accumulation of \nvarious MPs at different temperatures; and (3) the impacts of virgin and aged MPs on development, fitness, \nimmunity, and resistance to pathogens by monitoring the survival, developmental rate, success, and fitness of \ntadpole exposed to virgin and aged post-consumer MPs for Ontario Lake, as well as by assessing whether \nlater in life young adult frogs have any defects in basal immune function or resistance to infectious diseases. \nWe anticipate that this innovative project will provide crucially needed evidence about biodistribution, \nbiological activity and health risks posed by MPs in water under varied temperatures, including exacerbated or \nderegulated immune function and resistance to microbial pathogens. In addition, we will identify sensitive and \nreliable biomarkers useful for human studies. Given the high degree of evolutionary conservation of vertebrate \nphysiology, the expected outcomes from this study will be applicable and relevant to humans.",
+   "principal_investigators": [
+    {
+     "full_name": "JACQUES  Robert",
+     "first_name": "JACQUES",
+     "last_name": "Robert",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "UNIVERSITY OF ROCHESTER",
+    "org_state": "NY",
+    "org_city": "ROCHESTER"
+   },
+   "project_start_date": "2024-03-11T00:00:00",
+   "project_end_date": "2029-02-28T00:00:00",
+   "award_amount": 310199,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10732588"
+  },
+  {
+   "appl_id": 10753570,
+   "project_num": "5R21ES034098-02",
+   "core_project_num": "R21ES034098",
+   "project_title": "Assessing the Pulmonary Toxicity of Microplastic Fibers Complexed with Azo Dyes",
+   "abstract_text": "PROJECT SUMMARY\nMicroplastics are now recognized as significant emerging environmental pollutants. A subset of microplastics,\nmicroplastic fibres (MPFs), originate from a variety of sources, including their extensive use in textiles. Due to\ntheir high volume use, MPFs contribute significantly to microplastic pollution of the environment on a global\nscale. Much of the toxicity and health effects data on MPFs had been directed towards oral exposures whereas\nstudies associated with inhalation of MPFs are scarce despite epidemiological evidence and more recent work\nthat has measured MPFs in air. These studies suggest that inhalation exposures are of equal importance to\nexplore. In addition, these fibers are known to harbor chemical additives, such as azobenzene disperse dyes\n(ADDs), that may contribute significantly to toxicity. Studies examining the damage of ADDs to the human\npulmonary system are limited, and no studies have characterized the toxicity of MPFs that harbor ADDs in the\ncontext of human inhalation exposures. Therefore, as one of the first studies to investigate the toxicity of MPF-\ncontaining ADDs we propose to quantify the toxicity of these agents, singly and in combination, to advanced\nlung cell cultures via a custom and unique aerosol delivery and exposure system in vitro and determine the\npulmonary effects in vivo. We will focus on mechanisms associated with classical fiber-based toxicity\n(pulmonary fibrosis) and on allergic airway disease (asthma) as ADDs are presumed to be chemical sensitizers\n(based on dermal studies) and no studies have examined these dyes in this context. Therefore, we propose\nthe first studies to investigate the toxicity of MPF-containing ADDs to determine whether toxicity is dominated\nby classic pro-fibrotic mechanisms (MPFs), respiratory sensitization (ADDs) or both (mixed phenotype). We will\ntest the overall hypothesis that that the most significant acute lung toxicity of dyed MPFs is attributed to\nADDs that leach from the fibers and act as respiratory sensitizers. Furthermore, respiratory\nsensitization is driven, in part, through ADD-protein adduct formation in lung cells, which manifest as\nallergic airway disease. Our approach encompasses 2 specific aims; the first to assess toxicity and\nassociated mechanisms (protein adduct formation) in vitro through aerosolized fibers (undyed and dyed) to\ncomplex epithelial and immune cell cultures; the second aim will focus on documenting pulmonary toxicity in a\nmouse model of asthma. These studies would fill a critical void in our understanding of the hazards posed by\nADD-containing MPFs and such lines of research will lead to a better understanding of long term health\nconsequences and improved risk assessment.",
+   "principal_investigators": [
+    {
+     "full_name": "Borna  Mehrad",
+     "first_name": "Borna",
+     "last_name": "Mehrad",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "UNIVERSITY OF FLORIDA",
+    "org_state": "FL",
+    "org_city": "GAINESVILLE"
+   },
+   "project_start_date": "2022-12-15T00:00:00",
+   "project_end_date": "2024-11-30T00:00:00",
+   "award_amount": 183557,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10753570"
+  },
+  {
+   "appl_id": 10785804,
+   "project_num": "1R21ES035921-01",
+   "core_project_num": "R21ES035921",
+   "project_title": "Characterizing human exposure to microplastics during pregnancy",
+   "abstract_text": "Global plastic pollution is a significant environmental and public health concern. Plastic production has\nincreased since the 1950s, reaching approximately 368 million metric tons in 2019. Approximately 60% of all\nplastics ever produced are disposed of, leading to pervasive contamination of our ecosystem with microplastic\nparticles. Microplastics are a concern for public health given their resistance to degradation, presence in air,\nfood and products relevant to human exposure, and demonstrated ability to cross cell membranes. Human\nexposure via inhalation and ingestion is unavoidable with recent evidence-based estimates suggesting humans\nintake tens of thousands of microplastic particles annually, or on the order of several milligrams daily.\nUnderstanding the extent to which microplastics are absorbed is a critical next step in evaluating their\nrelevance to human health. The overarching aim of this research is to translate methods that have been\ndeveloped for measuring microplastics in environmental samples and marine tissues for use with human\nbiospecimens. Specifically, by leveraging the relatively accessible placenta, we propose an approach to\nmeasure and characterize microplastics in tissue collected from the general population of pregnant people. We\nwill also investigate sources of exposure, including modifiable lifestyle factors, as well as sources of\ncontamination present in the labor and delivery room and during sample processing. The proposed research\nwill leverage existing infrastructure from the N\n(NYU CHES), an ongoing prospective birth cohort designed to study prenatal exposure to endocrine disrupting\nchemicals on a range of perinatal and child health outcomes. Maternal urinary concentrations of bisphenol and\nphthalate chemicals will also be measured during pregnancy. This will allow us to examine patterns of joint\nexposure to chemical plastic additives and plastic particles. In sum, we anticipate results from this research will\nprovide critical insights on the extent to which humans are exposed to microplastics. This information may\nsignificantly alter our view of plastics as inert particles that pass through the human system and lead to a\nreassessment of the risks posed by microplastics exposure.",
+   "principal_investigators": [
+    {
+     "full_name": "Whitney  Cowell",
+     "first_name": "Whitney",
+     "last_name": "Cowell",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "NEW YORK UNIVERSITY SCHOOL OF MEDICINE",
+    "org_state": "NY",
+    "org_city": "NEW YORK"
+   },
+   "project_start_date": "2024-09-01T00:00:00",
+   "project_end_date": "2027-08-31T00:00:00",
+   "award_amount": 429504,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10785804"
+  },
+  {
+   "appl_id": 10789824,
+   "project_num": "1R21ES035963-01",
+   "core_project_num": "R21ES035963",
+   "project_title": "The influence of tampon nanoplastic particles on gynecological mucosal barriers",
+   "abstract_text": "PROJECT SUMMARY\nIt was recently reported that tampons, a menstrual hygiene product used by over half the population of people\nwho menstruate, release up to 17 billion nanoplastic particles per use. However, neither the chemical\ncharacteristics of the tampon nanoplastic particles nor the physiological effects of these particles coming in direct\ncontact with gynecological tissues have been identified. Therefore, the overall goal of this application is to define\nboth the chemical characteristics of tampon nanoplastic particles as well as their downstream physiological\neffects on the gynecological tissue, Typically, the mucosal epithelial barriers of the vagina and cervix serve as\nprotective barriers against infection and disease, yet there is currently very little known about how nanoplastics\npenetrate these barriers, which could potentially induce inflammation, oxidative stress, and dysregulated\nhormonal signaling, which cumulatively can lead to cervical and endometrial cancer, vaginosis, endometriosis,\nand impaired fertility. Furthermore, there is growing appreciation that exposure to biologically relevant\nenvironments can cause a corona of biological components to form around nanoparticles, altering the surface\nmorphology and enhancing the internalization of plastic particles. Thus, our overarching hypothesis is that\nproteins found in menstrual blood adsorb to the surface of the nano-plastic particles shed from tampons, forming\na biological corona that enables them to penetrate and disrupt cervical and vaginal mucosal membranes. This\nhypothesis with be explored by pursuing the following aims: 1. Characterize the surface chemistry of tampon\nnanoplastics shed in a biologically relevant environment; and 2. Determine the role of the biological coronas on\ntampon nanoplastics' ability to penetrate cervical and vaginal mucosal barriers and detrimentally affect\ndownstream signaling cascades. The proposed research is significant, because it will provide a comprehensive\noverview of the biophysical interactions between tampon nanoplastics, the physiological environment they\nencounter, and the gynecological tissue they come in contact with. Absent such insights, people who menstruate\nwill continue to have insufficient information on the potential detrimental health effects of tampon use.",
+   "principal_investigators": [
+    {
+     "full_name": "Kaitlin C Fogg",
+     "first_name": "Kaitlin",
+     "last_name": "Fogg",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "OREGON STATE UNIVERSITY",
+    "org_state": "OR",
+    "org_city": "CORVALLIS"
+   },
+   "project_start_date": "2024-01-22T00:00:00",
+   "project_end_date": "2025-12-31T00:00:00",
+   "award_amount": 212050,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10789824"
+  },
+  {
+   "appl_id": 10876343,
+   "project_num": "5R01ES032037-03",
+   "core_project_num": "R01ES032037",
+   "project_title": "Defining the Harmful Effects of Microplastics on Gastrointestinal Health",
+   "abstract_text": "Program Director/Principal Investigator: Castillo, Eliseo, F\nPROJECT SUMMARY\nPlastic pollution and the breakdown of plastic materials primarily into micron-sized microplastic particles (MP)\nhave contaminated our food and water sources, raising public health concerns. MP ingestion by humans is\nnow an inevitable consequence of global plastic pollution and there is a critical gap in knowledge as to how MP\nimpact human health (WHO). There is also an important gap in knowledge regarding how MP affect the major\ndirect organ of contact, the gastrointestinal (GI) tract. The studies proposed in this grant application seek to\nbridge this gap in environmental health knowledge and provide insight into how MP pose a significant health\nrisk to the general population as well as susceptible (i.e. Inflammatory Bowel Disease; IBD) individuals. Our\npreliminary data provides evidence chronic MP exposure affects the GI tract specifically causing gut dysbiosis,\nlow-level intestinal inflammation, and alterations in cellular metabolism. Based on our preliminary studies, we\nadvance a novel hypothesis that MP ingestion indeed pose a human health hazard by disrupting oxidative\nmetabolism in epithelial cells subsequently causing intestinal permeability, dysbiosis, and an immunometabolic\nactive state which could lead to intestinal inflammation. Additionally, we hypothesize MP ingestion pose a\nsignificant health risk to individuals that have an underlying condition such as intestinal inflammation as seen in\nIBD patients. The goals of this application are to investigate how MP induce cellular changes in intestinal\nepithelial cells and to determine how these MP-induced changes in cellular pathways can lead to intestinal\npermeability, dysbiosis and an inflammatory state. In aim 1, we will investigate the effects of varying doses and\ntypes of MP on intestinal permeability in a zebrafish model. In Aim 2, we will determine the mechanism behind\nMP induced dysbiosis and intestinal permeability. Aim 3 will delineate how an intact human intestinal tract\nresponds to microplastics through the use of human colonoids derived from health patients as well as IBD\npatients. The information generated from this project would be a ground-breaking step with important long-term\nimplications in understanding how MP can affect intestinal homeostasis through modulation of epithelial barrier\nfunction and overall human health.",
+   "principal_investigators": [
+    {
+     "full_name": "Eliseo F Castillo",
+     "first_name": "Eliseo",
+     "last_name": "Castillo",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "UNIVERSITY OF NEW MEXICO HEALTH SCIS CTR",
+    "org_state": "NM",
+    "org_city": "ALBUQUERQUE"
+   },
+   "project_start_date": "2022-09-22T00:00:00",
+   "project_end_date": "2027-06-30T00:00:00",
+   "award_amount": 370181,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10876343"
+  },
+  {
+   "appl_id": 10907635,
+   "project_num": "5R16GM150406-02",
+   "core_project_num": "R16GM150406",
+   "project_title": "A whole animal model for investigation of ingested nanoplastic mixtures and effects on genomic integrity and health",
+   "abstract_text": "Project Summary/Abstract\n Microplastics (MP, plastic particles < 5 mm) are pervasive in the environment and an emerging health\nconcern. MPs have the ability to accumulate chemical pollutants from the environment and contribute to\nbioaccumulation of pollutants, making their consumption potentially hazardous. MPs have been found in nearly\nall human tissue and specifically, nanoplastics (NPs, ≤ 1 µm) are of alarming concern due to the ability to enter\nmammalian cells. Current research into the physiological or pathological effects of nanoplastic pollutant exposure\nis limited, and the human risks of ingestion of NPs alone or combined with environmental chemicals are unknown.\nThe long-term goal is to understand the impact of NP exposure on biological systems. The overall objectives in\nthis application are to (i) establish Caenorhabditis elegans (C. elegans) as a novel model system for NP-chemical\nmixture research and (ii) to test the ability and impact of NPs as a delivery vehicle for environmental chemicals.\nThe central hypothesis is that NPs, which have absorbed environmental chemicals, will promote DNA damage\nand subsequent changes in physiology. The rationale for this project is that chemical pollutants like pesticides\nand phthalates are genotoxic and become concentrated in nanoplastics in the environment. Furthermore, model\norganisms such as C. elegans can consume NPs and the chemicals contained in them are absorbed by the\nanimal. Two specific aims are proposed to test the central hypothesis: 1) Determine DNA damaging effects of\nNPs and absorbed environmental chemicals and 2) Determine the physiological consequence of NPs and\nabsorbed environmental chemical exposure. Under the first aim, protocols will be established to quantify\nchemical absorption in NPs, and to verify absorption and metabolism of ingested chemicals in C. elegans.\nAdditionally, we will evaluate DNA damage induced by NP-chemical mixtures by assessing frequency and\nlocation of mutations using an established fluorescent-based reporter. For the second aim, C. elegans exposed\nto NP-chemical mixtures will be observed for known physiological defects due to the NPs and chemicals alone,\nwith the hypothesis that combined effects will be more severe. Furthermore, we will correlate the presence of\nDNA damage in specific tissues, with the observed phenotypic changes after NP-chemical exposure. The\nresearch proposed in this application is innovative, in the applicant’s option, because it focuses on systematic\nand rigorous methods to assess and determine the combined effects of NP and environmental chemical\ntoxicology on the cellular level in vivo and in a whole animal, a system that is currently not available. The\nproposed research is significant because it is expected to provide strong scientific justification for continued\nstudies to prevent negative health outcomes due to NP-chemical mixture exposure and will inform exposure\nlimits on nanoplastics and environmental chemical pollutants. Ultimately such knowledge has the potential to\ngreatly add to our understanding of the additive toxicology of NPs and environmental chemicals and their risks\nto human health.",
+   "principal_investigators": [
+    {
+     "full_name": "Jennifer  Harr",
+     "first_name": "Jennifer",
+     "last_name": "Harr",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "ST. MARY'S UNIVERSITY",
+    "org_state": "TX",
+    "org_city": "SAN ANTONIO"
+   },
+   "project_start_date": "2023-09-01T00:00:00",
+   "project_end_date": "2027-07-31T00:00:00",
+   "award_amount": 168750,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "GM",
+    "abbreviation": "NIGMS",
+    "name": "National Institute of General Medical Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10907635"
+  },
+  {
+   "appl_id": 10927451,
+   "project_num": "5R00ES034053-03",
+   "core_project_num": "R00ES034053",
+   "project_title": "Harnessing PET to Study the In Vivo Fate and Health Effects of Micro- and Nanoplastics",
+   "abstract_text": "ABSTRACT\nCANDIDATE: The candidate is a postdoctoral fellow in the laboratory of Dr. Zeglis at Hunter College of CUNY.\nHer proposed research will provide a strong foundation for independent research career following the K99 phase\nof this grant. Her long-term career goal is to establish a robust program in environmental pollution research\nutilizing molecular imaging. To achieve this, she has developed a career plan that will (1) broaden her technical\nand scientific skills (2) strengthen her presentation and communication skills, and cultivate her professional\nrelationships, (3) enrich her mentoring skills, and (4) prepare her for the transition to independence.\nRESEARCH: The proliferation of micro- and nanoplastics in the environment is increasing at an alarming rate.\nMicro- and nanoplastics have been found to be persistent and ubiquitous pollutants in a variety of environments,\nincluding sea water, fresh water, soil, sewage, and air. In light of this harrowing phenomenon, the evaluation of\nthe possible health effects of microplastic (<5 mm) and nanoplastic (<100 nm) pollutants has emerged as an\nunmet scientific need. The over-arching goal of this investigation is to study the biodistribution and health effects\nof micro- and nanoplastics in mammals using a sensitive and quantitative molecular imaging technique: positron\nemission tomography (PET). The exquisite sensitivity of PET is major advantage of this strategy, as it will\nfacilitate the non-invasive tracking of micro- and nanoplastics at environmentally relevant concentrations. The\nspecific aims are: 1) To determine the bioaccumulation and bioretention of radioplastics in mice after pulmonary\nand oral exposure, 2) To quantify the bioaccumulation and bioretention of radioplastics in pregnant mice after\noral and pulmonary exposure, and 3) To quantify the pro-inflammatory effects of micro- and nanoplastic exposure\nvia non-invasive approaches.\nENVIRONMENT: Hunter College is known for its highly collaborative environment to facilitate interdisciplinary\nresearch efforts such as those proposed in this application. The candidate is mentored by Dr. Zeglis, a\nrecognized inorganic radiochemist with groundbreaking work in preclinical investigations of\nradiopharmaceuticals. In addition, she is co-mentored by Dr. Stapleton, an environmental toxicologist who has\ndone pioneering and innovative contributions to the plastic research. Hunter College provides a rich set of\ncollaborative, technical and scientific resources to execute the research and career development proposed here.",
+   "principal_investigators": [
+    {
+     "full_name": "Outi Maria Keinaenen",
+     "first_name": "Outi",
+     "last_name": "Keinaenen",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "UNIVERSITY OF ALABAMA AT BIRMINGHAM",
+    "org_state": "AL",
+    "org_city": "BIRMINGHAM"
+   },
+   "project_start_date": "2023-09-15T00:00:00",
+   "project_end_date": "2026-08-31T00:00:00",
+   "award_amount": 249000,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10927451"
+  },
+  {
+   "appl_id": 10932098,
+   "project_num": "5R21OH012595-02",
+   "core_project_num": "R21OH012595",
+   "project_title": "Inhalation exposure assessment to microplastics for workers in the laundry and dry cleaning industry",
+   "abstract_text": "Abstract\nAlthough exposure to microplastics and nanoplasctis (hereafter, microplastics) in general populations has been\nwidely assessed, workers’ exposures to microplastics at workplaces are mainly unknown. Limited laboratory\nstudies estimated that workers are exposed to airborne microplastics several orders of magnitude higher than\ngeneral populations. Moreover, inhaled microplastics were found in all parts of the lung in humans and found\nsignificantly higher levels in the lower lung. Thus, workers handling or manufacturing materials containing\nmicroplastics are at increased risk for adverse health effects (e.g., respiratory outcomes) from microplastic\nexposures at their workplaces. To our knowledge, no studies have directly examined personal exposure to\nmicroplastics among workers, especially in the Service Sectors. Textiles made from synthetic (plastic) fibers are\nsignificant sources of occupational exposure to microplastics. Although workers in the drying cleaning and\nlaundry industry are exposed to synthetic fibers (containing microplastics) by handling clothing and linens daily,\nthese workers’ exposure to microplastics is largely unknown. Further, review studies summarized that workers\nin the garment industry handling synthetic fibers (including nylon, polyester, acrylic) had a higher prevalence of\nrespiratory diseases than non-exposed populations. Hence, workers in the drying cleaning and laundry industry\nexperience may experience a large burden of exposure to microplastics at their workplaces. In 2021, the dry\ncleaning and laundry industry in the United States employed 160,000 -244,000 persons, excluding self-employed\npersons. This industry is expected to grow nationally from $10.8 billion in 2020 to $14.4 billion by 2025. However,\nthe impact of exposure to emerging microplastics on workers in this business sector is unknown due to the lack\nof exposure assessment. This proposed R21 study, in response to the National Occupational Research Agenda:\nthe Services Sector and the Cross-sector of Healthy Work Design, will evaluate the effects of key determinants\n(work hazards, characteristics of workplace and workforce) on inhalation exposure to microplastics in the laundry\nand dry cleaning industry. We aim to (1) measure inhalation exposure to microplastics from 30 workers in the\nlaundry and dry cleaning industry, and (2) determine the effects of work-related factors (workforce, workplace,\nand work hazards) on inhalation exposure to microplastics among these workers. The results will inform a future\nintervention study and training program to develop strategies for reducing workers’ exposure to microplastics in\nthe Service Sector. The proposed research will also improve a scientific knowledge gap by informing workers’\nexposure to microplastics that can be deposited in the human lungs, and by examining the association between\nmicroplastic exposure and adverse health effects among workers in the Services Sector.",
+   "principal_investigators": [
+    {
+     "full_name": "Inkyu  Han",
+     "first_name": "Inkyu",
+     "last_name": "Han",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "TEMPLE UNIV OF THE COMMONWEALTH",
+    "org_state": "PA",
+    "org_city": "PHILADELPHIA"
+   },
+   "project_start_date": "2023-09-30T00:00:00",
+   "project_end_date": "2025-09-29T00:00:00",
+   "award_amount": 182366,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "OH",
+    "abbreviation": "NIOSH",
+    "name": "National Institute for Occupational Safety and Health"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10932098"
+  },
+  {
+   "appl_id": 10944361,
+   "project_num": "1R21CA293440-01",
+   "core_project_num": "R21CA293440",
+   "project_title": "Epidemiologic study of microplastic pollution in bronchoalveolar lavage fluid and its association with lung cancer",
+   "abstract_text": "ABSTRACT\nAn estimated 400 metric tons of plastic are produced each year worldwide and less than 10% is recycled. Microplastics (MPs) defined as particles <5mm generated from weathering and wear of discarded plastic trash, tires and textiles are now ubiquitous in the environment. MPs enter the body by ingestion, inhalation and contact with skin and MPs have been identified in all human tissue types studied including blood, placenta and lung. The impacts of internalized MPs on health are unknown. Given that MPs may be coated with toxic chemicals and ‘biofilms’ containing pathogens, and the physical presence of MPs may induce local inflammatory and immune responses, there is urgent need to establish carcinogenic potential of MP exposures in body sites such as the lung. In this R21 we propose to interrogate bronchoalveolar lavage (BAL) fluid for MPs in thoracic oncology patients to gain insights on the potential relationship of MPs with lung cancer (LCa), the leading cancer diagnosis and cause of cancer death in the US and most western countries. Prior studies have documented BAL as a minimally invasive approach to isolate and characterize MPs in the airway of living persons. In the proposed R21, a total of ~275 patients undergoing BAL at Moffitt Cancer Center, Tampa, FL for suspected new primary LCa, staging of another primary neoplasm, or diagnosis of lung infection will be enrolled and a 10-mL sample of recovered BAL fluid reserved for study of MPs. Patients with a history of surgeries or BAL of the affected lung will be ineligible. Participants will complete a survey on demographics, smoking and occupational history, and medical records will be reviewed to capture history of pulmonary diseases and procedures. MPs in BAL fluid will be studied in a physics laboratory at the University of South Florida, Tampa, FL and characterized for abundance and morphology using standard optical and Atomic Force Microscopy, and for chemical composition using Raman spectroscopy, methods widely used in emerging studies of MPs in biologic and environmental samples. Stringent processes will be in place to limit contamination from ambient MPs in the clinic and lab. In a series of 300 study participants, including ~25 from our recently initiated pilot study, patients with confirmed incident LCa (~50% of the participants) will be compared to patients with other pathologies on total number of MPs in BAL samples with adjustment for patient age, biological sex, race, smoking history and occupation in regression models. Associations will be examined with LCa overall and, in exploratory analyses, with LCa subtype (i.e., adenocarcinoma versus other LCas). Other features of MPs including morphology, polymer subtype (e.g., polyethylele terephthalate (i.e., polyester); polypropylene; and semisynthetic polymer fibers (i.e., rayon)), and surface coatings and contaminants will also be explored for associations with LCa risk. The proposed investigation offers one of the first studies to examine MP impacts on human health with a focus on LCa. Data generated will help fill an important knowledge gap and provide a foundation for future research on this now ubiquitous pollutant worldwide.",
+   "principal_investigators": [
+    {
+     "full_name": "Kathleen M. Egan",
+     "first_name": "Kathleen",
+     "last_name": "Egan",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "H. LEE MOFFITT CANCER CTR & RES INST",
+    "org_state": "FL",
+    "org_city": "TAMPA"
+   },
+   "project_start_date": "2024-07-15T00:00:00",
+   "project_end_date": "2027-06-30T00:00:00",
+   "award_amount": 425772,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "CA",
+    "abbreviation": "NCI",
+    "name": "National Cancer Institute"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10944361"
+  },
+  {
+   "appl_id": 10982259,
+   "project_num": "1R01ES035780-01A1",
+   "core_project_num": "R01ES035780",
+   "project_title": "Mechanisms for environmental microplastics-enhanced colorectal tumor progression",
+   "abstract_text": "Project Summary\nIn response to the Notice of Special Interest (NOSI) NOT-ES-23-002, our research addresses the urgent\nconcern of escalating plastic pollution. Despite numerous reports indicating the ubiquitous presence of plastics\nin the environment and growing global concern for ecosystems and human health, plastic production and use\ncontinue to grow unabatedly. Humans are exposed to plastic particles mainly through ingestion of\ncontaminated food or water, through inhalation, or through skin contact. Humans consume up to 5g (weight of\na credit card) microplastics weekly, and colonic epithelial cells will face the brunt of this toxic exposure. Recent\nstudies provide evidence for the accumulation of microplastics in multiple human organs including the colon.\nToxic exposure to microplastics has been linked to the disruption of colonic epithelial cell structure and\nfunction. Moreover, studies in different preclinical models including mice indicate that microplastics exposure\nleads to various adverse intestinal effects including inflammation, barrier dysfunction, and microbial imbalance.\nLong-standing intestinal inflammation and oxidative stress increase the risk of colorectal cancer (CRC)\ndevelopment. However, to date, there have been no studies investigating the influence of microplastics on\ncolon tumor growth and metastasis in vivo. Thus, investigation into the potential association between the\nenvironmental microplastics exposure and the risk of CRC is merited. Our objective is to unveil the molecular\nmechanisms linking microplastics exposure to CRC. We hypothesize that microplastics trigger PIEZO1-\ndependent oxidative stress and hypoxia inducible factor (HIF)-3α signaling, promoting CRC progression. Our\nhypothesis is based on our data showing that different microplastics consistently and dramatically promote\noxidative stress in a mechanosensing ion channel PIEZO1 dependent manner. Moreover, microplastics\nactivate HIF-3α signaling, which drives growth, migration, and metastasis of colon tumors in preclinical models.\nThe proposal highlights the unique PIEZO1 trigger (Aim 1) and the immediate downstream HIF-3α signaling\n(Aim 2) of oxidative stress, integrating human relevance through archived colon tissues from New Mexico's\ndiverse and underprivileged population, as well as human colonoids (both normal and tumor, Aim 3). These\ngoals aim to enhance our comprehension of the fundamental mechanisms underlying microplastics' toxicity\nand identify actionable elements for community-level disease prevention and treatment.",
+   "principal_investigators": [
+    {
+     "full_name": "Xiang  Xue",
+     "first_name": "Xiang",
+     "last_name": "Xue",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "UNIVERSITY OF NEW MEXICO HEALTH SCIS CTR",
+    "org_state": "NM",
+    "org_city": "ALBUQUERQUE"
+   },
+   "project_start_date": "2024-08-16T00:00:00",
+   "project_end_date": "2029-07-31T00:00:00",
+   "award_amount": 453688,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10982259"
+  },
+  {
+   "appl_id": 10996862,
+   "project_num": "1R01ES036043-01A1",
+   "core_project_num": "R01ES036043",
+   "project_title": "Intestinal uptake, translocation, biodistribution, and toxicity of ingested environmentally relevant micro-nanoplastics (MNPs) and the role of inflammation using advanced cellular and in vivo models",
+   "abstract_text": "EXECUTIVE SUMMARY/ABSTRACT\n After decades of increasing production of and reliance upon plastic materials, six billion metric tons of\nplastic waste has been deposited in our environment. Through environmental, commercial, and municipal\ndegradation processes all plastics are eventually fragmented into micro-nanometer scale plastic particles and\nfibers known as micro-nanoplastics (MNPs). Consequently, MNPs have become a nearly ubiquitous\ncontaminant of our environment and food web, to the extent that concentrations of MNPs in meat, dairy,\nseafood, and grains range from 10 to over 3,000 µg/mL. Yet little is known about the hazards of MNP ingestion\nexposures. A major concern is the ability of ingested MNPs, demonstrated by a growing number of studies, to\nreach the circulation and breach biological barriers to enter virtually any tissue. They have been found in\nhuman blood (at up to 13 µg/mL), colectomy samples, and placenta, and a recent study in our lab showed that\nMNPs ingested by pregnant rats reach the livers, hearts, lungs, kidneys, and brains of fetal pups within 24\nhours. Yet the impacts of MNP ingestion on human health, including absorption, biodistribution, toxicity, and\ninflammation remain unclear, constituting major knowledge gaps that impede any science-based risk\nassessment of this emerging contaminant.\n To address these knowledge gaps, the proposed project, comprising three interconnected aims, will\nassess toxicity, uptake, and biodistribution of environmentally relevant MNPs, and the roles of MNP properties\nand intestinal inflammation in each. In Aim 1 we will develop and fully characterize 5 environmentally relevant\ngold core – plastic shell MNPs of three major plastic polymers (polyethylene, polyethylene terephthalate, and\npolystyrene). The pristine core-shell MNPs will be photo-aged to simulate decades of environmental\nexposures. The Au cores will enable accurate quantification of MNPs in cells and tissues, and intracellular\nlocalization in Aims 2 and 3. In Aim 2 we will use a triculture small intestinal epithelium model and an “intestine-\non-chip” (IOC) model with organoids from both healthy donors and donors with inflammatory bowel disease\n(IBD) coupled with simulated digestions to determine the role of iMNP physicochemical properties in iMNP\ntoxicity, inflammation, uptake, and translocation, and the role of inflammation in iMNP uptake and toxicity.\nSpecific molecular inhibitors and siRNA silencing will also be used to determine the cellular mechanisms\ninvolved in MNP translocation. In Aim 3 we will assess in vivo MNP uptake, toxicity, biodistribution, and the role\nof inflammation in each, in healthy and IBD-susceptible intestinal Hnf4a knockout mice. These studies will\nprovide validation and translational assessment of in vitro approaches as well as detailed data on iMNP organ\nand tissue biodistribution.\n The data generated from these studies will allow health risk assessors and policymakers to assess the\npotential risks of iMNP exposures and provide the basis for future mechanistic and epidemiological studies.",
+   "principal_investigators": [
+    {
+     "full_name": "Philip  Demokritou",
+     "first_name": "Philip",
+     "last_name": "Demokritou",
+     "is_contact_pi": true
+    },
+    {
+     "full_name": "MICHAEL P. VERZI",
+     "first_name": "MICHAEL",
+     "last_name": "VERZI",
+     "is_contact_pi": false
+    }
+   ],
+   "organization": {
+    "org_name": "RUTGERS BIOMEDICAL AND HEALTH SCIENCES",
+    "org_state": "NJ",
+    "org_city": "Newark"
+   },
+   "project_start_date": "2024-07-15T00:00:00",
+   "project_end_date": "2029-06-30T00:00:00",
+   "award_amount": 637553,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10996862"
+  },
+  {
+   "appl_id": 10997746,
+   "project_num": "1F31ES036154-01A1",
+   "core_project_num": "F31ES036154",
+   "project_title": "Nasal uptake of polystyrene nanoplastics into the murine central nervous system",
+   "abstract_text": "Project Abstract:\nAir pollutants such as nanoplastics have been identified to increase risks for neurodegenerative diseases such\nas Alzheimer’s disease and related dementias (ADRDs). Studies have found that these pollutants can enter the\ncentral nervous system (CNS), however how this happens has not been fully characterized. Olfactory sensory\nneurons (OSNs) are neurons whose cell bodies are found within the nasal epithelium, sending projections though\nthe cribiform plate and onto the olfactory bulbs (OBs) within the CNS. These neurons endogenously sense\ncompounds in the air to transmit information to the CNS and form a potential direct route for nanoplastics to\ntravel from the nose to the brain. The purpose of this proposal is to characterize the nose-to-brain pathway that\nnanoplastics can be transported into the brain, whether sex, inflammation, age, or known genetic risk factors for\ncognitive decline and ADRDs (APOE3/4) influence this pathway, and how microglial dynamics change in vitro,\nafter intranasal nanoplastic exposure. The first set of experiments will use advanced histological techniques and\nconfocal microscopy to investigate the cells involved in this pathway and whether sex, age, genotype and\ninflammation alter the rate of nanoplastic uptake. The second set of experiments will focus on understanding\nmicroglial dynamics after intranasal exposure to nanoplastics through 2-photon microscopy and utilizing antibody\nstaining to further investigate microglial dynamics. Age, sex, genotype, and inflammation will be observed to\ndetermine their influence on nanoplastic uptake into the CNS.",
+   "principal_investigators": [
+    {
+     "full_name": "Denver  Greenawalt",
+     "first_name": "Denver",
+     "last_name": "Greenawalt",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "PENNSYLVANIA STATE UNIVERSITY, THE",
+    "org_state": "PA",
+    "org_city": "UNIVERSITY PARK"
+   },
+   "project_start_date": "2024-09-01T00:00:00",
+   "project_end_date": "2027-08-31T00:00:00",
+   "award_amount": 35944,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/10997746"
+  },
+  {
+   "appl_id": 11078137,
+   "project_num": "3P30CA118100-19S3",
+   "core_project_num": "P30CA118100",
+   "project_title": "The impact of microplastics exposure across lifespan on human colons",
+   "abstract_text": "Project Summary\nIn response to the Notice of Special Interest (NOSI) NOT-CA-24-030, our research addresses the urgent\nconcern of escalating plastic pollution across the life course and across the cancer control continuum as an\nadministrative supplement to University of New Mexico Cancer Center Support Grant (P30CA118100, Current\nYear 18). Despite numerous reports indicating the ubiquitous presence of plastics in the environment and\ngrowing global concern for ecosystems and human health, plastic production and use continue to grow\nunabatedly. Humans are exposed to plastic particles mainly through ingestion of contaminated food or water,\nthrough inhalation, or through skin contact. Humans consume up to 5g (weight of a credit card) microplastics\nweekly, and colonic epithelial cells will face the brunt of this contemporary modifiable exposure. Recent studies\nprovide evidence for the accumulation of microplastics in multiple human organs including the colon. Toxic\nexposure to microplastics has been linked to the disruption of colonic epithelial cell structure and function.\nMoreover, studies in different preclinical models including mice indicate that microplastics exposure leads to\nvarious adverse intestinal effects including inflammation, barrier dysfunction, and microbial imbalance. Long-\nstanding intestinal inflammation and oxidative stress increase the risk of colorectal cancer (CRC) development.\nHowever, to date, there have been no studies investigating the influence of microplastics on colon tumor\ngrowth and metastasis in vivo. Thus, investigation into the potential association between the environmental\nmicroplastics exposure and the risk of CRC is merited. Our objective is to investigate the impact of\nmicroplastics exposure across lifespan on human colons (n=64). We hypothesize that there's an increasing\ntrend in the uptake of plastics into human colon tissues over time, potentially impacting CRC risk. Our\nhypothesis is based on our data showing that the most common microplastics in human colon tumors are\npolyethylene (PE), and there is a positive correlation between microplastics concentration and patient age.\nMoreover, PE and polystyrene (PS) are significantly increased in human colon tumors compared to normal\ncolon tissues from cadavers. The proposal integrates human relevance through archived colon tissues from\nNew Mexico's diverse and underprivileged population, as well as human colonoids (both normal and tumor).\nThis project aims to enhance our comprehension of the fundamental mechanisms underlying microplastics'\ntoxicity and identify actionable elements for community-level disease prevention and treatment.",
+   "principal_investigators": [
+    {
+     "full_name": "Yolanda  Sanchez",
+     "first_name": "Yolanda",
+     "last_name": "Sanchez",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "UNIVERSITY OF NEW MEXICO HEALTH SCIS CTR",
+    "org_state": "NM",
+    "org_city": "ALBUQUERQUE"
+   },
+   "project_start_date": "2005-09-26T00:00:00",
+   "project_end_date": "2026-08-31T00:00:00",
+   "award_amount": 100000,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "CA",
+    "abbreviation": "NCI",
+    "name": "National Cancer Institute"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/11078137"
+  },
+  {
+   "appl_id": 11078145,
+   "project_num": "3P30CA015704-49S6",
+   "core_project_num": "P30CA015704",
+   "project_title": "CCSG Administrative Supplement for Contemporary Modifiable Exposures and Cancer Across the Cancer Control Continuum",
+   "abstract_text": "ABSTRACT\nWe are pleased to submit this proposal in response to NOSI NOT-CA-24-030 - Administrative Supplements for\nContemporary Modifiable Exposures and Cancer Across the Cancer Control Continuum.\nMicroplastics (MPs), tiny plastic particles that enter the environment via the degradation of plastic waste and\nindustrial pollution, have become a ubiquitous environmental contaminant. The presence of MPs in the oceans,\ndrinking water, and food supply is increasingly well-documented. Accumulating evidence also demonstrates\nthe presence of MP contamination in human tissues and biospecimens, raising significant questions as to the\nhealth implications of MP exposure and bioaccumulation. Given the ubiquity of MPs in different foods and in\nbeverages, it is plausible that the effects of MP exposure would be especially pronounced for diseases of the\ncolon and rectum, such as colorectal cancer (CRC). Several suggested pathways link MP exposure to CRC\npathways. The presence of MPs has been implicated in triggering the production of reactive oxygen species,\ninducing DNA damage and an inflammatory response. Chemical additives that leach out of MPs (i.e.,\nleachates) could also contribute to CRC pathways directly or indirectly via impacts on the gut microbiome. The\nobjective of this proposal is to characterize the burden of MPs within the human gut, and to examine the\npotential implications of this burden with respect to CRC. Specifically, in Aim 1 we will quantify and contrast\nthe burden of MPs in stool according to CRC history (1a) and in CRC tissue according to age at CRC\ndiagnosis (1b). This latter comparison is timely given that CRC incidence rates among individuals aged <50\nyears have been steadily increasing over the past 30 years – consistent with the timeline of growing MP\ncontamination. Our proposed Aim 2 allows a more mechanistic focus, where we will develop a system\nintegrating anaerobic microbial metabolism with CRC-derived organoids to examine the host response to toxic\npolyvinylchloride MP leachates and to their microbial metabolites. Organoid cultures will be incubated with MP\nleachates and with microbial-derived metabolites of those MP leachates to assess proliferation and apoptosis,\ngene expression, and cancer-related pathways, yielding more detailed understanding as to the implications of\nMPs on the gut microbiome and CRC pathways. Production and use of plastics has increased >230-fold since\n1950, meaning that each passing generation will experience greater potential for MP bioaccumulation and\nlifetime exposure. Given the pervasive and growing burden of MP contamination, it is critical we understand\nthe implications of MP exposure in human populations. Through the proposed aims, this project will\naddress a critical gap in knowledge as to the association of MP burden with CRC and will yield foundational\nknowledge as to the direct and indirect effects of MP exposures.",
+   "principal_investigators": [
+    {
+     "full_name": "Thomas James Lynch",
+     "first_name": "Thomas",
+     "last_name": "Lynch",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "FRED HUTCHINSON CANCER CENTER",
+    "org_state": "WA",
+    "org_city": "SEATTLE"
+   },
+   "project_start_date": "1997-01-01T00:00:00",
+   "project_end_date": "2024-12-31T00:00:00",
+   "award_amount": 99996,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "CA",
+    "abbreviation": "NCI",
+    "name": "National Cancer Institute"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/11078145"
+  },
+  {
+   "appl_id": 11189559,
+   "project_num": "1ZIAES103375-03",
+   "core_project_num": "ZIAES103375",
+   "project_title": "Emerging Contaminants and Issues of Concern Research Program",
+   "abstract_text": "The goal of the ECIC research program is to develop strategies to provide high-quality data and knowledge to decision-makers and affected communities in a timely manner to address contemporary public health issues. These strategies include scoping activities to proactively identify environmental conditions that lead to the release of new hazards, increases in exposure to previously contained hazards, increases in environmentally related disease, and gaps in capabilities that, if addressed, would improve response to issues of concern. Emerging contaminant exposures or health conditions are typically highly visible issues that may be affected by outside factors (i.e., political, legal, and societal). While there are challenges in addressing time-sensitive issues of concern, there are also rewards: benefits to public health, the advancement of science, and expansion of collaborations. Our portfolio consists of program projects/activities for developing strategies and interactions with partners on problems related to specific ECIC.\n\nOur work in the last year has focused on:\n1. Building a stakeholder network and strategies. The ECIC team developed, organized, and hosted a two-day workshop (April 30th and May 7th 2024, titled “Sharing Strategies to Move From Reactive to Proactive Approaches to Identify New Environmental Concerns”.  Speakers from around the world provided context and issues regarding strategies on horizon scanning with multiple opportunities for speakers and the audience to interact via break-out groups. The second-day round table and breakout discussions focused on “where do we go from here” to develop a strategy  to advance horizon scanning and work toward a community of practice. The ECIC team is currently working on a commentary highlighting the workshop’s success and providing a framework for developing networks, case studies, and advancing horizon scanning methods. The workshop arose in part from a series of earlier meetings with stakeholders. Our team has also developed inter-agency and inter-divisional relationships and participates in meetings disaster response (DR2) and drinking water contaminants (National Emerging Contaminants Research Initiative or NECRI) topics. .\n\n2. Management of our ECIC project portfolio.  East Palestine Project, an ECIC program team-initiated project, is a Rapid Scoping Review of East Palestine, Ohio Chemicals of Interest developed, approved (May 2023), and largely completed (November 2023) in FY 2024. The scoping draft report summarizes health hazards and evidence gaps of over 20 chemicals released from the 2023 Norfolk Southern Railway freight train derailment and response in East Palestine, Ohio, USA. The team provided the draft report  and summarized the findings at the National Academy Science Engineering and Medicine 2023 workshop: “Public Health Research and Surveillance Priorities from the East Palestine, Ohio Train Derailment: A Workshop ”.  Following, the workshop, the project team revised the report and submitted the manuscript for potential publication. \n\nThe project addressing the chemical exposome in cord blood of infants and their mothers in three different regions of NC as  progress continues with validation of methods for identifying and quantifying about 60 suspect contaminants in human plasma, including heavy metals, persistent organic pollutants, and some short half-life contaminants. The Brominated Azo Dye project that was approved this FY has started with pilot studies starting in late FY 24.  The project encompasses the evaluation of genetic toxicity, and immune toxicity of select brominated azo dyes.  Thallium is a heavy metal, sometimes found in drinking water, and known to induce a broad spectrum of adverse health effects in humans. The project to characterize perinatal and subchronic toxicity of thallium continues with the project publication expected in FY25. Following the earlier sulfolane work on disposition and metabolism of in mice and rats, 28-d toxicity studies in three species following oral exposures, and the immunotoxicity outcomes in developmentally exposed rats and in adult-exposed mice, the sulfolane chronic toxicity and carcinogenicity study is going to peer review in FY24. As part of the Interagency agreement with FDA NCTR, ECIC supports the “NanoCore, Nano Standards and Nanoplastic Scoping” program under Anil Patri. The characterization of Boron for potential reproductive and developmental toxicity continues with the expectation of publication of the subchronic study with perinatal exposure in FY25. \n\n3. Development of new projects. The ECIC research program project evaluating the toxicological effects of bromo-azo dyes (June Dunnick lead), reviewed in FY 23, was approved in FY 24.  Often found in children's clothing and other colored materials, they are suspected of having a link to some cancers. The study will evaluate genomic signatures linked to acute exposure and characterize the genotoxic and immunotoxic effects of three bromo-azo dyes compared to previously studied chemicals that are structurally related. The ECIC research program reviewed and facilitated approval of a Thallium TK/ADME project that will evaluate potential differences in ADME from drinking water and food consumption to assist in the risk assessment of thallium exposure from various sources.  Additionally, the ECIC reviewed and is facilitating approval a chemical class project that would evaluate the genotoxicity and ADME profile of multiple p-phenylenediamines (PPDs).  This project is associated with a wider Federal working group that is assessing the exposure and toxicity profile of N-(1,3-dimethylbutyl)-N'-phenyl-p-phenylenediamine (6PPD), a stabilizer used in tires that has been associated with coho salmon mortality following rain storms.  \n\nRapid Review Systematic review methods.  The development of rapid systematic review methods for ECIC and diesters is another program-initiated project approved in May 2024. The concepts arose in part from a request by DR2 to add it to its resource portal of tools. Following the completion of the East Palestine Rapid Scoping Review manuscript, the team initiated work on the project in collaboration with members of the Integrative Health Assessment Branch, which has expertise in developing methods and implementing systematic reviews.",
+   "principal_investigators": [
+    {
+     "full_name": "Chad  Blystone",
+     "first_name": "Chad",
+     "last_name": "Blystone",
+     "is_contact_pi": true
+    }
+   ],
+   "organization": {
+    "org_name": "NATIONAL INSTITUTE OF ENVIRONMENTAL HEALTH SCIENCES",
+    "org_state": null,
+    "org_city": null
+   },
+   "project_start_date": null,
+   "project_end_date": null,
+   "award_amount": 1227790,
+   "fiscal_year": 2024,
+   "agency_ic_admin": {
+    "code": "ES",
+    "abbreviation": "NIEHS",
+    "name": "National Institute of Environmental Health Sciences"
+   },
+   "project_detail_url": "https://reporter.nih.gov/project-details/11189559"
+  }
+ ]
+}

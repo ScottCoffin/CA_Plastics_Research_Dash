@@ -51,6 +51,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - S8.1 grants (`atlas.ingest.grants`): C3 schema, frozen `grant_key` = sha256(`sourceaward_id`)[:16]; relevance and tags use provisional S2.3 rules (private `atlas.nlp.labels` helpers) until S5.1. See `docs/GRANTS_SCHEMA.md`.
 
 ## Verified API facts
+- NIH RePORTER v2 (2026-11-10): keyless POST `/v2/projects/search`; text search needs `operator: advanced`, `search_field: projecttitle,abstracttext,terms` with quoted OR phrases (no stemming); limit ≤ 500; offset ≤ 14,999 (split by fiscal year); `org_states` takes 2-letter codes (a full name silently returns 0). See `docs/api_notes/nih_reporter.md`.
 - Regional Water Board layer (EM-2, 2026-11-09): FeatureServer/1 GeoJSON query returns 9 features (`rb` 1-9) in one request. `atlas.geo.rwqcb.assign_region` adds the offshore rule against S1.3 CDFW state waters. The committed asset is `data/processed/geo/rwqcb_regions.parquet` (simplified about 20 m). See `docs/api_notes/rwqcb_regions.md`. (one line each; details in docs/api_notes/)
 - GitHub Actions schedules use the default branch, default to UTC, and may be
   delayed; the 60-day inactivity disablement is documented for public repos.

@@ -81,7 +81,7 @@ Check off only when the task Definition of Done and acceptance check in
 
 ## S8 Grants
 - [x] **S8.1** Grant schema, normalization, and classifier reuse. Acceptance: C3 schema tests. Complete 2026-11-09: `docs/S8_1_VERIFICATION.md`; `py -3.14 scripts/check_s8_1.py`. Relevance and tags use provisional S2.3 rules until the S5.1 classifier exists.
-- [ ] **S8.2** NIH RePORTER ingester. Acceptance: backfill, incremental path, fixture, and usage notes.
+- [x] **S8.2** NIH RePORTER ingester. Acceptance: backfill, incremental path, fixture, and usage notes. Complete 2026-11-10: `atlas.ingest.grants.nih_reporter` (CA + terms-only sweeps, resumable backfill, incremental current/previous FY, offset-ceiling defer); live backfill 26 requests → 196 grants FY2013–2027 (ignored `data/interim/grants/`); `docs/api_notes/nih_reporter.md`; `py -3.14 scripts/check_s8_2.py`.
 - [ ] **S8.3** NSF ingester. Acceptance: documented parameters, backfill, increment, and fixture.
 - [ ] **S8.4** USAspending ingester. Acceptance: pagination, bulk backfill, and keyword-noise notes.
 - [ ] **S8.5** California Sea Grant scraper. Acceptance: OPC microplastics projects cross-checked.

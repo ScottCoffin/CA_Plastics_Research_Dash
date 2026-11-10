@@ -60,3 +60,4 @@
 | 2026-11-10 | SPK-1 partial | Opt-in Pages deploy of 5/25/100 MB synthetic Parquet: 206 + CORS *, lazy DuckDB-Wasm reads (1.2 MB for 100 MB); G-HOST = Pages only ≤25 MB; R2 leg pending owner | this commit |
 | 2026-11-10 | SPK-2 partial | Parquet writer×option×DuckDB-Wasm matrix all 15/15 (lead re-ran); G-PARQ = DuckDB 1.1.1 + zstd; Framework leg deferred to SPK-3 | this commit |
 | 2026-11-10 | SPK-4 | Bit-mask vs Mosaic at 30k/100k × 5 runs: bit-masks win cold start and meet budgets with exact counts; G-FACET = bit-masks main page; Mosaic correctness to AT-6 | this commit |
+| 2026-11-10 | S8.2 | NIH RePORTER ingester (CA + terms-only sweeps, backfill/incremental, defer pattern); live backfill 196 grants; 505 tests pass | this commit |
