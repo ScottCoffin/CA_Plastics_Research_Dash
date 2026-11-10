@@ -142,3 +142,15 @@ Rules from §0 and §8 for this ledger:
 - The atlas is not an official OPC, SFEI, DTSC, OEHHA, Water Board or partner product (§0 rule 5).
 - Disclosure of the owner's roles is handled in the About tab (A2-D8, EM-14), not in this ledger (§0 rule 7).
 - Do not add a row, link or code from a source that is not named in the A2 sections above without a new ledger entry.
+
+## A1 spike libraries (SPK-1..SPK-4, 2026-11-10)
+
+Used only in `spikes/` (not shipped in `site/`). Licences are as each project
+states them; re-verify at adoption (AT-4/AT-5).
+
+| Name | Version used | Licence (project-stated) | Use |
+|---|---|---|---|
+| @observablehq/framework | 1.13.4 | ISC | SPK-3 shell bake-off; G-SHELL choice |
+| @duckdb/duckdb-wasm | 1.29.0, 1.32.0 | MIT | SPK-1/2/3 browser Parquet reads |
+| @uwdata/mosaic-core / vgplot | 0.34.1 | BSD-3-Clause | SPK-4 comparison only (not adopted) |
+| DuckDB (Python) | 1.1.1, 2.0.0 via `uv run --with` | MIT | SPK-2 writer; G-PARQ pins 1.1.1 + zstd |
