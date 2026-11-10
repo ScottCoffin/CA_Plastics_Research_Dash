@@ -25,3 +25,17 @@ To approve, reply with: **“Approve `guide_v1` as written”**, plus the approv
 - Approved guide SHA-256: `7F2C74258FD5CAED1407D0418EFEDACFB316ECE41B7299390E248F8E90455E3E`
 - Requested revisions / conditions: None; approved as written.
 The approved hash pins the frozen policy. Annotation remains subject to the separate representative-data and annotation authorization gates; do not treat this guide approval as evidence of representative coverage, completed annotation, gold labels, or model performance.
+
+# EM-1-A owner review: `guide_v2` (Add-on A2 addendum)
+
+**Review state:** approved 2026-11-09. `guide_v2` is `guide_v1`
+([LABELING_GUIDE.md](LABELING_GUIDE.md), unchanged) plus
+[LABELING_GUIDE_A2_ADDENDUM.md](LABELING_GUIDE_A2_ADDENDUM.md), which adds the
+A2 label fields (study_type, compartment, waterbody_type, pathway,
+source_category, product_type, size_class, size_subclass; rwqcb_region is
+derived, not hand-labelled).
+
+- Decision: approved (owner reply "approved", 2026-11-09)
+- Owner: Scott Coffin
+- `guide_v1` SHA-256 at approval (unchanged): `7F2C74258FD5CAED1407D0418EFEDACFB316ECE41B7299390E248F8E90455E3E`
+- Approved addendum SHA-256: `751ADD85913099831CA888BF356952E118FFBE35CED02A23F76D11F3D384C47D`

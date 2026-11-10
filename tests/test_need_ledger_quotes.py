@@ -478,3 +478,54 @@ def _two_page_pdf(page_texts: list[str]) -> bytes:
     trailer = f"trailer\n<< /Size {len(objects) + 1} /Root 1 0 R >>\nstartxref\n{xref_at}\n%%EOF\n"
     out += trailer.encode()
     return bytes(out)
+
+
+# Segment matching (elisions and one layout interruption), added 2026-11-09.
+from atlas.evidence.quote_check import MAX_SEGMENT_GAP, _contains  # noqa: E402
+
+_PAGE = (
+    "landfills (loppi et al., 2021) and recycling centers (brown et al., 2023) have been noted "
+    "as potential additional sources for microplastic environmental discharge, but the "
+    "magnitude of statewide microplastics monitoring strategy g-4 their contribution has yet "
+    "to be explored."
+)
+
+
+def test_elided_quote_matches_segments_in_order() -> None:
+    quote = normalize_text(
+        "Landfills … and recycling centers … have been noted as potential additional sources"
+    )
+    assert _contains(quote, _PAGE)
+
+
+def test_elided_quote_rejects_out_of_order_segments() -> None:
+    quote = normalize_text("have been noted ... landfills (loppi")
+    assert not _contains(quote, _PAGE)
+
+
+def test_single_interruption_by_running_footer_matches() -> None:
+    quote = normalize_text("but the magnitude of their contribution has yet to be explored")
+    assert _contains(quote, _PAGE)
+
+
+def test_interruption_gap_is_bounded() -> None:
+    text = (
+        "alpha beta gamma delta epsilon "
+        + "x" * (MAX_SEGMENT_GAP + 1)
+        + " zeta eta theta iota kappa"
+    )
+    quote = "alpha beta gamma delta epsilon zeta eta theta iota kappa"
+    assert not _contains(quote, text)
+
+
+def test_short_halves_do_not_match_by_splitting() -> None:
+    assert not _contains("ab cd", "ab zz cd")
+
+
+def test_elided_quote_tolerates_one_interrupted_segment() -> None:
+    quote = normalize_text(
+        "Landfills … and recycling centers … have been noted as potential additional sources "
+        "for microplastic environmental discharge, but the magnitude of their contribution has "
+        "yet to be explored."
+    )
+    assert _contains(quote, _PAGE)

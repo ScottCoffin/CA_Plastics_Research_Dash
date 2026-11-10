@@ -6,7 +6,7 @@ Regenerate with `py -3.14 scripts/build_need_ledger.py`; do not edit by hand.
 ## Input
 
 - File: `docs/opc_needs_csv_Need_Ledger_Data_File_companion_to_Add_on_Spec_A2.xlsx`
-- SHA-256: `068bce0f216194da98b1204b665d40269afe56cd99f2c1cc41bc0a84c1f525fa`
+- SHA-256: `f2dc5bb84864fb77b6bd2b28b3537c8035c083d2dfd5b22df274532794b7d9f6`
 - Rows: 70 (roster 70)
 - Hard validation errors: 0 (a failing run writes no output)
 
@@ -66,12 +66,7 @@ Regenerate with `py -3.14 scripts/build_need_ledger.py`; do not edit by hand.
 
 ## Findings (non-blocking)
 
-- quote_length: 2
-
-Details:
-
-- quote_length: N2.9 quote has 34 words
-- quote_length: N4.1 quote has 38 words
+None.
 
 ## Documented source discrepancy
 

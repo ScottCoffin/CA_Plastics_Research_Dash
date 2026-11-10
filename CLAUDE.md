@@ -39,6 +39,11 @@ Playwright/WSL browser smoke procedure.
 | Code layout | `agent_docs/project_structure.md` |
 | Data / Parquet / JSON | `wc -l`, `head`, or a pyarrow schema print. Never `cat` |
 
+Read PDFs (manual reads, quote verification) with the `pdf-to-markdown` skill,
+writing to `scratch/pdfmd/`. Pipeline code keeps pdfminer. The A2 Need Ledger
+source PDFs are in Zotero; run `scripts/check_need_ledger_quotes.py` against
+copies in `scratch/a2_pdfs/`.
+
 Never open `data/`, `output/`, `scratch/`, `site/data/*.json`, `.playwright-cli/`,
 `.codex_workflow_hidden_resources/`, or `.env`.
 

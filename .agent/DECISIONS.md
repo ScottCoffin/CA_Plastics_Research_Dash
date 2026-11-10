@@ -462,3 +462,15 @@ the implementing task's acceptance passes.
   optional and gated. S1.5-A and S7.3-A defaults keep the query candidate inactive
   and SF Bay / 5 Gyres data unpublished. A2 levels E0-E3 are adopted (A2-INT-3).
 - **Decided by:** Owner instruction, 2026-11-09.
+
+## ADR-SPK-AUTH-2026-11-09: Owner authorizes the L2 spikes
+
+- **Decision:** The owner authorized SPK-1..SPK-4 to add spike dependencies
+  (DuckDB-Wasm, Mosaic, Observable Framework and Node tooling) and to run live
+  hosting tests (Pages deploy of synthetic Parquet, Cloudflare R2), 2026-11-09.
+- **Guardrails:** Spike dependencies stay isolated (a `spikes/` workspace or dev
+  extras), not runtime dependencies of `site/` until the gate decision lands.
+  Synthetic test files above 25 MB are generated at deploy time, never committed.
+  R2 needs owner-side Cloudflare account steps (bucket, custom domain, CORS);
+  the agent never handles Cloudflare credentials.
+- **Also recorded:** EM-1-A approved (`guide_v2`); A2-D11 confirmed (CDFW ds3158).

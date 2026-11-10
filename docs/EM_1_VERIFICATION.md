@@ -20,12 +20,30 @@ Date: 2026-11-09.
 - `docs/LABELING_GUIDE_A2_ADDENDUM.md`: a draft `guide_v2` addendum. `guide_v1` stays frozen; approval is `QUESTIONS.md` EM-1-A.
 - EAT-2 and EAT-10 are now real offline tests. `scripts/check_a2_scaffold.py` allows only these two stubs to hold tests.
 
-## Findings (non-blocking)
+## Owner follow-up (2026-11-09)
 
-- Two ledger quotes exceed the §6.3 limit of 30 words: N2.9 (34) and N4.1 (38). The XLSX is owner data, so it was left unedited. Shorten them in the XLSX and rebuild.
-- The quote regression has not been run against real PDFs, because the owner's local copies were not available to the agent. Owner action: `py -3.14 scripts/check_need_ledger_quotes.py --write-map-template > a2_pdf_map.json`, fill in the file names, then run with `--pdf-dir <dir> --map a2_pdf_map.json`.
+- Quote regression run against the owner's Zotero PDFs (MON2026, DTSC_WP,
+  DTSC_2023, DTSC_BG2025; no ledger row uses OPC2022 or DTSC_WP as
+  `source_doc`). Result: **69/70 `match_on_page`**. The one exception, N3.2, is
+  accepted: the source PDF (p. 46) misprints "minimum" as "mimum", and the owner
+  ruled on 2026-11-09 to keep "minimum" with no [sic]. The checker therefore
+  reports N3.2 as `not_found` (similarity 0.972), so `--strict` exits 1 by design.
+  The report is in ignored `data/interim/need_ledger_quote_check.json`.
+- The checker now matches elided quotes (`…`) segment by segment, and it
+  tolerates one layout interruption (running header or footer, figure label,
+  table-cell wrap) of at most 400 characters, with each half at least 20
+  characters. Three false misses were genuine quotes split this way: N1.6
+  (figure label, PDF 30), N2.2 (page footer and photo caption, PDF 36–37) and M3
+  (table-cell wrap, PDF 61). The `pdf-to-markdown` extraction confirms the wording
+  of all three; M3 reads contiguously there.
+- Ledger edits in the owner XLSX, each with a dated row note: N2.9 shortened
+  from 34 to 28 words by eliding two citations (`…`); N4.1 shortened from 38 to
+  29 words as a contiguous verbatim span; trailing whitespace was removed from
+  multi-line cells (41 cells, whitespace only). The QC report now has no findings.
+- `guide_v2` (`guide_v1` plus the addendum) was approved 2026-11-09; hashes are in
+  `docs/LABELING_GUIDE_REVIEW.md`.
 
 ## Commands
 
 - `py -3.14 scripts/check_em1.py` passed. It covers vocab counts, rule parity and compilation, the discrepancy record, `build_need_ledger.py --check`, the A2 scaffold, and the quote-check skip path.
-- Full gate passed: links, A1/A2 scaffolds, lint, 367 tests passed / 10 skipped, build, and `git diff --check`.
+- Full gate passed: links, A1/A2 scaffolds, lint, 367 tests passed / 10 skipped (477 / 9 after the 2026-11-09 follow-up), build, and `git diff --check`.

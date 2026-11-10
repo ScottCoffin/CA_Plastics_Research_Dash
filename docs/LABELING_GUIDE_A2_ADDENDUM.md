@@ -1,8 +1,10 @@
-# Human Labeling Guide: A2 Addendum (draft for `guide_v2`)
+# Human Labeling Guide: A2 Addendum (`guide_v2`)
 
-**Status:** Draft addendum for guide_v2. Not approved. `guide_v1` remains the
-frozen, approved guide; do not annotate A2 fields for the gold set until the
-owner approves this addendum (QUESTIONS.md EM-1-A).
+**Status:** Approved by the owner on 2026-11-09 (QUESTIONS.md EM-1-A).
+`guide_v2` = `guide_v1` ([LABELING_GUIDE.md](LABELING_GUIDE.md), unchanged) plus
+this addendum. The approved hash is recorded in
+[LABELING_GUIDE_REVIEW.md](LABELING_GUIDE_REVIEW.md). Annotating A2 fields for the
+gold set (EM-3) is now permitted under `guide_v2`.
 
 **Scope:** New A2 label fields only. It extends, and does not replace,
 [LABELING_GUIDE.md](LABELING_GUIDE.md) (`guide_v1`). Sections 1 to 7 of
@@ -209,20 +211,20 @@ the owner has not yet reviewed it.
 Please review this addendum and confirm each item before it is merged into
 `guide_v2`:
 
-- [ ] Study_type vocabulary and disambiguation notes match A2 §3.
-- [ ] One primary study_type per work, with `discipline` kept separate.
-- [ ] `unclear_other` always routes to `needs_review`.
-- [ ] `test_system` applies only to `exposure_lab_toxicity`.
-- [ ] OpenAlex `review` is a prior, not a label.
-- [ ] Facet definitions and the parent/subtype rule for `product_type` match
+- [x] Study_type vocabulary and disambiguation notes match A2 §3.
+- [x] One primary study_type per work, with `discipline` kept separate.
+- [x] `unclear_other` always routes to `needs_review`.
+- [x] `test_system` applies only to `exposure_lab_toxicity`.
+- [x] OpenAlex `review` is a prior, not a label.
+- [x] Facet definitions and the parent/subtype rule for `product_type` match
       A2 §4.
-- [ ] Every micro rule includes nano; `size_subclass` is used only when the
+- [x] Every micro rule includes nano; `size_subclass` is used only when the
       work reports a range (A2-D9).
-- [ ] `rwqcb_region` is derived from coordinates, and offshore values are
+- [x] `rwqcb_region` is derived from coordinates, and offshore values are
       explained as stated.
-- [ ] Definitions crosswalk quotes are short and match the sources.
-- [ ] Worked edge cases agree with `guide_v1` Sections 2 and 3.
-- [ ] The ≥ 40 examples per value rule and the κ 0.7 / F1 0.70 "experimental"
+- [x] Definitions crosswalk quotes are short and match the sources.
+- [x] Worked edge cases agree with `guide_v1` Sections 2 and 3.
+- [x] The ≥ 40 examples per value rule and the κ 0.7 / F1 0.70 "experimental"
       threshold are accepted as planning targets.
-- [ ] Owner approval is recorded, with the date and the approved file hash,
+- [x] Owner approval is recorded, with the date and the approved file hash,
       in `docs/LABELING_GUIDE_REVIEW.md` before any A2 field is annotated.

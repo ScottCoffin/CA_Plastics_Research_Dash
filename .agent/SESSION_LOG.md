@@ -56,3 +56,4 @@
 | 2026-11-09 | EM-1 | A2 vocabularies, keyword rules, Need Ledger XLSX→CSV validator/QC (70/70, 0 hard errors), local-only quote checker, draft guide_v2 addendum; check_em1 and full gate pass (367 tests) | this commit |
 | 2026-11-09 | EM-2 partial | Fetched Regional Board layer (9 features), committed simplified GeoParquet, offshore rule vs CDFW state waters, EAT-12 real test; full gate 407 passed; unchecked pending S5.4 and view wiring | this commit |
 | 2026-11-09 | S8.1 | Grant C3 schema, frozen grant_key, normalization/validation/Parquet writer, provisional rule labels; 64 tests; full gate 471 passed | this commit |
+| 2026-11-09 | EM-1 follow-up | Quote regression 69/70 (+1 accepted exception) vs Zotero PDFs; checker handles elisions and one layout interruption; N2.9/N4.1 shortened (N3.2 source typo accepted as owner exception); guide_v2 approved; A2-D11 confirmed; SPK-1..4 authorized; gate 477 passed | this commit |

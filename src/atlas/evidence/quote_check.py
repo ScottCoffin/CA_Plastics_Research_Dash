@@ -191,14 +191,62 @@ class PageText:
         return dict(self._pages)
 
 
+MAX_SEGMENT_GAP = 400  # characters allowed between consecutive quote segments
+MIN_SPLIT_CHARS = 20  # each half of a once-interrupted quote must be at least this long
+
+
+def _segments_in_order(segments: Sequence[str], text: str) -> bool:
+    """True when every segment occurs in order, each starting within the gap limit."""
+    first, rest = segments[0], segments[1:]
+    start = text.find(first)
+    while start != -1:
+        end = start + len(first)
+        for segment in rest:
+            nxt = text.find(segment, end)
+            if nxt == -1 or nxt - end > MAX_SEGMENT_GAP:
+                break
+            end = nxt + len(segment)
+        else:
+            return True
+        start = text.find(first, start + 1)
+    return False
+
+
+def _contains(quote: str, text: str) -> bool:
+    """Match a normalized quote, honouring elisions and one layout interruption.
+
+    An elided quote (``...``; NFKC also maps ``…`` to it) matches when its segments
+    occur in order. An unelided quote may be interrupted once, for example by a
+    running header, footer or photo caption at a page break, with each half at
+    least ``MIN_SPLIT_CHARS`` long and the gap at most ``MAX_SEGMENT_GAP``.
+    """
+    if quote in text:
+        return True
+    segments = [part.strip(" ,;") for part in quote.split("...")]
+    segments = [part for part in segments if part]
+    if not segments:
+        return False
+    if len(segments) > 1 and _segments_in_order(segments, text):
+        return True
+    for position, segment in enumerate(segments):
+        words = segment.split(" ")
+        for index in range(1, len(words)):
+            head, tail = " ".join(words[:index]), " ".join(words[index:])
+            if len(head) >= MIN_SPLIT_CHARS and len(tail) >= MIN_SPLIT_CHARS:
+                candidate = [*segments[:position], head, tail, *segments[position + 1 :]]
+                if _segments_in_order(candidate, text):
+                    return True
+    return False
+
+
 def _find_quote(quote: str, page_texts: Mapping[int, str]) -> tuple[int, ...] | None:
     """Return the page(s) containing the quote: a single page, else an adjacent pair."""
     ordered = sorted(page_texts)
     for page in ordered:
-        if quote in page_texts[page]:
+        if _contains(quote, page_texts[page]):
             return (page,)
     for first, second in zip(ordered, ordered[1:]):
-        if second == first + 1 and quote in f"{page_texts[first]} {page_texts[second]}":
+        if second == first + 1 and _contains(quote, f"{page_texts[first]} {page_texts[second]}"):
             return (first, second)
     return None
 
