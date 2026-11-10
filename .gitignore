@@ -47,3 +47,7 @@ models/
 release/
 # Large local Parquet files must use the .large.parquet suffix.
 *.large.parquet
+
+# Spike tooling (SPK-3/SPK-4): npm installs and Framework build cache
+node_modules/
+**/.observablehq/cache/
