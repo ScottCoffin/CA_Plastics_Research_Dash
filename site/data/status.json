@@ -1,0 +1,77 @@
+{
+  "actions_runs": [],
+  "actions_status": "skipped",
+  "alarms": [],
+  "deltas": null,
+  "drift_status": "insufficient_history",
+  "generated_at": "2026-11-10T06:37:44Z",
+  "history_records": 1,
+  "label_rates_series": {
+    "ca_any_author": [
+      {
+        "run_at_utc": "2026-11-10T06:34:36Z",
+        "value": 1.0
+      }
+    ],
+    "ca_led": [
+      {
+        "run_at_utc": "2026-11-10T06:34:36Z",
+        "value": 0.453608
+      }
+    ],
+    "needs_review": [
+      {
+        "run_at_utc": "2026-11-10T06:34:36Z",
+        "value": 0.0
+      }
+    ],
+    "not_plastic": [
+      {
+        "run_at_utc": "2026-11-10T06:34:36Z",
+        "value": 0.056701
+      }
+    ],
+    "plastic_core": [
+      {
+        "run_at_utc": "2026-11-10T06:34:36Z",
+        "value": 0.943299
+      }
+    ],
+    "plastic_tier2": [
+      {
+        "run_at_utc": "2026-11-10T06:34:36Z",
+        "value": 0.0
+      }
+    ]
+  },
+  "last_success_by_workflow": {
+    "seed": {
+      "api_spend": null,
+      "labels_total": 194,
+      "run_at_utc": "2026-11-10T06:34:36Z",
+      "run_id": "local",
+      "status": "ok",
+      "workflow": "seed",
+      "works_added": 0,
+      "works_total": 194
+    }
+  },
+  "recent_runs": [
+    {
+      "api_spend": null,
+      "labels_total": 194,
+      "run_at_utc": "2026-11-10T06:34:36Z",
+      "run_id": "local",
+      "status": "ok",
+      "workflow": "seed",
+      "works_added": 0,
+      "works_total": 194
+    }
+  ],
+  "spend": {
+    "latest": null,
+    "runs_with_spend": 0,
+    "total_cost_usd": 0,
+    "total_credits": 0
+  }
+}
