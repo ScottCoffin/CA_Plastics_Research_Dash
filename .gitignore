@@ -7,7 +7,7 @@ __pycache__/
 .coverage
 htmlcov/
 dist/
-build/
+/build/
 .venv/
 venv/
 

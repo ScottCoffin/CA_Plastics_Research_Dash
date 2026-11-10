@@ -156,9 +156,15 @@ def _write_author_details(
 
 
 def _aggregate(works: Sequence[Mapping[str, Any]]) -> dict[str, list[dict[str, Any]]]:
-    by_year: defaultdict[int, dict[str, int]] = defaultdict(lambda: {"count": 0, "plastic_related_count": 0})
-    by_type: defaultdict[str, dict[str, int]] = defaultdict(lambda: {"count": 0, "plastic_related_count": 0})
-    by_tag: defaultdict[str, dict[str, int]] = defaultdict(lambda: {"count": 0, "plastic_related_count": 0})
+    by_year: defaultdict[int, dict[str, int]] = defaultdict(
+        lambda: {"count": 0, "plastic_related_count": 0}
+    )
+    by_type: defaultdict[str, dict[str, int]] = defaultdict(
+        lambda: {"count": 0, "plastic_related_count": 0}
+    )
+    by_tag: defaultdict[str, dict[str, int]] = defaultdict(
+        lambda: {"count": 0, "plastic_related_count": 0}
+    )
     for work in works:
         related = work.get("plastic_related") is True
         year = work.get("year")
@@ -168,19 +174,15 @@ def _aggregate(works: Sequence[Mapping[str, Any]]) -> dict[str, list[dict[str, A
         work_type = _text(work.get("type")) or "unknown"
         by_type[work_type]["count"] += 1
         by_type[work_type]["plastic_related_count"] += int(related)
-        for tag in _sorted_unique([*_list(work.get("domain_tags")), *_list(work.get("facet_tags"))]):
+        for tag in _sorted_unique(
+            [*_list(work.get("domain_tags")), *_list(work.get("facet_tags"))]
+        ):
             by_tag[tag]["count"] += 1
             by_tag[tag]["plastic_related_count"] += int(related)
     return {
-        "by_year": [
-            {"year": year, **by_year[year]} for year in sorted(by_year)
-        ],
-        "by_type": [
-            {"type": work_type, **by_type[work_type]} for work_type in sorted(by_type)
-        ],
-        "by_tag": [
-            {"tag": tag, **by_tag[tag]} for tag in sorted(by_tag)
-        ],
+        "by_year": [{"year": year, **by_year[year]} for year in sorted(by_year)],
+        "by_type": [{"type": work_type, **by_type[work_type]} for work_type in sorted(by_type)],
+        "by_tag": [{"tag": tag, **by_tag[tag]} for tag in sorted(by_tag)],
     }
 
 
@@ -220,9 +222,13 @@ def export_site(
         if author_id:
             if work_id:
                 works_by_author[author_id].append(work_id)
-            institutions_by_author[author_id].update(_text(i) for i in _list(row.get("institution_ids")) if _text(i))
+            institutions_by_author[author_id].update(
+                _text(i) for i in _list(row.get("institution_ids")) if _text(i)
+            )
         if work_id:
-            institutions_by_work[work_id].update(_text(i) for i in _list(row.get("institution_ids")) if _text(i))
+            institutions_by_work[work_id].update(
+                _text(i) for i in _list(row.get("institution_ids")) if _text(i)
+            )
 
     slim_works = [
         _work_payload(row, labels.get(_text(row.get("work_id"))), authors_by_work)
@@ -230,11 +236,12 @@ def export_site(
         if _text(row.get("work_id"))
     ]
     full_work_by_id = {
-        _text(row.get("work_id")): _full_work_payload(
-            row, slim_works[index]
-        )
+        _text(row.get("work_id")): _full_work_payload(row, slim_works[index])
         for index, row in enumerate(
-            sorted((item for item in works_rows if _text(item.get("work_id"))), key=lambda item: _text(item.get("work_id")))
+            sorted(
+                (item for item in works_rows if _text(item.get("work_id"))),
+                key=lambda item: _text(item.get("work_id")),
+            )
         )
     }
 
@@ -278,9 +285,18 @@ def export_site(
         inst_tags = [
             tag
             for work_id in inst_work_ids
-            for tag in [*_list(work_lookup.get(work_id, {}).get("domain_tags")), *_list(work_lookup.get(work_id, {}).get("facet_tags"))]
+            for tag in [
+                *_list(work_lookup.get(work_id, {}).get("domain_tags")),
+                *_list(work_lookup.get(work_id, {}).get("facet_tags")),
+            ]
         ]
-        years = sorted({work_lookup[work_id]["year"] for work_id in inst_work_ids if work_id in work_lookup and isinstance(work_lookup[work_id].get("year"), int)})
+        years = sorted(
+            {
+                work_lookup[work_id]["year"]
+                for work_id in inst_work_ids
+                if work_id in work_lookup and isinstance(work_lookup[work_id].get("year"), int)
+            }
+        )
         institutions.append(
             {
                 "inst_id": inst_id,
@@ -329,7 +345,9 @@ def export_site(
         output,
         author_index,
         {
-            author_id: [full_work_by_id[work_id] for work_id in work_ids if work_id in full_work_by_id]
+            author_id: [
+                full_work_by_id[work_id] for work_id in work_ids if work_id in full_work_by_id
+            ]
             for author_id, work_ids in works_by_author.items()
         },
     )
@@ -341,7 +359,10 @@ def export_site(
         features.append(
             {
                 "type": "Feature",
-                "geometry": {"type": "Point", "coordinates": [institution["lon"], institution["lat"]]},
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [institution["lon"], institution["lat"]],
+                },
                 "properties": properties,
             }
         )

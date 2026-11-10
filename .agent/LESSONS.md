@@ -217,3 +217,10 @@ CI ran red from e410e03 onward (a link to an ignored screenshot, and a fixture
 `.gitkeep` hidden by the `release/` ignore rule) while every local gate passed,
 because the ignored files exist locally. Before sealing, run the checks in a
 clean `git worktree add --detach <tmp> HEAD`, and confirm the CI run after pushing.
+
+## `build/` in .gitignore hid src/atlas/build from git add and from ruff
+An unanchored `build/` matched `src/atlas/build/`, so new modules there were
+silently untracked and ruff skipped the directory (11 hidden E501s). Fixed by
+anchoring to `/build/`. Never run `scripts/build_export_site.py` as a check:
+it rewrites public `site/data/` from the current processed data. Use
+`scripts/check_s3_1.py`.

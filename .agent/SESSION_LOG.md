@@ -66,3 +66,4 @@
 | 2026-11-10 | SPK-3 + SPK-2 | Shell bake-off (clean lead re-run): G-SHELL = Framework 1.13.4; SPK-2 part (a) 5/5 so SPK-2 complete | this commit |
 | 2026-11-10 | S8.9 | Grants Portal open-calls panel + daily deploy refresh; lead tightened keywords (all 9 initial hits were water recycling); browser smoke ok | this commit |
 | 2026-11-10 | S8.3 | NSF ingester; lead ran incremental (25) and backfill (316 grants, 936 free requests) | this commit |
+| 2026-11-10 | S10.1 | Status page + drift alarms + run-history log; lead fixed spend matching (since job start), works_added floor, `/build/` ignore anchor, export_site format; 565 tests | this commit |

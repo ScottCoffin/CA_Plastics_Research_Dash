@@ -97,7 +97,7 @@ Check off only when the task Definition of Done and acceptance check in
 - [ ] **S9.3** Expert badges and profile/network polish. Acceptance: 10 profiles reviewed. `owner: review`
 
 ## S10 Hardening
-- [ ] **S10.1** Pipeline status page and drift alarms. Acceptance: run health, deltas, spend, and label-rate drift display.
+- [x] **S10.1** Pipeline status page and drift alarms. Acceptance: run health, deltas, spend, and label-rate drift display. Complete 2026-11-10: committed `data/processed/status_history.jsonl` (ingest appends one record per run, spend summed since job start); `site/status.html` + deploy-built `site/data/status.json` (Actions runs via `GITHUB_TOKEN`); drift alarms per `config/status.yml` (label-rate ±0.05, works_added band with floor 50, count drop >1%); browser-smoked. `py -3.14 scripts/check_s10_1.py`.
 - [ ] **S10.2** Governance, license, privacy, corrections, dictionary, and citation. Acceptance: owner checklist sign-off. `owner: sign-off`
 - [ ] **AT-10** Release pipeline (replaces S10.3). Adoption: L3. Depends: AT-3. Acceptance test (§9): Release; Licence audit; No abstracts. Gated on owner decision.
 - [ ] **S10.3** Fixture rebuild and versioned reproducibility release. Acceptance: tagged snapshot archived as chosen. `owner: archive choice`

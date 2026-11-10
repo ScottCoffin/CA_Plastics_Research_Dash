@@ -38,6 +38,9 @@ jobs:
       status: ${{ steps.refresh.outputs.status }}
       reason: ${{ steps.refresh.outputs.reason }}
     steps:
+      - name: Record job start (S10.1 spend window)
+        run: echo "JOB_STARTED_UTC=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+
       - name: Check out the default branch
         uses: actions/checkout@v7
         with:
@@ -80,6 +83,20 @@ jobs:
         if: steps.refresh.outputs.status == 'success'
         run: python scripts/label_works.py
 
+      # S10.1 run history. Placed after label so counts reflect this run; always runs so failures are recorded.
+      - name: Record run status
+        if: always()
+        continue-on-error: true
+        env:
+          REFRESH_STATUS: ${{ steps.refresh.outputs.status }}
+        run: |
+          case "${REFRESH_STATUS:-}" in
+            success) status=ok ;;
+            deferred) status=deferred ;;
+            *) status=failed ;;
+          esac
+          python scripts/record_run_status.py --workflow ingest_works --run-id "${{ github.run_id }}" --status "$status" --since "$JOB_STARTED_UTC"
+
       - name: Explain disabled commit guard
         if: steps.refresh.outputs.status == 'success' && vars.ENABLE_DATA_COMMITS != 'true'
         run: echo "ENABLE_DATA_COMMITS is not true; generated outputs remain local to this run."
@@ -97,6 +114,7 @@ jobs:
             data/interim/openalex_works_high_water_mark.json \
             data/processed/normalized/*.parquet \
             data/processed/work_labels.parquet \
+            data/processed/status_history.jsonl \
             docs/normalization_qc.md \
             docs/labels_qc.md
           git diff --cached --quiet && echo "No generated output changes" && exit 0

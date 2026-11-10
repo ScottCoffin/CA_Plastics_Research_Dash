@@ -1,0 +1,13 @@
+# Drift thresholds for the pipeline status page (S10.1). Read by src/atlas/build/status.py.
+# label_rate_max_abs_change: alarm when a label rate moves more than this from the trailing median.
+# trailing_window: number of prior ok records used for the trailing median.
+# min_history: fewer ok records than this reports "insufficient history" (no alarm).
+# works_added_max_multiple: alarm when works_added is outside [0, multiple * trailing median].
+# count_drop_max_fraction: alarm when works_total or labels_total falls below the trailing median by more than this fraction.
+label_rate_max_abs_change: 0.05
+trailing_window: 7
+min_history: 2
+works_added_max_multiple: 3.0
+count_drop_max_fraction: 0.01
+# works_added_floor: the works_added upper bound is never below this (avoids alarms when the trailing median is 0).
+works_added_floor: 50

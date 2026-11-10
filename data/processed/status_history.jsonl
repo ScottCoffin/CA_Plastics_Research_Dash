@@ -1,0 +1,1 @@
+{"api_spend": null, "label_rates": {"ca_any_author": 1.0, "ca_led": 0.453608, "needs_review": 0.0, "not_plastic": 0.056701, "plastic_core": 0.943299, "plastic_tier2": 0.0}, "labels_total": 194, "run_at_utc": "2026-11-10T06:34:36Z", "run_id": "local", "status": "ok", "workflow": "seed", "works_added": 0, "works_total": 194}
