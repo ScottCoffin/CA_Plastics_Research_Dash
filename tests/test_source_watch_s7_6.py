@@ -1,7 +1,7 @@
 import json
+from io import BytesIO
 from pathlib import Path
 from urllib.error import HTTPError
-from io import BytesIO
 
 import pytest
 
@@ -98,7 +98,7 @@ def test_probe_range_fallback_reads_only_cap_and_reports_failures(monkeypatch):
     class Opener:
         def open(self, request, timeout):
             assert timeout == watch.TIMEOUT_SECONDS
-            if request.method == "HEAD":
+            if request.get_method() == "HEAD":
                 raise HTTPError(request.full_url, 405, "no head", {}, BytesIO())
             assert request.get_header("Range") == f"bytes=0-{watch.MAX_BODY_BYTES - 1}"
             return Response()
@@ -122,3 +122,28 @@ def test_workflow_guard_and_staging_are_narrow():
     assert "vars.ENABLE_DATA_COMMITS == 'true'" in workflow
     assert "git add -- docs/SOURCES.md docs/api_notes/source_watch_s7_6.json" in workflow
     assert "data/" not in workflow
+
+
+def test_request_time_last_modified_is_not_a_change_signal():
+    dynamic = {
+        "Date": "Tue, 10 Nov 2026 22:06:26 GMT",
+        "Last-Modified": "Tue, 10 Nov 2026 22:06:26 GMT",
+    }
+    stable = {
+        "Date": "Tue, 10 Nov 2026 22:06:26 GMT",
+        "Last-Modified": "Mon, 02 Nov 2026 08:00:00 GMT",
+    }
+    assert watch._response(200, dynamic, "HEAD", 0)["last_modified"] is None
+    assert watch._response(200, stable, "HEAD", 0)["last_modified"] == stable["Last-Modified"]
+    assert (
+        watch._response(200, {"Last-Modified": "garbage", "Date": "x"}, "HEAD", 0)["last_modified"]
+        == "garbage"
+    )
+    later = dict(
+        dynamic,
+        Date="Tue, 17 Nov 2026 22:06:30 GMT",
+        **{"Last-Modified": "Tue, 17 Nov 2026 22:06:30 GMT"},
+    )
+    assert watch._digest(watch._response(200, dynamic, "HEAD", 0)) == watch._digest(
+        watch._response(200, later, "HEAD", 0)
+    )

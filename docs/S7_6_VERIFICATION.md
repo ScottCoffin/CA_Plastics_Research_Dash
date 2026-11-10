@@ -21,3 +21,13 @@ No private service, data download, model API, or paid request is used.
 
 Run locally with `PYTHONPATH=src python scripts/check_source_watch_s7_6.py`.
 Run offline fixtures with `python -m pytest tests/test_source_watch_s7_6.py -q`.
+
+## Completion check (2026-11-10)
+
+A live run on 2026-11-10 showed that `opc.ca.gov` sends a `Last-Modified`
+equal to the response `Date`. Hashing that header would flag a change on every
+weekly run. A `Last-Modified` within 120 s of the response `Date` is now
+treated as request-time and excluded from the observation digest
+(`test_request_time_last_modified_is_not_a_change_signal`). The same run timed
+out on `ceden.org` after 8 s. It is recorded as a failed access observation, not
+as a change. Outputs are written with LF so Windows runs stay byte-identical to CI.

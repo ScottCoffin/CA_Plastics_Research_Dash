@@ -9,6 +9,7 @@ import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
@@ -17,6 +18,7 @@ MAX_SOURCES = 50
 MAX_WORKERS = 3
 MAX_BODY_BYTES = 1024
 TIMEOUT_SECONDS = 8
+DYNAMIC_WINDOW_SECONDS = 120
 ALLOWED_HOSTS = {"opc.ca.gov", "ceden.org"}
 STATUS_PATH = Path("docs/api_notes/source_watch_s7_6.json")
 DOC_PATH = Path("docs/SOURCES.md")
@@ -77,13 +79,30 @@ def probe(url: str) -> dict[str, Any]:
         return _response(response.status, response.headers, method, n)
 
 
+def _stable_last_modified(headers: Any) -> str | None:
+    """Drop a Last-Modified the server generated at request time.
+
+    Dynamic pages (opc.ca.gov, observed 2026-11-10) send Last-Modified equal to
+    the response Date, which would flag a change on every weekly run.
+    """
+    value = headers.get("Last-Modified")
+    sent = headers.get("Date")
+    if not value or not sent:
+        return value
+    try:
+        modified, date = parsedate_to_datetime(value), parsedate_to_datetime(sent)
+    except (TypeError, ValueError):
+        return value
+    return None if abs((date - modified).total_seconds()) <= DYNAMIC_WINDOW_SECONDS else value
+
+
 def _response(code: int, headers: Any, method: str, n: int) -> dict[str, Any]:
     return {
         "http_status": code,
         "method": method,
         "bytes_read": n,
         "etag": headers.get("ETag"),
-        "last_modified": headers.get("Last-Modified"),
+        "last_modified": _stable_last_modified(headers),
         "content_length": headers.get("Content-Length"),
         "access_status": "reachable" if 200 <= code < 400 else "unavailable_or_restricted",
     }
@@ -137,13 +156,15 @@ def run(watch_path: Path, status_path: Path, docs_path: Path, checked_at: str) -
         history.append({"checked_at": checked_at, "digest": digest})
     payload["history"] = history[-100:]
     status_path.parent.mkdir(parents=True, exist_ok=True)
-    status_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    status_path.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n"
+    )
     _update_docs(docs_path, payload)
     return payload
 
 
 def _update_docs(path: Path, payload: dict[str, Any]) -> None:
-    text = path.read_text(encoding="utf-8")
+    text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
     if text.count(START) != 1 or text.count(END) != 1:
         raise ValueError("docs/SOURCES.md must contain exactly one marked S7.6 block")
     rows = [
@@ -161,8 +182,7 @@ def _update_docs(path: Path, payload: dict[str, Any]) -> None:
             f"[{record['url']}]({record['url']}) | {record['checked_at']} | {status} | C |"
         )
     block = (
-        START
-        + "\n\nWeekly metadata-only checks. HTTP status, validators, and limited response "
+        START + "\n\nWeekly metadata-only checks. HTTP status, validators, and limited response "
         "metadata do not establish data availability, quality, or reuse rights.\n\n"
         + "\n".join(rows)
         + "\n\n"
@@ -170,7 +190,7 @@ def _update_docs(path: Path, payload: dict[str, Any]) -> None:
     )
     begin = text.index(START)
     finish = text.index(END, begin) + len(END)
-    path.write_text(text[:begin] + block + text[finish:], encoding="utf-8")
+    path.write_text(text[:begin] + block + text[finish:], encoding="utf-8", newline="\n")
 
 
 def main() -> None:
