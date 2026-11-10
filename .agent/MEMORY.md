@@ -198,7 +198,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   variable `ENABLE_DATA_COMMITS` is exactly `true`; the owner enabled it.
 - User-managed Actions configuration names are listed, without values, in
   `docs/SECRETS.md`.
-- Live Pages URL: `https://scottcoff.in/CA_Plastics_Research_Dash/`.
+- Live Pages URL: `https://plastiverse.live/` (repo custom domain since 2026-11-10; old `scottcoff.in/CA_Plastics_Research_Dash/` paths 301 there). Feed `FEED_ID` and `tag:scottcoff.in` entry ids stay frozen. DNS is in Cloudflare: apex A → GitHub (grey cloud); keep the MX, `camply` (owner's tunnel SaaS) and `data` (R2) records.
 
 ## Current model versions and metrics (one line per model)
 - None; classifiers are not implemented.

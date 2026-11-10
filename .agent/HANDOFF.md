@@ -15,7 +15,7 @@
   upload copies; they are safe to delete and must not be committed.
 
 ## Owner actions (one line each; reply in QUESTIONS.md or chat)
-1. Domain: move the Pages site to `plastiverse.live`? If yes, set the repo's Pages custom domain plus Cloudflare A records (see chat), then tell the agent so it can update URLs. If no, add `https://scottcoff.in` to the R2 CORS `AllowedOrigins`.
+1. Done 2026-11-10: site moved to `https://plastiverse.live/`; feed links, README, MEMORY updated; R2 CORS verified from the live origin. Remaining: tick **Enforce HTTPS** in repo Settings → Pages (certificate approved).
 2. AT-1: fill `review_label` (relevant / not_relevant) and `reviewer` in `docs/QUERY_AUDIT_REVIEW.csv` (405 rows; ~2-3 h), optionally `noise_terms`.
 3. S1.5-A: after 2, decide whether to promote `plastic-v2-candidate` (the precision estimate from 2 informs it).
 4. EM-3/S4 annotation: waits on 3 (no representative corpus to sample yet); nothing to do now.
@@ -24,7 +24,6 @@
 7. Later sign-offs: S9.3 profile review, S10.2 governance checklist, S10.3 archive choice (Zenodo vs GitHub release).
 
 ## Next eligible once answered
-- After 1: update site URLs / R2 origin; re-run `spikes/spk1_hosting/measure.py --origin <site origin>`.
 - After 2: AT-1 precision report → AT-2 → AT-3 → AT-4 → AT-5, EM-5, EM-7, EM-16..18.
 - After 3: S3.6 on real data, S4.2, S6.1 coverage; then 4 → S5.x, EM-4, EM-8, EM-11.
 - After 5: S7.3, S7.5. After 6: S8.7, S8.8.

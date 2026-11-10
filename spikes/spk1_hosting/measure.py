@@ -2,7 +2,7 @@
 
 Usage:
   py -3.14 spikes/spk1_hosting/measure.py --base https://host/path/spikes/spk1/ \
-      [--probe https://host/path/spikes/spk1/probe.html] [--origin https://scottcoff.in]
+      [--probe https://host/path/spikes/spk1/probe.html] [--origin https://plastiverse.live]
 
 Writes JSON to stdout. Network use is owner-authorized for SPK-1 (ADR-SPK-AUTH).
 """
@@ -111,7 +111,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", required=True)
     parser.add_argument("--probe")
-    parser.add_argument("--origin", default="https://scottcoff.in")
+    parser.add_argument("--origin", default="https://plastiverse.live")
     parser.add_argument(
         "--serve-origin-probe",
         action="store_true",

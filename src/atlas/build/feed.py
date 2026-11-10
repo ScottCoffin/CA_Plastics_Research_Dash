@@ -30,8 +30,9 @@ from typing import Any
 from xml.etree import ElementTree as ET
 
 ATOM_NS = "http://www.w3.org/2005/Atom"
-SITE_URL = "https://scottcoff.in/CA_Plastics_Research_Dash/"
-FEED_ID = SITE_URL
+SITE_URL = "https://plastiverse.live/"
+# Atom ids must never change; the site moved from scottcoff.in on 2026-11-10.
+FEED_ID = "https://scottcoff.in/CA_Plastics_Research_Dash/"
 FEED_URL = SITE_URL + "feed.xml"
 FEED_TITLE = "CA Plastics Research Atlas: new papers and awards"
 FEED_AUTHOR = "CA Plastics Research Atlas"
@@ -129,7 +130,7 @@ def select_papers(index_payload: Mapping[str, Any], limit: int = MAX_PAPERS) -> 
         work_id = _text(work.get("work_id"))
         if year is None or not work_id:
             continue
-        link = PAPER_LINK_BASE + work_id if _WORK_ID.match(work_id) else FEED_ID
+        link = PAPER_LINK_BASE + work_id if _WORK_ID.match(work_id) else SITE_URL
         entries.append(
             {
                 "category": "paper",
@@ -166,7 +167,7 @@ def select_awards(grants_payload: Mapping[str, Any], limit: int = MAX_AWARDS) ->
                 "category": "award",
                 "id": f"{TAG_ROOT}/award/{grant_key}",
                 "title": _text(row.get("title")) or "Untitled award",
-                "link": url if url.startswith("https://") else FEED_ID,
+                "link": url if url.startswith("https://") else SITE_URL,
                 "updated": f"{start}T00:00:00Z",
                 "summary": _award_summary(row),
             }
@@ -195,7 +196,7 @@ def build_feed_element(entries: Sequence[Mapping[str, Any]]) -> ET.Element:
         "awards. Summaries only; open the source for details.",
     )
     _sub(feed, "link", rel="self", type="application/atom+xml", href=FEED_URL)
-    _sub(feed, "link", rel="alternate", type="text/html", href=FEED_ID)
+    _sub(feed, "link", rel="alternate", type="text/html", href=SITE_URL)
     _sub(feed, "updated", updated)
     author = _sub(feed, "author")
     _sub(author, "name", FEED_AUTHOR)

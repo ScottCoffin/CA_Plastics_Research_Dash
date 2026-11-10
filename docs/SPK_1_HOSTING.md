@@ -51,16 +51,16 @@ The uploads are regenerated files, so their sizes differ slightly from the Pages
   The browser still applies real CORS against R2; only the HTML document is local.
 - Headless Chromium on the owner's desktop network; single run; timings are indicative
   (the first count includes DuckDB-Wasm warm-up).
-- The bucket's CORS policy currently allows only `https://plastiverse.live`. The Atlas
-  is served from `https://scottcoff.in/CA_Plastics_Research_Dash/` (GitHub Pages user
-  domain), and preflights from that origin return 403. Before any production file
-  moves to R2, add `https://scottcoff.in` to `AllowedOrigins` (or move the site to
-  plastiverse.live); re-run the command above with `--origin https://scottcoff.in`
-  (no `--serve-origin-probe` needed once a page is deployed there).
+- On 2026-11-10 the site moved to the repo custom domain `https://plastiverse.live/`
+  (old `scottcoff.in/CA_Plastics_Research_Dash/` paths return 301). From the live page
+  origin, Chromium `fetch` with `Range: bytes=-8` returned 206 with the exposed
+  `Content-Range` and `ETag` and the Parquet `PAR1` footer for p5 and p100. The
+  bucket's CORS policy (`https://plastiverse.live` only) therefore already matches
+  the production origin.
 
 ## Result
 
 SPK-1 is closed. G-HOST stands: GitHub Pages serves every Parquet file of 25 MB or
 less. Cloudflare R2 at `data.plastiverse.live` is a verified scale lever for larger
 files: it serves 206 range reads with exposed headers, and DuckDB-Wasm read 1.6% of a
-99 MB file. The CORS origin above is the one configuration step before production use.
+99 MB file. No further configuration is needed before production use.

@@ -57,3 +57,10 @@ Commit `3f5e832` was pushed to `main` on 2026-11-05.
 - `https://scottcoff.in/CA_Plastics_Research_Dash/` returned HTTP 200 with
   `text/html; charset=utf-8`; the expected title and placeholder text were both
   present.
+
+## Custom domain change (2026-11-10)
+
+The repository Pages custom domain is now `plastiverse.live` (Cloudflare DNS, four apex A
+records to 185.199.108-111.153, DNS only). GitHub issued the certificate the same day
+(expires 2027-02-08), and `https://scottcoff.in/CA_Plastics_Research_Dash/<path>` returns
+301 to `plastiverse.live/<path>`. The earlier scottcoff.in records above are historical.
