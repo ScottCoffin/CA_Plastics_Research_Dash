@@ -59,6 +59,8 @@ Never open `data/`, `output/`, `scratch/`, `site/data/*.json`, `.playwright-cli/
 - CI pre-steps: `py -3.14 scripts/check_doc_links.py`, `py -3.14 scripts/check_a1_scaffold.py`
   and `py -3.14 scripts/check_a2_scaffold.py` (A2 also checks that EM-1..18,
   A2-D/INT and A2-C register IDs exist once and that EM dependencies are listed in order in TODO).
+- Framework revisit check: `py -3.14 scripts/check_framework_triggers.py` (warns only; also in CI).
+  If it reports a fired trigger, raise AT-5/AT-6 with the owner (ADR-FRAMEWORK-REVISIT-2026-11-11).
 - Task acceptance: `py -3.14 scripts/check_s<stage>_<task>.py` (also `check_at1.py`).
 - **Full gate** = links + scaffold + lint + test + build + `git diff --check`.
   Then run links, scaffolds and pytest in a clean `git worktree` of HEAD

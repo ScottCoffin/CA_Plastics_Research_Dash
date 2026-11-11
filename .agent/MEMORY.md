@@ -175,6 +175,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   `scripts/build_author_merges.py` (owner rule: same name + institution). Grant relevance:
   owner decision > title > strong abstract terms (`STRONG_ABSTRACT_RE`) > Haiku > false.
 
+- AT-5/AT-6 (Observable Framework) deferred 2026-11-11: revisit when `scripts/check_framework_triggers.py` (CI warning) fires: >10k works, >1.5 MB initial gzip, EM-5..EM-12 started, or index.html >300 KB / >6 pages. Rationale and preferred incremental path: ADR-FRAMEWORK-REVISIT-2026-11-11. Run it at session entry and before starting any EM-5..EM-12 task.
+
 ## Known pitfalls (top 10; details in LESSONS.md)
 - OpenAlex `title_and_abstract.search` stems terms: `microplasticity` matches `microplastic`, `plastic` matches `plasticity`, `plastics` matches `plastic`. Never use them as exclusions or context words; test every exclusion against the labelled AT-1 set (`docs/QUERY_AUDIT.md`).
 - GNU Make is not on PATH; call Rtools as `/c/rtools45/usr/bin/make.exe PYTHON="py -3.14" APPDATA="$APPDATA" USERPROFILE="$USERPROFILE" <target>`. The Rtools shell drops APPDATA (pytest/ruff live in user site-packages) and USERPROFILE (matplotlib home), giving false `No module named pytest` or `test_eval` failures; bare `python` is 3.15 without deps.

@@ -91,3 +91,4 @@
 | 2026-11-11 | AT-2 | Institution types carried forward to v3.1 ranking (168 rows, 52 new top-100 entrants queued); labeled_works count fix | this commit |
 | 2026-11-11 | S3-UX, S8 | Experts topics/sort/citations; interactive institutions map + topic bars; institution evidence maps; author auto-merges; grant strong-term rule; owner grant review applied; works review app | this commit |
 | 2026-11-11 | S8-VIZ, S3-UX2, gates | Grants Sankey suite; map labels; topic sort; drawer abstracts; whole-record plastics citations; fallback OpenAlex key; owner clears A1 gates | this commit |
+| 2026-11-11 | ADR | Observable Framework deferral recorded with CI-checked revisit triggers | this commit |
