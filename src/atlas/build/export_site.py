@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import re
 import tempfile
 from collections import defaultdict
 from collections.abc import Iterable, Mapping, Sequence
@@ -20,7 +21,7 @@ from typing import Any
 
 import pyarrow.parquet as pq
 
-from atlas.build.curation import apply_curation, load_curation
+from atlas.build.curation import apply_curation, load_curation, load_work_relevance
 
 SCHEMA_VERSION = "s3.1"
 
@@ -144,6 +145,15 @@ def _datasets_by_work(rows: Sequence[Mapping[str, Any]]) -> dict[str, list[dict[
     }
 
 
+# Corresponding-author emails sometimes appear inside abstracts; the public payload
+# must not carry them (S10.2 privacy scan).
+_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}")
+
+
+def _redact_contacts(text: str) -> str:
+    return _EMAIL_RE.sub("[email removed]", text)
+
+
 def _full_work_payload(
     row: Mapping[str, Any],
     slim: Mapping[str, Any],
@@ -152,7 +162,7 @@ def _full_work_payload(
     payload = {
         **dict(slim),
         "doi": _text(row.get("doi")),
-        "abstract": _text(row.get("abstract")),
+        "abstract": _redact_contacts(_text(row.get("abstract"))),
         "pub_date": _text(row.get("pub_date")),
         "journal": _text(row.get("journal")),
         "is_oa": _bool(row.get("is_oa")),
@@ -228,6 +238,7 @@ def export_site(
     suppressions_path: str | Path | None = None,
     work_overrides_path: str | Path | None = None,
     author_merges_path: str | Path | None = None,
+    work_relevance_path: str | Path | None = None,
     output_dir: str | Path = "site/data",
     generated_at: str | None = None,
     ca_authors_only: bool = True,
@@ -243,6 +254,8 @@ def export_site(
 
     The optional ``curation/`` inputs (suppressions, work overrides and author
     merges) are applied before any payload is built; see ``atlas.build.curation``.
+    ``work_relevance_path`` (``curation/work_relevance.csv``, reviewed plastic-relevance
+    calls) replaces the rule's ``plastic_related`` first; owner overrides still win.
     """
 
     works_rows = _read(works_path)
@@ -251,6 +264,13 @@ def export_site(
     institution_rows = _read(institutions_path)
     label_rows = _read(labels_path, required=False) if labels_path else []
     labels = {_text(row.get("work_id")): row for row in label_rows if _text(row.get("work_id"))}
+    if work_relevance_path:
+        for work_id, related in load_work_relevance(work_relevance_path).items():
+            labels[work_id] = {
+                "work_id": work_id,
+                **labels.get(work_id, {}),
+                "plastic_related": related,
+            }
     # S9.2 links are opt-in: without a path, author payloads are byte-identical to before.
     link_rows = _read(work_dataset_links_path, required=False) if work_dataset_links_path else []
     datasets_by_work = _datasets_by_work(link_rows)
@@ -310,12 +330,29 @@ def export_site(
         )
     }
 
+    # Recount CA works from the curated authorships, so works removed by curation
+    # (suppressed or owner-excluded) no longer count. Matches normalize's count when
+    # nothing is removed.
+    ca_institutions = {
+        _text(row.get("inst_id")) for row in institution_rows if _bool(row.get("ca_flag"))
+    }
+    ca_works_by_author: defaultdict[str, set[str]] = defaultdict(set)
+    if ca_institutions:
+        for row in authorship_rows:
+            if ca_institutions.intersection(_text(i) for i in _list(row.get("institution_ids"))):
+                ca_works_by_author[_text(row.get("author_id"))].add(_text(row.get("work_id")))
+
+    def ca_works_count(row: Mapping[str, Any]) -> int:
+        if not ca_institutions:
+            return _int(row.get("ca_works_count"))
+        return len(ca_works_by_author.get(_text(row.get("author_id")), ()))
+
     author_index: list[dict[str, Any]] = []
     for row in sorted(author_rows, key=lambda item: _text(item.get("author_id"))):
         author_id = _text(row.get("author_id"))
         if not author_id:
             continue
-        if ca_authors_only and _int(row.get("ca_works_count")) <= 0:
+        if ca_authors_only and ca_works_count(row) <= 0:
             # spec A3.1: the researcher list shows California-affiliated researchers;
             # out-of-state co-authors stay visible on each work's author list.
             continue
@@ -325,7 +362,7 @@ def export_site(
                 "author_id": author_id,
                 "name": _text(row.get("name")),
                 "orcid": _text(row.get("orcid")),
-                "ca_works_count": _int(row.get("ca_works_count")),
+                "ca_works_count": ca_works_count(row),
                 "first_year": row.get("first_year"),
                 "last_year": row.get("last_year"),
                 "domain_tags": _sorted_unique(_list(row.get("domain_tags"))),

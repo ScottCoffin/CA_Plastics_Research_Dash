@@ -43,7 +43,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   watchdog, and an opt-in monthly keepalive commit.
 - ADR-002: keep the repository public, use GitHub Actions Pages, enable guarded
   repository writes, and use MIT for code plus CC BY for eligible derived data.
-- SPK-7/G-COST: 2026-11-09 OpenAlex measurement recorded 100/100 calls; free-only owner authorization; 10,000-credit/USD 1.00 daily account limit and USD 0.25 local stop. Response metadata totaled USD 0.026 while the provider balance decrement implied USD 0.028; budget guard charges conservatively and retains the discrepancy. See `docs/api_notes/openalex_costs.md` and commit `79301e7`.
+- SPK-7/G-COST: 2026-11-09 OpenAlex measurement recorded 100/100 calls; free-only owner authorization; 10,000-credit/USD 1.00 daily account limit; owner rule 2026-11-11: may spend up to that limit every day (stop at USD 0.95 in `config/budget.yml`). Free status: GET `/rate-limit` (no credits). Response metadata totaled USD 0.026 while the provider balance decrement implied USD 0.028; budget guard charges conservatively and retains the discrepancy. See `docs/api_notes/openalex_costs.md` and commit `79301e7`.
 - Add-on A2 (`docs/add_on_spec_2.md`, integrated 2026-11-09): EM-1..EM-18 in TODO (S4/S5 plus the EM section; S11.2 superseded by EM-8); ADR-A2-OWNER and A2-C1..C15 in DECISIONS; A2-D1..D11 and A2-INT-1..3 in QUESTIONS; ledger in REUSE.md; scaffold `scripts/check_a2_scaffold.py`. The ledger source is the companion XLSX (70 rows, 20 cols). All pending defaults were accepted 2026-11-09 (ADR-DEFAULTS-2026-11-09): A1 L2 spikes SPK-1..4 are eligible, L3 stays gated, and EM-1 is eligible. EAT-8's Minderoo grep must exclude the governance docs that record the exclusion.
 
 - EM-1 complete 2026-11-09 (`docs/EM_1_VERIFICATION.md`): A2 vocabularies live in `config/taxonomy.yml` `add_on_a2`; candidate keyword rules are in `config/a2_keyword_rules.yml`; `config/need_ledger.csv` is generated from the owner XLSX by `scripts/build_need_ledger.py` (`--check` in CI-style gates). The local-only quote regression matched 69/70 (N3.2: accepted source typo "mimum", owner keeps "minimum") against the owner's Zotero PDFs on 2026-11-09. `guide_v2` (`guide_v1` plus `docs/LABELING_GUIDE_A2_ADDENDUM.md`) was approved the same day.
@@ -161,13 +161,13 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   is identified as example data; missing refresh/count values display as
   unavailable. Acceptance and independent Chromium evidence are in
   `docs/S3_5_VERIFICATION.md`; browser smoke had only harmless favicon 404s.
-- S3.6 partial evidence is in `docs/S3_6_VERIFICATION.md`: Pages run 42334138365
-  deployed commit 226df54 successfully and live HTTP returned 200. Fixture-only
-  C5 run: 3,403 gzip bytes; 5-context Chromium FCP median/max 44/80 ms, render
-  75.1/124.1 ms, and 20/20 exact expected-author filters at median/max
-  14.2/15.9 ms. No representative export exists; the 98,118 S1.5 count is only
-  an estimate. Keep S3.6 unchecked pending owner query review and authorized
-  bounded export; do not promote the inactive candidate to create a benchmark.
+- S3.6 done 2026-11-11 on real data (`docs/S3_6_VERIFICATION.md`): initial payload 442 KB gzip,
+  render median 0.81 s, filter median 5.5 ms (author summaries memoized once per payload).
+- v3.1 corpus (2026-11-11): 1,506 unique CA-affiliated works since 1950 (a full backfill is
+  ~53 pages, ~0.05 USD); export after curation 1,424 works, 1,982 experts. Owner AT-1 labels
+  -> `curation/overrides_works.csv` via `scripts/build_audit_overrides.py` (`exclude` override);
+  Haiku calls for unlabelled works in `curation/work_relevance.csv` (owner overrides win).
+  Some OpenAlex works carry another paper's (nanoplastics) abstract; those are false matches.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
 - OpenAlex `title_and_abstract.search` stems terms: `microplasticity` matches `microplastic`, `plastic` matches `plasticity`, `plastics` matches `plastic`. Never use them as exclusions or context words; test every exclusion against the labelled AT-1 set (`docs/QUERY_AUDIT.md`).

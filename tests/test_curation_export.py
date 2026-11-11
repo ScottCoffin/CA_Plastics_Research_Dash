@@ -65,8 +65,11 @@ def test_shipped_curation_files_are_header_only_and_load_empty() -> None:
     )
     assert not curation.suppressed_authors
     assert not curation.suppressed_works
-    assert not curation.work_overrides
     assert not curation.author_merges
+    # overrides_works.csv carries only the generated AT-1 owner audit labels.
+    assert curation.work_overrides
+    fields = {name for values in curation.work_overrides.values() for name in values}
+    assert fields <= {"exclude", "plastic_related"}
 
 
 def test_empty_curation_leaves_payloads_unchanged(tmp_path: Path) -> None:
@@ -196,6 +199,24 @@ def test_work_overrides_apply_to_index_detail_and_aggregates(tmp_path: Path) -> 
     assert metadata["curation"]["work_overrides_skipped"] == 0
 
 
+def test_exclude_override_drops_work_and_recounts_author(tmp_path: Path) -> None:
+    plain = _json(_export(tmp_path / "plain"), "index.json")
+    target = plain["works"][0]
+    overrides = _csv(
+        tmp_path / "overrides.csv",
+        OVERRIDE_HEADER,
+        [f"{target['work_id']},exclude,true,AT-1 owner audit label,SC,2026-11-11"],
+    )
+    site = _export(tmp_path / "curated", work_overrides_path=overrides)
+    index = _json(site, "index.json")
+    assert target["work_id"] not in {w["work_id"] for w in index["works"]}
+    for author in index["authors"]:
+        assert target["work_id"] not in author["work_ids"]
+    metadata = _json(site, "build_metadata.json")
+    assert metadata["curation"]["works_excluded_listed"] == 1
+    assert metadata["curation"]["works_removed"] >= 1
+
+
 def test_work_override_for_suppressed_work_is_skipped(tmp_path: Path) -> None:
     suppressions = _csv(
         tmp_path / "suppressions.csv",
@@ -299,3 +320,31 @@ def test_bad_header_is_rejected(tmp_path: Path) -> None:
     path = _csv(tmp_path / "bad.csv", "kind,id", ["author,A1"])
     with pytest.raises(ValueError, match="header must be"):
         load_curation(suppressions_path=path)
+
+
+def test_work_relevance_sets_plastic_related_and_owner_override_wins(tmp_path: Path) -> None:
+    plain = _json(_export(tmp_path / "plain"), "index.json")
+    first, second = plain["works"][0]["work_id"], plain["works"][1]["work_id"]
+    header = (
+        "work_id,plastic_related,assist_plastic_related,confidence,reason,"
+        "reviewer,reviewed_at,owner_review"
+    )
+    relevance = _csv(
+        tmp_path / "relevance.csv",
+        header,
+        [
+            f"{first},false,false,high,off topic,claude-haiku-assist,2026-11-11,pending",
+            f"{second},false,false,low,unsure,claude-haiku-assist,2026-11-11,pending",
+        ],
+    )
+    overrides = _csv(
+        tmp_path / "overrides.csv",
+        OVERRIDE_HEADER,
+        [f"{second},plastic_related,true,AT-1 owner audit label,SC,2026-11-11"],
+    )
+    site = _export(
+        tmp_path / "curated", work_relevance_path=relevance, work_overrides_path=overrides
+    )
+    works = {w["work_id"]: w for w in _json(site, "index.json")["works"]}
+    assert works[first]["plastic_related"] is False
+    assert works[second]["plastic_related"] is True

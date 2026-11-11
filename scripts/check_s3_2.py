@@ -58,9 +58,14 @@ def main() -> None:
     )
     assert {"by_year", "by_type", "by_tag"} <= set(aggregates), "aggregate contract is incomplete"
     assert metadata.get("schema_version") == "s3.1"
-    assert metadata.get("payload_gzip_bytes", 0) < 3_000_000, (
-        "fixture exceeds the C5 payload budget"
+    # C5 budgets the initial payload; author detail files load lazily from the drawer.
+    files = metadata.get("files") or {}
+    initial = sum(
+        int(item.get("gzip_bytes", 0))
+        for name, item in files.items()
+        if not name.startswith("authors/")
     )
+    assert initial < 3_000_000, f"initial payload {initial} gzip bytes exceeds the C5 budget"
     print(
         "S3.2 acceptance passed: accessible five-tab shell, hash/CSV hooks, "
         f"and fixture payloads ({len(index['authors'])} authors, {len(index['works'])} works)"

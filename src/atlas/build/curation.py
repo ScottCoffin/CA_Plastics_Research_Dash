@@ -29,12 +29,14 @@ AUTHOR_MERGES_HEADER = ("from_author_id", "to_author_id", "reason", "reviewed_by
 GRANT_RELEVANCE_HEADER = (
     "grant_key",
     "plastic_related",
+    "assist_plastic_related",
     "confidence",
     "reason",
     "reviewer",
     "reviewed_at",
     "owner_review",
 )
+WORK_RELEVANCE_HEADER = ("work_id", *GRANT_RELEVANCE_HEADER[1:])
 SUPPRESSION_KINDS = ("author", "work")
 OPENALEX_PREFIX = "https://openalex.org/"
 
@@ -49,6 +51,10 @@ WORK_OVERRIDE_FIELDS: dict[str, tuple[str, str, str]] = {
     "study_type": ("label", "study_type", "text"),
     "domain_tags": ("label", "domain_tags", "tags"),
     "facet_tags": ("label", "facet_tags", "tags"),
+    # ``exclude = true``: an owner judged the work off-topic (AT-1 audit labels via
+    # scripts/build_audit_overrides.py). It leaves every payload like a suppression,
+    # but is counted separately because it is a relevance call, not a GOV-B request.
+    "exclude": ("removal", "exclude", "bool"),
 }
 
 
@@ -199,6 +205,24 @@ def load_grant_relevance(path: str | Path) -> dict[str, bool]:
     return decisions
 
 
+def load_work_relevance(path: str | Path) -> dict[str, bool]:
+    """Return ``{work_id: plastic_related}`` from ``work_relevance.csv``.
+
+    Same columns as ``grant_relevance.csv`` keyed by ``work_id``: assisted (Claude
+    Haiku) calls with ``owner_review`` tracking owner confirmation.
+    """
+    if not Path(path).exists():
+        return {}
+    decisions: dict[str, bool] = {}
+    for number, row in _read(path, WORK_RELEVANCE_HEADER):
+        _require(row, number, path, ("work_id", "plastic_related"))
+        key = compact_id(row["work_id"])
+        if key in decisions:
+            raise ValueError(f"{path} row {number}: work_id {key} is listed more than once")
+        decisions[key] = _coerce("plastic_related", "bool", row["plastic_related"], path, number)
+    return decisions
+
+
 def load_curation(
     *,
     suppressions_path: str | Path | None = None,
@@ -237,6 +261,12 @@ def apply_curation(
     """
     suppressed_authors = curation.suppressed_authors
     merges = curation.author_merges
+    excluded_works = frozenset(
+        work_id
+        for work_id, values in curation.work_overrides.items()
+        if values.get("exclude") is True
+    )
+    dropped_works = curation.suppressed_works | excluded_works
     counts = {
         "suppressed_authors_listed": len(suppressed_authors),
         "suppressed_works_listed": len(curation.suppressed_works),
@@ -247,6 +277,7 @@ def apply_curation(
         "authors_removed": 0,
         "work_overrides_applied": 0,
         "work_overrides_skipped": 0,
+        "works_excluded_listed": len(excluded_works),
     }
 
     linked_before_works = {
@@ -262,7 +293,7 @@ def apply_curation(
         author_id = _text(row.get("author_id"))
         resolved = merges.get(author_id, author_id)
         if (
-            work_id in curation.suppressed_works
+            work_id in dropped_works
             or author_id in suppressed_authors
             or resolved in suppressed_authors
         ):
@@ -279,7 +310,7 @@ def apply_curation(
     linked_after_authors = {
         _text(row.get("author_id")) for row in kept_links if _text(row.get("work_id"))
     }
-    removed_works = curation.suppressed_works | (linked_before_works - linked_after_works)
+    removed_works = dropped_works | (linked_before_works - linked_after_works)
     removed_authors = (
         suppressed_authors | frozenset(merges) | (linked_before_authors - linked_after_authors)
     )
@@ -310,6 +341,8 @@ def apply_curation(
             continue
         for name, value in values.items():
             table, key, _kind = WORK_OVERRIDE_FIELDS[name]
+            if table == "removal":
+                continue
             if table == "work":
                 by_id[work_id][key] = value
             else:

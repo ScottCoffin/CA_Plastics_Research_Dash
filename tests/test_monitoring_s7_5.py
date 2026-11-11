@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import re
+from pathlib import Path
 
 import pytest
 
@@ -9,6 +11,8 @@ from atlas.build.monitoring import (
     build_monitoring_payload,
     require_private_output_outside_site,
 )
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def registry() -> dict:
@@ -168,3 +172,30 @@ def test_public_build_drops_qa_samples_but_private_preview_keeps_them() -> None:
     assert public["excluded_qa_samples"] == 1
     private = build_monitoring_payload(registry(), samples=[real, blank], private_preview=True)
     assert private["sample_count"] == 2 and private["excluded_qa_samples"] == 0
+
+
+def test_monitoring_facets_and_map_controls_are_static_markup() -> None:
+    html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+    facets = ("facet-filters", "facet-sources", "facet-map", "facet-gaps", "facet-samples")
+    assert html.count('<details class="facet"') == len(facets)
+    for facet in facets:
+        assert re.search(rf'<details class="facet" id="{facet}"[^>]*>\s*<summary>', html), facet
+    # Filters and Sample map open by default; the other facets start closed.
+    assert 'id="facet-filters" open>' in html and 'id="facet-map" open>' in html
+    assert 'id="facet-sources">' in html and 'id="facet-samples">' in html
+    for element_id in (
+        "monitoring-map-details",
+        "monitoring-map-hint",
+        "monitoring-zoom-in",
+        "monitoring-zoom-out",
+        "monitoring-zoom-reset",
+        "monitoring-facets-expand",
+        "monitoring-facets-collapse",
+        "monitoring-sources-heading",
+        "monitoring-gaps-heading",
+        "monitoring-samples-heading",
+    ):
+        assert f'id="{element_id}"' in html, element_id
+    assert 'id="monitoring-map" class="monitoring-map" role="group" tabindex="0"' in html
+    # The page stays dependency-free: no external scripts, stylesheets or tile servers.
+    assert not re.search(r'<(script|link|img|iframe)[^>]+(src|href)=["\']https?://', html)

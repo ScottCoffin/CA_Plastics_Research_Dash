@@ -268,3 +268,8 @@ until it reports.
 - `data/interim/works_raw.parquet` and the high-water JSON are force-added by CI. Never
   move them locally; copy instead (`git status` shows them as deleted).
 
+
+## 2026-11-11: verify a live pipeline by its output, not its exit code
+- The S2.1 "backfill from 1950" passed tests and CI but would have fetched only 1950 and replaced the table with it (end year defaulted to the start year), and per-year windows multiplied 10-credit calls 77-fold. Before relying on a range pull, count it cheaply (`per_page=1` per batch) and assert the requested window in a test.
+- Three overnight sessions reported "all ungated work done" while the Experts tab still served the 4-work fixture. Every downstream stage (S3.6 measurement, S4.2 representative sample, S5 classifiers trained on that gold set) was blocked on that one fault. When several stages are blocked on the same missing input, fix that input first and say so in the handoff; do not treat the stages as separately gated.
+- Owner labels in a review CSV are inert until a build step reads them. After any owner labelling round, wire the labels into curation and check the public payload.

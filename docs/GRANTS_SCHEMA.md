@@ -72,8 +72,11 @@ pass-through awards is S8.6 and is not part of this schema.
 
 **Plastic relevance rule.** `grant_plastic_decision` in `normalize.py` returns
 `(plastic_related, basis)`. A reviewed decision in `curation/grant_relevance.csv`
-(keyed by `grant_key`, columns `plastic_related,confidence,reason,reviewer,
-reviewed_at,owner_review`) wins (basis `reviewed`). Otherwise a core term in the
+(keyed by `grant_key`, columns `plastic_related,assist_plastic_related,confidence,
+reason,reviewer,reviewed_at,owner_review`) wins (basis `reviewed`).
+`assist_plastic_related` keeps the Claude Haiku call permanently; the owner reviews
+with `py -3.14 -m streamlit run scripts/review_grant_relevance_app.py`, which sets
+`owner_review` to `confirmed`, `changed` or `unsure` (unsure keeps the Haiku call). Otherwise a core term in the
 title (at most 250 characters) gives `true` (basis `title`). A core term that
 appears only in the abstract gives `false` (basis `abstract_mention_only`), and
 no match gives `false` (basis `none`). The export

@@ -81,6 +81,9 @@ def scan_file(path: Path, repo: Path = REPO) -> list[tuple[str, str, str]]:
     data = json.loads(path.read_text(encoding="utf-8"))
     for field, text in _walk_json(data, ""):
         for kind, rx in PATTERNS.items():
+            # DOIs are public identifiers whose digit groups can look like phone numbers.
+            if kind != "email" and field.rsplit(".", 1)[-1] in {"doi", "doi_url"}:
+                continue
             if rx.search(text):
                 hits.append((rel, field or "(root)", kind))
     return hits

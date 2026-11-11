@@ -84,4 +84,67 @@ assert.deepEqual(mapResult.legend, [["sediment", 1], ["fish", 2]]);
 assert.deepEqual(mapResult.legendStatewide, [["sediment", 1], ["fish", 3]]);
 assert.equal(mapResult.colorFish, "#2e7d32");
 assert.equal(mapResult.colorOther, "#6b7177");
+
+// Interactive map: zoom clamping, re-clustering on zoom, and the legend toggle helper.
+const interactiveResult = JSON.parse(vm.runInContext(`JSON.stringify((() => {
+  const sw = monitoringMap.viewBox("statewide");
+  let zoomed = sw;
+  for (let i = 0; i < 200; i += 1) zoomed = monitoringMap.zoomView(zoomed, 1.5);
+  const zoomedOut = monitoringMap.zoomView(sw, 0.01);
+  const panned = monitoringMap.panView(sw, 1000, -1000);
+  const centre = (view) => [view.x + view.width / 2, view.y + view.height / 2];
+  const [px, py] = centre(panned);
+  const inside = px >= sw.x && px <= sw.x + sw.width && py >= sw.y && py <= sw.y + sw.height;
+  const aspectKept = Math.abs(zoomed.height / zoomed.width - sw.height / sw.width) < 1e-9;
+
+  // Two points 0.1 statewide cells apart, inside one statewide cell but in different cells at 8x.
+  const cell = sw.width / 12;
+  const k = Math.floor(sw.x / cell) + 3;
+  const x0 = (k + 0.2) * cell;
+  const x1 = x0 + 0.1 * cell;
+  const lonOf = (x) => x / monitoringMap.cosMid;
+  const pair = [
+    { row: { id: "p0", matrix: "fish", date: "2020-01-02", method: "m" }, coordinates: [37.0, lonOf(x0)] },
+    { row: { id: "p1", matrix: "fish", date: "2020-01-03", method: "m" }, coordinates: [37.0, lonOf(x1)] }
+  ];
+  const width8 = sw.width / 8;
+  const height8 = sw.height / 8;
+  const view8 = { x: x0 - width8 / 2, y: -37.0 - height8 / 2, width: width8, height: height8 };
+
+  // Legend toggle: hidden matrices leave the map, but the legend keeps counting them.
+  const mixed = [
+    { row: { id: "f", matrix: "fish", date: "2020-01-02", method: "m" }, coordinates: [37.8, -122.4] },
+    { row: { id: "s", matrix: "sediment", date: "2020-01-03", method: "m" }, coordinates: [37.8, -122.4] },
+    { row: { id: "f2", matrix: "fish", date: "2020-01-04", method: "m" }, coordinates: [37.8, -122.41] }
+  ];
+  const hidden = new Set(["sediment"]);
+  const shownAfterToggle = monitoringMap.visibleSamples(mixed, hidden).map((item) => item.row.id);
+  const mapMatrices = [...new Set(monitoringMap.clusters(monitoringMap.visibleSamples(mixed, hidden), "statewide").flatMap((c) => [...c.matrices.keys()]))];
+
+  return {
+    minWidthRatio: zoomed.width / (sw.width / 40),
+    maxZoomScale: monitoringMap.zoomScale(zoomed),
+    zoomedOutIsStatewide: Math.abs(zoomedOut.width - sw.width) < 1e-9,
+    panInside: inside,
+    aspectKept,
+    statewideClusters: monitoringMap.clusters(pair, "statewide").length,
+    zoomedClusters: monitoringMap.clusters(pair, "statewide", view8).length,
+    zoomedRows: monitoringMap.clusters(pair, "statewide", view8).map((c) => c.rows.length),
+    shownAfterToggle,
+    mapMatrices,
+    legendCounts: monitoringMap.legend(mixed, "statewide")
+  };
+})())`, context));
+
+assert.ok(Math.abs(interactiveResult.minWidthRatio - 1) < 1e-9, "zoom-in must stop at 40x the statewide width");
+assert.ok(Math.abs(interactiveResult.maxZoomScale - 40) < 1e-9, "zoom scale must cap at 40x");
+assert.equal(interactiveResult.zoomedOutIsStatewide, true, "zoom-out must stop at the statewide width (1x)");
+assert.equal(interactiveResult.panInside, true, "panning must keep the view centre inside the statewide extent");
+assert.equal(interactiveResult.aspectKept, true, "zoom must keep the view aspect ratio");
+assert.equal(interactiveResult.statewideClusters, 1, "points in one statewide cell share a cluster");
+assert.equal(interactiveResult.zoomedClusters, 2, "the same points split into two clusters at 8x");
+assert.deepEqual(interactiveResult.zoomedRows, [1, 1]);
+assert.deepEqual(interactiveResult.shownAfterToggle, ["f", "f2"], "hiding sediment removes it from the drawn markers");
+assert.deepEqual(interactiveResult.mapMatrices, ["fish"]);
+assert.deepEqual(interactiveResult.legendCounts, [["sediment", 1], ["fish", 2]], "legend counts ignore the hidden state (palette order)");
 console.log("Monitoring view runtime checks passed: coordinates, zero values, unknown matrices and dates.");

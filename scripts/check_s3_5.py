@@ -57,16 +57,17 @@ vm.runInContext(
 );
 const aboutViewModel = context.aboutViewModel;
 const fixture = aboutViewModel(metadata, index);
-assert.equal(
-  metadata.generated_at,
-  "fixture",
-  "committed site data should keep the fixture sentinel"
-);
-assert.equal(fixture.isFixture, true);
-assert.equal(
-  fixture.refreshText,
-  "Fixture snapshot loaded — committed fixture data, not a current refresh."
-);
+// Committed site data is the fixture until CI exports a live refresh (S2.1-B).
+if (metadata.generated_at === "fixture") {
+  assert.equal(fixture.isFixture, true);
+  assert.equal(
+    fixture.refreshText,
+    "Fixture snapshot loaded — committed fixture data, not a current refresh."
+  );
+} else {
+  assert.equal(fixture.isFixture, false);
+  assert.equal(fixture.refreshText, `Last refresh (UTC): ${metadata.generated_at}`);
+}
 const countKeys = [
   ["Authors", "authors"],
   ["Works", "works"],
@@ -184,7 +185,11 @@ def main() -> None:
         )
 
     assert metadata.get("schema_version") == "s3.1"
-    assert metadata.get("generated_at") == "fixture", "fixture freshness sentinel was lost"
+    generated_at = metadata.get("generated_at")
+    assert isinstance(generated_at, str) and generated_at, "build metadata needs generated_at"
+    assert generated_at == "fixture" or generated_at.endswith("+00:00"), (
+        "generated_at must be the fixture sentinel or a UTC timestamp"
+    )
     counts = metadata.get("counts")
     assert isinstance(counts, dict), "build metadata must contain generated counts"
     assert counts == index.get("counts"), "export metadata and index counts disagree"

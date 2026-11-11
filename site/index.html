@@ -103,6 +103,35 @@
       .monitoring-table, .gaps-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
       .monitoring-table th, .monitoring-table td, .gaps-table th, .gaps-table td { padding: 0.55rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
       .monitoring-table th, .gaps-table th { background: #edf5f4; }
+      .monitoring-map { touch-action: none; cursor: grab; }
+      .monitoring-map.is-panning { cursor: grabbing; }
+      .monitoring-marker { cursor: pointer; }
+      .monitoring-marker:focus { outline: none; }
+      .monitoring-marker:focus-visible .marker-body { stroke: var(--focus); stroke-width: 5px; }
+      .monitoring-marker .marker-halo { fill: none; stroke: #0d1b24; stroke-width: 3px; vector-effect: non-scaling-stroke; }
+      .map-hint { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.85rem; }
+      .monitoring-legend-toggle { border: 1px solid #8fa5a7; border-radius: 999px; background: #fff; color: #1d2a33; padding: 0.2rem 0.6rem; font: inherit; font-size: 0.85rem; cursor: pointer; }
+      .monitoring-legend-toggle[aria-pressed="false"] { background: #eef1f2; color: #5b6770; border-style: dashed; }
+      .monitoring-legend-toggle[aria-pressed="false"] .monitoring-swatch { opacity: 0.35; }
+      .monitoring-map-details { margin-top: 0.6rem; }
+      .map-details-card { border: 1px solid #b8ced0; border-radius: 0.45rem; padding: 0.6rem 0.75rem; background: #fff; }
+      .map-details-head { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: space-between; }
+      .map-details-head h4 { margin: 0; font-size: 1rem; }
+      .map-details-actions { display: flex; gap: 0.4rem; }
+      .map-details-actions button, .facet-controls button { border: 1px solid var(--brand); border-radius: 0.35rem; background: #fff; color: var(--brand); padding: 0.45rem 0.8rem; font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+      .facet { margin: 0.75rem 0; border: 1px solid #8da7af; border-radius: 0.5rem; background: #fff; }
+      .facet > summary { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; padding: 0.55rem 0.85rem; border-radius: 0.5rem; background: #e3efed; color: #0b3d31; cursor: pointer; list-style: none; }
+      .facet > summary::-webkit-details-marker { display: none; }
+      .facet > summary:hover { background: #d4e8e4; }
+      .facet[open] > summary { border-radius: 0.5rem 0.5rem 0 0; border-bottom: 1px solid #8da7af; }
+      .facet > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+      .facet > summary h3 { margin: 0; flex: 1 1 auto; font-size: 1.05rem; }
+      .facet-count { color: #3d5560; font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
+      .facet > summary::after { content: ""; flex: 0 0 auto; width: 0.6rem; height: 0.6rem; margin-right: 0.3rem; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; transform: rotate(45deg); transition: transform 0.15s ease; }
+      .facet[open] > summary::after { transform: rotate(-135deg); }
+      .facet > :not(summary) { margin-left: 0.85rem; margin-right: 0.85rem; }
+      .facet > :last-child { margin-bottom: 0.85rem; }
+      .facet-controls { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
       .gaps-cell { text-align: center !important; font-variant-numeric: tabular-nums; }
       .map-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.8rem; margin-top: 0.6rem; color: var(--muted); font-size: 0.8rem; }
       .map-legend span::before { content: ""; display: inline-block; width: 0.7rem; height: 0.7rem; margin-right: 0.25rem; border-radius: 50%; background: var(--brand); vertical-align: -0.05rem; }
@@ -249,6 +278,12 @@
         <h2>Monitoring</h2>
         <p id="monitoring-status" class="panel-intro">Loading verified source catalogue…</p>
         <p id="monitoring-quality-note" class="notice"></p>
+        <div class="facet-controls" role="group" aria-label="Expand or collapse every section">
+          <button type="button" id="monitoring-facets-expand">Expand all</button>
+          <button type="button" id="monitoring-facets-collapse">Collapse all</button>
+        </div>
+        <details class="facet" id="facet-filters" open>
+          <summary><h3 id="monitoring-filters-heading">Filters</h3><span class="facet-count" id="facet-filters-count"></span></summary>
         <form id="monitoring-filters" class="controls" aria-label="Filter monitoring sources and samples">
           <div class="field"><label for="monitoring-tier">Access tier</label><select id="monitoring-tier"><option value="">All tiers</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
           <div class="field"><label for="monitoring-search">Source or steward</label><input id="monitoring-search" type="search" autocomplete="off"></div>
@@ -257,11 +292,12 @@
           <div class="field"><label for="monitoring-year">Sample year</label><select id="monitoring-year"><option value="">All years</option></select></div>
           <div class="field"><label for="monitoring-region">Sample region</label><select id="monitoring-region"><option value="">All regions</option><option value="land">California land</option><option value="state_waters">California state waters</option><option value="outside">Outside California polygons</option><option value="unknown">Unknown location</option></select></div>
         </form>
-        <section aria-labelledby="monitoring-sources-heading"><h3 id="monitoring-sources-heading">Source registry</h3><p id="monitoring-source-count" class="result-count" role="status" aria-live="polite"></p><div id="monitoring-sources" class="monitoring-table-wrap"></div></section>
+        </details>
+        <section aria-labelledby="monitoring-sources-heading"><details class="facet" id="facet-sources"><summary><h3 id="monitoring-sources-heading">Source registry</h3><span class="facet-count" id="facet-sources-count"></span></summary><p id="monitoring-source-count" class="result-count" role="status" aria-live="polite"></p><div id="monitoring-sources" class="monitoring-table-wrap"></div></details></section>
         <div class="monitoring-layout">
-          <section class="institution-map-panel" aria-labelledby="monitoring-map-heading"><h3 id="monitoring-map-heading">Sample map</h3><p id="monitoring-map-note" class="data-note"></p><div class="monitoring-map-controls" role="group" aria-label="Map extent"><button type="button" data-map-extent="statewide" aria-pressed="true">Statewide</button><button type="button" data-map-extent="sf_bay" aria-pressed="false">SF Bay</button></div><div id="monitoring-map" class="monitoring-map" role="group" aria-label="Sample locations on a California basemap"></div><div id="monitoring-map-legend" class="monitoring-map-legend" aria-label="Marker colours by matrix"></div></section>
-          <section aria-labelledby="monitoring-gaps-heading"><h3 id="monitoring-gaps-heading">Data coverage by matrix, region and year</h3><p id="monitoring-gaps-note" class="data-note"></p><div id="monitoring-gaps" class="monitoring-table-wrap"></div></section>
-          <section aria-labelledby="monitoring-samples-heading"><h3 id="monitoring-samples-heading">Sample observations</h3><div id="monitoring-samples" class="monitoring-table-wrap"></div></section>
+          <section class="institution-map-panel" aria-labelledby="monitoring-map-heading"><details class="facet" id="facet-map" open><summary><h3 id="monitoring-map-heading">Sample map</h3><span class="facet-count" id="facet-map-count"></span></summary><p id="monitoring-map-note" class="data-note"></p><p id="monitoring-map-hint" class="map-hint">How to use: drag to pan, scroll or +/- to zoom, select a marker for details. With the map focused, arrow keys pan.</p><div class="monitoring-map-controls" role="group" aria-label="Map extent and zoom"><button type="button" data-map-extent="statewide" aria-pressed="true">Statewide</button><button type="button" data-map-extent="sf_bay" aria-pressed="false">SF Bay</button><button type="button" id="monitoring-zoom-in">Zoom in (+)</button><button type="button" id="monitoring-zoom-out">Zoom out (-)</button><button type="button" id="monitoring-zoom-reset">Reset view</button></div><div id="monitoring-map" class="monitoring-map" role="group" tabindex="0" aria-label="Sample locations on a California basemap" aria-describedby="monitoring-map-hint"></div><div id="monitoring-map-details" class="monitoring-map-details" aria-live="polite"></div><div id="monitoring-map-legend" class="monitoring-map-legend" aria-label="Marker colours by matrix"></div></details></section>
+          <section aria-labelledby="monitoring-gaps-heading"><details class="facet" id="facet-gaps"><summary><h3 id="monitoring-gaps-heading">Data coverage by matrix, region and year</h3><span class="facet-count" id="facet-gaps-count"></span></summary><p id="monitoring-gaps-note" class="data-note"></p><div id="monitoring-gaps" class="monitoring-table-wrap"></div></details></section>
+          <section aria-labelledby="monitoring-samples-heading"><details class="facet" id="facet-samples"><summary><h3 id="monitoring-samples-heading">Sample observations</h3><span class="facet-count" id="facet-samples-count"></span></summary><div id="monitoring-samples" class="monitoring-table-wrap"></div></details></section>
         </div>
       </section>
 
@@ -469,6 +505,54 @@
           const [x, y] = monitoringMap.project(lon, lat);
           return x >= view.x && x <= view.x + view.width && y >= view.y && y <= view.y + view.height;
         },
+        // Interactive view: 1x (statewide width) up to maxZoom, centred within the statewide extent.
+        maxZoom: 40,
+        clampView(view) {
+          const bounds = monitoringMap.viewBox("statewide");
+          const aspect = view.height / view.width;
+          const width = Math.min(bounds.width, Math.max(bounds.width / monitoringMap.maxZoom, view.width));
+          const height = width * aspect;
+          const cx = Math.min(bounds.x + bounds.width, Math.max(bounds.x, view.x + view.width / 2));
+          const cy = Math.min(bounds.y + bounds.height, Math.max(bounds.y, view.y + view.height / 2));
+          return { x: cx - width / 2, y: cy - height / 2, width, height };
+        },
+        zoomScale(view) {
+          return monitoringMap.viewBox("statewide").width / view.width;
+        },
+        // factor > 1 zooms in; the anchor point (view units) stays under the pointer when given.
+        zoomView(view, factor, anchor = null) {
+          const width = view.width / factor;
+          const ax = anchor ? anchor.x : view.x + view.width / 2;
+          const ay = anchor ? anchor.y : view.y + view.height / 2;
+          const scale = width / view.width;
+          return monitoringMap.clampView({ x: ax - (ax - view.x) * scale, y: ay - (ay - view.y) * scale, width, height: view.height * scale });
+        },
+        panView(view, dx, dy) {
+          return monitoringMap.clampView({ ...view, x: view.x + dx, y: view.y + dy });
+        },
+        // Centre and zoom so that projected points fit with margin; a single point gets a close view.
+        fitView(points, view) {
+          if (!points.length) return null;
+          const bounds = monitoringMap.viewBox("statewide");
+          const aspect = view.height / view.width;
+          const xs = points.map(([x]) => x);
+          const ys = points.map(([, y]) => y);
+          const maxX = Math.max(...xs);
+          const minX = Math.min(...xs);
+          const maxY = Math.max(...ys);
+          const minY = Math.min(...ys);
+          const width = Math.max(bounds.width / 16, Math.max(maxX - minX, (maxY - minY) / aspect) * 1.5);
+          const height = width * aspect;
+          return monitoringMap.clampView({ x: (maxX + minX) / 2 - width / 2, y: (maxY + minY) / 2 - height / 2, width, height });
+        },
+        inRect(view, lat, lon) {
+          const [x, y] = monitoringMap.project(lon, lat);
+          return x >= view.x && x <= view.x + view.width && y >= view.y && y <= view.y + view.height;
+        },
+        // Drops samples whose matrix the legend has switched off.
+        visibleSamples(located, hidden) {
+          return located.filter(({ row }) => !hidden.has(monitoringView.matrix(row) || monitoringMap.unknownLabel));
+        },
         colorFor(label) {
           return monitoringMap.palette[label] || monitoringMap.otherColor;
         },
@@ -488,16 +572,16 @@
           }));
           return parts.join("");
         },
-        // Grid clustering in projected space; cell size is 1/12 of the current extent width.
-        clusters(located, key) {
-          const view = monitoringMap.viewBox(key);
+        // Grid clustering in projected space on an absolute grid; cell size is 1/12 of the view width.
+        // Zooming in shrinks cells and splits clusters; panning leaves cluster membership unchanged.
+        clusters(located, key, view = monitoringMap.viewBox(key)) {
           const cell = view.width / 12;
           const groups = new Map();
           located.forEach(({ row, coordinates }) => {
             const [lat, lon] = coordinates;
-            if (!monitoringMap.inView(key, lat, lon)) return;
+            if (!monitoringMap.inRect(view, lat, lon)) return;
             const [x, y] = monitoringMap.project(lon, lat);
-            const cellKey = `${Math.floor((x - view.x) / cell)}:${Math.floor((y - view.y) / cell)}`;
+            const cellKey = `${Math.floor(x / cell)}:${Math.floor(y / cell)}`;
             const group = groups.get(cellKey) || { rows: [], x: 0, y: 0, matrices: new Map() };
             const label = monitoringView.matrix(row) || monitoringMap.unknownLabel;
             group.rows.push(row);
@@ -933,8 +1017,30 @@
           $("ca-basis-filter").value = state.caBasis;
           $("oa-filter").value = state.oa;
         }
+        // Lookup maps and per-author summaries are built once per loaded payload; rebuilding
+        // them on every keystroke made filtering O(authors x works) (S3.6: 520 ms -> fast).
+        let lookupCache = { institutions: null, byInst: new Map(), index: null, byWork: new Map(), summaries: [] };
         function institutionById(id) {
-          return (state.data.institutions.institutions || []).find((institution) => institution.inst_id === id) || null;
+          const list = state.data.institutions.institutions || [];
+          if (lookupCache.institutions !== list) {
+            lookupCache.institutions = list;
+            lookupCache.byInst = new Map(list.map((institution) => [institution.inst_id, institution]));
+          }
+          return lookupCache.byInst.get(id) || null;
+        }
+        function workById(id) {
+          const index = state.data.index;
+          if (lookupCache.index !== index) {
+            lookupCache.index = index;
+            lookupCache.byWork = new Map((index.works || []).map((work) => [work.work_id, work]));
+            lookupCache.summaries = null;
+          }
+          return lookupCache.byWork.get(id);
+        }
+        function authorSummaries() {
+          workById("");
+          if (!lookupCache.summaries) lookupCache.summaries = (state.data.index.authors || []).map(authorSummary);
+          return lookupCache.summaries;
         }
         function workBasis(work) {
           if (work.ca_basis) return String(work.ca_basis);
@@ -947,7 +1053,7 @@
           return "none";
         }
         function authorSummary(author) {
-          const works = (state.data.index.works || []).filter((work) => (author.work_ids || []).includes(work.work_id));
+          const works = (author.work_ids || []).map(workById).filter(Boolean);
           const tags = [...new Set(works.flatMap((work) => [...(work.domain_tags || []), ...(work.facet_tags || [])]))].sort();
           const institutionIds = [...new Set(works.flatMap((work) => work.institution_ids || []).concat(author.institution_ids || []))];
           const institutionRows = institutionIds.map(institutionById).filter(Boolean);
@@ -961,10 +1067,11 @@
           return { ...author, works, tags, institutionRows, types, caInstitutions, basis, recentCount, latest };
         }
         function filteredAuthors() {
-          const authors = (state.data.index.authors || []).map(authorSummary);
+          const authors = authorSummaries();
+          const search = state.search.toLowerCase();
           return authors.filter((author) => {
             const haystack = `${author.name} ${author.author_id}`.toLowerCase();
-            if (state.search && !haystack.includes(state.search.toLowerCase())) return false;
+            if (search && !haystack.includes(search)) return false;
             if (state.institutionType && !author.types.includes(state.institutionType)) return false;
             if (state.institution && !author.institutionRows.some((institution) => institution.inst_id === state.institution)) return false;
             if (state.tag && !author.tags.includes(state.tag)) return false;
@@ -1127,8 +1234,35 @@
         }
         let monitoringMapSamples = [];
         let monitoringMapExtent = "statewide";
+        let monitoringMapView = null; // null means the extent's own view; otherwise the user's zoom and pan
+        let monitoringMapHidden = new Set(); // matrix labels hidden with the legend toggles
+        let monitoringMapSelection = null; // { rows } for the selected marker
+        let monitoringMapRendered = []; // clusters from the last draw; markers index into this
+        let monitoringMapFrame = 0;
+        let monitoringMapSuppressClick = false;
+        let monitoringMapGesture = null;
         let caBasemap = null;
         let caBasemapStatus = "idle";
+        function currentMapView() {
+          return monitoringMapView || monitoringMap.viewBox(monitoringMapExtent);
+        }
+        function scheduleMapDraw() {
+          if (monitoringMapFrame) return;
+          monitoringMapFrame = window.requestAnimationFrame(() => { monitoringMapFrame = 0; drawMonitoringMap(); });
+        }
+        function mapScreen(view) {
+          const svg = document.querySelector("#monitoring-map .monitoring-map-svg");
+          if (!svg) return null;
+          const rect = svg.getBoundingClientRect();
+          if (!rect.width || !rect.height) return null;
+          const scale = Math.min(rect.width / view.width, rect.height / view.height);
+          return { rect, scale, offsetX: (rect.width - view.width * scale) / 2, offsetY: (rect.height - view.height * scale) / 2 };
+        }
+        function clientToMapView(clientX, clientY, view) {
+          const screen = mapScreen(view);
+          if (!screen) return null;
+          return { x: view.x + (clientX - screen.rect.left - screen.offsetX) / screen.scale, y: view.y + (clientY - screen.rect.top - screen.offsetY) / screen.scale };
+        }
         function ensureCaBasemap() {
           if (caBasemapStatus !== "idle") return;
           caBasemapStatus = "loading";
@@ -1156,25 +1290,36 @@
           const extent = monitoringMap.extents[key];
           const samples = monitoringMapSamples;
           const located = monitoringView.locatedSamples(samples);
+          const container = $("monitoring-map");
           document.querySelectorAll("[data-map-extent]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.mapExtent === key)));
           if (!located.length) {
-            $("monitoring-map").innerHTML = '<p class="empty">No valid sample coordinates are available for this filter.</p>';
+            container.innerHTML = '<p class="empty">No valid sample coordinates are available for this filter.</p>';
             $("monitoring-map-legend").innerHTML = "";
             $("monitoring-map-note").textContent = `${samples.length} observations match; 0 have valid coordinate pairs.`;
+            $("facet-map-count").textContent = "0 samples in extent";
+            monitoringMapRendered = [];
             return;
           }
-          const view = monitoringMap.viewBox(key);
-          const clusters = monitoringMap.clusters(located, key);
+          const view = currentMapView();
+          // The legend counts follow the filters only; hiding a matrix does not change them.
           const legend = monitoringMap.legend(located, key);
-          const inView = legend.reduce((total, [, count]) => total + count, 0);
+          const inExtent = legend.reduce((total, [, count]) => total + count, 0);
+          const clusters = monitoringMap.clusters(monitoringMap.visibleSamples(located, monitoringMapHidden), key, view);
+          monitoringMapRendered = clusters;
+          const position = new Map(samples.map((row, index) => [row, index]));
+          const selected = new Set(monitoringMapSelection ? monitoringMapSelection.rows : []);
+          const focused = document.activeElement && container.contains(document.activeElement) ? document.activeElement.getAttribute("data-cluster-key") : null;
+          // Marker radius and font scale with the view width, so they keep the same on-screen size.
           const radius = view.width * 0.026;
           const fontSize = view.width * 0.024;
-          const markers = clusters.map((cluster) => {
+          const markers = clusters.map((cluster, index) => {
             const clustered = cluster.rows.length > 1;
             const [first] = cluster.rows;
             const label = clustered
               ? `${cluster.rows.length} samples; ${cluster.mixed ? "mixed matrices: " : "matrix: "}${[...cluster.matrices].map(([name, count]) => `${name} ${count}`).join(", ")}`
               : `${monitoringView.matrix(first) || monitoringMap.unknownLabel}; ${monitoringView.year(first) ? first.date : "Unknown date"}; ${first.method || "method unknown"}`;
+            const isSelected = cluster.rows.some((row) => selected.has(row));
+            const clusterKey = String(Math.min(...cluster.rows.map((row) => position.get(row))));
             // Mixed clusters: a ring split by matrix share, so colour still shows the matrices.
             let ring = "";
             if (cluster.mixed) {
@@ -1188,17 +1333,77 @@
                 return arc;
               }).join("");
             }
-            return `<g class="monitoring-marker${cluster.mixed ? " mixed" : ""}" role="img" aria-label="${escapeHtml(label)}"><title>${escapeHtml(label)}</title>${ring}<circle cx="${cluster.x}" cy="${cluster.y}" r="${radius}" fill="${cluster.color}"/><text x="${cluster.x}" y="${cluster.y}" font-size="${fontSize}" text-anchor="middle" dominant-baseline="central">${cluster.rows.length}</text></g>`;
+            const halo = isSelected ? `<circle class="marker-halo" cx="${cluster.x}" cy="${cluster.y}" r="${radius * 1.5}"/>` : "";
+            return `<g class="monitoring-marker${cluster.mixed ? " mixed" : ""}${isSelected ? " selected" : ""}" role="button" tabindex="0" aria-pressed="${isSelected}" aria-label="${escapeHtml(`${label}. Select for details.`)}" data-cluster-index="${index}" data-cluster-key="${clusterKey}"><title>${escapeHtml(label)}</title>${ring}<circle class="marker-body" cx="${cluster.x}" cy="${cluster.y}" r="${radius}" fill="${cluster.color}"/>${halo}<text x="${cluster.x}" y="${cluster.y}" font-size="${fontSize}" text-anchor="middle" dominant-baseline="central">${cluster.rows.length}</text></g>`;
           }).join("");
           const basemap = caBasemap
             ? `<path class="map-state-waters" fill-rule="evenodd" d="${caBasemap.state_waters}"/><path class="map-land" fill-rule="evenodd" d="${caBasemap.land}"/>`
             : "";
-          $("monitoring-map").innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`${extent.label} sample map: ${inView} samples, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}<g class="monitoring-markers">${markers}</g></svg>`;
+          container.innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`${extent.label} sample map: ${inExtent} samples, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}<g class="monitoring-markers">${markers}</g></svg>`;
+          if (focused !== null) {
+            const marker = container.querySelector(`[data-cluster-key="${focused}"]`);
+            (marker || container).focus({ preventScroll: true });
+          }
           $("monitoring-map-legend").innerHTML = legend.length
-            ? `<ul>${legend.map(([label, count]) => `<li><span class="monitoring-swatch" style="background:${monitoringMap.colorFor(label)}"></span>${escapeHtml(label)} (${count})</li>`).join("")}${clusters.some((cluster) => cluster.mixed) ? '<li><span class="monitoring-swatch mixed"></span>Mixed-matrix cluster: ring segments show each matrix\'s share</li>' : ""}</ul>`
+            ? `<ul>${legend.map(([label, count]) => { const shown = !monitoringMapHidden.has(label); return `<li><button type="button" class="monitoring-legend-toggle" data-matrix="${escapeHtml(label)}" aria-pressed="${shown}"><span class="monitoring-swatch" style="background:${monitoringMap.colorFor(label)}"></span>${escapeHtml(label)} (${count})</button></li>`; }).join("")}${clusters.some((cluster) => cluster.mixed) ? '<li><span class="monitoring-swatch mixed"></span>Mixed-matrix cluster: ring segments show each matrix\'s share</li>' : ""}</ul>`
             : "";
           const basemapNote = caBasemapStatus === "failed" ? "Basemap unavailable; markers only." : caBasemap ? "" : "Basemap loading.";
-          $("monitoring-map-note").textContent = `${samples.length} observations match; ${located.length} have valid coordinate pairs; ${inView} fall inside the ${extent.label} extent. Dots are coloured by matrix, and nearby samples are grouped into numbered clusters. The basemap is a simplified outline of California land and state waters. ${basemapNote}`.trim();
+          const hiddenCount = monitoringMapHidden.size;
+          $("facet-map-count").textContent = `${inExtent} sample${inExtent === 1 ? "" : "s"} in extent`;
+          $("monitoring-map-note").textContent = `${samples.length} observations match; ${located.length} have valid coordinate pairs; ${inExtent} fall inside the ${extent.label} extent. Zoom ${monitoringMap.zoomScale(view).toFixed(1)}x${hiddenCount ? `; ${hiddenCount} matrix${hiddenCount === 1 ? "" : "es"} hidden from the map` : ""}. Dots are coloured by matrix, and nearby samples are grouped into numbered clusters that split as you zoom in. The basemap is a simplified outline of California land and state waters. ${basemapNote}`.trim();
+        }
+        function renderMonitoringMapDetails() {
+          const panel = $("monitoring-map-details");
+          const rows = monitoringMapSelection ? monitoringMapSelection.rows : [];
+          if (!rows.length) {
+            panel.innerHTML = "";
+            return;
+          }
+          const payload = state.data.monitoring;
+          const shown = rows.slice(0, 25);
+          panel.innerHTML = `<div class="map-details-card"><div class="map-details-head"><h4>${rows.length} sample${rows.length === 1 ? "" : "s"} selected</h4><div class="map-details-actions"><button type="button" data-map-fit>Zoom to these</button><button type="button" data-map-close>Close</button></div></div><div class="monitoring-table-wrap"><table class="monitoring-table"><thead><tr><th>Date</th><th>Matrix</th><th>Region</th><th>Method</th><th>Particle count</th><th>Concentration</th><th>Citation</th></tr></thead><tbody>${shown.map((row) => { const source = (payload.datasets || []).find((dataset) => dataset.id === row.dataset_id); return `<tr><td>${escapeHtml(monitoringView.year(row) ? row.date : "Unknown date")}</td><td>${escapeHtml(monitoringView.matrix(row) || "Unknown matrix")}</td><td>${escapeHtml(monitoringView.region(row).replaceAll("_", " "))}</td><td>${escapeHtml(row.method || "unknown")}</td><td>${escapeHtml(monitoringView.displayValue(row.particle_count, "unknown"))}</td><td>${escapeHtml(monitoringView.displayValue(row.concentration_value, "not available"))} ${escapeHtml(row.concentration_unit || "")}</td><td>${escapeHtml(row.citation || source?.citation || "Citation unavailable")}</td></tr>`; }).join("")}</tbody></table></div>${rows.length > 25 ? `<p class="data-note">+${rows.length - 25} more</p>` : ""}</div>`;
+        }
+        function selectMapCluster(index) {
+          const cluster = monitoringMapRendered[index];
+          if (!cluster) return;
+          monitoringMapSelection = { rows: cluster.rows.slice() };
+          renderMonitoringMapDetails();
+          drawMonitoringMap();
+        }
+        function fitMapToSelection() {
+          const rows = monitoringMapSelection ? monitoringMapSelection.rows : [];
+          const points = rows.map((row) => monitoringView.coordinates(row)).filter(Boolean).map(([lat, lon]) => monitoringMap.project(lon, lat));
+          const fitted = monitoringMap.fitView(points, currentMapView());
+          if (!fitted) return;
+          monitoringMapView = fitted;
+          drawMonitoringMap();
+        }
+        const FACET_IDS = ["facet-filters", "facet-sources", "facet-map", "facet-gaps", "facet-samples"];
+        const FACET_STORAGE_KEY = "monitoring-facets";
+        function readFacetState() {
+          try {
+            const saved = JSON.parse(window.sessionStorage.getItem(FACET_STORAGE_KEY) || "{}");
+            return saved && typeof saved === "object" ? saved : {};
+          } catch (error) {
+            return {};
+          }
+        }
+        function saveFacetState() {
+          const snapshot = {};
+          FACET_IDS.forEach((id) => { snapshot[id] = $(id).open; });
+          try {
+            window.sessionStorage.setItem(FACET_STORAGE_KEY, JSON.stringify(snapshot));
+          } catch (error) {
+            // Storage can be blocked; the sections then keep their default state.
+          }
+        }
+        function restoreFacetState() {
+          const saved = readFacetState();
+          FACET_IDS.forEach((id) => { if (typeof saved[id] === "boolean") $(id).open = saved[id]; });
+        }
+        function setAllFacets(open) {
+          FACET_IDS.forEach((id) => { $(id).open = open; });
+          saveFacetState();
         }
         function renderMonitoring() {
           const payload = state.data.monitoring;
@@ -1226,9 +1431,18 @@
               ? `Observations come only from rights-cleared sources: ${publishedSources.map((row) => `${row.name} (${row.publication_license ? row.publication_license.id : "licence recorded"})`).join("; ")}. They describe those projects' samples, not statewide monitoring coverage, and concentrations from different methods are not directly comparable. Blank cells are not evidence of a data gap. Cite: ${publishedSources.map((row) => row.citation).join("; ")}.`
               : "Registry entries describe sources and programs, not confirmed sample coverage. No cleared monitoring observations are available for this public snapshot, so absence here is not evidence of a data gap.";
           $("monitoring-source-count").textContent = `${datasets.length} source record${datasets.length === 1 ? "" : "s"} shown · contributor location is unknown unless explicitly recorded`;
+          const activeFilters = Object.values(f).filter(Boolean).length;
+          $("facet-filters-count").textContent = activeFilters ? `${activeFilters} filter${activeFilters === 1 ? "" : "s"} active` : "No filters set";
+          $("facet-sources-count").textContent = `${datasets.length} source${datasets.length === 1 ? "" : "s"}`;
           $("monitoring-sources").innerHTML = datasets.length ? `<table class="monitoring-table"><thead><tr><th>Source</th><th>Steward / tier</th><th>Matrix and region</th><th>Format / cadence</th><th>License</th><th>Checked</th><th>Citations</th></tr></thead><tbody>${datasets.map((row) => `<tr><th scope="row">${escapeHtml(row.name)}<br><small>${row.seed_eligible ? "Verified registry seed" : "Discovery record; not in seed count"} · ${escapeHtml(row.entity_type)} · ${escapeHtml(row.status)}</small>${workDatasetView.linkedWorksHtml(row)}</th><td>${escapeHtml(row.steward)}<br>Tier ${escapeHtml(row.access_tier)} · contributor in CA: ${row.contributor_in_ca === true ? "yes" : row.contributor_in_ca === false ? "no" : "unknown"}</td><td>${escapeHtml((row.sample_matrix || []).join(", "))}<br>${escapeHtml(row.region)}</td><td>${escapeHtml((row.format || []).join(", "))}<br>${escapeHtml(row.cadence)}</td><td>${escapeHtml(row.license)}</td><td>${escapeHtml(row.last_checked || "unknown")}</td><td><a href="${escapeHtml(row.url)}" target="_blank" rel="noreferrer">Source</a> · <a href="${escapeHtml(row.provenance_url)}" target="_blank" rel="noreferrer">Evidence</a><br>${escapeHtml(row.citation)}</td></tr>`).join("")}</tbody></table>` : '<p class="empty">No source records match these filters.</p>';
           const samples = filteredMonitoringSamples();
           monitoringMapSamples = samples;
+          if (monitoringMapSelection) {
+            const available = new Set(samples);
+            const rows = monitoringMapSelection.rows.filter((row) => available.has(row));
+            monitoringMapSelection = rows.length ? { rows } : null;
+            renderMonitoringMapDetails();
+          }
           drawMonitoringMap();
           $("monitoring-gaps-note").textContent = samples.length
             ? `Observed sample counts in the ${localPreview ? "private local preview" : "public data"} only. Blank cells do not imply absence of monitoring.`
@@ -1236,11 +1450,13 @@
           const counts = new Map();
           samples.forEach((row) => { const year = monitoringView.year(row) || "Unknown date"; const matrix = monitoringView.matrix(row) || "Unknown matrix"; const key = `${matrix}\u0000${monitoringView.region(row)}\u0000${year}`; counts.set(key, (counts.get(key) || 0) + 1); });
           const keys = [...counts.keys()].sort();
+          $("facet-gaps-count").textContent = `${keys.length} coverage cell${keys.length === 1 ? "" : "s"}`;
           $("monitoring-gaps").innerHTML = keys.length ? `<table class="gaps-table"><thead><tr><th>Matrix</th><th>Region</th><th>Year</th><th>Samples</th></tr></thead><tbody>${keys.map((key) => { const [matrix, region, year] = key.split("\u0000"); return `<tr><th scope="row">${escapeHtml(matrix)}</th><td>${escapeHtml(region.replaceAll("_", " "))}</td><td>${escapeHtml(year)}</td><td class="gaps-cell">${counts.get(key)}</td></tr>`; }).join("")}</tbody></table>` : '<p class="empty">No sample-derived coverage cells are available.</p>';
           const MONITORING_PAGE_SIZE = 50;
           const monitoringPages = Math.max(1, Math.ceil(samples.length / MONITORING_PAGE_SIZE));
           state.monitoringPage = Math.min(Math.max(state.monitoringPage, 0), monitoringPages - 1);
           const monitoringPageStart = state.monitoringPage * MONITORING_PAGE_SIZE;
+          $("facet-samples-count").textContent = `${samples.length} row${samples.length === 1 ? "" : "s"}`;
           $("monitoring-samples").innerHTML = samples.length ? `<table class="monitoring-table"><thead><tr><th>Date</th><th>Matrix / region</th><th>Method</th><th>Count / concentration</th><th>Citation</th></tr></thead><tbody>${samples.slice(monitoringPageStart, monitoringPageStart + MONITORING_PAGE_SIZE).map((row) => { const source = payload.datasets.find((dataset) => dataset.id === row.dataset_id); const dateLabel = monitoringView.year(row) ? row.date : "Unknown date"; const matrixLabel = monitoringView.matrix(row) || "Unknown matrix"; return `<tr><td>${escapeHtml(dateLabel)}</td><td>${escapeHtml(matrixLabel)} / ${escapeHtml(monitoringView.region(row).replaceAll("_", " "))}</td><td>${escapeHtml(row.method || "unknown")}</td><td>${escapeHtml(monitoringView.displayValue(row.particle_count, "unknown"))} particles · ${escapeHtml(monitoringView.displayValue(row.concentration_value, "not available"))} ${escapeHtml(row.concentration_unit || "")}${row.deposition_rate_value === null || row.deposition_rate_value === undefined ? "" : ` · deposition ${escapeHtml(String(row.deposition_rate_value))} ${escapeHtml(row.deposition_rate_unit || "")}`}</td><td>${escapeHtml(row.citation || source?.citation || "Citation unavailable")}${source ? ` · <a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">source</a>` : ""}</td></tr>`; }).join("")}</tbody></table>${samples.length > MONITORING_PAGE_SIZE ? `<p class="data-note monitoring-pager">Rows ${monitoringPageStart + 1}–${Math.min(monitoringPageStart + MONITORING_PAGE_SIZE, samples.length)} of ${samples.length} <button type="button" data-monitoring-page="-1" ${monitoringPageStart === 0 ? "disabled" : ""}>◀ Previous</button> <button type="button" data-monitoring-page="1" ${monitoringPageStart + MONITORING_PAGE_SIZE >= samples.length ? "disabled" : ""}>Next ▶</button></p>` : ""}` : '<p class="empty">No sample observations are available in this snapshot.</p>';
         }
         function aboutViewModel(metadata, index) {
@@ -1339,7 +1555,94 @@
           $(id).addEventListener("input", () => { const f = state.monitoringFilters; f.tier = $("monitoring-tier").value; f.search = $("monitoring-search").value.trim(); f.contributor = $("monitoring-contributor").value; f.matrix = $("monitoring-matrix").value; f.year = $("monitoring-year").value; f.region = $("monitoring-region").value; state.monitoringPage = 0; renderMonitoring(); });
           $(id).addEventListener("change", () => { const f = state.monitoringFilters; f.tier = $("monitoring-tier").value; f.search = $("monitoring-search").value.trim(); f.contributor = $("monitoring-contributor").value; f.matrix = $("monitoring-matrix").value; f.year = $("monitoring-year").value; f.region = $("monitoring-region").value; state.monitoringPage = 0; renderMonitoring(); });
         });
-        document.querySelectorAll("[data-map-extent]").forEach((button) => button.addEventListener("click", () => { monitoringMapExtent = button.dataset.mapExtent; drawMonitoringMap(); }));
+        document.querySelectorAll("[data-map-extent]").forEach((button) => button.addEventListener("click", () => { monitoringMapExtent = button.dataset.mapExtent; monitoringMapView = null; scheduleMapDraw(); }));
+        function zoomMapBy(factor) { monitoringMapView = monitoringMap.zoomView(currentMapView(), factor); scheduleMapDraw(); }
+        function panMapBy(dx, dy) { monitoringMapView = monitoringMap.panView(currentMapView(), dx, dy); scheduleMapDraw(); }
+        $("monitoring-zoom-in").addEventListener("click", () => zoomMapBy(1.5));
+        $("monitoring-zoom-out").addEventListener("click", () => zoomMapBy(1 / 1.5));
+        $("monitoring-zoom-reset").addEventListener("click", () => { monitoringMapView = null; scheduleMapDraw(); });
+        const mapContainer = $("monitoring-map");
+        mapContainer.addEventListener("pointerdown", (event) => {
+          monitoringMapSuppressClick = false;
+          if (event.button !== 0) return;
+          monitoringMapGesture = { id: event.pointerId, x: event.clientX, y: event.clientY, dragging: false };
+        });
+        mapContainer.addEventListener("pointermove", (event) => {
+          if (!monitoringMapGesture || event.pointerId !== monitoringMapGesture.id) return;
+          const dx = event.clientX - monitoringMapGesture.x;
+          const dy = event.clientY - monitoringMapGesture.y;
+          if (!monitoringMapGesture.dragging) {
+            // Below 4px the gesture is still a click, so markers keep working.
+            if (Math.hypot(dx, dy) < 4) return;
+            monitoringMapGesture.dragging = true;
+            mapContainer.setPointerCapture(event.pointerId);
+            mapContainer.classList.add("is-panning");
+          }
+          const view = currentMapView();
+          const screen = mapScreen(view);
+          if (!screen) return;
+          monitoringMapView = monitoringMap.panView(view, -dx / screen.scale, -dy / screen.scale);
+          monitoringMapGesture.x = event.clientX;
+          monitoringMapGesture.y = event.clientY;
+          scheduleMapDraw();
+        });
+        const endMapGesture = (event) => {
+          if (!monitoringMapGesture || event.pointerId !== monitoringMapGesture.id) return;
+          monitoringMapSuppressClick = monitoringMapGesture.dragging;
+          monitoringMapGesture = null;
+          mapContainer.classList.remove("is-panning");
+        };
+        mapContainer.addEventListener("pointerup", endMapGesture);
+        mapContainer.addEventListener("pointercancel", endMapGesture);
+        mapContainer.addEventListener("click", (event) => {
+          if (monitoringMapSuppressClick) { monitoringMapSuppressClick = false; return; }
+          const marker = event.target.closest(".monitoring-marker");
+          if (marker) selectMapCluster(Number(marker.dataset.clusterIndex));
+        });
+        mapContainer.addEventListener("wheel", (event) => {
+          event.preventDefault();
+          const view = currentMapView();
+          const anchor = clientToMapView(event.clientX, event.clientY, view);
+          const delta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+          monitoringMapView = monitoringMap.zoomView(view, Math.exp(-delta * 0.0015), anchor);
+          scheduleMapDraw();
+        }, { passive: false });
+        mapContainer.addEventListener("keydown", (event) => {
+          const marker = event.target.closest(".monitoring-marker");
+          if (marker && (event.key === "Enter" || event.key === " ")) {
+            event.preventDefault();
+            selectMapCluster(Number(marker.dataset.clusterIndex));
+            return;
+          }
+          if (event.target !== mapContainer) return;
+          const step = currentMapView().width * 0.15;
+          const actions = { ArrowLeft: () => panMapBy(-step, 0), ArrowRight: () => panMapBy(step, 0), ArrowUp: () => panMapBy(0, -step), ArrowDown: () => panMapBy(0, step), "+": () => zoomMapBy(1.25), "=": () => zoomMapBy(1.25), "-": () => zoomMapBy(0.8), _: () => zoomMapBy(0.8) };
+          const action = actions[event.key];
+          if (!action) return;
+          event.preventDefault();
+          action();
+        });
+        $("monitoring-map-legend").addEventListener("click", (event) => {
+          const button = event.target.closest("[data-matrix]");
+          if (!button) return;
+          const label = button.dataset.matrix;
+          if (monitoringMapHidden.has(label)) monitoringMapHidden.delete(label); else monitoringMapHidden.add(label);
+          drawMonitoringMap();
+          const again = [...$("monitoring-map-legend").querySelectorAll("[data-matrix]")].find((item) => item.dataset.matrix === label);
+          if (again) again.focus();
+        });
+        $("monitoring-map-details").addEventListener("click", (event) => {
+          if (event.target.closest("[data-map-fit]")) fitMapToSelection();
+          if (event.target.closest("[data-map-close]")) {
+            monitoringMapSelection = null;
+            renderMonitoringMapDetails();
+            drawMonitoringMap();
+            mapContainer.focus({ preventScroll: true });
+          }
+        });
+        FACET_IDS.forEach((id) => $(id).addEventListener("toggle", () => { saveFacetState(); if (id === "facet-map" && $(id).open) scheduleMapDraw(); }));
+        $("monitoring-facets-expand").addEventListener("click", () => setAllFacets(true));
+        $("monitoring-facets-collapse").addEventListener("click", () => setAllFacets(false));
         $("monitoring-samples").addEventListener("click", (event) => { const button = event.target.closest("[data-monitoring-page]"); if (!button) return; state.monitoringPage += Number(button.dataset.monitoringPage); renderMonitoring(); $("monitoring-samples-heading").scrollIntoView({ block: "start" }); });
         $("reset-filters").addEventListener("click", () => { state.search = state.institutionType = state.institution = state.tag = state.yearFrom = state.yearTo = state.caBasis = state.oa = ""; writeHash(); updateViews(); $("expert-search").focus(); });
         $("export-csv").addEventListener("click", () => {
@@ -1354,6 +1657,7 @@
         $("drawer-backdrop").addEventListener("click", closeDrawer);
         document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !$("researcher-drawer").hidden) closeDrawer(); });
         window.addEventListener("hashchange", () => { readHash(); if (state.data) updateViews(); });
+        restoreFacetState();
         readHash();
         loadData();
       })();

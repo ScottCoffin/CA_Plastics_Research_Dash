@@ -23,6 +23,37 @@ The C5 time budgets pass on the fixture. The payload target passes for the fixtu
 
 No safe representative export is available locally. The daily works workflow uses the configured candidate query and is budget-guarded, but the S1.5 candidate remains deliberately inactive pending owner promotion review. Do not activate it just to manufacture a performance fixture. The 98,118 metadata count is not a license to synthesize rows or a substitute for an export. Once an approved production query is active and an authorized bounded run is made under the existing OpenAlex credit guard, export that corpus and rerun C5. Until then, the full-data performance DoD is unmet.
 
+## Real-data pass (S2.1-B, 2026-11-11)
+
+- Ingest run [43043699471](https://github.com/ScottCoffin/CA_Plastics_Research_Dash/actions/runs/43043699471)
+  (manual dispatch, commit `3f173d4`) detected the query-version change (`None -> plastic-v3.1`),
+  backfilled 1950-01-01..2027-12-31 in one cursor-paged window per institution batch, fetched
+  1,916 works (1,506 unique), normalized, labelled, exported `site/data`, committed it as
+  `e954181` and dispatched deploy run 43044301692 (success). Cost: 53 boolean-search pages,
+  about 0.05 USD (pre-run count of the same scope: 49 calls, 490 credits).
+- Live check: `https://plastiverse.live/data/index.json` returned HTTP 200 (1,400,461 bytes) with
+  the CI counts. Named CA researchers present: Win Cowger 37 CA works, Andrew B. Gray 29,
+  Scott Coffin 25, Matthew S. Savoca 23, Stephen B. Weisberg 16, Leah M. Thornton Hampton 13,
+  Rebecca Sutton 9.
+- Curation applied afterwards (this checkpoint): AT-1 owner audit labels (497 rows; 128
+  `exclude`, 62 of them in the corpus) and Claude Haiku relevance calls for the 1,081 works the
+  owner had not labelled (`curation/work_relevance.csv`, owner_review pending). Export after
+  curation: 1,424 works (1,115 plastic-related), 1,982 CA-affiliated experts, 2,141 institutions.
+
+| C5 budget | Result (real data, after curation) |
+|---|---:|
+| Initial payload <3 MB gzip | 442,037 bytes (all top-level payloads; author detail files load lazily, 4.27 MB total gzip) |
+| First Contentful Paint | median 204 ms; max 1,244 ms |
+| Meaningful render <2 s | median 807 ms; max 1,765 ms |
+| Filter response <150 ms | median 5.5 ms; max 15 ms (10 named-author searches) |
+
+Method: headless Edge (Playwright, `channel=msedge`) against `python -m http.server` on
+localhost, five cold contexts; render = navigation start to `Data loaded` plus a virtual row;
+filter = input event to the next animation frame. Before this checkpoint, filtering took a
+median of 519 ms because every keystroke rebuilt each author's summary by scanning all works
+(O(authors x works)). Summaries and id lookups are now built once per payload. No DuckDB-Wasm
+escalation is needed. `scripts/check_s3_2.py` now budgets the initial payload only, matching C5.
+
 ## Reproduction commands
 
 ```powershell
