@@ -10,8 +10,13 @@ from atlas.query_audit_review import REVIEW_CSV, load_review, save_review, set_l
 
 @pytest.fixture()
 def review_copy(tmp_path: Path) -> Path:
+    # Work on a copy with labels cleared: the real CSV holds the owner's labels in progress.
     target = tmp_path / "review.csv"
     shutil.copyfile(REVIEW_CSV, target)
+    table = load_review(target)
+    for row in table.rows:
+        row.update(review_label="", reviewer="", noise_terms="")
+    save_review(table, target)
     return target
 
 
