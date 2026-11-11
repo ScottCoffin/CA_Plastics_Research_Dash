@@ -250,3 +250,9 @@ a stand-alone global count) before adding it.
 `scratch/at1/bisect.py` and `types.py` broke `random` and `enum` imports
 (circular-import errors). Name scratch scripts after their purpose, never after a
 stdlib module.
+
+## Clean-worktree pytest can be very slow on this machine
+On 2026-11-11 the clean `git worktree` test run took 1 h 35 min (779 passed), against
+about 90 s in the main checkout. The suspect is real-time antivirus scanning freshly
+written files. Run that step in the background with a long timeout, and do not push
+until it reports.
