@@ -24,7 +24,12 @@ from typing import Any
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-from atlas.query import load_query_config, openalex_filter
+from atlas.query import (
+    always_include_filters,
+    load_query_config,
+    openalex_filter,
+    type_filters,
+)
 from atlas.util.budget import (
     conservative_request_cost,
     daily_logged_usage,
@@ -144,10 +149,17 @@ def build_works_url(
     updated_since: str | None = None,
     cursor: str = "*",
     per_page: int = DEFAULT_PER_PAGE,
+    scope_filter: str | None = None,
 ) -> str:
-    """Build one bounded works request for a date window or update cursor."""
+    """Build one bounded works request for a date window or update cursor.
 
-    if not institution_ids:
+    ``scope_filter`` (an ``always_include`` entry) replaces both the term search and
+    the institution filter; type exclusions and date windows still apply.
+    """
+
+    if scope_filter is not None and institution_ids:
+        raise ValueError("scope_filter requests take no institution IDs")
+    if scope_filter is None and not institution_ids:
         raise ValueError("at least one institution ID is required")
     if len(institution_ids) > MAX_INSTITUTION_IDS_PER_REQUEST:
         raise ValueError("OpenAlex accepts at most 100 institution IDs per request")
@@ -158,7 +170,14 @@ def build_works_url(
     if not 1 <= per_page <= 100:
         raise ValueError("per_page must be between 1 and 100")
 
-    filters = [openalex_filter(config), "institutions.id:" + "|".join(institution_ids)]
+    if scope_filter is not None:
+        filters = [scope_filter, *type_filters(config)]
+    else:
+        filters = [
+            openalex_filter(config),
+            "institutions.id:" + "|".join(institution_ids),
+            *type_filters(config),
+        ]
     if start_date:
         filters.append(_date_filter("from_publication_date", start_date))
     if end_date:
@@ -463,7 +482,11 @@ def ingest_live(
     conservative_cost_total = Decimal(0)
     credits_total = Decimal(0)
     with ApiCostLogger(actual_run_id, paths.usage_log) as logger:
-        for batch in chunks(list(institution_ids)):
+        units: list[tuple[list[str], str | None]] = [
+            (batch, None) for batch in chunks(list(institution_ids))
+        ]
+        units += [([], scope) for scope in always_include_filters(config)]
+        for batch, scope in units:
             windows: list[tuple[str | None, str | None]]
             if start_year is not None and end_year is not None:
                 windows = [
@@ -485,6 +508,7 @@ def ingest_live(
                     url = build_works_url(
                         config,
                         batch,
+                        scope_filter=scope,
                         start_date=window_start,
                         end_date=window_end,
                         updated_since=updated_since,

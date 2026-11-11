@@ -238,3 +238,15 @@ request (opc.ca.gov sends `Last-Modified` equal to `Date`).
 real (522) origin was fetched and the probe hung for 10 minutes. Match with a
 predicate (`lambda url: url.split("?")[0] == prefix`) and use short timeouts
 while debugging.
+
+## OpenAlex search stemming breaks exclusions
+Adding `microplasticity` to the query's NOT list cut Win Cowger's matched works from
+60 to 11, because OpenAlex stems it onto `microplastic`. The `plastic` stem also hits
+`plasticity`, which is why "litter AND plastic" pulled in leaf-litter phenotypic
+plasticity papers. Measure each exclusion and context pair alone (labelled set plus
+a stand-alone global count) before adding it.
+
+## Scratch scripts must not shadow stdlib modules
+`scratch/at1/bisect.py` and `types.py` broke `random` and `enum` imports
+(circular-import errors). Name scratch scripts after their purpose, never after a
+stdlib module.

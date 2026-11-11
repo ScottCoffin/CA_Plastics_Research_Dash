@@ -11,6 +11,7 @@ Nothing is sent anywhere; the app only reads and writes that CSV.
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 from pathlib import Path
@@ -28,8 +29,18 @@ from atlas.query_audit_review import (  # noqa: E402
     set_label,
 )
 
-# ATLAS_REVIEW_CSV points the app at a copy (used for smoke tests).
-CSV_PATH = Path(os.environ.get("ATLAS_REVIEW_CSV") or ROOT / REVIEW_CSV)
+
+def _csv_path() -> Path:
+    """``-- --csv PATH`` (e.g. the v3 repeat audit), else ATLAS_REVIEW_CSV, else the default."""
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--csv", default="")
+    args, _ = parser.parse_known_args()
+    chosen = args.csv or os.environ.get("ATLAS_REVIEW_CSV") or str(REVIEW_CSV)
+    path = Path(chosen)
+    return path if path.is_absolute() else ROOT / path
+
+
+CSV_PATH = _csv_path()
 BADGE = {
     "relevant": ("#0f766e", "#ecfdf5"),
     "not_relevant": ("#b91c1c", "#fef2f2"),

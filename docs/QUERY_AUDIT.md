@@ -177,3 +177,77 @@ word that pulled in an off-topic work. Each click saves to `docs/QUERY_AUDIT_REV
 One label covers all rows of the same `work_id` (354 works across 405 rows). The
 default "Unlabeled" view moves to the next unlabelled work; "Show: All" revisits
 earlier labels. Label helpers: `atlas.query_audit_review`.
+
+## Results of the owner audit (2026-11-10)
+
+Scott Coffin labelled all 354 works (405 rows) on 2026-11-10: 293 relevant and 61 not
+relevant. The owner had approved this 354-work sample as the audit set, so the AT-1
+"≥ 500 labelled works" target is closed at 354 by owner decision.
+
+- Precision of `plastic-v2-candidate`: 293/354 = **82.8%** (Wilson 95% CI 78.5-86.3%).
+- By stratum, precision is 100% at Stanford, UC San Diego, UC Riverside, UC Santa Cruz
+  and Scripps, and 96% at UC Davis. It is low at Caltech (6/21), Lawrence Livermore
+  (0/4) and JPL (7/10).
+- Noise groups: materials-science "plasticity" (microplasticity, strain-gradient
+  plasticity, ductile fracture, elastic-plastic contacts); "microfiber" in engineering
+  and medicine (gecko adhesives, vascular grafts, scaffolds); microfabrication ("micro
+  plastic embossing", "microplastic lens"); and passing mentions in air-pollution,
+  exposome and policy abstracts. Recorded noise terms: microfiber (3), microplasticity,
+  plasticity, elastic-plastic.
+- Duplicates and non-research items: 5 near-duplicate pairs (preprint/article, chapter/
+  "other", one book in two years) and 21 items typed editorial (8), dataset (4), other
+  (3), erratum (3), peer-review (2) and letter (1).
+
+## Query v3 candidate (`config/queries_v3.yml`, not yet active)
+
+OpenAlex stems search terms. `microplasticity` therefore matches `microplastic`: as an
+exclusion it removed 49 of Win Cowger's 60 matched works. `plastic` also matches
+`plasticity`, so neither term may be used as an exclusion or as a context word.
+Exclusions were tested one at a time on the labelled set and kept only if they removed
+no relevant work.
+
+| Change | Detail |
+|---|---|
+| Core terms added | macroplastic, mesoplastic, "plastics pollution", "plastic pollutants", "plastic trash", "plastic contamination", "anthropogenic litter", "anthropogenic debris", "anthropogenic microparticle(s)", "ingested plastic(s)", "eat plastic", "consuming plastic" |
+| Qualified terms | microfiber only with textile, laundry, washing, shedding, wastewater or microplastic context; new litter (trash, cleanup, roadside, beach, stormwater) and trash (litter, stormwater, beach, creek, ocean, debris) |
+| Exclusions added | crystal plasticity, strain gradient plasticity, ductile fracture, elastic-plastic, plastic embossing, gecko, dislocation, nanopillar, plastic deformation (each removed only not-relevant works; polycrystalline, "particulate matter" and PM2.5 were rejected because each removed relevant works) |
+| Types excluded | erratum, peer-review, retraction, paratext (`type:!<slug>` filters; editorials and datasets are kept because the owner labelled them relevant) |
+| Always included | works whose raw affiliation names the Moore Institute for Plastic Pollution Research or Algalita (owner: all Moore Institute publications). OpenAlex has no institution record for the Institute and leaves 43 of its authorships without any institution, so these works bypass both the terms and the California institution filter. |
+
+Pairs dropped after measuring their stand-alone contribution (works matched beyond v2,
+globally): litter + anthropogenic (2,372), litter + plastic (2,027), trash + plastic
+(1,838), trash + river (1,195, mostly trash racks), microfiber + environment (722),
+trash + capture (720), and a `plastics` qualifier that stemmed to "plastic".
+
+Evaluation (2026-11-10; free-plan, cost-logged calls):
+
+| Measure | v2 | v3 |
+|---|---:|---:|
+| Labelled works matched | 354 | 329 |
+| Precision on the labelled set | 82.8% | 89.1% (0 relevant works lost) |
+| Win Cowger works matched | 60 | 67 |
+| Scott Coffin | 33 | 35 |
+| Andrew B. Gray (two author records) | 33 | 37 |
+| Matthew S. Savoca | 22 | 27 |
+| Moore Institute affiliation works (49) | 40 | 44 by terms; 49 with the always-include rule |
+| Global matching works | 98,424 | 102,333 |
+
+The named authors' remaining misses fall outside the audit's scope (toxicology and
+water reuse, wildfire sediment, whale ecology) or are records without abstracts
+(software versions, datasets). Works with no California-registry institution still
+fall outside the institution filter. For the Moore Institute the always-include rule
+covers this; other cases need registry additions.
+
+## Repeat audit (owner action)
+
+`py -3.14 scripts/run_at1_repeat_sample.py` drew 76 works that v3 adds over v2
+(10 per stratum, seed 20261110, type exclusions applied) into
+`docs/QUERY_AUDIT_REVIEW_V3.csv`. Label them with:
+
+```powershell
+py -3.14 -m streamlit run scripts/review_query_audit_app.py -- --csv docs/QUERY_AUDIT_REVIEW_V3.csv
+```
+
+The precision of these additions decides whether v3 replaces v2 (QUESTIONS S1.5-A).
+Near-duplicate collapsing (preprint versus article, repeated chapters) belongs in S2.2
+normalization and is tracked in TODO under AT-1.

@@ -162,6 +162,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   bounded export; do not promote the inactive candidate to create a benchmark.
 
 ## Known pitfalls (top 10; details in LESSONS.md)
+- OpenAlex `title_and_abstract.search` stems terms: `microplasticity` matches `microplastic`, `plastic` matches `plasticity`, `plastics` matches `plastic`. Never use them as exclusions or context words; test every exclusion against the labelled AT-1 set (`docs/QUERY_AUDIT.md`).
 - GNU Make is not on PATH; call Rtools as `/c/rtools45/usr/bin/make.exe PYTHON="py -3.14" APPDATA="$APPDATA" USERPROFILE="$USERPROFILE" <target>`. The Rtools shell drops APPDATA (pytest/ruff live in user site-packages) and USERPROFILE (matplotlib home), giving false `No module named pytest` or `test_eval` failures; bare `python` is 3.15 without deps.
 - Do not treat Part D research claims as live API contracts without smoke tests.
 - Do not copy from reuse candidates before recording and confirming their licenses.

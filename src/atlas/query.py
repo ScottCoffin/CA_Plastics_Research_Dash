@@ -69,6 +69,44 @@ def openalex_filter(config: Mapping[str, Any], *, include_exclusions: bool = Tru
     return f"{field}:{render_query(config, include_exclusions=include_exclusions)}"
 
 
+_TYPE_SLUG = re.compile(r"[a-z][a-z-]*")
+
+
+def type_filters(config: Mapping[str, Any]) -> list[str]:
+    """OpenAlex filters dropping non-research types (``exclude_types``, AT-1 v3).
+
+    Each type becomes its own ``type:!<slug>`` filter; OpenAlex ANDs repeated keys
+    (verified 2026-11-10). Configs without the key (v2) return no filters.
+    """
+    types = config.get("exclude_types") or []
+    if not isinstance(types, list) or not all(
+        isinstance(t, str) and _TYPE_SLUG.fullmatch(t) for t in types
+    ):
+        raise ValueError("exclude_types must be a list of OpenAlex type slugs")
+    return [f"type:!{slug}" for slug in types]
+
+
+def always_include_filters(config: Mapping[str, Any]) -> list[str]:
+    """Scope filters whose works are ingested regardless of terms and institutions.
+
+    Used for owner-designated groups with no usable OpenAlex institution record
+    (Moore Institute for Plastic Pollution Research, AT-1 v3). Each entry needs a
+    ``filter`` on ``raw_affiliation_strings.search`` and a ``reason``.
+    """
+    entries = config.get("always_include") or []
+    if not isinstance(entries, list):
+        raise ValueError("always_include must be a list")
+    filters = []
+    for entry in entries:
+        if not isinstance(entry, Mapping) or not str(entry.get("reason") or "").strip():
+            raise ValueError("each always_include entry needs a filter and a reason")
+        value = str(entry.get("filter") or "")
+        if not value.startswith("raw_affiliation_strings.search:") or "," in value:
+            raise ValueError("always_include filters must be one raw_affiliation_strings.search")
+        filters.append(value)
+    return filters
+
+
 def openalex_url(
     config: Mapping[str, Any],
     *,
@@ -78,7 +116,10 @@ def openalex_url(
 ) -> str:
     """Build a fully encoded OpenAlex works URL."""
 
-    filters = [openalex_filter(config, include_exclusions=include_exclusions)]
+    filters = [
+        openalex_filter(config, include_exclusions=include_exclusions),
+        *type_filters(config),
+    ]
     filters.extend(extra_filters or [])
     query_params: dict[str, object] = {"filter": ",".join(filters), **params}
     return "https://api.openalex.org/works?" + urlencode(query_params)

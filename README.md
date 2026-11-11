@@ -21,7 +21,15 @@ each work **Relevant**, **Not relevant** or **Unsure**. A noise term (the word t
 pulled in an off-topic work, such as "plasticity") is optional. Every click saves to
 `docs/QUERY_AUDIT_REVIEW.csv`, so you can stop and resume at any time. A label covers
 every row of the same work. The default view shows only unlabelled works; choose
-**Show: All** to revisit earlier labels. Details: `docs/QUERY_AUDIT.md`.
+**Show: All** to revisit earlier labels. **Back to last reviewed** reopens the work you just labelled.
+
+For the v3 repeat audit, open the second file instead:
+
+```powershell
+py -3.14 -m streamlit run scripts/review_query_audit_app.py -- --csv docs/QUERY_AUDIT_REVIEW_V3.csv
+```
+
+Details: `docs/QUERY_AUDIT.md`.
 
 ## Development
 

@@ -1,0 +1,133 @@
+# Query v3 candidate (AT-1 revision, 2026-11-10). Not active: config/queries.yml (v2) stays
+# the active candidate until the owner reviews the repeat audit and decides S1.5-A.
+version: plastic-v3-candidate
+status: agent_revision_candidate
+scope: title_and_abstract
+core_terms:
+- microplastic
+- nanoplastic
+- micro-plastic
+- nano-plastic
+- micro-sized plastic
+- microsized plastics
+- plastic pollution
+- plastic debris
+- plastic litter
+- marine debris
+- marine litter
+- plastic particles
+- plastic fragments
+- plastic ingestion
+- resin pellet
+- plastic pellet
+- macroplastic
+- mesoplastic
+- plastics pollution
+- plastic pollutants
+- plastic trash
+- anthropogenic litter
+- anthropogenic debris
+- anthropogenic microparticles
+- anthropogenic microparticle
+- ingested plastic
+- ingested plastics
+- eat plastic
+- consuming plastic
+- plastic contamination
+qualified_terms:
+- term: microfiber
+  any_context:
+  - textile
+  - textiles
+  - laundry
+  - washing
+  - shedding
+  - wastewater
+  - microplastic
+- term: tire wear
+  any_context:
+  - particles
+  - microplastic
+  - runoff
+  - 6PPD
+  - stormwater
+  - pollution
+  - toxicity
+- term: plastic waste
+  any_context:
+  - ocean
+  - marine
+  - river
+  - soil
+  - environment
+  - pollution
+  - leakage
+- term: litter
+  any_context:
+  - trash
+  - cleanup
+  - cleanups
+  - roadside
+  - beach
+  - stormwater
+- term: trash
+  any_context:
+  - litter
+  - stormwater
+  - beach
+  - creek
+  - ocean
+  - debris
+tier_2_terms:
+- chemicals in plastics
+- plastic additives
+- bisphenol A
+- BPA
+- phthalates
+- 6PPD
+- 6PPD-quinone
+exclusions:
+- microplastic strain
+- microplastic deformation
+- internal friction
+- plastic behaviour of crystals
+- plastic behavior of crystals
+- crystal plasticity
+- strain gradient plasticity
+- ductile fracture
+- elastic-plastic
+- plastic embossing
+- gecko
+- dislocation
+- nanopillar
+- plastic deformation
+versioning:
+  increment_when:
+  - a term is added, removed, or reclassified
+  - Boolean qualification or exclusion logic changes
+  - the OpenAlex field scope changes
+  cache_contract:
+  - persist query_version and rendered query with cached counts
+  - reject legacy flat caches and caches with a different query_version
+  - percent-encode the complete filter value through the shared URL builder
+provenance:
+  supplied_by: lead agent (AT-1 revision)
+  supplied_on: 2026-11-10
+  evidence_status: derived from owner labels (354 works) and owner-named author recall probe
+  details: docs/QUERY_AUDIT.md (AT-1 results and revision v3)
+openalex:
+  field: title_and_abstract.search
+always_include:
+- filter: raw_affiliation_strings.search:"Moore Institute for Plastic Pollution Research"
+  reason: 'owner 2026-11-10: capture all Moore Institute publications (no OpenAlex institution record;
+    most authorships carry no institution)'
+- filter: raw_affiliation_strings.search:Algalita
+  reason: Moore Institute predecessor name (Algalita Marine Research and Education)
+exclude_types:
+- erratum
+- peer-review
+- retraction
+- paratext
+notes: 'OpenAlex stems search terms: ''microplasticity'' matches ''microplastic'' and ''plastic'' matches
+  ''plasticity'', so neither may be used as an exclusion or as a context word. Per-term contributions
+  measured 2026-11-10 are in docs/QUERY_AUDIT.md.'
