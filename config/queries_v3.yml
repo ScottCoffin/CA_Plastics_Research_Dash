@@ -34,6 +34,17 @@ core_terms:
 - eat plastic
 - consuming plastic
 - plastic contamination
+- plastic recycling
+- plastics recycling
+- recycled plastic
+- recycled plastics
+- single-use plastic
+- single-use plastics
+- bioplastic
+- bioplastics
+- biodegradable plastic
+- biodegradable plastics
+- circular economy of plastics
 qualified_terms:
 - term: microfiber
   any_context:
@@ -78,6 +89,34 @@ qualified_terms:
   - creek
   - ocean
   - debris
+- term: plastic packaging
+  any_context:
+  - waste
+  - food
+  - recycling
+  - recyclability
+  - environmental
+  - sustainable
+  - sustainability
+  - single-use
+  - consumer
+- term: life cycle assessment
+  any_context: &id001
+  - plastic
+  - plastics
+  - polyethylene
+  - polypropylene
+  - polystyrene
+  - PET
+  - PVC
+  - polymer
+  - packaging
+- term: chemical recycling
+  any_context: *id001
+- term: mechanical recycling
+  any_context: *id001
+- term: upcycling
+  any_context: *id001
 tier_2_terms:
 - chemicals in plastics
 - plastic additives
@@ -131,3 +170,5 @@ exclude_types:
 notes: 'OpenAlex stems search terms: ''microplasticity'' matches ''microplastic'' and ''plastic'' matches
   ''plasticity'', so neither may be used as an exclusion or as a context word. Per-term contributions
   measured 2026-11-10 are in docs/QUERY_AUDIT.md.'
+scope_note: 'Owner 2026-11-10: plastics LCA, recycling and alternatives are in scope, not only pollution.
+  ''plastic products'' and ''plastic production'' were measured and left out (noise).'

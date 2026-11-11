@@ -230,7 +230,7 @@ Evaluation (2026-11-10; free-plan, cost-logged calls):
 | Andrew B. Gray (two author records) | 33 | 37 |
 | Matthew S. Savoca | 22 | 27 |
 | Moore Institute affiliation works (49) | 40 | 44 by terms; 49 with the always-include rule |
-| Global matching works | 98,424 | 102,333 |
+| Global matching works | 98,424 | 145,818 (102,333 before the LCA/recycling scope addition) |
 
 The named authors' remaining misses fall outside the audit's scope (toxicology and
 water reuse, wildfire sediment, whale ecology) or are records without abstracts
@@ -238,9 +238,23 @@ water reuse, wildfire sediment, whale ecology) or are records without abstracts
 fall outside the institution filter. For the Moore Institute the always-include rule
 covers this; other cases need registry additions.
 
+### Scope addition: plastics LCA, recycling and alternatives (owner, 2026-11-11)
+
+The owner confirmed that plastics-focused LCA papers are in scope. v3 now also matches
+plastic(s) recycling, recycled plastic(s), single-use plastic(s), bioplastic(s),
+biodegradable plastic(s), "circular economy of plastics"; "plastic packaging" with waste,
+food, recycling or sustainability context (to skip electronics packaging); and life cycle
+assessment, chemical recycling, mechanical recycling and upcycling, each only with a
+plastic or polymer name. Stand-alone contributions beyond v3 were bioplastic(s) 11,272,
+LCA 7,659, plastic packaging (unqualified) 5,444, upcycling 4,133, chemical recycling
+3,355 and biodegradable plastics 3,505. "Plastic products" (4,512) and "plastic
+production" (1,242) were measured, found to be mostly manufacturing and unrelated
+noise, and left out. The labelled-set precision and the named-author recall are
+unchanged by this addition.
+
 ## Repeat audit (owner action)
 
-`py -3.14 scripts/run_at1_repeat_sample.py` drew 76 works that v3 adds over v2
+`py -3.14 scripts/run_at1_repeat_sample.py` drew 143 works that v3 adds over v2
 (10 per stratum, seed 20261110, type exclusions applied) into
 `docs/QUERY_AUDIT_REVIEW_V3.csv`. Label them with:
 

@@ -19,7 +19,7 @@
   `data/processed/p{5,25,100}.parquet` R2 copies.
 
 ## Owner actions (one line each)
-1. Label the AT-1 repeat sample (76 works): `py -3.14 -m streamlit run scripts/review_query_audit_app.py -- --csv docs/QUERY_AUDIT_REVIEW_V3.csv`, then say "v3 labels done".
+1. Label the AT-1 repeat sample (143 works; now includes plastics LCA, recycling, bioplastics): `py -3.14 -m streamlit run scripts/review_query_audit_app.py -- --csv docs/QUERY_AUDIT_REVIEW_V3.csv`, then say "v3 labels done".
 2. Zenodo: at zenodo.org → Account → GitHub, confirm `ScottCoffin/CA_Plastics_Research_Dash` is ON (press Sync if offered), then say "Zenodo fixed"; the agent will publish a new release `v2026.11.11` (Zenodo only archives releases made after the switch).
 3. Governance checklist (`docs/GOVERNANCE_CHECKLIST.md`): review the "Needs owner decision" rows (PI names on grants, ORCIDs, Sea Grant scraper, monitoring registry licences, GeoNames CC BY 3.0 vs 4.0 note) and the new Plastiverse disclosure sentence on the About tab; sign off.
 4. Optional: `www.plastiverse.live` is Cloudflare-proxied; set DNS-only CNAME → scottcoffin.github.io or delete it.
