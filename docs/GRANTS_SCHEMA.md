@@ -110,3 +110,14 @@ until the S8.6 de-duplication pass runs. Use `funder_chain` to see the path.
 
 **Unknown geography.** `ca_led` depends on `org_state`. Records without a
 state are unknown, not non-California.
+
+## Sector and funder agency (Funding visualizations, 2026-11-11)
+
+`site/data/grants.json` rows carry `sector` (`academia`, `nonprofit`, `jpa`,
+`government`, `industry`, `individual`, `unknown`), `sector_detail` (for example
+`federal`, `state`, `local`, `tribal` for government) and `funder_agency` (the first
+mapped element of `funder_chain`, skipping parent departments such as the Department of
+Commerce, so NOAA awards read "NOAA"). Rules are in `config/grant_sectors.yml`: exact
+names first, then ordered regex rules, then the registry institution type; personal-name
+recipients are tested last. Sector is a descriptive grouping of the recipient name, not a
+legal status. `sector_labels` at the top level gives display names.

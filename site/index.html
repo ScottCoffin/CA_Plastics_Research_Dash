@@ -87,6 +87,19 @@
       .monitoring-map-svg .map-sea { fill: #f4f8fb; }
       .monitoring-map-svg .map-state-waters { fill: #cfe5f2; }
       .monitoring-map-svg .map-land { fill: #f1efe4; stroke: #7d8775; stroke-width: 1px; vector-effect: non-scaling-stroke; }
+      .map-places { pointer-events: none; }
+      .map-places .place-dot { fill: #56656d; stroke: #fff; stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+      .map-places text { fill: #2f3d45; font-weight: 600; font-family: inherit; paint-order: stroke fill; stroke: #fff; stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
+      .map-places .place-landmark text { fill: #3f6075; font-style: italic; font-weight: 500; }
+      .institution-sort-row { display: flex; flex-wrap: wrap; gap: 0.65rem 1rem; align-items: end; }
+      .institution-sort-row .field { min-width: 12rem; flex: 1 1 12rem; max-width: 22rem; }
+      .primary-topic-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0; font-size: 0.9rem; font-weight: 700; color: var(--ink); }
+      .abstract-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 0.6rem; }
+      .abstract-controls button { border: 1px solid var(--brand); border-radius: 0.35rem; padding: 0.3rem 0.6rem; color: var(--brand-dark); background: #fff; font-weight: 700; font-size: 0.85rem; }
+      .work-abstract { margin-top: 0.5rem; }
+      .work-abstract summary { cursor: pointer; font-weight: 700; color: var(--brand-dark); font-size: 0.9rem; }
+      .work-abstract p { margin: 0.4rem 0 0; white-space: pre-wrap; }
+      .basis-note { color: var(--muted); font-weight: 400; }
       .monitoring-marker circle { stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
       .monitoring-marker.mixed circle { stroke: #1d2a33; }
       .monitoring-marker text { fill: #fff; font-weight: 800; font-family: inherit; }
@@ -284,6 +297,10 @@
         <p class="panel-intro">Tagged-work volume is a descriptive count from the same S3.1 export used by the Experts view; it is not a quality ranking. Each topic bar shows the share of topic tags across the institution's plastic-related works (a work can carry several topics).</p>
         <div class="institution-toolbar">
           <div id="institution-type-chips" class="institution-type-chips" role="group" aria-label="Filter institutions by type"></div>
+          <div class="institution-sort-row">
+            <div class="field"><label for="institution-sort">Sort by</label><select id="institution-sort"></select></div>
+            <div class="field"><label for="institution-topic-filter">Primary topic</label><select id="institution-topic-filter"></select></div>
+          </div>
           <p id="institution-count" class="result-count" role="status" aria-live="polite">Loading institutions…</p>
         </div>
         <div class="institutions-layout">
@@ -329,6 +346,7 @@
 
       <section id="panel-funding" class="panel" role="tabpanel" aria-labelledby="tab-funding" tabindex="0" hidden>
         <h2>Funding</h2>
+        <p class="viz-link"><a class="btn-link" href="grants.html" style="display:inline-block;padding:0.55rem 1rem;border-radius:0.4rem;background:var(--brand-dark);color:#fff;font-weight:700;text-decoration:none">Open the funding visualizations &rarr;</a> <span class="data-note">Interactive Sankey, charts and a filterable award table.</span></p>
         <section aria-labelledby="grants-heading" class="grants">
           <h3 id="grants-heading">Awards</h3>
           <p class="data-note">Awards as reported by each source (NIH RePORTER, NSF Awards, USAspending.gov, California Sea Grant, Ocean Protection Council). Amounts follow each source's own basis and are not comparable or additive across sources or fiscal years. Pass-through awards appear once, on their lowest-level record. Plastic relevance and topic tags are provisional rule-based labels. This is not a complete record of public funding.</p>
@@ -519,6 +537,86 @@
         project(lon, lat) {
           return [lon * monitoringMap.cosMid, -lat];
         },
+        // Static place names drawn under the data markers. priority 1 shows statewide; higher numbers appear as the view zooms in.
+        places: [
+          { name: "San Francisco", lon: -122.42, lat: 37.77, priority: 1, kind: "city" },
+          { name: "Los Angeles", lon: -118.24, lat: 34.05, priority: 1, kind: "city" },
+          { name: "San Diego", lon: -117.16, lat: 32.72, priority: 1, kind: "city" },
+          { name: "Sacramento", lon: -121.49, lat: 38.58, priority: 1, kind: "city" },
+          { name: "Fresno", lon: -119.79, lat: 36.74, priority: 1, kind: "city" },
+          { name: "San Jose", lon: -121.89, lat: 37.34, priority: 1, kind: "city" },
+          { name: "Bakersfield", lon: -119.02, lat: 35.37, priority: 1, kind: "city" },
+          { name: "Redding", lon: -122.39, lat: 40.59, priority: 1, kind: "city" },
+          { name: "Eureka", lon: -124.16, lat: 40.8, priority: 1, kind: "city" },
+          { name: "Riverside", lon: -117.4, lat: 33.95, priority: 2, kind: "city" },
+          { name: "Oakland", lon: -122.27, lat: 37.8, priority: 2, kind: "city" },
+          { name: "Santa Barbara", lon: -119.7, lat: 34.42, priority: 2, kind: "city" },
+          { name: "Stockton", lon: -121.29, lat: 37.96, priority: 2, kind: "city" },
+          { name: "Chico", lon: -121.84, lat: 39.73, priority: 2, kind: "city" },
+          { name: "Long Beach", lon: -118.19, lat: 33.77, priority: 3, kind: "city" },
+          { name: "Monterey", lon: -121.89, lat: 36.6, priority: 3, kind: "city" },
+          { name: "Santa Cruz", lon: -122.03, lat: 36.97, priority: 3, kind: "city" },
+          { name: "San Bernardino", lon: -117.29, lat: 34.11, priority: 3, kind: "city" },
+          { name: "Modesto", lon: -121.0, lat: 37.64, priority: 3, kind: "city" },
+          { name: "Palm Springs", lon: -116.55, lat: 33.83, priority: 3, kind: "city" },
+          { name: "San Luis Obispo", lon: -120.66, lat: 35.28, priority: 3, kind: "city" },
+          { name: "Irvine", lon: -117.83, lat: 33.68, priority: 4, kind: "city" },
+          { name: "Davis", lon: -121.74, lat: 38.54, priority: 4, kind: "city" },
+          { name: "Berkeley", lon: -122.27, lat: 37.87, priority: 4, kind: "city" },
+          { name: "Merced", lon: -120.48, lat: 37.3, priority: 4, kind: "city" },
+          { name: "Sierra Nevada", lon: -118.9, lat: 37.2, priority: 1, kind: "landmark" },
+          { name: "Central Valley", lon: -120.1, lat: 36.3, priority: 1, kind: "landmark" },
+          { name: "Mojave Desert", lon: -116.8, lat: 35.1, priority: 1, kind: "landmark" },
+          { name: "Salton Sea", lon: -115.85, lat: 33.3, priority: 2, kind: "landmark" },
+          { name: "Lake Tahoe", lon: -120.04, lat: 39.09, priority: 2, kind: "landmark" },
+          { name: "San Francisco Bay", lon: -122.28, lat: 37.62, priority: 3, kind: "landmark" },
+          { name: "Channel Islands", lon: -119.7, lat: 33.96, priority: 2, kind: "landmark" },
+          { name: "Monterey Bay", lon: -121.95, lat: 36.78, priority: 4, kind: "landmark" },
+          { name: "Point Conception", lon: -120.47, lat: 34.45, priority: 3, kind: "landmark" }
+        ],
+        placeMinZoom: { 1: 0, 2: 1.8, 3: 3.5, 4: 7 },
+        // avoid: [{ x, y, r }] marker discs in view units; labels that would sit under a marker are skipped so they stay legible.
+        placeLabels(view, avoid = []) {
+          const zoom = monitoringMap.zoomScale(view);
+          const fs = view.width * 0.019;
+          const charW = fs * 0.56;
+          const boxes = avoid.map((m) => ({ x0: m.x - m.r, x1: m.x + m.r, y0: m.y - m.r, y1: m.y + m.r, marker: m }));
+          const hit = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
+          const out = [];
+          const ordered = monitoringMap.places.filter((place) => zoom >= (monitoringMap.placeMinZoom[place.priority] ?? 0)).sort((a, b) => a.priority - b.priority);
+          for (const place of ordered) {
+            const [x, y] = monitoringMap.project(place.lon, place.lat);
+            const pad = fs * 0.6;
+            if (x < view.x + pad || x > view.x + view.width - pad || y < view.y + pad || y > view.y + view.height - pad) continue;
+            const city = place.kind === "city";
+            const width = place.name.length * charW;
+            const dot = fs * 0.28;
+            // A city sitting under a data marker gets no dot; its name is set beside that marker instead.
+            const cover = city ? avoid.filter((m) => Math.hypot(m.x - x, m.y - y) < m.r + dot).sort((a, b) => b.r - a.r)[0] : null;
+            const ox = cover ? cover.x : x;
+            const oy = cover ? cover.y : y;
+            const gap = city ? (cover ? cover.r : dot) + fs * 0.25 : 0;
+            const candidates = city
+              ? [{ anchor: "start", x0: ox + gap, x1: ox + gap + width, dy: 0 }, { anchor: "end", x0: ox - gap - width, x1: ox - gap, dy: 0 }, { anchor: "middle", x0: ox - width / 2, x1: ox + width / 2, dy: -(gap + fs * 0.6) }, { anchor: "middle", x0: ox - width / 2, x1: ox + width / 2, dy: gap + fs * 0.6 }]
+              : [{ anchor: "middle", x0: x - width / 2, x1: x + width / 2, dy: 0 }];
+            const dotBox = { x0: x - dot, x1: x + dot, y0: y - dot, y1: y + dot };
+            let chosen = null;
+            for (const cand of candidates) {
+              const cy = oy + (cand.dy || 0);
+              const box = { x0: cand.x0, x1: cand.x1, y0: cy - fs * 0.6, y1: cy + fs * 0.6 };
+              if (box.x0 < view.x + pad * 0.3 || box.x1 > view.x + view.width - pad * 0.3) continue;
+              if (boxes.some((other) => other.marker !== cover && (hit(box, other) || (city && !cover && hit(dotBox, other))))) continue;
+              chosen = { cand, box, cy };
+              break;
+            }
+            if (!chosen) continue;
+            boxes.push(chosen.box);
+            if (city && !cover) boxes.push(dotBox);
+            const tx = chosen.cand.anchor === "start" ? ox + gap : chosen.cand.anchor === "end" ? ox - gap : ox;
+            out.push(`<g class="place-${place.kind}">${city && !cover ? `<circle class="place-dot" cx="${x}" cy="${y}" r="${dot}"/>` : ""}<text x="${tx}" y="${chosen.cy}" font-size="${fs}" text-anchor="${chosen.cand.anchor}" dominant-baseline="central" style="stroke-width:${fs * 0.3}">${place.name}</text></g>`);
+          }
+          return `<g class="map-places" aria-hidden="true">${out.join("")}</g>`;
+        },
         viewBox(key) {
           const extent = monitoringMap.extents[key];
           if (!extent) throw new Error(`unknown map extent: ${key}`);
@@ -673,7 +771,7 @@
         const SORT_KEYS = ["ca_works", "cited_by", "h_index", "plastic_citations", "plastic_works"];
         const SORT_FIELDS = { cited_by: "cited_by_count", h_index: "h_index", plastic_citations: "plastic_citations", plastic_works: "plastic_works_count" };
         const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
-        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", sort: "ca_works", institutionViewType: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
+        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", sort: "ca_works", institutionViewType: "", institutionSort: "tagged", institutionPrimaryTopic: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
         const $ = (id) => document.getElementById(id);
 
         function escapeHtml(value) {
@@ -1164,8 +1262,10 @@
         }
         function expertMetricsHtml(author) {
           const share = plasticShare(author);
-          const part = (key, text) => (state.sort === key ? `<strong>${escapeHtml(text)}</strong>` : escapeHtml(text));
-          return [part("h_index", `h ${metricNumber(author.h_index)}`), part("cited_by", `${metricNumber(author.cited_by_count)} citations`), part("plastic_citations", `${metricNumber(author.plastic_citations)} on plastics (${share === null ? "—" : `${share}%`})`), part("plastic_works", `${metricNumber(author.plastic_works_count)} plastics works`)].join(" · ");
+          const corpusOnly = author.plastic_basis === "atlas_corpus";
+          const basisTitle = corpusOnly ? "Plastics citations are counted only over this author's works in the Atlas California corpus, not their whole OpenAlex record." : "Plastics citations are counted across this author's whole OpenAlex record (works classified as plastics-related).";
+          const part = (key, text, title = "") => { const body = state.sort === key ? `<strong>${escapeHtml(text)}</strong>` : escapeHtml(text); return title ? `<span title="${escapeHtml(title)}">${body}</span>` : body; };
+          return [part("h_index", `h ${metricNumber(author.h_index)}`), part("cited_by", `${metricNumber(author.cited_by_count)} citations`), part("plastic_citations", `${metricNumber(author.plastic_citations)} on plastics (${share === null ? "—" : `${share}%`})`, basisTitle), part("plastic_works", `${metricNumber(author.plastic_works_count)} plastics works`)].join(" · ") + (corpusOnly ? ' <span class="basis-note" title="' + escapeHtml(basisTitle) + '">(CA corpus only)</span>' : "");
         }
         function expertTopicsHtml(author) {
           if (!author.topicsHtml) {
@@ -1263,7 +1363,12 @@
             const coauthorIds = [...new Set(works.flatMap((work) => (work.author_ids || []).filter((id) => id !== authorId)))];
             $("drawer-title").textContent = author.name || "Researcher";
             $("drawer-issue-link").href = profileIssueUrl(author.name, author.author_id || authorId);
-            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p><p class="expert-metrics" style="display:block">${expertMetricsHtml(author)}</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}<h3>Topics</h3>${drawerTopics.length ? `<div class="topic-chips">${drawerTopics.map(([tag, count]) => AtlasTopics.chip(tag, count)).join("")}</div>` : '<p class="detail-meta">No topic tags yet.</p>'}<h3>Affiliation history</h3><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p><h3>Co-author institutions</h3><p class="detail-meta">${coauthorIds.length ? escapeHtml(coauthorIds.join(", ")) : "No co-author IDs recorded."}</p><h3>Works</h3><ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="topic-chips">${AtlasTopics.sortTags(tags).map((tag) => AtlasTopics.chip(tag)).join("")}</div>` : ""}${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
+            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p><p class="expert-metrics" style="display:block">${expertMetricsHtml(author)}</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}<h3>Topics</h3>${drawerTopics.length ? `<div class="topic-chips">${drawerTopics.map(([tag, count]) => AtlasTopics.chip(tag, count)).join("")}</div>` : '<p class="detail-meta">No topic tags yet.</p>'}<h3>Affiliation history</h3><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p><h3>Co-author institutions</h3><p class="detail-meta">${coauthorIds.length ? escapeHtml(coauthorIds.join(", ")) : "No co-author IDs recorded."}</p><h3>Works</h3>${works.length ? '<div class="abstract-controls" role="group" aria-label="Abstract display"><button type="button" id="abstracts-expand">Expand all abstracts</button><button type="button" id="abstracts-collapse">Collapse all</button></div>' : ""}<ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="topic-chips">${AtlasTopics.sortTags(tags).map((tag) => AtlasTopics.chip(tag)).join("")}</div>` : ""}<details class="work-abstract"><summary>Abstract</summary>${String(work.abstract || "").trim() ? `<p>${escapeHtml(String(work.abstract).trim())}</p>` : '<p class="detail-meta">No abstract available</p>'}</details>${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
+            const setAbstracts = (open) => $("drawer-content").querySelectorAll("details.work-abstract").forEach((node) => { node.open = open; });
+            const expandButton = $("abstracts-expand");
+            const collapseButton = $("abstracts-collapse");
+            if (expandButton) expandButton.addEventListener("click", () => setAbstracts(true));
+            if (collapseButton) collapseButton.addEventListener("click", () => setAbstracts(false));
           } catch (error) {
             $("drawer-content").innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
           }
@@ -1389,7 +1494,7 @@
           const basemap = caBasemap
             ? `<path class="map-state-waters" fill-rule="evenodd" d="${caBasemap.state_waters}"/><path class="map-land" fill-rule="evenodd" d="${caBasemap.land}"/>`
             : "";
-          container.innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`California institution map: ${institutionMapPoints.length} institutions, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}<g class="monitoring-markers">${markers}</g></svg>`;
+          container.innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`California institution map: ${institutionMapPoints.length} institutions, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}${monitoringMap.placeLabels(view, clusters.map((cluster) => ({ x: cluster.x, y: cluster.y, r: view.width * (0.014 + 0.03 * Math.sqrt(cluster.weight / maxWeight)) })))}<g class="monitoring-markers">${markers}</g></svg>`;
           if (focused !== null) {
             const marker = [...container.querySelectorAll("[data-cluster-key]")].find((item) => item.getAttribute("data-cluster-key") === focused);
             (marker || container).focus({ preventScroll: true });
@@ -1435,14 +1540,56 @@
           renderInstitutionMapDetails();
           drawInstitutionMap();
         }
+        function primaryTopicLine(metric) {
+          const tag = primaryTopic(metric);
+          const note = state.institutionSort.startsWith("share:") ? (() => { const t = state.institutionSort.slice(6); const v = topicShare(metric, t); return ` <span class="basis-note">${escapeHtml(AtlasTopics.label(t))}: ${Math.round(v.share * 100)}% of works</span>`; })() : "";
+          return `<p class="primary-topic-line">Primary topic: ${tag ? AtlasTopics.chip(tag, topicShare(metric, tag).count) : '<span class="basis-note">not yet tagged</span>'}${note}</p>`;
+        }
+        function primaryTopic(metric) {
+          const entry = metric.topics.find(([tag]) => !AtlasTopics.isMatrix(tag));
+          return entry ? entry[0] : "";
+        }
+        function topicShare(metric, tag) {
+          const entry = metric.topics.find(([name]) => name === tag);
+          return { count: entry ? entry[1] : 0, share: metric.taggedCount ? (entry ? entry[1] : 0) / metric.taggedCount : 0 };
+        }
+        function setupInstitutionControls(all) {
+          const topics = AtlasTopics.sortTags([...new Set(all.flatMap((metric) => metric.topics.map(([tag]) => tag)).filter((tag) => !AtlasTopics.isMatrix(tag)))]);
+          const sortSelect = $("institution-sort");
+          const filterSelect = $("institution-topic-filter");
+          const signature = topics.join("|");
+          if (sortSelect.dataset.signature !== signature) {
+            sortSelect.dataset.signature = signature;
+            sortSelect.innerHTML = '<option value="tagged">Tagged works (most first)</option><option value="recent">Recent 5-year works</option><option value="name">Name (A to Z)</option>' + topics.map((tag) => `<option value="share:${escapeHtml(tag)}">Share of topic: ${escapeHtml(AtlasTopics.label(tag))}</option>`).join("");
+            filterSelect.innerHTML = '<option value="">All primary topics</option>' + topics.map((tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(AtlasTopics.label(tag))}</option>`).join("");
+            sortSelect.addEventListener("change", () => { state.institutionSort = sortSelect.value; renderInstitutions(); });
+            filterSelect.addEventListener("change", () => { state.institutionPrimaryTopic = filterSelect.value; renderInstitutions(); });
+          }
+          if (![...sortSelect.options].some((option) => option.value === state.institutionSort)) state.institutionSort = "tagged";
+          if (![...filterSelect.options].some((option) => option.value === state.institutionPrimaryTopic)) state.institutionPrimaryTopic = "";
+          sortSelect.value = state.institutionSort;
+          filterSelect.value = state.institutionPrimaryTopic;
+        }
+        function institutionComparator(sortKey) {
+          const byName = (a, b) => String(a.institution.name).localeCompare(String(b.institution.name));
+          if (sortKey === "name") return byName;
+          if (sortKey === "recent") return (a, b) => b.recentCount - a.recentCount || b.taggedCount - a.taggedCount || byName(a, b);
+          if (sortKey.startsWith("share:")) {
+            const tag = sortKey.slice(6);
+            return (a, b) => { const x = topicShare(a, tag); const y = topicShare(b, tag); return y.share - x.share || y.count - x.count || b.taggedCount - a.taggedCount || byName(a, b); };
+          }
+          return (a, b) => b.taggedCount - a.taggedCount || b.recentCount - a.recentCount || byName(a, b);
+        }
         function renderInstitutions() {
           const all = (state.data.institutions.institutions || []).map(institutionMetrics).filter((metric) => metric.taggedCount > 0);
           const types = [...new Set(all.map((metric) => metric.institution.atlas_type || "other"))].sort();
           const selected = state.institutionViewType;
-          const filtered = all.filter((metric) => !selected || (metric.institution.atlas_type || "other") === selected).sort((a, b) => b.taggedCount - a.taggedCount || b.recentCount - a.recentCount || String(a.institution.name).localeCompare(String(b.institution.name)));
+          setupInstitutionControls(all);
+          const topicFilter = state.institutionPrimaryTopic;
+          const filtered = all.filter((metric) => (!selected || (metric.institution.atlas_type || "other") === selected) && (!topicFilter || primaryTopic(metric) === topicFilter)).sort(institutionComparator(state.institutionSort));
           $("institution-type-chips").innerHTML = [`<button class="chip-button institution-type-chip" type="button" data-institution-type="" aria-pressed="${selected === ""}">All types</button>`, ...types.map((type) => `<button class="chip-button institution-type-chip" type="button" data-institution-type="${escapeHtml(type)}" aria-pressed="${selected === type}">${escapeHtml(type)}</button>`)].join("");
-          $("institution-count").textContent = `${filtered.length} qualifying institution${filtered.length === 1 ? "" : "s"} shown`;
-          $("institution-list").innerHTML = filtered.length ? filtered.map((metric) => { const institution = metric.institution; return `<article class="card institution-card" data-institution-id="${escapeHtml(institution.inst_id)}"><div class="card-header"><h3>${escapeHtml(institution.name)}</h3><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div><p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p><div class="institution-topics">${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 5)}</div>${sparkline(metric)}<div class="institution-actions">${institutionExpertLink(institution.inst_id)}${publicationsLink(institution.inst_id)}</div></article>`; }).join("") : '<p class="empty">No qualifying institutions match this type filter.</p>';
+          { const sortLabel = $("institution-sort").selectedOptions[0]?.textContent || ""; const topicNote = topicFilter ? `; primary topic: ${AtlasTopics.label(topicFilter)}` : ""; $("institution-count").textContent = `${filtered.length} of ${all.length} qualifying institution${all.length === 1 ? "" : "s"} shown${topicNote}; sorted by ${sortLabel.toLowerCase()}`; }
+          $("institution-list").innerHTML = filtered.length ? filtered.map((metric) => { const institution = metric.institution; return `<article class="card institution-card" data-institution-id="${escapeHtml(institution.inst_id)}"><div class="card-header"><h3>${escapeHtml(institution.name)}</h3><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div>${primaryTopicLine(metric)}<p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p><div class="institution-topics">${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 5)}</div>${sparkline(metric)}<div class="institution-actions">${institutionExpertLink(institution.inst_id)}${publicationsLink(institution.inst_id)}</div></article>`; }).join("") : '<p class="empty">No qualifying institutions match this type filter.</p>';
           $("institution-type-chips").querySelectorAll(".institution-type-chip").forEach((button) => button.addEventListener("click", () => { state.institutionViewType = button.dataset.institutionType; renderInstitutions(); }));
           $("institution-list").querySelectorAll(".institution-expert-link").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId)));
           clusterMap(filtered);
@@ -1632,7 +1779,7 @@
           const basemap = caBasemap
             ? `<path class="map-state-waters" fill-rule="evenodd" d="${caBasemap.state_waters}"/><path class="map-land" fill-rule="evenodd" d="${caBasemap.land}"/>`
             : "";
-          container.innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`${extent.label} sample map: ${inExtent} samples, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}<g class="monitoring-markers">${markers}</g></svg>`;
+          container.innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`${extent.label} sample map: ${inExtent} samples, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}${monitoringMap.placeLabels(view, clusters.map((cluster) => ({ x: cluster.x, y: cluster.y, r: radius })))}<g class="monitoring-markers">${markers}</g></svg>`;
           if (focused !== null) {
             const marker = container.querySelector(`[data-cluster-key="${focused}"]`);
             (marker || container).focus({ preventScroll: true });

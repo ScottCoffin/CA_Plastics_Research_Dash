@@ -28,6 +28,7 @@ from typing import Any
 
 import pyarrow.parquet as pq
 
+from atlas.build.grant_sectors import SectorRules, load_sector_rules
 from atlas.ingest.grants.normalize import grant_plastic_decision
 
 SCHEMA_VERSION = "s8.10"
@@ -91,6 +92,9 @@ ROW_KEYS: tuple[str, ...] = (
     "plastic_related",
     "domain_tags",
     "ca_led",
+    "sector",
+    "sector_detail",
+    "funder_agency",
 )
 INSTITUTION_COLUMNS: tuple[str, ...] = ("display_name", "ror_id", "atlas_type")
 ROR_PREFIX = "https://ror.org/"
@@ -267,11 +271,20 @@ def build_payload(
     *,
     generated_at: str,
     input_rows: int | None = None,
+    sector_rules: SectorRules | None = None,
 ) -> dict[str, Any]:
-    """Build the public grants payload from merged grant and institution records."""
+    """Build the public grants payload from merged grant and institution records.
+
+    ``sector``/``sector_detail`` (recipient organisation group) and ``funder_agency``
+    come from ``config/grant_sectors.yml`` (see ``atlas.build.grant_sectors``).
+    """
 
     by_ror, by_name = build_institution_index(institutions)
     exported = [export_row(row, by_ror, by_name) for row in rows]
+    rules = sector_rules or load_sector_rules()
+    for row in exported:
+        row["sector"], row["sector_detail"] = rules.sector(row["org"], row["institution_type"])
+        row["funder_agency"] = rules.agency(row["funder_chain"], row["funder"])
     keys = [row["grant_key"] for row in exported]
     if len(set(keys)) != len(keys):
         raise ValueError("grant_key values must be unique")
@@ -307,7 +320,10 @@ def build_payload(
         "aggregates": {
             "by_year_funder_type": _aggregate(dated, ("fiscal_year", "funder_type")),
             "by_institution_type": _aggregate(exported, ("institution_type",)),
+            "by_sector": _aggregate(exported, ("sector",)),
+            "by_funder_agency": _aggregate(exported, ("funder_agency",)),
         },
+        "sector_labels": dict((sector_rules or rules).labels),
     }
 
 

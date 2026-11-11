@@ -81,21 +81,44 @@ class OpenAlexPaths:
     usage_log: Path = Path("data/logs/api_usage.jsonl")
 
 
-def load_openalex_key(path: str | Path = ".env") -> None:
-    """Load the local OpenAlex key without printing or storing its value."""
+PRIMARY_KEY_VAR = "OPENALEX_API_KEY"
+FALLBACK_KEY_VAR = "OPENALEX_API_KEY_ALT"
+_KEY_ALIASES = {
+    "OPENALEX_API_KEY": PRIMARY_KEY_VAR,
+    "OPEN_ALEX_API_KEY": PRIMARY_KEY_VAR,
+    "OPENALEX_API_KEY_ALT": FALLBACK_KEY_VAR,
+    "OPEN_ALEX_API_KEY_ALT": FALLBACK_KEY_VAR,
+}
+# Owner rule (2026-11-11): when the primary free account's daily allowance is exhausted
+# (non-burst HTTP 429), continue on the fallback key. Values are never printed.
+_active_key_var = PRIMARY_KEY_VAR
 
-    if os.environ.get("OPENALEX_API_KEY"):
-        return
+
+def load_openalex_key(path: str | Path = ".env") -> None:
+    """Load the primary and optional fallback OpenAlex keys without printing them."""
+
     dotenv = Path(path)
     if not dotenv.exists():
         return
     for line in dotenv.read_text(encoding="utf-8").splitlines():
         name, separator, value = line.partition("=")
-        if separator and name.strip() in {"OPENALEX_API_KEY", "OPEN_ALEX_API_KEY"}:
-            cleaned = value.strip().strip("'\"")
-            if cleaned:
-                os.environ["OPENALEX_API_KEY"] = cleaned
-                return
+        target = _KEY_ALIASES.get(name.strip())
+        if not separator or target is None or os.environ.get(target):
+            continue
+        cleaned = value.strip().strip("'\"")
+        if cleaned:
+            os.environ[target] = cleaned
+
+
+def _switch_to_fallback_key() -> bool:
+    """Use the fallback key from now on; False when none exists or already active."""
+
+    global _active_key_var
+    if _active_key_var == FALLBACK_KEY_VAR or not os.environ.get(FALLBACK_KEY_VAR):
+        return False
+    _active_key_var = FALLBACK_KEY_VAR
+    print("OpenAlex primary key exhausted for today; continuing on the fallback key")
+    return True
 
 
 def compact_openalex_id(value: object) -> str:
@@ -220,10 +243,14 @@ def _request_json(
     attempts: int = 4,
     timeout: int = 60,
 ) -> dict[str, Any]:
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    key = os.environ.get("OPENALEX_API_KEY")
-    if key:
-        request.add_header("Authorization", f"Bearer {key}")
+    def build_request() -> urllib.request.Request:
+        request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        key = os.environ.get(_active_key_var) or os.environ.get(PRIMARY_KEY_VAR)
+        if key:
+            request.add_header("Authorization", f"Bearer {key}")
+        return request
+
+    request = build_request()
     for attempt in range(attempts):
         _throttle()
         try:
@@ -261,6 +288,9 @@ def _request_json(
                 # Per-second limit for boolean-heavy searches (5 req/s on the free plan,
                 # seen 2026-11-10): wait and retry instead of deferring the whole run.
                 time.sleep(_retry_delay(headers.get("Retry-After"), attempt))
+                continue
+            if error.code == 429 and not _is_burst_limit(message) and _switch_to_fallback_key():
+                request = build_request()
                 continue
             if error.code == 429:
                 raise OpenAlexRateLimitError(

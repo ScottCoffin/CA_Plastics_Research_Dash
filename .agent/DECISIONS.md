@@ -495,3 +495,17 @@ the implementing task's acceptance passes.
 - **Context:** Reviewing the Haiku grant calls, the owner found most abstract-only grants are relevant: mentions of "plastic pollution", "microplastics"/"micro-plastics" and usually "anthropogenic debris" indicate a plastic-related grant.
 - **Decision:** `grant_plastic_decision` precedence: owner decision (`owner_review` confirmed/changed) > core-term title match > strong abstract term (`STRONG_ABSTRACT_RE`; nanoplastics, plastic debris, marine debris, plastic particles and tire wear particles added by the owner the same day) > Haiku call > false. The review app's default view lists only pending grants the rules do not settle.
 - **Evidence:** 41/41 strong-term grants already reviewed by the owner were relevant; the rule flips 93 grants to plastic-related and leaves 40 pending grants for the owner.
+
+## ADR-GRANT-SECTORS-2026-11-11: Recipient sectors and funder agencies for the funding visualizations
+- **Context:** The owner asked for a Sankey of funders, recipient institutions grouped by sector (academia, nonprofit, JPA, government, industry) and topics. `institution_type` was unknown for 484/524 grants and funder names were inconsistent (NSF vs National Science Foundation; NOAA under Department of Commerce).
+- **Decision:** `config/grant_sectors.yml` + `atlas.build.grant_sectors` add `sector`, `sector_detail` and `funder_agency` at export (names > ordered regex rules > registry type). Current split: academia 405, nonprofit 52, industry 35, government 20, individual 6, JPA 4, unknown 2. Visualizations default to award counts because amounts are not comparable across sources.
+
+## ADR-OA-FALLBACK-2026-11-11: Fallback OpenAlex key; whole-record plastics citations
+- **Fallback key (owner rule):** when the primary free account returns a non-burst HTTP 429 (daily allowance exhausted), `_request_json` switches to `OPENALEX_API_KEY_ALT` (local `.env` alias `OPEN_ALEX_API_KEY_ALT`) for the rest of the process; the budget guard scales its per-account ceilings by the number of keys. CI needs the repository secret `OPENALEX_API_KEY_ALT` (owner action).
+- **Plastics citations:** the Experts share compared corpus-only plastics citations with career citations and understated specialists (Rochman 42% vs 98.7% whole-record). `scripts/fetch_author_metrics.py` now counts each author's plastics works and citations across their whole OpenAlex record with the active query (incremental, 25 authors per batch; full pass 952 credits). Export field `plastic_basis` says which basis applies.
+
+## ADR-GATES-2026-11-11: Owner clears the A1 L3 gates, defers AT-5/AT-6, sets gold-set labelling
+- **AT-5/AT-6 (Observable Framework shell, Explore page):** deferred; the static site is kept. AT-4 targets the existing pages.
+- **L3 tasks approved:** SPK-5/AT-7 (bibliometrix, R outside CI), SPK-6/AT-8 (maps), AT-9 (embedding map and taxonomy QA, after S5), AT-10 (release pipeline).
+- **Gold set (G-10 revised):** the owner labels the S4.2 sample; a Claude reviewer independently double-labels 20%. Reported kappa is owner-vs-model agreement, disclosed in METHODS; the owner adjudicates disagreements.
+- **Abstracts:** kept in public per-author JSON (emails redacted); AT-4 public Parquet stays abstract-free as A1 specifies.

@@ -63,6 +63,7 @@ jobs:
         id: refresh
         env:
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+          OPENALEX_API_KEY_ALT: ${{ secrets.OPENALEX_API_KEY_ALT }}
           START_YEAR: ${{ inputs.start_year }}
           END_YEAR: ${{ inputs.end_year }}
           OPENALEX_MAX_CREDITS: ${{ inputs.max_credits || vars.OPENALEX_MAX_CREDITS }}
@@ -97,6 +98,7 @@ jobs:
         if: steps.refresh.outputs.status == 'success'
         env:
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+          OPENALEX_API_KEY_ALT: ${{ secrets.OPENALEX_API_KEY_ALT }}
         run: python scripts/fetch_author_metrics.py
 
       # Experts/Institutions payloads for the live site (CA-affiliated experts only).

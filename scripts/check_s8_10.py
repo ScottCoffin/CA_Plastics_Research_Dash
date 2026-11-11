@@ -23,6 +23,7 @@ TOP_KEYS = {
     "schema_version",
     "generated_at",
     "caveat",
+    "sector_labels",
     "counts",
     "sources",
     "columns",

@@ -1,38 +1,43 @@
-# Handoff - 2026-11-11 (day) - real Experts data live; curation wired; monitoring map interactive; AT-2 done
+# Handoff - 2026-11-11 (afternoon) - owner UX requests delivered; A1 gates cleared
 
-## State
-- S2.1-B done: fixed a backfill that would have pulled only 1950 and replaced the table, and
-  per-year windows (~3.8 USD); run 43043699471 fetched 1,506 unique v3.1 works (~0.05 USD),
-  committed `site/data` and deployed. Live Experts verified (Cowger, Gray, Coffin, Savoca, ...).
-- Curation: AT-1 owner labels now feed `curation/overrides_works.csv`
-  (`scripts/build_audit_overrides.py`; new `exclude` override removed 62 owner-rejected works).
-  1,081 never-labelled works were screened by three Claude Haiku reviewers into
-  `curation/work_relevance.csv` (applied to `plastic_related`; owner overrides win).
-  Export: 1,424 works, 1,982 experts. Emails in abstracts are redacted.
-- S3.6 done on real data: initial payload 442 KB gzip, render median 0.81 s, filter 5.5 ms
-  (was 519 ms: author summaries rebuilt per keystroke).
-- Monitoring (owner request): zoom/pan/wheel/keyboard map, re-clustering, clickable markers
-  with a details panel, legend toggles, and expandable `<details>` sections. Checked in headless Edge.
-- Grant review app: `py -3.14 -m streamlit run scripts/review_grant_relevance_app.py`
-  (`assist_plastic_related` column keeps the Haiku call).
-- Budget: owner rule, up to the free USD 1/day (stop 0.95). UTC 2026-11-11 spend about 0.80.
-- Worktree leftovers (not committed on purpose): `docs/SOURCES.md`,
-  `docs/api_notes/source_watch_s7_6.json`, owner's `data/processed/p{5,25,100}.parquet`.
+This file is the live tracker for the current session: update it at every checkpoint
+(owner requests, status, next steps) so a fresh session can resume without chat history.
+
+## Owner request tracker (2026-11-11)
+| # | Request | Status |
+|---|---|---|
+| 1 | Experts populated with real data | Done: v3.1 backfill live (1,424 works, ~1,950 CA experts) |
+| 2 | Monitoring map interactive; expandable facet boxes | Done (zoom/pan/keyboard, details panel, legend toggles, `<details>` sections) |
+| 3 | OpenAlex up to $1/day as a rule; fallback key when exhausted | Done (`config/budget.yml` 0.95; `OPENALEX_API_KEY_ALT` local + CI secret) |
+| 4 | Grant relevance review app | Done; owner finished review; strong-term rule (plastic pollution, micro/nano-plastics, plastic/marine debris, plastic particles, anthropogenic debris, tire wear particles) |
+| 5 | v3.1 unseen works checked by Haiku; owner reviews 215 low-confidence | Haiku done (`curation/work_relevance.csv`); owner review app `scripts/review_work_relevance_app.py` (owner in progress) |
+| 6 | Why S5 was skipped | Answered: S5 needs the S4 gold set, which needed the corpus that never ingested |
+| 7 | Expert topics readable, pretty labels, conserved colours | Done (`site/assets/topics.js`, two-line chips) |
+| 8 | Expert sort by total citations, h-index, plastics citations | Done; plastics citations now whole-record (Rochman 98.7%) with `plastic_basis` |
+| 9 | Institutions map with basemap, interactive, city/landmark labels | Done (shared map helpers, priority labels) |
+| 10 | Institution topic weighting; sort by primary topic | Done (stacked topic bar, primary-topic chip, share-of-topic sort, filter) |
+| 11 | "View publications" → institution SEM with abstracts + topic heatmap | Done (`site/sem.html#inst=<id>`) |
+| 12 | Auto-merge same name + same institution | Done (`scripts/build_author_merges.py`, 108 merges, run in CI) |
+| 13 | Expandable full abstracts in expert drawer | Done |
+| 14 | Grants visualization suite with Sankey (funder → sector → institution → topic), filters | Done (`site/grants.html`; sectors in `config/grant_sectors.yml`) |
+| 15 | Keep abstracts (emails redacted); DTSC dates confirmed | Recorded |
+| 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
+
+## Next eligible (dependency order)
+1. S4.2 representative sample + leak test + frozen splits (corpus exists), then a gold-label
+   Streamlit app for the owner; Claude second rater on 20%.
+2. AT-3 SQL analytics -> AT-4 serving bundle (abstract-free Parquet) -> AT-10 release pipeline.
+3. AT-11 CI guards for S2.
+4. SPK-6/AT-8 maps (reuse today's map helpers); SPK-5/AT-7 bibliometrix (R, outside CI).
+5. S5.x after the owner labels the gold set; AT-9 after S5.
 
 ## Owner actions (one line each)
-1. GRANT-REL: work through the grant review app (76 low-confidence rows first).
-2. WORK-REL: spot-check `curation/work_relevance.csv` low-confidence/false rows; should Haiku-false works leave Experts?
-3. ABSTRACT-PUB: keep OpenAlex abstracts in public author files (emails redacted) or drop them?
-4. EM18-DATES: confirm "18 June 2026" and "1 October 2026" on the DTSC pages.
-5. AT2-REVIEW: review types for 52 new top-100 institutions in `data/processed/institution_review_needs_v31.csv`.
-6. Author splits: 26 duplicate names on Experts (e.g. Andrew B. Gray x3); approve rows in `curation/author_merges.csv`?
+1. Finish the 215 low-confidence works in `scripts/review_work_relevance_app.py` (Low confidence pending view).
+2. AT2-REVIEW: types for 52 new top-100 institutions in `data/processed/institution_review_needs_v31.csv`.
 
-## Next eligible
-- AT-2 done (`docs/AT_2_VERIFICATION.md`). Next: AT-3 SQL analytics -> AT-4 -> EM-5; AT-11 CI guards.
-- S4.2 representative sample (corpus now exists), which unblocks owner gold labelling and so S5.
-
-## Verification
-- Full gate passed locally (886 tests); site checks S3.2-S3.5 and S7.5 pass; clean-worktree
-  run and CI after push: see SESSION_LOG.
+## Notes
+- Worktree leftovers not committed on purpose: `docs/SOURCES.md`,
+  `docs/api_notes/source_watch_s7_6.json`, owner's `data/processed/p{5,25,100}.parquet`.
+- Shell heredocs on this machine corrupt `\b` in regexes; write patch scripts with the Write tool.
 
 Older handoff entries: `.agent/archive/HANDOFF_history.md`.

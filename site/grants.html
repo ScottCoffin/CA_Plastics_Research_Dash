@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plastics research funding · CA Plastics Research Atlas</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17324d;
+        --muted: #536879;
+        --brand: #075a46;
+        --brand-dark: #043e32;
+        --surface: #ffffff;
+        --canvas: #eef6f7;
+        --line: #c8d8dc;
+        --focus: #c45100;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--canvas);
+      }
+      * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
+      body { margin: 0; min-width: 18rem; line-height: 1.5; background: var(--canvas); color: var(--ink); }
+      a { color: var(--brand-dark); }
+      button, input, select { font: inherit; }
+      button { cursor: pointer; }
+      :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+      .skip-link { position: absolute; left: 0.75rem; top: 0.75rem; z-index: 50; transform: translateY(-150%); padding: 0.6rem 0.8rem; border-radius: 0.35rem; color: #fff; background: var(--brand-dark); }
+      .skip-link:focus { transform: translateY(0); }
+      .site-header { color: #fff; background: var(--brand-dark); }
+      .header-inner, .page-main { width: min(74rem, calc(100% - 2rem)); margin: 0 auto; }
+      .header-inner { padding: 1.25rem 0 1rem; }
+      .crumbs a { color: #d5f2e8; font-weight: 600; }
+      .crumbs a:focus-visible { outline-color: #ffd7b8; }
+      .eyebrow { margin: 0.5rem 0 0; color: #bfe8d9; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      h1 { margin: 0.25rem 0 0.4rem; font-size: clamp(1.5rem, 5vw, 2.4rem); line-height: 1.15; overflow-wrap: anywhere; }
+      .tagline { max-width: 50rem; margin: 0; color: #e3f4ef; }
+      .page-main { padding: 1rem 0 3rem; }
+      .panel { margin-top: 1rem; padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid var(--line); border-radius: 0.75rem; background: var(--surface); box-shadow: 0 0.5rem 1.75rem rgb(23 50 77 / 7%); min-width: 0; }
+      h2 { margin: 0 0 0.35rem; font-size: clamp(1.15rem, 3vw, 1.45rem); }
+      .panel-intro, .muted { color: var(--muted); }
+      .panel-intro { margin: 0 0 0.6rem; font-size: 0.92rem; }
+      .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: 0.6rem; margin: 0; }
+      .metric { margin: 0; padding: 0.6rem 0.75rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #f7fbfb; min-width: 0; }
+      .metric dt { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
+      .metric dd { margin: 0; font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+      .metric small { display: block; color: var(--muted); font-size: 0.78rem; font-weight: 400; line-height: 1.3; }
+      .filters { display: flex; flex-wrap: wrap; gap: 0.6rem 0.8rem; align-items: flex-end; }
+      .field { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.82rem; font-weight: 600; color: var(--muted); min-width: 0; }
+      .field select, .field input[type="search"] { font-size: 0.9rem; padding: 0.4rem; min-height: 2.4rem; border: 1px solid #8da7af; border-radius: 0.35rem; background: #fff; color: var(--ink); max-width: 100%; }
+      .field.search { flex: 1 1 14rem; }
+      .field.search input { width: 100%; }
+      .field select { width: 10rem; }
+      .check { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 2.4rem; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+      .check input { width: 1.1rem; height: 1.1rem; }
+      .btn { padding: 0.4rem 0.8rem; min-height: 2.4rem; border: 1px solid #8da7af; border-radius: 0.4rem; color: var(--brand-dark); background: #fff; font-weight: 600; }
+      .btn:hover { background: #eef6f4; }
+      .btn.primary { background: var(--brand-dark); color: #fff; border-color: var(--brand-dark); }
+      .status-row { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; align-items: center; margin-top: 0.7rem; }
+      .status { font-weight: 700; font-variant-numeric: tabular-nums; }
+      .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+      .sel-chip { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.15rem 0.2rem 0.15rem 0.65rem; border: 1px solid #8da7af; border-radius: 999px; background: #e8f1f5; font-size: 0.84rem; font-weight: 600; }
+      .sel-chip button { border: 0; background: transparent; padding: 0 0.45rem; min-height: 1.6rem; font-size: 1rem; line-height: 1; color: var(--ink); border-radius: 999px; }
+      .sel-chip button:hover { background: #cfe0e8; }
+      .caveat { margin: 0.4rem 0 0.7rem; padding: 0.55rem 0.75rem; border-left: 4px solid #c45100; background: #fff4ea; font-size: 0.88rem; border-radius: 0 0.35rem 0.35rem 0; }
+      .controls { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; align-items: center; margin: 0.4rem 0 0.7rem; }
+      .controls fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.2rem 1rem; min-width: 0; }
+      .controls legend { padding: 0; font-size: 0.82rem; font-weight: 700; color: var(--muted); }
+      .controls label.opt { display: inline-flex; gap: 0.4rem; align-items: center; font-size: 0.9rem; }
+      .controls input[type="range"] { width: 8rem; }
+      .scroll { overflow-x: auto; max-width: 100%; padding-bottom: 0.3rem; }
+      .sankey-wrap { position: relative; overflow-x: auto; max-width: 100%; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
+      .sankey-wrap svg { display: block; }
+      .col-head { font-size: 11px; font-weight: 700; fill: #536879; text-transform: uppercase; letter-spacing: 0.06em; }
+      .node rect { stroke: none; }
+      .node { cursor: pointer; outline: none; }
+      .node:focus-visible rect, .node.focus rect { stroke: var(--focus); stroke-width: 3; }
+      .node.sel rect { stroke: #17324d; stroke-width: 2.5; }
+      .node text, .lbl { font-size: 12px; fill: #17324d; paint-order: stroke; stroke: #fbfdfd; stroke-width: 3px; stroke-linejoin: round; }
+      .link { fill: none; opacity: 0.38; transition: opacity 0.12s; cursor: pointer; }
+      svg.hl .link { opacity: 0.05; }
+      svg.hl .link.on { opacity: 0.7; }
+      svg.hl .node { opacity: 0.35; }
+      svg.hl .node.on { opacity: 1; }
+      .note { color: var(--muted); font-size: 0.85rem; margin: 0.5rem 0 0; }
+      details.tbl { margin-top: 0.6rem; }
+      details.tbl summary { cursor: pointer; font-weight: 600; font-size: 0.9rem; min-height: 1.8rem; }
+      table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+      th, td { padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+      th { color: var(--muted); font-weight: 700; background: #f7fbfb; }
+      td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+      .tbl-scroll { max-height: 22rem; overflow: auto; border: 1px solid var(--line); border-radius: 0.4rem; margin-top: 0.4rem; }
+      .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); gap: 1rem; margin-top: 1rem; }
+      .grid2 .panel { margin-top: 0; }
+      .legend { display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; margin: 0.4rem 0; padding: 0; list-style: none; font-size: 0.82rem; }
+      .legend li { display: inline-flex; align-items: center; gap: 0.35rem; }
+      .legend i { width: 0.8rem; height: 0.8rem; border-radius: 2px; display: inline-block; }
+      .axis text { font-size: 11px; fill: #536879; }
+      .mat { min-width: max-content; width: auto; }
+      .mat th, .mat td { padding: 1px; border: 0; background: #fff; }
+      .mat thead th { font-size: 0.72rem; text-align: center; background: #fff; vertical-align: bottom; }
+      .mat tbody th { font-size: 0.8rem; white-space: nowrap; padding-right: 0.5rem; background: #fff; position: sticky; left: 0; z-index: 1; }
+      .mat .dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 999px; margin-right: 0.35rem; }
+      .mat thead th.rowhead { min-width: 9rem; } .mat thead th { min-width: 4.6rem; }
+      .cell { display: block; width: 100%; min-width: 2.1rem; height: 2.1rem; padding: 0; border: 0; border-radius: 2px; font-size: 0.78rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+      .cell.sel { outline: 3px solid #17324d; outline-offset: -3px; }
+      .cell:disabled { cursor: default; }
+      .orgs { list-style: none; margin: 0.4rem 0 0; padding: 0; display: grid; gap: 4px; }
+      .orgs button { display: grid; grid-template-columns: minmax(7rem, 14rem) 1fr auto; gap: 0.5rem; align-items: center; width: 100%; padding: 0.15rem 0.3rem; border: 1px solid transparent; border-radius: 0.3rem; background: transparent; text-align: left; color: var(--ink); }
+      .orgs button:hover { background: #f1f7f8; }
+      .orgs button.sel { border-color: #17324d; background: #eaf2f6; }
+      .orgs .nm { font-size: 0.84rem; min-width: 0; }
+      .orgs .nm b { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .badge { display: inline-block; padding: 0 0.4rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; color: #17324d; border: 1px solid #aebcc4; background: #f1f5f7; }
+      .orgs .bar { height: 10px; background: #f0f4f6; border-radius: 2px; }
+      .orgs .bar span { display: block; height: 100%; background: #4a6f93; border-radius: 2px; }
+      .orgs .ct { font-size: 0.84rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+      .award-table th button { border: 0; background: none; padding: 0; font-weight: 700; color: var(--muted); }
+      .award-table th button:hover { color: var(--ink); }
+      .award-table td.title { min-width: 14rem; }
+      .award-table td { font-size: 0.84rem; }
+      .tip { position: fixed; z-index: 60; pointer-events: none; max-width: 17rem; padding: 0.4rem 0.6rem; border-radius: 0.4rem; background: #17324d; color: #fff; font-size: 0.82rem; line-height: 1.35; box-shadow: 0 4px 14px rgb(0 0 0 / 25%); }
+      .tip b { font-weight: 700; }
+      .notice { font-size: 0.92rem; margin-top: 1.25rem; }
+      footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.85rem; }
+      .empty { padding: 1.5rem; text-align: center; color: var(--muted); }
+      @media (max-width: 700px) {
+        .field select { width: 100%; }
+        .field { flex: 1 1 8rem; }
+        .orgs button { grid-template-columns: 1fr auto; }
+        .orgs .bar { grid-column: 1 / -1; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to the visualizations</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html#funding">&larr; Back to the Atlas funding tab</a></nav>
+        <p class="eyebrow">CA Plastics Research Atlas</p>
+        <h1>Plastics research funding</h1>
+        <p class="tagline">Who funds plastics research, which kinds of organisations receive the awards, and which topics the awards address. Every chart responds to the same filters, and the filters are saved in the page address so a view can be shared.</p>
+      </div>
+    </header>
+
+    <main id="main" class="page-main">
+      <section class="panel" aria-labelledby="sum-h">
+        <h2 id="sum-h">Summary of the filtered awards</h2>
+        <dl class="metrics" id="tiles"></dl>
+        <p class="status-row"><span class="status" id="status" role="status" aria-live="polite">Loading awards&hellip;</span></p>
+      </section>
+
+      <section class="panel" aria-labelledby="flt-h">
+        <h2 id="flt-h">Filters</h2>
+        <form class="filters" id="filters" aria-label="Filter awards" onsubmit="return false">
+          <div class="field"><label for="f-yf">Fiscal year from</label><select id="f-yf"></select></div>
+          <div class="field"><label for="f-yt">Fiscal year to</label><select id="f-yt"></select></div>
+          <div class="field"><label for="f-topic">Topic</label><select id="f-topic"></select></div>
+          <div class="field"><label for="f-agency">Funder agency</label><select id="f-agency"></select></div>
+          <div class="field"><label for="f-sector">Recipient sector</label><select id="f-sector"></select></div>
+          <div class="field"><label for="f-ftype">Funder type</label><select id="f-ftype"><option value="">All funders</option><option value="federal">Federal</option><option value="state">State</option></select></div>
+          <div class="field search"><label for="f-q">Search title, organisation or PI</label><input id="f-q" type="search" autocomplete="off" placeholder="e.g. Scripps, microfibers"></div>
+          <label class="check"><input type="checkbox" id="f-ca"> California-led only</label>
+          <label class="check"><input type="checkbox" id="f-plastic" checked> Plastic-related only</label>
+          <button type="button" class="btn" id="f-reset">Reset filters</button>
+        </form>
+        <div class="status-row"><div class="chips" id="chips" aria-label="Active selections"></div></div>
+      </section>
+
+      <section class="panel" aria-labelledby="sk-h">
+        <h2 id="sk-h">Funder to sector to organisation to topic</h2>
+        <p class="panel-intro">Each ribbon is a group of awards. Hover or focus a block to follow its flows; click a block to filter every chart to it (click again to clear).</p>
+        <p class="caveat"><strong>Read amounts with care.</strong> Amounts follow each source's own basis (NSF estimated total, NIH fiscal-year total cost, USAspending obligated, and so on). They are <strong>not comparable or additive across sources</strong>, and some awards have no amount. Ribbon width therefore defaults to the number of awards.</p>
+        <div class="controls">
+          <fieldset><legend>Ribbon width</legend>
+            <label class="opt"><input type="radio" name="amt" value="awards" checked> Number of awards</label>
+            <label class="opt"><input type="radio" name="amt" value="amount"> Reported amount (USD, not comparable across sources)</label>
+          </fieldset>
+          <label class="opt"><input type="checkbox" id="sk-orgs" checked> Show recipient organisations</label>
+          <label class="opt" id="sk-n-wrap">Organisations per sector: <input type="range" id="sk-n" min="3" max="15" value="6"> <output id="sk-n-out">6</output></label>
+        </div>
+        <p class="note" id="sk-amt-note" hidden></p>
+        <div class="sankey-wrap" id="sk-wrap"><div id="sk-host"></div></div>
+        <p class="note">Awards with several topics split their weight equally across those topics (an award with two topics adds one half to each); awards with no topic go to "Untagged". Within each sector the organisation column shows the largest recipients, and the remainder are grouped as "Other &lt;sector&gt;".</p>
+        <details class="tbl"><summary>View the Sankey as a table</summary><div class="tbl-scroll" id="sk-table"></div></details>
+      </section>
+
+      <div class="grid2">
+        <section class="panel" aria-labelledby="yr-h">
+          <h2 id="yr-h">Awards per fiscal year, by funder agency</h2>
+          <p class="panel-intro">Count of awards. Click a segment to filter to that funder agency.</p>
+          <ul class="legend" id="yr-legend" aria-label="Funder agencies"></ul>
+          <div class="scroll" id="yr-chart"></div>
+          <details class="tbl"><summary>View as a table</summary><div class="tbl-scroll" id="yr-table"></div></details>
+        </section>
+        <section class="panel" aria-labelledby="org-h">
+          <h2 id="org-h">Top recipient organisations</h2>
+          <p class="panel-intro">Number of awards. Click a row to filter to that organisation.</p>
+          <ul class="orgs" id="org-list"></ul>
+        </section>
+        <section class="panel" aria-labelledby="hm-h">
+          <h2 id="hm-h">Topic by fiscal year</h2>
+          <p class="panel-intro">Awards per cell (an award with several topics counts once in each). Click a cell to filter.</p>
+          <div class="scroll" id="heat"></div>
+        </section>
+        <section class="panel" aria-labelledby="mx-h">
+          <h2 id="mx-h">Recipient sector by topic</h2>
+          <p class="panel-intro">Awards per cell. Click a cell to filter to that sector and topic.</p>
+          <div class="scroll" id="matrix"></div>
+        </section>
+      </div>
+
+      <section class="panel" aria-labelledby="tb-h">
+        <h2 id="tb-h">Awards</h2>
+        <p class="panel-intro">The filtered awards. Use the search box above to narrow by title, organisation or PI; click a column heading to sort.</p>
+        <p class="status-row"><button type="button" class="btn" id="csv-btn">Download filtered awards (CSV)</button><span class="muted" id="tb-count"></span></p>
+        <div class="tbl-scroll" style="max-height:none"><table class="award-table" id="award-table"></table></div>
+        <p><button type="button" class="btn" id="more-btn" hidden>Show more</button></p>
+      </section>
+
+      <section class="panel" aria-labelledby="about-h">
+        <h2 id="about-h">About these data</h2>
+        <p class="note" id="caveat-text">Loading&hellip;</p>
+        <p class="note">Sources: <span id="sources-text"></span></p>
+        <p class="notice"><strong>Disclaimer:</strong> Independent project; not an official OEHHA or State product.</p>
+      </section>
+      <footer>Static snapshot for exploration; accessibility and data quality are being improved in staged releases.</footer>
+    </main>
+    <div class="tip" id="tip" role="tooltip" hidden></div>
+
+    <script src="assets/topics.js"></script>
+    <script id="grants-app">
+      "use strict";
+      const T = typeof AtlasTopics !== "undefined" ? AtlasTopics : window.AtlasTopics;
+      const UNTAGGED = "__untagged__";
+      const DEFAULT_SECTOR_LABELS = { academia: "Academia", nonprofit: "Nonprofit & research institute", jpa: "Joint powers / regional agency", government: "Government", industry: "Industry", individual: "Individual (fellowship)", unknown: "Unknown" };
+      const SECTOR_ORDER = ["academia", "nonprofit", "jpa", "government", "industry", "individual", "unknown"];
+      const SECTOR_SHORT = { nonprofit: "Nonprofit & institute", jpa: "Joint powers / regional", individual: "Individual fellowship" };
+      const SECTOR_COLORS = { academia: "#2f5d8a", nonprofit: "#5f8fb8", jpa: "#86a3bd", government: "#55616b", industry: "#8b959d", individual: "#a9b4bd", unknown: "#c3cbd1" };
+      const FUNDER_COLOR = "#3d4f5c";
+      const AGENCY_COLORS = {
+        NSF: "#2c5f9e", NIH: "#b84f7e", NOAA: "#1f9393", EPA: "#8d9b22", "CA Ocean Protection Council": "#c97b17",
+        NIST: "#7a5aa6", USDA: "#5e8c3a", "CA State Water Board": "#a64b3c", "California Sea Grant": "#3a8fbf", "US Department of State": "#7d8790"
+      };
+      const AGENCY_OTHER = "#a9b3ba";
+      const DEFAULTS = { yf: "", yt: "", topic: "", agency: "", sector: "", ftype: "", ca: false, plastic: true, q: "", org: "", amt: false, n: 6, orgs: true };
+      const HEAT_START = 2012;
+
+      function escapeHtml(v) {
+        return String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+      }
+      function fmtInt(n) { return Math.round(n).toLocaleString("en-US"); }
+      function fmtShare(n) { return Math.abs(n - Math.round(n)) < 0.05 ? fmtInt(n) : n.toFixed(1); }
+      function fmtUsd(n) {
+        if (n == null || !isFinite(n)) return "n/a";
+        const a = Math.abs(n);
+        if (a >= 1e9) return "$" + (n / 1e9).toFixed(2) + " B";
+        if (a >= 1e6) return "$" + (n / 1e6).toFixed(1) + " M";
+        if (a >= 1e3) return "$" + Math.round(n / 1e3).toLocaleString("en-US") + " K";
+        return "$" + Math.round(n);
+      }
+      function fmtUsdFull(n) { return n == null ? "" : "$" + Math.round(n).toLocaleString("en-US"); }
+      function safeUrl(u) { return /^https?:\/\//i.test(String(u || "")) ? String(u) : ""; }
+
+      // ---------- topics ----------
+      function topicKeys() { return Object.keys(T.TOPICS); }
+      function topicLabel(k) { return k === UNTAGGED ? "Untagged" : T.label(k); }
+      function topicColor(k) { return k === UNTAGGED ? "#8a9499" : T.color(k); }
+      function topicOrder(k) { return k === UNTAGGED ? 999 : T.order(k); }
+      // Topics of one award; untagged awards get the single UNTAGGED topic.
+      function topicsOf(row) {
+        const tags = T.sortTags((row.domain_tags || []).filter((t) => !T.isMatrix(t)));
+        return tags.length ? tags : [UNTAGGED];
+      }
+
+      // ---------- organisations ----------
+      function orgKeyOf(name) {
+        const k = String(name || "").toLowerCase().replace(/[.,'’"]/g, "").replace(/\s+/g, " ").trim();
+        return k || "(unknown)";
+      }
+      function titleCaseOrg(s) {
+        const small = new Set(["of", "and", "the", "at", "for", "in", "on"]);
+        return s.toLowerCase().split(" ").map((w, i) => (i > 0 && small.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(" ");
+      }
+      // Adds derived fields to each row and returns a Map of org key -> display name.
+      function prepareRows(rows) {
+        const variants = new Map();
+        rows.forEach((r) => {
+          const raw = String(r.org || "").replace(/\s+/g, " ").trim();
+          r._orgKey = orgKeyOf(raw);
+          if (!variants.has(r._orgKey)) variants.set(r._orgKey, new Map());
+          if (raw) variants.get(r._orgKey).set(raw, (variants.get(r._orgKey).get(raw) || 0) + 1);
+          r._agency = r.funder_agency || r.funder || "Unknown funder";
+          r._sector = r.sector || "unknown";
+          r._topics = topicsOf(r);
+          r._fy = r.fiscal_year == null ? null : Number(r.fiscal_year);
+          r._q = [r.title, r.org, (r.pi_names || []).join(" "), r.program].join(" ").toLowerCase();
+        });
+        const names = new Map();
+        variants.forEach((m, key) => {
+          const all = [...m.entries()].sort((a, b) => b[1] - a[1]);
+          const mixed = all.find(([n]) => n !== n.toUpperCase());
+          const pick = mixed ? mixed[0] : all.length ? titleCaseOrg(all[0][0]) : "Unknown organisation";
+          names.set(key, pick);
+        });
+        rows.forEach((r) => { r._orgName = names.get(r._orgKey); });
+        return names;
+      }
+
+      // ---------- filtering ----------
+      function filterRows(rows, f) {
+        const yf = f.yf === "" || f.yf == null ? null : Number(f.yf);
+        const yt = f.yt === "" || f.yt == null ? null : Number(f.yt);
+        const q = String(f.q || "").trim().toLowerCase();
+        return rows.filter((r) => {
+          if (f.plastic && !r.plastic_related) return false;
+          if (yf != null || yt != null) {
+            if (r._fy == null) return false;
+            if (yf != null && r._fy < yf) return false;
+            if (yt != null && r._fy > yt) return false;
+          }
+          if (f.topic && !r._topics.includes(f.topic)) return false;
+          if (f.agency && r._agency !== f.agency) return false;
+          if (f.sector && r._sector !== f.sector) return false;
+          if (f.ftype && r.funder_type !== f.ftype) return false;
+          if (f.ca && r.ca_led !== true) return false;
+          if (f.org && r._orgKey !== f.org) return false;
+          if (q && !q.split(/\s+/).every((t) => r._q.includes(t))) return false;
+          return true;
+        });
+      }
+
+      // ---------- hash ----------
+      function encodeHash(s) {
+        const p = new URLSearchParams();
+        ["yf", "yt", "topic", "agency", "sector", "ftype", "q", "org"].forEach((k) => { if (s[k] !== "" && s[k] != null && s[k] !== DEFAULTS[k]) p.set(k, s[k]); });
+        if (s.ca) p.set("ca", "1");
+        if (!s.plastic) p.set("plastic", "0");
+        if (s.amt) p.set("amt", "1");
+        if (s.n !== DEFAULTS.n) p.set("n", String(s.n));
+        if (!s.orgs) p.set("orgs", "0");
+        const out = p.toString();
+        return out ? "#" + out : "";
+      }
+      function decodeHash(hash) {
+        const s = Object.assign({}, DEFAULTS);
+        const p = new URLSearchParams(String(hash || "").replace(/^#/, ""));
+        ["yf", "yt"].forEach((k) => { const v = p.get(k); if (v && /^\d{4}$/.test(v)) s[k] = v; });
+        ["topic", "agency", "sector", "ftype", "q", "org"].forEach((k) => { const v = p.get(k); if (v) s[k] = v; });
+        s.ca = p.get("ca") === "1";
+        s.plastic = p.get("plastic") !== "0";
+        s.amt = p.get("amt") === "1";
+        s.orgs = p.get("orgs") !== "0";
+        const n = parseInt(p.get("n"), 10);
+        if (isFinite(n)) s.n = Math.max(3, Math.min(15, n));
+        return s;
+      }
+
+      // ---------- Sankey data ----------
+      function hasAmount(r) { return typeof r.amount === "number" && isFinite(r.amount) && r.amount > 0; }
+      // Columns: 0 funder agency, 1 sector, 2 organisation (optional), last topic.
+      // opts.mode "awards" (default) or "amount"; opts.topN organisations per sector; opts.orgs include org column.
+      function buildSankey(rows, opts) {
+        const mode = opts && opts.mode === "amount" ? "amount" : "awards";
+        const topN = Math.max(1, (opts && opts.topN) || 6);
+        const withOrgs = !opts || opts.orgs !== false;
+        const used = [];
+        let excluded = 0;
+        rows.forEach((r) => {
+          if (mode === "amount" && !hasAmount(r)) { excluded += 1; return; }
+          used.push(r);
+        });
+        const wOf = (r) => (mode === "amount" ? r.amount : 1);
+        // Rank organisations inside each sector by weight.
+        const bySector = new Map();
+        used.forEach((r) => {
+          if (!bySector.has(r._sector)) bySector.set(r._sector, new Map());
+          const m = bySector.get(r._sector);
+          m.set(r._orgKey, (m.get(r._orgKey) || 0) + wOf(r));
+        });
+        const keep = new Map();
+        bySector.forEach((m, sector) => {
+          const ranked = [...m.entries()].sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(b[0]));
+          keep.set(sector, new Set(ranked.slice(0, topN).map((e) => e[0])));
+        });
+        const nodes = new Map();
+        const links = new Map();
+        const sectorLabels = (opts && opts.sectorLabels) || DEFAULT_SECTOR_LABELS;
+        function node(id, col, type, key, name, extra) {
+          let n = nodes.get(id);
+          if (!n) {
+            n = Object.assign({ id, col, type, key, name, value: 0, awardsW: 0, amountW: 0, set: new Set() }, extra || {});
+            nodes.set(id, n);
+          }
+          return n;
+        }
+        function touch(n, r, w, share, awardShare, amountShare) {
+          n.value += share;
+          n.awardsW += awardShare;
+          n.amountW += amountShare;
+          n.set.add(r.grant_key);
+          void w;
+        }
+        function link(a, b, r, share, awardShare, amountShare) {
+          const id = a.id + ">" + b.id;
+          let l = links.get(id);
+          if (!l) { l = { id, source: a.id, target: b.id, value: 0, awardsW: 0, amountW: 0 }; links.set(id, l); }
+          l.value += share;
+          l.awardsW += awardShare;
+          l.amountW += amountShare;
+        }
+        const lastCol = withOrgs ? 3 : 2;
+        used.forEach((r) => {
+          const w = wOf(r);
+          const amt = hasAmount(r) ? r.amount : 0;
+          const a = node("a:" + r._agency, 0, "agency", r._agency, r._agency);
+          const s = node("s:" + r._sector, 1, "sector", r._sector, sectorLabels[r._sector] || r._sector);
+          touch(a, r, w, w, 1, amt);
+          touch(s, r, w, w, 1, amt);
+          link(a, s, r, w, 1, amt);
+          let from = s;
+          if (withOrgs) {
+            const isTop = keep.get(r._sector).has(r._orgKey);
+            const o = isTop
+              ? node("o:" + r._orgKey, 2, "org", r._orgKey, r._orgName, { sector: r._sector })
+              : node("o:other:" + r._sector, 2, "other", r._sector, "Other " + (SECTOR_SHORT[r._sector] || sectorLabels[r._sector] || r._sector).toLowerCase(), { sector: r._sector });
+            touch(o, r, w, w, 1, amt);
+            link(s, o, r, w, 1, amt);
+            from = o;
+          }
+          const k = r._topics.length;
+          r._topics.forEach((t) => {
+            const tn = node("t:" + t, lastCol, "topic", t, topicLabel(t));
+            touch(tn, r, w, w / k, 1 / k, amt / k);
+            link(from, tn, r, w / k, 1 / k, amt / k);
+          });
+        });
+        let total = 0;
+        nodes.forEach((n) => { if (n.col === 0) total += n.value; });
+        const nodeList = [...nodes.values()].map((n) => Object.assign(n, { count: n.set.size }));
+        nodeList.forEach((n) => { delete n.set; });
+        return { nodes: nodeList, links: [...links.values()], total, excluded, mode, ncols: lastCol + 1, awardCount: used.length };
+      }
+
+      // Hand-rolled Sankey layout. Returns positioned nodes/links; all columns share one scale.
+      function layoutSankey(graph, o) {
+        const W = o.width, gap = o.gap == null ? 2 : o.gap, nw = o.nodeWidth || 12;
+        const ml = o.marginLeft == null ? 130 : o.marginLeft, mr = o.marginRight == null ? 170 : o.marginRight, mt = o.marginTop == null ? 26 : o.marginTop;
+        const minH = o.minNodeHeight == null ? 5 : o.minNodeHeight;
+        let H = o.height;
+        const cols = [];
+        for (let c = 0; c < graph.ncols; c++) cols.push(graph.nodes.filter((n) => n.col === c));
+        const sectorIdx = (s) => { const i = SECTOR_ORDER.indexOf(s); return i < 0 ? 99 : i; };
+        cols.forEach((list, c) => {
+          list.sort((a, b) => {
+            if (a.type === "topic" || b.type === "topic") {
+              const au = a.key === UNTAGGED ? 1 : 0, bu = b.key === UNTAGGED ? 1 : 0;
+              return au - bu || b.value - a.value || a.name.localeCompare(b.name);
+            }
+            if (a.type === "org" || a.type === "other") {
+              const ao = a.type === "other" ? 1 : 0, bo = b.type === "other" ? 1 : 0;
+              return sectorIdx(a.sector) - sectorIdx(b.sector) || ao - bo || b.value - a.value || a.name.localeCompare(b.name);
+            }
+            return b.value - a.value || a.name.localeCompare(b.name);
+          });
+          void c;
+        });
+        const inner = Math.max(40, H - mt - 8);
+        let scale = Infinity;
+        cols.forEach((list) => {
+          const sum = list.reduce((s, n) => s + n.value, 0);
+          if (sum > 0) scale = Math.min(scale, (inner - gap * Math.max(0, list.length - 1)) / sum);
+        });
+        if (!isFinite(scale)) scale = 0;
+        // grow the canvas when minimum node heights make a column taller than the canvas
+        let usedMax = 0;
+        cols.forEach((list) => {
+          const h = list.reduce((s, n) => s + Math.max(n.value * scale, minH), 0) + gap * Math.max(0, list.length - 1);
+          usedMax = Math.max(usedMax, h);
+        });
+        H = Math.max(H, usedMax + mt + 8);
+        const span = graph.ncols > 1 ? (W - ml - mr - nw) / (graph.ncols - 1) : 0;
+        const byId = new Map();
+        cols.forEach((list, c) => {
+          let y = mt;
+          list.forEach((n) => {
+            n.x = ml + c * span; n.w = nw; n.h = Math.max(n.value * scale, minH); n.y = y;
+            y += n.h + gap;
+            byId.set(n.id, n);
+          });
+        });
+        const links = graph.links.map((l) => Object.assign({}, l, { s: byId.get(l.source), t: byId.get(l.target), width: l.value * scale }));
+        // order link ends by the position of the node at the other end
+        graph.nodes.forEach((n) => {
+          const out = links.filter((l) => l.s === n).sort((a, b) => a.t.y - b.t.y || a.id.localeCompare(b.id));
+          const inn = links.filter((l) => l.t === n).sort((a, b) => a.s.y - b.s.y || a.id.localeCompare(b.id));
+          let oy = n.y; out.forEach((l) => { l.y0 = oy + l.width / 2; oy += l.width; });
+          let iy = n.y; inn.forEach((l) => { l.y1 = iy + l.width / 2; iy += l.width; });
+        });
+        links.forEach((l) => {
+          const x0 = l.s.x + l.s.w, x1 = l.t.x, xm = (x0 + x1) / 2;
+          l.d = `M${x0.toFixed(1)},${l.y0.toFixed(2)}C${xm.toFixed(1)},${l.y0.toFixed(2)} ${xm.toFixed(1)},${l.y1.toFixed(2)} ${x1.toFixed(1)},${l.y1.toFixed(2)}`;
+        });
+        return { nodes: graph.nodes, links, width: W, height: H, scale, marginLeft: ml };
+      }
+
+      // Nodes and links on any path through a node (upstream and downstream).
+      function connected(links, nodeId) {
+        const ls = new Set(), ns = new Set([nodeId]);
+        let frontier = [nodeId];
+        while (frontier.length) {
+          const next = [];
+          links.forEach((l) => { if (frontier.includes(l.source) && !ls.has(l.id)) { ls.add(l.id); ns.add(l.target); next.push(l.target); } });
+          frontier = next;
+        }
+        frontier = [nodeId];
+        while (frontier.length) {
+          const next = [];
+          links.forEach((l) => { if (frontier.includes(l.target) && !ls.has(l.id)) { ls.add(l.id); ns.add(l.source); next.push(l.source); } });
+          frontier = next;
+        }
+        return { links: ls, nodes: ns };
+      }
+
+      // ---------- other aggregations ----------
+      function agencyOrder(allRows) {
+        const counts = new Map();
+        allRows.forEach((r) => counts.set(r._agency, (counts.get(r._agency) || 0) + 1));
+        const known = Object.keys(AGENCY_COLORS);
+        const extra = [...counts.keys()].filter((a) => !known.includes(a)).sort();
+        return known.filter((a) => counts.has(a)).concat(extra);
+      }
+      function agencyColor(a) { return AGENCY_COLORS[a] || AGENCY_OTHER; }
+      function yearCounts(rows, order) {
+        const years = new Map();
+        let undated = 0;
+        rows.forEach((r) => {
+          if (r._fy == null) { undated += 1; return; }
+          if (!years.has(r._fy)) years.set(r._fy, new Map());
+          const m = years.get(r._fy);
+          m.set(r._agency, (m.get(r._agency) || 0) + 1);
+        });
+        if (!years.size) return { years: [], undated, max: 0 };
+        const lo = Math.min(...years.keys()), hi = Math.max(...years.keys());
+        const out = [];
+        let max = 0;
+        for (let y = lo; y <= hi; y++) {
+          const m = years.get(y) || new Map();
+          const segs = order.filter((a) => m.get(a)).map((a) => ({ agency: a, n: m.get(a) }));
+          const total = segs.reduce((s, x) => s + x.n, 0);
+          max = Math.max(max, total);
+          out.push({ year: y, total, segs });
+        }
+        return { years: out, undated, max };
+      }
+      function heatBucket(fy) { return fy < HEAT_START ? "pre" : fy; }
+      function buildHeat(rows) {
+        const dated = rows.filter((r) => r._fy != null);
+        if (!dated.length) return { cols: [], rows: [], max: 0 };
+        const hi = Math.max(...dated.map((r) => r._fy));
+        const lo = Math.max(HEAT_START, Math.min(...dated.map((r) => r._fy)));
+        const cols = [];
+        if (dated.some((r) => r._fy < HEAT_START)) cols.push("pre");
+        for (let y = lo; y <= hi; y++) cols.push(y);
+        const tk = topicKeys().concat([UNTAGGED]);
+        const out = tk.map((t) => ({ key: t, label: topicLabel(t), counts: cols.map(() => 0), total: 0 }));
+        const idx = new Map(out.map((r) => [r.key, r]));
+        dated.forEach((r) => {
+          const ci = cols.indexOf(heatBucket(r._fy));
+          r._topics.forEach((t) => { const row = idx.get(t); if (row) { row.counts[ci] += 1; row.total += 1; } });
+        });
+        const kept = out.filter((r) => r.total > 0);
+        return { cols, rows: kept, max: Math.max(0, ...kept.flatMap((r) => r.counts)) };
+      }
+      function buildSectorTopic(rows) {
+        const sectors = SECTOR_ORDER.filter((s) => rows.some((r) => r._sector === s));
+        const tk = topicKeys().concat([UNTAGGED]).filter((t) => rows.some((r) => r._topics.includes(t)));
+        const grid = sectors.map((s) => tk.map((t) => rows.filter((r) => r._sector === s && r._topics.includes(t)).length));
+        return { sectors, topics: tk, grid, max: Math.max(0, ...grid.flat()) };
+      }
+      function topOrgs(rows, n) {
+        const m = new Map();
+        rows.forEach((r) => {
+          let e = m.get(r._orgKey);
+          if (!e) { e = { key: r._orgKey, name: r._orgName, sector: r._sector, n: 0 }; m.set(r._orgKey, e); }
+          e.n += 1;
+        });
+        return [...m.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name)).slice(0, n);
+      }
+      function summarize(rows) {
+        const agencies = new Set(), orgs = new Set(), sectors = new Set();
+        let ca = 0, amount = 0, withAmt = 0;
+        rows.forEach((r) => {
+          agencies.add(r._agency); orgs.add(r._orgKey); sectors.add(r._sector);
+          if (r.ca_led === true) ca += 1;
+          if (hasAmount(r)) { amount += r.amount; withAmt += 1; }
+        });
+        return { awards: rows.length, funders: agencies.size, orgs: orgs.size, sectors: sectors.size, caShare: rows.length ? ca / rows.length : 0, amount, withAmt, noAmt: rows.length - withAmt };
+      }
+      function heatFill(count, max) {
+        if (!count) return "#f3f5f6";
+        const t = max > 0 ? Math.min(1, count / max) : 0;
+        const a = [0xe6, 0xee, 0xf6], b = [0x0b, 0x4f, 0x9c];
+        const c = a.map((v, i) => Math.round(v + (b[i] - v) * t));
+        return "#" + c.map((v) => v.toString(16).padStart(2, "0")).join("");
+      }
+      function inkFor(hex) {
+        const n = parseInt(hex.slice(1), 16);
+        const lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+        const L = 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
+        return L < 0.35 ? "#ffffff" : "#17324d";
+      }
+      function niceMax(max) {
+        if (max <= 5) return Math.max(1, max);
+        const pow = Math.pow(10, Math.floor(Math.log10(max)));
+        const f = max / pow;
+        return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * pow;
+      }
+      function sortRows(rows, key, dir) {
+        const sign = dir === "asc" ? 1 : -1;
+        const val = (r) => (key === "title" ? String(r.title || "").toLowerCase() : key === "org" ? r._orgName.toLowerCase() : key === "sector" ? r._sector : key === "funder" ? (r._agency + " " + (r.program || "")).toLowerCase() : key === "year" ? r._fy : key === "amount" ? (hasAmount(r) ? r.amount : null) : "");
+        return rows.slice().sort((a, b) => {
+          const x = val(a), y = val(b);
+          if (x == null && y == null) return 0;
+          if (x == null) return 1;
+          if (y == null) return -1;
+          return (x < y ? -1 : x > y ? 1 : 0) * sign || String(a.grant_key).localeCompare(b.grant_key);
+        });
+      }
+      function csvCell(v) {
+        let s = v == null ? "" : String(v);
+        if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+        return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+      }
+      function rowsToCsv(rows, sectorLabels) {
+        const head = ["grant_key", "title", "pi_names", "organisation", "org_state", "sector", "funder_agency", "funder_type", "program", "source", "fiscal_year", "start", "end", "amount", "currency", "amount_basis", "topics", "url"];
+        const lines = [head.join(",")];
+        rows.forEach((r) => {
+          lines.push([r.grant_key, r.title, (r.pi_names || []).join("; "), r.org, r.org_state, (sectorLabels || DEFAULT_SECTOR_LABELS)[r._sector] || r._sector, r._agency, r.funder_type, r.program, r.source, r._fy, r.start, r.end, hasAmount(r) ? r.amount : "", r.currency, r.amount_basis, r._topics.map(topicLabel).join("; "), r.url].map(csvCell).join(","));
+        });
+        return lines.join("\r\n") + "\r\n";
+      }
+
+      // ---------- page (browser only) ----------
+      if (typeof document !== "undefined" && document.getElementById("tiles")) {
+        const $ = (id) => document.getElementById(id);
+        let DATA = null, ALL = [], SECTOR_LABELS = DEFAULT_SECTOR_LABELS, AGENCIES = [];
+        let S = decodeHash(location.hash);
+        let filtered = [];
+        let sort = { key: "year", dir: "desc" };
+        let shown = 50;
+        let focusId = null;
+        let lastHash = null;
+        const tip = $("tip");
+
+        function showTip(html, x, y) {
+          tip.innerHTML = html; tip.hidden = false;
+          const r = tip.getBoundingClientRect();
+          let left = x + 14, top = y + 14;
+          if (left + r.width > innerWidth - 8) left = Math.max(8, x - r.width - 14);
+          if (top + r.height > innerHeight - 8) top = Math.max(8, y - r.height - 14);
+          tip.style.left = left + "px"; tip.style.top = top + "px";
+        }
+        function hideTip() { tip.hidden = true; }
+        function bindTip(host, find) {
+          host.addEventListener("mousemove", (e) => { const h = find(e.target); if (h) showTip(h, e.clientX, e.clientY); else hideTip(); });
+          host.addEventListener("mouseleave", hideTip);
+          host.addEventListener("focusin", (e) => { const h = find(e.target); if (h) { const r = e.target.getBoundingClientRect(); showTip(h, r.left + r.width / 2, r.top); } });
+          host.addEventListener("focusout", hideTip);
+        }
+
+        function setState(patch) { S = Object.assign({}, S, patch); update(); }
+        function toggle(key, value, extra) {
+          const same = S[key] === value;
+          setState(Object.assign({ [key]: same ? "" : value }, same ? {} : extra || {}));
+        }
+
+        function fillSelect(el, options, value) {
+          el.innerHTML = options.map(([v, t]) => `<option value="${escapeHtml(v)}">${escapeHtml(t)}</option>`).join("");
+          el.value = value;
+          if (el.value !== value) el.value = "";
+        }
+        function syncControls() {
+          const years = [...new Set(ALL.map((r) => r._fy).filter((y) => y != null))].sort((a, b) => a - b);
+          const yopts = (any) => [["", any]].concat(years.map((y) => [String(y), String(y)]));
+          fillSelect($("f-yf"), yopts("Earliest"), S.yf);
+          fillSelect($("f-yt"), yopts("Latest"), S.yt);
+          fillSelect($("f-topic"), [["", "All topics"]].concat(topicKeys().concat([UNTAGGED]).map((t) => [t, topicLabel(t)])), S.topic);
+          fillSelect($("f-agency"), [["", "All funders"]].concat(AGENCIES.map((a) => [a, a])), S.agency);
+          fillSelect($("f-sector"), [["", "All sectors"]].concat(SECTOR_ORDER.filter((s) => ALL.some((r) => r._sector === s)).map((s) => [s, SECTOR_LABELS[s] || s])), S.sector);
+          $("f-ftype").value = S.ftype;
+          $("f-ca").checked = S.ca;
+          $("f-plastic").checked = S.plastic;
+          if ($("f-q").value !== S.q) $("f-q").value = S.q;
+          document.querySelectorAll('input[name="amt"]').forEach((el) => { el.checked = (el.value === "amount") === S.amt; });
+          $("sk-orgs").checked = S.orgs;
+          $("sk-n").value = S.n; $("sk-n-out").textContent = S.n;
+          $("sk-n-wrap").hidden = !S.orgs;
+        }
+
+        function renderTiles() {
+          const m = summarize(filtered);
+          const tile = (t, v, s) => `<div class="metric"><dt>${t}</dt><dd>${v}</dd>${s ? `<small>${s}</small>` : ""}</div>`;
+          $("tiles").innerHTML =
+            tile("Awards", fmtInt(m.awards)) +
+            tile("Funder agencies", fmtInt(m.funders)) +
+            tile("Recipient organisations", fmtInt(m.orgs)) +
+            tile("Sectors", fmtInt(m.sectors)) +
+            tile("California-led", m.awards ? Math.round(m.caShare * 100) + "%" : "n/a", "share of awards led from California") +
+            tile("Reported amount", m.withAmt ? fmtUsd(m.amount) : "n/a", `${fmtInt(m.withAmt)} awards with an amount, ${fmtInt(m.noAmt)} without. Sources use different bases; do not treat as a total.`);
+          $("status").textContent = `${fmtInt(filtered.length)} of ${fmtInt(ALL.length)} awards`;
+        }
+
+        function renderChips() {
+          const chips = [];
+          const add = (k, label) => chips.push(`<span class="sel-chip">${escapeHtml(label)}<button type="button" data-clear="${k}" aria-label="Remove filter: ${escapeHtml(label)}">&times;</button></span>`);
+          if (S.yf || S.yt) add("years", `Fiscal year ${S.yf || "earliest"} to ${S.yt || "latest"}`);
+          if (S.topic) add("topic", "Topic: " + topicLabel(S.topic));
+          if (S.agency) add("agency", "Funder: " + S.agency);
+          if (S.sector) add("sector", "Sector: " + (SECTOR_LABELS[S.sector] || S.sector));
+          if (S.ftype) add("ftype", "Funder type: " + S.ftype);
+          if (S.org) { const r = ALL.find((x) => x._orgKey === S.org); add("org", "Organisation: " + (r ? r._orgName : S.org)); }
+          if (S.ca) add("ca", "California-led only");
+          if (!S.plastic) add("plastic", "Including awards not flagged plastic-related");
+          if (S.q) add("q", "Search: " + S.q);
+          $("chips").innerHTML = chips.join("");
+        }
+
+        // ----- Sankey -----
+        let layout = null;
+        function renderSankey() {
+          const host = $("sk-host");
+          const g = buildSankey(filtered, { mode: S.amt ? "amount" : "awards", topN: S.n, orgs: S.orgs, sectorLabels: SECTOR_LABELS });
+          const note = $("sk-amt-note");
+          note.hidden = !S.amt;
+          if (S.amt) note.innerHTML = `<strong>Showing reported amounts (USD), which are not comparable across sources.</strong> ${fmtInt(g.excluded)} of ${fmtInt(filtered.length)} filtered awards have no reported amount and are excluded from this view.`;
+          if (!g.nodes.length) { host.innerHTML = `<p class="empty">No awards match the current filters.</p>`; layout = null; $("sk-table").innerHTML = ""; return; }
+          const wrapW = $("sk-wrap").clientWidth || 800;
+          const W = Math.max(760, wrapW);
+          const count = Math.max(...Array.from({ length: g.ncols }, (_, c) => g.nodes.filter((n) => n.col === c).length));
+          const H = Math.min(1000, Math.max(420, count * 24 + 40));
+          const L = layoutSankey(g, { width: W, height: H, marginLeft: 120, marginRight: 190 });
+          layout = L;
+          const heads = ["Funder agency", "Recipient sector", S.orgs ? "Recipient organisation" : null, "Topic"].filter(Boolean);
+          const colOf = (n) => n.col;
+          const nodeColor = (n) => (n.type === "agency" ? FUNDER_COLOR : n.type === "sector" ? SECTOR_COLORS[n.key] || "#8b959d" : n.type === "topic" ? topicColor(n.key) : SECTOR_COLORS[n.sector] || "#8b959d");
+          const linkColor = (l) => (l.t.type === "topic" ? topicColor(l.t.key) : l.t.type === "sector" ? SECTOR_COLORS[l.t.key] || "#8b959d" : SECTOR_COLORS[l.t.sector] || "#8b959d");
+          const total = g.total || 1;
+          const nodeAria = (n) => `${n.name}: ${fmtInt(n.count)} awards${S.amt ? `, ${fmtUsd(n.value)} reported` : ""}. ${isSelected(n) ? "Selected. " : ""}Press Enter to ${isSelected(n) ? "remove" : "apply"} this filter.`;
+          const parts = [`<svg id="sk-svg" width="${W}" height="${L.height}" viewBox="0 0 ${W} ${L.height}" role="group" aria-label="Sankey diagram of funders, sectors, organisations and topics">`];
+          heads.forEach((h, i) => {
+            const x = layout.nodes.find((n) => n.col === i);
+            if (x) parts.push(`<text class="col-head" x="${i === 0 ? x.x + x.w : i === heads.length - 1 ? x.x : x.x}" y="14" text-anchor="${i === 0 ? "end" : "start"}">${h}</text>`);
+          });
+          parts.push(`<g>`);
+          L.links.forEach((l, i) => {
+            parts.push(`<path class="link" data-i="${i}" d="${l.d}" stroke="${linkColor(l)}" stroke-width="${Math.max(l.width, 0.6).toFixed(2)}"></path>`);
+          });
+          parts.push(`</g><g>`);
+          const lastBottom = new Map();
+          L.nodes.slice().sort((a, b) => a.col - b.col || a.y - b.y).forEach((n) => {
+            const sel = isSelected(n);
+            const first = colOf(n) === 0, last = colOf(n) === g.ncols - 1;
+            const cy = n.y + n.h / 2;
+            const prev = lastBottom.get(n.col) || -1e9;
+            let label = "";
+            if (cy - 7 >= prev) {
+              const maxc = first ? 17 : last ? 24 : 26;
+              const nm = n.name.length > maxc ? n.name.slice(0, maxc - 1) + "…" : n.name;
+              label = `<text x="${first ? n.x - 6 : n.x + n.w + 6}" y="${(cy + 4).toFixed(1)}" text-anchor="${first ? "end" : "start"}">${escapeHtml(nm)}</text>`;
+              lastBottom.set(n.col, cy + 7);
+            }
+            parts.push(`<g class="node${sel ? " sel" : ""}" data-id="${escapeHtml(n.id)}" tabindex="0" role="button" aria-pressed="${sel}" aria-label="${escapeHtml(nodeAria(n))}"><rect x="${n.x}" y="${n.y.toFixed(2)}" width="${n.w}" height="${n.h.toFixed(2)}" fill="${nodeColor(n)}" rx="1"></rect>${label}</g>`);
+          });
+          parts.push(`</g></svg>`);
+          host.innerHTML = parts.join("");
+          // table alternative
+          const nameOf = new Map(g.nodes.map((n) => [n.id, n]));
+          const colName = (n) => heads[n.col];
+          $("sk-table").innerHTML = `<table><thead><tr><th>From</th><th>To</th><th class="num">${S.amt ? "Reported amount (USD)" : "Awards (split across topics)"}</th><th class="num">Share</th></tr></thead><tbody>` +
+            g.links.slice().sort((a, b) => a.source.localeCompare(b.source) || b.value - a.value).map((l) => {
+              const a = nameOf.get(l.source), b = nameOf.get(l.target);
+              return `<tr><td>${escapeHtml(a.name)} <span class="muted">(${colName(a)})</span></td><td>${escapeHtml(b.name)} <span class="muted">(${colName(b)})</span></td><td class="num">${S.amt ? fmtUsdFull(l.value) : fmtShare(l.value)}</td><td class="num">${(l.value / total * 100).toFixed(1)}%</td></tr>`;
+            }).join("") + `</tbody></table>`;
+          g._total = total;
+          layout.graph = g;
+          if (focusId) { const el = host.querySelector(`.node[data-id="${CSS.escape(focusId)}"]`); if (el) el.focus({ preventScroll: true }); focusId = null; }
+        }
+        function isSelected(n) {
+          return (n.type === "agency" && S.agency === n.key) || (n.type === "sector" && S.sector === n.key) || (n.type === "other" && S.sector === n.key) || (n.type === "org" && S.org === n.key) || (n.type === "topic" && S.topic === n.key);
+        }
+        function nodeToggle(n) {
+          focusId = n.id;
+          if (n.type === "agency") toggle("agency", n.key);
+          else if (n.type === "sector" || n.type === "other") toggle("sector", n.key);
+          else if (n.type === "org") toggle("org", n.key);
+          else if (n.type === "topic") toggle("topic", n.key);
+        }
+        function nodeTip(n) {
+          const g = layout.graph, share = (n.value / (g._total || 1)) * 100;
+          const kind = n.type === "topic" ? "Topic" : n.type === "agency" ? "Funder agency" : n.type === "sector" ? "Sector" : "Recipient organisation";
+          const lines = [`<b>${escapeHtml(n.name)}</b>`, `<span style="opacity:.8">${kind}</span>`, `${fmtInt(n.count)} awards${n.type === "topic" ? " (weight split across topics: " + fmtShare(n.awardsW) + ")" : ""}`, `${share.toFixed(1)}% of ${S.amt ? "reported amount" : "award weight"}`, `Reported amount: ${n.amountW ? fmtUsd(n.amountW) : "none"} (source bases differ)`];
+          return lines.join("<br>");
+        }
+        function linkTip(l) {
+          const g = layout.graph;
+          return `<b>${escapeHtml(l.s.name)} &rarr; ${escapeHtml(l.t.name)}</b><br>${S.amt ? fmtUsd(l.value) + " reported" : fmtShare(l.value) + " awards"}<br>${(l.value / (g._total || 1) * 100).toFixed(1)}% of ${S.amt ? "reported amount" : "award weight"}<br>Reported amount: ${l.amountW ? fmtUsd(l.amountW) : "none"} (source bases differ)`;
+        }
+        function highlight(svg, ids) {
+          if (!ids) { svg.classList.remove("hl"); svg.querySelectorAll(".on").forEach((e) => e.classList.remove("on")); return; }
+          svg.classList.add("hl");
+          svg.querySelectorAll(".link").forEach((p) => p.classList.toggle("on", ids.links.has(layout.links[+p.dataset.i].id)));
+          svg.querySelectorAll(".node").forEach((p) => p.classList.toggle("on", ids.nodes.has(p.dataset.id)));
+        }
+        function initSankeyEvents() {
+          const host = $("sk-host");
+          const nodeOf = (t) => { const el = t.closest && t.closest(".node"); return el && layout ? layout.nodes.find((n) => n.id === el.dataset.id) : null; };
+          const linkOf = (t) => (t.classList && t.classList.contains("link") && layout ? layout.links[+t.dataset.i] : null);
+          const enter = (t) => {
+            const svg = host.querySelector("svg");
+            if (!svg || !layout) return null;
+            const n = nodeOf(t);
+            if (n) { highlight(svg, connected(layout.links, n.id)); return nodeTip(n); }
+            const l = linkOf(t);
+            if (l) { highlight(svg, { links: new Set([l.id]), nodes: new Set([l.source, l.target]) }); return linkTip(l); }
+            highlight(svg, null);
+            return null;
+          };
+          bindTip(host, enter);
+          host.addEventListener("mouseleave", () => { const svg = host.querySelector("svg"); if (svg) highlight(svg, null); });
+          host.addEventListener("focusout", () => { const svg = host.querySelector("svg"); if (svg) highlight(svg, null); });
+          host.addEventListener("click", (e) => { const n = nodeOf(e.target); if (n) { nodeToggle(n); return; } const l = linkOf(e.target); if (l) { nodeToggle(l.t.type === "topic" ? l.t : l.s); } });
+          host.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { const n = nodeOf(e.target); if (n) { e.preventDefault(); nodeToggle(n); } } });
+        }
+
+        // ----- stacked bar by year -----
+        function renderYearChart() {
+          const yc = yearCounts(filtered, AGENCIES);
+          const present = AGENCIES.filter((a) => yc.years.some((y) => y.segs.some((s) => s.agency === a)));
+          $("yr-legend").innerHTML = present.map((a) => `<li><i style="background:${agencyColor(a)}"></i>${escapeHtml(a)}</li>`).join("");
+          const host = $("yr-chart");
+          if (!yc.years.length) { host.innerHTML = `<p class="empty">No dated awards match the current filters.</p>`; $("yr-table").innerHTML = ""; return; }
+          const n = yc.years.length;
+          const W = Math.max(Math.min(host.clientWidth || 560, 760), 300), H = 260, ml = 38, mr = 8, mt = 8, mb = 28;
+          const pw = W - ml - mr, ph = H - mt - mb, top = niceMax(yc.max);
+          const bw = pw / n;
+          const y = (v) => mt + ph - (v / top) * ph;
+          const parts = [`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Stacked bar chart of awards per fiscal year by funder agency; a table follows"><g class="axis">`];
+          [0, top / 2, top].forEach((t) => { parts.push(`<line x1="${ml}" x2="${W - mr}" y1="${y(t)}" y2="${y(t)}" stroke="#e1eaed"></line><text x="${ml - 5}" y="${y(t) + 4}" text-anchor="end">${fmtShare(t)}</text>`); });
+          const step = Math.max(1, Math.ceil(n * 30 / pw));
+          yc.years.forEach((yr, i) => { if (i % step === 0) parts.push(`<text x="${ml + bw * i + bw / 2}" y="${H - 10}" text-anchor="middle">${yr.year}</text>`); });
+          parts.push(`</g>`);
+          yc.years.forEach((yr, i) => {
+            let acc = 0;
+            yr.segs.forEach((s) => {
+              const y0 = y(acc + s.n), h = y(acc) - y0;
+              parts.push(`<rect class="seg" data-year="${yr.year}" data-agency="${escapeHtml(s.agency)}" data-n="${s.n}" x="${(ml + bw * i + bw * 0.12).toFixed(1)}" y="${y0.toFixed(1)}" width="${(bw * 0.76).toFixed(1)}" height="${Math.max(h, 0).toFixed(1)}" fill="${agencyColor(s.agency)}" stroke="#fff" stroke-width="2" tabindex="0" role="button" aria-label="${yr.year}, ${escapeHtml(s.agency)}: ${s.n} awards"></rect>`);
+              acc += s.n;
+            });
+          });
+          parts.push(`</svg>`);
+          host.innerHTML = parts.join("") + (yc.undated ? `<p class="note">${fmtInt(yc.undated)} filtered awards have no fiscal year and are not shown here.</p>` : "");
+          $("yr-table").innerHTML = `<table><thead><tr><th>Fiscal year</th>${present.map((a) => `<th class="num">${escapeHtml(a)}</th>`).join("")}<th class="num">Total</th></tr></thead><tbody>` +
+            yc.years.map((yr) => `<tr><td>${yr.year}</td>${present.map((a) => { const s = yr.segs.find((x) => x.agency === a); return `<td class="num">${s ? s.n : 0}</td>`; }).join("")}<td class="num">${yr.total}</td></tr>`).join("") + `</tbody></table>`;
+        }
+        function initYearEvents() {
+          const host = $("yr-chart");
+          bindTip(host, (t) => (t.classList && t.classList.contains("seg") ? `<b>${t.dataset.year}</b><br>${escapeHtml(t.dataset.agency)}: ${t.dataset.n} awards` : null));
+          host.addEventListener("click", (e) => { if (e.target.classList && e.target.classList.contains("seg")) toggle("agency", e.target.dataset.agency); });
+          host.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("seg")) { e.preventDefault(); toggle("agency", e.target.dataset.agency); } });
+        }
+
+        // ----- heatmap and matrix -----
+        function renderHeat() {
+          const h = buildHeat(filtered);
+          const host = $("heat");
+          if (!h.rows.length) { host.innerHTML = `<p class="empty">No dated awards match the current filters.</p>`; return; }
+          const selYear = S.yf && S.yf === S.yt ? Number(S.yf) : S.yt === String(HEAT_START - 1) && !S.yf ? "pre" : null;
+          host.innerHTML = `<table class="mat"><thead><tr><th class="rowhead"></th>${h.cols.map((c) => `<th scope="col">${c === "pre" ? "&lt;" + HEAT_START : c}</th>`).join("")}</tr></thead><tbody>` +
+            h.rows.map((r) => `<tr><th scope="row"><span class="dot" style="background:${topicColor(r.key)}"></span>${escapeHtml(r.label)}</th>${r.counts.map((n, i) => {
+              const fill = heatFill(n, h.max), sel = S.topic === r.key && selYear === h.cols[i];
+              return `<td><button type="button" class="cell${sel ? " sel" : ""}" ${n ? "" : "disabled"} data-topic="${r.key}" data-col="${h.cols[i]}" style="background:${fill};color:${inkFor(fill)}" aria-label="${escapeHtml(r.label)}, ${h.cols[i] === "pre" ? "before " + HEAT_START : h.cols[i]}: ${n} awards">${n || ""}</button></td>`;
+            }).join("")}</tr>`).join("") + `</tbody></table>`;
+        }
+        function initHeatEvents() {
+          const host = $("heat");
+          host.addEventListener("click", (e) => {
+            const b = e.target.closest(".cell");
+            if (!b || b.disabled) return;
+            const t = b.dataset.topic, c = b.dataset.col;
+            const year = c === "pre" ? { yf: "", yt: String(HEAT_START - 1) } : { yf: c, yt: c };
+            const same = S.topic === t && S.yf === year.yf && S.yt === year.yt;
+            setState(same ? { topic: "", yf: "", yt: "" } : Object.assign({ topic: t }, year));
+          });
+          bindTip(host, (t) => { const b = t.closest && t.closest(".cell"); return b ? escapeHtml(b.getAttribute("aria-label")) : null; });
+        }
+        function renderMatrix() {
+          const m = buildSectorTopic(filtered);
+          const host = $("matrix");
+          if (!m.sectors.length) { host.innerHTML = `<p class="empty">No awards match the current filters.</p>`; return; }
+          host.innerHTML = `<table class="mat"><thead><tr><th class="rowhead"></th>${m.topics.map((t) => `<th scope="col" title="${escapeHtml(topicLabel(t))}"><span class="dot" style="background:${topicColor(t)};margin:0 0 2px"></span><br>${escapeHtml(topicLabel(t))}</th>`).join("")}</tr></thead><tbody>` +
+            m.sectors.map((s, i) => `<tr><th scope="row">${escapeHtml(SECTOR_LABELS[s] || s)}</th>${m.grid[i].map((n, j) => {
+              const fill = heatFill(n, m.max), sel = S.sector === s && S.topic === m.topics[j];
+              return `<td><button type="button" class="cell${sel ? " sel" : ""}" ${n ? "" : "disabled"} data-sector="${s}" data-topic="${m.topics[j]}" style="background:${fill};color:${inkFor(fill)}" aria-label="${escapeHtml(SECTOR_LABELS[s] || s)}, ${escapeHtml(topicLabel(m.topics[j]))}: ${n} awards">${n || ""}</button></td>`;
+            }).join("")}</tr>`).join("") + `</tbody></table>`;
+        }
+        function initMatrixEvents() {
+          const host = $("matrix");
+          host.addEventListener("click", (e) => {
+            const b = e.target.closest(".cell");
+            if (!b || b.disabled) return;
+            const same = S.sector === b.dataset.sector && S.topic === b.dataset.topic;
+            setState(same ? { sector: "", topic: "" } : { sector: b.dataset.sector, topic: b.dataset.topic });
+          });
+          bindTip(host, (t) => { const b = t.closest && t.closest(".cell"); return b ? escapeHtml(b.getAttribute("aria-label")) : null; });
+        }
+
+        // ----- top organisations -----
+        function renderOrgs() {
+          const list = topOrgs(filtered, 12);
+          const host = $("org-list");
+          if (!list.length) { host.innerHTML = `<li class="empty">No awards match the current filters.</li>`; return; }
+          const max = list[0].n;
+          host.innerHTML = list.map((o) => `<li><button type="button" class="${S.org === o.key ? "sel" : ""}" data-org="${escapeHtml(o.key)}" aria-pressed="${S.org === o.key}"><span class="nm"><b title="${escapeHtml(o.name)}">${escapeHtml(o.name)}</b><span class="badge">${escapeHtml(SECTOR_LABELS[o.sector] || o.sector)}</span></span><span class="bar"><span style="width:${(o.n / max * 100).toFixed(1)}%"></span></span><span class="ct">${o.n}</span></button></li>`).join("");
+        }
+
+        // ----- award table -----
+        function renderTable() {
+          const rows = sortRows(filtered, sort.key, sort.dir);
+          const cols = [["title", "Title"], ["org", "Organisation"], ["sector", "Sector"], ["funder", "Funder / program"], ["year", "Years"], ["amount", "Amount"]];
+          const head = cols.map(([k, t]) => `<th class="${k === "amount" ? "num" : ""}" scope="col" aria-sort="${sort.key === k ? (sort.dir === "asc" ? "ascending" : "descending") : "none"}"><button type="button" data-sort="${k}">${t}${sort.key === k ? (sort.dir === "asc" ? " ▲" : " ▼") : ""}</button></th>`).join("") + `<th scope="col">Topics</th>`;
+          const body = rows.slice(0, shown).map((r) => {
+            const u = safeUrl(r.url);
+            const yrs = [r.start, r.end].map((d) => (d ? String(d).slice(0, 4) : "")).filter(Boolean);
+            const years = r._fy != null ? `FY${r._fy}` + (yrs.length === 2 && yrs[0] !== yrs[1] ? ` (${yrs[0]}-${yrs[1]})` : "") : yrs.join("-") || "n/a";
+            return `<tr><td class="title">${u ? `<a href="${escapeHtml(u)}" target="_blank" rel="noreferrer">${escapeHtml(r.title || "(untitled)")}</a>` : escapeHtml(r.title || "(untitled)")}</td><td>${escapeHtml(r._orgName)}${r.org_state ? ` <span class="muted">${escapeHtml(r.org_state)}</span>` : ""}</td><td>${escapeHtml(SECTOR_LABELS[r._sector] || r._sector)}</td><td>${escapeHtml(r._agency)}${r.program && r.program !== r._agency ? `<br><span class="muted">${escapeHtml(r.program)}</span>` : ""}</td><td>${escapeHtml(years)}</td><td class="num" title="${escapeHtml(r.amount_basis || "")}">${hasAmount(r) ? fmtUsdFull(r.amount) : '<span class="muted">none</span>'}</td><td>${r._topics.map((t) => (t === UNTAGGED ? '<span class="muted">Untagged</span>' : T.chip(t))).join(" ")}</td></tr>`;
+          }).join("");
+          $("award-table").innerHTML = `<thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="7" class="empty">No awards match the current filters.</td></tr>`}</tbody>`;
+          $("tb-count").textContent = `Showing ${Math.min(shown, rows.length)} of ${fmtInt(rows.length)} filtered awards`;
+          $("more-btn").hidden = rows.length <= shown;
+        }
+
+        function update() {
+          filtered = filterRows(ALL, S);
+          const h = encodeHash(S);
+          if (h !== lastHash) { lastHash = h; try { history.replaceState(null, "", location.pathname + location.search + h); } catch (e) { /* ignore */ } }
+          syncControls(); renderTiles(); renderChips(); renderSankey(); renderYearChart(); renderHeat(); renderMatrix(); renderOrgs();
+          shown = Math.min(shown, Math.max(50, shown)); renderTable();
+          hideTip();
+        }
+
+        function initControls() {
+          const bind = (id, key, ev) => $(id).addEventListener(ev || "change", (e) => { shown = 50; setState({ [key]: e.target.type === "checkbox" ? e.target.checked : e.target.value }); });
+          bind("f-yf", "yf"); bind("f-yt", "yt"); bind("f-topic", "topic"); bind("f-agency", "agency"); bind("f-sector", "sector"); bind("f-ftype", "ftype");
+          bind("f-ca", "ca"); bind("f-plastic", "plastic");
+          let timer = null;
+          $("f-q").addEventListener("input", (e) => { clearTimeout(timer); const v = e.target.value; timer = setTimeout(() => { shown = 50; setState({ q: v }); }, 200); });
+          $("f-reset").addEventListener("click", () => { shown = 50; S = Object.assign({}, DEFAULTS, { amt: S.amt, n: S.n, orgs: S.orgs }); $("f-q").value = ""; update(); });
+          document.querySelectorAll('input[name="amt"]').forEach((el) => el.addEventListener("change", () => setState({ amt: el.value === "amount" && el.checked })));
+          $("sk-orgs").addEventListener("change", (e) => setState({ orgs: e.target.checked }));
+          $("sk-n").addEventListener("input", (e) => setState({ n: Number(e.target.value) }));
+          $("chips").addEventListener("click", (e) => {
+            const b = e.target.closest("button[data-clear]");
+            if (!b) return;
+            const k = b.dataset.clear;
+            if (k === "years") setState({ yf: "", yt: "" });
+            else if (k === "ca") setState({ ca: false });
+            else if (k === "plastic") setState({ plastic: true });
+            else setState({ [k]: "" });
+          });
+          $("org-list").addEventListener("click", (e) => { const b = e.target.closest("button[data-org]"); if (b) toggle("org", b.dataset.org); });
+          $("award-table").addEventListener("click", (e) => {
+            const b = e.target.closest("button[data-sort]");
+            if (!b) return;
+            const k = b.dataset.sort;
+            sort = { key: k, dir: sort.key === k && sort.dir === "asc" ? "desc" : k === "title" || k === "org" || k === "sector" || k === "funder" ? "asc" : "desc" };
+            renderTable();
+          });
+          $("more-btn").addEventListener("click", () => { shown += 50; renderTable(); });
+          $("csv-btn").addEventListener("click", () => {
+            const csv = rowsToCsv(sortRows(filtered, sort.key, sort.dir), SECTOR_LABELS);
+            const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+            const a = document.createElement("a");
+            a.href = url; a.download = "plastics_funding_filtered.csv";
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+          });
+          addEventListener("hashchange", () => { if (location.hash !== lastHash && (location.hash || "") !== (lastHash || "")) { S = decodeHash(location.hash); update(); } });
+          let rt = null;
+          addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { renderSankey(); renderYearChart(); }, 150); });
+        }
+
+        fetch("data/grants.json").then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then((d) => {
+          DATA = d; ALL = d.rows || [];
+          SECTOR_LABELS = Object.assign({}, DEFAULT_SECTOR_LABELS, d.sector_labels || {});
+          prepareRows(ALL);
+          AGENCIES = agencyOrder(ALL);
+          $("caveat-text").textContent = d.caveat || "";
+          $("sources-text").textContent = Object.keys(d.sources || {}).map((k) => k.replace(/_/g, " ")).join(", ");
+          initControls(); initSankeyEvents(); initYearEvents(); initHeatEvents(); initMatrixEvents();
+          lastHash = encodeHash(S);
+          update();
+        }).catch((err) => {
+          $("status").textContent = "Could not load the awards data (" + err.message + ").";
+        });
+      }
+    </script>
+  </body>
+</html>

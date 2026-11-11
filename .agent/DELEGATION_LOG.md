@@ -59,3 +59,5 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-11T07:50:00-08:00 | AT-2 | claude-haiku (haiku-developer) | Institution type carry-forward | Accepted after one resume | 2 sessions; ~108K subagent tokens |
 | 2026-11-11T08:20:00-08:00 | S3-UX | claude-sonnet (general-purpose) | Experts topics/sort/metrics + interactive Institutions map, topic bars | Accepted; escalated to Sonnet because one-file scope was larger than Haiku's 30-turn budget earlier today | 1 session; ~146K subagent tokens |
 | 2026-11-11T08:20:00-08:00 | S3-SEM | claude-haiku (haiku-developer) | Institution evidence-map page (sem.html) | Accepted after lead stopped a stalled background wait; lead binned pre-2000 years and scrolled to newest | 1 session; ~113K subagent tokens |
+| 2026-11-11T09:20:00-08:00 | S8-VIZ | claude-sonnet (general-purpose) | Grants visualization suite (Sankey, linked charts) | Accepted | 1 session; ~127K subagent tokens |
+| 2026-11-11T09:40:00-08:00 | S3-UX2 | claude-sonnet (general-purpose) | Map place labels, institution topic sort/filter, drawer abstracts, plastic basis note | Accepted | 1 session; ~111K subagent tokens |

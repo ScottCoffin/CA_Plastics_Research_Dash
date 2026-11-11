@@ -90,3 +90,4 @@
 | 2026-11-11 | S2.1-B, S3.6, S7.5-UX, S11.3 | Real v3.1 backfill live; owner labels + Haiku work relevance at export; experts filter 519->5.5 ms; interactive monitoring map; grant review app | this commit |
 | 2026-11-11 | AT-2 | Institution types carried forward to v3.1 ranking (168 rows, 52 new top-100 entrants queued); labeled_works count fix | this commit |
 | 2026-11-11 | S3-UX, S8 | Experts topics/sort/citations; interactive institutions map + topic bars; institution evidence maps; author auto-merges; grant strong-term rule; owner grant review applied; works review app | this commit |
+| 2026-11-11 | S8-VIZ, S3-UX2, gates | Grants Sankey suite; map labels; topic sort; drawer abstracts; whole-record plastics citations; fallback OpenAlex key; owner clears A1 gates | this commit |

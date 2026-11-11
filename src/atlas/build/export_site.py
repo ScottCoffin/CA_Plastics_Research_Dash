@@ -304,7 +304,8 @@ def export_site(
     calls) replaces the rule's ``plastic_related`` first; owner overrides still win.
     ``author_metrics_path`` (``scripts/fetch_author_metrics.py``) adds career-wide
     OpenAlex ``cited_by_count`` and ``h_index``; merged records sum citations and keep
-    the largest h-index. Plastics-only counts come from the exported works.
+    the largest h-index. Plastics counts use the author's whole OpenAlex record when
+    fetched (``plastic_basis`` = ``openalex``), else the exported CA corpus.
     """
 
     works_rows = _read(works_path)
@@ -402,9 +403,16 @@ def export_site(
         target = curation.author_merges.get(
             _text(metric.get("author_id")), _text(metric.get("author_id"))
         )
-        entry = career.setdefault(target, {"cited_by_count": 0, "h_index": 0})
+        entry = career.setdefault(
+            target, {"cited_by_count": 0, "h_index": 0, "plastic_works": 0, "plastic_cites": 0}
+        )
         entry["cited_by_count"] += _int(metric.get("cited_by_count"))
         entry["h_index"] = max(entry["h_index"], _int(metric.get("h_index")))
+        if _text(metric.get("plastic_fetched_at_utc")):
+            # Whole-record plastics metrics (all of the author's OpenAlex works).
+            entry["plastic_covered"] = 1
+            entry["plastic_works"] += _int(metric.get("plastic_works_global"))
+            entry["plastic_cites"] += _int(metric.get("plastic_citations_global"))
     slim_by_id = {work["work_id"]: work for work in slim_works}
 
     author_index: list[dict[str, Any]] = []
@@ -423,6 +431,8 @@ def export_site(
             if work_id in slim_by_id and slim_by_id[work_id].get("plastic_related") is True
         ]
         metrics = career.get(author_id, {})
+        corpus_cites = sum(_int(w.get("cited_by_count")) for w in plastic_works)
+        whole_record = bool(metrics.get("plastic_covered"))
         author_index.append(
             {
                 "author_id": author_id,
@@ -436,8 +446,15 @@ def export_site(
                 "work_ids": author_work_ids,
                 "cited_by_count": metrics.get("cited_by_count"),
                 "h_index": metrics.get("h_index"),
-                "plastic_works_count": len(plastic_works),
-                "plastic_citations": sum(_int(w.get("cited_by_count")) for w in plastic_works),
+                # Whole OpenAlex record when fetched (basis "openalex"); otherwise the
+                # CA corpus only (basis "atlas_corpus"), which understates specialists
+                # whose plastics papers mostly lack CA co-authors.
+                "plastic_works_count": (
+                    metrics["plastic_works"] if whole_record else len(plastic_works)
+                ),
+                "plastic_citations": metrics["plastic_cites"] if whole_record else corpus_cites,
+                "plastic_basis": "openalex" if whole_record else "atlas_corpus",
+                "ca_plastic_works_count": len(plastic_works),
                 "institution_ids": sorted(institutions_by_author.get(author_id, set())),
             }
         )

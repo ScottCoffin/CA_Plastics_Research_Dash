@@ -273,3 +273,7 @@ until it reports.
 - The S2.1 "backfill from 1950" passed tests and CI but would have fetched only 1950 and replaced the table with it (end year defaulted to the start year), and per-year windows multiplied 10-credit calls 77-fold. Before relying on a range pull, count it cheaply (`per_page=1` per batch) and assert the requested window in a test.
 - Three overnight sessions reported "all ungated work done" while the Experts tab still served the 4-work fixture. Every downstream stage (S3.6 measurement, S4.2 representative sample, S5 classifiers trained on that gold set) was blocked on that one fault. When several stages are blocked on the same missing input, fix that input first and say so in the handoff; do not treat the stages as separately gated.
 - Owner labels in a review CSV are inert until a build step reads them. After any owner labelling round, wire the labels into curation and check the public payload.
+
+## 2026-11-11: shell heredocs corrupt regex escapes here
+- Python patches sent through Git Bash heredocs turned `\b` into a backspace (0x08) twice, silently breaking regexes. Write patch scripts with the Write tool, or use lookarounds; scan with `grep -rlP "\x08" --include=*.py`.
+- A share metric must use the same population in numerator and denominator: corpus-only plastics citations over career citations put Rochman at 42% (true 98.7%).

@@ -93,10 +93,18 @@ def resolve_openalex_budget(
     def setting(name: str) -> Decimal | None:
         return _decimal(raw.get(name), field=name)
 
-    daily_cost = setting("daily_ceiling_usd")
-    abort_cost = setting("abort_threshold_usd")
-    daily_credits = setting("daily_ceiling_credits")
-    abort_credits = setting("abort_threshold_credits")
+    # A fallback key (owner rule 2026-11-11) is a second free daily allowance, so the
+    # configured per-account ceilings scale with the number of keys available.
+    accounts = Decimal(2 if env.get("OPENALEX_API_KEY_ALT") else 1)
+
+    def scaled(name: str) -> Decimal | None:
+        value = setting(name)
+        return None if value is None else value * accounts
+
+    daily_cost = scaled("daily_ceiling_usd")
+    abort_cost = scaled("abort_threshold_usd")
+    daily_credits = scaled("daily_ceiling_credits")
+    abort_credits = scaled("abort_threshold_credits")
     env_cost = _decimal(env.get("OPENALEX_MAX_COST_USD"), field="OPENALEX_MAX_COST_USD")
     env_credits = _decimal(env.get("OPENALEX_MAX_CREDITS"), field="OPENALEX_MAX_CREDITS")
     cli_cost = _decimal(max_cost_usd, field="max_cost_usd")

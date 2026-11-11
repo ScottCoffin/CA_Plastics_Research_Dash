@@ -1,0 +1,57 @@
+# Grant recipient sectors and funder agencies for the Funding visualizations.
+# Applied at export by atlas.build.grant_sectors. Edit freely: `names` (exact,
+# case-insensitive) win over `rules` (ordered regexes, first match wins). Sectors are
+# descriptive groupings of the recipient organisation, not legal status.
+
+sectors:
+  academia: Academia
+  nonprofit: Nonprofit & research institute
+  jpa: Joint powers / regional agency
+  government: Government
+  industry: Industry
+  individual: Individual (fellowship)
+  unknown: Unknown
+
+names:
+  southern california coastal water research project: [jpa, regional]
+  bay area stormwater management agencies association: [jpa, regional]
+  richardsons bay regional agency: [jpa, regional]
+  san francisco estuary institute: [nonprofit, research institute]
+  georgia tech research corporation: [academia, university research foundation]
+  university corporation for atmospheric res: [nonprofit, research consortium]
+  national academy of sciences: [nonprofit, academy]
+  wiyot tribe: [government, tribal]
+  redacted due to pii: [individual, individual]
+  oneil colleen e: [individual, individual]
+
+rules:
+  # Personal-name recipients ("Last, First M") are tested last, after every
+  # organisation keyword, so "University of California, Davis" stays academia.
+  - [government, tribal, '\btribe\b|\brancheria\b|\bband of\b']
+  - [government, local, '^city of\b|\bcounty\b|\bcity of\b|\bport of\b|\bsanitation district\b|\bwater district\b']
+  - [government, state, '\bstate of california\b|^california (coastal commission|department)|\bstate coastal conservancy\b|\bwater resources control board\b|\bdepartment of\b']
+  - [government, federal, '^national institute of\b|^national (oceanic|park)|\bu\.?s\.? (geological|fish)\b']
+  - [academia, university, '\buniv(ersity|\.)?\b|\bcollege\b|\bpolytechnic\b|\binstitute of tech|\bsuny\b|\bcuny\b|\bcolleges\b|\bschool of mines\b|\bhigher education\b|\bschool of medicine\b|\bhealth sci(s|ences)?\b|\bregents\b|\bcaltech\b|\bmit\b']
+  - [nonprofit, medical research, '\bcancer\b|\bclinic\b|\bhospital\b|\bmedical center\b']
+  - [nonprofit, nonprofit, '\bfoundation\b|\binstitute\b|\binstitution\b|\bconservancy\b|\bsociety\b|\bassociation\b|\baquarium\b|\bmuseum\b|\blaboratory\b|\bnetwork\b|\bconferences?\b|\bcouncil\b|\bsurfrider\b|\bsave our shores\b|\bwildcoast\b|\bone cool earth\b|\btheiss research\b|\bmammal center\b']
+  - [industry, company, '\b(inc|llc|corp|corporation|co|company|ltd|technologies|biolabs|bioworks|biosciences|innovations?|polymers|materials)\b\.?']
+  - [individual, individual, '^(?!.*\b(inc|llc|corp|the|co)\b)[A-Za-z''\- ]+,\s+[A-Za-z]+(\s+[A-Za-z]+)?(\s+[A-Za-z]\.?)?\s*$']
+
+# Funder agency from the funder chain: the first chain element that maps here,
+# skipping parent departments. Unmapped names are kept as written.
+funder_agencies:
+  nsf: NSF
+  national science foundation: NSF
+  nih: NIH
+  national oceanic and atmospheric administration: NOAA
+  national oceanic and atmospheric administration (noaa): NOAA
+  national institute of standards and technology: NIST
+  environmental protection agency: EPA
+  department of agriculture: USDA
+  national institute of food and agriculture: USDA
+  department of state: US Department of State
+  california ocean protection council (opc): CA Ocean Protection Council
+  california ocean protection council: CA Ocean Protection Council
+  state water resources control board: CA State Water Board
+  california sea grant: California Sea Grant
+parent_departments: [department of commerce]
