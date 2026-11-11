@@ -46,6 +46,7 @@ This file is the live tracker for the current session: update it at every checkp
 | 39 | Review apps highlight the admitting search terms in title + abstract | Done 2026-11-11: `atlas.review_highlight` (core / qualified+context / tier-2 / grant keywords / exclusions / plastic* stems; matched-terms line + legend) in all three `scripts/review_*_app.py` |
 | 40 | Streamlit torchvision / `__path__` traceback spam in the work review app | Fixed: `.streamlit/config.toml` `fileWatcherType = "none"` (the watcher probes transformers' lazy zoedepth aliases, which import the missing torchvision); restart the app after code edits |
 | 41 | Persistent human-task list with simple instructions | Done: `.agent/HUMAN_TASKS.md` (CLAUDE.md session entry step 6); photo review sheet `curation/expert_photo_review.csv` via `scripts/build_photo_review.py` |
+| 42 | Rule: human reviews with >10 cases get a Streamlit app | Recorded (CLAUDE.md step 6, HUMAN_TASKS.md); applied: `scripts/review_institution_types_app.py` (AT2-REVIEW, 47 rows) and `scripts/review_expert_photos_app.py` (44 photos), shared `atlas.csv_review` |
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
 ## Next eligible (dependency order) - as of the session-end commit (2026-11-11 ~21:45 UTC)

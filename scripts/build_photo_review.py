@@ -27,6 +27,7 @@ FIELDS = [
     "commons_page_url",
     "license_short",
     "credit",
+    "thumb_url",
     "owner_decision",
     "owner_notes",
 ]
@@ -54,6 +55,7 @@ def main() -> None:
                     "commons_page_url": row.get("description_url") or "",
                     "license_short": row.get("license_short") or "",
                     "credit": " ".join(str(row.get("credit") or row.get("artist") or "").split()),
+                    "thumb_url": row.get("thumb_url") or "",
                     "owner_decision": old.get("owner_decision", ""),
                     "owner_notes": old.get("owner_notes", ""),
                 }

@@ -26,6 +26,10 @@ the next eligible task.
 6. Remind the owner of the open "Do now" items in `.agent/HUMAN_TASKS.md` (the
    persistent owner to-do list). Keep it current: add a task with simple,
    complete steps whenever work becomes owner-gated, and move finished tasks to "Done".
+   Owner rule: a human review of more than 10 cases ships with a Streamlit review
+   app (adapt an existing `scripts/review_*_app.py`, or use `atlas.csv_review` for a
+   CSV sheet), with one case per screen, one-click decisions saved immediately, and
+   the admitting search terms highlighted (`atlas.review_highlight`) when text is shown.
 
 `.agent/README.md` is summarized by this file. Open it only for the
 Playwright/WSL browser smoke procedure.

@@ -5,6 +5,10 @@ current: it adds a task when work becomes owner-gated, and moves a task to "Done
 when the owner finishes it. Each task says where, what to do, and how to tell the
 agent it is finished.
 
+Owner rule (2026-11-11): any human review with more than 10 cases gets a Streamlit
+review app (one case per screen, one-click decisions saved at once), not a
+spreadsheet to edit by hand. Small reviews (10 or fewer) may stay as a file edit.
+
 All commands run from the repository folder in Git Bash:
 `cd ~/R_new/CA_Plastics_Research_Dash`
 
@@ -43,31 +47,28 @@ Last updated: 2026-11-11.
   the model is least sure of. Use it after H2 to label faster.
 
 ### H3. Set institution types for the new top-100 institutions (AT2-REVIEW)
-1. Open `data/processed/institution_review_needs_v31.csv` in Excel (47 rows today;
-   QUESTIONS.md says 52).
-2. For each row, read `display_name` and `proposed_atlas_type`.
-3. In `owner_atlas_type`, type exactly one of these: `UC`, `CSU`, `private`
-   (private university or college), `nonprofit/NGO`, `company`, `state-agency`,
-   `federal`, `local-agency`. Copy `proposed_atlas_type` when it is right. If none
-   fits (for example a community college), pick the closest and explain in
-   `owner_notes`; the agent will add a type if needed.
-4. Put today's date (YYYY-MM-DD) in `owner_reviewed_at`. Add a note in
-   `owner_notes` if you want to.
-5. Save as CSV (keep the name and the comma format).
-- **Done when:** every row has `owner_atlas_type` filled. Tell the agent
+1. Run `py -3.14 -m streamlit run scripts/review_institution_types_app.py`
+   (47 institutions today; QUESTIONS.md says 52).
+2. For each institution, read the name and the proposed type. Use **Open in
+   OpenAlex** or **Search the web** if you are not sure what it is.
+3. Click **✓ Accept proposed** if it is right. Otherwise click the correct type
+   (hover a button for its definition; **Type definitions** in the sidebar lists
+   them all). If none fits (for example a community college), pick the closest and
+   type a note first; the agent will add a type if needed.
+4. Each click saves the type, today's date and your note to
+   `data/processed/institution_review_needs_v31.csv`, and the next institution appears.
+- **Done when:** the sidebar shows "Reviewed 47 of 47". Tell the agent
   "AT2-REVIEW done".
 
 ### H4. Approve or reject 44 expert photos from Wikidata (S9.5)
-1. Open `curation/expert_photo_review.csv` in Excel (one row per photo).
-2. For each row:
-   - Open `commons_page_url` to see the photo and its licence.
-   - Open `atlas_profile_url` to see the expert in the Atlas.
-   - Decide whether the photo shows that same person.
-3. In `owner_decision`, type `approve` (same person, fine to show with the listed
-   credit) or `reject` (wrong person, or you do not want it shown). Add a reason
-   in `owner_notes` if useful.
-4. Save as CSV. (If the sheet is ever regenerated with
-   `py -3.14 scripts/build_photo_review.py`, your decisions are kept.)
+1. Run `py -3.14 -m streamlit run scripts/review_expert_photos_app.py`.
+2. For each photo, compare it with the expert. Use **Atlas profile**, **Wikidata**
+   and **Commons page** if you need to check the person or the licence.
+3. Click **✓ Approve** (same person, fine to show with the licence and credit) or
+   **✗ Reject** (wrong person, or you do not want it shown). Type a note first if useful.
+4. Each click saves to `curation/expert_photo_review.csv`, and the next photo appears.
+   (If the sheet is regenerated with `py -3.14 scripts/build_photo_review.py`,
+   your decisions are kept.)
 - **Done when:** all 44 rows have `approve` or `reject`. Tell the agent
   "photos reviewed". No photo is shown on the site before this.
 
@@ -95,6 +96,9 @@ Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
 ---
 
 ## Later (the agent will say when each is ready)
+
+Each later review with more than 10 cases (H9 gold labels, H12 need cells) will
+come with its own Streamlit app and run command here.
 
 - **H7. Review 10 expert profiles (S9.3/S9.5).** After the agent adds ORCID bios
   and approved photos to the expert drawer: open https://plastiverse.live/#experts,
