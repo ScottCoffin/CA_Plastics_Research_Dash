@@ -22,6 +22,15 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from atlas.build.curation import load_suppressions
+from atlas.ingest.state_agencies import (
+    DEFAULT_PATH as STATE_AGENCIES_PATH,
+)
+from atlas.ingest.state_agencies import (
+    apply_state_agencies,
+    load_state_agencies,
+    match_state_agencies,
+    registry_row,
+)
 
 WORKS_SCHEMA = pa.schema(
     [
@@ -611,6 +620,7 @@ def normalize_records(
     author_overrides_path: str | Path = "config/author_overrides.csv",
     suppressions_path: str | Path | None = "curation/suppressions.csv",
     generated_at: str | None = None,
+    state_agencies_path: str | Path | None = STATE_AGENCIES_PATH,
 ) -> NormalizationResult:
     """Normalize raw OpenAlex work objects into C3-shaped Parquet tables.
 
@@ -619,6 +629,13 @@ def normalize_records(
     """
 
     registry = _read_registry(institution_path)
+    agencies = (
+        load_state_agencies(state_agencies_path)
+        if state_agencies_path is not None and Path(state_agencies_path).exists()
+        else []
+    )
+    for agency in agencies:
+        registry.setdefault(agency.id, registry_row(agency))
     overrides = _load_overrides(author_overrides_path)
     suppressed_authors: frozenset[str] = frozenset()
     suppressed_works: frozenset[str] = frozenset()
@@ -687,6 +704,13 @@ def normalize_records(
                 )
             else:
                 raw_affiliation = _string(raw_authorship.get("raw_affiliation"))
+            matched_agencies = match_state_agencies(raw_affiliation, agencies)
+            if matched_agencies:
+                # Replace the umbrella OpenAlex linked (CalEPA / State of California) with
+                # the named agency, so the work is not counted for both.
+                institution_ids = apply_state_agencies(institution_ids, matched_agencies)
+                for agency_id in matched_agencies:
+                    institution_rows[agency_id] = dict(registry[agency_id])
             if not raw_affiliation:
                 missing_affiliations += 1
             if not author_id:

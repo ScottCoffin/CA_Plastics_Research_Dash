@@ -1,0 +1,177 @@
+# California state bodies that have no OpenAlex institution record (S1.2-AGENCIES, 2026-11-11).
+#
+# normalize matches `patterns` (case-insensitive regular expressions) against each
+# raw-affiliation string of an authorship. A match adds the synthetic `id` to the
+# authorship and removes the umbrella records OpenAlex linked instead (CalEPA
+# I65137940 and "State of California" I4389425283), so one body is never counted twice.
+# Keep patterns strict: a false positive moves a work to the wrong agency.
+#
+# Regional Water Quality Control Boards use `region_pattern` + `region_number`, which
+# expand to "<region> ... water board", "water board ... <region>" and "water board, region N".
+#
+# To add an agency: append an entry with a stable id (CAAG-<SHORT>), its HQ location, the
+# parent OpenAlex id, and patterns; then run scripts/normalize_openalex.py. Agencies that
+# do have an OpenAlex record (CDPH, DTSC, CARB, OPC, ...) belong in the registry, not here.
+agencies:
+  - id: CAAG-OEHHA
+    name: Office of Environmental Health Hazard Assessment
+    short_name: OEHHA
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: Sacramento
+    region: California
+    lat: 38.5767
+    lon: -121.4937
+    patterns:
+      - 'office of environmental health (and )?hazard assessment'
+      - '\boehha\b'
+  - id: CAAG-SWRCB
+    name: State Water Resources Control Board
+    short_name: State Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: Sacramento
+    region: California
+    lat: 38.5767
+    lon: -121.4937
+    patterns:
+      - 'state water resources control board'
+      - 'state water (quality control )?board'
+      - '\bswrcb\b'
+      - 'california water boards?\b'
+      - 'division of drinking water.{0,80}(sacramento|california)'
+      - '(sacramento|california).{0,80}division of drinking water'
+  - id: CAAG-RWQCB1
+    name: North Coast Regional Water Quality Control Board
+    short_name: North Coast Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: Santa Rosa
+    region: California
+    lat: 38.4404
+    lon: -122.7144
+    region_pattern: 'north coast'
+    region_number: 1
+  - id: CAAG-RWQCB2
+    name: San Francisco Bay Regional Water Quality Control Board
+    short_name: SF Bay Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: Oakland
+    region: California
+    lat: 37.8044
+    lon: -122.2712
+    region_pattern: 'san francisco bay'
+    region_number: 2
+  - id: CAAG-RWQCB3
+    name: Central Coast Regional Water Quality Control Board
+    short_name: Central Coast Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: San Luis Obispo
+    region: California
+    lat: 35.2828
+    lon: -120.6596
+    region_pattern: 'central coast'
+    region_number: 3
+  - id: CAAG-RWQCB4
+    name: Los Angeles Regional Water Quality Control Board
+    short_name: LA Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: Los Angeles
+    region: California
+    lat: 34.0522
+    lon: -118.2437
+    region_pattern: 'los angeles'
+    region_number: 4
+  - id: CAAG-RWQCB5
+    name: Central Valley Regional Water Quality Control Board
+    short_name: Central Valley Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: Rancho Cordova
+    region: California
+    lat: 38.5891
+    lon: -121.3027
+    region_pattern: 'central valley'
+    region_number: 5
+  - id: CAAG-RWQCB6
+    name: Lahontan Regional Water Quality Control Board
+    short_name: Lahontan Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: South Lake Tahoe
+    region: California
+    lat: 38.9399
+    lon: -119.9772
+    region_pattern: 'lahontan'
+    region_number: 6
+  - id: CAAG-RWQCB7
+    name: Colorado River Basin Regional Water Quality Control Board
+    short_name: Colorado River Basin Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: Palm Desert
+    region: California
+    lat: 33.7222
+    lon: -116.3745
+    region_pattern: 'colorado river basin'
+    region_number: 7
+  - id: CAAG-RWQCB8
+    name: Santa Ana Regional Water Quality Control Board
+    short_name: Santa Ana Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: Riverside
+    region: California
+    lat: 33.9806
+    lon: -117.3755
+    region_pattern: 'santa ana'
+    region_number: 8
+  - id: CAAG-RWQCB9
+    name: San Diego Regional Water Quality Control Board
+    short_name: San Diego Water Board
+    atlas_type: state-agency
+    parent_id: I65137940
+    parent_name: California Environmental Protection Agency
+    city: San Diego
+    region: California
+    lat: 32.7157
+    lon: -117.1611
+    region_pattern: 'san diego'
+    region_number: 9
+  - id: CAAG-SLC
+    name: California State Lands Commission
+    short_name: State Lands Commission
+    atlas_type: state-agency
+    parent_id: I4389425283
+    parent_name: State of California
+    city: Sacramento
+    region: California
+    lat: 38.5865
+    lon: -121.4170
+    patterns:
+      - 'state lands commission'
+  - id: CAAG-SJDC
+    name: San Joaquin Delta Conservancy
+    short_name: Delta Conservancy
+    atlas_type: state-agency
+    parent_id: I4389425283
+    parent_name: State of California
+    city: West Sacramento
+    region: California
+    lat: 38.5805
+    lon: -121.5302
+    patterns:
+      - 'san joaquin delta conservancy'

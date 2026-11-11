@@ -380,3 +380,88 @@ def test_export_recount_honours_ca_basis(tmp_path: Path) -> None:
     index = _json(tmp_path / "site", "index.json")
     counts = {a["author_id"]: a["ca_works_count"] for a in index["authors"]}
     assert counts[target["author_id"]] == 1
+
+
+def test_export_precedence_owner_over_at1_over_model_over_haiku(tmp_path: Path) -> None:
+    plain = _json(_export(tmp_path / "plain"), "index.json")
+    ids = [w["work_id"] for w in plain["works"][:4]]
+    if len(ids) < 4:
+        pytest.skip("fixture has fewer than four works")
+    owner, at1, model, both = ids
+    header = (
+        "work_id,plastic_related,assist_plastic_related,confidence,reason,"
+        "reviewer,reviewed_at,owner_review"
+    )
+    relevance = _csv(
+        tmp_path / "relevance.csv",
+        header,
+        [
+            f"{owner},false,true,high,x,SC,2026-11-11,changed",  # owner says false, Haiku true
+            f"{at1},true,true,high,x,claude-haiku-assist,2026-11-11,pending",
+            f"{model},true,true,high,x,claude-haiku-assist,2026-11-11,pending",
+            f"{both},true,true,high,x,claude-haiku-assist,2026-11-11,pending",
+        ],
+    )
+    overrides = _csv(
+        tmp_path / "overrides.csv",
+        OVERRIDE_HEADER,
+        [
+            f"{owner},plastic_related,true,AT-1,SC,2026-11-11",  # owner decision wins
+            f"{at1},plastic_related,false,AT-1,SC,2026-11-11",  # AT-1 beats model and Haiku
+        ],
+    )
+    model_csv = _csv(
+        tmp_path / "model.csv",
+        "work_id,plastic_related,p_relevant,model_version,accepted_at",
+        [
+            f"{owner},true,0.9,m,2026-11-11",  # must not touch an owner row
+            f"{at1},true,0.9,m,2026-11-11",
+            f"{model},false,0.1,m,2026-11-11",  # model beats Haiku
+        ],
+    )
+    site = _export(
+        tmp_path / "curated",
+        work_relevance_path=relevance,
+        work_overrides_path=overrides,
+        model_relevance_path=model_csv,
+    )
+    works = {w["work_id"]: w for w in _json(site, "index.json")["works"]}
+    assert works[owner]["plastic_related"] is False
+    assert works[at1]["plastic_related"] is False
+    assert works[model]["plastic_related"] is False
+    assert works[both]["plastic_related"] is True
+
+
+def test_owner_decision_without_haiku_row_is_appended_and_exports(tmp_path: Path) -> None:
+    from atlas.work_relevance_review import (
+        load_work_reviews,
+        record_decision,
+        record_owner_decision,
+        save_work_reviews,
+    )
+
+    plain = _json(_export(tmp_path / "plain"), "index.json")
+    first, second = plain["works"][0]["work_id"], plain["works"][1]["work_id"]
+    header = (
+        "work_id,plastic_related,assist_plastic_related,confidence,reason,"
+        "reviewer,reviewed_at,owner_review"
+    )
+    path = _csv(
+        tmp_path / "relevance.csv",
+        header,
+        [f"{first},true,true,high,r,claude-haiku-assist,2026-11-11,pending"],
+    )
+    table = load_work_reviews(path)
+    assert record_owner_decision(table, second, False, "SC", "line one\nline two") == "confirmed"
+    assert record_owner_decision(table, first, False, "SC") == "changed"  # existing row
+    save_work_reviews(table, path)
+    reloaded = load_work_reviews(path)
+    new = next(r for r in reloaded.rows if r["work_id"] == second)
+    assert new["assist_plastic_related"] == "" and new["confidence"] == ""
+    assert new["reason"].startswith("owner (no assist call)") and new["owner_review"] == "confirmed"
+    assert reloaded.counts()["changed"] == 1
+    record_decision(reloaded, second, True, "SC")  # revisiting the appended row still works
+    site = _export(tmp_path / "curated", work_relevance_path=path)
+    works = {w["work_id"]: w for w in _json(site, "index.json")["works"]}
+    assert works[second]["plastic_related"] is False
+    assert works[first]["plastic_related"] is False

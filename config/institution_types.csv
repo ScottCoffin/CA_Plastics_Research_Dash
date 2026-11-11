@@ -1,169 +1,203 @@
 inst_id,display_name,atlas_type,type_source,parent_id,v31_work_count,v31_rank,needs_review
+CAAG-OEHHA,Office of Environmental Health Hazard Assessment,state-agency,rule,I65137940,6,48,true
+CAAG-RWQCB9,San Diego Regional Water Quality Control Board,state-agency,rule,I65137940,1,113,false
+CAAG-SJDC,San Joaquin Delta Conservancy,state-agency,rule,I4389425283,1,114,false
+CAAG-SLC,California State Lands Commission,state-agency,rule,I4389425283,2,88,true
+CAAG-SWRCB,State Water Resources Control Board,state-agency,rule,I65137940,21,20,true
 I103635307,"University of California, Riverside",UC,owner_reviewed,,116,4,false
-I108652713,Public Library of Science,nonprofit/NGO,rule,,1,86,true
-I11006740,Southern California Coastal Water Research Project,nonprofit/NGO,owner_reviewed,,44,10,false
+I108652713,Public Library of Science,nonprofit/NGO,rule,,1,115,false
+I11006740,Southern California Coastal Water Research Project,nonprofit/NGO,rule,,44,11,true
 I1174212,University of Southern California,private,owner_reviewed,,58,9,false
-I118839592,"California State University, Bakersfield",CSU,owner_reviewed,,7,32,false
-I119303690,Fullerton College,private,rule,,1,87,true
-I119942576,University of the Pacific,private,rule,,11,26,true
-I122411786,California Institute of Technology,private,owner_reviewed,,12,24,false
-I123431417,Scripps Research Institute,nonprofit/NGO,owner_reviewed,,2,68,false
-I124104796,Marine Mammal Center,nonprofit/NGO,rule,,7,33,true
-I126031752,Santa Barbara City College,private,rule,,2,69,true
-I126533617,Alliant University,federal,rule,,1,88,true
-I127339247,California State University System,CSU,rule,,4,49,true
-I1282311441,Lawrence Livermore National Laboratory,federal,owner_reviewed,I4210138311,1,89,false
-I1282927834,Cedars-Sinai Medical Center,nonprofit/NGO,owner_reviewed,,4,50,false
-I129302853,Roche (United States),company,rule,I118019719,1,90,true
-I1294537935,Point Blue Conservation Science,nonprofit/NGO,owner_reviewed,,3,57,false
-I1295874195,California Coastal Commission,local-agency,rule,,2,70,true
-I1297132110,Los Angeles Police Department,local-agency,rule,,1,91,true
-I1298353152,SRI International,nonprofit/NGO,rule,,2,71,true
-I1301076528,City Of Hope National Medical Center,nonprofit/NGO,owner_override,,1,92,false
-I1301553790,J. Craig Venter Institute,nonprofit/NGO,owner_reviewed,,11,27,false
-I1306134198,Los Angeles County Department of Public Health,nonprofit/NGO,rule,,1,93,true
-I1309849503,RAND Corporation,nonprofit/NGO,rule,,1,94,true
-I1315708478,San Francisco VA Medical Center,federal,owner_override,I4210143381,1,95,false
-I1316194761,Museum of Vertebrate Zoology,UC,owner_override,,5,43,false
-I1319261023,Monterey Bay Aquarium Research Institute,nonprofit/NGO,owner_reviewed,,12,25,false
-I1324840837,Hewlett-Packard (United States),company,rule,,3,58,true
-I1327551190,Zoological Society of San Diego,nonprofit/NGO,owner_reviewed,,2,72,false
-I1333577951,California Department of Fish and Wildlife,state-agency,owner_reviewed,I4389425283,6,37,false
-I1334627681,Jet Propulsion Laboratory,federal,owner_override,I4210124779,7,34,false
-I1343180700,Intel (United States),company,rule,,3,59,true
-I138285227,Agilent Technologies (United States),company,owner_reviewed,,6,38,false
-I149919469,California Polytechnic State University,CSU,owner_reviewed,,30,14,false
+I118839592,"California State University, Bakersfield",CSU,rule,,7,42,true
+I119303690,Fullerton College,private,rule,,1,116,false
+I119942576,University of the Pacific,private,owner_reviewed,,11,33,false
+I122411786,California Institute of Technology,private,owner_reviewed,,12,30,false
+I123431417,Scripps Research Institute,nonprofit/NGO,owner_reviewed,,2,89,false
+I124104796,Marine Mammal Center,nonprofit/NGO,rule,,7,43,true
+I126031752,Santa Barbara City College,private,rule,,2,90,true
+I126533617,Alliant University,federal,rule,,1,117,false
+I127339247,California State University System,CSU,owner_reviewed,,4,64,false
+I1282311441,Lawrence Livermore National Laboratory,federal,owner_reviewed,I4210138311,1,118,false
+I1282927834,Cedars-Sinai Medical Center,nonprofit/NGO,owner_reviewed,,4,65,false
+I1290230355,California Department of Toxic Substances Control,state-agency,rule,I4389425283,1,119,false
+I129302853,Roche (United States),company,rule,I118019719,1,120,false
+I1294537935,Point Blue Conservation Science,nonprofit/NGO,rule,,3,75,true
+I1295874195,California Coastal Commission,state-agency,rule,,2,91,true
+I1297132110,Los Angeles Police Department,local-agency,rule,,1,121,false
+I1298353152,SRI International,nonprofit/NGO,owner_reviewed,,2,92,false
+I1301076528,City Of Hope National Medical Center,nonprofit/NGO,owner_override,,1,122,false
+I1301553790,J. Craig Venter Institute,nonprofit/NGO,rule,,11,34,true
+I1306134198,Los Angeles County Department of Public Health,local-agency,rule,,1,123,false
+I1309849503,RAND Corporation,nonprofit/NGO,rule,,1,124,false
+I1315708478,San Francisco VA Medical Center,federal,owner_override,I4210143381,1,125,false
+I1316194761,Museum of Vertebrate Zoology,UC,owner_override,,5,58,false
+I1316958739,California Air Resources Board,state-agency,rule,,3,76,true
+I1319261023,Monterey Bay Aquarium Research Institute,nonprofit/NGO,owner_reviewed,,12,31,false
+I1324840837,Hewlett-Packard (United States),company,owner_reviewed,,3,77,false
+I1327551190,Zoological Society of San Diego,nonprofit/NGO,rule,,2,93,true
+I1328614147,California Department of Transportation,state-agency,rule,I4389425283,2,94,true
+I1333577951,California Department of Fish and Wildlife,state-agency,owner_reviewed,I4389425283,6,49,false
+I1334627681,Jet Propulsion Laboratory,federal,owner_override,I4210124779,7,44,false
+I1336788258,California Department of Public Health,state-agency,rule,I4389425283,12,32,true
+I1343180700,Intel (United States),company,owner_reviewed,,3,78,false
+I135369504,"California State University, Monterey Bay",CSU,rule,,4,66,true
+I138285227,Agilent Technologies (United States),company,rule,,6,50,true
+I142934699,"California State University, Fullerton",CSU,owner_reviewed,,8,40,false
+I149919469,California Polytechnic State University,CSU,owner_reviewed,,30,15,false
 I150209017,Scripps Institution of Oceanography,UC,owner_reviewed,I36258959,63,8,false
 I154570441,"University of California, Santa Barbara",UC,owner_reviewed,,90,6,false
-I160856358,University of San Diego,private,rule,,9,29,true
+I156087764,"University of California, Merced",UC,owner_reviewed,,13,28,false
+I157638225,"California State University, Northridge",CSU,owner_reviewed,,20,21,false
+I158011677,Sonoma State University,CSU,rule,,2,95,true
+I160856358,University of San Diego,private,owner_reviewed,,9,37,false
 I161318765,"University of California, Los Angeles",UC,owner_reviewed,,85,7,false
-I169366031,Woodbury University,private,rule,,1,96,true
-I169540460,The Aerospace Corporation,nonprofit/NGO,rule,,1,97,true
-I172039944,Dominican University of California,UC,owner_reviewed,,3,60,false
-I176611909,California Lutheran University,private,rule,,3,61,true
-I177449303,California Baptist University,private,rule,,1,98,true
-I180670191,"University of California, San Francisco",UC,owner_reviewed,,28,15,false
-I185103710,"University of California, Santa Cruz",UC,owner_reviewed,,40,12,false
-I188017875,Thomas Jefferson School of Law,private,rule,,1,99,true
-I188891513,Sanford Burnham Prebys Medical Discovery Institute,nonprofit/NGO,rule,,1,100,true
-I192389796,Cal Poly Humboldt,other-public,owner_reviewed,,5,44,false
-I193054373,University of Redlands,private,rule,,1,101,false
-I196333967,Inter-American Tropical Tuna Commission,company,rule,,5,45,true
-I204250578,"University of California, Irvine",UC,owner_reviewed,,42,11,false
-I2799641166,Asia Foundation,nonprofit/NGO,rule,,1,102,false
-I2800935791,UC San Diego Health System,UC,owner_reviewed,I36258959,1,103,false
-I2801025900,Natural History Museum of Los Angeles County,nonprofit/NGO,owner_reviewed,,2,73,false
-I2801935854,SLAC National Accelerator Laboratory,federal,owner_reviewed,I97018004,8,31,false
-I2801975132,Ocean Institute,nonprofit/NGO,rule,,4,51,true
-I2802549562,Rancho Los Amigos National Rehabilitation Center,nonprofit/NGO,owner_reviewed,I1328359107,1,104,false
-I2803209242,University of California System,UC,owner_reviewed,,35,13,false
+I16269868,Santa Clara University,private,owner_reviewed,,2,96,false
+I169366031,Woodbury University,private,rule,,1,126,false
+I169540460,The Aerospace Corporation,nonprofit/NGO,owner_reviewed,,1,127,false
+I172039944,Dominican University of California,UC,rule,,3,79,true
+I176611909,California Lutheran University,private,rule,,3,80,true
+I177449303,California Baptist University,private,rule,,1,128,false
+I180670191,"University of California, San Francisco",UC,owner_reviewed,,28,16,false
+I184813773,"California State University, East Bay",CSU,rule,,2,97,true
+I185103710,"University of California, Santa Cruz",UC,owner_reviewed,,40,13,false
+I188017875,Thomas Jefferson School of Law,private,rule,,1,129,false
+I188891513,Sanford Burnham Prebys Medical Discovery Institute,nonprofit/NGO,owner_reviewed,,1,130,false
+I192389796,Cal Poly Humboldt,CSU,owner_reviewed,,5,59,false
+I193054373,University of Redlands,private,rule,,1,131,false
+I194388944,"California State University, Channel Islands",CSU,rule,,14,25,true
+I196333967,Inter-American Tropical Tuna Commission,company,rule,,5,60,true
+I197875241,"California State University, Stanislaus",CSU,rule,,3,81,true
+I204250578,"University of California, Irvine",UC,owner_reviewed,,42,12,false
+I226560621,"California State University, San Marcos",CSU,rule,,6,51,true
+I230604491,California Maritime Academy,CSU,rule,,1,132,false
+I26347476,Loma Linda University,private,owner_reviewed,,7,45,false
+I26538001,San Diego State University,CSU,owner_reviewed,,48,10,false
+I27825529,California State University Los Angeles,CSU,owner_reviewed,,10,36,false
+I2799641166,Asia Foundation,nonprofit/NGO,rule,,1,133,false
+I2800935791,UC San Diego Health System,UC,owner_reviewed,I36258959,1,134,false
+I2801025900,Natural History Museum of Los Angeles County,nonprofit/NGO,rule,,2,98,true
+I2801935854,SLAC National Accelerator Laboratory,federal,owner_reviewed,I97018004,8,41,false
+I2801975132,Ocean Institute,nonprofit/NGO,rule,,4,67,true
+I2802549562,Rancho Los Amigos National Rehabilitation Center,nonprofit/NGO,rule,I1328359107,1,135,false
+I2803209242,University of California System,UC,owner_reviewed,,35,14,false
+I290598920,"California State University, Dominguez Hills",CSU,rule,,2,99,true
+I36053171,"California State University, Chico",CSU,owner_reviewed,,14,26,false
 I36258959,University of California San Diego,UC,owner_reviewed,,103,5,false
-I38257878,Energy Biosciences Institute,nonprofit/NGO,rule,,6,39,true
-I4210085935,IBM Research - Almaden,company,owner_override,I4210114115,13,23,false
-I4210086937,Oak Crest Institute of Science,nonprofit/NGO,rule,,2,74,true
-I4210087078,Phoenix Bioinformatics,nonprofit/NGO,rule,,1,105,false
-I4210088273,Align Technology (United States),company,rule,,1,106,false
-I4210090234,Marine Megafauna Foundation,nonprofit/NGO,rule,,7,35,true
-I4210090748,San Joaquin Valley Agricultural Sciences Center,federal,owner_override,I4210094889,1,107,false
-I4210090881,National Marine Mammal Foundation,nonprofit/NGO,rule,,3,62,true
-I4210091954,Global Alliance for Incinerator Alternatives,nonprofit/NGO,rule,,4,52,true
-I4210093100,Saint Agnes Medical Center,nonprofit/NGO,rule,,1,108,false
-I4210093679,Amyris (United States),company,rule,,1,109,false
-I4210094589,Hubbs-Sea World Research Institute,nonprofit/NGO,rule,,1,110,false
-I4210095401,Loma Linda University Health Care,nonprofit/NGO,owner_reviewed,,4,53,false
-I4210095419,Carnegie Department of Plant Biology,nonprofit/NGO,owner_reviewed,I196817621,3,63,false
-I4210095563,Sonoma Technology (United States),company,rule,,3,64,true
-I4210097074,Theiss Research,nonprofit/NGO,rule,,5,46,true
-I4210097936,Terasaki Foundation,nonprofit/NGO,owner_reviewed,,6,40,false
-I4210099595,VA San Diego Healthcare System,federal,owner_override,I4210138663,1,111,false
-I4210103292,California Marine Sanctuary Foundation,nonprofit/NGO,rule,,7,36,true
-I4210105015,Stanford Health Care,nonprofit/NGO,owner_reviewed,I97018004,1,112,false
-I4210105790,Naval Health Research Center,nonprofit/NGO,rule,I4391768141,1,113,false
-I4210106805,Cigarette Butt Pollution Project,company,rule,,1,114,false
-I4210108719,EP Analytics (United States),company,rule,,1,115,false
-I4210110664,University of California San Francisco Medical Center,UC,owner_reviewed,,1,116,false
-I4210111001,San Francisco Estuary Institute,nonprofit/NGO,rule,,24,16,true
-I4210111119,National Research Institute,company,rule,,1,117,false
-I4210111358,Actinix (United States),company,rule,,1,118,false
-I4210111905,Public Health Institute,nonprofit/NGO,rule,,1,119,false
-I4210112098,National University,private,owner_reviewed,I4210086682,9,30,false
-I4210118014,Chevron (United States),company,owner_reviewed,,3,65,false
-I4210118136,Aecom (United States),company,rule,,1,120,false
-I4210119363,Earthjustice,nonprofit/NGO,rule,,1,121,false
-I4210122605,Photon Systems (United States),company,rule,,1,122,false
-I4210123616,Lassen County,local-agency,rule,,1,123,false
-I4210124134,Mills Peninsula Health Services,nonprofit/NGO,rule,I114073160,1,124,false
-I4210125452,Surface Optics (United States),company,rule,,2,75,true
-I4210125844,Community Initiatives,nonprofit/NGO,rule,,1,125,false
-I4210126221,The Carpentries,nonprofit/NGO,rule,,1,126,false
-I4210126476,Kavli Energy NanoScience Institute,nonprofit/NGO,rule,,1,127,false
-I4210131145,Conservation Science Partners,nonprofit/NGO,rule,,1,128,false
-I4210132395,University of California San Diego Medical Center,UC,owner_reviewed,I36258959,1,129,false
-I4210132870,Xerox (United States),company,rule,,1,130,false
-I4210135612,Physical Optics Corporation,company,rule,,1,131,false
-I4210135759,H.T. Harvey & Associates,nonprofit/NGO,rule,,1,132,false
-I4210136348,California Sea Grant,UC,rule,I4405269913,4,54,true
-I4210137306,Stanford Medicine,private,owner_override,I97018004,17,20,false
-I4210138663,VA Desert Pacific Healthcare Network,nonprofit/NGO,rule,I2799886695,1,133,false
-I4210139753,Quidel Corporation (United States),company,rule,,1,134,false
-I4210140349,Harvard Eye Associates,nonprofit/NGO,rule,,1,135,false
-I4210140478,SpaceX (United States),company,rule,,1,136,false
-I4210140527,California Institute for Biomedical Research,nonprofit/NGO,rule,,1,137,false
-I4210140558,Western Regional Research Center,federal,owner_override,I4210094889,11,28,false
-I4210140879,Brown and Caldwell (United States),company,rule,,6,41,true
-I4210141674,Cedars-Sinai Smidt Heart Institute,nonprofit/NGO,rule,I1282927834,1,138,false
-I4210142140,Walt Disney (United States),company,owner_reviewed,,1,139,false
-I4210147451,Barnett Technical Services (United States),company,rule,,2,76,true
-I4210148676,U.S. Salinity Laboratory,federal,owner_reviewed,I4210094889,1,140,false
-I4210156876,VA Greater Los Angeles Healthcare System,federal,owner_override,I4210138663,1,141,false
-I4210160527,University of California Davis Medical Center,UC,owner_reviewed,I4210160856,1,142,false
-I4210160856,UC Davis Health,UC,owner_reviewed,,1,143,false
-I4210161447,Intuitive Surgical (United States),company,rule,,1,144,false
-I4210164553,Biospherical Instruments (United States),company,rule,,3,66,true
-I4210164579,Action Network,nonprofit/NGO,rule,,1,145,false
-I4210165985,Harbor–UCLA Medical Center,local-agency,owner_override,I1328359107,5,47,false
-I4389425283,State of California,state-agency,owner_reviewed,,22,18,false
-I4405253663,Astera Institute,nonprofit/NGO,rule,,1,146,false
-I4405259471,Aspiring Scholars Directed Research Program,private,rule,,1,147,false
-I4405260539,Harmonic (United States),company,rule,,1,148,false
-I4405260682,Yosemite National Park,nonprofit/NGO,rule,I1335927249,1,149,false
-I4405260704,East Bay Municipal Utility District,local-agency,rule,,2,77,true
-I4405260739,Channel Islands National Park,nonprofit/NGO,rule,I1335927249,1,150,false
-I4405260825,Peak Health Center,nonprofit/NGO,rule,,1,151,false
-I4405260842,California Cooperative Oceanic Fisheries Investigations,UC,rule,I4389425283,1,152,false
-I4405260962,Samsung Semiconductor (United States),company,rule,I4405259277,1,153,false
-I4405261152,California Department of Water Resources,state-agency,rule,I2801479539,1,154,false
-I4405261977,Calico Life Sciences,company,rule,,2,78,true
-I4405264838,Metropolitan Water District of Southern California,local-agency,rule,,4,55,true
-I4405266016,Hopkins Marine Station,private,owner_override,I97018004,24,17,false
-I4405267552,Big Health Inc. (United States),company,rule,,1,155,false
-I4405267770,International American University,private,rule,,2,79,true
-I4405269264,Stanford Cardiovascular Institute,nonprofit/NGO,owner_reviewed,I97018004,3,67,false
-I4405271240,"Honda Research Institute, USA",nonprofit/NGO,rule,,1,156,false
-I4405271973,Western Center for Agricultural Health and Safety,UC,rule,,1,157,false
-I4405272753,University of California Institute of Transportation Studies,UC,rule,,1,158,false
-I4405273060,M.C. Gill Composites Center,nonprofit/NGO,rule,,1,159,false
-I4405273165,South Coast Air Quality Management District,nonprofit/NGO,rule,,2,80,true
-I4405279407,Center for Geospatial Sciences,UC,rule,I103635307,1,160,false
-I4405281303,Center for Environmental Research and Technology,UC,rule,I103635307,2,81,true
-I4405281367,Aquarium of the Bay,nonprofit/NGO,rule,,1,161,false
-I4405287357,Eric and Wendy Schmidt Center for Data Science & Environment,UC,rule,I95457486,1,162,false
-I44829897,Golden Gate University,private,rule,,2,82,true
-I52710748,Charles R. Drew University of Medicine and Science,private,rule,,1,163,false
+I38257878,Energy Biosciences Institute,nonprofit/NGO,rule,,6,52,true
+I4210085935,IBM Research - Almaden,company,owner_override,I4210114115,13,29,false
+I4210086937,Oak Crest Institute of Science,nonprofit/NGO,rule,,2,100,true
+I4210087078,Phoenix Bioinformatics,nonprofit/NGO,rule,,1,136,false
+I4210088273,Align Technology (United States),company,rule,,1,137,false
+I4210090234,Marine Megafauna Foundation,nonprofit/NGO,rule,,7,46,true
+I4210090748,San Joaquin Valley Agricultural Sciences Center,federal,owner_override,I4210094889,1,138,false
+I4210090881,National Marine Mammal Foundation,nonprofit/NGO,rule,,3,82,true
+I4210091954,Global Alliance for Incinerator Alternatives,nonprofit/NGO,rule,,4,68,true
+I4210093100,Saint Agnes Medical Center,nonprofit/NGO,rule,,1,139,false
+I4210093679,Amyris (United States),company,rule,,1,140,false
+I4210094589,Hubbs-Sea World Research Institute,nonprofit/NGO,rule,,1,141,false
+I4210095401,Loma Linda University Health Care,nonprofit/NGO,rule,,4,69,true
+I4210095419,Carnegie Department of Plant Biology,nonprofit/NGO,owner_reviewed,I196817621,3,83,false
+I4210095563,Sonoma Technology (United States),company,rule,,3,84,true
+I4210097074,Theiss Research,nonprofit/NGO,rule,,5,61,true
+I4210097936,Terasaki Foundation,nonprofit/NGO,rule,,6,53,true
+I4210099595,VA San Diego Healthcare System,federal,owner_override,I4210138663,1,142,false
+I4210103292,California Marine Sanctuary Foundation,nonprofit/NGO,rule,,7,47,true
+I4210105015,Stanford Health Care,nonprofit/NGO,owner_reviewed,I97018004,1,143,false
+I4210105790,Naval Health Research Center,nonprofit/NGO,rule,I4391768141,1,144,false
+I4210106805,Cigarette Butt Pollution Project,company,rule,,1,145,false
+I4210108719,EP Analytics (United States),company,rule,,1,146,false
+I4210109599,NOAA National Marine Fisheries Service Southwest Fisheries Science Center,federal,rule,I1343035065,9,38,true
+I4210110664,University of California San Francisco Medical Center,UC,owner_reviewed,,1,147,false
+I4210111001,San Francisco Estuary Institute,nonprofit/NGO,rule,,24,17,true
+I4210111119,National Research Institute,company,rule,,1,148,false
+I4210111358,Actinix (United States),company,rule,,1,149,false
+I4210111905,Public Health Institute,nonprofit/NGO,rule,,1,150,false
+I4210112098,National University,private,rule,I4210086682,9,39,true
+I4210118014,Chevron (United States),company,owner_reviewed,,3,85,false
+I4210118136,Aecom (United States),company,rule,,1,151,false
+I4210119363,Earthjustice,nonprofit/NGO,rule,,1,152,false
+I4210122605,Photon Systems (United States),company,rule,,1,153,false
+I4210123616,Lassen County,local-agency,rule,,1,154,false
+I4210124134,Mills Peninsula Health Services,nonprofit/NGO,rule,I114073160,1,155,false
+I4210125452,Surface Optics (United States),company,rule,,2,101,false
+I4210125844,Community Initiatives,nonprofit/NGO,rule,,1,156,false
+I4210126221,The Carpentries,nonprofit/NGO,rule,,1,157,false
+I4210126476,Kavli Energy NanoScience Institute,nonprofit/NGO,rule,,1,158,false
+I4210131145,Conservation Science Partners,nonprofit/NGO,rule,,1,159,false
+I4210132395,University of California San Diego Medical Center,UC,owner_reviewed,I36258959,1,160,false
+I4210132870,Xerox (United States),company,rule,,1,161,false
+I4210135612,Physical Optics Corporation,company,rule,,1,162,false
+I4210135759,H.T. Harvey & Associates,nonprofit/NGO,rule,,1,163,false
+I4210136348,California Sea Grant,UC,rule,I4405269913,4,70,true
+I4210137306,Stanford Medicine,private,owner_override,I97018004,17,23,false
+I4210138663,VA Desert Pacific Healthcare Network,nonprofit/NGO,rule,I2799886695,1,164,false
+I4210139753,Quidel Corporation (United States),company,rule,,1,165,false
+I4210140349,Harvard Eye Associates,nonprofit/NGO,rule,,1,166,false
+I4210140478,SpaceX (United States),company,rule,,1,167,false
+I4210140527,California Institute for Biomedical Research,nonprofit/NGO,rule,,1,168,false
+I4210140558,Western Regional Research Center,federal,owner_override,I4210094889,11,35,false
+I4210140879,Brown and Caldwell (United States),company,rule,,6,54,true
+I4210141674,Cedars-Sinai Smidt Heart Institute,nonprofit/NGO,rule,I1282927834,1,169,false
+I4210142140,Walt Disney (United States),company,rule,,1,170,false
+I4210147451,Barnett Technical Services (United States),company,rule,,2,102,false
+I4210148676,U.S. Salinity Laboratory,federal,owner_reviewed,I4210094889,1,171,false
+I4210156876,VA Greater Los Angeles Healthcare System,federal,owner_override,I4210138663,1,172,false
+I4210160527,University of California Davis Medical Center,UC,owner_reviewed,I4210160856,1,173,false
+I4210160856,UC Davis Health,UC,owner_reviewed,,1,174,false
+I4210161447,Intuitive Surgical (United States),company,rule,,1,175,false
+I4210164553,Biospherical Instruments (United States),company,rule,,3,86,true
+I4210164579,Action Network,nonprofit/NGO,rule,,1,176,false
+I4210165985,Harbor–UCLA Medical Center,local-agency,owner_override,I1328359107,5,62,false
+I43369023,"California State University, San Bernardino",CSU,owner_reviewed,,4,71,false
+I43522216,"California State University, Sacramento",CSU,owner_reviewed,,4,72,false
+I4387154128,California Ocean Protection Council,state-agency,rule,,2,103,false
+I4389425283,State of California,state-agency,rule,,1,177,false
+I4392021110,Pacific Coastal and Marine Science Center,federal,rule,I1335927249,1,178,false
+I4405253663,Astera Institute,nonprofit/NGO,rule,,1,179,false
+I4405259471,Aspiring Scholars Directed Research Program,private,rule,,1,180,false
+I4405260539,Harmonic (United States),company,rule,,1,181,false
+I4405260682,Yosemite National Park,nonprofit/NGO,rule,I1335927249,1,182,false
+I4405260704,East Bay Municipal Utility District,local-agency,rule,,2,104,false
+I4405260739,Channel Islands National Park,nonprofit/NGO,rule,I1335927249,1,183,false
+I4405260825,Peak Health Center,nonprofit/NGO,rule,,1,184,false
+I4405260842,California Cooperative Oceanic Fisheries Investigations,UC,rule,I4389425283,1,185,false
+I4405260962,Samsung Semiconductor (United States),company,rule,I4405259277,1,186,false
+I4405261152,California Department of Water Resources,state-agency,rule,I2801479539,1,187,false
+I4405261977,Calico Life Sciences,company,rule,,2,105,false
+I4405264838,Metropolitan Water District of Southern California,local-agency,rule,,4,73,true
+I4405266016,Hopkins Marine Station,private,owner_override,I97018004,24,18,false
+I4405267552,Big Health Inc. (United States),company,rule,,1,188,false
+I4405267770,International American University,private,rule,,2,106,false
+I4405269264,Stanford Cardiovascular Institute,nonprofit/NGO,rule,I97018004,3,87,true
+I4405271240,"Honda Research Institute, USA",nonprofit/NGO,rule,,1,189,false
+I4405271973,Western Center for Agricultural Health and Safety,UC,rule,,1,190,false
+I4405272753,University of California Institute of Transportation Studies,UC,rule,,1,191,false
+I4405273060,M.C. Gill Composites Center,nonprofit/NGO,rule,,1,192,false
+I4405273165,South Coast Air Quality Management District,local-agency,rule,,2,107,false
+I4405279407,Center for Geospatial Sciences,UC,rule,I103635307,1,193,false
+I4405281303,Center for Environmental Research and Technology,UC,rule,I103635307,2,108,false
+I4405281367,Aquarium of the Bay,nonprofit/NGO,rule,,1,194,false
+I4405287357,Eric and Wendy Schmidt Center for Data Science & Environment,UC,rule,I95457486,1,195,false
+I44829897,Golden Gate University,private,rule,,2,109,false
+I51504820,San Jose State University,CSU,owner_reviewed,,6,55,false
+I52710748,Charles R. Drew University of Medicine and Science,private,rule,,1,196,false
 I53012624,Joint BioEnergy Institute,federal,owner_override,I1330989302,22,19,false
-I67328108,"California State University, Fresno",CSU,owner_reviewed,,5,48,false
-I70076703,Whittier College,private,rule,,2,83,true
-I708430,University of La Verne,private,rule,,2,84,true
-I71838634,San Francisco State University,CSU,rule,,14,22,true
-I83180283,Ventura College,private,rule,I4210130831,1,164,false
+I59897056,"California State University, Long Beach",CSU,owner_reviewed,,19,22,false
+I65137940,California Environmental Protection Agency,state-agency,rule,,6,56,true
+I67328108,"California State University, Fresno",CSU,owner_reviewed,,5,63,false
+I70076703,Whittier College,private,rule,,2,110,false
+I708430,University of La Verne,private,rule,,2,111,false
+I71838634,San Francisco State University,CSU,owner_reviewed,,14,27,false
+I76766440,University of San Francisco,private,owner_reviewed,,1,197,false
+I83180283,Ventura College,private,rule,I4210130831,1,198,false
 I84218800,"University of California, Davis",UC,owner_reviewed,,168,2,false
-I872248612,Claremont Colleges,private,owner_reviewed,,1,165,false
-I872623138,Search for Extraterrestrial Intelligence,nonprofit/NGO,owner_reviewed,,1,166,false
-I87828566,Edison International (United States),company,rule,,1,167,false
-I926333354,Tetra Tech (United States),company,rule,,2,85,true
-I93393672,Western University of Health Sciences,private,owner_reviewed,,1,168,false
+I872248612,Claremont Colleges,private,rule,,1,199,false
+I872623138,Search for Extraterrestrial Intelligence,nonprofit/NGO,rule,,1,200,false
+I87828566,Edison International (United States),company,rule,,1,201,false
+I926333354,Tetra Tech (United States),company,rule,,2,112,false
+I93393672,Western University of Health Sciences,private,owner_reviewed,,1,202,false
 I95457486,"University of California, Berkeley",UC,owner_reviewed,,148,3,false
-I95850191,Moss Landing Marine Laboratories,CSU,owner_override,,6,42,false
+I95850191,Moss Landing Marine Laboratories,CSU,owner_override,,6,57,false
 I97018004,Stanford University,private,owner_reviewed,,182,1,false
-I98947143,California State Polytechnic University,CSU,owner_reviewed,,16,21,false
-I99418890,San Francisco Bay University,private,owner_reviewed,,4,56,false
+I98947143,California State Polytechnic University,CSU,owner_reviewed,,16,24,false
+I99418890,San Francisco Bay University,private,rule,,4,74,true

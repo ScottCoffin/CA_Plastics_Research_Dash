@@ -37,6 +37,13 @@ GRANT_RELEVANCE_HEADER = (
     "owner_review",
 )
 WORK_RELEVANCE_HEADER = ("work_id", *GRANT_RELEVANCE_HEADER[1:])
+MODEL_RELEVANCE_HEADER = (
+    "work_id",
+    "plastic_related",
+    "p_relevant",
+    "model_version",
+    "accepted_at",
+)
 SUPPRESSION_KINDS = ("author", "work")
 OPENALEX_PREFIX = "https://openalex.org/"
 
@@ -226,6 +233,35 @@ def load_work_relevance(path: str | Path) -> dict[str, bool]:
         return {}
     decisions: dict[str, bool] = {}
     for number, row in _read(path, WORK_RELEVANCE_HEADER):
+        _require(row, number, path, ("work_id", "plastic_related"))
+        key = compact_id(row["work_id"])
+        if key in decisions:
+            raise ValueError(f"{path} row {number}: work_id {key} is listed more than once")
+        decisions[key] = _coerce("plastic_related", "bool", row["plastic_related"], path, number)
+    return decisions
+
+
+def load_work_owner_reviewed(path: str | Path) -> frozenset[str]:
+    """Work IDs whose ``work_relevance.csv`` row the owner confirmed or changed."""
+    if not Path(path).exists():
+        return frozenset()
+    return frozenset(
+        compact_id(row["work_id"])
+        for _number, row in _read(path, WORK_RELEVANCE_HEADER)
+        if row.get("owner_review") in {"confirmed", "changed"}
+    )
+
+
+def load_model_relevance(path: str | Path) -> dict[str, bool]:
+    """Return ``{work_id: plastic_related}`` from the accepted active-learning labels.
+
+    ``curation/work_relevance_model.csv`` exists only after the owner accepts the model
+    (``atlas.nlp.active_relevance``). A missing file means no model labels.
+    """
+    if not Path(path).exists():
+        return {}
+    decisions: dict[str, bool] = {}
+    for number, row in _read(path, MODEL_RELEVANCE_HEADER):
         _require(row, number, path, ("work_id", "plastic_related"))
         key = compact_id(row["work_id"])
         if key in decisions:

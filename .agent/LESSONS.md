@@ -282,3 +282,6 @@ until it reports.
 - A frozen split's check asserted the live corpus hash, so growing the corpus "failed" S4.2. Check frozen files against their manifest; rebuild only when inputs are unchanged.
 - An enrichment pass that refreshes every author costs ~1,200 credits/run; gate refreshes by age/version (30 days) so a routine run costs ~40.
 - Derived committed files (AT-2 institution types) must be regenerated wherever the corpus is regenerated (ingest workflow), or the next push fails their freshness test.
+
+## 2026-11-11: owner-reviewed files must be write-protected from rebuilds
+- A registry rebuild re-ranked the top 100 and rewrote `institution_review_top100.csv`, silently dropping 100 owner reviews on 2026-11-06; checks then passed against the blank file for days. Any generator that writes a file carrying owner annotations must refuse to overwrite reviewed rows; checks should assert the reviewed count (S1.2 now reports 100/100).

@@ -221,3 +221,42 @@ def select_view(items: list[dict[str, Any]], view: str, search: str = "") -> lis
     """Items in the view, low-confidence first, then by ``work_id``."""
     shown = [item for item in items if in_view(item, view, search)]
     return sorted(shown, key=lambda item: (item["confidence"] != "low", item["work_id"]))
+
+
+NO_ASSIST_REASON = "owner (no assist call)"
+
+
+def record_owner_decision(
+    table: WorkReviewTable,
+    work_id: str,
+    plastic_related: bool,
+    reviewer: str,
+    note: str = "",
+    today: date | None = None,
+) -> str:
+    """Record a decision, appending a new row when the work has no Haiku call.
+
+    A new row has ``assist_plastic_related`` and ``confidence`` empty and
+    ``owner_review`` confirmed, so the export uses the owner's choice. Existing rows go
+    through ``record_decision`` unchanged. Unsure is not supported for new rows (there is
+    nothing to fall back to); the caller should skip the work instead.
+    """
+    if any(row["work_id"] == work_id for row in table.rows):
+        return record_decision(table, work_id, plastic_related, reviewer, note, today)
+    initials = reviewer.strip()
+    if not initials:
+        raise ValueError("reviewer initials are required with a decision")
+    cleaned = _clean_note(note)
+    table.rows.append(
+        {
+            "work_id": work_id,
+            "plastic_related": "true" if plastic_related else "false",
+            "assist_plastic_related": "",
+            "confidence": "",
+            "reason": NO_ASSIST_REASON + (f"{NOTE_MARKER}{cleaned}" if cleaned else ""),
+            "reviewer": initials,
+            "reviewed_at": (today or datetime.now(UTC).date()).isoformat(),
+            "owner_review": "confirmed",
+        }
+    )
+    return "confirmed"

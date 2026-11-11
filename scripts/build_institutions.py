@@ -44,9 +44,22 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--refresh-openalex", action="store_true")
     parser.add_argument("--refresh-counts", action="store_true")
+    parser.add_argument(
+        "--supplement-government",
+        action="store_true",
+        help="add California type:government institutions missing from the cached seed",
+    )
+    parser.add_argument(
+        "--reuse-ror-dump",
+        action="store_true",
+        help="use the ROR dump on disk and the existing registry's provenance (no Zenodo call)",
+    )
     parser.add_argument("--usage-log", type=Path, default=Path("data/logs/api_usage.jsonl"))
     args = parser.parse_args()
     load_openalex_key()
+    from atlas.ingest.openalex import load_openalex_key as load_all_keys
+
+    load_all_keys()
     run_id = f"institutions-{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}"
     with ApiCostLogger(run_id, args.usage_log) as logger:
         summary = build_registry(
@@ -54,6 +67,8 @@ def main() -> None:
             logger,
             refresh_openalex=args.refresh_openalex,
             refresh_counts=args.refresh_counts,
+            supplement_government=args.supplement_government,
+            reuse_ror_dump=args.reuse_ror_dump,
         )
     if not summary["openalex_authenticated"]:
         print(

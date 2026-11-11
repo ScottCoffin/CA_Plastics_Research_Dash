@@ -14,14 +14,20 @@ import re
 import tempfile
 from collections import defaultdict
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 import pyarrow.parquet as pq
 
-from atlas.build.curation import apply_curation, load_curation, load_work_relevance
+from atlas.build.curation import (
+    apply_curation,
+    load_curation,
+    load_model_relevance,
+    load_work_owner_reviewed,
+    load_work_relevance,
+)
 
 SCHEMA_VERSION = "s3.1"
 
@@ -284,6 +290,7 @@ def export_site(
     work_overrides_path: str | Path | None = None,
     author_merges_path: str | Path | None = None,
     work_relevance_path: str | Path | None = None,
+    model_relevance_path: str | Path | None = None,
     author_metrics_path: str | Path | None = None,
     output_dir: str | Path = "site/data",
     generated_at: str | None = None,
@@ -327,8 +334,21 @@ def export_site(
         ]
     label_rows = _read(labels_path, required=False) if labels_path else []
     labels = {_text(row.get("work_id")): row for row in label_rows if _text(row.get("work_id"))}
+    # Precedence, highest first: owner decision (owner_review confirmed/changed), owner AT-1
+    # overrides, accepted model labels, Haiku (pending rows), then the rule's label.
+    owner_reviewed: frozenset[str] = frozenset()
     if work_relevance_path:
+        owner_reviewed = load_work_owner_reviewed(work_relevance_path)
         for work_id, related in load_work_relevance(work_relevance_path).items():
+            labels[work_id] = {
+                "work_id": work_id,
+                **labels.get(work_id, {}),
+                "plastic_related": related,
+            }
+    if model_relevance_path:
+        for work_id, related in load_model_relevance(model_relevance_path).items():
+            if work_id in owner_reviewed:
+                continue  # never overrides an owner decision
             labels[work_id] = {
                 "work_id": work_id,
                 **labels.get(work_id, {}),
@@ -342,6 +362,15 @@ def export_site(
         work_overrides_path=work_overrides_path,
         author_merges_path=author_merges_path,
     )
+    if owner_reviewed:
+        # An owner decision in the works review app beats an AT-1 plastic_related override.
+        trimmed = {
+            work_id: {k: v for k, v in values.items() if k != "plastic_related"}
+            if work_id in owner_reviewed
+            else values
+            for work_id, values in curation.work_overrides.items()
+        }
+        curation = replace(curation, work_overrides=trimmed)
     curated = apply_curation(
         works=works_rows,
         authorships=authorship_rows,

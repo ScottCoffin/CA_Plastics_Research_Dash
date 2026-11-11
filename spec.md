@@ -407,6 +407,7 @@ S3.3	Experts tab: filters (tags, institution type, institution, years, ca_basis)
 S3.4	Institutions tab + map: leaderboard, sparkline, institution-type filter chips, clustered map (a client-side mapping library [GK]; check the tile provider's usage terms [VERIFY])	Map renders ≥ all CA institutions with tagged works; popups link into the Experts view	L
 S3.5	About/Methods page from docs/METHODS.md + auto-generated data freshness and counts; disclaimer (G-12)	Page shows last refresh time from build metadata	S
 S3.6	Deploy + perf pass: Pages deploy from CI; run the performance ladder (C5) if the budget is missed	Lighthouse-style metrics recorded in MEMORY.md; escalate to DuckDB-Wasm only if needed (decision logged)	M
+S3.7	Hero landing page (owner request 2026-11-11; scheduled last, after all other substantive tasks): headline and purpose, live key numbers from build_metadata.json, expert/topic search deep-linking into Experts, entry cards to every view (Experts, Institutions, Monitoring, Funding, evidence maps, network), one featured California visual, What's new from feed.xml, DOI/citation badge, disclaimer and correction route; built in Observable Framework if AT-5 has been adopted by then	Hero loads < 100 KB gzip with FCP < 1 s; accessible and responsive at 400 px; owner review 🧑	S
 
 Milestone M1 (end of Stage 3): public MVP; the owner reviews real outputs and refines taxonomy (feeds Stage 4).
 
@@ -426,6 +427,7 @@ STAGE 5 — Classifiers (≈6 sessions)
 Goal. Replace provisional rule-only labels with validated labels.
 
 ID	Task	DoD / acceptance	Size
+S5.0	Active-learning labelling framework (owner request 2026-11-11): shared embedding + calibrated-classifier engine with per-task configs for S5.1 relevance, S5.3 sampling-vs-mention sentences, S5.5 domain tags, EM-4 A2 fields and grant topics; queue = uncertain + assist disagreements + random audits; per-class Wilson-CI acceptance (target 95%); the S4.2 gold set stays fixed-selection for evaluation and its test split is excluded from all AL (docs/ACTIVE_LEARNING.md)	Each task reports CV fit and audit accuracy with CI; accepted labels only for classes meeting the target; published metrics come from the frozen test split	M
 S5.1	Plastic-relevance classifier: rules + SetFit on dev set; evaluate; threshold selection; document failure cases	Meets thresholds in G-9 on test set, or documents the gap and proposes more labels	M
 S5.2	Gazetteer gate + toponym extraction (nlp/rules.py, geo/*): evaluate recall of the gate on the labelled set and on the leak-test sample; compare 2–3 NER options offline	Gate recall reported with CI; chosen NER tool justified in DECISIONS.md	L
 S5.3	Sampling-vs-mention classifier (SetFit baseline; SciBERT comparator if baseline misses thresholds) trained on sentence-level labels derived from gold evidence snippets	Per-class metrics on test; model_version registered; model artifacts small enough to commit or host [VERIFY]	L

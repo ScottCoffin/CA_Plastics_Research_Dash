@@ -1,0 +1,36 @@
+{
+  "audit_log": [],
+  "confident_auto_labels": 816,
+  "cv_metrics": {
+    "calibrated": true,
+    "cv_accuracy": 0.9084158415841584,
+    "cv_folds": 5,
+    "cv_not_relevant_precision": 0.8,
+    "cv_not_relevant_recall": 0.4827586206896552,
+    "cv_roc_auc": 0.9249053219055212
+  },
+  "label_counts": {
+    "by_source": {
+      "at1": 404
+    },
+    "not_relevant": 58,
+    "relevant": 346,
+    "total": 404
+  },
+  "model": "BAAI/bge-small-en-v1.5",
+  "model_slug": "bge-small-en-v1.5",
+  "skipped": [],
+  "trend": [
+    {
+      "at": "2026-11-11T18:39:22+00:00",
+      "audit_accuracy": null,
+      "audit_lower": 0.0,
+      "audit_n": 0,
+      "cv_accuracy": 0.9084,
+      "cv_roc_auc": 0.9212,
+      "n_labels": 404
+    }
+  ],
+  "unlabeled_scored": 1448,
+  "updated_at": "2026-11-11T18:39:45+00:00"
+}

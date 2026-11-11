@@ -18,6 +18,7 @@ def main() -> None:
     parser.add_argument("--work-overrides", default="curation/overrides_works.csv")
     parser.add_argument("--author-merges", default="curation/author_merges.csv")
     parser.add_argument("--work-relevance", default="curation/work_relevance.csv")
+    parser.add_argument("--model-relevance", default="curation/work_relevance_model.csv")
     parser.add_argument("--author-metrics", default="data/processed/author_metrics.parquet")
     parser.add_argument("--output-dir", default="site/data")
     parser.add_argument("--generated-at", default=None)
@@ -31,6 +32,7 @@ def main() -> None:
         suppressions_path=args.suppressions,
         work_overrides_path=args.work_overrides,
         work_relevance_path=args.work_relevance,
+        model_relevance_path=args.model_relevance,
         author_metrics_path=args.author_metrics,
         author_merges_path=args.author_merges,
         output_dir=args.output_dir,

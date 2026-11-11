@@ -100,7 +100,12 @@ def main() -> int:
     _require(review_ids == new_top, "review CSV must hold exactly the new v3.1 top-100 entrants")
     _require(len(review) == len(new_top), "duplicate review rows")
     _require(SENTINEL_NEW_ENTRANT in review_ids, "SFEI should be a new top-100 entrant")
-    _require(SENTINEL_OLD_MEMBER in ids and SENTINEL_OLD_MEMBER in old, "SCCWRP should be carried")
+    # SCCWRP was not in the owner-reviewed 2026-11-05 top 100 (restored from 0cec765), so it
+    # is a new v3.1 entrant, as the A1 AT-2 contract expects ("expect SCCWRP, SFEI ... to appear").
+    _require(
+        SENTINEL_OLD_MEMBER in ids and SENTINEL_OLD_MEMBER in review_ids,
+        "SCCWRP should be a new top-100 entrant queued for review",
+    )
 
     by_id = {row["inst_id"]: row for row in types}
     sources = {"owner_override", "owner_reviewed", "rule"}

@@ -200,6 +200,32 @@
       .grants-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
       .grants-table th, .grants-table td { padding: 0.45rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
       .grants-table th { background: #edf5f4; }
+      .grants-table-wrap { overflow: auto; max-height: 75vh; border: 1px solid var(--line); border-radius: 0.5rem; }
+      .grants-table-wrap .grants-table { min-width: 68rem; }
+      .grants-table tbody th { background: transparent; font-weight: 400; min-width: 16rem; max-width: 24rem; }
+      .grants-table tbody th a { font-weight: 600; }
+      .grants-table td { min-width: 5.5rem; }
+      .grants-table td:nth-child(2) { min-width: 11rem; }
+      .grants-table td:nth-child(7) { white-space: nowrap; }
+      .grants-table thead th { position: sticky; top: 0; z-index: 1; padding: 0; box-shadow: 0 1px 0 var(--line); white-space: nowrap; }
+      .grants-table thead th.num, .grants-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+      .grants-sort { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 0.3rem; width: 100%; padding: 0.5rem 0.45rem; font-weight: 700; cursor: pointer; }
+      .grants-table thead th.num .grants-sort { justify-content: flex-end; }
+      .grants-sort:hover { background: #dcebe9; }
+      .grants-sort:focus-visible { outline: 3px solid var(--brand-dark); outline-offset: -3px; }
+      .grants-arrow { font-size: 0.7rem; color: #7a8c92; min-width: 0.8rem; }
+      .grants-table th[aria-sort="ascending"] .grants-arrow, .grants-table th[aria-sort="descending"] .grants-arrow { color: var(--brand-dark); font-size: 0.8rem; }
+      .grants-badge { display: inline-block; padding: 0.05rem 0.45rem; border-radius: 0.3rem; border: 1px solid #b8c4c8; background: #f1f4f5; color: #3b4850; font-size: 0.75rem; }
+      .grants-badge.yes { background: #e6f2ec; border-color: #9cc4b0; }
+      .grants-table td .topic-chips { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.3rem; }
+      .grants-table td .topic-chip { font-size: 0.72rem; padding: 0.1rem 0.45rem; }
+      .grants-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin: 0 0 0.6rem; padding: 0; list-style: none; }
+      .grants-chips button { font: inherit; font-size: 0.8rem; padding: 0.15rem 0.55rem; border: 1px solid var(--brand); border-radius: 999px; background: #fff; color: var(--brand-dark); cursor: pointer; }
+      .grants-chips button:hover { background: #edf5f4; }
+      .grants-pager { flex-wrap: wrap; }
+      .grants-pager label { display: inline-flex; gap: 0.35rem; align-items: center; margin-left: auto; }
+      .grants-pager select { font: inherit; padding: 0.25rem; border: 1px solid #8da7af; border-radius: 0.35rem; background: #fff; }
+      .grants-field input[type="search"] { font: inherit; padding: 0.35rem; border: 1px solid #8da7af; border-radius: 0.35rem; background: #fff; min-width: 0; }
       .grants-pager { display: flex; gap: 0.75rem; align-items: center; margin-top: 0.6rem; font-size: 0.85rem; }
       .grants-basis ul { margin: 0.5rem 0 0; padding-left: 1.25rem; font-size: 0.85rem; }
       .grants-basis h4 { margin: 1rem 0 0; }
@@ -253,6 +279,8 @@
         .button-row { display: grid; grid-template-columns: 1fr 1fr; }
         .button-row .button { width: 100%; }
       }
+          .grants-filter-panel > summary { cursor: pointer; font-weight: 700; padding: 0.6rem 0; min-height: 44px; display: flex; align-items: center; }
+      .grants-filter-panel > summary:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
     </style>
   </head>
   <body>
@@ -365,7 +393,11 @@
         <section aria-labelledby="grants-heading" class="grants">
           <h3 id="grants-heading">Awards</h3>
           <p class="data-note">Awards as reported by each source (NIH RePORTER, NSF Awards, USAspending.gov, California Sea Grant, Ocean Protection Council). Amounts follow each source's own basis and are not comparable or additive across sources or fiscal years. Pass-through awards appear once, on their lowest-level record. Plastic relevance and topic tags are provisional rule-based labels. This is not a complete record of public funding.</p>
+          <details id="grants-filter-panel" class="facet grants-filter-panel" open><summary><span class="grants-filter-summary">Filters</span></summary>
           <form id="grants-filters" class="grants-filters" aria-label="Filter awards">
+            <div class="grants-field"><label for="grants-search">Search awards</label><input id="grants-search" type="search" autocomplete="off" placeholder="Title, recipient, PI, program, funder"></div>
+            <div class="grants-field"><label for="grants-sector">Recipient sector</label><select id="grants-sector"></select></div>
+            <div class="grants-field"><label for="grants-agency">Funder agency</label><select id="grants-agency"></select></div>
             <div class="grants-field"><label for="grants-funder-type">Funder type</label><select id="grants-funder-type"><option value="">All funder types</option><option value="federal">Federal</option><option value="state">State</option><option value="other">Other</option></select></div>
             <div class="grants-field"><label for="grants-funder">Funder</label><select id="grants-funder"></select></div>
             <div class="grants-field"><label for="grants-program">Program</label><select id="grants-program"></select></div>
@@ -379,13 +411,15 @@
             <div class="grants-field grants-check"><input id="grants-plastic" type="checkbox" checked><label for="grants-plastic">Provisional plastic relevance only (true or unknown)</label></div>
             <div class="grants-actions"><button id="grants-reset" type="button">Reset filters</button><button id="grants-csv" type="button">Download filtered CSV</button></div>
           </form>
+          </details>
+          <ul id="grants-chips" class="grants-chips" aria-label="Active filters"></ul>
           <p id="grants-status" class="result-count" role="status" aria-live="polite"></p>
           <div class="grants-charts">
             <figure class="grants-chart"><figcaption>Awards by fiscal year and funder type (count)</figcaption><div id="grants-chart-year"></div></figure>
             <figure class="grants-chart"><figcaption>Awards by recipient institution type (count)</figcaption><div id="grants-chart-institution"></div></figure>
           </div>
-          <div id="grants-table" class="monitoring-table-wrap"></div>
-          <nav class="grants-pager" aria-label="Award table pages"><button id="grants-prev" type="button">Previous</button><span id="grants-page"></span><button id="grants-next" type="button">Next</button></nav>
+          <div id="grants-table" class="grants-table-wrap" tabindex="0" role="region" aria-label="Awards table, scrollable"></div>
+          <nav class="grants-pager" aria-label="Award table pages"><button id="grants-prev" type="button">Previous</button><span id="grants-page"></span><button id="grants-next" type="button">Next</button><label for="grants-page-size">Rows per page <select id="grants-page-size"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option></select></label></nav>
           <section aria-labelledby="grants-basis-heading" class="grants-basis"><h4 id="grants-basis-heading">Amount basis by source</h4><div id="grants-basis"></div></section>
         </section>
         <section aria-labelledby="open-calls-heading" class="open-calls">
@@ -856,24 +890,63 @@
             });
         }
         const GRANTS_FILE = "data/grants.json";
-        const GRANTS_PAGE_SIZE = 50;
+        let grantsPageSize = 50;
         const GRANT_FUNDER_ORDER = ["federal", "state", "other"];
         const GRANT_FUNDER_COLORS = { federal: "#2f6f8f", state: "#2f8f6f", other: "#b8862b" };
         const GRANT_FUNDER_LABELS = { federal: "Federal", state: "State", other: "Other" };
         const GRANT_SOURCE_LABELS = { nih_reporter: "NIH RePORTER", nsf_awards: "NSF Awards", usaspending: "USAspending.gov", ca_sea_grant: "California Sea Grant", opc_council: "Ocean Protection Council" };
         const GRANT_FILTERS = [
+          { key: "q", id: "grants-search" }, { key: "sc", id: "grants-sector" }, { key: "fa", id: "grants-agency" },
           { key: "ft", id: "grants-funder-type" }, { key: "fn", id: "grants-funder" }, { key: "pg", id: "grants-program" },
           { key: "yf", id: "grants-year-from" }, { key: "yt", id: "grants-year-to" }, { key: "amin", id: "grants-amount-min" },
           { key: "amax", id: "grants-amount-max" }, { key: "it", id: "grants-institution-type" }, { key: "tg", id: "grants-tag" },
           { key: "ca", id: "grants-ca-led" }
         ];
-        const GRANT_CSV_COLUMNS = ["grant_key", "source", "title", "pi_names", "org", "org_state", "institution_type", "start", "end", "fiscal_year", "amount", "currency", "amount_basis", "funder", "funder_type", "program", "funder_chain", "url", "plastic_related", "domain_tags", "ca_led"];
+        const GRANT_CSV_COLUMNS = ["grant_key", "source", "title", "pi_names", "org", "org_state", "institution_type", "start", "end", "fiscal_year", "amount", "currency", "amount_basis", "funder", "funder_type", "program", "funder_chain", "url", "plastic_related", "domain_tags", "ca_led", "sector", "sector_detail", "funder_agency"];
         const USD_FORMAT = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
         let grantsRequest = null;
         let grantsData = null;
         let grantsFiltered = [];
         let grantsPage = 0;
         let grantsReady = false;
+        let grantsSort = { key: null, dir: "asc" };
+        let grantsSearchTimer = 0;
+        const GRANT_COLUMNS = [
+          { key: "title", label: "Award" }, { key: "org", label: "Recipient" }, { key: "sector", label: "Sector" },
+          { key: "agency", label: "Funder agency" }, { key: "program", label: "Program" }, { key: "fy", label: "Fiscal year / start", num: true },
+          { key: "end", label: "End" }, { key: "amount", label: "Amount", num: true }, { key: "ca", label: "CA-led" }, { key: "plastic", label: "Plastic-related" }
+        ];
+        function grantTri(value) { return value === true ? 1 : value === false ? 0 : null; }
+        function grantSectorLabel(row) { return (grantsData.sector_labels && grantsData.sector_labels[row.sector]) || row.sector || "Unknown"; }
+        function prepareGrantRows(rows) {
+          rows.forEach((row) => {
+            row._q = [row.title, row.org, (row.pi_names || []).join(" "), row.program, row.funder, row.funder_agency].filter(Boolean).join(" \n ").toLowerCase();
+            row._s = {
+              title: (row.title || "").toLowerCase(), org: (row.org || "").toLowerCase(), sector: grantSectorLabel(row).toLowerCase(),
+              agency: (row.funder_agency || row.funder || "").toLowerCase(), program: (row.program || "").toLowerCase(),
+              fy: row.fiscal_year ?? null, end: row.end || "", amount: row.amount ?? null, ca: grantTri(row.ca_led), plastic: grantTri(row.plastic_related)
+            };
+          });
+        }
+        function sortGrantRows(rows) {
+          const key = grantsSort.key;
+          const mult = grantsSort.dir === "desc" ? -1 : 1;
+          const tie = (a, b) => {
+            const fa = a._s.fy, fb = b._s.fy;
+            if (fa !== fb) { if (fa === null) return 1; if (fb === null) return -1; return fb - fa; }
+            return a._s.title < b._s.title ? -1 : a._s.title > b._s.title ? 1 : 0;
+          };
+          rows.sort((a, b) => {
+            if (key) {
+              const va = a._s[key], vb = b._s[key];
+              const na = va === null || va === "", nb = vb === null || vb === "";
+              if (na !== nb) return na ? 1 : -1;
+              if (!na && va !== vb) return (va < vb ? -1 : 1) * mult;
+            }
+            return tie(a, b);
+          });
+          return rows;
+        }
 
         function loadGrants() {
           if (!grantsRequest) {
@@ -897,10 +970,19 @@
         }
         function populateGrantFilters(payload) {
           const rows = payload.rows;
+          prepareGrantRows(rows);
+          const countBy = (getter) => { const m = new Map(); rows.forEach((row) => { const v = getter(row); if (v) m.set(v, (m.get(v) || 0) + 1); }); return m; };
+          const fillCounted = (id, counts, allLabel, labelFor, order) => {
+            const entries = [...counts.entries()].sort(order);
+            $(id).innerHTML = `<option value="">${escapeHtml(allLabel)}</option>` + entries.map(([value, n]) => `<option value="${escapeHtml(value)}" data-label="${escapeHtml(labelFor(value))}">${escapeHtml(labelFor(value))} (${n})</option>`).join("");
+          };
+          const sectorLabels = payload.sector_labels || {};
+          fillCounted("grants-sector", countBy((row) => row.sector), "All sectors", (v) => sectorLabels[v] || v, (a, b) => (sectorLabels[a[0]] || a[0]).localeCompare(sectorLabels[b[0]] || b[0]));
+          fillCounted("grants-agency", countBy((row) => row.funder_agency), "All funder agencies", (v) => v, (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
           fillGrantSelect("grants-funder", grantUniqueSorted(rows.map((row) => row.funder)), "All funders");
           fillGrantSelect("grants-program", grantUniqueSorted(rows.map((row) => row.program)), "All programs");
           fillGrantSelect("grants-institution-type", grantUniqueSorted(rows.map((row) => row.institution_type)), "All institution types");
-          fillGrantSelect("grants-tag", grantUniqueSorted(rows.flatMap((row) => row.domain_tags)), "All topic tags", (tag) => tag.replaceAll("_", " "));
+          fillGrantSelect("grants-tag", grantUniqueSorted(rows.flatMap((row) => row.domain_tags)), "All topic tags", (tag) => AtlasTopics.label(tag));
           const years = rows.map((row) => row.fiscal_year).filter((year) => year !== null);
           if (years.length) {
             ["grants-year-from", "grants-year-to"].forEach((id) => {
@@ -914,6 +996,9 @@
         function readGrantFilterValues() {
           const number = (id) => (($(id).value === "") ? null : Number($(id).value));
           return {
+            q: $("grants-search").value.trim().toLowerCase(),
+            sector: $("grants-sector").value,
+            agency: $("grants-agency").value,
             funderType: $("grants-funder-type").value,
             funder: $("grants-funder").value,
             program: $("grants-program").value,
@@ -932,6 +1017,9 @@
         }
         function grantMatches(row, filters) {
           if (filters.plastic && row.plastic_related === false) return false;
+          if (filters.sector && row.sector !== filters.sector) return false;
+          if (filters.agency && row.funder_agency !== filters.agency) return false;
+          if (filters.q && !row._q.includes(filters.q)) return false;
           if (filters.funderType && row.funder_type !== filters.funderType) return false;
           if (filters.funder && row.funder !== filters.funder) return false;
           if (filters.program && row.program !== filters.program) return false;
@@ -952,6 +1040,8 @@
             $(id).value = params.get(key) || "";
           });
           $("grants-plastic").checked = params.get("pl") !== "0";
+          const sortKey = params.get("sort");
+          grantsSort = GRANT_COLUMNS.some((column) => column.key === sortKey) ? { key: sortKey, dir: params.get("dir") === "desc" ? "desc" : "asc" } : { key: null, dir: "asc" };
         }
         function writeFundingHash() {
           const params = new URLSearchParams();
@@ -959,6 +1049,7 @@
             if ($(id).value) params.set(key, $(id).value);
           });
           if (!$("grants-plastic").checked) params.set("pl", "0");
+          if (grantsSort.key) { params.set("sort", grantsSort.key); params.set("dir", grantsSort.dir); }
           const next = `#funding${params.toString() ? `?${params.toString()}` : ""}`;
           if (window.location.hash !== next) window.history.replaceState(null, "", next);
         }
@@ -967,36 +1058,68 @@
           if (row.currency && row.currency !== "USD") return `${row.amount.toLocaleString("en-US")} ${escapeHtml(row.currency)}`;
           return USD_FORMAT.format(row.amount);
         }
-        function grantChainLabel(row) {
-          const parts = [...row.funder_chain];
-          if (row.org && parts[parts.length - 1] !== row.org) parts.push(row.org);
-          return parts.join(" → ");
+        function grantFlagBadge(value) {
+          const text = value === true ? "Yes" : value === false ? "No" : "Unknown";
+          return `<span class="grants-badge${value === true ? " yes" : ""}">${text}</span>`;
         }
         function grantRowHtml(row) {
           const title = row.url
             ? `<a href="${escapeHtml(row.url)}" target="_blank" rel="noreferrer">${escapeHtml(row.title)}</a>`
             : escapeHtml(row.title);
           const people = row.pi_names.length ? `<br><small>${escapeHtml(row.pi_names.join("; "))}</small>` : "";
-          const tags = row.domain_tags.length ? `<br><small>${escapeHtml(row.domain_tags.map((tag) => tag.replaceAll("_", " ")).join(", "))}</small>` : "";
-          const flags = `Plastic: ${row.plastic_related === true ? "yes" : row.plastic_related === false ? "no" : "unknown"}<br>Led from CA: ${grantCaLedState(row)}`;
+          const tags = row.domain_tags.length ? `<div class="topic-chips">${AtlasTopics.sortTags([...row.domain_tags]).map((tag) => AtlasTopics.chip(tag)).join("")}</div>` : "";
+          const detail = row.sector_detail ? ` title="${escapeHtml(row.sector_detail)}"` : "";
           return `<tr><th scope="row">${title}${people}${tags}</th>`
             + `<td>${escapeHtml(row.org || "Recipient not reported")}<br><small>${escapeHtml(row.institution_type)}${row.org_state ? ` · ${escapeHtml(row.org_state)}` : ""}</small></td>`
-            + `<td>${escapeHtml(grantChainLabel(row))}</td>`
+            + `<td><span class="grants-badge"${detail}>${escapeHtml(grantSectorLabel(row))}</span></td>`
+            + `<td>${escapeHtml(row.funder_agency || row.funder || "Not reported")}</td>`
             + `<td>${escapeHtml(row.program || "Not reported")}</td>`
-            + `<td>${escapeHtml(row.start || "start not reported")} to ${escapeHtml(row.end || "not reported")}<br><small>Fiscal year ${row.fiscal_year ?? "unknown"}</small></td>`
-            + `<td><span title="${escapeHtml(row.amount_basis)}">${formatGrantAmount(row)}</span></td>`
-            + `<td><small>${flags}</small></td></tr>`;
+            + `<td>${row.fiscal_year ?? "unknown"}<br><small>${escapeHtml(row.start || "start not reported")}</small></td>`
+            + `<td>${escapeHtml(row.end || "not reported")}</td>`
+            + `<td class="num"><span title="${escapeHtml(row.amount_basis)}">${formatGrantAmount(row)}</span></td>`
+            + `<td>${grantFlagBadge(row.ca_led)}</td>`
+            + `<td>${grantFlagBadge(row.plastic_related)}</td></tr>`;
+        }
+        function grantsHeadHtml() {
+          return "<tr>" + GRANT_COLUMNS.map((column) => {
+            const active = grantsSort.key === column.key;
+            const aria = active ? (grantsSort.dir === "desc" ? "descending" : "ascending") : "none";
+            const arrow = active ? (grantsSort.dir === "desc" ? "▼" : "▲") : "⇅";
+            return `<th scope="col" aria-sort="${aria}"${column.num ? ' class="num"' : ""}><button type="button" class="grants-sort" data-sort="${column.key}">${column.label}<span class="grants-arrow" aria-hidden="true">${arrow}</span></button></th>`;
+          }).join("") + "</tr>";
         }
         function renderGrantsTable(rows) {
-          const pages = Math.max(1, Math.ceil(rows.length / GRANTS_PAGE_SIZE));
+          const pages = Math.max(1, Math.ceil(rows.length / grantsPageSize));
           grantsPage = Math.min(grantsPage, pages - 1);
-          const slice = rows.slice(grantsPage * GRANTS_PAGE_SIZE, (grantsPage + 1) * GRANTS_PAGE_SIZE);
-          $("grants-table").innerHTML = slice.length
-            ? `<table class="grants-table"><caption class="grants-sr-only">Awards matching the filters</caption><thead><tr><th scope="col">Award</th><th scope="col">Recipient</th><th scope="col">Funder chain</th><th scope="col">Program</th><th scope="col">Dates</th><th scope="col">Amount</th><th scope="col">Flags</th></tr></thead><tbody>${slice.map(grantRowHtml).join("")}</tbody></table>`
-            : '<p class="empty">No awards match these filters. Try resetting one of the selections.</p>';
+          const slice = rows.slice(grantsPage * grantsPageSize, (grantsPage + 1) * grantsPageSize);
+          const body = slice.length ? slice.map(grantRowHtml).join("") : `<tr><td colspan="${GRANT_COLUMNS.length}" class="empty">No awards match these filters. Try resetting one of the selections.</td></tr>`;
+          $("grants-table").innerHTML = `<table class="grants-table"><caption class="grants-sr-only">Awards matching the filters; column headers sort the table</caption><thead>${grantsHeadHtml()}</thead><tbody>${body}</tbody></table>`;
           $("grants-page").textContent = rows.length ? `Page ${grantsPage + 1} of ${pages}` : "";
           $("grants-prev").disabled = grantsPage === 0;
           $("grants-next").disabled = grantsPage >= pages - 1;
+        }
+        function renderGrantChips() {
+          const chips = [];
+          GRANT_FILTERS.forEach(({ id }) => {
+            const control = $(id);
+            if (!control.value) return;
+            const field = document.querySelector(`label[for="${id}"]`).textContent;
+            const option = control.tagName === "SELECT" ? control.selectedOptions[0] : null;
+            const text = option ? (option.dataset.label || option.textContent) : control.value;
+            chips.push(`<li><button type="button" data-clear="${id}" aria-label="Remove filter ${escapeHtml(field)}: ${escapeHtml(text)}">${escapeHtml(field)}: ${escapeHtml(text)} ✕</button></li>`);
+          });
+          if (!$("grants-plastic").checked) chips.push('<li><button type="button" data-clear="grants-plastic" aria-label="Remove filter: including non-plastic awards">Including non-plastic awards ✕</button></li>');
+          if (chips.length) chips.push('<li><button type="button" data-clear="all">Reset all filters and sort</button></li>');
+          $("grants-chips").innerHTML = chips.join("");
+        }
+        function resetGrantFilters() {
+          GRANT_FILTERS.forEach(({ id }) => {
+            $(id).value = "";
+          });
+          $("grants-plastic").checked = true;
+          grantsSort = { key: null, dir: "asc" };
+          grantsPage = 0;
+          renderFunding();
         }
         function svgBarChartYears(rows) {
           const byYear = new Map();
@@ -1056,13 +1179,14 @@
         }
         function renderFunding() {
           const filters = readGrantFilterValues();
-          grantsFiltered = grantsData.rows.filter((row) => grantMatches(row, filters));
+          grantsFiltered = sortGrantRows(grantsData.rows.filter((row) => grantMatches(row, filters)));
           const withAmount = grantsFiltered.filter((row) => row.amount !== null);
           const total = withAmount.reduce((sum, row) => sum + row.amount, 0);
           $("grants-status").textContent = `${grantsFiltered.length} of ${grantsData.rows.length} awards match. ${withAmount.length} report an amount, summing to ${USD_FORMAT.format(total)} across mixed amount bases (see Amount basis by source).`;
           $("grants-chart-year").innerHTML = svgBarChartYears(grantsFiltered);
           $("grants-chart-institution").innerHTML = svgBarChartInstitutions(grantsFiltered);
           renderGrantsTable(grantsFiltered);
+          renderGrantChips();
           writeFundingHash();
         }
         function grantCsvCell(value) {
@@ -1070,13 +1194,17 @@
           if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
           return /[",\n\r]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
         }
-        function downloadGrantsCsv() {
+        function buildGrantsCsv() {
           const lines = [GRANT_CSV_COLUMNS.join(",")];
           grantsFiltered.forEach((row) => {
             const cells = GRANT_CSV_COLUMNS.map((column) => grantCsvCell(column === "funder_chain" ? row.funder_chain.join(" > ") : row[column]));
             lines.push(cells.join(","));
           });
-          const blob = new Blob([`﻿${lines.join("\r\n")}\r\n`], { type: "text/csv;charset=utf-8" });
+          return `﻿${lines.join("\r\n")}\r\n`;
+        }
+        window.atlasGrantsCsv = buildGrantsCsv;
+        function downloadGrantsCsv() {
+          const blob = new Blob([buildGrantsCsv()], { type: "text/csv;charset=utf-8" });
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
           link.download = "ca_plastics_awards_filtered.csv";
@@ -1087,19 +1215,44 @@
         }
         function bindFundingControls() {
           document.querySelectorAll("#grants-filters input, #grants-filters select").forEach((control) => {
-            control.addEventListener(control.type === "number" ? "input" : "change", () => {
-              grantsPage = 0;
-              renderFunding();
+            const isText = control.type === "search";
+            control.addEventListener(control.type === "number" || isText ? "input" : "change", () => {
+              const run = () => {
+                grantsPage = 0;
+                renderFunding();
+              };
+              if (isText) {
+                window.clearTimeout(grantsSearchTimer);
+                grantsSearchTimer = window.setTimeout(run, 150);
+              } else run();
             });
           });
           $("grants-filters").addEventListener("submit", (event) => event.preventDefault());
-          $("grants-reset").addEventListener("click", () => {
-            GRANT_FILTERS.forEach(({ id }) => {
-              $(id).value = "";
-            });
-            $("grants-plastic").checked = true;
+          $("grants-reset").addEventListener("click", resetGrantFilters);
+          $("grants-chips").addEventListener("click", (event) => {
+            const button = event.target.closest("button[data-clear]");
+            if (!button) return;
+            if (button.dataset.clear === "all") return resetGrantFilters();
+            const control = $(button.dataset.clear);
+            if (control.type === "checkbox") control.checked = true;
+            else control.value = "";
             grantsPage = 0;
             renderFunding();
+          });
+          $("grants-table").addEventListener("click", (event) => {
+            const button = event.target.closest("button.grants-sort");
+            if (!button) return;
+            const key = button.dataset.sort;
+            grantsSort = grantsSort.key === key && grantsSort.dir === "asc" ? { key, dir: "desc" } : { key, dir: "asc" };
+            grantsPage = 0;
+            renderFunding();
+            const next = $("grants-table").querySelector(`button[data-sort="${key}"]`);
+            if (next) next.focus();
+          });
+          $("grants-page-size").addEventListener("change", () => {
+            grantsPageSize = Number($("grants-page-size").value) || 50;
+            grantsPage = 0;
+            renderGrantsTable(grantsFiltered);
           });
           $("grants-prev").addEventListener("click", () => {
             grantsPage = Math.max(0, grantsPage - 1);
@@ -1112,6 +1265,9 @@
           $("grants-csv").addEventListener("click", downloadGrantsCsv);
         }
         function showFunding() {
+          // Narrow screens start with the filter panel collapsed so the table stays in view.
+          const filterPanel = document.getElementById("grants-filter-panel");
+          if (filterPanel && !filterPanel.dataset.sized) { filterPanel.dataset.sized = "1"; if (window.matchMedia("(max-width: 700px)").matches) filterPanel.open = false; }
           if (grantsReady) {
             readFundingHash();
             renderFunding();

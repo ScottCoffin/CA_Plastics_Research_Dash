@@ -10,6 +10,7 @@ import csv
 import hashlib
 import json
 import os
+import re
 import shutil
 import time
 import urllib.error
@@ -18,12 +19,14 @@ import urllib.request
 import zipfile
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
+from decimal import Decimal
 from pathlib import Path
 from typing import Any, Literal
 
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from atlas.util.budget import daily_logged_usage, resolve_openalex_budget
 from atlas.util.cost import ApiCostLogger
 
 OPENALEX_BASE = "https://api.openalex.org"
@@ -139,6 +142,9 @@ REQUIRED_NAME_ALIASES: dict[str, tuple[str, ...]] = {
 }
 
 
+DEFAULT_USAGE_LOG = Path("data/logs/api_usage.jsonl")
+
+
 @dataclass(frozen=True)
 class BuildPaths:
     raw_openalex: Path = Path("data/raw/openalex_institutions_ca.jsonl")
@@ -166,6 +172,11 @@ def _request_json(
     timeout: int = 60,
     attempts: int = 4,
 ) -> tuple[dict[str, Any], Mapping[str, str]]:
+    if source == "openalex":
+        # The shared client handles current credit metadata, throttling and the fallback key.
+        from atlas.ingest.openalex import _request_json as openalex_request
+
+        return openalex_request(url, logger=logger, attempts=attempts, timeout=timeout), {}
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     api_key = os.environ.get("OPENALEX_API_KEY") if source == "openalex" else None
     if api_key:
@@ -300,6 +311,69 @@ def pull_openalex_institutions(
         for record in records:
             stream.write(json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n")
     temporary.replace(path)
+    return records
+
+
+def supplement_government_institutions(
+    records: list[dict[str, Any]],
+    path: Path,
+    logger: ApiCostLogger,
+    *,
+    max_pages: int = 3,
+) -> list[dict[str, Any]]:
+    """Add California ``type:government`` institutions absent from the geo seed.
+
+    OpenAlex has since gained government records (CDPH, CARB, DTSC, OPC, Caltrans...)
+    that the cached seed predates. One list call returns 100 records, so this takes
+    one or two calls; a daily budget guard runs before each one.
+    """
+
+    budget = resolve_openalex_budget()
+    prior_cost, prior_credits = daily_logged_usage(
+        DEFAULT_USAGE_LOG, cost_per_credit_usd=budget.cost_per_credit_usd
+    )
+    spent_credits = Decimal(0)
+    existing_ids = {_compact_openalex_id(record.get("id")) for record in records}
+    selected = (
+        "id,display_name,display_name_alternatives,ror,type,lineage,geo,works_count,updated_date"
+    )
+    added: list[dict[str, Any]] = []
+    expected: int | None = None
+    page = 1
+    while page <= max_pages and (expected is None or (page - 1) * 100 < expected):
+        error = budget.reserve_error(
+            cost_usd=prior_cost + spent_credits * budget.cost_per_credit_usd,
+            credits=prior_credits + spent_credits,
+        )
+        if error:
+            raise RuntimeError(error)
+        url = _openalex_url(
+            "/institutions",
+            {
+                "filter": "type:government,geo.region:California",
+                "select": selected,
+                "per_page": 100,
+                "page": page,
+            },
+        )
+        before = len(logger.request_metrics)
+        body, _ = _request_json(url, source="openalex", logger=logger)
+        for metric in logger.request_metrics[before:]:
+            spent_credits += Decimal(str(metric.get("credits") or 1))
+        expected = int(body["meta"]["count"])
+        for record in body.get("results", []):
+            record_id = _compact_openalex_id(record.get("id"))
+            if record_id not in existing_ids:
+                added.append(record)
+                existing_ids.add(record_id)
+        page += 1
+    if added:
+        records = [*records, *added]
+        temporary = path.with_suffix(path.suffix + ".tmp")
+        with temporary.open("w", encoding="utf-8", newline="\n") as stream:
+            for record in records:
+                stream.write(json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n")
+        temporary.replace(path)
     return records
 
 
@@ -442,6 +516,19 @@ def acquire_ror_dump(
     }
 
 
+def existing_ror_dump(directory: Path, registry: Path) -> tuple[Path, dict[str, str]]:
+    """Reuse the ROR dump already on disk (no Zenodo call); provenance from the registry."""
+
+    dumps = sorted(directory.glob("*.zip"))
+    if not dumps:
+        raise RuntimeError(f"no ROR dump in {directory}; run a full build")
+    metadata = pq.read_schema(registry).metadata or {}
+    return dumps[-1], {
+        "ror_release": metadata.get(b"ror_release", b"unknown").decode(),
+        "ror_doi": metadata.get(b"ror_doi", b"unknown").decode(),
+    }
+
+
 def load_ror_records(dump: Path, wanted_ids: set[str]) -> dict[str, dict[str, Any]]:
     """Load only requested ROR IDs from a verified JSON dump."""
 
@@ -512,6 +599,7 @@ def plastic_work_counts(
     def valid_count(value: object) -> bool:
         return type(value) is int and value >= 0
 
+    seed: dict[str, int] = {}
     if active_path.exists() and not refresh:
         try:
             payload = json.loads(active_path.read_text(encoding="utf-8"))
@@ -536,11 +624,18 @@ def plastic_work_counts(
             and all(key in payload for key in unique_ids)
         ):
             return {key: payload[key] for key in unique_ids}
+        elif isinstance(payload, dict) and all(
+            isinstance(key, str) and valid_count(value) for key, value in payload.items()
+        ):
+            # Legacy cache that predates newly added institutions: reuse it and fetch
+            # only the missing ids instead of re-grouping the whole registry.
+            seed = {key: payload[key] for key in unique_ids if key in payload}
 
-    preliminary = dict.fromkeys(unique_ids, 0)
+    preliminary = {key: seed.get(key, 0) for key in unique_ids}
+    to_fetch = [key for key in unique_ids if key not in seed]
     batch_size = 10 if authenticated else 50
-    for offset in range(0, len(unique_ids), batch_size):
-        batch = unique_ids[offset : offset + batch_size]
+    for offset in range(0, len(to_fetch), batch_size):
+        batch = to_fetch[offset : offset + batch_size]
         params: dict[str, object] = {
             "filter": f"{field}:{query_config.partition(':')[2]},institutions.id:{'|'.join(batch)}"
             if query_mode == "audit"
@@ -604,12 +699,66 @@ def _name_blob(record: Mapping[str, Any], lineage_names: Iterable[str]) -> str:
     return " | ".join(str(value).casefold() for value in values)
 
 
+_GOV_STATE_RE = re.compile(
+    r"^california\b"
+    r"|\bstate of california\b|\bof california$"
+    r"|^(department|office|division|commission|board|council|agency) of .*\bcalifornia\b"
+    r"|^state (water|lands|coastal|energy|air|office|department)\b"
+    r"|\bregional water quality control board\b|^office of environmental health hazard"
+    r"|^san francisco bay conservation and development commission"
+    r"|^tahoe regional planning agency|^governor.s office\b|^office of the attorney general"
+    r"|^employment development department"
+)
+_GOV_FEDERAL_RE = re.compile(
+    r"geological survey|\busgs\b|national park|forest service|\bnoaa\b|\busda\b"
+    r"|national marine fisheries|fish and wildlife service|environmental protection agency"
+    r"|agricultural research service|bureau of (land|reclamation|ocean|mines)|army corps"
+    r"|\b(army|navy|naval|air force|marine corps|coast guard|space force)\b|veterans affairs"
+    r"|national institutes? of|national science foundation|\bnasa\b|\bnswc\b"
+    r"|department of (energy|defense|agriculture|the interior|commerce|homeland)"
+    r"|national (aeronautics|oceanic|laboratory|center for|institute of standards)"
+    r"|united states|\bu\.s\. |\bfederal\b|lawrence livermore|research station"
+    r"|nutrition research center|science center\b|defense microelectronics"
+)
+_GOV_LOCAL_RE = re.compile(
+    r"\bcounty\b|\bcity of\b|\bcity and county\b|\bdistrict\b|\bmunicipal\b|\bsanitation\b"
+    r"|\bwater (agency|authority)\b|\bport of\b|\bcommunity services\b|\bwatershed\b"
+    r"|\bmetropolitan\b|\bregional (park|planning|council)\b|water and power"
+    r"|\b(association|council) of governments\b|\bpolice\b|\bfire department\b"
+    r"|transportation (authority|commission|corridor)"
+)
+_COUNTY_HEALTH_RE = re.compile(
+    r"^san francisco department of public health|"
+    r"\b(county|city)\b.*\b(public health|health services|health department|"
+    r"department of health|health agency|health care services)\b"
+    r"|\b(public health|health services|health department|department of health)\b.*"
+    r"\b(county|city)\b"
+)
+
+
+def _own_names(record: Mapping[str, Any]) -> list[str]:
+    return [
+        str(value).casefold()
+        for value in (record.get("display_name"), *(record.get("display_name_alternatives") or []))
+        if value
+    ]
+
+
 def classify_atlas_type(record: Mapping[str, Any], lineage_names: Iterable[str]) -> tuple[str, str]:
     """Return an atlas type and the deterministic rule that selected it."""
 
     names = _name_blob(record, lineage_names)
     ror_types = set((record.get("ror_record") or {}).get("types", []))
     openalex_type = str(record.get("type") or "").casefold()
+
+    own_names = _own_names(record)
+    is_government = "government" in ror_types or openalex_type == "government"
+    county_health = any(
+        _COUNTY_HEALTH_RE.search(name) and "city of hope" not in name for name in own_names
+    )
+    gov_state = is_government and any(_GOV_STATE_RE.search(name) for name in own_names)
+    gov_federal = is_government and any(_GOV_FEDERAL_RE.search(name) for name in own_names)
+    gov_local = is_government and any(_GOV_LOCAL_RE.search(name) for name in own_names)
 
     rules: list[tuple[str, str, bool]] = [
         ("UC", "uc-lineage-or-name", "university of california" in names or " uc " in names),
@@ -633,9 +782,10 @@ def classify_atlas_type(record: Mapping[str, Any], lineage_names: Iterable[str])
                     "sacramento state",
                     "stanislaus state",
                     "cal maritime",
-                    "csun",
                 )
-            ),
+            )
+            # Whole-word only: a substring test matched "Fracsun" (2026-11-11).
+            or re.search(r"(?<![a-z])csun(?![a-z])", names) is not None,
         ),
         (
             "community-college",
@@ -692,6 +842,10 @@ def classify_atlas_type(record: Mapping[str, Any], lineage_names: Iterable[str])
                 )
             ),
         ),
+        ("local-agency", "county-health-department-name", county_health),
+        ("state-agency", "government-state-name", gov_state),
+        ("federal", "government-federal-name", gov_federal),
+        ("local-agency", "government-local-name", gov_local),
         (
             "company",
             "organization-type-company",
@@ -850,23 +1004,29 @@ def write_outputs(
     if paths.review_csv.exists():
         with paths.review_csv.open(encoding="utf-8", newline="") as stream:
             existing_review = {row["openalex_id"]: row for row in csv.DictReader(stream)}
-    with paths.review_csv.open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=review_fields)
-        writer.writeheader()
-        for rank, row in enumerate(rows[:100], 1):
-            previous = existing_review.get(row["openalex_id"], {})
-            writer.writerow(
-                {
-                    "review_rank": rank,
-                    "openalex_id": row["openalex_id"],
-                    "display_name": row["display_name"],
-                    "plastic_work_count": row["plastic_work_count"],
-                    "proposed_atlas_type": row["atlas_type"],
-                    "owner_atlas_type": previous.get("owner_atlas_type", ""),
-                    "owner_reviewed_at": previous.get("owner_reviewed_at", ""),
-                    "owner_notes": previous.get("owner_notes", ""),
-                }
-            )
+    # The owner-reviewed queue is a frozen record (S1.2, reviewed 2026-11-05): a rebuild
+    # re-ranks institutions and used to drop reviewed rows that fell out of the top 100
+    # (annotations were lost on 2026-11-06). Never rewrite a file that holds owner reviews;
+    # new entrants are queued by AT-2 (data/processed/institution_review_needs_v31.csv).
+    owner_reviewed = any(row.get("owner_reviewed_at") for row in existing_review.values())
+    if not owner_reviewed:
+        with paths.review_csv.open("w", encoding="utf-8", newline="") as stream:
+            writer = csv.DictWriter(stream, fieldnames=review_fields)
+            writer.writeheader()
+            for rank, row in enumerate(rows[:100], 1):
+                previous = existing_review.get(row["openalex_id"], {})
+                writer.writerow(
+                    {
+                        "review_rank": rank,
+                        "openalex_id": row["openalex_id"],
+                        "display_name": row["display_name"],
+                        "plastic_work_count": row["plastic_work_count"],
+                        "proposed_atlas_type": row["atlas_type"],
+                        "owner_atlas_type": previous.get("owner_atlas_type", ""),
+                        "owner_reviewed_at": previous.get("owner_reviewed_at", ""),
+                        "owner_notes": previous.get("owner_notes", ""),
+                    }
+                )
 
     type_counts: dict[str, int] = {}
     rule_counts: dict[str, int] = {}
@@ -964,7 +1124,13 @@ def write_outputs(
             "- CSU campus list and 22-university transition: <https://www.calstate.edu/attend/campuses/Pages/default.aspx>.",
         ]
     )
-    paths.qc_markdown.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    marker = "\n## California state agencies"
+    kept = ""
+    if paths.qc_markdown.exists():
+        previous = paths.qc_markdown.read_text(encoding="utf-8").replace("\r\n", "\n")
+        if marker in previous:
+            kept = previous[previous.index(marker) :].rstrip("\n") + "\n"
+    paths.qc_markdown.write_text("\n".join(lines) + "\n" + kept, encoding="utf-8")
 
 
 def build_registry(
@@ -973,6 +1139,8 @@ def build_registry(
     *,
     refresh_openalex: bool = False,
     refresh_counts: bool = False,
+    supplement_government: bool = False,
+    reuse_ror_dump: bool = False,
 ) -> dict[str, object]:
     openalex_authenticated = validate_openalex_key(logger)
     openalex_records = pull_openalex_institutions(
@@ -981,6 +1149,10 @@ def build_registry(
     openalex_records = supplement_required_institutions(
         openalex_records, paths.raw_openalex, logger
     )
+    if supplement_government:
+        openalex_records = supplement_government_institutions(
+            openalex_records, paths.raw_openalex, logger
+        )
     institution_ids = [_compact_openalex_id(record["id"]) for record in openalex_records]
     counts = plastic_work_counts(
         institution_ids,
@@ -989,7 +1161,10 @@ def build_registry(
         authenticated=openalex_authenticated,
         refresh=refresh_counts,
     )
-    dump, provenance = acquire_ror_dump(paths.raw_ror_dir, logger)
+    if reuse_ror_dump:
+        dump, provenance = existing_ror_dump(paths.raw_ror_dir, paths.output_parquet)
+    else:
+        dump, provenance = acquire_ror_dump(paths.raw_ror_dir, logger)
     wanted_ror = {_compact_ror_id(record.get("ror")) for record in openalex_records}
     wanted_ror.discard("")
     ror_records = load_ror_records(dump, wanted_ror)

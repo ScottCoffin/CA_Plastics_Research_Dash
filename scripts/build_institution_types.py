@@ -28,6 +28,7 @@ from typing import Any
 import pyarrow.parquet as pq
 
 from atlas.ingest.institutions import ATLAS_TYPES
+from atlas.ingest.state_agencies import load_state_agencies
 
 ROOT = Path(__file__).resolve().parents[1]
 TOP_N = 100
@@ -97,6 +98,17 @@ def _read_csv(path: Path) -> list[dict[str, str]]:
 
 def load_inputs(paths: Paths = Paths()) -> Inputs:
     registry = {row["openalex_id"]: row for row in pq.read_table(paths.registry).to_pylist()}
+    # Synthetic state agencies without an OpenAlex record (config/ca_state_agencies.yml).
+    for agency in load_state_agencies(ROOT / "config/ca_state_agencies.yml"):
+        registry.setdefault(
+            agency.id,
+            {
+                "openalex_id": agency.id,
+                "display_name": agency.name,
+                "atlas_type": agency.atlas_type,
+                "lineage": [agency.parent_id, agency.id] if agency.parent_id else [agency.id],
+            },
+        )
     corpus = {row["inst_id"]: row for row in pq.read_table(paths.corpus_institutions).to_pylist()}
     authorships = [
         (row["work_id"], row["institution_ids"] or [])
