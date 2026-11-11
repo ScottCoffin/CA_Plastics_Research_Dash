@@ -109,6 +109,9 @@ This ledger lists the external tools and projects named in add-on A1 §§0 and 7
 | npm | UNKNOWN - needs SPK-6 | SPK-6 build commands |
 | Plot | UNKNOWN - needs SPK-6 | SPK-6 fallback network-chart option |
 | D3 | UNKNOWN - needs SPK-6 | SPK-6 fallback network-chart option |
+| networkx | UNKNOWN - verify (expected BSD-3-Clause) | S9.4 co-authorship graph, Louvain communities, centrality |
+| sigma.js | UNKNOWN - verify (expected MIT) | S9.4 fallback in-page network renderer (vendored) |
+| graphology (+ layout-forceatlas2) | UNKNOWN - verify (expected MIT) | S9.4 fallback graph model and ForceAtlas2 layout |
 
 Rules from §0 and the L6 licence gate:
 

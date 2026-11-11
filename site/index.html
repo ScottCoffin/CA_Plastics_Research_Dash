@@ -225,6 +225,21 @@
       .work-detail { padding: 0.75rem; border: 1px solid var(--line); border-radius: 0.45rem; }
       .work-detail p { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
       .work-links { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 0.45rem; }
+      .drawer-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: 0.5rem; margin: 0.9rem 0; padding: 0; font-variant-numeric: tabular-nums; }
+      .drawer-stat { margin: 0; padding: 0.5rem 0.6rem; border-radius: 0.45rem; background: #e9f3f1; min-width: 0; overflow-wrap: anywhere; }
+      .drawer-stat dt { color: var(--muted); font-size: 0.78rem; }
+      .drawer-stat dd { margin: 0.15rem 0 0; color: var(--brand-dark); font-size: 1.15rem; font-weight: 750; }
+      .drawer-stat-note { display: block; margin-top: 0.15rem; color: var(--muted); font-size: 0.72rem; font-weight: 400; }
+      .drawer-section { margin: 0.75rem 0; }
+      .drawer-section > summary { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; min-height: 44px; padding: 0.5rem 0.75rem; border: 1px solid var(--line); border-radius: 0.45rem; color: var(--brand-dark); background: #fff; font-weight: 650; cursor: pointer; list-style: none; }
+      .drawer-section > summary::-webkit-details-marker { display: none; }
+      .drawer-section > summary::after { content: ""; flex: none; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform 0.15s ease; }
+      .drawer-section[open] > summary::after { transform: rotate(45deg); }
+      .drawer-section > summary:hover { background: #edf7f4; }
+      .drawer-section > summary:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+      .drawer-section-count { color: var(--muted); font-weight: 400; margin-left: auto; }
+      .drawer-section-body { padding: 0.5rem 0.25rem 0; }
+      .drawer-section-body p { margin: 0; }
       footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.85rem; }
       @media (max-width: 45rem) {
         .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1267,6 +1282,31 @@
           const part = (key, text, title = "") => { const body = state.sort === key ? `<strong>${escapeHtml(text)}</strong>` : escapeHtml(text); return title ? `<span title="${escapeHtml(title)}">${body}</span>` : body; };
           return [part("h_index", `h ${metricNumber(author.h_index)}`), part("cited_by", `${metricNumber(author.cited_by_count)} citations`), part("plastic_citations", `${metricNumber(author.plastic_citations)} on plastics (${share === null ? "—" : `${share}%`})`, basisTitle), part("plastic_works", `${metricNumber(author.plastic_works_count)} plastics works`)].join(" · ") + (corpusOnly ? ' <span class="basis-note" title="' + escapeHtml(basisTitle) + '">(CA corpus only)</span>' : "");
         }
+        // Summary tiles for the drawer. Missing or null values render as an em dash.
+        // coauthorCount is null when the works carry no author_ids, so that tile is omitted.
+        function drawerStatsHtml(author, works, coauthorCount) {
+          const share = plasticShare(author);
+          const corpusOnly = author.plastic_basis === "atlas_corpus";
+          const years = works.map((work) => Number(work.year)).filter(Number.isFinite);
+          const latest = years.length ? Math.max(...years) : null;
+          const recent = latest === null ? null : works.filter((work) => Number(work.year) >= latest - 4).length;
+          const first = metricValue(author.first_year);
+          const last = metricValue(author.last_year);
+          const activeYears = first === null && last === null ? "—" : `${first ?? "—"}–${last ?? "—"}`;
+          const plasticNote = [`${share === null ? "—" : share}% of total`, corpusOnly ? "(CA corpus only)" : ""].filter(Boolean).join(" ");
+          const tiles = [
+            ["h-index", metricNumber(author.h_index)],
+            ["Total citations", metricNumber(author.cited_by_count)],
+            ["Plastics citations", metricNumber(author.plastic_citations), plasticNote],
+            ["Plastics works", metricNumber(author.plastic_works_count)],
+            ["CA-affiliated works", metricNumber(author.ca_works_count)],
+            ["Years active", activeYears],
+            ["Recent works (last 5 years)", metricNumber(recent)],
+          ];
+          if (coauthorCount !== null) tiles.push(["Distinct co-authors", metricNumber(coauthorCount)]);
+          const tileHtml = ([label, value, note = ""]) => `<div class="drawer-stat"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}${note ? `<span class="drawer-stat-note">${escapeHtml(note)}</span>` : ""}</dd></div>`;
+          return `<dl class="drawer-stats" aria-label="Summary metrics">${tiles.map(tileHtml).join("")}</dl>`;
+        }
         function expertTopicsHtml(author) {
           if (!author.topicsHtml) {
             const chips = [...author.topicWeights, ...author.matrixWeights].map(([tag, count]) => AtlasTopics.chip(tag, count));
@@ -1361,14 +1401,22 @@
             const institutionIds = [...new Set(works.flatMap((work) => work.institution_ids || []))];
             const institutions = institutionIds.map(institutionById).filter(Boolean);
             const coauthorIds = [...new Set(works.flatMap((work) => (work.author_ids || []).filter((id) => id !== authorId)))];
+            const coauthorCount = works.some((work) => Array.isArray(work.author_ids)) ? coauthorIds.length : null;
+            // Frequent co-authors: shared-work counts per co-author; named when they are CA experts.
+            const sharedCounts = new Map();
+            works.forEach((work) => new Set(work.author_ids || []).forEach((id) => { if (id !== authorId) sharedCounts.set(id, (sharedCounts.get(id) || 0) + 1); }));
+            const expertsById = new Map(authorSummaries().map((item) => [item.author_id, item]));
+            const namedCoauthors = [...sharedCounts.entries()].filter(([id]) => expertsById.has(id)).sort((a, b) => b[1] - a[1] || String(expertsById.get(a[0]).name).localeCompare(String(expertsById.get(b[0]).name)));
+            const otherCoauthors = sharedCounts.size - namedCoauthors.length;
             $("drawer-title").textContent = author.name || "Researcher";
             $("drawer-issue-link").href = profileIssueUrl(author.name, author.author_id || authorId);
-            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p><p class="expert-metrics" style="display:block">${expertMetricsHtml(author)}</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}<h3>Topics</h3>${drawerTopics.length ? `<div class="topic-chips">${drawerTopics.map(([tag, count]) => AtlasTopics.chip(tag, count)).join("")}</div>` : '<p class="detail-meta">No topic tags yet.</p>'}<h3>Affiliation history</h3><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p><h3>Co-author institutions</h3><p class="detail-meta">${coauthorIds.length ? escapeHtml(coauthorIds.join(", ")) : "No co-author IDs recorded."}</p><h3>Works</h3>${works.length ? '<div class="abstract-controls" role="group" aria-label="Abstract display"><button type="button" id="abstracts-expand">Expand all abstracts</button><button type="button" id="abstracts-collapse">Collapse all</button></div>' : ""}<ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="topic-chips">${AtlasTopics.sortTags(tags).map((tag) => AtlasTopics.chip(tag)).join("")}</div>` : ""}<details class="work-abstract"><summary>Abstract</summary>${String(work.abstract || "").trim() ? `<p>${escapeHtml(String(work.abstract).trim())}</p>` : '<p class="detail-meta">No abstract available</p>'}</details>${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
+            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}${drawerStatsHtml(author, works, coauthorCount)}<h3>Topics</h3>${drawerTopics.length ? `<div class="topic-chips">${drawerTopics.map(([tag, count]) => AtlasTopics.chip(tag, count)).join("")}</div>` : '<p class="detail-meta">No topic tags yet.</p>'}<details class="drawer-section"><summary>Affiliation history <span class="drawer-section-count">(${institutions.length} ${institutions.length === 1 ? "institution" : "institutions"})</span></summary><div class="drawer-section-body"><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p></div></details><details class="drawer-section"><summary>Frequent co-authors <span class="drawer-section-count">(${namedCoauthors.length} CA experts${otherCoauthors > 0 ? `, ${otherCoauthors} others` : ""})</span></summary><div class="drawer-section-body">${namedCoauthors.length ? `<ul class="coauthor-list">${namedCoauthors.map(([id, count]) => `<li><button type="button" class="coauthor-link" data-author-id="${escapeHtml(id)}">${escapeHtml(expertsById.get(id).name || id)}</button> <span class="detail-meta">${count} shared ${count === 1 ? "work" : "works"}</span></li>`).join("")}</ul>` : '<p class="detail-meta">No co-authors on the California expert list.</p>'}${otherCoauthors > 0 ? `<p class="detail-meta">Plus ${otherCoauthors} co-author${otherCoauthors === 1 ? "" : "s"} outside the California expert list.</p>` : ""}</div></details><h3>Works</h3>${works.length ? '<div class="abstract-controls" role="group" aria-label="Abstract display"><button type="button" id="abstracts-expand">Expand all abstracts</button><button type="button" id="abstracts-collapse">Collapse all</button></div>' : ""}<ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="topic-chips">${AtlasTopics.sortTags(tags).map((tag) => AtlasTopics.chip(tag)).join("")}</div>` : ""}<details class="work-abstract"><summary>Abstract</summary>${String(work.abstract || "").trim() ? `<p>${escapeHtml(String(work.abstract).trim())}</p>` : '<p class="detail-meta">No abstract available</p>'}</details>${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
             const setAbstracts = (open) => $("drawer-content").querySelectorAll("details.work-abstract").forEach((node) => { node.open = open; });
             const expandButton = $("abstracts-expand");
             const collapseButton = $("abstracts-collapse");
             if (expandButton) expandButton.addEventListener("click", () => setAbstracts(true));
             if (collapseButton) collapseButton.addEventListener("click", () => setAbstracts(false));
+            $("drawer-content").querySelectorAll(".coauthor-link").forEach((button) => button.addEventListener("click", () => openDrawer(button.dataset.authorId)));
           } catch (error) {
             $("drawer-content").innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
           }
@@ -1975,6 +2023,11 @@
           state.caBasis = $("ca-basis-filter").value;
           state.oa = $("oa-filter").value;
           state.sort = $("expert-sort").value;
+          // "change" fires on blur after "input" already rendered; re-rendering then replaced the
+          // rows between mousedown and mouseup, so the first click on an expert was lost.
+          const signature = JSON.stringify([state.search, state.institutionType, state.institution, state.tag, state.yearFrom, state.yearTo, state.caBasis, state.oa, state.sort]);
+          if (signature === state.lastFilterSignature) return;
+          state.lastFilterSignature = signature;
           writeHash();
           renderExperts();
         }
