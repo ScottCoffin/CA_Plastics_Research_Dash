@@ -103,3 +103,4 @@
 | 2026-11-11 | AT-11 | CI guards: raw/normalized schema and payload checks before the daily commit; failure-mode tests | this commit |
 | 2026-11-11 | AT-10 (partial), AT-4 UI | Release pipeline (methods card, checksums, release.json, About DOI); Institutions tiers view; check_s10_3 abstract check made key-based | this commit |
 | 2026-11-11 | S2.5 (partial) | Europe PMC recall benchmark 51.0%; DOI ingest deferred by the budget guard | this commit |
+| 2026-11-11 | S2.5c, S9.5 (partial) | ORCID enrichment (employments, carry-forward evidence, bios) and Wikidata photo metadata | this commit |
