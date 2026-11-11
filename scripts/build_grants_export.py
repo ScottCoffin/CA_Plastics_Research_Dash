@@ -13,7 +13,7 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
-from atlas.build.curation import load_grant_relevance
+from atlas.build.curation import load_grant_owner_reviewed, load_grant_relevance
 from atlas.build.grants_export import build_from_paths
 from atlas.query import load_query_config
 
@@ -40,6 +40,7 @@ def main(argv: list[str] | None = None) -> int:
         generated_at=datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         query_config=load_query_config(args.queries),
         relevance=load_grant_relevance(args.relevance),
+        owner_reviewed=load_grant_owner_reviewed(args.relevance),
     )
     print(json.dumps(summary, sort_keys=True))
     return 0

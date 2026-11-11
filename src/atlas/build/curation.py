@@ -205,6 +205,17 @@ def load_grant_relevance(path: str | Path) -> dict[str, bool]:
     return decisions
 
 
+def load_grant_owner_reviewed(path: str | Path) -> frozenset[str]:
+    """Grant keys whose row the owner confirmed or changed (``owner_review``)."""
+    if not Path(path).exists():
+        return frozenset()
+    return frozenset(
+        row["grant_key"]
+        for _number, row in _read(path, GRANT_RELEVANCE_HEADER)
+        if row.get("owner_review") in {"confirmed", "changed"}
+    )
+
+
 def load_work_relevance(path: str | Path) -> dict[str, bool]:
     """Return ``{work_id: plastic_related}`` from ``work_relevance.csv``.
 

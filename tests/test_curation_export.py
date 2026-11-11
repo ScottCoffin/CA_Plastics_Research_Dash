@@ -65,7 +65,8 @@ def test_shipped_curation_files_are_header_only_and_load_empty() -> None:
     )
     assert not curation.suppressed_authors
     assert not curation.suppressed_works
-    assert not curation.author_merges
+    # author_merges.csv carries only the generated same-name/same-institution merges.
+    assert curation.author_merges
     # overrides_works.csv carries only the generated AT-1 owner audit labels.
     assert curation.work_overrides
     fields = {name for values in curation.work_overrides.values() for name in values}

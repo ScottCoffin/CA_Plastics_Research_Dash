@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A static atlas of plastic-related research connected to California.">
     <title>CA Plastics Research Atlas</title>
+    <script src="assets/topics.js"></script>
     <link rel="alternate" type="application/atom+xml" title="New CA plastics papers and awards" href="feed.xml">
     <style>
       :root {
@@ -78,11 +79,8 @@
       .sparkline polyline { fill: none; stroke: var(--brand); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
       .sparkline circle { fill: var(--brand); }
       .institution-map-panel { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
-      .institution-map { position: relative; min-height: 25rem; overflow: hidden; border: 1px solid #b8ced0; border-radius: 0.45rem; background: linear-gradient(145deg, #e7f3f2, #f8fbf9 57%, #e6f0e5); }
-      .institution-map::before { content: "California coordinates · schematic view"; position: absolute; inset: 0.55rem auto auto 0.65rem; color: #536879; font-size: 0.75rem; }
-      .institution-map-marker { position: absolute; z-index: 1; display: grid; place-items: center; min-width: 2.35rem; min-height: 2.35rem; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 999px; padding: 0.2rem; color: #fff; background: var(--brand); box-shadow: 0 0 0 1px #075a46, 0 0.15rem 0.35rem rgb(23 50 77 / 28%); font-size: 0.75rem; font-weight: 800; }
-      .institution-map-marker[data-cluster="true"] { background: #c45100; box-shadow: 0 0 0 1px #8e3900, 0 0.15rem 0.35rem rgb(23 50 77 / 28%); }
-      .institution-map-marker:hover { z-index: 2; }
+      .institution-map .institution-marker .marker-body { fill: var(--brand); }
+      .institution-map .institution-marker.cluster .marker-body { fill: #c45100; }
       .monitoring-layout { display: grid; gap: 1rem; }
       .monitoring-map { overflow: hidden; border: 1px solid #b8ced0; border-radius: 0.45rem; background: #f4f8fb; padding: 0.35rem; }
       .monitoring-map-svg { display: block; width: 100%; height: auto; }
@@ -140,6 +138,30 @@
       .virtual-spacer { position: relative; width: 100%; }
       .virtual-row { position: absolute; left: 0; right: 0; padding: 0.35rem; }
       .virtual-row > .card { min-height: 10rem; }
+      .virtual-row { box-sizing: border-box; }
+      .expert-card { box-sizing: border-box; height: 100%; display: flex; flex-direction: column; gap: 0.4rem; overflow: hidden; }
+      .expert-card .card-header { align-items: center; flex: none; }
+      .expert-card .card-header h3 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .expert-card .card-header .chip { flex: none; white-space: nowrap; }
+      .expert-topics { position: relative; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 0.35rem; flex: none; max-height: 3.75rem; overflow: hidden; }
+      .expert-topics [hidden] { display: none !important; }
+      .expert-topics .topic-chip { font-size: 0.85rem; }
+      .topic-more { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border: 1px solid #8da7af; border-radius: 999px; color: #24445a; background: #fff; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+      .expert-metrics { margin: 0; flex: none; color: var(--ink); font-size: 0.88rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+      .expert-metrics strong { color: var(--brand-dark); }
+      .expert-affil { margin: 0; flex: none; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+      .topic-bar { display: block; width: 100%; height: 0.85rem; border-radius: 0.3rem; overflow: hidden; background: #e6eff2; }
+      .topic-bar rect { stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+      .topic-bar-note { margin: 0; color: var(--muted); font-size: 0.8rem; }
+      .institution-topics { display: grid; gap: 0.4rem; }
+      .button-link { display: inline-block; border: 1px solid var(--brand); border-radius: 0.35rem; padding: 0.38rem 0.6rem; color: #fff; background: var(--brand); font-weight: 700; font-size: 0.9rem; text-decoration: none; }
+      .map-inst { padding: 0.5rem 0; border-top: 1px solid var(--line); display: grid; gap: 0.45rem; }
+      .map-inst:first-of-type { border-top: 0; }
+      .map-inst h5 { margin: 0; font-size: 0.98rem; color: var(--brand-dark); }
+      .map-inst-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: 0.35rem 0.75rem; margin: 0; }
+      .map-inst-stats dt { color: var(--muted); font-size: 0.75rem; }
+      .map-inst-stats dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+      .institution-map-panel.is-sticky { position: sticky; top: 0.5rem; max-height: calc(100vh - 1rem); overflow: auto; }
       .card { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
       .card-header { display: flex; justify-content: space-between; gap: 0.75rem; }
       .card-header h3 { color: var(--brand-dark); }
@@ -235,6 +257,7 @@
           <div class="field"><label for="expert-search">Search name or ID</label><input id="expert-search" name="search" type="search" autocomplete="off" placeholder="e.g. California"></div>
           <div class="field"><label for="institution-type-filter">Institution type</label><select id="institution-type-filter" name="institution_type"><option value="">All institution types</option></select></div>
           <div class="field"><label for="institution-filter">Institution</label><select id="institution-filter" name="institution"><option value="">All institutions</option></select></div>
+          <div class="field"><label for="expert-sort">Sort by</label><select id="expert-sort" name="sort"><option value="ca_works">CA works</option><option value="cited_by">Total citations</option><option value="h_index">h-index</option><option value="plastic_citations">Plastics citations</option><option value="plastic_works">Plastics works</option></select></div>
           <div class="field"><label for="tag-filter">Domain or matrix tag</label><select id="tag-filter" name="tag"><option value="">All tags</option></select></div>
           <div class="field"><label for="year-from">From year</label><input id="year-from" name="year_from" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
           <div class="field"><label for="year-to">To year</label><input id="year-to" name="year_to" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
@@ -246,6 +269,7 @@
           <button id="export-csv" class="button" type="button">Export filtered CSV</button>
         </div>
         <div class="result-line"><p id="expert-count" class="result-count" role="status" aria-live="polite">Loading experts…</p></div>
+        <p class="data-note">Chips show each expert's research topics with the number of their works in each topic. Citation figures are career-wide OpenAlex counts; "on plastics" counts citations of the expert's plastic-related works in this corpus, so a low share suggests plastics is a secondary focus.</p>
         <div id="expert-list" class="virtual-list" role="list" aria-label="Experts" aria-live="polite"><div id="expert-spacer" class="virtual-spacer"><div id="expert-rows"></div></div></div>
       </section>
 
@@ -257,19 +281,21 @@
 
       <section id="panel-institutions" class="panel" role="tabpanel" aria-labelledby="tab-institutions" tabindex="0" hidden>
         <h2>Institutions</h2>
-        <p class="panel-intro">Tagged-work volume is a descriptive count from the same S3.1 export used by the Experts view; it is not a quality ranking.</p>
+        <p class="panel-intro">Tagged-work volume is a descriptive count from the same S3.1 export used by the Experts view; it is not a quality ranking. Each topic bar shows the share of topic tags across the institution's plastic-related works (a work can carry several topics).</p>
         <div class="institution-toolbar">
           <div id="institution-type-chips" class="institution-type-chips" role="group" aria-label="Filter institutions by type"></div>
           <p id="institution-count" class="result-count" role="status" aria-live="polite">Loading institutions…</p>
         </div>
         <div class="institutions-layout">
           <div id="institution-list" class="cards" aria-live="polite"></div>
-          <div class="institution-map-panel">
+          <div class="institution-map-panel is-sticky">
             <h3>California institution map</h3>
-            <p class="data-note">Markers are clustered when coordinates are close. Select a marker to open the matching Experts filter.</p>
-            <div id="institution-map" class="institution-map" role="group" aria-label="Clustered map of California institutions"></div>
+            <p id="institution-map-hint" class="map-hint">Drag to pan, scroll or +/- to zoom, select a marker for institution details. With the map focused, arrow keys pan. Marker size follows plastic-related work count.</p>
+            <div class="monitoring-map-controls" role="group" aria-label="Institution map zoom"><button type="button" id="institution-zoom-in">Zoom in (+)</button><button type="button" id="institution-zoom-out">Zoom out (-)</button><button type="button" id="institution-zoom-reset">Reset view</button></div>
+            <div id="institution-map" class="monitoring-map institution-map" role="group" tabindex="0" aria-label="Clustered map of California institutions on a California basemap" aria-describedby="institution-map-hint"></div>
             <div class="map-legend" aria-label="Map legend"><span>Institution marker</span><span class="cluster">Cluster</span></div>
             <p id="institution-map-note" class="data-note"></p>
+            <div id="institution-map-details" class="monitoring-map-details" aria-live="polite"></div>
           </div>
         </div>
       </section>
@@ -603,6 +629,23 @@
             };
           });
         },
+        // Generic grid clustering for weighted points {x, y, weight, item} already in projected space.
+        // Same absolute grid as clusters(): cell size is 1/12 of the view width.
+        clusterPoints(points, view) {
+          const cell = view.width / 12;
+          const groups = new Map();
+          points.forEach((point) => {
+            if (point.x < view.x || point.x > view.x + view.width || point.y < view.y || point.y > view.y + view.height) return;
+            const cellKey = `${Math.floor(point.x / cell)}:${Math.floor(point.y / cell)}`;
+            const group = groups.get(cellKey) || { items: [], x: 0, y: 0, weight: 0 };
+            group.items.push(point.item);
+            group.x += point.x;
+            group.y += point.y;
+            group.weight += point.weight || 0;
+            groups.set(cellKey, group);
+          });
+          return [...groups.values()].map((group) => ({ items: group.items, x: group.x / group.items.length, y: group.y / group.items.length, weight: group.weight }));
+        },
         // Matrix counts for samples inside the extent, palette order first, then other labels.
         legend(located, key) {
           const counts = new Map();
@@ -627,8 +670,10 @@
           metadata: "data/build_metadata.json",
           monitoring: "data/monitoring.json"
         };
+        const SORT_KEYS = ["ca_works", "cited_by", "h_index", "plastic_citations", "plastic_works"];
+        const SORT_FIELDS = { cited_by: "cited_by_count", h_index: "h_index", plastic_citations: "plastic_citations", plastic_works: "plastic_works_count" };
         const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
-        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", institutionViewType: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 174, overscan: 4 } };
+        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", sort: "ca_works", institutionViewType: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
         const $ = (id) => document.getElementById(id);
 
         function escapeHtml(value) {
@@ -646,6 +691,7 @@
           state.yearTo = params.get("year_to") || "";
           state.caBasis = params.get("ca_basis") || "";
           state.oa = ["", "oa", "closed"].includes(params.get("oa") || "") ? (params.get("oa") || "") : "";
+          state.sort = SORT_KEYS.includes(params.get("sort") || "") ? params.get("sort") : "ca_works";
         }
         function writeHash() {
           if (state.tab === "funding") return; // Funding keeps its own hash state (writeFundingHash).
@@ -658,6 +704,7 @@
           if (state.yearTo) params.set("year_to", state.yearTo);
           if (state.caBasis) params.set("ca_basis", state.caBasis);
           if (state.oa) params.set("oa", state.oa);
+          if (state.sort && state.sort !== "ca_works") params.set("sort", state.sort);
           const next = `#${state.tab}${params.toString() ? `?${params.toString()}` : ""}`;
           if (window.location.hash !== next) window.history.replaceState(null, "", next);
         }
@@ -1005,7 +1052,9 @@
           });
           $("institution-type-filter").innerHTML = '<option value="">All institution types</option>' + [...types].sort().map((type) => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`).join("");
           $("institution-filter").innerHTML = '<option value="">All institutions</option>' + [...institutions.values()].sort((a, b) => String(a.name).localeCompare(String(b.name))).map((institution) => `<option value="${escapeHtml(institution.inst_id)}">${escapeHtml(institution.name)}</option>`).join("");
-          $("tag-filter").innerHTML = '<option value="">All tags</option>' + [...tags].sort().map((tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(tag)}</option>`).join("");
+          const sortedTags = AtlasTopics.sortTags([...tags]);
+          const tagOption = (tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(AtlasTopics.label(tag))}</option>`;
+          $("tag-filter").innerHTML = '<option value="">All tags</option>' + `<optgroup label="Research topics">${sortedTags.filter((tag) => !AtlasTopics.isMatrix(tag)).map(tagOption).join("")}</optgroup><optgroup label="Matrices">${sortedTags.filter(AtlasTopics.isMatrix).map(tagOption).join("")}</optgroup>`;
         }
         function applyControls() {
           $("expert-search").value = state.search;
@@ -1016,6 +1065,7 @@
           $("year-to").value = state.yearTo;
           $("ca-basis-filter").value = state.caBasis;
           $("oa-filter").value = state.oa;
+          $("expert-sort").value = state.sort;
         }
         // Lookup maps and per-author summaries are built once per loaded payload; rebuilding
         // them on every keystroke made filtering O(authors x works) (S3.6: 520 ms -> fast).
@@ -1064,7 +1114,9 @@
           const years = works.map((work) => Number(work.year)).filter(Number.isFinite);
           const latest = years.length ? Math.max(...years) : null;
           const recentCount = latest === null ? 0 : works.filter((work) => Number(work.year) >= latest - 4).length;
-          return { ...author, works, tags, institutionRows, types, caInstitutions, basis, recentCount, latest };
+          const topicWeights = AtlasTopics.weights(works).filter(([tag]) => !AtlasTopics.isMatrix(tag));
+          const matrixWeights = AtlasTopics.weights(works.map((work) => ({ domain_tags: (work.facet_tags || []).filter(AtlasTopics.isMatrix) }))).filter(([tag]) => AtlasTopics.isMatrix(tag));
+          return { ...author, works, tags, topicWeights, matrixWeights, institutionRows, types, caInstitutions, basis, recentCount, latest };
         }
         function filteredAuthors() {
           const authors = authorSummaries();
@@ -1081,7 +1133,67 @@
             if (state.oa === "oa" && !author.works.some((work) => work.is_oa)) return false;
             if (state.oa === "closed" && !author.works.every((work) => !work.is_oa)) return false;
             return true;
-          }).sort((a, b) => (b.ca_works_count || 0) - (a.ca_works_count || 0) || (b.work_count || 0) - (a.work_count || 0) || String(a.name).localeCompare(String(b.name)));
+          }).sort(expertComparator(state.sort));
+        }
+        function metricValue(value) {
+          return value === null || value === undefined || value === "" || !Number.isFinite(Number(value)) ? null : Number(value);
+        }
+        function expertComparator(sortKey) {
+          const base = (a, b) => (b.ca_works_count || 0) - (a.ca_works_count || 0) || (b.work_count || 0) - (a.work_count || 0) || String(a.name).localeCompare(String(b.name));
+          const field = SORT_FIELDS[sortKey];
+          if (!field) return base;
+          // Null metrics sort last in either case; ties fall back to the CA-works order.
+          return (a, b) => {
+            const x = metricValue(a[field]);
+            const y = metricValue(b[field]);
+            if (x === null && y === null) return base(a, b);
+            if (x === null) return 1;
+            if (y === null) return -1;
+            return y - x || base(a, b);
+          };
+        }
+        const countFormat = new Intl.NumberFormat("en-US");
+        function metricNumber(value) {
+          const number = metricValue(value);
+          return number === null ? "—" : countFormat.format(number);
+        }
+        function plasticShare(author) {
+          const total = metricValue(author.cited_by_count);
+          const plastic = metricValue(author.plastic_citations);
+          return total && plastic !== null ? Math.round((plastic / total) * 100) : null;
+        }
+        function expertMetricsHtml(author) {
+          const share = plasticShare(author);
+          const part = (key, text) => (state.sort === key ? `<strong>${escapeHtml(text)}</strong>` : escapeHtml(text));
+          return [part("h_index", `h ${metricNumber(author.h_index)}`), part("cited_by", `${metricNumber(author.cited_by_count)} citations`), part("plastic_citations", `${metricNumber(author.plastic_citations)} on plastics (${share === null ? "—" : `${share}%`})`), part("plastic_works", `${metricNumber(author.plastic_works_count)} plastics works`)].join(" · ");
+        }
+        function expertTopicsHtml(author) {
+          if (!author.topicsHtml) {
+            const chips = [...author.topicWeights, ...author.matrixWeights].map(([tag, count]) => AtlasTopics.chip(tag, count));
+            author.topicsHtml = chips.length
+              ? `<div class="expert-topics" aria-label="Research topics with work counts">${chips.join("")}<button class="topic-more" type="button" data-author-id="${escapeHtml(author.author_id)}" hidden>+0 more</button></div>`
+              : '<p class="card-meta">No topic tags yet</p>';
+          }
+          return author.topicsHtml;
+        }
+        // Shows at most two lines of chips; whatever does not fit collapses into a "+N more" button.
+        function fitExpertTopics(root) {
+          root.querySelectorAll(".expert-topics").forEach((box) => {
+            const chips = [...box.querySelectorAll(".topic-chip")];
+            const more = box.querySelector(".topic-more");
+            if (!more || !chips.length) return;
+            const overflows = (element) => element.offsetTop + element.offsetHeight > box.clientHeight + 1;
+            if (!overflows(chips[chips.length - 1])) return;
+            more.hidden = false;
+            let hidden = 0;
+            while (hidden < chips.length - 1) {
+              hidden += 1;
+              chips[chips.length - hidden].hidden = true;
+              more.textContent = `+${hidden} more`;
+              if (!overflows(more)) break;
+            }
+            more.title = chips.slice(chips.length - hidden).map((chip) => chip.textContent.trim()).join(", ");
+          });
         }
         function renderLegacyExperts() {
           const authors = filteredAuthors();
@@ -1095,11 +1207,19 @@
         function renderExperts() {
           const authors = filteredAuthors();
           state.filteredAuthors = authors;
+          updateRowHeight();
           $("expert-count").textContent = `${authors.length} expert${authors.length === 1 ? "" : "s"} shown`;
           const spacer = $("expert-spacer");
           spacer.style.height = `${Math.max(authors.length * state.virtual.rowHeight, authors.length ? 1 : 0)}px`;
           renderVirtualRows();
           if (!authors.length) $("expert-rows").innerHTML = '<p class="empty">No experts match these filters. Try resetting one of the selections.</p>';
+        }
+        // Narrow screens wrap the metrics and affiliation lines more, so their slots are taller.
+        function updateRowHeight() {
+          const height = window.innerWidth < 640 ? 264 : 232;
+          const changed = height !== state.virtual.rowHeight;
+          state.virtual.rowHeight = height;
+          return changed;
         }
         function renderVirtualRows() {
           const list = $("expert-list");
@@ -1109,12 +1229,14 @@
           const end = Math.min(state.filteredAuthors.length, Math.ceil((list.scrollTop + list.clientHeight) / state.virtual.rowHeight) + state.virtual.overscan);
           rows.innerHTML = state.filteredAuthors.slice(start, end).map((author, offset) => {
             const index = start + offset;
-            const tags = (author.tags || []).slice(0, 8).map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("");
             const years = author.first_year && author.last_year ? `${author.first_year}–${author.last_year}` : "Year unavailable";
             const affiliation = author.caInstitutions.length ? author.caInstitutions.map((institution) => institution.name).join(", ") : "No California affiliation";
-            return `<article class="virtual-row" role="listitem" style="transform:translateY(${index * state.virtual.rowHeight}px)"><div class="card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></div><p class="card-meta">${escapeHtml(affiliation)} · ${escapeHtml(years)} · ${escapeHtml(author.recentCount)} in recent 5 years · ${escapeHtml(author.basis)}</p>${author.orcid ? `<p class="card-meta"><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID</a></p>` : ""}${tags ? `<div class="chips" aria-label="Domain tags">${tags}</div>` : ""}</div></article>`;
+            const meta = `${affiliation} · ${years} · ${author.recentCount} in recent 5 years · ${author.basis}`;
+            const orcid = author.orcid ? ` · <a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID</a>` : "";
+            return `<article class="virtual-row" role="listitem" style="transform:translateY(${index * state.virtual.rowHeight}px);height:${state.virtual.rowHeight}px"><div class="card expert-card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></div>${expertTopicsHtml(author)}<p class="expert-metrics">${expertMetricsHtml(author)}${orcid}</p><p class="card-meta expert-affil" title="${escapeHtml(meta)}">${escapeHtml(meta)}</p></div></article>`;
           }).join("");
-          rows.querySelectorAll(".expert-link").forEach((button) => button.addEventListener("click", () => openDrawer(button.dataset.authorId)));
+          fitExpertTopics(rows);
+          rows.querySelectorAll(".expert-link, .topic-more").forEach((button) => button.addEventListener("click", () => openDrawer(button.dataset.authorId)));
         }
         function profileIssueUrl(name, authorId) {
           const title = `Profile issue: ${name || "Researcher"} (${authorId})`;
@@ -1132,14 +1254,16 @@
             const response = await fetch(`data/authors/${encodeURIComponent(authorId)}.json`, { cache: "no-cache" });
             if (!response.ok) throw new Error(`author detail returned HTTP ${response.status}`);
             const detail = await response.json();
-            const author = detail.author || {};
+            const summary = authorSummaries().find((item) => item.author_id === authorId) || {};
+            const author = { ...summary, ...(detail.author || {}) };
             const works = detail.works || [];
+            const drawerTopics = AtlasTopics.weights(works, { matrices: true });
             const institutionIds = [...new Set(works.flatMap((work) => work.institution_ids || []))];
             const institutions = institutionIds.map(institutionById).filter(Boolean);
             const coauthorIds = [...new Set(works.flatMap((work) => (work.author_ids || []).filter((id) => id !== authorId)))];
             $("drawer-title").textContent = author.name || "Researcher";
             $("drawer-issue-link").href = profileIssueUrl(author.name, author.author_id || authorId);
-            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}<h3>Affiliation history</h3><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p><h3>Co-author institutions</h3><p class="detail-meta">${coauthorIds.length ? escapeHtml(coauthorIds.join(", ")) : "No co-author IDs recorded."}</p><h3>Works</h3><ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="chips">${tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
+            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p><p class="expert-metrics" style="display:block">${expertMetricsHtml(author)}</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}<h3>Topics</h3>${drawerTopics.length ? `<div class="topic-chips">${drawerTopics.map(([tag, count]) => AtlasTopics.chip(tag, count)).join("")}</div>` : '<p class="detail-meta">No topic tags yet.</p>'}<h3>Affiliation history</h3><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p><h3>Co-author institutions</h3><p class="detail-meta">${coauthorIds.length ? escapeHtml(coauthorIds.join(", ")) : "No co-author IDs recorded."}</p><h3>Works</h3><ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="topic-chips">${AtlasTopics.sortTags(tags).map((tag) => AtlasTopics.chip(tag)).join("")}</div>` : ""}${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
           } catch (error) {
             $("drawer-content").innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
           }
@@ -1152,8 +1276,24 @@
         function taggedWork(work) {
           return work && work.plastic_related === true;
         }
+        function institutionWorksIndex() {
+          const index = state.data.index;
+          if (lookupCache.instIndex !== index) {
+            lookupCache.instIndex = index;
+            const map = new Map();
+            (index.works || []).forEach((work) => {
+              if (!taggedWork(work)) return;
+              new Set(work.institution_ids || []).forEach((id) => {
+                if (!map.has(id)) map.set(id, []);
+                map.get(id).push(work);
+              });
+            });
+            lookupCache.instWorks = map;
+          }
+          return lookupCache.instWorks;
+        }
         function institutionMetrics(institution) {
-          const works = (state.data.index.works || []).filter((work) => (work.institution_ids || []).includes(institution.inst_id) && taggedWork(work));
+          const works = institutionWorksIndex().get(institution.inst_id) || [];
           const years = works.map((work) => Number(work.year)).filter(Number.isFinite);
           const latestYear = years.length ? Math.max(...years) : null;
           const firstYear = years.length ? Math.min(...years) : null;
@@ -1162,7 +1302,30 @@
           const trendYears = firstYear === null ? [] : Array.from({ length: latestYear - firstYear + 1 }, (_, index) => firstYear + index);
           const series = trendYears.map((year) => byYear.get(year) || 0);
           const recentCutoff = latestYear === null ? null : latestYear - 4;
-          return { institution, works, taggedCount: works.length, recentCount: recentCutoff === null ? 0 : years.filter((year) => year >= recentCutoff).length, trendYears, series };
+          return { institution, works, taggedCount: works.length, recentCount: recentCutoff === null ? 0 : years.filter((year) => year >= recentCutoff).length, trendYears, series, topics: AtlasTopics.weights(works) };
+        }
+        // 100%-stacked bar of topic counts; hue fills only, 2px white gaps come from the segment strokes.
+        function topicBar(entries, name) {
+          const total = entries.reduce((sum, [, count]) => sum + count, 0);
+          if (!total) return '<p class="topic-bar-note">No topic tags yet</p>';
+          let x = 0;
+          const share = (count) => Math.round((count / total) * 100);
+          const segments = entries.map(([tag, count]) => {
+            const width = (count / total) * 1000;
+            const rect = `<rect x="${x.toFixed(2)}" y="0" width="${width.toFixed(2)}" height="14" fill="${AtlasTopics.color(tag)}"><title>${escapeHtml(AtlasTopics.label(tag))}: ${count} work${count === 1 ? "" : "s"} (${share(count)}%)</title></rect>`;
+            x += width;
+            return rect;
+          }).join("");
+          const summary = entries.slice(0, 5).map(([tag, count]) => `${AtlasTopics.label(tag)} ${share(count)}%`).join(", ");
+          return `<svg class="topic-bar" viewBox="0 0 1000 14" preserveAspectRatio="none" role="img" aria-label="${escapeHtml(`Topic mix of ${name}: ${summary}${entries.length > 5 ? ", and others" : ""}`)}">${segments}</svg>`;
+        }
+        function topicChipList(entries, limit) {
+          const shown = entries.slice(0, limit).map(([tag, count]) => AtlasTopics.chip(tag, count)).join("");
+          const rest = entries.length - limit;
+          return shown ? `<div class="topic-chips" aria-label="Top topics with work counts">${shown}${rest > 0 ? `<span class="topic-chip matrix">+${rest} more</span>` : ""}</div>` : "";
+        }
+        function publicationsLink(institutionId) {
+          return `<a class="button-link institution-publications-link" href="sem.html#inst=${encodeURIComponent(institutionId)}">View publications</a>`;
         }
         function sparkline(metric) {
           const values = metric.series;
@@ -1184,29 +1347,93 @@
           updateViews();
           $("expert-list").focus({ preventScroll: true });
         }
-        function clusterMap(metrics) {
-          const mapped = metrics.filter((metric) => metric.institution.ca_flag && Number.isFinite(Number(metric.institution.lat)) && Number.isFinite(Number(metric.institution.lon)));
-          const groups = new Map();
-          mapped.forEach((metric) => {
-            const x = Math.max(3, Math.min(97, ((Number(metric.institution.lon) + 125) / 11) * 100));
-            const y = Math.max(7, Math.min(95, ((42.5 - Number(metric.institution.lat)) / 11) * 100));
-            const key = `${Math.floor(x / 7)}:${Math.floor(y / 7)}`;
-            const group = groups.get(key) || { metrics: [], x: 0, y: 0 };
-            group.metrics.push(metric); group.x += x; group.y += y; groups.set(key, group);
-          });
-          const markers = [...groups.values()].map((group) => {
-            const count = group.metrics.reduce((sum, metric) => sum + metric.taggedCount, 0);
-            const x = group.x / group.metrics.length;
-            const y = group.y / group.metrics.length;
-            const clustered = group.metrics.length > 1;
-            const label = clustered ? `${group.metrics.length} institutions, ${count} tagged works` : `${group.metrics[0].institution.name}, ${count} tagged works`;
-            const ids = group.metrics.map((metric) => metric.institution.inst_id).join(",");
-            return `<button class="institution-map-marker" type="button" data-cluster="${clustered}" data-institution-id="${escapeHtml(clustered ? group.metrics[0].institution.inst_id : ids)}" style="left:${x}%;top:${y}%" aria-label="${escapeHtml(label)}">${escapeHtml(clustered ? group.metrics.length : count)}</button>`;
+        let institutionMapPoints = [];
+        let institutionMapView = null; // null means the statewide view
+        let institutionMapSelection = null; // { ids } for the selected marker or cluster
+        let institutionMapRendered = [];
+        let institutionMapFrame = 0;
+        function institutionMapCurrentView() {
+          return institutionMapView || monitoringMap.viewBox("statewide");
+        }
+        function scheduleInstitutionMapDraw() {
+          if (institutionMapFrame) return;
+          institutionMapFrame = window.requestAnimationFrame(() => { institutionMapFrame = 0; drawInstitutionMap(); });
+        }
+        function institutionClusterKey(cluster) {
+          return cluster.items.map((metric) => metric.institution.inst_id).sort()[0];
+        }
+        function drawInstitutionMap() {
+          if (!state.data) return;
+          ensureCaBasemap();
+          const container = $("institution-map");
+          if (!institutionMapPoints.length) {
+            container.innerHTML = '<p class="empty">No California institutions with coordinates match this filter.</p>';
+            institutionMapRendered = [];
+            return;
+          }
+          const view = institutionMapCurrentView();
+          const clusters = monitoringMap.clusterPoints(institutionMapPoints, view);
+          institutionMapRendered = clusters;
+          const selected = new Set(institutionMapSelection ? institutionMapSelection.ids : []);
+          const focused = document.activeElement && container.contains(document.activeElement) ? document.activeElement.getAttribute("data-cluster-key") : null;
+          const maxWeight = Math.max(1, ...clusters.map((cluster) => cluster.weight));
+          const fontSize = view.width * 0.022;
+          const markers = clusters.map((cluster, index) => {
+            const clustered = cluster.items.length > 1;
+            const radius = view.width * (0.014 + 0.03 * Math.sqrt(cluster.weight / maxWeight));
+            const label = clustered ? `${cluster.items.length} institutions, ${cluster.weight} plastic-related works` : `${cluster.items[0].institution.name}, ${cluster.weight} plastic-related works`;
+            const isSelected = cluster.items.some((metric) => selected.has(metric.institution.inst_id));
+            const halo = isSelected ? `<circle class="marker-halo" cx="${cluster.x}" cy="${cluster.y}" r="${radius * 1.4}"/>` : "";
+            return `<g class="monitoring-marker institution-marker${clustered ? " cluster" : ""}${isSelected ? " selected" : ""}" role="button" tabindex="0" aria-pressed="${isSelected}" aria-label="${escapeHtml(`${label}. Select for details.`)}" data-cluster-index="${index}" data-cluster-key="${escapeHtml(institutionClusterKey(cluster))}"><title>${escapeHtml(label)}</title><circle class="marker-body" cx="${cluster.x}" cy="${cluster.y}" r="${radius}"/>${halo}${clustered ? `<text x="${cluster.x}" y="${cluster.y}" font-size="${fontSize}" text-anchor="middle" dominant-baseline="central">${cluster.items.length}</text>` : ""}</g>`;
           }).join("");
-          $("institution-map").innerHTML = markers || '<p class="empty">No California institutions with coordinates match this filter.</p>';
-          $("institution-map").querySelectorAll(".institution-map-marker").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId.split(",")[0])));
-          const withoutCoordinates = metrics.filter((metric) => metric.institution.ca_flag && (!Number.isFinite(Number(metric.institution.lat)) || !Number.isFinite(Number(metric.institution.lon)))).length;
-          $("institution-map-note").textContent = `${mapped.length} California institution${mapped.length === 1 ? "" : "s"} mapped${withoutCoordinates ? `; ${withoutCoordinates} qualifying institution${withoutCoordinates === 1 ? "" : "s"} lack coordinates.` : "."}`;
+          const basemap = caBasemap
+            ? `<path class="map-state-waters" fill-rule="evenodd" d="${caBasemap.state_waters}"/><path class="map-land" fill-rule="evenodd" d="${caBasemap.land}"/>`
+            : "";
+          container.innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`California institution map: ${institutionMapPoints.length} institutions, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}<g class="monitoring-markers">${markers}</g></svg>`;
+          if (focused !== null) {
+            const marker = [...container.querySelectorAll("[data-cluster-key]")].find((item) => item.getAttribute("data-cluster-key") === focused);
+            (marker || container).focus({ preventScroll: true });
+          }
+          const basemapNote = caBasemapStatus === "failed" ? " Basemap unavailable; markers only." : caBasemap ? "" : " Basemap loading.";
+          $("institution-map-note").textContent = `${institutionMapPoints.length} California institution${institutionMapPoints.length === 1 ? "" : "s"} mapped${institutionMapLacking ? `; ${institutionMapLacking} qualifying institution${institutionMapLacking === 1 ? "" : "s"} lack coordinates` : ""}. Zoom ${monitoringMap.zoomScale(view).toFixed(1)}x; nearby institutions are grouped into numbered clusters that split as you zoom in.${basemapNote}`;
+        }
+        let institutionMapLacking = 0;
+        function renderInstitutionMapDetails() {
+          const panel = $("institution-map-details");
+          const ids = institutionMapSelection ? institutionMapSelection.ids : [];
+          const byId = new Map(institutionMapPoints.map((point) => [point.item.institution.inst_id, point.item]));
+          const metrics = ids.map((id) => byId.get(id)).filter(Boolean).sort((a, b) => b.taggedCount - a.taggedCount);
+          if (!metrics.length) { panel.innerHTML = ""; return; }
+          const shown = metrics.slice(0, 5);
+          const blocks = shown.map((metric) => {
+            const institution = metric.institution;
+            const years = metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : (institution.years || []).length ? `${Math.min(...institution.years)}–${Math.max(...institution.years)}` : "—";
+            const stat = (name, value) => `<div><dt>${name}</dt><dd>${escapeHtml(value)}</dd></div>`;
+            return `<section class="map-inst"><h5>${escapeHtml(institution.name)}</h5><div><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div><dl class="map-inst-stats">${stat("Works", metricNumber(institution.work_count))}${stat("Plastic-related works", metricNumber(metric.taggedCount))}${stat("Authors", metricNumber(institution.author_count))}${stat("Years active", years)}${stat("Recent 5 years", metricNumber(metric.recentCount))}</dl>${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 3)}<div class="institution-actions"><button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institution.inst_id)}">Show experts</button>${publicationsLink(institution.inst_id)}</div></section>`;
+          }).join("");
+          panel.innerHTML = `<div class="map-details-card"><div class="map-details-head"><h4>${metrics.length} institution${metrics.length === 1 ? "" : "s"} selected</h4><div class="map-details-actions">${metrics.length > 1 ? "<button type=\"button\" data-map-fit>Zoom to these</button>" : ""}<button type="button" data-map-close>Close</button></div></div>${blocks}${metrics.length > shown.length ? `<p class="data-note">Showing the ${shown.length} largest of ${metrics.length} institutions; zoom in to separate the rest.</p>` : ""}</div>`;
+        }
+        function selectInstitutionCluster(index) {
+          const cluster = institutionMapRendered[index];
+          if (!cluster) return;
+          institutionMapSelection = { ids: cluster.items.map((metric) => metric.institution.inst_id) };
+          renderInstitutionMapDetails();
+          drawInstitutionMap();
+        }
+        function clusterMap(metrics) {
+          const located = metrics.filter((metric) => metric.institution.ca_flag && monitoringView.coordinates({ lat: metric.institution.lat, lon: metric.institution.lon }) !== null);
+          institutionMapPoints = located.map((metric) => {
+            const [x, y] = monitoringMap.project(Number(metric.institution.lon), Number(metric.institution.lat));
+            return { x, y, weight: metric.taggedCount, item: metric };
+          });
+          institutionMapLacking = metrics.filter((metric) => metric.institution.ca_flag).length - located.length;
+          if (institutionMapSelection) {
+            const available = new Set(institutionMapPoints.map((point) => point.item.institution.inst_id));
+            const ids = institutionMapSelection.ids.filter((id) => available.has(id));
+            institutionMapSelection = ids.length ? { ids } : null;
+          }
+          renderInstitutionMapDetails();
+          drawInstitutionMap();
         }
         function renderInstitutions() {
           const all = (state.data.institutions.institutions || []).map(institutionMetrics).filter((metric) => metric.taggedCount > 0);
@@ -1215,7 +1442,7 @@
           const filtered = all.filter((metric) => !selected || (metric.institution.atlas_type || "other") === selected).sort((a, b) => b.taggedCount - a.taggedCount || b.recentCount - a.recentCount || String(a.institution.name).localeCompare(String(b.institution.name)));
           $("institution-type-chips").innerHTML = [`<button class="chip-button institution-type-chip" type="button" data-institution-type="" aria-pressed="${selected === ""}">All types</button>`, ...types.map((type) => `<button class="chip-button institution-type-chip" type="button" data-institution-type="${escapeHtml(type)}" aria-pressed="${selected === type}">${escapeHtml(type)}</button>`)].join("");
           $("institution-count").textContent = `${filtered.length} qualifying institution${filtered.length === 1 ? "" : "s"} shown`;
-          $("institution-list").innerHTML = filtered.length ? filtered.map((metric) => { const institution = metric.institution; const tags = (institution.domain_tags || []).map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join(""); return `<article class="card institution-card"><div class="card-header"><h3>${escapeHtml(institution.name)}</h3><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div><p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p>${sparkline(metric)}${tags ? `<div class="chips" aria-label="Institution tags">${tags}</div>` : ""}<div class="institution-actions">${institutionExpertLink(institution.inst_id)}</div></article>`; }).join("") : '<p class="empty">No qualifying institutions match this type filter.</p>';
+          $("institution-list").innerHTML = filtered.length ? filtered.map((metric) => { const institution = metric.institution; return `<article class="card institution-card" data-institution-id="${escapeHtml(institution.inst_id)}"><div class="card-header"><h3>${escapeHtml(institution.name)}</h3><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div><p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p><div class="institution-topics">${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 5)}</div>${sparkline(metric)}<div class="institution-actions">${institutionExpertLink(institution.inst_id)}${publicationsLink(institution.inst_id)}</div></article>`; }).join("") : '<p class="empty">No qualifying institutions match this type filter.</p>';
           $("institution-type-chips").querySelectorAll(".institution-type-chip").forEach((button) => button.addEventListener("click", () => { state.institutionViewType = button.dataset.institutionType; renderInstitutions(); }));
           $("institution-list").querySelectorAll(".institution-expert-link").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId)));
           clusterMap(filtered);
@@ -1250,18 +1477,84 @@
           if (monitoringMapFrame) return;
           monitoringMapFrame = window.requestAnimationFrame(() => { monitoringMapFrame = 0; drawMonitoringMap(); });
         }
-        function mapScreen(view) {
-          const svg = document.querySelector("#monitoring-map .monitoring-map-svg");
+        function mapScreen(view, container = $("monitoring-map")) {
+          const svg = container.querySelector("svg.monitoring-map-svg");
           if (!svg) return null;
           const rect = svg.getBoundingClientRect();
           if (!rect.width || !rect.height) return null;
           const scale = Math.min(rect.width / view.width, rect.height / view.height);
           return { rect, scale, offsetX: (rect.width - view.width * scale) / 2, offsetY: (rect.height - view.height * scale) / 2 };
         }
-        function clientToMapView(clientX, clientY, view) {
-          const screen = mapScreen(view);
+        function clientToMapView(clientX, clientY, view, container) {
+          const screen = mapScreen(view, container);
           if (!screen) return null;
           return { x: view.x + (clientX - screen.rect.left - screen.offsetX) / screen.scale, y: view.y + (clientY - screen.rect.top - screen.offsetY) / screen.scale };
+        }
+        // Pointer, wheel and keyboard behaviour shared by the Monitoring and Institutions maps.
+        // hooks: getView(), setView(view), select(clusterIndex).
+        function attachMapInteractions(container, hooks) {
+          let gesture = null;
+          let suppressClick = false;
+          const zoomBy = (factor) => hooks.setView(monitoringMap.zoomView(hooks.getView(), factor));
+          const panBy = (dx, dy) => hooks.setView(monitoringMap.panView(hooks.getView(), dx, dy));
+          container.addEventListener("pointerdown", (event) => {
+            suppressClick = false;
+            if (event.button !== 0) return;
+            gesture = { id: event.pointerId, x: event.clientX, y: event.clientY, dragging: false };
+          });
+          container.addEventListener("pointermove", (event) => {
+            if (!gesture || event.pointerId !== gesture.id) return;
+            const dx = event.clientX - gesture.x;
+            const dy = event.clientY - gesture.y;
+            if (!gesture.dragging) {
+              // Below 4px the gesture is still a click, so markers keep working.
+              if (Math.hypot(dx, dy) < 4) return;
+              gesture.dragging = true;
+              container.setPointerCapture(event.pointerId);
+              container.classList.add("is-panning");
+            }
+            const view = hooks.getView();
+            const screen = mapScreen(view, container);
+            if (!screen) return;
+            hooks.setView(monitoringMap.panView(view, -dx / screen.scale, -dy / screen.scale));
+            gesture.x = event.clientX;
+            gesture.y = event.clientY;
+          });
+          const endGesture = (event) => {
+            if (!gesture || event.pointerId !== gesture.id) return;
+            suppressClick = gesture.dragging;
+            gesture = null;
+            container.classList.remove("is-panning");
+          };
+          container.addEventListener("pointerup", endGesture);
+          container.addEventListener("pointercancel", endGesture);
+          container.addEventListener("click", (event) => {
+            if (suppressClick) { suppressClick = false; return; }
+            const marker = event.target.closest(".monitoring-marker");
+            if (marker) hooks.select(Number(marker.dataset.clusterIndex));
+          });
+          container.addEventListener("wheel", (event) => {
+            event.preventDefault();
+            const view = hooks.getView();
+            const anchor = clientToMapView(event.clientX, event.clientY, view, container);
+            const delta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+            hooks.setView(monitoringMap.zoomView(view, Math.exp(-delta * 0.0015), anchor));
+          }, { passive: false });
+          container.addEventListener("keydown", (event) => {
+            const marker = event.target.closest(".monitoring-marker");
+            if (marker && (event.key === "Enter" || event.key === " ")) {
+              event.preventDefault();
+              hooks.select(Number(marker.dataset.clusterIndex));
+              return;
+            }
+            if (event.target !== container) return;
+            const step = hooks.getView().width * 0.15;
+            const actions = { ArrowLeft: () => panBy(-step, 0), ArrowRight: () => panBy(step, 0), ArrowUp: () => panBy(0, -step), ArrowDown: () => panBy(0, step), "+": () => zoomBy(1.25), "=": () => zoomBy(1.25), "-": () => zoomBy(0.8), _: () => zoomBy(0.8) };
+            const action = actions[event.key];
+            if (!action) return;
+            event.preventDefault();
+            action();
+          });
         }
         function ensureCaBasemap() {
           if (caBasemapStatus !== "idle") return;
@@ -1282,7 +1575,7 @@
               caBasemapStatus = "ready";
             })
             .catch(() => { caBasemapStatus = "failed"; })
-            .then(() => drawMonitoringMap());
+            .then(() => { drawMonitoringMap(); drawInstitutionMap(); });
         }
         function drawMonitoringMap() {
           ensureCaBasemap();
@@ -1534,6 +1827,7 @@
           state.yearTo = $("year-to").value;
           state.caBasis = $("ca-basis-filter").value;
           state.oa = $("oa-filter").value;
+          state.sort = $("expert-sort").value;
           writeHash();
           renderExperts();
         }
@@ -1546,10 +1840,12 @@
             buttons[next].focus();
           });
         });
-        ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter"].forEach((id) => {
+        ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "expert-sort"].forEach((id) => {
           $(id).addEventListener("input", onFilterChange);
           $(id).addEventListener("change", onFilterChange);
         });
+        let resizeFrame = 0;
+        window.addEventListener("resize", () => { if (resizeFrame) return; resizeFrame = window.requestAnimationFrame(() => { resizeFrame = 0; if (!state.data) return; if (updateRowHeight()) renderExperts(); else renderVirtualRows(); }); });
         $("expert-list").addEventListener("scroll", () => window.requestAnimationFrame(renderVirtualRows), { passive: true });
         ["monitoring-tier", "monitoring-search", "monitoring-contributor", "monitoring-matrix", "monitoring-year", "monitoring-region"].forEach((id) => {
           $(id).addEventListener("input", () => { const f = state.monitoringFilters; f.tier = $("monitoring-tier").value; f.search = $("monitoring-search").value.trim(); f.contributor = $("monitoring-contributor").value; f.matrix = $("monitoring-matrix").value; f.year = $("monitoring-year").value; f.region = $("monitoring-region").value; state.monitoringPage = 0; renderMonitoring(); });
@@ -1562,65 +1858,27 @@
         $("monitoring-zoom-out").addEventListener("click", () => zoomMapBy(1 / 1.5));
         $("monitoring-zoom-reset").addEventListener("click", () => { monitoringMapView = null; scheduleMapDraw(); });
         const mapContainer = $("monitoring-map");
-        mapContainer.addEventListener("pointerdown", (event) => {
-          monitoringMapSuppressClick = false;
-          if (event.button !== 0) return;
-          monitoringMapGesture = { id: event.pointerId, x: event.clientX, y: event.clientY, dragging: false };
-        });
-        mapContainer.addEventListener("pointermove", (event) => {
-          if (!monitoringMapGesture || event.pointerId !== monitoringMapGesture.id) return;
-          const dx = event.clientX - monitoringMapGesture.x;
-          const dy = event.clientY - monitoringMapGesture.y;
-          if (!monitoringMapGesture.dragging) {
-            // Below 4px the gesture is still a click, so markers keep working.
-            if (Math.hypot(dx, dy) < 4) return;
-            monitoringMapGesture.dragging = true;
-            mapContainer.setPointerCapture(event.pointerId);
-            mapContainer.classList.add("is-panning");
+        attachMapInteractions(mapContainer, { getView: currentMapView, setView: (view) => { monitoringMapView = view; scheduleMapDraw(); }, select: selectMapCluster });
+        const institutionMapContainer = $("institution-map");
+        attachMapInteractions(institutionMapContainer, { getView: institutionMapCurrentView, setView: (view) => { institutionMapView = view; scheduleInstitutionMapDraw(); }, select: selectInstitutionCluster });
+        $("institution-zoom-in").addEventListener("click", () => { institutionMapView = monitoringMap.zoomView(institutionMapCurrentView(), 1.5); scheduleInstitutionMapDraw(); });
+        $("institution-zoom-out").addEventListener("click", () => { institutionMapView = monitoringMap.zoomView(institutionMapCurrentView(), 1 / 1.5); scheduleInstitutionMapDraw(); });
+        $("institution-zoom-reset").addEventListener("click", () => { institutionMapView = null; scheduleInstitutionMapDraw(); });
+        $("institution-map-details").addEventListener("click", (event) => {
+          const expertButton = event.target.closest(".institution-expert-link");
+          if (expertButton) { openInstitutionExperts(expertButton.dataset.institutionId); return; }
+          if (event.target.closest("[data-map-fit]")) {
+            const byId = new Map(institutionMapPoints.map((point) => [point.item.institution.inst_id, point]));
+            const points = (institutionMapSelection ? institutionMapSelection.ids : []).map((id) => byId.get(id)).filter(Boolean).map((point) => [point.x, point.y]);
+            const fitted = monitoringMap.fitView(points, institutionMapCurrentView());
+            if (fitted) { institutionMapView = fitted; drawInstitutionMap(); }
           }
-          const view = currentMapView();
-          const screen = mapScreen(view);
-          if (!screen) return;
-          monitoringMapView = monitoringMap.panView(view, -dx / screen.scale, -dy / screen.scale);
-          monitoringMapGesture.x = event.clientX;
-          monitoringMapGesture.y = event.clientY;
-          scheduleMapDraw();
-        });
-        const endMapGesture = (event) => {
-          if (!monitoringMapGesture || event.pointerId !== monitoringMapGesture.id) return;
-          monitoringMapSuppressClick = monitoringMapGesture.dragging;
-          monitoringMapGesture = null;
-          mapContainer.classList.remove("is-panning");
-        };
-        mapContainer.addEventListener("pointerup", endMapGesture);
-        mapContainer.addEventListener("pointercancel", endMapGesture);
-        mapContainer.addEventListener("click", (event) => {
-          if (monitoringMapSuppressClick) { monitoringMapSuppressClick = false; return; }
-          const marker = event.target.closest(".monitoring-marker");
-          if (marker) selectMapCluster(Number(marker.dataset.clusterIndex));
-        });
-        mapContainer.addEventListener("wheel", (event) => {
-          event.preventDefault();
-          const view = currentMapView();
-          const anchor = clientToMapView(event.clientX, event.clientY, view);
-          const delta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
-          monitoringMapView = monitoringMap.zoomView(view, Math.exp(-delta * 0.0015), anchor);
-          scheduleMapDraw();
-        }, { passive: false });
-        mapContainer.addEventListener("keydown", (event) => {
-          const marker = event.target.closest(".monitoring-marker");
-          if (marker && (event.key === "Enter" || event.key === " ")) {
-            event.preventDefault();
-            selectMapCluster(Number(marker.dataset.clusterIndex));
-            return;
+          if (event.target.closest("[data-map-close]")) {
+            institutionMapSelection = null;
+            renderInstitutionMapDetails();
+            drawInstitutionMap();
+            institutionMapContainer.focus({ preventScroll: true });
           }
-          if (event.target !== mapContainer) return;
-          const step = currentMapView().width * 0.15;
-          const actions = { ArrowLeft: () => panMapBy(-step, 0), ArrowRight: () => panMapBy(step, 0), ArrowUp: () => panMapBy(0, -step), ArrowDown: () => panMapBy(0, step), "+": () => zoomMapBy(1.25), "=": () => zoomMapBy(1.25), "-": () => zoomMapBy(0.8), _: () => zoomMapBy(0.8) };
-          const action = actions[event.key];
-          if (!action) return;
-          event.preventDefault();
-          action();
         });
         $("monitoring-map-legend").addEventListener("click", (event) => {
           const button = event.target.closest("[data-matrix]");
@@ -1647,8 +1905,8 @@
         $("reset-filters").addEventListener("click", () => { state.search = state.institutionType = state.institution = state.tag = state.yearFrom = state.yearTo = state.caBasis = state.oa = ""; writeHash(); updateViews(); $("expert-search").focus(); });
         $("export-csv").addEventListener("click", () => {
           if (!state.data) return;
-          const header = ["author_id", "name", "work_count", "ca_works_count", "first_year", "last_year", "ca_basis", "domain_tags", "institution_ids"];
-          const rows = filteredAuthors().map((author) => [author.author_id, author.name, author.work_count, author.ca_works_count, author.first_year, author.last_year, author.basis, (author.tags || []).join(";"), (author.institution_ids || []).join(";")]);
+          const header = ["author_id", "name", "work_count", "ca_works_count", "first_year", "last_year", "ca_basis", "domain_tags", "institution_ids", "cited_by_count", "h_index", "plastic_works_count", "plastic_citations", "plastic_citation_share_pct", "topic_counts"];
+          const rows = filteredAuthors().map((author) => [author.author_id, author.name, author.work_count, author.ca_works_count, author.first_year, author.last_year, author.basis, (author.tags || []).join(";"), (author.institution_ids || []).join(";"), author.cited_by_count, author.h_index, author.plastic_works_count, author.plastic_citations, plasticShare(author), author.topicWeights.map(([tag, count]) => `${tag}:${count}`).join(";")]);
           const csv = [header, ...rows].map((row) => row.map((value) => `"${String(value ?? "").replaceAll('"', '""')}"`).join(",")).join("\n");
           const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
           const link = document.createElement("a"); link.href = url; link.download = "ca-plastics-atlas-experts.csv"; link.click(); URL.revokeObjectURL(url);

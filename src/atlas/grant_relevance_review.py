@@ -60,7 +60,17 @@ DETAIL_FIELDS = (
     "url",
 )
 NOTE_MARKER = " | owner: "
-VIEWS = ("Pending", "Low confidence pending", "All", "Owner-confirmed", "Owner-changed")
+VIEWS = (
+    "Pending, not settled by rule",
+    "Pending",
+    "Low confidence pending",
+    "All",
+    "Owner-confirmed",
+    "Owner-changed",
+)
+# Rule bases that decide a grant without the owner (title match or the owner's
+# strong abstract terms, 2026-11-11); see atlas.ingest.grants.normalize.
+RULE_SETTLED = frozenset({"title", "abstract_strong_term"})
 
 
 @dataclass
@@ -186,6 +196,10 @@ def merged_view(
 def in_view(item: dict[str, Any], view: str, search: str = "") -> bool:
     state = item["owner_review"]
     if view == "Pending" and state != "pending":
+        return False
+    if view == "Pending, not settled by rule" and (
+        state != "pending" or item.get("rule_basis") in RULE_SETTLED
+    ):
         return False
     if view == "Low confidence pending" and (state != "pending" or item["confidence"] != "low"):
         return False

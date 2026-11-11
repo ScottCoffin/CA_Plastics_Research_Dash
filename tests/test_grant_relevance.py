@@ -260,3 +260,40 @@ def test_export_without_query_config_keeps_merged_flag(tmp_path: Path) -> None:
     )
     rows = json.loads(output.read_text())["rows"]
     assert {row["start"]: row["plastic_related"] for row in rows}["2024-01-01"] is True
+
+
+def test_strong_abstract_terms_outrank_assisted_calls_but_not_owner() -> None:
+    config = {"version": "t", "core_terms": ["microplastic"]}
+    abstract = "We will quantify micro-plastics and anthropogenic debris on beaches."
+    assert grant_plastic_decision(
+        "Cell biology",
+        "nanoplastic pollution uptake",
+        config,
+        {"G3": False},
+        "G3",
+        owner_reviewed=frozenset(),
+    ) == (True, "abstract_strong_term")
+    haiku_false = {"G1": False, "G2": False}
+    related, basis = grant_plastic_decision(
+        "Beach ecology", abstract, config, haiku_false, "G1", owner_reviewed=frozenset()
+    )
+    assert (related, basis) == (True, "abstract_strong_term")
+    related, basis = grant_plastic_decision(
+        "Beach ecology", abstract, config, haiku_false, "G2", owner_reviewed={"G2"}
+    )
+    assert (related, basis) == (False, "owner")
+    # Plasticity and plastic surgery are not strong terms.
+    related, basis = grant_plastic_decision(
+        "Neural plasticity",
+        "plastic surgery outcomes",
+        config,
+        haiku_false,
+        "G1",
+        owner_reviewed=frozenset(),
+    )
+    assert basis == "reviewed" and related is False
+    # Legacy callers (no owner_reviewed) keep every override authoritative.
+    assert grant_plastic_decision("Beach ecology", abstract, config, haiku_false, "G1") == (
+        False,
+        "reviewed",
+    )

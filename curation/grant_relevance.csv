@@ -2,77 +2,77 @@ grant_key,plastic_related,assist_plastic_related,confidence,reason,reviewer,revi
 005b160e8254ca3b,true,true,high,Plastics replacement from nanocellulose with biodegradable plastic pollution aim,claude-haiku-assist,2026-11-10,pending
 00d9ff048c87bc5e,false,false,high,State water quality planning; microplastic scoping is one of many activities,claude-haiku-assist,2026-11-10,pending
 011fd7b05ae01ba6,false,false,high,PPE ozone sanitization; microplastics only as background motivation,claude-haiku-assist,2026-11-10,pending
-01456d81acd29b23,true,true,low,Microplastic exposure arm is one of three aim 1 exposures in mouse models,claude-haiku-assist,2026-11-10,pending
+01456d81acd29b23,true,true,low,Microplastic exposure arm is one of three aim 1 exposures in mouse models,SC,2026-11-11,confirmed
 01ffa978bd81e20c,false,false,high,Instrument development; no plastic focus in summary,claude-haiku-assist,2026-11-10,pending
 02c8028cb5f20f1d,false,false,high,Microscope acquisition for biomedical use; no plastic focus,claude-haiku-assist,2026-11-10,pending
-03621c42635cb9da,false,false,low,Climate and Vibrio center; microplastics only one of four projects,claude-haiku-assist,2026-11-10,pending
+03621c42635cb9da,true,false,low,Climate and Vibrio center; microplastics only one of four projects,SC,2026-11-11,changed
 03c4c6be4136fc2e,true,true,high,Core producing microplastic reference materials and consensus isolation protocols,claude-haiku-assist,2026-11-10,pending
 03e6fd5be4dcfee4,true,true,high,PHA biopolymer coatings replacing plastic in paper food packaging,claude-haiku-assist,2026-11-10,pending
 04ca4a40a6c2e07d,false,false,high,Particle aggregation physics; plastic pollution only an example,claude-haiku-assist,2026-11-10,pending
 061aa0357272db0b,false,false,high,Cultivated meat bioprocessing; no plastics focus,claude-haiku-assist,2026-11-10,pending
-07c0bf6be709a926,false,false,low,Administrative core of climate center; microplastics only one project area,claude-haiku-assist,2026-11-10,pending
+07c0bf6be709a926,true,false,low,Administrative core of climate center; microplastics only one project area,SC,2026-11-11,changed
 08336d4f9ed9a426,true,true,high,Biodegradable thermoplastics replacing microplastic-generating packaging films,claude-haiku-assist,2026-11-10,pending
 086401e87158e287,true,true,high,Plastic debris microbial communities and fate in pond ecosystems,claude-haiku-assist,2026-11-10,pending
 093d37334cea0c63,true,true,high,Wax coatings replacing plastic coatings in recyclable compostable paper packaging,claude-haiku-assist,2026-11-10,pending
 09498047facc0821,false,false,high,Coastal carbon sensor sharing; no plastics focus,claude-haiku-assist,2026-11-10,pending
 0be0c19b99e8e1f4,false,false,high,SEM instrument acquisition for earth science; no plastics,claude-haiku-assist,2026-11-10,pending
-0c4577435f635cb0,false,false,low,Chemical spill fate in water; plumbing plastics only a secondary material,claude-haiku-assist,2026-11-10,pending
-0d20ef69f64673ac,true,true,low,Furfural chemistry; one aim is PET microplastic depolymerization,claude-haiku-assist,2026-11-10,pending
+0c4577435f635cb0,true,false,low,Chemical spill fate in water; plumbing plastics only a secondary material,SC,2026-11-11,changed
+0d20ef69f64673ac,true,true,low,Furfural chemistry; one aim is PET microplastic depolymerization,SC,2026-11-11,confirmed
 0d3dc3b26e5bb629,true,true,high,Biodegradable microencapsulation replacing polymers that cause microplastic pollution,claude-haiku-assist,2026-11-10,pending
 0d94ad42ddedf2ac,false,false,high,Cyanobacteria toxins; microplastics only one stressor listed,claude-haiku-assist,2026-11-10,pending
 0e2f9a143a0c68f4,true,true,high,Compostable bioplastic film replacing conventional flexible plastic packaging,claude-haiku-assist,2026-11-10,pending
-0eef4290048503b8,false,false,low,Wave particle dynamics; marine debris collection only a motivating application,claude-haiku-assist,2026-11-10,pending
-114983efb9cd9511,true,true,low,Combined exposure modeling includes microplastics and plastic trash burning byproducts,claude-haiku-assist,2026-11-10,pending
-11c1ed2afe866eac,false,false,low,Raman microscope acquisition; microplastics one of several listed uses,claude-haiku-assist,2026-11-10,pending
-127c3b2ddecc4bb7,false,false,low,Engagement core for trash burning study; microplastics one monitoring target,claude-haiku-assist,2026-11-10,pending
+0eef4290048503b8,true,false,low,Wave particle dynamics; marine debris collection only a motivating application,SC,2026-11-11,changed
+114983efb9cd9511,true,true,low,Combined exposure modeling includes microplastics and plastic trash burning byproducts,SC,2026-11-11,confirmed
+11c1ed2afe866eac,true,false,low,Raman microscope acquisition; microplastics one of several listed uses,SC,2026-11-11,changed
+127c3b2ddecc4bb7,true,false,low,Engagement core for trash burning study; microplastics one monitoring target,SC,2026-11-11,changed
 13174128a33b7278,true,true,high,EPSCoR program on microplastic impacts plastic recycling and bio-based polymers,claude-haiku-assist,2026-11-10,pending
 13a29264b340d718,false,false,high,Engineered microorganism testing; plastic pollution only a broader motivation,claude-haiku-assist,2026-11-10,pending
-166bf104b891f9c1,false,false,low,Canopy throughfall particles; plastics not evident in visible abstract,claude-haiku-assist,2026-11-10,pending
+166bf104b891f9c1,true,false,low,Canopy throughfall particles; plastics not evident in visible abstract,SC,2026-11-11,changed
 16fdf27dde1101f6,true,true,high,Microplastic-associated microbial communities in freshwater lake bioreactors,claude-haiku-assist,2026-11-10,pending
 1810c2223d463c8c,false,false,high,Environmental health engagement core; microplastics among many topics,claude-haiku-assist,2026-11-10,pending
 1892ffa6ced80f52,false,false,high,Immunoengineering progress summary; microplastic finding is one result among many,claude-haiku-assist,2026-11-10,pending
-1a905395dd9e100f,true,true,low,Frozen archive analyses target microplastics baseline and a microplastics assay,claude-haiku-assist,2026-11-10,pending
+1a905395dd9e100f,true,true,low,Frozen archive analyses target microplastics baseline and a microplastics assay,SC,2026-11-11,confirmed
 1b92f7f3b98a898f,false,false,high,Wildfire air pollution and Alzheimer; nanoplastics only one aerosol component,claude-haiku-assist,2026-11-10,pending
-1d5f342fc3991073,true,true,low,Ocean tracer theory motivated by microplastics and tested with microplastic-like tracers,claude-haiku-assist,2026-11-10,pending
-1d62fddb4a403b49,false,false,low,Floating particle waves; duplicate of marine debris motivation award,claude-haiku-assist,2026-11-10,pending
-1eb82703d6161e8a,false,false,low,FTIR microscope acquisition; microplastics one of several named uses,claude-haiku-assist,2026-11-10,pending
+1d5f342fc3991073,true,true,low,Ocean tracer theory motivated by microplastics and tested with microplastic-like tracers,SC,2026-11-11,confirmed
+1d62fddb4a403b49,true,false,low,Floating particle waves; duplicate of marine debris motivation award,SC,2026-11-11,changed
+1eb82703d6161e8a,true,false,low,FTIR microscope acquisition; microplastics one of several named uses,SC,2026-11-11,changed
 2160f87c53e87492,true,true,high,Chitin foam replacing expanded polystyrene packaging as biodegradable alternative,claude-haiku-assist,2026-11-10,pending
 22f576bb9dc75814,false,false,high,Confocal Raman instrument acquisition; no plastics focus,claude-haiku-assist,2026-11-10,pending
 267853c778c79485,false,false,high,Fractured media particle transport; microplastics only one contaminant example,claude-haiku-assist,2026-11-10,pending
-26f50454283c0c21,false,false,low,Pilot program core; microplastics one of several possible research questions,claude-haiku-assist,2026-11-10,pending
+26f50454283c0c21,true,false,low,Pilot program core; microplastics one of several possible research questions,SC,2026-11-11,changed
 27db88f0aa6208dc,true,true,high,Microplastic burden in human gut stool and colorectal tissue aims,claude-haiku-assist,2026-11-10,pending
-2807fd682815082b,false,false,low,Canopy throughfall particles; plastics not evident in visible abstract,claude-haiku-assist,2026-11-10,pending
-2888734aa0b06d90,true,true,low,REU geospatial study with marine debris as one of two main disparity focuses,claude-haiku-assist,2026-11-10,pending
+2807fd682815082b,true,false,low,Canopy throughfall particles; plastics not evident in visible abstract,SC,2026-11-11,changed
+2888734aa0b06d90,false,true,low,REU geospatial study with marine debris as one of two main disparity focuses,SC,2026-11-11,changed
 293a22ed8dffd2e4,true,true,high,Caribbean network designing circular economy solutions for plastics,claude-haiku-assist,2026-11-10,pending
-2990f0d33c75b94b,false,false,low,Mass spectrometer acquisition; microplastics one of several research aims,claude-haiku-assist,2026-11-10,pending
-2b9cf8a5c32c3199,false,false,low,Polymer network fracture mechanics; microplastic release only motivation,claude-haiku-assist,2026-11-10,pending
+2990f0d33c75b94b,true,false,low,Mass spectrometer acquisition; microplastics one of several research aims,SC,2026-11-11,changed
+2b9cf8a5c32c3199,true,false,low,Polymer network fracture mechanics; microplastic release only motivation,SC,2026-11-11,changed
 2c33f5def8ac6f90,true,true,high,Polystyrene micro and nanoplastic effects on intestinal models and immunity,claude-haiku-assist,2026-11-10,pending
 2c55fa0ed8c3e5ba,false,false,high,Plasmon polariton physics; microplastic detector only a high school activity,claude-haiku-assist,2026-11-10,pending
 2c68811509c6774d,false,false,high,Nanoparticle tracking analyzer acquisition; no plastics focus,claude-haiku-assist,2026-11-10,pending
-2c7a814d278f807b,true,true,high,Mechanochemical recycling of post-consumer plastics into high value products,claude-haiku-assist,2026-11-10,pending
-2d0ce3af1ea097f6,false,false,low,Seafood contaminant risk study; plastics not evident in visible abstract,claude-haiku-assist,2026-11-10,pending
+2c7a814d278f807b,true,true,high,Mechanochemical recycling of post-consumer plastics into high value products,SC,2026-11-11,confirmed
+2d0ce3af1ea097f6,true,false,low,Seafood contaminant risk study; plastics not evident in visible abstract,SC,2026-11-11,changed
 2e76069a25be3fdc,true,true,high,Deep ocean incubators measure plastic degradation and microbial biodegradation,claude-haiku-assist,2026-11-10,pending
-2e8347e3f7db2859,false,false,low,FTIR microscope acquisition; microplastic ID one of two named uses,claude-haiku-assist,2026-11-10,pending
+2e8347e3f7db2859,true,false,low,FTIR microscope acquisition; microplastic ID one of two named uses,SC,2026-11-11,changed
 2f510ecbede2542d,true,true,high,Biodegradable microencapsulation replacing plastic materials to reduce microplastic pollution,claude-haiku-assist,2026-11-10,pending
 305f8879fba9c196,false,false,high,Persistent pollutants and vascular disease; no plastics focus,claude-haiku-assist,2026-11-10,pending
 33367a0f6ded43c4,false,false,high,Exposure facility core; micro-nanoplastic aerosols only one source,claude-haiku-assist,2026-11-10,pending
 338ea6b87c3e3401,true,true,high,Upcycling PVC PP PET waste into filters and elastomers,claude-haiku-assist,2026-11-10,pending
-33b995beb25460a3,false,false,low,ICP-MS acquisition; microplastics one of several named applications,claude-haiku-assist,2026-11-10,pending
-3428beb7298a9314,false,false,low,Pilot program core; duplicate of investigator development core,claude-haiku-assist,2026-11-10,pending
-348036189b25276d,true,true,low,Buoyant particle transport study with microplastic transport as key application,claude-haiku-assist,2026-11-10,pending
+33b995beb25460a3,true,false,low,ICP-MS acquisition; microplastics one of several named applications,SC,2026-11-11,changed
+3428beb7298a9314,true,false,low,Pilot program core; duplicate of investigator development core,SC,2026-11-11,changed
+348036189b25276d,true,true,low,Buoyant particle transport study with microplastic transport as key application,SC,2026-11-11,confirmed
 34f1b939a7342a32,false,false,high,Ocean surface boundary layer physics; microplastics only a tracer example,claude-haiku-assist,2026-11-10,pending
-36dd6c5dfe33a5d7,false,false,low,Endocrine disruptor and atherosclerosis; plastic additives not framed as focus,claude-haiku-assist,2026-11-10,pending
+36dd6c5dfe33a5d7,true,false,low,Endocrine disruptor and atherosclerosis; plastic additives not framed as focus,SC,2026-11-11,changed
 37010bd80dec8581,false,false,high,Environmental health center; microplastics one of many exposures,claude-haiku-assist,2026-11-10,pending
 382e73c678d090fe,false,false,high,Environmental justice center; microplastics one of many exposures,claude-haiku-assist,2026-11-10,pending
-38fdac2225449671,false,false,low,Canopy throughfall particles; plastics not evident in visible abstract,claude-haiku-assist,2026-11-10,pending
+38fdac2225449671,true,false,low,Canopy throughfall particles; plastics not evident in visible abstract,SC,2026-11-11,changed
 39831f4fce192ff6,false,false,high,Chemistry REU; microplastics one of many research project topics,claude-haiku-assist,2026-11-10,pending
 3bc728c285d12dfc,false,false,high,AI materials institute; plastics not a stated focus,claude-haiku-assist,2026-11-10,pending
 3bf2475fe5c74cd5,true,true,high,Marine plastic debris degradation and persistence from archived samples,claude-haiku-assist,2026-11-10,pending
 3d8f7ee3ccd40eb2,true,true,high,Studies additive release and transformation from weathering plastics in water,claude-haiku-assist,2026-11-10,pending
-3dad1b80bc2d0da4,false,false,low,Instrument acquisition; plastics only appear in truncated marine text,claude-haiku-assist,2026-11-10,pending
-3e8acbe1dfe4e5af,false,false,low,Microplastics one of several exposures in climate and pathogen center project,claude-haiku-assist,2026-11-10,pending
+3dad1b80bc2d0da4,true,false,low,Instrument acquisition; plastics only appear in truncated marine text,SC,2026-11-11,changed
+3e8acbe1dfe4e5af,true,false,low,Microplastics one of several exposures in climate and pathogen center project,SC,2026-11-11,changed
 3ed898beb5b713ba,true,true,high,Universal compatibilization to recycle mixed plastic waste,claude-haiku-assist,2026-11-10,pending
-3f3139510d109f7c,false,false,low,Anaerobic digestion training program; microplastics one of four research foci,claude-haiku-assist,2026-11-10,pending
+3f3139510d109f7c,true,false,low,Anaerobic digestion training program; microplastics one of four research foci,SC,2026-11-11,changed
 4002df64976f4076,false,false,high,Dioxin conference; plastics not a focus,claude-haiku-assist,2026-11-10,pending
 401033449a8e1274,false,false,high,Exposure core facility; micro-nanoplastics one aerosol source among many,claude-haiku-assist,2026-11-10,pending
 401f8de856ecc26b,false,false,high,Teacher program on polymers generally; no plastic pollution or end-of-life focus,claude-haiku-assist,2026-11-10,pending
@@ -91,17 +91,17 @@ grant_key,plastic_related,assist_plastic_related,confidence,reason,reviewer,revi
 4898501df7cbe493,true,true,high,Social study of Great Pacific Garbage Patch and plastic pollution knowledge,claude-haiku-assist,2026-11-10,pending
 48fad90f84da4ae8,false,false,high,Separation instrument acquisition; plastics not a focus,claude-haiku-assist,2026-11-10,pending
 49e19de8b16226d6,true,true,high,Plastic-derived dissolved carbon effects on ocean nutrients and biology,claude-haiku-assist,2026-11-10,pending
-4b0255e9c5dc9100,true,true,low,Biodegradable protein fibers to replace petroleum synthetic fibers that shed microplastics,claude-haiku-assist,2026-11-10,pending
+4b0255e9c5dc9100,true,true,low,Biodegradable protein fibers to replace petroleum synthetic fibers that shed microplastics,SC,2026-11-11,confirmed
 4cb3297d7f649d14,false,false,high,Colloid electrokinetics; microplastics only an example application,claude-haiku-assist,2026-11-10,pending
-4d0aac2c7cc822b6,true,true,low,Biodegradable bio-based material to replace leather and synthetic plastic leather,claude-haiku-assist,2026-11-10,pending
+4d0aac2c7cc822b6,true,true,low,Biodegradable bio-based material to replace leather and synthetic plastic leather,SC,2026-11-11,confirmed
 4e2a800c9a4d9d83,true,true,high,Hemp-derived biodegradable bioplastics with recycling and degradation routes,claude-haiku-assist,2026-11-10,pending
 4e2c48b2b310fbb7,false,false,high,ICP-MS instrument for trace metals; plastics not a focus,claude-haiku-assist,2026-11-10,pending
-4f7cda5d738a30c8,false,false,high,3D printer extruder for plastic pellets; manufacturing not waste or pollution,claude-haiku-assist,2026-11-10,pending
+4f7cda5d738a30c8,false,false,high,3D printer extruder for plastic pellets; manufacturing not waste or pollution,SC,2026-11-11,confirmed
 516496a8cf359aa0,true,true,high,Doctoral project on microplastic exposure effects on mouse intestine,claude-haiku-assist,2026-11-10,pending
 518f1fe6a2a012fb,true,true,high,Tests plastic degradation by microbes in deep ocean water,claude-haiku-assist,2026-11-10,pending
 535d031e72f0f2e0,true,true,high,Plastic litter storage and transport in river networks,claude-haiku-assist,2026-11-10,pending
 548c6baf0ff16a35,false,false,high,Fish collection curation; microplastics one research use among many,claude-haiku-assist,2026-11-10,pending
-5584124f1b89deee,false,false,low,Risk communication study; ocean plastic is one of two test topics,claude-haiku-assist,2026-11-10,pending
+5584124f1b89deee,true,false,low,Risk communication study; ocean plastic is one of two test topics,SC,2026-11-11,changed
 558e65a8d7c23822,true,true,high,Biobased biodegradable textiles with upcycling of waste plastic,claude-haiku-assist,2026-11-10,pending
 55e90124a1ca605b,true,true,high,Plastic recycling and reincarnation of polymers for circular economy,claude-haiku-assist,2026-11-10,pending
 579cbf56ab652b16,true,true,high,Adds marine debris data module to citizen science program,claude-haiku-assist,2026-11-10,pending
@@ -110,11 +110,11 @@ grant_key,plastic_related,assist_plastic_related,confidence,reason,reviewer,revi
 5cfcedb249420a51,true,true,high,Measures plastic carbon versus organic carbon in surface ocean,claude-haiku-assist,2026-11-10,pending
 5d8a7a2b7022ecc5,true,true,high,Plastic-derived dissolved organic carbon effects on nutrients and biological pump,claude-haiku-assist,2026-11-10,pending
 5dd22c3eb3886e36,true,true,high,Tire wear particles and 6PPD-Q lung toxicity,claude-haiku-assist,2026-11-10,pending
-5e1a14f3bf8390bf,true,true,low,Marine snow imaging with quantified microplastics as a stated project component,claude-haiku-assist,2026-11-10,pending
+5e1a14f3bf8390bf,true,true,low,Marine snow imaging with quantified microplastics as a stated project component,SC,2026-11-11,confirmed
 5ebee5852b526871,false,false,high,Air sample analysis platform; microplastics one analyte among many,claude-haiku-assist,2026-11-10,pending
-6014e759127d28e5,false,false,high,Bay nutrient and monitoring funding; plastics not a focus,claude-haiku-assist,2026-11-10,pending
+6014e759127d28e5,true,false,high,Bay nutrient and monitoring funding; plastics not a focus,SC,2026-11-11,changed
 6030338ad983cf92,false,false,high,Plankton survey; no plastic focus,claude-haiku-assist,2026-11-10,pending
-60b6ac8f38befc6c,false,false,low,Bio-based leather alternative; plastic pollution only background,claude-haiku-assist,2026-11-10,pending
+60b6ac8f38befc6c,true,false,low,Bio-based leather alternative; plastic pollution only background,SC,2026-11-11,changed
 618badb4f0cd393e,true,true,high,Nanoplastic transport into the brain via olfactory neurons,claude-haiku-assist,2026-11-10,pending
 63c0498bef663e89,false,false,high,Cancer control program; plastics not an aim,claude-haiku-assist,2026-11-10,pending
 63e2c075e50cc7ea,true,true,high,Plastic degradation in deep ocean water column,claude-haiku-assist,2026-11-10,pending
@@ -127,7 +127,7 @@ grant_key,plastic_related,assist_plastic_related,confidence,reason,reviewer,revi
 69bc7ef90aba12bb,false,false,high,Organic pollutant partitioning; pesticides and PFAS focus; no plastics aim,claude-haiku-assist,2026-11-10,pending
 69f1de1bed137a77,false,false,high,IBD mechanism study; pollution listed only as broad environmental factor,claude-haiku-assist,2026-11-10,pending
 6a76fb828467d441,true,true,high,Biosensor aimed at quantifying plastic particles in human blood serum,claude-haiku-assist,2026-11-10,pending
-6d24bb3e7f896bc4,false,false,low,Metals-focused center; plastic burning emissions one concern among many,claude-haiku-assist,2026-11-10,pending
+6d24bb3e7f896bc4,true,false,low,Metals-focused center; plastic burning emissions one concern among many,SC,2026-11-11,changed
 6e63163c987ed963,true,true,high,Clay-PET nanocomposite to reduce plastic use in packaging,claude-haiku-assist,2026-11-10,pending
 6eec080e6e4fe6a8,true,true,high,Micro-nanoplastic accumulation in human CSF and glymphatic clearance,claude-haiku-assist,2026-11-10,pending
 6f7b25d92cd9e9f9,true,true,high,Transport of microplastic particles in wavy flows,claude-haiku-assist,2026-11-10,pending
@@ -137,11 +137,11 @@ grant_key,plastic_related,assist_plastic_related,confidence,reason,reviewer,revi
 73bad53d22ee883e,false,false,high,Colloid transport physics; microplastic spreading only a motivating example,claude-haiku-assist,2026-11-10,pending
 75299f29cc586cfc,true,true,high,Plastic particle exposure effects on uteroplacental vasculature and fetal growth,claude-haiku-assist,2026-11-10,pending
 758afaf61b1bec87,true,true,high,Emissions and microplastic release from recycled plastic bricks,claude-haiku-assist,2026-11-10,pending
-75ce87ff60e5488f,false,false,low,EPS aggregation of general particles; microplastics only one particle type listed,claude-haiku-assist,2026-11-10,pending
+75ce87ff60e5488f,true,false,low,EPS aggregation of general particles; microplastics only one particle type listed,SC,2026-11-11,changed
 76765fcf5ddfa26b,true,true,high,Engineering PET-degrading enzyme for plastic recycling is the core aim,claude-haiku-assist,2026-11-10,pending
 77a4dcef4cbf3787,true,true,high,Compatibilization to recycle mixed plastic waste is the stated goal,claude-haiku-assist,2026-11-10,pending
 77c4cdf8da908d30,true,true,high,Administrative core of a center whose sole focus is microplastics and health,claude-haiku-assist,2026-11-10,pending
-795288f87627c61e,false,false,low,Polymer network fracture mechanics; plastic pollution is background motivation only,claude-haiku-assist,2026-11-10,pending
+795288f87627c61e,true,false,low,Polymer network fracture mechanics; plastic pollution is background motivation only,SC,2026-11-11,changed
 7a80dcd13ecb60f6,true,true,high,Chemical recycling and enzymatic depolymerization of PET waste,claude-haiku-assist,2026-11-10,pending
 7c02a472316c1781,false,false,high,Jet drop particle enrichment; microplastics mentioned only as one transported particle,claude-haiku-assist,2026-11-10,pending
 7d1ce0f83ace814b,false,false,high,NMR instrument acquisition with no plastics aim,claude-haiku-assist,2026-11-10,pending
@@ -150,14 +150,14 @@ grant_key,plastic_related,assist_plastic_related,confidence,reason,reviewer,revi
 7e48da1770caedb2,true,true,high,Catalytic chemical recycling and upcycling of PVC waste,claude-haiku-assist,2026-11-10,pending
 80efc850ef54a16d,false,false,high,Urban energy and water systems center; no plastics aim visible,claude-haiku-assist,2026-11-10,pending
 82b28b57fa2110e2,true,true,high,Ocean litter and plastic pollution prevention strategy is the project focus,claude-haiku-assist,2026-11-10,pending
-8316331d624cacdd,false,false,low,Community engagement core of environmental health center; trash burning and microplastics one exposure among many,claude-haiku-assist,2026-11-10,pending
-83f5d37e8ae37e5c,true,true,low,Ocean tracer theory explicitly applied to marine microplastic transport as a core test case,claude-haiku-assist,2026-11-10,pending
+8316331d624cacdd,true,false,low,Community engagement core of environmental health center; trash burning and microplastics one exposure among many,SC,2026-11-11,changed
+83f5d37e8ae37e5c,true,true,low,Ocean tracer theory explicitly applied to marine microplastic transport as a core test case,SC,2026-11-11,confirmed
 8457956879f4b46c,false,false,high,Estuarine buoyant transport; microplastics one example of buoyant material,claude-haiku-assist,2026-11-10,pending
 84a569a9893b77c8,false,false,high,Variable-mass centrifuge vibration control; plastic removal named only as application,claude-haiku-assist,2026-11-10,pending
 86b0078e8af73094,true,true,high,End-of-life solutions for agricultural plastic pollution and marine debris,claude-haiku-assist,2026-11-10,pending
 8923bd533a7ea8c5,false,false,high,Research vessel instrument acquisition; marine debris only as hazard to sensor,claude-haiku-assist,2026-11-10,pending
-8ba440710c7a65e8,false,false,low,FTIR microscope acquisition; microplastics one of three listed applications,claude-haiku-assist,2026-11-10,pending
-8cb6c84e203963b3,true,true,low,Biodegradable thermoplastic elastomers modeled as sustainable plastic replacements,claude-haiku-assist,2026-11-10,pending
+8ba440710c7a65e8,true,false,low,FTIR microscope acquisition; microplastics one of three listed applications,SC,2026-11-11,changed
+8cb6c84e203963b3,true,true,low,Biodegradable thermoplastic elastomers modeled as sustainable plastic replacements,SC,2026-11-11,confirmed
 8e04309049498cd1,false,false,high,Fractured media particle transport; microplastics cited only as motivation,claude-haiku-assist,2026-11-10,pending
 9219a56879429ec0,true,true,high,Plastic particle exposure effects on uteroplacental vasculature is the stated focus,claude-haiku-assist,2026-11-10,pending
 93a8a989a58b8004,true,true,high,Waxes developed to replace conventional plastic and PFAS packaging coatings,claude-haiku-assist,2026-11-10,pending
@@ -165,11 +165,11 @@ grant_key,plastic_related,assist_plastic_related,confidence,reason,reviewer,revi
 963cf76d4887ea64,true,true,high,Microbial biocatalyst for deconstructing mixed plastic waste into monomers,claude-haiku-assist,2026-11-10,pending
 98b096e69a32323e,false,false,high,Soil and groundwater particle transport; microplastics one particle class among pathogens,claude-haiku-assist,2026-11-10,pending
 98f9d66d5ba19892,false,false,high,ToF-SIMS instrument acquisition with no plastics aim,claude-haiku-assist,2026-11-10,pending
-9a816f20658240f9,false,false,low,Sequencing instrument acquisition; plastic pollution microbes one of four projects,claude-haiku-assist,2026-11-10,pending
+9a816f20658240f9,true,false,low,Sequencing instrument acquisition; plastic pollution microbes one of four projects,SC,2026-11-11,changed
 9b8843691db57a0a,false,false,high,Bioaerosol instrument acquisition; microplastics one of four listed applications,claude-haiku-assist,2026-11-10,pending
-9bceba6052013969,false,false,low,Supramolecular hybrid polymer chemistry; recyclability mentioned without a plastics replacement aim,claude-haiku-assist,2026-11-10,pending
+9bceba6052013969,true,false,low,Supramolecular hybrid polymer chemistry; recyclability mentioned without a plastics replacement aim,SC,2026-11-11,changed
 9c140d9102607120,true,true,high,Mechanism of tire wear particle and microplastic release from tires,claude-haiku-assist,2026-11-10,pending
-9c2e3f426fc6e437,false,false,low,Caged urea compost fertilizer; plastic relevance limited to avoiding polymer coatings,claude-haiku-assist,2026-11-10,pending
+9c2e3f426fc6e437,true,false,low,Caged urea compost fertilizer; plastic relevance limited to avoiding polymer coatings,SC,2026-11-11,changed
 9c3ac825a38384be,true,true,high,Watershed plastic flux and retention in river networks is the research question,claude-haiku-assist,2026-11-10,pending
 9c63dfa61c16d924,false,false,high,Single-molecule catalyst electrometry; microplastics only in outreach activities,claude-haiku-assist,2026-11-10,pending
 9c7f77608ffabe41,false,false,low,State revolving fund for emerging contaminants; microplastics one class among many,claude-haiku-assist,2026-11-10,pending
@@ -197,7 +197,7 @@ abf443e8b4b33fb7,false,false,low,Emerging contaminants program; plastics one iss
 acf0b0d8f7816888,false,false,low,Toxicology meeting travel support; microplastics one of three sessions,claude-haiku-assist,2026-11-10,pending
 ad74b2c54db43aa0,false,false,high,Algal bloom sensor; microplastics only a possible future application,claude-haiku-assist,2026-11-10,pending
 add8fdef7a3d712c,true,true,high,Recyclable and reprocessable bio-based polymer composites to reduce plastic pollution,claude-haiku-assist,2026-11-10,pending
-ae98d8c85c401723,false,false,low,Ocean acidification education program; marine debris reduction one activity,claude-haiku-assist,2026-11-10,pending
+ae98d8c85c401723,false,false,low,Ocean acidification education program; marine debris reduction one activity,SC,2026-11-11,confirmed
 aec2e1b8f5c4e629,false,false,high,Cultivated fish cell lines; microplastics mentioned only as absent contaminant,claude-haiku-assist,2026-11-10,pending
 b083fa2000c60811,true,true,high,Circular economy network for plastics in the Caribbean and US,claude-haiku-assist,2026-11-10,pending
 b127cb43312c127f,true,true,low,Combined exposure modeling including microplastics and plastic burning byproducts on tribal lands,claude-haiku-assist,2026-11-10,pending
@@ -207,7 +207,7 @@ b313fd654e611a38,true,true,low,Technical assistance to replace single-use plasti
 b3430185a5f2e709,false,false,low,Caged urea compost fertilizer; plastic relevance limited to avoiding polymer coatings,claude-haiku-assist,2026-11-10,pending
 b3b7bb93b3bd4341,true,true,high,Funded pilot statewide microplastics monitoring program,claude-haiku-assist,2026-11-10,pending
 b51a5da90941a949,false,false,high,Emerging contaminants horizon scanning program; plastics not a stated focus,claude-haiku-assist,2026-11-10,pending
-b523ae35af0da9b4,true,true,high,Degradable bioplastic microfluidic devices as plastic replacement with end-of-life focus,claude-haiku-assist,2026-11-10,pending
+b523ae35af0da9b4,true,true,high,Degradable bioplastic microfluidic devices as plastic replacement with end-of-life focus,SC,2026-11-11,confirmed
 b5a57463c8e6a0b2,false,false,high,Coastal aerosol transfer study; microplastics only one of many pollutants,claude-haiku-assist,2026-11-10,pending
 b61b97ecaa77b33e,true,true,high,Plastic nanoparticle sorption of pollutants is the core aim,claude-haiku-assist,2026-11-10,pending
 b7068a7079dd9ed9,false,false,high,Nanotechnology grantee conference; plastics at most one session,claude-haiku-assist,2026-11-10,pending

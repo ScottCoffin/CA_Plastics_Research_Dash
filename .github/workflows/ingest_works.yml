@@ -84,6 +84,21 @@ jobs:
         if: steps.refresh.outputs.status == 'success'
         run: python scripts/label_works.py
 
+      # Owner rules: AT-1 audit labels -> overrides; same name + institution -> author merges.
+      - name: Build curation from owner rules
+        if: steps.refresh.outputs.status == 'success'
+        run: |
+          python scripts/build_audit_overrides.py
+          python scripts/build_author_merges.py
+
+      # Career citations / h-index for the Experts sort (~20 list credits; keeps the old
+      # file on a budget or rate stop).
+      - name: Fetch author metrics
+        if: steps.refresh.outputs.status == 'success'
+        env:
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+        run: python scripts/fetch_author_metrics.py
+
       # Experts/Institutions payloads for the live site (CA-affiliated experts only).
       - name: Export site data
         if: steps.refresh.outputs.status == 'success'
@@ -121,6 +136,9 @@ jobs:
             data/interim/openalex_works_high_water_mark.json \
             data/processed/normalized/*.parquet \
             data/processed/work_labels.parquet \
+            data/processed/author_metrics.parquet \
+            curation/overrides_works.csv \
+            curation/author_merges.csv \
             data/processed/status_history.jsonl \
             docs/normalization_qc.md \
             docs/labels_qc.md \
@@ -129,7 +147,7 @@ jobs:
             site/data/build_metadata.json \
             site/data/institutions.json \
             site/data/institutions.geojson
-          git add -A site/data/authors
+          git add -A site/data/authors site/data/institution_works
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"
           git pull --rebase origin "$DEFAULT_BRANCH"

@@ -71,7 +71,14 @@ pass-through awards is S8.6 and is not part of this schema.
 ## Caveats
 
 **Plastic relevance rule.** `grant_plastic_decision` in `normalize.py` returns
-`(plastic_related, basis)`. A reviewed decision in `curation/grant_relevance.csv`
+`(plastic_related, basis)`. Precedence (owner rule, 2026-11-11): an owner decision (`owner_review` = `confirmed` or
+`changed`) always wins; then a core-term title match; then a strong abstract term
+(`plastic pollution`, `marine debris` (incl. `plastic marine debris`), `plastic debris`,
+`plastic particle(s)`, `tire (tyre) wear particle(s)`, `microplastic(s)`, `micro-plastic(s)`, `nanoplastic(s)` incl.
+`nanoplastic pollution`, `anthropogenic debris`;
+basis `abstract_strong_term`); then the Claude Haiku call; otherwise false. On the
+first 44 owner-reviewed grants the strong-term rule agreed with the owner 41/41.
+A reviewed decision in `curation/grant_relevance.csv`
 (keyed by `grant_key`, columns `plastic_related,assist_plastic_related,confidence,
 reason,reviewer,reviewed_at,owner_review`) wins (basis `reviewed`).
 `assist_plastic_related` keeps the Claude Haiku call permanently; the owner reviews

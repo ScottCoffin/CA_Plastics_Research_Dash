@@ -18,7 +18,7 @@ from __future__ import annotations
 import math
 import re
 import tempfile
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Collection, Iterable, Mapping, Sequence
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
@@ -120,12 +120,25 @@ def _currency(value: object) -> str | None:
     return text.upper()
 
 
+# Owner rule (2026-11-11, from reviewing the Haiku grant calls): an abstract that
+# discusses plastic pollution, plastic or marine debris, plastic particles, micro- or
+# nanoplastics, anthropogenic debris or tire wear particles is almost always a
+# plastic-related grant, so these terms count even when the title does not match.
+STRONG_ABSTRACT_RE = re.compile(
+    r"(?<![a-z])(?:plastic\s+pollution|(?:plastic|marine)\s+debris|plastic\s+particles?"
+    r"|(?:micro|nano)[\s-]?plastics?|anthropogenic\s+debris|ty?i?re[\s-]+wear\s+particles?)"
+    r"(?![a-z])",
+    re.IGNORECASE,
+)
+
+
 def grant_plastic_decision(
     title: str | None,
     abstract: str | None,
     query_config: Mapping[str, Any],
     overrides: Mapping[str, bool] | None = None,
     grant_key: str | None = None,
+    owner_reviewed: Collection[str] | None = None,
 ) -> tuple[bool, str]:
     """Return ``(plastic_related, basis)`` for one grant.
 
@@ -137,10 +150,17 @@ def grant_plastic_decision(
     * ``abstract_mention_only``: only the title plus abstract matches. Unreviewed
       abstract-only mentions are not plastic-related.
     * ``none``: no match.
+
+    When ``owner_reviewed`` is given, only those keys' overrides are owner decisions
+    (basis ``owner``, always win). Other overrides are assisted (Claude Haiku) calls:
+    a title match or a strong abstract term (``STRONG_ABSTRACT_RE``, basis
+    ``abstract_strong_term``) outranks them. Without ``owner_reviewed`` every override
+    wins, as before.
     """
 
-    if overrides is not None and grant_key is not None and grant_key in overrides:
-        return bool(overrides[grant_key]), "reviewed"
+    has_override = overrides is not None and grant_key is not None and grant_key in overrides
+    if has_override and (owner_reviewed is None or grant_key in owner_reviewed):
+        return bool(overrides[grant_key]), "owner" if owner_reviewed is not None else "reviewed"
     title_text = _optional_text(title) or ""
     abstract_text = _optional_text(abstract) or ""
     if (
@@ -148,6 +168,10 @@ def grant_plastic_decision(
         and classify_plastic_text(title_text, query_config).related
     ):
         return True, "title"
+    if owner_reviewed is not None and STRONG_ABSTRACT_RE.search(f"{title_text} {abstract_text}"):
+        return True, "abstract_strong_term"
+    if has_override:
+        return bool(overrides[grant_key]), "reviewed"
     full_text = " ".join(part for part in (title_text, abstract_text) if part)
     if classify_plastic_text(full_text, query_config).related:
         return False, "abstract_mention_only"

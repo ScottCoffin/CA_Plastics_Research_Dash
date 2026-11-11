@@ -37,7 +37,7 @@ def main() -> None:
     }
     assert qualifying, "fixture has no tagged institutions"
     assert "I84218800" in qualifying, "California fixture institution is absent"
-    assert "clusterMap" in html and "institution-map-marker" in html
+    assert "clusterMap" in html and "institution-marker" in html
     print(
         f"S3.4 acceptance passed: {len(qualifying)} qualifying institutions, "
         "leaderboard, trends, type chips, map, and Experts links verified"

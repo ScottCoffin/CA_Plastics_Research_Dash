@@ -21,7 +21,7 @@ import gzip
 import json
 import re
 import unicodedata
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Collection, Iterable, Mapping, Sequence
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -334,6 +334,7 @@ def apply_plastic_decisions(
     rows: Sequence[dict[str, Any]],
     query_config: Mapping[str, Any],
     overrides: Mapping[str, bool] | None = None,
+    owner_reviewed: Collection[str] | None = None,
 ) -> None:
     """Set ``plastic_related`` on each merged row in place (see ``grant_plastic_decision``)."""
 
@@ -344,6 +345,7 @@ def apply_plastic_decisions(
             query_config,
             overrides=overrides,
             grant_key=row.get("grant_key"),
+            owner_reviewed=owner_reviewed,
         )
 
 
@@ -378,6 +380,7 @@ def build_from_paths(
     generated_at: str,
     query_config: Mapping[str, Any] | None = None,
     relevance: Mapping[str, bool] | None = None,
+    owner_reviewed: Collection[str] | None = None,
 ) -> dict[str, Any]:
     """Write ``output`` from the Parquet inputs and return a count-only summary.
 
@@ -387,7 +390,7 @@ def build_from_paths(
 
     rows = read_merged(merged)
     if query_config is not None:
-        apply_plastic_decisions(rows, query_config, relevance)
+        apply_plastic_decisions(rows, query_config, relevance, owner_reviewed)
     payload = build_payload(rows, read_institutions(institutions), generated_at=generated_at)
     map_rows = None
     if dedupe_map is not None and dedupe_map.exists():

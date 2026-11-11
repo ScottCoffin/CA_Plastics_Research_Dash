@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Systematic evidence map · CA Plastics Research Atlas</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17324d;
+        --muted: #536879;
+        --brand: #075a46;
+        --brand-dark: #043e32;
+        --surface: #ffffff;
+        --canvas: #eef6f7;
+        --line: #c8d8dc;
+        --focus: #c45100;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--canvas);
+      }
+      * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
+      body { margin: 0; min-width: 18rem; line-height: 1.5; }
+      a { color: var(--brand-dark); }
+      button, input, select { font: inherit; min-height: 2.75rem; }
+      button { cursor: pointer; }
+      :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+      .skip-link {
+        position: absolute; left: 0.75rem; top: 0.75rem; z-index: 5;
+        transform: translateY(-150%); padding: 0.6rem 0.8rem; border-radius: 0.35rem;
+        color: #fff; background: var(--brand-dark);
+      }
+      .skip-link:focus { transform: translateY(0); }
+      .site-header { color: #fff; background: var(--brand-dark); }
+      .header-inner, .page-main { width: min(74rem, calc(100% - 2rem)); margin: 0 auto; }
+      .header-inner { padding: 1.25rem 0 1rem; }
+      .crumbs a { color: #d5f2e8; font-weight: 600; }
+      .crumbs a:focus-visible { outline-color: #ffd7b8; }
+      .eyebrow { margin: 0.5rem 0 0; color: #bfe8d9; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      h1 { margin: 0.25rem 0 0.4rem; font-size: clamp(1.5rem, 5vw, 2.4rem); line-height: 1.15; overflow-wrap: anywhere; }
+      .tagline { max-width: 50rem; margin: 0; color: #e3f4ef; }
+      .header-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-top: 1rem; color: #d1eee5; font-size: 0.9rem; }
+      .status-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.6rem; border-radius: 999px; color: #083d31; background: #d9f2e9; font-weight: 700; }
+      .status-pill[data-state="error"] { color: #6b2100; background: #ffe3d3; }
+      .page-main { padding: 1rem 0 3rem; }
+      .panel { margin-top: 1rem; padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid var(--line); border-radius: 0.75rem; background: var(--surface); box-shadow: 0 0.5rem 1.75rem rgb(23 50 77 / 7%); }
+      h2 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 3vw, 1.6rem); }
+      h3 { margin: 0; font-size: 1.02rem; overflow-wrap: anywhere; }
+      .panel-intro { margin: 0 0 0.75rem; color: var(--muted); }
+      .muted { color: var(--muted); }
+      .notice { margin-top: 1.25rem; font-size: 0.92rem; }
+      .page-footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+      .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: 0.6rem; }
+      .metric { margin: 0; padding: 0.6rem 0.75rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #f7fbfb; }
+      .metric dt { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
+      .metric dd { margin: 0; font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+      .metric small { display: block; color: var(--muted); font-size: 0.8rem; }
+      .tools { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 0.5rem 0 0.75rem; }
+      .btn {
+        padding: 0.4rem 0.8rem; border: 1px solid #8da7af; border-radius: 0.4rem;
+        color: var(--brand-dark); background: #fff; font-weight: 600;
+      }
+      .btn[aria-pressed="true"] { background: #e1f1ee; border-color: var(--brand); }
+      .heat-scroll { overflow-x: auto; padding: 0.25rem 0 0.6rem; border-radius: 0.25rem; }
+      .heat-grid { display: grid; gap: 2px; min-width: max-content; background: #fff; }
+      .heat-corner, .heat-head, .heat-year { color: var(--muted); font-size: 0.78rem; font-weight: 700; align-self: end; text-align: center; }
+      .heat-corner { text-align: left; }
+      .heat-year.vertical { writing-mode: vertical-rl; transform: rotate(180deg); height: 3.2rem; margin: 0 auto; font-weight: 600; font-size: 0.72rem; }
+      .heat-label {
+        position: sticky; left: 0; z-index: 1; display: flex; align-items: center; gap: 0.4rem;
+        padding: 0.2rem 0.4rem 0.2rem 0; background: var(--surface); font-size: 0.86rem; font-weight: 600;
+      }
+      .heat-label .topic-dot { width: 0.6rem; height: 0.6rem; border-radius: 999px; flex: none; }
+      .heat-foot { color: var(--muted); }
+      .heat-cell {
+        min-height: 2.25rem; width: 100%; padding: 0; border: 0; border-radius: 2px;
+        font-size: 0.82rem; font-weight: 700; font-variant-numeric: tabular-nums;
+      }
+      .heat-cell.is-selected { box-shadow: inset 0 0 0 3px var(--focus); }
+      .heat-total, .heat-sum { color: var(--ink); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; align-self: center; font-size: 0.86rem; }
+      .heat-sum { color: var(--muted); }
+      .table-scroll { overflow-x: auto; }
+      .sem-table { border-collapse: collapse; font-size: 0.85rem; min-width: max-content; }
+      .sem-table caption { text-align: left; color: var(--muted); padding-bottom: 0.4rem; }
+      .sem-table th, .sem-table td { border: 1px solid var(--line); padding: 0.3rem 0.45rem; text-align: right; font-variant-numeric: tabular-nums; }
+      .sem-table th { font-weight: 700; background: #f7fbfb; }
+      .sem-table th[scope="row"] { text-align: left; white-space: nowrap; }
+      .filters { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-end; margin: 0.5rem 0 0.75rem; }
+      .field { display: flex; flex-direction: column; gap: 0.25rem; flex: 1 1 10rem; min-width: 0; }
+      .field.search { flex: 2 1 16rem; }
+      .field.check { flex: 0 0 auto; flex-direction: row; align-items: center; min-height: 2.75rem; }
+      .field label { font-size: 0.85rem; font-weight: 700; }
+      .field input[type="search"], .field select {
+        width: 100%; padding: 0.5rem 0.6rem; border: 1px solid #8da7af; border-radius: 0.35rem; color: var(--ink); background: #fff;
+      }
+      .field input[type="checkbox"] { width: 1.2rem; height: 1.2rem; margin: 0 0.4rem 0 0; }
+      .list-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; justify-content: space-between; margin: 0.5rem 0; color: var(--muted); }
+      .cell-banner { padding: 0.5rem 0.75rem; border-radius: 0.4rem; background: #fff4ec; border: 1px solid #f2c9a8; color: #6b2100; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: space-between; }
+      .cell-banner button { padding: 0.25rem 0.7rem; min-height: 2.25rem; }
+      .pub-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+      .pub { padding: 0.8rem 0.95rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fff; }
+      .pub-meta { margin: 0.25rem 0; color: var(--muted); font-size: 0.88rem; display: flex; flex-wrap: wrap; gap: 0.2rem 0.5rem; align-items: center; }
+      .pub-authors { margin: 0.2rem 0 0.45rem; font-size: 0.9rem; overflow-wrap: anywhere; }
+      .link-btn { min-height: 2.25rem; padding: 0.1rem 0.4rem; border: 0; background: transparent; color: var(--brand-dark); font-weight: 700; text-decoration: underline; }
+      .badge { display: inline-block; padding: 0.05rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+      .badge.oa { color: #083d31; background: #d9f2e9; }
+      .badge.plastic { color: #6b2100; background: #ffe3d3; }
+      .topic-chips { margin: 0.1rem 0 0.5rem; }
+      .abstract summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; font-weight: 700; min-height: 2.25rem; display: flex; align-items: center; }
+      .abstract p, .no-abstract { margin: 0.2rem 0 0; font-size: 0.93rem; white-space: pre-line; overflow-wrap: anywhere; }
+      .no-abstract { color: var(--muted); font-style: italic; }
+      .show-more { margin-top: 0.9rem; }
+      .picker-search { margin: 0.5rem 0; max-width: 32rem; }
+      .picker-search input { width: 100%; padding: 0.5rem 0.6rem; border: 1px solid #8da7af; border-radius: 0.35rem; background: #fff; }
+      .inst-list { list-style: none; margin: 0.75rem 0 0; padding: 0; display: grid; gap: 0.45rem; }
+      .inst-list li { padding: 0.5rem 0.75rem; border: 1px solid var(--line); border-radius: 0.45rem; background: #fff; }
+      .inst-list a { font-weight: 700; overflow-wrap: anywhere; }
+      .inst-meta { display: block; color: var(--muted); font-size: 0.85rem; }
+      .unknown-note { color: #6b2100; font-weight: 600; }
+      @media (max-width: 40rem) {
+        .metric dd { font-size: 1.2rem; }
+        .panel { border-radius: 0.6rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html#institutions">&larr; Back to Institutions</a></nav>
+        <p class="eyebrow">Systematic evidence map</p>
+        <h1 id="inst-name">Systematic evidence map</h1>
+        <p class="tagline" id="inst-meta"></p>
+        <div class="header-meta">
+          <span id="sem-status" class="status-pill" role="status" aria-live="polite">Loading…</span>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="page-main">
+      <noscript><section class="panel"><p>This page needs JavaScript to draw the evidence map.</p></section></noscript>
+
+      <section id="picker" class="panel" aria-labelledby="picker-h" hidden>
+        <h2 id="picker-h">Choose an institution</h2>
+        <p id="picker-note" class="panel-intro">Pick an institution to open its systematic evidence map.</p>
+        <div class="picker-search">
+          <label for="picker-search"><strong>Search institutions</strong></label>
+          <input id="picker-search" type="search" autocomplete="off" aria-describedby="picker-count">
+        </div>
+        <p id="picker-count" class="muted" role="status"></p>
+        <ul id="picker-list" class="inst-list"></ul>
+      </section>
+
+      <div id="sem" hidden>
+        <section class="panel" aria-labelledby="summary-h">
+          <h2 id="summary-h">Summary</h2>
+          <p class="panel-intro">Every publication linked to this institution in the Atlas snapshot, tagged by research topic and sample matrix.</p>
+          <dl id="metrics" class="metrics"></dl>
+        </section>
+
+        <section class="panel" aria-labelledby="topic-h">
+          <h2 id="topic-h">Topic by year</h2>
+          <p class="panel-intro">Each cell counts publications in a topic and year. A publication with several topics appears in each of its rows, so row totals can exceed the publication count. Column totals count each publication once. Select a cell to filter the list below.</p>
+          <div class="tools"><button type="button" class="btn table-toggle" data-kind="domain" aria-pressed="false">View heatmap as table</button></div>
+          <div id="topic-heat"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="matrix-h">
+          <h2 id="matrix-h">Matrix by year</h2>
+          <p class="panel-intro">Publications by sample matrix (the facet tags) and year. Select a cell to filter the list below.</p>
+          <div class="tools"><button type="button" class="btn table-toggle" data-kind="facet" aria-pressed="false">View heatmap as table</button></div>
+          <div id="matrix-heat"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="pubs-h">
+          <h2 id="pubs-h">Publications</h2>
+          <form class="filters" role="search" onsubmit="return false">
+            <div class="field search">
+              <label for="f-query">Search titles, abstracts and authors</label>
+              <input id="f-query" type="search" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="f-topic">Topic</label>
+              <select id="f-topic"></select>
+            </div>
+            <div class="field check">
+              <input id="f-plastic" type="checkbox">
+              <label for="f-plastic">Plastic-related only</label>
+            </div>
+            <div class="field">
+              <label for="f-from">Year from</label>
+              <select id="f-from"></select>
+            </div>
+            <div class="field">
+              <label for="f-to">Year to</label>
+              <select id="f-to"></select>
+            </div>
+            <div class="field">
+              <label for="f-sort">Sort by</label>
+              <select id="f-sort">
+                <option value="newest">Newest first</option>
+                <option value="cited">Most cited</option>
+                <option value="title">Title (A to Z)</option>
+              </select>
+            </div>
+            <div class="field check">
+              <button type="button" id="f-reset" class="btn">Reset filters</button>
+            </div>
+          </form>
+          <div id="cell-banner" class="cell-banner" hidden>
+            <span id="cell-text"></span>
+            <button type="button" class="btn" data-clear-cell>Clear selection</button>
+          </div>
+          <div class="list-meta">
+            <p id="count-line" role="status" aria-live="polite" style="margin:0"></p>
+            <div class="tools" style="margin:0">
+              <button type="button" class="btn" id="abs-expand">Expand all abstracts</button>
+              <button type="button" class="btn" id="abs-collapse">Collapse all abstracts</button>
+            </div>
+          </div>
+          <ol id="pub-list" class="pub-list"></ol>
+          <div id="more-wrap" class="show-more" hidden>
+            <button type="button" id="show-more" class="btn">Show more</button>
+          </div>
+        </section>
+      </div>
+
+      <p class="notice"><strong>Disclaimer:</strong> Independent project; not an official OEHHA or State product.</p>
+      <footer class="page-footer">
+        <p>Publication records come from the Atlas static snapshot. Institution pages are not a complete census of an institution's output.</p>
+        <p><a href="index.html#institutions">Back to Institutions</a></p>
+      </footer>
+    </main>
+
+    <script src="assets/topics.js"></script>
+    <script id="sem-app">
+      "use strict";
+
+      // ---- Constants -------------------------------------------------------
+      const UNTAGGED = "__untagged__";
+      const PAGE_SIZE = 100;
+      const PROGRESSIVE_ABOVE = 300;
+      const AUTHOR_PREVIEW = 8;
+      const HEAT_LOW = [0xea, 0xf2, 0xfb];
+      const HEAT_HIGH = [0x0b, 0x4f, 0x9c];
+      const HEAT_ZERO = "#f3f5f6";
+      const INK_DARK = "#17324d";
+      const UNTAGGED_COLOR = "#8a9499";
+      const TYPE_LABELS = {
+        UC: "UC campus",
+        CSU: "CSU campus",
+        other: "Other institution",
+        "nonprofit/NGO": "Nonprofit or NGO",
+        private: "Private",
+        federal: "Federal agency",
+        company: "Company",
+        "local-agency": "Local agency",
+        "state-agency": "State agency",
+        "other-public": "Other public body"
+      };
+
+      // ---- Pure helpers (also exercised from Node in tests/test_sem_page.py) ---
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+      }
+
+      // Raw institution id from "#inst=" (preferred) or "?inst=". Empty string when absent.
+      function instParam(hash, search) {
+        const fromHash = new URLSearchParams(String(hash || "").replace(/^#/, "")).get("inst");
+        const fromQuery = new URLSearchParams(String(search || "").replace(/^\?/, "")).get("inst");
+        return String(fromHash || fromQuery || "").trim();
+      }
+      function isValidInstId(raw) {
+        return /^[A-Za-z0-9]{1,40}$/.test(String(raw || ""));
+      }
+
+      function safeUrl(url) {
+        const text = String(url || "").trim();
+        return /^https?:\/\//i.test(text) ? text : "";
+      }
+      function workHref(work) {
+        return safeUrl(work.doi) || (work.work_id ? `https://openalex.org/${encodeURIComponent(work.work_id)}` : "");
+      }
+      function typeLabel(type) {
+        if (!type) return "";
+        return TYPE_LABELS[type] || String(type).replace(/[-_]+/g, " ");
+      }
+      function formatNumber(value) {
+        return Number(value || 0).toLocaleString("en-US");
+      }
+
+      function keyLabel(key) {
+        return key === UNTAGGED ? "Untagged" : AtlasTopics.label(key);
+      }
+      function keyColor(key) {
+        return key === UNTAGGED ? UNTAGGED_COLOR : AtlasTopics.color(key);
+      }
+      function isMatrixKey(tag) {
+        return AtlasTopics.isMatrix(tag);
+      }
+      function authorsOf(work) {
+        return Array.isArray(work.author_names) ? work.author_names.filter((a) => typeof a === "string" && a.trim()) : [];
+      }
+      function workYear(work) {
+        const y = Number(work.year);
+        return Number.isInteger(y) && y > 0 ? y : null;
+      }
+      function toYear(value) {
+        const y = Number.parseInt(value, 10);
+        return Number.isInteger(y) ? y : null;
+      }
+
+      // Domain (topic) keys for a work; works with no topic tag fall into UNTAGGED.
+      function domainKeys(work) {
+        const tags = [...new Set((work.domain_tags || []).filter((t) => t && !isMatrixKey(t)))];
+        return tags.length ? tags : [UNTAGGED];
+      }
+      // Matrix keys for a work (facet_tags "matrix:*").
+      function matrixKeys(work) {
+        return [...new Set((work.facet_tags || []).filter((t) => isMatrixKey(t)))];
+      }
+
+      function yearSpan(works) {
+        const years = works.map(workYear).filter((y) => y !== null);
+        if (!years.length) return { min: null, max: null, list: [] };
+        const min = Math.min(...years);
+        const max = Math.max(...years);
+        const list = [];
+        for (let y = min; y <= max; y += 1) list.push(y);
+        return { min, max, list };
+      }
+
+      // Heatmap columns: one per year from EARLY_YEAR on; sparse earlier years share one
+      // "Before 2000" column (key BEFORE) so the grid opens on the dense recent years.
+      const EARLY_YEAR = 2000;
+      const BEFORE = 0;
+      function heatColumn(year) {
+        if (year === null) return null;
+        return year < EARLY_YEAR ? BEFORE : year;
+      }
+      function columnLabel(col) {
+        return col === BEFORE ? `Before ${EARLY_YEAR}` : String(col);
+      }
+      function heatColumns(works) {
+        const span = yearSpan(works);
+        if (!span.list.length) return [];
+        const cols = span.min < EARLY_YEAR ? [BEFORE] : [];
+        for (let y = Math.max(span.min, EARLY_YEAR); y <= span.max; y += 1) cols.push(y);
+        return cols;
+      }
+
+      // Row keys present in the works, in AtlasTopics order, with UNTAGGED last when used.
+      function presentKeys(works, keysOf) {
+        const set = new Set();
+        let untagged = false;
+        works.forEach((work) => {
+          keysOf(work).forEach((key) => {
+            if (key === UNTAGGED) untagged = true;
+            else set.add(key);
+          });
+        });
+        const keys = AtlasTopics.sortTags([...set]);
+        if (untagged) keys.push(UNTAGGED);
+        return keys;
+      }
+
+      // Heatmap matrix: rows = keys, columns = every year from min to max (empty years kept).
+      // Cell = number of works with that key and year. Works without a valid year are not in the grid.
+      function buildHeatmap(works, keysOf) {
+        const columns = heatColumns(works);
+        const keys = presentKeys(works, keysOf);
+        const yearIndex = new Map(columns.map((y, i) => [y, i]));
+        const rows = new Map(keys.map((key) => [key, { key, label: keyLabel(key), color: keyColor(key), counts: columns.map(() => 0), total: 0 }]));
+        const colTotals = columns.map(() => 0);
+        let total = 0;
+        let max = 0;
+        works.forEach((work) => {
+          const year = heatColumn(workYear(work));
+          if (year === null || !yearIndex.has(year)) return;
+          const col = yearIndex.get(year);
+          const keysHere = [...new Set(keysOf(work))];
+          if (!keysHere.length) return;
+          keysHere.forEach((key) => {
+            const row = rows.get(key);
+            row.counts[col] += 1;
+            row.total += 1;
+            if (row.counts[col] > max) max = row.counts[col];
+          });
+          colTotals[col] += 1;
+          total += 1;
+        });
+        return { years: columns, rows: keys.map((key) => rows.get(key)), colTotals, total, max };
+      }
+
+      // Sequential ramp: 0 is a neutral grey, counts ramp from light to dark blue.
+      function heatFill(count, max) {
+        if (!count) return HEAT_ZERO;
+        const t = 0.12 + 0.88 * (max > 0 ? count / max : 1);
+        const hex = HEAT_LOW.map((v, i) => Math.round(v + (HEAT_HIGH[i] - v) * t))
+          .map((v) => v.toString(16).padStart(2, "0"))
+          .join("");
+        return `#${hex}`;
+      }
+      function luminance(hex) {
+        const channels = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+          .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+        return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+      }
+      function contrastRatio(a, b) {
+        const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+        return (hi + 0.05) / (lo + 0.05);
+      }
+      function inkFor(background) {
+        return contrastRatio(background, "#ffffff") >= contrastRatio(background, INK_DARK) ? "#ffffff" : INK_DARK;
+      }
+
+      function matchesQuery(work, query) {
+        const terms = String(query || "").toLowerCase().split(/\s+/).filter(Boolean);
+        if (!terms.length) return true;
+        const haystack = [work.title, work.abstract, authorsOf(work).join(" ")].join(" ").toLowerCase();
+        return terms.every((term) => haystack.includes(term));
+      }
+      function matchesCell(work, cell) {
+        if (!cell) return true;
+        if (heatColumn(workYear(work)) !== cell.year) return false;
+        const keys = cell.kind === "facet" ? matrixKeys(work) : domainKeys(work);
+        return keys.includes(cell.key);
+      }
+      // Filters compose with AND: heatmap cell, topic, plastic-only, year range, text query.
+      function filterWorks(works, filters = {}) {
+        const from = toYear(filters.yearFrom);
+        const to = toYear(filters.yearTo);
+        return works.filter((work) => {
+          if (filters.plasticOnly && work.plastic_related !== true) return false;
+          if (filters.topic && !domainKeys(work).includes(filters.topic)) return false;
+          if (from !== null || to !== null) {
+            const year = workYear(work);
+            if (year === null) return false;
+            if (from !== null && year < from) return false;
+            if (to !== null && year > to) return false;
+          }
+          if (!matchesCell(work, filters.cell)) return false;
+          return matchesQuery(work, filters.query);
+        });
+      }
+
+      function compareText(a, b) {
+        return String(a || "").localeCompare(String(b || ""), "en", { sensitivity: "base" });
+      }
+      function sortWorks(list, sort) {
+        const byYearDesc = (a, b) => (workYear(b) || 0) - (workYear(a) || 0);
+        const byTitle = (a, b) => compareText(a.title, b.title);
+        const comparers = {
+          cited: (a, b) => (Number(b.cited_by_count) || 0) - (Number(a.cited_by_count) || 0) || byYearDesc(a, b) || byTitle(a, b),
+          title: (a, b) => byTitle(a, b) || byYearDesc(a, b),
+          newest: (a, b) => byYearDesc(a, b) || compareText(b.pub_date, a.pub_date) || byTitle(a, b)
+        };
+        return [...list].sort(comparers[sort] || comparers.newest);
+      }
+
+      function summarize(works) {
+        const names = new Set();
+        works.forEach((work) => authorsOf(work).forEach((name) => names.add(name.replace(/\s+/g, " ").trim().toLowerCase())));
+        const years = works.map(workYear).filter((y) => y !== null);
+        const oa = works.filter((work) => work.is_oa === true).length;
+        return {
+          publications: works.length,
+          plastic: works.filter((work) => work.plastic_related === true).length,
+          citations: works.reduce((sum, work) => sum + (Number(work.cited_by_count) || 0), 0),
+          authors: names.size,
+          yearMin: years.length ? Math.min(...years) : null,
+          yearMax: years.length ? Math.max(...years) : null,
+          yearsWithOutput: new Set(years).size,
+          oaCount: oa,
+          oaShare: works.length ? oa / works.length : 0
+        };
+      }
+
+      function visibleCount(total, shown) {
+        return total <= PROGRESSIVE_ABOVE ? total : Math.min(total, shown);
+      }
+
+      // ---- Page state and rendering -------------------------------------------
+      const $ = (id) => document.getElementById(id);
+      const DEFAULT_FILTERS = { query: "", topic: "", plasticOnly: false, yearFrom: "", yearTo: "", sort: "newest", cell: null };
+      const S = {
+        inst: "",
+        institution: null,
+        works: [],
+        filtered: [],
+        topicHeat: null,
+        matrixHeat: null,
+        filters: { ...DEFAULT_FILTERS },
+        shown: PAGE_SIZE,
+        abstractsOpen: true,
+        tableView: { domain: false, facet: false },
+        pickerItems: null,
+        loadToken: 0
+      };
+
+      function setStatus(text, state) {
+        const el = $("sem-status");
+        el.textContent = text;
+        if (state) el.dataset.state = state;
+        else delete el.dataset.state;
+      }
+
+      function showPanel(which) {
+        $("picker").hidden = which !== "picker";
+        $("sem").hidden = which !== "sem";
+      }
+
+      function isSelected(kind, key, year) {
+        const cell = S.filters.cell;
+        return Boolean(cell) && cell.kind === kind && cell.key === key && cell.year === year;
+      }
+
+      function heatCellHtml(kind, row, year, count, max) {
+        const fill = heatFill(count, max);
+        const ink = count ? inkFor(fill) : INK_DARK;
+        const text = `${row.label}, ${columnLabel(year)}: ${count} ${count === 1 ? "publication" : "publications"}`;
+        const pressed = isSelected(kind, row.key, year);
+        return `<button type="button" class="heat-cell${pressed ? " is-selected" : ""}" data-kind="${kind}" data-key="${escapeHtml(row.key)}" data-year="${year}" style="background:${fill};color:${ink}" title="${escapeHtml(text)}" aria-label="${escapeHtml(text)}" aria-pressed="${pressed ? "true" : "false"}">${count ? count : ""}</button>`;
+      }
+
+      function heatGridHtml(hm, kind, caption) {
+        if (!hm.years.length) return '<p class="panel-intro">No publication has a valid year, so there is nothing to map.</p>';
+        if (!hm.rows.length) return '<p class="panel-intro">No tagged publications to show.</p>';
+        const vertical = hm.years.length > 20 ? " vertical" : "";
+        const first = hm.years[0] === BEFORE ? "4.5rem " : "";
+        const columns = `13rem ${first}repeat(${hm.years.length - (first ? 1 : 0)}, 2.25rem) 3.5rem`;
+        let html = `<div class="heat-scroll" role="region" tabindex="0" aria-label="${escapeHtml(caption)}"><div class="heat-grid" style="grid-template-columns:${columns}">`;
+        html += `<div class="heat-corner">${kind === "facet" ? "Matrix" : "Topic"}</div>`;
+        html += hm.years.map((y) => `<div class="heat-year${vertical}${y === BEFORE ? " early" : ""}">${columnLabel(y)}</div>`).join("");
+        html += '<div class="heat-head">Total</div>';
+        hm.rows.forEach((row) => {
+          html += `<div class="heat-label"><span class="topic-dot" aria-hidden="true" style="background:${row.color}"></span>${escapeHtml(row.label)}</div>`;
+          row.counts.forEach((count, i) => {
+            html += heatCellHtml(kind, row, hm.years[i], count, hm.max);
+          });
+          html += `<div class="heat-total">${row.total}</div>`;
+        });
+        html += '<div class="heat-label heat-foot">Publications</div>';
+        html += hm.colTotals.map((n) => `<div class="heat-sum">${n}</div>`).join("");
+        html += `<div class="heat-total">${hm.total}</div>`;
+        html += "</div></div>";
+        return html;
+      }
+
+      function heatTableHtml(hm, caption) {
+        if (!hm.years.length || !hm.rows.length) return '<p class="panel-intro">Nothing to show.</p>';
+        const head = hm.years.map((y) => `<th scope="col">${columnLabel(y)}</th>`).join("");
+        const body = hm.rows.map((row) => `<tr><th scope="row">${escapeHtml(row.label)}</th>${row.counts.map((n) => `<td>${n}</td>`).join("")}<td><strong>${row.total}</strong></td></tr>`).join("");
+        const foot = hm.colTotals.map((n) => `<td>${n}</td>`).join("");
+        return `<div class="table-scroll" role="region" tabindex="0" aria-label="${escapeHtml(caption)}"><table class="sem-table"><caption>${escapeHtml(caption)}</caption><thead><tr><th scope="col">Topic</th>${head}<th scope="col">Total</th></tr></thead><tbody>${body}</tbody><tfoot><tr><th scope="row">Publications</th>${foot}<td><strong>${hm.total}</strong></td></tr></tfoot></table></div>`;
+      }
+
+      function renderHeat(kind) {
+        const isFacet = kind === "facet";
+        const hm = isFacet ? S.matrixHeat : S.topicHeat;
+        const target = $(isFacet ? "matrix-heat" : "topic-heat");
+        const caption = isFacet ? "Publications by matrix and year" : "Publications by topic and year";
+        const tableOn = S.tableView[kind];
+        target.innerHTML = tableOn ? heatTableHtml(hm, caption) : heatGridHtml(hm, kind, caption);
+        const toggle = document.querySelector(`.table-toggle[data-kind="${kind}"]`);
+        toggle.setAttribute("aria-pressed", tableOn ? "true" : "false");
+        toggle.textContent = tableOn ? "View heatmap as grid" : "View heatmap as table";
+        // Open on the newest years; earlier columns stay one scroll away.
+        const scroller = target.querySelector(".heat-scroll");
+        if (scroller) scroller.scrollLeft = scroller.scrollWidth;
+      }
+
+      function updateHeatSelection() {
+        document.querySelectorAll(".heat-cell").forEach((btn) => {
+          const on = isSelected(btn.dataset.kind, btn.dataset.key, Number(btn.dataset.year));
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+          btn.classList.toggle("is-selected", on);
+        });
+      }
+
+      function renderMetrics() {
+        const m = summarize(S.works);
+        const tiles = [
+          ["Publications", formatNumber(m.publications), ""],
+          ["Plastic-related", formatNumber(m.plastic), `${m.publications ? Math.round((100 * m.plastic) / m.publications) : 0}% of publications`],
+          ["Total citations", formatNumber(m.citations), "Sum of cited-by counts"],
+          ["Distinct authors", formatNumber(m.authors), "From author names"],
+          ["Years active", m.yearMin === null ? "None" : `${m.yearMin}–${m.yearMax}`, m.yearMin === null ? "" : `${m.yearsWithOutput} years with output`],
+          ["Open access", `${Math.round(100 * m.oaShare)}%`, `${formatNumber(m.oaCount)} of ${formatNumber(m.publications)}`]
+        ];
+        $("metrics").innerHTML = tiles
+          .map(([label, value, sub]) => `<div class="metric"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd>${sub ? `<small>${escapeHtml(sub)}</small>` : ""}</div>`)
+          .join("");
+      }
+
+      function renderFilterOptions() {
+        const topicSelect = $("f-topic");
+        const topicOptions = S.topicHeat.rows.map((row) => `<option value="${escapeHtml(row.key)}">${escapeHtml(row.label)}</option>`).join("");
+        topicSelect.innerHTML = `<option value="">All topics</option>${topicOptions}`;
+        const years = yearSpan(S.works).list;
+        const yearOptions = years.map((y) => `<option value="${y}">${y}</option>`).join("");
+        $("f-from").innerHTML = `<option value="">Any</option>${yearOptions}`;
+        $("f-to").innerHTML = `<option value="">Any</option>${yearOptions}`;
+      }
+
+      function syncFilterControls() {
+        const f = S.filters;
+        $("f-query").value = f.query;
+        $("f-topic").value = f.topic;
+        $("f-plastic").checked = f.plasticOnly;
+        $("f-from").value = f.yearFrom;
+        $("f-to").value = f.yearTo;
+        $("f-sort").value = f.sort;
+      }
+
+      function authorsHtml(work) {
+        const names = authorsOf(work);
+        if (!names.length) return '<span class="muted">Authors not listed</span>';
+        if (names.length <= AUTHOR_PREVIEW) return escapeHtml(names.join(", "));
+        const first = names.slice(0, AUTHOR_PREVIEW).map(escapeHtml).join(", ");
+        const rest = names.slice(AUTHOR_PREVIEW).map(escapeHtml).join(", ");
+        const label = `+${formatNumber(names.length - AUTHOR_PREVIEW)} more`;
+        return `<span>${first}</span><span class="author-rest" hidden>, ${rest}</span> <button type="button" class="link-btn authors-toggle" aria-expanded="false" data-more-label="${label}">${label}</button>`;
+      }
+
+      function chipsHtml(work) {
+        const domain = domainKeys(work).map((key) => (key === UNTAGGED ? '<span class="topic-chip untagged">Untagged</span>' : AtlasTopics.chip(key)));
+        const matrix = AtlasTopics.sortTags(matrixKeys(work)).map((key) => AtlasTopics.chip(key));
+        return [...domain, ...matrix].join(" ");
+      }
+
+      function pubItemHtml(work) {
+        const href = workHref(work);
+        const title = String(work.title || "").trim() || "Untitled publication";
+        const titleHtml = href ? `<a href="${escapeHtml(href)}">${escapeHtml(title)}</a>` : escapeHtml(title);
+        const cites = Number(work.cited_by_count) || 0;
+        const year = workYear(work);
+        const abstract = String(work.abstract || "").trim();
+        const badges = [
+          work.is_oa === true ? '<span class="badge oa">Open access</span>' : "",
+          work.plastic_related === true ? '<span class="badge plastic">Plastic-related</span>' : ""
+        ].join(" ");
+        const body = abstract
+          ? `<details class="abstract"${S.abstractsOpen ? " open" : ""}><summary>Abstract</summary><p>${escapeHtml(abstract)}</p></details>`
+          : '<p class="no-abstract">No abstract available</p>';
+        return `<li class="pub"><h3>${titleHtml}</h3><p class="pub-meta"><span>${year === null ? "Year unknown" : year}</span><span aria-hidden="true">·</span><span>${escapeHtml(work.journal || "Journal not listed")}</span><span aria-hidden="true">·</span><span>${formatNumber(cites)} ${cites === 1 ? "citation" : "citations"}</span> ${badges}</p><p class="pub-authors">${authorsHtml(work)}</p><div class="topic-chips">${chipsHtml(work)}</div>${body}</li>`;
+      }
+
+      function renderCellBanner() {
+        const cell = S.filters.cell;
+        $("cell-banner").hidden = !cell;
+        if (cell) {
+          const kind = cell.kind === "facet" ? "matrix" : "topic";
+          $("cell-text").textContent = `Showing ${keyLabel(cell.key)} (${kind}) in ${columnLabel(cell.year)}.`;
+        }
+      }
+
+      function renderList() {
+        const list = sortWorks(filterWorks(S.works, S.filters), S.filters.sort);
+        S.filtered = list;
+        const total = S.works.length;
+        const n = list.length;
+        const limit = visibleCount(n, S.shown);
+        const from = toYear(S.filters.yearFrom);
+        const to = toYear(S.filters.yearTo);
+        const reversed = from !== null && to !== null && from > to ? " Year from is later than year to." : "";
+        $("count-line").textContent = `${formatNumber(n)} of ${formatNumber(total)} publications.${reversed}`;
+        $("pub-list").innerHTML = n ? list.slice(0, limit).map(pubItemHtml).join("") : '<li class="muted">No publications match these filters.</li>';
+        const remaining = n - limit;
+        $("more-wrap").hidden = remaining <= 0;
+        $("show-more").textContent = `Show ${formatNumber(Math.min(PAGE_SIZE, remaining))} more (${formatNumber(remaining)} remaining)`;
+        renderCellBanner();
+        updateHeatSelection();
+      }
+
+      function resetListWindow() {
+        S.shown = PAGE_SIZE;
+        renderList();
+      }
+
+      function selectCell(kind, key, year) {
+        const same = isSelected(kind, key, year);
+        S.filters.cell = same ? null : { kind, key, year };
+        S.shown = PAGE_SIZE;
+        renderList();
+      }
+
+      function renderInstitution(data) {
+        const inst = data.institution || {};
+        S.institution = inst;
+        const name = inst.name || inst.inst_id || "Institution";
+        document.title = `${name} · Systematic evidence map · CA Plastics Research Atlas`;
+        $("inst-name").textContent = name;
+        const meta = [typeLabel(inst.atlas_type), inst.city].filter(Boolean).join(" · ");
+        $("inst-meta").textContent = meta;
+        S.works = Array.isArray(data.works) ? data.works : [];
+        S.filters = { ...DEFAULT_FILTERS };
+        S.shown = PAGE_SIZE;
+        S.topicHeat = buildHeatmap(S.works, domainKeys);
+        S.matrixHeat = buildHeatmap(S.works, matrixKeys);
+        renderFilterOptions();
+        syncFilterControls();
+        renderMetrics();
+        renderHeat("domain");
+        renderHeat("facet");
+        renderList();
+        setStatus(`${formatNumber(S.works.length)} publications`, null);
+        showPanel("sem");
+      }
+
+      function renderPicker() {
+        const items = S.pickerItems || [];
+        const q = $("picker-search").value.trim().toLowerCase();
+        const shown = items.filter((i) => !q || [i.name, i.city, i.atlas_type].join(" ").toLowerCase().includes(q));
+        $("picker-count").textContent = `${formatNumber(shown.length)} of ${formatNumber(items.length)} institutions`;
+        $("picker-list").innerHTML = shown
+          .map((i) => {
+            const details = [i.city, typeLabel(i.atlas_type), `${formatNumber(i.work_count)} publications`].filter(Boolean).join(" · ");
+            return `<li><a href="sem.html#inst=${encodeURIComponent(i.inst_id)}">${escapeHtml(i.name || i.inst_id)}</a><span class="inst-meta">${escapeHtml(details)}</span></li>`;
+          })
+          .join("");
+      }
+
+      async function showPicker(note, unknown) {
+        S.inst = "";
+        showPanel("picker");
+        const noteEl = $("picker-note");
+        noteEl.textContent = note || "Pick an institution to open its systematic evidence map.";
+        noteEl.classList.toggle("unknown-note", Boolean(unknown));
+        $("inst-name").textContent = "Systematic evidence map";
+        $("inst-meta").textContent = "Choose an institution to open its evidence map.";
+        document.title = "Systematic evidence map · CA Plastics Research Atlas";
+        setStatus("Choose an institution", null);
+        if (!S.pickerItems) {
+          try {
+            const res = await fetch("data/institutions.json");
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const json = await res.json();
+            S.pickerItems = (json.institutions || [])
+              .filter((i) => i.ca_flag === true && Number(i.work_count) > 0)
+              .sort((a, b) => compareText(a.name, b.name));
+          } catch (err) {
+            S.pickerItems = [];
+            $("picker-count").textContent = "The institution list could not be loaded.";
+            return;
+          }
+        }
+        renderPicker();
+      }
+
+      async function route() {
+        const raw = instParam(location.hash, location.search);
+        if (!raw) {
+          showPicker("", false);
+          return;
+        }
+        if (!isValidInstId(raw)) {
+          showPicker(`"${raw}" is not a valid institution id.`, true);
+          return;
+        }
+        if (raw === S.inst && S.institution) return;
+        const token = ++S.loadToken;
+        S.inst = raw;
+        setStatus("Loading publications…", null);
+        showPanel("none");
+        $("inst-name").textContent = "Loading…";
+        $("inst-meta").textContent = "";
+        let data = null;
+        try {
+          const res = await fetch(`data/institution_works/${encodeURIComponent(raw)}.json`);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          data = await res.json();
+        } catch (err) {
+          if (token !== S.loadToken) return;
+          S.inst = "";
+          showPicker(`No evidence map is available for "${raw}".`, true);
+          return;
+        }
+        if (token !== S.loadToken) return;
+        renderInstitution(data);
+      }
+
+      function resetFilters() {
+        S.filters = { ...DEFAULT_FILTERS };
+        S.shown = PAGE_SIZE;
+        syncFilterControls();
+        renderList();
+      }
+
+      function bindEvents() {
+        document.addEventListener("click", (event) => {
+          const target = event.target;
+          const cellBtn = target.closest(".heat-cell");
+          if (cellBtn) {
+            selectCell(cellBtn.dataset.kind, cellBtn.dataset.key, Number(cellBtn.dataset.year));
+            return;
+          }
+          if (target.closest("[data-clear-cell]")) {
+            S.filters.cell = null;
+            S.shown = PAGE_SIZE;
+            renderList();
+            return;
+          }
+          const toggle = target.closest(".table-toggle");
+          if (toggle) {
+            const kind = toggle.dataset.kind;
+            S.tableView[kind] = !S.tableView[kind];
+            renderHeat(kind);
+            return;
+          }
+          const authors = target.closest(".authors-toggle");
+          if (authors) {
+            const rest = authors.parentElement.querySelector(".author-rest");
+            const open = authors.getAttribute("aria-expanded") !== "true";
+            authors.setAttribute("aria-expanded", open ? "true" : "false");
+            rest.hidden = !open;
+            authors.textContent = open ? "Show fewer" : authors.dataset.moreLabel;
+            return;
+          }
+          if (target.closest("#show-more")) {
+            S.shown += PAGE_SIZE;
+            renderList();
+            return;
+          }
+          if (target.closest("#abs-expand") || target.closest("#abs-collapse")) {
+            S.abstractsOpen = Boolean(target.closest("#abs-expand"));
+            document.querySelectorAll("#pub-list details").forEach((d) => {
+              d.open = S.abstractsOpen;
+            });
+            return;
+          }
+          if (target.closest("#f-reset")) {
+            resetFilters();
+          }
+        });
+        $("f-query").addEventListener("input", (event) => {
+          S.filters.query = event.target.value;
+          resetListWindow();
+        });
+        $("f-topic").addEventListener("change", (event) => {
+          S.filters.topic = event.target.value;
+          resetListWindow();
+        });
+        $("f-plastic").addEventListener("change", (event) => {
+          S.filters.plasticOnly = event.target.checked;
+          resetListWindow();
+        });
+        $("f-from").addEventListener("change", (event) => {
+          S.filters.yearFrom = event.target.value;
+          resetListWindow();
+        });
+        $("f-to").addEventListener("change", (event) => {
+          S.filters.yearTo = event.target.value;
+          resetListWindow();
+        });
+        $("f-sort").addEventListener("change", (event) => {
+          S.filters.sort = event.target.value;
+          resetListWindow();
+        });
+        $("picker-search").addEventListener("input", renderPicker);
+      }
+
+      if (typeof window !== "undefined" && window.document) {
+        bindEvents();
+        window.addEventListener("hashchange", route);
+        route();
+      }
+    </script>
+  </body>
+</html>

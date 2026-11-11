@@ -196,6 +196,51 @@ def _write_author_details(
         _atomic_json(output_dir / "authors" / f"{author_id}.json", detail)
 
 
+def _write_institution_works(
+    output_dir: Path,
+    institutions: Sequence[Mapping[str, Any]],
+    full_work_by_id: Mapping[str, Mapping[str, Any]],
+    works_for_institution: Mapping[str, set[str]],
+    authors_by_work: Mapping[str, list[Mapping[str, Any]]],
+) -> None:
+    """One lazily loaded publication file per CA institution (evidence-map page)."""
+    folder = output_dir / "institution_works"
+    folder.mkdir(parents=True, exist_ok=True)
+    written: set[str] = set()
+    for institution in institutions:
+        inst_id = _text(institution.get("inst_id"))
+        if not inst_id or not institution.get("ca_flag") or not institution.get("work_count"):
+            continue
+        works = []
+        for work_id in sorted(works_for_institution.get(inst_id, set())):
+            if work_id not in full_work_by_id:
+                continue
+            ordered = sorted(
+                authors_by_work.get(work_id, []),
+                key=lambda a: {"first": 0, "last": 2}.get(_text(a.get("position")), 1),
+            )
+            works.append(
+                {
+                    **dict(full_work_by_id[work_id]),
+                    "author_names": [_text(a.get("author_name")) for a in ordered],
+                }
+            )
+        works.sort(key=lambda w: (-(w.get("year") or 0), _text(w.get("title"))))
+        name = f"{inst_id}.json"
+        written.add(name)
+        _atomic_json(
+            folder / name,
+            {
+                "schema_version": SCHEMA_VERSION,
+                "institution": {k: institution[k] for k in institution if k != "years"},
+                "works": works,
+            },
+        )
+    for stale in folder.glob("*.json"):
+        if stale.name not in written:
+            stale.unlink()
+
+
 def _aggregate(works: Sequence[Mapping[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     by_year: defaultdict[int, dict[str, int]] = defaultdict(
         lambda: {"count": 0, "plastic_related_count": 0}
@@ -239,6 +284,7 @@ def export_site(
     work_overrides_path: str | Path | None = None,
     author_merges_path: str | Path | None = None,
     work_relevance_path: str | Path | None = None,
+    author_metrics_path: str | Path | None = None,
     output_dir: str | Path = "site/data",
     generated_at: str | None = None,
     ca_authors_only: bool = True,
@@ -256,6 +302,9 @@ def export_site(
     merges) are applied before any payload is built; see ``atlas.build.curation``.
     ``work_relevance_path`` (``curation/work_relevance.csv``, reviewed plastic-relevance
     calls) replaces the rule's ``plastic_related`` first; owner overrides still win.
+    ``author_metrics_path`` (``scripts/fetch_author_metrics.py``) adds career-wide
+    OpenAlex ``cited_by_count`` and ``h_index``; merged records sum citations and keep
+    the largest h-index. Plastics-only counts come from the exported works.
     """
 
     works_rows = _read(works_path)
@@ -347,6 +396,17 @@ def export_site(
             return _int(row.get("ca_works_count"))
         return len(ca_works_by_author.get(_text(row.get("author_id")), ()))
 
+    metric_rows = _read(author_metrics_path, required=False) if author_metrics_path else []
+    career: dict[str, dict[str, int]] = {}
+    for metric in metric_rows:
+        target = curation.author_merges.get(
+            _text(metric.get("author_id")), _text(metric.get("author_id"))
+        )
+        entry = career.setdefault(target, {"cited_by_count": 0, "h_index": 0})
+        entry["cited_by_count"] += _int(metric.get("cited_by_count"))
+        entry["h_index"] = max(entry["h_index"], _int(metric.get("h_index")))
+    slim_by_id = {work["work_id"]: work for work in slim_works}
+
     author_index: list[dict[str, Any]] = []
     for row in sorted(author_rows, key=lambda item: _text(item.get("author_id"))):
         author_id = _text(row.get("author_id"))
@@ -357,6 +417,12 @@ def export_site(
             # out-of-state co-authors stay visible on each work's author list.
             continue
         author_work_ids = sorted(set(works_by_author.get(author_id, [])))
+        plastic_works = [
+            slim_by_id[work_id]
+            for work_id in author_work_ids
+            if work_id in slim_by_id and slim_by_id[work_id].get("plastic_related") is True
+        ]
+        metrics = career.get(author_id, {})
         author_index.append(
             {
                 "author_id": author_id,
@@ -368,6 +434,10 @@ def export_site(
                 "domain_tags": _sorted_unique(_list(row.get("domain_tags"))),
                 "work_count": len(author_work_ids),
                 "work_ids": author_work_ids,
+                "cited_by_count": metrics.get("cited_by_count"),
+                "h_index": metrics.get("h_index"),
+                "plastic_works_count": len(plastic_works),
+                "plastic_citations": sum(_int(w.get("cited_by_count")) for w in plastic_works),
                 "institution_ids": sorted(institutions_by_author.get(author_id, set())),
             }
         )
@@ -459,6 +529,9 @@ def export_site(
             ]
             for author_id, work_ids in works_by_author.items()
         },
+    )
+    _write_institution_works(
+        output, institutions, full_work_by_id, works_for_institution, authors_by_work
     )
     features = []
     for institution in institutions:

@@ -3,6 +3,7 @@
 # Dates are as DTSC states them (date_as_stated); date_iso is derived from them.
 # Order rule: entries are newest-first by date_iso (validated by src/atlas/dtsc_timeline.py).
 # Link-only content: this file never implies a status beyond what DTSC states.
+# Owner verified "1 October 2026" (dtsc-01) and "18 June 2026" (dtsc-03) against the DTSC pages on 2026-11-11.
 
 caveat: "Listing does not by itself create requirements; Priority Product designation is a separate rulemaking."
 caveat_detail: "DTSC states it may only designate a Priority Product if it falls within one of the categories described in the current Work Plan, with three exceptions."

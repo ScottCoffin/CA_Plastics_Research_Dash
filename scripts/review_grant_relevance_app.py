@@ -46,6 +46,8 @@ from atlas.grant_relevance_review import (  # noqa: E402
     save_grant_reviews,
     select_view,
 )
+from atlas.ingest.grants.normalize import grant_plastic_decision  # noqa: E402
+from atlas.query import load_query_config  # noqa: E402
 
 
 def _csv_path() -> Path:
@@ -151,9 +153,18 @@ def main() -> None:
     st.markdown("### Grant relevance: is this grant about plastic pollution?")
     table = load_grant_reviews(CSV_PATH)
     details = load_grant_details(GRANTS_PATH)
+    try:
+        query_config = load_query_config(ROOT / "config" / "queries.yml")
+    except Exception:  # noqa: BLE001 - the app still works without the rule view
+        query_config = None
     items: list[dict[str, Any]] = []
     for item in merged_view(table.rows, details):
-        items.append({**item, "haiku": haiku_value(item)})
+        basis = ""
+        if query_config is not None:
+            _value, basis = grant_plastic_decision(
+                item.get("title"), item.get("abstract"), query_config, owner_reviewed=frozenset()
+            )
+        items.append({**item, "haiku": haiku_value(item), "rule_basis": basis})
     by_key = {str(item["grant_key"]): item for item in items}
     st.session_state.setdefault("history", [])
     st.session_state.setdefault("focus_key", None)
@@ -271,6 +282,12 @@ def main() -> None:
     st.divider()
 
     st.subheader(item.get("title") or "(no title)")
+    if item.get("rule_basis") in ("title", "abstract_strong_term"):
+        st.caption(
+            "Rule: plastic-related by "
+            + ("title match" if item["rule_basis"] == "title" else "strong abstract term")
+            + " unless you decide otherwise."
+        )
     st.markdown(_facts(item))
     if item.get("url"):
         st.link_button("Open grant page", str(item["url"]))
