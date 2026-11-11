@@ -27,8 +27,8 @@ This file is the live tracker for the current session: update it at every checkp
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
 ## Next eligible (dependency order)
-1. S4.2 representative sample + leak test + frozen splits (corpus exists), then a gold-label
-   Streamlit app for the owner; Claude second rater on 20%.
+1. S4.2 DONE (splits_v2). Next: gold-label Streamlit app for the owner over the 580 sampled
+   works (guide_v2 fields), Claude second rater on a blind 20%; kappa report via S4.3 tooling.
 2. AT-3 SQL analytics -> AT-4 serving bundle (abstract-free Parquet) -> AT-10 release pipeline.
 3. AT-11 CI guards for S2.
 4. SPK-6/AT-8 maps (reuse today's map helpers); SPK-5/AT-7 bibliometrix (R, outside CI).

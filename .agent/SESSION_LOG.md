@@ -93,3 +93,4 @@
 | 2026-11-11 | S8-VIZ, S3-UX2, gates | Grants Sankey suite; map labels; topic sort; drawer abstracts; whole-record plastics citations; fallback OpenAlex key; owner clears A1 gates | this commit |
 | 2026-11-11 | ADR | Observable Framework deferral recorded with CI-checked revisit triggers | this commit |
 | 2026-11-11 | S9.3-UX, S9.4 (spec) | Drawer metrics strip and collapsible sections; frequent co-authors; first-click bug fix; collaboration network written up | this commit |
+| 2026-11-11 | S4.2 | splits_v2: 500-work stratified v3.1 pool + 80 leak-test works; size-aware author-group splits | this commit |

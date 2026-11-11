@@ -106,11 +106,15 @@ def _assign_splits(
             for group, split in zip(ordered, ("train", "test"), strict=True)
             for work_id in members[group]
         }
-    cumulative = (normalized[0], normalized[0] + normalized[1])
+    # Size-aware greedy: largest author components first, each to the split furthest below
+    # its target share, so one big component cannot swallow the held-out split by chance.
+    total_works = sum(len(items) for items in members.values())
+    targets = {name: share * total_works for name, share in zip(names, normalized, strict=True)}
+    loads = {name: 0 for name in names}
     result: dict[str, str] = {}
-    for index, group in enumerate(ordered):
-        point = (index + 0.5) / max(len(ordered), 1)
-        split = "train" if point < cumulative[0] else "dev" if point < cumulative[1] else "test"
+    for group in sorted(ordered, key=lambda g: (-len(members[g]), ordered.index(g))):
+        split = max(names, key=lambda n: (targets[n] - loads[n], -names.index(n)))
+        loads[split] += len(members[group])
         result.update({work_id: split for work_id in members[group]})
     # Small samples can miss a split at the ratio boundaries; assign whole
     # author components deterministically to empty splits when feasible.
@@ -175,9 +179,16 @@ def build_split_rows(
                     break
         if not progressed:
             break
+    # Prefer leak candidates that share no author with a selected pool work: a shared author
+    # would force the whole connected pool component into the held-out split.
+    pool_authors = {str(a) for row in selected for a in (row.get("author_ids") or ()) if a}
     selected_leak = sorted(
         leak,
-        key=lambda row: (_stable_rank(seed, str(row["work_id"])), str(row["work_id"])),
+        key=lambda row: (
+            any(str(a) in pool_authors for a in (row.get("author_ids") or ())),
+            _stable_rank(seed, str(row["work_id"])),
+            str(row["work_id"]),
+        ),
     )[:leak_test_size]
     combined = [*selected, *selected_leak]
     combined_groups = _author_groups(combined)

@@ -6,7 +6,7 @@ import argparse
 import csv
 import hashlib
 import json
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import pyarrow.parquet as pq
@@ -34,11 +34,36 @@ def _load_gazetteer_hit_ids(path: Path) -> set[str]:
         }
 
 
+def _leak_records(path: Path, hit_ids: set[str], taken: set[str]) -> list[dict]:
+    """Minimal leak-candidate records: not CA-affiliated, gazetteer hit from the hit CSV."""
+    records = []
+    for row in pq.read_table(path).to_pylist():
+        work_id = row["work_id"]
+        if work_id not in hit_ids or work_id in taken:
+            continue
+        records.append(
+            {
+                "work_id": work_id,
+                "title": row.get("title") or "",
+                "abstract": row.get("abstract") or "",
+                "year": row.get("year"),
+                "type": row.get("type") or "",
+                "oa_status": row.get("oa_status") or "",
+                "institution_type": "unknown",
+                "author_ids": sorted(row.get("author_ids") or []),
+                "ca_any_author": False,
+                "gazetteer_hit": True,
+            }
+        )
+    return records
+
+
 def _load_records(
     works_path: Path,
     authorships_path: Path,
     institutions_path: Path,
     gazetteer_hits_path: Path | None,
+    leak_candidates_path: Path | None = None,
 ) -> list[dict]:
     works = pq.read_table(works_path).to_pylist()
     authorships = pq.read_table(authorships_path).to_pylist()
@@ -67,12 +92,42 @@ def _load_records(
             }
         )
         records.append(record)
+    if leak_candidates_path:
+        records.extend(
+            _leak_records(leak_candidates_path, hit_ids, {row["work_id"] for row in records})
+        )
     unknown_hits = hit_ids - {row["work_id"] for row in records}
     if unknown_hits:
         raise ValueError(
             f"gazetteer-hit input contains {len(unknown_hits)} work IDs absent from works snapshot"
         )
     return records
+
+
+def _v2_details(rows: list[dict], args: argparse.Namespace) -> dict:
+    pool = [row for row in rows if row["sample_role"] == "pool"]
+    split_by_group: dict[str, set[str]] = defaultdict(set)
+    for row in rows:
+        split_by_group[row["author_group"]].add(row["split"])
+    dimensions = ("year_bin", "journal_type", "matrix", "oa_status", "institution_type")
+    return {
+        "author_group_overlap_across_splits": sum(len(v) > 1 for v in split_by_group.values()),
+        "split_counts_all_roles": {
+            name: sum(row["split"] == name for row in rows) for name in ("train", "dev", "test")
+        },
+        "stratum_counts": {
+            dim: dict(sorted(Counter(row[dim] for row in pool).items())) for dim in dimensions
+        },
+        "leak_candidates_sha256": (
+            _sha256(args.leak_candidates)
+            if args.leak_candidates and args.leak_candidates.exists()
+            else None
+        ),
+        "leak_candidates_note": (
+            "ignored parquet (data/interim); not re-hashable from a clean checkout; "
+            "leak_test IDs are verifiable against the committed gazetteer-hit CSV"
+        ),
+    }
 
 
 def main() -> None:
@@ -93,14 +148,23 @@ def main() -> None:
     parser.add_argument("--leak-test-size", type=int, default=100)
     parser.add_argument("--seed", type=int, default=42042)
     parser.add_argument(
-        "--snapshot-status", choices=("fixture_only", "production_snapshot"), default="fixture_only"
+        "--snapshot-status",
+        choices=("fixture_only", "production_snapshot", "v3.1_corpus"),
+        default="fixture_only",
+    )
+    parser.add_argument(
+        "--leak-candidates",
+        type=Path,
+        help="ignored parquet from scripts/fetch_leak_candidates.py (non-CA works)",
     )
     parser.add_argument("--out", type=Path, default=Path("curation/splits_v1.csv"))
     args = parser.parse_args()
     source_paths = [args.works, args.authorships, args.institutions]
     if args.gazetteer_hits:
         source_paths.append(args.gazetteer_hits)
-    records = _load_records(args.works, args.authorships, args.institutions, args.gazetteer_hits)
+    records = _load_records(
+        args.works, args.authorships, args.institutions, args.gazetteer_hits, args.leak_candidates
+    )
     rows = build_split_rows(
         records, seed=args.seed, sample_size=args.sample_size, leak_test_size=args.leak_test_size
     )
@@ -121,7 +185,7 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(rows)
     manifest = {
-        "version": "splits_v1",
+        "version": args.out.stem,
         "snapshot_status": args.snapshot_status,
         "seed": args.seed,
         "requested_pool_sample_size": args.sample_size,
@@ -143,7 +207,9 @@ def main() -> None:
         ),
         "split_file_sha256": _sha256(args.out),
     }
-    manifest_path = args.out.with_name("splits_v1_manifest.json")
+    if args.snapshot_status == "v3.1_corpus":
+        manifest.update(_v2_details(rows, args))
+    manifest_path = args.out.with_name(f"{args.out.stem}_manifest.json")
     manifest_path.write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
