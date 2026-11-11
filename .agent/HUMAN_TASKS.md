@@ -72,7 +72,7 @@ Last updated: 2026-11-11.
 - **Done when:** all 44 rows have `approve` or `reject`. Tell the agent
   "photos reviewed". No photo is shown on the site before this.
 
-### H5. Answer three open questions (defaults are in use until you answer)
+### H5. Answer four open questions (defaults are in use until you answer)
 Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
 ("keep default" or "change").
 - **AT4-SEARCH:** title search is the home-made token search. Default: keep it.
@@ -83,6 +83,10 @@ Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
   their ORCID shows a job elsewhere (19 of 109 checkable cases; list in
   `docs/api_notes/orcid_enrichment.md`). Default: keep counting them and list the
   cases. Change = drop those years.
+- **PLASTISPHERE-SCOPE:** the new Plastisphere topic counts studies of microplastic
+  effects on soil microbial communities, but not works only about microbes or insects
+  biodegrading plastic. Default: keep that. Change = add biodegradation, or tag only
+  communities living on the plastic itself.
 
 ### H6. Cut a new archived release when you want a citable snapshot (AT-10, optional)
 1. On GitHub: repository > **Releases** > **Draft a new release**.

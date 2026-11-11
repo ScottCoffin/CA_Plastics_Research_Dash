@@ -15,7 +15,10 @@
     air: { label: "Air & atmosphere", color: "#e34948", order: 8 },
     // A 9th category never gets a generated hue: it reuses the related violet with a
     // 45-degree hatch and a diamond marker (composite encoding; dataviz rule).
-    risk_assessment: { label: "Risk assessment", color: "#6250d6", order: 9, pattern: "hatch" }
+    risk_assessment: { label: "Risk assessment", color: "#6250d6", order: 9, pattern: "hatch" },
+    // Owner request 2026-11-11: life on plastic (biofilms, microbial communities,
+    // rafting). Hatched ecotoxicology pink, the closest biological topic.
+    plastisphere: { label: "Plastisphere", color: "#e87ba4", order: 10, pattern: "hatch" }
   };
   const MATRICES = {
     marine: "Marine",
@@ -64,13 +67,17 @@
     if (pattern(tag) !== "hatch") return hue;
     return `repeating-linear-gradient(45deg, ${hue} 0 3px, #ffffff 3px 5px)`;
   }
-  // SVG fill: a solid colour, or url(#atlas-hatch) when svgDefs() is in the SVG.
+  // SVG fill: a solid colour, or url(#atlas-hatch-<tag>) when svgDefs() is in the SVG.
+  // Each hatched topic gets its own pattern in its own hue.
   function svgFill(tag) {
-    return pattern(tag) === "hatch" ? "url(#atlas-hatch)" : color(tag);
+    return pattern(tag) === "hatch" ? `url(#atlas-hatch-${String(tag)})` : color(tag);
   }
   function svgDefs() {
-    return '<defs><pattern id="atlas-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
-      + '<rect width="5" height="5" fill="#ffffff"/><rect width="3" height="5" fill="#6250d6"/></pattern></defs>';
+    const patterns = Object.keys(TOPICS)
+      .filter((key) => TOPICS[key].pattern === "hatch")
+      .map((key) => `<pattern id="atlas-hatch-${key}" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">`
+        + `<rect width="5" height="5" fill="#ffffff"/><rect width="3" height="5" fill="${TOPICS[key].color}"/></pattern>`);
+    return `<defs>${patterns.join("")}</defs>`;
   }
   function sortTags(tags) {
     return [...new Set(tags || [])].sort((a, b) => order(a) - order(b) || label(a).localeCompare(label(b)));

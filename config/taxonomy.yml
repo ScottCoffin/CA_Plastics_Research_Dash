@@ -18,6 +18,7 @@ disciplines:
   - ecotoxicology_and_trophic_transfer
   - human_exposure_and_health_risk
   - risk_assessment
+  - plastisphere
 
 domain_tags:
   - id: occurrence_and_monitoring
@@ -46,6 +47,17 @@ domain_tags:
       management threshold, management thresholds, risk threshold, risk thresholds,
       toxicity threshold, toxicity thresholds, effect threshold, effect thresholds,
       environmental risk, human health risk]
+  # Owner request 2026-11-11: plastisphere (life on plastic) as its own topic. Phrase
+  # seeds only: bare "colonization", "pathogen" and "microbiome" hit off-topic works
+  # (plant colonizers, gut microbiomes). Microbial biodegradation of plastic is not
+  # included by default (QUESTIONS.md PLASTISPHERE-SCOPE).
+  - id: plastisphere
+    seed_concepts: [plastisphere, biofilm, microbial community, microbial communities,
+      bacterial community, bacterial communities, fungal community, fungal communities,
+      microbial colonization, microbial colonisation, bacterial colonization,
+      bacterial colonisation, colonizing plastic, colonising plastic, plastic microbiome,
+      plastic-associated microbes, plastic-associated bacteria, microbial hotspot,
+      epiplastic, rafting, hitchhiking]
 
 provenance:
   supplied_by: owner external query agent

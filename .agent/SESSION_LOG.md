@@ -108,3 +108,4 @@
 | 2026-11-11 | handoff | Usage window at 91%: handoff via RESUME_PROMPT.md; audit script gains --extra-dois | this commit |
 | 2026-11-11 | review-apps | Search-term highlighting in the three review apps; Streamlit watcher off (torchvision traceback); .agent/HUMAN_TASKS.md; photo review sheet | this commit |
 | 2026-11-11 | review-apps | Owner rule: >10-case reviews get Streamlit apps; institution-type and expert-photo review apps; atlas.csv_review | this commit |
+| 2026-11-11 | topic | Plastisphere topic (taxonomy seeds, topics.js per-topic hatch); labels, site data, analytics, bundle rebuilt | this commit |
