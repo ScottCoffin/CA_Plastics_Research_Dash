@@ -4,6 +4,13 @@ Plastic relevance and domain tags are PROVISIONAL.  They reuse the S2.3 rule
 labels (``classify_plastic_text`` and ``_taxonomy_tags``) until the shared
 S5.1 classifier exists.  The candidate query in ``config/queries.yml`` is not
 promoted by this module.
+
+Plastic relevance for a grant is decided by ``grant_plastic_decision``.  A core
+term in the title makes a grant plastic-related.  A core term that appears only
+in the abstract does not: such a grant is recorded as not plastic-related
+(basis ``abstract_mention_only``) unless a reviewed decision in
+``curation/grant_relevance.csv`` says otherwise.  Reviewed decisions are applied
+at export time (``atlas.build.grants_export``), not during ingest.
 """
 
 from __future__ import annotations
@@ -37,6 +44,7 @@ from atlas.nlp.labels import _taxonomy_tags, classify_plastic_text
 _DATE_PATTERN = re.compile(r"(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?")
 _STATE_PATTERN = re.compile(r"[A-Za-z]{2}")
 _CURRENCY_PATTERN = re.compile(r"[A-Za-z]{3}")
+TITLE_RULE_MAX_CHARS = 250
 
 
 def _optional_text(value: object) -> str | None:
@@ -112,6 +120,40 @@ def _currency(value: object) -> str | None:
     return text.upper()
 
 
+def grant_plastic_decision(
+    title: str | None,
+    abstract: str | None,
+    query_config: Mapping[str, Any],
+    overrides: Mapping[str, bool] | None = None,
+    grant_key: str | None = None,
+) -> tuple[bool, str]:
+    """Return ``(plastic_related, basis)`` for one grant.
+
+    ``basis`` is one of:
+
+    * ``reviewed``: ``grant_key`` is in ``overrides``; the reviewed value wins.
+    * ``title``: the title (at most ``TITLE_RULE_MAX_CHARS`` characters) matches
+      a core rule.
+    * ``abstract_mention_only``: only the title plus abstract matches. Unreviewed
+      abstract-only mentions are not plastic-related.
+    * ``none``: no match.
+    """
+
+    if overrides is not None and grant_key is not None and grant_key in overrides:
+        return bool(overrides[grant_key]), "reviewed"
+    title_text = _optional_text(title) or ""
+    abstract_text = _optional_text(abstract) or ""
+    if (
+        len(title_text) <= TITLE_RULE_MAX_CHARS
+        and classify_plastic_text(title_text, query_config).related
+    ):
+        return True, "title"
+    full_text = " ".join(part for part in (title_text, abstract_text) if part)
+    if classify_plastic_text(full_text, query_config).related:
+        return False, "abstract_mention_only"
+    return False, "none"
+
+
 def normalize_grant(
     raw: Mapping[str, Any],
     *,
@@ -135,7 +177,7 @@ def normalize_grant(
     start = _parse_date(raw.get("start"), "start")
     end = _parse_date(raw.get("end"), "end")
     text = " ".join(part for part in (title, abstract) if part is not None)
-    decision = classify_plastic_text(text, query_config)
+    plastic_related, _basis = grant_plastic_decision(title, abstract, query_config)
     domain_tags, _facets = _taxonomy_tags(text, [], taxonomy)
     return {
         "grant_key": grant_key(source_text, award_id),
@@ -155,7 +197,7 @@ def normalize_grant(
         "program": _optional_text(raw.get("program")),
         "funder_chain": _names(raw.get("funder_chain"), "funder_chain"),
         "url": _optional_text(raw.get("url")),
-        "plastic_related": decision.related,
+        "plastic_related": plastic_related,
         "domain_tags": list(domain_tags),
         "ca_led": None if org_state is None else org_state == "CA",
         "ca_sampling_flag": None,

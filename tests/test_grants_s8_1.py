@@ -310,14 +310,15 @@ def test_plastic_relevance_negative_title() -> None:
     assert row["plastic_related"] is False
 
 
-def test_abstract_contributes_to_relevance_and_domain_tags() -> None:
+def test_abstract_mention_is_not_plastic_but_contributes_domain_tags() -> None:
+    # An abstract-only core term is not enough for plastic_related (see grant_plastic_decision).
     row = _normalize(
         _base(
             title="Coastal planning",
             abstract="Monitoring microplastic loads in wastewater effluent.",
         )
     )
-    assert row["plastic_related"] is True
+    assert row["plastic_related"] is False
     assert row["domain_tags"] == ["occurrence_and_monitoring", "wastewater_and_treatment"]
 
 

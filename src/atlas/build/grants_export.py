@@ -7,6 +7,11 @@ deterministic for a fixed ``generated_at`` and input.
 
 Amounts are never normalised across sources. Each row carries the basis that
 its source reports, and the payload carries the caveat text for every source.
+
+When a query configuration is supplied, ``plastic_related`` is recomputed for
+every row with ``grant_plastic_decision``, using reviewed decisions from
+``curation/grant_relevance.csv`` where they exist. This lets the public flag
+change without re-ingesting the sources.
 """
 
 from __future__ import annotations
@@ -22,6 +27,8 @@ from pathlib import Path
 from typing import Any
 
 import pyarrow.parquet as pq
+
+from atlas.ingest.grants.normalize import grant_plastic_decision
 
 SCHEMA_VERSION = "s8.10"
 PI_LIMIT = 3
@@ -323,6 +330,23 @@ def read_merged(path: Path) -> list[dict[str, Any]]:
     return pq.read_table(path).to_pylist()
 
 
+def apply_plastic_decisions(
+    rows: Sequence[dict[str, Any]],
+    query_config: Mapping[str, Any],
+    overrides: Mapping[str, bool] | None = None,
+) -> None:
+    """Set ``plastic_related`` on each merged row in place (see ``grant_plastic_decision``)."""
+
+    for row in rows:
+        row["plastic_related"], _basis = grant_plastic_decision(
+            row.get("title"),
+            row.get("abstract"),
+            query_config,
+            overrides=overrides,
+            grant_key=row.get("grant_key"),
+        )
+
+
 def read_institutions(path: Path) -> list[dict[str, Any]]:
     """Read the institution columns needed for the type join."""
 
@@ -352,10 +376,18 @@ def build_from_paths(
     dedupe_map: Path | None,
     output: Path,
     generated_at: str,
+    query_config: Mapping[str, Any] | None = None,
+    relevance: Mapping[str, bool] | None = None,
 ) -> dict[str, Any]:
-    """Write ``output`` from the Parquet inputs and return a count-only summary."""
+    """Write ``output`` from the Parquet inputs and return a count-only summary.
+
+    Pass ``query_config`` to recompute ``plastic_related`` at export; ``relevance``
+    holds the reviewed decisions. Without ``query_config`` the merged flag is kept.
+    """
 
     rows = read_merged(merged)
+    if query_config is not None:
+        apply_plastic_decisions(rows, query_config, relevance)
     payload = build_payload(rows, read_institutions(institutions), generated_at=generated_at)
     map_rows = None
     if dedupe_map is not None and dedupe_map.exists():

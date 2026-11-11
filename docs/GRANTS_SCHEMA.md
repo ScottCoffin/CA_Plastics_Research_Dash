@@ -33,7 +33,7 @@ not report a value. Unknown is never coerced to `false`.
 | `program` | string | yes | Program or mechanism name. |
 | `funder_chain` | list of string | yes (`[]`) | Ordered funder path from the original funder to the reporting source, for example `["Synthetic Pass-Through Agency", "Synthetic State Sea Grant"]`. Required for pass-through awards. |
 | `url` | string | yes | Source landing page for the award. |
-| `plastic_related` | bool | yes | Provisional rule-based plastic relevance over title and abstract (see the caveat below). |
+| `plastic_related` | bool | yes | Provisional plastic relevance: title rule, abstract-only mentions default to `false`, reviewed overrides win (see the relevance rule below). |
 | `domain_tags` | list of string | yes (`[]`) | Provisional taxonomy domain tags over title and abstract, from `config/taxonomy.yml`. |
 | `ca_led` | bool | yes | `true` when `org_state` is `CA`, `false` when it is another known state, and `null` when `org_state` is unknown. |
 | `ca_sampling_flag` | bool | yes | Reserved for the S5 sampling-location check. Always `null` from this module. |
@@ -69,6 +69,18 @@ pass-through awards is S8.6 and is not part of this schema.
 - the rows convert to `GRANT_SCHEMA` in pyarrow.
 
 ## Caveats
+
+**Plastic relevance rule.** `grant_plastic_decision` in `normalize.py` returns
+`(plastic_related, basis)`. A reviewed decision in `curation/grant_relevance.csv`
+(keyed by `grant_key`, columns `plastic_related,confidence,reason,reviewer,
+reviewed_at,owner_review`) wins (basis `reviewed`). Otherwise a core term in the
+title (at most 250 characters) gives `true` (basis `title`). A core term that
+appears only in the abstract gives `false` (basis `abstract_mention_only`), and
+no match gives `false` (basis `none`). The export
+(`atlas.build.grants_export`, run by `scripts/build_grants_export.py`) recomputes
+`plastic_related` from `config/queries.yml` and the curation file, so the public
+flag changes without re-ingest. The curation loader is `load_grant_relevance` in
+`atlas.build.curation`; a missing file means no reviewed decisions.
 
 **Provisional labels.** `plastic_related` and `domain_tags` apply the S2.3
 rule-based labels to the grant title and abstract. They are provisional until

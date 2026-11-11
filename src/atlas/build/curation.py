@@ -6,6 +6,9 @@ Three CSV files under ``curation/`` are read at export time:
 * ``overrides_works.csv``: allowlisted field overrides on work rows;
 * ``author_merges.csv``: authorships re-pointed from one author ID to another.
 
+``grant_relevance.csv`` (S8.10) is read by ``load_grant_relevance`` when the
+grants export runs. It holds reviewed plastic-relevance decisions for awards.
+
 Every active row needs a non-empty ``reviewed_by``. Malformed rows raise
 ``ValueError`` so that a bad correction stops the build instead of being
 skipped silently. Author splits are not represented here; they need an
@@ -23,6 +26,15 @@ from typing import Any
 SUPPRESSIONS_HEADER = ("kind", "id", "reason", "requested_at", "reviewed_by")
 WORK_OVERRIDES_HEADER = ("work_id", "field", "value", "reason", "reviewed_by", "reviewed_at")
 AUTHOR_MERGES_HEADER = ("from_author_id", "to_author_id", "reason", "reviewed_by", "reviewed_at")
+GRANT_RELEVANCE_HEADER = (
+    "grant_key",
+    "plastic_related",
+    "confidence",
+    "reason",
+    "reviewer",
+    "reviewed_at",
+    "owner_review",
+)
 SUPPRESSION_KINDS = ("author", "work")
 OPENALEX_PREFIX = "https://openalex.org/"
 
@@ -168,6 +180,23 @@ def _final_target(source: str, direct: Mapping[str, str], path: str | Path) -> s
         seen.add(target)
         target = direct[target]
     return target
+
+
+def load_grant_relevance(path: str | Path) -> dict[str, bool]:
+    """Return ``{grant_key: plastic_related}`` from ``grant_relevance.csv``.
+
+    A missing file means no reviewed decisions. A grant key may appear only once.
+    """
+    if not Path(path).exists():
+        return {}
+    decisions: dict[str, bool] = {}
+    for number, row in _read(path, GRANT_RELEVANCE_HEADER):
+        _require(row, number, path, ("grant_key", "plastic_related"))
+        key = row["grant_key"]
+        if key in decisions:
+            raise ValueError(f"{path} row {number}: grant_key {key} is listed more than once")
+        decisions[key] = _coerce("plastic_related", "bool", row["plastic_related"], path, number)
+    return decisions
 
 
 def load_curation(
