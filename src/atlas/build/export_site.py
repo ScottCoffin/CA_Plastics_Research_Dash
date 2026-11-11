@@ -429,7 +429,7 @@ def export_site(
         "authors": len(author_index),
         "institutions": len(institutions),
         "ca_institutions": sum(item["ca_flag"] for item in institutions),
-        "labeled_works": len(labels),
+        "labeled_works": len(labels.keys() & work_lookup.keys()),
     }
     index = {
         "schema_version": SCHEMA_VERSION,

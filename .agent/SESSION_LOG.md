@@ -88,3 +88,4 @@
 | 2026-11-11 | S10.3, EM-16, EM-18, S7.5 | Zenodo DOI 10.5281/zenodo.24124016; link-out registry + checker; DTSC timeline; monitoring paging | this commit |
 | 2026-11-11 | AT-1, S2.1-B, S8, S7.5, S10.2, EM-16 | Query v3.1 promoted; grant relevance review; monitoring basemap + matrices; CI experts export; GOV-B | this commit |
 | 2026-11-11 | S2.1-B, S3.6, S7.5-UX, S11.3 | Real v3.1 backfill live; owner labels + Haiku work relevance at export; experts filter 519->5.5 ms; interactive monitoring map; grant review app | this commit |
+| 2026-11-11 | AT-2 | Institution types carried forward to v3.1 ranking (168 rows, 52 new top-100 entrants queued); labeled_works count fix | this commit |

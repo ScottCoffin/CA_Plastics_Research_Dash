@@ -53,3 +53,7 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-10T19:35:00-08:00 | S10.2b | claude-haiku (haiku-developer) | Suppressions, work overrides, author merges | Accepted (also edited scripts/build_export_site.py to wire defaults) | 1 session; ~90K subagent tokens |
 | 2026-11-11T00:40:00-08:00 | EM-16 | claude-haiku (haiku-developer) | Link-out registry + weekly checker | Accepted after one resume; lead restored LO-12 candidate URL and added outcome classes | 2 sessions; ~83K subagent tokens |
 | 2026-11-11T00:20:00-08:00 | EM-18 | claude-haiku (haiku-developer) | Curated DTSC timeline + validator | Accepted | 1 session; ~45K subagent tokens |
+| 2026-11-11T07:05:00-08:00 | S11.3 | claude-haiku (haiku-developer) | Grant relevance Streamlit review app | Accepted after one resume (assist_plastic_related column added) | 2 sessions; ~100K subagent tokens |
+| 2026-11-11T07:10:00-08:00 | S7.5-UX | claude-haiku (haiku-developer) | Interactive monitoring map + expandable sections | Accepted after one resume; lead browser-smoked in headless Edge | 2 sessions; ~170K subagent tokens |
+| 2026-11-11T07:20:00-08:00 | S11.3-works | claude-haiku (general-purpose x3) | Relevance screen of 1,081 unlabelled v3.1 works | Accepted; merged into curation/work_relevance.csv | 3 sessions; ~505K subagent tokens |
+| 2026-11-11T07:50:00-08:00 | AT-2 | claude-haiku (haiku-developer) | Institution type carry-forward | Accepted after one resume | 2 sessions; ~108K subagent tokens |

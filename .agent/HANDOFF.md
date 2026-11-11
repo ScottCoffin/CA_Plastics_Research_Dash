@@ -1,4 +1,4 @@
-# Handoff - 2026-11-11 (day) - real Experts data live; curation wired; monitoring map interactive
+# Handoff - 2026-11-11 (day) - real Experts data live; curation wired; monitoring map interactive; AT-2 done
 
 ## State
 - S2.1-B done: fixed a backfill that would have pulled only 1950 and replaced the table, and
@@ -24,11 +24,11 @@
 2. WORK-REL: spot-check `curation/work_relevance.csv` low-confidence/false rows; should Haiku-false works leave Experts?
 3. ABSTRACT-PUB: keep OpenAlex abstracts in public author files (emails redacted) or drop them?
 4. EM18-DATES: confirm "18 June 2026" and "1 October 2026" on the DTSC pages.
-5. Author splits: 26 duplicate names on Experts (e.g. Andrew B. Gray x3); approve rows in `curation/author_merges.csv`?
+5. AT2-REVIEW: review types for 52 new top-100 institutions in `data/processed/institution_review_needs_v31.csv`.
+6. Author splits: 26 duplicate names on Experts (e.g. Andrew B. Gray x3); approve rows in `curation/author_merges.csv`?
 
 ## Next eligible
-- AT-2 (institution type carry-forward, now computable offline from the v3.1 authorships),
-  then AT-3 -> AT-4 -> EM-5.
+- AT-2 done (`docs/AT_2_VERIFICATION.md`). Next: AT-3 SQL analytics -> AT-4 -> EM-5; AT-11 CI guards.
 - S4.2 representative sample (corpus now exists), which unblocks owner gold labelling and so S5.
 
 ## Verification
