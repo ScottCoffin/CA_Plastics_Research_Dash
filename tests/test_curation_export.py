@@ -349,3 +349,34 @@ def test_work_relevance_sets_plastic_related_and_owner_override_wins(tmp_path: P
     works = {w["work_id"]: w for w in _json(site, "index.json")["works"]}
     assert works[first]["plastic_related"] is False
     assert works[second]["plastic_related"] is True
+
+
+def test_export_recount_honours_ca_basis(tmp_path: Path) -> None:
+    """An authorship with no CA institution but ca_basis set still counts as CA."""
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    normalized = normalize_fixture(
+        FIXTURE,
+        institution_path=INSTITUTIONS,
+        output_dir=tmp_path / "normalized",
+        qc_path=tmp_path / "qc.md",
+        generated_at="test",
+    )
+    path = normalized.output_dir / "authorships.parquet"
+    rows = pq.read_table(path).to_pylist()
+    target = next(r for r in rows if r["author_id"] and not r["ca_basis"])
+    target["ca_basis"] = "author_carry_forward"
+    pq.write_table(pa.Table.from_pylist(rows, schema=pq.read_schema(path)), path)
+    export_site(
+        works_path=normalized.output_dir / "works.parquet",
+        authors_path=normalized.output_dir / "authors.parquet",
+        authorships_path=path,
+        institutions_path=normalized.output_dir / "institutions.parquet",
+        output_dir=tmp_path / "site",
+        generated_at="test",
+        ca_authors_only=False,
+    )
+    index = _json(tmp_path / "site", "index.json")
+    counts = {a["author_id"]: a["ca_works_count"] for a in index["authors"]}
+    assert counts[target["author_id"]] == 1

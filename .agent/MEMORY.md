@@ -56,6 +56,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   limited to 5 req/s when they have >5 operators (429 "wait 1s"); the client throttles
   and retries that 429. Rejected 429s carry no credit header; the budget guard charges
   them the 10-credit reserve. Every live call must go through the budget guard.
+- CORE API v3 (2026-11-11): owner key in `.env` (renewed daily by the owner; remind on 2026-11-12); Bearer auth; 150-token bucket per window; good for full text by DOI and CA place-name phrase searches (theses/grey lit), useless for CA affiliation discovery. See `docs/api_notes/supplementary_sources.md`.
 - NSF Award Search (2026-11-10): `api.nsf.gov/services/v1/awards.json`; uppercase OR only; two quoted phrases OR'd silently return 0, so use one phrase per query; `awardeeStateCode`/`perfStateCode`; dates mm/dd/yyyy filter the `date` field; errors can arrive as HTTP 200 with `serviceNotification`. See `docs/api_notes/nsf_awards.md`.
 - USAspending (2026-11-10): `spending_by_award` limit ≤ 100; page 101 returns an empty 200 (silent 10k ceiling, so cap and defer); keywords OR-join and substring-match, so bare "plastic"/"polymer" are noisy; key = `generated_internal_id`. See `docs/api_notes/usaspending.md`.
 - NIH RePORTER v2 (2026-11-10): keyless POST `/v2/projects/search`; text search needs `operator: advanced`, `search_field: projecttitle,abstracttext,terms` with quoted OR phrases (no stemming); limit ≤ 500; offset ≤ 14,999 (split by fiscal year); `org_states` takes 2-letter codes (a full name silently returns 0). See `docs/api_notes/nih_reporter.md`.
@@ -168,6 +169,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   -> `curation/overrides_works.csv` via `scripts/build_audit_overrides.py` (`exclude` override);
   Haiku calls for unlabelled works in `curation/work_relevance.csv` (owner overrides win).
   Some OpenAlex works carry another paper's (nanoplastics) abstract; those are false matches.
+- CA inference (2026-11-11): authorships have `ca_basis` (registry / raw_affiliation / author_carry_forward); ingest adds a raw-affiliation California scope and author-anchored units; the public export keeps only works with a CA authorship. Frozen S4.2 splits verify against their manifest when the corpus grows.
 - Site UX (2026-11-11): shared topic labels/colours in `site/assets/topics.js` (window.AtlasTopics,
   validated 8-hue palette); per-institution publication files `site/data/institution_works/`
   feed `site/sem.html#inst=<id>`; author career metrics from `scripts/fetch_author_metrics.py`

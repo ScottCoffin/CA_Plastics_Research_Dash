@@ -41,12 +41,19 @@ def test_normalization_outputs_c3_tables_and_flags(tmp_path: Path) -> None:
         "null_author_ids": 2,
         "unresolved_institution_links": 2,
         "ca_affiliation_without_resolved_institution": 1,
-        "ca_led_works": 1,
-        "ca_any_author_works": 2,
+        "ca_led_works": 2,
+        "ca_any_author_works": 3,
         "near_duplicates_collapsed": 0,
         "near_duplicate_groups": 0,
         "skipped_same_title_distinct_doi": 0,
+        "authorships_ca_registry": 2,
+        "authorships_ca_raw_affiliation": 1,
+        "authorships_ca_carry_forward": 0,
     }
+    # W...103 is CA only through a raw affiliation string ("California, USA").
+    assert by_id["W9000000103"]["ca_led"] is True
+    authorships = pq.read_table(result.output_dir / "authorships.parquet").to_pylist()
+    assert {r["ca_basis"] for r in authorships} == {"registry", "raw_affiliation", ""}
     report = result.qc_path.read_text(encoding="utf-8")
     assert "Authorships with missing raw affiliation | 2" in report
 

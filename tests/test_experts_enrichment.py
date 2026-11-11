@@ -137,3 +137,28 @@ def test_export_adds_author_metrics_and_institution_files(tmp_path: Path) -> Non
     detail = json.loads(files[0].read_text(encoding="utf-8"))
     assert detail["works"] and "abstract" in detail["works"][0]
     assert "author_names" in detail["works"][0]
+
+
+def test_ca_only_export_drops_works_without_ca_authorship(tmp_path: Path) -> None:
+    from atlas.build.export_site import export_site
+    from atlas.ingest.normalize import normalize_fixture
+
+    normalized = normalize_fixture(
+        Path("tests/fixtures/s2_2_openalex_works.json"),
+        institution_path=Path("data/processed/institutions.parquet"),
+        output_dir=tmp_path / "normalized",
+        qc_path=tmp_path / "qc.md",
+        generated_at="test",
+    )
+    site = tmp_path / "site"
+    export_site(
+        works_path=normalized.output_dir / "works.parquet",
+        authors_path=normalized.output_dir / "authors.parquet",
+        authorships_path=normalized.output_dir / "authorships.parquet",
+        institutions_path=normalized.output_dir / "institutions.parquet",
+        output_dir=site,
+        generated_at="test",
+        ca_authors_only=True,
+    )
+    works = json.loads((site / "index.json").read_text(encoding="utf-8"))["works"]
+    assert works and all(w["ca_any_author"] for w in works)

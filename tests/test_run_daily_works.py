@@ -84,3 +84,42 @@ def test_year_range_uses_one_window_per_unit(monkeypatch: pytest.MonkeyPatch, tm
     assert len(urls) == 1
     assert "from_publication_date%3A1950-01-01" in urls[0]
     assert "to_publication_date%3A2027-12-31" in urls[0]
+
+
+@pytest.mark.parametrize(
+    ("flag", "expect_ids"), [("--author-anchored", True), ("--no-author-anchored", False)]
+)
+def test_author_anchored_flag_passes_ca_experts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, flag: str, expect_ids: bool
+) -> None:
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    authors = tmp_path / "authors.parquet"
+    pq.write_table(
+        pa.table({"author_id": ["A1", "A2", "A3"], "ca_works_count": [2, 0, 1]}), authors
+    )
+    runner = _load_runner()
+    seen: dict = {}
+
+    def fake_run(**kwargs):
+        seen.update(kwargs)
+        return {"status": "deferred", "reason": "budget_exceeded"}
+
+    monkeypatch.setattr(runner, "load_openalex_key", lambda: None)
+    monkeypatch.setattr(runner, "load_institution_ids", lambda path: ["I1"])
+    monkeypatch.setattr(runner, "run_daily_ingest", fake_run)
+    monkeypatch.delenv("GITHUB_OUTPUT", raising=False)
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+    runner.main(
+        [
+            "--start-year",
+            "2020",
+            "--authors-parquet",
+            str(authors),
+            "--output",
+            str(tmp_path / "w.parquet"),
+            flag,
+        ]
+    )
+    assert seen["anchor_author_ids"] == (["A1", "A3"] if expect_ids else None)

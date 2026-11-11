@@ -24,6 +24,11 @@ from typing import Any
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from atlas.ingest.normalize import (
+    compact_id,
+    is_placeholder_affiliation,
+    matches_california_affiliation,
+)
 from atlas.query import (
     always_include_filters,
     load_query_config,
@@ -155,6 +160,70 @@ def load_institution_ids(path: str | Path = "data/processed/institutions.parquet
     return ids
 
 
+ANCHOR_AUTHORS_PER_UNIT = 25
+REJECTED_REQUEST_CREDITS = Decimal(10)
+RAW_AFFILIATION_TERM = "California"
+
+
+def authorship_raw_affiliation(authorship: Mapping[str, Any]) -> str:
+    raw = authorship.get("raw_affiliation_strings")
+    if isinstance(raw, Sequence) and not isinstance(raw, (str, bytes)):
+        return " | ".join(str(value) for value in raw if value)
+    return str(authorship.get("raw_affiliation") or "")
+
+
+def keep_raw_affiliation_work(work: Mapping[str, Any]) -> bool:
+    """Keep a raw-affiliation-scope work only if some authorship passes the strict CA matcher.
+
+    ``raw_affiliation_strings.search`` stems and matches loosely ("Baja California"),
+    so the local matcher is the gate.
+    """
+
+    authorships = work.get("authorships")
+    if not isinstance(authorships, Sequence) or isinstance(authorships, (str, bytes)):
+        return False
+    return any(
+        isinstance(item, Mapping)
+        and matches_california_affiliation(authorship_raw_affiliation(item))
+        for item in authorships
+    )
+
+
+def anchored_authorship_is_ca_candidate(authorship: Mapping[str, Any]) -> bool:
+    """True when an authorship may be California although OpenAlex lacks the institution.
+
+    That is the case for an authorship with no institution and no real raw affiliation
+    (placeholder or empty), or one whose raw affiliation matches the strict California
+    pattern. An authorship that names another place stays out.
+    """
+
+    raw_text = authorship_raw_affiliation(authorship)
+    if matches_california_affiliation(raw_text):
+        return True
+    institutions = authorship.get("institutions")
+    has_institution = isinstance(institutions, Sequence) and any(
+        isinstance(item, Mapping) and item.get("id") for item in institutions
+    )
+    return not has_institution and is_placeholder_affiliation(raw_text)
+
+
+def keep_anchored_work(work: Mapping[str, Any], anchor_ids: Iterable[str]) -> bool:
+    """Keep an author-anchored work only if an anchored author's authorship is a CA candidate."""
+
+    anchors = set(anchor_ids)
+    authorships = work.get("authorships")
+    if not isinstance(authorships, Sequence) or isinstance(authorships, (str, bytes)):
+        return False
+    for authorship in authorships:
+        if not isinstance(authorship, Mapping):
+            continue
+        author = authorship.get("author")
+        author_id = compact_id(author.get("id")) if isinstance(author, Mapping) else ""
+        if author_id in anchors and anchored_authorship_is_ca_candidate(authorship):
+            return True
+    return False
+
+
 def _date_filter(name: str, value: str) -> str:
     try:
         date.fromisoformat(value)
@@ -173,17 +242,27 @@ def build_works_url(
     cursor: str = "*",
     per_page: int = DEFAULT_PER_PAGE,
     scope_filter: str | None = None,
+    author_ids: Sequence[str] = (),
+    raw_affiliation_term: str | None = None,
 ) -> str:
     """Build one bounded works request for a date window or update cursor.
 
     ``scope_filter`` (an ``always_include`` entry) replaces both the term search and
     the institution filter; type exclusions and date windows still apply.
+    ``author_ids`` (author-anchored unit) swaps the institution filter for an
+    ``authorships.author.id`` filter and keeps the term search.
     """
 
-    if scope_filter is not None and institution_ids:
-        raise ValueError("scope_filter requests take no institution IDs")
-    if scope_filter is None and not institution_ids:
+    if raw_affiliation_term and (scope_filter or institution_ids or author_ids):
+        raise ValueError("raw-affiliation requests take no other scope")
+    if scope_filter is not None and (institution_ids or author_ids):
+        raise ValueError("scope_filter requests take no institution or author IDs")
+    if author_ids and institution_ids:
+        raise ValueError("choose institution IDs or author IDs, not both")
+    if scope_filter is None and not institution_ids and not author_ids and not raw_affiliation_term:
         raise ValueError("at least one institution ID is required")
+    if len(author_ids) > ANCHOR_AUTHORS_PER_UNIT:
+        raise ValueError("author-anchored units take at most 25 author IDs")
     if len(institution_ids) > MAX_INSTITUTION_IDS_PER_REQUEST:
         raise ValueError("OpenAlex accepts at most 100 institution IDs per request")
     if start_date and updated_since:
@@ -195,6 +274,18 @@ def build_works_url(
 
     if scope_filter is not None:
         filters = [scope_filter, *type_filters(config)]
+    elif raw_affiliation_term:
+        filters = [
+            openalex_filter(config),
+            f"raw_affiliation_strings.search:{raw_affiliation_term}",
+            *type_filters(config),
+        ]
+    elif author_ids:
+        filters = [
+            openalex_filter(config),
+            "authorships.author.id:" + "|".join(author_ids),
+            *type_filters(config),
+        ]
     else:
         filters = [
             openalex_filter(config),
@@ -503,11 +594,18 @@ def ingest_live(
     budget_path: str | Path = "config/budget.yml",
     run_id: str | None = None,
     replace_output: bool = False,
+    anchor_author_ids: Sequence[str] | None = None,
+    raw_affiliation_scope: bool = False,
 ) -> dict[str, Any]:
     """Run a backfill or inclusive publication/update-date incremental pull.
 
     ``replace_output`` writes only this run's rows (a backfill after a query-version
     change) instead of merging them into rows fetched under an older query.
+    ``anchor_author_ids`` (California experts) adds author-anchored units whose works
+    are kept only when the anchored author's authorship lacks an institution or has a
+    California raw affiliation, recovering works the institution filter cannot see.
+    ``raw_affiliation_scope`` adds one term-search unit on ``raw_affiliation_strings``
+    ("California"); its works are kept only when a raw affiliation passes the strict matcher.
     """
 
     config = load_query_config(config_path)
@@ -518,6 +616,7 @@ def ingest_live(
         )
     if not institution_ids:
         raise ValueError("institution_ids must not be empty")
+    anchor_ids = sorted({compact_id(value) for value in anchor_author_ids or () if value} - {""})
     if start_year is None and end_year is not None:
         raise ValueError("start_year is required when end_year is supplied")
     if start_year is not None and end_year is None:
@@ -548,11 +647,18 @@ def ingest_live(
     conservative_cost_total = Decimal(0)
     credits_total = Decimal(0)
     with ApiCostLogger(actual_run_id, paths.usage_log) as logger:
-        units: list[tuple[list[str], str | None]] = [
-            (batch, None) for batch in chunks(list(institution_ids))
+        units: list[tuple[list[str], str | None, list[str], str | None]] = [
+            (batch, None, [], None) for batch in chunks(list(institution_ids))
         ]
-        units += [([], scope) for scope in always_include_filters(config)]
-        for batch, scope in units:
+        units += [([], scope, [], None) for scope in always_include_filters(config)]
+        units += [([], None, batch, None) for batch in chunks(anchor_ids, ANCHOR_AUTHORS_PER_UNIT)]
+        if raw_affiliation_scope:
+            units.append(([], None, [], RAW_AFFILIATION_TERM))
+        anchored_fetched = 0
+        anchored_kept = 0
+        raw_fetched = 0
+        raw_kept = 0
+        for batch, scope, anchor_batch, raw_term in units:
             # One publication-date window per unit, cursor-paged. Per-year windows
             # multiplied boolean-search calls (10 credits each) by the year span: a
             # 1950 backfill was ~3,800 calls for ~2,000 works.
@@ -575,6 +681,8 @@ def ingest_live(
                         config,
                         batch,
                         scope_filter=scope,
+                        author_ids=anchor_batch,
+                        raw_affiliation_term=raw_term,
                         start_date=window_start,
                         end_date=window_end,
                         updated_since=updated_since,
@@ -590,6 +698,16 @@ def ingest_live(
                         )
                     response_credits = Decimal(0)
                     for attempt_record in attempts:
+                        if (
+                            attempt_record["credits_known"] is not True
+                            and attempt_record.get("status_code") == 429
+                        ):
+                            # A burst-limited retry carries no credit header; charge one
+                            # boolean-search page so the guard stays conservative.
+                            reserve = REJECTED_REQUEST_CREDITS
+                            response_credits += reserve
+                            conservative_cost_total += reserve * budget.cost_per_credit_usd
+                            continue
                         if attempt_record["credits_known"] is not True:
                             raise OpenAlexUsageMetadataError(
                                 "OpenAlex request has unknown credit usage; "
@@ -622,10 +740,18 @@ def ingest_live(
                     results = body.get("results")
                     if not isinstance(results, list):
                         raise ValueError("OpenAlex response results must be a list")
+                    page_works = [work for work in results if isinstance(work, Mapping)]
+                    if anchor_batch:
+                        anchored_fetched += len(page_works)
+                        page_works = [w for w in page_works if keep_anchored_work(w, anchor_batch)]
+                        anchored_kept += len(page_works)
+                    if raw_term:
+                        raw_fetched += len(page_works)
+                        page_works = [w for w in page_works if keep_raw_affiliation_work(w)]
+                        raw_kept += len(page_works)
                     new_rows.extend(
                         _row_from_work(work, run_id=actual_run_id, fetched_at_utc=fetched_at)
-                        for work in results
-                        if isinstance(work, Mapping)
+                        for work in page_works
                     )
                     page_count += 1
                     if max_pages is not None and page_count >= max_pages:
@@ -659,5 +785,9 @@ def ingest_live(
         "requests": request_number,
         "accounted_cost_usd": float(conservative_cost_total),
         "credits": float(credits_total),
+        "anchored_fetched": anchored_fetched,
+        "anchored_kept": anchored_kept,
+        "raw_affiliation_fetched": raw_fetched,
+        "raw_affiliation_kept": raw_kept,
         "high_water": high_water,
     }

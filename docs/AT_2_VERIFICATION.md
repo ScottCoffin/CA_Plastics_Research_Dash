@@ -5,7 +5,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 ## Counts
 
-- Works in the v3.1 corpus: 1486; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
+- Works in the v3.1 corpus: 1896; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
 - California institutions with at least one non-excluded v3.1 work: 168.
 - Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 168, one row each in `config/institution_types.csv`.
 - type_source: owner_override 14, owner_reviewed 52, rule 102.
@@ -31,16 +31,16 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | 1 | I97018004 | Stanford University | 182 | private | owner_reviewed | old top 100 |
 | 2 | I84218800 | University of California, Davis | 168 | UC | owner_reviewed | old top 100 |
 | 3 | I95457486 | University of California, Berkeley | 148 | UC | owner_reviewed | old top 100 |
-| 4 | I103635307 | University of California, Riverside | 118 | UC | owner_reviewed | old top 100 |
+| 4 | I103635307 | University of California, Riverside | 116 | UC | owner_reviewed | old top 100 |
 | 5 | I36258959 | University of California San Diego | 103 | UC | owner_reviewed | old top 100 |
-| 6 | I154570441 | University of California, Santa Barbara | 89 | UC | owner_reviewed | old top 100 |
-| 7 | I161318765 | University of California, Los Angeles | 86 | UC | owner_reviewed | old top 100 |
+| 6 | I154570441 | University of California, Santa Barbara | 90 | UC | owner_reviewed | old top 100 |
+| 7 | I161318765 | University of California, Los Angeles | 85 | UC | owner_reviewed | old top 100 |
 | 8 | I150209017 | Scripps Institution of Oceanography | 63 | UC | owner_reviewed | old top 100 |
 | 9 | I1174212 | University of Southern California | 58 | private | owner_reviewed | old top 100 |
 | 10 | I11006740 | Southern California Coastal Water Research Project | 44 | nonprofit/NGO | owner_reviewed | old top 100 |
 | 11 | I204250578 | University of California, Irvine | 42 | UC | owner_reviewed | old top 100 |
 | 12 | I185103710 | University of California, Santa Cruz | 40 | UC | owner_reviewed | old top 100 |
-| 13 | I2803209242 | University of California System | 36 | UC | owner_reviewed | old top 100 |
+| 13 | I2803209242 | University of California System | 35 | UC | owner_reviewed | old top 100 |
 | 14 | I149919469 | California Polytechnic State University | 30 | CSU | owner_reviewed | old top 100 |
 | 15 | I180670191 | University of California, San Francisco | 28 | UC | owner_reviewed | old top 100 |
 | 16 | I4210111001 | San Francisco Estuary Institute | 24 | nonprofit/NGO | rule | new |
@@ -77,13 +77,13 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | 62 | I4210090881 | National Marine Mammal Foundation | 3 | nonprofit/NGO |
 | 64 | I4210095563 | Sonoma Technology (United States) | 3 | company |
 | 66 | I4210164553 | Biospherical Instruments (United States) | 3 | company |
-| 67 | I4405260704 | East Bay Municipal Utility District | 3 | local-agency |
-| 70 | I126031752 | Santa Barbara City College | 2 | private |
-| 71 | I1295874195 | California Coastal Commission | 2 | local-agency |
-| 72 | I1298353152 | SRI International | 2 | nonprofit/NGO |
-| 75 | I4210086937 | Oak Crest Institute of Science | 2 | nonprofit/NGO |
-| 76 | I4210125452 | Surface Optics (United States) | 2 | company |
-| 77 | I4210147451 | Barnett Technical Services (United States) | 2 | company |
+| 69 | I126031752 | Santa Barbara City College | 2 | private |
+| 70 | I1295874195 | California Coastal Commission | 2 | local-agency |
+| 71 | I1298353152 | SRI International | 2 | nonprofit/NGO |
+| 74 | I4210086937 | Oak Crest Institute of Science | 2 | nonprofit/NGO |
+| 75 | I4210125452 | Surface Optics (United States) | 2 | company |
+| 76 | I4210147451 | Barnett Technical Services (United States) | 2 | company |
+| 77 | I4405260704 | East Bay Municipal Utility District | 2 | local-agency |
 | 78 | I4405261977 | Calico Life Sciences | 2 | company |
 | 79 | I4405267770 | International American University | 2 | private |
 | 80 | I4405273165 | South Coast Air Quality Management District | 2 | nonprofit/NGO |

@@ -91,6 +91,7 @@ jobs:
         run: |
           python scripts/build_audit_overrides.py
           python scripts/build_author_merges.py
+          python scripts/build_institution_types.py
 
       # Career citations / h-index for the Experts sort (~20 list credits; keeps the old
       # file on a budget or rate stop).
@@ -141,6 +142,9 @@ jobs:
             data/processed/author_metrics.parquet \
             curation/overrides_works.csv \
             curation/author_merges.csv \
+            config/institution_types.csv \
+            data/processed/institution_review_needs_v31.csv \
+            docs/AT_2_VERIFICATION.md \
             data/processed/status_history.jsonl \
             docs/normalization_qc.md \
             docs/labels_qc.md \

@@ -312,6 +312,19 @@ def export_site(
     author_rows = _read(authors_path)
     authorship_rows = _read(authorships_path)
     institution_rows = _read(institutions_path)
+    # Publish only California research: works with no CA authorship on any basis
+    # (registry, raw affiliation, carry-forward) stay in the corpus but not on the site.
+    # Applies in CA-only mode (the live export); fixtures without the column are unaffected.
+    non_ca = {
+        _text(row.get("work_id"))
+        for row in works_rows
+        if ca_authors_only and "ca_any_author" in row and row.get("ca_any_author") is False
+    }
+    if non_ca:
+        works_rows = [row for row in works_rows if _text(row.get("work_id")) not in non_ca]
+        authorship_rows = [
+            row for row in authorship_rows if _text(row.get("work_id")) not in non_ca
+        ]
     label_rows = _read(labels_path, required=False) if labels_path else []
     labels = {_text(row.get("work_id")): row for row in label_rows if _text(row.get("work_id"))}
     if work_relevance_path:
@@ -387,13 +400,18 @@ def export_site(
         _text(row.get("inst_id")) for row in institution_rows if _bool(row.get("ca_flag"))
     }
     ca_works_by_author: defaultdict[str, set[str]] = defaultdict(set)
-    if ca_institutions:
+    # ``ca_basis`` (registry / raw_affiliation / author_carry_forward) is written by
+    # normalize; tables without the column count institutions only, as before.
+    has_ca_basis = any(_text(row.get("ca_basis")) for row in authorship_rows)
+    if ca_institutions or has_ca_basis:
         for row in authorship_rows:
-            if ca_institutions.intersection(_text(i) for i in _list(row.get("institution_ids"))):
+            if _text(row.get("ca_basis")) or ca_institutions.intersection(
+                _text(i) for i in _list(row.get("institution_ids"))
+            ):
                 ca_works_by_author[_text(row.get("author_id"))].add(_text(row.get("work_id")))
 
     def ca_works_count(row: Mapping[str, Any]) -> int:
-        if not ca_institutions:
+        if not ca_institutions and not has_ca_basis:
             return _int(row.get("ca_works_count"))
         return len(ca_works_by_author.get(_text(row.get("author_id")), ()))
 

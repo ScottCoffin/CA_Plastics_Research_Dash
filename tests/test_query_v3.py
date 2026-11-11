@@ -65,7 +65,7 @@ def test_institution_and_scope_requests() -> None:
     assert moore[0] == scope
     assert not any(f.startswith(("title_and_abstract", "institutions.id")) for f in moore)
     assert "type:!paratext" in moore and "from_publication_date:2024-01-01" in moore
-    with pytest.raises(ValueError, match="no institution IDs"):
+    with pytest.raises(ValueError, match="no institution or author IDs"):
         build_works_url(config, ["I1"], scope_filter=scope)
     with pytest.raises(ValueError, match="at least one institution"):
         build_works_url(config, [])

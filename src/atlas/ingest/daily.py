@@ -27,6 +27,8 @@ def run_daily_ingest(
     max_credits: float | None = None,
     max_cost_usd: float | None = None,
     replace_output: bool = False,
+    anchor_author_ids: Sequence[str] | None = None,
+    raw_affiliation_scope: bool = False,
     ingest: Callable[..., Mapping[str, Any]] = ingest_live,
 ) -> dict[str, Any]:
     """Run one refresh and convert expected budget stops into a clean outcome.
@@ -50,6 +52,8 @@ def run_daily_ingest(
             max_credits=max_credits,
             max_cost_usd=max_cost_usd,
             **({"replace_output": True} if replace_output else {}),
+            **({"anchor_author_ids": anchor_author_ids} if anchor_author_ids else {}),
+            **({"raw_affiliation_scope": True} if raw_affiliation_scope else {}),
         )
     except OpenAlexRateLimitError as error:
         return {

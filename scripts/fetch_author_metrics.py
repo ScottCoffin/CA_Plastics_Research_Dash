@@ -11,7 +11,8 @@ work:
   page). Comparing career citations with corpus-only plastics citations understated
   specialists whose plastics work mostly lacks CA co-authors (e.g. 42% vs 98.5%).
 
-The plastics pass is incremental: authors never fetched (then the oldest) go first,
+The plastics pass is incremental: only authors never fetched, fetched under another query
+version, or older than --plastics-max-age-days (30) are refreshed, oldest first;
 the file is saved after every batch, and a budget or rate stop keeps what was done so
 the next daily run continues. ``plastic_fetched_at_utc`` is empty until covered.
 """
@@ -21,7 +22,7 @@ from __future__ import annotations
 import argparse
 import sys
 import urllib.parse
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 
@@ -148,6 +149,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--config", type=Path, default=Path("config/queries.yml"))
     parser.add_argument("--usage-log", type=Path, default=Path("data/logs/api_usage.jsonl"))
     parser.add_argument("--skip-plastics", action="store_true")
+    parser.add_argument(
+        "--plastics-max-age-days",
+        type=int,
+        default=30,
+        help="refresh whole-record plastics counts only when older than this (or new query)",
+    )
     args = parser.parse_args(argv)
     load_openalex_key()
     ids = author_ids(args.authors)
@@ -191,8 +198,17 @@ def main(argv: list[str] | None = None) -> int:
             _save(args.output, rows)
             if not args.skip_plastics:
                 version = str(config.get("version") or "")
+                cutoff = (
+                    datetime.now(UTC) - timedelta(days=args.plastics_max_age_days)
+                ).isoformat()
+
+                def stale(author: str) -> bool:
+                    row = rows.get(author, {})
+                    fetched = row.get("plastic_fetched_at_utc") or ""
+                    return row.get("plastic_query_version") != version or fetched < cutoff
+
                 pending = sorted(
-                    ids,
+                    [a for a in ids if stale(a)],
                     key=lambda a: (
                         rows.get(a, {}).get("plastic_query_version") == version,
                         rows.get(a, {}).get("plastic_fetched_at_utc") or "",

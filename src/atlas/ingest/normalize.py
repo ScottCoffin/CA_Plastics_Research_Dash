@@ -57,6 +57,7 @@ AUTHORSHIPS_SCHEMA = pa.schema(
         ("is_corresponding", pa.bool_()),
         ("institution_ids", pa.list_(pa.string())),
         ("raw_affiliation", pa.string()),
+        ("ca_basis", pa.string()),
     ]
 )
 
@@ -122,9 +123,17 @@ class _CollapseResult:
     skipped_distinct_doi: int
 
 
+_TITLE_ARTIFACT = re.compile(r"^\s*Title\s*:?\s*(?=[A-Z])")
+
+
 def title_key(title: object) -> str:
-    """Lowercase the title, drop every non [a-z0-9] character, keep 60 characters."""
-    return re.sub(r"[^a-z0-9]", "", _string(title).lower())[:60]
+    """Lowercase the title, drop every non [a-z0-9] character, keep 60 characters.
+
+    A leading ``Title``/``Title:`` form-field artifact (seen on SSRN preprints) is
+    ignored when a capital letter follows, so the preprint matches its article.
+    """
+    text = _TITLE_ARTIFACT.sub("", _string(title))
+    return re.sub(r"[^a-z0-9]", "", text.lower())[:60]
 
 
 def _type_rank(value: object) -> int:
@@ -346,6 +355,54 @@ def _looks_california(value: str) -> bool:
     return "california" in text or bool(re.search(r"(?<![a-z])ca(?![a-z])", text))
 
 
+CA_BASIS_REGISTRY = "registry"
+CA_BASIS_RAW = "raw_affiliation"
+CA_BASIS_CARRY = "author_carry_forward"
+CARRY_FORWARD_YEAR_WINDOW = 2
+
+_CA_AFFILIATION_PATTERNS = (
+    re.compile(
+        r"(?<!Baja )\bCalifornia\b(?!,?\s*(?:PA\b|Pennsylvania|Missouri|MO\b|Maryland|MD\b))",
+        re.IGNORECASE,
+    ),
+    re.compile(r",\s*CA\.?,?\s+9\d{4}\b"),
+    re.compile(r",\s*CA,?\s+(?:USA|U\.S\.A\.|United States)\b", re.IGNORECASE),
+    re.compile(
+        r"\bUC\s+(?:Berkeley|Davis|Irvine|Los Angeles|Merced|Riverside|San Diego"
+        r"|San Francisco|Santa Barbara|Santa Cruz)\b"
+    ),
+    re.compile(r"\bScripps Institution of Oceanography\b", re.IGNORECASE),
+    re.compile(r"\bCaltech\b"),
+    re.compile(r"\bMoss Landing Marine Laborator", re.IGNORECASE),
+    re.compile(r"\bStanford University\b", re.IGNORECASE),
+)
+_AFFILIATION_PLACEHOLDER = re.compile(
+    r"affiliation\s+not\s+provided|^\s*(?:independent|unaffiliated|none|n/?a|unknown)\b",
+    re.IGNORECASE,
+)
+
+
+_NOT_CALIFORNIA_STATE = re.compile(
+    r"California\s+(?:University\s+of\s+Pennsylvania|Univ\.?\s+of\s+Pa\.?)", re.IGNORECASE
+)
+
+
+def matches_california_affiliation(value: object) -> bool:
+    """True when a raw affiliation string carries a strict California signal.
+
+    Only affiliation strings are tested (never titles), so "California sea lion"
+    cannot match. ``Baja California`` and ``California, PA`` style places are excluded.
+    """
+    text = _NOT_CALIFORNIA_STATE.sub(" ", _string(value))
+    return bool(text.strip()) and any(pattern.search(text) for pattern in _CA_AFFILIATION_PATTERNS)
+
+
+def is_placeholder_affiliation(value: object) -> bool:
+    """True for an empty or placeholder affiliation ("Independent - ... not provided")."""
+    text = _string(value).strip(" |,.;")
+    return not text or bool(_AFFILIATION_PLACEHOLDER.search(text))
+
+
 def _read_registry(path: str | Path) -> dict[str, dict[str, Any]]:
     table = pq.read_table(path)
     result: dict[str, dict[str, Any]] = {}
@@ -470,6 +527,12 @@ def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) 
             "Same-title article pairs kept apart (distinct DOIs)",
             metrics["skipped_same_title_distinct_doi"],
         ),
+        ("Authorships CA by registry institution", metrics["authorships_ca_registry"]),
+        ("Authorships CA by raw affiliation string", metrics["authorships_ca_raw_affiliation"]),
+        (
+            "Authorships CA by author carry-forward (no affiliation, +/-2 years)",
+            metrics["authorships_ca_carry_forward"],
+        ),
     ]
     lines = [
         "# OpenAlex normalization QC",
@@ -479,8 +542,12 @@ def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) 
         "",
         "The normalizer treats the reviewed California institution registry as "
         "the authoritative resolved-CA set. `ca_led` is true only when the "
-        "first authorship has a resolved CA registry institution; `ca_any_author` "
-        "is true when any authorship does. A CA-like unresolved affiliation is "
+        "first authorship has a California basis; `ca_any_author` "
+        "is true when any authorship does. An authorship's `ca_basis` is "
+        "`registry` (resolved CA institution), `raw_affiliation` (strict California "
+        "pattern in the raw affiliation string) or `author_carry_forward` (no "
+        "affiliation at all, same author has a CA authorship within 2 years). "
+        "A CA-like unresolved affiliation is "
         "reported when its affiliation contains `California` or a standalone "
         "`CA` token but no resolved CA institution is linked for that work.",
         "",
@@ -498,6 +565,40 @@ def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) 
         ]
     )
     return "\n".join(lines)
+
+
+def _apply_carry_forward(
+    authorships: list[dict[str, Any]],
+    works: Sequence[Mapping[str, Any]],
+    author_state: dict[str, dict[str, Any]],
+) -> None:
+    """Mark empty-affiliation authorships ``author_carry_forward`` (in place).
+
+    An authorship with no institutions and no real raw affiliation inherits California
+    from the same author when that author has a registry/raw CA authorship on a work
+    published within ``CARRY_FORWARD_YEAR_WINDOW`` years.
+    """
+    year_of = {row["work_id"]: row["year"] for row in works}
+    ca_years: dict[str, list[int]] = defaultdict(list)
+    for row in authorships:
+        year = year_of.get(row["work_id"])
+        if row["author_id"] and row["ca_basis"] and isinstance(year, int):
+            ca_years[row["author_id"]].append(year)
+    for row in authorships:
+        year = year_of.get(row["work_id"])
+        if (
+            row["ca_basis"]
+            or not row["author_id"]
+            or not isinstance(year, int)
+            or row["institution_ids"]
+            or not is_placeholder_affiliation(row["raw_affiliation"])
+        ):
+            continue
+        if any(
+            abs(year - other) <= CARRY_FORWARD_YEAR_WINDOW for other in ca_years[row["author_id"]]
+        ):
+            row["ca_basis"] = CA_BASIS_CARRY
+            author_state[row["author_id"]]["ca_works"].add(row["work_id"])
 
 
 def normalize_records(
@@ -545,8 +646,6 @@ def normalize_records(
         raw_authorships = work.get("authorships") or []
         if not isinstance(raw_authorships, Sequence) or isinstance(raw_authorships, (str, bytes)):
             raw_authorships = []
-        work_ca_led = False
-        work_ca_any = False
         work_ca_like = False
         work_resolved_ca = False
         total_authors = len(raw_authorships)
@@ -597,12 +696,15 @@ def normalize_records(
                 registry.get(inst_id, {}).get("ca_flag") for inst_id in institution_ids
             )
             ca_like = _looks_california(raw_affiliation)
-            work_ca_any = work_ca_any or resolved_ca
+            if resolved_ca:
+                ca_basis = CA_BASIS_REGISTRY
+            elif matches_california_affiliation(raw_affiliation):
+                ca_basis = CA_BASIS_RAW
+            else:
+                ca_basis = ""
             work_resolved_ca = work_resolved_ca or resolved_ca
             work_ca_like = work_ca_like or ca_like
             position = _author_position(index, total_authors, raw_authorship.get("author_position"))
-            if position == "first" and resolved_ca:
-                work_ca_led = True
             authorships.append(
                 {
                     "work_id": work_id,
@@ -612,6 +714,7 @@ def normalize_records(
                     "is_corresponding": bool(raw_authorship.get("is_corresponding", False)),
                     "institution_ids": institution_ids,
                     "raw_affiliation": raw_affiliation,
+                    "ca_basis": ca_basis,
                 }
             )
 
@@ -629,7 +732,7 @@ def normalize_records(
                 state["name"] = state["name"] or author_name
                 state["orcid"] = state["orcid"] or _string(author.get("orcid"))
                 state["works"].add(work_id)
-                if resolved_ca:
+                if ca_basis:
                     state["ca_works"].add(work_id)
 
         if work_ca_like and not work_resolved_ca:
@@ -663,10 +766,19 @@ def normalize_records(
                 "cited_by_count": _number(work.get("cited_by_count")) or 0,
                 "first_seen": _string(work.get("fetched_at_utc")),
                 "last_updated": _string(work.get("updated_date")),
-                "ca_led": work_ca_led,
-                "ca_any_author": work_ca_any,
+                "ca_led": False,
+                "ca_any_author": False,
             }
         )
+
+    _apply_carry_forward(authorships, works, author_state)
+    ca_any_works = {row["work_id"] for row in authorships if row["ca_basis"]}
+    ca_led_works = {
+        row["work_id"] for row in authorships if row["ca_basis"] and row["position"] == "first"
+    }
+    for row in works:
+        row["ca_any_author"] = row["work_id"] in ca_any_works
+        row["ca_led"] = row["work_id"] in ca_led_works
 
     # Collapse near-duplicate works before anything is written. Authorships and
     # author work sets of collapsed works are re-pointed to the kept work.
@@ -718,6 +830,9 @@ def normalize_records(
         "near_duplicates_collapsed": len(collapse.duplicate_rows),
         "near_duplicate_groups": len(set(keeper_of.values())),
         "skipped_same_title_distinct_doi": collapse.skipped_distinct_doi,
+        "authorships_ca_registry": sum(r["ca_basis"] == CA_BASIS_REGISTRY for r in authorships),
+        "authorships_ca_raw_affiliation": sum(r["ca_basis"] == CA_BASIS_RAW for r in authorships),
+        "authorships_ca_carry_forward": sum(r["ca_basis"] == CA_BASIS_CARRY for r in authorships),
     }
     output = Path(output_dir)
     _atomic_write_table(output / "works.parquet", works, WORKS_SCHEMA)

@@ -13,11 +13,32 @@ import os
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pyarrow.parquet as pq
+
 from atlas.ingest.daily import run_daily_ingest
 from atlas.ingest.openalex import OpenAlexPaths, load_institution_ids, load_openalex_key
 from atlas.query import load_query_config
 
 BACKFILL_START_YEAR = 1950
+DEFAULT_AUTHORS_PARQUET = Path("data/processed/normalized/authors.parquet")
+
+
+def load_anchor_author_ids(path: Path) -> list[str]:
+    """California experts (``ca_works_count > 0``) whose works may lack an institution."""
+    if not path.exists():
+        return []
+    table = pq.read_table(path, columns=["author_id", "ca_works_count"])
+    return sorted(
+        {
+            str(author_id)
+            for author_id, count in zip(
+                table.column("author_id").to_pylist(),
+                table.column("ca_works_count").to_pylist(),
+                strict=True,
+            )
+            if author_id and (count or 0) > 0
+        }
+    )
 
 
 def _write_github_output(name: str, value: object) -> None:
@@ -53,6 +74,21 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-credits", type=float, default=None)
     parser.add_argument("--max-cost-usd", type=float, default=None)
     parser.add_argument("--allow-candidate", action="store_true")
+    parser.add_argument(
+        "--author-anchored",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="also query CA experts by author ID, keeping works whose authorship has no "
+        "institution or a California raw affiliation (default on)",
+    )
+    parser.add_argument(
+        "--raw-affiliation-scope",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="also search raw_affiliation_strings for 'California', keeping works whose "
+        "raw affiliation passes the strict California matcher (default on)",
+    )
+    parser.add_argument("--authors-parquet", type=Path, default=DEFAULT_AUTHORS_PARQUET)
     args = parser.parse_args(argv)
 
     load_openalex_key()
@@ -100,6 +136,10 @@ def main(argv: list[str] | None = None) -> int:
         max_credits=args.max_credits,
         max_cost_usd=args.max_cost_usd,
         replace_output=replace_output,
+        raw_affiliation_scope=args.raw_affiliation_scope,
+        anchor_author_ids=(
+            load_anchor_author_ids(args.authors_parquet) if args.author_anchored else None
+        ),
     )
     _write_github_output("status", result["status"])
     _write_github_output("reason", result.get("reason", ""))

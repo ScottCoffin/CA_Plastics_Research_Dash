@@ -277,3 +277,8 @@ until it reports.
 ## 2026-11-11: shell heredocs corrupt regex escapes here
 - Python patches sent through Git Bash heredocs turned `\b` into a backspace (0x08) twice, silently breaking regexes. Write patch scripts with the Write tool, or use lookarounds; scan with `grep -rlP "\x08" --include=*.py`.
 - A share metric must use the same population in numerator and denominator: corpus-only plastics citations over career citations put Rochman at 42% (true 98.7%).
+
+## 2026-11-11: frozen artifacts must tolerate corpus growth; refresh only stale enrichments
+- A frozen split's check asserted the live corpus hash, so growing the corpus "failed" S4.2. Check frozen files against their manifest; rebuild only when inputs are unchanged.
+- An enrichment pass that refreshes every author costs ~1,200 credits/run; gate refreshes by age/version (30 days) so a routine run costs ~40.
+- Derived committed files (AT-2 institution types) must be regenerated wherever the corpus is regenerated (ingest workflow), or the next push fails their freshness test.

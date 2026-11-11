@@ -516,3 +516,9 @@ the implementing task's acceptance passes.
 - **Costs:** a Node build step in CI; rewriting five working, tested pages; regression risk; no current performance need.
 - **Revisit triggers (checked on every CI run by `scripts/check_framework_triggers.py`, which emits a GitHub `::warning::`):** T1 exported works > 10,000; T2 initial payload > 1.5 MB gzip (half the C5 budget); T3 any of EM-5..EM-12 started or done (A2 visual build-out); T4 `site/index.html` > 300 KB or more than 6 hand-built pages.
 - **When a trigger fires:** reopen AT-5/AT-6 with the owner. Preferred path: build the new A2 pages in Framework alongside the existing pages (incremental), not a big-bang rewrite.
+
+## ADR-CA-INFERENCE-2026-11-11: California inference beyond linked institutions; CA-only public works
+- **Context:** Owner forensics on Aleksandra Karapetrova: a 2022 Zenodo poster had no OpenAlex affiliation, and 35/40 sampled Europe PMC CA papers missing from the corpus had a California raw affiliation but no linked institution.
+- **Decision:** authorships carry `ca_basis` = registry | raw_affiliation (strict matcher; excludes Baja California and California, PA) | author_carry_forward (no institution and empty/placeholder affiliation, author has a CA authorship within 2 years). Ingest adds a `raw_affiliation_strings.search:California` scope and author-anchored units (25 CA experts per call, kept only when the anchored authorship is unaffiliated or CA). The public export keeps only works with a CA authorship on any basis; other fetched works stay in the corpus.
+- **Result:** corpus 1,486 -> 1,896 works; site 1,774 works, 2,422 experts; authorships by basis: registry 3,648, raw_affiliation 917, carry_forward 230. Karapetrova's alpine poster is in.
+- **Risk:** carry-forward can misattribute when OpenAlex merges same-name authors; ORCID dated employments (TODO S2.5c) are the planned confirmation.

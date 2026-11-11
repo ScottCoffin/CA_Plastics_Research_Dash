@@ -94,3 +94,4 @@
 | 2026-11-11 | ADR | Observable Framework deferral recorded with CI-checked revisit triggers | this commit |
 | 2026-11-11 | S9.3-UX, S9.4 (spec) | Drawer metrics strip and collapsible sections; frequent co-authors; first-click bug fix; collaboration network written up | this commit |
 | 2026-11-11 | S4.2 | splits_v2: 500-work stratified v3.1 pool + 80 leak-test works; size-aware author-group splits | this commit |
+| 2026-11-11 | S2-COVERAGE | Karapetrova forensics; raw-affiliation and carry-forward CA inference; raw-affiliation scope and author-anchored ingest; CA-only export; corpus 1,896 works | this commit |

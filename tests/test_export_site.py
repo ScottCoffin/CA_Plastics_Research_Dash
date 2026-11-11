@@ -55,6 +55,8 @@ def test_export_site_lists_only_california_affiliated_experts(tmp_path) -> None:
     authors = pq.read_table(normalized.output_dir / "authors.parquet").to_pylist()
     expected = {row["author_id"] for row in authors if (row["ca_works_count"] or 0) > 0}
     assert expected and {row["author_id"] for row in payload["authors"]} == expected
-    assert payload["counts"]["works"] == 4
+    # CA-only mode also drops works with no CA authorship on any basis (2026-11-11).
+    works = pq.read_table(normalized.output_dir / "works.parquet").to_pylist()
+    assert payload["counts"]["works"] == sum(1 for w in works if w["ca_any_author"])
     files = {path.stem for path in (result.output_dir / "authors").glob("*.json")}
     assert files == expected
