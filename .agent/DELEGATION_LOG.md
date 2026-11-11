@@ -73,3 +73,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-11T11:40:00-08:00 | AT-11 | haiku-developer | atlas.guards, check_ci_guards, failure-mode tests (parallel with AT-4) | Accepted first pass; lead wired workflows | 1 session; ~62K subagent tokens |
 | 2026-11-11T12:10:00-08:00 | AT-4 UI | claude-sonnet (general-purpose) | Institutions tiers view with ranges in site/index.html | Accepted first pass (browser smoke at 1280/400 px) | 1 session; ~80K subagent tokens |
 | 2026-11-11T12:10:00-08:00 | AT-10 | haiku-developer | Release writer, methods card, check_at10, release.json | Accepted; lead fixed DATA_DICTIONARY entry, key-based abstract check, About DOI line | 1 session; ~115K subagent tokens |
+| 2026-11-11T12:10:00-08:00 | S2.5b | claude-sonnet (general-purpose) | Europe PMC recall audit and DOI ingest | Partial: benchmark done; ingest stopped at the budget guard as instructed | 1 session; ~82K subagent tokens |
