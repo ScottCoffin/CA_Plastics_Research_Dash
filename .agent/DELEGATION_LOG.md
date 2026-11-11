@@ -76,3 +76,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-11T12:10:00-08:00 | S2.5b | claude-sonnet (general-purpose) | Europe PMC recall audit and DOI ingest | Partial: benchmark done; ingest stopped at the budget guard as instructed | 1 session; ~82K subagent tokens |
 | 2026-11-11T12:30:00-08:00 | S2.5c/S9.5 | claude-sonnet (general-purpose) | ORCID public-API enrichment | Accepted; lead added bio email redaction and fixed the User-Agent URL | 1 session; ~99K subagent tokens |
 | 2026-11-11T12:30:00-08:00 | S9.5 | haiku-developer | Wikidata P496/P18 + Commons licence metadata | Accepted first pass | 1 session; ~72K subagent tokens |
+| 2026-11-11T12:50:00-08:00 | S2.5d | haiku-developer | DataCite by ORCID | Accepted after one continue message (turn limit; DataCite 502 resumed from cache) | 2 sessions; ~90K subagent tokens |
