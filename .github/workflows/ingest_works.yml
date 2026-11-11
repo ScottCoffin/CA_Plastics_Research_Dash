@@ -107,6 +107,19 @@ jobs:
         if: steps.refresh.outputs.status == 'success'
         run: python scripts/build_export_site.py
 
+      # AT-3 analytics (DuckDB) over the published works, then the AT-4 serving bundle.
+      - name: Build analytics and serving bundle
+        if: steps.refresh.outputs.status == 'success'
+        run: |
+          python scripts/build_analytics.py
+          python scripts/build_bundle.py
+          python scripts/check_at4.py
+
+      # AT-11: stop before committing if the raw/normalized schema changed or a payload is too big.
+      - name: Schema and payload guards
+        if: steps.refresh.outputs.status == 'success'
+        run: python scripts/check_ci_guards.py --require-raw --require-normalized
+
       # S10.1 run history. Placed after label so counts reflect this run; always runs so failures are recorded.
       - name: Record run status
         if: always()
@@ -153,7 +166,7 @@ jobs:
             site/data/build_metadata.json \
             site/data/institutions.json \
             site/data/institutions.geojson
-          git add -A site/data/authors site/data/institution_works
+          git add -A site/data/authors site/data/institution_works site/data/bundle
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"
           git pull --rebase origin "$DEFAULT_BRANCH"

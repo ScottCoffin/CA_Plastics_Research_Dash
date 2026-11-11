@@ -1,4 +1,4 @@
-# Handoff - 2026-11-11 (late afternoon) - AT-3 SQL analytics sealed
+# Handoff - 2026-11-11 (night, overnight mode) - AT-3, AT-4, AT-11 sealed
 
 This file is the live tracker for the current session: update it at every checkpoint
 (owner requests, status, next steps) so a fresh session can resume without chat history.
@@ -39,15 +39,16 @@ This file is the live tracker for the current session: update it at every checkp
 | 32 | DuckDB dependency for AT-3 | Done: owner chose duckdb==2.0.0 and moved the G-PARQ writer pin (ADR-DUCKDB-2-2026-11-11) |
 | 33 | AT-3 SQL analytics | Done: `atlas.analytics`, `docs/AT_3_VERIFICATION.md`; every ranked CA institution overlaps a neighbour, so show tiers/intervals, not strict ranks |
 | 34 | AT-4 serving bundle (tiers with ranges, owner-confirmed) | Done: `site/data/bundle/`, `site/assets/facets.js`; Institutions tab tier UI next |
+| 35 | AT-11 CI guards | Done: schema/payload guards before the daily commit; analytics + bundle rebuilt daily |
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
-## Next eligible (dependency order) - as of the AT-3 commit
-1. AT-4 serving bundle (abstract-free public Parquet from the AT-3 tables + facets; DuckDB 2.0.0 zstd writer) -> AT-10 release pipeline.
-2. AT-11 CI guards for S2 (also wire `scripts/build_analytics.py` into `ingest_works.yml`).
+## Next eligible (dependency order) - as of the AT-11 commit
+1. AT-4 UI: Institutions tab shows tiers with ranges from `site/data/bundle/inst_tiers.json`.
+2. AT-10 release pipeline: methods card, Parquet, checksums, CITATION/Zenodo metadata (cutting the GitHub release, which mints a DOI, is an owner action).
 3. Gold-label app for the S4.2 sample (580 works, guide_v2 fields) + Claude second rater on a blind 20% (ADR-GATES); kappa via S4.3 tooling.
-4. S5.0 shared active-learning engine (after the owner validates the S5.1 Smart queue), then S5.5 domain tags.
-5. S2.5 coverage: Europe PMC recall audit, ORCID enrichment, DataCite by ORCID, CORE full text (needs the renewed CORE key).
-6. S9.5 bios/photos, then S9.6 outreach, S9.4 network with SPK-6/AT-8 (inputs: `inst_cooccurrence`), SPK-5/AT-7.
+4. S2.5 coverage: Europe PMC recall audit, ORCID enrichment, DataCite by ORCID; CORE full text needs the renewed key.
+5. S9.5 bios/photos (ORCID + Wikidata), then S9.6 outreach, S9.4 network with SPK-6/AT-8 (inputs: `inst_cooccurrence`), SPK-5/AT-7.
+6. S5.0 shared active-learning engine waits on the owner's S5.1 Smart-queue validation.
 7. Last: S3.7 hero page and S3.8 SEO.
 
 ## Owner actions (one line each)

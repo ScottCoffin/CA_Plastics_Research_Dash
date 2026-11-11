@@ -100,3 +100,4 @@
 | 2026-11-11 | handoff | Context at 80%: handoff to a fresh orchestrator via RESUME_PROMPT.md | this commit |
 | 2026-11-11 | AT-3 | SQL analytics (DuckDB 2.0.0): fractional counts, bootstrap stability, year x tag, co-occurrence; `works.is_retracted`; owner confirmed two state-agency overrides | this commit |
 | 2026-11-11 | AT-4 | Serving bundle: Appendix C bit-sets, facets.js, title search, abstract-free Parquet, institution tiers; wired into ingest_works and CI | this commit |
+| 2026-11-11 | AT-11 | CI guards: raw/normalized schema and payload checks before the daily commit; failure-mode tests | this commit |

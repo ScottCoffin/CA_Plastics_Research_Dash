@@ -53,3 +53,12 @@ jobs:
 
       - name: Build
         run: make build
+
+      # AT-4: committed serving bundle stays within the 3 MB gz landing budget, has no
+      # abstracts, and facets.js counts match the Python reference (needs node).
+      - name: Check serving bundle (AT-4)
+        run: python scripts/check_at4.py
+
+      # AT-11: committed site payload sizes and index schema.
+      - name: Check site payload guards (AT-11)
+        run: python scripts/check_ci_guards.py
