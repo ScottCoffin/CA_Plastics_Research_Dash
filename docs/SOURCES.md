@@ -64,3 +64,23 @@ Weekly metadata-only checks. HTTP status, validators, and limited response metad
 | CEDEN 2.0 microplastics module | CEDEN says microplastics data types will be added over time; implementation and data availability need confirmation. / 2027-01-15 | [https://ceden.org/](https://ceden.org/) | 2026-11-09T22:09:18+00:00 | None; baseline; manual review | C |
 
 <!-- S7.6 WATCHLIST END -->
+
+<!-- S7.8 CEDEN WATCH START -->
+
+Weekly metadata-only CEDEN check. Row counts are availability metadata from the data.ca.gov datastore, not data quality, completeness, or reuse rights.
+
+Checked 2026-11-11T00:11:51+00:00 against [surface-water-chemistry-results](https://data.ca.gov/dataset/surface-water-chemistry-results); units: particles/L, particles/g, particles/kg, particles/m3.
+
+| Resource | Rows | Distinct projects | Projects (rows) |
+|---|---|---|---|
+| 2014 CEDEN Water Chemistry Data | 60 | 1 | SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation (60) |
+| 2015 CEDEN Water Chemistry Data | 121 | 1 | SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation (121) |
+| 2016 CEDEN Water Chemistry Data | 83 | 1 | SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation (83) |
+| 2017 CEDEN Water Chemistry Data | 1948 | 1 | SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation (1948) |
+| 2018 CEDEN Water Chemistry Data | 763 | 1 | SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation (763) |
+| CEDEN Water Chemistry Data Prior to 2000  | 70 | 1 | SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation (70) |
+
+Total microplastics rows across checked resources: 3045.
+New projects flagged: none.
+
+<!-- S7.8 CEDEN WATCH END -->
