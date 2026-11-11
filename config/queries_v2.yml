@@ -1,0 +1,101 @@
+version: plastic-v2-candidate
+status: owner_supplied_candidate
+scope: title_and_abstract
+
+# G-1: chemicals-in-plastics are tier 2. G-2: tire-wear particles and textile
+# microfibers are core, but generic collision-prone terms require context.
+core_terms:
+  - microplastic
+  - nanoplastic
+  - micro-plastic
+  - nano-plastic
+  - micro-sized plastic
+  - microsized plastics
+  - plastic pollution
+  - plastic debris
+  - plastic litter
+  - marine debris
+  - marine litter
+  - plastic particles
+  - plastic fragments
+  - plastic ingestion
+  - resin pellet
+  - plastic pellet
+
+qualified_terms:
+  - term: microfiber
+    any_context:
+      - textile
+      - laundry
+      - synthetic
+      - plastic
+      - wastewater
+      - polyester
+  - term: tire wear
+    any_context:
+      - particles
+      - microplastic
+      - runoff
+      - 6PPD
+      - stormwater
+      - pollution
+      - toxicity
+  - term: plastic waste
+    any_context:
+      - ocean
+      - marine
+      - river
+      - soil
+      - environment
+      - pollution
+      - leakage
+
+tier_2_terms:
+  - chemicals in plastics
+  - plastic additives
+  - bisphenol A
+  - BPA
+  - phthalates
+  - 6PPD
+  - 6PPD-quinone
+
+exclusions:
+  - microplastic strain
+  - microplastic deformation
+  - internal friction
+  - plastic behaviour of crystals
+  - plastic behavior of crystals
+
+# Candidate OpenAlex expression supplied by the owner's external query agent.
+# S1.5 must smoke-test syntax/encoding and measure precision/recall before this
+# becomes the production query.
+openalex:
+  field: title_and_abstract.search
+  query_expression: >-
+    (microplastic OR nanoplastic OR "micro-plastic" OR "nano-plastic" OR
+    "micro-sized plastic" OR "microsized plastics" OR "plastic pollution" OR
+    "plastic debris" OR "plastic litter" OR "marine debris" OR "marine litter"
+    OR "plastic particles" OR "plastic fragments" OR "plastic ingestion" OR
+    "resin pellet" OR "plastic pellet" OR (microfiber AND (textile OR laundry
+    OR synthetic OR plastic OR wastewater OR polyester)) OR ("tire wear" AND
+    (particles OR microplastic OR runoff OR 6PPD OR stormwater OR pollution OR
+    toxicity)) OR ("plastic waste" AND (ocean OR marine OR river OR soil OR
+    environment OR pollution OR leakage))) NOT ("microplastic strain" OR
+    "microplastic deformation" OR "internal friction" OR "plastic behaviour of
+    crystals" OR "plastic behavior of crystals")
+
+versioning:
+  increment_when:
+    - a term is added, removed, or reclassified
+    - Boolean qualification or exclusion logic changes
+    - the OpenAlex field scope changes
+  cache_contract:
+    - persist query_version and rendered query with cached counts
+    - reject legacy flat caches and caches with a different query_version
+    - percent-encode the complete filter value through the shared URL builder
+
+provenance:
+  supplied_by: owner external query agent
+  supplied_on: 2026-11-05
+  evidence_status: not independently reproduced at owner request
+  details: docs/query_design_v2.md

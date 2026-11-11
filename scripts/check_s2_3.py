@@ -76,7 +76,7 @@ def main() -> None:
         )
         assert len(first_rows) == len(normalized) == len({row["work_id"] for row in first_rows})
         assert all(row["label_source"] == "rule" for row in first_rows)
-        assert all(row["model_version"] == "plastic-v2-candidate-rule-v1" for row in first_rows)
+        assert all(row["model_version"] == "plastic-v3.1-rule-v1" for row in first_rows)
         assert all(row["confidence"] is None for row in first_rows)
         by_id = {row["work_id"]: row for row in first_rows}
         assert by_id["W9000000201"]["plastic_related"] is True

@@ -26,7 +26,7 @@ from atlas.ingest.grants import (
 from atlas.ingest.grants import nih_reporter as nr
 
 FIXTURE = Path("tests/fixtures/s8_2_nih_reporter.json")
-QUERIES = Path("config/queries.yml")
+QUERIES = Path("config/queries_v2.yml")  # fixture: request counts pinned to v2 terms
 TAXONOMY = Path("config/taxonomy.yml")
 TODAY = date(2026, 11, 10)  # FY2027 is current, FY2026 is previous.
 NOW = datetime(2026, 11, 10, tzinfo=UTC)

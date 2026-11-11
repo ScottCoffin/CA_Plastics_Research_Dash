@@ -46,7 +46,7 @@ WORK_LABELS_SCHEMA = pa.schema(
     ]
 )
 
-MODEL_VERSION = "plastic-v2-candidate-rule-v1"
+MODEL_VERSION = "plastic-v3.1-rule-v1"
 
 # These are intentionally small, transparent matrix facets.  They are an
 # independent local implementation of the documented regex-facet approach;

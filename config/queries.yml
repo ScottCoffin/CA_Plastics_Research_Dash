@@ -1,101 +1,224 @@
-version: plastic-v2-candidate
-status: owner_supplied_candidate
+# Active plastics query (AT-1, promoted 2026-11-10). v3.1 tightens the v3 candidate
+# (config/queries_v3.yml) after the owner-labelled repeat audit; v2 is archived in
+# config/queries_v2.yml. Evidence: docs/QUERY_AUDIT.md.
+version: plastic-v3.1
+status: active
 scope: title_and_abstract
-
-# G-1: chemicals-in-plastics are tier 2. G-2: tire-wear particles and textile
-# microfibers are core, but generic collision-prone terms require context.
 core_terms:
-  - microplastic
-  - nanoplastic
-  - micro-plastic
-  - nano-plastic
-  - micro-sized plastic
-  - microsized plastics
-  - plastic pollution
-  - plastic debris
-  - plastic litter
-  - marine debris
-  - marine litter
-  - plastic particles
-  - plastic fragments
-  - plastic ingestion
-  - resin pellet
-  - plastic pellet
-
+- microplastic
+- nanoplastic
+- micro-plastic
+- nano-plastic
+- micro-sized plastic
+- microsized plastics
+- plastic pollution
+- plastic debris
+- plastic litter
+- marine debris
+- marine litter
+- plastic particles
+- plastic fragments
+- plastic ingestion
+- resin pellet
+- plastic pellet
+- macroplastic
+- mesoplastic
+- plastics pollution
+- plastic pollutants
+- plastic trash
+- anthropogenic litter
+- anthropogenic debris
+- anthropogenic microparticles
+- anthropogenic microparticle
+- ingested plastic
+- ingested plastics
+- eat plastic
+- consuming plastic
+- plastic contamination
+- plastic recycling
+- plastics recycling
+- recycled plastic
+- recycled plastics
+- single-use plastics
+- biodegradable plastic
+- biodegradable plastics
+- circular economy of plastics
 qualified_terms:
-  - term: microfiber
-    any_context:
-      - textile
-      - laundry
-      - synthetic
-      - plastic
-      - wastewater
-      - polyester
-  - term: tire wear
-    any_context:
-      - particles
-      - microplastic
-      - runoff
-      - 6PPD
-      - stormwater
-      - pollution
-      - toxicity
-  - term: plastic waste
-    any_context:
-      - ocean
-      - marine
-      - river
-      - soil
-      - environment
-      - pollution
-      - leakage
-
-tier_2_terms:
-  - chemicals in plastics
-  - plastic additives
-  - bisphenol A
-  - BPA
-  - phthalates
+- term: microfiber
+  any_context:
+  - textile
+  - textiles
+  - laundry
+  - washing
+  - shedding
+  - wastewater
+  - microplastic
+- term: tire wear
+  any_context:
+  - particles
+  - microplastic
+  - runoff
   - 6PPD
-  - 6PPD-quinone
-
+  - stormwater
+  - pollution
+  - toxicity
+- term: plastic waste
+  any_context:
+  - ocean
+  - marine
+  - river
+  - soil
+  - environment
+  - pollution
+  - leakage
+- term: litter
+  any_context:
+  - cleanup
+  - cleanups
+  - roadside
+  - beach
+  - stormwater
+  - plastic
+  - cigarette
+- term: plastic packaging
+  any_context:
+  - waste
+  - food
+  - recycling
+  - recyclability
+  - environmental
+  - sustainable
+  - sustainability
+  - single-use
+  - consumer
+- term: life cycle assessment
+  any_context:
+  - plastic
+  - plastics
+  - polyethylene
+  - polypropylene
+  - polystyrene
+  - PVC
+  - polyethylene terephthalate
+  - polyester
+  - polyesters
+- term: chemical recycling
+  any_context:
+  - plastic
+  - plastics
+  - polyethylene
+  - polypropylene
+  - polystyrene
+  - PET
+  - PVC
+  - polymer
+  - packaging
+- term: mechanical recycling
+  any_context:
+  - plastic
+  - plastics
+  - polyethylene
+  - polypropylene
+  - polystyrene
+  - PET
+  - PVC
+  - polymer
+  - packaging
+- term: upcycling
+  any_context:
+  - plastic
+  - plastics
+  - polyethylene
+  - polypropylene
+  - polystyrene
+  - PET
+  - PVC
+  - polymer
+  - packaging
+- term: bioplastic
+  any_context: &id001
+  - polyhydroxyalkanoate
+  - polyhydroxyalkanoates
+  - PHA
+  - PHB
+  - polyhydroxybutyrate
+  - polylactic acid
+  - PLA
+  - biodegradable
+  - biodegradation
+  - petrochemical plastics
+  - plastic waste
+  - packaging
+- term: bioplastics
+  any_context: *id001
+- term: single-use plastic
+  any_context:
+  - pollution
+  - bag
+  - bags
+  - bottle
+  - bottles
+  - ban
+  - ocean
+  - marine
+  - litter
+tier_2_terms:
+- chemicals in plastics
+- plastic additives
+- bisphenol A
+- BPA
+- phthalates
+- 6PPD
+- 6PPD-quinone
 exclusions:
-  - microplastic strain
-  - microplastic deformation
-  - internal friction
-  - plastic behaviour of crystals
-  - plastic behavior of crystals
-
-# Candidate OpenAlex expression supplied by the owner's external query agent.
-# S1.5 must smoke-test syntax/encoding and measure precision/recall before this
-# becomes the production query.
-openalex:
-  field: title_and_abstract.search
-  query_expression: >-
-    (microplastic OR nanoplastic OR "micro-plastic" OR "nano-plastic" OR
-    "micro-sized plastic" OR "microsized plastics" OR "plastic pollution" OR
-    "plastic debris" OR "plastic litter" OR "marine debris" OR "marine litter"
-    OR "plastic particles" OR "plastic fragments" OR "plastic ingestion" OR
-    "resin pellet" OR "plastic pellet" OR (microfiber AND (textile OR laundry
-    OR synthetic OR plastic OR wastewater OR polyester)) OR ("tire wear" AND
-    (particles OR microplastic OR runoff OR 6PPD OR stormwater OR pollution OR
-    toxicity)) OR ("plastic waste" AND (ocean OR marine OR river OR soil OR
-    environment OR pollution OR leakage))) NOT ("microplastic strain" OR
-    "microplastic deformation" OR "internal friction" OR "plastic behaviour of
-    crystals" OR "plastic behavior of crystals")
-
+- microplastic strain
+- microplastic deformation
+- internal friction
+- plastic behaviour of crystals
+- plastic behavior of crystals
+- crystal plasticity
+- strain gradient plasticity
+- ductile fracture
+- elastic-plastic
+- plastic embossing
+- gecko
+- dislocation
+- nanopillar
+- plastic deformation
 versioning:
   increment_when:
-    - a term is added, removed, or reclassified
-    - Boolean qualification or exclusion logic changes
-    - the OpenAlex field scope changes
+  - a term is added, removed, or reclassified
+  - Boolean qualification or exclusion logic changes
+  - the OpenAlex field scope changes
   cache_contract:
-    - persist query_version and rendered query with cached counts
-    - reject legacy flat caches and caches with a different query_version
-    - percent-encode the complete filter value through the shared URL builder
-
+  - persist query_version and rendered query with cached counts
+  - reject legacy flat caches and caches with a different query_version
+  - percent-encode the complete filter value through the shared URL builder
 provenance:
-  supplied_by: owner external query agent
-  supplied_on: 2026-11-05
-  evidence_status: not independently reproduced at owner request
-  details: docs/query_design_v2.md
+  supplied_by: lead agent (AT-1 revision)
+  supplied_on: 2026-11-10
+  evidence_status: derived from owner labels (354 works) and owner-named author recall probe
+  details: docs/QUERY_AUDIT.md (AT-1 results and revision v3)
+openalex:
+  field: title_and_abstract.search
+always_include:
+- filter: raw_affiliation_strings.search:"Moore Institute for Plastic Pollution Research"
+  reason: 'owner 2026-11-10: capture all Moore Institute publications (no OpenAlex institution record;
+    most authorships carry no institution)'
+- filter: raw_affiliation_strings.search:Algalita
+  reason: Moore Institute predecessor name (Algalita Marine Research and Education)
+exclude_types:
+- erratum
+- peer-review
+- retraction
+- paratext
+notes: 'OpenAlex stems search terms: ''microplasticity'' matches ''microplastic'' and ''plastic'' matches
+  ''plasticity'', so neither may be used as an exclusion or as a context word. Per-term contributions
+  measured 2026-11-10 are in docs/QUERY_AUDIT.md.'
+scope_note: 'Owner 2026-11-10: plastics LCA, recycling and alternatives are in scope, not only pollution.
+  ''plastic products'' and ''plastic production'' were measured and left out (noise).'
+promotion:
+  date: '2026-11-10'
+  decision: AT1-V3 / S1.5-A
+  evidence: docs/QUERY_AUDIT.md (repeat audit and v3.1 revision)
+  rule: promote when estimated precision >= v2 (82.8%) with no relevant v2-labelled work lost

@@ -198,7 +198,7 @@ relevant. The owner had approved this 354-work sample as the audit set, so the A
   "other", one book in two years) and 21 items typed editorial (8), dataset (4), other
   (3), erratum (3), peer-review (2) and letter (1).
 
-## Query v3 candidate (`config/queries_v3.yml`, not yet active)
+## Query v3 candidate (`config/queries_v3.yml`, superseded by v3.1)
 
 OpenAlex stems search terms. `microplasticity` therefore matches `microplastic`: as an
 exclusion it removed 49 of Win Cowger's 60 matched works. `plastic` also matches
@@ -265,3 +265,47 @@ py -3.14 -m streamlit run scripts/review_query_audit_app.py -- --csv docs/QUERY_
 The precision of these additions decides whether v3 replaces v2 (QUESTIONS S1.5-A).
 Near-duplicate collapsing (preprint versus article, repeated chapters) belongs in S2.2
 normalization and is tracked in TODO under AT-1.
+
+## Repeat audit results and v3.1 promotion (2026-11-10)
+
+The owner labelled all 143 works of the repeat sample (`docs/QUERY_AUDIT_REVIEW_V3.csv`,
+reviewer SC): 76 relevant, 67 not relevant. Precision of the works v3 adds over v2 was
+**76/143 = 53.1%**. With the sampled institutions' counts (v2 881 works; v3 adds 390) and
+88.9% precision for the v2-overlap (v3 on the 354 labelled works), v3 as drafted would
+have been about 77.5% precise overall: worse than v2 (82.8%), so v3 was not promoted.
+
+Clause attribution (`ids.openalex` membership queries, 99 free-plan calls, cost-logged as
+`at1-v3-attribution`) located the noise; relevant/not-relevant sample works per clause:
+
+| Clause | Relevant | Not relevant | Change in v3.1 |
+|---|---:|---:|---|
+| trash (qualified) | 2 | 14 | dropped (no relevant work matched by trash alone) |
+| bioplastic(s) | 11 | 14 | now qualified: PHA/PHB/polyhydroxy-, PLA/polylactic acid, biodegradable/biodegradation, petrochemical plastics, plastic waste, packaging |
+| life cycle assessment | 9 | 12 | context limited to plastic(s), polyethylene, polypropylene, polystyrene, PVC, polyethylene terephthalate, polyester(s) |
+| litter (qualified) | 8 | 9 | context: cleanup(s), roadside, beach, stormwater, plastic, cigarette (trash removed) |
+| single-use plastic | 3 | 7 | now qualified: pollution, bag(s), bottle(s), ban, ocean, marine, litter |
+| upcycling | 23 | 3 | unchanged |
+| chemical recycling | 9 | 2 | unchanged |
+
+Result for `plastic-v3.1` (`config/queries.yml`):
+
+| Measure | v2 | v3 | v3.1 |
+|---|---:|---:|---:|
+| v2-labelled set: relevant matched (of 293) | 293 | 288 (+5 via Moore rule) | 288 (+5 via Moore rule) |
+| v2-labelled set precision | 82.8% | 88.9% | 88.9% |
+| Repeat sample: additions kept | n/a | 143 | 102 |
+| Precision of additions | n/a | 53.1% | **70.6%** (72/102; Wilson 95% CI 61-78%) |
+| Relevant additions lost vs v3 | n/a | 0 | 4 of 76 (two bioeconomy overviews, a feather-bioplastic paper, a park-litter robot) |
+| Sampled institutions: works | 881 | 1,220 | 1,152 |
+| Estimated overall precision | 82.8% | ~77.5% | **~83.8%** |
+
+The v3.1 additions are a subset of the v3 additions, which were sampled at random within
+each institution stratum, so the owner's labels on the surviving 102 estimate v3.1's
+addition precision without new labelling. Strata were equal-sized (10 per institution),
+not proportional, so the overall figure is approximate.
+
+Decision (AT1-V3 / S1.5-A): promote v3.1, by the rule "estimated precision at least
+v2's 82.8% and no relevant v2-labelled work lost". v3.1 meets it and finds roughly 30%
+more relevant works than v2 at the sampled institutions. v2 is archived as
+`config/queries_v2.yml` (S1.5's acceptance record); `config/queries_v3.yml` stays as the
+rejected draft. Rule labels are now `plastic-v3.1-rule-v1`.

@@ -16,7 +16,7 @@ from atlas.query import (
 
 
 def test_owner_query_renders_from_structured_terms() -> None:
-    config = load_query_config()
+    config = load_query_config("config/queries_v2.yml")
     rendered = render_query(config)
     supplied = " ".join(config["openalex"]["query_expression"].split())
     assert rendered == supplied
@@ -25,14 +25,14 @@ def test_owner_query_renders_from_structured_terms() -> None:
 
 
 def test_openalex_filter_is_encoded_as_one_value() -> None:
-    config = load_query_config()
+    config = load_query_config("config/queries_v2.yml")
     url = openalex_url(config, per_page=1, group_by="publication_year")
     assert " " not in url and '"' not in url and "(" not in url
     assert "filter=title_and_abstract.search%3A" in url
 
 
 def test_count_cache_rejects_legacy_and_mismatched_payloads(tmp_path: Path) -> None:
-    config = load_query_config()
+    config = load_query_config("config/queries_v2.yml")
     rendered = render_query(config)
     legacy = tmp_path / "legacy.json"
     legacy.write_text("123\n", encoding="utf-8")

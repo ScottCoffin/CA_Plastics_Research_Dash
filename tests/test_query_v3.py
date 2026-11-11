@@ -35,10 +35,22 @@ def test_v3_config_loads_with_type_exclusions_and_moore_rule() -> None:
     assert "macroplastic" in config["core_terms"]
 
 
-def test_v2_config_is_unchanged_by_the_new_keys() -> None:
-    config = load_query_config()
+def test_v2_archive_is_unchanged_by_the_new_keys() -> None:
+    config = load_query_config("config/queries_v2.yml")
     assert config["version"] == "plastic-v2-candidate"
     assert type_filters(config) == [] and always_include_filters(config) == []
+
+
+def test_active_config_is_promoted_v3_1() -> None:
+    config = load_query_config()
+    assert config["version"] == "plastic-v3.1" and config["status"] == "active"
+    assert type_filters(config) == type_filters(load_query_config(V3))
+    assert always_include_filters(config) == always_include_filters(load_query_config(V3))
+    terms = {item["term"]: item["any_context"] for item in config["qualified_terms"]}
+    # Repeat audit (docs/QUERY_AUDIT.md): unqualified trash and bioplastic were noise.
+    assert "trash" not in terms and "bioplastic" in terms
+    assert "bioplastic" not in config["core_terms"]
+    assert "trash" not in terms["litter"]
 
 
 def test_institution_and_scope_requests() -> None:

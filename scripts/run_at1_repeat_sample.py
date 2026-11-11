@@ -59,7 +59,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.output.exists():
         raise SystemExit(f"{args.output} exists; it may hold labels. Remove it deliberately first.")
-    v2 = load_query_config()
+    v2 = load_query_config("config/queries_v2.yml")
     v3 = load_query_config("config/queries_v3.yml")
     search = added_only_filter(v2, v3)
     first = load_review(REVIEW_CSV)

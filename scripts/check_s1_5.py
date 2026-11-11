@@ -24,7 +24,7 @@ def main() -> None:
     parser.add_argument("--audit", type=Path, default=Path("docs/query_audit_s1_5.md"))
     args = parser.parse_args()
 
-    config = load_query_config()
+    config = load_query_config("config/queries_v2.yml")  # S1.5 acceptance is the archived v2 record
     rendered = render_query(config)
     assert config["version"] == "plastic-v2-candidate"
     assert config["status"] == "owner_supplied_candidate"

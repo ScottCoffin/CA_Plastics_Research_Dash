@@ -15,7 +15,7 @@ from atlas.ingest.grants import GRANT_SCHEMA, validate_grants
 from atlas.ingest.grants import nsf_awards as ns
 
 FIXTURE = Path("tests/fixtures/s8_3_nsf_awards.json")
-QUERIES = Path("config/queries.yml")
+QUERIES = Path("config/queries_v2.yml")  # fixture: request counts pinned to v2 terms
 TAXONOMY = Path("config/taxonomy.yml")
 TODAY = date(2026, 11, 9)
 
