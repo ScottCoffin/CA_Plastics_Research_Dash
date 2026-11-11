@@ -1,4 +1,4 @@
-# Handoff - 2026-11-11 (night, overnight mode) - AT-3, AT-4, AT-11 sealed
+# Handoff - 2026-11-11 (night, overnight mode) - AT-3, AT-4 (+UI), AT-11 sealed; AT-10, S2.5 partial
 
 This file is the live tracker for the current session: update it at every checkpoint
 (owner requests, status, next steps) so a fresh session can resume without chat history.
@@ -40,22 +40,23 @@ This file is the live tracker for the current session: update it at every checkp
 | 33 | AT-3 SQL analytics | Done: `atlas.analytics`, `docs/AT_3_VERIFICATION.md`; every ranked CA institution overlaps a neighbour, so show tiers/intervals, not strict ranks |
 | 34 | AT-4 serving bundle (tiers with ranges, owner-confirmed) | Done: `site/data/bundle/`, `site/assets/facets.js`; Institutions tab tier UI next |
 | 35 | AT-11 CI guards | Done: schema/payload guards before the daily commit; analytics + bundle rebuilt daily |
+| 36 | AT-10 release pipeline | Pipeline done; owner cuts the next GitHub release (mints a Zenodo DOI) |
+| 37 | S2.5 Europe PMC recall | Benchmark 51.0% (438/858); DOI ingest after the OpenAlex daily reset |
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
-## Next eligible (dependency order) - as of the AT-11 commit
-1. AT-4 UI: Institutions tab shows tiers with ranges from `site/data/bundle/inst_tiers.json`.
-2. AT-10 release pipeline: methods card, Parquet, checksums, CITATION/Zenodo metadata (cutting the GitHub release, which mints a DOI, is an owner action).
-3. Gold-label app for the S4.2 sample (580 works, guide_v2 fields) + Claude second rater on a blind 20% (ADR-GATES); kappa via S4.3 tooling.
-4. S2.5 coverage: Europe PMC recall audit, ORCID enrichment, DataCite by ORCID; CORE full text needs the renewed key.
-5. S9.5 bios/photos (ORCID + Wikidata), then S9.6 outreach, S9.4 network with SPK-6/AT-8 (inputs: `inst_cooccurrence`), SPK-5/AT-7.
-6. S5.0 shared active-learning engine waits on the owner's S5.1 Smart-queue validation.
-7. Last: S3.7 hero page and S3.8 SEO.
+## Next eligible (dependency order) - as of the S2.5-partial commit
+1. S2.5(b) finish after 00:00 UTC (OpenAlex daily reset): `PYTHONPATH=src py -3.14 scripts/audit_europepmc_recall.py --max-credits 300`, normalize, spot check 20, recall after; then export + analytics + bundle.
+2. Gold-label app for the S4.2 sample (580 works, guide_v2 fields) + Claude second rater on a blind 20% (ADR-GATES); kappa via S4.3 tooling.
+3. S2.5(c) ORCID enrichment (public API, no key): dated employments, works by DOI, ROR-based discovery; S2.5(d) DataCite by ORCID.
+4. S9.5 bios/photos (ORCID + Wikidata), then S9.6 outreach, S9.4 network with SPK-6/AT-8 (inputs: `inst_cooccurrence`), SPK-5/AT-7.
+5. S5.0 shared active-learning engine waits on the owner's S5.1 Smart-queue validation.
+6. Last: S3.7 hero page and S3.8 SEO.
 
 ## Owner actions (one line each)
 0. **2026-11-12: renew the CORE API key** and put the new value in `.env`.
 1. Finish the 215 low-confidence works in `scripts/review_work_relevance_app.py` (not started as of 2026-11-11 afternoon).
 2. AT2-REVIEW: types for 52 new top-100 institutions in `data/processed/institution_review_needs_v31.csv`.
-3. (Answered: AT-4 leaderboard shows tiers with ranges.)
+3. AT-10: cut a GitHub release (for example v2026.11.12) when you want a new archived snapshot; then update `config/release.yml` with the new Zenodo DOI.
 
 ## Notes
 - Worktree leftovers not committed on purpose: `docs/SOURCES.md`,
