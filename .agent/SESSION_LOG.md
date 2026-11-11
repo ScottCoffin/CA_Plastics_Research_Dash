@@ -97,3 +97,4 @@
 | 2026-11-11 | S2-COVERAGE | Karapetrova forensics; raw-affiliation and carry-forward CA inference; raw-affiliation scope and author-anchored ingest; CA-only export; corpus 1,896 works | this commit |
 | 2026-11-11 | S1.2-AGENCIES, S5.1-AL, S8-TABLE | State agencies differentiated; owner top-100 review restored and protected; active-learning relevance app; sortable funding table | this commit |
 | 2026-11-11 | S3-INST, topics, specs | Collaborator clarity (Doñana), top experts per institution, Risk assessment topic (hatched), grant tags recomputed at export; specs S9.5 bios/photos, S9.6 outreach, S3.8 SEO | this commit |
+| 2026-11-11 | handoff | Context at 80%: handoff to a fresh orchestrator via RESUME_PROMPT.md | this commit |
