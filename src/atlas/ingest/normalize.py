@@ -21,6 +21,8 @@ from typing import Any
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from atlas.build.curation import load_suppressions
+
 WORKS_SCHEMA = pa.schema(
     [
         ("work_id", pa.string()),
@@ -506,18 +508,27 @@ def normalize_records(
     qc_path: str | Path,
     source: str,
     author_overrides_path: str | Path = "config/author_overrides.csv",
+    suppressions_path: str | Path | None = "curation/suppressions.csv",
     generated_at: str | None = None,
 ) -> NormalizationResult:
-    """Normalize raw OpenAlex work objects into C3-shaped Parquet tables."""
+    """Normalize raw OpenAlex work objects into C3-shaped Parquet tables.
+
+    Works and authors listed in ``suppressions_path`` are dropped here as well as at
+    export (owner decision GOV-B, 2026-11-10: suppressed records are excluded at ingest).
+    """
 
     registry = _read_registry(institution_path)
     overrides = _load_overrides(author_overrides_path)
+    suppressed_authors: frozenset[str] = frozenset()
+    suppressed_works: frozenset[str] = frozenset()
+    if suppressions_path is not None and Path(suppressions_path).exists():
+        suppressed_authors, suppressed_works = load_suppressions(suppressions_path)
     work_rows: dict[str, Mapping[str, Any]] = {}
     source_count = 0
     for record in records:
         source_count += 1
         work_id = compact_id(record.get("id"))
-        if work_id:
+        if work_id and work_id not in suppressed_works:
             work_rows[work_id] = record
 
     works: list[dict[str, Any]] = []
@@ -546,6 +557,8 @@ def normalize_records(
             author = raw_authorship.get("author")
             author = author if isinstance(author, Mapping) else {}
             author_id = compact_id(author.get("id"))
+            if author_id and author_id in suppressed_authors:
+                continue
             author_name = _string(author.get("display_name"))
             institution_values = raw_authorship.get("institutions") or []
             if not isinstance(institution_values, Sequence) or isinstance(
@@ -734,6 +747,7 @@ def normalize_raw_parquet(
     output_dir: str | Path,
     qc_path: str | Path,
     author_overrides_path: str | Path = "config/author_overrides.csv",
+    suppressions_path: str | Path | None = "curation/suppressions.csv",
     generated_at: str | None = None,
 ) -> NormalizationResult:
     """Read S2.1's raw Parquet and normalize each embedded work JSON object."""
@@ -753,6 +767,7 @@ def normalize_raw_parquet(
         qc_path=qc_path,
         source=str(raw_path),
         author_overrides_path=author_overrides_path,
+        suppressions_path=suppressions_path,
         generated_at=generated_at,
     )
 
@@ -764,6 +779,7 @@ def normalize_fixture(
     output_dir: str | Path,
     qc_path: str | Path,
     author_overrides_path: str | Path = "config/author_overrides.csv",
+    suppressions_path: str | Path | None = "curation/suppressions.csv",
     generated_at: str | None = "fixture",
 ) -> NormalizationResult:
     """Normalize a committed JSON fixture without contacting OpenAlex."""
@@ -779,5 +795,6 @@ def normalize_fixture(
         qc_path=qc_path,
         source=str(fixture_path),
         author_overrides_path=author_overrides_path,
+        suppressions_path=suppressions_path,
         generated_at=generated_at,
     )

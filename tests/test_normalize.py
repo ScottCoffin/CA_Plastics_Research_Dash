@@ -63,3 +63,32 @@ def test_normalization_preserves_unresolved_institution_rows(tmp_path: Path) -> 
     assert by_id["I84218800"]["ca_flag"] is True
     assert by_id["I99999992"]["ca_flag"] is False
     assert by_id["I99999991"]["atlas_type"] == "other"
+
+
+def test_suppressed_works_and_authors_are_dropped_at_ingest(tmp_path: Path) -> None:
+    """GOV-B (owner, 2026-11-10): suppressions apply at ingest, not only at export."""
+    works = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    author_id = next(
+        a["author"]["id"].rsplit("/", 1)[-1]
+        for a in works[0]["authorships"]
+        if (a.get("author") or {}).get("id")
+    )
+    suppressions = tmp_path / "suppressions.csv"
+    suppressions.write_text(
+        "kind,id,reason,requested_at,reviewed_by\n"
+        f"work,W9000000104,test,2026-11-10,SC\nauthor,{author_id},test,2026-11-10,SC\n",
+        encoding="utf-8",
+    )
+    result = normalize_fixture(
+        FIXTURE,
+        institution_path=INSTITUTIONS,
+        output_dir=tmp_path / "processed",
+        qc_path=tmp_path / "qc.md",
+        suppressions_path=suppressions,
+        generated_at="test",
+    )
+    works_table = pq.read_table(result.output_dir / "works.parquet").to_pylist()
+    kept = {row["work_id"] for row in works_table}
+    assert "W9000000104" not in kept and len(kept) == 3
+    authorships = pq.read_table(result.output_dir / "authorships.parquet").to_pylist()
+    assert author_id not in {row["author_id"] for row in authorships}

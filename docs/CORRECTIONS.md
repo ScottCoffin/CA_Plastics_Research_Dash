@@ -91,10 +91,12 @@ Some errors come from the source, not the atlas:
 - Grant records: the funder's public record governs. Amounts follow each source's
   own basis (see `docs/DATA_DICTIONARY.md`).
 
-## Open items for owner decision
+## Owner decisions (GOV-B, 2026-11-10)
 
-- Decide whether suppressed records must also be excluded at ingest, not only at export.
-- Set a response-time commitment for issues.
-- Add the "Is this you? Report an issue" link to the About tab and profile drawer.
-- Decide whether the About tab should also name the owner's roles (see `docs/PRIVACY_REVIEW.md`).
-- Align the About tab card with the removal and correction steps above.
+- Suppressed records are excluded at ingest as well as at export: a person or work
+  listed in `curation/suppressions.csv` is dropped by normalization, not only hidden
+  in the published payloads.
+- Response time: issues are acknowledged and acted on within 5 to 10 business days.
+- The "Is this you? Report an issue" link stays on the About tab and the profile drawer.
+- The About tab names the owner's roles (see `docs/PRIVACY_REVIEW.md`).
+- The About tab card follows the removal and correction steps above.
