@@ -13,6 +13,8 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+import yaml
+
 from atlas.build.curation import load_grant_owner_reviewed, load_grant_relevance
 from atlas.build.grants_export import build_from_paths
 from atlas.query import load_query_config
@@ -41,6 +43,7 @@ def main(argv: list[str] | None = None) -> int:
         query_config=load_query_config(args.queries),
         relevance=load_grant_relevance(args.relevance),
         owner_reviewed=load_grant_owner_reviewed(args.relevance),
+        taxonomy=yaml.safe_load(Path("config/taxonomy.yml").read_text(encoding="utf-8")),
     )
     print(json.dumps(summary, sort_keys=True))
     return 0

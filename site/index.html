@@ -92,6 +92,16 @@
       .map-places text { fill: #2f3d45; font-weight: 600; font-family: inherit; paint-order: stroke fill; stroke: #fff; stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
       .map-places .place-landmark text { fill: #3f6075; font-style: italic; font-weight: 500; }
       .institution-sort-row { display: flex; flex-wrap: wrap; gap: 0.65rem 1rem; align-items: end; }
+      .institution-collab-field { align-self: center; }
+      .institution-collab-field label { display: flex; align-items: center; gap: 0.45rem; font-weight: 600; }
+      .institution-collab-field input { width: 1.2rem; height: 1.2rem; margin: 0; }
+      .collab-badge { display: inline-block; padding: 0.1rem 0.55rem; border-radius: 999px; background: #fff4ec; border: 1px solid #f2c9a8; color: #6b2100; font-size: 0.78rem; font-weight: 700; }
+      .collab-line { margin: 0.25rem 0; color: #6b2100; font-size: 0.9rem; }
+      .top-experts { margin: 0.4rem 0; }
+      .top-experts h4 { margin: 0 0 0.25rem; font-size: 0.85rem; }
+      .top-experts ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
+      .top-experts li { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; align-items: center; }
+      .top-experts .expert-name { font-weight: 700; }
       .institution-sort-row .field { min-width: 12rem; flex: 1 1 12rem; max-width: 22rem; }
       .primary-topic-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0; font-size: 0.9rem; font-weight: 700; color: var(--ink); }
       .abstract-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 0.6rem; }
@@ -343,7 +353,9 @@
           <div class="institution-sort-row">
             <div class="field"><label for="institution-sort">Sort by</label><select id="institution-sort"></select></div>
             <div class="field"><label for="institution-topic-filter">Primary topic</label><select id="institution-topic-filter"></select></div>
+            <div class="field institution-collab-field"><label for="institution-collab"><input id="institution-collab" type="checkbox"> Include out-of-state collaborators</label></div>
           </div>
+          <p class="data-note">California institutions only by default. Collaborators outside California appear only through works co-authored with California researchers.</p>
           <p id="institution-count" class="result-count" role="status" aria-live="polite">Loading institutions…</p>
         </div>
         <div class="institutions-layout">
@@ -820,7 +832,7 @@
         const SORT_KEYS = ["ca_works", "cited_by", "h_index", "plastic_citations", "plastic_works"];
         const SORT_FIELDS = { cited_by: "cited_by_count", h_index: "h_index", plastic_citations: "plastic_citations", plastic_works: "plastic_works_count" };
         const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
-        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", sort: "ca_works", institutionViewType: "", institutionSort: "tagged", institutionPrimaryTopic: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
+        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", sort: "ca_works", institutionViewType: "", institutionSort: "tagged", institutionPrimaryTopic: "", includeCollaborators: false, pendingAuthor: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
         const $ = (id) => document.getElementById(id);
 
         function escapeHtml(value) {
@@ -839,6 +851,9 @@
           state.caBasis = params.get("ca_basis") || "";
           state.oa = ["", "oa", "closed"].includes(params.get("oa") || "") ? (params.get("oa") || "") : "";
           state.sort = SORT_KEYS.includes(params.get("sort") || "") ? params.get("sort") : "ca_works";
+          state.includeCollaborators = params.get("collab") === "1";
+          // Deep link #experts?author=<id> opens that researcher's drawer once the data is loaded.
+          state.pendingAuthor = /^[A-Za-z0-9]{1,40}$/.test(params.get("author") || "") ? params.get("author") : "";
         }
         function writeHash() {
           if (state.tab === "funding") return; // Funding keeps its own hash state (writeFundingHash).
@@ -852,6 +867,7 @@
           if (state.caBasis) params.set("ca_basis", state.caBasis);
           if (state.oa) params.set("oa", state.oa);
           if (state.sort && state.sort !== "ca_works") params.set("sort", state.sort);
+          if (state.includeCollaborators) params.set("collab", "1");
           const next = `#${state.tab}${params.toString() ? `?${params.toString()}` : ""}`;
           if (window.location.hash !== next) window.history.replaceState(null, "", next);
         }
@@ -1577,6 +1593,11 @@
             $("drawer-content").innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
           }
         }
+        function openPendingAuthor() {
+          const authorId = state.pendingAuthor;
+          state.pendingAuthor = "";
+          if (authorId && state.data) openDrawer(authorId);
+        }
         function closeDrawer() {
           $("researcher-drawer").hidden = true;
           $("drawer-backdrop").hidden = true;
@@ -1621,7 +1642,7 @@
           const share = (count) => Math.round((count / total) * 100);
           const segments = entries.map(([tag, count]) => {
             const width = (count / total) * 1000;
-            const rect = `<rect x="${x.toFixed(2)}" y="0" width="${width.toFixed(2)}" height="14" fill="${AtlasTopics.color(tag)}"><title>${escapeHtml(AtlasTopics.label(tag))}: ${count} work${count === 1 ? "" : "s"} (${share(count)}%)</title></rect>`;
+            const rect = `<rect x="${x.toFixed(2)}" y="0" width="${width.toFixed(2)}" height="14" fill="${AtlasTopics.svgFill ? AtlasTopics.svgFill(tag) : AtlasTopics.color(tag)}"><title>${escapeHtml(AtlasTopics.label(tag))}: ${count} work${count === 1 ? "" : "s"} (${share(count)}%)</title></rect>`;
             x += width;
             return rect;
           }).join("");
@@ -1632,6 +1653,20 @@
           const shown = entries.slice(0, limit).map(([tag, count]) => AtlasTopics.chip(tag, count)).join("");
           const rest = entries.length - limit;
           return shown ? `<div class="topic-chips" aria-label="Top topics with work counts">${shown}${rest > 0 ? `<span class="topic-chip matrix">+${rest} more</span>` : ""}</div>` : "";
+        }
+        function topExpertsHtml(institution) {
+          const experts = institution.top_experts || [];
+          if (!experts.length) return "";
+          const items = experts.map((expert) => {
+            const name = expert.in_atlas_index ? `<a class="expert-name" href="#experts?author=${encodeURIComponent(expert.author_id)}">${escapeHtml(expert.name || expert.author_id)}</a>` : `<span class="expert-name">${escapeHtml(expert.name || expert.author_id)}</span>`;
+            return `<li>${name}<span class="detail-meta">${expert.works} ${expert.works === 1 ? "work" : "works"}</span>${expert.topic ? AtlasTopics.chip(expert.topic) : ""}</li>`;
+          }).join("");
+          return `<div class="top-experts"><h4>Top experts</h4><ul>${items}</ul><a href="sem.html#inst=${encodeURIComponent(institution.inst_id)}&section=experts">All experts at this institution</a></div>`;
+        }
+        function collaboratorLine(institution) {
+          if (institution.ca_flag) return "";
+          const n = Number(institution.work_count) || 0;
+          return `<p class="collab-line"><span class="collab-badge">Collaborator outside California</span> Appears through ${n} ${n === 1 ? "work" : "works"} co-authored with California researchers.</p>`;
         }
         function publicationsLink(institutionId) {
           return `<a class="button-link institution-publications-link" href="sem.html#inst=${encodeURIComponent(institutionId)}">View publications</a>`;
@@ -1704,7 +1739,7 @@
             (marker || container).focus({ preventScroll: true });
           }
           const basemapNote = caBasemapStatus === "failed" ? " Basemap unavailable; markers only." : caBasemap ? "" : " Basemap loading.";
-          $("institution-map-note").textContent = `${institutionMapPoints.length} California institution${institutionMapPoints.length === 1 ? "" : "s"} mapped${institutionMapLacking ? `; ${institutionMapLacking} qualifying institution${institutionMapLacking === 1 ? "" : "s"} lack coordinates` : ""}. Zoom ${monitoringMap.zoomScale(view).toFixed(1)}x; nearby institutions are grouped into numbered clusters that split as you zoom in.${basemapNote}`;
+          $("institution-map-note").textContent = `${state.includeCollaborators ? "The map shows California institutions only; out-of-state collaborators have no California location. " : ""}${institutionMapPoints.length} California institution${institutionMapPoints.length === 1 ? "" : "s"} mapped${institutionMapLacking ? `; ${institutionMapLacking} qualifying institution${institutionMapLacking === 1 ? "" : "s"} lack coordinates` : ""}. Zoom ${monitoringMap.zoomScale(view).toFixed(1)}x; nearby institutions are grouped into numbered clusters that split as you zoom in.${basemapNote}`;
         }
         let institutionMapLacking = 0;
         function renderInstitutionMapDetails() {
@@ -1718,7 +1753,7 @@
             const institution = metric.institution;
             const years = metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : (institution.years || []).length ? `${Math.min(...institution.years)}–${Math.max(...institution.years)}` : "—";
             const stat = (name, value) => `<div><dt>${name}</dt><dd>${escapeHtml(value)}</dd></div>`;
-            return `<section class="map-inst"><h5>${escapeHtml(institution.name)}</h5><div><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div><dl class="map-inst-stats">${stat("Works", metricNumber(institution.work_count))}${stat("Plastic-related works", metricNumber(metric.taggedCount))}${stat("Authors", metricNumber(institution.author_count))}${stat("Years active", years)}${stat("Recent 5 years", metricNumber(metric.recentCount))}</dl>${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 3)}<div class="institution-actions"><button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institution.inst_id)}">Show experts</button>${publicationsLink(institution.inst_id)}</div></section>`;
+            return `<section class="map-inst"><h5>${escapeHtml(institution.name)}</h5><div><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div><dl class="map-inst-stats">${stat("Works", metricNumber(institution.work_count))}${stat("Plastic-related works", metricNumber(metric.taggedCount))}${stat("Authors", metricNumber(institution.author_count))}${stat("Years active", years)}${stat("Recent 5 years", metricNumber(metric.recentCount))}</dl>${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 3)}${topExpertsHtml(institution)}<div class="institution-actions"><button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institution.inst_id)}">Show experts</button>${publicationsLink(institution.inst_id)}</div></section>`;
           }).join("");
           panel.innerHTML = `<div class="map-details-card"><div class="map-details-head"><h4>${metrics.length} institution${metrics.length === 1 ? "" : "s"} selected</h4><div class="map-details-actions">${metrics.length > 1 ? "<button type=\"button\" data-map-fit>Zoom to these</button>" : ""}<button type="button" data-map-close>Close</button></div></div>${blocks}${metrics.length > shown.length ? `<p class="data-note">Showing the ${shown.length} largest of ${metrics.length} institutions; zoom in to separate the rest.</p>` : ""}</div>`;
         }
@@ -1785,19 +1820,25 @@
           return (a, b) => b.taggedCount - a.taggedCount || b.recentCount - a.recentCount || byName(a, b);
         }
         function renderInstitutions() {
-          const all = (state.data.institutions.institutions || []).map(institutionMetrics).filter((metric) => metric.taggedCount > 0);
+          const all = (state.data.institutions.institutions || []).filter((institution) => state.includeCollaborators || institution.ca_flag).map(institutionMetrics).filter((metric) => metric.taggedCount > 0);
+          $("institution-collab").checked = state.includeCollaborators;
           const types = [...new Set(all.map((metric) => metric.institution.atlas_type || "other"))].sort();
           const selected = state.institutionViewType;
           setupInstitutionControls(all);
           const topicFilter = state.institutionPrimaryTopic;
           const filtered = all.filter((metric) => (!selected || (metric.institution.atlas_type || "other") === selected) && (!topicFilter || primaryTopic(metric) === topicFilter)).sort(institutionComparator(state.institutionSort));
           $("institution-type-chips").innerHTML = [`<button class="chip-button institution-type-chip" type="button" data-institution-type="" aria-pressed="${selected === ""}">All types</button>`, ...types.map((type) => `<button class="chip-button institution-type-chip" type="button" data-institution-type="${escapeHtml(type)}" aria-pressed="${selected === type}">${escapeHtml(type)}</button>`)].join("");
-          { const sortLabel = $("institution-sort").selectedOptions[0]?.textContent || ""; const topicNote = topicFilter ? `; primary topic: ${AtlasTopics.label(topicFilter)}` : ""; $("institution-count").textContent = `${filtered.length} of ${all.length} qualifying institution${all.length === 1 ? "" : "s"} shown${topicNote}; sorted by ${sortLabel.toLowerCase()}`; }
-          $("institution-list").innerHTML = filtered.length ? filtered.map((metric) => { const institution = metric.institution; return `<article class="card institution-card" data-institution-id="${escapeHtml(institution.inst_id)}"><div class="card-header"><h3>${escapeHtml(institution.name)}</h3><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div>${primaryTopicLine(metric)}<p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p><div class="institution-topics">${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 5)}</div>${sparkline(metric)}<div class="institution-actions">${institutionExpertLink(institution.inst_id)}${publicationsLink(institution.inst_id)}</div></article>`; }).join("") : '<p class="empty">No qualifying institutions match this type filter.</p>';
+          { const sortLabel = $("institution-sort").selectedOptions[0]?.textContent || ""; const topicNote = topicFilter ? `; primary topic: ${AtlasTopics.label(topicFilter)}` : ""; $("institution-count").textContent = `${filtered.length} of ${all.length} ${state.includeCollaborators ? "" : "California "}qualifying institution${all.length === 1 ? "" : "s"} shown${topicNote}; sorted by ${sortLabel.toLowerCase()}`; }
+          $("institution-list").innerHTML = filtered.length ? filtered.map((metric) => { const institution = metric.institution; return `<article class="card institution-card" data-institution-id="${escapeHtml(institution.inst_id)}"><div class="card-header"><h3>${escapeHtml(institution.name)}</h3><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div>${collaboratorLine(institution)}${primaryTopicLine(metric)}<p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p><div class="institution-topics">${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 5)}</div>${sparkline(metric)}${topExpertsHtml(institution)}<div class="institution-actions">${institution.ca_flag ? institutionExpertLink(institution.inst_id) : ""}${publicationsLink(institution.inst_id)}</div></article>`; }).join("") : '<p class="empty">No qualifying institutions match this type filter.</p>';
           $("institution-type-chips").querySelectorAll(".institution-type-chip").forEach((button) => button.addEventListener("click", () => { state.institutionViewType = button.dataset.institutionType; renderInstitutions(); }));
           $("institution-list").querySelectorAll(".institution-expert-link").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId)));
           clusterMap(filtered);
         }
+        $("institution-collab").addEventListener("change", (event) => {
+          state.includeCollaborators = event.target.checked;
+          writeHash();
+          if (state.data) renderInstitutions();
+        });
         function filteredMonitoringSamples() {
           const payload = state.data.monitoring;
           const f = state.monitoringFilters;
@@ -2163,6 +2204,7 @@
             populateFilters();
             updateViews();
             setLoadStatus("Data loaded");
+            openPendingAuthor();
           } catch (error) {
             setLoadStatus("Data unavailable", true);
             $("expert-count").textContent = "The static data could not be loaded.";
@@ -2270,7 +2312,7 @@
         $("drawer-close").addEventListener("click", closeDrawer);
         $("drawer-backdrop").addEventListener("click", closeDrawer);
         document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !$("researcher-drawer").hidden) closeDrawer(); });
-        window.addEventListener("hashchange", () => { readHash(); if (state.data) updateViews(); });
+        window.addEventListener("hashchange", () => { readHash(); if (state.data) { updateViews(); openPendingAuthor(); } });
         restoreFacetState();
         readHash();
         loadData();

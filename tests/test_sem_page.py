@@ -69,6 +69,36 @@ const R = JSON.parse(vm.runInContext(`JSON.stringify((() => {
     inst: [instParam("#inst=I84218800", ""), instParam("", "?inst=I1"), instParam("#foo=1", "")],
     valid: [isValidInstId("I84218800"), isValidInstId("../x")],
     progressive: [visibleCount(301, 100), visibleCount(300, 100)],
+    ex: (() => {
+      const experts = [
+        { author_id: "A1", name: "Zed Ng", in_atlas_index: true, works_at_institution: 5, h_index: 10, plastic_citations: 50, years: { "2018": 2, "2020": 3 }, topics: [["air", 3]] },
+        { author_id: "A2", name: "Amy Roe", in_atlas_index: false, works_at_institution: 3, h_index: 30, plastic_citations: null, years: { "2021": 3 }, topics: [] },
+        { author_id: "A3", name: "Bob Fox", in_atlas_index: true, works_at_institution: 2, h_index: null, plastic_citations: 5, years: { "2020": 1, "2021": 1 }, topics: [] }
+      ];
+      const ids = (l) => l.map((e) => e.author_id);
+      const all = filterExperts(experts, {});
+      const r2020 = filterExperts(experts, { yearFrom: "2020", yearTo: "2020" });
+      const m = expertYearMatrix(experts, { yearFrom: "2020", yearTo: "2021" });
+      return {
+        all: ids(sortExperts(all, "works", "desc")),
+        byH: ids(sortExperts(all, "h_index", "desc")),
+        byHAsc: ids(sortExperts(all, "h_index", "asc")),
+        byName: ids(sortExperts(all, "name", "asc")),
+        byCites: ids(sortExperts(all, "citations", "desc")),
+        r2020: r2020.map((e) => [e.author_id, e.in_range]),
+        r2020Sorted: ids(sortExperts(r2020, "works", "desc")),
+        none: filterExperts(experts, { yearFrom: "2030" }).length,
+        matrixYears: m.years,
+        matrixRows: m.rows.map((r) => [r.author_id, r.counts, r.total]),
+        matrixMax: m.max,
+        linked: [expertHref(experts[0]), expertHref(experts[1])],
+        nameHtml: expertNameHtml(experts[0])
+      };
+    })(),
+    notice: [collabNoticeText({ scope: "collaborator" }, [1, 2, 3]), collabNoticeText({ scope: "collaborator" }, [1]), collabNoticeText({ scope: "california" }, [1])],
+    conn: caConnectionHtml({ ca_connection: { authors: [{ author_id: "A9", name: "Kim <b>", ca_basis: "registry" }], institutions: [{ inst_id: "I1", name: "UC Davis", ca_basis: ["registry"] }] } }),
+    connNone: caConnectionHtml({ ca_connection: { authors: [], institutions: [] } }) + caConnectionHtml({}),
+    pubConn: pubItemHtml({ work_id: "W1", title: "T", year: 2020, domain_tags: [], facet_tags: [], ca_connection: { authors: [{ author_id: "A9", name: "Kim", ca_basis: "registry" }], institutions: [] } }),
     href: [workHref({ doi: "https://doi.org/10.1/a", work_id: "W1" }), workHref({ work_id: "W9" }), workHref({ doi: "javascript:alert(1)", work_id: "W9" })]
   };
 })())`, context));
@@ -136,6 +166,31 @@ assert.deepEqual(R.progressive, [100, 300], "lists over 300 render 100 at a time
 assert.equal(R.href[0], "https://doi.org/10.1/a");
 assert.equal(R.href[1], "https://openalex.org/W9");
 assert.equal(R.href[2], "https://openalex.org/W9", "non-http DOI values fall back to OpenAlex");
+
+// Top experts: sort, year filter, years matrix.
+assert.deepEqual(R.ex.all, ["A1", "A2", "A3"]);
+assert.deepEqual(R.ex.byH, ["A2", "A1", "A3"], "missing h-index sorts last when descending");
+assert.deepEqual(R.ex.byHAsc, ["A3", "A1", "A2"]);
+assert.deepEqual(R.ex.byName, ["A2", "A3", "A1"]);
+assert.deepEqual(R.ex.byCites, ["A1", "A3", "A2"]);
+assert.deepEqual(R.ex.r2020, [["A1", 3], ["A3", 1]], "year range keeps only experts active in range");
+assert.deepEqual(R.ex.r2020Sorted, ["A1", "A3"]);
+assert.equal(R.ex.none, 0);
+assert.deepEqual(R.ex.matrixYears, [2020, 2021]);
+assert.deepEqual(R.ex.matrixRows, [["A2", [0, 3], 3], ["A1", [3, 0], 3], ["A3", [1, 1], 2]]);
+assert.equal(R.ex.matrixMax, 3);
+assert.equal(R.ex.linked[0], "index.html#experts?author=A1");
+assert.equal(R.ex.linked[1], "");
+assert.ok(R.ex.nameHtml.includes('href="index.html#experts?author=A1"'));
+
+// Collaborator notice and California connection.
+assert.equal(R.notice[0], "Outside California. Listed because of 3 works co-authored with California researchers.");
+assert.ok(R.notice[1].includes("1 work co-authored"));
+assert.equal(R.notice[2], "");
+assert.ok(R.conn.includes("California connection:") && R.conn.includes("UC Davis") && R.conn.includes("experts?author=A9"));
+assert.ok(R.conn.includes("Kim &lt;b&gt;") && !R.conn.includes("<b>"), "names are escaped");
+assert.equal(R.connNone, "");
+assert.ok(R.pubConn.includes("California connection:") && R.pubConn.includes("registry"));
 
 console.log("SEM page runtime checks passed: matrix builder, filter composition, sorting, summary, ids.");
 """  # noqa: E501

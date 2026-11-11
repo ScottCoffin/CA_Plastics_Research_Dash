@@ -12,7 +12,10 @@
     ecotoxicology_and_trophic_transfer: { label: "Ecotoxicology & food webs", color: "#e87ba4", order: 5 },
     wastewater_and_treatment: { label: "Wastewater & treatment", color: "#008300", order: 6 },
     human_exposure_and_health_risk: { label: "Human exposure & health", color: "#6250d6", order: 7 },
-    air: { label: "Air & atmosphere", color: "#e34948", order: 8 }
+    air: { label: "Air & atmosphere", color: "#e34948", order: 8 },
+    // A 9th category never gets a generated hue: it reuses the related violet with a
+    // 45-degree hatch and a diamond marker (composite encoding; dataviz rule).
+    risk_assessment: { label: "Risk assessment", color: "#6250d6", order: 9, pattern: "hatch" }
   };
   const MATRICES = {
     marine: "Marine",
@@ -51,6 +54,24 @@
     if (TOPICS[key]) return TOPICS[key].order;
     return isMatrix(key) ? 100 : 50;
   }
+  function pattern(tag) {
+    const key = String(tag || "");
+    return TOPICS[key] && TOPICS[key].pattern ? TOPICS[key].pattern : "";
+  }
+  // CSS background for a solid or hatched topic fill (chips, bars drawn with HTML).
+  function cssFill(tag, alpha) {
+    const hue = color(tag);
+    if (pattern(tag) !== "hatch") return hue;
+    return `repeating-linear-gradient(45deg, ${hue} 0 3px, #ffffff 3px 5px)`;
+  }
+  // SVG fill: a solid colour, or url(#atlas-hatch) when svgDefs() is in the SVG.
+  function svgFill(tag) {
+    return pattern(tag) === "hatch" ? "url(#atlas-hatch)" : color(tag);
+  }
+  function svgDefs() {
+    return '<defs><pattern id="atlas-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
+      + '<rect width="5" height="5" fill="#ffffff"/><rect width="3" height="5" fill="#6250d6"/></pattern></defs>';
+  }
   function sortTags(tags) {
     return [...new Set(tags || [])].sort((a, b) => order(a) - order(b) || label(a).localeCompare(label(b)));
   }
@@ -62,7 +83,8 @@
     const text = escapeText(label(tag)) + (count === undefined || count === null ? "" : ` <span class="topic-count">${Number(count)}</span>`);
     if (isMatrix(tag)) return `<span class="topic-chip matrix" data-tag="${escapeText(tag)}">${text}</span>`;
     const hue = color(tag);
-    return `<span class="topic-chip" data-tag="${escapeText(tag)}" style="--topic:${hue}"><span class="topic-dot" aria-hidden="true"></span>${text}</span>`;
+    const hatch = pattern(tag) === "hatch" ? " hatch" : "";
+    return `<span class="topic-chip${hatch}" data-tag="${escapeText(tag)}" style="--topic:${hue}"><span class="topic-dot" aria-hidden="true"></span>${text}</span>`;
   }
   // Counts per tag from a list of works with domain_tags / facet_tags.
   function weights(works, { matrices = false } = {}) {
@@ -78,7 +100,9 @@
 .topic-chip .topic-dot{width:.6rem;height:.6rem;border-radius:999px;background:var(--topic,#8a9499);flex:none}
 .topic-chip.matrix{background:#fff;border:1px dashed #8a9499;color:#3b4850;font-weight:500}
 .topic-chip .topic-count{font-weight:700;color:#4a5860}
-.topic-chips{display:flex;flex-wrap:wrap;gap:.35rem}`;
+.topic-chips{display:flex;flex-wrap:wrap;gap:.35rem}
+.topic-chip.hatch{background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--topic) 22%,#fff) 0 3px,#fff 3px 6px)}
+.topic-chip.hatch .topic-dot{border-radius:1px;transform:rotate(45deg);width:.55rem;height:.55rem}`;
   function injectCss(doc) {
     const d = doc || global.document;
     if (!d || d.getElementById("atlas-topic-css")) return;
@@ -86,8 +110,16 @@
     style.id = "atlas-topic-css";
     style.textContent = CSS;
     d.head.appendChild(style);
+    // One shared, hidden <defs> for patterned topic fills (avoids duplicate ids per chart).
+    const addDefs = () => {
+      if (d.getElementById("atlas-topic-defs") || !d.body) return;
+      const holder = d.createElement("div");
+      holder.innerHTML = `<svg id="atlas-topic-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">${svgDefs()}</svg>`;
+      d.body.appendChild(holder.firstChild);
+    };
+    if (d.body) addDefs(); else d.addEventListener("DOMContentLoaded", addDefs);
   }
-  const api = { TOPICS, MATRICES, label, color, order, sortTags, chip, weights, isMatrix, injectCss };
+  const api = { TOPICS, MATRICES, label, color, order, pattern, cssFill, svgFill, svgDefs, sortTags, chip, weights, isMatrix, injectCss };
   global.AtlasTopics = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (global.document) injectCss(global.document);

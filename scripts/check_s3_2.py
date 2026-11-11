@@ -58,12 +58,13 @@ def main() -> None:
     )
     assert {"by_year", "by_type", "by_tag"} <= set(aggregates), "aggregate contract is incomplete"
     assert metadata.get("schema_version") == "s3.1"
-    # C5 budgets the initial payload; author detail files load lazily from the drawer.
+    # C5 budgets the initial payload; author detail files load lazily from the drawer and
+    # institution publication files load lazily from the evidence-map page.
     files = metadata.get("files") or {}
     initial = sum(
         int(item.get("gzip_bytes", 0))
         for name, item in files.items()
-        if not name.startswith("authors/")
+        if not name.startswith(("authors/", "institution_works/"))
     )
     assert initial < 3_000_000, f"initial payload {initial} gzip bytes exceeds the C5 budget"
     print(

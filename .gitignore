@@ -51,3 +51,6 @@ release/
 # Spike tooling (SPK-3/SPK-4): npm installs and Framework build cache
 node_modules/
 **/.observablehq/cache/
+
+# Private outreach contacts and consent records (owner decision 2026-11-11): never commit.
+data/private/

@@ -12,7 +12,7 @@ import gzip
 import json
 import re
 import tempfile
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
@@ -202,21 +202,138 @@ def _write_author_details(
         _atomic_json(output_dir / "authors" / f"{author_id}.json", detail)
 
 
+EXPERTS_PER_INSTITUTION = 150
+INSTITUTION_WORKS_MAX_BYTES = 25_000_000
+
+
+def _institution_experts(
+    authorship_rows: Sequence[Mapping[str, Any]],
+    full_work_by_id: Mapping[str, Mapping[str, Any]],
+    index_by_id: Mapping[str, Mapping[str, Any]],
+    career: Mapping[str, Mapping[str, int]],
+) -> dict[str, list[dict[str, Any]]]:
+    """Authors per institution from authorship rows that list the institution itself."""
+    works_at: defaultdict[tuple[str, str], set[str]] = defaultdict(set)
+    names: dict[str, str] = {}
+    for row in authorship_rows:
+        author_id = _text(row.get("author_id"))
+        work_id = _text(row.get("work_id"))
+        if not author_id or work_id not in full_work_by_id:
+            continue
+        names.setdefault(author_id, _text(row.get("author_name")))
+        for inst_id in {_text(i) for i in _list(row.get("institution_ids")) if _text(i)}:
+            works_at[(inst_id, author_id)].add(work_id)
+    grouped: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for (inst_id, author_id), work_ids in works_at.items():
+        works = [full_work_by_id[w] for w in work_ids]
+        years = [w["year"] for w in works if isinstance(w.get("year"), int)]
+        topics: Counter[str] = Counter()
+        per_year: Counter[str] = Counter()
+        for work in works:
+            topics.update({t for t in work.get("domain_tags", []) if not t.startswith("matrix:")})
+            if isinstance(work.get("year"), int):
+                per_year[str(work["year"])] += 1
+        indexed = index_by_id.get(author_id)
+        metrics = career.get(author_id, {})
+        plastic_here = sum(1 for w in works if w.get("plastic_related") is True)
+        if indexed:
+            plastic_count = indexed.get("plastic_works_count")
+            plastic_cites = indexed.get("plastic_citations")
+            h_index = indexed.get("h_index")
+            name = indexed.get("name") or names.get(author_id, "")
+        else:
+            covered = bool(metrics.get("plastic_covered"))
+            plastic_count = metrics.get("plastic_works") if covered else plastic_here
+            plastic_cites = metrics.get("plastic_cites") if covered else None
+            h_index = metrics.get("h_index")
+            name = names.get(author_id, "")
+        grouped[inst_id].append(
+            {
+                "author_id": author_id,
+                "name": name,
+                "in_atlas_index": indexed is not None,
+                "works_at_institution": len(work_ids),
+                "first_year": min(years) if years else None,
+                "last_year": max(years) if years else None,
+                "plastic_works_count": plastic_count,
+                "plastic_citations": plastic_cites,
+                "h_index": h_index,
+                "topics": sorted(topics.items(), key=lambda kv: (-kv[1], kv[0]))[:5],
+                "years": dict(sorted(per_year.items())),
+            }
+        )
+    for experts in grouped.values():
+        experts.sort(key=lambda e: (-e["works_at_institution"], -(e["h_index"] or 0), e["name"]))
+    return grouped
+
+
+def _ca_connection(
+    authorships: Sequence[Mapping[str, Any]],
+    ca_institutions: set[str],
+    institution_names: Mapping[str, str],
+) -> dict[str, Any]:
+    """California co-authors on a work, and the California institutions they list."""
+    authors: list[dict[str, Any]] = []
+    institutions: dict[str, set[str]] = {}
+    seen: set[str] = set()
+    for row in authorships:
+        author_id = _text(row.get("author_id"))
+        ca_ids = sorted({_text(i) for i in _list(row.get("institution_ids"))} & ca_institutions)
+        basis = _text(row.get("ca_basis"))
+        if not (ca_ids or basis) or author_id in seen:
+            continue
+        seen.add(author_id)
+        authors.append(
+            {
+                "author_id": author_id,
+                "name": _text(row.get("author_name")),
+                "ca_basis": basis,
+                "institution_ids": ca_ids,
+            }
+        )
+        for inst_id in ca_ids:
+            institutions.setdefault(inst_id, set())
+            if basis:
+                institutions[inst_id].add(basis)
+    return {
+        "authors": authors,
+        "institutions": [
+            {
+                "inst_id": inst_id,
+                "name": institution_names.get(inst_id, inst_id),
+                "ca_basis": sorted(bases),
+            }
+            for inst_id, bases in sorted(institutions.items())
+        ],
+    }
+
+
 def _write_institution_works(
     output_dir: Path,
     institutions: Sequence[Mapping[str, Any]],
     full_work_by_id: Mapping[str, Mapping[str, Any]],
     works_for_institution: Mapping[str, set[str]],
     authors_by_work: Mapping[str, list[Mapping[str, Any]]],
+    experts_by_institution: Mapping[str, list[dict[str, Any]]] | None = None,
+    abstracts_for_collaborators: bool = True,
 ) -> None:
-    """One lazily loaded publication file per CA institution (evidence-map page)."""
+    """One lazily loaded publication file per institution (evidence-map page).
+
+    Out-of-state institutions appear only through co-authorship with California
+    researchers; their files carry ``scope: "collaborator"`` and a per-work
+    ``ca_connection``.
+    """
     folder = output_dir / "institution_works"
     folder.mkdir(parents=True, exist_ok=True)
     written: set[str] = set()
+    ca_ids = {_text(i.get("inst_id")) for i in institutions if i.get("ca_flag")}
+    names = {_text(i.get("inst_id")): _text(i.get("name")) for i in institutions}
+    experts_by_institution = experts_by_institution or {}
     for institution in institutions:
         inst_id = _text(institution.get("inst_id"))
-        if not inst_id or not institution.get("ca_flag") or not institution.get("work_count"):
+        if not inst_id or not institution.get("work_count"):
             continue
+        collaborator = not institution.get("ca_flag")
         works = []
         for work_id in sorted(works_for_institution.get(inst_id, set())):
             if work_id not in full_work_by_id:
@@ -225,20 +342,28 @@ def _write_institution_works(
                 authors_by_work.get(work_id, []),
                 key=lambda a: {"first": 0, "last": 2}.get(_text(a.get("position")), 1),
             )
-            works.append(
-                {
-                    **dict(full_work_by_id[work_id]),
-                    "author_names": [_text(a.get("author_name")) for a in ordered],
-                }
-            )
+            entry = {
+                **dict(full_work_by_id[work_id]),
+                "author_names": [_text(a.get("author_name")) for a in ordered],
+            }
+            if collaborator:
+                entry["ca_connection"] = _ca_connection(ordered, ca_ids, names)
+                if not abstracts_for_collaborators:
+                    entry["abstract"] = ""
+            works.append(entry)
         works.sort(key=lambda w: (-(w.get("year") or 0), _text(w.get("title"))))
         name = f"{inst_id}.json"
         written.add(name)
+        experts = experts_by_institution.get(inst_id, [])[:EXPERTS_PER_INSTITUTION]
         _atomic_json(
             folder / name,
             {
                 "schema_version": SCHEMA_VERSION,
-                "institution": {k: institution[k] for k in institution if k != "years"},
+                "institution": {
+                    **{k: institution[k] for k in institution if k not in {"years", "top_experts"}},
+                    "scope": "collaborator" if collaborator else "california",
+                },
+                "experts": experts,
                 "works": works,
             },
         )
@@ -506,6 +631,12 @@ def export_site(
             }
         )
 
+    experts_by_institution = _institution_experts(
+        authorship_rows,
+        full_work_by_id,
+        {a["author_id"]: a for a in author_index},
+        career,
+    )
     institutions: list[dict[str, Any]] = []
     work_lookup = {work["work_id"]: work for work in slim_works}
     authors_for_institution: defaultdict[str, set[str]] = defaultdict(set)
@@ -552,6 +683,16 @@ def export_site(
                 "author_count": len(authors_for_institution.get(inst_id, set())),
                 "years": years,
                 "domain_tags": _sorted_unique(inst_tags),
+                "top_experts": [
+                    {
+                        "author_id": e["author_id"],
+                        "name": e["name"],
+                        "works": e["works_at_institution"],
+                        "topic": e["topics"][0][0] if e["topics"] else "",
+                        "in_atlas_index": e["in_atlas_index"],
+                    }
+                    for e in experts_by_institution.get(inst_id, [])[:3]
+                ],
             }
         )
 
@@ -595,8 +736,25 @@ def export_site(
         },
     )
     _write_institution_works(
-        output, institutions, full_work_by_id, works_for_institution, authors_by_work
+        output,
+        institutions,
+        full_work_by_id,
+        works_for_institution,
+        authors_by_work,
+        experts_by_institution,
     )
+    inst_works_bytes = sum(f.stat().st_size for f in (output / "institution_works").glob("*.json"))
+    if inst_works_bytes > INSTITUTION_WORKS_MAX_BYTES:
+        # Size guard: collaborator files drop abstracts first (California files keep theirs).
+        _write_institution_works(
+            output,
+            institutions,
+            full_work_by_id,
+            works_for_institution,
+            authors_by_work,
+            experts_by_institution,
+            abstracts_for_collaborators=False,
+        )
     features = []
     for institution in institutions:
         if not institution["ca_flag"] or institution["lat"] is None or institution["lon"] is None:

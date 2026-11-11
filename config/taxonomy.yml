@@ -17,6 +17,7 @@ disciplines:
   - wastewater_and_treatment
   - ecotoxicology_and_trophic_transfer
   - human_exposure_and_health_risk
+  - risk_assessment
 
 domain_tags:
   - id: occurrence_and_monitoring
@@ -35,6 +36,16 @@ domain_tags:
     seed_concepts: [ingestion, inhalation, dermal, estimated daily intake, BPA, phthalates]
   - id: air
     seed_concepts: [airborne, atmosphere, aerosol, deposition, inhalation]
+  # Owner request 2026-11-11: risk assessment as its own topic (ecological and human).
+  - id: risk_assessment
+    seed_concepts: [risk assessment, risk characterization, risk characterisation,
+      hazard quotient, risk quotient, species sensitivity distribution, ecological risk,
+      probabilistic risk, risk-based threshold, health-based threshold, margin of exposure,
+      risk management framework, risk management, health-based, hazard assessment,
+      hazard characterization, hazard characterisation, health effects thresholds,
+      management threshold, management thresholds, risk threshold, risk thresholds,
+      toxicity threshold, toxicity thresholds, effect threshold, effect thresholds,
+      environmental risk, human health risk]
 
 provenance:
   supplied_by: owner external query agent

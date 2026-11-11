@@ -268,6 +268,9 @@
       function topicKeys() { return Object.keys(T.TOPICS); }
       function topicLabel(k) { return k === UNTAGGED ? "Untagged" : T.label(k); }
       function topicColor(k) { return k === UNTAGGED ? "#8a9499" : T.color(k); }
+      // Patterned (9th) topics: hatched fill in SVG, hatched background in CSS dots.
+      function topicSvgFill(k) { return k === UNTAGGED || !T.svgFill ? topicColor(k) : T.svgFill(k); }
+      function topicCssFill(k) { return k === UNTAGGED || !T.cssFill ? topicColor(k) : T.cssFill(k); }
       function topicOrder(k) { return k === UNTAGGED ? 999 : T.order(k); }
       // Topics of one award; untagged awards get the single UNTAGGED topic.
       function topicsOf(row) {
@@ -745,8 +748,8 @@
           layout = L;
           const heads = ["Funder agency", "Recipient sector", S.orgs ? "Recipient organisation" : null, "Topic"].filter(Boolean);
           const colOf = (n) => n.col;
-          const nodeColor = (n) => (n.type === "agency" ? FUNDER_COLOR : n.type === "sector" ? SECTOR_COLORS[n.key] || "#8b959d" : n.type === "topic" ? topicColor(n.key) : SECTOR_COLORS[n.sector] || "#8b959d");
-          const linkColor = (l) => (l.t.type === "topic" ? topicColor(l.t.key) : l.t.type === "sector" ? SECTOR_COLORS[l.t.key] || "#8b959d" : SECTOR_COLORS[l.t.sector] || "#8b959d");
+          const nodeColor = (n) => (n.type === "agency" ? FUNDER_COLOR : n.type === "sector" ? SECTOR_COLORS[n.key] || "#8b959d" : n.type === "topic" ? topicSvgFill(n.key) : SECTOR_COLORS[n.sector] || "#8b959d");
+          const linkColor = (l) => (l.t.type === "topic" ? topicSvgFill(l.t.key) : l.t.type === "sector" ? SECTOR_COLORS[l.t.key] || "#8b959d" : SECTOR_COLORS[l.t.sector] || "#8b959d");
           const total = g.total || 1;
           const nodeAria = (n) => `${n.name}: ${fmtInt(n.count)} awards${S.amt ? `, ${fmtUsd(n.value)} reported` : ""}. ${isSelected(n) ? "Selected. " : ""}Press Enter to ${isSelected(n) ? "remove" : "apply"} this filter.`;
           const parts = [`<svg id="sk-svg" width="${W}" height="${L.height}" viewBox="0 0 ${W} ${L.height}" role="group" aria-label="Sankey diagram of funders, sectors, organisations and topics">`];
@@ -879,7 +882,7 @@
           if (!h.rows.length) { host.innerHTML = `<p class="empty">No dated awards match the current filters.</p>`; return; }
           const selYear = S.yf && S.yf === S.yt ? Number(S.yf) : S.yt === String(HEAT_START - 1) && !S.yf ? "pre" : null;
           host.innerHTML = `<table class="mat"><thead><tr><th class="rowhead"></th>${h.cols.map((c) => `<th scope="col">${c === "pre" ? "&lt;" + HEAT_START : c}</th>`).join("")}</tr></thead><tbody>` +
-            h.rows.map((r) => `<tr><th scope="row"><span class="dot" style="background:${topicColor(r.key)}"></span>${escapeHtml(r.label)}</th>${r.counts.map((n, i) => {
+            h.rows.map((r) => `<tr><th scope="row"><span class="dot" style="background:${topicCssFill(r.key)}"></span>${escapeHtml(r.label)}</th>${r.counts.map((n, i) => {
               const fill = heatFill(n, h.max), sel = S.topic === r.key && selYear === h.cols[i];
               return `<td><button type="button" class="cell${sel ? " sel" : ""}" ${n ? "" : "disabled"} data-topic="${r.key}" data-col="${h.cols[i]}" style="background:${fill};color:${inkFor(fill)}" aria-label="${escapeHtml(r.label)}, ${h.cols[i] === "pre" ? "before " + HEAT_START : h.cols[i]}: ${n} awards">${n || ""}</button></td>`;
             }).join("")}</tr>`).join("") + `</tbody></table>`;
@@ -900,7 +903,7 @@
           const m = buildSectorTopic(filtered);
           const host = $("matrix");
           if (!m.sectors.length) { host.innerHTML = `<p class="empty">No awards match the current filters.</p>`; return; }
-          host.innerHTML = `<table class="mat"><thead><tr><th class="rowhead"></th>${m.topics.map((t) => `<th scope="col" title="${escapeHtml(topicLabel(t))}"><span class="dot" style="background:${topicColor(t)};margin:0 0 2px"></span><br>${escapeHtml(topicLabel(t))}</th>`).join("")}</tr></thead><tbody>` +
+          host.innerHTML = `<table class="mat"><thead><tr><th class="rowhead"></th>${m.topics.map((t) => `<th scope="col" title="${escapeHtml(topicLabel(t))}"><span class="dot" style="background:${topicCssFill(t)};margin:0 0 2px"></span><br>${escapeHtml(topicLabel(t))}</th>`).join("")}</tr></thead><tbody>` +
             m.sectors.map((s, i) => `<tr><th scope="row">${escapeHtml(SECTOR_LABELS[s] || s)}</th>${m.grid[i].map((n, j) => {
               const fill = heatFill(n, m.max), sel = S.sector === s && S.topic === m.topics[j];
               return `<td><button type="button" class="cell${sel ? " sel" : ""}" ${n ? "" : "disabled"} data-sector="${s}" data-topic="${m.topics[j]}" style="background:${fill};color:${inkFor(fill)}" aria-label="${escapeHtml(SECTOR_LABELS[s] || s)}, ${escapeHtml(topicLabel(m.topics[j]))}: ${n} awards">${n || ""}</button></td>`;

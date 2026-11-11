@@ -162,3 +162,54 @@ def test_ca_only_export_drops_works_without_ca_authorship(tmp_path: Path) -> Non
     )
     works = json.loads((site / "index.json").read_text(encoding="utf-8"))["works"]
     assert works and all(w["ca_any_author"] for w in works)
+
+
+def test_institution_files_cover_collaborators_and_experts(tmp_path: Path) -> None:
+    from atlas.build.export_site import export_site
+    from atlas.ingest.normalize import normalize_fixture
+
+    normalized = normalize_fixture(
+        Path("tests/fixtures/s2_2_openalex_works.json"),
+        institution_path=Path("data/processed/institutions.parquet"),
+        output_dir=tmp_path / "normalized",
+        qc_path=tmp_path / "qc.md",
+        generated_at="test",
+    )
+    site = tmp_path / "site"
+    export_site(
+        works_path=normalized.output_dir / "works.parquet",
+        authors_path=normalized.output_dir / "authors.parquet",
+        authorships_path=normalized.output_dir / "authorships.parquet",
+        institutions_path=normalized.output_dir / "institutions.parquet",
+        output_dir=site,
+        generated_at="test",
+        ca_authors_only=False,
+    )
+    details = [
+        json.loads(f.read_text(encoding="utf-8"))
+        for f in (site / "institution_works").glob("*.json")
+    ]
+    assert details and all("experts" in d for d in details)
+    scopes = {d["institution"]["scope"] for d in details}
+    assert "california" in scopes
+    collaborators = [d for d in details if d["institution"]["scope"] == "collaborator"]
+    assert collaborators, "out-of-state institutions on exported works get a file"
+    for detail in collaborators:
+        assert detail["institution"]["ca_flag"] is False
+        for work in detail["works"]:
+            connection = work["ca_connection"]
+            assert {"authors", "institutions"} <= set(connection)
+    sample = next(e for d in details for e in d["experts"])
+    assert {
+        "author_id",
+        "name",
+        "works_at_institution",
+        "first_year",
+        "last_year",
+        "plastic_works_count",
+        "h_index",
+        "topics",
+        "years",
+    } <= set(sample)
+    inst = json.loads((site / "institutions.json").read_text(encoding="utf-8"))["institutions"]
+    assert all("top_experts" in row for row in inst)

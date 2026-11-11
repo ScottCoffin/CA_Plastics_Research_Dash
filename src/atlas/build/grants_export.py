@@ -30,6 +30,7 @@ import pyarrow.parquet as pq
 
 from atlas.build.grant_sectors import SectorRules, load_sector_rules
 from atlas.ingest.grants.normalize import grant_plastic_decision
+from atlas.nlp.labels import _taxonomy_tags
 
 SCHEMA_VERSION = "s8.10"
 PI_LIMIT = 3
@@ -351,8 +352,13 @@ def apply_plastic_decisions(
     query_config: Mapping[str, Any],
     overrides: Mapping[str, bool] | None = None,
     owner_reviewed: Collection[str] | None = None,
+    taxonomy: Mapping[str, Any] | None = None,
 ) -> None:
-    """Set ``plastic_related`` on each merged row in place (see ``grant_plastic_decision``)."""
+    """Set ``plastic_related`` on each merged row in place (see ``grant_plastic_decision``).
+
+    With ``taxonomy``, ``domain_tags`` are recomputed from title + abstract so taxonomy
+    changes (e.g. the 2026-11-11 Risk assessment topic) reach grants without re-ingest.
+    """
 
     for row in rows:
         row["plastic_related"], _basis = grant_plastic_decision(
@@ -363,6 +369,9 @@ def apply_plastic_decisions(
             grant_key=row.get("grant_key"),
             owner_reviewed=owner_reviewed,
         )
+        if taxonomy is not None:
+            text = " ".join(str(row.get(k) or "") for k in ("title", "abstract"))
+            row["domain_tags"] = list(_taxonomy_tags(text, [], taxonomy)[0])
 
 
 def read_institutions(path: Path) -> list[dict[str, Any]]:
@@ -397,6 +406,7 @@ def build_from_paths(
     query_config: Mapping[str, Any] | None = None,
     relevance: Mapping[str, bool] | None = None,
     owner_reviewed: Collection[str] | None = None,
+    taxonomy: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Write ``output`` from the Parquet inputs and return a count-only summary.
 
@@ -406,7 +416,7 @@ def build_from_paths(
 
     rows = read_merged(merged)
     if query_config is not None:
-        apply_plastic_decisions(rows, query_config, relevance, owner_reviewed)
+        apply_plastic_decisions(rows, query_config, relevance, owner_reviewed, taxonomy)
     payload = build_payload(rows, read_institutions(institutions), generated_at=generated_at)
     map_rows = None
     if dedupe_map is not None and dedupe_map.exists():

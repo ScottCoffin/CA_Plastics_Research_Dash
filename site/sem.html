@@ -73,6 +73,7 @@
         padding: 0.2rem 0.4rem 0.2rem 0; background: var(--surface); font-size: 0.86rem; font-weight: 600;
       }
       .heat-label .topic-dot { width: 0.6rem; height: 0.6rem; border-radius: 999px; flex: none; }
+      .heat-label .topic-dot.hatch { border-radius: 1px; transform: rotate(45deg); }
       .heat-foot { color: var(--muted); }
       .heat-cell {
         min-height: 2.25rem; width: 100%; padding: 0; border: 0; border-radius: 2px;
@@ -119,6 +120,17 @@
       .inst-list a { font-weight: 700; overflow-wrap: anywhere; }
       .inst-meta { display: block; color: var(--muted); font-size: 0.85rem; }
       .unknown-note { color: #6b2100; font-weight: 600; }
+      .collab-notice { margin: 0 0 1rem; padding: 0.8rem 1rem; border: 2px solid #e0a070; border-radius: 0.5rem; background: #fff4ec; color: #6b2100; font-weight: 700; }
+      .collab-notice span { display: block; font-weight: 500; font-size: 0.92rem; margin-top: 0.2rem; }
+      .ca-connection { margin: 0.2rem 0 0.45rem; padding: 0.35rem 0.6rem; border-left: 4px solid #e0a070; background: #fff9f4; font-size: 0.9rem; overflow-wrap: anywhere; }
+      .ca-connection strong { color: #6b2100; }
+      .experts-table td.name, .experts-table th.name { text-align: left; white-space: normal; min-width: 11rem; }
+      .experts-table td.topics { text-align: left; white-space: normal; width: 24rem; max-width: 24rem; }
+      .experts-table .sort-btn { min-height: 2rem; padding: 0.1rem 0.3rem; border: 0; background: transparent; font-weight: 700; color: var(--brand-dark); cursor: pointer; }
+      .experts-table th[aria-sort="descending"] .sort-btn::after { content: " \25BC"; font-size: 0.7em; }
+      .experts-table th[aria-sort="ascending"] .sort-btn::after { content: " \25B2"; font-size: 0.7em; }
+      .heat-cell.static { display: flex; align-items: center; justify-content: center; }
+      .heat-label a { overflow-wrap: anywhere; }
       @media (max-width: 40rem) {
         .metric dd { font-size: 1.2rem; }
         .panel { border-radius: 0.6rem; }
@@ -154,10 +166,35 @@
       </section>
 
       <div id="sem" hidden>
+        <div id="collab-notice" class="collab-notice" role="note" hidden></div>
         <section class="panel" aria-labelledby="summary-h">
           <h2 id="summary-h">Summary</h2>
           <p class="panel-intro">Every publication linked to this institution in the Atlas snapshot, tagged by research topic and sample matrix.</p>
           <dl id="metrics" class="metrics"></dl>
+        </section>
+
+        <section id="experts-section" class="panel" aria-labelledby="experts-h" tabindex="-1">
+          <h2 id="experts-h">Top experts</h2>
+          <p id="experts-intro" class="panel-intro">Researchers with publications at this institution, ranked by publication count in the selected years. Topics are counted over each expert's publications at this institution (all years).</p>
+          <div class="filters">
+            <div class="field">
+              <label for="e-from">Years from</label>
+              <select id="e-from"></select>
+            </div>
+            <div class="field">
+              <label for="e-to">Years to</label>
+              <select id="e-to"></select>
+            </div>
+            <div class="field check">
+              <button type="button" class="btn expert-view" data-view="table" aria-pressed="true">Table</button>
+              <button type="button" class="btn expert-view" data-view="years" aria-pressed="false">Experts by year</button>
+            </div>
+          </div>
+          <p id="experts-count" class="muted" role="status" aria-live="polite"></p>
+          <div id="experts-view"></div>
+          <div id="experts-more-wrap" class="show-more" hidden>
+            <button type="button" id="experts-more" class="btn">Show more experts</button>
+          </div>
         </section>
 
         <section class="panel" aria-labelledby="topic-h">
@@ -482,6 +519,90 @@
         return total <= PROGRESSIVE_ABOVE ? total : Math.min(total, shown);
       }
 
+      // ---- Top experts and collaborator helpers (pure) -------------------------
+      const EXPERT_PAGE = 20;
+      const EXPERT_YEAR_ROWS = 15;
+      // Publications by this expert at the institution inside the year range (null bounds are open).
+      function expertInRange(expert, from, to) {
+        const f = toYear(from);
+        const t = toYear(to);
+        if (f === null && t === null) return Number(expert.works_at_institution) || 0;
+        let n = 0;
+        Object.entries(expert.years || {}).forEach(([year, count]) => {
+          const y = Number(year);
+          if ((f === null || y >= f) && (t === null || y <= t)) n += Number(count) || 0;
+        });
+        return n;
+      }
+      function filterExperts(experts, filters = {}) {
+        return (experts || [])
+          .map((expert) => ({ ...expert, in_range: expertInRange(expert, filters.yearFrom, filters.yearTo) }))
+          .filter((expert) => expert.in_range > 0);
+      }
+      function sortExperts(list, key, dir) {
+        const sign = dir === "asc" ? 1 : -1;
+        const num = (v) => (v === null || v === undefined ? -1 : Number(v));
+        const byName = (a, b) => compareText(a.name, b.name);
+        const pick = {
+          works: (e) => num(e.in_range),
+          h_index: (e) => num(e.h_index),
+          citations: (e) => num(e.plastic_citations)
+        };
+        return [...list].sort((a, b) => {
+          if (key === "name") return sign * byName(a, b);
+          const get = pick[key] || pick.works;
+          return sign * (get(a) - get(b)) || num(b.in_range) - num(a.in_range) || byName(a, b);
+        });
+      }
+      // Experts x years matrix for the top rows by publications in range.
+      function expertYearMatrix(experts, filters = {}, limit = EXPERT_YEAR_ROWS) {
+        const f = toYear(filters.yearFrom);
+        const t = toYear(filters.yearTo);
+        const ranked = sortExperts(filterExperts(experts, filters), "works", "desc").slice(0, limit);
+        const yearsSeen = new Set();
+        ranked.forEach((expert) => Object.keys(expert.years || {}).forEach((y) => {
+          const n = Number(y);
+          if ((f === null || n >= f) && (t === null || n <= t)) yearsSeen.add(n);
+        }));
+        const years = [];
+        if (yearsSeen.size) {
+          for (let y = Math.min(...yearsSeen); y <= Math.max(...yearsSeen); y += 1) years.push(y);
+        }
+        let max = 0;
+        const rows = ranked.map((expert) => {
+          const counts = years.map((y) => Number((expert.years || {})[String(y)]) || 0);
+          max = Math.max(max, ...counts, 0);
+          return { author_id: expert.author_id, name: expert.name, in_atlas_index: expert.in_atlas_index, counts, total: counts.reduce((a, b) => a + b, 0) };
+        });
+        return { years, rows, max };
+      }
+      function expertHref(expert) {
+        return expert.in_atlas_index ? `index.html#experts?author=${encodeURIComponent(expert.author_id)}` : "";
+      }
+      function expertNameHtml(expert) {
+        const href = expertHref(expert);
+        const name = escapeHtml(expert.name || expert.author_id);
+        return href ? `<a href="${escapeHtml(href)}">${name}</a>` : name;
+      }
+      function isCollaborator(inst) {
+        return Boolean(inst) && inst.scope === "collaborator";
+      }
+      function collabNoticeText(inst, works) {
+        if (!isCollaborator(inst)) return "";
+        const n = (works || []).length;
+        return `Outside California. Listed because of ${formatNumber(n)} ${n === 1 ? "work" : "works"} co-authored with California researchers.`;
+      }
+      // "California connection" line for one work in a collaborator institution's list.
+      function caConnectionHtml(work) {
+        const conn = work && work.ca_connection;
+        if (!conn || !Array.isArray(conn.authors) || !conn.authors.length) return "";
+        const authors = conn.authors.map((a) => `<a href="index.html#experts?author=${encodeURIComponent(a.author_id)}">${escapeHtml(a.name || a.author_id)}</a>`).join(", ");
+        const insts = (conn.institutions || []).map((i) => escapeHtml(i.name)).join("; ");
+        const basis = !insts ? [...new Set(conn.authors.map((a) => a.ca_basis).filter(Boolean))].map((b) => b.replace(/_/g, " ")).join(", ") : "";
+        const where = insts ? ` at ${insts}` : basis ? ` (California link: ${escapeHtml(basis)})` : "";
+        return `<p class="ca-connection"><strong>California connection:</strong> ${authors}${where}</p>`;
+      }
+
       // ---- Page state and rendering -------------------------------------------
       const $ = (id) => document.getElementById(id);
       const DEFAULT_FILTERS = { query: "", topic: "", plasticOnly: false, yearFrom: "", yearTo: "", sort: "newest", cell: null };
@@ -496,6 +617,10 @@
         shown: PAGE_SIZE,
         abstractsOpen: true,
         tableView: { domain: false, facet: false },
+        experts: [],
+        expertSort: { key: "works", dir: "desc" },
+        expertView: "table",
+        expertsShown: EXPERT_PAGE,
         pickerItems: null,
         loadToken: 0
       };
@@ -536,7 +661,7 @@
         html += hm.years.map((y) => `<div class="heat-year${vertical}${y === BEFORE ? " early" : ""}">${columnLabel(y)}</div>`).join("");
         html += '<div class="heat-head">Total</div>';
         hm.rows.forEach((row) => {
-          html += `<div class="heat-label"><span class="topic-dot" aria-hidden="true" style="background:${row.color}"></span>${escapeHtml(row.label)}</div>`;
+          html += `<div class="heat-label"><span class="topic-dot${AtlasTopics.pattern && AtlasTopics.pattern(row.key) ? " hatch" : ""}" aria-hidden="true" style="background:${row.key !== UNTAGGED && AtlasTopics.cssFill ? AtlasTopics.cssFill(row.key) : row.color}"></span>${escapeHtml(row.label)}</div>`;
           row.counts.forEach((count, i) => {
             html += heatCellHtml(kind, row, hm.years[i], count, hm.max);
           });
@@ -603,6 +728,8 @@
         const yearOptions = years.map((y) => `<option value="${y}">${y}</option>`).join("");
         $("f-from").innerHTML = `<option value="">Any</option>${yearOptions}`;
         $("f-to").innerHTML = `<option value="">Any</option>${yearOptions}`;
+        $("e-from").innerHTML = `<option value="">Any</option>${yearOptions}`;
+        $("e-to").innerHTML = `<option value="">Any</option>${yearOptions}`;
       }
 
       function syncFilterControls() {
@@ -612,6 +739,8 @@
         $("f-plastic").checked = f.plasticOnly;
         $("f-from").value = f.yearFrom;
         $("f-to").value = f.yearTo;
+        $("e-from").value = f.yearFrom;
+        $("e-to").value = f.yearTo;
         $("f-sort").value = f.sort;
       }
 
@@ -645,7 +774,7 @@
         const body = abstract
           ? `<details class="abstract"${S.abstractsOpen ? " open" : ""}><summary>Abstract</summary><p>${escapeHtml(abstract)}</p></details>`
           : '<p class="no-abstract">No abstract available</p>';
-        return `<li class="pub"><h3>${titleHtml}</h3><p class="pub-meta"><span>${year === null ? "Year unknown" : year}</span><span aria-hidden="true">·</span><span>${escapeHtml(work.journal || "Journal not listed")}</span><span aria-hidden="true">·</span><span>${formatNumber(cites)} ${cites === 1 ? "citation" : "citations"}</span> ${badges}</p><p class="pub-authors">${authorsHtml(work)}</p><div class="topic-chips">${chipsHtml(work)}</div>${body}</li>`;
+        return `<li class="pub"><h3>${titleHtml}</h3><p class="pub-meta"><span>${year === null ? "Year unknown" : year}</span><span aria-hidden="true">·</span><span>${escapeHtml(work.journal || "Journal not listed")}</span><span aria-hidden="true">·</span><span>${formatNumber(cites)} ${cites === 1 ? "citation" : "citations"}</span> ${badges}</p><p class="pub-authors">${authorsHtml(work)}</p>${caConnectionHtml(work)}<div class="topic-chips">${chipsHtml(work)}</div>${body}</li>`;
       }
 
       function renderCellBanner() {
@@ -655,6 +784,67 @@
           const kind = cell.kind === "facet" ? "matrix" : "topic";
           $("cell-text").textContent = `Showing ${keyLabel(cell.key)} (${kind}) in ${columnLabel(cell.year)}.`;
         }
+      }
+
+      function expertsTableHtml(rows) {
+        const sort = S.expertSort;
+        const th = (key, label, cls = "") => {
+          const aria = sort.key === key ? (sort.dir === "asc" ? "ascending" : "descending") : "none";
+          return `<th scope="col" class="${cls}" aria-sort="${aria}"><button type="button" class="sort-btn" data-sort="${key}">${label}</button></th>`;
+        };
+        const body = rows.map((e) => {
+          const years = e.first_year ? (e.first_year === e.last_year ? `${e.first_year}` : `${e.first_year}–${e.last_year}`) : "";
+          const topics = (e.topics || []).slice(0, 3).map(([tag, n]) => AtlasTopics.chip(tag, n)).join(" ");
+          const dash = (v) => (v === null || v === undefined ? "–" : formatNumber(v));
+          return `<tr><th scope="row" class="name">${expertNameHtml(e)}</th><td>${formatNumber(e.in_range)}</td><td>${formatNumber(e.works_at_institution)}</td><td>${dash(e.h_index)}</td><td>${dash(e.plastic_citations)}</td><td>${escapeHtml(years)}</td><td class="topics">${topics ? `<div class="topic-chips">${topics}</div>` : '<span class="muted">No topic tags</span>'}</td></tr>`;
+        }).join("");
+        return `<div class="table-scroll" role="region" tabindex="0" aria-label="Top experts"><table class="sem-table experts-table"><caption>Experts with publications at this institution</caption><thead><tr>${th("name", "Name", "name")}${th("works", "Works in range")}<th scope="col">All years</th>${th("h_index", "h-index")}${th("citations", "Plastics citations")}<th scope="col">Years here</th><th scope="col">Main topics (works)</th></tr></thead><tbody>${body}</tbody></table></div>`;
+      }
+
+      function expertsYearsHtml(matrix) {
+        if (!matrix.rows.length || !matrix.years.length) return '<p class="panel-intro">No experts have publications in these years.</p>';
+        const cols = `13rem repeat(${matrix.years.length}, 2.25rem) 3.5rem`;
+        let html = `<div class="heat-scroll" role="region" tabindex="0" aria-label="Experts by year"><div class="heat-grid" style="grid-template-columns:${cols}">`;
+        html += '<div class="heat-corner">Expert</div>';
+        html += matrix.years.map((y) => `<div class="heat-year vertical">${y}</div>`).join("");
+        html += '<div class="heat-head">Total</div>';
+        matrix.rows.forEach((row) => {
+          html += `<div class="heat-label">${expertNameHtml(row)}</div>`;
+          row.counts.forEach((count, i) => {
+            const fill = heatFill(count, matrix.max);
+            const ink = count ? inkFor(fill) : INK_DARK;
+            const text = `${row.name}, ${matrix.years[i]}: ${count} ${count === 1 ? "publication" : "publications"}`;
+            html += `<div class="heat-cell static" style="background:${fill};color:${ink}" title="${escapeHtml(text)}" role="img" aria-label="${escapeHtml(text)}">${count ? count : ""}</div>`;
+          });
+          html += `<div class="heat-total">${row.total}</div>`;
+        });
+        html += "</div></div>";
+        return html;
+      }
+
+      function renderExperts() {
+        const all = S.experts || [];
+        const section = $("experts-section");
+        section.hidden = !all.length;
+        if (!all.length) return;
+        const filters = { yearFrom: S.filters.yearFrom, yearTo: S.filters.yearTo };
+        const ranked = filterExperts(all, filters);
+        document.querySelectorAll(".expert-view").forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.view === S.expertView ? "true" : "false"));
+        const note = all.length >= 150 ? " The list is capped at the 150 most active." : "";
+        $("experts-count").textContent = `${formatNumber(ranked.length)} of ${formatNumber(all.length)} experts have publications in these years.${note}`;
+        if (S.expertView === "years") {
+          $("experts-view").innerHTML = expertsYearsHtml(expertYearMatrix(all, filters));
+          $("experts-more-wrap").hidden = true;
+          const scroller = $("experts-view").querySelector(".heat-scroll");
+          if (scroller) scroller.scrollLeft = scroller.scrollWidth;
+          return;
+        }
+        const sorted = sortExperts(ranked, S.expertSort.key, S.expertSort.dir);
+        const shown = sorted.slice(0, S.expertsShown);
+        $("experts-view").innerHTML = shown.length ? expertsTableHtml(shown) : '<p class="panel-intro">No experts have publications in these years.</p>';
+        const remaining = sorted.length - shown.length;
+        $("experts-more-wrap").hidden = remaining <= 0;
+        $("experts-more").textContent = `Show ${Math.min(EXPERT_PAGE, remaining)} more experts (${remaining} remaining)`;
       }
 
       function renderList() {
@@ -696,6 +886,16 @@
         const meta = [typeLabel(inst.atlas_type), inst.city].filter(Boolean).join(" · ");
         $("inst-meta").textContent = meta;
         S.works = Array.isArray(data.works) ? data.works : [];
+        S.experts = Array.isArray(data.experts) ? data.experts : [];
+        S.expertSort = { key: "works", dir: "desc" };
+        S.expertView = "table";
+        S.expertsShown = EXPERT_PAGE;
+        const notice = collabNoticeText(inst, S.works);
+        $("collab-notice").hidden = !notice;
+        $("collab-notice").innerHTML = notice
+          ? `${escapeHtml(notice)}<span>Only publications co-authored with California researchers are in the Atlas. Each publication below lists its California connection.</span>`
+          : "";
+        if (isCollaborator(inst)) $("inst-meta").textContent = [typeLabel(inst.atlas_type), inst.city, "Collaborator outside California"].filter(Boolean).join(" · ");
         S.filters = { ...DEFAULT_FILTERS };
         S.shown = PAGE_SIZE;
         S.topicHeat = buildHeatmap(S.works, domainKeys);
@@ -703,11 +903,26 @@
         renderFilterOptions();
         syncFilterControls();
         renderMetrics();
+        renderExperts();
         renderHeat("domain");
         renderHeat("facet");
         renderList();
         setStatus(`${formatNumber(S.works.length)} publications`, null);
         showPanel("sem");
+        scrollToSection();
+      }
+
+      // "#inst=<id>&section=experts" scrolls to the Top experts section.
+      function sectionParam(hash) {
+        return new URLSearchParams(String(hash || "").replace(/^#/, "")).get("section") || "";
+      }
+      function scrollToSection() {
+        if (sectionParam(location.hash) !== "experts") return;
+        const el = $("experts-section");
+        if (el && !el.hidden) {
+          el.scrollIntoView();
+          el.focus({ preventScroll: true });
+        }
       }
 
       function renderPicker() {
@@ -760,7 +975,10 @@
           showPicker(`"${raw}" is not a valid institution id.`, true);
           return;
         }
-        if (raw === S.inst && S.institution) return;
+        if (raw === S.inst && S.institution) {
+          scrollToSection();
+          return;
+        }
         const token = ++S.loadToken;
         S.inst = raw;
         setStatus("Loading publications…", null);
@@ -785,8 +1003,19 @@
       function resetFilters() {
         S.filters = { ...DEFAULT_FILTERS };
         S.shown = PAGE_SIZE;
+        S.expertsShown = EXPERT_PAGE;
         syncFilterControls();
+        renderExperts();
         renderList();
+      }
+
+      function setYearRange(from, to) {
+        S.filters.yearFrom = from;
+        S.filters.yearTo = to;
+        S.expertsShown = EXPERT_PAGE;
+        syncFilterControls();
+        renderExperts();
+        resetListWindow();
       }
 
       function bindEvents() {
@@ -831,6 +1060,24 @@
             });
             return;
           }
+          const sortBtn = target.closest(".experts-table .sort-btn");
+          if (sortBtn) {
+            const key = sortBtn.dataset.sort;
+            S.expertSort = S.expertSort.key === key ? { key, dir: S.expertSort.dir === "asc" ? "desc" : "asc" } : { key, dir: key === "name" ? "asc" : "desc" };
+            renderExperts();
+            return;
+          }
+          const viewBtn = target.closest(".expert-view");
+          if (viewBtn) {
+            S.expertView = viewBtn.dataset.view;
+            renderExperts();
+            return;
+          }
+          if (target.closest("#experts-more")) {
+            S.expertsShown += EXPERT_PAGE;
+            renderExperts();
+            return;
+          }
           if (target.closest("#f-reset")) {
             resetFilters();
           }
@@ -847,14 +1094,10 @@
           S.filters.plasticOnly = event.target.checked;
           resetListWindow();
         });
-        $("f-from").addEventListener("change", (event) => {
-          S.filters.yearFrom = event.target.value;
-          resetListWindow();
-        });
-        $("f-to").addEventListener("change", (event) => {
-          S.filters.yearTo = event.target.value;
-          resetListWindow();
-        });
+        $("f-from").addEventListener("change", (event) => setYearRange(event.target.value, S.filters.yearTo));
+        $("f-to").addEventListener("change", (event) => setYearRange(S.filters.yearFrom, event.target.value));
+        $("e-from").addEventListener("change", (event) => setYearRange(event.target.value, S.filters.yearTo));
+        $("e-to").addEventListener("change", (event) => setYearRange(S.filters.yearFrom, event.target.value));
         $("f-sort").addEventListener("change", (event) => {
           S.filters.sort = event.target.value;
           resetListWindow();

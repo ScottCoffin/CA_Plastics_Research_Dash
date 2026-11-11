@@ -35,3 +35,16 @@ and scraping it is prohibited.
    and a CA place-name theses/grey-literature audit; eScholarship OAI-PMH for UC deposits.
 
 Tracked as TODO S2.5 (supplementary coverage sources).
+
+## Expert bios and photos (probed 2026-11-11)
+
+| Source | Coverage (sample of Atlas experts) | Licence | Verdict |
+|---|---|---|---|
+| ORCID `/person` biography | 8 of 100 sampled ORCID experts (1,605 of 2,426 experts have an ORCID) | ORCID public data is CC0 | Use: short self-written bios |
+| ORCID keywords, researcher URLs | 12 and 17 of 100 | CC0 | Use: keywords and homepage/lab links |
+| Wikidata via ORCID (P496), photo P18 | 104 of 200 have an item; 7 of 200 have a photo | items CC0; photos are Wikimedia Commons files with per-file licences (attribution required, from Commons `extmetadata`) | Use for photos with credit line; cache thumbnails, never hotlink without attribution |
+| Faculty pages, LinkedIn, Google Scholar | n/a | copyright / terms restrict scraping | Do not scrape |
+
+Opt-in submissions through the correction route (GitHub issue form: bio <= 600 characters, photo the expert owns and licenses, consent checkbox) are the main path to coverage, and the only path for photos of most experts. Suppressions (`curation/suppressions.csv`) and an opt-out remove bios and photos at the next build. Tracked as TODO S9.5.
+
+Additional bio/photo sources checked 2026-11-11: UC Davis Aggie Experts (JSON API exists but robots.txt disallows `/api/search`, `/search`, `/browse`) and UCSF Profiles (robots.txt disallows `/profile/`, `/display/`, `/sparql/`): not crawled; a data partnership with the campus libraries is the legitimate route. Wikipedia extracts (CC BY-SA) exist only for notable researchers. Gravatar images could be shown for contacts who opt in via the outreach form. Emails: OpenAlex raw affiliations hold one for 207 of 2,426 experts; ORCID public email ~11% of ORCID holders; see `docs/OUTREACH.md`.
