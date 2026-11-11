@@ -33,6 +33,7 @@ data/interim/*
 data/logs/*
 !data/logs/.gitkeep
 data/processed/normalized/
+data/processed/analytics/
 
 # Downloaded full text and local model artifacts
 *.pdf

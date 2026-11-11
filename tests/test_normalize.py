@@ -99,3 +99,24 @@ def test_suppressed_works_and_authors_are_dropped_at_ingest(tmp_path: Path) -> N
     assert "W9000000104" not in kept and len(kept) == 3
     authorships = pq.read_table(result.output_dir / "authorships.parquet").to_pylist()
     assert author_id not in {row["author_id"] for row in authorships}
+
+
+def test_is_retracted_is_carried_from_openalex(tmp_path: Path) -> None:
+    """AT-3 excludes retracted works; normalize keeps OpenAlex's flag (missing -> False)."""
+    works = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    works[0]["is_retracted"] = True
+    works[1].pop("is_retracted", None)
+    fixture = tmp_path / "works.json"
+    fixture.write_text(json.dumps(works), encoding="utf-8")
+    result = normalize_fixture(
+        fixture,
+        institution_path=INSTITUTIONS,
+        output_dir=tmp_path / "processed",
+        qc_path=tmp_path / "qc.md",
+        generated_at="test",
+    )
+    rows = {r["work_id"]: r for r in pq.read_table(result.output_dir / "works.parquet").to_pylist()}
+    first = works[0]["id"].rsplit("/", 1)[-1]
+    second = works[1]["id"].rsplit("/", 1)[-1]
+    assert rows[first]["is_retracted"] is True
+    assert rows[second]["is_retracted"] is False

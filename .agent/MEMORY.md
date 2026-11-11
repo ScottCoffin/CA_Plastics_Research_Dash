@@ -51,6 +51,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - S8.1 grants (`atlas.ingest.grants`): C3 schema, frozen `grant_key` = sha256(`sourceaward_id`)[:16]; relevance and tags use provisional S2.3 rules (private `atlas.nlp.labels` helpers) until S5.1. See `docs/GRANTS_SCHEMA.md`.
 
 - A1 gates decided 2026-11-10: G-HOST = GitHub Pages while files ≤ 25 MB (206 + CORS verified); R2 scale lever verified 2026-11-10 at `https://data.plastiverse.live/` (CORS allows only `https://plastiverse.live`, which hosts nothing; the site is still `scottcoff.in`); G-PARQ = DuckDB 1.1.1 writer + zstd; G-FACET = Appendix C bit-masks (main page); G-SHELL = Observable Framework 1.13.4. Grants pipeline S8.1–S8.6/S8.9/S8.10 complete: ignored `data/interim/grants/*.parquet` → dedupe → public `site/data/grants.json`. Site JSON/XML are LF-pinned; check clean worktrees before pushing.
+- AT-3 done 2026-11-11 (`docs/AT_3_VERIFICATION.md`): `atlas.analytics` builds `data/processed/analytics/*.parquet` (gitignored) from normalized tables scoped to `site/data/index.json` (published, plastic-related by default, retracted excluded via new `works.is_retracted`). Appendix B fractional weights with an `unaffiliated` bucket; CA-only ranks; seeded bootstrap. DuckDB 2.0.0 is a pipeline dependency and the G-PARQ writer pin (ADR-DUCKDB-2-2026-11-11).
 ## Verified API facts
 - OpenAlex (2026-11-11): boolean title_and_abstract searches cost 10 credits/call and are
   limited to 5 req/s when they have >5 operators (429 "wait 1s"); the client throttles

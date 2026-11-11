@@ -1,5 +1,8 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-11 -- AT-3 analytics
+- DuckDB parallel float SUM varies in the last bit between runs; set `SET threads = 1` (or round before ranking) wherever reproducible ranks or seeded bootstrap outputs are tested. DuckDB 1.1.1 has no Python 3.14 wheel, so the pipeline uses 2.0.0. When regenerating `requirements/lock.txt`, `uv pip compile --extra ml` drags in torch/CUDA; the existing lock pins the ml extra by hand, so insert single pins instead of recompiling.
+
 ## 2026-11-09 -- S7.5 monitoring publication and runtime
 - Keep registry catalogue output separate from observations: unknown contributors remain unknown, and an empty public sample view is not a data-gap claim. Private previews must resolve outside the public site tree, including aliases. The focused browser-logic regression runs through pytest and requires Node.js 20+ on PATH; install/version pinning belongs with S10 environment hardening.
 

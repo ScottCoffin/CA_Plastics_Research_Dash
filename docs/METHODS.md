@@ -93,6 +93,34 @@ corpus or an institution leaderboard. Counts and tags therefore describe this
 snapshot's records; they are not pollution measurements or research-quality
 rankings.
 
+## Institution counts and stability (AT-3)
+
+Institution leaderboard numbers come from SQL over the normalized tables
+(`atlas.analytics`, DuckDB; `scripts/build_analytics.py`). They cover the
+published work set (the works on the site after curation), restricted by
+default to works labelled plastic-related.
+
+- **Exclusions.** Retracted works (OpenAlex `is_retracted`) are excluded. We
+  do not follow the Leiden Ranking's core-publication rules (English,
+  core journals, at least one reference), because they would drop
+  regional, agency and grey literature that matters here.
+- **Full count (`works_full`).** The number of works with at least one
+  author affiliated with the institution.
+- **Fractional count (`works_frac`).** Each work has a weight of 1, split
+  equally among its distinct authors. An author's share is then split equally
+  among that author's distinct institutions on the work. For example, if 2 of
+  5 authors are affiliated only with institution A, A receives 0.4. An author
+  listing two institutions gives each one half of that author's share.
+  Authors with no institution go to an `unaffiliated` bucket, so every
+  work's weights sum to 1. Rankings use California institutions only;
+  non-California co-author institutions keep their shares but are not ranked.
+- **Stability intervals.** We bootstrap works with replacement (B = 1,000,
+  fixed seed) and report 95% percentile intervals for `works_frac` and rank
+  for the top 200 California institutions. When an interval would exclude
+  the point estimate, we widen it to include the point and flag it. An
+  institution whose rank interval overlaps the neighbour above or below is
+  marked "not distinguishable" from it.
+
 ## Corrections and source work
 
 To report a correction or request review of a profile, [open a data-correction

@@ -532,7 +532,13 @@ the implementing task's acceptance passes.
 - **Context:** Owner: state institutions did not separate CDPH, OEHHA, State Water Board, OPC. 40 CA government institutions were missing from the registry and government defaulted to local-agency; OEHHA/SWRCB/RWQCBs/State Lands have no OpenAlex record (filed under CalEPA or "State of California").
 - **Decision:** registry supplement (`scripts/build_institutions.py --supplement-government --reuse-ror-dump`), state/local/federal/county-health name rules, and `config/ca_state_agencies.yml` resolving sub-agencies from raw affiliations into `CAAG-*` institutions (umbrella replaced, no double count). OEHHA 37 and SWRCB 35 works now appear; "State of California" falls 41 -> 5.
 - **Recovered loss:** the owner's 2026-11-05 top-100 review (100/100, commit 0cec765) had been overwritten by a blank regenerated file on 2026-11-06 (44166c7). Restored; `write_outputs` now never rewrites a review file that holds owner reviews. AT-2 regenerated from it: owner_reviewed 56, new entrants 47 (SCCWRP and SFEI among them, as A1 expected).
-- **Pending owner confirmation:** overrides I4210161945 "Department of Health Services" and I4405283712 (CDPH injury-control branch) typed state-agency.
+- **Owner confirmed 2026-11-11:** overrides I4210161945 "Department of Health Services" and I4405283712 (CDPH injury-control branch) typed state-agency.
 
 ## ADR-OUTREACH-2026-11-11: Expert outreach by owner-sent email
 - **Decision (owner):** collect expert emails only from published corresponding-author data and public ORCID records; store them in `data/private/` (gitignored) only; the owner sends mail-merge invitations from their own account; experts submit bio/photo/licence/consent through an owner-owned Google/Microsoft Form; only owner-approved public fields are imported. No automated sending, no robots-disallowed crawling, no guessed addresses; opt-outs honoured permanently. Spec `docs/OUTREACH.md`, TODO S9.6.
+
+## ADR-DUCKDB-2-2026-11-11: DuckDB 2.0.0 as the pipeline engine and G-PARQ writer pin
+- **Context:** AT-3 makes DuckDB a pipeline dependency (A1 C4: counts come only from DuckDB). The G-PARQ pin, DuckDB 1.1.1, has no wheel for the project interpreter (Python 3.14). SPK-2 found that DuckDB 2.0.0 + zstd Parquet passes 15/15 checks in both browser engines (wasm 1.29.0 / engine 1.1.1 and wasm 1.32.0 / engine 1.4.3) and is about 10% smaller.
+- **Decision (owner, 2026-11-11):** `duckdb==2.0.0` goes in `pyproject.toml` dependencies and `requirements/lock.txt`. The G-PARQ writer pin moves to 2.0.0 with `COPY ... (FORMAT PARQUET, COMPRESSION zstd)` and default row groups.
+- **Alternatives:** keep 1.1.1 in a separate Python 3.12 environment (second interpreter in CI, more fragile); pyarrow-only counts (contradicts C4).
+- **Consequence:** AT-4 public Parquet uses the 2.0.0 writer. Re-run the SPK-2 browser checks if the wasm pin changes.

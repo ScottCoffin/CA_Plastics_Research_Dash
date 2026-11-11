@@ -49,6 +49,7 @@ WORKS_SCHEMA = pa.schema(
         ("openalex_topics", pa.list_(pa.string())),
         ("primary_topic", pa.string()),
         ("cited_by_count", pa.int64()),
+        ("is_retracted", pa.bool_()),
         ("first_seen", pa.string()),
         ("last_updated", pa.string()),
         ("ca_led", pa.bool_()),
@@ -788,6 +789,8 @@ def normalize_records(
                 "openalex_topics": _topic_ids(work),
                 "primary_topic": compact_id(primary_topic.get("id")),
                 "cited_by_count": _number(work.get("cited_by_count")) or 0,
+                # AT-3 excludes retracted works from analytics; OpenAlex sends a boolean.
+                "is_retracted": work.get("is_retracted") is True,
                 "first_seen": _string(work.get("fetched_at_utc")),
                 "last_updated": _string(work.get("updated_date")),
                 "ca_led": False,
