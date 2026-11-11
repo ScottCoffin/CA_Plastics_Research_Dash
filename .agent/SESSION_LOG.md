@@ -83,3 +83,4 @@
 | 2026-11-10 | S7.7 | Sierra snow literature rows (40) published; S7.8 CEDEN task added | this commit |
 | 2026-11-10 | S7.8 | CEDEN concentrations joined (63 kept, 78 filled); 56 QA samples removed from public map; weekly CEDEN watch | this commit |
 | 2026-11-10 | AT-1 | Owner labels complete (82.8%); v3 candidate + ingester support; 76-work repeat sample; licenses; Zenodo release v2026.11.10; review app fixes | this commit |
+| 2026-11-10 | S2.2 / S10.2 | Near-duplicate collapsing; governance gaps (issue link, REUSE, disclosure, suppression/overrides/merges) | this commit |

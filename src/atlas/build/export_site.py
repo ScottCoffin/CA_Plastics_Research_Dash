@@ -13,12 +13,14 @@ import json
 import tempfile
 from collections import defaultdict
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 import pyarrow.parquet as pq
+
+from atlas.build.curation import apply_curation, load_curation
 
 SCHEMA_VERSION = "s3.1"
 
@@ -31,6 +33,7 @@ class ExportResult:
     metadata_path: Path
     counts: dict[str, int]
     sizes: dict[str, dict[str, int]]
+    curation: dict[str, int] = field(default_factory=dict)
 
 
 def _text(value: object) -> str:
@@ -222,6 +225,9 @@ def export_site(
     institutions_path: str | Path,
     labels_path: str | Path | None = None,
     work_dataset_links_path: str | Path | None = None,
+    suppressions_path: str | Path | None = None,
+    work_overrides_path: str | Path | None = None,
+    author_merges_path: str | Path | None = None,
     output_dir: str | Path = "site/data",
     generated_at: str | None = None,
 ) -> ExportResult:
@@ -230,6 +236,9 @@ def export_site(
     ``labels_path`` is optional so the exporter can build a useful fixture or
     an early refresh before S2.3 output exists.  Missing label fields remain
     ``null`` rather than being inferred by the site builder.
+
+    The optional ``curation/`` inputs (suppressions, work overrides and author
+    merges) are applied before any payload is built; see ``atlas.build.curation``.
     """
 
     works_rows = _read(works_path)
@@ -241,6 +250,22 @@ def export_site(
     # S9.2 links are opt-in: without a path, author payloads are byte-identical to before.
     link_rows = _read(work_dataset_links_path, required=False) if work_dataset_links_path else []
     datasets_by_work = _datasets_by_work(link_rows)
+    curation = load_curation(
+        suppressions_path=suppressions_path,
+        work_overrides_path=work_overrides_path,
+        author_merges_path=author_merges_path,
+    )
+    curated = apply_curation(
+        works=works_rows,
+        authorships=authorship_rows,
+        authors=author_rows,
+        labels=labels,
+        curation=curation,
+    )
+    works_rows = curated.works
+    authorship_rows = curated.authorships
+    author_rows = curated.authors
+    labels = curated.labels
 
     authors_by_work: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
     works_by_author: defaultdict[str, list[str]] = defaultdict(list)
@@ -382,7 +407,10 @@ def export_site(
         author_index,
         {
             author_id: [
-                full_work_by_id[work_id] for work_id in work_ids if work_id in full_work_by_id
+                full_work_by_id[work_id]
+                # dict.fromkeys drops duplicates left by merged authorships, keeping order.
+                for work_id in dict.fromkeys(work_ids)
+                if work_id in full_work_by_id
             ]
             for author_id, work_ids in works_by_author.items()
         },
@@ -423,6 +451,7 @@ def export_site(
         "files": sizes,
         "payload_bytes": sum(item["bytes"] for item in sizes.values()),
         "payload_gzip_bytes": sum(item["gzip_bytes"] for item in sizes.values()),
+        "curation": curated.counts,
     }
     metadata_path = output / "build_metadata.json"
     _atomic_json(metadata_path, metadata)
@@ -431,4 +460,4 @@ def export_site(
         "bytes": metadata_path.stat().st_size,
         "gzip_bytes": len(gzip.compress(metadata_path.read_bytes(), mtime=0)),
     }
-    return ExportResult(output, metadata_path, counts, result_sizes)
+    return ExportResult(output, metadata_path, counts, result_sizes, curated.counts)

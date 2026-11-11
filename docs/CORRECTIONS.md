@@ -32,33 +32,53 @@ link for disambiguation errors (spec F4). See the open items below.
 1. Triage the issue and label it as a correction, a profile review, or a removal request.
 2. Check the claim against the source record. The project does not alter the
    upstream OpenAlex record, a publisher record, or a funder record.
-3. Record an accepted correction in the matching override file, with `reason`,
-   `reviewed_by` and `reviewed_at`:
+3. Record an accepted action as one row in the matching curation file. Every row
+   needs `reason`, `reviewed_by` and a review date. The build refuses a row without
+   `reviewed_by`, so an unreviewed correction cannot reach the site.
+4. Run the export (`py -3.14 scripts/build_export_site.py`). The build reads the
+   curation files on every run, so the action is applied in that build and
+   `site/data/build_metadata.json` records the counts under `curation`.
+5. Close the issue with a link to the commit or the snapshot that carries the change.
 
-| Scope | File | What the build does today |
+| Action | File (header) | What the export does |
 |---|---|---|
-| Institution fields (for example `atlas_type`, `display_name`) | `config/institution_overrides.csv` | Applied by `src/atlas/ingest/institutions.py`. Verified in code. |
-| Author-level action (merge or split) | `config/author_overrides.csv` | Read by `src/atlas/ingest/normalize.py` and written as `override_flags` only. The merge or split is **not yet applied** to the site export. |
-| Work-level field | `curation/overrides_works.csv` | Header only. **No code reads this file yet.** A work correction will not reach the site until a consumer is built. |
+| Remove an author profile | `curation/suppressions.csv` (`kind,id,reason,requested_at,reviewed_by`), `kind` = `author` | The author is dropped from `index.json`, `authors/<id>.json` is not written, and the author's ID is removed from every work's `author_ids`. Works with no remaining linked author are dropped. Institution and aggregate counts are recomputed. |
+| Remove a work | `curation/suppressions.csv`, `kind` = `work` | The work is dropped from every payload, and its authorships are removed. |
+| Correct a work field | `curation/overrides_works.csv` (`work_id,field,value,reason,reviewed_by,reviewed_at`) | Replaces the value before aggregation. Allowed fields: `title`, `publication_year`, `ca_led`, `ca_any_author`, `plastic_related`, `study_type`, `domain_tags` and `facet_tags` (pipe-separated). Any other field is an error. Two rows for the same work and field are an error. |
+| Merge two author profiles | `curation/author_merges.csv` (`from_author_id,to_author_id,reason,reviewed_by,reviewed_at`) | Re-points the `from` author's authorships to the `to` author. The `from` profile is dropped. Chains are resolved; cycles are an error. |
+| Institution fields | `config/institution_overrides.csv` | Applied by `src/atlas/ingest/institutions.py` during ingest. |
 
-4. Close the issue with a link to the commit or the snapshot that carries the change.
+Split of an author profile is **not** handled by the atlas. Ask OpenAlex to split the
+profile, and record the request in the issue.
+
+`config/author_overrides.csv` is still read only by `src/atlas/ingest/normalize.py`
+and written as `override_flags`. It does not change the export. Use
+`curation/author_merges.csv` for merges.
+
+Identifiers may be given as bare IDs (`A9000000102`, `W9000000101`) or as full
+OpenAlex URLs. The export removes or changes only the listed IDs. It does not
+read or change the upstream OpenAlex record.
+
+Known limits: a suppressed author's name can still appear in a work's title or
+abstract, and the work-level `ca_led` and `ca_any_author` flags are not recomputed
+after an author is removed. Check both by hand when you suppress a profile.
 
 ## Timing
 
-Spec F4 requires that accepted overrides are applied within the next build. This is
-true today only for institution overrides. The author and work overrides above are
-open items in `docs/GOVERNANCE_CHECKLIST.md`. The owner also needs to set the
+Spec F4 requires that accepted overrides are applied within the next build. The
+curation files above are read by every export run, so an accepted row is applied
+in the next build after it is committed. Institution overrides are applied at ingest
+(`src/atlas/ingest/institutions.py`), not at export. The owner still needs to set the
 response-time commitment (none is stated in the repository yet).
 
 ## Removal
 
-The repository has no removal mechanism that suppresses a profile or work from the
-export. A removal request can be handled today only by a manual change to the
-export input, after owner review, and that change is not yet recorded in an
-override file. The owner needs to decide the removal policy and mechanism (for
-example an author-level "exclude" action applied by the normalizer) before this
-process can be completed. Until then the request is logged in the issue and the
-owner decides the response case by case.
+Removal is handled by a `kind=author` or `kind=work` row in
+`curation/suppressions.csv`. The export drops the listed profile or work from every
+public payload. Records are dropped from the site, not deleted from the source
+database or from the Parquet tables. The owner still needs to decide the removal
+policy (for example whether the record is also excluded from the next ingest, and
+how long a removed profile stays suppressed), and to confirm the About tab wording.
 
 ## Source-level problems
 
@@ -73,9 +93,8 @@ Some errors come from the source, not the atlas:
 
 ## Open items for owner decision
 
-- Build the work-override consumer, or record that work corrections are manual until it exists.
-- Apply author merge and split actions in the export, or record them as manual until then.
-- Define the removal mechanism and policy.
+- Decide whether suppressed records must also be excluded at ingest, not only at export.
 - Set a response-time commitment for issues.
 - Add the "Is this you? Report an issue" link to the About tab and profile drawer.
 - Decide whether the About tab should also name the owner's roles (see `docs/PRIVACY_REVIEW.md`).
+- Align the About tab card with the removal and correction steps above.

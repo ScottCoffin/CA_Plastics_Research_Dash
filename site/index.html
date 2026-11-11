@@ -211,7 +211,7 @@
 
       <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
       <aside id="researcher-drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
-        <div class="drawer-header"><div><p class="eyebrow">Researcher detail</p><h2 id="drawer-title">Researcher</h2></div><button id="drawer-close" class="drawer-close" type="button">Close</button></div>
+        <div class="drawer-header"><div><p class="eyebrow">Researcher detail</p><h2 id="drawer-title">Researcher</h2><p class="detail-meta"><a id="drawer-issue-link" href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new" target="_blank" rel="noreferrer">Is this you? Report an issue</a></p></div><button id="drawer-close" class="drawer-close" type="button">Close</button></div>
         <div id="drawer-content"><p class="detail-meta">Select an expert to load their works.</p></div>
       </aside>
 
@@ -319,6 +319,8 @@
           </section>
         </div>
         <p class="notice"><strong>Disclaimer:</strong> Independent project; not an official OEHHA or State product.</p>
+        <!-- EM-14: owner affiliation disclosure, pending owner review -->
+        <p class="notice"><strong>Disclosure:</strong> the Atlas owner, Scott Coffin, is a co-founder of Plastiverse, which hosts this site at plastiverse.live. The Atlas is an independent research tool and is not an official product of any agency.</p>
         <p>Full methods: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/METHODS.md" target="_blank" rel="noreferrer">docs/METHODS.md</a>. Data schema: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/SITE_DATA.md" target="_blank" rel="noreferrer">S3.1 site data contract</a>. Upstream catalogue: <a href="https://openalex.org/" target="_blank" rel="noreferrer">OpenAlex</a>.</p>
         <p class="data-note">Pipeline health: <a href="status.html">run status and drift alarms</a>. <a href="feed.xml" type="application/atom+xml">Subscribe (Atom feed)</a>.</p>
       </section>
@@ -897,11 +899,16 @@
           }).join("");
           rows.querySelectorAll(".expert-link").forEach((button) => button.addEventListener("click", () => openDrawer(button.dataset.authorId)));
         }
+        function profileIssueUrl(name, authorId) {
+          const title = `Profile issue: ${name || "Researcher"} (${authorId})`;
+          return `https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=${encodeURIComponent(title)}`;
+        }
         async function openDrawer(authorId) {
           const drawer = $("researcher-drawer");
           state.drawerPrevious = document.activeElement;
           drawer.hidden = false;
           $("drawer-backdrop").hidden = false;
+          $("drawer-issue-link").href = profileIssueUrl(authorId, authorId);
           $("drawer-content").innerHTML = '<p class="detail-meta">Loading researcher details…</p>';
           $("drawer-close").focus();
           try {
@@ -914,6 +921,7 @@
             const institutions = institutionIds.map(institutionById).filter(Boolean);
             const coauthorIds = [...new Set(works.flatMap((work) => (work.author_ids || []).filter((id) => id !== authorId)))];
             $("drawer-title").textContent = author.name || "Researcher";
+            $("drawer-issue-link").href = profileIssueUrl(author.name, author.author_id || authorId);
             $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}<h3>Affiliation history</h3><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p><h3>Co-author institutions</h3><p class="detail-meta">${coauthorIds.length ? escapeHtml(coauthorIds.join(", ")) : "No co-author IDs recorded."}</p><h3>Works</h3><ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="chips">${tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
           } catch (error) {
             $("drawer-content").innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;

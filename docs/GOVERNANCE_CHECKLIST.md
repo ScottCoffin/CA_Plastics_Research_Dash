@@ -28,18 +28,18 @@ not a sign-off.
 | Owner decision: ORCID values in public payloads | [PRIVACY_REVIEW.md](PRIVACY_REVIEW.md) | Needs owner decision | | |
 | Owner decision: Sea Grant HTML scraper acceptable under F4 | [ca_sea_grant.py](../src/atlas/ingest/grants/ca_sea_grant.py) | Needs owner decision | | |
 | Correction request process documented on About tab | [CORRECTIONS.md](CORRECTIONS.md) | Found: About card and drawer link exist | | |
-| Removal mechanism and policy | [CORRECTIONS.md](CORRECTIONS.md) | Gap: no suppression mechanism in code | | |
+| Removal mechanism and policy | [curation.py](../src/atlas/build/curation.py) | Found: `curation/suppressions.csv` removes authors and works from every export payload; policy and About wording still need owner decision | | |
 | Institution overrides applied in the build | [institutions.py](../src/atlas/ingest/institutions.py) | Found: config/institution_overrides.csv consumed | | |
-| Author merge and split overrides applied in the export | [normalize.py](../src/atlas/ingest/normalize.py) | Gap: recorded as override_flags only | | |
-| Work overrides applied in the build | [overrides_works.csv](../curation/overrides_works.csv) | Gap: header only, no code reads it | | |
-| "Is this you? Report an issue" link | [index.html](../site/index.html) | Gap: not present; a profile-drawer error link exists | | |
+| Author merge and split overrides applied in the export | [curation.py](../src/atlas/build/curation.py) | Found: merges in `curation/author_merges.csv` re-point authorships at export; splits not applied (OpenAlex correction request) | | |
+| Work overrides applied in the build | [curation.py](../src/atlas/build/curation.py) | Found: `curation/overrides_works.csv` applied at export for an allowlisted set of fields; unknown fields rejected | | |
+| "Is this you? Report an issue" link | [index.html](../site/index.html) | Found: drawer header link added (prefilled "Profile issue: name (author_id)" title); pending owner review | | |
 | Author prominence shown as tagged-work count, not a ranking | [index.html](../site/index.html) | Found: copy and fields; browser default order not tested | | |
 | Independence disclaimer (A3.4 / G-12) | [index.html](../site/index.html) | Found: About tab disclaimer present | | |
-| Owner affiliation disclosure (co-founder role) on About tab | [REUSE.md](REUSE.md) | Gap: REUSE rule 7 expects it; not on About tab | | |
+| Owner affiliation disclosure (co-founder role) on About tab | [index.html](../site/index.html), [REUSE.md](REUSE.md) | Found: disclosure sentence added under the About disclaimer; pending owner review (EM-14) | | |
 | Data dictionary covers every public file in site/data and site/feed.xml | [DATA_DICTIONARY.md](DATA_DICTIONARY.md) | Found: check confirms each file named | | |
 | Licence audit: repository code licence | [LICENSE](../LICENSE) | Found: MIT, confirmed by owner 2026-11-10 (QUESTIONS LICENSE-A) | | |
 | Licence audit: derived-data licence (CC BY 4.0) | [LICENSE-DATA.md](../LICENSE-DATA.md) | Found: CC BY 4.0 confirmed by owner 2026-11-10; upstream terms per source in REUSE.md (some rows still incomplete, see next item) | | |
-| Licence audit: third-party register complete for shipped sources | [REUSE.md](REUSE.md) | Gap: no rows for NIH RePORTER, NSF, USAspending, CA Sea Grant, OPC grants, or ROR | | |
+| Licence audit: third-party register complete for shipped sources | [REUSE.md](REUSE.md) | Found: rows added for NIH, NSF, USAspending, CA Sea Grant, OPC, Delta, FAAST, ROR, OpenAlex and CA Grants Portal; terms not recorded for seven federal and state sources, marked TERMS-UNVERIFIED | | |
 | Monitoring rows limited to the rights-cleared dataset | [monitoring_publication.yml](../config/monitoring_publication.yml) | Found: 314 rows, one dataset (CC BY 4.0, owner determination) | | |
 | Monitoring registry entries with unknown licences (metadata only) | [monitoring.json](../site/data/monitoring.json) | Needs owner decision: 24 entries, most licences unknown | | |
 | CITATION.cff parses and has CFF 1.2.0 required keys | [CITATION.cff](../CITATION.cff) | Found: keys present; license field follows the code licence decision | | |

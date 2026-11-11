@@ -48,3 +48,6 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-10T17:35:00-08:00 | S10.3 | claude-haiku (haiku-developer) | Fixture rebuild, snapshot, Zenodo prep | Accepted (prepared; owner Zenodo step pending) after one resume | 2 sessions; ~116K subagent tokens |
 | 2026-11-10T18:10:00-08:00 | S7.8a | claude-haiku (haiku-developer) | CEDEN fetch, SampleID join, QA flags | Accepted; lead set rel_tol 1e-5 default and wired QA exclusion into export | 1 session; ~90K subagent tokens |
 | 2026-11-10T18:15:00-08:00 | S7.8b | claude-haiku (haiku-developer) | Weekly CEDEN watch + workflow step | Accepted; lead stopped a stray second live pass and skipped the failing Parquet resource | 1 session; ~79K subagent tokens |
+| 2026-11-10T19:30:00-08:00 | AT-1/S2.2 | claude-haiku (haiku-developer) | Near-duplicate work collapsing | Accepted | 1 session; ~64K subagent tokens |
+| 2026-11-10T19:30:00-08:00 | S10.2a | claude-haiku (haiku-developer) | Drawer issue link, REUSE rows, disclosure | Accepted; lead reconciled OpenAlex ledger rows | 1 session; ~62K subagent tokens |
+| 2026-11-10T19:35:00-08:00 | S10.2b | claude-haiku (haiku-developer) | Suppressions, work overrides, author merges | Accepted (also edited scripts/build_export_site.py to wire defaults) | 1 session; ~90K subagent tokens |

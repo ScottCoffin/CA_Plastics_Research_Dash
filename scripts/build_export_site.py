@@ -14,6 +14,9 @@ def main() -> None:
     parser.add_argument("--authorships", default="data/processed/normalized/authorships.parquet")
     parser.add_argument("--institutions", default="data/processed/normalized/institutions.parquet")
     parser.add_argument("--labels", default="data/processed/work_labels.parquet")
+    parser.add_argument("--suppressions", default="curation/suppressions.csv")
+    parser.add_argument("--work-overrides", default="curation/overrides_works.csv")
+    parser.add_argument("--author-merges", default="curation/author_merges.csv")
     parser.add_argument("--output-dir", default="site/data")
     parser.add_argument("--generated-at", default=None)
     args = parser.parse_args()
@@ -23,6 +26,9 @@ def main() -> None:
         authorships_path=args.authorships,
         institutions_path=args.institutions,
         labels_path=args.labels,
+        suppressions_path=args.suppressions,
+        work_overrides_path=args.work_overrides,
+        author_merges_path=args.author_merges,
         output_dir=args.output_dir,
         generated_at=args.generated_at,
     )
