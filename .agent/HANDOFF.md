@@ -43,6 +43,9 @@ This file is the live tracker for the current session: update it at every checkp
 | 36 | AT-10 release pipeline | Pipeline done; owner cuts the next GitHub release (mints a Zenodo DOI) |
 | 37 | S2.5 Europe PMC recall | Benchmark 51.0% (438/858); DOI ingest after the OpenAlex daily reset |
 | 38 | S2.5c ORCID / S2.5d DataCite / S9.5 photos | ORCID 1,604 profiles (carry-forward 90/19/121); DataCite 98 plastic outputs (84 not in corpus); 44 licensed Wikidata photos (metadata only) |
+| 39 | Review apps highlight the admitting search terms in title + abstract | Done 2026-11-11: `atlas.review_highlight` (core / qualified+context / tier-2 / grant keywords / exclusions / plastic* stems; matched-terms line + legend) in all three `scripts/review_*_app.py` |
+| 40 | Streamlit torchvision / `__path__` traceback spam in the work review app | Fixed: `.streamlit/config.toml` `fileWatcherType = "none"` (the watcher probes transformers' lazy zoedepth aliases, which import the missing torchvision); restart the app after code edits |
+| 41 | Persistent human-task list with simple instructions | Done: `.agent/HUMAN_TASKS.md` (CLAUDE.md session entry step 6); photo review sheet `curation/expert_photo_review.csv` via `scripts/build_photo_review.py` |
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
 ## Next eligible (dependency order) - as of the session-end commit (2026-11-11 ~21:45 UTC)
@@ -58,7 +61,7 @@ This file is the live tracker for the current session: update it at every checkp
 5. Gated on owner: gold-label app/EM-3 labelling, S5.0 (after S5.1 Smart-queue validation).
 6. Last: S3.7 hero page and S3.8 SEO.
 
-## Owner actions (one line each)
+## Owner actions (one line each; step-by-step instructions in `.agent/HUMAN_TASKS.md`)
 0. **2026-11-12: renew the CORE API key** and put the new value in `.env`.
 1. Finish the 215 low-confidence works in `scripts/review_work_relevance_app.py` (not started as of 2026-11-11 afternoon).
 2. AT2-REVIEW: types for 52 new top-100 institutions in `data/processed/institution_review_needs_v31.csv`.

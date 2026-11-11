@@ -30,7 +30,9 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
+from atlas import review_highlight as hl  # noqa: E402
 from atlas.nlp import active_relevance as al  # noqa: E402
+from atlas.query import load_query_config  # noqa: E402
 from atlas.work_relevance_review import (  # noqa: E402
     REVIEW_CSV,
     VIEWS,
@@ -157,6 +159,27 @@ REASON_TEXT = {
         "Your answer measures how accurate the auto-labels are."
     ),
 }
+
+
+@st.cache_resource(show_spinner=False)
+def _highlight_rules() -> list[hl.Rule]:
+    """Search terms that admitted a record (see atlas.review_highlight)."""
+    return hl.build_rules([load_query_config(ROOT / "config" / "queries.yml")])
+
+
+def _show_record(title: object, abstract: object, *, empty: str) -> str:
+    """Title and abstract with the admitting search terms highlighted."""
+    blocks = hl.record_blocks(
+        str(title) if title else None,
+        str(abstract) if abstract else None,
+        _highlight_rules(),
+        empty=empty,
+    )
+    st.html(blocks.title)
+    st.html(blocks.summary)
+    with st.expander("Highlight legend"):
+        st.html(hl.legend_html())
+    return blocks.abstract
 
 
 def _ml_available() -> str:
@@ -476,7 +499,11 @@ def _smart_view(
             else:
                 _smart_record(pick, value, reviewer, note)
     st.divider()
-    st.subheader(item.get("title") or "(no title)")
+    abstract_html = _show_record(
+        item.get("title"),
+        item.get("abstract"),
+        empty="No abstract in OpenAlex for this work.",
+    )
     st.markdown(_facts(item))
     links = st.columns(2)
     if item.get("doi"):
@@ -484,7 +511,7 @@ def _smart_view(
     if item.get("url"):
         links[1].link_button("Open in OpenAlex", str(item["url"]), use_container_width=True)
     st.markdown("**Abstract**")
-    st.write(item.get("abstract") or "_No abstract in OpenAlex for this work._")
+    st.html(abstract_html)
 
 
 def main() -> None:
@@ -619,7 +646,11 @@ def main() -> None:
         _reset(work_id)
     st.divider()
 
-    st.subheader(item.get("title") or "(no title)")
+    abstract_html = _show_record(
+        item.get("title"),
+        item.get("abstract"),
+        empty="No abstract in OpenAlex for this work.",
+    )
     st.markdown(_facts(item))
     links = st.columns(2)
     if item.get("doi"):
@@ -627,7 +658,7 @@ def main() -> None:
     if item.get("url"):
         links[1].link_button("Open in OpenAlex", str(item["url"]), use_container_width=True)
     st.markdown("**Abstract**")
-    st.write(item.get("abstract") or "_No abstract in OpenAlex for this work._")
+    st.html(abstract_html)
 
     with st.expander("All fields"):
         st.json(

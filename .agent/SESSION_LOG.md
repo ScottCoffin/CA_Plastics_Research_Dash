@@ -106,3 +106,4 @@
 | 2026-11-11 | S2.5c, S9.5 (partial) | ORCID enrichment (employments, carry-forward evidence, bios) and Wikidata photo metadata | this commit |
 | 2026-11-11 | S2.5d (partial) | DataCite outputs by expert ORCID (98 plastic-related, 84 not in corpus) | this commit |
 | 2026-11-11 | handoff | Usage window at 91%: handoff via RESUME_PROMPT.md; audit script gains --extra-dois | this commit |
+| 2026-11-11 | review-apps | Search-term highlighting in the three review apps; Streamlit watcher off (torchvision traceback); .agent/HUMAN_TASKS.md; photo review sheet | this commit |

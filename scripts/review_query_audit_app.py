@@ -21,6 +21,8 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
+from atlas import review_highlight as hl  # noqa: E402
+from atlas.query import load_query_config  # noqa: E402
 from atlas.query_audit_review import (  # noqa: E402
     LABELS,
     REVIEW_CSV,
@@ -28,6 +30,31 @@ from atlas.query_audit_review import (  # noqa: E402
     save_review,
     set_label,
 )
+
+
+@st.cache_resource(show_spinner=False)
+def _highlight_rules() -> list[hl.Rule]:
+    """Search terms that admitted a record (see atlas.review_highlight)."""
+    return hl.build_rules(
+        load_query_config(ROOT / "config" / name)
+        for name in ("queries.yml", "queries_v3.yml", "queries_v2.yml")
+        if (ROOT / "config" / name).exists()
+    )
+
+
+def _show_record(title: object, abstract: object, *, empty: str) -> str:
+    """Title and abstract with the admitting search terms highlighted."""
+    blocks = hl.record_blocks(
+        str(title) if title else None,
+        str(abstract) if abstract else None,
+        _highlight_rules(),
+        empty=empty,
+    )
+    st.html(blocks.title)
+    st.html(blocks.summary)
+    with st.expander("Highlight legend"):
+        st.html(hl.legend_html())
+    return blocks.abstract
 
 
 def _csv_path() -> Path:
@@ -191,7 +218,11 @@ def main() -> None:
     )
     st.divider()
 
-    st.subheader(work.get("title") or "(no title)")
+    abstract_html = _show_record(
+        work.get("title"),
+        work.get("abstract_excerpt"),
+        empty="No abstract excerpt in the sample.",
+    )
     st.markdown(f"Current label: {_badge(label)}", unsafe_allow_html=True)
     meta = [
         f"**Published:** {work.get('publication_date') or 'unknown'}",
@@ -204,7 +235,7 @@ def main() -> None:
     if work.get("work_url"):
         links[1].link_button("Open in OpenAlex", str(work["work_url"]), use_container_width=True)
     st.markdown("**Abstract excerpt**")
-    st.write(work.get("abstract_excerpt") or "_No abstract excerpt in the sample._")
+    st.html(abstract_html)
 
     with st.expander("All fields"):
         st.json({k: v for k, v in work.items() if k != "abstract_excerpt"})

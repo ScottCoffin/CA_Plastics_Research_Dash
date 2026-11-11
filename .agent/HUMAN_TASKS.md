@@ -1,0 +1,119 @@
+# Human tasks (owner to-do list)
+
+Persistent list of things only the owner (Scott) can do. The lead agent keeps it
+current: it adds a task when work becomes owner-gated, and moves a task to "Done"
+when the owner finishes it. Each task says where, what to do, and how to tell the
+agent it is finished.
+
+All commands run from the repository folder in Git Bash:
+`cd ~/R_new/CA_Plastics_Research_Dash`
+
+Last updated: 2026-11-11.
+
+---
+
+## Do now
+
+### H1. Renew the CORE API key (due 2026-11-12, repeats daily)
+1. Sign in at https://core.ac.uk/services/api and copy the new API key.
+2. Open `.env` in the repository folder in a text editor.
+3. Find the existing line that holds the CORE key. Replace only the value after `=`
+   with the new key. Do not add quotes or spaces, and do not rename the variable.
+4. Save the file. Never commit `.env`; it is gitignored.
+- **Done when:** the file is saved. Tell the agent "CORE key renewed".
+
+### H2. Review the 215 low-confidence work-relevance decisions
+1. Run `py -3.14 -m streamlit run scripts/review_work_relevance_app.py`.
+   A browser tab opens. If it does not, go to http://localhost:8501.
+2. In the left sidebar, type your initials in **Your initials (required)**.
+3. In **Show**, choose **Low confidence pending**.
+4. For each work, read the title and abstract. Highlighted words are the search
+   terms that admitted the work; open **Highlight legend** for the colour key.
+   Then click one of:
+   - **Plastic-related ✓**: plastic is a central subject of the work.
+   - **Not plastic-related ✗**: plastic is not central (for example "plasticity",
+     plastic surgery, or a passing mention).
+   - **Unsure (skip)**: leave it for later.
+   With **Advance after deciding** ticked, the next work appears automatically.
+5. Stop at any time. Every click is saved to `curation/work_relevance.csv` at once.
+   The sidebar shows how many are still pending.
+- **Done when:** the sidebar shows 0 low-confidence pending. Tell the agent
+  "work relevance review done". The agent then screens the 414 newer works.
+- Optional: the default **Smart queue (active learning)** view asks about the works
+  the model is least sure of. Use it after H2 to label faster.
+
+### H3. Set institution types for the new top-100 institutions (AT2-REVIEW)
+1. Open `data/processed/institution_review_needs_v31.csv` in Excel (47 rows today;
+   QUESTIONS.md says 52).
+2. For each row, read `display_name` and `proposed_atlas_type`.
+3. In `owner_atlas_type`, type exactly one of these: `UC`, `CSU`, `private`
+   (private university or college), `nonprofit/NGO`, `company`, `state-agency`,
+   `federal`, `local-agency`. Copy `proposed_atlas_type` when it is right. If none
+   fits (for example a community college), pick the closest and explain in
+   `owner_notes`; the agent will add a type if needed.
+4. Put today's date (YYYY-MM-DD) in `owner_reviewed_at`. Add a note in
+   `owner_notes` if you want to.
+5. Save as CSV (keep the name and the comma format).
+- **Done when:** every row has `owner_atlas_type` filled. Tell the agent
+  "AT2-REVIEW done".
+
+### H4. Approve or reject 44 expert photos from Wikidata (S9.5)
+1. Open `curation/expert_photo_review.csv` in Excel (one row per photo).
+2. For each row:
+   - Open `commons_page_url` to see the photo and its licence.
+   - Open `atlas_profile_url` to see the expert in the Atlas.
+   - Decide whether the photo shows that same person.
+3. In `owner_decision`, type `approve` (same person, fine to show with the listed
+   credit) or `reject` (wrong person, or you do not want it shown). Add a reason
+   in `owner_notes` if useful.
+4. Save as CSV. (If the sheet is ever regenerated with
+   `py -3.14 scripts/build_photo_review.py`, your decisions are kept.)
+- **Done when:** all 44 rows have `approve` or `reject`. Tell the agent
+  "photos reviewed". No photo is shown on the site before this.
+
+### H5. Answer three open questions (defaults are in use until you answer)
+Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
+("keep default" or "change").
+- **AT4-SEARCH:** title search is the home-made token search. Default: keep it.
+  Change = add the MiniSearch library (better search, one new dependency).
+- **AT11-WINDOW:** the daily ingest has no "only up to yesterday" cap. Default: no
+  cap. Change = cap at yesterday (future-dated works arrive a day later).
+- **CA-CARRY-ORCID:** some authors are counted as California-based in years when
+  their ORCID shows a job elsewhere (19 of 109 checkable cases; list in
+  `docs/api_notes/orcid_enrichment.md`). Default: keep counting them and list the
+  cases. Change = drop those years.
+
+### H6. Cut a new archived release when you want a citable snapshot (AT-10, optional)
+1. On GitHub: repository > **Releases** > **Draft a new release**.
+2. Tag: `v` plus today's date, for example `v2026.11.12`. Title: the same.
+   Click **Publish release**.
+3. Wait about 5 minutes. Zenodo archives the release automatically. Open
+   https://zenodo.org/ > your uploads and copy the new version DOI.
+4. Tell the agent "release vYYYY.MM.DD, DOI 10.5281/zenodo.NNNNNNN". The agent
+   updates `config/release.yml` and the About page.
+
+---
+
+## Later (the agent will say when each is ready)
+
+- **H7. Review 10 expert profiles (S9.3/S9.5).** After the agent adds ORCID bios
+  and approved photos to the expert drawer: open https://plastiverse.live/#experts,
+  open 10 experts you know, and report anything wrong (name, affiliation, bio,
+  photo, credit). Reply "10 profiles OK" or list the problems.
+- **H8. Outreach emails (S9.6).** After H7: approve the email template in
+  `docs/OUTREACH.md`, then send the first batch from your own email account. The
+  agent never sends email.
+- **H9. Gold-label set (EM-3 / S5).** Label works in the gold-label app when the
+  agent builds it.
+- **H10. Leak-test widening decision (S5.7).** Choose whether to widen the
+  candidate pool after the agent writes the report.
+- **H11. ToMEx DOI list (EM-15).** Run the R script the agent provides
+  (`PSSDplusplus::tomex2`) and save its output where the script says.
+- **H12. Evidence map reviews (EM-13, EM-14, EM-17, S3.7, S3.8).** Review need
+  cells, methods text, policy mapping, the hero page, and Search Console set-up
+  when each is built.
+
+---
+
+## Done
+- (none yet in this file; earlier owner actions are in `.agent/archive/HANDOFF_history.md`)

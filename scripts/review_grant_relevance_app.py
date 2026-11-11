@@ -30,6 +30,7 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
+from atlas import review_highlight as hl  # noqa: E402
 from atlas.grant_relevance_review import (  # noqa: E402
     GRANTS_PARQUET,
     REVIEW_CSV,
@@ -46,8 +47,41 @@ from atlas.grant_relevance_review import (  # noqa: E402
     save_grant_reviews,
     select_view,
 )
-from atlas.ingest.grants.normalize import grant_plastic_decision  # noqa: E402
+from atlas.ingest.grants.ca_sea_grant import KEYWORDS as CA_SEA_GRANT_KEYWORDS  # noqa: E402
+from atlas.ingest.grants.faast import KEYWORDS as FAAST_KEYWORDS  # noqa: E402
+from atlas.ingest.grants.normalize import (  # noqa: E402
+    STRONG_ABSTRACT_RE,
+    grant_plastic_decision,
+)
+from atlas.ingest.grants.usaspending import USASPENDING_TERMS  # noqa: E402
 from atlas.query import load_query_config  # noqa: E402
+
+
+@st.cache_resource(show_spinner=False)
+def _highlight_rules() -> list[hl.Rule]:
+    """Search terms that admitted a record (see atlas.review_highlight)."""
+    return hl.build_rules(
+        [load_query_config(ROOT / "config" / "queries.yml")],
+        extra=[
+            hl.regex_rule("core", "strong abstract term", STRONG_ABSTRACT_RE),
+            *hl.keyword_rules((*CA_SEA_GRANT_KEYWORDS, *FAAST_KEYWORDS, *USASPENDING_TERMS)),
+        ],
+    )
+
+
+def _show_record(title: object, abstract: object, *, empty: str) -> str:
+    """Title and abstract with the admitting search terms highlighted."""
+    blocks = hl.record_blocks(
+        str(title) if title else None,
+        str(abstract) if abstract else None,
+        _highlight_rules(),
+        empty=empty,
+    )
+    st.html(blocks.title)
+    st.html(blocks.summary)
+    with st.expander("Highlight legend"):
+        st.html(hl.legend_html())
+    return blocks.abstract
 
 
 def _csv_path() -> Path:
@@ -281,7 +315,11 @@ def main() -> None:
         _reset(grant_key)
     st.divider()
 
-    st.subheader(item.get("title") or "(no title)")
+    abstract_html = _show_record(
+        item.get("title"),
+        item.get("abstract"),
+        empty="No abstract in the grant details file.",
+    )
     if item.get("rule_basis") in ("title", "abstract_strong_term"):
         st.caption(
             "Rule: plastic-related by "
@@ -292,7 +330,7 @@ def main() -> None:
     if item.get("url"):
         st.link_button("Open grant page", str(item["url"]))
     st.markdown("**Abstract**")
-    st.write(item.get("abstract") or "_No abstract in the grant details file._")
+    st.html(abstract_html)
 
     with st.expander("All fields"):
         st.json(

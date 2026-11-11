@@ -23,6 +23,9 @@ the next eligible task.
    only for the selected task; tasks marked `Gated on owner decision` are not eligible.
 5. Check for owner answers with `git diff HEAD -- .agent/QUESTIONS.md`. Read the
    whole file only if it changed.
+6. Remind the owner of the open "Do now" items in `.agent/HUMAN_TASKS.md` (the
+   persistent owner to-do list). Keep it current: add a task with simple,
+   complete steps whenever work becomes owner-gated, and move finished tasks to "Done".
 
 `.agent/README.md` is summarized by this file. Open it only for the
 Playwright/WSL browser smoke procedure.

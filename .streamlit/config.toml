@@ -1,0 +1,12 @@
+# Streamlit settings for the local review apps (scripts/review_*_app.py), read when
+# `py -3.14 -m streamlit run ...` is launched from the repository root.
+#
+# The source watcher walks every module in sys.modules after each rerun. transformers
+# (loaded by sentence-transformers for the Smart queue) exposes lazy alias modules such
+# as models.zoedepth.image_processing_zoedepth_fast; probing them imports torchvision,
+# which is not installed, and Streamlit logs a traceback plus "Accessing `__path__`"
+# warnings. folderWatchBlacklist cannot help (it filters after the probe), so the
+# watcher is off. Restart the app after editing its code.
+[server]
+fileWatcherType = "none"
+runOnSave = false
