@@ -76,7 +76,8 @@ def main() -> None:
             return numeric_pair and -90 <= row["lat"] <= 90 and -180 <= row["lon"] <= 180
 
         assert sum(has_coordinates(row) for row in local_rows) == 277
-        assert sum(not str(row.get("matrix") or "").strip() for row in local_rows) == 240
+        # Only the 8 samples without any Particle Data rows lack a matrix code (S7.3 mapping).
+        assert sum(not str(row.get("matrix") or "").strip() for row in local_rows) == 8
     print(
         f"S7.5 public monitoring payload passed: {len(payload['datasets'])} sources, "
         f"{payload['sample_count']} public observations ({mode}), {path.stat().st_size} bytes"

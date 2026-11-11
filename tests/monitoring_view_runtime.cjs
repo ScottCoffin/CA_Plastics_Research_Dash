@@ -54,4 +54,34 @@ assert.deepEqual(result.zeroValues, ["0", "0"]);
 assert.equal(result.zeroMatrix, null);
 assert.deepEqual(result.invalidYears, [null, null, null, null]);
 assert.deepEqual(result.partialYears, ["2024", "2024", "2024"]);
+
+const mapResult = JSON.parse(vm.runInContext(`JSON.stringify((() => {
+  const near = { lat: 37.8, lon: -122.4 };
+  const located = [
+    { row: { id: "a", matrix: "fish", date: "2020-01-02", method: "m" }, coordinates: [near.lat, near.lon] },
+    { row: { id: "b", matrix: "sediment", date: "2020-01-03", method: "m" }, coordinates: [near.lat, near.lon] },
+    { row: { id: "c", matrix: "fish", date: "2020-01-04", method: "m" }, coordinates: [37.8, -122.4] },
+    { row: { id: "far", matrix: "fish", date: "2020-01-05", method: "m" }, coordinates: [34.0, -118.2] }
+  ];
+  return {
+    statewideWidth: monitoringMap.viewBox("statewide").width > 8,
+    sfBayWidth: monitoringMap.viewBox("sf_bay").width < 1.2,
+    path: monitoringMap.pathData({ type: "MultiPolygon", coordinates: [[[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]]] }),
+    clusters: monitoringMap.clusters(located, "sf_bay").map((c) => ({ n: c.rows.length, mixed: c.mixed, color: c.color })),
+    legend: monitoringMap.legend(located, "sf_bay"),
+    legendStatewide: monitoringMap.legend(located, "statewide"),
+    colorFish: monitoringMap.colorFor("fish"),
+    colorOther: monitoringMap.colorFor("novel matrix")
+  };
+})())`, context));
+
+assert.equal(mapResult.statewideWidth, true);
+assert.equal(mapResult.sfBayWidth, true);
+const cosRounded = String(Math.round(Math.cos(37.25 * Math.PI / 180) * 100) / 100);
+assert.equal(mapResult.path, `M0 0L${cosRounded} 0L${cosRounded} -1L0 -1L0 0Z`);
+assert.deepEqual(mapResult.clusters, [{ n: 3, mixed: true, color: "#ffffff" }]);
+assert.deepEqual(mapResult.legend, [["sediment", 1], ["fish", 2]]);
+assert.deepEqual(mapResult.legendStatewide, [["sediment", 1], ["fish", 3]]);
+assert.equal(mapResult.colorFish, "#2e7d32");
+assert.equal(mapResult.colorOther, "#6b7177");
 console.log("Monitoring view runtime checks passed: coordinates, zero values, unknown matrices and dates.");

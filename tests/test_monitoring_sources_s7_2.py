@@ -13,6 +13,25 @@ from atlas.ingest.monitoring.sources import (
 )
 
 
+@pytest.mark.parametrize(
+    ("code", "matrix"),
+    [
+        ("sw", "stormwater"),
+        ("sed", "sediment"),
+        ("eff", "wastewater effluent"),
+        ("fish", "fish"),
+        ("unknown", None),
+    ],
+)
+def test_sf_bay_matrix_codes_follow_shared_map(code: str, matrix: str | None) -> None:
+    fixture = json.loads(Path("tests/fixtures/monitoring/sf_bay_sample_ccby.json").read_text())
+    sample = fixture["sheets"]["manta"]["row"]
+    particle = dict(fixture["sheets"]["Particle Data"]["row"], SampleMatrix=code)
+    mapped = map_sf_bay_sample(sample, particle, license_cleared=True)
+    assert mapped["matrix"] == matrix
+    assert mapped["matrix_source_code"] == code
+
+
 def test_sf_bay_sample_maps_observed_fields_and_requires_cleared_license() -> None:
     fixture = json.loads(Path("tests/fixtures/monitoring/sf_bay_sample_ccby.json").read_text())
     sample_sheet = fixture["sheets"]["manta"]

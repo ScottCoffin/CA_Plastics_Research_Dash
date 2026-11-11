@@ -849,7 +849,7 @@
     }
   ],
   "excluded_qa_samples": 56,
-  "generated_at": "2026-11-11T00:07:11.458240+00:00",
+  "generated_at": "2026-11-11T06:59:47.201989+00:00",
   "publication_mode": "public_cleared",
   "sample_count": 298,
   "samples": [
@@ -864,7 +864,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906683,
       "lon": -122.34667,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, polyethylene",
       "particle_count": 163,
       "sample_id": "15RMPMC-CB10-MP1"
@@ -880,7 +880,7 @@
       "in_ca_state_waters": true,
       "lat": 37.8279,
       "lon": -122.303417,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, polyethylene",
       "particle_count": 405,
       "sample_id": "15RMPMC-CB15-MP1"
@@ -896,7 +896,7 @@
       "in_ca_state_waters": true,
       "lat": 37.756633,
       "lon": -122.2204,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, polyethylene",
       "particle_count": 384,
       "sample_id": "15RMPMC-CB32-MP1"
@@ -912,7 +912,7 @@
       "in_ca_state_waters": false,
       "lat": 37.6414,
       "lon": -122.3945,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, polyethylene",
       "particle_count": 363,
       "sample_id": "15RMPMC-CB37-MP1"
@@ -928,7 +928,7 @@
       "in_ca_state_waters": false,
       "lat": 37.762,
       "lon": -122.214,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 181,
       "sample_id": "17-POC-100-125&355"
@@ -944,7 +944,7 @@
       "in_ca_state_waters": false,
       "lat": 37.755,
       "lon": -122.201,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 770,
       "sample_id": "17-POC-130-125&355"
@@ -960,7 +960,7 @@
       "in_ca_state_waters": false,
       "lat": 38.018,
       "lon": -122.277,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 152,
       "sample_id": "17-POC-259-125&355"
@@ -976,7 +976,7 @@
       "in_ca_state_waters": false,
       "lat": 37.65,
       "lon": -122.412,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 1203,
       "sample_id": "17-POC-283-125&355"
@@ -992,7 +992,7 @@
       "in_ca_state_waters": false,
       "lat": 38.016,
       "lon": -122.254,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 180,
       "sample_id": "17-POC-438-125&355"
@@ -1008,7 +1008,7 @@
       "in_ca_state_waters": false,
       "lat": 37.754,
       "lon": -122.204,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 1551,
       "sample_id": "17-POC-515-125&355"
@@ -1024,7 +1024,7 @@
       "in_ca_state_waters": false,
       "lat": 37.37356,
       "lon": -121.93283,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "Individual Collection by bucket sampler",
       "particle_count": 386,
       "sample_id": "17GR-003-125&355"
@@ -1040,7 +1040,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 33,
       "sample_id": "17MMP-AN-CB010-MP_1"
@@ -1056,7 +1056,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 11,
       "sample_id": "17MMP-AN-CB010-MP_10"
@@ -1072,7 +1072,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 21,
       "sample_id": "17MMP-AN-CB010-MP_2"
@@ -1088,7 +1088,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 18,
       "sample_id": "17MMP-AN-CB010-MP_3"
@@ -1104,7 +1104,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 33,
       "sample_id": "17MMP-AN-CB010-MP_4"
@@ -1120,7 +1120,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 18,
       "sample_id": "17MMP-AN-CB010-MP_5"
@@ -1136,7 +1136,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 10,
       "sample_id": "17MMP-AN-CB010-MP_6"
@@ -1152,7 +1152,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 19,
       "sample_id": "17MMP-AN-CB010-MP_7"
@@ -1168,7 +1168,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 20,
       "sample_id": "17MMP-AN-CB010-MP_8"
@@ -1184,7 +1184,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 27,
       "sample_id": "17MMP-AN-CB010-MP_9"
@@ -1200,7 +1200,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 27,
       "sample_id": "17MMP-AN-CB037-MP_1"
@@ -1216,7 +1216,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 4,
       "sample_id": "17MMP-AN-CB037-MP_10"
@@ -1232,7 +1232,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 14,
       "sample_id": "17MMP-AN-CB037-MP_2"
@@ -1248,7 +1248,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 26,
       "sample_id": "17MMP-AN-CB037-MP_3"
@@ -1264,7 +1264,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 11,
       "sample_id": "17MMP-AN-CB037-MP_4"
@@ -1280,7 +1280,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 17,
       "sample_id": "17MMP-AN-CB037-MP_5"
@@ -1296,7 +1296,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 7,
       "sample_id": "17MMP-AN-CB037-MP_6"
@@ -1312,7 +1312,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 9,
       "sample_id": "17MMP-AN-CB037-MP_7"
@@ -1328,7 +1328,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 5,
       "sample_id": "17MMP-AN-CB037-MP_8"
@@ -1344,7 +1344,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 5,
       "sample_id": "17MMP-AN-CB037-MP_9"
@@ -1360,7 +1360,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 21,
       "sample_id": "17MMP-AN-CB106-MP_1"
@@ -1376,7 +1376,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 17,
       "sample_id": "17MMP-AN-CB106-MP_10"
@@ -1392,7 +1392,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 17,
       "sample_id": "17MMP-AN-CB106-MP_2"
@@ -1408,7 +1408,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 14,
       "sample_id": "17MMP-AN-CB106-MP_3"
@@ -1424,7 +1424,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 27,
       "sample_id": "17MMP-AN-CB106-MP_4"
@@ -1440,7 +1440,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 22,
       "sample_id": "17MMP-AN-CB106-MP_5"
@@ -1456,7 +1456,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 16,
       "sample_id": "17MMP-AN-CB106-MP_6"
@@ -1472,7 +1472,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 17,
       "sample_id": "17MMP-AN-CB106-MP_7"
@@ -1488,7 +1488,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 8,
       "sample_id": "17MMP-AN-CB106-MP_8"
@@ -1504,7 +1504,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 15,
       "sample_id": "17MMP-AN-CB106-MP_9"
@@ -1520,7 +1520,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 30,
       "sample_id": "17MMP-AN-LSB06-MP_1"
@@ -1536,7 +1536,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 12,
       "sample_id": "17MMP-AN-LSB06-MP_2"
@@ -1552,7 +1552,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 50,
       "sample_id": "17MMP-AN-LSB06-MP_3"
@@ -1568,7 +1568,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 4,
       "sample_id": "17MMP-AN-LSB06-MP_4"
@@ -1584,7 +1584,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 8,
       "sample_id": "17MMP-AN-SB074-MP_1"
@@ -1600,7 +1600,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 8,
       "sample_id": "17MMP-AN-SB074-MP_10"
@@ -1616,7 +1616,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 6,
       "sample_id": "17MMP-AN-SB074-MP_2"
@@ -1632,7 +1632,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 1,
       "sample_id": "17MMP-AN-SB074-MP_3"
@@ -1648,7 +1648,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 6,
       "sample_id": "17MMP-AN-SB074-MP_4"
@@ -1664,7 +1664,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 18,
       "sample_id": "17MMP-AN-SB074-MP_5"
@@ -1680,7 +1680,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 9,
       "sample_id": "17MMP-AN-SB074-MP_6"
@@ -1696,7 +1696,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 8,
       "sample_id": "17MMP-AN-SB074-MP_7"
@@ -1712,7 +1712,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 8,
       "sample_id": "17MMP-AN-SB074-MP_8"
@@ -1728,7 +1728,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 5,
       "sample_id": "17MMP-AN-SB074-MP_9"
@@ -1744,7 +1744,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 14,
       "sample_id": "17MMP-AN-SOSL40-MP_1"
@@ -1760,7 +1760,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 4,
       "sample_id": "17MMP-AN-SOSL40-MP_10"
@@ -1776,7 +1776,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 4,
       "sample_id": "17MMP-AN-SOSL40-MP_2"
@@ -1792,7 +1792,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 7,
       "sample_id": "17MMP-AN-SOSL40-MP_3"
@@ -1808,7 +1808,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 12,
       "sample_id": "17MMP-AN-SOSL40-MP_4"
@@ -1824,7 +1824,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 7,
       "sample_id": "17MMP-AN-SOSL40-MP_5"
@@ -1840,7 +1840,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 3,
       "sample_id": "17MMP-AN-SOSL40-MP_6"
@@ -1856,7 +1856,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 7,
       "sample_id": "17MMP-AN-SOSL40-MP_7"
@@ -1872,7 +1872,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 9,
       "sample_id": "17MMP-AN-SOSL40-MP_8"
@@ -1888,7 +1888,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 3,
       "sample_id": "17MMP-AN-SOSL40-MP_9"
@@ -1920,7 +1920,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 9,
       "sample_id": "17MMP-AN-TB101-MP_10"
@@ -1952,7 +1952,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 6,
       "sample_id": "17MMP-AN-TB101-MP_3"
@@ -1968,7 +1968,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 1,
       "sample_id": "17MMP-AN-TB101-MP_4"
@@ -1984,7 +1984,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 1,
       "sample_id": "17MMP-AN-TB101-MP_5"
@@ -2000,7 +2000,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 5,
       "sample_id": "17MMP-AN-TB101-MP_6"
@@ -2016,7 +2016,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 10,
       "sample_id": "17MMP-AN-TB101-MP_7"
@@ -2032,7 +2032,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 5,
       "sample_id": "17MMP-AN-TB101-MP_8"
@@ -2048,7 +2048,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 9,
       "sample_id": "17MMP-AN-TB101-MP_9"
@@ -2064,7 +2064,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 10,
       "sample_id": "17MMP-AN-TB102-MP_1"
@@ -2080,7 +2080,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 4,
       "sample_id": "17MMP-AN-TB102-MP_10"
@@ -2096,7 +2096,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 7,
       "sample_id": "17MMP-AN-TB102-MP_2"
@@ -2112,7 +2112,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 2,
       "sample_id": "17MMP-AN-TB102-MP_3"
@@ -2128,7 +2128,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 3,
       "sample_id": "17MMP-AN-TB102-MP_4"
@@ -2144,7 +2144,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 6,
       "sample_id": "17MMP-AN-TB102-MP_5"
@@ -2160,7 +2160,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 5,
       "sample_id": "17MMP-AN-TB102-MP_6"
@@ -2176,7 +2176,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 3,
       "sample_id": "17MMP-AN-TB102-MP_7"
@@ -2192,7 +2192,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 6,
       "sample_id": "17MMP-AN-TB102-MP_8"
@@ -2208,7 +2208,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 4,
       "sample_id": "17MMP-AN-TB102-MP_9"
@@ -2224,7 +2224,7 @@
       "in_ca_state_waters": true,
       "lat": 37.4629,
       "lon": -122.105033,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 963,
       "sample_id": "17MMP-S-LSB02-MP-1"
@@ -2240,7 +2240,7 @@
       "in_ca_state_waters": true,
       "lat": 37.486383,
       "lon": -122.068883,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 343,
       "sample_id": "17MMP-S-LSB04-MP"
@@ -2256,7 +2256,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 330,
       "sample_id": "17MMP-S-LSB06-MP"
@@ -2272,7 +2272,7 @@
       "in_ca_state_waters": true,
       "lat": 37.601767,
       "lon": -122.362,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 175,
       "sample_id": "17MMP-S-SB051-MP"
@@ -2288,7 +2288,7 @@
       "in_ca_state_waters": false,
       "lat": 37.560516,
       "lon": -122.130917,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 75,
       "sample_id": "17MMP-S-SB056-MP"
@@ -2304,7 +2304,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 120,
       "sample_id": "17MMP-S-SB074-MP"
@@ -2320,7 +2320,7 @@
       "in_ca_state_waters": true,
       "lat": 37.4576,
       "lon": -122.03995,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 398,
       "sample_id": "17MMP-S-SOSL16-MP-1"
@@ -2336,7 +2336,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 162,
       "sample_id": "17MMP-S-SOSL40-MP"
@@ -2352,7 +2352,7 @@
       "in_ca_state_waters": true,
       "lat": 38.01565,
       "lon": -122.30025,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 203,
       "sample_id": "17MMP-S-SPB128-MP"
@@ -2368,7 +2368,7 @@
       "in_ca_state_waters": true,
       "lat": 38.108383,
       "lon": -122.488233,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 349,
       "sample_id": "17MMP-S-SPB15-MP-1"
@@ -2384,7 +2384,7 @@
       "in_ca_state_waters": true,
       "lat": 38.136217,
       "lon": -122.034983,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 118,
       "sample_id": "17MMP-S-SUB52-MP"
@@ -2400,7 +2400,7 @@
       "in_ca_state_waters": true,
       "lat": 38.0442,
       "lon": -122.096867,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 75,
       "sample_id": "17MMP-S-SUB53-MP"
@@ -2416,7 +2416,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 116,
       "sample_id": "17MMP-S-TB101-MP"
@@ -2432,7 +2432,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "scoop, stainless steel",
       "particle_count": 125,
       "sample_id": "17MMP-S-TB102-MP"
@@ -2448,7 +2448,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_OtterTrawl_16",
       "particle_count": 23,
       "sample_id": "17MMP-TS-CB010-MP_1"
@@ -2464,7 +2464,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 24,
       "sample_id": "17MMP-TS-CB010-MP_2"
@@ -2480,7 +2480,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 17,
       "sample_id": "17MMP-TS-CB010-MP_3"
@@ -2496,7 +2496,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 10,
       "sample_id": "17MMP-TS-CB010-MP_4"
@@ -2512,7 +2512,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 16,
       "sample_id": "17MMP-TS-CB010-MP_5"
@@ -2528,7 +2528,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 19,
       "sample_id": "17MMP-TS-CB010-MP_6"
@@ -2544,7 +2544,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 12,
       "sample_id": "17MMP-TS-CB010-MP_7"
@@ -2560,7 +2560,7 @@
       "in_ca_state_waters": false,
       "lat": 37.906718,
       "lon": -122.346692,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 7,
       "sample_id": "17MMP-TS-CB010-MP_8"
@@ -2576,7 +2576,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 9,
       "sample_id": "17MMP-TS-CB037-MP_1"
@@ -2592,7 +2592,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 4,
       "sample_id": "17MMP-TS-CB037-MP_10"
@@ -2608,7 +2608,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 5,
       "sample_id": "17MMP-TS-CB037-MP_2"
@@ -2624,7 +2624,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 5,
       "sample_id": "17MMP-TS-CB037-MP_3"
@@ -2640,7 +2640,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 9,
       "sample_id": "17MMP-TS-CB037-MP_4"
@@ -2656,7 +2656,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 12,
       "sample_id": "17MMP-TS-CB037-MP_5"
@@ -2672,7 +2672,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 6,
       "sample_id": "17MMP-TS-CB037-MP_6"
@@ -2688,7 +2688,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 11,
       "sample_id": "17MMP-TS-CB037-MP_7"
@@ -2704,7 +2704,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 10,
       "sample_id": "17MMP-TS-CB037-MP_8"
@@ -2720,7 +2720,7 @@
       "in_ca_state_waters": false,
       "lat": 37.641418,
       "lon": -122.394541,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 7,
       "sample_id": "17MMP-TS-CB037-MP_9"
@@ -2736,7 +2736,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 16,
       "sample_id": "17MMP-TS-CB106-MP_1"
@@ -2752,7 +2752,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 4,
       "sample_id": "17MMP-TS-CB106-MP_10"
@@ -2768,7 +2768,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 13,
       "sample_id": "17MMP-TS-CB106-MP_2"
@@ -2784,7 +2784,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 7,
       "sample_id": "17MMP-TS-CB106-MP_3"
@@ -2800,7 +2800,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 13,
       "sample_id": "17MMP-TS-CB106-MP_4"
@@ -2816,7 +2816,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 13,
       "sample_id": "17MMP-TS-CB106-MP_5"
@@ -2832,7 +2832,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 7,
       "sample_id": "17MMP-TS-CB106-MP_6"
@@ -2848,7 +2848,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 13,
       "sample_id": "17MMP-TS-CB106-MP_7"
@@ -2864,7 +2864,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 20,
       "sample_id": "17MMP-TS-CB106-MP_8"
@@ -2880,7 +2880,7 @@
       "in_ca_state_waters": true,
       "lat": 37.75787,
       "lon": -122.219,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 9,
       "sample_id": "17MMP-TS-CB106-MP_9"
@@ -2896,7 +2896,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 2,
       "sample_id": "17MMP-TS-LSB06-MP_1"
@@ -2912,7 +2912,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 5,
       "sample_id": "17MMP-TS-LSB06-MP_10"
@@ -2928,7 +2928,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 3,
       "sample_id": "17MMP-TS-LSB06-MP_2"
@@ -2944,7 +2944,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 5,
       "sample_id": "17MMP-TS-LSB06-MP_3"
@@ -2960,7 +2960,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 7,
       "sample_id": "17MMP-TS-LSB06-MP_4"
@@ -2976,7 +2976,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 6,
       "sample_id": "17MMP-TS-LSB06-MP_5"
@@ -2992,7 +2992,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 7,
       "sample_id": "17MMP-TS-LSB06-MP_6"
@@ -3008,7 +3008,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 10,
       "sample_id": "17MMP-TS-LSB06-MP_7"
@@ -3024,7 +3024,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 9,
       "sample_id": "17MMP-TS-LSB06-MP_8"
@@ -3040,7 +3040,7 @@
       "in_ca_state_waters": true,
       "lat": 37.457617,
       "lon": -122.092033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 19,
       "sample_id": "17MMP-TS-LSB06-MP_9"
@@ -3056,7 +3056,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 14,
       "sample_id": "17MMP-TS-SB074-MP_1"
@@ -3072,7 +3072,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 31,
       "sample_id": "17MMP-TS-SB074-MP_10"
@@ -3088,7 +3088,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 28,
       "sample_id": "17MMP-TS-SB074-MP_2"
@@ -3104,7 +3104,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 29,
       "sample_id": "17MMP-TS-SB074-MP_3"
@@ -3120,7 +3120,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 40,
       "sample_id": "17MMP-TS-SB074-MP_4"
@@ -3136,7 +3136,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 30,
       "sample_id": "17MMP-TS-SB074-MP_5"
@@ -3152,7 +3152,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 29,
       "sample_id": "17MMP-TS-SB074-MP_6"
@@ -3168,7 +3168,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 57,
       "sample_id": "17MMP-TS-SB074-MP_7"
@@ -3184,7 +3184,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 19,
       "sample_id": "17MMP-TS-SB074-MP_8"
@@ -3200,7 +3200,7 @@
       "in_ca_state_waters": true,
       "lat": 37.52775,
       "lon": -122.184,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 24,
       "sample_id": "17MMP-TS-SB074-MP_9"
@@ -3216,7 +3216,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 38,
       "sample_id": "17MMP-TS-SOSL40-MP_1"
@@ -3232,7 +3232,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 2,
       "sample_id": "17MMP-TS-SOSL40-MP_10"
@@ -3248,7 +3248,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 20,
       "sample_id": "17MMP-TS-SOSL40-MP_2"
@@ -3264,7 +3264,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 44,
       "sample_id": "17MMP-TS-SOSL40-MP_3"
@@ -3280,7 +3280,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 21,
       "sample_id": "17MMP-TS-SOSL40-MP_4"
@@ -3296,7 +3296,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 7,
       "sample_id": "17MMP-TS-SOSL40-MP_5"
@@ -3312,7 +3312,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 9,
       "sample_id": "17MMP-TS-SOSL40-MP_6"
@@ -3328,7 +3328,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 11,
       "sample_id": "17MMP-TS-SOSL40-MP_7"
@@ -3344,7 +3344,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 14,
       "sample_id": "17MMP-TS-SOSL40-MP_8"
@@ -3360,7 +3360,7 @@
       "in_ca_state_waters": false,
       "lat": 37.462083,
       "lon": -122.022217,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 8,
       "sample_id": "17MMP-TS-SOSL40-MP_9"
@@ -3376,7 +3376,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 10,
       "sample_id": "17MMP-TS-TB101-MP_1"
@@ -3392,7 +3392,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 4,
       "sample_id": "17MMP-TS-TB101-MP_10"
@@ -3408,7 +3408,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 4,
       "sample_id": "17MMP-TS-TB101-MP_2"
@@ -3424,7 +3424,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 20,
       "sample_id": "17MMP-TS-TB101-MP_3"
@@ -3440,7 +3440,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 15,
       "sample_id": "17MMP-TS-TB101-MP_4"
@@ -3456,7 +3456,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 14,
       "sample_id": "17MMP-TS-TB101-MP_5"
@@ -3472,7 +3472,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 8,
       "sample_id": "17MMP-TS-TB101-MP_6"
@@ -3488,7 +3488,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 14,
       "sample_id": "17MMP-TS-TB101-MP_7"
@@ -3504,7 +3504,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 5,
       "sample_id": "17MMP-TS-TB101-MP_8"
@@ -3520,7 +3520,7 @@
       "in_ca_state_waters": true,
       "lat": 38.2057,
       "lon": -122.929033,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 5,
       "sample_id": "17MMP-TS-TB101-MP_9"
@@ -3536,7 +3536,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 24,
       "sample_id": "17MMP-TS-TB102-MP_1"
@@ -3552,7 +3552,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 9,
       "sample_id": "17MMP-TS-TB102-MP_10"
@@ -3568,7 +3568,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 17,
       "sample_id": "17MMP-TS-TB102-MP_2"
@@ -3584,7 +3584,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 8,
       "sample_id": "17MMP-TS-TB102-MP_3"
@@ -3600,7 +3600,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 7,
       "sample_id": "17MMP-TS-TB102-MP_4"
@@ -3616,7 +3616,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 10,
       "sample_id": "17MMP-TS-TB102-MP_5"
@@ -3632,7 +3632,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 11,
       "sample_id": "17MMP-TS-TB102-MP_6"
@@ -3648,7 +3648,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 5,
       "sample_id": "17MMP-TS-TB102-MP_7"
@@ -3664,7 +3664,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 7,
       "sample_id": "17MMP-TS-TB102-MP_8"
@@ -3680,7 +3680,7 @@
       "in_ca_state_waters": true,
       "lat": 38.097983,
       "lon": -122.8457,
-      "matrix": null,
+      "matrix": "fish",
       "method": "MPSL-MLML_CastNet",
       "particle_count": 5,
       "sample_id": "17MMP-TS-TB102-MP_9"
@@ -3696,7 +3696,7 @@
       "in_ca_state_waters": false,
       "lat": 37.747,
       "lon": -122.201,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 1744,
       "sample_id": "19-POC-198-125&355"
@@ -3712,7 +3712,7 @@
       "in_ca_state_waters": false,
       "lat": 37.83429,
       "lon": -122.29349,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 1504,
       "sample_id": "20180108MMPStormCBEmery125&355"
@@ -3728,7 +3728,7 @@
       "in_ca_state_waters": false,
       "lat": 37.91786111,
       "lon": -122.3383833,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 1283,
       "sample_id": "20180108MMPStormCBMeek125&355"
@@ -3744,7 +3744,7 @@
       "in_ca_state_waters": false,
       "lat": 37.573,
       "lon": -122.311,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 153,
       "sample_id": "20180108MMPStormSBSMMP125&355"
@@ -3760,7 +3760,7 @@
       "in_ca_state_waters": false,
       "lat": 37.385832,
       "lon": -121.91,
-      "matrix": null,
+      "matrix": "stormwater",
       "method": "SFEI ISCO Pump, hand filled",
       "particle_count": 903,
       "sample_id": "20180406MMPStormSBCCMP125&355"
@@ -4080,7 +4080,7 @@
       "in_ca_state_waters": false,
       "lat": 38.0016162,
       "lon": -122.0747423,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 299,
       "sample_id": "CCCSD_A_Field"
@@ -4096,7 +4096,7 @@
       "in_ca_state_waters": false,
       "lat": 38.0016162,
       "lon": -122.0747423,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 67,
       "sample_id": "CCCSD_B_Field"
@@ -4112,7 +4112,7 @@
       "in_ca_state_waters": false,
       "lat": 37.668226,
       "lon": -122.159271,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 305,
       "sample_id": "EBDA_A_Field"
@@ -4128,7 +4128,7 @@
       "in_ca_state_waters": false,
       "lat": 37.668226,
       "lon": -122.159271,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 140,
       "sample_id": "EBDA_B_Field"
@@ -4144,7 +4144,7 @@
       "in_ca_state_waters": false,
       "lat": 37.819524,
       "lon": -122.2952298,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 484,
       "sample_id": "EBMUD_A_Field"
@@ -4160,7 +4160,7 @@
       "in_ca_state_waters": false,
       "lat": 37.819524,
       "lon": -122.2952298,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 251,
       "sample_id": "EBMUD_B_Field"
@@ -4176,7 +4176,7 @@
       "in_ca_state_waters": false,
       "lat": 37.5688271,
       "lon": -122.298322,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 51,
       "sample_id": "FSSD_A_Field"
@@ -4192,7 +4192,7 @@
       "in_ca_state_waters": false,
       "lat": 37.5688271,
       "lon": -122.298322,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 78,
       "sample_id": "FSSD_B_Field"
@@ -4592,7 +4592,7 @@
       "in_ca_state_waters": false,
       "lat": 37.4574137,
       "lon": -122.1531102,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 124,
       "sample_id": "PA_A_Field"
@@ -4608,7 +4608,7 @@
       "in_ca_state_waters": false,
       "lat": 37.4574137,
       "lon": -122.1531102,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 79,
       "sample_id": "PA_B_Field"
@@ -4624,7 +4624,7 @@
       "in_ca_state_waters": true,
       "lat": 37.87631112,
       "lon": -122.3615019,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "SFEI Mod. Van Veen Grab (0.1m2)",
       "particle_count": 264,
       "sample_id": "RMP-14SC-1153"
@@ -4640,7 +4640,7 @@
       "in_ca_state_waters": true,
       "lat": 37.61019366,
       "lon": -122.1673764,
-      "matrix": null,
+      "matrix": "sediment",
       "method": "SFEI Mod. Van Veen Grab (0.1m2)",
       "particle_count": 128,
       "sample_id": "RMP-14SC-1270"
@@ -4800,7 +4800,7 @@
       "in_ca_state_waters": false,
       "lat": 37.740791,
       "lon": -122.39087,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 503,
       "sample_id": "SFPUC_A_Field"
@@ -4816,7 +4816,7 @@
       "in_ca_state_waters": false,
       "lat": 37.740791,
       "lon": -122.39087,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 454,
       "sample_id": "SFPUC_B_Field"
@@ -4832,7 +4832,7 @@
       "in_ca_state_waters": false,
       "lat": 37.4316326,
       "lon": -121.948245,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 170,
       "sample_id": "SJ_A_Field"
@@ -4848,7 +4848,7 @@
       "in_ca_state_waters": false,
       "lat": 37.4316326,
       "lon": -121.948245,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 156,
       "sample_id": "SJ_B_Field"
@@ -4960,7 +4960,7 @@
       "in_ca_state_waters": false,
       "lat": 37.419597,
       "lon": -122.016233,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 58,
       "sample_id": "SUNN_A_Field"
@@ -4976,7 +4976,7 @@
       "in_ca_state_waters": false,
       "lat": 37.419597,
       "lon": -122.016233,
-      "matrix": null,
+      "matrix": "wastewater effluent",
       "method": "5Gyres Metal bucket, 45-um sieve",
       "particle_count": 62,
       "sample_id": "SUNN_B_Field"

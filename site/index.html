@@ -84,10 +84,21 @@
       .institution-map-marker[data-cluster="true"] { background: #c45100; box-shadow: 0 0 0 1px #8e3900, 0 0.15rem 0.35rem rgb(23 50 77 / 28%); }
       .institution-map-marker:hover { z-index: 2; }
       .monitoring-layout { display: grid; gap: 1rem; }
-      .monitoring-map { position: relative; min-height: 20rem; overflow: hidden; border: 1px solid #b8ced0; border-radius: 0.45rem; background: linear-gradient(145deg, #e7f3f2, #f8fbf9 57%, #e6f0e5); }
-      .monitoring-map::before { content: "California sample locations · schematic view"; position: absolute; inset: 0.55rem auto auto 0.65rem; color: #536879; font-size: 0.75rem; }
-      .monitoring-marker { position: absolute; z-index: 1; display: grid; place-items: center; min-width: 2.25rem; min-height: 2.25rem; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 999px; padding: 0.2rem; color: #fff; background: var(--brand); box-shadow: 0 0 0 1px #075a46; font-size: 0.75rem; font-weight: 800; }
-      .monitoring-marker[data-cluster="true"] { background: #c45100; }
+      .monitoring-map { overflow: hidden; border: 1px solid #b8ced0; border-radius: 0.45rem; background: #f4f8fb; padding: 0.35rem; }
+      .monitoring-map-svg { display: block; width: 100%; height: auto; }
+      .monitoring-map-svg .map-sea { fill: #f4f8fb; }
+      .monitoring-map-svg .map-state-waters { fill: #cfe5f2; }
+      .monitoring-map-svg .map-land { fill: #f1efe4; stroke: #7d8775; stroke-width: 1px; vector-effect: non-scaling-stroke; }
+      .monitoring-marker circle { stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+      .monitoring-marker.mixed circle { stroke: #1d2a33; }
+      .monitoring-marker text { fill: #fff; font-weight: 800; font-family: inherit; }
+      .monitoring-marker.mixed text { fill: #1d2a33; }
+      .monitoring-map-controls { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0; }
+      .monitoring-map-controls button { border: 1px solid #8fa5a7; border-radius: 0.35rem; background: #fff; color: #1d2a33; padding: 0.25rem 0.7rem; font: inherit; font-size: 0.85rem; cursor: pointer; }
+      .monitoring-map-controls button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 700; }
+      .monitoring-map-legend ul { display: flex; flex-wrap: wrap; gap: 0.3rem 0.95rem; list-style: none; margin: 0.5rem 0 0; padding: 0; font-size: 0.85rem; }
+      .monitoring-swatch { display: inline-block; width: 0.8rem; height: 0.8rem; margin-right: 0.3rem; border: 1px solid #5b6770; border-radius: 999px; vertical-align: -0.05rem; }
+      .monitoring-swatch.mixed { background: #fff; border: 2px solid #1d2a33; }
       .monitoring-table-wrap { overflow-x: auto; }
       .monitoring-table, .gaps-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
       .monitoring-table th, .monitoring-table td, .gaps-table th, .gaps-table td { padding: 0.55rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
@@ -248,7 +259,7 @@
         </form>
         <section aria-labelledby="monitoring-sources-heading"><h3 id="monitoring-sources-heading">Source registry</h3><p id="monitoring-source-count" class="result-count" role="status" aria-live="polite"></p><div id="monitoring-sources" class="monitoring-table-wrap"></div></section>
         <div class="monitoring-layout">
-          <section class="institution-map-panel" aria-labelledby="monitoring-map-heading"><h3 id="monitoring-map-heading">Sample map</h3><p id="monitoring-map-note" class="data-note"></p><div id="monitoring-map" class="monitoring-map" role="group" aria-label="Clustered sample locations"></div></section>
+          <section class="institution-map-panel" aria-labelledby="monitoring-map-heading"><h3 id="monitoring-map-heading">Sample map</h3><p id="monitoring-map-note" class="data-note"></p><div class="monitoring-map-controls" role="group" aria-label="Map extent"><button type="button" data-map-extent="statewide" aria-pressed="true">Statewide</button><button type="button" data-map-extent="sf_bay" aria-pressed="false">SF Bay</button></div><div id="monitoring-map" class="monitoring-map" role="group" aria-label="Sample locations on a California basemap"></div><div id="monitoring-map-legend" class="monitoring-map-legend" aria-label="Marker colours by matrix"></div></section>
           <section aria-labelledby="monitoring-gaps-heading"><h3 id="monitoring-gaps-heading">Data coverage by matrix, region and year</h3><p id="monitoring-gaps-note" class="data-note"></p><div id="monitoring-gaps" class="monitoring-table-wrap"></div></section>
           <section aria-labelledby="monitoring-samples-heading"><h3 id="monitoring-samples-heading">Sample observations</h3><div id="monitoring-samples" class="monitoring-table-wrap"></div></section>
         </div>
@@ -315,11 +326,11 @@
           </section>
           <section class="card" aria-labelledby="about-corrections-heading">
             <h3 id="about-corrections-heading">Corrections and source work</h3>
-            <p>For a correction or profile-removal request, <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">open a data-correction issue</a>. Include the OpenAlex ID, DOI or source URL when available, the field in question, and the proposed correction. Changes are reviewed for a later snapshot; the project does not alter the upstream OpenAlex record.</p>
+            <p>For a correction or profile-removal request, <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">open a data-correction issue</a>. Include the OpenAlex ID, DOI or source URL when available, the field in question, and the proposed correction. Requests are acknowledged and acted on within 5 to 10 business days; a removed person or work is also excluded at the next ingest. Changes are reviewed for a later snapshot; the project does not alter the upstream OpenAlex record.</p>
           </section>
         </div>
         <p class="notice"><strong>Disclaimer:</strong> Independent project; not an official OEHHA or State product.</p>
-        <!-- EM-14: owner affiliation disclosure, pending owner review -->
+        <!-- EM-14: owner affiliation disclosure; owner approved naming roles (GOV-B, 2026-11-10) -->
         <p class="notice"><strong>Disclosure:</strong> the Atlas owner, Scott Coffin, is a co-founder of Plastiverse, which hosts this site at plastiverse.live. The Atlas is an independent research tool and is not an official product of any agency.</p>
         <p>Full methods: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/METHODS.md" target="_blank" rel="noreferrer">docs/METHODS.md</a>. Data schema: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/SITE_DATA.md" target="_blank" rel="noreferrer">S3.1 site data contract</a>. Upstream catalogue: <a href="https://openalex.org/" target="_blank" rel="noreferrer">OpenAlex</a>.</p>
         <p class="data-note">Pipeline health: <a href="status.html">run status and drift alarms</a>. <a href="feed.xml" type="application/atom+xml">Subscribe (Atom feed)</a>.</p>
@@ -420,6 +431,105 @@
             if (filters.contributor && String(sample.contributor_in_ca) !== filters.contributor) return false;
             return true;
           });
+        }
+      });
+      const monitoringMap = Object.freeze({
+        extents: Object.freeze({
+          statewide: Object.freeze({ label: "Statewide", lon: [-124.6, -114], lat: [32.4, 42.1] }),
+          sf_bay: Object.freeze({ label: "SF Bay", lon: [-123.1, -121.7], lat: [37.3, 38.3] })
+        }),
+        // One x-scale for every extent: equirectangular, cos(mid-latitude of California).
+        cosMid: Math.cos((37.25 * Math.PI) / 180),
+        unknownLabel: "Unknown matrix",
+        palette: Object.freeze({
+          "surface water": "#1f5fa8",
+          stormwater: "#6b3fa0",
+          sediment: "#8a5a1c",
+          "wastewater effluent": "#b35900",
+          fish: "#2e7d32",
+          "snow (fresh snowfall)": "#0f7490",
+          "snow (snowpack pit layer)": "#4b5fc0",
+          "atmospheric deposition (dry, passive sampler)": "#b3245c",
+          "Unknown matrix": "#6b7177"
+        }),
+        otherColor: "#6b7177",
+        mixedColor: "#ffffff",
+        project(lon, lat) {
+          return [lon * monitoringMap.cosMid, -lat];
+        },
+        viewBox(key) {
+          const extent = monitoringMap.extents[key];
+          if (!extent) throw new Error(`unknown map extent: ${key}`);
+          const [x0, y0] = monitoringMap.project(extent.lon[0], extent.lat[1]);
+          const [x1, y1] = monitoringMap.project(extent.lon[1], extent.lat[0]);
+          return { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
+        },
+        inView(key, lat, lon) {
+          const view = monitoringMap.viewBox(key);
+          const [x, y] = monitoringMap.project(lon, lat);
+          return x >= view.x && x <= view.x + view.width && y >= view.y && y <= view.y + view.height;
+        },
+        colorFor(label) {
+          return monitoringMap.palette[label] || monitoringMap.otherColor;
+        },
+        // GeoJSON MultiPolygon -> SVG path data in projected units, rounded to ~0.01 degree.
+        pathData(geometry) {
+          if (!geometry || geometry.type !== "MultiPolygon") throw new Error("basemap feature must be a MultiPolygon");
+          const round = (value) => Math.round(value * 100) / 100;
+          const parts = [];
+          geometry.coordinates.forEach((polygon) => polygon.forEach((ring) => {
+            const points = [];
+            ring.forEach(([lon, lat]) => {
+              const [x, y] = monitoringMap.project(lon, lat).map(round);
+              const last = points[points.length - 1];
+              if (!last || last[0] !== x || last[1] !== y) points.push([x, y]);
+            });
+            if (points.length >= 3) parts.push(`M${points.map(([x, y]) => `${x} ${y}`).join("L")}Z`);
+          }));
+          return parts.join("");
+        },
+        // Grid clustering in projected space; cell size is 1/12 of the current extent width.
+        clusters(located, key) {
+          const view = monitoringMap.viewBox(key);
+          const cell = view.width / 12;
+          const groups = new Map();
+          located.forEach(({ row, coordinates }) => {
+            const [lat, lon] = coordinates;
+            if (!monitoringMap.inView(key, lat, lon)) return;
+            const [x, y] = monitoringMap.project(lon, lat);
+            const cellKey = `${Math.floor((x - view.x) / cell)}:${Math.floor((y - view.y) / cell)}`;
+            const group = groups.get(cellKey) || { rows: [], x: 0, y: 0, matrices: new Map() };
+            const label = monitoringView.matrix(row) || monitoringMap.unknownLabel;
+            group.rows.push(row);
+            group.x += x;
+            group.y += y;
+            group.matrices.set(label, (group.matrices.get(label) || 0) + 1);
+            groups.set(cellKey, group);
+          });
+          return [...groups.values()].map((group) => {
+            const labels = [...group.matrices.keys()];
+            const mixed = labels.length > 1;
+            return {
+              rows: group.rows,
+              x: group.x / group.rows.length,
+              y: group.y / group.rows.length,
+              matrices: group.matrices,
+              mixed,
+              color: mixed ? monitoringMap.mixedColor : monitoringMap.colorFor(labels[0])
+            };
+          });
+        },
+        // Matrix counts for samples inside the extent, palette order first, then other labels.
+        legend(located, key) {
+          const counts = new Map();
+          located.forEach(({ row, coordinates }) => {
+            if (!monitoringMap.inView(key, coordinates[0], coordinates[1])) return;
+            const label = monitoringView.matrix(row) || monitoringMap.unknownLabel;
+            counts.set(label, (counts.get(label) || 0) + 1);
+          });
+          const ordered = Object.keys(monitoringMap.palette).filter((label) => counts.has(label));
+          const others = [...counts.keys()].filter((label) => !(label in monitoringMap.palette)).sort();
+          return [...ordered, ...others].map((label) => [label, counts.get(label)]);
         }
       });
     </script>
@@ -1015,6 +1125,81 @@
           }).map((row) => row.id));
           return monitoringView.filterSamples(payload.samples || [], eligible, f);
         }
+        let monitoringMapSamples = [];
+        let monitoringMapExtent = "statewide";
+        let caBasemap = null;
+        let caBasemapStatus = "idle";
+        function ensureCaBasemap() {
+          if (caBasemapStatus !== "idle") return;
+          caBasemapStatus = "loading";
+          fetch("assets/ca_boundaries.geojson")
+            .then((response) => {
+              if (!response.ok) throw new Error(`HTTP ${response.status}`);
+              return response.json();
+            })
+            .then((geojson) => {
+              const features = {};
+              (geojson.features || []).forEach((feature) => {
+                const boundary = feature.properties && feature.properties.boundary;
+                if (boundary === "land" || boundary === "state_waters") features[boundary] = monitoringMap.pathData(feature.geometry);
+              });
+              if (!features.land || !features.state_waters) throw new Error("basemap lacks land or state_waters");
+              caBasemap = features;
+              caBasemapStatus = "ready";
+            })
+            .catch(() => { caBasemapStatus = "failed"; })
+            .then(() => drawMonitoringMap());
+        }
+        function drawMonitoringMap() {
+          ensureCaBasemap();
+          const key = monitoringMapExtent;
+          const extent = monitoringMap.extents[key];
+          const samples = monitoringMapSamples;
+          const located = monitoringView.locatedSamples(samples);
+          document.querySelectorAll("[data-map-extent]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.mapExtent === key)));
+          if (!located.length) {
+            $("monitoring-map").innerHTML = '<p class="empty">No valid sample coordinates are available for this filter.</p>';
+            $("monitoring-map-legend").innerHTML = "";
+            $("monitoring-map-note").textContent = `${samples.length} observations match; 0 have valid coordinate pairs.`;
+            return;
+          }
+          const view = monitoringMap.viewBox(key);
+          const clusters = monitoringMap.clusters(located, key);
+          const legend = monitoringMap.legend(located, key);
+          const inView = legend.reduce((total, [, count]) => total + count, 0);
+          const radius = view.width * 0.026;
+          const fontSize = view.width * 0.024;
+          const markers = clusters.map((cluster) => {
+            const clustered = cluster.rows.length > 1;
+            const [first] = cluster.rows;
+            const label = clustered
+              ? `${cluster.rows.length} samples; ${cluster.mixed ? "mixed matrices: " : "matrix: "}${[...cluster.matrices].map(([name, count]) => `${name} ${count}`).join(", ")}`
+              : `${monitoringView.matrix(first) || monitoringMap.unknownLabel}; ${monitoringView.year(first) ? first.date : "Unknown date"}; ${first.method || "method unknown"}`;
+            // Mixed clusters: a ring split by matrix share, so colour still shows the matrices.
+            let ring = "";
+            if (cluster.mixed) {
+              const ringR = radius * 1.18;
+              const circumference = 2 * Math.PI * ringR;
+              let offset = 0;
+              ring = [...cluster.matrices].map(([name, count]) => {
+                const length = (count / cluster.rows.length) * circumference;
+                const arc = `<circle cx="${cluster.x}" cy="${cluster.y}" r="${ringR}" style="fill:none;stroke:${monitoringMap.colorFor(name)};stroke-width:${radius * 0.42};vector-effect:none" stroke-dasharray="${length} ${circumference - length}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${cluster.x} ${cluster.y})"/>`;
+                offset += length;
+                return arc;
+              }).join("");
+            }
+            return `<g class="monitoring-marker${cluster.mixed ? " mixed" : ""}" role="img" aria-label="${escapeHtml(label)}"><title>${escapeHtml(label)}</title>${ring}<circle cx="${cluster.x}" cy="${cluster.y}" r="${radius}" fill="${cluster.color}"/><text x="${cluster.x}" y="${cluster.y}" font-size="${fontSize}" text-anchor="middle" dominant-baseline="central">${cluster.rows.length}</text></g>`;
+          }).join("");
+          const basemap = caBasemap
+            ? `<path class="map-state-waters" fill-rule="evenodd" d="${caBasemap.state_waters}"/><path class="map-land" fill-rule="evenodd" d="${caBasemap.land}"/>`
+            : "";
+          $("monitoring-map").innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`${extent.label} sample map: ${inView} samples, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}<g class="monitoring-markers">${markers}</g></svg>`;
+          $("monitoring-map-legend").innerHTML = legend.length
+            ? `<ul>${legend.map(([label, count]) => `<li><span class="monitoring-swatch" style="background:${monitoringMap.colorFor(label)}"></span>${escapeHtml(label)} (${count})</li>`).join("")}${clusters.some((cluster) => cluster.mixed) ? '<li><span class="monitoring-swatch mixed"></span>Mixed-matrix cluster: ring segments show each matrix\'s share</li>' : ""}</ul>`
+            : "";
+          const basemapNote = caBasemapStatus === "failed" ? "Basemap unavailable; markers only." : caBasemap ? "" : "Basemap loading.";
+          $("monitoring-map-note").textContent = `${samples.length} observations match; ${located.length} have valid coordinate pairs; ${inView} fall inside the ${extent.label} extent. Dots are coloured by matrix, and nearby samples are grouped into numbered clusters. The basemap is a simplified outline of California land and state waters. ${basemapNote}`.trim();
+        }
         function renderMonitoring() {
           const payload = state.data.monitoring;
           if (!payload || payload.schema_version !== "s7.5") throw new Error("monitoring.json does not match the S7.5 contract");
@@ -1043,19 +1228,8 @@
           $("monitoring-source-count").textContent = `${datasets.length} source record${datasets.length === 1 ? "" : "s"} shown · contributor location is unknown unless explicitly recorded`;
           $("monitoring-sources").innerHTML = datasets.length ? `<table class="monitoring-table"><thead><tr><th>Source</th><th>Steward / tier</th><th>Matrix and region</th><th>Format / cadence</th><th>License</th><th>Checked</th><th>Citations</th></tr></thead><tbody>${datasets.map((row) => `<tr><th scope="row">${escapeHtml(row.name)}<br><small>${row.seed_eligible ? "Verified registry seed" : "Discovery record; not in seed count"} · ${escapeHtml(row.entity_type)} · ${escapeHtml(row.status)}</small>${workDatasetView.linkedWorksHtml(row)}</th><td>${escapeHtml(row.steward)}<br>Tier ${escapeHtml(row.access_tier)} · contributor in CA: ${row.contributor_in_ca === true ? "yes" : row.contributor_in_ca === false ? "no" : "unknown"}</td><td>${escapeHtml((row.sample_matrix || []).join(", "))}<br>${escapeHtml(row.region)}</td><td>${escapeHtml((row.format || []).join(", "))}<br>${escapeHtml(row.cadence)}</td><td>${escapeHtml(row.license)}</td><td>${escapeHtml(row.last_checked || "unknown")}</td><td><a href="${escapeHtml(row.url)}" target="_blank" rel="noreferrer">Source</a> · <a href="${escapeHtml(row.provenance_url)}" target="_blank" rel="noreferrer">Evidence</a><br>${escapeHtml(row.citation)}</td></tr>`).join("")}</tbody></table>` : '<p class="empty">No source records match these filters.</p>';
           const samples = filteredMonitoringSamples();
-          const located = monitoringView.locatedSamples(samples);
-          const groups = new Map();
-          located.forEach(({ row, coordinates }) => {
-            const [lat, lon] = coordinates;
-            const x = Math.max(4, Math.min(96, ((lon + 125) / 11) * 100));
-            const y = Math.max(8, Math.min(94, ((42.5 - lat) / 11) * 100));
-            const key = `${Math.floor(x / 6)}:${Math.floor(y / 6)}`;
-            const group = groups.get(key) || { rows: [], x: 0, y: 0 };
-            group.rows.push(row); group.x += x; group.y += y; groups.set(key, group);
-          });
-          const map = [...groups.values()].map((group) => { const clustered = group.rows.length > 1; const row = group.rows[0]; const label = clustered ? `${group.rows.length} samples` : `${monitoringView.matrix(row) || "Unknown matrix"}; ${monitoringView.year(row) ? row.date : "Unknown date"}; ${row.method || "method unknown"}`; return `<button class="monitoring-marker" data-cluster="${clustered}" style="left:${group.x / group.rows.length}%;top:${group.y / group.rows.length}%" aria-label="${escapeHtml(label)}">${group.rows.length}</button>`; }).join("");
-          $("monitoring-map").innerHTML = map || '<p class="empty">No valid sample coordinates are available for this filter.</p>';
-          $("monitoring-map-note").textContent = `${samples.length} observations match; ${located.length} have valid coordinate pairs. Markers are schematic clusters, not a navigable base map.`;
+          monitoringMapSamples = samples;
+          drawMonitoringMap();
           $("monitoring-gaps-note").textContent = samples.length
             ? `Observed sample counts in the ${localPreview ? "private local preview" : "public data"} only. Blank cells do not imply absence of monitoring.`
             : "No sample rows are available for a measurement-based gap assessment. Registry topic/region descriptions are not counted as observations.";
@@ -1165,6 +1339,7 @@
           $(id).addEventListener("input", () => { const f = state.monitoringFilters; f.tier = $("monitoring-tier").value; f.search = $("monitoring-search").value.trim(); f.contributor = $("monitoring-contributor").value; f.matrix = $("monitoring-matrix").value; f.year = $("monitoring-year").value; f.region = $("monitoring-region").value; state.monitoringPage = 0; renderMonitoring(); });
           $(id).addEventListener("change", () => { const f = state.monitoringFilters; f.tier = $("monitoring-tier").value; f.search = $("monitoring-search").value.trim(); f.contributor = $("monitoring-contributor").value; f.matrix = $("monitoring-matrix").value; f.year = $("monitoring-year").value; f.region = $("monitoring-region").value; state.monitoringPage = 0; renderMonitoring(); });
         });
+        document.querySelectorAll("[data-map-extent]").forEach((button) => button.addEventListener("click", () => { monitoringMapExtent = button.dataset.mapExtent; drawMonitoringMap(); }));
         $("monitoring-samples").addEventListener("click", (event) => { const button = event.target.closest("[data-monitoring-page]"); if (!button) return; state.monitoringPage += Number(button.dataset.monitoringPage); renderMonitoring(); $("monitoring-samples-heading").scrollIntoView({ block: "start" }); });
         $("reset-filters").addEventListener("click", () => { state.search = state.institutionType = state.institution = state.tag = state.yearFrom = state.yearTo = state.caBasis = state.oa = ""; writeHash(); updateViews(); $("expert-search").focus(); });
         $("export-csv").addEventListener("click", () => {

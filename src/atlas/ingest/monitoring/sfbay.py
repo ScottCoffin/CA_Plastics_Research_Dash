@@ -14,6 +14,7 @@ from typing import Any
 from openpyxl import load_workbook
 
 from atlas.geo.ca_polygons import in_ca
+from atlas.ingest.monitoring.sources import SF_BAY_MATRIX_MAP
 
 DATASET_ID = "sf_bay_5gyres_microplastics"
 EXPECTED_SHA256 = "8fc7c636413e8030d9648d295c3263fe3dbf30a04c64c765e267cb71611d2684"
@@ -41,7 +42,8 @@ ATTRIBUTION = (
     "Sanctuaries Microplastic and Microparticle Project (published by OPC on the "
     "California Natural Resources Agency Open Data portal); CC BY 4.0"
 )
-MATRIX_MAP = {"manta": "surface water"}
+# Shared with sources.py so the workbook and source-probe mappings cannot diverge.
+MATRIX_MAP = SF_BAY_MATRIX_MAP
 POLYMER_RE = re.compile(
     r"\bpoly(?:ethylene|propylene|ester|amide|styrene|vinyl|urethane|acrylic)\b",
     re.IGNORECASE,

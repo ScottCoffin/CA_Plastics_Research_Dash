@@ -8,10 +8,17 @@ from typing import Any
 
 MAX_REQUESTS = 50
 MAX_BYTES_PER_FILE = 10_000_000
-# Source-specific code observed in `Particle Data`; the workbook's manta sample
-# sheet has a surface position and 5Gyres Manta Trawl method, and its catalog
-# resource title identifies these as surface-water particle data.
-SF_BAY_MATRIX_MAP = {"manta": "surface water"}
+# Source-specific codes observed in `Particle Data` (and the matching sample sheet
+# names). The SFEI / 5 Gyres study uses: manta = surface-water manta trawl, sw =
+# stormwater runoff, sed = sediment, eff = wastewater effluent, fish = fish (gut
+# contents). Shared by sfbay.py; a code is only mapped when it equals its sheet.
+SF_BAY_MATRIX_MAP = {
+    "manta": "surface water",
+    "sw": "stormwater",
+    "sed": "sediment",
+    "eff": "wastewater effluent",
+    "fish": "fish",
+}
 
 
 def read_bounded(response: Any, *, limit: int = MAX_BYTES_PER_FILE) -> bytes:

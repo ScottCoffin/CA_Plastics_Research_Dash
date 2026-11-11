@@ -3,9 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
 from openpyxl import Workbook
 
-from atlas.ingest.monitoring import sfbay
+from atlas.ingest.monitoring import sfbay, sources
 
 
 def test_normalize_fixture_sample_preserves_source_and_units(monkeypatch) -> None:
@@ -51,6 +52,34 @@ def test_invalid_denominator_and_ambiguous_matrix_are_qc_not_values() -> None:
     assert rows[0]["concentration_value"] is None
     assert rows[0]["concentration_unit"] is None
     assert report["qc"]["selected_unique_invalid_or_missing_volume_l"] == 1
+
+
+EXPECTED_MATRIX = {
+    "manta": "surface water",
+    "sw": "stormwater",
+    "sed": "sediment",
+    "eff": "wastewater effluent",
+    "fish": "fish",
+}
+
+
+@pytest.mark.parametrize("code", sorted(EXPECTED_MATRIX))
+def test_matrix_codes_map_only_when_code_equals_sheet(code: str) -> None:
+    assert sfbay.MATRIX_MAP == EXPECTED_MATRIX
+    assert sfbay.MATRIX_MAP is sources.SF_BAY_MATRIX_MAP
+    sample = {"SampleID": "S1", "Count": 1, "Volume.L": 2.0}
+    particle = {"SampleID": "S1", "SampleMatrix": code, "PlasticType": "Polyethylene"}
+    rows, _, report = sfbay.normalize_rows({code: [sample]}, [particle], source_sha256="abc")
+    assert rows[0]["matrix"] == EXPECTED_MATRIX[code]
+    assert "unknown_or_conflicting_matrix_code" not in report["qc"]
+    # Concentration stays limited to the surface-water manta trawl.
+    expected_concentration = 0.5 if code == "manta" else None
+    assert rows[0]["concentration_value"] == expected_concentration
+
+    other = "fish" if code != "fish" else "sed"
+    rows, _, report = sfbay.normalize_rows({other: [sample]}, [particle], source_sha256="abc")
+    assert rows[0]["matrix"] is None
+    assert report["qc"]["unknown_or_conflicting_matrix_code"] == 1
 
 
 def test_particle_level_confirmation_aggregate_and_matrix_conflict() -> None:
