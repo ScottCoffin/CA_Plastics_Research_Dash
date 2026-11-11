@@ -1,5 +1,7 @@
 # CA Plastics Research Atlas
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24124016.svg)](https://doi.org/10.5281/zenodo.24124016)
+
 A public, auto-updating atlas of California plastic-related researchers,
 monitoring data, and research funding. The project is in bootstrap development;
 `spec.md` is the product and implementation specification.
@@ -62,4 +64,4 @@ Agents must follow `spec.md` Part B and start with `.agent/README.md`.
 ## License
 
 Code: MIT (`LICENSE`). Derived data: CC BY 4.0 (`LICENSE-DATA.md`). Third-party
-sources keep their own terms; see `docs/REUSE.md`. Cite with `CITATION.cff`.
+sources keep their own terms; see `docs/REUSE.md`. Cite with `CITATION.cff` or the Zenodo concept DOI [10.5281/zenodo.24124016](https://doi.org/10.5281/zenodo.24124016) (all versions).

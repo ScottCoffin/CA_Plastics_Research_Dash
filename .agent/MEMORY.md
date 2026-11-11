@@ -199,6 +199,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   variable `ENABLE_DATA_COMMITS` is exactly `true`; the owner enabled it.
 - User-managed Actions configuration names are listed, without values, in
   `docs/SECRETS.md`.
+- Zenodo concept DOI 10.5281/zenodo.24124016 (first archived release v2026.11.11; new GitHub releases archive automatically).
 - Live Pages URL: `https://plastiverse.live/` (repo custom domain since 2026-11-10; old `scottcoff.in/CA_Plastics_Research_Dash/` paths 301 there). Feed `FEED_ID` and `tag:scottcoff.in` entry ids stay frozen. DNS is in Cloudflare: apex A → GitHub (grey cloud); keep the MX, `camply` (owner's tunnel SaaS) and `data` (R2) records.
 
 ## Current model versions and metrics (one line per model)

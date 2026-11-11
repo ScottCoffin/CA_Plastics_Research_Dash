@@ -18,3 +18,11 @@ keywords:
 url: "https://plastiverse.live/"
 repository-code: "https://github.com/ScottCoffin/CA_Plastics_Research_Dash"
 license: MIT
+doi: 10.5281/zenodo.24124016
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24124016
+    description: Zenodo concept DOI (all versions)
+  - type: doi
+    value: 10.5281/zenodo.24124017
+    description: Zenodo archive of release v2026.11.11

@@ -139,3 +139,10 @@ Zenodo on deposit".
   the first deposit.
 - The release notes should say which upstream sources are included, following
   `docs/REUSE.md`.
+
+## Archived releases
+
+| Release | Zenodo DOI | Notes |
+|---|---|---|
+| v2026.11.11 | [10.5281/zenodo.24124017](https://doi.org/10.5281/zenodo.24124017) (concept [10.5281/zenodo.24124016](https://doi.org/10.5281/zenodo.24124016)) | First Zenodo-archived snapshot (source commit f76de3b) |
+| v2026.11.10 | none | Published before the Zenodo link was active; GitHub release only |
