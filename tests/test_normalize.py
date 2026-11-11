@@ -43,6 +43,9 @@ def test_normalization_outputs_c3_tables_and_flags(tmp_path: Path) -> None:
         "ca_affiliation_without_resolved_institution": 1,
         "ca_led_works": 1,
         "ca_any_author_works": 2,
+        "near_duplicates_collapsed": 0,
+        "near_duplicate_groups": 0,
+        "skipped_same_title_distinct_doi": 0,
     }
     report = result.qc_path.read_text(encoding="utf-8")
     assert "Authorships with missing raw affiliation | 2" in report

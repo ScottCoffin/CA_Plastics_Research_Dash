@@ -42,6 +42,7 @@ WORKS_SCHEMA = pa.schema(
         ("last_updated", pa.string()),
         ("ca_led", pa.bool_()),
         ("ca_any_author", pa.bool_()),
+        ("duplicate_work_ids", pa.list_(pa.string())),
     ]
 )
 
@@ -94,6 +95,165 @@ class NormalizationResult:
     output_dir: Path
     qc_path: Path
     metrics: dict[str, int]
+
+
+_TYPE_RANK = {
+    "article": 0,
+    "review": 1,
+    "book-chapter": 2,
+    "book": 3,
+    "conference-paper": 4,
+    "proceedings-article": 4,
+    "preprint": 6,
+    "posted-content": 6,
+    "dataset": 7,
+}
+_OTHER_TYPE_RANK = 5
+NEAR_DUPLICATE_MIN_KEY_LENGTH = 20
+NEAR_DUPLICATE_YEAR_WINDOW = 1
+
+
+@dataclass(frozen=True)
+class _CollapseResult:
+    kept: list[dict[str, Any]]
+    duplicate_rows: list[dict[str, Any]]
+    skipped_distinct_doi: int
+
+
+def title_key(title: object) -> str:
+    """Lowercase the title, drop every non [a-z0-9] character, keep 60 characters."""
+    return re.sub(r"[^a-z0-9]", "", _string(title).lower())[:60]
+
+
+def _type_rank(value: object) -> int:
+    return _TYPE_RANK.get(_string(value).lower(), _OTHER_TYPE_RANK)
+
+
+def _preference(work: Mapping[str, Any]) -> tuple[Any, ...]:
+    """Sort key: lower tuples are preferred as the kept representative."""
+    doi = _string(work.get("doi"))
+    pub_date = _string(work.get("pub_date"))
+    return (
+        _type_rank(work.get("type")),
+        not doi,
+        not pub_date,
+        pub_date,
+        _string(work.get("work_id")),
+    )
+
+
+def _distinct_article_dois(first: Mapping[str, Any], second: Mapping[str, Any]) -> bool:
+    """True when both works are articles carrying different non-empty DOIs."""
+    doi_a = _string(first.get("doi")).lower()
+    doi_b = _string(second.get("doi")).lower()
+    return (
+        bool(doi_a and doi_b)
+        and doi_a != doi_b
+        and _string(first.get("type")).lower() == "article"
+        and _string(second.get("type")).lower() == "article"
+    )
+
+
+def _year_clusters(members: list[Mapping[str, Any]]) -> list[list[Mapping[str, Any]]]:
+    """Chain works sorted by year; a gap above the window starts a new cluster."""
+    clusters: list[list[Mapping[str, Any]]] = []
+    for work in members:
+        if clusters and work["year"] - clusters[-1][-1]["year"] <= NEAR_DUPLICATE_YEAR_WINDOW:
+            clusters[-1].append(work)
+        else:
+            clusters.append([work])
+    return clusters
+
+
+def _collapse_near_duplicates(works: Sequence[Mapping[str, Any]]) -> _CollapseResult:
+    """Collapse same-title, same-window works into one preferred representative."""
+    groups: dict[str, list[Mapping[str, Any]]] = defaultdict(list)
+    for work in works:
+        key = title_key(work.get("title"))
+        year = work.get("year")
+        if len(key) < NEAR_DUPLICATE_MIN_KEY_LENGTH or not isinstance(year, int):
+            continue
+        groups[key].append(work)
+
+    duplicate_of: dict[str, str] = {}
+    duplicate_rows: list[dict[str, Any]] = []
+    skipped = 0
+    for key in sorted(groups):
+        members = sorted(groups[key], key=lambda work: (work["year"], _string(work["work_id"])))
+        for cluster in _year_clusters(members):
+            if len(cluster) < 2:
+                continue
+            keepers: list[Mapping[str, Any]] = []
+            for work in sorted(cluster, key=_preference):
+                target = None
+                blocked = False
+                for keeper in keepers:
+                    if _distinct_article_dois(keeper, work):
+                        blocked = True
+                        continue
+                    target = keeper
+                    break
+                if target is None:
+                    skipped += int(blocked)
+                    keepers.append(work)
+                    continue
+                duplicate_of[_string(work["work_id"])] = _string(target["work_id"])
+                duplicate_rows.append(
+                    {
+                        "work_id": _string(work["work_id"]),
+                        "duplicate_of": _string(target["work_id"]),
+                        "title_key": key,
+                        "reason": "same_title_key_within_year_window",
+                    }
+                )
+
+    collapsed_by_keeper: dict[str, list[str]] = defaultdict(list)
+    for duplicate_id, keeper_id in duplicate_of.items():
+        collapsed_by_keeper[keeper_id].append(duplicate_id)
+    kept = [
+        {
+            **work,
+            "duplicate_work_ids": sorted(collapsed_by_keeper.get(_string(work["work_id"]), [])),
+        }
+        for work in works
+        if _string(work["work_id"]) not in duplicate_of
+    ]
+    duplicate_rows.sort(key=lambda row: row["work_id"])
+    return _CollapseResult(kept, duplicate_rows, skipped)
+
+
+def collapse_near_duplicates(
+    works: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Return (kept works, duplicate map rows) for near-duplicate works.
+
+    Works group by ``title_key`` (titles shorter than 20 characters are skipped)
+    and by publication years chained within one year. The preferred work keeps
+    its row and lists the collapsed ids in ``duplicate_work_ids``. Two articles
+    with different non-empty DOIs are never collapsed.
+    """
+    result = _collapse_near_duplicates(works)
+    return result.kept, result.duplicate_rows
+
+
+def _repoint_authorships(
+    rows: list[dict[str, Any]], keeper_of: Mapping[str, str]
+) -> list[dict[str, Any]]:
+    """Move authorships of collapsed works to their kept work and dedupe by author."""
+    own = [row for row in rows if row["work_id"] not in keeper_of]
+    seen = {(row["work_id"], row["author_id"]) for row in own if row["author_id"]}
+    moved: list[dict[str, Any]] = []
+    for row in rows:
+        if row["work_id"] not in keeper_of:
+            continue
+        repointed = {**row, "work_id": keeper_of[row["work_id"]]}
+        if repointed["author_id"]:
+            key = (repointed["work_id"], repointed["author_id"])
+            if key in seen:
+                continue
+            seen.add(key)
+        moved.append(repointed)
+    return own + moved
 
 
 def compact_id(value: object) -> str:
@@ -302,6 +462,12 @@ def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) 
         ),
         ("Works with ca_led=true", metrics["ca_led_works"]),
         ("Works with ca_any_author=true", metrics["ca_any_author_works"]),
+        ("Near-duplicate works collapsed into a kept work", metrics["near_duplicates_collapsed"]),
+        ("Near-duplicate groups", metrics["near_duplicate_groups"]),
+        (
+            "Same-title article pairs kept apart (distinct DOIs)",
+            metrics["skipped_same_title_distinct_doi"],
+        ),
     ]
     lines = [
         "# OpenAlex normalization QC",
@@ -445,7 +611,6 @@ def normalize_records(
                         "orcid": _string(author.get("orcid")),
                         "works": set(),
                         "ca_works": set(),
-                        "years": [],
                     },
                 )
                 state["name"] = state["name"] or author_name
@@ -453,9 +618,6 @@ def normalize_records(
                 state["works"].add(work_id)
                 if resolved_ca:
                     state["ca_works"].add(work_id)
-                year = _number(work.get("publication_year"))
-                if year is not None:
-                    state["years"].append(year)
 
         if work_ca_like and not work_resolved_ca:
             ca_affiliation_without_resolved.add(work_id)
@@ -493,16 +655,32 @@ def normalize_records(
             }
         )
 
+    # Collapse near-duplicate works before anything is written. Authorships and
+    # author work sets of collapsed works are re-pointed to the kept work.
+    all_works = works
+    collapse = _collapse_near_duplicates(all_works)
+    works = collapse.kept
+    keeper_of = {row["work_id"]: row["duplicate_of"] for row in collapse.duplicate_rows}
+    any_ca_by_id = {row["work_id"]: row["ca_any_author"] for row in all_works}
+    kept_by_id = {row["work_id"]: row for row in works}
+    for duplicate_id, keeper_id in keeper_of.items():
+        kept_row = kept_by_id[keeper_id]
+        kept_row["ca_any_author"] = bool(kept_row["ca_any_author"] or any_ca_by_id[duplicate_id])
+    authorships = _repoint_authorships(authorships, keeper_of)
+    work_year = {row["work_id"]: row["year"] for row in works}
+
     authors = []
     for author_id in sorted(author_state):
         state = author_state[author_id]
-        years = state["years"]
+        author_works = {keeper_of.get(work, work) for work in state["works"]}
+        ca_works = {keeper_of.get(work, work) for work in state["ca_works"]}
+        years = [work_year[work] for work in author_works if work_year.get(work) is not None]
         authors.append(
             {
                 "author_id": author_id,
                 "name": state["name"],
                 "orcid": state["orcid"],
-                "ca_works_count": len(state["ca_works"]),
+                "ca_works_count": len(ca_works),
                 "first_year": min(years) if years else None,
                 "last_year": max(years) if years else None,
                 "domain_tags": [],
@@ -519,9 +697,14 @@ def normalize_records(
         "missing_affiliations": missing_affiliations,
         "null_author_ids": null_author_ids,
         "unresolved_institution_links": unresolved_links,
-        "ca_affiliation_without_resolved_institution": len(ca_affiliation_without_resolved),
+        "ca_affiliation_without_resolved_institution": len(
+            {work for work in ca_affiliation_without_resolved if work not in keeper_of}
+        ),
         "ca_led_works": sum(bool(row["ca_led"]) for row in works),
         "ca_any_author_works": sum(bool(row["ca_any_author"]) for row in works),
+        "near_duplicates_collapsed": len(collapse.duplicate_rows),
+        "near_duplicate_groups": len(set(keeper_of.values())),
+        "skipped_same_title_distinct_doi": collapse.skipped_distinct_doi,
     }
     output = Path(output_dir)
     _atomic_write_table(output / "works.parquet", works, WORKS_SCHEMA)

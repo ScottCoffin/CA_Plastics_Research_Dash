@@ -48,6 +48,7 @@ Licence: derived from OpenAlex metadata; OpenAlex licence recorded as unknown in
 | `ca_any_author` | boolean | Any author affiliation resolves to a California institution. |
 | `ca_led` | boolean | First-author affiliation resolves to a California institution. |
 | `cited_by_count` | integer | OpenAlex citation count. Shown as a field only; not used for ranking. |
+| `duplicate_work_ids` | array of string | OpenAlex IDs of near-duplicate works (same normalized title with publication years within 1, e.g. preprint and article) collapsed into this kept work during S2.2 normalization. Empty when none. |
 | `domain_tags` | array of string | Provisional topic domain tags. |
 | `facet_tags` | array of string | Provisional matrix/facet tags. |
 | `plastic_related` | boolean | Provisional plastic-related label. |
