@@ -81,3 +81,4 @@
 | 2026-11-10 | S7.5 | 314 cleared SF Bay / 5 Gyres observations public; clearance file gates publication | this commit |
 | 2026-11-10 | S8.8 | SWRCB awards via FAAST public search (2 awarded rows; contacts never stored) | this commit |
 | 2026-11-10 | S7.7 | Sierra snow literature rows (40) published; S7.8 CEDEN task added | this commit |
+| 2026-11-10 | S7.8 | CEDEN concentrations joined (63 kept, 78 filled); 56 QA samples removed from public map; weekly CEDEN watch | this commit |

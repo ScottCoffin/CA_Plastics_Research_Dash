@@ -35,6 +35,10 @@ jobs:
         env:
           PYTHONPATH: src
         run: python scripts/check_source_watch_s7_6.py
+      - name: Watch CEDEN microplastics availability
+        env:
+          PYTHONPATH: src
+        run: python scripts/watch_ceden_microplastics.py
       - name: Explain disabled commit guard
         if: vars.ENABLE_DATA_COMMITS != 'true'
         run: echo "ENABLE_DATA_COMMITS is not true; checked outputs remain in this workflow run."
@@ -46,7 +50,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- docs/SOURCES.md docs/api_notes/source_watch_s7_6.json
+          git add -- docs/SOURCES.md docs/api_notes/source_watch_s7_6.json docs/api_notes/ceden_watch.json
           git diff --cached --quiet && echo "No checked-source changes" && exit 0
           git commit -m "chore: update future source watch"
           git pull --rebase origin "$DEFAULT_BRANCH"

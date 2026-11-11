@@ -158,3 +158,13 @@ def test_private_output_rejects_public_tree_and_relative_alias(tmp_path) -> None
         )
         == (tmp_path / "ignored" / "monitoring.json").resolve()
     )
+
+
+def test_public_build_drops_qa_samples_but_private_preview_keeps_them() -> None:
+    blank = {**_sample(), "sample_id": "s-blank", "qa_sample": True}
+    real = {**_sample(), "qa_sample": False}
+    public = build_monitoring_payload(registry(), samples=[real, blank], clearances=CLEARANCE)
+    assert [row["sample_id"] for row in public["samples"]] == ["s-1"]
+    assert public["excluded_qa_samples"] == 1
+    private = build_monitoring_payload(registry(), samples=[real, blank], private_preview=True)
+    assert private["sample_count"] == 2 and private["excluded_qa_samples"] == 0

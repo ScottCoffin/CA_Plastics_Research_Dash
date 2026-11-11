@@ -143,10 +143,15 @@ def build_monitoring_payload(
     if work_links:
         _attach_linked_works(datasets, list(registry["datasets"]), work_links)
     dataset_ids = {row["id"] for row in datasets}
+    excluded_qa = 0
     if rows:
         unknown = sorted({row.get("dataset_id") for row in rows} - dataset_ids)
         if unknown:
             raise ValueError(f"sample rows reference unknown registry datasets: {unknown}")
+        if not private_preview:
+            # QA samples (blanks, QA replicates; S7.8) are not environmental observations.
+            excluded_qa = sum(row.get("qa_sample") is True for row in rows)
+            rows = [row for row in rows if row.get("qa_sample") is not True]
         samples_out = [
             {key: row.get(key) for key in PRIVATE_SAMPLE_FIELDS if key in row}
             for row in sorted(rows, key=lambda row: str(row.get("sample_id", "")))
@@ -178,6 +183,7 @@ def build_monitoring_payload(
         "generated_at": generated_at or datetime.now(UTC).isoformat(),
         "publication_mode": mode,
         "sample_count": len(samples_out),
+        "excluded_qa_samples": excluded_qa,
         "coverage_basis": basis,
         "datasets": datasets,
         "samples": samples_out,

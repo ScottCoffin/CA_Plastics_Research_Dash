@@ -1,0 +1,385 @@
+{
+  "checked_at": "2026-11-11T00:11:51+00:00",
+  "history": [
+    {
+      "checked_at": "2026-11-11T00:07:18+00:00",
+      "digest": "5bc2990f3da1f0fc4bc26c34aa7ce71482572000c12863b9c8e7d80c78dc36a6"
+    },
+    {
+      "checked_at": "2026-11-11T00:11:51+00:00",
+      "digest": "432ea740fbff224ed7ad6166f86904850a6b904a3460e59b32b1d83779d0ea7d"
+    }
+  ],
+  "package_error": null,
+  "package_id": "surface-water-chemistry-results",
+  "requests": 36,
+  "resources": {
+    "00c4ca34-064f-4526-8276-57533a1a36d9": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2002 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "13e64899-df32-461c-bec1-a4e72fcbbcfa": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2007 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "158c8ca1-b02f-4665-99d6-2c1c15b6de5a": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {
+          "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 70
+        },
+        "rows": 70
+      },
+      "name": "CEDEN Water Chemistry Data Prior to 2000 ",
+      "new_projects": [],
+      "projects": {
+        "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 70
+      },
+      "rows": 70
+    },
+    "2eba14fa-2678-4d54-ad8b-f60784c1b234": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2020 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "341627e6-a483-4e9e-9a85-9f73b6ddbbba": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2013 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "42b906a2-9e30-4e44-92c9-0f94561e47fe": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {
+          "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 83
+        },
+        "rows": 83
+      },
+      "name": "2016 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {
+        "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 83
+      },
+      "rows": 83
+    },
+    "4d01a693-2a22-466a-a60b-3d6f236326ff": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2011 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "572bf4d2-e83d-490a-9aa5-c1d574e36ae0": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2010 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "5b136831-8870-46f2-8f72-fe79c23d7118": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2009 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "5d7175c8-dfc6-4c43-b78a-c5108a61c053": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2022 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "68787549-8a78-4eea-b5b9-ef719e65a05c": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {
+          "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 1948
+        },
+        "rows": 1948
+      },
+      "name": "2017 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {
+        "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 1948
+      },
+      "rows": 1948
+    },
+    "6cf99106-f45f-4c17-80af-b91603f391d9": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2019 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "6f9dd0e2-4e16-46c2-bed1-fa844d92df3c": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2023 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "7abfde16-61b6-425d-9c57-d6bd70700603": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {
+          "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 60
+        },
+        "rows": 60
+      },
+      "name": "2014 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {
+        "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 60
+      },
+      "rows": 60
+    },
+    "7c2faf29-d5d3-4ad6-a429-442ed337febb": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2026 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "7d9384fa-70e1-4986-81d6-438ce5565be6": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {
+          "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 121
+        },
+        "rows": 121
+      },
+      "name": "2015 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {
+        "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 121
+      },
+      "rows": 121
+    },
+    "9538cbfa-f8be-4445-97dc-b931579bb927": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2005 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "97b8bb60-8e58-4c97-a07f-d51a48cd36d4": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2025 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "99402c9c-5175-47ca-8fce-cb6c5ecc8be6": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2000 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "9dcf551f-452d-4257-b857-30fbcc883a03": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2024 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "a31a7864-06b9-4a81-92ba-d8912834ca1d": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2006 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "c587a47f-ac28-4f77-b85e-837939276a28": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2008 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "c962f46d-6a7b-4618-90ec-3c8522836f28": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2004 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "cec6768c-99d3-45bf-9e56-d62561e9939e": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2001 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "d3f59df4-2a8d-4b40-b90f-8147e73335d9": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2003 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "dde19a95-504b-48d7-8f3e-8af3d484009f": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2021 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    },
+    "f638c764-89d5-4756-ac17-f6b20555d694": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {
+          "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 763
+        },
+        "rows": 763
+      },
+      "name": "2018 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {
+        "SF Bay Regional Monitoring for Water Quality / Regional Monitoring Program-Microplastics / 2017-2018 Microplastic Study - Moore Foundation": 763
+      },
+      "rows": 763
+    },
+    "f9dd0348-85d5-4945-aa62-c7c9ad4cf6fd": {
+      "classification": "no_change",
+      "error": null,
+      "good": {
+        "projects": {},
+        "rows": 0
+      },
+      "name": "2012 CEDEN Water Chemistry Data",
+      "new_projects": [],
+      "projects": {},
+      "rows": 0
+    }
+  },
+  "schema_version": 1,
+  "units": [
+    "particles/L",
+    "particles/g",
+    "particles/kg",
+    "particles/m3"
+  ]
+}

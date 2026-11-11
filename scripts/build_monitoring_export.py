@@ -21,7 +21,13 @@ from atlas.build.monitoring import (
 )
 from atlas.ingest.monitoring.literature import load_curated_samples
 
-DEFAULT_SAMPLES = Path("data/processed/normalized/sf_bay_5gyres/samples.json")
+# S7.8 enriched rows (CEDEN concentrations, qa_sample flags) when present.
+_NORMALIZED = Path("data/processed/normalized/sf_bay_5gyres")
+DEFAULT_SAMPLES = (
+    _NORMALIZED / "samples_enriched.json"
+    if (_NORMALIZED / "samples_enriched.json").exists()
+    else _NORMALIZED / "samples.json"
+)
 
 
 def main() -> None:
