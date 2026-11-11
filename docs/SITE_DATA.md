@@ -20,6 +20,8 @@ Missing labels are retained as `null` and are never inferred by the exporter.
 | `aggregates.json` | `by_year`, `by_type`, and `by_tag` arrays. Each row has `count` and `plastic_related_count`; tag rows combine taxonomy domain and matrix facet IDs. |
 | `build_metadata.json` | Build timestamp, row counts, per-file raw and gzip byte sizes, and total payload sizes. This is the S3.1 size log. |
 
+| `bundle/` | AT-4 serving bundle (`scripts/build_bundle.py`, `docs/AT_4_VERIFICATION.md`): `works_index.json` (ordered work IDs, titles, years; record i = bit i), `facets.json` + `facets.bin` (Appendix C bit-sets: year, type, topic, plastic, ca_led, institution, sector, oa), `inst_tiers.json` (AT-3 rank-range tiers), `parquet/` (abstract-free `works`, `inst_counts`, `inst_tiers`, `year_tag`; DuckDB 2.0.0 zstd), `manifest.json` (sizes). Read in the browser with `site/assets/facets.js` (`window.AtlasFacets`). |
+
 The initial C5 target is an initial payload below 3 MB gzip.  A build that
 exceeds the target must retain the recorded sizes here and document the reason
 before introducing DuckDB-Wasm or another client-side query engine.

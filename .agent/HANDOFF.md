@@ -38,6 +38,7 @@ This file is the live tracker for the current session: update it at every checkp
 | 28 | 'Risk assessment' topic | Done: 65 works, 39 grants; hatched violet + diamond in chips, bars, heatmaps, Sankey; grant topics now recomputed at export |
 | 32 | DuckDB dependency for AT-3 | Done: owner chose duckdb==2.0.0 and moved the G-PARQ writer pin (ADR-DUCKDB-2-2026-11-11) |
 | 33 | AT-3 SQL analytics | Done: `atlas.analytics`, `docs/AT_3_VERIFICATION.md`; every ranked CA institution overlaps a neighbour, so show tiers/intervals, not strict ranks |
+| 34 | AT-4 serving bundle (tiers with ranges, owner-confirmed) | Done: `site/data/bundle/`, `site/assets/facets.js`; Institutions tab tier UI next |
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
 ## Next eligible (dependency order) - as of the AT-3 commit
@@ -53,7 +54,7 @@ This file is the live tracker for the current session: update it at every checkp
 0. **2026-11-12: renew the CORE API key** and put the new value in `.env`.
 1. Finish the 215 low-confidence works in `scripts/review_work_relevance_app.py` (not started as of 2026-11-11 afternoon).
 2. AT2-REVIEW: types for 52 new top-100 institutions in `data/processed/institution_review_needs_v31.csv`.
-3. Leaderboard display (AT-4): tiers from AT-3 intervals vs. a plain sorted list without ranks (default: tiers).
+3. (Answered: AT-4 leaderboard shows tiers with ranges.)
 
 ## Notes
 - Worktree leftovers not committed on purpose: `docs/SOURCES.md`,

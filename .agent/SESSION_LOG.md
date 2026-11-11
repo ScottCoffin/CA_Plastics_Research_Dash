@@ -99,3 +99,4 @@
 | 2026-11-11 | S3-INST, topics, specs | Collaborator clarity (Doñana), top experts per institution, Risk assessment topic (hatched), grant tags recomputed at export; specs S9.5 bios/photos, S9.6 outreach, S3.8 SEO | this commit |
 | 2026-11-11 | handoff | Context at 80%: handoff to a fresh orchestrator via RESUME_PROMPT.md | this commit |
 | 2026-11-11 | AT-3 | SQL analytics (DuckDB 2.0.0): fractional counts, bootstrap stability, year x tag, co-occurrence; `works.is_retracted`; owner confirmed two state-agency overrides | this commit |
+| 2026-11-11 | AT-4 | Serving bundle: Appendix C bit-sets, facets.js, title search, abstract-free Parquet, institution tiers; wired into ingest_works and CI | this commit |
