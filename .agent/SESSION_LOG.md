@@ -105,3 +105,4 @@
 | 2026-11-11 | S2.5 (partial) | Europe PMC recall benchmark 51.0%; DOI ingest deferred by the budget guard | this commit |
 | 2026-11-11 | S2.5c, S9.5 (partial) | ORCID enrichment (employments, carry-forward evidence, bios) and Wikidata photo metadata | this commit |
 | 2026-11-11 | S2.5d (partial) | DataCite outputs by expert ORCID (98 plastic-related, 84 not in corpus) | this commit |
+| 2026-11-11 | handoff | Usage window at 91%: handoff via RESUME_PROMPT.md; audit script gains --extra-dois | this commit |

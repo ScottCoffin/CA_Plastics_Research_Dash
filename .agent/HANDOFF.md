@@ -1,4 +1,4 @@
-# Handoff - 2026-11-11 (night, overnight mode) - AT-3, AT-4 (+UI), AT-11 sealed; AT-10, S2.5 partial
+# Handoff - 2026-11-11 (session end, 91% of usage window) - AT-3/4/11 done; AT-10, S2.5, S9.5 partial
 
 This file is the live tracker for the current session: update it at every checkpoint
 (owner requests, status, next steps) so a fresh session can resume without chat history.
@@ -42,21 +42,28 @@ This file is the live tracker for the current session: update it at every checkp
 | 35 | AT-11 CI guards | Done: schema/payload guards before the daily commit; analytics + bundle rebuilt daily |
 | 36 | AT-10 release pipeline | Pipeline done; owner cuts the next GitHub release (mints a Zenodo DOI) |
 | 37 | S2.5 Europe PMC recall | Benchmark 51.0% (438/858); DOI ingest after the OpenAlex daily reset |
+| 38 | S2.5c ORCID / S2.5d DataCite / S9.5 photos | ORCID 1,604 profiles (carry-forward 90/19/121); DataCite 98 plastic outputs (84 not in corpus); 44 licensed Wikidata photos (metadata only) |
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
-## Next eligible (dependency order) - as of the S2.5-partial commit
-1. S2.5(b) finish after 00:00 UTC (OpenAlex daily reset): `PYTHONPATH=src py -3.14 scripts/audit_europepmc_recall.py --max-credits 300`, normalize, spot check 20, recall after; then export + analytics + bundle.
-2. Gold-label app for the S4.2 sample (580 works, guide_v2 fields) + Claude second rater on a blind 20% (ADR-GATES); kappa via S4.3 tooling.
-3. S2.5(c) ORCID enrichment (public API, no key): dated employments, works by DOI, ROR-based discovery; S2.5(d) DataCite by ORCID.
-4. S9.5 bios/photos (ORCID + Wikidata), then S9.6 outreach, S9.4 network with SPK-6/AT-8 (inputs: `inst_cooccurrence`), SPK-5/AT-7.
-5. S5.0 shared active-learning engine waits on the owner's S5.1 Smart-queue validation.
+## Next eligible (dependency order) - as of the session-end commit (2026-11-11 ~21:45 UTC)
+1. S2.5(b)+(d) OpenAlex DOI match (needs the daily budget reset, after 00:00 UTC; ~110 credits, 11 batches):
+   `PYTHONPATH=src py -3.14 scripts/audit_europepmc_recall.py --max-credits 300 --extra-dois data/interim/datacite_plastic_dois.txt`
+   then `py -3.14 scripts/normalize_openalex.py`, `py -3.14 scripts/build_export_site.py`, `py -3.14 scripts/build_analytics.py`,
+   `py -3.14 scripts/build_bundle.py`, `py -3.14 scripts/check_ci_guards.py --require-raw --require-normalized`;
+   `--measure-only` for recall after; spot-check 20 added CA works in `docs/api_notes/europepmc_recall.md`; commit raw/normalized/site data as the daily ingest does.
+   (`data/interim/datacite_plastic_dois.txt` is ignored; regenerate from `expert_datacite_outputs.parquet` where plastic_related and not in_corpus.)
+2. S2.5 remainder: ORCID missing DOIs (57,934; filter before any OpenAlex matching, budget across days), ROR-discovered researchers (4,752), CORE full text (needs the renewed key), eScholarship.
+3. S9.5 drawer: show ORCID bio/keywords/links and the 44 licensed photos with credit, after the owner reviews them.
+4. S9.4 network with SPK-6/AT-8 (inputs: `data/processed/analytics/inst_cooccurrence.parquet`), SPK-5/AT-7.
+5. Gated on owner: gold-label app/EM-3 labelling, S5.0 (after S5.1 Smart-queue validation).
 6. Last: S3.7 hero page and S3.8 SEO.
 
 ## Owner actions (one line each)
 0. **2026-11-12: renew the CORE API key** and put the new value in `.env`.
 1. Finish the 215 low-confidence works in `scripts/review_work_relevance_app.py` (not started as of 2026-11-11 afternoon).
 2. AT2-REVIEW: types for 52 new top-100 institutions in `data/processed/institution_review_needs_v31.csv`.
-3. AT-10: cut a GitHub release (for example v2026.11.12) when you want a new archived snapshot; then update `config/release.yml` with the new Zenodo DOI.
+3. Review the 44 Wikidata photos (`data/processed/expert_photos.parquet`, `docs/api_notes/wikidata_photos.md`) and decide CA-CARRY-ORCID, AT4-SEARCH, AT11-WINDOW (defaults in use).
+4. AT-10: cut a GitHub release (for example v2026.11.12) when you want a new archived snapshot; then update `config/release.yml` with the new Zenodo DOI.
 
 ## Notes
 - Worktree leftovers not committed on purpose: `docs/SOURCES.md`,

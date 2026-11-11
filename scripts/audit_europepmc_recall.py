@@ -54,6 +54,11 @@ def main() -> None:
     parser.add_argument("--max-credits", type=float, default=300.0)
     parser.add_argument("--cache-dir", type=Path, default=Path("data/raw/europepmc"))
     parser.add_argument("--out", type=Path, default=Path("scratch/europepmc_audit.json"))
+    parser.add_argument(
+        "--extra-dois",
+        type=Path,
+        help="text file, one DOI per line (e.g. S2.5d DataCite outputs); matched the same way",
+    )
     args = parser.parse_args()
 
     today = datetime.now(UTC).date().isoformat()
@@ -64,6 +69,17 @@ def main() -> None:
     ca, _ = corpus_state()
     missing = audit.missing_dois(bench, ca)
     queryable = [d for d in missing if audit.is_queryable_doi(d)]
+    extra: list[str] = []
+    if args.extra_dois:
+        lines = args.extra_dois.read_text(encoding="utf-8").splitlines()
+        seen = set(queryable)
+        for line in lines:
+            doi = audit.normalize_doi(line)
+            if doi and doi not in ca and doi not in seen and audit.is_queryable_doi(doi):
+                extra.append(doi)
+                seen.add(doi)
+        queryable += extra
+        print(f"extra DOIs not in corpus: {len(extra)}")
     batches = audit.doi_batches(queryable)
     print(f"benchmark {len(records)} records, {len(bench)} with DOI, {len(missing)} missing")
     print(f"measured: {before}; {len(batches)} OpenAlex batches planned")
