@@ -1,33 +1,37 @@
-# Handoff - 2026-11-10 (evening) - S7.6, S10.4, SPK-1 closed; only owner-gated work remains
+# Handoff - 2026-11-10 (late) - Monitoring, funding and governance checkpoints sealed
 
 ## State
-- Closed this session: S7.6 (owner WIP + request-time `Last-Modified` digest fix,
-  `96d09e5`), S10.4 (CI green on `96d09e5`), SPK-1 (R2 leg measured at
-  `https://data.plastiverse.live/spk1/`: all 206, 1.57 MB read of a 99 MB file;
-  `docs/SPK_1_HOSTING.md`). Fixes: S8.9 test pinned to a date (`--today`); S2.4 daily
-  ingestion now defers on a 429 that lacks a credit header (the 2026-11-10 run went red).
-- Owner confirmed defaults: S8.6-A, S8.10-A, S9.1-A, S9.1-B, S9.2-A, TODO-A. AT-1-A:
-  the 405-row sample is approved as the audit set (labels still blank).
-- The listed idle `python -` PIDs no longer exist; nothing was killed.
-- Worktree: `docs/SOURCES.md` and `docs/api_notes/source_watch_s7_6.json` hold one
-  live watch run (2026-11-10, pre-fix false "changed"). They are not committed; the weekly workflow
-  rewrites them. Untracked `data/processed/p{5,25,100}.parquet` are the owner's R2
-  upload copies; they are safe to delete and must not be committed.
+- Closed today (all pushed; CI green on `1a3c19e`; 739 tests): S7.3 (SF Bay / 5 Gyres
+  CC BY 4.0), S7.5 (public cleared observations), S7.6, S7.7 (Karapetrova 2026 Sierra
+  snow, 40 rows), S7.8 (CEDEN concentrations by SampleID + weekly CEDEN watch), S8.7
+  (NOAA MDP via USAspending ALN 11.999), S8.8 (FAAST awarded proposals), S10.4, SPK-1.
+  The site moved to https://plastiverse.live/ (HTTPS enforced).
+- Live monitoring payload: 298 observations (258 SF Bay + 40 Sierra), 56 QA samples
+  excluded, 146 with concentrations. Publication is gated by `config/monitoring_publication.yml`.
+- Prepared, awaiting owner: S10.2 governance checklist (`docs/GOVERNANCE_CHECKLIST.md`),
+  S10.3 Zenodo release (`docs/REPRODUCIBILITY.md`, `make reproduce`).
+- AT-1 labelling is in progress by the owner in the local app
+  (`py -3.14 -m streamlit run scripts/review_query_audit_app.py`): 204/354 works labelled
+  at last check. `docs/QUERY_AUDIT_REVIEW.csv` is the owner's uncommitted work; never
+  overwrite it.
+- Worktree leftovers (not committed on purpose): `docs/SOURCES.md` S7.6 rows and
+  `docs/api_notes/source_watch_s7_6.json` from a pre-fix live run (the weekly workflow
+  rewrites them); `data/processed/p{5,25,100}.parquet` (owner's R2 upload copies).
 
-## Owner actions (one line each; reply in QUESTIONS.md or chat)
-1. Done 2026-11-10: site moved to `https://plastiverse.live/`; feed links, README, MEMORY updated; R2 CORS verified from the live origin. Remaining: tick **Enforce HTTPS** in repo Settings → Pages (certificate approved).
-2. AT-1: fill `review_label` (relevant / not_relevant) and `reviewer` in `docs/QUERY_AUDIT_REVIEW.csv` (405 rows; ~2-3 h), optionally `noise_terms`.
-3. S1.5-A: after 2, decide whether to promote `plastic-v2-candidate` (the precision estimate from 2 informs it).
-4. EM-3/S4 annotation: waits on 3 (no representative corpus to sample yet); nothing to do now.
-5. S7.3-A: pick a license for SF Bay / 5 Gyres data: "ODC-BY, publish with attribution", "CC BY 4.0", or "ask SFEI first".
-6. S8.7: NOAA Marine Debris award years (default proposal: FY2015–present). S8.8: State Water Board funding: ingest, curate by hand, or defer.
-7. Later sign-offs: S9.3 profile review, S10.2 governance checklist, S10.3 archive choice (Zenodo vs GitHub release).
+## Owner actions (one line each)
+1. Finish AT-1 labels in the review app, then say "labels done".
+2. LICENSE-A: confirm MIT (code) + CC BY 4.0 (derived data) so LICENSE can be written.
+3. Zenodo: enable the repo under zenodo.org → Account → GitHub, then say "Zenodo on" (DOI minting is permanent; the agent waits).
+4. S10.2: review the "Needs owner decision" rows in `docs/GOVERNANCE_CHECKLIST.md` and sign off.
+5. Optional: `www.plastiverse.live` is proxied by Cloudflare; set it to DNS-only CNAME → scottcoffin.github.io or delete it.
 
-## Next eligible once answered
-- After 2: AT-1 precision report → AT-2 → AT-3 → AT-4 → AT-5, EM-5, EM-7, EM-16..18.
-- After 3: S3.6 on real data, S4.2, S6.1 coverage; then 4 → S5.x, EM-4, EM-8, EM-11.
-- After 5: S7.3, S7.5. After 6: S8.7, S8.8.
-- Optional, no gate: S11.1 (low value now that G-SHELL = Framework).
+## Next eligible
+- After 1: AT-1 precision report and noise-term review → S1.5-A promotion decision →
+  AT-2 → AT-3 → AT-4; S3.6, S4.2, S6.1 on real data.
+- After 2+3: S10.3 release (tag `vYYYY.MM.DD`, snapshot ZIP attached).
+- No gate: S10.2 agent-fixable gaps ("Is this you?" link, removal/suppression mechanism,
+  work-override consumer, author merge/split, REUSE rows for grant APIs and ROR,
+  affiliation disclosure); sample-table paging on the Monitoring tab.
 
 ## Verification commands
 - Full gate per CLAUDE.md, plus the clean-worktree run and CI after push.
