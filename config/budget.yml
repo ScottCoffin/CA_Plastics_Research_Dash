@@ -1,10 +1,11 @@
 # SPK-7 measurements completed 2026-11-09; verify policy before reuse.
+# Owner rule 2026-11-11: OpenAlex may run up to the free USD 1.00/day limit (stop at 0.95).
 measurement_status: complete_100_calls
 provider: openalex
 daily_ceiling_usd: 1.0
-abort_threshold_usd: 0.25
+abort_threshold_usd: 0.95
 daily_ceiling_credits: 10000
-abort_threshold_credits: 2500
+abort_threshold_credits: 9500
 measurement_date: 2026-11-09
 measurement_run_id: openalex-bench-5c9fe4e0487b
 measurement_calls: 100

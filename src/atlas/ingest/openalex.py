@@ -523,12 +523,12 @@ def ingest_live(
         ]
         units += [([], scope) for scope in always_include_filters(config)]
         for batch, scope in units:
+            # One publication-date window per unit, cursor-paged. Per-year windows
+            # multiplied boolean-search calls (10 credits each) by the year span: a
+            # 1950 backfill was ~3,800 calls for ~2,000 works.
             windows: list[tuple[str | None, str | None]]
             if start_year is not None and end_year is not None:
-                windows = [
-                    (f"{year:04d}-01-01", f"{year:04d}-12-31")
-                    for year in range(start_year, end_year + 1)
-                ]
+                windows = [(f"{start_year:04d}-01-01", f"{end_year:04d}-12-31")]
             else:
                 windows = [(None, None)]
             for window_start, window_end in windows:

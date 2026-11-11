@@ -50,3 +50,37 @@ def test_version_change_starts_replacing_backfill(
     runner.main(["--high-water", str(high_water), "--output", str(tmp_path / "w.parquet")])
     assert seen["start_year"] == expected_start
     assert seen["replace_output"] is expected_replace
+    if expected_replace:
+        # Without an explicit end year ingest_live would pull 1950 only and replace
+        # the whole table with it.
+        assert seen["end_year"] is not None and seen["end_year"] >= 2026
+    else:
+        assert seen["end_year"] is None
+
+
+def test_year_range_uses_one_window_per_unit(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+    from atlas.ingest import openalex
+
+    urls: list[str] = []
+
+    def fake_request(url, *, logger, **_):
+        urls.append(url)
+        logger._request_metrics.append(
+            {"credits_known": True, "credits": 10, "cost_known": True, "cost_usd": 0.001}
+        )
+        return {"results": [], "meta": {"next_cursor": None}}
+
+    monkeypatch.setattr(openalex, "_request_json", fake_request)
+    monkeypatch.setattr(openalex, "always_include_filters", lambda config: [])
+    paths = openalex.OpenAlexPaths(
+        raw_dir=tmp_path / "raw",
+        output_parquet=tmp_path / "w.parquet",
+        high_water_mark=tmp_path / "hw.json",
+        usage_log=tmp_path / "usage.jsonl",
+    )
+    openalex.ingest_live(
+        institution_ids=["I1"], paths=paths, start_year=1950, end_year=2027, replace_output=True
+    )
+    assert len(urls) == 1
+    assert "from_publication_date%3A1950-01-01" in urls[0]
+    assert "to_publication_date%3A2027-12-31" in urls[0]

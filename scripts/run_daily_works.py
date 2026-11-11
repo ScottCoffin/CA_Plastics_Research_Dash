@@ -57,6 +57,7 @@ def main(argv: list[str] | None = None) -> int:
 
     load_openalex_key()
     start_year = args.start_year
+    end_year = args.end_year
     replace_output = False
     if args.start_year is None and args.updated_since is None and args.high_water.exists():
         state = json.loads(args.high_water.read_text(encoding="utf-8"))
@@ -66,6 +67,8 @@ def main(argv: list[str] | None = None) -> int:
             # backfill instead of continuing incrementally from the old query's rows.
             # A deferred run leaves the old state in place, so the next run retries.
             start_year = BACKFILL_START_YEAR
+            # ingest_live treats a missing end year as start_year (a one-year pull).
+            end_year = end_year or datetime.now(UTC).year + 1
             replace_output = True
             print(
                 f"query version {state.get('query_version')!r} -> {active_version!r}: "
@@ -90,7 +93,7 @@ def main(argv: list[str] | None = None) -> int:
             usage_log=args.usage_log,
         ),
         start_year=start_year,
-        end_year=args.end_year,
+        end_year=end_year,
         updated_since=args.updated_since,
         allow_candidate=args.allow_candidate,
         max_pages=args.max_pages,
