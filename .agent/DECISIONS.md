@@ -474,3 +474,14 @@ the implementing task's acceptance passes.
   R2 needs owner-side Cloudflare account steps (bucket, custom domain, CORS);
   the agent never handles Cloudflare credentials.
 - **Also recorded:** EM-1-A approved (`guide_v2`); A2-D11 confirmed (CDFW ds3158).
+
+## ADR-AT1-V31-2026-11-11: Promote query v3.1; CA-only experts; reviewed grant relevance
+- Context: owner labels showed v3's additions were 53.1% precise (overall ~77.5%, below v2's
+  82.8%). Clause attribution located the noise (trash, bioplastic, LCA, litter, single-use).
+- Decision: promote the tightened `plastic-v3.1` (est. ~83.8%, no v2-relevant loss) by the
+  rule "precision >= v2 and no relevant v2-labelled work lost". The Experts list holds
+  authors with at least one CA-affiliated authorship (spec A3.1). Grants count as plastic-related
+  on a short-title match or a reviewed label; abstract-only mentions default to false.
+- Consequences: a full backfill replaces v2 rows; grant labels from the Haiku review await
+  an owner spot-check (QUESTIONS GRANT-REL).
+

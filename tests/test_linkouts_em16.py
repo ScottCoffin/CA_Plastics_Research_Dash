@@ -46,7 +46,7 @@ def test_real_registry_is_valid_with_quoted_descriptions():
     assert by_id["LO-1"]["terms"] == "Global Plastic Laws. All rights reserved."
     assert by_id["LO-3"]["update_model"] == "Data Update Frequency Quarterly"
     assert by_id["LO-8"]["disclosure"].startswith("The Atlas owner is a co-founder")
-    assert by_id["LO-9"]["url_status"] == "to_confirm"
+    assert by_id["LO-9"]["url_status"] == "owner_confirmed"
     assert all(entry["reuse_mode"] == "link_only" for entry in data["entries"])
     assert all(entry["last_checked"] is None for entry in data["entries"])
     assert "minderoo" not in str(data).lower()
@@ -274,11 +274,11 @@ def test_run_live_writes_json_and_leaves_yaml_unchanged(tmp_path):
     assert registry_path.read_bytes() == before
     assert out.exists()
     assert set(payload["entries"]) == set(linkouts.EXPECTED_IDS)
-    # LO-12's candidate URL stays "to_confirm": dtsc.ca.gov answers 403 to automated
-    # clients (2026-11-11), which is not evidence the page is gone.
-    assert payload["entries"]["LO-12"]["url_status"] == "to_confirm"
+    # LO-12 and LO-9 URLs were confirmed by the owner in a browser (2026-11-10); dtsc.ca.gov
+    # answers 403 to automated clients (2026-11-11), which is not evidence a page is gone.
+    assert payload["entries"]["LO-12"]["url_status"] == "owner_confirmed"
     assert payload["entries"]["LO-12"]["root_url"].startswith("https://dtsc.ca.gov/")
-    assert payload["entries"]["LO-9"]["url_status"] == "to_confirm"
+    assert payload["entries"]["LO-9"]["url_status"] == "owner_confirmed"
     assert payload["entries"]["LO-1"]["last_checked"] == payload["checked_at"]
     assert payload["entries"]["LO-1"]["ok"] is True
 

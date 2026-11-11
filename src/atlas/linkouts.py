@@ -41,7 +41,7 @@ REQUIRED_KEYS = (
     "last_checked",
 )
 TERMS_RECORDED_IDS = {"LO-1"}
-URL_STATUSES = {"as_stated", "to_confirm", "unavailable"}
+URL_STATUSES = {"as_stated", "owner_confirmed", "to_confirm", "unavailable"}
 DISCLOSURE_LO8 = "The Atlas owner is a co-founder of Plastiverse (A2 §0 rule 7)."
 FALLBACK_STATUSES = {403, 405, 501}
 MAX_BODY_BYTES = 1024

@@ -86,3 +86,4 @@
 | 2026-11-10 | S2.2 / S10.2 | Near-duplicate collapsing; governance gaps (issue link, REUSE, disclosure, suppression/overrides/merges) | this commit |
 | 2026-11-11 | AT-1 | Owner scope: plastics LCA/recycling/alternatives added to v3; repeat sample regenerated (143) | this commit |
 | 2026-11-11 | S10.3, EM-16, EM-18, S7.5 | Zenodo DOI 10.5281/zenodo.24124016; link-out registry + checker; DTSC timeline; monitoring paging | this commit |
+| 2026-11-11 | AT-1, S2.1-B, S8, S7.5, S10.2, EM-16 | Query v3.1 promoted; grant relevance review; monitoring basemap + matrices; CI experts export; GOV-B | this commit |

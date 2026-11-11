@@ -52,6 +52,10 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 
 - A1 gates decided 2026-11-10: G-HOST = GitHub Pages while files ≤ 25 MB (206 + CORS verified); R2 scale lever verified 2026-11-10 at `https://data.plastiverse.live/` (CORS allows only `https://plastiverse.live`, which hosts nothing; the site is still `scottcoff.in`); G-PARQ = DuckDB 1.1.1 writer + zstd; G-FACET = Appendix C bit-masks (main page); G-SHELL = Observable Framework 1.13.4. Grants pipeline S8.1–S8.6/S8.9/S8.10 complete: ignored `data/interim/grants/*.parquet` → dedupe → public `site/data/grants.json`. Site JSON/XML are LF-pinned; check clean worktrees before pushing.
 ## Verified API facts
+- OpenAlex (2026-11-11): boolean title_and_abstract searches cost 10 credits/call and are
+  limited to 5 req/s when they have >5 operators (429 "wait 1s"); the client throttles
+  and retries that 429. Rejected 429s carry no credit header; the budget guard charges
+  them the 10-credit reserve. Every live call must go through the budget guard.
 - NSF Award Search (2026-11-10): `api.nsf.gov/services/v1/awards.json`; uppercase OR only; two quoted phrases OR'd silently return 0, so use one phrase per query; `awardeeStateCode`/`perfStateCode`; dates mm/dd/yyyy filter the `date` field; errors can arrive as HTTP 200 with `serviceNotification`. See `docs/api_notes/nsf_awards.md`.
 - USAspending (2026-11-10): `spending_by_award` limit ≤ 100; page 101 returns an empty 200 (silent 10k ceiling, so cap and defer); keywords OR-join and substring-match, so bare "plastic"/"polymer" are noisy; key = `generated_internal_id`. See `docs/api_notes/usaspending.md`.
 - NIH RePORTER v2 (2026-11-10): keyless POST `/v2/projects/search`; text search needs `operator: advanced`, `search_field: projecttitle,abstracttext,terms` with quoted OR phrases (no stemming); limit ≤ 500; offset ≤ 14,999 (split by fiscal year); `org_states` takes 2-letter codes (a full name silently returns 0). See `docs/api_notes/nih_reporter.md`.
@@ -67,8 +71,12 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   universities after the 2026 Cal Poly/Cal Maritime integration), and the
   default major-private set 11/11. Owner top-100 review is complete 100/100;
   22 corrected types are durable overrides in `config/institution_overrides.csv`.
-- Owner-supplied S1.5 query design is recorded as
-  `plastic-v2-candidate` in `config/queries.yml`; generic microfiber, tire-wear,
+- Active query since 2026-11-11: `plastic-v3.1` (status active) in `config/queries.yml`
+  (AT-1 audit, `docs/QUERY_AUDIT.md`); v2 archived as `config/queries_v2.yml`, which
+  S1.5's check and v2-pinned mechanic tests read. The daily runner backfills from 1950
+  and replaces rows when the high-water `query_version` differs from the config.
+- Historical: the owner-supplied S1.5 query design was
+  `plastic-v2-candidate`; generic microfiber, tire-wear,
   and plastic-waste terms require context, mechanical microplasticity phrases
   are excluded, and the cache contract includes query version plus rendered
   query. External counts are unverified design snapshots, not dashboard data.
@@ -191,6 +199,10 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   bounded precision examples and promotes it for downstream ingestion.
 
 ## Automation
+- Experts payload: `ingest_works.yml` normalizes, labels, runs `build_export_site.py`
+  (CA-affiliated authors only, `ca_works_count > 0`), commits `site/data` and dispatches
+  `build_deploy.yml`. Grants `plastic_related`: short-title rule plus reviewed overrides in
+  `curation/grant_relevance.csv`; abstract-only mentions default to false.
 - `.github/workflows/ci.yml` runs lint, tests, and the build on pushes, pull
   requests, and manual dispatches.
 - `build_deploy.yml` publishes `site/` on pushes, manual dispatches, and daily at

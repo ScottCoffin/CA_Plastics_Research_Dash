@@ -168,8 +168,8 @@ entries:
     terms_status: "not recorded"
     terms: "not stated"
     reuse_mode: "link_only"
-    root_url: "https://www.plastiverse.org/tools/one4all-an-open-source-portal-to-validate-share-and-harmonize-microplastics-data"
-    url_status: "to_confirm"
+    root_url: "https://moore-institute-4-plastic-pollution-res.r-universe.dev/One4All"
+    url_status: "owner_confirmed"  # owner, 2026-11-10
     deep_link_templates: []
     trigger_rules:
       - "weekly HTTP status check only"
@@ -219,8 +219,8 @@ entries:
     terms_status: "not recorded"
     terms: "not stated"
     reuse_mode: "link_only"
-    root_url: https://dtsc.ca.gov/scp/priority-product-work-plan/
-    url_status: "to_confirm"
+    root_url: "https://dtsc.ca.gov/scp/priority-product-work-plan/"
+    url_status: "owner_confirmed"  # owner, 2026-11-10
     deep_link_templates: []
     trigger_rules:
       - "weekly HTTP status check only"

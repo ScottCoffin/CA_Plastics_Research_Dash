@@ -256,3 +256,15 @@ On 2026-11-11 the clean `git worktree` test run took 1 h 35 min (779 passed), ag
 about 90 s in the main checkout. The suspect is real-time antivirus scanning freshly
 written files. Run that step in the background with a long timeout, and do not push
 until it reports.
+
+## Scratch API scripts bypass the budget guard
+- 2026-11-11: audit attribution scripts called `_request_json` directly (~700 calls at 10
+  credits) and pushed the UTC day to $0.69, past the owner's $0.25 local stop; the guarded
+  backfill then refused to run. Estimate credits first (boolean searches cost 10), and
+  route exploratory calls through `ingest_live`-style budget checks or a `--max-credits`
+  counter.
+
+## Tracked CI state lives under ignored-looking paths
+- `data/interim/works_raw.parquet` and the high-water JSON are force-added by CI. Never
+  move them locally; copy instead (`git status` shows them as deleted).
+
