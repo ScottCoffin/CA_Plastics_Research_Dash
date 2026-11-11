@@ -371,7 +371,9 @@ def apply_plastic_decisions(
         )
         if taxonomy is not None:
             text = " ".join(str(row.get(k) or "") for k in ("title", "abstract"))
-            row["domain_tags"] = list(_taxonomy_tags(text, [], taxonomy)[0])
+            row["domain_tags"] = list(
+                _taxonomy_tags(text, [], taxonomy, title=str(row.get("title") or ""))[0]
+            )
 
 
 def read_institutions(path: Path) -> list[dict[str, Any]]:

@@ -20,6 +20,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import yaml
 
+from atlas.ingest.abstract_qc import misattached_abstract_ids
 from atlas.ingest.normalize import compact_id
 
 WORK_LABELS_SCHEMA = pa.schema(
@@ -153,10 +154,31 @@ def classify_plastic_text(text: str, query_config: Mapping[str, Any]) -> Plastic
     return PlasticDecision(False, 0, "", ())
 
 
+def always_relevant(text: str, query_config: Mapping[str, Any]) -> bool:
+    """True when ``text`` matches an owner ``always_relevant_patterns`` regex."""
+
+    patterns = query_config.get("always_relevant_patterns") or []
+    if isinstance(patterns, (str, bytes)):
+        raise ValueError("always_relevant_patterns must be a YAML list")
+    return any(re.search(str(p), text or "", re.IGNORECASE) for p in patterns if p)
+
+
 def _taxonomy_tags(
-    text: str, topic_names: Sequence[str], taxonomy: Mapping[str, Any]
+    text: str,
+    topic_names: Sequence[str],
+    taxonomy: Mapping[str, Any],
+    *,
+    title: str | None = None,
 ) -> tuple[list[str], list[str]]:
+    """Domain tags and matrix facets for one record.
+
+    ``seed_concepts`` match the text plus OpenAlex topic names. Optional
+    ``title_seed_concepts`` match only ``title`` (when given; else the whole text), for
+    words that are on-topic in a title but usually passing mentions in an abstract.
+    Optional ``exclude_concepts`` (matched on the text) veto the tag.
+    """
     searchable = " ".join([text, *topic_names])
+    title_text = text if title is None else title
     domain_tags: list[str] = []
     configured = taxonomy.get("domain_tags") or []
     if not isinstance(configured, Sequence) or isinstance(configured, (str, bytes)):
@@ -168,7 +190,15 @@ def _taxonomy_tags(
         seeds = entry.get("seed_concepts") or []
         if not tag_id or not isinstance(seeds, Sequence) or isinstance(seeds, (str, bytes)):
             continue
-        if any(_matches(searchable, _text(seed)) for seed in seeds if _text(seed)):
+        title_seeds = entry.get("title_seed_concepts") or []
+        excludes = entry.get("exclude_concepts") or []
+        if isinstance(title_seeds, (str, bytes)) or isinstance(excludes, (str, bytes)):
+            raise ValueError(f"taxonomy lists for {tag_id} must be YAML lists")
+        if any(_matches(text, _text(term)) for term in excludes if _text(term)):
+            continue
+        if any(_matches(searchable, _text(seed)) for seed in seeds if _text(seed)) or any(
+            _matches(title_text, _text(seed)) for seed in title_seeds if _text(seed)
+        ):
             domain_tags.append(tag_id)
 
     facets = [
@@ -225,6 +255,8 @@ def _qc_markdown(metrics: Mapping[str, int], *, source: str, generated_at: str) 
         ("Plastic-related rows", metrics["plastic_related_rows"]),
         ("Excluded rows", metrics["excluded_rows"]),
         ("Rows with provisional domain tags", metrics["domain_tagged_rows"]),
+        ("Mis-attached (ignored) abstracts", metrics.get("misattached_abstract_rows", 0)),
+        ("Always-relevant rule rows", metrics.get("always_relevant_rows", 0)),
     ]
     lines = [
         "# Provisional work-label QC",
@@ -277,8 +309,12 @@ def label_records(
         if compact_id(row.get("work_id"))
     }
     rows: list[dict[str, Any]] = []
+    # Abstracts OpenAlex attached to unrelated works are ignored (normally blanked
+    # already by normalization; repeated here for older normalized tables).
+    shared = misattached_abstract_ids(normalized_by_id.values())
     topic_id_rows = matched_topic_rows = missing_topic_rows = missing_primary_topic_rows = 0
     missing_raw_work_rows = plastic_related_rows = excluded_rows = domain_tagged_rows = 0
+    always_relevant_rows = 0
     for work_id in sorted(normalized_by_id):
         work = normalized_by_id[work_id]
         raw = raw_by_id.get(work_id)
@@ -302,14 +338,20 @@ def label_records(
         if primary_topic and not primary_topic_name:
             missing_primary_topic_rows += 1
         title = _text(work.get("title"))
-        abstract = _text(work.get("abstract"))
+        abstract = "" if work_id in shared else _text(work.get("abstract"))
         text = " ".join(value for value in (title, abstract) if value)
         decision = classify_plastic_text(text, query_config)
+        if not decision.related and always_relevant(text, query_config):
+            # Owner rule: micro-nano plastics (any spelling) is always plastic-related.
+            decision = PlasticDecision(True, 1, "always", ("always:micro-nano plastics",))
+            always_relevant_rows += 1
         if decision.related:
             plastic_related_rows += 1
         if decision.hits and decision.hits[0].startswith("exclude:"):
             excluded_rows += 1
-        domain_tags, facet_tags = _taxonomy_tags(text, [*topic_names, raw_primary_name], taxonomy)
+        domain_tags, facet_tags = _taxonomy_tags(
+            text, [*topic_names, raw_primary_name], taxonomy, title=title
+        )
         if domain_tags:
             domain_tagged_rows += 1
         needs_review = (
@@ -352,6 +394,8 @@ def label_records(
         "plastic_related_rows": plastic_related_rows,
         "excluded_rows": excluded_rows,
         "domain_tagged_rows": domain_tagged_rows,
+        "misattached_abstract_rows": len(shared),
+        "always_relevant_rows": always_relevant_rows,
     }
     if metrics["label_rows"] != metrics["normalized_work_rows"]:
         raise AssertionError("label output must retain one row per normalized work")

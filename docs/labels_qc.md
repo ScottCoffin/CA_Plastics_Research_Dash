@@ -15,8 +15,10 @@ This is an owner-supplied candidate rule layer, not a validated classifier. `lab
 | Matched raw topic-name rows | 5685 |
 | Missing raw topic-name rows | 0 |
 | Missing primary-topic names | 0 |
-| Plastic-related rows | 1616 |
+| Plastic-related rows | 1608 |
 | Excluded rows | 0 |
-| Rows with provisional domain tags | 1211 |
+| Rows with provisional domain tags | 1209 |
+| Mis-attached (ignored) abstracts | 0 |
+| Always-relevant rule rows | 2 |
 
 Topic display names are joined from raw OpenAlex records by `work_id`; missing raw rows and missing topic entries are retained and counted.

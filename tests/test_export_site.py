@@ -60,3 +60,29 @@ def test_export_site_lists_only_california_affiliated_experts(tmp_path) -> None:
     assert payload["counts"]["works"] == sum(1 for w in works if w["ca_any_author"])
     files = {path.stem for path in (result.output_dir / "authors").glob("*.json")}
     assert files == expected
+
+
+def test_export_site_removes_stale_author_files(tmp_path: Path) -> None:
+    normalized = normalize_fixture(
+        FIXTURE,
+        institution_path=INSTITUTIONS,
+        output_dir=tmp_path / "normalized",
+        qc_path=tmp_path / "qc.md",
+        generated_at="test",
+    )
+    stale = tmp_path / "site" / "authors" / "A_GONE.json"
+    stale.parent.mkdir(parents=True)
+    stale.write_text("{}", encoding="utf-8")
+    result = export_site(
+        works_path=normalized.output_dir / "works.parquet",
+        authors_path=normalized.output_dir / "authors.parquet",
+        authorships_path=normalized.output_dir / "authorships.parquet",
+        institutions_path=normalized.output_dir / "institutions.parquet",
+        output_dir=tmp_path / "site",
+        generated_at="test",
+        ca_authors_only=False,
+    )
+    payload = json.loads((result.output_dir / "index.json").read_text(encoding="utf-8"))
+    assert not stale.exists()
+    files = {p.stem for p in (result.output_dir / "authors").glob("*.json")}
+    assert files == {row["author_id"] for row in payload["authors"]}

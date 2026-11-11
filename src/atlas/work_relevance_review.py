@@ -29,6 +29,8 @@ from typing import Any
 
 import pyarrow.parquet as pq
 
+from atlas.ingest.abstract_qc import misattached_abstract_ids
+
 REVIEW_CSV = Path("curation/work_relevance.csv")
 WORKS_PARQUET = Path("data/interim/works_raw.parquet")
 
@@ -187,6 +189,13 @@ def load_work_details(path: Path = WORKS_PARQUET) -> dict[str, dict[str, Any]]:
             "institutions": "; ".join(institutions[:12]),
             "cited_by_count": work.get("cited_by_count"),
         }
+    # Hide abstracts OpenAlex attached to unrelated works (atlas.ingest.abstract_qc).
+    rows = [{"work_id": key, **value} for key, value in details.items()]
+    for work_id in misattached_abstract_ids(rows):
+        details[work_id]["abstract"] = ""
+        details[work_id]["abstract_note"] = (
+            "OpenAlex abstract hidden: the same text is attached to several unrelated works."
+        )
     return details
 
 

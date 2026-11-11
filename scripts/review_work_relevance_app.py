@@ -502,7 +502,7 @@ def _smart_view(
     abstract_html = _show_record(
         item.get("title"),
         item.get("abstract"),
-        empty="No abstract in OpenAlex for this work.",
+        empty=item.get("abstract_note") or "No abstract in OpenAlex for this work.",
     )
     st.markdown(_facts(item))
     links = st.columns(2)
@@ -649,7 +649,7 @@ def main() -> None:
     abstract_html = _show_record(
         item.get("title"),
         item.get("abstract"),
-        empty="No abstract in OpenAlex for this work.",
+        empty=item.get("abstract_note") or "No abstract in OpenAlex for this work.",
     )
     st.markdown(_facts(item))
     links = st.columns(2)

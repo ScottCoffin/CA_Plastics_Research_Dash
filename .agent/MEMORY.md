@@ -173,7 +173,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   ~53 pages, ~0.05 USD); export after curation 1,424 works, 1,982 experts. Owner AT-1 labels
   -> `curation/overrides_works.csv` via `scripts/build_audit_overrides.py` (`exclude` override);
   Haiku calls for unlabelled works in `curation/work_relevance.csv` (owner overrides win).
-  Some OpenAlex works carry another paper's (nanoplastics) abstract; those are false matches.
+  OpenAlex mis-attached abstracts (one micro-nano abstract on 10 PNAS papers) are blanked at normalization by `atlas.ingest.abstract_qc` (ADR-RELEVANCE-RULES-2026-11-11); "micro-nano plastics" is always relevant (`always_relevant_patterns`).
 - CA inference (2026-11-11): authorships have `ca_basis` (registry / raw_affiliation / author_carry_forward); ingest adds a raw-affiliation California scope and author-anchored units; the public export keeps only works with a CA authorship. Frozen S4.2 splits verify against their manifest when the corpus grows.
 - Site UX (2026-11-11): shared topic labels/colours in `site/assets/topics.js` (window.AtlasTopics,
   validated 8-hue palette); per-institution publication files `site/data/institution_works/`

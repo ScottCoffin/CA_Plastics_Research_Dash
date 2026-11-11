@@ -22,6 +22,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from atlas.build.curation import load_suppressions
+from atlas.ingest.abstract_qc import misattached_abstract_ids
 from atlas.ingest.state_agencies import (
     DEFAULT_PATH as STATE_AGENCIES_PATH,
 )
@@ -532,6 +533,10 @@ def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) 
         ("Works with ca_led=true", metrics["ca_led_works"]),
         ("Works with ca_any_author=true", metrics["ca_any_author_works"]),
         ("Near-duplicate works collapsed into a kept work", metrics["near_duplicates_collapsed"]),
+        (
+            "Mis-attached OpenAlex abstracts blanked",
+            metrics.get("misattached_abstracts_blanked", 0),
+        ),
         ("Near-duplicate groups", metrics["near_duplicate_groups"]),
         (
             "Same-title article pairs kept apart (distinct DOIs)",
@@ -807,6 +812,13 @@ def normalize_records(
         row["ca_any_author"] = row["work_id"] in ca_any_works
         row["ca_led"] = row["work_id"] in ca_led_works
 
+    # Blank abstracts OpenAlex attached to unrelated works (atlas.ingest.abstract_qc),
+    # so no page, rule or model shows or uses another paper's abstract.
+    misattached = misattached_abstract_ids(works)
+    for row in works:
+        if row["work_id"] in misattached:
+            row["abstract"] = ""
+
     # Collapse near-duplicate works before anything is written. Authorships and
     # author work sets of collapsed works are re-pointed to the kept work.
     all_works = works
@@ -854,6 +866,7 @@ def normalize_records(
         ),
         "ca_led_works": sum(bool(row["ca_led"]) for row in works),
         "ca_any_author_works": sum(bool(row["ca_any_author"]) for row in works),
+        "misattached_abstracts_blanked": len(misattached),
         "near_duplicates_collapsed": len(collapse.duplicate_rows),
         "near_duplicate_groups": len(set(keeper_of.values())),
         "skipped_same_title_distinct_doi": collapse.skipped_distinct_doi,

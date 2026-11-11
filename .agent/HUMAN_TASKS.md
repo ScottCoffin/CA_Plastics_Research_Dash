@@ -72,7 +72,7 @@ Last updated: 2026-11-11.
 - **Done when:** all 44 rows have `approve` or `reject`. Tell the agent
   "photos reviewed". No photo is shown on the site before this.
 
-### H5. Answer four open questions (defaults are in use until you answer)
+### H5. Answer three open questions (defaults are in use until you answer)
 Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
 ("keep default" or "change").
 - **AT4-SEARCH:** title search is the home-made token search. Default: keep it.
@@ -83,10 +83,6 @@ Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
   their ORCID shows a job elsewhere (19 of 109 checkable cases; list in
   `docs/api_notes/orcid_enrichment.md`). Default: keep counting them and list the
   cases. Change = drop those years.
-- **PLASTISPHERE-SCOPE:** the new Plastisphere topic counts studies of microplastic
-  effects on soil microbial communities, but not works only about microbes or insects
-  biodegrading plastic. Default: keep that. Change = add biodegradation, or tag only
-  communities living on the plastic itself.
 
 ### H6. Cut a new archived release when you want a citable snapshot (AT-10, optional)
 1. On GitHub: repository > **Releases** > **Draft a new release**.
@@ -96,6 +92,20 @@ Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
    https://zenodo.org/ > your uploads and copy the new version DOI.
 4. Tell the agent "release vYYYY.MM.DD, DOI 10.5281/zenodo.NNNNNNN". The agent
    updates `config/release.yml` and the About page.
+
+### H6b. Report the wrong PNAS abstracts to OpenAlex (optional, 5 minutes)
+The Atlas already hides these abstracts; this fixes them for everyone.
+1. Go to https://openalex.org, click **Help** (or the feedback / "report an issue" link)
+   and open a new support request.
+2. Paste this text and submit:
+   > Wrong abstract on 10 PNAS works: W2127391942, W2013886709, W2150748212,
+   > W1975799990, W1971788246, W3108707921, W3108784206, W3124276284, W4200564390,
+   > W4389073027 all carry the same abstract ("Micro-nano plastics originating from the
+   > prevalent usage of plastics have raised increasingly alarming concerns worldwide...").
+   > It is two teaser snippets about nanoplastics joined by "...", apparently scraped
+   > from related-article text on the PNAS landing pages. None of these papers is about
+   > plastics; please remove the abstract_inverted_index for them.
+- **Done when:** submitted. Tell the agent "OpenAlex report sent".
 
 ---
 
@@ -124,4 +134,6 @@ come with its own Streamlit app and run command here.
 ---
 
 ## Done
-- (none yet in this file; earlier owner actions are in `.agent/archive/HANDOFF_history.md`)
+- 2026-11-11: PLASTISPHERE-SCOPE answered (soil-community effects and biodegradation-only
+  works are not Plastisphere).
+- Earlier owner actions are in `.agent/archive/HANDOFF_history.md`.

@@ -28,6 +28,9 @@ from atlas.build.curation import (
     load_work_owner_reviewed,
     load_work_relevance,
 )
+from atlas.ingest.abstract_qc import misattached_abstract_ids
+from atlas.nlp.labels import always_relevant
+from atlas.query import load_query_config
 
 SCHEMA_VERSION = "s3.1"
 
@@ -190,6 +193,7 @@ def _write_author_details(
     authors: Sequence[Mapping[str, Any]],
     works_by_author: Mapping[str, list[Mapping[str, Any]]],
 ) -> None:
+    written: set[str] = set()
     for author in authors:
         author_id = _text(author.get("author_id"))
         if not author_id:
@@ -200,6 +204,12 @@ def _write_author_details(
             "works": list(works_by_author.get(author_id, [])),
         }
         _atomic_json(output_dir / "authors" / f"{author_id}.json", detail)
+        written.add(f"{author_id}.json")
+    # Authors who left the export (merged, suppressed, no longer CA) must not stay
+    # reachable with stale data, as institution_works files already are not.
+    for stale in (output_dir / "authors").glob("*.json"):
+        if stale.name not in written:
+            stale.unlink()
 
 
 EXPERTS_PER_INSTITUTION = 150
@@ -417,6 +427,7 @@ def export_site(
     work_relevance_path: str | Path | None = None,
     model_relevance_path: str | Path | None = None,
     author_metrics_path: str | Path | None = None,
+    query_config_path: str | Path | None = None,
     output_dir: str | Path = "site/data",
     generated_at: str | None = None,
     ca_authors_only: bool = True,
@@ -479,6 +490,23 @@ def export_site(
                 **labels.get(work_id, {}),
                 "plastic_related": related,
             }
+    if query_config_path:
+        # Owner rule: always-relevant terms (micro-nano plastics) beat model/Haiku/rule;
+        # owner review decisions (skipped here) and curation overrides (applied later) win.
+        query_config = load_query_config(query_config_path)
+        shared = misattached_abstract_ids(works_rows)
+        for row in works_rows:
+            work_id = _text(row.get("work_id"))
+            if not work_id or work_id in owner_reviewed:
+                continue
+            abstract = "" if work_id in shared else _text(row.get("abstract"))
+            text = f"{_text(row.get('title'))} {abstract}"
+            if always_relevant(text, query_config):
+                labels[work_id] = {
+                    "work_id": work_id,
+                    **labels.get(work_id, {}),
+                    "plastic_related": True,
+                }
     # S9.2 links are opt-in: without a path, author payloads are byte-identical to before.
     link_rows = _read(work_dataset_links_path, required=False) if work_dataset_links_path else []
     datasets_by_work = _datasets_by_work(link_rows)

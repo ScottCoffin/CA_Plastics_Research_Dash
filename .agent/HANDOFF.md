@@ -48,6 +48,9 @@ This file is the live tracker for the current session: update it at every checkp
 | 41 | Persistent human-task list with simple instructions | Done: `.agent/HUMAN_TASKS.md` (CLAUDE.md session entry step 6); photo review sheet `curation/expert_photo_review.csv` via `scripts/build_photo_review.py` |
 | 42 | Rule: human reviews with >10 cases get a Streamlit app | Recorded (CLAUDE.md step 6, HUMAN_TASKS.md); applied: `scripts/review_institution_types_app.py` (AT2-REVIEW, 47 rows) and `scripts/review_expert_photos_app.py` (44 photos), shared `atlas.csv_review` |
 | 43 | 'Plastisphere' as its own topic | Done: `config/taxonomy.yml` phrase seeds (59 published works, 37 grants); hatched ecotox pink in `site/assets/topics.js` (hatch patterns now one per topic: `#atlas-hatch-<tag>`); site data rebuilt from the committed `work_relevance.csv` (owner edits in progress left out); scope question PLASTISPHERE-SCOPE |
+| 44 | Plastisphere excludes soil-community effects and biodegradation-only works | Done: title-only seeds + exclusions (29 works, 7 grants); ADR-RELEVANCE-RULES-2026-11-11 |
+| 45 | 'Micro-nano plastics' always relevant | Done: `always_relevant_patterns` (all spellings) above model/Haiku/rule; shared OpenAlex abstracts ignored (26 works; removed 1 false positive); grants unchanged (503) |
+| 46 | Wrong abstract on 'A new formalism in perturbation theory' | Root cause: OpenAlex attached one scraped micro-nano teaser abstract to 10 unrelated PNAS papers. Fixed locally: `atlas.ingest.abstract_qc` blanks it at normalization (also in labels/export/review app); export prunes 171 stale author files. Upstream: owner report text in HUMAN_TASKS H6b |
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
 ## Next eligible (dependency order) - as of the session-end commit (2026-11-11 ~21:45 UTC)

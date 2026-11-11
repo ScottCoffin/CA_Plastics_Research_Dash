@@ -100,6 +100,10 @@ def rules_from_query_config(config: Mapping[str, Any]) -> list[Rule]:
     """Rules for one ``config/queries*.yml`` mapping."""
 
     rules = [Rule("core", term, term_pattern(term)) for term in _strings(config.get("core_terms"))]
+    rules += [
+        Rule("core", "micro-nano plastics (always relevant)", re.compile(pattern, re.IGNORECASE))
+        for pattern in _strings(config.get("always_relevant_patterns"))
+    ]
     for entry in config.get("qualified_terms") or []:
         if not isinstance(entry, Mapping):
             continue

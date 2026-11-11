@@ -207,6 +207,15 @@ always_include:
     most authorships carry no institution)'
 - filter: raw_affiliation_strings.search:Algalita
   reason: Moore Institute predecessor name (Algalita Marine Research and Education)
+# Owner rule 2026-11-11: "micro-nano plastics" in any spelling (micro-nano plastics,
+# micro/nano plastics, micro(nano)plastics, micro- and nanoplastics, micronanoplastics)
+# always makes a work plastic-related. Local labelling and export only; this is not part
+# of the rendered OpenAlex query, so it does not change the query version. Export
+# precedence: owner review-app decisions and AT-1/curation overrides still win; it beats
+# the accepted model, Haiku and the keyword rule. Abstracts shared verbatim by 3+ works
+# (OpenAlex mis-attachments) are ignored (atlas.nlp.labels.shared_abstract_ids).
+always_relevant_patterns:
+- '(?<![a-z])micro\s*(?:[-‐‑/(]\s*)?(?:and\s+|&\s*|or\s+)?\(?nano\)?\s*[-‐‑]?\s*plastics?(?![a-z])'
 exclude_types:
 - erratum
 - peer-review

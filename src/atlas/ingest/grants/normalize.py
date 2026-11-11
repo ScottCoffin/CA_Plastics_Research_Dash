@@ -126,7 +126,9 @@ def _currency(value: object) -> str | None:
 # plastic-related grant, so these terms count even when the title does not match.
 STRONG_ABSTRACT_RE = re.compile(
     r"(?<![a-z])(?:plastic\s+pollution|(?:plastic|marine)\s+debris|plastic\s+particles?"
-    r"|(?:micro|nano)[\s-]?plastics?|anthropogenic\s+debris|ty?i?re[\s-]+wear\s+particles?)"
+    r"|(?:micro|nano)[\s-]?plastics?|anthropogenic\s+debris|ty?i?re[\s-]+wear\s+particles?"
+    # Owner rule 2026-11-11: micro-nano plastics in any spelling, e.g. micro(nano)plastics.
+    r"|micro\s*(?:[-‐‑/(]\s*)?(?:and\s+|&\s*|or\s+)?\(?nano\)?\s*[-‐‑]?\s*plastics?)"
     r"(?![a-z])",
     re.IGNORECASE,
 )
@@ -202,7 +204,7 @@ def normalize_grant(
     end = _parse_date(raw.get("end"), "end")
     text = " ".join(part for part in (title, abstract) if part is not None)
     plastic_related, _basis = grant_plastic_decision(title, abstract, query_config)
-    domain_tags, _facets = _taxonomy_tags(text, [], taxonomy)
+    domain_tags, _facets = _taxonomy_tags(text, [], taxonomy, title=title)
     return {
         "grant_key": grant_key(source_text, award_id),
         "source": source_text,

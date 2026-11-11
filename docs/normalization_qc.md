@@ -1,6 +1,6 @@
 # OpenAlex normalization QC
 
-Generated at (UTC): `2026-11-11T18:40:40+00:00`
+Generated at (UTC): `2026-11-11T23:50:42+00:00`
 Source: `data\interim\works_raw.parquet`
 
 The normalizer treats the reviewed California institution registry as the authoritative resolved-CA set. `ca_led` is true only when the first authorship has a California basis; `ca_any_author` is true when any authorship does. An authorship's `ca_basis` is `registry` (resolved CA institution), `raw_affiliation` (strict California pattern in the raw affiliation string) or `author_carry_forward` (no affiliation at all, same author has a CA authorship within 2 years). A CA-like unresolved affiliation is reported when its affiliation contains `California` or a standalone `CA` token but no resolved CA institution is linked for that work.
@@ -19,6 +19,7 @@ The normalizer treats the reviewed California institution registry as the author
 | Works with ca_led=true | 975 |
 | Works with ca_any_author=true | 1836 |
 | Near-duplicate works collapsed into a kept work | 37 |
+| Mis-attached OpenAlex abstracts blanked | 10 |
 | Near-duplicate groups | 34 |
 | Same-title article pairs kept apart (distinct DOIs) | 10 |
 | Authorships CA by registry institution | 4105 |

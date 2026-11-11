@@ -18,6 +18,11 @@ def main() -> None:
     parser.add_argument("--work-overrides", default="curation/overrides_works.csv")
     parser.add_argument("--author-merges", default="curation/author_merges.csv")
     parser.add_argument("--work-relevance", default="curation/work_relevance.csv")
+    parser.add_argument(
+        "--query-config",
+        default="config/queries.yml",
+        help="Source of always_relevant_patterns (owner rule); empty string disables.",
+    )
     parser.add_argument("--model-relevance", default="curation/work_relevance_model.csv")
     parser.add_argument("--author-metrics", default="data/processed/author_metrics.parquet")
     parser.add_argument("--output-dir", default="site/data")
@@ -35,6 +40,7 @@ def main() -> None:
         model_relevance_path=args.model_relevance,
         author_metrics_path=args.author_metrics,
         author_merges_path=args.author_merges,
+        query_config_path=args.query_config,
         output_dir=args.output_dir,
         generated_at=args.generated_at,
     )

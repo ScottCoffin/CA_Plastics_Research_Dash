@@ -47,17 +47,23 @@ domain_tags:
       management threshold, management thresholds, risk threshold, risk thresholds,
       toxicity threshold, toxicity thresholds, effect threshold, effect thresholds,
       environmental risk, human health risk]
-  # Owner request 2026-11-11: plastisphere (life on plastic) as its own topic. Phrase
-  # seeds only: bare "colonization", "pathogen" and "microbiome" hit off-topic works
-  # (plant colonizers, gut microbiomes). Microbial biodegradation of plastic is not
-  # included by default (QUESTIONS.md PLASTISPHERE-SCOPE).
+  # Owner request 2026-11-11: plastisphere = life living on plastic (microbes and
+  # animals colonizing, fouling or rafting on plastic). Owner decision 2026-11-11:
+  # microplastic effects on soil (or other) microbial communities, and works only about
+  # microbes or insects biodegrading plastic, do NOT count; so "microbial community",
+  # "microbiome" and biodegradation terms are not seeds. "biofilm"/"biofouled" are
+  # usually passing mentions in abstracts, so they count only in a title.
   - id: plastisphere
-    seed_concepts: [plastisphere, biofilm, microbial community, microbial communities,
-      bacterial community, bacterial communities, fungal community, fungal communities,
-      microbial colonization, microbial colonisation, bacterial colonization,
-      bacterial colonisation, colonizing plastic, colonising plastic, plastic microbiome,
-      plastic-associated microbes, plastic-associated bacteria, microbial hotspot,
-      epiplastic, rafting, hitchhiking]
+    seed_concepts: [plastisphere, plastic-associated microbial, plastic-associated microbes,
+      plastic-associated microorganisms, plastic-associated bacteria,
+      plastic-associated communities, plastic-associated rafting, rafting assemblage,
+      rafting communities, rafting plastic, ocean rafting, microbial colonization,
+      microbial colonisation, bacterial colonization, bacterial colonisation,
+      colonizing plastic, colonising plastic, colonize plastic, colonise plastic,
+      early colonizing, plastic microbiome, plastic biofilm, epiplastic]
+    title_seed_concepts: [biofilm, biofilms, biofouled, bio-fouled, rafting]
+    exclude_concepts: [biofilm reactor, moving-bed biofilm, fixed-film reactor,
+      in-water cleaning]
 
 provenance:
   supplied_by: owner external query agent

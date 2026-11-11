@@ -1,5 +1,9 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-11 -- Mis-attached OpenAlex abstracts and stale site files
+- OpenAlex served one teaser-style micro-nano plastics abstract (two snippets joined by "...") as the abstract of 10 unrelated PNAS papers (1962-2023, no real abstract; Europe PMC has none either). Verbatim-shared abstracts are also legitimate (preprint versions and `/supp-N` files, book chapters, report series), so flag only when >= 3 works share it with >= 3 distinct DOI roots and >= 3 distinct title families (`atlas.ingest.abstract_qc`); normalization blanks them.
+- `export_site` never deleted author files of authors who left the export: 171 stale `site/data/authors/*.json` stayed reachable. Any per-entity output folder must prune files it did not write.
+
 ## 2026-11-11 -- AT-3 analytics
 - DuckDB parallel float SUM varies in the last bit between runs; set `SET threads = 1` (or round before ranking) wherever reproducible ranks or seeded bootstrap outputs are tested. DuckDB 1.1.1 has no Python 3.14 wheel, so the pipeline uses 2.0.0. When regenerating `requirements/lock.txt`, `uv pip compile --extra ml` drags in torch/CUDA; the existing lock pins the ml extra by hand, so insert single pins instead of recompiling.
 
