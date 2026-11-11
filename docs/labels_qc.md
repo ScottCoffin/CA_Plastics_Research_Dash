@@ -7,16 +7,16 @@ This is an owner-supplied candidate rule layer, not a validated classifier. `lab
 
 | Check | Count |
 |---|---:|
-| Normalized work rows | 194 |
-| Label rows | 194 |
-| Raw OpenAlex work rows | 194 |
+| Normalized work rows | 1486 |
+| Label rows | 1486 |
+| Raw OpenAlex work rows | 1506 |
 | Missing raw work rows | 0 |
-| Normalized topic ID rows | 582 |
-| Matched raw topic-name rows | 582 |
+| Normalized topic ID rows | 4458 |
+| Matched raw topic-name rows | 4458 |
 | Missing raw topic-name rows | 0 |
 | Missing primary-topic names | 0 |
-| Plastic-related rows | 183 |
+| Plastic-related rows | 1244 |
 | Excluded rows | 0 |
-| Rows with provisional domain tags | 128 |
+| Rows with provisional domain tags | 928 |
 
 Topic display names are joined from raw OpenAlex records by `work_id`; missing raw rows and missing topic entries are retained and counted.
