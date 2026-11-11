@@ -1,0 +1,152 @@
+{
+  "checked_at": "2026-11-11T02:58:56Z",
+  "policy": "HEAD; GET fallback on 405/403/501; redirects not followed (Location reported)",
+  "entries": {
+    "LO-1": {
+      "root_url": "https://www.globalplasticlaws.org/",
+      "url_status": "as_stated",
+      "method": "GET",
+      "status": 403,
+      "location": null,
+      "error": null,
+      "ok": false,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-2": {
+      "root_url": "https://microplastics.sccwrp.org/",
+      "url_status": "as_stated",
+      "method": "HEAD",
+      "status": 200,
+      "location": null,
+      "error": null,
+      "ok": true,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-3": {
+      "root_url": "https://www.ncei.noaa.gov/products/microplastics",
+      "url_status": "as_stated",
+      "method": "HEAD",
+      "status": 200,
+      "location": null,
+      "error": null,
+      "ok": true,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-4": {
+      "root_url": "https://aomi.env.go.jp/",
+      "url_status": "as_stated",
+      "method": "HEAD",
+      "status": 200,
+      "location": null,
+      "error": null,
+      "ok": true,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-5": {
+      "root_url": "https://globalplasticshub.org/",
+      "url_status": "as_stated",
+      "method": "HEAD",
+      "status": 200,
+      "location": null,
+      "error": null,
+      "ok": true,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-6": {
+      "root_url": "https://oceanaccounts.org/publications/global-plastic-data-tracker/",
+      "url_status": "as_stated",
+      "method": "HEAD",
+      "status": 200,
+      "location": null,
+      "error": null,
+      "ok": true,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-7": {
+      "root_url": "https://dse.berkeley.edu/news/data-interactive-tools-and-ai-actionable-change-ending-plastic-pollution",
+      "url_status": "as_stated",
+      "method": "HEAD",
+      "status": 200,
+      "location": null,
+      "error": null,
+      "ok": true,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-8": {
+      "root_url": "https://www.plastiverse.org/microplastics-tools-resources",
+      "url_status": "as_stated",
+      "method": "HEAD",
+      "status": 200,
+      "location": null,
+      "error": null,
+      "ok": true,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-9": {
+      "root_url": "https://www.plastiverse.org/tools/one4all-an-open-source-portal-to-validate-share-and-harmonize-microplastics-data",
+      "url_status": "to_confirm",
+      "method": "HEAD",
+      "status": 200,
+      "location": null,
+      "error": null,
+      "ok": true,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-10": {
+      "root_url": "https://dtsc.ca.gov/scp/microplastics-in-consumer-products",
+      "url_status": "as_stated",
+      "method": "GET",
+      "status": 403,
+      "location": null,
+      "error": null,
+      "ok": false,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-11": {
+      "root_url": "https://dtsc.ca.gov/scp/candidate-chemical-list_microplastics/",
+      "url_status": "as_stated",
+      "method": "GET",
+      "status": 403,
+      "location": null,
+      "error": null,
+      "ok": false,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "LO-12": {
+      "root_url": "https://dtsc.ca.gov/scp/priority-product-work-plan/",
+      "url_status": "to_confirm",
+      "method": "GET",
+      "status": 403,
+      "location": null,
+      "error": null,
+      "ok": false,
+      "last_checked": "2026-11-11T02:58:56Z"
+    }
+  },
+  "timeline": {
+    "https://dtsc.ca.gov/scp/candidate-chemical-list_microplastics/": {
+      "method": "GET",
+      "status": 403,
+      "location": null,
+      "error": null,
+      "ok": false,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "https://dtsc.ca.gov/2026/07/02/california-finalizes-regulation-adding-microplastics-to-candidate-chemicals-list": {
+      "method": "GET",
+      "status": 403,
+      "location": null,
+      "error": null,
+      "ok": false,
+      "last_checked": "2026-11-11T02:58:56Z"
+    },
+    "https://dtsc.ca.gov/scp/microplastics-in-consumer-products": {
+      "method": "GET",
+      "status": 403,
+      "location": null,
+      "error": null,
+      "ok": false,
+      "last_checked": "2026-11-11T02:58:56Z"
+    }
+  }
+}

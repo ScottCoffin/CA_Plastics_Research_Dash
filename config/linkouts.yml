@@ -1,0 +1,227 @@
+# Link-out registry (Add-on A2 §8, EM-16).
+# Principles: link, don't mirror; deepest verified link only; static and contextual;
+# no claims beyond what the steward says; terms recorded per entry; weekly HTTP status
+# check only. Nothing listed here is ingested, mirrored or scraped.
+# Unknown fields are "not stated". The Minderoo Plastic Health Map is intentionally absent.
+# last_checked stays null here; the weekly check records it in docs/api_notes/linkouts_check.json.
+schema_version: 1
+entries:
+  - id: "LO-1"
+    name: "Global Plastic Laws"
+    steward: "managed by Plastic Pollution Coalition, with key partners Break Free From Plastic Europe, Environmental Law Alliance Worldwide, and Surfrider Foundation U.S."
+    description: "plastic legislation that has been passed around the world"
+    description_source: "https://www.globalplasticlaws.org/about"
+    relation: "law database"
+    update_model: "not stated"
+    terms_status: "recorded"
+    terms: "Global Plastic Laws. All rights reserved."
+    reuse_mode: "link_only"
+    root_url: "https://www.globalplasticlaws.org/"
+    url_status: "as_stated"
+    verified_topic_slugs:
+      - "design-reuse"
+      - "microplastics"
+      - "reduction"
+      - "maritime-sources"
+      - "waste-management"
+      - "extended-producer-responsibility"
+    deep_link_templates:
+      - template: "/search?search={q}"
+        evidence_url: "https://www.globalplasticlaws.org/"
+      - template: "/map"
+        evidence_url: "https://www.globalplasticlaws.org/"
+      - template: "/topic/{slug}"
+        evidence_url: "https://www.globalplasticlaws.org/"
+      - template: "/law?lawId={id}"
+        evidence_url: "https://www.globalplasticlaws.org/"
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-2"
+    name: "ToMEx (Aquatic Organisms; Human Health)"
+    steward: "SCCWRP"
+    description: "a living resource, new studies can be added at any time"
+    description_source: "https://www.plastiverse.org/tools/tomex-microplastics-toxicity-database"
+    relation: "toxicity database"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://microplastics.sccwrp.org/"
+    url_status: "as_stated"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-3"
+    name: "NOAA NCEI Marine Microplastics"
+    steward: "not stated"
+    description: "a global database of microplastics observations in marine settings"
+    description_source: "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncei:MicroplasticsDatabase/html"
+    relation: "marine observations database"
+    update_model: "Data Update Frequency Quarterly"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://www.ncei.noaa.gov/products/microplastics"
+    url_status: "as_stated"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-4"
+    name: "Atlas of Ocean Microplastics (AOMI)"
+    steward: "Japan Ministry of the Environment"
+    description: "a global database of surface microplastics"
+    description_source: "https://aomi.env.go.jp/"
+    relation: "surface microplastics database"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://aomi.env.go.jp/"
+    url_status: "as_stated"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-5"
+    name: "Global Plastics Hub"
+    steward: "GPML"
+    description: "datasets available on plastics across the lifecycle"
+    description_source: "https://globalplasticshub.org/page/data-sources"
+    relation: "data hub"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://globalplasticshub.org/"
+    url_status: "as_stated"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-6"
+    name: "Global Plastics Data Tracker"
+    steward: "UNSW CSDR via Global Ocean Accounts Partnership"
+    description: "an interactive registry that maps plastics data across more than 193 countries"
+    description_source: "https://oceanaccounts.org/publications/global-plastic-data-tracker/"
+    relation: "data registry"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://oceanaccounts.org/publications/global-plastic-data-tracker/"
+    url_status: "as_stated"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-7"
+    name: "Global Plastics Policy Tool"
+    steward: "Berkeley data-science center (Eric and Wendy Schmidt Center for Data Science & Environment)"
+    description: "predicts the impact of potential interventions"
+    description_source: "https://dse.berkeley.edu/news/data-interactive-tools-and-ai-actionable-change-ending-plastic-pollution"
+    relation: "policy modelling tool"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://dse.berkeley.edu/news/data-interactive-tools-and-ai-actionable-change-ending-plastic-pollution"
+    url_status: "as_stated"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-8"
+    name: "Plastiverse tools directory"
+    steward: "not stated"
+    description: "a curated and evolving directory of plastics research tools & resources"
+    description_source: "https://www.plastiverse.org/microplastics-tools-resources"
+    relation: "tools directory"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://www.plastiverse.org/microplastics-tools-resources"
+    url_status: "as_stated"
+    disclosure: "The Atlas owner is a co-founder of Plastiverse (A2 §0 rule 7)."
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-9"
+    name: "Moore Institute One4All and Microplastics Open Data Portal"
+    steward: "Moore Institute"
+    description: "an open-source portal and toolkit designed to make microplastics data Findable, Accessible, Interoperable, and Reusable (FAIR)"
+    description_source: "https://www.plastiverse.org/tools/one4all-an-open-source-portal-to-validate-share-and-harmonize-microplastics-data"
+    relation: "open data portal"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://www.plastiverse.org/tools/one4all-an-open-source-portal-to-validate-share-and-harmonize-microplastics-data"
+    url_status: "to_confirm"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-10"
+    name: "DTSC: Microplastics in Consumer Products"
+    steward: "DTSC Safer Consumer Products (SCP)"
+    description: "not stated"
+    description_source: "https://dtsc.ca.gov/scp/microplastics-in-consumer-products"
+    relation: "regulatory research page"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://dtsc.ca.gov/scp/microplastics-in-consumer-products"
+    url_status: "as_stated"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-11"
+    name: "DTSC: Addition to the Candidate Chemicals List: Microplastics"
+    steward: "DTSC Safer Consumer Products (SCP)"
+    description: "not stated"
+    description_source: "https://dtsc.ca.gov/scp/candidate-chemical-list_microplastics/"
+    relation: "regulatory listing page"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://dtsc.ca.gov/scp/candidate-chemical-list_microplastics/"
+    url_status: "as_stated"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null
+
+  - id: "LO-12"
+    name: "DTSC: Priority Product Work Plan"
+    steward: "DTSC Safer Consumer Products (SCP)"
+    description: "not stated"
+    description_source: "https://dtsc.ca.gov/scp/priority-product-work-plan/"
+    relation: "regulatory work plan page"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: https://dtsc.ca.gov/scp/priority-product-work-plan/
+    url_status: "to_confirm"
+    deep_link_templates: []
+    trigger_rules:
+      - "weekly HTTP status check only"
+    last_checked: null

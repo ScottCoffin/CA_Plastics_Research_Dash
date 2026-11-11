@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install fixture test runner
-        run: python -m pip install -c requirements/lock.txt pytest
+        run: python -m pip install -c requirements/lock.txt pytest pyyaml
       - name: Run fixture checks
         run: python -m pytest tests/test_source_watch_s7_6.py -q
       - name: Check public source metadata
@@ -39,6 +39,10 @@ jobs:
         env:
           PYTHONPATH: src
         run: python scripts/watch_ceden_microplastics.py
+      - name: Check link-out registry HTTP status (weekly, no content fetch)
+        env:
+          PYTHONPATH: src
+        run: python scripts/check_linkouts.py --live
       - name: Explain disabled commit guard
         if: vars.ENABLE_DATA_COMMITS != 'true'
         run: echo "ENABLE_DATA_COMMITS is not true; checked outputs remain in this workflow run."
@@ -50,7 +54,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- docs/SOURCES.md docs/api_notes/source_watch_s7_6.json docs/api_notes/ceden_watch.json
+          git add -- docs/SOURCES.md docs/api_notes/source_watch_s7_6.json docs/api_notes/ceden_watch.json docs/api_notes/linkouts_check.json
           git diff --cached --quiet && echo "No checked-source changes" && exit 0
           git commit -m "chore: update future source watch"
           git pull --rebase origin "$DEFAULT_BRANCH"

@@ -51,3 +51,5 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-10T19:30:00-08:00 | AT-1/S2.2 | claude-haiku (haiku-developer) | Near-duplicate work collapsing | Accepted | 1 session; ~64K subagent tokens |
 | 2026-11-10T19:30:00-08:00 | S10.2a | claude-haiku (haiku-developer) | Drawer issue link, REUSE rows, disclosure | Accepted; lead reconciled OpenAlex ledger rows | 1 session; ~62K subagent tokens |
 | 2026-11-10T19:35:00-08:00 | S10.2b | claude-haiku (haiku-developer) | Suppressions, work overrides, author merges | Accepted (also edited scripts/build_export_site.py to wire defaults) | 1 session; ~90K subagent tokens |
+| 2026-11-11T00:40:00-08:00 | EM-16 | claude-haiku (haiku-developer) | Link-out registry + weekly checker | Accepted after one resume; lead restored LO-12 candidate URL and added outcome classes | 2 sessions; ~83K subagent tokens |
+| 2026-11-11T00:20:00-08:00 | EM-18 | claude-haiku (haiku-developer) | Curated DTSC timeline + validator | Accepted | 1 session; ~45K subagent tokens |
