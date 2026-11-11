@@ -1,0 +1,8 @@
+# Latest archived release (AT-10). The owner or lead updates this file when a new GitHub
+# release is cut and its Zenodo DOI is minted. Then run:
+#   py -3.14 scripts/build_release_snapshot.py --write-site-release
+# which writes site/data/release.json for the About page.
+version: v2026.11.11
+date: 2026-11-11
+doi: 10.5281/zenodo.24124017
+concept_doi: 10.5281/zenodo.24124016

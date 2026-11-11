@@ -12,10 +12,14 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import re
 import sys
 import tempfile
 import zipfile
 from pathlib import Path
+
+# A JSON key named abstract*, not a value that merely starts with "Abstract".
+ABSTRACT_KEY = re.compile(rb'"abstract[a-z_]*"\s*:')
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -124,7 +128,7 @@ def check_snapshot(snapshot, root: Path = ROOT) -> list[str]:
                     errors.append(f"byte count mismatch for {item['path']}")
                 if not item.get("license"):
                     errors.append(f"no licence recorded for {item['path']}")
-                if item["path"].endswith(".json") and b'"abstract' in data.lower():
+                if item["path"].endswith(".json") and ABSTRACT_KEY.search(data.lower()):
                     errors.append(f"abstract-bearing JSON packaged: {item['path']}")
             listed = {item["path"] for item in manifest["files"]} | {"MANIFEST.json"}
             if listed != names:

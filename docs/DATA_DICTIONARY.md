@@ -218,6 +218,25 @@ across releases), `title`, `link` (alternate; points to the source record), `upd
 `category` (`term`, for example `award`).
 Licence: summaries are derived; the feed links to each source record for details.
 
+### `site/data/release.json`
+
+Latest archived release, written from `config/release.yml` by
+`py -3.14 scripts/build_release_snapshot.py --write-site-release` (AT-10). The About tab
+links to it. CC BY 4.0.
+
+| Field | Type | Meaning |
+|---|---|---|
+| `version` | string | Release tag (for example `v2026.11.11`). |
+| `date` | string | Release date (YYYY-MM-DD). |
+| `doi` | string | Zenodo version DOI. |
+| `concept_doi` | string | Zenodo concept DOI (always resolves to the latest version). |
+| `doi_url`, `concept_url` | string | `https://doi.org/` links for the two DOIs. |
+
+### `site/data/bundle/`
+
+AT-4 serving bundle (bit-set facets, title search, institution tiers, abstract-free
+Parquet). See `docs/SITE_DATA.md` and `docs/AT_4_VERIFICATION.md`. CC BY 4.0.
+
 ## Files not listed
 
 Files in `site/` outside `site/data/` and `site/feed.xml` (for example `index.html`,

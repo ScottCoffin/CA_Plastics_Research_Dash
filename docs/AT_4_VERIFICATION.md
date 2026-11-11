@@ -15,7 +15,7 @@ module: `site/assets/facets.js` (dependency-free; classic script sets
 - `inst_tiers.json` / `parquet/inst_tiers.parquet`: owner decision "tiers with ranges".
   Walk CA institutions in fractional rank order; an institution joins the current tier
   while its bootstrap rank_lo <= the tier leader's rank_hi, otherwise it starts a new tier.
-  Result: 161 institutions in 5 tiers (sizes 7, 7, 20, 62, 65).
+  Result: 161 institutions in 5 tiers (sizes 7, 8, 20, 62, 64).
 - `parquet/works.parquet` (slim, no abstract), `inst_counts`, `year_tag`; DuckDB 2.0.0 zstd.
 
 ## Acceptance (A1 section 9)

@@ -1,10 +1,14 @@
-"""Package the versioned release snapshot ZIP for Zenodo archiving (S10.3).
+"""Package the versioned release snapshot ZIP for Zenodo archiving (S10.3, AT-10).
 
 The ZIP holds only public and curated files: ``site/data/*.json``, ``site/feed.xml``,
 the gold and split files in ``curation/``, and the query and taxonomy definitions in
 ``config/``. It also holds a ``MANIFEST.json`` (path, bytes, sha256, license per file)
 and a ``README.txt`` with the citation. Raw and interim data, ``.env`` files, and any
 field named ``abstract`` are refused, and the build fails rather than dropping data.
+
+AT-10 adds two options. ``--release-date YYYY-MM-DD`` writes ``release/<date>/`` (see
+``atlas.release``) and packs its contents under ``release/<date>/``. ``--write-site-release``
+writes ``site/data/release.json`` from ``config/release.yml`` and exits.
 
 Offline only. The default output is ``dist/atlas-snapshot-<version>.zip``, which the
 repository's ``.gitignore`` already excludes.
@@ -19,6 +23,7 @@ import io
 import json
 import re
 import subprocess
+import sys
 import zipfile
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -26,6 +31,15 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "src"))
+
+from atlas.release import (  # noqa: E402
+    ReleaseError,
+    refuse_abstract_columns,
+    write_release,
+    write_site_release,
+)
+
 SCHEMA_VERSION = "s10.3"
 CODE_LICENSE = "MIT"
 DATA_LICENSE = "CC BY 4.0"
@@ -53,9 +67,10 @@ class SnapshotError(RuntimeError):
 
 @dataclass(frozen=True)
 class Entry:
-    path: str  # repository-relative POSIX path
+    path: str  # snapshot member path (repository-relative POSIX path)
     license: str
     notes: str = ""
+    source: Path | None = None  # file to read when it is not at ``root / path``
 
 
 def _is_excluded(path: str) -> bool:
@@ -77,13 +92,18 @@ def _json_keys(value: Any) -> set[str]:
     return keys
 
 
-def _check_no_abstract(root: Path, entry: Entry) -> None:
-    path = root / entry.path
+def _check_no_abstract(path: Path, entry: Entry) -> None:
     if path.suffix == ".json":
         keys = _json_keys(json.loads(path.read_text(encoding="utf-8")))
     elif path.suffix == ".csv":
         with path.open(newline="", encoding="utf-8") as stream:
             keys = set(next(csv.reader(stream), []))
+    elif path.suffix == ".parquet":
+        try:
+            refuse_abstract_columns(path)
+        except ReleaseError as error:
+            raise SnapshotError(f"{entry.path}: {error}") from error
+        return
     else:
         return
     hits = sorted(key for key in keys if key.lower().startswith(ABSTRACT_PREFIX))
@@ -116,9 +136,19 @@ def discover(root: Path) -> list[Entry]:
     return [unique[path] for path in sorted(unique)]
 
 
-def _readme(version: str, source_commit: str | None) -> str:
+def _readme(version: str, source_commit: str | None, release_name: str | None = None) -> str:
     commit = source_commit or "not recorded"
     year = version[:4] if version[:4].isdigit() else "n.d."
+    contents = [
+        "  site/data/*.json   public payloads (CC BY 4.0, derived data)",
+        "  site/feed.xml      Atom digest (CC BY 4.0)",
+        "  curation/          gold sets and split files (CC BY 4.0)",
+        "  config/            query and taxonomy definitions (MIT)",
+    ]
+    if release_name:
+        contents.append(
+            f"  release/{release_name}/  Parquet, query text, methods card, checksums (AT-10)"
+        )
     return "\n".join(
         [
             "CA Plastics Research Atlas, release snapshot " + version,
@@ -132,10 +162,7 @@ def _readme(version: str, source_commit: str | None) -> str:
             f"Source commit: {commit}",
             "",
             "Contents:",
-            "  site/data/*.json   public payloads (CC BY 4.0, derived data)",
-            "  site/feed.xml      Atom digest (CC BY 4.0)",
-            "  curation/          gold sets and split files (CC BY 4.0)",
-            "  config/            query and taxonomy definitions (MIT)",
+            *contents,
             "  MANIFEST.json      path, bytes, sha256, and license for each file",
             "",
             "Licences:",
@@ -152,29 +179,62 @@ def _readme(version: str, source_commit: str | None) -> str:
     )
 
 
+def _release_entries(release_dir: Path) -> list[Entry]:
+    """Entries for a ``release/<date>/`` directory, packed under ``release/<date>/``."""
+
+    if not (release_dir / "checksums.sha256").is_file():
+        raise SnapshotError(f"{release_dir} has no checksums.sha256; write the release first")
+    name = release_dir.name
+    entries: list[Entry] = []
+    for path in sorted(release_dir.rglob("*")):
+        if not path.is_file():
+            continue
+        relative = path.relative_to(release_dir).as_posix()
+        license_name = CODE_LICENSE if relative == "query.txt" else DATA_LICENSE
+        entries.append(
+            Entry(
+                f"release/{name}/{relative}",
+                license_name,
+                "AT-10 release bundle file.",
+                source=path,
+            )
+        )
+    return entries
+
+
 def build_snapshot(
     root: Path,
     output: Path,
     version: str,
     *,
     source_commit: str | None = None,
+    release_dir: Path | None = None,
 ) -> dict[str, Any]:
-    """Write the snapshot ZIP to ``output`` and return the manifest it contains."""
+    """Write the snapshot ZIP to ``output`` and return the manifest it contains.
+
+    When ``release_dir`` is given, its files are packed under ``release/<name>/``.
+    """
 
     if not VERSION_PATTERN.match(version):
         raise SnapshotError(f"invalid snapshot version {version!r}")
     entries = discover(root)
     if not any(entry.path.startswith("site/data/") for entry in entries):
         raise SnapshotError("no site/data payloads found; run the site build first")
+    release_name = None
+    if release_dir is not None:
+        release_entries = _release_entries(release_dir)
+        entries = sorted([*entries, *release_entries], key=lambda entry: entry.path)
+        release_name = release_dir.name
 
     payloads: dict[str, bytes] = {}
     for entry in entries:
         if _is_excluded(entry.path):
             raise SnapshotError(f"{entry.path} is an excluded path")
-        _check_no_abstract(root, entry)
-        payloads[entry.path] = (root / entry.path).read_bytes()
+        source = entry.source or (root / entry.path)
+        _check_no_abstract(source, entry)
+        payloads[entry.path] = source.read_bytes()
 
-    readme = _readme(version, source_commit).encode("utf-8")
+    readme = _readme(version, source_commit, release_name).encode("utf-8")
     files: list[dict[str, Any]] = []
     for entry in entries:
         data = payloads[entry.path]
@@ -250,11 +310,39 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="ZIP path; default dist/atlas-snapshot-<version>.zip",
     )
+    parser.add_argument(
+        "--release-date",
+        default=None,
+        help="write release/<date>/ (YYYY-MM-DD) and include it in the ZIP",
+    )
+    parser.add_argument(
+        "--write-site-release",
+        action="store_true",
+        help="write site/data/release.json from config/release.yml and exit",
+    )
     args = parser.parse_args(argv)
+    if args.write_site_release:
+        try:
+            payload = write_site_release(REPO)
+        except (ReleaseError, OSError) as error:
+            print(f"site release refused: {error}")
+            return 1
+        print(json.dumps(payload, sort_keys=True))
+        return 0
     output = args.output or REPO / "dist" / f"atlas-snapshot-{args.version}.zip"
+    release_dir = None
     try:
-        manifest = build_snapshot(REPO, output, args.version, source_commit=_source_commit(REPO))
-    except SnapshotError as error:
+        if args.release_date:
+            written = write_release(args.release_date, REPO / "release", root=REPO)
+            release_dir = Path(written["directory"])
+        manifest = build_snapshot(
+            REPO,
+            output,
+            args.version,
+            source_commit=_source_commit(REPO),
+            release_dir=release_dir,
+        )
+    except (SnapshotError, ReleaseError) as error:
         print(f"snapshot refused: {error}")
         return 1
     total = sum(item["bytes"] for item in manifest["files"])

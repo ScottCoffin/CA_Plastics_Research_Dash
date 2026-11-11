@@ -191,6 +191,20 @@
       .expert-link { border: 0; padding: 0; color: var(--brand-dark); background: transparent; font: inherit; font-weight: 700; text-align: left; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.15em; }
       .card-meta { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
       .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.55rem; }
+      #institution-list[hidden] { display: none; }
+      .tier-note { margin: 0 0 0.75rem; }
+      .tier-group { margin: 0 0 0.6rem; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--surface); }
+      .tier-group > summary { cursor: pointer; padding: 0.7rem 0.85rem; font-weight: 600; }
+      .tier-list { margin: 0; padding: 0 0.85rem 0.5rem; list-style: none; }
+      .tier-row { display: grid; grid-template-columns: minmax(0, 2.2fr) auto auto minmax(0, 2.4fr) auto; gap: 0.25rem 0.6rem; align-items: center; padding: 0.45rem 0; border-top: 1px solid var(--line); font-size: 0.9rem; }
+      .tier-name { min-height: 2.75rem; padding: 0; border: 0; color: var(--brand-dark); background: none; text-align: left; text-decoration: underline; }
+      .tier-frac { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.1rem 0.5rem; }
+      .tier-full, .tier-rank { color: var(--muted); }
+      .tier-bar { flex: none; max-width: 100%; }
+      .tier-bar-axis { stroke: var(--line); stroke-width: 1; }
+      .tier-bar-range { stroke: var(--brand); stroke-width: 4; stroke-linecap: round; }
+      .tier-bar-dot { fill: var(--ink); stroke: var(--surface); stroke-width: 1; }
+      @media (max-width: 40rem) { .tier-row { grid-template-columns: 1fr auto; } .tier-name, .tier-frac { grid-column: 1 / -1; } }
       .chip { display: inline-block; padding: 0.18rem 0.45rem; border-radius: 999px; color: #24445a; background: #e6eff2; font-size: 0.78rem; }
       .open-calls-list { margin: 0.75rem 0 0; padding-left: 1.25rem; }
       .open-calls-list li + li { margin-top: 0.75rem; }
@@ -356,10 +370,14 @@
             <div class="field institution-collab-field"><label for="institution-collab"><input id="institution-collab" type="checkbox"> Include out-of-state collaborators</label></div>
           </div>
           <p class="data-note">California institutions only by default. Collaborators outside California appear only through works co-authored with California researchers.</p>
+          <div id="institution-view-field" class="field" hidden><span id="institution-view-label">Leaderboard view</span><div class="institution-type-chips" role="group" aria-labelledby="institution-view-label"><button class="chip-button" type="button" data-inst-view="tiers">Tiers (fractional credit)</button><button class="chip-button" type="button" data-inst-view="list">Institution cards</button></div></div>
           <p id="institution-count" class="result-count" role="status" aria-live="polite">Loading institutions…</p>
         </div>
         <div class="institutions-layout">
-          <div id="institution-list" class="cards" aria-live="polite"></div>
+          <div>
+            <div id="institution-tiers" hidden><p class="data-note tier-note">Institutions in the same tier cannot be reliably ordered, because their bootstrap rank ranges overlap. Fractional credit splits each paper among its authors' institutions; see <a href="#about">About</a> and docs/METHODS.md (Institution counts and stability).</p><div id="institution-tier-groups"></div></div>
+            <div id="institution-list" class="cards" aria-live="polite"></div>
+          </div>
           <div class="institution-map-panel is-sticky">
             <h3>California institution map</h3>
             <p id="institution-map-hint" class="map-hint">Drag to pan, scroll or +/- to zoom, select a marker for institution details. With the map focused, arrow keys pan. Marker size follows plastic-related work count.</p>
@@ -446,6 +464,18 @@
         <h2>About this snapshot</h2>
         <p class="panel-intro">The app is a static, client-side shell. It reads generated JSON and does not query OpenAlex from your browser.</p>
         <p id="about-freshness" class="data-note">Loading snapshot metadata…</p>
+        <p id="about-release" class="data-note">Archived releases: <a href="https://doi.org/10.5281/zenodo.24124016" target="_blank" rel="noreferrer">Zenodo DOI 10.5281/zenodo.24124016</a> (always resolves to the latest release).</p>
+        <script id="about-release-loader">
+          // AT-10: name the latest archived release and its DOI from data/release.json.
+          fetch("data/release.json", { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)).then((rel) => {
+            if (!rel || !rel.doi || !/^10\.\d+\/[\w.\/-]+$/.test(rel.doi)) return;
+            const p = document.getElementById("about-release");
+            const a = document.createElement("a");
+            a.href = "https://doi.org/" + rel.doi; a.target = "_blank"; a.rel = "noreferrer"; a.textContent = rel.doi;
+            p.textContent = `Latest archived release: ${String(rel.version || "")} (${String(rel.date || "")}), DOI `;
+            p.append(a, ". Methods card, Parquet files and checksums are in the release archive.");
+          }).catch(() => {});
+        </script>
         <dl id="about-stats" class="about-grid"></dl>
         <p class="notice"><strong>Interpretation note:</strong> provisional labels are screening metadata, not a validated pollution leaderboard. Confirm the linked source work before drawing conclusions.</p>
         <div class="about-methods">
@@ -506,6 +536,40 @@
         return `<br><small>Linked works: ${works} (${workDatasetEscape(types.join(", "))})</small>`;
       }
       const workDatasetView = Object.freeze({ datasetsHtml: workDatasetsHtml, linkedWorksHtml: workLinkedWorksHtml });
+    </script>
+    <script id="inst-tiers-helpers">
+      const instTiers = Object.freeze({
+        esc(v) { return String(v ?? "").replace(/[&<>'"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[c])); },
+        fmt(n) { return Number(n || 0).toFixed(1); },
+        viewFromParams(params) { return params.get("inst_view") === "list" ? "list" : "tiers"; },
+        applyViewParam(params, view) { if (view === "list") params.set("inst_view", "list"); },
+        // Groups rows by tier (optionally one atlas_type), sorts each tier by fractional works, and computes a shared bar scale.
+        groupTiers(rows, type) {
+          const by = new Map();
+          (rows || []).filter((r) => !type || (r.atlas_type || "other") === type).forEach((r) => { if (!by.has(r.tier)) by.set(r.tier, []); by.get(r.tier).push(r); });
+          return [...by.keys()].sort((a, b) => a - b).map((tier) => {
+            const list = by.get(tier).slice().sort((a, b) => b.works_frac - a.works_frac || String(a.name).localeCompare(String(b.name)));
+            const fr = list.map((r) => r.works_frac);
+            return { tier, rows: list, fracMin: Math.min(...fr), fracMax: Math.max(...fr), scaleMin: Math.min(...list.map((r) => r.frac_lo)), scaleMax: Math.max(...list.map((r) => r.frac_hi)) };
+          });
+        },
+        summary(g) { return `Tier ${g.tier} · ${g.rows.length} institution${g.rows.length === 1 ? "" : "s"} · fractional works ${this.fmt(g.fracMin)}–${this.fmt(g.fracMax)}`; },
+        rankText(r) { return r.rank_lo === r.rank_hi ? `rank ${r.rank_lo}` : `ranks ${r.rank_lo}–${r.rank_hi}`; },
+        rangeSvg(r, lo, hi) {
+          const w = 120, span = hi > lo ? hi - lo : 1, x = (v) => Math.max(0, Math.min(w, ((v - lo) / span) * w)).toFixed(1);
+          const label = `${this.fmt(r.works_frac)} fractional works, 95% range ${this.fmt(r.frac_lo)} to ${this.fmt(r.frac_hi)}`;
+          return `<svg class="tier-bar" viewBox="0 0 ${w} 12" width="${w}" height="12" role="img" aria-label="${this.esc(label)}"><line class="tier-bar-axis" x1="0" x2="${w}" y1="6" y2="6"/><line class="tier-bar-range" x1="${x(r.frac_lo)}" x2="${x(r.frac_hi)}" y1="6" y2="6"/><circle class="tier-bar-dot" cx="${x(r.works_frac)}" cy="6" r="3.5"/></svg>`;
+        },
+        rowHtml(r, g) {
+          const e = this.esc;
+          return `<li class="tier-row"><button class="tier-name" type="button" data-institution-id="${e(r.inst_id)}" title="View experts at ${e(r.name)}">${e(r.name)}</button><span class="chip">${e(r.atlas_type || "other")}</span><span class="tier-full">${r.works_full} works (full count)</span><span class="tier-frac">${this.fmt(r.works_frac)} (${this.fmt(r.frac_lo)}–${this.fmt(r.frac_hi)}) ${this.rangeSvg(r, g.scaleMin, g.scaleMax)}</span><span class="tier-rank">${this.rankText(r)}</span></li>`;
+        },
+        tiersHtml(rows, type) {
+          const groups = this.groupTiers(rows, type);
+          if (!groups.length) return '<p class="empty">No ranked institutions match this type filter.</p>';
+          return groups.map((g) => `<details class="tier-group"${g.tier <= 2 ? " open" : ""}><summary>${this.summary(g)}</summary><ul class="tier-list">${g.rows.map((r) => this.rowHtml(r, g)).join("")}</ul></details>`).join("");
+        }
+      });
     </script>
     <script id="monitoring-view-helpers">
       const monitoringView = Object.freeze({
@@ -832,7 +896,7 @@
         const SORT_KEYS = ["ca_works", "cited_by", "h_index", "plastic_citations", "plastic_works"];
         const SORT_FIELDS = { cited_by: "cited_by_count", h_index: "h_index", plastic_citations: "plastic_citations", plastic_works: "plastic_works_count" };
         const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
-        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", sort: "ca_works", institutionViewType: "", institutionSort: "tagged", institutionPrimaryTopic: "", includeCollaborators: false, pendingAuthor: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
+        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", sort: "ca_works", institutionViewType: "", institutionSort: "tagged", instView: "tiers", institutionPrimaryTopic: "", includeCollaborators: false, pendingAuthor: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
         const $ = (id) => document.getElementById(id);
 
         function escapeHtml(value) {
@@ -852,6 +916,7 @@
           state.oa = ["", "oa", "closed"].includes(params.get("oa") || "") ? (params.get("oa") || "") : "";
           state.sort = SORT_KEYS.includes(params.get("sort") || "") ? params.get("sort") : "ca_works";
           state.includeCollaborators = params.get("collab") === "1";
+          state.instView = instTiers.viewFromParams(params);
           // Deep link #experts?author=<id> opens that researcher's drawer once the data is loaded.
           state.pendingAuthor = /^[A-Za-z0-9]{1,40}$/.test(params.get("author") || "") ? params.get("author") : "";
         }
@@ -868,6 +933,7 @@
           if (state.oa) params.set("oa", state.oa);
           if (state.sort && state.sort !== "ca_works") params.set("sort", state.sort);
           if (state.includeCollaborators) params.set("collab", "1");
+          instTiers.applyViewParam(params, state.instView);
           const next = `#${state.tab}${params.toString() ? `?${params.toString()}` : ""}`;
           if (window.location.hash !== next) window.history.replaceState(null, "", next);
         }
@@ -1318,6 +1384,7 @@
             panel.hidden = panel.id !== `panel-${state.tab}`;
           });
           writeHash();
+          if (state.tab === "institutions" && state.data) ensureInstitutionTiers();
           if (state.tab === "funding") showOpenCalls();
           if (state.tab === "funding") showFunding();
           if (moveFocus) $(`tab-${state.tab}`).focus();
@@ -1819,7 +1886,36 @@
           }
           return (a, b) => b.taggedCount - a.taggedCount || b.recentCount - a.recentCount || byName(a, b);
         }
+        let tiersStatus = "idle"; // idle | loading | ready | failed
+        let tiersRows = [];
+        function ensureInstitutionTiers() {
+          if (tiersStatus !== "idle") return;
+          tiersStatus = "loading";
+          fetch("data/bundle/inst_tiers.json")
+            .then((response) => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })
+            .then((payload) => { if (!payload || !Array.isArray(payload.tiers) || !payload.tiers.length) throw new Error("no tiers"); tiersRows = payload.tiers; tiersStatus = "ready"; })
+            .catch(() => { tiersStatus = "failed"; })
+            .then(() => { if (tiersStatus === "ready") renderInstitutions(); });
+        }
+        function renderInstitutionTiers() {
+          const on = tiersStatus === "ready" && state.instView !== "list";
+          $("institution-view-field").hidden = tiersStatus !== "ready";
+          $("institution-tiers").hidden = !on;
+          $("institution-list").hidden = on;
+          document.querySelectorAll("[data-inst-view]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.instView === (on ? "tiers" : "list"))));
+          if (!on) return;
+          $("institution-tier-groups").innerHTML = instTiers.tiersHtml(tiersRows, state.institutionViewType);
+          const groups = instTiers.groupTiers(tiersRows, state.institutionViewType);
+          $("institution-count").textContent = `${groups.reduce((n, g) => n + g.rows.length, 0)} California institutions in ${groups.length} tiers, sorted by fractional works within each tier`;
+        }
+        document.addEventListener("click", (event) => {
+          const view = event.target.closest("[data-inst-view]");
+          if (view) { state.instView = view.dataset.instView; writeHash(); renderInstitutions(); return; }
+          const name = event.target.closest("#institution-tier-groups .tier-name");
+          if (name) openInstitutionExperts(name.dataset.institutionId);
+        });
         function renderInstitutions() {
+          if (state.tab === "institutions") ensureInstitutionTiers();
           const all = (state.data.institutions.institutions || []).filter((institution) => state.includeCollaborators || institution.ca_flag).map(institutionMetrics).filter((metric) => metric.taggedCount > 0);
           $("institution-collab").checked = state.includeCollaborators;
           const types = [...new Set(all.map((metric) => metric.institution.atlas_type || "other"))].sort();
@@ -1833,6 +1929,7 @@
           $("institution-type-chips").querySelectorAll(".institution-type-chip").forEach((button) => button.addEventListener("click", () => { state.institutionViewType = button.dataset.institutionType; renderInstitutions(); }));
           $("institution-list").querySelectorAll(".institution-expert-link").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId)));
           clusterMap(filtered);
+          renderInstitutionTiers();
         }
         $("institution-collab").addEventListener("change", (event) => {
           state.includeCollaborators = event.target.checked;
