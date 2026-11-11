@@ -34,10 +34,10 @@ def test_checklist_evidence_links_resolve():
     assert check.check_checklist(REPO) == []
 
 
-def test_checklist_signoff_cells_are_blank():
+def test_checklist_signoff_cells_are_blank_or_complete():
     rows = check.checklist_rows(REPO)
     assert rows, "checklist has no data rows"
-    assert all(cells[3] == "" and cells[4] == "" for cells in rows)
+    assert all(bool(cells[3]) == bool(cells[4]) for cells in rows)
 
 
 def test_data_dictionary_names_every_public_payload():

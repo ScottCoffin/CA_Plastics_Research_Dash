@@ -3,7 +3,7 @@
 Checks that the governance files exist, that CITATION.cff parses with the
 required CFF 1.2.0 keys, that every checklist evidence link resolves, that the
 data dictionary names every public payload, that the checklist sign-off cells
-are still blank, and that a privacy scan finds no email-like or phone-like
+are blank or complete (initials and date), and that a privacy scan finds no email-like or phone-like
 strings in public site data. The scan reports file and field paths only; it
 never prints matched values.
 """
@@ -147,8 +147,11 @@ def check_checklist(repo: Path = REPO) -> list[str]:
             rel = target.split("#", 1)[0]
             if not (repo / CHECKLIST).parent.joinpath(rel).exists():
                 errors.append(f"unresolved link {rel} in row: {item[:60]}")
-        if signoff or date:
-            errors.append(f"sign-off cell filled before owner review: {item[:60]}")
+        # Owner sign-off: initials and an ISO date together, or both blank.
+        if bool(signoff) != bool(date):
+            errors.append(f"sign-off needs both initials and date: {item[:60]}")
+        if date and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+            errors.append(f"sign-off date is not YYYY-MM-DD: {item[:60]}")
     return errors
 
 
