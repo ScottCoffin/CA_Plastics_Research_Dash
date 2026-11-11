@@ -8,12 +8,16 @@ the next scheduled invocation resume from the unchanged high-water mark.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from datetime import UTC, datetime
 from pathlib import Path
 
 from atlas.ingest.daily import run_daily_ingest
 from atlas.ingest.openalex import OpenAlexPaths, load_institution_ids, load_openalex_key
+from atlas.query import load_query_config
+
+BACKFILL_START_YEAR = 1950
 
 
 def _write_github_output(name: str, value: object) -> None:
@@ -53,6 +57,20 @@ def main(argv: list[str] | None = None) -> int:
 
     load_openalex_key()
     start_year = args.start_year
+    replace_output = False
+    if args.start_year is None and args.updated_since is None and args.high_water.exists():
+        state = json.loads(args.high_water.read_text(encoding="utf-8"))
+        active_version = load_query_config(args.config)["version"]
+        if state.get("query_version") != active_version:
+            # Query changed (e.g. AT-1 promotion): rebuild the works table from a full
+            # backfill instead of continuing incrementally from the old query's rows.
+            # A deferred run leaves the old state in place, so the next run retries.
+            start_year = BACKFILL_START_YEAR
+            replace_output = True
+            print(
+                f"query version {state.get('query_version')!r} -> {active_version!r}: "
+                f"full backfill from {start_year}"
+            )
     if (
         start_year is None
         and args.end_year is None
@@ -78,6 +96,7 @@ def main(argv: list[str] | None = None) -> int:
         max_pages=args.max_pages,
         max_credits=args.max_credits,
         max_cost_usd=args.max_cost_usd,
+        replace_output=replace_output,
     )
     _write_github_output("status", result["status"])
     _write_github_output("reason", result.get("reason", ""))

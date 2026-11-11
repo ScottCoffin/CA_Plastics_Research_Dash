@@ -25,6 +25,7 @@ def test_export_site_builds_slim_index_without_labels(tmp_path: Path) -> None:
         institutions_path=normalized.output_dir / "institutions.parquet",
         output_dir=tmp_path / "site",
         generated_at="test",
+        ca_authors_only=False,
     )
     payload = json.loads((result.output_dir / "index.json").read_text(encoding="utf-8"))
     assert payload["counts"]["works"] == 4
@@ -32,3 +33,28 @@ def test_export_site_builds_slim_index_without_labels(tmp_path: Path) -> None:
     assert pq.read_table(normalized.output_dir / "authors.parquet").num_rows == len(
         payload["authors"]
     )
+
+
+def test_export_site_lists_only_california_affiliated_experts(tmp_path) -> None:
+    normalized = normalize_fixture(
+        FIXTURE,
+        institution_path=INSTITUTIONS,
+        output_dir=tmp_path / "normalized",
+        qc_path=tmp_path / "qc.md",
+        generated_at="test",
+    )
+    result = export_site(
+        works_path=normalized.output_dir / "works.parquet",
+        authors_path=normalized.output_dir / "authors.parquet",
+        authorships_path=normalized.output_dir / "authorships.parquet",
+        institutions_path=normalized.output_dir / "institutions.parquet",
+        output_dir=tmp_path / "site",
+        generated_at="test",
+    )
+    payload = json.loads((result.output_dir / "index.json").read_text(encoding="utf-8"))
+    authors = pq.read_table(normalized.output_dir / "authors.parquet").to_pylist()
+    expected = {row["author_id"] for row in authors if (row["ca_works_count"] or 0) > 0}
+    assert expected and {row["author_id"] for row in payload["authors"]} == expected
+    assert payload["counts"]["works"] == 4
+    files = {path.stem for path in (result.output_dir / "authors").glob("*.json")}
+    assert files == expected

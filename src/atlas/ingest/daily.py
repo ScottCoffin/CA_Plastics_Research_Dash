@@ -26,6 +26,7 @@ def run_daily_ingest(
     max_pages: int | None = None,
     max_credits: float | None = None,
     max_cost_usd: float | None = None,
+    replace_output: bool = False,
     ingest: Callable[..., Mapping[str, Any]] = ingest_live,
 ) -> dict[str, Any]:
     """Run one refresh and convert expected budget stops into a clean outcome.
@@ -48,6 +49,7 @@ def run_daily_ingest(
             allow_candidate=allow_candidate,
             max_credits=max_credits,
             max_cost_usd=max_cost_usd,
+            **({"replace_output": True} if replace_output else {}),
         )
     except OpenAlexRateLimitError as error:
         return {

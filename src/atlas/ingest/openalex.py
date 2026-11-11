@@ -188,6 +188,31 @@ def build_works_url(
     return f"{OPENALEX_BASE}/works?{urllib.parse.urlencode(params)}"
 
 
+MIN_REQUEST_INTERVAL_SECONDS = 0.25
+_last_request_at = 0.0
+
+
+def _throttle() -> None:
+    """Keep below OpenAlex's 5 requests/second limit for boolean-heavy searches."""
+    global _last_request_at
+    wait = _last_request_at + MIN_REQUEST_INTERVAL_SECONDS - time.monotonic()
+    if wait > 0:
+        time.sleep(wait)
+    _last_request_at = time.monotonic()
+
+
+def _is_burst_limit(message: str) -> bool:
+    text = message.lower()
+    return "per second" in text or "wait 1s" in text
+
+
+def _retry_delay(retry_after: object, attempt: int) -> float:
+    try:
+        return min(max(float(str(retry_after)), 1.0), 30.0)
+    except (TypeError, ValueError):
+        return float(2**attempt)
+
+
 def _request_json(
     url: str,
     *,
@@ -200,6 +225,7 @@ def _request_json(
     if key:
         request.add_header("Authorization", f"Bearer {key}")
     for attempt in range(attempts):
+        _throttle()
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 body = json.load(response)
@@ -231,6 +257,11 @@ def _request_json(
             message = str(body.get("message") or body.get("error") or "request rejected")
             if error.code in {400, 401, 403, 404}:
                 raise RuntimeError(f"OpenAlex returned HTTP {error.code}: {message}") from error
+            if error.code == 429 and _is_burst_limit(message) and attempt + 1 < attempts:
+                # Per-second limit for boolean-heavy searches (5 req/s on the free plan,
+                # seen 2026-11-10): wait and retry instead of deferring the whole run.
+                time.sleep(_retry_delay(headers.get("Retry-After"), attempt))
+                continue
             if error.code == 429:
                 raise OpenAlexRateLimitError(
                     f"OpenAlex returned HTTP 429: {message}",
@@ -441,8 +472,13 @@ def ingest_live(
     max_cost_usd: float | None = None,
     budget_path: str | Path = "config/budget.yml",
     run_id: str | None = None,
+    replace_output: bool = False,
 ) -> dict[str, Any]:
-    """Run a backfill or inclusive publication/update-date incremental pull."""
+    """Run a backfill or inclusive publication/update-date incremental pull.
+
+    ``replace_output`` writes only this run's rows (a backfill after a query-version
+    change) instead of merging them into rows fetched under an older query.
+    """
 
     config = load_query_config(config_path)
     if config.get("status") != "active" and not allow_candidate:
@@ -567,10 +603,12 @@ def ingest_live(
                     meta = body.get("meta")
                     cursor = meta.get("next_cursor") if isinstance(meta, Mapping) else None
 
-        merged = _merge_rows(_read_rows(paths.output_parquet), new_rows)
+        prior_rows = [] if replace_output else _read_rows(paths.output_parquet)
+        merged = _merge_rows(prior_rows, new_rows)
         _atomic_write_parquet(paths.output_parquet, merged)
         high_water = {
             "schema_version": HIGH_WATER_SCHEMA_VERSION,
+            "query_version": config["version"],
             "mode": "updated_since" if updated_since else "publication_date",
             "incremental_field": "updated_date" if updated_since else "publication_date",
             "last_publication_date": _max_date(new_rows, "publication_date")

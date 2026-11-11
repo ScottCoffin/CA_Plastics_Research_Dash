@@ -230,8 +230,12 @@ def export_site(
     author_merges_path: str | Path | None = None,
     output_dir: str | Path = "site/data",
     generated_at: str | None = None,
+    ca_authors_only: bool = True,
 ) -> ExportResult:
     """Build all S3.1 payloads from normalized C3 tables.
+
+    ``ca_authors_only`` keeps the Experts index and author files to authors with at
+    least one California-affiliated authorship (``ca_works_count > 0``).
 
     ``labels_path`` is optional so the exporter can build a useful fixture or
     an early refresh before S2.3 output exists.  Missing label fields remain
@@ -310,6 +314,10 @@ def export_site(
     for row in sorted(author_rows, key=lambda item: _text(item.get("author_id"))):
         author_id = _text(row.get("author_id"))
         if not author_id:
+            continue
+        if ca_authors_only and _int(row.get("ca_works_count")) <= 0:
+            # spec A3.1: the researcher list shows California-affiliated researchers;
+            # out-of-state co-authors stay visible on each work's author list.
             continue
         author_work_ids = sorted(set(works_by_author.get(author_id, [])))
         author_index.append(

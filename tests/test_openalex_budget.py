@@ -276,7 +276,7 @@ def test_ingest_reserves_before_each_request_and_reruns_count_prior_usage(
 
     monkeypatch.setattr(openalex, "_request_json", fake_request)
     run_args = {
-        "config_path": "config/queries.yml",
+        "config_path": "config/queries_v2.yml",
         "institution_ids": ["I1"],
         "paths": paths,
         "start_year": 2024,
@@ -345,7 +345,7 @@ def test_ingest_budget_or_bad_credit_preserves_outputs_and_high_water(
 
     monkeypatch.setattr(openalex, "_request_json", fake_request)
     run_args = {
-        "config_path": "config/queries.yml",
+        "config_path": "config/queries_v2.yml",
         "institution_ids": ["I1"],
         "paths": paths,
         "start_year": 2024,
@@ -410,7 +410,7 @@ def test_http_500_without_credit_stops_before_retry_or_output_advancement(
 
     monkeypatch.setattr(openalex.urllib.request, "urlopen", fake_urlopen)
     run_args = {
-        "config_path": "config/queries.yml",
+        "config_path": "config/queries_v2.yml",
         "institution_ids": ["I1"],
         "paths": paths,
         "start_year": 2024,
@@ -513,7 +513,7 @@ def test_http_429_without_credit_defers_as_rate_limit_without_retry(
     monkeypatch.setattr(openalex.urllib.request, "urlopen", fake_urlopen)
     with pytest.raises(openalex.OpenAlexRateLimitError) as error:
         openalex.ingest_live(
-            config_path="config/queries.yml",
+            config_path="config/queries_v2.yml",
             institution_ids=["I1"],
             paths=paths,
             start_year=2024,
@@ -529,3 +529,70 @@ def test_http_429_without_credit_defers_as_rate_limit_without_retry(
     rows = [json.loads(line) for line in paths.usage_log.read_text(encoding="utf-8").splitlines()]
     request = next(row for row in rows if row["record_type"] == "request")
     assert request["status_code"] == 429 and request["credits_known"] is False
+
+
+def test_burst_rate_limit_429_is_retried_not_deferred(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Boolean-heavy searches are limited to 5 requests/second; that 429 says wait 1s."""
+    calls = 0
+    burst = (
+        b'{"message":"queries with more than 5 operators are limited to 5 requests per'
+        b' second per client. Please wait 1s and retry"}'
+    )
+
+    class SuccessResponse:
+        status = 200
+        headers = {"X-RateLimit-Credits-Used": "1"}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return None
+
+        def read(self):
+            return b'{"meta":{"cost_usd":0.0001},"results":[]}'
+
+    def fake_urlopen(request, timeout):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            raise urllib.error.HTTPError(
+                request.full_url, 429, "Too Many Requests", Message(), io.BytesIO(burst)
+            )
+        return SuccessResponse()
+
+    sleeps: list[float] = []
+    monkeypatch.setattr(openalex.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(openalex.time, "sleep", sleeps.append)
+    with ApiCostLogger("burst-retry", tmp_path / "burst.jsonl") as logger:
+        body = openalex._request_json(
+            "https://api.openalex.org/works?filter=type%3Aarticle", logger=logger, timeout=1
+        )
+    assert body["results"] == [] and calls == 2
+    assert any(delay >= 1.0 for delay in sleeps)
+
+
+def test_unknown_credit_429_is_charged_reserve_not_blocking(tmp_path: Path) -> None:
+    path = tmp_path / "usage.jsonl"
+    base = {
+        "record_type": "request",
+        "source": "openalex",
+        "timestamp_utc": "2026-11-09T12:00:00Z",
+        "url": "https://api.openalex.org/works?filter=x",
+    }
+    rejected = {**base, "status_code": 429, "credits": 0, "credits_known": False}
+    rejected["cost_known"] = False
+    metered = {**base, "status_code": 200, "credits": 10, "credits_known": True}
+    metered["cost_known"] = True
+    metered["cost_usd"] = 0.001
+    path.write_text("\n".join(json.dumps(r) for r in (rejected, metered)) + "\n", "utf-8")
+    costs, credits = daily_logged_usage(
+        path, cost_per_credit_usd=Decimal("0.0001"), day=date(2026, 11, 9)
+    )
+    assert credits == Decimal(20) and costs == Decimal("0.002")
+    unknown_500 = {**rejected, "status_code": 500}
+    path.write_text(json.dumps(unknown_500) + "\n", "utf-8")
+    with pytest.raises(ValueError, match="unknown credits"):
+        daily_logged_usage(path, cost_per_credit_usd=Decimal("0.0001"), day=date(2026, 11, 9))

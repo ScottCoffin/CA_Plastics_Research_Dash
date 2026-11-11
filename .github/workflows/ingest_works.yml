@@ -24,6 +24,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: atlas-data-commits
@@ -68,7 +69,7 @@ jobs:
           OPENALEX_MAX_COST_USD: ${{ inputs.max_cost_usd || vars.OPENALEX_MAX_COST_USD }}
         run: |
           set -euo pipefail
-          args=(--allow-candidate)
+          args=()
           if [[ -n "${START_YEAR:-}" ]]; then args+=(--start-year "$START_YEAR"); fi
           if [[ -n "${END_YEAR:-}" ]]; then args+=(--end-year "$END_YEAR"); fi
           if [[ -n "${OPENALEX_MAX_CREDITS:-}" ]]; then args+=(--max-credits "$OPENALEX_MAX_CREDITS"); fi
@@ -82,6 +83,11 @@ jobs:
       - name: Label works
         if: steps.refresh.outputs.status == 'success'
         run: python scripts/label_works.py
+
+      # Experts/Institutions payloads for the live site (CA-affiliated experts only).
+      - name: Export site data
+        if: steps.refresh.outputs.status == 'success'
+        run: python scripts/build_export_site.py
 
       # S10.1 run history. Placed after label so counts reflect this run; always runs so failures are recorded.
       - name: Record run status
@@ -105,6 +111,7 @@ jobs:
         if: steps.refresh.outputs.status == 'success' && vars.ENABLE_DATA_COMMITS == 'true'
         env:
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -116,8 +123,16 @@ jobs:
             data/processed/work_labels.parquet \
             data/processed/status_history.jsonl \
             docs/normalization_qc.md \
-            docs/labels_qc.md
+            docs/labels_qc.md \
+            site/data/index.json \
+            site/data/aggregates.json \
+            site/data/build_metadata.json \
+            site/data/institutions.json \
+            site/data/institutions.geojson
+          git add -A site/data/authors
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"
           git pull --rebase origin "$DEFAULT_BRANCH"
           git push origin "HEAD:$DEFAULT_BRANCH"
+          # A GITHUB_TOKEN push does not trigger other workflows; dispatch the deploy.
+          gh workflow run build_deploy.yml --ref "$DEFAULT_BRANCH"

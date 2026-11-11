@@ -40,6 +40,7 @@ def _export(tmp_path: Path, **curation: Path) -> Path:
         institutions_path=normalized.output_dir / "institutions.parquet",
         output_dir=tmp_path / "site",
         generated_at="test",
+        ca_authors_only=False,
         **curation,
     )
     return tmp_path / "site"

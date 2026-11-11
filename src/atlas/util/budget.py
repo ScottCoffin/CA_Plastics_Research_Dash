@@ -150,6 +150,9 @@ def conservative_request_cost(
     return max(metadata, credit_count * cost_per_credit_usd)
 
 
+UNKNOWN_429_CREDITS = Decimal(10)
+
+
 def daily_logged_usage(
     path: str | Path,
     *,
@@ -186,6 +189,12 @@ def daily_logged_usage(
             if urlsplit(str(record.get("url", ""))).path.rstrip("/") == "/rate-limit":
                 continue
             if _utc_day(record.get("timestamp_utc"), line_number=line_number) != selected_day:
+                continue
+            if record.get("credits_known", True) is not True and record.get("status_code") == 429:
+                # A rate-limited request is rejected without a credit header. Charge it the
+                # conservative per-request reserve instead of blocking the rest of the day.
+                credits_total += UNKNOWN_429_CREDITS
+                cost_total += UNKNOWN_429_CREDITS * cost_per_credit_usd
                 continue
             if record.get("credits_known", True) is not True:
                 raise ValueError(
