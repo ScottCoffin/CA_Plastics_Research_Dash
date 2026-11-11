@@ -37,8 +37,8 @@ not a sign-off.
 | Independence disclaimer (A3.4 / G-12) | [index.html](../site/index.html) | Found: About tab disclaimer present | | |
 | Owner affiliation disclosure (co-founder role) on About tab | [REUSE.md](REUSE.md) | Gap: REUSE rule 7 expects it; not on About tab | | |
 | Data dictionary covers every public file in site/data and site/feed.xml | [DATA_DICTIONARY.md](DATA_DICTIONARY.md) | Found: check confirms each file named | | |
-| Licence audit: repository code licence | [LICENSE](../LICENSE) | Needs owner decision: file says "License pending owner confirmation" | | |
-| Licence audit: derived-data licence (CC BY per ADR-002) | [DECISIONS.md](../.agent/DECISIONS.md) | Needs owner decision: upstream licences unrecorded for several sources | | |
+| Licence audit: repository code licence | [LICENSE](../LICENSE) | Found: MIT, confirmed by owner 2026-11-10 (QUESTIONS LICENSE-A) | | |
+| Licence audit: derived-data licence (CC BY 4.0) | [LICENSE-DATA.md](../LICENSE-DATA.md) | Found: CC BY 4.0 confirmed by owner 2026-11-10; upstream terms per source in REUSE.md (some rows still incomplete, see next item) | | |
 | Licence audit: third-party register complete for shipped sources | [REUSE.md](REUSE.md) | Gap: no rows for NIH RePORTER, NSF, USAspending, CA Sea Grant, OPC grants, or ROR | | |
 | Monitoring rows limited to the rights-cleared dataset | [monitoring_publication.yml](../config/monitoring_publication.yml) | Found: 314 rows, one dataset (CC BY 4.0, owner determination) | | |
 | Monitoring registry entries with unknown licences (metadata only) | [monitoring.json](../site/data/monitoring.json) | Needs owner decision: 24 entries, most licences unknown | | |

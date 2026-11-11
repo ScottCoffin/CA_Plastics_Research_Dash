@@ -97,9 +97,8 @@ Two checks of the current outputs (2026-11-10):
 - `site/data/authors/*.json` is not packaged. These files hold full work rows, including
   abstracts, so they are outside the release set.
 
-Snapshot licence status: `LICENSE` is still a placeholder ("License pending owner
-confirmation"). The snapshot manifest records this status. Confirm the code and
-derived-data licences before publishing a release.
+Snapshot licence status: confirmed by the owner on 2026-11-10. Code is MIT (`LICENSE`)
+and derived data are CC BY 4.0 (`LICENSE-DATA.md`); the manifest records this.
 
 ## 4. Release to Zenodo
 

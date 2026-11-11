@@ -53,5 +53,5 @@ Agents must follow `spec.md` Part B and start with `.agent/README.md`.
 
 ## License
 
-The owner must confirm the code and derived-data licenses. See `LICENSE` and
-question G-7 in `.agent/QUESTIONS.md`.
+Code: MIT (`LICENSE`). Derived data: CC BY 4.0 (`LICENSE-DATA.md`). Third-party
+sources keep their own terms; see `docs/REUSE.md`. Cite with `CITATION.cff`.
