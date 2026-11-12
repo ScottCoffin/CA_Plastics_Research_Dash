@@ -201,9 +201,9 @@ def _draw_form(row: dict[str, str], design_options: list[str]) -> None:
 
     st.markdown("**Evidence** (the shortest exact excerpt that supports the decision)")
     st.text_area(
-        f"Evidence snippet (optional; needs a source; max {gl.MAX_SNIPPET_CHARS} characters)",
+        f"Evidence snippet (optional; paste from the title or abstract; up to "
+        f"{gl.MAX_SNIPPET_CHARS} characters)",
         value=init["evidence_snippet"],
-        max_chars=gl.MAX_SNIPPET_CHARS,
         key=widget_key("evidence_snippet"),
     )
     sources = ["", *gl.SOURCE_OPTIONS]
@@ -211,7 +211,7 @@ def _draw_form(row: dict[str, str], design_options: list[str]) -> None:
         "Evidence source",
         sources,
         index=sources.index(init["evidence_source"]) if init["evidence_source"] in sources else 0,
-        format_func=lambda v: v or "(none)",
+        format_func=lambda v: v or "(automatic: title if the snippet is in it, else abstract)",
         key=widget_key("evidence_source"),
     )
 

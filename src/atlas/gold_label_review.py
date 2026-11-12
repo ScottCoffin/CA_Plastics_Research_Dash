@@ -33,7 +33,7 @@ from atlas.nlp.annotation import (
 ANNOTATOR = "SC"
 GUIDE_VERSION = "guide_v2"
 SHEET_NAME = f"annotations_{ANNOTATOR}.csv"
-MAX_SNIPPET_CHARS = 300
+MAX_SNIPPET_CHARS = 1000
 SPLIT_ORDER = ("test", "dev", "train")
 # Dev and test are labelled before train: dev sets thresholds, test is frozen (F3).
 QUEUE_SPLIT_RANK = {"dev": 0, "test": 1, "train": 2}
@@ -416,7 +416,9 @@ def validate_row(
     return _normalize_row(dict(row), dict(splits), guide_version)
 
 
-def values_from_form(form: Mapping[str, Any], decision_status: str) -> dict[str, str]:
+def values_from_form(
+    form: Mapping[str, Any], decision_status: str, *, title: str = ""
+) -> dict[str, str]:
     """Map widget values to the sheet fields for one save.
 
     A negative work gets no tier, domain tags, ca_sampled or study_type: once a work is
@@ -432,6 +434,10 @@ def values_from_form(form: Mapping[str, Any], decision_status: str) -> dict[str,
 
     snippet = text("evidence_snippet")
     source = text("evidence_source")
+    if snippet and not source:
+        source = guess_source(snippet, title)
+    if not snippet:
+        source = ""
     if decision_status == "adjudication_required":
         return {
             "plastic_related": "",
@@ -457,6 +463,15 @@ def values_from_form(form: Mapping[str, Any], decision_status: str) -> dict[str,
     }
 
 
+def guess_source(snippet: str, title: str) -> str:
+    """'title' when the pasted snippet is part of the title, else 'abstract'."""
+
+    def squash(text: str) -> str:
+        return " ".join(str(text or "").casefold().split())
+
+    return "title" if squash(snippet) and squash(snippet) in squash(title) else "abstract"
+
+
 def save_decision(
     path: Path,
     work_id: str,
@@ -468,7 +483,7 @@ def save_decision(
     current = {row["work_id"]: row for row in read_rows(path)}
     if work_id not in current:
         raise KeyError(work_id)
-    values = values_from_form(form, decision_status)
+    values = values_from_form(form, decision_status, title=current[work_id].get("title", ""))
     validate_row({**current[work_id], **values}, splits)
     update_row(path, work_id, values)
     return values

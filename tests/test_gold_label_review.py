@@ -149,7 +149,7 @@ def test_adjudication_hold_without_evidence_is_rejected(tmp_path: Path) -> None:
 def test_snippet_longer_than_limit_is_rejected(tmp_path: Path) -> None:
     path = _sheet(tmp_path)
     form = {**COMPLETE_FORM, "evidence_snippet": "x" * (gl.MAX_SNIPPET_CHARS + 1)}
-    with pytest.raises(ValueError, match="longer than 300"):
+    with pytest.raises(ValueError, match=f"longer than {gl.MAX_SNIPPET_CHARS}"):
         gl.save_decision(path, "W1", form, "complete", gl.split_index(SPLITS))
 
 
@@ -392,3 +392,15 @@ def test_load_works_adds_doi_journal_and_authors(tmp_path: Path) -> None:
     assert out["W1"]["authors"] == ["First", "Second"]
     assert out["W1"]["journal"] == "J"
     assert out["W1"]["doi"] == "https://doi.org/10.1/a"
+
+
+def test_snippet_without_source_gets_one_automatically(tmp_path: Path) -> None:
+    path = _sheet(tmp_path)
+    title = gl.read_rows(path)[0]["title"]
+    splits = gl.split_index(SPLITS)
+    form = {**COMPLETE_FORM, "evidence_snippet": "samples were collected", "evidence_source": ""}
+    assert gl.save_decision(path, "W1", form, "complete", splits)["evidence_source"] == "abstract"
+    form["evidence_snippet"] = f"  {title.upper()} "
+    assert gl.save_decision(path, "W1", form, "complete", splits)["evidence_source"] == "title"
+    form.update(evidence_snippet="", evidence_source="abstract")
+    assert gl.save_decision(path, "W1", form, "complete", splits)["evidence_source"] == ""
