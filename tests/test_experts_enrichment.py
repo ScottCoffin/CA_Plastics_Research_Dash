@@ -72,6 +72,10 @@ def test_author_metrics_url_and_row() -> None:
         "i10_index": 1,
         "works_count": 3,
         "fetched_at_utc": "t",
+        # Expert page columns (2026-11-12); empty JSON lists when OpenAlex omits them.
+        "counts_by_year_json": "[]",
+        "last_known_institutions_json": "[]",
+        "affiliations_json": "[]",
     }
 
 

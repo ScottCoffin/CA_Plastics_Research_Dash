@@ -85,3 +85,9 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-11T18:16:04-08:00 | S4/S5 gold labels | haiku-developer | Streamlit gold-labelling app over the S4.2 sample (owner >10 rule) | Accepted after one continue message (turn limit); lead added metadata fallbacks (leak candidates, raw) so all 580 sample works resolve | 2 sessions; ~131K subagent tokens |
 | 2026-11-11T22:16:37-08:00 | H9 gold labels | haiku-developer | Gold app: evaluation-set view (dev+test pool), pre-select prior AT-1 relevance decisions | Running | - |
 | 2026-11-11 | H9 gold labels | (result) | Gold app evaluation-set view + prior AT-1 decisions | Accepted first pass (33 focused tests; lead fixed one misattributed comment; full gate 1248 passed) | 1 session; ~56K subagent tokens |
+| 2026-11-12T08:42:17-08:00 | S9.3 expert page | haiku-developer | Full-page expert view site/expert.html + assets/expert_page.js (histogram, sortable/filterable works, topic-chip filters) against the new author data contract | Running | - |
+| 2026-11-12 | S9.3 expert page | (result) | Full-page expert view | Accepted after one continue message (turn limit); 11 focused tests incl. Node runtime; lead review: no external hosts, histogram signature kept | 2 sessions; ~166K subagent tokens |
+| 2026-11-12T08:55:52-08:00 | S9.6a outreach contacts | haiku-developer | Offline contact-list builder to gitignored data/private/ (counts-only output, opt-outs) | Running | - |
+| 2026-11-12 | S9.6a outreach contacts | (result) | Offline contact builder | Accepted first pass (22 tests); lead renamed opt-out file to docs/OUTREACH.md name | 1 session |
+| 2026-11-12T09:04:20-08:00 | AT4-SEARCH | haiku-developer | Wire vendored MiniSearch into facets.js (ranked) and Experts search | Running | - |
+| 2026-11-12 | AT4-SEARCH | (result) | MiniSearch wiring | Accepted first pass (11 tests, check_at4, check_s3_3) | 1 session; ~65K subagent tokens |

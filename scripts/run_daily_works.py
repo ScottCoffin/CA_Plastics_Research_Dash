@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pyarrow.parquet as pq
@@ -59,6 +59,11 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--start-year", type=int)
     parser.add_argument("--end-year", type=int)
+    parser.add_argument(
+        "--no-date-cap",
+        action="store_true",
+        help="do not cap to_publication_date at yesterday UTC (AT11-WINDOW)",
+    )
     parser.add_argument("--updated-since")
     parser.add_argument(
         "--institution-parquet", type=Path, default=Path("data/processed/institutions.parquet")
@@ -139,6 +144,10 @@ def main(argv: list[str] | None = None) -> int:
         raw_affiliation_scope=args.raw_affiliation_scope,
         anchor_author_ids=(
             load_anchor_author_ids(args.authors_parquet) if args.author_anchored else None
+        ),
+        # Owner AT11-WINDOW (2026-11-12): pull only complete days (up to yesterday UTC).
+        publication_date_cap=(
+            None if args.no_date_cap else (datetime.now(UTC).date() - timedelta(days=1)).isoformat()
         ),
     )
     _write_github_output("status", result["status"])

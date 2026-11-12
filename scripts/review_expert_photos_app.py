@@ -33,10 +33,25 @@ def _sheet():
 
 
 def _decide(key: str, decision: str, note: str, view: str, pos: int) -> None:
-    set_fields(_sheet(), key, {"owner_decision": decision, "owner_notes": note})
+    sheet = _sheet()
+    old = sheet.find(key)
+    st.session_state.setdefault("history", []).append(
+        {
+            "key": key,
+            "label": old["wikidata_label"] or key,
+            "decision": decision,
+            "fields": {"owner_decision": old["owner_decision"], "owner_notes": old["owner_notes"]},
+        }
+    )
+    set_fields(sheet, key, {"owner_decision": decision, "owner_notes": note})
     if view != "Pending":
         st.session_state.pos = pos + 1
     st.rerun()
+
+
+def _undo() -> None:
+    last = st.session_state.history.pop()
+    set_fields(_sheet(), last["key"], last["fields"])
 
 
 def main() -> None:
@@ -51,6 +66,13 @@ def main() -> None:
     with st.sidebar:
         st.progress(done / len(rows) if rows else 1.0, text=f"Reviewed {done} of {len(rows)}")
         view = st.selectbox("Show", VIEWS, index=0)
+        history = st.session_state.get("history", [])
+        if history:
+            last = history[-1]
+            st.caption(f"Last: {last['decision'] or 'clear'} — {last['label']}")
+        if st.button("↶ Undo last decision", width="stretch", disabled=not history):
+            _undo()
+            st.rerun()
         st.caption(
             "Approve only if the photo shows this expert. The site will show the "
             "licence and credit under the photo."

@@ -371,6 +371,25 @@ CA_BASIS_RAW = "raw_affiliation"
 CA_BASIS_CARRY = "author_carry_forward"
 CA_BASIS_ESCHOLARSHIP = "escholarship"
 ESCHOLARSHIP_PATH = Path("data/processed/escholarship_items.parquet")
+# Owner CA-CARRY-ORCID (2026-11-12): a carry-forward is dropped when the author's ORCID
+# record has dated employments and none in California covers the work year.
+ORCID_PROFILES_PATH = Path("data/processed/orcid_profiles.parquet")
+
+
+def load_orcid_employment(
+    path: str | Path | None,
+) -> dict[str, tuple[list[dict[str, Any]], list[list[int | None]]]]:
+    """``{author_id: (employments, ca_employment_years)}``; empty when the file is absent."""
+    if path is None or not Path(path).exists():
+        return {}
+    table = pq.read_table(path, columns=["author_id", "employments", "ca_employment_years"])
+    return {
+        row["author_id"]: (list(row["employments"] or []), list(row["ca_employment_years"] or []))
+        for row in table.to_pylist()
+        if row["author_id"]
+    }
+
+
 ESCHOLARSHIP_CERTAIN = frozenset({"etd", "uc_oa_policy", "uc_unit"})
 CARRY_FORWARD_YEAR_WINDOW = 2
 
@@ -552,6 +571,10 @@ def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) 
             metrics["authorships_ca_carry_forward"],
         ),
         (
+            "Carry-forwards dropped: ORCID dated non-CA employment covers the year",
+            metrics.get("authorships_carry_forward_orcid_contradicted", 0),
+        ),
+        (
             "Authorships CA by eScholarship (UC thesis author or matched UC co-author)",
             metrics.get("authorships_ca_escholarship", 0),
         ),
@@ -669,13 +692,20 @@ def _apply_carry_forward(
     authorships: list[dict[str, Any]],
     works: Sequence[Mapping[str, Any]],
     author_state: dict[str, dict[str, Any]],
-) -> None:
+    orcid_employment: Mapping[str, tuple[list[dict[str, Any]], list[list[int | None]]]]
+    | None = None,
+) -> int:
     """Mark empty-affiliation authorships ``author_carry_forward`` (in place).
 
     An authorship with no institutions and no real raw affiliation inherits California
     from the same author when that author has a registry/raw CA authorship on a work
-    published within ``CARRY_FORWARD_YEAR_WINDOW`` years.
+    published within ``CARRY_FORWARD_YEAR_WINDOW`` years, unless the author's ORCID
+    employments contradict it (dated employments, none in California covering the year;
+    owner CA-CARRY-ORCID 2026-11-12). Returns the number of contradicted carry-forwards.
     """
+    from atlas.ingest.orcid import classify_carry_forward
+
+    contradicted = 0
     year_of = {row["work_id"]: row["year"] for row in works}
     ca_years: dict[str, list[int]] = defaultdict(list)
     for row in authorships:
@@ -695,8 +725,13 @@ def _apply_carry_forward(
         if any(
             abs(year - other) <= CARRY_FORWARD_YEAR_WINDOW for other in ca_years[row["author_id"]]
         ):
+            employment = (orcid_employment or {}).get(row["author_id"])
+            if employment and classify_carry_forward(year, *employment) == "contradicted":
+                contradicted += 1
+                continue
             row["ca_basis"] = CA_BASIS_CARRY
             author_state[row["author_id"]]["ca_works"].add(row["work_id"])
+    return contradicted
 
 
 def normalize_records(
@@ -711,6 +746,7 @@ def normalize_records(
     generated_at: str | None = None,
     state_agencies_path: str | Path | None = STATE_AGENCIES_PATH,
     escholarship_path: str | Path | None = ESCHOLARSHIP_PATH,
+    orcid_profiles_path: str | Path | None = ORCID_PROFILES_PATH,
 ) -> NormalizationResult:
     """Normalize raw OpenAlex work objects into C3-shaped Parquet tables.
 
@@ -892,7 +928,9 @@ def normalize_records(
     escholarship_works = _apply_escholarship(
         works, authorships, author_state, load_escholarship_evidence(escholarship_path)
     )
-    _apply_carry_forward(authorships, works, author_state)
+    carry_contradicted = _apply_carry_forward(
+        authorships, works, author_state, load_orcid_employment(orcid_profiles_path)
+    )
     ca_any_works = {row["work_id"] for row in authorships if row["ca_basis"]}
     ca_any_works |= escholarship_works
     ca_led_works = {
@@ -963,6 +1001,7 @@ def normalize_records(
         "authorships_ca_registry": sum(r["ca_basis"] == CA_BASIS_REGISTRY for r in authorships),
         "authorships_ca_raw_affiliation": sum(r["ca_basis"] == CA_BASIS_RAW for r in authorships),
         "authorships_ca_carry_forward": sum(r["ca_basis"] == CA_BASIS_CARRY for r in authorships),
+        "authorships_carry_forward_orcid_contradicted": carry_contradicted,
         "authorships_ca_escholarship": sum(
             r["ca_basis"] == CA_BASIS_ESCHOLARSHIP for r in authorships
         ),

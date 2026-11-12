@@ -268,8 +268,8 @@ def build_works_url(
         raise ValueError("OpenAlex accepts at most 100 institution IDs per request")
     if start_date and updated_since:
         raise ValueError("choose publication-date or updated-since mode, not both")
-    if end_date and not start_date:
-        raise ValueError("end_date requires start_date")
+    if end_date and not (start_date or updated_since):
+        raise ValueError("end_date requires start_date or updated_since")
     if not 1 <= per_page <= 100:
         raise ValueError("per_page must be between 1 and 100")
 
@@ -604,6 +604,7 @@ def ingest_live(
     replace_output: bool = False,
     anchor_author_ids: Sequence[str] | None = None,
     raw_affiliation_scope: bool = False,
+    publication_date_cap: str | None = None,
 ) -> dict[str, Any]:
     """Run a backfill or inclusive publication/update-date incremental pull.
 
@@ -614,6 +615,8 @@ def ingest_live(
     California raw affiliation, recovering works the institution filter cannot see.
     ``raw_affiliation_scope`` adds one term-search unit on ``raw_affiliation_strings``
     ("California"); its works are kept only when a raw affiliation passes the strict matcher.
+    ``publication_date_cap`` (ISO date; the daily runner passes yesterday UTC, owner
+    AT11-WINDOW 2026-11-12) adds ``to_publication_date`` so only complete days are pulled.
     """
 
     config = load_query_config(config_path)
@@ -672,9 +675,12 @@ def ingest_live(
             # 1950 backfill was ~3,800 calls for ~2,000 works.
             windows: list[tuple[str | None, str | None]]
             if start_year is not None and end_year is not None:
-                windows = [(f"{start_year:04d}-01-01", f"{end_year:04d}-12-31")]
+                window_end = f"{end_year:04d}-12-31"
+                if publication_date_cap and publication_date_cap < window_end:
+                    window_end = publication_date_cap
+                windows = [(f"{start_year:04d}-01-01", window_end)]
             else:
-                windows = [(None, None)]
+                windows = [(None, publication_date_cap)]
             for window_start, window_end in windows:
                 cursor = "*"
                 page_count = 0

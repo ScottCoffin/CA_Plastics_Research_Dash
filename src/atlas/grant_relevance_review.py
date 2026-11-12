@@ -10,8 +10,9 @@ they are never written back.
 
 ``assist_plastic_related`` keeps Haiku's suggestion permanently, so an owner's
 choice can always be compared with it. ``plastic_related`` is the value the export
-uses: the owner's choice when confirmed or changed, and Haiku's value when pending
-or unsure. Files without the column are loaded with it filled from ``plastic_related``.
+uses: the owner's choice when confirmed or changed, Haiku's value when pending, and
+false when unsure (owner UNSURE-SEM, 2026-11-12: unsure is not plastic-related).
+Files without the column are loaded with it filled from ``plastic_related``.
 """
 
 from __future__ import annotations
@@ -156,8 +157,9 @@ def record_decision(
         base = row["reason"].split(NOTE_MARKER, 1)[0]
         row["reason"] = f"{base}{NOTE_MARKER}{cleaned}"
     if plastic_related is None:
-        # Unsure leaves the export on Haiku's value; the owner's earlier choice is discarded.
-        row["plastic_related"] = "true" if prior else "false"
+        # Owner UNSURE-SEM (2026-11-12): an owner-unsure grant is treated as not
+        # plastic-related; the owner's earlier choice is discarded.
+        row["plastic_related"] = "false"
         row["owner_review"] = "unsure"
     else:
         row["plastic_related"] = "true" if plastic_related else "false"

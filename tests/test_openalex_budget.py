@@ -592,6 +592,12 @@ def test_unknown_credit_429_is_charged_reserve_not_blocking(tmp_path: Path) -> N
         path, cost_per_credit_usd=Decimal("0.0001"), day=date(2026, 11, 9)
     )
     assert credits == Decimal(20) and costs == Decimal("0.002")
+    gateway = {**rejected, "status_code": 504}
+    path.write_text(json.dumps(gateway) + "\n", "utf-8")
+    costs, credits = daily_logged_usage(
+        path, cost_per_credit_usd=Decimal("0.0001"), day=date(2026, 11, 9)
+    )
+    assert credits == Decimal(10)
     unknown_500 = {**rejected, "status_code": 500}
     path.write_text(json.dumps(unknown_500) + "\n", "utf-8")
     with pytest.raises(ValueError, match="unknown credits"):

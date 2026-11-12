@@ -20,6 +20,7 @@ the next daily run continues. ``plastic_fetched_at_utc`` is empty until covered.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import urllib.parse
 from datetime import UTC, datetime, timedelta
@@ -40,7 +41,7 @@ from atlas.ingest.openalex import (  # noqa: E402
 )
 from atlas.query import load_query_config, openalex_filter, type_filters  # noqa: E402
 from atlas.util.budget import daily_logged_usage, resolve_openalex_budget  # noqa: E402
-from atlas.util.cost import ApiCostLogger  # noqa: E402
+from atlas.util.cost import ApiCostLogger, OpenAlexUsageMetadataError  # noqa: E402
 
 SCHEMA = pa.schema(
     [
@@ -54,6 +55,18 @@ SCHEMA = pa.schema(
         ("plastic_citations_global", pa.int64()),
         ("plastic_query_version", pa.string()),
         ("plastic_fetched_at_utc", pa.string()),
+        # JSON columns (2026-11-12, owner request: expert page). Citations received per
+        # year (OpenAlex counts_by_year, last ~10 years), the author's own affiliations,
+        # and plastics citations received per year over the whole-record plastics works.
+        ("counts_by_year_json", pa.string()),
+        ("last_known_institutions_json", pa.string()),
+        ("affiliations_json", pa.string()),
+        ("plastic_counts_by_year_json", pa.string()),
+        # Whole-record works per publication year (group_by, 1 credit per author) and the
+        # robust first publication year used for the m-quotient.
+        ("works_by_year_json", pa.string()),
+        ("first_pub_year", pa.int64()),
+        ("career_fetched_at_utc", pa.string()),
     ]
 )
 BATCH = 100
@@ -75,7 +88,10 @@ def authors_url(ids: list[str]) -> str:
     params = {
         "filter": "openalex:" + "|".join(ids),
         "per-page": len(ids),
-        "select": "id,cited_by_count,summary_stats,works_count",
+        "select": (
+            "id,cited_by_count,summary_stats,works_count,counts_by_year,"
+            "last_known_institutions,affiliations"
+        ),
     }
     return f"{OPENALEX_BASE}/authors?{urllib.parse.urlencode(params)}"
 
@@ -87,13 +103,58 @@ def plastic_works_url(config: dict, ids: list[str], cursor: str = "*") -> str:
         "filter": ",".join(filters),
         "per-page": 100,
         "cursor": cursor,
-        "select": "id,cited_by_count,authorships",
+        "select": "id,cited_by_count,authorships,counts_by_year",
     }
+    return f"{OPENALEX_BASE}/works?{urllib.parse.urlencode(params)}"
+
+
+def works_by_year_url(config: dict, author: str) -> str:
+    filters = ["authorships.author.id:" + author, *type_filters(config)]
+    params = {"filter": ",".join(filters), "group_by": "publication_year"}
     return f"{OPENALEX_BASE}/works?{urllib.parse.urlencode(params)}"
 
 
 def _short(value: object) -> str:
     return str(value or "").rsplit("/", 1)[-1]
+
+
+def _json(value: object) -> str:
+    return json.dumps(value, separators=(",", ":"), sort_keys=True)
+
+
+def _institution(item: dict) -> dict:
+    return {
+        "id": _short(item.get("id")),
+        "name": str(item.get("display_name") or ""),
+        "country_code": str(item.get("country_code") or ""),
+    }
+
+
+def works_by_year(body: dict) -> dict[int, int]:
+    """``{year: works}`` from a ``group_by=publication_year`` response."""
+    out: dict[int, int] = {}
+    for group in body.get("group_by") or []:
+        try:
+            year = int(str(group.get("key")))
+        except ValueError:
+            continue
+        out[year] = out.get(year, 0) + int(group.get("count") or 0)
+    return out
+
+
+def robust_first_year(counts: dict[int, int], *, window: int = 5) -> int | None:
+    """Earliest publication year that is not an isolated outlier.
+
+    A year counts as the career start when the author has at least two works in it and
+    the following ``window`` years together, which skips single works misattributed by
+    OpenAlex author disambiguation decades before the real career. Authors with a single
+    work fall back to that year.
+    """
+    years = sorted(year for year, n in counts.items() if n > 0)
+    for year in years:
+        if sum(counts.get(y, 0) for y in range(year, year + window + 1)) >= 2:
+            return year
+    return years[0] if years else None
 
 
 def row_from_author(author: dict, fetched_at: str) -> dict:
@@ -105,6 +166,29 @@ def row_from_author(author: dict, fetched_at: str) -> dict:
         "i10_index": int(stats.get("i10_index") or 0),
         "works_count": int(author.get("works_count") or 0),
         "fetched_at_utc": fetched_at,
+        "counts_by_year_json": _json(
+            sorted(
+                (
+                    {"year": int(c["year"]), "cited_by_count": int(c.get("cited_by_count") or 0)}
+                    for c in author.get("counts_by_year") or []
+                    if c.get("year")
+                ),
+                key=lambda c: c["year"],
+            )
+        ),
+        "last_known_institutions_json": _json(
+            [_institution(i) for i in author.get("last_known_institutions") or []]
+        ),
+        "affiliations_json": _json(
+            [
+                {
+                    **_institution(a.get("institution") or {}),
+                    "years": sorted(int(y) for y in a.get("years") or []),
+                }
+                for a in author.get("affiliations") or []
+                if (a.get("institution") or {}).get("id")
+            ]
+        ),
     }
 
 
@@ -119,12 +203,35 @@ def tally_plastic_works(works: list[dict], batch: set[str]) -> dict[str, list[in
     return tally
 
 
+def tally_plastic_by_year(works: list[dict], batch: set[str]) -> dict[str, dict[int, int]]:
+    """``{author_id: {year: citations received that year}}`` over the matching works."""
+    tally: dict[str, dict[int, int]] = {author: {} for author in batch}
+    for work in works:
+        authors = {_short((a.get("author") or {}).get("id")) for a in work.get("authorships") or []}
+        for author in authors & batch:
+            for count in work.get("counts_by_year") or []:
+                if not count.get("year"):
+                    continue
+                year = int(count["year"])
+                tally[author][year] = tally[author].get(year, 0) + int(
+                    count.get("cited_by_count") or 0
+                )
+    return tally
+
+
 def _empty_plastic() -> dict:
     return {
         "plastic_works_global": None,
         "plastic_citations_global": None,
         "plastic_query_version": "",
         "plastic_fetched_at_utc": "",
+        "counts_by_year_json": "",
+        "last_known_institutions_json": "",
+        "affiliations_json": "",
+        "plastic_counts_by_year_json": "",
+        "works_by_year_json": "",
+        "first_pub_year": None,
+        "career_fetched_at_utc": "",
     }
 
 
@@ -149,6 +256,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--config", type=Path, default=Path("config/queries.yml"))
     parser.add_argument("--usage-log", type=Path, default=Path("data/logs/api_usage.jsonl"))
     parser.add_argument("--skip-plastics", action="store_true")
+    parser.add_argument("--skip-career", action="store_true", help="skip works-per-year pass")
+    parser.add_argument(
+        "--career-max-age-days",
+        type=int,
+        default=180,
+        help="refresh works-per-year (first publication year) only when older than this",
+    )
     parser.add_argument(
         "--plastics-max-age-days",
         type=int,
@@ -181,6 +295,10 @@ def main(argv: list[str] | None = None) -> int:
             body = _request_json(url, logger=logger)
         except OpenAlexRateLimitError as exc:
             raise Stop(f"rate limited ({exc})") from exc
+        except OpenAlexUsageMetadataError as exc:
+            # A gateway failure (e.g. HTTP 504) without a credit header: save and stop;
+            # the next run resumes from the saved rows.
+            raise Stop(f"OpenAlex request failed ({exc})") from exc
         for record in logger.request_metrics[before:]:
             credits = Decimal(str(record.get("credits") or 10))
             spent["credits"] += credits
@@ -196,6 +314,28 @@ def main(argv: list[str] | None = None) -> int:
                     row = row_from_author(author, fetched_at)
                     rows[row["author_id"]] = {**rows.get(row["author_id"], {}), **row}
             _save(args.output, rows)
+            if not args.skip_career:
+                career_cutoff = (
+                    datetime.now(UTC) - timedelta(days=args.career_max_age_days)
+                ).isoformat()
+                pending_career = [
+                    a
+                    for a in ids
+                    if (rows.get(a, {}).get("career_fetched_at_utc") or "") < career_cutoff
+                ]
+                for done, author in enumerate(pending_career, 1):
+                    counts = works_by_year(call(works_by_year_url(config, author), logger))
+                    rows[author] = {
+                        **rows.get(author, {"author_id": author}),
+                        "works_by_year_json": _json(
+                            [{"year": y, "works": n} for y, n in sorted(counts.items())]
+                        ),
+                        "first_pub_year": robust_first_year(counts),
+                        "career_fetched_at_utc": fetched_at,
+                    }
+                    if done % 100 == 0:
+                        _save(args.output, rows)
+                _save(args.output, rows)
             if not args.skip_plastics:
                 version = str(config.get("version") or "")
                 cutoff = (
@@ -205,7 +345,11 @@ def main(argv: list[str] | None = None) -> int:
                 def stale(author: str) -> bool:
                     row = rows.get(author, {})
                     fetched = row.get("plastic_fetched_at_utc") or ""
-                    return row.get("plastic_query_version") != version or fetched < cutoff
+                    return (
+                        row.get("plastic_query_version") != version
+                        or fetched < cutoff
+                        or not row.get("plastic_counts_by_year_json")
+                    )
 
                 pending = sorted(
                     [a for a in ids if stale(a)],
@@ -223,11 +367,18 @@ def main(argv: list[str] | None = None) -> int:
                         body = call(plastic_works_url(config, batch, cursor), logger)
                         works.extend(body.get("results") or [])
                         cursor = (body.get("meta") or {}).get("next_cursor")
+                    by_year = tally_plastic_by_year(works, set(batch))
                     for author, (n, cites) in tally_plastic_works(works, set(batch)).items():
                         rows[author] = {
                             **rows.get(author, {"author_id": author}),
                             "plastic_works_global": n,
                             "plastic_citations_global": cites,
+                            "plastic_counts_by_year_json": _json(
+                                [
+                                    {"year": y, "cited_by_count": c}
+                                    for y, c in sorted(by_year[author].items())
+                                ]
+                            ),
                             "plastic_query_version": version,
                             "plastic_fetched_at_utc": fetched_at,
                         }

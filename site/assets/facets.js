@@ -170,6 +170,25 @@
       return out;
     }
 
+    // Ranked, typo-tolerant variant of searchBits over the same titles. Uses the MiniSearch
+    // global (vendored at site/assets/vendor/) when present; otherwise falls back to searchBits.
+    // Returns the same bit-set format; ranking order is not kept in the bits.
+    rankedSearchBits(query, opts) {
+      const text = String(query == null ? '' : query).trim();
+      if (!text || typeof MiniSearch !== 'function') return this.searchBits(query);
+      if (!this._ranked || this._ranked.ctor !== MiniSearch) {
+        const index = new MiniSearch({ fields: ['title'], idField: 'id', storeFields: [] });
+        index.addAll(this.titles.map((title, id) => ({ id, title })));
+        this._ranked = { ctor: MiniSearch, index };
+      }
+      const { fuzzy = 0.2, prefix = true } = opts || {};
+      const out = new Uint32Array(this.W);
+      for (const { id } of this._ranked.index.search(text, { prefix, fuzzy, combineWith: 'AND' })) {
+        out[id >>> 5] |= (1 << (id & 31)) >>> 0;
+      }
+      return out;
+    }
+
     // Work ids (index order) selected by sel AND extra bits.
     selectedIds(sel, extraBits) {
       const selected = this._intersect(this._unions(sel), this._checkExtra(extraBits), null);

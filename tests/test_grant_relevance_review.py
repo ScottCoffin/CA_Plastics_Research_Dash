@@ -92,18 +92,19 @@ def test_haiku_value_reads_the_assist_column() -> None:
     assert haiku_value({"plastic_related": "true", "owner_review": "pending"}) is True
 
 
-def test_unsure_restores_haiku_value(csv_copy: Path) -> None:
+def test_unsure_is_not_plastic_related(csv_copy: Path) -> None:
+    """Owner UNSURE-SEM (2026-11-12): unsure means not plastic-related."""
     table = load_grant_reviews(csv_copy)
     assert record_decision(table, "eee5", None, "SC", today=TODAY) == "unsure"
-    # ddd4 was changed to false; skipping it puts Haiku's true back for the export.
+    # Both skipped grants export as false, whatever Haiku or the owner said before.
     assert record_decision(table, "ddd4", None, "SC", today=TODAY) == "unsure"
     save_grant_reviews(table, csv_copy)
     row = _row(csv_copy, "eee5")
     assert row["owner_review"] == "unsure"
-    assert row["plastic_related"] == "true"
+    assert row["plastic_related"] == "false"
     assert row["reviewer"] == "SC"
     ddd4 = _row(csv_copy, "ddd4")
-    assert ddd4["plastic_related"] == "true"
+    assert ddd4["plastic_related"] == "false"
     assert ddd4["assist_plastic_related"] == "true"
 
 
@@ -193,7 +194,7 @@ def test_output_loads_with_curation_loader(csv_copy: Path) -> None:
         "bbb2": False,
         "ccc3": True,
         "ddd4": False,
-        "eee5": True,
+        "eee5": False,  # unsure = not plastic-related (UNSURE-SEM)
     }
 
 

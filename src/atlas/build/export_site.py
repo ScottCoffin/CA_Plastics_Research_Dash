@@ -21,6 +21,7 @@ from typing import Any
 
 import pyarrow.parquet as pq
 
+from atlas.build import expert_metrics
 from atlas.build.curation import (
     apply_curation,
     load_curation,
@@ -193,6 +194,7 @@ def _write_author_details(
     authors: Sequence[Mapping[str, Any]],
     works_by_author: Mapping[str, list[Mapping[str, Any]]],
     profiles: Mapping[str, Mapping[str, Any]] | None = None,
+    extras: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> None:
     written: set[str] = set()
     for author in authors:
@@ -201,7 +203,7 @@ def _write_author_details(
             continue
         detail = {
             "schema_version": SCHEMA_VERSION,
-            "author": dict(author),
+            "author": {**dict(author), **dict((extras or {}).get(author_id, {}))},
             "works": list(works_by_author.get(author_id, [])),
         }
         # Additive: the key is omitted entirely for authors without a drawer profile.
@@ -547,7 +549,12 @@ def export_site(
     works_by_author: defaultdict[str, list[str]] = defaultdict(list)
     institutions_by_author: defaultdict[str, set[str]] = defaultdict(set)
     institutions_by_work: defaultdict[str, set[str]] = defaultdict(set)
+    # The author's OWN institutions on each work (not co-authors'), for the expert page.
+    own_institutions: defaultdict[tuple[str, str], set[str]] = defaultdict(set)
     for row in authorship_rows:
+        own_institutions[(_text(row.get("author_id")), _text(row.get("work_id")))].update(
+            _text(i) for i in _list(row.get("institution_ids")) if _text(i)
+        )
         work_id = _text(row.get("work_id"))
         author_id = _text(row.get("author_id"))
         if work_id:
@@ -606,10 +613,12 @@ def export_site(
 
     metric_rows = _read(author_metrics_path, required=False) if author_metrics_path else []
     career: dict[str, dict[str, int]] = {}
+    metric_rows_by_target: defaultdict[str, list[Mapping[str, Any]]] = defaultdict(list)
     for metric in metric_rows:
         target = curation.author_merges.get(
             _text(metric.get("author_id")), _text(metric.get("author_id"))
         )
+        metric_rows_by_target[target].append(metric)
         entry = career.setdefault(
             target, {"cited_by_count": 0, "h_index": 0, "plastic_works": 0, "plastic_cites": 0}
         )
@@ -665,6 +674,60 @@ def export_site(
                 "institution_ids": sorted(institutions_by_author.get(author_id, set())),
             }
         )
+
+    # Career metrics, primary affiliations and citation histograms (expert page).
+    # Fixture builds pass a literal generated_at such as "fixture"; use the clock then.
+    stamp = generated_at or ""
+    current_year = int(stamp[:4]) if stamp[:4].isdigit() else datetime.now(UTC).year
+    institution_names = {
+        _text(row.get("inst_id")): _text(row.get("name")) for row in institution_rows
+    }
+    merged_metrics = {
+        author["author_id"]: expert_metrics.merge_metric_rows(
+            metric_rows_by_target.get(author["author_id"], [])
+        )
+        for author in author_index
+    }
+    rising = expert_metrics.rising_scores(
+        {key: value["plastic_by_year"] for key, value in merged_metrics.items()}, current_year
+    )
+    author_extras: dict[str, dict[str, Any]] = {}
+    for author in author_index:
+        author_id = author["author_id"]
+        merged = merged_metrics[author_id]
+        own_years = [
+            (slim_by_id[work_id].get("year"), work_id)
+            for work_id in author["work_ids"]
+            if work_id in slim_by_id and isinstance(slim_by_id[work_id].get("year"), int)
+        ]
+        latest = max((year for year, _ in own_years), default=None)
+        recent_ids = [
+            institution_id
+            for year, work_id in own_years
+            if year == latest
+            for institution_id in own_institutions.get((author_id, work_id), ())
+        ]
+        primary = expert_metrics.primary_affiliations(merged, recent_ids, institution_names)
+        first_year = merged["first_pub_year"]
+        score = rising.get(author_id)
+        author.update(
+            {
+                "primary_affiliations": [item["name"] for item in primary if item["name"]],
+                "first_pub_year": first_year,
+                "m_quotient": expert_metrics.m_quotient(
+                    author.get("h_index"), first_year, current_year
+                ),
+                "rising_score": score[0] if score else None,
+                "rising_pct": score[1] if score else None,
+                "early_career": isinstance(first_year, int)
+                and current_year - first_year <= expert_metrics.EARLY_CAREER_YEARS,
+            }
+        )
+        author_extras[author_id] = {
+            "primary_affiliations": primary,
+            "affiliation_history": expert_metrics.affiliation_history(merged),
+            "citations_by_year": expert_metrics.citations_by_year(merged, current_year),
+        }
 
     experts_by_institution = _institution_experts(
         authorship_rows,
@@ -762,7 +825,12 @@ def export_site(
         author_index,
         {
             author_id: [
-                full_work_by_id[work_id]
+                {
+                    **full_work_by_id[work_id],
+                    "author_institution_ids": sorted(
+                        own_institutions.get((author_id, work_id), set())
+                    ),
+                }
                 # dict.fromkeys drops duplicates left by merged authorships, keeping order.
                 for work_id in dict.fromkeys(work_ids)
                 if work_id in full_work_by_id
@@ -770,6 +838,7 @@ def export_site(
             for author_id, work_ids in works_by_author.items()
         },
         profiles,
+        author_extras,
     )
     _write_institution_works(
         output,

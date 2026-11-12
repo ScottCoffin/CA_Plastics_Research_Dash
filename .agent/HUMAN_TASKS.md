@@ -12,7 +12,7 @@ spreadsheet to edit by hand. Small reviews (10 or fewer) may stay as a file edit
 All commands run from the repository folder in Git Bash:
 `cd ~/R_new/CA_Plastics_Research_Dash`
 
-Last updated: 2026-11-11.
+Last updated: 2026-11-12.
 
 ---
 
@@ -49,50 +49,6 @@ Last updated: 2026-11-11.
 - Optional: the default **Smart queue (active learning)** view asks about the works
   the model is least sure of. Use it after H2 to label faster.
 
-### H3. Set institution types for the new top-100 institutions (AT2-REVIEW)
-1. Run `py -3.14 -m streamlit run scripts/review_institution_types_app.py`
-   (47 institutions today; QUESTIONS.md says 52).
-2. For each institution, read the name and the proposed type. Use **Open in
-   OpenAlex** or **Search the web** if you are not sure what it is.
-3. Click **✓ Accept proposed** if it is right. Otherwise click the correct type
-   (hover a button for its definition; **Type definitions** in the sidebar lists
-   them all). If none fits (for example a community college), pick the closest and
-   type a note first; the agent will add a type if needed.
-4. Each click saves the type, today's date and your note to
-   `data/processed/institution_review_needs_v31.csv`, and the next institution appears.
-- **Done when:** the sidebar shows "Reviewed 47 of 47". Tell the agent
-  "AT2-REVIEW done".
-
-### H4. Approve or reject 44 expert photos from Wikidata (S9.5)
-1. Run `py -3.14 -m streamlit run scripts/review_expert_photos_app.py`.
-2. For each photo, compare it with the expert. Use **Atlas profile**, **Wikidata**
-   and **Commons page** if you need to check the person or the licence.
-3. Click **✓ Approve** (same person, fine to show with the licence and credit) or
-   **✗ Reject** (wrong person, or you do not want it shown). Type a note first if useful.
-4. Each click saves to `curation/expert_photo_review.csv`, and the next photo appears.
-   (If the sheet is regenerated with `py -3.14 scripts/build_photo_review.py`,
-   your decisions are kept.)
-- **Done when:** all 44 rows have `approve` or `reject`. Tell the agent
-  "photos reviewed". No photo is shown on the site before this.
-
-### H5. Answer five open questions (defaults are in use until you answer)
-Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
-("keep default" or "change").
-- **AT4-SEARCH:** title search is the home-made token search. Default: keep it.
-  Change = add the MiniSearch library (better search, one new dependency).
-- **AT11-WINDOW:** the daily ingest has no "only up to yesterday" cap. Default: no
-  cap. Change = cap at yesterday (future-dated works arrive a day later).
-- **CA-CARRY-ORCID:** some authors are counted as California-based in years when
-  their ORCID shows a job elsewhere (19 of 109 checkable cases; list in
-  `docs/api_notes/orcid_enrichment.md`). Default: keep counting them and list the
-  cases. Change = drop those years.
-- **EM5-FRAMEWORK:** the evidence map (EM-5, which unblocks the rest of the A2 views)
-  can be built in the current site, or after moving the site to Observable Framework.
-  Default: current site, built step by step. Change = Framework first.
-- **OUTREACH-EMAILS:** expert outreach (S9.6) needs a private email list (gitignored,
-  never published), but you also asked that no emails be stored. Default: no emails,
-  so S9.6 waits. Change = allow emails in `data/private/` only, for outreach you send.
-
 ### H6. Cut a new archived release when you want a citable snapshot (AT-10, optional)
 1. On GitHub: repository > **Releases** > **Draft a new release**.
 2. Tag: `v` plus today's date, for example `v2026.11.12`. Title: the same.
@@ -115,6 +71,37 @@ The Atlas already hides these abstracts; this fixes them for everyone.
    > from related-article text on the PNAS landing pages. None of these papers is about
    > plastics; please remove the abstract_inverted_index for them.
 - **Done when:** submitted. Tell the agent "OpenAlex report sent".
+
+### H13. Add the MiniSearch library file (AT4-SEARCH, 2 minutes)
+You chose MiniSearch (MIT licence, free). The agent's permission settings blocked it from
+downloading third-party code, so either:
+- **Option A (simplest):** tell the agent "you may download MiniSearch 7.2.0 from jsDelivr",
+  and approve the download prompt when it appears; or
+- **Option B:** download https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.js and
+  save it as `site/assets/vendor/minisearch-7.2.0.js` (create the `vendor` folder), and save
+  https://cdn.jsdelivr.net/npm/minisearch@7.2.0/LICENSE.txt next to it as
+  `site/assets/vendor/minisearch-LICENSE.txt`.
+- **Done when:** the file is in place (or you have given permission). Tell the agent
+  "MiniSearch ready". It then wires it in and adds the REUSE entry.
+
+### H14. Approve installing Observable Framework (EM5-FRAMEWORK, AT-5)
+You chose to move the site to Observable Framework before the evidence map. That needs Node
+packages (`@observablehq/framework@1.13.4`, the version already approved for G-SHELL)
+installed in a new `framework/` folder.
+1. Tell the agent "you may run npm install for Observable Framework 1.13.4".
+2. Approve the npm prompt when it appears.
+- **Done when:** the install has run. The agent then builds the AT-5 shell step by step,
+  keeping the current site live until the new one passes the same checks.
+
+### H15. Look at the new expert pages (after the next deploy)
+Open https://plastiverse.live/#experts. The list is now sorted by plastics citations.
+1. Click **Full profile** on a few experts you know. Check the primary affiliation, the
+   citations-per-year chart (orange = plastics-related), the m-quotient, and that clicking a
+   topic tag filters the publication list.
+2. Click **Find up-and-coming researchers** (under Career stage). Check whether the names
+   look right to you.
+3. Answer RISING-METRIC in `.agent/QUESTIONS.md` ("keep default" or describe the change).
+- **Done when:** you reply "expert pages OK" or list what to change.
 
 ### H9. Label the gold set (unblocks the whole S5 classifier chain)
 The S5 classifiers (and Haiku) are tested against your gold labels. You only need the
@@ -142,11 +129,6 @@ leak-check works wait for S5.7.
   "gold evaluation set done". The agent then runs the Claude second rater on 20%, the
   Haiku evaluation and the S5.1 test evaluation.
 
-### H7. Review 10 expert profiles (S9.3/S9.5)
-The drawer now shows ORCID bios, keywords and links (399 experts). Open
-https://plastiverse.live/#experts, open 10 experts you know, and check name,
-affiliation, bio and links. Reply "10 profiles OK" or list the problems.
-
 ---
 
 ## Later (the agent will say when each is ready)
@@ -154,7 +136,7 @@ affiliation, bio and links. Reply "10 profiles OK" or list the problems.
 Each later review with more than 10 cases (H12 need cells) will
 come with its own Streamlit app and run command here.
 
-- **H8. Outreach emails (S9.6).** After H7: approve the email template in
+- **H8. Outreach emails (S9.6).** Now unblocked (H7 done, emails allowed in `data/private/`): approve the email template in
   `docs/OUTREACH.md`, then send the first batch from your own email account. The
   agent never sends email.
 - **H10. Leak-test widening decision (S5.7).** Choose whether to widen the
@@ -168,6 +150,17 @@ come with its own Streamlit app and run command here.
 ---
 
 ## Done
+- **H4 photos** (2026-11-11): 43 approved, 1 rejected; approved photos ship with the next export.
+- **H5 questions** (2026-11-12): AT4-SEARCH MiniSearch (see H13), AT11-WINDOW cap at yesterday
+  (applied), CA-CARRY-ORCID drop contradicted years (applied), EM5-FRAMEWORK Framework first
+  (see H14), OUTREACH-EMAILS emails only in `data/private/` (S9.6 after H8); UNSURE-SEM unsure =
+  not plastic-related (applied).
+- **H7 profiles** (2026-11-12): reviewed; owner asked for full-page views, primary affiliation,
+  citation histogram, sortable/filterable publications, plastics-citation default sort,
+  up-and-coming finder and m-quotient (built 2026-11-12; check them in H15).
+- **H3 / AT2-REVIEW** (2026-11-12): 46 new top-100 institutions typed in the review app.
+  Applied as owner overrides; new types `JPA` (in use), `utility` and
+  `intergovernmental-organization` added to the pipeline.
 - 2026-11-12: HIST-EMAILS answered (keep history). CORE key: owner renews 2026-11-13 when reissued.
 - 2026-11-11: ESCH-CA answered (use eScholarship UC evidence).
 - 2026-11-11: PLASTISPHERE-SCOPE answered (soil-community effects and biodegradation-only

@@ -86,6 +86,43 @@ def test_year_range_uses_one_window_per_unit(monkeypatch: pytest.MonkeyPatch, tm
     assert "to_publication_date%3A2027-12-31" in urls[0]
 
 
+def test_publication_date_cap_limits_windows(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+    """AT11-WINDOW (owner 2026-11-12): only complete days, up to yesterday UTC."""
+    from atlas.ingest import openalex
+
+    urls: list[str] = []
+
+    def fake_request(url, *, logger, **_):
+        urls.append(url)
+        logger._request_metrics.append(
+            {"credits_known": True, "credits": 10, "cost_known": True, "cost_usd": 0.001}
+        )
+        return {"results": [], "meta": {"next_cursor": None}}
+
+    monkeypatch.setattr(openalex, "_request_json", fake_request)
+    monkeypatch.setattr(openalex, "always_include_filters", lambda config: [])
+    paths = openalex.OpenAlexPaths(
+        raw_dir=tmp_path / "raw",
+        output_parquet=tmp_path / "w.parquet",
+        high_water_mark=tmp_path / "hw.json",
+        usage_log=tmp_path / "usage.jsonl",
+    )
+    openalex.ingest_live(
+        institution_ids=["I1"],
+        paths=paths,
+        start_year=1950,
+        end_year=2027,
+        replace_output=True,
+        publication_date_cap="2026-11-11",
+    )
+    state = json.loads(paths.high_water_mark.read_text(encoding="utf-8"))
+    state["last_publication_date"] = "2026-11-01"
+    paths.high_water_mark.write_text(json.dumps(state), encoding="utf-8")
+    openalex.ingest_live(institution_ids=["I1"], paths=paths, publication_date_cap="2026-11-11")
+    assert "to_publication_date%3A2026-11-11" in urls[0]
+    assert "from_updated_date" in urls[1] and "to_publication_date%3A2026-11-11" in urls[1]
+
+
 @pytest.mark.parametrize(
     ("flag", "expect_ids"), [("--author-anchored", True), ("--no-author-anchored", False)]
 )

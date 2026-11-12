@@ -375,3 +375,35 @@ def test_ingest_live_raw_scope_and_burst_429_accounting(monkeypatch, tmp_path: P
     assert result["credits"] == 30.0
     ids = {r["openalex_id"] for r in pq.read_table(paths.output_parquet).to_pylist()}
     assert ids == {"W200"}
+
+
+def test_carry_forward_dropped_when_orcid_contradicts() -> None:
+    """Owner CA-CARRY-ORCID (2026-11-12): a dated non-CA employment covering the year wins."""
+    from collections import defaultdict
+
+    from atlas.ingest.normalize import _apply_carry_forward
+
+    works = [{"work_id": "W1", "year": 2014}, {"work_id": "W2", "year": 2016}]
+    rows = [
+        {
+            "work_id": "W1",
+            "author_id": "A1",
+            "ca_basis": "registry",
+            "institution_ids": ["I"],
+            "raw_affiliation": "UC Davis",
+        },
+        {
+            "work_id": "W2",
+            "author_id": "A1",
+            "ca_basis": "",
+            "institution_ids": [],
+            "raw_affiliation": "",
+        },
+    ]
+    state: defaultdict[str, dict] = defaultdict(lambda: {"ca_works": set()})
+    toronto = [{"org": "U Toronto", "start_year": 2016, "end_year": None}]
+    dropped = _apply_carry_forward(rows, works, state, {"A1": (toronto, [[2010, 2013]])})
+    assert dropped == 1 and rows[1]["ca_basis"] == ""
+    rows[1]["ca_basis"] = ""
+    assert _apply_carry_forward(rows, works, state, {}) == 0
+    assert rows[1]["ca_basis"] == "author_carry_forward"

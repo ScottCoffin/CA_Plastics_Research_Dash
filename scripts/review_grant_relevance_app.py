@@ -14,8 +14,8 @@ refresh site/data/grants.json.
 Haiku's suggestion is kept in ``assist_plastic_related``. Confirm and Not
 plastic-related set ``plastic_related`` to the owner's choice, and ``owner_review``
 records whether it matches Haiku. Reset to pending restores Haiku's value. Unsure
-sets ``owner_review`` to ``unsure`` and puts ``plastic_related`` back to Haiku's value,
-so the export uses Haiku's value for skipped grants.
+sets ``owner_review`` to ``unsure`` and ``plastic_related`` to false (owner UNSURE-SEM,
+2026-11-12: unsure grants are treated as not plastic-related).
 """
 
 from __future__ import annotations
@@ -277,7 +277,7 @@ def main() -> None:
     if item.get("reason"):
         st.caption(f"Haiku's reason: {item['reason']}")
     st.caption(
-        "Unsure (skip) leaves the export on Haiku's value for this grant; "
+        "Unsure (skip) treats this grant as not plastic-related in the export; "
         "Reset to pending restores Haiku's value."
     )
 

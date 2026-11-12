@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Expert profile · CA Plastics Research Atlas</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17324d;
+        --muted: #536879;
+        --brand: #075a46;
+        --brand-dark: #043e32;
+        --surface: #ffffff;
+        --canvas: #eef6f7;
+        --line: #c8d8dc;
+        --focus: #c45100;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--canvas);
+      }
+      * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
+      body { margin: 0; min-width: 18rem; line-height: 1.5; }
+      a { color: var(--brand-dark); overflow-wrap: anywhere; }
+      button, input, select { font: inherit; min-height: 2.75rem; }
+      button { cursor: pointer; }
+      :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+      .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+      .skip-link {
+        position: absolute; left: 0.75rem; top: 0.75rem; z-index: 5;
+        transform: translateY(-150%); padding: 0.6rem 0.8rem; border-radius: 0.35rem;
+        color: #fff; background: var(--brand-dark);
+      }
+      .skip-link:focus { transform: translateY(0); }
+      .site-header { color: #fff; background: var(--brand-dark); }
+      .header-inner, .page-main { width: min(74rem, calc(100% - 2rem)); margin: 0 auto; }
+      .header-inner { padding: 1.25rem 0 1rem; }
+      .crumbs a { color: #d5f2e8; font-weight: 600; }
+      .crumbs a:focus-visible { outline-color: #ffd7b8; }
+      .eyebrow { margin: 0.5rem 0 0; color: #bfe8d9; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      h1 { margin: 0.25rem 0 0.4rem; font-size: clamp(1.5rem, 5vw, 2.4rem); line-height: 1.15; overflow-wrap: anywhere; }
+      .affil-primary { list-style: none; margin: 0.25rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 0.6rem; }
+      .affil-primary li { color: #e3f4ef; font-size: 1.02rem; font-weight: 600; }
+      .affil-primary a { color: #d5f2e8; }
+      .affil-primary .affil-country, .affil-primary .affil-source { color: #bfe8d9; font-weight: 500; font-size: 0.88rem; margin-left: 0.25rem; }
+      .affil-primary .affil-source::before { content: "· "; }
+      .affil-primary .affil-none { color: #bfe8d9; font-weight: 500; }
+      .expert-meta { margin: 0.4rem 0 0; color: #d1eee5; font-size: 0.92rem; overflow-wrap: anywhere; }
+      .expert-meta a { color: #d5f2e8; font-weight: 600; }
+      .header-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-top: 1rem; color: #d1eee5; font-size: 0.9rem; }
+      .status-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.6rem; border-radius: 999px; color: #083d31; background: #d9f2e9; font-weight: 700; }
+      .status-pill[data-state="error"] { color: #6b2100; background: #ffe3d3; }
+      .header-link { display: inline-flex; align-items: center; min-height: 2.5rem; padding: 0.3rem 0.8rem; border: 1px solid #8fd1bb; border-radius: 0.4rem; color: #fff; font-weight: 700; text-decoration: none; }
+      .header-link:hover { background: #0b6b53; }
+      .page-main { padding: 1rem 0 3rem; }
+      .panel { margin-top: 1rem; padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid var(--line); border-radius: 0.75rem; background: var(--surface); box-shadow: 0 0.5rem 1.75rem rgb(23 50 77 / 7%); }
+      h2 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 3vw, 1.6rem); }
+      h3 { margin: 0; font-size: 1.02rem; overflow-wrap: anywhere; }
+      .panel-intro { margin: 0 0 0.75rem; color: var(--muted); }
+      .muted { color: var(--muted); }
+      .notice { margin-top: 1.25rem; font-size: 0.92rem; }
+      .page-footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+      .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: 0.6rem; margin: 0; }
+      .metric { margin: 0; padding: 0.6rem 0.75rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #f7fbfb; }
+      .metric dt { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
+      .metric dd { margin: 0; font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+      .metric small { display: block; color: var(--muted); font-size: 0.8rem; }
+      .profile { display: grid; gap: 0.6rem; margin-bottom: 1rem; }
+      .expert-photo { margin: 0; display: flex; flex-direction: column; gap: 0.3rem; max-width: 9rem; }
+      .expert-photo img { width: 100%; height: auto; border-radius: 0.4rem; border: 1px solid var(--line); }
+      .expert-photo figcaption { color: var(--muted); font-size: 0.8rem; }
+      .expert-bio { margin: 0; max-width: 60rem; }
+      .kw-chips, .expert-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+      .kw-chip { padding: 0.15rem 0.6rem; border-radius: 999px; background: #e9f3f1; border: 1px solid var(--line); font-size: 0.86rem; }
+      .expert-links li { font-weight: 600; }
+      .affil-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.45rem; }
+      .affil-list li { padding: 0.5rem 0.75rem; border: 1px solid var(--line); border-radius: 0.45rem; background: #fff; display: flex; flex-wrap: wrap; gap: 0.2rem 0.6rem; align-items: baseline; }
+      .affil-name { font-weight: 700; }
+      .affil-country, .affil-years { color: var(--muted); font-size: 0.9rem; }
+      .affil-years { margin-left: auto; font-variant-numeric: tabular-nums; }
+      .cit-figure { margin: 0; }
+      .cit-figure figcaption { margin-bottom: 0.4rem; color: var(--muted); font-size: 0.92rem; }
+      .cit-chart { display: block; width: 100%; height: auto; max-width: 100%; }
+      .topic-summary { margin: 0.25rem 0 0.75rem; }
+      .topic-filter { display: inline-flex; align-items: center; min-height: 2.25rem; padding: 0; border: 0; border-radius: 999px; background: transparent; text-align: left; }
+      .topic-filter .topic-chip { cursor: pointer; }
+      .topic-filter[aria-pressed="true"] .topic-chip { box-shadow: 0 0 0 2px var(--brand-dark); }
+      .filters { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-end; margin: 0.5rem 0 0.75rem; }
+      .field { display: flex; flex-direction: column; gap: 0.25rem; flex: 1 1 10rem; min-width: 0; }
+      .field.search { flex: 2 1 16rem; }
+      .field.check { flex: 0 0 auto; flex-direction: row; align-items: center; min-height: 2.75rem; gap: 0.5rem; }
+      .field label { font-size: 0.85rem; font-weight: 700; }
+      .field input[type="search"], .field select {
+        width: 100%; padding: 0.5rem 0.6rem; border: 1px solid #8da7af; border-radius: 0.35rem; color: var(--ink); background: #fff;
+      }
+      .field input[type="checkbox"] { width: 1.2rem; height: 1.2rem; margin: 0; }
+      .btn {
+        padding: 0.4rem 0.8rem; border: 1px solid #8da7af; border-radius: 0.4rem;
+        color: var(--brand-dark); background: #fff; font-weight: 600;
+      }
+      .btn:disabled { color: #7d8b93; border-color: var(--line); cursor: default; }
+      .active-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin: 0.25rem 0 0.5rem; }
+      .active-chip { min-height: 2.25rem; padding: 0.15rem 0.7rem; border: 1px solid #e0a070; border-radius: 999px; background: #fff4ec; color: #6b2100; font-weight: 600; font-size: 0.88rem; }
+      .list-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; justify-content: space-between; margin: 0.5rem 0; color: var(--muted); }
+      .list-meta p { margin: 0; }
+      .pub-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+      .pub { padding: 0.8rem 0.95rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fff; }
+      .pub-meta { margin: 0.25rem 0; color: var(--muted); font-size: 0.88rem; display: flex; flex-wrap: wrap; gap: 0.2rem 0.5rem; align-items: center; }
+      .pub-links { margin: 0.2rem 0 0.4rem; font-size: 0.9rem; }
+      .topic-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.1rem 0 0.5rem; }
+      .badge { display: inline-block; padding: 0.05rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+      .badge.oa { color: #083d31; background: #d9f2e9; }
+      .badge.plastic { color: #6b2100; background: #ffe3d3; }
+      .abstract summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; font-weight: 700; min-height: 2.25rem; display: flex; align-items: center; }
+      .abstract p, .no-abstract { margin: 0.2rem 0 0; font-size: 0.93rem; white-space: pre-line; overflow-wrap: anywhere; }
+      .no-abstract { color: var(--muted); font-style: italic; }
+      .coauthor-list { margin: 0.5rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.35rem; }
+      .coauthor-list li { padding: 0.35rem 0.6rem; border: 1px solid var(--line); border-radius: 0.4rem; background: #fff; }
+      .coauthor-list .shared { color: var(--muted); font-size: 0.9rem; }
+      details summary { cursor: pointer; font-weight: 700; min-height: 2.25rem; display: flex; align-items: center; }
+      @media (max-width: 40rem) {
+        .metric dd { font-size: 1.2rem; }
+        .panel { border-radius: 0.6rem; }
+        .affil-years { margin-left: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html#experts">&larr; All experts</a></nav>
+        <p class="eyebrow">Expert profile</p>
+        <h1 id="expert-name">Loading…</h1>
+        <ul id="affil-primary" class="affil-primary" aria-label="Primary affiliations"></ul>
+        <p id="expert-meta" class="expert-meta"></p>
+        <div class="header-meta">
+          <span id="expert-status" class="status-pill" role="status" aria-live="polite">Loading…</span>
+          <a id="open-in-list" class="header-link" href="index.html#experts">Open in Experts list</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="page-main">
+      <noscript><section class="panel"><p>This page needs JavaScript to show an expert profile.</p></section></noscript>
+
+      <section id="message" class="panel" aria-labelledby="message-title" hidden>
+        <h2 id="message-title"></h2>
+        <p id="message-text" class="panel-intro"></p>
+        <p><a href="index.html#experts">Back to the Experts list</a></p>
+      </section>
+
+      <div id="expert" hidden>
+        <section class="panel" aria-labelledby="overview-h">
+          <h2 id="overview-h" class="sr-only">Overview</h2>
+          <div id="profile" class="profile" hidden></div>
+          <dl id="metrics" class="metrics"></dl>
+        </section>
+
+        <section class="panel" aria-labelledby="affil-h">
+          <h2 id="affil-h">Affiliation history</h2>
+          <p class="panel-intro">Institutions from this expert's own publication record, most recent first, with the years they appear. Co-authors' institutions are not included.</p>
+          <ol id="affil-history" class="affil-list"></ol>
+          <p id="affil-empty" class="muted" hidden>Affiliation history is not yet available for this expert.</p>
+        </section>
+
+        <section class="panel" aria-labelledby="cit-h">
+          <h2 id="cit-h">Citations by year</h2>
+          <figure class="cit-figure">
+            <figcaption>Citations received per year (OpenAlex; last 10 years). Plastics = works matching the Atlas plastics query.</figcaption>
+            <div id="cit-chart"></div>
+          </figure>
+          <p id="cit-note" class="muted" hidden></p>
+          <div class="sr-only">
+            <table>
+              <caption>Citations received per year, values behind the chart</caption>
+              <thead><tr><th scope="col">Year</th><th scope="col">All citations</th><th scope="col">Plastics-related</th></tr></thead>
+              <tbody id="cit-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="pubs-h">
+          <h2 id="pubs-h">Publications</h2>
+          <p class="panel-intro">Select a topic to filter. Selecting the same topic again removes the filter. Topics on each publication work the same way.</p>
+          <div id="topic-summary" class="topic-chips topic-summary" aria-label="Topics across all publications"></div>
+          <form class="filters" role="search" onsubmit="return false">
+            <div class="field search">
+              <label for="f-query">Search titles and journals</label>
+              <input id="f-query" type="search" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="f-from">Year from</label>
+              <select id="f-from"></select>
+            </div>
+            <div class="field">
+              <label for="f-to">Year to</label>
+              <select id="f-to"></select>
+            </div>
+            <div class="field check">
+              <input id="f-plastic" type="checkbox">
+              <label for="f-plastic">Plastics-related only</label>
+            </div>
+            <div class="field">
+              <label for="f-sort">Sort by</label>
+              <select id="f-sort">
+                <option value="year">Year (newest first)</option>
+                <option value="citations">Citations (most first)</option>
+                <option value="title">Title (A to Z)</option>
+              </select>
+            </div>
+            <div class="field check">
+              <button type="button" id="f-clear" class="btn">Clear filters</button>
+            </div>
+          </form>
+          <div id="active-filters" class="active-filters" aria-label="Active filters"></div>
+          <div class="list-meta">
+            <p id="count-line" role="status" aria-live="polite"></p>
+          </div>
+          <ol id="pub-list" class="pub-list"></ol>
+        </section>
+
+        <section class="panel" aria-labelledby="coauthor-h">
+          <h2 id="coauthor-h">Frequent co-authors</h2>
+          <details id="coauthors">
+            <summary>Show co-authors <span id="coauthor-count" class="muted"></span></summary>
+            <div id="coauthor-body"><p class="muted">Co-author names load when this section opens.</p></div>
+          </details>
+        </section>
+      </div>
+
+      <p class="notice"><strong>Disclaimer:</strong> Independent project; not an official OEHHA or State product.</p>
+      <footer class="page-footer">
+        <p>Expert records come from the Atlas static snapshot. Publication lists are not a complete census of a researcher's output.</p>
+        <p><a href="index.html#experts">Back to the Experts list</a></p>
+      </footer>
+    </main>
+
+    <script src="assets/topics.js"></script>
+    <script src="assets/expert_page.js"></script>
+    <script id="expert-app">
+      "use strict";
+
+      const { escapeHtml, safeHttpUrl, parseAuthorParam, isValidAuthorId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, profileHtml, citationSeries, citationHistogramSvg } = AtlasExpert;
+
+      const RISING_TIP = "Trend in this expert's share of all Atlas experts' plastics citations over the last 5 complete years; percentile among experts";
+      const CHART_LABEL = "Citations received per year, all and plastics-related";
+      const RECENT_YEARS = 10;
+      const COAUTHOR_SHOWN = 12;
+      const INST_ID_RE = /^[A-Za-z0-9]{1,40}$/;
+      const SOURCE_LABELS = { openalex_last_known: "last known, OpenAlex", atlas_recent: "recent Atlas works" };
+      const DEFAULT_FILTERS = { q: "", yearFrom: "", yearTo: "", plasticOnly: false };
+
+      const S = {
+        id: "",
+        author: null,
+        name: "",
+        works: [],
+        institutions: null,
+        filters: { ...DEFAULT_FILTERS },
+        tags: new Set(),
+        sort: "year",
+        coauthorsDone: false,
+        loadToken: 0
+      };
+      const $ = (id) => document.getElementById(id);
+
+      // ---- Small formatting helpers ------------------------------------------
+      function metricValue(value) {
+        return value === null || value === undefined || value === "" || !Number.isFinite(Number(value)) ? null : Number(value);
+      }
+      function metricNumber(value) {
+        const n = metricValue(value);
+        return n === null ? "—" : n.toLocaleString("en-US");
+      }
+      function ordinal(n) {
+        const tens = n % 100;
+        const suffix = tens >= 11 && tens <= 13 ? "th" : { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th";
+        return `${n}${suffix}`;
+      }
+      function workYear(work) {
+        const y = Number(work.year);
+        return Number.isInteger(y) && y > 0 ? y : null;
+      }
+      function sourceLabel(source) {
+        return Object.hasOwn(SOURCE_LABELS, source) ? SOURCE_LABELS[source] : "";
+      }
+      function fetchJson(url) {
+        return fetch(url, { cache: "no-cache" }).then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        });
+      }
+      function loadInstitutions() {
+        if (!S.institutions) {
+          S.institutions = fetchJson("data/institutions.json")
+            .then((json) => new Map((json.institutions || []).map((inst) => [inst.inst_id, inst])))
+            .catch(() => new Map());
+        }
+        return S.institutions;
+      }
+      // Institution name, linked to its evidence map when it is a California institution in the snapshot.
+      function instLink(id, name, institutions) {
+        const label = escapeHtml(name || id || "Unnamed institution");
+        const inst = institutions && institutions.get(id);
+        return inst && inst.ca_flag === true && INST_ID_RE.test(String(id || ""))
+          ? `<a href="sem.html#inst=${encodeURIComponent(id)}">${label}</a>`
+          : label;
+      }
+      function topicButton(tag, count) {
+        return `<button type="button" class="topic-filter" data-tag="${escapeHtml(tag)}" aria-pressed="false">${AtlasTopics.chip(tag, count)}</button>`;
+      }
+
+      // ---- Rendering ------------------------------------------------------------
+      function showMessage(title, text, state) {
+        $("expert").hidden = true;
+        $("message").hidden = false;
+        $("message-title").textContent = title;
+        $("message-text").textContent = text;
+        $("expert-name").textContent = title;
+        $("affil-primary").innerHTML = "";
+        $("expert-meta").textContent = "";
+        setStatus("Not available", state || "error");
+        document.title = `${title} · Expert profile · CA Plastics Research Atlas`;
+      }
+      function setStatus(text, state) {
+        const el = $("expert-status");
+        el.textContent = text;
+        if (state) el.dataset.state = state;
+        else delete el.dataset.state;
+      }
+
+      function renderHeader(author, institutions) {
+        $("expert-name").textContent = S.name;
+        const primary = (Array.isArray(author.primary_affiliations) ? author.primary_affiliations : []).filter((a) => a && (a.name || a.id));
+        $("affil-primary").innerHTML = primary.length
+          ? primary.map((a) => {
+              const source = sourceLabel(a.source);
+              const country = a.country_code ? `<span class="affil-country">${escapeHtml(a.country_code)}</span>` : "";
+              return `<li>${instLink(a.id, a.name, institutions)}${country}${source ? `<span class="affil-source">${escapeHtml(source)}</span>` : ""}</li>`;
+            }).join("")
+          : '<li class="affil-none">No primary affiliation recorded in this snapshot.</li>';
+        const orcid = safeHttpUrl(author.orcid);
+        const meta = [`OpenAlex ${escapeHtml(author.author_id || S.id)}`];
+        if (orcid) meta.push(`<a href="${escapeHtml(orcid)}" target="_blank" rel="noreferrer">ORCID profile</a>`);
+        $("expert-meta").innerHTML = meta.join(" · ");
+        $("open-in-list").href = `index.html#experts?author=${encodeURIComponent(S.id)}`;
+      }
+
+      function renderProfile(profile) {
+        const markup = profileHtml(profile, S.name);
+        $("profile").innerHTML = markup;
+        $("profile").hidden = !markup;
+      }
+
+      function renderMetrics(author) {
+        const mq = metricValue(author.m_quotient);
+        const pct = metricValue(author.rising_pct);
+        const risingPct = pct !== null && Number.isInteger(pct) && pct >= 0 && pct <= 100 ? pct : null;
+        const share = plasticShare(author);
+        const first = metricValue(author.first_pub_year);
+        const corpusOnly = author.plastic_basis === "atlas_corpus";
+        const tiles = [
+          { label: "h-index", value: metricNumber(author.h_index) },
+          { label: "m-quotient", value: mq === null ? "—" : mq.toFixed(2), title: mQuotientText(author), note: "h-index per year since first publication" },
+          { label: "Total citations", value: metricNumber(author.cited_by_count) },
+          {
+            label: "Plastics citations",
+            value: metricNumber(author.plastic_citations),
+            note: `${share === null ? "—" : `${share}%`} of total${corpusOnly ? " (CA corpus only)" : ""}`,
+            title: corpusOnly ? "Counted only over works in the Atlas California corpus." : "Counted across the whole OpenAlex record."
+          },
+          { label: "Plastics works", value: metricNumber(author.plastic_works_count) },
+          { label: "CA-affiliated works", value: metricNumber(author.ca_works_count) },
+          { label: "Rising score percentile", value: risingPct === null ? "—" : ordinal(risingPct), title: RISING_TIP, note: "among Atlas experts" },
+          { label: "First publication", value: first === null ? "—" : String(first), note: author.early_career === true ? "Early-career researcher" : "" }
+        ];
+        $("metrics").innerHTML = tiles.map((t) => `<div class="metric"><dt>${escapeHtml(t.label)}</dt><dd${t.title ? ` title="${escapeHtml(t.title)}"` : ""}>${escapeHtml(t.value)}</dd>${t.note ? `<small>${escapeHtml(t.note)}</small>` : ""}</div>`).join("");
+      }
+
+      function renderHistory(author, institutions) {
+        const items = (Array.isArray(author.affiliation_history) ? author.affiliation_history : []).filter((a) => a && (a.name || a.id));
+        $("affil-history").innerHTML = items.map((a) => {
+          const years = yearRangesText(a.years);
+          const country = a.country_code ? ` <span class="affil-country">${escapeHtml(a.country_code)}</span>` : "";
+          return `<li><span class="affil-name">${instLink(a.id, a.name, institutions)}</span>${country}<span class="affil-years">${years ? escapeHtml(years) : "Years not recorded"}</span></li>`;
+        }).join("");
+        $("affil-empty").hidden = items.length > 0;
+      }
+
+      function renderCitations(author) {
+        const series = citationSeries(author.citations_by_year);
+        const latest = series.length ? series[series.length - 1].year : null;
+        const rows = latest === null ? [] : series.filter((r) => r.year >= latest - (RECENT_YEARS - 1));
+        const note = $("cit-note");
+        if (!rows.length) {
+          $("cit-chart").innerHTML = '<p class="muted">No citation history in this snapshot.</p>';
+          note.hidden = true;
+          $("cit-table-body").innerHTML = "";
+          return;
+        }
+        $("cit-chart").innerHTML = citationHistogramSvg(rows, { width: 640, height: 260, label: CHART_LABEL });
+        const plasticKnown = rows.some((r) => r.plastic !== null);
+        note.hidden = plasticKnown;
+        note.textContent = "Plastics-by-year is not yet available; only all-citation bars are drawn.";
+        $("cit-table-body").innerHTML = rows
+          .map((r) => `<tr><th scope="row">${r.year}</th><td>${r.all}</td><td>${r.plastic === null ? "Not yet available" : r.plastic}</td></tr>`)
+          .join("");
+      }
+
+      function renderYearOptions() {
+        const years = [...new Set(S.works.map(workYear).filter((y) => y !== null))].sort((a, b) => a - b);
+        const options = `<option value="">Any</option>${years.map((y) => `<option value="${y}">${y}</option>`).join("")}`;
+        $("f-from").innerHTML = options;
+        $("f-to").innerHTML = options;
+      }
+
+      function syncControls() {
+        $("f-query").value = S.filters.q;
+        $("f-from").value = S.filters.yearFrom;
+        $("f-to").value = S.filters.yearTo;
+        $("f-plastic").checked = S.filters.plasticOnly;
+        $("f-sort").value = S.sort;
+      }
+
+      function renderTopicSummary() {
+        const weights = AtlasTopics.weights(S.works, { matrices: true });
+        $("topic-summary").innerHTML = weights.length
+          ? weights.map(([tag, count]) => topicButton(tag, count)).join("")
+          : '<p class="muted">No topic tags yet.</p>';
+      }
+
+      function filterChip(label, attrs) {
+        return `<button type="button" class="active-chip" ${attrs} aria-label="Remove filter: ${escapeHtml(label)}">${escapeHtml(label)} <span aria-hidden="true">×</span></button>`;
+      }
+      function activeChips() {
+        const chips = [];
+        const q = S.filters.q.trim();
+        if (q) chips.push(filterChip(`Search: "${q}"`, 'data-remove-filter="q"'));
+        if (S.filters.yearFrom || S.filters.yearTo) {
+          chips.push(filterChip(`Years ${S.filters.yearFrom || "earliest"}–${S.filters.yearTo || "latest"}`, 'data-remove-filter="years"'));
+        }
+        if (S.filters.plasticOnly) chips.push(filterChip("Plastics-related only", 'data-remove-filter="plastic"'));
+        [...S.tags].forEach((tag) => chips.push(filterChip(AtlasTopics.label(tag), `data-remove-tag="${escapeHtml(tag)}"`)));
+        return chips;
+      }
+
+      function pubHtml(work) {
+        const year = workYear(work);
+        const cites = metricValue(work.cited_by_count) || 0;
+        const badges = [
+          work.is_oa === true ? '<span class="badge oa">Open access</span>' : "",
+          work.plastic_related === true ? '<span class="badge plastic">Plastic-related</span>' : ""
+        ].join(" ");
+        const doi = safeHttpUrl(work.doi);
+        const oa = safeHttpUrl(work.oa_url);
+        const openalex = INST_ID_RE.test(String(work.work_id || "")) ? `https://openalex.org/${work.work_id}` : "";
+        const links = [
+          doi ? `<a href="${escapeHtml(doi)}" target="_blank" rel="noreferrer">DOI</a>` : "",
+          oa ? `<a href="${escapeHtml(oa)}" target="_blank" rel="noreferrer">Open access copy</a>` : "",
+          openalex ? `<a href="${escapeHtml(openalex)}" target="_blank" rel="noreferrer">OpenAlex record</a>` : ""
+        ].filter(Boolean).join(" · ");
+        const tags = AtlasTopics.sortTags([...(work.domain_tags || []), ...(work.facet_tags || [])]);
+        const abstract = String(work.abstract || "").trim();
+        const title = String(work.title || "").trim() || "Untitled publication";
+        return `<li class="pub"><h3>${escapeHtml(title)}</h3>`
+          + `<p class="pub-meta"><span>${year === null ? "Year unknown" : year}</span><span aria-hidden="true">·</span><span>${escapeHtml(work.journal || "Journal not listed")}</span><span aria-hidden="true">·</span><span>${metricNumber(cites)} ${cites === 1 ? "citation" : "citations"}</span> ${badges}</p>`
+          + (links ? `<p class="pub-links">${links}</p>` : "")
+          + (tags.length ? `<div class="topic-chips">${tags.map((tag) => topicButton(tag)).join("")}</div>` : "")
+          + (abstract
+            ? `<details class="abstract"><summary>Abstract</summary><p>${escapeHtml(abstract)}</p></details>`
+            : '<p class="no-abstract">No abstract available</p>')
+          + "</li>";
+      }
+
+      function syncTopicButtons() {
+        document.querySelectorAll(".topic-filter").forEach((btn) => {
+          const on = S.tags.has(btn.dataset.tag);
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+          btn.classList.toggle("is-on", on);
+        });
+      }
+
+      function renderList() {
+        const filters = { q: S.filters.q, yearFrom: S.filters.yearFrom, yearTo: S.filters.yearTo, plasticOnly: S.filters.plasticOnly, tags: S.tags };
+        const list = sortWorks(filterWorks(S.works, filters), S.sort);
+        const from = Number.parseInt(S.filters.yearFrom, 10);
+        const to = Number.parseInt(S.filters.yearTo, 10);
+        const reversed = Number.isInteger(from) && Number.isInteger(to) && from > to ? " Year from is later than year to, so nothing matches." : "";
+        $("count-line").textContent = `${metricNumber(list.length)} of ${metricNumber(S.works.length)} publications.${reversed}`;
+        $("pub-list").innerHTML = list.length ? list.map(pubHtml).join("") : '<li class="muted">No publications match these filters.</li>';
+        const chips = activeChips();
+        $("active-filters").innerHTML = chips.join("");
+        $("f-clear").disabled = chips.length === 0;
+        syncTopicButtons();
+      }
+
+      function renderCoauthorSummary() {
+        const counts = coauthorCounts(S.works, S.id);
+        $("coauthor-count").textContent = counts.length ? `(${counts.length} distinct)` : "";
+      }
+
+      // Co-author names come from data/index.json, loaded only when the section opens.
+      async function loadCoauthors() {
+        if (S.coauthorsDone) return;
+        const id = S.id;
+        const body = $("coauthor-body");
+        if (!S.works.some((w) => Array.isArray(w.author_ids))) {
+          body.innerHTML = '<p class="muted">Co-author data is not in this snapshot.</p>';
+          S.coauthorsDone = true;
+          return;
+        }
+        const counts = coauthorCounts(S.works, id);
+        if (!counts.length) {
+          body.innerHTML = '<p class="muted">No co-authors are recorded for this expert.</p>';
+          S.coauthorsDone = true;
+          return;
+        }
+        body.innerHTML = '<p class="muted">Loading co-author names…</p>';
+        let names = null;
+        try {
+          const json = await fetchJson("data/index.json");
+          names = new Map((json.authors || []).map((a) => [a.author_id, a.name]));
+        } catch (err) {
+          names = null;
+        }
+        if (id !== S.id) return;
+        S.coauthorsDone = names !== null;
+        const items = counts.slice(0, COAUTHOR_SHOWN).map(({ author_id: coId, shared }) => {
+          const works = `${shared} shared ${shared === 1 ? "work" : "works"}`;
+          let who;
+          if (names === null) who = `<span class="muted">${escapeHtml(coId)}</span>`;
+          else if (names.has(coId)) who = `<a href="expert.html#author=${encodeURIComponent(coId)}">${escapeHtml(names.get(coId) || coId)}</a>`;
+          else who = '<span class="muted">Co-author outside the expert list</span>';
+          return `<li>${who} <span class="shared">· ${works}</span></li>`;
+        });
+        const notes = [];
+        if (names === null) notes.push("Co-author names could not be loaded; OpenAlex ids are shown.");
+        if (counts.length > COAUTHOR_SHOWN) notes.push(`Plus ${metricNumber(counts.length - COAUTHOR_SHOWN)} more co-authors.`);
+        body.innerHTML = `<ul class="coauthor-list">${items.join("")}</ul>${notes.map((n) => `<p class="muted">${escapeHtml(n)}</p>`).join("")}`;
+      }
+
+      function renderExpert(detail, institutions) {
+        const author = detail.author || {};
+        S.author = author;
+        S.works = Array.isArray(detail.works) ? detail.works : [];
+        S.name = author.name || author.author_id || S.id;
+        S.filters = { ...DEFAULT_FILTERS };
+        S.tags = new Set();
+        S.sort = "year";
+        S.coauthorsDone = false;
+        document.title = `${S.name} · Expert profile · CA Plastics Research Atlas`;
+        renderHeader(author, institutions);
+        renderProfile(detail.profile);
+        renderMetrics(author);
+        renderHistory(author, institutions);
+        renderCitations(author);
+        renderYearOptions();
+        syncControls();
+        renderTopicSummary();
+        renderList();
+        renderCoauthorSummary();
+        $("coauthors").open = false;
+        $("coauthor-body").innerHTML = '<p class="muted">Co-author names load when this section opens.</p>';
+        $("message").hidden = true;
+        $("expert").hidden = false;
+        setStatus(`${metricNumber(S.works.length)} publications`, null);
+      }
+
+      // ---- Routing and events -----------------------------------------------------
+      async function route() {
+        const raw = parseAuthorParam(location.hash, location.search);
+        if (!raw) {
+          S.author = null;
+          S.id = "";
+          showMessage("No expert selected", "Open an expert from the Experts list to see the full profile.", "");
+          return;
+        }
+        if (!isValidAuthorId(raw)) {
+          S.author = null;
+          S.id = raw;
+          showMessage("Invalid expert id", `"${raw}" is not a valid OpenAlex author id.`, "error");
+          return;
+        }
+        if (raw === S.id && S.author) return;
+        const token = ++S.loadToken;
+        S.id = raw;
+        S.author = null;
+        setStatus("Loading profile…", null);
+        $("expert").hidden = true;
+        $("message").hidden = true;
+        $("expert-name").textContent = "Loading…";
+        $("expert-meta").textContent = "";
+        $("affil-primary").innerHTML = "";
+        $("open-in-list").href = `index.html#experts?author=${encodeURIComponent(raw)}`;
+        const [detail, institutions] = await Promise.all([
+          fetchJson(`data/authors/${encodeURIComponent(raw)}.json`).catch(() => null),
+          loadInstitutions()
+        ]);
+        if (token !== S.loadToken) return;
+        if (!detail) {
+          showMessage("Profile not available", `No profile is available for "${raw}" in this snapshot.`, "error");
+          return;
+        }
+        renderExpert(detail, institutions);
+      }
+
+      function clearFilters() {
+        S.filters = { ...DEFAULT_FILTERS };
+        S.tags = new Set();
+        syncControls();
+        renderList();
+      }
+
+      function bindEvents() {
+        document.addEventListener("click", (event) => {
+          const target = event.target;
+          const topic = target.closest(".topic-filter");
+          if (topic) {
+            const tag = topic.dataset.tag;
+            if (S.tags.has(tag)) S.tags.delete(tag);
+            else S.tags.add(tag);
+            renderList();
+            return;
+          }
+          const removeTag = target.closest("[data-remove-tag]");
+          if (removeTag) {
+            S.tags.delete(removeTag.dataset.removeTag);
+            renderList();
+            return;
+          }
+          const removeFilter = target.closest("[data-remove-filter]");
+          if (removeFilter) {
+            const key = removeFilter.dataset.removeFilter;
+            if (key === "q") S.filters.q = "";
+            if (key === "years") {
+              S.filters.yearFrom = "";
+              S.filters.yearTo = "";
+            }
+            if (key === "plastic") S.filters.plasticOnly = false;
+            syncControls();
+            renderList();
+            return;
+          }
+          if (target.closest("#f-clear")) clearFilters();
+        });
+        $("f-query").addEventListener("input", (event) => {
+          S.filters.q = event.target.value;
+          renderList();
+        });
+        $("f-from").addEventListener("change", (event) => {
+          S.filters.yearFrom = event.target.value;
+          renderList();
+        });
+        $("f-to").addEventListener("change", (event) => {
+          S.filters.yearTo = event.target.value;
+          renderList();
+        });
+        $("f-plastic").addEventListener("change", (event) => {
+          S.filters.plasticOnly = event.target.checked;
+          renderList();
+        });
+        $("f-sort").addEventListener("change", (event) => {
+          S.sort = event.target.value;
+          renderList();
+        });
+        $("coauthors").addEventListener("toggle", () => {
+          if ($("coauthors").open) loadCoauthors();
+        });
+      }
+
+      if (typeof window !== "undefined" && window.document) {
+        bindEvents();
+        window.addEventListener("hashchange", route);
+        route();
+      }
+    </script>
+  </body>
+</html>

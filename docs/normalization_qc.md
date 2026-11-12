@@ -1,6 +1,6 @@
 # OpenAlex normalization QC
 
-Generated at (UTC): `2026-11-12T02:31:41+00:00`
+Generated at (UTC): `2026-11-12T17:08:34+00:00`
 Source: `data\interim\works_raw.parquet`
 
 The normalizer treats the reviewed California institution registry as the authoritative resolved-CA set. `ca_led` is true only when the first authorship has a California basis; `ca_any_author` is true when any authorship does. An authorship's `ca_basis` is `registry` (resolved CA institution), `raw_affiliation` (strict California pattern in the raw affiliation string) or `author_carry_forward` (no affiliation at all, same author has a CA authorship within 2 years). A CA-like unresolved affiliation is reported when its affiliation contains `California` or a standalone `CA` token but no resolved CA institution is linked for that work.
@@ -16,15 +16,16 @@ The normalizer treats the reviewed California institution registry as the author
 | Authorships with null author IDs | 792 |
 | Unresolved institution links | 11431 |
 | Works with CA-like affiliation but no resolved CA institution | 134 |
-| Works with ca_led=true | 1061 |
-| Works with ca_any_author=true | 1981 |
+| Works with ca_led=true | 1056 |
+| Works with ca_any_author=true | 1971 |
 | Near-duplicate works collapsed into a kept work | 37 |
 | Mis-attached OpenAlex abstracts blanked | 10 |
 | Near-duplicate groups | 34 |
 | Same-title article pairs kept apart (distinct DOIs) | 10 |
 | Authorships CA by registry institution | 4544 |
 | Authorships CA by raw affiliation string | 493 |
-| Authorships CA by author carry-forward (no affiliation, +/-2 years) | 228 |
+| Authorships CA by author carry-forward (no affiliation, +/-2 years) | 208 |
+| Carry-forwards dropped: ORCID dated non-CA employment covers the year | 22 |
 | Authorships CA by eScholarship (UC thesis author or matched UC co-author) | 17 |
 | Works CA by eScholarship UC evidence | 62 |
 

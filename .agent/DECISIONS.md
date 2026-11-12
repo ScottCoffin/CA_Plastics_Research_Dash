@@ -564,3 +564,24 @@ the implementing task's acceptance passes.
 - **Decision (owner, 2026-11-11):** the owner labels only the evaluation set (split dev/test, role pool; 150). Haiku was not tuned on dev, so all 150 are held out for Haiku (95% CI half-width about 0.05 at p near 0.9, about 0.07 at 75); trained models report the final number on the 75 test works only (F3). Train works get no owner gold labels (S5.0 active learning supplies training labels). The 80 leak-check works are labelled for relevance and CA sampling when S5.7 runs.
 - **Prior decisions:** AT-1 audit calls (`overrides_works.csv`: `plastic_related=true`, or `exclude=true` with reason `not_relevant`) are pre-selected in the app, never auto-saved: the one overlap labelled so far reversed an audit `not_relevant`. Works-review-app decisions (`work_relevance.csv` confirmed/changed) were made with Haiku's call visible, so they are not pre-selected and are relabelled blind.
 - **Consequence:** rare design classes and domain tags will have small support; they are reported with CIs and stay experimental under the per-tag rule.
+
+## ADR-EXPERT-METRICS-2026-11-12: Expert page, primary affiliation, citation histogram, m-quotient, rising score
+- **Owner request (2026-11-12, after H7):** full-page expert views; primary affiliation(s) instead of co-authors' institutions; citations-per-year histogram with plastics citations coloured separately; sortable/filterable publications with clickable topic tags; Experts default sort by plastics citations; a way to find up-and-coming researchers; the m-quotient.
+- **Data:** `scripts/fetch_author_metrics.py` also stores OpenAlex `counts_by_year`, `last_known_institutions`, `affiliations` (the author's own) from the existing `/authors` calls; plastics citations received per year (sum of the whole-record plastics works' `counts_by_year`); works per publication year by `group_by=publication_year` (1 credit per author, refreshed every 180 days).
+- **Definitions** (`atlas.build.expert_metrics`): histogram = last 10 years (works' `counts_by_year` covers only ten years, so the plastics series is complete only there). m-quotient = h-index / max(1, build year − first publication year), first year = earliest year with ≥ 2 works in it and the next 5 years (skips isolated misattributed early works; single-work authors use their one year). Rising score = least-squares slope over the last 5 complete years of the expert's share (%) of all exported experts' plastics citations per year (normalizing by the yearly field total removes field growth); scored only with ≥ 10 plastics citations in the window; `rising_pct` = percentile among scored experts. Early career = first publication ≤ 10 years before the build year. "Find up-and-coming researchers" = early career + sort by rising score. Primary affiliation = OpenAlex last-known institutions, else the institution(s) the author used most in their latest Atlas year.
+- **UI:** `site/expert.html#author=<id>` (full page; helpers in `site/assets/expert_page.js`, shared with the drawer histogram). Drawer affiliation history now lists only the author's own affiliations. Open question RISING-METRIC records the default.
+
+## ADR-UNSURE-SEM-2026-11-12: Owner-unsure grants are not plastic-related
+- Owner answer UNSURE-SEM: "Unsure" in the grant review app sets `plastic_related=false` (was: Haiku's value). No rows were unsure when applied.
+
+## ADR-AT11-WINDOW-2026-11-12: Daily works pull capped at yesterday UTC
+- Owner answer AT11-WINDOW: `run_daily_works.py` passes `publication_date_cap` = yesterday UTC; `ingest_live` adds `to_publication_date` to backfill and incremental windows. `--no-date-cap` overrides.
+
+## ADR-CA-CARRY-ORCID-2026-11-12: ORCID contradiction drops a carry-forward
+- Owner answer CA-CARRY-ORCID: normalization skips an `author_carry_forward` authorship when the author's ORCID record (committed `data/processed/orcid_profiles.parquet`) has dated employments and none in California covers the work year (±1, `atlas.ingest.orcid.classify_carry_forward`). QC reports the dropped count. Missing file = previous behaviour.
+
+## ADR-EM5-FRAMEWORK-2026-11-12: Observable Framework before the evidence map
+- Owner answer EM5-FRAMEWORK: migrate to Observable Framework (AT-5 shell, static routes; also serves S3.8 SEO) before EM-5. Supersedes the "incremental hand-built" preference in ADR-FRAMEWORK-REVISIT-2026-11-11. AT-5 is now eligible; installing `@observablehq/framework@1.13.4` (G-SHELL pin) needs the owner to approve the npm install (HUMAN_TASKS H14). New pages built meanwhile (`site/expert.html`) keep plain JS helpers in `site/assets/` so they port as Framework components.
+
+## ADR-OUTREACH-EMAILS-2026-11-12: Emails allowed only in data/private/
+- Owner answer OUTREACH-EMAILS: expert emails may be stored only in gitignored `data/private/`, only for owner-sent outreach (S9.6). Committed tables and public payloads stay email-free (normalization redaction unchanged).

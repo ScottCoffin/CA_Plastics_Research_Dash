@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A static atlas of plastic-related research connected to California.">
     <title>CA Plastics Research Atlas</title>
+    <script src="assets/vendor/minisearch-7.2.0.js"></script>
     <script src="assets/topics.js"></script>
+    <script src="assets/expert_page.js"></script>
     <link rel="alternate" type="application/atom+xml" title="New CA plastics papers and awards" href="feed.xml">
     <style>
       :root {
@@ -288,6 +290,17 @@
       .kw-chip { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; background: #e9f3f1; color: var(--brand-dark); font-size: 0.8rem; }
       .drawer-links { margin: 0.4rem 0; padding-left: 1.1rem; overflow-wrap: anywhere; }
       .drawer-section { margin: 0.75rem 0; }
+      .drawer-primary { margin: 0 0 0.25rem; }
+      .expert-card-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+      .expert-page-link { font-size: 0.85rem; font-weight: 650; color: var(--brand-dark); }
+      .drawer-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+      .button-link { display: inline-block; padding: 0.4rem 0.75rem; border-radius: 0.4rem; background: var(--brand-dark); color: #fff; font-weight: 650; text-decoration: none; }
+      .button-link:hover, .button-link:focus-visible { background: var(--brand); color: #fff; }
+      .affiliation-list { margin: 0; padding-left: 1.1rem; }
+      .drawer-histogram svg { width: 100%; height: auto; }
+      .field-check label { display: flex; gap: 0.4rem; align-items: center; font-weight: 400; }
+      .field-check-label { font-weight: 650; }
+      .link-button { border: 0; background: none; padding: 0.15rem 0; color: var(--brand-dark); text-decoration: underline; cursor: pointer; font: inherit; text-align: left; }
       .drawer-section > summary { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; min-height: 44px; padding: 0.5rem 0.75rem; border: 1px solid var(--line); border-radius: 0.45rem; color: var(--brand-dark); background: #fff; font-weight: 650; cursor: pointer; list-style: none; }
       .drawer-section > summary::-webkit-details-marker { display: none; }
       .drawer-section > summary::after { content: ""; flex: none; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform 0.15s ease; }
@@ -341,10 +354,11 @@
         <h2>Experts</h2>
         <p class="panel-intro">Browse the author index from the latest static export. Use the filters to narrow the starting list.</p>
         <form id="expert-filters" class="controls expert-controls" novalidate>
-          <div class="field"><label for="expert-search">Search name or ID</label><input id="expert-search" name="search" type="search" autocomplete="off" placeholder="e.g. California"></div>
+          <div class="field"><label for="expert-search">Search name or ID</label><input id="expert-search" name="search" type="search" autocomplete="off" placeholder="e.g. Rochman, UC Davis"></div>
           <div class="field"><label for="institution-type-filter">Institution type</label><select id="institution-type-filter" name="institution_type"><option value="">All institution types</option></select></div>
           <div class="field"><label for="institution-filter">Institution</label><select id="institution-filter" name="institution"><option value="">All institutions</option></select></div>
-          <div class="field"><label for="expert-sort">Sort by</label><select id="expert-sort" name="sort"><option value="ca_works">CA works</option><option value="cited_by">Total citations</option><option value="h_index">h-index</option><option value="plastic_citations">Plastics citations</option><option value="plastic_works">Plastics works</option></select></div>
+          <div class="field"><label for="expert-sort">Sort by</label><select id="expert-sort" name="sort"><option value="plastic_citations">Plastics citations</option><option value="plastic_works">Plastics works</option><option value="rising">Rising (citation momentum)</option><option value="m_quotient">m-quotient (h per career year)</option><option value="h_index">h-index</option><option value="cited_by">Total citations</option><option value="ca_works">CA works</option></select></div>
+          <div class="field field-check"><span class="field-check-label">Career stage</span><label for="early-filter"><input id="early-filter" name="early" type="checkbox"> Early career only <span class="detail-meta">(first paper ≤ 10 years ago)</span></label><button type="button" id="rising-preset" class="link-button" title="Early-career experts sorted by rising citation momentum">Find up-and-coming researchers</button></div>
           <div class="field"><label for="tag-filter">Domain or matrix tag</label><select id="tag-filter" name="tag"><option value="">All tags</option></select></div>
           <div class="field"><label for="year-from">From year</label><input id="year-from" name="year_from" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
           <div class="field"><label for="year-to">To year</label><input id="year-to" name="year_to" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
@@ -900,10 +914,12 @@
           metadata: "data/build_metadata.json",
           monitoring: "data/monitoring.json"
         };
-        const SORT_KEYS = ["ca_works", "cited_by", "h_index", "plastic_citations", "plastic_works"];
-        const SORT_FIELDS = { cited_by: "cited_by_count", h_index: "h_index", plastic_citations: "plastic_citations", plastic_works: "plastic_works_count" };
+        const SORT_KEYS = ["ca_works", "cited_by", "h_index", "plastic_citations", "plastic_works", "m_quotient", "rising"];
+        const SORT_FIELDS = { cited_by: "cited_by_count", h_index: "h_index", plastic_citations: "plastic_citations", plastic_works: "plastic_works_count", m_quotient: "m_quotient", rising: "rising_score" };
+        // Owner request 2026-11-12: experts default to plastics citations.
+        const DEFAULT_SORT = "plastic_citations";
         const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
-        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", sort: "ca_works", institutionViewType: "", institutionSort: "tagged", instView: "tiers", institutionPrimaryTopic: "", includeCollaborators: false, pendingAuthor: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
+        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", early: false, sort: "plastic_citations", institutionViewType: "", institutionSort: "tagged", instView: "tiers", institutionPrimaryTopic: "", includeCollaborators: false, pendingAuthor: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
         const $ = (id) => document.getElementById(id);
 
         function escapeHtml(value) {
@@ -921,7 +937,8 @@
           state.yearTo = params.get("year_to") || "";
           state.caBasis = params.get("ca_basis") || "";
           state.oa = ["", "oa", "closed"].includes(params.get("oa") || "") ? (params.get("oa") || "") : "";
-          state.sort = SORT_KEYS.includes(params.get("sort") || "") ? params.get("sort") : "ca_works";
+          state.sort = SORT_KEYS.includes(params.get("sort") || "") ? params.get("sort") : DEFAULT_SORT;
+          state.early = params.get("early") === "1";
           state.includeCollaborators = params.get("collab") === "1";
           state.instView = instTiers.viewFromParams(params);
           // Deep link #experts?author=<id> opens that researcher's drawer once the data is loaded.
@@ -938,7 +955,8 @@
           if (state.yearTo) params.set("year_to", state.yearTo);
           if (state.caBasis) params.set("ca_basis", state.caBasis);
           if (state.oa) params.set("oa", state.oa);
-          if (state.sort && state.sort !== "ca_works") params.set("sort", state.sort);
+          if (state.early) params.set("early", "1");
+          if (state.sort && state.sort !== DEFAULT_SORT) params.set("sort", state.sort);
           if (state.includeCollaborators) params.set("collab", "1");
           instTiers.applyViewParam(params, state.instView);
           const next = `#${state.tab}${params.toString() ? `?${params.toString()}` : ""}`;
@@ -1425,6 +1443,7 @@
           $("ca-basis-filter").value = state.caBasis;
           $("oa-filter").value = state.oa;
           $("expert-sort").value = state.sort;
+          $("early-filter").checked = state.early;
         }
         // Lookup maps and per-author summaries are built once per loaded payload; rebuilding
         // them on every keystroke made filtering O(authors x works) (S3.6: 520 ms -> fast).
@@ -1461,6 +1480,24 @@
           if (work.ca_any_author) return "ca-affiliated";
           return "none";
         }
+        // Ranked author search (fuzzy, prefix, all words must match) via the vendored MiniSearch.
+        // One index per loaded payload, memoized with the summaries; returns the matching author ids,
+        // or null when MiniSearch is missing so the caller uses the substring fallback.
+        function authorSearchIds(query) {
+          if (!query || typeof window.MiniSearch !== "function") return null;
+          const summaries = authorSummaries();
+          if (!lookupCache.authorSearch || lookupCache.authorSearch.source !== summaries) {
+            const index = new window.MiniSearch({ idField: "author_id", fields: ["name", "author_id", "affiliation"], storeFields: [] });
+            index.addAll(summaries.map((author) => ({ author_id: author.author_id, name: author.name || "", affiliation: primaryAffiliationText(author) })));
+            lookupCache.authorSearch = { source: summaries, index, query: null, ids: null };
+          }
+          const memo = lookupCache.authorSearch;
+          if (memo.query !== query) {
+            memo.query = query;
+            memo.ids = new Set(memo.index.search(query, { prefix: true, fuzzy: 0.2, combineWith: "AND" }).map((hit) => hit.id));
+          }
+          return memo.ids;
+        }
         function authorSummary(author) {
           const works = (author.work_ids || []).map(workById).filter(Boolean);
           const tags = [...new Set(works.flatMap((work) => [...(work.domain_tags || []), ...(work.facet_tags || [])]))].sort();
@@ -1479,10 +1516,13 @@
         }
         function filteredAuthors() {
           const authors = authorSummaries();
-          const search = state.search.toLowerCase();
+          const query = state.search.trim();
+          const search = query.toLowerCase();
+          const ranked = authorSearchIds(query);
           return authors.filter((author) => {
             const haystack = `${author.name} ${author.author_id}`.toLowerCase();
-            if (search && !haystack.includes(search)) return false;
+            const idMatch = String(author.author_id).toLowerCase() === search;
+            if (search && !idMatch && !(ranked ? ranked.has(author.author_id) : haystack.includes(search))) return false;
             if (state.institutionType && !author.types.includes(state.institutionType)) return false;
             if (state.institution && !author.institutionRows.some((institution) => institution.inst_id === state.institution)) return false;
             if (state.tag && !author.tags.includes(state.tag)) return false;
@@ -1491,6 +1531,7 @@
             if (state.caBasis && author.basis !== state.caBasis) return false;
             if (state.oa === "oa" && !author.works.some((work) => work.is_oa)) return false;
             if (state.oa === "closed" && !author.works.every((work) => !work.is_oa)) return false;
+            if (state.early && !author.early_career) return false;
             return true;
           }).sort(expertComparator(state.sort));
         }
@@ -1521,12 +1562,23 @@
           const plastic = metricValue(author.plastic_citations);
           return total && plastic !== null ? Math.round((plastic / total) * 100) : null;
         }
+        const RISING_TITLE = "Rising citation momentum: trend in this expert's share of all Atlas experts' plastics citations over the last 5 complete years (percentile among experts with at least 10 plastics citations in that window).";
+        function mQuotientTitle(author) {
+          return author.first_pub_year ? `m-quotient: h-index divided by years since first publication (${author.first_pub_year}).` : "m-quotient: h-index divided by years since first publication (first year unavailable).";
+        }
+        function primaryAffiliationText(author) {
+          const primary = (author.primary_affiliations || []).map((item) => (typeof item === "string" ? item : item && item.name)).filter(Boolean);
+          return primary.join(", ");
+        }
+        function expertPageUrl(authorId) {
+          return `expert.html#author=${encodeURIComponent(authorId)}`;
+        }
         function expertMetricsHtml(author) {
           const share = plasticShare(author);
           const corpusOnly = author.plastic_basis === "atlas_corpus";
           const basisTitle = corpusOnly ? "Plastics citations are counted only over this author's works in the Atlas California corpus, not their whole OpenAlex record." : "Plastics citations are counted across this author's whole OpenAlex record (works classified as plastics-related).";
           const part = (key, text, title = "") => { const body = state.sort === key ? `<strong>${escapeHtml(text)}</strong>` : escapeHtml(text); return title ? `<span title="${escapeHtml(title)}">${body}</span>` : body; };
-          return [part("h_index", `h ${metricNumber(author.h_index)}`), part("cited_by", `${metricNumber(author.cited_by_count)} citations`), part("plastic_citations", `${metricNumber(author.plastic_citations)} on plastics (${share === null ? "—" : `${share}%`})`, basisTitle), part("plastic_works", `${metricNumber(author.plastic_works_count)} plastics works`)].join(" · ") + (corpusOnly ? ' <span class="basis-note" title="' + escapeHtml(basisTitle) + '">(CA corpus only)</span>' : "");
+          return [part("h_index", `h ${metricNumber(author.h_index)}`), part("cited_by", `${metricNumber(author.cited_by_count)} citations`), part("plastic_citations", `${metricNumber(author.plastic_citations)} on plastics (${share === null ? "—" : `${share}%`})`, basisTitle), part("plastic_works", `${metricNumber(author.plastic_works_count)} plastics works`), part("m_quotient", `m ${author.m_quotient ?? "—"}`, mQuotientTitle(author)), ...(author.rising_pct === null || author.rising_pct === undefined ? [] : [part("rising", `rising: ${author.rising_pct}th percentile`, RISING_TITLE)])].join(" · ") + (corpusOnly ? ' <span class="basis-note" title="' + escapeHtml(basisTitle) + '">(CA corpus only)</span>' : "");
         }
         // Returns only http(s) URLs (escaped by the caller), or "" for anything else.
         function safeHttpUrl(value) {
@@ -1576,6 +1628,8 @@
             ["Plastics citations", metricNumber(author.plastic_citations), plasticNote],
             ["Plastics works", metricNumber(author.plastic_works_count)],
             ["CA-affiliated works", metricNumber(author.ca_works_count)],
+            ["m-quotient", author.m_quotient === null || author.m_quotient === undefined ? "—" : String(author.m_quotient), author.first_pub_year ? `first paper ${author.first_pub_year}` : ""],
+            ["Rising (percentile)", author.rising_pct === null || author.rising_pct === undefined ? "—" : `${author.rising_pct}th`],
             ["Years active", activeYears],
             ["Recent works (last 5 years)", metricNumber(recent)],
           ];
@@ -1646,10 +1700,11 @@
           rows.innerHTML = state.filteredAuthors.slice(start, end).map((author, offset) => {
             const index = start + offset;
             const years = author.first_year && author.last_year ? `${author.first_year}–${author.last_year}` : "Year unavailable";
-            const affiliation = author.caInstitutions.length ? author.caInstitutions.map((institution) => institution.name).join(", ") : "No California affiliation";
+            const primary = primaryAffiliationText(author);
+            const affiliation = primary || (author.caInstitutions.length ? author.caInstitutions.map((institution) => institution.name).join(", ") : "No California affiliation");
             const meta = `${affiliation} · ${years} · ${author.recentCount} in recent 5 years · ${author.basis}`;
             const orcid = author.orcid ? ` · <a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID</a>` : "";
-            return `<article class="virtual-row" role="listitem" style="transform:translateY(${index * state.virtual.rowHeight}px);height:${state.virtual.rowHeight}px"><div class="card expert-card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></div>${expertTopicsHtml(author)}<p class="expert-metrics">${expertMetricsHtml(author)}${orcid}</p><p class="card-meta expert-affil" title="${escapeHtml(meta)}">${escapeHtml(meta)}</p></div></article>`;
+            return `<article class="virtual-row" role="listitem" style="transform:translateY(${index * state.virtual.rowHeight}px);height:${state.virtual.rowHeight}px"><div class="card expert-card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="expert-card-actions"><a class="expert-page-link" href="${escapeHtml(expertPageUrl(author.author_id))}" title="Open the full profile page">Full profile</a><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></span></div>${expertTopicsHtml(author)}<p class="expert-metrics">${expertMetricsHtml(author)}${orcid}</p><p class="card-meta expert-affil" title="${escapeHtml(meta)}">${escapeHtml(meta)}</p></div></article>`;
           }).join("");
           fitExpertTopics(rows);
           rows.querySelectorAll(".expert-link, .topic-more").forEach((button) => button.addEventListener("click", () => openDrawer(button.dataset.authorId)));
@@ -1674,8 +1729,14 @@
             const author = { ...summary, ...(detail.author || {}) };
             const works = detail.works || [];
             const drawerTopics = AtlasTopics.weights(works, { matrices: true });
-            const institutionIds = [...new Set(works.flatMap((work) => work.institution_ids || []))];
-            const institutions = institutionIds.map(institutionById).filter(Boolean);
+            // The author's OWN affiliations (owner 2026-11-12): OpenAlex affiliation history with
+            // years, else the institutions on this author's own authorships, never co-authors'.
+            const history = Array.isArray(author.affiliation_history) && author.affiliation_history.length
+              ? author.affiliation_history.map((item) => ({ name: item.name || item.id, years: item.years || [] }))
+              : [...new Set(works.flatMap((work) => work.author_institution_ids || []).concat(author.institution_ids || []))].map((id) => ({ name: institutionById(id)?.name || id, years: [] }));
+            const historyHtml = history.map((item) => { const years = item.years.length ? ` <span class="detail-meta">(${item.years.length > 1 ? `${Math.min(...item.years)}–${Math.max(...item.years)}` : item.years[0]})</span>` : ""; return `<li>${escapeHtml(item.name)}${years}</li>`; }).join("");
+            const primaryText = primaryAffiliationText(author);
+            const histogram = window.AtlasExpert && Array.isArray(author.citations_by_year) && author.citations_by_year.length ? `<h3>Citations per year</h3><div class="drawer-histogram">${window.AtlasExpert.citationHistogramSvg(author.citations_by_year, { width: 420, height: 180 })}</div>` : "";
             const coauthorIds = [...new Set(works.flatMap((work) => (work.author_ids || []).filter((id) => id !== authorId)))];
             const coauthorCount = works.some((work) => Array.isArray(work.author_ids)) ? coauthorIds.length : null;
             // Frequent co-authors: shared-work counts per co-author; named when they are CA experts.
@@ -1686,7 +1747,7 @@
             const otherCoauthors = sharedCounts.size - namedCoauthors.length;
             $("drawer-title").textContent = author.name || "Researcher";
             $("drawer-issue-link").href = profileIssueUrl(author.name, author.author_id || authorId);
-            $("drawer-content").innerHTML = `<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p>${author.orcid ? `<p><a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a></p>` : ""}${profileHtml(detail.profile, author.name)}${drawerStatsHtml(author, works, coauthorCount)}<h3>Topics</h3>${drawerTopics.length ? `<div class="topic-chips">${drawerTopics.map(([tag, count]) => AtlasTopics.chip(tag, count)).join("")}</div>` : '<p class="detail-meta">No topic tags yet.</p>'}<details class="drawer-section"><summary>Affiliation history <span class="drawer-section-count">(${institutions.length} ${institutions.length === 1 ? "institution" : "institutions"})</span></summary><div class="drawer-section-body"><p class="detail-meta">${institutions.length ? institutions.map((institution) => escapeHtml(institution.name)).join(" · ") : "No institution affiliations in this snapshot."}</p></div></details><details class="drawer-section"><summary>Frequent co-authors <span class="drawer-section-count">(${namedCoauthors.length} CA experts${otherCoauthors > 0 ? `, ${otherCoauthors} others` : ""})</span></summary><div class="drawer-section-body">${namedCoauthors.length ? `<ul class="coauthor-list">${namedCoauthors.map(([id, count]) => `<li><button type="button" class="coauthor-link" data-author-id="${escapeHtml(id)}">${escapeHtml(expertsById.get(id).name || id)}</button> <span class="detail-meta">${count} shared ${count === 1 ? "work" : "works"}</span></li>`).join("")}</ul>` : '<p class="detail-meta">No co-authors on the California expert list.</p>'}${otherCoauthors > 0 ? `<p class="detail-meta">Plus ${otherCoauthors} co-author${otherCoauthors === 1 ? "" : "s"} outside the California expert list.</p>` : ""}</div></details><h3>Works</h3>${works.length ? '<div class="abstract-controls" role="group" aria-label="Abstract display"><button type="button" id="abstracts-expand">Expand all abstracts</button><button type="button" id="abstracts-collapse">Collapse all</button></div>' : ""}<ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="topic-chips">${AtlasTopics.sortTags(tags).map((tag) => AtlasTopics.chip(tag)).join("")}</div>` : ""}<details class="work-abstract"><summary>Abstract</summary>${String(work.abstract || "").trim() ? `<p>${escapeHtml(String(work.abstract).trim())}</p>` : '<p class="detail-meta">No abstract available</p>'}</details>${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
+            $("drawer-content").innerHTML = `${primaryText ? `<p class="drawer-primary"><span class="detail-meta">Primary affiliation:</span> <strong>${escapeHtml(primaryText)}</strong></p>` : ""}<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p><p class="drawer-actions"><a class="button-link" href="${escapeHtml(expertPageUrl(author.author_id || authorId))}">Open full profile page</a>${author.orcid ? ` <a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a>` : ""}</p>${profileHtml(detail.profile, author.name)}${drawerStatsHtml(author, works, coauthorCount)}${histogram}<h3>Topics</h3>${drawerTopics.length ? `<div class="topic-chips">${drawerTopics.map(([tag, count]) => AtlasTopics.chip(tag, count)).join("")}</div>` : '<p class="detail-meta">No topic tags yet.</p>'}<details class="drawer-section"><summary>Affiliation history <span class="drawer-section-count">(${history.length} ${history.length === 1 ? "institution" : "institutions"})</span></summary><div class="drawer-section-body">${history.length ? `<ul class="affiliation-list">${historyHtml}</ul>` : '<p class="detail-meta">No institution affiliations in this snapshot.</p>'}</div></details><details class="drawer-section"><summary>Frequent co-authors <span class="drawer-section-count">(${namedCoauthors.length} CA experts${otherCoauthors > 0 ? `, ${otherCoauthors} others` : ""})</span></summary><div class="drawer-section-body">${namedCoauthors.length ? `<ul class="coauthor-list">${namedCoauthors.map(([id, count]) => `<li><button type="button" class="coauthor-link" data-author-id="${escapeHtml(id)}">${escapeHtml(expertsById.get(id).name || id)}</button> <span class="detail-meta">${count} shared ${count === 1 ? "work" : "works"}</span></li>`).join("")}</ul>` : '<p class="detail-meta">No co-authors on the California expert list.</p>'}${otherCoauthors > 0 ? `<p class="detail-meta">Plus ${otherCoauthors} co-author${otherCoauthors === 1 ? "" : "s"} outside the California expert list.</p>` : ""}</div></details><h3>Works</h3>${works.length ? '<div class="abstract-controls" role="group" aria-label="Abstract display"><button type="button" id="abstracts-expand">Expand all abstracts</button><button type="button" id="abstracts-collapse">Collapse all</button></div>' : ""}<ul class="works-list">${works.length ? works.map((work) => { const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join(""); const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])]; return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml((work.institution_ids || []).map((id) => institutionById(id)?.name || id).join(", ") || "not recorded")}</p>${tags.length ? `<div class="topic-chips">${AtlasTopics.sortTags(tags).map((tag) => AtlasTopics.chip(tag)).join("")}</div>` : ""}<details class="work-abstract"><summary>Abstract</summary>${String(work.abstract || "").trim() ? `<p>${escapeHtml(String(work.abstract).trim())}</p>` : '<p class="detail-meta">No abstract available</p>'}</details>${workDatasetView.datasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`; }).join("") : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
             const setAbstracts = (open) => $("drawer-content").querySelectorAll("details.work-abstract").forEach((node) => { node.open = open; });
             const expandButton = $("abstracts-expand");
             const collapseButton = $("abstracts-collapse");
@@ -2355,9 +2416,10 @@
           state.caBasis = $("ca-basis-filter").value;
           state.oa = $("oa-filter").value;
           state.sort = $("expert-sort").value;
+          state.early = $("early-filter").checked;
           // "change" fires on blur after "input" already rendered; re-rendering then replaced the
           // rows between mousedown and mouseup, so the first click on an expert was lost.
-          const signature = JSON.stringify([state.search, state.institutionType, state.institution, state.tag, state.yearFrom, state.yearTo, state.caBasis, state.oa, state.sort]);
+          const signature = JSON.stringify([state.search, state.institutionType, state.institution, state.tag, state.yearFrom, state.yearTo, state.caBasis, state.oa, state.early, state.sort]);
           if (signature === state.lastFilterSignature) return;
           state.lastFilterSignature = signature;
           writeHash();
@@ -2372,7 +2434,7 @@
             buttons[next].focus();
           });
         });
-        ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "expert-sort"].forEach((id) => {
+        ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "expert-sort", "early-filter"].forEach((id) => {
           $(id).addEventListener("input", onFilterChange);
           $(id).addEventListener("change", onFilterChange);
         });
@@ -2434,7 +2496,8 @@
         $("monitoring-facets-expand").addEventListener("click", () => setAllFacets(true));
         $("monitoring-facets-collapse").addEventListener("click", () => setAllFacets(false));
         $("monitoring-samples").addEventListener("click", (event) => { const button = event.target.closest("[data-monitoring-page]"); if (!button) return; state.monitoringPage += Number(button.dataset.monitoringPage); renderMonitoring(); $("monitoring-samples-heading").scrollIntoView({ block: "start" }); });
-        $("reset-filters").addEventListener("click", () => { state.search = state.institutionType = state.institution = state.tag = state.yearFrom = state.yearTo = state.caBasis = state.oa = ""; writeHash(); updateViews(); $("expert-search").focus(); });
+        $("reset-filters").addEventListener("click", () => { state.search = state.institutionType = state.institution = state.tag = state.yearFrom = state.yearTo = state.caBasis = state.oa = ""; state.early = false; writeHash(); updateViews(); $("expert-search").focus(); });
+        $("rising-preset").addEventListener("click", () => { state.early = true; state.sort = "rising"; $("early-filter").checked = true; $("expert-sort").value = "rising"; state.lastFilterSignature = ""; writeHash(); renderExperts(); });
         $("export-csv").addEventListener("click", () => {
           if (!state.data) return;
           const header = ["author_id", "name", "work_count", "ca_works_count", "first_year", "last_year", "ca_basis", "domain_tags", "institution_ids", "cited_by_count", "h_index", "plastic_works_count", "plastic_citations", "plastic_citation_share_pct", "topic_counts"];
