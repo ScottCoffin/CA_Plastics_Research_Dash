@@ -61,6 +61,7 @@
       .status-row { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; align-items: center; margin-top: 0.7rem; }
       .status { font-weight: 700; font-variant-numeric: tabular-nums; }
       .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+      .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
       .sel-chip { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.15rem 0.2rem 0.15rem 0.65rem; border: 1px solid #8da7af; border-radius: 999px; background: #e8f1f5; font-size: 0.84rem; font-weight: 600; }
       .sel-chip button { border: 0; background: transparent; padding: 0 0.45rem; min-height: 1.6rem; font-size: 1rem; line-height: 1; color: var(--ink); border-radius: 999px; }
       .sel-chip button:hover { background: #cfe0e8; }
@@ -166,7 +167,7 @@
           <label class="check"><input type="checkbox" id="f-plastic" checked> Plastic-related only</label>
           <button type="button" class="btn" id="f-reset">Reset filters</button>
         </form>
-        <div class="status-row"><div class="chips" id="chips" aria-label="Active selections"></div></div>
+        <div class="status-row"><div class="chips" id="chips" role="group" aria-label="Active selections"></div></div>
       </section>
 
       <section class="panel" aria-labelledby="sk-h">
@@ -705,7 +706,7 @@
 
         function renderTiles() {
           const m = summarize(filtered);
-          const tile = (t, v, s) => `<div class="metric"><dt>${t}</dt><dd>${v}</dd>${s ? `<small>${s}</small>` : ""}</div>`;
+          const tile = (t, v, s) => `<div class="metric"><dt>${t}</dt><dd>${v}${s ? `<small>${s}</small>` : ""}</dd></div>`;
           $("tiles").innerHTML =
             tile("Awards", fmtInt(m.awards)) +
             tile("Funder agencies", fmtInt(m.funders)) +
@@ -850,7 +851,7 @@
           const pw = W - ml - mr, ph = H - mt - mb, top = niceMax(yc.max);
           const bw = pw / n;
           const y = (v) => mt + ph - (v / top) * ph;
-          const parts = [`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Stacked bar chart of awards per fiscal year by funder agency; a table follows"><g class="axis">`];
+          const parts = [`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="Stacked bar chart of awards per fiscal year by funder agency; a table follows"><g class="axis">`];
           [0, top / 2, top].forEach((t) => { parts.push(`<line x1="${ml}" x2="${W - mr}" y1="${y(t)}" y2="${y(t)}" stroke="#e1eaed"></line><text x="${ml - 5}" y="${y(t) + 4}" text-anchor="end">${fmtShare(t)}</text>`); });
           const step = Math.max(1, Math.ceil(n * 30 / pw));
           yc.years.forEach((yr, i) => { if (i % step === 0) parts.push(`<text x="${ml + bw * i + bw / 2}" y="${H - 10}" text-anchor="middle">${yr.year}</text>`); });
@@ -881,7 +882,7 @@
           const host = $("heat");
           if (!h.rows.length) { host.innerHTML = `<p class="empty">No dated awards match the current filters.</p>`; return; }
           const selYear = S.yf && S.yf === S.yt ? Number(S.yf) : S.yt === String(HEAT_START - 1) && !S.yf ? "pre" : null;
-          host.innerHTML = `<table class="mat"><thead><tr><th class="rowhead"></th>${h.cols.map((c) => `<th scope="col">${c === "pre" ? "&lt;" + HEAT_START : c}</th>`).join("")}</tr></thead><tbody>` +
+          host.innerHTML = `<table class="mat"><thead><tr><th class="rowhead"><span class="visually-hidden">Topic</span></th>${h.cols.map((c) => `<th scope="col">${c === "pre" ? "&lt;" + HEAT_START : c}</th>`).join("")}</tr></thead><tbody>` +
             h.rows.map((r) => `<tr><th scope="row"><span class="dot" style="background:${topicCssFill(r.key)}"></span>${escapeHtml(r.label)}</th>${r.counts.map((n, i) => {
               const fill = heatFill(n, h.max), sel = S.topic === r.key && selYear === h.cols[i];
               return `<td><button type="button" class="cell${sel ? " sel" : ""}" ${n ? "" : "disabled"} data-topic="${r.key}" data-col="${h.cols[i]}" style="background:${fill};color:${inkFor(fill)}" aria-label="${escapeHtml(r.label)}, ${h.cols[i] === "pre" ? "before " + HEAT_START : h.cols[i]}: ${n} awards">${n || ""}</button></td>`;
@@ -903,7 +904,7 @@
           const m = buildSectorTopic(filtered);
           const host = $("matrix");
           if (!m.sectors.length) { host.innerHTML = `<p class="empty">No awards match the current filters.</p>`; return; }
-          host.innerHTML = `<table class="mat"><thead><tr><th class="rowhead"></th>${m.topics.map((t) => `<th scope="col" title="${escapeHtml(topicLabel(t))}"><span class="dot" style="background:${topicCssFill(t)};margin:0 0 2px"></span><br>${escapeHtml(topicLabel(t))}</th>`).join("")}</tr></thead><tbody>` +
+          host.innerHTML = `<table class="mat"><thead><tr><th class="rowhead"><span class="visually-hidden">Recipient sector</span></th>${m.topics.map((t) => `<th scope="col" title="${escapeHtml(topicLabel(t))}"><span class="dot" style="background:${topicCssFill(t)};margin:0 0 2px"></span><br>${escapeHtml(topicLabel(t))}</th>`).join("")}</tr></thead><tbody>` +
             m.sectors.map((s, i) => `<tr><th scope="row">${escapeHtml(SECTOR_LABELS[s] || s)}</th>${m.grid[i].map((n, j) => {
               const fill = heatFill(n, m.max), sel = S.sector === s && S.topic === m.topics[j];
               return `<td><button type="button" class="cell${sel ? " sel" : ""}" ${n ? "" : "disabled"} data-sector="${s}" data-topic="${m.topics[j]}" style="background:${fill};color:${inkFor(fill)}" aria-label="${escapeHtml(SECTOR_LABELS[s] || s)}, ${escapeHtml(topicLabel(m.topics[j]))}: ${n} awards">${n || ""}</button></td>`;

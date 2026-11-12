@@ -123,3 +123,4 @@
 | 2026-11-12 | UX-22 | Contrast and link underlines (style.css), ported pages as light panels in dark theme, sidebar toggle aria-label (postbuild); axe 0 contrast nodes light+dark | this commit |
 | 2026-11-12 | UX-4 | Evidence map: one in-development notice, placeholders removed, intro matches controls, loaded/failed status with Retry (1 Haiku worker) | this commit |
 | 2026-11-12 | UX-23 | One h1 on Experts and Funding; heading skips removed on every /app/ route (1 Haiku worker) | this commit |
+| 2026-11-12 | UX-24 | Monitoring CLS 0.52 -> 0.04 (static quality-note lead), no headings inside summary; grants.html aria/dl/th/nested fixes (1 Haiku worker) | this commit |
