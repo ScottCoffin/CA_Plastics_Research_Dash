@@ -18,7 +18,26 @@ OUTPUT = REPO / "site" / "data" / "methods_flow.json"
 
 
 def _card() -> dict:
-    return json.loads(flow_build.newest_card_path().read_text(encoding="utf-8"))
+    # release/ is gitignored (local AT-10 output), so clean checkouts and CI skip card checks;
+    # the committed methods_flow.json is still checked for shape below.
+    try:
+        path = flow_build.newest_card_path()
+    except (OSError, ValueError):
+        pytest.skip("no local release/<date>/methods_card.json")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _synthetic_card() -> dict:
+    keys = [
+        "raw_records",
+        "after_near_duplicate_collapse",
+        "california_authorship",
+        "published_after_curation",
+        "plastic_related_published",
+        "analysed_excluding_retracted",
+    ]
+    flow = {k: {"value": 100 - i, "source": f"src {k}", "reason": None} for i, k in enumerate(keys)}
+    return {"flow": flow, "release_date": "2026-01-01", "query": {"version": "q-test"}}
 
 
 def _committed() -> dict:
@@ -26,6 +45,7 @@ def _committed() -> dict:
 
 
 def test_committed_flow_is_not_stale() -> None:
+    _card()
     text = flow_build.build_from_disk()
     assert OUTPUT.read_bytes() == text.encode("utf-8")
     assert text.endswith("\n")
@@ -81,13 +101,15 @@ def test_release_metadata_matches_card() -> None:
 
 
 def test_build_rejects_card_without_flow_counts() -> None:
-    card = _card()
+    flow_build.build_payload(_synthetic_card())
+    card = _synthetic_card()
     del card["flow"]["raw_records"]
     with pytest.raises(ValueError, match="raw_records"):
         flow_build.build_payload(card)
 
 
 def test_check_mode_exits_one_when_stale(tmp_path: Path) -> None:
+    _card()
     stale = tmp_path / "methods_flow.json"
     stale.write_text("{}\n", encoding="utf-8")
     assert flow_build.main(["--check", "--output", str(stale)]) == 1
