@@ -207,6 +207,17 @@ Licence: the file records `Other (Public Domain)` as stated by the source. This 
 
 `calls[]`: empty at the time of writing (0 rows). No field list is documented yet; add one when the first call is listed.
 
+### `site/data/linkouts.json`
+
+Purpose: the Evidence Map's related-resources strip (EM-5). Written from `config/linkouts.yml`
+by `py -3.14 scripts/build_linkouts_json.py` (`--check` fails when it is stale).
+Top-level keys: `schema_version` (`em5.v1`), `source` (string), `entries` (array, 12 at the time of writing).
+Licence: project metadata; names and descriptions are quoted from each steward, and nothing
+from the linked resources is copied (link-only, Add-on A2 §8).
+
+`entries[]`: `id`, `name`, `steward`, `description`, `relation`, `root_url` (https), `topics`
+(topic tags that show the entry), `default` (boolean: shown when no topic-specific entry matches).
+
 ### `site/feed.xml`
 
 Purpose: Atom feed of newly indexed California-connected papers and newly recorded awards.

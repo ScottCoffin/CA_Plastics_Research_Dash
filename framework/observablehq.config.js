@@ -23,6 +23,7 @@ export default {
     {name: "Institutions", path: "/institutions"},
     {name: "Monitoring", path: "/monitoring"},
     {name: "Funding", path: "/funding"},
+    {name: "Evidence map", path: "/evidence"},
     {name: "About", path: "/about"}
   ],
   header: `<span class="atlas-header">California research atlas · <a href="../">Classic site</a></span>`,

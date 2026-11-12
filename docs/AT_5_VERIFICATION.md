@@ -41,9 +41,13 @@ the switch (HUMAN_TASKS H16).
   against the ported module.
 - Full gate: lint, 1,306 tests, build, doc links, A1/A2 scaffolds, `git diff --check`.
 
+## Deploy
+
+Confirmed 2026-11-12: the deploy run for `f5667276` built the app; https://plastiverse.live/app/
+returns 200, and headless Edge shows "2614 experts shown" and "524 awards match" live.
+
 ## Not yet verified
 
-- The deploy run that builds `/app/` in CI (first push after this checkpoint).
 - Keyboard and screen-reader walk-through, dark theme, 400 px layout (markup is the classic
   markup, so behaviour should match, but it was not checked by hand).
 - MiniSearch ranked search in a real browser (the substring fallback was exercised).

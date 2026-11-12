@@ -91,11 +91,15 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-12 | S9.6a outreach contacts | (result) | Offline contact builder | Accepted first pass (22 tests); lead renamed opt-out file to docs/OUTREACH.md name | 1 session |
 | 2026-11-12T09:04:20-08:00 | AT4-SEARCH | haiku-developer | Wire vendored MiniSearch into facets.js (ranked) and Experts search | Running | - |
 | 2026-11-12 | AT4-SEARCH | (result) | MiniSearch wiring | Accepted first pass (11 tests, check_at4, check_s3_3) | 1 session; ~65K subagent tokens |
-| 2026-11-12T23:30:00-08:00 | AT-5b Funding page | haiku-developer | Lift-and-shift Funding tab into framework/src/funding.md + components/funding.js | Running | - |
-| 2026-11-12T23:30:00-08:00 | AT-5c Monitoring page | haiku-developer | Lift-and-shift Monitoring tab (map, facets, helpers) into Framework | Running | - |
-| 2026-11-12T23:40:00-08:00 | AT-5d Experts page | haiku-developer | Lift-and-shift Experts tab (filters, search, virtual list, drawer) into Framework | Running | - |
+| 2026-11-12 | AT-5b Funding page | haiku-developer | Lift-and-shift Funding tab into framework/src/funding.md + components/funding.js | Running | - |
+| 2026-11-12 | AT-5c Monitoring page | haiku-developer | Lift-and-shift Monitoring tab (map, facets, helpers) into Framework | Running | - |
+| 2026-11-12 | AT-5d Experts page | haiku-developer | Lift-and-shift Experts tab (filters, search, virtual list, drawer) into Framework | Running | - |
 | 2026-11-12 | AT-5b Funding page | (result) | Funding port | Accepted after one continue (30-turn limit); runtime test + smoke PASS | 2 sessions; ~125K subagent tokens |
 | 2026-11-12 | AT-5c Monitoring page | (result) | Monitoring port + shared svg_map.js | Accepted after one continue; lead removed a duplicate h2; classic helper assertions repeated | 2 sessions; ~135K subagent tokens |
 | 2026-11-12 | AT-5d Experts page | (result) | Experts port (search, virtual list, drawer) | Accepted after one continue; deep links verified | 2 sessions; ~159K subagent tokens |
-| 2026-11-13T00:10:00-08:00 | AT-5e Institutions page | haiku-developer | Institutions port reusing svg_map.js | Running | - |
-| 2026-11-13 | AT-5e Institutions page | (result) | Institutions port | Accepted first pass; 161 tier rows in smoke | 1 session; ~139K subagent tokens |
+| 2026-11-12 | AT-5e Institutions page | haiku-developer | Institutions port reusing svg_map.js | Running | - |
+| 2026-11-12 | AT-5e Institutions page | (result) | Institutions port | Accepted first pass; 161 tier rows in smoke | 1 session; ~139K subagent tokens |
+| 2026-11-12T09:59:03-08:00 | EM-5a linkouts strip JSON | haiku-developer | atlas.linkouts strip_entries + site/data/linkouts.json export + staleness test | Running | - |
+| 2026-11-12T09:59:03-08:00 | EM-5b Evidence Map page | haiku-developer | Framework evidence.md: bit-set facets, hash state, works drawer, related-resources strip, V-1..V-5 placeholders | Running | - |
+| 2026-11-12 | EM-5a linkouts strip JSON | (result) | strip_entries + export | Accepted first pass (37 tests) | 1 session; ~37K subagent tokens |
+| 2026-11-12 | EM-5b Evidence Map page | (result) | Framework evidence page | Accepted first pass; lead added nav entry + DATA_DICTIONARY entry | 1 session; ~84K subagent tokens |

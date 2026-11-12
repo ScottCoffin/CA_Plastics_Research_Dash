@@ -1,0 +1,147 @@
+{
+ "schema_version": "em5.v1",
+ "source": "config/linkouts.yml",
+ "entries": [
+  {
+   "id": "LO-1",
+   "name": "Global Plastic Laws",
+   "steward": "managed by Plastic Pollution Coalition, with key partners Break Free From Plastic Europe, Environmental Law Alliance Worldwide, and Surfrider Foundation U.S.",
+   "description": "plastic legislation that has been passed around the world",
+   "relation": "law database",
+   "root_url": "https://www.globalplasticlaws.org/",
+   "topics": [],
+   "default": true
+  },
+  {
+   "id": "LO-2",
+   "name": "ToMEx (Aquatic Organisms; Human Health)",
+   "steward": "SCCWRP",
+   "description": "a living resource, new studies can be added at any time",
+   "relation": "toxicity database",
+   "root_url": "https://microplastics.sccwrp.org/",
+   "topics": [
+    "ecotoxicology_and_trophic_transfer",
+    "human_exposure_and_health_risk",
+    "risk_assessment"
+   ],
+   "default": false
+  },
+  {
+   "id": "LO-3",
+   "name": "NOAA NCEI Marine Microplastics",
+   "steward": "not stated",
+   "description": "a global database of microplastics observations in marine settings",
+   "relation": "marine observations database",
+   "root_url": "https://www.ncei.noaa.gov/products/microplastics",
+   "topics": [
+    "fate_transport_and_sorption",
+    "occurrence_and_monitoring"
+   ],
+   "default": false
+  },
+  {
+   "id": "LO-4",
+   "name": "Atlas of Ocean Microplastics (AOMI)",
+   "steward": "Japan Ministry of the Environment",
+   "description": "a global database of surface microplastics",
+   "relation": "surface microplastics database",
+   "root_url": "https://aomi.env.go.jp/",
+   "topics": [
+    "fate_transport_and_sorption",
+    "occurrence_and_monitoring"
+   ],
+   "default": false
+  },
+  {
+   "id": "LO-5",
+   "name": "Global Plastics Hub",
+   "steward": "GPML",
+   "description": "datasets available on plastics across the lifecycle",
+   "relation": "data hub",
+   "root_url": "https://globalplasticshub.org/",
+   "topics": [],
+   "default": true
+  },
+  {
+   "id": "LO-6",
+   "name": "Global Plastics Data Tracker",
+   "steward": "UNSW CSDR via Global Ocean Accounts Partnership",
+   "description": "an interactive registry that maps plastics data across more than 193 countries",
+   "relation": "data registry",
+   "root_url": "https://oceanaccounts.org/publications/global-plastic-data-tracker/",
+   "topics": [],
+   "default": true
+  },
+  {
+   "id": "LO-7",
+   "name": "Global Plastics Policy Tool",
+   "steward": "Berkeley data-science center (Eric and Wendy Schmidt Center for Data Science & Environment)",
+   "description": "predicts the impact of potential interventions",
+   "relation": "policy modelling tool",
+   "root_url": "https://dse.berkeley.edu/news/data-interactive-tools-and-ai-actionable-change-ending-plastic-pollution",
+   "topics": [],
+   "default": true
+  },
+  {
+   "id": "LO-8",
+   "name": "Plastiverse tools directory",
+   "steward": "not stated",
+   "description": "a curated and evolving directory of plastics research tools & resources",
+   "relation": "tools directory",
+   "root_url": "https://www.plastiverse.org/microplastics-tools-resources",
+   "topics": [],
+   "default": true
+  },
+  {
+   "id": "LO-9",
+   "name": "Moore Institute One4All and Microplastics Open Data Portal",
+   "steward": "Moore Institute",
+   "description": "an open-source portal and toolkit designed to make microplastics data Findable, Accessible, Interoperable, and Reusable (FAIR)",
+   "relation": "open data portal",
+   "root_url": "https://moore-institute-4-plastic-pollution-res.r-universe.dev/One4All",
+   "topics": [
+    "analytical_methods",
+    "occurrence_and_monitoring"
+   ],
+   "default": false
+  },
+  {
+   "id": "LO-10",
+   "name": "DTSC: Microplastics in Consumer Products",
+   "steward": "DTSC Safer Consumer Products (SCP)",
+   "description": "not stated",
+   "relation": "regulatory research page",
+   "root_url": "https://dtsc.ca.gov/scp/microplastics-in-consumer-products",
+   "topics": [
+    "human_exposure_and_health_risk"
+   ],
+   "default": false
+  },
+  {
+   "id": "LO-11",
+   "name": "DTSC: Addition to the Candidate Chemicals List: Microplastics",
+   "steward": "DTSC Safer Consumer Products (SCP)",
+   "description": "not stated",
+   "relation": "regulatory listing page",
+   "root_url": "https://dtsc.ca.gov/scp/candidate-chemical-list_microplastics/",
+   "topics": [
+    "human_exposure_and_health_risk",
+    "risk_assessment"
+   ],
+   "default": false
+  },
+  {
+   "id": "LO-12",
+   "name": "DTSC: Priority Product Work Plan",
+   "steward": "DTSC Safer Consumer Products (SCP)",
+   "description": "not stated",
+   "relation": "regulatory work plan page",
+   "root_url": "https://dtsc.ca.gov/scp/priority-product-work-plan/",
+   "topics": [
+    "human_exposure_and_health_risk",
+    "risk_assessment"
+   ],
+   "default": false
+  }
+ ]
+}

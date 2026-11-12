@@ -82,6 +82,9 @@ main site until you approve the switch.
 2. Try a few things you use: an expert search, the "Find up-and-coming researchers" button,
    an expert's drawer, the institutions map and tiers, the monitoring map, the funding filters
    and CSV download.
+   Also open **Evidence map** (new): tick a topic, check the counts change, click **Show works**
+   (the list should open and close with Escape), and look at the related-resources links
+   (question EM5-STRIP in `.agent/QUESTIONS.md`: keep the default rules or change them).
 3. Locally, without deploying: `cd framework && npm run build`, then
    `py -3.14 scripts/serve_framework_preview.py` and open
    http://127.0.0.1:8766/CA_Plastics_Research_Dash/app/ .

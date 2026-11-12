@@ -3,6 +3,8 @@
 # no claims beyond what the steward says; terms recorded per entry; weekly HTTP status
 # check only. Nothing listed here is ingested, mirrored or scraped.
 # Unknown fields are "not stated". The Minderoo Plastic Health Map is intentionally absent.
+# trigger_rules: "topic=<tag>" shows the entry in the Evidence Map strip when that topic is
+# selected; "default" shows it when no topic-specific entry matches (owner question EM5-STRIP).
 # last_checked stays null here; the weekly check records it in docs/api_notes/linkouts_check.json.
 schema_version: 1
 entries:
@@ -35,6 +37,7 @@ entries:
       - template: "/law?lawId={id}"
         evidence_url: "https://www.globalplasticlaws.org/"
     trigger_rules:
+      - "default"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -52,6 +55,9 @@ entries:
     url_status: "as_stated"
     deep_link_templates: []
     trigger_rules:
+      - "topic=ecotoxicology_and_trophic_transfer"
+      - "topic=human_exposure_and_health_risk"
+      - "topic=risk_assessment"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -69,6 +75,8 @@ entries:
     url_status: "as_stated"
     deep_link_templates: []
     trigger_rules:
+      - "topic=occurrence_and_monitoring"
+      - "topic=fate_transport_and_sorption"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -86,6 +94,8 @@ entries:
     url_status: "as_stated"
     deep_link_templates: []
     trigger_rules:
+      - "topic=occurrence_and_monitoring"
+      - "topic=fate_transport_and_sorption"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -103,6 +113,7 @@ entries:
     url_status: "as_stated"
     deep_link_templates: []
     trigger_rules:
+      - "default"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -120,6 +131,7 @@ entries:
     url_status: "as_stated"
     deep_link_templates: []
     trigger_rules:
+      - "default"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -137,6 +149,7 @@ entries:
     url_status: "as_stated"
     deep_link_templates: []
     trigger_rules:
+      - "default"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -155,6 +168,7 @@ entries:
     disclosure: "The Atlas owner is a co-founder of Plastiverse (A2 §0 rule 7)."
     deep_link_templates: []
     trigger_rules:
+      - "default"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -172,6 +186,8 @@ entries:
     url_status: "owner_confirmed"  # owner, 2026-11-10
     deep_link_templates: []
     trigger_rules:
+      - "topic=occurrence_and_monitoring"
+      - "topic=analytical_methods"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -189,6 +205,7 @@ entries:
     url_status: "as_stated"
     deep_link_templates: []
     trigger_rules:
+      - "topic=human_exposure_and_health_risk"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -206,6 +223,8 @@ entries:
     url_status: "as_stated"
     deep_link_templates: []
     trigger_rules:
+      - "topic=human_exposure_and_health_risk"
+      - "topic=risk_assessment"
       - "weekly HTTP status check only"
     last_checked: null
 
@@ -223,5 +242,7 @@ entries:
     url_status: "owner_confirmed"  # owner, 2026-11-10
     deep_link_templates: []
     trigger_rules:
+      - "topic=risk_assessment"
+      - "topic=human_exposure_and_health_risk"
       - "weekly HTTP status check only"
     last_checked: null

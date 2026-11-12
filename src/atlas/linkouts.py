@@ -276,3 +276,63 @@ def run_live(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return payload
+
+
+STRIP_FIELDS = (
+    "id",
+    "name",
+    "steward",
+    "description",
+    "relation",
+    "root_url",
+    "topics",
+    "default",
+)
+TOPIC_PREFIX = "topic="
+DEFAULT_RULE = "default"
+
+
+def parse_trigger_rules(rules: list[str]) -> dict[str, Any]:
+    """Split display rules into {"topics": sorted unique tags, "default": bool}.
+
+    "topic=<tag>" adds a topic; "default" sets the default flag; any other string
+    (e.g. "weekly HTTP status check only") is not a display rule and is ignored.
+    """
+    topics: set[str] = set()
+    default = False
+    for rule in rules:
+        if not isinstance(rule, str):
+            continue
+        text = rule.strip()
+        if text.startswith(TOPIC_PREFIX):
+            tag = text[len(TOPIC_PREFIX) :].strip()
+            if tag:
+                topics.add(tag)
+        elif text == DEFAULT_RULE:
+            default = True
+    return {"topics": sorted(topics), "default": default}
+
+
+def strip_entries(data: Any) -> list[dict[str, Any]]:
+    """Public, display-only view of each registry entry, in file order.
+
+    Raises ValueError when the registry fails validate_registry.
+    """
+    errors = validate_registry(data)
+    if errors:
+        raise ValueError("invalid link-out registry: " + "; ".join(errors))
+    entries: list[dict[str, Any]] = []
+    for entry in data["entries"]:
+        rules = parse_trigger_rules(entry["trigger_rules"])
+        public = {
+            "id": entry["id"],
+            "name": entry["name"],
+            "steward": entry["steward"],
+            "description": entry["description"],
+            "relation": entry["relation"],
+            "root_url": entry["root_url"],
+            "topics": rules["topics"],
+            "default": rules["default"],
+        }
+        entries.append({key: public[key] for key in STRIP_FIELDS})
+    return entries

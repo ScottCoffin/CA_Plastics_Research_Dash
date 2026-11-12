@@ -113,4 +113,5 @@
 | 2026-11-12 | S2.5/S6.1/S9.5 | ORCID DOI ingest (+117), eScholarship evidence + basis (+19), S6.1 corpus report (PMCID fix), drawer profiles (worker), email redaction in committed tables | this commit |
 | 2026-11-12 | S2.5/S5.1/S6 | Owner decisions committed; 146 additions queued; S5.1 dev eval (closed via gap); S6.2/S6.3 closed; gold-labelling app; ROR researcher ingest (+1) | this commit |
 | 2026-11-12 | S9.3/H5/AT4/S9.6a | Expert full page + metrics (m-quotient, rising, histogram, primary affiliation); H5 answers applied; MiniSearch; Framework installed; outreach contact builder; gateway-504 budget fix | this commit |
-| 2026-11-13 | AT-5 | Framework app: all five tabs + Overview ported lift-and-shift (4 Haiku workers), deployed under /app/ beside the classic site; check_at5, preview + headless smoke | this commit |
+| 2026-11-12 | AT-5 | Framework app: all five tabs + Overview ported lift-and-shift (4 Haiku workers), deployed under /app/ beside the classic site; check_at5, preview + headless smoke | this commit |
+| 2026-11-12 | EM-5 | Evidence Map shell as Framework page (facets, hash, drawer, link-out strip); linkouts.json export with trigger rules (2 Haiku workers) | this commit |
