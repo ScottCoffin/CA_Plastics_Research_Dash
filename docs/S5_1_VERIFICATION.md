@@ -38,9 +38,16 @@ while seeing the Haiku call, so that row measures agreement more than independen
 
 ## Labelling plan
 
-1. Owner labels the S4.2 sample in the gold-labelling app
-   (`scripts/review_gold_labels_app.py`): dev and test first (230 works), then train.
-   A Claude reviewer double-labels 20% for kappa (owner decision, ADR-GATES-2026-11-11).
+1. Owner labels the **evaluation set** in the gold-labelling app
+   (`scripts/review_gold_labels_app.py`): the dev and test random-sample works (150; split
+   `dev` or `test`, role `pool`). Revised 2026-11-11 (ADR-GOLD-EVAL-SET-2026-11-11): the
+   350 train works are not owner-labelled (training labels come from S5.0 active learning)
+   and the 80 leak-check works wait for S5.7. Haiku's prompt was not tuned on dev, so all
+   150 are held out for Haiku (95% CI half-width about 0.05 on a proportion near 0.9); the
+   trained models still use only the 75 test works for the final number. Earlier AT-1
+   audit calls are pre-selected, not auto-saved; decisions made with Haiku's answer
+   visible are relabelled blind. A Claude reviewer double-labels 20% for kappa (owner
+   decision, ADR-GATES-2026-11-11).
 2. Keep the works review app's Smart queue on uncertain works; it surfaces likely negatives.
    Target at least 150 not-relevant labels outside the test split before retraining.
 3. Then evaluate once on the test split (F3 hygiene: no tuning on test). If F1 < 0.90,

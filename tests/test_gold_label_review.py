@@ -404,3 +404,118 @@ def test_snippet_without_source_gets_one_automatically(tmp_path: Path) -> None:
     assert gl.save_decision(path, "W1", form, "complete", splits)["evidence_source"] == "title"
     form.update(evidence_snippet="", evidence_source="abstract")
     assert gl.save_decision(path, "W1", form, "complete", splits)["evidence_source"] == ""
+
+
+def _eval_rows() -> list[dict[str, str]]:
+    def row(work_id: str, split: str, role: str, status: str = "") -> dict[str, str]:
+        return {
+            "work_id": work_id,
+            "split": split,
+            "sample_role": role,
+            "decision_status": status,
+        }
+
+    return [
+        row("W10", "train", "pool"),
+        row("W11", "dev", "leak_test"),
+        row("W12", "dev", "pool"),
+        row("W13", "dev", "pool", "complete"),
+        row("W14", "test", "pool"),
+        row("W15", "test", "pool", "adjudication_required"),
+        row("W16", "test", "pool", "complete"),
+        row("W17", "test", "leak_test"),
+    ]
+
+
+def test_in_eval_set_is_dev_and_test_pool_only() -> None:
+    flags = {r["work_id"]: gl.in_eval_set(r) for r in _eval_rows()}
+    assert [w for w, ok in flags.items() if ok] == ["W12", "W13", "W14", "W15", "W16"]
+
+
+def test_eval_views_include_only_eval_set_and_order_test_first() -> None:
+    rows = _eval_rows()
+    assert gl.VIEWS[:2] == ("Evaluation set: unlabelled", "Evaluation set: all")
+    unlabelled = [r["work_id"] for r in gl.queue(rows, "Evaluation set: unlabelled")]
+    assert unlabelled == ["W14", "W12"]  # test before dev; complete and holds excluded
+    everything = [r["work_id"] for r in gl.queue(rows, "Evaluation set: all")]
+    assert everything == ["W14", "W15", "W16", "W12", "W13"]
+
+
+def test_eval_progress_counts_complete_over_eval_set() -> None:
+    assert gl.eval_progress(_eval_rows()) == (2, 5)
+    assert gl.eval_progress([]) == (0, 0)
+
+
+def test_load_prior_relevance_rules(tmp_path: Path) -> None:
+    overrides = tmp_path / "overrides_works.csv"
+    fields = ["work_id", "field", "value", "reason", "reviewed_by", "reviewed_at"]
+    rows = [
+        {
+            "work_id": "W1",
+            "field": "plastic_related",
+            "value": "true",
+            "reason": "x",
+            "reviewed_by": "SC",
+            "reviewed_at": "2026-01-02",
+        },
+        {
+            "work_id": "W2",
+            "field": "exclude",
+            "value": "true",
+            "reason": "not_relevant: x",
+            "reviewed_by": "SC",
+            "reviewed_at": "2026-01-03",
+        },
+        {
+            "work_id": "W3",
+            "field": "exclude",
+            "value": "true",
+            "reason": "duplicate",
+            "reviewed_by": "SC",
+            "reviewed_at": "2026-01-04",
+        },
+        {
+            "work_id": "W4",
+            "field": "plastic_related",
+            "value": "true",
+            "reason": "x",
+            "reviewed_by": "SC",
+            "reviewed_at": "2026-01-05",
+        },
+        {
+            "work_id": "W5",
+            "field": "plastic_related",
+            "value": "false",
+            "reason": "x",
+            "reviewed_by": "SC",
+            "reviewed_at": "2026-01-06",
+        },
+    ]
+    with overrides.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+    relevance = tmp_path / "work_relevance.csv"
+    with relevance.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=["work_id", "owner_review"])
+        writer.writeheader()
+        writer.writerows(
+            [
+                {"work_id": "W1", "owner_review": "confirmed"},
+                {"work_id": "W2", "owner_review": "pending"},
+                {"work_id": "W4", "owner_review": "changed"},
+            ]
+        )
+    prior = gl.load_prior_relevance(overrides, relevance)
+    assert prior == {
+        "W2": {"value": "false", "date": "2026-01-03", "source": "AT-1 audit"},
+    }
+    assert gl.load_prior_relevance(overrides, tmp_path / "absent.csv") == {
+        "W1": {"value": "true", "date": "2026-01-02", "source": "AT-1 audit"},
+        "W2": {"value": "false", "date": "2026-01-03", "source": "AT-1 audit"},
+        "W4": {"value": "true", "date": "2026-01-05", "source": "AT-1 audit"},
+    }
+
+
+def test_load_prior_relevance_missing_files_gives_empty(tmp_path: Path) -> None:
+    assert gl.load_prior_relevance(tmp_path / "a.csv", tmp_path / "b.csv") == {}

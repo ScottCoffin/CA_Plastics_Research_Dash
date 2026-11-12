@@ -117,11 +117,16 @@ The Atlas already hides these abstracts; this fixes them for everyone.
 - **Done when:** submitted. Tell the agent "OpenAlex report sent".
 
 ### H9. Label the gold set (unblocks the whole S5 classifier chain)
-The S5 classifiers can only be tested against your gold labels. There are 580 works:
-start with dev and test (230), then train.
-1. Run `py -3.14 -m streamlit run scripts/review_gold_labels_app.py`. The first launch
-   creates `curation/annotations/annotations_SC.csv`.
-2. Keep **Show** on "Unlabelled (dev+test first)".
+The S5 classifiers (and Haiku) are tested against your gold labels. You only need the
+**evaluation set: 150 works** (dev + test random sample; 13 already done). The 350 train
+works are not needed (training labels come from the active-learning app) and the 80
+leak-check works wait for S5.7.
+1. Run `py -3.14 -m streamlit run scripts/review_gold_labels_app.py` (restart it if it is
+   already open).
+2. Keep **Show** on "Evaluation set: unlabelled".
+   About 40 works show "You already judged this ... on <date>": your earlier audit call
+   is pre-selected, so check it and click Save and next (for a "not relevant" one that is
+   the only click).
 3. For each work, read the highlighted title and abstract (authors, journal, year and a
    DOI link to the full paper sit under the title), then set:
    - **plastic_related** (true or false). If **false**, nothing else is needed: go to step 4.
@@ -133,9 +138,9 @@ start with dev and test (230), then train.
    - optionally an evidence snippet copied from the text.
 4. Click **Save and next**. If you can't decide, click **Needs adjudication**.
    Every click saves immediately.
-- **Done when:** dev and test show "labelled 230 of 230" in the sidebar (train can
-  follow later). Tell the agent "gold dev+test done". The agent then runs the Claude
-  second rater on 20% and the S5.1 test evaluation.
+- **Done when:** the sidebar shows "Evaluation set: labelled 150 of 150". Tell the agent
+  "gold evaluation set done". The agent then runs the Claude second rater on 20%, the
+  Haiku evaluation and the S5.1 test evaluation.
 
 ### H7. Review 10 expert profiles (S9.3/S9.5)
 The drawer now shows ORCID bios, keywords and links (399 experts). Open

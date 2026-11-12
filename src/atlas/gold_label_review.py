@@ -37,7 +37,13 @@ MAX_SNIPPET_CHARS = 1000
 SPLIT_ORDER = ("test", "dev", "train")
 # Dev and test are labelled before train: dev sets thresholds, test is frozen (F3).
 QUEUE_SPLIT_RANK = {"dev": 0, "test": 1, "train": 2}
+# The 150-work evaluation set is the dev and test pool works. Test comes first so the held-out
+# works are finished even if labelling stops early (ADR-GOLD-EVAL-SET-2026-11-11).
+EVAL_SPLITS = ("dev", "test")
+EVAL_SPLIT_RANK = {"test": 0, "dev": 1}
 VIEWS = (
+    "Evaluation set: unlabelled",
+    "Evaluation set: all",
     "Unlabelled (dev+test first)",
     "Unlabelled (all)",
     "All",
@@ -496,6 +502,18 @@ def is_unlabelled(row: Mapping[str, str]) -> bool:
     return row["decision_status"] not in _STATUSES
 
 
+def in_eval_set(row: Mapping[str, str]) -> bool:
+    """True for the evaluation set: dev and test pool works (not train, not leak-check)."""
+    return row["split"] in EVAL_SPLITS and row["sample_role"] == "pool"
+
+
+def eval_progress(rows: Sequence[Mapping[str, str]]) -> tuple[int, int]:
+    """(complete, total) over the evaluation set."""
+    members = [row for row in rows if in_eval_set(row)]
+    done = sum(1 for row in members if row["decision_status"] == "complete")
+    return done, len(members)
+
+
 def queue(rows: Sequence[Mapping[str, str]], view: str) -> list[dict[str, str]]:
     """Work list for one view. 'Unlabelled' excludes both complete and adjudication holds."""
     by_work = sorted(rows, key=lambda row: row["work_id"])
@@ -503,6 +521,14 @@ def queue(rows: Sequence[Mapping[str, str]], view: str) -> list[dict[str, str]]:
         rows,
         key=lambda row: (QUEUE_SPLIT_RANK.get(row["split"], 9), row["work_id"]),
     )
+    if view in ("Evaluation set: unlabelled", "Evaluation set: all"):
+        members = sorted(
+            (row for row in rows if in_eval_set(row)),
+            key=lambda row: (EVAL_SPLIT_RANK[row["split"]], row["work_id"]),
+        )
+        if view == "Evaluation set: unlabelled":
+            members = [row for row in members if is_unlabelled(row)]
+        return [dict(r) for r in members]
     if view == "Unlabelled (dev+test first)":
         return [dict(r) for r in by_priority if is_unlabelled(r)]
     if view == "Unlabelled (all)":
@@ -521,6 +547,51 @@ def progress(rows: Sequence[Mapping[str, str]]) -> dict[str, tuple[int, int]]:
         members = [row for row in rows if row["split"] == split]
         done = sum(1 for row in members if row["decision_status"] == "complete")
         out[split] = (done, len(members))
+    return out
+
+
+PRIOR_SOURCE = "AT-1 audit"
+# Owner decisions made with Haiku's answer visible; these must be relabelled blind.
+HAIKU_VISIBLE_REVIEWS = ("confirmed", "changed")
+
+
+def _csv_rows(path: Path) -> list[dict[str, str]]:
+    if not Path(path).exists():
+        return []
+    with Path(path).open(encoding="utf-8", newline="") as stream:
+        return [dict(row) for row in csv.DictReader(stream)]
+
+
+def load_prior_relevance(
+    overrides_csv: Path, work_relevance_csv: Path
+) -> dict[str, dict[str, str]]:
+    """work_id -> {"value": "true"|"false", "date": reviewed_at, "source": text}.
+
+    Earlier relevance decisions from the audit overrides: plastic_related=true, and
+    exclude=true with 'not_relevant' in the reason (read as not plastic-related). Works the
+    owner already confirmed or changed after seeing Haiku's answer are dropped, so the
+    evaluation labels are not anchored on that answer.
+    """
+    out: dict[str, dict[str, str]] = {}
+    for row in _csv_rows(overrides_csv):
+        work_id = (row.get("work_id") or "").strip()
+        field = (row.get("field") or "").strip()
+        value = (row.get("value") or "").strip()
+        if field == "plastic_related" and value == "true":
+            out[work_id] = {
+                "value": "true",
+                "date": row.get("reviewed_at", ""),
+                "source": PRIOR_SOURCE,
+            }
+        elif field == "exclude" and value == "true" and "not_relevant" in (row.get("reason") or ""):
+            out[work_id] = {
+                "value": "false",
+                "date": row.get("reviewed_at", ""),
+                "source": PRIOR_SOURCE,
+            }
+    for row in _csv_rows(work_relevance_csv):
+        if (row.get("owner_review") or "").strip() in HAIKU_VISIBLE_REVIEWS:
+            out.pop((row.get("work_id") or "").strip(), None)
     return out
 
 

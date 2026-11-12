@@ -83,3 +83,5 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-11T18:13:18-08:00 | S11.3/S2.5 | haiku-developer | Haiku relevance screening of 144 new works (title+abstract) | Running | - |
 | 2026-11-12 | S11.3/S2.5 | (result) | Haiku screening of 144 new works | Accepted (144 rows validated; 47 true / 97 false; 93 low confidence) appended to curation/work_relevance.csv as pending | 1 session; ~130K subagent tokens |
 | 2026-11-11T18:16:04-08:00 | S4/S5 gold labels | haiku-developer | Streamlit gold-labelling app over the S4.2 sample (owner >10 rule) | Accepted after one continue message (turn limit); lead added metadata fallbacks (leak candidates, raw) so all 580 sample works resolve | 2 sessions; ~131K subagent tokens |
+| 2026-11-11T22:16:37-08:00 | H9 gold labels | haiku-developer | Gold app: evaluation-set view (dev+test pool), pre-select prior AT-1 relevance decisions | Running | - |
+| 2026-11-11 | H9 gold labels | (result) | Gold app evaluation-set view + prior AT-1 decisions | Accepted first pass (33 focused tests; lead fixed one misattributed comment; full gate 1248 passed) | 1 session; ~56K subagent tokens |

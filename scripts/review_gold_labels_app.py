@@ -66,6 +66,13 @@ def _rules() -> list[hl.Rule]:
     return hl.build_rules([load_query_config(ROOT / "config" / "queries.yml")])
 
 
+@st.cache_resource(show_spinner=False)
+def _prior() -> dict[str, dict[str, str]]:
+    return gl.load_prior_relevance(
+        ROOT / "curation" / "overrides_works.csv", ROOT / "curation" / "work_relevance.csv"
+    )
+
+
 def _key(work_id: str, field: str) -> str:
     return f"{work_id}|{field}"
 
@@ -106,11 +113,17 @@ def _skip(work_id: str) -> None:
     st.session_state.search = ""
 
 
-def _defaults(row: dict[str, str]) -> dict[str, Any]:
-    """Initial widget values for a row; applied only the first time a widget is drawn."""
+def _defaults(row: dict[str, str], prior: dict[str, str] | None = None) -> dict[str, Any]:
+    """Initial widget values for a row; applied only the first time a widget is drawn.
+
+    A prior relevance decision pre-selects plastic_related on an unlabelled row only.
+    """
     tags = [tag for tag in row["domain_tags"].split("|") if tag in DOMAIN_TAGS]
+    related = row["plastic_related"] or None
+    if prior and row["decision_status"] == "":
+        related = prior["value"]
     return {
-        "plastic_related": row["plastic_related"] or None,
+        "plastic_related": related,
         "plastic_tier": row["plastic_tier"] or None,
         "ca_sampled": row["ca_sampled"] or None,
         "study_type": row["study_type"],
@@ -128,14 +141,22 @@ def _design_label(value: str) -> str:
     return value if value in gl.STUDY_TYPES else f"{value} (new label)"
 
 
-def _draw_form(row: dict[str, str], design_options: list[str]) -> None:
+def _draw_form(
+    row: dict[str, str], design_options: list[str], prior: dict[str, str] | None = None
+) -> None:
     work_id = row["work_id"]
-    init = _defaults(row)
+    init = _defaults(row, prior)
 
     def widget_key(field: str) -> str:
         return _key(work_id, field)
 
     st.markdown("**Plastic relevance** (guide_v1 sections 1-2)")
+    if prior and row["decision_status"] == "":
+        verdict = "relevant" if prior["value"] == "true" else "not relevant"
+        st.info(
+            f"You already judged this {verdict} on {prior['date']} ({prior['source']}). "
+            "Pre-selected; change it if you disagree."
+        )
     related = st.radio(
         "Is plastic the primary research subject?",
         ["true", "false"],
@@ -238,6 +259,15 @@ def main() -> None:
     with st.sidebar:
         st.caption(f"Annotator `{gl.ANNOTATOR}` · `{gl.GUIDE_VERSION}`")
         st.caption(f"Sheet: `{SHEET.relative_to(ROOT) if SHEET.is_relative_to(ROOT) else SHEET}`")
+        done, total = gl.eval_progress(rows)
+        st.progress(
+            done / total if total else 1.0,
+            text=f"Evaluation set: labelled {done} of {total}",
+        )
+        st.caption(
+            "Train (350) and leak-check (80) works are not needed now: train labels come from "
+            "active learning, leak-check works wait for S5.7."
+        )
         for split, (done, total) in gl.progress(rows).items():
             st.progress(done / total if total else 1.0, text=f"{split}: labelled {done} of {total}")
         view = st.selectbox("Show", gl.VIEWS, key="view")
@@ -313,7 +343,8 @@ def main() -> None:
     if current["decision_status"] in ("complete", "adjudication_required"):
         st.caption("Already recorded: saving again overwrites this row.")
 
-    _draw_form(current, gl.study_type_options(rows))
+    prior = _prior().get(work_id)
+    _draw_form(current, gl.study_type_options(rows), prior)
 
     st.divider()
     buttons = st.columns(3)
