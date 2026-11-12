@@ -19,6 +19,11 @@ PUBLIC_FIELDS = {
     "root_url",
     "topics",
     "default",
+    "description_source",
+    "update_model",
+    "terms_status",
+    "terms",
+    "url_status",
 }
 
 
@@ -73,6 +78,9 @@ def test_strip_entries_field_set_and_order():
             if rule.startswith("topic=")
         }
         assert isinstance(entry["default"], bool)
+        assert entry["description_source"].startswith("https://")
+        assert entry["terms"] is None or isinstance(entry["terms"], str)
+        assert (entry["terms"] is not None) == (entry["terms_status"] == "recorded")
 
 
 def test_strip_entries_rejects_invalid_registry():

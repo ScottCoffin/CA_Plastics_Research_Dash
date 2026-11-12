@@ -115,3 +115,4 @@
 | 2026-11-12 | S9.3/H5/AT4/S9.6a | Expert full page + metrics (m-quotient, rising, histogram, primary affiliation); H5 answers applied; MiniSearch; Framework installed; outreach contact builder; gateway-504 budget fix | this commit |
 | 2026-11-12 | AT-5 | Framework app: all five tabs + Overview ported lift-and-shift (4 Haiku workers), deployed under /app/ beside the classic site; check_at5, preview + headless smoke | this commit |
 | 2026-11-12 | EM-5 | Evidence Map shell as Framework page (facets, hash, drawer, link-out strip); linkouts.json export with trigger rules (2 Haiku workers) | this commit |
+| 2026-11-12 | EM-16/EM-18 | Related Resources page and DTSC timeline (Policy) page in Framework; linkouts.json fields extended; dtsc_timeline.json export (2 Haiku workers) | this commit |

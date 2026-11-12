@@ -1,0 +1,15 @@
+/* Related resources page (EM-16). Rules are scoped to #resources-root and use Framework theme
+ * variables, so they follow the light and dark themes. */
+#resources-root { color: var(--theme-foreground); }
+#resources-root :focus-visible { outline: 3px solid var(--theme-foreground-focus); outline-offset: 2px; }
+#resources-root .result-count, #resources-root .data-note { margin: 0.5rem 0 0; color: var(--theme-foreground-muted); font-size: 0.9rem; }
+#resources-root .rs-filter { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 1rem; max-width: 36rem; }
+#resources-root input[type="search"] { font: inherit; padding: 0.35rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.35rem; background: var(--theme-background); color: var(--theme-foreground); }
+#resources-root a { color: var(--theme-foreground-focus); overflow-wrap: anywhere; }
+#resources-root .rs-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+#resources-root .rs-card { padding: 0.75rem 1rem; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; background: var(--theme-background-alt); }
+#resources-root .rs-name { margin: 0; font-size: 1.05rem; }
+#resources-root .rs-relation { display: inline-block; margin: 0.3rem 0 0.4rem; padding: 0 0.4rem; border-radius: 0.25rem; border: 1px solid var(--theme-foreground-faint); font-size: 0.75rem; color: var(--theme-foreground-muted); }
+#resources-root .rs-field, #resources-root .rs-description { margin: 0.25rem 0 0; font-size: 0.9rem; }
+#resources-root .rs-label { color: var(--theme-foreground-muted); }
+#resources-root .rs-description { font-style: italic; }

@@ -85,6 +85,7 @@ main site until you approve the switch.
    Also open **Evidence map** (new): tick a topic, check the counts change, click **Show works**
    (the list should open and close with Escape), and look at the related-resources links
    (question EM5-STRIP in `.agent/QUESTIONS.md`: keep the default rules or change them).
+   Also new: **Policy** (DTSC timeline; check the dates and the caveat) and **Related resources**.
 3. Locally, without deploying: `cd framework && npm run build`, then
    `py -3.14 scripts/serve_framework_preview.py` and open
    http://127.0.0.1:8766/CA_Plastics_Research_Dash/app/ .

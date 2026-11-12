@@ -103,3 +103,7 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-12T09:59:03-08:00 | EM-5b Evidence Map page | haiku-developer | Framework evidence.md: bit-set facets, hash state, works drawer, related-resources strip, V-1..V-5 placeholders | Running | - |
 | 2026-11-12 | EM-5a linkouts strip JSON | (result) | strip_entries + export | Accepted first pass (37 tests) | 1 session; ~37K subagent tokens |
 | 2026-11-12 | EM-5b Evidence Map page | (result) | Framework evidence page | Accepted first pass; lead added nav entry + DATA_DICTIONARY entry | 1 session; ~84K subagent tokens |
+| 2026-11-12T10:12:21-08:00 | EM-16 Related Resources page | haiku-developer | Framework resources page + extended linkouts.json fields | Running | - |
+| 2026-11-12T10:12:21-08:00 | EM-18 DTSC timeline page | haiku-developer | dtsc_timeline.json export + Framework policy page | Running | - |
+| 2026-11-12 | EM-16 Related Resources page | (result) | resources page + export fields | Accepted first pass (52 tests) | 1 session; ~59K subagent tokens |
+| 2026-11-12 | EM-18 DTSC timeline page | (result) | timeline export + policy page | Accepted first pass (41 tests) | 1 session; ~57K subagent tokens |

@@ -216,7 +216,19 @@ Licence: project metadata; names and descriptions are quoted from each steward, 
 from the linked resources is copied (link-only, Add-on A2 §8).
 
 `entries[]`: `id`, `name`, `steward`, `description`, `relation`, `root_url` (https), `topics`
-(topic tags that show the entry), `default` (boolean: shown when no topic-specific entry matches).
+(topic tags that show the entry), `default` (boolean: shown when no topic-specific entry matches),
+`description_source` (https URL where the steward states the description), `update_model` (string,
+or "not stated"), `terms_status` (`recorded` or `not recorded`), `terms` (string, or null when the
+steward's terms are not stated), `url_status` (`as_stated`, `owner_confirmed`, `to_confirm` or
+`unavailable`). The Related resources page (EM-16) lists every entry.
+
+### `site/data/dtsc_timeline.json`
+
+Purpose: the Policy page's DTSC microplastics regulatory timeline (EM-18, Add-on A2 §7 Part B). Written from `config/dtsc_timeline.yml` by `py -3.14 scripts/build_dtsc_timeline_json.py` (`--check` fails when it is stale).
+Top-level keys: `schema_version` (`em18.v1`), `source` (string), `caveat` (the required "Listing does not by itself create requirements" sentence), `caveat_detail` (string), `order` (`newest_first`), `entries` (array).
+Licence: curated by hand from DTSC pages and uploaded documents; no scraping. Dates are as DTSC states them.
+
+`entries[]`: `id` (`dtsc-NN`), `date_as_stated` (verbatim from DTSC), `date_iso` (`YYYY-MM-DD` or `YYYY-MM`), `event`, `source_label`, `source_url` (https or null), `kind` (`workshop`, `proposal`, `background`, `finalized`, `effective` or `work_plan`).
 
 ### `site/feed.xml`
 

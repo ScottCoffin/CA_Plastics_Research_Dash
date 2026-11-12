@@ -22,5 +22,7 @@ const snapshot = aboutViewModel(metadata, null);
   <a class="card" href="./monitoring"><h2>Monitoring</h2><p>Public plastic monitoring samples from California waters.</p></a>
   <a class="card" href="./funding"><h2>Funding</h2><p>Grants and awards for plastics research, and open funding calls.</p></a>
   <a class="card" href="./evidence"><h2>Evidence map</h2><p>Filter the corpus by topic, year and sector; related external resources.</p></a>
+  <a class="card" href="./policy"><h2>Policy</h2><p>The DTSC microplastics regulatory timeline, with source links.</p></a>
+  <a class="card" href="./resources"><h2>Related resources</h2><p>Outside databases and tools on plastics (links only).</p></a>
   <a class="card" href="./about"><h2>About</h2><p>Sources, definitions, limitations and corrections.</p></a>
 </div>

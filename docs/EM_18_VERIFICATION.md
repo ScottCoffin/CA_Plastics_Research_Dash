@@ -44,3 +44,9 @@ Tests: `tests/test_dtsc_timeline_em18.py`. Acceptance: `scripts/check_dtsc_timel
 - Date wording for dtsc-01 ("1 October 2026") and dtsc-03 ("18 June 2026") follows the A2 contract text. These were not checked against ref 8 because the work is offline. Confirm the DTSC wording before publication.
 - The Background Document (ref 7) and Work Plan (ref 32) have no URL of their own. Rows cite the DTSC research page or no link.
 - Remaining work: the UI timeline after EM-16 and EM-5. Link checking belongs to the EM-16 checker, which reads this file.
+
+## UI (2026-11-12)
+
+- `scripts/build_dtsc_timeline_json.py` exports the validated YAML to `site/data/dtsc_timeline.json` (`--check` guards staleness; `tests/test_dtsc_timeline_json_em18.py`).
+- Framework page `/app/policy` (`framework/src/policy.md`, `components/policy.js`): the caveat is rendered first from a constant (visible even if loading fails), then the entries newest-first with `date_as_stated` verbatim and source links. EM-17 (OPC Solutions track) is a placeholder pending owner review.
+- Checks: headless Edge smoke shows the caveat and "1 October 2026"; `tests/test_framework_policy.py`; full gate 1,325 tests.

@@ -287,7 +287,13 @@ STRIP_FIELDS = (
     "root_url",
     "topics",
     "default",
+    "description_source",
+    "update_model",
+    "terms_status",
+    "terms",
+    "url_status",
 )
+NOT_STATED = "not stated"
 TOPIC_PREFIX = "topic="
 DEFAULT_RULE = "default"
 
@@ -333,6 +339,11 @@ def strip_entries(data: Any) -> list[dict[str, Any]]:
             "root_url": entry["root_url"],
             "topics": rules["topics"],
             "default": rules["default"],
+            "description_source": entry["description_source"],
+            "update_model": entry["update_model"],
+            "terms_status": entry["terms_status"],
+            "terms": None if entry["terms"] == NOT_STATED else entry["terms"],
+            "url_status": entry["url_status"],
         }
         entries.append({key: public[key] for key in STRIP_FIELDS})
     return entries

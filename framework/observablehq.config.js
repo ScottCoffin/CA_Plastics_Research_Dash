@@ -24,6 +24,8 @@ export default {
     {name: "Monitoring", path: "/monitoring"},
     {name: "Funding", path: "/funding"},
     {name: "Evidence map", path: "/evidence"},
+    {name: "Policy", path: "/policy"},
+    {name: "Related resources", path: "/resources"},
     {name: "About", path: "/about"}
   ],
   header: `<span class="atlas-header">California research atlas · <a href="../">Classic site</a></span>`,
