@@ -17,4 +17,7 @@ def test_framework_funding_runtime_helpers() -> None:
             "Node.js is required for tests/framework_funding_runtime.mjs; "
             "install Node.js 20 or newer and ensure `node` is on PATH."
         )
+    # Shared helpers are gitignored copies of site/assets; create them as `npm run build` does.
+    sync = ROOT / "framework" / "scripts" / "sync_shared.mjs"
+    subprocess.run([node, str(sync)], cwd=ROOT, check=True, capture_output=True)
     subprocess.run([node, str(RUNTIME_CHECK)], cwd=ROOT, check=True)
