@@ -45,6 +45,8 @@ ATLAS_TYPES = frozenset(
         "local-agency",
         "JPA",
         "company",
+        "utility",
+        "intergovernmental-organization",
     }
 )
 

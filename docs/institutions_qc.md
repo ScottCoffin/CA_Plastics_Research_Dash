@@ -11,7 +11,7 @@ to the versioned ROR data dump.
 - ROR IDs matched in the dump: **4,677**
 - ROR release: **v2.15** (10.5281/zenodo.23500708)
 - OpenAlex authenticated: **true**
-- This build's API requests: **4**; OpenAlex credits: **3.0**; cost: **USD 0.0003**
+- This build's API requests: **1**; OpenAlex credits: **1.0**; cost: **USD 0.0001**
 - Plastic-work review ranking: broad OpenAlex `search=plastic` grouped count; this
   can include plasticity, plastic surgery, and plastic deformation. The owner inferred
   this risk from institution types rather than checking the underlying works.
@@ -23,15 +23,18 @@ to the versioned ROR data dump.
 | atlas_type | count |
 |---|---:|
 | CSU | 28 |
-| UC | 78 |
-| community-college | 51 |
-| company | 2,236 |
+| JPA | 2 |
+| UC | 77 |
+| community-college | 52 |
+| company | 2,235 |
 | federal | 49 |
-| local-agency | 71 |
-| nonprofit/NGO | 1,770 |
+| intergovernmental-organization | 1 |
+| local-agency | 70 |
+| nonprofit/NGO | 1,767 |
 | other-public | 1 |
-| private | 343 |
+| private | 344 |
 | state-agency | 50 |
+| utility | 1 |
 
 ## Coverage checks
 
@@ -62,21 +65,21 @@ None. The exact OpenAlex region seed populated all output rows.
 |---|---:|
 | community-college-name | 50 |
 | county-health-department-name | 10 |
-| csu-lineage-or-name | 27 |
-| education-default-private | 339 |
-| federal-name | 26 |
+| csu-lineage-or-name | 20 |
+| education-default-private | 335 |
+| federal-name | 25 |
 | government-fallback-local | 17 |
 | government-federal-name | 15 |
 | government-local-name | 35 |
-| government-state-name | 25 |
-| local-agency-name | 7 |
-| manual-override | 25 |
-| organization-type-company | 2,016 |
-| organization-type-nonprofit | 1,768 |
+| government-state-name | 24 |
+| local-agency-name | 6 |
+| manual-override | 68 |
+| organization-type-company | 2,012 |
+| organization-type-nonprofit | 1,751 |
 | public-education-name | 1 |
-| state-agency-name | 23 |
-| uc-lineage-or-name | 74 |
-| untyped-fallback-company | 219 |
+| state-agency-name | 18 |
+| uc-lineage-or-name | 72 |
+| untyped-fallback-company | 218 |
 
 ## Sources
 

@@ -137,7 +137,18 @@ def main() -> int:
         )
 
     for row in review:
-        _require(all(row[col] == "" for col in REVIEW_HEADER[5:]), "owner columns must be blank")
+        owner_type = row["owner_atlas_type"].strip()
+        if owner_type:
+            # A finished review must carry a date and already be applied through
+            # config/institution_overrides.csv, so the resolved type matches it.
+            _require(bool(row["owner_reviewed_at"].strip()), "owner review lacks a date")
+            _require(owner_type in ATLAS_TYPES, f"{owner_type}: owner type not in ATLAS_TYPES")
+            _require(
+                by_id[row["openalex_id"]]["atlas_type"] == owner_type,
+                f"{row['openalex_id']}: owner type not applied; add an institution override",
+            )
+        else:
+            _require(row["owner_reviewed_at"] == "", "owner date without an owner type")
         _require(row["openalex_id"] not in old, "review row is an old top-100 member")
         config_row = by_id[row["openalex_id"]]
         _require(row["plastic_work_count"] == config_row["v31_work_count"], "work count mismatch")

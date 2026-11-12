@@ -80,6 +80,7 @@ class Inputs:
     site: Sequence[Mapping[str, Any]]
     overrides_rows: int = 0
     works_override_rows: int = 0
+    previous_review: Mapping[str, Mapping[str, str]] = field(default_factory=dict)
 
 
 @dataclass
@@ -132,6 +133,11 @@ def load_inputs(paths: Paths = Paths()) -> Inputs:
         overrides[row["inst_id"]] = row["value"]
     old_top100 = {row["openalex_id"]: row for row in _read_csv(paths.old_top100)}
     site = json.loads(paths.site_institutions.read_text(encoding="utf-8"))["institutions"]
+    previous_review = (
+        {row["openalex_id"]: row for row in _read_csv(paths.out_review)}
+        if paths.out_review.exists()
+        else {}
+    )
     return Inputs(
         registry=registry,
         corpus=corpus,
@@ -142,6 +148,7 @@ def load_inputs(paths: Paths = Paths()) -> Inputs:
         site=site,
         overrides_rows=len(type_rows),
         works_override_rows=len(works_rows),
+        previous_review=previous_review,
     )
 
 
@@ -228,6 +235,7 @@ def build(inputs: Inputs) -> Build:
         if inst_id in inputs.old_top100:
             continue
         atlas_type, _ = resolve_type(inst_id, inputs)
+        previous = inputs.previous_review.get(inst_id, {})
         review_rows.append(
             {
                 "review_rank": str(rank),
@@ -235,9 +243,11 @@ def build(inputs: Inputs) -> Build:
                 "display_name": str(inputs.registry[inst_id]["display_name"]),
                 "plastic_work_count": str(counts[inst_id]),
                 "proposed_atlas_type": atlas_type,
-                "owner_atlas_type": "",
-                "owner_reviewed_at": "",
-                "owner_notes": "",
+                # Owner decisions survive a rebuild; config/institution_overrides.csv
+                # is what feeds them into atlas_type.
+                "owner_atlas_type": previous.get("owner_atlas_type", ""),
+                "owner_reviewed_at": previous.get("owner_reviewed_at", ""),
+                "owner_notes": previous.get("owner_notes", ""),
             }
         )
 

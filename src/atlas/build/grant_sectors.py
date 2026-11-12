@@ -24,6 +24,9 @@ REGISTRY_SECTORS = {
     "federal": ("government", "federal"),
     "nonprofit/NGO": ("nonprofit", "nonprofit"),
     "company": ("industry", "company"),
+    "JPA": ("jpa", "regional"),
+    "utility": ("government", "utility"),
+    "intergovernmental-organization": ("government", "intergovernmental"),
 }
 
 

@@ -131,6 +131,16 @@ def test_review_rows_have_blank_owner_fields_and_no_relevance_notes():
         assert "relevance" not in " ".join(row.values()).lower()
 
 
+def test_rebuild_keeps_owner_review_fields():
+    from dataclasses import replace
+
+    owner = {"owner_atlas_type": "JPA", "owner_reviewed_at": "2026-11-12", "owner_notes": "n"}
+    result = build(replace(_inputs(), previous_review={"I3": {"openalex_id": "I3", **owner}}))
+    by_id = {row["openalex_id"]: row for row in result.review_rows}
+    assert {key: by_id["I3"][key] for key in owner} == owner
+    assert all(row["owner_atlas_type"] == "" for key, row in by_id.items() if key != "I3")
+
+
 def test_resolved_type_must_match_registry():
     inputs = _inputs(overrides={"I3": "UC"})
     with pytest.raises(ValueError, match="rebuild the registry"):

@@ -42,22 +42,7 @@ def main() -> int:
     rows = pq.read_table(parquet).to_pylist()
     if len(rows) < 100:
         raise SystemExit("institution registry has fewer than 100 rows")
-    missing_types = sorted(
-        {row["atlas_type"] for row in rows}
-        - {
-            "UC",
-            "CSU",
-            "other-public",
-            "private",
-            "community-college",
-            "nonprofit/NGO",
-            "state-agency",
-            "federal",
-            "local-agency",
-            "JPA",
-            "company",
-        }
-    )
+    missing_types = sorted({row["atlas_type"] for row in rows} - ATLAS_TYPES)
     if missing_types:
         raise SystemExit(f"unexpected atlas types: {missing_types}")
     for label, expected, atlas_type in (
