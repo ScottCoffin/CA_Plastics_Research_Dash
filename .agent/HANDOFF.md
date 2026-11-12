@@ -13,7 +13,7 @@
 
 ## Next eligible (dependency order)
 1. After H16 ("switch"): Framework at the root; classic hashes redirect to the new pages.
-2. 2026-11-13: CORE full-text audit (H1 key); resume `fetch_escholarship_items.py` (148 pending).
+2. 2026-11-13: CORE full-text audit (H1 key); resume `fetch_escholarship_items.py` (72 pending; 2026-11-12 resume got 127 items then HTTP 403; the new evidence is not yet applied to the export).
 
 ## Owner actions (details in `.agent/HUMAN_TASKS.md`)
 - H16: compare https://plastiverse.live/app/ (incl. the new Evidence map) with the classic site; reply "Framework pages OK, switch" or list differences. Answer EM5-STRIP (keep default link-out rules?).

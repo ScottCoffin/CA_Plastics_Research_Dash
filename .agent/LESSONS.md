@@ -302,3 +302,4 @@ until it reports.
 - Observable Framework: a top-level `const view` in a page shadows the builtin `view()` and breaks interpolation (`Cannot read properties of undefined`). Framework's default head links Google Fonts; set `globalStylesheets: []`.
 - The Bash safety parser rejects heredocs containing `${...}` in some shells ("could not be checked for dangerous rm"); write such files with the Write tool or a Python generator.
 - Headless Edge `--dump-dom --virtual-time-budget` is a reliable Windows browser smoke when the WSL Playwright browser is missing; one render in ~6 can stop early, so rerun before calling a page broken.
+- Never chain `git push` after the clean-worktree pytest with `;`: a failing worktree run (EM-6 tests needing gitignored `release/`) still pushed. Gate the push on the pytest exit code. Tests must not depend on gitignored folders (`release/`, `data/`); skip when absent.
