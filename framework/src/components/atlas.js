@@ -41,7 +41,7 @@ export function aboutViewModel(metadata, index) {
   const generatedAt = typeof current.generated_at === "string" ? current.generated_at.trim() : "";
   const isFixture = generatedAt === "fixture";
   const refreshText = isFixture
-    ? "Fixture snapshot loaded — committed fixture data, not a current refresh."
+    ? "Example data loaded — sample data, not a current refresh."
     : generatedAt
       ? `Last refresh (UTC): ${generatedAt}`
       : "Refresh time unavailable";

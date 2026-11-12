@@ -62,7 +62,7 @@ if (metadata.generated_at === "fixture") {
   assert.equal(fixture.isFixture, true);
   assert.equal(
     fixture.refreshText,
-    "Fixture snapshot loaded — committed fixture data, not a current refresh."
+    "Example data loaded — sample data, not a current refresh."
   );
 } else {
   assert.equal(fixture.isFixture, false);

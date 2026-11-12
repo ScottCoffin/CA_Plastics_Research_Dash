@@ -32,11 +32,11 @@ Filter the atlas's distinct works by topic, sector, work type, open access, Cali
         <ul id="evidence-strip-list" class="ev-strip-list"></ul>
         <p id="evidence-strip-note" class="data-note"></p>
       </section>
-      <section class="ev-view" aria-labelledby="ev-v1-heading"><h3 id="ev-v1-heading">Evidence matrix</h3><p class="ev-placeholder">Coming with EM-8.</p></section>
-      <section class="ev-view" aria-labelledby="ev-v2-heading"><h3 id="ev-v2-heading">Sampled-location atlas</h3><p class="ev-placeholder">Coming with EM-9.</p></section>
+      <section class="ev-view" aria-labelledby="ev-v1-heading"><h3 id="ev-v1-heading">Evidence matrix</h3><p class="ev-placeholder">In development.</p></section>
+      <section class="ev-view" aria-labelledby="ev-v2-heading"><h3 id="ev-v2-heading">Sampled-location atlas</h3><p class="ev-placeholder">In development.</p></section>
       <section class="ev-view" aria-labelledby="ev-v3-heading"><h3 id="ev-v3-heading">Pipeline flow</h3><div id="ev-v3"></div></section>
       <section class="ev-view" aria-labelledby="ev-v4-heading"><h3 id="ev-v4-heading">Trend panel</h3><div id="ev-v4"></div></section>
-      <section class="ev-view" aria-labelledby="ev-v5-heading"><h3 id="ev-v5-heading">Review overlay</h3><p class="ev-placeholder">Coming with EM-10.</p></section>
+      <section class="ev-view" aria-labelledby="ev-v5-heading"><h3 id="ev-v5-heading">Review overlay</h3><p class="ev-placeholder">In development.</p></section>
     </div>
   </div>
   <dialog id="evidence-drawer" class="ev-drawer" role="dialog" aria-modal="true" aria-labelledby="evidence-drawer-title">

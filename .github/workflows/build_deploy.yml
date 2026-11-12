@@ -79,6 +79,8 @@ jobs:
           npm ci --no-audit --no-fund
           npm run build
           python ../scripts/check_at5.py --dist dist
+          # UX-3: no internal project vocabulary in rendered public text.
+          python ../scripts/check_public_text.py
 
       - name: Add Framework app under /app/
         if: ${{ steps.framework.outcome == 'success' }}

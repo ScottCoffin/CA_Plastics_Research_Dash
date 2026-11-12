@@ -31,9 +31,9 @@ ${doi
 
 ### Sources and snapshot
 
-OpenAlex supplies the work and affiliation metadata in this static export. The owner-supplied `plastic-v2-candidate` query remains inactive; broad `search=plastic` counts are review-priority metadata, not the published corpus.
+OpenAlex supplies the work and affiliation metadata in this static export. An earlier candidate search query is not in use; broad `search=plastic` counts are review-priority metadata, not the published corpus.
 
-The refresh time is the export build time in `build_metadata.json`, not an update time for each source record. “Fixture snapshot loaded” means the committed example data is shown.
+The refresh time is the export build time in `build_metadata.json`, not an update time for each source record. “Example data loaded” means the committed sample data is shown, not a current refresh.
 
 </section>
 <section class="card">

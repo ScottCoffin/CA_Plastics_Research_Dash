@@ -64,6 +64,11 @@ jobs:
       - name: Check Framework shell (AT-5)
         run: python scripts/check_at5.py
 
+      # UX-3: no internal project vocabulary in public page text and site JSON (static;
+      # build_deploy.yml repeats it on the built Framework pages).
+      - name: Check public text (UX-3)
+        run: python scripts/check_public_text.py
+
       # AT-11: committed site payload sizes and index schema.
       - name: Check site payload guards (AT-11)
         run: python scripts/check_ci_guards.py

@@ -385,7 +385,7 @@
 
       <section id="panel-institutions" class="panel" role="tabpanel" aria-labelledby="tab-institutions" tabindex="0" hidden>
         <h2>Institutions</h2>
-        <p class="panel-intro">Tagged-work volume is a descriptive count from the same S3.1 export used by the Experts view; it is not a quality ranking. Each topic bar shows the share of topic tags across the institution's plastic-related works (a work can carry several topics).</p>
+        <p class="panel-intro">Tagged-work volume is a descriptive count from the same data snapshot used by the Experts view; it is not a quality ranking. Each topic bar shows the share of topic tags across the institution's plastic-related works (a work can carry several topics).</p>
         <div class="institution-toolbar">
           <div id="institution-type-chips" class="institution-type-chips" role="group" aria-label="Filter institutions by type"></div>
           <div class="institution-sort-row">
@@ -505,8 +505,8 @@
         <div class="about-methods">
           <section class="card" aria-labelledby="about-sources-heading">
             <h3 id="about-sources-heading">Sources and snapshot</h3>
-            <p>OpenAlex supplies the work and affiliation metadata in this static export. The owner-supplied <code>plastic-v2-candidate</code> query remains inactive; broad <code>search=plastic</code> counts are review-priority metadata, not the published corpus.</p>
-            <p>The refresh time is the export build time in <code>build_metadata.json</code>, not an update time for each source record. “Fixture snapshot loaded” means the committed example data is shown.</p>
+            <p>OpenAlex supplies the work and affiliation metadata in this static export. An earlier candidate search query is not in use; broad <code>search=plastic</code> counts are review-priority metadata, not the published corpus.</p>
+            <p>The refresh time is the export build time in <code>build_metadata.json</code>, not an update time for each source record. “Example data loaded” means the committed sample data is shown, not a current refresh.</p>
           </section>
           <section class="card" aria-labelledby="about-definitions-heading">
             <h3 id="about-definitions-heading">Definitions</h3>
@@ -2349,7 +2349,7 @@
           const generatedAt = typeof current.generated_at === "string" ? current.generated_at.trim() : "";
           const isFixture = generatedAt === "fixture";
           const refreshText = isFixture
-            ? "Fixture snapshot loaded — committed fixture data, not a current refresh."
+            ? "Example data loaded — sample data, not a current refresh."
             : generatedAt
               ? `Last refresh (UTC): ${generatedAt}`
               : "Refresh time unavailable";

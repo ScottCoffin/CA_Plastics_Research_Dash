@@ -7,7 +7,7 @@ title: Institutions
 <link rel="stylesheet" href="./components/institutions.css">
 
 <div id="institutions-root">
-<p class="panel-intro">Tagged-work volume is a descriptive count from the same S3.1 export used by the Experts view; it is not a quality ranking. Each topic bar shows the share of topic tags across the institution's plastic-related works (a work can carry several topics).</p>
+<p class="panel-intro">Tagged-work volume is a descriptive count from the same data snapshot used by the Experts view; it is not a quality ranking. Each topic bar shows the share of topic tags across the institution's plastic-related works (a work can carry several topics).</p>
 <div class="institution-toolbar">
 <div id="institution-type-chips" class="institution-type-chips" role="group" aria-label="Filter institutions by type"></div>
 <div class="institution-sort-row">

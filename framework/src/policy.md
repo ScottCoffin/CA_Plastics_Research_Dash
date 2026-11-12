@@ -14,7 +14,7 @@ Reference information with outbound links; it makes no statement about implement
 
 ## OPC Solutions track
 
-Coming with EM-17 (the mapping of the 22 early actions awaits owner review).
+In preparation: how the Ocean Protection Council's 22 early actions map to global plastics-policy topics.
 
 ```js
 import {mountPolicy} from "./components/policy.js";
