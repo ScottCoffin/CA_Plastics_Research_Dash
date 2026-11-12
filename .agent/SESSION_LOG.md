@@ -110,3 +110,4 @@
 | 2026-11-11 | review-apps | Owner rule: >10-case reviews get Streamlit apps; institution-type and expert-photo review apps; atlas.csv_review | this commit |
 | 2026-11-11 | topic | Plastisphere topic (taxonomy seeds, topics.js per-topic hatch); labels, site data, analytics, bundle rebuilt | this commit |
 | 2026-11-11 | relevance-rules | Plastisphere narrowed; micro-nano plastics always relevant; mis-attached OpenAlex abstracts blanked; stale author files pruned | this commit |
+| 2026-11-12 | S2.5/S6.1/S9.5 | ORCID DOI ingest (+117), eScholarship evidence + basis (+19), S6.1 corpus report (PMCID fix), drawer profiles (worker), email redaction in committed tables | this commit |

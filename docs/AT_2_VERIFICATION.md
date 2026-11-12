@@ -5,15 +5,15 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 ## Counts
 
-- Works in the v3.1 corpus: 1896; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
-- California institutions with at least one non-excluded v3.1 work: 202.
-- Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 202, one row each in `config/institution_types.csv`.
-- type_source: owner_override 14, owner_reviewed 56, rule 132.
-- needs_review true (rule-typed and in the new top 100): 47.
-- Old top-100 review list: 100 institutions; 53 remain in the v3.1 top 100; 47 drop out. 70 of the old list are on the site.
-- Newly in the v3.1 top 100: 47; written to `data/processed/institution_review_needs_v31.csv`.
+- Works in the v3.1 corpus: 2032; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
+- California institutions with at least one non-excluded v3.1 work: 206.
+- Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 206, one row each in `config/institution_types.csv`.
+- type_source: owner_override 14, owner_reviewed 58, rule 134.
+- needs_review true (rule-typed and in the new top 100): 46.
+- Old top-100 review list: 100 institutions; 54 remain in the v3.1 top 100; 46 drop out. 72 of the old list are on the site.
+- Newly in the v3.1 top 100: 46; written to `data/processed/institution_review_needs_v31.csv`.
 - Owner overrides: 25 rows; 14 apply to site institutions. Not used on the site (no v3.1 works): I1295908608, I204866599, I2801272649, I2801403999, I2802673095, I4210094059, I4210110459, I4210117038, I4210133819, I4210161945, I4405283712.
-- Rank 100 is a tie: 25 institutions share the cut-off count of 2 work(s) (ranks 88 to 112); ties are ordered by inst_id, so membership at the boundary is arbitrary.
+- Rank 100 is a tie: 27 institutions share the cut-off count of 2 work(s) (ranks 93 to 119); ties are ordered by inst_id, so membership at the boundary is arbitrary.
 
 ## Method
 
@@ -28,75 +28,74 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 | Rank | inst_id | Name | v3.1 works | Type | Type source | Status |
 |---|---|---|---|---|---|---|
-| 1 | I97018004 | Stanford University | 182 | private | owner_reviewed | old top 100 |
-| 2 | I84218800 | University of California, Davis | 168 | UC | owner_reviewed | old top 100 |
-| 3 | I95457486 | University of California, Berkeley | 148 | UC | owner_reviewed | old top 100 |
-| 4 | I103635307 | University of California, Riverside | 116 | UC | owner_reviewed | old top 100 |
-| 5 | I36258959 | University of California San Diego | 103 | UC | owner_reviewed | old top 100 |
-| 6 | I154570441 | University of California, Santa Barbara | 90 | UC | owner_reviewed | old top 100 |
-| 7 | I161318765 | University of California, Los Angeles | 85 | UC | owner_reviewed | old top 100 |
-| 8 | I150209017 | Scripps Institution of Oceanography | 63 | UC | owner_reviewed | old top 100 |
-| 9 | I1174212 | University of Southern California | 58 | private | owner_reviewed | old top 100 |
-| 10 | I26538001 | San Diego State University | 48 | CSU | owner_reviewed | old top 100 |
-| 11 | I11006740 | Southern California Coastal Water Research Project | 44 | nonprofit/NGO | rule | new |
-| 12 | I204250578 | University of California, Irvine | 42 | UC | owner_reviewed | old top 100 |
-| 13 | I185103710 | University of California, Santa Cruz | 40 | UC | owner_reviewed | old top 100 |
-| 14 | I2803209242 | University of California System | 35 | UC | owner_reviewed | old top 100 |
-| 15 | I149919469 | California Polytechnic State University | 30 | CSU | owner_reviewed | old top 100 |
-| 16 | I180670191 | University of California, San Francisco | 28 | UC | owner_reviewed | old top 100 |
+| 1 | I84218800 | University of California, Davis | 199 | UC | owner_reviewed | old top 100 |
+| 2 | I97018004 | Stanford University | 185 | private | owner_reviewed | old top 100 |
+| 3 | I95457486 | University of California, Berkeley | 159 | UC | owner_reviewed | old top 100 |
+| 4 | I103635307 | University of California, Riverside | 124 | UC | owner_reviewed | old top 100 |
+| 5 | I36258959 | University of California San Diego | 106 | UC | owner_reviewed | old top 100 |
+| 6 | I154570441 | University of California, Santa Barbara | 100 | UC | owner_reviewed | old top 100 |
+| 7 | I161318765 | University of California, Los Angeles | 98 | UC | owner_reviewed | old top 100 |
+| 8 | I1174212 | University of Southern California | 65 | private | owner_reviewed | old top 100 |
+| 9 | I26538001 | San Diego State University | 64 | CSU | owner_reviewed | old top 100 |
+| 10 | I150209017 | Scripps Institution of Oceanography | 63 | UC | owner_reviewed | old top 100 |
+| 11 | I180670191 | University of California, San Francisco | 51 | UC | owner_reviewed | old top 100 |
+| 12 | I11006740 | Southern California Coastal Water Research Project | 44 | nonprofit/NGO | rule | new |
+| 13 | I204250578 | University of California, Irvine | 44 | UC | owner_reviewed | old top 100 |
+| 14 | I185103710 | University of California, Santa Cruz | 43 | UC | owner_reviewed | old top 100 |
+| 15 | I2803209242 | University of California System | 38 | UC | owner_reviewed | old top 100 |
+| 16 | I149919469 | California Polytechnic State University | 30 | CSU | owner_reviewed | old top 100 |
 | 17 | I4210111001 | San Francisco Estuary Institute | 24 | nonprofit/NGO | rule | new |
 | 18 | I4405266016 | Hopkins Marine Station | 24 | private | owner_override | old top 100 |
-| 19 | I53012624 | Joint BioEnergy Institute | 22 | federal | owner_override | old top 100 |
-| 20 | CAAG-SWRCB | State Water Resources Control Board | 21 | state-agency | rule | new |
+| 19 | I157638225 | California State University, Northridge | 22 | CSU | owner_reviewed | old top 100 |
+| 20 | I53012624 | Joint BioEnergy Institute | 22 | federal | owner_override | old top 100 |
 
 ## Newly in the v3.1 top 100
 
 | Rank | inst_id | Name | v3.1 works | Proposed type |
 |---|---|---|---|---|
-| 11 | I11006740 | Southern California Coastal Water Research Project | 44 | nonprofit/NGO |
+| 12 | I11006740 | Southern California Coastal Water Research Project | 44 | nonprofit/NGO |
 | 17 | I4210111001 | San Francisco Estuary Institute | 24 | nonprofit/NGO |
-| 20 | CAAG-SWRCB | State Water Resources Control Board | 21 | state-agency |
-| 25 | I194388944 | California State University, Channel Islands | 14 | CSU |
+| 21 | CAAG-SWRCB | State Water Resources Control Board | 21 | state-agency |
+| 27 | I194388944 | California State University, Channel Islands | 14 | CSU |
 | 32 | I1336788258 | California Department of Public Health | 12 | state-agency |
 | 34 | I1301553790 | J. Craig Venter Institute | 11 | nonprofit/NGO |
-| 38 | I4210109599 | NOAA National Marine Fisheries Service Southwest Fisheries Science Center | 9 | federal |
-| 39 | I4210112098 | National University | 9 | private |
-| 42 | I118839592 | California State University, Bakersfield | 7 | CSU |
-| 43 | I124104796 | Marine Mammal Center | 7 | nonprofit/NGO |
-| 46 | I4210090234 | Marine Megafauna Foundation | 7 | nonprofit/NGO |
-| 47 | I4210103292 | California Marine Sanctuary Foundation | 7 | nonprofit/NGO |
-| 48 | CAAG-OEHHA | Office of Environmental Health Hazard Assessment | 6 | state-agency |
-| 50 | I138285227 | Agilent Technologies (United States) | 6 | company |
-| 51 | I226560621 | California State University, San Marcos | 6 | CSU |
-| 52 | I38257878 | Energy Biosciences Institute | 6 | nonprofit/NGO |
-| 53 | I4210097936 | Terasaki Foundation | 6 | nonprofit/NGO |
-| 54 | I4210140879 | Brown and Caldwell (United States) | 6 | company |
-| 56 | I65137940 | California Environmental Protection Agency | 6 | state-agency |
-| 60 | I196333967 | Inter-American Tropical Tuna Commission | 5 | company |
-| 61 | I4210097074 | Theiss Research | 5 | nonprofit/NGO |
-| 66 | I135369504 | California State University, Monterey Bay | 4 | CSU |
-| 67 | I2801975132 | Ocean Institute | 4 | nonprofit/NGO |
-| 68 | I4210091954 | Global Alliance for Incinerator Alternatives | 4 | nonprofit/NGO |
-| 69 | I4210095401 | Loma Linda University Health Care | 4 | nonprofit/NGO |
-| 70 | I4210136348 | California Sea Grant | 4 | UC |
-| 73 | I4405264838 | Metropolitan Water District of Southern California | 4 | local-agency |
-| 74 | I99418890 | San Francisco Bay University | 4 | private |
-| 75 | I1294537935 | Point Blue Conservation Science | 3 | nonprofit/NGO |
-| 76 | I1316958739 | California Air Resources Board | 3 | state-agency |
-| 79 | I172039944 | Dominican University of California | 3 | UC |
-| 80 | I176611909 | California Lutheran University | 3 | private |
-| 81 | I197875241 | California State University, Stanislaus | 3 | CSU |
-| 82 | I4210090881 | National Marine Mammal Foundation | 3 | nonprofit/NGO |
-| 84 | I4210095563 | Sonoma Technology (United States) | 3 | company |
-| 86 | I4210164553 | Biospherical Instruments (United States) | 3 | company |
-| 87 | I4405269264 | Stanford Cardiovascular Institute | 3 | nonprofit/NGO |
-| 88 | CAAG-SLC | California State Lands Commission | 2 | state-agency |
-| 90 | I126031752 | Santa Barbara City College | 2 | private |
-| 91 | I1295874195 | California Coastal Commission | 2 | state-agency |
-| 93 | I1327551190 | Zoological Society of San Diego | 2 | nonprofit/NGO |
-| 94 | I1328614147 | California Department of Transportation | 2 | state-agency |
-| 95 | I158011677 | Sonoma State University | 2 | CSU |
-| 97 | I184813773 | California State University, East Bay | 2 | CSU |
-| 98 | I2801025900 | Natural History Museum of Los Angeles County | 2 | nonprofit/NGO |
-| 99 | I290598920 | California State University, Dominguez Hills | 2 | CSU |
-| 100 | I4210086937 | Oak Crest Institute of Science | 2 | nonprofit/NGO |
+| 37 | I4210109599 | NOAA National Marine Fisheries Service Southwest Fisheries Science Center | 10 | federal |
+| 40 | I4210112098 | National University | 9 | private |
+| 41 | CAAG-OEHHA | Office of Environmental Health Hazard Assessment | 8 | state-agency |
+| 44 | I118839592 | California State University, Bakersfield | 7 | CSU |
+| 45 | I124104796 | Marine Mammal Center | 7 | nonprofit/NGO |
+| 47 | I4210090234 | Marine Megafauna Foundation | 7 | nonprofit/NGO |
+| 48 | I4210103292 | California Marine Sanctuary Foundation | 7 | nonprofit/NGO |
+| 51 | I138285227 | Agilent Technologies (United States) | 6 | company |
+| 52 | I226560621 | California State University, San Marcos | 6 | CSU |
+| 53 | I38257878 | Energy Biosciences Institute | 6 | nonprofit/NGO |
+| 54 | I4210097936 | Terasaki Foundation | 6 | nonprofit/NGO |
+| 55 | I4210140879 | Brown and Caldwell (United States) | 6 | company |
+| 57 | I4405284138 | Kaiser Permanente Northern California | 6 | nonprofit/NGO |
+| 59 | I65137940 | California Environmental Protection Agency | 6 | state-agency |
+| 63 | I196333967 | Inter-American Tropical Tuna Commission | 5 | company |
+| 64 | I4210097074 | Theiss Research | 5 | nonprofit/NGO |
+| 68 | I135369504 | California State University, Monterey Bay | 4 | CSU |
+| 69 | I2801975132 | Ocean Institute | 4 | nonprofit/NGO |
+| 70 | I4210091954 | Global Alliance for Incinerator Alternatives | 4 | nonprofit/NGO |
+| 71 | I4210095401 | Loma Linda University Health Care | 4 | nonprofit/NGO |
+| 72 | I4210136348 | California Sea Grant | 4 | UC |
+| 76 | I4405264838 | Metropolitan Water District of Southern California | 4 | local-agency |
+| 77 | I99418890 | San Francisco Bay University | 4 | private |
+| 78 | I1290230355 | California Department of Toxic Substances Control | 3 | state-agency |
+| 79 | I1294537935 | Point Blue Conservation Science | 3 | nonprofit/NGO |
+| 80 | I1316958739 | California Air Resources Board | 3 | state-agency |
+| 83 | I172039944 | Dominican University of California | 3 | UC |
+| 84 | I176611909 | California Lutheran University | 3 | private |
+| 85 | I184813773 | California State University, East Bay | 3 | CSU |
+| 86 | I197875241 | California State University, Stanislaus | 3 | CSU |
+| 87 | I4210090881 | National Marine Mammal Foundation | 3 | nonprofit/NGO |
+| 89 | I4210095563 | Sonoma Technology (United States) | 3 | company |
+| 91 | I4210164553 | Biospherical Instruments (United States) | 3 | company |
+| 92 | I4405269264 | Stanford Cardiovascular Institute | 3 | nonprofit/NGO |
+| 93 | CAAG-SLC | California State Lands Commission | 2 | state-agency |
+| 95 | I126031752 | Santa Barbara City College | 2 | private |
+| 96 | I1295874195 | California Coastal Commission | 2 | state-agency |
+| 98 | I1327551190 | Zoological Society of San Diego | 2 | nonprofit/NGO |
+| 99 | I1328614147 | California Department of Transportation | 2 | state-agency |
+| 100 | I158011677 | Sonoma State University | 2 | CSU |

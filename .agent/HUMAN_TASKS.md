@@ -72,7 +72,7 @@ Last updated: 2026-11-11.
 - **Done when:** all 44 rows have `approve` or `reject`. Tell the agent
   "photos reviewed". No photo is shown on the site before this.
 
-### H5. Answer three open questions (defaults are in use until you answer)
+### H5. Answer four open questions (defaults are in use until you answer)
 Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
 ("keep default" or "change").
 - **AT4-SEARCH:** title search is the home-made token search. Default: keep it.
@@ -83,6 +83,10 @@ Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
   their ORCID shows a job elsewhere (19 of 109 checkable cases; list in
   `docs/api_notes/orcid_enrichment.md`). Default: keep counting them and list the
   cases. Change = drop those years.
+- **HIST-EMAILS:** older commits of `data/processed/normalized/authorships.parquet` contain
+  email addresses from OpenAlex affiliation strings (fixed going forward on 2026-11-12).
+  Default: leave history alone. Change = the agent rewrites git history and force-pushes
+  (destructive; anyone with a clone must re-clone).
 
 ### H6. Cut a new archived release when you want a citable snapshot (AT-10, optional)
 1. On GitHub: repository > **Releases** > **Draft a new release**.
@@ -134,6 +138,7 @@ come with its own Streamlit app and run command here.
 ---
 
 ## Done
+- 2026-11-11: ESCH-CA answered (use eScholarship UC evidence).
 - 2026-11-11: PLASTISPHERE-SCOPE answered (soil-community effects and biodegradation-only
   works are not Plastisphere).
 - Earlier owner actions are in `.agent/archive/HANDOFF_history.md`.

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import tempfile
 import time
 import urllib.error
@@ -426,6 +427,9 @@ def _write_snapshot(
     path.write_text(json.dumps(payload, sort_keys=True) + "\n", encoding="utf-8")
 
 
+_RAW_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}")
+
+
 def _row_from_work(work: Mapping[str, Any], *, run_id: str, fetched_at_utc: str) -> dict[str, Any]:
     work_id = compact_openalex_id(work.get("id"))
     if not work_id:
@@ -439,7 +443,11 @@ def _row_from_work(work: Mapping[str, Any], *, run_id: str, fetched_at_utc: str)
         "updated_date": str(work.get("updated_date") or ""),
         "publication_date": str(publication_date or ""),
         "publication_year": int(publication_year) if publication_year is not None else None,
-        "raw_json": json.dumps(work, sort_keys=True, separators=(",", ":")),
+        # Owner rule: never store emails. Affiliation strings and abstracts can carry
+        # contact emails; the raw table is committed, so redact them here.
+        "raw_json": _RAW_EMAIL_RE.sub(
+            "[email removed]", json.dumps(work, sort_keys=True, separators=(",", ":"))
+        ),
         "source_run_id": run_id,
         "fetched_at_utc": fetched_at_utc,
     }

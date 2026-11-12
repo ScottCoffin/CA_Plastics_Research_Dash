@@ -1,16 +1,19 @@
 from_author_id,to_author_id,reason,reviewed_by,reviewed_at
+A5127019171,A5002407483,auto: same name and institution (m daniele fallin),SC (rule),2026-11-11
 A5108126269,A5005266012,auto: same name and institution (annalisa griffa),SC (rule),2026-11-11
 A5078702225,A5007415927,auto: same name and institution (shoufeng zhang),SC (rule),2026-11-11
 A5027437494,A5008249397,auto: same name and institution (kent e pinkerton),SC (rule),2026-11-11
 A5113389662,A5010638511,auto: same name and institution (qingyang wu),SC (rule),2026-11-11
 A5042607072,A5011964335,auto: same name and institution (yuzhao han),SC (rule),2026-11-11
 A5046936580,A5012407269,auto: same name and institution (charles c lee),SC (rule),2026-11-11
+A5134499967,A5014783118,auto: same name and institution (emily s barrett),SC (rule),2026-11-11
 A5137288637,A5016101667,auto: same name and institution (john harvey),SC (rule),2026-11-11
 A5135413905,A5016406573,auto: same name and institution (kenneth schiff),SC (rule),2026-11-11
 A5128178232,A5017037052,auto: same name and institution (andrew b gray),SC (rule),2026-11-11
 A5146478103,A5017917939,auto: same name and institution (b larry li),SC (rule),2026-11-11
 A5126597412,A5018182101,auto: same name and institution (jing guo),SC (rule),2026-11-11
 A5123605661,A5020842159,auto: same name and institution (martin wagner),SC (rule),2026-11-11
+A5056987680,A5022512264,auto: same name and institution (juan wu),SC (rule),2026-11-11
 A5124081799,A5023893546,auto: same name and institution (sunkyu park),SC (rule),2026-11-11
 A5159114932,A5023893546,auto: same name and institution (sunkyu park),SC (rule),2026-11-11
 A5113795174,A5023915957,auto: same name and institution (connie ka yan ng),SC (rule),2026-11-11
@@ -27,6 +30,7 @@ A5101679645,A5041270704,auto: same name and institution (yu hsuan lee),SC (rule)
 A5139126268,A5042010300,auto: same name and institution (mingliang fang),SC (rule),2026-11-11
 A5159208087,A5043428176,auto: same name and institution (lixin zhu),SC (rule),2026-11-11
 A5114111239,A5046986222,auto: same name and institution (roland geyer),SC (rule),2026-11-11
+A5114205895,A5047831398,auto: same name and institution (audrey j braun),SC (rule),2026-11-11
 A5024072593,A5049976083,auto: same name and institution (lorena m rios mendoza),SC (rule),2026-11-11
 A5103635739,A5050678130,auto: same name and institution (m belal hossain),SC (rule),2026-11-11
 A5144119641,A5051781729,auto: same name and institution (clay c c wang),SC (rule),2026-11-11
@@ -34,15 +38,21 @@ A5125448209,A5053629190,auto: same name and institution (zedong zhang),SC (rule)
 A5126496100,A5057079069,auto: same name and institution (ting xu),SC (rule),2026-11-11
 A5125588560,A5057101946,auto: same name and institution (naying li),SC (rule),2026-11-11
 A5110688653,A5057365719,auto: same name and institution (jiaying liu),SC (rule),2026-11-11
+A5108963099,A5058251849,auto: same name and institution (catherine j karr),SC (rule),2026-11-11
 A5103559117,A5060202803,auto: same name and institution (judith c chow),SC (rule),2026-11-11
+A5111835054,A5060240365,auto: same name and institution (susan l schantz),SC (rule),2026-11-11
 A5129059422,A5063162390,auto: same name and institution (peipei wu),SC (rule),2026-11-11
 A5149085183,A5063162390,auto: same name and institution (peipei wu),SC (rule),2026-11-11
+A5123370784,A5064971821,auto: same name and institution (anping zhang),SC (rule),2026-11-11
 A5125535674,A5066553969,auto: same name and institution (honghui lin),SC (rule),2026-11-11
 A5128956213,A5068232281,auto: same name and institution (yanxu zhang),SC (rule),2026-11-11
 A5127999059,A5068567739,auto: same name and institution (matthias c rillig),SC (rule),2026-11-11
 A5128986881,A5071969820,auto: same name and institution (lili lei),SC (rule),2026-11-11
 A5100384094,A5072773621,auto: same name and institution (zilong wang),SC (rule),2026-11-11
+A5112711451,A5075398471,auto: same name and institution (frank d gilliland),SC (rule),2026-11-11
+A5100747571,A5076737848,auto: same name and institution (qinghua zhou),SC (rule),2026-11-11
 A5158793941,A5078978436,auto: same name and institution (valeriya komyakova),SC (rule),2026-11-11
+A5138787643,A5079167841,auto: same name and institution (deborah h bennett),SC (rule),2026-11-11
 A5083746100,A5080532432,auto: same name and institution (ruijuan liu),SC (rule),2026-11-11
 A5136992616,A5081714493,auto: same name and institution (xuefei zhou),SC (rule),2026-11-11
 A5100385611,A5085833022,auto: same name and institution (yang li),SC (rule),2026-11-11
@@ -51,7 +61,7 @@ A5101736224,A5086539587,auto: same name and institution (shafaqat ali),SC (rule)
 A5100360155,A5086605166,auto: same name and institution (ke wang),SC (rule),2026-11-11
 A5100905843,A5087083026,auto: same name and institution (zhaoqing yang),SC (rule),2026-11-11
 A5128211092,A5087083026,auto: same name and institution (zhaoqing yang),SC (rule),2026-11-11
-A5100459613,A5087760962,auto: same name and institution (yi chun chen),SC (rule),2026-11-11
+A5138774697,A5089396883,auto: same name and institution (qi zhao),SC (rule),2026-11-11
 A5113379327,A5089947106,auto: same name and institution (changzhi shi),SC (rule),2026-11-11
 A5065859286,A5090097840,auto: same name and institution (hui li),SC (rule),2026-11-11
 A5122119668,A5090097840,auto: same name and institution (hui li),SC (rule),2026-11-11
@@ -62,12 +72,16 @@ A5136571518,A5100333219,auto: same name and institution (xiaofeng wang),SC (rule
 A5137264677,A5100333219,auto: same name and institution (xiaofeng wang),SC (rule),2026-11-11
 A5100718684,A5100333721,auto: same name and institution (yue zhang),SC (rule),2026-11-11
 A5100342391,A5100342351,auto: same name and institution (kun zhang),SC (rule),2026-11-11
+A5100343900,A5100343848,auto: same name and institution (min liu),SC (rule),2026-11-11
 A5146564823,A5100343970,auto: same name and institution (ling liu),SC (rule),2026-11-11
 A5101750925,A5100371012,auto: same name and institution (hong wang),SC (rule),2026-11-11
+A5100371784,A5100371771,auto: same name and institution (xing chen),SC (rule),2026-11-11
 A5123863931,A5100377165,auto: same name and institution (meng wang),SC (rule),2026-11-11
 A5124609460,A5100404889,auto: same name and institution (ning zhang),SC (rule),2026-11-11
 A5100412644,A5100412624,auto: same name and institution (guangyu li),SC (rule),2026-11-11
 A5128116572,A5100458050,auto: same name and institution (yue wu),SC (rule),2026-11-11
+A5087760962,A5100459613,auto: same name and institution (yi chun chen),SC (rule),2026-11-11
+A5100459603,A5100459613,auto: same name and institution (yi chun chen),SC (rule),2026-11-11
 A5049256756,A5100562644,auto: same name and institution (yuxin tian),SC (rule),2026-11-11
 A5124120312,A5100562644,auto: same name and institution (yuxin tian),SC (rule),2026-11-11
 A5152385001,A5100622784,auto: same name and institution (jie ding),SC (rule),2026-11-11
@@ -77,6 +91,7 @@ A5100748315,A5100698698,auto: same name and institution (abdul rehman),SC (rule)
 A5100717838,A5100717842,auto: same name and institution (zhenfeng wang),SC (rule),2026-11-11
 A5146783477,A5100717842,auto: same name and institution (zhenfeng wang),SC (rule),2026-11-11
 A5100737338,A5100737340,auto: same name and institution (minghua zhang),SC (rule),2026-11-11
+A5100737339,A5100737340,auto: same name and institution (minghua zhang),SC (rule),2026-11-11
 A5129027020,A5100741304,auto: same name and institution (xianming zhang),SC (rule),2026-11-11
 A5132812388,A5101529772,auto: same name and institution (qin wu),SC (rule),2026-11-11
 A5112570614,A5101751305,auto: same name and institution (xin jiang),SC (rule),2026-11-11

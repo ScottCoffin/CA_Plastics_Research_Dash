@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 
+from atlas.build.expert_profiles import load_expert_profiles
 from atlas.build.export_site import export_site
 
 
@@ -25,9 +26,21 @@ def main() -> None:
     )
     parser.add_argument("--model-relevance", default="curation/work_relevance_model.csv")
     parser.add_argument("--author-metrics", default="data/processed/author_metrics.parquet")
+    parser.add_argument(
+        "--orcid-profiles",
+        default="data/processed/orcid_profiles.parquet",
+        help="ORCID bio, keywords and links for the drawer; empty string disables.",
+    )
+    parser.add_argument(
+        "--photo-review",
+        default="curation/expert_photo_review.csv",
+        help="Owner photo review; only rows with owner_decision=approve are used. "
+        "Empty string disables.",
+    )
     parser.add_argument("--output-dir", default="site/data")
     parser.add_argument("--generated-at", default=None)
     args = parser.parse_args()
+    profiles = load_expert_profiles(args.orcid_profiles, args.photo_review)
     result = export_site(
         works_path=args.works,
         authors_path=args.authors,
@@ -43,6 +56,7 @@ def main() -> None:
         query_config_path=args.query_config,
         output_dir=args.output_dir,
         generated_at=args.generated_at,
+        profiles=profiles,
     )
     print(
         f"S3.1 exported {result.counts['works']} works, {result.counts['authors']} authors, "

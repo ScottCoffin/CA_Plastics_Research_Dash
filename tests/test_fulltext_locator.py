@@ -114,3 +114,26 @@ def test_pmc_license_url_requires_trusted_https_host_and_canonical_pmcid_path():
         "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8123456/fullTextXML": True,
     }
     assert {value: _url_names_pmcid(value, "PMC8123456") for value in cases} == cases
+
+
+def test_openalex_url_form_pmcid_selects_xml_with_legacy_pmc_license():
+    # OpenAlex reports ids.pmcid as a URL with bare digits (found on the real corpus,
+    # 2026-11-12: all 321 PMCIDs were missed before this form was accepted).
+    raw = {
+        "W1": {
+            "ids": {"pmcid": "https://www.ncbi.nlm.nih.gov/pmc/articles/221095"},
+            "open_access": {"is_oa": True},
+            "locations": [
+                {
+                    "landing_page_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/221095",
+                    "license": "cc-by",
+                }
+            ],
+        }
+    }
+    [row] = locate_records([{"work_id": "W1", "is_oa": True}], raw)
+    assert row["source_type"] == "xml"
+    assert row["pmcid"] == "PMC221095"
+    assert row["license"] == "cc-by"
+    assert _url_names_pmcid("https://www.ncbi.nlm.nih.gov/pmc/articles/PMC221095", "PMC221095")
+    assert not _url_names_pmcid("https://www.ncbi.nlm.nih.gov/pmc/articles/999", "PMC221095")

@@ -182,6 +182,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   `scripts/build_author_merges.py` (owner rule: same name + institution). Grant relevance:
   owner decision > title > strong abstract terms (`STRONG_ABSTRACT_RE`) > Haiku > false.
 
+- S2.5/eScholarship (2026-11-12): CA basis `escholarship` (work level for UC thesis / UC OA-policy deposit / campus-unit items; author level for sole thesis authors or matched CA co-authors) from `data/processed/escholarship_items.parquet` (`scripts/fetch_escholarship_items.py`, GraphQL item(id), 5 s spacing, stops on 403). ORCID DOI ingest: `scripts/ingest_orcid_dois.py` (plain DOI filters cost 1 credit/50 DOIs; query rule applied locally). Normalization redacts emails in raw_affiliation and abstract (committed tables).
 - AT-5/AT-6 (Observable Framework) deferred 2026-11-11: revisit when `scripts/check_framework_triggers.py` (CI warning) fires: >10k works, >1.5 MB initial gzip, EM-5..EM-12 started, or index.html >300 KB / >6 pages. Rationale and preferred incremental path: ADR-FRAMEWORK-REVISIT-2026-11-11. Run it at session entry and before starting any EM-5..EM-12 task.
 
 ## Known pitfalls (top 10; details in LESSONS.md)

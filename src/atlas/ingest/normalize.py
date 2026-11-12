@@ -369,6 +369,9 @@ def _looks_california(value: str) -> bool:
 CA_BASIS_REGISTRY = "registry"
 CA_BASIS_RAW = "raw_affiliation"
 CA_BASIS_CARRY = "author_carry_forward"
+CA_BASIS_ESCHOLARSHIP = "escholarship"
+ESCHOLARSHIP_PATH = Path("data/processed/escholarship_items.parquet")
+ESCHOLARSHIP_CERTAIN = frozenset({"etd", "uc_oa_policy", "uc_unit"})
 CARRY_FORWARD_YEAR_WINDOW = 2
 
 _CA_AFFILIATION_PATTERNS = (
@@ -548,6 +551,11 @@ def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) 
             "Authorships CA by author carry-forward (no affiliation, +/-2 years)",
             metrics["authorships_ca_carry_forward"],
         ),
+        (
+            "Authorships CA by eScholarship (UC thesis author or matched UC co-author)",
+            metrics.get("authorships_ca_escholarship", 0),
+        ),
+        ("Works CA by eScholarship UC evidence", metrics.get("works_ca_escholarship", 0)),
     ]
     lines = [
         "# OpenAlex normalization QC",
@@ -580,6 +588,81 @@ def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) 
         ]
     )
     return "\n".join(lines)
+
+
+EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}")
+
+
+def redact_emails(text: str) -> str:
+    """Owner rule: never store email addresses. Committed normalized tables carry
+    OpenAlex raw affiliations and abstracts, which can include contact emails; they are
+    redacted after CA detection has used the original string."""
+
+    return EMAIL_RE.sub("[email removed]", text) if text else text
+
+
+def load_escholarship_evidence(path: str | Path | None) -> dict[str, dict[str, Any]]:
+    """work_id -> eScholarship evidence row (``scripts/fetch_escholarship_items.py``)."""
+
+    if path is None or not Path(path).exists():
+        return {}
+    rows = pq.read_table(path).to_pylist()
+    return {
+        str(row["work_id"]): row for row in rows if row.get("ca_evidence") in ESCHOLARSHIP_CERTAIN
+    }
+
+
+def _name_key(name: object) -> str:
+    """'Rochman, Chelsea M' and 'Chelsea M. Rochman' -> 'rochman c'."""
+
+    text = str(name or "").strip()
+    if "," in text:
+        family, _, given = text.partition(",")
+    else:
+        parts = text.split()
+        family, given = (parts[-1], " ".join(parts[:-1])) if parts else ("", "")
+    family = re.sub(r"[^a-z]", "", family.casefold())
+    initial = re.sub(r"[^a-z]", "", given.casefold())[:1]
+    return f"{family} {initial}".strip()
+
+
+def _apply_escholarship(
+    works: list[dict[str, Any]],
+    authorships: list[dict[str, Any]],
+    author_state: dict[str, dict[str, Any]],
+    evidence: Mapping[str, Mapping[str, Any]],
+) -> set[str]:
+    """Owner decision ESCH-CA (2026-11-11): eScholarship UC evidence (in place).
+
+    Work level: every work with a UC thesis, UC open-access-policy or campus-unit record
+    is California research (returned set). Author level (``ca_basis = escholarship``):
+    the sole author of a UC thesis, or a co-author who is already California-based
+    elsewhere and whose name matches an eScholarship author. UC-hosted journals carry
+    no evidence and are not in ``evidence``.
+    """
+
+    by_work: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in authorships:
+        by_work[row["work_id"]].append(row)
+    flagged: set[str] = set()
+    for work in works:
+        work_id = work["work_id"]
+        item = evidence.get(work_id)
+        if not item:
+            continue
+        flagged.add(work_id)
+        rows = by_work.get(work_id, [])
+        names = {_name_key(name) for name in item.get("author_names") or []} - {""}
+        for row in rows:
+            if row["ca_basis"] or not row["author_id"]:
+                continue
+            state = author_state.get(row["author_id"]) or {}
+            sole_thesis_author = item.get("ca_evidence") == "etd" and len(rows) == 1
+            known_ca_match = bool(state.get("ca_works")) and _name_key(state.get("name")) in names
+            if sole_thesis_author or known_ca_match:
+                row["ca_basis"] = CA_BASIS_ESCHOLARSHIP
+                state.setdefault("ca_works", set()).add(work_id)
+    return flagged
 
 
 def _apply_carry_forward(
@@ -627,6 +710,7 @@ def normalize_records(
     suppressions_path: str | Path | None = "curation/suppressions.csv",
     generated_at: str | None = None,
     state_agencies_path: str | Path | None = STATE_AGENCIES_PATH,
+    escholarship_path: str | Path | None = ESCHOLARSHIP_PATH,
 ) -> NormalizationResult:
     """Normalize raw OpenAlex work objects into C3-shaped Parquet tables.
 
@@ -743,7 +827,7 @@ def normalize_records(
                     "position": position,
                     "is_corresponding": bool(raw_authorship.get("is_corresponding", False)),
                     "institution_ids": institution_ids,
-                    "raw_affiliation": raw_affiliation,
+                    "raw_affiliation": redact_emails(raw_affiliation),
                     "ca_basis": ca_basis,
                 }
             )
@@ -778,7 +862,9 @@ def normalize_records(
                 "work_id": work_id,
                 "doi": _string(work.get("doi")),
                 "title": _string(work.get("title")),
-                "abstract": _abstract_from_inverted_index(work.get("abstract_inverted_index")),
+                "abstract": redact_emails(
+                    _abstract_from_inverted_index(work.get("abstract_inverted_index"))
+                ),
                 "year": pub_year,
                 "pub_date": _string(work.get("publication_date")),
                 "type": _string(work.get("type")),
@@ -803,8 +889,12 @@ def normalize_records(
             }
         )
 
+    escholarship_works = _apply_escholarship(
+        works, authorships, author_state, load_escholarship_evidence(escholarship_path)
+    )
     _apply_carry_forward(authorships, works, author_state)
     ca_any_works = {row["work_id"] for row in authorships if row["ca_basis"]}
+    ca_any_works |= escholarship_works
     ca_led_works = {
         row["work_id"] for row in authorships if row["ca_basis"] and row["position"] == "first"
     }
@@ -873,6 +963,10 @@ def normalize_records(
         "authorships_ca_registry": sum(r["ca_basis"] == CA_BASIS_REGISTRY for r in authorships),
         "authorships_ca_raw_affiliation": sum(r["ca_basis"] == CA_BASIS_RAW for r in authorships),
         "authorships_ca_carry_forward": sum(r["ca_basis"] == CA_BASIS_CARRY for r in authorships),
+        "authorships_ca_escholarship": sum(
+            r["ca_basis"] == CA_BASIS_ESCHOLARSHIP for r in authorships
+        ),
+        "works_ca_escholarship": len({w for w in escholarship_works if w in kept_by_id}),
     }
     output = Path(output_dir)
     _atomic_write_table(output / "works.parquet", works, WORKS_SCHEMA)

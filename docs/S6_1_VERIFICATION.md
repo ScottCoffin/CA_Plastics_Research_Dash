@@ -46,3 +46,23 @@ py -3.14 scripts/check_s6_1.py
 py -3.14 -m pytest tests/test_fulltext_locator.py
 py -3.14 scripts/smoke/europepmc_fulltext.py
 ```
+
+## Real candidate-corpus coverage (2026-11-12)
+
+The required corpus report now exists: `py -3.14 scripts/locate_fulltext.py` over the v3.1
+normalized corpus (1,896 works; outputs in gitignored `data/processed/normalized/`).
+
+| Locator | Works | Share |
+|---|---:|---:|
+| Europe PMC XML | 320 | 16.9% |
+| OA PDF | 482 | 25.4% |
+| None | 1,094 | 57.7% |
+
+License decisions: permissive 328, restricted 0, review 220, unknown 1,348. Locators are
+metadata only; nothing was fetched.
+
+Bug fixed on the first real run: OpenAlex reports `ids.pmcid` as a URL
+(`https://www.ncbi.nlm.nih.gov/pmc/articles/221095`) and PMC locations on the legacy
+`www.ncbi.nlm.nih.gov/pmc/articles/` host. The locator accepted neither, so all 321 PMCIDs
+fell through (XML 0%). It now keeps the URL's last segment and accepts the legacy host
+(regression test `test_openalex_url_form_pmcid_selects_xml_with_legacy_pmc_license`).

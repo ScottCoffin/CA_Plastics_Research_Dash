@@ -45,9 +45,24 @@ then `py -3.14 scripts/normalize_openalex.py`. Expected cost is about 90 credits
 The ingest gate keeps a fetched work only if a strict CA raw-affiliation match or a registry
 institution is present, so non-CA works are never merged; normalize still decides `ca_any_author`.
 
+## DOI match run (2026-11-12 00:0x UTC, after the OpenAlex daily reset)
+
+`audit_europepmc_recall.py --max-credits 300 --extra-dois data/interim/datacite_plastic_dois.txt`
+(420 missing benchmark DOIs + 84 DataCite plastic outputs not in the corpus): 11 batches,
+110 credits (about USD 0.011). OpenAlex returned 50 works that match the active query
+(`plastic-v3.1`); 39 failed the California gate; the 11 that passed were already in the raw
+corpus (10 published or normalized, 1 collapsed as a near-duplicate), so **0 works were added**.
+469 DOIs did not match the active query in OpenAlex.
+
+Interpretation: the 51.0% recall gap against Europe PMC is a **query-scope** gap, not an
+ingestion gap. Europe PMC's plastics search (full text and MeSH, broad terms) admits papers
+whose OpenAlex title/abstract does not contain any v3.1 query term, and most of the rest are
+non-California. Recall within the query's own scope is complete for this benchmark. Closing
+the remaining gap would need query changes (owner decision, AT-1 audit), not more DOI ingest.
+
 ## Spot check (20 random added CA works)
 
-Pending the ingest run; none added yet.
+Not applicable: no works were added by the DOI match.
 
 ## Caveats
 

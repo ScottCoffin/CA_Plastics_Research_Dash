@@ -51,18 +51,16 @@ This file is the live tracker for the current session: update it at every checkp
 | 44 | Plastisphere excludes soil-community effects and biodegradation-only works | Done: title-only seeds + exclusions (29 works, 7 grants); ADR-RELEVANCE-RULES-2026-11-11 |
 | 45 | 'Micro-nano plastics' always relevant | Done: `always_relevant_patterns` (all spellings) above model/Haiku/rule; shared OpenAlex abstracts ignored (26 works; removed 1 false positive); grants unchanged (503) |
 | 46 | Wrong abstract on 'A new formalism in perturbation theory' | Root cause: OpenAlex attached one scraped micro-nano teaser abstract to 10 unrelated PNAS papers. Fixed locally: `atlas.ingest.abstract_qc` blanks it at normalization (also in labels/export/review app); export prunes 171 stale author files. Upstream: owner report text in HUMAN_TASKS H6b |
+| 47 | eScholarship (portal blocked; owner: leverage its UC affiliation evidence) | Done: OpenAlex-indexed eScholarship audit; GraphQL campus evidence; CA basis `escholarship`; 19 works added (66/214 items fetched before a rate-limit block; resumable) |
+| 48 | Workers per CLAUDE.md | Resumed: S9.5 drawer (Haiku, accepted), eScholarship audit (Haiku, superseded); logged in DELEGATION_LOG |
+| 49 | Emails in committed normalized tables (found while spot-checking) | Fixed forward: normalization redacts raw_affiliation/abstract emails (808 strings); history purge is owner question HIST-EMAILS |
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
-## Next eligible (dependency order) - as of the session-end commit (2026-11-11 ~21:45 UTC)
-1. S2.5(b)+(d) OpenAlex DOI match (needs the daily budget reset, after 00:00 UTC; ~110 credits, 11 batches):
-   `PYTHONPATH=src py -3.14 scripts/audit_europepmc_recall.py --max-credits 300 --extra-dois data/interim/datacite_plastic_dois.txt`
-   then `py -3.14 scripts/normalize_openalex.py`, `py -3.14 scripts/build_export_site.py`, `py -3.14 scripts/build_analytics.py`,
-   `py -3.14 scripts/build_bundle.py`, `py -3.14 scripts/check_ci_guards.py --require-raw --require-normalized`;
-   `--measure-only` for recall after; spot-check 20 added CA works in `docs/api_notes/europepmc_recall.md`; commit raw/normalized/site data as the daily ingest does.
-   (`data/interim/datacite_plastic_dois.txt` is ignored; regenerate from `expert_datacite_outputs.parquet` where plastic_related and not in_corpus.)
-2. S2.5 remainder: ORCID missing DOIs (57,934; filter before any OpenAlex matching, budget across days), ROR-discovered researchers (4,752), CORE full text (needs the renewed key), eScholarship.
-3. S9.5 drawer: show ORCID bio/keywords/links and the 44 licensed photos with credit, after the owner reviews them.
-4. S9.4 network with SPK-6/AT-8 (inputs: `data/processed/analytics/inst_cooccurrence.parquet`), SPK-5/AT-7.
+## Next eligible (dependency order) - as of 2026-11-12 ~01:30 UTC
+1. Owner review of the 136 new works (117 ORCID-DOI + 19 eScholarship) per the >10 rule: add them as pending rows to the works review app once the owner pauses edits to `curation/work_relevance.csv` (the owner is editing it live; never write it concurrently), or give the app an additions sheet. Then Haiku screening of the same rows.
+2. Resume `scripts/fetch_escholarship_items.py` (148 items pending; 5 s spacing; stops on 403) on a later day, then `ingest_escholarship_works.py` + rebuild.
+3. S2.5 remainder: CORE (renewed key), ROR-discovered researchers (4,752).
+4. S9.4 network with SPK-6/AT-8 (SPK-6 formally depends on S5.5); EM-5+ needs the Framework revisit decision (trigger fires when EM-5..EM-12 start).
 5. Gated on owner: gold-label app/EM-3 labelling, S5.0 (after S5.1 Smart-queue validation).
 6. Last: S3.7 hero page and S3.8 SEO.
 

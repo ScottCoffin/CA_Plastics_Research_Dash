@@ -192,6 +192,7 @@ def _write_author_details(
     output_dir: Path,
     authors: Sequence[Mapping[str, Any]],
     works_by_author: Mapping[str, list[Mapping[str, Any]]],
+    profiles: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> None:
     written: set[str] = set()
     for author in authors:
@@ -203,6 +204,9 @@ def _write_author_details(
             "author": dict(author),
             "works": list(works_by_author.get(author_id, [])),
         }
+        # Additive: the key is omitted entirely for authors without a drawer profile.
+        if profiles and author_id in profiles:
+            detail["profile"] = dict(profiles[author_id])
         _atomic_json(output_dir / "authors" / f"{author_id}.json", detail)
         written.add(f"{author_id}.json")
     # Authors who left the export (merged, suppressed, no longer CA) must not stay
@@ -431,6 +435,7 @@ def export_site(
     output_dir: str | Path = "site/data",
     generated_at: str | None = None,
     ca_authors_only: bool = True,
+    profiles: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> ExportResult:
     """Build all S3.1 payloads from normalized C3 tables.
 
@@ -449,6 +454,8 @@ def export_site(
     OpenAlex ``cited_by_count`` and ``h_index``; merged records sum citations and keep
     the largest h-index. Plastics counts use the author's whole OpenAlex record when
     fetched (``plastic_basis`` = ``openalex``), else the exported CA corpus.
+    ``profiles`` (``atlas.build.expert_profiles``) adds a ``profile`` key to the
+    author detail files it names; ``None`` leaves the detail files unchanged.
     """
 
     works_rows = _read(works_path)
@@ -762,6 +769,7 @@ def export_site(
             ]
             for author_id, work_ids in works_by_author.items()
         },
+        profiles,
     )
     _write_institution_works(
         output,

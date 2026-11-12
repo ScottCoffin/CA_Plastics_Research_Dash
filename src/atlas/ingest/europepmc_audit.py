@@ -123,14 +123,25 @@ def doi_batches(dois: Sequence[str], size: int = DOI_BATCH_SIZE) -> list[list[st
     return [list(dois[i : i + size]) for i in range(0, len(dois), size)]
 
 
-def build_doi_url(config: Mapping[str, Any], batch: Sequence[str], *, per_page: int = 100) -> str:
-    """One OpenAlex works request: DOI list AND active query AND type filters."""
+def build_doi_url(
+    config: Mapping[str, Any],
+    batch: Sequence[str],
+    *,
+    per_page: int = 100,
+    with_query: bool = True,
+) -> str:
+    """One OpenAlex works request: DOI list AND (optionally) active query AND type filters.
+
+    ``with_query=False`` drops the title/abstract search: a plain filter request costs
+    1 credit instead of 10, and the caller applies the query rule locally
+    (``atlas.nlp.labels.classify_plastic_text``).
+    """
 
     if not batch or len(batch) > DOI_BATCH_SIZE:
         raise ValueError("batch must hold 1 to 50 DOIs")
     filters = [
         "doi:" + "|".join(f"https://doi.org/{doi}" for doi in batch),
-        openalex_filter(config),
+        *([openalex_filter(config)] if with_query else []),
         *type_filters(config),
     ]
     params = {"filter": ",".join(filters), "per-page": per_page}
@@ -158,11 +169,36 @@ def fetch_openalex_by_doi(
     budget_path: str | Path = "config/budget.yml",
     usage_log: str | Path = "data/logs/api_usage.jsonl",
     raw_dir: Path = Path("data/raw/openalex_works"),
+    with_query: bool = True,
 ) -> dict[str, Any]:
     """Run DOI batches through the OpenAlex client and budget guard.
 
     Returns the matched works and credit use; raises OpenAlexBudgetError when the guard
     stops the run (nothing is merged by this function).
+    """
+
+    return fetch_openalex_urls(
+        [build_doi_url(config, batch, with_query=with_query) for batch in batches],
+        run_id=run_id,
+        max_credits=max_credits,
+        budget_path=budget_path,
+        usage_log=usage_log,
+        raw_dir=raw_dir,
+    )
+
+
+def fetch_openalex_urls(
+    urls: Sequence[str],
+    *,
+    run_id: str,
+    max_credits: float,
+    budget_path: str | Path = "config/budget.yml",
+    usage_log: str | Path = "data/logs/api_usage.jsonl",
+    raw_dir: Path = Path("data/raw/openalex_works"),
+) -> dict[str, Any]:
+    """Fetch prepared OpenAlex works URLs through the budget guard; keep raw snapshots.
+
+    Returns ``{"works", "requests", "credits", "meta"}`` (``meta`` of the last response).
     """
 
     budget = resolve_openalex_budget(budget_path, max_credits=max_credits)
@@ -173,14 +209,14 @@ def fetch_openalex_by_doi(
     credits_total = Decimal(0)
     works: list[dict[str, Any]] = []
     requests = 0
+    meta: dict[str, Any] = {}
     with ApiCostLogger(run_id, usage_log) as logger:
-        for batch in batches:
+        for url in urls:
             error = budget.reserve_error(
                 cost_usd=prior_cost + cost_total, credits=prior_credits + credits_total
             )
             if error:
                 raise oa.OpenAlexBudgetError(f"{error}; no records merged")
-            url = build_doi_url(config, batch)
             before = len(logger.request_metrics)
             body = oa._request_json(url, logger=logger)
             for record in logger.request_metrics[before:]:
@@ -212,7 +248,8 @@ def fetch_openalex_by_doi(
             if not isinstance(results, list):
                 raise ValueError("OpenAlex response results must be a list")
             works.extend(w for w in results if isinstance(w, dict))
-    return {"works": works, "requests": requests, "credits": float(credits_total)}
+            meta = body.get("meta") if isinstance(body.get("meta"), dict) else {}
+    return {"works": works, "requests": requests, "credits": float(credits_total), "meta": meta}
 
 
 def merge_works(

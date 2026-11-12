@@ -1,5 +1,9 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-12 -- Emails in committed tables; eScholarship rate limit
+- The site export redacted emails, but the committed normalized tables (authorships raw_affiliation, works abstract) carried 808 + 4 OpenAlex strings with emails. Redact at the point where any committed table is written, not only at the public export; grep committed Parquet for `@domain.tld` after schema changes.
+- eScholarship blocks the HTML site and OAI (bot screen) and blocked the GraphQL API too after ~120 requests at 2 s spacing; use OpenAlex (which indexes eScholarship) to find items, and fetch single items slowly from cache-first scripts. A worker kept paging after a stop message: kill background processes yourself rather than relying on a message.
+
 ## 2026-11-11 -- Mis-attached OpenAlex abstracts and stale site files
 - OpenAlex served one teaser-style micro-nano plastics abstract (two snippets joined by "...") as the abstract of 10 unrelated PNAS papers (1962-2023, no real abstract; Europe PMC has none either). Verbatim-shared abstracts are also legitimate (preprint versions and `/supp-N` files, book chapters, report series), so flag only when >= 3 works share it with >= 3 distinct DOI roots and >= 3 distinct title families (`atlas.ingest.abstract_qc`); normalization blanks them.
 - `export_site` never deleted author files of authors who left the export: 171 stale `site/data/authors/*.json` stayed reachable. Any per-entity output folder must prune files it did not write.

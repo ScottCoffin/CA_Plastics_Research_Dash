@@ -4,7 +4,7 @@ from urllib.parse import parse_qs, urlparse
 import pytest
 
 from atlas.ingest import europepmc_audit as audit
-from atlas.query import load_query_config
+from atlas.query import load_query_config, type_filters
 
 
 def test_normalize_doi() -> None:
@@ -39,6 +39,10 @@ def test_query_strings() -> None:
     assert "title_and_abstract.search" in flt
     with pytest.raises(ValueError):
         audit.build_doi_url(config, [f"10.1/{i}" for i in range(51)])
+    # S2.5c: plain DOI lookup (1 credit) keeps the type filters but drops the search.
+    plain = parse_qs(urlparse(audit.build_doi_url(config, ["10.1/a"], with_query=False)).query)
+    assert "title_and_abstract.search" not in plain["filter"][0]
+    assert all(f in plain["filter"][0] for f in type_filters(config))
 
 
 def test_fetch_benchmark_pages_and_caches(tmp_path: Path) -> None:

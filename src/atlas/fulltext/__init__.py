@@ -137,6 +137,14 @@ def _url_names_pmcid(value: object, pmcid: str) -> bool:
             and path[0].casefold() == "articles"
             and path[1].casefold() == canonical_id
         )
+    if host == "www.ncbi.nlm.nih.gov":
+        # Legacy PMC paths, as OpenAlex reports them: /pmc/articles/<PMCID or digits>.
+        return (
+            len(path) >= 3
+            and path[0].casefold() == "pmc"
+            and path[1].casefold() == "articles"
+            and path[2].casefold() in {canonical_id, canonical_id.removeprefix("pmc")}
+        )
     if host in {"europepmc.org", "www.europepmc.org"}:
         return (
             len(path) >= 2
@@ -182,7 +190,9 @@ def locate_records(
         raw = _raw_record(raw_by_work_id.get(work_id, {}))
         ids = raw.get("ids") if isinstance(raw.get("ids"), Mapping) else {}
         pmcid_value = ids.get("pmcid") if isinstance(ids, Mapping) else None
-        pmcid = str(pmcid_value or "").strip()
+        # OpenAlex gives a URL (https://www.ncbi.nlm.nih.gov/pmc/articles/221095); keep the
+        # last path segment so the bare-ID check below accepts it.
+        pmcid = str(pmcid_value or "").strip().rstrip("/").rsplit("/", 1)[-1]
         if pmcid and _PMCID.fullmatch(pmcid):
             pmcid = pmcid.upper()
             if not pmcid.startswith("PMC"):

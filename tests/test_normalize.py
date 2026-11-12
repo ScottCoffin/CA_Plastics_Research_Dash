@@ -50,6 +50,8 @@ def test_normalization_outputs_c3_tables_and_flags(tmp_path: Path) -> None:
         "authorships_ca_registry": 2,
         "authorships_ca_raw_affiliation": 1,
         "authorships_ca_carry_forward": 0,
+        "authorships_ca_escholarship": 0,
+        "works_ca_escholarship": 0,
     }
     # W...103 is CA only through a raw affiliation string ("California, USA").
     assert by_id["W9000000103"]["ca_led"] is True
