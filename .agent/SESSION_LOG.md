@@ -118,3 +118,4 @@
 | 2026-11-12 | EM-16/EM-18 | Related Resources page and DTSC timeline (Policy) page in Framework; linkouts.json fields extended; dtsc_timeline.json export (2 Haiku workers) | this commit |
 | 2026-11-12 | EM-6/EM-7 | Evidence Map V-3 pipeline flow (methods card) and V-4 trend panel (topic trends + CA share of global output, 1 OpenAlex request) (2 Haiku workers) | this commit |
 | 2026-11-12 | UX-0/UX-1/UX-21 | Owner UX spec integrated (TODO UX section, ADR-UX-SPEC, UXD-1..9); live Playwright+axe+Lighthouse audit (spec Section 1A); Classic-site link fixed, new-version banner, lang/viewport via postbuild | this commit |
+| 2026-11-12 | UX-2 | expert.html: parseExpertId (hash, ?author=, ?id=), plain missing/malformed/not-found messages (1 Haiku worker) | this commit |

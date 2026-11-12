@@ -26,6 +26,22 @@
   function isValidAuthorId(raw) {
     return /^[A-Za-z0-9]{1,40}$/.test(String(raw || ""));
   }
+  // Expert id from the page address (pure; the page passes in the address query and fragment).
+  // "#author=<id>" wins; otherwise "?author=<id>" or "?id=<id>" are used. A full OpenAlex author URL
+  // (openalex.org/A... with a scheme) is reduced to its last segment. status: "ok" (id is "A" plus digits,
+  // returned upper-case), "missing" (no id given) or "malformed" (an id was given but is not an OpenAlex
+  // author id). raw is the text that was tried, trimmed; empty when missing.
+  function parseExpertId(search, hash) {
+    const fromHash = new URLSearchParams(String(hash || "").replace(/^#/, "")).get("author");
+    const query = new URLSearchParams(String(search || "").replace(/^\?/, ""));
+    const raw = [fromHash, query.get("author"), query.get("id")]
+      .map((value) => String(value ?? "").trim())
+      .find((value) => value !== "") || "";
+    if (!raw) return { id: "", status: "missing", raw: "" };
+    const tail = raw.replace(/\/+$/, "").split("/").pop();
+    const match = /^A(\d+)$/i.exec(tail);
+    return match ? { id: `A${match[1]}`, status: "ok", raw } : { id: "", status: "malformed", raw };
+  }
 
   function toYear(value) {
     const y = Number.parseInt(value, 10);
@@ -232,6 +248,7 @@
     safeHttpUrl,
     parseAuthorParam,
     isValidAuthorId,
+    parseExpertId,
     filterWorks,
     sortWorks,
     mQuotientText,

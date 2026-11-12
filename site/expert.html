@@ -243,7 +243,7 @@
     <script id="expert-app">
       "use strict";
 
-      const { escapeHtml, safeHttpUrl, parseAuthorParam, isValidAuthorId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, profileHtml, citationSeries, citationHistogramSvg } = AtlasExpert;
+      const { escapeHtml, safeHttpUrl, parseExpertId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, profileHtml, citationSeries, citationHistogramSvg } = AtlasExpert;
 
       const RISING_TIP = "Trend in this expert's share of all Atlas experts' plastics citations over the last 5 complete years; percentile among experts";
       const CHART_LABEL = "Citations received per year, all and plastics-related";
@@ -571,19 +571,22 @@
 
       // ---- Routing and events -----------------------------------------------------
       async function route() {
-        const raw = parseAuthorParam(location.hash, location.search);
-        if (!raw) {
+        const expert = parseExpertId(location.search, location.hash);
+        if (expert.status === "missing") {
           S.author = null;
           S.id = "";
-          showMessage("No expert selected", "Open an expert from the Experts list to see the full profile.", "");
+          showMessage("No expert selected", "To open a profile, choose an expert in the Experts list. Profile addresses look like expert.html#author=A5046986222.", "");
           return;
         }
-        if (!isValidAuthorId(raw)) {
+        if (expert.status === "malformed") {
           S.author = null;
-          S.id = raw;
-          showMessage("Invalid expert id", `"${raw}" is not a valid OpenAlex author id.`, "error");
+          S.id = "";
+          showMessage("Invalid expert id", `"${expert.raw}" is not a valid OpenAlex author ID. An author ID is the letter A followed by digits, such as A5046986222.`, "error");
           return;
         }
+        const raw = expert.id;
+        // Old ?id= or ?author= addresses are rewritten to the canonical #author= form.
+        if (location.search) history.replaceState(null, "", `${location.pathname}#author=${encodeURIComponent(raw)}`);
         if (raw === S.id && S.author) return;
         const token = ++S.loadToken;
         S.id = raw;
