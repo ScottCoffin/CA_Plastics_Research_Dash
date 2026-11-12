@@ -1,0 +1,76 @@
+/* Funding view (AT-5b): lift-and-shift of the classic site's Funding tab styles (site/index.html).
+ * Rules are scoped to #funding-root so they do not leak into other Framework pages. The colours
+ * are the classic site's light palette, pinned with color-scheme so the dark theme cannot make
+ * the light table headers unreadable. */
+#funding-root {
+  color-scheme: light;
+  color: #17324d;
+  --brand: #075a46;
+  --brand-dark: #043e32;
+  --focus: #c45100;
+  --line: #c8d8dc;
+  --muted: #536879;
+}
+.data-note { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.9rem; }
+.result-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.facet { margin: 0.75rem 0; border: 1px solid #8da7af; border-radius: 0.5rem; background: #fff; }
+.facet > summary { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; padding: 0.55rem 0.85rem; border-radius: 0.5rem; background: #e3efed; color: #0b3d31; cursor: pointer; list-style: none; }
+.facet > summary::-webkit-details-marker { display: none; }
+.facet > summary:hover { background: #d4e8e4; }
+.facet[open] > summary { border-radius: 0.5rem 0.5rem 0 0; border-bottom: 1px solid #8da7af; }
+.facet > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.facet > summary::after { content: ""; flex: 0 0 auto; width: 0.6rem; height: 0.6rem; margin-right: 0.3rem; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; transform: rotate(45deg); transition: transform 0.15s ease; }
+.facet[open] > summary::after { transform: rotate(-135deg); }
+.facet > :not(summary) { margin-left: 0.85rem; margin-right: 0.85rem; }
+.facet > :last-child { margin-bottom: 0.85rem; }
+.open-calls-list { margin: 0.75rem 0 0; padding-left: 1.25rem; }
+.open-calls-list li + li { margin-top: 0.75rem; }
+.grants-filters { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: 0.6rem 0.8rem; margin: 0.75rem 0; }
+.grants-field { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.85rem; }
+.grants-field select, .grants-field input[type="number"] { font: inherit; padding: 0.35rem; border: 1px solid #8da7af; border-radius: 0.35rem; background: #fff; }
+.grants-check { flex-direction: row; align-items: center; gap: 0.5rem; }
+.grants-actions { display: flex; gap: 0.5rem; align-items: flex-end; flex-wrap: wrap; }
+.grants-actions button, .grants-pager button { font: inherit; padding: 0.35rem 0.7rem; border: 1px solid var(--brand); border-radius: 0.35rem; background: #fff; color: var(--brand-dark); cursor: pointer; }
+.grants-actions button:disabled, .grants-pager button:disabled { opacity: 0.5; cursor: default; }
+.grants-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; margin: 0.75rem 0; }
+.grants-chart { margin: 0; padding: 0.5rem; border: 1px solid var(--line); border-radius: 0.5rem; }
+.grants-chart figcaption { font-weight: 700; font-size: 0.9rem; }
+.grants-chart svg { width: 100%; height: auto; display: block; }
+.grants-legend { display: flex; flex-wrap: wrap; gap: 0.75rem; list-style: none; padding: 0; margin: 0.35rem 0 0; font-size: 0.8rem; }
+.grants-swatch { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; margin-right: 0.3rem; vertical-align: middle; }
+.grants-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.grants-table th, .grants-table td { padding: 0.45rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.grants-table th { background: #edf5f4; }
+.grants-table-wrap { overflow: auto; max-height: 75vh; border: 1px solid var(--line); border-radius: 0.5rem; }
+.grants-table-wrap .grants-table { min-width: 68rem; }
+.grants-table tbody th { background: transparent; font-weight: 400; min-width: 16rem; max-width: 24rem; }
+.grants-table tbody th a { font-weight: 600; }
+.grants-table td { min-width: 5.5rem; }
+.grants-table td:nth-child(2) { min-width: 11rem; }
+.grants-table td:nth-child(7) { white-space: nowrap; }
+.grants-table thead th { position: sticky; top: 0; z-index: 1; padding: 0; box-shadow: 0 1px 0 var(--line); white-space: nowrap; }
+.grants-table thead th.num, .grants-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.grants-sort { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 0.3rem; width: 100%; padding: 0.5rem 0.45rem; font-weight: 700; cursor: pointer; }
+.grants-table thead th.num .grants-sort { justify-content: flex-end; }
+.grants-sort:hover { background: #dcebe9; }
+.grants-sort:focus-visible { outline: 3px solid var(--brand-dark); outline-offset: -3px; }
+.grants-arrow { font-size: 0.7rem; color: #7a8c92; min-width: 0.8rem; }
+.grants-table th[aria-sort="ascending"] .grants-arrow, .grants-table th[aria-sort="descending"] .grants-arrow { color: var(--brand-dark); font-size: 0.8rem; }
+.grants-badge { display: inline-block; padding: 0.05rem 0.45rem; border-radius: 0.3rem; border: 1px solid #b8c4c8; background: #f1f4f5; color: #3b4850; font-size: 0.75rem; }
+.grants-badge.yes { background: #e6f2ec; border-color: #9cc4b0; }
+.grants-table td .topic-chips { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.3rem; }
+.grants-table td .topic-chip { font-size: 0.72rem; padding: 0.1rem 0.45rem; }
+.grants-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin: 0 0 0.6rem; padding: 0; list-style: none; }
+.grants-chips button { font: inherit; font-size: 0.8rem; padding: 0.15rem 0.55rem; border: 1px solid var(--brand); border-radius: 999px; background: #fff; color: var(--brand-dark); cursor: pointer; }
+.grants-chips button:hover { background: #edf5f4; }
+.grants-pager { flex-wrap: wrap; }
+.grants-pager label { display: inline-flex; gap: 0.35rem; align-items: center; margin-left: auto; }
+.grants-pager select { font: inherit; padding: 0.25rem; border: 1px solid #8da7af; border-radius: 0.35rem; background: #fff; }
+.grants-field input[type="search"] { font: inherit; padding: 0.35rem; border: 1px solid #8da7af; border-radius: 0.35rem; background: #fff; min-width: 0; }
+.grants-pager { display: flex; gap: 0.75rem; align-items: center; margin-top: 0.6rem; font-size: 0.85rem; }
+.grants-basis ul { margin: 0.5rem 0 0; padding-left: 1.25rem; font-size: 0.85rem; }
+.grants-basis h4 { margin: 1rem 0 0; }
+.grants-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.empty { padding: 1.25rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; }
+.grants-filter-panel > summary { cursor: pointer; font-weight: 700; padding: 0.6rem 0; min-height: 44px; display: flex; align-items: center; }
+.grants-filter-panel > summary:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }

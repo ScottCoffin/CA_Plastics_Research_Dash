@@ -68,6 +68,22 @@ jobs:
           python -m pip install --quiet -c requirements/lock.txt -e .
           python scripts/build_feed.py
 
+      # AT-5 Observable Framework app, published under /app/ beside the classic site (which
+      # stays the root until the owner approves the switch). Best effort: a failed build or
+      # check leaves this deploy with the classic site only.
+      - name: Build Framework app
+        id: framework
+        continue-on-error: true
+        working-directory: framework
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          python ../scripts/check_at5.py --dist dist
+
+      - name: Add Framework app under /app/
+        if: ${{ steps.framework.outcome == 'success' }}
+        run: cp -R framework/dist site/app
+
       - name: Upload static site
         uses: actions/upload-pages-artifact@v5
         with:

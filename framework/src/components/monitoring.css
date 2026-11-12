@@ -1,0 +1,90 @@
+/* Monitoring page styles (AT-5c), lifted from the classic site's <style> block (site/index.html).
+   Every rule is scoped under #monitoring-root so generic class names (.field, .empty, .notice) stay local. */
+
+#monitoring-root {
+  --ink: #17324d;
+  --muted: #536879;
+  --brand: #075a46;
+  --brand-dark: #043e32;
+  --surface: #ffffff;
+  --line: #c8d8dc;
+  --focus: #c45100;
+  color: var(--ink);
+}
+#monitoring-root button, #monitoring-root input, #monitoring-root select { font: inherit; min-height: 2.75rem; }
+#monitoring-root button { cursor: pointer; }
+#monitoring-root h3 { margin: 0; font-size: 1.05rem; }
+#monitoring-root .panel-intro { margin-top: 0; color: var(--muted); }
+#monitoring-root .data-note { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.9rem; }
+#monitoring-root .result-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
+#monitoring-root .notice { margin: 0.75rem 0; padding: 0.7rem 0.85rem; border-left: 0.3rem solid var(--brand); color: #254658; background: #edf7f4; }
+#monitoring-root .empty { padding: 1.25rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; }
+
+#monitoring-root .controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; align-items: end; margin: 1.25rem 0; }
+#monitoring-root .field { display: flex; flex-direction: column; gap: 0.3rem; }
+#monitoring-root .field label { font-size: 0.85rem; font-weight: 700; }
+#monitoring-root .field input, #monitoring-root .field select { width: 100%; padding: 0.55rem 0.65rem; border: 1px solid #8da7af; border-radius: 0.35rem; color: var(--ink); background: #fff; }
+@media (max-width: 45rem) {
+  #monitoring-root .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 30rem) {
+  #monitoring-root .controls { grid-template-columns: 1fr; }
+}
+
+#monitoring-root .facet { margin: 0.75rem 0; border: 1px solid #8da7af; border-radius: 0.5rem; background: #fff; }
+#monitoring-root .facet > summary { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; padding: 0.55rem 0.85rem; border-radius: 0.5rem; background: #e3efed; color: #0b3d31; cursor: pointer; list-style: none; }
+#monitoring-root .facet > summary::-webkit-details-marker { display: none; }
+#monitoring-root .facet > summary:hover { background: #d4e8e4; }
+#monitoring-root .facet[open] > summary { border-radius: 0.5rem 0.5rem 0 0; border-bottom: 1px solid #8da7af; }
+#monitoring-root .facet > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+#monitoring-root .facet > summary h3 { margin: 0; flex: 1 1 auto; font-size: 1.05rem; }
+#monitoring-root .facet-count { color: #3d5560; font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
+#monitoring-root .facet > summary::after { content: ""; flex: 0 0 auto; width: 0.6rem; height: 0.6rem; margin-right: 0.3rem; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; transform: rotate(45deg); transition: transform 0.15s ease; }
+#monitoring-root .facet[open] > summary::after { transform: rotate(-135deg); }
+#monitoring-root .facet > :not(summary) { margin-left: 0.85rem; margin-right: 0.85rem; }
+#monitoring-root .facet > :last-child { margin-bottom: 0.85rem; }
+#monitoring-root .facet-controls { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+#monitoring-root .facet-controls button { border: 1px solid var(--brand); border-radius: 0.35rem; background: #fff; color: var(--brand); padding: 0.45rem 0.8rem; font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+
+#monitoring-root .institution-map-panel { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
+#monitoring-root .monitoring-layout { display: grid; gap: 1rem; }
+#monitoring-root .monitoring-map { overflow: hidden; border: 1px solid #b8ced0; border-radius: 0.45rem; background: #f4f8fb; padding: 0.35rem; touch-action: none; cursor: grab; }
+#monitoring-root .monitoring-map.is-panning { cursor: grabbing; }
+#monitoring-root .monitoring-map-svg { display: block; width: 100%; height: auto; }
+#monitoring-root .monitoring-map-svg .map-sea { fill: #f4f8fb; }
+#monitoring-root .monitoring-map-svg .map-state-waters { fill: #cfe5f2; }
+#monitoring-root .monitoring-map-svg .map-land { fill: #f1efe4; stroke: #7d8775; stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#monitoring-root .map-places { pointer-events: none; }
+#monitoring-root .map-places .place-dot { fill: #56656d; stroke: #fff; stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+#monitoring-root .map-places text { fill: #2f3d45; font-weight: 600; font-family: inherit; paint-order: stroke fill; stroke: #fff; stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
+#monitoring-root .map-places .place-landmark text { fill: #3f6075; font-style: italic; font-weight: 500; }
+#monitoring-root .monitoring-marker circle { stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+#monitoring-root .monitoring-marker.mixed circle { stroke: #1d2a33; }
+#monitoring-root .monitoring-marker text { fill: #fff; font-weight: 800; font-family: inherit; }
+#monitoring-root .monitoring-marker.mixed text { fill: #1d2a33; }
+#monitoring-root .monitoring-marker { cursor: pointer; }
+#monitoring-root .monitoring-marker:focus { outline: none; }
+#monitoring-root .monitoring-marker:focus-visible .marker-body { stroke: var(--focus); stroke-width: 5px; }
+#monitoring-root .monitoring-marker .marker-halo { fill: none; stroke: #0d1b24; stroke-width: 3px; vector-effect: non-scaling-stroke; }
+#monitoring-root .map-hint { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.85rem; }
+#monitoring-root .monitoring-map-controls { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0; }
+#monitoring-root .monitoring-map-controls button { border: 1px solid #8fa5a7; border-radius: 0.35rem; background: #fff; color: #1d2a33; padding: 0.25rem 0.7rem; font: inherit; font-size: 0.85rem; cursor: pointer; }
+#monitoring-root .monitoring-map-controls button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 700; }
+#monitoring-root .monitoring-map-legend ul { display: flex; flex-wrap: wrap; gap: 0.3rem 0.95rem; list-style: none; margin: 0.5rem 0 0; padding: 0; font-size: 0.85rem; }
+#monitoring-root .monitoring-legend-toggle { border: 1px solid #8fa5a7; border-radius: 999px; background: #fff; color: #1d2a33; padding: 0.2rem 0.6rem; font: inherit; font-size: 0.85rem; cursor: pointer; }
+#monitoring-root .monitoring-legend-toggle[aria-pressed="false"] { background: #eef1f2; color: #5b6770; border-style: dashed; }
+#monitoring-root .monitoring-legend-toggle[aria-pressed="false"] .monitoring-swatch { opacity: 0.35; }
+#monitoring-root .monitoring-swatch { display: inline-block; width: 0.8rem; height: 0.8rem; margin-right: 0.3rem; border: 1px solid #5b6770; border-radius: 999px; vertical-align: -0.05rem; }
+#monitoring-root .monitoring-swatch.mixed { background: #fff; border: 2px solid #1d2a33; }
+#monitoring-root .monitoring-map-details { margin-top: 0.6rem; }
+#monitoring-root .map-details-card { border: 1px solid #b8ced0; border-radius: 0.45rem; padding: 0.6rem 0.75rem; background: #fff; }
+#monitoring-root .map-details-head { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: space-between; }
+#monitoring-root .map-details-head h4 { margin: 0; font-size: 1rem; }
+#monitoring-root .map-details-actions { display: flex; gap: 0.4rem; }
+#monitoring-root .map-details-actions button { border: 1px solid var(--brand); border-radius: 0.35rem; background: #fff; color: var(--brand); padding: 0.45rem 0.8rem; font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+
+#monitoring-root .monitoring-table-wrap { overflow-x: auto; }
+#monitoring-root .monitoring-table, #monitoring-root .gaps-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+#monitoring-root .monitoring-table th, #monitoring-root .monitoring-table td, #monitoring-root .gaps-table th, #monitoring-root .gaps-table td { padding: 0.55rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#monitoring-root .monitoring-table th, #monitoring-root .gaps-table th { background: #edf5f4; }
+#monitoring-root .gaps-cell { text-align: center !important; font-variant-numeric: tabular-nums; }

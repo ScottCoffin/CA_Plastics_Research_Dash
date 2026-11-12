@@ -59,6 +59,11 @@ jobs:
       - name: Check serving bundle (AT-4)
         run: python scripts/check_at4.py
 
+      # AT-5: Framework shell guardrails (pin, no external fonts/CDNs, top-level pages,
+      # data files named by pages exist). Static; the build itself runs in build_deploy.yml.
+      - name: Check Framework shell (AT-5)
+        run: python scripts/check_at5.py
+
       # AT-11: committed site payload sizes and index schema.
       - name: Check site payload guards (AT-11)
         run: python scripts/check_ci_guards.py

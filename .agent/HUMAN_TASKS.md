@@ -72,26 +72,21 @@ The Atlas already hides these abstracts; this fixes them for everyone.
    > plastics; please remove the abstract_inverted_index for them.
 - **Done when:** submitted. Tell the agent "OpenAlex report sent".
 
-### H13. Add the MiniSearch library file (AT4-SEARCH, 2 minutes)
-You chose MiniSearch (MIT licence, free). The agent's permission settings blocked it from
-downloading third-party code, so either:
-- **Option A (simplest):** tell the agent "you may download MiniSearch 7.2.0 from jsDelivr",
-  and approve the download prompt when it appears; or
-- **Option B:** download https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.js and
-  save it as `site/assets/vendor/minisearch-7.2.0.js` (create the `vendor` folder), and save
-  https://cdn.jsdelivr.net/npm/minisearch@7.2.0/LICENSE.txt next to it as
-  `site/assets/vendor/minisearch-LICENSE.txt`.
-- **Done when:** the file is in place (or you have given permission). Tell the agent
-  "MiniSearch ready". It then wires it in and adds the REUSE entry.
-
-### H14. Approve installing Observable Framework (EM5-FRAMEWORK, AT-5)
-You chose to move the site to Observable Framework before the evidence map. That needs Node
-packages (`@observablehq/framework@1.13.4`, the version already approved for G-SHELL)
-installed in a new `framework/` folder.
-1. Tell the agent "you may run npm install for Observable Framework 1.13.4".
-2. Approve the npm prompt when it appears.
-- **Done when:** the install has run. The agent then builds the AT-5 shell step by step,
-  keeping the current site live until the new one passes the same checks.
+### H16. Compare the new Framework pages with the current site (AT-5, 15 minutes)
+The site is being moved to Observable Framework one page at a time. After the next deploy the
+new pages run at https://plastiverse.live/app/ next to the current site, which stays the
+main site until you approve the switch.
+1. Open https://plastiverse.live/app/ and click through Experts, Institutions, Monitoring,
+   Funding and About. Each should show the same data and controls as the matching tab at
+   https://plastiverse.live/ (the layout differs: a left sidebar instead of tabs).
+2. Try a few things you use: an expert search, the "Find up-and-coming researchers" button,
+   an expert's drawer, the institutions map and tiers, the monitoring map, the funding filters
+   and CSV download.
+3. Locally, without deploying: `cd framework && npm run build`, then
+   `py -3.14 scripts/serve_framework_preview.py` and open
+   http://127.0.0.1:8766/CA_Plastics_Research_Dash/app/ .
+- **Done when:** you reply "Framework pages OK, switch" (the agent then makes the Framework
+  app the main site and keeps the old pages as redirects), or list what differs.
 
 ### H15. Look at the new expert pages (after the next deploy)
 Open https://plastiverse.live/#experts. The list is now sorted by plastics citations.
@@ -150,6 +145,8 @@ come with its own Streamlit app and run command here.
 ---
 
 ## Done
+- **H13 MiniSearch / H14 Framework install** (2026-11-12): MiniSearch 7.2.0 vendored and wired;
+  Observable Framework 1.13.4 installed in `framework/`.
 - **H4 photos** (2026-11-11): 43 approved, 1 rejected; approved photos ship with the next export.
 - **H5 questions** (2026-11-12): AT4-SEARCH MiniSearch (see H13), AT11-WINDOW cap at yesterday
   (applied), CA-CARRY-ORCID drop contradicted years (applied), EM5-FRAMEWORK Framework first

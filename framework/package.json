@@ -3,7 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "sync": "node scripts/sync_shared.mjs",
+    "predev": "node scripts/sync_shared.mjs",
     "dev": "observable preview",
+    "prebuild": "node scripts/sync_shared.mjs",
     "build": "observable build"
   },
   "dependencies": {

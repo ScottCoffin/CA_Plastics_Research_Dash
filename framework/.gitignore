@@ -1,0 +1,6 @@
+dist/
+dist-*/
+node_modules/
+# Copied from site/assets by scripts/sync_shared.mjs before every build/preview (single source of truth stays in site/).
+src/components/shared/
+src/.observablehq/cache/

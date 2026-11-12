@@ -28,6 +28,8 @@ _SKIP_DIRS = {
     "output",
     "scratch",
 }
+# Observable Framework page sources use clean URLs (./experts); `observable build` validates them.
+_SKIP_PATHS = {("framework", "src")}
 
 
 def _blank(value: str) -> str:
@@ -194,7 +196,11 @@ def _display(path: Path, root: Path) -> str:
 def _walk_markdown(directory: Path) -> list[Path]:
     files: list[Path] = []
     for current, directories, names in os.walk(directory):
-        directories[:] = sorted(name for name in directories if name not in _SKIP_DIRS)
+        directories[:] = sorted(
+            name
+            for name in directories
+            if name not in _SKIP_DIRS and (Path(current).name, name) not in _SKIP_PATHS
+        )
         files.extend(Path(current) / name for name in names if Path(name).suffix.lower() == ".md")
     return files
 

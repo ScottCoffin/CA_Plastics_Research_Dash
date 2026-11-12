@@ -296,3 +296,9 @@ until it reports.
 
 ## 2026-11-11: owner-reviewed files must be write-protected from rebuilds
 - A registry rebuild re-ranked the top 100 and rewrote `institution_review_top100.csv`, silently dropping 100 owner reviews on 2026-11-06; checks then passed against the blank file for days. Any generator that writes a file carrying owner annotations must refuse to overwrite reviewed rows; checks should assert the reviewed count (S1.2 now reports 100/100).
+
+## 2026-11-12 AT-5 Framework ports
+- Haiku workers porting a whole classic tab (300-600 lines) hit the 30-turn limit every time; one "continue, be economical" message finished each. Budget a resume per large port, or split by file.
+- Observable Framework: a top-level `const view` in a page shadows the builtin `view()` and breaks interpolation (`Cannot read properties of undefined`). Framework's default head links Google Fonts; set `globalStylesheets: []`.
+- The Bash safety parser rejects heredocs containing `${...}` in some shells ("could not be checked for dangerous rm"); write such files with the Write tool or a Python generator.
+- Headless Edge `--dump-dom --virtual-time-budget` is a reliable Windows browser smoke when the WSL Playwright browser is missing; one render in ~6 can stop early, so rerun before calling a page broken.

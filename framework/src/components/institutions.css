@@ -1,0 +1,127 @@
+/* Institutions page styles (AT-5e), lifted from the classic site's <style> block (site/index.html).
+   Every rule is scoped under #institutions-root so generic class names (.field, .empty, .card) stay local. */
+
+#institutions-root {
+  --ink: #17324d;
+  --muted: #536879;
+  --brand: #075a46;
+  --brand-dark: #043e32;
+  --surface: #ffffff;
+  --line: #c8d8dc;
+  --focus: #c45100;
+  color: var(--ink);
+}
+#institutions-root :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+#institutions-root button, #institutions-root input, #institutions-root select { font: inherit; min-height: 2.75rem; }
+#institutions-root button { cursor: pointer; }
+#institutions-root h3 { margin: 0; font-size: 1.05rem; }
+#institutions-root h4 { margin: 0; font-size: 1rem; }
+#institutions-root .panel-intro { margin-top: 0; color: var(--muted); }
+#institutions-root .data-note { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.9rem; }
+#institutions-root .result-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
+#institutions-root .empty { padding: 1.25rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; }
+#institutions-root .field { display: flex; flex-direction: column; gap: 0.3rem; }
+#institutions-root .field label { font-size: 0.85rem; font-weight: 700; }
+#institutions-root .field select { width: 100%; padding: 0.55rem 0.65rem; border: 1px solid #8da7af; border-radius: 0.35rem; color: var(--ink); background: #fff; }
+
+#institutions-root .institution-toolbar { display: grid; gap: 0.65rem; margin: 1.25rem 0; }
+#institutions-root .institution-type-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+#institutions-root .chip-button { border: 1px solid #8da7af; border-radius: 999px; padding: 0.28rem 0.6rem; color: #24445a; background: #fff; font-size: 0.82rem; }
+#institutions-root .chip-button[aria-pressed="true"] { border-color: var(--brand); color: #fff; background: var(--brand); }
+#institutions-root .institution-sort-row { display: flex; flex-wrap: wrap; gap: 0.65rem 1rem; align-items: end; }
+#institutions-root .institution-sort-row .field { min-width: 12rem; flex: 1 1 12rem; max-width: 22rem; }
+#institutions-root .institution-collab-field { align-self: center; }
+#institutions-root .institution-collab-field label { display: flex; align-items: center; gap: 0.45rem; font-weight: 600; }
+#institutions-root .institution-collab-field input { width: 1.2rem; height: 1.2rem; margin: 0; }
+#institutions-root .institutions-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr); gap: 1rem; align-items: start; }
+#institutions-root .cards { display: grid; gap: 0.65rem; }
+#institutions-root #institution-list[hidden] { display: none; }
+
+#institutions-root .card { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
+#institutions-root .card-header { display: flex; justify-content: space-between; gap: 0.75rem; }
+#institutions-root .card-header h3 { color: var(--brand-dark); }
+#institutions-root .institution-card { display: grid; gap: 0.5rem; }
+#institutions-root .institution-card .card-header { align-items: start; }
+#institutions-root .chip { display: inline-block; padding: 0.18rem 0.45rem; border-radius: 999px; color: #24445a; background: #e6eff2; font-size: 0.78rem; }
+#institutions-root .institution-stats { display: flex; flex-wrap: wrap; gap: 0.45rem 1rem; margin: 0; color: var(--muted); font-size: 0.9rem; }
+#institutions-root .institution-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+#institutions-root .institution-expert-link { border: 1px solid var(--brand); border-radius: 0.35rem; padding: 0.38rem 0.6rem; color: var(--brand-dark); background: #fff; font-weight: 700; }
+#institutions-root .institution-topics { display: grid; gap: 0.4rem; }
+#institutions-root .button-link { display: inline-block; border: 1px solid var(--brand); border-radius: 0.4rem; padding: 0.4rem 0.75rem; color: #fff; background: var(--brand-dark); font-weight: 650; font-size: 0.9rem; text-decoration: none; }
+#institutions-root .button-link:hover, #institutions-root .button-link:focus-visible { background: var(--brand); color: #fff; }
+#institutions-root .sparkline { display: block; width: 100%; max-width: 13rem; height: 2.2rem; overflow: visible; }
+#institutions-root .sparkline polyline { fill: none; stroke: var(--brand); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+#institutions-root .sparkline circle { fill: var(--brand); }
+#institutions-root .collab-badge { display: inline-block; padding: 0.1rem 0.55rem; border-radius: 999px; background: #fff4ec; border: 1px solid #f2c9a8; color: #6b2100; font-size: 0.78rem; font-weight: 700; }
+#institutions-root .collab-line { margin: 0.25rem 0; color: #6b2100; font-size: 0.9rem; }
+#institutions-root .primary-topic-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0; font-size: 0.9rem; font-weight: 700; color: var(--ink); }
+#institutions-root .basis-note { color: var(--muted); font-weight: 400; }
+#institutions-root .detail-meta { color: var(--muted); }
+#institutions-root .top-experts { margin: 0.4rem 0; }
+#institutions-root .top-experts h4 { margin: 0 0 0.25rem; font-size: 0.85rem; }
+#institutions-root .top-experts ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
+#institutions-root .top-experts li { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; align-items: center; }
+#institutions-root .top-experts .expert-name { font-weight: 700; }
+#institutions-root .topic-bar { display: block; width: 100%; height: 0.85rem; border-radius: 0.3rem; overflow: hidden; background: #e6eff2; }
+#institutions-root .topic-bar rect { stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+#institutions-root .topic-bar-note { margin: 0; color: var(--muted); font-size: 0.8rem; }
+
+#institutions-root .institution-map-panel { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
+#institutions-root .institution-map-panel.is-sticky { position: sticky; top: 0.5rem; max-height: calc(100vh - 1rem); overflow: auto; }
+#institutions-root .map-hint { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.85rem; }
+#institutions-root .monitoring-map-controls { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0; }
+#institutions-root .monitoring-map-controls button { border: 1px solid #8fa5a7; border-radius: 0.35rem; background: #fff; color: #1d2a33; padding: 0.25rem 0.7rem; font: inherit; font-size: 0.85rem; cursor: pointer; }
+#institutions-root .monitoring-map-controls button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 700; }
+#institutions-root .monitoring-map { overflow: hidden; border: 1px solid #b8ced0; border-radius: 0.45rem; background: #f4f8fb; padding: 0.35rem; touch-action: none; cursor: grab; }
+#institutions-root .monitoring-map.is-panning { cursor: grabbing; }
+#institutions-root .monitoring-map-svg { display: block; width: 100%; height: auto; }
+#institutions-root .monitoring-map-svg .map-sea { fill: #f4f8fb; }
+#institutions-root .monitoring-map-svg .map-state-waters { fill: #cfe5f2; }
+#institutions-root .monitoring-map-svg .map-land { fill: #f1efe4; stroke: #7d8775; stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#institutions-root .map-places { pointer-events: none; }
+#institutions-root .map-places .place-dot { fill: #56656d; stroke: #fff; stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+#institutions-root .map-places text { fill: #2f3d45; font-weight: 600; font-family: inherit; paint-order: stroke fill; stroke: #fff; stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
+#institutions-root .map-places .place-landmark text { fill: #3f6075; font-style: italic; font-weight: 500; }
+#institutions-root .monitoring-marker { cursor: pointer; }
+#institutions-root .monitoring-marker:focus { outline: none; }
+#institutions-root .monitoring-marker:focus-visible .marker-body { stroke: var(--focus); stroke-width: 5px; }
+#institutions-root .monitoring-marker circle { stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+#institutions-root .monitoring-marker text { fill: #fff; font-weight: 800; font-family: inherit; }
+#institutions-root .monitoring-marker .marker-halo { fill: none; stroke: #0d1b24; stroke-width: 3px; vector-effect: non-scaling-stroke; }
+#institutions-root .institution-map .institution-marker .marker-body { fill: var(--brand); }
+#institutions-root .institution-map .institution-marker.cluster .marker-body { fill: #c45100; }
+#institutions-root .monitoring-map-details { margin-top: 0.6rem; }
+#institutions-root .map-details-card { border: 1px solid #b8ced0; border-radius: 0.45rem; padding: 0.6rem 0.75rem; background: #fff; }
+#institutions-root .map-details-head { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: space-between; }
+#institutions-root .map-details-actions { display: flex; gap: 0.4rem; }
+#institutions-root .map-details-actions button { border: 1px solid var(--brand); border-radius: 0.35rem; background: #fff; color: var(--brand); padding: 0.45rem 0.8rem; font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+#institutions-root .map-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.8rem; margin-top: 0.6rem; color: var(--muted); font-size: 0.8rem; }
+#institutions-root .map-legend span::before { content: ""; display: inline-block; width: 0.7rem; height: 0.7rem; margin-right: 0.25rem; border-radius: 50%; background: var(--brand); vertical-align: -0.05rem; }
+#institutions-root .map-legend span.cluster::before { background: #c45100; }
+#institutions-root .map-inst { padding: 0.5rem 0; border-top: 1px solid var(--line); display: grid; gap: 0.45rem; }
+#institutions-root .map-inst:first-of-type { border-top: 0; }
+#institutions-root .map-inst h5 { margin: 0; font-size: 0.98rem; color: var(--brand-dark); }
+#institutions-root .map-inst-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: 0.35rem 0.75rem; margin: 0; }
+#institutions-root .map-inst-stats dt { color: var(--muted); font-size: 0.75rem; }
+#institutions-root .map-inst-stats dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+#institutions-root .tier-note { margin: 0 0 0.75rem; }
+#institutions-root .tier-group { margin: 0 0 0.6rem; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--surface); }
+#institutions-root .tier-group > summary { cursor: pointer; padding: 0.7rem 0.85rem; font-weight: 600; }
+#institutions-root .tier-list { margin: 0; padding: 0 0.85rem 0.5rem; list-style: none; }
+#institutions-root .tier-row { display: grid; grid-template-columns: minmax(0, 2.2fr) auto auto minmax(0, 2.4fr) auto; gap: 0.25rem 0.6rem; align-items: center; padding: 0.45rem 0; border-top: 1px solid var(--line); font-size: 0.9rem; }
+#institutions-root .tier-name { min-height: 2.75rem; padding: 0; border: 0; color: var(--brand-dark); background: none; text-align: left; text-decoration: underline; }
+#institutions-root .tier-frac { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.1rem 0.5rem; }
+#institutions-root .tier-full, #institutions-root .tier-rank { color: var(--muted); }
+#institutions-root .tier-bar { flex: none; max-width: 100%; }
+#institutions-root .tier-bar-axis { stroke: var(--line); stroke-width: 1; }
+#institutions-root .tier-bar-range { stroke: var(--brand); stroke-width: 4; stroke-linecap: round; }
+#institutions-root .tier-bar-dot { fill: var(--ink); stroke: var(--surface); stroke-width: 1; }
+
+@media (max-width: 45rem) {
+  #institutions-root .institutions-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 40rem) {
+  #institutions-root .tier-row { grid-template-columns: 1fr auto; }
+  #institutions-root .tier-name, #institutions-root .tier-frac { grid-column: 1 / -1; }
+}

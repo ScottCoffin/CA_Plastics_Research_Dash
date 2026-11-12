@@ -585,3 +585,8 @@ the implementing task's acceptance passes.
 
 ## ADR-OUTREACH-EMAILS-2026-11-12: Emails allowed only in data/private/
 - Owner answer OUTREACH-EMAILS: expert emails may be stored only in gitignored `data/private/`, only for owner-sent outreach (S9.6). Committed tables and public payloads stay email-free (normalization redaction unchanged).
+
+## ADR-AT5-SHELL-2026-11-12: Framework app beside the classic site, lift-and-shift ports
+- **Context:** owner chose the Framework migration (ADR-EM5-FRAMEWORK-2026-11-12) and asked to avoid regressions.
+- **Decision:** `framework/` builds to `dist/`; the deploy copies it to `site/app/` (best-effort step, so a failed Framework build never blocks the classic deploy). The classic `site/` stays the live root until the owner approves the switch after a parity review (H16). Tabs are ported lift-and-shift (same markup, scoped CSS, same logic as ES modules, DOM-free helpers tested in Node), not rewritten in Plot/Inputs; Framework idioms are for new pages (EM-5+). Pages read the classic payloads at runtime from `../data/` (one copy of the data; every page is top-level in `src/`); shared helpers are copied from `site/assets/` at build. No external fonts/CDNs (`globalStylesheets: []`). `npm audit` findings are build-time only; keep the 1.13.4 pin.
+- **Switch plan (after H16):** build Framework at the root, move classic-only pages (`grants.html`, `sem.html`, `expert.html`, `status.html`, `feed.xml`, `data/`, `assets/`) alongside, and make `index.html#<tab>?...` redirect to the matching page hash.
