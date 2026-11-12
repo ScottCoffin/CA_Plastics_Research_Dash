@@ -1,6 +1,6 @@
 // Evidence map shell (Add-on A2 §5, EM-5b): shared filter state in the URL hash, A1 bit-set facets
 // (AT-4 engine), distinct works only, a shared works drawer and a related-resources strip. The
-// views (V-1..V-5) arrive with EM-6..EM-10 and are placeholders in evidence.md for now.
+// views V-3 and V-4 mount here; the other views are not built yet and have no sections in evidence.md.
 // Pure helpers live in evidence_model.js; this file owns the DOM.
 import "./shared/facets.js";
 import "./shared/topics.js";
@@ -73,12 +73,14 @@ function optionName(ui, label) {
 
 function buildFilterGroups(container, index) {
   for (const ui of FACET_UI) {
+    const labels = (index.facets[ui.key] || []).map((item) => item.label);
+    // A facet with no options in the bundle gets no group, so the intro never lists a missing filter.
+    if (!labels.length) continue;
     const fieldset = document.createElement("fieldset");
     fieldset.className = "ev-group";
     const legend = document.createElement("legend");
     legend.textContent = ui.label;
     fieldset.append(legend);
-    const labels = (index.facets[ui.key] || []).map((item) => item.label);
     labels.sort((a, b) => optionName(ui, a).localeCompare(optionName(ui, b)));
     for (const label of labels) {
       const row = document.createElement("label");
@@ -259,33 +261,71 @@ function bindFilters() {
   window.addEventListener("hashchange", () => setState(parseHash(location.hash), {sync: true}));
 }
 
-export async function mountEvidence() {
-  const status = $("evidence-status");
-  // V-3 (EM-6) needs only the methods card export, so it renders independently of the bundle.
-  mountV3Flow($("ev-v3")).catch(() => {});
-  const linkouts = loadJson("linkouts.json", {optional: true})
-    .then((data) => (Array.isArray(data?.entries) ? data.entries : null))
-    .catch(() => null);
+// A view section stays hidden until its container has content, so a failed view leaves no empty heading.
+function settleSection(container, mounted) {
+  const section = container.closest("section");
+  section.hidden = true;
+  return mounted.then(
+    () => {
+      section.hidden = !container.hasChildNodes();
+    },
+    () => {
+      section.hidden = true;
+    }
+  );
+}
+
+function showStatus(text) {
+  $("evidence-status").textContent = text;
+}
+
+function showFailed() {
+  const retry = document.createElement("button");
+  retry.type = "button";
+  retry.textContent = "Retry";
+  retry.addEventListener("click", () => loadBundle());
+  $("evidence-status").replaceChildren("Could not load the evidence data. ", retry);
+}
+
+let linkoutsPromise = null;
+let bound = false;
+
+// Loads the bundle and wires the controls once. A failed load shows a retry button; a retry re-runs this.
+async function loadBundle() {
+  showStatus("Loading the evidence bundle…");
+  let index;
   try {
-    app.index = await window.AtlasFacets.BitmaskIndex.load(dataUrl("bundle/"));
-  } catch (error) {
-    status.textContent = `Could not load the evidence bundle: ${error.message}`;
+    index = await window.AtlasFacets.BitmaskIndex.load(dataUrl("bundle/"));
+  } catch {
+    showFailed();
     return;
   }
-  const index = app.index;
+  app.index = index;
   app.known = Object.fromEntries(
     Object.keys(index.facets).map((key) => [key, new Set(index.facets[key].map((item) => item.label))])
   );
   app.yearLabels = (index.facets.year || []).map((item) => item.label);
-  buildFilterGroups($("evidence-groups"), index);
-  bindFilters();
-  bindDrawer();
+  if (!bound) {
+    buildFilterGroups($("evidence-groups"), index);
+    bindFilters();
+    bindDrawer();
+    bound = true;
+  }
   app.state = sanitizeState(parseHash(location.hash), app.known);
-  status.textContent = "";
   $("evidence-show-works").disabled = false;
   setState(app.state, {sync: true});
-  app.linkouts = await linkouts;
+  showStatus(`Loaded ${formatCount(index.N)} works.`);
+  app.linkouts = await linkoutsPromise;
   renderStrip();
   // V-4 (EM-7): whole-corpus trends from the same bit-set index (not filtered by the selection).
-  mountV4Trend($("ev-v4"), index).catch(() => {});
+  settleSection($("ev-v4"), mountV4Trend($("ev-v4"), index));
+}
+
+export async function mountEvidence() {
+  // V-3 (EM-6) needs only the methods card export, so it renders independently of the bundle.
+  settleSection($("ev-v3"), mountV3Flow($("ev-v3")));
+  linkoutsPromise = loadJson("linkouts.json", {optional: true})
+    .then((data) => (Array.isArray(data?.entries) ? data.entries : null))
+    .catch(() => null);
+  await loadBundle();
 }

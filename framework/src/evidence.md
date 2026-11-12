@@ -4,7 +4,9 @@ title: Evidence map
 
 # Evidence map
 
-Filter the atlas's distinct works by topic, sector, work type, open access, California leadership, plastic relevance and year, then open the works behind any count.
+Filter the atlas's distinct works by words in the title, year range, topic, sector, work type, open access, California leadership and plastic relevance, then open the works behind any count.
+
+<p class="ev-notice">In development: an evidence matrix, a map of sampled locations and a review overlay will be added here.</p>
 
 <link rel="stylesheet" href="./components/evidence.css">
 <link rel="stylesheet" href="./components/v3_flow.css">
@@ -28,20 +30,17 @@ Filter the atlas's distinct works by topic, sector, work type, open access, Cali
         <button id="evidence-show-works" type="button" disabled>Show works</button>
       </div>
       <section id="evidence-strip" class="ev-strip" aria-labelledby="evidence-strip-heading" hidden>
-        <h3 id="evidence-strip-heading">Related resources</h3>
+        <h2 id="evidence-strip-heading">Related resources</h2>
         <ul id="evidence-strip-list" class="ev-strip-list"></ul>
         <p id="evidence-strip-note" class="data-note"></p>
       </section>
-      <section class="ev-view" aria-labelledby="ev-v1-heading"><h3 id="ev-v1-heading">Evidence matrix</h3><p class="ev-placeholder">In development.</p></section>
-      <section class="ev-view" aria-labelledby="ev-v2-heading"><h3 id="ev-v2-heading">Sampled-location atlas</h3><p class="ev-placeholder">In development.</p></section>
-      <section class="ev-view" aria-labelledby="ev-v3-heading"><h3 id="ev-v3-heading">Pipeline flow</h3><div id="ev-v3"></div></section>
-      <section class="ev-view" aria-labelledby="ev-v4-heading"><h3 id="ev-v4-heading">Trend panel</h3><div id="ev-v4"></div></section>
-      <section class="ev-view" aria-labelledby="ev-v5-heading"><h3 id="ev-v5-heading">Review overlay</h3><p class="ev-placeholder">In development.</p></section>
+      <section class="ev-view" aria-labelledby="ev-v3-heading" hidden><h2 id="ev-v3-heading">Pipeline flow</h2><div id="ev-v3"></div></section>
+      <section class="ev-view" aria-labelledby="ev-v4-heading" hidden><h2 id="ev-v4-heading">Trend panel</h2><div id="ev-v4"></div></section>
     </div>
   </div>
   <dialog id="evidence-drawer" class="ev-drawer" role="dialog" aria-modal="true" aria-labelledby="evidence-drawer-title">
     <div class="ev-drawer-body">
-      <header class="ev-drawer-head"><h3 id="evidence-drawer-title">Works</h3><button id="evidence-drawer-close" type="button">Close</button></header>
+      <header class="ev-drawer-head"><h2 id="evidence-drawer-title">Works</h2><button id="evidence-drawer-close" type="button">Close</button></header>
       <p id="evidence-drawer-count" class="result-count" aria-live="polite"></p>
       <ol id="evidence-drawer-list" class="ev-drawer-list"></ol>
       <nav class="ev-pager" aria-label="Work pages"><button id="evidence-drawer-prev" type="button">Previous</button><span id="evidence-drawer-page"></span><button id="evidence-drawer-next" type="button">Next</button></nav>

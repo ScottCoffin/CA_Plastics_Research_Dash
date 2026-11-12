@@ -113,3 +113,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-12 | EM-7 V-4 trend | (result) | trend_global.json (1 request, 10 credits) + v4_trend.js | Accepted after one continue (30-turn limit) | 2 sessions; ~88K subagent tokens |
 | 2026-11-12 | UX-2 expert ids | haiku-developer | site/expert.html, site/assets/expert_page.js, tests/test_expert_page_ids.py | Accepted first pass (9 tests; lead browser-checked) | 1 session; ~60K subagent tokens |
 | 2026-11-12 | UX-3 public text | haiku-developer | page copy (classic + Framework), dtsc labels, scripts/check_public_text.py + tests | Accepted first pass (13 tests); lead wired CI | 1 session; ~48K subagent tokens |
+| 2026-11-12 | UX-4 evidence honest state | haiku-developer | framework/src/evidence.md, components/evidence.{js,css}, tests/test_ux4_evidence.py | Accepted after one continue (30-turn limit); lead fixed V-4 headings under UX-23 | 2 sessions; ~62K subagent tokens |
