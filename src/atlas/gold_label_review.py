@@ -13,6 +13,7 @@ import csv
 import io
 import json
 import os
+import re
 import tempfile
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
@@ -128,6 +129,18 @@ STUDY_TYPES: dict[str, str] = {
 }
 
 
+def normalize_label(text: str) -> str:
+    """A typed design label in the sheet's snake_case style: 'Field survey ' -> 'field_survey'."""
+    words = re.findall(r"[a-z0-9]+", str(text or "").lower())
+    return "_".join(words)
+
+
+def study_type_options(rows: Sequence[Mapping[str, str]]) -> list[str]:
+    """The guide's design labels, then any new labels already saved in the sheet (sorted)."""
+    custom = {row.get("study_type", "").strip() for row in rows} - set(STUDY_TYPES) - {""}
+    return [*STUDY_TYPES, *sorted(custom)]
+
+
 # --- corpus and sample -----------------------------------------------------------------
 
 
@@ -150,53 +163,110 @@ LEAK_CANDIDATES = Path("data/interim/leak_candidates.parquet")
 RAW_WORKS = Path("data/interim/works_raw.parquet")
 
 
+WORK_FIELDS = ("work_id", "title", "abstract", "year", "doi", "journal", "authors")
+
+
+def _raw_record(openalex_id: str, raw_json: str | None) -> dict[str, Any]:
+    work = json.loads(raw_json or "{}")
+    source = ((work.get("primary_location") or {}).get("source") or {}).get("display_name")
+    return {
+        "work_id": str(openalex_id).rsplit("/", 1)[-1],
+        "title": work.get("title") or work.get("display_name") or "",
+        "abstract": _abstract_from_inverted_index(work.get("abstract_inverted_index")),
+        "year": work.get("publication_year"),
+        "doi": work.get("doi") or "",
+        "journal": source or "",
+        "authors": [
+            str((a.get("author") or {}).get("display_name") or "")
+            for a in work.get("authorships") or []
+            if (a.get("author") or {}).get("display_name")
+        ],
+    }
+
+
+def _authors_by_work(path: Path, wanted: set[str] | None) -> dict[str, list[str]]:
+    """work_id -> author names in authorship order (the file keeps OpenAlex order)."""
+    out: dict[str, list[str]] = {}
+    if not Path(path).exists():
+        return out
+    for row in pq.read_table(path, columns=["work_id", "author_name"]).to_pylist():
+        work_id = str(row["work_id"])
+        if (wanted is None or work_id in wanted) and row["author_name"]:
+            out.setdefault(work_id, []).append(str(row["author_name"]))
+    return out
+
+
 def load_works(
     path: Path,
     work_ids: Iterable[str] | None = None,
     *,
     fallbacks: Sequence[Path] = (LEAK_CANDIDATES, RAW_WORKS),
+    authorships: Path | None = None,
 ) -> dict[str, dict[str, Any]]:
-    """work_id -> {work_id, title, abstract, year}.
+    """work_id -> {work_id, title, abstract, year, doi, journal, authors}.
 
-    The normalized works parquet comes first. The S4.2 leak-test works come from outside
-    the corpus (``leak_candidates.parquet``), and a few pool works were collapsed or
-    suppressed at normalization, so missing ids fall back to those files and then to the
-    raw OpenAlex table (``raw_json``).
+    The normalized works parquet comes first, with author names from ``authorships.parquet``
+    beside it (or ``authorships``). The S4.2 leak-test works come from outside the corpus
+    (``leak_candidates.parquet``), and a few pool works were collapsed or suppressed at
+    normalization, so missing ids fall back to those files and then to the raw OpenAlex
+    table (``raw_json``). Missing display fields are filled from later sources.
     """
     wanted = None if work_ids is None else set(work_ids)
     out: dict[str, dict[str, Any]] = {}
 
     def take(record: Mapping[str, Any]) -> None:
         work_id = str(record["work_id"])
-        if (wanted is None or work_id in wanted) and work_id not in out:
-            out[work_id] = {k: record.get(k) for k in ("work_id", "title", "abstract", "year")}
+        if wanted is not None and work_id not in wanted:
+            return
+        current = out.setdefault(work_id, {k: None for k in WORK_FIELDS} | {"work_id": work_id})
+        for key in WORK_FIELDS:
+            if not current.get(key) and record.get(key):
+                current[key] = record[key]
 
-    for record in pq.read_table(path, columns=["work_id", "title", "abstract", "year"]).to_pylist():
-        take(record)
+    names = pq.read_schema(path).names
+    cols = [c for c in WORK_FIELDS if c in names]
+    authors = _authors_by_work(authorships or Path(path).with_name("authorships.parquet"), wanted)
+    for record in pq.read_table(path, columns=cols).to_pylist():
+        take({**record, "authors": authors.get(str(record["work_id"]))})
+
+    def incomplete() -> bool:
+        if wanted is None or not wanted <= out.keys():
+            return True
+        return any(not out[i].get(k) for i in wanted for k in ("doi", "journal", "authors"))
+
     for fallback in fallbacks:
-        if wanted is not None and wanted <= out.keys():
+        if not incomplete():
             break
         if not Path(fallback).exists():
             continue
         names = pq.read_schema(fallback).names
         if "raw_json" in names:
             for row in pq.read_table(fallback, columns=["openalex_id", "raw_json"]).to_pylist():
-                work = json.loads(row["raw_json"] or "{}")
-                take(
-                    {
-                        "work_id": str(row["openalex_id"]).rsplit("/", 1)[-1],
-                        "title": work.get("title") or work.get("display_name") or "",
-                        "abstract": _abstract_from_inverted_index(
-                            work.get("abstract_inverted_index")
-                        ),
-                        "year": work.get("publication_year"),
-                    }
-                )
+                work_id = str(row["openalex_id"]).rsplit("/", 1)[-1]
+                if wanted is None or work_id in wanted:
+                    take(_raw_record(row["openalex_id"], row["raw_json"]))
         elif {"work_id", "title", "year"} <= set(names):
-            cols = [c for c in ("work_id", "title", "abstract", "year") if c in names]
+            cols = [c for c in WORK_FIELDS if c in names]
             for record in pq.read_table(fallback, columns=cols).to_pylist():
                 take(record)
     return out
+
+
+def paper_link(work: Mapping[str, Any], work_id: str) -> str:
+    """The DOI resolver URL when there is a DOI, else the OpenAlex page."""
+    doi = str(work.get("doi") or "").strip()
+    if doi:
+        doi = re.sub(r"^(https?://(dx\.)?doi\.org/|doi:)", "", doi, flags=re.I)
+        return f"https://doi.org/{doi}"
+    return f"https://openalex.org/{work_id}"
+
+
+def author_line(authors: Sequence[str] | None, limit: int = 8) -> str:
+    """'A, B, C' or 'A, B, ... (12 authors), Z' when there are many."""
+    names = [str(n) for n in authors or [] if str(n).strip()]
+    if len(names) <= limit:
+        return ", ".join(names)
+    return f"{', '.join(names[: limit - 1])}, ... ({len(names)} authors), {names[-1]}"
 
 
 def split_index(split_rows: Sequence[Mapping[str, Any]]) -> dict[str, dict[str, Any]]:
@@ -349,7 +419,8 @@ def validate_row(
 def values_from_form(form: Mapping[str, Any], decision_status: str) -> dict[str, str]:
     """Map widget values to the sheet fields for one save.
 
-    A negative work gets no tier and no domain tags (guide_v1 section 2). An adjudication
+    A negative work gets no tier, domain tags, ca_sampled or study_type: once a work is
+    marked not plastic-related nothing else is asked (owner, 2026-11-11). An adjudication
     hold clears every label, because the importer rejects labels on unresolved rows, and
     keeps the evidence note, which the importer requires.
     """
@@ -377,8 +448,8 @@ def values_from_form(form: Mapping[str, Any], decision_status: str) -> dict[str,
     return {
         "plastic_related": text("plastic_related"),
         "plastic_tier": text("plastic_tier") if related else "",
-        "ca_sampled": text("ca_sampled"),
-        "study_type": text("study_type"),
+        "ca_sampled": text("ca_sampled") if related else "",
+        "study_type": normalize_label(text("study_type")) if related else "",
         "domain_tags": "|".join(tags) if related else "",
         "evidence_snippet": snippet,
         "evidence_source": source,

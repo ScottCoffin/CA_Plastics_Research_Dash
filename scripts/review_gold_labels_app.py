@@ -37,6 +37,7 @@ CA_HELP = (
     "lab-only work do not count."
 )
 TIER_HELP_TEXT = "guide_v1 section 2. Shown only when plastic_related is yes."
+NEW_LABEL = "__new__"
 
 
 def _sheet_path() -> Path:
@@ -80,6 +81,12 @@ def _save(work_id: str, status: str) -> None:
     view = st.session_state.view
     before = [row["work_id"] for row in gl.queue(gl.read_rows(SHEET), view)]
     form = {field: st.session_state.get(_key(work_id, field)) for field in gl.FORM_FIELDS}
+    if form["study_type"] == NEW_LABEL:
+        typed = gl.normalize_label(st.session_state.get(_key(work_id, "study_type_new")) or "")
+        if not typed and status == "complete" and form["plastic_related"] == "true":
+            st.session_state.flash = ("error", "Not saved: type the new design label first.")
+            return
+        form["study_type"] = typed
     try:
         gl.save_decision(SHEET, work_id, form, status, gl.split_index(_splits()))
     except (ValueError, KeyError) as error:
@@ -113,7 +120,15 @@ def _defaults(row: dict[str, str]) -> dict[str, Any]:
     }
 
 
-def _draw_form(row: dict[str, str]) -> None:
+def _design_label(value: str) -> str:
+    if value == NEW_LABEL:
+        return "+ Create a new design label"
+    if not value:
+        return "Choose a design"
+    return value if value in gl.STUDY_TYPES else f"{value} (new label)"
+
+
+def _draw_form(row: dict[str, str], design_options: list[str]) -> None:
     work_id = row["work_id"]
     init = _defaults(row)
 
@@ -148,29 +163,41 @@ def _draw_form(row: dict[str, str]) -> None:
             key=widget_key("domain_tags"),
         )
 
-    st.markdown("**California sampling** (guide_v1 section 3)")
-    samplings = list(gl.SAMPLING_OPTIONS)
-    st.radio(
-        "ca_sampled",
-        samplings,
-        index=samplings.index(init["ca_sampled"]) if init["ca_sampled"] in samplings else None,
-        format_func=lambda v: f"{v}: {gl.SAMPLING_HELP[v]}",
-        key=widget_key("ca_sampled"),
-        help=CA_HELP,
-    )
+    if related == "false":
+        st.info("Not plastic-related: nothing else is needed. Save and next.")
+    if related == "true":
+        st.markdown("**California sampling** (guide_v1 section 3)")
+        samplings = list(gl.SAMPLING_OPTIONS)
+        st.radio(
+            "ca_sampled",
+            samplings,
+            index=samplings.index(init["ca_sampled"]) if init["ca_sampled"] in samplings else None,
+            format_func=lambda v: f"{v}: {gl.SAMPLING_HELP[v]}",
+            key=widget_key("ca_sampled"),
+            help=CA_HELP,
+        )
 
-    st.markdown("**Design** (guide_v2 section 1)")
-    studies = ["", *gl.STUDY_TYPES]
-    if init["study_type"] and init["study_type"] not in studies:
-        studies.append(init["study_type"])
-    st.selectbox(
-        "study_type (one primary design)",
-        studies,
-        index=studies.index(init["study_type"]),
-        format_func=lambda v: v or "Choose a design",
-        help="\n\n".join(f"**{k}**: {v}" for k, v in gl.STUDY_TYPES.items()),
-        key=widget_key("study_type"),
-    )
+        st.markdown("**Design** (guide_v2 section 1)")
+        studies = ["", *design_options]
+        if init["study_type"] and init["study_type"] not in studies:
+            studies.append(init["study_type"])
+        studies.append(NEW_LABEL)
+        choice = st.selectbox(
+            "study_type (one primary design)",
+            studies,
+            index=studies.index(init["study_type"]),
+            format_func=_design_label,
+            help="\n\n".join(f"**{k}**: {v}" for k, v in gl.STUDY_TYPES.items()),
+            key=widget_key("study_type"),
+        )
+        if choice == NEW_LABEL:
+            typed = st.text_input(
+                "New design label (saved as snake_case; offered for later works)",
+                key=widget_key("study_type_new"),
+                placeholder="e.g. archival_specimen_analysis",
+            )
+            if typed.strip():
+                st.caption(f"Will be saved as `{gl.normalize_label(typed)}`.")
 
     st.markdown("**Evidence** (the shortest exact excerpt that supports the decision)")
     st.text_area(
@@ -266,17 +293,27 @@ def main() -> None:
 
     st.divider()
     st.html(blocks.title)
+    year = meta.get("year") or current["year"]
+    byline = gl.author_line(meta.get("authors"))
+    journal = str(meta.get("journal") or "").strip()
+    link = gl.paper_link(meta, work_id)
+    link_label = "DOI" if "doi.org" in link else "OpenAlex (no DOI)"
+    st.markdown(
+        f"{byline or '_Authors not available_'}  \n"
+        f"_{journal or 'Journal not available'}_ · **{year}** · "
+        f"[{link_label}: {link.removeprefix('https://')} ↗]({link})"
+    )
     st.html(blocks.summary)
     st.html(blocks.abstract)
-    st.markdown(
-        f"**{work_id}** · year **{meta.get('year', current['year'])}** · split "
+    st.caption(
+        f"**{work_id}** · split "
         f"`{current['split']}` · role `{current['sample_role']}` · status "
         f"`{current['decision_status'] or 'unlabelled'}`"
     )
     if current["decision_status"] in ("complete", "adjudication_required"):
         st.caption("Already recorded: saving again overwrites this row.")
 
-    _draw_form(current)
+    _draw_form(current, gl.study_type_options(rows))
 
     st.divider()
     buttons = st.columns(3)

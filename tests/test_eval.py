@@ -113,3 +113,21 @@ def test_rejects_null_blank_and_noncanonical_gold_ids(work_id):
     gold[0]["work_id"] = work_id
     with pytest.raises(ValueError, match="gold work_id"):
         evaluate(gold, predictions, split="dev", model_version="m1", data_snapshot="s1")
+
+
+def test_negative_gold_may_leave_ca_sampled_and_study_type_blank():
+    gold, predictions = _fixture()
+    gold[1]["ca_sampled"] = gold[1]["study_type"] = ""
+    # Predictions on a negative gold work are not scored for these fields.
+    predictions[1]["ca_sampled"], predictions[1]["study_type"] = "yes", "anything"
+    report = evaluate(gold, predictions, split="dev", model_version="m1", data_snapshot="s1")
+    assert report["metrics"]["ca_sampled"]["precision"] == 1
+    assert report["metrics"]["ca_sampled"]["classes"]["yes"]["support"] == 2
+    assert not report["errors"]
+
+
+def test_positive_gold_still_requires_study_type():
+    gold, predictions = _fixture()
+    gold[0]["study_type"] = ""
+    with pytest.raises(ValueError, match="missing study_type"):
+        evaluate(gold, predictions, split="dev", model_version="m1", data_snapshot="s1")

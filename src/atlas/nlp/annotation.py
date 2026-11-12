@@ -206,9 +206,11 @@ def _normalize_row(
             raise ValueError(f"invalid plastic_tier for {work_id}")
         if not related and result["plastic_tier"]:
             raise ValueError(f"negative work {work_id} cannot have a plastic_tier")
-        if result["ca_sampled"] not in _SAMPLING:
+        # A negative work needs no further labels (owner, 2026-11-11): ca_sampled and
+        # study_type are optional there and scored only on plastic-relevant gold (eval.py).
+        if (related or result["ca_sampled"]) and result["ca_sampled"] not in _SAMPLING:
             raise ValueError(f"invalid ca_sampled for {work_id}")
-        if not result["study_type"]:
+        if related and not result["study_type"]:
             raise ValueError(f"missing study_type for {work_id}")
         tags = [tag.strip() for tag in result["domain_tags"].split("|") if tag.strip()]
         if len(tags) != len(set(tags)) or set(tags) - set(DOMAIN_TAGS):

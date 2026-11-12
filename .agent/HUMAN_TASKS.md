@@ -122,12 +122,14 @@ start with dev and test (230), then train.
 1. Run `py -3.14 -m streamlit run scripts/review_gold_labels_app.py`. The first launch
    creates `curation/annotations/annotations_SC.csv`.
 2. Keep **Show** on "Unlabelled (dev+test first)".
-3. For each work, read the highlighted title and abstract, then set:
-   - **plastic_related** (true or false), and the **tier** if true (core, or
-     chemicals-in-plastics);
-   - **ca_sampled**: yes, partial, no or unclear. Did they sample in California?
-   - **study_type** (definitions in `docs/LABELING_GUIDE_A2_ADDENDUM.md` §1.1);
-   - **domain tags** (any that apply);
+3. For each work, read the highlighted title and abstract (authors, journal, year and a
+   DOI link to the full paper sit under the title), then set:
+   - **plastic_related** (true or false). If **false**, nothing else is needed: go to step 4.
+   - If true: the **tier** (core, or chemicals-in-plastics); **ca_sampled** (yes,
+     partial, no or unclear: did they sample in California?); **study_type**
+     (definitions in `docs/LABELING_GUIDE_A2_ADDENDUM.md` §1.1; if none fits, pick
+     "+ Create a new design label" and type one, and it is offered for later works);
+     **domain tags** (any that apply);
    - optionally an evidence snippet copied from the text.
 4. Click **Save and next**. If you can't decide, click **Needs adjudication**.
    Every click saves immediately.

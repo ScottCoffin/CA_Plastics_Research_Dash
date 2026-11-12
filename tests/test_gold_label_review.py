@@ -327,3 +327,68 @@ def test_line_endings_are_kept_for_crlf_and_lf_sheets(tmp_path: Path) -> None:
     assert b"\r" not in path.read_bytes()
     with path.open(encoding="utf-8-sig", newline="") as stream:
         assert len(list(csv.DictReader(stream))) == 5
+
+
+def test_negative_work_needs_no_other_labels(tmp_path: Path) -> None:
+    path = _sheet(tmp_path)
+    form = {"plastic_related": "false"}
+    values = gl.save_decision(path, "W1", form, "complete", gl.split_index(SPLITS))
+    assert values["ca_sampled"] == values["study_type"] == values["domain_tags"] == ""
+    # Labels left over from an earlier "true" answer are cleared, not saved.
+    full = {**COMPLETE_FORM, "plastic_related": "false"}
+    assert gl.values_from_form(full, "complete")["study_type"] == ""
+    assert gl.values_from_form(full, "complete")["ca_sampled"] == ""
+
+
+def test_positive_work_still_needs_ca_sampled(tmp_path: Path) -> None:
+    path = _sheet(tmp_path)
+    form = {**COMPLETE_FORM, "ca_sampled": None}
+    with pytest.raises(ValueError, match="invalid ca_sampled for W1"):
+        gl.save_decision(path, "W1", form, "complete", gl.split_index(SPLITS))
+
+
+def test_new_design_label_is_saved_and_offered_again(tmp_path: Path) -> None:
+    path = _sheet(tmp_path)
+    form = {**COMPLETE_FORM, "study_type": " Archival specimen-analysis "}
+    gl.save_decision(path, "W1", form, "complete", gl.split_index(SPLITS))
+    assert gl.read_rows(path)[0]["study_type"] == "archival_specimen_analysis"
+    options = gl.study_type_options(gl.read_rows(path))
+    assert options[: len(gl.STUDY_TYPES)] == list(gl.STUDY_TYPES)
+    assert options[-1] == "archival_specimen_analysis"
+
+
+def test_paper_link_and_author_line() -> None:
+    assert gl.paper_link({"doi": "https://doi.org/10.1/X"}, "W1") == "https://doi.org/10.1/X"
+    assert gl.paper_link({"doi": "doi:10.1/x"}, "W1") == "https://doi.org/10.1/x"
+    assert gl.paper_link({}, "W9") == "https://openalex.org/W9"
+    assert gl.author_line(["A", "B"]) == "A, B"
+    many = gl.author_line([f"N{i}" for i in range(12)], limit=4)
+    assert many == "N0, N1, N2, ... (12 authors), N11"
+
+
+def test_load_works_adds_doi_journal_and_authors(tmp_path: Path) -> None:
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    works = tmp_path / "works.parquet"
+    pq.write_table(
+        pa.table(
+            {
+                "work_id": ["W1"],
+                "doi": ["https://doi.org/10.1/a"],
+                "title": ["T"],
+                "abstract": ["A"],
+                "year": [2020],
+                "journal": ["J"],
+            }
+        ),
+        works,
+    )
+    pq.write_table(
+        pa.table({"work_id": ["W1", "W1"], "author_name": ["First", "Second"]}),
+        tmp_path / "authorships.parquet",
+    )
+    out = gl.load_works(works, ["W1"], fallbacks=())
+    assert out["W1"]["authors"] == ["First", "Second"]
+    assert out["W1"]["journal"] == "J"
+    assert out["W1"]["doi"] == "https://doi.org/10.1/a"

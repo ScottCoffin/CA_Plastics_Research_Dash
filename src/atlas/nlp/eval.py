@@ -21,6 +21,9 @@ CLASSES = {
     "ca_sampled": ("yes", "partial", "no", "unclear"),
     # study_type is intentionally open vocabulary in the annotation schema.
 }
+# Labelled only for plastic-relevant works; scored only on gold rows with
+# plastic_related=true (a negative gold row may leave them blank).
+POSITIVE_ONLY = ("ca_sampled", "study_type")
 
 
 def _scores(tp: int, fp: int, fn: int, support: int) -> dict[str, Any]:
@@ -76,20 +79,23 @@ def _normalize_gold(rows: list[dict[str, Any]], split: str) -> list[dict[str, An
         if item.get("plastic_related") not in {True, False, "true", "false"}:
             raise ValueError(f"invalid plastic_related gold label for {work_id}")
         item["plastic_related"] = str(item["plastic_related"]).lower()
+        negative = item["plastic_related"] == "false"
         for field, allowed in CLASSES.items():
             value = item.get(field)
-            if (
-                field == "plastic_tier"
-                and item["plastic_related"] == "false"
-                and value in (None, "")
-            ):
+            if field == "plastic_tier" and negative and value in (None, ""):
                 item[field] = "none"
+                continue
+            if field in POSITIVE_ONLY and negative and value in (None, ""):
+                item[field] = ""
                 continue
             if value not in allowed:
                 raise ValueError(f"invalid {field} gold label for {work_id}: {value!r}")
         if (item["plastic_related"] == "true") == (item["plastic_tier"] == "none"):
             raise ValueError(f"plastic_related and plastic_tier conflict for {work_id}")
-        if not isinstance(item.get("study_type"), str) or not item["study_type"].strip():
+        study_type = item.get("study_type")
+        if study_type in (None, "") and negative:
+            item["study_type"] = ""
+        elif not isinstance(study_type, str) or not study_type.strip():
             raise ValueError(f"missing study_type gold label for {work_id}")
         tags = item.get("domain_tags", [])
         if isinstance(tags, str):
@@ -128,10 +134,13 @@ def evaluate(
     gold_ids = {row["work_id"] for row in gold}
     if set(pred_by_id) != gold_ids:
         raise ValueError("prediction IDs must exactly match selected gold split")
-    study_types = tuple(sorted({str(row["study_type"]) for row in gold}))
+    study_types = tuple(sorted({str(row["study_type"]) for row in gold if row["study_type"]}))
     metric_classes = {**CLASSES, "study_type": study_types}
+    gold_positive = {row["work_id"] for row in gold if row["plastic_related"] == "true"}
     for row in pred_by_id.values():
         for field, allowed in metric_classes.items():
+            if field in POSITIVE_ONLY and row["work_id"] not in gold_positive:
+                continue
             if row.get(field) not in allowed:
                 raise ValueError(f"invalid predicted {field} for {row['work_id']}")
         if (row["plastic_related"] == "true") == (row["plastic_tier"] == "none"):
@@ -145,9 +154,11 @@ def evaluate(
     gold_by_id = {row["work_id"]: row for row in gold}
     ids = sorted(gold_ids)
     metrics: dict[str, Any] = {}
+    positive_ids = [i for i in ids if gold_by_id[i]["plastic_related"] == "true"]
     for field in metric_classes:
-        gv = [gold_by_id[i][field] for i in ids]
-        pv = [pred_by_id[i][field] for i in ids]
+        scored = positive_ids if field in POSITIVE_ONLY else ids
+        gv = [gold_by_id[i][field] for i in scored]
+        pv = [pred_by_id[i][field] for i in scored]
         metrics[field] = {"classes": _class_metrics(gv, pv, metric_classes[field])}
         positive = (
             "true" if field == "plastic_related" else "yes" if field == "ca_sampled" else None
@@ -171,7 +182,11 @@ def evaluate(
     errors = []
     for work_id in ids:
         g, p = gold_by_id[work_id], pred_by_id[work_id]
-        fields = [f for f in metric_classes if g[f] != p[f]]
+        fields = [
+            f
+            for f in metric_classes
+            if g[f] != p[f] and (f not in POSITIVE_ONLY or g["plastic_related"] == "true")
+        ]
         tag_fp = sorted(set(p["domain_tags"]) - set(g["domain_tags"]))
         tag_fn = sorted(set(g["domain_tags"]) - set(p["domain_tags"]))
         if fields or tag_fp or tag_fn:
