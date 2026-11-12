@@ -7,7 +7,8 @@
     "predev": "node scripts/sync_shared.mjs",
     "dev": "observable preview",
     "prebuild": "node scripts/sync_shared.mjs",
-    "build": "observable build"
+    "build": "observable build",
+    "postbuild": "node scripts/postbuild.mjs"
   },
   "dependencies": {
     "@observablehq/framework": "1.13.4"

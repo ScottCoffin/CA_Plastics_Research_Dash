@@ -1,20 +1,18 @@
-# Handoff - 2026-11-12 - AT-5 Framework app live at /app/; EM-5/6/7, EM-16, EM-18 pages
+# Handoff - 2026-11-12 - UX spec integrated; UX-0, UX-1, UX-21 done
 
 ## Done this session
-- AT-5 (partial, ADR-AT5-SHELL-2026-11-12, `docs/AT_5_VERIFICATION.md`): Observable Framework app in `framework/` (Overview, Experts, Institutions, Monitoring, Funding, About), ported lift-and-shift from `site/index.html` by Haiku workers. Deployed at https://plastiverse.live/app/ (confirmed live) beside the classic root; the Framework deploy step is best-effort.
-- EM-5 done (ADR-EM5-SHELL-2026-11-12, `docs/EM_5_VERIFICATION.md`): `/app/evidence` with AT-4 bit-set facets, hash state, shared works drawer (`openWorksDrawer`), related-resources strip from `site/data/linkouts.json` (rules in `config/linkouts.yml`, default per QUESTIONS EM5-STRIP), V-1..V-5 placeholders.
-- EM-16 `/app/resources` and EM-18 `/app/policy` (DTSC timeline, caveat always shown) done (`docs/EM_16_VERIFICATION.md`, `docs/EM_18_VERIFICATION.md`).
-- EM-6 V-3 pipeline flow and EM-7 V-4 trend panel live on `/app/evidence` (`docs/EM_6_7_VERIFICATION.md`; 10 OpenAlex credits for global counts).
-- Tooling: `scripts/check_at5.py`, `scripts/serve_framework_preview.py`, `scripts/smoke_framework_pages.py`, `scripts/build_linkouts_json.py --check`.
+- Owner UX/UI spec `docs/EM_spec.md` integrated as TODO section "UX" (UX-0..UX-25, ADR-UX-SPEC-2026-11-12); decisions UXD-1..UXD-9 are QUESTIONS rows with defaults in use (owner task H17).
+- Live browser audit (Playwright + axe-core 4.10.3 + Lighthouse 12.8.2, 12 routes, desktop + 375 px) recorded as spec Section 1A: Classic-site link and internal vocabulary confirmed; expert-profile links and stuck loading text NOT reproduced; new UX-21..UX-25 (lang/viewport, contrast, headings, Monitoring CLS 0.50, mobile overflow).
+- UX-1/UX-21 (`docs/UX_1_VERIFICATION.md`): `framework/scripts/postbuild.mjs` fixes the Classic-site href (`../index.html`), `<html lang="en">` and viewport zoom; classic `site/index.html` banner links to `app/`.
+- Machine-wide audit tool `~/tools/ux-audit/` (README; listed in the owner's global CLAUDE.md and Codex AGENTS.md).
 
 ## Verified / not verified
-- Verified: full gate (lint, 1,349 tests, build, links, scaffolds, diff check), clean-worktree tests, CI + deploy green for AT-5, live render of /app/ pages.
-- Not verified: drawer dialog and keyboard walk-through in a real browser; dark theme; MiniSearch ranking on the new pages.
+- Verified: full gate (1,353 passed), check_at5 --dist, smoke on 9 pages, Playwright click-through of both links and axe on the local preview.
+- Not verified: live deploy of this commit (check CI run); remaining axe findings (UX-22..UX-25).
 
 ## Next eligible (dependency order)
-1. After H16 ("switch"): Framework at the root; classic hashes redirect to the new pages.
-2. 2026-11-13: CORE full-text audit (H1 key); resume `fetch_escholarship_items.py` (72 pending; 2026-11-12 resume got 127 items then HTTP 403; the new evidence is not yet applied to the export).
+1. UX-2 (expert.html empty state + `?id=` alias), UX-3 (internal vocabulary + rendered-HTML string check), then UX-4, UX-22, UX-23, UX-24.
+2. After H16 ("switch"): Framework at the root. 2026-11-13: CORE audit (H1); eScholarship resume (72 pending).
 
 ## Owner actions (details in `.agent/HUMAN_TASKS.md`)
-- H16: compare https://plastiverse.live/app/ (incl. the new Evidence map) with the classic site; reply "Framework pages OK, switch" or list differences. Answer EM5-STRIP (keep default link-out rules?).
-- H15 expert pages + RISING-METRIC; H8 outreach template; H2 relevance review; H9 gold labels; H1 CORE key.
+- H17 answer UXD-1..UXD-9; H16 compare /app/ and answer EM5-STRIP; H1 CORE key; H2, H15, H8, H9.

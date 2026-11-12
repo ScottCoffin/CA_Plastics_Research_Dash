@@ -72,6 +72,16 @@ The Atlas already hides these abstracts; this fixes them for everyone.
    > plastics; please remove the abstract_inverted_index for them.
 - **Done when:** submitted. Tell the agent "OpenAlex report sent".
 
+### H17. Answer the UX decisions UXD-1..UXD-9 (10 minutes)
+Your UX spec (`docs/EM_spec.md`) is now TODO section "UX". Its decisions are rows UXD-1..UXD-9
+at the bottom of `.agent/QUESTIONS.md`, each with the default the agent is using.
+1. Open `.agent/QUESTIONS.md` and scroll to the UXD rows.
+2. For each row, write your answer in the "Owner answer" column, or leave it blank to keep the default.
+   Most important: UXD-3 (what counts as "California-connected"), UXD-4 (Experts vs Authors),
+   UXD-8 (licence wording; ADR-002 already chose MIT code + CC BY data), UXD-9 (add axe/Lighthouse to CI).
+3. Save the file.
+- **Done when:** saved. Tell the agent "UXD answered".
+
 ### H16. Compare the new Framework pages with the current site (AT-5, 15 minutes)
 The site is being moved to Observable Framework one page at a time. After the next deploy the
 new pages run at https://plastiverse.live/app/ next to the current site, which stays the

@@ -1,5 +1,9 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-12 -- Framework header links and template
+- Observable Framework 1.13.4 rewrites header/footer hrefs that leave the app root (`../`) to `./`, silently pointing at the current page; it also hardcodes `<html>` without lang and `maximum-scale=1`. Check rendered hrefs in `dist/`, not the config, and fix in `framework/scripts/postbuild.mjs`.
+- Text-extraction walkthroughs of a site misread hrefs (`expert.html#author=` came out as `expert.html=`) and loading states; confirm such findings in a real browser before changing code.
+
 ## 2026-11-12 -- Emails in committed tables; eScholarship rate limit
 - The site export redacted emails, but the committed normalized tables (authorships raw_affiliation, works abstract) carried 808 + 4 OpenAlex strings with emails. Redact at the point where any committed table is written, not only at the public export; grep committed Parquet for `@domain.tld` after schema changes.
 - eScholarship blocks the HTML site and OAI (bot screen) and blocked the GraphQL API too after ~120 requests at 2 s spacing; use OpenAlex (which indexes eScholarship) to find items, and fetch single items slowly from cache-first scripts. A worker kept paging after a stop message: kill background processes yourself rather than relying on a message.

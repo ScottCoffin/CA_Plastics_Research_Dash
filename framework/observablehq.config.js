@@ -28,7 +28,7 @@ export default {
     {name: "Related resources", path: "/resources"},
     {name: "About", path: "/about"}
   ],
-  header: `<span class="atlas-header">California research atlas · <a href="../">Classic site</a></span>`,
+  header: `<span class="atlas-header">California research atlas · <a class="atlas-classic" href="../index.html">Classic site</a></span>`,
   footer: `Independent project; not an official OEHHA or State product. ` +
     `<a href="${REPO}/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">Report a correction</a>.`
 };

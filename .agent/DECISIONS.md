@@ -593,3 +593,8 @@ the implementing task's acceptance passes.
 
 ## ADR-EM5-SHELL-2026-11-12: Evidence Map shell in Framework; link-out strip rules in the registry
 - EM-5 is the Framework page `/app/evidence`, not a classic tab. Filters are the AT-4 bit-set facets (counts = popcounts of build-time bit-sets; EAT-5), hash `#facet=a,b&year_from&year_to&q`. One shared works drawer (`openWorksDrawer`) for every later view. The related-resources strip reads `site/data/linkouts.json`, exported from `config/linkouts.yml`; display rules are `trigger_rules` strings `topic=<tag>` and `default` (other strings are ignored), defaults pending owner question EM5-STRIP. Link-only: names, stewards and descriptions as stated; nothing ingested (EAT-9).
+
+## ADR-UX-SPEC-2026-11-12: Owner UX remediation spec integrated as UX-0..UX-25
+- Owner spec `docs/EM_spec.md` (UX/UI remediation from a text walkthrough of the live site) becomes TODO section "UX". A browser audit (Playwright + axe-core 4.10.3 + Lighthouse 12.8.2, 2026-11-12) was added as its Section 1A: it confirmed the broken "Classic site" link and the internal vocabulary, refuted the broken expert-profile links and the stuck loading text, and added UX-21..UX-25 (template lang/viewport, contrast, headings, Monitoring CLS, mobile).
+- The spec's branch-per-PR rule and `.agent/handoff.md` append are replaced by this repo's checkpoint protocol (commit on main as `UX-<n>: ...`, HANDOFF overwritten). Spec decisions UXD-1..8 plus UXD-9 (CI audit tooling) are QUESTIONS rows with defaults in use.
+- Framework 1.13.4 template limits (no `<html lang>`, `maximum-scale=1`, header links outside the app root rewritten to `./`) are fixed by `framework/scripts/postbuild.mjs`, run by npm's postbuild hook; revisit when upgrading Framework.
