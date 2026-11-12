@@ -75,7 +75,7 @@ Last updated: 2026-11-11.
 - **Done when:** all 44 rows have `approve` or `reject`. Tell the agent
   "photos reviewed". No photo is shown on the site before this.
 
-### H5. Answer three open questions (defaults are in use until you answer)
+### H5. Answer five open questions (defaults are in use until you answer)
 Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
 ("keep default" or "change").
 - **AT4-SEARCH:** title search is the home-made token search. Default: keep it.
@@ -86,6 +86,12 @@ Open `.agent/QUESTIONS.md`, find each ID, and reply to the agent in one line
   their ORCID shows a job elsewhere (19 of 109 checkable cases; list in
   `docs/api_notes/orcid_enrichment.md`). Default: keep counting them and list the
   cases. Change = drop those years.
+- **EM5-FRAMEWORK:** the evidence map (EM-5, which unblocks the rest of the A2 views)
+  can be built in the current site, or after moving the site to Observable Framework.
+  Default: current site, built step by step. Change = Framework first.
+- **OUTREACH-EMAILS:** expert outreach (S9.6) needs a private email list (gitignored,
+  never published), but you also asked that no emails be stored. Default: no emails,
+  so S9.6 waits. Change = allow emails in `data/private/` only, for outreach you send.
 
 ### H6. Cut a new archived release when you want a citable snapshot (AT-10, optional)
 1. On GitHub: repository > **Releases** > **Draft a new release**.
