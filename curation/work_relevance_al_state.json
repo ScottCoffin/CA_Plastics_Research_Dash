@@ -1,21 +1,266 @@
 {
-  "audit_log": [],
-  "confident_auto_labels": 816,
+  "audit_log": [
+    {
+      "at": "2026-11-11T22:57:54+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.991,
+      "pick_reason": "audit",
+      "work_id": "W4401447742"
+    },
+    {
+      "at": "2026-11-11T22:58:02+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.923,
+      "pick_reason": "audit",
+      "work_id": "W4402738023"
+    },
+    {
+      "at": "2026-11-11T22:58:09+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9477,
+      "pick_reason": "audit",
+      "work_id": "W1998205740"
+    },
+    {
+      "at": "2026-11-11T22:58:18+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9763,
+      "pick_reason": "audit",
+      "work_id": "W2981889360"
+    },
+    {
+      "at": "2026-11-11T22:58:23+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9758,
+      "pick_reason": "audit",
+      "work_id": "W7162679175"
+    },
+    {
+      "at": "2026-11-11T22:58:58+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9111,
+      "pick_reason": "audit",
+      "work_id": "W4361190986"
+    },
+    {
+      "at": "2026-11-11T22:59:11+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.931,
+      "pick_reason": "audit",
+      "work_id": "W4388451530"
+    },
+    {
+      "at": "2026-11-11T22:59:40+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9158,
+      "pick_reason": "audit",
+      "work_id": "W7223043299"
+    },
+    {
+      "at": "2026-11-11T22:59:55+00:00",
+      "model_pred": false,
+      "outcome": "correct",
+      "owner": false,
+      "p_relevant": 0.0629,
+      "pick_reason": "audit",
+      "work_id": "W4396904880"
+    },
+    {
+      "at": "2026-11-11T22:59:59+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9828,
+      "pick_reason": "audit",
+      "work_id": "W3213778836"
+    },
+    {
+      "at": "2026-11-11T23:00:07+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9188,
+      "pick_reason": "audit",
+      "work_id": "W4220930440"
+    },
+    {
+      "at": "2026-11-11T23:00:26+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9664,
+      "pick_reason": "audit",
+      "work_id": "W3115815812"
+    },
+    {
+      "at": "2026-11-11T23:00:31+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9936,
+      "pick_reason": "audit",
+      "work_id": "W2162073919"
+    },
+    {
+      "at": "2026-11-11T23:00:35+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9713,
+      "pick_reason": "audit",
+      "work_id": "W3143866338"
+    },
+    {
+      "at": "2026-11-11T23:00:39+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9443,
+      "pick_reason": "audit",
+      "work_id": "W7220757365"
+    },
+    {
+      "at": "2026-11-11T23:00:44+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.996,
+      "pick_reason": "audit",
+      "work_id": "W4298144681"
+    },
+    {
+      "at": "2026-11-11T23:00:48+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9937,
+      "pick_reason": "audit",
+      "work_id": "W3025494721"
+    },
+    {
+      "at": "2026-11-11T23:00:52+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9899,
+      "pick_reason": "audit",
+      "work_id": "W7116082613"
+    },
+    {
+      "at": "2026-11-11T23:00:57+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9861,
+      "pick_reason": "audit",
+      "work_id": "W4393235034"
+    },
+    {
+      "at": "2026-11-11T23:01:03+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9708,
+      "pick_reason": "audit",
+      "work_id": "W7133632554"
+    },
+    {
+      "at": "2026-11-11T23:01:08+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9739,
+      "pick_reason": "audit",
+      "work_id": "W4401108628"
+    },
+    {
+      "at": "2026-11-11T23:01:12+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9869,
+      "pick_reason": "audit",
+      "work_id": "W4389340784"
+    },
+    {
+      "at": "2026-11-11T23:01:16+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9397,
+      "pick_reason": "audit",
+      "work_id": "W7139192330"
+    },
+    {
+      "at": "2026-11-11T23:01:20+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9532,
+      "pick_reason": "audit",
+      "work_id": "W2084147759"
+    },
+    {
+      "at": "2026-11-11T23:01:31+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9899,
+      "pick_reason": "audit",
+      "work_id": "W4384007634"
+    },
+    {
+      "at": "2026-11-11T23:01:58+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9166,
+      "pick_reason": "audit",
+      "work_id": "W3091315288"
+    },
+    {
+      "at": "2026-11-11T23:02:02+00:00",
+      "model_pred": true,
+      "outcome": "correct",
+      "owner": true,
+      "p_relevant": 0.9507,
+      "pick_reason": "audit",
+      "work_id": "W4415255056"
+    }
+  ],
+  "confident_auto_labels": 807,
   "cv_metrics": {
     "calibrated": true,
-    "cv_accuracy": 0.9084158415841584,
+    "cv_accuracy": 0.9095127610208816,
     "cv_folds": 5,
-    "cv_not_relevant_precision": 0.8,
-    "cv_not_relevant_recall": 0.4827586206896552,
-    "cv_roc_auc": 0.9249053219055212
+    "cv_not_relevant_precision": 0.7380952380952381,
+    "cv_not_relevant_recall": 0.5254237288135594,
+    "cv_roc_auc": 0.9254146163659558
   },
   "label_counts": {
     "by_source": {
-      "at1": 404
+      "at1": 404,
+      "owner": 27
     },
-    "not_relevant": 58,
-    "relevant": 346,
-    "total": 404
+    "not_relevant": 59,
+    "relevant": 372,
+    "total": 431
   },
   "model": "BAAI/bge-small-en-v1.5",
   "model_slug": "bge-small-en-v1.5",
@@ -29,8 +274,44 @@
       "cv_accuracy": 0.9084,
       "cv_roc_auc": 0.9212,
       "n_labels": 404
+    },
+    {
+      "at": "2026-11-11T22:20:17+00:00",
+      "audit_accuracy": null,
+      "audit_lower": 0.0,
+      "audit_n": 0,
+      "cv_accuracy": 0.9059,
+      "cv_roc_auc": 0.9194,
+      "n_labels": 404
+    },
+    {
+      "at": "2026-11-11T22:45:06+00:00",
+      "audit_accuracy": null,
+      "audit_lower": 0.0,
+      "audit_n": 0,
+      "cv_accuracy": 0.9035,
+      "cv_roc_auc": 0.922,
+      "n_labels": 404
+    },
+    {
+      "at": "2026-11-11T22:50:34+00:00",
+      "audit_accuracy": null,
+      "audit_lower": 0.0,
+      "audit_n": 0,
+      "cv_accuracy": 0.9084,
+      "cv_roc_auc": 0.9209,
+      "n_labels": 404
+    },
+    {
+      "at": "2026-11-11T23:02:02+00:00",
+      "audit_accuracy": 1.0,
+      "audit_lower": 0.8754,
+      "audit_n": 27,
+      "cv_accuracy": 0.9095,
+      "cv_roc_auc": 0.9254,
+      "n_labels": 431
     }
   ],
-  "unlabeled_scored": 1448,
-  "updated_at": "2026-11-11T18:39:45+00:00"
+  "unlabeled_scored": 1421,
+  "updated_at": "2026-11-11T23:02:02+00:00"
 }

@@ -6,11 +6,11 @@ W1481734388,false,false,high,Tobacco product waste EPR policy review; plastic no
 W1494259782,false,false,high,Microalgal biofuels argument; no plastics subject,claude-haiku-assist,2026-11-11,pending
 W1506978079,true,true,high,Great Pacific Garbage Patch debris and legal strategies,claude-haiku-assist,2026-11-11,pending
 W1539877952,true,true,high,Plastics industry lobbying on California plastic bag laws,claude-haiku-assist,2026-11-11,pending
-W1860418548,false,false,low,Unmanned aircraft testing in a marine protected area; debris monitoring not evident,claude-haiku-assist,2026-11-11,pending
+W1860418548,true,false,low,Unmanned aircraft testing in a marine protected area; debris monitoring not evident,SC,2026-11-11,changed
 W1916444554,true,true,high,Recycled spray-painted plastic parts mechanical behaviour,claude-haiku-assist,2026-11-11,pending
 W1932096073,false,false,high,Conservation values and approaches,claude-haiku-assist,2026-11-11,pending
 W1964562218,true,true,high,Deep-sea marine litter survey in Monterey Canyon,claude-haiku-assist,2026-11-11,pending
-W1964670406,false,false,low,Air agitation of liquids; dispersing plastic particles as process material,claude-haiku-assist,2026-11-11,pending
+W1964670406,false,false,low,Air agitation of liquids; dispersing plastic particles as process material,SC,2026-11-11,confirmed
 W1970066681,true,true,high,LCA comparing biodegradable and conventional polymers in food packaging,claude-haiku-assist,2026-11-11,pending
 W1970550404,true,true,high,Editorial on quantity of plastic in the ocean; title unambiguous,claude-haiku-assist,2026-11-11,pending
 W1971879521,false,false,high,Indonesian small islands seagrass and coral conservation,claude-haiku-assist,2026-11-11,pending
@@ -18,10 +18,10 @@ W1973041860,true,true,high,Biogas-to-bioplastic PHB life-cycle assessment,claude
 W1973411112,true,true,high,Plastic-associated rafting communities in North Pacific,claude-haiku-assist,2026-11-11,pending
 W1973684404,true,true,high,Dungeness crab fishery marine debris in Northwestern Hawaiian Islands,claude-haiku-assist,2026-11-11,pending
 W1974555350,false,false,high,Sidestream cigarette smoke and rat fetal weights,claude-haiku-assist,2026-11-11,pending
-W1974984381,true,true,low,"Sperm whale deaths from floating net debris; marine debris, plastic not stated",claude-haiku-assist,2026-11-11,pending
-W1975150383,false,false,low,Benthic marine pollution at McMurdo Station; plastics not evident from title,claude-haiku-assist,2026-11-11,pending
+W1974984381,true,true,low,"Sperm whale deaths from floating net debris; marine debris, plastic not stated",SC,2026-11-11,confirmed
+W1975150383,true,false,low,Benthic marine pollution at McMurdo Station; plastics not evident from title,SC,2026-11-11,changed
 W1975167825,false,false,high,Metallic glass mechanical response; metals only,claude-haiku-assist,2026-11-11,pending
-W1975799990,false,false,low,"Title on plant parasitic nematodes; abstract describes nanoplastics, metadata mismatch",claude-haiku-assist,2026-11-11,pending
+W1975799990,true,false,low,"Title on plant parasitic nematodes; abstract describes nanoplastics, metadata mismatch",SC,2026-11-11,changed
 W1976451728,true,true,high,Plastic recycling overview in Rio de Janeiro,claude-haiku-assist,2026-11-11,pending
 W1977617315,true,true,high,Synthetic polymers as long-term threat in marine environment,claude-haiku-assist,2026-11-11,pending
 W1979992704,false,false,high,Sandy beach ecological condition metrics; no plastics focus,claude-haiku-assist,2026-11-11,pending
@@ -30,23 +30,23 @@ W1983212850,false,false,high,Microplastic deformation behaviour of nickel; metal
 W1985533019,true,true,high,Oceanic plastic particle pollution and fat deposition in phalaropes,claude-haiku-assist,2026-11-11,pending
 W1988701855,true,true,high,Plastics as multiple stressor with priority pollutants in aquatic habitats,claude-haiku-assist,2026-11-11,pending
 W1993006019,true,true,high,Pinniped entanglement in synthetic debris and net fragments,claude-haiku-assist,2026-11-11,pending
-W1993996528,true,true,low,"Detecting derelict fishing gear at sea; marine debris, plastic not stated",claude-haiku-assist,2026-11-11,pending
+W1993996528,true,true,low,"Detecting derelict fishing gear at sea; marine debris, plastic not stated",SC,2026-11-11,confirmed
 W1996606853,true,true,high,Persistent organic pollutants carried by synthetic polymers in ocean,claude-haiku-assist,2026-11-11,pending
-W1996727799,false,false,low,Breathing circuit obstruction from packaging film; clinical incident,claude-haiku-assist,2026-11-11,pending
+W1996727799,false,false,low,Breathing circuit obstruction from packaging film; clinical incident,SC,2026-11-11,confirmed
 W1998484801,true,true,high,PHA biodegradable plastics production in bacteria and plants,claude-haiku-assist,2026-11-11,pending
 W1999417148,false,false,high,Self-consolidating concrete with fly ash; LCA of cement mixes,claude-haiku-assist,2026-11-11,pending
 W200293136,false,false,high,Winter crops for root-knot nematode control; plastic tarping as method,claude-haiku-assist,2026-11-11,pending
 W2004196742,false,false,high,Plant population demography and environmental heterogeneity,claude-haiku-assist,2026-11-11,pending
 W2004243790,false,false,high,Endocrine disruption rebuttal on ethinyl estradiol in rats,claude-haiku-assist,2026-11-11,pending
-W2007888807,false,false,low,Bisphenol A expert panel on health mechanisms; plastic association not studied,claude-haiku-assist,2026-11-11,pending
+W2007888807,false,false,low,Bisphenol A expert panel on health mechanisms; plastic association not studied | owner: Plastic additive-related work. It's not directly related to plastics per se.,SC,2026-11-11,confirmed
 W2009120022,true,true,high,Endocrine disruption in fish from ingested polyethylene with sorbed pollutants,claude-haiku-assist,2026-11-11,pending
 W2009646475,true,true,high,Chemical recycling of PET by organocatalytic aminolysis,claude-haiku-assist,2026-11-11,pending
-W2013886709,false,false,low,"Sums of random variables; abstract describes nanoplastics, metadata mismatch",claude-haiku-assist,2026-11-11,pending
+W2013886709,true,false,low,"Sums of random variables; abstract describes nanoplastics, metadata mismatch",SC,2026-11-11,changed
 W2015084771,true,true,high,Plastic versus plankton abundance in North Pacific Central Gyre,claude-haiku-assist,2026-11-11,pending
 W2015426832,false,false,high,Learning and memory in cloned dogs,claude-haiku-assist,2026-11-11,pending
 W2015535435,false,false,high,Nicotine and sidestream smoke pregnancy outcomes in rats,claude-haiku-assist,2026-11-11,pending
 W2018716315,false,false,high,Litter beetle counts in broiler houses,claude-haiku-assist,2026-11-11,pending
-W2021684953,false,false,low,Extruded wood-plastic composite material optimisation; generic composite engineering,claude-haiku-assist,2026-11-11,pending
+W2021684953,false,false,low,Extruded wood-plastic composite material optimisation; generic composite engineering,SC,2026-11-11,confirmed
 W2021774444,false,false,high,"Toxic ash from artisanal cellphone mining; e-waste, plastic not central",claude-haiku-assist,2026-11-11,pending
 W2021829952,true,true,high,Organic micropollutants in marine plastic debris,claude-haiku-assist,2026-11-11,pending
 W2022145333,false,false,high,Ion-implantation annealing in silicon,claude-haiku-assist,2026-11-11,pending
@@ -57,18 +57,18 @@ W2028515058,false,false,high,Primary aerosol plume model,claude-haiku-assist,202
 W2029157782,false,false,high,Amphibians as laboratory animals,claude-haiku-assist,2026-11-11,pending
 W2030783638,true,true,high,Material flow analysis of PET plastic in the US,claude-haiku-assist,2026-11-11,pending
 W2034449646,true,true,high,Recycling effects on glass-filled PET material properties,claude-haiku-assist,2026-11-11,pending
-W2035263745,false,false,low,Additive manufacturing vs CNC machining LCA; ABS parts incidental,claude-haiku-assist,2026-11-11,pending
-W2035765219,true,true,low,"Starch foam with natural rubber latex; likely biodegradable foam alternative, abstract empty",claude-haiku-assist,2026-11-11,pending
+W2035263745,true,false,low,Additive manufacturing vs CNC machining LCA; ABS parts incidental,SC,2026-11-11,changed
+W2035765219,false,true,low,"Starch foam with natural rubber latex; likely biodegradable foam alternative, abstract empty",SC,2026-11-11,changed
 W2035859958,false,false,high,General properties of F-pili in bacteria,claude-haiku-assist,2026-11-11,pending
-W2037994813,true,true,low,"Particleboard with recycled HDPE plastic; upcycling of plastic, abstract empty",claude-haiku-assist,2026-11-11,pending
-W2038832122,true,true,low,"Numerical modelling of floating ocean debris; marine debris, plastic not stated",claude-haiku-assist,2026-11-11,pending
-W2040964416,false,false,low,Highway litter loading during storms; generic litter without plastics focus,claude-haiku-assist,2026-11-11,pending
-W2041457372,false,false,low,Anthropogenic and natural shelf debris in Southern California Bight; plastics not shown central,claude-haiku-assist,2026-11-11,pending
+W2037994813,false,true,low,"Particleboard with recycled HDPE plastic; upcycling of plastic, abstract empty",SC,2026-11-11,changed
+W2038832122,true,true,low,"Numerical modelling of floating ocean debris; marine debris, plastic not stated",SC,2026-11-11,confirmed
+W2040964416,false,false,low,Highway litter loading during storms; generic litter without plastics focus,SC,2026-11-11,confirmed
+W2041457372,true,false,low,Anthropogenic and natural shelf debris in Southern California Bight; plastics not shown central,SC,2026-11-11,changed
 W2041492845,true,true,high,Plant polymers for biodegradable plastics,claude-haiku-assist,2026-11-11,pending
 W2045042019,false,false,high,Electronic waste recycling infrastructure review,claude-haiku-assist,2026-11-11,pending
 W2048773714,true,true,high,Neustonic plastic versus zooplankton near southern California,claude-haiku-assist,2026-11-11,pending
 W2050853363,true,true,high,Plastic ingestion by albatrosses in North Pacific,claude-haiku-assist,2026-11-11,pending
-W2053106793,false,false,low,Pollution prevention engineering essay; biodegradable plastics only one research need,claude-haiku-assist,2026-11-11,pending
+W2053106793,true,false,low,Pollution prevention engineering essay; biodegradable plastics only one research need,SC,2026-11-11,changed
 W2054445124,true,true,high,Plastic incidence in tropical Pacific seabirds,claude-haiku-assist,2026-11-11,pending
 W2056303724,false,false,high,Sidestream smoke and airway hyperresponsiveness in rats,claude-haiku-assist,2026-11-11,pending
 W2058231402,false,false,high,Neurotoxicology editorial on models and mechanisms,claude-haiku-assist,2026-11-11,pending
@@ -76,28 +76,28 @@ W2059806564,false,false,high,Animal behaviour and welfare housing,claude-haiku-a
 W2065032512,false,false,high,Internal stresses in metal deformation modelling,claude-haiku-assist,2026-11-11,pending
 W2065737701,false,false,high,Synthetic surfactant in preterm rabbits,claude-haiku-assist,2026-11-11,pending
 W2071750857,false,false,high,Plant invasion along roadways,claude-haiku-assist,2026-11-11,pending
-W2073370533,false,false,low,Transseptal needle particle generation in cardiac procedure; medical plastic debris,claude-haiku-assist,2026-11-11,pending
+W2073370533,false,false,low,Transseptal needle particle generation in cardiac procedure; medical plastic debris,SC,2026-11-11,confirmed
 W2076061264,false,false,high,Port diesel PM emission reductions,claude-haiku-assist,2026-11-11,pending
 W2076438006,false,false,high,World catalogue of Pselaphidae beetle genera,claude-haiku-assist,2026-11-11,pending
 W2077517503,true,true,high,Reusable plastic containers in food catering supply chain LCA; packaging,claude-haiku-assist,2026-11-11,pending
-W2078862846,false,false,low,Thermolytic reaction kinetics of polymers; generic polymer chemistry,claude-haiku-assist,2026-11-11,pending
-W2080671154,false,false,low,Bisphenol A ecological assessment in comparative biology; not framed as plastic-associated,claude-haiku-assist,2026-11-11,pending
+W2078862846,false,false,low,Thermolytic reaction kinetics of polymers; generic polymer chemistry,SC,2026-11-11,confirmed
+W2080671154,false,false,low,Bisphenol A ecological assessment in comparative biology; not framed as plastic-associated,SC,2026-11-11,confirmed
 W2084044423,false,false,high,Protecting dolphins and whales from multiple stressors,claude-haiku-assist,2026-11-11,pending
-W2084147759,true,true,low,Pellet Watch POP monitoring using plastic pellets as samplers,claude-haiku-assist,2026-11-11,pending
+W2084147759,true,true,low,Pellet Watch POP monitoring using plastic pellets as samplers,SC,2026-11-11,confirmed
 W2084203834,true,true,high,Neustonic plastic versus zooplankton in coastal southern California,claude-haiku-assist,2026-11-11,pending
 W2086629674,false,false,high,Albatrosses as heavy metal sentinels,claude-haiku-assist,2026-11-11,pending
 W2088122955,true,true,high,Classifying plastic waste as hazardous,claude-haiku-assist,2026-11-11,pending
-W2088498825,true,true,low,Edible whey protein O2-scavenging film as alternative to plastic packaging,claude-haiku-assist,2026-11-11,pending
+W2088498825,true,true,low,Edible whey protein O2-scavenging film as alternative to plastic packaging,SC,2026-11-11,confirmed
 W2088902890,true,true,high,Prey and plastic ingestion by northern fulmars in Monterey Bay,claude-haiku-assist,2026-11-11,pending
-W2091329075,false,false,low,"Micro hot embossing of plastic for millimetre-wave devices; fabrication, not plastic pollution",claude-haiku-assist,2026-11-11,pending
-W2091862963,true,true,low,"Editorial on diamonds and plastics; title suggests plastic persistence, abstract empty",claude-haiku-assist,2026-11-11,pending
+W2091329075,false,false,low,"Micro hot embossing of plastic for millimetre-wave devices; fabrication, not plastic pollution",SC,2026-11-11,confirmed
+W2091862963,true,true,low,"Editorial on diamonds and plastics; title suggests plastic persistence, abstract empty",SC,2026-11-11,confirmed
 W2091885761,true,true,high,Engineering PHBV composition in Salmonella,claude-haiku-assist,2026-11-11,pending
-W2096337678,true,true,low,E-waste materials recycling including plastics recycling methods,claude-haiku-assist,2026-11-11,pending
+W2096337678,true,true,low,E-waste materials recycling including plastics recycling methods,SC,2026-11-11,confirmed
 W2097196948,true,true,high,PBDEs in fish as indicator of plastic contamination,claude-haiku-assist,2026-11-11,pending
 W2098285675,true,true,high,Plastic and anthropogenic nest material in crows,claude-haiku-assist,2026-11-11,pending
 W2099449202,true,true,high,PHB localisation in engineered sugarcane as bioplastic,claude-haiku-assist,2026-11-11,pending
-W2100307676,false,false,low,Sustainable building materials in French Polynesia; recycled plastic one option only,claude-haiku-assist,2026-11-11,pending
-W2102136694,false,false,low,Cigarette butt litter tobacco-industry response; plastic not the focus,claude-haiku-assist,2026-11-11,pending
+W2100307676,true,false,low,Sustainable building materials in French Polynesia; recycled plastic one option only,SC,2026-11-11,changed
+W2102136694,true,false,low,Cigarette butt litter tobacco-industry response; plastic not the focus,SC,2026-11-11,changed
 W2103819068,false,false,high,GnRH neurons in transgenic mice,claude-haiku-assist,2026-11-11,pending
 W2108998525,false,false,high,Brown and black widow spider prevalence,claude-haiku-assist,2026-11-11,pending
 W2116464510,true,true,high,Ingested plastic transferring chemicals and liver stress in fish,claude-haiku-assist,2026-11-11,pending
@@ -122,7 +122,7 @@ W2145804463,false,false,high,Amazon throughfall exclusion experiment; plastic pa
 W2150748212,false,false,low,"Maya forest editorial; abstract describes nanoplastics, metadata mismatch",claude-haiku-assist,2026-11-11,pending
 W2156117663,false,false,low,Palaeontological criteria for the Anthropocene; plastic not central,claude-haiku-assist,2026-11-11,pending
 W2161424163,true,true,high,Plastic ingestion by planktivorous fishes in North Pacific Gyre,claude-haiku-assist,2026-11-11,pending
-W2162073919,true,true,high,Microplastics and toxic chemicals from North Pacific gyre samples,claude-haiku-assist,2026-11-11,pending
+W2162073919,true,true,high,Microplastics and toxic chemicals from North Pacific gyre samples,SC,2026-11-11,confirmed
 W2163761350,true,true,high,Young green turtles exposed to plastic,claude-haiku-assist,2026-11-11,pending
 W2164325500,true,true,high,POPs adsorbed on plastic debris from the eastern garbage patch,claude-haiku-assist,2026-11-11,pending
 W2171132886,true,true,high,Plastic in turkey vulture diet in Atacama Desert,claude-haiku-assist,2026-11-11,pending
@@ -173,7 +173,7 @@ W2690036541,false,false,high,Cigarette tar extracts and stem-cell corticogenesis
 W2733548549,true,true,high,Biocomposite fibre-matrix treatments and anaerobic biodegradation of end-of-life composites,claude-haiku-assist,2026-11-11,pending
 W2737217596,true,true,high,"Production, use and fate of all plastics ever made",claude-haiku-assist,2026-11-11,pending
 W2749026414,true,true,high,Giant larvaceans transporting microplastics to the deep sea,claude-haiku-assist,2026-11-11,pending
-W2751728655,true,true,low,Engineered fluorinated diketide and fluoropolymer production in cells,claude-haiku-assist,2026-11-11,pending
+W2751728655,true,true,low,Engineered fluorinated diketide and fluoropolymer production in cells,SC,2026-11-11,confirmed
 W2756010764,false,false,high,Predator-induced evolution and plasticity in guppies,claude-haiku-assist,2026-11-11,pending
 W2758021857,false,false,high,Electrostatic water vapour nucleation; plastic bottles only as context,claude-haiku-assist,2026-11-11,pending
 W2759784647,true,true,high,Microplastic sampling with AVANI and neuston trawls,claude-haiku-assist,2026-11-11,pending
@@ -192,7 +192,7 @@ W2800461569,false,false,high,Microbial cocultures without fixed carbon or nitrog
 W2801129639,false,false,high,Hatching egg sanitation; plastic floors incidental,claude-haiku-assist,2026-11-11,pending
 W2804592134,true,true,high,Nanoplastics in aquatic environment,claude-haiku-assist,2026-11-11,pending
 W2805868973,false,false,low,Glass durability in Roma food jars; plastic as contrast only,claude-haiku-assist,2026-11-11,pending
-W2807973883,false,false,low,Requeijao cheese packaging and consumer age groups,claude-haiku-assist,2026-11-11,pending
+W2807973883,true,false,low,Requeijao cheese packaging and consumer age groups,SC,2026-11-11,changed
 W2885010800,true,true,high,Small microplastics in river sediments in eastern China,claude-haiku-assist,2026-11-11,pending
 W2885190060,false,false,high,Editorial on teaching the universe in a classroom,claude-haiku-assist,2026-11-11,pending
 W2888026655,false,false,high,Scientific name for Pacific oysters,claude-haiku-assist,2026-11-11,pending
@@ -287,7 +287,7 @@ W3087541062,true,true,high,settling and rising velocities of weathered micro and
 W3089612338,false,false,low,traffic PM source apportionment; tire wear not central,claude-haiku-assist,2026-11-11,pending
 W3091091054,true,true,high,microfibres in Mytilus from Southern California,claude-haiku-assist,2026-11-11,pending
 W3091186399,true,true,high,microplastic transport from riverine dredge piles,claude-haiku-assist,2026-11-11,pending
-W3091315288,true,true,high,life-cycle analysis of fuels from non-recycled plastics,claude-haiku-assist,2026-11-11,pending
+W3091315288,true,true,high,life-cycle analysis of fuels from non-recycled plastics,SC,2026-11-11,confirmed
 W3091765604,true,true,high,classifying plastics in SWIR hyperspectral images,claude-haiku-assist,2026-11-11,pending
 W3093335786,true,true,low,anthropogenic debris in whale stomach; abstract empty and debris likely plastic,claude-haiku-assist,2026-11-11,pending
 W3094505816,true,true,high,polyethylene upcycled to long-chain alkylaromatics,claude-haiku-assist,2026-11-11,pending
@@ -307,7 +307,7 @@ W3112612094,true,true,high,microbes degrading polyethylene in enrichment microco
 W3112807306,true,true,high,microplastics and anthropogenic particles in SF Bay mussels,claude-haiku-assist,2026-11-11,pending
 W3112962566,true,true,high,best practices for microplastic monitoring in SF Bay,claude-haiku-assist,2026-11-11,pending
 W3114088611,false,false,high,electrical contact failure; plastic debris only a fault hypothesis,claude-haiku-assist,2026-11-11,pending
-W3115815812,true,true,high,catalytic chemical recycling and upcycling of commercial polymers,claude-haiku-assist,2026-11-11,pending
+W3115815812,true,true,high,catalytic chemical recycling and upcycling of commercial polymers,SC,2026-11-11,confirmed
 W3118410685,false,false,high,Brazil Current Lagrangian transport; no plastics focus,claude-haiku-assist,2026-11-11,pending
 W3120540739,true,true,high,polystyrene biodegradation by mealworm gut enrichment,claude-haiku-assist,2026-11-11,pending
 W3121331573,true,true,high,computational redesign of PETase for plastic biodegradation,claude-haiku-assist,2026-11-11,pending
@@ -321,7 +321,7 @@ W3138911354,true,true,high,PET depolymerization and recycling with betaine,claud
 W3139007008,false,false,high,urban living and Darwin's finch nesting success,claude-haiku-assist,2026-11-11,pending
 W3139453502,false,false,high,PM2.5 metals trends in Los Angeles,claude-haiku-assist,2026-11-11,pending
 W3141380979,true,true,high,editorial on confronting plastic pollution,claude-haiku-assist,2026-11-11,pending
-W3143866338,true,true,high,microplastics mitigation and collaboration; California case,claude-haiku-assist,2026-11-11,pending
+W3143866338,true,true,high,microplastics mitigation and collaboration; California case,SC,2026-11-11,confirmed
 W3146237563,true,true,low,derelict fishing gear risk including microplastic transfer; gear-focused,claude-haiku-assist,2026-11-11,pending
 W3148231880,true,true,high,Polylactic acid biodegradation by mealworms,claude-haiku-assist,2026-11-11,pending
 W3153596449,true,true,high,conditional fragmentation model of microplastic size in soil,claude-haiku-assist,2026-11-11,pending
@@ -361,7 +361,7 @@ W3207451556,true,true,high,robotic quantification of floating plastic with deep 
 W3207710391,true,true,high,characterization of microplastics in sediment,claude-haiku-assist,2026-11-11,pending
 W3208535646,true,true,high,public explainer on how microplastics enter the environment,claude-haiku-assist,2026-11-11,pending
 W3210209122,true,true,high,symposium on microplastic removal analysis and risk,claude-haiku-assist,2026-11-11,pending
-W3213778836,true,true,high,identification of macroplastics degrading in Lake Tahoe,claude-haiku-assist,2026-11-11,pending
+W3213778836,true,true,high,identification of macroplastics degrading in Lake Tahoe,SC,2026-11-11,confirmed
 W3214502452,true,true,low,starch-based biodegradable materials review; bioplastic alternative,claude-haiku-assist,2026-11-11,pending
 W3216485027,false,false,low,Montreal Protocol feedstock exemptions; plastics only a co-benefit,claude-haiku-assist,2026-11-11,pending
 W3217042778,true,true,high,floating plastic debris supports neopelagic community,claude-haiku-assist,2026-11-11,pending
@@ -453,7 +453,7 @@ W4295775467,true,true,high,visual microscopy methods for microplastic research,c
 W4296187577,true,true,high,microplastics in urban runoff review,claude-haiku-assist,2026-11-11,pending
 W4296312596,true,true,high,microplastics in children's playgrounds,claude-haiku-assist,2026-11-11,pending
 W4298088356,true,true,high,polyethylene chemical recycling to propylene,claude-haiku-assist,2026-11-11,pending
-W4298144681,true,true,high,history of marine plastic pollution,claude-haiku-assist,2026-11-11,pending
+W4298144681,true,true,high,history of marine plastic pollution,SC,2026-11-11,confirmed
 W4302017673,true,true,high,US plastics recycling system after National Sword,claude-haiku-assist,2026-11-11,pending
 W4302187932,true,true,low,proteome comparison of PHB-producing Cupriavidus strains,claude-haiku-assist,2026-11-11,pending
 W4302362666,true,true,high,nanoplastic emissions from sewer pipe repairs,claude-haiku-assist,2026-11-11,pending
@@ -497,7 +497,7 @@ W4324355680,true,true,high,deficiencies in plastic pollution prevention technolo
 W4327902081,true,true,high,microplastic spatiotemporal trends in Karnaphuli estuary,claude-haiku-assist,2026-11-11,pending
 W4328048895,false,false,high,tobacco tax and flavour policies in San Francisco,claude-haiku-assist,2026-11-11,pending
 W4360822016,true,true,high,detection limits for environmental microplastics analysis,claude-haiku-assist,2026-11-11,pending
-W4361190986,true,true,high,depolymerization rate in polydiketoenamines,claude-haiku-assist,2026-11-11,pending
+W4361190986,true,true,high,depolymerization rate in polydiketoenamines,SC,2026-11-11,confirmed
 W4361215564,false,false,high,Heavy metals in Juan Fernandez fur seals,claude-haiku-assist,2026-11-11,pending
 W4361803508,false,false,low,ecolabels and green taxes for seafood; plastic only an example,claude-haiku-assist,2026-11-11,pending
 W4362559450,false,false,high,Grape cluster upcycling for food ingredients; not plastic,claude-haiku-assist,2026-11-11,pending
@@ -532,7 +532,7 @@ W4383105288,true,true,high,marine plastic exposure risk for oceanic birds,claude
 W4383224299,true,true,high,plastic waste incorporated in construction materials,claude-haiku-assist,2026-11-11,pending
 W4383499981,false,false,low,contaminants of emerging concern editorial; microplastics one example,claude-haiku-assist,2026-11-11,pending
 W4383682818,true,true,high,Clear aligner sustainability responding to critique of plastic aligners,claude-haiku-assist,2026-11-11,pending
-W4384007634,true,true,high,PAHs on burnt and oiled plastic from X-Press Pearl,claude-haiku-assist,2026-11-11,pending
+W4384007634,true,true,high,PAHs on burnt and oiled plastic from X-Press Pearl,SC,2026-11-11,confirmed
 W4385301247,false,false,low,dFAD tuna fishing pros and cons; marine litter one concern,claude-haiku-assist,2026-11-11,pending
 W4385337261,false,false,high,Non-tailpipe PM2.5 and PM10 near roads,claude-haiku-assist,2026-11-11,pending
 W4385359764,true,true,high,Biorenewable circular polydiketoenamine plastics,claude-haiku-assist,2026-11-11,pending
@@ -563,7 +563,7 @@ W4388095311,false,false,high,editorial on urban water sustainability,claude-haik
 W4388196980,true,true,high,hyperspectral Raman imaging of microplastics,claude-haiku-assist,2026-11-11,pending
 W4388421262,true,true,high,bioplastic PVA and microplastics in aquaponics,claude-haiku-assist,2026-11-11,pending
 W4388450739,false,false,high,POPs and heavy metals in mysticetes from UAE,claude-haiku-assist,2026-11-11,pending
-W4388451530,true,true,high,mechanical and solvent recycling of polypropylene,claude-haiku-assist,2026-11-11,pending
+W4388451530,true,true,high,mechanical and solvent recycling of polypropylene,SC,2026-11-11,confirmed
 W4388524409,true,true,high,upstream prevention versus plastic cleanup,claude-haiku-assist,2026-11-11,pending
 W4388572537,false,false,low,basking shark filter-feeding robotic imaging; microplastics only motivation,claude-haiku-assist,2026-11-11,pending
 W4388739039,true,true,high,Upcycling waste polystyrene foam into nanofibres,claude-haiku-assist,2026-11-11,pending
@@ -572,7 +572,7 @@ W4388818691,true,true,high,airborne microplastic deposition on land,claude-haiku
 W4389078362,false,false,low,NYC recycling habits; plastic one of several recycled materials,claude-haiku-assist,2026-11-11,pending
 W4389145397,true,true,high,microplastics in Humboldt Bay,claude-haiku-assist,2026-11-11,pending
 W4389238048,false,false,high,diffusiophoresis transport mechanisms,claude-haiku-assist,2026-11-11,pending
-W4389340784,true,true,high,airborne microplastics on the Tibetan Plateau,claude-haiku-assist,2026-11-11,pending
+W4389340784,true,true,high,airborne microplastics on the Tibetan Plateau,SC,2026-11-11,confirmed
 W4389344455,true,true,high,Upcycling waste polycarbonate to recyclable poly(carbonate-imines),claude-haiku-assist,2026-11-11,pending
 W4389538142,true,true,high,polystyrene nanoplastic cytotoxicity in gastric cells,claude-haiku-assist,2026-11-11,pending
 W4389634265,false,false,high,Physical characteristics of estuaries and coasts synthesis,claude-haiku-assist,2026-11-11,pending
@@ -629,7 +629,7 @@ W4393118276,true,true,low,ocean litter cleanup app; plastic waste framing in int
 W4393124741,true,true,high,how many microplastics to subsample,claude-haiku-assist,2026-11-11,pending
 W4393166586,true,true,high,LDPE-isolated bacterium with antimicrobial activity; plastisphere context,claude-haiku-assist,2026-11-11,pending
 W4393200376,true,true,high,Ni and Cu catalysts for PET upcycling,claude-haiku-assist,2026-11-11,pending
-W4393235034,true,true,high,leaching of POPs and additives from HDPE and PVC in seabird gut model,claude-haiku-assist,2026-11-11,pending
+W4393235034,true,true,high,leaching of POPs and additives from HDPE and PVC in seabird gut model,SC,2026-11-11,confirmed
 W4393254489,true,true,high,photothermal upcycling of waste polyesters,claude-haiku-assist,2026-11-11,pending
 W4393256742,true,true,high,vapour-phase acidolysis of polyurethane waste,claude-haiku-assist,2026-11-11,pending
 W4393341215,true,true,high,microfibres and microplastics in mysid shrimp,claude-haiku-assist,2026-11-11,pending
@@ -653,10 +653,10 @@ W4395052271,true,true,high,microplastics in Yangtze headwater ecosystems,claude-
 W4395468817,false,false,low,Abrasion-induced particulate matter emission mechanics; tyre or plastic link not stated,claude-haiku-assist,2026-11-11,pending
 W4396699250,false,false,high,particulate matter on crop foliage in California,claude-haiku-assist,2026-11-11,pending
 W4396706153,false,false,high,editorial on plant-pathogen interactions,claude-haiku-assist,2026-11-11,pending
-W4396758916,false,false,low,Biomarkers in wintering shearwaters; plastics not evident,claude-haiku-assist,2026-11-11,pending
+W4396758916,false,false,low,Biomarkers in wintering shearwaters; plastics not evident,SC,2026-11-11,confirmed
 W4396807674,true,true,high,Tyre rubber-derived chemicals toxicity to brook trout,claude-haiku-assist,2026-11-11,pending
 W4396865066,true,true,high,polystyrene particles and Hyalella at elevated temperature,claude-haiku-assist,2026-11-11,pending
-W4396904880,false,false,high,Langmuir circulation observations,claude-haiku-assist,2026-11-11,pending
+W4396904880,false,false,high,Langmuir circulation observations,SC,2026-11-11,confirmed
 W4396967944,true,true,high,plastic debris dispersal modelling around Sulawesi,claude-haiku-assist,2026-11-11,pending
 W4397049788,true,true,high,Microplastics characterised in wastewater treatment plant,claude-haiku-assist,2026-11-11,pending
 W4398135722,false,false,low,dFAD trajectories and sea turtle interaction; plastic only as device material,claude-haiku-assist,2026-11-11,pending
@@ -684,12 +684,12 @@ W4400150271,true,true,high,Plastic particle transport in sea spray aerosols,clau
 W4400204571,false,false,low,Nudging conference abstract; plastic recycling only an example; no abstract,claude-haiku-assist,2026-11-11,pending
 W4400416707,true,true,high,Biotic transport of microplastics across ecosystems,claude-haiku-assist,2026-11-11,pending
 W4400419592,true,true,low,Parasite responses to microbes and consumed plastic contaminants,claude-haiku-assist,2026-11-11,pending
-W4400672239,true,true,low,"Carotenoid-based films for smart food packaging; packaging film, plastic not stated",claude-haiku-assist,2026-11-11,pending
+W4400672239,true,true,low,"Carotenoid-based films for smart food packaging; packaging film, plastic not stated",SC,2026-11-11,confirmed
 W4400688332,false,false,high,Epithelial barrier review; microplastics one of many exposures,claude-haiku-assist,2026-11-11,pending
 W4400721758,true,true,high,Microbiomes on microplastics in aquaculture ponds and streams,claude-haiku-assist,2026-11-11,pending
 W4400871873,true,true,high,Plastic chemicals science for global plastics treaty,claude-haiku-assist,2026-11-11,pending
 W4401027145,true,true,high,Halomonas bio-polyester (PHA) production from feedstocks,claude-haiku-assist,2026-11-11,pending
-W4401108628,true,true,high,Wastewater discharge transporting riverine microplastics,claude-haiku-assist,2026-11-11,pending
+W4401108628,true,true,high,Wastewater discharge transporting riverine microplastics,SC,2026-11-11,confirmed
 W4401152995,true,true,high,Microbial succession on biofouled polyolefin debris,claude-haiku-assist,2026-11-11,pending
 W4401165422,false,false,high,Traffic air pollution agent-based model; no plastics,claude-haiku-assist,2026-11-11,pending
 W4401172293,true,true,high,Synthetic debris in swift nests as plastic pollution,claude-haiku-assist,2026-11-11,pending
@@ -698,7 +698,7 @@ W4401267057,true,true,high,Microplastic migration modelling in soil and groundwa
 W4401358840,true,true,high,Biomass microbeads as alternative to plastic microbeads,claude-haiku-assist,2026-11-11,pending
 W4401388566,true,true,low,Biodegradable active packaging film as petroleum plastic alternative,claude-haiku-assist,2026-11-11,pending
 W4401401907,false,false,high,GAMESS GPU computing; polymer upcycling only motivation,claude-haiku-assist,2026-11-11,pending
-W4401447742,true,true,high,Meso- micro- nanoplastic pollution in LA estuaries,claude-haiku-assist,2026-11-11,pending
+W4401447742,true,true,high,Meso- micro- nanoplastic pollution in LA estuaries,SC,2026-11-11,confirmed
 W4402129574,true,true,high,Protocol for microplastic extraction from oysters,claude-haiku-assist,2026-11-11,pending
 W4402137839,false,false,high,Near real-time particulate metal monitoring instrument,claude-haiku-assist,2026-11-11,pending
 W4402250898,true,true,low,Mangrove root models trapping marine litter; plastic framed as the issue,claude-haiku-assist,2026-11-11,pending
@@ -706,7 +706,7 @@ W4402315444,true,true,high,Cockroach biodegradation of polystyrene,claude-haiku-
 W4402421427,true,true,high,Tenebrio biodegradation of aged polystyrene,claude-haiku-assist,2026-11-11,pending
 W4402497336,false,false,high,Patent analysis of EV technologies and carbon emissions,claude-haiku-assist,2026-11-11,pending
 W4402529354,false,false,high,Underwater robot for basking sharks; microplastics only motivation,claude-haiku-assist,2026-11-11,pending
-W4402738023,true,true,high,Carbendazim adsorption on polyethylene microplastics,claude-haiku-assist,2026-11-11,pending
+W4402738023,true,true,high,Carbendazim adsorption on polyethylene microplastics,SC,2026-11-11,confirmed
 W4402770644,false,false,high,Biochar lead immobilisation in soil,claude-haiku-assist,2026-11-11,pending
 W4402774182,true,true,high,Aged micro(nano)plastics effects on sediment microbes and resistance genes,claude-haiku-assist,2026-11-11,pending
 W4403000424,true,true,low,Chemical recycling of biobased polythioureas; generic polymer chemistry,claude-haiku-assist,2026-11-11,pending
@@ -854,7 +854,7 @@ W4414767972,true,true,high,Lignin streams to PHA bioplastic,claude-haiku-assist,
 W4415014845,true,true,high,Solar reforming of PET waste for hydrogen,claude-haiku-assist,2026-11-11,pending
 W4415023858,false,false,low,Bio-derived seed lubricant; microplastics only as comparator,claude-haiku-assist,2026-11-11,pending
 W4415210106,true,true,high,"Beetle larvae biodegrading PS, PE and PP",claude-haiku-assist,2026-11-11,pending
-W4415255056,true,true,high,Raman detection of microplastics on membranes (title unambiguous),claude-haiku-assist,2026-11-11,pending
+W4415255056,true,true,high,Raman detection of microplastics on membranes (title unambiguous),SC,2026-11-11,confirmed
 W4415362036,true,true,high,Microplastics in Bangladesh rivers,claude-haiku-assist,2026-11-11,pending
 W4415426834,true,true,high,Microplastic patterns in Flint River watershed,claude-haiku-assist,2026-11-11,pending
 W4415470241,false,false,low,Poplar engineered for PDC; plastic precursor only as end use,claude-haiku-assist,2026-11-11,pending
@@ -872,7 +872,7 @@ W4416356236,false,false,low,Phaco machine reuse position paper; microplastic was
 W4416409378,true,true,high,Microplastic and atherosclerosis in LDLR mice,claude-haiku-assist,2026-11-11,pending
 W4416418629,false,false,high,Tailpipe and non-tailpipe oxidative potential of freeway PM10,claude-haiku-assist,2026-11-11,pending
 W4416425657,false,false,high,Phenological plasticity in hibernating mammals,claude-haiku-assist,2026-11-11,pending
-W4416602927,false,false,high,Seawater electrolysis for hydrogen,claude-haiku-assist,2026-11-11,pending
+W4416602927,false,false,high,Seawater electrolysis for hydrogen,SC,2026-11-11,confirmed
 W4416674436,false,false,low,Mesoporous zeolite catalysts; polymer upcycling only motivation,claude-haiku-assist,2026-11-11,pending
 W4416789862,true,true,low,Recycling epoxy resin composites by C-N bond cleavage,claude-haiku-assist,2026-11-11,pending
 W4416918969,true,true,high,Microplastic hazards in alpine ponds (title unambiguous),claude-haiku-assist,2026-11-11,pending
@@ -896,7 +896,7 @@ W7105927448,true,true,high,Supplement for paternal microplastic exposure study,c
 W7113461656,false,false,high,Marine megafauna vulnerability to anthropogenic threats,claude-haiku-assist,2026-11-11,pending
 W7114798576,true,true,high,Microplastic exposure via bottled water in California,claude-haiku-assist,2026-11-11,pending
 W7114912542,true,true,low,Dielectrophoretic enrichment of PHB-producing cyanobacterium,claude-haiku-assist,2026-11-11,pending
-W7116082613,true,true,high,Microplastics in biosolids across US and Canada WRRFs,claude-haiku-assist,2026-11-11,pending
+W7116082613,true,true,high,Microplastics in biosolids across US and Canada WRRFs,SC,2026-11-11,confirmed
 W7116087816,true,true,high,uFTIR microplastic ingestion by aquatic insects,claude-haiku-assist,2026-11-11,pending
 W7117326630,true,true,high,Micro nano and biodegradable plastics effects on plants and soil,claude-haiku-assist,2026-11-11,pending
 W7117465775,true,true,high,Microplastic exposure and human health systematic review,claude-haiku-assist,2026-11-11,pending
@@ -944,7 +944,7 @@ W7135372316,true,true,high,Microplastic transport in urban estuary,claude-haiku-
 W7135407757,true,true,high,Submesoscale cyclone concentrates microfibres,claude-haiku-assist,2026-11-11,pending
 W7138935970,true,true,high,Atmospheric microplastic deposition in Chinese cities (title unambiguous),claude-haiku-assist,2026-11-11,pending
 W7139056955,true,true,high,Microplastics and thermal biology in crickets,claude-haiku-assist,2026-11-11,pending
-W7139192330,true,true,high,Parental plastic exposure effects on offspring,claude-haiku-assist,2026-11-11,pending
+W7139192330,true,true,high,Parental plastic exposure effects on offspring,SC,2026-11-11,confirmed
 W7139986142,false,false,low,Microfluidic blood-brain barrier nanoparticle model,claude-haiku-assist,2026-11-11,pending
 W7140102910,true,true,high,Data quality for microplastic toxicity prediction,claude-haiku-assist,2026-11-11,pending
 W7140127943,true,true,high,Chemically recyclable polyester miscible with HDPE,claude-haiku-assist,2026-11-11,pending
@@ -961,7 +961,7 @@ W7151321069,true,true,high,Dietary polystyrene microplastics and bone homeostasi
 W7151544045,true,true,high,Biochar sequestration of textile microplastic fibres,claude-haiku-assist,2026-11-11,pending
 W7152111241,true,true,high,Colloidal stability of polyethylene nanoplastics,claude-haiku-assist,2026-11-11,pending
 W7153466766,false,false,low,Soil priming meta-analysis; degradable microplastics one substrate,claude-haiku-assist,2026-11-11,pending
-W7154082087,false,false,high,Paleolithic bast fibre microfibres; not plastic,claude-haiku-assist,2026-11-11,pending
+W7154082087,true,false,high,Paleolithic bast fibre microfibres; not plastic,SC,2026-11-11,changed
 W7154738221,true,true,high,Airborne exposure from plastic-waste brick grinding,claude-haiku-assist,2026-11-11,pending
 W7154913098,true,true,low,Chemical recycling of fibre-reinforced polymer composites,claude-haiku-assist,2026-11-11,pending
 W7154938376,true,true,high,Overview of new approaches to the plastic problem,claude-haiku-assist,2026-11-11,pending
@@ -986,7 +986,7 @@ W7161940028,true,true,high,Plastic additives and microplastics harm children's b
 W7162420552,true,true,high,PVC microplastic biodegradation by superworms,claude-haiku-assist,2026-11-11,pending
 W7162517465,true,true,high,Microplastic abundance in riverine sediment-water (title unambiguous),claude-haiku-assist,2026-11-11,pending
 W7162525974,true,true,high,Plastic waste to jet fuel cycloalkanes,claude-haiku-assist,2026-11-11,pending
-W7162679175,true,true,high,Microplastics and methane emissions in mountain lakes (title unambiguous),claude-haiku-assist,2026-11-11,pending
+W7162679175,true,true,high,Microplastics and methane emissions in mountain lakes (title unambiguous),SC,2026-11-11,confirmed
 W7162942559,true,true,low,Chemically circular poly(orthoester) elastomers; generic polymer chemistry,claude-haiku-assist,2026-11-11,pending
 W7162945568,true,true,low,Chemically circular poly(orthoester) elastomers (duplicate of W7162942559),claude-haiku-assist,2026-11-11,pending
 W7163528635,false,false,high,Water hydration biochemistry review,claude-haiku-assist,2026-11-11,pending
@@ -1064,14 +1064,14 @@ W7214909157,true,true,high,Zeolite catalysts for polyurethane upcycling,claude-h
 W7214973671,true,true,high,Nanoplastics and heat stress in marine medaka,claude-haiku-assist,2026-11-11,pending
 W7215086276,true,true,high,Food-chain transferred polystyrene microplastics in mice,claude-haiku-assist,2026-11-11,pending
 W7216284540,true,true,high,Microplastic removal from WWTPs chapter,claude-haiku-assist,2026-11-11,pending
-W7220757365,true,true,high,Automated laser characterisation of microplastics,claude-haiku-assist,2026-11-11,pending
+W7220757365,true,true,high,Automated laser characterisation of microplastics,SC,2026-11-11,confirmed
 W7220814283,true,true,high,Microplastics in Yucatan karst freshwater,claude-haiku-assist,2026-11-11,pending
 W7221046642,true,true,high,Systematic review of microplastic health impacts (retraction notice; title clear),claude-haiku-assist,2026-11-11,pending
 W7221336842,true,true,high,Insect-derived chitosan as bio-based plastic alternative,claude-haiku-assist,2026-11-11,pending
 W7221519990,true,true,high,Essay on plastic pollution and marine violence,claude-haiku-assist,2026-11-11,pending
 W7221776748,true,true,high,Reactive oxygen generation at microplastic-water interfaces,claude-haiku-assist,2026-11-11,pending
 W7222393019,true,true,high,Microplastic pollution from ports and shipping (title clear),claude-haiku-assist,2026-11-11,pending
-W7223043299,true,true,high,LCA of mixed-plastic upcycling via nitric acid,claude-haiku-assist,2026-11-11,pending
+W7223043299,true,true,high,LCA of mixed-plastic upcycling via nitric acid,SC,2026-11-11,confirmed
 W7223100146,true,true,high,PHA microplastic priming effect on soil carbon,claude-haiku-assist,2026-11-11,pending
 W7223146953,true,true,high,Reporting microplastic particle size,claude-haiku-assist,2026-11-11,pending
 W7223225806,true,true,high,Plastic consumption and waste in California 1950-2050,claude-haiku-assist,2026-11-11,pending
@@ -1080,3 +1080,11 @@ W7223812990,true,true,high,Rhodococcus ethylene glycol upcycling pathway (title 
 W7223933094,true,true,high,Tyre-wear additive mixtures and Daphnia toxicity,claude-haiku-assist,2026-11-11,pending
 W7225234225,false,false,high,Neolithic pottery residue analysis,claude-haiku-assist,2026-11-11,pending
 W7225619797,true,true,high,Anthropogenic microparticles in salmon shark stomachs,claude-haiku-assist,2026-11-11,pending
+W1998205740,true,,,owner (no assist call),SC,2026-11-11,confirmed
+W2981889360,true,,,owner (no assist call),SC,2026-11-11,confirmed
+W4220930440,true,,,owner (no assist call),SC,2026-11-11,confirmed
+W3025494721,true,,,owner (no assist call),SC,2026-11-11,confirmed
+W7133632554,true,,,owner (no assist call),SC,2026-11-11,confirmed
+W4232682975,false,,,owner (no assist call),SC,2026-11-11,confirmed
+W2118691871,true,,,owner (no assist call),SC,2026-11-11,confirmed
+W2793808267,false,,,owner (no assist call),SC,2026-11-11,confirmed
