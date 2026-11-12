@@ -39,20 +39,29 @@ WORKS = Path("data/processed/normalized/works.parquet")
 RAW_OUT = Path("data/interim/works_raw.parquet")
 
 
-def candidate_dois(profiles: Path = PROFILES, works: Path = WORKS) -> list[str]:
+def candidate_dois(
+    profiles: Path = PROFILES, works: Path = WORKS, dois_file: Path | None = None
+) -> list[str]:
     corpus = {
         audit.normalize_doi(row["doi"])
         for row in pq.read_table(works, columns=["doi"]).to_pylist()
         if row.get("doi")
     }
+    if dois_file is not None:
+        values = dois_file.read_text(encoding="utf-8").split()
+    else:
+        values = [
+            value
+            for row in pq.read_table(profiles, columns=["orcid_dois"]).to_pylist()
+            for value in row.get("orcid_dois") or []
+        ]
     seen: set[str] = set()
     out: list[str] = []
-    for row in pq.read_table(profiles, columns=["orcid_dois"]).to_pylist():
-        for value in row.get("orcid_dois") or []:
-            doi = audit.normalize_doi(value)
-            if doi and doi not in corpus and doi not in seen and audit.is_queryable_doi(doi):
-                seen.add(doi)
-                out.append(doi)
+    for value in values:
+        doi = audit.normalize_doi(value)
+        if doi and doi not in corpus and doi not in seen and audit.is_queryable_doi(doi):
+            seen.add(doi)
+            out.append(doi)
     return sorted(out)
 
 
@@ -74,10 +83,16 @@ def main() -> None:
     parser.add_argument("--max-credits", type=float, default=1500)
     parser.add_argument("--max-batches", type=int, default=0, help="0 = all")
     parser.add_argument("--out", type=Path, default=Path("scratch/orcid_doi_ingest.json"))
+    parser.add_argument(
+        "--dois-file",
+        type=Path,
+        default=None,
+        help="one DOI per line (e.g. fetch_ror_researcher_dois.py output) instead of expert ORCIDs",
+    )
     args = parser.parse_args()
 
     config = load_query_config()
-    dois = candidate_dois()
+    dois = candidate_dois(dois_file=args.dois_file)
     batches = audit.doi_batches(dois)
     if args.max_batches:
         batches = batches[: args.max_batches]
@@ -85,7 +100,8 @@ def main() -> None:
     print(f"ORCID DOIs not in corpus: {len(dois)}; batches this run: {len(batches)}")
     if not args.dry_run:
         oa.load_openalex_key()
-        run_id = f"orcid-doi-ingest-{datetime.now(UTC).date().isoformat()}"
+        prefix = "ror-researcher-doi-ingest" if args.dois_file else "orcid-doi-ingest"
+        run_id = f"{prefix}-{datetime.now(UTC).date().isoformat()}"
         fetched = audit.fetch_openalex_by_doi(
             batches,
             config=config,

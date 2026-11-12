@@ -54,15 +54,16 @@ This file is the live tracker for the current session: update it at every checkp
 | 47 | eScholarship (portal blocked; owner: leverage its UC affiliation evidence) | Done: OpenAlex-indexed eScholarship audit; GraphQL campus evidence; CA basis `escholarship`; 19 works added (66/214 items fetched before a rate-limit block; resumable) |
 | 48 | Workers per CLAUDE.md | Resumed: S9.5 drawer (Haiku, accepted), eScholarship audit (Haiku, superseded); logged in DELEGATION_LOG |
 | 49 | Emails in committed normalized tables (found while spot-checking) | Fixed forward: normalization redacts raw_affiliation/abstract emails (808 strings); history purge is owner question HIST-EMAILS |
+| 50 | Owner not editing work_relevance.csv: unblock | Done: 62 owner decisions committed; 146 new works Haiku/lead-screened and queued (low-confidence queue now 278) |
+| 51 | Continue unblocked TODO | S6.2/S6.3 closed (already met); S5.1 closed via documented gap (`docs/S5_1_VERIFICATION.md`); gold-labelling app (`scripts/review_gold_labels_app.py`, H9); ROR researchers ingest (+1) |
 | 16 | Gates: AT-5/AT-6 deferred; SPK-5/AT-7, SPK-6/AT-8, AT-9, AT-10 approved; gold set = owner + Claude second rater | Recorded (ADR-GATES-2026-11-11) |
 
-## Next eligible (dependency order) - as of 2026-11-12 ~01:30 UTC
-1. Owner review of the 136 new works (117 ORCID-DOI + 19 eScholarship) per the >10 rule: add them as pending rows to the works review app once the owner pauses edits to `curation/work_relevance.csv` (the owner is editing it live; never write it concurrently), or give the app an additions sheet. Then Haiku screening of the same rows.
-2. Resume `scripts/fetch_escholarship_items.py` (148 items pending; 5 s spacing; stops on 403) on a later day, then `ingest_escholarship_works.py` + rebuild.
-3. S2.5 remainder: CORE (renewed key), ROR-discovered researchers (4,752).
-4. S9.4 network with SPK-6/AT-8 (SPK-6 formally depends on S5.5); EM-5+ needs the Framework revisit decision (trigger fires when EM-5..EM-12 start).
-5. Gated on owner: gold-label app/EM-3 labelling, S5.0 (after S5.1 Smart-queue validation).
-6. Last: S3.7 hero page and S3.8 SEO.
+## Next eligible (dependency order) - as of 2026-11-12
+1. 2026-11-13: CORE full text by DOI and CA place-name audit (owner renews the key), then close S2.5.
+2. Resume `scripts/fetch_escholarship_items.py` (148 pending; 5 s spacing) on a later day, then `ingest_escholarship_works.py` + rebuild.
+3. After owner gold labels (H9): Claude second rater on 20%, kappa (EM-3/S4.3), S5.1 test evaluation; then S5.0 engine (also needs owner validation of the Smart queue).
+4. S9.4/SPK-6 depend on S5.5; EM-5+ needs the Framework revisit decision with the owner.
+5. Last: S3.7 hero page and S3.8 SEO.
 
 ## Owner actions (one line each; step-by-step instructions in `.agent/HUMAN_TASKS.md`)
 0. **2026-11-12: renew the CORE API key** and put the new value in `.env`.

@@ -1088,3 +1088,149 @@ W7133632554,true,,,owner (no assist call),SC,2026-11-11,confirmed
 W4232682975,false,,,owner (no assist call),SC,2026-11-11,confirmed
 W2118691871,true,,,owner (no assist call),SC,2026-11-11,confirmed
 W2793808267,false,,,owner (no assist call),SC,2026-11-11,confirmed
+W1602352289,false,false,low,Phthalate exposure from douching; no plastic source or pollution focus,claude-haiku-assist,2026-11-12,pending
+W1607089140,false,false,high,Refugee camp narrative; plastic bags only incidental,claude-haiku-assist,2026-11-12,pending
+W1635896198,false,false,low,Condor estrogen receptors and EDC activation; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W1804989789,false,false,low,Polymer microcapsule synthesis; no plastics use or waste angle,claude-haiku-assist,2026-11-12,pending
+W1927679233,false,false,low,Phthalates in house dust and autism; endocrine framing with no plastic angle,claude-haiku-assist,2026-11-12,pending
+W1929605467,true,true,low,BPA polycarbonate versus Tritan copolyester alternative assessment; plastic material substitution,claude-haiku-assist,2026-11-12,pending
+W1965283764,false,false,low,Phthalate metabolite trends in NHANES; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W1980911134,true,true,high,Covalently bound PVC plasticizers to stop phthalate leaching from plastic,claude-haiku-assist,2026-11-12,pending
+W1984254033,false,false,low,BPA in umbilical cord serum; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W1994555806,false,false,low,Epoxy phenolic foam flammability; generic polymer chemistry,claude-haiku-assist,2026-11-12,pending
+W2001506146,false,false,low,Editorial on environmental health review; plastics only in passing,claude-haiku-assist,2026-11-12,pending
+W2009591543,false,false,low,Phthalates and phenols from personal care products; abstract missing,claude-haiku-assist,2026-11-12,pending
+W2010933273,false,false,low,Phthalate daily exposure estimates and anogenital distance; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2024495322,false,false,high,Thiol-ene stamps for soft lithography; no plastics waste or use focus,claude-haiku-assist,2026-11-12,pending
+W2053475025,false,false,low,Multi-chemical biomonitoring in pregnant women; plastics not the focus,claude-haiku-assist,2026-11-12,pending
+W2056137791,false,false,low,BPA fluorescence in ionic liquids; title only and no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2066976117,true,true,low,Bacterial degradation of phthalate plasticizers from soil; borderline plastic additive degradation,claude-haiku-assist,2026-11-12,pending
+W2085135288,true,true,high,Polymeric phthalate plasticizers designed to avoid migration from plastics,claude-haiku-assist,2026-11-12,pending
+W2099694471,false,false,low,Letter on BPA study controls; endocrine toxicology with no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2107684579,false,false,low,Round robin BPA measurement in serum; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2120542733,false,false,high,Biosolids runoff of EDCs and metals; no plastic focus,claude-haiku-assist,2026-11-12,pending
+W213049756,false,false,high,Kelp wrack beach essay; litter mentioned only in passing,claude-haiku-assist,2026-11-12,pending
+W2146673016,false,false,low,Indoor dust SVOC source strength including phthalates; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W2188262548,true,true,high,Global action agenda on plastic marine litter,claude-haiku-assist,2026-11-12,pending
+W2211831736,false,false,high,Dissertation on Latina health and neighborhood; no plastics,claude-haiku-assist,2026-11-12,pending
+W2260781632,false,false,high,Arthropod response to Carpobrotus invasion; no plastics,claude-haiku-assist,2026-11-12,pending
+W2308244787,false,false,low,DNA methylation and environmental chemicals in autism; BPA as example only,claude-haiku-assist,2026-11-12,pending
+W2316708679,false,false,low,Catalyst-free poly(aryl ether sulfone) synthesis; no plastics use or waste angle,claude-haiku-assist,2026-11-12,pending
+W2321215647,true,true,low,Cyclobutanediol monomers to replace BPA in polyesters; plastic material substitution,claude-haiku-assist,2026-11-12,pending
+W2341720320,false,false,low,Direct BPA measurement in pregnant women; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2346812676,true,true,high,Great Pacific Garbage Patch dissertation on plastic circulation and plastisphere,claude-haiku-assist,2026-11-12,pending
+W2470390030,true,true,high,Converts waste polycarbonate into poly(aryl ether sulfone) polymers; plastic upcycling,claude-haiku-assist,2026-11-12,pending
+W2498253482,false,false,low,BPS germline effects in C elegans; endocrine framing with no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2514360601,false,false,low,Cumulative phthalate exposure in NHANES; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W2520610831,false,false,low,Consumer product chemicals in indoor dust meta-analysis; plastics not the focus,claude-haiku-assist,2026-11-12,pending
+W269728704,false,false,high,Kelp wrack essay; litter mentioned only in passing,claude-haiku-assist,2026-11-12,pending
+W2739566238,false,false,low,Reducing household chemical exposure; consumer products broadly and no plastic focus,claude-haiku-assist,2026-11-12,pending
+W2751048283,true,true,low,Lactic acid fermentation for PLA bioplastic; bioplastic is motivation rather than focus,claude-haiku-assist,2026-11-12,pending
+W2762445857,false,false,low,Perinatal BPA and gut inflammation in rabbits; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2766850463,false,false,high,Kelp wrack essay; litter mentioned only in passing,claude-haiku-assist,2026-11-12,pending
+W2768394658,true,true,high,Beach litter and marine debris economics and public willingness to clean up,claude-haiku-assist,2026-11-12,pending
+W2769796531,false,false,high,Congressional oral history; marine debris only one incidental policy item,claude-haiku-assist,2026-11-12,pending
+W2772387322,false,false,high,Kelp wrack essay; litter mentioned only in passing,claude-haiku-assist,2026-11-12,pending
+W2774922934,false,false,low,Graphene oxide photoreactivity and BPA degradation; title only,claude-haiku-assist,2026-11-12,pending
+W2782880633,true,true,high,Tsunami marine debris arriving on North American shorelines; debris influx,claude-haiku-assist,2026-11-12,pending
+W2785389059,false,false,low,Lesson plans on five ocean impacts; marine debris is one of five topics,claude-haiku-assist,2026-11-12,pending
+W2787462105,true,true,high,Marine debris abundance with plastic the most common item type,claude-haiku-assist,2026-11-12,pending
+W2787961267,false,false,low,Tall ship education program; marine debris is one of six modules,claude-haiku-assist,2026-11-12,pending
+W2788887682,true,true,high,Deep sea anthropogenic debris and marine litter mapping app,claude-haiku-assist,2026-11-12,pending
+W2788913328,false,false,low,Ocean film festival; plastic pollution is one seminar theme among several,claude-haiku-assist,2026-11-12,pending
+W2795203733,false,false,low,Dietary phthalate sources in NHANES; abstract missing,claude-haiku-assist,2026-11-12,pending
+W2797268540,true,true,high,Exhibit on plastic accumulation from SEAPLEX gyre expedition,claude-haiku-assist,2026-11-12,pending
+W2799626906,false,false,low,Lignin-derived epoxy thermosets; generic polymer chemistry vs BPA benchmark,claude-haiku-assist,2026-11-12,pending
+W2801685629,true,true,high,Plastic up-cycling and plastic management challenges on Palau,claude-haiku-assist,2026-11-12,pending
+W2802923438,false,false,low,Urinary phthalate metabolites and breast cancer; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2803338827,false,false,low,BPA transgenerational epigenetic effects in C elegans; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2808883717,true,true,low,Redox-switchable catalysts for biodegradable polymers motivated by plastic pollution,claude-haiku-assist,2026-11-12,pending
+W2827316337,false,false,low,Formaldehyde-free lignin epoxy thermosets; generic polymer chemistry,claude-haiku-assist,2026-11-12,pending
+W286916730,false,false,high,Kelp wrack essay; litter mentioned only in passing,claude-haiku-assist,2026-11-12,pending
+W2891834046,true,true,high,Reducing single-use plastic products on a university campus,claude-haiku-assist,2026-11-12,pending
+W2895585370,false,false,low,UV nitrate degradation of contaminants including BPA; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2901473182,false,false,low,Phthalate metabolite variability in pregnancy urine; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W2902095901,false,false,low,Prenatal phthalates and autism in MARBLES; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2902863502,true,true,high,Reprocessable and recyclable epoxy thermoset with imine bonds,claude-haiku-assist,2026-11-12,pending
+W2904456702,false,false,low,Air-to-skin uptake of indoor SVOCs; no plastic focus,claude-haiku-assist,2026-11-12,pending
+W2908879306,false,false,low,Review of health risks of consumer product chemicals; plastics not the focus,claude-haiku-assist,2026-11-12,pending
+W2914661508,false,false,low,Vault-encapsulated enzyme degrading bisphenols; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2923783013,true,true,high,Humic acid alters polystyrene nanoplastic toxicity to Daphnia,claude-haiku-assist,2026-11-12,pending
+W2934384318,false,false,low,BPA neurotoxicity in human neurons; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2946765275,false,false,low,Quinoxaline benzoxazine thermosets; generic polymer chemistry,claude-haiku-assist,2026-11-12,pending
+W2949831522,false,false,low,Prenatal BPA multiomics in mice; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W2952400092,true,true,high,Surfrider Foundation thesis on plastic pollution and single-use plastics,claude-haiku-assist,2026-11-12,pending
+W2969437147,false,false,low,BPA and germline mitochondrial cholesterol; title only,claude-haiku-assist,2026-11-12,pending
+W2985810567,false,false,low,Key characteristics of endocrine disrupting chemicals; no plastic focus,claude-haiku-assist,2026-11-12,pending
+W2998037431,false,false,low,BPS cardiotoxicity in zebrafish; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W3020151830,false,false,low,DEP gene expression in rats and breast tissue; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W3021568610,false,false,low,BPA exposure in travelers; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W3087400099,false,false,low,Phthalate and alternative trends in California pregnancy; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W3107366627,true,true,high,Stranded marine debris trends from citizen science shoreline surveys,claude-haiku-assist,2026-11-12,pending
+W3121420714,true,true,low,DnBP plasticizer metabolism in plants and human microsomes; plastic-derived chemical fate,claude-haiku-assist,2026-11-12,pending
+W3126773800,false,false,low,Gestational phthalates and social responsiveness; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W3159139574,false,false,low,BPA effects on sand dollar larvae; plastic leaching only in background,claude-haiku-assist,2026-11-12,pending
+W3161874558,false,false,low,Phthalate film formation on indoor surfaces; no plastic focus,claude-haiku-assist,2026-11-12,pending
+W3187417045,false,false,low,Phenol and paraben trends in pregnancy; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W3188551808,false,false,low,Phthalate processing additive in blade-coated solar cells; no plastic waste angle,claude-haiku-assist,2026-11-12,pending
+W3196484230,false,false,high,Tooth biomarkers for prenatal exposome; no plastic focus,claude-haiku-assist,2026-11-12,pending
+W3196598954,false,false,low,BPA derivatives as ERbeta coactivator inhibitors; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W3203637028,false,false,low,BPA effects on mouse primordial germ cell model; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W3207550279,true,true,low,Dog waste bags as plastic pollution source; abstract missing,claude-haiku-assist,2026-11-12,pending
+W3208526803,true,true,high,Review of internally plasticized PVC to stop plasticizer migration,claude-haiku-assist,2026-11-12,pending
+W3210246443,false,false,low,Phthalates and phenols with telomere length and breast cancer; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W3214515012,true,true,low,Washing machine filters reduce synthetic microfiber emissions; microfiber pollution,claude-haiku-assist,2026-11-12,pending
+W3216072132,true,true,low,DCHP plasticizer activates PXR and lipid effects; plastic-associated EDC framing,claude-haiku-assist,2026-11-12,pending
+W3216545943,false,false,low,Phenol and paraben urine variability in pregnancy; no plastic focus,claude-haiku-assist,2026-11-12,pending
+W3217402991,false,false,low,Toxic chemicals in autism etiology commentary; phthalates one example among many,claude-haiku-assist,2026-11-12,pending
+W4200059226,true,true,high,Recycling waste polycarbonate into epoxy resins and degrading composites,claude-haiku-assist,2026-11-12,pending
+W4207005541,false,false,low,Pesticide phthalate phenol and metal exposures in neurodevelopment; no plastic focus,claude-haiku-assist,2026-11-12,pending
+W4210944526,true,true,high,Recycling waste polycarbonate into epoxy curing agents and degrading composites,claude-haiku-assist,2026-11-12,pending
+W4212857146,false,false,low,Triglycerides and subacute BPA exposure; abstract missing,claude-haiku-assist,2026-11-12,pending
+W4224232500,false,false,high,Evidence map protocol on environmental chemicals and SARS-CoV-2 immunity,claude-haiku-assist,2026-11-12,pending
+W4285037565,false,false,low,Prenatal phthalate metabolites and preterm birth; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W4294838990,false,false,low,Maternal and placental metabolome with phthalate exposure; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W4311521151,false,false,low,Evidence evaluation delays for hazardous agents including BPA; no plastic focus,claude-haiku-assist,2026-11-12,pending
+W4315652071,false,false,low,Chemical class grouping with ortho-phthalates as case study; regulatory method focus,claude-haiku-assist,2026-11-12,pending
+W4316928050,false,false,low,Bisphenol uptake and metabolism in carrot cells; no plastic waste angle,claude-haiku-assist,2026-11-12,pending
+W4317802055,false,false,low,Paternal DCHP effects on offspring metabolism; plastic EDC framing but no plastic focus,claude-haiku-assist,2026-11-12,pending
+W4376139779,true,true,high,Protocol for identifying microplastics in larval fish diets,claude-haiku-assist,2026-11-12,pending
+W4382654731,true,true,high,Tire tread microplastic particles leaching organic compounds into water,claude-haiku-assist,2026-11-12,pending
+W4383104558,true,true,low,Suspected microplastics in bottled water; abstract missing,claude-haiku-assist,2026-11-12,pending
+W4385971845,false,false,low,Machine learning interactions among environmental chemicals and autism; no plastic focus,claude-haiku-assist,2026-11-12,pending
+W4386810792,false,false,low,Phenol paraben PFAS and cancer history; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W4387523771,false,false,low,Phthalate mixture and social responsiveness scores; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W4388915489,false,false,low,Organic contaminants in Tijuana estuary sediments; phthalates a minor part,claude-haiku-assist,2026-11-12,pending
+W4389913107,false,false,low,Chlorination of emerging contaminants including BPA; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W4392811624,false,false,low,Phenol paraben phthalate and ADHD symptoms; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W4394182873,true,true,low,Microplastic trophic transfer via DMSP infochemical; title reads Delete so verify,claude-haiku-assist,2026-11-12,pending
+W4394446046,true,true,high,Photocatalytic strategies to degrade microplastics in aquatic environments,claude-haiku-assist,2026-11-12,pending
+W4396527422,false,false,low,Early childhood phthalates and ADHD behaviors; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W4399795912,false,false,low,Yeast screen for reproductive toxicants including BPA analogs; no plastic angle,claude-haiku-assist,2026-11-12,pending
+W4400906440,false,false,low,Infant EDC biomarkers and neurodevelopment; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W4405825711,true,true,high,Tire tread particle leachates under simulated sunlight; microplastic leachate degradation,claude-haiku-assist,2026-11-12,pending
+W4406832917,false,false,high,Sea turtle population status; plastic pollution is one threat among many,claude-haiku-assist,2026-11-12,pending
+W4408153354,true,true,high,Evidence review on human microplastic and nanoplastic removal,claude-haiku-assist,2026-11-12,pending
+W4408472161,true,true,high,Mass balance of riverine plastic and debris sources and sinks in San Diego River,claude-haiku-assist,2026-11-12,pending
+W4408939442,false,false,low,Chemicals in childrens products mapping; plastic toys are one product category,claude-haiku-assist,2026-11-12,pending
+W4409416166,false,false,low,Gut hydrolysis of phthalate diesters in toxicokinetics; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W4409594956,true,true,high,Sunlight effects on tire tread particle leachate chemistry and toxicity,claude-haiku-assist,2026-11-12,pending
+W4410717155,false,false,high,Organic contaminants in vegetables from recycled water and biosolids; plastics minor,claude-haiku-assist,2026-11-12,pending
+W4411417805,true,true,high,Plastic waste transfer and sources across the Tijuana River estuary,claude-haiku-assist,2026-11-12,pending
+W4411814173,false,false,low,Child chemical exposures in ECHO cohort; plastics not the focus,claude-haiku-assist,2026-11-12,pending
+W4411918633,false,false,low,Prenatal phthalates and alternative plasticizers with child behavior; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W4412472478,true,true,high,Review of microplastic transfer through the food chain to humans,claude-haiku-assist,2026-11-12,pending
+W4413577734,true,true,low,Pan-African networks on plastic pollution threat; abstract missing,claude-haiku-assist,2026-11-12,pending
+W4417296784,true,true,high,Trial reducing household plastic waste burning in rural Guatemala,claude-haiku-assist,2026-11-12,pending
+W4417498968,true,true,high,Review of monitoring methods for transboundary plastic waste,claude-haiku-assist,2026-11-12,pending
+W4417535166,true,true,high,Exponential microplastic accumulation in Narragansett Bay sediments,claude-haiku-assist,2026-11-12,pending
+W7124928907,false,false,low,Glycosyl BPA deconjugation in digestion; no plastic waste angle,claude-haiku-assist,2026-11-12,pending
+W7131876976,false,false,low,Prenatal phthalates and language trajectories; no plastic source focus,claude-haiku-assist,2026-11-12,pending
+W7135240209,true,true,high,Citizen science protocol for beach litter mapping at Mediterranean hotspots,claude-haiku-assist,2026-11-12,pending
+W7165058336,false,false,low,Gestational chemical classes and birth outcomes in ECHO; phthalates one of ten classes,claude-haiku-assist,2026-11-12,pending
+W7169773515,true,true,high,Multimodal AI classification of marine plastic polymers in field images,claude-haiku-assist,2026-11-12,pending
+W7171993963,true,true,high,Photocatalytic upcycling of polyester plastic waste to organonitrogen compounds,claude-haiku-assist,2026-11-12,pending
+W7211917430,false,false,high,Environmental contaminants and osteoporosis meta-analysis; phthalates one class among many,claude-haiku-assist,2026-11-12,pending
+W7221543157,true,true,high,Recycling epoxy composites by aerobic C-N cleavage with carbon fiber recovery,claude-haiku-assist,2026-11-12,pending
+W2740780736,false,false,high,Satellite ocean-current mission concept; plastic or debris mention is incidental,claude-lead-assist,2026-11-12,pending
+W4402620310,true,true,low,Stormwater contaminants incl. bisphenols and tire-derived 6PPD-quinone; plastic-chemical angle partial,claude-lead-assist,2026-11-12,pending

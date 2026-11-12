@@ -86,3 +86,12 @@ Top 30 California institutions by works in the corpus, ORCID `expanded-search` b
 | University of California, Merced | 00d9ah105 | 13 | 200 | 200 |
 | IBM Research - Almaden | 005w8dd04 | 13 | 111 | 111 |
 | J. Craig Venter Institute | 049r1ts75 | 12 | 48 | 48 |
+
+## d2. ROR-discovered researchers: works ingest (2026-11-12)
+
+`scripts/fetch_ror_researcher_dois.py` fetched the public `works` list of all 4,752 candidates
+(4,752 requests, 0 errors; only the works endpoint, so no contact data) giving 18,221
+distinct DOIs. `scripts/ingest_orcid_dois.py --dois-file data/interim/ror_researcher_dois.txt`
+looked them up in OpenAlex with plain DOI filters (365 requests, 365 credits): 17,710 found,
+11 pass the local plastics rule, 2 pass the California gate, 1 new work. Researchers at CA
+institutions who are not experts yet have almost no plastics work missing from the corpus.

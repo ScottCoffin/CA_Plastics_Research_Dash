@@ -111,3 +111,4 @@
 | 2026-11-11 | topic | Plastisphere topic (taxonomy seeds, topics.js per-topic hatch); labels, site data, analytics, bundle rebuilt | this commit |
 | 2026-11-11 | relevance-rules | Plastisphere narrowed; micro-nano plastics always relevant; mis-attached OpenAlex abstracts blanked; stale author files pruned | this commit |
 | 2026-11-12 | S2.5/S6.1/S9.5 | ORCID DOI ingest (+117), eScholarship evidence + basis (+19), S6.1 corpus report (PMCID fix), drawer profiles (worker), email redaction in committed tables | this commit |
+| 2026-11-12 | S2.5/S5.1/S6 | Owner decisions committed; 146 additions queued; S5.1 dev eval (closed via gap); S6.2/S6.3 closed; gold-labelling app; ROR researcher ingest (+1) | this commit |

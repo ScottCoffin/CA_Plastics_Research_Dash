@@ -5,7 +5,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 ## Counts
 
-- Works in the v3.1 corpus: 2032; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
+- Works in the v3.1 corpus: 2033; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
 - California institutions with at least one non-excluded v3.1 work: 206.
 - Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 206, one row each in `config/institution_types.csv`.
 - type_source: owner_override 14, owner_reviewed 58, rule 134.
@@ -44,7 +44,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | 14 | I185103710 | University of California, Santa Cruz | 43 | UC | owner_reviewed | old top 100 |
 | 15 | I2803209242 | University of California System | 38 | UC | owner_reviewed | old top 100 |
 | 16 | I149919469 | California Polytechnic State University | 30 | CSU | owner_reviewed | old top 100 |
-| 17 | I4210111001 | San Francisco Estuary Institute | 24 | nonprofit/NGO | rule | new |
+| 17 | I4210111001 | San Francisco Estuary Institute | 25 | nonprofit/NGO | rule | new |
 | 18 | I4405266016 | Hopkins Marine Station | 24 | private | owner_override | old top 100 |
 | 19 | I157638225 | California State University, Northridge | 22 | CSU | owner_reviewed | old top 100 |
 | 20 | I53012624 | Joint BioEnergy Institute | 22 | federal | owner_override | old top 100 |
@@ -54,7 +54,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | Rank | inst_id | Name | v3.1 works | Proposed type |
 |---|---|---|---|---|
 | 12 | I11006740 | Southern California Coastal Water Research Project | 44 | nonprofit/NGO |
-| 17 | I4210111001 | San Francisco Estuary Institute | 24 | nonprofit/NGO |
+| 17 | I4210111001 | San Francisco Estuary Institute | 25 | nonprofit/NGO |
 | 21 | CAAG-SWRCB | State Water Resources Control Board | 21 | state-agency |
 | 27 | I194388944 | California State University, Channel Islands | 14 | CSU |
 | 32 | I1336788258 | California Department of Public Health | 12 | state-agency |
