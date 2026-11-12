@@ -1,0 +1,81 @@
+{
+ "schema_version": "em6.v1",
+ "release_date": "2026-11-11",
+ "release_version": "v2026.11.11",
+ "query_version": "plastic-v3.1",
+ "template": {
+  "name": "ROSES flow diagram for systematic maps",
+  "licence": "CC BY 4.0"
+ },
+ "stages": [
+  {
+   "stage": "Searching",
+   "status": "performed",
+   "steps": [
+    {
+     "label": "Records retrieved from OpenAlex (query plastic-v3.1)",
+     "value": 1933,
+     "source": "data/interim/works_raw.parquet rows"
+    }
+   ],
+   "note": null
+  },
+  {
+   "stage": "Screening",
+   "status": "performed",
+   "steps": [
+    {
+     "label": "After near-duplicate collapse",
+     "value": 1896,
+     "source": "data/processed/normalized/works.parquet rows"
+    },
+    {
+     "label": "With a California authorship",
+     "value": 1836,
+     "source": "data/processed/normalized/works.parquet ca_any_author true"
+    },
+    {
+     "label": "Published after curation",
+     "value": 1774,
+     "source": "site/data/index.json works"
+    },
+    {
+     "label": "Plastic-related",
+     "value": 1430,
+     "source": "site/data/index.json works with plastic_related true"
+    }
+   ],
+   "note": null
+  },
+  {
+   "stage": "Coding / meta-data extraction",
+   "status": "performed",
+   "steps": [],
+   "note": "Provisional rule-based topic labels; not validated against a gold set."
+  },
+  {
+   "stage": "Data extraction",
+   "status": "not performed",
+   "steps": [],
+   "note": null
+  },
+  {
+   "stage": "Critical appraisal",
+   "status": "not performed",
+   "steps": [],
+   "note": "The Atlas does not grade study quality."
+  },
+  {
+   "stage": "Synthesis",
+   "status": "performed",
+   "steps": [
+    {
+     "label": "Analysed (retracted works excluded)",
+     "value": 1429,
+     "source": "data/processed/analytics/manifest.json n_works"
+    }
+   ],
+   "note": "Descriptive evidence map (counts), no meta-analysis."
+  }
+ ]
+}

@@ -116,3 +116,4 @@
 | 2026-11-12 | AT-5 | Framework app: all five tabs + Overview ported lift-and-shift (4 Haiku workers), deployed under /app/ beside the classic site; check_at5, preview + headless smoke | this commit |
 | 2026-11-12 | EM-5 | Evidence Map shell as Framework page (facets, hash, drawer, link-out strip); linkouts.json export with trigger rules (2 Haiku workers) | this commit |
 | 2026-11-12 | EM-16/EM-18 | Related Resources page and DTSC timeline (Policy) page in Framework; linkouts.json fields extended; dtsc_timeline.json export (2 Haiku workers) | this commit |
+| 2026-11-12 | EM-6/EM-7 | Evidence Map V-3 pipeline flow (methods card) and V-4 trend panel (topic trends + CA share of global output, 1 OpenAlex request) (2 Haiku workers) | this commit |

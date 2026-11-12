@@ -5,6 +5,8 @@
 import "./shared/facets.js";
 import "./shared/topics.js";
 import {dataUrl, formatCount, loadJson} from "./atlas.js";
+import {mountV3Flow} from "./v3_flow.js";
+import {mountV4Trend} from "./v4_trend.js";
 import {
   DRAWER_PAGE_SIZE,
   LINKOUT_NOTE,
@@ -259,6 +261,8 @@ function bindFilters() {
 
 export async function mountEvidence() {
   const status = $("evidence-status");
+  // V-3 (EM-6) needs only the methods card export, so it renders independently of the bundle.
+  mountV3Flow($("ev-v3")).catch(() => {});
   const linkouts = loadJson("linkouts.json", {optional: true})
     .then((data) => (Array.isArray(data?.entries) ? data.entries : null))
     .catch(() => null);
@@ -282,4 +286,6 @@ export async function mountEvidence() {
   setState(app.state, {sync: true});
   app.linkouts = await linkouts;
   renderStrip();
+  // V-4 (EM-7): whole-corpus trends from the same bit-set index (not filtered by the selection).
+  mountV4Trend($("ev-v4"), index).catch(() => {});
 }

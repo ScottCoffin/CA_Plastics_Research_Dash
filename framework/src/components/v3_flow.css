@@ -1,0 +1,17 @@
+/* V-3 pipeline flow (EM-6). Rules are scoped to .v3-flow and use Framework theme variables, so
+ * they follow the light and dark themes. Arrows are CSS only (no SVG library). */
+.v3-flow { color: var(--theme-foreground); max-width: 46rem; margin: 1rem 0; }
+.v3-flow :focus-visible { outline: 3px solid var(--theme-foreground-focus); outline-offset: 2px; }
+.v3-flow .v3-stages { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: stretch; }
+.v3-flow .v3-stage { position: relative; padding: 0.75rem 1rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.5rem; background: var(--theme-background-alt); }
+.v3-flow .v3-stage:not(:last-child) { margin-bottom: 1.6rem; }
+.v3-flow .v3-stage:not(:last-child)::after { content: ""; position: absolute; left: 50%; bottom: -1.5rem; transform: translateX(-50%); width: 0; height: 0; border-left: 0.5rem solid transparent; border-right: 0.5rem solid transparent; border-top: 0.7rem solid var(--theme-foreground-muted); }
+.v3-flow .v3-stage--off { border-style: dashed; border-color: var(--theme-foreground-faintest); background: transparent; color: var(--theme-foreground-muted); }
+.v3-flow .v3-stage--off:not(:last-child)::after { border-top-color: var(--theme-foreground-faintest); }
+.v3-flow .v3-stage-name { margin: 0; font-size: 1rem; }
+.v3-flow .v3-status { margin: 0.2rem 0 0; font-size: 0.8rem; font-style: italic; color: var(--theme-foreground-muted); }
+.v3-flow .v3-steps { margin: 0.5rem 0 0; padding-left: 1.5rem; }
+.v3-flow .v3-step { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.9rem; }
+.v3-flow .v3-step-value { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.v3-flow .v3-note { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--theme-foreground-muted); }
+.v3-flow .v3-footer { margin: 1.2rem 0 0; font-size: 0.85rem; color: var(--theme-foreground-muted); }

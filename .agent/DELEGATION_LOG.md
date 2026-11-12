@@ -107,3 +107,7 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-12T10:12:21-08:00 | EM-18 DTSC timeline page | haiku-developer | dtsc_timeline.json export + Framework policy page | Running | - |
 | 2026-11-12 | EM-16 Related Resources page | (result) | resources page + export fields | Accepted first pass (52 tests) | 1 session; ~59K subagent tokens |
 | 2026-11-12 | EM-18 DTSC timeline page | (result) | timeline export + policy page | Accepted first pass (41 tests) | 1 session; ~57K subagent tokens |
+| 2026-11-12T10:25:18-08:00 | EM-6 V-3 flow | haiku-developer | methods_flow.json from AT-10 card + v3_flow.js component | Running | - |
+| 2026-11-12T10:25:18-08:00 | EM-7 V-4 trend | haiku-developer | trend_global.json (1 authorized OpenAlex group_by) + v4_trend.js component | Running | - |
+| 2026-11-12 | EM-6 V-3 flow | (result) | methods_flow.json + v3_flow.js | Accepted first pass (8 tests) | 1 session; ~55K subagent tokens |
+| 2026-11-12 | EM-7 V-4 trend | (result) | trend_global.json (1 request, 10 credits) + v4_trend.js | Accepted after one continue (30-turn limit) | 2 sessions; ~88K subagent tokens |

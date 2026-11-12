@@ -230,6 +230,21 @@ Licence: curated by hand from DTSC pages and uploaded documents; no scraping. Da
 
 `entries[]`: `id` (`dtsc-NN`), `date_as_stated` (verbatim from DTSC), `date_iso` (`YYYY-MM-DD` or `YYYY-MM`), `event`, `source_label`, `source_url` (https or null), `kind` (`workshop`, `proposal`, `background`, `finalized`, `effective` or `work_plan`).
 
+### `site/data/methods_flow.json`
+
+Purpose: the V-3 pipeline flow diagram on the Evidence Map (EM-6, Add-on A2 §5). Counts are copied from the newest `release/<date>/methods_card.json` (AT-10). Written by `py -3.14 scripts/build_methods_flow_json.py` (`--check` fails when it is stale).
+Top-level keys: `schema_version` (`em6.v1`), `release_date` (`YYYY-MM-DD`), `release_version` (string from `site/data/release.json` when its date matches, else null), `query_version` (string), `template` (`name`: ROSES flow diagram for systematic maps; `licence`: `CC BY 4.0`), `stages` (array, in flow order).
+Licence: the ROSES template is credited under CC BY 4.0; counts are project metadata.
+
+`stages[]`: `stage` (string), `status` (`performed` or `not performed`), `steps` (array; empty for stages with no count), `note` (string or null).
+`stages[].steps[]`: `label` (string), `value` (integer count), `source` (string naming the methods-card field the count comes from).
+
+### `site/data/trend_global.json`
+
+Purpose: the global denominator for the V-4 trend panel on the Evidence Map (EM-7, Add-on A2 §5). Works per publication year for all OpenAlex works matching the active plastics query (same type exclusions, no institution filter). Written by `py -3.14 scripts/fetch_trend_global.py` (one OpenAlex `group_by=publication_year` request; `--dry-run` prints the URL without a call; cached by `query_version` for 30 days, `--force` refetches).
+Top-level keys: `schema_version` (`em7.v1`), `query_version` (the active query, e.g. `plastic-v3.1`), `fetched_at` (UTC ISO 8601), `source` (`OpenAlex group_by publication_year`), `by_year` (object: year string to integer count, sorted by year).
+Missing file: the panel shows the per-topic chart and "Global comparison unavailable."
+
 ### `site/feed.xml`
 
 Purpose: Atom feed of newly indexed California-connected papers and newly recorded awards.

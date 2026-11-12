@@ -7,6 +7,8 @@ title: Evidence map
 Filter the atlas's distinct works by topic, sector, work type, open access, California leadership, plastic relevance and year, then open the works behind any count.
 
 <link rel="stylesheet" href="./components/evidence.css">
+<link rel="stylesheet" href="./components/v3_flow.css">
+<link rel="stylesheet" href="./components/v4_trend.css">
 
 <div id="evidence-root">
   <p id="evidence-status" class="result-count" role="status" aria-live="polite">Loading the evidence bundle…</p>
@@ -32,8 +34,8 @@ Filter the atlas's distinct works by topic, sector, work type, open access, Cali
       </section>
       <section class="ev-view" aria-labelledby="ev-v1-heading"><h3 id="ev-v1-heading">Evidence matrix</h3><p class="ev-placeholder">Coming with EM-8.</p></section>
       <section class="ev-view" aria-labelledby="ev-v2-heading"><h3 id="ev-v2-heading">Sampled-location atlas</h3><p class="ev-placeholder">Coming with EM-9.</p></section>
-      <section class="ev-view" aria-labelledby="ev-v3-heading"><h3 id="ev-v3-heading">Pipeline flow</h3><p class="ev-placeholder">Coming with EM-6.</p></section>
-      <section class="ev-view" aria-labelledby="ev-v4-heading"><h3 id="ev-v4-heading">Trend panel</h3><p class="ev-placeholder">Coming with EM-7.</p></section>
+      <section class="ev-view" aria-labelledby="ev-v3-heading"><h3 id="ev-v3-heading">Pipeline flow</h3><div id="ev-v3"></div></section>
+      <section class="ev-view" aria-labelledby="ev-v4-heading"><h3 id="ev-v4-heading">Trend panel</h3><div id="ev-v4"></div></section>
       <section class="ev-view" aria-labelledby="ev-v5-heading"><h3 id="ev-v5-heading">Review overlay</h3><p class="ev-placeholder">Coming with EM-10.</p></section>
     </div>
   </div>
