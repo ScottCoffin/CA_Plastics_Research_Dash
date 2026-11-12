@@ -6,7 +6,7 @@ title: Experts
 
 <div id="experts-root">
 <section id="panel-experts" class="panel">
-<h2>Experts</h2>
+<h1>Experts</h1>
 <p class="panel-intro">Browse the author index from the latest static export. Use the filters to narrow the starting list.</p>
 <form id="expert-filters" class="controls expert-controls" novalidate>
 <div class="field"><label for="expert-search">Search name or ID</label><input id="expert-search" name="search" type="search" autocomplete="off" placeholder="e.g. Rochman, UC Davis"></div>
@@ -26,6 +26,7 @@ title: Experts
 </div>
 <div class="result-line"><p id="expert-count" class="result-count" role="status" aria-live="polite">Loading experts…</p></div>
 <p class="data-note">Chips show each expert's research topics with the number of their works in each topic. Citation figures are career-wide OpenAlex counts; "on plastics" counts citations of the expert's plastic-related works in this corpus, so a low share suggests plastics is a secondary focus.</p>
+<h2 class="expert-sr-only">Expert list</h2>
 <div id="expert-list" class="virtual-list" role="list" aria-label="Experts" aria-live="polite"><div id="expert-spacer" class="virtual-spacer"><div id="expert-rows"></div></div></div>
 </section>
 <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>

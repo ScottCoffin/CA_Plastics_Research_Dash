@@ -25,7 +25,7 @@ title: Institutions
 <div id="institution-list" class="cards" aria-live="polite"></div>
 </div>
 <div class="institution-map-panel is-sticky">
-<h3>California institution map</h3>
+<h2>California institution map</h2>
 <p id="institution-map-hint" class="map-hint">Drag to pan, scroll or +/- to zoom, select a marker for institution details. With the map focused, arrow keys pan. Marker size follows plastic-related work count.</p>
 <div class="monitoring-map-controls" role="group" aria-label="Institution map zoom"><button type="button" id="institution-zoom-in">Zoom in (+)</button><button type="button" id="institution-zoom-out">Zoom out (-)</button><button type="button" id="institution-zoom-reset">Reset view</button></div>
 <div id="institution-map" class="monitoring-map institution-map" role="group" tabindex="0" aria-label="Clustered map of California institutions on a California basemap" aria-describedby="institution-map-hint"></div>

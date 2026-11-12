@@ -5,10 +5,10 @@ title: Funding
 <link rel="stylesheet" href="./components/funding.css">
 
 <div id="funding-root">
-  <h2>Funding</h2>
+  <h1>Funding</h1>
   <p class="viz-link"><a class="btn-link" id="funding-grants-link" style="display:inline-block;padding:0.55rem 1rem;border-radius:0.4rem;background:var(--brand-dark);color:#fff;font-weight:700;text-decoration:none">Open the funding visualizations &rarr;</a> <span class="data-note">Interactive Sankey, charts and a filterable award table.</span></p>
   <section aria-labelledby="grants-heading" class="grants">
-    <h3 id="grants-heading">Awards</h3>
+    <h2 id="grants-heading">Awards</h2>
     <p class="data-note">Awards as reported by each source (NIH RePORTER, NSF Awards, USAspending.gov, California Sea Grant, Ocean Protection Council). Amounts follow each source's own basis and are not comparable or additive across sources or fiscal years. Pass-through awards appear once, on their lowest-level record. Plastic relevance and topic tags are provisional rule-based labels. This is not a complete record of public funding.</p>
     <details id="grants-filter-panel" class="facet grants-filter-panel" open><summary><span class="grants-filter-summary">Filters</span></summary>
     <form id="grants-filters" class="grants-filters" aria-label="Filter awards">
@@ -37,10 +37,10 @@ title: Funding
     </div>
     <div id="grants-table" class="grants-table-wrap" tabindex="0" role="region" aria-label="Awards table, scrollable"></div>
     <nav class="grants-pager" aria-label="Award table pages"><button id="grants-prev" type="button">Previous</button><span id="grants-page"></span><button id="grants-next" type="button">Next</button><label for="grants-page-size">Rows per page <select id="grants-page-size"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option></select></label></nav>
-    <section aria-labelledby="grants-basis-heading" class="grants-basis"><h4 id="grants-basis-heading">Amount basis by source</h4><div id="grants-basis"></div></section>
+    <section aria-labelledby="grants-basis-heading" class="grants-basis"><h3 id="grants-basis-heading">Amount basis by source</h3><div id="grants-basis"></div></section>
   </section>
   <section aria-labelledby="open-calls-heading" class="open-calls">
-    <h3 id="open-calls-heading">Open funding calls</h3>
+    <h2 id="open-calls-heading">Open funding calls</h2>
     <p class="data-note">Source: California Grants Portal (public domain), refreshed daily; calls are opportunities, not awards. <a href="https://data.ca.gov/dataset/california-grants-portal" target="_blank" rel="noreferrer">Dataset</a></p>
     <p id="open-calls-status" class="result-count" role="status" aria-live="polite"></p>
     <div id="open-calls"></div>

@@ -29,7 +29,7 @@ ${doi
 <div class="atlas-cards">
 <section class="card">
 
-### Sources and snapshot
+## Sources and snapshot
 
 OpenAlex supplies the work and affiliation metadata in this static export. An earlier candidate search query is not in use; broad `search=plastic` counts are review-priority metadata, not the published corpus.
 
@@ -38,7 +38,7 @@ The refresh time is the export build time in `build_metadata.json`, not an updat
 </section>
 <section class="card">
 
-### Definitions
+## Definitions
 
 **Plastic-related:** work about plastic debris or particles, plastic litter, microfibers, tire-wear particles, or plastic-pollution policy. Chemicals in plastics are a separately flagged Tier 2 scope.
 
@@ -49,7 +49,7 @@ California state waters use a three-nautical-mile polygon derived from NOAA’s 
 </section>
 <section class="card">
 
-### Limitations
+## Limitations
 
 Plastic-related and topic labels are provisional, rule-based screening metadata. A held-out gold set and evaluation are later roadmap work, so no validated precision or recall is available yet.
 
@@ -58,7 +58,7 @@ OpenAlex coverage and affiliation records may be incomplete or incorrect, and au
 </section>
 <section class="card">
 
-### Corrections and source work
+## Corrections and source work
 
 For a correction or profile-removal request, <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">open a data-correction issue</a>. Include the OpenAlex ID, DOI or source URL when available, the field in question, and the proposed correction. Requests are acknowledged and acted on within 5 to 10 business days; a removed person or work is also excluded at the next ingest. Changes are reviewed for a later snapshot; the project does not alter the upstream OpenAlex record.
 

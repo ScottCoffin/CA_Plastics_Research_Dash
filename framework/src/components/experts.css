@@ -15,8 +15,10 @@
 #experts-root button, #experts-root input, #experts-root select { font: inherit; min-height: 2.75rem; }
 #experts-root button { cursor: pointer; }
 #experts-root :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-#experts-root h2 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 3vw, 1.65rem); }
+#experts-root h1, #experts-root h2 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 3vw, 1.65rem); }
 #experts-root h3 { margin: 0; font-size: 1.05rem; }
+#experts-root .expert-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#experts-root .card-header h2 { margin: 0; font-size: 1.05rem; }
 #experts-root .eyebrow { margin: 0; color: var(--muted); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 #experts-root .panel { margin-top: 1rem; padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid var(--line); border-radius: 0.75rem; background: var(--surface); box-shadow: 0 0.5rem 1.75rem rgb(23 50 77 / 7%); }
 #experts-root .panel-intro { margin-top: 0; color: var(--muted); }
@@ -39,7 +41,7 @@
 #experts-root .chip { display: inline-block; padding: 0.18rem 0.45rem; border-radius: 999px; color: #24445a; background: #e6eff2; font-size: 0.78rem; }
 #experts-root .card { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
 #experts-root .card-header { display: flex; justify-content: space-between; gap: 0.75rem; }
-#experts-root .card-header h3 { color: var(--brand-dark); }
+#experts-root .card-header h2 { color: var(--brand-dark); }
 #experts-root .card-meta { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
 #experts-root .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.55rem; }
 #experts-root .expert-link { border: 0; padding: 0; color: var(--brand-dark); background: transparent; font: inherit; font-weight: 700; text-align: left; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.15em; }
@@ -49,7 +51,7 @@
 #experts-root .virtual-row > .card { min-height: 10rem; }
 #experts-root .expert-card { box-sizing: border-box; height: 100%; display: flex; flex-direction: column; gap: 0.4rem; overflow: hidden; }
 #experts-root .expert-card .card-header { align-items: center; flex: none; }
-#experts-root .expert-card .card-header h3 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#experts-root .expert-card .card-header h2 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #experts-root .expert-card .card-header .chip { flex: none; white-space: nowrap; }
 #experts-root .expert-topics { position: relative; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 0.35rem; flex: none; max-height: 3.75rem; overflow: hidden; }
 #experts-root .expert-topics [hidden] { display: none !important; }

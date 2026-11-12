@@ -176,13 +176,13 @@ export async function mountV4Trend(container, idx) {
   const rows = globalByYear ? caShare(corpusByYear, globalByYear) : [];
   const version = globalPayload ? String(globalPayload.query_version || "") : "";
   const globalSection = globalPayload
-    ? `<h4 class="v4-heading">California share of global output</h4>` +
+    ? `<h3 class="v4-heading">California share of global output</h3>` +
       shareChart(rows, years, version, refDate) +
       `<p class="v4-note">Under query ${escapeHtml(version)}: California-connected works as a share of all OpenAlex works ` +
       `matching the same query, by publication year. Global counts fetched ${escapeHtml(globalPayload.fetched_at)}.</p>`
     : '<p class="v4-note v4-unavailable">Global comparison unavailable.</p>';
   container.innerHTML =
-    `<h4 class="v4-heading">Works per year by topic</h4>` +
+    `<h3 class="v4-heading">Works per year by topic</h3>` +
     barChart(data, refDate) +
     legend(topics) +
     `<p class="v4-note">A work with several topic tags is counted under each. Works before ${FIRST_YEAR} are not shown.</p>` +

@@ -14,7 +14,8 @@
 #institutions-root :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 #institutions-root button, #institutions-root input, #institutions-root select { font: inherit; min-height: 2.75rem; }
 #institutions-root button { cursor: pointer; }
-#institutions-root h3 { margin: 0; font-size: 1.05rem; }
+#institutions-root h2, #institutions-root h3 { margin: 0; font-size: 1.05rem; }
+#institutions-root .map-details-head h3 { font-size: 1rem; }
 #institutions-root h4 { margin: 0; font-size: 1rem; }
 #institutions-root .panel-intro { margin-top: 0; color: var(--muted); }
 #institutions-root .data-note { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.9rem; }
@@ -39,7 +40,7 @@
 
 #institutions-root .card { padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
 #institutions-root .card-header { display: flex; justify-content: space-between; gap: 0.75rem; }
-#institutions-root .card-header h3 { color: var(--brand-dark); }
+#institutions-root .card-header h2 { color: var(--brand-dark); }
 #institutions-root .institution-card { display: grid; gap: 0.5rem; }
 #institutions-root .institution-card .card-header { align-items: start; }
 #institutions-root .chip { display: inline-block; padding: 0.18rem 0.45rem; border-radius: 999px; color: #24445a; background: #e6eff2; font-size: 0.78rem; }
@@ -58,7 +59,7 @@
 #institutions-root .basis-note { color: var(--muted); font-weight: 400; }
 #institutions-root .detail-meta { color: var(--muted); }
 #institutions-root .top-experts { margin: 0.4rem 0; }
-#institutions-root .top-experts h4 { margin: 0 0 0.25rem; font-size: 0.85rem; }
+#institutions-root .top-experts h3 { margin: 0 0 0.25rem; font-size: 0.85rem; }
 #institutions-root .top-experts ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
 #institutions-root .top-experts li { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; align-items: center; }
 #institutions-root .top-experts .expert-name { font-weight: 700; }
@@ -100,7 +101,7 @@
 #institutions-root .map-legend span.cluster::before { background: #c45100; }
 #institutions-root .map-inst { padding: 0.5rem 0; border-top: 1px solid var(--line); display: grid; gap: 0.45rem; }
 #institutions-root .map-inst:first-of-type { border-top: 0; }
-#institutions-root .map-inst h5 { margin: 0; font-size: 0.98rem; color: var(--brand-dark); }
+#institutions-root .map-inst h4 { margin: 0; font-size: 0.98rem; color: var(--brand-dark); }
 #institutions-root .map-inst-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: 0.35rem 0.75rem; margin: 0; }
 #institutions-root .map-inst-stats dt { color: var(--muted); font-size: 0.75rem; }
 #institutions-root .map-inst-stats dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }

@@ -46,7 +46,7 @@ function labelled(label, value) {
 
 export function buildCard(entry) {
   const card = el("li", "rs-card");
-  const heading = el("h3", "rs-name");
+  const heading = el("h2", "rs-name");
   if (isHttps(entry.root_url)) {
     heading.append(externalLink(entry.root_url, entry.name));
   } else {
