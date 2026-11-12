@@ -138,7 +138,7 @@ Contract: `docs/EM_spec.md` Sections 0-8 (Section 1A = verified browser audit; A
 - [x] **UX-3** P0 Remove internal vocabulary from public text (EM-n, "S3.1 export", "uploaded document; no URL", "awaits owner review", "Fixture snapshot", inactive query name); build-time string check over rendered /app/ HTML that fails on a seeded sample. Size: S. Done 2026-11-12 (`docs/UX_2_3_VERIFICATION.md`; `scripts/check_public_text.py` in ci.yml and build_deploy.yml).
 - [ ] **UX-4** P0 Evidence map honest state (UXD-5): one "In development" notice, no empty headings or "Coming with EM-n", intro lists only rendered filters, visible failed state with retry. Size: S/M.
 - [ ] **UX-17** Quality gate: CI accessibility audit (axe-core per /app/ route plus grants.html/expert.html; fail on new violations against a committed baseline; Lighthouse report-only) and the UX-3 string check. New dev dependency needs owner approval (UXD-9). Size: M.
-- [ ] **UX-22** P1 Contrast and link styling in `framework/src/style.css` (muted text >= 4.5:1, links in text underlined); sidebar search label and list markup if reachable. Size: S.
+- [x] **UX-22** P1 Contrast and link styling in `framework/src/style.css` (muted text >= 4.5:1, links in text underlined); sidebar search label and list markup if reachable. Size: S. Done 2026-11-12 (`docs/UX_22_VERIFICATION.md`): 0 color-contrast / link-in-text-block / label-title-only nodes on 9 routes in light and dark; the sidebar `<ol>` list violation is a Framework template limit (not moved).
 - [ ] **UX-23** P1 Heading structure: h1 on Experts and Funding; no heading-level skips. Size: S.
 - [ ] **UX-24** P1 Monitoring CLS 0.50 (`#monitoring-quality-note`) below 0.1; nested-interactive on Monitoring and grants.html; grants.html aria/definition-list/empty-th. Size: S.
 - [ ] **UX-6** P1 Reconcile institution counts (Overview 211 vs Institutions 161): definitions beside each number; stop and report if the code cannot explain it. Size: S.
@@ -153,7 +153,7 @@ Contract: `docs/EM_spec.md` Sections 0-8 (Section 1A = verified browser audit; A
 - [ ] **UX-14** P2 Overview: drop duplicate "Labeled works" tile unless defined; refresh time as "12 Nov 2026, 17:09 UTC" in `<time datetime>`; "Start here" row (copy TODO-OWNER). Size: S.
 - [ ] **UX-15** P2 Experts list scalability: pagination or virtual list with visible loading and no-results states. Size: M.
 - [ ] **UX-16** P2 "Volume, not strength" caption on every count-based view lacking one. Size: S.
-- [ ] **UX-25** P2 Mobile and metadata: no 375 px overflow (Evidence), 24 px touch targets, meta description per page, fix the per-page console 404. Size: S/M.
+- [ ] **UX-25** P2 Mobile and metadata: no 375 px overflow (Evidence), 24 px touch targets, meta description per page, fix the per-page console 404; Funding fiscal-year inputs overflow their grid cell at 1366 px. Size: S/M.
 - [ ] **UX-18** Naive-user Playwright task scripts (six tasks in the spec), pass/fail with steps and last element touched. Size: M.
 - [ ] **UX-19** Manual accessibility pass (WCAG 2.2 AA checklist in the spec); output a failure table only. Size: M. `owner: review` (human or human-assisted).
 - [ ] **UX-20** Moderated sessions plan (5 participants, six tasks, think-aloud script); agent prepares materials only. Size: L. `owner: review`.

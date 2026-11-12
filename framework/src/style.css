@@ -11,3 +11,63 @@
 .atlas-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
 .atlas-cards a.card { text-decoration: none; color: inherit; }
 .atlas-pending { color: var(--theme-foreground-muted); }
+
+/* UX-22 (docs/EM_spec.md): text contrast and link affordance (WCAG 2.2 AA).
+   Framework's muted (60%) and faint (50%) text mixes measure 3.2-4.4:1; these mixes reach
+   at least 4.5:1 on both theme backgrounds and the alternate background. */
+@media (prefers-color-scheme: light) {
+  :root {
+    --theme-foreground-muted: color-mix(in srgb, var(--theme-foreground) 75%, var(--theme-background-a));
+    --theme-foreground-faint: color-mix(in srgb, var(--theme-foreground) 68%, var(--theme-background-a));
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --theme-foreground-muted: color-mix(in srgb, var(--theme-foreground) 75%, var(--theme-background-b));
+    --theme-foreground-faint: color-mix(in srgb, var(--theme-foreground) 68%, var(--theme-background-b));
+  }
+}
+/* Links inside running text are underlined, so colour is not the only cue. */
+.atlas-header a,
+#observablehq-footer a,
+#observablehq-main p a,
+#observablehq-main li a,
+#observablehq-main dd a,
+#observablehq-main td a,
+#observablehq-main figcaption a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+/* Facet headers keep a fixed light background in both themes; keep their links dark too. */
+.facet > summary a { color: #0b3d31; }
+/* Pages ported from the classic site (Experts, Institutions, Monitoring, Funding) hardcode a
+   light palette (white inputs and buttons, dark ink). In the dark theme they render as a light
+   panel, so every text/background pair keeps 4.5:1; "html" raises specificity above the page
+   stylesheets, which load later. A full dark palette for these pages is later polish. */
+@media (prefers-color-scheme: dark) {
+  html #experts-root,
+  html #funding-root,
+  html #institutions-root,
+  html #monitoring-root {
+    color-scheme: light;
+    --theme-foreground: #17324d;
+    --theme-foreground-alt: #17324d;
+    --theme-foreground-muted: #46576a;
+    --theme-foreground-fainter: #9aa7b2;
+    --theme-foreground-faintest: #dde5e8;
+    --theme-foreground-faint: #5b6876;
+    --theme-foreground-focus: #0b57d0;
+    --theme-background: #ffffff;
+    --theme-background-alt: #f4f6f7;
+    background: #ffffff;
+    color: #17324d;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+  }
+  html #experts-root :is(h1, h2, h3, h4, h5, h6),
+  html #funding-root :is(h1, h2, h3, h4, h5, h6),
+  html #institutions-root :is(h1, h2, h3, h4, h5, h6),
+  html #monitoring-root :is(h1, h2, h3, h4, h5, h6) {
+    color: #17324d;
+  }
+}

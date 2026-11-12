@@ -40,6 +40,7 @@ def test_postbuild_fix_html_rewrites_template():
         "<html>\n"
         '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">'
         '<a class="atlas-classic" href="./">Classic site</a>'
+        '<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">'
     )
     script = "import(process.argv[1]).then(m => process.stdout.write(m.fixHtml(process.argv[2])))"
     module = (FW / "scripts" / "postbuild.mjs").resolve().as_uri()
@@ -50,3 +51,13 @@ def test_postbuild_fix_html_rewrites_template():
     assert "maximum-scale" not in out
     assert 'href="../index.html"' in out
     assert 'href="./"' not in out
+    assert 'aria-label="Toggle sidebar"' in out
+
+
+def test_style_css_keeps_contrast_overrides():
+    """UX-22: the contrast fixes live in style.css; guard against an accidental revert."""
+    css = (FW / "src" / "style.css").read_text(encoding="utf-8")
+    assert "--theme-foreground-muted: color-mix(in srgb, var(--theme-foreground) 75%" in css
+    assert "text-decoration: underline" in css
+    for root in ("experts", "funding", "institutions", "monitoring"):
+        assert f"html #{root}-root" in css

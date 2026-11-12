@@ -5,6 +5,7 @@
 //   - the viewport meta sets maximum-scale=1, blocking zoom      -> removed (axe meta-viewport)
 //   - the header's "Classic site" link (class atlas-classic) is rewritten from ../ to ./,
 //     i.e. the page the reader is already on                     -> ../index.html
+//   - the sidebar toggle is labelled only by title (axe label-title-only) -> adds aria-label
 // Every page sits at the top level of the app (check_at5.py), so ../index.html always
 // reaches the classic site root beside the app.
 import {readdirSync, readFileSync, statSync, writeFileSync} from "node:fs";
@@ -18,6 +19,8 @@ export function fixHtml(html) {
   return html
     .replace(/<html>/, '<html lang="en">')
     .replace(/(<meta name="viewport" content="[^"]*?),\s*maximum-scale=1/, "$1")
+    .replace(/<input id="observablehq-sidebar-toggle" type="checkbox" title="([^"]*)">/,
+      '<input id="observablehq-sidebar-toggle" type="checkbox" title="$1" aria-label="$1">')
     .replace(/<a href="[^"]*" class="atlas-classic">/g, '<a href="../index.html" class="atlas-classic">')
     .replace(/<a class="atlas-classic" href="[^"]*">/g, '<a class="atlas-classic" href="../index.html">');
 }

@@ -111,3 +111,5 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-12T10:25:18-08:00 | EM-7 V-4 trend | haiku-developer | trend_global.json (1 authorized OpenAlex group_by) + v4_trend.js component | Running | - |
 | 2026-11-12 | EM-6 V-3 flow | (result) | methods_flow.json + v3_flow.js | Accepted first pass (8 tests) | 1 session; ~55K subagent tokens |
 | 2026-11-12 | EM-7 V-4 trend | (result) | trend_global.json (1 request, 10 credits) + v4_trend.js | Accepted after one continue (30-turn limit) | 2 sessions; ~88K subagent tokens |
+| 2026-11-12 | UX-2 expert ids | haiku-developer | site/expert.html, site/assets/expert_page.js, tests/test_expert_page_ids.py | Accepted first pass (9 tests; lead browser-checked) | 1 session; ~60K subagent tokens |
+| 2026-11-12 | UX-3 public text | haiku-developer | page copy (classic + Framework), dtsc labels, scripts/check_public_text.py + tests | Accepted first pass (13 tests); lead wired CI | 1 session; ~48K subagent tokens |
