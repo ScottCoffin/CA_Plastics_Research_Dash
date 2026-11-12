@@ -519,3 +519,34 @@ def test_load_prior_relevance_rules(tmp_path: Path) -> None:
 
 def test_load_prior_relevance_missing_files_gives_empty(tmp_path: Path) -> None:
     assert gl.load_prior_relevance(tmp_path / "a.csv", tmp_path / "b.csv") == {}
+
+
+def test_load_works_keeps_a_blanked_abstract_blank(tmp_path: Path) -> None:
+    """Normalization blanks mis-attached abstracts; the raw fallback must not restore them."""
+    import json
+
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    works = tmp_path / "works.parquet"
+    pq.write_table(
+        pa.table({"work_id": ["W1"], "title": ["Nematodes"], "abstract": [""], "year": [1998]}),
+        works,
+    )
+    teaser = "Micro-nano plastics originating from the prevalent usage of plastics " * 3
+    raw_rows = []
+    for i, title in enumerate(["Nematodes", "Galaxies", "Enzymes", "Volcanoes"], start=1):
+        work = {
+            "title": title,
+            "publication_year": 1998,
+            "doi": f"https://doi.org/10.1073/pnas.{i}",
+            "abstract_inverted_index": {f"{w}{n}": [n] for n, w in enumerate(teaser.split())},
+            "primary_location": {"source": {"display_name": "PNAS"}},
+        }
+        raw_rows.append({"openalex_id": f"https://openalex.org/W{i}", "raw_json": json.dumps(work)})
+    raw = tmp_path / "raw.parquet"
+    pq.write_table(pa.Table.from_pylist(raw_rows), raw)
+    out = gl.load_works(works, ["W1", "W2"], fallbacks=(raw,), authorships=tmp_path / "none")
+    assert not out["W1"]["abstract"]  # normalized blank wins
+    assert out["W1"]["journal"] == "PNAS"  # display fields still filled
+    assert not out["W2"]["abstract"]  # fallback-only work: same QC blanks it

@@ -22,6 +22,7 @@ from typing import Any
 
 import pyarrow.parquet as pq
 
+from atlas.ingest.abstract_qc import misattached_abstract_ids
 from atlas.ingest.normalize import _abstract_from_inverted_index
 from atlas.nlp.annotation import (
     _STATUSES,
@@ -215,18 +216,27 @@ def load_works(
     beside it (or ``authorships``). The S4.2 leak-test works come from outside the corpus
     (``leak_candidates.parquet``), and a few pool works were collapsed or suppressed at
     normalization, so missing ids fall back to those files and then to the raw OpenAlex
-    table (``raw_json``). Missing display fields are filled from later sources.
+    table (``raw_json``). Later sources fill only missing DOI, journal and authors for a work
+    the normalized table has: its title and abstract stay authoritative, because
+    normalization blanks abstracts OpenAlex attached to unrelated works. For works found
+    only in a fallback, ``atlas.ingest.abstract_qc`` runs over every fallback record and
+    blanks those abstracts here too.
     """
     wanted = None if work_ids is None else set(work_ids)
     out: dict[str, dict[str, Any]] = {}
+    primary: set[str] = set()
+    fallback_seen: dict[str, dict[str, Any]] = {}
 
-    def take(record: Mapping[str, Any]) -> None:
+    def take(record: Mapping[str, Any], *, from_fallback: bool = False) -> None:
         work_id = str(record["work_id"])
+        if from_fallback:
+            fallback_seen.setdefault(work_id, dict(record))
         if wanted is not None and work_id not in wanted:
             return
         current = out.setdefault(work_id, {k: None for k in WORK_FIELDS} | {"work_id": work_id})
+        locked = ("title", "abstract", "year") if from_fallback and work_id in primary else ()
         for key in WORK_FIELDS:
-            if not current.get(key) and record.get(key):
+            if key not in locked and not current.get(key) and record.get(key):
                 current[key] = record[key]
 
     names = pq.read_schema(path).names
@@ -234,6 +244,7 @@ def load_works(
     authors = _authors_by_work(authorships or Path(path).with_name("authorships.parquet"), wanted)
     for record in pq.read_table(path, columns=cols).to_pylist():
         take({**record, "authors": authors.get(str(record["work_id"]))})
+    primary.update(out)
 
     def incomplete() -> bool:
         if wanted is None or not wanted <= out.keys():
@@ -248,13 +259,14 @@ def load_works(
         names = pq.read_schema(fallback).names
         if "raw_json" in names:
             for row in pq.read_table(fallback, columns=["openalex_id", "raw_json"]).to_pylist():
-                work_id = str(row["openalex_id"]).rsplit("/", 1)[-1]
-                if wanted is None or work_id in wanted:
-                    take(_raw_record(row["openalex_id"], row["raw_json"]))
+                take(_raw_record(row["openalex_id"], row["raw_json"]), from_fallback=True)
         elif {"work_id", "title", "year"} <= set(names):
             cols = [c for c in WORK_FIELDS if c in names]
             for record in pq.read_table(fallback, columns=cols).to_pylist():
-                take(record)
+                take(record, from_fallback=True)
+    for work_id in misattached_abstract_ids(fallback_seen.values()):
+        if work_id in out and work_id not in primary:
+            out[work_id]["abstract"] = ""
     return out
 
 
