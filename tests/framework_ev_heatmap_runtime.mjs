@@ -3,11 +3,17 @@
 import assert from "node:assert/strict";
 import {
   NO_MATRIX_KEY,
+  cellKey,
   colorFor,
   contrastRatio,
   escapeHtml,
   heatmapCells,
+  pruneSelection,
+  rowSelected,
+  selectedIds,
   textInk,
+  toggleCell,
+  toggleRow,
   yearBins
 } from "../framework/src/components/ev_heatmap_model.js";
 
@@ -150,5 +156,61 @@ assert.throws(() => heatmapCells([], "topic-size"));
 assert.equal(escapeHtml(`<a href="x">&'`), "&lt;a href=&quot;x&quot;&gt;&amp;&#39;");
 assert.equal(escapeHtml(null), "");
 assert.equal(escapeHtml(0), "0");
+
+// Selection: cells toggle, rows toggle every non-empty cell, selections are unions, and zero cells never count.
+{
+  const rows = [
+    {work_id: "A", year: 2021, domain_tags: ["air"], facet_tags: ["matrix:marine"]},
+    {work_id: "B", year: 2021, domain_tags: ["air"], facet_tags: ["matrix:freshwater"]},
+    {work_id: "C", year: 2022, domain_tags: ["plastisphere"], facet_tags: ["matrix:marine"]},
+    {work_id: "D", year: 2022, domain_tags: ["plastisphere"], facet_tags: []}
+  ];
+  const model = heatmapCells(rows, "topic-matrix");
+  const airMarine = cellKey("air", "matrix:marine");
+  const plastiMarine = cellKey("plastisphere", "matrix:marine");
+  const plastiNone = cellKey("plastisphere", NO_MATRIX_KEY);
+
+  // Cell toggle: on, then off; the input set is never mutated.
+  const empty = new Set();
+  const on = toggleCell(empty, airMarine);
+  assert.deepEqual([...on], [airMarine]);
+  assert.equal(empty.size, 0);
+  assert.equal(toggleCell(on, airMarine).size, 0);
+
+  // Union of two cells, in model order, and no duplicates when a work sits in two selected cells.
+  const union = toggleCell(toggleCell(empty, airMarine), plastiMarine);
+  assert.deepEqual(selectedIds(model, union).sort(), ["A", "C"]);
+  assert.deepEqual(selectedIds(model, toggleCell(union, plastiNone)).sort(), ["A", "C", "D"]);
+  assert.deepEqual(selectedIds(model, empty), []);
+
+  // Row toggle selects every non-empty cell in the row; a second toggle clears them all.
+  const airRow = toggleRow(empty, model, "air");
+  assert.deepEqual(selectedIds(model, airRow).sort(), ["A", "B"]);
+  assert.equal(rowSelected(airRow, model, "air"), true);
+  assert.equal(rowSelected(airRow, model, "plastisphere"), false);
+  assert.equal(toggleRow(airRow, model, "air").size, 0);
+
+  // A partly selected row: the header completes it first (aria-pressed stays false until every cell is in).
+  const partial = toggleCell(empty, airMarine);
+  assert.equal(rowSelected(partial, model, "air"), false);
+  const completed = toggleRow(partial, model, "air");
+  assert.equal(rowSelected(completed, model, "air"), true);
+  assert.equal(toggleRow(completed, model, "air").size, 0);
+
+  // A row with no works cannot be selected.
+  assert.equal(toggleRow(empty, model, "soil_and_agriculture").size, 0);
+  assert.equal(rowSelected(empty, model, "soil_and_agriculture"), false);
+
+  // Zero cells are never selected: a stray key for an empty cell is pruned and adds no ids.
+  const stray = new Set([cellKey("air", "matrix:air"), airMarine]);
+  assert.deepEqual([...pruneSelection(stray, model)], [airMarine]);
+  assert.deepEqual(selectedIds(model, stray), ["A"]);
+  assert.equal(pruneSelection(union, null).size, 0);
+
+  // Filter change: a selected cell that no longer has works is dropped; a surviving cell stays.
+  const narrowed = heatmapCells(rows.filter((r) => r.work_id !== "C"), "topic-matrix");
+  assert.deepEqual([...pruneSelection(union, narrowed)], [airMarine]);
+  assert.equal(pruneSelection(union, heatmapCells([], "topic-matrix")).size, 0);
+}
 
 console.log("framework_ev_heatmap_runtime: all checks passed");

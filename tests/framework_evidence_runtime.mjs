@@ -7,14 +7,11 @@ import {fileURLToPath} from "node:url";
 import {
   emptyState,
   formatHash,
-  pageWorks,
   parseHash,
   safeHttpUrl,
   sanitizeState,
   selectionFor,
-  sortWorksNewestFirst,
-  stripEntries,
-  worksMetaMap
+  stripEntries
 } from "../framework/src/components/evidence_model.js";
 
 const require = createRequire(import.meta.url);
@@ -48,6 +45,14 @@ const {BitmaskIndex} = require(fileURLToPath(new URL("../site/assets/facets.js",
   assert.deepEqual(parseHash("#bogus=1&topic=air,,air"), {facets: {topic: ["air"]}, yearFrom: null, yearTo: null, q: ""});
 }
 
+// The plastic filter is not a hash key: a hash that carries it is ignored and never written back.
+{
+  assert.deepEqual(parseHash("#plastic=no"), emptyState());
+  assert.deepEqual(parseHash("#plastic=yes&topic=air"), {facets: {topic: ["air"]}, yearFrom: null, yearTo: null, q: ""});
+  assert.equal(formatHash({...emptyState(), facets: {plastic: ["yes"]}}), "");
+  assert.equal(formatHash({...emptyState(), facets: {plastic: ["no"], topic: ["air"]}}), "#topic=air");
+}
+
 // sanitizeState keeps only labels the bundle defines.
 {
   const known = {topic: new Set(["air"])};
@@ -74,30 +79,6 @@ const {BitmaskIndex} = require(fileURLToPath(new URL("../site/assets/facets.js",
   assert.deepEqual(stripEntries(null, ["air"]), []);
 }
 
-// Drawer helpers: sorting, paging and the works map.
-{
-  const works = {
-    work_ids: ["W1", "W2", "W3", "W4"],
-    titles: ["one", "two", "three", "four"],
-    years: [2010, null, 2020, 2010]
-  };
-  const meta = worksMetaMap(works);
-  assert.deepEqual(meta.get("W3"), {title: "three", year: 2020});
-  assert.deepEqual(meta.get("W2"), {title: "two", year: null});
-  assert.deepEqual(sortWorksNewestFirst(["W1", "W2", "W3", "W4"], meta), ["W3", "W1", "W4", "W2"]);
-
-  const many = Array.from({length: 120}, (_, i) => `W${i}`);
-  const page = pageWorks(many, 2);
-  assert.equal(page.pages, 3);
-  assert.equal(page.page, 2);
-  assert.equal(page.items.length, 20);
-  assert.equal(page.items[0], "W100");
-  assert.equal(pageWorks(many, 9).page, 2);
-  assert.equal(pageWorks(many, -1).page, 0);
-  assert.equal(pageWorks([], 0).pages, 1);
-  assert.throws(() => worksMetaMap({work_ids: ["W1"], titles: [], years: [2000]}));
-}
-
 // Related links are rendered only for https URLs.
 {
   assert.equal(safeHttpUrl("https://example.org/x"), "https://example.org/x");
@@ -106,18 +87,25 @@ const {BitmaskIndex} = require(fileURLToPath(new URL("../site/assets/facets.js",
 }
 
 // Year ranges map onto the bundle's year labels; a range with no labels is impossible.
+// Every selection carries the plastic-related constraint.
 {
   const years = ["2014", "2015", "2020"];
-  assert.deepEqual(selectionFor({...emptyState(), yearFrom: 2015}, years), {sel: {year: ["2015", "2020"]}, impossible: false});
-  assert.deepEqual(selectionFor({...emptyState(), yearTo: 2014}, years), {sel: {year: ["2014"]}, impossible: false});
+  assert.deepEqual(selectionFor({...emptyState(), yearFrom: 2015}, years), {sel: {plastic: ["yes"], year: ["2015", "2020"]}, impossible: false});
+  assert.deepEqual(selectionFor({...emptyState(), yearTo: 2014}, years), {sel: {plastic: ["yes"], year: ["2014"]}, impossible: false});
   assert.equal(selectionFor({...emptyState(), yearFrom: 2030}, years).impossible, true);
-  assert.deepEqual(selectionFor(emptyState(), years), {sel: {}, impossible: false});
+  assert.deepEqual(selectionFor(emptyState(), years), {sel: {plastic: ["yes"]}, impossible: false});
+}
+
+// A plastic facet in the state never widens or changes the selection.
+{
+  const state = {...emptyState(), facets: {plastic: ["no"], topic: ["air"]}};
+  assert.deepEqual(selectionFor(state, []), {sel: {plastic: ["yes"], topic: ["air"]}, impossible: false});
 }
 
 // The shared AT-4 engine over a synthetic bundle: works W0..W3 (bit i = work i).
-// topic air = {0,1}, sea = {2,3}; year 2015 = {0,2}, year 2020 = {1,3}.
+// topic air = {0,1}, sea = {2,3}; year 2015 = {0,2}, year 2020 = {1,3}; plastic yes = {0,1,2}.
 {
-  const words = [0b0011, 0b1100, 0b0101, 0b1010];
+  const words = [0b0011, 0b1100, 0b0101, 0b1010, 0b0111];
   const header = Buffer.alloc(16);
   header.write("BMF1", 0, "latin1");
   header.writeUInt32LE(1, 4);
@@ -128,24 +116,32 @@ const {BitmaskIndex} = require(fileURLToPath(new URL("../site/assets/facets.js",
   const buffer = Buffer.concat([header, body]);
   const facets = {
     topic: [{label: "air", id: 0, count: 2}, {label: "sea", id: 1, count: 2}],
-    year: [{label: "2015", id: 2, count: 2}, {label: "2020", id: 3, count: 2}]
+    year: [{label: "2015", id: 2, count: 2}, {label: "2020", id: 3, count: 2}],
+    plastic: [{label: "yes", id: 4, count: 3}]
   };
   const works = {schema: "at4.v1", work_ids: ["W0", "W1", "W2", "W3"], titles: ["a", "b", "c", "d"], years: [2015, 2020, 2015, 2020]};
   const index = new BitmaskIndex(facets, buffer, works);
 
+  // Year range plus topic, with the plastic constraint applied through selectionFor.
   const {sel, impossible} = selectionFor({...emptyState(), facets: {topic: ["air"]}, yearFrom: 2020, yearTo: 2020}, ["2015", "2020"]);
   assert.equal(impossible, false);
   assert.equal(index.counts(sel).total, 1);
   assert.deepEqual(index.selectedIds(sel), ["W1"]);
 
+  // Plastic-only: W3 is not plastic-related, so it is excluded from every count.
+  const plasticOnly = selectionFor(emptyState(), ["2015", "2020"]);
+  assert.equal(index.counts(plasticOnly.sel).total, 3);
+  assert.deepEqual(index.selectedIds(plasticOnly.sel), ["W0", "W1", "W2"]);
+  const sea = selectionFor({...emptyState(), facets: {topic: ["sea"]}}, ["2015", "2020"]);
+  assert.deepEqual(index.selectedIds(sea.sel), ["W2"]);
+  assert.equal(index.counts(sea.sel).total, 1);
+
+  // The engine's own counts (no plastic facet) still see all four works.
   const all = index.counts({topic: ["air"]});
   assert.equal(all.total, 2);
   assert.equal(all.counts["year|2015"], 1);
   assert.equal(all.counts["year|2020"], 1);
   assert.equal(all.counts["topic|sea"], 2);
 }
-
-// The shell's hash format is the one parseHash reads back.
-assert.equal(formatHash({...emptyState(), facets: {plastic: ["yes"]}}), "#plastic=yes");
 
 console.log("framework_evidence_runtime: all checks passed");

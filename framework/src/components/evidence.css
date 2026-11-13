@@ -7,7 +7,6 @@
 @media (max-width: 760px) { #evidence-root .ev-layout { grid-template-columns: minmax(0, 1fr); } }
 #evidence-root .ev-filters { display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; }
 #evidence-root .ev-field { display: flex; flex-direction: column; gap: 0.25rem; }
-#evidence-root .ev-years { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; }
 #evidence-root input[type="search"], #evidence-root input[type="number"] { font: inherit; padding: 0.35rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.35rem; background: var(--theme-background); color: var(--theme-foreground); }
 #evidence-root button { font: inherit; min-height: 2rem; padding: 0.3rem 0.8rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.35rem; background: var(--theme-background-alt); color: var(--theme-foreground); cursor: pointer; }
 #evidence-root button:disabled { opacity: 0.5; cursor: default; }
@@ -22,20 +21,12 @@
 #evidence-root .ev-view { margin-top: 1.25rem; padding: 0.75rem 1rem; border: 1px dashed var(--theme-foreground-faintest); border-radius: 0.5rem; }
 #evidence-root .ev-view h2 { margin: 0; font-size: 1rem; }
 #evidence-root .ev-notice { margin: 0.75rem 0 0; padding: 0.5rem 0.75rem; border-left: 4px solid var(--theme-foreground-faint); border-radius: 0.25rem; background: var(--theme-background-alt); font-size: 0.9rem; }
-#evidence-root .ev-drawer { width: min(40rem, 94vw); max-height: 85vh; padding: 0; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.6rem; background: var(--theme-background); color: var(--theme-foreground); }
-#evidence-root .ev-drawer::backdrop { background: rgb(0 0 0 / 0.45); }
-#evidence-root .ev-drawer-body { box-sizing: border-box; max-height: 85vh; padding: 1rem 1.25rem; overflow: auto; }
-#evidence-root .ev-drawer-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
-#evidence-root .ev-drawer-head h2 { margin: 0; font-size: 1.05rem; }
-#evidence-root .ev-drawer-list { margin: 0.75rem 0; padding-left: 1.5rem; }
-#evidence-root .ev-drawer-list li + li { margin-top: 0.4rem; }
-#evidence-root .ev-pager { display: flex; align-items: center; gap: 0.75rem; }
 #evidence-root input[type="search"], #evidence-root input[type="number"] { box-sizing: border-box; width: 100%; min-width: 0; }
 #evidence-root .ev-option input[type="checkbox"] { flex: 0 0 auto; width: 1.5rem; height: 1.5rem; margin: 0; }
 #evidence-root .v4-sr-only { display: block; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-#evidence-root .ev-year { color: var(--theme-foreground-muted); }
 /* Pipeline flow: collapsed by default; the heading sits inside the summary. */
 #evidence-root .ev-flow-box { margin-top: 1.25rem; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; padding: 0.25rem 0.75rem; }
 #evidence-root .ev-flow-box > summary { cursor: pointer; min-height: 2.75rem; display: flex; align-items: center; gap: 0.5rem; }
 #evidence-root .ev-flow-box > summary { font-weight: 650; }
 #evidence-root .ev-view { margin-top: 1.25rem; }
+#evidence-root .ev-years { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; }

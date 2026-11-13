@@ -1,7 +1,8 @@
 // Evidence map shell (Add-on A2 §5, EM-5b): shared filter state in the URL hash, A1 bit-set facets
-// (AT-4 engine), distinct works only and a shared works drawer. Every view below the filters
-// follows them (owner 2026-11-12): trend panel, heatmap and publication table get the matching rows
-// on each change; the pipeline flow is static. Related resources moved to their own page.
+// (AT-4 engine) and distinct works only. The page lists plastic-related works only (selectionFor adds
+// that facet). Every view below the filters follows them (owner 2026-11-12): trend panel, heatmap and
+// publication table get the matching rows on each change; heatmap cells narrow the publication table
+// (owner 2026-11-13); the pipeline flow is static. Related resources moved to their own page.
 // Pure helpers live in evidence_model.js; this file owns the DOM.
 import "./shared/facets.js";
 import "./shared/topics.js";
@@ -11,30 +12,18 @@ import {mountV4Trend} from "./v4_trend.js";
 import {mountHeatmap} from "./ev_heatmap.js";
 import {mountWorksTable, renderRecentCallout} from "./ev_table.js";
 import {normaliseRows} from "./ev_table_model.js";
-import {
-  DRAWER_PAGE_SIZE,
-  emptyState,
-  formatHash,
-  openAlexUrl,
-  pageWorks,
-  parseHash,
-  safeHttpUrl,
-  sanitizeState,
-  selectionFor,
-  sortWorksNewestFirst,
-  worksMetaMap
-} from "./evidence_model.js";
+import {emptyState, formatHash, parseHash, sanitizeState, selectionFor} from "./evidence_model.js";
 
 const $ = (id) => document.getElementById(id);
 
-// Facets shown as checkbox groups. The institution facet stays valid in the hash but has no UI.
+// Facets shown as checkbox groups. Plastic relevance is not a choice here: the page always applies it.
+// The institution facet stays valid in the hash but has no UI.
 const FACET_UI = [
   {key: "topic", label: "Topic", name: (label) => window.AtlasTopics.label(label)},
   {key: "ca_led", label: "Led from California", names: {yes: "Yes", no: "No"}},
   {key: "sector", label: "Sector"},
   {key: "type", label: "Work type"},
-  {key: "oa", label: "Open access", names: {open: "Open access", closed: "Closed access"}},
-  {key: "plastic", label: "Plastic-related", names: {yes: "Yes", no: "No"}}
+  {key: "oa", label: "Open access", names: {open: "Open access", closed: "Closed access"}}
 ];
 
 const app = {
@@ -46,28 +35,11 @@ const app = {
   current: null,
   detail: null,
   views: [],
-  drawer: null,
-  opener: null
+  // Work ids that match the page filters, and the heatmap selection (null when nothing is selected).
+  lastIds: [],
+  heatIds: null,
+  table: null
 };
-
-let worksPromise = null;
-
-// Titles and years for the drawer, built once from the bundle's works index.
-function loadWorks() {
-  if (!worksPromise) {
-    worksPromise = fetch(dataUrl("bundle/works_index.json"))
-      .then((response) => {
-        if (!response.ok) throw new Error(`works_index.json returned HTTP ${response.status}`);
-        return response.json();
-      })
-      .then(worksMetaMap)
-      .catch((error) => {
-        worksPromise = null;
-        throw error;
-      });
-  }
-  return worksPromise;
-}
 
 function optionName(ui, label) {
   if (ui.name) return ui.name(label);
@@ -158,6 +130,7 @@ function notifyViews() {
   const ids = impossible ? [] : app.index.selectedIds(sel, extra);
   const rows = ids.map((id) => app.detail.get(id)).filter(Boolean);
   const filtered = formatHash(app.state) !== "";
+  app.lastIds = ids;
   for (const view of app.views) {
     try {
       view({ids, rows, filtered});
@@ -165,6 +138,13 @@ function notifyViews() {
       console.error(error);
     }
   }
+}
+
+// The publication table shows the page-filtered works, narrowed to the heatmap selection when one exists.
+function applyTable() {
+  if (!app.table) return;
+  const ids = app.heatIds ? app.lastIds.filter((id) => app.heatIds.has(id)) : app.lastIds;
+  app.table.update(ids);
 }
 
 let detailPromise = null;
@@ -180,64 +160,6 @@ function loadDetail() {
   return detailPromise;
 }
 
-function renderDrawer() {
-  const drawer = app.drawer;
-  const page = pageWorks(drawer.sorted, drawer.page, DRAWER_PAGE_SIZE);
-  drawer.page = page.page;
-  const list = $("evidence-drawer-list");
-  list.replaceChildren();
-  for (const id of page.items) {
-    const info = drawer.meta.get(id) || {title: "", year: null};
-    const item = document.createElement("li");
-    const link = document.createElement("a");
-    link.href = openAlexUrl(id);
-    link.target = "_blank";
-    link.rel = "noreferrer";
-    link.textContent = info.title || id;
-    item.append(link);
-    if (info.year !== null) {
-      const year = document.createElement("span");
-      year.className = "ev-year";
-      year.textContent = ` (${info.year})`;
-      item.append(year);
-    }
-    list.append(item);
-  }
-  $("evidence-drawer-count").textContent = `${formatCount(page.total)} works, newest first`;
-  $("evidence-drawer-page").textContent = `Page ${page.page + 1} of ${page.pages}`;
-  $("evidence-drawer-prev").disabled = page.page === 0;
-  $("evidence-drawer-next").disabled = page.page >= page.pages - 1;
-}
-
-// Shared works drawer. Matrix cells (EM-8) reuse it: pass a title and the work ids to list.
-export async function openWorksDrawer(title, workIds, opener = document.activeElement) {
-  const dialog = $("evidence-drawer");
-  if (!dialog) throw new Error("evidence drawer markup is missing");
-  const meta = await loadWorks();
-  app.drawer = {meta, sorted: sortWorksNewestFirst(workIds, meta), page: 0};
-  app.opener = opener instanceof HTMLElement ? opener : null;
-  $("evidence-drawer-title").textContent = title;
-  renderDrawer();
-  if (!dialog.open) dialog.showModal();
-  $("evidence-drawer-close").focus();
-}
-
-function bindDrawer() {
-  const dialog = $("evidence-drawer");
-  const step = (delta) => {
-    app.drawer.page += delta;
-    renderDrawer();
-  };
-  $("evidence-drawer-prev").addEventListener("click", () => step(-1));
-  $("evidence-drawer-next").addEventListener("click", () => step(1));
-  $("evidence-drawer-close").addEventListener("click", () => dialog.close());
-  // A click on the dialog box itself (padding is zero) is a click on the backdrop.
-  dialog.addEventListener("click", (event) => {
-    if (event.target === dialog) dialog.close();
-  });
-  dialog.addEventListener("close", () => app.opener?.focus());
-}
-
 function bindFilters() {
   const form = $("evidence-filters");
   let timer = 0;
@@ -248,13 +170,6 @@ function bindFilters() {
     timer = setTimeout(() => setState(readControls()), 150);
   });
   $("evidence-reset").addEventListener("click", () => setState(emptyState(), {sync: true}));
-  $("evidence-show-works").addEventListener("click", (event) => {
-    const {sel, impossible, extra} = app.current;
-    const ids = impossible ? [] : app.index.selectedIds(sel, extra);
-    openWorksDrawer("Matching works", ids, event.currentTarget).catch((error) => {
-      $("evidence-status").textContent = `Could not list the works: ${error.message}`;
-    });
-  });
   window.addEventListener("hashchange", () => setState(parseHash(location.hash), {sync: true}));
 }
 
@@ -304,11 +219,9 @@ async function loadBundle() {
   if (!bound) {
     buildFilterGroups($("evidence-groups"), index);
     bindFilters();
-    bindDrawer();
     bound = true;
   }
   app.state = sanitizeState(parseHash(location.hash), app.known);
-  $("evidence-show-works").disabled = false;
   setState(app.state, {sync: true});
   showStatus(`Loaded ${formatCount(index.N)} works.`);
   await mountViews(index);
@@ -329,13 +242,17 @@ async function mountViews(index) {
     return;
   }
   app.detail = detail;
-  renderRecentCallout($("ev-recent"), [...detail.values()], new Date());
+  const plasticWorks = [...detail.values()].filter((row) => row.plastic_related === true);
+  renderRecentCallout($("ev-recent"), plasticWorks, new Date());
   const heatmap = mountHeatmap($("ev-heatmap"), {
-    onCell: ({title, ids}) => openWorksDrawer(title, ids).catch((error) => showStatus(`Could not list the works: ${error.message}`))
+    onSelect: (ids) => {
+      app.heatIds = ids ? new Set(ids) : null;
+      applyTable();
+    }
   });
   $("ev-heatmap").closest("section").hidden = false;
-  const table = mountWorksTable($("ev-table"));
-  app.views.push(({rows}) => heatmap.update(rows), ({ids}) => table.update(ids));
+  app.table = mountWorksTable($("ev-table"));
+  app.views.push(({rows}) => heatmap.update(rows), () => applyTable());
   notifyViews();
   try {
     const trend = await trendPromise;

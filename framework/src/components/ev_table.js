@@ -13,7 +13,6 @@ import {
   pageRows,
   recentRows,
   sortRows,
-  tagsPresent,
   toCsv
 } from "./ev_table_model.js";
 
@@ -50,11 +49,6 @@ function topicChips(row) {
   const api = topicApi();
   if (!api) return tags.map((tag) => escapeHtml(tag)).join(" ");
   return api.sortTags(tags).map((tag) => api.chip(tag)).join(" ");
-}
-
-function tagLabel(tag) {
-  const api = topicApi();
-  return api ? api.label(tag) : tag;
 }
 
 function linkLinks(row) {
@@ -96,10 +90,10 @@ function shellHtml() {
   const sortOptions = SORT_OPTIONS.map(([key, label]) => `<option value="${key}">${label}</option>`).join("");
   const header = (key, label, cls = "") => `<th scope="col"${cls ? ` class="${cls}"` : ""}>`
     + `<button type="button" class="ev-sort" data-sort="${key}">${label}</button></th>`;
-  return `<div class="ev-table-tools">`
+  return `<p class="ev-hint">Select heatmap cells or topic names to narrow this table.</p>`
+    + `<div class="ev-table-tools">`
     + `<label class="ev-field ev-field-search"><span>Search</span>`
     + `<input type="search" data-role="q" autocomplete="off" placeholder="Title, author or journal"></label>`
-    + `<label class="ev-field"><span>Topic</span><select data-role="tag"><option value="">All topics</option></select></label>`
     + `<label class="ev-field"><span>Minimum citations</span>`
     + `<input type="number" min="0" step="1" inputmode="numeric" data-role="min"></label>`
     + `<label class="ev-check"><input type="checkbox" data-role="oa"> Open access only</label>`
@@ -128,7 +122,6 @@ export function mountWorksTable(container, {today = new Date()} = {}) {
   const el = {
     tools: container.querySelector(".ev-table-tools"),
     q: q("q"),
-    tag: q("tag"),
     min: q("min"),
     oa: q("oa"),
     recent: q("recent"),
@@ -146,7 +139,6 @@ export function mountWorksTable(container, {today = new Date()} = {}) {
 
   const filters = () => ({
     q: el.q.value,
-    tag: el.tag.value,
     minCites: el.min.value,
     oaOnly: el.oa.checked,
     recentOnly: el.recent.checked
@@ -265,15 +257,9 @@ export function mountWorksTable(container, {today = new Date()} = {}) {
 
   const ready = loadJson("works_detail.json")
     .then((payload) => {
-      state.rows = normaliseRows(payload);
+      // The page lists plastic-related works only.
+      state.rows = normaliseRows(payload).filter((row) => row.plastic_related === true);
       state.loaded = true;
-      const tags = tagsPresent(state.rows);
-      const api = topicApi();
-      const ordered = api ? api.sortTags(tags) : tags;
-      el.tag.insertAdjacentHTML(
-        "beforeend",
-        ordered.map((tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(tagLabel(tag))}</option>`).join("")
-      );
       el.status.textContent = "";
       render();
     })

@@ -1,12 +1,19 @@
 // Evidence heatmap for the Evidence Map page (EV-HEATMAP). Topic x matrix, or topic x 5-year period.
 // Hand-built HTML table of buttons; no chart library. Rows are passed in already filtered by the page.
+// Cells and topic names are multi-select: the selected works narrow the publication table (onSelect).
 import "./shared/topics.js";
 import {
+  cellKey,
   colorFor,
   escapeHtml,
   heatmapCells,
   NO_MATRIX_KEY,
-  textInk
+  pruneSelection,
+  rowSelected,
+  selectedIds,
+  textInk,
+  toggleCell,
+  toggleRow
 } from "./ev_heatmap_model.js";
 
 const MODE_LABELS = {"topic-matrix": "Topic × matrix", "topic-year": "Topic × time"};
@@ -25,8 +32,8 @@ function colLabel(col) {
   return String(col.key).startsWith("matrix:") ? labelFor(col.key) : col.label;
 }
 
-function plural(count) {
-  return `${count} ${count === 1 ? "work" : "works"}`;
+function plural(count, one, many) {
+  return `${count} ${count === 1 ? one : many}`;
 }
 
 function legendHtml(max) {
@@ -40,26 +47,38 @@ function legendHtml(max) {
   );
 }
 
-function tableHtml(model, mode) {
+function tableHtml(model, mode, selected) {
   const head = model.cols
     .map((col) => `<th scope="col">${escapeHtml(colLabel(col))}</th>`)
     .join("");
   const body = model.rows
     .map((row) => {
+      const hasWorks = model.cells.some((c) => c.row === row && c.count > 0);
+      const rowButton =
+        `<button type="button" class="ev-heatmap-rowbtn" data-row="${escapeHtml(row)}" ` +
+        `aria-pressed="${rowSelected(selected, model, row)}"${hasWorks ? "" : " disabled"}>${escapeHtml(labelFor(row))}</button>`;
       const cells = model.cols
         .map((col) => {
           const cell = model.cells.find((c) => c.row === row && c.col === col.key);
           const fill = colorFor(cell.count, model.max);
           const ink = textInk(fill);
-          const name = `${labelFor(row)}, ${colLabel(col)}: ${plural(cell.count)}`;
+          const name = `${labelFor(row)}, ${colLabel(col)}: ${plural(cell.count, "work", "works")}`;
+          if (!cell.count) {
+            return (
+              `<td><button type="button" class="ev-heatmap-cell" data-row="${escapeHtml(row)}" ` +
+              `data-col="${escapeHtml(col.key)}" style="background:${fill};color:${ink}" disabled ` +
+              `aria-label="${escapeHtml(name)}">${cell.count}</button></td>`
+            );
+          }
+          const pressed = selected.has(cellKey(row, col.key));
           return (
             `<td><button type="button" class="ev-heatmap-cell" data-row="${escapeHtml(row)}" ` +
-            `data-col="${escapeHtml(col.key)}" style="background:${fill};color:${ink}"` +
-            `${cell.count ? "" : " disabled"} aria-label="${escapeHtml(name)}">${cell.count}</button></td>`
+            `data-col="${escapeHtml(col.key)}" style="background:${fill};color:${ink}" ` +
+            `aria-pressed="${pressed}" aria-label="${escapeHtml(name)}">${cell.count}</button></td>`
           );
         })
         .join("");
-      return `<tr><th scope="row">${escapeHtml(labelFor(row))}</th>${cells}</tr>`;
+      return `<tr><th scope="row">${rowButton}</th>${cells}</tr>`;
     })
     .join("");
   const caption = mode === "topic-matrix" ? "Works by topic and matrix" : "Works by topic and five-year period";
@@ -70,12 +89,15 @@ function tableHtml(model, mode) {
   );
 }
 
-export function mountHeatmap(container, {onCell = () => {}} = {}) {
+// onSelect(ids) runs on every selection change and on every update(rows): ids are the works in the
+// selected cells, and onSelect(null) means nothing is selected (the table then shows every work).
+export function mountHeatmap(container, {onSelect = () => {}} = {}) {
   if (!container) throw new Error("mountHeatmap needs a container element");
   container.classList.add("ev-heatmap");
   let mode = "topic-matrix";
   let rows = [];
   let model = null;
+  let selected = new Set();
 
   container.innerHTML =
     '<div class="ev-heatmap-toggle" role="group" aria-label="Heatmap view">' +
@@ -86,26 +108,63 @@ export function mountHeatmap(container, {onCell = () => {}} = {}) {
       )
       .join("") +
     "</div>" +
+    '<div class="ev-heatmap-selection">' +
+    '<p class="ev-heatmap-status" role="status" aria-live="polite"></p>' +
+    '<button type="button" class="ev-heatmap-clear" disabled>Clear selection</button>' +
+    "</div>" +
     '<div class="ev-heatmap-body"></div>';
   const body = container.querySelector(".ev-heatmap-body");
+  const status = container.querySelector(".ev-heatmap-status");
+  const clearButton = container.querySelector(".ev-heatmap-clear");
+
+  // Updates pressed state and the status line in place, so keyboard focus stays on the pressed button.
+  function refreshSelection() {
+    const count = selected.size;
+    status.textContent = count
+      ? `Table limited to ${plural(count, "selected cell", "selected cells")} (${plural(selectedIds(model, selected).length, "work", "works")}).`
+      : "";
+    clearButton.disabled = count === 0;
+    for (const button of container.querySelectorAll("button.ev-heatmap-cell:not(:disabled)")) {
+      button.setAttribute("aria-pressed", String(selected.has(cellKey(button.dataset.row, button.dataset.col))));
+    }
+    for (const button of container.querySelectorAll("button.ev-heatmap-rowbtn:not(:disabled)")) {
+      button.setAttribute("aria-pressed", String(rowSelected(selected, model, button.dataset.row)));
+    }
+  }
+
+  function publish() {
+    onSelect(selected.size ? selectedIds(model, selected) : null);
+  }
+
+  function setSelected(next) {
+    selected = next;
+    refreshSelection();
+    publish();
+  }
 
   function render() {
     if (!rows.length) {
       model = null;
       body.innerHTML = `<p class="ev-heatmap-empty" role="status">${escapeHtml(EMPTY_TEXT)}</p>`;
-      return;
+    } else {
+      model = heatmapCells(rows, mode);
+      body.innerHTML =
+        tableHtml(model, mode, selected) +
+        legendHtml(model.max) +
+        `<p class="ev-heatmap-note">${escapeHtml(CAPTION)}</p>`;
     }
-    model = heatmapCells(rows, mode);
-    body.innerHTML =
-      tableHtml(model, mode) +
-      legendHtml(model.max) +
-      `<p class="ev-heatmap-note">${escapeHtml(CAPTION)}</p>`;
+    // A selected cell that no longer has works (after a filter change) is dropped. The works behind a
+    // surviving cell can change too, so the selection is published on every render, not only on a drop.
+    selected = pruneSelection(selected, model);
+    refreshSelection();
+    publish();
   }
 
   container.querySelector(".ev-heatmap-toggle").addEventListener("click", (event) => {
     const button = event.target.closest("button[data-mode]");
     if (!button || button.dataset.mode === mode) return;
     mode = button.dataset.mode;
+    selected = new Set();
     for (const other of container.querySelectorAll(".ev-heatmap-toggle button")) {
       other.setAttribute("aria-pressed", String(other === button));
     }
@@ -113,12 +172,18 @@ export function mountHeatmap(container, {onCell = () => {}} = {}) {
   });
 
   body.addEventListener("click", (event) => {
-    const button = event.target.closest("button.ev-heatmap-cell");
-    if (!button || button.disabled || !model) return;
-    const cell = model.cells.find((c) => c.row === button.dataset.row && c.col === button.dataset.col);
-    if (!cell || cell.count === 0) return;
-    const col = model.cols.find((c) => c.key === cell.col);
-    onCell({title: `${labelFor(cell.row)} · ${colLabel(col)}`, ids: [...cell.ids]});
+    if (!model) return;
+    const cellButton = event.target.closest("button.ev-heatmap-cell");
+    if (cellButton) {
+      if (!cellButton.disabled) setSelected(toggleCell(selected, cellKey(cellButton.dataset.row, cellButton.dataset.col)));
+      return;
+    }
+    const rowButton = event.target.closest("button.ev-heatmap-rowbtn");
+    if (rowButton && !rowButton.disabled) setSelected(toggleRow(selected, model, rowButton.dataset.row));
+  });
+
+  clearButton.addEventListener("click", () => {
+    if (selected.size) setSelected(new Set());
   });
 
   render();

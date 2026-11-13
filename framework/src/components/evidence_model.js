@@ -2,8 +2,10 @@
 // document or window at module top level, so tests/framework_evidence_runtime.mjs can import it.
 // State shape: {facets: {facet: [label, ...]}, yearFrom: number|null, yearTo: number|null, q: string}.
 
-export const FACET_KEYS = ["topic", "ca_led", "sector", "type", "oa", "plastic", "institution"];
-export const DRAWER_PAGE_SIZE = 50;
+// "plastic" is not a state key: the page always lists plastic-related works only (see selectionFor),
+// so a hash that carries plastic=... is ignored.
+export const FACET_KEYS = ["topic", "ca_led", "sector", "type", "oa", "institution"];
+export const PLASTIC_ONLY = {plastic: ["yes"]};
 export const LINKOUT_NOTE = "External resource; the Atlas links to it and does not copy its data.";
 
 export function emptyState() {
@@ -90,9 +92,10 @@ function inYearRange(year, from, to) {
 // Converts the state into an index selection {sel, impossible}. yearLabels are the bundle's
 // year labels (strings). A year range that matches no label cannot be expressed as a selection
 // (an empty list means "no constraint" to the engine), so it is flagged as impossible instead.
+// The plastic-related facet is always applied, so every count, view and list excludes other works.
 export function selectionFor(state, yearLabels = []) {
   const clean = normalizeState(state);
-  const sel = {};
+  const sel = {plastic: [...PLASTIC_ONLY.plastic]};
   for (const [key, labels] of Object.entries(clean.facets)) sel[key] = labels;
   let impossible = false;
   if (clean.yearFrom !== null || clean.yearTo !== null) {
@@ -117,41 +120,6 @@ export function stripEntries(entries, selectedTopics = []) {
   const matched = unique.filter((entry) => Array.isArray(entry.topics) && entry.topics.some((tag) => topics.has(tag)));
   if (matched.length) return matched;
   return unique.filter((entry) => entry.default === true);
-}
-
-// Builds {work_id: {title, year}} from works_index.json (index-aligned arrays).
-export function worksMetaMap(works) {
-  const ids = Array.isArray(works?.work_ids) ? works.work_ids : [];
-  const titles = Array.isArray(works?.titles) ? works.titles : [];
-  const years = Array.isArray(works?.years) ? works.years : [];
-  if (titles.length !== ids.length || years.length !== ids.length) {
-    throw new Error("works_index.json fields are not index-aligned");
-  }
-  const meta = new Map();
-  ids.forEach((id, i) => meta.set(id, {title: String(titles[i] ?? ""), year: Number.isInteger(years[i]) ? years[i] : null}));
-  return meta;
-}
-
-// Newest first; works without a year sort last; ties keep the index order.
-export function sortWorksNewestFirst(ids, meta) {
-  return ids
-    .map((id, index) => ({id, index, year: meta?.get(id)?.year ?? null}))
-    .sort((a, b) => {
-      if (a.year === null || b.year === null) return (a.year === null) - (b.year === null) || a.index - b.index;
-      return b.year - a.year || a.index - b.index;
-    })
-    .map((item) => item.id);
-}
-
-// One page of a list, with the page index clamped into range.
-export function pageWorks(list, page = 0, size = DRAWER_PAGE_SIZE) {
-  const pages = Math.max(1, Math.ceil(list.length / size));
-  const current = Math.min(Math.max(0, page), pages - 1);
-  return {items: list.slice(current * size, current * size + size), page: current, pages, total: list.length};
-}
-
-export function openAlexUrl(workId) {
-  return `https://openalex.org/${encodeURIComponent(String(workId))}`;
 }
 
 // Only https links are rendered as links (root_url comes from a curated JSON file).

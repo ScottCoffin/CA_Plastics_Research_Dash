@@ -13,7 +13,6 @@ import {
   recentRows,
   safeHttpUrl,
   sortRows,
-  tagsPresent,
   toCsv
 } from "../framework/src/components/ev_table_model.js";
 
@@ -140,8 +139,8 @@ assert.equal(normaliseRows({works: [work({year: undefined, pub_date: "2023-05-04
   assert.deepEqual(ids(filterRows(rows, {q: "hopper atmos"}, TODAY)), []);
   assert.deepEqual(ids(filterRows(rows, {q: "turing"}, TODAY)), ["B"]);
   assert.deepEqual(ids(filterRows(rows, {q: "marine"}, TODAY)), ["C"]);
-  assert.deepEqual(ids(filterRows(rows, {tag: "matrix:marine"}, TODAY)), ["C"]);
-  assert.deepEqual(ids(filterRows(rows, {tag: "air"}, TODAY)), ["B"]);
+  // The topic filter was removed: a leftover tag key is ignored, and the heatmap narrows the table instead.
+  assert.deepEqual(ids(filterRows(rows, {tag: "air"}, TODAY)), ["A", "B", "C"]);
   assert.deepEqual(ids(filterRows(rows, {minCites: "10"}, TODAY)), ["B", "C"]);
   assert.deepEqual(ids(filterRows(rows, {minCites: ""}, TODAY)), ["A", "B", "C"]);
   assert.deepEqual(ids(filterRows(rows, {minCites: "abc"}, TODAY)), ["A", "B", "C"]);
@@ -177,13 +176,6 @@ assert.equal(normaliseRows({works: [work({year: undefined, pub_date: "2023-05-04
 assert.equal(dateLabel({pub_date: "2026-11-02", year: 2026}), "2 Nov 2026");
 assert.equal(dateLabel({pub_date: "", year: 2024}), "2024");
 assert.equal(dateLabel({pub_date: "", year: null}), "Date not listed");
-
-// tagsPresent: unique tags across both tag lists.
-assert.deepEqual(tagsPresent([work(), work({work_id: "W9", facet_tags: ["matrix:air"]})]), [
-  "matrix:air",
-  "matrix:freshwater",
-  "occurrence_and_monitoring"
-]);
 
 // toCsv: header, quoting of commas and quotes, line breaks, formula guard, no-data case.
 {

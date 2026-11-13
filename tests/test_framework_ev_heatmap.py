@@ -48,9 +48,17 @@ def test_model_exports_public_api() -> None:
 def test_view_exports_mount_and_imports_shared_helpers() -> None:
     text = VIEW.read_text(encoding="utf-8")
     assert re.search(
-        r"export\s+function\s+mountHeatmap\s*\(\s*container,\s*\{onCell\s*=\s*\(\)\s*=>\s*\{\}\}\s*=\s*\{\}\s*\)",
+        r"export\s+function\s+mountHeatmap\s*\(\s*container,\s*\{onSelect\s*=\s*\(\)\s*=>\s*\{\}\}\s*=\s*\{\}\s*\)",
         text,
     )
+    assert "onCell" not in text
+    assert "openWorksDrawer" not in text
+    # Selection markup: pressed state on cells and headers, a clear button, a polite status line.
+    assert 'aria-pressed="${pressed}"' in text
+    assert 'class="ev-heatmap-rowbtn"' in text
+    assert "Clear selection" in text
+    assert "Table limited to" in text
+    assert 'role="status" aria-live="polite"' in text
     assert 'import "./shared/topics.js";' in text
     assert "window.AtlasTopics" in text
     assert "Topic × matrix" in text

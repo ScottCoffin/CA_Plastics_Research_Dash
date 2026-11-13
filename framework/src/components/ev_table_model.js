@@ -105,13 +105,6 @@ export function normaliseRows(payload) {
   return rows;
 }
 
-// Sorted, de-duplicated topic and matrix tags carried by any row.
-export function tagsPresent(rows) {
-  const tags = new Set();
-  for (const row of rows || []) allTags(row).forEach((tag) => tags.add(tag));
-  return [...tags].sort();
-}
-
 // True when pub_date falls within the last `days` calendar days before `today`, inclusive.
 // Future dates and rows without a valid pub_date are not recent.
 export function isRecent(row, today = new Date(), days = 14) {
@@ -126,10 +119,10 @@ export function recentRows(rows, today = new Date()) {
   return (rows || []).filter((row) => isRecent(row, today));
 }
 
-// filters: {q, tag, minCites, oaOnly, recentOnly}. q matches every whitespace-separated term
+// filters: {q, minCites, oaOnly, recentOnly}. q matches every whitespace-separated term
 // against title, authors and journal. Blank or non-numeric minCites means no minimum.
 export function filterRows(rows, filters = {}, today = new Date()) {
-  const {q = "", tag = "", minCites = null, oaOnly = false, recentOnly = false} = filters || {};
+  const {q = "", minCites = null, oaOnly = false, recentOnly = false} = filters || {};
   const terms = String(q ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
   const min = minCites === null || minCites === undefined || String(minCites).trim() === "" ? NaN : Number(minCites);
   const hasMin = Number.isFinite(min);
@@ -138,7 +131,6 @@ export function filterRows(rows, filters = {}, today = new Date()) {
       const haystack = [row.title, (row.authors || []).join(" "), row.journal].join(" ").toLowerCase();
       if (!terms.every((term) => haystack.includes(term))) return false;
     }
-    if (tag && !allTags(row).includes(tag)) return false;
     if (hasMin && row.cited_by_count < min) return false;
     if (oaOnly && !row.is_oa) return false;
     if (recentOnly && !isRecent(row, today)) return false;

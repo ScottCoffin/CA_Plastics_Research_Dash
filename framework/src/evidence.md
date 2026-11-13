@@ -4,7 +4,7 @@ title: Evidence map
 
 # Evidence map
 
-Filter the atlas's distinct works by words in the title, year range, topic, sector, work type, open access, California leadership and plastic relevance. The trend charts, the heatmap and the publication table below all follow the filters.
+Filter the atlas's distinct works by words in the title, year range, topic, sector, work type, open access and California leadership. The page lists plastic-related works only. The trend charts and the heatmap follow the filters, and selecting heatmap cells narrows the publication table below.
 
 <p class="ev-notice">In development: a map of sampled locations and a review overlay will be added here. Topic and matrix tags come from keyword rules and are provisional.</p>
 
@@ -30,7 +30,6 @@ Filter the atlas's distinct works by words in the title, year range, topic, sect
     <div class="ev-main">
       <div class="ev-summary">
         <p id="evidence-count" class="ev-count-line" aria-live="polite"></p>
-        <button id="evidence-show-works" type="button" disabled>Show works</button>
       </div>
       <p class="data-note volume-caption">Counts show how much has been published, not the strength or quality of the evidence.</p>
       <section class="ev-view" aria-labelledby="ev-v4-heading" hidden><h2 id="ev-v4-heading">Trends</h2><div id="ev-v4"></div></section>
@@ -39,14 +38,6 @@ Filter the atlas's distinct works by words in the title, year range, topic, sect
   </div>
   <section class="ev-view" aria-labelledby="ev-table-heading"><h2 id="ev-table-heading">Publications</h2><div id="ev-table"><p class="result-count">Loading publications…</p></div></section>
   <details class="ev-view ev-flow-box"><summary id="ev-v3-heading">How works were selected (pipeline flow)</summary><div id="ev-v3"></div></details>
-  <dialog id="evidence-drawer" class="ev-drawer" role="dialog" aria-modal="true" aria-labelledby="evidence-drawer-title">
-    <div class="ev-drawer-body">
-      <header class="ev-drawer-head"><h2 id="evidence-drawer-title">Works</h2><button id="evidence-drawer-close" type="button">Close</button></header>
-      <p id="evidence-drawer-count" class="result-count" aria-live="polite"></p>
-      <ol id="evidence-drawer-list" class="ev-drawer-list"></ol>
-      <nav class="ev-pager" aria-label="Work pages"><button id="evidence-drawer-prev" type="button">Previous</button><span id="evidence-drawer-page"></span><button id="evidence-drawer-next" type="button">Next</button></nav>
-    </div>
-  </dialog>
 </div>
 
 ```js

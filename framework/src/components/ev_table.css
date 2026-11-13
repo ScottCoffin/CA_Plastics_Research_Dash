@@ -19,6 +19,7 @@
 .ev-table-root .ev-btn:disabled { color: #5f6b72; border-color: #8a9499; cursor: default; }
 .ev-table-root :focus-visible { outline: 3px solid #1a5fb4; outline-offset: 2px; }
 .ev-table-root .ev-status { margin: 0.25rem 0 0.5rem; color: #4a5860; font-size: 0.9rem; }
+.ev-table-root .ev-hint { margin: 0 0 0.6rem; color: #3b4850; font-size: 0.9rem; }
 .ev-table-root .ev-table-scroll { overflow-x: auto; border: 1px solid #c9d1d6; border-radius: 8px; }
 .ev-table-root table.ev-works { width: 100%; min-width: 52rem; border-collapse: collapse; background: #ffffff; }
 .ev-table-root caption { caption-side: top; text-align: left; padding: 0.5rem 0.75rem; font-weight: 600; color: #1d2a33; }

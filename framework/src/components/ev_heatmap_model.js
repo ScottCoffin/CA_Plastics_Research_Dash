@@ -139,6 +139,56 @@ export function heatmapCells(rows, mode) {
   return {rows: topicTags, cols, cells, max};
 }
 
+// Selection helpers. A selection is a Set of cell keys (cellKey). Every helper returns a new Set, and
+// only non-empty cells can be selected, so a zero cell never narrows the publication table.
+export function cellKey(row, col) {
+  return `${row}\u0000${col}`;
+}
+
+function nonEmptyCells(model, row = null) {
+  return (model ? model.cells : []).filter((c) => c.count > 0 && (row === null || c.row === row));
+}
+
+// Drops selected keys whose cell is now empty or gone (after a filter change or a mode change).
+export function pruneSelection(selected, model) {
+  const live = new Set(nonEmptyCells(model).map((c) => cellKey(c.row, c.col)));
+  return new Set([...selected].filter((key) => live.has(key)));
+}
+
+export function toggleCell(selected, key) {
+  const next = new Set(selected);
+  if (next.has(key)) next.delete(key);
+  else next.add(key);
+  return next;
+}
+
+// Row header: selects every non-empty cell in the row, or clears them when all are already selected.
+export function toggleRow(selected, model, row) {
+  const keys = nonEmptyCells(model, row).map((c) => cellKey(c.row, c.col));
+  const next = new Set(selected);
+  const allSelected = keys.length > 0 && keys.every((key) => next.has(key));
+  for (const key of keys) {
+    if (allSelected) next.delete(key);
+    else next.add(key);
+  }
+  return next;
+}
+
+// True when the row has cells and every one of them is selected.
+export function rowSelected(selected, model, row) {
+  const keys = nonEmptyCells(model, row).map((c) => cellKey(c.row, c.col));
+  return keys.length > 0 && keys.every((key) => selected.has(key));
+}
+
+// Union of the work ids in the selected cells, in model order, without duplicates.
+export function selectedIds(model, selected) {
+  const ids = new Set();
+  for (const c of nonEmptyCells(model)) {
+    if (selected.has(cellKey(c.row, c.col))) c.ids.forEach((id) => ids.add(id));
+  }
+  return [...ids];
+}
+
 function hexToRgb(hex) {
   const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
   if (!m) return null;
