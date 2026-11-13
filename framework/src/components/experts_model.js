@@ -11,7 +11,7 @@ export const SORT_FIELDS = Object.freeze({cited_by: "cited_by_count", h_index: "
 export const DEFAULT_SORT = "plastic_citations";
 const OA_VALUES = ["", "oa", "closed"];
 const GITHUB_REPO = "https://github.com/ScottCoffin/CA_Plastics_Research_Dash";
-export const EMPTY_MATCH_HTML = '<p class="empty">No experts match these filters. Try resetting one of the selections.</p>';
+export const EMPTY_MATCH_TEXT = "No experts match these filters.";
 export const RISING_TITLE = "Rising citation momentum: trend in this expert's share of all Atlas experts' plastics citations over the last 5 complete years (percentile among experts with at least 10 plastics citations in that window).";
 export const CSV_HEADER = ["author_id", "name", "work_count", "ca_works_count", "first_year", "last_year", "ca_basis", "domain_tags", "institution_ids", "cited_by_count", "h_index", "plastic_works_count", "plastic_citations", "plastic_citation_share_pct", "topic_counts"];
 
@@ -183,8 +183,9 @@ export function rowHeightForWidth(width) {
   return width < 640 ? 264 : 232;
 }
 
-export function expertCountText(count) {
-  return `${count} expert${count === 1 ? "" : "s"} shown`;
+// "N of M experts": N matching the filters, M in the whole index.
+export function expertCountText(count, total) {
+  return `${countFormat.format(count)} of ${countFormat.format(total)} expert${total === 1 ? "" : "s"}`;
 }
 
 // ---- Row and drawer markup ------------------------------------------------------------------
@@ -234,7 +235,7 @@ export function expertRowHtml(author, index, rowHeight, sortKey) {
   const affiliation = primary || (author.caInstitutions.length ? author.caInstitutions.map((institution) => institution.name).join(", ") : "No California affiliation");
   const meta = `${affiliation} · ${years} · ${author.recentCount} in recent 5 years · ${author.basis}`;
   const orcid = author.orcid ? ` · <a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID</a>` : "";
-  return `<article class="virtual-row" role="listitem" style="transform:translateY(${index * rowHeight}px);height:${rowHeight}px"><div class="card expert-card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="expert-card-actions"><a class="expert-page-link" href="${escapeHtml(expertPageUrl(author.author_id))}" title="Open the full profile page">Full profile</a><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></span></div>${expertTopicsHtml(author)}<p class="expert-metrics">${expertMetricsHtml(author, sortKey)}${orcid}</p><p class="card-meta expert-affil" title="${escapeHtml(meta)}">${escapeHtml(meta)}</p></div></article>`;
+  return `<div class="virtual-row" role="listitem" style="transform:translateY(${index * rowHeight}px);height:${rowHeight}px"><div class="card expert-card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="expert-card-actions"><a class="expert-page-link" href="${escapeHtml(expertPageUrl(author.author_id))}" title="Open the full profile page">Full profile</a><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></span></div>${expertTopicsHtml(author)}<p class="expert-metrics">${expertMetricsHtml(author, sortKey)}${orcid}</p><p class="card-meta expert-affil" title="${escapeHtml(meta)}">${escapeHtml(meta)}</p></div></div>`;
 }
 
 export function profileIssueUrl(name, authorId) {

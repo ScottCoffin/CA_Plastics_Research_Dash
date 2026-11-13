@@ -49,6 +49,13 @@
 #experts-root .virtual-spacer { position: relative; width: 100%; }
 #experts-root .virtual-row { position: absolute; left: 0; right: 0; padding: 0.35rem; box-sizing: border-box; }
 #experts-root .virtual-row > .card { min-height: 10rem; }
+#experts-root .expert-state { display: grid; justify-items: center; gap: 0.75rem; margin: 0 0 0.5rem; padding: 1.25rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); text-align: center; }
+#experts-root .expert-state[hidden] { display: none; }
+#experts-root .expert-state:focus { outline: none; }
+#experts-root .expert-state-message { margin: 0; }
+#experts-root .expert-spinner { display: inline-block; width: 1rem; height: 1rem; margin-right: 0.5rem; border: 2px solid #8da7af; border-top-color: var(--brand); border-radius: 50%; vertical-align: -0.15rem; animation: expert-spin 0.9s linear infinite; }
+@keyframes expert-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { #experts-root .expert-spinner { animation: none; } }
 #experts-root .expert-card { box-sizing: border-box; height: 100%; display: flex; flex-direction: column; gap: 0.4rem; overflow: hidden; }
 #experts-root .expert-card .card-header { align-items: center; flex: none; }
 #experts-root .expert-card .card-header h2 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

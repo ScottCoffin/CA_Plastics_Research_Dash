@@ -25,6 +25,7 @@ title: Experts
 <button id="export-csv" class="button" type="button">Export filtered CSV</button>
 </div>
 <div class="result-line"><p id="expert-count" class="result-count" role="status" aria-live="polite">Loading experts…</p></div>
+<p class="data-note volume-caption">Counts show volume, not strength: more works or citations do not mean better or more relevant research, and the list is not a ranking of expertise.</p>
 <p class="data-note">Chips show each expert's research topics with the number of their works in each topic. Citation figures are career-wide OpenAlex counts; "on plastics" counts citations of the expert's plastic-related works in this corpus, so a low share suggests plastics is a secondary focus.</p>
 <details class="term-help"><summary>What do the expert terms mean?</summary><ul>
 <li><a href="./glossary#m-quotient">m-quotient</a>: h-index divided by career length in years.</li>
@@ -33,7 +34,8 @@ title: Experts
 <li><a href="./glossary#matrix">Matrix</a>: the sampled medium; the tag filter uses provisional work tags.</li>
 </ul></details>
 <h2 class="expert-sr-only">Expert list</h2>
-<div id="expert-list" class="virtual-list" role="list" aria-label="Experts" aria-live="polite"><div id="expert-spacer" class="virtual-spacer"><div id="expert-rows"></div></div></div>
+<div id="expert-state" class="expert-state" tabindex="-1"><p class="expert-state-message"><span class="expert-spinner" aria-hidden="true"></span>Loading experts…</p></div>
+<div id="expert-list" class="virtual-list" role="list" aria-label="Experts" aria-live="polite" hidden><div id="expert-spacer" class="virtual-spacer"><div id="expert-rows"></div></div></div>
 </section>
 <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
 <aside id="researcher-drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>

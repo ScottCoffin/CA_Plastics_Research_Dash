@@ -29,6 +29,7 @@ Filter the atlas's distinct works by words in the title, year range, topic, sect
         <p id="evidence-count" class="ev-count-line" aria-live="polite"></p>
         <button id="evidence-show-works" type="button" disabled>Show works</button>
       </div>
+      <p class="data-note volume-caption">Counts show how much has been published, not the strength or quality of the evidence.</p>
       <section id="evidence-strip" class="ev-strip" aria-labelledby="evidence-strip-heading" hidden>
         <h2 id="evidence-strip-heading">Related resources</h2>
         <ul id="evidence-strip-list" class="ev-strip-list"></ul>

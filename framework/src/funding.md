@@ -10,6 +10,7 @@ title: Funding
   <section aria-labelledby="grants-heading" class="grants">
     <h2 id="grants-heading">Awards</h2>
     <p class="data-note">Awards as reported by each source (NIH RePORTER, NSF Awards, USAspending.gov, California Sea Grant, Ocean Protection Council). Amounts follow each source's own basis and are not comparable or additive across sources or fiscal years. Pass-through awards appear once, on their lowest-level record. Plastic relevance and topic tags are provisional rule-based labels. This is not a complete record of public funding.</p>
+    <p class="data-note volume-caption">Award counts show volume, not strength: more awards do not mean larger or better research programmes.</p>
     <details id="grants-filter-panel" class="facet grants-filter-panel" open><summary><span class="grants-filter-summary">Filters</span></summary>
     <form id="grants-filters" class="grants-filters" aria-label="Filter awards">
       <div class="grants-field"><label for="grants-search">Search awards</label><input id="grants-search" type="search" autocomplete="off" placeholder="Title, recipient, PI, program, funder"></div>

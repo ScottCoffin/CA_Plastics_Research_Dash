@@ -6,7 +6,7 @@ import "./shared/topics.js";
 import "./shared/expert_page.js";
 import {dataUrl, escapeHtml} from "./atlas.js";
 import {
-  EMPTY_MATCH_HTML,
+  EMPTY_MATCH_TEXT,
   buildAuthorSearchIndex,
   buildLookups,
   csvText,
@@ -28,6 +28,8 @@ import {
 const $ = (id) => document.getElementById(id);
 const FILTER_IDS = ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "expert-sort", "early-filter"];
 const OVERSCAN = 4;
+const LOADING_HTML = '<p class="expert-state-message"><span class="expert-spinner" aria-hidden="true"></span>Loading experts…</p>';
+const EMPTY_RESULTS_HTML = `<p class="expert-state-message">${EMPTY_MATCH_TEXT}</p><button id="expert-state-reset" class="button secondary" type="button">Reset filters</button>`;
 
 const state = {
   data: null,
@@ -120,14 +122,23 @@ function updateRowHeight() {
   return changed;
 }
 
+// The state panel sits above the list: loading, load failure, or no matching experts.
+function setStatePanel(html) {
+  const panel = $("expert-state");
+  panel.innerHTML = html;
+  panel.hidden = !html;
+}
+
 function renderExperts() {
   const authors = currentAuthors();
   state.filteredAuthors = authors;
   updateRowHeight();
-  $("expert-count").textContent = expertCountText(authors.length);
+  $("expert-count").textContent = expertCountText(authors.length, summaries().length);
+  const empty = !authors.length;
+  setStatePanel(empty ? EMPTY_RESULTS_HTML : "");
+  $("expert-list").hidden = empty;
   $("expert-spacer").style.height = `${Math.max(authors.length * state.rowHeight, authors.length ? 1 : 0)}px`;
   renderVirtualRows();
-  if (!authors.length) $("expert-rows").innerHTML = EMPTY_MATCH_HTML;
 }
 
 function updateViews() {
@@ -239,6 +250,15 @@ function onFilterChange() {
   renderExperts();
 }
 
+// Clears every filter and returns focus to the first one (the search box).
+function resetAllFilters() {
+  state.filters = resetFilters(state.filters);
+  state.lastFilterSignature = "";
+  writeHash();
+  updateViews();
+  $("expert-search").focus();
+}
+
 function exportCsv() {
   if (!state.data) return;
   const blob = new Blob([csvText(currentAuthors())], {type: "text/csv;charset=utf-8"});
@@ -251,6 +271,9 @@ function exportCsv() {
 }
 
 async function loadData() {
+  $("expert-count").textContent = "Loading experts…";
+  $("expert-list").hidden = true;
+  setStatePanel(LOADING_HTML);
   try {
     const [index, institutions] = await Promise.all(["index.json", "institutions.json"].map(async (path) => {
       const response = await fetch(dataUrl(path), {cache: "no-cache"});
@@ -266,7 +289,8 @@ async function loadData() {
     openPendingAuthor();
   } catch (error) {
     $("expert-count").textContent = "The static data could not be loaded.";
-    $("expert-list").innerHTML = `<p class="empty">${escapeHtml(error.message)}<br>Run the site through a web server and rebuild the S3.1 data export.</p>`;
+    $("expert-list").hidden = true;
+    setStatePanel(`<p class="expert-state-message" role="alert">${escapeHtml(error.message)}. Run the site through a web server and rebuild the S3.1 data export.</p><button id="expert-retry" class="button secondary" type="button">Retry</button>`);
   }
 }
 
@@ -275,12 +299,15 @@ function bindEvents(signal) {
     $(id).addEventListener("input", onFilterChange, {signal});
     $(id).addEventListener("change", onFilterChange, {signal});
   });
-  $("reset-filters").addEventListener("click", () => {
-    state.filters = resetFilters(state.filters);
-    writeHash();
-    updateViews();
-    $("expert-search").focus();
-  });
+  $("reset-filters").addEventListener("click", resetAllFilters, {signal});
+  // The state panel is rebuilt on every change, so one delegated listener serves its buttons.
+  $("expert-state").addEventListener("click", (event) => {
+    if (event.target.closest("#expert-state-reset")) resetAllFilters();
+    else if (event.target.closest("#expert-retry")) {
+      $("expert-state").focus();
+      loadData();
+    }
+  }, {signal});
   $("rising-preset").addEventListener("click", () => {
     state.filters = {...state.filters, early: true, sort: "rising"};
     $("early-filter").checked = true;

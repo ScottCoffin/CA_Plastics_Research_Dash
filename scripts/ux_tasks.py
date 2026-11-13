@@ -102,8 +102,9 @@ def task_experts_export(run: Run) -> None:
     run.fill(run.page.get_by_label("From year"), "From year", "2015")
     run.fill(run.page.get_by_label("To year"), "To year", "2024")
     run.page.wait_for_timeout(300)
-    shown_text = run.page.get_by_text(re.compile(r"^\d+ experts? shown$")).inner_text()
-    shown = int(re.match(r"\d+", shown_text).group())
+    count_re = re.compile(r"^[\d,]+ of [\d,]+ experts?|^\d+ experts? shown$")
+    shown_text = run.page.get_by_text(count_re).first.inner_text()
+    shown = int(re.match(r"[\d,]+", shown_text).group().replace(",", ""))
     run.step(f"read count '{shown_text}'")
     run.last_element = "Export filtered CSV"
     with run.page.expect_download() as info:
