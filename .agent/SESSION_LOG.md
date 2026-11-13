@@ -129,3 +129,4 @@
 | 2026-11-12 | UX-9 | Monitoring: filtered CSV download with citations and licences, ISO dates, unit headers, licence glosses (1 Haiku worker) | this commit |
 | 2026-11-12 | UX-11 | Related resources: single reuse badge, unstated fields hidden, NCEI and Plastiverse stewards with source links (lead inline) | this commit |
 | 2026-11-12 | UX-12 | Policy timeline: '1 Oct 2026' dates in <time>, acronyms expanded on first use (1 Haiku worker) | this commit |
+| 2026-11-12 | UX-14 | Overview: refresh time '12 Nov 2026, 17:09 UTC' in <time>, duplicate Labeled works tile hidden, Start here row (lead inline) | this commit |

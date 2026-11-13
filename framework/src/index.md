@@ -12,9 +12,18 @@ const metadata = await loadJson("build_metadata.json");
 const snapshot = aboutViewModel(metadata, null);
 ```
 
-<p class="atlas-notice">${snapshot.refreshText}</p>
+<p class="atlas-notice">${snapshot.refreshDisplay ? html`Last refresh: <time datetime=${snapshot.refreshIso}>${snapshot.refreshDisplay}</time>` : snapshot.refreshText}</p>
 
 <dl class="atlas-stats">${snapshot.stats.filter((s) => s.label !== "Schema").map(({label, value, note}) => html`<div><dt>${label}</dt><dd>${value}</dd>${note ? html`<dd class="stat-note">${note}</dd>` : ""}</div>`)}</dl>
+
+<section class="atlas-start" aria-labelledby="start-here">
+<h2 id="start-here">Start here</h2>
+<ul class="atlas-start-links">
+  <li><a href="./experts">Find a California researcher</a></li>
+  <li><a href="./funding">See who is funded for plastics research</a></li>
+  <li><a href="./monitoring">Check plastic monitoring data</a></li>
+</ul>
+</section>
 
 <div class="atlas-cards">
   <a class="card" href="./experts"><h2>Experts</h2><p>California researchers working on plastics, with topics and metrics.</p></a>

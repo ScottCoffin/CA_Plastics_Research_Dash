@@ -33,6 +33,16 @@ export function formatCount(value) {
   return Number.isSafeInteger(value) && value >= 0 ? new Intl.NumberFormat("en-US").format(value) : "Unavailable";
 }
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// UX-14: "12 Nov 2026, 17:09 UTC" for prose; null when the value is not a timestamp.
+export function formatRefresh(value) {
+  const date = new Date(String(value ?? ""));
+  if (!/^\d{4}-\d{2}-\d{2}T/.test(String(value ?? "")) || Number.isNaN(date.getTime())) return null;
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}, ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())} UTC`;
+}
+
 // Same view model as the classic About tab (site/index.html aboutViewModel).
 export function aboutViewModel(metadata, index) {
   const current = metadata && typeof metadata === "object" ? metadata : {};
@@ -40,21 +50,27 @@ export function aboutViewModel(metadata, index) {
   const counts = current.counts && typeof current.counts === "object" ? current.counts : {};
   const generatedAt = typeof current.generated_at === "string" ? current.generated_at.trim() : "";
   const isFixture = generatedAt === "fixture";
+  const refreshDisplay = isFixture ? null : formatRefresh(generatedAt);
+  const refreshIso = refreshDisplay ? new Date(generatedAt).toISOString() : null;
   const refreshText = isFixture
     ? "Example data loaded — sample data, not a current refresh."
-    : generatedAt
-      ? `Last refresh (UTC): ${generatedAt}`
-      : "Refresh time unavailable";
+    : refreshDisplay
+      ? `Last refresh: ${refreshDisplay}`
+      : generatedAt
+        ? `Last refresh (UTC): ${generatedAt}`
+        : "Refresh time unavailable";
   // UX-6: each count carries its definition, so pages with different filters can be compared.
   const stats = [
     ["Authors", counts.authors, "California-affiliated authors with at least one published work."],
     ["Works", counts.works, "Distinct published works with a California author."],
     ["Institutions", counts.institutions, "Every institution on those works, including out-of-state co-authors."],
-    ["California institutions", counts.ca_institutions, "California institutions with any published work. The Institutions page lists only those with a plastic-related work, so it shows fewer."],
-    ["Labeled works", counts.labeled_works, ""]
-  ].map(([label, value, note]) => ({label, value: formatCount(value), note}));
-  stats.push({label: "Schema", value: current.schema_version || indexData.schema_version || "Unavailable"});
-  return {isFixture, refreshText, stats};
+    ["California institutions", counts.ca_institutions, "California institutions with any published work. The Institutions page lists only those with a plastic-related work, so it shows fewer."]
+  ];
+  // UX-14: "Labeled works" is shown only when it differs from Works (every published work carries a label row).
+  if (counts.labeled_works !== counts.works) stats.push(["Labeled works", counts.labeled_works, "Published works with a topic and relevance label."]);
+  const rows = stats.map(([label, value, note]) => ({label, value: formatCount(value), note}));
+  rows.push({label: "Schema", value: current.schema_version || indexData.schema_version || "Unavailable"});
+  return {isFixture, refreshText, refreshDisplay, refreshIso, stats: rows};
 }
 
 // A DOI is shown only when it looks like a DOI (same rule as the classic About tab).

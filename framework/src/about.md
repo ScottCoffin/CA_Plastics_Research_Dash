@@ -16,7 +16,7 @@ const snapshot = aboutViewModel(metadata, null);
 const doi = releaseDoi(release);
 ```
 
-<p class="atlas-notice" id="about-freshness">${snapshot.refreshText}</p>
+<p class="atlas-notice" id="about-freshness">${snapshot.refreshDisplay ? html`Last refresh: <time datetime=${snapshot.refreshIso}>${snapshot.refreshDisplay}</time>` : snapshot.refreshText}</p>
 
 ${doi
   ? html`<p>Latest archived release: ${String(release.version || "")} (${String(release.date || "")}), DOI <a href="https://doi.org/${doi}" target="_blank" rel="noreferrer">${doi}</a>. Methods card, Parquet files and checksums are in the release archive.</p>`

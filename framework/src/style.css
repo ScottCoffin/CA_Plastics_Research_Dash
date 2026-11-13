@@ -7,6 +7,11 @@
 .atlas-stats div { border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; padding: 0.6rem 0.8rem; }
 .atlas-stats dt { font-size: 0.8rem; color: var(--theme-foreground-muted); }
 .atlas-stats dd { margin: 0; font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.atlas-start { margin: 1.25rem 0; }
+.atlas-start h2 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+.atlas-start-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+.atlas-start-links a { display: inline-block; min-height: 2.75rem; padding: 0.6rem 0.9rem; border: 1px solid var(--theme-foreground-focus); border-radius: 0.5rem; font-weight: 600; text-decoration: none; }
+.atlas-start-links a:hover, .atlas-start-links a:focus-visible { background: var(--theme-background-alt); text-decoration: underline; }
 .atlas-stats dd.stat-note { margin-top: 0.25rem; font-size: 0.8rem; font-weight: 400; color: var(--theme-foreground-muted); }
 .atlas-notice { border-left: 4px solid var(--theme-foreground-focus); padding: 0.4rem 0.8rem; background: var(--theme-background-alt); max-width: 70ch; }
 .atlas-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
