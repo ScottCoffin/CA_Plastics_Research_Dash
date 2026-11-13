@@ -7,6 +7,8 @@
 .atlas-stats div { border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; padding: 0.6rem 0.8rem; }
 .atlas-stats dt { font-size: 0.8rem; color: var(--theme-foreground-muted); }
 .atlas-stats dd { margin: 0; font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+/* UX-25: long URLs and DOIs in running text wrap instead of widening the page at 375 px. */
+#observablehq-main p, #observablehq-main li, #observablehq-main dd { overflow-wrap: anywhere; }
 .atlas-start { margin: 1.25rem 0; }
 .atlas-start h2 { margin: 0 0 0.5rem; font-size: 1.1rem; }
 .atlas-start-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }

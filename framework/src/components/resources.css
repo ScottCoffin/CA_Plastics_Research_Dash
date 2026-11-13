@@ -14,3 +14,4 @@
 #resources-root .rs-label { color: var(--theme-foreground-muted); }
 #resources-root .rs-badge { display: inline-block; margin: 0.4rem 0 0; padding: 0.1rem 0.5rem; border: 1px solid var(--theme-foreground-faint); border-radius: 999px; font-size: 0.8rem; color: var(--theme-foreground-muted); }
 #resources-root .rs-description { font-style: italic; }
+#resources-root .rs-card a { display: inline-block; min-height: 1.5rem; }

@@ -4,10 +4,10 @@
 #evidence-root :focus-visible { outline: 3px solid var(--theme-foreground-focus); outline-offset: 2px; }
 #evidence-root .result-count, #evidence-root .data-note { margin: 0.5rem 0 0; color: var(--theme-foreground-muted); font-size: 0.9rem; }
 #evidence-root .ev-layout { display: grid; grid-template-columns: minmax(14rem, 17rem) minmax(0, 1fr); gap: 1.25rem; align-items: start; margin-top: 1rem; }
-@media (max-width: 760px) { #evidence-root .ev-layout { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { #evidence-root .ev-layout { grid-template-columns: minmax(0, 1fr); } }
 #evidence-root .ev-filters { display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; }
 #evidence-root .ev-field { display: flex; flex-direction: column; gap: 0.25rem; }
-#evidence-root .ev-years { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+#evidence-root .ev-years { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; }
 #evidence-root input[type="search"], #evidence-root input[type="number"] { font: inherit; padding: 0.35rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.35rem; background: var(--theme-background); color: var(--theme-foreground); }
 #evidence-root button { font: inherit; min-height: 2rem; padding: 0.3rem 0.8rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.35rem; background: var(--theme-background-alt); color: var(--theme-foreground); cursor: pointer; }
 #evidence-root button:disabled { opacity: 0.5; cursor: default; }
@@ -35,3 +35,6 @@
 #evidence-root .ev-drawer-list { margin: 0.75rem 0; padding-left: 1.5rem; }
 #evidence-root .ev-drawer-list li + li { margin-top: 0.4rem; }
 #evidence-root .ev-pager { display: flex; align-items: center; gap: 0.75rem; }
+#evidence-root input[type="search"], #evidence-root input[type="number"] { box-sizing: border-box; width: 100%; min-width: 0; }
+#evidence-root .ev-option input[type="checkbox"] { flex: 0 0 auto; width: 1.5rem; height: 1.5rem; margin: 0; }
+#evidence-root .v4-sr-only { display: block; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

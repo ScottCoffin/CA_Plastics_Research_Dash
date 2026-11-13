@@ -97,3 +97,4 @@
 #monitoring-root .monitoring-download .data-note { margin: 0; }
 #monitoring-root .monitoring-download button { border: 1px solid var(--brand); border-radius: 0.35rem; background: #fff; color: var(--brand); padding: 0.4rem 0.8rem; font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
 #monitoring-root .monitoring-download button:disabled { opacity: 0.5; cursor: not-allowed; }
+#monitoring-root table a { display: inline-block; min-width: 1.5rem; min-height: 1.5rem; line-height: 1.5rem; }
