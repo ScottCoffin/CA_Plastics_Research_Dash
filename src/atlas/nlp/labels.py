@@ -163,6 +163,19 @@ def always_relevant(text: str, query_config: Mapping[str, Any]) -> bool:
     return any(re.search(str(p), text or "", re.IGNORECASE) for p in patterns if p)
 
 
+def title_relevant(title: str, query_config: Mapping[str, Any]) -> bool:
+    """True when ``title`` matches a ``title_relevant_patterns`` regex.
+
+    Title-only, high-precision phrases (plastisphere, polymer biodegradation, the plastics
+    treaty, ...) that the OpenAlex query or the abstract rules miss; same precedence as
+    ``always_relevant``. Abstracts are not searched: the same words are noisy there.
+    """
+    patterns = query_config.get("title_relevant_patterns") or []
+    if isinstance(patterns, (str, bytes)):
+        raise ValueError("title_relevant_patterns must be a YAML list")
+    return any(re.search(str(p), title or "", re.IGNORECASE) for p in patterns if p)
+
+
 def _taxonomy_tags(
     text: str,
     topic_names: Sequence[str],

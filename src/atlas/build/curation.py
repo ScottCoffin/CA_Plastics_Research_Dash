@@ -252,6 +252,23 @@ def load_work_owner_reviewed(path: str | Path) -> frozenset[str]:
     )
 
 
+def load_work_low_confidence_false(path: str | Path) -> frozenset[str]:
+    """Work IDs with a pending low-confidence ``false`` call in ``work_relevance.csv``.
+
+    The relevance policy lets a rule's chemicals-in-plastics label survive these calls
+    (``relevance_policy`` in ``config/queries.yml``); owner-reviewed rows are never listed.
+    """
+    if not Path(path).exists():
+        return frozenset()
+    return frozenset(
+        compact_id(row["work_id"])
+        for _number, row in _read(path, WORK_RELEVANCE_HEADER)
+        if str(row.get("plastic_related", "")).strip().lower() == "false"
+        and str(row.get("confidence", "")).strip().lower() == "low"
+        and row.get("owner_review") not in {"confirmed", "changed"}
+    )
+
+
 def load_model_relevance(path: str | Path) -> dict[str, bool]:
     """Return ``{work_id: plastic_related}`` from the accepted active-learning labels.
 

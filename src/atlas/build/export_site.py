@@ -26,11 +26,12 @@ from atlas.build.curation import (
     apply_curation,
     load_curation,
     load_model_relevance,
+    load_work_low_confidence_false,
     load_work_owner_reviewed,
     load_work_relevance,
 )
 from atlas.ingest.abstract_qc import misattached_abstract_ids
-from atlas.nlp.labels import always_relevant
+from atlas.nlp.labels import always_relevant, title_relevant
 from atlas.query import load_query_config
 
 SCHEMA_VERSION = "s3.1"
@@ -559,6 +560,14 @@ def export_site(
     # Precedence, highest first: owner decision (owner_review confirmed/changed), owner AT-1
     # overrides, accepted model labels, Haiku (pending rows), then the rule's label.
     owner_reviewed: frozenset[str] = frozenset()
+    query_config = load_query_config(query_config_path) if query_config_path else {}
+    policy = query_config.get("relevance_policy") or {}
+    # Rule chemicals-in-plastics labels, captured before Haiku calls replace them.
+    rule_tier2 = {
+        work_id
+        for work_id, row in labels.items()
+        if row.get("plastic_related") is True and row.get("plastic_tier") == "chemicals-in-plastics"
+    }
     if work_relevance_path:
         owner_reviewed = load_work_owner_reviewed(work_relevance_path)
         for work_id, related in load_work_relevance(work_relevance_path).items():
@@ -567,6 +576,11 @@ def export_site(
                 **labels.get(work_id, {}),
                 "plastic_related": related,
             }
+        if policy.get("tier2_survives_low_confidence_false"):
+            # Owner scope (H9 guide): chemicals-in-plastics is a plastic-related tier, so a
+            # pending low-confidence Haiku "false" does not drop a rule tier-2 hit.
+            for work_id in load_work_low_confidence_false(work_relevance_path) & rule_tier2:
+                labels[work_id] = {**labels[work_id], "plastic_related": True}
     if model_relevance_path:
         for work_id, related in load_model_relevance(model_relevance_path).items():
             if work_id in owner_reviewed:
@@ -579,7 +593,6 @@ def export_site(
     if query_config_path:
         # Owner rule: always-relevant terms (micro-nano plastics) beat model/Haiku/rule;
         # owner review decisions (skipped here) and curation overrides (applied later) win.
-        query_config = load_query_config(query_config_path)
         shared = misattached_abstract_ids(works_rows)
         for row in works_rows:
             work_id = _text(row.get("work_id"))
@@ -587,7 +600,9 @@ def export_site(
                 continue
             abstract = "" if work_id in shared else _text(row.get("abstract"))
             text = f"{_text(row.get('title'))} {abstract}"
-            if always_relevant(text, query_config):
+            if always_relevant(text, query_config) or title_relevant(
+                _text(row.get("title")), query_config
+            ):
                 labels[work_id] = {
                     "work_id": work_id,
                     **labels.get(work_id, {}),
@@ -759,6 +774,9 @@ def export_site(
     institution_names = {
         _text(row.get("inst_id")): _text(row.get("name")) for row in institution_rows
     }
+    ca_institution_ids = {
+        _text(row.get("inst_id")) for row in institution_rows if row.get("ca_flag") is True
+    }
     merged_metrics = {
         author["author_id"]: expert_metrics.merge_metric_rows(
             metric_rows_by_target.get(author["author_id"], [])
@@ -785,6 +803,7 @@ def export_site(
             for institution_id in own_institutions.get((author_id, work_id), ())
         ]
         primary = expert_metrics.primary_affiliations(merged, recent_ids, institution_names)
+        history = expert_metrics.affiliation_history(merged)
         first_year = merged["first_pub_year"]
         score = rising.get(author_id)
         author.update(
@@ -798,11 +817,12 @@ def export_site(
                 "rising_pct": score[1] if score else None,
                 "early_career": isinstance(first_year, int)
                 and current_year - first_year <= expert_metrics.EARLY_CAREER_YEARS,
+                **expert_metrics.california_status(primary, history, ca_institution_ids),
             }
         )
         author_extras[author_id] = {
             "primary_affiliations": primary,
-            "affiliation_history": expert_metrics.affiliation_history(merged),
+            "affiliation_history": history,
             "citations_by_year": expert_metrics.citations_by_year(merged, current_year),
         }
 

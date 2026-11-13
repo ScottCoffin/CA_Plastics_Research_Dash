@@ -194,3 +194,31 @@ def affiliation_history(merged: Mapping[str, Any]) -> list[dict[str, Any]]:
         for item in merged.get("affiliations") or []
     ]
     return sorted(rows, key=lambda r: (-(max(r["years"]) if r["years"] else 0), r["name"]))
+
+
+def california_status(
+    primary: Iterable[Mapping[str, Any]],
+    history: Iterable[Mapping[str, Any]],
+    ca_institution_ids: Iterable[str],
+) -> dict[str, Any]:
+    """Where the expert is now, relative to California (owner request 2026-11-13).
+
+    ``current_in_ca`` is True when any primary (latest) affiliation is a California
+    registry institution, False when primary affiliations exist and none is (OpenAlex
+    ``country_code`` "CA" means Canada, so only the registry decides), and None when
+    unknown. ``last_ca_year`` is the latest year of the author's own California
+    affiliations in the OpenAlex history, or None.
+    """
+    ca_ids = set(ca_institution_ids)
+    primary_ids = [str(item.get("id") or "") for item in primary if item.get("id")]
+    current: bool | None = None
+    if primary_ids:
+        current = any(i in ca_ids for i in primary_ids)
+    years = [
+        int(year)
+        for item in history
+        if str(item.get("id") or "") in ca_ids
+        for year in (item.get("years") or [])
+        if isinstance(year, int)
+    ]
+    return {"current_in_ca": current, "last_ca_year": max(years) if years else None}

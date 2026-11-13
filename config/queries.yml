@@ -216,6 +216,22 @@ always_include:
 # (OpenAlex mis-attachments) are ignored (atlas.nlp.labels.shared_abstract_ids).
 always_relevant_patterns:
 - '(?<![a-z])micro\s*(?:[-‐‑/(]\s*)?(?:and\s+|&\s*|or\s+)?\(?nano\)?\s*[-‐‑]?\s*plastics?(?![a-z])'
+title_relevant_patterns:
+# Lead 2026-11-13 (REL-1, docs/RELEVANCE_AUDIT_2026-11-13.md): title-only, high-precision phrases the
+# query or the abstract rules miss. Each had 100% precision on the 1,909-work export; abstracts are not
+# searched (noisy). Same precedence as always_relevant_patterns; owner review decisions still win.
+- 'plastisphere|plastic[-\s]associated\s+(?:microb|microorganism|bacteri|biofilm|communit)'
+- '(?<![a-z])(?:poly(?:styrene|propylene|ethylene(?! glycol)|vinyl chloride|ester)s?|PVC|PET|plastics?)\b[^.]{0,60}?(?:biodegrad|depolymeri[sz]|upcycl|methanolysis|glycolysis|pyrolysis|hydrothermal)'
+- '(?:biodegrad|depolymeri[sz]|upcycl)\w*\s+(?:of\s+)?(?:\w+\s+){0,3}?(?:poly(?:styrene|propylene|ethylene(?! glycol)|vinyl chloride|ester)s?|PVC|plastics?)\b'
+- 'plastics?\s+treaty|global\s+plastics?\s+(?:treaty|agreement)'
+- '(?:abandoned|derelict),?\s+(?:lost|discarded)?[^.]{0,30}fishing\s+gear|ALDFG|ghost\s+(?:fishing|nets?)'
+- 'cigarette\s+butts?'
+- '\bty(?:re|res)\s+(?:wear\s+)?particles|\btires?\s+(?:wear\s+)?particles'
+- 'agricultural\s+plastics?|plastic\s+(?:film\s+)?mulch'
+relevance_policy:
+  # Lead default 2026-11-13 (QUESTIONS REL-TIER2): chemicals-in-plastics is a plastic-related tier in the
+  # labelling guide, so a pending low-confidence Haiku "false" does not drop a rule tier-2 hit.
+  tier2_survives_low_confidence_false: true
 exclude_types:
 - erratum
 - peer-review
