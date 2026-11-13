@@ -125,3 +125,4 @@
 | 2026-11-12 | UX-23 | One h1 on Experts and Funding; heading skips removed on every /app/ route (1 Haiku worker) | this commit |
 | 2026-11-12 | UX-24 | Monitoring CLS 0.52 -> 0.04 (static quality-note lead), no headings inside summary; grants.html aria/dl/th/nested fixes (1 Haiku worker) | this commit |
 | 2026-11-12 | UX-6 | Institution counts explained (211 any work vs 161 plastic-related) and defined on Overview, About and Institutions (lead inline) | this commit |
+| 2026-11-12 | UX-8 | Funding: headline dollar sum removed (app + grants.html), per-source subtotals with caveat, rows-per-page default stated (1 Haiku worker) | this commit |

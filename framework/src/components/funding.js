@@ -274,8 +274,17 @@ function populateGrantFilters(payload) {
       $(id).max = String(Math.max(...years));
     });
   }
-  const sourceLines = Object.entries(payload.sources).map(([name, info]) => `<li><strong>${escapeHtml(GRANT_SOURCE_LABELS[name] || name)}</strong> (${escapeHtml(GRANT_FUNDER_LABELS[info.funder_type] || info.funder_type)}, ${info.rows} rows, ${info.amount_rows} with an amount): ${escapeHtml(info.amount_basis)}</li>`);
-  $("grants-basis").innerHTML = `<ul>${sourceLines.join("")}</ul><p class="data-note">${escapeHtml(payload.caveat)}</p>`;
+  // Per-source subtotals only: each source uses its own amount basis, so the figures are never summed across sources.
+  const subtotalRows = Object.entries(payload.sources).map(([name, info]) => {
+    const amounts = rows.filter((row) => row.source === name && row.amount !== null);
+    const subtotal = amounts.reduce((sum, row) => sum + row.amount, 0);
+    return `<tr><th scope="row">${escapeHtml(GRANT_SOURCE_LABELS[name] || name)} (${escapeHtml(GRANT_FUNDER_LABELS[info.funder_type] || info.funder_type)})</th>`
+      + `<td class="num">${amounts.length}</td><td class="num">${amounts.length ? USD_FORMAT.format(subtotal) : "None reported"}</td>`
+      + `<td>${escapeHtml(info.amount_basis)}</td></tr>`;
+  });
+  $("grants-basis").innerHTML = `<table class="grants-subtotals"><caption>Per-source subtotals, as reported. These are not a total: sources use different amount bases and cannot be added.</caption>`
+    + `<thead><tr><th scope="col">Source</th><th scope="col" class="num">Awards with an amount</th><th scope="col" class="num">Reported amount (USD)</th><th scope="col">Amount basis</th></tr></thead>`
+    + `<tbody>${subtotalRows.join("")}</tbody></table><p class="data-note">${escapeHtml(payload.caveat)}</p>`;
 }
 
 function readGrantFilterValues() {
@@ -465,8 +474,7 @@ function renderFunding() {
   const filters = readGrantFilterValues();
   state.grantsFiltered = sortGrantRows(state.grantsData.rows.filter((row) => grantMatches(row, filters)), state.grantsSort);
   const withAmount = state.grantsFiltered.filter((row) => row.amount !== null);
-  const total = withAmount.reduce((sum, row) => sum + row.amount, 0);
-  $("grants-status").textContent = `${state.grantsFiltered.length} of ${state.grantsData.rows.length} awards match. ${withAmount.length} report an amount, summing to ${USD_FORMAT.format(total)} across mixed amount bases (see Amount basis by source).`;
+  $("grants-status").textContent = `${state.grantsFiltered.length} of ${state.grantsData.rows.length} awards match. ${withAmount.length} report an amount.`;
   $("grants-chart-year").innerHTML = svgBarChartYears(state.grantsFiltered);
   $("grants-chart-institution").innerHTML = svgBarChartInstitutions(state.grantsFiltered);
   renderGrantsTable(state.grantsFiltered);

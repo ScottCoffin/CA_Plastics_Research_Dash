@@ -41,6 +41,10 @@
 .grants-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 .grants-table th, .grants-table td { padding: 0.45rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .grants-table th { background: #edf5f4; }
+.grants-subtotals { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.5rem 0; }
+.grants-subtotals caption { text-align: left; color: var(--muted); padding-bottom: 0.4rem; }
+.grants-subtotals th, .grants-subtotals td { padding: 0.4rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.grants-subtotals .num { text-align: right; }
 .grants-table-wrap { overflow: auto; max-height: 75vh; border: 1px solid var(--line); border-radius: 0.5rem; }
 .grants-table-wrap .grants-table { min-width: 68rem; }
 .grants-table tbody th { background: transparent; font-weight: 400; min-width: 16rem; max-width: 24rem; }

@@ -36,7 +36,7 @@ title: Funding
       <figure class="grants-chart"><figcaption>Awards by recipient institution type (count)</figcaption><div id="grants-chart-institution"></div></figure>
     </div>
     <div id="grants-table" class="grants-table-wrap" tabindex="0" role="region" aria-label="Awards table, scrollable"></div>
-    <nav class="grants-pager" aria-label="Award table pages"><button id="grants-prev" type="button">Previous</button><span id="grants-page"></span><button id="grants-next" type="button">Next</button><label for="grants-page-size">Rows per page <select id="grants-page-size"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option></select></label></nav>
+    <nav class="grants-pager" aria-label="Award table pages"><button id="grants-prev" type="button">Previous</button><span id="grants-page"></span><button id="grants-next" type="button">Next</button><label for="grants-page-size">Rows per page (default 50) <select id="grants-page-size"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option></select></label></nav>
     <section aria-labelledby="grants-basis-heading" class="grants-basis"><h3 id="grants-basis-heading">Amount basis by source</h3><div id="grants-basis"></div></section>
   </section>
   <section aria-labelledby="open-calls-heading" class="open-calls">

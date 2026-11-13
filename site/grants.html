@@ -712,8 +712,7 @@
             tile("Funder agencies", fmtInt(m.funders)) +
             tile("Recipient organisations", fmtInt(m.orgs)) +
             tile("Sectors", fmtInt(m.sectors)) +
-            tile("California-led", m.awards ? Math.round(m.caShare * 100) + "%" : "n/a", "share of awards led from California") +
-            tile("Reported amount", m.withAmt ? fmtUsd(m.amount) : "n/a", `${fmtInt(m.withAmt)} awards with an amount, ${fmtInt(m.noAmt)} without. Sources use different bases; do not treat as a total.`);
+            tile("California-led", m.awards ? Math.round(m.caShare * 100) + "%" : "n/a", "share of awards led from California");
           $("status").textContent = `${fmtInt(filtered.length)} of ${fmtInt(ALL.length)} awards`;
         }
 
