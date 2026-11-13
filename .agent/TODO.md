@@ -156,7 +156,7 @@ Contract: `docs/EM_spec.md` Sections 0-8 (Section 1A = verified browser audit; A
 - [ ] **UX-25** P2 Mobile and metadata: no 375 px overflow (Evidence), 24 px touch targets, meta description per page, fix the per-page console 404; Funding fiscal-year inputs overflow their grid cell at 1366 px. Size: S/M.
 - [ ] **UX-18** Naive-user Playwright task scripts (six tasks in the spec), pass/fail with steps and last element touched. Size: M.
 - [ ] **UX-19** Manual accessibility pass (WCAG 2.2 AA checklist in the spec); output a failure table only. Size: M. `owner: review` (human or human-assisted).
-- [ ] **UX-20** Moderated sessions plan (5 participants, six tasks, think-aloud script); agent prepares materials only. Size: L. `owner: review`.
+- [ ] **UX-20** Moderated sessions plan (5 participants, six tasks, think-aloud script); agent prepares materials only. Size: L. `owner: review`. Partial 2026-11-12: plan, recruitment table, facilitator script and note sheet in `docs/UX_20_SESSION_PLAN.md` (no recording, no personal data); owner recruits and runs the sessions (H18).
 
 ## S11 Fallback/extras
 - [ ] **S11.1** Optional stlite fallback reading shared outputs. Acceptance: static runtime and Pyodide compatibility tested. Dropped 2026-11-11 (owner left it to the lead): the static site covers every view; a Pyodide fallback adds a large runtime for no current user need.
