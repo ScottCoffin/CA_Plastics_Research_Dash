@@ -14,8 +14,12 @@ import {
   parseExpertHash,
   resetFilters,
   rowHeightForWidth,
+  bylineNames,
+  coauthorSummary,
+  drawerContentHtml,
   summarizeAuthor,
-  virtualWindow
+  virtualWindow,
+  workAuthorsHtml
 } from "../framework/src/components/experts_model.js";
 
 // Works: W1 CA-led and CA-sampled (both), OA; W2 CA-led, closed; W3 CA-affiliated, closed; W4 CA-sampled, OA.
@@ -118,5 +122,28 @@ assert.equal(lines[0], '"author_id","name","work_count","ca_works_count","first_
 assert.ok(lines[1].startsWith('"A900","Jo ""JJ"" Smith","2","2","2012","2020","both","'), lines[1]);
 const topicCell = quoted.topicWeights.map(([tag, count]) => `${tag}:${count}`).join(";");
 assert.ok(lines[1].endsWith(`,"5","","","${topicCell}"`), lines[1]);
+
+// Byline and co-authors (works carry authors[] and author_count; old snapshots do not).
+const bylineWorks = [
+  {work_id: "W1", title: "Paper <one>", year: 2021, journal: "J", author_ids: ["A100", "A200", "A300", "A500"], author_count: 27,
+    authors: [{id: "A100", name: "Chelsea Rochman"}, {id: "A200", name: "Beth Ann"}, {id: "A300", name: "Zed Quinn"}, {id: "A500", name: "Outside <Writer>"}]},
+  {work_id: "W2", title: "Paper two", year: 2022, journal: "K", author_ids: ["A100", "A500", "A600"],
+    authors: [{id: "A100", name: "Chelsea Rochman"}, {id: "A500", name: "Outside <Writer>"}]},
+  {work_id: "W3", title: "Old snapshot", year: 2019, journal: "L", author_ids: ["A100", "A700"]}
+];
+assert.equal(workAuthorsHtml(bylineWorks[0], "A100"), '<p class="work-authors"><strong>Chelsea Rochman</strong>, Beth Ann, Zed Quinn, Outside &lt;Writer&gt;, et al. (27 authors)</p>');
+assert.equal(workAuthorsHtml(bylineWorks[2], "A100"), "", "old snapshot without authors adds no line");
+assert.equal(workAuthorsHtml({authors: [{id: "A1", name: "Solo"}], author_count: 1}, "A9"), '<p class="work-authors">Solo</p>');
+assert.deepEqual(Object.fromEntries(bylineNames(bylineWorks)), {A100: "Chelsea Rochman", A200: "Beth Ann", A300: "Zed Quinn", A500: "Outside <Writer>"});
+const expertsForWorks = new Map([["A200", {author_id: "A200", name: "Beth Ann"}], ["A300", {author_id: "A300", name: "Zed Quinn"}]]);
+const coSummary = coauthorSummary(bylineWorks, "A100", expertsForWorks);
+assert.equal(coSummary.coauthorCount, 5, "distinct co-author ids, unchanged by names");
+assert.deepEqual(coSummary.namedCoauthors.map(([id, count]) => [id, count]), [["A200", 1], ["A300", 1]]);
+assert.deepEqual(coSummary.otherCoauthors, [{author_id: "A500", name: "Outside <Writer>", shared: 2}], "non-expert co-author named from the byline; unnamed A600 and A700 omitted");
+const drawerHtml = drawerContentHtml({author: {author_id: "A100", name: "Chelsea Rochman"}, works: bylineWorks, authorId: "A100", profile: null, expertsById: expertsForWorks, institutionsById: new Map(), histogramSvg: null});
+assert.ok(drawerHtml.includes("(2 CA experts, 1 others)"), "summary count text");
+assert.ok(drawerHtml.includes("Outside &lt;Writer&gt; </span>") || drawerHtml.includes("<span>Outside &lt;Writer&gt;</span>"), "other co-author shown unlinked and escaped");
+assert.ok(!drawerHtml.includes("Co-author outside"), "old placeholder text is gone");
+assert.ok(drawerHtml.includes('<p class="work-authors"><strong>Chelsea Rochman</strong>'), "work byline in the drawer");
 
 console.log("framework_experts_runtime: all assertions passed");

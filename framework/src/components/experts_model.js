@@ -313,14 +313,49 @@ export function historyFromAuthor(author, works, institutionsById) {
     .map((id) => ({name: institutionsById.get(id)?.name || id, years: []}));
 }
 
-// Frequent co-authors: shared-work counts per co-author; named when they are CA experts.
+// Id -> name from works' byline entries (authors: [{id, name}]). Entries without an id or name are skipped.
+export function bylineNames(works) {
+  const names = new Map();
+  (Array.isArray(works) ? works : []).forEach((work) => {
+    (Array.isArray(work?.authors) ? work.authors : []).forEach((author) => {
+      const id = String(author?.id ?? "").trim();
+      const name = String(author?.name ?? "").trim();
+      if (id && name && !names.has(id)) names.set(id, name);
+    });
+  });
+  return names;
+}
+
+// Byline under a work title (plain text): names in byline order (at most 10), the profiled author in bold,
+// then "et al. (N authors)" using author_count. Returns "" when the work has no authors list (old snapshots).
+const BYLINE_SHOWN = 10;
+const DRAWER_OTHERS_SHOWN = 12;
+export function workAuthorsHtml(work, authorId) {
+  const raw = Array.isArray(work?.authors) ? work.authors : [];
+  const named = raw.map((author) => ({id: String(author?.id ?? "").trim(), name: String(author?.name ?? "").trim()})).filter((author) => author.name);
+  if (!named.length) return "";
+  const shown = named.slice(0, BYLINE_SHOWN);
+  const declared = Number.isInteger(work.author_count) && work.author_count > 0 ? work.author_count : 0;
+  const total = declared > 0 ? Math.max(declared, named.length) : raw.length;
+  const parts = shown.map(({id, name}) => (id && id === String(authorId) ? `<strong>${escapeHtml(name)}</strong>` : escapeHtml(name)));
+  if (total > shown.length) parts.push(`et al. (${total} authors)`);
+  return `<p class="work-authors">${parts.join(", ")}</p>`;
+}
+
+// Frequent co-authors: shared-work counts per co-author. CA experts are named from expertsById; other
+// co-authors are named from the works' byline entries and left out when no name is recorded.
 export function coauthorSummary(works, authorId, expertsById) {
   const coauthorIds = [...new Set(works.flatMap((work) => (work.author_ids || []).filter((id) => id !== authorId)))];
   const coauthorCount = works.some((work) => Array.isArray(work.author_ids)) ? coauthorIds.length : null;
   const sharedCounts = new Map();
   works.forEach((work) => new Set(work.author_ids || []).forEach((id) => { if (id !== authorId) sharedCounts.set(id, (sharedCounts.get(id) || 0) + 1); }));
   const namedCoauthors = [...sharedCounts.entries()].filter(([id]) => expertsById.has(id)).sort((a, b) => b[1] - a[1] || String(expertsById.get(a[0]).name).localeCompare(String(expertsById.get(b[0]).name)));
-  return {coauthorCount, namedCoauthors, otherCoauthors: sharedCounts.size - namedCoauthors.length};
+  const names = bylineNames(works);
+  const otherCoauthors = [...sharedCounts.entries()]
+    .filter(([id]) => !expertsById.has(id) && names.has(id))
+    .map(([id, shared]) => ({author_id: id, name: names.get(id), shared}))
+    .sort((a, b) => b.shared - a.shared || a.name.localeCompare(b.name));
+  return {coauthorCount, namedCoauthors, otherCoauthors};
 }
 
 export function workDatasetsHtml(work) {
@@ -345,13 +380,16 @@ export function drawerContentHtml({author, works, authorId, profile, expertsById
   const primaryText = primaryAffiliationText(author);
   const histogram = histogramSvg && Array.isArray(author.citations_by_year) && author.citations_by_year.length ? `<h3>Citations per year</h3><div class="drawer-histogram">${histogramSvg(author.citations_by_year, {width: 420, height: 180})}</div>` : "";
   const {coauthorCount, namedCoauthors, otherCoauthors} = coauthorSummary(works, authorId, expertsById);
+  const otherHtml = otherCoauthors.length
+    ? `<p class="detail-meta">Other co-authors (not on the California expert list)</p><ul class="coauthor-list">${otherCoauthors.slice(0, DRAWER_OTHERS_SHOWN).map((c) => `<li><span>${escapeHtml(c.name)}</span> <span class="detail-meta">${c.shared} shared ${c.shared === 1 ? "work" : "works"}</span></li>`).join("")}</ul>${otherCoauthors.length > DRAWER_OTHERS_SHOWN ? `<p class="detail-meta">Plus ${otherCoauthors.length - DRAWER_OTHERS_SHOWN} more co-authors.</p>` : ""}`
+    : "";
   const worksHtml = works.map((work) => {
     const links = [work.doi ? `<a href="${escapeHtml(work.doi)}" target="_blank" rel="noreferrer">DOI</a>` : "", work.oa_url ? `<a href="${escapeHtml(work.oa_url)}" target="_blank" rel="noreferrer">Open access</a>` : ""].filter(Boolean).join("");
     const tags = [...(work.domain_tags || []), ...(work.facet_tags || [])];
     const affiliations = (work.institution_ids || []).map((id) => institutionsById.get(id)?.name || id).join(", ") || "not recorded";
-    return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong><p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml(affiliations)}</p>${tags.length ? `<div class="topic-chips">${topics().sortTags(tags).map((tag) => topics().chip(tag)).join("")}</div>` : ""}<details class="work-abstract"><summary>Abstract</summary>${String(work.abstract || "").trim() ? `<p>${escapeHtml(String(work.abstract).trim())}</p>` : '<p class="detail-meta">No abstract available</p>'}</details>${workDatasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`;
+    return `<li class="work-detail"><strong>${escapeHtml(work.title || "Untitled work")}</strong>${workAuthorsHtml(work, authorId)}<p>${escapeHtml(work.year || "Year unavailable")} · ${escapeHtml(work.journal || "Journal unavailable")} · ${escapeHtml(workBasis(work))}</p><p>Affiliations: ${escapeHtml(affiliations)}</p>${tags.length ? `<div class="topic-chips">${topics().sortTags(tags).map((tag) => topics().chip(tag)).join("")}</div>` : ""}<details class="work-abstract"><summary>Abstract</summary>${String(work.abstract || "").trim() ? `<p>${escapeHtml(String(work.abstract).trim())}</p>` : '<p class="detail-meta">No abstract available</p>'}</details>${workDatasetsHtml(work)}${links ? `<div class="work-links">${links}</div>` : ""}</li>`;
   }).join("");
-  return `${primaryText ? `<p class="drawer-primary"><span class="detail-meta">Primary affiliation:</span> <strong>${escapeHtml(primaryText)}</strong></p>` : ""}<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p><p class="drawer-actions"><a class="button-link" href="${escapeHtml(expertPageUrl(author.author_id || authorId))}">Open full profile page</a>${author.orcid ? ` <a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a>` : ""}</p>${profileHtml(profile, author.name)}${drawerStatsHtml(author, works, coauthorCount)}${histogram}<h3>Topics</h3>${drawerTopics.length ? `<div class="topic-chips">${drawerTopics.map(([tag, count]) => topics().chip(tag, count)).join("")}</div>` : '<p class="detail-meta">No topic tags yet.</p>'}<details class="drawer-section"><summary>Affiliation history <span class="drawer-section-count">(${history.length} ${history.length === 1 ? "institution" : "institutions"})</span></summary><div class="drawer-section-body">${history.length ? `<ul class="affiliation-list">${historyHtml}</ul>` : '<p class="detail-meta">No institution affiliations in this snapshot.</p>'}</div></details><details class="drawer-section"><summary>Frequent co-authors <span class="drawer-section-count">(${namedCoauthors.length} CA experts${otherCoauthors > 0 ? `, ${otherCoauthors} others` : ""})</span></summary><div class="drawer-section-body">${namedCoauthors.length ? `<ul class="coauthor-list">${namedCoauthors.map(([id, count]) => `<li><button type="button" class="coauthor-link" data-author-id="${escapeHtml(id)}">${escapeHtml(expertsById.get(id).name || id)}</button> <span class="detail-meta">${count} shared ${count === 1 ? "work" : "works"}</span></li>`).join("")}</ul>` : '<p class="detail-meta">No co-authors on the California expert list.</p>'}${otherCoauthors > 0 ? `<p class="detail-meta">Plus ${otherCoauthors} co-author${otherCoauthors === 1 ? "" : "s"} outside the California expert list.</p>` : ""}</div></details><h3>Works</h3>${works.length ? '<div class="abstract-controls" role="group" aria-label="Abstract display"><button type="button" id="abstracts-expand">Expand all abstracts</button><button type="button" id="abstracts-collapse">Collapse all</button></div>' : ""}<ul class="works-list">${works.length ? worksHtml : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="${GITHUB_REPO}/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
+  return `${primaryText ? `<p class="drawer-primary"><span class="detail-meta">Primary affiliation:</span> <strong>${escapeHtml(primaryText)}</strong></p>` : ""}<p class="detail-meta">${escapeHtml(author.author_id)} · ${escapeHtml(author.work_count || works.length)} works · ${escapeHtml(author.ca_works_count || 0)} CA-connected works</p><p class="drawer-actions"><a class="button-link" href="${escapeHtml(expertPageUrl(author.author_id || authorId))}">Open full profile page</a>${author.orcid ? ` <a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID profile</a>` : ""}</p>${profileHtml(profile, author.name)}${drawerStatsHtml(author, works, coauthorCount)}${histogram}<h3>Topics</h3>${drawerTopics.length ? `<div class="topic-chips">${drawerTopics.map(([tag, count]) => topics().chip(tag, count)).join("")}</div>` : '<p class="detail-meta">No topic tags yet.</p>'}<details class="drawer-section"><summary>Affiliation history <span class="drawer-section-count">(${history.length} ${history.length === 1 ? "institution" : "institutions"})</span></summary><div class="drawer-section-body">${history.length ? `<ul class="affiliation-list">${historyHtml}</ul>` : '<p class="detail-meta">No institution affiliations in this snapshot.</p>'}</div></details><details class="drawer-section"><summary>Frequent co-authors <span class="drawer-section-count">(${namedCoauthors.length} CA experts${otherCoauthors.length ? `, ${otherCoauthors.length} others` : ""})</span></summary><div class="drawer-section-body">${namedCoauthors.length ? `<ul class="coauthor-list">${namedCoauthors.map(([id, count]) => `<li><button type="button" class="coauthor-link" data-author-id="${escapeHtml(id)}">${escapeHtml(expertsById.get(id).name || id)}</button> <span class="detail-meta">${count} shared ${count === 1 ? "work" : "works"}</span></li>`).join("")}</ul>` : '<p class="detail-meta">No co-authors on the California expert list.</p>'}${otherHtml}</div></details><h3>Works</h3>${works.length ? '<div class="abstract-controls" role="group" aria-label="Abstract display"><button type="button" id="abstracts-expand">Expand all abstracts</button><button type="button" id="abstracts-collapse">Collapse all</button></div>' : ""}<ul class="works-list">${works.length ? worksHtml : '<li class="empty">No works are available for this researcher.</li>'}</ul><p><a href="${GITHUB_REPO}/issues/new?title=Atlas%20data%20correction%20${encodeURIComponent(author.name || authorId)}" target="_blank" rel="noreferrer">Report an error about this profile</a></p>`;
 }
 
 // ---- CSV export -----------------------------------------------------------------------------

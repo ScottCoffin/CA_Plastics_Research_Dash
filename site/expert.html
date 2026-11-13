@@ -85,7 +85,7 @@
       .cit-chart { display: block; width: 100%; height: auto; max-width: 100%; }
       .topic-summary { margin: 0.25rem 0 0.75rem; }
       .topic-filter { display: inline-flex; align-items: center; min-height: 2.25rem; padding: 0; border: 0; border-radius: 999px; background: transparent; text-align: left; }
-      .topic-filter .topic-chip { cursor: pointer; }
+      .topic-filter .topic-chip { cursor: pointer; font-size: var(--tag-font, 0.82rem); padding: var(--tag-pad-y, 0.2rem) var(--tag-pad-x, 0.6rem); }
       .topic-filter[aria-pressed="true"] .topic-chip { box-shadow: 0 0 0 2px var(--brand-dark); }
       .filters { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-end; margin: 0.5rem 0 0.75rem; }
       .field { display: flex; flex-direction: column; gap: 0.25rem; flex: 1 1 10rem; min-width: 0; }
@@ -107,6 +107,7 @@
       .list-meta p { margin: 0; }
       .pub-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
       .pub { padding: 0.8rem 0.95rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fff; }
+      .pub-authors { margin: 0.2rem 0 0.35rem; font-size: 0.9rem; overflow-wrap: anywhere; }
       .pub-meta { margin: 0.25rem 0; color: var(--muted); font-size: 0.88rem; display: flex; flex-wrap: wrap; gap: 0.2rem 0.5rem; align-items: center; }
       .pub-links { margin: 0.2rem 0 0.4rem; font-size: 0.9rem; }
       .topic-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.1rem 0 0.5rem; }
@@ -215,7 +216,7 @@
               <button type="button" id="f-clear" class="btn">Clear filters</button>
             </div>
           </form>
-          <div id="active-filters" class="active-filters" aria-label="Active filters"></div>
+          <div id="active-filters" class="active-filters" role="group" aria-label="Active filters"></div>
           <div class="list-meta">
             <p id="count-line" role="status" aria-live="polite"></p>
           </div>
@@ -243,7 +244,7 @@
     <script id="expert-app">
       "use strict";
 
-      const { escapeHtml, safeHttpUrl, parseExpertId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, profileHtml, citationSeries, citationHistogramSvg } = AtlasExpert;
+      const { escapeHtml, safeHttpUrl, parseExpertId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, tagScale, bylineNames, coauthorEntries, authorLineHtml, profileHtml, citationSeries, citationHistogramSvg } = AtlasExpert;
 
       const RISING_TIP = "Trend in this expert's share of all Atlas experts' plastics citations over the last 5 complete years; percentile among experts";
       const CHART_LABEL = "Citations received per year, all and plastics-related";
@@ -263,6 +264,8 @@
         tags: new Set(),
         sort: "year",
         coauthorsDone: false,
+        expertNames: null,
+        expertNamesPromise: null,
         loadToken: 0
       };
       const $ = (id) => document.getElementById(id);
@@ -309,8 +312,22 @@
           ? `<a href="sem.html#inst=${encodeURIComponent(id)}">${label}</a>`
           : label;
       }
-      function topicButton(tag, count) {
-        return `<button type="button" class="topic-filter" data-tag="${escapeHtml(tag)}" aria-pressed="false">${AtlasTopics.chip(tag, count)}</button>`;
+      // Expert id -> name from data/index.json (about 2.5 MB). Fetched once; null when unavailable.
+      function loadExpertNames() {
+        if (!S.expertNamesPromise) {
+          S.expertNamesPromise = fetchJson("data/index.json")
+            .then((json) => {
+              S.expertNames = new Map((json.authors || []).map((a) => [a.author_id, a.name]));
+              return S.expertNames;
+            })
+            .catch(() => null);
+        }
+        return S.expertNamesPromise;
+      }
+      // scale (optional, from tagScale) sets the size of the topic filter button through CSS variables.
+      function topicButton(tag, count, scale) {
+        const style = scale ? ` style="--tag-font:${scale.fontRem}rem;--tag-pad-y:${scale.padYRem}rem;--tag-pad-x:${scale.padXRem}rem"` : "";
+        return `<button type="button" class="topic-filter" data-tag="${escapeHtml(tag)}" aria-pressed="false"${style}>${AtlasTopics.chip(tag, count)}</button>`;
       }
 
       // ---- Rendering ------------------------------------------------------------
@@ -427,8 +444,9 @@
 
       function renderTopicSummary() {
         const weights = AtlasTopics.weights(S.works, { matrices: true });
+        const max = weights.length ? Math.max(...weights.map(([, count]) => count)) : 0;
         $("topic-summary").innerHTML = weights.length
-          ? weights.map(([tag, count]) => topicButton(tag, count)).join("")
+          ? weights.map(([tag, count]) => topicButton(tag, count, tagScale(count, max))).join("")
           : '<p class="muted">No topic tags yet.</p>';
       }
 
@@ -466,6 +484,7 @@
         const abstract = String(work.abstract || "").trim();
         const title = String(work.title || "").trim() || "Untitled publication";
         return `<li class="pub"><h3>${escapeHtml(title)}</h3>`
+          + authorLineHtml(work, S.id, S.expertNames)
           + `<p class="pub-meta"><span>${year === null ? "Year unknown" : year}</span><span aria-hidden="true">·</span><span>${escapeHtml(work.journal || "Journal not listed")}</span><span aria-hidden="true">·</span><span>${metricNumber(cites)} ${cites === 1 ? "citation" : "citations"}</span> ${badges}</p>`
           + (links ? `<p class="pub-links">${links}</p>` : "")
           + (tags.length ? `<div class="topic-chips">${tags.map((tag) => topicButton(tag)).join("")}</div>` : "")
@@ -502,7 +521,7 @@
         $("coauthor-count").textContent = counts.length ? `(${counts.length} distinct)` : "";
       }
 
-      // Co-author names come from data/index.json, loaded only when the section opens.
+      // Co-author names come from the works' byline entries; CA experts are linked when the expert list loads.
       async function loadCoauthors() {
         if (S.coauthorsDone) return;
         const id = S.id;
@@ -519,26 +538,23 @@
           return;
         }
         body.innerHTML = '<p class="muted">Loading co-author names…</p>';
-        let names = null;
-        try {
-          const json = await fetchJson("data/index.json");
-          names = new Map((json.authors || []).map((a) => [a.author_id, a.name]));
-        } catch (err) {
-          names = null;
-        }
+        const expertNames = await loadExpertNames();
         if (id !== S.id) return;
-        S.coauthorsDone = names !== null;
-        const items = counts.slice(0, COAUTHOR_SHOWN).map(({ author_id: coId, shared }) => {
+        S.coauthorsDone = expertNames !== null;
+        // Co-authors without a name in this snapshot are left out, so the "Plus N more" count covers listed rows only.
+        const entries = coauthorEntries(counts, bylineNames(S.works), expertNames);
+        if (!entries.length) {
+          body.innerHTML = '<p class="muted">No co-author names are available in this snapshot.</p>';
+          return;
+        }
+        const items = entries.slice(0, COAUTHOR_SHOWN).map(({ author_id: coId, shared, name, expert }) => {
           const works = `${shared} shared ${shared === 1 ? "work" : "works"}`;
-          let who;
-          if (names === null) who = `<span class="muted">${escapeHtml(coId)}</span>`;
-          else if (names.has(coId)) who = `<a href="expert.html#author=${encodeURIComponent(coId)}">${escapeHtml(names.get(coId) || coId)}</a>`;
-          else who = '<span class="muted">Co-author outside the expert list</span>';
+          const who = expert ? `<a href="expert.html#author=${encodeURIComponent(coId)}">${escapeHtml(name)}</a>` : escapeHtml(name);
           return `<li>${who} <span class="shared">· ${works}</span></li>`;
         });
         const notes = [];
-        if (names === null) notes.push("Co-author names could not be loaded; OpenAlex ids are shown.");
-        if (counts.length > COAUTHOR_SHOWN) notes.push(`Plus ${metricNumber(counts.length - COAUTHOR_SHOWN)} more co-authors.`);
+        if (expertNames === null) notes.push("The CA expert list could not be loaded, so experts are not linked.");
+        if (entries.length > COAUTHOR_SHOWN) notes.push(`Plus ${metricNumber(entries.length - COAUTHOR_SHOWN)} more co-authors.`);
         body.innerHTML = `<ul class="coauthor-list">${items.join("")}</ul>${notes.map((n) => `<p class="muted">${escapeHtml(n)}</p>`).join("")}`;
       }
 
@@ -561,6 +577,9 @@
         syncControls();
         renderTopicSummary();
         renderList();
+        const id = S.id;
+        // Bylines link CA experts once the expert list arrives; the list is redrawn then.
+        loadExpertNames().then((names) => { if (names && id === S.id) renderList(); });
         renderCoauthorSummary();
         $("coauthors").open = false;
         $("coauthor-body").innerHTML = '<p class="muted">Co-author names load when this section opens.</p>';

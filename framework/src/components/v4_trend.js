@@ -11,6 +11,7 @@ import {
   niceMax,
   refDateFor,
   seriesByTopic,
+  seriesFromRows,
   yearRange
 } from "./v4_trend_model.js";
 
@@ -161,6 +162,8 @@ function dataTable(data, rows, globalByYear, version) {
     `<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
 }
 
+// Renders the whole corpus first; update(rows) redraws from the rows that match the page filters.
+// The global denominator is never filtered, so the share note says so when filters are on.
 export async function mountV4Trend(container, idx) {
   if (!container) throw new Error("mountV4Trend needs a container element");
   container.classList.add("v4-trend");
@@ -170,22 +173,34 @@ export async function mountV4Trend(container, idx) {
   const refDate = refDateFor(globalPayload, today);
   const years = yearRange(FIRST_YEAR, today.getUTCFullYear());
   const topics = topicKeys(idx);
-  const data = seriesByTopic(countsFor(idx), years, topics);
-  const corpusByYear = Object.fromEntries(years.map((year, i) => [year, data.totals[i]]));
   const globalByYear = globalPayload ? globalPayload.by_year : null;
-  const rows = globalByYear ? caShare(corpusByYear, globalByYear) : [];
   const version = globalPayload ? String(globalPayload.query_version || "") : "";
-  const globalSection = globalPayload
-    ? `<h3 class="v4-heading">California share of global output</h3>` +
-      shareChart(rows, years, version, refDate) +
-      `<p class="v4-note">Under query ${escapeHtml(version)}: California-connected works as a share of all OpenAlex works ` +
-      `matching the same query, by publication year. Global counts fetched ${escapeHtml(globalPayload.fetched_at)}.</p>`
-    : '<p class="v4-note v4-unavailable">Global comparison unavailable.</p>';
-  container.innerHTML =
-    `<h3 class="v4-heading">Works per year by topic</h3>` +
-    barChart(data, refDate) +
-    legend(topics) +
-    `<p class="v4-note">A work with several topic tags is counted under each. Works before ${FIRST_YEAR} are not shown.</p>` +
-    globalSection +
-    dataTable(data, rows, globalByYear, version);
+
+  function draw(data, filtered) {
+    const corpusByYear = Object.fromEntries(years.map((year, i) => [year, data.totals[i]]));
+    const rows = globalByYear ? caShare(corpusByYear, globalByYear) : [];
+    const scope = filtered ? "Works matching the current filters" : "California-connected works";
+    const globalSection = globalPayload
+      ? `<h3 class="v4-heading">California share of global output</h3>` +
+        shareChart(rows, years, version, refDate) +
+        `<p class="v4-note">Under query ${escapeHtml(version)}: ${scope.toLowerCase()} as a share of all OpenAlex works ` +
+        `matching the same query, by publication year. Global counts fetched ${escapeHtml(globalPayload.fetched_at)}.` +
+        (filtered ? " The global count is not filtered, so with topic or other filters on this compares a subset with all plastics research." : "") +
+        `</p>`
+      : '<p class="v4-note v4-unavailable">Global comparison unavailable.</p>';
+    container.innerHTML =
+      `<h3 class="v4-heading">Works per year by topic${filtered ? " (filtered)" : ""}</h3>` +
+      barChart(data, refDate) +
+      legend(topics) +
+      `<p class="v4-note">A work with several topic tags is counted under each. Works before ${FIRST_YEAR} are not shown.</p>` +
+      globalSection +
+      dataTable(data, rows, globalByYear, version);
+  }
+
+  draw(seriesByTopic(countsFor(idx), years, topics), false);
+  return {
+    update(rows, {filtered = true} = {}) {
+      draw(seriesFromRows(rows, years, topics), filtered);
+    }
+  };
 }

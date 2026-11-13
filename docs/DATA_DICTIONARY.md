@@ -84,7 +84,27 @@ Licence: as `index.json`. These files are present for each indexed author.
 `ca_led`, `cited_by_count`, `is_oa` (boolean), `oa_status` (string), `oa_url` (string),
 `license` (string, as recorded by OpenAlex or null), `last_updated` (string, ISO date),
 `openalex_topics` (array of string), `primary_topic` (string), `domain_tags`,
-`facet_tags`, `plastic_related`, `plastic_tier`, `study_type`, `needs_review`.
+`facet_tags`, `plastic_related`, `plastic_tier`, `study_type`, `needs_review`,
+`authors` (array of `{id, name}` in byline order, first 20 authors; `id` may be empty),
+`author_count` (integer, all authors), `author_institution_ids` (this author's own institutions).
+`profile` (optional): ORCID biography, keywords and links, plus `photo` (`thumb_url`, `license`,
+`credit`, `source_url`) for owner-approved photos; local photos live in `site/assets/experts/`.
+
+### `site/data/works_detail.json`
+
+Purpose: publication table on the Evidence map (one row per published work).
+Top-level keys: `schema_version`, `works` (array). Licence: as `index.json`.
+Row fields: `work_id`, `title`, `year`, `pub_date`, `first_seen` (date first ingested), `doi`,
+`journal`, `type`, `cited_by_count`, `is_oa`, `oa_url`, `plastic_related`, `ca_led`,
+`domain_tags`, `facet_tags`, `authors` (array of names, first 20), `author_count`,
+`has_abstract` (boolean). Written by `scripts/build_export_site.py`.
+
+### `site/data/work_text/abstracts.json`
+
+Purpose: abstracts for the Evidence map table, loaded only when a reader expands one. Kept in a
+subfolder so the abstract-free release snapshot does not package it.
+Top-level keys: `schema_version`, `abstracts` (object, work_id -> abstract text with email
+addresses redacted). Licence: abstracts as supplied by OpenAlex (as `authors/*.json`).
 
 ### `site/data/institutions.json`
 

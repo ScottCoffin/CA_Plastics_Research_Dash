@@ -10,7 +10,7 @@ export default {
   root: "src",
   // ATLAS_FW_OUT lets parallel local builds use separate folders (dist-*/ is gitignored).
   output: process.env.ATLAS_FW_OUT || "dist",
-  theme: ["air", "near-midnight"],
+  theme: "air",
   head: `<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23075a46'/%3E%3C/svg%3E">`,
   style: "style.css",
   // No external CDNs (C5/S3.7): drop Framework's default Google Fonts link; system fonts apply.

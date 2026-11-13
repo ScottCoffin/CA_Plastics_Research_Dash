@@ -59,5 +59,6 @@ def test_style_css_keeps_contrast_overrides():
     css = (FW / "src" / "style.css").read_text(encoding="utf-8")
     assert "--theme-foreground-muted: color-mix(in srgb, var(--theme-foreground) 75%" in css
     assert "text-decoration: underline" in css
-    for root in ("experts", "funding", "institutions", "monitoring"):
-        assert f"html #{root}-root" in css
+    # Owner 2026-11-12: light theme only, so the dark-theme panel overrides were removed.
+    assert "near-midnight" not in css
+    assert "prefers-color-scheme: dark" not in css

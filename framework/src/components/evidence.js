@@ -1,15 +1,18 @@
 // Evidence map shell (Add-on A2 §5, EM-5b): shared filter state in the URL hash, A1 bit-set facets
-// (AT-4 engine), distinct works only, a shared works drawer and a related-resources strip. The
-// views V-3 and V-4 mount here; the other views are not built yet and have no sections in evidence.md.
+// (AT-4 engine), distinct works only and a shared works drawer. Every view below the filters
+// follows them (owner 2026-11-12): trend panel, heatmap and publication table get the matching rows
+// on each change; the pipeline flow is static. Related resources moved to their own page.
 // Pure helpers live in evidence_model.js; this file owns the DOM.
 import "./shared/facets.js";
 import "./shared/topics.js";
 import {dataUrl, formatCount, loadJson} from "./atlas.js";
 import {mountV3Flow} from "./v3_flow.js";
 import {mountV4Trend} from "./v4_trend.js";
+import {mountHeatmap} from "./ev_heatmap.js";
+import {mountWorksTable, renderRecentCallout} from "./ev_table.js";
+import {normaliseRows} from "./ev_table_model.js";
 import {
   DRAWER_PAGE_SIZE,
-  LINKOUT_NOTE,
   emptyState,
   formatHash,
   openAlexUrl,
@@ -19,7 +22,6 @@ import {
   sanitizeState,
   selectionFor,
   sortWorksNewestFirst,
-  stripEntries,
   worksMetaMap
 } from "./evidence_model.js";
 
@@ -42,7 +44,8 @@ const app = {
   state: emptyState(),
   rows: [],
   current: null,
-  linkouts: null,
+  detail: null,
+  views: [],
   drawer: null,
   opener: null
 };
@@ -144,43 +147,37 @@ function render() {
   }
   app.current = {sel, impossible, extra};
   $("evidence-count").textContent = `${formatCount(result.total)} distinct works match`;
-  renderStrip();
+  notifyViews();
 }
 
-function renderStrip() {
-  const section = $("evidence-strip");
-  const entries = app.linkouts ? stripEntries(app.linkouts, app.state.facets.topic || []) : [];
-  section.hidden = entries.length === 0;
-  if (!entries.length) return;
-  const list = $("evidence-strip-list");
-  list.replaceChildren();
-  for (const entry of entries) {
-    const item = document.createElement("li");
-    item.className = "ev-strip-item";
-    const url = safeHttpUrl(entry.root_url);
-    const name = document.createElement(url ? "a" : "span");
-    if (url) {
-      name.href = url;
-      name.target = "_blank";
-      name.rel = "noreferrer";
+// Pushes the matching rows to every reactive view. Views mount asynchronously, so a view that
+// mounts later gets the current rows from notifyViews() once it registers.
+function notifyViews() {
+  if (!app.current || !app.detail) return;
+  const {sel, impossible, extra} = app.current;
+  const ids = impossible ? [] : app.index.selectedIds(sel, extra);
+  const rows = ids.map((id) => app.detail.get(id)).filter(Boolean);
+  const filtered = formatHash(app.state) !== "";
+  for (const view of app.views) {
+    try {
+      view({ids, rows, filtered});
+    } catch (error) {
+      console.error(error);
     }
-    name.textContent = String(entry.name || entry.id);
-    item.append(name);
-    if (entry.steward) {
-      const steward = document.createElement("span");
-      steward.className = "ev-strip-steward";
-      steward.textContent = ` ${entry.steward}`;
-      item.append(steward);
-    }
-    if (entry.description) {
-      const description = document.createElement("p");
-      description.className = "ev-strip-description";
-      description.textContent = String(entry.description);
-      item.append(description);
-    }
-    list.append(item);
   }
-  $("evidence-strip-note").textContent = LINKOUT_NOTE;
+}
+
+let detailPromise = null;
+function loadDetail() {
+  if (!detailPromise) {
+    detailPromise = loadJson("works_detail.json")
+      .then((payload) => new Map(normaliseRows(payload).map((row) => [row.work_id, row])))
+      .catch((error) => {
+        detailPromise = null;
+        throw error;
+      });
+  }
+  return detailPromise;
 }
 
 function renderDrawer() {
@@ -287,7 +284,6 @@ function showFailed() {
   $("evidence-status").replaceChildren("Could not load the evidence data. ", retry);
 }
 
-let linkoutsPromise = null;
 let bound = false;
 
 // Loads the bundle and wires the controls once. A failed load shows a retry button; a retry re-runs this.
@@ -315,17 +311,45 @@ async function loadBundle() {
   $("evidence-show-works").disabled = false;
   setState(app.state, {sync: true});
   showStatus(`Loaded ${formatCount(index.N)} works.`);
-  app.linkouts = await linkoutsPromise;
-  renderStrip();
-  // V-4 (EM-7): whole-corpus trends from the same bit-set index (not filtered by the selection).
-  settleSection($("ev-v4"), mountV4Trend($("ev-v4"), index));
+  await mountViews(index);
+}
+
+let viewsMounted = false;
+// Trend panel, heatmap, publication table and the "new in the last 2 weeks" callout.
+async function mountViews(index) {
+  if (viewsMounted) return;
+  viewsMounted = true;
+  const trendPromise = mountV4Trend($("ev-v4"), index);
+  settleSection($("ev-v4"), trendPromise);
+  let detail;
+  try {
+    detail = await loadDetail();
+  } catch {
+    $("ev-table").textContent = "Could not load the publication details.";
+    return;
+  }
+  app.detail = detail;
+  renderRecentCallout($("ev-recent"), [...detail.values()], new Date());
+  const heatmap = mountHeatmap($("ev-heatmap"), {
+    onCell: ({title, ids}) => openWorksDrawer(title, ids).catch((error) => showStatus(`Could not list the works: ${error.message}`))
+  });
+  $("ev-heatmap").closest("section").hidden = false;
+  const table = mountWorksTable($("ev-table"));
+  app.views.push(({rows}) => heatmap.update(rows), ({ids}) => table.update(ids));
+  notifyViews();
+  try {
+    const trend = await trendPromise;
+    if (trend && typeof trend.update === "function") {
+      app.views.push(({rows, filtered}) => trend.update(rows, {filtered}));
+      if (formatHash(app.state) !== "") notifyViews();
+    }
+  } catch {
+    // settleSection already hid the trend section.
+  }
 }
 
 export async function mountEvidence() {
   // V-3 (EM-6) needs only the methods card export, so it renders independently of the bundle.
-  settleSection($("ev-v3"), mountV3Flow($("ev-v3")));
-  linkoutsPromise = loadJson("linkouts.json", {optional: true})
-    .then((data) => (Array.isArray(data?.entries) ? data.entries : null))
-    .catch(() => null);
+  mountV3Flow($("ev-v3"));
   await loadBundle();
 }

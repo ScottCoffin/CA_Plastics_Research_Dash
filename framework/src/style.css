@@ -1,6 +1,11 @@
 @import url("observablehq:default.css");
-@import url("observablehq:theme-air.css") (prefers-color-scheme: light);
-@import url("observablehq:theme-near-midnight.css") (prefers-color-scheme: dark);
+/* Owner 2026-11-12: light theme by default (and only); the dark theme is not loaded. */
+@import url("observablehq:theme-air.css");
+
+/* Framework's #observablehq-main is a z-index 0 stacking context below the fixed header
+   (z-index 2), so an open Experts drawer slid under the header. While a drawer is open,
+   lift the whole main column above the header and sidebar. */
+#observablehq-main:has(.drawer:not([hidden]), .drawer-backdrop:not([hidden])) { z-index: 4; }
 
 .atlas-header { font-size: 0.9rem; color: var(--theme-foreground-muted); }
 .atlas-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 0.75rem; margin: 1rem 0; }
@@ -23,17 +28,9 @@
 /* UX-22 (docs/EM_spec.md): text contrast and link affordance (WCAG 2.2 AA).
    Framework's muted (60%) and faint (50%) text mixes measure 3.2-4.4:1; these mixes reach
    at least 4.5:1 on both theme backgrounds and the alternate background. */
-@media (prefers-color-scheme: light) {
-  :root {
-    --theme-foreground-muted: color-mix(in srgb, var(--theme-foreground) 75%, var(--theme-background-a));
-    --theme-foreground-faint: color-mix(in srgb, var(--theme-foreground) 68%, var(--theme-background-a));
-  }
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --theme-foreground-muted: color-mix(in srgb, var(--theme-foreground) 75%, var(--theme-background-b));
-    --theme-foreground-faint: color-mix(in srgb, var(--theme-foreground) 68%, var(--theme-background-b));
-  }
+:root {
+  --theme-foreground-muted: color-mix(in srgb, var(--theme-foreground) 75%, var(--theme-background-a));
+  --theme-foreground-faint: color-mix(in srgb, var(--theme-foreground) 68%, var(--theme-background-a));
 }
 /* Links inside running text are underlined, so colour is not the only cue. */
 .atlas-header a,
@@ -48,34 +45,3 @@
 }
 /* Facet headers keep a fixed light background in both themes; keep their links dark too. */
 .facet > summary a { color: #0b3d31; }
-/* Pages ported from the classic site (Experts, Institutions, Monitoring, Funding) hardcode a
-   light palette (white inputs and buttons, dark ink). In the dark theme they render as a light
-   panel, so every text/background pair keeps 4.5:1; "html" raises specificity above the page
-   stylesheets, which load later. A full dark palette for these pages is later polish. */
-@media (prefers-color-scheme: dark) {
-  html #experts-root,
-  html #funding-root,
-  html #institutions-root,
-  html #monitoring-root {
-    color-scheme: light;
-    --theme-foreground: #17324d;
-    --theme-foreground-alt: #17324d;
-    --theme-foreground-muted: #46576a;
-    --theme-foreground-fainter: #9aa7b2;
-    --theme-foreground-faintest: #dde5e8;
-    --theme-foreground-faint: #5b6876;
-    --theme-foreground-focus: #0b57d0;
-    --theme-background: #ffffff;
-    --theme-background-alt: #f4f6f7;
-    background: #ffffff;
-    color: #17324d;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-  }
-  html #experts-root :is(h1, h2, h3, h4, h5, h6),
-  html #funding-root :is(h1, h2, h3, h4, h5, h6),
-  html #institutions-root :is(h1, h2, h3, h4, h5, h6),
-  html #monitoring-root :is(h1, h2, h3, h4, h5, h6) {
-    color: #17324d;
-  }
-}

@@ -9,6 +9,7 @@ import {
   niceMax,
   refDateFor,
   seriesByTopic,
+  seriesFromRows,
   yearRange
 } from "../framework/src/components/v4_trend_model.js";
 
@@ -77,5 +78,24 @@ assert.equal(niceMax(5), 5);
 // escapeHtml neutralises markup characters.
 assert.equal(escapeHtml(`<a href="x">&'`), "&lt;a href=&quot;x&quot;&gt;&amp;&#39;");
 assert.equal(escapeHtml(null), "");
+
+// seriesFromRows counts filtered rows per year and per topic; duplicate tags count once,
+// out-of-range years and unknown topics are ignored.
+{
+  const rows = [
+    {year: 2024, domain_tags: ["air", "air"]},
+    {year: 2024, domain_tags: ["air", "soil_and_agriculture"]},
+    {year: 2025, domain_tags: []},
+    {year: 1999, domain_tags: ["air"]},
+    {year: 2025, domain_tags: ["unknown_tag"]}
+  ];
+  const data = seriesFromRows(rows, [2024, 2025], ["air", "soil_and_agriculture"]);
+  assert.deepEqual(data.totals, [2, 2]);
+  assert.deepEqual(data.series, [
+    {topic: "air", values: [2, 0]},
+    {topic: "soil_and_agriculture", values: [1, 0]}
+  ]);
+  assert.deepEqual(seriesFromRows(null, [2024], ["air"]).totals, [0]);
+}
 
 console.log("framework_v4_trend_runtime: all checks passed");

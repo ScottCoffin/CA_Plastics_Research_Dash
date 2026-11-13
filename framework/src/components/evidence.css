@@ -19,11 +19,6 @@
 #evidence-root .ev-option.ev-zero { opacity: 0.45; }
 #evidence-root .ev-summary { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; }
 #evidence-root .ev-count-line { margin: 0; font-weight: 600; }
-#evidence-root .ev-strip { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; background: var(--theme-background-alt); }
-#evidence-root .ev-strip h2 { margin: 0 0 0.4rem; font-size: 1rem; }
-#evidence-root .ev-strip-list { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
-#evidence-root .ev-strip-steward, #evidence-root .ev-year { color: var(--theme-foreground-muted); }
-#evidence-root .ev-strip-description { margin: 0.15rem 0 0; font-size: 0.9rem; }
 #evidence-root .ev-view { margin-top: 1.25rem; padding: 0.75rem 1rem; border: 1px dashed var(--theme-foreground-faintest); border-radius: 0.5rem; }
 #evidence-root .ev-view h2 { margin: 0; font-size: 1rem; }
 #evidence-root .ev-notice { margin: 0.75rem 0 0; padding: 0.5rem 0.75rem; border-left: 4px solid var(--theme-foreground-faint); border-radius: 0.25rem; background: var(--theme-background-alt); font-size: 0.9rem; }
@@ -38,3 +33,9 @@
 #evidence-root input[type="search"], #evidence-root input[type="number"] { box-sizing: border-box; width: 100%; min-width: 0; }
 #evidence-root .ev-option input[type="checkbox"] { flex: 0 0 auto; width: 1.5rem; height: 1.5rem; margin: 0; }
 #evidence-root .v4-sr-only { display: block; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#evidence-root .ev-year { color: var(--theme-foreground-muted); }
+/* Pipeline flow: collapsed by default; the heading sits inside the summary. */
+#evidence-root .ev-flow-box { margin-top: 1.25rem; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; padding: 0.25rem 0.75rem; }
+#evidence-root .ev-flow-box > summary { cursor: pointer; min-height: 2.75rem; display: flex; align-items: center; gap: 0.5rem; }
+#evidence-root .ev-flow-box > summary { font-weight: 650; }
+#evidence-root .ev-view { margin-top: 1.25rem; }

@@ -153,6 +153,68 @@
       .sort((a, b) => b.shared - a.shared || compareText(a.author_id, b.author_id));
   }
 
+  // Font size and padding (rem) for a topic tag: scaled by its count relative to the largest count
+  // (sqrt scale, 0.8rem to 1.6rem). Missing or zero counts and max give the smallest size.
+  function tagScale(count, max) {
+    const c = Number(count);
+    const m = Number(max);
+    const ratio = Number.isFinite(c) && Number.isFinite(m) && m > 0 ? Math.min(1, Math.max(0, c / m)) : 0;
+    const s = Math.sqrt(ratio);
+    const r = (x) => Math.round(x * 100) / 100;
+    return { fontRem: r(0.8 + 0.8 * s), padYRem: r(0.2 + 0.15 * s), padXRem: r(0.6 + 0.4 * s) };
+  }
+
+  // Id -> name from the byline entries (works[].authors). Entries without an id or name are skipped.
+  function bylineNames(works) {
+    const names = new Map();
+    (Array.isArray(works) ? works : []).forEach((work) => {
+      (Array.isArray(work && work.authors) ? work.authors : []).forEach((author) => {
+        const id = String(author?.id ?? "").trim();
+        const name = String(author?.name ?? "").trim();
+        if (id && name && !names.has(id)) names.set(id, name);
+      });
+    });
+    return names;
+  }
+
+  // Co-author rows for the list: {author_id, shared, name, expert}. names: Map from bylineNames.
+  // expertNames: Map of CA expert id to name, or null when the expert list is unavailable. A co-author
+  // with no name in either source is dropped, so the caller's "Plus N more" count is over named rows only.
+  function coauthorEntries(counts, names, expertNames) {
+    const hasExperts = Boolean(expertNames) && typeof expertNames.has === "function";
+    return (Array.isArray(counts) ? counts : [])
+      .map(({ author_id: id, shared }) => {
+        const expert = hasExperts && expertNames.has(id);
+        const name = (expert && expertNames.get(id)) || (names && names.get(id)) || "";
+        return { author_id: id, shared, name: String(name).trim(), expert: Boolean(expert) };
+      })
+      .filter((entry) => entry.name);
+  }
+
+  // Byline under a publication title. Names in byline order (at most 10); the profiled expert (selfId) in
+  // bold; CA experts (ids in expertNames, a Map) link to their profile; then "et al. (N authors)" when there
+  // are more. Returns "" when the work has no authors list (old snapshots).
+  const BYLINE_SHOWN = 10;
+  function authorLineHtml(work, selfId, expertNames) {
+    const raw = Array.isArray(work && work.authors) ? work.authors : [];
+    const named = raw
+      .map((author) => ({ id: String(author?.id ?? "").trim(), name: String(author?.name ?? "").trim() }))
+      .filter((author) => author.name);
+    if (!named.length) return "";
+    const shown = named.slice(0, BYLINE_SHOWN);
+    const declared = Number.isInteger(work.author_count) && work.author_count > 0 ? work.author_count : 0;
+    const total = declared > 0 ? Math.max(declared, named.length) : raw.length;
+    const self = String(selfId || "");
+    const hasExperts = Boolean(expertNames) && typeof expertNames.has === "function";
+    const parts = shown.map(({ id, name }) => {
+      if (self && id === self) return `<strong>${escapeHtml(name)}</strong>`;
+      if (hasExperts && id && expertNames.has(id)) return `<a href="expert.html#author=${encodeURIComponent(id)}">${escapeHtml(name)}</a>`;
+      return escapeHtml(name);
+    });
+    if (total > shown.length) parts.push(`et al. (${total} authors)`);
+    return `<p class="pub-authors">${parts.join(", ")}</p>`;
+  }
+
   // Profile block from data/authors/<id>.json: photo credit, ORCID bio, keywords and links.
   // Returns "" when there is nothing to show. Only http(s) URLs are linked.
   function profileHtml(profile, name = "") {
@@ -255,6 +317,10 @@
     plasticShare,
     yearRangesText,
     coauthorCounts,
+    tagScale,
+    bylineNames,
+    coauthorEntries,
+    authorLineHtml,
     profileHtml,
     citationSeries,
     citationHistogramSvg

@@ -86,3 +86,37 @@ def test_export_site_removes_stale_author_files(tmp_path: Path) -> None:
     assert not stale.exists()
     files = {p.stem for p in (result.output_dir / "authors").glob("*.json")}
     assert files == {row["author_id"] for row in payload["authors"]}
+
+
+def test_export_site_writes_bylines_and_evidence_table(tmp_path: Path) -> None:
+    normalized = normalize_fixture(
+        FIXTURE,
+        institution_path=INSTITUTIONS,
+        output_dir=tmp_path / "normalized",
+        qc_path=tmp_path / "qc.md",
+        generated_at="test",
+    )
+    result = export_site(
+        works_path=normalized.output_dir / "works.parquet",
+        authors_path=normalized.output_dir / "authors.parquet",
+        authorships_path=normalized.output_dir / "authorships.parquet",
+        institutions_path=normalized.output_dir / "institutions.parquet",
+        output_dir=tmp_path / "site",
+        generated_at="test",
+        ca_authors_only=False,
+    )
+    out = result.output_dir
+    table = json.loads((out / "works_detail.json").read_text(encoding="utf-8"))["works"]
+    index = json.loads((out / "index.json").read_text(encoding="utf-8"))
+    assert {row["work_id"] for row in table} == {w["work_id"] for w in index["works"]}
+    abstracts = json.loads((out / "work_text" / "abstracts.json").read_text(encoding="utf-8"))
+    for row in table:
+        assert "abstract" not in row
+        assert row["has_abstract"] == (row["work_id"] in abstracts["abstracts"])
+        assert row["author_count"] >= len(row["authors"])
+    # Author-detail works carry the ordered byline with ids and names.
+    detail = json.loads(next((out / "authors").glob("*.json")).read_text(encoding="utf-8"))
+    work = detail["works"][0]
+    assert work["author_count"] == len({a["id"] or a["name"] for a in work["authors"]})
+    assert all(set(a) == {"id", "name"} for a in work["authors"])
+    assert detail["author"]["author_id"] in {a["id"] for a in work["authors"]}

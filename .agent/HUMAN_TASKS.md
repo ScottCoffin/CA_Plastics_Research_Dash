@@ -72,6 +72,15 @@ The Atlas already hides these abstracts; this fixes them for everyone.
    > plastics; please remove the abstract_inverted_index for them.
 - **Done when:** submitted. Tell the agent "OpenAlex report sent".
 
+### H19. Confirm the Margaret Spring photo credit (2 minutes)
+The photo you supplied now shows on her profile with the credit "Photo supplied by the Atlas
+maintainer" and licence "Owner-supplied". The governance rule is: photos only with a licence or
+the person's consent.
+1. Check where the photo came from (for example the MBARI staff page) and whether you have
+   permission to reuse it.
+2. Tell the agent the credit line to show (for example "Photo: MBARI") or "remove the photo".
+- **Done when:** the agent has the credit line or the removal request.
+
 ### H17. Answer the UX decisions UXD-1..UXD-9 (10 minutes)
 Your UX spec (`docs/EM_spec.md`) is now TODO section "UX". Its decisions are rows UXD-1..UXD-9
 at the bottom of `.agent/QUESTIONS.md`, each with the default the agent is using.

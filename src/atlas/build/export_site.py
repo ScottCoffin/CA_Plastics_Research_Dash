@@ -219,6 +219,83 @@ def _write_author_details(
 
 
 EXPERTS_PER_INSTITUTION = 150
+# Author names shown per work (cards, evidence table); the full count stays in author_count.
+AUTHORS_PER_WORK = 20
+
+
+def _ordered_authors(authorships: Sequence[Mapping[str, Any]]) -> list[dict[str, str]]:
+    """Byline order: first, middle (source order), last; one entry per author id."""
+    ordered = sorted(
+        authorships,
+        key=lambda a: {"first": 0, "last": 2}.get(_text(a.get("position")), 1),
+    )
+    seen: set[str] = set()
+    result: list[dict[str, str]] = []
+    for row in ordered:
+        author_id = _text(row.get("author_id"))
+        key = author_id or _text(row.get("author_name"))
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        result.append({"id": author_id, "name": _text(row.get("author_name"))})
+    return result
+
+
+def _byline(authorships: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    authors = _ordered_authors(authorships)
+    return {"authors": authors[:AUTHORS_PER_WORK], "author_count": len(authors)}
+
+
+def _write_evidence_works(
+    output_dir: Path,
+    full_work_by_id: Mapping[str, Mapping[str, Any]],
+    authors_by_work: Mapping[str, list[Mapping[str, Any]]],
+    first_seen: Mapping[str, str],
+) -> None:
+    """Evidence-map publication table: one compact row per work, abstracts in a second file.
+
+    ``works_detail.json`` loads with the page; ``work_text/abstracts.json`` loads only when a
+    reader first expands an abstract. It sits in a subfolder so the abstract-free release
+    snapshot (top-level ``site/data/*.json`` only) never packages it.
+    """
+    rows = []
+    abstracts: dict[str, str] = {}
+    for work_id in sorted(full_work_by_id):
+        work = full_work_by_id[work_id]
+        byline = _ordered_authors(authors_by_work.get(work_id, []))
+        rows.append(
+            {
+                "work_id": work_id,
+                "title": work.get("title", ""),
+                "year": work.get("year"),
+                "pub_date": work.get("pub_date", ""),
+                "first_seen": first_seen.get(work_id, ""),
+                "doi": work.get("doi", ""),
+                "journal": work.get("journal", ""),
+                "type": work.get("type", ""),
+                "cited_by_count": work.get("cited_by_count", 0),
+                "is_oa": work.get("is_oa", False),
+                "oa_url": work.get("oa_url", ""),
+                "plastic_related": work.get("plastic_related"),
+                "ca_led": work.get("ca_led", False),
+                "domain_tags": list(work.get("domain_tags", [])),
+                "facet_tags": list(work.get("facet_tags", [])),
+                "authors": [a["name"] for a in byline[:AUTHORS_PER_WORK]],
+                "author_count": len(byline),
+                "has_abstract": bool(work.get("abstract")),
+            }
+        )
+        if work.get("abstract"):
+            abstracts[work_id] = work["abstract"]
+    _atomic_json(
+        output_dir / "works_detail.json", {"schema_version": SCHEMA_VERSION, "works": rows}
+    )
+    _atomic_json(
+        output_dir / "work_text" / "abstracts.json",
+        {"schema_version": SCHEMA_VERSION, "abstracts": abstracts},
+    )
+
+
 INSTITUTION_WORKS_MAX_BYTES = 25_000_000
 
 
@@ -827,6 +904,7 @@ def export_site(
             author_id: [
                 {
                     **full_work_by_id[work_id],
+                    **_byline(authors_by_work.get(work_id, [])),
                     "author_institution_ids": sorted(
                         own_institutions.get((author_id, work_id), set())
                     ),
@@ -839,6 +917,12 @@ def export_site(
         },
         profiles,
         author_extras,
+    )
+    _write_evidence_works(
+        output,
+        full_work_by_id,
+        authors_by_work,
+        {_text(r.get("work_id")): _text(r.get("first_seen")) for r in works_rows},
     )
     _write_institution_works(
         output,

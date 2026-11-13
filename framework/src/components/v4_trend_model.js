@@ -23,6 +23,24 @@ export function seriesByTopic(countsFn, years, topics) {
   return {years: years.slice(), series, totals};
 }
 
+// Same shape as seriesByTopic, computed from work rows ({year, domain_tags}) already filtered by
+// the page's selection, so the panel follows the filters.
+export function seriesFromRows(rows, years, topics) {
+  const index = new Map(years.map((year, i) => [year, i]));
+  const totals = years.map(() => 0);
+  const byTopic = new Map(topics.map((topic) => [topic, years.map(() => 0)]));
+  for (const row of rows || []) {
+    const i = index.get(Number(row && row.year));
+    if (i === undefined) continue;
+    totals[i] += 1;
+    for (const tag of new Set(row.domain_tags || [])) {
+      const values = byTopic.get(tag);
+      if (values) values[i] += 1;
+    }
+  }
+  return {years: years.slice(), series: topics.map((topic) => ({topic, values: byTopic.get(topic)})), totals};
+}
+
 // CA share per year: corpus works / global works, for years with a positive global count.
 // corpusByYear and globalByYear are objects keyed by year (string or number).
 // Returns [{year, corpus, global, share}] sorted by year; share is a fraction (0..1+).
