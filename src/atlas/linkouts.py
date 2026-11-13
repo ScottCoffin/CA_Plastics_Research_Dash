@@ -131,6 +131,9 @@ def _validate_entry(entry: dict[str, Any]) -> list[str]:
             errors.append(f"{eid}: {key} must be a non-empty string")
     if entry["update_model"] != "not stated" and not isinstance(entry["update_model"], str):
         errors.append(f"{eid}: update_model must be a string")
+    source = entry.get("steward_source")
+    if source is not None and not (isinstance(source, str) and source.startswith("https://")):
+        errors.append(f"{eid}: steward_source must be an https URL when present")
     if entry["reuse_mode"] != "link_only":
         errors.append(f"{eid}: reuse_mode must be link_only")
     expected_terms = "recorded" if eid in TERMS_RECORDED_IDS else "not recorded"
@@ -282,6 +285,7 @@ STRIP_FIELDS = (
     "id",
     "name",
     "steward",
+    "steward_source",
     "description",
     "relation",
     "root_url",
@@ -334,6 +338,7 @@ def strip_entries(data: Any) -> list[dict[str, Any]]:
             "id": entry["id"],
             "name": entry["name"],
             "steward": entry["steward"],
+            "steward_source": entry.get("steward_source"),
             "description": entry["description"],
             "relation": entry["relation"],
             "root_url": entry["root_url"],

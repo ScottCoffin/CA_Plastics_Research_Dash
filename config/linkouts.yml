@@ -63,7 +63,8 @@ entries:
 
   - id: "LO-3"
     name: "NOAA NCEI Marine Microplastics"
-    steward: "not stated"
+    steward: "NOAA National Centers for Environmental Information"
+    steward_source: "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncei:MicroplasticsDatabase/html"
     description: "a global database of microplastics observations in marine settings"
     description_source: "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncei:MicroplasticsDatabase/html"
     relation: "marine observations database"
@@ -155,7 +156,8 @@ entries:
 
   - id: "LO-8"
     name: "Plastiverse tools directory"
-    steward: "not stated"
+    steward: "Plastiverse"
+    steward_source: "https://www.plastiverse.org/microplastics-tools-resources"
     description: "a curated and evolving directory of plastics research tools & resources"
     description_source: "https://www.plastiverse.org/microplastics-tools-resources"
     relation: "tools directory"

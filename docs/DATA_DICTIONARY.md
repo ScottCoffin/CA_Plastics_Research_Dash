@@ -215,7 +215,7 @@ Top-level keys: `schema_version` (`em5.v1`), `source` (string), `entries` (array
 Licence: project metadata; names and descriptions are quoted from each steward, and nothing
 from the linked resources is copied (link-only, Add-on A2 §8).
 
-`entries[]`: `id`, `name`, `steward`, `description`, `relation`, `root_url` (https), `topics`
+`entries[]`: `id`, `name`, `steward`, `steward_source` (https URL where the steward is named, or null), `description`, `relation`, `root_url` (https), `topics`
 (topic tags that show the entry), `default` (boolean: shown when no topic-specific entry matches),
 `description_source` (https URL where the steward states the description), `update_model` (string,
 or "not stated"), `terms_status` (`recorded` or `not recorded`), `terms` (string, or null when the

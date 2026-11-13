@@ -12,4 +12,5 @@
 #resources-root .rs-relation { display: inline-block; margin: 0.3rem 0 0.4rem; padding: 0 0.4rem; border-radius: 0.25rem; border: 1px solid var(--theme-foreground-faint); font-size: 0.75rem; color: var(--theme-foreground-muted); }
 #resources-root .rs-field, #resources-root .rs-description { margin: 0.25rem 0 0; font-size: 0.9rem; }
 #resources-root .rs-label { color: var(--theme-foreground-muted); }
+#resources-root .rs-badge { display: inline-block; margin: 0.4rem 0 0; padding: 0.1rem 0.5rem; border: 1px solid var(--theme-foreground-faint); border-radius: 999px; font-size: 0.8rem; color: var(--theme-foreground-muted); }
 #resources-root .rs-description { font-style: italic; }

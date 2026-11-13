@@ -53,7 +53,9 @@ export function buildCard(entry) {
     heading.textContent = entry.name;
   }
   card.append(heading, el("p", "rs-relation", entry.relation));
-  card.append(labelled("Steward", entry.steward));
+  const steward = labelled("Steward", entry.steward);
+  if (isHttps(entry.steward_source)) steward.append(" (", externalLink(entry.steward_source, "source"), ")");
+  card.append(steward);
 
   const description = el("p", "rs-description");
   description.textContent = entry.description === NOT_STATED
@@ -64,8 +66,10 @@ export function buildCard(entry) {
   }
   card.append(description);
 
-  card.append(labelled("Updates", entry.update_model));
-  card.append(labelled("Terms", entry.terms ?? entry.terms_status));
+  // UX-11: show what the steward states; one badge replaces the repeated "not stated" fields.
+  if (entry.update_model && entry.update_model !== NOT_STATED) card.append(labelled("Updates", entry.update_model));
+  if (entry.terms_status === "recorded" && entry.terms) card.append(labelled("Terms", entry.terms));
+  else if (entry.terms_status !== "recorded") card.append(el("p", "rs-badge", "Reuse terms not recorded"));
   return card;
 }
 

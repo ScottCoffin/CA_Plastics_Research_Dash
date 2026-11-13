@@ -14,6 +14,7 @@ PUBLIC_FIELDS = {
     "id",
     "name",
     "steward",
+    "steward_source",
     "description",
     "relation",
     "root_url",
