@@ -64,6 +64,7 @@
 #experts-root .expert-topics [hidden] { display: none !important; }
 #experts-root .expert-topics .topic-chip { font-size: 0.85rem; }
 #experts-root .topic-more { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border: 1px solid #8da7af; border-radius: 999px; color: #24445a; background: #fff; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+#experts-root .now-badge { display: inline-block; padding: 0.05rem 0.4rem; border: 1px solid #c45100; border-radius: 999px; color: #5c2300; background: #ffe9cf; font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
 #experts-root .expert-metrics { margin: 0; flex: none; color: var(--ink); font-size: 0.88rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
 #experts-root .expert-metrics strong { color: var(--brand-dark); }
 #experts-root .expert-affil { margin: 0; flex: none; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }

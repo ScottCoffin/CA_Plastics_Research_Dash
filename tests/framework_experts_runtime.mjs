@@ -16,7 +16,11 @@ import {
   rowHeightForWidth,
   bylineNames,
   coauthorSummary,
+  currentAffiliationHtml,
+  currentAffiliationStatus,
+  NOW_VALUES,
   drawerContentHtml,
+  expertRowHtml,
   summarizeAuthor,
   virtualWindow,
   workAuthorsHtml
@@ -145,5 +149,36 @@ assert.ok(drawerHtml.includes("(2 CA experts, 1 others)"), "summary count text")
 assert.ok(drawerHtml.includes("Outside &lt;Writer&gt; </span>") || drawerHtml.includes("<span>Outside &lt;Writer&gt;</span>"), "other co-author shown unlinked and escaped");
 assert.ok(!drawerHtml.includes("Co-author outside"), "old placeholder text is gone");
 assert.ok(drawerHtml.includes('<p class="work-authors"><strong>Chelsea Rochman</strong>'), "work byline in the drawer");
+
+// Current affiliation (owner request 2026-11-13): now=ca | outside | unknown, from current_in_ca.
+// A100 outside (last California year 2019), A200 in California, A300 null, A400 field absent (unknown).
+const nowAuthors = [
+  {...index.authors[0], current_in_ca: false, last_ca_year: 2019},
+  {...index.authors[1], current_in_ca: true, last_ca_year: null},
+  {...index.authors[2], current_in_ca: null, last_ca_year: null},
+  {...index.authors[3]}
+];
+const nowSummaries = nowAuthors.map((author) => summarizeAuthor(author, lookups.worksById, lookups.institutionsById));
+const runNow = (now) => filterAuthors(nowSummaries, {...defaultFilters(), now}).map((author) => author.author_id);
+assert.deepEqual(NOW_VALUES, ["", "ca", "outside", "unknown"]);
+assert.deepEqual(nowSummaries.map(currentAffiliationStatus), ["outside", "ca", "unknown", "unknown"]);
+assert.deepEqual(runNow(""), ["A100", "A300", "A400", "A200"], "any: no current-affiliation filtering");
+assert.deepEqual(runNow("ca"), ["A200"], "in California now");
+assert.deepEqual(runNow("outside"), ["A100"], "outside California now");
+assert.deepEqual(runNow("unknown"), ["A300", "A400"], "unknown includes a missing field");
+assert.equal(parseExpertHash("#now=outside").filters.now, "outside");
+assert.equal(parseExpertHash("#experts?now=ca").filters.now, "ca", "legacy prefix");
+assert.equal(parseExpertHash("#now=sometimes").filters.now, "", "invalid now falls back to any");
+assert.equal(formatExpertHash({...defaultFilters(), now: "unknown"}), "#now=unknown");
+assert.equal(formatExpertHash({...defaultFilters(), now: ""}), "", "any writes no hash");
+assert.equal(resetFilters({...defaultFilters(), now: "ca", sort: "h_index"}).now, "", "reset clears the current-affiliation filter");
+assert.equal(resetFilters({...defaultFilters(), now: "ca", sort: "h_index"}).sort, "h_index", "reset keeps the sort");
+assert.equal(currentAffiliationHtml(nowSummaries[0]), '<span class="now-badge">Now outside California</span> <span class="detail-meta">· last California affiliation 2019</span>');
+assert.equal(currentAffiliationHtml({current_in_ca: false, last_ca_year: null}), '<span class="now-badge">Now outside California</span>', "no year when none is recorded");
+assert.equal(currentAffiliationHtml(nowSummaries[1]), "", "in California: no badge");
+assert.equal(currentAffiliationHtml(nowSummaries[2]), "", "unknown: no badge");
+const outsideRow = expertRowHtml(nowSummaries[0], 0, 232, "plastic_citations");
+assert.ok(outsideRow.includes('<p class="card-meta expert-affil" title="') && outsideRow.includes('</span> <span class="detail-meta">· last California affiliation 2019</span> · '), outsideRow);
+assert.ok(!expertRowHtml(nowSummaries[1], 0, 232, "plastic_citations").includes("now-badge"), "in-California row has no badge");
 
 console.log("framework_experts_runtime: all assertions passed");

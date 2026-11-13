@@ -50,6 +50,12 @@ title: Glossary
 <p><small>Source: the Atlas's expert metrics method. Wording to be confirmed.</small></p>
 </dd>
 
+<dt id="current-affiliation"><strong>Current affiliation</strong></dt>
+<dd>
+<p>The expert's latest OpenAlex affiliations, the institutions listed on their most recent affiliation record. "In California now" means at least one of them is in the Atlas's California institution registry. "Outside California now" means none of them is. "Unknown" means OpenAlex lists no latest affiliation for the expert. The "last California affiliation" year is the latest year OpenAlex lists the expert at a California institution. Where the expert lives or where their work was done is not checked.</p>
+<p><small>Source: the Atlas's expert metrics method and California institution registry.</small></p>
+</dd>
+
 <dt id="ca-led"><strong>CA-led</strong></dt>
 <dd>
 <p>The first author's affiliation resolves to a California institution.</p>

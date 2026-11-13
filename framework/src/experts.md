@@ -13,6 +13,7 @@ title: Experts
 <div class="field"><label for="institution-type-filter">Institution type</label><select id="institution-type-filter" name="institution_type"><option value="">All institution types</option></select></div>
 <div class="field"><label for="institution-filter">Institution</label><select id="institution-filter" name="institution"><option value="">All institutions</option></select></div>
 <div class="field"><label for="expert-sort">Sort by</label><select id="expert-sort" name="sort"><option value="plastic_citations">Plastics citations</option><option value="plastic_works">Plastics works</option><option value="rising">Rising (citation momentum)</option><option value="m_quotient">m-quotient (h per career year)</option><option value="h_index">h-index</option><option value="cited_by">Total citations</option><option value="ca_works">CA works</option></select></div>
+<div class="field"><label for="now-filter"><a href="./glossary#current-affiliation">Current affiliation</a></label><select id="now-filter" name="now"><option value="">Any</option><option value="ca">In California now</option><option value="outside">Outside California now</option><option value="unknown">Unknown</option></select></div>
 <div class="field field-check"><span class="field-check-label">Career stage</span><label for="early-filter"><input id="early-filter" name="early" type="checkbox"> Early career only <span class="detail-meta">(first paper ≤ 10 years ago)</span></label><button type="button" id="rising-preset" class="link-button" title="Early-career experts sorted by rising citation momentum">Find up-and-coming researchers</button></div>
 <div class="field"><label for="tag-filter">Domain or matrix tag</label><select id="tag-filter" name="tag"><option value="">All tags</option></select></div>
 <div class="field"><label for="year-from">From year</label><input id="year-from" name="year_from" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
@@ -31,6 +32,7 @@ title: Experts
 <li><a href="./glossary#m-quotient">m-quotient</a>: h-index divided by career length in years.</li>
 <li><a href="./glossary#rising-percentile">Rising percentile</a>: rank of citation momentum among scored experts (those with at least 10 plastics citations in the last 5 complete years).</li>
 <li><a href="./glossary#plastic-related">Plastic-related</a> works, and the <a href="./glossary#ca-led">CA-led</a> and <a href="./glossary#ca-sampled">CA-sampled</a> bases for the CA basis filter.</li>
+<li><a href="./glossary#current-affiliation">Current affiliation</a>: where the expert's latest affiliations are. "Outside California now" means none is a California institution in the Atlas registry.</li>
 <li><a href="./glossary#matrix">Matrix</a>: the sampled medium; the tag filter uses provisional work tags.</li>
 </ul></details>
 <h2 class="expert-sr-only">Expert list</h2>

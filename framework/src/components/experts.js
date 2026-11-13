@@ -26,7 +26,7 @@ import {
 } from "./experts_model.js";
 
 const $ = (id) => document.getElementById(id);
-const FILTER_IDS = ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "expert-sort", "early-filter"];
+const FILTER_IDS = ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "now-filter", "expert-sort", "early-filter"];
 const OVERSCAN = 4;
 const LOADING_HTML = '<p class="expert-state-message"><span class="expert-spinner" aria-hidden="true"></span>Loading experts…</p>';
 const EMPTY_RESULTS_HTML = `<p class="expert-state-message">${EMPTY_MATCH_TEXT}</p><button id="expert-state-reset" class="button secondary" type="button">Reset filters</button>`;
@@ -100,6 +100,7 @@ function applyControls() {
   $("year-to").value = f.yearTo;
   $("ca-basis-filter").value = f.caBasis;
   $("oa-filter").value = f.oa;
+  $("now-filter").value = f.now;
   $("expert-sort").value = f.sort;
   $("early-filter").checked = f.early;
 }
@@ -237,13 +238,14 @@ function onFilterChange() {
     yearTo: $("year-to").value,
     caBasis: $("ca-basis-filter").value,
     oa: $("oa-filter").value,
+    now: $("now-filter").value,
     sort: $("expert-sort").value,
     early: $("early-filter").checked
   };
   // "change" fires on blur after "input" already rendered; re-rendering then replaced the
   // rows between mousedown and mouseup, so the first click on an expert was lost.
   const f = state.filters;
-  const signature = JSON.stringify([f.search, f.institutionType, f.institution, f.tag, f.yearFrom, f.yearTo, f.caBasis, f.oa, f.early, f.sort]);
+  const signature = JSON.stringify([f.search, f.institutionType, f.institution, f.tag, f.yearFrom, f.yearTo, f.caBasis, f.oa, f.now, f.early, f.sort]);
   if (signature === state.lastFilterSignature) return;
   state.lastFilterSignature = signature;
   writeHash();

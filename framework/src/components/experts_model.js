@@ -10,6 +10,8 @@ export const SORT_FIELDS = Object.freeze({cited_by: "cited_by_count", h_index: "
 // Owner request 2026-11-12: experts default to plastics citations.
 export const DEFAULT_SORT = "plastic_citations";
 const OA_VALUES = ["", "oa", "closed"];
+// Current affiliation (owner request 2026-11-13): "" is any; the rest match currentAffiliationStatus.
+export const NOW_VALUES = ["", "ca", "outside", "unknown"];
 const GITHUB_REPO = "https://github.com/ScottCoffin/CA_Plastics_Research_Dash";
 export const EMPTY_MATCH_TEXT = "No experts match these filters.";
 export const RISING_TITLE = "Rising citation momentum: trend in this expert's share of all Atlas experts' plastics citations over the last 5 complete years (percentile among experts with at least 10 plastics citations in that window).";
@@ -24,12 +26,12 @@ function topics() {
 // ---- Hash state -----------------------------------------------------------------------------
 
 export function defaultFilters() {
-  return {search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", early: false, sort: DEFAULT_SORT, collab: false};
+  return {search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", now: "", early: false, sort: DEFAULT_SORT, collab: false};
 }
 
 // Clears the filter selections; the sort order and the collaborator flag are kept (classic reset).
 export function resetFilters(filters) {
-  return {...filters, search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", early: false};
+  return {...filters, search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", now: "", early: false};
 }
 
 // Accepts "#<params>" and the legacy "#experts?<params>" (and bare "#experts").
@@ -48,6 +50,7 @@ export function parseExpertHash(hash) {
     yearTo: pick("year_to"),
     caBasis: pick("ca_basis"),
     oa: OA_VALUES.includes(pick("oa")) ? pick("oa") : "",
+    now: NOW_VALUES.includes(pick("now")) ? pick("now") : "",
     early: params.get("early") === "1",
     sort: SORT_KEYS.includes(pick("sort")) ? pick("sort") : DEFAULT_SORT,
     collab: params.get("collab") === "1"
@@ -67,6 +70,7 @@ export function formatExpertQuery(filters) {
   if (filters.yearTo) params.set("year_to", filters.yearTo);
   if (filters.caBasis) params.set("ca_basis", filters.caBasis);
   if (filters.oa) params.set("oa", filters.oa);
+  if (filters.now) params.set("now", filters.now);
   if (filters.early) params.set("early", "1");
   if (filters.sort && filters.sort !== DEFAULT_SORT) params.set("sort", filters.sort);
   if (filters.collab) params.set("collab", "1");
@@ -167,9 +171,25 @@ export function filterAuthors(summaries, filters, rankedIds = null) {
     if (filters.caBasis && author.basis !== filters.caBasis) return false;
     if (filters.oa === "oa" && !author.works.some((work) => work.is_oa)) return false;
     if (filters.oa === "closed" && !author.works.every((work) => !work.is_oa)) return false;
+    if (filters.now && currentAffiliationStatus(author) !== filters.now) return false;
     if (filters.early && !author.early_career) return false;
     return true;
   }).sort(expertComparator(filters.sort));
+}
+
+// ca: at least one latest affiliation is in the California registry; outside: none is; unknown: no affiliation.
+export function currentAffiliationStatus(author) {
+  if (author.current_in_ca === true) return "ca";
+  if (author.current_in_ca === false) return "outside";
+  return "unknown";
+}
+
+// Badge for experts whose latest affiliations are outside California, with the last California year if known.
+// Returns "" for everyone else.
+export function currentAffiliationHtml(author) {
+  if (author.current_in_ca !== false) return "";
+  const year = Number.isInteger(author.last_ca_year) ? ` <span class="detail-meta">· last California affiliation ${escapeHtml(author.last_ca_year)}</span>` : "";
+  return `<span class="now-badge">Now outside California</span>${year}`;
 }
 
 export function virtualWindow({scrollTop, clientHeight, rowHeight, count, overscan}) {
@@ -234,8 +254,9 @@ export function expertRowHtml(author, index, rowHeight, sortKey) {
   const primary = primaryAffiliationText(author);
   const affiliation = primary || (author.caInstitutions.length ? author.caInstitutions.map((institution) => institution.name).join(", ") : "No California affiliation");
   const meta = `${affiliation} · ${years} · ${author.recentCount} in recent 5 years · ${author.basis}`;
+  const badge = currentAffiliationHtml(author);
   const orcid = author.orcid ? ` · <a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID</a>` : "";
-  return `<div class="virtual-row" role="listitem" style="transform:translateY(${index * rowHeight}px);height:${rowHeight}px"><div class="card expert-card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="expert-card-actions"><a class="expert-page-link" href="${escapeHtml(expertPageUrl(author.author_id))}" title="Open the full profile page">Full profile</a><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></span></div>${expertTopicsHtml(author)}<p class="expert-metrics">${expertMetricsHtml(author, sortKey)}${orcid}</p><p class="card-meta expert-affil" title="${escapeHtml(meta)}">${escapeHtml(meta)}</p></div></div>`;
+  return `<div class="virtual-row" role="listitem" style="transform:translateY(${index * rowHeight}px);height:${rowHeight}px"><div class="card expert-card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="expert-card-actions"><a class="expert-page-link" href="${escapeHtml(expertPageUrl(author.author_id))}" title="Open the full profile page">Full profile</a><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></span></div>${expertTopicsHtml(author)}<p class="expert-metrics">${expertMetricsHtml(author, sortKey)}${orcid}</p><p class="card-meta expert-affil" title="${escapeHtml(meta)}">${badge ? `${badge} · ` : ""}${escapeHtml(meta)}</p></div></div>`;
 }
 
 export function profileIssueUrl(name, authorId) {

@@ -24,6 +24,7 @@ GLOSSARY_IDS = [
     "ca-sampled",
     "matrix",
     "plastic-related",
+    "current-affiliation",
     "licences",
 ]
 

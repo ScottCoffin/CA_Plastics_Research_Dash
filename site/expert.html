@@ -47,6 +47,9 @@
       .affil-primary .affil-country, .affil-primary .affil-source { color: #bfe8d9; font-weight: 500; font-size: 0.88rem; margin-left: 0.25rem; }
       .affil-primary .affil-source::before { content: "· "; }
       .affil-primary .affil-none { color: #bfe8d9; font-weight: 500; }
+      .expert-now { margin: 0.4rem 0 0; color: #d1eee5; font-size: 0.92rem; }
+      .expert-now .now-badge { display: inline-block; padding: 0.05rem 0.45rem; border: 1px solid #c45100; border-radius: 999px; color: #5c2300; background: #ffe9cf; font-size: 0.82rem; font-weight: 700; white-space: nowrap; margin-right: 0.35rem; }
+      .expert-now .now-year { color: #d1eee5; }
       .expert-meta { margin: 0.4rem 0 0; color: #d1eee5; font-size: 0.92rem; overflow-wrap: anywhere; }
       .expert-meta a { color: #d5f2e8; font-weight: 600; }
       .header-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-top: 1rem; color: #d1eee5; font-size: 0.9rem; }
@@ -136,6 +139,7 @@
         <p class="eyebrow">Expert profile</p>
         <h1 id="expert-name">Loading…</h1>
         <ul id="affil-primary" class="affil-primary" aria-label="Primary affiliations"></ul>
+        <p id="expert-now" class="expert-now"></p>
         <p id="expert-meta" class="expert-meta"></p>
         <div class="header-meta">
           <span id="expert-status" class="status-pill" role="status" aria-live="polite">Loading…</span>
@@ -338,6 +342,7 @@
         $("message-text").textContent = text;
         $("expert-name").textContent = title;
         $("affil-primary").innerHTML = "";
+        $("expert-now").innerHTML = "";
         $("expert-meta").textContent = "";
         setStatus("Not available", state || "error");
         document.title = `${title} · Expert profile · CA Plastics Research Atlas`;
@@ -347,6 +352,14 @@
         el.textContent = text;
         if (state) el.dataset.state = state;
         else delete el.dataset.state;
+      }
+
+      // Badge under the primary affiliation when the expert's latest affiliations are outside California.
+      // Authors without current_in_ca (older snapshots) show nothing.
+      function currentAffiliationHtml(author) {
+        if (author.current_in_ca !== false) return "";
+        const year = Number.isInteger(author.last_ca_year) ? ` <span class="now-year">· last California affiliation ${escapeHtml(author.last_ca_year)}</span>` : "";
+        return `<span class="now-badge">Now outside California</span>${year}`;
       }
 
       function renderHeader(author, institutions) {
@@ -359,6 +372,7 @@
               return `<li>${instLink(a.id, a.name, institutions)}${country}${source ? `<span class="affil-source">${escapeHtml(source)}</span>` : ""}</li>`;
             }).join("")
           : '<li class="affil-none">No primary affiliation recorded in this snapshot.</li>';
+        $("expert-now").innerHTML = currentAffiliationHtml(author);
         const orcid = safeHttpUrl(author.orcid);
         const meta = [`OpenAlex ${escapeHtml(author.author_id || S.id)}`];
         if (orcid) meta.push(`<a href="${escapeHtml(orcid)}" target="_blank" rel="noreferrer">ORCID profile</a>`);
@@ -616,6 +630,7 @@
         $("expert-name").textContent = "Loading…";
         $("expert-meta").textContent = "";
         $("affil-primary").innerHTML = "";
+        $("expert-now").innerHTML = "";
         $("open-in-list").href = `index.html#experts?author=${encodeURIComponent(raw)}`;
         const [detail, institutions] = await Promise.all([
           fetchJson(`data/authors/${encodeURIComponent(raw)}.json`).catch(() => null),
