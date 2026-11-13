@@ -3,10 +3,10 @@ title: Funding
 ---
 
 <link rel="stylesheet" href="./components/funding.css">
+<link rel="stylesheet" href="./components/funding_viz.css">
 
 <div id="funding-root">
   <h1>Funding</h1>
-  <p class="viz-link"><a class="btn-link" id="funding-grants-link" style="display:inline-block;padding:0.55rem 1rem;border-radius:0.4rem;background:var(--brand-dark);color:#fff;font-weight:700;text-decoration:none">Open the funding visualizations &rarr;</a> <span class="data-note">Interactive Sankey, charts and a filterable award table.</span></p>
   <section aria-labelledby="grants-heading" class="grants">
     <h2 id="grants-heading">Awards</h2>
     <p class="data-note">Awards as reported by each source (NIH RePORTER, NSF Awards, USAspending.gov, California Sea Grant, Ocean Protection Council). Amounts follow each source's own basis and are not comparable or additive across sources or fiscal years. Pass-through awards appear once, on their lowest-level record. Plastic relevance and topic tags are provisional rule-based labels. This is not a complete record of public funding.</p>
@@ -32,10 +32,7 @@ title: Funding
     </details>
     <ul id="grants-chips" class="grants-chips" aria-label="Active filters"></ul>
     <p id="grants-status" class="result-count" role="status" aria-live="polite"></p>
-    <div class="grants-charts">
-      <figure class="grants-chart"><figcaption>Awards by fiscal year and funder type (count)</figcaption><div id="grants-chart-year"></div></figure>
-      <figure class="grants-chart"><figcaption>Awards by recipient institution type (count)</figcaption><div id="grants-chart-institution"></div></figure>
-    </div>
+    <div id="grants-viz" class="grants-viz"></div>
     <div id="grants-table" class="grants-table-wrap" tabindex="0" role="region" aria-label="Awards table, scrollable"></div>
     <nav class="grants-pager" aria-label="Award table pages"><button id="grants-prev" type="button">Previous</button><span id="grants-page"></span><button id="grants-next" type="button">Next</button><label for="grants-page-size">Rows per page (default 50) <select id="grants-page-size"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option></select></label></nav>
     <section aria-labelledby="grants-basis-heading" class="grants-basis"><h3 id="grants-basis-heading">Amount basis by source</h3><div id="grants-basis"></div></section>

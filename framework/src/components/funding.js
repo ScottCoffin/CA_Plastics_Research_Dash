@@ -5,7 +5,8 @@
 // - the page hash has no "funding?" tab prefix (legacy "#funding?..." hashes are still read);
 // - nothing touches the DOM at module top level, so Node tests can import the pure helpers.
 // funding.md imports components/shared/topics.js (AtlasTopics) before this module runs.
-import {classicUrl, dataUrl, escapeHtml} from "./atlas.js";
+import {dataUrl, escapeHtml} from "./atlas.js";
+import {mountFundingViz} from "./funding_viz.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -37,6 +38,7 @@ const state = {
   grantsPage: 0,
   grantsPageSize: 50,
   grantsReady: false,
+  viz: null,
   grantsSort: {key: null, dir: "asc"},
   grantsSearchTimer: 0,
   listening: false
@@ -379,66 +381,6 @@ function resetGrantFilters() {
   renderFunding();
 }
 
-// ---- Awards: charts ---------------------------------------------------------------------------
-
-export function svgBarChartYears(rows) {
-  const byYear = new Map();
-  let undated = 0;
-  rows.forEach((row) => {
-    if (row.fiscal_year === null) {
-      undated += 1;
-      return;
-    }
-    if (!byYear.has(row.fiscal_year)) byYear.set(row.fiscal_year, {federal: 0, state: 0, other: 0});
-    byYear.get(row.fiscal_year)[row.funder_type] += 1;
-  });
-  const years = [...byYear.keys()].sort((a, b) => a - b);
-  if (!years.length) return '<p class="empty">No dated awards match these filters.</p>';
-  const totals = years.map((year) => GRANT_FUNDER_ORDER.reduce((sum, type) => sum + byYear.get(year)[type], 0));
-  const max = Math.max(1, ...totals);
-  const width = 600;
-  const height = 220;
-  const pad = 28;
-  const slot = (width - pad * 2) / years.length;
-  const bars = years.map((year, index) => {
-    let base = height - pad;
-    const x = pad + index * slot + slot * 0.15;
-    const barWidth = slot * 0.7;
-    const segments = GRANT_FUNDER_ORDER.map((type) => {
-      const count = byYear.get(year)[type];
-      const segmentHeight = (count / max) * (height - pad * 2);
-      base -= segmentHeight;
-      return count ? `<rect x="${x.toFixed(1)}" y="${base.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${segmentHeight.toFixed(1)}" fill="${GRANT_FUNDER_COLORS[type]}"><title>${year} ${GRANT_FUNDER_LABELS[type]}: ${count}</title></rect>` : "";
-    }).join("");
-    return `${segments}<text x="${(x + barWidth / 2).toFixed(1)}" y="${height - pad + 14}" font-size="10" text-anchor="middle">${year}</text><text x="${(x + barWidth / 2).toFixed(1)}" y="${(height - pad - (totals[index] / max) * (height - pad * 2) - 3).toFixed(1)}" font-size="10" text-anchor="middle">${totals[index]}</text>`;
-  }).join("");
-  const legend = GRANT_FUNDER_ORDER.map((type) => `<li><span class="grants-swatch" style="background:${GRANT_FUNDER_COLORS[type]}"></span>${GRANT_FUNDER_LABELS[type]}</li>`).join("");
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="grants-year-chart-title"><title id="grants-year-chart-title">Awards per fiscal year, stacked by funder type</title><line x1="${pad}" y1="${height - pad}" x2="${width - pad}" y2="${height - pad}" stroke="#8da7af"/>${bars}</svg>`
-    + `<ul class="grants-legend">${legend}</ul>`
-    + `<p class="data-note">${undated} matching ${undated === 1 ? "award has" : "awards have"} no start date and ${undated === 1 ? "is" : "are"} left out of this chart.</p>`;
-}
-
-export function svgBarChartInstitutions(rows) {
-  const counts = new Map();
-  rows.forEach((row) => counts.set(row.institution_type, (counts.get(row.institution_type) || 0) + 1));
-  if (!counts.size) return '<p class="empty">No awards match these filters.</p>';
-  const entries = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  const max = Math.max(...entries.map(([, count]) => count));
-  const width = 600;
-  const rowHeight = 22;
-  const labelWidth = 170;
-  const barArea = width - labelWidth - 50;
-  const height = entries.length * rowHeight + 8;
-  const bars = entries.map(([label, count], index) => {
-    const y = 4 + index * rowHeight;
-    const barLength = (count / max) * barArea;
-    return `<text x="0" y="${y + 14}" font-size="12">${escapeHtml(label)}</text>`
-      + `<rect x="${labelWidth}" y="${y + 3}" width="${barLength.toFixed(1)}" height="14" fill="#2f6f8f"><title>${escapeHtml(label)}: ${count}</title></rect>`
-      + `<text x="${(labelWidth + barLength + 4).toFixed(1)}" y="${y + 14}" font-size="12">${count}</text>`;
-  }).join("");
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="grants-institution-chart-title"><title id="grants-institution-chart-title">Awards per recipient institution type</title>${bars}</svg>`;
-}
-
 // ---- Awards: CSV export -----------------------------------------------------------------------
 
 export function grantCsvCell(value) {
@@ -475,8 +417,7 @@ function renderFunding() {
   state.grantsFiltered = sortGrantRows(state.grantsData.rows.filter((row) => grantMatches(row, filters)), state.grantsSort);
   const withAmount = state.grantsFiltered.filter((row) => row.amount !== null);
   $("grants-status").textContent = `${state.grantsFiltered.length} of ${state.grantsData.rows.length} awards match. ${withAmount.length} report an amount.`;
-  $("grants-chart-year").innerHTML = svgBarChartYears(state.grantsFiltered);
-  $("grants-chart-institution").innerHTML = svgBarChartInstitutions(state.grantsFiltered);
+  state.viz.update(state.grantsFiltered, sectorLabelsOf());
   renderGrantsTable(state.grantsFiltered);
   renderGrantChips();
   writeFundingHash();
@@ -565,9 +506,8 @@ function showFunding() {
 // Mounts the whole Funding view: open calls, then awards (same order as the classic selectTab).
 // Call once from the page's js block, after the panel markup has been rendered.
 export function mountFunding() {
-  // The panel's link to the classic visualizations is set here so the markup needs no page-specific URL.
-  const vizLink = $("funding-grants-link");
-  if (vizLink) vizLink.href = classicUrl("grants.html");
+  // The charts follow the filter form: update() runs on every change to the awards (renderFunding).
+  if (!state.viz) state.viz = mountFundingViz($("grants-viz"));
   showOpenCalls();
   showFunding();
   if (!state.listening) {

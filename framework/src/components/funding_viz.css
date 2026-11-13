@@ -1,0 +1,69 @@
+/* Funding visualizations (ported from the classic grants page). Colours come from the Framework theme
+ * variables (light "air" theme, the only theme loaded). Rules are scoped to .fv-root. The Sankey box and
+ * the table boxes scroll horizontally on their own, so the page never scrolls sideways at 375 px. */
+.fv-root { margin: 0.75rem 0; min-width: 0; max-width: 100%; }
+.fv-root h3 { margin: 0 0 0.35rem; font-size: 1.1rem; }
+.fv-section { margin: 0 0 1rem; padding: 0.9rem; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; min-width: 0; }
+.fv-intro, .fv-note { margin: 0.35rem 0 0; color: var(--theme-foreground-muted); font-size: 0.9rem; }
+.fv-note { margin-top: 0.5rem; }
+.fv-caveat { margin: 0.5rem 0; padding: 0.5rem 0.75rem; border-left: 4px solid var(--theme-foreground-focus); background: var(--theme-background-alt); font-size: 0.9rem; border-radius: 0 0.35rem 0.35rem 0; }
+.fv-muted { color: var(--theme-foreground-muted); }
+.fv-empty { margin: 0.5rem 0; padding: 1rem; border: 1px dashed var(--theme-foreground-faint); border-radius: 0.5rem; color: var(--theme-foreground-muted); text-align: center; }
+.fv-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.fv-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: 0.6rem; margin: 0; }
+.fv-metric { margin: 0; padding: 0.6rem 0.75rem; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; min-width: 0; }
+.fv-metric dt { color: var(--theme-foreground-muted); font-size: 0.85rem; font-weight: 600; }
+.fv-metric dd { margin: 0; font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.fv-metric small { display: block; color: var(--theme-foreground-muted); font-size: 0.78rem; font-weight: 400; line-height: 1.3; }
+
+.fv-controls { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; align-items: center; margin: 0.6rem 0; font-size: 0.9rem; }
+.fv-fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.2rem 1rem; min-width: 0; }
+.fv-fieldset legend { padding: 0; font-size: 0.85rem; font-weight: 700; color: var(--theme-foreground-muted); }
+.fv-fieldset label, .fv-controls > label { display: inline-flex; gap: 0.4rem; align-items: center; min-height: 2.4rem; }
+.fv-topn input[type="range"] { width: 8rem; }
+.fv-controls input[type="radio"], .fv-controls input[type="checkbox"] { width: 1.1rem; height: 1.1rem; margin: 0; }
+
+.fv-sankey-wrap { overflow-x: auto; max-width: 100%; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; background: var(--theme-background); }
+.fv-sankey-svg { display: block; }
+.fv-col-head { font-size: 11px; font-weight: 700; fill: var(--theme-foreground-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.fv-label { font-size: 12px; fill: var(--theme-foreground); paint-order: stroke; stroke: var(--theme-background); stroke-width: 3px; stroke-linejoin: round; }
+.fv-link { fill: none; opacity: 0.38; }
+.fv-sankey-svg .fv-link:hover { opacity: 0.75; }
+.fv-node rect { stroke: none; }
+.fv-node:hover rect { stroke: var(--theme-foreground); stroke-width: 2; }
+
+.fv-scroll { overflow-x: auto; max-width: 100%; }
+.fv-details { margin-top: 0.6rem; }
+.fv-details summary { cursor: pointer; font-weight: 600; font-size: 0.9rem; min-height: 2.2rem; display: flex; align-items: center; }
+.fv-root :focus-visible { outline: 3px solid var(--theme-foreground-focus); outline-offset: 2px; }
+.fv-root table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+.fv-root th, .fv-root td { padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--theme-foreground-faintest); text-align: left; vertical-align: top; }
+.fv-root th { font-weight: 700; color: var(--theme-foreground-muted); }
+.fv-root td.num, .fv-root th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.fv-legend { display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; margin: 0.5rem 0; padding: 0; list-style: none; font-size: 0.85rem; }
+.fv-legend li { display: inline-flex; align-items: center; gap: 0.35rem; }
+.fv-legend i { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 2px; }
+.fv-year-svg { display: block; }
+.fv-year-svg text { font-size: 11px; fill: var(--theme-foreground-muted); }
+
+.fv-orgs-list { list-style: none; margin: 0.5rem 0 0; padding: 0; display: grid; gap: 0.4rem; }
+.fv-orgs-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.6rem; font-size: 0.9rem; }
+.fv-org-name { flex: 1 1 12rem; min-width: 0; font-weight: 600; overflow-wrap: anywhere; }
+.fv-badge { flex: 0 0 auto; padding: 0 0.4rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; color: var(--theme-foreground); border: 1px solid var(--theme-foreground-faint); background: var(--theme-background-alt); }
+.fv-bar { flex: 1 1 8rem; min-width: 4rem; height: 10px; background: var(--theme-background-alt); border-radius: 2px; }
+.fv-bar span { display: block; height: 100%; background: #4a6f93; border-radius: 2px; }
+.fv-count { flex: 0 0 auto; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.fv-matrix { min-width: max-content; width: auto; }
+.fv-matrix th, .fv-matrix td { padding: 2px 4px; border: 0; }
+.fv-matrix thead th { font-size: 0.75rem; vertical-align: bottom; }
+.fv-matrix tbody th { font-size: 0.8rem; white-space: nowrap; padding-right: 0.6rem; }
+.fv-matrix .fv-cell { min-width: 2.6rem; height: 2.1rem; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; border-radius: 2px; }
+.fv-dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 999px; margin-right: 0.35rem; vertical-align: middle; }
+
+@media (max-width: 700px) {
+  .fv-section { padding: 0.7rem; }
+  .fv-metric dd { font-size: 1.2rem; }
+}

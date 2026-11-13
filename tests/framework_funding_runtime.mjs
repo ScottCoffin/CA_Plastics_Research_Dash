@@ -11,8 +11,7 @@ import {
   grantCsvCell,
   grantMatches,
   prepareGrantRows,
-  sortGrantRows,
-  svgBarChartInstitutions
+  sortGrantRows
 } from "../framework/src/components/funding.js";
 
 const base = {
@@ -117,12 +116,11 @@ const ids = (list) => list.map((row) => row.grant_key);
   assert.equal(fundingFromParams(fundingParamsFromHash("")).plastic, true);
 }
 
-// Chart helper smoke check.
+// The classic-style bar charts were replaced by the ported views in funding_viz.js.
 {
-  const prepared = prepareGrantRows(rows(), labels);
-  const svg = svgBarChartInstitutions(prepared);
-  assert.match(svg, /^<svg /);
-  assert.match(svg, /university: 2/);
+  const exported = await import("../framework/src/components/funding.js");
+  assert.equal("svgBarChartYears" in exported, false);
+  assert.equal("svgBarChartInstitutions" in exported, false);
 }
 
 console.log("framework funding runtime checks passed");
