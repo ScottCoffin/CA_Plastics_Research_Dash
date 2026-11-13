@@ -28,6 +28,8 @@ FORBIDDEN_PATTERNS: list[re.Pattern[str]] = [
     re.compile(r"\bS\d+\.\d+ export\b", re.IGNORECASE),
     re.compile(r"uploaded document; no URL", re.IGNORECASE),
     re.compile(r"awaits owner review", re.IGNORECASE),
+    re.compile(r"pending owner review", re.IGNORECASE),
+    re.compile(r"TODO-OWNER"),
     re.compile(r"Fixture snapshot", re.IGNORECASE),
     re.compile(r"plastic-v2-candidate", re.IGNORECASE),
     re.compile(r"Coming with", re.IGNORECASE),

@@ -58,6 +58,8 @@ def test_clean_sample_passes(tmp_path: Path) -> None:
         "from the same S3.1 export used by the Experts view",
         "(uploaded document; no URL)",
         "the mapping awaits owner review",
+        "Definition pending owner review.",
+        "TODO-OWNER: confirm each gloss",
         "Fixture snapshot loaded",
         "the plastic-v2-candidate query",
     ],
