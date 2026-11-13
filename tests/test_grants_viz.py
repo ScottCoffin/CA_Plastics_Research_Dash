@@ -162,7 +162,7 @@ assert.equal(R.sum.awards, 8);
 assert.equal(R.sum.noAmt, 1);
 assert.equal(R.fills[0], "#f3f5f6");
 assert.equal(R.fills[1], "#0b4f9c");
-assert.deepEqual(R.ink, ["#ffffff", "#17324d"]);
+assert.deepEqual(R.ink, ["#ffffff", "#000000"]);
 console.log("Grants page runtime checks passed.");
 """  # noqa: E501
 

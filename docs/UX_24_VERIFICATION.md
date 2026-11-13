@@ -20,7 +20,9 @@ empty-table-header).
 - Lighthouse (mobile preset, local preview) on /app/monitoring: CLS 0.521 -> 0.036; Performance 60 -> 99.
 - axe /app/monitoring: nested-interactive 5 -> 0, heading-order 1 -> 0.
 - axe grants.html: aria-prohibited-attr, definition-list, empty-table-header and nested-interactive
-  -> 0. The 15 color-contrast nodes on the grants heat-map cells are left for a later task.
+  -> 0. Follow-up the same day: the 15 color-contrast nodes on the heat-map cells are fixed by choosing
+  the higher-contrast of white and black text for each fill (at least 4.58:1); grants.html is now
+  axe-clean.
 
 ## For owner review
 - The licence/citation text is now behind a closed disclosure on the same page. CC BY attribution
