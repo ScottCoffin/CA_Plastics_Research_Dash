@@ -133,3 +133,4 @@
 | 2026-11-12 | UX-10 | About: How to cite, licence statement from the committed licence files, developer sentences rewritten, Glossary link (lead inline) | this commit |
 | 2026-11-12 | UX-7 | Glossary page linked from every footer; inline term links on Experts and Institutions (1 Haiku worker) | this commit |
 | 2026-11-12 | UX-25 | Mobile and metadata: 375 px overflow gone, favicon 404 fixed, meta descriptions, 24 px targets (1 Haiku worker) | this commit |
+| 2026-11-12 | UX-18 | Naive-user Playwright task scripts; 6/6 tasks pass locally (1 Haiku worker) | this commit |
