@@ -1,6 +1,7 @@
 // Policy page: the curated DTSC microplastics regulatory timeline (Add-on A2 §7 Part B, EM-18).
 // Reference information with outbound links only; it makes no statement about implementation,
-// enforcement or effectiveness. Dates are shown exactly as DTSC states them (date_as_stated).
+// enforcement or effectiveness. The date text is reformatted from date_iso (UXD-7 prose style);
+// the machine value is kept in <time datetime>. date_as_stated is the fallback when date_iso is unusable.
 import {escapeHtml, loadJson} from "./atlas.js";
 
 // Hardcoded so the caveat is shown even when the data file cannot be loaded.
@@ -23,6 +24,26 @@ export function isHttps(url) {
   } catch {
     return false;
   }
+}
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Prose date from an ISO-style value: "2025-11-12" -> "12 Nov 2025", "2025-11" -> "Nov 2025",
+// "2025" -> "2025". Returns null for anything else so the caller can fall back to date_as_stated.
+export function formatDate(dateIso) {
+  const m = /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(String(dateIso ?? ""));
+  if (!m) return null;
+  const [, year, month, day] = m;
+  if (month === undefined) return year;
+  const monthNumber = Number(month);
+  if (monthNumber < 1 || monthNumber > 12) return null;
+  const label = MONTHS[monthNumber - 1];
+  if (day === undefined) return `${label} ${year}`;
+  const dayNumber = Number(day);
+  // Day 0 of the following month is the last day of this one.
+  const daysInMonth = new Date(Date.UTC(Number(year), monthNumber, 0)).getUTCDate();
+  if (dayNumber < 1 || dayNumber > daysInMonth) return null;
+  return `${dayNumber} ${label} ${year}`;
 }
 
 // Sort key: a month-only date sorts as the first day of that month (same rule as the validator).
@@ -59,7 +80,11 @@ function itemHtml(item) {
     ? `<a href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHtml(item.sourceLabel)}</a>`
     : `<span class="pol-source-text">${escapeHtml(item.sourceLabel)}</span>`;
   const kind = item.kindLabel ? `<span class="pol-kind">${escapeHtml(item.kindLabel)}</span> ` : "";
-  return `<li class="pol-item"><p class="pol-date">${escapeHtml(item.dateAsStated)}</p>` +
+  const prose = formatDate(item.dateIso);
+  const dateHtml = prose
+    ? `<time datetime="${escapeHtml(item.dateIso)}">${escapeHtml(prose)}</time>`
+    : escapeHtml(item.dateAsStated);
+  return `<li class="pol-item"><p class="pol-date">${dateHtml}</p>` +
     `<p class="pol-event">${escapeHtml(item.event)}</p>` +
     `<p class="pol-meta">${kind}${source}</p></li>`;
 }

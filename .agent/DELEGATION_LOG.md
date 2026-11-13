@@ -118,3 +118,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-12 | UX-24 monitoring CLS + grants a11y | haiku-developer | monitoring.md, components/monitoring.{js,css}, site/grants.html, tests/test_ux24_monitoring_grants.py | Accepted after one continue (30-turn limit) | 2 sessions; ~93K subagent tokens |
 | 2026-11-12 | UX-8 funding sum | haiku-developer | funding.md, components/funding.{js,css}, site/grants.html, tests/test_ux8_funding.py | Accepted first pass (5 tests) | 1 session; ~56K subagent tokens |
 | 2026-11-12 | UX-9 monitoring usability | haiku-developer | monitoring.md, components/monitoring{,_view}.js, monitoring.css, tests/test_ux9_monitoring.py | Accepted after one continue (30-turn limit) | 2 sessions; ~109K subagent tokens |
+| 2026-11-12 | UX-12 policy polish | haiku-developer | policy.md, components/policy.js, tests/test_ux12_policy.py | Accepted first pass (3 tests) | 1 session; ~58K subagent tokens |

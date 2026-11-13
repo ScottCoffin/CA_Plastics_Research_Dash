@@ -128,3 +128,4 @@
 | 2026-11-12 | UX-8 | Funding: headline dollar sum removed (app + grants.html), per-source subtotals with caveat, rows-per-page default stated (1 Haiku worker) | this commit |
 | 2026-11-12 | UX-9 | Monitoring: filtered CSV download with citations and licences, ISO dates, unit headers, licence glosses (1 Haiku worker) | this commit |
 | 2026-11-12 | UX-11 | Related resources: single reuse badge, unstated fields hidden, NCEI and Plastiverse stewards with source links (lead inline) | this commit |
+| 2026-11-12 | UX-12 | Policy timeline: '1 Oct 2026' dates in <time>, acronyms expanded on first use (1 Haiku worker) | this commit |
