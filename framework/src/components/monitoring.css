@@ -92,3 +92,8 @@
 #monitoring-root .monitoring-table th, #monitoring-root .monitoring-table td, #monitoring-root .gaps-table th, #monitoring-root .gaps-table td { padding: 0.55rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 #monitoring-root .monitoring-table th, #monitoring-root .gaps-table th { background: #edf5f4; }
 #monitoring-root .gaps-cell { text-align: center !important; font-variant-numeric: tabular-nums; }
+
+#monitoring-root .monitoring-download { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 0 0 0.6rem; }
+#monitoring-root .monitoring-download .data-note { margin: 0; }
+#monitoring-root .monitoring-download button { border: 1px solid var(--brand); border-radius: 0.35rem; background: #fff; color: var(--brand); padding: 0.4rem 0.8rem; font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+#monitoring-root .monitoring-download button:disabled { opacity: 0.5; cursor: not-allowed; }

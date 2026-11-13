@@ -3,7 +3,7 @@
 // and the event bindings). Markup lives in src/monitoring.md; pure helpers in monitoring_view.js and
 // shared map code in svg_map.js. Nothing touches the DOM until mountMonitoring() runs.
 import {loadJson, escapeHtml} from "./atlas.js";
-import {monitoringView} from "./monitoring_view.js";
+import {monitoringView, formatSampleDate, licenceGloss, samplesCsv, sharedUnit} from "./monitoring_view.js";
 import {monitoringMap, attachMapInteractions, ensureCaBasemap, caBasemapFeatures, caBasemapState} from "./svg_map.js";
 
 const $ = (id) => document.getElementById(id);
@@ -95,7 +95,7 @@ function drawMonitoringMap() {
     const [first] = cluster.rows;
     const label = clustered
       ? `${cluster.rows.length} samples; ${cluster.mixed ? "mixed matrices: " : "matrix: "}${[...cluster.matrices].map(([name, count]) => `${name} ${count}`).join(", ")}`
-      : `${monitoringView.matrix(first) || monitoringMap.unknownLabel}; ${monitoringView.year(first) ? first.date : "Unknown date"}; ${first.method || "method unknown"}`;
+      : `${monitoringView.matrix(first) || monitoringMap.unknownLabel}; ${formatSampleDate(first)}; ${first.method || "method unknown"}`;
     const isSelected = cluster.rows.some((row) => selected.has(row));
     const clusterKey = String(Math.min(...cluster.rows.map((row) => position.get(row))));
     // Mixed clusters: a ring split by matrix share, so colour still shows the matrices.
@@ -141,7 +141,36 @@ function renderMapDetails() {
   }
   const payload = state.data;
   const shown = rows.slice(0, 25);
-  panel.innerHTML = `<div class="map-details-card"><div class="map-details-head"><h2>${rows.length} sample${rows.length === 1 ? "" : "s"} selected</h2><div class="map-details-actions"><button type="button" data-map-fit>Zoom to these</button><button type="button" data-map-close>Close</button></div></div><div class="monitoring-table-wrap"><table class="monitoring-table"><thead><tr><th>Date</th><th>Matrix</th><th>Region</th><th>Method</th><th>Particle count</th><th>Concentration</th><th>Citation</th></tr></thead><tbody>${shown.map((row) => { const source = (payload.datasets || []).find((dataset) => dataset.id === row.dataset_id); return `<tr><td>${escapeHtml(monitoringView.year(row) ? row.date : "Unknown date")}</td><td>${escapeHtml(monitoringView.matrix(row) || "Unknown matrix")}</td><td>${escapeHtml(monitoringView.region(row).replaceAll("_", " "))}</td><td>${escapeHtml(row.method || "unknown")}</td><td>${escapeHtml(monitoringView.displayValue(row.particle_count, "unknown"))}</td><td>${escapeHtml(monitoringView.displayValue(row.concentration_value, "not available"))} ${escapeHtml(row.concentration_unit || "")}</td><td>${escapeHtml(row.citation || source?.citation || "Citation unavailable")}</td></tr>`; }).join("")}</tbody></table></div>${rows.length > 25 ? `<p class="data-note">+${rows.length - 25} more</p>` : ""}</div>`;
+  const shownUnit = sharedUnit(shown, "concentration_unit");
+  panel.innerHTML = `<div class="map-details-card"><div class="map-details-head"><h2>${rows.length} sample${rows.length === 1 ? "" : "s"} selected</h2><div class="map-details-actions"><button type="button" data-map-fit>Zoom to these</button><button type="button" data-map-close>Close</button></div></div><div class="monitoring-table-wrap"><table class="monitoring-table"><thead><tr><th>Date</th><th>Matrix</th><th>Region</th><th>Method</th><th>Particle count</th><th>Concentration${shownUnit ? ` (${escapeHtml(shownUnit)})` : ""}</th><th>Citation</th></tr></thead><tbody>${shown.map((row) => { const source = (payload.datasets || []).find((dataset) => dataset.id === row.dataset_id); return `<tr><td>${escapeHtml(formatSampleDate(row))}</td><td>${escapeHtml(monitoringView.matrix(row) || "Unknown matrix")}</td><td>${escapeHtml(monitoringView.region(row).replaceAll("_", " "))}</td><td>${escapeHtml(row.method || "unknown")}</td><td>${escapeHtml(monitoringView.displayValue(row.particle_count, "unknown"))}</td><td>${escapeHtml(monitoringView.displayValue(row.concentration_value, "not available"))}${shownUnit ? "" : ` ${escapeHtml(row.concentration_unit || "")}`}</td><td>${escapeHtml(row.citation || source?.citation || "Citation unavailable")}</td></tr>`; }).join("")}</tbody></table></div>${rows.length > 25 ? `<p class="data-note">+${rows.length - 25} more</p>` : ""}</div>`;
+}
+
+// Licence cell: the structured id (when recorded) with its plain-language gloss, plus the free-text terms.
+function licenceCellHtml(row) {
+  const id = row.publication_license && row.publication_license.id;
+  const idLabel = id ? `<strong>${escapeHtml(id)}</strong><br>` : "";
+  return `${idLabel}${escapeHtml(row.license || "")}<br><small>${escapeHtml(licenceGloss(id))}</small>`;
+}
+
+function localIsoDate(date) {
+  const pad = (value) => String(value).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+// Client-side CSV of the filtered rows (state.samples), built from the same filters as the table.
+function downloadSamplesCsv() {
+  const rows = state.samples;
+  if (!rows.length) return;
+  const today = localIsoDate(new Date());
+  const text = samplesCsv(rows, state.data.datasets || [], today);
+  const url = URL.createObjectURL(new Blob([text], {type: "text/csv;charset=utf-8"}));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `ca-plastics-observations-${today}.csv`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function selectCluster(index) {
@@ -218,7 +247,7 @@ function render() {
   const activeFilters = Object.values(f).filter(Boolean).length;
   $("facet-filters-count").textContent = activeFilters ? `${activeFilters} filter${activeFilters === 1 ? "" : "s"} active` : "No filters set";
   $("facet-sources-count").textContent = `${datasets.length} source${datasets.length === 1 ? "" : "s"}`;
-  $("monitoring-sources").innerHTML = datasets.length ? `<table class="monitoring-table"><thead><tr><th>Source</th><th>Steward / tier</th><th>Matrix and region</th><th>Format / cadence</th><th>License</th><th>Checked</th><th>Citations</th></tr></thead><tbody>${datasets.map((row) => `<tr><th scope="row">${escapeHtml(row.name)}<br><small>${row.seed_eligible ? "Verified registry seed" : "Discovery record; not in seed count"} · ${escapeHtml(row.entity_type)} · ${escapeHtml(row.status)}</small>${linkedWorksHtml(row)}</th><td>${escapeHtml(row.steward)}<br>Tier ${escapeHtml(row.access_tier)} · contributor in CA: ${row.contributor_in_ca === true ? "yes" : row.contributor_in_ca === false ? "no" : "unknown"}</td><td>${escapeHtml((row.sample_matrix || []).join(", "))}<br>${escapeHtml(row.region)}</td><td>${escapeHtml((row.format || []).join(", "))}<br>${escapeHtml(row.cadence)}</td><td>${escapeHtml(row.license)}</td><td>${escapeHtml(row.last_checked || "unknown")}</td><td><a href="${escapeHtml(row.url)}" target="_blank" rel="noreferrer">Source</a> · <a href="${escapeHtml(row.provenance_url)}" target="_blank" rel="noreferrer">Evidence</a><br>${escapeHtml(row.citation)}</td></tr>`).join("")}</tbody></table>` : '<p class="empty">No source records match these filters.</p>';
+  $("monitoring-sources").innerHTML = datasets.length ? `<table class="monitoring-table"><thead><tr><th>Source</th><th>Steward / tier <a href="./glossary#access-tiers">What do tiers mean?</a></th><th>Matrix and region</th><th>Format / cadence</th><th>License <a href="./glossary#licences">What do these mean?</a></th><th>Checked</th><th>Citations</th></tr></thead><tbody>${datasets.map((row) => `<tr><th scope="row">${escapeHtml(row.name)}<br><small>${row.seed_eligible ? "Verified registry seed" : "Discovery record; not in seed count"} · ${escapeHtml(row.entity_type)} · ${escapeHtml(row.status)}</small>${linkedWorksHtml(row)}</th><td>${escapeHtml(row.steward)}<br>Tier <a href="./glossary#access-tiers">${escapeHtml(row.access_tier)}</a> · contributor in CA: ${row.contributor_in_ca === true ? "yes" : row.contributor_in_ca === false ? "no" : "unknown"}</td><td>${escapeHtml((row.sample_matrix || []).join(", "))}<br>${escapeHtml(row.region)}</td><td>${escapeHtml((row.format || []).join(", "))}<br>${escapeHtml(row.cadence)}</td><td>${licenceCellHtml(row)}</td><td>${escapeHtml(row.last_checked || "unknown")}</td><td><a href="${escapeHtml(row.url)}" target="_blank" rel="noreferrer">Source</a> · <a href="${escapeHtml(row.provenance_url)}" target="_blank" rel="noreferrer">Evidence</a><br>${escapeHtml(row.citation)}</td></tr>`).join("")}</tbody></table>` : '<p class="empty">No source records match these filters.</p>';
   const samples = filteredSamples();
   state.samples = samples;
   if (state.selection) {
@@ -239,8 +268,15 @@ function render() {
   const monitoringPages = Math.max(1, Math.ceil(samples.length / MONITORING_PAGE_SIZE));
   state.page = Math.min(Math.max(state.page, 0), monitoringPages - 1);
   const monitoringPageStart = state.page * MONITORING_PAGE_SIZE;
+  const pageRows = samples.slice(monitoringPageStart, monitoringPageStart + MONITORING_PAGE_SIZE);
+  const pageUnit = sharedUnit(pageRows, "concentration_unit");
   $("facet-samples-count").textContent = `${samples.length} row${samples.length === 1 ? "" : "s"}`;
-  $("monitoring-samples").innerHTML = samples.length ? `<table class="monitoring-table"><thead><tr><th>Date</th><th>Matrix / region</th><th>Method</th><th>Count / concentration</th><th>Citation</th></tr></thead><tbody>${samples.slice(monitoringPageStart, monitoringPageStart + MONITORING_PAGE_SIZE).map((row) => { const source = payload.datasets.find((dataset) => dataset.id === row.dataset_id); const dateLabel = monitoringView.year(row) ? row.date : "Unknown date"; const matrixLabel = monitoringView.matrix(row) || "Unknown matrix"; return `<tr><td>${escapeHtml(dateLabel)}</td><td>${escapeHtml(matrixLabel)} / ${escapeHtml(monitoringView.region(row).replaceAll("_", " "))}</td><td>${escapeHtml(row.method || "unknown")}</td><td>${escapeHtml(monitoringView.displayValue(row.particle_count, "unknown"))} particles · ${escapeHtml(monitoringView.displayValue(row.concentration_value, "not available"))} ${escapeHtml(row.concentration_unit || "")}${row.deposition_rate_value === null || row.deposition_rate_value === undefined ? "" : ` · deposition ${escapeHtml(String(row.deposition_rate_value))} ${escapeHtml(row.deposition_rate_unit || "")}`}</td><td>${escapeHtml(row.citation || source?.citation || "Citation unavailable")}${source ? ` · <a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">source</a>` : ""}</td></tr>`; }).join("")}</tbody></table>${samples.length > MONITORING_PAGE_SIZE ? `<p class="data-note monitoring-pager">Rows ${monitoringPageStart + 1}–${Math.min(monitoringPageStart + MONITORING_PAGE_SIZE, samples.length)} of ${samples.length} <button type="button" data-monitoring-page="-1" ${monitoringPageStart === 0 ? "disabled" : ""}>◀ Previous</button> <button type="button" data-monitoring-page="1" ${monitoringPageStart + MONITORING_PAGE_SIZE >= samples.length ? "disabled" : ""}>Next ▶</button></p>` : ""}` : '<p class="empty">No sample observations are available in this snapshot.</p>';
+  const downloadButton = $("monitoring-download-csv");
+  downloadButton.disabled = !samples.length;
+  $("monitoring-download-note").textContent = samples.length
+    ? `The CSV holds all ${samples.length} filtered row${samples.length === 1 ? "" : "s"}, not only this page, with citations and licence ids in # comment lines at the top.`
+    : "No observations match these filters, so there is nothing to download.";
+  $("monitoring-samples").innerHTML = samples.length ? `<table class="monitoring-table"><thead><tr><th>Date</th><th>Matrix / region</th><th>Method</th><th>Count / concentration${pageUnit ? ` (${escapeHtml(pageUnit)})` : ""}</th><th>Citation</th></tr></thead><tbody>${pageRows.map((row) => { const source = payload.datasets.find((dataset) => dataset.id === row.dataset_id); const dateLabel = formatSampleDate(row); const matrixLabel = monitoringView.matrix(row) || "Unknown matrix"; return `<tr><td>${escapeHtml(dateLabel)}</td><td>${escapeHtml(matrixLabel)} / ${escapeHtml(monitoringView.region(row).replaceAll("_", " "))}</td><td>${escapeHtml(row.method || "unknown")}</td><td>${escapeHtml(monitoringView.displayValue(row.particle_count, "unknown"))} particles · ${escapeHtml(monitoringView.displayValue(row.concentration_value, "not available"))}${pageUnit ? "" : ` ${escapeHtml(row.concentration_unit || "")}`}${row.deposition_rate_value === null || row.deposition_rate_value === undefined ? "" : ` · deposition ${escapeHtml(String(row.deposition_rate_value))} ${escapeHtml(row.deposition_rate_unit || "")}`}</td><td>${escapeHtml(row.citation || source?.citation || "Citation unavailable")}${source ? ` · <a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">source</a>` : ""}</td></tr>`; }).join("")}</tbody></table>${samples.length > MONITORING_PAGE_SIZE ? `<p class="data-note monitoring-pager">Rows ${monitoringPageStart + 1}–${Math.min(monitoringPageStart + MONITORING_PAGE_SIZE, samples.length)} of ${samples.length} <button type="button" data-monitoring-page="-1" ${monitoringPageStart === 0 ? "disabled" : ""}>◀ Previous</button> <button type="button" data-monitoring-page="1" ${monitoringPageStart + MONITORING_PAGE_SIZE >= samples.length ? "disabled" : ""}>Next ▶</button></p>` : ""}` : '<p class="empty">No sample observations are available in this snapshot.</p>';
 }
 
 // Filter controls: any change resets the sample page to the first one (classic input/change handlers).
@@ -290,6 +326,7 @@ function bindEvents() {
   FACET_IDS.forEach((id) => $(id).addEventListener("toggle", () => { saveFacetState(); if (id === "facet-map" && $(id).open) scheduleMapDraw(); }));
   $("monitoring-facets-expand").addEventListener("click", () => setAllFacets(true));
   $("monitoring-facets-collapse").addEventListener("click", () => setAllFacets(false));
+  $("monitoring-download-csv").addEventListener("click", downloadSamplesCsv);
   $("monitoring-samples").addEventListener("click", (event) => {
     const button = event.target.closest("[data-monitoring-page]");
     if (!button) return;
