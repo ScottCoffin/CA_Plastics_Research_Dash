@@ -135,3 +135,4 @@
 | 2026-11-12 | UX-25 | Mobile and metadata: 375 px overflow gone, favicon 404 fixed, meta descriptions, 24 px targets (1 Haiku worker) | this commit |
 | 2026-11-12 | UX-18 | Naive-user Playwright task scripts; 6/6 tasks pass locally (1 Haiku worker) | this commit |
 | 2026-11-12 | UX-15/UX-16 | Experts list loading/failed/no-results states and axe-clean rows (1 Haiku worker); volume-not-strength captions on Experts, Funding, Evidence (lead) | this commit |
+| 2026-11-12 | S2.5 | eScholarship fetch complete (72 remaining items, no 403); evidence parquet updated for the next export | this commit |
