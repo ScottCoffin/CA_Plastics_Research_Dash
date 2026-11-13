@@ -21,6 +21,7 @@ export default {
   sidebar: true,
   pages: [
     {name: "Experts", path: "/experts"},
+    {name: "Collaboration network", path: "/network"},
     {name: "Institutions", path: "/institutions"},
     {name: "Monitoring", path: "/monitoring"},
     {name: "Funding", path: "/funding"},

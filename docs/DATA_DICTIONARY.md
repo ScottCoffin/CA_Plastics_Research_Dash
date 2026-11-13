@@ -69,6 +69,8 @@ Licence: derived from OpenAlex metadata; OpenAlex licence recorded as unknown in
 | `domain_tags` | array of string | Domain tags across the author's works. |
 | `institution_ids` | array of string | Atlas institution identifiers in the author's affiliation history. |
 | `work_ids` | array of string | Work identifiers in the index. |
+| `current_in_ca` | boolean or null | True when any latest (primary) affiliation is a California registry institution; false when none is (OpenAlex country code "CA" is Canada, so only the registry decides); null when unknown. |
+| `last_ca_year` | integer or null | Latest year OpenAlex lists the author at a California registry institution. |
 
 ### `site/data/authors/<author_id>.json`
 
@@ -89,6 +91,17 @@ Licence: as `index.json`. These files are present for each indexed author.
 `author_count` (integer, all authors), `author_institution_ids` (this author's own institutions).
 `profile` (optional): ORCID biography, keywords and links, plus `photo` (`thumb_url`, `license`,
 `credit`, `source_url`) for owner-approved photos; local photos live in `site/assets/experts/`.
+
+### `site/data/network.json`
+
+Purpose: expert collaboration network page (`/app/network`). Top-level keys: `schema_version`,
+`generated_at`, `method` (edge weight, community and layout methods, networkx version),
+`communities`, `nodes`, `edges`. Node fields: `id` (author_id), `name`, `x`, `y` (seeded layout),
+`community`, `degree`, `strength`, `plastic_works`, `topics` (top tags of the expert's
+plastic-related works), `institution_ids`, `institutions`, `sectors`, `primary_affiliations`,
+`current_in_ca`. Edge fields: `source`, `target`, `weight` (co-authored plastic-related works),
+`years` (weight per year). Licence: as `index.json`. Written by `scripts/build_network.py` from
+`index.json` and `institutions.json`; `--check` fails when stale.
 
 ### `site/data/works_detail.json`
 
