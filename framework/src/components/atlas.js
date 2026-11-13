@@ -45,13 +45,14 @@ export function aboutViewModel(metadata, index) {
     : generatedAt
       ? `Last refresh (UTC): ${generatedAt}`
       : "Refresh time unavailable";
+  // UX-6: each count carries its definition, so pages with different filters can be compared.
   const stats = [
-    ["Authors", counts.authors],
-    ["Works", counts.works],
-    ["Institutions", counts.institutions],
-    ["California institutions", counts.ca_institutions],
-    ["Labeled works", counts.labeled_works]
-  ].map(([label, value]) => ({label, value: formatCount(value)}));
+    ["Authors", counts.authors, "California-affiliated authors with at least one published work."],
+    ["Works", counts.works, "Distinct published works with a California author."],
+    ["Institutions", counts.institutions, "Every institution on those works, including out-of-state co-authors."],
+    ["California institutions", counts.ca_institutions, "California institutions with any published work. The Institutions page lists only those with a plastic-related work, so it shows fewer."],
+    ["Labeled works", counts.labeled_works, ""]
+  ].map(([label, value, note]) => ({label, value: formatCount(value), note}));
   stats.push({label: "Schema", value: current.schema_version || indexData.schema_version || "Unavailable"});
   return {isFixture, refreshText, stats};
 }

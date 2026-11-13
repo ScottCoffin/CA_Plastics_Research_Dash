@@ -22,7 +22,7 @@ ${doi
   ? html`<p>Latest archived release: ${String(release.version || "")} (${String(release.date || "")}), DOI <a href="https://doi.org/${doi}" target="_blank" rel="noreferrer">${doi}</a>. Methods card, Parquet files and checksums are in the release archive.</p>`
   : html`<p>Archived releases: <a href="https://doi.org/10.5281/zenodo.24124016" target="_blank" rel="noreferrer">Zenodo DOI 10.5281/zenodo.24124016</a> (always resolves to the latest release).</p>`}
 
-<dl class="atlas-stats" id="about-stats">${snapshot.stats.map(({label, value}) => html`<div><dt>${label}</dt><dd>${value}</dd></div>`)}</dl>
+<dl class="atlas-stats" id="about-stats">${snapshot.stats.map(({label, value, note}) => html`<div><dt>${label}</dt><dd>${value}</dd>${note ? html`<dd class="stat-note">${note}</dd>` : ""}</div>`)}</dl>
 
 <p class="atlas-notice"><strong>Interpretation note:</strong> provisional labels are screening metadata, not a validated pollution leaderboard. Confirm the linked source work before drawing conclusions.</p>
 

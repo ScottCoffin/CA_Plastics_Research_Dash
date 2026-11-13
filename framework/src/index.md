@@ -14,7 +14,7 @@ const snapshot = aboutViewModel(metadata, null);
 
 <p class="atlas-notice">${snapshot.refreshText}</p>
 
-<dl class="atlas-stats">${snapshot.stats.filter((s) => s.label !== "Schema").map(({label, value}) => html`<div><dt>${label}</dt><dd>${value}</dd></div>`)}</dl>
+<dl class="atlas-stats">${snapshot.stats.filter((s) => s.label !== "Schema").map(({label, value, note}) => html`<div><dt>${label}</dt><dd>${value}</dd>${note ? html`<dd class="stat-note">${note}</dd>` : ""}</div>`)}</dl>
 
 <div class="atlas-cards">
   <a class="card" href="./experts"><h2>Experts</h2><p>California researchers working on plastics, with topics and metrics.</p></a>
