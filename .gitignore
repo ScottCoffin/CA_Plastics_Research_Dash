@@ -55,3 +55,8 @@ node_modules/
 
 # Private outreach contacts and consent records (owner decision 2026-11-11): never commit.
 data/private/
+
+# S3.8 SEO entity pages and sitemaps: generated at deploy time only, never committed.
+site/experts/
+site/institutions/
+site/sitemap*.xml

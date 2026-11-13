@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A static atlas of plastic-related research connected to California.">
     <title>CA Plastics Research Atlas</title>
+    <link rel="canonical" href="https://plastiverse.live/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="CA Plastics Research Atlas">
+    <meta property="og:description" content="A static atlas of plastic-related research connected to California.">
+    <meta property="og:url" content="https://plastiverse.live/">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "CA Plastics Research Atlas",
+          "description": "A static atlas of plastic-related research connected to California.",
+          "url": "https://plastiverse.live/"
+        },
+        {
+          "@type": "Dataset",
+          "name": "CA Plastics Research Atlas",
+          "description": "Researchers, institutions and works in plastic-related research connected to California, built from public bibliographic data.",
+          "url": "https://plastiverse.live/",
+          "license": "https://creativecommons.org/licenses/by/4.0/",
+          "identifier": "https://doi.org/10.5281/zenodo.24124016",
+          "spatialCoverage": "California",
+          "temporalCoverage": "1950/..",
+          "isAccessibleForFree": true,
+          "creator": {
+            "@type": "Organization",
+            "name": "CA Plastics Research Atlas"
+          }
+        }
+      ]
+    }
+    </script>
     <script src="assets/vendor/minisearch-7.2.0.js"></script>
     <script src="assets/topics.js"></script>
     <script src="assets/expert_page.js"></script>
@@ -176,6 +209,7 @@
       .topic-more { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border: 1px solid #8da7af; border-radius: 999px; color: #24445a; background: #fff; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
       .expert-metrics { margin: 0; flex: none; color: var(--ink); font-size: 0.88rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
       .expert-metrics strong { color: var(--brand-dark); }
+      .now-badge { display: inline-block; padding: 0.05rem 0.4rem; border: 1px solid #c45100; border-radius: 999px; color: #5c2300; background: #ffe9cf; font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
       .expert-affil { margin: 0; flex: none; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
       .topic-bar { display: block; width: 100%; height: 0.85rem; border-radius: 0.3rem; overflow: hidden; background: #e6eff2; }
       .topic-bar rect { stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
@@ -362,6 +396,7 @@
           <div class="field"><label for="institution-filter">Institution</label><select id="institution-filter" name="institution"><option value="">All institutions</option></select></div>
           <div class="field"><label for="expert-sort">Sort by</label><select id="expert-sort" name="sort"><option value="plastic_citations">Plastics citations</option><option value="plastic_works">Plastics works</option><option value="rising">Rising (citation momentum)</option><option value="m_quotient">m-quotient (h per career year)</option><option value="h_index">h-index</option><option value="cited_by">Total citations</option><option value="ca_works">CA works</option></select></div>
           <div class="field field-check"><span class="field-check-label">Career stage</span><label for="early-filter"><input id="early-filter" name="early" type="checkbox"> Early career only <span class="detail-meta">(first paper ≤ 10 years ago)</span></label><button type="button" id="rising-preset" class="link-button" title="Early-career experts sorted by rising citation momentum">Find up-and-coming researchers</button></div>
+          <div class="field"><label for="now-filter">Current affiliation</label><select id="now-filter" name="now"><option value="">Any</option><option value="ca">In California now</option><option value="outside">Outside California now</option><option value="unknown">Unknown</option></select></div>
           <div class="field"><label for="tag-filter">Domain or matrix tag</label><select id="tag-filter" name="tag"><option value="">All tags</option></select></div>
           <div class="field"><label for="year-from">From year</label><input id="year-from" name="year_from" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
           <div class="field"><label for="year-to">To year</label><input id="year-to" name="year_to" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
@@ -922,7 +957,7 @@
         // Owner request 2026-11-12: experts default to plastics citations.
         const DEFAULT_SORT = "plastic_citations";
         const VALID_TABS = ["experts", "institutions", "monitoring", "funding", "about"];
-        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", early: false, sort: "plastic_citations", institutionViewType: "", institutionSort: "tagged", instView: "tiers", institutionPrimaryTopic: "", includeCollaborators: false, pendingAuthor: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
+        const state = { tab: "experts", search: "", institutionType: "", institution: "", tag: "", yearFrom: "", yearTo: "", caBasis: "", oa: "", now: "", early: false, sort: "plastic_citations", institutionViewType: "", institutionSort: "tagged", instView: "tiers", institutionPrimaryTopic: "", includeCollaborators: false, pendingAuthor: "", monitoringFilters: { tier: "", search: "", contributor: "", matrix: "", year: "", region: "" }, monitoringPage: 0, data: null, filteredAuthors: [], virtual: { rowHeight: 232, overscan: 4 } };
         const $ = (id) => document.getElementById(id);
 
         function escapeHtml(value) {
@@ -941,6 +976,7 @@
           state.caBasis = params.get("ca_basis") || "";
           state.oa = ["", "oa", "closed"].includes(params.get("oa") || "") ? (params.get("oa") || "") : "";
           state.sort = SORT_KEYS.includes(params.get("sort") || "") ? params.get("sort") : DEFAULT_SORT;
+          state.now = ["", "ca", "outside", "unknown"].includes(params.get("now") || "") ? (params.get("now") || "") : "";
           state.early = params.get("early") === "1";
           state.includeCollaborators = params.get("collab") === "1";
           state.instView = instTiers.viewFromParams(params);
@@ -958,6 +994,7 @@
           if (state.yearTo) params.set("year_to", state.yearTo);
           if (state.caBasis) params.set("ca_basis", state.caBasis);
           if (state.oa) params.set("oa", state.oa);
+          if (state.now) params.set("now", state.now);
           if (state.early) params.set("early", "1");
           if (state.sort && state.sort !== DEFAULT_SORT) params.set("sort", state.sort);
           if (state.includeCollaborators) params.set("collab", "1");
@@ -1445,6 +1482,7 @@
           $("year-to").value = state.yearTo;
           $("ca-basis-filter").value = state.caBasis;
           $("oa-filter").value = state.oa;
+          $("now-filter").value = state.now;
           $("expert-sort").value = state.sort;
           $("early-filter").checked = state.early;
         }
@@ -1501,6 +1539,15 @@
           }
           return memo.ids;
         }
+        function currentAffiliationStatus(author) {
+          return author.current_in_ca === true ? "ca" : author.current_in_ca === false ? "outside" : "unknown";
+        }
+        // Badge for experts whose latest affiliations are outside California (mirrors experts_model.js).
+        function currentAffiliationHtml(author) {
+          if (author.current_in_ca !== false) return "";
+          const year = Number.isInteger(author.last_ca_year) ? ` <span class="detail-meta">· last California affiliation ${escapeHtml(author.last_ca_year)}</span>` : "";
+          return `<span class="now-badge">Now outside California</span>${year}`;
+        }
         function authorSummary(author) {
           const works = (author.work_ids || []).map(workById).filter(Boolean);
           const tags = [...new Set(works.flatMap((work) => [...(work.domain_tags || []), ...(work.facet_tags || [])]))].sort();
@@ -1534,6 +1581,7 @@
             if (state.caBasis && author.basis !== state.caBasis) return false;
             if (state.oa === "oa" && !author.works.some((work) => work.is_oa)) return false;
             if (state.oa === "closed" && !author.works.every((work) => !work.is_oa)) return false;
+            if (state.now && currentAffiliationStatus(author) !== state.now) return false;
             if (state.early && !author.early_career) return false;
             return true;
           }).sort(expertComparator(state.sort));
@@ -1707,7 +1755,7 @@
             const affiliation = primary || (author.caInstitutions.length ? author.caInstitutions.map((institution) => institution.name).join(", ") : "No California affiliation");
             const meta = `${affiliation} · ${years} · ${author.recentCount} in recent 5 years · ${author.basis}`;
             const orcid = author.orcid ? ` · <a href="${escapeHtml(author.orcid)}" target="_blank" rel="noreferrer">ORCID</a>` : "";
-            return `<article class="virtual-row" role="listitem" style="transform:translateY(${index * state.virtual.rowHeight}px);height:${state.virtual.rowHeight}px"><div class="card expert-card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="expert-card-actions"><a class="expert-page-link" href="${escapeHtml(expertPageUrl(author.author_id))}" title="Open the full profile page">Full profile</a><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></span></div>${expertTopicsHtml(author)}<p class="expert-metrics">${expertMetricsHtml(author)}${orcid}</p><p class="card-meta expert-affil" title="${escapeHtml(meta)}">${escapeHtml(meta)}</p></div></article>`;
+            return `<article class="virtual-row" role="listitem" style="transform:translateY(${index * state.virtual.rowHeight}px);height:${state.virtual.rowHeight}px"><div class="card expert-card"><div class="card-header"><h3><button class="expert-link" type="button" data-author-id="${escapeHtml(author.author_id)}">${escapeHtml(author.name || "Unnamed author")}</button></h3><span class="expert-card-actions"><a class="expert-page-link" href="${escapeHtml(expertPageUrl(author.author_id))}" title="Open the full profile page">Full profile</a><span class="chip">${escapeHtml(author.ca_works_count || 0)} tagged works</span></span></div>${expertTopicsHtml(author)}<p class="expert-metrics">${expertMetricsHtml(author)}${orcid}</p><p class="card-meta expert-affil" title="${escapeHtml(meta)}">${currentAffiliationHtml(author) ? `${currentAffiliationHtml(author)} · ` : ""}${escapeHtml(meta)}</p></div></article>`;
           }).join("");
           fitExpertTopics(rows);
           rows.querySelectorAll(".expert-link, .topic-more").forEach((button) => button.addEventListener("click", () => openDrawer(button.dataset.authorId)));
@@ -2418,11 +2466,12 @@
           state.yearTo = $("year-to").value;
           state.caBasis = $("ca-basis-filter").value;
           state.oa = $("oa-filter").value;
+          state.now = $("now-filter").value;
           state.sort = $("expert-sort").value;
           state.early = $("early-filter").checked;
           // "change" fires on blur after "input" already rendered; re-rendering then replaced the
           // rows between mousedown and mouseup, so the first click on an expert was lost.
-          const signature = JSON.stringify([state.search, state.institutionType, state.institution, state.tag, state.yearFrom, state.yearTo, state.caBasis, state.oa, state.early, state.sort]);
+          const signature = JSON.stringify([state.search, state.institutionType, state.institution, state.tag, state.yearFrom, state.yearTo, state.caBasis, state.oa, state.now, state.early, state.sort]);
           if (signature === state.lastFilterSignature) return;
           state.lastFilterSignature = signature;
           writeHash();
@@ -2437,7 +2486,7 @@
             buttons[next].focus();
           });
         });
-        ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "expert-sort", "early-filter"].forEach((id) => {
+        ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "now-filter", "expert-sort", "early-filter"].forEach((id) => {
           $(id).addEventListener("input", onFilterChange);
           $(id).addEventListener("change", onFilterChange);
         });
@@ -2499,7 +2548,7 @@
         $("monitoring-facets-expand").addEventListener("click", () => setAllFacets(true));
         $("monitoring-facets-collapse").addEventListener("click", () => setAllFacets(false));
         $("monitoring-samples").addEventListener("click", (event) => { const button = event.target.closest("[data-monitoring-page]"); if (!button) return; state.monitoringPage += Number(button.dataset.monitoringPage); renderMonitoring(); $("monitoring-samples-heading").scrollIntoView({ block: "start" }); });
-        $("reset-filters").addEventListener("click", () => { state.search = state.institutionType = state.institution = state.tag = state.yearFrom = state.yearTo = state.caBasis = state.oa = ""; state.early = false; writeHash(); updateViews(); $("expert-search").focus(); });
+        $("reset-filters").addEventListener("click", () => { state.search = state.institutionType = state.institution = state.tag = state.yearFrom = state.yearTo = state.caBasis = state.oa = ""; state.now = ""; state.early = false; writeHash(); updateViews(); $("expert-search").focus(); });
         $("rising-preset").addEventListener("click", () => { state.early = true; state.sort = "rising"; $("early-filter").checked = true; $("expert-sort").value = "rising"; state.lastFilterSignature = ""; writeHash(); renderExperts(); });
         $("export-csv").addEventListener("click", () => {
           if (!state.data) return;

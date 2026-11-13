@@ -198,4 +198,7 @@ def test_monitoring_facets_and_map_controls_are_static_markup() -> None:
         assert f'id="{element_id}"' in html, element_id
     assert 'id="monitoring-map" class="monitoring-map" role="group" tabindex="0"' in html
     # The page stays dependency-free: no external scripts, stylesheets or tile servers.
-    assert not re.search(r'<(script|link|img|iframe)[^>]+(src|href)=["\']https?://', html)
+    # (A rel="canonical" link names the page's own URL for crawlers and loads nothing.)
+    assert not re.search(
+        r'<(script|link|img|iframe)(?![^>]*rel="canonical")[^>]+(src|href)=["\']https?://', html
+    )

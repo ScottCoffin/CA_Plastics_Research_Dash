@@ -68,6 +68,15 @@ jobs:
           python -m pip install --quiet -c requirements/lock.txt -e .
           python scripts/build_feed.py
 
+      # S3.8 static expert and institution pages plus sitemaps (deploy-only, gitignored). Best
+      # effort: a failure leaves this deploy without the SEO pages and never fails the build.
+      - name: Build SEO pages
+        continue-on-error: true
+        run: |
+          python -m pip install --quiet -c requirements/lock.txt -e .
+          python scripts/build_seo_pages.py --site site
+          python scripts/check_s3_8.py --site site
+
       # AT-5 Observable Framework app, published under /app/ beside the classic site (which
       # stays the root until the owner approves the switch). Best effort: a failed build or
       # check leaves this deploy with the classic site only.

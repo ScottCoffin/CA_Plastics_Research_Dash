@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://plastiverse.live/sitemap.xml

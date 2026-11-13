@@ -1,0 +1,31 @@
+# CA Plastics Research Atlas
+
+> A static, independent atlas of plastic-related research connected to California. It lists the researchers, institutions and works behind that research, built from public bibliographic data (OpenAlex) and public funding and monitoring sources.
+
+Independent research atlas; profiles are generated from public bibliographic data.
+
+## Main pages
+
+- [Atlas home](https://plastiverse.live/): overview, search and tabs
+- [Interactive app](https://plastiverse.live/app/): experts, institutions, funding, monitoring, policy, resources and glossary
+- [Evidence](https://plastiverse.live/app/evidence): publication and evidence views
+- [Experts](https://plastiverse.live/app/experts): California-connected plastics researchers
+- [Institutions](https://plastiverse.live/app/institutions): institutions with California-connected plastics research
+- [Funding](https://plastiverse.live/app/funding): grants and awards
+- [Monitoring](https://plastiverse.live/app/monitoring): monitoring sources
+- [Policy](https://plastiverse.live/app/policy): policy context
+- [Resources](https://plastiverse.live/app/resources): downloads and data resources
+- [Glossary](https://plastiverse.live/app/glossary): terms used in the Atlas
+- [About](https://plastiverse.live/app/about): method, scope and limitations
+- [Sitemap](https://plastiverse.live/sitemap.xml): index of all static pages
+
+## Entity pages (static, one per expert or institution)
+
+- Expert profiles: https://plastiverse.live/experts/<OpenAlex author ID>/
+- Institution profiles: https://plastiverse.live/institutions/<institution ID>/
+
+## Data and licence
+
+- Data: CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+- Code: MIT
+- Archived release and citable DOI (concept, always resolves to the latest release): https://doi.org/10.5281/zenodo.24124016
