@@ -72,14 +72,23 @@ The Atlas already hides these abstracts; this fixes them for everyone.
    > plastics; please remove the abstract_inverted_index for them.
 - **Done when:** submitted. Tell the agent "OpenAlex report sent".
 
-### H19. Confirm the Margaret Spring photo credit (2 minutes)
-The photo you supplied now shows on her profile with the credit "Photo supplied by the Atlas
-maintainer" and licence "Owner-supplied". The governance rule is: photos only with a licence or
-the person's consent.
-1. Check where the photo came from (for example the MBARI staff page) and whether you have
-   permission to reuse it.
-2. Tell the agent the credit line to show (for example "Photo: MBARI") or "remove the photo".
-- **Done when:** the agent has the credit line or the removal request.
+### H20. Register the site with search engines (S3.8, 15 minutes, after the next deploy)
+The deploy now publishes a page per expert and institution, a sitemap and robots.txt.
+1. Open https://search.google.com/search-console, add the domain `plastiverse.live`, and copy
+   the TXT record it gives you. In Cloudflare > DNS, add that TXT record at the apex; click Verify.
+2. In Search Console > Sitemaps, submit `https://plastiverse.live/sitemap.xml`.
+3. Optional: repeat at https://www.bing.com/webmasters (it can import from Search Console).
+4. Paste one expert page (e.g. https://plastiverse.live/experts/A5031423229/) into
+   https://search.google.com/test/rich-results and note any errors.
+5. Answer S3.8-AI in `.agent/QUESTIONS.md` (AI crawlers allowed by default).
+- **Done when:** the sitemap shows "Success". Tell the agent "search console done".
+
+### H21. Review the collaboration network (S9.4, 10 minutes, after the next deploy)
+Open https://plastiverse.live/app/network. Check three slices: (a) no filters,
+(b) one topic (e.g. occurrence and monitoring), (c) years 2020-2026 with "Now in California only".
+Do the clusters and links match the collaborations you know? Answer S9.4-DEP in QUESTIONS
+(add networkx so CI refreshes the network daily: yes/no).
+- **Done when:** you reply "network OK" or list what looks wrong.
 
 ### H17. Answer the UX decisions UXD-1..UXD-9 (10 minutes)
 Your UX spec (`docs/EM_spec.md`) is now TODO section "UX". Its decisions are rows UXD-1..UXD-9
@@ -179,6 +188,7 @@ come with its own Streamlit app and run command here.
 ---
 
 ## Done
+- **H19 Spring photo credit** (2026-11-13): "Monterey Bay Aquarium", used with permission.
 - **H13 MiniSearch / H14 Framework install** (2026-11-12): MiniSearch 7.2.0 vendored and wired;
   Observable Framework 1.13.4 installed in `framework/`.
 - **H4 photos** (2026-11-11): 43 approved, 1 rejected; approved photos ship with the next export.

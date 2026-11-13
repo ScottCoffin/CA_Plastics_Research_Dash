@@ -598,3 +598,15 @@ the implementing task's acceptance passes.
 - Owner spec `docs/EM_spec.md` (UX/UI remediation from a text walkthrough of the live site) becomes TODO section "UX". A browser audit (Playwright + axe-core 4.10.3 + Lighthouse 12.8.2, 2026-11-12) was added as its Section 1A: it confirmed the broken "Classic site" link and the internal vocabulary, refuted the broken expert-profile links and the stuck loading text, and added UX-21..UX-25 (template lang/viewport, contrast, headings, Monitoring CLS, mobile).
 - The spec's branch-per-PR rule and `.agent/handoff.md` append are replaced by this repo's checkpoint protocol (commit on main as `UX-<n>: ...`, HANDOFF overwritten). Spec decisions UXD-1..8 plus UXD-9 (CI audit tooling) are QUESTIONS rows with defaults in use.
 - Framework 1.13.4 template limits (no `<html lang>`, `maximum-scale=1`, header links outside the app root rewritten to `./`) are fixed by `framework/scripts/postbuild.mjs`, run by npm's postbuild hook; revisit when upgrading Framework.
+
+## ADR-REL-1-2026-11-13: Public views use resolved plastic relevance; title-only rescue patterns; tier-2 survives low-confidence Haiku "false"
+Context: a Neolithic pottery paper (OpenAlex matched a withheld abstract on "microfibers") showed on the Evidence map although the rule and Haiku labels said not plastic-related; the map ignored `plastic_related`. Decision: every Evidence map view uses only `plastic_related === true`; `title_relevant_patterns` (title-only, 100% precision on export titles) sit at the always-relevant precedence; `relevance_policy.tier2_survives_low_confidence_false` keeps rule chemicals-in-plastics hits against pending low-confidence Haiku calls; works ingested outside the OpenAlex query need a Haiku screen before export. Owner decisions still win. Evidence: `docs/RELEVANCE_AUDIT_2026-11-13.md`. Questions: REL-TIER2, REL-TITLE.
+
+## ADR-S3.8-RENDER-2026-11-13: Crawlable entity pages are static Python output at deploy
+Decision (lead default, QUESTIONS S3.8-RENDER): `scripts/build_seo_pages.py` writes `/experts/<id>/`, `/institutions/<id>/` and sitemaps into `site/` during `build_deploy.yml` (gitignored, ~10 MB), each linking into the interactive app. Independent of the classic-vs-Framework root switch, so pages are built once. robots.txt allows all crawlers (S3.8-AI default).
+
+## ADR-S9.4-VIEW-2026-11-13: Network page without VOSviewer/sigma.js; networkx local-only for now
+Owner asked to start S9.4 before SPK-6. The page is a hand-built SVG over a precomputed seeded spring layout (no new front-end dependency). networkx (spec-named) is not a declared dependency yet, so `site/data/network.json` is rebuilt locally with `scripts/build_network.py` and committed; CI export waits for S9.4-DEP. Revisit when SPK-6 runs.
+
+## ADR-FUNDING-MERGE-2026-11-13: Funding visualizations live in the Framework Funding page
+Owner prefers the Framework layout. The grants.html views are ported to `/app/funding` and follow its single filter form; grants.html stays for the classic root until the H16 switch, then becomes a redirect (UX-13).
