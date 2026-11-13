@@ -16,12 +16,13 @@ title: Institutions
 <div class="field institution-collab-field"><label for="institution-collab"><input id="institution-collab" type="checkbox"> Include out-of-state collaborators</label></div>
 </div>
 <p class="data-note">California institutions only by default. Collaborators outside California appear only through works co-authored with California researchers.</p>
+<details class="term-help"><summary>What do the counts and tiers mean?</summary><p>Counts use <a href="./glossary#fractional-works">fractional works</a>: each paper's credit is split among its authors' institutions. A <a href="./glossary#rank-range">rank range</a> and a <a href="./glossary#bootstrap-interval">bootstrap interval</a> show how much an institution's position could move. Institutions in the same <a href="./glossary#tier">tier</a> cannot be reliably ordered. Plastic-related works are defined in the <a href="./glossary#plastic-related">glossary</a>.</p></details>
 <div id="institution-view-field" class="field" hidden><span id="institution-view-label">Leaderboard view</span><div class="institution-type-chips" role="group" aria-labelledby="institution-view-label"><button class="chip-button" type="button" data-inst-view="tiers">Tiers (fractional credit)</button><button class="chip-button" type="button" data-inst-view="list">Institution cards</button></div></div>
 <p id="institution-count" class="result-count" role="status" aria-live="polite">Loading institutions…</p>
 </div>
 <div class="institutions-layout">
 <div>
-<div id="institution-tiers" hidden><p class="data-note tier-note">Institutions in the same tier cannot be reliably ordered, because their bootstrap rank ranges overlap. Fractional credit splits each paper among its authors' institutions; see <a href="./about">About</a> and docs/METHODS.md (Institution counts and stability).</p><div id="institution-tier-groups"></div></div>
+<div id="institution-tiers" hidden><p class="data-note tier-note">Institutions in the same <a href="./glossary#tier">tier</a> cannot be reliably ordered, because their <a href="./glossary#bootstrap-interval">bootstrap</a> <a href="./glossary#rank-range">rank ranges</a> overlap. Fractional credit splits each paper among its authors' institutions (<a href="./glossary#fractional-works">definition</a>); see <a href="./about">About</a> and docs/METHODS.md (Institution counts and stability).</p><div id="institution-tier-groups"></div></div>
 <div id="institution-list" class="cards" aria-live="polite"></div>
 </div>
 <div class="institution-map-panel is-sticky">

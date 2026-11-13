@@ -112,3 +112,9 @@
   #experts-root .button-row { display: grid; grid-template-columns: 1fr 1fr; }
   #experts-root .button-row .button { width: 100%; }
 }
+
+/* Inline term help (UX-7): keyboard-operable details next to the controls. */
+#experts-root .term-help { margin: 0.5rem 0; }
+#experts-root .term-help > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--brand-dark, #0b3d31); font-weight: 650; }
+#experts-root .term-help > summary:focus-visible { outline: 3px solid var(--brand, #1f7a66); outline-offset: 2px; }
+#experts-root .term-help ul { margin: 0.25rem 0 0.5rem; padding-left: 1.25rem; }

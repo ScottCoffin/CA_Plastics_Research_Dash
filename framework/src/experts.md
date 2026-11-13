@@ -26,6 +26,12 @@ title: Experts
 </div>
 <div class="result-line"><p id="expert-count" class="result-count" role="status" aria-live="polite">Loading experts…</p></div>
 <p class="data-note">Chips show each expert's research topics with the number of their works in each topic. Citation figures are career-wide OpenAlex counts; "on plastics" counts citations of the expert's plastic-related works in this corpus, so a low share suggests plastics is a secondary focus.</p>
+<details class="term-help"><summary>What do the expert terms mean?</summary><ul>
+<li><a href="./glossary#m-quotient">m-quotient</a>: h-index divided by career length in years.</li>
+<li><a href="./glossary#rising-percentile">Rising percentile</a>: rank of citation momentum among scored experts (those with at least 10 plastics citations in the last 5 complete years).</li>
+<li><a href="./glossary#plastic-related">Plastic-related</a> works, and the <a href="./glossary#ca-led">CA-led</a> and <a href="./glossary#ca-sampled">CA-sampled</a> bases for the CA basis filter.</li>
+<li><a href="./glossary#matrix">Matrix</a>: the sampled medium; the tag filter uses provisional work tags.</li>
+</ul></details>
 <h2 class="expert-sr-only">Expert list</h2>
 <div id="expert-list" class="virtual-list" role="list" aria-label="Experts" aria-live="polite"><div id="expert-spacer" class="virtual-spacer"><div id="expert-rows"></div></div></div>
 </section>

@@ -11,6 +11,7 @@ export default {
   // ATLAS_FW_OUT lets parallel local builds use separate folders (dist-*/ is gitignored).
   output: process.env.ATLAS_FW_OUT || "dist",
   theme: ["air", "near-midnight"],
+  head: `<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23075a46'/%3E%3C/svg%3E">`,
   style: "style.css",
   // No external CDNs (C5/S3.7): drop Framework's default Google Fonts link; system fonts apply.
   globalStylesheets: [],
@@ -26,9 +27,11 @@ export default {
     {name: "Evidence map", path: "/evidence"},
     {name: "Policy", path: "/policy"},
     {name: "Related resources", path: "/resources"},
-    {name: "About", path: "/about"}
+    {name: "About", path: "/about"},
+    {name: "Glossary", path: "/glossary"}
   ],
   header: `<span class="atlas-header">California research atlas · <a class="atlas-classic" href="../index.html">Classic site</a></span>`,
   footer: `Independent project; not an official OEHHA or State product. ` +
+    `<a href="./glossary">Glossary</a>. ` +
     `<a href="${REPO}/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">Report a correction</a>.`
 };

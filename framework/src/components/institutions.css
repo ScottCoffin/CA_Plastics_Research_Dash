@@ -126,3 +126,9 @@
   #institutions-root .tier-row { grid-template-columns: 1fr auto; }
   #institutions-root .tier-name, #institutions-root .tier-frac { grid-column: 1 / -1; }
 }
+
+/* Inline term help (UX-7): keyboard-operable details next to the controls. */
+#institutions-root .term-help { margin: 0.5rem 0; }
+#institutions-root .term-help > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--brand-dark, #0b3d31); font-weight: 650; }
+#institutions-root .term-help > summary:focus-visible { outline: 3px solid var(--brand, #1f7a66); outline-offset: 2px; }
+#institutions-root .term-help p { margin: 0.25rem 0 0.5rem; }

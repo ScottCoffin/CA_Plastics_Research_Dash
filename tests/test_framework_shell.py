@@ -24,7 +24,7 @@ def test_static_guardrails_pass() -> None:
 
 def test_nav_covers_the_classic_tabs() -> None:
     check = _load("check_at5")
-    assert {"experts", "institutions", "monitoring", "funding", "about"} <= set(
+    assert {"experts", "institutions", "monitoring", "funding", "about", "glossary"} <= set(
         check.config_pages()
     )
 
