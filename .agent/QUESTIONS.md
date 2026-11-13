@@ -96,3 +96,6 @@ Defaults below come from `spec.md` Part G and remain in use until the owner answ
 | UXD-7 | Date format | YYYY-MM-DD in tables; "12 Nov 2026" in prose | | Open 2026-11-12 |
 | UXD-8 | Licence statement for Atlas code and site content on About | Placeholder only. Note: ADR-002 already chose MIT for code and CC BY for eligible derived data; confirm that wording for About | | Open 2026-11-12 |
 | UXD-9 | UX-17 CI audits need dev tooling in CI (axe-core via Playwright, Lighthouse). Add them to CI? | Not added; audits run locally with `~/tools/ux-audit/ux_audit.py` until you approve | | Open 2026-11-12 |
+| UX-LICENCE | About now states the committed licences (MIT code, CC BY 4.0 data, from `LICENSE`/`LICENSE-DATA.md`) instead of UXD-8's placeholder | Keep the statement; edit the wording if you prefer | | Open 2026-11-12 |
+| UX-GLOSS | Agent-drafted wording: licence glosses (Monitoring, Glossary), matrix, m-quotient and rising-percentile glossary entries, Overview "Start here" links | Shown as drafted; replace any you disagree with | | Open 2026-11-12 |
+| UX-13-H16 | UX-13 (grants.html/expert.html in the /app/ shell; URL state on every filtered page) waits for your H16 switch decision, because the shell moves to the site root then | Deferred until H16 | | Open 2026-11-12 |

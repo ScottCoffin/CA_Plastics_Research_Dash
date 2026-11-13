@@ -307,3 +307,17 @@ until it reports.
 - The Bash safety parser rejects heredocs containing `${...}` in some shells ("could not be checked for dangerous rm"); write such files with the Write tool or a Python generator.
 - Headless Edge `--dump-dom --virtual-time-budget` is a reliable Windows browser smoke when the WSL Playwright browser is missing; one render in ~6 can stop early, so rerun before calling a page broken.
 - Never chain `git push` after the clean-worktree pytest with `;`: a failing worktree run (EM-6 tests needing gitignored `release/`) still pushed. Gate the push on the pytest exit code. Tests must not depend on gitignored folders (`release/`, `data/`); skip when absent.
+
+## 2026-11-12 UX remediation batch
+- Python `Path.write_text` on Windows turns every `\n` into `\r\n`; text read with `read_text`
+  already carries `\r\n` from the autocrlf checkout, so a round trip writes `\r\r\n` and git stores
+  CRs in LF files. Edit repo files as bytes (strip `\r`, write `\n`) or with `newline=""`; check
+  `git show HEAD:<file> | grep -c $'\r'` after scripted edits.
+- `cmd && tail -1 log && git commit` commits even when the command failed, because `tail` exits 0.
+  Capture the exit code (`cmd > log; rc=$?`) and gate the commit on it.
+- Haiku workers sometimes park on a background preview server ("waiting on background work") and
+  never report; one short "stop waiting and report" message ends it. Killing processes can be
+  denied to a worker: do not relay that kill; leave it for the owner.
+- Worker-written public copy tends to cite repo paths ("docs/...", "src/...") and "TODO-OWNER" on the
+  page; `check_public_text.py` now rejects TODO-OWNER and "pending owner review", but read new
+  public pages before sealing.

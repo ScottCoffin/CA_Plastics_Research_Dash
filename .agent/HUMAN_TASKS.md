@@ -79,8 +79,19 @@ at the bottom of `.agent/QUESTIONS.md`, each with the default the agent is using
 2. For each row, write your answer in the "Owner answer" column, or leave it blank to keep the default.
    Most important: UXD-3 (what counts as "California-connected"), UXD-4 (Experts vs Authors),
    UXD-8 (licence wording; ADR-002 already chose MIT code + CC BY data), UXD-9 (add axe/Lighthouse to CI).
-3. Save the file.
+   Also new rows UX-LICENCE, UX-GLOSS and UX-13-H16 (agent-drafted page wording to confirm).
+3. Optional, same sitting: give a non-GitHub contact address for the About page, and say whether
+   the Monitoring "Licences, citations and caveats" box should start open.
+4. Save the file.
 - **Done when:** saved. Tell the agent "UXD answered".
+
+### H18. Run the moderated usability sessions (UX-20, optional, about 5 x 45 minutes)
+Materials are ready in `docs/UX_20_SESSION_PLAN.md`: who to recruit, the facilitator script with the
+six tasks, and a note-taking sheet. No recording and no personal data, so no consent form is needed.
+1. Recruit five people from the audiences in the plan's table.
+2. Run each session from the script and fill one note sheet per person.
+3. Save the notes in `scratch/` or send them to the agent.
+- **Done when:** five note sheets exist. Tell the agent "UX sessions done".
 
 ### H16. Compare the new Framework pages with the current site (AT-5, 15 minutes)
 The site is being moved to Observable Framework one page at a time. After the next deploy the
