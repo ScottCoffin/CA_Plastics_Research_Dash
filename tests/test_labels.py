@@ -55,6 +55,9 @@ def test_labels_join_topics_and_are_one_row_per_work(tmp_path: Path) -> None:
     assert by_id["W9000000202"]["plastic_related"] is True
     assert by_id["W9000000204"]["plastic_related"] is False
     assert by_id["W9000000205"]["plastic_tier"] == "chemicals-in-plastics"
+    # Owner REL-TIER2: chemicals-only works carry the auxiliary topic; core works do not.
+    assert "plastic_associated_chemicals" in by_id["W9000000205"]["domain_tags"]
+    assert "plastic_associated_chemicals" not in by_id["W9000000201"]["domain_tags"]
     assert by_id["W9000000201"]["openalex_topic_names"] == ["Environmental science"]
     assert by_id["W9000000201"]["label_source"] == "rule"
     assert by_id["W9000000201"]["confidence"] is None

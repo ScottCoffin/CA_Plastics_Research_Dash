@@ -17,7 +17,7 @@ This is an owner-supplied candidate rule layer, not a validated classifier. `lab
 | Missing primary-topic names | 0 |
 | Plastic-related rows | 1745 |
 | Excluded rows | 0 |
-| Rows with provisional domain tags | 1331 |
+| Rows with provisional domain tags | 1341 |
 | Mis-attached (ignored) abstracts | 0 |
 | Always-relevant rule rows | 2 |
 

@@ -82,8 +82,14 @@ title: Glossary
 
 <dt id="plastic-related"><strong>Plastic-related</strong></dt>
 <dd>
-<p>A work about plastic debris or particles, plastic litter, microfibers, tire-wear particles, or plastic-pollution policy. Chemicals in plastics are a separately flagged Tier 2 scope. Plastic-related and topic labels are provisional, rule-based screening metadata; a held-out gold set and evaluation are later work, so no validated precision or recall is available yet.</p>
+<p>A work about plastic debris or particles, plastic litter, microfibers, tire-wear particles, or plastic-pollution policy. Studies of chemicals associated with plastics are kept as an auxiliary topic (see <a href="#plastic-associated-chemicals">Plastic-associated chemicals</a>). Plastic-related and topic labels are provisional, rule-based screening metadata; a held-out gold set and evaluation are later work, so no validated precision or recall is available yet.</p>
 <p><small>Source: About, Definitions and Limitations.</small></p>
+</dd>
+
+<dt id="plastic-associated-chemicals"><strong>Plastic-associated chemicals (auxiliary topic)</strong></dt>
+<dd>
+<p>Studies of chemicals that come from or travel with plastics, such as bisphenol A (BPA), phthalates, plastic additives and the tire chemical 6PPD, that the search found through those chemical names rather than through plastics terms. They stay in the Atlas and carry this topic tag, shown with a dashed, grey-hatched chip. They are auxiliary: the Atlas searches for plastics terms, so its coverage of these chemical studies (much of it exposure and health research) is far less complete than its coverage of studies of plastic particles and debris. Do not read their counts as the size of California research on these chemicals.</p>
+<p><small>Source: owner scope decision, 13 November 2026; the search's chemicals-in-plastics terms.</small></p>
 </dd>
 
 <dt id="licences"><strong>Licences</strong></dt>

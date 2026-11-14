@@ -48,6 +48,8 @@ WORK_LABELS_SCHEMA = pa.schema(
 )
 
 MODEL_VERSION = "plastic-v3.1-rule-v1"
+# Auxiliary topic for works admitted only by a chemicals-in-plastics term (owner REL-TIER2).
+PLASTIC_CHEMICALS_TAG = "plastic_associated_chemicals"
 
 # These are intentionally small, transparent matrix facets.  They are an
 # independent local implementation of the documented regex-facet approach;
@@ -365,6 +367,10 @@ def label_records(
         domain_tags, facet_tags = _taxonomy_tags(
             text, [*topic_names, raw_primary_name], taxonomy, title=title
         )
+        if decision.tier == "chemicals-in-plastics":
+            # Owner REL-TIER2 (2026-11-13): works admitted only by a chemicals-in-plastics
+            # term (BPA, phthalates, 6PPD) carry the auxiliary plastic-associated chemicals tag.
+            domain_tags = sorted({*domain_tags, PLASTIC_CHEMICALS_TAG})
         if domain_tags:
             domain_tagged_rows += 1
         needs_review = (

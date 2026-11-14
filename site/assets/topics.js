@@ -18,8 +18,23 @@
     risk_assessment: { label: "Risk assessment", color: "#6250d6", order: 9, pattern: "hatch" },
     // Owner request 2026-11-11: life on plastic (biofilms, microbial communities,
     // rafting). Hatched ecotoxicology pink, the closest biological topic.
-    plastisphere: { label: "Plastisphere", color: "#e87ba4", order: 10, pattern: "hatch" }
+    plastisphere: { label: "Plastisphere", color: "#e87ba4", order: 10, pattern: "hatch" },
+    // Owner decision 2026-11-13: BPA, phthalate and 6PPD studies admitted only by a
+    // chemicals-in-plastics term. Auxiliary: neutral grey hatch, listed last, with a note.
+    plastic_associated_chemicals: {
+      label: "Plastic-associated chemicals",
+      color: "#6f7b82",
+      order: 11,
+      pattern: "hatch",
+      auxiliary: true
+    }
   };
+  // Shown wherever an auxiliary topic appears (chip tooltip, glossary, Evidence map).
+  const AUXILIARY_NOTE =
+    "Auxiliary topic: studies of chemicals associated with plastics (such as BPA, phthalates " +
+    "and 6PPD) that the search found through those chemical names. The Atlas searches for " +
+    "plastics terms, so coverage of these chemical studies is less complete than for studies " +
+    "of plastic particles and debris.";
   const MATRICES = {
     marine: "Marine",
     freshwater: "Freshwater",
@@ -85,13 +100,22 @@
   function escapeText(value) {
     return String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   }
+  function isAuxiliary(tag) {
+    const key = String(tag || "");
+    return Boolean(TOPICS[key] && TOPICS[key].auxiliary);
+  }
+  function note(tag) {
+    return isAuxiliary(tag) ? AUXILIARY_NOTE : "";
+  }
   // Chip markup: topic chips carry a colour dot and a tinted fill; matrix chips are outlined.
+  // Auxiliary topics add a dashed border and a title with the coverage note.
   function chip(tag, count) {
     const text = escapeText(label(tag)) + (count === undefined || count === null ? "" : ` <span class="topic-count">${Number(count)}</span>`);
     if (isMatrix(tag)) return `<span class="topic-chip matrix" data-tag="${escapeText(tag)}">${text}</span>`;
     const hue = color(tag);
     const hatch = pattern(tag) === "hatch" ? " hatch" : "";
-    return `<span class="topic-chip${hatch}" data-tag="${escapeText(tag)}" style="--topic:${hue}"><span class="topic-dot" aria-hidden="true"></span>${text}</span>`;
+    const aux = isAuxiliary(tag) ? ` auxiliary" title="${escapeText(AUXILIARY_NOTE)}` : "";
+    return `<span class="topic-chip${hatch}${aux}" data-tag="${escapeText(tag)}" style="--topic:${hue}"><span class="topic-dot" aria-hidden="true"></span>${text}</span>`;
   }
   // Counts per tag from a list of works with domain_tags / facet_tags.
   function weights(works, { matrices = false } = {}) {
@@ -109,7 +133,8 @@
 .topic-chip .topic-count{font-weight:700;color:#4a5860}
 .topic-chips{display:flex;flex-wrap:wrap;gap:.35rem}
 .topic-chip.hatch{background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--topic) 22%,#fff) 0 3px,#fff 3px 6px)}
-.topic-chip.hatch .topic-dot{border-radius:1px;transform:rotate(45deg);width:.55rem;height:.55rem}`;
+.topic-chip.hatch .topic-dot{border-radius:1px;transform:rotate(45deg);width:.55rem;height:.55rem}
+.topic-chip.auxiliary{border-style:dashed;font-style:italic}`;
   function injectCss(doc) {
     const d = doc || global.document;
     if (!d || d.getElementById("atlas-topic-css")) return;
@@ -126,7 +151,7 @@
     };
     if (d.body) addDefs(); else d.addEventListener("DOMContentLoaded", addDefs);
   }
-  const api = { TOPICS, MATRICES, label, color, order, pattern, cssFill, svgFill, svgDefs, sortTags, chip, weights, isMatrix, injectCss };
+  const api = { TOPICS, MATRICES, AUXILIARY_NOTE, label, color, order, pattern, cssFill, svgFill, svgDefs, sortTags, chip, weights, isMatrix, isAuxiliary, note, injectCss };
   global.AtlasTopics = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (global.document) injectCss(global.document);

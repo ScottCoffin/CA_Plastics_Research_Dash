@@ -64,6 +64,12 @@ domain_tags:
     title_seed_concepts: [biofilm, biofilms, biofouled, bio-fouled, rafting]
     exclude_concepts: [biofilm reactor, moving-bed biofilm, fixed-film reactor,
       in-water cleaning]
+  # Owner decision REL-TIER2 (2026-11-13): works admitted only by a chemicals-in-plastics
+  # term (config/queries.yml tier_2_terms: BPA, phthalates, 6PPD, plastic additives) stay on
+  # the site as an auxiliary topic. Assigned by the label rule (atlas.nlp.labels), never by
+  # seeds; coverage is incomplete because the search targets plastics terms.
+  - id: plastic_associated_chemicals
+    seed_concepts: []
 
 provenance:
   supplied_by: owner external query agent
