@@ -14,7 +14,9 @@ FW = ROOT / "framework"
 PAGES = {
     "index",
     "experts",
+    "network",
     "institutions",
+    "institution",
     "monitoring",
     "funding",
     "evidence",

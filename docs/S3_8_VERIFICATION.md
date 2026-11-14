@@ -54,10 +54,15 @@ after the run, as the deploy-only design requires.
 
 ## Owner actions
 
-1. AI crawler decision (S3.8-AI): robots.txt currently allows all crawlers.
-2. Google Search Console and Bing Webmaster Tools: verify the domain through a Cloudflare
-   DNS TXT record, then submit `https://plastiverse.live/sitemap.xml`.
+1. AI crawler decision (S3.8-AI): answered 2026-11-13, allow. Since 2026-11-14 `robots.txt` names
+   the AI crawlers (GPTBot, ClaudeBot, Google-Extended, CCBot, PerplexityBot and others) with
+   `Allow: /`, and `check_s3_8.py` fails on any `Disallow` or a missing AI crawler. Sitemap page
+   URLs and llms.txt moved to the root routes when the Framework app became the root (H16).
+2. Google Search Console: done 2026-11-13 (owner reports the property verified and
+   `https://plastiverse.live/sitemap.xml` submitted). Still to confirm: the sitemap
+   status reads Success. Bing Webmaster Tools: open (H20b, optional).
 3. Run the Rich Results test on one expert page (for example `/experts/A5000014168/`)
-   to check the Person JSON-LD.
-4. Confirm after the next deploy that `https://plastiverse.live/robots.txt` and
-   `https://plastiverse.live/sitemap.xml` are served.
+   to check the Person JSON-LD. Open (H20b).
+4. Done 2026-11-13 (agent check): `https://plastiverse.live/robots.txt`,
+   `sitemap.xml`, `sitemap-pages.xml`, `sitemap-experts.xml` and
+   `sitemap-institutions.xml` all return 200.

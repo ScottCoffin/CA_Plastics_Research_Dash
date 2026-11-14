@@ -1,7 +1,7 @@
 // AT-5 Observable Framework shell (ADR-EM5-FRAMEWORK-2026-11-12, ADR-AT5-SHELL-2026-11-12).
-// The build is deployed under <site>/app/ beside the classic site/, which stays the live root
-// until the owner approves the switch after parity checks. Pages read the classic site's
-// data at runtime (components/atlas.js), so both shells always show the same snapshot.
+// Since the owner's H16 switch (2026-11-13) the deploy puts this build at the site root over
+// the classic site/ (scripts/assemble_site.py; /app/, grants.html, sem.html and expert.html
+// become redirects). Pages read site/data at runtime (components/atlas.js).
 // Every page lives at the top level of src/ (atlas.js resolves ../data/ from the page URL).
 const REPO = "https://github.com/ScottCoffin/CA_Plastics_Research_Dash";
 
@@ -31,7 +31,7 @@ export default {
     {name: "About", path: "/about"},
     {name: "Glossary", path: "/glossary"}
   ],
-  header: `<span class="atlas-header">California research atlas · <a class="atlas-classic" href="../index.html">Classic site</a></span>`,
+  header: `<span class="atlas-header">California research atlas</span>`,
   footer: `Independent project; not an official OEHHA or State product. ` +
     `<a href="./glossary">Glossary</a>. ` +
     `<a href="${REPO}/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">Report a correction</a>.`

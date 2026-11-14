@@ -1,19 +1,26 @@
 // Shared runtime helpers for the Framework pages (AT-5).
-// Data: pages fetch the classic site's committed payloads at runtime. The Framework build
-// is deployed at <site>/app/, and every page sits at the top level of src/, so the data
-// directory is always ../data/ relative to the page URL.
+// Data: pages fetch the site's committed payloads (site/data) at runtime. Every page sits at the
+// top level of src/. Since the owner's switch (2026-11-13) the deploy puts the app at the site
+// root (scripts/assemble_site.py), so data is ./data/; the side-by-side layout (app under /app/,
+// used by scripts/serve_framework_preview.py without --assembled) keeps ../data/.
 
 // Resolved lazily so Node tests can import this module (and modules that import it).
 function pageBase() {
   return typeof document !== "undefined" ? document.baseURI : "http://localhost/app/";
 }
 
+// The folder that holds data/, assets/ and the classic pages, as an absolute URL.
+export function siteRoot(base = pageBase()) {
+  const url = new URL(base);
+  return new URL(/\/app\/[^/]*$/.test(url.pathname) ? "../" : "./", url);
+}
+
 export function dataUrl(path) {
-  return new URL(String(path).replace(/^\/+/, ""), new URL("../data/", pageBase())).href;
+  return new URL(String(path).replace(/^\/+/, ""), new URL("data/", siteRoot())).href;
 }
 
 export function classicUrl(path = "") {
-  return new URL(String(path).replace(/^\/+/, ""), new URL("../", pageBase())).href;
+  return new URL(String(path).replace(/^\/+/, ""), siteRoot()).href;
 }
 
 export async function loadJson(path, {optional = false} = {}) {

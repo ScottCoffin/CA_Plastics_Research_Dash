@@ -77,9 +77,9 @@ jobs:
           python scripts/build_seo_pages.py --site site
           python scripts/check_s3_8.py --site site
 
-      # AT-5 Observable Framework app, published under /app/ beside the classic site (which
-      # stays the root until the owner approves the switch). Best effort: a failed build or
-      # check leaves this deploy with the classic site only.
+      # AT-5 Observable Framework app. Since the owner's H16 switch (2026-11-13) it is the site
+      # root. Best effort: a failed build or check leaves this deploy with the classic site as
+      # the root, so the site never goes down because of the app build.
       - name: Build Framework app
         id: framework
         continue-on-error: true
@@ -91,9 +91,11 @@ jobs:
           # UX-3: no internal project vocabulary in rendered public text.
           python ../scripts/check_public_text.py
 
-      - name: Add Framework app under /app/
+      # Framework at the root over the classic site; /app/, grants.html, sem.html, expert.html
+      # and classic #tab links become redirects (scripts/assemble_site.py).
+      - name: Put Framework app at the site root
         if: ${{ steps.framework.outcome == 'success' }}
-        run: cp -R framework/dist site/app
+        run: python scripts/assemble_site.py --site site --dist framework/dist --out site
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@v5

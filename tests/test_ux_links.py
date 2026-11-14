@@ -14,11 +14,11 @@ ROOT = Path(__file__).resolve().parents[1]
 FW = ROOT / "framework"
 
 
-def test_framework_header_classic_link_targets_classic_index():
+def test_framework_header_has_no_classic_link_after_switch():
+    """Owner H16 switch (2026-11-13): the app is the site root, so no "Classic site" link."""
     config = (FW / "observablehq.config.js").read_text(encoding="utf-8")
-    match = re.search(r'<a class="atlas-classic" href="([^"]+)">Classic site</a>', config)
-    assert match, "header must carry the atlas-classic link"
-    assert match.group(1) == "../index.html"
+    assert "atlas-classic" not in config
+    assert not re.search(r"Classic site", config)
 
 
 def test_postbuild_runs_after_build():
@@ -39,7 +39,6 @@ def test_postbuild_fix_html_rewrites_template():
     sample = (
         "<html>\n"
         '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">'
-        '<a class="atlas-classic" href="./">Classic site</a>'
         '<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">'
     )
     script = "import(process.argv[1]).then(m => process.stdout.write(m.fixHtml(process.argv[2])))"
@@ -49,8 +48,6 @@ def test_postbuild_fix_html_rewrites_template():
     ).stdout
     assert '<html lang="en">' in out
     assert "maximum-scale" not in out
-    assert 'href="../index.html"' in out
-    assert 'href="./"' not in out
     assert 'aria-label="Toggle sidebar"' in out
 
 

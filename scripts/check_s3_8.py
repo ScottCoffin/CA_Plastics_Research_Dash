@@ -17,6 +17,8 @@ from pathlib import Path
 DEFAULT_BASE_URL = "https://plastiverse.live"
 MAX_URLS_PER_SITEMAP = 50_000
 MIN_EXPERT_SAMPLE = 20
+# Named explicitly in robots.txt so the owner's "allow AI crawlers" decision is visible.
+AI_CRAWLERS = ("GPTBot", "ClaudeBot", "Google-Extended", "CCBot", "PerplexityBot")
 EXPERT_SAMPLE_SIZE = 25
 SITEMAP_NS = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
@@ -35,6 +37,15 @@ def check_robots(site: Path, base: str) -> list[str]:
     text = path.read_text(encoding="utf-8")
     if f"Sitemap: {base}/sitemap.xml" not in text:
         return [f"{path.name} does not reference {base}/sitemap.xml"]
+    # Owner S3.8-AI / S3.8-RENDER (2026-11-13): every crawler, AI crawlers included, may read
+    # all content, so no group may disallow anything.
+    for line in text.splitlines():
+        rule = line.split("#", 1)[0].strip().lower()
+        if rule.startswith("disallow:") and rule.split(":", 1)[1].strip():
+            return [f"{path.name} disallows a path ({line.strip()}); all content must be crawlable"]
+    for agent in AI_CRAWLERS:
+        if f"User-agent: {agent}" not in text:
+            return [f"{path.name} does not name AI crawler {agent} (owner: allow AI crawlers)"]
     return []
 
 

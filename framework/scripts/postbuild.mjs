@@ -1,13 +1,10 @@
 // Post-processes the Framework build (runs automatically after `npm run build`).
-// Framework 1.13.4 hardcodes parts of its page template that fail accessibility audits and
-// rewrites header links that leave the app root (UX-1, docs/EM_spec.md):
+// Framework 1.13.4 hardcodes parts of its page template that fail accessibility audits
+// (UX-1, docs/EM_spec.md):
 //   - <html> has no lang attribute (axe html-has-lang)          -> <html lang="en">
 //   - the viewport meta sets maximum-scale=1, blocking zoom      -> removed (axe meta-viewport)
-//   - the header's "Classic site" link (class atlas-classic) is rewritten from ../ to ./,
-//     i.e. the page the reader is already on                     -> ../index.html
 //   - the sidebar toggle is labelled only by title (axe label-title-only) -> adds aria-label
-// Every page sits at the top level of the app (check_at5.py), so ../index.html always
-// reaches the classic site root beside the app.
+// The header's former "Classic site" link was removed at the H16 switch (app at the root).
 import {readdirSync, readFileSync, statSync, writeFileSync} from "node:fs";
 import {basename, dirname, join} from "node:path";
 import {fileURLToPath} from "node:url";
@@ -24,16 +21,16 @@ function fixTemplate(html) {
     .replace(/<html>/, '<html lang="en">')
     .replace(/(<meta name="viewport" content="[^"]*?),\s*maximum-scale=1/, "$1")
     .replace(/<input id="observablehq-sidebar-toggle" type="checkbox" title="([^"]*)">/,
-      '<input id="observablehq-sidebar-toggle" type="checkbox" title="$1" aria-label="$1">')
-    .replace(/<a href="[^"]*" class="atlas-classic">/g, '<a href="../index.html" class="atlas-classic">')
-    .replace(/<a class="atlas-classic" href="[^"]*">/g, '<a class="atlas-classic" href="../index.html">');
+      '<input id="observablehq-sidebar-toggle" type="checkbox" title="$1" aria-label="$1">');
 }
 
 // Plain-language meta descriptions per built page (SEO audit). Keyed by page file name without .html.
 export const PAGE_DESCRIPTIONS = {
   index: "Overview of the California Plastics Research Atlas, an independent guide to research on plastics in California.",
   experts: "Researchers working on plastics in California, with their publications and affiliations.",
+  network: "Interactive map of who co-authors plastics research with whom among California experts.",
   institutions: "Universities, agencies and other organisations active in California plastics research.",
+  institution: "One institution's plastics research: publications, lead authors, topics and collaborators.",
   monitoring: "Monitoring programmes and observations of plastics in California, with sources, locations and licence details.",
   funding: "Grants and funding programmes that support California plastics research, with totals by source and year.",
   evidence: "Evidence map of California plastics research: filter studies by topic, year and source.",

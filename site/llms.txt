@@ -6,17 +6,17 @@ Independent research atlas; profiles are generated from public bibliographic dat
 
 ## Main pages
 
-- [Atlas home](https://plastiverse.live/): overview, search and tabs
-- [Interactive app](https://plastiverse.live/app/): experts, institutions, funding, monitoring, policy, resources and glossary
-- [Evidence](https://plastiverse.live/app/evidence): publication and evidence views
-- [Experts](https://plastiverse.live/app/experts): California-connected plastics researchers
-- [Institutions](https://plastiverse.live/app/institutions): institutions with California-connected plastics research
-- [Funding](https://plastiverse.live/app/funding): grants and awards
-- [Monitoring](https://plastiverse.live/app/monitoring): monitoring sources
-- [Policy](https://plastiverse.live/app/policy): policy context
-- [Resources](https://plastiverse.live/app/resources): downloads and data resources
-- [Glossary](https://plastiverse.live/app/glossary): terms used in the Atlas
-- [About](https://plastiverse.live/app/about): method, scope and limitations
+- [Atlas home](https://plastiverse.live/): overview and entry points to every view
+- [Experts](https://plastiverse.live/experts): California-connected plastics researchers
+- [Collaboration network](https://plastiverse.live/network): who co-authors with whom
+- [Institutions](https://plastiverse.live/institutions): institutions with California-connected plastics research; one page per institution at https://plastiverse.live/institution#inst=<institution ID>
+- [Monitoring](https://plastiverse.live/monitoring): monitoring sources and samples
+- [Funding](https://plastiverse.live/funding): grants and awards
+- [Evidence map](https://plastiverse.live/evidence): publication and evidence views
+- [Policy](https://plastiverse.live/policy): policy context
+- [Related resources](https://plastiverse.live/resources): other data and tools
+- [Glossary](https://plastiverse.live/glossary): terms used in the Atlas
+- [About](https://plastiverse.live/about): method, scope and limitations
 - [Sitemap](https://plastiverse.live/sitemap.xml): index of all static pages
 
 ## Entity pages (static, one per expert or institution)

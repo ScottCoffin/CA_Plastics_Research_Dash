@@ -23,19 +23,21 @@ MAX_URLS_PER_SITEMAP = 50_000
 DESCRIPTION_LIMIT = 160
 PROFILE_WORK_LIMIT = 10
 TOPIC_LIMIT = 5
-# Interactive app routes for the sitemap. grants.html and feed.xml are deliberately absent.
+# Interactive app routes for the sitemap (the Framework app is the site root since the owner's
+# H16 switch, 2026-11-13; /app/ paths are redirects). Redirect stubs (grants.html, sem.html,
+# expert.html, /app/*) and feed.xml are deliberately absent.
 PAGE_PATHS = (
     "/",
-    "/app/",
-    "/app/evidence",
-    "/app/experts",
-    "/app/institutions",
-    "/app/funding",
-    "/app/monitoring",
-    "/app/policy",
-    "/app/resources",
-    "/app/glossary",
-    "/app/about",
+    "/experts",
+    "/network",
+    "/institutions",
+    "/monitoring",
+    "/funding",
+    "/evidence",
+    "/policy",
+    "/resources",
+    "/glossary",
+    "/about",
 )
 SAFE_ID = re.compile(r"[A-Za-z0-9_-]+")
 TOPIC_LABEL = re.compile(r'^\s*([A-Za-z0-9_]+):\s*\{\s*label:\s*"([^"]+)"', re.MULTILINE)

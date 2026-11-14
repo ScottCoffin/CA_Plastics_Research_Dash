@@ -229,8 +229,11 @@ def test_sitemap_index_and_children(built) -> None:
     pages = ET.parse(site / "sitemap-pages.xml").getroot()
     page_locs = [el.text for el in pages.iter(f"{SITEMAP_NS}loc")]
     assert f"{BASE}/" in page_locs
-    assert f"{BASE}/app/evidence" in page_locs
-    assert f"{BASE}/app/about" in page_locs
+    assert f"{BASE}/evidence" in page_locs
+    assert f"{BASE}/about" in page_locs
+    assert f"{BASE}/network" in page_locs
+    # The Framework app is the root (H16); /app/ paths are redirect stubs, never listed.
+    assert not any("/app/" in loc for loc in page_locs)
     assert not any("grants.html" in loc or "feed.xml" in loc for loc in page_locs)
     experts = ET.parse(site / "sitemap-experts.xml").getroot()
     assert [el.text for el in experts.iter(f"{SITEMAP_NS}loc")] == [

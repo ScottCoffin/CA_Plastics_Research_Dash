@@ -1,4 +1,4 @@
-"""Naive-user Playwright checks for six UX-18 tasks on the Framework build (/app/).
+"""Naive-user Playwright checks for six UX-18 tasks on the Framework app (the site root).
 
 Each task navigates by visible text, role and label only. A task records its steps, the last
 element it touched, and a finding. A failed control lookup is itself a finding.
@@ -70,7 +70,7 @@ class Run:
 
 def task_overview_profile(run: Run) -> None:
     """1. Overview -> CA-led author -> profile."""
-    run.goto("app/")
+    run.goto("")
     run.check(
         run.page.get_by_role("heading", name="CA Plastics Research Atlas").is_visible(),
         "no Overview heading",
@@ -96,7 +96,7 @@ def task_overview_profile(run: Run) -> None:
 
 def task_experts_export(run: Run) -> None:
     """2. Experts: topic + year range, export CSV, row count matches shown count."""
-    run.goto("app/experts")
+    run.goto("experts")
     tag = run.page.get_by_label("Domain or matrix tag")
     run.select(tag, "Domain or matrix tag", tag.locator("option").nth(1).inner_text())
     run.fill(run.page.get_by_label("From year"), "From year", "2015")
@@ -120,7 +120,7 @@ def task_experts_export(run: Run) -> None:
 
 def task_institution_tier(run: Run) -> None:
     """3. Institutions: explain from the page why two institutions share a tier."""
-    run.goto("app/institutions")
+    run.goto("institutions")
     shown_notes = [
         n for n in run.page.get_by_text("cannot be reliably ordered").all() if n.is_visible()
     ]
@@ -151,7 +151,7 @@ def task_institution_tier(run: Run) -> None:
 
 def task_monitoring_csv(run: Run) -> None:
     """4. Monitoring: filter to one matrix and download the CSV."""
-    run.goto("app/monitoring")
+    run.goto("monitoring")
     matrix = run.page.get_by_label("Sample matrix")
     option = matrix.locator("option").nth(1).inner_text()
     run.select(matrix, "Sample matrix", option)
@@ -174,9 +174,9 @@ def task_monitoring_csv(run: Run) -> None:
 
 def task_funding_basis(run: Run) -> None:
     """5. Funding: California-led awards, then the amount basis for NIH awards."""
-    run.goto("app/funding")
+    run.goto("funding")
     run.select(run.page.get_by_label("Led from California"), "Led from California", "Yes")
-    agency = run.page.get_by_label("Funder agency")
+    agency = run.page.get_by_label("Funder agency", exact=True)
     labels = agency.locator("option").all_inner_texts()
     nih = next((text for text in labels if re.search(r"NIH|Institutes of Health", text)), None)
     run.check(nih is not None, "no NIH option under Funder agency")
@@ -191,20 +191,17 @@ def task_funding_basis(run: Run) -> None:
     run.note = f"NIH RePORTER amount basis: '{cells[-1]}' (reported amount {cells[-2]})."
 
 
-def task_index_to_app(run: Run) -> None:
-    """6. From index.html, reach /app/."""
-    run.goto("index.html")
-    link = run.page.get_by_role("link", name=re.compile("newer version of this atlas", re.I))
-    run.check(link.count() > 0, "no link to the Framework app on index.html")
-    run.check(link.first.is_visible(), "app link on index.html is not visible")
-    run.click(link.first, "A newer version of this atlas is available.")
+def task_old_app_link(run: Run) -> None:
+    """6. An old /app/ address (bookmarks, shared links) still reaches the matching page."""
+    run.goto("app/experts")
     run.page.wait_for_load_state("networkidle")
-    run.check(run.page.url.rstrip("/").endswith("/app"), f"landed on {run.page.url}")
+    url = run.page.url.split("#", 1)[0].rstrip("/")
+    run.check(url.endswith("/experts") and "/app/" not in url, f"landed on {run.page.url}")
     run.check(
-        run.page.get_by_role("heading", name="CA Plastics Research Atlas").is_visible(),
-        "no app heading",
+        run.page.get_by_role("heading", name=re.compile("Experts", re.I)).first.is_visible(),
+        "no Experts heading after the redirect",
     )
-    run.note = f"Reached {run.page.url} via the index.html banner link."
+    run.note = f"Old /app/experts link redirected to {run.page.url}."
 
 
 TASKS: list[tuple[str, Callable[[Run], None]]] = [
@@ -213,7 +210,7 @@ TASKS: list[tuple[str, Callable[[Run], None]]] = [
     ("3_institution_tier", task_institution_tier),
     ("4_monitoring_csv", task_monitoring_csv),
     ("5_funding_basis", task_funding_basis),
-    ("6_index_to_app", task_index_to_app),
+    ("6_old_app_link", task_old_app_link),
 ]
 
 

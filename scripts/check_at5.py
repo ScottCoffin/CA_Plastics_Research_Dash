@@ -3,7 +3,7 @@
 Static checks (always; no Node needed):
   - @observablehq/framework pinned to exactly 1.13.4 in package.json and package-lock.json;
   - the config drops external stylesheets (globalStylesheets: []), and every nav page has a source;
-  - every page sits at the top level of framework/src/ (data resolves as ../data/);
+  - every page sits at the top level of framework/src/ (data resolves from the site root);
   - data files named in loadJson("...")/dataUrl("...") literals exist in site/data/;
   - the shared helpers copied by scripts/sync_shared.mjs exist in site/assets/.
 Build checks (with --dist, after `npm run build`):
@@ -64,7 +64,7 @@ def static_problems() -> list[str]:
     for page in [*pages, "index"]:
         if "/" in page:
             problems.append(
-                f"page {page!r} must sit at the top level of src/ (data resolves as ../data/)"
+                f"page {page!r} must sit at the top level of src/ (data resolves from the root)"
             )
         if not (SRC / f"{page}.md").is_file():
             problems.append(f"missing page source framework/src/{page}.md")
