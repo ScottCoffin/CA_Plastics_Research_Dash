@@ -3,16 +3,18 @@
 ## Done
 - Added Pacific Contour tokens and Framework mappings in `framework/src/design/tokens.css`;
   aliased the five task-owned page palettes and retained UX-22 link underlines.
-- Added the deterministic non-token CSS literal ratchet, seven focused tests, and CI step.
-- Verified 259 CSS literal uses vs 293 baseline, 1,565 tests, 6/6 UX tasks, and all-route axe;
+- Added the deterministic non-token CSS literal ratchet, eight focused tests, and CI step.
+- Verified 259 CSS literal uses vs 293 baseline, 1,566 tests, 6/6 UX tasks, and all-route axe;
   details and screenshot paths are in `docs/VD_1_VERIFICATION.md`.
+- Reserved async stats and institution surfaces after the first live audit; local CLS is now
+  0/0.004/0.047 on Overview/Institution/About (each under 0.1).
 - Owner accepted VD-D1..VD-D8; H24 is closed.
 
 ## State of the repo
 - Build with `cd framework; npm run build`; accept with
   `py -3.14 scripts/check_at5.py --dist dist` and `py -3.14 scripts/check_design_tokens.py`.
-- Local Lighthouse through the single-process preview is not comparable with the live-CDN
-  baseline; run the deployed audit after push before beginning VD-2.
+- The first deployed audit passed axe/contrast but found async CLS on Institution and About;
+  the reservation correction is locally verified and needs the post-correction deployed audit.
 - `.agent/QUESTIONS.md` had owner edits on entry; preserve any remaining unstaged formatting.
 
 ## Next task (suggested)

@@ -86,3 +86,14 @@ def test_required_sequential_ramp_is_centralized_in_tokens() -> None:
 
     for name, value in expected.items():
         assert f"{name}: {value};" in tokens
+
+
+def test_async_foundation_surfaces_reserve_viewport_space() -> None:
+    style = (ROOT / "framework" / "src" / "style.css").read_text(encoding="utf-8")
+    institution = (ROOT / "framework" / "src" / "components" / "institution.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert ".atlas-stats { min-height: 10rem; }" in style
+    assert ".atlas-stats { min-height: 31rem; }" in style
+    assert "min-height: calc(100vh - 6rem);" in institution

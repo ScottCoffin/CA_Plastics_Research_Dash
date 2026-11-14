@@ -18,7 +18,7 @@ Date: 2026-11-14
   `py -3.14 scripts/check_at5.py --dist dist` passed.
 - Full gate: doc links, A1/A2 scaffolds, Ruff check/format, compileall, public-text check,
   design-token check, and `git diff --check` passed.
-- Tests: 1,565 passed, 9 documented Add-on A2 placeholders skipped.
+- Tests: 1,566 passed, 9 documented Add-on A2 placeholders skipped.
 - `py -3.14 scripts/ux_tasks.py --base http://127.0.0.1:8776/CA_Plastics_Research_Dash/`:
   6/6 visitor journeys passed.
 
@@ -34,10 +34,13 @@ rerun in `scratch/ux_vd1_rerun/`.
   sidebar `list` and `region` rows remain on every route and are assigned to UX-32.
 - Visual review: sea-mist page, white surfaces, teal links/actions, and readable responsive
   layouts match the foundation stage; screenshots show no new clipping.
-- Local Lighthouse is not like-for-like with the live-CDN baseline: the preview logged browser
-  connection resets and made data-heavy LCP/CLS substantially worse on repeat runs while built
-  gzip sizes stayed within AT-5 limits. The deployed URL is therefore re-audited after push;
-  those results are appended here before VD-2 begins.
+- The first deployed audit kept accessibility at baseline and performance within three points
+  (or better) on 10/12 routes. It exposed real async CLS on Institution (0.751) and About
+  (0.296), also present in the connection-reset-prone local preview.
+- VD-1 now reserves the shared async stat surface and the Institution viewport. The targeted
+  local rerun measured CLS 0 on Overview, 0.004 on Institution, and 0.047 on About; each is below
+  0.1. Built gzip sizes remained within AT-5 limits. A deployed rerun of these three routes is
+  required after the correction push.
 
 ## Review notes
 

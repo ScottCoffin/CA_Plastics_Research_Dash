@@ -26,6 +26,12 @@
 .atlas-cards a.card { text-decoration: none; color: inherit; }
 .atlas-pending { color: var(--theme-foreground-muted); }
 
+/* Async stat payloads must not push the following content through the viewport. */
+.atlas-stats { min-height: 10rem; }
+@media (max-width: 640px) {
+  .atlas-stats { min-height: 31rem; }
+}
+
 /* Links inside running text are underlined, so colour is not the only cue. */
 .atlas-header a,
 #observablehq-footer a,

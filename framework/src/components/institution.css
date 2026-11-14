@@ -8,6 +8,7 @@
   --line: var(--atlas-line);
   --focus: var(--atlas-accent);
   color: var(--ink);
+  min-height: calc(100vh - 6rem);
   max-width: 72rem;
   overflow-wrap: anywhere;
 }
