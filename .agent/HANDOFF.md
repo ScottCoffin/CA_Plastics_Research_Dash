@@ -21,6 +21,9 @@
 - Daily ingest fix: it failed on 2026-11-12 and 2026-11-13 (`run_daily_ingest()` lacked the
   `publication_date_cap` the runner passes since 5d3aa61d), so site data last refreshed 2026-11-11.
   The parameter is now forwarded; regression test in `tests/test_ci_guards_at11.py`.
+- Clean worktree (owner, 2026-11-14): gold-label sheet `curation/annotations/annotations_SC.csv`
+  committed (38 of 580 rows labelled); stray local source-watch run discarded (patch in
+  `scratch/source_watch_local_run_2026-11-10.patch`); Quarto preview and SPK-1 parquets gitignored.
 - Peer session (2026-11-13): owner did H20 (Search Console + sitemap); folded into these records.
 
 ## Not verified / left

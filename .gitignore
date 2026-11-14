@@ -60,3 +60,12 @@ data/private/
 site/experts/
 site/institutions/
 site/sitemap*.xml
+
+# Local previews and spike outputs, never committed (2026-11-14):
+# Quarto preview renders of agent files (e.g. quarto render .agent/QUESTIONS.md).
+.agent/*.html
+.agent/*_files/
+# SPK-1 synthetic hosting Parquet (spikes/spk1_hosting/make_parquet.py; spike closed 2026-11-10).
+data/processed/p5.parquet
+data/processed/p25.parquet
+data/processed/p100.parquet
