@@ -24,10 +24,11 @@
 - Peer session (2026-11-13): owner did H20 (Search Console + sitemap); folded into these records.
 
 ## Not verified / left
-- Live checks wait for the deploy: `/experts` and `/institutions` collide with the SEO folders
-  `experts/` and `institutions/`; stubs at `experts/index.html` and `institutions/index.html` send
-  them to `experts.html`/`institutions.html` if GitHub Pages prefers the folder. Check both URLs,
-  the `/app/` redirects and Lighthouse SEO after the deploy.
+- Live after deploy 43575952984 (2026-11-14): Framework is the root; GitHub Pages serves
+  `experts.html` for `/experts` (no SEO-folder collision); six UX-18 tasks pass on
+  https://plastiverse.live/; Evidence map selection, network (canvas 0.58 s), institution page,
+  legacy `#institutions?...` redirect and 375 px checks pass with no page errors. CI 43575952979
+  green. Lighthouse SEO still unmeasured.
 - UX-19 rows are recorded, not fixed (spec). Fixing them is the next UX task.
 - Network: hover, drag, wheel zoom and full screen were not exercised by automation; the WebGL
   fallback was not forced. One unexplained "element is not enabled" flake in a worker run.
