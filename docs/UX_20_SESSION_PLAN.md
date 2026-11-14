@@ -36,7 +36,9 @@ or keyboard only.
 | 35-42 min | Debrief questions |
 | 42-45 min | Thanks and close |
 
-Start every session at https://plastiverse.live/app/ on the participant's own browser and device.
+Start every session at https://plastiverse.live/ on the participant's own browser and device. Since
+13 November 2026 the interactive app is the home page; the older tabbed site is retired and its
+addresses (including `/app/` links) redirect to the matching page.
 
 ## Facilitator script
 
@@ -59,8 +61,14 @@ We are not recording; I am only taking notes."
    download them."
 5. "Look at funding for California-led awards. What does the site say about how NIH award amounts
    are counted?"
-6. "Start from the older version of this site at https://plastiverse.live/ and get back to the new
-   version."
+6. "Pick one institution you know. Open its own page and find who has led the most of its
+   plastics papers, and which topic it publishes on most."
+7. Optional, if time allows: "Find a researcher you know on the collaboration map, and name two
+   people they have written papers with."
+
+Task 6 replaced the old "get back to the new version from the older site" task when the older site
+was retired (13 November 2026). Task 7 covers the collaboration map, which UX-18's automated tasks
+do not exercise; skip it if the session runs long.
 
 Neutral prompts only: "What are you thinking?", "What would you do next?", "What did you expect
 there?" Do not answer questions about the site during a task; note them instead.
@@ -80,6 +88,7 @@ there?" Do not answer questions about the site during a task; note them instead.
 | 4 | | | | |
 | 5 | | | | |
 | 6 | | | | |
+| 7 (optional) | | | | |
 
 Also note: device and browser, any words they asked about, and any error or empty state they saw.
 
@@ -88,3 +97,31 @@ Also note: device and browser, any words they asked about, and any error or empt
 - For each problem: route, what the participant did, what they expected, and a proposed fix.
 - Compare with the automated task results in `docs/UX_18_RESULTS.md`; a task that passes there but
   fails here usually points to wording, not a broken control.
+
+## Participant task card (print one per session, hand over task by task)
+Cut along the lines and give the participant one task at a time, face down until you read it.
+
+| # | Task |
+|---|---|
+| 1 | Find a researcher whose work is led from California, and open their full profile. |
+| 2 | Show only experts working on one topic you care about, from 2020 onwards. Download that list, and check that the file has the same number of people the page says. |
+| 3 | On the institutions view, find two institutions that are in the same tier. Explain, using only what the page tells you, why they share a tier. |
+| 4 | Find the monitoring observations for one kind of sample, such as water or sediment, and download them. |
+| 5 | Look at funding for California-led awards. What does the site say about how NIH award amounts are counted? |
+| 6 | Pick one institution you know. Open its own page and find who has led the most of its plastics papers, and which topic it publishes on most. |
+| 7 | (Optional) Find a researcher you know on the collaboration map, and name two people they have written papers with. |
+
+## Results summary template (fill after all five sessions)
+| Task | Completed (of 5) | With help | Median time (min) | Problems seen by 2+ people |
+|---|---|---|---|---|
+| 1 | | | | |
+| 2 | | | | |
+| 3 | | | | |
+| 4 | | | | |
+| 5 | | | | |
+| 6 | | | | |
+| 7 (optional) | | | | |
+
+| Problem | Route | What participants did | What they expected | Seen by (n) | Proposed fix |
+|---|---|---|---|---|---|
+| | | | | | |
