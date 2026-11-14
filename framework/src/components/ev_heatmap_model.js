@@ -145,13 +145,35 @@ export function cellKey(row, col) {
   return `${row}\u0000${col}`;
 }
 
-function nonEmptyCells(model, row = null) {
-  return (model ? model.cells : []).filter((c) => c.count > 0 && (row === null || c.row === row));
+// Non-empty cells, optionally limited to one row (topic) or one column (matrix or period).
+function nonEmptyCells(model, {row = null, col = null} = {}) {
+  return (model ? model.cells : []).filter(
+    (c) => c.count > 0 && (row === null || c.row === row) && (col === null || c.col === col)
+  );
+}
+
+function keysOf(cells) {
+  return cells.map((c) => cellKey(c.row, c.col));
+}
+
+// Adds every key, or removes them all when they are already all selected.
+function toggleKeys(selected, keys) {
+  const next = new Set(selected);
+  const allSelected = keys.length > 0 && keys.every((key) => next.has(key));
+  for (const key of keys) {
+    if (allSelected) next.delete(key);
+    else next.add(key);
+  }
+  return next;
+}
+
+function allSelectedIn(selected, keys) {
+  return keys.length > 0 && keys.every((key) => selected.has(key));
 }
 
 // Drops selected keys whose cell is now empty or gone (after a filter change or a mode change).
 export function pruneSelection(selected, model) {
-  const live = new Set(nonEmptyCells(model).map((c) => cellKey(c.row, c.col)));
+  const live = new Set(keysOf(nonEmptyCells(model)));
   return new Set([...selected].filter((key) => live.has(key)));
 }
 
@@ -164,20 +186,30 @@ export function toggleCell(selected, key) {
 
 // Row header: selects every non-empty cell in the row, or clears them when all are already selected.
 export function toggleRow(selected, model, row) {
-  const keys = nonEmptyCells(model, row).map((c) => cellKey(c.row, c.col));
-  const next = new Set(selected);
-  const allSelected = keys.length > 0 && keys.every((key) => next.has(key));
-  for (const key of keys) {
-    if (allSelected) next.delete(key);
-    else next.add(key);
-  }
-  return next;
+  return toggleKeys(selected, keysOf(nonEmptyCells(model, {row})));
 }
 
 // True when the row has cells and every one of them is selected.
 export function rowSelected(selected, model, row) {
-  const keys = nonEmptyCells(model, row).map((c) => cellKey(c.row, c.col));
-  return keys.length > 0 && keys.every((key) => selected.has(key));
+  return allSelectedIn(selected, keysOf(nonEmptyCells(model, {row})));
+}
+
+// Column header (matrix or period): selects every non-empty cell in the column, or clears them when all
+// are already selected. Mirrors toggleRow.
+export function toggleCol(selected, model, colKey) {
+  return toggleKeys(selected, keysOf(nonEmptyCells(model, {col: colKey})));
+}
+
+// True when the column has cells and every one of them is selected.
+export function colSelected(selected, model, colKey) {
+  return allSelectedIn(selected, keysOf(nonEmptyCells(model, {col: colKey})));
+}
+
+// Short list for the selection banner: the first two labels, then how many more there are.
+export function labelSummary(labels) {
+  const head = labels.slice(0, 2).join(", ");
+  const more = labels.length - 2;
+  return more > 0 ? `${head} (+${more} more)` : head;
 }
 
 // Union of the work ids in the selected cells, in model order, without duplicates.

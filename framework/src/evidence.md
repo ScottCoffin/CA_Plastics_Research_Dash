@@ -4,9 +4,11 @@ title: Evidence map
 
 # Evidence map
 
-Filter the atlas's distinct works by words in the title, year range, topic, sector, work type, open access and California leadership. The page lists plastic-related works only. The trend charts and the heatmap follow the filters, and selecting heatmap cells narrows the publication table below.
+Filter the atlas's distinct works by words in the title, year range, topic, sector, work type, open access and California leadership. The page lists plastic-related works only. The trend charts and the heatmap follow the filters, and selecting heatmap cells narrows the publication table below. Click a topic, matrix or period heading to select that whole row or column.
 
 <p class="ev-notice">In development: a map of sampled locations and a review overlay will be added here. Topic and matrix tags come from keyword rules and are provisional.</p>
+
+<p class="data-note ev-aux-note">The topic <strong>Plastic-associated chemicals</strong> (such as BPA, phthalates and 6PPD) is auxiliary. The Atlas searches for plastics terms, so it covers these chemical studies far less completely than studies of plastic particles and debris. <a href="./glossary#plastic-associated-chemicals">More about this topic</a>.</p>
 
 <link rel="stylesheet" href="./components/evidence.css">
 <link rel="stylesheet" href="./components/v3_flow.css">
@@ -33,10 +35,10 @@ Filter the atlas's distinct works by words in the title, year range, topic, sect
       </div>
       <p class="data-note volume-caption">Counts show how much has been published, not the strength or quality of the evidence.</p>
       <section class="ev-view" aria-labelledby="ev-v4-heading" hidden><h2 id="ev-v4-heading">Trends</h2><div id="ev-v4"></div></section>
-      <section class="ev-view" aria-labelledby="ev-heatmap-heading" hidden><h2 id="ev-heatmap-heading">Evidence heatmap</h2><div id="ev-heatmap"></div></section>
+      <section class="ev-view" aria-labelledby="ev-heatmap-heading" hidden><h2 id="ev-heatmap-heading" tabindex="-1">Evidence heatmap</h2><div id="ev-heatmap"></div></section>
     </div>
   </div>
-  <section class="ev-view" aria-labelledby="ev-table-heading"><h2 id="ev-table-heading">Publications</h2><div id="ev-table"><p class="result-count">Loading publications…</p></div></section>
+  <section class="ev-view" aria-labelledby="ev-table-heading"><h2 id="ev-table-heading" tabindex="-1">Publications</h2><div id="ev-table-selection" class="ev-table-selection ev-table-root" role="status" aria-live="polite" hidden></div><div id="ev-table"><p class="result-count">Loading publications…</p></div></section>
   <details class="ev-view ev-flow-box"><summary id="ev-v3-heading">How works were selected (pipeline flow)</summary><div id="ev-v3"></div></details>
 </div>
 

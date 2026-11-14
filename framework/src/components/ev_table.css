@@ -61,3 +61,18 @@
 .ev-recent .ev-recent-meta { font-size: 0.88rem; color: #3b4850; }
 /* Full-width table: the title column gets room to read (owner 2026-11-12). */
 .ev-table-root td:has(> .ev-title) { min-width: 22rem; }
+/* Heatmap selection banner above the publication table. It carries the ev-table-root class so the
+ * rules stay scoped to this feature. Text 13:1 and button text 7:1 on their backgrounds. */
+.ev-table-root.ev-table-selection {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; align-items: center; margin: 0 0 0.75rem;
+  padding: 0.6rem 0.85rem; border: 1px solid #9cc0e6; border-left: 6px solid #0b4f8a; border-radius: 8px;
+  background: #e8f1fb; color: #1d2a33; font-size: 0.95rem;
+}
+.ev-table-root.ev-table-selection[hidden] { display: none; }
+.ev-table-root.ev-table-selection .ev-table-selection-text { flex: 1 1 24rem; }
+.ev-table-root.ev-table-selection button {
+  font: inherit; font-size: 0.9rem; min-height: 2.1rem; padding: 0.35rem 0.8rem; border-radius: 6px;
+  border: 1px solid #0b4f8a; background: #ffffff; color: #0b4f8a; cursor: pointer;
+}
+.ev-table-root.ev-table-selection button:hover { background: #d6e7f7; }
+.ev-table-root.ev-table-selection button:focus-visible { outline: 3px solid #1a5fb4; outline-offset: 2px; }

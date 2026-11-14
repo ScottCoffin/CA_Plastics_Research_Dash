@@ -69,6 +69,35 @@ def test_view_exports_mount_and_imports_shared_helpers() -> None:
     assert "Tags come from keyword rules and are provisional." in text
 
 
+def test_view_selection_is_visible_without_focus_or_colour() -> None:
+    text = VIEW.read_text(encoding="utf-8")
+    # Pressed state comes with a text check mark, so it does not rely on colour or focus.
+    assert 'class="ev-heatmap-check" aria-hidden="true"' in text
+    assert '"✓ "' in text
+    # Column headers are toggle buttons, like the row headers.
+    assert 'class="ev-heatmap-colbtn"' in text
+    assert "toggleCol" in text and "colSelected" in text
+    # Public surface: clear(), describe(), and "Show in table" jumping to the publication heading.
+    assert "clear()" in text
+    assert "describe()" in text
+    assert "Show in table" in text
+    assert "getElementById(TABLE_HEADING_ID)" in text
+    assert 'TABLE_HEADING_ID = "ev-table-heading"' in text
+    assert "heading.focus(" in text
+
+
+def test_css_dims_unselected_cells_and_rings_selected_ones() -> None:
+    text = re.sub(r"/\*.*?\*/", "", CSS.read_text(encoding="utf-8"), flags=re.DOTALL)
+    dimmed = (
+        ".ev-heatmap.ev-heatmap-selecting .ev-heatmap-cell"
+        ':not(:disabled):not([aria-pressed="true"])'
+    )
+    assert dimmed in text
+    assert "opacity: 0.45" in text
+    assert "inset 0 0 0 3px #000000" in text
+    assert ".ev-heatmap-colbtn" in text
+
+
 def test_view_imports_are_local_only() -> None:
     for path in (VIEW, MODEL):
         text = path.read_text(encoding="utf-8")

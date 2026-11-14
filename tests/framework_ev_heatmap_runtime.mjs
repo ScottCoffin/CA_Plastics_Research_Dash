@@ -8,11 +8,14 @@ import {
   contrastRatio,
   escapeHtml,
   heatmapCells,
+  colSelected,
+  labelSummary,
   pruneSelection,
   rowSelected,
   selectedIds,
   textInk,
   toggleCell,
+  toggleCol,
   toggleRow,
   yearBins
 } from "../framework/src/components/ev_heatmap_model.js";
@@ -212,5 +215,58 @@ assert.equal(escapeHtml(0), "0");
   assert.deepEqual([...pruneSelection(union, narrowed)], [airMarine]);
   assert.equal(pruneSelection(union, heatmapCells([], "topic-matrix")).size, 0);
 }
+
+// Column selection (matrix and period headers): mirrors the row helpers.
+{
+  const rows = [
+    {work_id: "A", year: 2021, domain_tags: ["air"], facet_tags: ["matrix:marine"]},
+    {work_id: "B", year: 2021, domain_tags: ["plastisphere"], facet_tags: ["matrix:marine"]},
+    {work_id: "C", year: 2022, domain_tags: ["air"], facet_tags: ["matrix:freshwater"]},
+    {work_id: "D", year: 2022, domain_tags: ["air"], facet_tags: []}
+  ];
+  const model = heatmapCells(rows, "topic-matrix");
+  const empty = new Set();
+
+  // Toggling a column selects every non-empty cell in it, and a second toggle clears them.
+  const marine = toggleCol(empty, model, "matrix:marine");
+  assert.deepEqual(selectedIds(model, marine).sort(), ["A", "B"]);
+  assert.equal(colSelected(marine, model, "matrix:marine"), true);
+  assert.equal(colSelected(marine, model, "matrix:freshwater"), false);
+  assert.equal(toggleCol(marine, model, "matrix:marine").size, 0);
+  assert.equal(empty.size, 0);
+
+  // A partly selected column is completed first, so aria-pressed stays false until every cell is in.
+  const partial = toggleCell(empty, cellKey("air", "matrix:marine"));
+  assert.equal(colSelected(partial, model, "matrix:marine"), false);
+  const completed = toggleCol(partial, model, "matrix:marine");
+  assert.equal(colSelected(completed, model, "matrix:marine"), true);
+  assert.deepEqual(selectedIds(model, completed).sort(), ["A", "B"]);
+
+  // Column and row selections combine as a union.
+  const both = toggleCol(toggleRow(empty, model, "air"), model, "matrix:marine");
+  assert.deepEqual(selectedIds(model, both).sort(), ["A", "B", "C", "D"]);
+
+  // An empty column (no works) cannot be selected; the no-matrix column holds only D.
+  assert.equal(toggleCol(empty, model, "matrix:air").size, 0);
+  assert.equal(colSelected(empty, model, "matrix:air"), false);
+  assert.deepEqual(selectedIds(model, toggleCol(empty, model, NO_MATRIX_KEY)), ["D"]);
+
+  // Period columns use the same helpers. All four works fall in the 2020-2024 bin.
+  const yearModel = heatmapCells(rows, "topic-year");
+  const bin = toggleCol(empty, yearModel, "2020");
+  assert.deepEqual(selectedIds(yearModel, bin).sort(), ["A", "B", "C", "D"]);
+  assert.equal(colSelected(bin, yearModel, "2020"), true);
+  assert.equal(colSelected(bin, yearModel, "2025"), false);
+  assert.equal(toggleCol(bin, yearModel, "2020").size, 0);
+  // A period with no works cannot be selected.
+  assert.equal(toggleCol(empty, yearModel, "2025").size, 0);
+}
+
+// labelSummary: the first two labels, then how many are left over.
+assert.equal(labelSummary([]), "");
+assert.equal(labelSummary(["A × B"]), "A × B");
+assert.equal(labelSummary(["A × B", "C × D"]), "A × B, C × D");
+assert.equal(labelSummary(["A × B", "C × D", "E × F"]), "A × B, C × D (+1 more)");
+assert.equal(labelSummary(["1", "2", "3", "4", "5"]), "1, 2 (+3 more)");
 
 console.log("framework_ev_heatmap_runtime: all checks passed");

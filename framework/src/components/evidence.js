@@ -10,6 +10,7 @@ import {dataUrl, formatCount, loadJson} from "./atlas.js";
 import {mountV3Flow} from "./v3_flow.js";
 import {mountV4Trend} from "./v4_trend.js";
 import {mountHeatmap} from "./ev_heatmap.js";
+import {labelSummary} from "./ev_heatmap_model.js";
 import {mountWorksTable, renderRecentCallout} from "./ev_table.js";
 import {normaliseRows} from "./ev_table_model.js";
 import {emptyState, formatHash, parseHash, sanitizeState, selectionFor} from "./evidence_model.js";
@@ -38,7 +39,13 @@ const app = {
   // Work ids that match the page filters, and the heatmap selection (null when nothing is selected).
   lastIds: [],
   heatIds: null,
-  table: null
+  // Works in the heatmap selection that the table shows, and one label per selected cell.
+  heatCount: null,
+  heatLabels: [],
+  // Distinct works that match the page filters (before the heatmap selection).
+  total: 0,
+  table: null,
+  heatmap: null
 };
 
 function optionName(ui, label) {
@@ -118,8 +125,28 @@ function render() {
     row.row.classList.toggle("ev-zero", count === 0);
   }
   app.current = {sel, impossible, extra};
-  $("evidence-count").textContent = `${formatCount(result.total)} distinct works match`;
+  app.total = result.total;
+  renderHeadline();
   notifyViews();
+}
+
+// The headline names the heatmap selection too, once one exists.
+function renderHeadline() {
+  const base = `${formatCount(app.total)} distinct works match`;
+  $("evidence-count").textContent =
+    app.heatCount === null
+      ? base
+      : `${base} · ${formatCount(app.heatCount)} in the heatmap selection (listed under Publications)`;
+}
+
+// Banner above the publication table: says what the table is narrowed to, and clears it.
+function renderSelectionBanner() {
+  const banner = $("ev-table-selection");
+  banner.hidden = app.heatIds === null;
+  if (app.heatIds === null) return;
+  const works = app.heatCount === 1 ? "work" : "works";
+  banner.querySelector(".ev-table-selection-text").textContent =
+    `Showing ${formatCount(app.heatCount)} ${works} from your heatmap selection: ${labelSummary(app.heatLabels)}.`;
 }
 
 // Pushes the matching rows to every reactive view. Views mount asynchronously, so a view that
@@ -141,10 +168,13 @@ function notifyViews() {
 }
 
 // The publication table shows the page-filtered works, narrowed to the heatmap selection when one exists.
+// The headline and the banner follow the same selected works.
 function applyTable() {
-  if (!app.table) return;
   const ids = app.heatIds ? app.lastIds.filter((id) => app.heatIds.has(id)) : app.lastIds;
-  app.table.update(ids);
+  app.heatCount = app.heatIds ? ids.length : null;
+  if (app.table) app.table.update(ids);
+  renderHeadline();
+  renderSelectionBanner();
 }
 
 let detailPromise = null;
@@ -227,6 +257,22 @@ async function loadBundle() {
   await mountViews(index);
 }
 
+// The banner's text is filled by applyTable; its one button clears the heatmap selection.
+function mountSelectionBanner(heatmap) {
+  const banner = $("ev-table-selection");
+  const text = document.createElement("span");
+  text.className = "ev-table-selection-text";
+  const clear = document.createElement("button");
+  clear.type = "button";
+  clear.textContent = "Clear heatmap selection";
+  clear.addEventListener("click", () => {
+    heatmap.clear();
+    // The banner hides on clear, so keep keyboard focus on the heatmap heading instead.
+    $("ev-heatmap-heading").focus({preventScroll: true});
+  });
+  banner.replaceChildren(text, clear);
+}
+
 let viewsMounted = false;
 // Trend panel, heatmap, publication table and the "new in the last 2 weeks" callout.
 async function mountViews(index) {
@@ -244,15 +290,17 @@ async function mountViews(index) {
   app.detail = detail;
   const plasticWorks = [...detail.values()].filter((row) => row.plastic_related === true);
   renderRecentCallout($("ev-recent"), plasticWorks, new Date());
-  const heatmap = mountHeatmap($("ev-heatmap"), {
+  app.heatmap = mountHeatmap($("ev-heatmap"), {
     onSelect: (ids) => {
       app.heatIds = ids ? new Set(ids) : null;
+      app.heatLabels = app.heatIds && app.heatmap ? app.heatmap.describe() : [];
       applyTable();
     }
   });
+  mountSelectionBanner(app.heatmap);
   $("ev-heatmap").closest("section").hidden = false;
   app.table = mountWorksTable($("ev-table"));
-  app.views.push(({rows}) => heatmap.update(rows), () => applyTable());
+  app.views.push(({rows}) => app.heatmap.update(rows), () => applyTable());
   notifyViews();
   try {
     const trend = await trendPromise;
