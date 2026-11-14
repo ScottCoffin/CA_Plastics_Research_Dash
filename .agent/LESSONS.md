@@ -1,5 +1,13 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-14 -- Root switch, "not reactive" reports, worker turn limits
+- Framework pages that resolve data as `../data/` only work at a domain root because `..` clamps at `/`; under any path prefix (local preview, a project Pages URL) they escape the site. Resolve from a detected site root and test the assembled layout, not the side-by-side one.
+- An owner report that a view "is not reactive" can be a visibility problem: Playwright in Edge and Firefox showed the heatmap did narrow the table 1,000 px below it. Reproduce first, then make the effect visible (selection marks, banner, headline) instead of rewiring.
+- Playwright `get_by_label("X")` matches substrings, so a chart titled "... by X" breaks a strict locator; use `exact=True` in task scripts.
+- Haiku workers with a page-sized brief hit the 30-turn limit and a transient API outage stopped all three at once; resume each with one continuation that names the remaining acceptance steps, and stop a worker whose files have not changed for an hour.
+- A runner test that monkeypatches the function it calls cannot catch a keyword the real function lacks: `publication_date_cap` broke the daily ingest for two days. Test the real call path (or assert the runner's kwargs are in the callee's signature), and check `gh run list --workflow ingest_works.yml` at session entry.
+- `table` elements ignore `width: 1px`; an sr-only table must sit inside an sr-only `div` (expert.html already did). Count-sized chips with `white-space: nowrap` overflow at 375 px.
+
 ## 2026-11-12 -- Framework header links and template
 - Observable Framework 1.13.4 rewrites header/footer hrefs that leave the app root (`../`) to `./`, silently pointing at the current page; it also hardcodes `<html>` without lang and `maximum-scale=1`. Check rendered hrefs in `dist/`, not the config, and fix in `framework/scripts/postbuild.mjs`.
 - Text-extraction walkthroughs of a site misread hrefs (`expert.html#author=` came out as `expert.html=`) and loading states; confirm such findings in a real browser before changing code.

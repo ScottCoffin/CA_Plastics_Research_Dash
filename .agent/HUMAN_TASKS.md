@@ -12,7 +12,7 @@ spreadsheet to edit by hand. Small reviews (10 or fewer) may stay as a file edit
 All commands run from the repository folder in Git Bash:
 `cd ~/R_new/CA_Plastics_Research_Dash`
 
-Last updated: 2026-11-12.
+Last updated: 2026-11-14.
 
 ---
 
@@ -72,23 +72,48 @@ The Atlas already hides these abstracts; this fixes them for everyone.
    > plastics; please remove the abstract_inverted_index for them.
 - **Done when:** submitted. Tell the agent "OpenAlex report sent".
 
-### H20. Register the site with search engines (S3.8, 15 minutes, after the next deploy)
-The deploy now publishes a page per expert and institution, a sitemap and robots.txt.
-1. Open https://search.google.com/search-console, add the domain `plastiverse.live`, and copy
-   the TXT record it gives you. In Cloudflare > DNS, add that TXT record at the apex; click Verify.
-2. In Search Console > Sitemaps, submit `https://plastiverse.live/sitemap.xml`.
-3. Optional: repeat at https://www.bing.com/webmasters (it can import from Search Console).
-4. Paste one expert page (e.g. https://plastiverse.live/experts/A5031423229/) into
-   https://search.google.com/test/rich-results and note any errors.
-5. Answer S3.8-AI in `.agent/QUESTIONS.md` (AI crawlers allowed by default).
-- **Done when:** the sitemap shows "Success". Tell the agent "search console done".
+### H20b. Bing Webmaster Tools and Rich Results check (optional, S3.8, 10 minutes)
+Google Search Console is done (H20). Two optional extras:
+1. Bing: go to https://www.bing.com/webmasters and sign in. Choose **Import from
+   Google Search Console**, or add `plastiverse.live` by hand and verify it with the
+   same Cloudflare DNS TXT method you used for Google.
+2. Under **Sitemaps**, submit `https://plastiverse.live/sitemap.xml`.
+3. Rich Results: open https://search.google.com/test/rich-results, enter
+   `https://plastiverse.live/experts/A5000014168/`, and check that **Person** is
+   detected with no errors.
+4. In Google Search Console > Sitemaps, check that `sitemap.xml` reads **Success** (it lists the
+   new root pages since the switch; resubmit it if it still shows the old `/app/` pages).
+- **Done when:** Bing lists the sitemap and the Rich Results test shows no errors. Tell the
+  agent "H20b done", or say which part you skipped.
 
 ### H21. Review the collaboration network (S9.4, 10 minutes, after the next deploy)
-Open https://plastiverse.live/app/network. Check three slices: (a) no filters,
-(b) one topic (e.g. occurrence and monitoring), (c) years 2020-2026 with "Now in California only".
-Do the clusters and links match the collaborations you know? Answer S9.4-DEP in QUESTIONS
-(add networkx so CI refreshes the network daily: yes/no).
+Open https://plastiverse.live/network. It is now fully interactive: scroll to zoom, drag the
+background to pan, drag a dot to move it, type a name in **Find an expert**, click a dot for its
+panel, and try **Colour by** and **Re-run layout**. Check three slices: (a) no filters, (b) one
+topic (e.g. Occurrence & monitoring), (c) years 2020-2026 with "Now in California only".
+Do the clusters and links match the collaborations you know?
 - **Done when:** you reply "network OK" or list what looks wrong.
+
+### H22. Screen-reader check (UX-19 follow-up, optional, 20 minutes)
+The agent's accessibility pass (`docs/UX_19_ACCESSIBILITY_PASS.md`) covers what tools can check.
+A person still needs to listen to the site once.
+1. On Windows, press Ctrl+Win+Enter to start Narrator (or use NVDA if installed).
+2. Open https://plastiverse.live/experts. Press Tab through the filters and change one; Narrator
+   should read each filter's name and then the new result count.
+3. Open https://plastiverse.live/evidence, tick one heatmap cell, and check it reads the cell
+   (topic, setting, count) and the "Table limited to ..." message.
+4. Press Ctrl+Win+Enter again to stop Narrator.
+- **Done when:** you reply "screen reader OK" or list what it read wrongly.
+
+### H23. Look at the new institution pages and expert badges (S9.3, 15 minutes, after the next deploy)
+1. Open https://plastiverse.live/institutions and click two institution names you know. Check
+   the summary numbers, the lead authors, and that clicking a topic narrows the publication list.
+2. Open the full profiles of ten experts (S9.3 acceptance), including some with funding, e.g.
+   https://plastiverse.live/expert.html#author=A5027952240 . Check the "Active funding" and
+   "Data steward" badges, the Funding, Datasets and Co-author institutions sections, and the
+   one-sentence topic summary under the name.
+3. Answer S9.3-NAMES in `.agent/QUESTIONS.md` (keep matching grants by PI name: yes/no).
+- **Done when:** you reply "profiles OK" or list what to change.
 
 ### H17. Answer the UX decisions UXD-1..UXD-9 (10 minutes)
 Your UX spec (`docs/EM_spec.md`) is now TODO section "UX". Its decisions are rows UXD-1..UXD-9
@@ -97,7 +122,9 @@ at the bottom of `.agent/QUESTIONS.md`, each with the default the agent is using
 2. For each row, write your answer in the "Owner answer" column, or leave it blank to keep the default.
    Most important: UXD-3 (what counts as "California-connected"), UXD-4 (Experts vs Authors),
    UXD-8 (licence wording; ADR-002 already chose MIT code + CC BY data), UXD-9 (add axe/Lighthouse to CI).
-   Also new rows UX-LICENCE, UX-GLOSS and UX-13-H16 (agent-drafted page wording to confirm).
+   Also rows UX-LICENCE and UX-GLOSS (agent-drafted page wording to confirm). UXD-1, UXD-2
+   and UX-13-H16 are closed by your H16 switch. New: H16-STUBS (old addresses that now
+   redirect) and REL-TITLE (title-only relevance patterns; explained in the session report).
 3. Optional, same sitting: give a non-GitHub contact address for the About page, and say whether
    the Monitoring "Licences, citations and caveats" box should start open.
 4. Save the file.
@@ -111,28 +138,8 @@ six tasks, and a note-taking sheet. No recording and no personal data, so no con
 3. Save the notes in `scratch/` or send them to the agent.
 - **Done when:** five note sheets exist. Tell the agent "UX sessions done".
 
-### H16. Compare the new Framework pages with the current site (AT-5, 15 minutes)
-The site is being moved to Observable Framework one page at a time. After the next deploy the
-new pages run at https://plastiverse.live/app/ next to the current site, which stays the
-main site until you approve the switch.
-1. Open https://plastiverse.live/app/ and click through Experts, Institutions, Monitoring,
-   Funding and About. Each should show the same data and controls as the matching tab at
-   https://plastiverse.live/ (the layout differs: a left sidebar instead of tabs).
-2. Try a few things you use: an expert search, the "Find up-and-coming researchers" button,
-   an expert's drawer, the institutions map and tiers, the monitoring map, the funding filters
-   and CSV download.
-   Also open **Evidence map** (new): tick a topic, check the counts change, click **Show works**
-   (the list should open and close with Escape), and look at the related-resources links
-   (question EM5-STRIP in `.agent/QUESTIONS.md`: keep the default rules or change them).
-   Also new: **Policy** (DTSC timeline; check the dates and the caveat) and **Related resources**.
-3. Locally, without deploying: `cd framework && npm run build`, then
-   `py -3.14 scripts/serve_framework_preview.py` and open
-   http://127.0.0.1:8766/CA_Plastics_Research_Dash/app/ .
-- **Done when:** you reply "Framework pages OK, switch" (the agent then makes the Framework
-  app the main site and keeps the old pages as redirects), or list what differs.
-
 ### H15. Look at the new expert pages (after the next deploy)
-Open https://plastiverse.live/#experts. The list is now sorted by plastics citations.
+Open https://plastiverse.live/experts. The list is now sorted by plastics citations.
 1. Click **Full profile** on a few experts you know. Check the primary affiliation, the
    citations-per-year chart (orange = plastics-related), the m-quotient, and that clicking a
    topic tag filters the publication list.
@@ -182,12 +189,17 @@ come with its own Streamlit app and run command here.
 - **H11. ToMEx DOI list (EM-15).** Run the R script the agent provides
   (`PSSDplusplus::tomex2`) and save its output where the script says.
 - **H12. Evidence map reviews (EM-13, EM-14, EM-17, S3.7, S3.8).** Review need
-  cells, methods text, policy mapping, the hero page, and Search Console set-up
-  when each is built.
+  cells, methods text, policy mapping and the hero page when each is built.
 
 ---
 
 ## Done
+- **H16 Framework switch** (2026-11-13): owner said "switch"; the Framework app is the site root
+  from the 2026-11-14 deploy, and old addresses redirect.
+- **H20 Google Search Console and sitemap** (2026-11-13): owner set up the property and submitted
+  `https://plastiverse.live/sitemap.xml`; the index and its three child sitemaps return 200.
+  Bing and the Rich Results test are H20b.
+- **Questions REL-TIER2, S3.8-AI, S3.8-RENDER, S9.4-DEP** (2026-11-13): answered; applied 2026-11-14.
 - **H19 Spring photo credit** (2026-11-13): "Monterey Bay Aquarium", used with permission.
 - **H13 MiniSearch / H14 Framework install** (2026-11-12): MiniSearch 7.2.0 vendored and wired;
   Observable Framework 1.13.4 installed in `framework/`.

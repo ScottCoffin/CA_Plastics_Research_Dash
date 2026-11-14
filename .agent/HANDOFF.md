@@ -1,34 +1,47 @@
-# Handoff - 2026-11-13 - owner batch: relevance audit, Evidence map, funding merge, SEO, network
+# Handoff - 2026-11-14 - Framework at the root, network, institution page, badges, a11y pass
 
-## Done this session (checks: full gate 1,529 passed / 9 skipped, ruff, AT-4, AT-5 build + check, public text, doc links, git diff --check; clean-worktree pytest before push)
-- REL-1: the Neolithic pottery paper came from an OpenAlex match on a withheld abstract
-  ("microfibers"); rules and Haiku already said "not plastic". The Evidence map ignored that
-  label, so 432 non-plastic works were shown. New title-only patterns, tier-2 policy and a Haiku
-  screen of 28 never-screened works take plastic-related works from 1,477 to 1,573. Details are in
-  `docs/RELEVANCE_AUDIT_2026-11-13.md`.
-- UX-27: Evidence map is plastic-only; heatmap cells/topic rows multi-select and narrow the table;
-  works popup and table topic dropdown removed (Playwright: 1,573 -> 293 -> 451, no errors, 375 px ok).
-- UX-28: Sankey and the other grants.html views ported into /app/funding.
-- UX-29: "Current affiliation" filter + "Now outside California" badge (Rochman: last CA 2019).
-- S9.4 (partial): `site/data/network.json` + /app/network page.
-- S3.8 (partial): deploy-built expert/institution pages with JSON-LD, sitemaps, robots, llms.txt.
-- H19 closed: Spring photo credit "Monterey Bay Aquarium", used with permission.
+## Done this session (checks: full gate, ruff, AT-5 build + check, public text, S3.8 and S10.2
+## checks, six UX-18 tasks on an assembled local copy, clean-worktree pytest before push)
+- AT-5 / H16 switch: the deploy assembles the Framework app at the site root
+  (`scripts/assemble_site.py`); `/app/*`, `grants.html`, `sem.html` redirect with the hash kept;
+  classic `#tab` links redirect; `atlas.js` `siteRoot()` replaces the `../data/` assumption.
+- UX-30: the Evidence map heatmap always narrowed the table (Edge and Firefox), but nothing showed
+  it. Now: marked and dimmed cells, column buttons, "Show in table", a banner and headline count.
+- UX-31: `/institution#inst=<id>` full page (tiles, per-year chart, sized topic chips that filter,
+  lead authors, collaborators, journals, most-cited, publication table); names link to it.
+- S9.4: sigma.js + graphology network (zoom, drag, search, panel, colour/size modes, ForceAtlas2);
+  networkx declared; the daily ingest rebuilds `network.json` (S9.4-DEP).
+- REL-2: auxiliary topic "Plastic-associated chemicals" (102 works tagged, 94 published) with the
+  coverage disclaimer (chip tooltip, glossary, Evidence map).
+- S9.3 (partial): `expert_badges.json` (89 experts) and badges, Funding, Datasets, Co-author
+  institutions and a template topic sentence on expert.html.
+- S3.8: robots.txt names AI crawlers with Allow; sitemap and llms.txt list root routes.
+- UX-19: assisted WCAG 2.2 AA pass, `docs/UX_19_ACCESSIBILITY_PASS.md` (12 failure rows, no fixes).
+- UX-20: session plan refreshed for the switched site; task card and results template added.
+- Daily ingest fix: it failed on 2026-11-12 and 2026-11-13 (`run_daily_ingest()` lacked the
+  `publication_date_cap` the runner passes since 5d3aa61d), so site data last refreshed 2026-11-11.
+  The parameter is now forwarded; regression test in `tests/test_ci_guards_at11.py`.
+- Peer session (2026-11-13): owner did H20 (Search Console + sitemap); folded into these records.
 
 ## Not verified / left
-- SEO pages and the network page are only checked locally; Lighthouse SEO and the 3 s network
-  load are unmeasured until after deploy.
-- `network.json` is rebuilt by hand (`py -3.14 scripts/build_network.py`) after each export until
-  S9.4-DEP; the daily ingest does not refresh it.
-- `.agent/TODO.md` in the worktree had lost the UX-26 line and an S11.2 note (likely a stale editor
-  save). It was left unstaged; the committed TODO keeps them. Owner: discard or keep the worktree diff.
-- Funding: chart click-to-filter not ported; the classic grants.html remains for the classic root.
-- EM-8..EM-13 remain blocked: all depend on EM-4 (A2 field classifiers), which needs S5 and the H9
-  gold labels. S9.3 stays `owner: review` (H15).
+- Live checks wait for the deploy: `/experts` and `/institutions` collide with the SEO folders
+  `experts/` and `institutions/`; stubs at `experts/index.html` and `institutions/index.html` send
+  them to `experts.html`/`institutions.html` if GitHub Pages prefers the folder. Check both URLs,
+  the `/app/` redirects and Lighthouse SEO after the deploy.
+- UX-19 rows are recorded, not fixed (spec). Fixing them is the next UX task.
+- Network: hover, drag, wheel zoom and full screen were not exercised by automation; the WebGL
+  fallback was not forced. One unexplained "element is not enabled" flake in a worker run.
+- UX-13 remainder: expert.html in the app shell; URL state on Funding and Monitoring.
 
 ## Next eligible
-1. After H20/H21 answers: finish S3.8/S9.4 acceptance. After H16 "switch": Framework at root, UX-13.
-2. S5 chain (then EM-4 -> EM-8..13) after H9.
+0. Confirm the next scheduled `Daily works ingestion` run succeeds (it now also builds the
+   network and badges).
+1. Fix the UX-19 failure rows (new task), then UX-13 remainder.
+2. After H21/H23 answers: close S9.4 and S9.3. After H20b: close S3.8 (with Lighthouse).
+3. S5 chain (then EM-4 -> EM-8..13) after H9.
 
 ## Owner actions (details in `.agent/HUMAN_TASKS.md`)
-- H20 Search Console + sitemap; H21 network review; H2 now includes 28 new pending Haiku rows.
-- QUESTIONS: REL-TIER2, REL-TITLE, S3.8-AI, S3.8-RENDER, S9.4-DEP; H16 "switch" (lead recommends it).
+- H21 network review (now sigma.js); H23 institution pages + 10 expert profiles (S9.3);
+  H22 screen-reader check (optional); H20b Bing + Rich Results (optional); H18 sessions (optional).
+- QUESTIONS: H16-STUBS (redirect map), S9.3-NAMES (PI name matching), REL-TITLE (explained in the
+  session report).
