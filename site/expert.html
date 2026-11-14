@@ -89,6 +89,9 @@
       .topic-summary { margin: 0.25rem 0 0.75rem; }
       .topic-filter { display: inline-flex; align-items: center; min-height: 2.25rem; padding: 0; border: 0; border-radius: 999px; background: transparent; text-align: left; }
       .topic-filter .topic-chip { cursor: pointer; font-size: var(--tag-font, 0.82rem); padding: var(--tag-pad-y, 0.2rem) var(--tag-pad-x, 0.6rem); }
+      /* Large count-sized chips must wrap on narrow screens instead of pushing the page sideways. */
+      .topic-filter { max-width: 100%; }
+      .topic-filter .topic-chip { white-space: normal; max-width: 100%; }
       .topic-filter[aria-pressed="true"] .topic-chip { box-shadow: 0 0 0 2px var(--brand-dark); }
       .filters { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-end; margin: 0.5rem 0 0.75rem; }
       .field { display: flex; flex-direction: column; gap: 0.25rem; flex: 1 1 10rem; min-width: 0; }
@@ -123,6 +126,14 @@
       .coauthor-list { margin: 0.5rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.35rem; }
       .coauthor-list li { padding: 0.35rem 0.6rem; border: 1px solid var(--line); border-radius: 0.4rem; background: #fff; }
       .coauthor-list .shared { color: var(--muted); font-size: 0.9rem; }
+      .expert-badges { list-style: none; margin: 0.4rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+      .expert-badge { padding: 0.1rem 0.6rem; border-radius: 999px; color: #083d31; background: #d9f2e9; font-size: 0.85rem; font-weight: 700; }
+      .expertise-statement { margin: 0.4rem 0 0; max-width: 52rem; color: #e3f4ef; font-size: 0.95rem; }
+      .grant-list, .dataset-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+      .grant, .dataset { padding: 0.6rem 0.8rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fff; }
+      .grant-meta { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.9rem; overflow-wrap: anywhere; }
+      .grant-note { margin: 0.25rem 0 0; color: #6b2100; font-size: 0.88rem; }
+      .badge.active { color: #083d31; background: #d9f2e9; }
       details summary { cursor: pointer; font-weight: 700; min-height: 2.25rem; display: flex; align-items: center; }
       @media (max-width: 40rem) {
         .metric dd { font-size: 1.2rem; }
@@ -138,8 +149,10 @@
         <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html#experts">&larr; All experts</a></nav>
         <p class="eyebrow">Expert profile</p>
         <h1 id="expert-name">Loading…</h1>
+        <ul id="expert-badges" class="expert-badges" aria-label="Expert badges" hidden></ul>
         <ul id="affil-primary" class="affil-primary" aria-label="Primary affiliations"></ul>
         <p id="expert-now" class="expert-now"></p>
+        <p id="expertise-statement" class="expertise-statement" hidden></p>
         <p id="expert-meta" class="expert-meta"></p>
         <div class="header-meta">
           <span id="expert-status" class="status-pill" role="status" aria-live="polite">Loading…</span>
@@ -169,6 +182,16 @@
           <p class="panel-intro">Institutions from this expert's own publication record, most recent first, with the years they appear. Co-authors' institutions are not included.</p>
           <ol id="affil-history" class="affil-list"></ol>
           <p id="affil-empty" class="muted" hidden>Affiliation history is not yet available for this expert.</p>
+        </section>
+
+        <section id="funding-panel" class="panel" aria-labelledby="funding-h" hidden>
+          <h2 id="funding-h">Funding</h2>
+          <div id="funding-body"></div>
+        </section>
+
+        <section id="datasets-panel" class="panel" aria-labelledby="datasets-h" hidden>
+          <h2 id="datasets-h">Datasets</h2>
+          <div id="datasets-body"></div>
         </section>
 
         <section class="panel" aria-labelledby="cit-h">
@@ -227,6 +250,11 @@
           <ol id="pub-list" class="pub-list"></ol>
         </section>
 
+        <section id="coauth-inst-panel" class="panel" aria-labelledby="coauth-inst-h" hidden>
+          <h2 id="coauth-inst-h">Co-author institutions</h2>
+          <div id="coauth-inst-body"></div>
+        </section>
+
         <section class="panel" aria-labelledby="coauthor-h">
           <h2 id="coauthor-h">Frequent co-authors</h2>
           <details id="coauthors">
@@ -248,7 +276,7 @@
     <script id="expert-app">
       "use strict";
 
-      const { escapeHtml, safeHttpUrl, parseExpertId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, tagScale, bylineNames, coauthorEntries, authorLineHtml, profileHtml, citationSeries, citationHistogramSvg } = AtlasExpert;
+      const { escapeHtml, safeHttpUrl, parseExpertId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, tagScale, bylineNames, coauthorEntries, authorLineHtml, profileHtml, citationSeries, citationHistogramSvg, isoDate, fundingStatus, expertBadgesHtml, fundingHtml, datasetsHtml, coauthorInstitutionSummary, coauthorInstitutionsHtml, expertiseStatement } = AtlasExpert;
 
       const RISING_TIP = "Trend in this expert's share of all Atlas experts' plastics citations over the last 5 complete years; percentile among experts";
       const CHART_LABEL = "Citations received per year, all and plastics-related";
@@ -270,6 +298,7 @@
         coauthorsDone: false,
         expertNames: null,
         expertNamesPromise: null,
+        badgesPromise: null,
         loadToken: 0
       };
       const $ = (id) => document.getElementById(id);
@@ -327,6 +356,19 @@
             .catch(() => null);
         }
         return S.expertNamesPromise;
+      }
+      // Funding, dataset and method notes (data/expert_badges.json). Fetched once; null when unavailable,
+      // which hides the new sections.
+      function loadBadges() {
+        if (!S.badgesPromise) {
+          S.badgesPromise = fetchJson("data/expert_badges.json").catch(() => null);
+        }
+        return S.badgesPromise;
+      }
+      // DOI link on doi.org; "" when the record has no plain DOI.
+      function doiUrl(doi) {
+        const value = String(doi ?? "").trim();
+        return /^10\.\S+$/.test(value) ? `https://doi.org/${value.split("/").map(encodeURIComponent).join("/")}` : "";
       }
       // scale (optional, from tagScale) sets the size of the topic filter button through CSS variables.
       function topicButton(tag, count, scale) {
@@ -572,7 +614,31 @@
         body.innerHTML = `<ul class="coauthor-list">${items.join("")}</ul>${notes.map((n) => `<p class="muted">${escapeHtml(n)}</p>`).join("")}`;
       }
 
-      function renderExpert(detail, institutions) {
+      // Header badges, expertise statement, funding, datasets and co-author institutions. Each section stays
+      // hidden when it has no content (or when the badges file is unavailable).
+      function renderBadgeSections(badges, institutions) {
+        const entry = badges && badges.experts && Object.hasOwn(badges.experts, S.id) && badges.experts[S.id] ? badges.experts[S.id] : {};
+        const method = badges && badges.method ? badges.method : {};
+        const grants = Array.isArray(entry.grants) ? entry.grants : [];
+        const datasetCount = Number(entry.datasets?.count) > 0 ? Number(entry.datasets.count) : 0;
+        const funding = fundingStatus(grants, isoDate(new Date()));
+        const badgeMarkup = expertBadgesHtml({ activeGrants: funding.active.length, datasetCount, method });
+        $("expert-badges").innerHTML = badgeMarkup;
+        $("expert-badges").hidden = !badgeMarkup;
+        const statement = expertiseStatement(S.works, AtlasTopics.label);
+        $("expertise-statement").textContent = statement;
+        $("expertise-statement").hidden = !statement;
+        $("funding-panel").hidden = grants.length === 0;
+        $("funding-body").innerHTML = grants.length ? fundingHtml(funding, method) : "";
+        $("datasets-panel").hidden = datasetCount === 0;
+        $("datasets-body").innerHTML = datasetCount ? datasetsHtml(entry.datasets, doiUrl) : "";
+        const summary = coauthorInstitutionSummary(S.works, S.id, institutions);
+        const summaryMarkup = coauthorInstitutionsHtml(summary);
+        $("coauth-inst-panel").hidden = !summaryMarkup;
+        $("coauth-inst-body").innerHTML = summaryMarkup;
+      }
+
+      function renderExpert(detail, institutions, badges) {
         const author = detail.author || {};
         S.author = author;
         S.works = Array.isArray(detail.works) ? detail.works : [];
@@ -586,6 +652,7 @@
         renderProfile(detail.profile);
         renderMetrics(author);
         renderHistory(author, institutions);
+        renderBadgeSections(badges, institutions);
         renderCitations(author);
         renderYearOptions();
         syncControls();
@@ -632,16 +699,17 @@
         $("affil-primary").innerHTML = "";
         $("expert-now").innerHTML = "";
         $("open-in-list").href = `index.html#experts?author=${encodeURIComponent(raw)}`;
-        const [detail, institutions] = await Promise.all([
+        const [detail, institutions, badges] = await Promise.all([
           fetchJson(`data/authors/${encodeURIComponent(raw)}.json`).catch(() => null),
-          loadInstitutions()
+          loadInstitutions(),
+          loadBadges()
         ]);
         if (token !== S.loadToken) return;
         if (!detail) {
           showMessage("Profile not available", `No profile is available for "${raw}" in this snapshot.`, "error");
           return;
         }
-        renderExpert(detail, institutions);
+        renderExpert(detail, institutions, badges);
       }
 
       function clearFilters() {

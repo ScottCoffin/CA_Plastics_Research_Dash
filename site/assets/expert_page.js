@@ -305,6 +305,213 @@
     return `<svg viewBox="0 0 ${width} ${height}" width="100%" role="img" aria-label="${escapeHtml(label)}" class="cit-chart"><title>${escapeHtml(label)}</title>${legend.join("")}${parts.join("")}${yTitle}${xTitle}</svg>`;
   }
 
+  // ---- Funding, data stewardship and co-author institutions ------------------------------------
+  // Inputs come from data/expert_badges.json (grants, datasets, method) and data/institutions.json.
+  const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  const RECENT_START_YEARS = 5;
+  const TOP_INSTITUTIONS = 8;
+  const TOPIC_SUMMARY_SHOWN = 2;
+
+  // Local calendar date as ISO "YYYY-MM-DD" (pass new Date()).
+  function isoDate(date) {
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  }
+  function isoDateOrEmpty(value) {
+    const text = String(value ?? "").trim();
+    return ISO_DATE_RE.test(text) ? text : "";
+  }
+  function stringList(value) {
+    return (Array.isArray(value) ? value : []).map((v) => String(v ?? "").trim()).filter(Boolean);
+  }
+  // "Source: ...." sentence from a method note in the badges file; "" when there is no note.
+  function sourceNote(text) {
+    const note = String(text ?? "").trim();
+    if (!note) return "";
+    const sentence = note.charAt(0).toUpperCase() + note.slice(1);
+    return `Source: ${sentence}${sentence.endsWith(".") ? "" : "."}`;
+  }
+  function countNoun(n, singular, plural) {
+    return `${n} ${n === 1 ? singular : plural}`;
+  }
+
+  // Grants split on the given ISO date. Active: end date on or after today, or no end date and a start
+  // date within the last five years. Grants without a valid date are past. Each list is newest start first.
+  function fundingStatus(grants, today) {
+    const day = isoDateOrEmpty(today);
+    const cutoff = day ? `${Number(day.slice(0, 4)) - RECENT_START_YEARS}${day.slice(4)}` : "";
+    const active = [];
+    const past = [];
+    (Array.isArray(grants) ? grants : []).forEach((grant) => {
+      if (!grant || typeof grant !== "object") return;
+      const start = isoDateOrEmpty(grant.start);
+      const end = isoDateOrEmpty(grant.end);
+      const isActive = day !== "" && (end !== "" ? end >= day : start !== "" && start >= cutoff);
+      (isActive ? active : past).push(grant);
+    });
+    const newestFirst = (a, b) => compareText(isoDateOrEmpty(b.start), isoDateOrEmpty(a.start)) || compareText(a.title, b.title);
+    return { active: active.sort(newestFirst), past: past.sort(newestFirst) };
+  }
+
+  // Header badges. Each one carries the source of its count in the title attribute.
+  function expertBadgesHtml({ activeGrants = 0, datasetCount = 0, method = {} } = {}) {
+    const badges = [];
+    if (activeGrants > 0) {
+      const title = `${sourceNote(method.funding)} Active: end date today or later, or no end date and a start within five years.`.trim();
+      badges.push(`<li class="expert-badge" title="${escapeHtml(title)}">Active funding</li>`);
+    }
+    if (datasetCount > 0) {
+      const title = sourceNote(method.datasets);
+      badges.push(`<li class="expert-badge" title="${escapeHtml(title)}">Data steward · ${escapeHtml(countNoun(datasetCount, "dataset", "datasets"))}</li>`);
+    }
+    return badges.join("");
+  }
+
+  // Grant list for the Funding section: source note, then active grants before past ones.
+  function grantItemHtml(grant, active) {
+    const title = String(grant.title || "").trim() || "Untitled grant";
+    const url = safeHttpUrl(grant.url);
+    const titleHtml = url
+      ? `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(title)}</a>`
+      : escapeHtml(title);
+    const facts = [grant.funder, grant.org]
+      .map((v) => String(v ?? "").trim())
+      .filter(Boolean)
+      .map((v) => `<span>${escapeHtml(v)}</span>`);
+    const years = grantYearsText(grant);
+    facts.push(`<span>${escapeHtml(years)}</span>`);
+    const tag = active ? ' <span class="badge active">Active</span>' : "";
+    const note = grant.match === "pi_name"
+      ? "<p class=\"grant-note\">Matched by the principal investigator's name; check the award.</p>"
+      : "";
+    return `<li class="grant"><h3>${titleHtml}${tag}</h3><p class="grant-meta">${facts.join(' <span aria-hidden="true">·</span> ')}</p>${note}</li>`;
+  }
+  function grantYearsText(grant) {
+    const start = isoDateOrEmpty(grant.start).slice(0, 4);
+    const end = isoDateOrEmpty(grant.end).slice(0, 4);
+    if (start && end) return start === end ? start : `${start}–${end}`;
+    if (start) return `From ${start}`;
+    if (end) return `Until ${end}`;
+    return "Dates not recorded";
+  }
+  function fundingHtml(funding, method = {}) {
+    const note = sourceNote(method.funding);
+    const items = [
+      ...funding.active.map((g) => grantItemHtml(g, true)),
+      ...funding.past.map((g) => grantItemHtml(g, false))
+    ];
+    return `${note ? `<p class="panel-intro">${escapeHtml(note)}</p>` : ""}<ul class="grant-list">${items.join("")}</ul>`;
+  }
+
+  // Dataset list. doiUrl(doi) returns the link for a DOI (or "" when there is none); the page supplies it.
+  function datasetsHtml(datasets, doiUrl) {
+    const items = (Array.isArray(datasets?.items) ? datasets.items : []).filter((d) => d && typeof d === "object");
+    const count = Number(datasets?.count) > 0 ? Number(datasets.count) : items.length;
+    const rows = items.map((d) => {
+      const title = String(d.title || "").trim() || "Untitled dataset";
+      const link = typeof doiUrl === "function" ? safeHttpUrl(doiUrl(d.doi)) : "";
+      const titleHtml = link
+        ? `<a href="${escapeHtml(link)}" target="_blank" rel="noreferrer">${escapeHtml(title)}</a>`
+        : escapeHtml(title);
+      const facts = [String(d.publisher ?? "").trim(), toYear(d.year) === null ? "" : String(toYear(d.year))]
+        .filter(Boolean)
+        .map((v) => `<span>${escapeHtml(v)}</span>`);
+      return `<li class="dataset"><h3>${titleHtml}</h3>${facts.length ? `<p class="grant-meta">${facts.join(' <span aria-hidden="true">·</span> ')}</p>` : ""}</li>`;
+    });
+    const lead = `<p class="panel-intro">${escapeHtml(countNoun(count, "plastic-related dataset", "plastic-related datasets"))} in DataCite</p>`;
+    return `${lead}<ul class="dataset-list">${rows.join("")}</ul>`;
+  }
+
+  // Co-author institutions. work.institution_ids lists every institution on the work; work.author_institution_ids
+  // lists only this expert's own institutions on it (not aligned with author_ids). Co-author institutions are
+  // therefore the work's institutions minus the expert's own ones. Works that list other author ids but not
+  // selfId are skipped. institutionsById is a Map or plain object from data/institutions.json (inst_id -> record).
+  function coauthorInstitutionSummary(works, selfId, institutionsById) {
+    const lookup = (id) => {
+      if (!institutionsById) return undefined;
+      if (typeof institutionsById.get === "function") return institutionsById.get(id);
+      return Object.hasOwn(institutionsById, id) ? institutionsById[id] : undefined;
+    };
+    const hasRecords = Boolean(institutionsById) && (typeof institutionsById.size === "number"
+      ? institutionsById.size > 0
+      : Object.keys(institutionsById).length > 0);
+    const tally = new Map();
+    (Array.isArray(works) ? works : []).forEach((work) => {
+      if (!work || typeof work !== "object") return;
+      if (selfId && Array.isArray(work.author_ids) && !work.author_ids.includes(selfId)) return;
+      const own = new Set(stringList(work.author_institution_ids));
+      stringList(work.institution_ids)
+        .filter((id) => !own.has(id))
+        .forEach((id) => tally.set(id, (tally.get(id) || 0) + 1));
+    });
+    const rows = [...tally.entries()]
+      .map(([inst_id, shared]) => {
+        const inst = lookup(inst_id);
+        const known = Boolean(inst) && typeof inst === "object";
+        return { inst_id, name: String((known && inst.name) || inst_id).trim(), works: shared, ca: known && inst.ca_flag === true };
+      })
+      .sort((a, b) => b.works - a.works || compareText(a.name, b.name) || compareText(a.inst_id, b.inst_id));
+    const count = rows.length;
+    const caCount = rows.filter((row) => row.ca).length;
+    return {
+      count,
+      caShare: count > 0 && hasRecords ? caCount / count : null,
+      top: rows.slice(0, TOP_INSTITUTIONS).map(({ inst_id, name, works: n, ca }) => ({ inst_id, name, works: n, ca }))
+    };
+  }
+
+  // Summary sentence plus a list. Names link to the institution's SEM page only when they are California
+  // institutions, as elsewhere on the page. Returns "" when there are no co-author institutions.
+  const INST_LINK_ID_RE = /^[A-Za-z0-9_-]{1,60}$/;
+  function coauthorInstitutionsHtml(summary) {
+    if (!summary || summary.count === 0) return "";
+    const pct = summary.caShare === null || summary.caShare === undefined ? null : Math.round(100 * summary.caShare);
+    const lead = `${escapeHtml(`Co-authors came from ${countNoun(summary.count, "institution", "institutions")}`)}${pct === null ? "." : `; ${pct}% in California.`}`;
+    const items = summary.top.map((row) => {
+      const label = escapeHtml(row.name || row.inst_id);
+      const name = row.ca && INST_LINK_ID_RE.test(row.inst_id)
+        ? `<a href="sem.html#inst=${encodeURIComponent(row.inst_id)}">${label}</a>`
+        : label;
+      return `<li>${name} <span class="shared">· ${escapeHtml(countNoun(row.works, "work", "works"))}</span></li>`;
+    });
+    return `<p class="panel-intro">${lead}</p><ul class="coauthor-list">${items.join("")}</ul>`;
+  }
+
+  // Expertise statement from the top two topics and top two matrices (settings) among plastic-related works.
+  // Template only, no generated prose. labelOf(tag) gives the visible label (AtlasTopics.label on the page).
+  // Returns "" when there are fewer than three plastic-related works.
+  function expertiseStatement(works, labelOf) {
+    const label = typeof labelOf === "function" ? labelOf : (tag) => String(tag);
+    const plastic = (Array.isArray(works) ? works : []).filter((w) => w && w.plastic_related === true);
+    const n = plastic.length;
+    if (n < 3) return "";
+    const topicCounts = new Map();
+    const settingCounts = new Map();
+    plastic.forEach((work) => {
+      new Set([...stringList(work.domain_tags), ...stringList(work.facet_tags)]).forEach((tag) => {
+        const bucket = tag.startsWith("matrix:") ? settingCounts : topicCounts;
+        bucket.set(tag, (bucket.get(tag) || 0) + 1);
+      });
+    });
+    const top = (counts) => [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || compareText(a[0], b[0]))
+      .slice(0, TOPIC_SUMMARY_SHOWN);
+    const parts = [];
+    const topics = top(topicCounts);
+    if (topics.length) {
+      const named = topics.map(([tag, count]) => `${label(tag)} (${count} of ${countNoun(n, "work", "works")})`);
+      parts.push(`Top topics in plastic-related work: ${named.join(" and ")}.`);
+    }
+    const settings = top(settingCounts).map(([tag]) => {
+      const text = String(label(tag));
+      return text.charAt(0).toLowerCase() + text.slice(1);
+    });
+    if (settings.length) {
+      parts.push(`${settings.length > 1 ? "Most common settings" : "Most common setting"}: ${settings.join(", ")}.`);
+    }
+    return parts.join(" ");
+  }
+
   const api = {
     escapeHtml,
     safeHttpUrl,
@@ -323,7 +530,15 @@
     authorLineHtml,
     profileHtml,
     citationSeries,
-    citationHistogramSvg
+    citationHistogramSvg,
+    isoDate,
+    fundingStatus,
+    expertBadgesHtml,
+    fundingHtml,
+    datasetsHtml,
+    coauthorInstitutionSummary,
+    coauthorInstitutionsHtml,
+    expertiseStatement
   };
   global.AtlasExpert = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;

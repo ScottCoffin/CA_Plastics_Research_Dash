@@ -94,14 +94,30 @@ Licence: as `index.json`. These files are present for each indexed author.
 
 ### `site/data/network.json`
 
-Purpose: expert collaboration network page (`/app/network`). Top-level keys: `schema_version`,
+Purpose: expert collaboration network page (`/network`; sigma.js renderer since 2026-11-13). Top-level keys: `schema_version`,
 `generated_at`, `method` (edge weight, community and layout methods, networkx version),
 `communities`, `nodes`, `edges`. Node fields: `id` (author_id), `name`, `x`, `y` (seeded layout),
 `community`, `degree`, `strength`, `plastic_works`, `topics` (top tags of the expert's
 plastic-related works), `institution_ids`, `institutions`, `sectors`, `primary_affiliations`,
 `current_in_ca`. Edge fields: `source`, `target`, `weight` (co-authored plastic-related works),
 `years` (weight per year). Licence: as `index.json`. Written by `scripts/build_network.py` from
-`index.json` and `institutions.json`; `--check` fails when stale.
+`index.json` and `institutions.json`; `--check` fails when stale. The daily ingest rebuilds it
+(networkx is a declared dependency since 2026-11-13).
+
+### `site/data/expert_badges.json`
+
+Purpose: funding and data-stewardship badges on the expert profile page (`expert.html`).
+Top-level keys: `schema_version` (`s9.3-v1`), `generated_at`, `method` (plain-language source
+notes), `experts` (author_id -> entry; experts with no badge are absent). Entry fields: `grants`
+(list of `grant_key`, `title`, `funder`, `org`, `start`, `end`, `url`, `amount`, `match`:
+`linked_work` when an OpenAlex award ID on one of the expert's works matches the grant, `pi_name`
+when the principal investigator's name matches the expert, unambiguously, at a California
+organisation) and `datasets` (`count` of plastic-related DataCite datasets the expert authored via
+ORCID, versions collapsed; `items`: up to five with `doi`, `title`, `publisher`, `year`). Only
+plastic-related grants from `grants.json` count; the page decides "active" from `end`. Licence: as
+`grants.json` and `index.json`. Written by `scripts/build_expert_badges.py` (daily ingest) from
+`index.json`, `grants.json`, `data/processed/work_grant_links.parquet` and
+`data/processed/expert_datacite_outputs.parquet`.
 
 ### `site/data/works_detail.json`
 
