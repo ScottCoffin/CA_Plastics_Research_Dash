@@ -39,8 +39,11 @@ rerun in `scratch/ux_vd1_rerun/`.
   (0.296), also present in the connection-reset-prone local preview.
 - VD-1 now reserves the shared async stat surface and the Institution viewport. The targeted
   local rerun measured CLS 0 on Overview, 0.004 on Institution, and 0.047 on About; each is below
-  0.1. Built gzip sizes remained within AT-5 limits. A deployed rerun of these three routes is
-  required after the correction push.
+  0.1. Built gzip sizes remained within AT-5 limits.
+- After correction commit `d171fc91` deployed successfully, the live rerun measured
+  Overview performance 100 / CLS 0, Institution 99 / 0, and About 100 / 0.047. Accessibility,
+  best practices, and SEO were 100 on all three. Live artifacts are in
+  `scratch/ux_vd1_live_fix/`.
 
 ## Review notes
 

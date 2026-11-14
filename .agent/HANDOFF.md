@@ -6,15 +6,15 @@
 - Added the deterministic non-token CSS literal ratchet, eight focused tests, and CI step.
 - Verified 259 CSS literal uses vs 293 baseline, 1,566 tests, 6/6 UX tasks, and all-route axe;
   details and screenshot paths are in `docs/VD_1_VERIFICATION.md`.
-- Reserved async stats and institution surfaces after the first live audit; local CLS is now
-  0/0.004/0.047 on Overview/Institution/About (each under 0.1).
+- Reserved async stats and institution surfaces after the first live audit. The deployed rerun
+  scored Overview 100/CLS 0, Institution 99/0, and About 100/0.047.
 - Owner accepted VD-D1..VD-D8; H24 is closed.
 
 ## State of the repo
 - Build with `cd framework; npm run build`; accept with
   `py -3.14 scripts/check_at5.py --dist dist` and `py -3.14 scripts/check_design_tokens.py`.
-- The first deployed audit passed axe/contrast but found async CLS on Institution and About;
-  the reservation correction is locally verified and needs the post-correction deployed audit.
+- CI and Pages succeeded for both VD-1 commits; the correction stylesheet and live metrics are
+  verified at `https://plastiverse.live/`.
 - `.agent/QUESTIONS.md` had owner edits on entry; preserve any remaining unstaged formatting.
 
 ## Next task (suggested)
