@@ -1,0 +1,761 @@
+<title>Pacific Contour</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Proposed visual refresh for the CA Plastics Research Atlas: tokens, type, components and an Overview mock. Reference for docs/VISUAL_DESIGN_SPEC.md.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: a sea-mist reference sheet; one framed app-shell mock carries the only bold band
+   (the deep-teal hero with California's coastline and seaward contour lines).
+   Single light theme on purpose: the Atlas is light-only by owner decision (UX-26). */
+:root {
+  /* Colour tokens (proposed --atlas-* names for framework/src/design/tokens.css) */
+  --atlas-ink: #17324d;          /* headings: Pacific navy, 13.1:1 on white */
+  --atlas-text: #1d2a33;         /* body text, 14.7:1 on white */
+  --atlas-muted: #4a5d6c;        /* secondary text, 6.3:1 on page */
+  --atlas-boundary: #6f8590;     /* input and control borders, 3.9:1 on white */
+  --atlas-line: #d5e0dd;         /* hairlines and dividers (decorative) */
+  --atlas-page: #f3f6f5;         /* sea-mist page */
+  --atlas-surface: #ffffff;      /* cards and panels */
+  --atlas-sunken: #eaf1ef;       /* table heads, filter panels */
+  --atlas-brand: #075a46;        /* Pacific teal: links, icons, active nav, 8.2:1 */
+  --atlas-brand-strong: #043e32; /* hero band and hover, 12.1:1 */
+  --atlas-brand-action: #0e6e56; /* primary buttons; white text 6.2:1 */
+  --atlas-brand-tint: #d8eee7;   /* selected state */
+  --atlas-brand-wash: #eef7f4;   /* icon tiles, page-head band */
+  --atlas-on-brand: #ffffff;
+  --atlas-on-brand-muted: #b2ddd0; /* 8.1:1 on brand-strong */
+  --atlas-accent: #c45100;       /* sunset: focus ring and "new" marks, 4.6:1 */
+  --atlas-accent-wash: #fff1e6;
+  --atlas-caution-ink: #7a4f00;
+  --atlas-caution-wash: #fff6e0;
+  --atlas-caution-line: #e8c77a;
+  --atlas-dev-line: #8da7af;
+  /* Data colours: topic slots from site/assets/topics.js (validated, fixed order) */
+  --topic-occurrence: #2a78d6; --topic-fate: #eb6834; --topic-soil: #1baf7a; --topic-analytical: #eda100;
+  --topic-ecotox: #e87ba4; --topic-wastewater: #008300; --topic-human: #6250d6; --topic-air: #e34948;
+  --topic-aux: #6f7b82;
+  /* Sequential (heatmap) ramp, one hue light to dark */
+  --seq-100: #e3f2ed; --seq-200: #b9e0d3; --seq-300: #86c7b2; --seq-400: #4fa68c; --seq-500: #23876d; --seq-600: #0e6e56; --seq-700: #043e32;
+  /* Type tokens */
+  --font-display: "Barlow Semi Condensed", "Segoe UI Semibold", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+  /* Shape and depth, assigned by role */
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-pill: 999px;
+  --shadow-raised: 0 1px 2px rgba(16, 42, 36, 0.06), 0 1px 1px rgba(16, 42, 36, 0.04);
+  --shadow-float: 0 2px 6px rgba(16, 42, 36, 0.07), 0 12px 28px rgba(16, 42, 36, 0.10);
+  --focus-ring: 0 0 0 3px var(--atlas-accent);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--atlas-page); }
+body {
+  margin: 0;
+  background: var(--atlas-page);
+  color: var(--atlas-text);
+  font: 16px/1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--atlas-brand); text-underline-offset: 0.15em; }
+a:hover { color: var(--atlas-brand-strong); }
+:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: 4px; }
+h1, h2, h3 { text-wrap: balance; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- Reference-sheet frame ---------- */
+.tile-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 56px;
+}
+.tile-head { display: grid; gap: 10px; }
+.tile-head .kicker {
+  display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
+  font: 600 0.78rem/1 var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; color: var(--atlas-muted);
+}
+.tile-head .kicker svg { width: 26px; height: 28px; }
+.tile-head h1 {
+  margin: 0; font: 700 clamp(2.2rem, 1.6rem + 2.6vw, 3.4rem)/1.02 var(--font-display);
+  color: var(--atlas-ink); letter-spacing: -0.01em;
+}
+.tile-head p { margin: 0; max-width: 64ch; color: var(--atlas-muted); font-size: 1.05rem; }
+.tile-head .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+
+.tile-section { display: grid; gap: 18px; }
+.tile-section > header { display: grid; gap: 4px; max-width: 70ch; }
+.tile-section > header h2 { margin: 0; font: 700 1.65rem/1.15 var(--font-display); color: var(--atlas-ink); }
+.tile-section > header p { margin: 0; color: var(--atlas-muted); }
+.tile-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 18px; align-items: start; }
+.sheet {
+  background: var(--atlas-surface); border: 1px solid var(--atlas-line); border-radius: var(--radius-card);
+  padding: 20px; display: grid; gap: 14px; min-width: 0;
+}
+.sheet > h3 { margin: 0; font: 600 0.8rem/1.2 var(--font-display); letter-spacing: 0.09em; text-transform: uppercase; color: var(--atlas-muted); }
+.sheet-note { margin: 0; font-size: 0.86rem; color: var(--atlas-muted); }
+
+/* ---------- Proposed components (class names map to the spec) ---------- */
+.atlas-pill {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 3px 11px;
+  border-radius: var(--radius-pill); background: var(--atlas-surface); border: 1px solid var(--atlas-line);
+  font-size: 0.82rem; color: var(--atlas-muted); white-space: nowrap;
+}
+.atlas-pill strong { color: var(--atlas-ink); font-weight: 650; }
+.atlas-pill svg { width: 14px; height: 14px; flex: none; }
+.atlas-pill--brand { background: var(--atlas-brand-wash); border-color: var(--atlas-brand-tint); color: var(--atlas-brand-strong); }
+
+.icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* Buttons */
+.atlas-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 40px; padding: 8px 16px; border-radius: var(--radius-control);
+  font: 600 0.92rem/1.2 var(--font-body); cursor: pointer; text-decoration: none;
+  border: 1px solid transparent; transition: background-color 120ms ease, border-color 120ms ease;
+}
+.atlas-btn .icon { width: 18px; height: 18px; }
+.atlas-btn--primary { background: var(--atlas-brand-action); color: var(--atlas-on-brand); }
+.atlas-btn--primary:hover { background: var(--atlas-brand); color: var(--atlas-on-brand); }
+.atlas-btn--secondary { background: var(--atlas-surface); color: var(--atlas-brand-strong); border-color: var(--atlas-boundary); }
+.atlas-btn--secondary:hover { background: var(--atlas-brand-wash); border-color: var(--atlas-brand); }
+.atlas-btn--ghost { background: transparent; color: var(--atlas-brand); padding-inline: 10px; }
+.atlas-btn--ghost:hover { background: var(--atlas-brand-wash); }
+.atlas-btn--icon { width: 40px; padding: 0; background: var(--atlas-surface); border-color: var(--atlas-line); color: var(--atlas-ink); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* Fields */
+.atlas-field { display: grid; gap: 6px; min-width: 0; }
+.atlas-label { font: 600 0.84rem/1.2 var(--font-body); color: var(--atlas-ink); }
+.atlas-hint { font-size: 0.8rem; color: var(--atlas-muted); }
+.atlas-input, .atlas-select {
+  width: 100%; min-height: 40px; padding: 8px 12px; border-radius: var(--radius-control);
+  border: 1px solid var(--atlas-boundary); background: var(--atlas-surface); color: var(--atlas-text);
+  font: 0.94rem/1.3 var(--font-body);
+}
+.atlas-input::placeholder { color: #5f7480; }
+.atlas-select {
+  appearance: none; padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23075a46' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; background-size: 18px;
+}
+.atlas-input:focus-visible, .atlas-select:focus-visible { border-color: var(--atlas-accent); box-shadow: 0 0 0 3px rgba(196, 81, 0, 0.28); border-radius: var(--radius-control); }
+.atlas-search { position: relative; }
+.atlas-search .icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--atlas-muted); width: 18px; height: 18px; }
+.atlas-search .atlas-input { padding-left: 40px; }
+.atlas-check { display: inline-flex; gap: 10px; align-items: flex-start; font-size: 0.92rem; }
+.atlas-check input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--atlas-brand-action); }
+.atlas-check small { display: block; color: var(--atlas-muted); font-size: 0.8rem; }
+
+/* Filter panel */
+.atlas-filters { background: var(--atlas-surface); border: 1px solid var(--atlas-line); border-radius: var(--radius-card); overflow: hidden; }
+.atlas-filters__head {
+  display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between;
+  padding: 12px 16px; background: var(--atlas-sunken); border-bottom: 1px solid var(--atlas-line);
+}
+.atlas-filters__head h4 { margin: 0; display: flex; gap: 8px; align-items: center; font: 700 1.05rem/1 var(--font-display); color: var(--atlas-ink); }
+.atlas-filters__head h4 .count { font: 600 0.78rem/1 var(--font-body); color: var(--atlas-on-brand); background: var(--atlas-brand-action); border-radius: var(--radius-pill); padding: 4px 8px; }
+.atlas-filters__body { display: grid; gap: 14px; padding: 16px; }
+.atlas-filters__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 14px; }
+.atlas-filters__more summary {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer; list-style: none;
+  font-weight: 600; color: var(--atlas-brand); min-height: 32px;
+}
+.atlas-filters__more summary::-webkit-details-marker { display: none; }
+.atlas-filters__more summary .icon { width: 16px; height: 16px; transition: transform 150ms ease; }
+.atlas-filters__more[open] summary .icon { transform: rotate(180deg); }
+.atlas-filters__more .atlas-filters__grid { margin-top: 12px; }
+.atlas-active-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.atlas-filter-chip {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 6px 4px 12px;
+  border-radius: var(--radius-pill); background: var(--atlas-brand-wash); border: 1px solid var(--atlas-brand-tint);
+  color: var(--atlas-brand-strong); font-size: 0.85rem;
+}
+.atlas-filter-chip b { font-weight: 650; }
+.atlas-filter-chip button {
+  display: inline-grid; place-items: center; width: 24px; height: 24px; border: 0; border-radius: 50%;
+  background: transparent; color: var(--atlas-brand-strong); cursor: pointer;
+}
+.atlas-filter-chip button:hover { background: var(--atlas-brand-tint); }
+.atlas-filter-chip .icon { width: 14px; height: 14px; }
+.atlas-result-line { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+.atlas-result-line strong { font: 700 1.25rem/1.2 var(--font-display); color: var(--atlas-ink); }
+.atlas-result-line span { font-size: 0.86rem; color: var(--atlas-muted); }
+
+/* Callouts */
+.atlas-callout { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 12px 14px; border-radius: var(--radius-control); border: 1px solid; font-size: 0.92rem; }
+.atlas-callout .icon { width: 20px; height: 20px; margin-top: 1px; }
+.atlas-callout p { margin: 0; }
+.atlas-callout strong { color: inherit; }
+.atlas-callout--info { background: var(--atlas-brand-wash); border-color: var(--atlas-brand-tint); color: var(--atlas-brand-strong); }
+.atlas-callout--caution { background: var(--atlas-caution-wash); border-color: var(--atlas-caution-line); color: var(--atlas-caution-ink); }
+.atlas-callout--new { background: var(--atlas-accent-wash); border-color: #f2c9a8; color: #6b2a00; }
+.atlas-callout--dev { background: var(--atlas-surface); border-style: dashed; border-color: var(--atlas-dev-line); color: var(--atlas-muted); }
+
+/* Badges and chips */
+.atlas-badge {
+  display: inline-flex; align-items: center; gap: 5px; min-height: 24px; padding: 2px 9px; border-radius: 6px;
+  font: 600 0.78rem/1.2 var(--font-body); border: 1px solid var(--atlas-line); background: var(--atlas-sunken); color: var(--atlas-ink);
+}
+.atlas-badge .icon { width: 13px; height: 13px; stroke-width: 2.4; }
+.atlas-badge--good { background: #e7f6e7; border-color: #a8d8a8; color: #0b4f0b; }
+.atlas-badge--accent { background: var(--atlas-accent-wash); border-color: #f2c9a8; color: #7a3300; }
+.atlas-badge--muted { background: var(--atlas-surface); color: var(--atlas-muted); }
+.topic-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: var(--radius-pill);
+  font-size: 0.8rem; line-height: 1.3; font-weight: 600; color: #1d2a33; white-space: nowrap;
+  background: color-mix(in srgb, var(--topic) 14%, #fff); border: 1px solid color-mix(in srgb, var(--topic) 45%, #fff);
+}
+.topic-chip .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--topic); flex: none; }
+.topic-chip .n { font-weight: 700; color: #4a5860; }
+.topic-chip.hatch { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--topic) 22%, #fff) 0 3px, #fff 3px 6px); }
+.topic-chip.hatch .dot { border-radius: 1px; transform: rotate(45deg); width: 8px; height: 8px; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Stat tiles */
+.atlas-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.atlas-kpi {
+  background: var(--atlas-surface); border: 1px solid var(--atlas-line); border-radius: var(--radius-card);
+  padding: 14px 16px; display: grid; gap: 4px; align-content: start; min-height: 128px; box-shadow: var(--shadow-raised);
+}
+.atlas-kpi__label { display: flex; gap: 7px; align-items: center; font: 600 0.76rem/1.2 var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--atlas-muted); }
+.atlas-kpi__label .icon { width: 16px; height: 16px; color: var(--atlas-brand); }
+.atlas-kpi__value { font: 650 2rem/1.1 var(--font-body); color: var(--atlas-ink); letter-spacing: -0.01em; }
+.atlas-kpi__note { font-size: 0.8rem; line-height: 1.4; color: var(--atlas-muted); }
+.atlas-kpi--loading .atlas-kpi__value, .atlas-kpi--loading .atlas-kpi__note { color: transparent; border-radius: 6px; background: linear-gradient(90deg, var(--atlas-sunken), #f6faf8, var(--atlas-sunken)); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+.atlas-kpi--loading .atlas-kpi__value { width: 60%; }
+@keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
+/* Tables */
+.atlas-table-wrap { overflow-x: auto; border: 1px solid var(--atlas-line); border-radius: var(--radius-card); background: var(--atlas-surface); }
+.atlas-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.atlas-table th { position: sticky; top: 0; background: var(--atlas-sunken); text-align: left; font: 600 0.78rem/1.2 var(--font-body); color: var(--atlas-muted); letter-spacing: 0.02em; padding: 10px 14px; border-bottom: 1px solid var(--atlas-line); white-space: nowrap; }
+.atlas-table td { padding: 9px 14px; border-bottom: 1px solid var(--atlas-line); vertical-align: middle; }
+.atlas-table tr:last-child td { border-bottom: 0; }
+.atlas-table tbody tr:hover td { background: #f7fbf9; }
+.atlas-table .r { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Chart card */
+.atlas-chart { margin: 0; display: grid; gap: 12px; }
+.atlas-chart__head { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: start; }
+.atlas-chart__head h4 { margin: 0; font: 700 1.1rem/1.2 var(--font-display); color: var(--atlas-ink); }
+.atlas-chart__head p { margin: 2px 0 0; font-size: 0.82rem; color: var(--atlas-muted); }
+.atlas-segmented { display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--radius-control); background: var(--atlas-sunken); border: 1px solid var(--atlas-line); }
+.atlas-segmented button { min-height: 32px; padding: 4px 12px; border: 0; border-radius: 6px; background: transparent; font: 600 0.82rem/1 var(--font-body); color: var(--atlas-muted); cursor: pointer; }
+.atlas-segmented button[aria-pressed="true"] { background: var(--atlas-surface); color: var(--atlas-ink); box-shadow: var(--shadow-raised); }
+.bars { display: grid; gap: 7px; }
+.bar-row { display: grid; grid-template-columns: minmax(118px, 13.5rem) 1fr 3.2rem; gap: 10px; align-items: center; font-size: 0.84rem; }
+.bar-row .lab { color: var(--atlas-text); overflow-wrap: anywhere; line-height: 1.25; }
+.bar-row .track { position: relative; height: 14px; border-left: 1px solid #c3c2b7; }
+.bar-row .fill { position: absolute; inset: 0 auto 0 0; border-radius: 0 4px 4px 0; background: var(--topic); }
+.bar-row .fill.hatch { background: repeating-linear-gradient(45deg, var(--topic) 0 3px, #fff 3px 5px); box-shadow: inset 0 0 0 1px var(--topic); }
+.bar-row .val { text-align: right; font-variant-numeric: tabular-nums; color: var(--atlas-ink); font-weight: 600; }
+.atlas-chart figcaption { font-size: 0.8rem; color: var(--atlas-muted); }
+
+/* Page header */
+.atlas-page-head {
+  position: relative; overflow: hidden; display: grid; gap: 8px; padding: 22px 24px; border-radius: var(--radius-card);
+  background: var(--atlas-brand-wash); border: 1px solid var(--atlas-brand-tint);
+}
+.atlas-page-head__eyebrow { display: flex; gap: 8px; align-items: center; font: 600 0.78rem/1 var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; color: var(--atlas-brand); }
+.atlas-page-head__eyebrow .icon { width: 16px; height: 16px; }
+.atlas-page-head h1 { margin: 0; font: 700 clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem)/1.05 var(--font-display); color: var(--atlas-ink); }
+.atlas-page-head__lead { margin: 0; max-width: 62ch; color: var(--atlas-text); }
+.atlas-page-head__meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.atlas-page-head .motif { position: absolute; right: -40px; top: -60px; width: 260px; opacity: 0.55; pointer-events: none; }
+.atlas-page-head .motif .land { fill: rgba(7, 90, 70, 0.06); stroke: rgba(7, 90, 70, 0.28); stroke-width: 2; }
+.atlas-page-head .motif .c { stroke: rgba(7, 90, 70, 0.22); stroke-width: 1.6; }
+.atlas-page-head > :not(.motif) { position: relative; }
+
+/* ---------- App-shell mock (Overview) ---------- */
+.mock {
+  border: 1px solid var(--atlas-line); border-radius: 14px; overflow: hidden; background: var(--atlas-page);
+  box-shadow: var(--shadow-float);
+}
+.mock__chrome { display: flex; gap: 6px; align-items: center; padding: 9px 14px; background: #e3eae8; border-bottom: 1px solid var(--atlas-line); font-size: 0.75rem; color: var(--atlas-muted); }
+.mock__chrome i { width: 10px; height: 10px; border-radius: 50%; background: #c3cfcc; display: block; }
+.mock__chrome span { margin-left: 10px; font-family: var(--font-mono); }
+.shell { display: grid; grid-template-columns: 236px minmax(0, 1fr); min-height: 640px; }
+.side { background: var(--atlas-surface); border-right: 1px solid var(--atlas-line); padding: 16px 12px; display: grid; align-content: start; gap: 14px; }
+.brand { display: flex; gap: 10px; align-items: center; padding: 2px 8px 12px; border-bottom: 1px solid var(--atlas-line); text-decoration: none; }
+.brand svg { width: 30px; height: 33px; flex: none; }
+.mark-land { fill: var(--atlas-brand); }
+.mark-line { fill: none; stroke: var(--atlas-accent); stroke-width: 14; }
+.brand b { display: block; font: 700 1.02rem/1.05 var(--font-display); color: var(--atlas-ink); }
+.brand small { display: block; font: 600 0.72rem/1.2 var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--atlas-muted); }
+.nav-group { display: grid; gap: 2px; }
+.nav-group > span { padding: 4px 10px; font: 600 0.7rem/1.2 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--atlas-muted); }
+.nav-link { display: flex; gap: 10px; align-items: center; min-height: 36px; padding: 6px 10px; border-radius: var(--radius-control); color: var(--atlas-text); text-decoration: none; font-size: 0.9rem; }
+.nav-link .icon { width: 18px; height: 18px; color: var(--atlas-muted); }
+.nav-link:hover { background: var(--atlas-brand-wash); color: var(--atlas-brand-strong); }
+.nav-link[aria-current="page"] { background: var(--atlas-brand-tint); color: var(--atlas-brand-strong); font-weight: 650; box-shadow: inset 3px 0 0 var(--atlas-brand); }
+.nav-link[aria-current="page"] .icon { color: var(--atlas-brand); }
+.main { display: grid; align-content: start; min-width: 0; }
+.topbar {
+  display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 10px 22px;
+  background: rgba(255, 255, 255, 0.85); border-bottom: 1px solid var(--atlas-line);
+}
+.topbar .crumb { font-size: 0.84rem; color: var(--atlas-muted); }
+.topbar .crumb b { color: var(--atlas-ink); font-weight: 650; }
+.topbar .right { display: flex; gap: 10px; align-items: center; }
+.topbar .atlas-search { width: min(300px, 40vw); }
+.topbar .atlas-input { min-height: 36px; font-size: 0.86rem; background: var(--atlas-page); }
+.topbar .burger { display: none; }
+
+.atlas-hero {
+  position: relative; overflow: hidden; color: var(--atlas-on-brand);
+  background: var(--atlas-brand-strong);
+  padding: 34px 32px 76px;
+}
+.atlas-hero__motif { position: absolute; right: -60px; top: -150px; width: 560px; pointer-events: none; }
+.atlas-hero__motif .land { fill: rgba(255, 255, 255, 0.07); stroke: rgba(216, 238, 231, 0.55); stroke-width: 1.4; }
+.atlas-hero__motif .c { stroke: rgba(216, 238, 231, 0.2); stroke-width: 1.2; }
+.atlas-hero__motif .c0, .atlas-hero__motif .c1 { stroke: rgba(216, 238, 231, 0.42); }
+.atlas-hero__motif .c2, .atlas-hero__motif .c3 { stroke: rgba(216, 238, 231, 0.32); }
+.atlas-hero > :not(.atlas-hero__motif) { position: relative; max-width: 560px; }
+.atlas-hero__eyebrow { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font: 600 0.78rem/1.2 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--atlas-on-brand-muted); }
+.atlas-hero__eyebrow i { width: 4px; height: 4px; border-radius: 50%; background: var(--atlas-accent); display: block; }
+.atlas-hero__title { margin: 10px 0 8px; font: 700 clamp(2rem, 1.3rem + 2.2vw, 2.9rem)/1.02 var(--font-display); letter-spacing: -0.005em; }
+.atlas-hero__lead { margin: 0 0 18px; font-size: 1.05rem; color: #e6f3ef; max-width: 46ch; }
+.atlas-hero__search { display: flex; gap: 8px; flex-wrap: wrap; }
+.atlas-hero__search .atlas-search { flex: 1 1 260px; }
+.atlas-hero__search .atlas-input { min-height: 46px; border-color: transparent; box-shadow: var(--shadow-float); font-size: 1rem; }
+.atlas-hero__search .atlas-btn { min-height: 46px; background: var(--atlas-accent); color: #fff; }
+.atlas-hero__search .atlas-btn:hover { background: #a94400; }
+.atlas-hero__fresh { margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.82rem; color: var(--atlas-on-brand-muted); }
+.atlas-hero__fresh time { color: #fff; font-weight: 600; }
+.overview-body { display: grid; gap: 26px; padding: 0 22px 26px; }
+.overview-body .atlas-kpis { margin-top: -50px; position: relative; }
+.ov-h2 { margin: 0 0 10px; font: 700 1.3rem/1.2 var(--font-display); color: var(--atlas-ink); }
+.atlas-tasks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.atlas-task {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; min-height: 64px;
+  background: var(--atlas-surface); border: 1px solid var(--atlas-line); border-radius: var(--radius-card); text-decoration: none; color: var(--atlas-ink); font-weight: 650; font-size: 0.94rem; line-height: 1.3;
+  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+.atlas-task .tile-icon { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--atlas-brand-action); color: #fff; }
+.atlas-task .arrow { color: var(--atlas-brand); }
+.atlas-task:hover { border-color: var(--atlas-brand); box-shadow: var(--shadow-float); transform: translateY(-1px); color: var(--atlas-ink); }
+.atlas-entry-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.atlas-entry {
+  display: grid; gap: 8px; align-content: start; padding: 16px; min-height: 172px; background: var(--atlas-surface);
+  border: 1px solid var(--atlas-line); border-radius: var(--radius-card); text-decoration: none; color: var(--atlas-text);
+  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+.atlas-entry:hover { border-color: var(--atlas-brand); box-shadow: var(--shadow-float); transform: translateY(-2px); color: var(--atlas-text); }
+.atlas-entry__icon { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: var(--atlas-brand-wash); color: var(--atlas-brand); border: 1px solid var(--atlas-brand-tint); }
+.atlas-entry__title { margin: 4px 0 0; font: 700 1.12rem/1.15 var(--font-display); color: var(--atlas-ink); }
+.atlas-entry__text { margin: 0; font-size: 0.85rem; line-height: 1.45; color: var(--atlas-muted); }
+.atlas-entry__meta { margin-top: auto; font-size: 0.78rem; font-weight: 650; color: var(--atlas-brand); font-variant-numeric: tabular-nums; }
+.mock-foot { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 14px 22px; border-top: 1px solid var(--atlas-line); background: var(--atlas-surface); font-size: 0.8rem; color: var(--atlas-muted); }
+.mock-foot a { color: var(--atlas-brand); }
+
+/* Palette sheet */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.sw { border: 1px solid var(--atlas-line); border-radius: 10px; overflow: hidden; background: var(--atlas-surface); font-size: 0.78rem; }
+.sw .chip { height: 54px; background: var(--c); display: flex; align-items: flex-end; padding: 6px 8px; font: 600 0.74rem/1 var(--font-mono); }
+.sw .meta { padding: 7px 9px; display: grid; gap: 1px; }
+.sw code { font-family: var(--font-mono); font-size: 0.74rem; color: var(--atlas-ink); }
+.sw span { color: var(--atlas-muted); line-height: 1.35; }
+.ramp { display: grid; grid-template-columns: repeat(7, 1fr); border-radius: 10px; overflow: hidden; border: 1px solid var(--atlas-line); }
+.ramp div { height: 40px; background: var(--c); display: flex; align-items: flex-end; padding: 4px 6px; font: 600 0.66rem/1 var(--font-mono); }
+
+/* Type sheet */
+.type-specimen { display: grid; gap: 12px; }
+.type-row { display: grid; grid-template-columns: 8.5rem 1fr; gap: 14px; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--atlas-line); }
+.type-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.type-row .spec { font: 0.74rem/1.4 var(--font-mono); color: var(--atlas-muted); }
+.type-row .sample { min-width: 0; overflow-wrap: anywhere; color: var(--atlas-ink); }
+
+/* Before/after table */
+.ba td:first-child { font-weight: 600; color: var(--atlas-ink); }
+.ba .before { color: var(--atlas-muted); }
+
+@media (max-width: 1040px) {
+  .atlas-entry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .atlas-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .atlas-tasks { grid-template-columns: 1fr; }
+}
+@media (max-width: 820px) {
+  .shell { grid-template-columns: 1fr; }
+  .side { display: none; }
+  .topbar .burger { display: inline-flex; }
+  .topbar .crumb { display: none; }
+  .topbar .atlas-search { width: auto; flex: 1; }
+  .atlas-hero { padding: 26px 20px 70px; }
+  .atlas-hero__motif { width: 420px; right: -170px; top: -90px; opacity: 0.8; }
+  .overview-body { padding: 0 14px 20px; }
+  .type-row { grid-template-columns: 1fr; gap: 4px; }
+}
+@media (max-width: 520px) {
+  .atlas-entry-grid { grid-template-columns: 1fr; }
+  .atlas-entry { min-height: 0; }
+  .atlas-kpi { min-height: 0; padding: 12px; }
+  .atlas-kpi__value { font-size: 1.6rem; }
+  .bar-row { grid-template-columns: minmax(96px, 8.5rem) 1fr 2.8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h5v-6h3v6h5V10"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c.6-3.9 3.6-6 7.5-6s6.9 2.1 7.5 6"/></symbol>
+    <symbol id="i-network" viewBox="0 0 24 24"><circle cx="5.5" cy="6.5" r="2.4"/><circle cx="18.5" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.6"/><path d="M7.7 7.4 10.6 15.7M16.6 7.5 13.3 15.8M8 6.4h8"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><path d="M3 20.5h18M4.5 9.5 12 4l7.5 5.5M6 10v10.5M10 10v10.5M14 10v10.5M18 10v10.5"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.5s-5.5 6.4-5.5 10.3a5.5 5.5 0 0 0 11 0C17.5 9.9 12 3.5 12 3.5Z"/><path d="M9.5 14.5c.3 1.3 1.3 2.2 2.6 2.4"/></symbol>
+    <symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="12" cy="6.5" rx="6.5" ry="2.8"/><path d="M5.5 6.5v5c0 1.6 2.9 2.8 6.5 2.8s6.5-1.2 6.5-2.8v-5M5.5 11.5v5c0 1.6 2.9 2.8 6.5 2.8s6.5-1.2 6.5-2.8v-5"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.4"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16.5M7 20.5h10M5 7.5h14M12 4l-1.2 3.5M7.5 7.5 4.5 14a3 3 0 0 0 6 0Zm9 0-3 6.5a3 3 0 0 0 6 0Z"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4.2 4.2 0 0 0 6 0l3-3a4.2 4.2 0 0 0-6-6l-1 1"/><path d="M14 10a4.2 4.2 0 0 0-6 0l-3 3a4.2 4.2 0 0 0 6 6l1-1"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v15H7.5A2.5 2.5 0 0 0 5 20.5Z"/><path d="M5 20.5A2.5 2.5 0 0 1 7.5 18H19v3H7.5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5.5h16l-6.2 7.3v5.4l-3.6 1.8v-7.2Z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.8 19.5h18.4Z"/><path d="M12 10v4.5M12 17v.2"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4M6 6l2.6 2.6M15.4 15.4 18 18M18 6l-2.6 2.6M8.6 15.4 6 18"/></symbol>
+    <symbol id="i-tools" viewBox="0 0 24 24"><path d="M4 20h16M6 20v-4l9-9 4 4-9 9"/><path d="m13 9 2 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  </defs>
+</svg>
+
+<div class="tile-wrap">
+  <header class="tile-head">
+    <div class="kicker"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-443 -557 970 1055" aria-hidden="true" focusable="false"><path class="mark-land" d="M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L-0,-221L-0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-263,-110L-265,-112L-261,-114L-262,-117L-260,-118L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-155,-114L-149,-121L-143,-122L-132,-116L-129,-111L-143,-122L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L152,365L153,359L155,358L158,357L161,361L167,360L221,405L256,494L469,474Z"/><path class="mark-line" fill="none" d="M-398,-412L-413,-376L-364,-305L-351,-202L-289,-136L-286,-96L-242,-76L-245,-51L-229,-6L-187,27L-198,43L-185,92L-101,182L-98,205L-79,220L-76,279L-48,303L30,308L63,337L115,349L125,375L162,384L203,418L232,494M-397,-553L-401,-525L-384,-488L-398,-412"/><path class="mark-line" fill="none" d="M-423,-420L-439,-370L-389,-295L-374,-191L-315,-130L-305,-79L-271,-62L-253,3L-222,35L-204,110L-126,193L-105,235L-100,290L-57,328L20,333L45,356L95,372L123,405L155,412L181,434L204,494M-423,-553L-427,-522L-411,-484L-423,-420"/></svg> CA Plastics Research Atlas · proposed visual refresh · 14 Nov 2026</div>
+    <h1>Pacific Contour</h1>
+    <p>One visual system for every Atlas page: Pacific teal and navy on a sea-mist page, a heading face drawn from California road signs, and the state's own coastline as the only ornament. Everything below uses real Atlas figures from the 13 Nov 2026 refresh.</p>
+    <div class="meta">
+      <span class="atlas-pill atlas-pill--brand"><svg class="icon"><use href="#i-book"/></svg>Spec: <strong>docs/VISUAL_DESIGN_SPEC.md</strong></span>
+      <span class="atlas-pill"><svg class="icon"><use href="#i-check"/></svg>Light theme only (owner, 12 Nov 2026)</span>
+      <span class="atlas-pill"><svg class="icon"><use href="#i-alert"/></svg>Needs owner sign-off before VD-2</span>
+    </div>
+  </header>
+
+  <section class="tile-section" aria-labelledby="s-overview">
+    <header>
+      <h2 id="s-overview">The Overview, as proposed</h2>
+      <p>The hero band is the one bold element on the site. Every other page uses the calmer page header shown further down.</p>
+    </header>
+
+    <div class="mock" role="img" aria-label="Mock-up of the proposed Overview page inside the app shell">
+      <div class="mock__chrome"><i></i><i></i><i></i><span>plastiverse.live</span></div>
+      <div class="shell">
+        <nav class="side" aria-label="Mock sidebar">
+          <a class="brand" href="#s-overview"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-443 -557 970 1055" aria-hidden="true" focusable="false"><path class="mark-land" d="M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L-0,-221L-0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-263,-110L-265,-112L-261,-114L-262,-117L-260,-118L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-155,-114L-149,-121L-143,-122L-132,-116L-129,-111L-143,-122L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L152,365L153,359L155,358L158,357L161,361L167,360L221,405L256,494L469,474Z"/><path class="mark-line" fill="none" d="M-398,-412L-413,-376L-364,-305L-351,-202L-289,-136L-286,-96L-242,-76L-245,-51L-229,-6L-187,27L-198,43L-185,92L-101,182L-98,205L-79,220L-76,279L-48,303L30,308L63,337L115,349L125,375L162,384L203,418L232,494M-397,-553L-401,-525L-384,-488L-398,-412"/><path class="mark-line" fill="none" d="M-423,-420L-439,-370L-389,-295L-374,-191L-315,-130L-305,-79L-271,-62L-253,3L-222,35L-204,110L-126,193L-105,235L-100,290L-57,328L20,333L45,356L95,372L123,405L155,412L181,434L204,494M-423,-553L-427,-522L-411,-484L-423,-420"/></svg><span><b>CA Plastics</b><small>Research Atlas</small></span></a>
+          <div class="nav-group">
+            <a class="nav-link" aria-current="page" href="#s-overview"><svg class="icon"><use href="#i-home"/></svg>Overview</a>
+          </div>
+          <div class="nav-group"><span>Explore</span>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-person"/></svg>Experts</a>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-network"/></svg>Collaboration network</a>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-building"/></svg>Institutions</a>
+          </div>
+          <div class="nav-group"><span>Data</span>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-drop"/></svg>Monitoring</a>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-coins"/></svg>Funding</a>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-grid"/></svg>Evidence map</a>
+          </div>
+          <div class="nav-group"><span>Context</span>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-scale"/></svg>Policy</a>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-link"/></svg>Related resources</a>
+          </div>
+          <div class="nav-group"><span>Reference</span>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-info"/></svg>About</a>
+            <a class="nav-link" href="#s-overview"><svg class="icon"><use href="#i-book"/></svg>Glossary</a>
+          </div>
+        </nav>
+        <div class="main">
+          <div class="topbar">
+            <button class="atlas-btn atlas-btn--icon burger" type="button" aria-label="Open navigation (mock)"><svg class="icon"><use href="#i-menu"/></svg></button>
+            <span class="crumb"><b>Overview</b></span>
+            <div class="right">
+              <label class="atlas-search"><span class="sr-only">Search experts (mock)</span><svg class="icon"><use href="#i-search"/></svg><input id="mock-top-search" class="atlas-input" type="search" placeholder="Search experts"></label>
+            </div>
+          </div>
+          <section class="atlas-hero" aria-label="Mock hero">
+            <div class="atlas-hero__motif"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-612 -559 1141 1059" fill="none" aria-hidden="true" focusable="false"><path class="land" d="M469.0,474.0L472.7,470.1L482.0,472.1L485.8,471.2L487.0,463.6L492.5,458.3L491.7,445.3L488.8,440.1L474.1,436.3L471.5,432.4L473.6,419.6L472.7,413.2L469.1,406.8L471.4,401.5L468.8,396.8L477.8,393.9L486.1,379.4L487.4,366.6L490.0,362.1L487.6,346.2L489.9,343.8L487.3,339.5L487.6,335.7L495.3,328.5L499.5,318.0L513.5,309.8L522.8,299.3L522.3,295.5L500.6,279.6L500.8,273.1L496.1,265.8L496.0,261.6L489.5,248.4L485.2,246.8L482.9,238.5L478.6,234.5L477.6,220.7L297.0,45.5L166.6,-76.4L-0.0,-221.1L-0.1,-552.8L-374.7,-552.8L-375.1,-536.3L-379.0,-528.1L-373.5,-524.0L-369.8,-523.7L-364.8,-504.9L-361.7,-501.9L-362.9,-499.9L-361.1,-490.5L-366.7,-462.4L-370.2,-456.9L-368.7,-448.9L-365.5,-446.9L-365.4,-444.0L-371.3,-425.4L-376.3,-416.5L-375.5,-415.4L-369.4,-427.0L-362.9,-425.0L-366.5,-421.0L-371.9,-420.2L-375.7,-407.6L-378.7,-408.9L-376.9,-415.6L-392.0,-380.8L-386.6,-367.0L-387.9,-360.6L-372.1,-346.0L-365.9,-343.6L-362.4,-334.7L-358.6,-333.1L-347.4,-316.9L-342.6,-313.3L-340.5,-301.5L-337.0,-296.0L-335.1,-283.5L-339.3,-270.2L-340.1,-259.5L-328.0,-224.2L-332.7,-216.2L-331.3,-212.1L-305.3,-186.5L-296.7,-173.3L-278.2,-160.3L-273.0,-150.4L-272.3,-143.3L-269.3,-145.1L-266.9,-143.2L-251.8,-121.2L-251.2,-118.5L-266.4,-137.4L-262.2,-126.5L-269.2,-110.0L-263.4,-109.7L-264.9,-112.2L-261.0,-114.0L-262.1,-117.3L-259.6,-117.8L-259.7,-114.4L-250.8,-110.3L-242.5,-99.8L-235.2,-99.4L-224.8,-90.3L-219.6,-92.0L-222.2,-98.8L-218.6,-95.4L-216.8,-97.5L-222.6,-102.3L-222.6,-104.0L-220.5,-104.1L-221.6,-107.2L-217.4,-108.9L-222.8,-112.5L-220.7,-119.1L-222.5,-123.1L-216.4,-124.2L-213.1,-127.5L-204.5,-122.5L-201.0,-118.2L-194.2,-117.7L-189.4,-115.2L-182.7,-125.4L-177.8,-125.8L-176.6,-122.8L-179.1,-121.5L-175.3,-118.9L-169.7,-119.3L-171.5,-117.0L-168.8,-116.5L-164.1,-118.6L-160.3,-117.5L-155.3,-120.3L-149.6,-126.8L-152.6,-120.8L-158.2,-117.4L-158.1,-114.6L-154.9,-113.8L-151.1,-116.2L-149.4,-120.8L-142.6,-122.3L-132.2,-115.5L-128.5,-111.0L-139.5,-117.9L-140.8,-113.7L-143.4,-112.9L-145.1,-115.5L-144.1,-117.4L-140.2,-118.8L-142.8,-121.6L-148.6,-119.8L-149.5,-115.9L-153.0,-114.1L-150.3,-111.6L-178.2,-116.8L-191.0,-113.2L-198.0,-117.0L-204.4,-111.8L-210.4,-111.9L-209.8,-109.2L-213.2,-105.7L-216.0,-106.6L-212.6,-100.4L-207.0,-100.4L-205.7,-97.9L-204.1,-91.9L-208.1,-89.2L-206.7,-88.9L-207.3,-86.5L-197.1,-83.9L-196.7,-82.2L-201.1,-82.2L-200.2,-79.9L-194.9,-77.4L-187.5,-57.3L-183.4,-55.5L-180.7,-51.2L-183.0,-49.5L-186.7,-50.3L-189.7,-55.0L-196.2,-57.2L-195.5,-59.2L-199.1,-60.5L-200.1,-62.8L-211.1,-66.8L-209.3,-67.8L-211.9,-69.8L-212.7,-78.5L-209.3,-80.7L-214.1,-89.6L-220.2,-89.6L-223.6,-86.4L-221.8,-73.6L-222.5,-66.5L-224.3,-65.6L-224.1,-58.8L-222.2,-54.5L-220.4,-55.6L-217.7,-52.7L-213.4,-39.8L-215.0,-27.9L-213.8,-21.5L-210.6,-19.2L-208.0,-13.1L-204.3,-12.3L-197.6,-2.7L-189.8,3.8L-182.0,5.7L-179.7,4.1L-175.5,5.0L-172.2,2.4L-169.4,3.4L-160.4,18.1L-159.1,21.4L-160.3,27.6L-156.8,30.7L-160.5,29.0L-162.4,38.0L-166.3,43.4L-167.8,44.0L-172.3,39.9L-176.1,46.0L-171.8,49.2L-171.4,52.6L-174.0,53.3L-169.3,68.1L-168.9,76.9L-164.7,79.7L-162.2,84.1L-149.2,92.6L-139.3,108.3L-133.9,110.2L-130.1,123.1L-118.9,134.2L-114.5,147.6L-104.0,150.7L-89.4,170.2L-78.9,173.3L-77.1,180.1L-73.9,184.0L-76.1,185.6L-76.7,181.1L-79.6,190.9L-77.9,196.4L-68.1,203.4L-66.6,201.5L-62.8,201.9L-57.3,205.7L-56.3,217.3L-59.8,231.4L-54.7,236.8L-56.9,247.8L-53.6,253.8L-57.6,267.0L-56.6,269.5L-45.3,274.1L-40.4,282.7L-11.9,279.4L-0.9,280.7L10.8,286.8L18.9,285.6L26.0,288.0L28.6,285.9L38.8,285.8L63.9,302.0L69.6,315.6L77.5,320.6L102.0,328.0L106.1,331.8L111.3,328.2L118.5,327.4L129.4,327.4L132.1,329.3L138.3,337.3L143.0,349.9L139.8,356.7L141.2,360.3L151.9,364.5L153.6,363.2L153.2,358.6L155.2,357.6L158.1,357.0L160.7,361.4L159.4,357.8L167.4,360.1L179.7,372.0L193.4,380.2L221.5,405.2L238.1,430.3L244.2,455.0L241.5,460.2L243.8,466.1L244.0,476.4L245.7,478.8L245.6,474.7L251.2,472.5L254.9,476.6L257.6,484.2L256.5,486.5L251.8,475.6L248.4,474.0L246.6,475.8L253.4,481.4L255.6,494.1L469.0,474.0ZM155.1,358.5L153.9,361.7L155.7,359.4L154.6,362.1L156.0,363.2L156.1,359.3L157.9,358.7L155.1,358.5ZM126.9,393.9L134.6,396.3L134.3,402.6L136.6,406.5L144.5,407.0L148.8,409.3L150.8,408.1L145.0,397.1L133.5,393.3L130.2,389.5L124.1,389.6L126.9,393.9ZM146.6,462.3L133.0,448.8L127.6,439.7L123.8,438.9L133.4,458.8L139.7,464.1L143.7,461.7L146.6,462.3ZM49.5,415.5L41.6,410.6L37.4,411.8L40.5,416.7L49.9,418.0L49.5,415.5ZM41.8,328.9L38.7,325.6L32.6,330.2L21.4,325.5L7.4,323.0L6.0,325.1L10.9,328.1L11.2,333.9L16.3,336.2L24.9,336.2L30.4,333.3L39.2,332.3L41.8,328.9ZM-3.9,327.6L-8.6,329.7L-12.9,329.0L-15.2,330.9L-22.1,331.6L-15.6,340.3L-9.8,343.5L2.8,338.2L1.7,333.5L-0.7,334.0L-4.2,331.3L-3.9,327.6ZM-31.7,326.5L-32.8,323.3L-39.9,327.7L-27.4,329.7L-28.3,327.3L-31.7,326.5Z"/><path class="c c0" data-km="5" d="M-388.3,-354.0L-375.4,-342.3L-369.0,-339.4L-366.6,-332.0L-361.9,-329.1L-346.9,-309.9L-340.1,-282.5L-344.1,-271.7L-345.0,-258.8L-333.1,-224.6L-337.5,-217.6L-335.8,-210.0L-310.0,-184.2L-300.0,-169.6L-282.5,-157.5L-277.9,-149.1L-276.9,-141.4L-271.3,-138.4L-267.3,-127.4L-274.0,-111.3L-273.0,-106.8L-263.5,-104.6L-258.5,-108.6L-254.2,-106.4L-245.5,-95.9L-237.4,-94.4L-228.6,-87.0L-226.8,-73.2L-229.2,-66.2L-228.8,-57.2L-225.7,-51.0L-222.5,-49.5L-218.6,-38.0L-220.0,-27.5L-218.5,-19.9L-211.9,-10.1L-206.7,-7.5L-201.3,0.6L-191.8,8.4L-181.7,10.7L-171.6,8.5L-169.6,10.8L-164.3,21.9L-166.2,33.8L-167.4,36.9L-175.2,35.8L-181.1,45.5L-173.4,79.1L-165.4,88.0L-152.8,96.0L-142.9,111.8L-137.4,114.1L-134.7,125.0L-122.9,137.3L-118.1,151.1L-106.3,156.2L-92.5,174.1L-82.8,176.7L-81.8,181.7L-84.8,194.2L-81.4,200.0L-69.9,208.1L-61.7,209.0L-64.8,231.9L-59.9,238.7L-61.9,248.3L-58.8,255.5L-62.6,267.2L-60.5,272.6L-49.2,277.5L-45.7,285.3L-40.9,287.7L-12.8,284.5L-1.9,286.1L10.3,291.7L17.9,290.6L26.5,293.0L34.7,290.3L60.5,306.4L65.6,318.6L75.1,325.0L100.1,332.8L105.5,336.7L113.0,333.2L129.0,333.2L137.9,350.6L134.8,356.4L138.2,364.3L152.1,369.5L165.1,364.5L217.8,408.7L233.4,432.2L239.1,455.0L236.5,460.5L239.1,477.2L242.8,482.9L248.5,482.9L250.6,494.2M-379.7,-552.8L-380.0,-537.4L-383.8,-526.9L-373.4,-519.0L-366.2,-490.4L-371.4,-464.0L-375.2,-457.6L-373.5,-447.6L-370.7,-443.6L-372.3,-436.7L-396.9,-381.9L-391.8,-366.3L-392.6,-358.9L-388.3,-354.0M-212.9,-94.4L-210.8,-94.0L-212.9,-94.4M-214.9,-114.0L-216.8,-115.2L-215.7,-119.3L-211.9,-121.0L-206.8,-117.0L-211.6,-116.8L-214.9,-114.0M-204.9,-78.3L-197.5,-72.4L-196.2,-65.9L-204.8,-70.1L-206.6,-75.4L-204.9,-78.3M122.2,395.6L129.7,400.0L130.3,406.3L134.7,411.1L149.4,414.2L155.3,410.2L155.0,403.2L148.5,393.5L132.4,385.0L120.8,385.8L119.2,390.5L122.2,395.6M121.4,445.1L129.3,461.6L137.2,468.4L150.7,465.1L150.0,458.5L138.0,446.9L129.0,434.3L124.5,433.4L120.0,435.7L118.8,441.4L121.4,445.1M32.9,413.8L37.2,420.4L43.4,423.0L51.7,422.6L55.2,418.4L52.9,411.9L42.7,405.7L34.3,407.6L32.9,413.8M-41.4,323.0L-44.9,327.0L-43.0,332.1L-32.3,335.1L-26.1,334.5L-18.8,344.1L-9.6,348.5L5.4,342.5L7.7,337.5L14.9,341.0L21.5,341.4L41.2,336.9L47.5,327.9L45.9,324.3L40.3,320.9L30.2,324.6L22.9,320.8L7.5,318.0L1.4,322.9L2.4,328.6L-3.7,322.6L-23.0,326.2L-32.2,318.3L-41.4,323.0"/><path class="c c1" data-km="12" d="M-401.9,-388.1L-403.9,-379.2L-400.0,-369.6L-398.3,-354.6L-374.6,-334.1L-371.2,-326.6L-363.4,-320.1L-353.2,-305.8L-348.6,-292.3L-347.7,-282.5L-351.3,-271.1L-351.9,-257.8L-340.4,-225.5L-344.7,-217.2L-342.1,-207.0L-315.9,-180.3L-304.7,-164.3L-286.5,-150.2L-283.4,-138.7L-274.8,-126.8L-281.1,-110.9L-278.4,-102.3L-270.3,-98.0L-257.7,-99.2L-249.8,-90.3L-235.5,-84.4L-233.8,-72.7L-236.2,-66.9L-235.5,-55.1L-225.7,-37.1L-227.0,-26.9L-225.2,-17.7L-217.5,-5.8L-194.7,14.8L-183.9,17.6L-174.4,16.8L-171.6,22.6L-172.5,27.9L-181.1,31.8L-188.1,44.7L-179.6,82.3L-169.9,93.4L-157.9,100.9L-149.2,115.1L-143.2,119.6L-139.9,130.0L-129.1,141.2L-123.2,156.0L-110.4,162.5L-96.8,179.6L-89.2,182.6L-91.7,195.3L-86.3,205.0L-74.5,213.6L-68.3,215.5L-71.8,232.6L-67.4,241.2L-68.9,248.8L-66.3,255.7L-69.6,267.4L-65.9,277.1L-61.3,281.0L-54.5,282.8L-51.0,289.9L-43.7,294.3L-14.0,291.5L-4.1,292.9L9.7,298.7L27.3,299.9L34.0,297.5L54.2,311.0L60.0,322.8L71.7,331.1L104.7,343.7L114.7,340.3L125.6,339.6L130.0,349.5L128.3,360.2L134.0,369.9L150.1,376.4L164.1,372.9L212.7,413.5L226.9,434.8L231.7,453.2L229.5,460.9L232.2,478.4L236.4,486.7L243.1,490.5L243.5,494.2M-386.6,-552.8L-386.8,-538.9L-390.1,-533.6L-390.6,-525.2L-386.9,-519.1L-379.9,-513.9L-373.3,-490.3L-378.0,-466.6L-382.1,-458.5L-379.0,-438.8L-401.9,-388.1M116.3,399.4L122.6,405.1L128.4,415.3L134.1,418.3L152.6,420.7L158.7,417.1L162.4,411.0L161.5,400.5L153.3,388.5L133.1,377.9L120.4,378.2L114.5,382.4L112.3,391.7L116.3,399.4M115.2,449.0L123.5,465.6L135.9,475.5L151.0,473.5L157.7,467.0L158.4,459.9L155.8,454.5L142.7,441.7L137.1,432.3L130.3,427.3L121.8,426.8L114.6,431.2L111.7,440.1L115.2,449.0M26.0,415.1L32.6,425.7L43.5,430.2L56.6,427.9L62.1,419.6L61.4,412.1L57.8,406.8L44.2,398.9L29.8,402.2L25.9,408.4L26.0,415.1M-45.2,317.0L-51.8,326.0L-49.3,335.5L-43.0,339.9L-28.9,341.7L-23.4,349.5L-11.8,355.4L-4.6,354.4L10.9,347.0L26.1,348.2L44.0,343.3L50.1,338.1L54.3,330.3L52.3,321.0L40.2,313.7L30.3,316.0L5.4,311.1L-2.2,315.8L-20.0,318.6L-27.1,312.7L-33.6,311.3L-45.2,317.0"/><path class="c c2" data-km="21" d="M-410.7,-390.5L-412.8,-378.1L-406.1,-350.0L-371.0,-315.0L-361.6,-301.4L-357.7,-289.3L-360.8,-256.5L-350.7,-226.9L-353.6,-213.8L-350.2,-203.1L-323.1,-174.7L-310.7,-157.6L-294.4,-145.9L-291.7,-135.3L-284.6,-126.2L-290.1,-111.7L-289.2,-103.6L-285.3,-96.5L-275.2,-89.9L-260.8,-88.8L-255.2,-83.1L-243.9,-78.1L-245.0,-57.2L-241.2,-45.4L-234.8,-35.8L-235.8,-24.2L-231.6,-10.3L-224.6,-0.3L-206.1,17.6L-198.3,23.0L-188.0,26.0L-194.7,36.2L-197.1,47.8L-187.7,86.3L-175.6,100.3L-164.5,107.1L-151.0,125.7L-147.3,135.1L-137.5,145.7L-132.1,159.1L-126.6,164.8L-116.9,169.3L-100.3,188.0L-100.6,196.6L-97.4,205.0L-90.1,213.8L-79.0,221.3L-80.7,233.5L-77.3,243.1L-76.1,256.2L-78.6,267.8L-75.6,278.5L-54.8,298.6L-40.0,303.7L-52.9,311.2L-59.7,320.8L-60.4,332.5L-56.6,340.8L-49.8,346.8L-33.7,351.0L-29.2,356.4L-18.9,362.8L-9.0,364.5L12.4,356.8L27.0,357.1L47.7,351.5L55.2,346.0L62.1,335.2L99.9,351.8L107.6,352.7L120.3,349.1L118.9,359.1L122.0,368.7L110.2,373.8L105.1,380.7L103.1,389.0L106.6,401.2L119.1,418.2L107.7,425.4L102.9,437.8L104.0,447.8L116.1,470.7L129.4,482.4L141.0,485.0L158.1,479.9L166.0,470.4L167.6,462.3L165.9,454.1L146.3,430.0L160.3,427.1L167.6,420.7L171.2,413.1L169.8,397.0L161.6,383.4L180.6,396.9L206.0,419.8L216.7,435.1L222.4,451.7L220.5,461.5L223.3,479.9L231.4,494.2M-395.6,-552.8L-395.5,-542.0L-399.5,-532.8L-399.4,-523.0L-395.7,-515.5L-387.7,-508.5L-382.4,-490.2L-386.2,-471.0L-391.0,-459.7L-387.9,-440.6L-410.7,-390.5M-6.2,301.9L-1.1,303.9L-5.7,306.7L-17.8,308.6L-26.4,303.3L-33.1,302.4L-15.5,300.6L-6.2,301.9M17.1,416.7L20.0,424.7L26.6,432.4L44.5,439.3L61.7,435.3L68.1,428.7L71.3,417.2L69.7,408.6L62.3,398.7L50.2,391.5L41.8,389.6L27.7,392.9L21.0,398.4L17.1,406.5L17.1,416.7"/><path class="c c3" data-km="32" d="M-421.4,-393.5L-423.7,-376.6L-415.6,-344.5L-379.2,-307.4L-371.9,-296.6L-368.6,-286.2L-371.7,-254.8L-362.7,-227.0L-364.5,-212.6L-360.1,-198.3L-349.5,-184.7L-330.5,-166.2L-318.0,-149.4L-304.5,-139.1L-297.8,-124.2L-301.0,-112.6L-299.7,-100.3L-293.7,-89.4L-284.1,-81.7L-265.5,-77.7L-255.7,-70.7L-254.6,-49.1L-246.3,-33.8L-246.7,-23.3L-242.0,-6.5L-229.4,10.6L-204.8,31.9L-208.0,48.7L-197.5,91.2L-182.7,108.7L-172.9,114.4L-156.3,141.4L-147.5,151.0L-141.3,165.1L-132.9,173.8L-124.3,178.0L-111.7,193.0L-106.6,210.9L-91.3,226.5L-87.7,256.2L-89.6,268.2L-88.4,275.6L-81.3,289.8L-63.1,305.8L-67.6,311.6L-71.6,323.0L-71.1,335.0L-65.4,347.3L-55.1,356.4L-39.9,361.1L-29.0,369.8L-15.1,375.1L-2.2,374.6L14.2,368.1L28.1,368.1L46.5,363.5L57.4,358.7L65.8,350.3L96.6,362.3L105.7,363.6L98.5,370.4L93.0,382.2L94.4,401.5L102.8,414.9L92.9,430.5L92.1,445.4L107.1,476.9L119.1,488.6L129.1,494.2M149.9,494.2L164.1,489.1L176.1,474.7L178.0,455.9L173.0,444.2L166.1,436.4L176.4,427.3L182.1,414.1L198.0,427.4L208.2,442.4L211.0,451.0L209.6,462.1L212.5,481.8L217.3,494.2M-406.6,-552.8L-406.1,-546.1L-410.6,-533.1L-410.0,-520.4L-404.5,-508.8L-396.9,-501.8L-393.6,-490.0L-401.9,-461.2L-399.6,-441.0L-412.0,-417.4L-421.4,-393.5M6.3,418.8L12.8,434.0L23.8,444.0L35.6,448.9L52.1,450.0L61.8,447.7L73.7,439.4L80.1,429.1L82.3,416.3L79.8,404.4L69.9,390.7L54.8,381.5L41.9,378.6L22.5,383.1L12.4,391.6L6.5,403.7L6.3,418.8"/><path class="c c4" data-km="45" d="M-434.1,-396.3L-436.6,-375.0L-430.3,-345.4L-426.8,-337.9L-388.5,-297.9L-381.9,-284.7L-384.6,-252.9L-376.5,-225.8L-377.4,-211.1L-371.9,-192.7L-367.4,-185.3L-339.9,-157.1L-326.6,-139.7L-315.5,-130.7L-312.2,-123.0L-314.0,-113.6L-312.0,-96.3L-303.7,-81.1L-290.2,-70.2L-269.1,-63.6L-267.0,-45.2L-259.7,-29.7L-258.4,-14.8L-253.5,-0.4L-243.7,14.3L-220.0,37.1L-219.5,58.1L-209.1,97.0L-196.2,113.6L-182.3,124.3L-146.9,178.9L-132.6,188.8L-124.4,198.5L-117.5,218.0L-104.6,232.9L-101.0,255.8L-101.4,277.3L-91.4,298.0L-80.1,307.9L-84.9,329.5L-81.1,346.0L-75.9,355.0L-61.3,367.8L-46.4,372.9L-27.8,385.1L-17.3,387.9L-0.3,387.4L-6.1,400.5L-6.7,420.4L-0.4,437.4L10.7,450.4L24.1,458.6L41.9,463.2L66.7,459.7L80.1,450.9L96.3,484.3L106.1,494.2M178.3,494.2L188.1,479.7L190.7,471.1L190.7,453.3L184.2,437.8L186.7,435.1L197.5,451.8L196.6,462.9L202.9,494.2M-419.5,-552.8L-423.4,-535.2L-422.6,-517.2L-419.6,-508.7L-406.9,-489.4L-414.8,-463.0L-413.2,-442.7L-429.0,-411.3L-434.1,-396.3M62.2,370.8L69.6,365.3L83.4,370.5L79.9,382.3L62.2,370.8"/><path class="c c5" data-km="60" d="M-448.7,-399.5L-451.9,-383.7L-451.5,-373.0L-444.4,-340.4L-433.3,-321.4L-415.5,-305.0L-397.5,-283.4L-399.4,-250.7L-391.9,-224.6L-392.3,-209.4L-389.9,-198.1L-385.4,-186.2L-379.4,-176.3L-350.8,-146.7L-336.6,-128.5L-328.4,-122.0L-328.8,-103.2L-326.3,-91.8L-315.2,-71.5L-297.2,-56.9L-283.5,-51.9L-266.8,6.6L-255.6,23.4L-235.8,43.1L-233.9,62.2L-222.6,103.7L-207.6,123.4L-193.0,135.6L-157.6,189.4L-138.4,205.3L-130.1,226.2L-119.0,240.2L-116.6,250.1L-117.5,269.4L-115.7,282.0L-109.0,298.7L-97.8,312.8L-99.9,330.1L-98.4,341.3L-88.0,363.9L-79.2,373.5L-68.6,380.9L-53.5,386.7L-33.4,399.0L-21.5,402.4L-21.5,423.3L-18.2,435.1L-9.7,450.7L0.8,461.7L18.6,472.5L38.2,477.9L56.7,477.7L73.4,473.0L85.2,494.2M-434.5,-552.8L-438.3,-537.5L-437.2,-513.5L-433.1,-502.2L-422.4,-487.2L-429.5,-465.8L-429.0,-445.1L-442.8,-417.1L-448.7,-399.5"/><path class="c c6" data-km="78" d="M-466.3,-403.4L-469.9,-384.6L-469.3,-370.7L-461.4,-334.3L-446.9,-309.6L-416.5,-278.9L-417.2,-248.1L-410.4,-223.1L-410.2,-207.4L-407.1,-192.6L-401.6,-178.5L-393.8,-165.5L-346.9,-113.8L-343.5,-86.4L-337.5,-72.5L-329.0,-60.0L-318.2,-49.3L-299.0,-38.3L-282.7,15.0L-269.8,34.4L-253.8,50.9L-244.1,97.4L-238.7,111.8L-230.4,124.8L-206.6,148.0L-170.6,201.9L-154.6,214.2L-145.2,236.0L-135.7,248.1L-133.5,284.9L-125.4,306.3L-117.2,318.5L-115.9,345.4L-111.0,360.0L-102.5,374.6L-91.1,387.0L-77.2,396.7L-60.9,403.4L-40.0,415.7L-39.1,426.7L-32.4,447.5L-24.1,461.4L-13.2,473.4L-0.2,483.2L28.8,494.2M-452.9,-552.8L-456.9,-524.7L-454.6,-509.2L-443.3,-484.5L-447.5,-467.4L-447.8,-448.3L-461.9,-418.1L-466.3,-403.4"/><path class="c c7" data-km="99" d="M-486.9,-408.0L-490.9,-385.7L-490.2,-368.0L-481.1,-327.2L-473.4,-310.7L-462.8,-295.8L-438.4,-271.8L-438.0,-245.0L-431.3,-219.4L-431.1,-205.0L-427.1,-186.2L-420.6,-169.4L-410.7,-153.0L-367.6,-105.0L-363.5,-80.0L-356.0,-62.4L-345.1,-46.5L-331.5,-33.0L-316.0,-22.8L-309.9,2.1L-301.2,24.8L-286.5,47.2L-273.6,60.9L-264.4,102.9L-257.4,121.2L-247.0,137.7L-217.4,168.6L-197.4,201.8L-185.7,216.5L-172.7,227.6L-162.8,247.4L-155.7,256.7L-156.5,270.9L-153.6,291.0L-143.7,316.5L-138.5,324.4L-136.4,350.2L-130.4,367.9L-119.4,387.0L-104.9,402.8L-87.4,415.1L-59.9,428.8L-49.4,460.6L-39.5,475.8L-20.5,494.2M-474.5,-552.8L-477.9,-523.7L-475.0,-504.1L-465.7,-481.1L-468.3,-470.3L-468.7,-453.3L-481.3,-426.2L-486.9,-408.0"/><path class="c c8" data-km="123" d="M-509.7,-345.6L-503.7,-319.1L-494.1,-298.6L-479.1,-278.0L-462.5,-262.2L-461.7,-241.5L-455.2,-214.9L-454.9,-202.3L-450.0,-179.0L-442.2,-159.0L-429.9,-138.7L-391.3,-95.6L-386.4,-72.8L-377.0,-50.8L-363.6,-31.1L-346.6,-14.4L-336.1,-7.4L-333.2,7.8L-322.4,36.1L-305.5,61.8L-295.8,72.3L-287.6,109.2L-278.9,131.9L-265.9,152.5L-237.1,182.3L-217.5,214.9L-202.9,233.2L-192.1,242.4L-180.1,264.6L-177.0,296.6L-162.8,331.2L-159.7,355.6L-152.1,378.2L-138.7,401.3L-120.7,420.9L-98.9,436.2L-81.3,444.0L-70.6,471.6L-55.0,494.2M-499.2,-552.8L-501.9,-522.7L-498.3,-498.2L-491.0,-478.1L-492.4,-460.0L-503.4,-435.5L-511.8,-408.6L-514.8,-386.8L-514.0,-364.9L-509.7,-345.6"/><path class="c c9" data-km="150" d="M-536.4,-341.8L-529.1,-310.0L-517.5,-285.0L-501.4,-262.5L-488.9,-249.3L-488.4,-237.5L-475.7,-170.8L-466.6,-147.4L-451.6,-122.6L-416.1,-83.0L-412.1,-64.6L-400.7,-37.8L-384.3,-13.8L-360.7,8.5L-346.3,48.7L-320.9,84.8L-313.6,116.3L-303.0,144.0L-287.2,169.1L-258.9,198.7L-240.1,229.7L-222.3,252.0L-213.6,259.4L-207.4,271.7L-203.3,302.8L-189.1,339.3L-186.0,361.7L-177.1,388.5L-160.5,417.3L-138.5,441.2L-111.9,459.8L-102.1,463.9L-95.3,482.8L-88.1,494.2M-526.9,-552.8L-528.8,-521.5L-524.5,-491.7L-518.9,-476.0L-519.1,-466.3L-535.9,-422.5L-541.8,-388.2L-540.7,-361.4L-536.4,-341.8"/><path class="c c10" data-km="180" d="M-566.0,-337.4L-557.4,-299.9L-543.4,-269.8L-518.2,-236.6L-504.3,-161.7L-493.7,-134.5L-475.7,-104.7L-443.9,-70.2L-440.7,-55.5L-427.0,-23.4L-407.3,5.4L-387.1,25.3L-372.8,62.8L-347.6,100.0L-338.8,136.3L-322.6,170.6L-299.6,200.7L-282.5,217.5L-258.3,255.9L-237.6,278.1L-232.5,309.7L-218.3,346.1L-215.3,368.5L-204.5,400.7L-184.7,435.0L-158.3,463.7L-125.6,486.4L-122.7,494.2M-557.0,-552.8L-558.8,-520.2L-553.6,-484.4L-549.4,-472.7L-567.3,-421.5L-571.8,-389.7L-570.5,-357.5L-566.0,-337.4"/><path class="c c11" data-km="214" d="M-599.6,-332.5L-589.4,-288.4L-572.7,-252.7L-549.8,-220.6L-536.7,-151.4L-524.4,-119.8L-503.0,-84.4L-474.9,-53.5L-456.8,-7.1L-433.4,27.2L-415.9,44.4L-402.9,78.7L-378.5,116.0L-370.9,147.5L-351.6,188.3L-324.3,224.1L-309.2,238.7L-283.7,278.8L-268.9,294.2L-265.5,317.5L-251.4,353.9L-248.4,376.2L-235.3,415.1L-212.0,455.2L-180.7,489.3L-173.7,494.2M-590.9,-552.8L-592.8,-518.6L-585.9,-474.2L-600.4,-429.2L-605.7,-391.3L-604.2,-353.1L-599.6,-332.5"/></svg></div>
+            <div class="atlas-hero__eyebrow"><span>California</span><i></i><span>32.5° to 42° N</span><i></i><span>Plastics research since 1950</span></div>
+            <h3 class="atlas-hero__title">CA Plastics Research Atlas</h3>
+            <p class="atlas-hero__lead">A transparent starting point for finding plastic-related research connected to California.</p>
+            <form class="atlas-hero__search" onsubmit="return false">
+              <label class="atlas-search"><span class="sr-only">Find a researcher, institution or topic (mock)</span><svg class="icon"><use href="#i-search"/></svg><input id="mock-hero-search" class="atlas-input" type="search" placeholder="Find a researcher, institution or topic"></label>
+              <button class="atlas-btn" type="submit">Search experts</button>
+            </form>
+            <p class="atlas-hero__fresh"><svg class="icon" style="width:16px;height:16px"><use href="#i-calendar"/></svg>Data refreshed <time datetime="2026-11-13T21:21Z">13 Nov 2026, 21:21 UTC</time></p>
+          </section>
+          <div class="overview-body">
+            <div class="atlas-kpis">
+              <div class="atlas-kpi"><span class="atlas-kpi__label"><svg class="icon"><use href="#i-person"/></svg>Authors</span><span class="atlas-kpi__value">2,614</span><span class="atlas-kpi__note">California-affiliated authors with at least one published work.</span></div>
+              <div class="atlas-kpi"><span class="atlas-kpi__label"><svg class="icon"><use href="#i-book"/></svg>Works</span><span class="atlas-kpi__value">1,909</span><span class="atlas-kpi__note">Distinct published works with a California author.</span></div>
+              <div class="atlas-kpi"><span class="atlas-kpi__label"><svg class="icon"><use href="#i-building"/></svg>California institutions</span><span class="atlas-kpi__value">211</span><span class="atlas-kpi__note">California institutions with any published work.</span></div>
+              <div class="atlas-kpi"><span class="atlas-kpi__label"><svg class="icon"><use href="#i-network"/></svg>All institutions</span><span class="atlas-kpi__value">2,400</span><span class="atlas-kpi__note">Every institution on those works, including out-of-state co-authors.</span></div>
+            </div>
+            <div>
+              <h4 class="ov-h2">Start here</h4>
+              <div class="atlas-tasks">
+                <a class="atlas-task" href="#s-overview"><span class="tile-icon"><svg class="icon"><use href="#i-person"/></svg></span>Find a California researcher<svg class="icon arrow"><use href="#i-arrow"/></svg></a>
+                <a class="atlas-task" href="#s-overview"><span class="tile-icon"><svg class="icon"><use href="#i-coins"/></svg></span>See who is funded for plastics research<svg class="icon arrow"><use href="#i-arrow"/></svg></a>
+                <a class="atlas-task" href="#s-overview"><span class="tile-icon"><svg class="icon"><use href="#i-drop"/></svg></span>Check plastic monitoring data<svg class="icon arrow"><use href="#i-arrow"/></svg></a>
+              </div>
+            </div>
+            <div>
+              <h4 class="ov-h2">Explore the Atlas</h4>
+              <div class="atlas-entry-grid">
+                <a class="atlas-entry" href="#s-overview"><span class="atlas-entry__icon"><svg class="icon"><use href="#i-person"/></svg></span><h5 class="atlas-entry__title">Experts</h5><p class="atlas-entry__text">California researchers working on plastics, with topics and metrics.</p><span class="atlas-entry__meta">2,614 authors</span></a>
+                <a class="atlas-entry" href="#s-overview"><span class="atlas-entry__icon"><svg class="icon"><use href="#i-network"/></svg></span><h5 class="atlas-entry__title">Collaboration network</h5><p class="atlas-entry__text">Who co-authors with whom, clustered by shared work.</p><span class="atlas-entry__meta">400 experts · 1,241 links</span></a>
+                <a class="atlas-entry" href="#s-overview"><span class="atlas-entry__icon"><svg class="icon"><use href="#i-building"/></svg></span><h5 class="atlas-entry__title">Institutions</h5><p class="atlas-entry__text">Universities, agencies and other organisations, with a map and tiers.</p><span class="atlas-entry__meta">168 institutions in 6 tiers</span></a>
+                <a class="atlas-entry" href="#s-overview"><span class="atlas-entry__icon"><svg class="icon"><use href="#i-drop"/></svg></span><h5 class="atlas-entry__title">Monitoring</h5><p class="atlas-entry__text">Public plastic monitoring samples from California waters.</p><span class="atlas-entry__meta">298 samples · 25 sources</span></a>
+                <a class="atlas-entry" href="#s-overview"><span class="atlas-entry__icon"><svg class="icon"><use href="#i-coins"/></svg></span><h5 class="atlas-entry__title">Funding</h5><p class="atlas-entry__text">Grants and awards for plastics research, and open funding calls.</p><span class="atlas-entry__meta">524 awards · 8 agencies</span></a>
+                <a class="atlas-entry" href="#s-overview"><span class="atlas-entry__icon"><svg class="icon"><use href="#i-grid"/></svg></span><h5 class="atlas-entry__title">Evidence map</h5><p class="atlas-entry__text">Filter plastic-related works by topic, year and sector.</p><span class="atlas-entry__meta">1,573 plastic-related works</span></a>
+                <a class="atlas-entry" href="#s-overview"><span class="atlas-entry__icon"><svg class="icon"><use href="#i-scale"/></svg></span><h5 class="atlas-entry__title">Policy</h5><p class="atlas-entry__text">The DTSC microplastics regulatory timeline, with source links.</p><span class="atlas-entry__meta">Latest: effective 1 Oct 2026</span></a>
+                <a class="atlas-entry" href="#s-overview"><span class="atlas-entry__icon"><svg class="icon"><use href="#i-link"/></svg></span><h5 class="atlas-entry__title">Related resources</h5><p class="atlas-entry__text">Outside databases and tools on plastics (links only).</p><span class="atlas-entry__meta">Links only</span></a>
+              </div>
+            </div>
+          </div>
+          <footer class="mock-foot"><span>Independent project; not an official OEHHA or State product.</span><a href="#s-overview">Glossary</a><a href="#s-overview">Report a correction</a><a href="#s-overview">How to cite</a></footer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tile-section" aria-labelledby="s-colour">
+    <header>
+      <h2 id="s-colour">Colour</h2>
+      <p>Interface colour comes from one teal family plus navy ink. Data colour keeps its own validated sets, so a hue on a chart always means data. Contrast figures are WCAG ratios on white unless stated.</p>
+    </header>
+    <div class="tile-grid-2">
+      <div class="sheet">
+        <h3>Interface</h3>
+        <div class="swatches">
+          <div class="sw"><div class="chip" style="--c:#075a46;color:#fff">#075a46</div><div class="meta"><code>--atlas-brand</code><span>Links, icons, active nav · 8.2:1</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#043e32;color:#fff">#043e32</div><div class="meta"><code>--atlas-brand-strong</code><span>Hero band, hover · 12.1:1</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#0e6e56;color:#fff">#0e6e56</div><div class="meta"><code>--atlas-brand-action</code><span>Primary buttons · white text 6.2:1</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#d8eee7;color:#043e32">#d8eee7</div><div class="meta"><code>--atlas-brand-tint</code><span>Selected nav, chips</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#eef7f4;color:#043e32">#eef7f4</div><div class="meta"><code>--atlas-brand-wash</code><span>Icon tiles, page head</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#c45100;color:#fff">#c45100</div><div class="meta"><code>--atlas-accent</code><span>Focus ring, "new" marks · 4.6:1</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#17324d;color:#fff">#17324d</div><div class="meta"><code>--atlas-ink</code><span>Headings · 13.1:1</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#1d2a33;color:#fff">#1d2a33</div><div class="meta"><code>--atlas-text</code><span>Body text · 14.7:1</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#4a5d6c;color:#fff">#4a5d6c</div><div class="meta"><code>--atlas-muted</code><span>Secondary text · 6.3:1 on page</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#6f8590;color:#fff">#6f8590</div><div class="meta"><code>--atlas-boundary</code><span>Control borders · 3.9:1</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#f3f6f5;color:#4a5d6c">#f3f6f5</div><div class="meta"><code>--atlas-page</code><span>Sea-mist page</span></div></div>
+          <div class="sw"><div class="chip" style="--c:#eaf1ef;color:#4a5d6c">#eaf1ef</div><div class="meta"><code>--atlas-sunken</code><span>Table heads, filter heads</span></div></div>
+        </div>
+      </div>
+      <div class="sheet">
+        <h3>Data</h3>
+        <p class="sheet-note">Topic colours stay exactly as in <code>site/assets/topics.js</code> (passes the palette validator). Hatched chips are subtopics; the grey hatch is the auxiliary topic.</p>
+        <div class="chip-row">
+          <span class="topic-chip" style="--topic:var(--topic-occurrence)"><span class="dot"></span>Occurrence &amp; monitoring</span>
+          <span class="topic-chip" style="--topic:var(--topic-fate)"><span class="dot"></span>Fate &amp; transport</span>
+          <span class="topic-chip" style="--topic:var(--topic-soil)"><span class="dot"></span>Soil &amp; agriculture</span>
+          <span class="topic-chip" style="--topic:var(--topic-analytical)"><span class="dot"></span>Analytical methods</span>
+          <span class="topic-chip" style="--topic:var(--topic-ecotox)"><span class="dot"></span>Ecotoxicology &amp; food webs</span>
+          <span class="topic-chip" style="--topic:var(--topic-wastewater)"><span class="dot"></span>Wastewater &amp; treatment</span>
+          <span class="topic-chip" style="--topic:var(--topic-human)"><span class="dot"></span>Human exposure &amp; health</span>
+          <span class="topic-chip" style="--topic:var(--topic-air)"><span class="dot"></span>Air &amp; atmosphere</span>
+          <span class="topic-chip hatch" style="--topic:var(--topic-human)"><span class="dot"></span>Risk assessment</span>
+          <span class="topic-chip hatch" style="--topic:var(--topic-ecotox)"><span class="dot"></span>Plastisphere</span>
+          <span class="topic-chip hatch" style="--topic:var(--topic-aux)"><span class="dot"></span>Plastic-associated chemicals</span>
+        </div>
+        <p class="sheet-note">Sequential ramp for heatmaps and choropleths: one teal hue, light to dark, lightest step means near zero.</p>
+        <div class="ramp">
+          <div style="--c:var(--seq-100);color:#043e32">100</div><div style="--c:var(--seq-200);color:#043e32">200</div><div style="--c:var(--seq-300);color:#043e32">300</div><div style="--c:var(--seq-400);color:#fff">400</div><div style="--c:var(--seq-500);color:#fff">500</div><div style="--c:var(--seq-600);color:#fff">600</div><div style="--c:var(--seq-700);color:#fff">700</div>
+        </div>
+        <p class="sheet-note">Status colours appear only with an icon and a label, never alone:</p>
+        <div class="chip-row">
+          <span class="atlas-badge atlas-badge--good"><svg class="icon"><use href="#i-check"/></svg>Effective</span>
+          <span class="atlas-badge atlas-badge--accent"><svg class="icon"><use href="#i-spark"/></svg>New this fortnight</span>
+          <span class="atlas-badge atlas-badge--muted"><svg class="icon"><use href="#i-tools"/></svg>In development</span>
+          <span class="atlas-badge"><svg class="icon"><use href="#i-building"/></svg>University of California</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tile-section" aria-labelledby="s-type">
+    <header>
+      <h2 id="s-type">Type</h2>
+      <p>Headings, eyebrows and navigation labels use Barlow Semi Condensed, a grotesk drawn from California's highway signs, licence plates and transit lettering. Body text, figures and controls use the system interface face. No serif anywhere.</p>
+    </header>
+    <div class="sheet">
+      <div class="type-specimen">
+        <div class="type-row"><span class="spec">Display · 700<br>40–46 px · 1.02</span><span class="sample" style="font:700 clamp(1.9rem,1.3rem + 2vw,2.9rem)/1.02 var(--font-display)">California plastics research, mapped</span></div>
+        <div class="type-row"><span class="spec">Page title · 700<br>30–38 px · 1.05</span><span class="sample" style="font:700 clamp(1.7rem,1.3rem + 1.3vw,2.35rem)/1.05 var(--font-display)">Collaboration network</span></div>
+        <div class="type-row"><span class="spec">Section · 700<br>22 px · 1.2</span><span class="sample" style="font:700 1.375rem/1.2 var(--font-display)">California institution map</span></div>
+        <div class="type-row"><span class="spec">Eyebrow · 600<br>12 px · +0.1em caps</span><span class="sample" style="font:600 0.75rem/1.2 var(--font-display);letter-spacing:.1em;text-transform:uppercase;color:var(--atlas-brand)">Explore · Experts</span></div>
+        <div class="type-row"><span class="spec">Body · 400<br>16 px · 1.6 · 65ch</span><span class="sample" style="font:400 1rem/1.6 var(--font-body);color:var(--atlas-text);max-width:65ch">Each dot is a California expert in the Atlas who co-authored plastic-related works. A line connects two experts who wrote at least one work together.</span></div>
+        <div class="type-row"><span class="spec">Figure · 650<br>32 px · proportional</span><span class="sample" style="font:650 2rem/1.1 var(--font-body)">1,573 <span style="font:400 1rem var(--font-body);color:var(--atlas-muted)">plastic-related works</span></span></div>
+        <div class="type-row"><span class="spec">Caption · 400<br>13 px · 1.45</span><span class="sample" style="font:400 0.82rem/1.45 var(--font-body);color:var(--atlas-muted)">Counts show volume, not strength: more works or citations do not mean better or more relevant research.</span></div>
+        <div class="type-row"><span class="spec">Data · mono<br>13 px</span><span class="sample" style="font:400 0.82rem/1.45 var(--font-mono);color:var(--atlas-text)">10.5281/zenodo.24124016</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tile-section" aria-labelledby="s-components">
+    <header>
+      <h2 id="s-components">Components</h2>
+      <p>One version of each control, shared by every page. Class names here are the ones the spec asks for.</p>
+    </header>
+
+    <div class="atlas-page-head">
+      <div class="motif"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-612 -559 1141 1059" fill="none" aria-hidden="true" focusable="false"><path class="land" d="M469.0,474.0L472.7,470.1L482.0,472.1L485.8,471.2L487.0,463.6L492.5,458.3L491.7,445.3L488.8,440.1L474.1,436.3L471.5,432.4L473.6,419.6L472.7,413.2L469.1,406.8L471.4,401.5L468.8,396.8L477.8,393.9L486.1,379.4L487.4,366.6L490.0,362.1L487.6,346.2L489.9,343.8L487.3,339.5L487.6,335.7L495.3,328.5L499.5,318.0L513.5,309.8L522.8,299.3L522.3,295.5L500.6,279.6L500.8,273.1L496.1,265.8L496.0,261.6L489.5,248.4L485.2,246.8L482.9,238.5L478.6,234.5L477.6,220.7L297.0,45.5L166.6,-76.4L-0.0,-221.1L-0.1,-552.8L-374.7,-552.8L-375.1,-536.3L-379.0,-528.1L-373.5,-524.0L-369.8,-523.7L-364.8,-504.9L-361.7,-501.9L-362.9,-499.9L-361.1,-490.5L-366.7,-462.4L-370.2,-456.9L-368.7,-448.9L-365.5,-446.9L-365.4,-444.0L-371.3,-425.4L-376.3,-416.5L-375.5,-415.4L-369.4,-427.0L-362.9,-425.0L-366.5,-421.0L-371.9,-420.2L-375.7,-407.6L-378.7,-408.9L-376.9,-415.6L-392.0,-380.8L-386.6,-367.0L-387.9,-360.6L-372.1,-346.0L-365.9,-343.6L-362.4,-334.7L-358.6,-333.1L-347.4,-316.9L-342.6,-313.3L-340.5,-301.5L-337.0,-296.0L-335.1,-283.5L-339.3,-270.2L-340.1,-259.5L-328.0,-224.2L-332.7,-216.2L-331.3,-212.1L-305.3,-186.5L-296.7,-173.3L-278.2,-160.3L-273.0,-150.4L-272.3,-143.3L-269.3,-145.1L-266.9,-143.2L-251.8,-121.2L-251.2,-118.5L-266.4,-137.4L-262.2,-126.5L-269.2,-110.0L-263.4,-109.7L-264.9,-112.2L-261.0,-114.0L-262.1,-117.3L-259.6,-117.8L-259.7,-114.4L-250.8,-110.3L-242.5,-99.8L-235.2,-99.4L-224.8,-90.3L-219.6,-92.0L-222.2,-98.8L-218.6,-95.4L-216.8,-97.5L-222.6,-102.3L-222.6,-104.0L-220.5,-104.1L-221.6,-107.2L-217.4,-108.9L-222.8,-112.5L-220.7,-119.1L-222.5,-123.1L-216.4,-124.2L-213.1,-127.5L-204.5,-122.5L-201.0,-118.2L-194.2,-117.7L-189.4,-115.2L-182.7,-125.4L-177.8,-125.8L-176.6,-122.8L-179.1,-121.5L-175.3,-118.9L-169.7,-119.3L-171.5,-117.0L-168.8,-116.5L-164.1,-118.6L-160.3,-117.5L-155.3,-120.3L-149.6,-126.8L-152.6,-120.8L-158.2,-117.4L-158.1,-114.6L-154.9,-113.8L-151.1,-116.2L-149.4,-120.8L-142.6,-122.3L-132.2,-115.5L-128.5,-111.0L-139.5,-117.9L-140.8,-113.7L-143.4,-112.9L-145.1,-115.5L-144.1,-117.4L-140.2,-118.8L-142.8,-121.6L-148.6,-119.8L-149.5,-115.9L-153.0,-114.1L-150.3,-111.6L-178.2,-116.8L-191.0,-113.2L-198.0,-117.0L-204.4,-111.8L-210.4,-111.9L-209.8,-109.2L-213.2,-105.7L-216.0,-106.6L-212.6,-100.4L-207.0,-100.4L-205.7,-97.9L-204.1,-91.9L-208.1,-89.2L-206.7,-88.9L-207.3,-86.5L-197.1,-83.9L-196.7,-82.2L-201.1,-82.2L-200.2,-79.9L-194.9,-77.4L-187.5,-57.3L-183.4,-55.5L-180.7,-51.2L-183.0,-49.5L-186.7,-50.3L-189.7,-55.0L-196.2,-57.2L-195.5,-59.2L-199.1,-60.5L-200.1,-62.8L-211.1,-66.8L-209.3,-67.8L-211.9,-69.8L-212.7,-78.5L-209.3,-80.7L-214.1,-89.6L-220.2,-89.6L-223.6,-86.4L-221.8,-73.6L-222.5,-66.5L-224.3,-65.6L-224.1,-58.8L-222.2,-54.5L-220.4,-55.6L-217.7,-52.7L-213.4,-39.8L-215.0,-27.9L-213.8,-21.5L-210.6,-19.2L-208.0,-13.1L-204.3,-12.3L-197.6,-2.7L-189.8,3.8L-182.0,5.7L-179.7,4.1L-175.5,5.0L-172.2,2.4L-169.4,3.4L-160.4,18.1L-159.1,21.4L-160.3,27.6L-156.8,30.7L-160.5,29.0L-162.4,38.0L-166.3,43.4L-167.8,44.0L-172.3,39.9L-176.1,46.0L-171.8,49.2L-171.4,52.6L-174.0,53.3L-169.3,68.1L-168.9,76.9L-164.7,79.7L-162.2,84.1L-149.2,92.6L-139.3,108.3L-133.9,110.2L-130.1,123.1L-118.9,134.2L-114.5,147.6L-104.0,150.7L-89.4,170.2L-78.9,173.3L-77.1,180.1L-73.9,184.0L-76.1,185.6L-76.7,181.1L-79.6,190.9L-77.9,196.4L-68.1,203.4L-66.6,201.5L-62.8,201.9L-57.3,205.7L-56.3,217.3L-59.8,231.4L-54.7,236.8L-56.9,247.8L-53.6,253.8L-57.6,267.0L-56.6,269.5L-45.3,274.1L-40.4,282.7L-11.9,279.4L-0.9,280.7L10.8,286.8L18.9,285.6L26.0,288.0L28.6,285.9L38.8,285.8L63.9,302.0L69.6,315.6L77.5,320.6L102.0,328.0L106.1,331.8L111.3,328.2L118.5,327.4L129.4,327.4L132.1,329.3L138.3,337.3L143.0,349.9L139.8,356.7L141.2,360.3L151.9,364.5L153.6,363.2L153.2,358.6L155.2,357.6L158.1,357.0L160.7,361.4L159.4,357.8L167.4,360.1L179.7,372.0L193.4,380.2L221.5,405.2L238.1,430.3L244.2,455.0L241.5,460.2L243.8,466.1L244.0,476.4L245.7,478.8L245.6,474.7L251.2,472.5L254.9,476.6L257.6,484.2L256.5,486.5L251.8,475.6L248.4,474.0L246.6,475.8L253.4,481.4L255.6,494.1L469.0,474.0ZM155.1,358.5L153.9,361.7L155.7,359.4L154.6,362.1L156.0,363.2L156.1,359.3L157.9,358.7L155.1,358.5ZM126.9,393.9L134.6,396.3L134.3,402.6L136.6,406.5L144.5,407.0L148.8,409.3L150.8,408.1L145.0,397.1L133.5,393.3L130.2,389.5L124.1,389.6L126.9,393.9ZM146.6,462.3L133.0,448.8L127.6,439.7L123.8,438.9L133.4,458.8L139.7,464.1L143.7,461.7L146.6,462.3ZM49.5,415.5L41.6,410.6L37.4,411.8L40.5,416.7L49.9,418.0L49.5,415.5ZM41.8,328.9L38.7,325.6L32.6,330.2L21.4,325.5L7.4,323.0L6.0,325.1L10.9,328.1L11.2,333.9L16.3,336.2L24.9,336.2L30.4,333.3L39.2,332.3L41.8,328.9ZM-3.9,327.6L-8.6,329.7L-12.9,329.0L-15.2,330.9L-22.1,331.6L-15.6,340.3L-9.8,343.5L2.8,338.2L1.7,333.5L-0.7,334.0L-4.2,331.3L-3.9,327.6ZM-31.7,326.5L-32.8,323.3L-39.9,327.7L-27.4,329.7L-28.3,327.3L-31.7,326.5Z"/><path class="c c0" data-km="5" d="M-388.3,-354.0L-375.4,-342.3L-369.0,-339.4L-366.6,-332.0L-361.9,-329.1L-346.9,-309.9L-340.1,-282.5L-344.1,-271.7L-345.0,-258.8L-333.1,-224.6L-337.5,-217.6L-335.8,-210.0L-310.0,-184.2L-300.0,-169.6L-282.5,-157.5L-277.9,-149.1L-276.9,-141.4L-271.3,-138.4L-267.3,-127.4L-274.0,-111.3L-273.0,-106.8L-263.5,-104.6L-258.5,-108.6L-254.2,-106.4L-245.5,-95.9L-237.4,-94.4L-228.6,-87.0L-226.8,-73.2L-229.2,-66.2L-228.8,-57.2L-225.7,-51.0L-222.5,-49.5L-218.6,-38.0L-220.0,-27.5L-218.5,-19.9L-211.9,-10.1L-206.7,-7.5L-201.3,0.6L-191.8,8.4L-181.7,10.7L-171.6,8.5L-169.6,10.8L-164.3,21.9L-166.2,33.8L-167.4,36.9L-175.2,35.8L-181.1,45.5L-173.4,79.1L-165.4,88.0L-152.8,96.0L-142.9,111.8L-137.4,114.1L-134.7,125.0L-122.9,137.3L-118.1,151.1L-106.3,156.2L-92.5,174.1L-82.8,176.7L-81.8,181.7L-84.8,194.2L-81.4,200.0L-69.9,208.1L-61.7,209.0L-64.8,231.9L-59.9,238.7L-61.9,248.3L-58.8,255.5L-62.6,267.2L-60.5,272.6L-49.2,277.5L-45.7,285.3L-40.9,287.7L-12.8,284.5L-1.9,286.1L10.3,291.7L17.9,290.6L26.5,293.0L34.7,290.3L60.5,306.4L65.6,318.6L75.1,325.0L100.1,332.8L105.5,336.7L113.0,333.2L129.0,333.2L137.9,350.6L134.8,356.4L138.2,364.3L152.1,369.5L165.1,364.5L217.8,408.7L233.4,432.2L239.1,455.0L236.5,460.5L239.1,477.2L242.8,482.9L248.5,482.9L250.6,494.2M-379.7,-552.8L-380.0,-537.4L-383.8,-526.9L-373.4,-519.0L-366.2,-490.4L-371.4,-464.0L-375.2,-457.6L-373.5,-447.6L-370.7,-443.6L-372.3,-436.7L-396.9,-381.9L-391.8,-366.3L-392.6,-358.9L-388.3,-354.0M-212.9,-94.4L-210.8,-94.0L-212.9,-94.4M-214.9,-114.0L-216.8,-115.2L-215.7,-119.3L-211.9,-121.0L-206.8,-117.0L-211.6,-116.8L-214.9,-114.0M-204.9,-78.3L-197.5,-72.4L-196.2,-65.9L-204.8,-70.1L-206.6,-75.4L-204.9,-78.3M122.2,395.6L129.7,400.0L130.3,406.3L134.7,411.1L149.4,414.2L155.3,410.2L155.0,403.2L148.5,393.5L132.4,385.0L120.8,385.8L119.2,390.5L122.2,395.6M121.4,445.1L129.3,461.6L137.2,468.4L150.7,465.1L150.0,458.5L138.0,446.9L129.0,434.3L124.5,433.4L120.0,435.7L118.8,441.4L121.4,445.1M32.9,413.8L37.2,420.4L43.4,423.0L51.7,422.6L55.2,418.4L52.9,411.9L42.7,405.7L34.3,407.6L32.9,413.8M-41.4,323.0L-44.9,327.0L-43.0,332.1L-32.3,335.1L-26.1,334.5L-18.8,344.1L-9.6,348.5L5.4,342.5L7.7,337.5L14.9,341.0L21.5,341.4L41.2,336.9L47.5,327.9L45.9,324.3L40.3,320.9L30.2,324.6L22.9,320.8L7.5,318.0L1.4,322.9L2.4,328.6L-3.7,322.6L-23.0,326.2L-32.2,318.3L-41.4,323.0"/><path class="c c1" data-km="12" d="M-401.9,-388.1L-403.9,-379.2L-400.0,-369.6L-398.3,-354.6L-374.6,-334.1L-371.2,-326.6L-363.4,-320.1L-353.2,-305.8L-348.6,-292.3L-347.7,-282.5L-351.3,-271.1L-351.9,-257.8L-340.4,-225.5L-344.7,-217.2L-342.1,-207.0L-315.9,-180.3L-304.7,-164.3L-286.5,-150.2L-283.4,-138.7L-274.8,-126.8L-281.1,-110.9L-278.4,-102.3L-270.3,-98.0L-257.7,-99.2L-249.8,-90.3L-235.5,-84.4L-233.8,-72.7L-236.2,-66.9L-235.5,-55.1L-225.7,-37.1L-227.0,-26.9L-225.2,-17.7L-217.5,-5.8L-194.7,14.8L-183.9,17.6L-174.4,16.8L-171.6,22.6L-172.5,27.9L-181.1,31.8L-188.1,44.7L-179.6,82.3L-169.9,93.4L-157.9,100.9L-149.2,115.1L-143.2,119.6L-139.9,130.0L-129.1,141.2L-123.2,156.0L-110.4,162.5L-96.8,179.6L-89.2,182.6L-91.7,195.3L-86.3,205.0L-74.5,213.6L-68.3,215.5L-71.8,232.6L-67.4,241.2L-68.9,248.8L-66.3,255.7L-69.6,267.4L-65.9,277.1L-61.3,281.0L-54.5,282.8L-51.0,289.9L-43.7,294.3L-14.0,291.5L-4.1,292.9L9.7,298.7L27.3,299.9L34.0,297.5L54.2,311.0L60.0,322.8L71.7,331.1L104.7,343.7L114.7,340.3L125.6,339.6L130.0,349.5L128.3,360.2L134.0,369.9L150.1,376.4L164.1,372.9L212.7,413.5L226.9,434.8L231.7,453.2L229.5,460.9L232.2,478.4L236.4,486.7L243.1,490.5L243.5,494.2M-386.6,-552.8L-386.8,-538.9L-390.1,-533.6L-390.6,-525.2L-386.9,-519.1L-379.9,-513.9L-373.3,-490.3L-378.0,-466.6L-382.1,-458.5L-379.0,-438.8L-401.9,-388.1M116.3,399.4L122.6,405.1L128.4,415.3L134.1,418.3L152.6,420.7L158.7,417.1L162.4,411.0L161.5,400.5L153.3,388.5L133.1,377.9L120.4,378.2L114.5,382.4L112.3,391.7L116.3,399.4M115.2,449.0L123.5,465.6L135.9,475.5L151.0,473.5L157.7,467.0L158.4,459.9L155.8,454.5L142.7,441.7L137.1,432.3L130.3,427.3L121.8,426.8L114.6,431.2L111.7,440.1L115.2,449.0M26.0,415.1L32.6,425.7L43.5,430.2L56.6,427.9L62.1,419.6L61.4,412.1L57.8,406.8L44.2,398.9L29.8,402.2L25.9,408.4L26.0,415.1M-45.2,317.0L-51.8,326.0L-49.3,335.5L-43.0,339.9L-28.9,341.7L-23.4,349.5L-11.8,355.4L-4.6,354.4L10.9,347.0L26.1,348.2L44.0,343.3L50.1,338.1L54.3,330.3L52.3,321.0L40.2,313.7L30.3,316.0L5.4,311.1L-2.2,315.8L-20.0,318.6L-27.1,312.7L-33.6,311.3L-45.2,317.0"/><path class="c c2" data-km="21" d="M-410.7,-390.5L-412.8,-378.1L-406.1,-350.0L-371.0,-315.0L-361.6,-301.4L-357.7,-289.3L-360.8,-256.5L-350.7,-226.9L-353.6,-213.8L-350.2,-203.1L-323.1,-174.7L-310.7,-157.6L-294.4,-145.9L-291.7,-135.3L-284.6,-126.2L-290.1,-111.7L-289.2,-103.6L-285.3,-96.5L-275.2,-89.9L-260.8,-88.8L-255.2,-83.1L-243.9,-78.1L-245.0,-57.2L-241.2,-45.4L-234.8,-35.8L-235.8,-24.2L-231.6,-10.3L-224.6,-0.3L-206.1,17.6L-198.3,23.0L-188.0,26.0L-194.7,36.2L-197.1,47.8L-187.7,86.3L-175.6,100.3L-164.5,107.1L-151.0,125.7L-147.3,135.1L-137.5,145.7L-132.1,159.1L-126.6,164.8L-116.9,169.3L-100.3,188.0L-100.6,196.6L-97.4,205.0L-90.1,213.8L-79.0,221.3L-80.7,233.5L-77.3,243.1L-76.1,256.2L-78.6,267.8L-75.6,278.5L-54.8,298.6L-40.0,303.7L-52.9,311.2L-59.7,320.8L-60.4,332.5L-56.6,340.8L-49.8,346.8L-33.7,351.0L-29.2,356.4L-18.9,362.8L-9.0,364.5L12.4,356.8L27.0,357.1L47.7,351.5L55.2,346.0L62.1,335.2L99.9,351.8L107.6,352.7L120.3,349.1L118.9,359.1L122.0,368.7L110.2,373.8L105.1,380.7L103.1,389.0L106.6,401.2L119.1,418.2L107.7,425.4L102.9,437.8L104.0,447.8L116.1,470.7L129.4,482.4L141.0,485.0L158.1,479.9L166.0,470.4L167.6,462.3L165.9,454.1L146.3,430.0L160.3,427.1L167.6,420.7L171.2,413.1L169.8,397.0L161.6,383.4L180.6,396.9L206.0,419.8L216.7,435.1L222.4,451.7L220.5,461.5L223.3,479.9L231.4,494.2M-395.6,-552.8L-395.5,-542.0L-399.5,-532.8L-399.4,-523.0L-395.7,-515.5L-387.7,-508.5L-382.4,-490.2L-386.2,-471.0L-391.0,-459.7L-387.9,-440.6L-410.7,-390.5M-6.2,301.9L-1.1,303.9L-5.7,306.7L-17.8,308.6L-26.4,303.3L-33.1,302.4L-15.5,300.6L-6.2,301.9M17.1,416.7L20.0,424.7L26.6,432.4L44.5,439.3L61.7,435.3L68.1,428.7L71.3,417.2L69.7,408.6L62.3,398.7L50.2,391.5L41.8,389.6L27.7,392.9L21.0,398.4L17.1,406.5L17.1,416.7"/><path class="c c3" data-km="32" d="M-421.4,-393.5L-423.7,-376.6L-415.6,-344.5L-379.2,-307.4L-371.9,-296.6L-368.6,-286.2L-371.7,-254.8L-362.7,-227.0L-364.5,-212.6L-360.1,-198.3L-349.5,-184.7L-330.5,-166.2L-318.0,-149.4L-304.5,-139.1L-297.8,-124.2L-301.0,-112.6L-299.7,-100.3L-293.7,-89.4L-284.1,-81.7L-265.5,-77.7L-255.7,-70.7L-254.6,-49.1L-246.3,-33.8L-246.7,-23.3L-242.0,-6.5L-229.4,10.6L-204.8,31.9L-208.0,48.7L-197.5,91.2L-182.7,108.7L-172.9,114.4L-156.3,141.4L-147.5,151.0L-141.3,165.1L-132.9,173.8L-124.3,178.0L-111.7,193.0L-106.6,210.9L-91.3,226.5L-87.7,256.2L-89.6,268.2L-88.4,275.6L-81.3,289.8L-63.1,305.8L-67.6,311.6L-71.6,323.0L-71.1,335.0L-65.4,347.3L-55.1,356.4L-39.9,361.1L-29.0,369.8L-15.1,375.1L-2.2,374.6L14.2,368.1L28.1,368.1L46.5,363.5L57.4,358.7L65.8,350.3L96.6,362.3L105.7,363.6L98.5,370.4L93.0,382.2L94.4,401.5L102.8,414.9L92.9,430.5L92.1,445.4L107.1,476.9L119.1,488.6L129.1,494.2M149.9,494.2L164.1,489.1L176.1,474.7L178.0,455.9L173.0,444.2L166.1,436.4L176.4,427.3L182.1,414.1L198.0,427.4L208.2,442.4L211.0,451.0L209.6,462.1L212.5,481.8L217.3,494.2M-406.6,-552.8L-406.1,-546.1L-410.6,-533.1L-410.0,-520.4L-404.5,-508.8L-396.9,-501.8L-393.6,-490.0L-401.9,-461.2L-399.6,-441.0L-412.0,-417.4L-421.4,-393.5M6.3,418.8L12.8,434.0L23.8,444.0L35.6,448.9L52.1,450.0L61.8,447.7L73.7,439.4L80.1,429.1L82.3,416.3L79.8,404.4L69.9,390.7L54.8,381.5L41.9,378.6L22.5,383.1L12.4,391.6L6.5,403.7L6.3,418.8"/><path class="c c4" data-km="45" d="M-434.1,-396.3L-436.6,-375.0L-430.3,-345.4L-426.8,-337.9L-388.5,-297.9L-381.9,-284.7L-384.6,-252.9L-376.5,-225.8L-377.4,-211.1L-371.9,-192.7L-367.4,-185.3L-339.9,-157.1L-326.6,-139.7L-315.5,-130.7L-312.2,-123.0L-314.0,-113.6L-312.0,-96.3L-303.7,-81.1L-290.2,-70.2L-269.1,-63.6L-267.0,-45.2L-259.7,-29.7L-258.4,-14.8L-253.5,-0.4L-243.7,14.3L-220.0,37.1L-219.5,58.1L-209.1,97.0L-196.2,113.6L-182.3,124.3L-146.9,178.9L-132.6,188.8L-124.4,198.5L-117.5,218.0L-104.6,232.9L-101.0,255.8L-101.4,277.3L-91.4,298.0L-80.1,307.9L-84.9,329.5L-81.1,346.0L-75.9,355.0L-61.3,367.8L-46.4,372.9L-27.8,385.1L-17.3,387.9L-0.3,387.4L-6.1,400.5L-6.7,420.4L-0.4,437.4L10.7,450.4L24.1,458.6L41.9,463.2L66.7,459.7L80.1,450.9L96.3,484.3L106.1,494.2M178.3,494.2L188.1,479.7L190.7,471.1L190.7,453.3L184.2,437.8L186.7,435.1L197.5,451.8L196.6,462.9L202.9,494.2M-419.5,-552.8L-423.4,-535.2L-422.6,-517.2L-419.6,-508.7L-406.9,-489.4L-414.8,-463.0L-413.2,-442.7L-429.0,-411.3L-434.1,-396.3M62.2,370.8L69.6,365.3L83.4,370.5L79.9,382.3L62.2,370.8"/><path class="c c5" data-km="60" d="M-448.7,-399.5L-451.9,-383.7L-451.5,-373.0L-444.4,-340.4L-433.3,-321.4L-415.5,-305.0L-397.5,-283.4L-399.4,-250.7L-391.9,-224.6L-392.3,-209.4L-389.9,-198.1L-385.4,-186.2L-379.4,-176.3L-350.8,-146.7L-336.6,-128.5L-328.4,-122.0L-328.8,-103.2L-326.3,-91.8L-315.2,-71.5L-297.2,-56.9L-283.5,-51.9L-266.8,6.6L-255.6,23.4L-235.8,43.1L-233.9,62.2L-222.6,103.7L-207.6,123.4L-193.0,135.6L-157.6,189.4L-138.4,205.3L-130.1,226.2L-119.0,240.2L-116.6,250.1L-117.5,269.4L-115.7,282.0L-109.0,298.7L-97.8,312.8L-99.9,330.1L-98.4,341.3L-88.0,363.9L-79.2,373.5L-68.6,380.9L-53.5,386.7L-33.4,399.0L-21.5,402.4L-21.5,423.3L-18.2,435.1L-9.7,450.7L0.8,461.7L18.6,472.5L38.2,477.9L56.7,477.7L73.4,473.0L85.2,494.2M-434.5,-552.8L-438.3,-537.5L-437.2,-513.5L-433.1,-502.2L-422.4,-487.2L-429.5,-465.8L-429.0,-445.1L-442.8,-417.1L-448.7,-399.5"/><path class="c c6" data-km="78" d="M-466.3,-403.4L-469.9,-384.6L-469.3,-370.7L-461.4,-334.3L-446.9,-309.6L-416.5,-278.9L-417.2,-248.1L-410.4,-223.1L-410.2,-207.4L-407.1,-192.6L-401.6,-178.5L-393.8,-165.5L-346.9,-113.8L-343.5,-86.4L-337.5,-72.5L-329.0,-60.0L-318.2,-49.3L-299.0,-38.3L-282.7,15.0L-269.8,34.4L-253.8,50.9L-244.1,97.4L-238.7,111.8L-230.4,124.8L-206.6,148.0L-170.6,201.9L-154.6,214.2L-145.2,236.0L-135.7,248.1L-133.5,284.9L-125.4,306.3L-117.2,318.5L-115.9,345.4L-111.0,360.0L-102.5,374.6L-91.1,387.0L-77.2,396.7L-60.9,403.4L-40.0,415.7L-39.1,426.7L-32.4,447.5L-24.1,461.4L-13.2,473.4L-0.2,483.2L28.8,494.2M-452.9,-552.8L-456.9,-524.7L-454.6,-509.2L-443.3,-484.5L-447.5,-467.4L-447.8,-448.3L-461.9,-418.1L-466.3,-403.4"/><path class="c c7" data-km="99" d="M-486.9,-408.0L-490.9,-385.7L-490.2,-368.0L-481.1,-327.2L-473.4,-310.7L-462.8,-295.8L-438.4,-271.8L-438.0,-245.0L-431.3,-219.4L-431.1,-205.0L-427.1,-186.2L-420.6,-169.4L-410.7,-153.0L-367.6,-105.0L-363.5,-80.0L-356.0,-62.4L-345.1,-46.5L-331.5,-33.0L-316.0,-22.8L-309.9,2.1L-301.2,24.8L-286.5,47.2L-273.6,60.9L-264.4,102.9L-257.4,121.2L-247.0,137.7L-217.4,168.6L-197.4,201.8L-185.7,216.5L-172.7,227.6L-162.8,247.4L-155.7,256.7L-156.5,270.9L-153.6,291.0L-143.7,316.5L-138.5,324.4L-136.4,350.2L-130.4,367.9L-119.4,387.0L-104.9,402.8L-87.4,415.1L-59.9,428.8L-49.4,460.6L-39.5,475.8L-20.5,494.2M-474.5,-552.8L-477.9,-523.7L-475.0,-504.1L-465.7,-481.1L-468.3,-470.3L-468.7,-453.3L-481.3,-426.2L-486.9,-408.0"/><path class="c c8" data-km="123" d="M-509.7,-345.6L-503.7,-319.1L-494.1,-298.6L-479.1,-278.0L-462.5,-262.2L-461.7,-241.5L-455.2,-214.9L-454.9,-202.3L-450.0,-179.0L-442.2,-159.0L-429.9,-138.7L-391.3,-95.6L-386.4,-72.8L-377.0,-50.8L-363.6,-31.1L-346.6,-14.4L-336.1,-7.4L-333.2,7.8L-322.4,36.1L-305.5,61.8L-295.8,72.3L-287.6,109.2L-278.9,131.9L-265.9,152.5L-237.1,182.3L-217.5,214.9L-202.9,233.2L-192.1,242.4L-180.1,264.6L-177.0,296.6L-162.8,331.2L-159.7,355.6L-152.1,378.2L-138.7,401.3L-120.7,420.9L-98.9,436.2L-81.3,444.0L-70.6,471.6L-55.0,494.2M-499.2,-552.8L-501.9,-522.7L-498.3,-498.2L-491.0,-478.1L-492.4,-460.0L-503.4,-435.5L-511.8,-408.6L-514.8,-386.8L-514.0,-364.9L-509.7,-345.6"/><path class="c c9" data-km="150" d="M-536.4,-341.8L-529.1,-310.0L-517.5,-285.0L-501.4,-262.5L-488.9,-249.3L-488.4,-237.5L-475.7,-170.8L-466.6,-147.4L-451.6,-122.6L-416.1,-83.0L-412.1,-64.6L-400.7,-37.8L-384.3,-13.8L-360.7,8.5L-346.3,48.7L-320.9,84.8L-313.6,116.3L-303.0,144.0L-287.2,169.1L-258.9,198.7L-240.1,229.7L-222.3,252.0L-213.6,259.4L-207.4,271.7L-203.3,302.8L-189.1,339.3L-186.0,361.7L-177.1,388.5L-160.5,417.3L-138.5,441.2L-111.9,459.8L-102.1,463.9L-95.3,482.8L-88.1,494.2M-526.9,-552.8L-528.8,-521.5L-524.5,-491.7L-518.9,-476.0L-519.1,-466.3L-535.9,-422.5L-541.8,-388.2L-540.7,-361.4L-536.4,-341.8"/><path class="c c10" data-km="180" d="M-566.0,-337.4L-557.4,-299.9L-543.4,-269.8L-518.2,-236.6L-504.3,-161.7L-493.7,-134.5L-475.7,-104.7L-443.9,-70.2L-440.7,-55.5L-427.0,-23.4L-407.3,5.4L-387.1,25.3L-372.8,62.8L-347.6,100.0L-338.8,136.3L-322.6,170.6L-299.6,200.7L-282.5,217.5L-258.3,255.9L-237.6,278.1L-232.5,309.7L-218.3,346.1L-215.3,368.5L-204.5,400.7L-184.7,435.0L-158.3,463.7L-125.6,486.4L-122.7,494.2M-557.0,-552.8L-558.8,-520.2L-553.6,-484.4L-549.4,-472.7L-567.3,-421.5L-571.8,-389.7L-570.5,-357.5L-566.0,-337.4"/><path class="c c11" data-km="214" d="M-599.6,-332.5L-589.4,-288.4L-572.7,-252.7L-549.8,-220.6L-536.7,-151.4L-524.4,-119.8L-503.0,-84.4L-474.9,-53.5L-456.8,-7.1L-433.4,27.2L-415.9,44.4L-402.9,78.7L-378.5,116.0L-370.9,147.5L-351.6,188.3L-324.3,224.1L-309.2,238.7L-283.7,278.8L-268.9,294.2L-265.5,317.5L-251.4,353.9L-248.4,376.2L-235.3,415.1L-212.0,455.2L-180.7,489.3L-173.7,494.2M-590.9,-552.8L-592.8,-518.6L-585.9,-474.2L-600.4,-429.2L-605.7,-391.3L-604.2,-353.1L-599.6,-332.5"/></svg></div>
+      <span class="atlas-page-head__eyebrow"><svg class="icon"><use href="#i-person"/></svg>Explore</span>
+      <h3 style="margin:0;font:700 clamp(1.8rem,1.4rem + 1.4vw,2.4rem)/1.05 var(--font-display);color:var(--atlas-ink)">Experts</h3>
+      <p class="atlas-page-head__lead">California researchers working on plastics, with their topics and metrics. Filter the list, then open a profile.</p>
+      <div class="atlas-page-head__meta">
+        <span class="atlas-pill"><strong class="num">2,614</strong> experts</span>
+        <span class="atlas-pill"><svg class="icon"><use href="#i-calendar"/></svg>Refreshed 13 Nov 2026</span>
+        <a class="atlas-pill" href="#s-components"><svg class="icon"><use href="#i-book"/></svg>What the terms mean</a>
+      </div>
+    </div>
+    <p class="sheet-note" style="margin-top:-6px">Page header: eyebrow names the nav group, the lead is at most two sentences, and the longer caveats move into callouts beside the numbers they qualify.</p>
+
+    <div class="tile-grid-2">
+      <div class="sheet">
+        <h3>Filter panel</h3>
+        <div class="atlas-filters">
+          <div class="atlas-filters__head">
+            <h4><svg class="icon"><use href="#i-filter"/></svg>Filters <span class="count">2 on</span></h4>
+            <button class="atlas-btn atlas-btn--ghost" type="button">Clear all</button>
+          </div>
+          <div class="atlas-filters__body">
+            <div class="atlas-filters__grid">
+              <div class="atlas-field"><label class="atlas-label" for="f-search">Search name or ID</label><span class="atlas-search"><svg class="icon"><use href="#i-search"/></svg><input id="f-search" class="atlas-input" type="search" placeholder="e.g. Rochman, UC Davis"></span></div>
+              <div class="atlas-field"><label class="atlas-label" for="f-type">Institution type</label><select id="f-type" class="atlas-select"><option>University of California</option><option>All institution types</option></select></div>
+              <div class="atlas-field"><label class="atlas-label" for="f-sort">Sort by</label><select id="f-sort" class="atlas-select"><option>Plastics citations</option><option>Plastics works</option></select></div>
+            </div>
+            <details class="atlas-filters__more">
+              <summary>More filters (8) <svg class="icon"><use href="#i-chevron"/></svg></summary>
+              <div class="atlas-filters__grid">
+                <div class="atlas-field"><label class="atlas-label" for="f-now">Current affiliation</label><select id="f-now" class="atlas-select"><option>In California now</option><option>Any</option></select></div>
+                <div class="atlas-field"><label class="atlas-label" for="f-from">From year</label><input id="f-from" class="atlas-input" inputmode="numeric" placeholder="Any"></div>
+                <div class="atlas-field"><span class="atlas-label">Career stage</span><label class="atlas-check" for="f-early"><input id="f-early" type="checkbox"><span>Early career only<small>First paper 10 or fewer years ago</small></span></label></div>
+              </div>
+            </details>
+            <div class="atlas-active-filters" aria-label="Active filters">
+              <span class="atlas-filter-chip">Institution type: <b>University of California</b><button type="button" aria-label="Remove institution type filter"><svg class="icon"><use href="#i-x"/></svg></button></span>
+              <span class="atlas-filter-chip">Now: <b>In California</b><button type="button" aria-label="Remove current affiliation filter"><svg class="icon"><use href="#i-x"/></svg></button></span>
+            </div>
+          </div>
+        </div>
+        <div class="atlas-result-line"><strong class="num">1,205 of 2,614 experts</strong><span>University of California, in California now (live count, 14 Nov 2026)</span></div>
+        <div class="btn-row">
+          <button class="atlas-btn atlas-btn--primary" type="button"><svg class="icon"><use href="#i-download"/></svg>Export filtered CSV</button>
+          <button class="atlas-btn atlas-btn--secondary" type="button">Reset filters</button>
+          <button class="atlas-btn atlas-btn--ghost" type="button">Show in table<svg class="icon"><use href="#i-arrow"/></svg></button>
+        </div>
+      </div>
+
+      <div class="sheet">
+        <h3>Callouts</h3>
+        <div class="atlas-callout atlas-callout--info"><svg class="icon"><use href="#i-info"/></svg><p><strong>Volume, not strength.</strong> More works or citations do not mean better or more relevant research, and the list is not a ranking of expertise.</p></div>
+        <div class="atlas-callout atlas-callout--caution"><svg class="icon"><use href="#i-alert"/></svg><p>Observations describe individual source samples; they do not establish statewide monitoring coverage or comparable concentrations. Blank cells are not evidence of a data gap.</p></div>
+        <div class="atlas-callout atlas-callout--new"><svg class="icon"><use href="#i-spark"/></svg><p><strong>New in the last 2 weeks.</strong> 2 works were published in the last 14 days.</p></div>
+        <div class="atlas-callout atlas-callout--dev"><svg class="icon"><use href="#i-tools"/></svg><p>In development: a map of sampled locations and a review overlay will be added here.</p></div>
+        <h3 style="margin-top:6px">Stat tiles</h3>
+        <div class="atlas-kpis" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))">
+          <div class="atlas-kpi"><span class="atlas-kpi__label"><svg class="icon"><use href="#i-coins"/></svg>Awards</span><span class="atlas-kpi__value">503</span><span class="atlas-kpi__note">of 524 match the default filters</span></div>
+          <div class="atlas-kpi atlas-kpi--loading" aria-busy="true"><span class="atlas-kpi__label"><svg class="icon"><use href="#i-building"/></svg>Recipients</span><span class="atlas-kpi__value">260</span><span class="atlas-kpi__note">Loading keeps the tile height</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet">
+      <figure class="atlas-chart">
+        <div class="atlas-chart__head">
+          <div><h4>Plastic-related works by topic</h4><p>Evidence map, all 1,573 plastic-related works, 13 Nov 2026</p></div>
+          <div class="atlas-segmented" role="group" aria-label="Chart or table view">
+            <button id="view-chart" type="button" aria-pressed="true">Chart</button>
+            <button id="view-table" type="button" aria-pressed="false">Table</button>
+          </div>
+        </div>
+        <div id="topic-bars" class="bars"></div>
+        <div id="topic-table" class="atlas-table-wrap" hidden>
+          <table class="atlas-table"><thead><tr><th scope="col">Topic</th><th scope="col" class="r">Works</th><th scope="col" class="r">Share of 1,573</th></tr></thead><tbody id="topic-rows"></tbody></table>
+        </div>
+        <figcaption>A work can carry several topics, so the bars add up to more than 1,573. Hatched bars are subtopics; the grey hatch is the auxiliary chemicals topic, which the Atlas covers less completely.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="tile-section" aria-labelledby="s-delta">
+    <header>
+      <h2 id="s-delta">What changes</h2>
+      <p>Measured on the live site, 14 Nov 2026 (Playwright, Chromium on Windows, 1440 × 900).</p>
+    </header>
+    <div class="atlas-table-wrap">
+      <table class="atlas-table ba">
+        <thead><tr><th scope="col">Aspect</th><th scope="col">Today</th><th scope="col">Pacific Contour</th></tr></thead>
+        <tbody>
+          <tr><td>Typeface</td><td class="before">Palatino Linotype (serif fallback) for headings, body and buttons; Arial in the sidebar and header. Measured on Windows with Chromium DevTools.</td><td>Barlow Semi Condensed for headings, eyebrows and navigation; the system interface face (Segoe UI on Windows) for text, figures and controls.</td></tr>
+          <tr><td>Colour on the first screen</td><td class="before">Colourfulness 14 to 23 (Hasler and Süsstrunk) with 2 to 5% saturated pixels on all 12 app routes. The older expert.html profile scores 37 with 35%.</td><td>Teal hero on the Overview; tinted page headers, icon tiles and a filled navigation state on every page.</td></tr>
+          <tr><td>Colour definitions</td><td class="before">78 distinct hard-coded hex colours (293 uses) in 15 stylesheets; the same seven-colour palette copied into 5 page stylesheets and 5 classic pages; blue links on some pages, green on others.</td><td>One token file of --atlas-* colours, one link colour, and a check that stops new hard-coded colours.</td></tr>
+          <tr><td>Navigation</td><td class="before">A flat list of 10 links with no icons; the header repeats a second name, “California research atlas”.</td><td>Four labelled groups with icons and a filled active item; the header carries the mark, the page name and an expert search.</td></tr>
+          <tr><td>Controls</td><td class="before">Three control styles: 44 px serif fields on ported pages, compact fields on the Evidence map, browser defaults on the network page.</td><td>One field, select, checkbox, button and chip style everywhere.</td></tr>
+          <tr><td>Callouts</td><td class="before">Four unrelated box styles for notes and caveats.</td><td>Four meanings, four styles: information, caution, new, in development.</td></tr>
+          <tr><td>First screen</td><td class="before">At 1440 × 900 the Experts page shows only filters; the Evidence map and network pages open with two to four paragraphs before any data.</td><td>Short page header, the key filters in one row, the rest under “More filters”; results or a chart on the first screen.</td></tr>
+          <tr><td>Chart colours</td><td class="before">Two categorical sets fail the colour-blind check (monitoring matrix map, ΔE 1.6; funding agencies, ΔE 1.1); heatmaps are teal on one page and blue on another.</td><td>Topic colours unchanged; every other categorical set validated; one teal sequential ramp.</td></tr>
+          <tr><td>Icons</td><td class="before">None on any route.</td><td>About 24 line icons, drawn for the Atlas or taken from a permissive set with the licence recorded.</td></tr>
+          <tr><td>Overview stability</td><td class="before">Layout shift 0.17 while the stat tiles load (Lighthouse, mobile).</td><td>Tiles keep their height while loading; layout shift below 0.1.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var topics = [
+    ["Occurrence & monitoring", 451, "--topic-occurrence", false],
+    ["Fate & transport", 266, "--topic-fate", false],
+    ["Analytical methods", 235, "--topic-analytical", false],
+    ["Soil & agriculture", 226, "--topic-soil", false],
+    ["Ecotoxicology & food webs", 203, "--topic-ecotox", false],
+    ["Human exposure & health", 199, "--topic-human", false],
+    ["Wastewater & treatment", 169, "--topic-wastewater", false],
+    ["Plastic-associated chemicals", 94, "--topic-aux", true],
+    ["Air & atmosphere", 92, "--topic-air", false],
+    ["Risk assessment", 68, "--topic-human", true],
+    ["Plastisphere", 28, "--topic-ecotox", true]
+  ];
+  var total = 1573, max = 451;
+  var bars = document.getElementById("topic-bars");
+  var rows = document.getElementById("topic-rows");
+  topics.forEach(function (t) {
+    var row = document.createElement("div");
+    row.className = "bar-row";
+    row.innerHTML = '<span class="lab"></span><span class="track"><span class="fill' + (t[3] ? " hatch" : "") +
+      '" style="width:' + (t[1] / max * 100).toFixed(1) + '%;--topic:var(' + t[2] + ')"></span></span><span class="val">' + t[1] + "</span>";
+    row.querySelector(".lab").textContent = t[0];
+    row.setAttribute("title", t[0] + ": " + t[1] + " works");
+    bars.appendChild(row);
+    var tr = document.createElement("tr");
+    tr.innerHTML = '<td><span class="topic-chip' + (t[3] ? " hatch" : "") + '" style="--topic:var(' + t[2] + ')"><span class="dot"></span></span></td><td class="r">' + t[1] +
+      '</td><td class="r">' + (t[1] / total * 100).toFixed(1) + "%</td>";
+    tr.querySelector(".topic-chip").appendChild(document.createTextNode(t[0]));
+    rows.appendChild(tr);
+  });
+  var bChart = document.getElementById("view-chart"), bTable = document.getElementById("view-table");
+  var table = document.getElementById("topic-table");
+  function show(isTable) {
+    bars.hidden = isTable; table.hidden = !isTable;
+    bChart.setAttribute("aria-pressed", String(!isTable)); bTable.setAttribute("aria-pressed", String(isTable));
+  }
+  bChart.addEventListener("click", function () { show(false); });
+  bTable.addEventListener("click", function () { show(true); });
+})();
+</script>

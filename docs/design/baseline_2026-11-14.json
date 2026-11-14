@@ -1,0 +1,541 @@
+{
+ "measured": "2026-11-14",
+ "site": "https://plastiverse.live/",
+ "method": "Playwright Chromium on Windows 11 (1440x900 and 390x844), axe-core 4.10.3, Lighthouse 12.8.2 mobile preset in Edge; colourfulness = Hasler and Susstrunk M on the first-screen screenshot; rendered fonts from DevTools CSS.getPlatformFontsForNode",
+ "css_inventory": {
+  "distinct_hex_in_framework_css": 78,
+  "hex_uses_in_framework_css": 293,
+  "stylesheets": 15,
+  "distinct_hex_in_component_js": 53,
+  "distinct_font_sizes": 27,
+  "distinct_border_radii": 17,
+  "files_redefining_brand_palette": 10
+ },
+ "palette_validation": {
+  "topics": "pass (contrast relief needed for 3 slots)",
+  "network_communities": "pass with CVD warning",
+  "monitoring_matrix_map": "fail (CVD dE 1.6, normal-vision dE 7.6, 2 low-chroma)",
+  "funding_agencies": "fail (CVD dE 1.1, normal-vision dE 9.1, 2 low-chroma)"
+ },
+ "routes": {
+  "home": {
+   "url": "https://plastiverse.live/",
+   "lighthouse_mobile": {
+    "performance": 93,
+    "accessibility": 100,
+    "lcp_s": 1.01,
+    "tbt_ms": 21,
+    "cls": 0.17
+   },
+   "fold_colourfulness_M": 18.0,
+   "fold_saturated_pct": 2.87,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "h2": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 1117,
+    "390": 2504
+   },
+   "icons": 0,
+   "note": "desktop axe pass failed on a transient DNS error; Lighthouse and the 375 px pass ran"
+  },
+  "experts": {
+   "url": "https://plastiverse.live/experts",
+   "lighthouse_mobile": {
+    "performance": 77,
+    "accessibility": 100,
+    "lcp_s": 2.37,
+    "tbt_ms": 944,
+    "cls": 0
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 15.9,
+   "fold_saturated_pct": 3.0,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "h2": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ],
+    "button": [
+     "Palatino Linotype"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 1702,
+    "390": 2489
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 23
+  },
+  "network": {
+   "url": "https://plastiverse.live/network",
+   "lighthouse_mobile": {
+    "performance": 80,
+    "accessibility": 100,
+    "lcp_s": 1.93,
+    "tbt_ms": 824,
+    "cls": 0
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 19.2,
+   "fold_saturated_pct": 3.18,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ],
+    "button": [
+     "Arial"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 1826,
+    "390": 2541
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 413
+  },
+  "institutions": {
+   "url": "https://plastiverse.live/institutions",
+   "lighthouse_mobile": {
+    "performance": 75,
+    "accessibility": 100,
+    "lcp_s": 1.17,
+    "tbt_ms": 1362,
+    "cls": 0
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 18.4,
+   "fold_saturated_pct": 4.07,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ],
+    "button": [
+     "Palatino Linotype"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 2168,
+    "390": 4517
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 29
+  },
+  "institution": {
+   "url": "https://plastiverse.live/institution",
+   "lighthouse_mobile": {
+    "performance": 98,
+    "accessibility": 100,
+    "lcp_s": 2.22,
+    "tbt_ms": 69,
+    "cls": 0
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 14.9,
+   "fold_saturated_pct": 2.32,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 3213,
+    "390": 4716
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 3
+  },
+  "monitoring": {
+   "url": "https://plastiverse.live/monitoring",
+   "lighthouse_mobile": {
+    "performance": 100,
+    "accessibility": 100,
+    "lcp_s": 1.13,
+    "tbt_ms": 81,
+    "cls": 0
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 15.2,
+   "fold_saturated_pct": 2.09,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ],
+    "button": [
+     "Palatino Linotype"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 2865,
+    "390": 2938
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 2
+  },
+  "funding": {
+   "url": "https://plastiverse.live/funding",
+   "lighthouse_mobile": {
+    "performance": 91,
+    "accessibility": 100,
+    "lcp_s": 1.18,
+    "tbt_ms": 366,
+    "cls": 0
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 16.1,
+   "fold_saturated_pct": 2.73,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "h2": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ],
+    "button": [
+     "Palatino Linotype"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 6022,
+    "390": 7364
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 8
+  },
+  "evidence": {
+   "url": "https://plastiverse.live/evidence",
+   "lighthouse_mobile": {
+    "performance": 77,
+    "accessibility": 96,
+    "lcp_s": 1.2,
+    "tbt_ms": 1055,
+    "cls": 0.037
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 21.0,
+   "fold_saturated_pct": 3.67,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "h2": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ],
+    "button": [
+     "Palatino Linotype"
+    ],
+    "td": [
+     "Arial"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 6254,
+    "390": 8458
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 33
+  },
+  "policy": {
+   "url": "https://plastiverse.live/policy",
+   "lighthouse_mobile": {
+    "performance": 100,
+    "accessibility": 100,
+    "lcp_s": 0.99,
+    "tbt_ms": 0,
+    "cls": 0.031
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 19.8,
+   "fold_saturated_pct": 3.43,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "h2": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 2116,
+    "390": 3087
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 8
+  },
+  "resources": {
+   "url": "https://plastiverse.live/resources",
+   "lighthouse_mobile": {
+    "performance": 100,
+    "accessibility": 100,
+    "lcp_s": 0.98,
+    "tbt_ms": 33,
+    "cls": 0
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 17.3,
+   "fold_saturated_pct": 2.65,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "h2": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 2138,
+    "390": 3332
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 2
+  },
+  "about": {
+   "url": "https://plastiverse.live/about",
+   "lighthouse_mobile": {
+    "performance": 98,
+    "accessibility": 100,
+    "lcp_s": 1.34,
+    "tbt_ms": 162,
+    "cls": 0
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 23.2,
+   "fold_saturated_pct": 4.68,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "h2": [
+     "Arial"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 2035,
+    "390": 3810
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 18
+  },
+  "glossary": {
+   "url": "https://plastiverse.live/glossary",
+   "lighthouse_mobile": {
+    "performance": 100,
+    "accessibility": 100,
+    "lcp_s": 1.0,
+    "tbt_ms": 32,
+    "cls": 0
+   },
+   "axe_desktop": [
+    "list",
+    "region"
+   ],
+   "fold_colourfulness_M": 21.2,
+   "fold_saturated_pct": 3.91,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 4034,
+    "390": 6904
+   },
+   "icons": 0,
+   "targets_under_24px_1366": 3
+  },
+  "expert_profile": {
+   "url": "https://plastiverse.live/expert.html#author=A5046986222",
+   "fold_colourfulness_M": 36.9,
+   "fold_saturated_pct": 34.68,
+   "rendered_fonts": {},
+   "doc_height_px": {
+    "1440": 6564,
+    "390": 9754
+   },
+   "icons": 0
+  },
+  "institution_page": {
+   "url": "https://plastiverse.live/institution#inst=I97018004",
+   "fold_colourfulness_M": 13.8,
+   "fold_saturated_pct": 2.35,
+   "rendered_fonts": {
+    "h1": [
+     "Palatino Linotype"
+    ],
+    "h2": [
+     "Palatino Linotype"
+    ],
+    "p": [
+     "Palatino Linotype",
+     "Times New Roman"
+    ],
+    "sidebar_link": [
+     "Arial"
+    ],
+    "header": [
+     "Arial"
+    ],
+    "button": [
+     "Palatino Linotype"
+    ],
+    "td": [
+     "Arial"
+    ]
+   },
+   "doc_height_px": {
+    "1440": 8426,
+    "390": 12589
+   },
+   "icons": 0
+  }
+ },
+ "notes": [
+  "home: the desktop axe pass hit a transient DNS error; Lighthouse ran. expert_profile is the classic expert.html page; institution_page is /institution#inst=I97018004.",
+  "375 px overflow and target checks for these routes are in docs/UX_19_ACCESSIBILITY_PASS.md."
+ ]
+}

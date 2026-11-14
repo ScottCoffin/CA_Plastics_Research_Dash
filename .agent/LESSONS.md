@@ -1,5 +1,10 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-14 -- Design assessment: Framework fonts and audit evidence
+- Observable Framework's body text uses `--serif` (Source Serif 4 from Google Fonts). With `globalStylesheets: []` the font never loads and Windows renders Palatino Linotype (macOS: Iowan Old Style); its `--sans-serif` lists `helvetica` before `segoe ui`, and Windows substitutes Arial. Set `--serif` and `--sans-serif` explicitly, and check rendered fonts with DevTools `CSS.getPlatformFontsForNode`, not computed `font-family`.
+- "Looks bland" is measurable: first-screen colourfulness (Hasler and Susstrunk M), hard-coded colour counts and rendered fonts turned the owner's complaint into numbers (`docs/design/baseline_2026-11-14.json`). Use the same probe for before/after.
+- `~/tools/ux-audit/ux_audit.py` results.json: an entry's `viewport` field is the page's meta viewport, not desktop/mobile; desktop entries are the ones with an `axe` key. A transient DNS error on the first route is recorded as `fatal` for that viewport only.
+
 ## 2026-11-14 -- Root switch, "not reactive" reports, worker turn limits
 - Framework pages that resolve data as `../data/` only work at a domain root because `..` clamps at `/`; under any path prefix (local preview, a project Pages URL) they escape the site. Resolve from a detected site root and test the assembled layout, not the side-by-side one.
 - An owner report that a view "is not reactive" can be a visibility problem: Playwright in Edge and Firefox showed the heatmap did narrow the table 1,000 px below it. Reproduce first, then make the effect visible (selection marks, banner, headline) instead of rewiring.

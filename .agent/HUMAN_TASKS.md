@@ -115,6 +115,15 @@ A person still needs to listen to the site once.
 3. Answer S9.3-NAMES in `.agent/QUESTIONS.md` (keep matching grants by PI name: yes/no).
 - **Done when:** you reply "profiles OK" or list what to change.
 
+### H24. Look at the proposed new design (VD, 10 minutes, optional)
+1. Open the style tile: https://claude.ai/code/artifact/c25b9435-7488-4fae-b889-109a581e17e4
+   (private to you). Or open `docs/design/style_tile.html` from the repository folder in a browser.
+2. Look at the Overview mock at the top, then the colours, fonts and components below it.
+3. Open `.agent/QUESTIONS.md` and find rows VD-D1 to VD-D8. Write an answer only where you
+   disagree; a blank answer keeps the default.
+- **Done when:** you reply "VD defaults OK" or list changes (for example "no header search").
+  The agent starts VD-1 either way; colours and fonts stay changeable in one file.
+
 ### H17. Answer the UX decisions UXD-1..UXD-9 (10 minutes)
 Your UX spec (`docs/EM_spec.md`) is now TODO section "UX". Its decisions are rows UXD-1..UXD-9
 at the bottom of `.agent/QUESTIONS.md`, each with the default the agent is using.
@@ -190,6 +199,8 @@ come with its own Streamlit app and run command here.
   (`PSSDplusplus::tomex2`) and save its output where the script says.
 - **H12. Evidence map reviews (EM-13, EM-14, EM-17, S3.7, S3.8).** Review need
   cells, methods text, policy mapping and the hero page when each is built.
+- **H25. Final design review (VD-12).** Compare the before and after screenshots the
+  agent prepares for every page, then reply "design OK" or list what to change.
 
 ---
 
