@@ -1,12 +1,12 @@
 /* Institution detail page (INST-PAGE). Every rule is scoped under #institution-root. */
 
 #institution-root {
-  --ink: #17324d;
-  --muted: #4a5d6c;
-  --brand: #075a46;
-  --brand-dark: #043e32;
-  --line: #c8d8dc;
-  --focus: #c45100;
+  --ink: var(--atlas-ink);
+  --muted: var(--atlas-muted);
+  --brand: var(--atlas-brand);
+  --brand-dark: var(--atlas-brand-strong);
+  --line: var(--atlas-line);
+  --focus: var(--atlas-accent);
   color: var(--ink);
   max-width: 72rem;
   overflow-wrap: anywhere;

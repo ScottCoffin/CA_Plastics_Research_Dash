@@ -1,13 +1,13 @@
 /* Experts view (AT-5d): rules copied from the classic site's <style> (site/index.html) and scoped
    under #experts-root so they cannot leak into other Framework pages. */
 #experts-root {
-  --ink: #17324d;
-  --muted: #536879;
-  --brand: #075a46;
-  --brand-dark: #043e32;
-  --surface: #ffffff;
-  --line: #c8d8dc;
-  --focus: #c45100;
+  --ink: var(--atlas-ink);
+  --muted: var(--atlas-muted);
+  --brand: var(--atlas-brand);
+  --brand-dark: var(--atlas-brand-strong);
+  --surface: var(--atlas-surface);
+  --line: var(--atlas-line);
+  --focus: var(--atlas-accent);
   color: var(--ink);
 }
 #experts-root * { box-sizing: border-box; }

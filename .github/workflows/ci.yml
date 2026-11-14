@@ -64,6 +64,10 @@ jobs:
       - name: Check Framework shell (AT-5)
         run: python scripts/check_at5.py
 
+      # VD-1: keep new interface colour literals centralized in the design tokens.
+      - name: Check Framework design tokens (VD-1)
+        run: python scripts/check_design_tokens.py
+
       # UX-3: no internal project vocabulary in public page text and site JSON (static;
       # build_deploy.yml repeats it on the built Framework pages).
       - name: Check public text (UX-3)

@@ -1,0 +1,85 @@
+/* Pacific Contour foundations. Keep interface colour literals in this file. */
+:root {
+  /* Interface colour palette. */
+  --atlas-ink: #17324d;
+  --atlas-text: #1d2a33;
+  --atlas-muted: #4a5d6c;
+  --atlas-faint: #5b6e7a;
+  --atlas-boundary: #6f8590;
+  --atlas-line: #d5e0dd;
+  --atlas-page: #f3f6f5;
+  --atlas-surface: #ffffff;
+  --atlas-sunken: #eaf1ef;
+  --atlas-brand: #075a46;
+  --atlas-brand-strong: #043e32;
+  --atlas-brand-action: #0e6e56;
+  --atlas-brand-tint: #d8eee7;
+  --atlas-brand-wash: #eef7f4;
+  --atlas-on-brand: #ffffff;
+  --atlas-on-brand-muted: #b2ddd0;
+  --atlas-accent: #c45100;
+  --atlas-accent-strong: #a94400;
+  --atlas-accent-wash: #fff1e6;
+  --atlas-caution-wash: #fff6e0;
+  --atlas-caution-ink: #7a4f00;
+  --atlas-caution-line: #e8c77a;
+  --atlas-good-wash: #e7f6e7;
+  --atlas-good-ink: #0b4f0b;
+
+  /* Shared sequential data ramp; categorical topic colours remain in topics.js. */
+  --seq-100: #e3f2ed;
+  --seq-200: #b9e0d3;
+  --seq-300: #86c7b2;
+  --seq-400: #4fa68c;
+  --seq-500: #23876d;
+  --seq-600: #0e6e56;
+  --seq-700: #043e32;
+
+  /* Type stacks. The display font is added locally in VD-2. */
+  --atlas-font-display: "Barlow Semi Condensed", "Segoe UI Semibold", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --atlas-font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", sans-serif;
+  --atlas-font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  /* Four-pixel spacing scale. */
+  --atlas-space-1: 4px;
+  --atlas-space-2: 8px;
+  --atlas-space-3: 12px;
+  --atlas-space-4: 16px;
+  --atlas-space-5: 20px;
+  --atlas-space-6: 24px;
+  --atlas-space-8: 32px;
+  --atlas-space-10: 40px;
+  --atlas-space-14: 56px;
+
+  --atlas-radius-control: 8px;
+  --atlas-radius-card: 12px;
+  --atlas-radius-pill: 999px;
+  --atlas-shadow-raised: 0 1px 2px rgba(16,42,36,.06), 0 1px 1px rgba(16,42,36,.04);
+  --atlas-shadow-float: 0 2px 6px rgba(16,42,36,.07), 0 12px 28px rgba(16,42,36,.10);
+
+  /* Observable Framework theme mapping (including native links and cards). */
+  --serif: var(--atlas-font-body);
+  --sans-serif: var(--atlas-font-body);
+  --monospace: var(--atlas-font-mono);
+  --theme-foreground: var(--atlas-text);
+  --theme-foreground-focus: var(--atlas-brand);
+  --theme-background-a: var(--atlas-surface);
+  --theme-background: var(--atlas-page);
+  --theme-background-alt: var(--atlas-surface);
+  --theme-foreground-muted: var(--atlas-muted);
+  --theme-foreground-faint: var(--atlas-faint);
+  --theme-foreground-faintest: var(--atlas-line);
+}
+
+body {
+  font: 400 16px/1.6 var(--atlas-font-body);
+}
+
+h1,
+h2 {
+  color: var(--atlas-ink);
+  font-family: var(--atlas-font-display);
+  font-weight: 700;
+}

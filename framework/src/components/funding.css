@@ -4,12 +4,12 @@
  * the light table headers unreadable. */
 #funding-root {
   color-scheme: light;
-  color: #17324d;
-  --brand: #075a46;
-  --brand-dark: #043e32;
-  --focus: #c45100;
-  --line: #c8d8dc;
-  --muted: #536879;
+  color: var(--atlas-ink);
+  --brand: var(--atlas-brand);
+  --brand-dark: var(--atlas-brand-strong);
+  --focus: var(--atlas-accent);
+  --line: var(--atlas-line);
+  --muted: var(--atlas-muted);
 }
 .data-note { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.9rem; }
 .result-count { margin: 0; color: var(--muted); font-size: 0.9rem; }

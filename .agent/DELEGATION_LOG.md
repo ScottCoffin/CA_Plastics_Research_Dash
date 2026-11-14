@@ -136,3 +136,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-14 | UX-31 institution page | haiku-developer | institution.md, institution*.js/css, institutions.js, tests | Accepted after one resume + one continue; lead added the table hint option | 3 sessions; ~146K subagent tokens |
 | 2026-11-14 | S9.4 sigma.js network | haiku-developer | network.md, network*.js/css, tests | Accepted after one resume (API outage) | 2 sessions; ~136K subagent tokens |
 | 2026-11-14 | S9.3 badges UI | haiku-developer | expert.html, expert_page.js, test_expert_page.py | Accepted after one continue; lead fixed the 375 px chip overflow | 2 sessions; ~127K subagent tokens |
+| 2026-11-14 | VD-1 tokens and foundations | Codex Luna task agent | tokens.css, base/five page stylesheets, design-token checker/test, CI step | Accepted; lead added the specified sequential ramp, updated the stale UX-22 assertion, and ran full/browser gates | 1 session |

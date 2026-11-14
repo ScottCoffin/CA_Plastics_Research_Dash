@@ -1,6 +1,7 @@
 @import url("observablehq:default.css");
 /* Owner 2026-11-12: light theme by default (and only); the dark theme is not loaded. */
 @import url("observablehq:theme-air.css");
+@import url("./design/tokens.css");
 
 /* Framework's #observablehq-main is a z-index 0 stacking context below the fixed header
    (z-index 2), so an open Experts drawer slid under the header. While a drawer is open,
@@ -25,13 +26,6 @@
 .atlas-cards a.card { text-decoration: none; color: inherit; }
 .atlas-pending { color: var(--theme-foreground-muted); }
 
-/* UX-22 (docs/EM_spec.md): text contrast and link affordance (WCAG 2.2 AA).
-   Framework's muted (60%) and faint (50%) text mixes measure 3.2-4.4:1; these mixes reach
-   at least 4.5:1 on both theme backgrounds and the alternate background. */
-:root {
-  --theme-foreground-muted: color-mix(in srgb, var(--theme-foreground) 75%, var(--theme-background-a));
-  --theme-foreground-faint: color-mix(in srgb, var(--theme-foreground) 68%, var(--theme-background-a));
-}
 /* Links inside running text are underlined, so colour is not the only cue. */
 .atlas-header a,
 #observablehq-footer a,
@@ -44,4 +38,4 @@
   text-underline-offset: 0.15em;
 }
 /* Facet headers keep a fixed light background in both themes; keep their links dark too. */
-.facet > summary a { color: #0b3d31; }
+.facet > summary a { color: var(--atlas-brand-strong); }

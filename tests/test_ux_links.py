@@ -52,9 +52,11 @@ def test_postbuild_fix_html_rewrites_template():
 
 
 def test_style_css_keeps_contrast_overrides():
-    """UX-22: the contrast fixes live in style.css; guard against an accidental revert."""
+    """UX-22: named theme tokens keep contrast and running links keep an underline."""
     css = (FW / "src" / "style.css").read_text(encoding="utf-8")
-    assert "--theme-foreground-muted: color-mix(in srgb, var(--theme-foreground) 75%" in css
+    tokens = (FW / "src" / "design" / "tokens.css").read_text(encoding="utf-8")
+    assert "--theme-foreground-muted: var(--atlas-muted);" in tokens
+    assert "--theme-foreground-faint: var(--atlas-faint);" in tokens
     assert "text-decoration: underline" in css
     # Owner 2026-11-12: light theme only, so the dark-theme panel overrides were removed.
     assert "near-midnight" not in css
