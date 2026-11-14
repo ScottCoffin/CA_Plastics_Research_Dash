@@ -3,7 +3,7 @@
 // comparators and hash state). Markup lives in src/institutions.md; the tiers helpers in inst_tiers.js;
 // shared map code in svg_map.js. Nothing touches the DOM until mountInstitutions() runs.
 import "./shared/topics.js";
-import {loadJson, escapeHtml, classicUrl} from "./atlas.js";
+import {loadJson, escapeHtml} from "./atlas.js";
 import {monitoringView} from "./monitoring_view.js";
 import {monitoringMap, attachMapInteractions, ensureCaBasemap, caBasemapFeatures, caBasemapState} from "./svg_map.js";
 import {instTiers} from "./inst_tiers.js";
@@ -156,7 +156,7 @@ function topExpertsHtml(institution) {
     const name = expert.in_atlas_index ? `<a class="expert-name" href="${escapeHtml(appUrl(`experts#author=${encodeURIComponent(expert.author_id)}`))}">${escapeHtml(expert.name || expert.author_id)}</a>` : `<span class="expert-name">${escapeHtml(expert.name || expert.author_id)}</span>`;
     return `<li>${name}<span class="detail-meta">${expert.works} ${expert.works === 1 ? "work" : "works"}</span>${expert.topic ? topics().chip(expert.topic) : ""}</li>`;
   }).join("");
-  return `<div class="top-experts"><h3>Top experts</h3><ul>${items}</ul><a href="${escapeHtml(classicUrl(`sem.html#inst=${encodeURIComponent(institution.inst_id)}&section=experts`))}">All experts at this institution</a></div>`;
+  return `<div class="top-experts"><h3>Top experts</h3><ul>${items}</ul><a href="${escapeHtml(institutionPageUrl(institution.inst_id, "experts"))}">All experts at this institution</a></div>`;
 }
 
 function collaboratorLine(institution) {
@@ -165,8 +165,13 @@ function collaboratorLine(institution) {
   return `<p class="collab-line"><span class="collab-badge">Collaborator outside California</span> Appears through ${n} ${n === 1 ? "work" : "works"} co-authored with California researchers.</p>`;
 }
 
+// Institution detail page (INST-PAGE); section is optional (experts, publications or topics).
+function institutionPageUrl(institutionId, section = "") {
+  return appUrl(`institution#inst=${encodeURIComponent(institutionId)}${section ? `&section=${section}` : ""}`);
+}
+
 function publicationsLink(institutionId) {
-  return `<a class="button-link institution-publications-link" href="${escapeHtml(classicUrl(`sem.html#inst=${encodeURIComponent(institutionId)}`))}">View publications</a>`;
+  return `<a class="button-link institution-publications-link" href="${escapeHtml(institutionPageUrl(institutionId, "publications"))}">View publications</a>`;
 }
 
 function sparkline(metric) {
@@ -187,6 +192,11 @@ function institutionExpertLink(institutionId) {
 // Classic openInstitutionExperts switched tabs; the Experts page is its own Framework page now.
 function openInstitutionExperts(institutionId) {
   window.location.assign(appUrl(`experts#institution=${encodeURIComponent(institutionId)}`));
+}
+
+// Tier names and card names open the institution detail page.
+function openInstitution(institutionId) {
+  window.location.assign(institutionPageUrl(institutionId));
 }
 
 function primaryTopicLine(metric) {
@@ -327,7 +337,7 @@ function renderInstitutionTiers() {
 
 function institutionCardHtml(metric) {
   const institution = metric.institution;
-  return `<article class="card institution-card" data-institution-id="${escapeHtml(institution.inst_id)}"><div class="card-header"><h2>${escapeHtml(institution.name)}</h2><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div>${collaboratorLine(institution)}${primaryTopicLine(metric)}<p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p><div class="institution-topics">${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 5)}</div>${sparkline(metric)}${topExpertsHtml(institution)}<div class="institution-actions">${institution.ca_flag ? institutionExpertLink(institution.inst_id) : ""}${publicationsLink(institution.inst_id)}</div></article>`;
+  return `<article class="card institution-card" data-institution-id="${escapeHtml(institution.inst_id)}"><div class="card-header"><h2><a href="${escapeHtml(institutionPageUrl(institution.inst_id))}">${escapeHtml(institution.name)}</a></h2><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div>${collaboratorLine(institution)}${primaryTopicLine(metric)}<p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p><div class="institution-topics">${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 5)}</div>${sparkline(metric)}${topExpertsHtml(institution)}<div class="institution-actions">${institution.ca_flag ? institutionExpertLink(institution.inst_id) : ""}${publicationsLink(institution.inst_id)}</div></article>`;
 }
 
 function renderInstitutions() {
@@ -358,7 +368,7 @@ function bindEvents() {
     const view = event.target.closest("[data-inst-view]");
     if (view) { state.instView = view.dataset.instView; writeHash(); renderInstitutions(); return; }
     const name = event.target.closest("#institution-tier-groups .tier-name");
-    if (name) openInstitutionExperts(name.dataset.institutionId);
+    if (name) openInstitution(name.dataset.institutionId);
   });
   $("institution-sort").addEventListener("change", (event) => { state.institutionSort = event.target.value; renderInstitutions(); });
   $("institution-topic-filter").addEventListener("change", (event) => { state.institutionPrimaryTopic = event.target.value; renderInstitutions(); });

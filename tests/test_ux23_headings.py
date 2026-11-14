@@ -53,7 +53,12 @@ def test_institutions_page_heading_order_has_no_skips():
 
 def test_institution_runtime_headings_follow_h1():
     js = _read("components/institutions.js")
-    assert '<div class="card-header"><h2>${escapeHtml(institution.name)}</h2>' in js
+    # UX-31: the card title links to the institution page; it stays an h2.
+    assert (
+        '<div class="card-header"><h2><a href="'
+        '${escapeHtml(institutionPageUrl(institution.inst_id))}">'
+        "${escapeHtml(institution.name)}</a></h2>"
+    ) in js
     assert '<div class="top-experts"><h3>Top experts</h3>' in js
     assert '<section class="map-inst"><h4>${escapeHtml(institution.name)}</h4>' in js
     assert '<div class="map-details-head"><h3>${metrics.length}' in js

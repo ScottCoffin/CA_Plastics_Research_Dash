@@ -1,0 +1,98 @@
+/* Institution detail page (INST-PAGE). Every rule is scoped under #institution-root. */
+
+#institution-root {
+  --ink: #17324d;
+  --muted: #4a5d6c;
+  --brand: #075a46;
+  --brand-dark: #043e32;
+  --line: #c8d8dc;
+  --focus: #c45100;
+  color: var(--ink);
+  max-width: 72rem;
+  overflow-wrap: anywhere;
+}
+#institution-root :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+#institution-root h1 { margin: 0.25rem 0 0.5rem; font-size: 1.8rem; line-height: 1.2; }
+#institution-root h2 { margin: 0 0 0.5rem; font-size: 1.25rem; scroll-margin-top: 1rem; }
+#institution-root h2:focus { outline: none; }
+#institution-root h3 { margin: 0.75rem 0 0.4rem; font-size: 1rem; }
+#institution-root p { margin: 0.5rem 0; }
+#institution-root a { color: var(--brand-dark); }
+#institution-root .data-note, #institution-root .result-count, #institution-root .detail-meta { color: var(--muted); font-size: 0.9rem; }
+#institution-root .empty { padding: 1rem; border: 1px dashed #8da7af; border-radius: 0.5rem; color: var(--muted); }
+#institution-root .inst-section { margin: 1.75rem 0; }
+#institution-root .inst-back { margin-top: 0.5rem; }
+#institution-root .inst-back a { display: inline-block; min-height: 2.75rem; line-height: 2.75rem; }
+#institution-root .inst-meta, #institution-root .inst-links { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; align-items: center; }
+#institution-root .inst-links a { display: inline-block; min-height: 2.75rem; line-height: 2.75rem; }
+#institution-root .inst-chip, #institution-root .inst-badge {
+  display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
+  background: #e3efec; color: var(--brand-dark); border: 1px solid #b9d6cd;
+}
+#institution-root .inst-badge.collab { background: #f4efe2; color: #5b4300; border-color: #d9c996; }
+#institution-root .inst-notice { padding: 0.6rem 0.9rem; border-left: 4px solid var(--focus); background: #fbf6f0; max-width: 70ch; }
+#institution-root .inst-state { padding: 1rem; border: 1px solid var(--line); border-radius: 0.5rem; }
+
+#institution-root .inst-button {
+  min-height: 2.75rem; padding: 0.4rem 0.9rem; border: 1px solid var(--brand); border-radius: 0.4rem;
+  background: #fff; color: var(--brand-dark); font: inherit; font-weight: 600; cursor: pointer;
+}
+#institution-root .inst-button:disabled { color: #5a6b75; border-color: #8da7af; cursor: default; }
+#institution-root .inst-field { display: flex; flex-direction: column; gap: 0.3rem; margin: 1rem 0 0.5rem; max-width: 28rem; }
+#institution-root .inst-field label { font-weight: 700; font-size: 0.9rem; }
+#institution-root .inst-field input { min-height: 2.75rem; padding: 0.5rem 0.65rem; border: 1px solid #8da7af; border-radius: 0.35rem; font: inherit; color: var(--ink); background: #fff; }
+#institution-root .inst-search-results li { margin: 0.35rem 0; }
+#institution-root .inst-search-results a { display: inline-block; min-height: 2.75rem; line-height: 2.75rem; }
+
+/* Summary tiles */
+#institution-root .inst-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 0.6rem; margin: 0; }
+#institution-root .inst-tile { margin: 0; padding: 0.6rem 0.8rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd; }
+#institution-root .inst-tile dt { font-size: 0.85rem; color: var(--muted); }
+#institution-root .inst-tile dd { margin: 0; font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+#institution-root .inst-tile-note { display: block; font-size: 0.8rem; font-weight: 400; color: var(--muted); }
+
+/* Works per year */
+#institution-root .inst-chart { margin: 0; max-width: 40rem; }
+#institution-root .inst-bars { display: block; width: 100%; height: auto; }
+#institution-root .inst-bar { fill: var(--brand); }
+#institution-root .inst-axis { stroke: #8da7af; stroke-width: 1; }
+#institution-root .inst-bars text { font-size: 13px; fill: var(--muted); }
+#institution-root .inst-sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Topic chips: font size is set inline, scaled by the work count */
+#institution-root .inst-topic-cloud { display: flex; flex-wrap: wrap; gap: 0.45rem 0.55rem; align-items: center; }
+#institution-root .inst-topic-chip {
+  display: inline-flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; padding: 0.2rem 0.7rem; line-height: 1.25;
+  border: 1px solid #8da7af; border-radius: 999px; background: #fff; color: var(--ink); font-family: inherit; font-weight: 600; cursor: pointer;
+}
+#institution-root .inst-topic-chip.matrix { border-style: dashed; font-weight: 500; color: #2f3f4a; }
+#institution-root .inst-topic-chip[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
+#institution-root .inst-topic-chip[aria-pressed="true"] .inst-topic-count { color: #fff; }
+#institution-root .inst-topic-chip .topic-dot { width: 0.6rem; height: 0.6rem; border-radius: 999px; flex: none; box-shadow: 0 0 0 1px #fff; }
+#institution-root .inst-topic-count { font-weight: 700; color: var(--muted); }
+#institution-root .inst-topic-chip[aria-pressed="true"] .inst-topic-count { color: #fff; }
+#institution-root .inst-filter-row { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; align-items: center; margin-top: 0.75rem; }
+#institution-root .inst-filter-note { margin: 0.5rem 0; font-weight: 600; }
+
+/* Tables and lists */
+#institution-root .inst-table-scroll { overflow-x: auto; max-width: 100%; }
+#institution-root .inst-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+#institution-root .inst-table caption { text-align: left; color: var(--muted); padding: 0 0 0.4rem; }
+#institution-root .inst-table th, #institution-root .inst-table td { padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#institution-root .inst-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+#institution-root .inst-table .topic-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+#institution-root .inst-list { padding-left: 1.4rem; margin: 0.4rem 0; }
+#institution-root .inst-list li { margin: 0.35rem 0; }
+#institution-root .inst-subhead { color: var(--muted); }
+
+/* Publications table comes from ev_table.js; keep it inside the page width */
+#institution-root .ev-table-root { max-width: 100%; }
+#institution-root .ev-table-scroll { max-width: 100%; overflow-x: auto; }
+
+@media (max-width: 40rem) {
+  #institution-root h1 { font-size: 1.5rem; }
+  #institution-root .inst-tile dd { font-size: 1.2rem; }
+  #institution-root .inst-table th, #institution-root .inst-table td { padding: 0.4rem 0.3rem; }
+}

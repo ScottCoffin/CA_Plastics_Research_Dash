@@ -38,7 +38,7 @@ def test_view_exports_mount_and_recent_callout() -> None:
     text = VIEW.read_text(encoding="utf-8")
     mount = (
         r"export\s+function\s+mountWorksTable\s*\(\s*container,"
-        r"\s*\{\s*today\s*=\s*new Date\(\)\s*\}\s*=\s*\{\}\s*\)"
+        r"\s*\{\s*today\s*=\s*new Date\(\),\s*hint\s*=\s*DEFAULT_HINT\s*\}\s*=\s*\{\}\s*\)"
     )
     assert re.search(mount, text)
     callout = r"export\s+function\s+renderRecentCallout\s*\(\s*container,\s*rows,\s*today"

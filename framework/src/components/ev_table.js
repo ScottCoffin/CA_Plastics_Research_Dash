@@ -86,11 +86,13 @@ function rowHtml(row, isNew) {
     + `</tr>`;
 }
 
-function shellHtml() {
+const DEFAULT_HINT = "Select heatmap cells or topic names to narrow this table.";
+
+function shellHtml(hint = DEFAULT_HINT) {
   const sortOptions = SORT_OPTIONS.map(([key, label]) => `<option value="${key}">${label}</option>`).join("");
   const header = (key, label, cls = "") => `<th scope="col"${cls ? ` class="${cls}"` : ""}>`
     + `<button type="button" class="ev-sort" data-sort="${key}">${label}</button></th>`;
-  return `<p class="ev-hint">Select heatmap cells or topic names to narrow this table.</p>`
+  return (hint ? `<p class="ev-hint">${escapeHtml(hint)}</p>` : "")
     + `<div class="ev-table-tools">`
     + `<label class="ev-field ev-field-search"><span>Search</span>`
     + `<input type="search" data-role="q" autocomplete="off" placeholder="Title, author or journal"></label>`
@@ -115,9 +117,10 @@ function shellHtml() {
 
 // Mounts the table into container. Resolves once the rows are loaded (never rejects; a load
 // failure is shown inside the table). update(ids) limits the table to those work_ids; null shows all.
-export function mountWorksTable(container, {today = new Date()} = {}) {
+// hint: the line above the controls (default: the Evidence map heatmap hint; "" for none).
+export function mountWorksTable(container, {today = new Date(), hint = DEFAULT_HINT} = {}) {
   container.classList.add("ev-table-root");
-  container.innerHTML = shellHtml();
+  container.innerHTML = shellHtml(hint);
   const q = (role) => container.querySelector(`[data-role="${role}"]`);
   const el = {
     tools: container.querySelector(".ev-table-tools"),
