@@ -29,6 +29,7 @@ def run_daily_ingest(
     replace_output: bool = False,
     anchor_author_ids: Sequence[str] | None = None,
     raw_affiliation_scope: bool = False,
+    publication_date_cap: str | None = None,
     ingest: Callable[..., Mapping[str, Any]] = ingest_live,
 ) -> dict[str, Any]:
     """Run one refresh and convert expected budget stops into a clean outcome.
@@ -54,6 +55,8 @@ def run_daily_ingest(
             **({"replace_output": True} if replace_output else {}),
             **({"anchor_author_ids": anchor_author_ids} if anchor_author_ids else {}),
             **({"raw_affiliation_scope": True} if raw_affiliation_scope else {}),
+            # Owner AT11-WINDOW: the daily runner caps publication dates at yesterday UTC.
+            **({"publication_date_cap": publication_date_cap} if publication_date_cap else {}),
         )
     except OpenAlexRateLimitError as error:
         return {

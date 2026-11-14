@@ -313,3 +313,21 @@ def test_cli_exit_code_reflects_problems(tmp_path: Path, capsys: pytest.CaptureF
     assert "raw_works: OK" in out and "site_payload: OK" in out
     assert module.main([*args, "--require-raw"]) == 0
     assert module.main(["--site-data", str(tmp_path / "absent")]) == 1
+
+
+def test_daily_ingest_passes_the_publication_date_cap(tmp_path: Path) -> None:
+    """Regression (2026-11-12/13 CI failures): the runner's date cap must reach ingest_live."""
+    seen: dict = {}
+
+    def fake_ingest(**kwargs):
+        seen.update(kwargs)
+        return {"works": 0}
+
+    result = run_daily_ingest(
+        institution_ids=["I1"],
+        paths=OpenAlexPaths(output_parquet=tmp_path / "w.parquet"),
+        publication_date_cap="2026-11-12",
+        ingest=fake_ingest,
+    )
+    assert result["status"] == "success"
+    assert seen["publication_date_cap"] == "2026-11-12"

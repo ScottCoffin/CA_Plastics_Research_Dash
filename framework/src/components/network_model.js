@@ -250,3 +250,143 @@ export function layoutToView(nodes, size = VIEW_SIZE, pad = 40) {
   }
   return out;
 }
+
+// ---- sigma.js graph helpers -------------------------------------------------------------------
+// Colour and size modes for the WebGL graph. Groups are the colour keys: a cluster number, a
+// main topic (first tag) or a main sector (first sector). Only the largest groups get a colour.
+export const OTHER_GROUP = "__other__";
+export const EDGE_COLOUR = "#7d8a90";
+
+function firstTag(list) {
+  if (!Array.isArray(list) || !list.length) return null;
+  const value = list[0];
+  return value === null || value === undefined || String(value) === "" ? null : String(value);
+}
+
+// The group a node belongs to in the chosen colour mode, or null when it has none.
+export function nodeGroup(node, colourMode) {
+  if (colourMode === "topic") return firstTag(node.topics);
+  if (colourMode === "sector") return firstTag(node.sectors);
+  return node.community === undefined || node.community === null ? null : String(node.community);
+}
+
+// Experts per group, largest first; ties by key (numbers in numeric order).
+export function groupCounts(nodes, colourMode) {
+  const counts = new Map();
+  for (const node of nodes || []) {
+    const key = nodeGroup(node, colourMode);
+    if (key !== null) counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return new Map(
+    [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], undefined, {numeric: true}))
+  );
+}
+
+// Colour per group for the largest groups, in palette order. Topics use their own colour when
+// topicColour returns one. Groups beyond the palette are absent and draw in the other colour.
+export function colourGroups(nodes, colourMode, topicColour = () => null) {
+  const out = new Map();
+  [...groupCounts(nodes, colourMode).keys()].slice(0, COMMUNITY_COLOURS.length).forEach((key, i) => {
+    const own = colourMode === "topic" ? topicColour(key) : null;
+    out.set(key, own || COMMUNITY_COLOURS[i]);
+  });
+  return out;
+}
+
+// Legend rows in colour order, plus one "other" row when some experts have no coloured group.
+export function legendGroups(nodes, colourMode, colours, topicLabel = (tag) => String(tag)) {
+  const counts = groupCounts(nodes, colourMode);
+  const noun = colourMode === "topic" ? "topics" : colourMode === "sector" ? "sectors" : "clusters";
+  const labelOf = (key, rank) => {
+    if (colourMode === "topic") return topicLabel(key);
+    if (colourMode === "sector") return sectorLabel(key);
+    return `Cluster ${rank}`;
+  };
+  const items = [...colours.keys()].map((key, i) => ({
+    key,
+    colour: colours.get(key),
+    count: counts.get(key) || 0,
+    label: labelOf(key, i + 1)
+  }));
+  const otherCount = (nodes || []).length - items.reduce((sum, item) => sum + item.count, 0);
+  if (otherCount > 0) {
+    items.push({key: OTHER_GROUP, colour: OTHER_COLOUR, count: otherCount, label: `Other ${noun}`});
+  }
+  return items;
+}
+
+// Colour for one node, given the colour map from colourGroups.
+export function nodeColour(node, colourMode, colours) {
+  const key = nodeGroup(node, colourMode);
+  return key !== null && colours.has(key) ? colours.get(key) : OTHER_COLOUR;
+}
+
+// The number a node is sized by: plastic-related works or collaborators.
+export function sizeValue(node, sizeMode) {
+  return sizeMode === "collaborators" ? Number(node.degree) || 0 : Number(node.plastic_works) || 0;
+}
+
+// Sigma node size in pixels: area grows with the value, from 3 px (none) to 14 px (the largest).
+export function sigmaNodeSize(value, maxValue) {
+  const share = maxValue > 0 ? Math.sqrt(Math.max(0, Number(value) || 0) / maxValue) : 0;
+  return 3 + 11 * share;
+}
+
+// Plain node and edge rows for the graph: only the experts that pass the node filters and are not
+// in a hidden legend group, and only the links with a shown weight between two kept experts.
+// options: {colours, hiddenGroups: Set, positions: Map(id -> {x, y})} override the defaults.
+export function graphAttributes(nodes, edges, state, colourMode, sizeMode, options = {}) {
+  const colours = options.colours || colourGroups(nodes, colourMode);
+  const hidden = options.hiddenGroups || new Set();
+  const positions = options.positions || new Map();
+  const matching = matchingNodeIds(nodes, state);
+  const weights = shownEdgeWeights(edges || [], matching, state);
+  const maxValue = Math.max(1, ...(nodes || []).map((node) => sizeValue(node, sizeMode)));
+  const nodeRows = [];
+  const kept = new Set();
+  for (const node of nodes || []) {
+    if (!matching.has(node.id)) continue;
+    const group = nodeGroup(node, colourMode);
+    const key = group !== null && colours.has(group) ? group : OTHER_GROUP;
+    if (hidden.has(key)) continue;
+    const at = positions.get(node.id) || {x: Number(node.x) || 0, y: Number(node.y) || 0};
+    kept.add(node.id);
+    nodeRows.push({
+      key: node.id,
+      label: node.name,
+      x: at.x,
+      y: at.y,
+      size: sigmaNodeSize(sizeValue(node, sizeMode), maxValue),
+      color: key === OTHER_GROUP ? OTHER_COLOUR : colours.get(key),
+      group: key
+    });
+  }
+  const edgeRows = [];
+  (edges || []).forEach((edge, i) => {
+    const weight = weights[i];
+    if (!(weight > 0) || !kept.has(edge.source) || !kept.has(edge.target)) return;
+    edgeRows.push({
+      key: `e${i}`,
+      source: edge.source,
+      target: edge.target,
+      size: 0.6 * edgeStroke(weight),
+      color: EDGE_COLOUR,
+      weight
+    });
+  });
+  return {nodes: nodeRows, edges: edgeRows};
+}
+
+// The co-authors joined to `id` by a shown link, most shared works first (then by id).
+export function topCoauthors(edges, weights, id, n = 8) {
+  const rows = [];
+  (edges || []).forEach((edge, i) => {
+    const weight = weights[i];
+    if (!(weight > 0)) return;
+    if (edge.source === id) rows.push({id: edge.target, weight});
+    else if (edge.target === id) rows.push({id: edge.source, weight});
+  });
+  return rows
+    .sort((a, b) => b.weight - a.weight || String(a.id).localeCompare(String(b.id)))
+    .slice(0, Math.max(0, n));
+}

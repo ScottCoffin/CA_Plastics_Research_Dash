@@ -115,6 +115,16 @@ jobs:
           python scripts/build_bundle.py
           python scripts/check_at4.py
 
+      # S9.4 collaboration network (networkx, seeded Louvain + spring layout) from the new export.
+      - name: Build collaboration network
+        if: steps.refresh.outputs.status == 'success'
+        run: python scripts/build_network.py
+
+      # S9.3 funding and data-stewardship badges for the expert profile page.
+      - name: Build expert badges
+        if: steps.refresh.outputs.status == 'success'
+        run: python scripts/build_expert_badges.py
+
       # AT-11: stop before committing if the raw/normalized schema changed or a payload is too big.
       - name: Schema and payload guards
         if: steps.refresh.outputs.status == 'success'
@@ -165,8 +175,11 @@ jobs:
             site/data/aggregates.json \
             site/data/build_metadata.json \
             site/data/institutions.json \
-            site/data/institutions.geojson
-          git add -A site/data/authors site/data/institution_works site/data/bundle
+            site/data/institutions.geojson \
+            site/data/works_detail.json \
+            site/data/network.json \
+            site/data/expert_badges.json
+          git add -A site/data/authors site/data/institution_works site/data/bundle site/data/work_text
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"
           git pull --rebase origin "$DEFAULT_BRANCH"

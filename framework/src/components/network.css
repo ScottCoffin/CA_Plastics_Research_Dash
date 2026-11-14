@@ -1,19 +1,50 @@
 /* Collaboration network page. Every selector is scoped to the .net- prefix. */
+.net-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  align-items: flex-end;
+  margin: 0.4rem 0;
+}
+
+.net-tools .field {
+  min-width: 12rem;
+}
+
 .net-chart {
-  position: relative;
-  height: 70vh;
-  min-height: 360px;
-  max-height: 760px;
-  overflow: hidden;
   border: 1px solid #c9d6d2;
   border-radius: 6px;
   background: #fbfdfc;
+  overflow: hidden;
 }
 
-.net-svg {
-  display: block;
-  width: 100%;
-  height: 100%;
+.net-chart:fullscreen {
+  height: 100vh;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.net-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #dfe7e4;
+}
+
+.net-btn {
+  min-height: 24px;
+  min-width: 24px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+.net-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .net-message {
@@ -22,85 +53,131 @@
   color: #3b4850;
 }
 
-.net-edge {
-  stroke: #7d8a90;
-  stroke-opacity: 0.45;
-}
-
-.net-edge.is-linked {
-  stroke: #1d2a33;
-  stroke-opacity: 0.9;
-}
-
-.net-edge.is-hidden,
-.net-node.is-hidden {
+.net-message[hidden] {
   display: none;
 }
 
-.net-node {
-  stroke: #ffffff;
-  stroke-width: 1.5;
+.net-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  height: 70vh;
+  min-height: 420px;
+  max-height: 760px;
+}
+
+.net-chart:fullscreen .net-body {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+}
+
+.net-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  cursor: grab;
+}
+
+.net-panel {
+  overflow-y: auto;
+  padding: 0.75rem 0.9rem;
+  border-left: 1px solid #dfe7e4;
+  background: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.net-panel h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+}
+
+.net-panel h3 {
+  margin: 0.8rem 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.net-panel-note {
+  color: #3b4850;
+}
+
+.net-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.6rem;
+  margin: 0;
+}
+
+.net-facts dt {
+  font-weight: 600;
+  color: #3b4850;
+}
+
+.net-facts dd {
+  margin: 0;
+}
+
+.net-coauthors {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.net-link-button {
+  min-height: 24px;
+  min-width: 24px;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid #9fb3ad;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #1d2a33;
+  font: inherit;
+  text-align: left;
   cursor: pointer;
 }
 
-.net-node.is-dim {
-  opacity: 0.35;
+.net-link-button:hover {
+  background: #eef5f2;
 }
 
-.net-node:focus {
-  outline: none;
-}
-
-.net-node:focus-visible,
-.net-node.is-focus {
-  stroke: #111111;
-  stroke-width: 3;
-}
-
-.net-svg.has-focus .net-edge:not(.is-linked) {
-  stroke-opacity: 0.08;
-}
-
-.net-svg.has-focus .net-node:not(.is-focus):not(.is-linked) {
-  opacity: 0.15;
-}
-
-.net-tooltip {
-  position: absolute;
-  z-index: 2;
-  display: grid;
-  gap: 0.1rem;
-  max-width: 260px;
-  padding: 0.45rem 0.6rem;
-  border: 1px solid #9fb3ad;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #1d2a33;
-  font-size: 0.85rem;
-  line-height: 1.3;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  pointer-events: none;
-  transform: translate(-50%, -100%);
-  margin-top: -12px;
-}
-
-.net-tooltip[hidden] {
-  display: none;
-}
-
-.net-tooltip.is-below {
-  transform: translate(-50%, 0);
-  margin-top: 12px;
+.net-profile-link {
+  display: inline-block;
+  margin-top: 0.8rem;
+  min-height: 24px;
+  line-height: 24px;
 }
 
 .net-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1rem;
+  gap: 0.3rem 0.6rem;
   padding: 0;
   margin: 0.6rem 0;
   list-style: none;
   font-size: 0.85rem;
+}
+
+.net-legend-item {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  min-width: 24px;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid #9fb3ad;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #1d2a33;
+  font: inherit;
+  cursor: pointer;
+}
+
+.net-legend-item[aria-pressed="false"] {
+  opacity: 0.45;
+  text-decoration: line-through;
 }
 
 .net-swatch {
@@ -114,4 +191,25 @@
 
 .net-table-wrap {
   overflow-x: auto;
+}
+
+@media (max-width: 720px) {
+  .net-body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 60vh auto;
+    height: auto;
+    max-height: none;
+    min-height: 0;
+  }
+
+  .net-stage {
+    height: 60vh;
+    min-height: 320px;
+  }
+
+  .net-panel {
+    border-left: 0;
+    border-top: 1px solid #dfe7e4;
+    max-height: 50vh;
+  }
 }

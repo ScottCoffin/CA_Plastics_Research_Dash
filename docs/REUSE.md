@@ -115,9 +115,9 @@ This ledger lists the external tools and projects named in add-on A1 §§0 and 7
 | npm | UNKNOWN - needs SPK-6 | SPK-6 build commands |
 | Plot | UNKNOWN - needs SPK-6 | SPK-6 fallback network-chart option |
 | D3 | UNKNOWN - needs SPK-6 | SPK-6 fallback network-chart option |
-| networkx | UNKNOWN - verify (expected BSD-3-Clause) | S9.4 co-authorship graph, Louvain communities, centrality |
-| sigma.js | UNKNOWN - verify (expected MIT) | S9.4 fallback in-page network renderer (vendored) |
-| graphology (+ layout-forceatlas2) | UNKNOWN - verify (expected MIT) | S9.4 fallback graph model and ForceAtlas2 layout |
+| networkx | BSD-3-Clause (verified 2026-11-13, pip metadata 3.6.1) | S9.4 co-authorship graph, seeded Louvain communities, spring layout; declared dependency since S9.4-DEP (lock: 3.6.1 on Python 3.11, 3.7 on 3.12+) |
+| sigma.js | MIT (verified 2026-11-13, npm sigma@3.0.3, published 2026-04-30) | S9.4 WebGL network renderer on /network; Framework `npm:` import, self-hosted at build (owner asked for ipysigma, its Jupyter wrapper) |
+| graphology (+ layout-forceatlas2) | MIT (verified 2026-11-13, npm graphology@0.26.0 and graphology-layout-forceatlas2@0.10.1) | S9.4 graph model and the on-page ForceAtlas2 re-layout |
 
 Rules from §0 and the L6 licence gate:
 

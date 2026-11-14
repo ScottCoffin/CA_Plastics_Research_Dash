@@ -9,18 +9,28 @@ import {
   edgeWeight,
   emptyNetworkState,
   formatNetworkHash,
+  colourGroups,
+  graphAttributes,
+  groupCounts,
   layoutToView,
+  legendGroups,
   matchingNodeIds,
   neighbourIds,
   networkSummary,
+  nodeColour,
+  nodeGroup,
   nodeRadius,
   normalizeNetworkState,
+  OTHER_COLOUR,
+  OTHER_GROUP,
   parseNetworkHash,
   sectorLabel,
   sectorOptions,
   shownEdgeWeights,
+  sigmaNodeSize,
   sortByCollaborators,
   tagOptions,
+  topCoauthors,
   yearBounds
 } from "../framework/src/components/network_model.js";
 
@@ -149,6 +159,87 @@ const everyone = new Set(["a", "b", "c", "d"]);
     assert.ok(point.y >= 40 && point.y <= 960, `y ${point.y}`);
   }
   assert.deepEqual(layoutToView([]), new Map());
+}
+
+// sigma graph helpers: groups by colour mode, legend rows, colours, sizes.
+{
+  assert.equal(nodeGroup(nodes[0], "cluster"), "0");
+  assert.equal(nodeGroup(nodes[1], "topic"), null);
+  assert.equal(nodeGroup(nodes[0], "sector"), "UC");
+  assert.deepEqual([...groupCounts(nodes, "cluster")], [["0", 2], ["1", 1], ["2", 1]]);
+  assert.deepEqual([...groupCounts(nodes, "topic")], [["air", 2]]);
+  const clusterColours = colourGroups(nodes, "cluster");
+  assert.deepEqual([...clusterColours.keys()], ["0", "1", "2"]);
+  assert.equal(clusterColours.get("0"), COMMUNITY_COLOURS[0]);
+  assert.equal(colourGroups(nodes, "topic", () => "#123456").get("air"), "#123456");
+  assert.equal(colourGroups(nodes, "topic").get("air"), COMMUNITY_COLOURS[0]);
+  const clusterLegend = legendGroups(nodes, "cluster", clusterColours);
+  assert.deepEqual(
+    clusterLegend.map((g) => [g.key, g.count, g.label]),
+    [["0", 2, "Cluster 1"], ["1", 1, "Cluster 2"], ["2", 1, "Cluster 3"]]
+  );
+  const topicColours = colourGroups(nodes, "topic");
+  const topicLegend = legendGroups(nodes, "topic", topicColours, (tag) => `Topic ${tag}`);
+  assert.deepEqual(
+    topicLegend.map((g) => [g.key, g.count, g.label]),
+    [["air", 2, "Topic air"], [OTHER_GROUP, 2, "Other topics"]]
+  );
+  assert.deepEqual(
+    legendGroups(nodes, "sector", colourGroups(nodes, "sector")).map((g) => g.label),
+    ["University of California", "California State University", "Private"]
+  );
+  assert.equal(nodeColour(nodes[3], "cluster", clusterColours), COMMUNITY_COLOURS[2]);
+  assert.equal(nodeColour(nodes[1], "topic", topicColours), OTHER_COLOUR);
+  assert.equal(sigmaNodeSize(0, 9), 3);
+  assert.equal(sigmaNodeSize(9, 9), 14);
+  assert.ok(Math.abs(sigmaNodeSize(4, 9) - 10.3333) < 1e-3);
+}
+
+// Graph rows: filters, hidden legend groups, saved positions, colour fallback.
+{
+  const all = graphAttributes(nodes, edges, {}, "cluster", "works");
+  assert.deepEqual(all.nodes.map((n) => n.key), ["a", "b", "c", "d"]);
+  assert.deepEqual(
+    all.edges.map((e) => [e.key, e.source, e.target, e.weight]),
+    [["e0", "a", "b", 5], ["e1", "a", "c", 2], ["e2", "b", "c", 1]]
+  );
+  assert.equal(all.nodes[0].label, "Ann");
+  assert.equal(all.nodes[0].color, COMMUNITY_COLOURS[0]);
+  assert.equal(all.nodes[0].size, 14);
+  assert.equal(all.nodes[0].x, -1);
+  const noCluster1 = graphAttributes(nodes, edges, {}, "cluster", "works", {hiddenGroups: new Set(["1"])});
+  assert.deepEqual(noCluster1.nodes.map((n) => n.key), ["a", "b", "d"]);
+  assert.deepEqual(noCluster1.edges.map((e) => e.key), ["e0"]);
+  const minTwo = graphAttributes(nodes, edges, {minWorks: 2}, "cluster", "works");
+  assert.deepEqual(minTwo.edges.map((e) => e.key), ["e0", "e1"]);
+  const current = graphAttributes(nodes, edges, {currentOnly: true}, "cluster", "collaborators", {
+    positions: new Map([["a", {x: 5, y: 6}]])
+  });
+  assert.deepEqual(current.nodes.map((n) => n.key), ["a", "c"]);
+  assert.deepEqual([current.nodes[0].x, current.nodes[0].y], [5, 6]);
+  assert.deepEqual(current.edges.map((e) => e.key), ["e1"]);
+  assert.equal(current.nodes[0].size, 14);
+  const byTopic = graphAttributes(nodes, edges, {}, "topic", "works", {colours: new Map([["air", "#111111"]])});
+  assert.deepEqual(
+    byTopic.nodes.map((n) => [n.key, n.color]),
+    [["a", "#111111"], ["b", OTHER_COLOUR], ["c", "#111111"], ["d", OTHER_COLOUR]]
+  );
+  const noOther = graphAttributes(nodes, edges, {}, "topic", "works", {
+    colours: new Map([["air", "#111111"]]),
+    hiddenGroups: new Set([OTHER_GROUP])
+  });
+  assert.deepEqual(noOther.nodes.map((n) => n.key), ["a", "c"]);
+  assert.deepEqual(noOther.edges.map((e) => e.key), ["e1"]);
+  assert.deepEqual(graphAttributes([], [], {}, "cluster", "works").nodes, []);
+}
+
+// Co-authors: shown links only, most shared works first.
+{
+  assert.deepEqual(topCoauthors(edges, [5, 2, 1], "a", 8), [{id: "b", weight: 5}, {id: "c", weight: 2}]);
+  assert.deepEqual(topCoauthors(edges, [5, 0, 1], "a", 8), [{id: "b", weight: 5}]);
+  assert.deepEqual(topCoauthors(edges, [5, 2, 1], "a", 1), [{id: "b", weight: 5}]);
+  assert.deepEqual(topCoauthors(edges, [5, 2, 1], "c", 8).map((r) => r.id), ["a", "b"]);
+  assert.deepEqual(topCoauthors(edges, [5, 2, 1], "d", 8), []);
 }
 
 console.log("framework_network_runtime: all checks passed");
