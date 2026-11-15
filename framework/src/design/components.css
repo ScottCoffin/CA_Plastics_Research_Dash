@@ -21,6 +21,12 @@
   overflow: hidden;
 }
 
+.observablehq-header-anchor {
+  display: inline-flex;
+  min-height: 1.5rem;
+  align-items: center;
+}
+
 .atlas-page-head {
   position: relative;
   isolation: isolate;

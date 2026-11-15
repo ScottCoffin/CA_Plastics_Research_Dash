@@ -25,6 +25,9 @@
 - The first deployed audit exposed Framework frontmatter `head` replacing the global font/favicon
   head. The corrective postbuild reuses `frameworkConfig.head` when those elements are missing;
   27 focused tests and independent Luna review confirm idempotence and unchanged VD-3 repairs.
+- The corrected live target probe found one real 22 px Framework heading permalink; shared
+  components now set `.observablehq-header-anchor` to a 24 px minimum. Local axe/target rerun leaves
+  only the inert hidden sidebar checkbox in the scanner count.
 - `.agent/QUESTIONS.md` had owner edits on entry; preserve its remaining unstaged formatting.
 
 ## Next tasks (suggested)

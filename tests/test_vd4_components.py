@@ -201,6 +201,11 @@ def test_component_styles_cover_each_spec_family_and_preserve_accessibility() ->
     assert ".atlas-input," in css and "min-height: 2.5rem" in css
     assert ".atlas-check {" in css and "width: 1.5rem" in css and "height: 1.5rem" in css
     assert ".atlas-filter-chip button {" in css and "height: 1.5rem" in css
+    heading_anchor = re.search(r"\.observablehq-header-anchor\s*\{([^}]*)\}", css)
+    assert heading_anchor is not None
+    assert "display: inline-flex" in heading_anchor.group(1)
+    assert "min-height: 1.5rem" in heading_anchor.group(1)
+    assert "align-items: center" in heading_anchor.group(1)
     assert '<p class="atlas-kpi__note">' not in guide
     assert 'class="atlas-active-filters" role="group" aria-label=' in guide
     assert 'class="atlas-card" aria-label=' not in guide

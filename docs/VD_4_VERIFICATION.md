@@ -83,3 +83,9 @@ is byte-idempotent. Independent Luna re-verification and 27 focused tests confir
 one product title, one description, two Barlow faces, one data favicon, one bold-font preload, and
 the unchanged VD-3 skip-link/sidebar repairs. Final deployed measurements are recorded after the
 corrective commit publishes.
+
+The corrected live page then scored performance, accessibility, and best practices 100 with CLS 0,
+and loaded both Barlow faces with HTTP 200. A target-box probe identified one remaining actionable
+22 px Framework heading permalink (the other audit count was the inert sidebar checkbox). The
+shared component layer now gives `.observablehq-header-anchor` a 24 px minimum height; the local
+production-shaped rerun reports only the inert template checkbox and remains axe-clean.
