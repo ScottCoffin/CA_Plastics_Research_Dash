@@ -19,6 +19,9 @@
   `py -3.14 scripts/check_at5.py --dist dist` and `py -3.14 scripts/check_design_tokens.py`.
 - VD-3 owns the config, shell stylesheet/import, idempotent postbuild accessibility transform,
   Resources height reservation, and `tests/test_vd3_shell.py`.
+- Commit `aaebb6f5` passed CI and Pages. The deployed all-route audit was axe-clean; Lighthouse
+  accessibility, best practices, and SEO were 100 throughout, performance was 77 to 100, and
+  CLS was 0 to 0.004.
 - One full-suite attempt exposed an unrelated transient Windows temp-directory `WinError 5` in
   `test_node_round_trip_counts_and_search`; the exact test and the complete rerun both passed.
 - `.agent/QUESTIONS.md` had owner edits on entry; preserve its remaining unstaged formatting.

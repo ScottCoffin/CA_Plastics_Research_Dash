@@ -67,3 +67,15 @@ The Luna worker implemented the grouped shell, responsive header/search, footer,
 repair, and focused tests. Lead review removed the skip-link/menu overlap, corrected the mark
 colours, normalized Framework's footer-link defaults, diagnosed and fixed Resources CLS, and
 ran the full repository and all-route browser gates.
+
+## Deployed acceptance
+
+Commit `aaebb6f5` passed both CI and the Pages deployment on 2026-11-15. A fresh probe of
+`https://plastiverse.live/` repeated the mobile menu, first-focus skip link, expert hash search,
+four-group sidebar, active Policy state, ten icons, and five footer-link checks with no console
+errors.
+
+The deployed 12-route audit reported no axe violations and Lighthouse accessibility, best
+practices, and SEO scores of 100 everywhere. Performance ranged from 77 to 100; CLS was 0 on
+ten routes, 0.004 on Institution, and otherwise 0. Every route therefore remains below the
+VD-3 CLS threshold, including Resources at 0 after the asynchronous-height correction.
