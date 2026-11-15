@@ -1,5 +1,5 @@
 ---
-title: Shared components | CA Plastics Research Atlas
+title: Shared components
 head: '<meta name="robots" content="noindex, nofollow">'
 ---
 

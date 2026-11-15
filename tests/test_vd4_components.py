@@ -2,13 +2,22 @@
 
 from __future__ import annotations
 
+import json
 import re
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ICONS = ROOT / "framework/src/components/shared/icons.js"
 STYLES = ROOT / "framework/src/design/components.css"
 STYLEGUIDE = ROOT / "framework/src/styleguide.md"
+FW = ROOT / "framework"
+STYLEGUIDE_SAMPLE = (
+    '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
+    '<meta name="robots" content="noindex, nofollow">'
+    "<title>Shared components | CA Plastics Research Atlas</title>"
+    "</head><body><main>Style guide</main></body></html>"
+)
 
 EXPECTED_ICONS = {
     "home",
@@ -38,6 +47,21 @@ EXPECTED_ICONS = {
 }
 
 
+def _postbuild(expression: str) -> str:
+    module = (FW / "scripts" / "postbuild.mjs").resolve().as_uri()
+    script = (
+        f"const m = await import({json.dumps(module)}); process.stdout.write(String({expression}));"
+    )
+    result = subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        cwd=FW,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return result.stdout
+
+
 def test_styleguide_is_unlisted_and_noindex() -> None:
     page = STYLEGUIDE.read_text(encoding="utf-8")
     config = (ROOT / "framework/observablehq.config.js").read_text(encoding="utf-8")
@@ -49,6 +73,31 @@ def test_styleguide_is_unlisted_and_noindex() -> None:
     assert "styleguide" not in config
     assert "/styleguide" not in llms
     assert '"/styleguide"' not in seo
+
+
+def test_postbuild_restores_global_head_for_styleguide_once() -> None:
+    once = _postbuild(f"m.fixHtml({json.dumps(STYLEGUIDE_SAMPLE)}, 'styleguide')")
+    twice = _postbuild(f"m.fixHtml({json.dumps(once)}, 'styleguide')")
+
+    assert once == twice
+    assert '<meta name="robots" content="noindex, nofollow">' in once
+    assert once.count('font-family: "Barlow Semi Condensed"') == 2
+    assert once.count('<link rel="icon" href="data:image/svg+xml') == 1
+    assert (
+        len(
+            re.findall(
+                r'<link\b(?=[^>]*\brel="preload")'
+                r'(?=[^>]*\bhref="\.\/assets\/fonts\/BarlowSemiCondensed-Bold-latin\.woff2")[^>]*>',
+                once,
+            )
+        )
+        == 1
+    )
+    assert once.count('<meta name="description" content="') == 1
+    title = re.search(r"<title>(.*?)</title>", once)
+    assert title is not None
+    assert title.group(1) == "Shared components | CA Plastics Research Atlas"
+    assert title.group(1).count("CA Plastics Research Atlas") == 1
 
 
 def test_icon_sprite_contains_the_atlas_symbols_and_is_injected_once() -> None:

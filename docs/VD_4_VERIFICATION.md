@@ -67,3 +67,19 @@ API review. The verifier found the ignored module path, invalid KPI definition-l
 generic-container labelling risks, and two small component targets; the executor corrected the
 semantics and sizes before lead acceptance. Lead review reconciled the sprite count, normalized a
 reference glyph, repeated the production-shaped browser audit, and ran the full repository gate.
+
+## Deployed-head correction
+
+Commit `9e26e1a8` passed CI and Pages. Its deployed styleguide remained axe-clean, performance 100,
+accessibility 100, LCP 1.5 s, and CLS 0.005. That live inspection also exposed a Framework behavior
+not visible in source: page frontmatter `head` replaces the configured global head, so the required
+noindex override had also removed the local Barlow `@font-face` block and data favicon. Lighthouse's
+only best-practices failure was consequently `/favicon.ico` returning 404.
+
+The correction keeps the frontmatter noindex directive and makes postbuild restore missing global
+head elements by importing and reusing the exact `frameworkConfig.head` value. It also gives the
+unlisted page a description and removes a duplicated product suffix from its title. The transform
+is byte-idempotent. Independent Luna re-verification and 27 focused tests confirm the built page has
+one product title, one description, two Barlow faces, one data favicon, one bold-font preload, and
+the unchanged VD-3 skip-link/sidebar repairs. Final deployed measurements are recorded after the
+corrective commit publishes.

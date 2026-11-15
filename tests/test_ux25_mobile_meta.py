@@ -52,7 +52,11 @@ def _descriptions() -> dict[str, str]:
 
 def test_every_app_page_has_a_plain_language_description():
     descriptions = _descriptions()
-    assert set(descriptions) == PAGES
+    assert set(descriptions) - PAGES == {"styleguide"}
+    assert PAGES <= set(descriptions)
+    styleguide = (FW / "src" / "styleguide.md").read_text(encoding="utf-8")
+    assert "title: Shared components\n" in styleguide
+    assert '<meta name="robots" content="noindex, nofollow">' in styleguide
     for page, text in descriptions.items():
         assert 50 <= len(text) <= 160, page
         assert text.endswith("."), page

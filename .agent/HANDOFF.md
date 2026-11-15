@@ -22,6 +22,9 @@
   generated directory. `sync_shared.mjs` copies four named files and leaves it intact.
 - Local styleguide Lighthouse: performance 98, accessibility 100, LCP 2.0 s, CLS 0.005. Its only
   best-practices deduction was a local preview favicon request; no interactive audit errors occurred.
+- The first deployed audit exposed Framework frontmatter `head` replacing the global font/favicon
+  head. The corrective postbuild reuses `frameworkConfig.head` when those elements are missing;
+  27 focused tests and independent Luna review confirm idempotence and unchanged VD-3 repairs.
 - `.agent/QUESTIONS.md` had owner edits on entry; preserve its remaining unstaged formatting.
 
 ## Next tasks (suggested)

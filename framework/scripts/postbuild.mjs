@@ -8,6 +8,7 @@
 import {readdirSync, readFileSync, statSync, writeFileSync} from "node:fs";
 import {basename, dirname, join} from "node:path";
 import {fileURLToPath} from "node:url";
+import frameworkConfig from "../observablehq.config.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = join(here, "..", process.env.ATLAS_FW_OUT || "dist");
@@ -16,10 +17,30 @@ const FONT_PRELOAD =
   'as="font" type="font/woff2" crossorigin>';
 const FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["']\.\/assets\/fonts\/BarlowSemiCondensed-Bold-latin\.woff2["'])[^>]*>\s*/gi;
 const SKIP_LINK = '<a class="atlas-skip-link" href="#observablehq-main">Skip to content</a>';
+const CONFIG_HEAD = frameworkConfig.head;
+const GLOBAL_FONT_STYLE = CONFIG_HEAD.match(/<style\b[\s\S]*?<\/style>/i)?.[0];
+const GLOBAL_FAVICON = CONFIG_HEAD.match(
+  /<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml,)[^>]*>/i
+)?.[0];
+
+if (!GLOBAL_FONT_STYLE || !GLOBAL_FAVICON) {
+  throw new Error("Framework config.head must include the Atlas font faces and data favicon");
+}
 
 export function fixHtml(html, page) {
   // Add stable page metadata first; fixTemplate then owns the final head ordering.
-  return fixShell(fixTemplate(addDescription(html, page)), page);
+  return fixShell(fixTemplate(addGlobalHead(addDescription(html, page))), page);
+}
+
+function addGlobalHead(html) {
+  const missing = [];
+  if (!/@font-face\b[\s\S]*?font-family:\s*["']Barlow Semi Condensed["']/i.test(html)) {
+    missing.push(GLOBAL_FONT_STYLE);
+  }
+  if (!/<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml,)[^>]*>/i.test(html)) {
+    missing.push(GLOBAL_FAVICON);
+  }
+  return missing.length ? html.replace("</head>", `${missing.join("\n")}\n</head>`) : html;
 }
 
 function fixShell(html, page) {
@@ -69,6 +90,7 @@ export const PAGE_DESCRIPTIONS = {
   resources: "Related resources on plastics in California, including data portals, reports and the organisations that maintain them.",
   about: "About the Atlas: what it covers, how the data is sourced, and how to cite it.",
   glossary: "Plain-language definitions of terms used in the California Plastics Research Atlas.",
+  styleguide: "Reference for the shared styles, icons, filters, tables, charts and accessible components used throughout the California Plastics Research Atlas.",
 };
 
 export function addDescription(html, page) {

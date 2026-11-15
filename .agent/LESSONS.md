@@ -8,6 +8,10 @@
 - Living styleguides need production semantics, not only representative visuals. Definition-list KPI
   groups must contain only `dt`/`dd`; generic labelled containers need an appropriate role; inline
   component links need a 24 px target box. Independent axe and rendered-box review caught each case.
+- Observable Framework page frontmatter `head` replaces the configured global head. A noindex page
+  can therefore silently lose local `@font-face` rules and the data favicon even while its CSS and
+  axe checks pass. Reuse `frameworkConfig.head` in the idempotent postbuild repair when those exact
+  elements are absent, and inspect the built/deployed head rather than only source frontmatter.
 
 ## 2026-11-14 -- Design assessment: Framework fonts and audit evidence
 - Observable Framework's body text uses `--serif` (Source Serif 4 from Google Fonts). With `globalStylesheets: []` the font never loads and Windows renders Palatino Linotype (macOS: Iowan Old Style); its `--sans-serif` lists `helvetica` before `segoe ui`, and Windows substitutes Arial. Set `--serif` and `--sans-serif` explicitly, and check rendered fonts with DevTools `CSS.getPlatformFontsForNode`, not computed `font-family`.
