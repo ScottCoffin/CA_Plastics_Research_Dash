@@ -143,3 +143,4 @@
 | 2026-11-14 | VD-1 | Pacific Contour design tokens, Framework mappings, five page palette aliases, CSS-literal ratchet/test/CI; 1 Luna agent; 1565 tests and all-route axe/browser inspection | this commit |
 | 2026-11-14 | VD-2 | Self-hosted Barlow Semi Condensed 600/700, Pacific Contour type scale and surfaces, relative preload; all-route platform-font/axe inspection, Policy CLS 0 median; 1 Luna agent; 1570 tests | this commit |
 | 2026-11-15 | VD-3 | Grouped icon sidebar, accessible responsive header/menu/hash search, footer and coastline mark; Framework list/region violations closed on all routes; Resources CLS guard; 1 Luna agent; 1574 tests | this commit |
+| 2026-11-15 | VD-4 | Section 5 shared component layer, unlisted/noindex living styleguide, 24-symbol accessible icon sprite; axe-clean responsive reference with actionable targets >=24 px; 2 Luna agents; 1577 tests | this commit |

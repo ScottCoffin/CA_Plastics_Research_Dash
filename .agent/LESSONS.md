@@ -1,5 +1,14 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-15 -- Shared module tracking and semantic component references
+- `framework/src/components/shared/` is ignored because four legacy helpers are copied there before
+  builds, but `sync_shared.mjs` copies a named list and does not clear the folder. A Framework-only
+  module required by the design contract can be force-tracked there without weakening the ignore
+  rule; verify the sync list before assuming a build will delete or overwrite it.
+- Living styleguides need production semantics, not only representative visuals. Definition-list KPI
+  groups must contain only `dt`/`dd`; generic labelled containers need an appropriate role; inline
+  component links need a 24 px target box. Independent axe and rendered-box review caught each case.
+
 ## 2026-11-14 -- Design assessment: Framework fonts and audit evidence
 - Observable Framework's body text uses `--serif` (Source Serif 4 from Google Fonts). With `globalStylesheets: []` the font never loads and Windows renders Palatino Linotype (macOS: Iowan Old Style); its `--sans-serif` lists `helvetica` before `segoe ui`, and Windows substitutes Arial. Set `--serif` and `--sans-serif` explicitly, and check rendered fonts with DevTools `CSS.getPlatformFontsForNode`, not computed `font-family`.
 - "Looks bland" is measurable: first-screen colourfulness (Hasler and Susstrunk M), hard-coded colour counts and rendered fonts turned the owner's complaint into numbers (`docs/design/baseline_2026-11-14.json`). Use the same probe for before/after.

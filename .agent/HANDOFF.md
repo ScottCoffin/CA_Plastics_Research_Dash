@@ -1,47 +1,46 @@
-# Handoff - 2026-11-15 - task VD-3
+# Handoff - 2026-11-15 - task VD-4
 
 ## Done
-- Replaced the flat Framework navigation with four grouped sections, ten route icons, visible active
-  state, and postbuild-applied `aria-current` on every built route.
-- Added the responsive Pacific Contour header with a first-focus skip link, product/breadcrumb
-  identity, expert search, 390 px menu behavior, and accessible footer links.
-- Added the coastline mark and shell styling in `framework/src/design/shell.css`; the embedded mark
-  is teal with an orange contour and does not require a runtime asset request.
-- Removed Framework's invalid sidebar close-label child and hid its replaced checkbox from assistive
-  technology. All 12 routes are now axe-clean, including the former sidebar `list` and `region` rows.
-- Reserved the asynchronous Resources root height after tracing its initial footer displacement to
-  CLS 0.181. The corrected Resources and Institutions checks both report CLS 0.
-- Full evidence is in `docs/VD_3_VERIFICATION.md`; the full suite passed with 1,574 tests and 9
+- Added the token-based Section 5 component surface in `framework/src/design/components.css` and
+  imported it globally after the VD-1/VD-3 layers.
+- Added the accessible icon helper and one-per-document 24-symbol sprite. The style tile's 23 source
+  paths are exact; `i-external` is the reconciled 24th Atlas icon (ADR-VD4-ICONS-2026-11-15).
+- Added the unlisted `/styleguide` living reference with every Section 5 family and real Atlas copy.
+  It is noindex/nofollow and absent from sidebar, sitemap, and `llms.txt`, but remains deployed by
+  the normal Framework assembly.
+- Independent Luna review and lead browser inspection found no axe violations or 390 px overflow.
+  All actionable targets are at least 24 px; the one audit count is Framework's inert, hidden 1 x 1
+  checkbox, replaced by the 40 px menu button.
+- Full evidence is in `docs/VD_4_VERIFICATION.md`; the full suite passed with 1,577 tests and 9
   expected placeholders skipped, and 6/6 visitor tasks passed.
 
 ## State of the repo
 - Build with `cd framework; npm run build`; accept with
-  `py -3.14 scripts/check_at5.py --dist dist` and `py -3.14 scripts/check_design_tokens.py`.
-- VD-3 owns the config, shell stylesheet/import, idempotent postbuild accessibility transform,
-  Resources height reservation, and `tests/test_vd3_shell.py`.
-- Commit `aaebb6f5` passed CI and Pages. The deployed all-route audit was axe-clean; Lighthouse
-  accessibility, best practices, and SEO were 100 throughout, performance was 77 to 100, and
-  CLS was 0 to 0.004.
-- One full-suite attempt exposed an unrelated transient Windows temp-directory `WinError 5` in
-  `test_node_round_trip_counts_and_search`; the exact test and the complete rerun both passed.
+  `py -3.14 scripts/check_at5.py --dist dist` from the repository root and
+  `py -3.14 scripts/check_design_tokens.py`.
+- `framework/src/components/shared/icons.js` is deliberately force-tracked inside an ignored
+  generated directory. `sync_shared.mjs` copies four named files and leaves it intact.
+- Local styleguide Lighthouse: performance 98, accessibility 100, LCP 2.0 s, CLS 0.005. Its only
+  best-practices deduction was a local preview favicon request; no interactive audit errors occurred.
 - `.agent/QUESTIONS.md` had owner edits on entry; preserve its remaining unstaged formatting.
 
-## Next task (suggested)
-- VD-4: add the shared component library and icon sprite, then expose every Section 5 component on
-  an unlisted `/styleguide`; require axe-clean output and interactive targets at least 24 px.
+## Next tasks (suggested)
+- After this shared-file checkpoint, the contract permits up to three disjoint Luna workers. Start
+  VD-5 Overview, VD-6a Experts, and VD-6b Collaboration network in parallel, then review and seal
+  each as its own narrow checkpoint. VD-6c remains blocked on VD-10; VD-7b remains blocked on VD-9.
 
 ## Gotchas the next agent must know
-- Framework 1.13.4 generates the sidebar close label inside its navigation list. Keep the postbuild
-  transform idempotent unless the template structure itself changes.
-- Framework footer selectors target pager links with ID specificity. Custom footer link resets must
-  keep at least the existing specificity.
-- Asynchronous roots can place the larger footer in the initial viewport before data mounts. Preserve
-  explicit initial height reservations and diagnose shifts with `PerformanceObserver` before tuning.
+- The style tile claims 24 symbols but contains 23. Do not replace the locked paths or remove the
+  Atlas-drawn external icon; the focused test protects the reconciliation.
+- A direct `framework/dist` preview lacks assembled font assets. Use `assemble_site.py` before visual
+  QA so page-relative WOFF2 requests resolve.
+- Framework's hidden sidebar checkbox appears as 1 x 1 in naive target scans, but is aria-hidden,
+  untabbable, pointer-events disabled, and not actionable. Do not enlarge it into a second control.
 - Run only one Observable Framework build at a time on Windows; concurrent builds can lock `dist/`.
 
 ## Needs owner input
-- H25 is the final VD-12 side-by-side review; it does not block VD-4 through VD-11/VD-13.
+- H25 is the final VD-12 side-by-side review; it does not block VD-5 through VD-11/VD-13.
 
 ## Files that are large or unsafe to read whole
-- `site/data/` -> inspect schemas/counts only; `scratch/ux_vd3*/` -> read `results.json` and named
-  screenshots rather than loading every Lighthouse JSON.
+- `site/data/` -> inspect schemas/counts only; `scratch/ux_vd4*/` -> read `results.json` and the two
+  named screenshots rather than loading every Lighthouse JSON.
