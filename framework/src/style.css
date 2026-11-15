@@ -10,20 +10,22 @@
 
 .atlas-header { font-size: 0.9rem; color: var(--theme-foreground-muted); }
 .atlas-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 0.75rem; margin: 1rem 0; }
-.atlas-stats div { border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; padding: 0.6rem 0.8rem; }
-.atlas-stats dt { font-size: 0.8rem; color: var(--theme-foreground-muted); }
-.atlas-stats dd { margin: 0; font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.atlas-stats div { border: 1px solid var(--theme-foreground-faintest); border-radius: var(--atlas-radius-card); padding: 0.6rem 0.8rem; background-color: var(--atlas-surface); box-shadow: var(--atlas-shadow-raised); }
+.atlas-stats dt { font-family: var(--atlas-font-display); font-size: var(--atlas-type-eyebrow-size); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--theme-foreground-muted); }
+.atlas-stats dd { margin: 0; font-size: var(--atlas-type-stat-size); line-height: 1.1; font-weight: 650; font-variant-numeric: proportional-nums; }
 /* UX-25: long URLs and DOIs in running text wrap instead of widening the page at 375 px. */
 #observablehq-main p, #observablehq-main li, #observablehq-main dd { overflow-wrap: anywhere; }
+#observablehq-main p { max-width: 70ch; }
 .atlas-start { margin: 1.25rem 0; }
-.atlas-start h2 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+.atlas-start h2 { margin: 0 0 0.5rem; font-size: var(--atlas-type-section-size); }
 .atlas-start-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
 .atlas-start-links a { display: inline-block; min-height: 2.75rem; padding: 0.6rem 0.9rem; border: 1px solid var(--theme-foreground-focus); border-radius: 0.5rem; font-weight: 600; text-decoration: none; }
 .atlas-start-links a:hover, .atlas-start-links a:focus-visible { background: var(--theme-background-alt); text-decoration: underline; }
-.atlas-stats dd.stat-note { margin-top: 0.25rem; font-size: 0.8rem; font-weight: 400; color: var(--theme-foreground-muted); }
+.atlas-stats dd.stat-note { margin-top: 0.25rem; font-size: var(--atlas-type-small-size); line-height: 1.45; font-weight: 400; color: var(--theme-foreground-muted); }
 .atlas-notice { border-left: 4px solid var(--theme-foreground-focus); padding: 0.4rem 0.8rem; background: var(--theme-background-alt); max-width: 70ch; }
 .atlas-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
 .atlas-cards a.card { text-decoration: none; color: inherit; }
+.card { background-color: var(--atlas-surface); }
 .atlas-pending { color: var(--theme-foreground-muted); }
 
 /* Async stat payloads must not push the following content through the viewport. */
@@ -45,3 +47,13 @@
 }
 /* Facet headers keep a fixed light background in both themes; keep their links dark too. */
 .facet > summary a { color: var(--atlas-brand-strong); }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}

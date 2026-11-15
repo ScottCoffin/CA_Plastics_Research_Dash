@@ -51,6 +51,36 @@ def test_postbuild_fix_html_rewrites_template():
     assert 'aria-label="Toggle sidebar"' in out
 
 
+@pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
+def test_postbuild_font_preload_is_relative_and_idempotent():
+    preload = (
+        '<link rel="preload" href="./assets/fonts/BarlowSemiCondensed-Bold-latin.woff2" '
+        'as="font" type="font/woff2" crossorigin>'
+    )
+    sample = f"<html><head>{preload}{preload}</head><body></body></html>"
+    script = (
+        "import(process.argv[1]).then(m => {"
+        "const once = m.fixHtml(process.argv[2], 'unknown');"
+        "const twice = m.fixHtml(once, 'unknown');"
+        "process.stdout.write(JSON.stringify([once, twice]));"
+        "})"
+    )
+    module = (FW / "scripts" / "postbuild.mjs").resolve().as_uri()
+    once, twice = json.loads(
+        subprocess.run(
+            ["node", "-e", script, module, sample],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+    )
+
+    assert once == twice
+    assert once.count(preload) == 1
+    assert once.index(preload) < once.index("</head>")
+    assert 'href="/assets/fonts/' not in once
+
+
 def test_style_css_keeps_contrast_overrides():
     """UX-22: named theme tokens keep contrast and running links keep an underline."""
     css = (FW / "src" / "style.css").read_text(encoding="utf-8")

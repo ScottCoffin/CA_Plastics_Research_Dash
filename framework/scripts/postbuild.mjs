@@ -11,17 +11,25 @@ import {fileURLToPath} from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = join(here, "..", process.env.ATLAS_FW_OUT || "dist");
+const FONT_PRELOAD =
+  '<link rel="preload" href="./assets/fonts/BarlowSemiCondensed-Bold-latin.woff2" ' +
+  'as="font" type="font/woff2" crossorigin>';
+const FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["']\.\/assets\/fonts\/BarlowSemiCondensed-Bold-latin\.woff2["'])[^>]*>\s*/gi;
 
 export function fixHtml(html, page) {
-  return addDescription(fixTemplate(html), page);
+  // Add stable page metadata first; fixTemplate then owns the final head ordering.
+  return fixTemplate(addDescription(html, page));
 }
 
 function fixTemplate(html) {
-  return html
+  const withoutFontPreloads = html.replace(FONT_PRELOAD_PATTERN, "");
+  return withoutFontPreloads
     .replace(/<html>/, '<html lang="en">')
     .replace(/(<meta name="viewport" content="[^"]*?),\s*maximum-scale=1/, "$1")
     .replace(/<input id="observablehq-sidebar-toggle" type="checkbox" title="([^"]*)">/,
-      '<input id="observablehq-sidebar-toggle" type="checkbox" title="$1" aria-label="$1">');
+      '<input id="observablehq-sidebar-toggle" type="checkbox" title="$1" aria-label="$1">')
+    // Inject after Framework's build so it leaves the assembled site's local URL intact.
+    .replace("</head>", `${FONT_PRELOAD}\n</head>`);
 }
 
 // Plain-language meta descriptions per built page (SEO audit). Keyed by page file name without .html.

@@ -97,3 +97,87 @@ def test_async_foundation_surfaces_reserve_viewport_space() -> None:
     assert ".atlas-stats { min-height: 10rem; }" in style
     assert ".atlas-stats { min-height: 31rem; }" in style
     assert "min-height: calc(100vh - 6rem);" in institution
+
+
+def test_policy_timeline_reserves_successful_payload_height() -> None:
+    policy = (ROOT / "framework" / "src" / "components" / "policy.css").read_text(encoding="utf-8")
+
+    assert "min-height: 85rem;" in policy
+    assert "min-height: 116.5rem;" in policy
+    assert "min-height: 124rem;" in policy
+
+
+def test_barlow_faces_are_self_hosted_with_font_budget() -> None:
+    tokens = (ROOT / "framework" / "src" / "design" / "tokens.css").read_text(encoding="utf-8")
+    config = (ROOT / "framework" / "observablehq.config.js").read_text(encoding="utf-8")
+    fonts = ROOT / "site" / "assets" / "fonts"
+
+    assert config.count("@font-face {") == 2
+    assert config.count('font-family: "Barlow Semi Condensed";') == 2
+    assert "font-weight: 600;" in config
+    assert "font-weight: 700;" in config
+    assert config.count("font-display: swap;") == 2
+    assert 'url("./assets/fonts/BarlowSemiCondensed-SemiBold-latin.woff2")' in config
+    assert 'url("./assets/fonts/BarlowSemiCondensed-Bold-latin.woff2")' in config
+    assert "unicode-range: U+0000-00FF" in config
+    assert "@font-face" not in tokens
+    assert "fonts.googleapis.com" not in f"{config}\n{tokens}"
+    assert "fonts.gstatic.com" not in f"{config}\n{tokens}"
+    assert (fonts / "BarlowSemiCondensed-SemiBold-latin.woff2").is_file()
+    assert (fonts / "BarlowSemiCondensed-Bold-latin.woff2").is_file()
+    assert (
+        sum(
+            (fonts / name).stat().st_size
+            for name in (
+                "BarlowSemiCondensed-SemiBold-latin.woff2",
+                "BarlowSemiCondensed-Bold-latin.woff2",
+            )
+        )
+        == 46_228
+    )
+    assert 46_228 <= 60 * 1024
+    assert "Arial" not in tokens
+    assert "Palatino Linotype" not in tokens
+    assert "Times New Roman" not in tokens
+    assert 'rel="preload"' not in config
+    assert 'rel="icon"' in config
+    assert not (ROOT / "framework" / "src" / "assets" / "fonts").exists()
+
+
+def test_type_scale_and_surface_tokens_are_applied() -> None:
+    tokens = (ROOT / "framework" / "src" / "design" / "tokens.css").read_text(encoding="utf-8")
+    style = (ROOT / "framework" / "src" / "style.css").read_text(encoding="utf-8")
+    expected = {
+        "--atlas-type-hero-size": "clamp(2rem, 1.3rem + 2.2vw, 2.9rem)",
+        "--atlas-type-page-size": "clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem)",
+        "--atlas-type-section-size": "1.375rem",
+        "--atlas-type-subsection-size": "1.125rem",
+        "--atlas-type-eyebrow-size": "0.75rem",
+        "--atlas-type-body-size": "1rem",
+        "--atlas-type-small-size": "0.875rem",
+        "--atlas-type-caption-size": "0.82rem",
+        "--atlas-type-stat-size": "2rem",
+        "--atlas-type-table-size": "0.9rem",
+        "--atlas-type-id-size": "0.82rem",
+    }
+
+    for name, value in expected.items():
+        assert f"{name}: {value};" in tokens
+    assert "font: 400 var(--atlas-type-body-size) / 1.6 var(--atlas-font-body);" in tokens
+    assert "font-size: var(--atlas-type-page-size);" in tokens
+    assert "font-size: var(--atlas-type-hero-size);" in tokens
+    assert "font-weight: 650;" in tokens
+    assert "font-size: var(--atlas-type-eyebrow-size);" in tokens
+    assert "line-height: 1.2;" in tokens
+    assert "font-size: var(--atlas-type-caption-size);" in tokens
+    assert "background-color: var(--atlas-page);" in tokens
+    assert "--atlas-page: #f3f6f5;" in tokens
+    assert "--atlas-surface: #ffffff;" in tokens
+    assert ".card { background-color: var(--atlas-surface); }" in style
+    assert "background-color: var(--atlas-surface);" in style
+    assert "--theme-background: var(--atlas-page);" in tokens
+    assert "--theme-background-alt: var(--atlas-surface);" in tokens
+    assert "#observablehq-main p { max-width: 70ch; }" in style
+    assert "prefers-reduced-motion: reduce" in style
+    assert "transition: none !important;" in style
+    assert "animation: none !important;" in style

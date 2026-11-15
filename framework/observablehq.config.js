@@ -11,9 +11,31 @@ export default {
   // ATLAS_FW_OUT lets parallel local builds use separate folders (dist-*/ is gitignored).
   output: process.env.ATLAS_FW_OUT || "dist",
   theme: "air",
-  head: `<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23075a46'/%3E%3C/svg%3E">`,
+  // Page-relative font URLs resolve to site/assets/fonts after assembly.
+  // postbuild adds the preload after Framework has finished parsing assets.
+  head: `<style>
+      @font-face {
+        font-family: "Barlow Semi Condensed";
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url("./assets/fonts/BarlowSemiCondensed-SemiBold-latin.woff2") format("woff2");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+          U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Barlow Semi Condensed";
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url("./assets/fonts/BarlowSemiCondensed-Bold-latin.woff2") format("woff2");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+          U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+    </style>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23075a46'/%3E%3C/svg%3E">`,
   style: "style.css",
-  // No external CDNs (C5/S3.7): drop Framework's default Google Fonts link; system fonts apply.
+  // No external CDNs (C5/S3.7): drop Framework's default Google Fonts link; display fonts are local.
   globalStylesheets: [],
   search: false,
   toc: false,

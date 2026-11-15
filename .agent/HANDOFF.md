@@ -1,35 +1,40 @@
-# Handoff - 2026-11-14 - task VD-1
+# Handoff - 2026-11-14 - task VD-2
 
 ## Done
-- Added Pacific Contour tokens and Framework mappings in `framework/src/design/tokens.css`;
-  aliased the five task-owned page palettes and retained UX-22 link underlines.
-- Added the deterministic non-token CSS literal ratchet, eight focused tests, and CI step.
-- Verified 259 CSS literal uses vs 293 baseline, 1,566 tests, 6/6 UX tasks, and all-route axe;
-  details and screenshot paths are in `docs/VD_1_VERIFICATION.md`.
-- Reserved async stats and institution surfaces after the first live audit. The deployed rerun
-  scored Overview 100/CLS 0, Institution 99/0, and About 100/0.047.
-- Owner accepted VD-D1..VD-D8; H24 is closed.
+- Self-hosted Barlow Semi Condensed 600 and 700 Latin WOFF2 faces under
+  `site/assets/fonts/`; recorded the SIL OFL provenance in `docs/REUSE.md`.
+- Applied the Pacific Contour type scale, system UI body stack, sea-mist page, and white-card
+  surfaces. Platform-font inspection on all 12 routes found Barlow headings and Segoe UI body
+  text, with no rendered Palatino Linotype, Times New Roman, or Arial.
+- Added one page-relative weight-700 preload per built page. The complete postbuild metadata and
+  preload transform is idempotent.
+- Corrected an exposed Policy async-layout regression: three Lighthouse runs now score
+  performance 99, accessibility 100, LCP 1.9 s, and CLS 0.
+- Full evidence is in `docs/VD_2_VERIFICATION.md`; local gate: 1,570 tests passed and 9 expected
+  placeholders skipped, 6/6 visitor tasks passed, and all 12 routes scored accessibility 100.
 
 ## State of the repo
 - Build with `cd framework; npm run build`; accept with
   `py -3.14 scripts/check_at5.py --dist dist` and `py -3.14 scripts/check_design_tokens.py`.
-- CI and Pages succeeded for both VD-1 commits; the correction stylesheet and live metrics are
-  verified at `https://plastiverse.live/`.
-- `.agent/QUESTIONS.md` had owner edits on entry; preserve any remaining unstaged formatting.
+- WOFF2 transfer is 46,228 bytes (limit 60 KiB). Fonts deliberately live in `site/assets/fonts/`,
+  not Framework source assets; the normal assembly step copies them beside the root pages.
+- `.agent/QUESTIONS.md` had owner edits on entry; preserve its remaining unstaged formatting.
 
 ## Next task (suggested)
-- VD-2: record the Barlow SIL OFL entry first, add the two local WOFF2 faces and surface/type
-  scale, then verify Framework copies the font URLs and measure platform fonts/transfer/CLS.
+- VD-3: group the sidebar, add the shell icons/active state, header skip link/product name/expert
+  search/mobile menu, and footer. Re-run the UX-32 Framework sidebar `list`/`region` checks.
 
 ## Gotchas the next agent must know
+- Framework 1.13.4 has no loader for WOFF2 referenced from CSS. Keep the face URLs and preload
+  page-relative so both the custom-domain root and repo-prefixed local preview resolve.
+- `#policy-timeline` reserves the successful payload height because its JSON mounts after paint;
+  removing the reservation restored mobile CLS 0.112.
 - Run only one Observable Framework build at a time on Windows; concurrent builds lock `dist/`
   and produce `EPERM` while removing `_npm` folders.
-- The design checker excludes `tokens.css` intentionally and ratchets each existing stylesheet
-  as well as the 292-use global ceiling.
 
 ## Needs owner input
-- H25 is the final VD-12 side-by-side review; it does not block VD-2 through VD-11/VD-13.
+- H25 is the final VD-12 side-by-side review; it does not block VD-3 through VD-11/VD-13.
 
 ## Files that are large or unsafe to read whole
-- `site/data/` -> inspect schemas/counts only; `scratch/ux_vd1*/` -> read `results.json` and named
+- `site/data/` -> inspect schemas/counts only; `scratch/ux_vd2*/` -> read `results.json` and named
   screenshots rather than loading every Lighthouse JSON.

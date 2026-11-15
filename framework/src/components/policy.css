@@ -1,4 +1,12 @@
-#policy-timeline { color: var(--theme-foreground); max-width: 70ch; }
+/* Reserve the successful timeline's height before its JSON arrives. Without this, the
+   following OPC section enters the mobile viewport and is displaced when the entries mount. */
+#policy-timeline { color: var(--theme-foreground); max-width: 70ch; min-height: 85rem; }
+@media (max-width: 640px) {
+  #policy-timeline { min-height: 116.5rem; }
+}
+@media (max-width: 400px) {
+  #policy-timeline { min-height: 124rem; }
+}
 #policy-timeline .data-note { margin: 0.5rem 0; color: var(--theme-foreground-muted); font-size: 0.9rem; }
 #policy-timeline .pol-caveat { border-left: 4px solid var(--theme-foreground-focus); padding: 0.5rem 0.9rem; margin: 1rem 0; background: var(--theme-background-alt); }
 #policy-timeline .pol-caveat p { margin: 0.25rem 0; }
