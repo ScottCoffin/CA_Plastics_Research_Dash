@@ -1,6 +1,7 @@
 /* Related resources page (EM-16). Rules are scoped to #resources-root and use Framework theme
  * variables, so they follow the light and dark themes. */
-#resources-root { color: var(--theme-foreground); }
+/* Keep the footer outside the initial viewport while the resource cards load. */
+#resources-root { min-height: calc(100vh - var(--observablehq-header-height)); color: var(--theme-foreground); }
 #resources-root :focus-visible { outline: 3px solid var(--theme-foreground-focus); outline-offset: 2px; }
 #resources-root .result-count, #resources-root .data-note { margin: 0.5rem 0 0; color: var(--theme-foreground-muted); font-size: 0.9rem; }
 #resources-root .rs-filter { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 1rem; max-width: 36rem; }

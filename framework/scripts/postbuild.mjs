@@ -15,10 +15,33 @@ const FONT_PRELOAD =
   '<link rel="preload" href="./assets/fonts/BarlowSemiCondensed-Bold-latin.woff2" ' +
   'as="font" type="font/woff2" crossorigin>';
 const FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["']\.\/assets\/fonts\/BarlowSemiCondensed-Bold-latin\.woff2["'])[^>]*>\s*/gi;
+const SKIP_LINK = '<a class="atlas-skip-link" href="#observablehq-main">Skip to content</a>';
 
 export function fixHtml(html, page) {
   // Add stable page metadata first; fixTemplate then owns the final head ordering.
-  return fixTemplate(addDescription(html, page));
+  return fixShell(fixTemplate(addDescription(html, page)), page);
+}
+
+function fixShell(html, page) {
+  let fixed = html.replace(SKIP_LINK, "");
+  fixed = fixed.replace(/<body>\s*/, "<body>");
+  fixed = fixed.replace("<body>", "<body>\n" + SKIP_LINK + "\n");
+  fixed = fixed.replace(/<label id="observablehq-sidebar-close"[^>]*><\/label>/, "");
+  fixed = fixed.replace(
+    /<input id="observablehq-sidebar-toggle" type="checkbox" title="([^"]*)" aria-label="([^"]*)">/,
+    '<input id="observablehq-sidebar-toggle" type="checkbox" title="$1" aria-label="$2" aria-hidden="true" tabindex="-1">'
+  );
+  fixed = fixed.replace(
+    /(<li class="observablehq-link observablehq-link-active"><a)(?![^>]*\baria-current=)/g,
+    '$1 aria-current="page"'
+  );
+  if (page === "index") {
+    fixed = fixed.replace(
+      /(<li class="observablehq-link observablehq-link-active"><a)(?![^>]*\baria-label=)/,
+      '$1 aria-label="Overview"'
+    );
+  }
+  return fixed;
 }
 
 function fixTemplate(html) {

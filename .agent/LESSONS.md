@@ -23,6 +23,15 @@
   after the build. Run idempotence over the complete postbuild transform: independently
   idempotent head injectors can still reorder each other on the second pass.
 
+## 2026-11-15 -- Framework shell accessibility and footer defaults
+- Framework 1.13.4 puts a close `<label>` directly inside the sidebar `<ol>` and the template
+  checkbox outside a landmark. Once a real header menu button owns the toggle, remove the close
+  label and hide the checkbox from AT in the idempotent postbuild transform; this cleared both
+  the axe `list` and `region` rows on every route.
+- Framework's footer styles assume pager links (`#observablehq-footer nav a` with 1rem padding).
+  Custom footer links need an ID-specific reset. Async roots must reserve enough initial height
+  to keep the larger footer outside the viewport while their payload mounts.
+
 ## 2026-11-12 -- Emails in committed tables; eScholarship rate limit
 - The site export redacted emails, but the committed normalized tables (authorships raw_affiliation, works abstract) carried 808 + 4 OpenAlex strings with emails. Redact at the point where any committed table is written, not only at the public export; grep committed Parquet for `@domain.tld` after schema changes.
 - eScholarship blocks the HTML site and OAI (bot screen) and blocked the GraphQL API too after ~120 requests at 2 s spacing; use OpenAlex (which indexes eScholarship) to find items, and fetch single items slowly from cache-first scripts. A worker kept paging after a stop message: kill background processes yourself rather than relying on a message.

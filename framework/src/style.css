@@ -2,6 +2,7 @@
 /* Owner 2026-11-12: light theme by default (and only); the dark theme is not loaded. */
 @import url("observablehq:theme-air.css");
 @import url("./design/tokens.css");
+@import url("./design/shell.css");
 
 /* Framework's #observablehq-main is a z-index 0 stacking context below the fixed header
    (z-index 2), so an open Experts drawer slid under the header. While a drawer is open,
