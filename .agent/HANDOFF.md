@@ -16,6 +16,8 @@
 ## State of the repo
 - Build with `cd framework; npm run build`; accept with
   `py -3.14 scripts/check_at5.py --dist dist` and `py -3.14 scripts/check_design_tokens.py`.
+- Commit `d4fcd660` passed CI and Pages. The deployed all-route audit scored accessibility 100,
+  CLS 0 to 0.051, and performance within three points of baseline on every route.
 - WOFF2 transfer is 46,228 bytes (limit 60 KiB). Fonts deliberately live in `site/assets/fonts/`,
   not Framework source assets; the normal assembly step copies them beside the root pages.
 - `.agent/QUESTIONS.md` had owner edits on entry; preserve its remaining unstaged formatting.

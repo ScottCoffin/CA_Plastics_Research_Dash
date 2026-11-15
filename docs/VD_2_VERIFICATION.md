@@ -42,8 +42,7 @@ The assembled site was served at
   successful timeline height produced three consecutive Policy runs at performance 99,
   accessibility 100, LCP 1.9 s, and CLS 0 (median CLS 0).
 - Other local CLS values were 0 to 0.070 except the pre-correction Policy sample. Local
-  Lighthouse performance was connection-sensitive on the Python preview; deployed route
-  metrics are recorded after Pages publishes the checkpoint.
+  Lighthouse performance was connection-sensitive on the Python preview.
 - Visual review found the 1440 x 900 and 390 x 844 Overview layouts readable, with the
   expected Barlow hierarchy, system body face, mist page, white cards, and no clipping.
 
@@ -73,3 +72,15 @@ The Luna worker implemented the faces, type scale, surfaces, preload, and focuse
 review added the licensed assets and provenance, verified platform fonts and every route,
 fixed the Policy CLS regression, and corrected combined metadata/preload idempotence found by
 the full suite.
+
+## Deployed acceptance
+
+Commit `d4fcd660` passed CI and Pages. A new all-route audit of
+`https://plastiverse.live/` then measured accessibility 100, best practices 100, and SEO 100
+on every route. CLS ranged from 0 to 0.051, including Overview 0, Policy 0, Monitoring 0.041,
+Evidence 0.051, and Resources 0.034. Performance was Overview 100, Experts 75, Network 95,
+Institutions 81, Institution 98, Monitoring 100, Funding 95, Evidence 82, Policy 100,
+Resources 100, About 100, and Glossary 100. Every route is within three points of its original
+baseline. The live platform-font probe again found Barlow headings and Segoe UI body text on
+all routes; both local WOFF2 files returned HTTP 200. Artifacts are in
+`scratch/ux_vd2_live/`.
