@@ -89,3 +89,7 @@ and loaded both Barlow faces with HTTP 200. A target-box probe identified one re
 22 px Framework heading permalink (the other audit count was the inert sidebar checkbox). The
 shared component layer now gives `.observablehq-header-anchor` a 24 px minimum height; the local
 production-shaped rerun reports only the inert template checkbox and remains axe-clean.
+
+Final commit `c7b1b000` passed CI and Pages. The live target rerun is axe-clean, has no horizontal
+overflow, unlabelled controls, console errors, or HTTP errors, and reports only the intentionally
+inert hidden checkbox below 24 px. This closes VD-4 deployed acceptance.

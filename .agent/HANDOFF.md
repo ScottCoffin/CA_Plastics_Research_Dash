@@ -28,6 +28,8 @@
 - The corrected live target probe found one real 22 px Framework heading permalink; shared
   components now set `.observablehq-header-anchor` to a 24 px minimum. Local axe/target rerun leaves
   only the inert hidden sidebar checkbox in the scanner count.
+- Final commit `c7b1b000` passed CI and Pages; the deployed rerun is axe-clean with no overflow or
+  browser errors and only the intentionally inert checkbox below 24 px.
 - `.agent/QUESTIONS.md` had owner edits on entry; preserve its remaining unstaged formatting.
 
 ## Next tasks (suggested)
