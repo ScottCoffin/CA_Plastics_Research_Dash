@@ -188,3 +188,11 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-16 | VD-7c dependency-free CI test | Codex Luna task agent | Replace JSDOM test with DOM-free helper coverage | Accepted locally; fresh CI exposed generated-module import | 1 session |
 | 2026-11-16 | VD-7c model-helper CI fix | Codex Luna task agent | Move helper/test to import-free model module | Accepted; final CI and Pages passed | 1 session |
 | 2026-11-16 | VD-7c final verification record | Codex Luna archivist | `docs/VD_7C_VERIFICATION.md` only | Accepted; final live and performance evidence recorded | 1 session |
+| 2026-11-15 | VD-8 production | Codex Luna task agent | Policy/Resources/About/Glossary markup, CSS and tests | Accepted after bounded review fixes | 1 session |
+| 2026-11-15 | VD-8 browser audit attempt | Codex Luna tester | Independent assembled context-route audit | Could not run: account usage cap; later Luna audits completed | 1 failed session |
+| 2026-11-15 | VD-8 final browser and code review | Codex Luna testers | Four-route responsive/axe audit and contract review | Accepted after target-highlight correction | 2 sessions |
+| 2026-11-16 | VD-8 brand-wash correction | Codex Luna task agent | Glossary target token fix | Accepted; focused tests passed | 1 session |
+| 2026-11-16 | VD-8 post-fix validation | Codex Luna tester | Desktop/mobile target color, build, axe and overflow | Accepted; computed brand-wash confirmed | 1 session |
+| 2026-11-15 | VD-8 verification draft | Codex Luna archivist | `docs/VD_8_VERIFICATION.md` | Accepted for local evidence; live gate remained pending | 1 session |
+| 2026-11-16 | VD-8 live acceptance | Codex Luna tester | Eight route/viewports and four Lighthouse audits | Accepted; all route gates passed, current Resource counts reconciled | 1 session |
+| 2026-11-16 | VD-8 final verification record | Codex Luna archivist | `docs/VD_8_VERIFICATION.md` only | Accepted; deployment and live evidence recorded | 1 session |
