@@ -18,6 +18,20 @@ Last updated: 2026-11-15.
 
 ## Do now
 
+### H27. Turn GitHub Pages back on (urgent: the live site is down since about 05:50 UTC 2026-11-16)
+The repository's Pages site disappeared between two deploys (`has_pages: false`; the API
+returns 404 and https://plastiverse.live/ returns 404). The deploy for NET-1 failed at
+"Configure Pages" for that reason; the code is fine (CI passed).
+1. On GitHub: repository > **Settings** > **Pages**.
+2. Under **Build and deployment** > **Source**, choose **GitHub Actions**.
+3. Under **Custom domain**, enter `plastiverse.live`, click **Save**, wait for the DNS check,
+   then tick **Enforce HTTPS** when it becomes available.
+4. Go to **Actions** > **Build and deploy Pages** > **Run workflow** (branch `main`).
+- **Done when:** https://plastiverse.live/ loads. Tell the agent "pages back on" and it
+  will confirm the deploy and check the new consortium card on the live site.
+- If you turned Pages off on purpose, tell the agent instead, so it stops the daily deploy
+  and the watchdog from failing.
+
 ### H26. Land to Sea Microplastics Consortium link (NET-1, 5 minutes)
 1. Open the UC Davis institution page (`/institution#inst=I84218800`) after the next deploy
    and check the "Research networks" card (logo, quote, focus areas, contributor links).
