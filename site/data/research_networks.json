@@ -1,0 +1,70 @@
+{
+ "schema_version": "net1.v1",
+ "source": "config/research_networks.yml",
+ "networks": [
+  {
+   "id": "NET-1",
+   "name": "Land to Sea Microplastics Consortium",
+   "url": "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution",
+   "steward": "Coastal and Marine Sciences Institute, UC Davis",
+   "steward_source": "https://marinescience.ucdavis.edu/about",
+   "description": "We aim to bring together experts from leading institutions to advance a One-Health understanding of microplastics, as well as even-smaller nano-plastics.",
+   "description_source": "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution",
+   "focus_areas": [
+    "Health and Ecological Consequences",
+    "Standardized Protocols and Methods",
+    "Technology and Policy Solutions",
+    "Education and Outreach"
+   ],
+   "related_links": [
+    {
+     "label": "UC Grand Challenges Policy Briefs",
+     "url": "https://escholarship.org/uc/ucd_grandchallenges_policybriefs"
+    }
+   ],
+   "host_institution_ids": [
+    "I84218800"
+   ],
+   "member_institution_ids": [
+    "CAAG-OEHHA",
+    "I1336788258",
+    "I131249849",
+    "I95457486",
+    "I4210091954"
+   ],
+   "listed_contributor_count": 14,
+   "roster_as_of": "2026-10-29",
+   "atlas_contributors": [
+    {
+     "author_id": "A5081541713",
+     "name": "Susanne Brander"
+    },
+    {
+     "author_id": "A5086442776",
+     "name": "Scott Coffin"
+    },
+    {
+     "author_id": "A5072641531",
+     "name": "Jenessa Gjeltema"
+    },
+    {
+     "author_id": "A5091152357",
+     "name": "Sanjai Parikh"
+    },
+    {
+     "author_id": "A5078654607",
+     "name": "Karen Shapiro"
+    },
+    {
+     "author_id": "A5067860674",
+     "name": "Neil Tangri"
+    }
+   ],
+   "logo": {
+    "path": "assets/networks/land-to-sea-microplastics-consortium.png",
+    "alt": "Land to Sea Microplastics Consortium logo"
+   },
+   "disclosure": "The Atlas owner is a listed contributor to this consortium."
+  }
+ ]
+}

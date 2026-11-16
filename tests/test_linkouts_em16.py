@@ -21,6 +21,10 @@ DESCRIPTIONS = {
         "an open-source portal and toolkit designed to make microplastics data Findable, "
         "Accessible, Interoperable, and Reusable (FAIR)"
     ),
+    "LO-13": (
+        "We aim to bring together experts from leading institutions to advance a One-Health "
+        "understanding of microplastics, as well as even-smaller nano-plastics."
+    ),
 }
 
 
@@ -82,6 +86,8 @@ def _add_minderoo(data):
         (_set("LO-1", "terms_status", "not recorded"), "terms_status"),
         (_set("LO-6", "last_checked", "2026-11-10T00:00:00Z"), "last_checked"),
         (_set("LO-8", "disclosure", "Owner is a co-founder."), "disclosure"),
+        (_set("LO-13", "disclosure", "   "), "disclosure must be a non-empty string"),
+        (_set("LO-13", "disclosure", None), "disclosure must be a non-empty string"),
         (_set("LO-1", "root_url", None), "root_url may be null"),
         (
             _set(
@@ -93,7 +99,7 @@ def _add_minderoo(data):
         ),
         (_set("LO-7", "url_status", "maybe"), "url_status"),
         (_add_minderoo, "Minderoo"),
-        (lambda d: d["entries"].append({**d["entries"][0], "id": "LO-13"}), "unexpected id LO-13"),
+        (lambda d: d["entries"].append({**d["entries"][0], "id": "LO-14"}), "unexpected id LO-14"),
     ],
 )
 def test_validation_rejects_bad_registry(mutate, expected):

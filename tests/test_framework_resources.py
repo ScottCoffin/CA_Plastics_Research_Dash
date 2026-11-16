@@ -9,10 +9,17 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_CHECK = ROOT / "tests" / "framework_resources_runtime.mjs"
 PAGE = ROOT / "framework" / "src" / "resources.md"
+JS = ROOT / "framework" / "src" / "components" / "resources.js"
 
 
 def test_resources_page_has_no_minderoo_mention() -> None:
     assert "minderoo" not in PAGE.read_text(encoding="utf-8").lower()
+
+
+def test_disclosure_is_written_as_text_not_markup() -> None:
+    js = JS.read_text(encoding="utf-8")
+    assert 'el("p", "rs-disclosure"' in js
+    assert "innerHTML" not in js
 
 
 def test_framework_resources_runtime_helpers() -> None:

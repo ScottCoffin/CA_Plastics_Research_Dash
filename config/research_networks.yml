@@ -1,0 +1,59 @@
+# Research networks and consortia registry (NET-1, owner request 2026-11-15).
+# Principles follow the link-out registry (config/linkouts.yml): link, don't mirror; text is
+# quoted as the steward states it; nothing is fetched or scraped from the linked pages.
+# The full contributor roster is NOT copied here: only the Atlas expert IDs of listed
+# contributors (to link their Atlas profiles) and the roster size. Most contributors have no
+# Atlas profile yet (no plastic-related publications so far, owner 2026-11-15); they appear
+# automatically once their work enters the corpus, if their ID is added below.
+# host_institution_ids get the full card on /institution; member_institution_ids (employers of
+# listed contributors, per the steward page) get a one-line pointer to the host.
+# Rebuild the public JSON with `py -3.14 scripts/build_research_networks_json.py`.
+schema_version: 1
+networks:
+  - id: "NET-1"
+    name: "Land to Sea Microplastics Consortium"
+    # The steward page title and breadcrumb use "Microplastics"; its on-page heading reads
+    # "Land to Sea Microplastic Consortium". The title form is used (QUESTIONS NET-1-NAME).
+    name_variants:
+      - "Land to Sea Microplastic Consortium"
+    url: "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution"
+    url_status: "owner_confirmed"  # owner supplied the saved page, 2026-11-15
+    steward: "Coastal and Marine Sciences Institute, UC Davis"
+    steward_source: "https://marinescience.ucdavis.edu/about"
+    description: "We aim to bring together experts from leading institutions to advance a One-Health understanding of microplastics, as well as even-smaller nano-plastics."
+    description_source: "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution"
+    focus_areas:  # section headings on the steward page, verbatim
+      - "Health and Ecological Consequences"
+      - "Standardized Protocols and Methods"
+      - "Technology and Policy Solutions"
+      - "Education and Outreach"
+    related_links:
+      - label: "UC Grand Challenges Policy Briefs"
+        url: "https://escholarship.org/uc/ucd_grandchallenges_policybriefs"
+    host_institution_ids:
+      - "I84218800"  # University of California, Davis
+    member_institution_ids:
+      - "CAAG-OEHHA"  # Office of Environmental Health Hazard Assessment
+      - "I1336788258"  # California Department of Public Health
+      - "I131249849"  # Oregon State University
+      - "I95457486"  # University of California, Berkeley
+      - "I4210091954"  # Global Alliance for Incinerator Alternatives
+    listed_contributor_count: 14
+    roster_as_of: "2026-10-29"  # steward page "Last update"
+    # Listed contributors with an Atlas expert profile (name match, lead-checked 2026-11-15).
+    # Names as the steward lists them. The other 8 have no Atlas profile yet.
+    atlas_contributors:
+      - {author_id: "A5081541713", name: "Susanne Brander"}
+      - {author_id: "A5086442776", name: "Scott Coffin"}
+      - {author_id: "A5072641531", name: "Jenessa Gjeltema"}
+      - {author_id: "A5091152357", name: "Sanjai Parikh"}
+      - {author_id: "A5078654607", name: "Karen Shapiro"}
+      - {author_id: "A5067860674", name: "Neil Tangri"}
+    logo:
+      path: "assets/networks/land-to-sea-microplastics-consortium.png"  # relative to the site root
+      alt: "Land to Sea Microplastics Consortium logo"
+      source_url: "https://marinescience.ucdavis.edu/sites/g/files/dgvnsk9221/files/styles/sf_large_width/public/media/images/Untitled%20design_0.png?itok=Pj7Z73fZ"
+      treatment: "cropped to the droplet, outer white made transparent, 160 px palette PNG"
+      terms: "Copyright The Regents of the University of California, Davis campus. All rights reserved."
+      permission: "to_confirm"  # QUESTIONS NET-1-LOGO; HUMAN_TASKS H26
+    disclosure: "The Atlas owner is a listed contributor to this consortium."

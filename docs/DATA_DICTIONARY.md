@@ -268,7 +268,7 @@ Licence: the file records `Other (Public Domain)` as stated by the source. This 
 
 Purpose: the Evidence Map's related-resources strip (EM-5). Written from `config/linkouts.yml`
 by `py -3.14 scripts/build_linkouts_json.py` (`--check` fails when it is stale).
-Top-level keys: `schema_version` (`em5.v1`), `source` (string), `entries` (array, 12 at the time of writing).
+Top-level keys: `schema_version` (`em5.v1`), `source` (string), `entries` (array, 13 at the time of writing).
 Licence: project metadata; names and descriptions are quoted from each steward, and nothing
 from the linked resources is copied (link-only, Add-on A2 §8).
 
@@ -277,7 +277,29 @@ from the linked resources is copied (link-only, Add-on A2 §8).
 `description_source` (https URL where the steward states the description), `update_model` (string,
 or "not stated"), `terms_status` (`recorded` or `not recorded`), `terms` (string, or null when the
 steward's terms are not stated), `url_status` (`as_stated`, `owner_confirmed`, `to_confirm` or
-`unavailable`). The Related resources page (EM-16) lists every entry.
+`unavailable`), `disclosure` (string, or null when none applies; the Atlas owner's stated interest,
+e.g. LO-8 and LO-13). The Related resources page (EM-16) lists every entry.
+
+### `site/data/research_networks.json`
+
+Purpose: the research networks and consortia that the Atlas links to (NET-1). Written from
+`config/research_networks.yml` by `py -3.14 scripts/build_research_networks_json.py` (`--check`
+fails when it is stale). The static institution pages (`/institutions/<id>/`) show a network where
+the institution hosts it or has listed contributors in it.
+Top-level keys: `schema_version` (`net1.v1`), `source` (string), `networks` (array, 1 at the time of writing).
+Licence: link-only, as for the link-out registry. Names, descriptions and focus areas are quoted
+from the steward's own pages; nothing is fetched or scraped. The full contributor roster is not
+published: only the roster size and the Atlas expert IDs of listed contributors appear. The logo
+image (`logo.path`, under `site/assets/`) is not covered by this file; its permission is still to
+be confirmed (owner task H26).
+
+`networks[]`: `id` (`NET-<n>`), `name`, `url` (https), `steward`, `steward_source` (https),
+`description`, `description_source` (https), `focus_areas` (array of strings), `related_links`
+(array of `label` and `url`), `host_institution_ids` and `member_institution_ids` (institution IDs,
+either OpenAlex-style such as `I84218800` or a local ID such as `CAAG-OEHHA`), `listed_contributor_count`
+(integer), `roster_as_of` (`YYYY-MM-DD`), `atlas_contributors` (array of `author_id` and `name`),
+`logo` (`path`, relative to the site root, and `alt`), `disclosure` (string). The name variants,
+URL status, logo source, terms and permission fields stay in the YAML only.
 
 ### `site/data/dtsc_timeline.json`
 

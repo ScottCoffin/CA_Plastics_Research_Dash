@@ -5,11 +5,15 @@ import {
   LEAD_AUTHOR_LIMIT,
   barChartLayout,
   collaborators,
+  contributorSummary,
   fontSizeRem,
+  formatRosterDate,
+  httpsUrl,
   isSafeInstId,
   labelStep,
   leadAuthors,
   mostCited,
+  networksForInstitution,
   openAlexUrl,
   parseInstitutionHash,
   plasticWorks,
@@ -149,5 +153,116 @@ assert.deepEqual(searchInstitutions(list, "DAVIS  company").shown.map((i) => i.i
 assert.equal(searchInstitutions(list, "nothing").total, 0);
 assert.equal(searchInstitutions(list, "", 2).shown.length, 2);
 assert.equal(searchInstitutions(list, "", 2).total, 3);
+
+// Research networks: which consortia an institution hosts or is a listed contributor to.
+const atlasPeople = [
+  {author_id: "A5081541713", name: "Susanne Brander"},
+  {author_id: "A5000000001", name: "Second Person"},
+  {author_id: "A5000000002", name: "Third Person"},
+  {author_id: "A5000000003", name: "Fourth Person"},
+  {author_id: "A5000000004", name: "Fifth Person"},
+  {author_id: "A5000000005", name: "Sixth Person"},
+];
+const consortium = {
+  id: "NET-1",
+  name: "Land to Sea Microplastics Consortium",
+  url: "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution",
+  steward: "Coastal and Marine Sciences Institute, UC Davis",
+  steward_source: "https://marinescience.ucdavis.edu/about",
+  description: "We aim to bring together experts from leading institutions.",
+  description_source: "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution",
+  focus_areas: ["Health and Ecological Consequences", "Education and Outreach"],
+  related_links: [{label: "UC Grand Challenges Policy Briefs", url: "https://escholarship.org/uc/ucd_grandchallenges_policybriefs"}],
+  host_institution_ids: ["I84218800"],
+  member_institution_ids: ["CAAG-OEHHA", "I1336788258", "I131249849", "I95457486", "I4210091954"],
+  listed_contributor_count: 14,
+  roster_as_of: "2026-10-29",
+  atlas_contributors: atlasPeople,
+  logo: {path: "assets/networks/land-to-sea-microplastics-consortium.png", alt: "Land to Sea Microplastics Consortium logo"},
+  disclosure: "The Atlas owner is a listed contributor to this consortium.",
+};
+const networkPayload = {
+  schema_version: "net1.v1",
+  networks: [
+    consortium,
+    {id: "NET-2", name: "Second network", url: "https://example.org/second", host_institution_ids: ["CAAG-OEHHA"], member_institution_ids: [], listed_contributor_count: null, roster_as_of: "", atlas_contributors: [], logo: null, disclosure: null},
+    // Unsafe links are emptied, bad ids and unsafe logo paths are dropped, the entry itself stays.
+    {
+      id: "NET-3", name: "Plain http network", url: "http://insecure.example.org/", steward_source: "javascript:alert(1)",
+      description_source: "http://insecure.example.org/about", host_institution_ids: ["../x", "", "I84218800"],
+      member_institution_ids: ["I1336788258"], related_links: [{label: "Old", url: "http://old.example.org/"}, {label: "Kept", url: "https://kept.example.org/"}, {label: "", url: "https://no-label.example.org/"}],
+      logo: {path: "assets/../secret.png", alt: "x"}, atlas_contributors: [{author_id: "bad id!", name: "Bad"}, {author_id: "A1", name: ""}],
+    },
+    // Malformed entries are ignored entirely.
+    null,
+    "not an object",
+    {name: "No id", host_institution_ids: ["I84218800"]},
+    {id: "NET-4", host_institution_ids: ["I84218800"]},
+    {id: "NET-5", name: "   ", host_institution_ids: ["I84218800"]},
+    // Hosts that are also members appear once, as hosted.
+    {id: "NET-6", name: "Self member", host_institution_ids: ["I9"], member_institution_ids: ["I9", "I10"]},
+  ],
+};
+
+const hostView = networksForInstitution(networkPayload, "I84218800");
+assert.deepEqual(hostView.member, [], "I84218800 is only a host here");
+assert.deepEqual(hostView.hosted.map((n) => n.id), ["NET-1", "NET-3"], "hosted networks keep payload order; malformed entries are dropped");
+assert.deepEqual(hostView.hosted[0], consortium, "a clean consortium survives unchanged");
+const insecure = hostView.hosted[1];
+assert.equal(insecure.url, "", "an http url is emptied, not rendered");
+assert.equal(insecure.steward_source, "", "a javascript: url is emptied");
+assert.equal(insecure.description_source, "", "an http description source is emptied");
+assert.deepEqual(insecure.host_institution_ids, ["I84218800"], "ids that are not institution ids are dropped");
+assert.deepEqual(insecure.related_links, [{label: "Kept", url: "https://kept.example.org/"}], "http and unlabelled related links are dropped");
+assert.equal(insecure.logo, null, "a logo path with .. is dropped");
+assert.deepEqual(insecure.atlas_contributors, [], "contributors with unsafe ids or no names are dropped");
+assert.equal(JSON.stringify(hostView).includes("http://"), false, "no http URL survives in either list");
+
+const memberView = networksForInstitution(networkPayload, "CAAG-OEHHA");
+assert.deepEqual(memberView.hosted.map((n) => n.id), ["NET-2"], "CAAG-OEHHA hosts NET-2 in this fixture");
+assert.deepEqual(memberView.member.map((n) => n.id), ["NET-1"], "CAAG-OEHHA is a listed member of the consortium");
+assert.equal(networksForInstitution(networkPayload, "I1336788258").member.length, 2, "several networks can list one institution");
+
+const selfMember = networksForInstitution(networkPayload, "I9");
+assert.deepEqual(selfMember.hosted.map((n) => n.id), ["NET-6"]);
+assert.deepEqual(selfMember.member, [], "a network the institution hosts is not repeated as a member");
+
+assert.deepEqual(networksForInstitution(networkPayload, "I404"), {hosted: [], member: []}, "unknown ids get nothing");
+assert.deepEqual(networksForInstitution(networkPayload, "../etc"), {hosted: [], member: []}, "unsafe ids get nothing");
+assert.deepEqual(networksForInstitution(null, "I84218800"), {hosted: [], member: []}, "a missing file gets nothing");
+assert.deepEqual(networksForInstitution({schema_version: "net0", networks: [consortium]}, "I84218800"), {hosted: [], member: []}, "another schema version is ignored");
+assert.deepEqual(networksForInstitution({schema_version: "net1.v1", networks: "nope"}, "I84218800"), {hosted: [], member: []});
+
+// Roster dates and the contributor sentence.
+assert.equal(formatRosterDate("2026-10-29"), "29 Oct 2026");
+assert.equal(formatRosterDate("2026-01-05"), "5 Jan 2026", "days are not zero-padded");
+assert.equal(formatRosterDate("2026-02-30"), "", "impossible dates give no text");
+assert.equal(formatRosterDate("2026-13-01"), "");
+assert.equal(formatRosterDate("29 Oct 2026"), "");
+assert.equal(formatRosterDate(undefined), "");
+assert.equal(
+  contributorSummary(consortium),
+  "The consortium lists 14 contributors (page updated 29 Oct 2026); 6 have Atlas expert profiles.",
+);
+assert.equal(
+  contributorSummary({listed_contributor_count: 1, roster_as_of: "2026-01-05", atlas_contributors: [atlasPeople[0]]}),
+  "The consortium lists 1 contributor (page updated 5 Jan 2026); 1 has an Atlas expert profile.",
+  "singular forms",
+);
+assert.equal(
+  contributorSummary({listed_contributor_count: 3, roster_as_of: "2026-02-30", atlas_contributors: []}),
+  "The consortium lists 3 contributors; none have Atlas expert profiles.",
+  "an invalid roster date leaves out the page-updated note",
+);
+assert.equal(contributorSummary({listed_contributor_count: null, roster_as_of: "2026-10-29", atlas_contributors: []}), "", "nothing known, nothing said");
+assert.equal(contributorSummary(null), "");
+
+// https-only URLs.
+assert.equal(httpsUrl("https://example.org/a"), "https://example.org/a");
+assert.equal(httpsUrl("  https://example.org/a  "), "https://example.org/a", "surrounding spaces are trimmed");
+assert.equal(httpsUrl("http://example.org/"), "");
+assert.equal(httpsUrl("javascript:alert(1)"), "");
+assert.equal(httpsUrl("https://"), "");
+assert.equal(httpsUrl(42), "");
 
 console.log("framework institution runtime checks passed");

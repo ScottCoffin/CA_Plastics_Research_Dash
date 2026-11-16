@@ -17,7 +17,7 @@ DETAIL_JS = COMPONENTS / "institution.js"
 MODEL_JS = COMPONENTS / "institution_model.js"
 
 # Internal project vocabulary must not reach visible text (scripts/check_public_text.py).
-INTERNAL_IDS = re.compile(r"\b(?:S\d+\.\d+|EM-\d+|UX-\d+|TODO)\b")
+INTERNAL_IDS = re.compile(r"\b(?:S\d+\.\d+|EM-\d+|UX-\d+|NET-\d+|TODO)\b")
 
 
 def _read(path: Path) -> str:
@@ -54,6 +54,38 @@ def test_institution_links_point_at_the_detail_page() -> None:
     # The View experts buttons keep the Experts page.
     assert "openInstitutionExperts(button.dataset.institutionId)" in text
     assert "openInstitutionExperts(expertButton.dataset.institutionId)" in text
+
+
+def test_research_networks_card_reads_the_networks_file() -> None:
+    component = _read(DETAIL_JS)
+    model = _read(MODEL_JS)
+    # Optional file, loaded alongside the institution data; a missing file means no card.
+    assert 'loadJson("research_networks.json", {optional: true})' in component
+    assert "loadNetworks()" in component
+    assert "networksForInstitution(networks, state.instId)" in component
+    assert "export function networksForInstitution" in model
+    assert "export function contributorSummary" in model
+    # The card sits between the header and the summary, and is only drawn when there is a network.
+    order = (
+        r"headerHtml\(institution\)\s*\+ networksSectionHtml\("
+        r'networksForInstitution\(networks, state\.instId\)\)\s*\+ sectionHtml\("summary"'
+    )
+    assert re.search(order, component)
+    assert 'sectionHtml("networks", "Research networks"' in component
+    # Logo is decorative (the name sits beside it), comes from the classic site root, and is lazy.
+    assert 'alt=""' in component
+    assert "classicUrl(network.logo.path)" in component
+    assert 'loading="lazy"' in component
+    # Visible copy is plain language, and the internal id is never rendered.
+    assert "Researchers here are listed contributors to the" in component
+    assert "network.id" not in component
+    assert "NET-" not in component
+
+
+def test_research_networks_model_stays_dom_free() -> None:
+    model = _read(MODEL_JS)
+    assert "fetch(" not in model
+    assert "innerHTML" not in model
 
 
 def test_copy_has_no_internal_ids() -> None:

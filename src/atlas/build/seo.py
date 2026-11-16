@@ -340,7 +340,46 @@ def _expert_page(
     )
 
 
-def _institution_page(inst: dict[str, Any], experts: dict[str, str], base: str) -> str:
+def _load_networks(path: Path) -> list[dict[str, Any]]:
+    """Network entries from ``research_networks.json`` that have a name and an https URL."""
+    cards: list[dict[str, Any]] = []
+    for network in _read_json(path).get("networks") or []:
+        if isinstance(network, dict) and _https(network.get("url")) and _text(network.get("name")):
+            cards.append(network)
+    return cards
+
+
+def _network_ids(network: dict[str, Any], key: str) -> list[Any]:
+    ids = network.get(key)
+    return ids if isinstance(ids, list) else []
+
+
+def _network_link(network: dict[str, Any]) -> str:
+    return f'<a href="{esc(_https(network["url"]))}">{esc(_text(network["name"]))}</a>'
+
+
+def _sub_organization(network: dict[str, Any], base: str) -> dict[str, Any]:
+    card: dict[str, Any] = {
+        "@type": "Organization",
+        "name": _text(network["name"]),
+        "url": _https(network["url"]),
+    }
+    description = _text(network.get("description"))
+    if description:
+        card["description"] = description
+    logo = network.get("logo")
+    path = _text(logo.get("path")) if isinstance(logo, dict) else ""
+    if path and not path.startswith("/") and ".." not in path.split("/"):
+        card["logo"] = f"{base}/{path}"
+    return card
+
+
+def _institution_page(
+    inst: dict[str, Any],
+    experts: dict[str, str],
+    base: str,
+    networks: list[dict[str, Any]] | None = None,
+) -> str:
     iid = inst["inst_id"]
     name = _text(inst.get("name")) or iid
     city = _text(inst.get("city"))
@@ -363,11 +402,26 @@ def _institution_page(inst: dict[str, Any], experts: dict[str, str], base: str) 
         seen.add(aid)
         linked.append((aid, experts[aid]))
 
+    hosted = [n for n in networks or [] if iid in _network_ids(n, "host_institution_ids")]
+    member = [n for n in networks or [] if iid in _network_ids(n, "member_institution_ids")]
+
     parts = _chrome_top(base)
     parts.append(f"<h1>{esc(name)}</h1>")
     facts = [f"Type: {kind}" if kind else "", f"City: {city}" if city else ""]
     facts.append(f"{count} works in the Atlas")
     parts.append("<ul>" + "".join(f"<li>{esc(f)}</li>" for f in facts if f) + "</ul>")
+    if hosted or member:
+        items = [f"<li>{_network_link(n)} — hosted here</li>" for n in hosted]
+        items += [
+            f"<li>{_network_link(n)} — researchers here are listed contributors</li>"
+            for n in member
+        ]
+        parts.append("<h2>Research networks</h2>")
+        parts.append("<ul>" + "".join(items) + "</ul>")
+        for network in hosted + member:
+            disclosure = _text(network.get("disclosure"))
+            if disclosure:
+                parts.append(f"<p>Disclosure: {esc(disclosure)}</p>")
     if linked:
         parts.append("<h2>Top experts</h2>")
         items = [
@@ -388,6 +442,8 @@ def _institution_page(inst: dict[str, Any], experts: dict[str, str], base: str) 
         schema["address"] = {"@type": "PostalAddress", "addressLocality": city}
     if ror:
         schema["sameAs"] = [ror]
+    if hosted:
+        schema["subOrganization"] = [_sub_organization(n, base) for n in hosted]
     return _page(
         title=f"{name} — plastics research | {ATLAS_NAME}",
         description=description,
@@ -440,6 +496,8 @@ def build_site(site_dir: Path, base_url: str = DEFAULT_BASE_URL) -> dict[str, in
 
     Returns counts of pages, sitemap URLs and bytes written. Input is read from
     ``site_dir/data``; topic labels come from ``site_dir/assets/topics.js`` when present.
+    Research networks come from ``site_dir/data/research_networks.json`` when present (a
+    missing file means no networks).
     """
     base = _normalise_base(base_url)
     data_dir = site_dir / "data"
@@ -451,6 +509,7 @@ def build_site(site_dir: Path, base_url: str = DEFAULT_BASE_URL) -> dict[str, in
             experts.setdefault(author["author_id"], author)
     expert_names = {aid: (_text(a.get("name")) or aid) for aid, a in experts.items()}
     labels = load_topic_labels(site_dir / "assets" / "topics.js")
+    networks = _load_networks(data_dir / "research_networks.json")
 
     written = 0
     for aid, author in experts.items():
@@ -466,7 +525,7 @@ def build_site(site_dir: Path, base_url: str = DEFAULT_BASE_URL) -> dict[str, in
         if inst.get("ca_flag") is True and _int(inst.get("work_count")) > 0:
             institutions.setdefault(inst["inst_id"], inst)
     for iid, inst in institutions.items():
-        page = _institution_page(inst, expert_names, base)
+        page = _institution_page(inst, expert_names, base, networks)
         written += _write(site_dir / "institutions" / iid / "index.html", page)
 
     lastmod = _lastmod(_read_json(data_dir / "build_metadata.json"))

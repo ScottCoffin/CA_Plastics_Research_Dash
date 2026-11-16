@@ -367,6 +367,39 @@
     return badges.join("");
   }
 
+  // Consortium badges from data/research_networks.json: one per network whose roster lists the author.
+  // Only https links are shown (a network without one is skipped). The logo must be a file under assets/networks/.
+  const NETWORK_LOGO_RE = /^assets\/networks\/[A-Za-z0-9._-]+$/;
+  const MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  // "2026-10-29" becomes "29 Oct 2026" (UTC, English month names); "" when the text is not a real date.
+  function proseDate(value) {
+    const iso = isoDateOrEmpty(value);
+    if (!iso) return "";
+    const [year, month, day] = iso.split("-").map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) return "";
+    return `${day} ${MONTH_ABBR[month - 1]} ${year}`;
+  }
+  function networkBadgesHtml(networks, authorId) {
+    const id = String(authorId ?? "").trim();
+    if (!id || !Array.isArray(networks)) return "";
+    const badges = [];
+    networks.forEach((network) => {
+      if (!network || typeof network !== "object") return;
+      const contributors = Array.isArray(network.atlas_contributors) ? network.atlas_contributors : [];
+      const listed = contributors.some((c) => c && String(c.author_id ?? "").trim() === id);
+      const name = String(network.name ?? "").trim();
+      const url = safeHttpUrl(network.url);
+      if (!listed || !name || !url.startsWith("https:")) return;
+      const logo = String(network.logo?.path ?? "").trim();
+      const img = NETWORK_LOGO_RE.test(logo) ? `<img src="${escapeHtml(logo)}" alt="" width="18" height="18"> ` : "";
+      const date = proseDate(network.roster_as_of);
+      const title = `Listed as a contributor on the consortium's page${date ? ` (updated ${date})` : ""}`;
+      badges.push(`<li class="expert-badge expert-badge-network"><a href="${escapeHtml(url)}" title="${escapeHtml(title)}">${img}${escapeHtml(name)}</a></li>`);
+    });
+    return badges.join("");
+  }
+
   // Grant list for the Funding section: source note, then active grants before past ones.
   function grantItemHtml(grant, active) {
     const title = String(grant.title || "").trim() || "Untitled grant";
@@ -534,6 +567,7 @@
     isoDate,
     fundingStatus,
     expertBadgesHtml,
+    networkBadgesHtml,
     fundingHtml,
     datasetsHtml,
     coauthorInstitutionSummary,

@@ -16,7 +16,8 @@
    "update_model": "not stated",
    "terms_status": "recorded",
    "terms": "Global Plastic Laws. All rights reserved.",
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": null
   },
   {
    "id": "LO-2",
@@ -36,7 +37,8 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": null
   },
   {
    "id": "LO-3",
@@ -55,7 +57,8 @@
    "update_model": "Data Update Frequency Quarterly",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": null
   },
   {
    "id": "LO-4",
@@ -74,7 +77,8 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": null
   },
   {
    "id": "LO-5",
@@ -90,7 +94,8 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": null
   },
   {
    "id": "LO-6",
@@ -106,7 +111,8 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": null
   },
   {
    "id": "LO-7",
@@ -122,7 +128,8 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": null
   },
   {
    "id": "LO-8",
@@ -138,7 +145,8 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": "The Atlas owner is a co-founder of Plastiverse (A2 §0 rule 7)."
   },
   {
    "id": "LO-9",
@@ -157,7 +165,8 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "owner_confirmed"
+   "url_status": "owner_confirmed",
+   "disclosure": null
   },
   {
    "id": "LO-10",
@@ -175,7 +184,8 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": null
   },
   {
    "id": "LO-11",
@@ -194,7 +204,8 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "as_stated"
+   "url_status": "as_stated",
+   "disclosure": null
   },
   {
    "id": "LO-12",
@@ -213,7 +224,29 @@
    "update_model": "not stated",
    "terms_status": "not recorded",
    "terms": null,
-   "url_status": "owner_confirmed"
+   "url_status": "owner_confirmed",
+   "disclosure": null
+  },
+  {
+   "id": "LO-13",
+   "name": "Land to Sea Microplastics Consortium",
+   "steward": "Coastal and Marine Sciences Institute, UC Davis",
+   "steward_source": "https://marinescience.ucdavis.edu/about",
+   "description": "We aim to bring together experts from leading institutions to advance a One-Health understanding of microplastics, as well as even-smaller nano-plastics.",
+   "relation": "research consortium",
+   "root_url": "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution",
+   "topics": [
+    "analytical_methods",
+    "ecotoxicology_and_trophic_transfer",
+    "human_exposure_and_health_risk"
+   ],
+   "default": false,
+   "description_source": "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution",
+   "update_model": "not stated",
+   "terms_status": "not recorded",
+   "terms": null,
+   "url_status": "owner_confirmed",
+   "disclosure": "The Atlas owner is a listed contributor to this consortium."
   }
  ]
 }

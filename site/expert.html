@@ -128,6 +128,11 @@
       .coauthor-list .shared { color: var(--muted); font-size: 0.9rem; }
       .expert-badges { list-style: none; margin: 0.4rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
       .expert-badge { padding: 0.1rem 0.6rem; border-radius: 999px; color: #083d31; background: #d9f2e9; font-size: 0.85rem; font-weight: 700; }
+      .expert-badge-network { max-width: 100%; }
+      .expert-badge a { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 1.5rem; color: inherit; text-decoration: none; overflow-wrap: anywhere; }
+      .expert-badge a:hover, .expert-badge a:focus-visible { text-decoration: underline; }
+      .expert-badge a:focus-visible { outline: 3px solid #ffd7b8; outline-offset: 2px; border-radius: 999px; }
+      .expert-badge img { flex: none; }
       .expertise-statement { margin: 0.4rem 0 0; max-width: 52rem; color: #e3f4ef; font-size: 0.95rem; }
       .grant-list, .dataset-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
       .grant, .dataset { padding: 0.6rem 0.8rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fff; }
@@ -276,7 +281,7 @@
     <script id="expert-app">
       "use strict";
 
-      const { escapeHtml, safeHttpUrl, parseExpertId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, tagScale, bylineNames, coauthorEntries, authorLineHtml, profileHtml, citationSeries, citationHistogramSvg, isoDate, fundingStatus, expertBadgesHtml, fundingHtml, datasetsHtml, coauthorInstitutionSummary, coauthorInstitutionsHtml, expertiseStatement } = AtlasExpert;
+      const { escapeHtml, safeHttpUrl, parseExpertId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, tagScale, bylineNames, coauthorEntries, authorLineHtml, profileHtml, citationSeries, citationHistogramSvg, isoDate, fundingStatus, expertBadgesHtml, networkBadgesHtml, fundingHtml, datasetsHtml, coauthorInstitutionSummary, coauthorInstitutionsHtml, expertiseStatement } = AtlasExpert;
 
       const RISING_TIP = "Trend in this expert's share of all Atlas experts' plastics citations over the last 5 complete years; percentile among experts";
       const CHART_LABEL = "Citations received per year, all and plastics-related";
@@ -299,6 +304,7 @@
         expertNames: null,
         expertNamesPromise: null,
         badgesPromise: null,
+        networksPromise: null,
         loadToken: 0
       };
       const $ = (id) => document.getElementById(id);
@@ -364,6 +370,16 @@
           S.badgesPromise = fetchJson("data/expert_badges.json").catch(() => null);
         }
         return S.badgesPromise;
+      }
+      // Research network rosters (data/research_networks.json). Fetched once; null when unavailable, which
+      // shows no consortium badge.
+      function loadNetworks() {
+        if (!S.networksPromise) {
+          S.networksPromise = fetchJson("data/research_networks.json")
+            .then((json) => (json && Array.isArray(json.networks) ? json.networks : null))
+            .catch(() => null);
+        }
+        return S.networksPromise;
       }
       // DOI link on doi.org; "" when the record has no plain DOI.
       function doiUrl(doi) {
@@ -614,15 +630,15 @@
         body.innerHTML = `<ul class="coauthor-list">${items.join("")}</ul>${notes.map((n) => `<p class="muted">${escapeHtml(n)}</p>`).join("")}`;
       }
 
-      // Header badges, expertise statement, funding, datasets and co-author institutions. Each section stays
-      // hidden when it has no content (or when the badges file is unavailable).
-      function renderBadgeSections(badges, institutions) {
+      // Header badges (funding, data steward and consortium), expertise statement, funding, datasets and
+      // co-author institutions. Each section stays hidden when it has no content (or when its file is unavailable).
+      function renderBadgeSections(badges, institutions, networks) {
         const entry = badges && badges.experts && Object.hasOwn(badges.experts, S.id) && badges.experts[S.id] ? badges.experts[S.id] : {};
         const method = badges && badges.method ? badges.method : {};
         const grants = Array.isArray(entry.grants) ? entry.grants : [];
         const datasetCount = Number(entry.datasets?.count) > 0 ? Number(entry.datasets.count) : 0;
         const funding = fundingStatus(grants, isoDate(new Date()));
-        const badgeMarkup = expertBadgesHtml({ activeGrants: funding.active.length, datasetCount, method });
+        const badgeMarkup = expertBadgesHtml({ activeGrants: funding.active.length, datasetCount, method }) + networkBadgesHtml(networks, S.id);
         $("expert-badges").innerHTML = badgeMarkup;
         $("expert-badges").hidden = !badgeMarkup;
         const statement = expertiseStatement(S.works, AtlasTopics.label);
@@ -638,7 +654,7 @@
         $("coauth-inst-body").innerHTML = summaryMarkup;
       }
 
-      function renderExpert(detail, institutions, badges) {
+      function renderExpert(detail, institutions, badges, networks) {
         const author = detail.author || {};
         S.author = author;
         S.works = Array.isArray(detail.works) ? detail.works : [];
@@ -652,7 +668,7 @@
         renderProfile(detail.profile);
         renderMetrics(author);
         renderHistory(author, institutions);
-        renderBadgeSections(badges, institutions);
+        renderBadgeSections(badges, institutions, networks);
         renderCitations(author);
         renderYearOptions();
         syncControls();
@@ -699,17 +715,18 @@
         $("affil-primary").innerHTML = "";
         $("expert-now").innerHTML = "";
         $("open-in-list").href = `index.html#experts?author=${encodeURIComponent(raw)}`;
-        const [detail, institutions, badges] = await Promise.all([
+        const [detail, institutions, badges, networks] = await Promise.all([
           fetchJson(`data/authors/${encodeURIComponent(raw)}.json`).catch(() => null),
           loadInstitutions(),
-          loadBadges()
+          loadBadges(),
+          loadNetworks()
         ]);
         if (token !== S.loadToken) return;
         if (!detail) {
           showMessage("Profile not available", `No profile is available for "${raw}" in this snapshot.`, "error");
           return;
         }
-        renderExpert(detail, institutions, badges);
+        renderExpert(detail, institutions, badges, networks);
       }
 
       function clearFilters() {

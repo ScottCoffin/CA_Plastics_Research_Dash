@@ -25,6 +25,7 @@ PUBLIC_FIELDS = {
     "terms_status",
     "terms",
     "url_status",
+    "disclosure",
 }
 
 
@@ -82,6 +83,16 @@ def test_strip_entries_field_set_and_order():
         assert entry["description_source"].startswith("https://")
         assert entry["terms"] is None or isinstance(entry["terms"], str)
         assert (entry["terms"] is not None) == (entry["terms_status"] == "recorded")
+
+
+def test_disclosures_carried_in_strip_output():
+    data = _registry()
+    stripped = {entry["id"]: entry for entry in linkouts.strip_entries(data)}
+    registry = {entry["id"]: entry for entry in data["entries"]}
+    assert stripped["LO-8"]["disclosure"] == linkouts.DISCLOSURE_LO8
+    assert stripped["LO-13"]["disclosure"] == registry["LO-13"]["disclosure"]
+    assert stripped["LO-13"]["disclosure"].startswith("The Atlas owner is a listed contributor")
+    assert stripped["LO-1"]["disclosure"] is None
 
 
 def test_strip_entries_rejects_invalid_registry():

@@ -416,7 +416,7 @@ def test_expert_page_badge_markup_and_sections() -> None:
     assert 'fetchJson("data/expert_badges.json")' in html, (
         "badges are fetched once from the site data folder"
     )
-    assert "loadBadges()" in html and "renderBadgeSections(badges, institutions)" in html
+    assert "loadBadges()" in html and "renderBadgeSections(badges, institutions, networks)" in html
     headings = [
         "overview-h",
         "affil-h",
@@ -434,3 +434,123 @@ def test_expert_page_badge_markup_and_sections() -> None:
     assert 'id="expert-badges"' in html and 'id="expertise-statement"' in html
     assert "https://doi.org/" in html, "dataset links are built in the page, not the helpers"
     assert "https://doi.org/" not in HELPERS.read_text(encoding="utf-8")
+
+
+# Consortium badges from data/research_networks.json: one per network that lists the author.
+NODE_NETWORK_CHECK = r"""
+"use strict";
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const vm = require("node:vm");
+
+const root = process.argv[2];
+const context = vm.createContext({ URL, URLSearchParams, module: { exports: {} } });
+const source = fs.readFileSync(path.join(root, "site", "assets", "expert_page.js"), "utf8");
+vm.runInContext(source, context, { filename: "expert_page.js" });
+const A = context.module.exports;
+
+const ID = "A5086442776";
+const network = {
+  id: "NET-1",
+  name: "Land to Sea Microplastics Consortium",
+  url: "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution",
+  roster_as_of: "2026-10-29",
+  atlas_contributors: [{ author_id: ID, name: "Scott Coffin" }],
+  logo: { path: "assets/networks/land-to-sea-microplastics-consortium.png", alt: "Land to Sea Microplastics Consortium logo" },
+  disclosure: "The Atlas owner is a listed contributor to this consortium."
+};
+
+// Exact markup for a listed author, with the roster date in prose.
+const expected = '<li class="expert-badge expert-badge-network"><a href="https://marinescience.ucdavis.edu/microplastics-consortium-source-solution" title="Listed as a contributor on the consortium&#39;s page (updated 29 Oct 2026)"><img src="assets/networks/land-to-sea-microplastics-consortium.png" alt="" width="18" height="18"> Land to Sea Microplastics Consortium</a></li>';
+assert.equal(A.networkBadgesHtml([network], ID), expected);
+
+// Only listed authors get a badge; bad input gives nothing.
+assert.equal(A.networkBadgesHtml([network], "A1"), "", "unlisted author gets no badge");
+assert.equal(A.networkBadgesHtml([network], ""), "", "no author id, no badge");
+assert.equal(A.networkBadgesHtml(null, ID), "");
+assert.equal(A.networkBadgesHtml({ networks: [network] }, ID), "", "the file root is not the list");
+assert.equal(A.networkBadgesHtml([null, "x", 3], ID), "", "non-objects are skipped");
+assert.equal(A.networkBadgesHtml([{ ...network, atlas_contributors: ID }], ID), "", "contributors must be a list");
+
+// Only https links; a network without a usable link or a name is skipped.
+const badUrls = ["http://example.org/x", "javascript:alert(1)", "", "not a url"].map((url) => ({ ...network, url }));
+assert.equal(A.networkBadgesHtml(badUrls, ID), "", "only https links are shown");
+assert.equal(A.networkBadgesHtml([{ ...network, name: "   " }], ID), "", "a name is required");
+
+// Escaping, logo guard and date text. A date that is not a real calendar day drops the "(updated ...)" part.
+const hostile = { ...network, name: "<b>Net</b> & co", url: "https://example.org/a?x=1&y=2", logo: { path: "https://cdn.example.org/logo.png" }, roster_as_of: "2026-02-30" };
+const hostileMarkup = A.networkBadgesHtml([hostile], ID);
+assert.ok(hostileMarkup.includes('<a href="https://example.org/a?x=1&amp;y=2" title="Listed as a contributor on the consortium&#39;s page">'), hostileMarkup);
+assert.ok(hostileMarkup.includes("&lt;b&gt;Net&lt;/b&gt; &amp; co</a>"), "name is escaped");
+assert.ok(!hostileMarkup.includes("<img") && !hostileMarkup.includes("(updated"), "logo outside assets/networks is not shown");
+for (const logo of [undefined, { path: "assets/networks/../../x.png" }, { path: 'assets/networks/a"b.png' }]) {
+  assert.ok(!A.networkBadgesHtml([{ ...network, logo }], ID).includes("<img"), `no image for ${JSON.stringify(logo)}`);
+}
+const dated = (value) => A.networkBadgesHtml([{ ...network, roster_as_of: value }], ID);
+assert.ok(dated("2026-01-05").includes("(updated 5 Jan 2026)"), "day without a leading zero");
+assert.ok(dated("2024-02-29").includes("(updated 29 Feb 2024)"), "leap day");
+assert.ok(!dated("2025-02-29").includes("(updated"), "not a leap year");
+assert.ok(!dated("2026-10-29T00:00:00Z").includes("(updated"), "date only");
+assert.ok(!dated(undefined).includes("(updated"), "no roster date");
+
+// One badge per listed network, in roster-file order.
+const second = { ...network, id: "NET-2", name: "Second Network", url: "https://example.org/second" };
+const two = A.networkBadgesHtml([network, second], ID);
+assert.equal((two.match(/<li /g) || []).length, 2, "one badge per network");
+assert.ok(two.indexOf("Land to Sea") < two.indexOf("Second Network"), "file order is kept");
+
+console.log("Consortium badge checks passed: markup, author match, https guard, escaping, logo and date text.");
+"""  # noqa: E501
+
+
+def test_expert_page_network_badges_runtime(tmp_path: Path) -> None:
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js is not on PATH; install Node.js 20+ to run the badge checks.")
+    script = tmp_path / "expert_network_badges_check.cjs"
+    script.write_text(NODE_NETWORK_CHECK, encoding="utf-8")
+    subprocess.run([node, str(script), str(ROOT)], cwd=ROOT, check=True)
+
+
+def test_network_badge_helper_is_exported_and_guards_links() -> None:
+    source = HELPERS.read_text(encoding="utf-8")
+    assert "function networkBadgesHtml(networks, authorId)" in source
+    assert "networkBadgesHtml,\n" in source, "networkBadgesHtml must be in the exported api object"
+    assert 'startsWith("https:")' in source, "only https links are shown"
+    assert "Date.UTC" in source and "toLocale" not in source, "date text is locale-free"
+
+
+def test_expert_page_loads_research_networks_once_and_shows_them_in_the_header() -> None:
+    html = PAGE.read_text(encoding="utf-8")
+    assert 'fetchJson("data/research_networks.json")' in html and "json.networks" in html, (
+        "networks are fetched once from the site data folder; a failed fetch means no badge"
+    )
+    assert "S.networksPromise" in html and "loadNetworks()" in html
+    assert "renderExpert(detail, institutions, badges, networks)" in html
+    assert "networkBadgesHtml(networks, S.id)" in html
+    assert '$("expert-badges").hidden = !badgeMarkup;' in html
+
+
+def _css_rule(css: str, selector: str) -> str:
+    match = re.search(rf"(?m)^\s*{re.escape(selector)} \{{([^}}]*)\}}", css)
+    assert match, f"the {selector} rule is missing"
+    return match.group(1)
+
+
+def test_network_badge_css_tap_focus_and_wrap_rules() -> None:
+    css = PAGE.read_text(encoding="utf-8")
+    link = _css_rule(css, ".expert-badge a")
+    for declaration in (
+        "display: inline-flex",
+        "align-items: center",
+        "min-height: 1.5rem",
+        "color: inherit",
+        "text-decoration: none",
+        "overflow-wrap: anywhere",
+    ):
+        assert declaration in link, f"link rule needs {declaration}"
+    underline = _css_rule(css, ".expert-badge a:hover, .expert-badge a:focus-visible")
+    assert "text-decoration: underline" in underline, "underline on hover and keyboard focus"
+    assert "outline: 3px solid" in _css_rule(css, ".expert-badge a:focus-visible")
+    assert "max-width: 100%" in _css_rule(css, ".expert-badge-network")

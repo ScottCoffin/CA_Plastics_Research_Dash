@@ -273,3 +273,105 @@ def test_id_and_url_normalisers() -> None:
     assert _orcid_url("https://example.org/x") is None
     assert _ror_url("04vnq7t77") == "https://ror.org/04vnq7t77"
     assert _ror_url("") is None
+
+
+NET_NAME = "Land <Test> Consortium & Co"
+NET_URL = "https://consortium.example/home"
+NET_DISCLOSURE = "The Atlas owner is a listed contributor to this consortium."
+NET_LINK = '<a href="https://consortium.example/home">Land &lt;Test&gt; Consortium &amp; Co</a>'
+
+
+def _network_payload(**changes: object) -> dict:
+    network: dict[str, object] = {
+        "id": "NET-9",
+        "name": NET_NAME,
+        "url": NET_URL,
+        "steward": "Steward Org",
+        "steward_source": "https://consortium.example/about",
+        "description": "Describes <b>the</b> network.",
+        "description_source": NET_URL,
+        "focus_areas": ["Health"],
+        "related_links": [],
+        "host_institution_ids": ["I1"],
+        "member_institution_ids": ["I4"],
+        "listed_contributor_count": 1,
+        "roster_as_of": "2026-10-29",
+        "atlas_contributors": [],
+        "logo": {"path": "assets/networks/test.png", "alt": "Test logo"},
+        "disclosure": NET_DISCLOSURE,
+    }
+    network.update(changes)
+    return {
+        "schema_version": "net1.v1",
+        "source": "config/research_networks.yml",
+        "networks": [network],
+    }
+
+
+def _site_with_networks(tmp_path: Path, payload: dict | None = None) -> Path:
+    site = _make_site(tmp_path)
+    institutions = site / "data" / "institutions.json"
+    data = json.loads(institutions.read_text(encoding="utf-8"))
+    data["institutions"].append(
+        {"inst_id": "I4", "name": "Member Lab", "city": "Davis", "work_count": 2, "ca_flag": True}
+    )
+    _write_json(institutions, data)
+    if payload is not None:
+        _write_json(site / "data" / "research_networks.json", payload)
+    build_site(site, BASE)
+    return site
+
+
+def test_host_institution_page_shows_network_disclosure_and_sub_organization(tmp_path) -> None:
+    site = _site_with_networks(tmp_path, _network_payload())
+    html = (site / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
+    assert "<h2>Research networks</h2>" in html
+    assert f"<li>{NET_LINK} — hosted here</li>" in html
+    assert f"<p>Disclosure: {NET_DISCLOSURE}</p>" in html
+    assert html.index("Research networks") < html.index("Top experts")
+    assert _jsonld(html)["subOrganization"] == [
+        {
+            "@type": "Organization",
+            "name": NET_NAME,
+            "url": NET_URL,
+            "description": "Describes <b>the</b> network.",
+            "logo": f"{BASE}/assets/networks/test.png",
+        }
+    ]
+
+
+def test_member_institution_page_points_to_host_without_sub_organization(tmp_path) -> None:
+    site = _site_with_networks(tmp_path, _network_payload())
+    html = (site / "institutions" / "I4" / "index.html").read_text(encoding="utf-8")
+    assert "<h2>Research networks</h2>" in html
+    assert f"<li>{NET_LINK} — researchers here are listed contributors</li>" in html
+    assert "hosted here" not in html
+    assert f"<p>Disclosure: {NET_DISCLOSURE}</p>" in html
+    assert "subOrganization" not in _jsonld(html)
+
+
+def test_no_networks_file_leaves_institution_page_unchanged(tmp_path) -> None:
+    site = _site_with_networks(tmp_path)
+    html = (site / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
+    assert "Research networks" not in html
+    assert "Disclosure" not in html
+    assert "subOrganization" not in _jsonld(html)
+
+
+def test_unsafe_network_url_is_not_shown(tmp_path) -> None:
+    payload = _network_payload(url="http://consortium.example/home")
+    site = _site_with_networks(tmp_path, payload)
+    html = (site / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
+    assert "Research networks" not in html
+    assert "subOrganization" not in _jsonld(html)
+
+
+def test_unsafe_logo_path_is_left_out_of_sub_organization(tmp_path) -> None:
+    payload = _network_payload()
+    payload["networks"][0]["logo"]["path"] = "../secret.png"
+    site = _site_with_networks(tmp_path, payload)
+    html = (site / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
+    assert NET_LINK in html
+    card = _jsonld(html)["subOrganization"][0]
+    assert card["name"] == NET_NAME
+    assert "logo" not in card

@@ -177,3 +177,9 @@ states them; re-verify at adoption (AT-4/AT-5).
 | @duckdb/duckdb-wasm | 1.29.0, 1.32.0 | MIT | SPK-1/2/3 browser Parquet reads |
 | @uwdata/mosaic-core / vgplot | 0.34.1 | BSD-3-Clause | SPK-4 comparison only (not adopted) |
 | DuckDB (Python) | 2.0.0 (pipeline dependency since AT-3); 1.1.1 spike only | MIT | AT-3 analytics; G-PARQ writer pin moved to 2.0.0 + zstd (owner 2026-11-11, ADR-DUCKDB-2-2026-11-11) |
+
+## Third-party marks and logos (NET-1, 2026-11-15)
+
+| Asset | Source | Terms | Use | Status |
+|---|---|---|---|---|
+| `site/assets/networks/land-to-sea-microplastics-consortium.png` | Land to Sea Microplastics Consortium logo, UC Davis Coastal and Marine Sciences Institute page (`config/research_networks.yml` `logo.source_url`) | "Copyright The Regents of the University of California, Davis campus. All rights reserved." (page footer) | Self-hosted, cropped and resized; shown only beside a link to the consortium (UC Davis institution page, expert badges); no endorsement implied | Permission to confirm with the consortium (QUESTIONS NET-1-LOGO, HUMAN_TASKS H26); remove the `logo` block if declined |

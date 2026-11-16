@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[2]
 REGISTRY_PATH = ROOT / "config" / "linkouts.yml"
 TIMELINE_PATH = ROOT / "config" / "dtsc_timeline.yml"
 OUTPUT_PATH = ROOT / "docs" / "api_notes" / "linkouts_check.json"
-EXPECTED_IDS = [f"LO-{number}" for number in range(1, 13)]
+EXPECTED_IDS = [f"LO-{number}" for number in range(1, 14)]
 REQUIRED_KEYS = (
     "id",
     "name",
@@ -152,7 +152,10 @@ def _validate_entry(entry: dict[str, Any]) -> list[str]:
         errors.append(f"{eid}: trigger_rules must be a list")
     if entry["last_checked"] is not None:
         errors.append(f"{eid}: last_checked must stay null in the YAML (see linkouts_check.json)")
-    if eid == "LO-8" and entry.get("disclosure") != DISCLOSURE_LO8:
+    disclosure = entry.get("disclosure")
+    if "disclosure" in entry and (not isinstance(disclosure, str) or not disclosure.strip()):
+        errors.append(f"{eid}: disclosure must be a non-empty string when present")
+    if eid == "LO-8" and disclosure != DISCLOSURE_LO8:
         errors.append("LO-8: disclosure must match the A2 §0 rule 7 wording")
     return errors
 
@@ -296,6 +299,7 @@ STRIP_FIELDS = (
     "terms_status",
     "terms",
     "url_status",
+    "disclosure",
 )
 NOT_STATED = "not stated"
 TOPIC_PREFIX = "topic="
@@ -349,6 +353,7 @@ def strip_entries(data: Any) -> list[dict[str, Any]]:
             "terms_status": entry["terms_status"],
             "terms": None if entry["terms"] == NOT_STATED else entry["terms"],
             "url_status": entry["url_status"],
+            "disclosure": entry.get("disclosure"),
         }
         entries.append({key: public[key] for key in STRIP_FIELDS})
     return entries

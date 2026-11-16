@@ -88,6 +88,23 @@
 #institution-root .inst-list li { margin: 0.35rem 0; }
 #institution-root .inst-subhead { color: var(--muted); }
 
+/* Research networks: consortium card (hosted) and one-line pointer (listed contributors) */
+#institution-root .inst-network {
+  max-width: 60rem; margin: 0.75rem 0; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 0.5rem; background: #fbfdfd;
+}
+#institution-root .inst-network-head { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: flex-start; }
+#institution-root .inst-network-logo { flex: none; width: 4rem; height: 4rem; object-fit: contain; }
+#institution-root .inst-network-title { flex: 1 1 14rem; min-width: 0; }
+#institution-root .inst-network h3 { margin: 0.1rem 0 0.25rem; font-size: 1.15rem; }
+#institution-root .inst-network a { display: inline-block; min-height: 1.5rem; line-height: 1.5rem; }
+#institution-root .inst-network-steward, #institution-root .inst-network-description { margin: 0.25rem 0; }
+#institution-root .inst-network-label { margin: 0.75rem 0 0.25rem; font-weight: 600; }
+#institution-root .inst-network-focus, #institution-root .inst-network-people {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 0.55rem; margin: 0; padding: 0; list-style: none;
+}
+#institution-root .inst-network-pointer { margin: 0.75rem 0 0.25rem; max-width: 70ch; }
+#institution-root .inst-network-disclosure { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.9rem; }
+
 /* Publications table comes from ev_table.js; keep it inside the page width */
 #institution-root .ev-table-root { max-width: 100%; }
 #institution-root .ev-table-scroll { max-width: 100%; overflow-x: auto; }

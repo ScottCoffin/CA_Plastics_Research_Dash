@@ -2,16 +2,18 @@
 // DOM only: every calculation lives in institution_model.js. The publications list is the shared
 // works table (ev_table.js), limited to this institution's works and to the chosen topic.
 import "./shared/topics.js";
-import {loadJson, escapeHtml} from "./atlas.js";
+import {loadJson, escapeHtml, classicUrl} from "./atlas.js";
 import {mountWorksTable} from "./ev_table.js";
 import {safeHttpUrl} from "./ev_table_model.js";
 import {
   LEAD_AUTHOR_LIMIT,
   barChartLayout,
   collaborators,
+  contributorSummary,
   labelStep,
   leadAuthors,
   mostCited,
+  networksForInstitution,
   openAlexUrl,
   parseInstitutionHash,
   plasticWorks,
@@ -48,6 +50,7 @@ const state = {
   filterTag: "",
   leadsExpanded: false,
   table: null,
+  networksRequest: null, // promise for research_networks.json, shared by every render
 };
 
 async function loadInstitutionList() {
@@ -58,6 +61,18 @@ async function loadInstitutionList() {
   state.byId = new Map(list.map((institution) => [String(institution.inst_id), institution]));
   state.institutions = list;
   return list;
+}
+
+// Loaded once per page session. A missing file resolves to null (no networks card); a failed
+// request clears the cache so that Retry can try again.
+function loadNetworks() {
+  if (!state.networksRequest) {
+    state.networksRequest = loadJson("research_networks.json", {optional: true}).catch(() => {
+      state.networksRequest = null;
+      return null;
+    });
+  }
+  return state.networksRequest;
 }
 
 function nameOf(id) {
@@ -263,7 +278,76 @@ function sectionHtml(id, heading, body, intro = "") {
   return `<section class="inst-section" id="section-${id}" aria-labelledby="heading-${id}"><h2 id="heading-${id}" tabindex="-1">${heading}</h2>${intro}${body}</section>`;
 }
 
-function renderInstitution(payload, known) {
+function disclosureHtml(network) {
+  return network.disclosure ? `<p class="inst-network-disclosure">Disclosure: ${escapeHtml(network.disclosure)}</p>` : "";
+}
+
+function networkNameHtml(network) {
+  return network.url
+    ? `<a href="${escapeHtml(network.url)}">${escapeHtml(network.name)}</a>`
+    : escapeHtml(network.name);
+}
+
+// Host institutions named from the institution list (linked to their pages). A host outside the
+// list falls back to the steward's name, unlinked.
+function hostLinksHtml(network) {
+  const known = network.host_institution_ids.filter((id) => state.byId.has(id));
+  if (!known.length) return network.steward ? escapeHtml(network.steward) : "";
+  return known
+    .map((id) => `<a href="${escapeHtml(appUrl(`institution#inst=${encodeURIComponent(id)}`))}">${escapeHtml(nameOf(id))}</a>`)
+    .join(" and ");
+}
+
+function linkListHtml(label, items) {
+  return `<p class="inst-network-label">${escapeHtml(label)}</p><ul class="inst-network-people">${items.join("")}</ul>`;
+}
+
+// A consortium this institution hosts: logo, name, steward, description, focus areas, contributors.
+function hostedNetworkHtml(network) {
+  const logo = network.logo
+    ? `<img class="inst-network-logo" src="${escapeHtml(classicUrl(network.logo.path))}" alt="" width="64" height="64" loading="lazy">`
+    : "";
+  const steward = network.steward
+    ? `<p class="inst-network-steward">Hosted by ${network.steward_source
+      ? `<a href="${escapeHtml(network.steward_source)}">${escapeHtml(network.steward)}</a>`
+      : escapeHtml(network.steward)}</p>`
+    : "";
+  const description = network.description
+    ? `<p class="inst-network-description">“${escapeHtml(network.description)}”${network.description_source ? ` (<a href="${escapeHtml(network.description_source)}">source</a>)` : ""}</p>`
+    : "";
+  const focus = network.focus_areas.length
+    ? `<p class="inst-network-label">Focus areas</p><ul class="inst-network-focus">${network.focus_areas.map((area) => `<li class="inst-chip">${escapeHtml(area)}</li>`).join("")}</ul>`
+    : "";
+  const people = network.atlas_contributors.length
+    ? linkListHtml("Contributors with Atlas expert profiles", network.atlas_contributors.map((person) =>
+      `<li><a href="${escapeHtml(appUrl(`experts#author=${encodeURIComponent(person.author_id)}`))}">${escapeHtml(person.name)}</a></li>`))
+    : "";
+  const summary = contributorSummary(network);
+  const related = network.related_links.length
+    ? linkListHtml("Related links", network.related_links.map((link) =>
+      `<li><a href="${escapeHtml(link.url)}">${escapeHtml(link.label)}</a></li>`))
+    : "";
+  return `<article class="inst-network"><div class="inst-network-head">${logo}`
+    + `<div class="inst-network-title"><h3>${networkNameHtml(network)}</h3>${steward}</div></div>`
+    + description + focus + people
+    + (summary ? `<p class="data-note">${escapeHtml(summary)}</p>` : "")
+    + related + disclosureHtml(network) + `</article>`;
+}
+
+// A network whose researchers are listed contributors: one pointer sentence and its disclosure.
+function memberNetworkHtml(network) {
+  const hosts = hostLinksHtml(network);
+  return `<p class="inst-network-pointer">Researchers here are listed contributors to the ${networkNameHtml(network)}${hosts ? `, hosted by ${hosts}` : ""}.</p>`
+    + disclosureHtml(network);
+}
+
+function networksSectionHtml(found) {
+  if (!found.hosted.length && !found.member.length) return "";
+  return sectionHtml("networks", "Research networks",
+    found.hosted.map(hostedNetworkHtml).join("") + found.member.map(memberNetworkHtml).join(""));
+}
+
+function renderInstitution(payload, known, networks) {
   const institution = {...(known || {}), ...(payload.institution || {}), inst_id: state.instId};
   state.works = plasticWorks(payload.works);
   state.experts = Array.isArray(payload.experts) ? payload.experts : [];
@@ -271,6 +355,7 @@ function renderInstitution(payload, known) {
   state.leadsExpanded = false;
   const stats = summaryStats(payload);
   root().innerHTML = headerHtml(institution)
+    + networksSectionHtml(networksForInstitution(networks, state.instId))
     + sectionHtml("summary", "Summary", tilesHtml(stats))
     + sectionHtml("years", "Plastic-related works per year", yearsHtml(state.works))
     + sectionHtml("topics", "Topics", `<div id="inst-topics"></div>`)
@@ -320,8 +405,12 @@ async function render() {
   state.payload = null;
   root().innerHTML = `<p class="result-count" role="status" aria-live="polite">Loading institution…</p>`;
   try {
-    await loadInstitutionList();
-    const payload = await loadJson(`institution_works/${encodeURIComponent(instId)}.json`, {optional: true});
+    // The networks card is decided before the first paint, so the page never shifts after mounting.
+    const [, payload, networks] = await Promise.all([
+      loadInstitutionList(),
+      loadJson(`institution_works/${encodeURIComponent(instId)}.json`, {optional: true}),
+      loadNetworks(),
+    ]);
     if (token !== state.token) return;
     const known = state.byId.get(instId) || null;
     if (!payload) {
@@ -331,7 +420,7 @@ async function render() {
     }
     state.payload = payload;
     state.loadedId = instId;
-    renderInstitution(payload, known);
+    renderInstitution(payload, known, networks);
     scrollToSection();
   } catch (error) {
     if (token === state.token) renderFailed(error);

@@ -18,6 +18,17 @@ Last updated: 2026-11-15.
 
 ## Do now
 
+### H26. Land to Sea Microplastics Consortium link (NET-1, 5 minutes)
+1. Open the UC Davis institution page (`/institution#inst=I84218800`) after the next deploy
+   and check the "Research networks" card (logo, quote, focus areas, contributor links).
+2. Ask the consortium lead (for example Christina Pasparakis) to confirm the Atlas may show
+   the consortium logo. If they decline, tell the agent "remove consortium logo".
+3. Answer NET-1-NAME and NET-1-SURFACES in `.agent/QUESTIONS.md`, or tell the agent
+   "keep defaults".
+4. When a contributor gets an Atlas profile, tell the agent their name so their expert ID is
+   added to `config/research_networks.yml` (8 of the 14 have none yet).
+- **Done when:** permission is confirmed (or the logo is removed) and the two questions are answered.
+
 ### H2. Review the 277 low-confidence work-relevance decisions
 1. Run `py -3.14 -m streamlit run scripts/review_work_relevance_app.py`.
    A browser tab opens. If it does not, go to http://localhost:8501.

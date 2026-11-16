@@ -257,3 +257,109 @@ export function searchInstitutions(list, query, limit = SEARCH_LIMIT) {
     .sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
   return {total: matches.length, shown: matches.slice(0, limit)};
 }
+
+// Research networks (site/data/research_networks.json). Each entry is cleaned here before the page
+// uses it: unsafe links are emptied, and entries without an id or a name are dropped.
+export const NETWORK_SCHEMA_VERSION = "net1.v1";
+const ASSET_PATH_PATTERN = /^assets\/[A-Za-z0-9._\/-]+\.(?:png|jpe?g|svg|webp)$/i;
+const AUTHOR_ID_PATTERN = /^[A-Za-z0-9]{1,32}$/;
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Only absolute https URLs with a host survive; anything else becomes "".
+export function httpsUrl(value) {
+  const text = typeof value === "string" ? value.trim() : "";
+  if (!text) return "";
+  try {
+    const url = new URL(text);
+    return url.protocol === "https:" && url.hostname !== "" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function trimmed(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function instIdList(value) {
+  return Array.isArray(value) ? value.map(trimmed).filter(isSafeInstId) : [];
+}
+
+function cleanNetwork(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const id = trimmed(raw.id);
+  const name = trimmed(raw.name);
+  if (!id || !name) return null;
+  const logoPath = trimmed(raw.logo && raw.logo.path);
+  const count = raw.listed_contributor_count;
+  return {
+    id,
+    name,
+    url: httpsUrl(raw.url),
+    steward: trimmed(raw.steward),
+    steward_source: httpsUrl(raw.steward_source),
+    description: trimmed(raw.description),
+    description_source: httpsUrl(raw.description_source),
+    focus_areas: Array.isArray(raw.focus_areas) ? raw.focus_areas.map(trimmed).filter(Boolean) : [],
+    related_links: Array.isArray(raw.related_links)
+      ? raw.related_links
+        .map((link) => ({label: trimmed(link && link.label), url: httpsUrl(link && link.url)}))
+        .filter((link) => link.label && link.url)
+      : [],
+    host_institution_ids: instIdList(raw.host_institution_ids),
+    member_institution_ids: instIdList(raw.member_institution_ids),
+    listed_contributor_count: Number.isInteger(count) && count >= 0 ? count : null,
+    roster_as_of: trimmed(raw.roster_as_of),
+    atlas_contributors: Array.isArray(raw.atlas_contributors)
+      ? raw.atlas_contributors
+        .map((person) => ({author_id: trimmed(person && person.author_id), name: trimmed(person && person.name)}))
+        .filter((person) => AUTHOR_ID_PATTERN.test(person.author_id) && person.name)
+      : [],
+    logo: ASSET_PATH_PATTERN.test(logoPath) && !logoPath.includes("..")
+      ? {path: logoPath, alt: trimmed(raw.logo.alt)}
+      : null,
+    disclosure: trimmed(raw.disclosure) || null,
+  };
+}
+
+// Networks for one institution: "hosted" when it hosts the consortium, "member" when its researchers
+// are listed contributors. A network it hosts is shown only once, as hosted.
+export function networksForInstitution(payload, instId) {
+  const id = String(instId || "");
+  const empty = {hosted: [], member: []};
+  if (!isSafeInstId(id) || !payload || payload.schema_version !== NETWORK_SCHEMA_VERSION || !Array.isArray(payload.networks)) return empty;
+  const networks = payload.networks.map(cleanNetwork).filter(Boolean);
+  return {
+    hosted: networks.filter((network) => network.host_institution_ids.includes(id)),
+    member: networks.filter((network) => !network.host_institution_ids.includes(id) && network.member_institution_ids.includes(id)),
+  };
+}
+
+// "2026-10-29" -> "29 Oct 2026". Invalid dates give "". UTC arithmetic, English month names.
+export function formatRosterDate(value) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value ?? ""));
+  if (!match) return "";
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) return "";
+  return `${day} ${MONTHS[month - 1]} ${year}`;
+}
+
+// One sentence on how many contributors the consortium lists and how many have Atlas profiles.
+export function contributorSummary(network) {
+  const listed = network ? network.listed_contributor_count : null;
+  const atlasCount = network && Array.isArray(network.atlas_contributors) ? network.atlas_contributors.length : 0;
+  const hasListed = Number.isInteger(listed) && listed >= 0;
+  if (!hasListed && !atlasCount) return "";
+  const date = formatRosterDate(network.roster_as_of);
+  const lead = hasListed
+    ? `The consortium lists ${listed} contributor${listed === 1 ? "" : "s"}`
+    : "The consortium lists its contributors";
+  const updated = date ? ` (page updated ${date})` : "";
+  const atlas = atlasCount === 0
+    ? "none have Atlas expert profiles"
+    : `${atlasCount} ${atlasCount === 1 ? "has an Atlas expert profile" : "have Atlas expert profiles"}`;
+  return `${lead}${updated}; ${atlas}.`;
+}

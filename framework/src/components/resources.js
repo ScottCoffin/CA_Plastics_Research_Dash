@@ -70,6 +70,10 @@ export function buildCard(entry) {
   if (entry.update_model && entry.update_model !== NOT_STATED) card.append(labelled("Updates", entry.update_model));
   if (entry.terms_status === "recorded" && entry.terms) card.append(labelled("Terms", entry.terms));
   else if (entry.terms_status !== "recorded") card.append(el("p", "rs-badge", "Reuse terms not recorded"));
+
+  // A link-out can carry a disclosure, e.g. that the Atlas owner is a listed contributor. Shown as text.
+  const disclosure = typeof entry.disclosure === "string" ? entry.disclosure.trim() : "";
+  if (disclosure) card.append(el("p", "rs-disclosure", `Disclosure: ${disclosure}`));
   return card;
 }
 

@@ -248,3 +248,25 @@ entries:
       - "topic=human_exposure_and_health_risk"
       - "weekly HTTP status check only"
     last_checked: null
+
+  - id: "LO-13"
+    name: "Land to Sea Microplastics Consortium"
+    steward: "Coastal and Marine Sciences Institute, UC Davis"
+    steward_source: "https://marinescience.ucdavis.edu/about"
+    description: "We aim to bring together experts from leading institutions to advance a One-Health understanding of microplastics, as well as even-smaller nano-plastics."
+    description_source: "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution"
+    relation: "research consortium"
+    update_model: "not stated"
+    terms_status: "not recorded"
+    terms: "not stated"
+    reuse_mode: "link_only"
+    root_url: "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution"
+    url_status: "owner_confirmed"  # owner supplied the saved page, 2026-11-15
+    disclosure: "The Atlas owner is a listed contributor to this consortium."
+    deep_link_templates: []
+    trigger_rules:  # One Health and standardized-protocol focus (NET-1; QUESTIONS EM5-STRIP)
+      - "topic=human_exposure_and_health_risk"
+      - "topic=ecotoxicology_and_trophic_transfer"
+      - "topic=analytical_methods"
+      - "weekly HTTP status check only"
+    last_checked: null
