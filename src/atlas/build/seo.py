@@ -45,20 +45,56 @@ HTTPS_URL = re.compile(r"https://[^\s<>\"]+")
 ROR_ID = re.compile(r"[0-9a-z]{9}")
 LASTMOD = re.compile(r"\d{4}-\d{2}-\d{2}")
 
+# Atlas tokens (framework/src/design/tokens.css, VD-11). tests/test_vd11_classic_pages.py
+# checks that these hex values match that file. Fonts are self-hosted at the site root, so
+# the page never requests a font or stylesheet from another host.
+_DISPLAY_STACK = (
+    '"Barlow Semi Condensed", "Segoe UI Semibold", system-ui, -apple-system, "Segoe UI", Roboto,'
+    ' "Helvetica Neue", sans-serif'
+)
+_BODY_STACK = (
+    'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif'
+)
+_UNICODE_RANGE = (
+    "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,"
+    "U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+)
+
+
+def _font_face(weight: int, name: str) -> str:
+    return (
+        '@font-face{font-family:"Barlow Semi Condensed";font-style:normal;'
+        f"font-weight:{weight};font-display:swap;"
+        f'src:url("/assets/fonts/BarlowSemiCondensed-{name}-latin.woff2") format("woff2");'
+        f"unicode-range:{_UNICODE_RANGE}}}"
+    )
+
+
 CSS = "\n".join(
     [
-        "body{margin:0;line-height:1.5;color:#17324d;background:#eef6f7;",
-        '  font-family:system-ui,-apple-system,"Segoe UI",sans-serif}',
+        _font_face(600, "SemiBold"),
+        _font_face(700, "Bold"),
+        ":root{color-scheme:light}",
+        "body{margin:0;line-height:1.6;color:#1d2a33;background:#f3f6f5;"
+        f"font-family:{_BODY_STACK}}}",
         ".wrap{max-width:760px;margin:0 auto;padding:16px}",
-        "h1{font-size:1.6rem;margin:.3em 0}",
-        "h2{font-size:1.15rem;margin:1.4em 0 .4em}",
+        "header.wrap{max-width:none;padding:0;background:#043e32;color:#ffffff}",
+        "header.wrap p{max-width:760px;margin:0 auto;padding:12px 16px;"
+        f"font-family:{_DISPLAY_STACK};font-weight:700}}",
+        "header.wrap a{color:#ffffff;text-decoration:none}",
+        "header.wrap a:focus-visible{outline-color:#fff1e6}",
+        f"h1{{font-family:{_DISPLAY_STACK};font-size:clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem);"
+        "font-weight:700;line-height:1.05;color:#17324d;margin:.3em 0;text-wrap:balance}",
+        f"h2{{font-family:{_DISPLAY_STACK};font-size:1.375rem;font-weight:700;"
+        "line-height:1.2;color:#17324d;margin:1.4em 0 .4em}",
         "a{color:#075a46}",
         "a:focus-visible{outline:3px solid #c45100;outline-offset:2px}",
-        ".muted{color:#536879;font-size:.95rem}",
-        ".cta{display:inline-block;margin:.6em 0;padding:.6em 1em;border-radius:4px;",
-        "  background:#075a46;color:#fff;font-weight:600;text-decoration:none}",
+        ".muted{color:#4a5d6c;font-size:.95rem}",
+        ".cta{display:inline-block;margin:.6em 0;padding:.6em 1em;border-radius:8px;",
+        "  background:#0e6e56;color:#ffffff;font-weight:600;text-decoration:none}",
         ".skip{position:absolute;left:-999px}",
-        ".skip:focus{left:8px;top:8px;background:#fff;padding:4px 8px}",
+        ".skip:focus{left:8px;top:8px;background:#ffffff;padding:4px 8px}",
+        "footer.wrap{margin-top:24px;border-top:1px solid #d5e0dd}",
         "li{margin:.3em 0}",
     ]
 )

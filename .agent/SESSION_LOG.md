@@ -158,3 +158,4 @@
 | 2026-11-16 | VD-14 | /network CLS fix: static page header and callout instead of a runtime display() cell; local CLS 0.42 -> 0 | this commit |
 | 2026-11-16 | VD-6c | Institutions/Institution visual adoption: headers, callouts, segmented toggle, tier cards, icon map controls, reserved chip row; CSS on tokens | this commit |
 | 2026-11-16 | VD-7b | Funding visual adoption: single head, caution/info callouts, filter panel + More filters, Chart/Table on all five charts; CSS on tokens | this commit |
+| 2026-11-16 | VD-11 | Classic expert profile and SEO template on Atlas tokens and local Barlow fonts; S3.8 abstract guard ignores DOIs | this commit + `S3.8` fix commit |
