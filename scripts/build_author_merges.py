@@ -17,25 +17,21 @@ from __future__ import annotations
 import argparse
 import csv
 import io
-import re
 import sys
-import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
 import pyarrow.parquet as pq
 
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "src"))
+
+from atlas.ingest.author_repair import normalize_name  # noqa: E402
+
 MERGES = Path("curation/author_merges.csv")
 HEADER = ["from_author_id", "to_author_id", "reason", "reviewed_by", "reviewed_at"]
 MARKER = "auto: same name and institution"
 RULE_DATE = "2026-11-11"
-
-
-def normalize_name(name: str) -> str:
-    folded = unicodedata.normalize("NFKD", name or "")
-    folded = "".join(c for c in folded if not unicodedata.combining(c)).lower()
-    folded = re.sub(r"[^a-z\s]", " ", folded.replace("‐", "-").replace("-", " "))
-    return " ".join(folded.split())
 
 
 def merge_rows(

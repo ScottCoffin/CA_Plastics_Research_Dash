@@ -13,7 +13,7 @@ import re
 import tempfile
 from collections import defaultdict
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -23,6 +23,18 @@ import pyarrow.parquet as pq
 
 from atlas.build.curation import load_suppressions
 from atlas.ingest.abstract_qc import misattached_abstract_ids
+from atlas.ingest.author_repair import (
+    DEFAULT_ATTACH_PATH,
+    DEFAULT_ORCID_IDS_PATH,
+    SOURCE_CURATED,
+    SOURCE_NAME_INSTITUTION,
+    SOURCE_OPENALEX,
+    SOURCE_ORCID,
+    UNRESOLVED,
+    load_attach_rows,
+    load_orcid_author_ids,
+    repair_author_ids,
+)
 from atlas.ingest.state_agencies import (
     DEFAULT_PATH as STATE_AGENCIES_PATH,
 )
@@ -63,6 +75,8 @@ AUTHORSHIPS_SCHEMA = pa.schema(
     [
         ("work_id", pa.string()),
         ("author_id", pa.string()),
+        # S2.6: openalex, curated, orcid, name_institution, or "" when no ID could be filled.
+        ("author_id_source", pa.string()),
         ("author_name", pa.string()),
         ("position", pa.string()),
         ("is_corresponding", pa.bool_()),
@@ -109,6 +123,9 @@ class NormalizationResult:
     output_dir: Path
     qc_path: Path
     metrics: dict[str, int]
+    # S2.6 author ID repair counts (see ``atlas.ingest.author_repair``); kept apart from
+    # ``metrics`` so that dict's keys stay as they were.
+    author_id_repairs: dict[str, int] = field(default_factory=dict)
 
 
 _TYPE_RANK = {
@@ -547,6 +564,22 @@ def _qc_markdown(metrics: Mapping[str, int], *, generated_at: str, source: str) 
         ("Linked/raw institution rows", metrics["institutions"]),
         ("Authorships with missing raw affiliation", metrics["missing_affiliations"]),
         ("Authorships with null author IDs", metrics["null_author_ids"]),
+        (
+            "Null author IDs filled by curated attach (author_attach.csv)",
+            metrics.get("author_ids_repaired_curated", 0),
+        ),
+        (
+            "Null author IDs filled by ORCID (raw index or orcid_author_ids.csv)",
+            metrics.get("author_ids_repaired_orcid", 0),
+        ),
+        (
+            "Null author IDs filled by name and institution (unique match)",
+            metrics.get("author_ids_repaired_name_institution", 0),
+        ),
+        (
+            "Authorships with null author IDs after repair",
+            metrics.get("null_author_ids_after_repair", 0),
+        ),
         ("Unresolved institution links", metrics["unresolved_institution_links"]),
         (
             "Works with CA-like affiliation but no resolved CA institution",
@@ -747,11 +780,15 @@ def normalize_records(
     state_agencies_path: str | Path | None = STATE_AGENCIES_PATH,
     escholarship_path: str | Path | None = ESCHOLARSHIP_PATH,
     orcid_profiles_path: str | Path | None = ORCID_PROFILES_PATH,
+    author_attach_path: str | Path | None = DEFAULT_ATTACH_PATH,
+    orcid_author_ids_path: str | Path | None = DEFAULT_ORCID_IDS_PATH,
 ) -> NormalizationResult:
     """Normalize raw OpenAlex work objects into C3-shaped Parquet tables.
 
     Works and authors listed in ``suppressions_path`` are dropped here as well as at
     export (owner decision GOV-B, 2026-11-10: suppressed records are excluded at ingest).
+    Null OpenAlex author IDs are filled once, before the authorship loop, by
+    ``atlas.ingest.author_repair``; a missing curation file means no input from it.
     """
 
     registry = _read_registry(institution_path)
@@ -774,6 +811,12 @@ def normalize_records(
         work_id = compact_id(record.get("id"))
         if work_id and work_id not in suppressed_works:
             work_rows[work_id] = record
+
+    repairs, repair_counts = repair_author_ids(
+        work_rows,
+        load_orcid_author_ids(orcid_author_ids_path),
+        load_attach_rows(author_attach_path),
+    )
 
     works: list[dict[str, Any]] = []
     authorships: list[dict[str, Any]] = []
@@ -798,7 +841,12 @@ def normalize_records(
                 continue
             author = raw_authorship.get("author")
             author = author if isinstance(author, Mapping) else {}
-            author_id = compact_id(author.get("id"))
+            raw_author_id = compact_id(author.get("id"))
+            author_id = raw_author_id
+            author_id_source = SOURCE_OPENALEX if raw_author_id else ""
+            if not raw_author_id and (work_id, index) in repairs:
+                # Repaired before the suppression check, so a suppressed ID stays suppressed.
+                author_id, author_id_source = repairs[(work_id, index)]
             if author_id and author_id in suppressed_authors:
                 continue
             author_name = _string(author.get("display_name"))
@@ -839,7 +887,7 @@ def normalize_records(
                     institution_rows[agency_id] = dict(registry[agency_id])
             if not raw_affiliation:
                 missing_affiliations += 1
-            if not author_id:
+            if not raw_author_id:
                 null_author_ids += 1
 
             resolved_ca = any(
@@ -859,6 +907,7 @@ def normalize_records(
                 {
                     "work_id": work_id,
                     "author_id": author_id,
+                    "author_id_source": author_id_source,
                     "author_name": author_name,
                     "position": position,
                     "is_corresponding": bool(raw_authorship.get("is_corresponding", False)),
@@ -1007,6 +1056,14 @@ def normalize_records(
         ),
         "works_ca_escholarship": len({w for w in escholarship_works if w in kept_by_id}),
     }
+    # Repair counts describe null-ID authorships before suppression (a repaired ID that is
+    # then suppressed still counts here, though its authorship is dropped).
+    author_id_repairs = {
+        "null_author_ids_after_repair": repair_counts[UNRESOLVED],
+        "author_ids_repaired_curated": repair_counts[SOURCE_CURATED],
+        "author_ids_repaired_orcid": repair_counts[SOURCE_ORCID],
+        "author_ids_repaired_name_institution": repair_counts[SOURCE_NAME_INSTITUTION],
+    }
     output = Path(output_dir)
     _atomic_write_table(output / "works.parquet", works, WORKS_SCHEMA)
     _atomic_write_table(output / "authorships.parquet", authorships, AUTHORSHIPS_SCHEMA)
@@ -1020,12 +1077,12 @@ def normalize_records(
     _atomic_write_text(
         qc,
         _qc_markdown(
-            metrics,
+            {**metrics, **author_id_repairs},
             generated_at=generated_at or datetime.now(UTC).replace(microsecond=0).isoformat(),
             source=source,
         ),
     )
-    return NormalizationResult(output, qc, metrics)
+    return NormalizationResult(output, qc, metrics, author_id_repairs)
 
 
 def normalize_raw_parquet(
@@ -1037,6 +1094,8 @@ def normalize_raw_parquet(
     author_overrides_path: str | Path = "config/author_overrides.csv",
     suppressions_path: str | Path | None = "curation/suppressions.csv",
     generated_at: str | None = None,
+    author_attach_path: str | Path | None = DEFAULT_ATTACH_PATH,
+    orcid_author_ids_path: str | Path | None = DEFAULT_ORCID_IDS_PATH,
 ) -> NormalizationResult:
     """Read S2.1's raw Parquet and normalize each embedded work JSON object."""
 
@@ -1057,6 +1116,8 @@ def normalize_raw_parquet(
         author_overrides_path=author_overrides_path,
         suppressions_path=suppressions_path,
         generated_at=generated_at,
+        author_attach_path=author_attach_path,
+        orcid_author_ids_path=orcid_author_ids_path,
     )
 
 
@@ -1069,6 +1130,8 @@ def normalize_fixture(
     author_overrides_path: str | Path = "config/author_overrides.csv",
     suppressions_path: str | Path | None = "curation/suppressions.csv",
     generated_at: str | None = "fixture",
+    author_attach_path: str | Path | None = DEFAULT_ATTACH_PATH,
+    orcid_author_ids_path: str | Path | None = DEFAULT_ORCID_IDS_PATH,
 ) -> NormalizationResult:
     """Normalize a committed JSON fixture without contacting OpenAlex."""
 
@@ -1085,4 +1148,6 @@ def normalize_fixture(
         author_overrides_path=author_overrides_path,
         suppressions_path=suppressions_path,
         generated_at=generated_at,
+        author_attach_path=author_attach_path,
+        orcid_author_ids_path=orcid_author_ids_path,
     )

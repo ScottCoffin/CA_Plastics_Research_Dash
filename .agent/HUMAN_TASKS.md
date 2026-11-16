@@ -12,19 +12,11 @@ spreadsheet to edit by hand. Small reviews (10 or fewer) may stay as a file edit
 All commands run from the repository folder in Git Bash:
 `cd ~/R_new/CA_Plastics_Research_Dash`
 
-Last updated: 2026-11-14.
+Last updated: 2026-11-15.
 
 ---
 
 ## Do now
-
-### H1. Renew the CORE API key (due 2026-11-12, repeats daily)
-1. Sign in at https://core.ac.uk/services/api and copy the new API key.
-2. Open `.env` in the repository folder in a text editor.
-3. Find the existing line that holds the CORE key. Replace only the value after `=`
-   with the new key. Do not add quotes or spaces, and do not rename the variable.
-4. Save the file. Never commit `.env`; it is gitignored.
-- **Done when:** the file is saved. Tell the agent "CORE key renewed".
 
 ### H2. Review the 277 low-confidence work-relevance decisions
 1. Run `py -3.14 -m streamlit run scripts/review_work_relevance_app.py`.
@@ -190,6 +182,9 @@ come with its own Streamlit app and run command here.
   (`PSSDplusplus::tomex2`) and save its output where the script says.
 - **H12. Evidence map reviews (EM-13, EM-14, EM-17, S3.7, S3.8).** Review need
   cells, methods text, policy mapping and the hero page when each is built.
+- **H1. CORE API key (renew only when asked).** No pipeline code calls CORE (checked
+  2026-11-15), so daily renewal stopped. The agent will ask you to renew the key in `.env`
+  when a task actually needs CORE (S6 full text by DOI, or a theses search).
 - **H25. Final design review (VD-12).** Compare the before and after screenshots the
   agent prepares for every page, then reply "design OK" or list what to change.
 

@@ -72,6 +72,14 @@ Licence: derived from OpenAlex metadata; OpenAlex licence recorded as unknown in
 | `current_in_ca` | boolean or null | True when any latest (primary) affiliation is a California registry institution; false when none is (OpenAlex country code "CA" is Canada, so only the registry decides); null when unknown. |
 | `last_ca_year` | integer or null | Latest year OpenAlex lists the author at a California registry institution. |
 
+Internal, not exported: the normalized authorships table
+(`data/processed/normalized/authorships.parquet`) is not in `site/data/`. Its
+`author_id_source` column records where each `author_id` came from.
+
+| Field | Type | Meaning |
+|---|---|---|
+| `author_id_source` | string | `openalex` (OpenAlex supplied the ID); `curated` (`curation/author_attach.csv`); `orcid` (ORCID index or `curation/orcid_author_ids.csv`); `name_institution` (the only known ID with the same full name at a shared institution); empty when no ID could be filled. Authorships with an empty `author_id` are not experts. |
+
 ### `site/data/authors/<author_id>.json`
 
 Purpose: one detail document per author for the Experts drawer.
