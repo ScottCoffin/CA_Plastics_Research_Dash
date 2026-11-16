@@ -4,7 +4,8 @@
 import assert from "node:assert/strict";
 import vm from "node:vm";
 import {monitoringView} from "../framework/src/components/monitoring_view.js";
-import {monitoringMap} from "../framework/src/components/svg_map.js";
+import {attachMapInteractions, monitoringMap} from "../framework/src/components/svg_map.js";
+import {nearestMonitoringMarker, preventMonitoringFilterSubmit} from "../framework/src/components/monitoring.js";
 
 const context = vm.createContext({monitoringView, monitoringMap});
 context.rows = [
@@ -143,4 +144,82 @@ assert.deepEqual(interactiveResult.zoomedRows, [1, 1]);
 assert.deepEqual(interactiveResult.shownAfterToggle, ["f", "f2"], "hiding sediment removes it from the drawn markers");
 assert.deepEqual(interactiveResult.mapMatrices, ["fish"]);
 assert.deepEqual(interactiveResult.legendCounts, [["sediment", 1], ["fish", 2]], "legend counts ignore the hidden state (palette order)");
+
+// Optional pointer resolution can select an extended target without an SVG marker under the pointer,
+// while shared maps without a resolver retain event-target selection and drags still suppress clicks.
+function fakeMapContainer() {
+  const listeners = new Map();
+  return {
+    addEventListener(type, listener) { listeners.set(type, listener); },
+    classList: { add() {}, remove() {} },
+    querySelector() { return { getBoundingClientRect: () => ({ left: 0, top: 0, width: 200, height: 100 }) }; },
+    setPointerCapture() {},
+    listeners
+  };
+}
+const resolvedContainer = fakeMapContainer();
+const resolvedSelections = [];
+let resolverCalls = 0;
+const resolvedMarker = { dataset: { clusterIndex: "4" } };
+attachMapInteractions(resolvedContainer, {
+  getView: () => monitoringMap.viewBox("statewide"),
+  setView() {},
+  select(index) { resolvedSelections.push(index); },
+  resolveMarker() { resolverCalls += 1; return resolvedMarker; }
+});
+const emptyTarget = { closest: () => null };
+resolvedContainer.listeners.get("click")({ target: emptyTarget, clientX: 0, clientY: 0 });
+assert.deepEqual(resolvedSelections, [4], "Monitoring's optional resolver can handle extension clicks on the map background");
+
+const defaultContainer = fakeMapContainer();
+const defaultSelections = [];
+const eventTargetMarker = { dataset: { clusterIndex: "2" } };
+attachMapInteractions(defaultContainer, {
+  getView: () => monitoringMap.viewBox("statewide"),
+  setView() {},
+  select(index) { defaultSelections.push(index); }
+});
+defaultContainer.listeners.get("click")({ target: { closest: () => eventTargetMarker }, clientX: 0, clientY: 0 });
+assert.deepEqual(defaultSelections, [2], "Institutions without a resolver keep event-target selection");
+
+resolvedContainer.listeners.get("pointerdown")({ button: 0, pointerId: 1, clientX: 0, clientY: 0 });
+resolvedContainer.listeners.get("pointermove")({ pointerId: 1, clientX: 5, clientY: 0 });
+resolvedContainer.listeners.get("pointerup")({ pointerId: 1 });
+resolvedContainer.listeners.get("click")({ target: emptyTarget, clientX: 5, clientY: 0 });
+assert.equal(resolverCalls, 1, "a completed pan suppresses click resolution");
+assert.deepEqual(resolvedSelections, [4], "a completed pan does not select a cluster");
+
+// The real Monitoring resolver keeps visible SVG artwork as the click target and extends the
+// target to 12 CSS pixels from the closest visible body center over the map background.
+function fakeMarker(index, x, y) {
+  return {
+    dataset: {clusterIndex: String(index)},
+    querySelector(selector) {
+      assert.equal(selector, ".marker-body");
+      return { getBoundingClientRect: () => ({ left: x - 6, right: x + 6, top: y - 6, bottom: y + 6, width: 12, height: 12 }) };
+    }
+  };
+}
+const markerNear = fakeMarker(1, 20, 30);
+const markerFar = fakeMarker(2, 60, 30);
+const markerContainer = { querySelectorAll: () => [markerNear, markerFar] };
+assert.equal(
+  nearestMonitoringMarker({ clientX: 20, clientY: 30 }, markerFar, markerContainer),
+  markerFar,
+  "visible artwork keeps the actual hit marker when marker geometry overlaps"
+);
+assert.equal(
+  nearestMonitoringMarker({ clientX: 31, clientY: 30 }, null, markerContainer),
+  markerNear,
+  "background clicks within 12 CSS pixels resolve to the nearest visible marker"
+);
+assert.equal(
+  nearestMonitoringMarker({ clientX: 34, clientY: 30 }, null, markerContainer),
+  null,
+  "background clicks beyond 12 CSS pixels do not select a marker"
+);
+
+let formSubmitPrevented = false;
+preventMonitoringFilterSubmit({ preventDefault() { formSubmitPrevented = true; } });
+assert.equal(formSubmitPrevented, true, "Enter in the Monitoring filters does not submit or reload the page");
 console.log("Framework Monitoring runtime checks passed: coordinates, zero values, unknown matrices and dates.");

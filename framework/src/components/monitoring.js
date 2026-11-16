@@ -5,6 +5,7 @@
 import {loadJson, escapeHtml} from "./atlas.js";
 import {monitoringView, formatSampleDate, licenceGloss, samplesCsv, sharedUnit} from "./monitoring_view.js";
 import {monitoringMap, attachMapInteractions, ensureCaBasemap, caBasemapFeatures, caBasemapState} from "./svg_map.js";
+import {injectIconSprite} from "./shared/icons.js";
 
 const $ = (id) => document.getElementById(id);
 const MONITORING_PAGE_SIZE = 50;
@@ -112,7 +113,7 @@ function drawMonitoringMap() {
       }).join("");
     }
     const halo = isSelected ? `<circle class="marker-halo" cx="${cluster.x}" cy="${cluster.y}" r="${radius * 1.5}"/>` : "";
-    return `<g class="monitoring-marker${cluster.mixed ? " mixed" : ""}${isSelected ? " selected" : ""}" role="button" tabindex="0" aria-pressed="${isSelected}" aria-label="${escapeHtml(`${label}. Select for details.`)}" data-cluster-index="${index}" data-cluster-key="${clusterKey}"><title>${escapeHtml(label)}</title>${ring}<circle class="marker-body" cx="${cluster.x}" cy="${cluster.y}" r="${radius}" fill="${cluster.color}"/>${halo}<text x="${cluster.x}" y="${cluster.y}" font-size="${fontSize}" text-anchor="middle" dominant-baseline="central">${cluster.rows.length}</text></g>`;
+    return `<g class="monitoring-marker${cluster.mixed ? " mixed" : ""}${isSelected ? " selected" : ""}" role="button" tabindex="0" aria-pressed="${isSelected}" aria-label="${escapeHtml(`${label}. Select for details.`)}" data-cluster-index="${index}" data-cluster-key="${clusterKey}"><title>${escapeHtml(label)}</title><circle class="marker-hit-area" cx="${cluster.x}" cy="${cluster.y}" r="1" aria-hidden="true"/>${ring}<circle class="marker-body" cx="${cluster.x}" cy="${cluster.y}" r="${radius}" fill="${cluster.color}"/>${halo}<text x="${cluster.x}" y="${cluster.y}" font-size="${fontSize}" text-anchor="middle" dominant-baseline="central">${cluster.rows.length}</text></g>`;
   }).join("");
   const basemapFeatures = caBasemapFeatures();
   const basemap = basemapFeatures
@@ -142,7 +143,7 @@ function renderMapDetails() {
   const payload = state.data;
   const shown = rows.slice(0, 25);
   const shownUnit = sharedUnit(shown, "concentration_unit");
-  panel.innerHTML = `<div class="map-details-card"><div class="map-details-head"><h2>${rows.length} sample${rows.length === 1 ? "" : "s"} selected</h2><div class="map-details-actions"><button type="button" data-map-fit>Zoom to these</button><button type="button" data-map-close>Close</button></div></div><div class="monitoring-table-wrap"><table class="monitoring-table"><thead><tr><th>Date</th><th>Matrix</th><th>Region</th><th>Method</th><th>Particle count</th><th>Concentration${shownUnit ? ` (${escapeHtml(shownUnit)})` : ""}</th><th>Citation</th></tr></thead><tbody>${shown.map((row) => { const source = (payload.datasets || []).find((dataset) => dataset.id === row.dataset_id); return `<tr><td>${escapeHtml(formatSampleDate(row))}</td><td>${escapeHtml(monitoringView.matrix(row) || "Unknown matrix")}</td><td>${escapeHtml(monitoringView.region(row).replaceAll("_", " "))}</td><td>${escapeHtml(row.method || "unknown")}</td><td>${escapeHtml(monitoringView.displayValue(row.particle_count, "unknown"))}</td><td>${escapeHtml(monitoringView.displayValue(row.concentration_value, "not available"))}${shownUnit ? "" : ` ${escapeHtml(row.concentration_unit || "")}`}</td><td>${escapeHtml(row.citation || source?.citation || "Citation unavailable")}</td></tr>`; }).join("")}</tbody></table></div>${rows.length > 25 ? `<p class="data-note">+${rows.length - 25} more</p>` : ""}</div>`;
+  panel.innerHTML = `<div class="map-details-card"><div class="map-details-head"><h2>${rows.length} sample${rows.length === 1 ? "" : "s"} selected</h2><div class="map-details-actions"><button type="button" data-map-fit>Zoom to these</button><button type="button" data-map-close>Close</button></div></div><div class="monitoring-table-wrap" role="region" tabindex="0" aria-label="Selected observation details"><table class="monitoring-table"><thead><tr><th>Date</th><th>Matrix</th><th>Region</th><th>Method</th><th>Particle count</th><th>Concentration${shownUnit ? ` (${escapeHtml(shownUnit)})` : ""}</th><th>Citation</th></tr></thead><tbody>${shown.map((row) => { const source = (payload.datasets || []).find((dataset) => dataset.id === row.dataset_id); return `<tr><td>${escapeHtml(formatSampleDate(row))}</td><td>${escapeHtml(monitoringView.matrix(row) || "Unknown matrix")}</td><td>${escapeHtml(monitoringView.region(row).replaceAll("_", " "))}</td><td>${escapeHtml(row.method || "unknown")}</td><td>${escapeHtml(monitoringView.displayValue(row.particle_count, "unknown"))}</td><td>${escapeHtml(monitoringView.displayValue(row.concentration_value, "not available"))}${shownUnit ? "" : ` ${escapeHtml(row.concentration_unit || "")}`}</td><td>${escapeHtml(row.citation || source?.citation || "Citation unavailable")}</td></tr>`; }).join("")}</tbody></table></div>${rows.length > 25 ? `<p class="data-note">+${rows.length - 25} more</p>` : ""}</div>`;
 }
 
 // Licence cell: the structured id (when recorded) with its plain-language gloss, plus the free-text terms.
@@ -179,6 +180,30 @@ function selectCluster(index) {
   state.selection = { rows: cluster.rows.slice() };
   renderMapDetails();
   drawMonitoringMap();
+}
+
+export function nearestMonitoringMarker(event, hitMarker, container) {
+  if (hitMarker) return hitMarker;
+  let nearest = null;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+  container.querySelectorAll(".monitoring-marker").forEach((marker) => {
+    const body = marker.querySelector(".marker-body");
+    if (!body) return;
+    const rect = body.getBoundingClientRect();
+    const dx = event.clientX - (rect.left + rect.width / 2);
+    const dy = event.clientY - (rect.top + rect.height / 2);
+    const distance = dx * dx + dy * dy;
+    if (distance < nearestDistance) {
+      nearest = marker;
+      nearestDistance = distance;
+    }
+  });
+  // Background extension clicks use only the 12px radius around the nearest marker center.
+  return nearest && nearestDistance <= 12 * 12 ? nearest : null;
+}
+
+export function preventMonitoringFilterSubmit(event) {
+  event.preventDefault();
 }
 
 function fitMapToSelection() {
@@ -293,6 +318,7 @@ function onFilterInput() {
 }
 
 function bindEvents() {
+  $("monitoring-filters").addEventListener("submit", preventMonitoringFilterSubmit);
   ["monitoring-tier", "monitoring-search", "monitoring-contributor", "monitoring-matrix", "monitoring-year", "monitoring-region"].forEach((id) => {
     $(id).addEventListener("input", onFilterInput);
     $(id).addEventListener("change", onFilterInput);
@@ -303,7 +329,7 @@ function bindEvents() {
   $("monitoring-zoom-out").addEventListener("click", () => zoomMapBy(1 / 1.5));
   $("monitoring-zoom-reset").addEventListener("click", () => { state.view = null; scheduleMapDraw(); });
   const mapContainer = $("monitoring-map");
-  attachMapInteractions(mapContainer, { getView: currentMapView, setView: (view) => { state.view = view; scheduleMapDraw(); }, select: selectCluster });
+  attachMapInteractions(mapContainer, { getView: currentMapView, setView: (view) => { state.view = view; scheduleMapDraw(); }, select: selectCluster, resolveMarker: nearestMonitoringMarker });
   // Keyboard arrows pan the map when it is focused; attachMapInteractions handles those keys.
   $("monitoring-map-legend").addEventListener("click", (event) => {
     const button = event.target.closest("[data-matrix]");
@@ -338,6 +364,7 @@ function bindEvents() {
 
 // Entry point for src/monitoring.md. Loads monitoring.json, then renders and binds the page.
 export async function mountMonitoring() {
+  injectIconSprite();
   try {
     const payload = await loadJson("monitoring.json");
     if (!payload || payload.schema_version !== "s7.5") throw new Error("monitoring.json does not match the S7.5 contract");

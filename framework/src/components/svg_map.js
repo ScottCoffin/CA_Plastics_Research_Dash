@@ -263,7 +263,7 @@ export function clientToMapView(clientX, clientY, view, container) {
   return { x: view.x + (clientX - screen.rect.left - screen.offsetX) / screen.scale, y: view.y + (clientY - screen.rect.top - screen.offsetY) / screen.scale };
 }
 // Pointer, wheel and keyboard behaviour shared by the Monitoring and Institutions maps.
-// hooks: getView(), setView(view), select(clusterIndex).
+// hooks: getView(), setView(view), select(clusterIndex), optional resolveMarker(event, marker, container).
 export function attachMapInteractions(container, hooks) {
   let gesture = null;
   let suppressClick = false;
@@ -303,7 +303,13 @@ export function attachMapInteractions(container, hooks) {
   container.addEventListener("click", (event) => {
     if (suppressClick) { suppressClick = false; return; }
     const marker = event.target.closest(".monitoring-marker");
-    if (marker) hooks.select(Number(marker.dataset.clusterIndex));
+    if (hooks.resolveMarker) {
+      const selectedMarker = hooks.resolveMarker(event, marker, container);
+      if (selectedMarker) hooks.select(Number(selectedMarker.dataset.clusterIndex));
+      return;
+    }
+    if (!marker) return;
+    hooks.select(Number(marker.dataset.clusterIndex));
   });
   container.addEventListener("wheel", (event) => {
     event.preventDefault();
