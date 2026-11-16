@@ -56,3 +56,7 @@ Option `value` attributes, URL hashes, data and CSV exports keep the raw slug.
   when it happens. VD-6c (which owns that toolbar) should reserve the chip row.
 - Evidence: `scratch/vdv/` (gitignored): `ux/results.json`, `slug_check.json`,
   `shots/`, `tasks/`.
+
+## Deployed
+
+Pushed `3d15e753`..`2cc15d30` on 2026-11-16; CI `43964970928`, Pages `43964971620` and legacy Pages `43964967242` passed. Live check on https://plastiverse.live/: Overview cards show the six new counts; network legend six Okabe-Ito colours plus `#8a969c`; Monitoring map `#0072B2`/`#CC79A7`; Funding "503 of 524 awards match".
