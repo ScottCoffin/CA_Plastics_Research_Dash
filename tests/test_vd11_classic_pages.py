@@ -23,7 +23,8 @@ FONT_FILES = {
     600: "BarlowSemiCondensed-SemiBold-latin.woff2",
     700: "BarlowSemiCondensed-Bold-latin.woff2",
 }
-ROUTING_SCRIPT_SHA256 = "ccc1a9dae62ee5fd9343dc097364483a6b7344e1f36f7e8b881ce9f6261b93fe"
+# Re-pinned by UX-32: the metrics <small> note moved inside its <dd> (axe definition-list).
+ROUTING_SCRIPT_SHA256 = "83dbfdaf9e794fb8dde966cc44d841c3efc001e7852e1232b6afd55443d2b789"
 HEX = re.compile(r"#[0-9a-fA-F]{6}\b")
 FACE = re.compile(r"@font-face\s*\{([^}]*)\}")
 REMOTE = re.compile(

@@ -106,6 +106,7 @@
 #monitoring-root .monitoring-marker { cursor: pointer; }
 #monitoring-root .monitoring-marker:focus { outline: none; }
 #monitoring-root .monitoring-marker:focus-visible .marker-body { stroke: var(--focus); stroke-width: 5px; }
+#monitoring-root .monitoring-marker:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 #monitoring-root .monitoring-marker .marker-halo { fill: none; stroke: #0d1b24; stroke-width: 3px; vector-effect: non-scaling-stroke; }
 #monitoring-root .map-hint { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.85rem; }
 #monitoring-root .monitoring-map-controls { display: flex; flex-wrap: wrap; gap: var(--atlas-space-2); margin: var(--atlas-space-2) 0; }

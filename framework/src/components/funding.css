@@ -56,6 +56,8 @@
 #funding-root .grants-table th,
 #funding-root .grants-table td { padding: 0.45rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 #funding-root .grants-table tbody th { min-width: 16rem; max-width: 24rem; font-weight: 400; }
+/* UX-32: award-title links fill their row-header cell, so keep a 24 px target. */
+#funding-root .grants-table tbody th a { display: inline-block; min-height: 1.5rem; padding-block: 0.2rem; box-sizing: border-box; }
 #funding-root .grants-table tbody th a { font-weight: 600; }
 #funding-root .grants-table td { min-width: 5.5rem; }
 #funding-root .grants-table td:nth-child(2) { min-width: 11rem; }

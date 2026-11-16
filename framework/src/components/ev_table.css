@@ -28,7 +28,7 @@
 .ev-table-root caption { caption-side: top; text-align: left; padding: 0.5rem 0.75rem; font-weight: 600; color: #1d2a33; }
 .ev-table-root th, .ev-table-root td { text-align: left; vertical-align: top; padding: 0.55rem 0.7rem; border-bottom: 1px solid #e1e6ea; }
 .ev-table-root th { background: #f2f5f7; font-size: 0.85rem; color: #1d2a33; white-space: nowrap; }
-.ev-table-root .ev-sort { font: inherit; font-weight: 700; padding: 0; border: 0; background: none; color: #1d2a33; cursor: pointer; }
+.ev-table-root .ev-sort { font: inherit; font-weight: 700; min-height: 24px; padding: 0; border: 0; background: none; color: #1d2a33; cursor: pointer; }
 .ev-table-root th[aria-sort="ascending"] .ev-sort::after { content: " \25B2"; }
 .ev-table-root th[aria-sort="descending"] .ev-sort::after { content: " \25BC"; }
 .ev-table-root .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }

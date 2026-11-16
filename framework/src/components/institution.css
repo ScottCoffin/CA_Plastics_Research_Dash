@@ -20,6 +20,7 @@
 #institution-root h3 { margin: 0.75rem 0 0.4rem; font-size: 1rem; }
 #institution-root p { margin: 0.5rem 0; }
 #institution-root a { color: var(--brand-dark); }
+#institution-root th a { display: inline-flex; align-items: center; min-height: 24px; }
 #institution-root .data-note, #institution-root .result-count, #institution-root .detail-meta { color: var(--muted); font-size: 0.9rem; }
 #institution-root .empty { padding: 1rem; border: 1px dashed var(--atlas-boundary); border-radius: var(--atlas-radius-control); color: var(--muted); }
 #institution-root .inst-back { margin: 0 0 var(--atlas-space-2); }

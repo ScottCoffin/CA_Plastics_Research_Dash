@@ -14,22 +14,47 @@ Not covered by machine checks and still owed by a person with assistive technolo
 NVDA or Narrator reading of filter labels and result announcements, Windows High Contrast, and
 text spacing (1.4.12).
 
-## Failures
+## Failures (current result, rerun 2026-11-16, UX-32)
 
-| # | Route | Element | Criterion | Problem | Proposed fix |
-|---|---|---|---|---|---|
-| 1 | every Framework page | sidebar `#observablehq-sidebar > ol` | 1.3.1 | axe `list`: the sidebar list holds non-`li` children (Framework 1.13.4 template) | In `framework/scripts/postbuild.mjs`, wrap the stray children in `li` or give the `ol` `role="none"` with `role="list"` on a wrapper; recheck on Framework upgrade |
-| 2 | /expert.html | `#metrics` | 1.3.1 | axe `definition-list`: the `dl` contains elements other than `dt`/`dd` groups | Wrap each term pair in a `div` (allowed) or move notes out of the `dl` |
-| 3 | /monitoring | `section.institution-map-panel`, `details#facet-gaps` | 1.4.10 | Page is 326 px wide at 320 px (scrolls sideways) | Let the map panel and the facet-gaps summary shrink (`min-width: 0`, wrap long words) |
-| 4 | /experts | "Full profile" links on each card | 2.5.8 | Targets under 24 px high and close together | Pad to `min-height: 24px` (`display: inline-block; padding-block: .2rem`) |
-| 5 | /network | topic, sector and colour selects; institution, year, search inputs; min-works slider | 2.5.8 | Form controls under 24 px high | Set `min-height: 2rem` on `.controls select, .controls input` in `network.css` |
-| 6 | /institution, /evidence | sort buttons in the publication table header (Published, Title, Journal, Citations) | 2.5.8 | Buttons under 24 px high | `min-height: 24px` on `.ev-sort` in `ev_table.css` |
-| 7 | /institution, /evidence | first link in each row's link cell (`td .ev-links a`) | 2.5.8 | axe `target-size`: DOI/OA links under 24 px with too little spacing | Space the links (`gap: .5rem`) or pad them |
-| 8 | /institutions | map cluster markers (`g.monitoring-marker`) at statewide zoom | 2.5.8 | Several markers render under 24 px and overlap | Give clusters a 12 px minimum radius, or rely on the 2.5.8 equivalent-control exception and say so: the tier table lists every institution |
-| 9 | /institutions | tier-table name button for long names (e.g. "Inter-American Tropical Tuna Commission") | 2.5.8 | Button height under 24 px when the name wraps tightly | `min-height: 24px` on `.tier-name` |
-| 10 | /funding | one `input` with no id or name; the organisation link "AI-Materials Institute (AI-MI)" | 2.5.8 | Controls under 24 px | Identify the input (likely a chart control), pad it and the standalone organisation links |
-| 11 | / | "Start here" links; /experts "Current affiliation" glossary link | 2.5.8 | Standalone links (not in a sentence) under 24 px | Pad standalone links, or move them into sentences |
-| 12 | /evidence, /about | in-page jump links (Trends, Evidence heatmap, Publications; About section links) | 2.5.8 | Standalone links under 24 px | Render as a padded inline list (`li a { display:inline-block; padding:.25rem 0 }`) |
+None open. Every remaining row is an accepted exception (below). The script lists at most 8
+undersized targets per route, so counts below were measured uncapped in the browser.
+
+## Accepted exceptions
+
+| Route | Elements | WCAG exception | Reason |
+|---|---|---|---|
+| /funding | 42 Sankey node groups (`g`, e.g. "EPA (Funder agency): 12 awards. Press Enter...") | 2.5.8 equivalent control | Every chart has a Chart/Table control with the same data and filter action (VD-7b). The Sankey is not resized |
+| /institutions | Statewide map cluster markers (`g.monitoring-marker.institution-marker`) | 2.5.8 equivalent control | Every institution is listed with the same select action in the tier table, whose 168 name buttons are all at least 24 px |
+| /funding | "Dataset" link in the open-calls note | 2.5.8 inline | The link sits in a sentence |
+
+## Rerun 2026-11-16 (UX-32)
+
+Command (after `npm run build` in `framework/`, a fresh copy of `site/`, `build_seo_pages.py` and
+`assemble_site.py` into `scratch/ux32/site`, served on 127.0.0.1):
+
+`py -3.14 scripts/ux19_a11y_pass.py --base http://127.0.0.1:8810/CA_Plastics_Research_Dash/ --out scratch/ux32/final`
+
+Fixed:
+- Sidebar toggle checkbox set to `display: none` in `framework/src/design/shell.css`; the header menu
+  button still drives it with `click()` (checked at 390 px).
+- Tier-table name buttons: the `.tier-row` grid gives the name column an 11rem minimum and lets the
+  type, count and rank columns shrink and wrap (the longer VD-10 type labels had squeezed names to
+  4-21 px wide). 168 of 168 buttons now measure at least 24 x 24 px at 1280 and 375 px.
+- Expert links in the institution leads table (`#institution-root th a`) and publication-table sort
+  buttons (`.ev-sort`), min-height 24 px.
+- Award-title links in the Funding table (`.grants-table tbody th a`), min-height 1.5rem.
+- Institution and monitoring map markers: `:focus-visible` outline on the marker group.
+- Funding top-N range slider (`funding_viz.css`), height 24 px.
+- /expert.html: "All experts" link and "Plastics-related only" checkbox at 24 px; the metrics note moved
+  inside its `dd`, so each `div` group holds only `dt` and `dd` (axe `definition-list` passes).
+
+Script fixes (`scripts/ux19_a11y_pass.py`): the keyboard walk names implicitly labelled inputs by
+their label or value (identical `input ''` keys for a row of topic checkboxes were reported as a
+possible 2.1.2 trap; focus does move), and the 4.1.3 live-region check ignores the shared header's
+expert search, which navigates to Experts rather than filtering the page.
+
+Result: axe 0 violations on all 14 routes; 12 routes have no rows; /institutions and /funding list
+only the accepted exceptions above.
 
 ## Checked and passing
 

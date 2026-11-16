@@ -56,7 +56,10 @@ PAGE_FACTS = """() => {
   const skips = []; heads.forEach((lvl, i) => { if (i && lvl > heads[i - 1] + 1)
     skips.push(`h${heads[i - 1]} -> h${lvl}`); });
   const vp = document.querySelector('meta[name=viewport]');
-  const filters = document.querySelectorAll('form input, form select, select, input[type=search]');
+  // The shared header's expert search navigates to Experts; it does not filter the page.
+  const filters = [...document.querySelectorAll(
+    'form input, form select, select, input[type=search]',
+  )].filter((el) => !el.closest('#observablehq-header, header'));
   const live = document.querySelectorAll('[aria-live], [role=status], [role=alert], output');
   const pointerOnly = [...document.querySelectorAll('body *')].filter((el) => vis(el)
     && getComputedStyle(el).cursor === 'pointer'
@@ -88,8 +91,11 @@ FOCUS_STATE = """() => {
   const top = document.elementFromPoint(cx, cy);
   const hidden = r.width > 0 && top && !(el === top || el.contains(top) || top.contains(el))
     && !!top.closest('header, #observablehq-header, [style*="fixed"], .sticky');
-  const name = (el.getAttribute('aria-label') || el.textContent || el.getAttribute('name')
-    || el.id || '').trim().replace(/\\s+/g, ' ').slice(0, 50);
+  // Implicitly labelled inputs (wrapped in a <label>) share one path; name them by label or value.
+  const labelText = el.labels && el.labels[0] ? el.labels[0].textContent : '';
+  const name = (el.getAttribute('aria-label') || el.textContent || labelText
+    || el.getAttribute('name') || el.id || el.value || '')
+    .trim().replace(/\\s+/g, ' ').slice(0, 50);
   const path = el.tagName.toLowerCase() + (el.id ? '#' + el.id : '')
     + (el.classList.length ? '.' + [...el.classList].slice(0, 2).join('.') : '');
   return { path, name, ring, hidden, size: r.width * r.height };

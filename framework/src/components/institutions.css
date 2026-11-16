@@ -88,6 +88,7 @@
 #institutions-root .monitoring-marker { cursor: pointer; }
 #institutions-root .monitoring-marker:focus { outline: none; }
 #institutions-root .monitoring-marker:focus-visible .marker-body { stroke: var(--focus); stroke-width: 5px; }
+#institutions-root .monitoring-marker:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 #institutions-root .monitoring-marker circle { stroke: var(--surface); stroke-width: 2px; vector-effect: non-scaling-stroke; }
 #institutions-root .monitoring-marker text { fill: var(--surface); font-weight: 800; font-family: inherit; }
 #institutions-root .monitoring-marker .marker-halo { fill: none; stroke: var(--atlas-text); stroke-width: 3px; vector-effect: non-scaling-stroke; }
@@ -113,9 +114,11 @@
 #institutions-root .tier-group { margin: 0 0 var(--atlas-space-3); border: 1px solid var(--line); border-radius: var(--atlas-radius-card); background: var(--surface); box-shadow: var(--atlas-shadow-raised); }
 #institutions-root .tier-group > summary { display: flex; min-height: 2.75rem; align-items: center; padding: var(--atlas-space-3) var(--atlas-space-4); cursor: pointer; color: var(--ink); font-family: var(--atlas-font-display); font-size: var(--atlas-type-subsection-size); font-weight: 650; }
 #institutions-root .tier-list { display: grid; gap: var(--atlas-space-2); margin: 0; padding: 0 var(--atlas-space-3) var(--atlas-space-3); list-style: none; }
-#institutions-root .tier-row { display: grid; grid-template-columns: minmax(0, 2.2fr) auto auto minmax(0, 2.4fr) auto; gap: var(--atlas-space-1) var(--atlas-space-3); align-items: center; padding: var(--atlas-space-2) var(--atlas-space-3); border: 1px solid var(--line); border-radius: var(--atlas-radius-control); background: var(--surface); font-size: 0.9rem; }
+#institutions-root .tier-row { display: grid; grid-template-columns: minmax(11rem, 2.2fr) minmax(0, auto) minmax(0, auto) minmax(9rem, 2.4fr) minmax(0, auto); gap: var(--atlas-space-1) var(--atlas-space-3); align-items: center; padding: var(--atlas-space-2) var(--atlas-space-3); border: 1px solid var(--line); border-radius: var(--atlas-radius-control); background: var(--surface); font-size: 0.9rem; }
 #institutions-root .tier-row .chip { display: inline-flex; min-height: 1.5rem; align-items: center; padding: 0 var(--atlas-space-2); border: 1px solid var(--line); border-radius: var(--atlas-radius-pill); background: var(--atlas-sunken); color: var(--muted); font-size: var(--atlas-type-caption-size); }
-#institutions-root .tier-name { min-height: 2.75rem; padding: 0; border: 0; color: var(--brand-dark); background: none; text-align: left; text-decoration: underline; }
+/* UX-32: the name column keeps an 11rem minimum; the auto columns shrink and wrap instead. */
+#institutions-root .tier-row > * { min-width: 0; overflow-wrap: anywhere; }
+#institutions-root .tier-name { min-width: 6rem; min-height: 2.75rem; padding: 0; border: 0; color: var(--brand-dark); background: none; text-align: left; text-decoration: underline; }
 #institutions-root .tier-frac { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.1rem 0.5rem; }
 #institutions-root .tier-full, #institutions-root .tier-rank { color: var(--muted); }
 #institutions-root .tier-bar { flex: none; width: min(100%, 12rem); max-width: 100%; height: auto; }

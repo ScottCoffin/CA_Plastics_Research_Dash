@@ -171,15 +171,9 @@
   display: none !important;
 }
 
+/* Not a target: the header menu button (.atlas-menu-button) drives this checkbox with click(). */
 #observablehq-sidebar-toggle {
-  position: fixed;
-  z-index: -1;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  opacity: 0;
-  pointer-events: none;
+  display: none;
 }
 
 a.atlas-skip-link:link,

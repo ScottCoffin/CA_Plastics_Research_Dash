@@ -60,7 +60,7 @@
       .site-header { color: #fff; background: var(--brand-dark); }
       .header-inner, .page-main { width: min(74rem, calc(100% - 2rem)); margin: 0 auto; }
       .header-inner { padding: 1.25rem 0 1rem; }
-      .crumbs a { color: #d5f2e8; font-weight: 600; }
+      .crumbs a { color: #d5f2e8; font-weight: 600; display: inline-flex; align-items: center; min-height: 24px; }
       .crumbs a:focus-visible { outline-color: #ffd7b8; }
       .eyebrow { margin: 0.5rem 0 0; color: #bfe8d9; font-family: var(--font-display); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
       h1 { margin: 0.25rem 0 0.4rem; font-family: var(--font-display); font-size: clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem); font-weight: 700; line-height: 1.05; text-wrap: balance; overflow-wrap: anywhere; }
@@ -94,7 +94,7 @@
       .metric { margin: 0; padding: 0.6rem 0.75rem; border: 1px solid var(--line); border-radius: 0.75rem; background: #f7fbfb; box-shadow: var(--shadow-raised); }
       .metric dt { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
       .metric dd { margin: 0; font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-      .metric small { display: block; color: var(--muted); font-size: 0.8rem; }
+      .metric small { display: block; color: var(--muted); font-size: 0.8rem; font-weight: 400; }
       .profile { display: grid; gap: 0.6rem; margin-bottom: 1rem; }
       .expert-photo { margin: 0; display: flex; flex-direction: column; gap: 0.3rem; max-width: 9rem; }
       .expert-photo img { width: 100%; height: auto; border-radius: 0.4rem; border: 1px solid var(--line); }
@@ -126,7 +126,7 @@
       .field input[type="search"], .field select {
         width: 100%; padding: 0.5rem 0.6rem; border: 1px solid var(--boundary); border-radius: 0.35rem; color: var(--ink); background: #fff;
       }
-      .field input[type="checkbox"] { width: 1.2rem; height: 1.2rem; margin: 0; }
+      .field input[type="checkbox"] { width: 24px; height: 24px; margin: 0; }
       .btn {
         padding: 0.4rem 0.8rem; border: 1px solid var(--boundary); border-radius: 0.4rem;
         color: var(--brand-dark); background: #fff; font-weight: 600;
@@ -498,7 +498,7 @@
           { label: "Rising score percentile", value: risingPct === null ? "—" : ordinal(risingPct), title: RISING_TIP, note: "among Atlas experts" },
           { label: "First publication", value: first === null ? "—" : String(first), note: author.early_career === true ? "Early-career researcher" : "" }
         ];
-        $("metrics").innerHTML = tiles.map((t) => `<div class="metric"><dt>${escapeHtml(t.label)}</dt><dd${t.title ? ` title="${escapeHtml(t.title)}"` : ""}>${escapeHtml(t.value)}</dd>${t.note ? `<small>${escapeHtml(t.note)}</small>` : ""}</div>`).join("");
+        $("metrics").innerHTML = tiles.map((t) => `<div class="metric"><dt>${escapeHtml(t.label)}</dt><dd${t.title ? ` title="${escapeHtml(t.title)}"` : ""}>${escapeHtml(t.value)}${t.note ? `<small>${escapeHtml(t.note)}</small>` : ""}</dd></div>`).join("");
       }
 
       function renderHistory(author, institutions) {

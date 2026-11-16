@@ -204,3 +204,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-16 | VD-7b implementation | Claude Haiku developer | funding page, CSS, chart cards, tests | Accepted; lead fixed ux_tasks task 5 for More filters | 1 session |
 | 2026-11-16 | VD-14 implementation | Claude Haiku developer | network.md/css, CLS measurement, tests | Accepted; one resume after the 30-turn limit | 1 session |
 | 2026-11-16 | VD-11 implementation | Claude Haiku developer | expert.html CSS/footer, seo.py CSS, tests | Accepted after lead screenshots; lead fixed the S3.8 DOI false positive | 1 session |
+| 2026-11-16 | UX-32 implementation | Claude Haiku developer | a11y CSS rows, expert.html, UX-19 doc, tests | Partial (turn limit); lead fixed tier-row grid and award links, rewrote the doc result | 1 session |
