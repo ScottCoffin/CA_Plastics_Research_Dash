@@ -39,6 +39,31 @@ def test_page_header_lead_is_two_sentences() -> None:
     assert len(sentences) == 2
 
 
+def test_page_styles_load_before_markup_and_recent_callout_follows_filters() -> None:
+    page = PAGE.read_text(encoding="utf-8")
+    expected_stylesheets = (
+        "evidence.css",
+        "v3_flow.css",
+        "v4_trend.css",
+        "ev_heatmap.css",
+        "ev_table.css",
+    )
+    stylesheet_links = list(
+        re.finditer(r'<link rel="stylesheet" href="\./components/([^"]+)">', page)
+    )
+    assert tuple(match.group(1) for match in stylesheet_links) == expected_stylesheets
+    header_start = page.index('<header class="atlas-page-head">')
+    assert all(match.start() < header_start for match in stylesheet_links)
+
+    layout_start = page.index('<div class="ev-layout">')
+    layout_end = page.index("\n  </div>", layout_start)
+    recent_start = page.index('<section id="ev-recent"')
+    publications_start = page.index(
+        '<section class="ev-view atlas-chart" aria-labelledby="ev-table-heading"'
+    )
+    assert layout_start < layout_end < recent_start < publications_start
+
+
 def test_how_to_disclosure_preserves_filter_and_selection_guidance() -> None:
     page = PAGE.read_text(encoding="utf-8")
     disclosure = re.search(
