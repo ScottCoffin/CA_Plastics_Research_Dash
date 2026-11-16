@@ -38,3 +38,7 @@ sections. `inst_tiers.js` is untouched (classic drift test).
   baseline; see the Deployed section for live numbers.
 - Targets under 24 px remain (24-28 on `/institutions`, 17-18 on `/institution`);
   UX-32 owns them.
+
+## Deployed
+
+Deployed with `d93dbb00` (CI `43970006962`, Pages `43970006785` passed). Live Lighthouse (mobile, 3 runs): accessibility 100 and CLS 0 to 0.027 on `/institutions`, `/institution`, `/funding` and `/network`; performance medians 57, 54, 82 and 72, below the 2026-11-14 baseline. A same-machine A/B of the pre-change build (`2cc15d30` files, `dist-ctl`) against the new build, alternating 3 runs each, gave medians before/after of funding 77/77, institution 72/72 and institutions 61/71 with equal or lower TBT, so the change does not cost performance; the live gap is host variance and data growth (unchanged `/policy` measured 1.59 s LCP vs 0.99 s baseline the same day). Network CLS on live is now 0 (VD-14).
