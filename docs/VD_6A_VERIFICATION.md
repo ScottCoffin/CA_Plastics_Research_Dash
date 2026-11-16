@@ -43,3 +43,15 @@ site; this check does not claim a live deployment.
 H25, the owner side-by-side design review in VD-12, remains open. VD-5 Overview
 acceptance also remains open, including its LCP requirement. VD-6b status is
 tracked separately.
+
+## Deployed acceptance
+
+Commit `3f088f2e` passed CI run `43778134344` and Pages run `43778134349`.
+The deployed `https://plastiverse.live/experts` page was then rechecked at
+1440 x 900 and 390 x 844. Both widths remained axe-clean, without horizontal
+overflow or console, page, or request errors. The desktop page retained three
+fully visible rows (the third ended at 897.375 px), with no actionable target
+below 24 px apart from the accepted inert Framework checkbox. The live
+interaction pass preserved `#search=Smith`, rendered its active chip, opened
+the researcher drawer as a dialog, and returned to the clean Experts URL after
+Reset.
