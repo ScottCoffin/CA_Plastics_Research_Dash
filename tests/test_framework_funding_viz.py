@@ -78,9 +78,18 @@ def test_views_keep_table_alternatives_and_accessible_names() -> None:
     viz = _read(VIZ_JS)
     assert "View the Sankey as a table" in viz
     assert viz.count("View as a table") == 1
-    assert 'role="img" aria-labelledby="fv-sankey-title"' in viz
+    assert 'role="group" aria-labelledby="fv-sankey-title"' in viz
     assert 'role="img" aria-labelledby="fv-year-title"' in viz
     assert 'aria-label="Sankey diagram, scrollable"' in viz
+
+
+def test_sankey_drill_down_is_a_keyboard_operable_local_control() -> None:
+    viz = _read(VIZ_JS)
+    css = _read(VIZ_CSS)
+    assert "Show all flows" in viz
+    assert 'role="button"' in viz
+    assert "focusOfNode" in viz
+    assert ".fv-node.is-focus" in css
 
 
 def test_viz_has_no_second_filter_form() -> None:

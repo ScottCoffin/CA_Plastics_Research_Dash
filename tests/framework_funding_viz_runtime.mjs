@@ -11,6 +11,7 @@ import {
   buildHeat,
   buildSankey,
   buildSectorTopic,
+  focusOfNode,
   heatFill,
   inkFor,
   layoutSankey,
@@ -203,7 +204,8 @@ for (const topN of [3, 15]) {
   const graph = buildSankey(V, {mode: "awards", topN: 6, orgs: true, T});
   const svg = sankeySvg(graph, 900, {T, amount: false});
   assert.match(svg, /^<svg /);
-  assert.match(svg, /role="img"/);
+  assert.match(svg, /role="group" aria-labelledby="fv-sankey-title"/);
+  assert.equal(svg.includes('role="img"'), false, "the Sankey is a group, so its focusable blocks stay reachable");
   assert.equal((svg.match(/class="fv-link"/g) || []).length, graph.links.length);
   const table = sankeyTableHtml(graph, false);
   assert.equal((table.match(/<tr>/g) || []).length, graph.links.length + 1, "one table row per ribbon plus the header");
@@ -226,6 +228,76 @@ for (const topN of [3, 15]) {
   assert.match(orgListHtml([], LABELS), /No awards match/);
   assert.match(tilesHtml(tileMetrics(V)), /California-led/);
   assert.equal(svg.includes("NaN"), false, "Sankey has no NaN coordinates");
+}
+
+// Drill-down model: a focus keeps only the awards that pass through one block. The organisation cap is set
+// from all awards first, so organisation and "Other" blocks match the unfocused graph.
+{
+  const opts = {mode: "awards", topN: 3, orgs: true, T};
+  const full = buildSankey(V, opts);
+  assert.deepEqual(buildSankey(V, {...opts, focus: null}), full, "no focus gives the unfocused graph");
+  const fullIds = new Set(full.nodes.map((n) => n.id));
+  for (const type of ["agency", "sector", "topic", "org", "other"]) {
+    const node = full.nodes.find((n) => n.type === type);
+    assert.ok(node, `unfocused graph has a ${type} block`);
+    const focus = focusOfNode(node);
+    assert.deepEqual(focus, {id: node.id, type: node.type, key: node.key, sector: node.sector ?? null, name: node.name});
+    const graph = buildSankey(V, {...opts, focus});
+    const hit = graph.nodes.find((n) => n.id === node.id);
+    assert.ok(hit, `${type}: the focused block is kept`);
+    const column = graph.nodes.filter((n) => n.col === hit.col);
+    assert.deepEqual(column.map((n) => n.id), [node.id], `${type}: only the focused block is in its column`);
+    assert.equal(hit.count, node.count, `${type}: the focused block keeps its award count`);
+    graph.nodes.forEach((n) => {
+      if (n.type === "org" || n.type === "other") assert.ok(fullIds.has(n.id), `${type}: ${n.id} is a block of the unfocused graph`);
+    });
+    checkConservation(graph);
+    assert.equal(sankeySvg(graph, 900, {T, focusId: node.id}).includes("NaN"), false, `${type}: focused Sankey has no NaN`);
+    if (type === "agency") {
+      const rows = V.filter((r) => r.agency === node.key);
+      assert.equal(hit.count, rows.length, "agency: count is the agency's awards");
+      assert.equal(graph.awardCount, rows.length, "agency: awardCount is the agency's awards");
+    }
+    if (type === "topic") {
+      const rows = V.filter((r) => r.topics.includes(node.key));
+      assert.deepEqual(graph.nodes.filter((n) => n.col === graph.ncols - 1).map((n) => n.id), [node.id], "topic: the last column holds only the topic");
+      assert.equal(hit.count, rows.length, "topic: count is the awards with that topic");
+      assert.equal(graph.awardCount, rows.length, "topic: awardCount is the awards with that topic");
+    }
+    if (type === "org" || type === "other") {
+      assert.deepEqual(graph.nodes.filter((n) => n.type === "sector").map((n) => n.key), [node.sector], `${type}: one sector`);
+    }
+  }
+  for (const focus of [
+    {id: "a:No such agency", type: "agency", key: "No such agency", sector: null, name: "No such agency"},
+    {id: "t:not_a_topic", type: "topic", key: "not_a_topic", sector: null, name: "Not a topic"}
+  ]) {
+    const none = buildSankey(V, {...opts, focus});
+    assert.equal(none.nodes.length, 0, `${focus.type}: an unknown key leaves no blocks`);
+    assert.equal(none.links.length, 0, `${focus.type}: an unknown key leaves no ribbons`);
+    assert.equal(none.awardCount, 0);
+  }
+  const amountOpts = {mode: "amount", topN: 3, orgs: true, T};
+  const sector = buildSankey(V, amountOpts).nodes.find((n) => n.type === "sector");
+  const amountFocused = buildSankey(V, {...amountOpts, focus: focusOfNode(sector)});
+  assert.equal(amountFocused.excluded, V.length - V.filter((r) => r.amount !== null).length, "excluded counts the whole input");
+  checkConservation(amountFocused);
+}
+
+// Focused Sankey markup: one pressed block carries is-focus, and every block is a labelled button.
+{
+  const graph = buildSankey(V, {mode: "awards", topN: 3, orgs: true, T});
+  const agency = graph.nodes.find((n) => n.type === "agency");
+  const focused = buildSankey(V, {mode: "awards", topN: 3, orgs: true, T, focus: focusOfNode(agency)});
+  const svg = sankeySvg(focused, 900, {T, focusId: agency.id});
+  assert.equal((svg.match(/aria-pressed="true"/g) || []).length, 1, "exactly one block is pressed");
+  assert.match(svg, /<g class="fv-node is-focus"[^>]*aria-pressed="true"/, "the pressed block is the focused one");
+  assert.equal((svg.match(/role="button"/g) || []).length, focused.nodes.length, "every block is a button");
+  assert.match(svg, /Selected\. Press Enter to show all flows\./);
+  const plain = sankeySvg(graph, 900, {T});
+  assert.equal(plain.includes("is-focus"), false, "no block is marked without a focus");
+  assert.equal((plain.match(/aria-pressed="false"/g) || []).length, graph.nodes.length, "unfocused blocks are not pressed");
+  assert.match(plain, /Press Enter to show only flows through this block\./);
 }
 
 console.log("framework funding visualization runtime checks passed");

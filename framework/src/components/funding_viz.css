@@ -32,6 +32,13 @@
 .fv-sankey-svg .fv-link:hover { opacity: 0.75; }
 .fv-node rect { stroke: none; }
 .fv-node:hover rect { stroke: var(--theme-foreground); stroke-width: 2; }
+.fv-node { cursor: pointer; }
+.fv-root .fv-node:focus { outline: none; }
+.fv-node:focus-visible rect, .fv-node.is-focus rect { stroke: var(--theme-foreground); stroke-width: 3; }
+.fv-focus-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.fv-focus-bar:has(.fv-focus-clear:not([hidden])) { margin-block: 0.5rem; }
+.fv-focus-text { margin: 0; }
+.fv-focus-clear { min-height: 40px; padding: 0 0.9rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.4rem; background: var(--theme-background); font: inherit; cursor: pointer; }
 
 .fv-scroll { overflow-x: auto; max-width: 100%; }
 .fv-details { margin-top: 0.6rem; }

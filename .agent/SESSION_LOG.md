@@ -147,3 +147,4 @@
 | 2026-11-15 | VD-6a | Experts adoption complete; 1,595 passed, 9 expected placeholder skips; local assembled desktop/mobile browser acceptance | this commit |
 | 2026-11-15 | VD-6b | Collaboration network adoption; 19 focused tests, 1,595 passed with 9 expected skips, 13-page build, local assembled desktop/mobile acceptance | this commit |
 | 2026-11-15 | S2.6 | Null OpenAlex author IDs repaired (ORCID / name+institution / curated); Jeff Wagner restored; +21 experts; 1,655 passed, 9 expected skips | this commit |
+| 2026-11-15 | UX-28 follow-up | Funding Sankey click drill-down restored (owner request); built-page click test + axe clean; 1,659 passed, 9 expected skips | this commit |

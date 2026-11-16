@@ -155,12 +155,16 @@ export function tileMetrics(vrows) {
 // "Other <sector>"); opts.sectorLabels; opts.T for topic labels. Each award adds its weight to every node
 // it passes through; an award with k topics splits its weight k ways, so flows into and out of a middle
 // node always balance.
+// opts.focus (a focusOfNode() object, or null) keeps only the awards that pass through one block. The
+// organisation cap is set from all awards before the focus is applied, so the blocks do not change. A
+// focused topic keeps its awards at full weight, with that topic alone. excluded counts the whole input.
 export function buildSankey(vrows, opts = {}) {
   const mode = opts.mode === "amount" ? "amount" : "awards";
   const topN = Math.max(1, opts.topN || 6);
   const withOrgs = opts.orgs !== false;
   const labels = opts.sectorLabels || DEFAULT_SECTOR_LABELS;
   const T = opts.T || null;
+  const focus = opts.focus || null;
   const used = [];
   let excluded = 0;
   vrows.forEach((r) => {
@@ -179,6 +183,15 @@ export function buildSankey(vrows, opts = {}) {
     const ranked = [...m.entries()].sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(b[0]));
     keep.set(sector, new Set(ranked.slice(0, topN).map((e) => e[0])));
   });
+  const passesFocus = (r) => {
+    if (focus.type === "agency") return r.agency === focus.key;
+    if (focus.type === "sector") return r.sector === focus.key;
+    if (focus.type === "org") return r.sector === focus.sector && r.orgKey === focus.key;
+    if (focus.type === "other") return r.sector === focus.key && !keep.get(r.sector).has(r.orgKey);
+    if (focus.type === "topic") return r.topics.includes(focus.key);
+    return false;
+  };
+  const shown = focus ? used.filter(passesFocus) : used;
   const nodes = new Map();
   const links = new Map();
   const lastCol = withOrgs ? 3 : 2;
@@ -202,7 +215,7 @@ export function buildSankey(vrows, opts = {}) {
     l.awardsW += awardShare;
     l.amountW += amountShare;
   };
-  used.forEach((r) => {
+  shown.forEach((r) => {
     const w = weight(r);
     const amt = r.amount ?? 0;
     const agency = node(`a:${r.agency}`, 0, "agency", r.agency, r.agency);
@@ -220,8 +233,9 @@ export function buildSankey(vrows, opts = {}) {
       link(sector, org, w, 1, amt);
       from = org;
     }
-    const k = r.topics.length;
-    r.topics.forEach((t) => {
+    const topics = focus && focus.type === "topic" ? [focus.key] : r.topics;
+    const k = topics.length;
+    topics.forEach((t) => {
       const topic = node(`t:${t}`, lastCol, "topic", t, topicLabel(t, T));
       touch(topic, r.grant_key, w / k, 1 / k, amt / k);
       link(from, topic, w / k, 1 / k, amt / k);
@@ -240,8 +254,13 @@ export function buildSankey(vrows, opts = {}) {
     mode,
     withOrgs,
     ncols: lastCol + 1,
-    awardCount: used.length
+    awardCount: shown.length
   };
+}
+
+// The focus object for one Sankey block, in the shape buildSankey's opts.focus expects.
+export function focusOfNode(n) {
+  return {id: n.id, type: n.type, key: n.key, sector: n.sector ?? null, name: n.name};
 }
 
 const sectorIndex = (s) => {

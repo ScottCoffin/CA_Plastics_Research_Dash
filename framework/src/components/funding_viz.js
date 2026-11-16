@@ -1,13 +1,14 @@
 // Funding visualizations for the Framework Funding page, ported from the classic grants page
 // (site/grants.html). mountFundingViz(container) builds the controls once and returns {update(rows)};
-// update() redraws every view from the awards that match the page's filter form. The views are
-// read-only: they follow the filter form and do not set filters themselves. Each chart has a table
-// alternative. The pure markup builders are exported so Node tests can check them.
+// update() redraws every view from the awards that match the page's filter form. The views follow the
+// filter form and do not set filters themselves. The Sankey alone has a local drill-down: clicking a
+// block (or pressing Enter on it) narrows only the Sankey and its table to the flows through that block.
+// Each chart has a table alternative. The pure markup builders are exported so Node tests can check them.
 import {escapeHtml} from "./atlas.js";
 import {
   DEFAULT_SECTOR_LABELS, FALLBACK_COLOR, FUNDER_COLOR, HEAT_START, SECTOR_COLORS, UNTAGGED, agencyColor, agencyOrder,
-  buildHeat, buildSankey, buildSectorTopic, heatFill, inkFor, layoutSankey, niceMax, sectorLabelsFor, tileMetrics,
-  topOrgs, topicFill, viewRows, yearCounts
+  buildHeat, buildSankey, buildSectorTopic, focusOfNode, heatFill, inkFor, layoutSankey, niceMax, sectorLabelsFor,
+  tileMetrics, topOrgs, topicFill, viewRows, yearCounts
 } from "./funding_viz_model.js";
 
 const esc = escapeHtml;
@@ -32,7 +33,7 @@ const SKELETON = `
 </div>
 <section class="fv-section" aria-labelledby="fv-sankey-h">
   <h3 id="fv-sankey-h">Funder, sector, organisation and topic</h3>
-  <p class="fv-intro">Each ribbon is a group of awards. Hover over a ribbon or a block to see its totals. The filters above change this view.</p>
+  <p class="fv-intro">Each ribbon is a group of awards. Hover over a ribbon or a block to see its totals. Click a block (or press Enter on it) to show only the flows that pass through it; click it again to show all flows. The filters above change this view.</p>
   <p class="fv-caveat"><strong>Read amounts with care.</strong> Amounts follow each source's own basis, are not comparable or additive across sources, and some awards have no amount. Ribbon width therefore defaults to the number of awards.</p>
   <div class="fv-controls">
     <fieldset class="fv-fieldset"><legend>Ribbon width</legend>
@@ -43,6 +44,7 @@ const SKELETON = `
     <label class="fv-topn">Organisations per sector <input type="range" class="fv-topn-input" min="3" max="15" value="6"> <output class="fv-topn-out">6</output></label>
   </div>
   <p class="fv-note" data-fv="amount-note" hidden></p>
+  <div class="fv-focus-bar" data-fv="sankey-focus"><p class="fv-focus-text" role="status" aria-live="polite"></p><button type="button" class="fv-focus-clear" hidden>Show all flows</button></div>
   <div class="fv-sankey-wrap" data-fv="sankey" role="region" aria-label="Sankey diagram, scrollable" tabindex="0"></div>
   <p class="fv-note">Awards with several topics split their weight equally across those topics (an award with two topics adds one half to each). Awards with no topic go to "Untagged". Within each sector the organisation column shows the largest recipients, and the rest are grouped as "Other" with the sector name.</p>
   <details class="fv-details"><summary>View the Sankey as a table</summary><div class="fv-scroll" data-fv="sankey-table" role="region" aria-label="Sankey values as a table, scrollable" tabindex="0"></div></details>
@@ -112,8 +114,10 @@ function linkFill(l, T) {
   return SECTOR_COLORS[t.sector] || FALLBACK_COLOR;
 }
 
-// SVG Sankey with a title per ribbon and per block. The caller puts it in a horizontally scrolling box.
-export function sankeySvg(graph, width, {T = null, amount = false} = {}) {
+// SVG Sankey with a title per ribbon and per block. Each block is a button (Enter or click toggles the
+// drill-down); focusId marks the block that is drilled into. The caller puts it in a horizontally
+// scrolling box.
+export function sankeySvg(graph, width, {T = null, amount = false, focusId = null} = {}) {
   const count = Math.max(...Array.from({length: graph.ncols}, (_, c) => graph.nodes.filter((n) => n.col === c).length));
   const height = Math.min(1000, Math.max(420, count * 24 + 40));
   const L = layoutSankey(graph, {width, height, marginLeft: 120, marginRight: 190});
@@ -121,7 +125,7 @@ export function sankeySvg(graph, width, {T = null, amount = false} = {}) {
     ? ["Funder agency", "Recipient sector", "Recipient organisation", "Topic"]
     : ["Funder agency", "Recipient sector", "Topic"];
   const parts = [
-    `<svg class="fv-sankey-svg" width="${L.width}" height="${L.height}" viewBox="0 0 ${L.width} ${L.height}" role="img" aria-labelledby="fv-sankey-title">`,
+    `<svg class="fv-sankey-svg" width="${L.width}" height="${L.height}" viewBox="0 0 ${L.width} ${L.height}" role="group" aria-labelledby="fv-sankey-title">`,
     `<title id="fv-sankey-title">Sankey diagram of funder agencies, recipient sectors, organisations and topics</title>`
   ];
   heads.forEach((h, i) => {
@@ -150,7 +154,12 @@ export function sankeySvg(graph, width, {T = null, amount = false} = {}) {
     const share = ((n.value / total) * 100).toFixed(1);
     const text = `${n.name} (${kindLabel(n)}): ${fmtInt(n.count)} awards, ${share}% of ${amount ? "reported amount" : "award weight"}`
       + (n.amountW ? `; ${fmtUsd(n.amountW)} reported (${AMOUNT_CAVEAT})` : "");
-    parts.push(`<g class="fv-node"><title>${esc(text)}</title><rect x="${n.x}" y="${n.y.toFixed(2)}" width="${n.w}" height="${n.h.toFixed(2)}" fill="${nodeFill(n, T)}"></rect>${label}</g>`);
+    const focused = n.id === focusId;
+    const action = focused ? "Selected. Press Enter to show all flows." : "Press Enter to show only flows through this block.";
+    const ariaLabel = `${n.name} (${kindLabel(n)}): ${fmtInt(n.count)} awards. ${action}`;
+    parts.push(`<g class="fv-node${focused ? " is-focus" : ""}" data-id="${esc(n.id)}" tabindex="0" role="button" `
+      + `aria-pressed="${focused ? "true" : "false"}" aria-label="${esc(ariaLabel)}"><title>${esc(text)}</title>`
+      + `<rect x="${n.x}" y="${n.y.toFixed(2)}" width="${n.w}" height="${n.h.toFixed(2)}" fill="${nodeFill(n, T)}"></rect>${label}</g>`);
   });
   parts.push("</g></svg>");
   return parts.join("");
@@ -257,11 +266,20 @@ export function mountFundingViz(container) {
   container.classList.add("fv-root");
   container.innerHTML = SKELETON;
   const host = (name) => container.querySelector(`[data-fv="${name}"]`);
-  const state = {vrows: [], labels: DEFAULT_SECTOR_LABELS, mode: "awards", orgs: true, topN: 6, width: 0};
+  const state = {vrows: [], labels: DEFAULT_SECTOR_LABELS, mode: "awards", orgs: true, topN: 6, width: 0, focus: null, graph: null};
 
   function renderSankey() {
     const amount = state.mode === "amount";
-    const graph = buildSankey(state.vrows, {mode: state.mode, topN: state.topN, orgs: state.orgs, sectorLabels: state.labels, T});
+    const opts = {mode: state.mode, topN: state.topN, orgs: state.orgs, sectorLabels: state.labels, T};
+    let graph = buildSankey(state.vrows, {...opts, focus: state.focus});
+    const block = state.focus ? graph.nodes.find((n) => n.id === state.focus.id) : null;
+    if (state.focus && !block) {
+      // The drill-down block has gone (a filter, the organisation cap or the amount mode removed it).
+      state.focus = null;
+      graph = buildSankey(state.vrows, opts);
+    }
+    if (block) state.focus = focusOfNode(block);
+    state.graph = graph;
     const note = host("amount-note");
     note.hidden = !amount;
     note.innerHTML = amount
@@ -270,12 +288,19 @@ export function mountFundingViz(container) {
     container.querySelector(".fv-topn").hidden = !state.orgs;
     const wrap = host("sankey");
     const table = host("sankey-table");
+    const bar = host("sankey-focus");
+    // The status line stays in the page (a live region that starts hidden is often not announced);
+    // only the clear button is hidden when nothing is drilled into.
+    bar.querySelector(".fv-focus-clear").hidden = !block;
+    bar.querySelector(".fv-focus-text").innerHTML = block
+      ? `Showing only flows through ${esc(block.name)} (${kindLabel(block).toLowerCase()}).`
+      : "";
     if (!graph.nodes.length) {
       wrap.innerHTML = emptyText(amount ? "No awards with a reported amount match the current filters." : "No awards match the current filters.");
       table.innerHTML = "";
       return;
     }
-    wrap.innerHTML = sankeySvg(graph, Math.max(760, wrap.clientWidth || 800), {T, amount});
+    wrap.innerHTML = sankeySvg(graph, Math.max(760, wrap.clientWidth || 800), {T, amount, focusId: block ? block.id : null});
     table.innerHTML = sankeyTableHtml(graph, amount);
   }
 
@@ -326,6 +351,48 @@ export function mountFundingViz(container) {
     container.querySelector(".fv-topn-out").textContent = target.value;
     renderSankey();
   });
+  // Sankey drill-down. A block toggles the focus on itself (a click, or Enter or Space on its keyboard focus).
+  // The Sankey redraws, and keyboard focus returns to the same block, or to the Sankey box if it has gone.
+  const cssEscape = (value) => (typeof CSS !== "undefined" && CSS.escape ? CSS.escape(value) : String(value).replace(/["\\]/g, "\\$&"));
+  function restoreFocus(id) {
+    const wrap = host("sankey");
+    const el = id == null ? null : wrap.querySelector(`.fv-node[data-id="${cssEscape(id)}"]`);
+    (el || wrap).focus({preventScroll: true});
+  }
+  function toggleFocus(id) {
+    const node = state.graph && state.graph.nodes.find((n) => n.id === id);
+    if (!node) return;
+    state.focus = state.focus && state.focus.id === id ? null : focusOfNode(node);
+    renderSankey();
+    restoreFocus(id);
+  }
+  function clearFocus() {
+    if (!state.focus) return;
+    state.focus = null;
+    renderSankey();
+    restoreFocus(null);
+  }
+  container.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target.closest(".fv-focus-clear")) {
+      clearFocus();
+      return;
+    }
+    const node = target.closest(".fv-node");
+    if (node) toggleFocus(node.getAttribute("data-id"));
+  });
+  container.addEventListener("keydown", (event) => {
+    const wrap = host("sankey");
+    if (!wrap.contains(event.target)) return;
+    const node = event.target.closest(".fv-node");
+    if (node && (event.key === "Enter" || event.key === " ")) {
+      event.preventDefault();
+      toggleFocus(node.getAttribute("data-id"));
+    } else if (event.key === "Escape") {
+      clearFocus();
+    }
+  });
+
   // The Sankey and year chart size themselves from the container width, so redraw when it changes.
   if (typeof ResizeObserver !== "undefined") {
     new ResizeObserver(() => {
