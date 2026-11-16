@@ -94,7 +94,7 @@ def test_css_dims_unselected_cells_and_rings_selected_ones() -> None:
     )
     assert dimmed in text
     assert "opacity: 0.45" in text
-    assert "inset 0 0 0 3px #000000" in text
+    assert "inset 0 0 0 3px var(--atlas-text)" in text
     assert ".ev-heatmap-colbtn" in text
 
 

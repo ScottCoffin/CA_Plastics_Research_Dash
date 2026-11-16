@@ -38,6 +38,9 @@
   /* Chart chrome: gridlines use the line token (framework/src/components/shared/palette.js mirrors these). */
   --atlas-chart-grid: var(--atlas-line);
 
+  /* Map chrome: state waters on the monitoring and institution maps (light blue, distinct from the sunken land). */
+  --atlas-map-water: #cfe5f2;
+
   /* Type stacks. Keep serif fallbacks out of the interface. */
   --atlas-font-display: "Barlow Semi Condensed", "Segoe UI Semibold", system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", sans-serif;

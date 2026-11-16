@@ -12,12 +12,18 @@ check_design_tokens = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(check_design_tokens)
 
 
+# The live baselines are all 0 since VD-17, so the mechanism tests use their own baseline.
+MECHANISM_BASELINE = {"style.css": (1, frozenset({"#0b3d31"}))}
+
+
 def test_token_stylesheet_is_excluded_from_the_literal_ratchet() -> None:
     count, problems = check_design_tokens.audit_stylesheets(
         {
             "style.css": ".facet { color: #0b3d31; }",
             "design/tokens.css": ":root { --atlas-ink: #abcdef; }",
-        }
+        },
+        baseline=MECHANISM_BASELINE,
+        max_total=292,
     )
 
     assert count == 1
@@ -26,7 +32,9 @@ def test_token_stylesheet_is_excluded_from_the_literal_ratchet() -> None:
 
 def test_checker_rejects_new_colours_outside_tokens() -> None:
     _, problems = check_design_tokens.audit_stylesheets(
-        {"style.css": ".facet { color: #0b3d31; background: #abcdef; }"}
+        {"style.css": ".facet { color: #0b3d31; background: #abcdef; }"},
+        baseline=MECHANISM_BASELINE,
+        max_total=292,
     )
 
     assert any("new unapproved hex colours: #abcdef" in problem for problem in problems)
@@ -34,7 +42,9 @@ def test_checker_rejects_new_colours_outside_tokens() -> None:
 
 def test_checker_rejects_more_uses_than_the_file_baseline() -> None:
     _, problems = check_design_tokens.audit_stylesheets(
-        {"style.css": ".facet { color: #0b3d31; border-color: #0b3d31; }"}
+        {"style.css": ".facet { color: #0b3d31; border-color: #0b3d31; }"},
+        baseline=MECHANISM_BASELINE,
+        max_total=292,
     )
 
     assert any("2 hex uses exceeds baseline 1" in problem for problem in problems)

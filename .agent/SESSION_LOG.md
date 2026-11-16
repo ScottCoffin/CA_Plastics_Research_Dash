@@ -160,3 +160,4 @@
 | 2026-11-16 | VD-7b | Funding visual adoption: single head, caution/info callouts, filter panel + More filters, Chart/Table on all five charts; CSS on tokens | this commit |
 | 2026-11-16 | VD-11 | Classic expert profile and SEO template on Atlas tokens and local Barlow fonts; S3.8 abstract guard ignores DOIs | this commit + `S3.8` fix commit |
 | 2026-11-16 | UX-32 | Accessibility rows fixed; axe 0 on 14 routes; remaining rows are accepted 2.5.8 exceptions; pass-script false positives fixed | this commit |
+| 2026-11-16 | VD-17 | Framework stylesheets have 0 hex literals outside tokens.css; ratchet cap 0 | this commit |

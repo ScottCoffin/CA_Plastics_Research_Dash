@@ -43,10 +43,22 @@ def _contrast(a: str, b: str) -> float:
 def _badge_colours(text: str) -> tuple[str, str]:
     rule = re.search(r"\.now-badge \{[^}]*\}", text)
     assert rule, "a .now-badge rule must exist"
-    colour = re.search(r"(?<![-\w])color: (#[0-9a-fA-F]{6});", rule.group(0))
-    background = re.search(r"background: (#[0-9a-fA-F]{6});", rule.group(0))
+    value = r"(#[0-9a-fA-F]{6}|var\(--[\w-]+\))"
+    colour = re.search(r"(?<![-\w])color: " + value + ";", rule.group(0))
+    background = re.search(r"background: " + value + ";", rule.group(0))
     assert colour and background, rule.group(0)
-    return colour.group(1), background.group(1)
+    return _resolve(colour.group(1)), _resolve(background.group(1))
+
+
+def _resolve(value: str) -> str:
+    """Hex as is; a var(--atlas-*) token resolved from tokens.css (VD-17)."""
+    if value.startswith("#"):
+        return value
+    name = value[4:-1]
+    tokens = (ROOT / "framework" / "src" / "design" / "tokens.css").read_text(encoding="utf-8")
+    match = re.search(re.escape(name) + r":\s*(#[0-9a-fA-F]{6})", tokens)
+    assert match, f"token {name} not defined as a hex value"
+    return match.group(1)
 
 
 def test_framework_filter_options_and_hash_key() -> None:

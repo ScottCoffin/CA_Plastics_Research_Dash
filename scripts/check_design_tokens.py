@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FRAMEWORK_SRC = ROOT / "framework" / "src"
 TOKEN_STYLESHEET = "design/tokens.css"
-MAX_HEX_USES = 292  # Strictly below the 293 literals measured before VD-1.
+MAX_HEX_USES = 0  # VD-17: no hex literals outside tokens.css (293 before VD-1).
 HEX_COLOR = re.compile(
     r"(?<![\w-])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})"
     r"(?![0-9a-fA-F])"
@@ -27,134 +27,19 @@ HEX_COLOR = re.compile(
 # before VD-1. A stylesheet can remove literals freely, but cannot add a new colour
 # or increase its count. Tokens are intentionally excluded from this baseline.
 BASELINE_HEX_BY_FILE: dict[str, tuple[int, frozenset[str]]] = {
-    "style.css": (1, frozenset({"#0b3d31"})),
-    "components/ev_heatmap.css": (
-        29,
-        frozenset(
-            {
-                "#000000",
-                "#0b4f8a",
-                "#1d2a33",
-                "#1d4ed8",
-                "#3b4850",
-                "#5e7480",
-                "#b8c4ca",
-                "#e8f1fb",
-                "#fff",
-                "#ffffff",
-            }
-        ),
-    ),
-    "components/ev_table.css": (
-        47,
-        frozenset(
-            {
-                "#0b4f8a",
-                "#1a5fb4",
-                "#1d2a33",
-                "#3b4850",
-                "#4a5860",
-                "#5f6b72",
-                "#6b777e",
-                "#8a9499",
-                "#9cc0e6",
-                "#c9d1d6",
-                "#d6e7f7",
-                "#e1e6ea",
-                "#e8f1fb",
-                "#f0f6fc",
-                "#f2f5f7",
-                "#ffffff",
-            }
-        ),
-    ),
-    "components/experts.css": (
-        34,
-        frozenset(
-            {
-                "#043e32",
-                "#075a46",
-                "#0b3d31",
-                "#17324d",
-                "#1f7a66",
-                "#24445a",
-                "#536879",
-                "#5c2300",
-                "#8da7af",
-                "#c45100",
-                "#c8d8dc",
-                "#e6eff2",
-                "#e9f3f1",
-                "#edf7f4",
-                "#fbfdfd",
-                "#ffe9cf",
-                "#fff",
-                "#ffffff",
-            }
-        ),
-    ),
+    "style.css": (0, frozenset()),
+    "components/ev_heatmap.css": (0, frozenset()),
+    "components/ev_table.css": (0, frozenset()),
+    "components/experts.css": (0, frozenset()),
     "components/funding.css": (0, frozenset()),
     "components/funding_viz.css": (0, frozenset()),
     "components/institution.css": (
         0,
         frozenset(),
     ),
-    "components/institutions.css": (
-        1,
-        frozenset({"#cfe5f2"}),
-    ),
-    "components/monitoring.css": (
-        55,
-        frozenset(
-            {
-                "#043e32",
-                "#075a46",
-                "#0b3d31",
-                "#0d1b24",
-                "#17324d",
-                "#1d2a33",
-                "#254658",
-                "#2f3d45",
-                "#3d5560",
-                "#3f6075",
-                "#536879",
-                "#56656d",
-                "#5b6770",
-                "#7d8775",
-                "#8da7af",
-                "#8fa5a7",
-                "#b8ced0",
-                "#c45100",
-                "#c8d8dc",
-                "#cfe5f2",
-                "#d4e8e4",
-                "#e3efed",
-                "#edf5f4",
-                "#edf7f4",
-                "#eef1f2",
-                "#f1efe4",
-                "#f4f8fb",
-                "#fbfdfd",
-                "#fff",
-                "#ffffff",
-            }
-        ),
-    ),
-    "components/network.css": (
-        16,
-        frozenset(
-            {
-                "#1d2a33",
-                "#3b4850",
-                "#9fb3ad",
-                "#c9d6d2",
-                "#dfe7e4",
-                "#eef5f2",
-                "#fbfdfc",
-                "#ffffff",
-            }
-        ),
-    ),
+    "components/institutions.css": (0, frozenset()),
+    "components/monitoring.css": (0, frozenset()),
+    "components/network.css": (0, frozenset()),
 }
 BASELINE_TOTAL = sum(count for count, _ in BASELINE_HEX_BY_FILE.values())
 
@@ -201,7 +86,7 @@ def main() -> int:
         for problem in problems:
             print(f"FAIL: {problem}", file=sys.stderr)
         return 1
-    print(f"OK: {total} Framework stylesheet hex uses (< 293; baseline {BASELINE_TOTAL})")
+    print(f"OK: {total} Framework stylesheet hex uses (limit {MAX_HEX_USES}; 293 before VD-1)")
     return 0
 
 

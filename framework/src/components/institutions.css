@@ -78,7 +78,7 @@
 #institutions-root .monitoring-map.is-panning { cursor: grabbing; }
 #institutions-root .monitoring-map-svg { display: block; width: 100%; height: auto; }
 #institutions-root .monitoring-map-svg .map-sea { fill: var(--atlas-page); }
-#institutions-root .monitoring-map-svg .map-state-waters { fill: #cfe5f2; }
+#institutions-root .monitoring-map-svg .map-state-waters { fill: var(--atlas-map-water); }
 /* Land takes the mist tint (VD-6c), so markers and labels read against the water and sea. */
 #institutions-root .monitoring-map-svg .map-land { fill: var(--atlas-sunken); stroke: var(--atlas-boundary); stroke-width: 1px; vector-effect: non-scaling-stroke; }
 #institutions-root .map-places { pointer-events: none; }
