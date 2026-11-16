@@ -23,6 +23,7 @@ EXPERT_SAMPLE_SIZE = 25
 SITEMAP_NS = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 JSON_LD = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.DOTALL)
+URL_OR_DOI = re.compile(r"(?:https?://|\b10\.\d{4,9}/)[^\s\"'<>]+")
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -114,7 +115,8 @@ def check_page(path: Path, base: str, expected_type: str) -> list[str]:
                 errors.append(f"{label}: JSON-LD @type is not {expected_type}")
     if EMAIL.search(text):
         errors.append(f"{label}: email-like string found")
-    if "abstract" in text.lower():
+    # DOIs and URLs can contain the word (e.g. "...2025.211.abstracts.a1093"); check prose only.
+    if "abstract" in URL_OR_DOI.sub(" ", text).lower():
         errors.append(f"{label}: abstract text found")
     return errors
 

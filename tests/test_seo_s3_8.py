@@ -375,3 +375,17 @@ def test_unsafe_logo_path_is_left_out_of_sub_organization(tmp_path) -> None:
     card = _jsonld(html)["subOrganization"][0]
     assert card["name"] == NET_NAME
     assert "logo" not in card
+
+
+def test_abstract_guard_ignores_dois_but_not_prose(tmp_path) -> None:
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "check_s3_8", Path(__file__).resolve().parents[1] / "scripts" / "check_s3_8.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    doi = "https://doi.org/10.1164/ajrccm.2025.211.abstracts.a1093"
+    strip = module.URL_OR_DOI.sub
+    assert "abstract" not in strip(" ", f'<a href="{doi}">10.1164/x.abstracts.1</a>')
+    assert "abstract" in strip(" ", "<p>Abstract: microplastics in soil</p>").lower()
