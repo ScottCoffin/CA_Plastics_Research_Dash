@@ -7,6 +7,7 @@ import {loadJson, escapeHtml} from "./atlas.js";
 import {monitoringView} from "./monitoring_view.js";
 import {monitoringMap, attachMapInteractions, ensureCaBasemap, caBasemapFeatures, caBasemapState} from "./svg_map.js";
 import {instTiers} from "./inst_tiers.js";
+import {institutionTypeLabel} from "./shared/labels.js";
 
 const $ = (id) => document.getElementById(id);
 // AtlasTopics is set by shared/topics.js (imported above); read it at call time, as experts_model.js does.
@@ -267,7 +268,7 @@ function renderInstitutionMapDetails() {
     const institution = metric.institution;
     const years = metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : (institution.years || []).length ? `${Math.min(...institution.years)}–${Math.max(...institution.years)}` : "—";
     const stat = (name, value) => `<div><dt>${name}</dt><dd>${escapeHtml(value)}</dd></div>`;
-    return `<section class="map-inst"><h4>${escapeHtml(institution.name)}</h4><div><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div><dl class="map-inst-stats">${stat("Works", metricNumber(institution.work_count))}${stat("Plastic-related works", metricNumber(metric.taggedCount))}${stat("Authors", metricNumber(institution.author_count))}${stat("Years active", years)}${stat("Recent 5 years", metricNumber(metric.recentCount))}</dl>${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 3)}${topExpertsHtml(institution)}<div class="institution-actions"><button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institution.inst_id)}">Show experts</button>${publicationsLink(institution.inst_id)}</div></section>`;
+    return `<section class="map-inst"><h4>${escapeHtml(institution.name)}</h4><div><span class="chip">${escapeHtml(institutionTypeLabel(institution.atlas_type || "other"))}</span></div><dl class="map-inst-stats">${stat("Works", metricNumber(institution.work_count))}${stat("Plastic-related works", metricNumber(metric.taggedCount))}${stat("Authors", metricNumber(institution.author_count))}${stat("Years active", years)}${stat("Recent 5 years", metricNumber(metric.recentCount))}</dl>${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 3)}${topExpertsHtml(institution)}<div class="institution-actions"><button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institution.inst_id)}">Show experts</button>${publicationsLink(institution.inst_id)}</div></section>`;
   }).join("");
   panel.innerHTML = `<div class="map-details-card"><div class="map-details-head"><h3>${metrics.length} institution${metrics.length === 1 ? "" : "s"} selected</h3><div class="map-details-actions">${metrics.length > 1 ? "<button type=\"button\" data-map-fit>Zoom to these</button>" : ""}<button type="button" data-map-close>Close</button></div></div>${blocks}${metrics.length > shown.length ? `<p class="data-note">Showing the ${shown.length} largest of ${metrics.length} institutions; zoom in to separate the rest.</p>` : ""}</div>`;
 }
@@ -330,14 +331,18 @@ function renderInstitutionTiers() {
   $("institution-list").hidden = on;
   root.querySelectorAll("[data-inst-view]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.instView === (on ? "tiers" : "list"))));
   if (!on) return;
-  $("institution-tier-groups").innerHTML = instTiers.tiersHtml(tiers.rows, state.institutionViewType);
+  // inst_tiers.js must stay a code-identical port of the classic helper (drift test), so the chip text
+  // is labelled here: filter on the raw type first, then pass rows whose atlas_type is the display label.
+  const typedRows = tiers.rows.filter((r) => !state.institutionViewType || (r.atlas_type || "other") === state.institutionViewType);
+  const labelledRows = typedRows.map((r) => ({...r, atlas_type: institutionTypeLabel(r.atlas_type || "other")}));
+  $("institution-tier-groups").innerHTML = instTiers.tiersHtml(labelledRows, "");
   const groups = instTiers.groupTiers(tiers.rows, state.institutionViewType);
   $("institution-count").textContent = `${groups.reduce((n, g) => n + g.rows.length, 0)} California institutions in ${groups.length} tiers, sorted by fractional works within each tier`;
 }
 
 function institutionCardHtml(metric) {
   const institution = metric.institution;
-  return `<article class="card institution-card" data-institution-id="${escapeHtml(institution.inst_id)}"><div class="card-header"><h2><a href="${escapeHtml(institutionPageUrl(institution.inst_id))}">${escapeHtml(institution.name)}</a></h2><span class="chip">${escapeHtml(institution.atlas_type || "other")}</span></div>${collaboratorLine(institution)}${primaryTopicLine(metric)}<p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p><div class="institution-topics">${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 5)}</div>${sparkline(metric)}${topExpertsHtml(institution)}<div class="institution-actions">${institution.ca_flag ? institutionExpertLink(institution.inst_id) : ""}${publicationsLink(institution.inst_id)}</div></article>`;
+  return `<article class="card institution-card" data-institution-id="${escapeHtml(institution.inst_id)}"><div class="card-header"><h2><a href="${escapeHtml(institutionPageUrl(institution.inst_id))}">${escapeHtml(institution.name)}</a></h2><span class="chip">${escapeHtml(institutionTypeLabel(institution.atlas_type || "other"))}</span></div>${collaboratorLine(institution)}${primaryTopicLine(metric)}<p class="institution-stats"><span>${metric.taggedCount} tagged works all time</span><span>${metric.recentCount} in recent 5 years</span><span>${metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : "Year unavailable"}</span></p><div class="institution-topics">${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 5)}</div>${sparkline(metric)}${topExpertsHtml(institution)}<div class="institution-actions">${institution.ca_flag ? institutionExpertLink(institution.inst_id) : ""}${publicationsLink(institution.inst_id)}</div></article>`;
 }
 
 function renderInstitutions() {
@@ -345,12 +350,12 @@ function renderInstitutions() {
   ensureInstitutionTiers();
   const all = (state.data.institutions.institutions || []).filter((institution) => state.includeCollaborators || institution.ca_flag).map((institution) => institutionMetrics(institution, state.worksByInst)).filter((metric) => metric.taggedCount > 0);
   $("institution-collab").checked = state.includeCollaborators;
-  const types = [...new Set(all.map((metric) => metric.institution.atlas_type || "other"))].sort();
+  const types = [...new Set(all.map((metric) => metric.institution.atlas_type || "other"))].sort((a, b) => institutionTypeLabel(a).localeCompare(institutionTypeLabel(b)));
   const selected = state.institutionViewType;
   setupInstitutionControls(all);
   const topicFilter = state.institutionPrimaryTopic;
   const filtered = all.filter((metric) => (!selected || (metric.institution.atlas_type || "other") === selected) && (!topicFilter || primaryTopic(metric) === topicFilter)).sort(institutionComparator(state.institutionSort));
-  $("institution-type-chips").innerHTML = [`<button class="chip-button institution-type-chip" type="button" data-institution-type="" aria-pressed="${selected === ""}">All types</button>`, ...types.map((type) => `<button class="chip-button institution-type-chip" type="button" data-institution-type="${escapeHtml(type)}" aria-pressed="${selected === type}">${escapeHtml(type)}</button>`)].join("");
+  $("institution-type-chips").innerHTML = [`<button class="chip-button institution-type-chip" type="button" data-institution-type="" aria-pressed="${selected === ""}">All types</button>`, ...types.map((type) => `<button class="chip-button institution-type-chip" type="button" data-institution-type="${escapeHtml(type)}" aria-pressed="${selected === type}">${escapeHtml(institutionTypeLabel(type))}</button>`)].join("");
   const sortLabel = $("institution-sort").selectedOptions[0]?.textContent || "";
   const topicNote = topicFilter ? `; primary topic: ${topics().label(topicFilter)}` : "";
   $("institution-count").textContent = `${filtered.length} of ${all.length} ${state.includeCollaborators ? "" : "California "}qualifying institution${all.length === 1 ? "" : "s"} shown${topicNote}; sorted by ${sortLabel.toLowerCase()}. Qualifying means at least one plastic-related work; the Overview's California count includes every California institution with any published work.`;

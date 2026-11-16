@@ -7,6 +7,7 @@
 // funding.md imports components/shared/topics.js (AtlasTopics) before this module runs.
 import {dataUrl, escapeHtml} from "./atlas.js";
 import {mountFundingViz} from "./funding_viz.js";
+import {institutionTypeLabel} from "./shared/labels.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -267,7 +268,7 @@ function populateGrantFilters(payload) {
   fillCounted("grants-agency", countBy((row) => row.funder_agency), "All funder agencies", (v) => v, (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   fillGrantSelect("grants-funder", grantUniqueSorted(rows.map((row) => row.funder)), "All funders");
   fillGrantSelect("grants-program", grantUniqueSorted(rows.map((row) => row.program)), "All programs");
-  fillGrantSelect("grants-institution-type", grantUniqueSorted(rows.map((row) => row.institution_type)), "All institution types");
+  fillGrantSelect("grants-institution-type", grantUniqueSorted(rows.map((row) => row.institution_type)), "All institution types", institutionTypeLabel);
   fillGrantSelect("grants-tag", grantUniqueSorted(rows.flatMap((row) => row.domain_tags)), "All topic tags", (tag) => AtlasTopics.label(tag));
   const years = rows.map((row) => row.fiscal_year).filter((year) => year !== null);
   if (years.length) {
@@ -324,7 +325,7 @@ export function grantRowHtml(row, sectorLabels = {}) {
   const tags = row.domain_tags.length ? `<div class="topic-chips">${AtlasTopics.sortTags([...row.domain_tags]).map((tag) => AtlasTopics.chip(tag)).join("")}</div>` : "";
   const detail = row.sector_detail ? ` title="${escapeHtml(row.sector_detail)}"` : "";
   return `<tr><th scope="row">${title}${people}${tags}</th>`
-    + `<td>${escapeHtml(row.org || "Recipient not reported")}<br><small>${escapeHtml(row.institution_type)}${row.org_state ? ` · ${escapeHtml(row.org_state)}` : ""}</small></td>`
+    + `<td>${escapeHtml(row.org || "Recipient not reported")}<br><small>${escapeHtml(institutionTypeLabel(row.institution_type))}${row.org_state ? ` · ${escapeHtml(row.org_state)}` : ""}</small></td>`
     + `<td><span class="grants-badge"${detail}>${escapeHtml(grantSectorLabel(row, sectorLabels))}</span></td>`
     + `<td>${escapeHtml(row.funder_agency || row.funder || "Not reported")}</td>`
     + `<td>${escapeHtml(row.program || "Not reported")}</td>`

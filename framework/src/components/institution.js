@@ -5,6 +5,7 @@ import "./shared/topics.js";
 import {loadJson, escapeHtml, classicUrl} from "./atlas.js";
 import {mountWorksTable} from "./ev_table.js";
 import {safeHttpUrl} from "./ev_table_model.js";
+import {institutionTypeLabel} from "./shared/labels.js";
 import {
   LEAD_AUTHOR_LIMIT,
   barChartLayout,
@@ -105,7 +106,7 @@ function renderSearchResults(query) {
     ? `${fmt(total)} institution${total === 1 ? "" : "s"} found${total > shown.length ? `; showing the first ${shown.length}. Type more words to narrow the list.` : "."}`
     : "No institution matches this search.";
   list.innerHTML = shown.map((institution) => {
-    const details = [institution.atlas_type, institution.city].filter(Boolean).join(", ");
+    const details = [institutionTypeLabel(institution.atlas_type), institution.city].filter(Boolean).join(", ");
     return `<li><a href="${escapeHtml(appUrl(`institution#inst=${encodeURIComponent(institution.inst_id)}`))}">${escapeHtml(institution.name || institution.inst_id)}</a>`
       + (details ? ` <span class="detail-meta">${escapeHtml(details)}</span>` : "")
       + `</li>`;
@@ -138,7 +139,7 @@ function headerHtml(institution) {
   ].join("");
   return `<p class="inst-back"><a href="${escapeHtml(appUrl("institutions"))}">← All institutions</a></p>`
     + `<h1>${escapeHtml(name)}</h1>`
-    + `<p class="inst-meta"><span class="inst-chip">${escapeHtml(institution.atlas_type || "other")}</span>${scope}`
+    + `<p class="inst-meta"><span class="inst-chip">${escapeHtml(institutionTypeLabel(institution.atlas_type || "other"))}</span>${scope}`
     + (location ? `<span class="detail-meta">${escapeHtml(location)}</span>` : "")
     + `</p>`
     + (links ? `<p class="inst-links">${links}</p>` : "");

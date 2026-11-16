@@ -196,3 +196,7 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-15 | VD-8 verification draft | Codex Luna archivist | `docs/VD_8_VERIFICATION.md` | Accepted for local evidence; live gate remained pending | 1 session |
 | 2026-11-16 | VD-8 live acceptance | Codex Luna tester | Eight route/viewports and four Lighthouse audits | Accepted; all route gates passed, current Resource counts reconciled | 1 session |
 | 2026-11-16 | VD-8 final verification record | Codex Luna archivist | `docs/VD_8_VERIFICATION.md` only | Accepted; deployment and live evidence recorded | 1 session |
+| 2026-11-16 | VD-10 implementation | Claude Haiku developer | `shared/labels.js`, six component call sites, labels tests | Accepted after lead review; one resume after the 30-turn limit | 1 session |
+| 2026-11-16 | VD-13 implementation | Claude Haiku developer | `export_site.py`, `network.py`, `build_network.py`, Overview cards, SITE_DATA, tests | Accepted; lead relaxed `check_s3_5.py` to the index-count subset | 1 session |
+| 2026-11-16 | VD-9 implementation | Claude Haiku developer | `shared/palette.js`, chart colour constants, runtime tests | Accepted; lead added `countFill` so non-zero heatmap cells start at seq-200 | 1 session |
+| 2026-11-16 | VD-9/10/13 local verification | Claude Haiku developer (as tester) | Build, assembled preview, axe + Lighthouse on 8 routes | Partial (turn limit after the audit); lead ran slug, card, colour and ux_tasks checks and wrote the docs | 1 session |

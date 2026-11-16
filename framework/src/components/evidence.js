@@ -14,6 +14,7 @@ import {labelSummary} from "./ev_heatmap_model.js";
 import {mountWorksTable, renderRecentCallout} from "./ev_table.js";
 import {normaliseRows} from "./ev_table_model.js";
 import {emptyState, formatHash, parseHash, sanitizeState, selectionFor} from "./evidence_model.js";
+import {sectorLabel, workTypeLabel} from "./shared/labels.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -22,8 +23,8 @@ const $ = (id) => document.getElementById(id);
 const FACET_UI = [
   {key: "topic", label: "Topic", name: (label) => window.AtlasTopics.label(label)},
   {key: "ca_led", label: "Led from California", names: {yes: "Yes", no: "No"}},
-  {key: "sector", label: "Sector"},
-  {key: "type", label: "Work type"},
+  {key: "sector", label: "Sector", name: sectorLabel},
+  {key: "type", label: "Work type", name: workTypeLabel},
   {key: "oa", label: "Open access", names: {open: "Open access", closed: "Closed access"}}
 ];
 

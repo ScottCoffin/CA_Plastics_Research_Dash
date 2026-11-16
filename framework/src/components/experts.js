@@ -5,6 +5,7 @@ import "./shared/vendor/minisearch-7.2.0.js";
 import "./shared/topics.js";
 import "./shared/expert_page.js";
 import {icon} from "./shared/icons.js";
+import {institutionTypeLabel} from "./shared/labels.js";
 import {dataUrl, escapeHtml} from "./atlas.js";
 import {
   EMPTY_MATCH_TEXT,
@@ -84,7 +85,7 @@ function populateFilters() {
     institutions.set(institution.inst_id, institution);
   });
   const topics = window.AtlasTopics;
-  $("institution-type-filter").innerHTML = '<option value="">All institution types</option>' + [...types].sort().map((type) => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`).join("");
+  $("institution-type-filter").innerHTML = '<option value="">All institution types</option>' + [...types].sort((a, b) => institutionTypeLabel(a).localeCompare(institutionTypeLabel(b))).map((type) => `<option value="${escapeHtml(type)}">${escapeHtml(institutionTypeLabel(type))}</option>`).join("");
   $("institution-filter").innerHTML = '<option value="">All institutions</option>' + [...institutions.values()].sort((a, b) => String(a.name).localeCompare(String(b.name))).map((institution) => `<option value="${escapeHtml(institution.inst_id)}">${escapeHtml(institution.name)}</option>`).join("");
   const sortedTags = topics.sortTags([...tags]);
   const tagOption = (tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(topics.label(tag))}</option>`;
@@ -143,6 +144,7 @@ const FILTER_LABELS = {
 function filterValue(key) {
   const f = state.filters;
   if (key === "tag") return window.AtlasTopics.label(f.tag);
+  if (key === "institutionType") return institutionTypeLabel(f.institutionType);
   if (key === "institution") return state.lookups?.institutionsById.get(f.institution)?.name || f.institution;
   if (key === "now") return ({ca: "In California now", outside: "Outside California now", unknown: "Unknown"})[f.now] || f.now;
   if (key === "early") return "Early career only";

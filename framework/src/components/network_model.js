@@ -1,4 +1,5 @@
 // Pure helpers for the collaboration network page. No DOM access.
+import {sectorLabel as sectorDisplayLabel} from "./shared/labels.js";
 // Edges carry yearly co-authored-work counts (years: {"2019": 1, ...}); the year range and the
 // minimum-works filter act on those counts. Nodes stay visible when they match the node filters
 // (topic, sector, institution, now in California); matching nodes with no shown link are dimmed.
@@ -17,22 +18,8 @@ export const COMMUNITY_COLOURS = [
 ];
 export const OTHER_COLOUR = "#b9c3c8";
 
-const SECTOR_LABELS = {
-  UC: "University of California",
-  CSU: "California State University",
-  other: "Other institution",
-  private: "Private",
-  "nonprofit/NGO": "Nonprofit or NGO",
-  JPA: "Joint powers authority",
-  federal: "Federal agency",
-  "state-agency": "State agency",
-  company: "Company",
-  utility: "Utility",
-  "local-agency": "Local agency"
-};
-
 export function sectorLabel(value) {
-  return Object.prototype.hasOwnProperty.call(SECTOR_LABELS, value) ? SECTOR_LABELS[value] : String(value);
+  return sectorDisplayLabel(value);
 }
 
 function safeDecode(text) {
