@@ -59,5 +59,9 @@ title: Evidence map
 
 ```js
 import {mountEvidence} from "./components/evidence.js";
-mountEvidence();
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    mountEvidence().catch((error) => console.error("Failed to initialize the Evidence map.", error));
+  });
+});
 ```

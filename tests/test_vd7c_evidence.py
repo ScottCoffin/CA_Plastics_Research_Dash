@@ -39,6 +39,23 @@ def test_page_header_lead_is_two_sentences() -> None:
     assert len(sentences) == 2
 
 
+def test_evidence_runtime_waits_for_initial_paint_and_reports_failure() -> None:
+    page = PAGE.read_text(encoding="utf-8")
+    bootstrap = re.search(r"```js\s*(.*?)\s*```", page, flags=re.DOTALL)
+    assert bootstrap is not None
+    source = bootstrap.group(1)
+
+    assert 'import {mountEvidence} from "./components/evidence.js";' in source
+    assert re.search(
+        r"requestAnimationFrame\(\(\) =>\s*\{\s*"
+        r"requestAnimationFrame\(\(\) =>\s*\{\s*"
+        r"mountEvidence\(\)\.catch\(\(error\) => console\.error\("
+        r'"Failed to initialize the Evidence map\."',
+        source,
+    )
+    assert not re.search(r"(?m)^mountEvidence\(\);$", source)
+
+
 def test_page_styles_load_before_markup_and_callouts_follow_filters() -> None:
     page = PAGE.read_text(encoding="utf-8")
     expected_stylesheets = (
