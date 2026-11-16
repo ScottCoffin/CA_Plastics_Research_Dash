@@ -155,3 +155,4 @@
 | 2026-11-16 | VD-10 | Display labels for vocabulary slugs: shared/labels.js on Experts, Institutions, Institution, Funding, Evidence and Network; no F10 slug on screen, URL values unchanged; clean-worktree pytest 1,706 passed (+28 rerun outside the repo temp root) | this commit |
 | 2026-11-16 | VD-13 | Overview entry-card counts in build_metadata.json (awards, monitoring samples/sources, network experts/links, plastic-related works); cards match their pages; clean-worktree pytest 1,719 passed | this commit |
 | 2026-11-16 | VD-9 | Chart and map colour system: shared/palette.js (Okabe-Ito 7/6 + Other, teal ramp, chrome), monitoring/funding/network/heatmap sets replaced; full gate 1,728 passed/13 skipped; found pre-existing /network CLS 0.421 (VD-14) | this commit |
+| 2026-11-16 | VD-14 | /network CLS fix: static page header and callout instead of a runtime display() cell; local CLS 0.42 -> 0 | this commit |
