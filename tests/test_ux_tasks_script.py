@@ -3,12 +3,60 @@
 from __future__ import annotations
 
 import importlib
+import inspect
+import re
 import sys
 from pathlib import Path
 
 import pytest
 
 from scripts import ux_tasks
+
+
+class _FakeDisclosure:
+    def __init__(self, open_: bool) -> None:
+        self.open = open_
+        self.clicks = 0
+
+    def get_attribute(self, name: str) -> str | None:
+        assert name == "open"
+        return "" if self.open else None
+
+    def click(self) -> None:
+        self.clicks += 1
+        self.open = not self.open
+
+
+class _FakeSummary:
+    def __init__(self, disclosure: _FakeDisclosure) -> None:
+        self.disclosure = disclosure
+
+    def locator(self, selector: str) -> _FakeDisclosure:
+        assert selector == "xpath=.."
+        return self.disclosure
+
+    def click(self) -> None:
+        self.disclosure.click()
+
+
+class _FakeDisclosurePage:
+    def __init__(self, summary: _FakeSummary) -> None:
+        self.summary = summary
+
+    def get_by_text(self, pattern: re.Pattern[str]) -> _FakeSummary:
+        assert pattern.fullmatch("More filters (7)")
+        return self.summary
+
+
+class _FakeDisclosureRun:
+    def __init__(self, open_: bool) -> None:
+        self.disclosure = _FakeDisclosure(open_)
+        self.page = _FakeDisclosurePage(_FakeSummary(self.disclosure))
+        self.clicked: list[str] = []
+
+    def click(self, locator: _FakeSummary, label: str) -> None:
+        self.clicked.append(label)
+        locator.click()
 
 
 def test_module_imports_without_playwright(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -24,6 +72,31 @@ def test_six_tasks_are_registered_in_order() -> None:
     assert len(set(ids)) == 6
     assert [task_id.split("_", 1)[0] for task_id in ids] == ["1", "2", "3", "4", "5", "6"]
     assert all(callable(fn) for _, fn in ux_tasks.TASKS)
+
+
+@pytest.mark.parametrize(("initially_open", "expected_clicks"), [(False, 1), (True, 0)])
+def test_open_expert_more_filters_only_toggles_when_collapsed(
+    initially_open: bool, expected_clicks: int
+) -> None:
+    run = _FakeDisclosureRun(initially_open)
+
+    ux_tasks.open_expert_more_filters(run)  # type: ignore[arg-type]
+
+    assert run.disclosure.open is True
+    assert run.disclosure.clicks == expected_clicks
+    assert run.clicked == (["More filters (7)"] if expected_clicks else [])
+
+
+def test_expert_visitor_tasks_open_secondary_filters_before_using_them() -> None:
+    profile = inspect.getsource(ux_tasks.task_overview_profile)
+    export = inspect.getsource(ux_tasks.task_experts_export)
+
+    assert profile.index("open_expert_more_filters(run)") < profile.index(
+        'run.select(run.page.get_by_label("CA basis")'
+    )
+    assert export.index("open_expert_more_filters(run)") < export.index(
+        'run.fill(run.page.get_by_label("From year")'
+    )
 
 
 def test_argparse_defaults() -> None:

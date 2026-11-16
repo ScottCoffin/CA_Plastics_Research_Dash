@@ -68,6 +68,14 @@ class Run:
             raise AssertionError(message)
 
 
+def open_expert_more_filters(run: Run) -> None:
+    """Open secondary Experts controls when they are currently collapsed."""
+    summary = run.page.get_by_text(re.compile(r"^More filters\s*\(7\)$"))
+    disclosure = summary.locator("xpath=..")
+    if disclosure.get_attribute("open") is None:
+        run.click(summary, "More filters (7)")
+
+
 def task_overview_profile(run: Run) -> None:
     """1. Overview -> CA-led author -> profile."""
     run.goto("")
@@ -82,6 +90,7 @@ def task_overview_profile(run: Run) -> None:
         run.page.get_by_role("link", name="Find a California researcher"),
         "Find a California researcher",
     )
+    open_expert_more_filters(run)
     run.select(run.page.get_by_label("CA basis"), "CA basis", "CA-led")
     first = run.page.get_by_role("list", name="Experts").get_by_role("button").first
     run.click(first, "first expert name")
@@ -99,6 +108,7 @@ def task_experts_export(run: Run) -> None:
     run.goto("experts")
     tag = run.page.get_by_label("Domain or matrix tag")
     run.select(tag, "Domain or matrix tag", tag.locator("option").nth(1).inner_text())
+    open_expert_more_filters(run)
     run.fill(run.page.get_by_label("From year"), "From year", "2015")
     run.fill(run.page.get_by_label("To year"), "To year", "2024")
     run.page.wait_for_timeout(300)
