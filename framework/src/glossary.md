@@ -2,11 +2,13 @@
 title: Glossary
 ---
 
-# Glossary
+<header class="atlas-page-head">
+<p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-book"></use></svg> Reference</p>
+<h1>Glossary</h1>
+<p class="atlas-page-head__lead">Plain-language meanings of the terms used on the Experts, Institutions and Monitoring pages. Each entry names where its wording comes from.</p>
+</header>
 
 <link rel="stylesheet" href="./components/glossary.css">
-
-<p class="panel-intro">Plain-language meanings of the terms used on the Experts, Institutions and Monitoring pages. Each entry names where its wording comes from.</p>
 
 <dl class="glossary">
 
@@ -108,3 +110,8 @@ title: Glossary
 </dd>
 
 </dl>
+
+```js
+import {injectIconSprite} from "./components/shared/icons.js";
+injectIconSprite();
+```

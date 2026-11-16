@@ -2,14 +2,18 @@
 title: About
 ---
 
-# About this snapshot
+<header class="atlas-page-head">
+<p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-info"></use></svg> Reference</p>
+<h1>About this snapshot</h1>
+<p class="atlas-page-head__lead">The Atlas is a static, client-side site. It reads generated JSON and does not query OpenAlex from your browser.</p>
+</header>
 
 <link rel="stylesheet" href="./components/about.css">
 
-The Atlas is a static, client-side site. It reads generated JSON and does not query OpenAlex from your browser.
-
 ```js
 import {loadJson, aboutViewModel, releaseDoi, classicUrl} from "./components/atlas.js";
+import {injectIconSprite} from "./components/shared/icons.js";
+injectIconSprite();
 const [metadata, release] = await Promise.all([
   loadJson("build_metadata.json"),
   loadJson("release.json", {optional: true})

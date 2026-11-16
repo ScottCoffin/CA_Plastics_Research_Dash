@@ -40,7 +40,7 @@ def _links(markup: str) -> set[str]:
 def test_glossary_has_anchor_for_every_term() -> None:
     markup = GLOSSARY.read_text(encoding="utf-8")
     assert markup.startswith("---\ntitle: Glossary\n---")
-    assert len(re.findall(r"^# ", markup, flags=re.MULTILINE)) == 1
+    assert len(re.findall(r"^# |<h1>", markup, flags=re.MULTILINE)) == 1
     ids = _anchor_ids(markup)
     missing = [term for term in GLOSSARY_IDS if term not in ids]
     assert missing == []
