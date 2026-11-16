@@ -1,9 +1,10 @@
 // Funding visualizations for the Framework Funding page, ported from the classic grants page
-// (site/grants.html). mountFundingViz(container) builds the controls once and returns {update(rows)};
+// (site/grants.html). mountFundingViz(container) builds the chart cards once and returns {update(rows)};
 // update() redraws every view from the awards that match the page's filter form. The views follow the
 // filter form and do not set filters themselves. The Sankey alone has a local drill-down: clicking a
 // block (or pressing Enter on it) narrows only the Sankey and its table to the flows through that block.
-// Each chart has a table alternative. The pure markup builders are exported so Node tests can check them.
+// Every chart is an Atlas chart card with a Chart/Table control; the table pane is that chart's table
+// alternative. The pure markup builders are exported so Node tests can check them.
 import {escapeHtml} from "./atlas.js";
 import {CHROME} from "./shared/palette.js";
 import {
@@ -26,52 +27,83 @@ export const fmtUsd = (n) => {
 const fmtUsdFull = (n) => (n == null ? "" : `$${Math.round(n).toLocaleString("en-US")}`);
 const AMOUNT_CAVEAT = "source bases differ";
 
-// Static controls and section frames. Each [data-fv] host is filled by update().
-const SKELETON = `
-<div class="fv-section" data-fv-section="tiles">
-  <h3 id="fv-tiles-h">Summary of the filtered awards</h3>
-  <div data-fv="tiles"></div>
-</div>
-<section class="fv-section" aria-labelledby="fv-sankey-h">
-  <h3 id="fv-sankey-h">Funder, sector, organisation and topic</h3>
-  <p class="fv-intro">Each ribbon is a group of awards. Hover over a ribbon or a block to see its totals. Click a block (or press Enter on it) to show only the flows that pass through it; click it again to show all flows. The filters above change this view.</p>
-  <p class="fv-caveat"><strong>Read amounts with care.</strong> Amounts follow each source's own basis, are not comparable or additive across sources, and some awards have no amount. Ribbon width therefore defaults to the number of awards.</p>
-  <div class="fv-controls">
-    <fieldset class="fv-fieldset"><legend>Ribbon width</legend>
-      <label><input type="radio" name="fv-width" value="awards" checked> Number of awards</label>
-      <label><input type="radio" name="fv-width" value="amount"> Reported amount (USD, not comparable across sources)</label>
-    </fieldset>
-    <label><input type="checkbox" class="fv-orgs" checked> Show recipient organisations</label>
-    <label class="fv-topn">Organisations per sector <input type="range" class="fv-topn-input" min="3" max="15" value="6"> <output class="fv-topn-out">6</output></label>
-  </div>
-  <p class="fv-note" data-fv="amount-note" hidden></p>
-  <div class="fv-focus-bar" data-fv="sankey-focus"><p class="fv-focus-text" role="status" aria-live="polite"></p><button type="button" class="fv-focus-clear" hidden>Show all flows</button></div>
-  <div class="fv-sankey-wrap" data-fv="sankey" role="region" aria-label="Sankey diagram, scrollable" tabindex="0"></div>
-  <p class="fv-note">Awards with several topics split their weight equally across those topics (an award with two topics adds one half to each). Awards with no topic go to "Untagged". Within each sector the organisation column shows the largest recipients, and the rest are grouped as "Other" with the sector name.</p>
-  <details class="fv-details"><summary>View the Sankey as a table</summary><div class="fv-scroll" data-fv="sankey-table" role="region" aria-label="Sankey values as a table, scrollable" tabindex="0"></div></details>
-</section>
-<section class="fv-section" aria-labelledby="fv-year-h">
-  <h3 id="fv-year-h">Awards per fiscal year, by funder agency</h3>
-  <p class="fv-intro">Count of awards in each fiscal year, stacked by funder agency.</p>
-  <ul class="fv-legend" data-fv="year-legend" aria-label="Funder agencies"></ul>
-  <div class="fv-scroll" data-fv="year-chart"></div>
-  <details class="fv-details"><summary>View as a table</summary><div class="fv-scroll" data-fv="year-table" role="region" aria-label="Awards per fiscal year as a table, scrollable" tabindex="0"></div></details>
-</section>
-<section class="fv-section" aria-labelledby="fv-org-h">
-  <h3 id="fv-org-h">Top recipient organisations</h3>
-  <p class="fv-intro">Number of awards for the twelve organisations with the most awards in the filtered list.</p>
-  <div data-fv="orgs"></div>
-</section>
-<section class="fv-section" aria-labelledby="fv-heat-h">
-  <h3 id="fv-heat-h">Topic by fiscal year</h3>
-  <p class="fv-intro">Awards per cell. An award with several topics counts once in each of its topics.</p>
-  <div data-fv="heat"></div>
-</section>
-<section class="fv-section" aria-labelledby="fv-matrix-h">
-  <h3 id="fv-matrix-h">Recipient sector by topic</h3>
-  <p class="fv-intro">Awards per cell. An award with several topics counts once in each of its topics.</p>
-  <div data-fv="matrix"></div>
-</section>`;
+// Atlas icon as a sprite reference. Pure markup, so the Node tests can build the static frame.
+const iconHtml = (name) => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-${name}"></use></svg>`;
+
+// Static frames. A loading tile reserves the stat-tile height before the awards arrive.
+const LOADING_TILE = '<div class="atlas-kpi atlas-kpi--loading" aria-hidden="true"><dt class="atlas-kpi__label">&nbsp;</dt><dd class="atlas-kpi__value">&nbsp;</dd></div>';
+
+// One chart card: title, source line, the Chart/Table control, then a Chart pane and a Table pane.
+// setView() shows one pane; the table pane starts hidden. Each [data-fv] host is filled by update().
+function chartCard({id, title, source, intro, extra = "", chart, table}) {
+  return `<section class="atlas-chart" aria-labelledby="${id}">`
+    + `<div class="atlas-chart__head"><div><h2 id="${id}">${title}</h2><p class="atlas-chart__source">${source}</p></div>`
+    + `<div class="atlas-segmented" role="group" aria-label="Chart or table view: ${title}">`
+    + '<button type="button" data-view="chart" aria-pressed="true">Chart</button>'
+    + '<button type="button" data-view="table" aria-pressed="false">Table</button></div></div>'
+    + `<div class="atlas-chart__body"><p class="fv-intro">${intro}</p>${extra}`
+    + `<div data-fv-pane="chart">${chart}</div><div data-fv-pane="table" hidden>${table}</div></div>`
+    + "</section>";
+}
+
+const VIZ_SKELETON = '<section class="fv-tiles" data-fv-section="tiles" aria-labelledby="fv-tiles-h">'
+  + '<h2 id="fv-tiles-h" class="fv-sr-only">Summary of the filtered awards</h2>'
+  + `<dl class="atlas-kpis" data-fv="tiles">${LOADING_TILE.repeat(5)}</dl></section>`
+  + chartCard({
+    id: "fv-sankey-h",
+    title: "Funder, sector, organisation and topic",
+    source: "Source: the awards in the filtered list.",
+    intro: "Each ribbon is a group of awards. Hover over a ribbon or a block to see its totals. Click a block (or press Enter on it) to show only the flows that pass through it; click it again to show all flows. The filters above change this view.",
+    extra: `<div class="atlas-callout atlas-callout--caution">${iconHtml("alert")}<p><strong>Read amounts with care.</strong> Amounts follow each source's own basis, are not comparable or additive across sources, and some awards have no amount. Ribbon width therefore defaults to the number of awards.</p></div>`
+      + '<div class="fv-controls">'
+      + '<fieldset class="fv-fieldset"><legend>Ribbon width</legend>'
+      + '<label><input type="radio" name="fv-width" value="awards" checked> Number of awards</label>'
+      + '<label><input type="radio" name="fv-width" value="amount"> Reported amount (USD, not comparable across sources)</label>'
+      + "</fieldset>"
+      + '<label><input type="checkbox" class="fv-orgs" checked> Show recipient organisations</label>'
+      + '<label class="fv-topn">Organisations per sector <input type="range" class="fv-topn-input" min="3" max="15" value="6"> <output class="fv-topn-out">6</output></label>'
+      + "</div>",
+    chart: '<p class="fv-note" data-fv="amount-note" hidden></p>'
+      + '<div class="fv-focus-bar" data-fv="sankey-focus"><p class="fv-focus-text" role="status" aria-live="polite"></p><button type="button" class="fv-focus-clear" hidden>Show all flows</button></div>'
+      + '<div class="fv-sankey-wrap" data-fv="sankey" role="region" aria-label="Sankey diagram, scrollable" tabindex="0"></div>'
+      + '<p class="fv-note">Awards with several topics split their weight equally across those topics (an award with two topics adds one half to each). Awards with no topic go to "Untagged". Within each sector the organisation column shows the largest recipients, and the rest are grouped as "Other" with the sector name.</p>',
+    table: '<div class="fv-scroll" data-fv="sankey-table" role="region" aria-label="Sankey values as a table, scrollable" tabindex="0"></div>'
+  })
+  + chartCard({
+    id: "fv-year-h",
+    title: "Awards per fiscal year, by funder agency",
+    source: "Source: the awards in the filtered list, by fiscal year.",
+    intro: "Count of awards in each fiscal year, stacked by funder agency.",
+    chart: '<ul class="fv-legend" data-fv="year-legend" aria-label="Funder agencies"></ul><div class="fv-scroll" data-fv="year-chart"></div>',
+    table: '<div class="fv-scroll" data-fv="year-table" role="region" aria-label="Awards per fiscal year as a table, scrollable" tabindex="0"></div>'
+  })
+  + chartCard({
+    id: "fv-org-h",
+    title: "Top recipient organisations",
+    source: "Source: the awards in the filtered list, by recipient organisation.",
+    intro: "Number of awards for the twelve organisations with the most awards in the filtered list.",
+    chart: '<div data-fv="orgs"></div>',
+    table: '<div data-fv="orgs-table"></div>'
+  })
+  + chartCard({
+    id: "fv-heat-h",
+    title: "Topic by fiscal year",
+    source: "Source: the awards in the filtered list, by topic and fiscal year.",
+    intro: "Awards per cell. An award with several topics counts once in each of its topics.",
+    chart: '<div data-fv="heat"></div>',
+    table: '<div data-fv="heat-table"></div>'
+  })
+  + chartCard({
+    id: "fv-matrix-h",
+    title: "Recipient sector by topic",
+    source: "Source: the awards in the filtered list, by recipient sector and topic.",
+    intro: "Awards per cell. An award with several topics counts once in each of its topics.",
+    chart: '<div data-fv="matrix"></div>',
+    table: '<div data-fv="matrix-table"></div>'
+  });
+
+// Exposed for the Node and pytest contract checks on the static frame.
+export {VIZ_SKELETON};
 
 function region(html, label) {
   return `<div class="fv-scroll" role="region" aria-label="${esc(label)}" tabindex="0">${html}</div>`;
@@ -83,11 +115,15 @@ function emptyText(text) {
 
 // ---- Markup builders (pure) -------------------------------------------------------------------
 
+// Stat tiles: the <dl class="atlas-kpis"> host is already in the page; these are its children.
 export function tilesHtml(m) {
-  const tile = (title, value, note) => `<div class="fv-metric"><dt>${title}</dt><dd>${value}${note ? `<small>${note}</small>` : ""}</dd></div>`;
-  return `<dl class="fv-metrics">${tile("Awards", fmtInt(m.awards))}${tile("Funder agencies", fmtInt(m.funders))}`
-    + `${tile("Recipient organisations", fmtInt(m.orgs))}${tile("Sectors", fmtInt(m.sectors))}`
-    + `${tile("California-led", m.awards ? `${Math.round(m.caShare * 100)}%` : "n/a", "share of awards led from California")}</dl>`;
+  const tile = (icon, title, value, note) => `<div class="atlas-kpi"><dt class="atlas-kpi__label">${iconHtml(icon)}${title}</dt>`
+    + `<dd class="atlas-kpi__value">${value}</dd>${note ? `<dd class="atlas-kpi__note">${note}</dd>` : ""}</div>`;
+  return tile("coins", "Awards", fmtInt(m.awards))
+    + tile("scale", "Funder agencies", fmtInt(m.funders))
+    + tile("building", "Recipient organisations", fmtInt(m.orgs))
+    + tile("grid", "Sectors", fmtInt(m.sectors))
+    + tile("home", "California-led", m.awards ? `${Math.round(m.caShare * 100)}%` : "n/a", "share of awards led from California");
 }
 
 function kindLabel(n) {
@@ -226,36 +262,49 @@ export function orgListHtml(list, labels) {
   if (!list.length) return emptyText("No awards match the current filters.");
   const max = list[0].n;
   return `<ol class="fv-orgs-list">${list.map((o) => `<li><span class="fv-org-name">${esc(o.name)}</span>`
-    + `<span class="fv-badge">${esc(labels[o.sector] || o.sector)}</span>`
+    + `<span class="atlas-badge atlas-badge--muted">${esc(labels[o.sector] || o.sector)}</span>`
     + `<span class="fv-bar" aria-hidden="true"><span style="width:${((o.n / max) * 100).toFixed(1)}%"></span></span>`
     + `<span class="fv-count">${o.n} ${o.n === 1 ? "award" : "awards"}</span></li>`).join("")}</ol>`;
+}
+
+// Table alternative to the organisation bars: one row per organisation, in the same order.
+export function orgTableHtml(list, labels) {
+  if (!list.length) return emptyText("No awards match the current filters.");
+  const body = list.map((o) => `<tr><th scope="row">${esc(o.name)}</th><td>${esc(labels[o.sector] || o.sector)}</td><td class="num">${o.n}</td></tr>`).join("");
+  return region(`<table><caption class="fv-sr-only">Top recipient organisations by number of awards</caption>`
+    + `<thead><tr><th scope="col">Recipient organisation</th><th scope="col">Sector</th><th scope="col" class="num">Awards</th></tr></thead><tbody>${body}</tbody></table>`,
+  "Top recipient organisations as a table, scrollable");
 }
 
 function dotHtml(key, T) {
   return `<span class="fv-dot" aria-hidden="true" style="background:${topicFill(key, T, true)}"></span>`;
 }
 
-export function heatTableHtml(h, T) {
+// A heatmap cell is coloured by its count. The plain variant (the table pane) keeps the same numbers
+// without the fill, so the table reads the same with or without colour.
+function heatCell(n, max, plain) {
+  if (plain) return `<td class="num">${n}</td>`;
+  const fill = heatFill(n, max);
+  return `<td class="fv-cell" style="background:${fill};color:${inkFor(fill)}">${n}</td>`;
+}
+
+export function heatTableHtml(h, T, {plain = false} = {}) {
   if (!h.rows.length) return emptyText("No dated awards match the current filters.");
   const colName = (c) => (c === "pre" ? `Before ${HEAT_START}` : String(c));
   const head = h.cols.map((c) => `<th scope="col">${esc(colName(c))}</th>`).join("");
-  const body = h.rows.map((r) => `<tr><th scope="row">${dotHtml(r.key, T)}${esc(r.label)}</th>${r.counts.map((n) => {
-    const fill = heatFill(n, h.max);
-    return `<td class="fv-cell" style="background:${fill};color:${inkFor(fill)}">${n}</td>`;
-  }).join("")}</tr>`).join("");
+  const body = h.rows.map((r) => `<tr><th scope="row">${dotHtml(r.key, T)}${esc(r.label)}</th>${r.counts.map((n) => heatCell(n, h.max, plain)).join("")}</tr>`).join("");
   return region(`<table class="fv-matrix"><caption class="fv-sr-only">Awards per topic and fiscal year</caption>`
-    + `<thead><tr><th scope="col">Topic</th>${head}</tr></thead><tbody>${body}</tbody></table>`, "Topic by fiscal year table, scrollable");
+    + `<thead><tr><th scope="col">Topic</th>${head}</tr></thead><tbody>${body}</tbody></table>`,
+  plain ? "Topic by fiscal year table, scrollable" : "Topic by fiscal year heatmap, scrollable");
 }
 
-export function matrixTableHtml(m, labels, T) {
+export function matrixTableHtml(m, labels, T, {plain = false} = {}) {
   if (!m.sectors.length) return emptyText("No awards match the current filters.");
   const head = m.topics.map((t) => `<th scope="col">${dotHtml(t, T)}${esc(t === UNTAGGED ? "Untagged" : T ? T.label(t) : t)}</th>`).join("");
-  const body = m.sectors.map((s, i) => `<tr><th scope="row">${esc(labels[s] || s)}</th>${m.grid[i].map((n) => {
-    const fill = heatFill(n, m.max);
-    return `<td class="fv-cell" style="background:${fill};color:${inkFor(fill)}">${n}</td>`;
-  }).join("")}</tr>`).join("");
+  const body = m.sectors.map((s, i) => `<tr><th scope="row">${esc(labels[s] || s)}</th>${m.grid[i].map((n) => heatCell(n, m.max, plain)).join("")}</tr>`).join("");
   return region(`<table class="fv-matrix"><caption class="fv-sr-only">Awards per recipient sector and topic</caption>`
-    + `<thead><tr><th scope="col">Recipient sector</th>${head}</tr></thead><tbody>${body}</tbody></table>`, "Recipient sector by topic table, scrollable");
+    + `<thead><tr><th scope="col">Recipient sector</th>${head}</tr></thead><tbody>${body}</tbody></table>`,
+  plain ? "Recipient sector by topic table, scrollable" : "Recipient sector by topic heatmap, scrollable");
 }
 
 // ---- Mount ------------------------------------------------------------------------------------
@@ -265,7 +314,7 @@ export function mountFundingViz(container) {
   if (!container) throw new Error("mountFundingViz needs a container element");
   const T = globalThis.AtlasTopics || null;
   container.classList.add("fv-root");
-  container.innerHTML = SKELETON;
+  container.innerHTML = VIZ_SKELETON;
   const host = (name) => container.querySelector(`[data-fv="${name}"]`);
   const state = {vrows: [], labels: DEFAULT_SECTOR_LABELS, mode: "awards", orgs: true, topN: 6, width: 0, focus: null, graph: null};
 
@@ -329,10 +378,28 @@ export function mountFundingViz(container) {
     host("tiles").innerHTML = tilesHtml(tileMetrics(state.vrows));
     renderSankey();
     renderYears();
-    host("orgs").innerHTML = orgListHtml(topOrgs(state.vrows, 12), state.labels);
-    host("heat").innerHTML = heatTableHtml(buildHeat(state.vrows, T), T);
-    host("matrix").innerHTML = matrixTableHtml(buildSectorTopic(state.vrows, T), state.labels, T);
+    const orgs = topOrgs(state.vrows, 12);
+    host("orgs").innerHTML = orgListHtml(orgs, state.labels);
+    host("orgs-table").innerHTML = orgTableHtml(orgs, state.labels);
+    const heat = buildHeat(state.vrows, T);
+    host("heat").innerHTML = heatTableHtml(heat, T);
+    host("heat-table").innerHTML = heatTableHtml(heat, T, {plain: true});
+    const matrix = buildSectorTopic(state.vrows, T);
+    host("matrix").innerHTML = matrixTableHtml(matrix, state.labels, T);
+    host("matrix-table").innerHTML = matrixTableHtml(matrix, state.labels, T, {plain: true});
     state.width = container.clientWidth;
+  }
+
+  // Chart/Table control: the card shows one pane. A hidden pane has no width to draw into, so the views
+  // are redrawn when the chart pane comes back.
+  function setView(button) {
+    const card = button.closest(".atlas-chart");
+    const view = button.dataset.view;
+    card.querySelectorAll("button[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+    card.querySelectorAll("[data-fv-pane]").forEach((pane) => {
+      pane.hidden = pane.dataset.fvPane !== view;
+    });
+    if (view === "chart" && state.vrows.length) renderAll();
   }
 
   container.addEventListener("change", (event) => {
@@ -375,6 +442,11 @@ export function mountFundingViz(container) {
   }
   container.addEventListener("click", (event) => {
     const target = event.target;
+    const view = target.closest("button[data-view]");
+    if (view) {
+      setView(view);
+      return;
+    }
     if (target.closest(".fv-focus-clear")) {
       clearFocus();
       return;

@@ -60,11 +60,11 @@ def test_views_render_in_the_requested_order_before_the_table() -> None:
     viz = _read(VIZ_JS)
     order = [
         'data-fv-section="tiles"',
-        'aria-labelledby="fv-sankey-h"',
-        'aria-labelledby="fv-year-h"',
-        'aria-labelledby="fv-org-h"',
-        'aria-labelledby="fv-heat-h"',
-        'aria-labelledby="fv-matrix-h"',
+        'id: "fv-sankey-h"',
+        'id: "fv-year-h"',
+        'id: "fv-org-h"',
+        'id: "fv-heat-h"',
+        'id: "fv-matrix-h"',
     ]
     positions = [viz.index(token) for token in order]
     assert positions == sorted(positions)
@@ -76,8 +76,10 @@ def test_views_render_in_the_requested_order_before_the_table() -> None:
 
 def test_views_keep_table_alternatives_and_accessible_names() -> None:
     viz = _read(VIZ_JS)
-    assert "View the Sankey as a table" in viz
-    assert viz.count("View as a table") == 1
+    # VD-7b: each chart card carries a Chart/Table control, which replaces the separate table links.
+    assert "View the Sankey as a table" not in viz
+    assert "View as a table" not in viz
+    assert 'data-view="table"' in viz
     assert 'role="group" aria-labelledby="fv-sankey-title"' in viz
     assert 'role="img" aria-labelledby="fv-year-title"' in viz
     assert 'aria-label="Sankey diagram, scrollable"' in viz

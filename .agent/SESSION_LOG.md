@@ -157,3 +157,4 @@
 | 2026-11-16 | VD-9 | Chart and map colour system: shared/palette.js (Okabe-Ito 7/6 + Other, teal ramp, chrome), monitoring/funding/network/heatmap sets replaced; full gate 1,728 passed/13 skipped; found pre-existing /network CLS 0.421 (VD-14) | this commit |
 | 2026-11-16 | VD-14 | /network CLS fix: static page header and callout instead of a runtime display() cell; local CLS 0.42 -> 0 | this commit |
 | 2026-11-16 | VD-6c | Institutions/Institution visual adoption: headers, callouts, segmented toggle, tier cards, icon map controls, reserved chip row; CSS on tokens | this commit |
+| 2026-11-16 | VD-7b | Funding visual adoption: single head, caution/info callouts, filter panel + More filters, Chart/Table on all five charts; CSS on tokens | this commit |

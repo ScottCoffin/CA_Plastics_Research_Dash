@@ -200,3 +200,6 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-16 | VD-13 implementation | Claude Haiku developer | `export_site.py`, `network.py`, `build_network.py`, Overview cards, SITE_DATA, tests | Accepted; lead relaxed `check_s3_5.py` to the index-count subset | 1 session |
 | 2026-11-16 | VD-9 implementation | Claude Haiku developer | `shared/palette.js`, chart colour constants, runtime tests | Accepted; lead added `countFill` so non-zero heatmap cells start at seq-200 | 1 session |
 | 2026-11-16 | VD-9/10/13 local verification | Claude Haiku developer (as tester) | Build, assembled preview, axe + Lighthouse on 8 routes | Partial (turn limit after the audit); lead ran slug, card, colour and ux_tasks checks and wrote the docs | 1 session |
+| 2026-11-16 | VD-6c implementation | Claude Haiku developer | institution pages, CSS, tests | Accepted after lead review and assembled-site check | 1 session |
+| 2026-11-16 | VD-7b implementation | Claude Haiku developer | funding page, CSS, chart cards, tests | Accepted; lead fixed ux_tasks task 5 for More filters | 1 session |
+| 2026-11-16 | VD-14 implementation | Claude Haiku developer | network.md/css, CLS measurement, tests | Accepted; one resume after the 30-turn limit | 1 session |

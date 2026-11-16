@@ -185,6 +185,10 @@ def task_monitoring_csv(run: Run) -> None:
 def task_funding_basis(run: Run) -> None:
     """5. Funding: California-led awards, then the amount basis for NIH awards."""
     run.goto("funding")
+    # VD-7b: "Led from California" sits under the "More filters" disclosure, as a visitor finds it.
+    more = run.page.locator("#grants-more-filters")
+    if more.count() and more.get_attribute("open") is None:
+        run.click(more.locator("summary"), "More filters")
     run.select(run.page.get_by_label("Led from California"), "Led from California", "Yes")
     agency = run.page.get_by_label("Funder agency", exact=True)
     labels = agency.locator("option").all_inner_texts()

@@ -93,33 +93,8 @@ BASELINE_HEX_BY_FILE: dict[str, tuple[int, frozenset[str]]] = {
             }
         ),
     ),
-    "components/funding.css": (
-        30,
-        frozenset(
-            {
-                "#043e32",
-                "#075a46",
-                "#0b3d31",
-                "#17324d",
-                "#3b4850",
-                "#536879",
-                "#7a8c92",
-                "#8da7af",
-                "#9cc4b0",
-                "#b8c4c8",
-                "#c45100",
-                "#c8d8dc",
-                "#d4e8e4",
-                "#dcebe9",
-                "#e3efed",
-                "#e6f2ec",
-                "#edf5f4",
-                "#f1f4f5",
-                "#fff",
-            }
-        ),
-    ),
-    "components/funding_viz.css": (1, frozenset({"#4a6f93"})),
+    "components/funding.css": (0, frozenset()),
+    "components/funding_viz.css": (0, frozenset()),
     "components/institution.css": (
         0,
         frozenset(),

@@ -9,8 +9,10 @@ import {dataUrl, escapeHtml} from "./atlas.js";
 import {mountFundingViz} from "./funding_viz.js";
 import {institutionTypeLabel} from "./shared/labels.js";
 import {OTHER, SECONDARY} from "./shared/palette.js";
+import {injectIconSprite} from "./shared/icons.js";
 
 const $ = (id) => document.getElementById(id);
+const iconUse = (name) => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-${name}"></use></svg>`;
 
 const GRANT_FUNDER_ORDER = ["federal", "state", "other"];
 const GRANT_FUNDER_COLORS = {federal: SECONDARY[0], state: SECONDARY[1], other: OTHER};
@@ -315,7 +317,8 @@ function readGrantFilterValues() {
 
 export function grantFlagBadge(value) {
   const text = value === true ? "Yes" : value === false ? "No" : "Unknown";
-  return `<span class="grants-badge${value === true ? " yes" : ""}">${text}</span>`;
+  const icon = value === true ? "check" : value === false ? "x" : "info";
+  return `<span class="atlas-badge ${value === true ? "atlas-badge--good" : "atlas-badge--muted"}">${iconUse(icon)}${text}</span>`;
 }
 
 export function grantRowHtml(row, sectorLabels = {}) {
@@ -327,7 +330,7 @@ export function grantRowHtml(row, sectorLabels = {}) {
   const detail = row.sector_detail ? ` title="${escapeHtml(row.sector_detail)}"` : "";
   return `<tr><th scope="row">${title}${people}${tags}</th>`
     + `<td>${escapeHtml(row.org || "Recipient not reported")}<br><small>${escapeHtml(institutionTypeLabel(row.institution_type))}${row.org_state ? ` · ${escapeHtml(row.org_state)}` : ""}</small></td>`
-    + `<td><span class="grants-badge"${detail}>${escapeHtml(grantSectorLabel(row, sectorLabels))}</span></td>`
+    + `<td><span class="atlas-badge atlas-badge--muted"${detail}>${escapeHtml(grantSectorLabel(row, sectorLabels))}</span></td>`
     + `<td>${escapeHtml(row.funder_agency || row.funder || "Not reported")}</td>`
     + `<td>${escapeHtml(row.program || "Not reported")}</td>`
     + `<td>${row.fiscal_year ?? "unknown"}<br><small>${escapeHtml(row.start || "start not reported")}</small></td>`
@@ -366,10 +369,10 @@ function renderGrantChips() {
     const field = document.querySelector(`label[for="${id}"]`).textContent;
     const option = control.tagName === "SELECT" ? control.selectedOptions[0] : null;
     const text = option ? (option.dataset.label || option.textContent) : control.value;
-    chips.push(`<li><button type="button" data-clear="${id}" aria-label="Remove filter ${escapeHtml(field)}: ${escapeHtml(text)}">${escapeHtml(field)}: ${escapeHtml(text)} ✕</button></li>`);
+    chips.push(`<span class="atlas-filter-chip"><span>${escapeHtml(field)}: ${escapeHtml(text)}</span><button type="button" data-clear="${id}" aria-label="Remove ${escapeHtml(field)} filter">${iconUse("x")}</button></span>`);
   });
-  if (!$("grants-plastic").checked) chips.push('<li><button type="button" data-clear="grants-plastic" aria-label="Remove filter: including non-plastic awards">Including non-plastic awards ✕</button></li>');
-  if (chips.length) chips.push('<li><button type="button" data-clear="all">Reset all filters and sort</button></li>');
+  if (!$("grants-plastic").checked) chips.push(`<span class="atlas-filter-chip"><span>Including non-plastic awards</span><button type="button" data-clear="grants-plastic" aria-label="Remove including non-plastic awards filter">${iconUse("x")}</button></span>`);
+  if (chips.length) chips.push('<button type="button" class="atlas-btn atlas-btn--ghost" data-clear="all">Reset all filters and sort</button>');
   $("grants-chips").innerHTML = chips.join("");
 }
 
@@ -414,6 +417,16 @@ function downloadGrantsCsv() {
 
 // ---- Awards: render and bind ------------------------------------------------------------------
 
+// Filters that sit under "More filters". The disclosure opens by itself while one of them is set.
+const HIDDEN_FILTER_IDS = ["grants-sector", "grants-funder-type", "grants-funder", "grants-program", "grants-amount-min", "grants-amount-max", "grants-institution-type", "grants-ca-led"];
+
+function renderFilterSummary() {
+  const plasticOff = !$("grants-plastic").checked;
+  const active = GRANT_FILTERS.filter(({id}) => $(id).value).length + (plasticOff ? 1 : 0);
+  $("grants-filter-count").textContent = `${active} on`;
+  if (plasticOff || HIDDEN_FILTER_IDS.some((id) => $(id).value)) $("grants-more-filters").open = true;
+}
+
 function renderFunding() {
   const filters = readGrantFilterValues();
   state.grantsFiltered = sortGrantRows(state.grantsData.rows.filter((row) => grantMatches(row, filters)), state.grantsSort);
@@ -422,6 +435,7 @@ function renderFunding() {
   state.viz.update(state.grantsFiltered, sectorLabelsOf());
   renderGrantsTable(state.grantsFiltered);
   renderGrantChips();
+  renderFilterSummary();
   writeFundingHash();
 }
 
@@ -478,12 +492,6 @@ function bindFundingControls() {
 }
 
 function showFunding() {
-  // Narrow screens start with the filter panel collapsed so the table stays in view.
-  const filterPanel = $("grants-filter-panel");
-  if (filterPanel && !filterPanel.dataset.sized) {
-    filterPanel.dataset.sized = "1";
-    if (window.matchMedia("(max-width: 700px)").matches) filterPanel.open = false;
-  }
   if (state.grantsReady) {
     readFundingHash();
     renderFunding();
@@ -508,6 +516,7 @@ function showFunding() {
 // Mounts the whole Funding view: open calls, then awards (same order as the classic selectTab).
 // Call once from the page's js block, after the panel markup has been rendered.
 export function mountFunding() {
+  injectIconSprite();
   // The charts follow the filter form: update() runs on every change to the awards (renderFunding).
   if (!state.viz) state.viz = mountFundingViz($("grants-viz"));
   showOpenCalls();
