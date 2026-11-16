@@ -5,6 +5,7 @@
 // block (or pressing Enter on it) narrows only the Sankey and its table to the flows through that block.
 // Each chart has a table alternative. The pure markup builders are exported so Node tests can check them.
 import {escapeHtml} from "./atlas.js";
+import {CHROME} from "./shared/palette.js";
 import {
   DEFAULT_SECTOR_LABELS, FALLBACK_COLOR, FUNDER_COLOR, HEAT_START, SECTOR_COLORS, UNTAGGED, agencyColor, agencyOrder,
   buildHeat, buildSankey, buildSectorTopic, focusOfNode, heatFill, inkFor, layoutSankey, niceMax, sectorLabelsFor,
@@ -191,7 +192,7 @@ export function yearChartSvg(yc, width) {
   const parts = [`<svg class="fv-year-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="fv-year-title">`,
     `<title id="fv-year-title">Stacked bar chart of awards per fiscal year by funder agency</title><g class="fv-axis">`];
   [0, top / 2, top].forEach((t) => {
-    parts.push(`<line x1="${ml}" x2="${W - mr}" y1="${y(t)}" y2="${y(t)}" stroke="#c8d8dc"></line>`
+    parts.push(`<line x1="${ml}" x2="${W - mr}" y1="${y(t)}" y2="${y(t)}" stroke="${CHROME.grid}"></line>`
       + `<text x="${ml - 5}" y="${y(t) + 4}" text-anchor="end">${fmtShare(t)}</text>`);
   });
   const step = Math.max(1, Math.ceil((n * 30) / pw));
@@ -203,7 +204,7 @@ export function yearChartSvg(yc, width) {
     let acc = 0;
     yr.segs.forEach((s) => {
       const y0 = y(acc + s.n), h = y(acc) - y0;
-      parts.push(`<rect x="${(ml + bw * i + bw * 0.12).toFixed(1)}" y="${y0.toFixed(1)}" width="${(bw * 0.76).toFixed(1)}" height="${Math.max(h, 0).toFixed(1)}" fill="${agencyColor(s.agency)}" stroke="#fff" stroke-width="2"><title>${yr.year}, ${esc(s.agency)}: ${s.n} awards</title></rect>`);
+      parts.push(`<rect x="${(ml + bw * i + bw * 0.12).toFixed(1)}" y="${y0.toFixed(1)}" width="${(bw * 0.76).toFixed(1)}" height="${Math.max(h, 0).toFixed(1)}" fill="${agencyColor(s.agency)}" stroke="${CHROME.surface}" stroke-width="2"><title>${yr.year}, ${esc(s.agency)}: ${s.n} awards</title></rect>`);
       acc += s.n;
     });
   });

@@ -41,7 +41,7 @@ def test_model_exports_public_api() -> None:
     assert re.search(r"export\s+function\s+heatmapCells\s*\(rows,\s*mode\)", text)
     assert re.search(r"export\s+function\s+colorFor\s*\(count,\s*max\)", text)
     assert re.search(r"export\s+function\s+textInk\s*\(fill\)", text)
-    assert "#f4f7f6" in text
+    assert 'from "./shared/palette.js"' in text
     assert '"No matrix tag"' in text
 
 

@@ -2,6 +2,8 @@
 // Rows are topic tags (from domain_tags). Columns are matrix tags (from facet_tags) plus a
 // "No matrix tag" column, or 5-year publication bins. A work counts once per cell it falls in.
 
+import {CHROME, INK_DARK, INK_LIGHT, countFill} from "./shared/palette.js";
+
 export const MODES = ["topic-matrix", "topic-year"];
 export const NO_MATRIX_KEY = "__no_matrix__";
 export const NO_MATRIX_LABEL = "No matrix tag";
@@ -28,11 +30,7 @@ const MATRIX_ORDER = [
   "matrix:wastewater"
 ];
 
-const EMPTY_FILL = "#f4f7f6";
-const LOW_FILL = "#d3ece6";
-const HIGH_FILL = "#0b4d48";
-const INK_DARK = "#000000";
-const INK_LIGHT = "#ffffff";
+const EMPTY_FILL = CHROME.sunken;
 
 // Fallback label for a matrix tag without a shared label; the view prefers the shared topic label helper.
 function titleFromKey(key) {
@@ -228,18 +226,11 @@ function hexToRgb(hex) {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
 
-function toHex([r, g, b]) {
-  return "#" + [r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
-}
-
-// Sequential single-hue scale. 0 (or no maximum) is the near-white empty fill; any positive count is
-// a teal from light (LOW_FILL) to dark (HIGH_FILL), linear in count / max, so darker means more works.
+// Sequential teal ramp (palette SEQ). 0 (or no maximum) is the sunken empty fill; any positive count
+// moves from seq-200 to seq-700 by count / max (palette countFill), so darker means more works.
 export function colorFor(count, max) {
   if (!(count > 0) || !(max > 0)) return EMPTY_FILL;
-  const t = Math.min(1, count / max);
-  const lo = hexToRgb(LOW_FILL);
-  const hi = hexToRgb(HIGH_FILL);
-  return toHex(lo.map((v, i) => v + (hi[i] - v) * t));
+  return countFill(count, max);
 }
 
 function luminance(rgb) {

@@ -2,6 +2,7 @@
 // No DOM access. Input rows are the awards that match the Funding filter form (state.grantsFiltered in
 // funding.js). viewRows() returns new objects, so the input rows are never changed.
 // The optional topic helper T is the shared AtlasTopics object (components/shared/topics.js).
+import {CHROME, INK_DARK, INK_LIGHT, NEUTRAL_FUNDER, NEUTRAL_STEPS, OTHER, SECONDARY, countFill} from "./shared/palette.js";
 
 export const UNTAGGED = "__untagged__";
 export const HEAT_START = 2012;
@@ -12,16 +13,18 @@ export const DEFAULT_SECTOR_LABELS = {
 export const SECTOR_ORDER = ["academia", "nonprofit", "jpa", "government", "industry", "individual", "unknown"];
 export const SECTOR_SHORT = {nonprofit: "Nonprofit & institute", jpa: "Joint powers / regional", individual: "Individual fellowship"};
 export const SECTOR_COLORS = {
-  academia: "#2f5d8a", nonprofit: "#5f8fb8", jpa: "#86a3bd", government: "#55616b", industry: "#8b959d", individual: "#a9b4bd", unknown: "#c3cbd1"
+  academia: NEUTRAL_STEPS[0], nonprofit: NEUTRAL_STEPS[1], jpa: NEUTRAL_STEPS[2], government: NEUTRAL_STEPS[3],
+  industry: NEUTRAL_STEPS[4], individual: NEUTRAL_STEPS[5], unknown: NEUTRAL_STEPS[6]
 };
-export const FUNDER_COLOR = "#3d4f5c";
+export const FUNDER_COLOR = NEUTRAL_FUNDER;
+// The seven named agencies take the secondary slots in this order; the rest share the Other grey.
 export const AGENCY_COLORS = {
-  NSF: "#2c5f9e", NIH: "#b84f7e", NOAA: "#1f9393", EPA: "#8d9b22", "CA Ocean Protection Council": "#c97b17",
-  NIST: "#7a5aa6", USDA: "#5e8c3a", "CA State Water Board": "#a64b3c", "California Sea Grant": "#3a8fbf", "US Department of State": "#7d8790"
+  NSF: SECONDARY[0], NIH: SECONDARY[1], NOAA: SECONDARY[2], EPA: SECONDARY[3], "CA Ocean Protection Council": SECONDARY[4],
+  NIST: SECONDARY[5], USDA: SECONDARY[6], "CA State Water Board": OTHER, "California Sea Grant": OTHER, "US Department of State": OTHER
 };
-export const AGENCY_OTHER = "#a9b3ba";
-export const UNTAGGED_COLOR = "#8a9499";
-export const FALLBACK_COLOR = "#8b959d";
+export const AGENCY_OTHER = OTHER;
+export const UNTAGGED_COLOR = OTHER;
+export const FALLBACK_COLOR = NEUTRAL_STEPS[4];
 
 const isMatrixTag = (tag) => String(tag).startsWith("matrix:");
 
@@ -418,13 +421,9 @@ export function topOrgs(vrows, n) {
   return [...m.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name)).slice(0, n);
 }
 
-// Cell colour on a white-to-blue ramp (count 0 is a neutral grey).
+// Cell colour on the shared teal ramp (count 0 is the sunken empty fill; see palette countFill).
 export function heatFill(count, max) {
-  if (!count) return "#f3f5f6";
-  const t = max > 0 ? Math.min(1, count / max) : 0;
-  const a = [0xe6, 0xee, 0xf6], b = [0x0b, 0x4f, 0x9c];
-  const c = a.map((v, i) => Math.round(v + (b[i] - v) * t));
-  return `#${c.map((v) => v.toString(16).padStart(2, "0")).join("")}`;
+  return countFill(count, max);
 }
 
 // Higher-contrast of white and black text on a hex fill (at least 4.58:1 on any fill).
@@ -435,7 +434,7 @@ export function inkFor(hex) {
     return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
   };
   const L = 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
-  return 1.05 / (L + 0.05) >= (L + 0.05) / 0.05 ? "#ffffff" : "#000000";
+  return 1.05 / (L + 0.05) >= (L + 0.05) / 0.05 ? INK_LIGHT : INK_DARK;
 }
 
 // Rounds an axis maximum up to 1, 2, 5 or 10 times a power of ten.

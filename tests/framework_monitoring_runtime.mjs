@@ -79,8 +79,8 @@ assert.equal(mapResult.path, `M0 0L${cosRounded} 0L${cosRounded} -1L0 -1L0 0Z`);
 assert.deepEqual(mapResult.clusters, [{ n: 3, mixed: true, color: "#ffffff" }]);
 assert.deepEqual(mapResult.legend, [["sediment", 1], ["fish", 2]]);
 assert.deepEqual(mapResult.legendStatewide, [["sediment", 1], ["fish", 3]]);
-assert.equal(mapResult.colorFish, "#2e7d32");
-assert.equal(mapResult.colorOther, "#6b7177");
+assert.equal(mapResult.colorFish, "#009E73");
+assert.equal(mapResult.colorOther, "#8a969c");
 
 // Interactive map: zoom clamping, re-clustering on zoom, and the legend toggle helper.
 const interactiveResult = JSON.parse(vm.runInContext(`JSON.stringify((() => {

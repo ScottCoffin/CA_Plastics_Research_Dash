@@ -8,11 +8,12 @@
 import {dataUrl, escapeHtml} from "./atlas.js";
 import {mountFundingViz} from "./funding_viz.js";
 import {institutionTypeLabel} from "./shared/labels.js";
+import {OTHER, SECONDARY} from "./shared/palette.js";
 
 const $ = (id) => document.getElementById(id);
 
 const GRANT_FUNDER_ORDER = ["federal", "state", "other"];
-const GRANT_FUNDER_COLORS = {federal: "#2f6f8f", state: "#2f8f6f", other: "#b8862b"};
+const GRANT_FUNDER_COLORS = {federal: SECONDARY[0], state: SECONDARY[1], other: OTHER};
 const GRANT_FUNDER_LABELS = {federal: "Federal", state: "State", other: "Other"};
 const GRANT_SOURCE_LABELS = {nih_reporter: "NIH RePORTER", nsf_awards: "NSF Awards", usaspending: "USAspending.gov", ca_sea_grant: "California Sea Grant", opc_council: "Ocean Protection Council"};
 export const GRANT_FILTERS = [

@@ -17,7 +17,7 @@
 .ev-heatmap-table td { padding: 0; }
 .ev-heatmap-cell {
   font: inherit; font-weight: 600; min-width: 4.5rem; min-height: 2.5rem; padding: 0.35rem 0.5rem;
-  border: 1px solid #ffffff; border-radius: 3px; cursor: pointer;
+  border: 1px solid var(--atlas-line); border-radius: 3px; cursor: pointer;
 }
 .ev-heatmap-cell:disabled { cursor: default; font-weight: 400; color: #5e7480 !important; }
 .ev-heatmap-sr {

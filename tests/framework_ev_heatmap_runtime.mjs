@@ -113,9 +113,9 @@ assert.throws(() => heatmapCells([], "topic-size"));
 
 // colorFor: zero is the near-white empty fill and distinct from 1; luminance never rises as the count grows.
 {
-  assert.equal(colorFor(0, 10), "#f4f7f6");
-  assert.equal(colorFor(0, 0), "#f4f7f6");
-  assert.notEqual(colorFor(1, 10), "#f4f7f6");
+  assert.equal(colorFor(0, 10), "#eaf1ef");
+  assert.equal(colorFor(0, 0), "#eaf1ef");
+  assert.notEqual(colorFor(1, 10), "#eaf1ef");
   const lum = (hex) => {
     const n = parseInt(hex.slice(1), 16);
     const lin = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
@@ -131,7 +131,11 @@ assert.throws(() => heatmapCells([], "topic-size"));
     assert.ok(lum(fill) <= previous, `luminance rose at count ${count}`);
     previous = lum(fill);
   }
-  assert.equal(colorFor(40, 40), "#0b4d48");
+  assert.equal(colorFor(40, 40), "#043e32");
+  // Non-zero counts span seq-200..seq-700, so the midpoint sits between seq-400 and seq-500.
+  assert.equal(colorFor(20, 40), "#39977d");
+  // The smallest non-zero count starts at seq-200, clearly apart from the empty fill.
+  assert.equal(colorFor(1e-9, 1), "#b9e0d3");
 }
 
 // textInk: black or white text reaches 4.5:1 on every fill in the ramp and on a grey sweep.
@@ -151,8 +155,8 @@ assert.throws(() => heatmapCells([], "topic-size"));
     const inkRgb = ink === "#000000" ? [0, 0, 0] : [255, 255, 255];
     assert.ok(contrastRatio(rgb, inkRgb) >= 4.5, `low contrast for grey ${fill}`);
   }
-  assert.equal(textInk("#f4f7f6"), "#000000");
-  assert.equal(textInk("#0b4d48"), "#ffffff");
+  assert.equal(textInk("#eaf1ef"), "#000000");
+  assert.equal(textInk("#043e32"), "#ffffff");
 }
 
 // escapeHtml neutralises markup characters.

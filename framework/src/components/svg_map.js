@@ -3,6 +3,10 @@
 // functions touch the DOM or the network only when called, so Node tests can import this file.
 import {classicUrl} from "./atlas.js";
 import {monitoringView} from "./monitoring_view.js";
+import {CHROME, OTHER, SECONDARY} from "./shared/palette.js";
+
+// Snow and passive-sampler deposition share one hue: snow captures atmospheric deposition.
+const DEPOSITION = SECONDARY[3];
 
 export const monitoringMap = Object.freeze({
   extents: Object.freeze({
@@ -13,18 +17,18 @@ export const monitoringMap = Object.freeze({
   cosMid: Math.cos((37.25 * Math.PI) / 180),
   unknownLabel: "Unknown matrix",
   palette: Object.freeze({
-    "surface water": "#1f5fa8",
-    stormwater: "#6b3fa0",
-    sediment: "#8a5a1c",
-    "wastewater effluent": "#b35900",
-    fish: "#2e7d32",
-    "snow (fresh snowfall)": "#0f7490",
-    "snow (snowpack pit layer)": "#4b5fc0",
-    "atmospheric deposition (dry, passive sampler)": "#b3245c",
-    "Unknown matrix": "#6b7177"
+    "surface water": SECONDARY[0],
+    stormwater: SECONDARY[5],
+    sediment: SECONDARY[4],
+    "wastewater effluent": SECONDARY[1],
+    fish: SECONDARY[2],
+    "snow (fresh snowfall)": DEPOSITION,
+    "snow (snowpack pit layer)": DEPOSITION,
+    "atmospheric deposition (dry, passive sampler)": DEPOSITION,
+    "Unknown matrix": OTHER
   }),
-  otherColor: "#6b7177",
-  mixedColor: "#ffffff",
+  otherColor: OTHER,
+  mixedColor: CHROME.surface,
   project(lon, lat) {
     return [lon * monitoringMap.cosMid, -lat];
   },

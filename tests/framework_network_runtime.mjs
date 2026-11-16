@@ -139,6 +139,11 @@ const everyone = new Set(["a", "b", "c", "d"]);
   assert.equal(colours.get(0), COMMUNITY_COLOURS[0]);
   assert.equal(colours.get(2), COMMUNITY_COLOURS[2]);
   assert.equal(colours.get(9), undefined);
+  // VD-9: six named slots (SECONDARY_ALL_PAIRS); the rest of the groups fall to the Other grey.
+  assert.equal(COMMUNITY_COLOURS.length, 6);
+  assert.equal(OTHER_COLOUR, "#8a969c");
+  const sevenGroups = Array.from({length: 7}, (_, i) => ({community: i}));
+  assert.equal(communityColourMap(sevenGroups).size, 6);
 }
 
 // Sizes: radius grows with the square root of works; stroke grows with weight, capped.

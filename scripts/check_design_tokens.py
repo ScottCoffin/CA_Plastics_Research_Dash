@@ -29,7 +29,7 @@ HEX_COLOR = re.compile(
 BASELINE_HEX_BY_FILE: dict[str, tuple[int, frozenset[str]]] = {
     "style.css": (1, frozenset({"#0b3d31"})),
     "components/ev_heatmap.css": (
-        30,
+        29,
         frozenset(
             {
                 "#000000",

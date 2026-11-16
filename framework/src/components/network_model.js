@@ -1,22 +1,15 @@
 // Pure helpers for the collaboration network page. No DOM access.
 import {sectorLabel as sectorDisplayLabel} from "./shared/labels.js";
+import {NEUTRAL_EDGE, OTHER, SECONDARY_ALL_PAIRS} from "./shared/palette.js";
 // Edges carry yearly co-authored-work counts (years: {"2019": 1, ...}); the year range and the
 // minimum-works filter act on those counts. Nodes stay visible when they match the node filters
 // (topic, sector, institution, now in California); matching nodes with no shown link are dimmed.
 
 export const MIN_WORKS_MAX = 10;
 export const VIEW_SIZE = 1000;
-export const COMMUNITY_COLOURS = [
-  "#0072B2",
-  "#D55E00",
-  "#009E73",
-  "#CC79A7",
-  "#E69F00",
-  "#56B4E9",
-  "#7A4E9B",
-  "#8C6D1F"
-];
-export const OTHER_COLOUR = "#b9c3c8";
+// Six named slots (SECONDARY_ALL_PAIRS); every smaller group takes OTHER_COLOUR.
+export const COMMUNITY_COLOURS = SECONDARY_ALL_PAIRS;
+export const OTHER_COLOUR = OTHER;
 
 export function sectorLabel(value) {
   return sectorDisplayLabel(value);
@@ -196,7 +189,7 @@ export function sortByCollaborators(nodes, matching) {
     .sort((a, b) => (Number(b.degree) || 0) - (Number(a.degree) || 0) || String(a.name).localeCompare(String(b.name)));
 }
 
-// Eight largest communities get the palette, in size order (Map insertion order). Others are absent.
+// Six largest communities get the palette, in size order (Map insertion order). Others are absent.
 export function communityColourMap(nodes) {
   const sizes = new Map();
   for (const node of nodes || []) sizes.set(node.community, (sizes.get(node.community) || 0) + 1);
@@ -242,7 +235,7 @@ export function layoutToView(nodes, size = VIEW_SIZE, pad = 40) {
 // Colour and size modes for the WebGL graph. Groups are the colour keys: a cluster number, a
 // main topic (first tag) or a main sector (first sector). Only the largest groups get a colour.
 export const OTHER_GROUP = "__other__";
-export const EDGE_COLOUR = "#7d8a90";
+export const EDGE_COLOUR = NEUTRAL_EDGE;
 
 function firstTag(list) {
   if (!Array.isArray(list) || !list.length) return null;

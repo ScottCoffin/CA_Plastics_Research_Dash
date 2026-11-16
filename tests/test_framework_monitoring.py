@@ -19,6 +19,17 @@ def _code_lines(text: str) -> list[str]:
     return [line for line in stripped if line]
 
 
+def _without_colours(text: str) -> str:
+    text = re.sub(r"palette:\s*Object\.freeze\(\{.*?\}\),?\n", "", text, count=1, flags=re.S)
+    return re.sub(r"^\s*(otherColor|mixedColor):[^\n]*\n", "", text, flags=re.M)
+
+
+def _palette_keys(text: str) -> list[str]:
+    block = re.search(r"palette:\s*Object\.freeze\(\{(.*?)\}\)", text, re.S)
+    assert block, "the map must keep its palette object"
+    return re.findall(r'^\s*("[^"]+"|\w+)\s*:', block.group(1), re.M)
+
+
 def _classic_helper_block() -> str:
     html = CLASSIC_PAGE.read_text(encoding="utf-8")
     match = re.search(r'<script id="monitoring-view-helpers">(.*?)</script>', html, re.S)
@@ -40,7 +51,10 @@ def test_ported_helpers_match_classic_block() -> None:
     assert _code_lines("const monitoringView" + ported_view) == _code_lines(
         "const monitoringView" + classic_view
     )
-    assert _code_lines(ported_map) == _code_lines(classic_map)
+    # VD-9: map colours come from shared/palette.js, so compare the code without colour values and
+    # compare the palette keys (the classic page keeps its own literal colours).
+    assert _code_lines(_without_colours(ported_map)) == _code_lines(_without_colours(classic_map))
+    assert _palette_keys(ported_map) == _palette_keys(classic_map)
 
 
 def test_framework_monitoring_runtime_regressions() -> None:
