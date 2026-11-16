@@ -69,7 +69,7 @@ def test_selection_banner_sits_above_publication_table() -> None:
     )
     assert banner in page
     # The banner comes directly before the table container, and the table heading can take focus.
-    assert f'{banner}<div id="ev-table">' in page
+    assert f'<div class="atlas-chart__body">{banner}<div id="ev-table">' in page
     assert '<h2 id="ev-table-heading" tabindex="-1">' in page
     assert '<h2 id="ev-heatmap-heading" tabindex="-1">' in page
 

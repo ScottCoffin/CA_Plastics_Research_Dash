@@ -73,6 +73,15 @@ function buildFilterGroups(container, index) {
       const name = document.createElement("span");
       name.className = "ev-option-name";
       name.textContent = optionName(ui, label);
+      if (ui.key === "topic") {
+        const dot = document.createElement("span");
+        dot.className = "topic-dot";
+        dot.setAttribute("aria-hidden", "true");
+        dot.style.background = window.AtlasTopics.cssFill(label);
+        if (window.AtlasTopics.pattern(label) === "hatch") dot.classList.add("hatch");
+        if (window.AtlasTopics.isAuxiliary(label)) dot.classList.add("auxiliary");
+        name.prepend(dot);
+      }
       const count = document.createElement("span");
       count.className = "ev-count";
       row.append(input, name, count);
