@@ -60,8 +60,8 @@ Weekly metadata-only checks. HTTP status, validators, and limited response metad
 
 | Source | Reason / next review | URL | Last checked | Observed status / change | Tier |
 |---|---|---|---|---|---|
-| California statewide plastics monitoring pilot | OPC describes a SWAMP-supported statewide pilot planned for 2027; public data availability is not established. / 2027-01-15 | [https://opc.ca.gov/2026/06/june-16-2026-council-meeting-summary](https://opc.ca.gov/2026/06/june-16-2026-council-meeting-summary) | 2026-11-09T22:09:18+00:00 | 200; baseline; manual review | C |
-| CEDEN 2.0 microplastics module | CEDEN says microplastics data types will be added over time; implementation and data availability need confirmation. / 2027-01-15 | [https://ceden.org/](https://ceden.org/) | 2026-11-09T22:09:18+00:00 | None; baseline; manual review | C |
+| California statewide plastics monitoring pilot | OPC describes a SWAMP-supported statewide pilot planned for 2027; public data availability is not established. / 2027-01-15 | [https://opc.ca.gov/2026/06/june-16-2026-council-meeting-summary](https://opc.ca.gov/2026/06/june-16-2026-council-meeting-summary) | 2026-11-16T20:38:08+00:00 | 403; access_or_metadata_changed; manual review | C |
+| CEDEN 2.0 microplastics module | CEDEN says microplastics data types will be added over time; implementation and data availability need confirmation. / 2027-01-15 | [https://ceden.org/](https://ceden.org/) | 2026-11-16T20:38:08+00:00 | 503; access_or_metadata_changed; manual review | C |
 
 <!-- S7.6 WATCHLIST END -->
 
@@ -69,7 +69,7 @@ Weekly metadata-only checks. HTTP status, validators, and limited response metad
 
 Weekly metadata-only CEDEN check. Row counts are availability metadata from the data.ca.gov datastore, not data quality, completeness, or reuse rights.
 
-Checked 2026-11-11T00:11:51+00:00 against [surface-water-chemistry-results](https://data.ca.gov/dataset/surface-water-chemistry-results); units: particles/L, particles/g, particles/kg, particles/m3.
+Checked 2026-11-16T20:38:14+00:00 against [surface-water-chemistry-results](https://data.ca.gov/dataset/surface-water-chemistry-results); units: particles/L, particles/g, particles/kg, particles/m3.
 
 | Resource | Rows | Distinct projects | Projects (rows) |
 |---|---|---|---|
