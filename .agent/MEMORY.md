@@ -243,6 +243,9 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - Zenodo concept DOI 10.5281/zenodo.24124016 (first archived release v2026.11.11; new GitHub releases archive automatically).
 - Live Pages URL: `https://plastiverse.live/` (repo custom domain since 2026-11-10; old `scottcoff.in/CA_Plastics_Research_Dash/` paths 301 there). Feed `FEED_ID` and `tag:scottcoff.in` entry ids stay frozen. DNS is in Cloudflare: apex A → GitHub (grey cloud); keep the MX, `camply` (owner's tunnel SaaS) and `data` (R2) records. Owner submitted `https://plastiverse.live/sitemap.xml` to Google Search Console on 2026-11-13.
 
+## Visual design checkpoint
+- VD-6a Experts adoption is complete (2026-11-15); canonical implementation is `framework/src/experts.md` and `framework/src/components/experts.{css,js}`, with acceptance evidence in `docs/VD_6A_VERIFICATION.md`. H25 owner review and VD-5 Overview LCP remain open.
+
 ## Current model versions and metrics (one line per model)
 - None; classifiers are not implemented.
 - S4.2 done 2026-11-11: real splits are `curation/splits_v2.csv` (500 pool 350/75/75 + 80 leak-test, all test); v1 stays the fixture. Gazetteer leak hits ignore state/country names and require pop >= 50k for single words; residual noise (Reading, Mason, Harper, Ontario). Test set is frozen: never tune or analyse errors on it.

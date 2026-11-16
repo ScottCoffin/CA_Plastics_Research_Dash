@@ -4,6 +4,7 @@
 import "./shared/vendor/minisearch-7.2.0.js";
 import "./shared/topics.js";
 import "./shared/expert_page.js";
+import {icon} from "./shared/icons.js";
 import {dataUrl, escapeHtml} from "./atlas.js";
 import {
   EMPTY_MATCH_TEXT,
@@ -29,7 +30,7 @@ const $ = (id) => document.getElementById(id);
 const FILTER_IDS = ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "now-filter", "expert-sort", "early-filter"];
 const OVERSCAN = 4;
 const LOADING_HTML = '<p class="expert-state-message"><span class="expert-spinner" aria-hidden="true"></span>Loading experts…</p>';
-const EMPTY_RESULTS_HTML = `<p class="expert-state-message">${EMPTY_MATCH_TEXT}</p><button id="expert-state-reset" class="button secondary" type="button">Reset filters</button>`;
+const EMPTY_RESULTS_HTML = `<p class="expert-state-message">${EMPTY_MATCH_TEXT}</p><button id="expert-state-reset" class="atlas-btn atlas-btn--secondary" type="button">Reset filters</button>`;
 
 const state = {
   data: null,
@@ -117,10 +118,55 @@ function writeHash() {
 }
 
 function updateRowHeight() {
-  const height = rowHeightForWidth(window.innerWidth);
+  // The older helper reserves 232 px per desktop row, which pushes useful results below the
+  // first screen. Compact desktop cards fit in 144 px; narrow cards retain room to wrap.
+  const height = Math.min(rowHeightForWidth(window.innerWidth), window.innerWidth >= 900 ? 124 : 224);
   const changed = height !== state.rowHeight;
   state.rowHeight = height;
   return changed;
+}
+
+const HIDDEN_FILTERS = ["institution", "now", "early", "yearFrom", "yearTo", "caBasis", "oa"];
+const FILTER_LABELS = {
+  search: "Search",
+  tag: "Domain or matrix tag",
+  institutionType: "Institution type",
+  institution: "Institution",
+  now: "Current affiliation",
+  early: "Career stage",
+  yearFrom: "From year",
+  yearTo: "To year",
+  caBasis: "CA basis",
+  oa: "OA availability"
+};
+
+function filterValue(key) {
+  const f = state.filters;
+  if (key === "tag") return window.AtlasTopics.label(f.tag);
+  if (key === "institution") return state.lookups?.institutionsById.get(f.institution)?.name || f.institution;
+  if (key === "now") return ({ca: "In California now", outside: "Outside California now", unknown: "Unknown"})[f.now] || f.now;
+  if (key === "early") return "Early career only";
+  if (key === "caBasis") return ({"ca-led": "CA-led", "ca-sampled": "CA-sampled", both: "Both", "ca-affiliated": "CA-affiliated", none: "No CA basis"})[f.caBasis] || f.caBasis;
+  if (key === "oa") return f.oa === "oa" ? "Has OA work" : "No OA work";
+  return f[key];
+}
+
+function renderActiveFilters() {
+  const active = Object.keys(FILTER_LABELS).filter((key) => key === "early" ? state.filters.early : Boolean(state.filters[key]));
+  const count = $("expert-filter-count");
+  const container = $("expert-active-filters");
+  count.textContent = `${active.length} on`;
+  container.innerHTML = active.map((key) => {
+    const label = FILTER_LABELS[key];
+    const value = filterValue(key);
+    return `<span class="atlas-filter-chip"><span>${escapeHtml(label)}: ${escapeHtml(value)}</span><button type="button" data-filter="${key}" aria-label="Remove ${escapeHtml(label)} filter">${icon("x").outerHTML}</button></span>`;
+  }).join("");
+}
+
+function openMoreFiltersWhenNeeded() {
+  if (HIDDEN_FILTERS.some((key) => key === "early" ? state.filters.early : Boolean(state.filters[key]))) {
+    $("expert-more-filters").open = true;
+  }
 }
 
 // The state panel sits above the list: loading, load failure, or no matching experts.
@@ -134,6 +180,8 @@ function renderExperts() {
   const authors = currentAuthors();
   state.filteredAuthors = authors;
   updateRowHeight();
+  openMoreFiltersWhenNeeded();
+  renderActiveFilters();
   $("expert-count").textContent = expertCountText(authors.length, summaries().length);
   const empty = !authors.length;
   setStatePanel(empty ? EMPTY_RESULTS_HTML : "");
@@ -156,6 +204,10 @@ function renderVirtualRows() {
   }
   const {start, end} = virtualWindow({scrollTop: list.scrollTop, clientHeight: list.clientHeight, rowHeight: state.rowHeight, count: state.filteredAuthors.length, overscan: OVERSCAN});
   rows.innerHTML = state.filteredAuthors.slice(start, end).map((author, offset) => expertRowHtml(author, start + offset, state.rowHeight, state.filters.sort)).join("");
+  rows.querySelectorAll(".expert-card").forEach((card) => {
+    card.classList.add("atlas-card");
+    card.querySelector(".expert-card-actions .chip")?.classList.add("atlas-badge", "atlas-badge--muted");
+  });
   fitExpertTopics(rows);
   rows.querySelectorAll(".expert-link, .topic-more").forEach((button) => button.addEventListener("click", () => openDrawer(button.dataset.authorId)));
 }
@@ -199,6 +251,7 @@ async function openDrawer(authorId) {
     $("drawer-title").textContent = author.name || "Researcher";
     $("drawer-issue-link").href = profileIssueUrl(author.name, author.author_id || authorId);
     $("drawer-content").innerHTML = drawerContentHtml({author, works, authorId, profile: detail.profile, expertsById, institutionsById: state.lookups.institutionsById, histogramSvg: histogramSvg()});
+    applyDrawerComponents($("drawer-content"));
     const setAbstracts = (open) => $("drawer-content").querySelectorAll("details.work-abstract").forEach((node) => { node.open = open; });
     const expandButton = $("abstracts-expand");
     const collapseButton = $("abstracts-collapse");
@@ -208,6 +261,45 @@ async function openDrawer(authorId) {
   } catch (error) {
     $("drawer-content").innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
   }
+}
+
+function applyDrawerComponents(root) {
+  const stats = root.querySelector(".drawer-stats");
+  if (stats) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "atlas-table-wrap";
+    const table = document.createElement("table");
+    table.className = "atlas-table drawer-stats";
+    table.setAttribute("aria-label", "Summary metrics");
+    const body = document.createElement("tbody");
+    stats.querySelectorAll(".drawer-stat").forEach((stat) => {
+      const label = stat.querySelector("dt");
+      const value = stat.querySelector("dd");
+      if (!label || !value) return;
+      const row = document.createElement("tr");
+      const heading = document.createElement("th");
+      heading.scope = "row";
+      const cell = document.createElement("td");
+      [...label.childNodes].forEach((node) => heading.append(node.cloneNode(true)));
+      [...value.childNodes].forEach((node) => cell.append(node.cloneNode(true)));
+      row.append(heading, cell);
+      body.append(row);
+    });
+    table.append(body);
+    wrapper.append(table);
+    stats.replaceWith(wrapper);
+  }
+  root.querySelectorAll(".button-link").forEach((link) => link.classList.add("atlas-btn", "atlas-btn--primary"));
+  root.querySelectorAll(".abstract-controls button").forEach((button) => button.classList.add("atlas-btn", "atlas-btn--secondary"));
+  root.querySelectorAll(".coauthor-link").forEach((button) => button.classList.add("atlas-btn", "atlas-btn--ghost"));
+  root.querySelectorAll(".drawer-section").forEach((section) => {
+    section.classList.add("atlas-disclosure");
+    section.querySelector(".drawer-section-body")?.classList.add("atlas-disclosure__body");
+  });
+  root.querySelectorAll(".work-abstract").forEach((section) => {
+    section.classList.add("atlas-disclosure");
+    section.querySelector(":scope > p")?.classList.add("atlas-disclosure__body");
+  });
 }
 
 function histogramSvg() {
@@ -261,6 +353,17 @@ function resetAllFilters() {
   $("expert-search").focus();
 }
 
+function removeActiveFilter(key) {
+  if (!Object.hasOwn(FILTER_LABELS, key)) return;
+  const fields = {search: "expert-search", tag: "tag-filter", institutionType: "institution-type-filter", institution: "institution-filter", now: "now-filter", early: "early-filter", yearFrom: "year-from", yearTo: "year-to", caBasis: "ca-basis-filter", oa: "oa-filter"};
+  const cleared = key === "early" ? false : "";
+  state.filters = {...state.filters, [key]: cleared};
+  state.lastFilterSignature = "";
+  writeHash();
+  updateViews();
+  $(fields[key]).focus();
+}
+
 function exportCsv() {
   if (!state.data) return;
   const blob = new Blob([csvText(currentAuthors())], {type: "text/csv;charset=utf-8"});
@@ -292,7 +395,7 @@ async function loadData() {
   } catch (error) {
     $("expert-count").textContent = "The static data could not be loaded.";
     $("expert-list").hidden = true;
-    setStatePanel(`<p class="expert-state-message" role="alert">${escapeHtml(error.message)}. Run the site through a web server and rebuild the S3.1 data export.</p><button id="expert-retry" class="button secondary" type="button">Retry</button>`);
+    setStatePanel(`<p class="expert-state-message" role="alert">${escapeHtml(error.message)}. Run the site through a web server and rebuild the S3.1 data export.</p><button id="expert-retry" class="atlas-btn atlas-btn--secondary" type="button">Retry</button>`);
   }
 }
 
@@ -302,6 +405,11 @@ function bindEvents(signal) {
     $(id).addEventListener("change", onFilterChange, {signal});
   });
   $("reset-filters").addEventListener("click", resetAllFilters, {signal});
+  $("clear-all-filters").addEventListener("click", resetAllFilters, {signal});
+  $("expert-active-filters").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-filter]");
+    if (button) removeActiveFilter(button.dataset.filter);
+  }, {signal});
   // The state panel is rebuilt on every change, so one delegated listener serves its buttons.
   $("expert-state").addEventListener("click", (event) => {
     if (event.target.closest("#expert-state-reset")) resetAllFilters();
