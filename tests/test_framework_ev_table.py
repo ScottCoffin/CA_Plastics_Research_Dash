@@ -38,12 +38,26 @@ def test_view_exports_mount_and_recent_callout() -> None:
     text = VIEW.read_text(encoding="utf-8")
     mount = (
         r"export\s+function\s+mountWorksTable\s*\(\s*container,"
-        r"\s*\{\s*today\s*=\s*new Date\(\),\s*hint\s*=\s*DEFAULT_HINT\s*\}\s*=\s*\{\}\s*\)"
+        r"\s*\{\s*today\s*=\s*new Date\(\),\s*hint\s*=\s*DEFAULT_HINT,"
+        r"\s*initialRows\s*\}\s*=\s*\{\}\s*\)"
     )
     assert re.search(mount, text)
     callout = r"export\s+function\s+renderRecentCallout\s*\(\s*container,\s*rows,\s*today"
     assert re.search(callout, text)
     assert "update(workIds)" in text
+
+
+def test_view_reuses_supplied_normalized_rows_and_keeps_fetch_fallback() -> None:
+    text = VIEW.read_text(encoding="utf-8")
+    assert "const hasInitialRows = initialRows !== undefined;" in text
+    assert "const initialRowsCopy = hasInitialRows ? initialRows.slice() : null;" in text
+    assert "Promise.resolve().then(() => setLoadedRows(initialRowsCopy))" in text
+    assert re.search(
+        r":\s*loadJson\(\"works_detail\.json\"\)\s*\.then\(\(payload\) =>\s*\{"
+        r".*?normaliseRows\(payload\)\.filter\(\(row\) => row\.plastic_related === true\)",
+        text,
+        re.DOTALL,
+    )
 
 
 def test_view_loads_payloads_lazily_and_imports_shared_helpers() -> None:

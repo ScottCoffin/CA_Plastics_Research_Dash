@@ -287,17 +287,19 @@ let viewsMounted = false;
 async function mountViews(index) {
   if (viewsMounted) return;
   viewsMounted = true;
-  const trendPromise = mountV4Trend($("ev-v4"), index);
-  settleSection($("ev-v4"), trendPromise);
   let detail;
   try {
     detail = await loadDetail();
   } catch {
     $("ev-table").textContent = "Could not load the publication details.";
+    const trendPromise = mountV4Trend($("ev-v4"), index);
+    settleSection($("ev-v4"), trendPromise);
     return;
   }
   app.detail = detail;
   const plasticWorks = [...detail.values()].filter((row) => row.plastic_related === true);
+  const trendPromise = mountV4Trend($("ev-v4"), index, plasticWorks);
+  settleSection($("ev-v4"), trendPromise);
   renderRecentCallout($("ev-recent"), plasticWorks, new Date());
   app.heatmap = mountHeatmap($("ev-heatmap"), {
     onSelect: (ids) => {
@@ -308,14 +310,16 @@ async function mountViews(index) {
   });
   mountSelectionBanner(app.heatmap);
   $("ev-heatmap").closest("section").hidden = false;
-  app.table = mountWorksTable($("ev-table"));
+  app.table = mountWorksTable($("ev-table"), {initialRows: plasticWorks});
   app.views.push(({rows}) => app.heatmap.update(rows), () => applyTable());
   notifyViews();
   try {
     const trend = await trendPromise;
     if (trend && typeof trend.update === "function") {
       app.views.push(({rows, filtered}) => trend.update(rows, {filtered}));
-      if (formatHash(app.state) !== "") notifyViews();
+      if (formatHash(app.state) !== "") {
+        trend.update(app.lastIds.map((id) => app.detail.get(id)).filter(Boolean), {filtered: true});
+      }
     }
   } catch {
     // settleSection already hid the trend section.

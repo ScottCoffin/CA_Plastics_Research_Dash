@@ -115,10 +115,17 @@ function shellHtml(hint = DEFAULT_HINT) {
     + `<button type="button" class="ev-btn" data-role="next">Next</button></nav>`;
 }
 
-// Mounts the table into container. Resolves once the rows are loaded (never rejects; a load
-// failure is shown inside the table). update(ids) limits the table to those work_ids; null shows all.
+// Mounts the table into container. Resolves once rows are ready (never rejects; a load failure is
+// shown inside the table). Supply initialRows to reuse normalized plastic-related rows already in
+// memory; otherwise the table loads and normalizes its own works_detail.json payload. update(ids)
+// limits the table to those work_ids; null shows all.
 // hint: the line above the controls (default: the Evidence map heatmap hint; "" for none).
-export function mountWorksTable(container, {today = new Date(), hint = DEFAULT_HINT} = {}) {
+export function mountWorksTable(container, {today = new Date(), hint = DEFAULT_HINT, initialRows} = {}) {
+  const hasInitialRows = initialRows !== undefined;
+  if (hasInitialRows && !Array.isArray(initialRows)) {
+    throw new TypeError("mountWorksTable initialRows must be an array");
+  }
+  const initialRowsCopy = hasInitialRows ? initialRows.slice() : null;
   container.classList.add("ev-table-root");
   container.innerHTML = shellHtml(hint);
   const q = (role) => container.querySelector(`[data-role="${role}"]`);
@@ -258,18 +265,23 @@ export function mountWorksTable(container, {today = new Date(), hint = DEFAULT_H
     button.addEventListener("click", () => setSort(button.dataset.sort));
   });
 
-  const ready = loadJson("works_detail.json")
-    .then((payload) => {
-      // The page lists plastic-related works only.
-      state.rows = normaliseRows(payload).filter((row) => row.plastic_related === true);
-      state.loaded = true;
-      el.status.textContent = "";
-      render();
-    })
-    .catch(() => {
-      el.status.textContent = "The works list is unavailable right now.";
-      el.rows.innerHTML = "";
-    });
+  const setLoadedRows = (rows) => {
+    state.rows = rows;
+    state.loaded = true;
+    el.status.textContent = "";
+    render();
+  };
+  const ready = (
+    hasInitialRows
+      ? Promise.resolve().then(() => setLoadedRows(initialRowsCopy))
+      : loadJson("works_detail.json").then((payload) => {
+          // The page lists plastic-related works only.
+          setLoadedRows(normaliseRows(payload).filter((row) => row.plastic_related === true));
+        })
+  ).catch(() => {
+    el.status.textContent = "The works list is unavailable right now.";
+    el.rows.innerHTML = "";
+  });
 
   return {
     ready,

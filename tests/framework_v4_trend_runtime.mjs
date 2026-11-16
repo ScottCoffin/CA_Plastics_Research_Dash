@@ -96,6 +96,74 @@ assert.equal(escapeHtml(null), "");
     {topic: "soil_and_agriculture", values: [1, 0]}
   ]);
   assert.deepEqual(seriesFromRows(null, [2024], ["air"]).totals, [0]);
+
+  // The row-derived initial chart and filtered redraw have the same series shape and counts
+  // as the index query path, including multi-topic works and out-of-range years.
+  const countRows = (selected) => rows.filter((row) => {
+    const yearMatches = row.year >= Number(selected.year[0]) && row.year <= Number(selected.year.at(-1));
+    const topicMatches = !selected.topic || selected.topic.some((topic) => row.domain_tags.includes(topic));
+    return yearMatches && topicMatches;
+  }).length;
+  assert.deepEqual(
+    seriesFromRows(rows, [2024, 2025], ["air", "soil_and_agriculture"]),
+    seriesByTopic(countRows, [2024, 2025], ["air", "soil_and_agriculture"])
+  );
+  const filteredRows = rows.filter((row) => row.year === 2024);
+  const filteredCounts = (selected) => (selected.year.includes("2024") ? countRows(selected) : 0);
+  assert.deepEqual(
+    seriesFromRows(filteredRows, [2024, 2025], ["air", "soil_and_agriculture"]),
+    seriesByTopic(filteredCounts, [2024, 2025], ["air", "soil_and_agriculture"])
+  );
+}
+
+// The trend renderer uses the supplied normalized rows for its initial chart, then uses the same
+// row path for filtered updates. No index counts are needed when rows are available; the legacy
+// index-count fallback remains available for callers without initialRows.
+{
+  const previousWindow = globalThis.window;
+  const previousFetch = globalThis.fetch;
+  globalThis.window = {};
+  globalThis.fetch = async () => ({
+    ok: true,
+    json: async () => ({query_version: "test-v1", fetched_at: "2026-01-01T00:00:00Z", by_year: {2024: 100, 2025: 120}})
+  });
+  try {
+    const {mountV4Trend} = await import("../framework/src/components/v4_trend.js");
+    const topics = new Set(["air", "soil_and_agriculture"]);
+    const noCountIndex = {ids: {topic: topics}, counts: () => { throw new Error("initial rows should avoid index counts"); }};
+    const initialRows = [
+      {year: 2024, domain_tags: ["air", "air", "soil_and_agriculture"]},
+      {year: 2024, domain_tags: ["air"]},
+      {year: 2025, domain_tags: ["soil_and_agriculture"]},
+      {year: 1999, domain_tags: ["air"]}
+    ];
+    const container = {classList: {add() {}}, innerHTML: ""};
+    const trend = await mountV4Trend(container, noCountIndex, initialRows);
+    assert.match(container.innerHTML, /2024 Air &amp; atmosphere: 2/);
+    assert.match(container.innerHTML, /2024 Soil &amp; agriculture: 1/);
+    assert.match(container.innerHTML, /<th scope="row">2024<\/th><td>2<\/td><td>1<\/td><td>2<\/td>/);
+
+    trend.update([initialRows[2]], {filtered: true});
+    assert.match(container.innerHTML, /Works per year by topic \(filtered\)/);
+    assert.match(container.innerHTML, /<th scope="row">2025<\/th><td>1<\/td><td>1<\/td><td>0<\/td>/);
+
+    const fallbackIndex = {
+      ids: {topic: topics, year: new Set(Array.from({length: 27}, (_, index) => String(2000 + index)))},
+      counts(selection) {
+        const year = Number(selection.year[0]);
+        const total = year === 2024 ? 3 : 0;
+        const byTopic = selection.topic?.[0] === "air" ? 2 : 1;
+        return {total: selection.topic ? byTopic : total};
+      }
+    };
+    const fallbackContainer = {classList: {add() {}}, innerHTML: ""};
+    await mountV4Trend(fallbackContainer, fallbackIndex);
+    assert.match(fallbackContainer.innerHTML, /<th scope="row">2024<\/th><td>3<\/td><td>1<\/td><td>2<\/td>/);
+  } finally {
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+    globalThis.fetch = previousFetch;
+  }
 }
 
 console.log("framework_v4_trend_runtime: all checks passed");

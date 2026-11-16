@@ -164,7 +164,7 @@ function dataTable(data, rows, globalByYear, version) {
 
 // Renders the whole corpus first; update(rows) redraws from the rows that match the page filters.
 // The global denominator is never filtered, so the share note says so when filters are on.
-export async function mountV4Trend(container, idx) {
+export async function mountV4Trend(container, idx, initialRows = null) {
   if (!container) throw new Error("mountV4Trend needs a container element");
   container.classList.add("v4-trend");
   container.innerHTML = '<p class="v4-status" role="status">Loading the trend panel…</p>';
@@ -197,7 +197,8 @@ export async function mountV4Trend(container, idx) {
       dataTable(data, rows, globalByYear, version);
   }
 
-  draw(seriesByTopic(countsFor(idx), years, topics), false);
+  const initialData = initialRows === null ? seriesByTopic(countsFor(idx), years, topics) : seriesFromRows(initialRows, years, topics);
+  draw(initialData, false);
   return {
     update(rows, {filtered = true} = {}) {
       draw(seriesFromRows(rows, years, topics), filtered);

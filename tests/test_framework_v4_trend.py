@@ -33,11 +33,29 @@ def test_model_has_no_top_level_dom_access() -> None:
 
 def test_view_exports_mount_and_imports_shared_helpers() -> None:
     text = (COMPONENTS / "v4_trend.js").read_text(encoding="utf-8")
-    assert re.search(r"export\s+async\s+function\s+mountV4Trend\s*\(\s*container,\s*idx\s*\)", text)
+    assert re.search(
+        r"export\s+async\s+function\s+mountV4Trend\s*\(\s*container,\s*idx,\s*initialRows\s*=\s*null\s*\)",
+        text,
+    )
+    assert "seriesFromRows(initialRows, years, topics)" in text
+    assert "seriesByTopic(countsFor(idx), years, topics)" in text
     assert 'import "./shared/topics.js";' in text
     assert "trend_global.json" in text
     assert "Global comparison unavailable." in text
     assert "Last 12 months: still being indexed" in text
+
+
+def test_evidence_mount_uses_normalised_rows_for_initial_trend_and_table() -> None:
+    evidence = (COMPONENTS / "evidence.js").read_text(encoding="utf-8")
+    assert 'const trendPromise = mountV4Trend($("ev-v4"), index, plasticWorks);' in evidence
+    assert 'mountWorksTable($("ev-table"), {initialRows: plasticWorks})' in evidence
+    assert "trend.update(app.lastIds.map((id) => app.detail.get(id)).filter(Boolean)," in evidence
+    assert "{filtered: true});" in evidence
+    assert re.search(
+        r"catch\s*\{\s*\$\(\"ev-table\"\).*?mountV4Trend\(\$\(\"ev-v4\"\), index\)",
+        evidence,
+        re.DOTALL,
+    )
 
 
 def test_view_uses_no_chart_library_or_npm_import() -> None:
