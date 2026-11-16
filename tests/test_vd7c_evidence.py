@@ -66,7 +66,7 @@ def test_development_information_and_recent_items_use_callouts() -> None:
     assert (
         '<div class="atlas-callout atlas-callout--caution ev-volume-callout" '
         'role="note"><p class="data-note volume-caption">Counts show how much has been published, '
-        'not the strength or quality of the evidence.</p></div>'
+        "not the strength or quality of the evidence.</p></div>"
     ) in page
 
     css = EVIDENCE_CSS.read_text(encoding="utf-8")
