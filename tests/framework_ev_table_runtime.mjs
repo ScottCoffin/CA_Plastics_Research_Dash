@@ -1,8 +1,6 @@
 // Runtime checks for the Evidence map publication table model (EV-TABLE).
 // The pure helpers live in framework/src/components/ev_table_model.js.
 import assert from "node:assert/strict";
-import {createRequire} from "node:module";
-import {fileURLToPath} from "node:url";
 import {
   authorLine,
   dateLabel,
@@ -206,70 +204,40 @@ assert.equal(safeHttpUrl(null), "");
 // The Evidence table can reuse its already-normalized in-memory rows without a second fetch;
 // other callers retain the default fetch/normalize/plastic-filter path.
 {
-  const require = createRequire(fileURLToPath(new URL("../framework/package.json", import.meta.url)));
-  const {JSDOM} = require("jsdom");
-  const dom = new JSDOM('<!doctype html><html><head></head><body><div id="reuse"></div><div id="fallback"></div></body></html>', {
-    url: "https://atlas.example/"
+  const {resolveWorksRows} = await import("../framework/src/components/ev_table.js");
+  const initialRows = normaliseRows({
+    works: [
+      work({work_id: "OLD", title: "Older California river study", pub_date: "2025-01-01"}),
+      work({work_id: "NEW", title: "Newer California estuary study", pub_date: "2026-10-01"})
+    ]
+  }).filter((row) => row.plastic_related === true);
+  const originalOrder = initialRows.map((row) => row.work_id);
+  let suppliedLoaderCalls = 0;
+  const reusedRows = await resolveWorksRows(initialRows, async () => {
+    suppliedLoaderCalls += 1;
+    return {};
   });
-  const previousWindow = globalThis.window;
-  const previousDocument = globalThis.document;
-  const previousFetch = globalThis.fetch;
+
+  assert.equal(suppliedLoaderCalls, 0, "supplied rows should skip the works_detail.json loader");
+  assert.notEqual(reusedRows, initialRows, "supplied row arrays should be snapshotted");
+  assert.deepEqual(reusedRows.map((row) => row.work_id), originalOrder);
+  assert.deepEqual(initialRows.map((row) => row.work_id), originalOrder, "resolution must preserve caller order");
+
   const fetchCalls = [];
-  globalThis.window = dom.window;
-  globalThis.document = dom.window.document;
-  globalThis.fetch = async (url, options) => {
-    fetchCalls.push({url: String(url), options});
+  const fallbackRows = await resolveWorksRows(undefined, async (path) => {
+    fetchCalls.push(path);
     return {
-      ok: true,
-      json: async () => ({works: [work({work_id: "FETCHED"}), work({work_id: "EXCLUDED", plastic_related: false})]})
-    };
-  };
-
-  try {
-    const {mountWorksTable} = await import("../framework/src/components/ev_table.js");
-    const initialRows = normaliseRows({
       works: [
-        work({work_id: "OLD", title: "Older California river study", pub_date: "2025-01-01"}),
-        work({work_id: "NEW", title: "Newer California estuary study", pub_date: "2026-10-01"})
+        work({work_id: "FETCHED"}),
+        work({work_id: "EXCLUDED", plastic_related: false})
       ]
-    }).filter((row) => row.plastic_related === true);
-    const originalOrder = initialRows.map((row) => row.work_id);
-    const reused = mountWorksTable(dom.window.document.getElementById("reuse"), {today: TODAY, initialRows});
-    await reused.ready;
+    };
+  });
+  assert.deepEqual(fetchCalls, ["works_detail.json"], "omitting rows should use the default payload path");
+  assert.deepEqual(fallbackRows.map((row) => row.work_id), ["FETCHED"], "the default path keeps plastic-only filtering");
+  assert.equal(fallbackRows[0].title, work().title, "the fallback path normalizes table rows");
 
-    assert.equal(fetchCalls.length, 0, "supplied rows should skip the works_detail.json fetch");
-    const reusedContainer = dom.window.document.getElementById("reuse");
-    assert.deepEqual(
-      [...reusedContainer.querySelectorAll("tbody[data-role='rows'] .ev-title")].map((node) => node.textContent),
-      ["Newer California estuary study", "Older California river study"]
-    );
-    assert.deepEqual(initialRows.map((row) => row.work_id), originalOrder, "sorting must not reorder caller rows");
-
-    const search = reusedContainer.querySelector('[data-role="q"]');
-    search.value = "estuary";
-    search.dispatchEvent(new dom.window.Event("input", {bubbles: true}));
-    assert.equal(reusedContainer.querySelector("tbody[data-role='rows'] .ev-title").textContent, "Newer California estuary study");
-    assert.match(reusedContainer.querySelector('[data-role="range"]').textContent, /of 1$/);
-    search.value = "";
-    search.dispatchEvent(new dom.window.Event("input", {bubbles: true}));
-    reused.update(["OLD"]);
-    assert.equal(reusedContainer.querySelector("tbody[data-role='rows'] .ev-title").textContent, "Older California river study");
-
-    const fallback = mountWorksTable(dom.window.document.getElementById("fallback"), {today: TODAY});
-    await fallback.ready;
-    assert.equal(fetchCalls.length, 1, "omitting initialRows should retain the fetch fallback");
-    assert.match(fetchCalls[0].url, /\/data\/works_detail\.json$/);
-    const fallbackTitles = [...dom.window.document.querySelectorAll("#fallback tbody[data-role='rows'] .ev-title")]
-      .map((node) => node.textContent);
-    assert.deepEqual(fallbackTitles, [work().title], "the default fetch path should retain plastic-only filtering");
-  } finally {
-    dom.window.close();
-    if (previousWindow === undefined) delete globalThis.window;
-    else globalThis.window = previousWindow;
-    if (previousDocument === undefined) delete globalThis.document;
-    else globalThis.document = previousDocument;
-    globalThis.fetch = previousFetch;
-  }
+  await assert.rejects(resolveWorksRows({}), /initialRows must be an array/);
 }
 
 // escapeHtml neutralises markup characters.

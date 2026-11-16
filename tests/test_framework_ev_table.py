@@ -49,15 +49,17 @@ def test_view_exports_mount_and_recent_callout() -> None:
 
 def test_view_reuses_supplied_normalized_rows_and_keeps_fetch_fallback() -> None:
     text = VIEW.read_text(encoding="utf-8")
-    assert "const hasInitialRows = initialRows !== undefined;" in text
-    assert "const initialRowsCopy = hasInitialRows ? initialRows.slice() : null;" in text
-    assert "Promise.resolve().then(() => setLoadedRows(initialRowsCopy))" in text
     assert re.search(
-        r":\s*loadJson\(\"works_detail\.json\"\)\s*\.then\(\(payload\) =>\s*\{"
-        r".*?normaliseRows\(payload\)\.filter\(\(row\) => row\.plastic_related === true\)",
+        r"export\s+async\s+function\s+resolveWorksRows\s*\(\s*initialRows,\s*loader\s*=\s*loadJson\s*\)",
         text,
-        re.DOTALL,
     )
+    assert "return initialRows.slice();" in text
+    assert 'const payload = await loader("works_detail.json");' in text
+    assert re.search(
+        r"return normaliseRows\(payload\)\.filter\(\(row\) => row\.plastic_related === true\)",
+        text,
+    )
+    assert "resolveWorksRows(initialRows).then(setLoadedRows).catch" in text
 
 
 def test_view_loads_payloads_lazily_and_imports_shared_helpers() -> None:

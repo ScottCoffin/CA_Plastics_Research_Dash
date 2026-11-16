@@ -28,6 +28,19 @@ const COLUMN_COUNT = 6;
 // Abstracts are a large file, so they load once, on the first "Abstract" expand, and are shared.
 let abstractsPromise = null;
 
+// Resolve the table's plastic-related rows. Evidence can provide rows it has already normalized;
+// other callers keep the default payload-loading path. Exported for DOM-free runtime coverage.
+export async function resolveWorksRows(initialRows, loader = loadJson) {
+  if (initialRows !== undefined) {
+    if (!Array.isArray(initialRows)) {
+      throw new TypeError("initialRows must be an array");
+    }
+    return initialRows.slice();
+  }
+  const payload = await loader("works_detail.json");
+  return normaliseRows(payload).filter((row) => row.plastic_related === true);
+}
+
 function loadAbstracts() {
   if (!abstractsPromise) {
     abstractsPromise = loadJson("work_text/abstracts.json")
@@ -121,11 +134,6 @@ function shellHtml(hint = DEFAULT_HINT) {
 // limits the table to those work_ids; null shows all.
 // hint: the line above the controls (default: the Evidence map heatmap hint; "" for none).
 export function mountWorksTable(container, {today = new Date(), hint = DEFAULT_HINT, initialRows} = {}) {
-  const hasInitialRows = initialRows !== undefined;
-  if (hasInitialRows && !Array.isArray(initialRows)) {
-    throw new TypeError("mountWorksTable initialRows must be an array");
-  }
-  const initialRowsCopy = hasInitialRows ? initialRows.slice() : null;
   container.classList.add("ev-table-root");
   container.innerHTML = shellHtml(hint);
   const q = (role) => container.querySelector(`[data-role="${role}"]`);
@@ -271,14 +279,7 @@ export function mountWorksTable(container, {today = new Date(), hint = DEFAULT_H
     el.status.textContent = "";
     render();
   };
-  const ready = (
-    hasInitialRows
-      ? Promise.resolve().then(() => setLoadedRows(initialRowsCopy))
-      : loadJson("works_detail.json").then((payload) => {
-          // The page lists plastic-related works only.
-          setLoadedRows(normaliseRows(payload).filter((row) => row.plastic_related === true));
-        })
-  ).catch(() => {
+  const ready = resolveWorksRows(initialRows).then(setLoadedRows).catch(() => {
     el.status.textContent = "The works list is unavailable right now.";
     el.rows.innerHTML = "";
   });
