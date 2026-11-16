@@ -4,6 +4,8 @@ title: About
 
 # About this snapshot
 
+<link rel="stylesheet" href="./components/about.css">
+
 The Atlas is a static, client-side site. It reads generated JSON and does not query OpenAlex from your browser.
 
 ```js
@@ -49,7 +51,7 @@ California state waters use a three-nautical-mile polygon derived from NOAA’s 
 More terms used across the Atlas are defined in the <a href="./glossary">Glossary</a>.
 
 </section>
-<section class="card">
+<section class="card about-limitations-card">
 
 ## Limitations
 
@@ -58,7 +60,7 @@ Plastic-related and topic labels are provisional, rule-based screening metadata.
 OpenAlex coverage and affiliation records may be incomplete or incorrect, and author profiles can split one person’s works or combine different people. Institution location does not identify a study’s sampling location.
 
 </section>
-<section class="card">
+<section class="card about-citation-card">
 
 ## How to cite
 

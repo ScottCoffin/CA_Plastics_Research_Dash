@@ -1,0 +1,17 @@
+#observablehq-main p a,
+#observablehq-main li a {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.about-citation-card a[href^="https://doi.org/"] {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  overflow-wrap: anywhere;
+}
+
+.about-limitations-card {
+  border-left: 4px solid var(--theme-foreground-focus);
+  background: var(--theme-background-alt);
+}

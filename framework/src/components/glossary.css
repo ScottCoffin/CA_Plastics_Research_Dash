@@ -1,0 +1,47 @@
+.glossary dt {
+  margin: 0.75rem 0 0;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.35rem;
+  font-family: "Barlow Semi Condensed", system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.glossary-term-link {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.glossary dd a {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.glossary-term-link:focus-visible {
+  outline: 3px solid var(--theme-foreground-focus);
+  outline-offset: 2px;
+}
+
+/* Observable's link pseudo-class has greater specificity than the shared shell rule. */
+.atlas-skip-link:link,
+.atlas-skip-link:visited,
+.atlas-skip-link:hover,
+.atlas-skip-link:focus,
+.atlas-skip-link:active {
+  color: var(--atlas-on-brand);
+}
+
+.glossary dt:target,
+.glossary dt:target + dd {
+  background: var(--atlas-brand-wash);
+  box-shadow: inset 0.25rem 0 var(--theme-foreground-focus);
+}
+
+.glossary dt:target + dd {
+  padding: 0.35rem 0.75rem 0.75rem;
+}
