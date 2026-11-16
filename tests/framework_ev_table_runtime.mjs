@@ -11,6 +11,7 @@ import {
   pageInfo,
   pageRows,
   recentRows,
+  resolveWorksRows,
   safeHttpUrl,
   sortRows,
   toCsv
@@ -204,7 +205,6 @@ assert.equal(safeHttpUrl(null), "");
 // The Evidence table can reuse its already-normalized in-memory rows without a second fetch;
 // other callers retain the default fetch/normalize/plastic-filter path.
 {
-  const {resolveWorksRows} = await import("../framework/src/components/ev_table.js");
   const initialRows = normaliseRows({
     works: [
       work({work_id: "OLD", title: "Older California river study", pub_date: "2025-01-01"}),

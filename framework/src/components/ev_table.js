@@ -12,6 +12,7 @@ import {
   pageInfo,
   pageRows,
   recentRows,
+  resolveWorksRows,
   sortRows,
   toCsv
 } from "./ev_table_model.js";
@@ -27,19 +28,6 @@ const COLUMN_COUNT = 6;
 
 // Abstracts are a large file, so they load once, on the first "Abstract" expand, and are shared.
 let abstractsPromise = null;
-
-// Resolve the table's plastic-related rows. Evidence can provide rows it has already normalized;
-// other callers keep the default payload-loading path. Exported for DOM-free runtime coverage.
-export async function resolveWorksRows(initialRows, loader = loadJson) {
-  if (initialRows !== undefined) {
-    if (!Array.isArray(initialRows)) {
-      throw new TypeError("initialRows must be an array");
-    }
-    return initialRows.slice();
-  }
-  const payload = await loader("works_detail.json");
-  return normaliseRows(payload).filter((row) => row.plastic_related === true);
-}
 
 function loadAbstracts() {
   if (!abstractsPromise) {
@@ -279,7 +267,7 @@ export function mountWorksTable(container, {today = new Date(), hint = DEFAULT_H
     el.status.textContent = "";
     render();
   };
-  const ready = resolveWorksRows(initialRows).then(setLoadedRows).catch(() => {
+  const ready = resolveWorksRows(initialRows, loadJson).then(setLoadedRows).catch(() => {
     el.status.textContent = "The works list is unavailable right now.";
     el.rows.innerHTML = "";
   });

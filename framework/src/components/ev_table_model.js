@@ -105,6 +105,22 @@ export function normaliseRows(payload) {
   return rows;
 }
 
+// Resolve the table's plastic-related rows. Evidence can provide rows it has already normalized;
+// other callers pass their payload loader to retain the default fetch/normalize/filter path.
+export async function resolveWorksRows(initialRows, loader) {
+  if (initialRows !== undefined) {
+    if (!Array.isArray(initialRows)) {
+      throw new TypeError("initialRows must be an array");
+    }
+    return initialRows.slice();
+  }
+  if (typeof loader !== "function") {
+    throw new TypeError("loader must be a function when initialRows are omitted");
+  }
+  const payload = await loader("works_detail.json");
+  return normaliseRows(payload).filter((row) => row.plastic_related === true);
+}
+
 // True when pub_date falls within the last `days` calendar days before `today`, inclusive.
 // Future dates and rows without a valid pub_date are not recent.
 export function isRecent(row, today = new Date(), days = 14) {

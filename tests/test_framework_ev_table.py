@@ -48,18 +48,20 @@ def test_view_exports_mount_and_recent_callout() -> None:
 
 
 def test_view_reuses_supplied_normalized_rows_and_keeps_fetch_fallback() -> None:
-    text = VIEW.read_text(encoding="utf-8")
+    model = MODEL.read_text(encoding="utf-8")
+    view = VIEW.read_text(encoding="utf-8")
     assert re.search(
-        r"export\s+async\s+function\s+resolveWorksRows\s*\(\s*initialRows,\s*loader\s*=\s*loadJson\s*\)",
-        text,
+        r"export\s+async\s+function\s+resolveWorksRows\s*\(\s*initialRows,\s*loader\s*\)",
+        model,
     )
-    assert "return initialRows.slice();" in text
-    assert 'const payload = await loader("works_detail.json");' in text
+    assert "return initialRows.slice();" in model
+    assert 'const payload = await loader("works_detail.json");' in model
     assert re.search(
         r"return normaliseRows\(payload\)\.filter\(\(row\) => row\.plastic_related === true\)",
-        text,
+        model,
     )
-    assert "resolveWorksRows(initialRows).then(setLoadedRows).catch" in text
+    assert "resolveWorksRows," in view
+    assert "resolveWorksRows(initialRows, loadJson).then(setLoadedRows).catch" in view
 
 
 def test_view_loads_payloads_lazily_and_imports_shared_helpers() -> None:
