@@ -13,6 +13,14 @@ CSS = ROOT / "framework" / "src" / "components" / "overview.css"
 MASK = ROOT / "framework" / "src" / "assets" / "design" / "ca_contours_mask.svg"
 
 
+def test_overview_stylesheet_does_not_replace_the_global_style() -> None:
+    page = INDEX.read_text(encoding="utf-8")
+    _, frontmatter, body = page.split("---", maxsplit=2)
+
+    assert not re.search(r"(?m)^style:\s*", frontmatter)
+    assert '<link rel="stylesheet" href="./components/overview.css">' in body
+
+
 def test_overview_hero_copy_and_single_heading() -> None:
     page = INDEX.read_text(encoding="utf-8")
 
