@@ -15,7 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from atlas.build.network import DEFAULT_NODE_CAP, build_network  # noqa: E402
+from atlas.build.export_site import refresh_metadata_counts  # noqa: E402
+from atlas.build.network import DEFAULT_NODE_CAP, build_network, network_counts  # noqa: E402
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -46,6 +47,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{out} is current")
         return 0
     out.write_bytes(text.encode("utf-8"))
+    # The Overview's network counts live in build_metadata.json, which the export wrote before
+    # this script ran; refresh them so they match the file just written (VD-13).
+    metadata_path = out.parent / "build_metadata.json"
+    if not refresh_metadata_counts(metadata_path, network_counts(network)):
+        print(
+            f"network counts not refreshed: {metadata_path} is missing or unreadable",
+            file=sys.stderr,
+        )
     print(
         f"network: {len(network['nodes'])} nodes, {len(network['edges'])} edges, "
         f"{network['communities']} communities, {out.stat().st_size} bytes -> {out}"

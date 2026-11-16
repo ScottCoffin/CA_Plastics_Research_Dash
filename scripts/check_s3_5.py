@@ -192,7 +192,11 @@ def main() -> None:
     )
     counts = metadata.get("counts")
     assert isinstance(counts, dict), "build metadata must contain generated counts"
-    assert counts == index.get("counts"), "export metadata and index counts disagree"
+    # VD-13: metadata may add Overview-only counts; every index count must still agree.
+    index_counts = index.get("counts") or {}
+    assert {key: counts.get(key) for key in index_counts} == index_counts, (
+        "export metadata and index counts disagree"
+    )
     assert all(isinstance(value, int) and value >= 0 for value in counts.values())
     assert {
         "authors",

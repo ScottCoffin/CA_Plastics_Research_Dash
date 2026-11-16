@@ -111,14 +111,25 @@ def test_entry_counts_use_only_existing_snapshot_metadata() -> None:
         page,
     )
 
-    assert set(count_keys) == {"Authors", "Works", "Institutions", "California institutions"}
-    assert len(count_groups) == 3
+    # VD-13: the Funding, Monitoring, Network and Evidence cards read build_metadata counts.
+    assert set(count_keys) == {
+        "Authors",
+        "Institutions",
+        "California institutions",
+        "Awards",
+        "Monitoring samples",
+        "Monitoring sources",
+        "Network experts",
+        "Network links",
+        "Plastic-related works",
+    }
+    assert len(count_groups) == 6
     assert "counts.authors" not in page
     assert "counts.works" not in page
     assert "counts.institutions" not in page
     assert "counts.ca_institutions" not in page
     assert "[data-overview-count-group]" in page
-    assert 'data-overview-suffix="works in snapshot"' in page
+    assert 'data-overview-suffix="plastic-related works"' in page
     assert ".atlas-entry__meta[hidden]" in css
     assert "400 experts" not in page and "1,241 links" not in page
     assert "samples ·" not in page and "awards ·" not in page

@@ -77,7 +77,7 @@ title: Overview
         </a>
         <a class="atlas-entry" href="./network">
           <span class="atlas-entry__icon" data-atlas-icon="network"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Collaboration network</span><span class="atlas-entry__text">See how researchers connect through shared work.</span></span>
+          <span class="atlas-entry__body"><span class="atlas-entry__title">Collaboration network</span><span class="atlas-entry__text">See how researchers connect through shared work.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Network experts" data-overview-suffix="experts"></span><span class="atlas-entry__meta-separator" aria-hidden="true">·</span><span data-overview-count="Network links" data-overview-suffix="links"></span></span></span>
         </a>
         <a class="atlas-entry" href="./institutions">
           <span class="atlas-entry__icon" data-atlas-icon="building"></span>
@@ -85,15 +85,15 @@ title: Overview
         </a>
         <a class="atlas-entry" href="./monitoring">
           <span class="atlas-entry__icon" data-atlas-icon="drop"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Monitoring</span><span class="atlas-entry__text">Browse public plastic monitoring samples from California waters.</span></span>
+          <span class="atlas-entry__body"><span class="atlas-entry__title">Monitoring</span><span class="atlas-entry__text">Browse public plastic monitoring samples from California waters.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Monitoring samples" data-overview-suffix="samples"></span><span class="atlas-entry__meta-separator" aria-hidden="true">·</span><span data-overview-count="Monitoring sources" data-overview-suffix="sources"></span></span></span>
         </a>
         <a class="atlas-entry" href="./funding">
           <span class="atlas-entry__icon" data-atlas-icon="coins"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Funding</span><span class="atlas-entry__text">Explore grants, awards, and open funding calls.</span></span>
+          <span class="atlas-entry__body"><span class="atlas-entry__title">Funding</span><span class="atlas-entry__text">Explore grants, awards, and open funding calls.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Awards" data-overview-suffix="plastic-related awards"></span></span></span>
         </a>
         <a class="atlas-entry" href="./evidence">
           <span class="atlas-entry__icon" data-atlas-icon="grid"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Evidence map</span><span class="atlas-entry__text">Filter the published works snapshot by topic, year, and sector.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Works" data-overview-suffix="works in snapshot"></span></span></span>
+          <span class="atlas-entry__body"><span class="atlas-entry__title">Evidence map</span><span class="atlas-entry__text">Filter the published works snapshot by topic, year, and sector.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Plastic-related works" data-overview-suffix="plastic-related works"></span></span></span>
         </a>
         <a class="atlas-entry" href="./policy">
           <span class="atlas-entry__icon" data-atlas-icon="scale"></span>
@@ -116,9 +116,24 @@ for (const host of document.querySelectorAll("[data-atlas-icon]")) {
 ```
 
 ```js
-import {loadJson, aboutViewModel} from "./components/atlas.js";
+import {loadJson, aboutViewModel, formatCount} from "./components/atlas.js";
 const metadata = await loadJson("build_metadata.json");
 const snapshot = aboutViewModel(metadata, null);
+
+// VD-13: entry-card counts beyond the About stats. Each reads one key of build_metadata.json
+// counts, formatted as the Atlas formats every count; a missing key reads "Unavailable", which
+// keeps its card group hidden.
+const metadataCounts = metadata?.counts ?? {};
+const cardCounts = new Map(
+  [
+    ["Awards", "awards"],
+    ["Monitoring samples", "monitoring_samples"],
+    ["Monitoring sources", "monitoring_sources"],
+    ["Network experts", "network_experts"],
+    ["Network links", "network_links"],
+    ["Plastic-related works", "plastic_works"],
+  ].map(([label, key]) => [label, formatCount(metadataCounts[key])]),
+);
 
 const statIcons = new Map([
   ["Authors", "person"],
@@ -150,7 +165,7 @@ statsHost.setAttribute("aria-busy", "false");
 
 for (const group of document.querySelectorAll("[data-overview-count-group]")) {
   const counts = [...group.querySelectorAll("[data-overview-count]")];
-  const entries = counts.map((node) => ({node, value: stats.get(node.dataset.overviewCount)?.value}));
+  const entries = counts.map((node) => ({node, value: cardCounts.get(node.dataset.overviewCount) ?? stats.get(node.dataset.overviewCount)?.value}));
   if (!entries.length || entries.some(({value}) => !value || value === "Unavailable")) continue;
   for (const {node, value} of entries) {
     node.textContent = `${value} ${node.dataset.overviewSuffix}`;

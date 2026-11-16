@@ -30,6 +30,7 @@ from atlas.build.curation import (
     load_work_owner_reviewed,
     load_work_relevance,
 )
+from atlas.build.network import network_counts
 from atlas.ingest.abstract_qc import misattached_abstract_ids
 from atlas.nlp.labels import always_relevant, title_relevant
 from atlas.query import load_query_config
@@ -464,6 +465,63 @@ def _write_institution_works(
     for stale in folder.glob("*.json"):
         if stale.name not in written:
             stale.unlink()
+
+
+def _optional_json(path: Path) -> Any:
+    """Parsed JSON, or None when the file is absent, unreadable or not valid JSON."""
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def _sibling_counts(output: Path) -> dict[str, int]:
+    """Headline counts from the payloads other scripts write beside index.json (VD-13).
+
+    Each count follows the default view of the page that shows it. A key is left out when its
+    source is absent, unreadable or not the expected shape, so an Overview card stays hidden
+    rather than showing a guess. A private preview is never counted into public metadata.
+    """
+    counts: dict[str, int] = {}
+    grants = _optional_json(output / "grants.json")
+    if isinstance(grants, dict) and isinstance(grants.get("rows"), list):
+        # Funding opens with "Provisional plastic relevance only (true or unknown)" ticked.
+        counts["awards"] = sum(
+            1
+            for row in grants["rows"]
+            if isinstance(row, dict) and row.get("plastic_related") is not False
+        )
+    monitoring = _optional_json(output / "monitoring.json")
+    if isinstance(monitoring, dict) and monitoring.get("publication_mode") != "private_preview":
+        # The Monitoring status line reads sample_count and lists every dataset row as a source.
+        sample_count = monitoring.get("sample_count")
+        if isinstance(sample_count, int) and not isinstance(sample_count, bool):
+            counts["monitoring_samples"] = sample_count
+        if isinstance(monitoring.get("datasets"), list):
+            counts["monitoring_sources"] = len(monitoring["datasets"])
+    network = _optional_json(output / "network.json")
+    if (
+        isinstance(network, dict)
+        and isinstance(network.get("nodes"), list)
+        and isinstance(network.get("edges"), list)
+    ):
+        counts.update(network_counts(network))
+    return counts
+
+
+def refresh_metadata_counts(metadata_path: str | Path, counts: Mapping[str, int]) -> bool:
+    """Merge ``counts`` into an existing build_metadata.json, keeping every other field (VD-13).
+
+    Returns False, and writes nothing, when the file is absent or is not a JSON object.
+    """
+    path = Path(metadata_path)
+    metadata = _optional_json(path)
+    if not isinstance(metadata, dict):
+        return False
+    current = metadata.get("counts")
+    metadata["counts"] = {**(current if isinstance(current, dict) else {}), **counts}
+    _atomic_json(path, metadata)
+    return True
 
 
 def _aggregate(works: Sequence[Mapping[str, Any]]) -> dict[str, list[dict[str, Any]]]:
@@ -996,7 +1054,12 @@ def export_site(
     metadata = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": timestamp,
-        "counts": counts,
+        # index.json keeps its own counts (check_s3_1 pins them); the Overview cards read these.
+        "counts": {
+            **counts,
+            "plastic_works": sum(1 for work in slim_works if work.get("plastic_related") is True),
+            **_sibling_counts(output),
+        },
         "files": sizes,
         "payload_bytes": sum(item["bytes"] for item in sizes.values()),
         "payload_gzip_bytes": sum(item["gzip_bytes"] for item in sizes.values()),

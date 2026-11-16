@@ -156,3 +156,42 @@ def build_network(
         "nodes": node_rows,
         "edges": edge_rows,
     }
+
+
+def _weight(value: object) -> float:
+    try:
+        return float(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def network_counts(network: Mapping[str, Any]) -> dict[str, int]:
+    """Headline counts the Collaboration network page shows with its default filters (VD-13).
+
+    Mirrors network.js: experts are the nodes with a string id; links are the edges whose two
+    ends are listed experts, that are not self-loops, and whose total weight is at least 1
+    (the page's default minimum of one shared work).
+    """
+    raw_nodes = network.get("nodes")
+    raw_edges = network.get("edges")
+    nodes = [
+        node
+        for node in (raw_nodes if isinstance(raw_nodes, list) else [])
+        if isinstance(node, Mapping) and isinstance(node.get("id"), str)
+    ]
+    ids = {node["id"] for node in nodes}
+    links = 0
+    for edge in raw_edges if isinstance(raw_edges, list) else []:
+        if not isinstance(edge, Mapping):
+            continue
+        source, target = edge.get("source"), edge.get("target")
+        if not (isinstance(source, str) and isinstance(target, str)):
+            continue
+        if (
+            source in ids
+            and target in ids
+            and source != target
+            and _weight(edge.get("weight")) >= 1
+        ):
+            links += 1
+    return {"network_experts": len(nodes), "network_links": links}
