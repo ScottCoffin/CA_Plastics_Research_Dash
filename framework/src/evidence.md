@@ -28,10 +28,6 @@ title: Evidence map
   <p class="ev-notice">In development: a map of sampled locations and a review overlay will be added here. Topic and matrix tags come from keyword rules and are provisional.</p>
 </div>
 
-<div class="atlas-callout atlas-callout--info ev-info-callout" role="note">
-  <p class="data-note ev-aux-note">The topic <strong>Plastic-associated chemicals</strong> (such as BPA, phthalates and 6PPD) is auxiliary. The Atlas searches for plastics terms, so it covers these chemical studies far less completely than studies of plastic particles and debris. <a href="./glossary#plastic-associated-chemicals">More about this topic</a>.</p>
-</div>
-
 <div id="evidence-root">
   <p id="evidence-status" class="result-count" role="status" aria-live="polite">Loading the evidence bundle…</p>
   <div class="ev-layout">
@@ -52,6 +48,9 @@ title: Evidence map
       <section class="ev-view atlas-chart" aria-labelledby="ev-v4-heading" hidden><div class="atlas-chart__head"><h2 id="ev-v4-heading">Trends</h2></div><div class="atlas-chart__body"><div id="ev-v4"></div></div></section>
       <section class="ev-view atlas-chart" aria-labelledby="ev-heatmap-heading" hidden><div class="atlas-chart__head"><h2 id="ev-heatmap-heading" tabindex="-1">Evidence heatmap</h2></div><div class="atlas-chart__body"><div id="ev-heatmap"></div></div></section>
     </div>
+  </div>
+  <div class="atlas-callout atlas-callout--info ev-info-callout" role="note">
+    <p class="data-note ev-aux-note">The topic <strong>Plastic-associated chemicals</strong> (such as BPA, phthalates and 6PPD) is auxiliary. The Atlas searches for plastics terms, so it covers these chemical studies far less completely than studies of plastic particles and debris. <a href="./glossary#plastic-associated-chemicals">More about this topic</a>.</p>
   </div>
   <section id="ev-recent" class="ev-recent atlas-callout atlas-callout--new" aria-label="New in the last 2 weeks" hidden></section>
   <section class="ev-view atlas-chart" aria-labelledby="ev-table-heading"><div class="atlas-chart__head"><h2 id="ev-table-heading" tabindex="-1">Publications</h2></div><div class="atlas-chart__body"><div id="ev-table-selection" class="ev-table-selection ev-table-root" role="status" aria-live="polite" hidden></div><div id="ev-table"><p class="result-count">Loading publications…</p></div></div></section>
