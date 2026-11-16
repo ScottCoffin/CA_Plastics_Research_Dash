@@ -149,3 +149,4 @@
 | 2026-11-15 | S2.6 | Null OpenAlex author IDs repaired (ORCID / name+institution / curated); Jeff Wagner restored; +21 experts; 1,655 passed, 9 expected skips | this commit |
 | 2026-11-15 | UX-28 follow-up | Funding Sankey click drill-down restored (owner request); built-page click test + axe clean; 1,659 passed, 9 expected skips | this commit |
 | 2026-11-15 | NET-1 | Land to Sea Microplastics Consortium linked: UC Davis host card with logo, member pointers, expert badges, LO-13, SEO subOrganization, owner disclosure; 1,702 passed, 9 expected skips | this commit |
+| 2026-11-16 | VD-7a | Monitoring visual adoption deployed: shared caution/disclosures/filter/map surface, 320 px reflow and complete marker/filter/details interactions; 1,702 passed, 9 expected skips; live Lighthouse 97/100 with CLS 0 | implementation `6e89d172` + this records commit |

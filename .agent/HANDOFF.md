@@ -1,24 +1,25 @@
-# Handoff — 2026-11-15 — task NET-1
+# Handoff — 2026-11-16 — task VD-7a
 
 ## Done
-- NET-1 (owner request): the UC Davis Land to Sea Microplastics Consortium is linked from the Atlas. Registry `config/research_networks.yml` -> `scripts/build_research_networks_json.py [--check]` -> `site/data/research_networks.json` (`atlas.networks`).
-- Surfaces: host card with the self-hosted logo on `/institution#inst=I84218800`; one-line pointer on OEHHA, CDPH, Oregon State, UC Berkeley and GAIA; badge on `expert.html` for the 6 listed contributors with Atlas profiles; link-out LO-13 on Resources and the Evidence Map strip (health, ecotoxicology, methods); static SEO institution pages with link, disclosure and JSON-LD `subOrganization`. Link-out disclosures are now published (fixes LO-8's unpublished disclosure).
-- Facts come from the owner-supplied saved page (the live page returns 403 to bots): 14 contributors, 8 without Atlas profiles; roster not copied.
-- Gate: links, A1/A2 scaffolds, Ruff, compileall, both JSON checks, public-text check; 1,702 passed / 9 expected skips; Framework build + assembled preview in headless Edge at 1280/375 px (no console errors, no overflow, axe clean on new markup). Evidence: `docs/NET_1_VERIFICATION.md`.
-- Previous checkpoint (UX-28 follow-up, commit f1805a21, by a concurrent session): Funding Sankey click drill-down restored; Sankey-local by default (does not set the page filters).
+- VD-7a Monitoring adoption is implemented at commit `6e89d172`, deployed, and accepted. Shared caution/disclosure/filter/map presentation is in place; the UX-19 320 px reflow row is closed.
+- Live 1440 x 900, 390 x 844 and 320 x 568 audits: axe 0, no horizontal overflow or browser/request errors, and no sub-24 px actionable target except Framework's inert 1 x 1 checkbox.
+- Direct and extended marker clicks, Enter/Space, drag preservation, submit-safe filter Enter, and keyboard-focusable horizontal details all pass. Evidence: `docs/VD_7A_VERIFICATION.md` and `scratch/ux_vd7a_live_acceptance/`.
+- Three live Lighthouse runs: performance 97, accessibility/best-practices/SEO 100, CLS 0. This passes the Section 9 score gate exactly (live control 100); LCP increased from 1.7 s to 2.4-2.5 s and is not hidden.
 
 ## State of the repo
-- Concurrent owner edits were preserved and left out of this commit (`framework/src/**` VD-7/VD-8 work, `tests/test_vd*.py`, `docs/VD_7A/7C/8_VERIFICATION.md`, `scripts/ux_tasks.py`, `tests/test_ux_tasks_script.py`, and the owner's formatting edits to `.agent/QUESTIONS.md`; only the three NET-1 rows were staged on top of HEAD).
-- `.rs-disclosure` has no rule in the owner-dirty `resources.css`; it renders as a plain paragraph.
+- VD-7c and VD-8 implementation files and verification drafts remain intentionally uncommitted for their own atomic checkpoints; independent Luna reviews requested bounded fixes before acceptance.
+- The owner's unrelated formatting edits in `.agent/QUESTIONS.md` remain untouched and uncommitted.
+- Pages is restored and deployment workflows pass. H27 now tracks only the remaining GitHub **Enforce HTTPS** switch; HTTP currently does not redirect.
 
 ## Next tasks (suggested)
-- Later idea (not in TODO): highlight consortium contributors on `/network`.
-- From S2.6: add `fetch_orcid_author_ids.py` to `ingest_works.yml` before normalization; compute expert metrics for repaired authors from corpus authorships.
+- Finish, commit, deploy and live-audit VD-7c, then VD-8 as separate checkpoints.
+- Re-read the roadmap and delegate the next independent available VD tasks (VD-9, VD-10 and VD-11) to Luna workers.
 
 ## Gotchas the next agent must know
 - `serve_framework_preview.py` serves under `/CA_Plastics_Research_Dash/`; browser scripts must include the prefix.
-- Add a consortium contributor only by Atlas author_id after a name check, then rebuild the JSON with the script.
+- Compare Lighthouse only between equivalent live runs; the single-threaded local preview makes LCP numbers much slower.
+- Preserve the owner's `.agent/QUESTIONS.md` edits and stage only the current checkpoint.
 
 ## Needs owner input
-- H26: consortium logo permission; QUESTIONS NET-1-NAME and NET-1-SURFACES.
-- H25 (VD-12 design review). Optional: Sankey-local vs global drill-down (UX-28).
+- H25 (VD-12 design review) and VD-5's absolute LCP target remain open.
+- H27: enable GitHub Pages HTTPS enforcement after the renewed certificate becomes available.
