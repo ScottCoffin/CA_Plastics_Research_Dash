@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -103,6 +104,18 @@ def test_shell_css_has_route_icons_and_mobile_controls() -> None:
     assert "env(safe-area-inset-left" in css
     assert ".atlas-search-open .atlas-header__search" in css
     assert ".atlas-menu-button" in css
+
+
+def test_skip_link_colors_override_framework_link_states() -> None:
+    css = (FRAMEWORK / "src" / "design" / "shell.css").read_text(encoding="utf-8")
+    states = ("link", "visited", "hover", "focus", "active")
+    selector = r"a\.atlas-skip-link:" + r",\s*a\.atlas-skip-link:".join(states)
+    rule = re.search(selector + r"\s*\{([^}]*)\}", css, flags=re.DOTALL)
+
+    assert rule is not None
+    assert "background: var(--atlas-brand-strong);" in rule.group(1)
+    assert "color: var(--atlas-on-brand);" in rule.group(1)
+    assert re.search(r"\.atlas-skip-link:focus\s*\{[^}]*transform: translate\(-50%, 0\)", css)
 
 
 def test_async_resources_keep_the_footer_out_of_the_initial_viewport() -> None:
