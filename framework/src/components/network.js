@@ -7,6 +7,7 @@ import Sigma from "npm:sigma@3.0.3";
 import forceAtlas2 from "npm:graphology-layout-forceatlas2@0.10.1";
 import "./shared/topics.js";
 import {classicUrl, escapeHtml, formatCount, loadJson} from "./atlas.js";
+import {icon, injectIconSprite} from "./shared/icons.js";
 import {
   colourGroups,
   emptyNetworkState,
@@ -30,6 +31,15 @@ const DIM_NODE_COLOUR = "#dfe5e8";
 const DIM_EDGE_COLOUR = "#eef1f2";
 const FOCUS_EDGE_COLOUR = "#1d2a33";
 const GRAPH_BUTTONS = ["zoomIn", "zoomOut", "resetView", "fullscreen", "layout", "restore"];
+const GRAPH_BUTTON_ICONS = {
+  zoomIn: "search",
+  zoomOut: "search",
+  resetView: "arrow",
+  fullscreen: "external",
+  layout: "tools",
+  restore: "download"
+};
+const GRAPH_BUTTON_MARKS = {zoomIn: "+", zoomOut: "−"};
 
 function labelFor(tag) {
   const api = window.AtlasTopics;
@@ -74,6 +84,22 @@ function sharedWorksText(weight) {
   return weight === 1 ? "1 shared work" : `${formatCount(weight)} shared works`;
 }
 
+function prepareGraphButtons(buttons) {
+  injectIconSprite();
+  for (const key of GRAPH_BUTTONS) {
+    const button = buttons[key];
+    const tooltip = textEl("span", button.dataset.tooltip, "net-btn__tooltip");
+    tooltip.setAttribute("aria-hidden", "true");
+    const children = [icon(GRAPH_BUTTON_ICONS[key])];
+    if (GRAPH_BUTTON_MARKS[key]) {
+      const mark = textEl("span", GRAPH_BUTTON_MARKS[key], "net-btn__mark");
+      mark.setAttribute("aria-hidden", "true");
+      children.push(mark);
+    }
+    button.replaceChildren(...children, tooltip);
+  }
+}
+
 export async function mountNetwork() {
   const chart = document.getElementById("network-chart");
   if (!chart) return;
@@ -86,6 +112,7 @@ export async function mountNetwork() {
   const tableDetails = document.getElementById("network-table");
   const status = document.getElementById("network-status");
   const search = document.getElementById("net-search");
+  const searchWrap = document.getElementById("net-search-wrap");
   const searchList = document.getElementById("net-search-list");
   const colourSelect = document.getElementById("net-colour");
   const sizeSelect = document.getElementById("net-size");
@@ -110,10 +137,14 @@ export async function mountNetwork() {
     reset: document.getElementById("network-reset")
   };
   const required = [
-    stage, message, panel, legend, rowsBody, caption, tableDetails, status, search, searchList,
+    stage, message, panel, legend, rowsBody, caption, tableDetails, status, search, searchWrap,
+    searchList,
     colourSelect, sizeSelect, ...Object.values(buttons), ...Object.values(controls)
   ];
   if (required.some((item) => !item)) return;
+
+  prepareGraphButtons(buttons);
+  searchWrap.prepend(icon("search"));
 
   let data;
   try {
@@ -338,7 +369,7 @@ export async function mountNetwork() {
         const item = document.createElement("li");
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "net-legend-item";
+        button.className = "net-legend-item atlas-pill";
         button.setAttribute("aria-pressed", String(!hiddenGroups.has(group.key)));
         const swatch = textEl("span", "", "net-swatch");
         swatch.style.background = group.colour;
@@ -405,7 +436,10 @@ export async function mountNetwork() {
 
   function setLayoutButton() {
     buttons.layout.setAttribute("aria-pressed", String(layoutRunning));
-    buttons.layout.textContent = layoutRunning ? "Stop layout" : "Re-run layout";
+    const label = layoutRunning ? "Stop layout" : "Re-run layout";
+    buttons.layout.setAttribute("aria-label", label);
+    buttons.layout.dataset.tooltip = label;
+    buttons.layout.querySelector(".net-btn__tooltip").textContent = label;
   }
 
   function stopLayout() {
