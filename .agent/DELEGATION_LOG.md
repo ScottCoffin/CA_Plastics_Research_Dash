@@ -205,3 +205,7 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-16 | VD-14 implementation | Claude Haiku developer | network.md/css, CLS measurement, tests | Accepted; one resume after the 30-turn limit | 1 session |
 | 2026-11-16 | VD-11 implementation | Claude Haiku developer | expert.html CSS/footer, seo.py CSS, tests | Accepted after lead screenshots; lead fixed the S3.8 DOI false positive | 1 session |
 | 2026-11-16 | UX-32 implementation | Claude Haiku developer | a11y CSS rows, expert.html, UX-19 doc, tests | Partial (turn limit); lead fixed tier-row grid and award links, rewrote the doc result | 1 session |
+| 2026-11-16 | VD-15 implementation | Claude Haiku developer | context page headers, tests | Accepted after assembled-site check | 1 session |
+| 2026-11-16 | VD-16 implementation | Claude Haiku developer | Evidence Chart/Table panes, tests | Accepted after lead click-test | 1 session |
+| 2026-11-16 | VD-17 implementation | Claude Haiku developer | 84 CSS hex literals to tokens | Accepted; lead set the cap to 0 and fixed two tests | 1 session |
+| 2026-11-16 | VD-12 machine part | Claude Haiku developer | design_snapshots.py, doc, Lighthouse | Partial (two resumes); found VD-15/16/17 gaps | 1 session |

@@ -52,6 +52,9 @@ h1 + .atlas-page-head__lead {
   flex: 0 0 auto; width: 1.5rem; height: 1.5rem; min-width: 1.5rem; min-height: 1.5rem; margin: 0;
 }
 #evidence-root .v4-sr-only { display: block; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* Chart cards: the Chart/Table control sets data-view on the card, and the card shows one pane (see evidence.js). */
+#evidence-root .atlas-chart[data-view="table"] [data-pane="chart"],
+#evidence-root .atlas-chart:not([data-view="table"]) [data-pane="table"] { display: none; }
 /* Pipeline flow: collapsed by default; the heading sits inside the summary. */
 #evidence-root .ev-flow-box { margin-top: 1.25rem; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; padding: 0.25rem 0.75rem; }
 #evidence-root .ev-flow-box > summary { cursor: pointer; min-height: 2.75rem; display: flex; align-items: center; gap: 0.5rem; }

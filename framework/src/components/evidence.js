@@ -327,7 +327,24 @@ async function mountViews(index) {
   }
 }
 
+// Chart/Table controls on the chart cards. A click sets data-view on the card and moves aria-pressed; evidence.css
+// shows the matching pane. The mode lives on the card, not in the pane, because the chart panes are rebuilt on
+// every filter change and would otherwise reset to the chart.
+function wireChartViews() {
+  for (const group of document.querySelectorAll("#evidence-root .atlas-chart > .atlas-chart__head .atlas-segmented")) {
+    group.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-view]");
+      if (!button || !group.contains(button)) return;
+      group.closest(".atlas-chart").dataset.view = button.dataset.view;
+      for (const other of group.querySelectorAll("button[data-view]")) {
+        other.setAttribute("aria-pressed", String(other === button));
+      }
+    });
+  }
+}
+
 export async function mountEvidence() {
+  wireChartViews();
   // V-3 (EM-6) needs only the methods card export, so it renders independently of the bundle.
   mountV3Flow($("ev-v3"));
   await loadBundle();

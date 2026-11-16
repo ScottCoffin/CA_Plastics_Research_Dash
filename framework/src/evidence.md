@@ -45,8 +45,8 @@ title: Evidence map
         <p id="evidence-count" class="ev-count-line" aria-live="polite"></p>
       </div>
       <div class="atlas-callout atlas-callout--caution ev-volume-callout" role="note"><p class="data-note volume-caption">Counts show how much has been published, not the strength or quality of the evidence.</p></div>
-      <section class="ev-view atlas-chart" aria-labelledby="ev-v4-heading" hidden><div class="atlas-chart__head"><h2 id="ev-v4-heading">Trends</h2></div><div class="atlas-chart__body"><div id="ev-v4"></div></div></section>
-      <section class="ev-view atlas-chart" aria-labelledby="ev-heatmap-heading" hidden><div class="atlas-chart__head"><h2 id="ev-heatmap-heading" tabindex="-1">Evidence heatmap</h2></div><div class="atlas-chart__body"><div id="ev-heatmap"></div></div></section>
+      <section class="ev-view atlas-chart" aria-labelledby="ev-v4-heading" hidden><div class="atlas-chart__head"><div><h2 id="ev-v4-heading">Trends</h2><p class="atlas-chart__source">Source: works in the Atlas by publication year, following the filters. Global counts come from OpenAlex.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Trends"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-v4"></div></div></section>
+      <section class="ev-view atlas-chart" aria-labelledby="ev-heatmap-heading" hidden><div class="atlas-chart__head"><div><h2 id="ev-heatmap-heading" tabindex="-1">Evidence heatmap</h2><p class="atlas-chart__source">Source: works in the Atlas by topic and matrix or five-year period, following the filters.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Evidence heatmap"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-heatmap"></div></div></section>
     </div>
   </div>
   <div class="atlas-callout atlas-callout--info ev-info-callout" role="note">
@@ -54,7 +54,7 @@ title: Evidence map
   </div>
   <section id="ev-recent" class="ev-recent atlas-callout atlas-callout--new" aria-label="New in the last 2 weeks" hidden></section>
   <section class="ev-view atlas-chart" aria-labelledby="ev-table-heading"><div class="atlas-chart__head"><h2 id="ev-table-heading" tabindex="-1">Publications</h2></div><div class="atlas-chart__body"><div id="ev-table-selection" class="ev-table-selection ev-table-root" role="status" aria-live="polite" hidden></div><div id="ev-table"><p class="result-count">Loading publications…</p></div></div></section>
-  <details class="ev-view ev-flow-box"><summary id="ev-v3-heading">How works were selected (pipeline flow)</summary><div id="ev-v3"></div></details>
+  <details class="ev-view ev-flow-box"><summary>How works were selected (pipeline flow)</summary><section class="atlas-chart" aria-labelledby="ev-v3-heading"><div class="atlas-chart__head"><div><h2 id="ev-v3-heading">Pipeline flow</h2><p class="atlas-chart__source">Source: the methods card for the current release.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Pipeline flow"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-v3"></div></div></section></details>
 </div>
 
 ```js

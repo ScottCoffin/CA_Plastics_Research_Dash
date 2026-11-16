@@ -162,3 +162,4 @@
 | 2026-11-16 | UX-32 | Accessibility rows fixed; axe 0 on 14 routes; remaining rows are accepted 2.5.8 exceptions; pass-script false positives fixed | this commit |
 | 2026-11-16 | VD-17 | Framework stylesheets have 0 hex literals outside tokens.css; ratchet cap 0 | this commit |
 | 2026-11-16 | VD-15 | Context pages (Policy, Resources, About, Glossary) get the shared page header and icons | this commit |
+| 2026-11-16 | VD-16 | Evidence map Trends, Heatmap and Pipeline flow get Chart/Table controls with table panes | this commit |

@@ -27,13 +27,50 @@ function buildStage(row) {
   return item;
 }
 
+// Table alternative to the diagram: one row per count, with the stage name and status repeated on each row.
+function flowTable(rows) {
+  const table = el("table", "atlas-table");
+  const head = el("tr");
+  for (const label of ["Stage", "Status", "Step", "Count"]) {
+    const th = el("th", null, label);
+    th.setAttribute("scope", "col");
+    head.append(th);
+  }
+  const body = el("tbody");
+  for (const row of rows) {
+    const steps = row.steps.length ? row.steps : [{label: "No counts reported", value: "—"}];
+    for (const step of steps) {
+      const tr = el("tr");
+      const name = el("th", null, row.stage);
+      name.setAttribute("scope", "row");
+      tr.append(name, el("td", null, row.status), el("td", null, step.label), el("td", "r", step.value));
+      body.append(tr);
+    }
+  }
+  table.append(el("caption", null, "Pipeline stages and counts"), el("thead"), body);
+  table.querySelector("thead").append(head);
+  return table;
+}
+
 export function renderV3Flow(container, data) {
   const rows = stageRows(data);
   if (!rows.length) throw new Error("methods_flow.json has no stages");
   const figure = el("div", "v3-flow");
   figure.append(el("ol", "v3-stages"), el("p", "v3-footer", footerText(data)));
   figure.querySelector(".v3-stages").append(...rows.map(buildStage));
-  container.replaceChildren(figure);
+  // Two panes: the diagram, and the same counts in a table. The card's Chart/Table control shows one of them.
+  const chart = el("div");
+  chart.setAttribute("data-pane", "chart");
+  chart.append(figure);
+  const wrap = el("div", "atlas-table-wrap");
+  wrap.setAttribute("role", "region");
+  wrap.setAttribute("aria-label", "Pipeline counts table, scrollable");
+  wrap.tabIndex = 0;
+  wrap.append(flowTable(rows));
+  const table = el("div");
+  table.setAttribute("data-pane", "table");
+  table.append(wrap);
+  container.replaceChildren(chart, table);
 }
 
 export async function mountV3Flow(container) {

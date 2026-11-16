@@ -40,6 +40,10 @@ function plural(count, one, many) {
   return `${count} ${count === 1 ? one : many}`;
 }
 
+function captionFor(mode) {
+  return mode === "topic-matrix" ? "Works by topic and matrix" : "Works by topic and five-year period";
+}
+
 // The check mark is text, so a selected control stays distinct without colour or focus.
 function checkHtml(pressed) {
   return `<span class="ev-heatmap-check" aria-hidden="true">${pressed ? "✓ " : ""}</span>`;
@@ -104,10 +108,29 @@ function tableHtml(model, mode, selected) {
       return `<tr><th scope="row">${rowButton}</th>${cells}</tr>`;
     })
     .join("");
-  const caption = mode === "topic-matrix" ? "Works by topic and matrix" : "Works by topic and five-year period";
+  const caption = captionFor(mode);
   return (
     `<div class="ev-heatmap-scroll" role="region" aria-label="${escapeHtml(caption)} grid" tabindex="0">` +
     `<table class="ev-heatmap-table"><caption class="ev-heatmap-sr">${escapeHtml(caption)}</caption>` +
+    `<thead><tr><th scope="col">Topic</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`
+  );
+}
+
+// The Table pane: the same counts as plain numbers, in the grid's row and column order.
+function countsHtml(model, mode) {
+  const head = model.cols.map((col) => `<th scope="col">${escapeHtml(colLabel(col))}</th>`).join("");
+  const body = model.rows
+    .map((row) => {
+      const counts = model.cols
+        .map((col) => `<td>${model.cells.find((c) => c.row === row && c.col === col.key).count}</td>`)
+        .join("");
+      return `<tr><th scope="row">${escapeHtml(labelFor(row))}</th>${counts}</tr>`;
+    })
+    .join("");
+  const caption = captionFor(mode);
+  return (
+    `<div class="atlas-table-wrap" role="region" aria-label="${escapeHtml(caption)} table, scrollable" tabindex="0">` +
+    `<table class="atlas-table"><caption>${escapeHtml(caption)}</caption>` +
     `<thead><tr><th scope="col">Topic</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`
   );
 }
@@ -180,9 +203,10 @@ export function mountHeatmap(container, {onSelect = () => {}} = {}) {
       body.innerHTML = `<p class="ev-heatmap-empty" role="status">${escapeHtml(EMPTY_TEXT)}</p>`;
     } else {
       model = heatmapCells(rows, mode);
+      // Two panes: the grid (with its legend) and the counts table. The card's Chart/Table control shows one.
       body.innerHTML =
-        tableHtml(model, mode, selected) +
-        legendHtml(model.max) +
+        `<div data-pane="chart">${tableHtml(model, mode, selected)}${legendHtml(model.max)}</div>` +
+        `<div data-pane="table">${countsHtml(model, mode)}</div>` +
         `<p class="ev-heatmap-note">${escapeHtml(CAPTION)}</p>`;
     }
     // A selected cell that no longer has works (after a filter change) is dropped. The works behind a

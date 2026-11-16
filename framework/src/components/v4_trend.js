@@ -158,8 +158,9 @@ function dataTable(data, rows, globalByYear, version) {
       return `<tr>${cells.join("")}</tr>`;
     })
     .join("");
-  return `<table class="v4-sr-only"><caption>Works per year by topic${globalByYear ? `, and CA share under query ${escapeHtml(version)}` : ""}</caption>` +
-    `<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+  return `<div class="atlas-table-wrap" role="region" aria-label="Works per year table, scrollable" tabindex="0">` +
+    `<table class="atlas-table"><caption>Works per year by topic${globalByYear ? `, and CA share under query ${escapeHtml(version)}` : ""}</caption>` +
+    `<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 
 // Renders the whole corpus first; update(rows) redraws from the rows that match the page filters.
@@ -188,13 +189,16 @@ export async function mountV4Trend(container, idx, initialRows = null) {
         (filtered ? " The global count is not filtered, so with topic or other filters on this compares a subset with all plastics research." : "") +
         `</p>`
       : '<p class="v4-note v4-unavailable">Global comparison unavailable.</p>';
+    // Two panes: the chart, and the same numbers in a table. The card's Chart/Table control shows one of them.
     container.innerHTML =
+      '<div data-pane="chart">' +
       `<h3 class="v4-heading">Works per year by topic${filtered ? " (filtered)" : ""}</h3>` +
       barChart(data, refDate) +
       legend(topics) +
       `<p class="v4-note">A work with several topic tags is counted under each. Works before ${FIRST_YEAR} are not shown.</p>` +
       globalSection +
-      dataTable(data, rows, globalByYear, version);
+      "</div>" +
+      `<div data-pane="table">${dataTable(data, rows, globalByYear, version)}</div>`;
   }
 
   const initialData = initialRows === null ? seriesByTopic(countsFor(idx), years, topics) : seriesFromRows(initialRows, years, topics);
