@@ -4,50 +4,55 @@ Date: 2026-11-16
 
 ## Result
 
-VD-7c updates `framework/src/evidence.md`, `framework/src/components/evidence.css`,
-`framework/src/components/evidence.js`, and `framework/src/components/ev_table.css`;
-focused coverage is in `tests/test_vd7c_evidence.py`. The lead is exactly two
-sentences, the How-to section is a disclosure, and the development and auxiliary-topic
-messages use `role="note"` development and info callouts; the volume caveat is a
-caution callout, and “New in the last 2 weeks” uses the New callout container. All
-11 topic dots render. Trends, Evidence heatmap, and Publications use three chart
-cards with the shared padded body. Selecting a heatmap item preserves UX-30
-behavior, showing the 294-work selection banner and clear control. Final review added standard
-`.atlas-disclosure__body` padding and an exact two-sentence assertion.
+VD-7c updates `framework/src/evidence.md`, the Evidence styles and runtime, and
+the shared publication table's optional preloaded-row path. The lead is exactly
+two sentences; How-to is a disclosure; development, auxiliary-topic, volume,
+and recent-work messages use the shared callout styles. All 11 topic dots render.
+Trends, Evidence heatmap, and Publications use padded chart bodies. UX-30
+selection, clear, and focus behavior is preserved.
+
+Performance work moves the five page stylesheets before rendered markup, places
+the asynchronously shown recent-work callout below the filters/charts, and waits
+two animation frames before mounting Evidence data views. The page passes its
+already-normalized plastic-related works to the trend and table. This avoids
+repeating normalization and filtering the details payload and replaces 324
+full-facet trend count queries with a single pass over those rows. Other table
+callers retain the default fetch path.
 
 ## Verification
 
-The final VD-7c, Framework Evidence, and UX-30 focused checks reported 20 passed;
-the combined visual regression set reported 37 passed. The full gate reported
-1,702 passed and 9 expected skips; its pytest command is `py -3.14 -m pytest -q`
-(see `CLAUDE.md` for the full gate). The Framework build produced 13 pages and 90
-links with `cd framework && npm run build` and `py -3.14 scripts/check_at5.py --dist dist`.
+The final full local suite reported 1,706 passed and 9 expected placeholder
+skips with `py -3.14 -m pytest -q`. Ruff lint/format, Node runtime checks, the
+Framework build (13 pages/90 links), and `py -3.14 scripts/check_at5.py --dist
+dist` passed.
 
-The post-fix assembled preview was checked at 1440 x 900 and 390 x 844. Each of
-the three chart bodies had 16 px padding on all sides. The development, info,
-caution, and recent-items callouts were visible, and all 11 topic options had
-dots. Axe found zero violations; there was no horizontal overflow or page error.
-The only actionable target below 24 px was Framework's inert 1 x 1 sidebar
-checkbox. The final screenshots are
-`scratch/ux_vd7c_postfix_luna/evidence-1440x900.png` and
-`scratch/ux_vd7c_postfix_luna/evidence-390x844.png`.
+The live site was checked at 1440 x 900 and 390 x 844 on deployed commit
+`f8877c4c`. Both routes returned HTTP 200; axe found zero violations, with no
+overflow, console/page/request errors, and one known inert 1 x 1 Framework
+sidebar checkbox below 24 px. The page loaded 1,915 works and showed 1,579
+plastic-related works, 27 trend years, 11 topic dots, and 16 px padding in each
+chart body. Each page load requested `works_detail.json` once. Filtering changed
+the count from 1,579 to 93 and updated the trend and table. UX-30 cell selection
+showed 294 works (1–25 of 294); clear restored 1,579 and “Show in table” focused
+Publications. Table search returned 201 rows; axe stayed clean after interaction.
+Browser evidence: `scratch/ux_vd7c_row_reuse_live/functional-results.json` and
+the `run1`–`run3` screenshots/reports.
 
-UX-30 interactions remained intact: selecting a cell showed 294 works (1–25 of
-294); row and column selections showed 452 and 404 works. Clearing restored
-1–25 of 1,579, and “Show in table” focused the Publications heading. Axe remained
-clean after selection.
+Three comparable live Lighthouse runs scored 92, 92, and 97 (median 92, matching
+the baseline of 92). LCP was 1.737–1.820 s, TBT 105–284 ms, and CLS 0.088;
+accessibility, Best Practices, and SEO scored 100 throughout. LCP identified the
+page lead. Evidence: `scratch/ux_vd7c_row_reuse_live/run1/` through `run3/`.
 
-The latest informational local-preview Lighthouse run scored 70 performance and
-100 accessibility, with CLS 0.03 and LCP 11.7 s. The historical baseline was
-measured on the live CDN; the comparable live pre-change control was performance
-92, accessibility 100, and CLS 0. Local and live results are not directly
-comparable. Post-deployment live performance acceptance remains pending and is
-not waived.
+The first row-reuse CI run failed because its runtime test imported undeclared
+`jsdom`; the next fresh-checkout run exposed a generated-module import in that
+test. The final test imports the DOM-free row-resolution helper from the table
+model, adding no dependency and retaining fast-path, fallback, snapshot, and
+validation coverage. The live-tested implementation is `f8877c4c`; the final
+behavior-preserving CI follow-up is `435ba318`. CI run `43950760535`, Pages run
+`43950760513`, and legacy Pages run `43950758055` all passed.
 
 ## Delegation and remaining work
 
-Luna handled multiple production and follow-up sessions. The initial independent
-tester hit the usage cap; final independent browser verification and review were
-completed, with requested fixes incorporated. H25 owner review and VD-5 Overview
-acceptance, including LCP, remain open. Recheck live Lighthouse performance after
-deployment against the live baseline before closing VD-7c acceptance.
+Luna handled the implementation, independent reviews, performance diagnosis,
+bounded corrections, and live audits. H25 owner review and VD-5 Overview
+acceptance, including its absolute LCP target, remain open.

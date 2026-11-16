@@ -249,6 +249,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 ## Visual design checkpoint
 - VD-6a Experts adoption is complete (2026-11-15); canonical implementation is `framework/src/experts.md` and `framework/src/components/experts.{css,js}`, with acceptance evidence in `docs/VD_6A_VERIFICATION.md`. H25 owner review and VD-5 Overview LCP remain open.
 - VD-7a Monitoring adoption is complete and deployed (2026-11-16, implementation commit `6e89d172`): five primary counted disclosures plus the licence/caveat disclosure, shared filters/map card, 320 px reflow, keyboard and extended marker targeting, focusable horizontal details, and submit-safe filter search. Live Lighthouse is 97 performance / 100 accessibility / CLS 0; the allowed score gate passes exactly, while the measured LCP increase from 1.7 s to 2.4-2.5 s stays visible in `docs/VD_7A_VERIFICATION.md`.
+- VD-7c Evidence adoption is complete and deployed (2026-11-16, final follow-up `435ba318`): four callouts, topic dots, padded chart cards and UX-30 behavior. Evidence yields the first paint, normalizes `works_detail.json` once, reuses plastic-related rows for the trend/table, and retains the table's default loader for other callers. This removed 324 redundant full-facet queries; live Lighthouse median returned to 92 with accessibility 100 and CLS 0.088. See `docs/VD_7C_VERIFICATION.md`.
 
 ## Current model versions and metrics (one line per model)
 - None; classifiers are not implemented.

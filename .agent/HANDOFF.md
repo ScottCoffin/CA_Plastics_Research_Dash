@@ -1,25 +1,23 @@
-# Handoff — 2026-11-16 — task VD-7a
+# Handoff — 2026-11-16 — task VD-7c
 
 ## Done
-- VD-7a Monitoring adoption is implemented at commit `6e89d172`, deployed, and accepted. Shared caution/disclosure/filter/map presentation is in place; the UX-19 320 px reflow row is closed.
-- Live 1440 x 900, 390 x 844 and 320 x 568 audits: axe 0, no horizontal overflow or browser/request errors, and no sub-24 px actionable target except Framework's inert 1 x 1 checkbox.
-- Direct and extended marker clicks, Enter/Space, drag preservation, submit-safe filter Enter, and keyboard-focusable horizontal details all pass. Evidence: `docs/VD_7A_VERIFICATION.md` and `scratch/ux_vd7a_live_acceptance/`.
-- Three live Lighthouse runs: performance 97, accessibility/best-practices/SEO 100, CLS 0. This passes the Section 9 score gate exactly (live control 100); LCP increased from 1.7 s to 2.4-2.5 s and is not hidden.
+- VD-7c Evidence visual adoption is implemented, deployed, and accepted. The page has a two-sentence lead, How-to disclosure, four shared callouts, 11 topic dots, and three padded chart cards; UX-30 selection/clear/focus behavior remains intact.
+- Performance corrections yield the static first paint, request/normalize `works_detail.json` once, reuse plastic-related rows for the trend/table, and keep the table's default loader for other pages. The trend no longer performs 324 full-facet count queries.
+- Live desktop/mobile checks: axe 0, no overflow/errors, one details request, filter/trend/table reactivity, table search, cell selection 294, clear to 1,579, and Publications focus all pass.
+- Live Lighthouse 92/92/97 (median 92, baseline 92), accessibility/best-practices/SEO 100, LCP 1.737-1.820 s, TBT 105-284 ms, CLS 0.088. Final CI `43950760535`, Pages `43950760513`, and legacy Pages `43950758055` passed. Evidence: `docs/VD_7C_VERIFICATION.md`.
 
 ## State of the repo
-- VD-7c and VD-8 implementation files and verification drafts remain intentionally uncommitted for their own atomic checkpoints; independent Luna reviews requested bounded fixes before acceptance.
+- VD-8 implementation and verification files remain intentionally uncommitted for their own atomic checkpoint.
 - The owner's unrelated formatting edits in `.agent/QUESTIONS.md` remain untouched and uncommitted.
-- Pages is restored and deployment workflows pass. H27 now tracks only the remaining GitHub **Enforce HTTPS** switch; HTTP currently does not redirect.
+- H27 still tracks GitHub Pages HTTPS enforcement; the live HTTPS site and deployment workflows work.
 
-## Next tasks (suggested)
-- Finish, commit, deploy and live-audit VD-7c, then VD-8 as separate checkpoints.
-- Re-read the roadmap and delegate the next independent available VD tasks (VD-9, VD-10 and VD-11) to Luna workers.
+## Next task
+- Finish only the already-started VD-8 checkpoint: commit its implementation, deploy, live-audit Policy/Resources/About/Glossary, update records, push, and inspect. Do not begin another roadmap item.
 
-## Gotchas the next agent must know
-- `serve_framework_preview.py` serves under `/CA_Plastics_Research_Dash/`; browser scripts must include the prefix.
-- Compare Lighthouse only between equivalent live runs; the single-threaded local preview makes LCP numbers much slower.
-- Preserve the owner's `.agent/QUESTIONS.md` edits and stage only the current checkpoint.
+## Gotchas
+- The source `framework/src/components/shared/` directory is generated before Framework builds; Node tests that run before build must import stable source modules instead.
+- Compare Lighthouse only between equivalent live runs; local preview timing is not comparable.
+- Preserve `.agent/QUESTIONS.md` and stage only VD-8 files.
 
 ## Needs owner input
-- H25 (VD-12 design review) and VD-5's absolute LCP target remain open.
-- H27: enable GitHub Pages HTTPS enforcement after the renewed certificate becomes available.
+- H25 (VD-12 design review), VD-5's absolute LCP target, and H27 HTTPS enforcement remain open.

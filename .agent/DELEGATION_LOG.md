@@ -161,3 +161,30 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-15 | VD performance reruns | Codex Luna tester | Comparable local and live-pre Lighthouse controls for VD-7a/7c/8 | Accepted as performance evidence; local-server results kept separate from live controls | 1 session |
 | 2026-11-16 | VD-7a live acceptance | Codex Luna tester | Live 1440/390/320 axe, interaction and three-run Lighthouse audit | Accepted: performance 97, accessibility 100, CLS 0; LCP increase recorded | 1 session |
 | 2026-11-16 | VD-7a deployed verification record | Codex Luna archivist | `docs/VD_7A_VERIFICATION.md` only | Accepted; deployment runs and live evidence recorded | 1 session |
+| 2026-11-15 | VD-7c production | Codex Luna task agent | Evidence markup/CSS/JS, table styling and focused tests | Accepted after bounded visual/accessibility corrections | 1 session |
+| 2026-11-15 | VD-7c browser audit attempt | Codex Luna tester | Independent assembled Evidence audit | Could not run: account usage cap; later Luna audits completed | 1 failed session |
+| 2026-11-16 | VD-7c independent review | Codex Luna tester | Contract, code, test and verification review | Found missing caution treatment and chart-body padding | 1 session |
+| 2026-11-16 | VD-7c review fixes | Codex Luna task agent | Fourth callout, three chart bodies and regressions | Accepted; 29 focused tests and build passed | 1 session |
+| 2026-11-16 | VD-7c post-fix browser | Codex Luna tester | Desktop/mobile callout, padding, UX-30 and axe audit | Accepted; selection 294, row 452, column 404 | 1 session |
+| 2026-11-16 | VD-7c post-fix validation | Codex Luna tester | Read-only diff, focused tests, build and AT-5 | Accepted; identified documentation reconciliation only | 1 session |
+| 2026-11-16 | VD-7c verification reconciliation | Codex Luna archivist | `docs/VD_7C_VERIFICATION.md` | Accepted with final local browser evidence | 1 session |
+| 2026-11-16 | VD-7c CI formatting | Codex Luna task agent | Ruff-only correction in focused test | Accepted; lint and focused tests passed | 1 session |
+| 2026-11-16 | VD-7c initial live acceptance | Codex Luna tester | Live function/axe and three Lighthouse runs | Function passed; performance failed and remained open | 1 session |
+| 2026-11-16 | VD-7c Lighthouse report analysis | Codex Luna investigator | Pre/post raw Lighthouse differential | Identified stylesheet/recent-callout shift and main-thread work | 1 session |
+| 2026-11-16 | VD-7c performance source review | Codex Luna investigator | Evidence markup/runtime critical-path review | Identified late stylesheet placement as strongest first correction | 1 session |
+| 2026-11-16 | VD-7c performance reproduction | Codex Luna tester | Three fresh live Lighthouse runs | Confirmed stable 4 s LCP regression | 1 session |
+| 2026-11-16 | VD-7c first-paint correction | Codex Luna task agent | Stylesheet ordering and recent-callout placement | Accepted; focused tests/build passed | 1 session |
+| 2026-11-16 | VD-7c first-paint local audit | Codex Luna tester | Assembled desktop/mobile interactions and local Lighthouse | Function passed; local timing kept informational | 1 session |
+| 2026-11-16 | VD-7c first-paint live audit | Codex Luna tester | Live function and three Lighthouse runs | CLS race fixed; performance still failed | 1 session |
+| 2026-11-16 | VD-7c auxiliary-note LCP correction | Codex Luna task agent | Preserve visible info callout below initial layout | Accepted; focused tests/build passed | 1 session |
+| 2026-11-16 | VD-7c auxiliary-note local/live audits | Codex Luna testers | Local and live function, axe and Lighthouse | Function passed; live lead LCP exposed remaining startup work | 2 sessions |
+| 2026-11-16 | VD-7c startup paint correction | Codex Luna task agent | Yield a static paint before mounting data views | Accepted; local LCP improved and function passed | 1 session |
+| 2026-11-16 | VD-7c startup local/live audits | Codex Luna testers | Initial paint, full interactions and live Lighthouse | LCP fixed; TBT remained above gate | 2 sessions |
+| 2026-11-16 | VD-7c trend/table/TBT investigations | Codex Luna investigators | Trend counts, table duplication and raw trace analysis | Found 324 redundant facet queries and duplicate details normalization | 3 sessions |
+| 2026-11-16 | VD-7c table row reuse | Codex Luna task agent | Backward-compatible preloaded-row table path and tests | Accepted; default Institution path retained | 1 session |
+| 2026-11-16 | VD-7c row-derived trend | Codex Luna task agent | Initial trend from normalized plastic rows and Evidence integration | Accepted; 39 focused tests/build passed | 1 session |
+| 2026-11-16 | VD-7c row-reuse integration audit | Codex Luna tester | One-request, trend/filter/table/UX-30/failure browser audit | Accepted; full functional coverage and axe clean | 1 session |
+| 2026-11-16 | VD-7c row-reuse live audit | Codex Luna tester | Live desktop/mobile and three Lighthouse runs | Accepted performance 92/92/97; exposed CI-only test dependency | 1 session |
+| 2026-11-16 | VD-7c dependency-free CI test | Codex Luna task agent | Replace JSDOM test with DOM-free helper coverage | Accepted locally; fresh CI exposed generated-module import | 1 session |
+| 2026-11-16 | VD-7c model-helper CI fix | Codex Luna task agent | Move helper/test to import-free model module | Accepted; final CI and Pages passed | 1 session |
+| 2026-11-16 | VD-7c final verification record | Codex Luna archivist | `docs/VD_7C_VERIFICATION.md` only | Accepted; final live and performance evidence recorded | 1 session |
