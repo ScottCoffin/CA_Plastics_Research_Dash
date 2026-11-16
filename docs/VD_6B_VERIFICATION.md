@@ -42,3 +42,16 @@ evidence remains local pending its narrow push.
 
 H25, the owner side-by-side design review in VD-12, and VD-5 Overview
 acceptance, including LCP, remain open.
+
+## Deployed acceptance
+
+Commit `9fdafc2e` passed CI run `43778747032` and Pages run `43778746966`.
+The deployed `https://plastiverse.live/network` page was then rechecked at
+1440 x 900 and 390 x 844. Both widths remained axe-clean, without horizontal
+overflow or console, page, or request errors. The only sub-24 px scanner item
+was the accepted inert Framework checkbox. All six graph controls remained
+40 x 40 px with accessible names and tooltip text; the nine legend chips,
+labeled selected-expert section, and `400 experts, 1,241 links shown` status
+rendered. Selecting the topic colour mode, zooming, resetting the view, and
+opening the how-to disclosure left all seven renderer canvases present and the
+URL stable.
