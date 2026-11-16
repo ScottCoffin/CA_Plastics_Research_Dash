@@ -6,6 +6,7 @@ import {loadJson, escapeHtml, classicUrl} from "./atlas.js";
 import {mountWorksTable} from "./ev_table.js";
 import {safeHttpUrl} from "./ev_table_model.js";
 import {institutionTypeLabel} from "./shared/labels.js";
+import {icon} from "./shared/icons.js";
 import {
   LEAD_AUTHOR_LIMIT,
   barChartLayout,
@@ -89,7 +90,7 @@ function renderFailed(error) {
 function searchPageHtml(notice) {
   return `<h1>Institutions</h1>`
     + `<p class="panel-intro">Search for an institution to see its plastic-related work, lead authors, topics and publications.</p>`
-    + (notice ? `<p class="inst-notice" role="status">${escapeHtml(notice)}</p>` : "")
+    + (notice ? noticeHtml(notice) : "")
     + `<div class="inst-field"><label for="institution-search">Search institutions</label>`
     + `<input id="institution-search" type="search" autocomplete="off" placeholder="Name, city or type"></div>`
     + `<p id="institution-search-count" class="result-count" role="status" aria-live="polite"></p>`
@@ -125,24 +126,32 @@ async function showSearch(token, notice) {
   renderSearchResults("");
 }
 
+// Shared callout (design/components.css): an info icon beside one message.
+function noticeHtml(message) {
+  return `<div class="atlas-callout atlas-callout--info" role="status">${icon("info").outerHTML}<p>${escapeHtml(message)}</p></div>`;
+}
+
 function headerHtml(institution) {
   const name = institution.name || institution.inst_id;
   const ror = rorUrl(institution.ror);
   const openAlex = openAlexUrl(institution.inst_id);
   const location = [institution.city, institution.region].filter(Boolean).join(", ");
   const scope = institution.ca_flag
-    ? `<span class="inst-badge">California</span>`
-    : `<span class="inst-badge collab">Collaborator outside California</span>`;
+    ? `<span class="atlas-badge atlas-badge--good">California</span>`
+    : `<span class="atlas-badge atlas-badge--accent">Collaborator outside California</span>`;
   const links = [
-    ror ? `<a href="${escapeHtml(ror)}">ROR record</a>` : "",
-    openAlex ? `<a href="${escapeHtml(openAlex)}">OpenAlex record</a>` : "",
+    ror ? `<a class="atlas-pill" href="${escapeHtml(ror)}">ROR record</a>` : "",
+    openAlex ? `<a class="atlas-pill" href="${escapeHtml(openAlex)}">OpenAlex record</a>` : "",
   ].join("");
   return `<p class="inst-back"><a href="${escapeHtml(appUrl("institutions"))}">← All institutions</a></p>`
+    + `<header class="atlas-page-head inst-page-head"><span class="motif" aria-hidden="true"></span>`
+    + `<p class="atlas-page-head__eyebrow">${icon("building").outerHTML}Institution</p>`
     + `<h1>${escapeHtml(name)}</h1>`
-    + `<p class="inst-meta"><span class="inst-chip">${escapeHtml(institutionTypeLabel(institution.atlas_type || "other"))}</span>${scope}`
-    + (location ? `<span class="detail-meta">${escapeHtml(location)}</span>` : "")
-    + `</p>`
-    + (links ? `<p class="inst-links">${links}</p>` : "");
+    + `<p class="atlas-page-head__lead">Plastic-related works, lead authors, topics and publications for this institution.</p>`
+    + `<div class="atlas-page-head__meta"><span class="atlas-badge">${escapeHtml(institutionTypeLabel(institution.atlas_type || "other"))}</span>${scope}`
+    + (location ? `<span class="atlas-pill">${escapeHtml(location)}</span>` : "")
+    + links
+    + `</div></header>`;
 }
 
 function tilesHtml(stats) {
@@ -155,8 +164,8 @@ function tilesHtml(stats) {
     ["Active years", stats.firstYear === null ? "—" : `${stats.firstYear}–${stats.lastYear}`, ""],
     ["Works in the last 5 full years", fmt(stats.recentWorks), `${stats.recentFrom}–${stats.recentTo}`],
   ];
-  return `<dl class="inst-tiles">${tiles.map(([label, value, note]) => `<div class="inst-tile"><dt>${escapeHtml(label)}</dt>`
-    + `<dd>${escapeHtml(value)}${note ? ` <span class="inst-tile-note">${escapeHtml(note)}</span>` : ""}</dd></div>`).join("")}</dl>`;
+  return `<dl class="atlas-kpis inst-tiles">${tiles.map(([label, value, note]) => `<div class="atlas-kpi"><dt class="atlas-kpi__label">${escapeHtml(label)}</dt>`
+    + `<dd class="atlas-kpi__value">${escapeHtml(value)}${note ? ` <span class="atlas-kpi__note">${escapeHtml(note)}</span>` : ""}</dd></div>`).join("")}</dl>`;
 }
 
 function yearsHtml(works) {
@@ -276,7 +285,7 @@ function citedHtml() {
 }
 
 function sectionHtml(id, heading, body, intro = "") {
-  return `<section class="inst-section" id="section-${id}" aria-labelledby="heading-${id}"><h2 id="heading-${id}" tabindex="-1">${heading}</h2>${intro}${body}</section>`;
+  return `<section class="inst-section atlas-card" id="section-${id}" aria-labelledby="heading-${id}"><h2 id="heading-${id}" tabindex="-1">${heading}</h2>${intro}${body}</section>`;
 }
 
 function disclosureHtml(network) {
@@ -376,7 +385,7 @@ function renderInstitution(payload, known, networks) {
 
 function renderUnavailable(known) {
   root().innerHTML = headerHtml(known)
-    + `<p class="inst-notice" role="status">Detailed data for this institution is not in the current export. Search for another institution, or return to the leaderboard.</p>`;
+    + noticeHtml("Detailed data for this institution is not in the current export. Search for another institution, or return to the leaderboard.");
 }
 
 function scrollToSection() {
