@@ -1,0 +1,8 @@
+# Phone alerts after each daily works refresh (scripts/notify_ntfy.py, ntfy.sh).
+# The topic is public by design: anyone who knows the name can read the alerts, and no secret is
+# needed to post or read them. Changing the topic also changes the subscribe steps on the About page.
+ntfy:
+  topic: plastiverse-california
+  server: https://ntfy.sh
+  # Titles listed in one alert; the rest are counted as "and N more".
+  max_titles: 5

@@ -262,3 +262,22 @@ jobs:
           git push origin "HEAD:$DEFAULT_BRANCH"
           # A GITHUB_TOKEN push does not trigger other workflows; dispatch the deploy.
           gh workflow run build_deploy.yml --ref "$DEFAULT_BRANCH"
+
+      # NOTIFY-AB: one ntfy alert when this run committed new plastic-related works. The baseline is the
+      # works file at the checkout commit (github.sha), i.e. before this run. Never fails the run.
+      - name: Notify new California plastics papers (ntfy)
+        if: steps.refresh.outputs.status == 'success' && vars.ENABLE_DATA_COMMITS == 'true'
+        continue-on-error: true
+        env:
+          RUN_SHA: ${{ github.sha }}
+        run: |
+          if [[ "$(git rev-parse HEAD)" == "$RUN_SHA" ]]; then
+            echo "No data commit from this run; no ntfy alert."
+            exit 0
+          fi
+          before="$RUNNER_TEMP/works_detail_before.json"
+          if ! git show "$RUN_SHA:site/data/works_detail.json" > "$before"; then
+            echo "::warning::works_detail.json at the checkout commit not found; no ntfy alert."
+            exit 0
+          fi
+          python scripts/notify_ntfy.py --previous "$before"

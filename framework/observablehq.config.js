@@ -146,5 +146,6 @@ export default {
     '<nav aria-label="Footer links"><ul class="atlas-footer__links">' +
     '<li><a href="./about">About</a></li><li><a href="./glossary">Glossary</a></li>' +
     '<li><a href="./about#how-to-cite">How to cite</a></li>' +
+    '<li><a href="./about#get-updates">Get updates</a></li>' +
     '<li><a href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction" rel="external">Report a correction</a></li></ul></nav>'
 };

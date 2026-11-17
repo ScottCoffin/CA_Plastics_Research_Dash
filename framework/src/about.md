@@ -36,6 +36,67 @@ mountAboutFlow(document.getElementById("about-flow"), metadata, releaseFlow);
 <p class="about-lede">A living evidence map of plastics and microplastics research connected to California. Every morning an automated pipeline collects new scholarly records and funding data and rebuilds the site, so the map grows as the field publishes. A work is included when at least one author is affiliated with California and plastic is central to it. Included works are journal articles and reviews, conference papers and abstracts, preprints, theses and dissertations, book chapters, reports and datasets. Around those works the Atlas maps the researchers and institutions involved, public monitoring observations from California waters, and plastic-related grants.</p>
 </section>
 
+```js
+// NOTIFY-AB: the feed address with a copy button. Without the Clipboard API (or when it refuses),
+// the address is selected so a reader can copy it from the keyboard.
+const FEED_URL = "https://plastiverse.live/feed.xml";
+
+async function copyFeedUrl(event) {
+  const panel = event.currentTarget.closest(".get-updates__feed");
+  const status = panel.querySelector(".get-updates__status");
+  try {
+    await navigator.clipboard.writeText(FEED_URL);
+    status.dataset.state = "copied";
+    status.textContent = "Copied";
+  } catch {
+    const range = document.createRange();
+    range.selectNodeContents(panel.querySelector(".get-updates__address"));
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    status.dataset.state = "fallback";
+    status.textContent = "Copying is not available here. The address is selected: press Ctrl+C or Cmd+C to copy it.";
+  }
+}
+
+const feedAddress = html`<div class="get-updates__feed">
+  <div class="get-updates__row">
+    <code class="get-updates__address">${FEED_URL}</code>
+    <button type="button" class="atlas-btn atlas-btn--primary get-updates__copy" onclick=${copyFeedUrl}>Copy feed link</button>
+  </div>
+  <p class="get-updates__status" role="status"></p>
+</div>`;
+```
+
+<section class="about-section get-updates" aria-labelledby="get-updates">
+
+## Get updates
+
+<p class="about-lede">Every morning the pipeline adds any new California plastics papers and awards it finds. Follow the feed, get phone alerts, or both.</p>
+
+<div class="about-grid">
+<article class="about-card" style="--c: var(--atlas-task-water)">
+<h3>Feed</h3>
+<p>The newest papers and awards come as an Atom feed. Copy the address into a feed reader such as Feedly, Inoreader, NetNewsWire or Thunderbird. In Slack or Microsoft Teams, add an RSS app and paste the same address.</p>
+${feedAddress}
+</article>
+<article class="about-card" style="--c: var(--atlas-task-people)">
+<h3>Phone alerts</h3>
+<p>When the daily update finds new papers, ntfy sends your phone one short alert that lists their titles. Days with nothing new send nothing.</p>
+<ol class="get-updates__steps">
+<li>Install the free ntfy app for Android or iOS.</li>
+<li>In the app, add the topic <code>plastiverse-california</code>.</li>
+</ol>
+<div class="get-updates__actions">
+<a class="atlas-btn atlas-btn--secondary" href="https://ntfy.sh" target="_blank" rel="noreferrer">Get the ntfy app</a>
+<a class="atlas-btn atlas-btn--secondary" href="https://ntfy.sh/plastiverse-california" target="_blank" rel="noreferrer">Open the topic in a browser</a>
+</div>
+</article>
+</div>
+
+<p class="about-soon">A weekly email digest is coming soon.</p>
+</section>
+
 <section class="about-section" aria-labelledby="how-works-are-screened">
 
 ## How works are screened

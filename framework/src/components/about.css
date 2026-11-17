@@ -259,3 +259,97 @@
   display: inline;
   min-height: 0;
 }
+
+/* NOTIFY-AB: Get updates. Every control is at least 40px high (touch targets on phones).
+   Buttons and links sit outside <p> so the inline-link rules above do not shrink them. */
+#observablehq-main #get-updates {
+  scroll-margin-top: 1rem;
+}
+
+#observablehq-main .get-updates__feed {
+  display: grid;
+  gap: var(--atlas-space-3);
+}
+
+#observablehq-main .get-updates__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--atlas-space-3);
+}
+
+#observablehq-main .get-updates__address {
+  display: flex;
+  flex: 1 1 14rem;
+  align-items: center;
+  min-width: 0;
+  min-height: 2.5rem;
+  padding: var(--atlas-space-2) var(--atlas-space-3);
+  border: 1px solid var(--atlas-line);
+  background: var(--atlas-page);
+  color: var(--atlas-ink);
+  font-family: var(--atlas-font-mono);
+  font-size: var(--atlas-type-caption-size);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+#observablehq-main .get-updates .atlas-btn {
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  text-decoration: none;
+}
+
+#observablehq-main .get-updates a.atlas-btn,
+#observablehq-main .get-updates a.atlas-btn:visited {
+  color: var(--atlas-ink);
+}
+
+#observablehq-main .get-updates a.atlas-btn--secondary:hover,
+#observablehq-main .get-updates a.atlas-btn--secondary:focus-visible {
+  color: var(--atlas-on-brand);
+}
+
+#observablehq-main .get-updates__status:not(:empty) {
+  display: inline-block;
+  justify-self: start;
+  padding: var(--atlas-space-1) var(--atlas-space-2);
+  background: var(--atlas-brand-wash);
+  color: var(--atlas-text);
+  font-weight: 650;
+}
+
+#observablehq-main .get-updates__status[data-state="copied"] {
+  background: var(--atlas-good-wash);
+  color: var(--atlas-good-ink);
+}
+
+#observablehq-main .get-updates__status[data-state="fallback"] {
+  background: var(--atlas-caution-wash);
+  color: var(--atlas-caution-ink);
+}
+
+#observablehq-main .get-updates__steps {
+  margin: 0 0 var(--atlas-space-4);
+  padding-left: var(--atlas-space-6);
+  font-size: 0.97rem;
+  line-height: 1.55;
+}
+
+#observablehq-main .get-updates__steps li + li {
+  margin-top: var(--atlas-space-2);
+}
+
+#observablehq-main .get-updates__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-space-3);
+}
+
+#observablehq-main .about-soon {
+  max-width: none;
+  margin: var(--atlas-space-5) 0 0;
+  color: var(--atlas-muted);
+  font-size: var(--atlas-type-small-size);
+}
