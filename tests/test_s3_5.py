@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_about_page_has_exact_disclaimer_and_correction_route() -> None:
     html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
-    assert "Independent project; not an official OEHHA or State product." in html
+    assert 'Created by <a href="https://scottcoff.in"' in html
     assert 'id="about-freshness"' in html
     assert "docs/METHODS.md" in html
     assert "issues/new?title=Atlas%20data%20correction" in html

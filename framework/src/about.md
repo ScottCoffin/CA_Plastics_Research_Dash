@@ -122,7 +122,4 @@ ${html`<p>Pipeline health: <a href="${classicUrl("status.html")}">run status and
 </div>
 </section>
 
-<p class="atlas-notice"><strong>Disclaimer:</strong> Independent project; not an official OEHHA or State product.</p>
-
-<!-- EM-14: owner affiliation disclosure; owner approved naming roles (GOV-B, 2026-11-10) -->
-<p class="atlas-notice"><strong>Disclosure:</strong> the Atlas owner, Scott Coffin, is a co-founder of Plastiverse, which hosts this site at plastiverse.live. The Atlas is an independent research tool and is not an official product of any agency.</p>
+<p class="about-credit">Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.</p>

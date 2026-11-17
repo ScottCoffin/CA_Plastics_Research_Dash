@@ -57,7 +57,9 @@ def test_sidebar_groups_header_search_and_footer_contract() -> None:
     assert "data-atlas-site-search" in data["header"]
     assert "Search the Atlas" in data["header"]
     assert 'href="./about#how-to-cite">How to cite</a>' in data["footer"]
-    assert "Independent project; not an official OEHHA or State product." in data["footer"]
+    # Owner 2026-11-17: the footer credits the creator; the former disclaimer was removed.
+    assert 'Created by <a href="https://scottcoff.in"' in data["footer"]
+    assert "not an official OEHHA" not in data["footer"]
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")

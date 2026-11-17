@@ -22,7 +22,7 @@ const SKIP_LINK = '<a class="atlas-skip-link" href="#observablehq-main">Skip to 
 const CONFIG_HEAD = frameworkConfig.head;
 const GLOBAL_FONT_STYLE = CONFIG_HEAD.match(/<style\b[\s\S]*?<\/style>/i)?.[0];
 const GLOBAL_FAVICON = CONFIG_HEAD.match(
-  /<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml,)[^>]*>/i
+  /<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml[;,])[^>]*>/i
 )?.[0];
 // Site search (VD-19) is loaded from the config head too, so pages with their own head get it here.
 // Framework cannot resolve a head <link>/<script src> to site/assets, so the head carries an
@@ -50,7 +50,7 @@ function addGlobalHead(html) {
   if (!/@font-face\b[\s\S]*?font-family:\s*["']Archivo["']/i.test(html)) {
     missing.push(GLOBAL_FONT_STYLE);
   }
-  if (!/<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml,)[^>]*>/i.test(html)) {
+  if (!/<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml[;,])[^>]*>/i.test(html)) {
     missing.push(GLOBAL_FAVICON);
   }
   if (!/site_search\.css/.test(html)) missing.push(GLOBAL_SEARCH_STYLE);

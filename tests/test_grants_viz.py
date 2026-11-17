@@ -178,6 +178,8 @@ def test_grants_page_has_no_external_hosts() -> None:
         for ref in refs
         if re.match(r"^(?:https?:)?//", ref, re.IGNORECASE) or ref.lower().startswith("http:")
     ]
+    # The creator credit (owner 2026-11-17) is an outbound text link, not a loaded resource.
+    external = [ref for ref in external if ref != "https://scottcoff.in"]
     assert external == [], f"external src/href values are not allowed: {external}"
     assert not re.search(r"url\(\s*['\"]?https?:", html, re.IGNORECASE)
     assert not re.search(r"@import", html)
@@ -187,7 +189,7 @@ def test_grants_page_structure_and_links() -> None:
     html = PAGE.read_text(encoding="utf-8")
     assert '<script src="assets/topics.js"></script>' in html
     assert 'href="index.html#funding"' in html
-    assert "Independent project; not an official OEHHA or State product." in html
+    assert 'Created by <a href="https://scottcoff.in"' in html
     assert "not comparable or additive across sources" in html
     index = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
     assert 'href="grants.html"' in index

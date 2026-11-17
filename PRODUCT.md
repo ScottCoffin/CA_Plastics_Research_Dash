@@ -32,7 +32,7 @@ A transparent, reproducible starting point: every count is traceable to open sou
 
 ## Brand Commitments
 - Name: CA Plastics Research Atlas.
-- Footer disclaimer: "Independent project; not an official OEHHA or State product." Never imply State endorsement.
+- Footer credit: "Created by Scott Coffin" linking to https://scottcoff.in (owner 2026-11-17; replaced the former disclaimer and the About disclosure). Never imply State endorsement.
 
 ## Evidence on Hand
 Live counts in `site/data/build_metadata.json` (authors, works, institutions, California institutions, awards, monitoring samples and sources, network experts and links, plastic-related works). No testimonials, users, or press exist; do not invent any.

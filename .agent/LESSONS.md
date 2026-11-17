@@ -364,5 +364,5 @@ until it reports.
   public pages before sealing.
 
 ## 2026-11-17: favicon data URIs and Pages source
-- Framework re-escapes `%` inside a head `href` that was built with `encodeURIComponent` (`%3D` became `%253D`), so the favicon silently failed. Encode data-URI SVGs lightly (quotes to apostrophes, `<`/`>`/`#` escaped) and check the built `<link rel="icon">` decodes in a browser.
+- Framework re-escapes every `%` inside a head `href` (`%3D` became `%253D`, `%23` became `%2523`). Any percent-encoded SVG data URI breaks: `#` colours become invalid (black fills) and `url(#id)` clips fail, so the favicon drew a black square (the original four-square icon too). Use base64 data URIs, and verify icons by pixel colour in a browser, not just that the image loads (`scratch/shots/fav_pixels.py` pattern).
 - If Pages `build_type` is `legacy`, GitHub's own "pages build and deployment" job races the Actions deploy on every push and can publish README.md as the homepage. Keep `build_type=workflow`; a run named "pages build and deployment" (event dynamic) next to ours is the symptom.

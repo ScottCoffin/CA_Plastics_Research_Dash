@@ -249,3 +249,13 @@
   display: inline;
   min-height: 0;
 }
+
+#observablehq-main .about-credit {
+  margin-top: var(--atlas-space-8);
+  color: var(--atlas-muted);
+}
+
+#observablehq-main .about-credit a {
+  display: inline;
+  min-height: 0;
+}

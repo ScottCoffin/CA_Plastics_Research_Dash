@@ -10,7 +10,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 DATA = SITE / "data"
-DISCLAIMER = "Independent project; not an official OEHHA or State product."
+# Owner 2026-11-17 (ADR-CREDIT-2026-11-17): the disclaimer was replaced by a creator credit.
+DISCLAIMER = (
+    'Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.'
+)
 
 
 def _read_json(path: Path) -> dict:
@@ -157,7 +160,7 @@ def main() -> None:
     metadata = _read_json(metadata_path)
     index = _read_json(index_path)
 
-    assert f"<strong>Disclaimer:</strong> {DISCLAIMER}</p>" in html
+    assert f'<p class="notice">{DISCLAIMER}</p>' in html
     for marker in (
         'id="about-freshness"',
         'id="about-stats"',

@@ -162,6 +162,8 @@ def test_expert_page_has_no_external_hosts() -> None:
         for ref in refs
         if re.match(r"^(?:https?:)?//", ref, re.IGNORECASE) or ref.lower().startswith("http:")
     ]
+    # The creator credit (owner 2026-11-17) is an outbound text link, not a loaded resource.
+    external = [ref for ref in external if ref != "https://scottcoff.in"]
     assert external == [], f"external src/href values are not allowed: {external}"
     assert not re.search(r"url\(\s*['\"]?https?:", html, re.IGNORECASE), "no external CSS url()"
     assert not re.search(r"@import", html), "no CSS @import"
@@ -180,7 +182,7 @@ def test_expert_page_navigation_and_disclaimer() -> None:
     html = PAGE.read_text(encoding="utf-8")
     assert 'href="index.html#experts"' in html, "back link to the Experts list"
     assert "index.html#experts?author=" in html, "Open in Experts list link"
-    assert "Independent project; not an official OEHHA or State product." in html
+    assert 'Created by <a href="https://scottcoff.in"' in html
     assert 'class="skip-link" href="#main-content"' in html
     assert "hashchange" in html, "a new author in the hash re-renders the page"
 

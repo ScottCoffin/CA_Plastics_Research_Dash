@@ -14,10 +14,9 @@ const PLANE_MARK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-400 -560 9
   '<polygon fill="#e3a92b" points="70,-150 560,-150 560,250 -70,205"/>' +
   '<polygon fill="#141311" points="-470,205 -70,205 560,250 560,520 -470,520"/></g></svg>';
 const CA_MARK = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK).toString("base64");
-// Light encoding only (quotes to apostrophes, < > # escaped): Framework re-escapes the "%" of a full
-// encodeURIComponent() string (%3D became %253D), which left browsers with an unreadable icon.
-const FAVICON = "data:image/svg+xml," + PLANE_MARK.replace(' aria-hidden="true" focusable="false"', "")
-  .replaceAll('"', "'").replaceAll("<", "%3C").replaceAll(">", "%3E").replaceAll("#", "%23");
+// Base64, like CA_MARK: Framework re-escapes "%" inside head hrefs (%23 became %2523), which turned every
+// fill into an invalid colour and broke the clip, so browsers drew a black square (owner 2026-11-17).
+const FAVICON = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK.replace(' aria-hidden="true" focusable="false"', "")).toString("base64");
 const PAGE_GROUPS = [
   {name: "Explore", pages: [
     {name: "Experts", path: "/experts"},
@@ -143,7 +142,8 @@ export default {
   home: '<span class="atlas-home-brand"><img src="' + CA_MARK + '" alt=""><span>CA Plastics Research Atlas</span></span>',
   pages: PAGE_GROUPS,
   header: atlasHeader,
-  footer: '<p class="atlas-footer__note">Independent project; not an official OEHHA or State product.</p>' +
+  // Owner 2026-11-17: the footer credits the creator instead of the former disclaimer.
+  footer: '<p class="atlas-footer__note">Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.</p>' +
     '<nav aria-label="Footer links"><ul class="atlas-footer__links">' +
     '<li><a href="./about">About</a></li><li><a href="./glossary">Glossary</a></li>' +
     '<li><a href="./about#how-to-cite">How to cite</a></li>' +

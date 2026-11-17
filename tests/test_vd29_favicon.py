@@ -9,12 +9,14 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG = (ROOT / "framework" / "observablehq.config.js").read_text(encoding="utf-8")
 
 
-def test_favicon_uses_light_encoding_not_encode_uri_component() -> None:
+def test_favicon_is_base64_so_the_build_cannot_re_escape_it() -> None:
     # Framework re-escapes "%" in a fully percent-encoded href (%3D became %253D).
     favicon = re.search(r"const FAVICON = .*?;\n", CONFIG, flags=re.S)
     assert favicon
+    # Percent-encoding of any kind gets re-escaped (%23 became %2523: black fills, broken clip).
     assert "encodeURIComponent" not in favicon.group(0)
-    assert '.replaceAll("<", "%3C")' in favicon.group(0)
+    assert "data:image/svg+xml;base64," in favicon.group(0)
+    assert "%23" not in favicon.group(0)
     assert '<link rel="icon" href="${FAVICON}">' in CONFIG
 
 
