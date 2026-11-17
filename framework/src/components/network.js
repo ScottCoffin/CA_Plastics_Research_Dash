@@ -9,7 +9,11 @@ import "./shared/topics.js";
 import {classicUrl, escapeHtml, formatCount, loadJson} from "./atlas.js";
 import {icon, injectIconSprite} from "./shared/icons.js";
 import {
+  clusterAnchors,
+  clusterName,
   colourGroups,
+  communityLabelMap,
+  communityLabelText,
   emptyNetworkState,
   formatNetworkHash,
   graphAttributes,
@@ -17,6 +21,7 @@ import {
   legendGroups,
   matchingNodeIds,
   normalizeNetworkState,
+  OTHER_COLOUR,
   parseNetworkHash,
   sectorLabel,
   sectorOptions,
@@ -165,6 +170,9 @@ export async function mountNetwork() {
     return;
   }
 
+  // Algorithmic cluster names (VD-20): "Cluster 1 · UC Davis · Ecotoxicology" in the legend and table.
+  const labelMap = communityLabelMap(data?.community_labels);
+
   // Filter options come from the data; a hash value that no option matches is dropped.
   const topics = tagOptions(nodes);
   const sectors = sectorOptions(nodes);
@@ -244,6 +252,74 @@ export async function mountNetwork() {
   let layoutFrame = 0;
   let layoutSettings = null;
 
+  // Cluster names drawn over the canvas in cluster colour mode (VD-20). Decorative only: the legend
+  // and table carry the same text, so the layer is hidden from assistive technology and ignores the
+  // pointer. It sits inside the stage, so it never changes the layout around the chart.
+  const labelLayer = document.createElement("div");
+  labelLayer.className = "net-cluster-labels";
+  labelLayer.setAttribute("aria-hidden", "true");
+  labelLayer.hidden = true;
+  stage.append(labelLayer);
+  const labelEls = new Map(); // cluster key -> label element
+
+  // Places each of the largest labelled clusters at the centre of its visible experts, skipping any
+  // name that would overlap a name already placed. Runs after every sigma render (afterRender).
+  function updateClusterLabels() {
+    if (!renderer || colourMode !== "cluster") {
+      labelLayer.hidden = true;
+      return;
+    }
+    labelLayer.hidden = false;
+    const width = stage.clientWidth;
+    const height = stage.clientHeight;
+    const placed = [];
+    const shown = new Set();
+    for (const {key, ids} of clusterAnchors(nodes, model.visible, labelMap)) {
+      let sumX = 0;
+      let sumY = 0;
+      let count = 0;
+      for (const id of ids) {
+        if (!graph.hasNode(id)) continue;
+        sumX += graph.getNodeAttribute(id, "x");
+        sumY += graph.getNodeAttribute(id, "y");
+        count += 1;
+      }
+      if (!count) continue;
+      let el = labelEls.get(key);
+      if (!el) {
+        // The canvas shows the name only; the legend and table carry the "Cluster n" prefix too.
+        el = document.createElement("span");
+        el.className = "net-cluster-label";
+        el.textContent = communityLabelText(labelMap.get(key), labelFor);
+        labelLayer.append(el);
+        labelEls.set(key, el);
+      }
+      // Text takes the cluster's colour; a cluster beyond the palette takes the grey "other" colour.
+      el.style.color = colours.get(key) ?? OTHER_COLOUR;
+      const point = renderer.graphToViewport({x: sumX / count, y: sumY / count});
+      el.hidden = false;
+      const w = el.offsetWidth;
+      const h = el.offsetHeight;
+      // Keep the name inside the stage (clamped at the edges) and skip it when the centre is off-stage.
+      const left = Math.min(Math.max(point.x - w / 2, 4), Math.max(4, width - w - 4));
+      const top = Math.min(Math.max(point.y - h / 2, 4), Math.max(4, height - h - 4));
+      const inside = point.x >= 0 && point.y >= 0 && point.x <= width && point.y <= height;
+      const clear = placed.every(
+        (box) => left >= box.right + 4 || box.left >= left + w + 4 || top >= box.bottom + 4 || box.top >= top + h + 4
+      );
+      if (inside && clear) {
+        el.style.transform = `translate(${left.toFixed(1)}px, ${top.toFixed(1)}px)`;
+        placed.push({left, top, right: left + w, bottom: top + h});
+        shown.add(key);
+      } else {
+        el.hidden = true;
+      }
+    }
+    for (const [key, el] of labelEls) {
+      if (!shown.has(key)) el.hidden = true;
+    }
+  }
+
   // Keep the current drawn positions so a rebuild does not move anyone.
   function savePositions() {
     graph.forEachNode((key, attrs) => positions.set(key, {x: attrs.x, y: attrs.y}));
@@ -289,8 +365,9 @@ export async function mountNetwork() {
       .map((node) => {
         const degree = Number(node.degree) || 0;
         const works = Number(node.plastic_works) || 0;
-        const rank = clusterRank.get(String(node.community));
-        const clusterCell = rank ? `Cluster ${rank}` : "Other clusters";
+        const key = String(node.community);
+        const rank = clusterRank.get(key);
+        const clusterCell = rank ? clusterName(rank, labelMap.get(key), labelFor) : "Other clusters";
         return (
           `<tr><th scope="row"><a href="${escapeHtml(expertUrl(node.id))}">${escapeHtml(node.name)}</a></th>` +
           `<td>${escapeHtml(clusterCell)}</td><td>${degree}</td><td>${works}</td></tr>`
@@ -363,7 +440,9 @@ export async function mountNetwork() {
 
   // Legend: one toggle per group, aria-pressed shows whether the group is drawn.
   function renderLegend() {
-    const groups = legendGroups(nodes, colourMode, colours, labelFor);
+    const groups = legendGroups(nodes, colourMode, colours, labelFor, (key, rank) =>
+      clusterName(rank, labelMap.get(key), labelFor)
+    );
     legend.replaceChildren(
       ...groups.map((group) => {
         const item = document.createElement("li");
@@ -413,6 +492,7 @@ export async function mountNetwork() {
     renderTable(model.visible);
     refreshHighlight();
     if (selectedId !== null) renderPanel();
+    updateClusterLabels();
   }
 
   // Controls are not rewritten here, so a half-typed year is never cleared mid-entry.
@@ -452,6 +532,7 @@ export async function mountNetwork() {
 
   function showFallback(text) {
     renderer = null;
+    labelLayer.hidden = true;
     message.hidden = false;
     message.textContent = text;
     tableDetails.open = true;
@@ -459,6 +540,7 @@ export async function mountNetwork() {
   }
 
   function bindRenderer() {
+    renderer.on("afterRender", updateClusterLabels);
     renderer.on("enterNode", (event) => {
       hoveredId = event.node;
       refreshHighlight();
@@ -584,6 +666,7 @@ export async function mountNetwork() {
   try {
     createRenderer();
     message.hidden = true;
+    updateClusterLabels();
   } catch (error) {
     showFallback(
       "The network graphic could not start in this browser, so the table below lists the same experts."

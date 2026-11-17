@@ -330,6 +330,33 @@
   }
 }
 
+/* Cluster names over the canvas (VD-20). Decorative: the legend and table carry the text. The layer
+   sits above sigma's canvases, ignores the pointer, and is absolutely positioned so nothing reflows. */
+.net-cluster-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.net-cluster-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  max-width: 24rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: var(--atlas-type-small-size);
+  font-weight: 700;
+  line-height: 1.25;
+  text-shadow:
+    0 0 2px var(--atlas-surface),
+    0 0 2px var(--atlas-surface),
+    0 0 4px var(--atlas-surface);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .net-btn__tooltip {
     transition: none;

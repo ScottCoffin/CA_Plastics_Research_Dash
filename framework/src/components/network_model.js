@@ -273,14 +273,82 @@ export function colourGroups(nodes, colourMode, topicColour = () => null) {
   return out;
 }
 
+// ---- Algorithmic cluster names (VD-20) --------------------------------------------------------
+// network.json carries community_labels: {community, size, institution: {name, share} | null,
+// topic: {tag, share, lift} | null}. A cluster with neither part keeps the plain "Cluster n".
+
+// Map from cluster key (String(community)) to its label entry, labelled clusters only.
+export function communityLabelMap(labels) {
+  const out = new Map();
+  for (const entry of Array.isArray(labels) ? labels : []) {
+    if (!entry || !Number.isInteger(entry.community)) continue;
+    const name = typeof entry.institution?.name === "string" ? entry.institution.name.trim() : "";
+    const tag = typeof entry.topic?.tag === "string" ? entry.topic.tag : "";
+    if (name || tag) out.set(String(entry.community), entry);
+  }
+  return out;
+}
+
+// Short display form of a campus name for the canvas labels: "University of California, Davis"
+// -> "UC Davis", "California State University, Long Beach" -> "CSU Long Beach". Others unchanged.
+export function shortInstitutionName(name) {
+  const text = String(name ?? "").trim();
+  const uc = /^University of California,\s*(.+)$/.exec(text);
+  if (uc) return `UC ${uc[1]}`;
+  const csu = /^California State University,\s*(.+)$/.exec(text);
+  if (csu) return `CSU ${csu[1]}`;
+  return text;
+}
+
+// "UC Davis · Ecotoxicology" for a label entry, or "" when it has no institution or topic.
+export function communityLabelText(entry, topicLabel = (tag) => String(tag)) {
+  const parts = [];
+  const name = typeof entry?.institution?.name === "string" ? shortInstitutionName(entry.institution.name) : "";
+  if (name) parts.push(name);
+  const tag = typeof entry?.topic?.tag === "string" ? entry.topic.tag : "";
+  if (tag) parts.push(topicLabel(tag));
+  return parts.join(" · ");
+}
+
+// "Cluster 1 · UC Davis · Ecotoxicology", or "Cluster 1" when the cluster is unlabelled.
+export function clusterName(rank, entry, topicLabel = (tag) => String(tag)) {
+  const text = communityLabelText(entry, topicLabel);
+  return text ? `Cluster ${rank} · ${text}` : `Cluster ${rank}`;
+}
+
+// Labelled clusters that have at least `min` visible experts, largest visible first (ties by key),
+// at most `max` of them. Returns [{key, ids}] with the visible member ids of each.
+export function clusterAnchors(nodes, visible, labelMap, {min = 4, max = 8} = {}) {
+  const groups = new Map();
+  for (const node of nodes || []) {
+    if (!visible.has(node.id)) continue;
+    const key = String(node.community);
+    if (!labelMap.has(key)) continue;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(node.id);
+  }
+  return [...groups.entries()]
+    .filter(([, ids]) => ids.length >= min)
+    .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], undefined, {numeric: true}))
+    .slice(0, max)
+    .map(([key, ids]) => ({key, ids}));
+}
+
 // Legend rows in colour order, plus one "other" row when some experts have no coloured group.
-export function legendGroups(nodes, colourMode, colours, topicLabel = (tag) => String(tag)) {
+// clusterLabel(key, rank) names a cluster row (VD-20 labels); the default is the plain "Cluster n".
+export function legendGroups(
+  nodes,
+  colourMode,
+  colours,
+  topicLabel = (tag) => String(tag),
+  clusterLabel = (key, rank) => `Cluster ${rank}`
+) {
   const counts = groupCounts(nodes, colourMode);
   const noun = colourMode === "topic" ? "topics" : colourMode === "sector" ? "sectors" : "clusters";
   const labelOf = (key, rank) => {
     if (colourMode === "topic") return topicLabel(key);
     if (colourMode === "sector") return sectorLabel(key);
-    return `Cluster ${rank}`;
+    return clusterLabel(key, rank);
   };
   const items = [...colours.keys()].map((key, i) => ({
     key,

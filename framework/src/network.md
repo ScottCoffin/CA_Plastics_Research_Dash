@@ -59,6 +59,7 @@ title: Collaboration network
 <summary>How to read the network</summary>
 <div class="atlas-disclosure__body">
 <p>Colours show collaboration clusters found automatically with the Louvain community-detection method, unless you choose another colour mode. Positions come from a force-directed layout and have no geographic meaning.</p>
+<p>Each cluster is named after the institution and research topic that most of its members share, when one is common enough; a cluster with no shared name stays "Cluster n". The legend and table show these names. In cluster colour mode the chart names up to eight of the largest clusters.</p>
 <p>Zoom with the buttons, mouse wheel, or a pinch. Drag the background to pan and drag a dot to move it. Hover a dot to see its links. Click a dot to open its details beside the chart, or choose a name in the search box to centre it. The search box and table below are the keyboard route.</p>
 </div>
 </details>

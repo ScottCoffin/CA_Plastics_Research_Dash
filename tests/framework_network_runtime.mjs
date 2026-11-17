@@ -25,6 +25,7 @@ import {
   OTHER_GROUP,
   parseNetworkHash,
   sectorLabel,
+  shortInstitutionName,
   sectorOptions,
   shownEdgeWeights,
   sigmaNodeSize,
@@ -245,6 +246,13 @@ const everyone = new Set(["a", "b", "c", "d"]);
   assert.deepEqual(topCoauthors(edges, [5, 2, 1], "a", 1), [{id: "b", weight: 5}]);
   assert.deepEqual(topCoauthors(edges, [5, 2, 1], "c", 8).map((r) => r.id), ["a", "b"]);
   assert.deepEqual(topCoauthors(edges, [5, 2, 1], "d", 8), []);
+}
+
+{
+  assert.equal(shortInstitutionName("University of California, Davis"), "UC Davis");
+  assert.equal(shortInstitutionName("California State University, Long Beach"), "CSU Long Beach");
+  assert.equal(shortInstitutionName("Lawrence Berkeley National Laboratory"), "Lawrence Berkeley National Laboratory");
+  assert.equal(shortInstitutionName(null), "");
 }
 
 console.log("framework_network_runtime: all checks passed");

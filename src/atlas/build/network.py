@@ -2,21 +2,34 @@
 
 Built from the public ``site/data/index.json`` only (no raw data), so the result is
 reproducible from committed files. Edge weight = number of co-authored plastic-related works
-(Newman fractional counting optional). Louvain communities and a spring layout use fixed
-seeds, so reruns give the same clusters and positions. ``networkx`` is imported lazily: it is
-not yet a declared project dependency (QUESTIONS S9.4-DEP).
+(Newman fractional counting optional). Louvain communities and a seeded spring layout use fixed
+seeds, so reruns give the same clusters. The stored positions are a ForceAtlas2 layout started
+from that spring layout (VD-20), so the page shows clusters on first load. ``networkx`` is
+imported lazily: it is not yet a declared project dependency (QUESTIONS S9.4-DEP).
 """
 
 from __future__ import annotations
 
+import math
 from collections import Counter, defaultdict
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Mapping, Sequence
 from itertools import combinations
 from typing import Any
 
-SCHEMA_VERSION = "s9.4-v1"
+SCHEMA_VERSION = "s9.4-v1.1"
 DEFAULT_NODE_CAP = 400
 SEED = 42
+# ForceAtlas2 settings mirror graphology's inferSettings(graph) (the page's own "Re-run layout"):
+# scaling ratio 10, strong gravity 0.05, node mass 1 + weighted degree, linear attraction.
+LAYOUT_ITERATIONS = 1000
+LAYOUT_SCALING_RATIO = 10.0
+LAYOUT_GRAVITY = 0.05
+# Community labels (VD-20): only communities with at least LABEL_MIN_SIZE experts are labelled.
+LABEL_MIN_SIZE = 4
+INSTITUTION_MIN_SHARE = 0.35
+INSTITUTION_MIN_COUNT = 2
+TOPIC_MIN_SHARE = 0.4
+TOPIC_MIN_LIFT = 1.15
 
 
 def _plastic_works(works: Iterable[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
@@ -70,6 +83,139 @@ def edge_years(
     return {key: dict(value) for key, value in out.items()}
 
 
+def _normalise(points: Mapping[str, tuple[float, float]]) -> dict[str, tuple[float, float]]:
+    """Centre the points on their bounding box and scale so the larger side spans [-1, 1]."""
+    if not points:
+        return {}
+    xs = [x for x, _ in points.values()]
+    ys = [y for _, y in points.values()]
+    if not all(math.isfinite(value) for value in (*xs, *ys)):
+        raise ValueError("ForceAtlas2 produced non-finite positions")
+    cx = (max(xs) + min(xs)) / 2
+    cy = (max(ys) + min(ys)) / 2
+    half = max(max(xs) - min(xs), max(ys) - min(ys)) / 2
+    if half <= 0:
+        half = 1.0
+    return {node: ((x - cx) / half, (y - cy) / half) for node, (x, y) in points.items()}
+
+
+def forceatlas2_positions(
+    graph: Any, start: Mapping[str, Any], *, iterations: int = LAYOUT_ITERATIONS
+) -> dict[str, tuple[float, float]]:
+    """ForceAtlas2 layout of ``graph`` from the ``start`` positions, normalised to [-1, 1].
+
+    Deterministic: the start layout is seeded and networkx adds no randomness once ``pos`` is given.
+    """
+    import networkx as nx  # lazy: optional until S9.4-DEP is answered
+
+    if graph.number_of_nodes() == 0:
+        return {}
+    mass = {node: 1.0 + float(strength) for node, strength in graph.degree(weight="weight")}
+    raw = nx.forceatlas2_layout(
+        graph,
+        pos=dict(start),
+        max_iter=iterations,
+        jitter_tolerance=1.0,
+        scaling_ratio=LAYOUT_SCALING_RATIO,
+        gravity=LAYOUT_GRAVITY,
+        strong_gravity=True,
+        linlog=False,
+        node_mass=mass,
+        weight="weight",
+    )
+    return _normalise({node: (float(xy[0]), float(xy[1])) for node, xy in raw.items()})
+
+
+def _home_institution(row: Mapping[str, Any]) -> str | None:
+    """First primary affiliation; without one, the first institution other than 'System'."""
+    primary = row.get("primary_affiliations") or []
+    if primary and str(primary[0]).strip():
+        return str(primary[0]).strip()
+    for name in row.get("institutions") or []:
+        text = str(name).strip()
+        if text and text != "System":
+            return text
+    return None
+
+
+def _institution_label(group: Sequence[Mapping[str, Any]]) -> dict[str, Any] | None:
+    size = len(group)
+    counts = Counter(name for name in (_home_institution(row) for row in group) if name)
+    if not counts:
+        return None
+    # Most members first, then by name, so ties are stable.
+    name, count = min(counts.items(), key=lambda item: (-item[1], item[0]))
+    if count < INSTITUTION_MIN_COUNT or count / size < INSTITUTION_MIN_SHARE:
+        return None
+    return {"name": name, "share": round(count / size, 3)}
+
+
+def _topic_label(
+    group: Sequence[Mapping[str, Any]], expert_tags: Mapping[str, int], total: int
+) -> dict[str, Any] | None:
+    size = len(group)
+    counts = Counter(tag for row in group for tag in set(row.get("topics") or []))
+    best: tuple[tuple[float, float, str], str, float, float] | None = None
+    for tag, count in counts.items():
+        share = count / size
+        if share < TOPIC_MIN_SHARE:
+            continue
+        # Lift = share in the community / share across all experts; one division keeps ties exact.
+        lift = (count * total) / (size * expert_tags[tag])
+        key = (-lift, -share, tag)
+        if best is None or key < best[0]:
+            best = (key, tag, share, lift)
+    if best is None or best[3] < TOPIC_MIN_LIFT:
+        return None
+    _, tag, share, lift = best
+    return {"tag": tag, "share": round(share, 3), "lift": round(lift, 3)}
+
+
+def community_labels(rows: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """Algorithmic cluster names (VD-20) for communities of at least LABEL_MIN_SIZE experts.
+
+    ``rows`` are the network node rows (each carries ``community``, ``topics``,
+    ``primary_affiliations`` and ``institutions``). Output is ordered by community index; a label
+    that fails its threshold is ``None``, so the page keeps "Cluster n" for it.
+    """
+    members: dict[int, list[Mapping[str, Any]]] = defaultdict(list)
+    for row in rows:
+        members[int(row["community"])].append(row)
+    total = len(rows)
+    expert_tags: Counter[str] = Counter(tag for row in rows for tag in set(row.get("topics") or []))
+    labels = []
+    for community in sorted(members):
+        group = members[community]
+        if len(group) < LABEL_MIN_SIZE:
+            continue
+        labels.append(
+            {
+                "community": community,
+                "size": len(group),
+                "institution": _institution_label(group),
+                "topic": _topic_label(group, expert_tags, total),
+            }
+        )
+    return labels
+
+
+COMMUNITY_LABELS_METHOD = (
+    f"Communities of at least {LABEL_MIN_SIZE} experts, in community order. Institution: the most "
+    "common first primary affiliation among members (a member without one counts its first "
+    "institution other than 'System'), kept when at least "
+    f"{INSTITUTION_MIN_SHARE:.0%} of members and at least {INSTITUTION_MIN_COUNT} share it. "
+    f"Topic: among tags on at least {TOPIC_MIN_SHARE:.0%} of members' topics, the one with the "
+    "highest lift (share in the community divided by share across all experts), ties by share "
+    f"then tag, kept when lift is at least {TOPIC_MIN_LIFT}. A null field means no label passed."
+)
+LAYOUT_METHOD = (
+    "ForceAtlas2 (networkx), started from the spring layout (seed 42) and run for "
+    f"{LAYOUT_ITERATIONS} iterations with scaling ratio {LAYOUT_SCALING_RATIO:g}, strong gravity "
+    f"{LAYOUT_GRAVITY:g} and node mass 1 + weighted degree (graphology inferSettings); "
+    "coordinates centred and scaled to [-1, 1]."
+)
+
+
 def build_network(
     index: Mapping[str, Any],
     institutions: Iterable[Mapping[str, Any]] = (),
@@ -95,7 +241,8 @@ def build_network(
     # Largest community first, so community 0 is the biggest and colours are stable.
     ordered = sorted(communities, key=lambda c: (-len(c), min(c)))
     community_of = {node: index_ for index_, members in enumerate(ordered) for node in members}
-    positions = nx.spring_layout(graph, weight="weight", seed=SEED, iterations=200)
+    start = nx.spring_layout(graph, weight="weight", seed=SEED, iterations=200)
+    positions = forceatlas2_positions(graph, start)
     strength = dict(graph.degree(weight="weight"))
 
     # Topics per expert = tags on their plastic-related works (author rows carry none).
@@ -149,10 +296,12 @@ def build_network(
             "works": "plastic-related works in the Atlas export",
             "node_cap": cap,
             "community": "Louvain (networkx), seed 42",
-            "layout": "spring layout (networkx), seed 42",
+            "layout": LAYOUT_METHOD,
+            "community_labels": COMMUNITY_LABELS_METHOD,
             "networkx": nx.__version__,
         },
         "communities": len(ordered),
+        "community_labels": community_labels(node_rows),
         "nodes": node_rows,
         "edges": edge_rows,
     }
