@@ -131,6 +131,18 @@
 #experts-root .work-abstract > .atlas-disclosure__body { padding: 0.75rem 0.8rem; white-space: pre-wrap; }
 #experts-root .abstract-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 0.6rem; }
 #experts-root .button-link { text-decoration: none; }
+/* VD-18: "Open full profile page" is a primary button. "#experts-root a" (specificity 1,0,1) sets
+   brand-strong text and outranks .atlas-btn--primary, so the label was dark on dark teal. */
+#experts-root a.button-link,
+#experts-root a.button-link:visited {
+  background: var(--atlas-brand-strong);
+  color: var(--atlas-on-brand);
+}
+#experts-root a.button-link:hover,
+#experts-root a.button-link:focus-visible {
+  background: var(--atlas-brand);
+  color: var(--atlas-on-brand);
+}
 
 @media (max-width: 62rem) {
   #experts-root .expert-primary-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }

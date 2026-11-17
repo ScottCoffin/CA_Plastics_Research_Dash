@@ -5,6 +5,8 @@
 //   - the viewport meta sets maximum-scale=1, blocking zoom      -> removed (axe meta-viewport)
 //   - the sidebar toggle is labelled only by title (axe label-title-only) -> adds aria-label
 // The header's former "Classic site" link was removed at the H16 switch (app at the root).
+// Pages with their own frontmatter head lose the config head, so addGlobalHead restores the
+// font faces, favicon and site search (VD-19) there too.
 import {readdirSync, readFileSync, statSync, writeFileSync} from "node:fs";
 import {basename, dirname, join} from "node:path";
 import {fileURLToPath} from "node:url";
@@ -22,9 +24,20 @@ const GLOBAL_FONT_STYLE = CONFIG_HEAD.match(/<style\b[\s\S]*?<\/style>/i)?.[0];
 const GLOBAL_FAVICON = CONFIG_HEAD.match(
   /<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml,)[^>]*>/i
 )?.[0];
+// Site search (VD-19) is loaded from the config head too, so pages with their own head get it here.
+// Framework cannot resolve a head <link>/<script src> to site/assets, so the head carries an
+// @import in a <style> and a small loader script instead.
+const GLOBAL_SEARCH_STYLE = CONFIG_HEAD.match(
+  /<style>@import url\("\.\/assets\/site_search\.css"\);<\/style>/
+)?.[0];
+const GLOBAL_SEARCH_SCRIPT = CONFIG_HEAD.match(
+  /<script>[^<]*site_search\.js[^<]*<\/script>/
+)?.[0];
 
-if (!GLOBAL_FONT_STYLE || !GLOBAL_FAVICON) {
-  throw new Error("Framework config.head must include the Atlas font faces and data favicon");
+if (!GLOBAL_FONT_STYLE || !GLOBAL_FAVICON || !GLOBAL_SEARCH_STYLE || !GLOBAL_SEARCH_SCRIPT) {
+  throw new Error(
+    "Framework config.head must include the Atlas font faces, data favicon and site search assets"
+  );
 }
 
 export function fixHtml(html, page) {
@@ -40,6 +53,8 @@ function addGlobalHead(html) {
   if (!/<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml,)[^>]*>/i.test(html)) {
     missing.push(GLOBAL_FAVICON);
   }
+  if (!/site_search\.css/.test(html)) missing.push(GLOBAL_SEARCH_STYLE);
+  if (!/site_search\.js/.test(html)) missing.push(GLOBAL_SEARCH_SCRIPT);
   return missing.length ? html.replace("</head>", `${missing.join("\n")}\n</head>`) : html;
 }
 

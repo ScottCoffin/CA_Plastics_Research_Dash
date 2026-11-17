@@ -120,6 +120,12 @@ jobs:
         if: steps.refresh.outputs.status == 'success'
         run: python scripts/build_network.py
 
+      # VD-19 header search: one index over pages, experts, institutions, topics, funders,
+      # glossary terms and related resources (stdlib only; reads the files built above).
+      - name: Build site search index
+        if: steps.refresh.outputs.status == 'success'
+        run: python scripts/build_search_index.py
+
       # S9.3 funding and data-stewardship badges for the expert profile page.
       - name: Build expert badges
         if: steps.refresh.outputs.status == 'success'
@@ -178,6 +184,7 @@ jobs:
             site/data/institutions.geojson \
             site/data/works_detail.json \
             site/data/network.json \
+            site/data/search_index.json \
             site/data/expert_badges.json
           git add -A site/data/authors site/data/institution_works site/data/bundle site/data/work_text
           git diff --cached --quiet && echo "No generated output changes" && exit 0

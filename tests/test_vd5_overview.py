@@ -29,7 +29,13 @@ def test_overview_hero_copy_and_single_heading() -> None:
         '<h1 class="atlas-hero__title" id="atlas-overview-title">CA Plastics Research Atlas</h1>'
         in page
     )
-    assert "California · 32.5° to 42° N · Plastics research since 1950" in page
+    # VD-18: the eyebrow separators are accent dots (style tile), not "·" text.
+    assert (
+        '<p class="atlas-hero__eyebrow"><span>California</span> <i></i> '
+        "<span>32.5° to 42° N</span> <i></i> <span>Plastics research since 1950</span></p>"
+    ) in page
+    assert "California · 32.5°" not in page
+    assert "Quick routes" not in page
     assert (
         "A transparent starting point for finding plastic-related research connected to California."
         in page
@@ -38,19 +44,18 @@ def test_overview_hero_copy_and_single_heading() -> None:
     assert "<time datetime=${snapshot.refreshIso}>${snapshot.refreshDisplay}</time>" in page
 
 
-def test_expert_search_uses_the_existing_search_hash_route() -> None:
+def test_hero_search_is_the_site_wide_search() -> None:
+    # H25 (2026-11-16): the hero uses the same site-wide combobox as the header (VD-19).
     page = INDEX.read_text(encoding="utf-8")
     config = (ROOT / "framework" / "observablehq.config.js").read_text(encoding="utf-8")
 
     form = re.search(r'<form class="atlas-hero__search"(.*?)</form>', page, re.DOTALL)
     assert form
-    assert "data-atlas-expert-search" in form.group(1)
-    assert 'action="./experts" method="get"' in form.group(1)
-    assert 'type="search" name="search"' in form.group(1)
-    assert 'e.target.closest("[data-atlas-expert-search]")' in config
-    assert "new URLSearchParams({search:f.elements.search.value.trim()})" in config
-    assert "u.hash=" in config
-    assert "location.assign(u.href)" in config
+    assert "data-atlas-site-search" in form.group(1)
+    assert 'action="./search" method="get"' in form.group(1)
+    assert 'type="search" name="q"' in form.group(1)
+    assert "data-atlas-expert-search" not in page
+    assert "data-atlas-expert-search" not in config
 
 
 def test_four_snapshot_tiles_three_tasks_and_eight_entries() -> None:
@@ -175,3 +180,17 @@ def test_desktop_task_grid_uses_full_content_width() -> None:
     assert task_grid
     assert "width: 100%;" in task_grid.group(1)
     assert "max-width: none;" in task_grid.group(1)
+
+
+def test_vd18_hero_motif_and_start_here_links_match_the_style_tile() -> None:
+    # VD-18: the coastline strokes use the tile colour at full mask alpha, and the Start-here
+    # rows carry no underline in any state (style.css underlines links inside list items).
+    css = CSS.read_text(encoding="utf-8")
+    motif = re.search(r"\.atlas-hero__motif \{([^}]*)\}", css)
+
+    assert motif
+    assert "background-color: var(--atlas-brand-tint);" in motif.group(1)
+    assert "opacity: 1;" in motif.group(1)
+    assert "#observablehq-main .atlas-task-list a:hover" in css
+    assert ".atlas-hero__eyebrow i" in css
+    assert ".atlas-task__title {" in css and ".atlas-task__text," in css

@@ -55,10 +55,23 @@
 }
 
 #observablehq-sidebar > ol:first-child > li > a[aria-label="Overview"] {
-  background: var(--atlas-brand-tint);
   color: var(--atlas-brand-strong);
   font-weight: 650;
-  box-shadow: inset 3px 0 0 var(--atlas-brand);
+}
+
+/* VD-18: the brand link has no box, inset bar or hover fill in any state (it framed the CA mark).
+   Keyboard focus keeps the outline from #observablehq-sidebar a:focus-visible. */
+#observablehq-sidebar > ol:first-child > li > a[aria-label="Overview"],
+#observablehq-sidebar > ol:first-child > li > a[aria-label="Overview"]:hover,
+#observablehq-sidebar > ol:first-child > li > a[aria-label="Overview"]:active {
+  background: none;
+  box-shadow: none;
+}
+
+/* Framework marks the active page with a 3 px bar on the list item (.observablehq-link-active::before).
+   The brand item is not a nav entry, so that bar is hidden too. */
+#observablehq-sidebar > ol:first-child > li.observablehq-link-active::before {
+  display: none;
 }
 
 #observablehq-sidebar > section {
@@ -125,6 +138,13 @@
 
 #observablehq-sidebar .observablehq-link-active > a::before {
   background-color: var(--atlas-brand);
+}
+
+/* H25: the brand (home) link has no nav icon; without one the mask is invalid and the swatch drew
+   an 18 px solid square above the CA mark. */
+#observablehq-sidebar > ol:first-child > li > a::before {
+  content: none;
+  display: none;
 }
 
 #observablehq-sidebar a[href$="/experts"] {
@@ -376,12 +396,16 @@ a.atlas-skip-link:active {
   margin: 0;
 }
 
+/* VD-18: the four links stay on one line at every width (no wrap, smaller gap and type on
+   phones), so the row cannot push the page wider than 320 px. */
 .atlas-footer__links {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
+  flex-wrap: nowrap;
+  gap: 0.25rem 0.875rem;
   margin: 0;
   padding: 0;
+  font-size: 0.8125rem;
+  white-space: nowrap;
   list-style: none;
 }
 
@@ -443,6 +467,20 @@ a.atlas-skip-link:active {
   #observablehq-footer > div {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+/* VD-18: on phones the page gutter is 2rem per side, which left the footer 224 px wide at 320 px.
+   The footer takes the full width so the one-line link row fits (288 px of content at 320 px). */
+@media (max-width: 26rem) {
+  #observablehq-footer {
+    max-width: none;
+    margin-inline: -2rem;
+  }
+
+  .atlas-footer__links {
+    gap: 0.5rem 0.75rem;
+    font-size: 0.75rem;
   }
 }
 

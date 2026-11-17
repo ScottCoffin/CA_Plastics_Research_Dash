@@ -25,3 +25,13 @@ def test_developer_vocabulary_is_gone() -> None:
     for phrase in prose_phrases:
         assert phrase not in ABOUT, phrase
     assert "./glossary" in ABOUT
+
+
+def test_pipeline_health_links_are_real_links_not_literal_markup() -> None:
+    # VD-18: the status and feed links sit in one html expression, not bare <a href=${...}> text.
+    assert '${html`<p>Pipeline health: <a href="${classicUrl("status.html")}">' in ABOUT
+    assert (
+        '<a href="${classicUrl("feed.xml")}" type="application/atom+xml">'
+        "Subscribe (Atom feed)</a>.</p>`}"
+    ) in ABOUT
+    assert "<a href=${classicUrl" not in ABOUT

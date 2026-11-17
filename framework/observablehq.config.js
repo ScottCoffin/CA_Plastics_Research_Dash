@@ -36,9 +36,9 @@ function atlasHeader({title, path}) {
   return '<button id="atlas-menu-button" class="atlas-menu-button" type="button" aria-label="Toggle navigation menu" aria-controls="observablehq-sidebar" aria-expanded="false"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>' +
     '<a class="atlas-header__brand" href="./"><img src="' + CA_MARK + '" alt=""><span>CA Plastics Research Atlas</span></a>' +
     '<nav class="atlas-header__breadcrumb" aria-label="Page location">' + breadcrumb + '</nav>' +
-    '<form class="atlas-header__search" action="./experts" method="get" data-atlas-expert-search><label for="atlas-header-search-input">Search experts</label><input id="atlas-header-search-input" name="search" type="search" placeholder="Search experts" autocomplete="off"><button type="submit">Search</button></form>' +
-    '<button id="atlas-search-toggle" class="atlas-search-toggle" type="button" aria-label="Show expert search" aria-controls="atlas-header-search-input" aria-expanded="false"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></button>' +
-    '<script>document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("observablehq-sidebar-toggle"),b=document.getElementById("atlas-menu-button");if(t&&b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))});document.addEventListener("click",e=>{const m=e.target.closest("#atlas-menu-button"),s=e.target.closest("#atlas-search-toggle"),t=document.getElementById("observablehq-sidebar-toggle");if(m&&t){t.click();m.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}if(s){const h=document.getElementById("observablehq-header"),i=document.getElementById("atlas-header-search-input"),x=s.getAttribute("aria-expanded")!=="true";h.classList.toggle("atlas-search-open",x);s.setAttribute("aria-expanded",String(x));s.setAttribute("aria-label",x?"Hide expert search":"Show expert search");if(x)i.focus()}if(t&&e.target===t){const b=document.getElementById("atlas-menu-button");if(b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}});document.addEventListener("submit",e=>{const f=e.target.closest("[data-atlas-expert-search]");if(!f)return;e.preventDefault();const u=new URL(f.action,location.href);u.hash=new URLSearchParams({search:f.elements.search.value.trim()}).toString();location.assign(u.href)})</script>';
+    '<form class="atlas-header__search" action="./search" method="get" role="search" data-atlas-site-search><label for="atlas-header-search-input">Search the Atlas</label><input id="atlas-header-search-input" name="q" type="search" placeholder="Search experts, institutions, topics, funders…" autocomplete="off"><button type="submit">Search</button></form>' +
+    '<button id="atlas-search-toggle" class="atlas-search-toggle" type="button" aria-label="Show search" aria-controls="atlas-header-search-input" aria-expanded="false"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></button>' +
+    '<script>document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("observablehq-sidebar-toggle"),b=document.getElementById("atlas-menu-button");if(t&&b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))});document.addEventListener("click",e=>{const m=e.target.closest("#atlas-menu-button"),s=e.target.closest("#atlas-search-toggle"),t=document.getElementById("observablehq-sidebar-toggle");if(m&&t){t.click();m.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}if(s){const h=document.getElementById("observablehq-header"),i=document.getElementById("atlas-header-search-input"),x=s.getAttribute("aria-expanded")!=="true";h.classList.toggle("atlas-search-open",x);s.setAttribute("aria-expanded",String(x));s.setAttribute("aria-label",x?"Hide search":"Show search");if(x)i.focus()}if(t&&e.target===t){const b=document.getElementById("atlas-menu-button");if(b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}});</script>';
 }
 
 export default {
@@ -69,7 +69,9 @@ export default {
           U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
     </style>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23075a46'/%3E%3C/svg%3E">`,
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23075a46'/%3E%3C/svg%3E">
+    <style>@import url("./assets/site_search.css");</style>
+    <script>(function(){var s=document.createElement("script");s.src="./assets/site_search.js";document.head.appendChild(s)})();</script>`,
   style: "style.css",
   // No external CDNs (C5/S3.7): drop Framework's default Google Fonts link; display fonts are local.
   globalStylesheets: [],
@@ -84,6 +86,5 @@ export default {
     '<nav aria-label="Footer links"><ul class="atlas-footer__links">' +
     '<li><a href="./about">About</a></li><li><a href="./glossary">Glossary</a></li>' +
     '<li><a href="./about#how-to-cite">How to cite</a></li>' +
-    '<li><a href="' + REPO + '/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">Report a correction</a></li>' +
-    '<li><a href="' + REPO + '" target="_blank" rel="noreferrer">Source code</a></li></ul></nav>'
+    '<li><a href="' + REPO + '/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">Report a correction</a></li></ul></nav>'
 };

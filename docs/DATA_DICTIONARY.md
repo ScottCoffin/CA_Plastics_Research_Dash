@@ -104,13 +104,22 @@ Licence: as `index.json`. These files are present for each indexed author.
 
 Purpose: expert collaboration network page (`/network`; sigma.js renderer since 2026-11-13). Top-level keys: `schema_version`,
 `generated_at`, `method` (edge weight, community and layout methods, networkx version),
-`communities`, `nodes`, `edges`. Node fields: `id` (author_id), `name`, `x`, `y` (seeded layout),
+`communities` (count), `community_labels`, `nodes`, `edges`. `community_labels[]` (since schema
+`s9.4-v1.1`, VD-20): `community`, `size`, `institution` (`{name, share}` or null: the most common
+primary affiliation, kept at share >= 0.35 and >= 2 members), `topic` (`{tag, share, lift}` or null:
+the most over-represented topic with community share >= 0.4 and lift >= 1.15); communities with
+fewer than 4 members are not labelled. Node fields: `id` (author_id), `name`, `x`, `y` (seeded
+ForceAtlas2 layout since VD-20, scaled to [-1, 1]),
 `community`, `degree`, `strength`, `plastic_works`, `topics` (top tags of the expert's
 plastic-related works), `institution_ids`, `institutions`, `sectors`, `primary_affiliations`,
 `current_in_ca`. Edge fields: `source`, `target`, `weight` (co-authored plastic-related works),
 `years` (weight per year). Licence: as `index.json`. Written by `scripts/build_network.py` from
 `index.json` and `institutions.json`; `--check` fails when stale. The daily ingest rebuilds it
 (networkx is a declared dependency since 2026-11-13).
+
+### `site/data/search_index.json`
+
+Purpose: header search across the Atlas (VD-19; `site/assets/site_search.js`, results page `/search`). Top-level keys: `schema_version` (1), `generated_at` (from `index.json`), `types` (type names; an item's first value is its index here) and `items`, each `[type_index, label, detail, href]`. Types: `page` (nav pages), `expert` (`expert.html#author=<id>`), `institution` (California institutions, `institution#inst=<id>`), `topic` (`experts#tag=<tag>`; matrices use `matrix:<key>`), `funder` (`funding#fa=<agency>`, or `funding#q=<name>` for funder names that are not agency names), `term` (`glossary#<id>`) and `resource` (the resource's `root_url`, or `resources`). Detail is the primary affiliation, institution type and city, research or matrix label, funder type, glossary excerpt or resource relation. No abstracts or e-mail addresses. Written by `scripts/build_search_index.py` (daily ingest) from `index.json`, `institutions.json`, `grants.json`, `linkouts.json`, `site/assets/topics.js`, `framework/src/components/shared/labels.js`, `framework/observablehq.config.js` and `framework/src/glossary.md`; `--check` fails when stale. Licence: as `index.json`.
 
 ### `site/data/expert_badges.json`
 

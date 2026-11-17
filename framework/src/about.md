@@ -98,4 +98,4 @@ For a correction or profile-removal request, <a href="https://github.com/ScottCo
 
 Full methods: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/METHODS.md" target="_blank" rel="noreferrer">docs/METHODS.md</a>. Data schema: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/SITE_DATA.md" target="_blank" rel="noreferrer">site data description</a>. Upstream catalogue: <a href="https://openalex.org/" target="_blank" rel="noreferrer">OpenAlex</a>.
 
-Pipeline health: <a href=${classicUrl("status.html")}>run status and drift alarms</a>. <a href=${classicUrl("feed.xml")} type="application/atom+xml">Subscribe (Atom feed)</a>.
+${html`<p>Pipeline health: <a href="${classicUrl("status.html")}">run status and drift alarms</a>. <a href="${classicUrl("feed.xml")}" type="application/atom+xml">Subscribe (Atom feed)</a>.</p>`}

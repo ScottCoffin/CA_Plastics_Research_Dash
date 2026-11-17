@@ -58,8 +58,10 @@ function xFor(index, count) {
   return M.left + (index + 0.5) * (PLOT_W / count);
 }
 
+// VD-18: label every even year. The former every-5-years rule plus a forced last year put 2025
+// and 2026 side by side; "recent" bars keep their lighter fill (still being indexed).
 function yearTicks(years) {
-  return years.map((year, i) => ({year, i})).filter(({year, i}) => year % 5 === 0 || i === years.length - 1);
+  return years.map((year, i) => ({year, i})).filter(({year}) => year % 2 === 0);
 }
 
 function barChart(data, refDate) {

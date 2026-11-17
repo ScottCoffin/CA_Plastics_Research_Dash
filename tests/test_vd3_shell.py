@@ -52,7 +52,10 @@ def test_sidebar_groups_header_search_and_footer_contract() -> None:
     assert "CA Plastics Research Atlas" in data["home"]
     assert "CA Plastics Research Atlas" in data["header"]
     assert 'aria-label="Toggle navigation menu"' in data["header"]
-    assert 'name="search"' in data["header"]
+    assert 'name="q"' in data["header"]
+    assert 'action="./search"' in data["header"]
+    assert "data-atlas-site-search" in data["header"]
+    assert "Search the Atlas" in data["header"]
     assert 'href="./about#how-to-cite">How to cite</a>' in data["footer"]
     assert "Independent project; not an official OEHHA or State product." in data["footer"]
 

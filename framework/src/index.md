@@ -8,16 +8,16 @@ title: Overview
   <section class="atlas-hero" aria-labelledby="atlas-overview-title">
     <div class="atlas-hero__motif" aria-hidden="true"></div>
     <div class="atlas-hero__content">
-      <p class="atlas-hero__eyebrow">California · 32.5° to 42° N · Plastics research since 1950</p>
+      <p class="atlas-hero__eyebrow"><span>California</span> <i></i> <span>32.5° to 42° N</span> <i></i> <span>Plastics research since 1950</span></p>
       <h1 class="atlas-hero__title" id="atlas-overview-title">CA Plastics Research Atlas</h1>
       <p class="atlas-hero__lead">A transparent starting point for finding plastic-related research connected to California.</p>
-      <form class="atlas-hero__search" data-atlas-expert-search action="./experts" method="get">
+      <form class="atlas-hero__search" data-atlas-site-search action="./search" method="get" role="search">
         <label class="atlas-search">
-          <span class="visually-hidden">Search experts</span>
+          <span class="visually-hidden">Search the Atlas</span>
           <span class="atlas-search__icon" data-atlas-icon="search"></span>
-          <input class="atlas-input" type="search" name="search" placeholder="Search California researchers" autocomplete="off">
+          <input class="atlas-input" type="search" name="q" placeholder="Search experts, institutions, topics, funders…" autocomplete="off">
         </label>
-        <button class="atlas-btn atlas-btn--primary" type="submit">Search experts</button>
+        <button class="atlas-btn atlas-btn--primary" type="submit">Search</button>
       </form>
       <p class="atlas-hero__fresh" id="overview-refresh" aria-live="polite">Loading snapshot refresh time…</p>
     </div>
@@ -41,7 +41,6 @@ title: Overview
     </section>
 <section class="overview-section" id="start-here" aria-labelledby="start-here-title">
       <div class="overview-section__head">
-        <p class="atlas-eyebrow">Quick routes</p>
         <h2 id="start-here-title">Start here</h2>
       </div>
       <ul class="atlas-task-list">
