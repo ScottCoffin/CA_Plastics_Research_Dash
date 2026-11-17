@@ -5,8 +5,8 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 ## Counts
 
-- Works in the v3.1 corpus: 2033; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
-- California institutions with at least one non-excluded v3.1 work: 206.
+- Works in the v3.1 corpus: 2036; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
+- California institutions with at least one non-excluded v3.1 work: 207.
 - Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 206, one row each in `config/institution_types.csv`.
 - type_source: owner_override 60, owner_reviewed 58, rule 88.
 - needs_review true (rule-typed and in the new top 100): 0.
@@ -28,10 +28,10 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 | Rank | inst_id | Name | v3.1 works | Type | Type source | Status |
 |---|---|---|---|---|---|---|
-| 1 | I84218800 | University of California, Davis | 199 | UC | owner_reviewed | old top 100 |
+| 1 | I84218800 | University of California, Davis | 200 | UC | owner_reviewed | old top 100 |
 | 2 | I97018004 | Stanford University | 185 | private | owner_reviewed | old top 100 |
-| 3 | I95457486 | University of California, Berkeley | 159 | UC | owner_reviewed | old top 100 |
-| 4 | I103635307 | University of California, Riverside | 124 | UC | owner_reviewed | old top 100 |
+| 3 | I95457486 | University of California, Berkeley | 160 | UC | owner_reviewed | old top 100 |
+| 4 | I103635307 | University of California, Riverside | 127 | UC | owner_reviewed | old top 100 |
 | 5 | I36258959 | University of California San Diego | 106 | UC | owner_reviewed | old top 100 |
 | 6 | I154570441 | University of California, Santa Barbara | 100 | UC | owner_reviewed | old top 100 |
 | 7 | I161318765 | University of California, Los Angeles | 98 | UC | owner_reviewed | old top 100 |
@@ -44,7 +44,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | 14 | I185103710 | University of California, Santa Cruz | 43 | UC | owner_reviewed | old top 100 |
 | 15 | I2803209242 | University of California System | 38 | UC | owner_reviewed | old top 100 |
 | 16 | I149919469 | California Polytechnic State University | 30 | CSU | owner_reviewed | old top 100 |
-| 17 | I4210111001 | San Francisco Estuary Institute | 25 | JPA | owner_override | new |
+| 17 | I4210111001 | San Francisco Estuary Institute | 26 | JPA | owner_override | new |
 | 18 | I4405266016 | Hopkins Marine Station | 24 | private | owner_override | old top 100 |
 | 19 | I157638225 | California State University, Northridge | 22 | CSU | owner_reviewed | old top 100 |
 | 20 | I53012624 | Joint BioEnergy Institute | 22 | federal | owner_override | old top 100 |
@@ -54,14 +54,14 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | Rank | inst_id | Name | v3.1 works | Proposed type |
 |---|---|---|---|---|
 | 12 | I11006740 | Southern California Coastal Water Research Project | 44 | JPA |
-| 17 | I4210111001 | San Francisco Estuary Institute | 25 | JPA |
+| 17 | I4210111001 | San Francisco Estuary Institute | 26 | JPA |
 | 21 | CAAG-SWRCB | State Water Resources Control Board | 21 | state-agency |
 | 27 | I194388944 | California State University, Channel Islands | 14 | CSU |
 | 32 | I1336788258 | California Department of Public Health | 12 | state-agency |
 | 34 | I1301553790 | J. Craig Venter Institute | 11 | nonprofit/NGO |
 | 37 | I4210109599 | NOAA National Marine Fisheries Service Southwest Fisheries Science Center | 10 | federal |
-| 40 | I4210112098 | National University | 9 | private |
-| 41 | CAAG-OEHHA | Office of Environmental Health Hazard Assessment | 8 | state-agency |
+| 38 | CAAG-OEHHA | Office of Environmental Health Hazard Assessment | 9 | state-agency |
+| 41 | I4210112098 | National University | 9 | private |
 | 44 | I118839592 | California State University, Bakersfield | 7 | CSU |
 | 45 | I124104796 | Marine Mammal Center | 7 | nonprofit/NGO |
 | 47 | I4210090234 | Marine Megafauna Foundation | 7 | nonprofit/NGO |
@@ -74,17 +74,17 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | 57 | I4405284138 | Kaiser Permanente Northern California | 6 | nonprofit/NGO |
 | 59 | I65137940 | California Environmental Protection Agency | 6 | state-agency |
 | 63 | I196333967 | Inter-American Tropical Tuna Commission | 5 | intergovernmental-organization |
-| 64 | I4210097074 | Theiss Research | 5 | nonprofit/NGO |
-| 68 | I135369504 | California State University, Monterey Bay | 4 | CSU |
-| 69 | I2801975132 | Ocean Institute | 4 | nonprofit/NGO |
-| 70 | I4210091954 | Global Alliance for Incinerator Alternatives | 4 | nonprofit/NGO |
-| 71 | I4210095401 | Loma Linda University Health Care | 4 | nonprofit/NGO |
-| 72 | I4210136348 | California Sea Grant | 4 | UC |
-| 76 | I4405264838 | Metropolitan Water District of Southern California | 4 | utility |
-| 77 | I99418890 | San Francisco Bay University | 4 | private |
-| 78 | I1290230355 | California Department of Toxic Substances Control | 3 | state-agency |
-| 79 | I1294537935 | Point Blue Conservation Science | 3 | nonprofit/NGO |
-| 80 | I1316958739 | California Air Resources Board | 3 | state-agency |
+| 64 | I4210091954 | Global Alliance for Incinerator Alternatives | 5 | nonprofit/NGO |
+| 65 | I4210097074 | Theiss Research | 5 | nonprofit/NGO |
+| 69 | I1316958739 | California Air Resources Board | 4 | state-agency |
+| 70 | I135369504 | California State University, Monterey Bay | 4 | CSU |
+| 71 | I2801975132 | Ocean Institute | 4 | nonprofit/NGO |
+| 72 | I4210095401 | Loma Linda University Health Care | 4 | nonprofit/NGO |
+| 73 | I4210136348 | California Sea Grant | 4 | UC |
+| 77 | I4405264838 | Metropolitan Water District of Southern California | 4 | utility |
+| 78 | I99418890 | San Francisco Bay University | 4 | private |
+| 79 | I1290230355 | California Department of Toxic Substances Control | 3 | state-agency |
+| 80 | I1294537935 | Point Blue Conservation Science | 3 | nonprofit/NGO |
 | 83 | I172039944 | Dominican University of California | 3 | private |
 | 84 | I176611909 | California Lutheran University | 3 | private |
 | 85 | I184813773 | California State University, East Bay | 3 | CSU |
