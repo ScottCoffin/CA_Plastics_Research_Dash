@@ -1,54 +1,68 @@
-/* Pacific Contour foundations. Keep interface colour literals in this file. */
+/* Plane Poster foundations (VD-25; the Pacific Contour design is tag design-pacific-contour-2026-11-16).
+   Keep interface colour literals in this file. */
 :root {
-  /* Interface colour palette. */
-  --atlas-ink: #17324d;
-  --atlas-text: #1d2a33;
-  --atlas-muted: #4a5d6c;
-  --atlas-faint: #5b6e7a;
-  --atlas-boundary: #6f8590;
-  --atlas-line: #d5e0dd;
-  --atlas-page: #f3f6f5;
-  --atlas-surface: #ffffff;
-  --atlas-sunken: #eaf1ef;
-  --atlas-brand: #075a46;
-  --atlas-brand-strong: #043e32;
-  --atlas-brand-action: #0e6e56;
-  --atlas-brand-tint: #d8eee7;
-  --atlas-brand-wash: #eef7f4;
-  --atlas-on-brand: #ffffff;
-  --atlas-on-brand-muted: #b2ddd0;
-  --atlas-accent: #c45100;
-  --atlas-accent-strong: #a94400;
-  --atlas-accent-wash: #fff1e6;
-  --atlas-caution-wash: #fff6e0;
-  --atlas-caution-ink: #7a4f00;
-  --atlas-caution-line: #e8c77a;
-  --atlas-good-wash: #e7f6e7;
-  --atlas-good-ink: #0b4f0b;
+  /* Interface colour palette (Plane Poster, VD-25: paper ground, flat planes, no outlines). */
+  --atlas-ink: #141311;
+  --atlas-text: #1f1d1a;
+  --atlas-muted: #4b463e;
+  --atlas-faint: #5d574d;
+  --atlas-boundary: #8a8478;
+  --atlas-line: #d8d3c5;
+  --atlas-page: #ece7dc;
+  --atlas-surface: #f6f3ec;
+  --atlas-sunken: #e2dccf;
+  --atlas-brand: #23305e;
+  --atlas-brand-strong: #141311;
+  --atlas-brand-action: #23305e;
+  --atlas-brand-tint: #dcdfe8;
+  --atlas-brand-wash: #e9e7e2;
+  --atlas-on-brand: #f6f3ec;
+  --atlas-on-brand-muted: #cfcabd;
+  --atlas-accent: #c4361c;
+  --atlas-accent-strong: #a82c16;
+  --atlas-accent-wash: #f6dcd5;
+  --atlas-caution-wash: #f5e6c4;
+  --atlas-caution-ink: #6b4a00;
+  --atlas-caution-line: #e3a92b;
+  --atlas-good-wash: #e7f0e2;
+  --atlas-good-ink: #2f4a17;
 
-  /* VD-24: full-bleed band behind each top-level page head (darker than the page body, --atlas-page). */
-  --atlas-head-band: var(--atlas-brand-tint);
+  /* The four planes. Colour is law: each task keeps its plane colour on every page.
+     Researchers vermilion, monitoring indigo, funding gold, evidence ink. Text never sits on
+     --atlas-vermilion below 18.66px bold; use --atlas-accent for vermilion text or text backgrounds. */
+  --atlas-vermilion: #e2452b;
+  --atlas-indigo: #23305e;
+  --atlas-gold: #e3a92b;
+  --atlas-plane-ink: #141311;
+  --atlas-task-people: var(--atlas-vermilion);
+  --atlas-task-water: var(--atlas-indigo);
+  --atlas-task-money: var(--atlas-gold);
+  --atlas-task-evidence: var(--atlas-plane-ink);
 
-  /* Shared sequential data ramp; categorical topic colours remain in topics.js. */
-  --seq-100: #e3f2ed;
-  --seq-200: #b9e0d3;
-  --seq-300: #86c7b2;
-  --seq-400: #4fa68c;
-  --seq-500: #23876d;
-  --seq-600: #0e6e56;
-  --seq-700: #043e32;
+  /* Full-bleed band behind each top-level page head (VD-24), now a stone band. */
+  --atlas-head-band: #e0dacb;
+
+  /* Shared sequential data ramp (indigo); categorical topic colours remain in topics.js. */
+  --seq-100: #e6e8ef;
+  --seq-200: #c3c8db;
+  --seq-300: #97a0c2;
+  --seq-400: #6a77a6;
+  --seq-500: #444f86;
+  --seq-600: #2e3a6d;
+  --seq-700: #1a2448;
 
   /* Chart chrome: gridlines use the line token (framework/src/components/shared/palette.js mirrors these). */
   --atlas-chart-grid: var(--atlas-line);
 
-  /* Map chrome: state waters on the monitoring and institution maps (light blue, distinct from the sunken land). */
-  --atlas-map-water: #cfe5f2;
+  /* Map chrome: state waters on the monitoring and institution maps. */
+  --atlas-map-water: #c9d3e6;
 
   /* Type stacks. Keep serif fallbacks out of the interface. */
-  --atlas-font-display: "Barlow Semi Condensed", "Segoe UI Semibold", system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  --atlas-font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans",
+  /* One grotesk at monumental and whisper extremes (self-hosted Archivo variable, wdth 62-125). */
+  --atlas-font-display: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --atlas-font-body: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
     sans-serif;
+  --atlas-display-stretch: 82%;
   --atlas-font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
   --atlas-type-hero-size: clamp(2rem, 1.3rem + 2.2vw, 2.9rem);
   /* VD-24 heading scale: page h1 about +20%, section h2 and subsection h3 about +15%. */
@@ -74,11 +88,13 @@
   --atlas-space-10: 40px;
   --atlas-space-14: 56px;
 
-  --atlas-radius-control: 8px;
-  --atlas-radius-card: 12px;
-  --atlas-radius-pill: 999px;
-  --atlas-shadow-raised: 0 1px 2px rgba(16,42,36,.06), 0 1px 1px rgba(16,42,36,.04);
-  --atlas-shadow-float: 0 2px 6px rgba(16,42,36,.07), 0 12px 28px rgba(16,42,36,.10);
+  /* Flat planes: square corners, no resting shadows; only floating layers (menus, tooltips) lift. */
+  --atlas-radius-control: 0;
+  --atlas-radius-card: 0;
+  --atlas-radius-pill: 2px;
+  --atlas-shadow-raised: none;
+  --atlas-shadow-float: 0 6px 20px rgba(20,19,17,.18);
+  --atlas-rule-strong: 2px solid var(--atlas-ink);
 
   /* Observable Framework theme mapping (including native links and cards). */
   --serif: var(--atlas-font-body);
@@ -104,8 +120,10 @@ h1 {
   color: var(--atlas-ink);
   font-family: var(--atlas-font-display);
   font-size: var(--atlas-type-page-size);
-  line-height: 1.05;
-  font-weight: 700;
+  line-height: 0.98;
+  font-weight: 800;
+  font-stretch: var(--atlas-display-stretch);
+  letter-spacing: -0.015em;
   text-wrap: balance;
 }
 
@@ -118,8 +136,10 @@ h2 {
   color: var(--atlas-ink);
   font-family: var(--atlas-font-display);
   font-size: var(--atlas-type-section-size);
-  line-height: 1.2;
-  font-weight: 700;
+  line-height: 1.1;
+  font-weight: 800;
+  font-stretch: 88%;
+  letter-spacing: -0.01em;
 }
 
 h3 {

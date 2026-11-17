@@ -226,7 +226,7 @@ function hexToRgb(hex) {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
 
-// Sequential teal ramp (palette SEQ). 0 (or no maximum) is the sunken empty fill; any positive count
+// Sequential indigo ramp (palette SEQ). 0 (or no maximum) is the sunken empty fill; any positive count
 // moves from seq-200 to seq-700 by count / max (palette countFill), so darker means more works.
 export function colorFor(count, max) {
   if (!(count > 0) || !(max > 0)) return EMPTY_FILL;

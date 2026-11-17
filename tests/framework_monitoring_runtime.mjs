@@ -76,7 +76,7 @@ assert.equal(mapResult.statewideWidth, true);
 assert.equal(mapResult.sfBayWidth, true);
 const cosRounded = String(Math.round(Math.cos(37.25 * Math.PI / 180) * 100) / 100);
 assert.equal(mapResult.path, `M0 0L${cosRounded} 0L${cosRounded} -1L0 -1L0 0Z`);
-assert.deepEqual(mapResult.clusters, [{ n: 3, mixed: true, color: "#ffffff" }]);
+assert.deepEqual(mapResult.clusters, [{ n: 3, mixed: true, color: "#f6f3ec" }]);
 assert.deepEqual(mapResult.legend, [["sediment", 1], ["fish", 2]]);
 assert.deepEqual(mapResult.legendStatewide, [["sediment", 1], ["fish", 3]]);
 assert.equal(mapResult.colorFish, "#009E73");

@@ -3,7 +3,7 @@
 (function (global) {
   "use strict";
 
-  const PLOT = { all: "#9db9cb", plastic: "#b43c0c", ink: "#17324d", muted: "#4f6272", grid: "#d5e2e6" };
+  const PLOT = { all: "#97a0c2", plastic: "#c4361c", ink: "#141311", muted: "#4b463e", grid: "#d8d3c5" }; // VD-25 Plane Poster (tokens.css)
 
   function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);

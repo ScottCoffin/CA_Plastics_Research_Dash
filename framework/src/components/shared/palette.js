@@ -13,16 +13,18 @@ export const SECONDARY_ALL_PAIRS = Object.freeze(SECONDARY.slice(0, 6));
 // The one grey for every "Other" or unknown slot.
 export const OTHER = "#8a969c";
 
-// Sequential teal ramp, light to dark (--seq-100 to --seq-700), for every heatmap and choropleth.
-export const SEQ = Object.freeze(["#e3f2ed", "#b9e0d3", "#86c7b2", "#4fa68c", "#23876d", "#0e6e56", "#043e32"]);
+// Sequential indigo ramp, light to dark (--seq-100 to --seq-700), for every heatmap and choropleth.
+export const SEQ = Object.freeze(["#e6e8ef", "#c3c8db", "#97a0c2", "#6a77a6", "#444f86", "#2e3a6d", "#1a2448"]);
 
 // Chart chrome. Gridlines use grid; axes and tick labels use axis; text stays in text or ink colours.
+// page is the paper ground (--atlas-page), used for the faintest network edges.
 export const CHROME = Object.freeze({
-  grid: "#d5e0dd",
-  axis: "#4a5d6c",
-  text: "#1d2a33",
-  surface: "#ffffff",
-  sunken: "#eaf1ef"
+  grid: "#d8d3c5",
+  axis: "#4b463e",
+  text: "#1f1d1a",
+  surface: "#f6f3ec",
+  sunken: "#e2dccf",
+  page: "#ece7dc"
 });
 
 // Cell label ink: black or white, whichever contrasts more with the fill.

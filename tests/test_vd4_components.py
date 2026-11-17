@@ -81,13 +81,13 @@ def test_postbuild_restores_global_head_for_styleguide_once() -> None:
 
     assert once == twice
     assert '<meta name="robots" content="noindex, nofollow">' in once
-    assert once.count('font-family: "Barlow Semi Condensed"') == 2
+    assert once.count('font-family: "Archivo"') == 1
     assert once.count('<link rel="icon" href="data:image/svg+xml') == 1
     assert (
         len(
             re.findall(
                 r'<link\b(?=[^>]*\brel="preload")'
-                r'(?=[^>]*\bhref="\.\/assets\/fonts\/BarlowSemiCondensed-Bold-latin\.woff2")[^>]*>',
+                r'(?=[^>]*\bhref="\.\/assets\/fonts\/Archivo-Variable-latin\.woff2")[^>]*>',
                 once,
             )
         )

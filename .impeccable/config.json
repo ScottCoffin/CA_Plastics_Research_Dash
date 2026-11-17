@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "framework/src/components/overview.css"
+        ],
+        "createdAt": "2026-11-17T08:07:23.798Z",
+        "reason": "lead (Claude): L393 is a zero-size ::after CSS triangle (arrow glyph on link buttons), not a side border on a card"
+      }
+    ]
+  }
+}

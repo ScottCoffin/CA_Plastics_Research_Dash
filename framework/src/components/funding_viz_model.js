@@ -421,7 +421,7 @@ export function topOrgs(vrows, n) {
   return [...m.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name)).slice(0, n);
 }
 
-// Cell colour on the shared teal ramp (count 0 is the sunken empty fill; see palette countFill).
+// Cell colour on the shared indigo ramp (count 0 is the sunken empty fill; see palette countFill).
 export function heatFill(count, max) {
   return countFill(count, max);
 }

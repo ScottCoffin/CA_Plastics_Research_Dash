@@ -267,24 +267,19 @@ def test_build_network_without_metadata_writes_no_metadata(tmp_path: Path, capsy
 def test_overview_cards_read_the_card_counts_from_build_metadata() -> None:
     page = INDEX_PAGE.read_text(encoding="utf-8")
     export = EXPORT_SRC.read_text(encoding="utf-8") + NETWORK_SRC.read_text(encoding="utf-8")
-    card_labels = set(re.findall(r'data-overview-count="([^"]+)"', page)) - {
-        "Authors",
-        "Institutions",
-        "California institutions",
-    }
-    mapped = {
-        key: label
-        for label, key in re.findall(r'\["([^"]+)", "([a-z_]+)"\]', page)
-        if key in CARD_KEYS
-    }
+    # VD-25b: every count is a data-count placeholder. Authors and California institutions come
+    # from the About stats; the six card keys come from metadata.counts.
+    placeholders = set(re.findall(r'data-count="([^"]+)"', page))
 
-    assert set(mapped) == CARD_KEYS
-    assert set(mapped.values()) == card_labels
-    assert page.count("data-overview-count-group hidden") == 6
-    assert 'data-overview-suffix="works in snapshot"' not in page
+    assert CARD_KEYS <= placeholders
+    assert placeholders - CARD_KEYS == {"authors", "california_institutions"}
+    # Four door counts and seven band facts, each hidden unless every value in it is present.
+    assert len(re.findall(r"<(?:li|small)[^>]*data-count-group", page)) == 11
     assert 'import {loadJson, aboutViewModel, formatCount} from "./components/atlas.js";' in page
-    assert "cardCounts.get(node.dataset.overviewCount)" in page
     assert "metadata?.counts" in page
+    assert "countText(formatCount(metadataCounts[key]))" in page
+    assert "group.hidden = !ready" in page
+    assert 'data-suffix="works in snapshot"' not in page
     for key in CARD_KEYS:
         assert f'"{key}"' in export
     assert "counts.awards" not in page

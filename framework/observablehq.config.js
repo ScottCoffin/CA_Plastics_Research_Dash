@@ -4,7 +4,9 @@
 // become redirects). Pages read site/data at runtime (components/atlas.js).
 // Every page lives at the top level of src/ (atlas.js resolves ../data/ from the page URL).
 const REPO = "https://github.com/ScottCoffin/CA_Plastics_Research_Dash";
-const CA_MARK = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii00NDMgLTU1NyA5NzAgMTA1NSIgYXJpYS1oaWRkZW49InRydWUiIGZvY3VzYWJsZT0iZmFsc2UiPjxzdHlsZT4ubWFyay1sYW5ke2ZpbGw6IzA3NWE0Nn0ubWFyay1saW5le3N0cm9rZTojYzQ1MTAwO3N0cm9rZS13aWR0aDoxNH08L3N0eWxlPjxwYXRoIGNsYXNzPSJtYXJrLWxhbmQiIGQ9Ik00NjksNDc0TDQ5Miw0NThMNDY5LDQwN0w0ODYsMzc5TDQ4OCwzMzZMNTIzLDI5OUw1MDEsMjgwTDQ3OCwyMjFMLTAsLTIyMUwtMCwtNTUzTC0zNzUsLTU1M0wtMzc5LC01MjhMLTM2MSwtNDkwTC0zNzYsLTQxNkwtMzY5LC00MjdMLTM2MywtNDI1TC0zOTIsLTM4MUwtMzQzLC0zMTNMLTMzMSwtMjEyTC0yNzgsLTE2MEwtMjUyLC0xMjFMLTI2NiwtMTM3TC0yNjksLTExMEwtMjYzLC0xMTBMLTI2NSwtMTEyTC0yNjEsLTExNEwtMjYyLC0xMTdMLTI2MCwtMTE4TC0yMjUsLTkwTC0yMTMsLTEyOEwtMTg5LC0xMTVMLTE1MCwtMTI3TC0xNTgsLTExNUwtMTU1LC0xMTRMLTE0OSwtMTIxTC0xNDMsLTEyMkwtMTMyLC0xMTZMLTEyOSwtMTExTC0xNDMsLTEyMkwtMTUwLC0xMTJMLTIxMCwtMTEyTC0xODEsLTUxTC0yMTEsLTY3TC0yMTQsLTkwTC0yMjQsLTU5TC0yMDgsLTEzTC0xNjAsMThMLTE1NywzMUwtMTc2LDQ2TC0xNjksNzdMLTc5LDE3M0wtNzgsMTk2TC01NywyMDZMLTU3LDI2OUwtNDAsMjgzTDM5LDI4Nkw3NywzMjFMMTMyLDMyOUwxNDEsMzYwTDE1MiwzNjVMMTUzLDM1OUwxNTUsMzU4TDE1OCwzNTdMMTYxLDM2MUwxNjcsMzYwTDIyMSw0MDVMMjU2LDQ5NEw0NjksNDc0WiIvPjxwYXRoIGNsYXNzPSJtYXJrLWxpbmUiIGZpbGw9Im5vbmUiIGQ9Ik0tMzk4LC00MTJMLTQxMywtMzc2TC0zNjQsLTMwNUwtMzUxLC0yMDJMLTI4OSwtMTM2TC0yODYsLTk2TC0yNDIsLTc2TC0yNDUsLTUxTC0yMjksLTZMLTE4NywyN0wtMTk4LDQzTC0xODUsOTJMLTEwMSwxODJMLTk4LDIwNUwtNzksMjIwTC03NiwyNzlMLTQ4LDMwM0wzMCwzMDhMNjMsMzM3TDExNSwzNDlMMTI1LDM3NUwxNjIsMzg0TDIwMyw0MThMMjMyLDQ5NE0tMzk3LC01NTNMLTQwMSwtNTI1TC0zODQsLTQ4OEwtMzk4LC00MTIiLz48cGF0aCBjbGFzcz0ibWFyay1saW5lIiBmaWxsPSJub25lIiBkPSJNLTQyMywtNDIwTC00MzksLTM3MEwtMzg5LC0yOTVMLTM3NCwtMTkxTC0zMTUsLTEzMEwtMzA1LC03OUwtMjcxLC02MkwtMjUzLDNMLTIyMiwzNUwtMjA0LDExMEwtMTI2LDE5M0wtMTA1LDIzNUwtMTAwLDI5MEwtNTcsMzI4TDIwLDMzM0w0NSwzNTZMOTUsMzcyTDEyMyw0MDVMMTU1LDQxMkwxODEsNDM0TDIwNCw0OTRNLTQyMywtNTUzTC00MjcsLTUyMkwtNDExLC00ODRMLTQyMywtNDIwIi8+PC9zdmc+";
+// VD-25a: the brand mark and the favicon are four flat planes (indigo, gold, vermilion, ink), one per task.
+const PLANE_MARK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" aria-hidden="true" focusable="false"><rect width="15" height="15" fill="#23305e"/><rect x="15" width="15" height="15" fill="#e3a92b"/><rect y="15" width="15" height="15" fill="#e2452b"/><rect x="15" y="15" width="15" height="15" fill="#141311"/></svg>';
+const CA_MARK = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK).toString("base64");
 const PAGE_GROUPS = [
   {name: "Explore", pages: [
     {name: "Experts", path: "/experts"},
@@ -106,25 +108,17 @@ export default {
   // postbuild adds the preload after Framework has finished parsing assets.
   head: `<style>
       @font-face {
-        font-family: "Barlow Semi Condensed";
+        font-family: "Archivo";
         font-style: normal;
-        font-weight: 600;
+        font-weight: 400 800;
+        font-stretch: 75% 100%;
         font-display: swap;
-        src: url("./assets/fonts/BarlowSemiCondensed-SemiBold-latin.woff2") format("woff2");
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
-          U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-      }
-      @font-face {
-        font-family: "Barlow Semi Condensed";
-        font-style: normal;
-        font-weight: 700;
-        font-display: swap;
-        src: url("./assets/fonts/BarlowSemiCondensed-Bold-latin.woff2") format("woff2");
+        src: url("./assets/fonts/Archivo-Variable-latin.woff2") format("woff2");
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
           U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
     </style>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23075a46'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Crect width='15' height='15' fill='%2323305e'/%3E%3Crect x='15' width='15' height='15' fill='%23e3a92b'/%3E%3Crect y='15' width='15' height='15' fill='%23e2452b'/%3E%3Crect x='15' y='15' width='15' height='15' fill='%23141311'/%3E%3C/svg%3E">
     <style>@import url("./assets/site_search.css");</style>
     <script>(function(){var s=document.createElement("script");s.src="./assets/site_search.js";document.head.appendChild(s)})();</script>`,
   style: "style.css",

@@ -8,6 +8,7 @@ import forceAtlas2 from "npm:graphology-layout-forceatlas2@0.10.1";
 import "./shared/topics.js";
 import {classicUrl, escapeHtml, formatCount, loadJson} from "./atlas.js";
 import {icon, injectIconSprite} from "./shared/icons.js";
+import {CHROME} from "./shared/palette.js";
 import {
   clusterAnchors,
   clusterName,
@@ -32,9 +33,9 @@ import {
   yearBounds
 } from "./network_model.js";
 
-const DIM_NODE_COLOUR = "#dfe5e8";
-const DIM_EDGE_COLOUR = "#eef1f2";
-const FOCUS_EDGE_COLOUR = "#1d2a33";
+const DIM_NODE_COLOUR = CHROME.sunken;
+const DIM_EDGE_COLOUR = CHROME.page;
+const FOCUS_EDGE_COLOUR = CHROME.text;
 const GRAPH_BUTTONS = ["zoomIn", "zoomOut", "resetView", "fullscreen", "layout", "restore"];
 const GRAPH_BUTTON_ICONS = {
   zoomIn: "search",

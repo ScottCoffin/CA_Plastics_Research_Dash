@@ -85,13 +85,13 @@ def test_tokens_are_imported_after_theme_and_running_links_stay_underlined() -> 
 def test_required_sequential_ramp_is_centralized_in_tokens() -> None:
     tokens = (ROOT / "framework" / "src" / "design" / "tokens.css").read_text(encoding="utf-8")
     expected = {
-        "--seq-100": "#e3f2ed",
-        "--seq-200": "#b9e0d3",
-        "--seq-300": "#86c7b2",
-        "--seq-400": "#4fa68c",
-        "--seq-500": "#23876d",
-        "--seq-600": "#0e6e56",
-        "--seq-700": "#043e32",
+        "--seq-100": "#e6e8ef",
+        "--seq-200": "#c3c8db",
+        "--seq-300": "#97a0c2",
+        "--seq-400": "#6a77a6",
+        "--seq-500": "#444f86",
+        "--seq-600": "#2e3a6d",
+        "--seq-700": "#1a2448",
     }
 
     for name, value in expected.items():
@@ -117,36 +117,30 @@ def test_policy_timeline_reserves_successful_payload_height() -> None:
     assert "min-height: 124rem;" in policy
 
 
-def test_barlow_faces_are_self_hosted_with_font_budget() -> None:
+def test_archivo_is_one_self_hosted_variable_face() -> None:
     tokens = (ROOT / "framework" / "src" / "design" / "tokens.css").read_text(encoding="utf-8")
     config = (ROOT / "framework" / "observablehq.config.js").read_text(encoding="utf-8")
     fonts = ROOT / "site" / "assets" / "fonts"
 
-    assert config.count("@font-face {") == 2
-    assert config.count('font-family: "Barlow Semi Condensed";') == 2
-    assert "font-weight: 600;" in config
-    assert "font-weight: 700;" in config
-    assert config.count("font-display: swap;") == 2
-    assert 'url("./assets/fonts/BarlowSemiCondensed-SemiBold-latin.woff2")' in config
-    assert 'url("./assets/fonts/BarlowSemiCondensed-Bold-latin.woff2")' in config
+    # VD-25a: one variable face (wght 400-800, wdth trimmed to 75-100 for the 60 KB font budget)
+    # replaces the two Barlow faces.
+    assert config.count("@font-face {") == 1
+    assert config.count('font-family: "Archivo";') == 1
+    assert "font-weight: 400 800;" in config
+    assert "font-stretch: 75% 100%;" in config
+    assert "font-display: swap;" in config
+    assert 'url("./assets/fonts/Archivo-Variable-latin.woff2") format("woff2")' in config
     assert "unicode-range: U+0000-00FF" in config
+    assert "Barlow" not in config
     assert "@font-face" not in tokens
     assert "fonts.googleapis.com" not in f"{config}\n{tokens}"
     assert "fonts.gstatic.com" not in f"{config}\n{tokens}"
-    assert (fonts / "BarlowSemiCondensed-SemiBold-latin.woff2").is_file()
-    assert (fonts / "BarlowSemiCondensed-Bold-latin.woff2").is_file()
-    assert (
-        sum(
-            (fonts / name).stat().st_size
-            for name in (
-                "BarlowSemiCondensed-SemiBold-latin.woff2",
-                "BarlowSemiCondensed-Bold-latin.woff2",
-            )
-        )
-        == 46_228
-    )
-    assert 46_228 <= 60 * 1024
-    assert "Arial" not in tokens
+    assert (fonts / "Archivo-Variable-latin.woff2").is_file()
+    assert (fonts / "OFL-Archivo.txt").is_file()
+    # Lead decision (VD-25): axes trimmed to fit the 60 KB FONT_TRANSFER_LIMIT in
+    # scripts/design_snapshots.py rather than raising the limit.
+    assert (fonts / "Archivo-Variable-latin.woff2").stat().st_size <= 60 * 1024
+    assert '--atlas-font-display: "Archivo"' in tokens
     assert "Palatino Linotype" not in tokens
     assert "Times New Roman" not in tokens
     assert 'rel="preload"' not in config
@@ -181,8 +175,8 @@ def test_type_scale_and_surface_tokens_are_applied() -> None:
     assert "line-height: 1.2;" in tokens
     assert "font-size: var(--atlas-type-caption-size);" in tokens
     assert "background-color: var(--atlas-page);" in tokens
-    assert "--atlas-page: #f3f6f5;" in tokens
-    assert "--atlas-surface: #ffffff;" in tokens
+    assert "--atlas-page: #ece7dc;" in tokens
+    assert "--atlas-surface: #f6f3ec;" in tokens
     assert ".card { background-color: var(--atlas-surface); }" in style
     assert "background-color: var(--atlas-surface);" in style
     assert "--theme-background: var(--atlas-page);" in tokens

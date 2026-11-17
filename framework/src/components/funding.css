@@ -6,6 +6,7 @@
   --muted: var(--atlas-muted);
   --brand-dark: var(--atlas-brand-strong);
   --line: var(--atlas-line);
+  --atlas-task: var(--atlas-task-money);
   color: var(--ink);
 }
 
@@ -62,7 +63,7 @@
 #funding-root .grants-table td { min-width: 5.5rem; }
 #funding-root .grants-table td:nth-child(2) { min-width: 11rem; }
 #funding-root .grants-table td:nth-child(7) { white-space: nowrap; }
-#funding-root .grants-table thead th { position: sticky; top: 0; z-index: 1; padding: 0; background: var(--atlas-sunken); box-shadow: 0 1px 0 var(--line); white-space: nowrap; }
+#funding-root .grants-table thead th { position: sticky; top: 0; z-index: 1; padding: 0; background: var(--atlas-sunken); border-bottom: 1px solid var(--line); white-space: nowrap; }
 #funding-root .grants-table thead th.num,
 #funding-root .grants-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 #funding-root .grants-sort { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 0.3rem; width: 100%; padding: 0.5rem 0.45rem; font-weight: 700; cursor: pointer; }
@@ -72,6 +73,11 @@
 #funding-root .grants-arrow { min-width: 0.8rem; color: var(--muted); font-size: 0.7rem; }
 #funding-root .grants-table th[aria-sort="ascending"] .grants-arrow,
 #funding-root .grants-table th[aria-sort="descending"] .grants-arrow { color: var(--brand-dark); font-size: 0.8rem; }
+/* The sorted column carries the money plane: a 3 px gold bar along the foot of its header. */
+#funding-root .grants-table thead th[aria-sort="ascending"]::after,
+#funding-root .grants-table thead th[aria-sort="descending"]::after {
+  position: absolute; right: 0; bottom: 0; left: 0; height: 3px; background: var(--atlas-task); content: "";
+}
 #funding-root .grants-table .topic-chips { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.3rem; }
 #funding-root .grants-table .topic-chip { font-size: 0.72rem; padding: 0.1rem 0.45rem; }
 #funding-root .grants-table .atlas-badge { min-height: 1.5rem; font-size: 0.75rem; }

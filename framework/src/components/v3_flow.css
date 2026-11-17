@@ -4,7 +4,7 @@
 .v3-flow { color: var(--theme-foreground); margin: 0.5rem 0; }
 .v3-flow :focus-visible { outline: 3px solid var(--theme-foreground-focus); outline-offset: 2px; }
 .v3-flow .v3-stages { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: 0.5rem 1.25rem; }
-.v3-flow .v3-stage { position: relative; padding: 0.4rem 0.6rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.4rem; background: var(--theme-background-alt); }
+.v3-flow .v3-stage { position: relative; padding: 0.4rem 0.6rem; border: 1px solid var(--theme-foreground-faint); border-radius: var(--atlas-radius-control); background: var(--theme-background-alt); }
 .v3-flow .v3-stage:not(:last-child)::after { content: ""; position: absolute; top: 50%; right: -0.95rem; transform: translateY(-50%); border-top: 0.35rem solid transparent; border-bottom: 0.35rem solid transparent; border-left: 0.5rem solid var(--theme-foreground-muted); }
 .v3-flow .v3-stage--off { border-style: dashed; border-color: var(--theme-foreground-faintest); background: transparent; color: var(--theme-foreground-muted); }
 .v3-flow .v3-stage-name { margin: 0; font-size: 0.85rem; }

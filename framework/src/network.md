@@ -2,11 +2,13 @@
 title: Collaboration network
 ---
 
+<div class="net-page-head">
 <header class="atlas-page-head">
 <p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-network"></use></svg> Explore</p>
 <h1>Collaboration network</h1>
 <p class="atlas-page-head__lead">Each dot represents an Atlas expert who co-authored plastic-related work, and each line connects co-authors. The network shows relationships in the current data snapshot; it is not a geographic map or a measure of research quality.</p>
 </header>
+</div>
 <p class="atlas-callout atlas-callout--info"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-info"></use></svg> <span><strong>Volume note.</strong> The network shows the 400 most active experts. Counts show volume, not quality: a well-connected expert is not necessarily a better researcher.</span></p>
 
 <link rel="stylesheet" href="./components/network.css">

@@ -1,6 +1,6 @@
 /* Reserve the successful timeline's height before its JSON arrives. Without this, the
    following OPC section enters the mobile viewport and is displaced when the entries mount. */
-#policy-timeline { color: var(--theme-foreground); max-width: 70ch; min-height: 85rem; }
+#policy-timeline { --atlas-task: var(--atlas-task-evidence); color: var(--theme-foreground); max-width: 70ch; min-height: 85rem; }
 @media (max-width: 640px) {
   #policy-timeline { min-height: 116.5rem; }
 }
@@ -8,7 +8,8 @@
   #policy-timeline { min-height: 124rem; }
 }
 #policy-timeline .data-note { margin: 0.5rem 0; color: var(--theme-foreground-muted); font-size: 0.9rem; }
-#policy-timeline .pol-caveat { border-left: 4px solid var(--theme-foreground-focus); padding: 0.5rem 0.9rem; margin: 1rem 0; background: var(--theme-background-alt); }
+#policy-timeline .pol-caveat { position: relative; border: 1px solid var(--theme-foreground-faintest); padding: 0.5rem 0.9rem; margin: 1rem 0; background: var(--theme-background-alt); }
+#policy-timeline .pol-caveat::before { position: absolute; top: -1px; left: -1px; width: 0.6rem; height: 0.6rem; background: var(--atlas-task, var(--atlas-plane-ink)); content: ""; }
 #policy-timeline .pol-caveat p { margin: 0.25rem 0; }
 #policy-timeline .pol-caveat-detail { font-size: 0.9rem; color: var(--theme-foreground-muted); }
 #policy-timeline .pol-list {
@@ -25,7 +26,7 @@
   column-gap: 0.75rem;
   margin: 0;
   padding: 0 0 1.25rem 1rem;
-  border-left: 2px solid var(--theme-foreground-faintest);
+  border-left: 1px solid var(--theme-foreground-faintest);
 }
 #policy-timeline .pol-item:last-child { padding-bottom: 0; }
 #policy-timeline .pol-item::before {
@@ -34,9 +35,8 @@
   left: -0.4rem;
   width: 0.7rem;
   height: 0.7rem;
-  border: 2px solid var(--theme-foreground-focus);
-  border-radius: 50%;
-  background: var(--theme-background);
+  border-radius: var(--atlas-radius-control);
+  background: var(--atlas-task, var(--atlas-plane-ink));
   content: "";
 }
 #policy-timeline .pol-item p { min-width: 0; margin: 0.15rem 0; }
@@ -51,7 +51,7 @@
   padding: 0.1rem 0.45rem;
   margin-right: 0.35rem;
   border: 1px solid var(--theme-foreground-faint);
-  border-radius: 999px;
+  border-radius: var(--atlas-radius-pill);
   font-size: 0.8rem;
 }
 #policy-timeline .pol-kind::before {

@@ -1,4 +1,8 @@
 /* Collaboration network page. Every selector is scoped to the .net- prefix. */
+/* The page head sits in .net-page-head, so the task colour is set on that wrapper (VD-25c). */
+.net-page-head {
+  --atlas-task: var(--atlas-task-people);
+}
 .net-page {
   min-width: 0;
 }

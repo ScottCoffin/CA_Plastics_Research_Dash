@@ -194,9 +194,9 @@ for (const topN of [3, 15]) {
   assert.equal(niceMax(0), 1);
   assert.equal(niceMax(12), 20);
   assert.equal(niceMax(7), 10);
-  assert.equal(heatFill(0, 5), "#eaf1ef");
-  assert.equal(heatFill(5, 5), "#043e32");
-  assert.notEqual(heatFill(1, 5), "#eaf1ef");
+  assert.equal(heatFill(0, 5), "#e2dccf");
+  assert.equal(heatFill(5, 5), "#1a2448");
+  assert.notEqual(heatFill(1, 5), "#e2dccf");
   assert.equal(agencyColor("NSF"), "#0072B2");
   assert.equal(agencyColor("CA State Water Board"), "#8a969c");
   assert.equal(agencyColor("Unlisted agency"), "#8a969c");

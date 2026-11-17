@@ -75,26 +75,26 @@ CSS = "\n".join(
         _font_face(600, "SemiBold"),
         _font_face(700, "Bold"),
         ":root{color-scheme:light}",
-        "body{margin:0;line-height:1.6;color:#1d2a33;background:#f3f6f5;"
+        "body{margin:0;line-height:1.6;color:#1f1d1a;background:#ece7dc;"
         f"font-family:{_BODY_STACK}}}",
         ".wrap{max-width:760px;margin:0 auto;padding:16px}",
-        "header.wrap{max-width:none;padding:0;background:#043e32;color:#ffffff}",
+        "header.wrap{max-width:none;padding:0;background:#141311;color:#f6f3ec}",
         "header.wrap p{max-width:760px;margin:0 auto;padding:12px 16px;"
         f"font-family:{_DISPLAY_STACK};font-weight:700}}",
-        "header.wrap a{color:#ffffff;text-decoration:none}",
-        "header.wrap a:focus-visible{outline-color:#fff1e6}",
+        "header.wrap a{color:#f6f3ec;text-decoration:none}",
+        "header.wrap a:focus-visible{outline-color:#f6dcd5}",
         f"h1{{font-family:{_DISPLAY_STACK};font-size:clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem);"
-        "font-weight:700;line-height:1.05;color:#17324d;margin:.3em 0;text-wrap:balance}",
+        "font-weight:700;line-height:1.05;color:#141311;margin:.3em 0;text-wrap:balance}",
         f"h2{{font-family:{_DISPLAY_STACK};font-size:1.375rem;font-weight:700;"
-        "line-height:1.2;color:#17324d;margin:1.4em 0 .4em}",
-        "a{color:#075a46}",
-        "a:focus-visible{outline:3px solid #c45100;outline-offset:2px}",
-        ".muted{color:#4a5d6c;font-size:.95rem}",
+        "line-height:1.2;color:#141311;margin:1.4em 0 .4em}",
+        "a{color:#23305e}",
+        "a:focus-visible{outline:3px solid #c4361c;outline-offset:2px}",
+        ".muted{color:#4b463e;font-size:.95rem}",
         ".cta{display:inline-block;margin:.6em 0;padding:.6em 1em;border-radius:8px;",
-        "  background:#0e6e56;color:#ffffff;font-weight:600;text-decoration:none}",
+        "  background:#23305e;color:#f6f3ec;font-weight:600;text-decoration:none}",
         ".skip{position:absolute;left:-999px}",
-        ".skip:focus{left:8px;top:8px;background:#ffffff;padding:4px 8px}",
-        "footer.wrap{margin-top:24px;border-top:1px solid #d5e0dd}",
+        ".skip:focus{left:8px;top:8px;background:#f6f3ec;padding:4px 8px}",
+        "footer.wrap{margin-top:24px;border-top:1px solid #d8d3c5}",
         "li{margin:.3em 0}",
     ]
 )

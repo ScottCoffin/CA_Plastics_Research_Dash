@@ -5,206 +5,139 @@ title: Overview
 <link rel="stylesheet" href="./components/overview.css">
 
 <div class="atlas-overview">
-  <section class="atlas-hero" aria-labelledby="atlas-overview-title">
-    <div class="atlas-hero__motif" aria-hidden="true"></div>
-    <div class="atlas-hero__content">
-      <h1 class="atlas-hero__title" id="atlas-overview-title">CA Plastics Research Atlas</h1>
-      <p class="atlas-hero__lead">A transparent starting point for finding plastic-related research connected to California.</p>
-      <form class="atlas-hero__search" data-atlas-site-search action="./search" method="get" role="search">
-        <label class="atlas-search">
-          <span class="visually-hidden">Search the Atlas</span>
-          <span class="atlas-search__icon" data-atlas-icon="search"></span>
-          <input class="atlas-input" type="search" name="q" placeholder="Search experts, institutions, topics, funders…" autocomplete="off">
-        </label>
-        <button class="atlas-btn atlas-btn--primary" type="submit">Search</button>
-      </form>
-      <p class="atlas-hero__fresh" id="overview-refresh" aria-live="polite">Loading snapshot refresh time…</p>
-    </div>
-  </section>
-  <div class="overview-body">
-<section class="overview-stats overview-band overview-band--sunken" aria-label="Atlas snapshot statistics">
-      <dl class="atlas-kpis" id="overview-stats" aria-busy="true">
-        <div class="atlas-kpi atlas-kpi--loading" aria-hidden="true">
-          <dt class="atlas-kpi__label">Authors</dt><dd class="atlas-kpi__value">&nbsp;</dd><dd class="stat-note">&nbsp;</dd>
-        </div>
-        <div class="atlas-kpi atlas-kpi--loading" aria-hidden="true">
-          <dt class="atlas-kpi__label">Works</dt><dd class="atlas-kpi__value">&nbsp;</dd><dd class="stat-note">&nbsp;</dd>
-        </div>
-        <div class="atlas-kpi atlas-kpi--loading" aria-hidden="true">
-          <dt class="atlas-kpi__label">Institutions</dt><dd class="atlas-kpi__value">&nbsp;</dd><dd class="stat-note">&nbsp;</dd>
-        </div>
-        <div class="atlas-kpi atlas-kpi--loading" aria-hidden="true">
-          <dt class="atlas-kpi__label">California institutions</dt><dd class="atlas-kpi__value">&nbsp;</dd><dd class="stat-note">&nbsp;</dd>
-        </div>
-      </dl>
-    </section>
-<section class="overview-section overview-band overview-band--surface" id="start-here" aria-labelledby="start-here-title">
-      <div class="overview-section__head">
-        <h2 id="start-here-title">Start here</h2>
-      </div>
-      <ul class="atlas-task-list">
-        <li><a href="./experts"><span class="atlas-task atlas-task--experts">
-            <span class="tile-icon" data-atlas-icon="person"></span>
-            <span class="atlas-task__body"><span class="atlas-task__title">Find a California researcher</span></span>
-            <span class="atlas-task__arrow" data-atlas-icon="arrow"></span>
-          </span></a>
-        </li>
-        <li><a href="./funding"><span class="atlas-task atlas-task--funding">
-            <span class="tile-icon" data-atlas-icon="coins"></span>
-            <span class="atlas-task__body"><span class="atlas-task__title">See plastics research funding</span></span>
-            <span class="atlas-task__arrow" data-atlas-icon="arrow"></span>
-          </span></a>
-        </li>
-        <li><a href="./monitoring"><span class="atlas-task atlas-task--monitoring">
-            <span class="tile-icon" data-atlas-icon="drop"></span>
-            <span class="atlas-task__body"><span class="atlas-task__title">Check monitoring data</span></span>
-            <span class="atlas-task__arrow" data-atlas-icon="arrow"></span>
-          </span></a>
-        </li>
-      </ul>
-    </section>
-<section class="overview-section overview-band overview-band--sunken" aria-labelledby="explore-atlas-title">
-      <div class="overview-section__head">
-        <p class="atlas-eyebrow">Browse by collection</p>
-        <h2 id="explore-atlas-title">Explore the Atlas</h2>
-      </div>
-      <div class="atlas-entry-grid">
-        <a class="atlas-entry" href="./experts">
-          <span class="atlas-entry__icon" data-atlas-icon="person"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Experts</span><span class="atlas-entry__text">California researchers, topics and metrics.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Authors" data-overview-suffix="authors"></span></span></span>
-        </a>
-        <a class="atlas-entry" href="./network">
-          <span class="atlas-entry__icon" data-atlas-icon="network"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Collaboration network</span><span class="atlas-entry__text">How researchers connect through shared work.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Network experts" data-overview-suffix="experts"></span><span class="atlas-entry__meta-separator" aria-hidden="true">·</span><span data-overview-count="Network links" data-overview-suffix="links"></span></span></span>
-        </a>
-        <a class="atlas-entry" href="./institutions">
-          <span class="atlas-entry__icon" data-atlas-icon="building"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Institutions</span><span class="atlas-entry__text">California institutions and research connections.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Institutions" data-overview-suffix="institutions"></span><span class="atlas-entry__meta-separator" aria-hidden="true">·</span><span data-overview-count="California institutions" data-overview-suffix="California institutions"></span></span></span>
-        </a>
-        <a class="atlas-entry" href="./monitoring">
-          <span class="atlas-entry__icon" data-atlas-icon="drop"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Monitoring</span><span class="atlas-entry__text">Public samples from California waters.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Monitoring samples" data-overview-suffix="samples"></span><span class="atlas-entry__meta-separator" aria-hidden="true">·</span><span data-overview-count="Monitoring sources" data-overview-suffix="sources"></span></span></span>
-        </a>
-        <a class="atlas-entry" href="./funding">
-          <span class="atlas-entry__icon" data-atlas-icon="coins"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Funding</span><span class="atlas-entry__text">Grants, awards and open calls.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Awards" data-overview-suffix="plastic-related awards"></span></span></span>
-        </a>
-        <a class="atlas-entry" href="./evidence">
-          <span class="atlas-entry__icon" data-atlas-icon="grid"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Evidence map</span><span class="atlas-entry__text">Filter works by topic, year, sector.</span><span class="atlas-entry__meta" data-overview-count-group hidden><span data-overview-count="Plastic-related works" data-overview-suffix="plastic-related works"></span></span></span>
-        </a>
-        <a class="atlas-entry" href="./policy">
-          <span class="atlas-entry__icon" data-atlas-icon="scale"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Policy</span><span class="atlas-entry__text">Follow the DTSC microplastics timeline.</span></span>
-        </a>
-        <a class="atlas-entry" href="./resources">
-          <span class="atlas-entry__icon" data-atlas-icon="link"></span>
-          <span class="atlas-entry__body"><span class="atlas-entry__title">Related resources</span><span class="atlas-entry__text">Outside databases and tools on plastics.</span></span>
-        </a>
-      </div>
-    </section>
-<section class="overview-section overview-band overview-band--surface" aria-labelledby="how-it-works">
-      <div class="overview-section__head">
-        <h2 id="how-it-works">How it works</h2>
-      </div>
-      <ol class="overview-steps">
-        <li class="overview-step">
-          <span class="overview-step__icon" data-atlas-icon="download"></span>
-          <h3>Daily ingest</h3>
-          <p class="overview-step__when">GitHub Actions, daily at 10:17 UTC</p>
-          <p class="overview-step__text">Fetches new plastic-related works from OpenAlex, normalises authors and institutions, applies relevance labels and reviewed overrides, rebuilds expert metrics, the collaboration network and the search index.</p>
-        </li>
-        <li class="overview-step">
-          <span class="overview-step__icon" data-atlas-icon="tools"></span>
-          <h3>Build and deploy</h3>
-          <p class="overview-step__when">Daily at 10:15 UTC and on every change</p>
-          <p class="overview-step__text">Rebuilds open funding calls, the status page and the feed, builds this Observable Framework site and publishes it on GitHub Pages.</p>
-        </li>
-        <li class="overview-step">
-          <span class="overview-step__icon" data-atlas-icon="search"></span>
-          <h3>Weekly source watch</h3>
-          <p class="overview-step__when">Mondays at 10:31 UTC</p>
-          <p class="overview-step__text">Checks CEDEN for new microplastics monitoring data and verifies outside links.</p>
-        </li>
-        <li class="overview-step">
-          <span class="overview-step__icon" data-atlas-icon="alert"></span>
-          <h3>Watchdog</h3>
-          <p class="overview-step__when">Daily at 11:47 UTC, plus a monthly keepalive</p>
-          <p class="overview-step__text">Flags scheduled jobs that fail or stall.</p>
-        </li>
-        <li class="overview-step overview-step--note">
-          <span class="overview-step__icon" data-atlas-icon="book"></span>
-          <h3>Static by design</h3>
-          <p class="overview-step__text">No server or database; data ship as versioned JSON and Parquet files; code and methods are open on GitHub. <a href="./about">Read the methods</a></p>
-        </li>
-      </ol>
-    </section>
-  </div>
+<section class="overview-hero" aria-labelledby="overview-title">
+<div class="overview-hero__grid">
+<div class="overview-hero__copy">
+<h1 class="overview-title" id="overview-title">California plastics research, in four parts.</h1>
+<p class="overview-lead">Who studies plastics in California, what is monitored, what is funded, and what has been published. Rebuilt from open sources every day.</p>
+<ul class="overview-doors" aria-label="Start here">
+<li><a class="overview-door" data-plane="people" href="./experts" style="--c: var(--atlas-task-people)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">Find a researcher</strong><small class="overview-door__count" data-count-group><span data-count="authors" data-suffix=" authors"></span></small></a></li>
+<li><a class="overview-door" data-plane="water" href="./monitoring" style="--c: var(--atlas-task-water)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">Check monitoring data</strong><small class="overview-door__count" data-count-group><span data-count="monitoring_samples" data-suffix=" samples"></span></small></a></li>
+<li><a class="overview-door" data-plane="money" href="./funding" style="--c: var(--atlas-task-money)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">See funding</strong><small class="overview-door__count" data-count-group><span data-count="awards" data-suffix=" awards"></span></small></a></li>
+<li><a class="overview-door" data-plane="evidence" href="./evidence" style="--c: var(--atlas-task-evidence)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">Explore the evidence</strong><small class="overview-door__count" data-count-group><span data-count="plastic_works" data-suffix=" works"></span></small></a></li>
+</ul>
+<form class="overview-search" action="./search" method="get" role="search" data-atlas-site-search>
+<label class="visually-hidden" for="overview-q">Search the whole Atlas</label>
+<p class="overview-caps" aria-hidden="true">Or search the whole Atlas</p>
+<div class="overview-search__field"><input id="overview-q" type="search" name="q" placeholder="Experts, institutions, topics, funders" autocomplete="off"><button type="submit">Search</button></div>
+</form>
 </div>
-
-```js
-import {icon} from "./components/shared/icons.js";
-for (const host of document.querySelectorAll("[data-atlas-icon]")) {
-  host.replaceChildren(icon(host.dataset.atlasIcon));
-}
-```
+<figure class="overview-figure" id="overview-figure" aria-label="California drawn from four planes: researchers, monitoring, funding and evidence">
+<svg viewBox="-470 -575 1010 1090" role="group" aria-labelledby="overview-fig-title">
+<title id="overview-fig-title">California in four colour planes, one for each part of the Atlas</title>
+<defs>
+<clipPath id="overview-ca"><path d="M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L0,-221L0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-149,-121L-143,-122L-132,-116L-129,-111L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L167,360L221,405L256,494L469,474Z"/></clipPath>
+</defs>
+<g clip-path="url(#overview-ca)">
+<g class="overview-plane-g" style="--dx:-40px;--dy:-30px"><a href="./monitoring" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="water" points="-470,-575 560,-575 560,-150 -470,-150"/></a></g>
+<g class="overview-plane-g" style="--dx:-50px;--dy:10px"><a href="./experts" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="people" points="-470,-150 70,-150 -70,205 -470,205"/></a></g>
+<g class="overview-plane-g" style="--dx:50px;--dy:0px"><a href="./funding" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="money" points="70,-150 560,-150 560,250 -70,205"/></a></g>
+<g class="overview-plane-g" style="--dx:30px;--dy:40px"><a href="./evidence" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="evidence" points="-470,205 -70,205 560,250 560,520 -470,520"/></a></g>
+</g>
+<path d="M-330,70 A62,62 0 0 0 -206,70 Z" style="fill: var(--atlas-vermilion)" aria-hidden="true"/>
+</svg>
+<figcaption class="overview-caps">32.5° to 42° N</figcaption>
+</figure>
+</div>
+</section>
+<section class="overview-band" id="people" aria-labelledby="people-h" style="--c: var(--atlas-task-people)">
+<div class="overview-band__grid">
+<div class="overview-band__swatch" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice" focusable="false"><rect x="150" y="0" width="150" height="220" style="fill: var(--atlas-indigo)"/><path d="M95,80 A55,55 0 0 0 205,80 Z" style="fill: var(--atlas-page)"/><circle cx="150" cy="190" r="70" style="fill: var(--atlas-gold)"/></svg></div>
+<div>
+<h2 class="overview-band__title" id="people-h">Find a researcher</h2>
+<p class="overview-band__text">Search California-affiliated authors by topic, institution and output, and see who publishes with whom. Profiles are built from OpenAlex and ROR records.</p>
+<ul class="overview-facts">
+<li data-count-group><b data-count="authors"></b><span>authors</span></li>
+<li data-count-group><b data-count="network_experts"></b><span>experts in the network, <span data-count="network_links"></span> links</span></li>
+<li data-count-group><b data-count="california_institutions"></b><span>California institutions</span></li>
+</ul>
+<div class="overview-go"><a href="./experts">Experts</a><a href="./network">Collaboration network</a><a href="./institutions">Institutions</a></div>
+</div>
+</div>
+</section>
+<section class="overview-band" id="water" aria-labelledby="water-h" style="--c: var(--atlas-task-water)">
+<div class="overview-band__grid">
+<div class="overview-band__swatch" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice" focusable="false"><rect y="120" width="300" height="100" style="fill: var(--atlas-page)"/><path d="M60,120 A90,90 0 0 1 240,120 Z" style="fill: var(--atlas-vermilion)"/><rect x="0" y="160" width="300" height="20" style="fill: var(--atlas-indigo)"/></svg></div>
+<div>
+<h2 class="overview-band__title" id="water-h">Check monitoring data</h2>
+<p class="overview-band__text">Browse public plastic samples from California waters on a map, with each source's licence and citation. Samples describe individual sites; they do not establish statewide coverage.</p>
+<ul class="overview-facts">
+<li data-count-group><b data-count="monitoring_samples"></b><span>sample observations</span></li>
+<li data-count-group><b data-count="monitoring_sources"></b><span>verified sources</span></li>
+</ul>
+<div class="overview-go"><a href="./monitoring">Monitoring map</a></div>
+</div>
+</div>
+</section>
+<section class="overview-band" id="money" aria-labelledby="money-h" style="--c: var(--atlas-task-money)">
+<div class="overview-band__grid">
+<div class="overview-band__swatch" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice" focusable="false"><rect x="40" y="40" width="90" height="90" style="fill: var(--atlas-ink)"/><circle cx="200" cy="85" r="45" style="fill: var(--atlas-page)"/><polygon points="90,220 170,130 250,220" style="fill: var(--atlas-vermilion)"/></svg></div>
+<div>
+<h2 class="overview-band__title" id="money-h">See funding</h2>
+<p class="overview-band__text">Browse plastic-related grants and awards connected to California, and open funding calls, drawn from public grant databases.</p>
+<ul class="overview-facts">
+<li data-count-group><b data-count="awards"></b><span>plastic-related awards</span></li>
+</ul>
+<div class="overview-go"><a href="./funding">Funding</a></div>
+</div>
+</div>
+</section>
+<section class="overview-band" id="evidence" aria-labelledby="evidence-h" style="--c: var(--atlas-task-evidence); --c-arrow: var(--atlas-gold)">
+<div class="overview-band__grid">
+<div class="overview-band__swatch" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice" focusable="false"><rect x="30" y="30" width="70" height="70" style="fill: var(--atlas-page)"/><rect x="115" y="30" width="70" height="70" style="fill: var(--atlas-gold)"/><rect x="200" y="30" width="70" height="70" style="fill: var(--atlas-page)"/><rect x="30" y="115" width="70" height="70" style="fill: var(--atlas-indigo)"/><rect x="115" y="115" width="70" height="70" style="fill: var(--atlas-page)"/><rect x="200" y="115" width="70" height="70" style="fill: var(--atlas-vermilion)"/></svg></div>
+<div>
+<h2 class="overview-band__title" id="evidence-h">Explore the evidence</h2>
+<p class="overview-band__text">Filter published plastic-related works by topic, year and sector, see trends and a topic heatmap, and follow the DTSC microplastics regulatory timeline. Topic tags come from keyword rules and are provisional.</p>
+<ul class="overview-facts">
+<li data-count-group><b data-count="plastic_works"></b><span>plastic-related works</span></li>
+</ul>
+<div class="overview-go"><a href="./evidence">Evidence map</a><a href="./policy">Policy</a><a href="./resources">Related resources</a></div>
+</div>
+</div>
+</section>
+<section class="overview-clock" aria-labelledby="overview-clock-title">
+<div class="overview-clock__inner">
+<h2 class="overview-clock__title" id="overview-clock-title">How the Atlas stays current</h2>
+<p class="overview-clock__text">Scheduled GitHub Actions jobs run in a two-hour window each morning, UTC (about 2 to 4 a.m. in California in winter). Times below are drawn to scale.</p>
+<div class="overview-chart" tabindex="0" role="region" aria-label="Scheduled jobs, drawn to scale"><div class="overview-chart__frame" id="overview-chart"></div></div>
+<div class="overview-notes">
+<div><h3>Static by design</h3><p>No server or database. Data ship as versioned JSON and Parquet files beside the pages.</p></div>
+<div><h3>Open methods</h3><p>Code, queries and decisions are public on GitHub. <a href="./about">Read the methods</a>. Terms are defined in the <a href="./glossary">glossary</a>.</p></div>
+<div><h3>Every number has a source</h3><p>Counts on this page come from the latest Atlas snapshot.</p><p class="stat-note" data-stat-note="Authors" hidden></p><p class="stat-note" data-stat-note="California institutions" hidden></p><p class="overview-refresh" id="overview-refresh" aria-live="polite">Loading snapshot refresh time…</p></div>
+</div>
+</div>
+</section>
+</div>
 
 ```js
 import {loadJson, aboutViewModel, formatCount} from "./components/atlas.js";
 const metadata = await loadJson("build_metadata.json");
 const snapshot = aboutViewModel(metadata, null);
 
-// VD-13: entry-card counts beyond the About stats. Each reads one key of build_metadata.json
-// counts, formatted as the Atlas formats every count; a missing key reads "Unavailable", which
-// keeps its card group hidden.
+// VD-25b: live counts. A data-count placeholder reads one value: the About stats for authors and
+// California institutions, metadata.counts for the rest. A group with any missing value is hidden
+// (never "Unavailable"). Visible groups reserve their height in CSS, so filling them does not shift the page.
+const statRows = new Map(snapshot.stats.map((row) => [row.label, row]));
 const metadataCounts = metadata?.counts ?? {};
-const cardCounts = new Map(
-  [
-    ["Awards", "awards"],
-    ["Monitoring samples", "monitoring_samples"],
-    ["Monitoring sources", "monitoring_sources"],
-    ["Network experts", "network_experts"],
-    ["Network links", "network_links"],
-    ["Plastic-related works", "plastic_works"],
-  ].map(([label, key]) => [label, formatCount(metadataCounts[key])]),
-);
-
-const statIcons = new Map([
-  ["Authors", "person"],
-  ["Works", "book"],
-  ["Institutions", "network"],
-  ["California institutions", "building"],
+const countText = (text) => (text && text !== "Unavailable" ? text : null);
+const counts = new Map([
+  ["authors", countText(statRows.get("Authors")?.value)],
+  ["california_institutions", countText(statRows.get("California institutions")?.value)],
+  ...["awards", "monitoring_samples", "monitoring_sources", "network_experts", "network_links", "plastic_works"]
+    .map((key) => [key, countText(formatCount(metadataCounts[key]))]),
 ]);
-const statLabels = [...statIcons.keys()];
-const stats = new Map(snapshot.stats.map(({label, value, note}) => [label, {value, note}]));
-const statsHost = document.querySelector("#overview-stats");
-const statTiles = statLabels.map((label) => {
-  const stat = stats.get(label);
-  const tile = document.createElement("div");
-  tile.className = "atlas-kpi";
-  const labelNode = document.createElement("dt");
-  labelNode.className = "atlas-kpi__label";
-  labelNode.append(icon(statIcons.get(label)), document.createTextNode(label));
-  const valueNode = document.createElement("dd");
-  valueNode.className = "atlas-kpi__value";
-  valueNode.textContent = stat?.value ?? "Unavailable";
-  const noteNode = document.createElement("dd");
-  noteNode.className = "atlas-kpi__note stat-note";
-  noteNode.textContent = stat?.note ?? "Definition unavailable.";
-  tile.append(labelNode, valueNode, noteNode);
-  return tile;
-});
-statsHost.replaceChildren(...statTiles);
-statsHost.setAttribute("aria-busy", "false");
-
-for (const group of document.querySelectorAll("[data-overview-count-group]")) {
-  const counts = [...group.querySelectorAll("[data-overview-count]")];
-  const entries = counts.map((node) => ({node, value: cardCounts.get(node.dataset.overviewCount) ?? stats.get(node.dataset.overviewCount)?.value}));
-  if (!entries.length || entries.some(({value}) => !value || value === "Unavailable")) continue;
-  for (const {node, value} of entries) {
-    node.textContent = `${value} ${node.dataset.overviewSuffix}`;
-  }
-  group.hidden = false;
+for (const group of document.querySelectorAll("[data-count-group]")) {
+  const pieces = [...group.querySelectorAll("[data-count]")];
+  const values = pieces.map((node) => counts.get(node.dataset.count) ?? null);
+  const ready = values.every(Boolean);
+  group.hidden = !ready;
+  if (ready) pieces.forEach((node, i) => { node.textContent = `${values[i]}${node.dataset.suffix ?? ""}`; });
+}
+for (const note of document.querySelectorAll("[data-stat-note]")) {
+  const row = statRows.get(note.dataset.statNote);
+  const shown = Boolean(countText(row?.value));
+  note.textContent = shown ? row.note : "";
+  note.hidden = !shown;
 }
 
 const refreshHost = document.querySelector("#overview-refresh");
@@ -213,4 +146,65 @@ if (snapshot.refreshDisplay && snapshot.refreshIso) {
 } else {
   refreshHost.textContent = snapshot.refreshText;
 }
+```
+
+```js
+(() => {
+  // Row and plane light each other (the signature interaction); focus lights the same pair.
+  const figure = document.getElementById("overview-figure");
+  const doors = [...document.querySelectorAll(".overview-door")];
+  const planes = [...document.querySelectorAll(".overview-plane")];
+  const light = (key) => {
+    figure.classList.toggle("has-lit", Boolean(key));
+    planes.forEach((p) => p.classList.toggle("is-lit", p.dataset.plane === key));
+    doors.forEach((d) => d.classList.toggle("is-lit", d.dataset.plane === key));
+  };
+  for (const el of [...doors, ...planes]) {
+    el.addEventListener("mouseenter", () => light(el.dataset.plane));
+    el.addEventListener("mouseleave", () => light(null));
+    el.addEventListener("focus", () => light(el.dataset.plane));
+    el.addEventListener("blur", () => light(null));
+  }
+})();
+```
+
+```js
+(() => {
+  // Schedule chart: 09:30 to 12:00 UTC on one linear scale, drawn to scale from the job times.
+  const host = document.getElementById("overview-chart");
+  const W = 1000, H = 260, L = 20, R = 20, t0 = 9 * 60 + 30, t1 = 12 * 60;
+  const x = (m) => L + ((m - t0) / (t1 - t0)) * (W - L - R);
+  const axisY = 150;
+  const jobs = [
+    {m: 9 * 60 + 42, label: "Keepalive", sub: "monthly, 1st", shape: "sq", c: "var(--atlas-line)", up: true},
+    {m: 10 * 60 + 15, label: "Build and deploy", sub: "daily 10:15", shape: "sq", c: "var(--atlas-vermilion)", up: true, dx: -6},
+    {m: 10 * 60 + 17, label: "Daily ingest from OpenAlex", sub: "daily 10:17", shape: "dot", c: "var(--atlas-gold)", up: false},
+    {m: 10 * 60 + 31, label: "Source watch", sub: "Mondays 10:31", shape: "tri", c: "var(--atlas-map-water)", up: true, dx: 70},
+    {m: 11 * 60 + 47, label: "Watchdog", sub: "daily 11:47", shape: "dot", c: "var(--atlas-on-brand)", up: false},
+  ];
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="overview-chart-title"><title id="overview-chart-title">Scheduled jobs between 09:30 and 12:00 UTC</title>`;
+  s += `<line x1="${L}" x2="${W - R}" y1="${axisY}" y2="${axisY}" style="stroke: var(--atlas-on-brand)" stroke-width="2"/>`;
+  for (let m = t0; m <= t1; m += 15) {
+    const major = m % 30 === 0;
+    s += `<line x1="${x(m)}" x2="${x(m)}" y1="${axisY}" y2="${axisY + (major ? 12 : 6)}" style="stroke: var(--atlas-on-brand)"/>`;
+    if (major) {
+      const hh = String(Math.floor(m / 60)).padStart(2, "0"), mm = String(m % 60).padStart(2, "0");
+      s += `<text x="${x(m)}" y="${axisY + 32}" text-anchor="middle" font-size="14" style="font-variant-numeric:tabular-nums">${hh}:${mm}</text>`;
+    }
+  }
+  for (const j of jobs) {
+    const cx = x(j.m), ly = j.up ? 40 : 238, my = axisY;
+    const tx = cx + (j.dx || 0);
+    s += `<line x1="${cx}" x2="${cx}" y1="${my}" y2="${j.up ? ly + 14 : ly - 34}" stroke-width="1.5" style="stroke: ${j.c}"/>`;
+    if (j.shape === "sq") s += `<rect x="${cx - 8}" y="${my - 8}" width="16" height="16" style="fill: ${j.c}"/>`;
+    else if (j.shape === "tri") s += `<polygon points="${cx},${my - 10} ${cx + 10},${my + 8} ${cx - 10},${my + 8}" style="fill: ${j.c}"/>`;
+    else s += `<circle cx="${cx}" cy="${my}" r="9" style="fill: ${j.c}"/>`;
+    const anchor = j.m > 11 * 60 ? "end" : "start";
+    const ax = anchor === "end" ? cx + 4 : tx;
+    s += `<text x="${ax}" y="${j.up ? ly - 6 : ly - 14}" font-size="16" font-weight="700" text-anchor="${anchor}">${j.label}</text>`;
+    s += `<text x="${ax}" y="${j.up ? ly + 12 : ly + 4}" font-size="13" text-anchor="${anchor}" fill-opacity=".75">${j.sub}</text>`;
+  }
+  s += `</svg>`;
+  host.innerHTML = s;
+})();
 ```

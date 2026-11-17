@@ -48,21 +48,21 @@
 
 .fv-legend { display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; margin: 0.5rem 0; padding: 0; list-style: none; font-size: 0.85rem; }
 .fv-legend li { display: inline-flex; align-items: center; gap: 0.35rem; }
-.fv-legend i { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 2px; }
+.fv-legend i { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: var(--atlas-radius-control); }
 .fv-year-svg { display: block; }
 .fv-year-svg text { font-size: 11px; fill: var(--theme-foreground-muted); }
 
 .fv-orgs-list { list-style: none; margin: 0.5rem 0 0; padding: 0; display: grid; gap: 0.4rem; }
 .fv-orgs-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.6rem; font-size: 0.9rem; }
 .fv-org-name { flex: 1 1 12rem; min-width: 0; font-weight: 600; overflow-wrap: anywhere; }
-.fv-bar { flex: 1 1 8rem; min-width: 4rem; height: 10px; background: var(--atlas-sunken); border-radius: 2px; }
-.fv-bar span { display: block; height: 100%; background: var(--atlas-brand); border-radius: 2px; }
+.fv-bar { flex: 1 1 8rem; min-width: 4rem; height: 10px; background: var(--atlas-sunken); border-radius: var(--atlas-radius-control); }
+.fv-bar span { display: block; height: 100%; background: var(--atlas-brand); border-radius: var(--atlas-radius-control); }
 .fv-count { flex: 0 0 auto; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 .fv-matrix { min-width: max-content; width: auto; }
 .fv-matrix th, .fv-matrix td { padding: 2px 4px; border: 0; }
 .fv-matrix thead th { font-size: 0.75rem; vertical-align: bottom; }
 .fv-matrix tbody th { font-size: 0.8rem; white-space: nowrap; padding-right: 0.6rem; }
-.fv-matrix .fv-cell { min-width: 2.6rem; height: 2.1rem; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; border-radius: 2px; }
+.fv-matrix .fv-cell { min-width: 2.6rem; height: 2.1rem; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; border-radius: var(--atlas-radius-control); }
 .fv-matrix td.num { min-width: 2.6rem; text-align: center; font-variant-numeric: tabular-nums; }
-.fv-dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 999px; margin-right: 0.35rem; vertical-align: middle; }
+.fv-dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-right: 0.35rem; vertical-align: middle; }

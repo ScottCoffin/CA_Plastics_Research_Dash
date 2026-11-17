@@ -15,9 +15,9 @@ import frameworkConfig from "../observablehq.config.js";
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = join(here, "..", process.env.ATLAS_FW_OUT || "dist");
 const FONT_PRELOAD =
-  '<link rel="preload" href="./assets/fonts/BarlowSemiCondensed-Bold-latin.woff2" ' +
+  '<link rel="preload" href="./assets/fonts/Archivo-Variable-latin.woff2" ' +
   'as="font" type="font/woff2" crossorigin>';
-const FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["']\.\/assets\/fonts\/BarlowSemiCondensed-Bold-latin\.woff2["'])[^>]*>\s*/gi;
+const FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["']\.\/assets\/fonts\/Archivo-Variable-latin\.woff2["'])[^>]*>\s*/gi;
 const SKIP_LINK = '<a class="atlas-skip-link" href="#observablehq-main">Skip to content</a>';
 const CONFIG_HEAD = frameworkConfig.head;
 const GLOBAL_FONT_STYLE = CONFIG_HEAD.match(/<style\b[\s\S]*?<\/style>/i)?.[0];
@@ -47,7 +47,7 @@ export function fixHtml(html, page) {
 
 function addGlobalHead(html) {
   const missing = [];
-  if (!/@font-face\b[\s\S]*?font-family:\s*["']Barlow Semi Condensed["']/i.test(html)) {
+  if (!/@font-face\b[\s\S]*?font-family:\s*["']Archivo["']/i.test(html)) {
     missing.push(GLOBAL_FONT_STYLE);
   }
   if (!/<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml,)[^>]*>/i.test(html)) {

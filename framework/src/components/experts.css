@@ -5,6 +5,7 @@
   --brand-dark: var(--atlas-brand-strong);
   --surface: var(--atlas-surface);
   --line: var(--atlas-line);
+  --atlas-task: var(--atlas-task-people);
   color: var(--ink);
 }
 
@@ -80,7 +81,7 @@
 #experts-root .expert-metrics a { display: inline-flex; min-height: 24px; align-items: center; vertical-align: middle; }
 #experts-root .expert-metrics strong { color: var(--atlas-brand-strong); }
 #experts-root .expert-affil { display: block; min-width: 0; margin: 0; overflow: hidden; color: var(--atlas-muted); font-size: 0.78rem; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
-#experts-root .now-badge { display: inline-block; padding: 0.05rem 0.4rem; border: 1px solid var(--atlas-accent); border-radius: 999px; color: var(--atlas-accent-strong); background: var(--atlas-accent-wash); font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
+#experts-root .now-badge { display: inline-block; padding: 0.05rem 0.4rem; border: 1px solid var(--atlas-accent); border-radius: var(--atlas-radius-pill); color: var(--atlas-accent-strong); background: var(--atlas-accent-wash); font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
 #experts-root .basis-note { color: var(--atlas-muted); }
 
 #experts-root .term-help { margin: 1rem 0; }
@@ -89,8 +90,8 @@
 
 #experts-root .drawer-backdrop[hidden],
 #experts-root .drawer[hidden] { display: none; }
-#experts-root .drawer-backdrop { position: fixed; inset: 0; z-index: 10; background: rgb(4 62 50 / 42%); }
-#experts-root .drawer { position: fixed; z-index: 11; inset: 0 0 0 auto; width: min(40rem, 100%); overflow-y: auto; padding: 1rem; border-left: 1px solid var(--atlas-line); background: var(--atlas-surface); box-shadow: -0.5rem 0 2rem rgb(23 50 77 / 18%); }
+#experts-root .drawer-backdrop { position: fixed; inset: 0; z-index: 10; background: color-mix(in srgb, var(--atlas-ink) 42%, transparent); }
+#experts-root .drawer { position: fixed; z-index: 11; inset: 0 0 0 auto; width: min(40rem, 100%); overflow-y: auto; padding: 1rem; border-left: 1px solid var(--atlas-line); background: var(--atlas-surface); box-shadow: var(--atlas-shadow-float); }
 #experts-root .drawer-header.atlas-page-head { display: flex; min-height: 0; align-items: flex-start; justify-content: space-between; gap: 0.75rem; margin: 0 0 0.75rem; padding: 0.85rem 1rem; }
 #experts-root .drawer-heading { min-width: 0; }
 #experts-root .drawer-heading h2 { margin: 0; font: 650 1.4rem / 1.15 var(--atlas-font-display); }
@@ -132,7 +133,7 @@
 #experts-root .abstract-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 0.6rem; }
 #experts-root .button-link { text-decoration: none; }
 /* VD-18: "Open full profile page" is a primary button. "#experts-root a" (specificity 1,0,1) sets
-   brand-strong text and outranks .atlas-btn--primary, so the label was dark on dark teal. */
+   brand-strong text and outranks .atlas-btn--primary, so the label was dark on dark ink. */
 #experts-root a.button-link,
 #experts-root a.button-link:visited {
   background: var(--atlas-brand-strong);

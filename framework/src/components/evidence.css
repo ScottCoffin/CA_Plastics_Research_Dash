@@ -9,10 +9,10 @@
 @media (max-width: 760px) { #evidence-root .ev-layout { grid-template-columns: minmax(0, 1fr); } }
 #evidence-root .ev-filters { display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; }
 #evidence-root .ev-field { display: flex; flex-direction: column; gap: 0.25rem; }
-#evidence-root input[type="search"], #evidence-root input[type="number"] { font: inherit; padding: 0.35rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.35rem; background: var(--theme-background); color: var(--theme-foreground); }
-#evidence-root button { font: inherit; min-height: 2rem; padding: 0.3rem 0.8rem; border: 1px solid var(--theme-foreground-faint); border-radius: 0.35rem; background: var(--theme-background-alt); color: var(--theme-foreground); cursor: pointer; }
+#evidence-root input[type="search"], #evidence-root input[type="number"] { font: inherit; padding: 0.35rem; border: 1px solid var(--theme-foreground-faint); border-radius: var(--atlas-radius-control); background: var(--theme-background); color: var(--theme-foreground); }
+#evidence-root button { font: inherit; min-height: 2rem; padding: 0.3rem 0.8rem; border: 1px solid var(--theme-foreground-faint); border-radius: var(--atlas-radius-control); background: var(--theme-background-alt); color: var(--theme-foreground); cursor: pointer; }
 #evidence-root button:disabled { opacity: 0.5; cursor: default; }
-#evidence-root .ev-group { min-width: 0; margin: 0; padding: 0.4rem 0.6rem 0.6rem; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.4rem; }
+#evidence-root .ev-group { min-width: 0; margin: 0; padding: 0.4rem 0.6rem 0.6rem; border: 1px solid var(--theme-foreground-faintest); border-radius: var(--atlas-radius-control); }
 #evidence-root .ev-group legend { padding: 0 0.25rem; font-weight: 600; }
 #evidence-root .ev-option { display: flex; align-items: center; gap: 0.4rem; min-height: 1.75rem; }
 #evidence-root .ev-option-name { min-width: 0; overflow-wrap: anywhere; }
@@ -46,7 +46,7 @@
 #evidence-root .atlas-chart[data-view="table"] [data-pane="chart"],
 #evidence-root .atlas-chart:not([data-view="table"]) [data-pane="table"] { display: none; }
 /* Pipeline flow: collapsed by default; the heading sits inside the summary. */
-#evidence-root .ev-flow-box { margin-top: 1.25rem; border: 1px solid var(--theme-foreground-faintest); border-radius: 0.5rem; padding: 0.25rem 0.75rem; }
+#evidence-root .ev-flow-box { margin-top: 1.25rem; border: 1px solid var(--theme-foreground-faintest); border-radius: var(--atlas-radius-card); padding: 0.25rem 0.75rem; }
 #evidence-root .ev-flow-box > summary { cursor: pointer; min-height: 2.75rem; display: flex; align-items: center; gap: 0.5rem; }
 #evidence-root .ev-flow-box > summary { font-weight: 650; }
 #evidence-root .ev-view { margin-top: 1.25rem; }

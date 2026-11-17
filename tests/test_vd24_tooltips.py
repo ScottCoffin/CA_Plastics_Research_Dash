@@ -42,7 +42,7 @@ def test_heading_scale_raises_h1_about_20_and_h2_h3_about_15_percent() -> None:
     assert "--atlas-type-section-size: 1.58rem;" in tokens
     assert "--atlas-type-subsection-size: 1.3rem;" in tokens
     # Line heights stay tight.
-    assert re.search(r"h1 \{[^}]*line-height: 1\.05;", tokens, flags=re.DOTALL)
+    assert re.search(r"h1 \{[^}]*line-height: 0\.98;", tokens, flags=re.DOTALL)
 
 
 def test_page_head_is_a_full_width_band_with_the_vd22_bleed() -> None:
@@ -56,7 +56,7 @@ def test_page_head_is_a_full_width_band_with_the_vd22_bleed() -> None:
     assert "box-shadow: 0 0 0 100vmax var(--atlas-head-band);" in band
     assert "clip-path: inset(0 -100vmax);" in band
     assert "100vw" not in band
-    assert "--atlas-head-band: var(--atlas-brand-tint);" in TOKENS.read_text(encoding="utf-8")
+    assert "--atlas-head-band: #e0dacb;" in TOKENS.read_text(encoding="utf-8")
 
 
 def test_evidence_title_and_lead_sit_inside_the_page_head() -> None:

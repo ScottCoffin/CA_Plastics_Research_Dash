@@ -9,6 +9,7 @@
   --surface: var(--atlas-surface);
   --line: var(--atlas-line);
   --focus: var(--atlas-accent);
+  --atlas-task: var(--atlas-task-people);
   color: var(--ink);
 }
 #institutions-root :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
@@ -30,7 +31,7 @@
 /* Reserve the chip row so the sort row below does not move when the type chips fill in after data loads (CLS). */
 #institutions-root #institution-type-chips { min-height: 2.75rem; align-items: center; }
 #institutions-root .chip-button { border: 1px solid var(--atlas-boundary); border-radius: var(--atlas-radius-pill); padding: 0.28rem 0.7rem; color: var(--brand-dark); background: var(--surface); font-size: 0.85rem; }
-#institutions-root .chip-button[aria-pressed="true"] { border-color: var(--brand); color: var(--atlas-on-brand); background: var(--brand); }
+#institutions-root .chip-button[aria-pressed="true"] { border-color: var(--atlas-task); color: var(--atlas-ink); background: var(--atlas-task); }
 #institutions-root .institution-sort-row { display: flex; flex-wrap: wrap; gap: var(--atlas-space-3) var(--atlas-space-4); align-items: end; }
 #institutions-root .institution-sort-row .atlas-field { min-width: 12rem; flex: 1 1 12rem; max-width: 22rem; }
 #institutions-root .institution-collab-field { align-self: center; }
@@ -63,7 +64,7 @@
 #institutions-root .top-experts ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
 #institutions-root .top-experts li { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; align-items: center; }
 #institutions-root .top-experts .expert-name { font-weight: 700; }
-#institutions-root .topic-bar { display: block; width: 100%; height: 0.85rem; border-radius: 0.3rem; overflow: hidden; background: var(--atlas-sunken); }
+#institutions-root .topic-bar { display: block; width: 100%; height: 0.85rem; border-radius: var(--atlas-radius-control); overflow: hidden; background: var(--atlas-sunken); }
 #institutions-root .topic-bar rect { stroke: var(--surface); stroke-width: 2px; vector-effect: non-scaling-stroke; }
 #institutions-root .topic-bar-note { margin: 0; color: var(--muted); font-size: 0.8rem; }
 
@@ -111,7 +112,7 @@
 
 /* Tier view: each tier is a card, each institution a row card with its rank-range bar in brand colour. */
 #institutions-root #institution-tiers > .atlas-callout { margin: 0 0 var(--atlas-space-3); }
-#institutions-root .tier-group { margin: 0 0 var(--atlas-space-3); border: 1px solid var(--line); border-radius: var(--atlas-radius-card); background: var(--surface); box-shadow: var(--atlas-shadow-raised); }
+#institutions-root .tier-group { margin: 0 0 var(--atlas-space-3); border: 1px solid var(--line); border-radius: var(--atlas-radius-card); background: var(--surface); }
 #institutions-root .tier-group > summary { display: flex; min-height: 2.75rem; align-items: center; padding: var(--atlas-space-3) var(--atlas-space-4); cursor: pointer; color: var(--ink); font-family: var(--atlas-font-display); font-size: var(--atlas-type-subsection-size); font-weight: 650; }
 #institutions-root .tier-list { display: grid; gap: var(--atlas-space-2); margin: 0; padding: 0 var(--atlas-space-3) var(--atlas-space-3); list-style: none; }
 #institutions-root .tier-row { display: grid; grid-template-columns: minmax(11rem, 2.2fr) minmax(0, auto) minmax(0, auto) minmax(9rem, 2.4fr) minmax(0, auto); gap: var(--atlas-space-1) var(--atlas-space-3); align-items: center; padding: var(--atlas-space-2) var(--atlas-space-3); border: 1px solid var(--line); border-radius: var(--atlas-radius-control); background: var(--surface); font-size: 0.9rem; }

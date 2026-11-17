@@ -82,7 +82,7 @@ PROBES: dict[str, tuple[tuple[str, ...], bool]] = {
     "td": (("main td",), False),
 }
 BANNED_FONTS = frozenset({"Palatino Linotype", "Times New Roman", "Arial"})
-DISPLAY_FONT = "Barlow Semi Condensed"
+DISPLAY_FONT = "Archivo"
 SYSTEM_BODY_FACES = frozenset(
     {"Roboto", "Helvetica Neue", "Noto Sans", "system-ui", "-apple-system", "BlinkMacSystemFont"}
 )
@@ -172,12 +172,15 @@ def font_problems(fonts: Mapping[str, list[str]]) -> list[str]:
                 problems.append(f"{probe} renders {family}")
     for probe in ("h1", "h2"):
         families = fonts.get(probe) or []
-        # Weight variants are reported as their own family, e.g. "Barlow Semi Condensed SemiBold".
+        # Weight variants are reported as their own family, e.g. "Archivo ExtraBold".
         if families and not families[0].startswith(DISPLAY_FONT):
             problems.append(f"{probe} renders {families[0]}, not {DISPLAY_FONT}")
     body = fonts.get("p") or []
-    if body and not body[0].startswith("Segoe UI") and body[0] not in SYSTEM_BODY_FACES:
-        problems.append(f"p renders {body[0]}, not the system face")
+    # VD-25a: body text is Archivo too (one grotesk); the system face stays allowed.
+    face = body[0] if body else ""
+    accepted = face.startswith(("Segoe UI", DISPLAY_FONT)) or face in SYSTEM_BODY_FACES
+    if body and not accepted:
+        problems.append(f"p renders {body[0]}, not Archivo or the system face")
     return problems
 
 

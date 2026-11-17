@@ -179,10 +179,11 @@ def test_ux30_banner_semantics_are_retained_with_filter_chip_presentation() -> N
     chip = re.search(r"\.ev-table-root\.ev-table-selection\s*\{([^}]*)\}", css, flags=re.DOTALL)
     assert chip is not None
     assert "display: inline-flex" in chip.group(1)
-    assert "border-radius: 999px" in chip.group(1)
+    assert "border-radius: var(--atlas-radius-pill)" in chip.group(1)
     assert "background: var(--theme-background-alt)" in chip.group(1)
     assert re.search(
-        r"\.ev-table-root\.ev-table-selection button\s*\{[^}]*border-radius: 999px",
+        r"\.ev-table-root\.ev-table-selection button\s*\{[^}]*"
+        r"border-radius: var\(--atlas-radius-pill\)",
         css,
         flags=re.DOTALL,
     )

@@ -216,3 +216,6 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-16 | VD-22 implementation | Claude Haiku developer | Overview bands, Start here, How it works | Accepted | 1 session |
 | 2026-11-16 | VD-23 implementation | Claude Haiku developer | Monitoring map toolbar, full screen, filter sidebar | Accepted | 1 session |
 | 2026-11-16 | VD-24 implementation | Claude Haiku developer | headings, page heads, shared tooltips | Accepted after one resume (90-turn cap); lead fixed one test and formatting | 1 session |
+| 2026-11-17 | VD-25a shell/components | Claude Haiku developer | font face, brand mark, shell, components, tests | Accepted; lead trimmed the font to the budget | 1 session |
+| 2026-11-17 | VD-25b Overview | Claude Haiku developer | Overview from reference, live counts | Accepted; lead fixed test_ux14 and a chart marker | 1 session |
+| 2026-11-17 | VD-25c page colours | Claude Haiku developer | task colour law, palette.js, page CSS | Accepted; lead remapped expert_page.js, expert.html, SEO CSS | 1 session |

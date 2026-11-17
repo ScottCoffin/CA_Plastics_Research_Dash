@@ -12,6 +12,18 @@
 }
 
 .about-limitations-card {
-  border-left: 4px solid var(--theme-foreground-focus);
+  position: relative;
+  border: 1px solid var(--atlas-line);
   background: var(--theme-background-alt);
+}
+
+/* A small square plane in the top-left corner. The About page has no task colour, so it is ink. */
+.about-limitations-card::before {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 0.6rem;
+  height: 0.6rem;
+  background: var(--atlas-plane-ink);
+  content: "";
 }

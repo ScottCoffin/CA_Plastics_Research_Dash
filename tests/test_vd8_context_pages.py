@@ -70,4 +70,6 @@ def test_glossary_terms_link_to_preserved_hash_targets_and_highlight() -> None:
     assert "color: var(--atlas-on-brand)" in styles
     assert ".glossary dt:target" in styles
     assert "var(--atlas-brand-wash)" in styles
-    assert 'font-family: "Barlow Semi Condensed"' in styles
+    # VD-25a: the glossary uses Archivo, through the display token or its own @font-face.
+    assert "Barlow Semi Condensed" not in styles
+    assert "var(--atlas-font-display)" in styles or 'font-family: "Archivo"' in styles

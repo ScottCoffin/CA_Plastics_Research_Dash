@@ -68,18 +68,24 @@ def test_image_metrics_matches_pixel_function(tmp_path: Path) -> None:
 
 def test_font_problems_accepts_target_faces() -> None:
     target = {
-        "h1": ["Barlow Semi Condensed"],
-        "h2": ["Barlow Semi Condensed"],
+        "h1": ["Archivo"],
+        "h2": ["Archivo"],
         "p": ["Segoe UI"],
-        "sidebar_link": ["Barlow Semi Condensed"],
-        "header": ["Barlow Semi Condensed"],
+        "sidebar_link": ["Archivo"],
+        "header": ["Archivo"],
     }
     assert design_snapshots.font_problems(target) == []
 
 
 def test_font_problems_accepts_weight_variants_of_target_faces() -> None:
-    weighted = {"h2": ["Barlow Semi Condensed SemiBold"], "p": ["Segoe UI Semibold"]}
+    weighted = {"h2": ["Archivo ExtraBold"], "p": ["Segoe UI Semibold"]}
     assert design_snapshots.font_problems(weighted) == []
+
+
+def test_font_problems_accepts_archivo_body_text() -> None:
+    # VD-25a: body text is Archivo too, so p may render Archivo or one of its weights.
+    assert design_snapshots.font_problems({"p": ["Archivo"]}) == []
+    assert design_snapshots.font_problems({"p": ["Archivo SemiBold"]}) == []
 
 
 def test_font_problems_flags_banned_and_wrong_faces() -> None:
@@ -88,8 +94,8 @@ def test_font_problems_flags_banned_and_wrong_faces() -> None:
     assert "h1 renders Palatino Linotype" in problems
     assert "p renders Times New Roman" in problems
     assert "header renders Arial" in problems
-    assert "h1 renders Palatino Linotype, not Barlow Semi Condensed" in problems
-    assert "p renders Times New Roman, not the system face" in problems
+    assert "h1 renders Palatino Linotype, not Archivo" in problems
+    assert "p renders Times New Roman, not Archivo or the system face" in problems
 
 
 def test_route_keys_match_baseline() -> None:

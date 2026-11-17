@@ -54,7 +54,7 @@ def test_postbuild_fix_html_rewrites_template():
 @pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
 def test_postbuild_font_preload_is_relative_and_idempotent():
     preload = (
-        '<link rel="preload" href="./assets/fonts/BarlowSemiCondensed-Bold-latin.woff2" '
+        '<link rel="preload" href="./assets/fonts/Archivo-Variable-latin.woff2" '
         'as="font" type="font/woff2" crossorigin>'
     )
     sample = f"<html><head>{preload}{preload}</head><body></body></html>"

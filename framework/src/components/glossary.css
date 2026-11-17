@@ -1,8 +1,9 @@
 .glossary dt {
   margin: 0.75rem 0 0;
   padding: 0.35rem 0.6rem;
-  border-radius: 0.35rem;
-  font-family: "Barlow Semi Condensed", system-ui, sans-serif;
+  border-radius: var(--atlas-radius-control);
+  font-family: var(--atlas-font-display);
+  font-stretch: 88%;
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -39,7 +40,22 @@
 .glossary dt:target,
 .glossary dt:target + dd {
   background: var(--atlas-brand-wash);
-  box-shadow: inset 0.25rem 0 var(--theme-foreground-focus);
+  border-left: 1px solid var(--atlas-plane-ink);
+}
+
+/* The targeted term keeps a small square plane at its top-left corner. The Glossary has no task colour. */
+.glossary dt:target {
+  position: relative;
+}
+
+.glossary dt:target::before {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--atlas-plane-ink);
+  content: "";
 }
 
 .glossary dt:target + dd {

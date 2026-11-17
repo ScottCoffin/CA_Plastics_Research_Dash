@@ -65,6 +65,8 @@ def test_pages_render_time_element_and_start_row() -> None:
     about = (SRC / "about.md").read_text(encoding="utf-8")
     for text in (index, about):
         assert "<time datetime=${snapshot.refreshIso}>" in text
-    assert 'id="start-here"' in index
-    for href in ("./experts", "./funding", "./monitoring"):
-        assert f'<li><a href="{href}">' in index
+    # VD-25: the Start here row became the four door rows beside the California figure.
+    assert '<ul class="overview-doors" aria-label="Start here">' in index
+    for href in ("./experts", "./funding", "./monitoring", "./evidence"):
+        assert 'class="overview-door" data-plane=' in index
+        assert f'href="{href}" style="--c: var(--atlas-task-' in index

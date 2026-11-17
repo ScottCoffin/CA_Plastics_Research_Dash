@@ -8,6 +8,7 @@
   --brand-dark: var(--atlas-brand-strong);
   --line: var(--atlas-line);
   --focus: var(--atlas-accent);
+  --atlas-task: var(--atlas-task-people);
   color: var(--ink);
   min-height: calc(100vh - 6rem);
   max-width: 72rem;
@@ -72,9 +73,9 @@
   border: 1px solid var(--atlas-boundary); border-radius: var(--atlas-radius-pill); background: var(--atlas-surface); color: var(--ink); font-family: inherit; font-weight: 600; cursor: pointer;
 }
 #institution-root .inst-topic-chip.matrix { border-style: dashed; font-weight: 500; color: var(--atlas-text); }
-#institution-root .inst-topic-chip[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: var(--atlas-on-brand); }
-#institution-root .inst-topic-chip[aria-pressed="true"] .inst-topic-count { color: var(--atlas-on-brand); }
-#institution-root .inst-topic-chip .topic-dot { width: 0.6rem; height: 0.6rem; border-radius: var(--atlas-radius-pill); flex: none; box-shadow: 0 0 0 1px var(--surface); }
+#institution-root .inst-topic-chip[aria-pressed="true"] { background: var(--atlas-task); border-color: var(--atlas-task); color: var(--atlas-ink); }
+#institution-root .inst-topic-chip[aria-pressed="true"] .inst-topic-count { color: var(--atlas-ink); }
+#institution-root .inst-topic-chip .topic-dot { width: 0.6rem; height: 0.6rem; border-radius: var(--atlas-radius-pill); flex: none; }
 #institution-root .inst-topic-count { font-weight: 700; color: var(--muted); }
 #institution-root .inst-filter-row { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; align-items: center; margin-top: 0.75rem; }
 #institution-root .inst-filter-note { margin: 0.5rem 0; font-weight: 600; }

@@ -6,7 +6,7 @@
 .ev-table-root .ev-field { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.85rem; font-weight: 600; color: var(--atlas-muted); }
 .ev-table-root .ev-field input, .ev-table-root .ev-field select {
   font: inherit; font-weight: 400; min-height: 2.1rem; padding: 0.3rem 0.5rem;
-  border: 1px solid var(--atlas-boundary); border-radius: 6px; background: var(--atlas-surface); color: var(--atlas-text);
+  border: 1px solid var(--atlas-boundary); border-radius: var(--atlas-radius-control); background: var(--atlas-surface); color: var(--atlas-text);
 }
 .ev-table-root .ev-field-search input { min-width: 14rem; }
 .ev-table-root .ev-field input[type="number"] { width: 7.5rem; }
@@ -15,7 +15,7 @@
   flex: 0 0 auto; width: 1.5rem; height: 1.5rem; min-width: 1.5rem; min-height: 1.5rem; margin: 0;
 }
 .ev-table-root .ev-btn {
-  font: inherit; font-size: 0.9rem; min-height: 2.1rem; padding: 0.35rem 0.8rem; border-radius: 6px;
+  font: inherit; font-size: 0.9rem; min-height: 2.1rem; padding: 0.35rem 0.8rem; border-radius: var(--atlas-radius-control);
   border: 1px solid var(--atlas-brand); background: var(--atlas-surface); color: var(--atlas-brand); cursor: pointer;
 }
 .ev-table-root .ev-btn:hover:not(:disabled) { background: var(--atlas-brand-wash); }
@@ -23,7 +23,7 @@
 .ev-table-root :focus-visible { outline: 3px solid var(--atlas-accent); outline-offset: 2px; }
 .ev-table-root .ev-status { margin: 0.25rem 0 0.5rem; color: var(--atlas-muted); font-size: 0.9rem; }
 .ev-table-root .ev-hint { margin: 0 0 0.6rem; color: var(--atlas-muted); font-size: 0.9rem; }
-.ev-table-root .ev-table-scroll { overflow-x: auto; border: 1px solid var(--atlas-line); border-radius: 8px; }
+.ev-table-root .ev-table-scroll { overflow-x: auto; border: 1px solid var(--atlas-line); border-radius: var(--atlas-radius-card); }
 .ev-table-root table.ev-works { width: 100%; min-width: 52rem; border-collapse: collapse; background: var(--atlas-surface); }
 .ev-table-root caption { caption-side: top; text-align: left; padding: 0.5rem 0.75rem; font-weight: 600; color: var(--atlas-text); }
 .ev-table-root th, .ev-table-root td { text-align: left; vertical-align: top; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--atlas-line); }
@@ -36,7 +36,7 @@
 .ev-table-root .ev-title { font-weight: 600; }
 .ev-table-root .ev-authors { margin-top: 0.2rem; font-size: 0.85rem; color: var(--atlas-muted); }
 .ev-table-root .ev-badge {
-  display: inline-block; margin-left: 0.35rem; padding: 0.05rem 0.4rem; border-radius: 4px;
+  display: inline-block; margin-left: 0.35rem; padding: 0.05rem 0.4rem; border-radius: var(--atlas-radius-control);
   background: var(--atlas-accent); color: var(--atlas-surface); font-size: 0.75rem; font-weight: 700; vertical-align: middle;
 }
 .ev-table-root .ev-links { display: flex; flex-direction: column; gap: 0.25rem; }
@@ -73,12 +73,12 @@
 .ev-table-root.ev-table-selection {
   display: inline-flex; flex-wrap: wrap; gap: 0.35rem 0.6rem; align-items: center; max-width: 100%;
   margin: 0 0 0.75rem; padding: 0.3rem 0.55rem; border: 1px solid var(--theme-foreground-faint);
-  border-radius: 999px; background: var(--theme-background-alt); color: var(--theme-foreground); font-size: 0.9rem;
+  border-radius: var(--atlas-radius-pill); background: var(--theme-background-alt); color: var(--theme-foreground); font-size: 0.9rem;
 }
 .ev-table-root.ev-table-selection[hidden] { display: none; }
 .ev-table-root.ev-table-selection .ev-table-selection-text { flex: 1 1 14rem; min-width: 0; }
 .ev-table-root.ev-table-selection button {
-  font: inherit; font-size: 0.85rem; min-height: 2rem; padding: 0.25rem 0.65rem; border-radius: 999px;
+  font: inherit; font-size: 0.85rem; min-height: 2rem; padding: 0.25rem 0.65rem; border-radius: var(--atlas-radius-pill);
   border: 1px solid var(--theme-foreground-focus); background: var(--theme-background);
   color: var(--theme-foreground-focus); cursor: pointer;
 }

@@ -1,16 +1,36 @@
-"""Focused contracts for the VD-5 Overview presentation."""
+"""Focused contracts for the VD-5 Overview presentation (rebuilt as the VD-25b Plane Poster)."""
 
 from __future__ import annotations
 
 import re
-import xml.etree.ElementTree as ET
 from pathlib import Path
-from urllib.parse import unquote_to_bytes
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "framework" / "src" / "index.md"
 CSS = ROOT / "framework" / "src" / "components" / "overview.css"
-MASK = ROOT / "framework" / "src" / "assets" / "design" / "ca_contours_mask.svg"
+
+# Live counts: the About stats (authors, California institutions) and metadata.counts (the rest).
+COUNT_KEYS = {
+    "authors",
+    "california_institutions",
+    "awards",
+    "monitoring_samples",
+    "monitoring_sources",
+    "network_experts",
+    "network_links",
+    "plastic_works",
+}
+
+
+def _markup(page: str) -> str:
+    start = page.index('<div class="atlas-overview">')
+    return page[start : page.index("\n```js", start)]
+
+
+def _block(css: str, selector: str) -> str:
+    match = re.search(rf"(?m)^{re.escape(selector)} \{{([^}}]*)\}}", css)
+    assert match, f"missing rule {selector}"
+    return match.group(1)
 
 
 def test_overview_stylesheet_does_not_replace_the_global_style() -> None:
@@ -26,20 +46,29 @@ def test_overview_hero_copy_and_single_heading() -> None:
 
     assert page.count("<h1 ") == 1
     assert (
-        '<h1 class="atlas-hero__title" id="atlas-overview-title">CA Plastics Research Atlas</h1>'
-        in page
-    )
-    # VD-22: the eyebrow line (California · 32.5° to 42° N · Plastics research since 1950) is gone.
-    assert "atlas-hero__eyebrow" not in page
-    assert "32.5° to 42° N" not in page
+        '<h1 class="overview-title" id="overview-title">'
+        "California plastics research, in four parts.</h1>"
+    ) in page
+    assert (
+        "Who studies plastics in California, what is monitored, what is funded, and what has been "
+        "published. Rebuilt from open sources every day."
+    ) in page
+    # The old eyebrow line, hero motif and Quick routes block are gone.
+    assert "Plastics research since 1950" not in page
     assert "California · 32.5°" not in page
     assert "Quick routes" not in page
-    assert (
-        "A transparent starting point for finding plastic-related research connected to California."
-        in page
-    )
+    assert "atlas-hero" not in page
     assert "Loading snapshot refresh time" in page
+
+
+def test_refresh_time_line_sits_in_the_static_notes() -> None:
+    page = INDEX.read_text(encoding="utf-8")
+
     assert "<time datetime=${snapshot.refreshIso}>${snapshot.refreshDisplay}</time>" in page
+    notes = page.index("<h3>Every number has a source</h3>")
+    refresh = page.index('<p class="overview-refresh" id="overview-refresh" aria-live="polite">')
+    assert notes < refresh < page.index("</section>", refresh)
+    assert page.count('id="overview-refresh"') == 1
 
 
 def test_hero_search_is_the_site_wide_search() -> None:
@@ -47,153 +76,93 @@ def test_hero_search_is_the_site_wide_search() -> None:
     page = INDEX.read_text(encoding="utf-8")
     config = (ROOT / "framework" / "observablehq.config.js").read_text(encoding="utf-8")
 
-    form = re.search(r'<form class="atlas-hero__search"(.*?)</form>', page, re.DOTALL)
+    form = re.search(r'<form class="overview-search"(.*?)</form>', page, re.DOTALL)
     assert form
     assert "data-atlas-site-search" in form.group(1)
     assert 'action="./search" method="get"' in form.group(1)
     assert 'type="search" name="q"' in form.group(1)
+    assert '<label class="visually-hidden" for="overview-q">' in form.group(1)
+    assert page.count("data-atlas-site-search") == 1
     assert "data-atlas-expert-search" not in page
     assert "data-atlas-expert-search" not in config
 
 
-def test_four_snapshot_tiles_three_tasks_and_eight_entries() -> None:
+def test_counts_are_live_placeholders_not_typed_numbers() -> None:
     page = INDEX.read_text(encoding="utf-8")
-    expected_stats = {"Authors", "Works", "Institutions", "California institutions"}
-    skeleton_labels = re.findall(r'<dt class="atlas-kpi__label">([^<]+)</dt>', page)
-    task_cards = re.findall(r'<li>\s*<a href="([^"]+)">(.*?)</a>\s*</li>', page, re.DOTALL)
-    entries = re.findall(r'<a class="atlas-entry" href="([^"]+)">', page)
+    markup = _markup(page)
 
-    assert skeleton_labels == ["Authors", "Works", "Institutions", "California institutions"]
-    assert page.count('class="atlas-kpi atlas-kpi--loading"') == 4
-    assert "const statLabels = [...statIcons.keys()]" in page
-    assert "snapshot.stats.map(({label, value, note}) => [label, {value, note}])" in page
-    assert "noteNode.textContent = stat?.note" in page
-    assert 'class="stat-note"' in page
-    assert 'noteNode.className = "atlas-kpi__note stat-note"' in page
-    assert len(task_cards) == 3
-    assert {href for href, _ in task_cards} == {"./experts", "./funding", "./monitoring"}
-    assert all('data-atlas-icon="' in card for _, card in task_cards)
-    assert len(entries) == 8
-    assert {
-        "./experts",
-        "./network",
-        "./institutions",
-        "./monitoring",
-        "./funding",
-        "./evidence",
-        "./policy",
-        "./resources",
-    } == set(entries)
-    assert expected_stats.issubset(set(skeleton_labels))
-
-
-def test_overview_raw_html_blocks_start_at_column_zero() -> None:
-    page = INDEX.read_text(encoding="utf-8")
-    markup = page[
-        page.index('<div class="atlas-overview">') : page.index(
-            "\n```js", page.index('<div class="atlas-overview">')
-        )
-    ]
-
-    # VD-22: every home section is a full-width band (overview-band), including How it works.
-    starts = (
-        '<section class="overview-stats overview-band overview-band--sunken"',
-        '<section class="overview-section overview-band overview-band--surface" id="start-here"',
-        '<section class="overview-section overview-band overview-band--sunken"'
-        ' aria-labelledby="explore-atlas-title"',
-        '<section class="overview-section overview-band overview-band--surface"'
-        ' aria-labelledby="how-it-works"',
-    )
-    for start in starts:
-        assert re.search(rf"(?m)^{re.escape(start)}", page)
-    assert "\n\n" not in markup
-
-
-def test_entry_counts_use_only_existing_snapshot_metadata() -> None:
-    page = INDEX.read_text(encoding="utf-8")
-    css = CSS.read_text(encoding="utf-8")
-    count_keys = re.findall(r'data-overview-count="([^"]+)"', page)
-    count_groups = re.findall(
-        r'<span class="atlas-entry__meta" data-overview-count-group hidden>(.*?)</span></span>',
-        page,
-    )
-
-    # VD-13: the Funding, Monitoring, Network and Evidence cards read build_metadata counts.
-    assert set(count_keys) == {
-        "Authors",
-        "Institutions",
-        "California institutions",
-        "Awards",
-        "Monitoring samples",
-        "Monitoring sources",
-        "Network experts",
-        "Network links",
-        "Plastic-related works",
-    }
-    assert len(count_groups) == 6
+    assert set(re.findall(r'data-count="([^"]+)"', markup)) == COUNT_KEYS
+    # The snapshot numbers from the approved reference must not be typed into the page. SVG path
+    # data is skipped: its coordinates include numbers such as -211.
+    prose = re.sub(r"<svg.*?</svg>", "", markup, flags=re.S)
+    for typed in ("2,635", "1,579", "1,245", "503", "298", "211"):
+        assert not re.search(rf"\b{re.escape(typed)}\b", prose), typed
+    assert "Unavailable" not in markup
     assert "counts.authors" not in page
     assert "counts.works" not in page
     assert "counts.institutions" not in page
     assert "counts.ca_institutions" not in page
-    assert "[data-overview-count-group]" in page
-    assert 'data-overview-suffix="plastic-related works"' in page
-    assert ".atlas-entry__meta[hidden]" in css
-    assert "400 experts" not in page and "1,241 links" not in page
-    assert "samples ·" not in page and "awards ·" not in page
 
 
-def test_coastline_uses_a_css_mask_without_javascript_motif_work() -> None:
+def test_counts_load_through_the_atlas_helpers_and_hide_when_missing() -> None:
+    page = INDEX.read_text(encoding="utf-8")
+    js = " ".join(re.findall(r"```js\s+(.*?)```", page, re.DOTALL))
+
+    assert 'import {loadJson, aboutViewModel, formatCount} from "./components/atlas.js";' in js
+    assert 'await loadJson("build_metadata.json")' in js
+    assert "aboutViewModel(metadata, null)" in js
+    assert "metadata?.counts" in js
+    assert "node.dataset.count" in js
+    # A group with any missing value is hidden; nothing reads "Unavailable" in the page.
+    assert 'querySelectorAll("[data-count-group]")' in js
+    assert "group.hidden = !ready" in js
+    assert 'text && text !== "Unavailable"' in js
+    # Definitions for the two About counts travel with their values.
+    assert 'querySelectorAll("[data-stat-note]")' in js
+    assert 'data-stat-note="Authors"' in page
+    assert 'data-stat-note="California institutions"' in page
+
+
+def test_counts_reserve_their_height_before_the_value_arrives() -> None:
+    css = CSS.read_text(encoding="utf-8")
+
+    assert "min-height: 1.4em;" in _block(css, ".overview-door__count")
+    assert "min-height: 1em;" in _block(css, ".overview-facts b")
+    assert "min-height: 1.5em;" in _block(
+        css, "#observablehq-main .overview-notes .overview-refresh"
+    )
+    assert "aspect-ratio: 1000 / 260;" in _block(css, ".overview-chart__frame")
+    assert "min-width: 760px;" in _block(css, ".overview-chart__frame")
+
+
+def test_no_hex_literals_in_the_overview_page_or_stylesheet() -> None:
     page = INDEX.read_text(encoding="utf-8")
     css = CSS.read_text(encoding="utf-8")
-    js_blocks = re.findall(r"```js\s+(.*?)```", page, re.DOTALL)
-    root = ET.parse(MASK).getroot()
-    paths = root.findall("{http://www.w3.org/2000/svg}path")
 
-    assert '<div class="atlas-hero__motif" aria-hidden="true"></div>' in page
-    mask_uri = re.search(r'mask-image: url\("data:image/svg\+xml,([^"]+)"\)', css)
-    webkit_mask_uri = re.search(r'-webkit-mask-image: url\("data:image/svg\+xml,([^"]+)"\)', css)
-    assert mask_uri and webkit_mask_uri
-    assert mask_uri.group(1) == webkit_mask_uri.group(1)
-    assert unquote_to_bytes(mask_uri.group(1)) == MASK.read_bytes()
-    assert "assets/design/" not in css
-    assert all("atlas-hero__motif" not in block for block in js_blocks)
-    assert root.get("fill") == "none"
-    assert paths and all(path.get("stroke") == "white" for path in paths)
-    assert MASK.stat().st_size <= 20 * 1024
-    assert ".atlas-hero .visually-hidden" in css
-    assert ".atlas-task-list > li > a:focus-visible" in css
-    assert "outline: 3px solid var(--atlas-accent)" in css
+    assert not re.search(r"#[0-9a-fA-F]{3,8}\b", css)
+    assert not re.search(r"#[0-9a-fA-F]{3,8}\b", page)
+    assert "fonts.googleapis" not in page and "fonts.googleapis" not in css
 
 
-def test_phone_layout_keeps_two_by_two_stats_and_one_column_cards() -> None:
+def test_raw_html_blocks_start_at_column_zero_and_have_no_blank_lines() -> None:
+    page = INDEX.read_text(encoding="utf-8")
+    markup = _markup(page)
+
+    # Blank lines end a raw HTML block in Markdown, so the whole composition stays one block.
+    assert "\n\n" not in markup
+    for start in (
+        '<section class="overview-hero" aria-labelledby="overview-title">',
+        '<section class="overview-band" id="people"',
+        '<section class="overview-clock" aria-labelledby="overview-clock-title">',
+    ):
+        assert re.search(rf"(?m)^{re.escape(start)}", page), start
+
+
+def test_phone_and_tablet_layout_stack_the_hero_and_bands() -> None:
     css = CSS.read_text(encoding="utf-8")
-    mobile = css.split("@media (max-width: 42rem)", maxsplit=1)[1]
+    tablet = css.split("@media (max-width: 64rem)", maxsplit=1)[1].split("@media", maxsplit=1)[0]
+    phone = css.split("@media (max-width: 42rem)", maxsplit=1)[1].split("@media", maxsplit=1)[0]
 
-    assert ".overview-stats .atlas-kpis" in mobile
-    assert "grid-template-columns: repeat(2, minmax(0, 1fr));" in mobile
-    assert ".atlas-task-list,\n  .atlas-entry-grid" in mobile
-    assert "grid-template-columns: minmax(0, 1fr);" in mobile
-
-
-def test_desktop_task_grid_uses_full_content_width() -> None:
-    css = CSS.read_text(encoding="utf-8")
-    task_grid = re.search(r"\.atlas-task-list\s*\{([^}]*)\}", css)
-
-    assert task_grid
-    assert "width: 100%;" in task_grid.group(1)
-    assert "max-width: none;" in task_grid.group(1)
-
-
-def test_vd18_hero_motif_and_start_here_links_match_the_style_tile() -> None:
-    # VD-18: the coastline strokes use the tile colour at full mask alpha, and the Start-here
-    # rows carry no underline in any state (style.css underlines links inside list items).
-    css = CSS.read_text(encoding="utf-8")
-    motif = re.search(r"\.atlas-hero__motif \{([^}]*)\}", css)
-
-    assert motif
-    assert "background-color: var(--atlas-brand-tint);" in motif.group(1)
-    assert "opacity: 1;" in motif.group(1)
-    assert "#observablehq-main .atlas-task-list a:hover" in css
-    assert ".atlas-task__title {" in css
-    # VD-22: the Start-here subtitles are removed, so their style goes with them.
-    assert ".atlas-task__text" not in css
+    assert ".overview-hero__grid," in tablet and "grid-template-columns: minmax(0, 1fr);" in tablet
+    assert "order: -1;" in phone
+    assert "display: none;" in phone
