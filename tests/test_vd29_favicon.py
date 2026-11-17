@@ -22,3 +22,9 @@ def test_static_icons_exist_for_non_framework_pages() -> None:
     assert (ROOT / "site" / "favicon.ico").read_bytes()[:4] == b"\x00\x00\x01\x00"
     assert (ROOT / "site" / "assets" / "favicon.svg").is_file()
     assert (ROOT / "site" / "assets" / "apple-touch-icon.png").is_file()
+
+
+def test_postbuild_unwraps_the_page_title_self_link() -> None:
+    # Owner 2026-11-17: page titles are not clickable; section headings keep their anchors.
+    postbuild = (ROOT / "framework" / "scripts" / "postbuild.mjs").read_text(encoding="utf-8")
+    assert r'.replace(/(<h1\b[^>]*>)<a class="observablehq-header-anchor"' in postbuild

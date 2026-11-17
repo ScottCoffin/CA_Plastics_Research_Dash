@@ -87,6 +87,9 @@ function fixTemplate(html) {
     .replace(/(<meta name="viewport" content="[^"]*?),\s*maximum-scale=1/, "$1")
     .replace(/<input id="observablehq-sidebar-toggle" type="checkbox" title="([^"]*)">/,
       '<input id="observablehq-sidebar-toggle" type="checkbox" title="$1" aria-label="$1">')
+    // Owner 2026-11-17: page titles are not links. Framework wraps every heading with an id in a
+    // self-link; unwrap it on h1 only (section headings keep their anchors for deep links).
+    .replace(/(<h1\b[^>]*>)<a class="observablehq-header-anchor" href="#[^"]*">([\s\S]*?)<\/a>(<\/h1>)/g, "$1$2$3")
     // Inject after Framework's build so it leaves the assembled site's local URL intact.
     .replace("</head>", `${FONT_PRELOAD}\n</head>`);
 }

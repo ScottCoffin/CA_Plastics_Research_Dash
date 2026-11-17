@@ -171,3 +171,4 @@
 | 2026-11-17 | VD-27 + EM-17 (partial) | Owner feedback round 3 (favicon/mark, full-width notices, Funding heatmap filtering, Experts/Network filters, Overview pipeline, About rewrite with living flow) and the OPC Solutions track panel with review app; owner review H28 | this commit |
 | 2026-11-17 | VD-28 | Network mobile search, full-screen details sheet, exit button | this commit |
 | 2026-11-17 | VD-29 | Tooltips clamped to the viewport, smaller help icon, boxed text full width, favicon encoding fix; owner switched Pages back to GitHub Actions | this commit |
+| 2026-11-17 | VD-29 follow-up | Page titles no longer self-links (postbuild unwraps h1 anchors) | this commit |
