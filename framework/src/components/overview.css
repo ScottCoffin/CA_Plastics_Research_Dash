@@ -554,10 +554,11 @@
 }
 
 .overview-engine__head {
-  max-width: 62rem;
+  max-width: none;
 }
 
 #observablehq-main .overview-engine__title {
+  max-width: none;
   margin: 0.25rem 0 0;
   font-family: var(--atlas-font-display);
   font-size: clamp(1.9rem, 1.4rem + 1.8vw, 2.75rem);
@@ -567,7 +568,7 @@
 
 #observablehq-main .overview-engine__lead,
 #observablehq-main .overview-engine__types {
-  max-width: 62rem;
+  max-width: none;
   margin: 0.875rem 0 0;
   font-size: 1.08rem;
 }

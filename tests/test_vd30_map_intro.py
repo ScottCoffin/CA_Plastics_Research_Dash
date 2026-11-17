@@ -1,7 +1,7 @@
 """VD-30: the homepage map intro. The four planes are groups that carry their own California clip,
 travel in from their own edges on a sampled spring played with the Web Animations API (no library:
-Motion cost about 64 KB gzip, over the hero budget), and are guarded by sessionStorage, reduced
-motion, visibility and API support. Browser checks run outside pytest.
+Motion cost about 64 KB gzip, over the hero budget). It plays on every load (owner 2026-11-17)
+and is guarded by reduced motion, visibility and API support. Browser checks run outside pytest.
 """
 
 from __future__ import annotations
@@ -116,13 +116,11 @@ def test_each_plane_starts_from_its_own_edge() -> None:
 def test_intro_is_guarded_by_session_reduced_motion_visibility_and_support() -> None:
     js = _js(INDEX.read_text(encoding="utf-8"))
 
-    assert 'const KEY = "atlas-map-intro";' in js
-    # sessionStorage is read and written inside try blocks, so a blocked store cannot throw.
-    assert re.search(r"try \{ played = sessionStorage\.getItem\(KEY\)", js)
-    assert re.search(r'try \{ sessionStorage\.setItem\(KEY, "1"\); \} catch \{\}', js)
+    # Owner 2026-11-17: the intro plays on every load, so there is no session guard.
+    assert "sessionStorage" not in js and "atlas-map-intro" not in js
     assert 'matchMedia("(prefers-reduced-motion: reduce)").matches' in js
     assert "!figure.getClientRects().length" in js
-    assert "if (!svg || pieces.length !== 4 || played || reduced" in js
+    assert "if (!svg || pieces.length !== 4 || reduced" in js
     # Without the Web Animations API the map stays at rest.
     assert 'typeof Element.prototype.animate !== "function"' in js
     assert "else { cancelled = true; rest(); }" in js

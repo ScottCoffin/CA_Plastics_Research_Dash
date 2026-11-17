@@ -208,18 +208,15 @@ if (snapshot.refreshDisplay && snapshot.refreshIso) {
 
 ```js
 (async () => {
-  // VD-30: once per browser session the four planes travel in from their own edges and spring into place
+  // VD-30: on every load (owner 2026-11-17) the four planes travel in from their own edges and spring into place
   // (a sampled spring on the Web Animations API, no library). The markup is the finished map; transforms
   // exist only while the intro runs.
-  const KEY = "atlas-map-intro";
   const figure = document.getElementById("overview-figure");
   const svg = figure?.querySelector("svg");
   const hero = figure?.closest(".overview-hero");
   const pieces = [...(figure?.querySelectorAll(".overview-piece") ?? [])];
-  let played = true; // if sessionStorage is blocked, stay still rather than replay on every load
-  try { played = sessionStorage.getItem(KEY) === "1"; } catch {}
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!svg || pieces.length !== 4 || played || reduced || !figure.getClientRects().length) return;
+  if (!svg || pieces.length !== 4 || reduced || !figure.getClientRects().length) return;
 
   // Each plane starts just outside the viewport on its own side: water from above, people from the left,
   // money from the right, evidence from below. Distances come from each plane's box at rest, in CSS px.
@@ -254,7 +251,6 @@ if (snapshot.refreshDisplay && snapshot.refreshIso) {
     piece.style.transformOrigin = "50% 50%";
     piece.style.transform = `translate(${x}px, ${y}px) rotate(${deg}deg)`;
   }
-  try { sessionStorage.setItem(KEY, "1"); } catch {}
 
   // A press or a key during the intro finishes it at once.
   const ac = new AbortController();
