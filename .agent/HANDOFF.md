@@ -1,29 +1,36 @@
-# Handoff — 2026-11-16 — VD-10, VD-13, VD-9
+# Handoff — 2026-11-16 — Visual design checkpoints VD-9..VD-17, UX-32
 
-## Done this run
-- VD-10 display labels (`3d15e753`): `framework/src/components/shared/labels.js`; no F10 slug on the 8 touched routes; URL values unchanged. `docs/VD_10_VERIFICATION.md`.
-- VD-13 Overview counts (`8536a4a8`): six new `build_metadata.json` `counts` keys, cards match their pages; `check_s3_5.py` now checks index counts as a subset. `docs/VD_13_VERIFICATION.md`.
-- VD-9 colour system (this commit): `shared/palette.js`, Okabe-Ito 7 (bars) / 6 (maps, network) + Other, teal ramp with `countFill`, ADR-VD9-PALETTE-2026-11-16. `docs/VD_9_VERIFICATION.md`.
-- Gate: clean-worktree full suite 1,728 passed / 13 skipped; Ruff, links, scaffolds, token (175) and public-text checks; assembled local site axe-clean on 8 routes at desktop and 375 px; ux_tasks 6/6.
-- Workers: four Claude Haiku dispatches (DELEGATION_LOG); each needed one resume after the 30-turn limit.
+## Done this run (all deployed, CI + Pages green)
+- VD-10 labels, VD-13 Overview counts, VD-9 colour system (ADR-VD9-PALETTE), VD-14 network CLS fix,
+  VD-6c Institutions, VD-7b Funding, VD-11 classic/SEO pages, UX-32 accessibility rows,
+  VD-15 context-page headers, VD-16 Evidence Chart/Table, VD-17 0 stylesheet hex literals.
+- VD-12 machine part: `scripts/design_snapshots.py` + `docs/VD_12_VERIFICATION.md`; owner review H25 pending.
+- Fixes found on the way: `check_s3_8.py` DOI false positive (deploy step was silently failing),
+  `check_s3_5.py` counts subset, two `ux19_a11y_pass.py` false positives, ux_tasks task 5 opens More filters.
+- Last full gate (clean worktree): 1,791 passed / 13 skipped; Ruff, links, scaffolds, token (0), public text.
+- Every verification doc: `docs/VD_{9,10,13,14,6C,7B,11,15,16,17,12}_VERIFICATION.md`, `docs/UX_19_ACCESSIBILITY_PASS.md`.
 
 ## Repository state
-- Three commits on `main`, push pending at time of writing (verify `origin/main`).
-- `labels.js` and `palette.js` are force-tracked in the gitignored `components/shared/` folder.
-- Owner's unrelated `.agent/QUESTIONS.md` formatting edit stays uncommitted; only the VD-D9 row was committed.
+- `main` pushed; the last commit is the records commit for this handoff (verify `origin/main`).
+- `labels.js` and `palette.js` are force-tracked in gitignored `framework/src/components/shared/`.
+- Owner's `.agent/QUESTIONS.md` formatting edit is still uncommitted (only the VD-D9 row was committed).
 
-## Findings
-- `/network` live CLS 0.421 at HEAD (pre-existing, `section.net-page`): new task VD-14.
-- `/institutions` CLS 0.199 in 2 of 3 local runs (type-chip row renders after load): noted on VD-6c.
-- VD-5 live LCP 1.9-2.0 s vs 1.1 s gate; ~0.6 s is host drift (unchanged /policy 1.59 s vs 0.99 s baseline). Owner question VD-D9.
-- `scripts/check_s3_1.py` fails on its pinned fixture counts at HEAD too (not in CI).
+## Open findings
+- Live Lighthouse performance on experts/institutions/institution is below the 2026-11-14 baseline in
+  single runs; a same-machine A/B shows no cost from VD-6c/VD-7b; unchanged /policy shows ~0.6 s host drift.
+- VD-5 LCP gate (1.1 s) vs live 1.9-2.0 s: owner question VD-D9.
+- Classic `expert.html` has no sprite icon (moves into the shell with UX-13).
+- `scripts/check_s3_1.py` fails on pinned fixture counts at HEAD (not in CI).
+- At 390 px a second pointer click on the header menu button is blocked by the open sidebar (pre-existing).
 
 ## Next eligible
-- VD-6c (Institutions; depends on VD-10, done), VD-7b (Funding; depends on VD-9, done), VD-14, VD-11, then UX-32 and VD-12 (owner review H25).
+- UX-13 remaining (expert.html into the app shell; URL-saved state on Funding and Monitoring).
+- VD-12 closes when the owner answers H25. Most other open TODO items are owner-gated (labelling,
+  reviews, decisions) or wait on S5 (S3.7 hero is "do last").
 
-## Owner actions
-- H27: enable GitHub Pages HTTPS enforcement.
+## Owner actions (one line each)
+- H27: enable GitHub Pages "Enforce HTTPS".
 - H26: Land to Sea Microplastics Consortium link.
 - H2: review the 277 low-confidence work-relevance decisions.
-- VD-D9: keep the absolute 1.1 s LCP gate for VD-5, or judge it on the relative gates?
-- H25: final design review (after VD-12).
+- H25: final design review (steps in HUMAN_TASKS).
+- VD-D9: keep the 1.1 s Overview LCP target, or use the relative gates?
