@@ -4,7 +4,7 @@ name: sonnet-reviewer
 description: Review architecture, integration, security, and complex code changes.
 model: sonnet
 tools: Read, Glob, Grep, Bash
-maxTurns: 25
+maxTurns: 60
 ---
 
 You are a senior software engineer reviewing

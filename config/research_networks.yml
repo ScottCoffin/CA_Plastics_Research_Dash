@@ -55,5 +55,5 @@ networks:
       source_url: "https://marinescience.ucdavis.edu/sites/g/files/dgvnsk9221/files/styles/sf_large_width/public/media/images/Untitled%20design_0.png?itok=Pj7Z73fZ"
       treatment: "cropped to the droplet, outer white made transparent, 160 px palette PNG"
       terms: "Copyright The Regents of the University of California, Davis campus. All rights reserved."
-      permission: "to_confirm"  # QUESTIONS NET-1-LOGO; HUMAN_TASKS H26
+      permission: "confirmed"  # owner confirmed with the consortium 2026-11-16 (QUESTIONS NET-1-LOGO, H26)
     disclosure: "The Atlas owner is a listed contributor to this consortium."

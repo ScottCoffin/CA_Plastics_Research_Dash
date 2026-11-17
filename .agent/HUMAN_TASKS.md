@@ -24,19 +24,11 @@ workflow and the live HTTPS site now pass. GitHub still reports the certificate 
 `dns_changed`, `https_enforced: false`, and plain HTTP returns 200 instead of redirecting.
 1. On GitHub: repository > **Settings** > **Pages**.
 2. Wait until the certificate/DNS check finishes, then tick **Enforce HTTPS**.
+   Checked 2026-11-16 after your "HTTPS enforced": GitHub still says "The certificate has not
+   finished being issued" (state `dns_changed`), so the box cannot be ticked yet and the agent's
+   API attempt was refused. Re-check in a few hours; the agent retries at each session start.
 - **Done when:** `http://plastiverse.live/` redirects to HTTPS. Tell the agent "HTTPS enforced"
   and it will confirm the API state and redirect.
-
-### H26. Land to Sea Microplastics Consortium link (NET-1, 5 minutes)
-1. Open the UC Davis institution page (`/institution#inst=I84218800`) after the next deploy
-   and check the "Research networks" card (logo, quote, focus areas, contributor links).
-2. Ask the consortium lead (for example Christina Pasparakis) to confirm the Atlas may show
-   the consortium logo. If they decline, tell the agent "remove consortium logo".
-3. Answer NET-1-NAME and NET-1-SURFACES in `.agent/QUESTIONS.md`, or tell the agent
-   "keep defaults".
-4. When a contributor gets an Atlas profile, tell the agent their name so their expert ID is
-   added to `config/research_networks.yml` (8 of the 14 have none yet).
-- **Done when:** permission is confirmed (or the logo is removed) and the two questions are answered.
 
 ### H2. Review the 277 low-confidence work-relevance decisions
 1. Run `py -3.14 -m streamlit run scripts/review_work_relevance_app.py`.
@@ -205,18 +197,16 @@ come with its own Streamlit app and run command here.
 - **H1. CORE API key (renew only when asked).** No pipeline code calls CORE (checked
   2026-11-15), so daily renewal stopped. The agent will ask you to renew the key in `.env`
   when a task actually needs CORE (S6 full text by DOI, or a theses search).
-- **H25. Final design review (VD-12).** Ready 2026-11-16. Steps: (1) open
-  `scratch/design_snapshots_v2/` (first screens at 1440 px, `<route>_1440_fold.png`, and
-  phones, `<route>_390_full.png`) or browse https://plastiverse.live/ page by page; (2) compare
-  with the target in `docs/design/style_tile.html`; (3) skim the gate table in
-  `docs/VD_12_VERIFICATION.md`; (4) reply "design OK" or list what to change.
-- **VD-D9. Overview load-time gate (1 line).** The Overview scores 99 for performance but its
-  largest paint is 1.9-2.0 s on the live host vs the 1.1 s target (part is host slowness, see
-  QUESTIONS VD-D9). Reply "keep the 1.1 s target" or "use the relative gates".
-
+- **H25. Final design review (VD-12).** Owner feedback received 2026-11-16 (14 items) and
+  turned into VD-18 (visual polish), VD-19 (site-wide search) and VD-20 (network layout and
+  cluster labels). After they deploy, re-check the live site and reply "design OK" or list changes.
 ---
 
 ## Done
+- **H26 Land to Sea Microplastics Consortium** (2026-11-16): logo permission confirmed with the
+  consortium; NET-1-NAME "Land to Sea Microplastics Consortium", NET-1-SURFACES keep.
+- **VD-D9** (2026-11-16): keep the absolute 1.1 s Overview LCP gate; try inlining the Overview
+  critical CSS when next touching the page.
 - **H24 Visual direction** (2026-11-14): owner accepted VD-D1..VD-D8; Pacific Contour remains
   the binding direction for the VD checkpoints.
 - **H16 Framework switch** (2026-11-13): owner said "switch"; the Framework app is the site root

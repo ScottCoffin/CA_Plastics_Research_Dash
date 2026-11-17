@@ -209,3 +209,6 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-16 | VD-16 implementation | Claude Haiku developer | Evidence Chart/Table panes, tests | Accepted after lead click-test | 1 session |
 | 2026-11-16 | VD-17 implementation | Claude Haiku developer | 84 CSS hex literals to tokens | Accepted; lead set the cap to 0 and fixed two tests | 1 session |
 | 2026-11-16 | VD-12 machine part | Claude Haiku developer | design_snapshots.py, doc, Lighthouse | Partial (two resumes); found VD-15/16/17 gaps | 1 session |
+| 2026-11-16 | VD-18 implementation | Claude Haiku (general-purpose, no turn cap) | H25 visual polish, About links, trend ticks | Accepted; lead fixed the real brand-square cause and hero icon | 1 session |
+| 2026-11-16 | VD-19 implementation | Claude Haiku (general-purpose, no turn cap) | site-wide search index, combobox, /search | Accepted; lead moved the hero form onto it | 1 session |
+| 2026-11-16 | VD-20 implementation | Claude Haiku (general-purpose, no turn cap) | FA2 layout, community labels | Accepted; lead added UC/CSU name shortening | 1 session |

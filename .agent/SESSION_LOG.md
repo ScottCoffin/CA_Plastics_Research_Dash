@@ -165,3 +165,4 @@
 | 2026-11-16 | VD-16 | Evidence map Trends, Heatmap and Pipeline flow get Chart/Table controls with table panes | this commit |
 | 2026-11-16 | VD-12 (partial) | design_snapshots.py and global acceptance record; Evidence eyebrow icon; owner review H25 pending | this commit |
 | 2026-11-16 | records | Handoff and memory for the VD-9..VD-17 / UX-32 run | this commit |
+| 2026-11-16 | VD-18/VD-19/VD-20 | H25 owner feedback: visual polish, site-wide search, network layout and cluster labels; H26 closed; H27 waits on certificate | 4a01550b, 1f11d4ac, this commit |

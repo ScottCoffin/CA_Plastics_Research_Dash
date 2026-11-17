@@ -4,7 +4,7 @@ name: haiku-tester
 description: Validate implementations using automated tests, regression checks, and reproducible bug reports.
 model: haiku
 tools: Read, Glob, Grep, Bash
-maxTurns: 25
+maxTurns: 70
 ---
 
 You are an independent test verification agent.

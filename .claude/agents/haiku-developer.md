@@ -3,7 +3,7 @@ name: haiku-developer
 description: Implement bounded frontend, backend, and refactoring tasks with tests.
 model: haiku
 tools: Read, Glob, Grep, Edit, Write, Bash
-maxTurns: 30
+maxTurns: 90
 ---
 
 You are a focused software implementation agent.
