@@ -1,0 +1,65 @@
+name: Weekly digest
+
+on:
+  # Schedule disabled until MAIL-1's "new this week" selection is fixed: first_seen was reset for
+  # most works by the 2026-11-11 re-ingest, so a dry run selected 1,565 works. Re-enable with:
+  #   schedule:
+  #     - cron: "0 14 * * 1"   # Monday 14:00 UTC (about 6-7 a.m. Pacific)
+  workflow_dispatch:
+    inputs:
+      week_ending:
+        description: "Sunday that ends the digest week (YYYY-MM-DD). Empty: the most recent Sunday (UTC)."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: weekly-digest
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    name: Send the weekly digest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      # Without the secret the digest is skipped and the job still succeeds.
+      - name: Check for the Buttondown secret
+        id: secret
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+        run: |
+          if [[ -z "$BUTTONDOWN_API_KEY" ]]; then
+            echo "::notice::BUTTONDOWN_API_KEY is not set; the weekly digest is skipped."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Python
+        if: steps.secret.outputs.ready == 'true'
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Install the package
+        if: steps.secret.outputs.ready == 'true'
+        run: python -m pip install -c requirements/lock.txt -e .
+
+      # Zero new works, or a missing key, logs a line and exits 0 (scripts/build_weekly_digest.py).
+      - name: Send the digest
+        if: steps.secret.outputs.ready == 'true'
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          WEEK_ENDING: ${{ inputs.week_ending }}
+        run: |
+          args=(--send)
+          if [[ -n "$WEEK_ENDING" ]]; then
+            args+=(--week-ending "$WEEK_ENDING")
+          fi
+          python scripts/build_weekly_digest.py "${args[@]}"

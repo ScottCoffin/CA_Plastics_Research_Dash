@@ -227,3 +227,6 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-17 | VD-28 network mobile | Claude Haiku developer | combobox search, full-screen panel, details layout, exit button | Accepted after one resume (90-turn cap) and one lead correction (canvas undrawn above the sheet) | 1 session |
 | 2026-11-17 | VD-29 tooltips/monitoring | Claude Haiku developer | body-level clamped tooltip, help icon, map text width | Accepted; lead added the site-wide boxed-text rule and the favicon encoding fix | 1 session |
 | 2026-11-17 | VD-30 map intro | Claude Haiku developer | per-plane clips, Motion spring intro, tests | Accepted after one resume (90-turn cap); lead replaced Motion (64 KB gzip) with an in-page spring | 1 session |
+| 2026-11-17 | NOTIFY-AB | Claude Haiku developer | Get updates panel, ntfy post | Accepted | 1 session |
+| 2026-11-17 | MAIL-1 | Claude Haiku developer | Buttondown digest | Stopped for budget near completion; lead committed with cron disabled (selection bug) | 1 session |
+| 2026-11-17 | PLAT-1, PLAT-2a | Claude Opus general-purpose; Claude Haiku developer | /california move; world map data | Stopped for budget before any edits | 1 session |

@@ -30,6 +30,20 @@ workflow and the live HTTPS site now pass. GitHub still reports the certificate 
 - **Done when:** `http://plastiverse.live/` redirects to HTTPS. Tell the agent "HTTPS enforced"
   and it will confirm the API state and redirect.
 
+### H29. Set up Buttondown for the weekly email digest (MAIL-1, about 10 minutes)
+The weekly Monday digest is built by a GitHub Action and sent through Buttondown.
+1. Go to https://buttondown.com and create a free account (newsletter name, for example
+   "Plastiverse California"; sender address theplastiverse@gmail.com).
+2. In Buttondown: **Settings** > **API** (or **Programming**), copy the API key.
+3. On GitHub: repository > **Settings** > **Secrets and variables** > **Actions** >
+   **New repository secret**. Name: `BUTTONDOWN_API_KEY`. Value: the key. Save.
+4. Optional: in Buttondown, copy your public subscribe page link and tell the agent; it will
+   add it to the "Get updates" panel.
+- **Done when:** you tell the agent "Buttondown ready". The first digest goes out the next
+  Monday at about 6 to 7 a.m. Pacific; the agent can also send a test to you first.
+
+### H27 is done (2026-11-17): HTTPS is enforced and http:// redirects to https://.
+
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
 Global Plastic Laws topic. That link is a draft the agent proposed, so the page shows a

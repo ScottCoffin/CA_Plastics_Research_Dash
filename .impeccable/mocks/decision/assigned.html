@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plastiverse: tile cartogram (decision sketch)</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&display=swap" rel="stylesheet">
+<style>
+html,body{width:1440px;height:900px;overflow:hidden;margin:0}
+*{box-sizing:border-box}
+body{position:relative;background:#ece7dc;color:#141311;font-family:Archivo,Arial,sans-serif;font-size:16px;line-height:1.4}
+a{color:#141311;text-decoration:none}
+.bar{position:absolute;left:0;top:0;width:1440px;height:66px;padding:0 48px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #141311}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-stretch:80%;font-size:26px;line-height:1;letter-spacing:-.01em}
+.mark{display:grid;grid-template-columns:1fr 1fr;width:26px;height:26px}
+.m1{background:#23305e}.m2{background:#e3a92b}.m3{background:#e2452b}.m4{background:#141311}
+.nav{font-weight:600}
+.sep{color:#4b463e;margin:0 9px}
+.display{font-family:Archivo,Arial,sans-serif;font-weight:800;font-stretch:75%;letter-spacing:-.02em}
+.count{position:absolute;left:44px;top:118px;margin:0;font-size:232px;line-height:.86;white-space:nowrap}
+.tag{position:absolute;left:48px;top:92px;margin:0;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#4b463e}
+.lede{position:absolute;left:48px;top:336px;width:640px;margin:0;font-size:22px;line-height:1.3;color:#4b463e}
+.pick{position:absolute;left:744px;top:236px;display:flex;align-items:center;gap:14px;white-space:nowrap}
+.pick h2{margin:0 8px 0 0;font-size:40px;line-height:1;font-stretch:75%;font-weight:800}
+.btn{display:inline-flex;align-items:center;height:56px;padding:0 22px;border:2px solid #141311;font-weight:700;font-size:18px}
+.btn-ca{background:#e2452b}
+.btn-no{border-color:#4b463e;color:#4b463e}
+.map{position:absolute;left:48px;top:404px;width:1344px;height:416px}
+.t{position:absolute;left:calc(var(--x)*32px);top:calc(var(--y)*32px);width:28px;height:28px;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:700;letter-spacing:.02em}
+.s1{background:#141311;color:#f6f3ec}
+.s2{background:#4b463e;color:#f6f3ec}
+.s3{background:#d8d3c5;color:#141311}
+.s4{background:#f6f3ec;color:#4b463e;border:1px solid #d8d3c5}
+.dc,.dn{width:60px;height:60px;font-size:15px}
+.dc{background:#e2452b;color:#141311}
+.dn{background:#23305e;color:#f6f3ec}
+.lab{position:absolute;margin:0;font-size:16px;font-weight:700;white-space:nowrap}
+.legend{position:absolute;left:48px;top:836px;margin:0;font-size:14px;color:#4b463e;white-space:nowrap}
+.sw{display:inline-block;width:12px;height:12px;margin:0 5px 0 14px;vertical-align:-1px}
+</style>
+</head>
+<body>
+<header class="bar">
+<a class="brand" href="#"><span class="mark" aria-hidden="true"><i class="m1"></i><i class="m2"></i><i class="m3"></i><i class="m4"></i></span>Plastiverse</a>
+<nav class="nav"><a href="#">Regions</a><span class="sep">·</span><a href="#">This week</a><span class="sep">·</span><a href="#">Get updates</a><span class="sep">·</span><a href="#">About</a></nav>
+</header>
+<p class="tag">Sample figures · global · rebuilt this morning</p>
+<p class="display count">96,412</p>
+<p class="lede">works on plastics' environmental impacts, from 164 countries<span style="white-space:nowrap"> · rebuilt this morning</span></p>
+<section class="pick" aria-label="Pick a region">
+<h2>Pick a region</h2>
+<a class="btn btn-ca" href="#">California →</a>
+<a class="btn btn-no" href="#" aria-disabled="true">Norway (soon)</a>
+</section>
+<div class="map">
+<p class="lab" style="left:0;top:132px">California → atlas</p>
+<p class="lab" style="left:0;top:4px;width:600px;text-align:right">Norway · coming 2027</p>
+<i class="t s2" style="--x:5;--y:0">CA</i>
+<i class="t s1" style="--x:5;--y:2">US</i>
+<i class="t dc" style="--x:3;--y:2">US-CA</i>
+<i class="t s3" style="--x:5;--y:4">MX</i>
+<i class="t s3" style="--x:6;--y:6">CO</i>
+<i class="t s3" style="--x:5;--y:7">PE</i>
+<i class="t s2" style="--x:8;--y:7">BR</i>
+<i class="t s3" style="--x:5;--y:9">CL</i>
+<i class="t s3" style="--x:7;--y:10">AR</i>
+<i class="t dn" style="--x:19;--y:0">NO</i>
+<i class="t s3" style="--x:21;--y:0">SE</i>
+<i class="t s3" style="--x:22;--y:0">FI</i>
+<i class="t s2" style="--x:26;--y:0">RU</i>
+<i class="t s3" style="--x:17;--y:2">IE</i>
+<i class="t s2" style="--x:18;--y:2">GB</i>
+<i class="t s3" style="--x:19;--y:2">NL</i>
+<i class="t s2" style="--x:20;--y:2">DE</i>
+<i class="t s3" style="--x:21;--y:2">PL</i>
+<i class="t s4" style="--x:22;--y:2">UA</i>
+<i class="t s4" style="--x:22;--y:3">RO</i>
+<i class="t s2" style="--x:18;--y:3">FR</i>
+<i class="t s3" style="--x:21;--y:3">AT</i>
+<i class="t s2" style="--x:18;--y:4">ES</i>
+<i class="t s3" style="--x:17;--y:4">PT</i>
+<i class="t s2" style="--x:20;--y:4">IT</i>
+<i class="t s3" style="--x:22;--y:4">GR</i>
+<i class="t s3" style="--x:23;--y:4">TR</i>
+<i class="t s4" style="--x:17;--y:6">MA</i>
+<i class="t s3" style="--x:21;--y:6">EG</i>
+<i class="t s3" style="--x:19;--y:8">NG</i>
+<i class="t s4" style="--x:22;--y:8">ET</i>
+<i class="t s3" style="--x:22;--y:9">KE</i>
+<i class="t s3" style="--x:21;--y:11">ZA</i>
+<i class="t s4" style="--x:26;--y:2">KZ</i>
+<i class="t s3" style="--x:27;--y:4">IR</i>
+<i class="t s3" style="--x:25;--y:5">SA</i>
+<i class="t s4" style="--x:28;--y:5">PK</i>
+<i class="t s2" style="--x:29;--y:5">IN</i>
+<i class="t s1" style="--x:32;--y:3">CN</i>
+<i class="t s2" style="--x:36;--y:3">JP</i>
+<i class="t s3" style="--x:35;--y:4">KR</i>
+<i class="t s3" style="--x:32;--y:6">TH</i>
+<i class="t s3" style="--x:35;--y:6">PH</i>
+<i class="t s3" style="--x:33;--y:7">VN</i>
+<i class="t s3" style="--x:31;--y:8">MY</i>
+<i class="t s3" style="--x:33;--y:9">ID</i>
+<i class="t s2" style="--x:35;--y:11">AU</i>
+<i class="t s3" style="--x:39;--y:12">NZ</i>
+</div>
+<p class="legend">Tile shade = works (sample figures): <span class="sw s1"></span>10,000+ <span class="sw s2"></span>3,000–9,999 <span class="sw s3"></span>500–2,999 <span class="sw s4"></span>under 500 · large tiles are doors · sample set: 48 of 164 countries</p>
+</body>
+</html>

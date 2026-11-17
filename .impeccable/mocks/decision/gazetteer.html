@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plastiverse: atlas gazetteer (decision sketch)</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&display=swap" rel="stylesheet">
+<style>
+html,body{width:1440px;height:900px;overflow:hidden;margin:0}
+*{box-sizing:border-box}
+body{position:relative;background:#ece7dc;color:#141311;font-family:Archivo,Arial,sans-serif;font-size:16px;line-height:1.4}
+a{color:#141311;text-decoration:none}
+.bar{position:absolute;left:0;top:0;width:1440px;height:66px;padding:0 48px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #141311;z-index:1;background:#ece7dc}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-stretch:80%;font-size:26px;line-height:1;letter-spacing:-.01em}
+.mark{display:grid;grid-template-columns:1fr 1fr;width:26px;height:26px}
+.m1{background:#23305e}.m2{background:#e3a92b}.m3{background:#e2452b}.m4{background:#141311}
+.nav{font-weight:600}
+.sep{color:#4b463e;margin:0 9px}
+.caps{margin:0;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.side{position:absolute;left:0;top:66px;width:420px;height:834px;padding:44px 48px 48px;background:#141311;color:#f6f3ec;display:flex;flex-direction:column}
+.side h1{margin:20px 0 0;font-weight:800;font-stretch:75%;font-size:72px;line-height:.9;letter-spacing:-.02em}
+.counts{margin-top:44px}
+.big{margin:0;font-weight:800;font-stretch:75%;font-size:104px;line-height:.86;letter-spacing:-.02em}
+.cap{margin:10px 0 0;font-size:16px;color:#d8d3c5}
+.pair{display:flex;gap:32px;margin-top:26px}
+.pair p{margin:0;font-size:15px;color:#d8d3c5}
+.pair b{display:block;font-weight:800;font-stretch:75%;font-size:44px;line-height:1;color:#f6f3ec}
+.gold{color:#e3a92b;margin-top:26px}
+.act{margin-top:auto}
+.act p{margin:0 0 18px;font-size:18px;line-height:1.4;color:#d8d3c5}
+.go{display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 20px;background:#e3a92b;color:#141311;font-weight:700;font-size:18px}
+.index{position:absolute;left:420px;top:66px;width:1020px;height:834px;padding:40px 56px}
+.ihead{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:12px;border-bottom:2px solid #141311}
+.muted{color:#4b463e}
+.cols{display:grid;grid-template-columns:430px 430px;column-gap:48px;margin-top:6px}
+.cols ol{margin:0;padding:0;list-style:none}
+.cols li{display:grid;grid-template-columns:40px 1fr auto;column-gap:8px;align-items:start;height:48px;padding-top:8px;border-bottom:1px solid #d8d3c5}
+.rk{font-size:14px;line-height:1.3;color:#4b463e;font-variant-numeric:tabular-nums}
+.nm,.pb{display:block}
+.nm{font-size:18px;line-height:1.2;white-space:nowrap}
+.nm small{margin-left:6px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4b463e}
+.mk{margin-left:6px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-bottom:2px solid #141311}
+.pb{height:5px;margin-top:5px}
+.am{background:#23305e}.eu{background:#e2452b}.as{background:#e3a92b}.af{background:#141311}
+.n{font-size:18px;font-weight:700;line-height:1.2;text-align:right;font-variant-numeric:tabular-nums}
+.foot{position:absolute;left:56px;bottom:40px;width:908px;margin:0;padding-top:12px;border-top:1px solid #d8d3c5;font-size:14px;color:#4b463e}
+</style>
+</head>
+<body>
+<header class="bar">
+<a class="brand" href="#"><span class="mark" aria-hidden="true"><i class="m1"></i><i class="m2"></i><i class="m3"></i><i class="m4"></i></span>Plastiverse</a>
+<nav class="nav"><a href="#">Regions</a><span class="sep">·</span><a href="#">This week</a><span class="sep">·</span><a href="#">Get updates</a><span class="sep">·</span><a href="#">About</a></nav>
+</header>
+<aside class="side">
+<p class="caps" style="color:#d8d3c5">Gazetteer</p>
+<h1>Plastics research, place by place.</h1>
+<div class="counts">
+<p class="big">96,412</p>
+<p class="cap">works on plastics' environmental impacts</p>
+<div class="pair"><p><b>164</b>countries</p><p><b>14,380</b>institutions</p></div>
+<p class="caps gold">Sample figures · rebuilt this morning</p>
+</div>
+<div class="act">
+<p>Pick a place from the index, or start with the live California atlas.</p>
+<a class="go" href="#">Open the California atlas →</a>
+</div>
+</aside>
+<section class="index">
+<div class="ihead"><span class="caps">Places, ranked by works</span><span class="caps muted">Sample figures · one bar scale</span></div>
+<div class="cols">
+<ol>
+<li><span class="rk">01</span><span><span class="nm">United States</span><span class="pb am" style="width:300px"></span></span><span class="n">21,340</span></li>
+<li><span class="rk">02</span><span><span class="nm">China</span><span class="pb as" style="width:262px"></span></span><span class="n">18,604</span></li>
+<li><span class="rk">03</span><span><span class="nm">United Kingdom</span><span class="pb eu" style="width:100px"></span></span><span class="n">7,118</span></li>
+<li><span class="rk">04</span><span><span class="nm">Germany</span><span class="pb eu" style="width:96px"></span></span><span class="n">6,840</span></li>
+<li><span class="rk">05</span><span><span class="nm">India</span><span class="pb as" style="width:92px"></span></span><span class="n">6,532</span></li>
+<li><span class="rk">06</span><span><span class="nm">Canada</span><span class="pb am" style="width:87px"></span></span><span class="n">6,210</span></li>
+<li><span class="rk">07</span><span><span class="nm">Australia</span><span class="pb af" style="width:73px"></span></span><span class="n">5,190</span></li>
+<li><span class="rk">08</span><span><span class="nm">France</span><span class="pb eu" style="width:69px"></span></span><span class="n">4,905</span></li>
+<li><span class="rk">09</span><span><span class="nm">Italy</span><span class="pb eu" style="width:64px"></span></span><span class="n">4,517</span></li>
+<li><span class="rk">10</span><span><span class="nm">Spain</span><span class="pb eu" style="width:59px"></span></span><span class="n">4,201</span></li>
+<li><span class="rk">11</span><span><span class="nm">Brazil</span><span class="pb am" style="width:55px"></span></span><span class="n">3,905</span></li>
+<li><span class="rk">12</span><span><span class="nm">Japan</span><span class="pb as" style="width:51px"></span></span><span class="n">3,600</span></li>
+<li><span class="rk">13</span><span><span class="nm">Russia</span><span class="pb eu" style="width:48px"></span></span><span class="n">3,410</span></li>
+</ol>
+<ol>
+<li><span class="rk">14</span><span><span class="nm">Iran</span><span class="pb as" style="width:41px"></span></span><span class="n">2,950</span></li>
+<li><span class="rk">15</span><span><span class="nm">Netherlands</span><span class="pb eu" style="width:37px"></span></span><span class="n">2,640</span></li>
+<li><span class="rk">16</span><span><span class="nm">South Korea</span><span class="pb as" style="width:34px"></span></span><span class="n">2,430</span></li>
+<li><span class="rk">17</span><span><span class="nm"><strong>California</strong><small>US state</small><span class="mk">→ open atlas</span></span><span class="pb am" style="width:27px"></span></span><span class="n">1,918</span></li>
+<li><span class="rk">18</span><span><span class="nm">Sweden</span><span class="pb eu" style="width:26px"></span></span><span class="n">1,820</span></li>
+<li><span class="rk">19</span><span><span class="nm">South Africa</span><span class="pb af" style="width:25px"></span></span><span class="n">1,760</span></li>
+<li><span class="rk">20</span><span><span class="nm">Mexico</span><span class="pb am" style="width:22px"></span></span><span class="n">1,590</span></li>
+<li><span class="rk">21</span><span><span class="nm">Turkey</span><span class="pb as" style="width:21px"></span></span><span class="n">1,520</span></li>
+<li><span class="rk">22</span><span><span class="nm">Indonesia</span><span class="pb as" style="width:19px"></span></span><span class="n">1,380</span></li>
+<li><span class="rk">23</span><span><span class="nm">Argentina</span><span class="pb am" style="width:19px"></span></span><span class="n">1,320</span></li>
+<li><span class="rk">24</span><span><span class="nm">Finland</span><span class="pb eu" style="width:17px"></span></span><span class="n">1,240</span></li>
+<li><span class="rk">25</span><span><span class="nm">Thailand</span><span class="pb as" style="width:17px"></span></span><span class="n">1,236</span></li>
+<li><span class="rk">26</span><span><span class="nm"><strong>Norway</strong><small>coming</small></span><span class="pb eu" style="width:16px"></span></span><span class="n">1,164</span></li>
+</ol>
+</div>
+<p class="foot">Bar length uses one scale (United States is the full bar). Colour marks the continent: indigo Americas, vermilion Europe, gold Asia, ink Africa and Oceania. All counts are sample figures until the global build lands.</p>
+</section>
+</body>
+</html>

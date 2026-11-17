@@ -6,3 +6,17 @@ ntfy:
   server: https://ntfy.sh
   # Titles listed in one alert; the rest are counted as "and N more".
   max_titles: 5
+
+# Weekly email digest through Buttondown (scripts/build_weekly_digest.py, MAIL-1). The API key is
+# the repository secret BUTTONDOWN_API_KEY; without it the send is a logged no-op. Digest links
+# point at site_url; the feed link is site_url plus /feed.xml.
+digest:
+  # Site root for every link in the digest. The PLAT-1 path move changes this one line.
+  site_url: https://plastiverse.live/california
+  # Works listed in one digest; the rest are counted as "and N more on the site".
+  max_works: 40
+  # {start} is the Monday of the digest week, for example "9 November 2026".
+  subject_template: "California plastics research, week of {start}"
+  # Shown in the header and footer. Buttondown's API has no per-email sender name, so set the same
+  # name as the newsletter name in Buttondown.
+  sender_name: Plastiverse · California
