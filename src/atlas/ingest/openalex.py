@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 import tempfile
 import time
 import urllib.error
@@ -362,8 +363,9 @@ def _request_json(
             return body
         except urllib.error.HTTPError as error:
             headers = dict(error.headers.items())
+            raw = error.read()
             try:
-                body = json.loads(error.read().decode("utf-8"))
+                body = json.loads(raw.decode("utf-8"))
             except (UnicodeDecodeError, json.JSONDecodeError):
                 body = {}
             if not isinstance(body, dict):
@@ -376,6 +378,9 @@ def _request_json(
                 # A rejected 429 carries no credit header (seen 2026-11-10). The row is
                 # logged; the 429 below already stops the run as deferred, unretried.
                 if error.code != 429:
+                    # 2026-11-16/17: CI got bare 403s that local runs never see. Say why
+                    # (OpenAlex message or a firewall page) before stopping; never the key.
+                    print(_rejection_summary(error.code, headers, raw), file=sys.stderr)
                     raise
             message = str(body.get("message") or body.get("error") or "request rejected")
             if error.code in {400, 401, 403, 404}:
@@ -526,6 +531,17 @@ def _later_date(first: str | None, second: str | None) -> str | None:
     """The later of two ISO dates (either may be missing)."""
     dates = [value for value in (first, second) if value]
     return max(dates, key=lambda value: value[:10]) if dates else None
+
+
+def _rejection_summary(status: int, headers: Mapping[str, str], raw: bytes) -> str:
+    """One diagnostic line for a rejected OpenAlex request, with any API key redacted."""
+    text = raw[:600].decode("utf-8", errors="replace")
+    text = re.sub(r"(api_key=|Bearer\s+)[^\s&\"']+", r"\1<redacted>", text)
+    text = " ".join(text.split())
+    lowered = {key.lower(): value for key, value in headers.items()}
+    firewall = [name for name in ("cf-ray", "cf-mitigated", "server") if name in lowered]
+    context = ", ".join(f"{name}={lowered[name]}" for name in firewall)
+    return f"OpenAlex HTTP {status} ({context or 'no firewall headers'}): {text[:300]}"
 
 
 def read_high_water_mark(path: str | Path) -> dict[str, Any] | None:

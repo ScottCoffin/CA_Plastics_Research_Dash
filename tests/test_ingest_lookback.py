@@ -28,3 +28,11 @@ def test_high_water_mark_never_moves_backwards() -> None:
     assert openalex._later_date("2026-11-17", "2026-11-16") == "2026-11-17"
     assert openalex._later_date(None, "2026-11-16") == "2026-11-16"
     assert openalex._later_date(None, None) is None
+
+
+def test_rejection_summary_redacts_keys_and_names_firewall_headers() -> None:
+    raw = b'{"error": "Forbidden", "message": "bad key api_key=SECRET123 or Bearer SECRET456"}'
+    line = openalex._rejection_summary(403, {"CF-RAY": "abc", "Server": "cloudflare"}, raw)
+    assert "SECRET" not in line
+    assert "cf-ray=abc" in line and "server=cloudflare" in line
+    assert line.startswith("OpenAlex HTTP 403")
