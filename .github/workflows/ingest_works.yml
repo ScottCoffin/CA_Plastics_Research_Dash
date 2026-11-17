@@ -131,6 +131,19 @@ jobs:
         if: steps.refresh.outputs.status == 'success'
         run: python scripts/build_expert_badges.py
 
+      # 2026-11-17: records derived from the exported site data. Institution types read the
+      # export, so they rebuild here too (the earlier run is one day behind otherwise). Journal
+      # metrics fetch only new journals' OpenAlex sources (~30 list credits at most); a budget
+      # or network stop keeps yesterday's file, whose missing journals show no value.
+      - name: Refresh export-derived records
+        if: steps.refresh.outputs.status == 'success'
+        env:
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+          OPENALEX_API_KEY_ALT: ${{ secrets.OPENALEX_API_KEY_ALT }}
+        run: |
+          python scripts/build_institution_types.py
+          python scripts/fetch_journal_metrics.py || echo "::warning::journal metrics not refreshed; keeping the committed file"
+
       # AT-11: stop before committing if the raw/normalized schema changed or a payload is too big.
       - name: Schema and payload guards
         if: steps.refresh.outputs.status == 'success'
@@ -185,7 +198,7 @@ jobs:
             site/data/works_detail.json \
             site/data/network.json \
             site/data/search_index.json \
-            site/data/expert_badges.json
+            site/data/expert_badges.json \n            site/data/journal_metrics.json
           git add -A site/data/authors site/data/institution_works site/data/bundle site/data/work_text
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"

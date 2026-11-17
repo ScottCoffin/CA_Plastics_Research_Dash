@@ -7,8 +7,8 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 - Works in the v3.1 corpus: 2036; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
 - California institutions with at least one non-excluded v3.1 work: 207.
-- Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 206, one row each in `config/institution_types.csv`.
-- type_source: owner_override 60, owner_reviewed 58, rule 88.
+- Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 207, one row each in `config/institution_types.csv`.
+- type_source: owner_override 60, owner_reviewed 58, rule 89.
 - needs_review true (rule-typed and in the new top 100): 0.
 - Old top-100 review list: 100 institutions; 54 remain in the v3.1 top 100; 46 drop out. 72 of the old list are on the site.
 - Newly in the v3.1 top 100: 46; written to `data/processed/institution_review_needs_v31.csv`.
