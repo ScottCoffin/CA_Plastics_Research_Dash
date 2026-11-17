@@ -90,10 +90,10 @@ def test_do_not_regress_items_remain_visible() -> None:
     assert "Descriptions are quoted as each steward states them." in resources
 
     about = _read("about.md")
-    assert 'class="card about-limitations-card"' in about
+    assert 'class="about-card about-limitations-card"' in about
     assert "no validated precision or recall is available yet" in about
     assert "10.5281/zenodo.24124016" in about
-    assert "## Corrections and source work" in about
+    assert "<h3>Corrections and source work</h3>" in about
 
     glossary = _read("glossary.md")
     ids = re.findall(r'<dt id="([^"]+)">', glossary)

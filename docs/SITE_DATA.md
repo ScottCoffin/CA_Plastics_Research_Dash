@@ -28,6 +28,20 @@ The initial C5 target is an initial payload below 3 MB gzip.  A build that
 exceeds the target must retain the recorded sizes here and document the reason
 before introducing DuckDB-Wasm or another client-side query engine.
 
+### `build_metadata.json` flow (FLOW-1)
+
+`build_metadata.json` has an optional top-level `flow` object: a PRISMA-style count for the daily export. `unique_works` and `no_ca_authorship` come from the normalized works table as read, before the non-California filter and curation; `published` and the plastic split come from the exported index. The exporter raises `ValueError` if the counts stop adding up. The key is omitted when `ca_authors_only` is off (the test and fixture builds) or the works table has no `ca_any_author` column. Consumers should treat a missing `flow` as "use the archived release".
+
+- `records_retrieved`: `unique_works` + `duplicates_collapsed` (integer).
+- `duplicates_collapsed`: total length of the `duplicate_work_ids` lists across the normalized works; null counts as 0 (integer).
+- `unique_works`: works in the normalized table before curation (integer).
+- `no_ca_authorship`: unique works whose `ca_any_author` is not true (integer).
+- `removed_by_curation`: `unique_works` - `no_ca_authorship` - `published`; equals `curation.works_removed` when the curation files agree (integer).
+- `published`: works in `index.json`, the same as `counts.works` (integer).
+- `plastic_related`: published works with `plastic_related` true, the same as `counts.plastic_works` (integer).
+- `not_plastic_related`: `published` - `plastic_related`; includes unlabelled works (integer).
+- `by_type`: object keyed by OpenAlex work type (`unknown` when empty) with the published count; values sum to `published`. The exporter sorts by count, but the JSON writer sorts keys, so the file lists types alphabetically; sort by value when order matters.
+
 ## Rebuild and check
 
 ```powershell

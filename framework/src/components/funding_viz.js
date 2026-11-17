@@ -1,8 +1,11 @@
 // Funding visualizations for the Framework Funding page, ported from the classic grants page
-// (site/grants.html). mountFundingViz(container) builds the chart cards once and returns {update(rows)};
-// update() redraws every view from the awards that match the page's filter form. The views follow the
-// filter form and do not set filters themselves. The Sankey alone has a local drill-down: clicking a
-// block (or pressing Enter on it) narrows only the Sankey and its table to the flows through that block.
+// (site/grants.html). mountFundingViz(container) builds the chart cards once and returns {update(rows),
+// onSelect(handler)}; update() redraws every view from the awards that match the page's filter form. The
+// views follow the filter form and do not set filters themselves. The Sankey alone has a local drill-down:
+// clicking a block (or pressing Enter on it) narrows only the Sankey and its table to the flows through that
+// block. The two heatmaps select cells (several cells combine as a union within one heatmap, and the two
+// heatmaps combine as an intersection); onSelect hands the page the awards the selection leaves, and only
+// the page's awards table follows it.
 // Every chart is an Atlas chart card with a Chart/Table control; the table pane is that chart's table
 // alternative. The pure markup builders are exported so Node tests can check them.
 import {escapeHtml} from "./atlas.js";
@@ -10,8 +13,9 @@ import {CHROME} from "./shared/palette.js";
 import {helpButtonHtml} from "./shared/tooltip.js";
 import {
   DEFAULT_SECTOR_LABELS, FALLBACK_COLOR, FUNDER_COLOR, HEAT_START, SECTOR_COLORS, UNTAGGED, agencyColor, agencyOrder,
-  buildHeat, buildSankey, buildSectorTopic, focusOfNode, heatFill, inkFor, layoutSankey, niceMax, sectorLabelsFor,
-  tileMetrics, topOrgs, topicFill, viewRows, yearCounts
+  buildHeat, buildSankey, buildSectorTopic, filterByHeatSelection, focusOfNode, heatCellKey, heatFill, inkFor,
+  layoutSankey, liveSectorTopicKeys, liveTopicYearKeys, niceMax, pruneHeatSelection, sectorLabelsFor, tileMetrics,
+  toggleHeatCell, topOrgs, topicFill, viewRows, yearCounts
 } from "./funding_viz_model.js";
 
 const esc = escapeHtml;
@@ -33,6 +37,18 @@ const iconHtml = (name) => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="t
 
 // Static frames. A loading tile reserves the stat-tile height before the awards arrive.
 const LOADING_TILE = '<div class="atlas-kpi atlas-kpi--loading" aria-hidden="true"><dt class="atlas-kpi__label">&nbsp;</dt><dd class="atlas-kpi__value">&nbsp;</dd></div>';
+
+const HEAT_INTRO = "Awards per cell. An award with several topics counts once in each of its topics.";
+// Host element of each heatmap's grid, by its cell kind.
+const HEAT_HOST = {"topic-year": "heat", "sector-topic": "matrix"};
+
+// The selection line above a heatmap: "N cells selected · Clear". paintHeats() keeps its text and button in step.
+function heatSelectionHtml(kind) {
+  return `<div class="fv-heat-selection" data-heat-selection="${kind}"><p class="fv-heat-status">`
+    + '<span class="fv-heat-count" role="status" aria-live="polite">No cells selected.</span>'
+    + '<span class="fv-heat-sep" aria-hidden="true" hidden> · </span>'
+    + `<button type="button" class="fv-heat-clear" data-heat="${kind}" hidden>Clear</button></p></div>`;
+}
 
 // One chart card: title, source line, the Chart/Table control, then a Chart pane and a Table pane.
 // setView() shows one pane; the table pane starts hidden. Each [data-fv] host is filled by update().
@@ -92,7 +108,8 @@ const VIZ_SKELETON = '<section class="fv-tiles" data-fv-section="tiles" aria-lab
     id: "fv-heat-h",
     title: "Topic by fiscal year",
     source: "Source: the awards in the filtered list, by topic and fiscal year.",
-    intro: "Awards per cell. An award with several topics counts once in each of its topics.",
+    intro: `${HEAT_INTRO} Click cells to show only their awards in the awards table below.`,
+    extra: heatSelectionHtml("topic-year"),
     chart: '<div data-fv="heat"></div>',
     table: '<div data-fv="heat-table"></div>'
   })
@@ -100,7 +117,8 @@ const VIZ_SKELETON = '<section class="fv-tiles" data-fv-section="tiles" aria-lab
     id: "fv-matrix-h",
     title: "Recipient sector by topic",
     source: "Source: the awards in the filtered list, by recipient sector and topic.",
-    intro: "Awards per cell. An award with several topics counts once in each of its topics.",
+    intro: `${HEAT_INTRO} Click cells to show only their awards in the awards table below.`,
+    extra: heatSelectionHtml("sector-topic"),
     chart: '<div data-fv="matrix"></div>',
     table: '<div data-fv="matrix-table"></div>'
   });
@@ -211,12 +229,12 @@ export function sankeyTableHtml(graph, amount = false) {
   const total = graph.total || 1;
   const rows = graph.links.slice().sort((a, b) => a.source.localeCompare(b.source) || b.value - a.value).map((l) => {
     const a = nameOf.get(l.source), b = nameOf.get(l.target);
-    return `<tr><td>${esc(a.name)} <span class="fv-muted">(${kindLabel(a)})</span></td>`
-      + `<td>${esc(b.name)} <span class="fv-muted">(${kindLabel(b)})</span></td>`
+    return `<tr><td class="fv-name">${esc(a.name)} <span class="fv-muted">(${kindLabel(a)})</span></td>`
+      + `<td class="fv-name">${esc(b.name)} <span class="fv-muted">(${kindLabel(b)})</span></td>`
       + `<td class="num">${amount ? fmtUsdFull(l.value) : fmtShare(l.value)}</td>`
       + `<td class="num">${((l.value / total) * 100).toFixed(1)}%</td></tr>`;
   }).join("");
-  return `<table><caption class="fv-sr-only">Sankey ribbons: from, to, ${amount ? "reported amount" : "awards"} and share</caption>`
+  return `<table class="fv-sankey-table"><caption class="fv-sr-only">Sankey ribbons: from, to, ${amount ? "reported amount" : "awards"} and share</caption>`
     + `<thead><tr><th scope="col">From</th><th scope="col">To</th><th scope="col" class="num">${amount ? "Reported amount (USD)" : "Awards (split across topics)"}</th><th scope="col" class="num">Share</th></tr></thead>`
     + `<tbody>${rows}</tbody></table>`;
 }
@@ -284,27 +302,46 @@ function dotHtml(key, T) {
 }
 
 // A heatmap cell is coloured by its count. The plain variant (the table pane) keeps the same numbers
-// without the fill, so the table reads the same with or without colour.
-function heatCell(n, max, plain) {
+// without the fill, so the table reads the same with or without colour. A chart cell is a button: a click
+// selects it (aria-pressed, a check mark and a 2 px ink outline). A cell with no awards is disabled.
+function heatCell(n, max, {plain = false, kind = "", row = "", col = "", label = "", pressed = false} = {}) {
   if (plain) return `<td class="num">${n}</td>`;
   const fill = heatFill(n, max);
-  return `<td class="fv-cell" style="background:${fill};color:${inkFor(fill)}">${n}</td>`;
+  const style = `background:${fill};color:${inkFor(fill)}`;
+  const name = `${label}: ${n ? `${n} ${n === 1 ? "award" : "awards"}` : "no awards"}`;
+  if (!n) return `<td><button type="button" class="fv-cell" style="${style}" disabled aria-label="${esc(name)}">${n}</button></td>`;
+  return `<td><button type="button" class="fv-cell" data-heat="${kind}" data-row="${esc(row)}" data-col="${esc(col)}" `
+    + `aria-pressed="${pressed ? "true" : "false"}" style="${style}" aria-label="${esc(name)}">`
+    + `<span class="fv-check" aria-hidden="true">${pressed ? "✓ " : ""}</span>${n}</button></td>`;
 }
 
-export function heatTableHtml(h, T, {plain = false} = {}) {
+export function heatTableHtml(h, T, {plain = false, selected = new Set()} = {}) {
   if (!h.rows.length) return emptyText("No dated awards match the current filters.");
   const colName = (c) => (c === "pre" ? `Before ${HEAT_START}` : String(c));
   const head = h.cols.map((c) => `<th scope="col">${esc(colName(c))}</th>`).join("");
-  const body = h.rows.map((r) => `<tr><th scope="row">${dotHtml(r.key, T)}${esc(r.label)}</th>${r.counts.map((n) => heatCell(n, h.max, plain)).join("")}</tr>`).join("");
+  const body = h.rows.map((r) => {
+    const cells = r.counts.map((n, i) => heatCell(n, h.max, {
+      plain, kind: "topic-year", row: r.key, col: h.cols[i], label: `${r.label}, ${colName(h.cols[i])}`,
+      pressed: selected.has(heatCellKey(r.key, h.cols[i]))
+    })).join("");
+    return `<tr><th scope="row">${dotHtml(r.key, T)}${esc(r.label)}</th>${cells}</tr>`;
+  }).join("");
   return region(`<table class="fv-matrix"><caption class="fv-sr-only">Awards per topic and fiscal year</caption>`
     + `<thead><tr><th scope="col">Topic</th>${head}</tr></thead><tbody>${body}</tbody></table>`,
   plain ? "Topic by fiscal year table, scrollable" : "Topic by fiscal year heatmap, scrollable");
 }
 
-export function matrixTableHtml(m, labels, T, {plain = false} = {}) {
+export function matrixTableHtml(m, labels, T, {plain = false, selected = new Set()} = {}) {
   if (!m.sectors.length) return emptyText("No awards match the current filters.");
-  const head = m.topics.map((t) => `<th scope="col">${dotHtml(t, T)}${esc(t === UNTAGGED ? "Untagged" : T ? T.label(t) : t)}</th>`).join("");
-  const body = m.sectors.map((s, i) => `<tr><th scope="row">${esc(labels[s] || s)}</th>${m.grid[i].map((n) => heatCell(n, m.max, plain)).join("")}</tr>`).join("");
+  const topicName = (t) => (t === UNTAGGED ? "Untagged" : T ? T.label(t) : t);
+  const head = m.topics.map((t) => `<th scope="col">${dotHtml(t, T)}${esc(topicName(t))}</th>`).join("");
+  const body = m.sectors.map((s, i) => {
+    const cells = m.grid[i].map((n, j) => heatCell(n, m.max, {
+      plain, kind: "sector-topic", row: s, col: m.topics[j], label: `${labels[s] || s}, ${topicName(m.topics[j])}`,
+      pressed: selected.has(heatCellKey(s, m.topics[j]))
+    })).join("");
+    return `<tr><th scope="row">${esc(labels[s] || s)}</th>${cells}</tr>`;
+  }).join("");
   return region(`<table class="fv-matrix"><caption class="fv-sr-only">Awards per recipient sector and topic</caption>`
     + `<thead><tr><th scope="col">Recipient sector</th>${head}</tr></thead><tbody>${body}</tbody></table>`,
   plain ? "Recipient sector by topic table, scrollable" : "Recipient sector by topic heatmap, scrollable");
@@ -319,7 +356,12 @@ export function mountFundingViz(container) {
   container.classList.add("fv-root");
   container.innerHTML = VIZ_SKELETON;
   const host = (name) => container.querySelector(`[data-fv="${name}"]`);
-  const state = {vrows: [], labels: DEFAULT_SECTOR_LABELS, mode: "awards", orgs: true, topN: 6, width: 0, focus: null, graph: null};
+  // raw: the awards as passed to update() (vrows is the same list in the same order, as viewRows keeps it).
+  // heat: the selected cells of each heatmap. onSelect: the page's handler for the awards the selection leaves.
+  const state = {
+    vrows: [], raw: [], labels: DEFAULT_SECTOR_LABELS, mode: "awards", orgs: true, topN: 6, width: 0, focus: null, graph: null,
+    heat: {"topic-year": new Set(), "sector-topic": new Set()}, onSelect: null
+  };
 
   function renderSankey() {
     const amount = state.mode === "amount";
@@ -377,6 +419,57 @@ export function mountFundingViz(container) {
     table.innerHTML = yearTableHtml(yc, present);
   }
 
+  // Both heatmaps count the awards that match the page filters; their selections narrow only the awards table.
+  // A selected cell that is empty (or gone) after a filter change is dropped; the other cells stay selected.
+  function renderHeats() {
+    const heat = buildHeat(state.vrows, T);
+    const matrix = buildSectorTopic(state.vrows, T);
+    state.heat["topic-year"] = pruneHeatSelection(state.heat["topic-year"], liveTopicYearKeys(heat));
+    state.heat["sector-topic"] = pruneHeatSelection(state.heat["sector-topic"], liveSectorTopicKeys(matrix));
+    host("heat").innerHTML = heatTableHtml(heat, T, {selected: state.heat["topic-year"]});
+    host("heat-table").innerHTML = heatTableHtml(heat, T, {plain: true});
+    host("matrix").innerHTML = matrixTableHtml(matrix, state.labels, T, {selected: state.heat["sector-topic"]});
+    host("matrix-table").innerHTML = matrixTableHtml(matrix, state.labels, T, {plain: true});
+    paintHeats();
+  }
+
+  // Keeps the pressed cells, the selection line and its Clear button in step with state.heat. It edits the
+  // markup in place, so keyboard focus stays on the cell that was pressed.
+  function paintHeats() {
+    for (const kind of Object.keys(state.heat)) {
+      const selected = state.heat[kind];
+      container.querySelectorAll(`button.fv-cell[data-heat="${kind}"]`).forEach((button) => {
+        const pressed = selected.has(heatCellKey(button.dataset.row, button.dataset.col));
+        button.setAttribute("aria-pressed", String(pressed));
+        button.querySelector(".fv-check").textContent = pressed ? "✓ " : "";
+      });
+      const bar = container.querySelector(`[data-heat-selection="${kind}"]`);
+      const count = selected.size;
+      bar.querySelector(".fv-heat-count").textContent = count ? `${count} ${count === 1 ? "cell" : "cells"} selected` : "No cells selected.";
+      bar.querySelector(".fv-heat-sep").hidden = !count;
+      bar.querySelector(".fv-heat-clear").hidden = !count;
+    }
+  }
+
+  // Tells the page which awards the heatmap selections leave (null when no cell is selected). The page's
+  // awards table shows those awards; the charts above keep following the page filters only.
+  function publish() {
+    if (!state.onSelect) return;
+    const heat = {topicYear: state.heat["topic-year"], sectorTopic: state.heat["sector-topic"]};
+    if (!heat.topicYear.size && !heat.sectorTopic.size) {
+      state.onSelect(null);
+      return;
+    }
+    const kept = new Set(filterByHeatSelection(state.vrows, heat));
+    state.onSelect(state.raw.filter((_, i) => kept.has(state.vrows[i])));
+  }
+
+  function setHeat(kind, next) {
+    state.heat[kind] = next;
+    paintHeats();
+    publish();
+  }
+
   function renderAll() {
     host("tiles").innerHTML = tilesHtml(tileMetrics(state.vrows));
     renderSankey();
@@ -384,12 +477,7 @@ export function mountFundingViz(container) {
     const orgs = topOrgs(state.vrows, 12);
     host("orgs").innerHTML = orgListHtml(orgs, state.labels);
     host("orgs-table").innerHTML = orgTableHtml(orgs, state.labels);
-    const heat = buildHeat(state.vrows, T);
-    host("heat").innerHTML = heatTableHtml(heat, T);
-    host("heat-table").innerHTML = heatTableHtml(heat, T, {plain: true});
-    const matrix = buildSectorTopic(state.vrows, T);
-    host("matrix").innerHTML = matrixTableHtml(matrix, state.labels, T);
-    host("matrix-table").innerHTML = matrixTableHtml(matrix, state.labels, T, {plain: true});
+    renderHeats();
     state.width = container.clientWidth;
   }
 
@@ -454,6 +542,19 @@ export function mountFundingViz(container) {
       clearFocus();
       return;
     }
+    const cell = target.closest("button.fv-cell[data-heat]");
+    if (cell) {
+      if (!cell.disabled) setHeat(cell.dataset.heat, toggleHeatCell(state.heat[cell.dataset.heat], heatCellKey(cell.dataset.row, cell.dataset.col)));
+      return;
+    }
+    const clear = target.closest("button.fv-heat-clear");
+    if (clear) {
+      if (state.heat[clear.dataset.heat].size) setHeat(clear.dataset.heat, new Set());
+      // The Clear button hides once nothing is selected, so keyboard focus moves to that heatmap's table.
+      const region = host(HEAT_HOST[clear.dataset.heat]).firstElementChild;
+      if (region) region.focus({preventScroll: true});
+      return;
+    }
     const node = target.closest(".fv-node");
     if (node) toggleFocus(node.getAttribute("data-id"));
   });
@@ -478,9 +579,20 @@ export function mountFundingViz(container) {
 
   return {
     update(rows, sectorLabels) {
-      state.vrows = viewRows(Array.isArray(rows) ? rows : [], T);
+      state.raw = Array.isArray(rows) ? rows : [];
+      state.vrows = viewRows(state.raw, T);
       state.labels = sectorLabelsFor(sectorLabels);
       renderAll();
+      publish();
+    },
+    // handler(rows) runs on every heatmap selection change and on every update(). rows are the awards the
+    // selection leaves, in the order given to update(); null means no cell is selected.
+    onSelect(handler) {
+      state.onSelect = typeof handler === "function" ? handler : null;
+    },
+    // Empties both heatmap selections (the page's "Reset all filters").
+    clearSelection() {
+      for (const kind of Object.keys(state.heat)) if (state.heat[kind].size) setHeat(kind, new Set());
     }
   };
 }

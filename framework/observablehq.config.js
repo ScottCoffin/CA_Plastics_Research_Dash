@@ -4,9 +4,17 @@
 // become redirects). Pages read site/data at runtime (components/atlas.js).
 // Every page lives at the top level of src/ (atlas.js resolves ../data/ from the page URL).
 const REPO = "https://github.com/ScottCoffin/CA_Plastics_Research_Dash";
-// VD-25a: the brand mark and the favicon are four flat planes (indigo, gold, vermilion, ink), one per task.
-const PLANE_MARK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" aria-hidden="true" focusable="false"><rect width="15" height="15" fill="#23305e"/><rect x="15" width="15" height="15" fill="#e3a92b"/><rect y="15" width="15" height="15" fill="#e2452b"/><rect x="15" y="15" width="15" height="15" fill="#141311"/></svg>';
+// VD-25a, VD-27: the brand mark and the favicon are the Overview's paper California: the state
+// outline cut from four flat planes, one per task (indigo water, vermilion people, gold money, ink evidence).
+const CA_OUTLINE = "M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L0,-221L0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-149,-121L-143,-122L-132,-116L-129,-111L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L167,360L221,405L256,494L469,474Z";
+const PLANE_MARK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-400 -560 930 1070" aria-hidden="true" focusable="false">' +
+  '<defs><clipPath id="m"><path d="' + CA_OUTLINE + '"/></clipPath></defs><g clip-path="url(#m)">' +
+  '<polygon fill="#23305e" points="-470,-575 560,-575 560,-150 -470,-150"/>' +
+  '<polygon fill="#e2452b" points="-470,-150 70,-150 -70,205 -470,205"/>' +
+  '<polygon fill="#e3a92b" points="70,-150 560,-150 560,250 -70,205"/>' +
+  '<polygon fill="#141311" points="-470,205 -70,205 560,250 560,520 -470,520"/></g></svg>';
 const CA_MARK = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK).toString("base64");
+const FAVICON = "data:image/svg+xml," + encodeURIComponent(PLANE_MARK.replace(' aria-hidden="true" focusable="false"', ""));
 const PAGE_GROUPS = [
   {name: "Explore", pages: [
     {name: "Experts", path: "/experts"},
@@ -118,7 +126,7 @@ export default {
           U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
     </style>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Crect width='15' height='15' fill='%2323305e'/%3E%3Crect x='15' width='15' height='15' fill='%23e3a92b'/%3E%3Crect y='15' width='15' height='15' fill='%23e2452b'/%3E%3Crect x='15' y='15' width='15' height='15' fill='%23141311'/%3E%3C/svg%3E">
+    <link rel="icon" href="${FAVICON}">
     <style>@import url("./assets/site_search.css");</style>
     <script>(function(){var s=document.createElement("script");s.src="./assets/site_search.js";document.head.appendChild(s)})();</script>`,
   style: "style.css",

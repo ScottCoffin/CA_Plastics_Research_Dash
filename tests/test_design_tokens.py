@@ -112,9 +112,9 @@ def test_async_foundation_surfaces_reserve_viewport_space() -> None:
 def test_policy_timeline_reserves_successful_payload_height() -> None:
     policy = (ROOT / "framework" / "src" / "components" / "policy.css").read_text(encoding="utf-8")
 
-    assert "min-height: 85rem;" in policy
-    assert "min-height: 116.5rem;" in policy
-    assert "min-height: 124rem;" in policy
+    # Re-measured 2026-11-17 after the Policy text went full width.
+    for value in ("56rem", "63rem", "75rem", "86rem", "110rem", "137rem"):
+        assert f"min-height: {value};" in policy
 
 
 def test_archivo_is_one_self_hosted_variable_face() -> None:

@@ -45,7 +45,7 @@ title: Collaboration network
 <div class="atlas-field"><label class="atlas-label" for="net-institution">Institution contains</label><input class="atlas-input" id="net-institution" name="institution" type="search" autocomplete="off" placeholder="e.g. UC Davis"></div>
 <div class="atlas-field"><label class="atlas-label" for="net-year-from">From year</label><input class="atlas-input" id="net-year-from" name="year_from" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
 <div class="atlas-field"><label class="atlas-label" for="net-year-to">To year</label><input class="atlas-input" id="net-year-to" name="year_to" type="number" inputmode="numeric" min="1900" max="2100" placeholder="Any"></div>
-<div class="atlas-field"><label class="atlas-label" for="net-min">Minimum co-authored works</label><input class="net-range" id="net-min" name="min" type="range" min="1" max="10" step="1" value="1"> <output id="net-min-out" for="net-min">1</output></div>
+<div class="atlas-field"><label class="atlas-label" for="net-min">Minimum co-authored works</label><div class="net-range-row"><input class="net-range" id="net-min" name="min" type="range" min="1" max="10" step="1" value="1"><output id="net-min-out" class="net-range-out" for="net-min">1</output></div></div>
 <div class="atlas-field atlas-field--check"><label class="atlas-label" for="net-current"><input class="atlas-check" id="net-current" name="now" type="checkbox"> Now in California only</label></div>
 </div>
 </details>

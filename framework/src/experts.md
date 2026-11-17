@@ -12,7 +12,6 @@ title: Experts
 <p class="atlas-page-head__lead">Explore California-linked researchers and plastics topics. Filter the index or share a focused view by URL.</p>
 <div class="atlas-page-head__meta">
 <span class="atlas-pill atlas-pill--brand">${icon("person")} Research profiles</span>
-<span class="atlas-pill">Filters are shareable by URL</span>
 <a class="atlas-pill" href="./glossary#plastic-related">Expert terms in the glossary</a>
 </div>
 </header>
@@ -54,10 +53,9 @@ title: Experts
 <label for="now-filter"><span class="atlas-label"><a href="./glossary#current-affiliation">Current affiliation</a></span></label>
 <select id="now-filter" class="atlas-select" name="now"><option value="">Any</option><option value="ca">In California now</option><option value="outside">Outside California now</option><option value="unknown">Unknown</option></select>
 </div>
-<div class="atlas-field expert-career-field">
-<span class="atlas-label">Career stage</span>
-<label class="expert-check-line" for="early-filter"><input id="early-filter" class="atlas-check" name="early" type="checkbox"> Early career only <span class="atlas-hint">(first paper ≤ 10 years ago)</span></label>
-<button type="button" id="rising-preset" class="atlas-btn atlas-btn--ghost" title="Early-career experts sorted by rising citation momentum">Find up-and-coming researchers</button>
+<div class="atlas-field expert-career-field" role="group" aria-labelledby="early-career-heading">
+<span id="early-career-heading" class="atlas-label">Career stage</span>
+<label class="expert-check-box" for="early-filter"><input id="early-filter" class="atlas-check" name="early" type="checkbox"><span>Early career only <span class="atlas-hint">(first paper ≤ 10 years ago)</span></span></label>
 </div>
 <div class="atlas-field">
 <label class="atlas-label" for="year-from">From year</label>

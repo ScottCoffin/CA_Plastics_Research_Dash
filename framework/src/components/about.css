@@ -11,19 +11,241 @@
   overflow-wrap: anywhere;
 }
 
-.about-limitations-card {
-  position: relative;
-  border: 1px solid var(--atlas-line);
-  background: var(--theme-background-alt);
+/* Owner 2026-11-17: bigger section headings, colour-coded cards that lift on hover, living flow. */
+.about-section {
+  margin-block: var(--atlas-space-10);
 }
 
-/* A small square plane in the top-left corner. The About page has no task colour, so it is ink. */
-.about-limitations-card::before {
+#observablehq-main .about-section > h2 {
+  position: relative;
+  margin: 0 0 var(--atlas-space-4);
+  padding-left: calc(0.7rem + var(--atlas-space-3));
+  font-family: var(--atlas-font-display);
+  font-size: clamp(1.7rem, 1.35rem + 1.2vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+#observablehq-main .about-section > h2::before {
   position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 0.6rem;
-  height: 0.6rem;
-  background: var(--atlas-plane-ink);
+  top: 0.22em;
+  left: 0;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: var(--atlas-vermilion);
   content: "";
+}
+
+#observablehq-main .about-section > p,
+#observablehq-main .about-lede {
+  max-width: 75ch;
+}
+
+#observablehq-main .about-lede {
+  font-size: 1.12rem;
+  line-height: 1.55;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: var(--atlas-space-5);
+}
+
+.about-card,
+.about-steps > li {
+  position: relative;
+  padding: var(--atlas-space-5) var(--atlas-space-5) var(--atlas-space-4);
+  border: 1px solid var(--atlas-line);
+  border-top: 6px solid var(--c, var(--atlas-plane-ink));
+  background: var(--atlas-surface);
+  transition: transform 160ms ease-out, box-shadow 160ms ease-out, background-color 160ms ease-out;
+}
+
+.about-card:hover,
+.about-card:focus-within,
+.about-steps > li:hover,
+.about-steps > li:focus-within {
+  background: var(--atlas-page);
+  box-shadow: 6px 6px 0 var(--c, var(--atlas-plane-ink));
+  transform: translate(-3px, -3px);
+}
+
+#observablehq-main .about-card h3,
+#observablehq-main .about-steps h3 {
+  margin: 0 0 var(--atlas-space-2);
+  font-family: var(--atlas-font-display);
+  font-size: var(--atlas-type-subsection-size);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+#observablehq-main .about-card p,
+#observablehq-main .about-steps p {
+  max-width: none;
+  margin: 0 0 var(--atlas-space-3);
+  font-size: 0.97rem;
+  line-height: 1.55;
+}
+
+#observablehq-main .about-card p:last-child,
+#observablehq-main .about-steps p:last-child {
+  margin-bottom: 0;
+}
+
+.about-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  gap: var(--atlas-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Living flow: stage boxes down the left, the count that left each stage to the right. */
+.about-flow-host {
+  min-height: 24rem;
+}
+
+.about-flow {
+  display: grid;
+  gap: var(--atlas-space-6);
+  max-width: 58rem;
+  margin: var(--atlas-space-5) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.about-flow__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: var(--atlas-space-8);
+  align-items: center;
+}
+
+.about-flow__row:not(:last-child)::after {
+  position: absolute;
+  bottom: calc(-1 * var(--atlas-space-6));
+  left: calc(31% - 1px);
+  width: 2px;
+  height: var(--atlas-space-6);
+  background: var(--atlas-ink);
+  content: "";
+}
+
+.about-flow__box,
+.about-flow__out {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: var(--atlas-space-3) var(--atlas-space-4);
+  transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+}
+
+.about-flow__box {
+  border: 2px solid var(--atlas-ink);
+  border-left: 10px solid var(--c);
+  background: var(--atlas-surface);
+}
+
+.about-flow__out {
+  border: 1px dashed var(--atlas-faint);
+  background: var(--atlas-page);
+  color: var(--atlas-muted);
+}
+
+.about-flow__out::before {
+  position: absolute;
+  top: 50%;
+  left: calc(-1 * var(--atlas-space-8));
+  width: var(--atlas-space-8);
+  height: 2px;
+  background: var(--atlas-faint);
+  content: "";
+}
+
+.about-flow__row:hover .about-flow__box {
+  box-shadow: 5px 5px 0 var(--c);
+  transform: translate(-2px, -2px);
+}
+
+.about-flow__value {
+  font: 800 1.6rem / 1.05 var(--atlas-font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.about-flow__out .about-flow__value {
+  font-size: 1.2rem;
+}
+
+.about-flow__label {
+  font-weight: 650;
+}
+
+.about-flow__note {
+  color: var(--atlas-muted);
+  font-size: var(--atlas-type-small-size);
+}
+
+#observablehq-main .about-flow__caption,
+#observablehq-main .about-flow__empty {
+  max-width: 75ch;
+  margin-top: var(--atlas-space-4);
+  color: var(--atlas-muted);
+  font-size: var(--atlas-type-small-size);
+}
+
+@media (max-width: 40rem) {
+  .about-flow__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--atlas-space-2);
+  }
+
+  .about-flow__row:not(:last-child)::after {
+    left: var(--atlas-space-6);
+  }
+
+  .about-flow__out {
+    margin-left: var(--atlas-space-8);
+  }
+
+  .about-flow__out::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-card,
+  .about-steps > li,
+  .about-flow__box {
+    transition: none;
+  }
+
+  .about-card:hover,
+  .about-card:focus-within,
+  .about-steps > li:hover,
+  .about-steps > li:focus-within,
+  .about-flow__row:hover .about-flow__box {
+    transform: none;
+  }
+}
+
+/* Framework caps lists at 640px; the step grid and the flow use the full width. */
+#observablehq-main .about-steps,
+#observablehq-main .about-flow {
+  max-width: none;
+}
+
+#observablehq-main .about-flow {
+  max-width: 58rem;
+}
+
+/* Links inside running sentences stay inline (WCAG 2.5.8 exempts inline text links from the target size). */
+#observablehq-main .about-card p a,
+#observablehq-main .about-steps p a,
+#observablehq-main .about-section > p a {
+  display: inline;
+  min-height: 0;
 }

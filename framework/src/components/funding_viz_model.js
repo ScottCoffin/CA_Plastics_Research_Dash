@@ -450,3 +450,67 @@ export function topicFill(key, T, css = false) {
   if (key === UNTAGGED || !T) return UNTAGGED_COLOR;
   return css ? T.cssFill(key) : T.svgFill(key);
 }
+
+// ---- Heatmap selection ------------------------------------------------------------------------
+
+// A heatmap cell is a row key and a column key joined by HEAT_SEP. The topic x year heatmap uses the topic
+// and the year column ("pre" before HEAT_START, else the fiscal year). The sector x topic heatmap uses the
+// sector and the topic. A selection is a Set of cell keys. Within one heatmap the selected cells combine as a
+// union (an award in any selected cell is shown); the two heatmaps combine as an intersection; both sit under
+// the page filters.
+export const HEAT_SEP = "\u0000";
+
+export function heatCellKey(row, col) {
+  return `${row}${HEAT_SEP}${col}`;
+}
+
+// The year column an award falls in, or null when it has no fiscal year.
+export function heatColOf(fy) {
+  if (fy === null || fy === undefined) return null;
+  return fy < HEAT_START ? "pre" : fy;
+}
+
+// Topic x year cells one award counts in: one per topic, none when the award is undated.
+export function topicYearKeysOf(row) {
+  const col = heatColOf(row.fy);
+  return col === null ? [] : row.topics.map((t) => heatCellKey(t, col));
+}
+
+// Sector x topic cells one award counts in: one per topic.
+export function sectorTopicKeysOf(row) {
+  return row.topics.map((t) => heatCellKey(row.sector, t));
+}
+
+// Keys of the non-empty cells of a topic x year heatmap (buildHeat) and of a sector x topic one (buildSectorTopic).
+export function liveTopicYearKeys(heat) {
+  return heat.rows.flatMap((r) => r.counts.flatMap((n, i) => (n > 0 ? [heatCellKey(r.key, heat.cols[i])] : [])));
+}
+
+export function liveSectorTopicKeys(matrix) {
+  return matrix.sectors.flatMap((s, i) => matrix.topics.flatMap((t, j) => (matrix.grid[i][j] > 0 ? [heatCellKey(s, t)] : [])));
+}
+
+// Adds the cell when it is not selected, removes it when it is. Returns a new Set.
+export function toggleHeatCell(selected, key) {
+  const next = new Set(selected);
+  if (next.has(key)) next.delete(key);
+  else next.add(key);
+  return next;
+}
+
+// Drops selected cells that are now empty or gone (after a filter change). Returns a new Set.
+export function pruneHeatSelection(selected, liveKeys) {
+  const live = new Set(liveKeys);
+  return new Set([...selected].filter((key) => live.has(key)));
+}
+
+// The awards that fall in every non-empty heatmap selection. selections: {topicYear: Set, sectorTopic: Set}.
+// With no selection the input array is returned unchanged.
+export function filterByHeatSelection(vrows, selections = {}) {
+  const active = [
+    [selections.topicYear, topicYearKeysOf],
+    [selections.sectorTopic, sectorTopicKeysOf]
+  ].filter(([set]) => set && set.size);
+  if (!active.length) return vrows;
+  return vrows.filter((row) => active.every(([set, keysOf]) => keysOf(row).some((key) => set.has(key))));
+}

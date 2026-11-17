@@ -555,6 +555,48 @@ def _aggregate(works: Sequence[Mapping[str, Any]]) -> dict[str, list[dict[str, A
     }
 
 
+def _flow(
+    normalized: Sequence[Mapping[str, Any]],
+    published: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """PRISMA-style flow for build_metadata.json (FLOW-1).
+
+    ``normalized`` is the works table as the export read it, before the non-California filter
+    and curation; ``published`` is the exported index's works. ``removed_by_curation`` is the
+    difference, so the block adds up by construction. The checks reject negative counts and
+    any total that does not agree, for example a published work without California authorship.
+    """
+    works = [row for row in normalized if _text(row.get("work_id"))]
+    unique_works = len(works)
+    duplicates_collapsed = sum(len(_list(row.get("duplicate_work_ids"))) for row in works)
+    no_ca_authorship = sum(1 for row in works if row.get("ca_any_author") is not True)
+    removed_by_curation = unique_works - no_ca_authorship - len(published)
+    plastic_related = sum(1 for row in published if row.get("plastic_related") is True)
+    by_type: Counter[str] = Counter(_text(row.get("type")) or "unknown" for row in published)
+    flow = {
+        "records_retrieved": unique_works + duplicates_collapsed,
+        "duplicates_collapsed": duplicates_collapsed,
+        "unique_works": unique_works,
+        "no_ca_authorship": no_ca_authorship,
+        "removed_by_curation": removed_by_curation,
+        "published": len(published),
+        "plastic_related": plastic_related,
+        "not_plastic_related": len(published) - plastic_related,
+        "by_type": dict(sorted(by_type.items(), key=lambda item: (-item[1], item[0]))),
+    }
+    values = [value for value in flow.values() if isinstance(value, int)]
+    values.extend(flow["by_type"].values())
+    if min(values) < 0:
+        raise ValueError(f"flow has a negative count: {flow}")
+    if unique_works - no_ca_authorship - removed_by_curation != flow["published"]:
+        raise ValueError(f"flow does not add up to published: {flow}")
+    if flow["published"] != flow["plastic_related"] + flow["not_plastic_related"]:
+        raise ValueError(f"flow plastic split does not add up to published: {flow}")
+    if sum(flow["by_type"].values()) != flow["published"]:
+        raise ValueError(f"flow by_type does not add up to published: {flow}")
+    return flow
+
+
 def export_site(
     *,
     works_path: str | Path,
@@ -594,9 +636,14 @@ def export_site(
     fetched (``plastic_basis`` = ``openalex``), else the exported CA corpus.
     ``profiles`` (``atlas.build.expert_profiles``) adds a ``profile`` key to the
     author detail files it names; ``None`` leaves the detail files unchanged.
+
+    ``build_metadata.json`` gets a ``flow`` block (FLOW-1, see ``_flow``) when the works
+    table carries ``ca_any_author`` and ``ca_authors_only`` is on; otherwise the key is omitted.
     """
 
     works_rows = _read(works_path)
+    # FLOW-1 counts the works table as read: before the non-CA filter and curation.
+    normalized_works = list(works_rows)
     author_rows = _read(authors_path)
     authorship_rows = _read(authorships_path)
     institution_rows = _read(institutions_path)
@@ -959,6 +1006,13 @@ def export_site(
         "ca_institutions": sum(item["ca_flag"] for item in institutions),
         "labeled_works": len(labels.keys() & work_lookup.keys()),
     }
+    # FLOW-1 needs the live normalized table (``ca_any_author``) and CA-only publishing. Fixture
+    # builds and ``ca_authors_only=False`` exports leave the flow block out (the front end then
+    # uses the archived release).
+    flow_applies = (
+        ca_authors_only and bool(normalized_works) and "ca_any_author" in normalized_works[0]
+    )
+    flow = _flow(normalized_works, slim_works) if flow_applies else None
     index = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": timestamp,
@@ -1065,6 +1119,8 @@ def export_site(
         "payload_gzip_bytes": sum(item["gzip_bytes"] for item in sizes.values()),
         "curation": curated.counts,
     }
+    if flow is not None:
+        metadata["flow"] = flow
     metadata_path = output / "build_metadata.json"
     _atomic_json(metadata_path, metadata)
     result_sizes = dict(sizes)

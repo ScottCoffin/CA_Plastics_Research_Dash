@@ -11,6 +11,12 @@
   align-items: end;
 }
 
+/* Grid children may shrink below their content, so a control cannot spill into the next column. */
+.net-primary-grid > *,
+.net-more-grid > * {
+  min-width: 0;
+}
+
 .net-filter-form {
   display: contents;
 }
@@ -23,12 +29,32 @@
   align-items: end;
 }
 
+/* Slider and value share one 2.5rem row, the same height as the select and input beside them. */
+.net-range-row {
+  display: flex;
+  min-width: 0;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: var(--atlas-space-3);
+}
+
 .net-range {
   box-sizing: border-box;
+  flex: 1 1 auto;
   width: 100%;
+  min-width: 0;
   min-height: 2.5rem;
   margin: 0;
   accent-color: var(--atlas-brand);
+}
+
+.net-range-out {
+  flex: 0 0 auto;
+  min-width: 2ch;
+  color: var(--atlas-ink);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .net-range:focus-visible {
@@ -36,8 +62,10 @@
   outline-offset: 2px;
 }
 
+/* The status line gets the card's horizontal padding so its text does not sit on the box edge. */
 .net-page .atlas-result-line > p {
   margin: 0;
+  padding: var(--atlas-space-2) var(--atlas-space-4);
 }
 
 .net-chart {
@@ -379,3 +407,4 @@
     transition: none;
   }
 }
+.net-more-grid .atlas-input { width: 100%; box-sizing: border-box; }

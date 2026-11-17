@@ -549,3 +549,118 @@
     animation: none;
   }
 }
+
+/* VD-27 (owner 2026-11-17): what the pipeline does, before the schedule. Four numbered task planes. */
+.overview-engine {
+  padding-block: clamp(2.25rem, 5vw, 4rem);
+  background: var(--atlas-surface);
+  box-shadow: 0 0 0 100vmax var(--atlas-surface);
+  clip-path: inset(0 -100vmax);
+}
+
+.overview-engine__head {
+  max-width: 62rem;
+}
+
+#observablehq-main .overview-engine__title {
+  margin: 0.25rem 0 0;
+  font-family: var(--atlas-font-display);
+  font-size: clamp(1.9rem, 1.4rem + 1.8vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+#observablehq-main .overview-engine__lead,
+#observablehq-main .overview-engine__types {
+  max-width: 62rem;
+  margin: 0.875rem 0 0;
+  font-size: 1.08rem;
+}
+
+#observablehq-main .overview-engine__types {
+  min-height: 1.5em;
+  color: var(--atlas-muted);
+  font-size: var(--atlas-type-small-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.overview-pipeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14.5rem, 1fr));
+  gap: var(--atlas-space-4);
+  margin: var(--atlas-space-8) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.overview-pipe {
+  position: relative;
+  padding: var(--atlas-space-6) var(--atlas-space-5) var(--atlas-space-5);
+  border: 1px solid var(--atlas-line);
+  border-top: 6px solid var(--c);
+  background: var(--atlas-page);
+  transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+}
+
+.overview-pipe:hover,
+.overview-pipe:focus-within {
+  box-shadow: 6px 6px 0 var(--c);
+  transform: translate(-3px, -3px);
+}
+
+.overview-pipe__n {
+  position: absolute;
+  top: var(--atlas-space-4);
+  right: var(--atlas-space-4);
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  background: var(--c);
+  color: var(--atlas-on-brand);
+  font: 800 1rem / 1 var(--atlas-font-display);
+}
+
+.overview-pipe[style*="task-money"] .overview-pipe__n {
+  color: var(--atlas-ink);
+}
+
+#observablehq-main .overview-pipe h3 {
+  margin: 0 2.5rem var(--atlas-space-2) 0;
+  font: 800 1.3rem / 1.15 var(--atlas-font-display);
+}
+
+#observablehq-main .overview-pipe p {
+  max-width: none;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+#observablehq-main .overview-pipe .overview-pipe__also {
+  margin-top: var(--atlas-space-3);
+  padding-top: var(--atlas-space-3);
+  border-top: 1px solid var(--atlas-line);
+  color: var(--atlas-muted);
+  font-size: var(--atlas-type-small-size);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overview-pipe {
+    transition: none;
+  }
+
+  .overview-pipe:hover,
+  .overview-pipe:focus-within {
+    transform: none;
+  }
+}
+
+#observablehq-main .overview-pipeline {
+  max-width: none;
+}
+
+#observablehq-main .overview-pipe a {
+  display: inline;
+  min-height: 0;
+}

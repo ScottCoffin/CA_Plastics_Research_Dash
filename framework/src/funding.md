@@ -10,7 +10,7 @@ title: Funding
 <span class="motif" aria-hidden="true"></span>
 <p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-coins"></use></svg>Data</p>
 <h1>Funding</h1>
-<p class="atlas-page-head__lead">Public awards from federal, state and other funders, as each source reports them. Use the filters to narrow the list, or switch any chart to its table.</p>
+<p class="atlas-page-head__lead">Public awards from federal, state and other funders, as each source reports them. Use the filters to narrow the list, click heatmap cells to narrow it further, or switch any chart to its table.</p>
 </header>
 
 <div id="grants-basis-caution" class="atlas-callout atlas-callout--caution">

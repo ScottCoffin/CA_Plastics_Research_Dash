@@ -189,11 +189,21 @@ Licence: derived counts; as `index.json`.
 Purpose: build log for the static export (timestamp, row counts, payload sizes).
 Top-level keys: `schema_version`, `generated_at`, `counts`, `files` (object keyed by
 relative path, for example `index.json` or `authors/<author_id>.json`), `payload_bytes`
-(integer), `payload_gzip_bytes` (integer).
+(integer), `payload_gzip_bytes` (integer), `flow` (optional, FLOW-1; see below).
 Licence: project operational output; no third-party content. Owner decision applies only to the repository licence.
 
 - `counts`: `authors`, `ca_institutions`, `institutions`, `labeled_works`, `works` (integers).
 - `files[path]`: `bytes` (integer), `gzip_bytes` (integer).
+- `flow` (optional; omitted when `ca_authors_only` is off or the works table has no `ca_any_author`; a missing key means "use the archived release"):
+  - `records_retrieved`: `unique_works` + `duplicates_collapsed` (integer).
+  - `duplicates_collapsed`: total `duplicate_work_ids` length over the normalized works, null as 0 (integer).
+  - `unique_works`: works in the normalized table before curation (integer).
+  - `no_ca_authorship`: unique works whose `ca_any_author` is not true (integer).
+  - `removed_by_curation`: `unique_works` - `no_ca_authorship` - `published` (integer).
+  - `published`: works in `index.json`, the same as `counts.works` (integer).
+  - `plastic_related`: published works with `plastic_related` true (integer).
+  - `not_plastic_related`: `published` - `plastic_related` (integer).
+  - `by_type`: object from OpenAlex work type to published count (`unknown` when empty); values sum to `published`.
 
 ### `site/data/grants.json`
 
@@ -317,6 +327,13 @@ Top-level keys: `schema_version` (`em18.v1`), `source` (string), `caveat` (the r
 Licence: curated by hand from DTSC pages and uploaded documents; no scraping. Dates are as DTSC states them.
 
 `entries[]`: `id` (`dtsc-NN`), `date_as_stated` (verbatim from DTSC), `date_iso` (`YYYY-MM-DD` or `YYYY-MM`), `event`, `source_label`, `source_url` (https or null), `kind` (`workshop`, `proposal`, `background`, `finalized`, `effective` or `work_plan`).
+
+### `site/data/opc_actions.json`
+
+Purpose: the Policy page's OPC Solutions track, the 22 recommended early actions in the Ocean Protection Council's Statewide Microplastics Strategy (EM-17, Add-on A2 §7 Part A), with a draft link to Global Plastic Laws topics. Written from `config/opc_early_actions.yml` by `py -3.14 scripts/build_opc_actions_json.py` (`--check` fails when it is stale).
+Top-level keys: `schema_version` (`em17.v1`), `source` (string), `mapping_status` (`draft` or `owner_reviewed`), `strategy` (`label`, `url` (https) and `adopted`), `gpl` (`name`, `steward`, `base_url` (https), `california_search_url` (https), `disclaimer` (the Global Plastic Laws sentence) and `topics`, an object that maps each topic slug to its name), `objectives` (array of `id` and `name`), `actions` (array).
+`actions[]`: `code` (`2A.N.N`), `objective` (an `objectives[].id`), `group`, `summary` (the Atlas's paraphrase, 200 characters or fewer), `deadline_as_stated` (verbatim from the Strategy), `deadline_year` (integer), `pdf_page`, `gpl_topics` (topic slugs from `gpl.topics`; may be empty), `atlas` (either `q`, search text, or `topic`, a key from `site/assets/topics.js`).
+Licence: curated by hand from the Strategy; no scraping. Summaries are the Atlas's own words, not the Council's.
 
 ### `site/data/methods_flow.json`
 

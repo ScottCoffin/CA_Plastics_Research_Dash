@@ -225,6 +225,7 @@ def _page(
         f"<title>{esc(title)}</title>",
         f'<meta name="description" content="{esc(description)}">',
         f'<link rel="canonical" href="{esc(canonical)}">',
+        '<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">',
         f'<meta property="og:type" content="{esc(og_type)}">',
         f'<meta property="og:title" content="{esc(title)}">',
         f'<meta property="og:description" content="{esc(description)}">',

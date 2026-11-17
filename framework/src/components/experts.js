@@ -420,14 +420,6 @@ function bindEvents(signal) {
       loadData();
     }
   }, {signal});
-  $("rising-preset").addEventListener("click", () => {
-    state.filters = {...state.filters, early: true, sort: "rising"};
-    $("early-filter").checked = true;
-    $("expert-sort").value = "rising";
-    state.lastFilterSignature = "";
-    writeHash();
-    renderExperts();
-  }, {signal});
   $("export-csv").addEventListener("click", exportCsv, {signal});
   $("drawer-close").addEventListener("click", closeDrawer, {signal});
   $("drawer-backdrop").addEventListener("click", closeDrawer, {signal});

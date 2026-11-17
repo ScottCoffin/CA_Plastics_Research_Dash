@@ -272,7 +272,9 @@ def test_overview_cards_read_the_card_counts_from_build_metadata() -> None:
     placeholders = set(re.findall(r'data-count="([^"]+)"', page))
 
     assert CARD_KEYS <= placeholders
-    assert placeholders - CARD_KEYS == {"authors", "california_institutions"}
+    # type_summary (owner 2026-11-17) is the living output mix from metadata.flow.by_type.
+    assert placeholders - CARD_KEYS == {"authors", "california_institutions", "type_summary"}
+    assert "metadata?.flow?.by_type" in page
     # Four door counts and seven band facts, each hidden unless every value in it is present.
     assert len(re.findall(r"<(?:li|small)[^>]*data-count-group", page)) == 11
     assert 'import {loadJson, aboutViewModel, formatCount} from "./components/atlas.js";' in page

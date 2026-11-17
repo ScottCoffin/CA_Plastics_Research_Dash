@@ -133,6 +133,24 @@ def test_chart_wrapper_is_labelled_div() -> None:
     assert match and "graph" in match.group(1)
 
 
+def test_range_slider_and_status_line_sit_inside_their_boxes() -> None:
+    page = PAGE.read_text(encoding="utf-8")
+    css = re.sub(r"/\*.*?\*/", "", CSS.read_text(encoding="utf-8"), flags=re.DOTALL)
+    assert (
+        '<div class="net-range-row"><input class="net-range" id="net-min" name="min" type="range"'
+        in page
+    )
+    assert 'id="net-min-out" class="net-range-out" for="net-min">1</output>' in page
+    assert ".net-primary-grid > *,\n.net-more-grid > * {\n  min-width: 0;\n}" in css
+    assert ".net-range-row {" in css and ".net-range-out {" in css
+    range_block = css.split(".net-range {", 1)[1].split("}", 1)[0]
+    assert "width: 100%;" in range_block and "min-width: 0;" in range_block
+    assert (
+        ".net-page .atlas-result-line > p {\n  margin: 0;\n"
+        "  padding: var(--atlas-space-2) var(--atlas-space-4);\n}"
+    ) in css
+
+
 def test_css_is_scoped_to_network() -> None:
     text = re.sub(r"/\*.*?\*/", "", CSS.read_text(encoding="utf-8"), flags=re.DOTALL)
     selectors = [

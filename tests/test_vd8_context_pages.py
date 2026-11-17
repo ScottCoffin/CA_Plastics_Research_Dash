@@ -42,9 +42,9 @@ def test_about_citation_doi_is_monospace_and_limitations_remain_visible() -> Non
     styles = (COMPONENTS / "about.css").read_text(encoding="utf-8")
 
     assert 'href="./components/about.css"' in page
-    assert '<section class="card about-citation-card">' in page
+    assert 'class="about-card about-citation-card"' in page
     assert "10.5281/zenodo.24124016" in page
-    assert '<section class="card about-limitations-card">' in page
+    assert 'class="about-card about-limitations-card"' in page
     assert "no validated precision or recall is available yet" in page
     assert "font-family: ui-monospace" in styles
     assert "#observablehq-main p a" in styles

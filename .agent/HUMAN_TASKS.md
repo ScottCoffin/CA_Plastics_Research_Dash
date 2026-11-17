@@ -30,6 +30,23 @@ workflow and the live HTTPS site now pass. GitHub still reports the certificate 
 - **Done when:** `http://plastiverse.live/` redirects to HTTPS. Tell the agent "HTTPS enforced"
   and it will confirm the API state and redirect.
 
+### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
+The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
+Global Plastic Laws topic. That link is a draft the agent proposed, so the page shows a
+"Draft mapping, not yet reviewed" badge until you check every row.
+1. Run `py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`.
+   A browser tab opens. If it does not, go to http://localhost:8501.
+2. Type your initials in the sidebar.
+3. For each action, read the summary and the draft topic(s), then click one:
+   - **Mapping OK ✓**: the draft topic is the right Global Plastic Laws page for this action.
+   - **No topic fits**: no topic page matches; the action shows "No matching topic".
+   - Pick topics in the list and click **Save changed topics** to replace the draft.
+   Each click saves to `curation/opc_mapping_review.csv` at once.
+4. The summaries are the Atlas's own paraphrases of the 2022 Strategy. If one reads wrong to you,
+   add a note on that action.
+- **Done when:** the sidebar shows 0 pending. Tell the agent "OPC mapping reviewed"; it rebuilds
+  the page data and the draft badge disappears.
+
 ### H2. Review the 277 low-confidence work-relevance decisions
 1. Run `py -3.14 -m streamlit run scripts/review_work_relevance_app.py`.
    A browser tab opens. If it does not, go to http://localhost:8501.
@@ -147,8 +164,9 @@ Open https://plastiverse.live/experts. The list is now sorted by plastics citati
 1. Click **Full profile** on a few experts you know. Check the primary affiliation, the
    citations-per-year chart (orange = plastics-related), the m-quotient, and that clicking a
    topic tag filters the publication list.
-2. Click **Find up-and-coming researchers** (under Career stage). Check whether the names
-   look right to you.
+2. Open **More filters**, tick **Early career only**, and set **Sort** to **Rising (citation momentum)**.
+   Check whether the names look right to you. (The separate "Find up-and-coming researchers"
+   button was removed at your request on 2026-11-17.)
 3. Answer RISING-METRIC in `.agent/QUESTIONS.md` ("keep default" or describe the change).
 - **Done when:** you reply "expert pages OK" or list what to change.
 

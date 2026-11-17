@@ -95,6 +95,37 @@ title: Overview
 </div>
 </div>
 </section>
+<section class="overview-engine" aria-labelledby="overview-engine-title">
+<div class="overview-engine__head">
+<p class="overview-caps">Behind the pages</p>
+<h2 class="overview-engine__title" id="overview-engine-title">A living evidence map of California plastics research</h2>
+<p class="overview-engine__lead">The Atlas is rebuilt every morning from open catalogues. It tracks plastics and microplastics research with at least one California-affiliated author: journal articles and reviews, conference papers and abstracts, preprints, theses and dissertations, book chapters, reports and datasets. It also tracks the researchers, institutions, monitoring data and funding around that work.</p>
+<p class="overview-engine__types" data-count-group hidden><span data-count="type_summary"></span></p>
+</div>
+<ol class="overview-pipeline">
+<li class="overview-pipe" style="--c: var(--atlas-task-water)">
+<span class="overview-pipe__n" aria-hidden="true">1</span>
+<h3>Gather</h3>
+<p>A reviewed search of titles and abstracts runs against <a href="https://openalex.org/" target="_blank" rel="noreferrer">OpenAlex</a>, an open index of scholarly works, authors and institutions. Records found through researchers' ORCID profiles, the University of California's eScholarship repository and DataCite are added, and recall is checked against Europe PMC.</p>
+<p class="overview-pipe__also">Funding: NIH RePORTER, NSF awards, USAspending.gov, California Sea Grant, the Ocean Protection Council and State Water Board grants. Monitoring: rights-cleared sample datasets.</p>
+</li>
+<li class="overview-pipe" style="--c: var(--atlas-task-people)">
+<span class="overview-pipe__n" aria-hidden="true">2</span>
+<h3>Screen</h3>
+<p>A work stays only if an author is tied to California: by a registered California institution, by the affiliation text itself, or by the author's recent California record. Keyword rules then decide whether plastic is central to the work. Uncertain cases get a second, language-model read, and the maintainer's review decisions override both.</p>
+</li>
+<li class="overview-pipe" style="--c: var(--atlas-task-money)">
+<span class="overview-pipe__n" aria-hidden="true">3</span>
+<h3>Classify and link</h3>
+<p>Keyword rules tag each work with topics (such as monitoring, toxicity, wastewater or human health) and a study type; these tags are provisional. Authors are matched to institutions through the ROR registry, duplicate profiles are merged, and co-authorship becomes the collaboration network.</p>
+</li>
+<li class="overview-pipe" style="--c: var(--atlas-task-evidence)">
+<span class="overview-pipe__n" aria-hidden="true">4</span>
+<h3>Publish</h3>
+<p>The build writes plain JSON and Parquet files and redeploys this static site. Nothing in your browser queries a server. Releases are archived on Zenodo with a citable DOI, and the <a href="./about#how-works-are-screened">About page</a> shows the full screening flow.</p>
+</li>
+</ol>
+</section>
 <section class="overview-clock" aria-labelledby="overview-clock-title">
 <div class="overview-clock__inner">
 <h2 class="overview-clock__title" id="overview-clock-title">How the Atlas stays current</h2>
@@ -125,7 +156,17 @@ const counts = new Map([
   ["california_institutions", countText(statRows.get("California institutions")?.value)],
   ...["awards", "monitoring_samples", "monitoring_sources", "network_experts", "network_links", "plastic_works"]
     .map((key) => [key, countText(formatCount(metadataCounts[key]))]),
+  ["type_summary", typeSummary(metadata?.flow?.by_type)],
 ]);
+
+// Living output mix, e.g. "Now: 1,398 articles · 109 reviews · …". Hidden until the export carries flow.by_type.
+function typeSummary(byType) {
+  const names = {article: "articles", review: "reviews", "conference-paper": "conference papers", preprint: "preprints",
+    "book-chapter": "book chapters", "conference-abstract": "conference abstracts", dataset: "datasets",
+    dissertation: "theses and dissertations", report: "reports", book: "books"};
+  const rows = Object.entries(byType ?? {}).filter(([type, n]) => names[type] && n > 0).sort((a, b) => b[1] - a[1]);
+  return rows.length ? `Now: ${rows.map(([type, n]) => `${formatCount(n)} ${names[type]}`).join(" · ")}.` : null;
+}
 for (const group of document.querySelectorAll("[data-count-group]")) {
   const pieces = [...group.querySelectorAll("[data-count]")];
   const values = pieces.map((node) => counts.get(node.dataset.count) ?? null);

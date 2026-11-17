@@ -17,6 +17,7 @@ FUNDING_JS = COMP / "funding.js"
 VIZ_JS = COMP / "funding_viz.js"
 MODEL_JS = COMP / "funding_viz_model.js"
 VIZ_CSS = COMP / "funding_viz.css"
+STYLES = COMP / "funding.css"
 RUNTIME = ROOT / "tests" / "framework_funding_viz_runtime.mjs"
 
 
@@ -128,3 +129,67 @@ def test_funding_css_keeps_touch_target_selectors_and_drops_chart_rules() -> Non
     assert ".grants-chart" not in css
     assert ".grants-legend" not in css
     assert '.grants-field input[type="number"]' in css
+
+
+def test_heatmap_cells_are_toggle_buttons_with_pressed_state() -> None:
+    viz = _read(VIZ_JS)
+    # Chart cells are buttons (Enter and Space come with the native button); a selected cell reports
+    # aria-pressed.
+    assert '<button type="button" class="fv-cell" data-heat="' in viz
+    assert 'aria-pressed="${pressed ? "true" : "false"}"' in viz
+    assert "button.fv-cell[data-heat]" in viz
+    # Each heatmap has a selection line with a Clear control; its Table pane stays plain numbers.
+    assert 'data-heat-selection="${kind}"' in viz
+    assert 'class="fv-heat-clear" data-heat="${kind}" hidden>Clear</button>' in viz
+    assert "cells selected" in viz
+    assert "heatTableHtml(heat, T, {plain: true})" in viz
+    assert "matrixTableHtml(matrix, state.labels, T, {plain: true})" in viz
+
+
+def test_heatmap_selection_narrows_only_the_awards_table_and_its_counts() -> None:
+    viz = _read(VIZ_JS)
+    js = _read(FUNDING_JS)
+    # The view reports the awards a selection leaves; the page owns the table, status and CSV.
+    assert "onSelect(handler)" in viz
+    assert "filterByHeatSelection(state.vrows, heat)" in viz
+    assert "state.viz.onSelect(onHeatSelect);" in js
+    assert "state.heatRows = rows;" in js
+    assert "renderGrantsTable(shown);" in js
+    assert "buildGrantsCsv(shownRows())" in js
+    assert "Showing ${shown.length} of ${state.grantsFiltered.length} filtered awards" in js
+    # The charts above keep following the page filters only.
+    assert "renderSankey();" in viz and "renderYears();" in viz
+
+
+def test_funding_tables_are_not_capped_at_the_framework_default_width() -> None:
+    css = _read(STYLES)
+    # Framework's default stylesheet caps tables at 640px; the Funding page lifts that cap.
+    assert "#funding-root table { max-width: none; }" in css
+    assert re.search(r"#funding-root \.grants-subtotals \{[^}]*width: 100%", css)
+    assert re.search(r"#funding-root #grants-basis \{[^}]*overflow-x: auto", css)
+    assert re.search(r"\.grants-subtotals \{[^}]*min-width: 36rem", css)
+
+
+def test_sankey_table_gives_the_from_and_to_columns_room() -> None:
+    css = _read(VIZ_CSS)
+    viz = _read(VIZ_JS)
+    assert '<table class="fv-sankey-table">' in viz
+    assert '<td class="fv-name">' in viz
+    assert re.search(r"\.fv-sankey-table \{[^}]*min-width: 36rem", css)
+    assert re.search(r"\.fv-sankey-table td\.fv-name \{[^}]*min-width: 14rem", css)
+
+
+def test_heatmap_selection_styles_use_tokens_and_respect_reduced_motion() -> None:
+    css = _read(VIZ_CSS)
+    assert 'aria-pressed="true"' in css
+    assert "outline: 2px solid var(--atlas-ink)" in css
+    assert "var(--atlas-task-money)" in css
+    # Transitions only when the reader has not asked for reduced motion.
+    motion = re.search(r"@media \(prefers-reduced-motion: no-preference\) \{(.*?)\n\}", css, re.S)
+    assert motion, "heatmap transitions must sit behind prefers-reduced-motion"
+    assert "transition" in motion.group(1)
+    assert css.count("transition:") == motion.group(1).count("transition:")
+
+
+def test_funding_lead_mentions_the_heatmap_selection() -> None:
+    assert "click heatmap cells to narrow it further" in _read(FUNDING_MD)

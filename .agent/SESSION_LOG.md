@@ -168,3 +168,4 @@
 | 2026-11-16 | VD-18/VD-19/VD-20 | H25 owner feedback: visual polish, site-wide search, network layout and cluster labels; H26 closed; H27 waits on certificate | 4a01550b, 1f11d4ac, this commit |
 | 2026-11-16 | VD-21..VD-24 | H25 round 2: top nav, Overview rework, Monitoring map tools, headings/page heads/tooltips; Impeccable intro option and owner decision to adopt Plane Poster (VD-25) | this commit |
 | 2026-11-17 | VD-25 | Plane Poster world site-wide (tokens, shell, Overview, task colours, Archivo); Pacific Contour kept as release design-pacific-contour-2026-11-16 | this commit |
+| 2026-11-17 | VD-27 + EM-17 (partial) | Owner feedback round 3 (favicon/mark, full-width notices, Funding heatmap filtering, Experts/Network filters, Overview pipeline, About rewrite with living flow) and the OPC Solutions track panel with review app; owner review H28 | this commit |

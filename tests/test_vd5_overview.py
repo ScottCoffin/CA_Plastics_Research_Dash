@@ -13,6 +13,7 @@ CSS = ROOT / "framework" / "src" / "components" / "overview.css"
 COUNT_KEYS = {
     "authors",
     "california_institutions",
+    "type_summary",  # owner 2026-11-17: living output mix from metadata.flow.by_type
     "awards",
     "monitoring_samples",
     "monitoring_sources",

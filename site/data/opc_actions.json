@@ -1,0 +1,355 @@
+{
+ "schema_version": "em17.v1",
+ "source": "config/opc_early_actions.yml",
+ "mapping_status": "draft",
+ "strategy": {
+  "label": "Ocean Protection Council, Statewide Microplastics Strategy (2022)",
+  "url": "https://opc.ca.gov/water-quality/plastics/",
+  "adopted": "23 February 2022"
+ },
+ "gpl": {
+  "name": "Global Plastic Laws",
+  "steward": "Plastic Pollution Coalition",
+  "base_url": "https://www.globalplasticlaws.org",
+  "california_search_url": "https://www.globalplasticlaws.org/search?search=california",
+  "disclaimer": "The Global Plastic Laws Database is an educational and research resource and should not be regarded as fully comprehensive or completely up to date for legal purposes.",
+  "topics": {
+   "design-reuse": "Design + Reuse",
+   "extended-producer-responsibility": "Extended Producer Responsibility",
+   "maritime-sources": "Maritime Sources",
+   "microplastics": "Microplastics",
+   "product-manufacturing": "Production + Manufacturing",
+   "reduction": "Reduction",
+   "transparency-traceability": "Transparency + Traceability",
+   "waste-management": "Waste Management",
+   "waste-trade": "Waste Trade"
+  }
+ },
+ "objectives": [
+  {
+   "id": 1,
+   "name": "Pollution prevention"
+  },
+  {
+   "id": 2,
+   "name": "Pathway interventions"
+  },
+  {
+   "id": 3,
+   "name": "Outreach and education"
+  }
+ ],
+ "actions": [
+  {
+   "code": "2A.1.1",
+   "objective": 1,
+   "group": "Product and material regulations",
+   "summary": "Carry out the statewide rule that single-use foodware and condiments are handed out only on request (AB 1276, 2021).",
+   "deadline_as_stated": "by 2022",
+   "deadline_year": 2022,
+   "pdf_page": 22,
+   "gpl_topics": [
+    "reduction"
+   ],
+   "atlas": {
+    "q": "packaging"
+   }
+  },
+  {
+   "code": "2A.1.2",
+   "objective": 1,
+   "group": "Product and material regulations",
+   "summary": "Encourage state purchasing and service contracts to require reusable foodware where feasible and cut the state's use of single-use foodware.",
+   "deadline_as_stated": "by 2022",
+   "deadline_year": 2022,
+   "pdf_page": 22,
+   "gpl_topics": [
+    "design-reuse"
+   ],
+   "atlas": {
+    "q": "reusable"
+   }
+  },
+  {
+   "code": "2A.1.3",
+   "objective": 1,
+   "group": "Product and material regulations",
+   "summary": "Adopt comprehensive statewide goals for plastic source reduction, reuse and refill.",
+   "deadline_as_stated": "by 2023",
+   "deadline_year": 2023,
+   "pdf_page": 22,
+   "gpl_topics": [
+    "reduction"
+   ],
+   "atlas": {
+    "q": "reduction"
+   }
+  },
+  {
+   "code": "2A.1.4",
+   "objective": 1,
+   "group": "Product and material regulations",
+   "summary": "Prohibit the sale and distribution of expanded polystyrene foodware and packaging.",
+   "deadline_as_stated": "by 2023",
+   "deadline_year": 2023,
+   "pdf_page": 22,
+   "gpl_topics": [
+    "reduction"
+   ],
+   "atlas": {
+    "q": "polystyrene"
+   }
+  },
+  {
+   "code": "2A.1.5",
+   "objective": 1,
+   "group": "Product and material regulations",
+   "summary": "Extend the AB 888 (2015) microbead ban to microplastics intentionally added to products such as cosmetics, detergents and cleaning products.",
+   "deadline_as_stated": "by 2023",
+   "deadline_year": 2023,
+   "pdf_page": 22,
+   "gpl_topics": [
+    "microplastics"
+   ],
+   "atlas": {
+    "q": "microbead"
+   }
+  },
+  {
+   "code": "2A.1.6",
+   "objective": 1,
+   "group": "Product and material regulations",
+   "summary": "Prohibit single-use tobacco products that add to plastic pollution, including cigarette filters, e-cigarettes, plastic cigar tips and unrecyclable packaging.",
+   "deadline_as_stated": "by 2022",
+   "deadline_year": 2022,
+   "pdf_page": 22,
+   "gpl_topics": [
+    "reduction"
+   ],
+   "atlas": {
+    "q": "cigarette"
+   }
+  },
+  {
+   "code": "2A.1.7",
+   "objective": 1,
+   "group": "Economic strategies",
+   "summary": "Identify extended producer responsibility (EPR) approaches for recycling or disposing of plastic packaging and foodware.",
+   "deadline_as_stated": "by 2022",
+   "deadline_year": 2022,
+   "pdf_page": 22,
+   "gpl_topics": [
+    "extended-producer-responsibility"
+   ],
+   "atlas": {
+    "q": "recycling"
+   }
+  },
+  {
+   "code": "2A.1.8",
+   "objective": 1,
+   "group": "Economic strategies",
+   "summary": "Promote or require ENERGY STAR condenser dryers and washing machines that filter to 100 microns or smaller, with rebates or other incentives for retrofits and purchases.",
+   "deadline_as_stated": "by 2024",
+   "deadline_year": 2024,
+   "pdf_page": 22,
+   "gpl_topics": [
+    "microplastics"
+   ],
+   "atlas": {
+    "q": "washing"
+   }
+  },
+  {
+   "code": "2A.1.9",
+   "objective": 1,
+   "group": "Identifying and advancing product alternatives",
+   "summary": "Bring together industries (such as tires, textiles, agriculture, foodware and packaging, fisheries and aquaculture) and scientists to find alternatives and sector-specific prevention strategies.",
+   "deadline_as_stated": "by 2023",
+   "deadline_year": 2023,
+   "pdf_page": 22,
+   "gpl_topics": [
+    "design-reuse"
+   ],
+   "atlas": {
+    "q": "tire"
+   }
+  },
+  {
+   "code": "2A.2.1",
+   "objective": 2,
+   "group": "Stormwater",
+   "summary": "Prioritise low impact development (LID) green-infrastructure retrofits on existing development that loads microplastics to receiving waters.",
+   "deadline_as_stated": "beginning in 2022",
+   "deadline_year": 2022,
+   "pdf_page": 23,
+   "gpl_topics": [],
+   "atlas": {
+    "q": "stormwater"
+   }
+  },
+  {
+   "code": "2A.2.2",
+   "objective": 2,
+   "group": "Stormwater",
+   "summary": "Evaluate how well LID structural best management practices remove microplastics, and identify sites where LID should be required.",
+   "deadline_as_stated": "by 2023",
+   "deadline_year": 2023,
+   "pdf_page": 23,
+   "gpl_topics": [],
+   "atlas": {
+    "q": "stormwater"
+   }
+  },
+  {
+   "code": "2A.2.3",
+   "objective": 2,
+   "group": "Stormwater",
+   "summary": "Depending on 2A.2.2 findings, consider LID requirements for new and redevelopment projects in water quality permits, local coastal programs and coastal development permits.",
+   "deadline_as_stated": "adopted or reissued after December 31, 2023",
+   "deadline_year": 2023,
+   "pdf_page": 23,
+   "gpl_topics": [],
+   "atlas": {
+    "q": "stormwater"
+   }
+  },
+  {
+   "code": "2A.2.4",
+   "objective": 2,
+   "group": "Stormwater",
+   "summary": "Prioritise compliance assurance and enforcement of discharge prohibitions for preproduction plastic pellets (nurdles).",
+   "deadline_as_stated": "beginning in 2022",
+   "deadline_year": 2022,
+   "pdf_page": 23,
+   "gpl_topics": [
+    "product-manufacturing",
+    "maritime-sources"
+   ],
+   "atlas": {
+    "q": "pellet"
+   }
+  },
+  {
+   "code": "2A.2.5",
+   "objective": 2,
+   "group": "Stormwater",
+   "summary": "Prioritise trash receptacles and trash services at hot spots (busy beaches, recreation areas, encampments near waterways) outside the statewide Trash Provisions.",
+   "deadline_as_stated": "beginning in 2022",
+   "deadline_year": 2022,
+   "pdf_page": 23,
+   "gpl_topics": [
+    "waste-management"
+   ],
+   "atlas": {
+    "q": "litter"
+   }
+  },
+  {
+   "code": "2A.2.6",
+   "objective": 2,
+   "group": "Stormwater",
+   "summary": "Implement the statewide Trash Provisions and meet the final deadline of no trash in state surface waters.",
+   "deadline_as_stated": "by 2030",
+   "deadline_year": 2030,
+   "pdf_page": 23,
+   "gpl_topics": [
+    "waste-management"
+   ],
+   "atlas": {
+    "q": "trash"
+   }
+  },
+  {
+   "code": "2A.2.7",
+   "objective": 2,
+   "group": "Wastewater",
+   "summary": "Building on wastewater-treatment removal studies, further promote recycling of tertiary-treated wastewater that would otherwise go to the ocean.",
+   "deadline_as_stated": "beginning in 2022",
+   "deadline_year": 2022,
+   "pdf_page": 23,
+   "gpl_topics": [],
+   "atlas": {
+    "topic": "wastewater_and_treatment"
+   }
+  },
+  {
+   "code": "2A.2.8",
+   "objective": 2,
+   "group": "Wastewater",
+   "summary": "After the SCCWRP treatment-efficacy study, develop microplastic reduction strategies and monitoring recommendations for each level of wastewater treatment.",
+   "deadline_as_stated": "beginning in 2023",
+   "deadline_year": 2023,
+   "pdf_page": 23,
+   "gpl_topics": [],
+   "atlas": {
+    "topic": "wastewater_and_treatment"
+   }
+  },
+  {
+   "code": "2A.3.1",
+   "objective": 3,
+   "group": "Outreach and education",
+   "summary": "Work with California Native American Tribes on outreach, monitoring and immediate plastic and microplastic reduction.",
+   "deadline_as_stated": "beginning in 2022",
+   "deadline_year": 2022,
+   "pdf_page": 24,
+   "gpl_topics": [],
+   "atlas": {
+    "q": "indigenous"
+   }
+  },
+  {
+   "code": "2A.3.2",
+   "objective": 3,
+   "group": "Outreach and education",
+   "summary": "Engage underserved communities and those burdened by environmental injustice in decisions, and pursue immediate solutions with them.",
+   "deadline_as_stated": "beginning in 2022",
+   "deadline_year": 2022,
+   "pdf_page": 24,
+   "gpl_topics": [],
+   "atlas": {
+    "q": "community"
+   }
+  },
+  {
+   "code": "2A.3.3",
+   "objective": 3,
+   "group": "Outreach and education",
+   "summary": "Run a public awareness campaign on microplastic pollution that supports behaviour, policy and systemic change.",
+   "deadline_as_stated": "by 2023",
+   "deadline_year": 2023,
+   "pdf_page": 24,
+   "gpl_topics": [],
+   "atlas": {
+    "q": "awareness"
+   }
+  },
+  {
+   "code": "2A.3.4",
+   "objective": 3,
+   "group": "Outreach and education",
+   "summary": "Promote K-12 education on microplastic sources, impacts and solutions through curricula, standards and teacher training.",
+   "deadline_as_stated": "by 2024",
+   "deadline_year": 2024,
+   "pdf_page": 24,
+   "gpl_topics": [],
+   "atlas": {
+    "q": "education"
+   }
+  },
+  {
+   "code": "2A.3.5",
+   "objective": 3,
+   "group": "Outreach and education",
+   "summary": "Promote industry engagement and outreach on sector-specific microplastic prevention strategies.",
+   "deadline_as_stated": "by 2024",
+   "deadline_year": 2024,
+   "pdf_page": 24,
+   "gpl_topics": [],
+   "atlas": {
+    "q": "industry"
+   }
+  }
+ ]
+}

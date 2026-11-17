@@ -31,7 +31,12 @@
 .fv-focus-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
 .fv-focus-bar:has(.fv-focus-clear:not([hidden])) { margin-block: 0.5rem; }
 .fv-focus-text { margin: 0; }
-.fv-focus-clear { min-height: 40px; padding: 0 0.9rem; border: 1px solid var(--atlas-boundary); border-radius: var(--atlas-radius-control); background: var(--atlas-surface); color: var(--atlas-brand-strong); font: inherit; cursor: pointer; }
+.fv-focus-clear, .fv-heat-clear { min-height: 40px; padding: 0 0.9rem; border: 1px solid var(--atlas-boundary); border-radius: var(--atlas-radius-control); background: var(--atlas-surface); color: var(--atlas-brand-strong); font: inherit; cursor: pointer; }
+
+/* Heatmap selection: "N cells selected · Clear" above each heatmap. */
+.fv-heat-selection { margin: 0.5rem 0 0; font-size: 0.9rem; }
+.fv-heat-status { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.4rem; margin: 0; color: var(--atlas-muted); }
+.fv-heat-status .fv-heat-count { font-weight: 650; color: var(--atlas-ink); }
 
 .fv-root .fv-controls { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; align-items: center; margin: 0.6rem 0; font-size: 0.9rem; }
 .fv-fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.2rem 1rem; min-width: 0; }
@@ -63,6 +68,21 @@
 .fv-matrix th, .fv-matrix td { padding: 2px 4px; border: 0; }
 .fv-matrix thead th { font-size: 0.75rem; vertical-align: bottom; }
 .fv-matrix tbody th { font-size: 0.8rem; white-space: nowrap; padding-right: 0.6rem; }
-.fv-matrix .fv-cell { min-width: 2.6rem; height: 2.1rem; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; border-radius: var(--atlas-radius-control); }
+/* A chart cell fills its table cell. A selected cell gets a 2 px ink outline and a gold inset (the money plane),
+ * so the selection reads without colour; the check mark is text. Focus keeps the page focus ring. */
+.fv-matrix .fv-cell { display: block; box-sizing: border-box; width: 100%; min-width: 2.6rem; min-height: 2.1rem; margin: 0; padding: 0 0.2rem; border: 0; border-radius: var(--atlas-radius-control); font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; text-align: center; cursor: pointer; }
+.fv-root .fv-cell[aria-pressed="true"] { outline: 2px solid var(--atlas-ink); outline-offset: -2px; box-shadow: inset 0 0 0 4px var(--atlas-task-money); }
+.fv-root .fv-cell:not(:disabled):not([aria-pressed="true"]):hover { outline: 1px solid var(--atlas-ink); outline-offset: -1px; }
+.fv-root .fv-cell:disabled { cursor: default; }
+.fv-check { margin-right: 0.1em; }
+@media (prefers-reduced-motion: no-preference) {
+  .fv-root .fv-cell { transition: box-shadow 0.12s ease-out, outline-color 0.12s ease-out; }
+}
 .fv-matrix td.num { min-width: 2.6rem; text-align: center; font-variant-numeric: tabular-nums; }
 .fv-dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-right: 0.35rem; vertical-align: middle; }
+
+/* The Sankey table: names get room on one line where the width allows, and wrap once when they do not. The
+ * table scrolls inside its box below its minimum width. */
+.fv-sankey-table { min-width: 36rem; }
+.fv-sankey-table td.fv-name { min-width: 14rem; }
+.fv-sankey-table td.num { white-space: nowrap; }

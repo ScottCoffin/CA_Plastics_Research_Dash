@@ -18,13 +18,15 @@
 /* UX-25: long URLs and DOIs in running text wrap instead of widening the page at 375 px. */
 #observablehq-main p, #observablehq-main li, #observablehq-main dd { overflow-wrap: anywhere; }
 #observablehq-main p { max-width: 70ch; }
+/* Owner 2026-11-17: notices, callouts and caveats run the full content width; only running prose keeps the 70ch measure. */
+#observablehq-main .atlas-notice, #observablehq-main .atlas-callout, #observablehq-main .atlas-callout p, #observablehq-main .atlas-callout li, #observablehq-main .atlas-callout details, #observablehq-main .ev-notice, #observablehq-main .ev-notice p { max-width: none; }
 .atlas-start { margin: 1.25rem 0; }
 .atlas-start h2 { margin: 0 0 0.5rem; font-size: var(--atlas-type-section-size); }
 .atlas-start-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
 .atlas-start-links a { display: inline-block; min-height: 2.75rem; padding: 0.6rem 0.9rem; border: 1px solid var(--theme-foreground-focus); border-radius: 0.5rem; font-weight: 600; text-decoration: none; }
 .atlas-start-links a:hover, .atlas-start-links a:focus-visible { background: var(--theme-background-alt); text-decoration: underline; }
 .atlas-stats dd.stat-note { margin-top: 0.25rem; font-size: var(--atlas-type-small-size); line-height: 1.45; font-weight: 400; color: var(--theme-foreground-muted); }
-.atlas-notice { border-left: 4px solid var(--theme-foreground-focus); padding: 0.4rem 0.8rem; background: var(--theme-background-alt); max-width: 70ch; }
+.atlas-notice { border-left: 4px solid var(--theme-foreground-focus); padding: 0.4rem 0.8rem; background: var(--theme-background-alt); max-width: none; }
 .atlas-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
 .atlas-cards a.card { text-decoration: none; color: inherit; }
 .card { background-color: var(--atlas-surface); }

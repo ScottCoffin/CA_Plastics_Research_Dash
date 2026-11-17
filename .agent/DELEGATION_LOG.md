@@ -219,3 +219,8 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-17 | VD-25a shell/components | Claude Haiku developer | font face, brand mark, shell, components, tests | Accepted; lead trimmed the font to the budget | 1 session |
 | 2026-11-17 | VD-25b Overview | Claude Haiku developer | Overview from reference, live counts | Accepted; lead fixed test_ux14 and a chart marker | 1 session |
 | 2026-11-17 | VD-25c page colours | Claude Haiku developer | task colour law, palette.js, page CSS | Accepted; lead remapped expert_page.js, expert.html, SEO CSS | 1 session |
+| 2026-11-17 | VD-27 Funding (FUND-UX) | Claude Haiku developer | full-width tables, filter-reactive heatmaps | Accepted; lead added Reset clearing the heatmap selection | 1 session |
+| 2026-11-17 | VD-27 Experts/Network (EXN-UX) | Claude Haiku developer | More filters alignment, removed button/pill, slider, status padding | Accepted; lead fixed a label row, input widths and a CSS scope test | 1 session |
+| 2026-11-17 | EM-17 panel | Claude Haiku developer | validator, JSON export, Policy panel, full-width Policy text | Accepted; lead re-measured the timeline reservation | 1 session |
+| 2026-11-17 | FLOW-1 | Claude Haiku developer | build_metadata flow block + tests + docs | Accepted; lead fixed a test that pinned the old Overview keys | 1 session |
+| 2026-11-17 | EM-17b review app | Claude Haiku developer | Streamlit mapping review app, apply at build | Accepted; lead made the status test follow the sheet | 1 session |

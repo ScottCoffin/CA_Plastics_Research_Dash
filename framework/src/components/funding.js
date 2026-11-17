@@ -39,6 +39,8 @@ const state = {
   grantsRequest: null,
   grantsData: null,
   grantsFiltered: [],
+  // The awards that the heatmap selection leaves (null when no cell is selected). The table shows these.
+  heatRows: null,
   grantsPage: 0,
   grantsPageSize: 50,
   grantsReady: false,
@@ -383,6 +385,7 @@ function resetGrantFilters() {
   $("grants-plastic").checked = true;
   state.grantsSort = {key: null, dir: "asc"};
   state.grantsPage = 0;
+  state.viz?.clearSelection?.();
   renderFunding();
 }
 
@@ -404,8 +407,9 @@ export function buildGrantsCsv(rows = state.grantsFiltered) {
   return `\uFEFF${lines.join("\r\n")}\r\n`;
 }
 
+// The download holds the rows the table shows, so a heatmap selection narrows it too.
 function downloadGrantsCsv() {
-  const blob = new Blob([buildGrantsCsv()], {type: "text/csv;charset=utf-8"});
+  const blob = new Blob([buildGrantsCsv(shownRows())], {type: "text/csv;charset=utf-8"});
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = "ca_plastics_awards_filtered.csv";
@@ -427,16 +431,45 @@ function renderFilterSummary() {
   if (plasticOff || HIDDEN_FILTER_IDS.some((id) => $(id).value)) $("grants-more-filters").open = true;
 }
 
+// The awards the table and the CSV show: the filtered awards, narrowed to the heatmap selection when one exists.
+function shownRows() {
+  return state.heatRows || state.grantsFiltered;
+}
+
+function sameRows(a, b) {
+  if (a === b) return true;
+  return Boolean(a && b && a.length === b.length && a.every((row, i) => row === b[i]));
+}
+
+// Status line and awards table. The counts say what the table holds: "N of M" in the filters, or the rows left by the heatmap selection.
+function renderAwards() {
+  const shown = shownRows();
+  if (state.heatRows) {
+    const withAmount = shown.filter((row) => row.amount !== null);
+    $("grants-status").textContent = `Showing ${shown.length} of ${state.grantsFiltered.length} filtered awards, limited to the selected heatmap cells. ${withAmount.length} report an amount.`;
+  } else {
+    const withAmount = state.grantsFiltered.filter((row) => row.amount !== null);
+    $("grants-status").textContent = `${state.grantsFiltered.length} of ${state.grantsData.rows.length} awards match. ${withAmount.length} report an amount.`;
+  }
+  renderGrantsTable(shown);
+}
+
 function renderFunding() {
   const filters = readGrantFilterValues();
   state.grantsFiltered = sortGrantRows(state.grantsData.rows.filter((row) => grantMatches(row, filters)), state.grantsSort);
-  const withAmount = state.grantsFiltered.filter((row) => row.amount !== null);
-  $("grants-status").textContent = `${state.grantsFiltered.length} of ${state.grantsData.rows.length} awards match. ${withAmount.length} report an amount.`;
+  // update() also reports the heatmap selection (onHeatSelect), so the table is current after this call.
   state.viz.update(state.grantsFiltered, sectorLabelsOf());
-  renderGrantsTable(state.grantsFiltered);
+  renderAwards();
   renderGrantChips();
   renderFilterSummary();
   writeFundingHash();
+}
+
+// A heatmap click (or a filter change that drops cells) narrows the awards table. A new selection starts on page 1.
+function onHeatSelect(rows) {
+  if (!sameRows(state.heatRows, rows)) state.grantsPage = 0;
+  state.heatRows = rows;
+  renderAwards();
 }
 
 function bindFundingControls() {
@@ -518,7 +551,10 @@ function showFunding() {
 export function mountFunding() {
   injectIconSprite();
   // The charts follow the filter form: update() runs on every change to the awards (renderFunding).
-  if (!state.viz) state.viz = mountFundingViz($("grants-viz"));
+  if (!state.viz) {
+    state.viz = mountFundingViz($("grants-viz"));
+    state.viz.onSelect(onHeatSelect);
+  }
   showOpenCalls();
   showFunding();
   if (!state.listening) {

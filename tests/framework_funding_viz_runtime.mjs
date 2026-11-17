@@ -6,19 +6,29 @@ import fs from "node:fs";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
 import {
+  HEAT_SEP,
   HEAT_START,
   agencyColor,
   agencyOrder,
   buildHeat,
   buildSankey,
   buildSectorTopic,
+  filterByHeatSelection,
   focusOfNode,
+  heatCellKey,
+  heatColOf,
   heatFill,
   inkFor,
   layoutSankey,
+  liveSectorTopicKeys,
+  liveTopicYearKeys,
   niceMax,
+  pruneHeatSelection,
+  sectorTopicKeysOf,
   tileMetrics,
+  toggleHeatCell,
   topOrgs,
+  topicYearKeysOf,
   viewRows,
   yearCounts
 } from "../framework/src/components/funding_viz_model.js";
@@ -304,6 +314,105 @@ for (const topN of [3, 15]) {
   assert.equal(plain.includes("is-focus"), false, "no block is marked without a focus");
   assert.equal((plain.match(/aria-pressed="false"/g) || []).length, graph.nodes.length, "unfocused blocks are not pressed");
   assert.match(plain, /Press Enter to show only flows through this block\./);
+}
+
+// Heatmap selection. A live cell selects exactly the awards its count reports; several cells in one heatmap
+// combine as a union; the two heatmaps combine as an intersection; undated awards never match a year cell.
+{
+  assert.equal(heatColOf(null), null, "undated awards have no year column");
+  assert.equal(heatColOf(HEAT_START - 1), "pre", "years before HEAT_START share the pre column");
+  assert.equal(heatColOf(HEAT_START), HEAT_START);
+
+  const heat = buildHeat(V, T);
+  const matrix = buildSectorTopic(V, T);
+  const topicYearLive = liveTopicYearKeys(heat);
+  const sectorTopicLive = liveSectorTopicKeys(matrix);
+  assert.ok(topicYearLive.length > 1 && sectorTopicLive.length > 1, "the fixture has live cells in both heatmaps");
+  // Live keys are exactly the cells with a count.
+  assert.equal(topicYearLive.length, heat.rows.flatMap((r) => r.counts).filter((n) => n > 0).length);
+  assert.equal(sectorTopicLive.length, matrix.grid.flat().filter((n) => n > 0).length);
+
+  // Every topic x year cell (zero cells too) selects as many awards as its count, and each one is in that topic and year.
+  heat.rows.forEach((r) => heat.cols.forEach((col, i) => {
+    const shown = filterByHeatSelection(V, {topicYear: new Set([heatCellKey(r.key, col)])});
+    assert.equal(shown.length, r.counts[i], `topic x year ${r.key}/${col} selects its count`);
+    shown.forEach((row) => {
+      assert.ok(row.topics.includes(r.key) && row.fy !== null && heatColOf(row.fy) === col, `${r.key}/${col}: award in the cell`);
+    });
+  }));
+  // Every sector x topic cell selects as many awards as its count.
+  matrix.sectors.forEach((s, i) => matrix.topics.forEach((t, j) => {
+    const shown = filterByHeatSelection(V, {sectorTopic: new Set([heatCellKey(s, t)])});
+    assert.equal(shown.length, matrix.grid[i][j], `sector x topic ${s}/${t} selects its count`);
+    shown.forEach((row) => assert.ok(row.sector === s && row.topics.includes(t), `${s}/${t}: award in the cell`));
+  }));
+
+  // Selecting every live cell of a heatmap leaves every award that has that heatmap's dimension.
+  assert.equal(filterByHeatSelection(V, {topicYear: new Set(topicYearLive)}).length, V.filter((r) => r.fy !== null).length);
+  assert.equal(filterByHeatSelection(V, {sectorTopic: new Set(sectorTopicLive)}).length, V.length);
+
+  // No selection returns the input itself.
+  assert.equal(filterByHeatSelection(V, {}), V);
+  assert.equal(filterByHeatSelection(V, {topicYear: new Set(), sectorTopic: new Set()}), V);
+
+  // OR within one heatmap: two cells show the union of their awards, with no duplicates.
+  const [a, b] = topicYearLive;
+  const [ta, ca] = a.split(HEAT_SEP);
+  const [tb, cb] = b.split(HEAT_SEP);
+  const inCell = (r, t, c) => r.fy !== null && r.topics.includes(t) && String(r.fy < HEAT_START ? "pre" : r.fy) === c;
+  const expectedUnion = V.filter((r) => inCell(r, ta, ca) || inCell(r, tb, cb)).map((r) => r.grant_key);
+  const union = filterByHeatSelection(V, {topicYear: new Set([a, b])}).map((r) => r.grant_key);
+  assert.deepEqual(union, expectedUnion, "two topic x year cells combine as a union, in input order");
+  assert.equal(new Set(union).size, union.length, "no award is listed twice");
+
+  // AND across heatmaps: an award must sit in a selected cell of each heatmap that has a selection.
+  const [sector, topic] = sectorTopicLive[0].split(HEAT_SEP);
+  const cross = filterByHeatSelection(V, {topicYear: new Set([a]), sectorTopic: new Set([sectorTopicLive[0]])});
+  const expectedCross = V.filter((r) => inCell(r, ta, ca) && r.sector === sector && r.topics.includes(topic)).map((r) => r.grant_key);
+  assert.deepEqual(cross.map((r) => r.grant_key), expectedCross, "the two heatmaps combine as an intersection");
+  assert.ok(cross.every((r) => topicYearKeysOf(r).includes(a) && sectorTopicKeysOf(r).includes(sectorTopicLive[0])));
+
+  // Toggle: a click adds a cell, a second click removes it; the input set is not changed.
+  const empty = new Set();
+  const once = toggleHeatCell(empty, a);
+  assert.deepEqual([...once], [a]);
+  assert.equal(empty.size, 0, "toggle returns a new set");
+  assert.equal(toggleHeatCell(once, a).size, 0, "a selected cell is cleared by a second click");
+  assert.deepEqual([...toggleHeatCell(once, b)], [a, b], "a second cell is added to the first");
+
+  // Prune: a selected cell that is no longer live (after a filter change) is dropped.
+  assert.deepEqual([...pruneHeatSelection(new Set([a, `x${HEAT_SEP}2030`]), topicYearLive)], [a]);
+  assert.equal(pruneHeatSelection(new Set(), topicYearLive).size, 0);
+}
+
+// Markup: a chart cell is a button with aria-pressed; empty cells are disabled; the table pane has no buttons.
+{
+  const heat = buildHeat(V, T);
+  const liveRow = heat.rows.find((r) => r.counts.some((n) => n > 0));
+  const liveCol = heat.cols[liveRow.counts.findIndex((n) => n > 0)];
+  const html = heatTableHtml(heat, T, {selected: new Set([heatCellKey(liveRow.key, liveCol)])});
+  const cells = heat.rows.length * heat.cols.length;
+  assert.equal((html.match(/<button type="button" class="fv-cell"/g) || []).length, cells, "every cell is a button");
+  assert.equal((html.match(/aria-pressed="true"/g) || []).length, 1, "exactly the selected cell is pressed");
+  assert.match(html, /data-heat="topic-year"/);
+  const empty = heat.rows.flatMap((r) => r.counts).filter((n) => n === 0).length;
+  assert.equal((html.match(/ disabled aria-label=/g) || []).length, empty, "empty cells are disabled");
+  if (empty) assert.match(html, /: no awards"/, "an empty cell is announced as having no awards");
+  assert.equal(heatTableHtml(heat, T, {plain: true}).includes("<button"), false, "the table pane is plain numbers");
+
+  const matrix = buildSectorTopic(V, T);
+  const sector = matrix.sectors[0];
+  const topic = matrix.topics.find((t, j) => matrix.grid[0][j] > 0);
+  const mhtml = matrixTableHtml(matrix, LABELS, T, {selected: new Set([heatCellKey(sector, topic)])});
+  assert.equal((mhtml.match(/aria-pressed="true"/g) || []).length, 1, "one pressed matrix cell");
+  assert.match(mhtml, /data-heat="sector-topic"/);
+  assert.equal(matrixTableHtml(matrix, LABELS, T, {plain: true}).includes("<button"), false);
+
+  // The Sankey table has one class hook per name cell, so the page CSS can give the From and To columns room.
+  const graph = buildSankey(V, {mode: "awards", topN: 6, orgs: true, T});
+  const table = sankeyTableHtml(graph, false);
+  assert.match(table, /^<table class="fv-sankey-table">/);
+  assert.equal((table.match(/<td class="fv-name">/g) || []).length, graph.links.length * 2);
 }
 
 console.log("framework funding visualization runtime checks passed");

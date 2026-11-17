@@ -35,19 +35,23 @@
 #experts-root .atlas-filters__body { gap: 0.4rem; padding: 0.5rem 0.75rem; }
 #experts-root .atlas-filters__grid { gap: 0.65rem; }
 #experts-root .expert-primary-filters { grid-template-columns: minmax(15rem, 2fr) repeat(3, minmax(10rem, 1fr)); }
-#experts-root .expert-more-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
+/* Four equal columns match the four primary fields; the media queries below drop to two, then one. */
+#experts-root .expert-more-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; }
 #experts-root .atlas-field { gap: 0.2rem; }
 #experts-root .atlas-label { font-size: 0.8rem; line-height: 1.2; }
+/* Every filter label takes one 24px row, so each control starts at the same offset in a row. */
+#experts-root .atlas-filters__grid > .atlas-field > label:not(.expert-check-box),
+#experts-root .atlas-filters__grid > .atlas-field > .atlas-label { display: flex; min-height: 1.5rem; align-items: flex-end; }
 #experts-root .atlas-field label[for="now-filter"] a { display: inline-flex; min-height: 24px; align-items: center; }
 #experts-root .atlas-input,
 #experts-root .atlas-select,
 #experts-root .atlas-search input { min-height: 2.5rem; }
 #experts-root .atlas-filters__more > summary { min-height: 2.1rem; }
-#experts-root .expert-career-field { align-content: start; }
-#experts-root .expert-check-line { display: flex; min-height: 1.5rem; flex-wrap: wrap; align-items: center; gap: 0.3rem; font-size: 0.85rem; }
-#experts-root .expert-check-line .atlas-hint { display: inline; }
-#experts-root .atlas-check { min-width: 1.5rem; min-height: 1.5rem; }
-#experts-root .expert-career-field > .atlas-btn { min-height: 2rem; justify-self: start; padding: 0 0.4rem; }
+/* The early-career checkbox sits in a box the height of a select; its hint wraps to a second line. */
+#experts-root .expert-check-box { display: flex; box-sizing: border-box; min-height: 2.5rem; align-items: center; gap: var(--atlas-space-2); padding: 0.125rem var(--atlas-space-3); border: 1px solid var(--atlas-boundary); border-radius: var(--atlas-radius-control); background: var(--atlas-surface); color: var(--atlas-text); font-size: 0.85rem; line-height: 1.2; cursor: pointer; }
+#experts-root .expert-check-box > span { min-width: 0; }
+#experts-root .expert-check-box .atlas-hint { display: block; font-size: 0.78rem; line-height: 1.2; }
+#experts-root .atlas-check { flex: none; min-width: 1.5rem; min-height: 1.5rem; }
 #experts-root .atlas-active-filters:not(:empty) { padding: 0 0.75rem 0.65rem; }
 #experts-root .atlas-filter-chip button { min-width: 1.5rem; min-height: 1.5rem; }
 
@@ -146,7 +150,8 @@
 }
 
 @media (max-width: 62rem) {
-  #experts-root .expert-primary-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #experts-root .expert-primary-filters,
+  #experts-root .expert-more-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 40rem) {
   #experts-root .expert-primary-filters,
@@ -158,3 +163,6 @@
   #experts-root .expert-card-actions { gap: 0.25rem; }
   #experts-root .expert-card-actions .atlas-badge { max-width: 5.25rem; overflow: hidden; text-overflow: ellipsis; }
 }
+/* Lead fix 2026-11-17: the glossary-linked label keeps the same 24px row, and number inputs fill their column. */
+#experts-root .atlas-filters__grid > .atlas-field > label[for="now-filter"] { height: 1.5rem; }
+#experts-root .atlas-filters__grid .atlas-input { width: 100%; box-sizing: border-box; }
