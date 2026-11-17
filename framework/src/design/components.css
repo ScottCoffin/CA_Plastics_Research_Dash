@@ -130,94 +130,41 @@
   margin-top: var(--atlas-space-4);
 }
 
-/* VD-24: shared tooltip. An element with data-atlas-tip shows that text in a bubble (its ::after) on hover
-   (fine pointers only) or keyboard focus, after a 200 ms delay. The bubble sits above the element; the
-   data-atlas-tip-pos="below|left|right" variants move it, and data-atlas-tip-align="start|end" anchors it to
-   the element's left or right edge (for controls near a viewport edge). Help buttons (.atlas-help) also open
-   on a tap: framework/src/components/shared/tooltip.js sets aria-expanded. Tooltips are supplementary; the
-   element keeps its own accessible name. Never put one on the home hero.
-   A hidden bubble is display: none, because visibility: hidden still adds to the page's scrollable width. */
-[data-atlas-tip] {
-  position: relative;
-}
-
-[data-atlas-tip]::after {
-  display: none;
-  position: absolute;
-  z-index: 30;
-  bottom: calc(100% + var(--atlas-space-2));
-  left: 50%;
+/* VD-24/VD-29: shared tooltip. An element with data-atlas-tip shows that text in one bubble, .atlas-tip, which
+   framework/src/components/shared/tooltip.js appends to document.body (or to the full-screen element) and places
+   with fixed viewport coordinates, so no ancestor's overflow can clip it. The bubble sits above its trigger; JS
+   keeps it 8 px inside the viewport and flips it when there is no room. data-atlas-tip-pos="below|left|right"
+   asks for another side and data-atlas-tip-align="start|end" anchors it to the trigger's left or right edge.
+   It opens on hover (fine pointers only), on keyboard focus and on a tap on a help button (.atlas-help, through
+   aria-expanded), after a 200 ms delay. Tooltips are supplementary; the element keeps its own accessible name.
+   Never put one on the home hero. */
+.atlas-tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1100;
   box-sizing: border-box;
   width: max-content;
-  max-width: min(18rem, calc(100vw - 2rem));
+  max-width: min(20rem, calc(100vw - 16px));
   padding: var(--atlas-space-2) var(--atlas-space-3);
   border-radius: var(--atlas-radius-control);
   background: var(--atlas-ink);
   box-shadow: var(--atlas-shadow-float);
   color: var(--atlas-surface);
-  content: attr(data-atlas-tip);
   font: 400 var(--atlas-type-small-size) / 1.4 var(--atlas-font-body);
   text-align: left;
   white-space: normal;
-  pointer-events: none;
-  transform: translateX(-50%);
-}
-
-/* The bubble appears after 200 ms and fades in over 120 ms; the keyframes hold it at opacity 0 during the delay. */
-@keyframes atlas-tip-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@media (hover: hover) {
-  [data-atlas-tip]:hover::after {
-    display: block;
-    opacity: 1;
-    animation: atlas-tip-in 120ms ease-out 200ms both;
-  }
-}
-
-[data-atlas-tip]:focus-visible::after,
-.atlas-help[aria-expanded="true"]::after {
-  display: block;
-  opacity: 1;
   animation: atlas-tip-in 120ms ease-out 200ms both;
 }
 
-/* Escape dismisses a focus-shown tip without moving focus (WCAG 1.4.13); tooltip.js adds this class. */
-[data-atlas-tip].atlas-tip--dismissed::after {
+.atlas-tip[hidden] {
   display: none;
 }
 
-[data-atlas-tip-align="start"]::after {
-  left: 0;
-  transform: none;
-}
-
-[data-atlas-tip-align="end"]::after {
-  right: 0;
-  left: auto;
-  transform: none;
-}
-
-[data-atlas-tip-pos="below"]::after {
-  top: calc(100% + var(--atlas-space-2));
-  bottom: auto;
-}
-
-[data-atlas-tip-pos="left"]::after {
-  top: 50%;
-  right: calc(100% + var(--atlas-space-2));
-  bottom: auto;
-  left: auto;
-  transform: translateY(-50%);
-}
-
-[data-atlas-tip-pos="right"]::after {
-  top: 50%;
-  bottom: auto;
-  left: calc(100% + var(--atlas-space-2));
-  transform: translateY(-50%);
+/* The bubble fades in over 120 ms after a 200 ms delay; the keyframes hold it at opacity 0 during the delay. */
+@keyframes atlas-tip-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Heading or label with a help button beside it. */
@@ -291,6 +238,51 @@
 :is(#evidence-root, #funding-root, #institutions-root, #monitoring-root, #experts-root) .atlas-help:is(:hover, [aria-expanded="true"]) {
   background: var(--atlas-ink);
   color: var(--atlas-on-brand);
+}
+
+/* VD-29: help button in a field's label row (filter sidebars, the Institutions view selector). The label and the
+   button share one line, and the button is a 24 px hit area whose 20 px disc is drawn by ::before, with no
+   negative margin, so it never overlaps the control below. The page-root selectors give the rules the
+   specificity needed to beat the page-wide button sizes. */
+.atlas-field > .atlas-help-row {
+  flex-wrap: nowrap;
+}
+
+.atlas-field > .atlas-help-row > .atlas-label {
+  min-width: 0;
+}
+
+:is(#evidence-root, #funding-root, #institutions-root, #monitoring-root, #experts-root) .atlas-field > .atlas-help-row > .atlas-help {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--atlas-ink);
+}
+
+:is(#evidence-root, #funding-root, #institutions-root, #monitoring-root, #experts-root) .atlas-field > .atlas-help-row > .atlas-help::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+:is(#evidence-root, #funding-root, #institutions-root, #monitoring-root, #experts-root) .atlas-field > .atlas-help-row > .atlas-help .atlas-help__icon {
+  position: relative;
+}
+
+:is(#evidence-root, #funding-root, #institutions-root, #monitoring-root, #experts-root) .atlas-field > .atlas-help-row > .atlas-help:is(:hover, [aria-expanded="true"]) {
+  color: var(--atlas-on-brand);
+}
+
+:is(#evidence-root, #funding-root, #institutions-root, #monitoring-root, #experts-root) .atlas-field > .atlas-help-row > .atlas-help:is(:hover, [aria-expanded="true"])::before {
+  background: var(--atlas-ink);
 }
 
 .atlas-demo-row {
@@ -1054,10 +1046,8 @@
     transition: none !important;
   }
 
-  /* VD-24: tooltips keep their 200 ms delay but drop the fade. */
-  [data-atlas-tip]:hover::after,
-  [data-atlas-tip]:focus-visible::after,
-  .atlas-help[aria-expanded="true"]::after {
+  /* VD-24/VD-29: tooltips keep their 200 ms delay but drop the fade. */
+  .atlas-tip {
     animation-duration: 0s;
   }
 }

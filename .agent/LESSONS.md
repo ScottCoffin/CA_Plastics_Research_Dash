@@ -362,3 +362,7 @@ until it reports.
 - Worker-written public copy tends to cite repo paths ("docs/...", "src/...") and "TODO-OWNER" on the
   page; `check_public_text.py` now rejects TODO-OWNER and "pending owner review", but read new
   public pages before sealing.
+
+## 2026-11-17: favicon data URIs and Pages source
+- Framework re-escapes `%` inside a head `href` that was built with `encodeURIComponent` (`%3D` became `%253D`), so the favicon silently failed. Encode data-URI SVGs lightly (quotes to apostrophes, `<`/`>`/`#` escaped) and check the built `<link rel="icon">` decodes in a browser.
+- If Pages `build_type` is `legacy`, GitHub's own "pages build and deployment" job races the Actions deploy on every push and can publish README.md as the homepage. Keep `build_type=workflow`; a run named "pages build and deployment" (event dynamic) next to ours is the symptom.

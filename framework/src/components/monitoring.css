@@ -109,6 +109,9 @@
 #monitoring-root .monitoring-marker:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 #monitoring-root .monitoring-marker .marker-halo { fill: none; stroke: var(--atlas-text); stroke-width: 3px; vector-effect: non-scaling-stroke; }
 #monitoring-root .map-hint { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.85rem; }
+/* VD-29: the status line and the "How to use" text run the full width of the map card; the shared 70ch and 640px measures do not apply. */
+#monitoring-root #monitoring-map-note,
+#monitoring-root #monitoring-map-hint { max-width: none; }
 /* Map frame: the map, its icon toolbar and the legend. Full screen (native, or the is-expanded fallback) fills the viewport. */
 #monitoring-root .monitoring-map-frame { position: relative; min-width: 0; }
 #monitoring-root .monitoring-map-frame.is-fullscreen { display: flex; flex-direction: column; gap: var(--atlas-space-3); box-sizing: border-box; height: 100%; padding: var(--atlas-space-3); background: var(--atlas-page); }
@@ -131,7 +134,7 @@ body.monitoring-map-expanded #observablehq-header { visibility: hidden; }
 #monitoring-root .monitoring-map-frame.is-fullscreen .monitoring-map-tool__icon--enter { display: none; }
 #monitoring-root .monitoring-map-frame.is-fullscreen .monitoring-map-tool__icon--exit { display: block; }
 
-/* Map-tool tooltips use the shared [data-atlas-tip] rules in design/components.css (data-atlas-tip-pos="left"). */
+/* Map-tool tooltips use the shared .atlas-tip bubble in design/components.css (data-atlas-tip-pos="left"). */
 #monitoring-root .monitoring-map-legend ul { display: flex; flex-wrap: wrap; gap: 0.3rem 0.95rem; list-style: none; margin: 0.5rem 0 0; padding: 0; font-size: 0.85rem; }
 #monitoring-root .monitoring-legend-toggle { border: 1px solid var(--atlas-boundary); border-radius: var(--atlas-radius-pill); background: var(--surface); color: var(--ink); padding: 0.2rem 0.6rem; font: inherit; font-size: 0.85rem; cursor: pointer; }
 #monitoring-root .monitoring-legend-toggle[aria-pressed="false"] { background: var(--atlas-sunken); color: var(--muted); border-style: dashed; }

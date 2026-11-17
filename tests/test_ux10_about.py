@@ -9,7 +9,7 @@ ABOUT = (ROOT / "framework" / "src" / "about.md").read_text(encoding="utf-8")
 
 
 def test_how_to_cite_uses_the_release_doi_and_concept_doi() -> None:
-    assert "<h3>How to cite</h3>" in ABOUT
+    assert '<h3 id="how-to-cite">How to cite</h3>' in ABOUT
     assert "https://doi.org/${doi}" in ABOUT
     assert "10.5281/zenodo.24124016" in ABOUT
 

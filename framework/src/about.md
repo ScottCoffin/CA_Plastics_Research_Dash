@@ -100,7 +100,7 @@ mountAboutFlow(document.getElementById("about-flow"), metadata, releaseFlow);
 <p>The refresh time is when the site's data were last rebuilt, not when each source record was last updated.</p>
 </article>
 <article class="about-card about-citation-card" style="--c: var(--atlas-task-money)">
-<h3>How to cite</h3>
+<h3 id="how-to-cite">How to cite</h3>
 ${doi
   ? html`<p>Coffin, S. (${String(release.date || "").slice(0, 4)}). <cite>CA Plastics Research Atlas</cite> (${String(release.version || "")}) [Data set and software]. Zenodo. <a href="https://doi.org/${doi}" target="_blank" rel="noreferrer">https://doi.org/${doi}</a></p>`
   : html`<p>Coffin, S. <cite>CA Plastics Research Atlas</cite> [Data set and software]. Zenodo.</p>`}

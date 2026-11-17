@@ -224,3 +224,5 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-17 | EM-17 panel | Claude Haiku developer | validator, JSON export, Policy panel, full-width Policy text | Accepted; lead re-measured the timeline reservation | 1 session |
 | 2026-11-17 | FLOW-1 | Claude Haiku developer | build_metadata flow block + tests + docs | Accepted; lead fixed a test that pinned the old Overview keys | 1 session |
 | 2026-11-17 | EM-17b review app | Claude Haiku developer | Streamlit mapping review app, apply at build | Accepted; lead made the status test follow the sheet | 1 session |
+| 2026-11-17 | VD-28 network mobile | Claude Haiku developer | combobox search, full-screen panel, details layout, exit button | Accepted after one resume (90-turn cap) and one lead correction (canvas undrawn above the sheet) | 1 session |
+| 2026-11-17 | VD-29 tooltips/monitoring | Claude Haiku developer | body-level clamped tooltip, help icon, map text width | Accepted; lead added the site-wide boxed-text rule and the favicon encoding fix | 1 session |

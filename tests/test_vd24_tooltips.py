@@ -80,22 +80,19 @@ def test_no_page_in_framework_splits_its_head_from_the_title() -> None:
                 assert "atlas-page-head__lead" in match.group(1), md.name
 
 
-def test_shared_tooltip_rules_show_on_hover_and_focus_after_200_ms() -> None:
+def test_shared_tooltip_is_one_fixed_bubble_shown_after_200_ms() -> None:
+    # VD-29 replaced the ::after bubble with one .atlas-tip element (see test_vd29_tooltips.py).
     css = COMPONENTS.read_text(encoding="utf-8")
-    after = _block(css, "[data-atlas-tip]::after")
-    assert "content: attr(data-atlas-tip);" in after
-    assert "max-width: min(18rem" in after
-    assert "display: none;" in after
-    assert "white-space: normal;" in after
-    hover = _media(css, "@media (hover: hover)")
-    assert "[data-atlas-tip]:hover::after" in hover and "display: block;" in hover
+    bubble = _block(css, ".atlas-tip")
+    assert "position: fixed;" in bubble
+    assert "max-width: min(20rem, calc(100vw - 16px));" in bubble
+    assert "white-space: normal;" in bubble
+    assert "[data-atlas-tip]::after" not in css
+    assert "attr(data-atlas-tip)" not in css
     assert re.search(r"animation: atlas-tip-in 120ms ease-out 200ms both;", css)
-    for variant in ("below", "left", "right"):
-        assert f'[data-atlas-tip-pos="{variant}"]::after' in css
-    assert '[data-atlas-tip-align="end"]::after' in css
-    assert "[data-atlas-tip].atlas-tip--dismissed::after" in css
+    assert ".atlas-tip[hidden]" in css
     reduced = _media(css, "@media (prefers-reduced-motion: reduce)")
-    assert "animation-duration: 0s;" in reduced and "data-atlas-tip" in reduced
+    assert "animation-duration: 0s;" in reduced and ".atlas-tip" in reduced
 
 
 def test_tooltip_is_defined_once_and_monitoring_keeps_only_its_layout() -> None:
@@ -108,7 +105,7 @@ def test_tooltip_module_exports_init_and_help_markup() -> None:
     js = TOOLTIP_JS.read_text(encoding="utf-8")
     assert "export function initTooltips(root = document)" in js
     assert "export function helpButtonHtml(" in js
-    assert '"Escape"' in js and "atlas-tip--dismissed" in js
+    assert '"Escape"' in js and "dismissed = true" in js
     assert "aria-expanded" in js
 
 

@@ -15,6 +15,7 @@ STYLES = ROOT / "framework" / "src" / "components" / "monitoring.css"
 SHARED_STYLES = ROOT / "framework" / "src" / "design" / "components.css"
 SCRIPT = ROOT / "framework" / "src" / "components" / "monitoring.js"
 MAP_SCRIPT = ROOT / "framework" / "src" / "components" / "svg_map.js"
+TOOLTIP_JS = ROOT / "framework" / "src" / "components" / "shared" / "tooltip.js"
 INSTITUTIONS_SCRIPT = ROOT / "framework" / "src" / "components" / "institutions.js"
 
 HEX_COLOR = re.compile(
@@ -101,25 +102,17 @@ def test_tool_hit_area_is_at_least_40_px() -> None:
 
 
 def test_tooltip_is_the_shared_left_variant_timed_under_300_ms() -> None:
-    # VD-24: the tooltip rules live once in design/components.css. The map tools use
-    # data-atlas-tip-pos="left" there.
+    # VD-24/VD-29: the tooltip is one shared .atlas-tip bubble (design/components.css), placed by
+    # components/shared/tooltip.js. The map tools use data-atlas-tip-pos="left", which it reads.
     shared = SHARED_STYLES.read_text(encoding="utf-8")
     assert PAGE.read_text(encoding="utf-8").count('data-atlas-tip-pos="left"') == 6
     assert "[data-atlas-tip]::after" not in STYLES.read_text(encoding="utf-8")
+    assert 'tip.getAttribute("data-atlas-tip-pos")' in TOOLTIP_JS.read_text(encoding="utf-8")
 
-    after = _rule(shared, "[data-atlas-tip]::after")
-    assert "content: attr(data-atlas-tip);" in after
-    assert "pointer-events: none;" in after
-    assert "display: none;" in after
-    left = _rule(shared, '[data-atlas-tip-pos="left"]::after')
-    assert "right: calc(100% + var(--atlas-space-2));" in left
-
-    shown = re.search(
-        r'\[data-atlas-tip\]:focus-visible::after,\s*\.atlas-help\[aria-expanded="true"\]::after\s*\{([^}]*)\}',
-        shared,
-    )
+    bubble = _rule(shared, ".atlas-tip")
+    assert "position: fixed;" in bubble
+    shown = re.search(r"animation: atlas-tip-in ([^;]+);", shared)
     assert shown is not None
-    assert "display: block;" in shown.group(1)
     delays = [
         float(value) / (1000 if unit == "ms" else 1)
         for value, unit in re.findall(r"(\d*\.?\d+)(ms|s)\b", shown.group(1))
@@ -127,7 +120,7 @@ def test_tooltip_is_the_shared_left_variant_timed_under_300_ms() -> None:
     assert delays and max(delays) <= 0.3, delays
 
     reduced = _media_block(shared, "@media (prefers-reduced-motion: reduce)")
-    assert "data-atlas-tip" in reduced and "animation-duration: 0s;" in reduced
+    assert ".atlas-tip" in reduced and "animation-duration: 0s;" in reduced
 
 
 def test_tooltip_is_not_clipped_by_the_toolbar_or_frame() -> None:

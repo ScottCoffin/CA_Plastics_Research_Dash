@@ -20,6 +20,8 @@
 #observablehq-main p { max-width: 70ch; }
 /* Owner 2026-11-17: notices, callouts and caveats run the full content width; only running prose keeps the 70ch measure. */
 #observablehq-main .atlas-notice, #observablehq-main .atlas-callout, #observablehq-main .atlas-callout p, #observablehq-main .atlas-callout li, #observablehq-main .atlas-callout details, #observablehq-main .ev-notice, #observablehq-main .ev-notice p { max-width: none; }
+/* Owner 2026-11-17 (round 2): text inside boxes (cards, panels, expandable sections, figures) fills the box; only free-standing page prose keeps the 70ch measure. */
+#observablehq-main :is(.card, details, figure, [class*="-card"], [class*="card-"], [class*="panel"], [class*="__body"], [class*="-note"], [class*="-hint"]) :is(p, ul, ol, li, dd, figcaption) { max-width: none; }
 .atlas-start { margin: 1.25rem 0; }
 .atlas-start h2 { margin: 0 0 0.5rem; font-size: var(--atlas-type-section-size); }
 .atlas-start-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }

@@ -14,7 +14,10 @@ const PLANE_MARK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-400 -560 9
   '<polygon fill="#e3a92b" points="70,-150 560,-150 560,250 -70,205"/>' +
   '<polygon fill="#141311" points="-470,205 -70,205 560,250 560,520 -470,520"/></g></svg>';
 const CA_MARK = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK).toString("base64");
-const FAVICON = "data:image/svg+xml," + encodeURIComponent(PLANE_MARK.replace(' aria-hidden="true" focusable="false"', ""));
+// Light encoding only (quotes to apostrophes, < > # escaped): Framework re-escapes the "%" of a full
+// encodeURIComponent() string (%3D became %253D), which left browsers with an unreadable icon.
+const FAVICON = "data:image/svg+xml," + PLANE_MARK.replace(' aria-hidden="true" focusable="false"', "")
+  .replaceAll('"', "'").replaceAll("<", "%3C").replaceAll(">", "%3E").replaceAll("#", "%23");
 const PAGE_GROUPS = [
   {name: "Explore", pages: [
     {name: "Experts", path: "/experts"},
