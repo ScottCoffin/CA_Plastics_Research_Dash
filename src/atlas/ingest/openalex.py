@@ -676,12 +676,16 @@ def ingest_live(
     )
 
     state = read_high_water_mark(paths.high_water_mark)
+    # Incremental runs filter on publication date. They used from_updated_date until
+    # OpenAlex made it a paid "daily sync" filter (HTTP 403 "Plan upgrade required" from
+    # 2026-11-16); the lookback window now catches works indexed after their publication date.
+    incremental_from: str | None = None
     if start_year is None and not updated_since and state:
         high_water_date = state.get("last_publication_date")
         if not high_water_date:
             raise ValueError("existing high-water mark has no publication date")
-        updated_since = incremental_start(high_water_date, lookback_days)
-    if start_year is None and not updated_since:
+        incremental_from = incremental_start(high_water_date, lookback_days)
+    if start_year is None and not updated_since and not incremental_from:
         raise ValueError("first live run requires start_year/end_year or updated_since")
 
     actual_run_id = run_id or _run_id()
@@ -716,7 +720,7 @@ def ingest_live(
                     window_end = publication_date_cap
                 windows = [(f"{start_year:04d}-01-01", window_end)]
             else:
-                windows = [(None, publication_date_cap)]
+                windows = [(incremental_from, publication_date_cap)]
             for window_start, window_end in windows:
                 cursor = "*"
                 page_count = 0

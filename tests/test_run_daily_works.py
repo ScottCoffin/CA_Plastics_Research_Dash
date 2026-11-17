@@ -120,7 +120,11 @@ def test_publication_date_cap_limits_windows(monkeypatch: pytest.MonkeyPatch, tm
     paths.high_water_mark.write_text(json.dumps(state), encoding="utf-8")
     openalex.ingest_live(institution_ids=["I1"], paths=paths, publication_date_cap="2026-11-11")
     assert "to_publication_date%3A2026-11-11" in urls[0]
-    assert "from_updated_date" in urls[1] and "to_publication_date%3A2026-11-11" in urls[1]
+    # Incremental runs filter on publication date from the high-water mark minus the 30-day
+    # lookback; from_updated_date became a paid OpenAlex filter (HTTP 403 from 2026-11-16).
+    assert "from_updated_date" not in urls[1]
+    assert "from_publication_date%3A2026-10-02" in urls[1]
+    assert "to_publication_date%3A2026-11-11" in urls[1]
 
 
 @pytest.mark.parametrize(
