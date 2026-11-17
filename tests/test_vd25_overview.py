@@ -121,7 +121,13 @@ def test_figure_is_the_reference_california_composition() -> None:
     assert (
         '<path d="M-330,70 A62,62 0 0 0 -206,70 Z" style="fill: var(--atlas-vermilion)"' in markup
     )
-    assert '<g clip-path="url(#overview-ca)">' in markup
+    # VD-30: each plane is its own group with the same clip, so the clip moves with the plane.
+    assert markup.count('<g clip-path="url(#overview-ca)">') == 4
+    for plane, _, _ in DOORS:
+        assert (
+            f'<g class="overview-piece" data-plane="{plane}"><g clip-path="url(#overview-ca)">'
+            in markup
+        ), plane
 
 
 def test_plane_links_are_hidden_from_assistive_tech_and_the_tab_order() -> None:

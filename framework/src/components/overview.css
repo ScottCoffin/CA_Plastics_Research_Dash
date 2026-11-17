@@ -212,20 +212,22 @@
   background: linear-gradient(135deg, var(--atlas-ink) 62%, var(--atlas-vermilion) 62%);
 }
 
-/* The figure: a clipPath of California with four flat planes. The planes take their colour from
-   CSS (so the lit state can override it); the others fall back to the line tone. */
+/* The figure: a clipPath of California with four flat planes. Each plane is a group that carries the
+   same clip, so the map intro can move a plane and its outline together. The planes take their colour
+   from CSS (so the lit state can override it); the others fall back to the line tone. */
 .overview-figure {
   position: relative;
   margin: 0;
   min-width: 0;
 }
 
+/* Overflow is visible so a plane can start outside the SVG during the map intro; the hero clips it then. */
 .overview-figure svg {
   display: block;
   width: 100%;
   height: auto;
   max-height: 86vh;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .overview-plane {
@@ -260,18 +262,12 @@
   writing-mode: vertical-rl;
 }
 
-@keyframes overview-settle {
-  from {
-    transform: translate(var(--dx), var(--dy));
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-.overview-plane-g {
-  animation: overview-settle 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+/* VD-30: the map intro (index.md). Each plane is its own group, so its California clip travels with it.
+   The JS adds transforms only while the intro runs and removes them afterwards, so the finished map has
+   none. During the intro the hero clips to its own box, so planes cannot widen the page. This clip is not
+   permanent: the site-search listbox is a child of the hero, and a permanent clip would cut it off. */
+.overview-hero.is-map-intro {
+  overflow: clip;
 }
 
 /* Task bands: swatch, title, text, facts and the Explore links. Each band has a 1px rule on top
@@ -543,7 +539,6 @@
   .overview-door,
   .overview-door::after,
   .overview-plane,
-  .overview-plane-g,
   .overview-go a {
     transition: none;
     animation: none;

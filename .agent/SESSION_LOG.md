@@ -173,3 +173,4 @@
 | 2026-11-17 | VD-29 | Tooltips clamped to the viewport, smaller help icon, boxed text full width, favicon encoding fix; owner switched Pages back to GitHub Actions | this commit |
 | 2026-11-17 | VD-29 follow-up | Page titles no longer self-links (postbuild unwraps h1 anchors) | this commit |
 | 2026-11-17 | VD-29 fix + VD-31 | Favicon as base64 (live icon was a black square: Framework double-escaped %23); creator credit replaces disclaimer and About disclosure; larger footer links | this commit |
+| 2026-11-17 | VD-30 | Homepage map spring intro (Web Animations, no library); About section text full width | this commit |

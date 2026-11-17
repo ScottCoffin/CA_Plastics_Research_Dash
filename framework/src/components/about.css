@@ -38,7 +38,7 @@
 
 #observablehq-main .about-section > p,
 #observablehq-main .about-lede {
-  max-width: 75ch;
+  max-width: none;
 }
 
 #observablehq-main .about-lede {
@@ -191,7 +191,7 @@
 
 #observablehq-main .about-flow__caption,
 #observablehq-main .about-flow__empty {
-  max-width: 75ch;
+  max-width: none;
   margin-top: var(--atlas-space-4);
   color: var(--atlas-muted);
   font-size: var(--atlas-type-small-size);

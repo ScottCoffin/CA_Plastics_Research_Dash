@@ -226,3 +226,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-17 | EM-17b review app | Claude Haiku developer | Streamlit mapping review app, apply at build | Accepted; lead made the status test follow the sheet | 1 session |
 | 2026-11-17 | VD-28 network mobile | Claude Haiku developer | combobox search, full-screen panel, details layout, exit button | Accepted after one resume (90-turn cap) and one lead correction (canvas undrawn above the sheet) | 1 session |
 | 2026-11-17 | VD-29 tooltips/monitoring | Claude Haiku developer | body-level clamped tooltip, help icon, map text width | Accepted; lead added the site-wide boxed-text rule and the favicon encoding fix | 1 session |
+| 2026-11-17 | VD-30 map intro | Claude Haiku developer | per-plane clips, Motion spring intro, tests | Accepted after one resume (90-turn cap); lead replaced Motion (64 KB gzip) with an in-page spring | 1 session |

@@ -28,13 +28,10 @@ title: Overview
 <defs>
 <clipPath id="overview-ca"><path d="M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L0,-221L0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-149,-121L-143,-122L-132,-116L-129,-111L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L167,360L221,405L256,494L469,474Z"/></clipPath>
 </defs>
-<g clip-path="url(#overview-ca)">
-<g class="overview-plane-g" style="--dx:-40px;--dy:-30px"><a href="./monitoring" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="water" points="-470,-575 560,-575 560,-150 -470,-150"/></a></g>
-<g class="overview-plane-g" style="--dx:-50px;--dy:10px"><a href="./experts" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="people" points="-470,-150 70,-150 -70,205 -470,205"/></a></g>
-<g class="overview-plane-g" style="--dx:50px;--dy:0px"><a href="./funding" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="money" points="70,-150 560,-150 560,250 -70,205"/></a></g>
-<g class="overview-plane-g" style="--dx:30px;--dy:40px"><a href="./evidence" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="evidence" points="-470,205 -70,205 560,250 560,520 -470,520"/></a></g>
-</g>
-<path d="M-330,70 A62,62 0 0 0 -206,70 Z" style="fill: var(--atlas-vermilion)" aria-hidden="true"/>
+<g class="overview-piece" data-plane="water"><g clip-path="url(#overview-ca)"><a href="./monitoring" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="water" points="-470,-575 560,-575 560,-150 -470,-150"/></a></g></g>
+<g class="overview-piece" data-plane="people"><g clip-path="url(#overview-ca)"><a href="./experts" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="people" points="-470,-150 70,-150 -70,205 -470,205"/></a></g><path d="M-330,70 A62,62 0 0 0 -206,70 Z" style="fill: var(--atlas-vermilion)" aria-hidden="true"/></g>
+<g class="overview-piece" data-plane="money"><g clip-path="url(#overview-ca)"><a href="./funding" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="money" points="70,-150 560,-150 560,250 -70,205"/></a></g></g>
+<g class="overview-piece" data-plane="evidence"><g clip-path="url(#overview-ca)"><a href="./evidence" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="evidence" points="-470,205 -70,205 560,250 560,520 -470,520"/></a></g></g>
 </svg>
 <figcaption class="overview-caps">32.5° to 42° N</figcaption>
 </figure>
@@ -206,6 +203,94 @@ if (snapshot.refreshDisplay && snapshot.refreshIso) {
     el.addEventListener("focus", () => light(el.dataset.plane));
     el.addEventListener("blur", () => light(null));
   }
+})();
+```
+
+```js
+(async () => {
+  // VD-30: once per browser session the four planes travel in from their own edges and spring into place
+  // (a sampled spring on the Web Animations API, no library). The markup is the finished map; transforms
+  // exist only while the intro runs.
+  const KEY = "atlas-map-intro";
+  const figure = document.getElementById("overview-figure");
+  const svg = figure?.querySelector("svg");
+  const hero = figure?.closest(".overview-hero");
+  const pieces = [...(figure?.querySelectorAll(".overview-piece") ?? [])];
+  let played = true; // if sessionStorage is blocked, stay still rather than replay on every load
+  try { played = sessionStorage.getItem(KEY) === "1"; } catch {}
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!svg || pieces.length !== 4 || played || reduced || !figure.getClientRects().length) return;
+
+  // Each plane starts just outside the viewport on its own side: water from above, people from the left,
+  // money from the right, evidence from below. Distances come from each plane's box at rest, in CSS px.
+  const EDGE = 16;
+  const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
+  const unit = svg.getScreenCTM().a; // CSS px per SVG user unit (the viewBox scales uniformly)
+  const outside = {
+    water: (r) => [0, -(r.bottom + EDGE)],
+    people: (r) => [-(r.right + EDGE), 0],
+    money: (r) => [vw - r.left + EDGE, 0],
+    evidence: (r) => [0, vh - r.top + EDGE],
+  };
+  const tilt = {water: -8, people: 7, money: -7, evidence: 8};
+  const plan = pieces.map((piece) => {
+    const [x, y] = outside[piece.dataset.plane](piece.getBoundingClientRect());
+    return {piece, x: x / unit, y: y / unit, tilt: tilt[piece.dataset.plane]};
+  });
+
+  // Park every plane off the page before the first animation frame, so the finished map never flashes. Each plane
+  // pivots on its own centre (fill-box), and rest() removes every trace of the intro.
+  const rest = () => {
+    for (const {piece} of plan) {
+      piece.style.transform = "";
+      piece.style.transformOrigin = "";
+      piece.style.transformBox = "";
+    }
+    hero?.classList.remove("is-map-intro");
+  };
+  hero?.classList.add("is-map-intro");
+  for (const {piece, x, y, tilt: deg} of plan) {
+    piece.style.transformBox = "fill-box";
+    piece.style.transformOrigin = "50% 50%";
+    piece.style.transform = `translate(${x}px, ${y}px) rotate(${deg}deg)`;
+  }
+  try { sessionStorage.setItem(KEY, "1"); } catch {}
+
+  // A press or a key during the intro finishes it at once.
+  const ac = new AbortController();
+  let controls = null;
+  let cancelled = false;
+  const finishNow = () => {
+    if (controls) controls.forEach((control) => control.complete());
+    else { cancelled = true; rest(); }
+  };
+  window.addEventListener("pointerdown", finishNow, {once: true, signal: ac.signal});
+  window.addEventListener("keydown", finishNow, {once: true, signal: ac.signal});
+
+  // The spring is sampled here and played with the browser's Web Animations API: no library download,
+  // so the intro starts at once. Underdamped spring (damping ratio 0.55, natural frequency 10 rad/s):
+  // about 12% overshoot, settled within 1.1 s. Pieces start 120 ms apart.
+  const ZETA = 0.55, OMEGA = 10, DURATION = 1100, STEPS = 66, GAP = 120;
+  const wd = OMEGA * Math.sqrt(1 - ZETA * ZETA);
+  const remaining = (t) => Math.exp(-ZETA * OMEGA * t) * (Math.cos(wd * t) + (ZETA * OMEGA / wd) * Math.sin(wd * t));
+  if (cancelled || typeof Element.prototype.animate !== "function") {
+    ac.abort();
+    rest();
+    return;
+  }
+  controls = plan.map(({piece, x, y, tilt: deg}, i) => {
+    const frames = [];
+    for (let s = 0; s <= STEPS; s++) {
+      const k = s === STEPS ? 0 : remaining((s / STEPS) * (DURATION / 1000));
+      frames.push({transform: `translate(${x * k}px, ${y * k}px) rotate(${deg * k}deg)`});
+    }
+    return piece.animate(frames, {duration: DURATION, delay: i * GAP, easing: "linear", fill: "both"});
+  });
+  controls.forEach((animation) => { animation.complete = () => animation.finish(); });
+  await Promise.allSettled(controls.map((animation) => animation.finished));
+  controls.forEach((animation) => animation.cancel());
+  ac.abort();
+  rest();
 })();
 ```
 
