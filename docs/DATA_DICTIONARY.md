@@ -291,7 +291,12 @@ Top-level keys: `schema_version` (`em5.v1`), `source` (string), `entries` (array
 Licence: project metadata; names and descriptions are quoted from each steward, and nothing
 from the linked resources is copied (link-only, Add-on A2 §8).
 
-`entries[]`: `id`, `name`, `steward`, `steward_source` (https URL where the steward is named, or null), `description`, `relation`, `root_url` (https), `topics`
+`entries[]`: `id`, `name`, `icon` (VD-32: site-root path `assets/linkouts/<id>.png` or `.svg`, or null
+when the card has no stored icon; written from `config/linkout_icons.yml`, fetched by
+`scripts/fetch_linkout_icons.py`), `initials` (1 to 3 capitals shown on a neutral plane when `icon` is
+null), `steward`, `steward_source` (https URL where the steward is named, or null), `steward_inst_id`
+(VD-32: an `inst_id` in `institutions.json` for a steward that is an Atlas institution, or null; the
+steward name links to `./institution#inst=<id>`), `description`, `relation`, `root_url` (https), `topics`
 (topic tags that show the entry), `default` (boolean: shown when no topic-specific entry matches),
 `description_source` (https URL where the steward states the description), `update_model` (string,
 or "not stated"), `terms_status` (`recorded` or `not recorded`), `terms` (string, or null when the

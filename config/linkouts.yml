@@ -6,6 +6,10 @@
 # trigger_rules: "topic=<tag>" shows the entry in the Evidence Map strip when that topic is
 # selected; "default" shows it when no topic-specific entry matches (owner question EM5-STRIP).
 # last_checked stays null here; the weekly check records it in docs/api_notes/linkouts_check.json.
+# steward_inst_id (VD-32): the Atlas institution id (site/data/institutions.json) of a steward
+# that is an Atlas institution, or of the institution a steward unit belongs to. The steward
+# name links to ./institution#inst=<id>. Only exact or unambiguous name matches are recorded;
+# unmatched stewards stay plain text. Icons: config/linkout_icons.yml.
 schema_version: 1
 entries:
   - id: "LO-1"
@@ -44,6 +48,7 @@ entries:
   - id: "LO-2"
     name: "ToMEx (Aquatic Organisms; Human Health)"
     steward: "SCCWRP"
+    steward_inst_id: "I11006740"  # Southern California Coastal Water Research Project (exact name)
     description: "a living resource, new studies can be added at any time"
     description_source: "https://www.plastiverse.org/tools/tomex-microplastics-toxicity-database"
     relation: "toxicity database"
@@ -64,6 +69,7 @@ entries:
   - id: "LO-3"
     name: "NOAA NCEI Marine Microplastics"
     steward: "NOAA National Centers for Environmental Information"
+    steward_inst_id: "I4210157891"  # NOAA National Centers for Environmental Information (exact name)
     steward_source: "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncei:MicroplasticsDatabase/html"
     description: "a global database of microplastics observations in marine settings"
     description_source: "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncei:MicroplasticsDatabase/html"
@@ -139,6 +145,7 @@ entries:
   - id: "LO-7"
     name: "Global Plastics Policy Tool"
     steward: "Berkeley data-science center (Eric and Wendy Schmidt Center for Data Science & Environment)"
+    steward_inst_id: "I4405287357"  # Eric and Wendy Schmidt Center for Data Science & Environment (exact name)
     description: "predicts the impact of potential interventions"
     description_source: "https://dse.berkeley.edu/news/data-interactive-tools-and-ai-actionable-change-ending-plastic-pollution"
     relation: "policy modelling tool"
@@ -196,6 +203,7 @@ entries:
   - id: "LO-10"
     name: "DTSC: Microplastics in Consumer Products"
     steward: "DTSC Safer Consumer Products (SCP)"
+    steward_inst_id: "I1290230355"  # California Department of Toxic Substances Control (DTSC; the SCP program is part of it)
     description: "not stated"
     description_source: "https://dtsc.ca.gov/scp/microplastics-in-consumer-products"
     relation: "regulatory research page"
@@ -214,6 +222,7 @@ entries:
   - id: "LO-11"
     name: "DTSC: Addition to the Candidate Chemicals List: Microplastics"
     steward: "DTSC Safer Consumer Products (SCP)"
+    steward_inst_id: "I1290230355"  # California Department of Toxic Substances Control (DTSC; the SCP program is part of it)
     description: "not stated"
     description_source: "https://dtsc.ca.gov/scp/candidate-chemical-list_microplastics/"
     relation: "regulatory listing page"
@@ -233,6 +242,7 @@ entries:
   - id: "LO-12"
     name: "DTSC: Priority Product Work Plan"
     steward: "DTSC Safer Consumer Products (SCP)"
+    steward_inst_id: "I1290230355"  # California Department of Toxic Substances Control (DTSC; the SCP program is part of it)
     description: "not stated"
     description_source: "https://dtsc.ca.gov/scp/priority-product-work-plan/"
     relation: "regulatory work plan page"
@@ -252,6 +262,7 @@ entries:
   - id: "LO-13"
     name: "Land to Sea Microplastics Consortium"
     steward: "Coastal and Marine Sciences Institute, UC Davis"
+    steward_inst_id: "I84218800"  # University of California, Davis (the host in config/research_networks.yml)
     steward_source: "https://marinescience.ucdavis.edu/about"
     description: "We aim to bring together experts from leading institutions to advance a One-Health understanding of microplastics, as well as even-smaller nano-plastics."
     description_source: "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution"

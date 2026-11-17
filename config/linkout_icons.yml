@@ -1,0 +1,170 @@
+# Icons for the Related resources cards (VD-32, owner request 2026-11-17).
+# Each icon is the steward's own site icon (favicon or touch icon), resized to 64 x 64 and
+# shown at 40 px only to identify the link; the card's title links to the resource. A card whose
+# root_url is a research network's logo source reuses that self-hosted logo (config/research_networks.yml).
+# initials: the two or three letters shown on a neutral plane when no icon is stored.
+# path: relative to the site root, or null. error: the last failed attempt (retried on the next run).
+# Rebuild the public JSON with `py -3.14 scripts/build_linkouts_json.py`. Fetch with
+# `py -3.14 scripts/fetch_linkout_icons.py [--refresh] [--only LO-n]`.
+schema_version: 1
+icons:
+- id: LO-1
+  initials: PC
+  icon_page: null
+  skip_reason: null
+  path: assets/linkouts/lo-1.png
+  format: png
+  source_kind: apple-touch-icon
+  icon_url: https://www.globalplasticlaws.org/wp-content/uploads/2023/10/PPC_GlobalPlasticLaws_FaviconFinal_whitev02.png
+  page_url: https://www.globalplasticlaws.org/
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+- id: LO-2
+  initials: SC
+  icon_page: https://sccwrp.org/
+  skip_reason: null
+  path: assets/linkouts/lo-2.png
+  format: png
+  source_kind: favicon.ico
+  icon_url: https://sccwrp.org/favicon.ico
+  page_url: https://sccwrp.org/
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+- id: LO-3
+  initials: NC
+  icon_page: null
+  skip_reason: null
+  path: assets/linkouts/lo-3.png
+  format: png
+  source_kind: rel-icon
+  icon_url: https://www.ncei.noaa.gov/themes/custom/ncei/favicon.ico
+  page_url: https://www.ncei.noaa.gov/
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+- id: LO-4
+  initials: MOE
+  icon_page: null
+  skip_reason: null
+  path: assets/linkouts/lo-4.png
+  format: png
+  source_kind: apple-touch-icon
+  icon_url: https://aomi.env.go.jp/apple-touch-icon.png
+  page_url: https://aomi.env.go.jp/
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+- id: LO-5
+  initials: GP
+  icon_page: null
+  skip_reason: null
+  path: assets/linkouts/lo-5.png
+  format: png
+  source_kind: apple-touch-icon
+  icon_url: https://globalplasticshub.org/apple-touch-icon.png
+  page_url: https://globalplasticshub.org/
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+- id: LO-6
+  initials: UN
+  icon_page: null
+  skip_reason: null
+  path: assets/linkouts/lo-6.png
+  format: png
+  source_kind: apple-touch-icon
+  icon_url: https://oceanaccounts.org/apple-touch-icon.png
+  page_url: https://oceanaccounts.org/
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+- id: LO-7
+  initials: EW
+  icon_page: null
+  skip_reason: null
+  path: assets/linkouts/lo-7.png
+  format: png
+  source_kind: rel-icon
+  icon_url: https://dse.berkeley.edu/themes/custom/dse/favicon.ico
+  page_url: https://dse.berkeley.edu/
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+- id: LO-8
+  initials: PV
+  icon_page: null
+  skip_reason: null
+  path: assets/linkouts/lo-8.png
+  format: png
+  source_kind: apple-touch-icon
+  icon_url: https://www.plastiverse.org/wp-content/uploads/2023/12/cropped-NewLogo-1-1-180x180.png
+  page_url: https://www.plastiverse.org/
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+- id: LO-9
+  initials: MI
+  icon_page: null
+  skip_reason: root_url is on the shared R-universe host, so its icon is R-universe's, not the Moore Institute's;
+    initials are shown
+  path: null
+  format: null
+  source_kind: null
+  icon_url: null
+  page_url: https://moore-institute-4-plastic-pollution-res.r-universe.dev/
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+- id: LO-10
+  initials: DT
+  icon_page: null
+  skip_reason: null
+  path: null
+  format: null
+  source_kind: null
+  icon_url: null
+  page_url: null
+  fetched: null
+  attempted: '2026-11-17'
+  error: 'homepage https://dtsc.ca.gov/: HTTP Error 403: Forbidden; favicon.ico https://dtsc.ca.gov/favicon.ico:
+    HTTP Error 403: Forbidden'
+- id: LO-11
+  initials: DT
+  icon_page: null
+  skip_reason: null
+  path: null
+  format: null
+  source_kind: null
+  icon_url: null
+  page_url: null
+  fetched: null
+  attempted: '2026-11-17'
+  error: 'homepage https://dtsc.ca.gov/: HTTP Error 403: Forbidden; favicon.ico https://dtsc.ca.gov/favicon.ico:
+    HTTP Error 403: Forbidden'
+- id: LO-12
+  initials: DT
+  icon_page: null
+  skip_reason: null
+  path: null
+  format: null
+  source_kind: null
+  icon_url: null
+  page_url: null
+  fetched: null
+  attempted: '2026-11-17'
+  error: 'homepage https://dtsc.ca.gov/: HTTP Error 403: Forbidden; favicon.ico https://dtsc.ca.gov/favicon.ico:
+    HTTP Error 403: Forbidden'
+- id: LO-13
+  initials: LS
+  icon_page: null
+  skip_reason: null
+  path: assets/linkouts/lo-13.png
+  format: png
+  source_kind: research network logo (NET-1)
+  icon_url: https://marinescience.ucdavis.edu/sites/g/files/dgvnsk9221/files/styles/sf_large_width/public/media/images/Untitled%20design_0.png?itok=Pj7Z73fZ
+  page_url: https://marinescience.ucdavis.edu/microplastics-consortium-source-solution
+  fetched: '2026-11-17'
+  attempted: null
+  error: null

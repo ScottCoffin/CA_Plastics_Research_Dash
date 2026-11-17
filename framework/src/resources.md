@@ -8,7 +8,7 @@ title: Related resources
 <p class="atlas-page-head__lead">Outside databases and tools on plastics. The Atlas links to them and does not copy, mirror or ingest their data.</p>
 </header>
 
-Descriptions are quoted as each steward states them.
+Descriptions are quoted as each steward states them. Each small icon is the steward's own site icon or logo, shown only to identify the link.
 
 <link rel="stylesheet" href="./components/resources.css">
 

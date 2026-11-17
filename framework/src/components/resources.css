@@ -7,9 +7,16 @@
 #resources-root .rs-filter { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 1rem; max-width: 36rem; }
 #resources-root input[type="search"] { font: inherit; padding: 0.35rem; border: 1px solid var(--theme-foreground-faint); border-radius: var(--atlas-radius-control); background: var(--theme-background); color: var(--theme-foreground); }
 #resources-root a { color: var(--theme-foreground-focus); overflow-wrap: anywhere; }
-#resources-root .rs-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; margin: 1rem 0 0; padding: 0; list-style: none; }
-#resources-root .rs-card { padding: 0.75rem 1rem; border: 1px solid var(--theme-foreground-faintest); border-radius: var(--atlas-radius-card); background: var(--theme-background-alt); }
-#resources-root .rs-name { margin: 0; font-size: 1.05rem; }
+/* VD-32: the cards fill the content width. auto-fill keeps columns at 20rem or wider: one column on
+ * phones, two on tablets, three or four on desktop. Text in a card is not capped at 70ch or 640px. */
+#resources-root .rs-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: 1rem; max-width: none; margin: 1rem 0 0; padding: 0; list-style: none; }
+#resources-root .rs-card { min-width: 0; padding: 0.75rem 1rem; border: 1px solid var(--theme-foreground-faintest); border-radius: var(--atlas-radius-card); background: var(--theme-background-alt); }
+#resources-root .rs-card p { max-width: none; }
+#resources-root .rs-head { display: flex; align-items: flex-start; gap: 0.6rem; }
+/* Square, flat icon tiles (Plane Poster). A stored icon is shown as it is; a card without one gets a neutral plane with the steward's initials. */
+#resources-root .rs-icon { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 0; object-fit: contain; }
+#resources-root .rs-icon-initials { display: inline-flex; align-items: center; justify-content: center; overflow: hidden; background: var(--atlas-sunken); color: var(--atlas-ink); font-family: var(--atlas-font-display); font-size: 0.72rem; font-weight: 650; letter-spacing: 0.02em; line-height: 1; }
+#resources-root .rs-name { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 1.05rem; overflow-wrap: anywhere; }
 #resources-root .rs-relation { display: inline-block; margin: 0.3rem 0 0.4rem; padding: 0 0.4rem; border-radius: var(--atlas-radius-control); border: 1px solid var(--theme-foreground-faint); font-size: 0.75rem; color: var(--theme-foreground-muted); }
 #resources-root .rs-field, #resources-root .rs-description { margin: 0.25rem 0 0; font-size: 0.9rem; }
 #resources-root .rs-label { color: var(--theme-foreground-muted); }

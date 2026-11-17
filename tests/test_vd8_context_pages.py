@@ -31,7 +31,7 @@ def test_resources_style_steward_and_reuse_as_badges() -> None:
     runtime = (COMPONENTS / "resources.js").read_text(encoding="utf-8")
 
     assert 'id="resources-root"' in page
-    assert 'labelled("Steward", entry.steward)' in runtime
+    assert 'labelled("Steward", stewardNode(entry))' in runtime
     assert '"Reuse terms not recorded"' in runtime
     assert ".rs-relation + .rs-field" in styles
     assert "#resources-root .rs-badge" in styles

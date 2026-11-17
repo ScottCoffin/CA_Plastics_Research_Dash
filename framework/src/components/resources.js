@@ -2,9 +2,13 @@
 // Link, don't mirror: names, stewards and descriptions are quoted from site/data/linkouts.json
 // as each steward states them; nothing is fetched from the linked resources. Pure helpers are
 // exported for Node tests, and nothing touches `document` at module load.
-import {loadJson} from "./atlas.js";
+import {classicUrl, loadJson} from "./atlas.js";
 
 const NOT_STATED = "not stated";
+const ICON_SIZE = 40; // px, shown in the card header (the stored icons are 64 x 64)
+const ICON_PATH_PATTERN = /^assets\/linkouts\/[a-z0-9][a-z0-9._-]*\.(?:png|svg)$/;
+const INST_ID_PATTERN = /^[A-Za-z0-9._-]{1,64}$/;
+const INITIALS_PATTERN = /^[A-Z0-9]{1,3}$/;
 
 export function isHttps(url) {
   if (typeof url !== "string") return false;
@@ -38,22 +42,66 @@ function externalLink(href, text) {
   return link;
 }
 
+// A value is text, or a node (the steward link) that is appended as it is.
 function labelled(label, value) {
   const p = el("p", "rs-field");
-  p.append(el("span", "rs-label", `${label}: `), document.createTextNode(String(value)));
+  const body = value && typeof value === "object" ? value : document.createTextNode(String(value));
+  p.append(el("span", "rs-label", `${label}: `), body);
   return p;
+}
+
+// The icon file for a card as an absolute URL on the site root (assets/ sits there in both
+// layouts). Only paths under assets/linkouts/ qualify; anything else gets the initials plane.
+export function iconUrl(path) {
+  return typeof path === "string" && ICON_PATH_PATTERN.test(path) ? classicUrl(path) : null;
+}
+
+// The Atlas institution page for a steward, ./institution#inst=<id>; null for an unsafe id.
+export function institutionHref(instId) {
+  if (typeof instId !== "string" || !INST_ID_PATTERN.test(instId)) return null;
+  const base = typeof document !== "undefined" && document.baseURI ? document.baseURI : "http://localhost/";
+  return new URL(`institution#inst=${encodeURIComponent(instId)}`, base).href;
+}
+
+function iconNode(entry) {
+  const src = iconUrl(entry.icon);
+  if (src) {
+    // Decorative: the card title names the site, so the icon has an empty alt text.
+    const img = el("img", "rs-icon");
+    img.src = src;
+    img.alt = "";
+    img.width = ICON_SIZE;
+    img.height = ICON_SIZE;
+    img.loading = "lazy";
+    return img;
+  }
+  const initials = typeof entry.initials === "string" && INITIALS_PATTERN.test(entry.initials) ? entry.initials : "";
+  const plane = el("span", "rs-icon rs-icon-initials", initials);
+  plane.setAttribute("aria-hidden", "true");
+  return plane;
+}
+
+// The steward name links to its Atlas institution page when the registry names one.
+function stewardNode(entry) {
+  const href = institutionHref(entry.steward_inst_id);
+  if (!href) return String(entry.steward);
+  const link = el("a", "", entry.steward);
+  link.href = href;
+  return link;
 }
 
 export function buildCard(entry) {
   const card = el("li", "rs-card");
+  const head = el("div", "rs-head");
   const heading = el("h2", "rs-name");
   if (isHttps(entry.root_url)) {
     heading.append(externalLink(entry.root_url, entry.name));
   } else {
     heading.textContent = entry.name;
   }
-  card.append(heading, el("p", "rs-relation", entry.relation));
-  const steward = labelled("Steward", entry.steward);
+  head.append(iconNode(entry), heading);
+  card.append(head, el("p", "rs-relation", entry.relation));
+  const steward = labelled("Steward", stewardNode(entry));
   if (isHttps(entry.steward_source)) steward.append(" (", externalLink(entry.steward_source, "source"), ")");
   card.append(steward);
 
