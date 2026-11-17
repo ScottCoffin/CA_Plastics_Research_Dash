@@ -17,7 +17,7 @@ title: Evidence map
 <details class="atlas-disclosure ev-how-to">
   <summary>How to use this page</summary>
   <div class="atlas-disclosure__body">
-    <p>Filter the Atlas's distinct works by words in the title, year range, topic, sector, work type, open access, and California leadership. The page lists plastic-related works only.</p>
+    <p>Filter the Atlas's distinct works by words in the title, year range, topic, sector, work type, open access, California leadership, and journal. The page lists plastic-related works only. The publication table can sort by journal and by <a href="./glossary#two-year-mean-citedness">2-yr mean citedness (OpenAlex)</a>, the open analogue of the impact factor.</p>
     <p>The trend charts and heatmap follow the filters, and selecting heatmap cells narrows the publication table below. Click a topic, matrix, or period heading to select that whole row or column.</p>
   </div>
 </details>

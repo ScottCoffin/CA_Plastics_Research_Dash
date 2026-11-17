@@ -84,3 +84,13 @@
 }
 .ev-table-root.ev-table-selection button:hover { background: var(--theme-foreground-faintest); }
 .ev-table-root.ev-table-selection button:focus-visible { outline: 3px solid var(--atlas-accent); outline-offset: 2px; }
+/* VD-34: the 2-yr mean citedness column. The help link is a small round "?" that opens its glossary entry. */
+.ev-table-root .ev-col-help {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 1.5rem; min-height: 1.5rem;
+  margin-inline-start: 0.25rem; border: 1px solid var(--atlas-brand); border-radius: 50%;
+  font-size: 0.8rem; font-weight: 700; color: var(--atlas-brand); text-decoration: none; vertical-align: middle;
+}
+.ev-table-root .ev-col-help:hover { background: var(--atlas-brand-wash); }
+/* position: relative keeps the screen-reader text of an empty value inside the scroll wrapper; an absolutely
+   positioned child of a static cell escapes the wrapper and widens the whole page at 390 px. */
+.ev-table-root .ev-none { color: var(--atlas-muted); position: relative; }

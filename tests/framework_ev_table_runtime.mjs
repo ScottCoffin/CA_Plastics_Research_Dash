@@ -2,7 +2,9 @@
 // The pure helpers live in framework/src/components/ev_table_model.js.
 import assert from "node:assert/strict";
 import {
+  attachJournalMetrics,
   authorLine,
+  citednessText,
   dateLabel,
   escapeHtml,
   filterRows,
@@ -243,5 +245,45 @@ assert.equal(safeHttpUrl(null), "");
 // escapeHtml neutralises markup characters.
 assert.equal(escapeHtml(`<a href="x">&'`), "&lt;a href=&quot;x&quot;&gt;&amp;&#39;");
 assert.equal(escapeHtml(null), "");
+
+// VD-34: 2-yr mean citedness. Values come from journal_metrics.json by journal name; a missing name,
+// a null value or a missing payload gives null, and null sorts last whichever way the column is sorted.
+{
+  const payload = {journals: [{name: "Water Research", two_yr_mean_citedness: 9.25}, {name: "Nature", two_yr_mean_citedness: null}]};
+  const rows = attachJournalMetrics(
+    [
+      work({work_id: "A", journal: "Water Research"}),
+      work({work_id: "B", journal: "Nature"}),
+      work({work_id: "C", journal: "No such journal"}),
+      work({work_id: "D", journal: "constructor"}),
+      work({work_id: "E", journal: "Water Research", title: "Second"})
+    ],
+    payload
+  );
+  assert.deepEqual(rows.map((row) => row.two_yr_mean_citedness), [9.25, null, null, null, 9.25]);
+  assert.deepEqual(attachJournalMetrics([work()], null)[0].two_yr_mean_citedness, null);
+  assert.deepEqual(attachJournalMetrics([work()], {journals: [{name: "Water Research", two_yr_mean_citedness: "9"}]})[0].two_yr_mean_citedness, null);
+  assert.deepEqual(attachJournalMetrics([work({journal: "Water Research"})], {journals: [{name: "Water Research", two_yr_mean_citedness: -2}]})[0].two_yr_mean_citedness, null);
+  assert.equal(attachJournalMetrics([work()], null)[0].journal, "Water Research", "the row keeps its other fields");
+
+  const ids = (list) => list.map((row) => row.work_id);
+  const withValues = [
+    work({work_id: "LOW", two_yr_mean_citedness: 1.5}),
+    work({work_id: "NONE", two_yr_mean_citedness: null}),
+    work({work_id: "HIGH", two_yr_mean_citedness: 12.0}),
+    work({work_id: "MID", two_yr_mean_citedness: 4.0})
+  ];
+  assert.deepEqual(ids(sortRows(withValues, "two_yr_mean_citedness")), ["HIGH", "MID", "LOW", "NONE"]);
+  assert.deepEqual(ids(sortRows(withValues, "two_yr_mean_citedness", "asc")), ["LOW", "MID", "HIGH", "NONE"]);
+  assert.equal(sortRows(withValues, "two_yr_mean_citedness").at(-1).work_id, "NONE", "nulls last, both directions");
+  assert.equal(sortRows(withValues, "two_yr_mean_citedness", "asc").at(-1).work_id, "NONE", "nulls last, both directions");
+
+  assert.equal(citednessText(4.25), "4.3");
+  assert.equal(citednessText(0), "0.0");
+  assert.equal(citednessText(56.68), "56.7");
+  assert.equal(citednessText(null), "");
+  assert.equal(citednessText(undefined), "");
+  assert.equal(citednessText(Number.NaN), "");
+}
 
 console.log("framework_ev_table_runtime: all checks passed");

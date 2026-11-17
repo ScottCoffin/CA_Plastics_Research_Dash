@@ -5,13 +5,19 @@ import assert from "node:assert/strict";
 import {createRequire} from "node:module";
 import {fileURLToPath} from "node:url";
 import {
+  JOURNAL_FACET,
+  andBits,
   emptyState,
   formatHash,
+  journalBits,
+  journalOptions,
+  matchesJournalQuery,
   parseHash,
   safeHttpUrl,
   sanitizeState,
   selectionFor,
-  stripEntries
+  stripEntries,
+  tallyJournals
 } from "../framework/src/components/evidence_model.js";
 
 const require = createRequire(import.meta.url);
@@ -142,6 +148,88 @@ const {BitmaskIndex} = require(fileURLToPath(new URL("../site/assets/facets.js",
   assert.equal(all.counts["year|2015"], 1);
   assert.equal(all.counts["year|2020"], 1);
   assert.equal(all.counts["topic|sea"], 2);
+}
+
+// VD-34 journal filter: the hash keeps journal names (commas and ampersands survive), and the
+// journal labels are sanitized like the other facets.
+{
+  const state = {...emptyState(), facets: {journal: ["Water, Air, & Soil Pollution", "Chemosphere"], topic: ["air"]}};
+  const hash = formatHash(state);
+  assert.ok(hash.startsWith("#topic=air&journal="), hash);
+  assert.ok(hash.includes("Water%2C%20Air%2C%20%26%20Soil%20Pollution,Chemosphere"), hash);
+  assert.deepEqual(parseHash(hash), state);
+  const known = {journal: new Set(["Chemosphere"]), topic: new Set(["air"])};
+  assert.deepEqual(sanitizeState(state, known).facets, {journal: ["Chemosphere"], topic: ["air"]});
+  // A journal the page does not list (or no journal list at all) is dropped, like any unknown label.
+  assert.deepEqual(sanitizeState(state, {topic: new Set(["air"])}).facets, {topic: ["air"]});
+}
+
+// journalOptions: distinct trimmed names, blank names skipped, most works first, then by name.
+{
+  const rows = [
+    {journal: "Chemosphere"},
+    {journal: " Water Research "},
+    {journal: "Chemosphere"},
+    {journal: ""},
+    {journal: "Aquatic Toxicology"},
+    {journal: "Water Research"},
+    {journal: null},
+    null
+  ];
+  assert.deepEqual(journalOptions(rows), [
+    {label: "Chemosphere", count: 2},
+    {label: "Water Research", count: 2},
+    {label: "Aquatic Toxicology", count: 1}
+  ]);
+  assert.deepEqual(journalOptions(null), []);
+}
+
+// The journal search is case-insensitive and every term must match.
+{
+  assert.equal(matchesJournalQuery("Water Research", "water"), true);
+  assert.equal(matchesJournalQuery("Water Research", "WATER  res"), true);
+  assert.equal(matchesJournalQuery("Water Research", "water chemo"), false);
+  assert.equal(matchesJournalQuery("Water Research", ""), true);
+  assert.equal(matchesJournalQuery("Water Research", "   "), true);
+}
+
+// The journal bit-set uses the AT-4 layout; journal counts ignore the journal filter itself.
+{
+  const words = [0b1111];
+  const header = Buffer.alloc(16);
+  header.write("BMF1", 0, "latin1");
+  header.writeUInt32LE(1, 4);
+  header.writeUInt32LE(4, 8);
+  header.writeUInt32LE(1, 12);
+  const body = Buffer.alloc(4);
+  body.writeUInt32LE(words[0], 0);
+  const index = new BitmaskIndex(
+    {topic: [{label: "air", id: 0, count: 4}]},
+    Buffer.concat([header, body]),
+    {schema: "at4.v1", work_ids: ["W0", "W1", "W2", "W3"], titles: ["a", "b", "c", "d"], years: [2015, 2015, 2020, 2020]}
+  );
+  const journalOf = new Map([["W0", "Chemosphere"], ["W1", "Water Research"], ["W2", "Chemosphere"], ["W3", ""]]);
+  const chemo = journalBits(index.workIds, journalOf, ["Chemosphere"], index.W);
+  assert.deepEqual(index.selectedIds({}, chemo), ["W0", "W2"]);
+  assert.equal(index.counts({}, chemo).total, 2);
+  assert.equal(index.counts({}, chemo).counts["topic|air"], 2);
+  // Two journals are an OR; with a text bit-set the two are ANDed.
+  const both = journalBits(index.workIds, journalOf, ["Chemosphere", "Water Research"], index.W);
+  assert.deepEqual(index.selectedIds({}, both), ["W0", "W1", "W2"]);
+  const titleBits = new Uint32Array([0b0101]);
+  assert.deepEqual(index.selectedIds({}, andBits(titleBits, both)), ["W0", "W2"]);
+  assert.equal(andBits(undefined, undefined), undefined);
+  assert.equal(andBits(titleBits, undefined), titleBits);
+  assert.deepEqual(Array.from(andBits(titleBits, chemo)), [0b0101]);
+  // Plastic-only selections never carry the journal key into the engine's selection.
+  const selection = selectionFor({...emptyState(), facets: {journal: ["Chemosphere"]}}, []);
+  assert.deepEqual(selection.sel, {plastic: ["yes"]});
+  assert.equal(JOURNAL_FACET, "journal");
+  // The tally counts each work once under its journal; works without a journal are not counted.
+  const tally = tallyJournals(index.selectedIds({}, undefined), journalOf);
+  assert.equal(tally.get("Chemosphere"), 2);
+  assert.equal(tally.get("Water Research"), 1);
+  assert.equal(tally.has(""), false);
 }
 
 console.log("framework_evidence_runtime: all checks passed");

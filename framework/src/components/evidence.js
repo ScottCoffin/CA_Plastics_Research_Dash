@@ -12,8 +12,20 @@ import {mountV4Trend} from "./v4_trend.js";
 import {mountHeatmap} from "./ev_heatmap.js";
 import {labelSummary} from "./ev_heatmap_model.js";
 import {mountWorksTable, renderRecentCallout} from "./ev_table.js";
-import {normaliseRows} from "./ev_table_model.js";
-import {emptyState, formatHash, parseHash, sanitizeState, selectionFor} from "./evidence_model.js";
+import {attachJournalMetrics, normaliseRows} from "./ev_table_model.js";
+import {
+  JOURNAL_FACET,
+  andBits,
+  emptyState,
+  formatHash,
+  journalBits,
+  journalOptions,
+  matchesJournalQuery,
+  parseHash,
+  sanitizeState,
+  selectionFor,
+  tallyJournals
+} from "./evidence_model.js";
 import {sectorLabel, workTypeLabel} from "./shared/labels.js";
 
 const $ = (id) => document.getElementById(id);
@@ -27,6 +39,8 @@ const FACET_UI = [
   {key: "type", label: "Work type", name: workTypeLabel},
   {key: "oa", label: "Open access", names: {open: "Open access", closed: "Closed access"}}
 ];
+// Keys the form owns: readControls rebuilds them from the controls and keeps every other key from the state.
+const CONTROLLED = new Set([...FACET_UI.map((ui) => ui.key), JOURNAL_FACET]);
 
 const app = {
   index: null,
@@ -45,6 +59,8 @@ const app = {
   heatLabels: [],
   // Distinct works that match the page filters (before the heatmap selection).
   total: 0,
+  // VD-34: work_id -> journal name (from works_detail), for the journal filter and its counts.
+  journalOf: new Map(),
   table: null,
   heatmap: null
 };
@@ -93,11 +109,50 @@ function buildFilterGroups(container, index) {
   }
 }
 
+// VD-34: the journal checklist, most works first, with a search box that only hides options. Each option is an
+// app.rows entry (facet "journal"), so readControls, syncControls and the counts treat it like any other facet.
+function buildJournalGroup(container, options) {
+  const fieldset = document.createElement("fieldset");
+  fieldset.className = "ev-group ev-journal-group";
+  const legend = document.createElement("legend");
+  legend.textContent = "Journal";
+  const search = document.createElement("input");
+  search.type = "search";
+  search.className = "ev-journal-search";
+  search.autocomplete = "off";
+  search.placeholder = "Search journals";
+  search.setAttribute("aria-label", "Search journals");
+  search.dataset.role = "journal-search";
+  const list = document.createElement("div");
+  list.className = "ev-journal-list";
+  list.setAttribute("role", "group");
+  list.setAttribute("aria-label", "Journals, most works first");
+  for (const {label, count} of options) {
+    const row = document.createElement("label");
+    row.className = "ev-option";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.value = label;
+    const name = document.createElement("span");
+    name.className = "ev-option-name";
+    name.textContent = label;
+    const countEl = document.createElement("span");
+    countEl.className = "ev-count";
+    countEl.textContent = formatCount(count);
+    row.append(input, name, countEl);
+    list.append(row);
+    app.rows.push({facet: JOURNAL_FACET, label, row, input, count: countEl});
+  }
+  fieldset.append(legend, search, list);
+  container.append(fieldset);
+  search.addEventListener("input", filterJournalOptions);
+}
+
 // Writes the form's controls back into a state object; hidden facets keep their hash values.
 function readControls() {
   const facets = {};
   for (const key of Object.keys(app.state.facets)) {
-    if (!FACET_UI.some((ui) => ui.key === key)) facets[key] = app.state.facets[key];
+    if (!CONTROLLED.has(key)) facets[key] = app.state.facets[key];
   }
   for (const row of app.rows) {
     if (row.input.checked) (facets[row.facet] = facets[row.facet] || []).push(row.label);
@@ -115,6 +170,24 @@ function syncControls() {
   $("evidence-year-from").value = app.state.yearFrom ?? "";
   $("evidence-year-to").value = app.state.yearTo ?? "";
   $("evidence-search").value = app.state.q;
+  filterJournalOptions();
+}
+
+// Works whose journal is ticked, as a bit-set over the bundle's works (undefined when no journal is ticked).
+function journalFilterBits() {
+  const labels = app.state.facets[JOURNAL_FACET];
+  return labels && labels.length ? journalBits(app.index.workIds, app.journalOf, labels, app.index.W) : undefined;
+}
+
+// Shows the journal options that match the search text. A ticked journal always stays visible.
+function filterJournalOptions() {
+  const search = $("evidence-groups").querySelector("[data-role='journal-search']");
+  if (!search) return;
+  for (const row of app.rows) {
+    if (row.facet === JOURNAL_FACET) {
+      row.row.hidden = !row.input.checked && !matchesJournalQuery(row.label, search.value);
+    }
+  }
 }
 
 // The one place state changes: sanitize, mirror into the hash, then redraw.
@@ -127,10 +200,17 @@ function setState(next, {sync = false} = {}) {
 
 function render() {
   const {sel, impossible} = selectionFor(app.state, app.yearLabels);
-  const extra = app.state.q ? app.index.searchBits(app.state.q) : undefined;
+  const text = app.state.q ? app.index.searchBits(app.state.q) : undefined;
+  // The journal filter is a bit-set over the bundle's works, so every count and list below respects it.
+  const extra = andBits(text, journalFilterBits());
   const result = impossible ? {total: 0, counts: {}} : app.index.counts(sel, extra);
+  // A journal's count ignores the journal filter itself, as a facet's count ignores its own facet.
+  const journals = impossible ? new Map() : tallyJournals(app.index.selectedIds(sel, text), app.journalOf);
   for (const row of app.rows) {
-    const count = result.counts[`${row.facet}|${row.label}`] ?? 0;
+    const count =
+      row.facet === JOURNAL_FACET
+        ? (journals.get(row.label) ?? 0)
+        : (result.counts[`${row.facet}|${row.label}`] ?? 0);
     row.count.textContent = formatCount(count);
     row.row.classList.toggle("ev-zero", count === 0);
   }
@@ -187,6 +267,11 @@ function applyTable() {
   renderSelectionBanner();
 }
 
+// VD-34: journal_metrics.json is optional. Without it the 2-yr mean citedness column is blank; the page still works.
+function loadJournalMetrics() {
+  return loadJson("journal_metrics.json", {optional: true}).catch(() => null);
+}
+
 let detailPromise = null;
 function loadDetail() {
   if (!detailPromise) {
@@ -205,11 +290,17 @@ function bindFilters() {
   let timer = 0;
   form.addEventListener("submit", (event) => event.preventDefault());
   form.addEventListener("change", () => setState(readControls()));
-  form.addEventListener("input", () => {
+  form.addEventListener("input", (event) => {
+    // The journal search only hides options; it is not part of the filter state.
+    if (event.target.dataset?.role === "journal-search") return;
     clearTimeout(timer);
     timer = setTimeout(() => setState(readControls()), 150);
   });
-  $("evidence-reset").addEventListener("click", () => setState(emptyState(), {sync: true}));
+  $("evidence-reset").addEventListener("click", () => {
+    const search = $("evidence-groups").querySelector("[data-role='journal-search']");
+    if (search) search.value = "";
+    setState(emptyState(), {sync: true});
+  });
   window.addEventListener("hashchange", () => setState(parseHash(location.hash), {sync: true}));
 }
 
@@ -245,8 +336,13 @@ let bound = false;
 async function loadBundle() {
   showStatus("Loading the evidence bundle…");
   let index;
+  let detail = null;
   try {
-    index = await window.AtlasFacets.BitmaskIndex.load(dataUrl("bundle/"));
+    // The works detail names each work's journal. Without it the journal filter is left out, not the page.
+    [index, detail] = await Promise.all([
+      window.AtlasFacets.BitmaskIndex.load(dataUrl("bundle/")),
+      loadDetail().catch(() => null)
+    ]);
   } catch {
     showFailed();
     return;
@@ -256,8 +352,15 @@ async function loadBundle() {
     Object.keys(index.facets).map((key) => [key, new Set(index.facets[key].map((item) => item.label))])
   );
   app.yearLabels = (index.facets.year || []).map((item) => item.label);
+  // VD-34: journal options come from the plastic-related rows, most works first. The filter's labels must be
+  // known before the hash is read, so a shared link with journal=... keeps its journals.
+  const plasticRows = detail ? [...detail.values()].filter((row) => row.plastic_related === true) : [];
+  const journals = journalOptions(plasticRows);
+  app.journalOf = detail ? new Map([...detail].map(([id, row]) => [id, row.journal])) : new Map();
+  app.known[JOURNAL_FACET] = new Set(journals.map((item) => item.label));
   if (!bound) {
     buildFilterGroups($("evidence-groups"), index);
+    if (journals.length) buildJournalGroup($("evidence-groups"), journals);
     bindFilters();
     bound = true;
   }
@@ -289,8 +392,9 @@ async function mountViews(index) {
   if (viewsMounted) return;
   viewsMounted = true;
   let detail;
+  let journals;
   try {
-    detail = await loadDetail();
+    [detail, journals] = await Promise.all([loadDetail(), loadJournalMetrics()]);
   } catch {
     $("ev-table").textContent = "Could not load the publication details.";
     const trendPromise = mountV4Trend($("ev-v4"), index);
@@ -311,7 +415,10 @@ async function mountViews(index) {
   });
   mountSelectionBanner(app.heatmap);
   $("ev-heatmap").closest("section").hidden = false;
-  app.table = mountWorksTable($("ev-table"), {initialRows: plasticWorks});
+  app.table = mountWorksTable($("ev-table"), {
+    initialRows: attachJournalMetrics(plasticWorks, journals),
+    metricsColumn: true
+  });
   app.views.push(({rows}) => app.heatmap.update(rows), () => applyTable());
   notifyViews();
   try {

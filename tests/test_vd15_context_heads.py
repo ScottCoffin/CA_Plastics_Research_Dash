@@ -97,6 +97,6 @@ def test_do_not_regress_items_remain_visible() -> None:
 
     glossary = _read("glossary.md")
     ids = re.findall(r'<dt id="([^"]+)">', glossary)
-    assert len(ids) == 15
+    assert len(ids) == 16
     for term_id in ids:
         assert f'<a class="glossary-term-link" href="#{term_id}">' in glossary, term_id

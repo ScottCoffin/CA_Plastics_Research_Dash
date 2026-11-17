@@ -48,7 +48,8 @@ def test_view_exports_mount_and_imports_shared_helpers() -> None:
 def test_evidence_mount_uses_normalised_rows_for_initial_trend_and_table() -> None:
     evidence = (COMPONENTS / "evidence.js").read_text(encoding="utf-8")
     assert 'const trendPromise = mountV4Trend($("ev-v4"), index, plasticWorks);' in evidence
-    assert 'mountWorksTable($("ev-table"), {initialRows: plasticWorks})' in evidence
+    assert 'mountWorksTable($("ev-table"), {' in evidence
+    assert "initialRows: attachJournalMetrics(plasticWorks, journals)," in evidence
     assert "trend.update(app.lastIds.map((id) => app.detail.get(id)).filter(Boolean)," in evidence
     assert "{filtered: true});" in evidence
     assert re.search(

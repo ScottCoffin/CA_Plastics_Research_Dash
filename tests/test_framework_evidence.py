@@ -92,3 +92,62 @@ def test_public_copy_has_no_internal_ids() -> None:
         text = (FW_SRC / "components" / name.split("/")[-1]).read_text(encoding="utf-8")
         visible = re.findall(r"`[^`]*`|\"[^\"]*\"", text)
         assert not any(re.search(r"UX-\d+|EM-\d+|S\d+\.\d+|TODO", s) for s in visible), name
+
+
+def test_journal_filter_is_wired_into_the_shared_state() -> None:
+    model = (FW_SRC / "components" / "evidence_model.js").read_text(encoding="utf-8")
+    source = (FW_SRC / "components" / "evidence.js").read_text(encoding="utf-8")
+    facet_keys = (
+        'FACET_KEYS = ["topic", "ca_led", "sector", "type", "oa", "institution", "journal"]'
+    )
+    assert facet_keys in model
+    assert 'export const JOURNAL_FACET = "journal";' in model
+    # The journal bit-set rides on the AT-4 extra bits: counts, heatmap, trend and table agree.
+    assert "journalBits(app.index.workIds, app.journalOf, labels, app.index.W)" in source
+    assert "andBits(text, journalFilterBits())" in source
+    assert "const journals = impossible ? new Map() : tallyJournals(" in source
+    assert 'search.dataset.role = "journal-search";' in source
+    # Journal names are not bundle labels, so selectionFor keeps them out of the engine's selection.
+    assert "if (key !== JOURNAL_FACET) sel[key] = labels;" in model
+
+
+def test_journal_metrics_load_is_optional_and_only_the_evidence_table_shows_the_column() -> None:
+    source = (FW_SRC / "components" / "evidence.js").read_text(encoding="utf-8")
+    table = (FW_SRC / "components" / "ev_table.js").read_text(encoding="utf-8")
+    institution = (FW_SRC / "components" / "institution.js").read_text(encoding="utf-8")
+    assert 'loadJson("journal_metrics.json", {optional: true})' in source
+    assert "attachJournalMetrics(plasticWorks, journals)" in source
+    assert "metricsColumn: true" in source
+    assert "metricsColumn" not in institution
+    assert (
+        'const METRIC_OPTION = ["two_yr_mean_citedness", "2-yr mean citedness (OpenAlex)"];'
+        in table
+    )
+    assert 'data-sort="${METRIC_OPTION[0]}"' in table
+    assert "2-yr mean citedness (OpenAlex)" in table
+    assert 'href="./glossary#two-year-mean-citedness"' in table
+
+
+def _read_fw(*parts: str) -> str:
+    return (FW_SRC.joinpath(*parts)).read_text(encoding="utf-8")
+
+
+def test_impact_factor_is_always_qualified_as_the_open_analogue() -> None:
+    texts = {
+        "evidence.md": _read_fw("evidence.md"),
+        "evidence.js": _read_fw("components", "evidence.js"),
+        "ev_table.js": _read_fw("components", "ev_table.js"),
+        "ev_table_model.js": _read_fw("components", "ev_table_model.js"),
+        "glossary.md": _read_fw("glossary.md"),
+    }
+    for name, text in texts.items():
+        # The glossary names Clarivate's proprietary metric only to say the Atlas does not use it.
+        text = text.replace("Clarivate's Journal Impact Factor", "")
+        for match in re.finditer(r"impact factor", text, flags=re.IGNORECASE):
+            before = text[max(0, match.start() - 40) : match.start()]
+            assert "open analogue of the " in before, f"{name}: unqualified 'impact factor'"
+
+
+def test_recent_box_text_fills_the_box() -> None:
+    css = (FW_SRC / "components" / "evidence.css").read_text(encoding="utf-8")
+    assert "#evidence-root .ev-recent :is(h2, p, ul, ol, li) { max-width: none; }" in css

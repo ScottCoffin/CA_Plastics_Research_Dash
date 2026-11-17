@@ -283,6 +283,27 @@ Licence: the file records `Other (Public Domain)` as stated by the source. This 
 
 `calls[]`: empty at the time of writing (0 rows). No field list is documented yet; add one when the first call is listed.
 
+### `site/data/journal_metrics.json`
+
+Purpose: the journal column and the "2-yr mean citedness (OpenAlex)" sort on the Evidence map publication table
+(VD-34). Written by `py -3.14 scripts/fetch_journal_metrics.py` (live: one OpenAlex list call per 100 works and per
+100 sources, about 30 credits; `--offline` rebuilds it from the ignored cache `data/interim/journal_metrics_raw.json`;
+`--check` fails when the file is malformed or its journal names no longer match `works_detail.json`).
+`two_yr_mean_citedness` is OpenAlex's open analogue of the impact factor: the average citations received this year by
+a source's works from the two previous years. It is not Clarivate's Journal Impact Factor, which is proprietary.
+Top-level keys: `schema_version` (1), `generated_at` (UTC timestamp), `source` (`OpenAlex sources summary_stats`),
+`coverage` (integer counts: `works`, `works_with_source`, `journals`, `journals_with_source`, `journals_with_metric`),
+`journals` (array sorted by name; each item's `name` is the journal exactly as `works_detail.journal` spells it; a list rather than
+an object keyed by name, because the release snapshot refuses any JSON key that starts with "abstract"), `unmatched_journals` (names
+whose works have no OpenAlex primary source), `name_mismatches` (the OpenAlex source has a different display name, so its
+metrics are withheld) and `ambiguous_journals` (the name's works sit in more than one source; the source holding most of
+them is used).
+
+`journals[]` items: `name` (above), `source_id` (OpenAlex source id such as `S41143188`), `issn_l` (string or null), `two_yr_mean_citedness`
+(number of at least 0, rounded to 3 decimals, or null), `h_index` (integer or null) and `type` (for example `journal` or
+`repository`, or null).
+Licence: derived from OpenAlex source metadata; check OpenAlex's current terms before reuse.
+
 ### `site/data/linkouts.json`
 
 Purpose: the Evidence Map's related-resources strip (EM-5). Written from `config/linkouts.yml`

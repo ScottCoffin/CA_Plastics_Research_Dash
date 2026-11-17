@@ -58,8 +58,8 @@ def test_glossary_terms_link_to_preserved_hash_targets_and_highlight() -> None:
     links = re.findall(r'<a class="glossary-term-link" href="#([^"]+)">', page)
 
     assert 'href="./components/glossary.css"' in page
-    assert len(ids) == 15
-    assert len(links) == 15
+    assert len(ids) == 16
+    assert len(links) == 16
     assert links == ids
     assert ".glossary-term-link" in styles
     assert ".glossary dd a" in styles

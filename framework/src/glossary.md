@@ -109,6 +109,12 @@ title: Glossary
 <p><small>Source: the Monitoring page's licence notes. These are summaries; check the licence text before relying on them for reuse decisions.</small></p>
 </dd>
 
+<dt id="two-year-mean-citedness"><a class="glossary-term-link" href="#two-year-mean-citedness"><strong>2-yr mean citedness</strong></a></dt>
+<dd>
+<p>The average number of citations received this year by a journal's works from the two previous years. OpenAlex publishes it for each source as the two-year mean citedness. It is the open analogue of the impact factor. Clarivate's Journal Impact Factor is proprietary and is not used here. The Evidence map labels the column "2-yr mean citedness (OpenAlex)". It describes a journal as a whole, not any one paper, and it counts citations rather than quality. A blank value means OpenAlex has no figure for that journal, or its OpenAlex record is a different venue, so no figure is shown.</p>
+<p><small>Source: OpenAlex source summary statistics, refreshed by the Atlas's data pipeline.</small></p>
+</dd>
+
 </dl>
 
 ```js

@@ -2,8 +2,15 @@
 // so Node tests can run it directly. Dates are calendar days in UTC.
 
 export const PAGE_SIZE = 25;
-export const SORT_KEYS = ["pub_date", "year", "cited_by_count", "title", "journal"];
-export const DEFAULT_DIRS = {pub_date: "desc", year: "desc", cited_by_count: "desc", title: "asc", journal: "asc"};
+export const SORT_KEYS = ["pub_date", "year", "cited_by_count", "title", "journal", "two_yr_mean_citedness"];
+export const DEFAULT_DIRS = {
+  pub_date: "desc",
+  year: "desc",
+  cited_by_count: "desc",
+  title: "asc",
+  journal: "asc",
+  two_yr_mean_citedness: "desc"
+};
 
 const DAY_MS = 86400000;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
@@ -105,6 +112,26 @@ export function normaliseRows(payload) {
   return rows;
 }
 
+// VD-34: copies each row with two_yr_mean_citedness (OpenAlex 2-yr mean citedness of its journal) from a
+// journal_metrics.json payload, {journals: [{name, two_yr_mean_citedness, ...}]}. A missing name, a missing
+// payload or a null value gives null, which sorts last.
+export function attachJournalMetrics(rows, payload) {
+  const byName = new Map();
+  for (const item of payload && Array.isArray(payload.journals) ? payload.journals : []) {
+    if (item && typeof item.name === "string") byName.set(item.name, item);
+  }
+  return (rows || []).map((row) => {
+    const entry = byName.get(row.journal);
+    const value = entry ? entry.two_yr_mean_citedness : null;
+    return {...row, two_yr_mean_citedness: Number.isFinite(value) && value >= 0 ? value : null};
+  });
+}
+
+// One decimal for the 2-yr mean citedness column; "" when there is no value.
+export function citednessText(value) {
+  return Number.isFinite(value) ? value.toFixed(1) : "";
+}
+
 // Resolve the table's plastic-related rows. Evidence can provide rows it has already normalized;
 // other callers pass their payload loader to retain the default fetch/normalize/filter path.
 export async function resolveWorksRows(initialRows, loader) {
@@ -166,6 +193,7 @@ function compareValues(a, b, key, sign) {
 function sortValue(row, key) {
   if (key === "year") return Number.isInteger(row.year) ? row.year : null;
   if (key === "cited_by_count") return Number.isFinite(row.cited_by_count) ? row.cited_by_count : null;
+  if (key === "two_yr_mean_citedness") return Number.isFinite(row.two_yr_mean_citedness) ? row.two_yr_mean_citedness : null;
   const text = textOf(row[key]);
   return text ? text : null;
 }

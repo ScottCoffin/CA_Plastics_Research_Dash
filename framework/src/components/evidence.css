@@ -51,3 +51,11 @@
 #evidence-root .ev-flow-box > summary { font-weight: 650; }
 #evidence-root .ev-view { margin-top: 1.25rem; }
 #evidence-root .ev-years { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; }
+/* VD-34: every paragraph, heading, list and item in the "New in the last 2 weeks" box fills the box. The
+   Framework caps p, ul and li at 640px, and the page's 70ch measure applies to running prose only. */
+#evidence-root .ev-recent :is(h2, p, ul, ol, li) { max-width: none; }
+/* VD-34: journal filter. The checklist scrolls inside the filter panel; options hidden by the search are removed
+   from the layout. */
+#evidence-root .ev-journal-list { display: flex; flex-direction: column; max-height: 16rem; margin-top: 0.4rem; overflow-y: auto; }
+#evidence-root .ev-option[hidden] { display: none; }
+#evidence-root .ev-journal-search { margin-top: 0.2rem; }

@@ -5,6 +5,7 @@ import {loadJson} from "./atlas.js";
 import {
   DEFAULT_DIRS,
   authorLine,
+  citednessText,
   dateLabel,
   escapeHtml,
   filterRows,
@@ -24,6 +25,10 @@ const SORT_OPTIONS = [
   ["title", "Title"],
   ["journal", "Journal"]
 ];
+// VD-34: the journal metric column is opt-in (the Evidence map), so other tables keep their columns.
+const METRIC_OPTION = ["two_yr_mean_citedness", "2-yr mean citedness (OpenAlex)"];
+const METRIC_TIP = "Average citations received this year by the journal's works from the previous two years, "
+  + "the open analogue of the impact factor.";
 const COLUMN_COUNT = 6;
 
 // Abstracts are a large file, so they load once, on the first "Abstract" expand, and are shared.
@@ -72,7 +77,13 @@ function abstractHtml(row, title) {
     + `<p class="ev-abstract-text">Loading abstract…</p></details>`;
 }
 
-function rowHtml(row, isNew) {
+// Blank when OpenAlex has no value; the screen-reader text says so.
+function citednessHtml(row) {
+  const text = citednessText(row.two_yr_mean_citedness);
+  return text ? escapeHtml(text) : `<span class="ev-none">&ndash;<span class="ev-sr-only"> no value</span></span>`;
+}
+
+function rowHtml(row, isNew, metricsColumn = false) {
   const title = row.title || "Untitled work";
   const badge = isNew ? ` <span class="ev-badge">New</span>` : "";
   const journal = row.journal ? escapeHtml(row.journal) : "";
@@ -83,14 +94,24 @@ function rowHtml(row, isNew) {
     + `<td>${journal}</td>`
     + `<td><div class="topic-chips">${topicChips(row)}</div></td>`
     + `<td class="num">${row.cited_by_count.toLocaleString("en-US")}</td>`
+    + (metricsColumn ? `<td class="num">${citednessHtml(row)}</td>` : "")
     + `<td>${linkLinks(row)}</td>`
     + `</tr>`;
 }
 
 const DEFAULT_HINT = "Select heatmap cells or topic names to narrow this table.";
 
-function shellHtml(hint = DEFAULT_HINT) {
-  const sortOptions = SORT_OPTIONS.map(([key, label]) => `<option value="${key}">${label}</option>`).join("");
+// The metric header: a sort button, and a link to the glossary entry that carries the definition.
+function metricHeaderHtml() {
+  const label = METRIC_OPTION[1];
+  return `<th scope="col" class="num"><button type="button" class="ev-sort" data-sort="${METRIC_OPTION[0]}">${label}</button>`
+    + `<a class="ev-col-help" href="./glossary#two-year-mean-citedness" data-atlas-tip="${escapeHtml(METRIC_TIP)}"`
+    + ` aria-label="${escapeHtml(`Glossary: 2-yr mean citedness. ${METRIC_TIP}`)}">?</a></th>`;
+}
+
+function shellHtml(hint = DEFAULT_HINT, metricsColumn = false) {
+  const options = metricsColumn ? [...SORT_OPTIONS, METRIC_OPTION] : SORT_OPTIONS;
+  const sortOptions = options.map(([key, label]) => `<option value="${key}">${label}</option>`).join("");
   const header = (key, label, cls = "") => `<th scope="col"${cls ? ` class="${cls}"` : ""}>`
     + `<button type="button" class="ev-sort" data-sort="${key}">${label}</button></th>`;
   return (hint ? `<p class="ev-hint">${escapeHtml(hint)}</p>` : "")
@@ -109,7 +130,8 @@ function shellHtml(hint = DEFAULT_HINT) {
     + `<div class="ev-table-scroll"><table class="ev-works">`
     + `<caption>Published works with a California author</caption>`
     + `<thead><tr>${header("pub_date", "Published")}${header("title", "Title")}${header("journal", "Journal")}`
-    + `<th scope="col">Topics</th>${header("cited_by_count", "Citations", "num")}<th scope="col">Links</th></tr></thead>`
+    + `<th scope="col">Topics</th>${header("cited_by_count", "Citations", "num")}`
+    + `${metricsColumn ? metricHeaderHtml() : ""}<th scope="col">Links</th></tr></thead>`
     + `<tbody data-role="rows"></tbody></table></div>`
     + `<nav class="ev-pager" aria-label="Works pages"><button type="button" class="ev-btn" data-role="prev">Previous</button>`
     + `<span data-role="range" aria-live="off"></span>`
@@ -121,9 +143,14 @@ function shellHtml(hint = DEFAULT_HINT) {
 // memory; otherwise the table loads and normalizes its own works_detail.json payload. update(ids)
 // limits the table to those work_ids; null shows all.
 // hint: the line above the controls (default: the Evidence map heatmap hint; "" for none).
-export function mountWorksTable(container, {today = new Date(), hint = DEFAULT_HINT, initialRows} = {}) {
+// metricsColumn: adds the 2-yr mean citedness column and sort (rows then need two_yr_mean_citedness).
+export function mountWorksTable(
+  container,
+  {today = new Date(), hint = DEFAULT_HINT, initialRows, metricsColumn = false} = {}
+) {
   container.classList.add("ev-table-root");
-  container.innerHTML = shellHtml(hint);
+  container.innerHTML = shellHtml(hint, metricsColumn);
+  const columnCount = metricsColumn ? COLUMN_COUNT + 1 : COLUMN_COUNT;
   const q = (role) => container.querySelector(`[data-role="${role}"]`);
   const el = {
     tools: container.querySelector(".ev-table-tools"),
@@ -187,8 +214,8 @@ export function mountWorksTable(container, {today = new Date(), hint = DEFAULT_H
     const items = pageRows(all, info.page);
     const recentIds = new Set(recentRows(all, today).map((row) => row.work_id));
     el.rows.innerHTML = items.length
-      ? items.map((row) => rowHtml(row, recentIds.has(row.work_id))).join("")
-      : `<tr><td class="ev-empty" colspan="${COLUMN_COUNT}">No works match these filters.</td></tr>`;
+      ? items.map((row) => rowHtml(row, recentIds.has(row.work_id), metricsColumn)).join("")
+      : `<tr><td class="ev-empty" colspan="${columnCount}">No works match these filters.</td></tr>`;
     el.rows.querySelectorAll("details.ev-abstract").forEach((details) => {
       details.addEventListener("toggle", () => {
         if (details.open) {

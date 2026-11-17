@@ -143,7 +143,8 @@ def test_heatmap_mode_toggle_selection_and_focus_are_unchanged() -> None:
 
 def test_views_add_no_data_loads() -> None:
     evidence = _read(EVIDENCE_JS)
-    assert evidence.count("loadJson(") == 1
+    # works_detail.json, plus the optional journal_metrics.json (VD-34); no other data loads.
+    assert evidence.count("loadJson(") == 2
     assert evidence.count("dataUrl(") == 1
     trend = _read(TREND_JS)
     assert trend.count("fetch(") == 1

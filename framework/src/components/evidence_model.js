@@ -4,8 +4,11 @@
 
 // "plastic" is not a state key: the page always lists plastic-related works only (see selectionFor),
 // so a hash that carries plastic=... is ignored.
-export const FACET_KEYS = ["topic", "ca_led", "sector", "type", "oa", "institution"];
+export const FACET_KEYS = ["topic", "ca_led", "sector", "type", "oa", "institution", "journal"];
 export const PLASTIC_ONLY = {plastic: ["yes"]};
+// VD-34: the journal filter is not an AT-4 bundle facet. It is applied as a bit-set over the bundle's
+// works (journalBits), so selectionFor leaves it out of the selection.
+export const JOURNAL_FACET = "journal";
 export const LINKOUT_NOTE = "External resource; the Atlas links to it and does not copy its data.";
 
 export function emptyState() {
@@ -96,7 +99,9 @@ function inYearRange(year, from, to) {
 export function selectionFor(state, yearLabels = []) {
   const clean = normalizeState(state);
   const sel = {plastic: [...PLASTIC_ONLY.plastic]};
-  for (const [key, labels] of Object.entries(clean.facets)) sel[key] = labels;
+  for (const [key, labels] of Object.entries(clean.facets)) {
+    if (key !== JOURNAL_FACET) sel[key] = labels;
+  }
   let impossible = false;
   if (clean.yearFrom !== null || clean.yearTo !== null) {
     const years = yearLabels.filter((label) => inYearRange(Number(label), clean.yearFrom, clean.yearTo));
@@ -125,4 +130,54 @@ export function stripEntries(entries, selectedTopics = []) {
 // Only https links are rendered as links (root_url comes from a curated JSON file).
 export function safeHttpUrl(url) {
   return typeof url === "string" && /^https:\/\/\S+$/.test(url) ? url : null;
+}
+
+// VD-34 journal filter. Options are the distinct journal names in rows (blank names skipped), most works
+// first, then by name: [{label, count}].
+export function journalOptions(rows) {
+  const counts = new Map();
+  for (const row of rows || []) {
+    const name = typeof row?.journal === "string" ? row.journal.trim() : "";
+    if (name) counts.set(name, (counts.get(name) || 0) + 1);
+  }
+  return [...counts]
+    .map(([label, count]) => ({label, count}))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, "en"));
+}
+
+// Case-insensitive search over the journal options: every whitespace-separated term must appear.
+export function matchesJournalQuery(label, query) {
+  const terms = String(query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const text = String(label).toLowerCase();
+  return terms.every((term) => text.includes(term));
+}
+
+// Bit-set in the AT-4 layout (bit i = work i of workIds) for the works whose journal is one of labels.
+// journalOf: Map of work_id -> journal name; words: the index's word count (index.W).
+export function journalBits(workIds, journalOf, labels, words) {
+  const wanted = new Set(labels || []);
+  const out = new Uint32Array(words);
+  workIds.forEach((id, i) => {
+    if (wanted.has(journalOf.get(id))) out[i >>> 5] |= (1 << (i & 31)) >>> 0;
+  });
+  return out;
+}
+
+// Works per journal name for the ids given (a Map). Works without a journal are not counted.
+export function tallyJournals(ids, journalOf) {
+  const counts = new Map();
+  for (const id of ids) {
+    const name = journalOf.get(id);
+    if (name) counts.set(name, (counts.get(name) || 0) + 1);
+  }
+  return counts;
+}
+
+// AND of two optional bit-sets; undefined means no constraint.
+export function andBits(a, b) {
+  if (!a) return b || undefined;
+  if (!b) return a;
+  const out = new Uint32Array(a.length);
+  for (let i = 0; i < a.length; i++) out[i] = a[i] & b[i];
+  return out;
 }
