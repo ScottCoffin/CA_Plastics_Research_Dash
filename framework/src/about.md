@@ -108,15 +108,15 @@ ${doi
 </article>
 <article class="about-card" style="--c: var(--atlas-task-evidence)">
 <h3>Licence</h3>
-<p>Data produced by the Atlas (the files behind these pages, the feed and the release snapshots) are shared under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">Creative Commons Attribution 4.0 licence (CC BY 4.0)</a>: you may reuse them, including commercially, if you credit the Atlas. The code is under the <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/LICENSE" target="_blank" rel="noreferrer">MIT licence</a>. Third-party material keeps its own terms: bibliographic metadata comes from OpenAlex (CC0), and each monitoring observation carries its source's licence and citation. Details: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/LICENSE-DATA.md" target="_blank" rel="noreferrer">data licence</a>.</p>
+<p>Data produced by the Atlas (the files behind these pages, the feed and the release snapshots) are shared under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">Creative Commons Attribution 4.0 licence (CC BY 4.0)</a>: you may reuse them, including commercially, if you credit the Atlas. The code is under the <a href="https://opensource.org/license/mit" target="_blank" rel="noreferrer">MIT licence</a>. Third-party material keeps its own terms: bibliographic metadata comes from OpenAlex (CC0), and each monitoring observation carries its source's licence and citation.</p>
 </article>
 <article class="about-card" style="--c: var(--atlas-task-people)">
 <h3>Corrections and source work</h3>
-<p>For a correction or profile-removal request, <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">open a data-correction issue</a>. Include the OpenAlex ID, DOI or source URL when available, the field in question, and the proposed correction. If you cannot use GitHub, a contact address will be listed here soon. Requests are acknowledged and acted on within 5 to 10 business days; a removed person or work is also excluded at the next ingest. The project does not alter the upstream OpenAlex record.</p>
+<p>For a correction or profile-removal request, <a href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction" rel="external">email theplastiverse@gmail.com</a>. Include the OpenAlex ID, DOI or source URL when available, the field in question, and the proposed correction. Requests are acknowledged and acted on within 5 to 10 business days; a removed person or work is also excluded at the next ingest. The project does not alter the upstream OpenAlex record.</p>
 </article>
 <article class="about-card" style="--c: var(--atlas-task-water)">
 <h3>Methods and pipeline health</h3>
-<p>Full methods: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/METHODS.md" target="_blank" rel="noreferrer">docs/METHODS.md</a>. Data schema: <a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/blob/main/docs/SITE_DATA.md" target="_blank" rel="noreferrer">site data description</a>.</p>
+<p><a href="https://doi.org/10.5281/zenodo.24124016" target="_blank" rel="noreferrer">Methods, data files and checksums are in each archived release</a> (concept DOI 10.5281/zenodo.24124016).</p>
 ${html`<p>Pipeline health: <a href="${classicUrl("status.html")}">run status and drift alarms</a>. <a href="${classicUrl("feed.xml")}" type="application/atom+xml">Subscribe (Atom feed)</a>.</p>`}
 </article>
 </div>

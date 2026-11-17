@@ -19,7 +19,7 @@ import {
   filterAuthors,
   formatExpertHash,
   parseExpertHash,
-  profileIssueUrl,
+  profileCorrectionUrl,
   resetFilters,
   rowHeightForWidth,
   searchAuthorIds,
@@ -238,7 +238,7 @@ async function openDrawer(authorId) {
   state.drawerPrevious = document.activeElement;
   $("researcher-drawer").hidden = false;
   $("drawer-backdrop").hidden = false;
-  $("drawer-issue-link").href = profileIssueUrl(authorId, authorId);
+  $("drawer-issue-link").href = profileCorrectionUrl(authorId, authorId);
   $("drawer-content").innerHTML = '<p class="detail-meta">Loading researcher details…</p>';
   $("drawer-close").focus();
   try {
@@ -251,7 +251,7 @@ async function openDrawer(authorId) {
     const works = detail.works || [];
     const expertsById = new Map(all.map((item) => [item.author_id, item]));
     $("drawer-title").textContent = author.name || "Researcher";
-    $("drawer-issue-link").href = profileIssueUrl(author.name, author.author_id || authorId);
+    $("drawer-issue-link").href = profileCorrectionUrl(author.name, author.author_id || authorId);
     $("drawer-content").innerHTML = drawerContentHtml({author, works, authorId, profile: detail.profile, expertsById, institutionsById: state.lookups.institutionsById, histogramSvg: histogramSvg()});
     applyDrawerComponents($("drawer-content"));
     const setAbstracts = (open) => $("drawer-content").querySelectorAll("details.work-abstract").forEach((node) => { node.open = open; });

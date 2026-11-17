@@ -3,7 +3,6 @@
 // the classic site/ (scripts/assemble_site.py; /app/, grants.html, sem.html and expert.html
 // become redirects). Pages read site/data at runtime (components/atlas.js).
 // Every page lives at the top level of src/ (atlas.js resolves ../data/ from the page URL).
-const REPO = "https://github.com/ScottCoffin/CA_Plastics_Research_Dash";
 // VD-25a, VD-27: the brand mark and the favicon are the Overview's paper California: the state
 // outline cut from four flat planes, one per task (indigo water, vermilion people, gold money, ink evidence).
 const CA_OUTLINE = "M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L0,-221L0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-149,-121L-143,-122L-132,-116L-129,-111L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L167,360L221,405L256,494L469,474Z";
@@ -147,5 +146,5 @@ export default {
     '<nav aria-label="Footer links"><ul class="atlas-footer__links">' +
     '<li><a href="./about">About</a></li><li><a href="./glossary">Glossary</a></li>' +
     '<li><a href="./about#how-to-cite">How to cite</a></li>' +
-    '<li><a href="' + REPO + '/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noreferrer">Report a correction</a></li></ul></nav>'
+    '<li><a href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction" rel="external">Report a correction</a></li></ul></nav>'
 };

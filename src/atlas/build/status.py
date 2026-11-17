@@ -380,7 +380,6 @@ def _normalize_action_run(run: Mapping[str, Any]) -> dict[str, Any]:
         "status": run.get("status"),
         "conclusion": run.get("conclusion"),
         "created_at": run.get("created_at"),
-        "html_url": run.get("html_url"),
     }
 
 

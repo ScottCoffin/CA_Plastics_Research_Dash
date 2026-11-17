@@ -113,7 +113,7 @@ title: Experts
 <div class="drawer-heading">
 <p class="atlas-page-head__eyebrow">${icon("person")} Researcher detail</p>
 <h2 id="drawer-title">Researcher</h2>
-<p class="atlas-page-head__lead"><a id="drawer-issue-link" class="atlas-btn atlas-btn--ghost" href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new" target="_blank" rel="noreferrer">Is this you? Report an issue</a></p>
+<p class="atlas-page-head__lead"><a id="drawer-issue-link" class="atlas-btn atlas-btn--ghost" href="mailto:theplastiverse@gmail.com?subject=Atlas%20correction" rel="external">Is this you? Report a correction</a></p>
 </div>
 <button id="drawer-close" class="atlas-btn atlas-btn--secondary" type="button">Close</button>
 </header>

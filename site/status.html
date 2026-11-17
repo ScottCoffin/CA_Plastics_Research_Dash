@@ -249,8 +249,9 @@
         var note = document.getElementById("actions-note");
         if (data.actions_status === "ok") {
           var runs = (data.actions_runs || []).map(function (r) {
-            return "<li><a href=\"" + esc(r.html_url) + "\">" + esc(r.name) + " #" + esc(r.run_number) +
-              "</a> (" + esc(r.conclusion || r.status) + ", " + esc(r.created_at) + ")</li>";
+            // Owner 2026-11-17: run names are plain text; the status page links to no repository.
+            return "<li>" + esc(r.name) + " #" + esc(r.run_number) +
+              " (" + esc(r.conclusion || r.status) + ", " + esc(r.created_at) + ")</li>";
           }).join("");
           note.innerHTML = "<h3>GitHub Actions runs</h3><ul>" + runs + "</ul>";
         } else if (data.actions_status === "unavailable") {

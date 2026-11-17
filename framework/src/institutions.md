@@ -30,7 +30,7 @@ title: Institutions
 </div>
 <div class="institutions-layout">
 <div>
-<div id="institution-tiers" hidden><div class="atlas-callout atlas-callout--caution"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><p class="tier-note">Institutions in the same <a href="./glossary#tier">tier</a> cannot be reliably ordered, because their <a href="./glossary#bootstrap-interval">bootstrap</a> <a href="./glossary#rank-range">rank ranges</a> overlap. Fractional credit splits each paper among its authors' institutions (<a href="./glossary#fractional-works">definition</a>); see <a href="./about">About</a> and docs/METHODS.md (Institution counts and stability).</p></div><div id="institution-tier-groups"></div></div>
+<div id="institution-tiers" hidden><div class="atlas-callout atlas-callout--caution"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><p class="tier-note">Institutions in the same <a href="./glossary#tier">tier</a> cannot be reliably ordered, because their <a href="./glossary#bootstrap-interval">bootstrap</a> <a href="./glossary#rank-range">rank ranges</a> overlap. Fractional credit splits each paper among its authors' institutions (<a href="./glossary#fractional-works">definition</a>); see <a href="./about">About</a> (the methods are also in each archived release).</p></div><div id="institution-tier-groups"></div></div>
 <div id="institution-list" class="cards" aria-live="polite"></div>
 </div>
 <div class="institution-map-panel atlas-card is-sticky">

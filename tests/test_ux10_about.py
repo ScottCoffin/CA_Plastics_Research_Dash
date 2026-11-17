@@ -18,6 +18,9 @@ def test_licence_matches_committed_licence_files() -> None:
     assert "<h3>Licence</h3>" in ABOUT
     assert "CC BY 4.0" in ABOUT and "CC BY 4.0" in (ROOT / "LICENSE-DATA.md").read_text("utf-8")
     assert "MIT licence" in ABOUT and "MIT License" in (ROOT / "LICENSE").read_text("utf-8")
+    # Owner 2026-11-17: the licence names link to the public licence texts, not repository files.
+    assert 'href="https://opensource.org/license/mit"' in ABOUT
+    assert "LICENSE-DATA.md" not in ABOUT and "/blob/main/" not in ABOUT
 
 
 def test_developer_vocabulary_is_gone() -> None:
