@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import json
+import urllib.error
+from email.message import Message
 from pathlib import Path
 
 import pytest
@@ -164,3 +167,147 @@ def test_author_anchored_flag_passes_ca_experts(
         ]
     )
     assert seen["anchor_author_ids"] == (["A1", "A3"] if expect_ids else None)
+
+
+@pytest.mark.parametrize(("flags", "expected"), [(["--deep-sweep"], 180), ([], None)])
+def test_deep_sweep_flag_sets_the_base_lookback(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, flags: list[str], expected: int | None
+) -> None:
+    """2026-11-17: the workflow passes --deep-sweep on Sundays (UTC) for a 180-day lookback."""
+    runner = _load_runner()
+    seen: dict = {}
+
+    def fake_run(**kwargs):
+        seen.update(kwargs)
+        return {"status": "deferred", "reason": "budget_exceeded"}
+
+    monkeypatch.setattr(runner, "load_openalex_key", lambda: None)
+    monkeypatch.setattr(runner, "load_institution_ids", lambda path: ["I1"])
+    monkeypatch.setattr(runner, "run_daily_ingest", fake_run)
+    monkeypatch.delenv("GITHUB_OUTPUT", raising=False)
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+    runner.main(
+        [
+            "--high-water",
+            str(tmp_path / "missing_hw.json"),
+            "--output",
+            str(tmp_path / "w.parquet"),
+            "--no-author-anchored",
+            "--no-raw-affiliation-scope",
+            *flags,
+        ]
+    )
+    assert seen["lookback_days"] == expected
+
+
+def test_run_daily_ingest_passes_lookback_only_when_given() -> None:
+    from atlas.ingest.daily import run_daily_ingest
+
+    calls: list[dict] = []
+
+    def fake_ingest(**kwargs):
+        calls.append(kwargs)
+        return {"run_id": "r"}
+
+    run_daily_ingest(institution_ids=["I1"], ingest=fake_ingest)
+    run_daily_ingest(institution_ids=["I1"], ingest=fake_ingest, lookback_days=180)
+    assert "lookback_days" not in calls[0]
+    assert calls[1]["lookback_days"] == 180
+
+
+def test_failed_run_writes_a_redacted_note_and_still_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from atlas.ingest import openalex
+
+    canary = "NOTE_CANARY_55555"
+    monkeypatch.setenv("OPENALEX_API_KEY", canary)
+    monkeypatch.setattr(openalex, "_last_rejection_line", None)
+    runner = _load_runner()
+
+    def failing_run(**_):
+        openalex._last_rejection_line = (
+            f"OpenAlex HTTP 403 (no firewall headers): Plan upgrade required {canary}"
+        )
+        raise openalex.OpenAlexPlanError(
+            "OpenAlex plan upgrade required (HTTP 403): filter from_updated_date ...",
+            filters=("from_updated_date",),
+        )
+
+    note = tmp_path / "runner_temp" / "ingest_failure.txt"
+    monkeypatch.setattr(runner, "load_openalex_key", lambda: None)
+    monkeypatch.setattr(runner, "load_institution_ids", lambda path: ["I1"])
+    monkeypatch.setattr(runner, "run_daily_ingest", failing_run)
+    monkeypatch.delenv("GITHUB_OUTPUT", raising=False)
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+    with pytest.raises(openalex.OpenAlexPlanError):
+        runner.main(
+            [
+                "--high-water",
+                str(tmp_path / "missing_hw.json"),
+                "--output",
+                str(tmp_path / "w.parquet"),
+                "--failure-note",
+                str(note),
+            ]
+        )
+    text = note.read_text(encoding="utf-8")
+    assert canary not in text
+    assert text.startswith("OpenAlex HTTP 403")
+    assert "OpenAlexPlanError: OpenAlex plan upgrade required" in text
+    assert "from_updated_date" in text
+
+
+def test_paid_filter_403_end_to_end_names_the_filter_in_the_note(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The 2026-11-16 incident path: an updated-date request gets the plan 403 and fails the run."""
+    from atlas.ingest import openalex
+
+    canary = "E2E_CANARY_77777"
+    monkeypatch.setenv("OPENALEX_API_KEY", canary)
+    monkeypatch.delenv("OPENALEX_API_KEY_ALT", raising=False)
+    monkeypatch.delenv("OPENALEX_MAX_CREDITS", raising=False)
+    monkeypatch.delenv("OPENALEX_MAX_COST_USD", raising=False)
+    monkeypatch.delenv("GITHUB_OUTPUT", raising=False)
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+    monkeypatch.setattr(openalex, "_last_rejection_line", None)
+    monkeypatch.setattr(openalex, "_throttle", lambda: None)
+
+    def fake_urlopen(request, timeout):
+        headers = Message()
+        headers["Content-Type"] = "application/json"
+        body = f'{{"message": "Plan upgrade required for daily sync; key {canary}"}}'
+        raise urllib.error.HTTPError(
+            request.full_url, 403, "Forbidden", headers, io.BytesIO(body.encode())
+        )
+
+    monkeypatch.setattr(openalex.urllib.request, "urlopen", fake_urlopen)
+    runner = _load_runner()
+    monkeypatch.setattr(runner, "load_openalex_key", lambda: None)
+    monkeypatch.setattr(runner, "load_institution_ids", lambda path: ["I1"])
+    note = tmp_path / "ingest_failure.txt"
+    with pytest.raises(openalex.OpenAlexPlanError, match="from_updated_date"):
+        runner.main(
+            [
+                "--updated-since",
+                "2026-11-01",
+                "--no-author-anchored",
+                "--no-raw-affiliation-scope",
+                "--high-water",
+                str(tmp_path / "hw.json"),
+                "--output",
+                str(tmp_path / "w.parquet"),
+                "--raw-dir",
+                str(tmp_path / "raw"),
+                "--usage-log",
+                str(tmp_path / "usage.jsonl"),
+                "--failure-note",
+                str(note),
+            ]
+        )
+    text = note.read_text(encoding="utf-8")
+    assert text.startswith("OpenAlex HTTP 403")
+    assert "from_updated_date" in text
+    assert canary not in text and "<redacted>" in text
+    assert not (tmp_path / "hw.json").exists()  # a failed run never writes the mark

@@ -53,6 +53,11 @@ HIGH_WATER_SCHEMA_VERSION = 1
 # created 2026-11-14), so an incremental run re-reads this many days before the high-water mark.
 # Rows merge by OpenAlex ID, so the overlap costs a few pages, never duplicates.
 INCREMENTAL_LOOKBACK_DAYS = 30
+# 2026-11-17: after days without a successful run, the lookback widens to the gap plus a week of
+# indexing lag (never past a year). The weekly deep sweep uses DEEP_SWEEP_LOOKBACK_DAYS as its base.
+LOOKBACK_LAG_DAYS = 7
+MAX_LOOKBACK_DAYS = 366
+DEEP_SWEEP_LOOKBACK_DAYS = 180
 RAW_SCHEMA = pa.schema(
     [
         ("openalex_id", pa.string()),
@@ -80,6 +85,25 @@ class OpenAlexBudgetError(RuntimeError):
     """The configured per-run credit or dollar ceiling was reached."""
 
     status_code = 429
+
+
+class OpenAlexPlanError(RuntimeError):
+    """OpenAlex refused a filter the plan does not include (HTTP 403 "Plan upgrade required").
+
+    A run stops as a failure, not a deferral: a retry cannot succeed until the filter changes
+    or the plan does. ``filters`` names the paid filter(s) in the rejected request.
+    """
+
+    def __init__(self, message: str, *, filters: Sequence[str] = ()) -> None:
+        super().__init__(message)
+        self.filters = tuple(filters)
+
+
+# Filters that need a paid OpenAlex plan ("daily sync", Member+/Partner). The free-plan
+# filters this project relies on are listed in docs/api_notes/openalex_plan_limits.md.
+PAID_FILTERS = frozenset({"from_updated_date", "from_created_date"})
+PLAN_LIMIT_PHRASE = "plan upgrade required"
+_FILTER_NAME_RE = re.compile(r"[a-z_.]+")
 
 
 @dataclass(frozen=True)
@@ -333,6 +357,9 @@ def _retry_delay(retry_after: object, attempt: int) -> float:
         return float(2**attempt)
 
 
+_last_rejection_line: str | None = None
+
+
 def _request_json(
     url: str,
     *,
@@ -340,6 +367,8 @@ def _request_json(
     attempts: int = 4,
     timeout: int = 60,
 ) -> dict[str, Any]:
+    global _last_rejection_line
+
     def build_request() -> urllib.request.Request:
         request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
         key = os.environ.get(_active_key_var) or os.environ.get(PRIMARY_KEY_VAR)
@@ -370,6 +399,10 @@ def _request_json(
                 body = {}
             if not isinstance(body, dict):
                 body = {}
+            rejection = _rejection_summary(error.code, headers, raw)
+            if error.code != 429:
+                _last_rejection_line = rejection
+            plan_limit = _is_plan_limit(error.code, raw)
             try:
                 logger.record_openalex_response(
                     method="GET", url=url, status_code=error.code, headers=headers, body=body
@@ -377,12 +410,16 @@ def _request_json(
             except OpenAlexUsageMetadataError:
                 # A rejected 429 carries no credit header (seen 2026-11-10). The row is
                 # logged; the 429 below already stops the run as deferred, unretried.
-                if error.code != 429:
+                # A plan-limit 403 is classified below, whether or not it carried credits.
+                if error.code != 429 and not plan_limit:
                     # 2026-11-16/17: CI got bare 403s that local runs never see. Say why
                     # (OpenAlex message or a firewall page) before stopping; never the key.
-                    print(_rejection_summary(error.code, headers, raw), file=sys.stderr)
+                    print(rejection, file=sys.stderr)
                     raise
             message = str(body.get("message") or body.get("error") or "request rejected")
+            if plan_limit:
+                print(rejection, file=sys.stderr)
+                raise _plan_limit_error(url, message) from error
             if error.code in {400, 401, 403, 404}:
                 raise RuntimeError(f"OpenAlex returned HTTP {error.code}: {message}") from error
             if error.code == 429 and _is_burst_limit(message) and attempt + 1 < attempts:
@@ -533,15 +570,87 @@ def _later_date(first: str | None, second: str | None) -> str | None:
     return max(dates, key=lambda value: value[:10]) if dates else None
 
 
+def redact_secrets(text: str) -> str:
+    """Hide API keys: ``api_key=``/bearer forms, and the configured key values themselves."""
+    text = re.sub(r"(api_key=|Bearer\s+)[^\s&\"']+", r"\1<redacted>", text)
+    for name in (PRIMARY_KEY_VAR, FALLBACK_KEY_VAR):
+        secret = os.environ.get(name, "")
+        if secret:
+            text = text.replace(secret, "<redacted>")
+    return text
+
+
 def _rejection_summary(status: int, headers: Mapping[str, str], raw: bytes) -> str:
     """One diagnostic line for a rejected OpenAlex request, with any API key redacted."""
-    text = raw[:600].decode("utf-8", errors="replace")
-    text = re.sub(r"(api_key=|Bearer\s+)[^\s&\"']+", r"\1<redacted>", text)
+    text = redact_secrets(raw[:600].decode("utf-8", errors="replace"))
     text = " ".join(text.split())
     lowered = {key.lower(): value for key, value in headers.items()}
     firewall = [name for name in ("cf-ray", "cf-mitigated", "server") if name in lowered]
     context = ", ".join(f"{name}={lowered[name]}" for name in firewall)
     return f"OpenAlex HTTP {status} ({context or 'no firewall headers'}): {text[:300]}"
+
+
+def last_rejection_line() -> str | None:
+    """The redacted diagnostic line of the most recent rejected (non-429) OpenAlex request."""
+    return _last_rejection_line
+
+
+def _filter_names(url: str) -> list[str]:
+    """Filter names (not values) in a works URL, in request order."""
+    query = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)
+    names: list[str] = []
+    for clause in query.get("filter", [""])[0].split(","):
+        name = clause.split(":", 1)[0].strip()
+        if _FILTER_NAME_RE.fullmatch(name) and name not in names:
+            names.append(name)
+    return names
+
+
+def _is_plan_limit(status: int, raw: bytes) -> bool:
+    """HTTP 403 "Plan upgrade required": a paid filter was used; retrying cannot succeed."""
+    return status == 403 and PLAN_LIMIT_PHRASE in raw.decode("utf-8", errors="replace").lower()
+
+
+def _plan_limit_error(url: str, message: str) -> OpenAlexPlanError:
+    names = _filter_names(url)
+    paid = [name for name in names if name in PAID_FILTERS] or names
+    named = ", ".join(paid) or "(unnamed)"
+    return OpenAlexPlanError(
+        f"OpenAlex plan upgrade required (HTTP 403): filter {named} is not included in the "
+        f"current OpenAlex plan; OpenAlex said: {redact_secrets(message)[:200]}",
+        filters=paid,
+    )
+
+
+def effective_lookback_days(
+    last_success_iso: object, now: datetime, base: int = INCREMENTAL_LOOKBACK_DAYS
+) -> int:
+    """Lookback in days for an incremental run that follows ``last_success_iso``.
+
+    The result is at least ``base``. After a gap without a successful run it widens to the days
+    since that run plus ``LOOKBACK_LAG_DAYS``, so a string of failed days is re-read on the next
+    success. A missing or unreadable timestamp keeps ``base``. The result is capped at
+    ``MAX_LOOKBACK_DAYS``.
+    """
+
+    if not 0 <= base <= MAX_LOOKBACK_DAYS:
+        raise ValueError(f"base lookback must be between 0 and {MAX_LOOKBACK_DAYS} days")
+    last = _parse_utc(last_success_iso)
+    if last is None:
+        return base
+    current = now if now.tzinfo else now.replace(tzinfo=UTC)
+    gap_days = (current - last).days
+    return min(max(base, gap_days + LOOKBACK_LAG_DAYS), MAX_LOOKBACK_DAYS)
+
+
+def _parse_utc(value: object) -> datetime | None:
+    if not isinstance(value, str) or not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError:
+        return None
+    return parsed if parsed.tzinfo else parsed.replace(tzinfo=UTC)
 
 
 def read_high_water_mark(path: str | Path) -> dict[str, Any] | None:
@@ -652,6 +761,9 @@ def ingest_live(
     ("California"); its works are kept only when a raw affiliation passes the strict matcher.
     ``publication_date_cap`` (ISO date; the daily runner passes yesterday UTC, owner
     AT11-WINDOW 2026-11-12) adds ``to_publication_date`` so only complete days are pulled.
+    ``lookback_days`` is the base incremental lookback; ``effective_lookback_days`` widens it
+    after a gap with no successful run. The effective value and window start are recorded in
+    the high-water mark and the returned summary.
     """
 
     config = load_query_config(config_path)
@@ -675,21 +787,27 @@ def ingest_live(
         budget_path, max_cost_usd=max_cost_usd, max_credits=max_credits
     )
 
+    started = datetime.now(UTC)
     state = read_high_water_mark(paths.high_water_mark)
     # Incremental runs filter on publication date. They used from_updated_date until
     # OpenAlex made it a paid "daily sync" filter (HTTP 403 "Plan upgrade required" from
     # 2026-11-16); the lookback window now catches works indexed after their publication date.
     incremental_from: str | None = None
+    lookback_used: int | None = None
     if start_year is None and not updated_since and state:
         high_water_date = state.get("last_publication_date")
         if not high_water_date:
             raise ValueError("existing high-water mark has no publication date")
-        incremental_from = incremental_start(high_water_date, lookback_days)
+        # Widened after any gap without a successful run, so failed days are re-read.
+        lookback_used = effective_lookback_days(
+            state.get("last_successful_run_utc"), started, lookback_days
+        )
+        incremental_from = incremental_start(high_water_date, lookback_used)
     if start_year is None and not updated_since and not incremental_from:
         raise ValueError("first live run requires start_year/end_year or updated_since")
 
     actual_run_id = run_id or _run_id()
-    fetched_at = datetime.now(UTC).isoformat()
+    fetched_at = started.isoformat()
     new_rows: list[dict[str, Any]] = []
     request_number = 0
     prior_day_cost, prior_day_credits = daily_logged_usage(
@@ -830,6 +948,8 @@ def ingest_live(
             or (state or {}).get("last_updated_date"),
             "last_successful_run_utc": fetched_at,
             "last_run_id": actual_run_id,
+            "lookback_days": lookback_used,
+            "incremental_from": incremental_from,
             "requests": request_number,
             "fetched": len(new_rows),
             "rows_written": len(merged),
@@ -846,5 +966,7 @@ def ingest_live(
         "anchored_kept": anchored_kept,
         "raw_affiliation_fetched": raw_fetched,
         "raw_affiliation_kept": raw_kept,
+        "lookback_days": lookback_used,
+        "incremental_from": incremental_from,
         "high_water": high_water,
     }

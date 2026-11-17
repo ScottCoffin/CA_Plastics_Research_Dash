@@ -17,6 +17,11 @@ latency, credits, response metadata cost, conservative accounted cost); the
 log remains ignored local output and can be summarized into a versioned artifact
 after a future measurement.
 
+Which filters are free on the current plan, and why the daily ingest no longer
+uses `from_updated_date` (HTTP 403 "Plan upgrade required", 2026-11-16/17), are in
+[openalex_plan_limits.md](openalex_plan_limits.md). The weekly deep sweep and the
+failure alert are described there too.
+
 Run `py -3.14 scripts/benchmark_openalex_costs.py` to print the offline plan.
 It makes no network calls by default. Live mode makes 20 sequential requests for
 each of five request shapes (100 planned calls): filter-only list,

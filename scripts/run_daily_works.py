@@ -3,6 +3,11 @@
 Expected OpenAlex budget/rate responses are reported as a deferred run with
 exit code zero. The workflow can then leave existing outputs in place and let
 the next scheduled invocation resume from the unchanged high-water mark.
+
+A failed run exits non-zero and, with ``--failure-note``, writes a redacted
+diagnostic that the workflow's alert step turns into a GitHub issue.
+``--deep-sweep`` (the workflow passes it on Sundays, UTC) widens the incremental
+lookback to ``DEEP_SWEEP_LOOKBACK_DAYS``.
 """
 
 from __future__ import annotations
@@ -16,11 +21,19 @@ from pathlib import Path
 import pyarrow.parquet as pq
 
 from atlas.ingest.daily import run_daily_ingest
-from atlas.ingest.openalex import OpenAlexPaths, load_institution_ids, load_openalex_key
+from atlas.ingest.openalex import (
+    DEEP_SWEEP_LOOKBACK_DAYS,
+    OpenAlexPaths,
+    last_rejection_line,
+    load_institution_ids,
+    load_openalex_key,
+    redact_secrets,
+)
 from atlas.query import load_query_config
 
 BACKFILL_START_YEAR = 1950
 DEFAULT_AUTHORS_PARQUET = Path("data/processed/normalized/authors.parquet")
+FAILURE_NOTE_MAX_CHARS = 2000
 
 
 def load_anchor_author_ids(path: Path) -> list[str]:
@@ -53,6 +66,23 @@ def _write_summary(message: str) -> None:
     if summary:
         with Path(summary).open("a", encoding="utf-8", newline="\n") as stream:
             stream.write(f"{message}\n")
+
+
+def failure_note_text(error: BaseException) -> str:
+    """Redacted diagnostics for a failed run: the OpenAlex rejection line (if any), then the error.
+
+    No API key can appear: the rejection line and the error text are both passed through
+    ``redact_secrets``, which also replaces the configured key values.
+    """
+    lines = [line for line in (last_rejection_line(), f"{type(error).__name__}: {error}") if line]
+    return redact_secrets("\n".join(lines))[:FAILURE_NOTE_MAX_CHARS] + "\n"
+
+
+def _write_failure_note(path: Path | None, error: BaseException) -> None:
+    if path is None:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(failure_note_text(error), encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -94,6 +124,18 @@ def main(argv: list[str] | None = None) -> int:
         "raw affiliation passes the strict California matcher (default on)",
     )
     parser.add_argument("--authors-parquet", type=Path, default=DEFAULT_AUTHORS_PARQUET)
+    parser.add_argument(
+        "--deep-sweep",
+        action="store_true",
+        help=f"weekly: widen the incremental lookback to {DEEP_SWEEP_LOOKBACK_DAYS} days "
+        "(the workflow passes this on Sundays, UTC)",
+    )
+    parser.add_argument(
+        "--failure-note",
+        type=Path,
+        default=None,
+        help="on a failed run, write a redacted diagnostic to this path for the alert step",
+    )
     args = parser.parse_args(argv)
 
     load_openalex_key()
@@ -124,32 +166,44 @@ def main(argv: list[str] | None = None) -> int:
         # The first scheduled run is intentionally bounded to the current year;
         # subsequent runs use the inclusive high-water mark automatically.
         start_year = datetime.now(UTC).year
-    result = run_daily_ingest(
-        institution_ids=load_institution_ids(args.institution_parquet),
-        config_path=args.config,
-        paths=OpenAlexPaths(
-            raw_dir=args.raw_dir,
-            output_parquet=args.output,
-            high_water_mark=args.high_water,
-            usage_log=args.usage_log,
-        ),
-        start_year=start_year,
-        end_year=end_year,
-        updated_since=args.updated_since,
-        allow_candidate=args.allow_candidate,
-        max_pages=args.max_pages,
-        max_credits=args.max_credits,
-        max_cost_usd=args.max_cost_usd,
-        replace_output=replace_output,
-        raw_affiliation_scope=args.raw_affiliation_scope,
-        anchor_author_ids=(
-            load_anchor_author_ids(args.authors_parquet) if args.author_anchored else None
-        ),
-        # Owner AT11-WINDOW (2026-11-12): pull only complete days (up to yesterday UTC).
-        publication_date_cap=(
-            None if args.no_date_cap else (datetime.now(UTC).date() - timedelta(days=1)).isoformat()
-        ),
-    )
+    lookback_days = None
+    if args.deep_sweep:
+        lookback_days = DEEP_SWEEP_LOOKBACK_DAYS
+        print(f"weekly deep sweep: incremental lookback base {DEEP_SWEEP_LOOKBACK_DAYS} days")
+    try:
+        result = run_daily_ingest(
+            institution_ids=load_institution_ids(args.institution_parquet),
+            config_path=args.config,
+            paths=OpenAlexPaths(
+                raw_dir=args.raw_dir,
+                output_parquet=args.output,
+                high_water_mark=args.high_water,
+                usage_log=args.usage_log,
+            ),
+            start_year=start_year,
+            end_year=end_year,
+            updated_since=args.updated_since,
+            allow_candidate=args.allow_candidate,
+            max_pages=args.max_pages,
+            max_credits=args.max_credits,
+            max_cost_usd=args.max_cost_usd,
+            replace_output=replace_output,
+            raw_affiliation_scope=args.raw_affiliation_scope,
+            anchor_author_ids=(
+                load_anchor_author_ids(args.authors_parquet) if args.author_anchored else None
+            ),
+            # Owner AT11-WINDOW (2026-11-12): pull only complete days (up to yesterday UTC).
+            publication_date_cap=(
+                None
+                if args.no_date_cap
+                else (datetime.now(UTC).date() - timedelta(days=1)).isoformat()
+            ),
+            lookback_days=lookback_days,
+        )
+    except Exception as error:
+        # The failure still propagates (non-zero exit); the note only feeds the alert issue.
+        _write_failure_note(args.failure_note, error)
+        raise
     _write_github_output("status", result["status"])
     _write_github_output("reason", result.get("reason", ""))
     if result["status"] == "deferred":
@@ -162,7 +216,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     print(
         f"Daily OpenAlex refresh succeeded: fetched={result.get('fetched', 0)} "
-        f"rows_written={result.get('rows_written', 0)}"
+        f"rows_written={result.get('rows_written', 0)} "
+        f"lookback_days={result.get('lookback_days')} "
+        f"incremental_from={result.get('incremental_from')}"
     )
     _write_summary(
         "## OpenAlex refresh succeeded\n\n"

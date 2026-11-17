@@ -25,6 +25,8 @@ on:
 permissions:
   contents: write
   actions: write
+  # The failure alert opens, comments on and closes the "Daily ingest failing" issue.
+  issues: write
 
 concurrency:
   group: atlas-data-commits
@@ -70,11 +72,13 @@ jobs:
           OPENALEX_MAX_COST_USD: ${{ inputs.max_cost_usd || vars.OPENALEX_MAX_COST_USD }}
         run: |
           set -euo pipefail
-          args=()
+          args=(--failure-note "$RUNNER_TEMP/ingest_failure.txt")
           if [[ -n "${START_YEAR:-}" ]]; then args+=(--start-year "$START_YEAR"); fi
           if [[ -n "${END_YEAR:-}" ]]; then args+=(--end-year "$END_YEAR"); fi
           if [[ -n "${OPENALEX_MAX_CREDITS:-}" ]]; then args+=(--max-credits "$OPENALEX_MAX_CREDITS"); fi
           if [[ -n "${OPENALEX_MAX_COST_USD:-}" ]]; then args+=(--max-cost-usd "$OPENALEX_MAX_COST_USD"); fi
+          # Weekly deep sweep: on Sundays (UTC) the incremental lookback is 180 days, not 30.
+          if [[ "$(date -u +%u)" == "7" ]]; then args+=(--deep-sweep); fi
           python scripts/run_daily_works.py "${args[@]}"
 
       - name: Normalize works
@@ -163,6 +167,57 @@ jobs:
           esac
           python scripts/record_run_status.py --workflow ingest_works --run-id "${{ github.run_id }}" --status "$status" --since "$JOB_STARTED_UTC"
 
+      # 2026-11-17 failure alert. A failed refresh on a scheduled or manual run opens, or comments
+      # on, one "Daily ingest failing" issue. Deferred (budget/429) runs stay quiet. The diagnostic
+      # is the redacted note from run_daily_works.py; no key is printed or written to the issue.
+      - name: Alert on failed refresh
+        if: >-
+          always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+          && steps.refresh.outputs.status != 'success' && steps.refresh.outputs.status != 'deferred'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          NOTE_FILE: ${{ runner.temp }}/ingest_failure.txt
+        run: |
+          today=$(date -u +%F)
+          body="$RUNNER_TEMP/ingest_alert_body.md"
+          {
+            echo "The daily OpenAlex works refresh failed on $today."
+            echo
+            echo "Run: $RUN_URL"
+            echo
+            echo "Redacted diagnostics:"
+            echo
+            echo '```text'
+            if [[ -s "$NOTE_FILE" ]]; then head -c 2000 "$NOTE_FILE"; else echo "No failure note was written; see the run log."; fi
+            echo '```'
+            echo
+            echo "The next successful run comments and closes this issue. The high-water mark did not advance, so the missed window is re-read."
+          } > "$body"
+          gh label create ingest-alert --color B60205 --description "Daily OpenAlex ingest failed" --force
+          number=$(gh issue list --label ingest-alert --state open --json number,title --jq '[.[] | select(.title == "Daily ingest failing")][0].number // empty')
+          if [[ -n "$number" ]]; then
+            gh issue comment "$number" --body-file "$body"
+          else
+            gh issue create --title "Daily ingest failing" --label ingest-alert --body-file "$body"
+          fi
+
+      # The next successful refresh comments "Recovered on <date>" and closes any open alert issue.
+      - name: Close the ingest alert after a successful refresh
+        if: success() && steps.refresh.outputs.status == 'success'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          today=$(date -u +%F)
+          for number in $(gh issue list --label ingest-alert --state open --json number,title --jq '.[] | select(.title == "Daily ingest failing") | .number'); do
+            gh issue comment "$number" --body "Recovered on $today."
+            gh issue close "$number"
+          done
+
       - name: Explain disabled commit guard
         if: steps.refresh.outputs.status == 'success' && vars.ENABLE_DATA_COMMITS != 'true'
         run: echo "ENABLE_DATA_COMMITS is not true; generated outputs remain local to this run."
@@ -198,7 +253,8 @@ jobs:
             site/data/works_detail.json \
             site/data/network.json \
             site/data/search_index.json \
-            site/data/expert_badges.json \n            site/data/journal_metrics.json
+            site/data/expert_badges.json \
+            site/data/journal_metrics.json
           git add -A site/data/authors site/data/institution_works site/data/bundle site/data/work_text
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"

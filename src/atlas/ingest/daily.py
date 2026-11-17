@@ -30,6 +30,7 @@ def run_daily_ingest(
     anchor_author_ids: Sequence[str] | None = None,
     raw_affiliation_scope: bool = False,
     publication_date_cap: str | None = None,
+    lookback_days: int | None = None,
     ingest: Callable[..., Mapping[str, Any]] = ingest_live,
 ) -> dict[str, Any]:
     """Run one refresh and convert expected budget stops into a clean outcome.
@@ -57,6 +58,8 @@ def run_daily_ingest(
             **({"raw_affiliation_scope": True} if raw_affiliation_scope else {}),
             # Owner AT11-WINDOW: the daily runner caps publication dates at yesterday UTC.
             **({"publication_date_cap": publication_date_cap} if publication_date_cap else {}),
+            # 2026-11-17: the weekly deep sweep widens the base lookback (None keeps 30 days).
+            **({"lookback_days": lookback_days} if lookback_days is not None else {}),
         )
     except OpenAlexRateLimitError as error:
         return {
