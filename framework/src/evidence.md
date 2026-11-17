@@ -9,7 +9,7 @@ title: Evidence map
 <link rel="stylesheet" href="./components/ev_table.css">
 
 <header class="atlas-page-head">
-  <p class="atlas-page-head__eyebrow">Data</p>
+  <p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-grid"></use></svg> Data</p>
 </header>
 
 # Evidence map
@@ -53,12 +53,14 @@ title: Evidence map
     <p class="data-note ev-aux-note">The topic <strong>Plastic-associated chemicals</strong> (such as BPA, phthalates and 6PPD) is auxiliary. The Atlas searches for plastics terms, so it covers these chemical studies far less completely than studies of plastic particles and debris. <a href="./glossary#plastic-associated-chemicals">More about this topic</a>.</p>
   </div>
   <section id="ev-recent" class="ev-recent atlas-callout atlas-callout--new" aria-label="New in the last 2 weeks" hidden></section>
-  <section class="ev-view atlas-chart" aria-labelledby="ev-table-heading"><div class="atlas-chart__head"><h2 id="ev-table-heading" tabindex="-1">Publications</h2></div><div class="atlas-chart__body"><div id="ev-table-selection" class="ev-table-selection ev-table-root" role="status" aria-live="polite" hidden></div><div id="ev-table"><p class="result-count">Loading publications…</p></div></div></section>
+  <section class="ev-view atlas-chart" aria-labelledby="ev-table-heading" data-kind="table"><div class="atlas-chart__head"><h2 id="ev-table-heading" tabindex="-1">Publications</h2></div><div class="atlas-chart__body"><div id="ev-table-selection" class="ev-table-selection ev-table-root" role="status" aria-live="polite" hidden></div><div id="ev-table"><p class="result-count">Loading publications…</p></div></div></section>
   <details class="ev-view ev-flow-box"><summary>How works were selected (pipeline flow)</summary><section class="atlas-chart" aria-labelledby="ev-v3-heading"><div class="atlas-chart__head"><div><h2 id="ev-v3-heading">Pipeline flow</h2><p class="atlas-chart__source">Source: the methods card for the current release.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Pipeline flow"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-v3"></div></div></section></details>
 </div>
 
 ```js
 import {mountEvidence} from "./components/evidence.js";
+import {injectIconSprite} from "./components/shared/icons.js";
+injectIconSprite();
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
     mountEvidence().catch((error) => console.error("Failed to initialize the Evidence map.", error));

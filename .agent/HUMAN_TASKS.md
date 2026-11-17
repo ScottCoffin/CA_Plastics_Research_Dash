@@ -205,8 +205,14 @@ come with its own Streamlit app and run command here.
 - **H1. CORE API key (renew only when asked).** No pipeline code calls CORE (checked
   2026-11-15), so daily renewal stopped. The agent will ask you to renew the key in `.env`
   when a task actually needs CORE (S6 full text by DOI, or a theses search).
-- **H25. Final design review (VD-12).** Compare the before and after screenshots the
-  agent prepares for every page, then reply "design OK" or list what to change.
+- **H25. Final design review (VD-12).** Ready 2026-11-16. Steps: (1) open
+  `scratch/design_snapshots_v2/` (first screens at 1440 px, `<route>_1440_fold.png`, and
+  phones, `<route>_390_full.png`) or browse https://plastiverse.live/ page by page; (2) compare
+  with the target in `docs/design/style_tile.html`; (3) skim the gate table in
+  `docs/VD_12_VERIFICATION.md`; (4) reply "design OK" or list what to change.
+- **VD-D9. Overview load-time gate (1 line).** The Overview scores 99 for performance but its
+  largest paint is 1.9-2.0 s on the live host vs the 1.1 s target (part is host slowness, see
+  QUESTIONS VD-D9). Reply "keep the 1.1 s target" or "use the relative gates".
 
 ---
 

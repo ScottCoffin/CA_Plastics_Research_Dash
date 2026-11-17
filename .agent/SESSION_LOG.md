@@ -163,3 +163,4 @@
 | 2026-11-16 | VD-17 | Framework stylesheets have 0 hex literals outside tokens.css; ratchet cap 0 | this commit |
 | 2026-11-16 | VD-15 | Context pages (Policy, Resources, About, Glossary) get the shared page header and icons | this commit |
 | 2026-11-16 | VD-16 | Evidence map Trends, Heatmap and Pipeline flow get Chart/Table controls with table panes | this commit |
+| 2026-11-16 | VD-12 (partial) | design_snapshots.py and global acceptance record; Evidence eyebrow icon; owner review H25 pending | this commit |

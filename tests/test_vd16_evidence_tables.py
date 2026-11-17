@@ -151,3 +151,9 @@ def test_views_add_no_data_loads() -> None:
     flow = _read(FLOW_JS)
     assert "fetch(" not in heatmap and "loadJson(" not in heatmap
     assert flow.count("loadJson(") == 1
+
+
+def test_evidence_eyebrow_has_its_nav_icon_and_the_sprite() -> None:
+    page = (ROOT / "framework" / "src" / "evidence.md").read_text(encoding="utf-8")
+    assert '<use href="#i-grid"></use></svg> Data</p>' in page
+    assert "injectIconSprite();" in page
