@@ -24,14 +24,14 @@ def test_page_header_lead_is_two_sentences() -> None:
     header = re.search(r'<header class="atlas-page-head">(.*?)</header>', page, flags=re.DOTALL)
     assert header is not None
     assert "atlas-page-head__eyebrow" in header.group(1)
-    assert re.search(
-        r"</header>\s*# Evidence map\s*<p class=\"atlas-page-head__lead\">",
-        page,
-    )
+    # VD-24: the h1 and lead sit inside the page head, so the full-width band holds both.
+    assert '<h1 id="evidence-map">Evidence map</h1>' in header.group(1)
+    assert 'class="atlas-page-head__lead"' in header.group(1)
+    assert "# Evidence map" not in page
 
     css = EVIDENCE_CSS.read_text(encoding="utf-8")
-    assert "header.atlas-page-head + h1" in css
-    assert "h1 + .atlas-page-head__lead" in css
+    assert "header.atlas-page-head + h1" not in css
+    assert "h1 + .atlas-page-head__lead" not in css
 
     lead = re.search(r'<p class="atlas-page-head__lead">(.*?)</p>', page, flags=re.DOTALL)
     assert lead is not None

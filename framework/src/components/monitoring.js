@@ -5,7 +5,7 @@
 import {loadJson, escapeHtml} from "./atlas.js";
 import {monitoringView, formatSampleDate, licenceGloss, samplesCsv, sharedUnit} from "./monitoring_view.js";
 import {monitoringMap, attachMapInteractions, ensureCaBasemap, caBasemapFeatures, caBasemapState} from "./svg_map.js";
-import {injectIconSprite} from "./shared/icons.js";
+import {icon, injectIconSprite} from "./shared/icons.js";
 
 const $ = (id) => document.getElementById(id);
 const MONITORING_PAGE_SIZE = 50;
@@ -26,6 +26,7 @@ const state = {
   hidden: new Set(), // matrix labels hidden with the legend toggles
   selection: null, // { rows } for the selected marker
   rendered: [], // clusters from the last draw; markers index into this
+  mapExpanded: false, // map full screen via the viewport fallback when the Fullscreen API is unavailable
   frame: 0
 };
 
@@ -244,6 +245,88 @@ function setAllFacets(open) {
   saveFacetState();
 }
 
+// Wide screens (CSS, 64rem and up) show the filter controls and filter panel as a sticky left sidebar.
+// The markup keeps them as siblings after the caveat callout (tests pin that order), so mount moves
+// them into one <section> here. Narrow screens keep the stacked disclosure layout; the wrapper and
+// the toggle are unstyled there.
+function wrapFilterSidebar() {
+  const controls = document.querySelector("#monitoring-root .facet-controls");
+  const filters = $("facet-filters");
+  if (!controls || !filters) return;
+  const sidebar = document.createElement("section");
+  sidebar.className = "monitoring-sidebar";
+  sidebar.setAttribute("aria-label", "Filters and section controls");
+  const head = document.createElement("div");
+  head.className = "monitoring-sidebar__head";
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.id = "monitoring-sidebar-toggle";
+  toggle.className = "atlas-btn atlas-btn--secondary";
+  toggle.setAttribute("aria-controls", "monitoring-sidebar-body");
+  toggle.append(icon("filter"), document.createElement("span"));
+  head.append(toggle);
+  const body = document.createElement("div");
+  body.id = "monitoring-sidebar-body";
+  body.className = "monitoring-sidebar__body";
+  sidebar.append(head, body);
+  controls.before(sidebar);
+  body.append(controls, filters);
+  toggle.addEventListener("click", () => setSidebarCollapsed(toggle.getAttribute("aria-expanded") === "true"));
+  setSidebarCollapsed(false);
+}
+
+function setSidebarCollapsed(collapsed) {
+  const toggle = $("monitoring-sidebar-toggle");
+  $("monitoring-root").classList.toggle("is-sidebar-collapsed", collapsed);
+  toggle.setAttribute("aria-expanded", String(!collapsed));
+  toggle.querySelector("span").textContent = collapsed ? "Show filters" : "Hide filters";
+}
+
+// Full screen for the map frame (map, toolbar and legend). The Fullscreen API is used where it exists.
+// Elsewhere (iOS Safari, for example) the frame fills the viewport with the is-expanded class. Escape
+// leaves that fallback here; the browser handles Escape for the native mode.
+function mapIsFullscreen() {
+  return state.mapExpanded || document.fullscreenElement === $("monitoring-map-frame");
+}
+
+function syncMapFullscreen() {
+  const frame = $("monitoring-map-frame");
+  const active = mapIsFullscreen();
+  frame.classList.toggle("is-fullscreen", active);
+  frame.classList.toggle("is-expanded", state.mapExpanded);
+  document.body.classList.toggle("monitoring-map-expanded", state.mapExpanded);
+  const button = $("monitoring-fullscreen");
+  const label = active ? "Exit full screen" : "Full screen";
+  button.setAttribute("aria-label", label);
+  button.dataset.atlasTip = label;
+}
+
+async function setMapFullscreen(on) {
+  const frame = $("monitoring-map-frame");
+  if (on) {
+    if (typeof frame.requestFullscreen === "function" && document.fullscreenEnabled === true) {
+      try {
+        await frame.requestFullscreen();
+      } catch (error) {
+        state.mapExpanded = true;
+      }
+    } else {
+      state.mapExpanded = true;
+    }
+  } else {
+    state.mapExpanded = false;
+    if (document.fullscreenElement) {
+      try {
+        await document.exitFullscreen();
+      } catch (error) {
+        // The browser is already leaving full screen; the fullscreenchange handler resyncs the button.
+      }
+    }
+  }
+  syncMapFullscreen();
+  $("monitoring-fullscreen").focus({ preventScroll: true });
+}
+
 function render() {
   const payload = state.data;
   const localPreview = payload.publication_mode === "private_preview";
@@ -328,6 +411,9 @@ function bindEvents() {
   $("monitoring-zoom-in").addEventListener("click", () => zoomMapBy(1.5));
   $("monitoring-zoom-out").addEventListener("click", () => zoomMapBy(1 / 1.5));
   $("monitoring-zoom-reset").addEventListener("click", () => { state.view = null; scheduleMapDraw(); });
+  $("monitoring-fullscreen").addEventListener("click", () => setMapFullscreen(!mapIsFullscreen()));
+  document.addEventListener("fullscreenchange", syncMapFullscreen);
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape" && state.mapExpanded) setMapFullscreen(false); });
   const mapContainer = $("monitoring-map");
   attachMapInteractions(mapContainer, { getView: currentMapView, setView: (view) => { state.view = view; scheduleMapDraw(); }, select: selectCluster, resolveMarker: nearestMonitoringMarker });
   // Keyboard arrows pan the map when it is focused; attachMapInteractions handles those keys.
@@ -365,6 +451,7 @@ function bindEvents() {
 // Entry point for src/monitoring.md. Loads monitoring.json, then renders and binds the page.
 export async function mountMonitoring() {
   injectIconSprite();
+  wrapFilterSidebar();
   try {
     const payload = await loadJson("monitoring.json");
     if (!payload || payload.schema_version !== "s7.5") throw new Error("monitoring.json does not match the S7.5 contract");

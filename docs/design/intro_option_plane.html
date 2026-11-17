@@ -1,0 +1,385 @@
+<title>Atlas in Four Planes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap">
+<style>
+/* Layout: a poster, not a portal. California is drawn from four flat planes, one per task;
+   every row, band and marker that follows keeps its plane's colour. Paper ground, no outlines. */
+:root {
+  --paper: #ece7dc;
+  --stone: #d8d3c5;
+  --ink: #141311;
+  --ink-soft: #4b463e;
+  --vermilion: #e2452b;
+  --indigo: #23305e;
+  --gold: #e3a92b;
+  --on-dark: #f3efe6;
+  --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --step-hero: clamp(3rem, 6.4vw, 5.75rem);
+  --step-2: clamp(1.9rem, 3.4vw, 3rem);
+  --step-1: clamp(1.35rem, 2vw, 1.75rem);
+  --cap: 0.75rem;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --frame: 1360px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+::selection { background: var(--gold); color: var(--ink); }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.55 var(--font);
+  font-stretch: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; }
+.wrap {
+  max-width: var(--frame);
+  margin-inline: auto;
+  padding-left: calc(var(--gutter-l) + clamp(0px, 3vw, 40px));
+  padding-right: calc(var(--gutter-r) + clamp(0px, 3vw, 40px));
+}
+.caps {
+  font: 600 var(--cap) / 1.3 var(--font);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Masthead */
+.mast { border-bottom: 1px solid var(--stone); }
+.mast .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; padding-block: 18px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-right: auto; }
+.brand svg { width: 30px; height: 30px; }
+.brand b { font: 800 1.15rem/1 var(--font); font-stretch: 88%; letter-spacing: -0.01em; }
+.mast nav { display: flex; flex-wrap: wrap; gap: 6px 26px; }
+.mast nav a { text-decoration: none; padding-block: 6px; border-bottom: 2px solid transparent; }
+.mast nav a:hover { border-bottom-color: var(--vermilion); }
+
+/* Hero: copy left, figure right */
+.hero .wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+  padding-block: clamp(28px, 5vw, 64px) clamp(36px, 5vw, 72px);
+}
+.hero h1 {
+  margin: 0;
+  font: 800 var(--step-hero) / 0.92 var(--font);
+  font-stretch: 78%;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.lead { margin: 22px 0 0; max-width: 46ch; font-size: 1.15rem; color: var(--ink-soft); }
+.doors { list-style: none; margin: 34px 0 0; padding: 0; border-top: 2px solid var(--ink); }
+.door {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 16px 52px 16px 0;
+  border-bottom: 1px solid var(--stone);
+  text-decoration: none;
+  transition: padding-left 180ms cubic-bezier(.2,.7,.2,1);
+}
+.door i { width: 30px; height: 30px; display: block; background: var(--c); }
+.door strong { font: 700 var(--step-1) / 1.1 var(--font); font-stretch: 94%; letter-spacing: -0.01em; }
+.door small { color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.door::after {
+  content: ""; position: absolute; right: 0; top: 50%; width: 34px; height: 34px; translate: 0 -50%;
+  background: linear-gradient(135deg, transparent 50%, var(--ink) 50%), var(--c);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transform: scale(.6); opacity: .0; transition: opacity 180ms, transform 180ms;
+}
+.door:hover, .door:focus-visible, .door.is-lit { padding-left: 10px; }
+.door:hover::after, .door:focus-visible::after, .door.is-lit::after { opacity: 1; transform: scale(1); }
+.search { margin-top: 30px; display: grid; gap: 8px; max-width: 34rem; }
+.search label { color: var(--ink-soft); }
+.search div { display: flex; }
+.search input {
+  flex: 1; min-width: 0; padding: 14px 16px; border: 2px solid var(--ink); border-right: 0;
+  background: var(--paper); color: var(--ink); font: 400 1rem var(--font); border-radius: 0;
+}
+.search input::placeholder { color: #6a645a; }
+.search button {
+  border: 0; padding: 0 26px; font: 700 0.85rem/1 var(--font); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--on-dark); cursor: pointer;
+  background: linear-gradient(135deg, var(--ink) 74%, var(--vermilion) 74%);
+}
+.search button:hover { background: linear-gradient(135deg, var(--ink) 62%, var(--vermilion) 62%); }
+
+.figure { position: relative; }
+.figure svg { display: block; width: 100%; height: auto; max-height: 86vh; overflow: visible; }
+.plane { transition: fill 220ms ease, opacity 220ms ease; cursor: pointer; }
+.figure.has-lit .plane:not(.is-lit) { fill: var(--stone); }
+.figure figcaption { position: absolute; right: 0; bottom: 0; color: var(--ink-soft); writing-mode: vertical-rl; }
+@keyframes settle { from { transform: translate(var(--dx), var(--dy)); } to { transform: none; } }
+.plane-g { animation: settle 900ms cubic-bezier(.16,1,.3,1) both; }
+
+/* Bands */
+.band { border-top: 1px solid var(--stone); }
+.band .wrap {
+  display: grid; grid-template-columns: minmax(180px, 300px) minmax(0, 1fr); gap: clamp(20px, 4vw, 56px);
+  padding-block: clamp(28px, 4vw, 52px);
+}
+.swatch { background: var(--c); min-height: 220px; position: relative; overflow: hidden; }
+.swatch svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.band h2 { margin: 0; font: 800 var(--step-2) / 1 var(--font); font-stretch: 90%; letter-spacing: -0.02em; text-wrap: balance; }
+.band p { margin: 14px 0 0; max-width: 62ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 14px 40px; margin: 22px 0 0; padding: 0; list-style: none; }
+.facts li { display: grid; gap: 2px; }
+.facts b { font: 800 2.25rem/1 var(--font); font-stretch: 85%; font-variant-numeric: tabular-nums; }
+.facts span { color: var(--ink-soft); }
+.go { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.go a {
+  display: inline-flex; align-items: center; gap: 10px; padding: 11px 16px; text-decoration: none;
+  border: 2px solid var(--ink); font-weight: 600;
+}
+.go a::after { content: ""; width: 0; height: 0; border-left: 7px solid var(--ink); border-block: 5px solid transparent; }
+.go a:hover { background: var(--ink); color: var(--on-dark); }
+.go a:hover::after { border-left-color: var(--c); }
+.band[style*="--ink"] .go a:hover::after { border-left-color: var(--gold); }
+.note { color: var(--ink-soft); font-size: 0.9rem; }
+
+/* Schedule */
+.clock { background: var(--ink); color: var(--on-dark); }
+.clock .wrap { padding-block: clamp(36px, 5vw, 64px); }
+.clock h2 { margin: 0; font: 800 var(--step-2)/1 var(--font); font-stretch: 90%; letter-spacing: -0.02em; }
+.clock p { max-width: 62ch; color: #cfc9bd; }
+.chart { overflow-x: auto; margin-top: 26px; }
+.chart svg { min-width: 760px; width: 100%; height: auto; display: block; }
+.chart text { fill: var(--on-dark); font-family: var(--font); }
+.static { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px 40px; margin-top: 30px; padding-top: 24px; border-top: 1px solid #3a3731; }
+.static h3 { margin: 0 0 6px; font: 700 1.15rem/1.2 var(--font); }
+.static p { margin: 0; }
+.clock a { color: var(--gold); text-underline-offset: 3px; }
+
+/* Footer */
+footer .wrap { display: flex; flex-wrap: wrap; gap: 14px 32px; justify-content: space-between; padding-block: 28px 40px; }
+footer ul { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; padding: 0; list-style: none; }
+footer a { text-underline-offset: 3px; }
+
+@media (max-width: 860px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+  .figure { order: -1; max-width: 420px; justify-self: center; width: 100%; }
+  .figure figcaption { display: none; }
+  .band .wrap { grid-template-columns: 1fr; }
+  .swatch { min-height: 120px; }
+}
+@media (max-width: 420px) {
+  .door { grid-template-columns: 22px minmax(0, 1fr); padding-right: 40px; }
+  .door i { width: 22px; height: 22px; }
+  .door small { grid-column: 2; }
+  .mast nav { gap: 4px 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <a class="brand" href="https://plastiverse.live/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 30 30" aria-hidden="true"><rect width="15" height="13" fill="var(--indigo)"/><rect x="15" width="15" height="13" fill="var(--gold)"/><rect y="13" width="15" height="17" fill="var(--vermilion)"/><rect x="15" y="13" width="15" height="17" fill="var(--ink)"/></svg>
+      <b>CA Plastics Research Atlas</b>
+    </a>
+    <nav aria-label="Main">
+      <a href="https://plastiverse.live/experts" target="_blank" rel="noopener">Experts</a>
+      <a href="https://plastiverse.live/monitoring" target="_blank" rel="noopener">Monitoring</a>
+      <a href="https://plastiverse.live/funding" target="_blank" rel="noopener">Funding</a>
+      <a href="https://plastiverse.live/evidence" target="_blank" rel="noopener">Evidence</a>
+      <a href="https://plastiverse.live/about" target="_blank" rel="noopener">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div>
+        <h1 id="hero-title">California plastics research, in four parts.</h1>
+        <p class="lead">Who studies plastics in California, what is monitored, what is funded, and what has been published. Rebuilt from open sources every day.</p>
+        <ul class="doors" aria-label="Start here">
+          <li><a class="door" data-plane="people" href="#people" style="--c: var(--vermilion)"><i aria-hidden="true"></i><strong>Find a researcher</strong><small>2,635 authors</small></a></li>
+          <li><a class="door" data-plane="water" href="#water" style="--c: var(--indigo)"><i aria-hidden="true"></i><strong>Check monitoring data</strong><small>298 samples</small></a></li>
+          <li><a class="door" data-plane="money" href="#money" style="--c: var(--gold)"><i aria-hidden="true"></i><strong>See funding</strong><small>503 awards</small></a></li>
+          <li><a class="door" data-plane="evidence" href="#evidence" style="--c: var(--ink)"><i aria-hidden="true"></i><strong>Explore the evidence</strong><small>1,579 works</small></a></li>
+        </ul>
+        <form class="search" id="atlas-search" role="search">
+          <label class="caps" for="atlas-q">Or search the whole Atlas</label>
+          <div><input id="atlas-q" name="q" type="search" placeholder="Experts, institutions, topics, funders" autocomplete="off"><button type="submit">Search</button></div>
+        </form>
+      </div>
+
+      <figure class="figure" id="figure" aria-label="California drawn from four planes: researchers, monitoring, funding and evidence">
+        <svg viewBox="-470 -575 1010 1090" role="img" aria-labelledby="fig-title">
+          <title id="fig-title">California in four colour planes, one for each part of the Atlas</title>
+          <defs>
+            <clipPath id="ca"><path d="M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L0,-221L0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-149,-121L-143,-122L-132,-116L-129,-111L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L167,360L221,405L256,494L469,474Z"/></clipPath>
+          </defs>
+          <g clip-path="url(#ca)">
+            <g class="plane-g" style="--dx:-40px;--dy:-30px"><a href="#water" tabindex="-1" aria-hidden="true"><polygon class="plane" data-plane="water" points="-470,-575 560,-575 560,-150 -470,-150" fill="var(--indigo)"/></a></g>
+            <g class="plane-g" style="--dx:-50px;--dy:10px"><a href="#people" tabindex="-1" aria-hidden="true"><polygon class="plane" data-plane="people" points="-470,-150 70,-150 -70,205 -470,205" fill="var(--vermilion)"/></a></g>
+            <g class="plane-g" style="--dx:50px;--dy:0px"><a href="#money" tabindex="-1" aria-hidden="true"><polygon class="plane" data-plane="money" points="70,-150 560,-150 560,250 -70,205" fill="var(--gold)"/></a></g>
+            <g class="plane-g" style="--dx:30px;--dy:40px"><a href="#evidence" tabindex="-1" aria-hidden="true"><polygon class="plane" data-plane="evidence" points="-470,205 -70,205 560,250 560,520 -470,520" fill="var(--ink)"/></a></g>
+          </g>
+          <path d="M-330,70 A62,62 0 0 0 -206,70 Z" fill="var(--vermilion)" aria-hidden="true"/>
+        </svg>
+        <figcaption class="caps">32.5° to 42° N</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band" id="people" aria-labelledby="people-h" style="--c: var(--vermilion); --hover-ink: var(--on-dark)">
+    <div class="wrap">
+      <div class="swatch" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice"><rect x="150" y="0" width="150" height="220" fill="var(--indigo)"/><path d="M95,80 A55,55 0 0 0 205,80 Z" fill="var(--paper)"/><circle cx="150" cy="190" r="70" fill="var(--gold)"/></svg></div>
+      <div>
+        <h2 id="people-h">Find a researcher</h2>
+        <p>Search California-affiliated authors by topic, institution and output, and see who publishes with whom. Profiles are built from OpenAlex and ROR records.</p>
+        <ul class="facts">
+          <li><b>2,635</b><span>authors</span></li>
+          <li><b>400</b><span>experts in the network, 1,245 links</span></li>
+          <li><b>211</b><span>California institutions</span></li>
+        </ul>
+        <div class="go"><a href="https://plastiverse.live/experts" target="_blank" rel="noopener">Experts</a><a href="https://plastiverse.live/network" target="_blank" rel="noopener">Collaboration network</a><a href="https://plastiverse.live/institutions" target="_blank" rel="noopener">Institutions</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="water" aria-labelledby="water-h" style="--c: var(--indigo); --hover-ink: var(--on-dark)">
+    <div class="wrap">
+      <div class="swatch" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice"><rect y="120" width="300" height="100" fill="var(--paper)"/><path d="M60,120 A90,90 0 0 1 240,120 Z" fill="var(--vermilion)"/><rect x="0" y="160" width="300" height="20" fill="var(--indigo)"/></svg></div>
+      <div>
+        <h2 id="water-h">Check monitoring data</h2>
+        <p>Browse public plastic samples from California waters on a map, with each source's licence and citation. Samples describe individual sites; they do not establish statewide coverage.</p>
+        <ul class="facts">
+          <li><b>298</b><span>sample observations</span></li>
+          <li><b>25</b><span>verified sources</span></li>
+        </ul>
+        <div class="go"><a href="https://plastiverse.live/monitoring" target="_blank" rel="noopener">Monitoring map</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="money" aria-labelledby="money-h" style="--c: var(--gold)">
+    <div class="wrap">
+      <div class="swatch" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice"><rect x="40" y="40" width="90" height="90" fill="var(--ink)"/><circle cx="200" cy="85" r="45" fill="var(--paper)"/><polygon points="90,220 170,130 250,220" fill="var(--vermilion)"/></svg></div>
+      <div>
+        <h2 id="money-h">See funding</h2>
+        <p>Browse plastic-related grants and awards connected to California, and open funding calls, drawn from public grant databases.</p>
+        <ul class="facts">
+          <li><b>503</b><span>plastic-related awards</span></li>
+        </ul>
+        <div class="go"><a href="https://plastiverse.live/funding" target="_blank" rel="noopener">Funding</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="evidence" aria-labelledby="evidence-h" style="--c: var(--ink); --hover-ink: var(--on-dark)">
+    <div class="wrap">
+      <div class="swatch" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice"><rect x="30" y="30" width="70" height="70" fill="var(--paper)"/><rect x="115" y="30" width="70" height="70" fill="var(--gold)"/><rect x="200" y="30" width="70" height="70" fill="var(--paper)"/><rect x="30" y="115" width="70" height="70" fill="var(--indigo)"/><rect x="115" y="115" width="70" height="70" fill="var(--paper)"/><rect x="200" y="115" width="70" height="70" fill="var(--vermilion)"/></svg></div>
+      <div>
+        <h2 id="evidence-h">Explore the evidence</h2>
+        <p>Filter published plastic-related works by topic, year and sector, see trends and a topic heatmap, and follow the DTSC microplastics regulatory timeline. Topic tags come from keyword rules and are provisional.</p>
+        <ul class="facts">
+          <li><b>1,579</b><span>plastic-related works</span></li>
+        </ul>
+        <div class="go"><a href="https://plastiverse.live/evidence" target="_blank" rel="noopener">Evidence map</a><a href="https://plastiverse.live/policy" target="_blank" rel="noopener">Policy</a><a href="https://plastiverse.live/resources" target="_blank" rel="noopener">Related resources</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="clock" aria-labelledby="clock-h">
+    <div class="wrap">
+      <h2 id="clock-h">How the Atlas stays current</h2>
+      <p>Scheduled GitHub Actions jobs run in a two-hour window each morning, UTC (about 2 to 4 a.m. in California in winter). Times below are drawn to scale.</p>
+      <div class="chart" id="chart"></div>
+      <div class="static">
+        <div><h3>Static by design</h3><p>No server or database. Data ship as versioned JSON and Parquet files beside the pages.</p></div>
+        <div><h3>Open methods</h3><p>Code, queries and decisions are public on GitHub. <a href="https://plastiverse.live/about" target="_blank" rel="noopener">Read the methods</a></p></div>
+        <div><h3>Every number has a source</h3><p>Counts on this page come from the 16 Nov 2026, 04:41 UTC snapshot.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="note">Independent project; not an official OEHHA or State product.</p>
+    <ul>
+      <li><a href="https://plastiverse.live/about" target="_blank" rel="noopener">About</a></li>
+      <li><a href="https://plastiverse.live/glossary" target="_blank" rel="noopener">Glossary</a></li>
+      <li><a href="https://plastiverse.live/about#how-to-cite" target="_blank" rel="noopener">How to cite</a></li>
+      <li><a href="https://github.com/ScottCoffin/CA_Plastics_Research_Dash/issues/new?title=Atlas%20data%20correction" target="_blank" rel="noopener">Report a correction</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // Row and plane light each other (signature interaction).
+  const fig = document.getElementById("figure");
+  const doors = [...document.querySelectorAll(".door")];
+  const planes = [...document.querySelectorAll(".plane")];
+  const light = (key) => {
+    fig.classList.toggle("has-lit", Boolean(key));
+    planes.forEach((p) => p.classList.toggle("is-lit", p.dataset.plane === key));
+    doors.forEach((d) => d.classList.toggle("is-lit", d.dataset.plane === key));
+  };
+  for (const el of [...doors, ...planes]) {
+    el.addEventListener("mouseenter", () => light(el.dataset.plane));
+    el.addEventListener("mouseleave", () => light(null));
+    el.addEventListener("focus", () => light(el.dataset.plane));
+    el.addEventListener("blur", () => light(null));
+  }
+
+  // Search hands off to the live Atlas search page.
+  document.getElementById("atlas-search").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = document.getElementById("atlas-q").value.trim();
+    window.open("https://plastiverse.live/search#q=" + encodeURIComponent(q), "_blank", "noopener");
+  });
+
+  // Schedule chart: 09:30 to 12:00 UTC on one linear scale.
+  const W = 1000, H = 260, L = 20, R = 20, t0 = 9 * 60 + 30, t1 = 12 * 60;
+  const x = (m) => L + ((m - t0) / (t1 - t0)) * (W - L - R);
+  const axisY = 150;
+  const jobs = [
+    { m: 9 * 60 + 42, label: "Keepalive", sub: "monthly, 1st", shape: "sq", c: "var(--stone)", up: true },
+    { m: 10 * 60 + 15, label: "Build and deploy", sub: "daily 10:15", shape: "sq", c: "var(--vermilion)", up: true, dx: -6 },
+    { m: 10 * 60 + 17, label: "Daily ingest from OpenAlex", sub: "daily 10:17", shape: "dot", c: "var(--gold)", up: false },
+    { m: 10 * 60 + 31, label: "Source watch", sub: "Mondays 10:31", shape: "tri", c: "var(--indigo)", up: true, dx: 70 },
+    { m: 11 * 60 + 47, label: "Watchdog", sub: "daily 11:47", shape: "dot", c: "var(--on-dark)", up: false },
+  ];
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="chart-t"><title id="chart-t">Scheduled jobs between 09:30 and 12:00 UTC</title>`;
+  s += `<line x1="${L}" x2="${W - R}" y1="${axisY}" y2="${axisY}" stroke="var(--on-dark)" stroke-width="2"/>`;
+  for (let m = t0; m <= t1; m += 15) {
+    const major = m % 30 === 0;
+    s += `<line x1="${x(m)}" x2="${x(m)}" y1="${axisY}" y2="${axisY + (major ? 12 : 6)}" stroke="var(--on-dark)"/>`;
+    if (major) {
+      const hh = String(Math.floor(m / 60)).padStart(2, "0"), mm = String(m % 60).padStart(2, "0");
+      s += `<text x="${x(m)}" y="${axisY + 32}" text-anchor="middle" font-size="14" style="font-variant-numeric:tabular-nums">${hh}:${mm}</text>`;
+    }
+  }
+  for (const j of jobs) {
+    const cx = x(j.m), ly = j.up ? 40 : 238, my = axisY;
+    const tx = cx + (j.dx || 0);
+    s += `<line x1="${cx}" x2="${cx}" y1="${my}" y2="${j.up ? ly + 14 : ly - 34}" stroke="${j.c}" stroke-width="1.5"/>`;
+    if (j.shape === "sq") s += `<rect x="${cx - 8}" y="${my - 8}" width="16" height="16" fill="${j.c}"/>`;
+    else if (j.shape === "tri") s += `<polygon points="${cx},${my - 10} ${cx + 10},${my + 8} ${cx - 10},${my + 8}" fill="${j.c}"/>`;
+    else s += `<circle cx="${cx}" cy="${my}" r="9" fill="${j.c}"/>`;
+    const anchor = j.m > 11 * 60 ? "end" : "start";
+    const ax = anchor === "end" ? cx + 4 : tx;
+    s += `<text x="${ax}" y="${j.up ? ly - 6 : ly - 14}" font-size="16" font-weight="700" text-anchor="${anchor}">${j.label}</text>`;
+    s += `<text x="${ax}" y="${j.up ? ly + 12 : ly + 4}" font-size="13" text-anchor="${anchor}" fill-opacity=".75">${j.sub}</text>`;
+  }
+  s += `</svg>`;
+  document.getElementById("chart").innerHTML = s;
+})();
+</script>

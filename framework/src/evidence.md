@@ -10,11 +10,9 @@ title: Evidence map
 
 <header class="atlas-page-head">
   <p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-grid"></use></svg> Data</p>
+  <h1 id="evidence-map">Evidence map</h1>
+  <p class="atlas-page-head__lead">Explore the Atlas's plastic-related works with filters, trends, and a heatmap. Selections show matching publications below.</p>
 </header>
-
-# Evidence map
-
-<p class="atlas-page-head__lead">Explore the Atlas's plastic-related works with filters, trends, and a heatmap. Selections show matching publications below.</p>
 
 <details class="atlas-disclosure ev-how-to">
   <summary>How to use this page</summary>
@@ -45,8 +43,8 @@ title: Evidence map
         <p id="evidence-count" class="ev-count-line" aria-live="polite"></p>
       </div>
       <div class="atlas-callout atlas-callout--caution ev-volume-callout" role="note"><p class="data-note volume-caption">Counts show how much has been published, not the strength or quality of the evidence.</p></div>
-      <section class="ev-view atlas-chart" aria-labelledby="ev-v4-heading" hidden><div class="atlas-chart__head"><div><h2 id="ev-v4-heading">Trends</h2><p class="atlas-chart__source">Source: works in the Atlas by publication year, following the filters. Global counts come from OpenAlex.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Trends"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-v4"></div></div></section>
-      <section class="ev-view atlas-chart" aria-labelledby="ev-heatmap-heading" hidden><div class="atlas-chart__head"><div><h2 id="ev-heatmap-heading" tabindex="-1">Evidence heatmap</h2><p class="atlas-chart__source">Source: works in the Atlas by topic and matrix or five-year period, following the filters.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Evidence heatmap"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-heatmap"></div></div></section>
+      <section class="ev-view atlas-chart" aria-labelledby="ev-v4-heading" hidden><div class="atlas-chart__head"><div><div class="atlas-help-row"><h2 id="ev-v4-heading">Trends</h2><button type="button" class="atlas-help" aria-label="About this chart: Bars count works per publication year, stacked by topic, and follow the filters. The line is California's share of all OpenAlex works matching the same query; its global count is never filtered." data-atlas-tip="Bars count works per publication year, stacked by topic, and follow the filters. The line is California's share of all OpenAlex works matching the same query; its global count is never filtered." aria-expanded="false"><svg class="atlas-help__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5M12 7.5h.01"/></svg></button></div><p class="atlas-chart__source">Source: works in the Atlas by publication year, following the filters. Global counts come from OpenAlex.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Trends"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-v4"></div></div></section>
+      <section class="ev-view atlas-chart" aria-labelledby="ev-heatmap-heading" hidden><div class="atlas-chart__head"><div><div class="atlas-help-row"><h2 id="ev-heatmap-heading" tabindex="-1">Evidence heatmap</h2><button type="button" class="atlas-help" data-atlas-tip-align="end" aria-label="About this chart: Each cell counts works for one topic and one matrix or five-year period; works can carry several tags, so cells overlap. Click a cell or a heading to select it, and the publication table lists only the selected works." data-atlas-tip="Each cell counts works for one topic and one matrix or five-year period; works can carry several tags, so cells overlap. Click a cell or a heading to select it, and the publication table lists only the selected works." aria-expanded="false"><svg class="atlas-help__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5M12 7.5h.01"/></svg></button></div><p class="atlas-chart__source">Source: works in the Atlas by topic and matrix or five-year period, following the filters.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Evidence heatmap"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-heatmap"></div></div></section>
     </div>
   </div>
   <div class="atlas-callout atlas-callout--info ev-info-callout" role="note">
@@ -54,13 +52,15 @@ title: Evidence map
   </div>
   <section id="ev-recent" class="ev-recent atlas-callout atlas-callout--new" aria-label="New in the last 2 weeks" hidden></section>
   <section class="ev-view atlas-chart" aria-labelledby="ev-table-heading" data-kind="table"><div class="atlas-chart__head"><h2 id="ev-table-heading" tabindex="-1">Publications</h2></div><div class="atlas-chart__body"><div id="ev-table-selection" class="ev-table-selection ev-table-root" role="status" aria-live="polite" hidden></div><div id="ev-table"><p class="result-count">Loading publications…</p></div></div></section>
-  <details class="ev-view ev-flow-box"><summary>How works were selected (pipeline flow)</summary><section class="atlas-chart" aria-labelledby="ev-v3-heading"><div class="atlas-chart__head"><div><h2 id="ev-v3-heading">Pipeline flow</h2><p class="atlas-chart__source">Source: the methods card for the current release.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Pipeline flow"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-v3"></div></div></section></details>
+  <details class="ev-view ev-flow-box"><summary>How works were selected (pipeline flow)</summary><section class="atlas-chart" aria-labelledby="ev-v3-heading"><div class="atlas-chart__head"><div><div class="atlas-help-row"><h2 id="ev-v3-heading">Pipeline flow</h2><button type="button" class="atlas-help" aria-label="About this chart: Each box is one stage of the selection pipeline, in order, with the counts at that stage. The table lists the same counts." data-atlas-tip="Each box is one stage of the selection pipeline, in order, with the counts at that stage. The table lists the same counts." aria-expanded="false"><svg class="atlas-help__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5M12 7.5h.01"/></svg></button></div><p class="atlas-chart__source">Source: the methods card for the current release.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Pipeline flow"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="ev-v3"></div></div></section></details>
 </div>
 
 ```js
 import {mountEvidence} from "./components/evidence.js";
 import {injectIconSprite} from "./components/shared/icons.js";
+import {initTooltips} from "./components/shared/tooltip.js";
 injectIconSprite();
+initTooltips(document);
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
     mountEvidence().catch((error) => console.error("Failed to initialize the Evidence map.", error));

@@ -64,6 +64,7 @@ title: Collaboration network
 </div>
 </details>
 
+<div class="atlas-help-row net-chart-heading"><h2 id="network-graph-heading">Network graph</h2><button type="button" class="atlas-help" aria-label="About this network: Each dot is an expert, and each line joins two experts who co-authored plastic-related work; thicker lines mean more shared works. Clusters are found automatically (Louvain) and named after the institution and topic most of their members share, and the force-directed layout (ForceAtlas2) has no geographic meaning." data-atlas-tip="Each dot is an expert, and each line joins two experts who co-authored plastic-related work; thicker lines mean more shared works. Clusters are found automatically (Louvain) and named after the institution and topic most of their members share, and the force-directed layout (ForceAtlas2) has no geographic meaning." aria-expanded="false"><svg class="atlas-help__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5M12 7.5h.01"/></svg></button></div>
 <div id="network-chart" class="net-chart" role="group" aria-label="Collaboration network graph of California experts. Each dot is an expert and a line joins two experts who wrote together. The table below lists the same experts.">
 <p id="network-message" class="net-message"><span class="expert-spinner" aria-hidden="true"></span>Loading network…</p>
 <div class="net-body">
@@ -95,5 +96,7 @@ title: Collaboration network
 
 ```js
 import {mountNetwork} from "./components/network.js";
+import {initTooltips} from "./components/shared/tooltip.js";
+initTooltips(document);
 mountNetwork();
 ```

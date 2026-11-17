@@ -1,37 +1,26 @@
-# Handoff — 2026-11-16 — H25 owner design feedback (VD-18, VD-19, VD-20)
+# Handoff — 2026-11-16 — H25 round 2 (VD-21..VD-24) and the Plane Poster decision
 
 ## Done this run
-- VD-18 visual polish (`docs/VD_18_VERIFICATION.md`): hero contour contrast, red eyebrow dots, larger
-  card/task/KPI text, "Quick routes" removed, Start-here links not underlined, brand-link green square
-  removed (nav-icon swatch on the home link), footer one line with no "Source code" link, drawer
-  "Open full profile page" contrast, About pipeline/feed links render, trend ticks every 2 years,
-  hero search icon inside the field.
-- VD-19 site-wide search (`docs/VD_19_VERIFICATION.md`): header + hero combobox over experts,
-  institutions, topics, funders, glossary, resources, pages; `/search#q=`; daily ingest rebuilds the index.
-- VD-20 network (`docs/VD_20_VERIFICATION.md`): ForceAtlas2 default layout; algorithmic Louvain cluster
-  labels (institution and/or over-represented topic) on canvas, legend and table.
-- Records: H26 closed (logo permission confirmed in `config/research_networks.yml`); NET-1, VD-D8, VD-D9
-  answers recorded; agent maxTurns raised (developer 90, tester 70, reviewer 60; next session).
-- Gate: full local gate 1,834 passed; clean worktree 1,830 passed / 13 skipped; axe none on 6 routes.
+- VD-21 desktop top nav (dropdowns from PAGE_GROUPS; sidebar hidden above 52rem; mobile drawer unchanged).
+- VD-22 Overview: full-bleed hero and bands, eyebrow removed, KPI overlap fixed, three-colour one-line Start-here cards, trimmed Explore text, "How it works".
+- VD-23 Monitoring: icon map toolbar with tooltips, full screen (API + fallback), sticky filter sidebar at >= 64rem.
+- VD-24 larger headings, Evidence page-head fix, full-bleed page-head bands, shared `[data-atlas-tip]` tooltip and `.atlas-help` buttons on tricky components (not the hero).
+- Impeccable: skill installed (owner also installed it into the repo; those untracked folders are owner work). `PRODUCT.md` written from owner answers; direction round served; owner chose "Plane Poster"; reference page `docs/design/intro_option_plane.html` published as a private artifact.
+- Gate: lint, format, links, scaffolds, tokens, public text, Framework build, check_at5, full pytest (1,881 passed, 10 skipped), axe none on 9 routes.
 
 ## Repository state
-- Commits `4a01550b` (VD-20), `1f11d4ac` (VD-18/VD-19), then this records commit; pushed to `main`
-  (verify CI and Pages).
+- This commit holds VD-21..VD-24 plus records; tag `design-pacific-contour-2026-11-16` marks the last Pacific Contour design (GitHub release with screenshots).
+- Untracked and not ours: `.agent/skills/`, `.agents/`, `.claude/agents/impeccable-*`, `.claude/skills/`, `.codex/`, `.github/agents|hooks|skills/`, `skills-lock.json`. `.impeccable/reference` and `.impeccable/sketches` are local scratch.
 
 ## Open findings
-- H27: GitHub still reports the Pages certificate as `dns_changed` ("certificate has not finished being
-  issued"); the API refused `https_enforced=true`. Retry with
-  `gh api -X PUT repos/:owner/:repo/pages -F https_enforced=true` at the next session start.
-- Search groups are fixed-order (experts first), so "davis" lists people named Davis above UC Davis.
-- Network cluster names can overlap expert name labels.
-- Carried over: VD-5 Overview LCP (absolute 1.1 s gate kept, VD-D9), classic expert.html icon (UX-13),
-  `check_s3_1.py` pinned fixture counts, 390 px header menu second-click issue, MEMORY.md is over 200 lines.
+- H27 HTTPS enforcement still pending (retry `gh api -X PUT repos/:owner/:repo/pages -F https_enforced=true`).
+- 833-900 px header search is narrow (~150 px). Breadcrumb hidden on mobile (unchanged). Institutions map h2 stays 1.05rem. Callout `border-left: 4px` flagged by the Impeccable hook (pre-existing).
+- Impeccable finish review and DESIGN.md not run for the reference page; due at the end of VD-25.
 
 ## Next eligible
-- UX-13 remaining (expert.html into the app shell; URL-saved state on Funding and Monitoring).
-- VD-5: try inlining the Overview critical CSS (owner VD-D9).
+- VD-25 Plane Poster site-wide (owner decision; see TODO and ADR-VD25-PLANE-POSTER-2026-11-16).
 
 ## Owner actions (one line each)
-- H25: re-check the live site after this deploy; reply "design OK" or list changes.
 - H27: tick Enforce HTTPS once GitHub finishes issuing the certificate.
 - H2: review the 277 low-confidence work-relevance decisions.
+- Decide whether to commit the Impeccable install folders you added to the repo.

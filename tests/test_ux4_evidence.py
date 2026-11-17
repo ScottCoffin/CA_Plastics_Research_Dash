@@ -28,7 +28,9 @@ def test_exactly_one_in_development_notice():
 def test_no_h3_headings_in_evidence_page():
     html = PAGE.read_text(encoding="utf-8")
     assert not re.search(r"<h3[\s>]", html), "section headings must be h2 under the h1"
-    assert len(re.findall(r"^# ", html, flags=re.MULTILINE)) == 1
+    # VD-24: the h1 sits inside the page-head band as HTML (it used to be a Markdown "# ").
+    markdown_h1 = len(re.findall(r"^# ", html, flags=re.MULTILINE))
+    assert markdown_h1 + len(re.findall(r"<h1[\s>]", html)) == 1
 
 
 def test_evidence_js_has_failed_state_and_retry_handler():

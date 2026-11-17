@@ -7,6 +7,7 @@
 // alternative. The pure markup builders are exported so Node tests can check them.
 import {escapeHtml} from "./atlas.js";
 import {CHROME} from "./shared/palette.js";
+import {helpButtonHtml} from "./shared/tooltip.js";
 import {
   DEFAULT_SECTOR_LABELS, FALLBACK_COLOR, FUNDER_COLOR, HEAT_START, SECTOR_COLORS, UNTAGGED, agencyColor, agencyOrder,
   buildHeat, buildSankey, buildSectorTopic, focusOfNode, heatFill, inkFor, layoutSankey, niceMax, sectorLabelsFor,
@@ -35,9 +36,10 @@ const LOADING_TILE = '<div class="atlas-kpi atlas-kpi--loading" aria-hidden="tru
 
 // One chart card: title, source line, the Chart/Table control, then a Chart pane and a Table pane.
 // setView() shows one pane; the table pane starts hidden. Each [data-fv] host is filled by update().
-function chartCard({id, title, source, intro, extra = "", chart, table}) {
+function chartCard({id, title, source, intro, extra = "", chart, table, help = ""}) {
+  const heading = help ? `<div class="atlas-help-row"><h2 id="${id}">${title}</h2>${help}</div>` : `<h2 id="${id}">${title}</h2>`;
   return `<section class="atlas-chart" aria-labelledby="${id}">`
-    + `<div class="atlas-chart__head"><div><h2 id="${id}">${title}</h2><p class="atlas-chart__source">${source}</p></div>`
+    + `<div class="atlas-chart__head"><div>${heading}<p class="atlas-chart__source">${source}</p></div>`
     + `<div class="atlas-segmented" role="group" aria-label="Chart or table view: ${title}">`
     + '<button type="button" data-view="chart" aria-pressed="true">Chart</button>'
     + '<button type="button" data-view="table" aria-pressed="false">Table</button></div></div>'
@@ -52,6 +54,7 @@ const VIZ_SKELETON = '<section class="fv-tiles" data-fv-section="tiles" aria-lab
   + chartCard({
     id: "fv-sankey-h",
     title: "Funder, sector, organisation and topic",
+    help: helpButtonHtml("Ribbons show how awards flow from funder to sector, organisation and topic; ribbon width counts awards unless you choose reported amounts, which follow each source's own basis and are not comparable. Click a block to show only the flows through it.", {align: "start"}),
     source: "Source: the awards in the filtered list.",
     intro: "Each ribbon is a group of awards. Hover over a ribbon or a block to see its totals. Click a block (or press Enter on it) to show only the flows that pass through it; click it again to show all flows. The filters above change this view.",
     extra: `<div class="atlas-callout atlas-callout--caution">${iconHtml("alert")}<p><strong>Read amounts with care.</strong> Amounts follow each source's own basis, are not comparable or additive across sources, and some awards have no amount. Ribbon width therefore defaults to the number of awards.</p></div>`

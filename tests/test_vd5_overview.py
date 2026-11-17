@@ -29,11 +29,9 @@ def test_overview_hero_copy_and_single_heading() -> None:
         '<h1 class="atlas-hero__title" id="atlas-overview-title">CA Plastics Research Atlas</h1>'
         in page
     )
-    # VD-18: the eyebrow separators are accent dots (style tile), not "·" text.
-    assert (
-        '<p class="atlas-hero__eyebrow"><span>California</span> <i></i> '
-        "<span>32.5° to 42° N</span> <i></i> <span>Plastics research since 1950</span></p>"
-    ) in page
+    # VD-22: the eyebrow line (California · 32.5° to 42° N · Plastics research since 1950) is gone.
+    assert "atlas-hero__eyebrow" not in page
+    assert "32.5° to 42° N" not in page
     assert "California · 32.5°" not in page
     assert "Quick routes" not in page
     assert (
@@ -97,10 +95,14 @@ def test_overview_raw_html_blocks_start_at_column_zero() -> None:
         )
     ]
 
+    # VD-22: every home section is a full-width band (overview-band), including How it works.
     starts = (
-        '<section class="overview-stats"',
-        '<section class="overview-section" id="start-here"',
-        '<section class="overview-section" aria-labelledby="explore-atlas-title"',
+        '<section class="overview-stats overview-band overview-band--sunken"',
+        '<section class="overview-section overview-band overview-band--surface" id="start-here"',
+        '<section class="overview-section overview-band overview-band--sunken"'
+        ' aria-labelledby="explore-atlas-title"',
+        '<section class="overview-section overview-band overview-band--surface"'
+        ' aria-labelledby="how-it-works"',
     )
     for start in starts:
         assert re.search(rf"(?m)^{re.escape(start)}", page)
@@ -192,5 +194,6 @@ def test_vd18_hero_motif_and_start_here_links_match_the_style_tile() -> None:
     assert "background-color: var(--atlas-brand-tint);" in motif.group(1)
     assert "opacity: 1;" in motif.group(1)
     assert "#observablehq-main .atlas-task-list a:hover" in css
-    assert ".atlas-hero__eyebrow i" in css
-    assert ".atlas-task__title {" in css and ".atlas-task__text," in css
+    assert ".atlas-task__title {" in css
+    # VD-22: the Start-here subtitles are removed, so their style goes with them.
+    assert ".atlas-task__text" not in css

@@ -26,6 +26,9 @@
   --atlas-good-wash: #e7f6e7;
   --atlas-good-ink: #0b4f0b;
 
+  /* VD-24: full-bleed band behind each top-level page head (darker than the page body, --atlas-page). */
+  --atlas-head-band: var(--atlas-brand-tint);
+
   /* Shared sequential data ramp; categorical topic colours remain in topics.js. */
   --seq-100: #e3f2ed;
   --seq-200: #b9e0d3;
@@ -48,9 +51,10 @@
     sans-serif;
   --atlas-font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
   --atlas-type-hero-size: clamp(2rem, 1.3rem + 2.2vw, 2.9rem);
-  --atlas-type-page-size: clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem);
-  --atlas-type-section-size: 1.375rem;
-  --atlas-type-subsection-size: 1.125rem;
+  /* VD-24 heading scale: page h1 about +20%, section h2 and subsection h3 about +15%. */
+  --atlas-type-page-size: clamp(2.16rem, 1.68rem + 1.68vw, 2.88rem);
+  --atlas-type-section-size: 1.58rem;
+  --atlas-type-subsection-size: 1.3rem;
   --atlas-type-eyebrow-size: 0.75rem;
   --atlas-type-body-size: 1rem;
   --atlas-type-small-size: 0.875rem;

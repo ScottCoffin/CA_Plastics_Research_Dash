@@ -159,9 +159,9 @@ def test_type_scale_and_surface_tokens_are_applied() -> None:
     style = (ROOT / "framework" / "src" / "style.css").read_text(encoding="utf-8")
     expected = {
         "--atlas-type-hero-size": "clamp(2rem, 1.3rem + 2.2vw, 2.9rem)",
-        "--atlas-type-page-size": "clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem)",
-        "--atlas-type-section-size": "1.375rem",
-        "--atlas-type-subsection-size": "1.125rem",
+        "--atlas-type-page-size": "clamp(2.16rem, 1.68rem + 1.68vw, 2.88rem)",
+        "--atlas-type-section-size": "1.58rem",
+        "--atlas-type-subsection-size": "1.3rem",
         "--atlas-type-eyebrow-size": "0.75rem",
         "--atlas-type-body-size": "1rem",
         "--atlas-type-small-size": "0.875rem",

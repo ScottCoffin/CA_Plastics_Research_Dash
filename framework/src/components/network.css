@@ -275,6 +275,19 @@
   cursor: pointer;
 }
 
+/* VD-24: long cluster names wrap inside their pill at 390 px (the shared pill is nowrap, which made the
+   legend widen the whole page). */
+.net-legend > li {
+  max-width: 100%;
+}
+
+.net-legend .net-legend-item {
+  max-width: 100%;
+  padding-block: var(--atlas-space-1);
+  text-align: left;
+  white-space: normal;
+}
+
 .net-legend-item[aria-pressed="false"] {
   opacity: 0.55;
   text-decoration: line-through;

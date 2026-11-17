@@ -42,6 +42,8 @@ PAGE_IDS = {
     "monitoring-zoom-in",
     "monitoring-zoom-out",
     "monitoring-zoom-reset",
+    "monitoring-fullscreen",
+    "monitoring-map-frame",
     "monitoring-map",
     "monitoring-map-details",
     "monitoring-map-legend",
@@ -139,7 +141,7 @@ def test_disclosure_state_and_map_interaction_hooks_remain_in_place() -> None:
         '"facet-samples"];'
     ) in script
     assert 'const FACET_STORAGE_KEY = "monitoring-facets";' in script
-    assert 'import {injectIconSprite} from "./shared/icons.js";' in script
+    assert 'import {icon, injectIconSprite} from "./shared/icons.js";' in script
     assert "  injectIconSprite();" in script
     assert "attachMapInteractions(mapContainer" in script
     assert 'document.querySelectorAll("[data-map-extent]")' in script

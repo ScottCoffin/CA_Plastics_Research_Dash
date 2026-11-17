@@ -147,43 +147,53 @@
   display: none;
 }
 
-#observablehq-sidebar a[href$="/experts"] {
+#observablehq-sidebar a[href$="/experts"],
+.atlas-topnav a[href$="/experts"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='8' r='3.6' fill='none' stroke='black' stroke-width='1.8'/%3E%3Cpath d='M4.5 20.5c.6-3.9 3.6-6 7.5-6s6.9 2.1 7.5 6' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
-#observablehq-sidebar a[href$="/network"] {
+#observablehq-sidebar a[href$="/network"],
+.atlas-topnav a[href$="/network"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='5.5' cy='6.5' r='2.4' fill='none' stroke='black' stroke-width='1.8'/%3E%3Ccircle cx='18.5' cy='6' r='2.4' fill='none' stroke='black' stroke-width='1.8'/%3E%3Ccircle cx='12' cy='18' r='2.6' fill='none' stroke='black' stroke-width='1.8'/%3E%3Cpath d='M7.7 7.4 10.6 15.7M16.6 7.5 13.3 15.8M8 6.4h8' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
-#observablehq-sidebar a[href$="/institutions"] {
+#observablehq-sidebar a[href$="/institutions"],
+.atlas-topnav a[href$="/institutions"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 20.5h18M4.5 9.5 12 4l7.5 5.5M6 10v10.5M10 10v10.5M14 10v10.5M18 10v10.5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-#observablehq-sidebar a[href$="/monitoring"] {
+#observablehq-sidebar a[href$="/monitoring"],
+.atlas-topnav a[href$="/monitoring"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3.5s-5.5 6.4-5.5 10.3a5.5 5.5 0 0 0 11 0C17.5 9.9 12 3.5 12 3.5Z' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M9.5 14.5c.3 1.3 1.3 2.2 2.6 2.4' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
-#observablehq-sidebar a[href$="/funding"] {
+#observablehq-sidebar a[href$="/funding"],
+.atlas-topnav a[href$="/funding"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='6.5' rx='6.5' ry='2.8' fill='none' stroke='black' stroke-width='1.8'/%3E%3Cpath d='M5.5 6.5v5c0 1.6 2.9 2.8 6.5 2.8s6.5-1.2 6.5-2.8v-5M5.5 11.5v5c0 1.6 2.9 2.8 6.5 2.8s6.5-1.2 6.5-2.8v-5' fill='none' stroke='black' stroke-width='1.8'/%3E%3C/svg%3E");
 }
 
-#observablehq-sidebar a[href$="/evidence"] {
+#observablehq-sidebar a[href$="/evidence"],
+.atlas-topnav a[href$="/evidence"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='3.5' y='3.5' width='7' height='7' rx='1.4' fill='none' stroke='black' stroke-width='1.8'/%3E%3Crect x='13.5' y='3.5' width='7' height='7' rx='1.4' fill='none' stroke='black' stroke-width='1.8'/%3E%3Crect x='3.5' y='13.5' width='7' height='7' rx='1.4' fill='none' stroke='black' stroke-width='1.8'/%3E%3Crect x='13.5' y='13.5' width='7' height='7' rx='1.4' fill='none' stroke='black' stroke-width='1.8'/%3E%3C/svg%3E");
 }
 
-#observablehq-sidebar a[href$="/policy"] {
+#observablehq-sidebar a[href$="/policy"],
+.atlas-topnav a[href$="/policy"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4v16.5M7 20.5h10M5 7.5h14M12 4l-1.2 3.5M7.5 7.5 4.5 14a3 3 0 0 0 6 0Zm9 0-3 6.5a3 3 0 0 0 6 0Z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-#observablehq-sidebar a[href$="/resources"] {
+#observablehq-sidebar a[href$="/resources"],
+.atlas-topnav a[href$="/resources"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 14a4.2 4.2 0 0 0 6 0l3-3a4.2 4.2 0 0 0-6-6l-1 1M14 10a4.2 4.2 0 0 0-6 0l-3 3a4.2 4.2 0 0 0 6 6l1-1' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-#observablehq-sidebar a[href$="/about"] {
+#observablehq-sidebar a[href$="/about"],
+.atlas-topnav a[href$="/about"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8.5' fill='none' stroke='black' stroke-width='1.8'/%3E%3Cpath d='M12 11v5.5M12 7.6v.2' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
-#observablehq-sidebar a[href$="/glossary"] {
+#observablehq-sidebar a[href$="/glossary"],
+.atlas-topnav a[href$="/glossary"] {
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 5.5A2.5 2.5 0 0 1 7.5 3H19v15H7.5A2.5 2.5 0 0 0 5 20.5ZM5 20.5A2.5 2.5 0 0 1 7.5 18H19v3H7.5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
@@ -341,6 +351,8 @@ a.atlas-skip-link:active {
 .atlas-menu-button:focus-visible,
 .atlas-search-toggle:focus-visible,
 #observablehq-sidebar a:focus-visible,
+.atlas-topnav__button:focus-visible,
+.atlas-topnav__link:focus-visible,
 #observablehq-footer a:focus-visible {
   outline: 3px solid var(--atlas-accent);
   outline-offset: 2px;
@@ -371,6 +383,129 @@ a.atlas-skip-link:active {
 
 #observablehq-sidebar-toggle:not(:checked):not(:indeterminate) ~ #observablehq-center .atlas-header__breadcrumb {
   display: none;
+}
+
+/* VD-21: top navigation, shown only above 52rem (see the desktop block below). The four page groups
+   are disclosure buttons; each panel reuses the sidebar's link colours and route icons (the
+   .atlas-topnav a[href$=...] selectors beside the sidebar rules at the top of this file). */
+.atlas-topnav {
+  display: none;
+}
+
+.atlas-topnav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-topnav__list {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.atlas-topnav__item {
+  position: relative;
+}
+
+.atlas-topnav__button {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  border: 0;
+  border-radius: var(--atlas-radius-control);
+  background: none;
+  color: var(--atlas-text);
+  cursor: pointer;
+  font: 600 0.95rem/1.2 var(--atlas-font-body);
+  white-space: nowrap;
+}
+
+.atlas-topnav__button::after {
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-top: -0.2rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  content: "";
+  transform: rotate(45deg);
+}
+
+.atlas-topnav__button:hover,
+.atlas-topnav__button[aria-expanded="true"] {
+  background: var(--atlas-brand-wash);
+  color: var(--atlas-brand-strong);
+}
+
+.atlas-topnav__button[aria-expanded="true"]::after {
+  margin-top: 0.2rem;
+  transform: rotate(225deg);
+}
+
+/* The group that holds the current page is underlined in the brand colour. */
+.atlas-topnav__button--current {
+  color: var(--atlas-brand-strong);
+  box-shadow: inset 0 -3px 0 var(--atlas-brand);
+}
+
+.atlas-topnav__panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  z-index: 3;
+  min-width: 14rem;
+  padding: 0.375rem;
+  border: 1px solid var(--atlas-line);
+  border-radius: var(--atlas-radius-card);
+  background: var(--atlas-surface);
+  box-shadow: var(--atlas-shadow-float);
+}
+
+.atlas-topnav__panel[hidden] {
+  display: none;
+}
+
+.atlas-topnav .atlas-topnav__link {
+  display: flex;
+  min-height: 2.25rem;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--atlas-radius-control);
+  color: var(--atlas-text);
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.atlas-topnav__link::before {
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex: 0 0 1.125rem;
+  background-color: currentColor;
+  content: "";
+  -webkit-mask: var(--atlas-nav-icon) center / contain no-repeat;
+  mask: var(--atlas-nav-icon) center / contain no-repeat;
+}
+
+.atlas-topnav .atlas-topnav__link:hover {
+  background: var(--atlas-brand-wash);
+  color: var(--atlas-brand-strong);
+}
+
+/* Same treatment as the sidebar's active link. */
+.atlas-topnav .atlas-topnav__link[aria-current="page"] {
+  background: var(--atlas-brand-tint);
+  color: var(--atlas-brand-strong);
+  font-weight: 650;
+  box-shadow: inset 3px 0 0 var(--atlas-brand);
+}
+
+.atlas-topnav .atlas-topnav__link[aria-current="page"]::before {
+  background-color: var(--atlas-brand);
 }
 
 #observablehq-footer {
@@ -467,6 +602,57 @@ a.atlas-skip-link:active {
   #observablehq-footer > div {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+/* VD-21: above 52rem there is no sidebar. Framework's sidebar, its backdrop and the menu button are
+   hidden, and the header carries the brand, the top nav and search across the full viewport. The
+   header's padding matches the page column (Framework's 1440 px body frame plus the 2 rem column
+   gutter), so the column stays centred at any zoom level instead of being pushed by a sidebar. */
+@media not all and (max-width: 52rem) {
+  #observablehq-sidebar,
+  #observablehq-sidebar-backdrop,
+  .atlas-menu-button {
+    display: none;
+  }
+
+  /* Framework insets the centre by the sidebar width while the sidebar is checked or indeterminate
+     (its default above 1008 px). Reset the inset so the column is centred. */
+  #observablehq-sidebar-toggle:checked ~ #observablehq-center,
+  #observablehq-sidebar-toggle:indeterminate ~ #observablehq-center {
+    --observablehq-inset-left: 0px;
+    --observablehq-inset-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #observablehq-header {
+    left: 0;
+    right: 0;
+    padding-left: calc(max(0px, (100% - var(--observablehq-max-width)) / 2) + 2rem);
+    padding-right: calc(max(0px, (100% - var(--observablehq-max-width)) / 2) + 2rem);
+    background: var(--atlas-surface);
+    box-shadow: none;
+    border-bottom: 1px solid var(--atlas-line);
+  }
+
+  .atlas-header__brand {
+    display: flex;
+    flex: 0 0 auto;
+  }
+
+  .atlas-header__breadcrumb {
+    display: none;
+  }
+
+  .atlas-topnav {
+    display: flex;
+    flex: 0 0 auto;
+    margin-left: 1rem;
+  }
+
+  .atlas-header__search {
+    min-width: 9rem;
   }
 }
 

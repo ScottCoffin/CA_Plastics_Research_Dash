@@ -80,5 +80,7 @@ title: Funding
 ```js
 import "./components/shared/topics.js";
 import {mountFunding} from "./components/funding.js";
+import {initTooltips} from "./components/shared/tooltip.js";
+initTooltips(document);
 mountFunding();
 ```

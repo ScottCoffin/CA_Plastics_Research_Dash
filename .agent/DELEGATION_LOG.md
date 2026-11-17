@@ -212,3 +212,7 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-16 | VD-18 implementation | Claude Haiku (general-purpose, no turn cap) | H25 visual polish, About links, trend ticks | Accepted; lead fixed the real brand-square cause and hero icon | 1 session |
 | 2026-11-16 | VD-19 implementation | Claude Haiku (general-purpose, no turn cap) | site-wide search index, combobox, /search | Accepted; lead moved the hero form onto it | 1 session |
 | 2026-11-16 | VD-20 implementation | Claude Haiku (general-purpose, no turn cap) | FA2 layout, community labels | Accepted; lead added UC/CSU name shortening | 1 session |
+| 2026-11-16 | VD-21 implementation | Claude Haiku developer | desktop top nav, shell.css, config header | Accepted | 1 session |
+| 2026-11-16 | VD-22 implementation | Claude Haiku developer | Overview bands, Start here, How it works | Accepted | 1 session |
+| 2026-11-16 | VD-23 implementation | Claude Haiku developer | Monitoring map toolbar, full screen, filter sidebar | Accepted | 1 session |
+| 2026-11-16 | VD-24 implementation | Claude Haiku developer | headings, page heads, shared tooltips | Accepted after one resume (90-turn cap); lead fixed one test and formatting | 1 session |

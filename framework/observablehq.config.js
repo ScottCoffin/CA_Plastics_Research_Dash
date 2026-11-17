@@ -27,6 +27,60 @@ const PAGE_GROUPS = [
 ];
 const PAGE_LABELS = new Map(PAGE_GROUPS.flatMap(({name, pages}) => pages.map(({name: label, path}) => [path, [label, name]])));
 
+// VD-21: the four PAGE_GROUPS as disclosure buttons for the desktop header (hidden at <= 52rem, where
+// the Framework sidebar drawer keeps the groups). Each button controls its own panel; the current
+// page's link gets aria-current="page" and its group button is highlighted.
+function topNav(path) {
+  const groups = PAGE_GROUPS.map(({name, pages}) => {
+    const id = "atlas-topnav-" + name.toLowerCase();
+    const current = pages.some(page => page.path === path);
+    const links = pages.map(page => '<li><a class="atlas-topnav__link" href=".' + page.path + '"' +
+      (page.path === path ? ' aria-current="page"' : "") + ">" + page.name + "</a></li>").join("");
+    return '<li class="atlas-topnav__item"><button type="button" class="atlas-topnav__button' +
+      (current ? " atlas-topnav__button--current" : "") + '" aria-expanded="false" aria-controls="' + id + '">' +
+      name + '</button><div class="atlas-topnav__panel" id="' + id + '" hidden><ul>' + links + "</ul></div></li>";
+  });
+  return '<nav class="atlas-topnav" aria-label="Primary"><ul class="atlas-topnav__list">' + groups.join("") + "</ul></nav>";
+}
+
+// VD-21: disclosure behaviour for the top nav, appended to the header's inline script. One group
+// is open at a time; Esc closes it and returns focus to its button; focus leaving the group or a
+// click outside the nav closes it. Closed panels use the hidden attribute, so their links are not tabbable.
+const TOP_NAV_JS = `
+(() => {
+  const setOpen = (button, open) => {
+    const panel = document.getElementById(button.getAttribute("aria-controls"));
+    button.setAttribute("aria-expanded", String(open));
+    if (panel) panel.hidden = !open;
+  };
+  const openButtons = () => Array.from(document.querySelectorAll('.atlas-topnav__button[aria-expanded="true"]'));
+  const closeAll = except => openButtons().forEach(button => { if (button !== except) setOpen(button, false); });
+  document.addEventListener("click", event => {
+    const button = event.target.closest?.(".atlas-topnav__button");
+    if (button) {
+      const open = button.getAttribute("aria-expanded") !== "true";
+      closeAll(button);
+      setOpen(button, open);
+    } else if (!event.target.closest?.(".atlas-topnav")) {
+      closeAll(null);
+    }
+  });
+  document.addEventListener("keydown", event => {
+    const [open] = openButtons();
+    if (event.key !== "Escape" || !open) return;
+    const inNav = Boolean(event.target.closest?.(".atlas-topnav"));
+    setOpen(open, false);
+    if (inNav) open.focus();
+  });
+  document.addEventListener("focusout", event => {
+    const item = event.target.closest?.(".atlas-topnav__item");
+    if (!item || (event.relatedTarget && item.contains(event.relatedTarget))) return;
+    const button = item.querySelector(".atlas-topnav__button");
+    if (button && button.getAttribute("aria-expanded") === "true") setOpen(button, false);
+  });
+})();
+`;
+
 function atlasHeader({title, path}) {
   const current = PAGE_LABELS.get(path);
   const pageTitle = title || (path === "/index" ? "Overview" : "CA Plastics Research Atlas");
@@ -35,10 +89,11 @@ function atlasHeader({title, path}) {
     : '<span class="atlas-header__page">' + pageTitle + '</span>';
   return '<button id="atlas-menu-button" class="atlas-menu-button" type="button" aria-label="Toggle navigation menu" aria-controls="observablehq-sidebar" aria-expanded="false"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>' +
     '<a class="atlas-header__brand" href="./"><img src="' + CA_MARK + '" alt=""><span>CA Plastics Research Atlas</span></a>' +
+    topNav(path) +
     '<nav class="atlas-header__breadcrumb" aria-label="Page location">' + breadcrumb + '</nav>' +
     '<form class="atlas-header__search" action="./search" method="get" role="search" data-atlas-site-search><label for="atlas-header-search-input">Search the Atlas</label><input id="atlas-header-search-input" name="q" type="search" placeholder="Search experts, institutions, topics, funders…" autocomplete="off"><button type="submit">Search</button></form>' +
     '<button id="atlas-search-toggle" class="atlas-search-toggle" type="button" aria-label="Show search" aria-controls="atlas-header-search-input" aria-expanded="false"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></button>' +
-    '<script>document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("observablehq-sidebar-toggle"),b=document.getElementById("atlas-menu-button");if(t&&b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))});document.addEventListener("click",e=>{const m=e.target.closest("#atlas-menu-button"),s=e.target.closest("#atlas-search-toggle"),t=document.getElementById("observablehq-sidebar-toggle");if(m&&t){t.click();m.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}if(s){const h=document.getElementById("observablehq-header"),i=document.getElementById("atlas-header-search-input"),x=s.getAttribute("aria-expanded")!=="true";h.classList.toggle("atlas-search-open",x);s.setAttribute("aria-expanded",String(x));s.setAttribute("aria-label",x?"Hide search":"Show search");if(x)i.focus()}if(t&&e.target===t){const b=document.getElementById("atlas-menu-button");if(b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}});</script>';
+    '<script>document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("observablehq-sidebar-toggle"),b=document.getElementById("atlas-menu-button");if(t&&b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))});document.addEventListener("click",e=>{const m=e.target.closest("#atlas-menu-button"),s=e.target.closest("#atlas-search-toggle"),t=document.getElementById("observablehq-sidebar-toggle");if(m&&t){t.click();m.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}if(s){const h=document.getElementById("observablehq-header"),i=document.getElementById("atlas-header-search-input"),x=s.getAttribute("aria-expanded")!=="true";h.classList.toggle("atlas-search-open",x);s.setAttribute("aria-expanded",String(x));s.setAttribute("aria-label",x?"Hide search":"Show search");if(x)i.focus()}if(t&&e.target===t){const b=document.getElementById("atlas-menu-button");if(b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}});' + TOP_NAV_JS + '</script>';
 }
 
 export default {
