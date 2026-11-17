@@ -8,13 +8,17 @@ import {
   edgeStroke,
   edgeWeight,
   emptyNetworkState,
+  foldSearchText,
   formatNetworkHash,
   colourGroups,
   graphAttributes,
   groupCounts,
   layoutToView,
   legendGroups,
+  matchExperts,
   matchingNodeIds,
+  NAME_SEARCH_LIMIT,
+  NAME_SEARCH_MIN,
   neighbourIds,
   networkSummary,
   nodeColour,
@@ -253,6 +257,49 @@ const everyone = new Set(["a", "b", "c", "d"]);
   assert.equal(shortInstitutionName("California State University, Long Beach"), "CSU Long Beach");
   assert.equal(shortInstitutionName("Lawrence Berkeley National Laboratory"), "Lawrence Berkeley National Laboratory");
   assert.equal(shortInstitutionName(null), "");
+}
+
+// Expert name search (VD-28): two characters to start, case and accents ignored, names that start
+// with the query before names that contain it, at most eight rows, one row per name.
+{
+  const people = [
+    {id: "p1", name: "Anna Rochester"},
+    {id: "p2", name: "Rochelle Adams"},
+    {id: "p3", name: "Ben Rochon"},
+    {id: "p4", name: "José Ochoa"},
+    {id: "p5", name: "Ann Lee"},
+    {id: "p6", name: "Ann Lee"},
+    {id: "p7", name: "Dan Ann"},
+    {id: "p8", name: "Aaron Mann"},
+    {id: "p9", name: "   "},
+    {id: "p10"}
+  ];
+  assert.equal(NAME_SEARCH_MIN, 2);
+  assert.equal(NAME_SEARCH_LIMIT, 8);
+  assert.equal(foldSearchText("  Émile   Zola "), "emile zola");
+  assert.equal(foldSearchText(null), "");
+  for (const query of ["", " ", "a", " a ", null]) assert.deepEqual(matchExperts(people, query), []);
+  assert.deepEqual(matchExperts(people, "zq"), []);
+  assert.deepEqual(
+    matchExperts(people, "roch").map((row) => row.name),
+    ["Rochelle Adams", "Anna Rochester", "Ben Rochon"]
+  );
+  // Prefix matches ("Ann Lee", "Anna Rochester") come before contains-only matches, even though
+  // "Aaron Mann" sorts first alphabetically.
+  assert.deepEqual(
+    matchExperts(people, "ann").map((row) => row.name),
+    ["Ann Lee", "Anna Rochester", "Aaron Mann", "Dan Ann"]
+  );
+  assert.deepEqual(matchExperts(people, "JOSÉ"), [{id: "p4", name: "José Ochoa"}]);
+  assert.deepEqual(matchExperts(people, "ochoa"), [{id: "p4", name: "José Ochoa"}]);
+  // A shared name is listed once, under the first expert with it.
+  assert.deepEqual(matchExperts(people, "ann lee"), [{id: "p5", name: "Ann Lee"}]);
+  const kims = Array.from({length: 10}, (_, i) => ({id: `k${i}`, name: `Kim ${String(i + 1).padStart(2, "0")}`}));
+  assert.deepEqual(
+    matchExperts(kims, "kim").map((row) => row.name),
+    Array.from({length: 8}, (_, i) => `Kim ${String(i + 1).padStart(2, "0")}`)
+  );
+  assert.equal(matchExperts(kims, "kim", 3).length, 3);
 }
 
 console.log("framework_network_runtime: all checks passed");

@@ -161,3 +161,46 @@ def test_css_is_scoped_to_network() -> None:
     ]
     assert selectors
     assert all(selector.startswith(".net-") for selector in selectors)
+
+
+def test_name_search_is_a_combobox_with_a_listbox_not_a_datalist() -> None:
+    page = PAGE.read_text(encoding="utf-8")
+    view = VIEW.read_text(encoding="utf-8")
+    assert "<datalist" not in page and "datalist" not in view
+    assert 'role="combobox"' in page and 'aria-controls="net-search-list"' in page
+    assert 'role="listbox"' in page and 'id="net-search-list"' in page
+    assert 'role="status"' in page and 'id="net-search-status"' in page
+    assert "matchExperts(nodes, search.value)" in view
+    assert "foldSearchText(search.value).length < NAME_SEARCH_MIN" in view
+    assert 'search.setAttribute("aria-activedescendant", option.id);' in view
+    assert 'search.setAttribute("aria-expanded"' in view
+    assert '"No matching experts."' in view and "No matching experts" in page
+    assert 'option.setAttribute("role", "option");' in view
+    assert 'searchList.addEventListener("mousedown", (event) => event.preventDefault());' in view
+    # A blur after a choice must not re-choose it (Close blurs the box first).
+    assert "id === pickedId" in view and "pickedId = null;" in view
+
+
+def test_full_screen_button_keeps_its_icon_and_swaps_only_its_label() -> None:
+    view = VIEW.read_text(encoding="utf-8")
+    assert "buttons.fullscreen.textContent" not in view
+    assert 'buttons.fullscreen.setAttribute("aria-label", label);' in view
+    assert 'buttons.fullscreen.querySelector(".net-btn__tooltip").textContent = label;' in view
+    assert "setFullscreenButton(on);" in view
+
+
+def test_full_screen_panel_takes_no_room_until_an_expert_is_chosen() -> None:
+    view = VIEW.read_text(encoding="utf-8")
+    css = re.sub(r"/\*.*?\*/", "", CSS.read_text(encoding="utf-8"), flags=re.DOTALL)
+    assert 'chart.classList.toggle("net-chart--selected", open);' in view
+    assert "setPanelOpen(selectedId !== null);" in view
+    assert (
+        ".net-chart:fullscreen:not(.net-chart--selected) .net-panel {\n  display: none;\n}" in css
+    )
+    assert "@media (max-width: 52rem) {" in css
+    assert "max-height: 45vh;" in css
+    assert 'aria-label", `Close details for ${node.name}`' in view
+    assert (
+        ".net-search-option {\n  display: flex;\n  box-sizing: border-box;\n  min-height: 2.5rem;"
+        in css
+    )

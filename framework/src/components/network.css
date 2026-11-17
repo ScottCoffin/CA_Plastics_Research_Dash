@@ -234,16 +234,44 @@
   color: var(--atlas-muted);
 }
 
+/* VD-28: in the 300 px side panel each label sits above its value, so a long institution list wraps
+   across the whole panel. A short label column beside the value is used on small screens, where the
+   panel spans the page (see the 720 px block below). */
+.net-panel-head {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--atlas-space-2);
+  margin-bottom: var(--atlas-space-2);
+}
+
+.net-panel-head h2 {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.net-panel-close {
+  flex: 0 0 auto;
+  padding: 0 var(--atlas-space-3);
+}
+
 .net-facts {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--atlas-space-1) var(--atlas-space-2);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--atlas-space-1) 0;
   margin: 0;
 }
 
 .net-facts dt {
   font-weight: 650;
   color: var(--atlas-muted);
+}
+
+.net-facts dt:not(:first-child) {
+  margin-top: var(--atlas-space-3);
 }
 
 .net-facts dd {
@@ -287,6 +315,74 @@
   min-height: 2.5rem;
   align-items: center;
   margin-top: var(--atlas-space-3);
+}
+
+/* VD-28: the name search is a combobox. Its matches drop below the box (styled like the site search),
+   and nothing is drawn until two characters are typed. The font is 16 px so iOS does not zoom on focus. */
+.net-page .net-search-input {
+  font-size: 1rem;
+}
+
+.net-search-popup {
+  position: absolute;
+  z-index: 6;
+  top: calc(100% + var(--atlas-space-1));
+  right: 0;
+  left: 0;
+  box-sizing: border-box;
+  max-height: min(70vh, 22rem);
+  overflow-y: auto;
+  padding: var(--atlas-space-1);
+  border: 1px solid var(--atlas-line);
+  background: var(--atlas-surface);
+  box-shadow: var(--atlas-shadow-float);
+}
+
+.net-search-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.net-search-option {
+  display: flex;
+  box-sizing: border-box;
+  min-height: 2.5rem;
+  align-items: center;
+  padding: var(--atlas-space-2) var(--atlas-space-3);
+  color: var(--atlas-text);
+  font-size: 0.95rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.net-search-option:hover,
+.net-search-option[aria-selected="true"] {
+  background: var(--atlas-brand-tint);
+}
+
+.net-search-empty {
+  box-sizing: border-box;
+  min-height: 2.5rem;
+  margin: 0;
+  padding: var(--atlas-space-2) var(--atlas-space-3);
+  color: var(--atlas-muted);
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+/* Text for screen readers only (the name search status line). */
+.net-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .net-legend {
@@ -372,6 +468,51 @@
     max-height: 50vh;
     margin-top: 0;
     border-top: 0;
+  }
+
+  .net-facts {
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: var(--atlas-space-2) var(--atlas-space-3);
+  }
+
+  .net-facts dt:not(:first-child) {
+    margin-top: 0;
+  }
+}
+
+/* VD-28: full screen gives the canvas the room. Until an expert is chosen the side panel is not drawn,
+   so the canvas takes the full width (on every screen size). */
+.net-chart:fullscreen:not(.net-chart--selected) .net-panel {
+  display: none;
+}
+
+.net-chart:fullscreen:not(.net-chart--selected) .net-body {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* VD-28: small screens in full screen. The chosen expert opens as a bottom sheet below the canvas. The
+   sheet is not laid over the WebGL canvas: a scrolling panel over it left the canvas above undrawn in
+   Chromium. The canvas gives up the sheet's height and is redrawn at its new size. The sheet scrolls,
+   and its Close button sits in its heading. */
+@media (max-width: 52rem) {
+  .net-chart:fullscreen .net-body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .net-chart:fullscreen .net-stage {
+    height: 100%;
+    min-height: 0;
+    border-radius: 0;
+  }
+
+  .net-chart:fullscreen .net-panel {
+    box-sizing: border-box;
+    max-height: 45vh;
+    margin: 0;
+    border: 0;
+    border-top: var(--atlas-rule-strong);
+    overscroll-behavior: contain;
   }
 }
 

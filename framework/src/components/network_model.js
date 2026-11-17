@@ -189,6 +189,45 @@ export function sortByCollaborators(nodes, matching) {
     .sort((a, b) => (Number(b.degree) || 0) - (Number(a.degree) || 0) || String(a.name).localeCompare(String(b.name)));
 }
 
+// ---- Expert name search (VD-28) ---------------------------------------------------------------
+export const NAME_SEARCH_MIN = 2;
+export const NAME_SEARCH_LIMIT = 8;
+
+// Lower case, accents removed, spaces collapsed: the form used to compare names.
+export function foldSearchText(text) {
+  return String(text ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// Experts whose names match the query, at most `limit`, as {id, name} rows with one row per name.
+// Nothing matches below NAME_SEARCH_MIN characters. Names that start with the query come first, then
+// names that only contain it; each group is in name order. Of two experts with one name, the first wins.
+export function matchExperts(nodes, query, limit = NAME_SEARCH_LIMIT) {
+  const needle = foldSearchText(query);
+  if (needle.length < NAME_SEARCH_MIN) return [];
+  const named = (nodes || [])
+    .filter((node) => typeof node?.name === "string" && foldSearchText(node.name) !== "")
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const starts = [];
+  const contains = [];
+  const seen = new Set();
+  for (const node of named) {
+    if (seen.has(node.name)) continue;
+    const folded = foldSearchText(node.name);
+    if (folded.startsWith(needle)) starts.push(node);
+    else if (folded.includes(needle)) contains.push(node);
+    else continue;
+    seen.add(node.name);
+  }
+  return [...starts, ...contains]
+    .slice(0, Math.max(0, limit))
+    .map((node) => ({id: node.id, name: node.name}));
+}
+
 // Six largest communities get the palette, in size order (Map insertion order). Others are absent.
 export function communityColourMap(nodes) {
   const sizes = new Map();

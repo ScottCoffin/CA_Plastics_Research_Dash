@@ -16,11 +16,14 @@ import {
   communityLabelMap,
   communityLabelText,
   emptyNetworkState,
+  foldSearchText,
   formatNetworkHash,
   graphAttributes,
   groupCounts,
   legendGroups,
+  matchExperts,
   matchingNodeIds,
+  NAME_SEARCH_MIN,
   normalizeNetworkState,
   OTHER_COLOUR,
   parseNetworkHash,
@@ -120,6 +123,9 @@ export async function mountNetwork() {
   const search = document.getElementById("net-search");
   const searchWrap = document.getElementById("net-search-wrap");
   const searchList = document.getElementById("net-search-list");
+  const searchPopup = document.getElementById("net-search-popup");
+  const searchEmpty = document.getElementById("net-search-empty");
+  const searchStatus = document.getElementById("net-search-status");
   const colourSelect = document.getElementById("net-colour");
   const sizeSelect = document.getElementById("net-size");
   const buttons = {
@@ -144,7 +150,7 @@ export async function mountNetwork() {
   };
   const required = [
     stage, message, panel, legend, rowsBody, caption, tableDetails, status, search, searchWrap,
-    searchList,
+    searchList, searchPopup, searchEmpty, searchStatus,
     colourSelect, sizeSelect, ...Object.values(buttons), ...Object.values(controls)
   ];
   if (required.some((item) => !item)) return;
@@ -189,19 +195,13 @@ export async function mountNetwork() {
     controls.yearTo.placeholder = String(bounds.max);
   }
 
-  // Search: one entry per name (first expert wins when two share a name).
+  // Search: one entry per name (first expert wins when two share a name). Matches are computed as the
+  // user types (matchExperts), so no list of every name is ever drawn.
   const byId = new Map(nodes.map((node) => [node.id, node]));
   const idByName = new Map();
   for (const node of [...nodes].sort((a, b) => String(a.name).localeCompare(String(b.name)))) {
     if (!idByName.has(node.name)) idByName.set(node.name, node.id);
   }
-  searchList.replaceChildren(
-    ...[...idByName.keys()].map((name) => {
-      const option = document.createElement("option");
-      option.value = name;
-      return option;
-    })
-  );
 
   function fromHash() {
     const parsed = parseNetworkHash(window.location.hash);
@@ -390,15 +390,24 @@ export async function mountNetwork() {
       panel.append(textEl("p", "Select a dot on the chart, or search for a name, to see that expert's collaborations here.", "net-panel-note"));
       return;
     }
-    panel.append(textEl("h2", node.name));
+    // The close button clears the selection, which folds the panel away in full screen (VD-28).
+    const head = document.createElement("div");
+    head.className = "net-panel-head";
+    head.append(textEl("h2", node.name));
+    const close = textEl("button", "Close", "atlas-btn atlas-btn--secondary net-panel-close");
+    close.type = "button";
+    close.setAttribute("aria-label", `Close details for ${node.name}`);
+    close.addEventListener("click", () => select(null));
+    head.append(close);
+    panel.append(head);
     if (!model.visible.has(node.id)) {
       panel.append(textEl("p", "This expert is hidden by the current filters or legend. Reset the filters to see them on the chart.", "net-panel-note"));
     }
     const facts = document.createElement("dl");
     facts.className = "net-facts";
-    addFact(facts, "Primary affiliation", (node.primary_affiliations || [])[0] || "Affiliation not listed");
+    addFact(facts, "Affiliation", (node.primary_affiliations || [])[0] || "Affiliation not listed");
     addFact(facts, "Institutions", (node.institutions || []).join("; ") || "Not listed");
-    addFact(facts, "Plastic-related works", formatCount(Number(node.plastic_works) || 0));
+    addFact(facts, "Plastic works", formatCount(Number(node.plastic_works) || 0));
     addFact(facts, "Collaborators", formatCount(Number(node.degree) || 0));
     addFact(facts, "Topics", (node.topics || []).map(labelFor).join(", ") || "None listed");
     panel.append(facts);
@@ -434,10 +443,124 @@ export async function mountNetwork() {
 
   function select(id, {pan = false} = {}) {
     selectedId = id !== null && byId.has(id) ? id : null;
+    setPanelOpen(selectedId !== null);
     refreshHighlight();
     renderPanel();
     if (pan && selectedId !== null) panTo(selectedId);
   }
+
+  // VD-28: the chart carries net-chart--selected while an expert is chosen. In full screen the CSS
+  // gives the panel no room until then, so the canvas takes the space. Opening or folding the panel
+  // changes the canvas height or width, so the canvas is redrawn at its new size.
+  function setPanelOpen(open) {
+    if (chart.classList.contains("net-chart--selected") === open) return;
+    chart.classList.toggle("net-chart--selected", open);
+    redrawCanvas();
+  }
+
+  // Sigma measures its container when it draws, so the redraw waits a frame for the layout to settle.
+  function redrawCanvas() {
+    window.requestAnimationFrame(() => {
+      if (!renderer) return;
+      renderer.resize();
+      renderer.refresh();
+    });
+  }
+
+  // Name search (VD-28): a combobox. Nothing shows until NAME_SEARCH_MIN characters are typed, then
+  // up to eight matching names. Choosing one does what the search always did: centre the expert and
+  // open its panel.
+  const nameSearch = {rows: [], active: -1};
+
+  function closeNameSearch() {
+    nameSearch.rows = [];
+    nameSearch.active = -1;
+    searchList.replaceChildren();
+    searchPopup.hidden = true;
+    searchStatus.textContent = "";
+    search.setAttribute("aria-expanded", "false");
+    search.removeAttribute("aria-activedescendant");
+  }
+
+  function setActiveMatch(index) {
+    nameSearch.active = index;
+    [...searchList.children].forEach((option, i) => option.setAttribute("aria-selected", String(i === index)));
+    if (index < 0) {
+      search.removeAttribute("aria-activedescendant");
+      return;
+    }
+    const option = searchList.children[index];
+    search.setAttribute("aria-activedescendant", option.id);
+    option.scrollIntoView({block: "nearest"});
+  }
+
+  function updateNameSearch() {
+    if (foldSearchText(search.value).length < NAME_SEARCH_MIN) {
+      closeNameSearch();
+      return;
+    }
+    const rows = matchExperts(nodes, search.value);
+    nameSearch.rows = rows;
+    nameSearch.active = -1;
+    searchList.replaceChildren(
+      ...rows.map((row, i) => {
+        const option = textEl("li", row.name, "net-search-option");
+        option.id = `net-search-option-${i}`;
+        option.setAttribute("role", "option");
+        option.setAttribute("aria-selected", "false");
+        option.addEventListener("click", () => pickExpert(row.id));
+        return option;
+      })
+    );
+    searchList.hidden = rows.length === 0;
+    searchEmpty.hidden = rows.length > 0;
+    searchPopup.hidden = false;
+    search.setAttribute("aria-expanded", String(rows.length > 0));
+    search.removeAttribute("aria-activedescendant");
+    searchStatus.textContent = rows.length
+      ? `${rows.length} matching ${rows.length === 1 ? "expert" : "experts"}. Use the arrow keys to choose one.`
+      : "No matching experts.";
+  }
+
+  // The expert the search last chose. Leaving the box after a choice must not choose it again, or
+  // pressing Close (which blurs the box first) would re-select the expert before the click lands.
+  let pickedId = null;
+
+  function pickExpert(id) {
+    const node = byId.get(id);
+    if (!node) return;
+    pickedId = id;
+    search.value = node.name;
+    closeNameSearch();
+    select(id, {pan: true});
+  }
+
+  search.addEventListener("input", () => {
+    pickedId = null;
+    updateNameSearch();
+  });
+  // Leaving the box closes the list. Presses on an option are cancelled so focus stays here.
+  search.addEventListener("blur", closeNameSearch);
+  searchList.addEventListener("mousedown", (event) => event.preventDefault());
+  search.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      if (searchPopup.hidden) updateNameSearch();
+      const total = nameSearch.rows.length;
+      if (!total) return;
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      if (nameSearch.active < 0) setActiveMatch(step > 0 ? 0 : total - 1);
+      else setActiveMatch((nameSearch.active + step + total) % total);
+    } else if (event.key === "Enter") {
+      if (!searchPopup.hidden && nameSearch.active >= 0) {
+        event.preventDefault();
+        pickExpert(nameSearch.rows[nameSearch.active].id);
+      }
+    } else if (event.key === "Escape" && !searchPopup.hidden) {
+      event.preventDefault();
+      closeNameSearch();
+    }
+  });
 
   // Legend: one toggle per group, aria-pressed shows whether the group is drawn.
   function renderLegend() {
@@ -521,6 +644,15 @@ export async function mountNetwork() {
     buttons.layout.setAttribute("aria-label", label);
     buttons.layout.dataset.tooltip = label;
     buttons.layout.querySelector(".net-btn__tooltip").textContent = label;
+  }
+
+  // VD-28: the button keeps its icon and tooltip; only the accessible name and tooltip text change.
+  // (Replacing its text content used to push the long label out of the 2.5 rem square.)
+  function setFullscreenButton(on) {
+    const label = on ? "Exit full screen" : "Full screen";
+    buttons.fullscreen.setAttribute("aria-label", label);
+    buttons.fullscreen.dataset.tooltip = label;
+    buttons.fullscreen.querySelector(".net-btn__tooltip").textContent = label;
   }
 
   function stopLayout() {
@@ -613,10 +745,11 @@ export async function mountNetwork() {
     render();
   });
 
+  // A name typed exactly (then Enter or leaving the box) still chooses that expert.
   search.addEventListener("change", () => {
     const id = idByName.get(search.value.trim());
-    if (id === undefined) return;
-    select(id, {pan: true});
+    if (id === undefined || id === pickedId) return;
+    pickExpert(id);
   });
 
   buttons.zoomIn.addEventListener("click", () => renderer?.getCamera().animatedZoom({duration: 250}));
@@ -634,11 +767,8 @@ export async function mountNetwork() {
   });
   document.addEventListener("fullscreenchange", () => {
     const on = document.fullscreenElement === chart;
-    buttons.fullscreen.textContent = on ? "Exit full screen" : "Full screen";
-    if (renderer) {
-      renderer.resize();
-      renderer.refresh();
-    }
+    setFullscreenButton(on);
+    redrawCanvas();
   });
 
   buttons.layout.addEventListener("click", () => {

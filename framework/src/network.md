@@ -23,7 +23,8 @@ title: Collaboration network
 <div class="atlas-filters__grid net-primary-grid">
 <div class="atlas-field">
 <label class="atlas-label" for="net-search">Find an expert</label>
-<span class="atlas-search" id="net-search-wrap"><input class="atlas-input" id="net-search" type="search" list="net-search-list" autocomplete="off" placeholder="Type a name"><datalist id="net-search-list"></datalist></span>
+<div class="atlas-search" id="net-search-wrap"><input class="atlas-input net-search-input" id="net-search" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="net-search-list" autocomplete="off" spellcheck="false" placeholder="Type a name"><div class="net-search-popup" id="net-search-popup" hidden><ul class="net-search-list" id="net-search-list" role="listbox" aria-label="Matching experts"></ul><p class="net-search-empty" id="net-search-empty" hidden>No matching experts</p></div></div>
+<span class="net-sr-only" id="net-search-status" role="status" aria-live="polite"></span>
 </div>
 <div class="atlas-field">
 <label class="atlas-label" for="net-colour">Colour by</label>
