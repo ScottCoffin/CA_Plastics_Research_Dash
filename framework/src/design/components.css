@@ -43,9 +43,11 @@
 
 /* VD-24: each top-level page head is a full-bleed band in the head-band token. It uses the VD-22 bleed
    (a 100vmax box-shadow spread, clipped to the band's own height by clip-path), so it adds no scrollable
-   width. The Experts drawer header keeps the card look above. */
+   width. The Experts drawer header keeps the card look above. VD-35: the band is compact (16 px top and
+   bottom); its plane is absolutely positioned, so it fills the band's height and never sets it. */
 .atlas-page-head:not(.drawer-header) {
   --atlas-plane-w: 22%;
+  padding-block: var(--atlas-space-4);
   border: 0;
   border-radius: 0;
   background: var(--atlas-head-band);
@@ -54,9 +56,10 @@
 }
 
 /* VD-25a: keep the text clear of the plane. The #observablehq-main prefix outranks the page roots' own
-   padding shorthands (for example #experts-root .experts-page-head), so the reserved right edge holds. */
+   padding shorthands (for example #experts-root .experts-page-head), so the reserved right edge holds.
+   VD-35: the reserve is the plane plus one space-4 gap, so the lead can use the full text column. */
 #observablehq-main .atlas-page-head:not(.drawer-header) {
-  padding-right: calc(clamp(var(--atlas-space-5), 4vw, var(--atlas-space-8)) + var(--atlas-plane-w) + 2%);
+  padding-right: calc(var(--atlas-plane-w) + var(--atlas-space-4));
 }
 
 /* VD-25a: the band's plane. A flat block in the task colour (--atlas-task, set by each page; ink when unset)
@@ -100,7 +103,7 @@
   display: flex;
   align-items: center;
   gap: var(--atlas-space-2);
-  margin: 0 0 var(--atlas-space-2);
+  margin: 0 0 var(--atlas-space-1);
   color: var(--atlas-brand-strong);
   font: 600 var(--atlas-type-eyebrow-size) / 1.2 var(--atlas-font-display);
   letter-spacing: 0.12em;
@@ -115,11 +118,17 @@
   font-weight: 800;
 }
 
+/* VD-35: the lead is body size and runs the full width of the text column, so it wraps into fewer
+   lines and the band stays short. The #observablehq-main prefix outranks the framework's own
+   `#observablehq-main p` measure cap (70ch). */
 .atlas-page-head__lead {
-  max-width: 65ch;
-  margin: var(--atlas-space-3) 0 0;
+  margin: var(--atlas-space-2) 0 0;
   color: var(--atlas-muted);
-  font-size: 1.05rem;
+  font-size: var(--atlas-type-body-size);
+}
+
+#observablehq-main .atlas-page-head__lead {
+  max-width: none;
 }
 
 .atlas-page-head__meta {
@@ -127,7 +136,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--atlas-space-2);
-  margin-top: var(--atlas-space-4);
+  margin-top: var(--atlas-space-3);
 }
 
 /* VD-24/VD-29: shared tooltip. An element with data-atlas-tip shows that text in one bubble, .atlas-tip, which
@@ -1024,6 +1033,7 @@
   .atlas-page-head { padding: var(--atlas-space-4); }
   .atlas-page-head:not(.drawer-header) {
     --atlas-plane-w: 14%;
+    padding-block: var(--atlas-space-3);
   }
   .atlas-filters__head { align-items: flex-start; }
   .atlas-chart__head { align-items: flex-start; }

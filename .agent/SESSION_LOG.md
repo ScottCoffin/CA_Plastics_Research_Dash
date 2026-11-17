@@ -174,3 +174,4 @@
 | 2026-11-17 | VD-29 follow-up | Page titles no longer self-links (postbuild unwraps h1 anchors) | this commit |
 | 2026-11-17 | VD-29 fix + VD-31 | Favicon as base64 (live icon was a black square: Framework double-escaped %23); creator credit replaces disclaimer and About disclosure; larger footer links | this commit |
 | 2026-11-17 | VD-30 | Homepage map spring intro (Web Animations, no library); About section text full width | this commit |
+| 2026-11-17 | VD-32..VD-35, ING-LOOKBACK/403/SAFETY | Resources icons and links, no repo links (mailto corrections), Evidence journal filter and 2-yr mean citedness, owner logos and compact page heads; daily ingest fixed (paid from_updated_date filter) with lookback, deep sweep and alert issue | this commit |

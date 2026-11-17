@@ -8,6 +8,11 @@ is kept as is, and only when it is self-contained: no script, no event attribute
 references. A card whose root_url is the logo source of a research network
 (config/research_networks.yml) reuses that self-hosted logo instead of fetching.
 
+An owner-chosen icon replaces the search (VD-35): set owner_source on a card's record in
+config/linkout_icons.yml to a local image file or an https URL. That image is converted the same
+way and recorded as source_kind owner_file or owner_url. A URL that several cards name is
+downloaded once per run. The note field is free text for provenance and is kept as written.
+
 Each outcome is written to config/linkout_icons.yml (source URL, fetch date, file path or error).
 Icon files that already exist are skipped unless --refresh is given; cards whose last attempt
 failed are retried. Failures are recorded and do not stop the run; the page then shows initials.
@@ -53,6 +58,7 @@ FIELDS = (
     "id",
     "initials",
     "icon_page",
+    "owner_source",
     "skip_reason",
     "path",
     "format",
@@ -62,6 +68,7 @@ FIELDS = (
     "fetched",
     "attempted",
     "error",
+    "note",
 )
 STOPWORDS = {"a", "an", "and", "by", "for", "in", "of", "on", "the", "with", "key", "managed"}
 HEADER = """\
@@ -71,6 +78,8 @@ HEADER = """\
 # root_url is a research network's logo source reuses that self-hosted logo
 # (config/research_networks.yml).
 # initials: the two or three letters shown on a neutral plane when no icon is stored.
+# owner_source (VD-35, owner request 2026-11-17): an owner-chosen icon, a local image file or an
+# https URL. When set, it is used instead of searching the homepage. note: provenance, kept as is.
 # path: relative to the site root, or null. error: the last failed attempt, retried next run.
 # Rebuild the public JSON with `py -3.14 scripts/build_linkouts_json.py`. Fetch with
 # `py -3.14 scripts/fetch_linkout_icons.py [--refresh] [--only LO-n]`.
@@ -290,6 +299,48 @@ def attempt(
     raise IconError("; ".join(errors[-3:]) or "no icon candidates")
 
 
+def is_url(source: str) -> bool:
+    return source.startswith(("https://", "http://"))
+
+
+def _owner_bytes(source: str) -> bytes:
+    """The bytes of an owner_source: a URL (polite delay first) or a local file. Errors name only
+    the file, not its folders, because the message is written to the icons file."""
+    if is_url(source):
+        time.sleep(POLITE_DELAY_SECONDS)
+        data, _ = _get(source, MAX_ICON_BYTES)
+        return data
+    path = Path(source)
+    try:
+        size = path.stat().st_size
+        if size > MAX_ICON_BYTES:
+            raise IconError(f"owner file {path.name} larger than {MAX_ICON_BYTES} bytes")
+        return path.read_bytes()
+    except OSError as exc:
+        raise IconError(f"owner file {path.name} cannot be read") from exc
+
+
+def owner_attempt(
+    entry: dict[str, Any], record: dict[str, Any], today: str, cache: dict[str, bytes]
+) -> dict[str, Any]:
+    """Store the owner-chosen icon named by record['owner_source'] (VD-35). Returns the fields to
+    record; raises IconError on failure. cache holds URL bytes already downloaded in this run."""
+    source = str(record["owner_source"]).strip()
+    if source not in cache:
+        cache[source] = _owner_bytes(source)
+    ext, payload = to_stored_icon(cache[source])
+    remote = is_url(source)
+    return {
+        "path": _store(entry["id"], ext, payload),
+        "format": ext,
+        "source_kind": "owner_url" if remote else "owner_file",
+        "icon_url": source if remote else None,
+        "page_url": record.get("icon_page"),
+        "fetched": today,
+        "error": None,
+    }
+
+
 def load_records(path: Path = ICONS_PATH) -> dict[str, dict[str, Any]]:
     if not path.exists():
         return {}
@@ -341,6 +392,7 @@ def main(argv: list[str] | None = None) -> int:
     wanted = {item.upper() for item in args.only} if args.only else None
     today = datetime.now(UTC).date().isoformat()
     records: list[dict[str, Any]] = []
+    owner_cache: dict[str, bytes] = {}
     for entry in registry["entries"]:
         eid = entry["id"]
         record = dict(existing.get(eid) or {"id": eid})
@@ -353,9 +405,12 @@ def main(argv: list[str] | None = None) -> int:
         elif not run or (not args.refresh and _has_file(record)):
             print(f"{eid}: kept ({record.get('path') or 'no icon'})")
         else:
-            network = network_logo_for(entry["root_url"], networks)
             try:
-                fields = attempt(entry, network, today, record.get("icon_page"))
+                if record.get("owner_source"):
+                    fields = owner_attempt(entry, record, today, owner_cache)
+                else:
+                    network = network_logo_for(entry["root_url"], networks)
+                    fields = attempt(entry, network, today, record.get("icon_page"))
                 record.update(attempted=None, **fields)
                 print(f"{eid}: {record['source_kind']} -> {record['path']}")
             except (OSError, ValueError) as exc:

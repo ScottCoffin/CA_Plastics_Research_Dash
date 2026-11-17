@@ -21,13 +21,14 @@
 #experts-root h3 { margin-top: 0; }
 #experts-root .expert-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
+/* VD-35: the band's block padding and the lead (body size, full width) come from design/components.css. */
 #experts-root .experts-page-head {
   margin-bottom: 0.15rem;
-  padding: 0.65rem clamp(1rem, 2.5vw, 1.75rem);
+  padding-inline: clamp(1rem, 2.5vw, 1.75rem);
 }
 #experts-root .experts-page-head h1 { margin: 0; }
-#experts-root .experts-page-head .atlas-page-head__lead { max-width: 80ch; margin-top: 0.25rem; font-size: 0.98rem; }
-#experts-root .experts-page-head .atlas-page-head__meta { gap: 0.4rem; margin-top: 0.6rem; }
+#experts-root .experts-page-head .atlas-page-head__lead { margin-top: var(--atlas-space-1); }
+#experts-root .experts-page-head .atlas-page-head__meta { gap: 0.4rem; margin-top: var(--atlas-space-1); }
 
 #experts-root .atlas-filters { margin: 0.25rem 0 0.1rem; }
 #experts-root .atlas-filters__head { min-height: 2.5rem; padding: 0.25rem 0.75rem; }

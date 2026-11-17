@@ -1,9 +1,12 @@
 # Icons for the Related resources cards (VD-32, owner request 2026-11-17).
 # Each icon is the steward's own site icon (favicon or touch icon), resized to 64 x 64 and
 # shown at 40 px only to identify the link; the card's title links to the resource. A card whose
-# root_url is a research network's logo source reuses that self-hosted logo (config/research_networks.yml).
+# root_url is a research network's logo source reuses that self-hosted logo
+# (config/research_networks.yml).
 # initials: the two or three letters shown on a neutral plane when no icon is stored.
-# path: relative to the site root, or null. error: the last failed attempt (retried on the next run).
+# owner_source (VD-35, owner request 2026-11-17): an owner-chosen icon, a local image file or an
+# https URL. When set, it is used instead of searching the homepage. note: provenance, kept as is.
+# path: relative to the site root, or null. error: the last failed attempt, retried next run.
 # Rebuild the public JSON with `py -3.14 scripts/build_linkouts_json.py`. Fetch with
 # `py -3.14 scripts/fetch_linkout_icons.py [--refresh] [--only LO-n]`.
 schema_version: 1
@@ -11,6 +14,7 @@ icons:
 - id: LO-1
   initials: PC
   icon_page: null
+  owner_source: null
   skip_reason: null
   path: assets/linkouts/lo-1.png
   format: png
@@ -20,21 +24,25 @@ icons:
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: null
 - id: LO-2
   initials: SC
-  icon_page: https://sccwrp.org/
+  icon_page: null
+  owner_source: curation/linkout_icon_sources/plastiverse_main_logo_drop.png
   skip_reason: null
   path: assets/linkouts/lo-2.png
   format: png
-  source_kind: favicon.ico
-  icon_url: https://sccwrp.org/favicon.ico
-  page_url: https://sccwrp.org/
+  source_kind: owner_file
+  icon_url: null
+  page_url: null
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: owner-supplied 2026-11-17
 - id: LO-3
   initials: NC
   icon_page: null
+  owner_source: null
   skip_reason: null
   path: assets/linkouts/lo-3.png
   format: png
@@ -44,9 +52,11 @@ icons:
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: null
 - id: LO-4
   initials: MOE
   icon_page: null
+  owner_source: null
   skip_reason: null
   path: assets/linkouts/lo-4.png
   format: png
@@ -56,9 +66,11 @@ icons:
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: null
 - id: LO-5
   initials: GP
   icon_page: null
+  owner_source: null
   skip_reason: null
   path: assets/linkouts/lo-5.png
   format: png
@@ -68,9 +80,11 @@ icons:
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: null
 - id: LO-6
   initials: UN
   icon_page: null
+  owner_source: null
   skip_reason: null
   path: assets/linkouts/lo-6.png
   format: png
@@ -80,9 +94,11 @@ icons:
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: null
 - id: LO-7
   initials: EW
   icon_page: null
+  owner_source: null
   skip_reason: null
   path: assets/linkouts/lo-7.png
   format: png
@@ -92,9 +108,11 @@ icons:
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: null
 - id: LO-8
   initials: PV
   icon_page: null
+  owner_source: null
   skip_reason: null
   path: assets/linkouts/lo-8.png
   format: png
@@ -104,61 +122,71 @@ icons:
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: null
 - id: LO-9
   initials: MI
-  icon_page: null
-  skip_reason: root_url is on the shared R-universe host, so its icon is R-universe's, not the Moore Institute's;
-    initials are shown
-  path: null
-  format: null
-  source_kind: null
-  icon_url: null
-  page_url: https://moore-institute-4-plastic-pollution-res.r-universe.dev/
+  icon_page: https://moore-institute-4-plastic-pollution-res.github.io/One4All/
+  owner_source: https://www.openanalysis.org/One4All/reference/figures/One4All.jpg
+  skip_reason: null
+  path: assets/linkouts/lo-9.png
+  format: png
+  source_kind: owner_url
+  icon_url: https://www.openanalysis.org/One4All/reference/figures/One4All.jpg
+  page_url: https://moore-institute-4-plastic-pollution-res.github.io/One4All/
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: One4All logo image (img alt "One4All logo") linked in the page HTML; the page redirects to openanalysis.org,
+    2026-11-17
 - id: LO-10
   initials: DT
   icon_page: null
+  owner_source: https://pfasproject.com/wp-content/uploads/2021/02/SCP_DTSC_Logo_T.png
   skip_reason: null
-  path: null
-  format: null
-  source_kind: null
-  icon_url: null
+  path: assets/linkouts/lo-10.png
+  format: png
+  source_kind: owner_url
+  icon_url: https://pfasproject.com/wp-content/uploads/2021/02/SCP_DTSC_Logo_T.png
   page_url: null
-  fetched: null
-  attempted: '2026-11-17'
-  error: 'homepage https://dtsc.ca.gov/: HTTP Error 403: Forbidden; favicon.ico https://dtsc.ca.gov/favicon.ico:
-    HTTP Error 403: Forbidden'
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+  note: owner-chosen 2026-11-17; the i0.wp.com copy (fit=1549,1461) returned 404 on 2026-11-17, so the
+    same file was taken from pfasproject.com
 - id: LO-11
   initials: DT
   icon_page: null
+  owner_source: https://pfasproject.com/wp-content/uploads/2021/02/SCP_DTSC_Logo_T.png
   skip_reason: null
-  path: null
-  format: null
-  source_kind: null
-  icon_url: null
+  path: assets/linkouts/lo-11.png
+  format: png
+  source_kind: owner_url
+  icon_url: https://pfasproject.com/wp-content/uploads/2021/02/SCP_DTSC_Logo_T.png
   page_url: null
-  fetched: null
-  attempted: '2026-11-17'
-  error: 'homepage https://dtsc.ca.gov/: HTTP Error 403: Forbidden; favicon.ico https://dtsc.ca.gov/favicon.ico:
-    HTTP Error 403: Forbidden'
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+  note: owner-chosen 2026-11-17; the i0.wp.com copy (fit=1549,1461) returned 404 on 2026-11-17, so the
+    same file was taken from pfasproject.com
 - id: LO-12
   initials: DT
   icon_page: null
+  owner_source: https://pfasproject.com/wp-content/uploads/2021/02/SCP_DTSC_Logo_T.png
   skip_reason: null
-  path: null
-  format: null
-  source_kind: null
-  icon_url: null
+  path: assets/linkouts/lo-12.png
+  format: png
+  source_kind: owner_url
+  icon_url: https://pfasproject.com/wp-content/uploads/2021/02/SCP_DTSC_Logo_T.png
   page_url: null
-  fetched: null
-  attempted: '2026-11-17'
-  error: 'homepage https://dtsc.ca.gov/: HTTP Error 403: Forbidden; favicon.ico https://dtsc.ca.gov/favicon.ico:
-    HTTP Error 403: Forbidden'
+  fetched: '2026-11-17'
+  attempted: null
+  error: null
+  note: owner-chosen 2026-11-17; the i0.wp.com copy (fit=1549,1461) returned 404 on 2026-11-17, so the
+    same file was taken from pfasproject.com
 - id: LO-13
   initials: LS
   icon_page: null
+  owner_source: null
   skip_reason: null
   path: assets/linkouts/lo-13.png
   format: png
@@ -168,3 +196,4 @@ icons:
   fetched: '2026-11-17'
   attempted: null
   error: null
+  note: null

@@ -20,7 +20,6 @@
 #funding-root :focus-visible { outline: 3px solid var(--atlas-accent); outline-offset: 2px; }
 
 #funding-root .funding-page-head { margin-bottom: 0.15rem; }
-#funding-root .atlas-page-head__lead { max-width: 80ch; }
 #funding-root .atlas-callout .volume-caption,
 #funding-root .atlas-callout p { margin: 0; color: inherit; font-size: inherit; }
 #funding-root .data-note { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.9rem; }

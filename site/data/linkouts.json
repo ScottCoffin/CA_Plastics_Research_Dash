@@ -175,7 +175,7 @@
   {
    "id": "LO-9",
    "name": "Moore Institute One4All and Microplastics Open Data Portal",
-   "icon": null,
+   "icon": "assets/linkouts/lo-9.png",
    "initials": "MI",
    "steward": "Moore Institute",
    "steward_source": null,
@@ -198,7 +198,7 @@
   {
    "id": "LO-10",
    "name": "DTSC: Microplastics in Consumer Products",
-   "icon": null,
+   "icon": "assets/linkouts/lo-10.png",
    "initials": "DT",
    "steward": "DTSC Safer Consumer Products (SCP)",
    "steward_source": null,
@@ -220,7 +220,7 @@
   {
    "id": "LO-11",
    "name": "DTSC: Addition to the Candidate Chemicals List: Microplastics",
-   "icon": null,
+   "icon": "assets/linkouts/lo-11.png",
    "initials": "DT",
    "steward": "DTSC Safer Consumer Products (SCP)",
    "steward_source": null,
@@ -243,7 +243,7 @@
   {
    "id": "LO-12",
    "name": "DTSC: Priority Product Work Plan",
-   "icon": null,
+   "icon": "assets/linkouts/lo-12.png",
    "initials": "DT",
    "steward": "DTSC Safer Consumer Products (SCP)",
    "steward_source": null,

@@ -41,6 +41,8 @@ EXPECTED_INST_NAMES = {
 }
 # Stewards left as plain text: no Atlas institution with that exact name, or an ambiguous one.
 UNMATCHED = {"LO-1", "LO-4", "LO-5", "LO-6", "LO-8", "LO-9"}
+# VD-35 owner-chosen DTSC logo; the i0.wp.com copy returned 404, so the origin file is recorded.
+DTSC_URL = "https://pfasproject.com/wp-content/uploads/2021/02/SCP_DTSC_Logo_T.png"
 
 
 @pytest.fixture(scope="module")
@@ -110,13 +112,12 @@ def test_stored_icons_are_small_square_and_self_contained(fetch_module):
             fetch_module.validate_svg(path.read_bytes())
 
 
-def test_no_orphan_icon_files_and_skipped_cards_keep_no_file():
+def test_no_orphan_icon_files_and_no_skipped_cards():
     referenced = {row["path"] for row in _icon_records() if row["path"]}
     on_disk = {f"assets/linkouts/{p.name}" for p in ICON_DIR.iterdir() if p.is_file()}
     assert on_disk == referenced
-    skipped = [row for row in _icon_records() if row.get("skip_reason")]
-    assert [row["id"] for row in skipped] == ["LO-9"]
-    assert not (ICON_DIR / "lo-9.png").exists()
+    assert len(referenced) == 13
+    assert [row["id"] for row in _icon_records() if row.get("skip_reason")] == []
 
 
 def test_committed_json_carries_icon_initials_and_steward_ids():
@@ -130,16 +131,28 @@ def test_committed_json_carries_icon_initials_and_steward_ids():
         assert entry["steward_inst_id"] == registry[eid].get("steward_inst_id"), eid
 
 
-def test_registered_icon_and_fetch_counts_match_the_run_log():
-    rows = _icon_records()
-    with_icon = [row["id"] for row in rows if row["path"]]
-    assert with_icon == ["LO-1", "LO-2", "LO-3", "LO-4", "LO-5", "LO-6", "LO-7", "LO-8", "LO-13"]
-    refused = [row["id"] for row in rows if row["path"] is None and not row.get("skip_reason")]
-    assert refused == ["LO-10", "LO-11", "LO-12"]
-    assert all("403" in row["error"] for row in rows if row["id"] in refused)
-    assert [row["source_kind"] for row in rows if row["id"] == "LO-13"] == [
+def test_every_card_has_an_icon_and_owner_choices_are_recorded():
+    rows = {row["id"]: row for row in _icon_records()}
+    assert all(row["path"] for row in rows.values())
+    assert rows["LO-1"]["source_kind"] == "apple-touch-icon"
+    assert [row["source_kind"] for row in rows.values() if row["id"] == "LO-13"] == [
         "research network logo (NET-1)"
     ]
+    # VD-35 owner choices: LO-2 is a local file, LO-9 and LO-10..12 are URLs.
+    assert rows["LO-2"]["source_kind"] == "owner_file"
+    assert rows["LO-2"]["icon_url"] is None
+    assert rows["LO-2"]["note"] == "owner-supplied 2026-11-17"
+    assert rows["LO-9"]["skip_reason"] is None
+    assert rows["LO-9"]["source_kind"] == "owner_url"
+    assert rows["LO-9"]["icon_url"].endswith("/One4All/reference/figures/One4All.jpg")
+    for eid in ("LO-10", "LO-11", "LO-12"):
+        assert rows[eid]["source_kind"] == "owner_url", eid
+        assert rows[eid]["icon_url"] == DTSC_URL, eid
+        assert rows[eid]["note"].startswith("owner-chosen 2026-11-17"), eid
+    dtsc_bytes = {
+        (ICON_DIR / f"{eid.lower()}.png").read_bytes() for eid in ("LO-10", "LO-11", "LO-12")
+    }
+    assert len(dtsc_bytes) == 1, "one download serves all three DTSC cards"
 
 
 # --- steward links -------------------------------------------------------------------------
@@ -294,45 +307,111 @@ def test_default_initials_and_network_logo_lookup(fetch_module):
     assert fetch_module.network_logo_for("https://example.org/", networks) is None
 
 
-def test_main_keeps_existing_files_and_records_failures_offline(fetch_module, monkeypatch):
-    attempted: list[str] = []
+def _offline_fetches(fetch_module, monkeypatch) -> dict[str, list[str]]:
+    """Replace the homepage search and the owner download with failing stubs; returns the calls."""
+    calls: dict[str, list[str]] = {"attempt": [], "owner": []}
 
-    def offline(entry, network, today, icon_page):
-        attempted.append(entry["id"])
+    def offline_attempt(entry, network, today, icon_page):
+        calls["attempt"].append(entry["id"])
         raise OSError("offline for this test")
 
+    def offline_owner(source):
+        calls["owner"].append(source)
+        raise OSError("offline for this test")
+
+    monkeypatch.setattr(fetch_module, "attempt", offline_attempt)
+    monkeypatch.setattr(fetch_module, "_owner_bytes", offline_owner)
+    monkeypatch.setattr(fetch_module, "_remove_icon", lambda eid: None)
+    return calls
+
+
+def _captured_writes(fetch_module, monkeypatch) -> dict[str, list[dict]]:
     written: dict[str, list[dict]] = {}
-    monkeypatch.setattr(fetch_module, "attempt", offline)
     monkeypatch.setattr(
         fetch_module, "write_records", lambda rows, path=None: written.update(rows=rows)
     )
-    monkeypatch.setattr(fetch_module, "_remove_icon", lambda eid: None)
+    return written
+
+
+def _redirect_storage(fetch_module, monkeypatch, root: Path) -> Path:
+    """Store icons under a temporary site folder instead of the committed one."""
+    icon_dir = root / "assets" / "linkouts"
+    monkeypatch.setattr(fetch_module, "SITE_DIR", root)
+    monkeypatch.setattr(fetch_module, "ICON_DIR", icon_dir)
+    return icon_dir
+
+
+def test_main_keeps_existing_files_without_network(fetch_module, monkeypatch):
+    calls = _offline_fetches(fetch_module, monkeypatch)
+    written = _captured_writes(fetch_module, monkeypatch)
     assert fetch_module.main([]) == 0
-    assert attempted == ["LO-10", "LO-11", "LO-12"], "only cards without a file are fetched"
+    assert calls == {"attempt": [], "owner": []}, "every card with a file is kept"
     rows = {row["id"]: row for row in written["rows"]}
     assert rows["LO-1"]["path"] == "assets/linkouts/lo-1.png"
-    assert rows["LO-10"]["path"] is None
-    assert "offline" in rows["LO-10"]["error"]
-    assert rows["LO-9"]["path"] is None and rows["LO-9"]["skip_reason"]
+    assert rows["LO-9"]["path"] == "assets/linkouts/lo-9.png"
+    assert rows["LO-9"]["skip_reason"] is None
 
 
-def test_main_only_refetches_the_named_card(fetch_module, monkeypatch):
-    attempted: list[str] = []
-
-    def offline(entry, network, today, icon_page):
-        attempted.append(entry["id"])
-        raise OSError("offline for this test")
-
-    written: dict[str, list[dict]] = {}
-    monkeypatch.setattr(fetch_module, "attempt", offline)
-    monkeypatch.setattr(
-        fetch_module, "write_records", lambda rows, path=None: written.update(rows=rows)
-    )
-    monkeypatch.setattr(fetch_module, "_remove_icon", lambda eid: None)
+def test_main_only_refetches_the_named_owner_card(fetch_module, monkeypatch):
+    calls = _offline_fetches(fetch_module, monkeypatch)
+    written = _captured_writes(fetch_module, monkeypatch)
     assert fetch_module.main(["--refresh", "--only", "lo-12"]) == 0
-    assert attempted == ["LO-12"]
+    assert calls == {"attempt": [], "owner": [DTSC_URL]}, "owner_source replaces the search"
     rows = {row["id"]: row for row in written["rows"]}
+    assert rows["LO-12"]["path"] == "assets/linkouts/lo-12.png", "a failed refresh keeps the file"
+    assert "offline" in rows["LO-12"]["error"]
+    assert rows["LO-12"]["note"].startswith("owner-chosen 2026-11-17"), "the note is kept"
     assert rows["LO-1"]["path"] == "assets/linkouts/lo-1.png", "other cards keep their files"
+
+
+def test_owner_url_is_downloaded_once_per_run_and_stored_as_png(
+    fetch_module, monkeypatch, tmp_path
+):
+    icon_dir = _redirect_storage(fetch_module, monkeypatch, tmp_path)
+    monkeypatch.setattr(fetch_module, "POLITE_DELAY_SECONDS", 0)
+    downloads: list[str] = []
+
+    def fake_get(url, limit, *, truncate=False):
+        downloads.append(url)
+        return _png_bytes((120, 60), (30, 90, 200, 255)), url
+
+    monkeypatch.setattr(fetch_module, "_get", fake_get)
+    cache: dict[str, bytes] = {}
+    results = [
+        fetch_module.owner_attempt(
+            {"id": eid}, {"owner_source": DTSC_URL, "icon_page": None}, "2026-11-17", cache
+        )
+        for eid in ("LO-10", "LO-11", "LO-12")
+    ]
+    assert downloads == [DTSC_URL], "one download serves all three cards"
+    for result in results:
+        assert result["source_kind"] == "owner_url"
+        assert result["icon_url"] == DTSC_URL
+        assert result["page_url"] is None
+    for eid in ("LO-10", "LO-11", "LO-12"):
+        with Image.open(icon_dir / f"{eid.lower()}.png") as image:
+            assert image.size == (64, 64) and image.mode == "RGBA"
+
+
+def test_owner_file_is_converted_and_recorded_without_a_url(fetch_module, monkeypatch, tmp_path):
+    icon_dir = _redirect_storage(fetch_module, monkeypatch, tmp_path)
+    source = tmp_path / "logo.png"
+    source.write_bytes(_png_bytes((438, 438), (10, 20, 30, 255)))
+    fields = fetch_module.owner_attempt(
+        {"id": "LO-2"}, {"owner_source": str(source), "icon_page": None}, "2026-11-17", {}
+    )
+    assert fields["path"] == "assets/linkouts/lo-2.png"
+    assert fields["source_kind"] == "owner_file"
+    assert fields["icon_url"] is None and fields["page_url"] is None
+    with Image.open(icon_dir / "lo-2.png") as image:
+        assert image.size == (64, 64)
+
+
+def test_missing_owner_file_error_names_only_the_file(fetch_module, tmp_path):
+    missing = tmp_path / "folder" / "gone.png"
+    with pytest.raises(fetch_module.IconError, match="gone.png") as info:
+        fetch_module._owner_bytes(str(missing))
+    assert str(tmp_path) not in str(info.value)
 
 
 # --- layout and page source ----------------------------------------------------------------
