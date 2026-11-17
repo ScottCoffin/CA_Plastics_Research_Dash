@@ -17,7 +17,7 @@ import urllib.parse
 import urllib.request
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
@@ -48,6 +48,10 @@ USER_AGENT = "CA-Plastics-Research-Atlas/0.1 (S2.1 works ingester; contact via G
 MAX_INSTITUTION_IDS_PER_REQUEST = 100
 DEFAULT_PER_PAGE = 100
 HIGH_WATER_SCHEMA_VERSION = 1
+# OpenAlex often indexes a work days after its publication date (W7226023234: published 2026-11-13,
+# created 2026-11-14), so an incremental run re-reads this many days before the high-water mark.
+# Rows merge by OpenAlex ID, so the overlap costs a few pages, never duplicates.
+INCREMENTAL_LOOKBACK_DAYS = 30
 RAW_SCHEMA = pa.schema(
     [
         ("openalex_id", pa.string()),
@@ -510,6 +514,20 @@ def _atomic_write_json(path: Path, payload: Mapping[str, Any]) -> None:
         temporary.unlink(missing_ok=True)
 
 
+def incremental_start(high_water_date: str, lookback_days: int = INCREMENTAL_LOOKBACK_DAYS) -> str:
+    """First publication date for an incremental run: the high-water mark minus the lookback."""
+    if lookback_days < 0:
+        raise ValueError("lookback_days must be zero or positive")
+    start = date.fromisoformat(high_water_date[:10]) - timedelta(days=lookback_days)
+    return start.isoformat()
+
+
+def _later_date(first: str | None, second: str | None) -> str | None:
+    """The later of two ISO dates (either may be missing)."""
+    dates = [value for value in (first, second) if value]
+    return max(dates, key=lambda value: value[:10]) if dates else None
+
+
 def read_high_water_mark(path: str | Path) -> dict[str, Any] | None:
     """Read a validated high-water mark, returning ``None`` before first run."""
 
@@ -605,6 +623,7 @@ def ingest_live(
     anchor_author_ids: Sequence[str] | None = None,
     raw_affiliation_scope: bool = False,
     publication_date_cap: str | None = None,
+    lookback_days: int = INCREMENTAL_LOOKBACK_DAYS,
 ) -> dict[str, Any]:
     """Run a backfill or inclusive publication/update-date incremental pull.
 
@@ -642,9 +661,10 @@ def ingest_live(
 
     state = read_high_water_mark(paths.high_water_mark)
     if start_year is None and not updated_since and state:
-        updated_since = state.get("last_publication_date")
-        if not updated_since:
+        high_water_date = state.get("last_publication_date")
+        if not high_water_date:
             raise ValueError("existing high-water mark has no publication date")
+        updated_since = incremental_start(high_water_date, lookback_days)
     if start_year is None and not updated_since:
         raise ValueError("first live run requires start_year/end_year or updated_since")
 
@@ -781,8 +801,11 @@ def ingest_live(
             "query_version": config["version"],
             "mode": "updated_since" if updated_since else "publication_date",
             "incremental_field": "updated_date" if updated_since else "publication_date",
-            "last_publication_date": _max_date(new_rows, "publication_date")
-            or (state or {}).get("last_publication_date"),
+            # The lookback re-reads older dates, so the mark never moves backwards.
+            "last_publication_date": _later_date(
+                _max_date(new_rows, "publication_date"),
+                (state or {}).get("last_publication_date"),
+            ),
             "last_updated_date": _max_date(new_rows, "updated_date")
             or (state or {}).get("last_updated_date"),
             "last_successful_run_utc": fetched_at,
