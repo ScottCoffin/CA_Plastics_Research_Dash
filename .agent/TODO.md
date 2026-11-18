@@ -264,7 +264,7 @@ Contract: [`docs/add_on_spec_3.md`](../docs/add_on_spec_3.md) (numbered plain-te
 - [ ] **BQ-2.2** Fetch/cache: reuse the query-version cache key (30 days), share PLAT-2b's fetch path, add a `stale` flag and surface plan-refusal 429s instead of deferring quietly; no language filter; all-types default plus an article+review sensitivity series. Depends: BQ-2.1. Size: M.
 - [ ] **BQ-2.3** Metrics: counts, share, index, log-linear CAGR with 95% CI; exclude the partial year and retractions. Depends: BQ-2.2. Size: M.
 - [ ] **BQ-2.4** Trend tab extension (`/explore` Trend and `/california/evidence` V-4) with table alternatives and a "what this is and is not" note; `site/data/denominators.json` (bq2-v1). Depends: BQ-2.3. Size: M. Acceptance: axe 0; no WoS totals.
-- [ ] **BQ-3.1** Document the network build (`atlas.build.network`, `scripts/build_network.py`) in `docs/NETWORK_BUILD.md`. Depends: BQ-0. Size: S.
+- [x] **BQ-3.1** (done 2026-11-18, `docs/NETWORK_BUILD.md`) Document the network build (`atlas.build.network`, `scripts/build_network.py`) in `docs/NETWORK_BUILD.md`. Depends: BQ-0. Size: S.
 - [ ] **BQ-3.2** Network metrics `site/data/network_metrics.json` (bq3-v1): components, giant component, density, clustering, isolates, degree quantiles, modularity, cross-institution/sector/out-of-region fractions; windows 2011-2015, 2016-2020, 2021-2025, 2026 partial; ascertainment note. Depends: BQ-3.1. Size: M.
 - [ ] **BQ-3.3** Null model (optional). Depends: BQ-3.2. Size: M.
 - [ ] **BQ-3.4** Collaboration-structure panel on `/california/network`; no person rankings. Depends: BQ-3.2. Size: M. Acceptance: table alternative, axe 0.

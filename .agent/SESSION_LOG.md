@@ -190,3 +190,4 @@
 | 2026-11-18 | PLAT-2b | Live global evidence-map counts (30 cell queries/day, 300 credits), landing table + canvas use them; owner A3 answers recorded (A3-ANSWERS + Q8/Q11/Q15, PLAT-4a split) | this commit |
 | 2026-11-18 | BQ-0 | A3 [VERIFY] recon (root is global; no pmid stored; PubMed cap 10,000; NCBI 3/10 rps + tool/email registration, H41; T10753 via primary_topic.id; ca_basis/ca_any_author provenance); pyproject licence MIT; baseline 2,283 passed | this commit |
 | 2026-11-18 | BQ-S8 | Operator-limit test (burst 429 retried, 0.25 s throttle) + caller table; gap: run_at1_audit.py bypasses the client (manual --live) | this commit |
+| 2026-11-18 | BQ-3.1 | Network build documented (constants, layout, communities, schema s9.4-v1.1); possible select_nodes docstring/code mismatch noted | this commit |
