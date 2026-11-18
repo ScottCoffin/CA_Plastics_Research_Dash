@@ -43,6 +43,13 @@ these numbers: the LCP image is CSS-sized from the first frame, phones get an 80
 landing preloads its own text face, and the engine starts after load + a painted frame + idle,
 decodes bitmaps off the main thread and cuts shards in yielded chunks (TBT 750 ms → 120 ms).
 
+## Live (https://plastiverse.live/, after deploy of `2b3df7ba`)
+
+- `scripts/check_plat2.py --base https://plastiverse.live/`: 0 failures.
+- Lighthouse mobile: landing performance 93, accessibility 100, best practices 96, SEO 100,
+  LCP 2.3 s, CLS 0 (spec: >= 90, 100, LCP <= 2.5 s, CLS <= 0.05). Same run: `/california/` 95,
+  `/ambassadors` 98. UX audit: 0 console errors, one h1, no heading skips on all three.
+
 ## Impeccable finish review
 
 The `impeccable-finish-reviewer` compared 52 build/prototype frame pairs (13 beats x middle/end x

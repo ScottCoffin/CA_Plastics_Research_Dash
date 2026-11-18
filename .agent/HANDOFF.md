@@ -20,8 +20,7 @@ MAIL-1's selection is fixed and its Monday cron is back on, so CI is green again
   review: story matches the prototype, 6 fixes applied; DESIGN.md written.
 
 ## In flight / next (in this order)
-1. Confirm the landing on the live site: `py -3.14 scripts/check_plat2.py --base https://plastiverse.live/`
-   and Lighthouse mobile (spec target 90; local same-machine run was 85 vs California overview 84).
+1. (Landing verified live: check_plat2 0 failures; Lighthouse mobile 93, LCP 2.3 s, CLS 0.)
 2. VD-SM: carry the Plastiverse Live system into the California pages. `DESIGN.md` (repo root, sidecar
    `.impeccable/design.json`) lists what is platform-wide; move the landing's font faces into
    `observablehq.config.js` then. Restyle `/ambassadors` in the new system.
