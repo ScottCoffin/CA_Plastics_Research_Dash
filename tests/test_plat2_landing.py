@@ -12,11 +12,15 @@ import json
 import re
 from pathlib import Path
 
+from PIL import Image
+
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "framework" / "src"
 INDEX = SRC / "index.md"
 ENGINE = SRC / "components" / "landing_story.js"
 STYLE = SRC / "components" / "landing_story.css"
+MOTION = SRC / "components" / "logo_motion.js"
+SYNC = ROOT / "framework" / "scripts" / "sync_shared.mjs"
 LANDING = ROOT / "site" / "assets" / "landing"
 
 
@@ -118,6 +122,57 @@ def test_landing_assets_referenced_by_the_page_exist() -> None:
     sync = (ROOT / "framework" / "scripts" / "sync_shared.mjs").read_text(encoding="utf-8")
     for name in re.findall(r'"([a-z_0-9]+\.webp)"', sync):
         assert (LANDING / name).is_file(), name
+
+
+def test_footer_logo_is_the_motion_poster_at_282_square() -> None:
+    page = INDEX.read_text(encoding="utf-8")
+    footer = page.split('<footer class="plv-foot"', 1)[1].split("</footer>", 1)[0]
+    tags = re.findall(r"<img [^>]*>", footer)
+    assert len(tags) == 1
+    tag = tags[0]
+    assert 'class="plv-flogo"' in tag
+    assert 'src="./assets/landing/logo_motion_poster.webp"' in tag
+    assert 'width="282" height="282"' in tag
+    assert 'loading="lazy"' in tag
+    assert (
+        'alt="Plastiverse Live logo: scattered plastic fragments flow into a bright node '
+        'and a network of research"' in tag
+    )
+    assert "logo_564.webp" not in footer
+    assert 'import {mountLogoMotion} from "./components/logo_motion.js";' in page
+    assert 'mountLogoMotion(document.querySelector(".plv-foot"));' in page
+
+
+def test_logo_motion_module_respects_reduced_motion_and_loads_lazily() -> None:
+    js = MOTION.read_text(encoding="utf-8")
+    assert "export function mountLogoMotion(footer)" in js
+    assert "prefers-reduced-motion: reduce" in js
+    assert "IntersectionObserver" in js
+    assert 'import {siteRoot} from "./atlas.js";' in js
+    assert 'new URL("assets/landing/plastiverse_live.mp4", siteRoot())' in js
+    assert '"Pause logo animation"' in js and '"Play logo animation"' in js
+    assert "aria-hidden" in js and 'role", "img"' in js
+
+
+def test_footer_animation_is_a_small_mp4_and_the_poster_is_564_square() -> None:
+    video = LANDING / "plastiverse_live.mp4"
+    assert video.is_file()
+    assert video.stat().st_size < 1_000_000
+    assert video.read_bytes()[4:8] == b"ftyp"
+    with Image.open(LANDING / "logo_motion_poster.webp") as poster:
+        assert poster.format == "WEBP"
+        assert poster.size == (564, 564)
+
+
+def test_sync_copies_the_motion_poster_with_the_other_landing_images() -> None:
+    sync = SYNC.read_text(encoding="utf-8")
+    block = re.search(r"LANDING_STATIC\s*=\s*\[(.*?)\]", sync, re.S)
+    assert block is not None
+    names = re.findall(r'"([^"]+)"', block.group(1))
+    assert "logo_motion_poster.webp" in names
+    # The MP4 loads at runtime from the site root; Framework must not copy it into src/.
+    assert "plastiverse_live.mp4" not in names
+    assert (LANDING / "logo_motion_poster.webp").is_file()
 
 
 def test_ambassador_page_explains_the_role_and_shows_the_address_as_text() -> None:

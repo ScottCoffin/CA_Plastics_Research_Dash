@@ -185,3 +185,4 @@
 | 2026-11-18 | GA-1 | Global data app design (Impeccable): Scope ladder chosen with owner steer; prototype with real OpenAlex sample (350 credits); finish review fix -> ship (8/8); axe 0; DESIGN.md merged | this commit |
 | 2026-11-18 | GA-2 | /explore built in Framework from the GA-1 prototype (Haiku x2 + lead); explore data pipeline in the daily ingest; axe 0, no console errors; Haiku finish review fix -> ship (5/5) | this commit |
 | 2026-11-18 | GA-3, PLAT-2d | Phone Menu drawer and 70-82% phone map on /explore; landing links /explore; network label removed; /explore in sitemap and llms.txt; global expert profile assessment ($0 plan GX-1..7) | this commit |
+| 2026-11-18 | LOGO-1 | Landing footer logo animation (MP4 near-viewport, poster fallback, Pause/Play); Explore agent on Haiku; GX owner decisions recorded; handoff for a fresh orchestrator | this commit |

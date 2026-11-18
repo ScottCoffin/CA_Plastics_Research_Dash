@@ -60,6 +60,12 @@ Papers with an empty title in credits.json: `papers/p00.webp`.
 - `logo_564.webp` and `logo_282.webp` come from `.impeccable/sketches/brand/logo_564.png`.
 - Generator prompt: `src/plastiverse_logo_gen_prompt.md`.
 
+## Logo animation (footer)
+
+- `plastiverse_live.mp4` is a byte copy of `src/plastiverse_live_high_res.mp4` (H.264, 1254 x 1254, 24 fps, 7 s). It loads at runtime from the site root, not from `framework/src/`.
+- `logo_motion_poster.webp` is the final frame, `src/plastiverse_live_static.png`, resized to 564 px (Lanczos), flattened onto black and saved at WebP quality 90. It is the static fallback and the video's poster.
+- Source: owner-supplied `src/` files made by `src/create_plastiverse_animation.py`, 2026-11-18. This build copies them and does not run that script.
+
 ## World and California raster
 
 - `site/data/global/world_raster.json`: world.json (world-atlas countries-110m and us-atlas states-10m) with total_by_country shading in four steps; port of .impeccable/sketches/src/story.py, fixed log breaks at 30, 300 and 3,000 works.

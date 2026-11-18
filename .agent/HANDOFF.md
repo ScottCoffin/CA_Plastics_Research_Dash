@@ -1,33 +1,32 @@
-# Handoff — 2026-11-18 (evening) — GA-3 phone layout + landing link done; GX assessment written
+# Handoff — 2026-11-18 (end of session) — GA-1..GA-3, PLAT-2d, LOGO-1 done; next PLAT-2b, VD-SM, PLAT-3/4
 
 ## State in one paragraph
-`/explore` is live (GA-2). This checkpoint answers the owner's three asks: on phones the views moved into the side
-Menu drawer and the map now fills about 75-82% of the screen (world as two stacked panes; a scoped map is a 3:5
-portrait at about 70%); the landing links "Explore the data" from the header and under the regions map, and the
-network beat's "illustrative" label is gone (PLAT-2d); and `docs/GLOBAL_EXPERTS_ASSESSMENT.md` says global expert
-profiles can stay at $0 with PLAT-4 first, batch `/authors` metrics, sharded R2 files and top-N SEO pages (tasks
-GX-1..GX-7). Pending outside the checkpoint: a proposed `.claude/agents/Explore.md` override on `model: haiku`
-(shown to the owner, not created; waiting for "add Explore"); the owner's "fix what /usage flagged" needs the
-`/usage` output, which was not in the session.
+The Global data app is live at https://plastiverse.live/explore (GA-1 design, GA-2 Framework build, GA-3 phone
+menu and bigger phone map) and the landing links to it (PLAT-2d). The landing footer now shows the owner's logo
+animation (LOGO-1). `docs/GLOBAL_EXPERTS_ASSESSMENT.md` is the $0 plan for global expert profiles; the owner
+answered its decisions (QUESTIONS GX-*: threshold 3+ works, top-20,000 SEO pages, licensed Wikidata photos shown
+automatically, OpenAlex author records as they are, R2 token reminder at GX-3). GX-1 waits on PLAT-4. Owner rule:
+every spawned agent runs on Haiku (`model: haiku`); the project `Explore` agent override now runs on Haiku too.
 
-## Done this checkpoint
-- GA-3a (Haiku): phone Menu drawer and two-pane map in `components/explore.{js,css}`, `explore.md`; lead: 3:5 portrait,
-  `maptip` rename (Framework `.tip` collision), DESIGN.md app sections.
-- GA-3b + PLAT-2d (Haiku): landing links, label removal, `/explore` in sitemap pages and `llms.txt`, tests; lead: spec lines.
-- Lead: `docs/GLOBAL_EXPERTS_ASSESSMENT.md` (free-tier limits checked against provider pages 2026-11-18).
+## Done this session (commits on main)
+- GA-1 `d2c01acf` design (Scope ladder), GA-2 `776c6aa3` /explore + explore data in the daily ingest,
+  GA-3 `355cbbb9` phone menu/map + landing link + label removal + assessment, LOGO-1 (this commit).
 
 ## In flight / next (in this order)
-1. Owner: "add Explore" (agent override) and the `/usage` items (paste the output).
-2. H34 owner look; H35 GX decisions.
-3. PLAT-2b live evidence counts; VD-SM; PLAT-3; PLAT-4 (unblocks GX-1).
+1. PLAT-2b: live global evidence-map counts (cells approved, H30).
+2. VD-SM: carry the Plastiverse Live system (reuse the /explore shell: header, scope ladder, tabs) into California.
+3. PLAT-3 region abstraction, then PLAT-4 global ingest (unblocks GX-1..GX-7; remind the owner about the R2 token at GX-3).
 
 ## Open findings
+- `/usage` items: the owner asked to fix what `/usage` flagged, showing each change first; the output was never
+  pasted into the session. Ask for it.
 - `tests/test_opc_actions_em17.py::test_committed_json_is_not_stale` fails locally only from the owner's
-  uncommitted `curation/opc_mapping_review.csv` (H28); a clean worktree passes.
-- Global author counts in the assessment are estimates until PLAT-4 measures them.
-- `.agent/MEMORY.md` is about 285 lines (target 200); compact at a quiet checkpoint.
+  uncommitted `curation/opc_mapping_review.csv` (H28 in progress); a clean worktree passes.
+- `explore.json --check` goes stale when `build_metadata.json` counts change without a rebuild (daily ingest rebuilds both).
+- `.agent/MEMORY.md` is about 290 lines (target 200); compact it at a quiet checkpoint.
+- Untracked prototype images under `.impeccable/sketches/{brand,items,papers,scene}` are the owner's; leave them.
 
 ## Owner actions (one line each)
-- Reply "add Explore" (or edit the proposed text) and paste the `/usage` output.
-- H34: check /explore on a phone; H35: GX decisions (or "defaults OK").
+- Paste the `/usage` output (each fix is shown before it is made).
+- H34: check /explore on a phone and the landing footer animation; reply "explore OK" or list changes.
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).

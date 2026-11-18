@@ -193,7 +193,16 @@ html:has(.plv) { scroll-behavior: smooth; }
 }
 .plv-foot b { color: var(--pv-paper); font-weight: 600; }
 .plv-foot a { color: var(--pv-paper); text-decoration: underline; }
-.plv-flogo { width: min(282px, 60vw); height: auto; flex-basis: 100%; max-width: 282px; }
+/* Footer logo: a static poster (.plv-flogo img) or the looping MP4 in .plv-flogo-wrap (logo_motion.js). */
+.plv-flogo { display: block; width: min(282px, 60vw); height: auto; aspect-ratio: 1 / 1; flex-basis: 100%; max-width: 282px; }
+.plv-flogo-wrap { position: relative; display: block; width: min(282px, 60vw); aspect-ratio: 1 / 1; flex-basis: 100%; max-width: 282px; }
+.plv-flogo-wrap > .plv-flogo { width: 100%; }
+.plv-flogo-toggle {
+  position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--pv-on-dark); border: 1px solid var(--pv-on-dark); border-radius: 0; cursor: pointer;
+}
+.plv-flogo-toggle:hover { background: var(--pv-on-dark); color: var(--pv-night); }
 .plv-pcred { flex-basis: 100%; font-size: 11px; line-height: 1.5; color: var(--pv-credit); }
 .plv-pcred summary { cursor: pointer; font-size: 12px; width: max-content; color: var(--pv-mint); }
 .plv-pcred p { margin-top: 8px; max-width: 150ch; }

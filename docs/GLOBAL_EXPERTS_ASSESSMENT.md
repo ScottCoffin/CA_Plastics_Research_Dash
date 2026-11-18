@@ -94,15 +94,15 @@ Both matter only if we switch the backfill to the snapshot or build the full glo
   each cached and spread across days. Photos as the owner decides.
 - **GX-7 Collaboration network slices.** Per country and per community, built locally.
 
-## What the owner needs to decide (before GX-1)
+## Owner decisions (answered 2026-11-18)
 
-1. Full-profile threshold: 3 or more plastics works (default), or another rule (for example 2 or more in the
-   last 5 years).
-2. SEO pages: top 20,000 experts by plastics works (default), or none outside curated regions.
-3. Photos outside curated regions: none (default), or licensed Wikidata images shown automatically with credit.
-4. Outside curated regions, accept OpenAlex author records as they are, without manual merges, with a
-   visible "report an error" link and the existing opt-out (default yes).
-5. An R2 write token (owner action, about 10 minutes) when GX-3 starts.
+1. Full-profile threshold: 3 or more plastics works under the active query. **Owner: yes (default).**
+2. SEO pages: top 20,000 experts by plastics works, inside the Pages budget. **Owner: yes (default).**
+3. Photos outside curated regions: **Owner: licensed Wikidata images shown automatically, with the licence and
+   credit under each photo** (not the default "none"). Images without a usable licence are not shown.
+4. Outside curated regions, accept OpenAlex author records as they are, without manual merges, with a visible
+   "report an error" link and the existing opt-out. **Owner: yes (default).**
+5. R2 write token (owner action, about 10 minutes): **Owner: remind me when it is needed** (at GX-3).
 
 ## Risks
 

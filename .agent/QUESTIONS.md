@@ -130,7 +130,8 @@ Defaults below come from `spec.md` Part G and remain in use until the owner answ
 | GA-ROUTE | URL of the Global data app page? | `/explore` (global page, `framework/src/explore.md`) | | Open (default in use) |
 | GA-LANDING-LINK | Add an "Explore the data" link to the landing header and regions band? (a landing edit) | Not yet; goes in with PLAT-2d when landing edits are allowed | Link it | Answered 2026-11-18 (done with GA-3) |
 | GA-PHONE | Phone layout of /explore: views in the side menu instead of a top tab row; map about 70-80% of the screen | Done: Menu drawer (Views, Scope, Regional atlases); world as two stacked panes (~75-82%), scoped map 3:5 (~70%) | Owner request 2026-11-18 | Answered 2026-11-18 |
-| GX-THRESHOLD | Which authors get a full global expert profile? | 3 or more plastics works under the active query (everyone else a light record) | | Open (default in use) |
-| GX-SEO | Static SEO pages for global experts? | Top 20,000 by plastics works, inside the 1 GB Pages budget | | Open (default in use) |
-| GX-PHOTOS | Photos outside curated regions? | None (curated regions keep owner-approved photos) | | Open (default in use) |
-| GX-AUTHORS | Accept OpenAlex author records as they are outside curated regions (no manual merges), with a report-an-error link and the opt-out? | Yes | | Open (default in use) |
+| GX-THRESHOLD | Which authors get a full global expert profile? | 3 or more plastics works under the active query (everyone else a light record) | Yes (default) | Answered 2026-11-18 |
+| GX-SEO | Static SEO pages for global experts? | Top 20,000 by plastics works, inside the 1 GB Pages budget | Yes (default) | Answered 2026-11-18 |
+| GX-PHOTOS | Photos outside curated regions? | None (curated regions keep owner-approved photos) | Licensed Wikidata images shown automatically (with licence and credit) | Answered 2026-11-18 |
+| GX-AUTHORS | Accept OpenAlex author records as they are outside curated regions (no manual merges), with a report-an-error link and the opt-out? | Yes | Yes (default) | Answered 2026-11-18 |
+| GX-R2-TOKEN | When to create the R2 write token? | At GX-3 | Remind me when it is needed | Answered 2026-11-18 |

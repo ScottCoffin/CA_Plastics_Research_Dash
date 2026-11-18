@@ -77,7 +77,7 @@ head: |
 <li><svg viewBox="0 0 56 40" aria-hidden="true"><path class="g" d="M4 20 H52"/><circle class="t" cx="12" cy="20" r="4"/><circle class="t" cx="28" cy="20" r="4"/><circle class="m" cx="44" cy="20" r="4"/></svg><div><b>Track policy</b><span>Laws, regulations and plans on one timeline.</span></div><a href="./california/policy">Policy<span class="sr-only"> (California)</span></a></li>
 </ol>
 </div></section>
-<footer class="plv-foot" id="updates"><img class="plv-flogo" src="./assets/landing/logo_564.webp" width="282" height="247" alt="Plastiverse Live logo: scattered plastic fragments flow into a bright node and a network of research" loading="lazy">
+<footer class="plv-foot" id="updates"><img class="plv-flogo" src="./assets/landing/logo_motion_poster.webp" width="282" height="282" alt="Plastiverse Live logo: scattered plastic fragments flow into a bright node and a network of research" loading="lazy">
 <div><b>Get updates</b><br>Weekly email (soon), <a href="./feed.xml">RSS feed</a>, <a href="https://ntfy.sh/plastiverse-california" rel="noreferrer">ntfy alerts</a>.</div>
 <div><b>Plastiverse Live</b><br>Created by <a href="https://scottcoff.in" rel="noreferrer">Scott Coffin</a>. Not a State product.</div>
 <div>Story framing after Hartmann, Mennekes &amp; Wagner (2026).</div>
@@ -86,8 +86,10 @@ head: |
 
 ```js
 import {mountLandingStory, mountPickers, mountRegionsMap} from "./components/landing_story.js";
+import {mountLogoMotion} from "./components/logo_motion.js";
 const landingRoot = document.querySelector(".plv");
 mountPickers(landingRoot);
 mountRegionsMap(landingRoot);
 mountLandingStory(landingRoot).catch((error) => console.error("landing story:", error));
+mountLogoMotion(document.querySelector(".plv-foot"));
 ```

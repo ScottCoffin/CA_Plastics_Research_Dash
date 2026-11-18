@@ -5,7 +5,9 @@ Ports two pieces of offline work from the approved prototype:
 * the picnic composition in ``.impeccable/sketches/src/story_engine7.js``
   (``LAYOUT``, ``fracture`` and ``compose``): the keyed blanket, the item
   cut-outs, the item atlas, the first-paint image and ``picnic.json``;
-* the world and California rasters in ``.impeccable/sketches/src/story.py``.
+* the world and California rasters in ``.impeccable/sketches/src/story.py``;
+* the footer logo animation: the owner's MP4 is copied and its poster is written from the static
+  PNG (both made by ``src/create_plastiverse_animation.py``; this script does not render them).
 
 The build is deterministic (fixed LCG seeds, no network, no randomness).
 Run with ``py -3.14 scripts/build_landing_assets.py``.
@@ -34,6 +36,8 @@ ITEMS_SIDECAR = SKETCH / "scene" / "picnic_items.png.json"
 PAPERS_DIR = SKETCH / "papers" / "web"
 CREDITS = SKETCH / "papers" / "credits.json"
 LOGO_SRC = SKETCH / "brand" / "logo_564.png"
+MOTION_SRC = ROOT / "src" / "plastiverse_live_high_res.mp4"  # owner-supplied, see provenance
+MOTION_STILL_SRC = ROOT / "src" / "plastiverse_live_static.png"  # final frame of the animation
 WORLD_JSON = ROOT / "site" / "assets" / "world" / "world.json"
 COUNTS_JSON = ROOT / "site" / "data" / "global" / "global_counts.json"
 OUT = ROOT / "site" / "assets" / "landing"
@@ -59,6 +63,7 @@ BLANKET_Q, ITEMS_Q, PAPER_Q, LOGO_Q = 82, 82, 80, 90
 FIRST_Q, FIRST_Q_MIN = 80, 40  # first paint: highest quality within FIRST_PAINT_MAX
 FIRST_W = 1600
 PAPER_H = 560
+MOTION_PX = 564  # logo animation poster: the footer logo's size (logo_564.webp)
 SHADOW_OFFSET = (5, 7)
 SHADOW_SIGMA = 8.0  # canvas shadowBlur 16 is a Gaussian sigma of 8
 SHADOW_ALPHA = 0.45
@@ -598,6 +603,19 @@ def picnic_json(items: list[Item], pos, pts, ords: list[int], atlas_size) -> dic
     }
 
 
+def write_motion_assets(out: Path) -> None:
+    """Copy the owner's logo animation and write its poster, the footer's static fallback.
+
+    The poster is the animation's final frame, resized to MOTION_PX (Lanczos) and flattened onto
+    black, the footer ground (--pv-night). Nothing is rendered here, so the output is deterministic.
+    """
+    shutil.copyfile(MOTION_SRC, out / "plastiverse_live.mp4")
+    with Image.open(MOTION_STILL_SRC) as still:
+        resized = still.convert("RGBA").resize((MOTION_PX, MOTION_PX), Image.Resampling.LANCZOS)
+    flat = Image.alpha_composite(Image.new("RGBA", resized.size, (0, 0, 0, 255)), resized)
+    flat.convert("RGB").save(out / "logo_motion_poster.webp", "WEBP", quality=LOGO_Q, method=6)
+
+
 def _sidecar_block(path: Path) -> list[str]:
     meta = json.loads(path.read_text(encoding="utf-8"))
     lines = [f"- Generator: `{meta['model']}` via `{meta['tool']}`, created `{meta['createdAt']}`."]
@@ -673,6 +691,17 @@ def provenance_md(papers: list[dict], counts: dict, world_source: str, first_q: 
         "- `logo_564.webp` and `logo_282.webp` come from "
         "`.impeccable/sketches/brand/logo_564.png`.",
         "- Generator prompt: `src/plastiverse_logo_gen_prompt.md`.",
+        "",
+        "## Logo animation (footer)",
+        "",
+        "- `plastiverse_live.mp4` is a byte copy of `src/plastiverse_live_high_res.mp4` "
+        "(H.264, 1254 x 1254, 24 fps, 7 s). It loads at runtime from the site root, "
+        "not from `framework/src/`.",
+        "- `logo_motion_poster.webp` is the final frame, `src/plastiverse_live_static.png`, "
+        f"resized to {MOTION_PX} px (Lanczos), flattened onto black and saved at "
+        f"WebP quality {LOGO_Q}. It is the static fallback and the video's poster.",
+        "- Source: owner-supplied `src/` files made by `src/create_plastiverse_animation.py`, "
+        "2026-11-18. This build copies them and does not run that script.",
         "",
         "## World and California raster",
         "",
@@ -758,6 +787,7 @@ def main(argv: list[str] | None = None) -> int:
     logo.resize((282, small_h), Image.Resampling.LANCZOS).save(
         OUT / "logo_282.webp", "WEBP", quality=LOGO_Q, method=6
     )
+    write_motion_assets(OUT)
 
     for src, name in (
         (BLANKET_SIDECAR, "blanket.png.json"),

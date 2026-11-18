@@ -46,8 +46,9 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-# Design prototypes (Impeccable sketches) are throwaway scripts, not production code.
-extend-exclude = [".impeccable"]
+# Design prototypes (Impeccable sketches) and the owner's logo-animation generator (needs ffmpeg,
+# writes the landing's MP4 source) are design tools, not production code.
+extend-exclude = [".impeccable", "src/create_plastiverse_animation.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]

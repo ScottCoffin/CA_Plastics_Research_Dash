@@ -24,11 +24,6 @@ Last updated: 2026-11-16.
 3. On the landing, check the "Explore the data" header link and the line under the regions map.
 - **Done when:** you reply "explore OK" or list changes.
 
-### H35. Decide the global expert profile basics (GX-1, about 10 minutes, before PLAT-4 finishes)
-Read `docs/GLOBAL_EXPERTS_ASSESSMENT.md` (section "What the owner needs to decide") and reply with your choices for
-GX-THRESHOLD, GX-SEO, GX-PHOTOS and GX-AUTHORS (`.agent/QUESTIONS.md`), or "defaults OK".
-- **Done when:** the four rows are answered; the R2 write token is a later step (GX-3).
-
 ### H31 is done (2026-11-17): the owner revoked the exposed OpenAI key; the new key is only in the ignored `.env`.
 
 ### H27 is done (2026-11-17): HTTPS is enforced and http:// redirects to https://.
@@ -225,6 +220,7 @@ come with its own Streamlit app and run command here.
 
 ## Done
 
+- H35 (2026-11-18): GX decisions answered in the assessment: threshold 3+ works, top-20,000 SEO pages, licensed Wikidata photos shown automatically, OpenAlex author records as they are; R2 token: remind at GX-3.
 - H33 (2026-11-18): owner approved the Global data app prototype ("global app OK"); GA-2 builds it.
 - H29 (2026-11-17): Buttondown secret added; digest workflow tested by the owner.
 - H32 (2026-11-17): sitemap resubmitted after the /california move.
