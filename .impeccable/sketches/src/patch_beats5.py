@@ -30,17 +30,17 @@ caps = '''<div class="cap c0 dk" data-a=".45" data-b="1.45"><h1>Plastic is every
 <div class="cap c2 dk" data-a="8.5" data-b="10.5"><h2>Connected, studies become knowledge.</h2></div>
 <div class="cap c2b bot dk" data-a="9.2" data-b="10.5"><p>Grouped by what they study and linked by who did the work, scattered results start to form a picture.</p></div>
 <div class="cap cb dk" data-a="11.6" data-b="12.9"><h2>Put to work, knowledge becomes understanding.</h2></div>
-<div class="cap c3s" data-a="14.55" data-b="17.65"><p class="src">Plastics-pollution research works per year, worldwide. OpenAlex, query __QV__, fetched __FETCHED__. One dot = <span id="unit"></span> works.</p></div>
-<div class="cap c3" data-a="16.3" data-b="17.65"><h2>Plastic pollution research is expanding at an unprecedented pace.</h2><p>The world needs innovative tools to turn data into knowledge and solutions to effectively react to this global crisis.</p></div>
-<div class="cap c5" data-a="18.9" data-b="20.5"><h2>See where the evidence is, worldwide, and where it is missing.</h2><p data-a="19.4">A live evidence map sorts every study by what it examines and where.</p></div>
-<div class="cap c4" data-a="21.7" data-b="23.2"><h2>See who works with whom, and forge new connections.</h2><p data-a="22.2">Collaboration networks show the research communities and the people who bridge them.</p><p class="src" data-a="22.2">Illustrative network layout.</p></div>
-<div class="cap c6" data-a="24.4" data-b="25.6"><h2>The problem is global.</h2><p data-a="24.85">Plastics research now comes from almost every country.</p><p class="src" data-a="24.85">Illustrative shading until the global country counts are built.</p></div>
-<div class="cap c7" data-a="26.7" data-b="99"><h2>Local knowledge and connections matter.</h2><p data-a="27.1">Regional atlases zoom in on the people, monitoring, funding and policy of one place. Powered by local experts and community leaders.</p><p class="cta" data-a="27.45"><a class="btn solid" href="#ambassadors">Join the movement, and become a local ambassador <svg width="14" height="10" viewBox="0 0 14 10" aria-hidden="true"><path d="M1 5h11M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p><p class="sep" data-a="27.8">California is live; Norway is next.</p></div>
+<div class="cap c3s" data-a="17.45" data-b="20.55"><p class="src">Plastics-pollution research works per year, worldwide. OpenAlex, query __QV__, fetched __FETCHED__. One dot = <span id="unit"></span> works.</p></div>
+<div class="cap c3" data-a="19.2" data-b="20.55"><h2>Plastic pollution research is expanding at an unprecedented pace.</h2><p>The world needs innovative tools to turn data into knowledge and solutions to effectively react to this global crisis.</p></div>
+<div class="cap c5" data-a="21.8" data-b="23.4"><h2>See where the evidence is, worldwide, and where it is missing.</h2><p data-a="22.3">A live evidence map sorts every study by what it examines and where.</p></div>
+<div class="cap c4" data-a="24.6" data-b="26.1"><h2>See who works with whom, and forge new connections.</h2><p data-a="25.1">Collaboration networks show the research communities and the people who bridge them.</p><p class="src" data-a="25.1">Illustrative network layout.</p></div>
+<div class="cap c6" data-a="27.3" data-b="28.5"><h2>The problem is global.</h2><p data-a="27.75">Plastics research now comes from almost every country.</p><p class="src" data-a="27.75">Illustrative shading until the global country counts are built.</p></div>
+<div class="cap c7" data-a="29.6" data-b="99"><h2>Local knowledge and connections matter.</h2><p data-a="30">Regional atlases zoom in on the people, monitoring, funding and policy of one place. Powered by local experts and community leaders.</p><p class="cta" data-a="30.35"><a class="btn solid" href="#ambassadors">Join the movement, and become a local ambassador <svg width="14" height="10" viewBox="0 0 14 10" aria-hidden="true"><path d="M1 5h11M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p><p class="sep" data-a="30.7">California is live; Norway is next.</p></div>
 '''
 t = t[:a] + caps + t[b:]
 
 # styles
-rep("#story{position:relative;height:1650vh}", "#story{position:relative;height:2800vh}")
+rep("#story{position:relative;height:1650vh}", "#story{position:relative;height:3080vh}")
 rep(".c1,.c2,.cb,.c4,.c5,.c7{max-width:min(36vw,560px)}",
     ".c1,.c1n,.c2,.cb,.c4,.c5,.c7,.c2b{max-width:min(36vw,560px)}\n"
     ".sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}\n"

@@ -3,7 +3,7 @@ from playwright.async_api import async_playwright
 from PIL import Image, ImageDraw
 
 url, outdir, vw, vh = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4])
-TOT = 28.6
+TOT = 31.5
 UNITS = [float(x) for x in sys.argv[5].split(",")]
 
 

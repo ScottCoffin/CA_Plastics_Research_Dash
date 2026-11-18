@@ -1,10 +1,10 @@
 // ---------- story ----------
 // Timeline in scroll units (about 0.95 screen heights each). TOT is the story length. Tune dwell here.
-const TOT=28.6;
+const TOT=31.5;
 const TU={move:[.25,.75],pop:[1.3,1.9],gdis:[2.5,3.0],U:[2.95,3.7],stack:[5.6,6.4],papersOut:[7.0,7.3],
  K:[7.3,8.1],Kl:[8.3,8.7,10.3,10.5],B:[10.5,11.2],glow:[12.1,12.6],burst:[12.6,13.2],
- C:[13.7,14.4],Cax:[14.5,14.8,17.6,17.75],Ann:[14.95,15.85],Ev:[17.8,18.5],Evg:[18.3,18.55,20.4,20.55],Nw:[20.6,21.3],Nwl:[21.1,21.4,23.1,23.25],spring:[20.9,21.3,23.0,23.35],
- Mp:[23.35,24.0],Mpu:[23.8,24.1,25.5,25.65],Z:[25.65,26.3],Zu:[26.1,26.4]};
+ C:[13.4,15.6],Cax:[17.4,17.7,20.5,20.65],Ann:[17.85,18.75],Ev:[20.7,21.4],Evg:[21.2,21.45,23.3,23.45],Nw:[23.5,24.2],Nwl:[24,24.3,26,26.15],spring:[23.8,24.2,25.9,26.25],
+ Mp:[26.25,26.9],Mpu:[26.7,27,28.4,28.55],Z:[28.55,29.2],Zu:[29,29.3]};
 const PD=.4/TOT,DD=.45/TOT;
 const T={};for(const k in TU)T[k]=TU[k].map(v=>v/TOT);
 const stage=document.getElementById("stage"),cv=document.getElementById("cv"),g=cv.getContext("2d"),story=document.getElementById("story");
@@ -12,7 +12,7 @@ const total=VALS.reduce((a,b)=>a+b,0);
 const UNIT=Math.max(50,Math.round(total/900/10)*10);
 document.getElementById("unit").textContent=UNIT;
 const colDots=VALS.map(v=>Math.round(v/UNIT));
-const N=colDots.reduce((a,b)=>a+b,0);
+const N=colDots.reduce((a,b)=>a+b,0),CI0=Math.max(0,colDots.findIndex(v=>v>0));
 const TEAL=[67,100,135],TEAL2=[134,169,191],TEAL1=[197,234,223],MATCH=[250,107,104],YEL=[255,244,154],GOLD=[226,183,20];
 const rng=s=>()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296};
 const rnd=rng(42);
@@ -158,7 +158,7 @@ function layout(){
  if(CH.txt)colDots.forEach((dd2,i)=>{const X=x0+i*stride+stride/2;if(X<=CH.txt.r&&dd2>0)gap=Math.min(gap,(base-CH.txt.b)/Math.ceil(dd2/3));});
  Object.assign(CH,{x0,x1,base,stride,gap,chartTop});
  const cs=[];colDots.forEach((d2,ci)=>{for(let k=0;k<d2;k++)cs.push([x0+ci*stride+stride/2+((k%3)-1)*gap,base-(Math.floor(k/3)+.5)*gap,ci]);});
- order.forEach(([,i],j)=>{const s=cs[j]||cs[cs.length-1];P[i].C=[s[0],s[1]];P[i].ci=s[2];});
+ order.forEach(([,i],j)=>{const s=cs[j]||cs[cs.length-1];P[i].C=[s[0],s[1]];P[i].ci=s[2];P[i].cj=j/N;});
  annLayout();
  // Ev: global evidence grid (illustrative weights)
  const ROWS=narrow?["occur.","effects","methods","fate","solutions"]:["occurrence","effects","methods","fate and transport","solutions"],COLS=narrow?["ocean","fresh","soil","air","biota","people"]:["ocean","freshwater","soil","air","food and biota","people"];
@@ -232,7 +232,7 @@ const RAYS=Array.from({length:40},(_,i)=>[i/40*Math.PI*2+rnd()*.08,.6+rnd()*.6])
 const FD=.25/TOT;let T0=0,lastPluck=0;
 function lerpRect(a,b,m){return{x:a.x+(b.x-a.x)*m,y:a.y+(b.y-a.y)*m,w:a.w+(b.w-a.w)*m,h:a.h+(b.h-a.h)*m};}
 function frame(t){
- const p=reduce?16.6/TOT:progress();
+ const p=reduce?19.5/TOT:progress();
  const bp=seg(p,...T.burst),litNow=bp>=1;
  stage.style.background=css(litNow?LT:DK);stage.classList.toggle("lit",litNow);
  hdr.classList.toggle("on-dark",bp<.8&&story.getBoundingClientRect().bottom>60);
@@ -290,7 +290,7 @@ function frame(t){
  const pos=new Map(),yel=Math.max(gl,bp);
  for(const q of P){
   if(!q.c)continue;
-  const st=(q.ci/YEARS.length)*(.5/TOT);
+  const st=q.cj*(1.4/TOT);
   const ph=q.c.ph,a0=ph.k0+q.thr*KD*.7;let x,y;
   if(p>=ph.c0)[x,y]=shardPt(q.c,q.sh,q.lx,q.ly);else{const f=q.c.xf,K=f.k*f.s;x=f.X+(q.lx*f.co-q.ly*f.si)*K;y=f.Y+(q.lx*f.si+q.ly*f.co)*K;}
   const dm=eo(seg(p,a0,a0+.7/TOT))*.55;
