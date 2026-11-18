@@ -18,8 +18,8 @@ MAIL-1's selection is fixed and its Monday cron is back on, so CI is green again
 
 ## In flight / next (in this order)
 1. (PLAT-1 done.)
-2. **PLAT-2a global data**: `scripts/build_world_map.py` and `scripts/build_global_counts.py`
-   (spec section 6; at most 60 credits; never paid filters).
+2. (PLAT-2a done: world.json, global_counts.json; 40 credits.) Release
+   `design-plane-poster-2026-11-17` preserves the pre-PLAT-1 site (owner request).
 3. **PLAT-2 build the landing** to `docs/PLAT_2_LANDING_SPEC.md`.
 4. Then PLAT-2c (`/ambassadors`, with the role list above), PLAT-2b (gated on H30), VD-SM,
    PLAT-3, PLAT-4, NOR-1..5.

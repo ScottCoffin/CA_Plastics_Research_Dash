@@ -1,0 +1,28 @@
+{
+ "type": "Topology",
+ "transform": {"scale": [0.1, 0.1], "translate": [-180, -90]},
+ "arcs": [
+  [[1800, 900], [100, 0], [0, 100], [-100, 0], [0, -100]],
+  [[3500, 900], [-3400, 0], [0, 100], [3400, 0], [0, -100]],
+  [[1800, 100], [100, 0], [0, 100], [-100, 0], [0, -100]],
+  [[1800, 900], [1, 0], [0, 1], [-1, 0], [0, -1]],
+  [[560, 1220], [100, 0], [0, 100], [-100, 0], [0, -100]]
+ ],
+ "objects": {
+  "countries": {
+   "type": "GeometryCollection",
+   "geometries": [
+    {"type": "Polygon", "id": "250", "properties": {"name": "Testland"}, "arcs": [[0]]},
+    {"type": "MultiPolygon", "id": "840", "properties": {"name": "Seamland"}, "arcs": [[[1]]]},
+    {"type": "Polygon", "id": "010", "properties": {"name": "Antarctica"}, "arcs": [[2]]},
+    {"type": "Polygon", "id": "696", "properties": {"name": "Speckland"}, "arcs": [[3]]}
+   ]
+  },
+  "states": {
+   "type": "GeometryCollection",
+   "geometries": [
+    {"type": "Polygon", "id": "06", "properties": {"name": "California"}, "arcs": [[4]]}
+   ]
+  }
+ }
+}

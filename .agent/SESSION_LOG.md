@@ -179,3 +179,4 @@
 | 2026-11-17 | PLAT-2 design | Landing scroll story approved (Plastiverse Live, logo palette); build spec docs/PLAT_2_LANDING_SPEC.md, direction contract v2, ADR-PLAT2-SPECTRAL-STORY; agent state tracked for cross-machine handoff | 1ed81e31, 2e53fb02, this commit |
 | 2026-11-17 | MAIL-1 fix | Digest "new this week" also requires pub_date within 60 days (19 works, not 1,565); Monday cron re-enabled (no-op without secret); owner accepted PLAT2 defaults (ambassador page describes the role) | this commit |
 | 2026-11-17 | PLAT-1 | California moved to /california/ (clean break, no redirects; expert.html and SEO pages under site/california/; search, feed, ntfy, llms retargeted); 6/6 UX tasks, axe 0 on 14 routes | this commit |
+| 2026-11-17 | PLAT-2a | World geometry and global country counts for the landing (40 credits); release design-plane-poster-2026-11-17 cut before the PLAT-1 deploy (owner request) | this commit |
