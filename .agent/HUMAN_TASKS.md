@@ -18,47 +18,14 @@ Last updated: 2026-11-16.
 
 ## Do now
 
-### H27. Finish GitHub Pages HTTPS enforcement (site restored; 2 minutes after certificate issuance)
-Pages and the `plastiverse.live` custom domain were restored on 2026-11-16. CI, the Pages
-workflow and the live HTTPS site now pass. GitHub still reports the certificate as
-`dns_changed`, `https_enforced: false`, and plain HTTP returns 200 instead of redirecting.
-1. On GitHub: repository > **Settings** > **Pages**.
-2. Wait until the certificate/DNS check finishes, then tick **Enforce HTTPS**.
-   Checked 2026-11-16 after your "HTTPS enforced": GitHub still says "The certificate has not
-   finished being issued" (state `dns_changed`), so the box cannot be ticked yet and the agent's
-   API attempt was refused. Re-check in a few hours; the agent retries at each session start.
-- **Done when:** `http://plastiverse.live/` redirects to HTTPS. Tell the agent "HTTPS enforced"
-  and it will confirm the API state and redirect.
-
-### H29. Set up Buttondown for the weekly email digest (MAIL-1, about 10 minutes)
-The weekly Monday digest is built by a GitHub Action and sent through Buttondown.
-1. Go to https://buttondown.com and create a free account (newsletter name, for example
-   "Plastiverse California"; sender address theplastiverse@gmail.com).
-2. In Buttondown: **Settings** > **API** (or **Programming**), copy the API key.
-3. On GitHub: repository > **Settings** > **Secrets and variables** > **Actions** >
-   **New repository secret**. Name: `BUTTONDOWN_API_KEY`. Value: the key. Save.
-4. Optional: in Buttondown, copy your public subscribe page link and tell the agent; it will
-   add it to the "Get updates" panel.
-- **Done when:** you tell the agent "Buttondown ready". Since 2026-11-17 the Monday schedule is
-  on, so the digest goes out automatically the first Monday after the secret exists (about 6 to
-  7 a.m. Pacific). Until you invite other subscribers, that first send reaches only you and serves
-  as the test. To see one sooner: GitHub > **Actions** > **Weekly digest** > **Run workflow**.
-
-### H32. Resubmit the sitemap after the /california move (PLAT-1, 2 minutes)
-PLAT-1 moved every California page to `https://plastiverse.live/california/...` with no redirects,
-so search engines must re-crawl.
-1. Wait until the deploy of the PLAT-1 commit is live (open https://plastiverse.live/california/).
-2. Google Search Console > **Sitemaps** > submit `https://plastiverse.live/sitemap.xml` again.
-- **Done when:** Search Console shows the new submission date. Tell the agent "sitemap resubmitted".
+### H33. Look at the Global data app prototype (GA-1, about 10 minutes)
+The design for the global, non-region pages is ready as a working prototype (real OpenAlex data).
+1. In a terminal at the repo root: `py -3.14 -m http.server 8853 --bind 127.0.0.1`
+2. Open http://127.0.0.1:8853/.impeccable/sketches/global_app.html (also try a phone-width window).
+3. Try: pick a continent and a country in the bar under the header, open the California callout, switch tabs.
+- **Done when:** you reply "global app OK" (the agent then writes the build spec for the Framework pages, GA-2), or list changes.
 
 ### H31 is done (2026-11-17): the owner revoked the exposed OpenAI key; the new key is only in the ignored `.env`.
-
-### H30. Approve the global evidence-map cells (PLAT-2b, 10 minutes)
-The landing page and its live evidence map sort every study into 5 x 6 cells.
-1. Open `docs/PLAT_2_LANDING_SPEC.md`, section 4.6 (rows and columns are listed there and in
-   `.agent/QUESTIONS.md` row PLAT2-EVIDENCE-CELLS).
-2. Reply "cells OK", or list the rows and columns you want instead (for example add "sediment").
-- **Done when:** the agent records your answer in QUESTIONS; PLAT-2b then becomes eligible.
 
 ### H27 is done (2026-11-17): HTTPS is enforced and http:// redirects to https://.
 
@@ -253,6 +220,10 @@ come with its own Streamlit app and run command here.
 ---
 
 ## Done
+
+- H29 (2026-11-17): Buttondown secret added; digest workflow tested by the owner.
+- H32 (2026-11-17): sitemap resubmitted after the /california move.
+- H30 (2026-11-17): evidence-map cells approved; PLAT-2b is eligible.
 - **H26 Land to Sea Microplastics Consortium** (2026-11-16): logo permission confirmed with the
   consortium; NET-1-NAME "Land to Sea Microplastics Consortium", NET-1-SURFACES keep.
 - **VD-D9** (2026-11-16): keep the absolute 1.1 s Overview LCP gate; try inlining the Overview

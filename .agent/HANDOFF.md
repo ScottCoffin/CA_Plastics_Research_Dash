@@ -1,40 +1,34 @@
-# Handoff — 2026-11-17 (night) — MAIL-1, PLAT-1, PLAT-2a, PLAT-2c, PLAT-2 done; next VD-SM
+# Handoff — 2026-11-18 — GA-1 Global data app design done; next H33 owner look, then GA-2
 
 ## State in one paragraph
-The global landing design is approved (ADR-PLAT2-SPECTRAL-STORY-2026-11-17); build spec
-`docs/PLAT_2_LANDING_SPEC.md`, prototype `.impeccable/sketches/spectral_story.html` (sources and
-rebuild in `.impeccable/sketches/src/README.md`). The owner accepted the PLAT2 defaults on
-2026-11-17 (QUESTIONS rows PLAT2-RESEARCH-LINE, -FONTS, -NETWORK, -AMBASSADORS); the ambassador
-placeholder must also describe the role: QC local institutions and experts, identify local
-community groups and networks, populate local monitoring datasets, identify local policy goals.
-MAIL-1's selection is fixed and its Monday cron is back on, so CI is green again.
+The owner asked for the Global site's interactive app (non-region data) designed with Impeccable on the
+landing's post-story look; the landing stays untouched and California's redesign is deferred. GA-1 is done:
+the owner chose the "Scope ladder" structure with a steer (no desktop sidebar, local-atlas indicator inside the
+map and the table, bigger world map). The working prototype `.impeccable/sketches/global_app.html` uses real
+OpenAlex data (ADR-GA-LAYOUT-2026-11-18). Finish review: fix (8 items) then ship on all 8; axe 0 on 6 views
+at 1440 and 390; DESIGN.md merged (owner choice) with the app shell, type steps and components.
 
 ## Done this checkpoint
-- MAIL-1 (`2ba73047`): digest selection requires a recent `pub_date` (19 works, not 1,565); Monday
-  cron on (no-op without the secret).
-- PLAT-1: California moved to `/california/` with a clean break (ADR-PLAT1-LAYOUT-2026-11-17,
-  `docs/PLAT_1_VERIFICATION.md`). Root `framework/src/index.md` is a placeholder until PLAT-2.
-  Local assembled deploy: 6/6 UX tasks, axe 0 and no console errors on 14 routes. Owner: H32.
-- PLAT-2a (`880973c1`), PLAT-2c (`a9e3a837`, live), release `design-plane-poster-2026-11-17` (pre-move site).
-- PLAT-2: the landing (`docs/PLAT_2_VERIFICATION.md`, ADR-PLAT2-BUILD). check_plat2 0 failures; finish
-  review: story matches the prototype, 6 fixes applied; DESIGN.md written.
+- GA-1: decision round (3 dealt structures), direction contract `.impeccable/surfaces/impeccable-sketches-global-app-html.md`,
+  prototype + data module (`.impeccable/sketches/src/build_global_app_data.py`, `fetch_global_app_sample.py`:
+  35 requests, 350 credits, raw in ignored `data/raw/global_app_sample/`), finish review, DESIGN.md + design.json.
+- Owner answers recorded: H29 Buttondown done, H32 sitemap resubmitted, H30 cells approved (PLAT-2b eligible),
+  PLAT2-NETWORK "remove the illustrative label" (queued as PLAT-2d; landing edit held).
+- Owner rule (memory): every spawned agent runs on Haiku (`model: haiku`), Impeccable agents included.
 
 ## In flight / next (in this order)
-1. (Landing verified live: check_plat2 0 failures; Lighthouse mobile 93, LCP 2.3 s, CLS 0.)
-2. VD-SM: carry the Plastiverse Live system into the California pages. `DESIGN.md` (repo root, sidecar
-   `.impeccable/design.json`) lists what is platform-wide; move the landing's font faces into
-   `observablehq.config.js` then. Restyle `/ambassadors` in the new system.
-3. PLAT-2b (gated on H30), PLAT-3, PLAT-4, NOR-1..5.
+1. H33: owner looks at the prototype; on "global app OK", GA-2 writes the build spec and builds the Framework pages.
+2. PLAT-2b (eligible now: live evidence-map counts), PLAT-2d when landing edits are allowed again.
+3. VD-SM (reuse the GA-1 shell for California), PLAT-3, PLAT-4, NOR-1..5.
 
 ## Open findings
-- Daily-ingest plan refusals returned as HTTP 429 still defer without an alert.
+- `tests/test_opc_actions_em17.py::test_committed_json_is_not_stale` fails locally only because of the owner's
+  uncommitted edit in `curation/opc_mapping_review.csv` (H28 in progress); rebuild `opc_actions.json` after H28.
+- Global query precision: recent-works samples include off-topic titles (for example "viral plasticity"); the
+  prototype hides titles without "plastic". Country institution lists include foreign co-author institutions.
+- DESIGN.md vs prototype: header sticky vs recorded fixed; mint text on the dark tooltip (Mint After Dark wording).
 - `.agent/MEMORY.md` is about 280 lines (target 200); compact it at a quiet checkpoint.
-- Unused prototype images are untracked in `.impeccable/sketches/`; not needed for the build.
-- Landing follow-ups: two canvas hex literals in `landing_story.js` (California zoom cells); `papers.json`
-  licence sentences truncated at source (`credits.json`); p00 has no title in `credits.json`.
 
 ## Owner actions (one line each)
-- H30: approve or edit the evidence-map cells (spec section 4.6), reply "cells OK".
-- H29: create the Buttondown account and secret, then say "Buttondown ready" (first Monday send reaches only you).
+- H33: open the prototype (steps in HUMAN_TASKS) and reply "global app OK" or list changes.
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).
-- H32: after the PLAT-1 deploy, resubmit `https://plastiverse.live/sitemap.xml` in Search Console.

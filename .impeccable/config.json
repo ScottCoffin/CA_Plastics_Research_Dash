@@ -20,6 +20,18 @@
         ],
         "createdAt": "2026-11-17T08:18:52.285Z",
         "reason": "owner chose the Plane Poster world (paper ground) on the Impeccable decision page, 2026-11-16; ADR-VD25-PLANE-POSTER-2026-11-16"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "grotesk\",system-ui,sans-serif",
+        "createdAt": "2026-11-18T15:54:02.378Z",
+        "reason": "agent: font shorthand fallback stack parsed as a family; Schibsted Grotesk is DESIGN.md body font"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "mono\",monospace",
+        "createdAt": "2026-11-18T15:54:02.514Z",
+        "reason": "agent: font shorthand fallback stack parsed as a family; Martian Mono is DESIGN.md data font"
       }
     ]
   }

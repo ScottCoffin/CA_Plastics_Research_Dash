@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-18T06:26:52+00:00",
+  "generatedAt": "2026-11-18T16:36:30+00:00",
   "title": "Design System: Plastiverse Live",
   "extensions": {
     "colorMeta": {
@@ -338,6 +338,18 @@
       "data-cell": {
         "displayName": "Data Cell",
         "purpose": "counts inside evidence cells."
+      },
+      "headline-page": {
+        "displayName": "Headline Page",
+        "purpose": "the app's page heading, which names the scope (world, a continent, a country). Platform-wide."
+      },
+      "headline-panel": {
+        "displayName": "Headline Panel",
+        "purpose": "the heading of each view panel in the app, 6 px above its lede."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "secondary metadata, mostly ink-2: continent column, works author line, panel-box ledes, ranked-bar names, filter chips, link-actions (600 coral-ink)."
       }
     },
     "shadows": [
@@ -382,13 +394,28 @@
         "name": "reduced-motion",
         "value": "animation: none; transition: none",
         "purpose": "prefers-reduced-motion: all animation stops; the story becomes stills."
+      },
+      {
+        "name": "scope-zoom",
+        "value": "viewBox tween 450ms, t => 1 - (1 - t)^3",
+        "purpose": "App map zooming to a new scope; callouts hide during the move and re-place after. Instant under reduced motion."
+      },
+      {
+        "name": "app-ease",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "App: scope drawer slide (.3s) and out-of-scope country fade to 22% (.35s)."
+      },
+      {
+        "name": "callout-fade",
+        "value": "opacity .2s",
+        "purpose": "App map callouts and leaders hiding and showing."
       }
     ],
     "breakpoints": [
       {
         "name": "stack",
         "value": "860px",
-        "purpose": "Grids stack, captions full width, header text links hide."
+        "purpose": "Grids stack, captions full width, header text links hide. App: the scope ladder and find box collapse into one Scope button opening the left drawer; the country table drops its continent, weekly and bar columns."
       },
       {
         "name": "table-compact",
@@ -399,6 +426,21 @@
         "name": "header-min",
         "value": "430px",
         "purpose": "Header hides the solid Get updates button."
+      },
+      {
+        "name": "app-stack",
+        "value": "1100px",
+        "purpose": "App: head and two-column panel grids stack; find box narrows to 220px."
+      },
+      {
+        "name": "map-narrow",
+        "value": "640px",
+        "purpose": "App map card's own width: callouts give way to the atlas strip (container-measured)."
+      },
+      {
+        "name": "chart-compact",
+        "value": "560px",
+        "purpose": "Column chart's own width: 70% height, ten-year ticks (container-measured)."
       }
     ]
   },
@@ -466,6 +508,62 @@
       "description": "Landing-only caption on the black stage: on-dark regular-weight headline and a mono source line.",
       "html": "<div class=\"ds-cap\"><h2>Microplastics were first described in the ocean more than 50&nbsp;years ago.</h2><p class=\"src\">Carpenter et al. (1972), Science 178:749.</p></div>",
       "css": ".ds-cap { background: var(--pv-night); padding: 32px; font-family: var(--pv-sans); max-width: 640px; } .ds-cap h2 { margin: 0; font-weight: 400; font-size: clamp(30px, 3.9vw, 56px); line-height: 1.03; letter-spacing: -.03em; color: var(--pv-on-dark); text-wrap: balance; } .ds-cap .src { margin: 14px 0 0; font-family: var(--pv-mono); font-size: 11px; color: var(--pv-mint); }"
+    },
+    {
+      "name": "Scope Ladder Bar",
+      "kind": "nav",
+      "refersTo": "scope-bar",
+      "description": "Sticky 52px paper bar: World > continent > country disclosure steps with mono counts, a coral-tinted live-atlas step, and the Find a country field.",
+      "html": "<nav class=\"ds-scope\" aria-label=\"Scope\"><ol class=\"ds-lad\"><li><button type=\"button\" class=\"ds-step\" aria-expanded=\"false\">World <span class=\"ds-n\">412,880</span></button></li><li><button type=\"button\" class=\"ds-step\" aria-expanded=\"false\">North America <span class=\"ds-n\">98,410</span></button></li><li><button type=\"button\" class=\"ds-step cur\" aria-expanded=\"false\" aria-current=\"location\">United States <span class=\"ds-n\">81,032</span></button></li><li><a class=\"ds-step atlas\" href=\"#\"><i class=\"ds-sw\"></i>California <span class=\"ds-n\">9,204</span><span class=\"ds-go\">Open live atlas <svg width=\"14\" height=\"10\" viewBox=\"0 0 14 10\" aria-hidden=\"true\"><path d=\"M1 5h11M8 1l4 4-4 4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg></span></a></li></ol><input class=\"ds-find\" type=\"search\" placeholder=\"Find a country\" aria-label=\"Find a country\"></nav>",
+      "css": ".ds-scope { display: flex; align-items: center; gap: 16px; height: 52px; padding: 0 16px; background: var(--pv-paper); color: var(--pv-ink); border-bottom: 1px solid var(--pv-line); font-family: var(--pv-sans); } .ds-lad { display: flex; align-items: center; gap: 4px; flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none; } .ds-lad li { display: flex; align-items: center; gap: 4px; } .ds-lad li + li::before { content: ''; width: 7px; height: 7px; border-top: 1.2px solid var(--pv-ink-2); border-right: 1.2px solid var(--pv-ink-2); transform: rotate(45deg); margin: 0 10px 0 6px; } .ds-step { border: 1px solid transparent; background: none; color: inherit; height: 36px; padding: 0 10px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font: 400 15px var(--pv-sans); white-space: nowrap; text-decoration: none; } .ds-step:hover { border-color: var(--pv-line); } .ds-step[aria-expanded='true'] { border-color: var(--pv-ink); } .ds-step.cur { font-weight: 600; } .ds-step:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; } .ds-n { font: 400 11px var(--pv-mono); color: var(--pv-ink-2); } .ds-step.atlas { background: color-mix(in srgb, var(--pv-coral) 7%, var(--pv-paper)); border-color: color-mix(in srgb, var(--pv-coral) 40%, var(--pv-paper)); } .ds-step.atlas:hover { background: color-mix(in srgb, var(--pv-coral) 14%, var(--pv-paper)); } .ds-sw { width: 14px; height: 14px; background: var(--pv-coral); display: inline-block; } .ds-go { font-size: 13px; font-weight: 600; color: var(--pv-coral-ink); display: inline-flex; gap: 6px; align-items: center; } .ds-find { width: 280px; height: 36px; border: 1px solid var(--pv-line); background: var(--pv-ground); padding: 0 12px; font: 400 15px var(--pv-sans); color: var(--pv-ink); border-radius: 0; } .ds-find:focus { border-color: var(--pv-ink); background: var(--pv-paper); } .ds-find:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 2px; } .ds-find::placeholder { color: var(--pv-ink-2); }"
+    },
+    {
+      "name": "View Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "Text tablist on a hairline; the selected tab gets a 2px ink underline. Arrow keys, Home and End move.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"Views\"><button type=\"button\" role=\"tab\" class=\"ds-tab\" aria-selected=\"true\">Countries</button><button type=\"button\" role=\"tab\" class=\"ds-tab\" aria-selected=\"false\" tabindex=\"-1\">Evidence map</button><button type=\"button\" role=\"tab\" class=\"ds-tab\" aria-selected=\"false\" tabindex=\"-1\">Trend</button><button type=\"button\" role=\"tab\" class=\"ds-tab\" aria-selected=\"false\" tabindex=\"-1\">Network</button></div>",
+      "css": ".ds-tabs { display: flex; gap: 28px; border-bottom: 1px solid var(--pv-line); font-family: var(--pv-sans); } .ds-tab { border: 0; background: none; padding: 12px 0 11px; font: 400 15px var(--pv-sans); color: var(--pv-ink-2); cursor: pointer; box-shadow: inset 0 -2px transparent; } .ds-tab:hover { color: var(--pv-ink); } .ds-tab[aria-selected='true'] { color: var(--pv-ink); box-shadow: inset 0 -2px var(--pv-ink); } .ds-tab:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: -2px; }"
+    },
+    {
+      "name": "Data Table",
+      "kind": "custom",
+      "refersTo": "table-row",
+      "description": "Sortable 44px-row table: mono headers over an ink rule, two-tone works bar, and the coral-tinted live-atlas sub-row with a ladder connector.",
+      "html": "<div class=\"ds-tw\"><table class=\"ds-t\"><thead><tr><th><span>#</span></th><th><span>Country</span></th><th class=\"n\" aria-sort=\"descending\"><button type=\"button\">Works <svg width=\"8\" height=\"8\" viewBox=\"0 0 8 8\" aria-hidden=\"true\"><path d=\"M4 7V1M1 4l3 3 3-3\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\"/></svg></button></th><th><span>All works, last 5 y darker</span></th></tr></thead><tbody><tr class=\"row\"><td class=\"rk\">1</td><td>China</td><td class=\"n\">96,214</td><td><div class=\"ds-bar\" style=\"width:100%\"><i style=\"width:58%\"></i></div></td></tr><tr class=\"row\"><td class=\"rk\">2</td><td>United States</td><td class=\"n\">81,032</td><td><div class=\"ds-bar\" style=\"width:84%\"><i style=\"width:41%\"></i></div></td></tr><tr class=\"atlas\"><td></td><td colspan=\"3\"><div class=\"ds-ac\"><i class=\"ds-sw\"></i><b>California</b><small>live regional atlas, daily build</small><a class=\"ds-go\" href=\"#\">Open atlas</a></div></td></tr></tbody></table></div>",
+      "css": ".ds-tw { border: 1px solid var(--pv-line); background: var(--pv-paper); overflow-x: auto; } .ds-t { width: 100%; border-collapse: collapse; font: 400 15px var(--pv-sans); color: var(--pv-ink); } .ds-t th { font: 400 11px var(--pv-mono); color: var(--pv-ink-2); text-align: left; border-bottom: 1px solid var(--pv-ink); padding: 0; white-space: nowrap; } .ds-t th > span, .ds-t th > button { display: flex; align-items: center; gap: 6px; width: 100%; padding: 12px 14px 9px; border: 0; background: none; font: inherit; color: inherit; } .ds-t th.n > button { justify-content: flex-end; } .ds-t th > button { cursor: pointer; } .ds-t th > button:hover, .ds-t th[aria-sort] > button { color: var(--pv-ink); } .ds-t th > button:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: -3px; } .ds-t td { padding: 0 14px; height: 44px; border-bottom: 1px solid var(--pv-line); } .ds-t td.n { font: 400 12px var(--pv-mono); font-variant-numeric: tabular-nums; text-align: right; } .ds-t td.rk { font: 400 11px var(--pv-mono); color: var(--pv-ink-2); width: 48px; } .ds-t tr.row { cursor: pointer; } .ds-t tr.row:hover td { background: color-mix(in srgb, var(--pv-slate) 6%, var(--pv-paper)); } .ds-bar { position: relative; height: 10px; background: var(--pv-slate-2); min-width: 2px; } .ds-bar i { position: absolute; inset: 0 auto 0 0; background: var(--pv-slate); } .ds-t tr.atlas td { background: color-mix(in srgb, var(--pv-coral) 7%, var(--pv-paper)); height: 48px; } .ds-t tr.atlas:hover td { background: color-mix(in srgb, var(--pv-coral) 12%, var(--pv-paper)); } .ds-ac { display: flex; align-items: center; gap: 10px; padding-left: 22px; position: relative; } .ds-ac::before { content: ''; position: absolute; left: 6px; top: -24px; width: 10px; height: 31px; border-left: 1px solid var(--pv-ink-2); border-bottom: 1px solid var(--pv-ink-2); } .ds-ac b { font-weight: 600; } .ds-ac small { font-size: 13px; color: var(--pv-ink-2); } .ds-sw { width: 14px; height: 14px; background: var(--pv-coral); display: inline-block; } .ds-go { font-size: 14px; font-weight: 600; color: var(--pv-coral-ink); } .ds-go:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }"
+    },
+    {
+      "name": "Map Callout",
+      "kind": "custom",
+      "refersTo": "map-callout",
+      "description": "Linked atlas box placed in open space on the pixel map, tied to its region by a 1px leader ending in a dot; live is coral-tinted, preparation dashed.",
+      "html": "<div class=\"ds-mapdemo\"><a class=\"ds-co live\" href=\"#\"><b><i class=\"ds-sw l\"></i>California</b><small>live atlas, <span class=\"ds-m\">9,204</span> works</small><span class=\"ds-go\">Open atlas <svg width=\"14\" height=\"10\" viewBox=\"0 0 14 10\" aria-hidden=\"true\"><path d=\"M1 5h11M8 1l4 4-4 4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg></span></a><a class=\"ds-co\" href=\"#\"><b><i class=\"ds-sw p\"></i>Norway</b><span class=\"ds-go q\">Atlas in preparation <svg width=\"14\" height=\"10\" viewBox=\"0 0 14 10\" aria-hidden=\"true\"><path d=\"M1 5h11M8 1l4 4-4 4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg></span></a></div>",
+      "css": ".ds-mapdemo { display: flex; gap: 24px; flex-wrap: wrap; padding: 24px; background-color: var(--pv-paper); background-image: linear-gradient(var(--pv-grid) 1px, transparent 1px), linear-gradient(90deg, var(--pv-grid) 1px, transparent 1px); background-size: 24px 24px; border: 1px solid var(--pv-line); font-family: var(--pv-sans); } .ds-co { background: var(--pv-paper); color: var(--pv-ink); border: 1px solid var(--pv-ink); padding: 7px 11px 8px; display: grid; gap: 1px; font-size: 13px; line-height: 1.3; max-width: 220px; text-decoration: none; } .ds-co.live { background: color-mix(in srgb, var(--pv-coral) 7%, var(--pv-paper)); } .ds-co:hover { border-color: var(--pv-coral-ink); } .ds-co:hover .ds-go { text-decoration: underline; } .ds-co:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; } .ds-co b { font-weight: 600; display: flex; align-items: center; gap: 8px; } .ds-co small { color: var(--pv-ink-2); font-size: 13px; } .ds-m { font-family: var(--pv-mono); } .ds-go { margin-top: 3px; font-size: 13px; font-weight: 600; color: var(--pv-coral-ink); display: inline-flex; gap: 6px; align-items: center; } .ds-go.q { color: var(--pv-ink-2); } .ds-sw { width: 14px; height: 14px; display: inline-block; } .ds-sw.l { background: var(--pv-coral); } .ds-sw.p { border: 1.5px dashed var(--pv-coral-ink); }"
+    },
+    {
+      "name": "Ranked Bars Box",
+      "kind": "card",
+      "refersTo": "ranked-bar",
+      "description": "Panel box ruled by a 1px ink top line, Title heading and 14px lede, then ranked horizontal bars with mono counts.",
+      "html": "<div class=\"ds-box\"><h3>Who they publish with</h3><p>Co-author countries on the same works.</p><button type=\"button\" class=\"ds-hb\"><span class=\"nm\">China</span><span class=\"bar\" style=\"width:100%\"></span><span class=\"n\">6,412</span></button><button type=\"button\" class=\"ds-hb\"><span class=\"nm\">United Kingdom</span><span class=\"bar\" style=\"width:52%\"></span><span class=\"n\">3,318</span></button><button type=\"button\" class=\"ds-hb\"><span class=\"nm\">Canada</span><span class=\"bar\" style=\"width:44%\"></span><span class=\"n\">2,840</span></button></div>",
+      "css": ".ds-box { border-top: 1px solid var(--pv-ink); padding-top: 14px; color: var(--pv-ink); font-family: var(--pv-sans); max-width: 520px; } .ds-box h3 { font-size: 20px; font-weight: 500; letter-spacing: -.01em; margin: 0 0 4px; } .ds-box p { font-size: 14px; color: var(--pv-ink-2); margin: 0 0 14px; } .ds-hb { display: grid; grid-template-columns: minmax(96px, 34%) 1fr 64px; gap: 12px; align-items: center; min-height: 32px; width: 100%; border: 0; border-bottom: 1px solid var(--pv-line); background: none; padding: 0; text-align: left; font: 400 14px var(--pv-sans); color: inherit; cursor: pointer; } .ds-hb:last-child { border-bottom: 0; } .ds-hb .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-hb:hover .nm { text-decoration: underline; } .ds-hb:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; } .ds-hb .bar { height: 8px; background: var(--pv-slate); } .ds-hb .n { font: 400 12px var(--pv-mono); text-align: right; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "A filter in effect: square paper chip with an ink border and a labelled 28px remove button.",
+      "html": "<span class=\"ds-chip\">Evidence cell: Drinking water, exposure<button type=\"button\" aria-label=\"Remove the evidence cell filter\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" aria-hidden=\"true\"><path d=\"M2 2l10 10M12 2L2 12\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg></button></span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); padding: 4px 6px 4px 12px; font: 400 14px var(--pv-sans); } .ds-chip button { border: 0; background: none; color: inherit; width: 28px; height: 28px; display: grid; place-items: center; cursor: pointer; } .ds-chip button:hover { background: var(--pv-ink); color: var(--pv-paper); } .ds-chip button:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }"
+    },
+    {
+      "name": "Preview Notice",
+      "kind": "card",
+      "refersTo": "notice",
+      "description": "Honest empty state: says what arrives later and links to the profiles that exist, instead of an empty chart.",
+      "html": "<div class=\"ds-notice\"><p><b>Expert rankings for Brazil arrive with the global build.</b> This preview carries full profiles for three countries.</p><div class=\"ds-r\"><button type=\"button\" class=\"ds-btn\">United States</button><button type=\"button\" class=\"ds-btn\">Norway</button><button type=\"button\" class=\"ds-btn\">China</button></div></div>",
+      "css": ".ds-notice { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 18px 20px; display: grid; gap: 10px; max-width: 760px; font: 400 15px/1.5 var(--pv-sans); } .ds-notice p { margin: 0; color: var(--pv-ink-2); } .ds-notice b { color: var(--pv-ink); font-weight: 500; } .ds-r { display: flex; flex-wrap: wrap; gap: 8px; } .ds-btn { border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); padding: 8px 14px; min-height: 40px; font: 400 15px var(--pv-sans); cursor: pointer; border-radius: 0; } .ds-btn:hover { background: var(--pv-ink); color: var(--pv-paper); } .ds-btn:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }"
     }
   ],
   "narrative": {
@@ -513,6 +611,16 @@
         "name": "The Flat Light Rule",
         "body": "Nothing on the light ground casts a shadow. A surface that needs separating gets a hairline or a paper fill.",
         "section": "elevation"
+      },
+      {
+        "name": "The Live Atlas Rule",
+        "body": "In the app, coral fills and coral tints (7% at rest, 12 to 14% on hover) belong to the live regional atlas (California) and its entry points alone: its map cells and callout, its ladder step, its table sub-row, its overview box and its drawer row. An atlas in preparation gets a dashed coral-ink swatch or outline, never a fill; a requestable region gets a plain ink-2 outline. Ordinary hover and selection tints are slate (6% hover, 8% list hover, 10% current row), never coral.",
+        "section": "colors"
+      },
+      {
+        "name": "The Source Line Rule",
+        "body": "Every data view in the app ends in an 11 px mono source line in ink-2 (line height 1.6, max 100ch, 12 px above). Illustrative counts and preview limits are stated there in plain words (\"Illustrative counts, scaled to ...\", \"This preview hides titles that ...\"), never left implicit.",
+        "section": "typography"
       }
     ],
     "dos": [
@@ -523,7 +631,12 @@
       "Do keep corners square and separate surfaces with 1 px ink or line rules.",
       "Do draw icons as inline SVG using `currentColor` or the token fills.",
       "Do label illustrative data as illustrative, in an 11 px mono source line under it.",
-      "Do keep story text out of image boxes by measuring caption boxes, and test it."
+      "Do keep story text out of image boxes by measuring caption boxes, and test it.",
+      "Do keep coral fills and tints for the live regional atlas; use slate tints for ordinary hover and selection.",
+      "Do announce every scope change in one polite live region and carry scope and view in the URL.",
+      "Do end every data view with an 11 px mono source line that names illustrative data and preview limits.",
+      "Do show an honest notice with links to profiles that exist when a view has no data, rather than an empty chart.",
+      "Do zoom the map to a new scope over 450 ms ease-out, and jump instantly under reduced motion."
     ],
     "donts": [
       "Don't put an eyebrow or kicker label above a heading.",
