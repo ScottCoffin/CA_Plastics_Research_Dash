@@ -1,68 +1,62 @@
-# Handoff — 2026-11-17 (end of session) — platform pivot started: /california, global landing, Norway
+# Handoff — 2026-11-17 (late) — landing design approved; build PLAT-1, PLAT-2a, PLAT-2
 
 ## State in one paragraph
-Everything listed under "Done" is committed, pushed, and deployed green (CI + Pages). The owner set
-a new direction late in the session: California moves to `plastiverse.live/california` (clean
-break, no redirects); the root becomes a global landing page designed with Impeccable (structure
-locked); Norway is the next MVP; one monorepo; weekly email via Buttondown. The architecture plan
-is `docs/PLATFORM_ARCHITECTURE.md` (owner has not yet reviewed it in detail). Three workers were
-stopped for budget: PLAT-1 (move) and PLAT-2a (global map data) had changed nothing; MAIL-1
-(digest) was finished and is committed with its schedule disabled (see Open findings).
+The owner approved the global landing design: a scroll story branded "Plastiverse Live", recoloured
+by the owner's logo (ADR-PLAT2-SPECTRAL-STORY-2026-11-17). The approved prototype is
+`.impeccable/sketches/spectral_story.html`; its sources and rebuild commands are in
+`.impeccable/sketches/src/README.md`. The build spec for the next agent is
+`docs/PLAT_2_LANDING_SPEC.md`, and the Impeccable direction contract (version 2) is
+`.impeccable/surfaces/framework-src-index-md.md`. No production code changed this session.
+The repo now carries all agent state for cross-machine work: the Claude auto-memory mirror is in
+`.claude/memory/` (see the CLAUDE.md "Cross-machine handoff" section). CI is red on one
+pre-existing test (see Open findings); Pages deploys are green.
 
-## Done this session (highlights; details in TODO and SESSION_LOG)
-- VD-27..VD-35: favicon and mark, full-width text, Funding heatmap filters, Experts/Network fixes,
-  network mobile, tooltips, homepage map spring intro (every load), creator credit replaces the
-  disclaimer, Resources icons (13/13, owner logos for ToMEx/One4All/DTSC) and steward institution
-  links, no repo links (corrections go to mailto theplastiverse@gmail.com), Evidence journal filter
-  and "2-yr mean citedness (OpenAlex)" column, compact page heads.
-- EM-17 partial: OPC Solutions track panel + review app (owner review H28 pending).
-- Ingest repair: OpenAlex made `from_updated_date` paid (HTTP 403 from 2026-11-16). Incremental
-  runs use `from_publication_date` with an adaptive lookback, Sunday deep sweep, `OpenAlexPlanError`,
-  and a "Daily ingest failing" issue (label `ingest-alert`). The derived files (institution types,
-  journal metrics) rebuild after the export. The owner's missing paper (doi 10.1021/acsestwater.6c01560) is live.
-- NOTIFY-AB: About "Get updates" panel (feed + ntfy topic `plastiverse-california`), daily ntfy post.
-- H27 HTTPS enforced (verified 2026-11-17).
+## Done this session
+- Landing design iterated with the owner to approval: picnic that shatters item by item (Voronoi
+  shards, crumbs), particle cloud, CC BY paper stack, Barker-like ordered mandala, bulb that fills
+  with the particles and bursts into light, real OpenAlex chart with arrow annotations, evidence
+  grid, springy network, world map, California zoom, local-ambassador button.
+- Assets: generated blanket and item sheet (gpt-image-2.6-sunburst, prompts in sidecars), 15
+  CC BY paper first pages (licence verified on the page, CalEPA download stamps redacted).
+- Brand: the logo and its generation prompt are in `src/`; the palette is recorded in MEMORY.
+- Commits `1ed81e31` (agent state, tooling and prototype tracked; ruff skips `.impeccable`;
+  vendored skills exempt from whitespace checks) and `2e53fb02` (slower bulb-to-chart transition).
 
 ## In flight / next (in this order)
-1. **MAIL-1 fix, then enable.** `src/atlas/build/digest.py` selects "new this week" by
-   `works_detail.first_seen`, but the 2026-11-11 re-ingest reset `first_seen` for most works (dry
-   run: 1,565 works for one week). Fix the selection (e.g. require `pub_date` within the last ~60
-   days as well as `first_seen` in the window, or persist a first-seen ledger that survives
-   re-ingests). Then re-enable the cron in `.github/workflows/weekly_digest.yml`. It sends only when
-   the `BUTTONDOWN_API_KEY` secret exists (owner H29), and the API flow is draft → publish
-   (`docs/api_notes/buttondown.md`). Send the owner a test first.
-2. **PLAT-1 move California to /california (clean break).** The brief is in this session's
-   transcript; summary: move `framework/src/*.md` pages into `framework/src/california/`, fix
-   relative imports and siteRoot data paths, set PAGE_GROUPS/nav/footer under /california, root
-   `index.md` becomes a placeholder until PLAT-2, SEO pages to `/california/experts/<id>/` etc.,
-   sitemap/robots/llms/feed links/search index/ntfy click URL/digest site_url, remove redirect-stub
-   generation in `scripts/assemble_site.py`, update tests deliberately. Cross-cutting, so the lead
-   or an Opus worker implements and `sonnet-reviewer` reviews. After deploy: owner resubmits the
-   sitemap in Search Console.
-3. **PLAT-2a global data**: Natural Earth 110m admin-0 outlines → `site/assets/world/` (public
-   domain; script `scripts/build_world_map.py`), California outline for the red overlay, and
-   `scripts/build_global_counts.py` → `site/data/global/global_counts.json` (OpenAlex group_by
-   `authorships.countries`, total, by year, new this week via `from_publication_date`; ≤ 60 credits;
-   never paid filters). Wire into the daily workflow after it works.
-4. **PLAT-2 build the global landing** (Impeccable, code-led). Direction contract:
-   `.impeccable/surfaces/framework-src-index-md.md`; chosen sketch:
-   `.impeccable/mocks/decision/assigned.html` (Tile cartogram). Owner steer: a real world map with
-   country outlines; built regions vermilion, all others white/grey/black by volume; keep the
-   four-plane stats strip from the "Region doors" sketch; built regions breathe on hover; springy
-   assembly of continents on every load (like California); text saying regions are added by user
-   interest and need, and that region experts are needed for guidance and QA/QC. Finish with the
-   Impeccable finish reviewer and documenter (DESIGN.md), per new-work.md section 7.
-5. PLAT-3 (region abstraction), PLAT-4 (global ingest + local partition), NOR-1..5: see
-   `docs/PLATFORM_ARCHITECTURE.md` section 8 and the TODO entries.
+1. **MAIL-1 fix, then enable.** Unchanged from the previous handoff: the digest selects "new this
+   week" by `works_detail.first_seen`, which the 2026-11-11 re-ingest reset (1,565 works in one
+   week). Fix the selection (require `pub_date` in the last ~60 days too, or keep a first-seen
+   ledger). Also fix `tests/test_weekly_digest.py::test_workflow_schedules_monday_and_sends_only_with_the_secret`,
+   which fails because the cron is disabled (make it pass in the disabled state, or re-enable the
+   cron once the owner says "Buttondown ready", H29). Send the owner a test first.
+2. **PLAT-1 move California to /california (clean break).** As in `docs/PLATFORM_ARCHITECTURE.md`:
+   move `framework/src/*.md` into `framework/src/california/`, fix imports and data paths,
+   nav/footer, SEO pages, sitemap, robots, llms, feed, search index, ntfy and digest URLs; remove the
+   redirect stubs in `scripts/assemble_site.py`; root `index.md` is a placeholder until PLAT-2.
+   Cross-cutting: the lead or an Opus worker implements, sonnet-reviewer reviews.
+3. **PLAT-2a global data**: `scripts/build_world_map.py` (Natural Earth 110m, public domain, Equal
+   Earth raster as in `.impeccable/sketches/src/build_geo.py` and `story.py`) and
+   `scripts/build_global_counts.py` to `site/data/global/global_counts.json` (group_by
+   `authorships.countries`; at most 60 credits; never paid filters).
+4. **PLAT-2 build the landing** to `docs/PLAT_2_LANDING_SPEC.md`: tokens and self-hosted fonts,
+   `scripts/build_landing_assets.py`, `framework/src/components/landing_story.{js,css}`, the
+   sections after the story, reduced-motion stills, `scripts/check_plat2.py`, then the Impeccable
+   finish reviewer and documenter (DESIGN.md). Haiku may take the bounded parts (font files, asset
+   script, check script, tests); the engine port and integration stay with the lead or Opus.
+5. Then PLAT-2c (`/ambassadors` placeholder), PLAT-2b (gated on H30), VD-SM (carry the brand into
+   the California pages), PLAT-3, PLAT-4, NOR-1..5.
 
 ## Open findings
-- Daily-ingest plan refusals returned as HTTP 429 still defer without an alert; failures after a
-  good refresh do not alert.
-- `.agent/MEMORY.md` is about 280 lines (target 200); compact it at a quiet checkpoint.
-- Impeccable doctor reports setup drift (config `buildPath` unset); run `/impeccable doctor` only if the owner asks.
+- CI fails on the MAIL-1 digest schedule test (pre-existing since `0a5d35cd`; see step 1).
+- Daily-ingest plan refusals returned as HTTP 429 still defer without an alert.
+- `.agent/MEMORY.md` is about 285 lines (target 200); compact it at a quiet checkpoint.
+- Unused prototype images (old flying picnic, dinner scene, earlier item set, full-size paper
+  renders) are untracked in `.impeccable/sketches/`; they are not needed for the build.
 
 ## Owner actions (one line each)
-- H29: create the Buttondown account and add the `BUTTONDOWN_API_KEY` repository secret, then say "Buttondown ready".
+- H31: revoke the OpenAI key pasted into the chat, then say "OpenAI key rotated".
+- H30: approve or edit the evidence-map cells (spec section 4.6), reply "cells OK".
+- H29: create the Buttondown account and secret, then say "Buttondown ready".
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).
-- Review `docs/PLATFORM_ARCHITECTURE.md` (especially the Norway sources marked [VERIFY] and the tier model).
+- Answer or accept the defaults for QUESTIONS rows PLAT2-RESEARCH-LINE, PLAT2-FONTS, PLAT2-NETWORK, PLAT2-AMBASSADORS.
 - After PLAT-1 deploys: resubmit `https://plastiverse.live/sitemap.xml` in Google Search Console.

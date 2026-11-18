@@ -1,26 +1,26 @@
 ---
-version: 1
+version: 2
 slug: "framework-src-index-md"
 primary_target: "framework/src/index.md"
-related_targets: []
+related_targets: ["framework/src/components/landing_story.js", "framework/src/components/landing_story.css"]
 ---
 
 # Surface: plastiverse.live global landing (framework/src/index.md after PLAT-1)
 
-Mode: Persuade. Audience: researchers, agency staff, funders, press. Job: see the global picture of plastics research and pick a region within seconds. Action: open a live regional atlas (California now, Norway next). Proof: live global counts rebuilt daily from OpenAlex; built regions shown as working atlases. Constraints: static Framework page, no external CDNs, tokens only, WCAG AA, reduced motion, usable at 375 px. Owner steer 2026-11-17: real world map with country outlines; built regions red, all others white/grey/black; keep the big stats strip; living hover on built regions; springy assembly of region pieces on load (as on California); state that regions are added by user interest and need, and that region-level experts are needed for guidance and QA/QC.
+Mode: Persuade. Audience: researchers, agency staff, funders, press, and local experts who might become ambassadors. Job: feel the scale of plastics research worldwide, see how Plastiverse Live turns it into knowledge, then open a regional atlas or join as a local ambassador. Proof: real OpenAlex counts (works per year, works by country), real CC BY paper pages, live regional atlases. Constraints: static Framework page, no external CDNs, tokens only, WCAG AA, reduced motion, usable at 375 px. Owner approved the prototype on 2026-11-17 (`.impeccable/sketches/spectral_story.html`); build spec `docs/PLAT_2_LANDING_SPEC.md`; replaces the version 1 Tile-cartogram contract.
 
 ## Direction contract
 
-THESIS: The world itself is the door. One outlined world map in flat Plane Poster planes where the few built regions burn vermilion and everything else waits in paper, stone and ink; refuses the SaaS hero and the chart wall.
+THESIS: Data, then knowledge, then understanding, told as one scroll. A 1950s throwaway picnic shatters into microplastics, the particles become studies, the studies order into a Barker-like mandala, the mandala lights a bulb, and the light opens onto the real global record. Refuses the SaaS hero, the chart wall and doom imagery.
 
-OWN-WORLD: Paper ground (#ece7dc), country planes in surface white, stone grey and ink by research volume (three steps, hairline paper outlines), built regions solid vermilion, Archivo 800 condensed counts, square corners, no gradients, no shadows, no photos.
+OWN-WORLD: Spectral Match, recoloured by the Plastiverse Live logo. Black story ground until the light burst, then an airy light ground (#F6F8F9). Navy ink #17263D; data in slate #436487 with mint #C5EADF steps; coral #FA6B68 for "LIVE", California and live markers (coral-ink #D9443F for text on light); butter yellow #FFF49A turning gold #E2B714 for the bulb. Schibsted Grotesk for text, Martian Mono only for data and source lines. Real photographic plastics and real paper pages before the light; flat data marks after.
 
-STORY: A visitor sees how much of the world studies plastics' impacts, notices that two regions are open, opens one, and learns that new regions come from expressed need plus local experts who guide and check the data.
+STORY: A visitor sees a picnic, watches each plastic item pop and shatter into particles of its own colours, learns microplastics were first described more than 50 years ago, sees every particle become a paper, watches the papers organise into knowledge and light a bulb, then sees the exponential growth of the research, where the evidence is and is missing, who works with whom, how global it is, and that local knowledge matters, ending at a regional atlas and an invitation to become a local ambassador.
 
-FIRST VIEWPORT: Top: the four-plane stats strip (works, countries, institutions, new this week) full width. Below: the outlined world map full width, built regions vermilion with labels and an "Open atlas" action; a left overlay column with the headline, one sentence, and the primary action "Pick a region" (California, Norway soon).
+FIRST VIEWPORT: Black stage under a black header. The picnic fills the screen with no text; the blanket and then each item light up one at a time within about 1.5 s; a small scroll cue appears. The first scroll brings "Plastic is everywhere…" in at the top while the picnic stays nearly full screen below it.
 
-FORM: Tile cartogram (dealt lead, position 7 of 7), steered to an outlined geographic map. seed:30b6e5b97c5820c5
+FORM: Spectral Match (assigned direction, seed:2c42143eccc874ce), steered by the owner into a scroll story after Hartmann, Mennekes and Wagner (2026).
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
-Signature interaction: on load the continents spring together from the page edges like the California planes; built regions breathe (scale and outline pulse) on hover and focus; pointer over any country shows its count; reduced motion shows the assembled map.
+Signature interaction: one sticky canvas stage driven by scroll position. Items crack along clean Voronoi lines and crumble into their own colours; the bulb's light bursts radially and turns the page light; the dots stream out of the bulb into the chart; network nodes ride damped springs and get plucked. Text never overlaps an image (measured safe zones). Reduced motion shows the beats as a static sequence.

@@ -42,6 +42,20 @@ The weekly Monday digest is built by a GitHub Action and sent through Buttondown
 - **Done when:** you tell the agent "Buttondown ready". The first digest goes out the next
   Monday at about 6 to 7 a.m. Pacific; the agent can also send a test to you first.
 
+### H31. Rotate the OpenAI API key (5 minutes)
+The key pasted into the chat on 2026-11-17 was used for the landing images and must be treated as exposed.
+1. Go to https://platform.openai.com/api-keys and revoke that key.
+2. If agents should generate images again, create a new key and set it only in your own shell
+   environment as `OPENAI_API_KEY` (never paste it into a chat or a file in the repo).
+- **Done when:** the old key shows as revoked. Tell the agent "OpenAI key rotated".
+
+### H30. Approve the global evidence-map cells (PLAT-2b, 10 minutes)
+The landing page and its live evidence map sort every study into 5 x 6 cells.
+1. Open `docs/PLAT_2_LANDING_SPEC.md`, section 4.6 (rows and columns are listed there and in
+   `.agent/QUESTIONS.md` row PLAT2-EVIDENCE-CELLS).
+2. Reply "cells OK", or list the rows and columns you want instead (for example add "sediment").
+- **Done when:** the agent records your answer in QUESTIONS; PLAT-2b then becomes eligible.
+
 ### H27 is done (2026-11-17): HTTPS is enforced and http:// redirects to https://.
 
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)

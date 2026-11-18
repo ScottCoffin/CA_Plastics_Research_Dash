@@ -176,3 +176,4 @@
 | 2026-11-17 | VD-30 | Homepage map spring intro (Web Animations, no library); About section text full width | this commit |
 | 2026-11-17 | VD-32..VD-35, ING-LOOKBACK/403/SAFETY | Resources icons and links, no repo links (mailto corrections), Evidence journal filter and 2-yr mean citedness, owner logos and compact page heads; daily ingest fixed (paid from_updated_date filter) with lookback, deep sweep and alert issue | this commit |
 | 2026-11-17 | end of session | NOTIFY-AB, platform plan, Impeccable global-landing structure locked (Tile cartogram + steer), MAIL-1 partial (cron off); PLAT-1/PLAT-2a not started (workers stopped for budget) | this commit |
+| 2026-11-17 | PLAT-2 design | Landing scroll story approved (Plastiverse Live, logo palette); build spec docs/PLAT_2_LANDING_SPEC.md, direction contract v2, ADR-PLAT2-SPECTRAL-STORY; agent state tracked for cross-machine handoff | 1ed81e31, 2e53fb02, this commit |
