@@ -169,7 +169,7 @@ ${doi
 </article>
 <article class="about-card" style="--c: var(--atlas-task-evidence)">
 <h3>Licence</h3>
-<p>Data produced by the Atlas (the files behind these pages, the feed and the release snapshots) are shared under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">Creative Commons Attribution 4.0 licence (CC BY 4.0)</a>: you may reuse them, including commercially, if you credit the Atlas. The code is under the <a href="https://opensource.org/license/mit" target="_blank" rel="noreferrer">MIT licence</a>. Third-party material keeps its own terms: bibliographic metadata comes from OpenAlex (CC0), and each monitoring observation carries its source's licence and citation.</p>
+<p>Data produced by the Atlas (the files behind these pages, the feed and the release snapshots) are shared under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">Creative Commons Attribution 4.0 licence (CC BY 4.0)</a>: you may reuse them, including commercially, if you credit the Atlas. The code is under the <a href="https://polyformproject.org/licenses/noncommercial/1.0.0" target="_blank" rel="noreferrer">PolyForm Noncommercial License 1.0.0</a>, which allows noncommercial use only. Third-party material keeps its own terms: bibliographic metadata comes from OpenAlex (CC0), and each monitoring observation carries its source's licence and citation.</p>
 </article>
 <article class="about-card" style="--c: var(--atlas-task-people)">
 <h3>Corrections and source work</h3>

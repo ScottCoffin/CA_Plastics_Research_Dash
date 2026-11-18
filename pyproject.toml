@@ -8,7 +8,7 @@ version = "0.0.0"
 description = "California plastics research, monitoring, and funding atlas"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = { text = "PolyForm-Noncommercial-1.0.0" }
 authors = [{ name = "Scott Coffin" }]
 dependencies = [
   "defusedxml>=0.7.1",

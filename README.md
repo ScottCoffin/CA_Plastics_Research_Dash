@@ -63,5 +63,7 @@ Agents must follow `spec.md` Part B and start with `.agent/README.md`.
 
 ## License
 
-Code: MIT (`LICENSE`). Derived data: CC BY 4.0 (`LICENSE-DATA.md`). Third-party
-sources keep their own terms; see `docs/REUSE.md`. Cite with `CITATION.cff` or the Zenodo concept DOI [10.5281/zenodo.24124016](https://doi.org/10.5281/zenodo.24124016) (all versions).
+Code: [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0) (`LICENSE`).
+No commercial use is permitted. Versions released before 2026-11-18 were published under MIT and
+keep that licence. Derived data: CC BY 4.0 (`LICENSE-DATA.md`). Third-party sources and vendored
+libraries keep their own terms; see `docs/REUSE.md`. Cite with `CITATION.cff` or the Zenodo concept DOI [10.5281/zenodo.24124016](https://doi.org/10.5281/zenodo.24124016) (all versions).

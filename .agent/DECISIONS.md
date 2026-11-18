@@ -746,3 +746,24 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
 ## ADR-A3-PUBMED-2026-11-18: PubMed coverage QC as a Python port (A3-D23 / A3-D9)
 
 - **Decision (owner, 2026-11-18, per A3-D23):** add `src/atlas/qc/pubmed.py` and `scripts/qc_pubmed_coverage.py` (Python, NCBI E-utilities, standard library only; A3-C8). Purpose: coverage check against PubMed reference sets; not a query source or authority (A3-D24). Licence: new code under the repo's MIT licence (A3-C7); no code is copied from the GPL-3.0 R package `pubmedsearchworkflow` (the owner holds its copyright; easyPubMed is not used). Etiquette: tool name sent, optional API key and contact email only from the environment (A3-Q14). Live calls only behind an explicit flag; tests offline.
+
+## ADR-LICENSE-PFNC-2026-11-18: code licence PolyForm Noncommercial 1.0.0 (supersedes ADR-002's MIT choice for code)
+
+- **Decision (owner, 2026-11-18):** all Atlas code and configuration is licensed under the PolyForm
+  Noncommercial License 1.0.0, copied verbatim from polyformproject/polyform-licenses tag 1.0.0 into
+  `LICENSE` with the line `Required Notice: Copyright (c) 2026 Scott Coffin (https://plastiverse.live)`.
+  SPDX id `PolyForm-Noncommercial-1.0.0` (`pyproject.toml`, `CITATION.cff`); Zenodo vocabulary id
+  `polyform-noncommercial-1.0.0` (`.zenodo.json`, checked against the Zenodo licences API 2026-11-18).
+  The owner asked that no commercial use be allowed under any circumstances.
+- **What the licence does and does not do (told to the owner):** it permits only noncommercial
+  purposes, personal research/study uses, and use by charitable, educational, public research, public
+  safety or health, environmental protection and government organisations "regardless of the source of
+  funding". It grants no commercial use. It cannot reach: (1) versions already released under MIT
+  (every commit and release before 2026-11-18, including Zenodo v2026.11.11), which stay MIT for anyone
+  who has them; (2) third-party and vendored code (MiniSearch, sigma.js, graphology, Observable
+  Framework, fonts under OFL), which keeps its own licence; (3) derived data, which remains CC BY 4.0
+  (commercial reuse allowed) until the owner decides otherwise (QUESTIONS LICENSE-DATA-NC); (4) fair
+  use. It is not an OSI open-source licence. Enforcement is the copyright holder's.
+- **Consequences:** contributions from others need the contributor's agreement to these terms;
+  `check_at10.py` compares the Zenodo and CFF licence ids case-insensitively; tests pin the verbatim
+  licence text by hash (`tests/test_ux10_about.py`).

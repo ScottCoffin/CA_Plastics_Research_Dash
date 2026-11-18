@@ -147,7 +147,8 @@ def check_metadata_agreement(root: Path = ROOT) -> list[str]:
     cff_creators = [f"{a['family-names']}, {a['given-names']}" for a in cff.get("authors", [])]
     if zenodo_creators != cff_creators:
         errors.append(".zenodo.json and CITATION.cff disagree on creators")
-    if zenodo.get("license") != cff.get("license"):
+    # Zenodo uses lowercase vocabulary ids; CITATION.cff uses the SPDX id (same licence).
+    if str(zenodo.get("license", "")).lower() != str(cff.get("license", "")).lower():
         errors.append(".zenodo.json and CITATION.cff disagree on licence")
     meta = release.load_release_yml(root)
     if cff.get("doi") != meta["concept_doi"]:

@@ -196,3 +196,4 @@
 | 2026-11-18 | BQ-1.6 | Count reconciliation: 1,919/1,583/1,849/2,037/1,749 traced to fields; possible bugs: >=10 curation exclusions match no work, Now line omits 70 works | this commit |
 | 2026-11-18 | BQ-R1 | "Authors" rename: /california/authors + redirect stub, visible text, glossary term, terminology lint (text, attributes, JSON method); Haiku review found the /explore PANELS bug (fixed) | this commit |
 | 2026-11-18 | BQ-G0 | Guide addendum A3 (guide_v3): candidate sets, anchor rule, lifecycle tier + tie-break, scope list, tags, centrality, lenses, 6 template fields, calibration cases with OpenAlex IDs, CA backfill; Haiku review (14 findings) applied; owner approved | this commit |
+| 2026-11-18 | LIC-1 | Code licence PolyForm Noncommercial 1.0.0 (owner); data licence question LICENSE-DATA-NC | this commit |

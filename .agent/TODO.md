@@ -300,6 +300,7 @@ Contract: [`docs/add_on_spec_3.md`](../docs/add_on_spec_3.md) (numbered plain-te
 - [ ] **OA-2** `scripts/run_at1_audit.py` sends >5-operator searches with its own `urlopen` (no throttle, no burst-429 retry; BQ-S8 note); route it through `atlas.ingest.openalex._request_json`. Manual `--live` tool only. Size: S.
 - [ ] **NET-2** `atlas.build.network.select_nodes` counts every co-listed author id while its docstring says "another Atlas expert" (BQ-3.1 note); decide which is intended, fix code or docstring, refresh stale "networkx not yet declared" comments. Size: S.
 
+- [x] **LIC-1** (done 2026-11-18, ADR-LICENSE-PFNC-2026-11-18) Code licence MIT -> PolyForm Noncommercial 1.0.0 (owner): LICENSE verbatim + Required Notice, pyproject, CITATION.cff, .zenodo.json, README, About, llms.txt, LICENSE-DATA, release snapshot, checks and tests.
 ## S11 Fallback/extras
 - [ ] **S11.1** Optional stlite fallback reading shared outputs. Acceptance: static runtime and Pyodide compatibility tested. Dropped 2026-11-11 (owner left it to the lead): the static site covers every view; a Pyodide fallback adds a large runtime for no current user need.
 - [ ] **S11.2** Optional evidence-map heatmaps. Superseded by Add-on A2 EM-8 (A2-C5); do not implement separately. 2026-11-12 (owner asked): interim provisional heatmap on the Evidence map from the keyword topic/matrix tags (UX-26); EM-8 replaces its tags with A2 fields after EM-4.

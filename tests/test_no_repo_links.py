@@ -117,7 +117,7 @@ def test_methods_point_to_archive_and_licence_names_link_public_texts() -> None:
         assert "Methods, data files and checksums are in each archived release" in text
         assert "docs/METHODS.md" not in text and "docs/SITE_DATA.md" not in text
     # The classic page has no licence block; only the Framework About page names the licences.
-    assert "https://opensource.org/license/mit" in about
+    assert "https://polyformproject.org/licenses/noncommercial/1.0.0" in about
     assert "LICENSE-DATA.md" not in about and "/blob/main/" not in about
 
 

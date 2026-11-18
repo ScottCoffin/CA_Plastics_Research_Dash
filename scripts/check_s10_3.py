@@ -59,8 +59,8 @@ def check_zenodo(root: Path) -> list[str]:
         errors.append(".zenodo.json title mismatch")
     if payload.get("creators") != [{"name": "Coffin, Scott"}]:
         errors.append(".zenodo.json creators mismatch")
-    if payload.get("license") != "MIT":
-        errors.append(".zenodo.json license must be MIT")
+    if payload.get("license") != "polyform-noncommercial-1.0.0":
+        errors.append(".zenodo.json license must be polyform-noncommercial-1.0.0")
     if "CC BY 4.0" not in str(payload.get("description", "")):
         errors.append(".zenodo.json description must note CC BY 4.0 derived data")
     related = payload.get("related_identifiers", [])

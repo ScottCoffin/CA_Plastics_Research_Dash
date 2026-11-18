@@ -82,7 +82,7 @@ pass, because it is the offline reference for the code.
   under CC BY 4.0.
 - `curation/gold_*.csv` and `curation/splits_v1*.{csv,json}`: gold set and split files,
   CC BY 4.0.
-- `config/queries.yml` and `config/taxonomy.yml`: query and taxonomy definitions, MIT.
+- `config/queries.yml` and `config/taxonomy.yml`: query and taxonomy definitions, PolyForm Noncommercial 1.0.0.
 - `MANIFEST.json`: each file's path, bytes, SHA-256, and licence, plus the source commit.
 - `README.txt`: the citation and licence summary.
 
@@ -97,8 +97,9 @@ Two checks of the current outputs (2026-11-10):
 - `site/data/authors/*.json` is not packaged. These files hold full work rows, including
   abstracts, so they are outside the release set.
 
-Snapshot licence status: confirmed by the owner on 2026-11-10. Code is MIT (`LICENSE`)
-and derived data are CC BY 4.0 (`LICENSE-DATA.md`); the manifest records this.
+Snapshot licence status: code is PolyForm Noncommercial 1.0.0 (`LICENSE`, owner 2026-11-18;
+releases before that date were MIT) and derived data are CC BY 4.0 (`LICENSE-DATA.md`, owner
+2026-11-10); the manifest records this.
 
 ## 4. Release to Zenodo
 
@@ -106,7 +107,7 @@ Zenodo archives each GitHub release of this repository once the repository is
 enabled in Zenodo. Zenodo mints a DOI for each archived release. A DOI cannot be
 deleted, so tags and releases are made only after the owner confirms the steps below.
 
-Metadata is in `.zenodo.json` (`upload_type` `software`, licence `MIT`,
+Metadata is in `.zenodo.json` (`upload_type` `software`, licence `polyform-noncommercial-1.0.0`, a Zenodo vocabulary id,
 `isSupplementTo` https://plastiverse.live/). Zenodo reads this file for the record.
 
 ### Owner steps (one time, then per release)
@@ -133,10 +134,9 @@ Zenodo on deposit".
 
 ### Before the first release (open items)
 
-- `LICENSE` is a placeholder. The MIT code licence and CC BY 4.0 data licence in
-  `.zenodo.json` and in the manifest need owner confirmation. The Zenodo licence
-  identifier `MIT` may need to match Zenodo's own vocabulary. Check the record during
-  the first deposit.
+- Resolved: the code licence (PolyForm Noncommercial 1.0.0 since 2026-11-18, Zenodo id
+  `polyform-noncommercial-1.0.0`, checked against the Zenodo licence vocabulary) and the CC BY 4.0
+  data licence are owner-confirmed.
 - The release notes should say which upstream sources are included, following
   `docs/REUSE.md`.
 

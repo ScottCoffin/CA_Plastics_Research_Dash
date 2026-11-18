@@ -134,7 +134,7 @@ def test_zenodo_metadata_has_required_keys() -> None:
     assert checker.check_zenodo(REPO) == []
     payload = json.loads((REPO / ".zenodo.json").read_text(encoding="utf-8"))
     assert payload["upload_type"] == "software"
-    assert payload["license"] == "MIT"
+    assert payload["license"] == "polyform-noncommercial-1.0.0"
     assert payload["creators"] == [{"name": "Coffin, Scott"}]
 
 

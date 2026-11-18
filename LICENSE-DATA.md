@@ -12,4 +12,4 @@ source. Monitoring rows carry their own license and citation in
 `site/data/monitoring.json`. Bibliographic metadata comes from OpenAlex (CC0), and
 grant records come from public agency sources.
 
-Source code is licensed separately under the MIT License (`LICENSE`).
+Source code is licensed separately under the PolyForm Noncommercial License 1.0.0 (`LICENSE`), which does not allow commercial use.

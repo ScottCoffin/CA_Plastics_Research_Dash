@@ -41,9 +41,12 @@ from atlas.release import (  # noqa: E402
 )
 
 SCHEMA_VERSION = "s10.3"
-CODE_LICENSE = "MIT"
+CODE_LICENSE = "PolyForm-Noncommercial-1.0.0"
 DATA_LICENSE = "CC BY 4.0"
-LICENSE_STATUS = "confirmed by owner 2026-11-10; see LICENSE and LICENSE-DATA.md"
+LICENSE_STATUS = (
+    "code PolyForm Noncommercial 1.0.0 (owner 2026-11-18), data CC BY 4.0 (owner 2026-11-10); "
+    "see LICENSE and LICENSE-DATA.md"
+)
 REPO_URL = "https://github.com/ScottCoffin/CA_Plastics_Research_Dash"
 SITE_URL = "https://plastiverse.live/"
 VERSION_PATTERN = re.compile(r"^[0-9A-Za-z][0-9A-Za-z._-]{0,63}$")
@@ -143,7 +146,7 @@ def _readme(version: str, source_commit: str | None, release_name: str | None = 
         "  site/data/*.json   public payloads (CC BY 4.0, derived data)",
         "  site/feed.xml      Atom digest (CC BY 4.0)",
         "  curation/          gold sets and split files (CC BY 4.0)",
-        "  config/            query and taxonomy definitions (MIT)",
+        "  config/            query and taxonomy definitions (PolyForm Noncommercial 1.0.0)",
     ]
     if release_name:
         contents.append(

@@ -124,6 +124,8 @@ This ledger lists the external tools and projects named in add-on A1 §§0 and 7
 Rules from §0 and the L6 licence gate:
 
 - Copy/vendor only MIT, BSD, ISC, or Apache-2.0 code, as allowed by §0.
+- Vendored code keeps its own licence and notice; the Atlas's own code is PolyForm Noncommercial
+  1.0.0 since 2026-11-18 (ADR-LICENSE-PFNC-2026-11-18). Permissive inbound licences allow this.
 - Do not copy GPL/AGPL code.
 - Treat bibliometrix as GPL-3; it may run only as a separate process.
 - No DESTINY code; concepts only.

@@ -26,7 +26,7 @@ def test_citation_cff_uses_mit_and_site_url():
 
     data = yaml.safe_load((REPO / "CITATION.cff").read_text(encoding="utf-8"))
     assert data["cff-version"] == "1.2.0"
-    assert data["license"] == "MIT"
+    assert data["license"] == "PolyForm-Noncommercial-1.0.0"
     assert data["url"] == "https://plastiverse.live/"
 
 

@@ -17,7 +17,7 @@ keywords:
   - OpenAlex
 url: "https://plastiverse.live/"
 repository-code: "https://github.com/ScottCoffin/CA_Plastics_Research_Dash"
-license: MIT
+license: PolyForm-Noncommercial-1.0.0
 doi: 10.5281/zenodo.24124016
 identifiers:
   - type: doi

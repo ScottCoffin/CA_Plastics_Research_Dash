@@ -244,7 +244,7 @@ def test_snapshot_packs_release_directory_with_licences(tmp_path: Path) -> None:
         readme = zf.read("README.txt").decode("utf-8")
     assert f"release/{DATE}/" in readme
     licences = {item["path"]: item["license"] for item in manifest["files"]}
-    assert licences[prefix + "query.txt"].startswith("MIT")
+    assert licences[prefix + "query.txt"].startswith("PolyForm-Noncommercial-1.0.0")
     assert licences[prefix + "parquet/works.parquet"] == snapshot.DATA_LICENSE
 
 
@@ -304,7 +304,7 @@ def test_zenodo_cff_disagreement_is_reported(tmp_path: Path) -> None:
     (root / "CITATION.cff").write_text(
         (REPO / "CITATION.cff")
         .read_text(encoding="utf-8")
-        .replace("license: MIT", "license: CC-BY-4.0"),
+        .replace("license: PolyForm-Noncommercial-1.0.0", "license: CC-BY-4.0"),
         encoding="utf-8",
     )
     assert any("licence" in e for e in checker.check_metadata_agreement(root))
