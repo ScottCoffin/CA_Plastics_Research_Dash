@@ -154,6 +154,10 @@ jobs:
           else
             echo "::warning::global country counts not refreshed; keeping the committed files"
           fi
+          # GA-2 /explore: real OpenAlex samples (cached 7 days, ~350 credits per refresh) and the
+          # per-country map/count file built from them. A failure keeps yesterday's files.
+          python scripts/fetch_global_explore_sample.py || echo "::warning::explore sample not refreshed; keeping the committed file"
+          python scripts/build_global_explore.py || echo "::warning::explore.json not rebuilt; keeping the committed file"
 
       # AT-11: stop before committing if the raw/normalized schema changed or a payload is too big.
       - name: Schema and payload guards
@@ -263,7 +267,7 @@ jobs:
             site/data/expert_badges.json \
             site/data/journal_metrics.json \
             site/data/global/global_counts.json \
-            site/data/global/world_raster.json
+            site/data/global/world_raster.json             site/data/global/explore_sample.json             site/data/global/explore.json
           git add -A site/data/authors site/data/institution_works site/data/bundle site/data/work_text
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"

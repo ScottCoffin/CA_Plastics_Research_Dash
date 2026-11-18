@@ -44,7 +44,7 @@ EXTERNAL_HOSTS = (
 
 REGIONS = ("california",)
 # Global pages at the top level of src/ (the landing page and PLAT-2c).
-GLOBAL_PAGES = ("index.md", "ambassadors.md")
+GLOBAL_PAGES = ("index.md", "ambassadors.md", "explore.md")
 
 
 def config_pages() -> list[str]:

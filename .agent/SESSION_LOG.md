@@ -183,3 +183,4 @@
 | 2026-11-17 | PLAT-2c | /ambassadors placeholder with the owner role list (QC institutions/experts, community groups, monitoring data, policy goals); axe 0 | this commit |
 | 2026-11-17 | PLAT-2 | Plastiverse Live landing: scroll-story engine port, offline assets, self-hosted fonts, check_plat2 0 failures, finish review 6 fixes, DESIGN.md; Lighthouse 85 local (control 84) | this commit |
 | 2026-11-18 | GA-1 | Global data app design (Impeccable): Scope ladder chosen with owner steer; prototype with real OpenAlex sample (350 credits); finish review fix -> ship (8/8); axe 0; DESIGN.md merged | this commit |
+| 2026-11-18 | GA-2 | /explore built in Framework from the GA-1 prototype (Haiku x2 + lead); explore data pipeline in the daily ingest; axe 0, no console errors; Haiku finish review fix -> ship (5/5) | this commit |

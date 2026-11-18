@@ -18,12 +18,11 @@ Last updated: 2026-11-16.
 
 ## Do now
 
-### H33. Look at the Global data app prototype (GA-1, about 10 minutes)
-The design for the global, non-region pages is ready as a working prototype (real OpenAlex data).
-1. In a terminal at the repo root: `py -3.14 -m http.server 8853 --bind 127.0.0.1`
-2. Open http://127.0.0.1:8853/.impeccable/sketches/global_app.html (also try a phone-width window).
-3. Try: pick a continent and a country in the bar under the header, open the California callout, switch tabs.
-- **Done when:** you reply "global app OK" (the agent then writes the build spec for the Framework pages, GA-2), or list changes.
+### H34. Check the new /explore page (GA-2, about 5 minutes)
+1. After the next deploy, open https://plastiverse.live/explore (also on a phone).
+2. Pick a country in the bar under the header; open the California callout; switch tabs.
+3. Decide whether the landing should link to it: reply "link it" (adds "Explore the data" to the landing header and regions band).
+- **Done when:** you reply "explore OK" (or list changes) and answer the link question.
 
 ### H31 is done (2026-11-17): the owner revoked the exposed OpenAI key; the new key is only in the ignored `.env`.
 
@@ -221,6 +220,7 @@ come with its own Streamlit app and run command here.
 
 ## Done
 
+- H33 (2026-11-18): owner approved the Global data app prototype ("global app OK"); GA-2 builds it.
 - H29 (2026-11-17): Buttondown secret added; digest workflow tested by the owner.
 - H32 (2026-11-17): sitemap resubmitted after the /california move.
 - H30 (2026-11-17): evidence-map cells approved; PLAT-2b is eligible.

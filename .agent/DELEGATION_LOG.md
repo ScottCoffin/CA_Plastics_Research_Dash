@@ -230,3 +230,6 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-17 | NOTIFY-AB | Claude Haiku developer | Get updates panel, ntfy post | Accepted | 1 session |
 | 2026-11-17 | MAIL-1 | Claude Haiku developer | Buttondown digest | Stopped for budget near completion; lead committed with cron disabled (selection bug) | 1 session |
 | 2026-11-17 | PLAT-1, PLAT-2a | Claude Opus general-purpose; Claude Haiku developer | /california move; world map data | Stopped for budget before any edits | 1 session |
+| 2026-11-18 | GA-1 | Impeccable finish reviewer; Impeccable documenter (default model, owner then required Haiku) | Prototype review (fix -> ship 8/8); DESIGN.md merge | Completed | 3 sessions (reviewer resumed once) |
+| 2026-11-18 | GA-2a, GA-2b | Claude Haiku developer x2 (parallel, disjoint files) | Explore data pipeline; /explore Framework port | Completed; lead fixed the js fence (page never mounted), California count source, Israel cell, Framework style overrides | 2 sessions |
+| 2026-11-18 | GA-2 | Impeccable finish reviewer (Haiku) | /explore vs prototype | recapture -> fix (5) -> ship | 3 rounds, 1 session |

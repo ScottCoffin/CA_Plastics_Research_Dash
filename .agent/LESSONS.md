@@ -372,3 +372,8 @@ until it reports.
 - Playwright `page.goto` to the same document with only a new `#hash` is a same-document navigation: open popovers, inputs and scroll state carry into the next "state" screenshot. Go to `about:blank` first (or call the app's own navigation) when capturing separate states.
 - A pixel raster's cell centres miss small countries (the Netherlands, Belgium at about 5.4 map units per cell): assign each such country the land cell nearest its interior point, or it vanishes from a per-country map. Natural Earth 110m France includes French Guiana and the US includes Alaska and Hawaii, so frame zooms on the main body, not the full bbox.
 - OpenAlex `trend_global.json` carries future-dated works (a 2027 year in Nov 2026): cap "year to date" at the current calendar year or the last-five-years share is wrong.
+
+## 2026-11-18: GA-2 Framework port of a single-file prototype
+- A ```js fence placed directly after closing HTML (no blank line) stays inside the Markdown HTML block: Framework renders it as text and the module never runs, with no console error. Keep a blank line before every fence (`tests/test_ga2_explore.py` checks it).
+- Framework's default sheet and `style.css` restyle component markup: tables get a 1rem top margin and 14.4 px / 1.2 text, and `#observablehq-main li a, td a, p a` are underlined. Scope overrides as `#observablehq-main .gx ...` so they outrank those rules.
+- `scripts/serve_framework_preview.py --assembled` serves under `/CA_Plastics_Research_Dash/`; a bare `/explore` is 404.
