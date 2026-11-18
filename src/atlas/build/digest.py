@@ -1,7 +1,10 @@
 """Weekly email digest of newly added California plastics papers (MAIL-1).
 
 The digest lists the plastic-related works in ``site/data/works_detail.json`` whose
-``first_seen`` falls in one Monday-to-Sunday week (UTC). Abstracts come from
+``first_seen`` falls in one Monday-to-Sunday week (UTC) and whose ``pub_date`` is recent
+(``digest.max_age_days``, default 60). ``first_seen`` is the fetch time of the raw snapshot, so a
+full re-ingest resets it for old papers; the publication-date window keeps those out. Abstracts
+come from
 ``site/data/work_text/abstracts.json``. The module renders an email-safe HTML body (table
 layout, inline CSS, Plane Poster colours) and a plain-text copy for previews.
 
@@ -28,6 +31,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_CONFIG = ROOT / "config" / "notifications.yml"
+# A work counts as new only when published within this many days of the week's end.
+DEFAULT_MAX_AGE_DAYS = 60
 DEFAULT_WORKS = ROOT / "site" / "data" / "works_detail.json"
 DEFAULT_ABSTRACTS = ROOT / "site" / "data" / "work_text" / "abstracts.json"
 
@@ -86,6 +91,7 @@ class DigestSettings:
     subject_template: str
     sender_name: str
     ntfy_url: str = ""
+    max_age_days: int = DEFAULT_MAX_AGE_DAYS
 
 
 @dataclass(frozen=True)
@@ -178,18 +184,41 @@ def _year(row: Mapping[str, Any]) -> int:
     return year if isinstance(year, int) and not isinstance(year, bool) else 0
 
 
+def parse_pub_date(value: Any) -> date | None:
+    """``YYYY-MM-DD`` (or a longer ISO string) as a date; None when missing or unreadable."""
+    if not isinstance(value, str) or len(value) < 10:
+        return None
+    try:
+        return date.fromisoformat(value[:10])
+    except ValueError:
+        return None
+
+
 def select_new_works(
-    rows: Sequence[Mapping[str, Any]], start: datetime, end: datetime
+    rows: Sequence[Mapping[str, Any]],
+    start: datetime,
+    end: datetime,
+    *,
+    max_age_days: int | None = None,
 ) -> list[Mapping[str, Any]]:
     """Plastic-related works with ``start <= first_seen < end``, newest first.
+
+    With ``max_age_days``, a work must also have a ``pub_date`` no more than that many days
+    before the window's end; rows without a readable ``pub_date`` are then left out. This stops a
+    re-ingest, which resets ``first_seen``, from listing old papers as new.
 
     Ties on ``first_seen`` break by year (newest first), then title and work_id, so the order is
     stable. Rows without a usable ``first_seen`` or a ``work_id`` are left out.
     """
+    cutoff = end.date() - timedelta(days=max_age_days) if max_age_days is not None else None
     fresh: list[tuple[datetime, Mapping[str, Any]]] = []
     for row in rows:
         if row.get("plastic_related") is not True or not row.get("work_id"):
             continue
+        if cutoff is not None:
+            published = parse_pub_date(row.get("pub_date"))
+            if published is None or published < cutoff:
+                continue
         seen = parse_timestamp(row.get("first_seen"))
         if seen is not None and start <= seen < end:
             fresh.append((seen, row))
@@ -271,10 +300,11 @@ def build_digest(
     week_ending: date,
     max_works: int,
     site_url: str,
+    max_age_days: int | None = None,
 ) -> Digest:
     """Select the week's new works and build at most ``max_works`` cards from them."""
     start, end = week_window(week_ending)
-    fresh = select_new_works(works, start, end)
+    fresh = select_new_works(works, start, end, max_age_days=max_age_days)
     cards = tuple(_card(row, abstracts, site_url) for row in fresh[:max_works])
     return Digest(week_start=start.date(), week_end=week_ending, total=len(fresh), cards=cards)
 
@@ -316,12 +346,16 @@ def load_settings(path: Path = DEFAULT_CONFIG) -> DigestSettings:
     sender = str(block.get("sender_name", "")).strip()
     if not sender:
         raise DigestError("digest.sender_name is empty")
+    max_age_days = block.get("max_age_days", DEFAULT_MAX_AGE_DAYS)
+    if not isinstance(max_age_days, int) or isinstance(max_age_days, bool) or max_age_days < 7:
+        raise DigestError("digest.max_age_days must be a whole number of at least 7")
     return DigestSettings(
         site_url=site_url,
         max_works=max_works,
         subject_template=subject,
         sender_name=sender,
         ntfy_url=_ntfy_url(data),
+        max_age_days=max_age_days,
     )
 
 

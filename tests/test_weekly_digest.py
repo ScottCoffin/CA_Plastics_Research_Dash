@@ -81,6 +81,7 @@ def work(work_id: str = "W1", first_seen: str = "2026-11-11T12:00:00+00:00", **e
         "domain_tags": ["fate_transport_and_sorption"],
         "plastic_related": True,
         "first_seen": first_seen,
+        "pub_date": "2026-11-02",  # inside the default 60-day publication window
     }
     row.update(extra)
     return row
@@ -204,6 +205,27 @@ def test_selection_follows_utc_boundaries_and_skips_unusable_rows():
     ids = [row["work_id"] for row in select_new_works(rows, start, end)]
     # Newest first: B and E are the latest, then G, H, A.
     assert ids == ["B", "E", "G", "H", "A"]
+
+
+def test_publication_window_drops_old_papers_whose_first_seen_was_reset():
+    stamp = "2026-11-11T12:00:00+00:00"
+    rows = [
+        work("RECENT", stamp, pub_date="2026-11-02"),
+        work("EDGE", stamp, pub_date="2026-09-17"),  # 60 days before 16 November: in
+        work("STALE", stamp, pub_date="2026-09-16"),  # 61 days: out
+        work("OLD", stamp, pub_date="1988-01-01"),  # re-ingested old paper: out
+        work("NODATE", stamp, pub_date=None),  # no pub_date: out once the window is on
+        work("BAD", stamp, pub_date="2026-13-40"),  # unreadable: out
+    ]
+    start, end = week_window(WEEK_ENDING)
+    ids = {row["work_id"] for row in select_new_works(rows, start, end, max_age_days=60)}
+    assert ids == {"RECENT", "EDGE"}
+    # Without the window every row with a first_seen in the week is listed.
+    assert len(select_new_works(rows, start, end)) == 6
+    digest = build_digest(
+        rows, {}, week_ending=WEEK_ENDING, max_works=40, site_url=SITE, max_age_days=60
+    )
+    assert digest.total == 2
 
 
 def test_ties_on_first_seen_order_by_year_then_title():
@@ -500,6 +522,7 @@ def test_config_digest_block_is_loaded():
     settings = load_settings(CONFIG)
     assert settings.site_url == "https://plastiverse.live/california"
     assert settings.max_works == 40
+    assert settings.max_age_days == 60
     assert settings.sender_name == "Plastiverse · California"
     assert settings.ntfy_url == "https://ntfy.sh/plastiverse-california"
     assert "{start}" in settings.subject_template
@@ -516,6 +539,10 @@ def test_config_digest_block_is_loaded():
         "sender_name: S",
         "site_url: https://example.org\nmax_works: 40\nsubject_template: 'no field'\n"
         "sender_name: S",
+        "site_url: https://example.org\nmax_works: 40\nsubject_template: 'x {start}'\n"
+        "sender_name: S\nmax_age_days: 3",
+        "site_url: https://example.org\nmax_works: 40\nsubject_template: 'x {start}'\n"
+        "sender_name: S\nmax_age_days: true",
     ],
 )
 def test_bad_digest_settings_are_rejected(tmp_path, block):

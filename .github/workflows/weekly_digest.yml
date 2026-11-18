@@ -1,10 +1,9 @@
 name: Weekly digest
 
 on:
-  # Schedule disabled until MAIL-1's "new this week" selection is fixed: first_seen was reset for
-  # most works by the 2026-11-11 re-ingest, so a dry run selected 1,565 works. Re-enable with:
-  #   schedule:
-  #     - cron: "0 14 * * 1"   # Monday 14:00 UTC (about 6-7 a.m. Pacific)
+  # Without the BUTTONDOWN_API_KEY secret the scheduled run is a no-op that succeeds.
+  schedule:
+    - cron: "0 14 * * 1"   # Monday 14:00 UTC (about 6-7 a.m. Pacific)
   workflow_dispatch:
     inputs:
       week_ending:

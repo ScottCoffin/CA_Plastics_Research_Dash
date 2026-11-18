@@ -39,8 +39,10 @@ The weekly Monday digest is built by a GitHub Action and sent through Buttondown
    **New repository secret**. Name: `BUTTONDOWN_API_KEY`. Value: the key. Save.
 4. Optional: in Buttondown, copy your public subscribe page link and tell the agent; it will
    add it to the "Get updates" panel.
-- **Done when:** you tell the agent "Buttondown ready". The first digest goes out the next
-  Monday at about 6 to 7 a.m. Pacific; the agent can also send a test to you first.
+- **Done when:** you tell the agent "Buttondown ready". Since 2026-11-17 the Monday schedule is
+  on, so the digest goes out automatically the first Monday after the secret exists (about 6 to
+  7 a.m. Pacific). Until you invite other subscribers, that first send reaches only you and serves
+  as the test. To see one sooner: GitHub > **Actions** > **Weekly digest** > **Run workflow**.
 
 ### H31. Rotate the OpenAI API key (5 minutes)
 The key pasted into the chat on 2026-11-17 was used for the landing images and must be treated as exposed.

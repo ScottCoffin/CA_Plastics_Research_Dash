@@ -15,6 +15,9 @@ digest:
   site_url: https://plastiverse.live/california
   # Works listed in one digest; the rest are counted as "and N more on the site".
   max_works: 40
+  # A paper counts as new only when OpenAlex dates it within this many days of the week's end.
+  # first_seen alone is not enough: a full re-ingest resets it for old papers.
+  max_age_days: 60
   # {start} is the Monday of the digest week, for example "9 November 2026".
   subject_template: "California plastics research, week of {start}"
   # Shown in the header and footer. Buttondown's API has no per-email sender name, so set the same

@@ -116,6 +116,7 @@ def main(argv: list[str] | None = None, *, opener=None) -> int:
         week_ending=week_ending,
         max_works=settings.max_works,
         site_url=settings.site_url,
+        max_age_days=settings.max_age_days,
     )
     subject = subject_line(settings, digest)
     print(
