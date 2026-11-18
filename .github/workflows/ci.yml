@@ -37,6 +37,9 @@ jobs:
       - name: Check Add-on A2 scaffold
         run: python scripts/check_a2_scaffold.py
 
+      - name: Check Add-on A3 scaffold
+        run: python scripts/check_a3_scaffold.py
+
       # ADR-FRAMEWORK-REVISIT-2026-11-11: warns (never fails) when a trigger to revisit
       # the deferred Observable Framework migration (AT-5/AT-6) has fired.
       - name: Check Observable Framework revisit triggers

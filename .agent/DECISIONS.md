@@ -674,3 +674,75 @@ Owner request 2026-11-14: the Framework site "lacks any meaningful design elemen
 - **Context:** the owner asked for the Global site's interactive app (non-region data) designed with Impeccable on the landing's post-story light look, landing untouched, California deferred. Answers: countries first; views countries + profile, evidence map + trend, experts + institutions, network + works; one shell with a scope switch that regional atlases reuse.
 - **Decision:** Impeccable surface round (seed:2fe7429ad86b7253) dealt three structures; the owner locked "Scope ladder" and steered it: the ladder is a sticky breadcrumb bar under the header on desktop (World > continent > country > regional atlas, each step a disclosure; "Find a country" on the right) and a left drawer only on phones; the live California atlas and the Norway atlas in preparation appear inside the map (callouts in open water, coral cells, dashed cell-traced outline) and inside the country table (a coral sub-row under the United States, a dashed badge on Norway) and as the last ladder step; the world map spans the content width. The seven view tabs stay fixed while every view re-scopes; the map's viewBox zooms (450 ms ease-out) on scope changes.
 - **Consequences:** prototype `.impeccable/sketches/global_app.html` is the composition GA-2 builds in Framework; VD-SM should reuse this shell for California. Continent totals are sums of country counts (overlapping) and say so. Per-country profiles need PLAT-4 data; the prototype shows honest empty states outside the US, China and Norway.
+
+## ADR-A3-INTEGRATION-2026-11-18: Add-on A3 (BQ tasks) integrated into the roadmap
+
+- **Context:** the owner supplied `docs/add_on_spec_3.md` (Add-on A3: corpus quality, global-denominator trends, collaboration structure, topic evolution, evidence-gap heatmap, Sigma.js views, search vocabulary and taxonomy, terminology, precision-goal-driven labelling; task prefix BQ-). It cites repo facts read on 2026-11-18 and marks drift-prone ones `[VERIFY]`.
+- **Decision:** 52 BQ tasks in `TODO.md` section "BQ" (A3 §10 order, with three dependency-driven changes: BQ-S2/S6/S3/S7 come before the BQ-1 module because BQ-1.3 and BQ-1.5 need the anchor sets; BQ-1.2 and BQ-1.6 depend only on BQ-0, so they become eligible early; PubMed stage 2 is the separate ID BQ-S9b). The A3 decision table is copied below as A3-D0..D24 with status; conflicts with repo facts or earlier ADRs are A3-C1..C14; open owner items are QUESTIONS A3-Q1..Q15; owner steps are HUMAN_TASKS H36-H40. `scripts/check_a3_scaffold.py` (CI) asserts every ID exists once and BQ dependencies are listed in order. Quote-verification sources are in `docs/A3_SOURCES.md` (Zotero item and attachment keys).
+- **Owner rule (2026-11-18):** for OpenAlex, depend on the repo's verified facts, not on the spec's claims (A3-C1).
+- **Pre-checked premises (2026-11-18):** `pmid` is not stored anywhere; the shared OpenAlex client already throttles >5-operator searches and retries their 429 (`atlas.ingest.openalex._throttle`); `requests` is not a dependency; code is MIT (`LICENSE`, ADR-002) and derived data CC BY (`LICENSE-DATA.md`), only the `pyproject.toml` string is stale.
+- **Consequence:** the 2026-11-18 handoff queue (PLAT-2b, VD-SM, PLAT-3, PLAT-4) is interleaved with A3 (A3-Q1 default). A3 does not change any A1/A2 gate, the active query, the frozen guide or the gold files.
+- **Decided by:** lead at integration; owner decisions marked in the register.
+
+## Add-on A3 decisions (register)
+
+Copied from `docs/add_on_spec_3.md` §3. "Owner" = decided by the owner per the spec; "Proposal" = awaiting owner approval (nothing ships on a proposal).
+
+| ID | Decision | Status |
+|---|---|---|
+| A3-D0 | Terminology: "Authors", never "Experts" (BQ-R1) | Owner |
+| A3-D1 | Engine: Sigma.js + graphology, precomputed layouts; stay on sigma 3.0.3 unless BQ-V.0 requires a change | Owner |
+| A3-D2 | Views: Authors, Institutions, Works in the seven-tab shell | Owner |
+| A3-D3 | Scope ladder Worldwide > Country > Region; generic subregion schema; California = RWQCB + offshore (A2); Norway subregions open (A3-Q12) | Owner (Norway open) |
+| A3-D4 | Pollution-core = v3.1 pollution terms as the starting set (A3 §5.3) | Owner |
+| A3-D5 | Label budget: 150 CA-eval + up to 350 global, precision-goal-driven, 350 is a ceiling; needs ADR-GOLD-GLOBAL | Owner (ADR proposed below, A3-Q3) |
+| A3-D6 | Second reader: Claude 20% per ADR-GATES, reported as LLM-owner agreement; optional 40-work intra-rater retest stored separately | Owner |
+| A3-D7 | Topic series use only owner-approved tags | Owner |
+| A3-D8 | Person-level metrics aggregate only; node size = work count | Owner (scope vs existing features: A3-C5, A3-Q2) |
+| A3-D9 | New dependencies need owner approval + a DECISIONS entry | Owner |
+| A3-D10 | Query changes go to candidate plastic-v3.2; promotion by the existing precision rule | Owner |
+| A3-D11 | Gold publication: IDs, labels, short excerpts; licence open (A3-Q9) | Owner (licence open) |
+| A3-D12 | Lifecycle-and-society scope included with the boundary defaults (bioplastics, packaging, SSbD) | Owner |
+| A3-D13 | Tier name `lifecycle_and_society` | Owner |
+| A3-D14 | Waste colonialism: topic tag + `analytic_lens[]` facet, explicit framing with quoted excerpt only | Owner |
+| A3-D15 | The 13 labelled CA works are checked against A3; lens and centrality default `not_assessed` | Owner |
+| A3-D16 | Tier name confirmed | Owner |
+| A3-D17 | `culture_media_and_discourse` optional, low weight, outside P1-P6 | Owner |
+| A3-D18 | Scope gate loosened via `plastics_centrality`; definition wording is a proposal | Owner (wording: A3-Q5) |
+| A3-D19 | No new label budgets beyond the 350 ceiling and the >= 30 reserve | Owner |
+| A3-D20 | Lens/tag reconciliation (two new lens values; other candidates folded) | Proposal (A3-Q7) |
+| A3-D21 | Review-derived facets (A3 §5.10.3) are candidates; evidence-quality scores not adopted | Proposal (A3-Q8) |
+| A3-D22 | BERT-based title classifier is precedent for certification arithmetic only | Owner |
+| A3-D23 | PubMed coverage QC: Python port on NCBI E-utilities (ADR-A3-PUBMED) | Owner |
+| A3-D24 | PubMed results are coverage against a reference set, never recall | Owner |
+
+## Add-on A3 conflicts (register)
+
+Each row is an adopted rule; status stays Open until the implementing task's acceptance passes.
+
+| ID | Issue | Resolution | Tasks | Status |
+|---|---|---|---|---|
+| A3-C1 | A3 §0 rule 12 and §5.9 cap agent-written OpenAlex queries at 5 boolean operators, from a 429 seen in a research tool; the repo verified on 2026-11-11 that >5-operator searches are rate-limited to 5 req/s (429 "wait 1s"), cost 10 credits, and are throttled and retried by the shared client. Splitting OR lists breaks count queries (split counts cannot be summed). | Owner 2026-11-18: verified repo facts govern OpenAlex, not the spec. Count queries (PLAT-2b cells, trend, language probe, per-theme counts) stay one fully parenthesised query on the throttled path. Splitting is allowed only for ID retrieval with dedupe by work ID. Any new OpenAlex behaviour is smoke-tested and recorded in `docs/api_notes/` before it is relied on. | BQ-S8, BQ-S2, BQ-S4, BQ-S10, BQ-2.2, PLAT-2b | Open |
+| A3-C2 | BQ-V.2 (global ingest) duplicates PLAT-4 | One implementation: PLAT-4 carries BQ-V.2's acceptance (cost estimate first, "unscreened query hits", `ids.pmid`, budget guard USD 0.95/day, no paid filters); BQ-V.2 is checked when PLAT-4 passes. PLAT-4 keeps its PLAT-3 dependency (A3-Q15). | PLAT-4, BQ-V.2, BQ-G3, BQ-S9b, GX-1 | Open |
+| A3-C3 | A3 §0 rule 2 forbids touching VD/PLAT/NOR/MAIL/GA inside a BQ task, but BQ-R1 must change explorer tabs and email copy | BQ-R1 is the named exception: public strings only, no layout change. Run it before VD-SM. | BQ-R1, VD-SM, MAIL-1, GA | Open |
+| A3-C4 | BQ-R1 asks for /experts -> /authors redirects; ADR-PLAT1-LAYOUT made the root -> /california move a clean break without redirects | PLAT-1's rule covers that move only. BQ-R1 adds redirect stubs for renamed routes; `expert.html`, data keys and file names stay unchanged (A3-Q4 default). | BQ-R1 | Open |
+| A3-C5 | A3-D8 / rule 8 "no person-level rankings" vs shipped person-level features (m-quotient and rising score on expert pages, ADR-EXPERT-METRICS; GX-SEO top-20,000 selection) | A3-D8 governs new A3 outputs; existing features are unchanged until the owner answers A3-Q2. | BQ-3.4, BQ-V.4; ADR-EXPERT-METRICS; GX-5 | Open |
+| A3-C6 | A3 §0 rule 14 (no publisher full text) vs the S6 full-text pipeline | Compatible: S6 already processes only selected copies with CC BY/CC0 evidence (G-8). BQ tasks store no full text; Zotero PDFs are read locally into gitignored `scratch/pdfmd/` for quote checks only. | S6.x, all BQ | Open |
+| A3-C7 | A3 lists code and gold licences as pending (from `pyproject.toml`) | Code is MIT (`LICENSE`, ADR-002) and derived data CC BY (`LICENSE-DATA.md`); BQ-0 fixes the stale pyproject string; new code (PubMed port) is MIT; gold licence default CC BY (A3-Q9). | BQ-0, BQ-S9, BQ-G6 | Open |
+| A3-C8 | PubMed port "via the standard library or requests"; `requests` is not a dependency | Standard library `urllib` only; no new dependency, so A3-D9 is not triggered. | BQ-S9 | Open |
+| A3-C9 | A3 §5.9 says `fetch_trend_global.py` does not handle 429 | False: it uses the shared `_request_json` path (throttle, per-second 429 retry, budget guard charges rejected 429s). The real gap is plan refusals returned as 429 that defer quietly (TODO ING note); BQ-2.2 adds a stale flag and surfaces them. BQ-S8 verifies and documents. | BQ-S8, BQ-2.2 | Open |
+| A3-C10 | A3 Module V names graphology JS layouts (layout-noverlap, communities-louvain); the repo precomputes ForceAtlas2 positions and communities in Python (`build_network.py`) | Precompute in Python with networkx (Louvain is in networkx); new npm packages need A3-D9 approval. | BQ-V.1 | Open |
+| A3-C11 | Overlapping work: BQ-V.4 Works view vs AT-9; BQ-V Authors graph vs GX-7; BQ-6.1 vs S5.2/S5.4; BQ-6.2 vs EM-8; Module 2 vs EM-7 and PLAT-2b | AT-9 is delivered by BQ-V.4; GX-7 by BQ-V.1/V.4; BQ-6.1 reuses S5.2/S5.4 (no second extractor); BQ-6.2 shares the EM-8 heatmap component (A2-C4); BQ-2.x extends `trend_global.json` and shares PLAT-2b's fetch path. | AT-9, GX-7, S5.2, S5.4, EM-8, EM-7, PLAT-2b | Open |
+| A3-C12 | A3 §0 rule 10 test baseline (1,702 passed, 9 skips) comes from NET-1 and is stale | BQ-0 records the current baseline; later BQ checkpoints compare against it. | BQ-0 | Open |
+| A3-C13 | ADR-GOLD-EVAL-SET limits owner gold labels to the 150 CA-eval works; A3-D5 adds up to 350 global labels | ADR-GOLD-GLOBAL (proposed below) extends it once the owner confirms (A3-Q3). | BQ-G3, BQ-G4 | Open |
+| A3-C14 | A3 §6 places new files directly in `site/data/`; PLAT-3 introduces `site/data/<region>/` | Global outputs go in `site/data/global/`, California outputs stay in `site/data/` until PLAT-3 moves them; every A3 file is listed in `build_metadata.json`. | all BQ data tasks, PLAT-3 | Open |
+
+## ADR-GOLD-GLOBAL-2026-11-18 (proposed): global evaluation labels under Add-on A3
+
+- **Status:** Proposed; takes effect when the owner confirms (QUESTIONS A3-Q3, HUMAN_TASKS H36).
+- **Decision:** extends ADR-GOLD-EVAL-SET. Besides the 150 California evaluation works, the owner labels up to 350 global works chosen by the A3 §4.3 adaptive design (round 0 of >= 10 per stratum, rounds of 25, checkpoints at 100/200/300/350, stop early once P1 is met at a checkpoint); 350 is a ceiling, not a quota. Strata and inclusion probabilities are frozen before labelling (`curation/gold_global_frame_v1.csv`); labels are never repeated; works with `role=guide_example` are excluded from every frame and test set. Claude double-labels 20% (ADR-GATES), reported as LLM-owner agreement. Labelling uses the Streamlit app from BQ-G4.
+- **Consequence:** gold_v1 covers both blocks and is immutable after release (BQ-G6).
+
+## ADR-A3-PUBMED-2026-11-18: PubMed coverage QC as a Python port (A3-D23 / A3-D9)
+
+- **Decision (owner, 2026-11-18, per A3-D23):** add `src/atlas/qc/pubmed.py` and `scripts/qc_pubmed_coverage.py` (Python, NCBI E-utilities, standard library only; A3-C8). Purpose: coverage check against PubMed reference sets; not a query source or authority (A3-D24). Licence: new code under the repo's MIT licence (A3-C7); no code is copied from the GPL-3.0 R package `pubmedsearchworkflow` (the owner holds its copyright; easyPubMed is not used). Etiquette: tool name sent, optional API key and contact email only from the environment (A3-Q14). Live calls only behind an explicit flag; tests offline.

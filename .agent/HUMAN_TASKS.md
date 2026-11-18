@@ -12,7 +12,7 @@ spreadsheet to edit by hand. Small reviews (10 or fewer) may stay as a file edit
 All commands run from the repository folder in Git Bash:
 `cd ~/R_new/CA_Plastics_Research_Dash`
 
-Last updated: 2026-11-16.
+Last updated: 2026-11-18.
 
 ---
 
@@ -196,7 +196,37 @@ leak-check works wait for S5.7.
 
 ---
 
+### H36. Answer the Add-on A3 questions (about 10 minutes; none blocks the next tasks)
+The new spec `docs/add_on_spec_3.md` is in the plan (TODO section "BQ"). Defaults are in use until you answer.
+1. Open `.agent/QUESTIONS.md` and find the rows A3-Q1 to A3-Q15 at the bottom.
+2. Answer in one line each, in chat or in the "Owner answer" column. The ones that matter soonest:
+   - **A3-Q1** order (PLAT-2b first, then the A3 recon, the "Authors" rename, then VD-SM, PLAT-3, PLAT-4).
+   - **A3-Q2** do shipped expert metrics (m-quotient, rising score) stay? Default: yes.
+   - **A3-Q3** confirm ADR-GOLD-GLOBAL (up to 350 global labels, adaptive) in `.agent/DECISIONS.md`.
+   - **A3-Q9** gold licence (default CC BY 4.0) and **A3-Q14** NCBI contact email (default: none sent).
+3. Add the A3 sources missing from Zotero (you have most of them as the spec's uploaded files), so
+   agents can quote-check them (`docs/A3_SOURCES.md` lists what is there):
+   - Papers: Ashworth (2026) (needed first, for BQ-G7), Stoett (2024), Peryman et al. (2024),
+     Fuller et al. (2022), Gutberlet (2023), Céspedes et al. (2025), Liboiron (2021).
+   - Supplements: Tran et al. (2026) Additional File 1 and Ortiz-Balsero et al. (2026) Texts S1-S2
+     (both needed for BQ-S10); attach each to its existing Zotero item.
+4. Optional, outside this repo: the spec lists eight improvements to your R package
+   `PubMed_Systematic_Search` (A3 section 5.11, "Optional changes to the R package").
+- **Done when:** you reply "A3 answers" with your answers, or "A3 defaults OK".
+
 ## Later (the agent will say when each is ready)
+
+- **H37. Approve guide addendum A3 (BQ-G0, A3-Q5).** The agent drafts
+  `docs/LABELING_GUIDE_A3_ADDENDUM.md` (lens values, topic tag names, `plastics_centrality`
+  wording, the P4 precision target). Read it and reply "A3 guide approved" or list changes.
+  Global labelling cannot start before this.
+- **H38. Two boundary cases (BQ-G7, A3-Q6).** Label Ashworth (2026) and Foellmer et al. (2022)
+  in `curation/a3_boundary_cases.csv` (the agent fills the evidence and proposes "incidental"),
+  one-line reason each.
+- **H39. Global gold labelling rounds (BQ-G4, after H37).** Up to 350 works in rounds of 25, in a
+  Streamlit app the agent builds; it tells you when to stop (a checkpoint met the precision goal).
+- **H40. Approve the taxonomy proposal (BQ-S5).** New topic tags, the lifecycle-and-society tier,
+  the lens facet and the candidate review facets; nothing ships until you approve.
 
 Each later review with more than 10 cases (H12 need cells) will
 come with its own Streamlit app and run command here.

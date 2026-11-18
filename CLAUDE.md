@@ -42,6 +42,7 @@ Playwright/WSL browser smoke procedure.
 | A decision | `grep -n '^##' .agent/DECISIONS.md`, then `sed -n` the ADR |
 | Lessons / pitfalls | `grep -n '^## ' .agent/LESSONS.md` (top 10 are already in MEMORY) |
 | Add-on A1 / A2 contract | Numbered plain-text sections, no `#` headings: `grep -nE '^[0-9]+(\.[0-9]*)? [A-Z]' docs/add_on_spec.md` (or `_2.md`), then read only the cited section |
+| Add-on A3 contract (BQ tasks) | `grep -nE -e '^[0-9]+(\.[0-9]+)*\.? [A-Z]' -e '^Module ' docs/add_on_spec_3.md`, then `sed -n` the cited section. Registers: DECISIONS A3-D/A3-C rows, QUESTIONS A3-Q rows; Zotero keys for quote checks in `docs/A3_SOURCES.md` |
 | Evidence for a finished task | `docs/S<stage>_<task>_VERIFICATION.md`, `docs/api_notes/<source>.md` |
 | Code layout | `agent_docs/project_structure.md` |
 | Data / Parquet / JSON | `wc -l`, `head`, or a pyarrow schema print. Never `cat` |
@@ -65,7 +66,8 @@ Never open `data/`, `output/`, `scratch/`, `site/data/*.json`, `.playwright-cli/
   `py -3.14 -m ruff format --check .`, `py -3.14 -m compileall -q src`.
 - CI pre-steps: `py -3.14 scripts/check_doc_links.py`, `py -3.14 scripts/check_a1_scaffold.py`
   and `py -3.14 scripts/check_a2_scaffold.py` (A2 also checks that EM-1..18,
-  A2-D/INT and A2-C register IDs exist once and that EM dependencies are listed in order in TODO).
+  A2-D/INT and A2-C register IDs exist once and that EM dependencies are listed in order in TODO),
+  and `py -3.14 scripts/check_a3_scaffold.py` (BQ task IDs, A3-D/C/Q registers, BQ dependency order).
 - Framework revisit check: `py -3.14 scripts/check_framework_triggers.py` (warns only; also in CI).
   If it reports a fired trigger, raise AT-5/AT-6 with the owner (ADR-FRAMEWORK-REVISIT-2026-11-11).
 - Task acceptance: `py -3.14 scripts/check_s<stage>_<task>.py` (also `check_at1.py`).
@@ -93,6 +95,9 @@ Never open `data/`, `output/`, `scratch/`, `site/data/*.json`, `.playwright-cli/
   bounded sub-parts (validators, fixtures, tests).
 - Add-on A2 says "docs/DECISIONS.md" and writes paths as `docs\...`; the real log
   is `.agent/DECISIONS.md` (ADR-A2-OWNER, A2-C1..C15), and paths use `/`.
+- Add-on A3 tasks tagged `[E]` (BQ-R1, BQ-G0, BQ-G4, BQ-S2, BQ-1.1, BQ-1.4, BQ-9) are
+  pre-escalated the same way. For OpenAlex, the repo's verified facts (MEMORY, `docs/api_notes/`)
+  override A3's claims (owner 2026-11-18, A3-C1). A3 docs cite as (Authors Year).
 - Do not spawn workers for edits to one doc or one config file, `.agent/`
   updates, or commits. A cold worker re-reads context, so doing these inline is cheaper.
 - Run workers in parallel only on disjoint file sets, at most 3 at a time.

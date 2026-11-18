@@ -184,3 +184,17 @@ states them; re-verify at adoption (AT-4/AT-5).
 | Asset | Source | Terms | Use | Status |
 |---|---|---|---|---|
 | `site/assets/networks/land-to-sea-microplastics-consortium.png` | Land to Sea Microplastics Consortium logo, UC Davis Coastal and Marine Sciences Institute page (`config/research_networks.yml` `logo.source_url`) | "Copyright The Regents of the University of California, Davis campus. All rights reserved." (page footer) | Self-hosted, cropped and resized; shown only beside a link to the consortium (UC Davis institution page, expert badges); no endorsement implied | Permission to confirm with the consortium (QUESTIONS NET-1-LOGO, HUMAN_TASKS H26); remove the `logo` block if declined |
+
+## Add-on A3 source and licence ledger (2026-11-18)
+
+Contract: `docs/add_on_spec_3.md` §0 rule 14 and §9. Store only metadata, abstracts and identifiers from OpenAlex, PubMed, Europe PMC or open-licence sources; nothing below is copied into the repo. Zotero keys for local quote checks are in `docs/A3_SOURCES.md`.
+
+| Source | Terms (as reported by A3) | Atlas use | Status |
+|---|---|---|---|
+| `pubmedsearchworkflow` 0.1.0 (R; owner's `PubMed_Systematic_Search` repository) | GPL-3.0; owner holds copyright | Design reference only for the BQ-S9 Python port; no code copied (ADR-A3-PUBMED) | Not reused |
+| NCBI E-utilities / PubMed | Public service; NCBI usage policy (rate limits to verify in BQ-0) | PMIDs, counts, query translations in BQ-S9 manifests | Pending BQ-0 check |
+| Discard Studies (discardstudies.com) | Terms of reuse not verified | Link-only Related Resources entry; vocabulary inspiration, no text copied | Link-only |
+| Foellmer et al. (2022), WHO/Europe HEN Synthesis Report 75 | CC BY-NC-SA 3.0 IGO | Link-only Related Resources entry; glossary definitions quoted briefly with citation | Link-only |
+| Zimmermann et al. (2025), npj Science of Food | CC BY-NC-ND 4.0 | Link-only; facet values recorded, tables not copied | Link-only |
+| Ortiz-Balsero et al. (2026), J Hazard Mater | Publisher reserves text and data mining and AI training | Link-only, metadata only | Link-only |
+| Tran et al. (2026); Özkan Vardar and Vardar (2026); Zuanazzi et al. (2026); Ashworth (2026) | Not recorded in A3; check before any reuse beyond metadata | Link-only, metadata only | Link-only |

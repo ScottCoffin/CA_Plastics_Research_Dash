@@ -235,3 +235,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-18 | GA-2 | Impeccable finish reviewer (Haiku) | /explore vs prototype | recapture -> fix (5) -> ship | 3 rounds, 1 session |
 | 2026-11-18 | GA-3a, GA-3b | Claude Haiku developer x2 (parallel, disjoint files) | /explore phone menu and map; landing link, label, sitemap | Completed; lead set the 3:5 portrait and renamed the tooltip class | 2 sessions |
 | 2026-11-18 | LOGO-1 | Claude Haiku developer | Landing footer logo animation | Work complete; worker stalled waiting on its own preview server and was stopped; lead verified | 1 session |
+| 2026-11-18 | A3-INT-SRC, A3-INT-SCAFFOLD | Claude Haiku general-purpose + Haiku developer (parallel, disjoint files) | Zotero source register; A3 scaffold check + CI step | Completed; lead spot-checked 2 Zotero keys and accepted the heading-match deviation | 2 sessions |

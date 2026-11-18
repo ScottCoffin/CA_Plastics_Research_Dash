@@ -135,3 +135,18 @@ Defaults below come from `spec.md` Part G and remain in use until the owner answ
 | GX-PHOTOS | Photos outside curated regions? | None (curated regions keep owner-approved photos) | Licensed Wikidata images shown automatically (with licence and credit) | Answered 2026-11-18 |
 | GX-AUTHORS | Accept OpenAlex author records as they are outside curated regions (no manual merges), with a report-an-error link and the opt-out? | Yes | Yes (default) | Answered 2026-11-18 |
 | GX-R2-TOKEN | When to create the R2 write token? | At GX-3 | Remind me when it is needed | Answered 2026-11-18 |
+| A3-Q1 | Add-on A3 order: interleave BQ tasks with the 2026-11-18 queue? | PLAT-2b > BQ-0 > BQ-S8 > BQ-R1 > BQ-1.6/BQ-1.2/BQ-G1/BQ-S1/BQ-S9/BQ-G0 draft (agent work while owner items wait) > VD-SM > BQ-V.0 > PLAT-3 > PLAT-4 (= BQ-V.2) > BQ-S4/G2/G3/G4 > owner labels > rest in TODO order | | Open (default in use) |
+| A3-Q2 | Does A3-D8 ("no person-level rankings") retire shipped person-level features (m-quotient and rising score on expert pages, GX-SEO top-20,000 selection)? | No: A3-D8 governs new A3 outputs only (A3-C5) | | Open (default in use) |
+| A3-Q3 | Confirm ADR-GOLD-GLOBAL (up to 350 global labels by the adaptive design, extending ADR-GOLD-EVAL-SET)? | Proposed text in DECISIONS; not in effect until confirmed | | Open |
+| A3-Q4 | BQ-R1: redirect stubs from renamed "experts" routes to "authors"? | Yes, stubs only; `expert.html`, data keys and file names unchanged (A3-C4) | | Open (default in use) |
+| A3-Q5 | Approve guide addendum A3 (lens values, topic tag names, `plastics_centrality` wording, P4 numeric target) once BQ-G0 drafts it? | Nothing is annotated in the global block until approved | | Open (gates H39 labelling) |
+| A3-Q6 | BQ-G7: labels for the boundary cases Ashworth (2026) and Foellmer et al. (2022)? | Proposed `incidental` for both | | Open |
+| A3-Q7 | Keep the A3-D20 lens/tag reconciliation? | Provisionally used in drafts; ships only after approval | | Open |
+| A3-Q8 | Approve any A3 §5.10.3 review-derived facets (A3-D21)? | None ship; fields stay unpopulated | | Open |
+| A3-Q9 | Licence for published gold (IDs, labels, short excerpts)? | CC BY 4.0, as `LICENSE-DATA.md` | | Open (default in use) |
+| A3-Q10 | Network N_MAX? | 60,000 (A3 default) until the BQ-V.0 benchmark proposes a value | | Open (default in use) |
+| A3-Q11 | Is Module 5 reserved (A3 numbering skips it)? | Reserved, unused | | Open (default in use) |
+| A3-Q12 | Norway subregions for the scope ladder? | Decided with NOR-1..5 | | Open |
+| A3-Q13 | Multilingual embedding model, UMAP or Leiden as new dependencies? | None; English bge-small with `embedding_quality=low` for non-English works; networkx Louvain | | Open (default in use) |
+| A3-Q14 | NCBI E-utilities etiquette: API key and contact email for BQ-S9? | No key (3 req/s), tool name `plastiverse-atlas`; email sent only if you set `NCBI_EMAIL` in `.env` / CI | | Open (default in use) |
+| A3-Q15 | Run the global ingest (PLAT-4 = BQ-V.2) before PLAT-3's region abstraction? | No: PLAT-3 first, as planned (A3-C2) | | Open (default in use) |

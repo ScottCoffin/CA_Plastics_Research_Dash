@@ -6,3 +6,4 @@
 - [Owner standing reminders](owner-standing-reminders.md) — remind every session of the "Do now" items in .agent/HUMAN_TASKS.md; keep that file current
 - [Delegate to Haiku first](delegate-to-haiku-first.md) — cost efficiency: every spawned agent gets model haiku (Impeccable agents too); lead only integrates/gates/commits
 - [Plastiverse Live logo and palette](plastiverse-logo-brand.md) — main logo file, palette, and the prompt file for variants
+- [OpenAlex: verified facts over spec](openalex-verified-facts-over-spec.md) — for OpenAlex limits/costs follow repo-verified facts, not spec claims (A3-C1)
