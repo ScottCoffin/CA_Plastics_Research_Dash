@@ -377,3 +377,4 @@ until it reports.
 - A ```js fence placed directly after closing HTML (no blank line) stays inside the Markdown HTML block: Framework renders it as text and the module never runs, with no console error. Keep a blank line before every fence (`tests/test_ga2_explore.py` checks it).
 - Framework's default sheet and `style.css` restyle component markup: tables get a 1rem top margin and 14.4 px / 1.2 text, and `#observablehq-main li a, td a, p a` are underlined. Scope overrides as `#observablehq-main .gx ...` so they outrank those rules.
 - `scripts/serve_framework_preview.py --assembled` serves under `/CA_Plastics_Research_Dash/`; a bare `/explore` is 404.
+- Framework's default sheet defines `.tip`, `.warning` and `.caution` callouts (green border, a bold "Tip" label from `::before`, 640 px cap). Never reuse those class names for component markup inside a Framework page (GA-3 renamed the map tooltip to `maptip`).

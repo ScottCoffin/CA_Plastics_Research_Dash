@@ -190,3 +190,59 @@ def test_js_block_is_separated_from_the_html_block() -> None:
 
     text = (ROOT / "framework" / "src" / "explore.md").read_text(encoding="utf-8")
     assert "\n\n```js" in text.replace("\r\n", "\n")
+
+
+def _media_bodies(css: str, query: str) -> list[str]:
+    """Bodies of every @media block whose query matches exactly (brace-matched)."""
+    bodies = []
+    for match in re.finditer(r"@media\s*" + re.escape(query) + r"\s*\{", css):
+        depth, index = 1, match.end()
+        while depth and index < len(css):
+            if css[index] == "{":
+                depth += 1
+            elif css[index] == "}":
+                depth -= 1
+            index += 1
+        bodies.append(css[match.end() : index - 1])
+    return bodies
+
+
+def test_phone_menu_drawer_has_views_then_scope_then_atlases():
+    page = PAGE.read_text(encoding="utf-8")
+    js = MODULE.read_text(encoding="utf-8")
+    assert ">Menu</span>" in page
+    assert 'role="group" aria-labelledby="menu-views"' in page
+    order = [
+        page.index(">Views</p>"),
+        page.index(">Scope</p>"),
+        page.index('id="find-mob"'),
+        page.index('id="vlad"'),
+    ]
+    assert order == sorted(order)
+    assert 'data-view="${id}"' in js
+    assert 'aria-current="page"' in js
+    assert "chooseView(b.dataset.view)" in js
+    assert "panel.focus({preventScroll: true})" in js
+    assert js.index('row("world"') < js.index("Regional atlases")
+
+
+def test_tab_row_is_hidden_on_phones_and_kept_on_desktop():
+    css = _strip_css_comments(STYLE.read_text(encoding="utf-8"))
+    phone = "".join(_media_bodies(css, "(max-width: 860px)"))
+    assert re.search(r"\.gx \.tabs\s*\{\s*display:\s*none", phone)
+    desktop = re.sub(r"@media[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}", "", css)
+    assert ".gx .tabs" in desktop
+    assert not re.search(r"\.gx \.tabs\s*\{[^}]*display:\s*none", desktop)
+
+
+def test_narrow_world_map_is_two_stacked_panes_with_captions():
+    js = MODULE.read_text(encoding="utf-8")
+    css = STYLE.read_text(encoding="utf-8")
+    assert '"Americas"' in js
+    assert '"Europe, Africa, Asia and Oceania"' in js
+    assert "78 * G.u" in js and "76 * G.u" in js and "108 * G.u" in js
+    assert "PORTRAIT = 3 / 5" in js
+    assert 'class="mcap"' in js and 'class="mp-box"' in js
+    assert ".gx .mapcard.pair #map { display: none; }" in css
+    assert ".gx .mapcard.portrait .mapbox { aspect-ratio: 3 / 5; }" in css
+    assert "function targetBox(aspect = ASPECT)" in js

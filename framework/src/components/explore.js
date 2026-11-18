@@ -16,6 +16,7 @@ export async function mountExplore(root) {
   const ARROW = '<svg class="i" viewBox="0 0 14 10" aria-hidden="true"><path d="M1 5h11M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
   const CHEV = '<svg width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
   const SEARCH = '<svg class="i" viewBox="0 0 14 14" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M9.5 9.5L13 13" stroke="currentColor" stroke-width="1.4"/></svg>';
+  const MENU = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   // Global listeners outlive the page when Framework's router swaps pages; they stop once root is gone.
   const attached = () => root.isConnected;
@@ -127,9 +128,13 @@ export async function mountExplore(root) {
       else if (s.kind === "cont") listPop(b, "Continents", "sums of country counts", CONTS.map((c) => ({key: "cont:" + c.name, label: c.name, works: c.works, cur: c.name === s.name})));
       else { const cont = s.cont || C[s.iso].continent; const list = contOf(cont).list; listPop(b, cont, `${list.length} countries`, list.map((c) => ({key: c.iso, label: c.name, works: c.works, cur: c.iso === s.iso}))); }
     }));
-    const sb = $("#scope-btn");
-    sb.innerHTML = `<span>${esc(scopeName())} <span class="n">${fmt(scopeWorks())}</span></span>${CHEV}`;
-    sb.setAttribute("aria-label", `Scope: ${scopeName()}. Change scope`);
+    paintMenuBtn();
+  }
+  // On phones this button is the menu: it names the current view and scope, then the scope's works.
+  function paintMenuBtn() {
+    const sb = $("#scope-btn"), label = viewLabel(tab);
+    sb.innerHTML = `${MENU}<span class="menu-t">${esc(label)} · ${esc(scopeName())}</span><span class="n">${fmt(scopeWorks())}</span>`;
+    sb.setAttribute("aria-label", `Menu: ${label}, ${scopeName()}. Open views and scope`);
   }
 
   // ---- find a country (combobox) --------------------------------------------------------
@@ -173,9 +178,19 @@ export async function mountExplore(root) {
     h += `<li class="lab">Regional atlases</li>
     <li><a class="opt live" href="${ATLAS.US.href}"><i class="sw live"></i><span>California<small>live atlas, daily build</small></span><span class="go">Open ${ARROW}</span></a></li>
     <li><a class="opt" href="${ATLAS.NO.href}"><i class="sw prep"></i><span>Norway<small>in preparation</small></span><span class="go quiet">Help build it</span></a></li>`;
+    $("#views").innerHTML = TABS.map(([id]) => `<li><button type="button" class="opt${id === tab ? " on" : ""}" data-view="${id}"${id === tab ? ' aria-current="page"' : ""}><span></span><span>${esc(viewLabel(id))}</span></button></li>`).join("");
     $("#vlad").innerHTML = h;
   }
   $("#vlad").addEventListener("click", (e) => { const b = e.target.closest("[data-scope]"); if (b) { closeDrawer(false); go(parseScope(b.dataset.scope)); } });
+  $("#views").addEventListener("click", (e) => { const b = e.target.closest("[data-view]"); if (b) chooseView(b.dataset.view); });
+  // A view picked from the menu: show it, then move focus to its panel and scroll it below the sticky bars.
+  function chooseView(id) {
+    closeDrawer(false);
+    setTab(id);
+    const panel = $("#panel-" + id);
+    panel.focus({preventScroll: true});
+    panel.scrollIntoView({block: "start"});
+  }
   function openDrawer() { renderDrawer(); $("#drawer").classList.add("open"); $("#scope-btn").setAttribute("aria-expanded", "true"); $("#drawer-x").focus(); }
   function closeDrawer(focus = true) { $("#drawer").classList.remove("open"); $("#scope-btn").setAttribute("aria-expanded", "false"); if (focus) $("#scope-btn").focus(); }
   $("#scope-btn").addEventListener("click", openDrawer);
@@ -202,9 +217,9 @@ export async function mountExplore(root) {
 
   // ---- tabs ----------------------------------------------------------------------------
   const TABS = [["countries", "Countries"], ["evidence", "Evidence map"], ["trend", "Trend"], ["experts", "Experts"], ["institutions", "Institutions"], ["network", "Network"], ["works", "Works"]];
+  const viewLabel = (id) => (id === "countries" && scope.kind === "country" ? "Overview" : TABS.find((t) => t[0] === id)[1]);
   function renderTabs() {
-    const label = (id, l) => (id === "countries" && scope.kind === "country" ? "Overview" : l);
-    $("#tabs").innerHTML = TABS.map(([id, l]) => `<button type="button" role="tab" class="tab" id="tab-${id}" aria-controls="panel-${id}" aria-selected="${id === tab}" tabindex="${id === tab ? 0 : -1}">${label(id, l)}</button>`).join("");
+    $("#tabs").innerHTML = TABS.map(([id]) => `<button type="button" role="tab" class="tab" id="tab-${id}" aria-controls="panel-${id}" aria-selected="${id === tab}" tabindex="${id === tab ? 0 : -1}">${viewLabel(id)}</button>`).join("");
     $("#panels").innerHTML = TABS.map(([id]) => `<section class="panel" role="tabpanel" id="panel-${id}" aria-labelledby="tab-${id}" tabindex="0"${id === tab ? "" : " hidden"}></section>`).join("");
   }
   $("#tabs").addEventListener("click", (e) => { const t = e.target.closest(".tab"); if (t) setTab(t.id.slice(4)); });
@@ -221,12 +236,16 @@ export async function mountExplore(root) {
     root.querySelectorAll(".tab").forEach((t) => { const on = t.id === "tab-" + id; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1; });
     root.querySelectorAll(".panel").forEach((p) => (p.hidden = p.id !== "panel-" + id));
     writeHash();
+    paintMenuBtn();
     renderPanel();
   }
 
   // ---- the map -------------------------------------------------------------------------
   // The world frame carries an empty Arctic band above the first raster row, so labels never sit on land at the top.
   const BAND = 12 * G.v, H = G.rows * G.v, FULL = [0, G.y0 - BAND, G.w, H + BAND], ASPECT = G.w / (H + BAND), CELL = G.u * 0.8;
+  // Narrow cards (under 640 px): a single map for a continent or country is portrait; a world scope is two panes over the raster.
+  const PORTRAIT = 3 / 5;
+  const PAIR = [["Americas", [0, G.y0, 78 * G.u, H]], ["Europe, Africa, Asia and Oceania", [76 * G.u, G.y0, 108 * G.u, H]]];
   const step = (w) => (w >= 3000 ? "s3" : w >= 300 ? "s2" : w >= 30 ? "s1" : w > 0 ? "s0" : "sx");
   const cellD = (cells) => cells.map(([c, r]) => `M${(c * G.u).toFixed(1)} ${(G.y0 + r * G.v).toFixed(1)}h${CELL.toFixed(2)}v${CELL.toFixed(2)}h-${CELL.toFixed(2)}z`).join("");
   const runsCells = (runs) => runs.flatMap(([c, r, n]) => Array.from({length: n}, (_, k) => [c + k, r]));
@@ -244,16 +263,20 @@ export async function mountExplore(root) {
     }
     return segs.join("");
   }
-  let vb = FULL.slice(), mapEl = null, tween = 0;
+  let vb = FULL.slice(), vbAspect = ASPECT, mapEl = null, tween = 0;
 
   function mapHTML() {
     const paths = D.countries.filter((c) => c.runs.length).map((c) => `<path class="c ${step(c.works)}" data-iso="${c.iso}" d="${cellD(runsCells(c.runs))}"/>`).join("");
-    return `<div class="mapcard"><div class="map-tools" id="map-tools"></div><div class="mapbox" id="mapbox" style="aspect-ratio:${G.w} / ${(H + BAND).toFixed(1)}">
-    <svg class="map" id="map" viewBox="${vb.join(" ")}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="World map of plastics works by country. Every country is also listed in the table below.">${paths}<path class="ca" d="${cellD(caCells)}"/><path class="no" d="${cellOutline(runsCells(C.NO.runs))}"/></svg>
+    const body = `${paths}<path class="ca" d="${cellD(caCells)}"/><path class="no" d="${cellOutline(runsCells(C.NO.runs))}"/>`;
+    // Each pane repeats the country paths in its own svg; the viewBox clips it to its part of the raster.
+    const pane = ([label, [x, y, w, h]]) => `<figure class="mp"><figcaption class="mcap">${label}</figcaption><div class="mp-box" style="aspect-ratio:${w} / ${h}"><svg class="map" viewBox="${x} ${y} ${w} ${h}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${label}: plastics works by country.">${body}</svg></div></figure>`;
+    return `<div class="mapcard"><div class="map-tools" id="map-tools"></div><div class="mapbox" id="mapbox" style="--ga-ar:${G.w} / ${(H + BAND).toFixed(1)}">
+    <svg class="map" id="map" viewBox="${vb.join(" ")}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="World map of plastics works by country. Every country is also listed in the table below.">${body}</svg>
+    <div class="panes" id="panes">${PAIR.map(pane).join("")}</div>
     <svg class="leaders" id="leaders" aria-hidden="true"></svg>
     <a class="callout live" id="co-ca" href="${ATLAS.US.href}"><b><i class="sw live"></i>California</b><small>live atlas · <span class="m">${fmt(D.california.works)}</span> works</small><span class="go">Open atlas ${ARROW}</span></a>
     <a class="callout" id="co-no" href="${ATLAS.NO.href}"><b><i class="sw prep"></i>Norway</b><span class="go quiet">Atlas in preparation ${ARROW}</span></a>
-    <div class="tip" id="tip" hidden></div>
+    <div class="maptip" id="tip" hidden></div>
   </div>
   <div class="astrip"><a class="opt live" href="${ATLAS.US.href}"><i class="sw live"></i><span>California<small>live regional atlas</small></span><span class="go">Open ${ARROW}</span></a><a class="opt" href="${ATLAS.NO.href}"><i class="sw prep"></i><span>Norway<small>atlas in preparation</small></span><span class="go quiet">Help build it</span></a></div>
   <div class="legend"><div class="ramp">works per country <i style="background:var(--pv-wash)"></i><i style="background:var(--pv-mint)"></i><i style="background:var(--pv-slate-2)"></i><i style="background:var(--pv-slate)"></i> under 30 · 30–299 · 300–2,999 · 3,000+</div><p>Select a country to scope every view to it. Countries too small for this map are in the table.</p></div></div>`;
@@ -262,19 +285,28 @@ export async function mountExplore(root) {
     mapEl = $("#map");
     const tip = $("#tip"), box = $("#mapbox");
     let hov = null;
-    mapEl.addEventListener("pointermove", (e) => {
-      const p = e.target.closest?.(".c");
-      if (p !== hov) { hov?.classList.remove("hov"); hov = p; p?.classList.add("hov"); }
-      if (!p) { tip.hidden = true; return; }
-      const c = C[p.dataset.iso], r = box.getBoundingClientRect();
-      tip.innerHTML = `${esc(c.name)}<br><span class="m">${c.works ? fmt(c.works) + " works · " + pct(c.recent5, c.works) + " last 5 y" : "no works counted"}</span>`;
-      tip.hidden = false;
-      const x = e.clientX - r.left, y = e.clientY - r.top;
-      tip.style.left = Math.min(x + 14, r.width - tip.offsetWidth - 6) + "px";
-      tip.style.top = Math.max(y - tip.offsetHeight - 12, 6) + "px";
+    // The panes repeat each country, so hover lights every copy of it.
+    const hover = (iso) => {
+      if (iso === hov) return;
+      hov = iso;
+      box.querySelectorAll(".c.hov").forEach((el) => el.classList.remove("hov"));
+      if (iso) box.querySelectorAll(`.c[data-iso="${iso}"]`).forEach((el) => el.classList.add("hov"));
+    };
+    box.querySelectorAll("svg.map").forEach((svg) => {
+      svg.addEventListener("pointermove", (e) => {
+        const p = e.target.closest?.(".c");
+        hover(p ? p.dataset.iso : null);
+        if (!p) { tip.hidden = true; return; }
+        const c = C[p.dataset.iso], r = box.getBoundingClientRect();
+        tip.innerHTML = `${esc(c.name)}<br><span class="m">${c.works ? fmt(c.works) + " works · " + pct(c.recent5, c.works) + " last 5 y" : "no works counted"}</span>`;
+        tip.hidden = false;
+        const x = e.clientX - r.left, y = e.clientY - r.top;
+        tip.style.left = Math.min(x + 14, r.width - tip.offsetWidth - 6) + "px";
+        tip.style.top = Math.max(y - tip.offsetHeight - 12, 6) + "px";
+      });
+      svg.addEventListener("pointerleave", () => { hover(null); tip.hidden = true; });
+      svg.addEventListener("click", (e) => { const p = e.target.closest?.(".c"); if (p && C[p.dataset.iso].works) go({kind: "country", iso: p.dataset.iso}); });
     });
-    mapEl.addEventListener("pointerleave", () => { hov?.classList.remove("hov"); hov = null; tip.hidden = true; });
-    mapEl.addEventListener("click", (e) => { const p = e.target.closest?.(".c"); if (p && C[p.dataset.iso].works) go({kind: "country", iso: p.dataset.iso}); });
     paintMapScope(false);
   }
   const CONT_BOX = {"Europe": [76, 2, 114, 26], "Asia": [108, 2, 176, 46], "North America": [22, 0, 78, 40], "South America": [44, 34, 78, 72], "Africa": [80, 12, 120, 68], "Oceania": [138, 38, 184, 72]};
@@ -288,27 +320,42 @@ export async function mountExplore(root) {
     const keep = cells.filter(([c, r]) => Math.hypot(c - mc, r - mr) <= 16);
     return keep.length ? keep : cells;
   }
-  function targetBox() {
-    if (scope.kind === "world") return FULL;
+  // The whole world in a box of the given aspect: the desktop frame itself, or centred on the raster when portrait.
+  const worldFrame = (aspect) => (aspect === ASPECT ? FULL : [0, FULL[1] + FULL[3] / 2 - G.w / aspect / 2, G.w, G.w / aspect]);
+  // A box of the given aspect around (cx, cy) that holds w by h. Desktop boxes stay inside the frame; a portrait box
+  // may run past the raster, which is blank, so it keeps its centre.
+  function frameOf(cx, cy, w, h, aspect) {
+    w = Math.min(Math.max(w, h * aspect), FULL[2]); h = w / aspect;
+    const x = Math.max(Math.min(cx - w / 2, G.w - w), 0);
+    const y = aspect === ASPECT ? Math.max(Math.min(cy - h / 2, FULL[1] + FULL[3] - h), FULL[1]) : cy - h / 2;
+    return [x, y, w, h];
+  }
+  function targetBox(aspect = ASPECT) {
+    if (scope.kind === "world") return worldFrame(aspect);
     const cells = scope.kind === "cont" ? null : runsCells(C[scope.iso].runs);
-    if (cells && !cells.length) return FULL;
+    if (cells && !cells.length) return worldFrame(aspect);
     const [c0, r0, c1, r1] = cells ? bboxCells(mainCells(cells, scope.iso)) : CONT_BOX[scope.name];
     const pad = cells ? 1.3 : 1.08;
     const cx = ((c0 + c1) / 2) * G.u, cy = G.y0 + ((r0 + r1) / 2) * G.v;
-    let w = Math.max((c1 - c0) * G.u * pad, scope.kind === "cont" ? 260 : 120), h = Math.max((r1 - r0) * G.v * pad, w / ASPECT);
-    w = Math.min(Math.max(w, h * ASPECT), FULL[2]); h = w / ASPECT;
-    return [Math.max(Math.min(cx - w / 2, G.w - w), 0), Math.max(Math.min(cy - h / 2, FULL[1] + FULL[3] - h), FULL[1]), w, h];
+    const w = Math.max((c1 - c0) * G.u * pad, scope.kind === "cont" ? 260 : 120), h = Math.max((r1 - r0) * G.v * pad, w / aspect);
+    return frameOf(cx, cy, w, h, aspect);
   }
   function paintMapScope(animate = true) {
     if (!mapEl) return;
     const inScope = scope.kind === "world" ? null : new Set(scope.kind === "cont" ? contOf(scope.name).list.map((c) => c.iso) : [scope.iso]);
-    mapEl.classList.toggle("scoped", !!inScope);
-    mapEl.querySelectorAll(".c").forEach((p) => p.classList.toggle("out", !!inScope && !inScope.has(p.dataset.iso)));
-    const to = targetBox(), from = vb.slice();
+    const box = $("#mapbox");
+    box.querySelectorAll("svg.map").forEach((s) => s.classList.toggle("scoped", !!inScope));
+    box.querySelectorAll(".c").forEach((p) => p.classList.toggle("out", !!inScope && !inScope.has(p.dataset.iso)));
+    const mode = layoutMap();
     const tools = $("#map-tools");
     tools.innerHTML = scope.kind === "world" ? "" : `<button type="button" class="btn" id="map-up">${scope.kind === "country" ? "Back to " + esc(C[scope.iso].continent) : "Whole world"}</button>`;
     $("#map-up")?.addEventListener("click", () => go(scope.kind === "country" ? {kind: "cont", name: C[scope.iso].continent} : {kind: "world"}));
     cancelAnimationFrame(tween);
+    // Pair mode shows fixed panes and leaves the desktop viewBox alone.
+    if (mode === "pair") { placeCallouts(); return; }
+    const aspect = mode === "portrait" ? PORTRAIT : ASPECT;
+    const to = targetBox(aspect), from = vbAspect === aspect ? vb.slice() : worldFrame(aspect);
+    vbAspect = aspect;
     if (!animate || reduced.matches) { vb = to.slice(); mapEl.setAttribute("viewBox", vb.join(" ")); placeCallouts(); return; }
     hideCallouts();
     const t0 = performance.now(), dur = 450, ease = (t) => 1 - Math.pow(1 - t, 3);
@@ -321,12 +368,21 @@ export async function mountExplore(root) {
     tween = requestAnimationFrame(frame);
   }
   function hideCallouts() { root.querySelectorAll(".callout, .leader").forEach((el) => el.classList.add("hide")); }
+  // Card width sets the layout: desktop; narrow with a world scope (two panes); narrow otherwise (one portrait map).
+  function layoutMap() {
+    const box = $("#mapbox"), card = box?.closest(".mapcard");
+    if (!card) return "desktop";
+    const narrow = box.getBoundingClientRect().width < 640;
+    const mode = !narrow ? "desktop" : scope.kind === "world" ? "pair" : "portrait";
+    card.classList.toggle("narrow", narrow);
+    card.classList.toggle("pair", mode === "pair");
+    card.classList.toggle("portrait", mode === "portrait");
+    return mode;
+  }
   function placeCallouts() {
     const box = $("#mapbox"); if (!box) return;
+    if (layoutMap() !== "desktop") return;
     const R = box.getBoundingClientRect(), W = R.width, Hh = R.height;
-    const narrow = W < 640;
-    box.closest(".mapcard").classList.toggle("narrow", narrow);
-    if (narrow) return;
     const px = (x) => ((x - vb[0]) / vb[2]) * W, py = (y) => ((y - vb[1]) / vb[3]) * Hh;
     box.closest(".mapcard").classList.toggle("compact", W < 1100);
     const L = $("#leaders"), lines = [], taken = [];
@@ -359,7 +415,7 @@ export async function mountExplore(root) {
     place("#co-no", runsCells(C.NO.runs), ["above", "above-left", "left", "below-left", "right", "below"], "prep", showNO);
     L.innerHTML = lines.join("");
   }
-  addEventListener("resize", () => { if (attached() && tab === "countries") placeCallouts(); });
+  addEventListener("resize", () => { if (attached() && tab === "countries" && mapEl) paintMapScope(false); });
 
   // ---- panels --------------------------------------------------------------------------
   const TH = (label, key, sort, num) => `<th class="${num ? "n " : ""}col-${key}"${sort.key === key ? ` aria-sort="${sort.dir > 0 ? "ascending" : "descending"}"` : ""}><button type="button" data-sort="${key}">${label}${sort.key === key ? `<svg class="arr" viewBox="0 0 8 8" aria-hidden="true"><path d="${sort.dir > 0 ? "M1 6l3-4 3 4" : "M1 2l3 4 3-4"}" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>` : ""}</button></th>`;

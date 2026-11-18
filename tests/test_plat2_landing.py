@@ -71,6 +71,14 @@ def test_page_hides_the_framework_shell_and_loads_the_engine() -> None:
     assert 'href="./ambassadors"' in page
 
 
+def test_header_and_regions_band_link_the_global_explore_page() -> None:
+    page = INDEX.read_text(encoding="utf-8")
+    nav = re.search(r'<nav class="plv-nav".*?</nav>', page, re.S)
+    assert nav is not None and 'href="./explore"' in nav.group(0)
+    regions = page.split('id="regions"', 1)[1].split("</section>", 1)[0]
+    assert 'class="plv-explore"' in regions and 'href="./explore"' in regions
+
+
 def test_engine_reads_only_same_origin_data_and_assets() -> None:
     engine = ENGINE.read_text(encoding="utf-8")
     paths = set(re.findall(r'json\("([^"]+)"\)', engine))

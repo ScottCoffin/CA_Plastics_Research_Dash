@@ -37,7 +37,7 @@ http://127.0.0.1:8765/spectral_story.html.
 | VD-SM | Carry the Spectral Match tokens, logo and header into the California pages | PLAT-1, PLAT-2 |
 
 Non-goals for PLAT-2: Norway data, the region abstraction (PLAT-3), and a real global
-co-authorship network. The network beat stays illustrative and says so.
+co-authorship network. The network beat stays illustrative; the owner removed its source label on 2026-11-17 (PLAT2-NETWORK).
 
 ## 2. Brand and tokens
 
@@ -120,7 +120,7 @@ Text never overlaps an image (section 4.10).
 | 8 | 13.4–17.0 | Particles stream out of the bulb by rank and build the unit chart left to right (one dot = 150 works) | none |
 | 9 | 17.4–20.65 | Axis and decade labels, then three arrow annotations one at a time (17.85–18.75) | Source line, mono, one line at full width under the axis (17.45): "Plastics-pollution research works per year, worldwide. OpenAlex, query plastic-v3.1, fetched <date>. One dot = <unit> works." Then middle-left over the empty early years (19.2): `h2` "Plastic pollution research is expanding at an unprecedented pace." with one line "The world needs innovative tools to turn data into knowledge and solutions to effectively react to this global crisis." |
 | 10 | 20.7–23.45 | Dots re-sort into the evidence grid (rows: occurrence, effects, methods, fate and transport, solutions; columns: ocean, freshwater, soil, air, food and biota, people) | `h2` "See where the evidence is, worldwide, and where it is missing." (21.8); then (22.3) "A live evidence map sorts every study by what it examines and where." |
-| 11 | 23.5–26.25 | Collaboration network: 7 communities on damped springs; every 2.3 s one community is plucked and wobbles back | `h2` "See who works with whom, and forge new connections." (24.6); then (25.1) "Collaboration networks show the research communities and the people who bridge them." and source "Illustrative network layout." |
+| 11 | 23.5–26.25 | Collaboration network: 7 communities on damped springs; every 2.3 s one community is plucked and wobbles back | `h2` "See who works with whom, and forge new connections." (24.6); then (25.1) "Collaboration networks show the research communities and the people who bridge them." (source line removed by the owner 2026-11-17) |
 | 12 | 26.25–28.55 | Dots settle into the world pixel map; country shading underneath | `h2` "The problem is global." (27.3); then (27.75) "Plastics research now comes from almost every country." plus a source line (real counts: "Works by country, OpenAlex, <date>." Until then: "Illustrative shading until the global country counts are built.") |
 | 13 | 28.55–end | Zoom to California at local scale (coral and slate cells) | `h2` "Local knowledge and connections matter." (29.6); `p` (30.0) "Regional atlases zoom in on the people, monitoring, funding and policy of one place. Powered by local experts and community leaders."; button (30.35) "Join the movement, and become a local ambassador →" to `/ambassadors`; then (30.7) "California is live; Norway is next." |
 
@@ -315,7 +315,7 @@ Run the `impeccable-finish-reviewer` against the direction contract and this pro
 
 - Google Fonts link: self-host instead.
 - Runtime fracture work: move it to the offline pipeline (section 6).
-- Illustrative evidence counts, map shading and network: replace with real data or keep the labels.
+- Illustrative evidence counts and map shading: replace with real data or keep the labels. The network beat carries no label (owner, 2026-11-17).
 - "prototype" badge: remove.
 - Header links that point to `#`: Methods and About go to the California pages until global versions exist.
 - Missing favicon (404): add one.

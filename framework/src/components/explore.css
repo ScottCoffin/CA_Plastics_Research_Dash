@@ -125,8 +125,17 @@ html:has(.gx) { scroll-padding-top: calc(60px + 52px + 12px); } /* header 60px, 
 .gx .mapcard { position: relative; background: var(--pv-paper); border: 1px solid var(--pv-line);
   background-image: linear-gradient(var(--pv-grid) 1px, transparent 1px), linear-gradient(90deg, var(--pv-grid) 1px, transparent 1px);
   background-size: 24px 24px; background-position: -1px -1px; }
-.gx .mapbox { position: relative; aspect-ratio: 1000 / 434.7; }
+.gx .mapbox { position: relative; aspect-ratio: var(--ga-ar, 1000 / 434.7); }
 .gx .mapbox svg.map { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* Narrow cards: a world scope is two stacked panes; any other scope is one portrait map (layoutMap in explore.js). */
+.gx .panes { display: none; }
+.gx .mapcard.pair .panes { display: block; }
+.gx .mapcard.pair .mapbox { aspect-ratio: auto; }
+.gx .mapcard.pair #map { display: none; }
+.gx .mapcard.portrait .mapbox { aspect-ratio: 3 / 5; }
+.gx .mp { margin: 0; }
+.gx .mp-box { position: relative; }
+.gx .mcap { display: block; font: 400 11px/1.4 var(--pv-mono); color: var(--pv-ink-2); padding: 10px 10px 6px; }
 .gx .map .c { cursor: pointer; transition: opacity .35s var(--ga-ease), fill .15s; }
 .gx .map .s0 { fill: var(--pv-wash); } .gx .map .s1 { fill: var(--pv-mint); } .gx .map .s2 { fill: var(--pv-slate-2); } .gx .map .s3 { fill: var(--pv-slate); } .gx .map .sx { fill: var(--pv-grid); }
 .gx .map .c.hov { fill: var(--pv-ink); }
@@ -151,9 +160,9 @@ html:has(.gx) { scroll-padding-top: calc(60px + 52px + 12px); } /* header 60px, 
 .gx svg.leaders { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
 .gx .leader { stroke: var(--pv-ink); stroke-width: 1; transition: opacity .2s; }
 .gx .leader.prep { stroke: var(--pv-coral-ink); stroke-dasharray: 3 3; }
-.gx .tip { position: absolute; z-index: 5; pointer-events: none; background: var(--pv-ink); color: var(--pv-paper); padding: 7px 10px; font-size: 13px; line-height: 1.35; white-space: nowrap; }
-.gx .tip .m { font-size: 11px; color: var(--pv-mint); }
-.gx .tip[hidden] { display: none; }
+.gx .maptip { position: absolute; z-index: 5; pointer-events: none; background: var(--pv-ink); color: var(--pv-paper); padding: 7px 10px; font-size: 13px; line-height: 1.35; white-space: nowrap; }
+.gx .maptip .m { font-size: 11px; color: var(--pv-mint); }
+.gx .maptip[hidden] { display: none; }
 .gx .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; justify-content: space-between; padding: 10px 14px; border-top: 1px solid var(--pv-line); background: var(--pv-paper); }
 .gx .ramp { display: flex; gap: 8px; align-items: center; font: 400 11px var(--pv-mono); color: var(--pv-ink-2); flex-wrap: wrap; }
 .gx .ramp i { width: 22px; height: 9px; display: inline-block; }
@@ -291,11 +300,12 @@ html:has(.gx) { scroll-padding-top: calc(60px + 52px + 12px); } /* header 60px, 
 .gx .drawer.open .sheet { transform: none; }
 .gx .sheet-h { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--pv-ink); font-weight: 600; font-size: 15px; }
 .gx .sheet-h button { width: 40px; height: 40px; border: 1px solid var(--pv-ink); background: var(--pv-paper); display: grid; place-items: center; cursor: pointer; }
+.gx .sheet-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-bottom: env(safe-area-inset-bottom, 0px); }
 .gx .sheet .find { width: auto; margin: 14px 16px; }
-.gx .vlad { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; border-top: 1px solid var(--pv-line); }
+.gx .vlad { list-style: none; margin: 0; padding: 0; }
 .gx .vlad .opt { padding-left: calc(16px + var(--d, 0) * 16px); }
 .gx .vlad .opt.on { background: var(--pv-ink); color: var(--pv-paper); } .gx .vlad .opt.on .n { color: var(--pv-mint); }
-.gx .vlad .lab { font-size: 13px; font-weight: 600; padding: 16px 16px 8px; border-bottom: 1px solid var(--pv-line); }
+.gx .lab { margin: 0; font-size: 13px; font-weight: 600; padding: 16px 16px 8px; border-bottom: 1px solid var(--pv-line); }
 
 @media (max-width: 1100px) {
   .gx .head { grid-template-columns: 1fr; }
@@ -306,13 +316,12 @@ html:has(.gx) { scroll-padding-top: calc(60px + 52px + 12px); } /* header 60px, 
   .gx .nav > a:not(.keep) { display: none; }
   .gx .nav { gap: 12px; }
   .gx .ladder, .gx .scope .find { display: none; }
-  .gx .scope-btn { display: inline-flex; flex: 1; justify-content: space-between; min-height: 40px; }
-  .gx .scope-btn .n { font: 400 11px var(--pv-mono); opacity: .8; }
+  .gx .scope-btn { display: inline-flex; flex: 1; min-width: 0; min-height: 40px; }
+  .gx .scope-btn svg { flex: none; }
+  .gx .scope-btn .menu-t { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+  .gx .scope-btn .n { font: 400 11px var(--pv-mono); opacity: .8; flex: none; }
   .gx .head { padding-top: 24px; }
-  .gx .tabs { gap: 22px; margin-inline: calc(var(--pv-gut) * -1); padding-inline: var(--pv-gut); padding-bottom: 4px; scrollbar-width: thin; scrollbar-color: var(--pv-slate-2) transparent;
-    -webkit-mask-image: linear-gradient(to right, black calc(100% - 44px), transparent); mask-image: linear-gradient(to right, black calc(100% - 44px), transparent); }
-  .gx .tabs::-webkit-scrollbar { display: block; height: 3px; }
-  .gx .tabs::-webkit-scrollbar-thumb { background: var(--pv-slate-2); }
+  .gx .tabs { display: none; } /* phones pick a view from the menu button */
   .gx .col-cont, .gx .col-week, .gx .col-bar { display: none; }
   .gx .callout { max-width: 168px; padding: 6px 9px; font-size: 13px; }
   .gx .callout small { display: none; }

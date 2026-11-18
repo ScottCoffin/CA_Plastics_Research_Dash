@@ -18,11 +18,16 @@ Last updated: 2026-11-16.
 
 ## Do now
 
-### H34. Check the new /explore page (GA-2, about 5 minutes)
-1. After the next deploy, open https://plastiverse.live/explore (also on a phone).
-2. Pick a country in the bar under the header; open the California callout; switch tabs.
-3. Decide whether the landing should link to it: reply "link it" (adds "Explore the data" to the landing header and regions band).
-- **Done when:** you reply "explore OK" (or list changes) and answer the link question.
+### H34. Check /explore, now with the phone menu and the bigger phone map (GA-2/GA-3, about 5 minutes)
+1. After the next deploy, open https://plastiverse.live/explore on a phone and on a computer.
+2. On the phone: tap the Menu bar under the header, choose a view and a country; check the map size.
+3. On the landing, check the "Explore the data" header link and the line under the regions map.
+- **Done when:** you reply "explore OK" or list changes.
+
+### H35. Decide the global expert profile basics (GX-1, about 10 minutes, before PLAT-4 finishes)
+Read `docs/GLOBAL_EXPERTS_ASSESSMENT.md` (section "What the owner needs to decide") and reply with your choices for
+GX-THRESHOLD, GX-SEO, GX-PHOTOS and GX-AUTHORS (`.agent/QUESTIONS.md`), or "defaults OK".
+- **Done when:** the four rows are answered; the R2 write token is a later step (GX-3).
 
 ### H31 is done (2026-11-17): the owner revoked the exposed OpenAI key; the new key is only in the ignored `.env`.
 

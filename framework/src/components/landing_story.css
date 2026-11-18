@@ -161,6 +161,9 @@ html:has(.plv) { scroll-behavior: smooth; }
 .plv-evsrc { font-family: var(--pv-mono); font-size: 11px; color: var(--pv-ink-2); margin-top: 12px; }
 .plv-regions { display: grid; grid-template-columns: 1fr minmax(300px, 400px); gap: 32px; align-items: start; margin-top: 40px; }
 .plv-regions .plv-picker { position: static; width: auto; }
+.plv-explore { margin-top: 24px; font-size: 16px; }
+.plv-explore a { color: var(--pv-coral-ink); font-weight: 600; text-underline-offset: 3px; }
+.plv-explore svg { color: var(--pv-coral-ink); display: inline-block; vertical-align: -1px; }
 .plv-mapbox { position: relative; width: 100%; }
 .plv-mapbox canvas, .plv-mapbox svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .plv-mapbox .o path { fill: none; stroke: var(--pv-ink); stroke-opacity: .36; stroke-width: .4; }

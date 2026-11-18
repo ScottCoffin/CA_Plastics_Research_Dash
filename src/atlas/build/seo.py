@@ -30,6 +30,7 @@ TOPIC_LIMIT = 5
 REGION_PATH = "/california"
 PAGE_PATHS = (
     "/",
+    "/explore",
     f"{REGION_PATH}/",
     f"{REGION_PATH}/experts",
     f"{REGION_PATH}/network",

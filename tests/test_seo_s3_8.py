@@ -232,6 +232,7 @@ def test_sitemap_index_and_children(built) -> None:
     assert f"{BASE}/california/evidence" in page_locs
     assert f"{BASE}/california/about" in page_locs
     assert f"{BASE}/california/network" in page_locs
+    assert f"{BASE}/explore" in page_locs
     # The Framework app is the root (H16); /app/ paths are redirect stubs, never listed.
     assert not any("/app/" in loc for loc in page_locs)
     assert not any("grants.html" in loc or "feed.xml" in loc for loc in page_locs)

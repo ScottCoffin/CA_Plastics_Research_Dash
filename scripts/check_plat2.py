@@ -46,7 +46,6 @@ CAPTIONS = (
     "A live evidence map sorts every study by what it examines and where.",
     "See who works with whom, and forge new connections.",
     "Collaboration networks show the research communities and the people who bridge them.",
-    "Illustrative network layout.",
     "The problem is global.",
     "Plastics research now comes from almost every country.",
     "Local knowledge and connections matter.",

@@ -8,6 +8,7 @@ Independent research atlas; profiles are generated from public bibliographic dat
 
 - [Atlas home](https://plastiverse.live/california/): overview and entry points to every view
 - [Plastiverse Live](https://plastiverse.live/): the global home page; regional atlases start with California
+- [Explore the data](https://plastiverse.live/explore): global plastics research by country (works, trend, evidence map, experts, institutions, collaboration network, newest works), with a scope switch from the world to a continent or country
 - [Experts](https://plastiverse.live/california/experts): California-connected plastics researchers
 - [Collaboration network](https://plastiverse.live/california/network): who co-authors with whom
 - [Institutions](https://plastiverse.live/california/institutions): institutions with California-connected plastics research; one page per institution at https://plastiverse.live/california/institution#inst=<institution ID>

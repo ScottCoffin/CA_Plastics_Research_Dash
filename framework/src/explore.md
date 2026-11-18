@@ -61,11 +61,13 @@ head: |
   <div><b>Plastiverse Live</b><br>Created by <a href="https://scottcoff.in" rel="noreferrer">Scott Coffin</a>. Not a State product.</div>
 </footer>
 <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-h">
-  <button type="button" class="scrim" tabindex="-1" aria-label="Close scope"></button>
+  <button type="button" class="scrim" tabindex="-1" aria-label="Close menu"></button>
   <div class="sheet">
-    <div class="sheet-h"><span id="drawer-h">Choose a scope</span><button type="button" id="drawer-x" aria-label="Close"><svg class="i" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
-    <div class="find" id="find-mob"></div>
-    <ul class="vlad" id="vlad"></ul>
+    <div class="sheet-h"><span id="drawer-h">Menu</span><button type="button" id="drawer-x" aria-label="Close"><svg class="i" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
+    <div class="sheet-body">
+      <div role="group" aria-labelledby="menu-views"><p class="lab" id="menu-views">Views</p><ul class="vlad" id="views"></ul></div>
+      <div role="group" aria-labelledby="menu-scope"><p class="lab" id="menu-scope">Scope</p><div class="find" id="find-mob"></div><ul class="vlad" id="vlad"></ul></div>
+    </div>
   </div>
 </div>
 </div>
