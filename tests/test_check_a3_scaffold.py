@@ -48,7 +48,9 @@ def _expect_failure(capsys: pytest.CaptureFixture[str], fragment: str) -> None:
 
 def _replace_on_line(path: Path, line_prefix: str, old: str, new: str) -> None:
     lines = path.read_text(encoding="utf-8").splitlines()
-    matches = [index for index, line in enumerate(lines) if line.startswith(line_prefix)]
+    # A task line matches whether it is open or done ("- [ ]" or "- [x]").
+    prefixes = (line_prefix, line_prefix.replace("- [ ]", "- [x]", 1))
+    matches = [index for index, line in enumerate(lines) if line.startswith(prefixes)]
     assert len(matches) == 1
     assert old in lines[matches[0]]
     lines[matches[0]] = lines[matches[0]].replace(old, new, 1)

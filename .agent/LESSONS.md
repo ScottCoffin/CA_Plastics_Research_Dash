@@ -378,3 +378,7 @@ until it reports.
 - Framework's default sheet and `style.css` restyle component markup: tables get a 1rem top margin and 14.4 px / 1.2 text, and `#observablehq-main li a, td a, p a` are underlined. Scope overrides as `#observablehq-main .gx ...` so they outrank those rules.
 - `scripts/serve_framework_preview.py --assembled` serves under `/CA_Plastics_Research_Dash/`; a bare `/explore` is 404.
 - Framework's default sheet defines `.tip`, `.warning` and `.caution` callouts (green border, a bold "Tip" label from `::before`, 640 px cap). Never reuse those class names for component markup inside a Framework page (GA-3 renamed the map tooltip to `maptip`).
+
+## 2026-11-18: plan-file tests and chained pushes
+- A scaffold test that edits a TODO line by the prefix `- [ ] **<task>**` fails as soon as that task is checked off (BQ-G1 broke `test_check_a3_scaffold.py`). Match task lines open or done.
+- Never chain `git push` after a gate command with `&&` on an unrelated step: read the gate output first. A clean-worktree failure reached `main` once this way (fixed in the next commit).
