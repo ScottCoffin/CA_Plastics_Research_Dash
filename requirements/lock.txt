@@ -131,5 +131,5 @@ virtualenv==21.15.6
     # via pre-commit
 scikit-learn==1.8.0
     # via ca-plastics-research-atlas (pyproject.toml, optional ml extra)
-sentence-transformers==5.4.1
+sentence-transformers==6.3.0
     # via ca-plastics-research-atlas (pyproject.toml, optional ml extra)
