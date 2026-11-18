@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Street Guide sketch</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:1440px;height:900px;overflow:hidden}
+body{background:#fbfaf3;color:#1a1a1a;font:16px/1.5 "Public Sans",sans-serif;display:grid;grid-template-columns:560px 1fr}
+.spiral{position:absolute;left:548px;top:0;bottom:0;width:24px;background:repeating-linear-gradient(#1a1a1a 0 6px,transparent 6px 22px);opacity:.8}
+.left{padding:56px 48px;border-right:2px solid #1a1a1a}
+h1{font:800 84px/.9 "Archivo";font-stretch:70%;margin:0 0 20px}
+.idx{border-top:3px solid #d23b2a;margin-top:28px}
+.idx a{display:grid;grid-template-columns:1fr auto;padding:14px 0;border-bottom:1px solid #1a1a1a;color:inherit;text-decoration:none;font:700 26px/1.1 "Archivo";font-stretch:80%}
+.idx a span{font:700 20px "Archivo";color:#d23b2a}
+input{width:100%;padding:14px;border:2px solid #1a1a1a;font:16px "Public Sans";background:#fff}
+.map{position:relative;background:#f6e27a;background-image:linear-gradient(#1a1a1a33 1px,transparent 1px),linear-gradient(90deg,#1a1a1a33 1px,transparent 1px);background-size:110px 110px}
+.map svg{position:absolute;inset:40px 80px}
+.pg{position:absolute;font:800 22px "Archivo";background:#fff;border:2px solid #1a1a1a;padding:2px 8px}
+</style></head><body>
+<div class="spiral"></div>
+<section class="left"><h1>California Plastics Research Street Guide</h1><input placeholder="Street index: search experts, institutions, topics"><div class="idx">
+<a href="#">Find a researcher<span>p. 12 · B4</span></a><a href="#">See funding<span>p. 31 · D2</span></a><a href="#">Check monitoring data<span>p. 47 · F6</span></a><a href="#">Explore the evidence<span>p. 58 · C3</span></a></div></section>
+<section class="map"><svg viewBox="-443 -557 970 1055" width="760" height="820"><path d="M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L-0,-221L-0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-225,-90L-213,-128L-189,-115L-150,-127L-129,-111L-150,-112L-210,-112L-181,-51L-211,-67L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L167,360L221,405L256,494L469,474Z" fill="#fffbe0" stroke="#1a1a1a" stroke-width="5"/><path d="M-300,-500L-150,-120L0,100L200,350L420,470" stroke="#d23b2a" stroke-width="12" fill="none"/></svg>
+<span class="pg" style="left:220px;top:300px">12</span><span class="pg" style="left:380px;top:430px">31</span><span class="pg" style="left:300px;top:560px">47</span><span class="pg" style="left:560px;top:700px">58</span></section>
+</body></html>

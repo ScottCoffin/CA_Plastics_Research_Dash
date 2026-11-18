@@ -1,0 +1,8 @@
+- [PDF reading in atlas repo](pdf-to-markdown-in-atlas-repo.md): use the pdf-to-markdown skill for manual PDF reads; pipeline keeps pdfminer
+- [A2 source PDFs in Zotero](zotero-a2-source-pdfs.md): attachment keys for MON2026 and the DTSC ledger sources
+- [Overnight mode](overnight-mode.md): "I am going to sleep" means work unattended, skip human gates, hand off with RESUME_PROMPT
+- [OpenAlex daily budget](openalex-daily-budget.md): owner allows up to the free $1/day OpenAlex limit every day
+- [Review apps for >10 cases](review-apps-over-10-cases.md) — any human review over 10 cases ships with a Streamlit app, not a CSV to edit
+- [Owner standing reminders](owner-standing-reminders.md) — remind every session of the "Do now" items in .agent/HUMAN_TASKS.md; keep that file current
+- [Delegate to Haiku first](delegate-to-haiku-first.md) — cost efficiency: bounded tasks go to Haiku; lead only integrates/gates/commits
+- [Plastiverse Live logo and palette](plastiverse-logo-brand.md) — main logo file, palette, and the prompt file for variants

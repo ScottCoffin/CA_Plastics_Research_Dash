@@ -69,3 +69,7 @@ site/sitemap*.xml
 data/processed/p5.parquet
 data/processed/p25.parquet
 data/processed/p100.parquet
+
+# Agent state travels with the repo (owner, 2026-11-17): un-ignore the Claude local settings
+# (Impeccable hooks), which a global git ignore would otherwise hide.
+!.claude/settings.local.json

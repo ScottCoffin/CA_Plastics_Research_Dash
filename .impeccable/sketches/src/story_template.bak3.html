@@ -1,0 +1,385 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plastiverse Live - story prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600&family=Martian+Mono:wdth,wght@87.5,400;87.5,500&display=swap" rel="stylesheet">
+<style>
+:root{--ground:#f6f8f9;--grid:#e4eaee;--ink:#17203a;--ink2:#4f5a74;--line:#c3cdd6;--night:#0a0a0b;--night2:#9aa6c2;
+--i0:#e6ecef;--i1:#cfe9e6;--i2:#7dcdc6;--i3:#1a9c96;--match:#e5386d;
+--sans:"Schibsted Grotesk",system-ui,sans-serif;--mono:"Martian Mono",ui-monospace,monospace;--gut:clamp(16px,3.4vw,48px)}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5}
+::selection{background:var(--match);color:#fff}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--match);outline-offset:3px}
+.grid-bg{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;background-position:-1px -1px}
+header.top{position:fixed;inset:0 0 auto 0;z-index:20;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--gut);background:var(--ground);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:19px;letter-spacing:-.01em;text-decoration:none}
+nav.main{display:flex;gap:28px;align-items:center;font-size:15px} nav.main a{text-decoration:none}
+.btn{font:inherit;font-size:15px;border:1px solid var(--ink);background:#fff;color:var(--ink);padding:8px 14px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.btn.solid{background:var(--ink);color:#fff}
+.btn:hover{background:var(--ink);color:#fff}
+.picker{position:absolute;right:var(--gut);top:64px;width:min(420px,calc(100vw - 32px));background:#fff;border:1px solid var(--ink);z-index:30}
+.pk-h{font-size:13px;font-weight:600;padding:11px 16px;border-bottom:1px solid var(--ink);display:flex;justify-content:space-between}
+.pk-h span,.row small{font-family:var(--mono);font-weight:400;color:var(--ink2);font-size:11px}
+.row{display:grid;grid-template-columns:14px 1fr auto;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);font-size:17px;text-decoration:none}
+.row.live{background:color-mix(in srgb,var(--match) 7%,#fff)} .row.live b{font-weight:600}
+.row:hover{background:color-mix(in srgb,var(--match) 12%,#fff)}
+.sw{width:14px;height:14px} .sw.l{background:var(--match)} .sw.s{border:1.5px dashed var(--match)} .sw.r{border:1px solid var(--ink2)}
+.go{font-size:14px;font-weight:600;color:var(--match);display:flex;gap:6px;align-items:center}
+.pk-note{font-size:13px;line-height:1.45;color:var(--ink2);padding:10px 16px 12px}
+
+/* story */
+#story{position:relative;height:1650vh}
+.stage{position:sticky;top:0;height:100vh;overflow:hidden;background:var(--night)}
+.stage .cue,.stage .skip{color:var(--night2)} .stage .cue i{background:var(--night2)}
+header.top{transition:background .3s,color .3s,border-color .3s}
+header.top.on-dark{background:var(--night);color:#eef1f8;border-color:#252c40}
+header.top.on-dark .btn{background:transparent;color:#eef1f8;border-color:#eef1f8}
+header.top.on-dark .btn.solid{background:#eef1f8;color:var(--night)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.it path,.it circle{stroke:var(--ink);stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.it .d{fill:none}
+.cap{position:absolute;left:var(--gut);max-width:min(640px,calc(100vw - 2*var(--gut)));opacity:0;will-change:opacity,transform}
+.cap h1,.cap h2{font-weight:400;letter-spacing:-.03em;line-height:1.03;text-wrap:balance}
+.cap h1{font-size:clamp(40px,5.6vw,80px)}
+.cap h2{font-size:clamp(30px,3.9vw,56px)}
+.cap p{margin-top:16px;font-size:clamp(16px,1.35vw,19px);color:var(--ink2);max-width:56ch}
+.cap .src{font-family:var(--mono);font-size:11px;margin-top:14px;color:var(--ink2)}
+.cap{top:calc(60px + 9vh)} .c1,.c2,.cb,.c4,.c5,.c7{max-width:min(36vw,560px)}
+.c0{max-width:min(38vw,600px)} .c0 h1{font-size:clamp(36px,4.6vw,72px)} .c0 .words{margin-top:.25em} .c0 .w{color:#0a0a0b}
+#scene{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;-webkit-mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 62%,transparent 100%)}
+#stack{position:absolute;inset:0;pointer-events:none}#stack img{position:absolute;left:0;top:0;transform-origin:50% 50%;opacity:0;box-shadow:0 10px 30px rgba(0,0,0,.55);background:#fff}
+.dk h1,.dk h2{color:#eef1f8} .c0 .words{color:inherit}  .dk p{color:var(--night2)}  .c6{top:calc(60px + 4vh)!important}
+.cue{position:absolute;left:var(--gut);bottom:28px;font-family:var(--mono);font-size:11px;color:var(--ink2);display:flex;gap:10px;align-items:center}
+.cue i{display:block;width:1px;height:28px;background:var(--ink2);animation:cue 1.6s ease-in-out infinite;transform-origin:top}
+@keyframes cue{50%{transform:scaleY(.4)}}
+.skip{position:absolute;right:var(--gut);bottom:24px;font-size:14px}
+
+/* sections */
+section.band{padding:clamp(72px,10vw,128px) var(--gut)}
+.wrap{max-width:1344px;margin:0 auto}
+.band h2{font-size:clamp(30px,3.6vw,52px);font-weight:400;letter-spacing:-.03em;line-height:1.05;max-width:18ch;text-wrap:balance}
+.band .lede{margin-top:16px;color:var(--ink2);max-width:60ch;font-size:clamp(16px,1.3vw,19px)}
+.regions{display:grid;grid-template-columns:1fr minmax(300px,400px);gap:32px;align-items:start;margin-top:40px}
+.mapbox{position:relative;width:100%;aspect-ratio:__MW__/__MH__}
+.mapbox canvas,.mapbox svg{position:absolute;inset:0;width:100%;height:100%}
+.mapbox .o path{fill:none;stroke:var(--ink);stroke-opacity:.36;stroke-width:.4}
+.mapbox .ca{fill:var(--match);transform-box:fill-box;transform-origin:center;animation:breathe 2.8s ease-in-out infinite}
+.mapbox .no{fill:none;stroke:var(--match);stroke-width:1.1;stroke-dasharray:2 1.5}
+@keyframes breathe{50%{transform:scale(1.2)}}
+.legend{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;color:var(--ink2);margin-top:14px;flex-wrap:wrap}
+.ramp{display:flex} .ramp span{width:30px;height:8px}
+.regions .picker{position:static;width:auto}
+.evtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:28px}.evnote{font-family:var(--mono);font-size:11px;color:var(--ink2);margin-left:8px}
+.evwrap{overflow-x:auto;margin-top:20px}.evt{border-collapse:collapse;width:100%;min-width:720px;font-size:14px;table-layout:fixed}.evt thead td{border:0;width:170px}
+.evt th{font-weight:500;text-align:left;padding:10px 12px;color:var(--ink2);font-family:var(--mono);font-size:11px}
+.evt thead th{text-align:center}.evt td{border:1px solid var(--line);height:64px;text-align:center;font-family:var(--mono);font-size:12px;background:color-mix(in srgb,var(--i3) calc(var(--v)*100%),#fff);cursor:pointer}
+.evt td span{background:#fff;padding:2px 6px}.evt td:hover{outline:2px solid var(--match);outline-offset:-2px}
+.evt td.gap{background:repeating-linear-gradient(45deg,#fff 0 6px,#f0f3f5 6px 12px);color:var(--match)}.evt td.gap span{background:none}
+.evsrc{font-family:var(--mono);font-size:11px;color:var(--ink2);margin-top:12px}
+.feat{display:grid;grid-template-columns:minmax(260px,1fr) 1.5fr;gap:48px;margin-top:8px}
+.feat ol{list-style:none;padding:0;border-top:1px solid var(--ink)}
+.feat li{display:grid;grid-template-columns:56px 1fr auto;gap:20px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
+.feat li b{font-weight:500;font-size:20px;letter-spacing:-.01em;display:block}
+.feat li span{color:var(--ink2);font-size:15px}
+.feat li a{font-size:14px;font-weight:600;color:var(--match);text-decoration:none;white-space:nowrap}
+.feat svg{width:56px;height:40px}
+.feat .g{fill:none;stroke:var(--ink);stroke-width:1.2}
+.feat .t{fill:var(--i2)} .feat .m{fill:var(--match)}
+footer{padding:48px var(--gut);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:24px 48px;justify-content:space-between;font-size:14px;color:var(--ink2)}
+footer b{color:var(--ink);font-weight:600} .pcred{flex-basis:100%;font-size:12px}
+.proto{position:fixed;left:12px;bottom:10px;z-index:40;font-family:var(--mono);font-size:10.5px;background:#fff;border:1px solid var(--line);padding:4px 8px;color:var(--ink2)}
+@media (max-width:860px){.c0{max-width:none}
+  .regions,.feat{grid-template-columns:1fr} nav.main a:not(.keep){display:none}}
+.brand,.btn{white-space:nowrap} @media (max-width:860px){nav.main{gap:12px}} @media (max-width:430px){nav.main .btn.solid{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}html{scroll-behavior:auto}}
+</style></head><body>
+<header class="top"><a class="brand" href="#"><svg width="26" height="20" viewBox="0 0 26 20" aria-hidden="true"><path d="M1 18 L6 17 L9 14 L11 3 L13 15 L16 11 L18 16 L25 18" fill="none" stroke="#e5386d" stroke-width="1.8" stroke-linejoin="round"/></svg>Plastiverse Live</a>
+<nav class="main" aria-label="Main"><a href="#evidence">Evidence map</a><button class="btn keep" id="regionsBtn" aria-expanded="false" aria-controls="hdrPicker">Regions <svg width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="#">Methods</a><a href="#">About</a><a class="btn solid keep" href="#updates">Get updates</a></nav>
+<div class="picker" id="hdrPicker" hidden></div></header>
+
+<section id="story" aria-label="Why Plastiverse exists">
+<div class="stage" id="stage">
+<canvas id="cv" aria-hidden="true"></canvas>
+<svg id="bulbsrc" width="0" height="0" style="position:absolute" aria-hidden="true"><path d="M100 10 C150 10 186 46 186 96 C186 134 162 152 146 176 C138 188 136 196 136 206 L64 206 C64 196 62 188 54 176 C38 152 14 134 14 96 C14 46 50 10 100 10 Z"/><path d="M66 218 H134 M68 232 H132 M72 246 H128 M84 262 H116"/><path d="M82 206 L86 132 L94 118 L100 132 L106 118 L114 132 L118 206"/></svg>
+<img id="scene" src="scene/web/picnic.jpg" alt="Disposable plastic picnic ware tossed into the air above a checked blanket">
+<div id="stack" aria-hidden="true"><img src="papers/web/p00.jpg" alt=""><img src="papers/web/p01.jpg" alt=""><img src="papers/web/p02.jpg" alt=""><img src="papers/web/p03.jpg" alt=""><img src="papers/web/p04.jpg" alt=""><img src="papers/web/p05.jpg" alt=""><img src="papers/web/p06.jpg" alt=""><img src="papers/web/p07.jpg" alt=""><img src="papers/web/p08.jpg" alt=""><img src="papers/web/p09.jpg" alt=""><img src="papers/web/p10.jpg" alt=""><img src="papers/web/p11.jpg" alt=""><img src="papers/web/p12.jpg" alt=""><img src="papers/web/p14.jpg" alt=""><img src="papers/web/p15.jpg" alt=""></div>
+<div class="cap c0 dk" data-a="0" data-b=".13"><h1>Plastic is everywhere&hellip;</h1><h1 class="words" aria-label="but so is the research." style="margin-top:22vh"><span class="w">&hellip;but</span> <span class="w">so</span> <span class="w">is</span> <span class="w">the</span> <span class="w">research.</span></h1></div>
+<div class="cap c1 dk" data-a=".17" data-b=".245"><h2>Microplastics were first described in the ocean more than 50&nbsp;years ago.</h2><p>Now picture every particle as a published study. Thousands more arrive every year.</p></div>
+<div class="cap c2 dk" data-a=".26" data-b=".425"><h2>Connected, studies become knowledge.</h2><p>Grouped by what they study and linked by who did the work, scattered results start to form a picture.</p></div>
+<div class="cap cb dk" data-a=".45" data-b=".565"><h2>Put to work, knowledge becomes understanding.</h2></div>
+<div class="cap c3" data-a=".655" data-b=".745"><h2>Plastic pollution research is expanding at an unprecedented pace.</h2><p>The world needs innovative tools to turn data into knowledge and solutions to effectively react to this global crisis.</p><p class="src">Plastics-pollution research works per year, worldwide. OpenAlex, query __QV__, fetched __FETCHED__. One dot = <span id="unit"></span> works.</p></div>
+<div class="cap c5" data-a=".77" data-b=".85"><h2>See where the evidence is, worldwide, and where it is missing.</h2><p>A live evidence map sorts every study by what it examines and where, so the gaps show up as empty cells.</p></div>
+<div class="cap c4" data-a=".86" data-b=".915"><h2>See who works with whom, across borders.</h2><p>Collaboration networks show the research communities and the people who bridge them.</p><p class="src">Illustrative network layout.</p></div>
+<div class="cap c6" data-a=".92" data-b=".958"><h2>The problem is global.</h2><p>Plastics research now comes from almost every country.</p></div>
+<div class="cap c7" data-a=".963" data-b="1.2"><h2>The answers are often local.</h2><p>Regional atlases zoom in on the people, monitoring, funding and policy of one place. California is live; Norway is next.</p><p class="src">Data, then knowledge, then understanding: after Hartmann, Mennekes and Wagner (2026).</p></div>
+<div class="cue" id="cue"><i></i>scroll</div>
+<a class="skip" href="#evidence">Skip to the evidence map</a>
+</div></section>
+
+<section class="band" id="evidence"><div class="wrap">
+<h2>The live evidence map.</h2>
+<p class="lede">Every plastics-pollution study worldwide, sorted by what it examines and where. Rebuilt daily from OpenAlex. Select a cell to see its studies, or filter by year, region and study type.</p>
+<div class="evtools"><button class="btn solid">Worldwide</button><button class="btn">California</button><button class="btn">Norway</button><span class="evnote">2015 to 2026 · all study types</span></div>
+<div class="evwrap"><table class="evt"><thead><tr><td></td><th scope='col'>ocean</th><th scope='col'>freshwater</th><th scope='col'>soil</th><th scope='col'>air</th><th scope='col'>food and biota</th><th scope='col'>people</th></tr></thead><tbody><tr><th scope="row">occurrence</th><td class="" style="--v:1.00"><span>3900</span></td><td class="" style="--v:0.67"><span>2600</span></td><td class="" style="--v:0.27"><span>1040</span></td><td class="" style="--v:0.17"><span>650</span></td><td class="" style="--v:0.40"><span>1560</span></td><td class="" style="--v:0.13"><span>520</span></td></tr><tr><th scope="row">effects</th><td class="" style="--v:0.60"><span>2340</span></td><td class="" style="--v:0.33"><span>1300</span></td><td class="" style="--v:0.13"><span>520</span></td><td class="" style="--v:0.03"><span>130</span></td><td class="" style="--v:0.53"><span>2080</span></td><td class="" style="--v:0.20"><span>780</span></td></tr><tr><th scope="row">methods</th><td class="" style="--v:0.33"><span>1300</span></td><td class="" style="--v:0.20"><span>780</span></td><td class="" style="--v:0.10"><span>390</span></td><td class="" style="--v:0.07"><span>260</span></td><td class="" style="--v:0.10"><span>390</span></td><td class="" style="--v:0.03"><span>130</span></td></tr><tr><th scope="row">fate and transport</th><td class="" style="--v:0.27"><span>1040</span></td><td class="" style="--v:0.20"><span>780</span></td><td class="" style="--v:0.10"><span>390</span></td><td class="" style="--v:0.07"><span>260</span></td><td class="" style="--v:0.03"><span>130</span></td><td class="gap" style="--v:0.00"><span>gap</span></td></tr><tr><th scope="row">solutions</th><td class="" style="--v:0.13"><span>520</span></td><td class="" style="--v:0.07"><span>260</span></td><td class="gap" style="--v:0.00"><span>gap</span></td><td class="gap" style="--v:0.00"><span>gap</span></td><td class="" style="--v:0.03"><span>130</span></td><td class="gap" style="--v:0.00"><span>gap</span></td></tr></tbody></table></div>
+<p class="evsrc">Illustrative counts in this prototype. The live version counts works per cell with the reviewed plastics query and agreed cell definitions.</p>
+</div></section>
+<section class="band grid-bg" id="regions"><div class="wrap">
+<h2>From global to local: open a regional atlas.</h2>
+<p class="lede">Each atlas maps who studies plastic pollution in one region, where they work, who funds them, what is monitored and which policies apply. It rebuilds every day from open data.</p>
+<div class="regions">
+<div><div class="mapbox" id="mapbox"><canvas id="px" aria-hidden="true"></canvas>
+<svg viewBox="__VB__" role="img" aria-label="World map of plastics research by country; California is live, Norway is in preparation"><defs><clipPath id="sph"><path d="__SPHERE__"/></clipPath></defs><g class="o" clip-path="url(#sph)">__OUTLINE__</g><path class="no" d="__NO__"/><path class="ca" d="__CA__"/></svg></div>
+<div class="legend">works per country <span class="ramp"><span style="background:var(--i0)"></span><span style="background:var(--i1)"></span><span style="background:var(--i2)"></span><span style="background:var(--i3)"></span></span> illustrative shading until the global counts are built</div></div>
+<div class="picker" id="secPicker"></div>
+</div></div></section>
+
+<section class="band"><div class="wrap feat">
+<div><h2>What a regional atlas does.</h2><p class="lede">Built and checked for California first. Every count links back to its open source.</p></div>
+<ol>
+<li><svg viewBox="0 0 56 40" aria-hidden="true"><circle class="g" cx="18" cy="14" r="7"/><path class="g" d="M6 36 C6 26 30 26 30 36"/><circle class="m" cx="42" cy="14" r="4"/></svg><div><b>Find an expert</b><span>Search researchers by topic, institution and recent work.</span></div><a href="#">Experts</a></li>
+<li><svg viewBox="0 0 56 40" aria-hidden="true"><path class="g" d="M10 30 L26 10 L46 22 L10 30 L46 22"/><circle class="t" cx="10" cy="30" r="4"/><circle class="t" cx="26" cy="10" r="4"/><circle class="m" cx="46" cy="22" r="4"/></svg><div><b>See who works with whom</b><span>A collaboration network of co-authors and communities.</span></div><a href="#">Network</a></li>
+<li><svg viewBox="0 0 56 40" aria-hidden="true"><rect class="t" x="8" y="20" width="8" height="14"/><rect class="t" x="22" y="10" width="8" height="24"/><rect class="m" x="36" y="4" width="8" height="30"/></svg><div><b>Compare institutions</b><span>Output, trends and leaders across universities and agencies.</span></div><a href="#">Institutions</a></li>
+<li><svg viewBox="0 0 56 40" aria-hidden="true"><path class="g" d="M4 32 H52"/><path class="g" d="M8 32 L18 22 L28 26 L40 10 L50 14"/><circle class="m" cx="40" cy="10" r="3.5"/></svg><div><b>Follow the funding</b><span>Federal and state awards for plastics research.</span></div><a href="#">Funding</a></li>
+<li><svg viewBox="0 0 56 40" aria-hidden="true"><g class="t"><rect x="6" y="6" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/><rect x="22" y="6" width="6" height="6"/><rect x="30" y="22" width="6" height="6"/></g><rect class="m" x="38" y="14" width="6" height="6"/></svg><div><b>Check monitoring data</b><span>Where microplastics have been sampled, with licences shown.</span></div><a href="#">Monitoring</a></li>
+<li><svg viewBox="0 0 56 40" aria-hidden="true"><g class="t"><rect x="6" y="6" width="10" height="8"/><rect x="18" y="16" width="10" height="8"/><rect x="30" y="6" width="10" height="8"/></g><rect class="m" x="42" y="26" width="10" height="8"/><path class="g" d="M6 26 H40"/></svg><div><b>Map the evidence</b><span>Topics by matrix, so gaps show up as empty cells.</span></div><a href="#">Evidence map</a></li>
+<li><svg viewBox="0 0 56 40" aria-hidden="true"><path class="g" d="M4 20 H52"/><circle class="t" cx="12" cy="20" r="4"/><circle class="t" cx="28" cy="20" r="4"/><circle class="m" cx="44" cy="20" r="4"/></svg><div><b>Track policy</b><span>Laws, regulations and plans on one timeline.</span></div><a href="#">Policy</a></li>
+</ol></div></section>
+
+<footer id="updates"><div><b>Get updates</b><br>Weekly email (soon), RSS feed, ntfy alerts.</div><div><b>Plastiverse Live</b><br>Created by Scott Coffin. Not a State product.</div><div>Story framing after Hartmann, Mennekes &amp; Wagner (2026).</div>
+<div class="pcred"><b>Paper first pages</b> reproduced under CC BY 4.0 (CC BY), with download stamps removed: 10.1021/acs.est.6c01796 (doi:10.1021/acs.est.6c01796); Risk-based management framework for microplastics in aquatic ecosystems (doi:10.1186/s43591-022-00033-3); Reporting Guidelines to Increase the Reproducibility and Comparability of Research on Microplastics (doi:10.1177/0003702820930292); Microplastics in freshwater: A global review of factors affecting spatial and temporal variations (doi:10.1016/j.envpol.2021.118393); Rapid single-particle chemical imaging of nanoplastics by SRS microscopy (doi:10.1073/pnas.2300582121); Nanoplastics transport to the remote, high-altitude Alps (doi:10.1016/j.envpol.2021.117697); Micro(nano)plastics sources, fate, and effects: What we know after ten years of research (doi:10.1016/j.hazadv.2022.100057); Microplastics analytics: why we should not underestimate the importance of blank controls (doi:10.1186/s43591-023-00065-3); Microplastics and Trash Cleaning and Harmonization (MaTCH): Semantic Data Ingestion and Harmonization Using Artificial Intelligence (doi:10.1021/acs.est.4c02406); Microplastics: A Matter of the Heart (and Vascular System) (doi:10.3390/biomedicines11020264); Studies of the effects of microplastics on aquatic organisms: What do we know and where should we focus our efforts in the future? (doi:10.1016/j.scitotenv.2018.07.207); Microplastics but not natural particles induce multigenerational effects in Daphnia magna (doi:10.1016/j.envpol.2019.113904); Plastic ingestion by green turtles ( Chelonia mydas ) over 33 years along the coast of Texas, USA (doi:10.1016/j.marpolbul.2021.113111); Size Distributions of Microplastics in the St Louis Estuary and Western Lake Superior (doi:10.1021/acs.est.3c10776); Paradigms to assess the human health risks of nano- and microplastics (doi:10.1186/s43591-021-00011-1).</div></footer>
+<div class="proto">prototype: story uses real OpenAlex counts; map shading and region numbers are illustrative</div>
+
+<script>
+(()=>{
+const YEARS=__YEARS__, VALS=__VALS__;
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+// ---------- pickers ----------
+const pickerHTML=`<div class="pk-h">Pick a region <span>2 regions</span></div>
+<a class="row live" href="#"><div class="sw l"></div><div><b>California</b><br><small>live atlas, daily build</small></div><div class="go">Open atlas <svg width="14" height="10" viewBox="0 0 14 10" aria-hidden="true"><path d="M1 5h11M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div></a>
+<a class="row" href="#"><div class="sw s"></div><div>Norway<br><small>in preparation</small></div><div class="go" style="color:var(--ink2)">Follow</div></a>
+<a class="row" href="#"><div class="sw r"></div><div>Your region<br><small>opens on request</small></div><div class="go" style="color:var(--ink)">Request</div></a>
+<p class="pk-note">Regions open where people ask for them. Each needs local experts to guide the sources and check the data before it goes live.</p>`;
+document.getElementById("hdrPicker").innerHTML=pickerHTML;
+document.getElementById("secPicker").innerHTML=pickerHTML;
+const rb=document.getElementById("regionsBtn"),hp=document.getElementById("hdrPicker");
+rb.addEventListener("click",()=>{const o=hp.hidden;hp.hidden=!o;rb.setAttribute("aria-expanded",String(o));});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!hp.hidden){hp.hidden=true;rb.setAttribute("aria-expanded","false");rb.focus();}});
+
+// ---------- story ----------
+// One timeline (fractions of the story's scroll length). Tune dwell here.
+const T={move:[.03,.07],words:[.05,.10],stack:[.055,.115],E:[.125,.165],U:[.155,.235],K:[.25,.33],Kl:[.30,.36,.40,.43],B:[.43,.49],glow:[.50,.56],burst:[.56,.61],
+ C:[.62,.67],Cax:[.665,.69,.73,.75],Ev:[.75,.79],Evg:[.785,.80,.835,.85],Nw:[.85,.88],Nwl:[.875,.89,.905,.915],Mp:[.915,.94],Mpu:[.93,.945,.96,.965],Z:[.96,.985],Zu:[.975,.99]};
+const stage=document.getElementById("stage"),cv=document.getElementById("cv"),g=cv.getContext("2d"),story=document.getElementById("story");
+const total=VALS.reduce((a,b)=>a+b,0);
+const UNIT=Math.max(50,Math.round(total/900/10)*10);
+document.getElementById("unit").textContent=UNIT;
+const colDots=VALS.map(v=>Math.round(v/UNIT));
+const N=colDots.reduce((a,b)=>a+b,0);
+const TEAL=[26,156,150],TEAL2=[125,205,198],TEAL1=[207,233,230],MATCH=[229,56,109];
+const rng=s=>()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296};
+const rnd=rng(42);
+const KINDS=["frag","frag","fiber","film","bead","grain","flake"];
+const P=[];let W=0,H=0,dpr=1;const CH={};
+const hue=([r,g2,b])=>{const mx=Math.max(r,g2,b),mn=Math.min(r,g2,b),d=mx-mn;if(d<18)return 400+mx;let h=mx===r?((g2-b)/d)%6:mx===g2?(b-r)/d+2:(r-g2)/d+4;h*=60;return h<0?h+360:h};
+for(let i=0;i<N;i++){const kind=KINDS[Math.floor(rnd()*KINDS.length)];const verts=[];const nv=kind==="film"?5:4;for(let v=0;v<nv;v++){const a=v/nv*Math.PI*2+rnd()*.6;verts.push([Math.cos(a)*(.6+rnd()*.6),Math.sin(a)*(.6+rnd()*.6)]);}
+ P.push({kind,rgb:[200,200,200],rot:rnd()*6.28,spin:(rnd()-.5)*6,size:1.7+rnd()*1.9,verts,seed:rnd(),dir:rnd()*6.28,dist:60+rnd()*220,ur:rnd(),ua:rnd()*6.28});}
+let KL=[],NL=[],MAPU=null,ZU={cell:1};
+const RAS="__RASTER__".split("|"),RC=RAS[0].length,RR=RAS.length;
+const ZR="__CARAS__".split("|");
+const MCOL={"0":[230,236,239],"1":TEAL1,"2":TEAL2,"3":TEAL,"c":MATCH};
+const scene=document.getElementById("scene");
+const capBox=sel=>{const el=document.querySelector(sel);if(!el)return{r:0,b:0};let rr=0,bb=0;el.querySelectorAll("h1,h2,p").forEach(k=>{const rg=document.createRange();rg.selectNodeContents(k);const q=rg.getBoundingClientRect();rr=Math.max(rr,q.right);bb=Math.max(bb,q.bottom);});const s=stage.getBoundingClientRect();return{r:rr-s.left,b:bb-s.top};};
+function layout(){
+ const r=stage.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(2,devicePixelRatio||1);
+ cv.width=W*dpr;cv.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0);
+ const gut=Math.max(16,Math.min(48,W*.034)),narrow=W<860;
+ // text never overlaps visuals: side beats keep visuals right of the widest side caption; on phones, below it
+ const side=[".c1",".c2",".cb",".c5",".c4",".c7"].map(capBox);
+ const textR=Math.max(...side.map(o=>o.r))+40,capB=Math.max(...side.map(o=>o.b))+20;
+ const VX0=narrow?gut:Math.max(textR,W*.4),VX1=W-gut,VY0=narrow?capB:H*.14,VY1=H*.94;CH.VX0=VX0;CH.VY0=VY0;
+ const order=P.map((p,i)=>[p.seed,i]).sort((a,b)=>a[0]-b[0]);
+ // scene and stack placement (right column; stacked below the text on phones)
+ const colX=narrow?gut:W*.42,colW=(narrow?W-2*gut:W*.58-gut),top0=60+H*.03;
+ const sceneFull={x:colX,y:narrow?H*.44:top0,w:colW,h:narrow?H*.5:H-60-H*.08};
+ const sceneSmall={x:colX,y:narrow?H*.40:top0,w:colW,h:narrow?H*.22:H*.36};
+ const stackBox={x:colX,y:narrow?H*.64:top0+H*.4,w:colW,h:narrow?H*.33:H-top0-H*.4-H*.04};
+ CH.sceneFull=sceneFull;CH.sceneSmall=sceneSmall;
+ placeStack(stackBox);
+ // A: sample the scene's lit pixels (the plastics), colour from the photo, at its beat-2 rect
+ const nat=fitContain(scene.naturalWidth,scene.naturalHeight,sceneSmall);
+ const ir={left:r.left+nat.x,top:r.top+nat.y,width:nat.w,height:nat.h},w=Math.max(1,Math.round(ir.width)),h=Math.max(1,Math.round(ir.height));
+ const oc=document.createElement("canvas");oc.width=w;oc.height=h;const o=oc.getContext("2d",{willReadFrequently:true});o.drawImage(scene,0,0,w,h);const d=o.getImageData(0,0,w,h).data;
+ const lit=[];for(let yy=0;yy<h;yy+=2)for(let xx=0;xx<w;xx+=2){const k=(yy*w+xx)*4;const l=.3*d[k]+.59*d[k+1]+.11*d[k+2];if(l>46)lit.push([xx,yy,d[k],d[k+1],d[k+2]]);}
+ const sr=rng(3);
+ P.forEach((p,i)=>{let ax,ay,rgb;
+  if(i%5<3||!PAPERS.length){const q=lit[Math.floor(sr()*lit.length)]||[w/2,h/2,128,128,128];ax=ir.left-r.left+q[0];ay=ir.top-r.top+q[1];rgb=[q[2],q[3],q[4]];}
+  else{const pp=PAPERS[Math.floor(sr()*PAPERS.length)],u=sr(),v=sr()*.75;const dx=(u-.5)*pp.w,dy=(v-.5)*pp.h,c=Math.cos(pp.rot),s=Math.sin(pp.rot);ax=pp.cx+dx*c-dy*s;ay=pp.cy+dx*s+dy*c;
+   const k=(Math.floor(v*pp.ih)*pp.iw+Math.floor(u*pp.iw))*4;const L=pp.data?[pp.data[k],pp.data[k+1],pp.data[k+2]]:[240,240,240];rgb=L[0]+L[1]+L[2]>690?[236,236,238]:L;}
+  p.A=[ax,ay];p.rgb=rgb;
+  p.E=[Math.max(VX0,p.A[0]+Math.cos(p.dir)*p.dist),p.A[1]+Math.sin(p.dir)*p.dist+30];});
+ // U: loose data cloud
+ const cx=(VX0+VX1)/2,cy=(VY0+VY1)/2,RXu=(VX1-VX0)/2,RYu=(VY1-VY0)/2;CH.ucx=cx;CH.ucy=cy;
+ P.forEach(p=>{const rr=Math.pow(p.ur,.6);p.U=[cx+Math.cos(p.ua)*rr*RXu,cy+Math.sin(p.ua)*rr*RYu];});
+ // K: eight colour-sorted constellations (phyllotaxis discs) on a ring, Barker-like order
+ const byHue=[...P].sort((a,b)=>hue(a.rgb)-hue(b.rgb)||a.seed-b.seed),G=8,per=Math.ceil(N/G);
+ const rad=Math.min(W,H)*.085,RX=(VX1-VX0)/2-rad-8,RY=(VY1-VY0)/2-rad-8,KC=[(VX0+VX1)/2,(VY0+VY1)/2];KL=[];const firsts=[];
+ for(let gi=0;gi<G;gi++){const grp=byHue.slice(gi*per,(gi+1)*per);if(!grp.length)continue;const ang=gi/G*Math.PI*2-Math.PI/2,ccx=KC[0]+Math.cos(ang)*RX,ccy=KC[1]+Math.sin(ang)*RY,c=rad/Math.sqrt(grp.length);
+  grp.forEach((p,j)=>{const rr=c*Math.sqrt(j+.5),th=j*2.39996;p.K=[ccx+Math.cos(th)*rr,ccy+Math.sin(th)*rr];if(j>=8)KL.push([p,grp[j-8]]);if(j>=13)KL.push([p,grp[j-13]]);});firsts.push(grp[0]);}
+ firsts.forEach((p,i)=>KL.push([p,firsts[(i+1)%firsts.length]]));
+ // B: light bulb outline
+ const bp=[...document.querySelectorAll("#bulbsrc path")],bl=bp.map(q=>q.getTotalLength()),BL=bl.reduce((a,b)=>a+b,0);
+ const bh=Math.min(H*.66,(VY1-VY0)*.95,(VX1-VX0)*1.4),bsc=bh/300,bcx=(VX0+VX1)/2,bx0=bcx-100*bsc,by0=(VY0+VY1)/2-150*bsc;CH.bulb=[bcx,by0+100*bsc,bh,bsc];
+ order.forEach(([,i],j)=>{let t=(j+.5)/N*BL,k=0;while(k<bp.length-1&&t>bl[k]){t-=bl[k];k++;}const pt=bp[k].getPointAtLength(Math.min(t,bl[k]));P[i].B=[bx0+pt.x*bsc,by0+pt.y*bsc];P[i].bj=j;});
+ // C: unit chart, full width
+ const c3=capBox(".c3");const x0=Math.max(24,W*.06),x1=W-x0,base=H*.88,n=YEARS.length,stride=(x1-x0)/n;CH.chartTop=c3.b+28;
+ const gap=Math.max(1.6,Math.min(6.2,stride/3.3,(base-CH.chartTop)/Math.ceil(Math.max(...colDots)/3)));
+ Object.assign(CH,{x0,x1,base,stride,gap});
+ const slots=[];colDots.forEach((dd,ci)=>{for(let k=0;k<dd;k++)slots.push([x0+ci*stride+stride/2+((k%3)-1)*gap,base-(Math.floor(k/3)+.5)*gap,ci]);});
+ order.forEach(([,i],j)=>{const s=slots[j]||slots[slots.length-1];P[i].C=[s[0],s[1]];P[i].ci=s[2];});
+ // Ev: global evidence grid (illustrative weights)
+ const ROWS=["occurrence","effects","methods","fate and transport","solutions"],COLS=["ocean","freshwater","soil","air","food and biota","people"];
+ const WTS=[[30,20,8,5,12,4],[18,10,4,1,16,6],[10,6,3,2,3,1],[8,6,3,2,1,0],[4,2,0,0,1,0]];
+ const sw=WTS.flat().reduce((a,b)=>a+b,0);const cnt=WTS.map(rw=>rw.map(v=>Math.floor(v/sw*N)));cnt[0][0]+=N-cnt.flat().reduce((a,b)=>a+b,0);
+ const gx0=VX0+(narrow?0:120),gy0=VY0+28,cw=(VX1-gx0)/COLS.length,chh=(VY1-gy0)/ROWS.length;Object.assign(CH,{ROWS,COLS,gx0,gy0,cw,chh});
+ let idx=0;cnt.forEach((rw,ri)=>rw.forEach((c,ci)=>{const sp=Math.max(3.2,Math.min(6,Math.sqrt((cw-14)*(chh-14)/Math.max(c,1))));const pr=Math.max(1,Math.floor((cw-14)/sp));
+  for(let k=0;k<c&&idx<N;k++,idx++){const p=P[order[idx][1]];p.Ev=[gx0+ci*cw+8+(k%pr)*sp+sp/2,gy0+ri*chh+8+Math.floor(k/pr)*sp+sp/2];p.evsp=sp;}}));
+ // Nw: collaboration network, 7 communities
+ const nr=rng(11),NCOM=7,coms=[];for(let k=0;k<NCOM;k++){const a=k/NCOM*6.28+nr()*.5;coms.push([(VX0+VX1)/2+Math.cos(a)*(VX1-VX0)*.32,(VY0+VY1)/2+Math.sin(a)*(VY1-VY0)*.3]);}
+ const members=coms.map(()=>[]);
+ order.forEach(([,i],j)=>{const k=j%NCOM,p=P[i];const s=Math.sqrt(-2*Math.log(nr()+1e-6))*Math.min(W,H)*.045,a=nr()*6.28;p.Nw=[coms[k][0]+Math.cos(a)*s,coms[k][1]+Math.sin(a)*s];p.com=k;members[k].push(p);});
+ NL=[];members.forEach((ms,k)=>{ms.forEach(p=>{for(let e=0;e<2;e++){const q=ms[Math.floor(nr()*ms.length)];if(q!==p)NL.push([p,q]);}if(nr()<.04){const o=members[(k+1+Math.floor(nr()*(NCOM-1)))%NCOM];NL.push([p,o[Math.floor(nr()*o.length)]]);}});});
+ // Mp: world pixels
+ const c6=capBox(".c6"),my0=c6.b+24,mw=Math.min(W-2*gut,(H*.96-my0)*RC/RR),cell=mw/RC,mx0=(W-mw)/2;MAPU={mx0,my0,cell,mw};
+ const land=[];for(let rr=0;rr<RR;rr++)for(let cc=0;cc<RC;cc++){const ch=RAS[rr][cc];if(ch===".")continue;const wt=ch==="c"?40:ch==="3"?4:ch==="2"?2:ch==="1"?1:.3;land.push([cc,rr,ch,wt]);}
+ const mr=rng(5);const pick=land.map(l=>[Math.pow(mr(),1/l[3]),l]).sort((a,b)=>b[0]-a[0]).slice(0,N).map(x=>x[1]);
+ order.forEach(([,i],j)=>{const l=pick[j%pick.length];P[i].Mp=[mx0+(l[0]+.5)*cell,my0+(l[1]+.5)*cell];P[i].mch=l[2];});
+ // Z: zoom to California at local scale
+ const zc=Math.min((VY1-VY0)/ZR.length,(VX1-VX0)/ZR[0].length),zx0=(VX0+VX1)/2-zc*ZR[0].length/2,zy0=VY0;ZU={zx0,zy0,cell:zc};
+ const zl=[];ZR.forEach((row,rr)=>{for(let cc=0;cc<row.length;cc++)if(row[cc]!==".")zl.push([cc,rr,row[cc]]);});
+ const zr=rng(9);for(let k=zl.length-1;k>0;k--){const j=Math.floor(zr()*(k+1));[zl[k],zl[j]]=[zl[j],zl[k]];}
+ order.forEach(([,i],j)=>{const l=zl[j%zl.length];P[i].Z=[zx0+(l[0]+.5)*zc,zy0+(l[1]+.5)*zc];P[i].zc=(l[2]==="w"?zr()<.5:zr()<.12)?MATCH:(zr()<.5?TEAL:TEAL2);});
+}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+const win=(p,w)=>seg(p,w[0],w[1])*(1-seg(p,w[2],w[3]));
+const eo=t=>1-Math.pow(1-t,3),eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const LT=[246,248,249],DK=[10,10,11];
+const mix=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];
+const css=(c,a=1)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
+function progress(){const r=story.getBoundingClientRect();return clamp(-r.top/(r.height-innerHeight),0,1);}
+function shape(p,x,y,s,a,rgb,alpha){g.save();g.translate(x,y);g.rotate(a);g.globalAlpha=alpha;const col=css(rgb);
+ if(p.kind==="fiber"){g.strokeStyle=col;g.lineWidth=1.2;g.lineCap="round";g.beginPath();g.moveTo(-s*2.4,0);g.quadraticCurveTo(-s,-s*1.6,0,0);g.quadraticCurveTo(s,s*1.6,s*2.4,0);g.stroke();}
+ else if(p.kind==="bead"){g.fillStyle=col;g.beginPath();g.arc(0,0,s*.9,0,7);g.fill();}
+ else if(p.kind==="grain"){g.fillStyle=col;g.fillRect(-s*.7,-s*.7,s*1.4,s*1.4);}
+ else{g.fillStyle=col;if(p.kind==="film")g.globalAlpha=alpha*.65;g.beginPath();p.verts.forEach((v,i)=>{const X=v[0]*s*(p.kind==="flake"?1.6:1.2),Y=v[1]*s*(p.kind==="flake"?.7:1.2);i?g.lineTo(X,Y):g.moveTo(X,Y)});g.closePath();g.fill();}
+ g.restore();}
+const caps=[...document.querySelectorAll(".cap")],cue=document.getElementById("cue"),hdr=document.querySelector("header.top"),words=[...document.querySelectorAll(".w")];
+const RAYS=Array.from({length:40},(_,i)=>[i/40*Math.PI*2+rnd()*.08,.6+rnd()*.6]);
+function frame(t){
+ const p=reduce?.66:progress();
+ const bp=seg(p,...T.burst),litNow=bp>=1;
+ stage.style.background=css(litNow?LT:DK);
+ hdr.classList.toggle("on-dark",bp<.8&&story.getBoundingClientRect().bottom>60);
+ g.clearRect(0,0,W,H);
+ // scene photo: visible until the burst of particles
+ const gone=1-seg(p,T.E[0]-.005,T.E[0]+.015);scene.style.opacity=String(gone);stackEl.style.opacity=String(gone);
+ if(CH.sceneFull){const m=eio(seg(p,...T.move)),a=fitContain(scene.naturalWidth,scene.naturalHeight,CH.sceneFull),b2=fitContain(scene.naturalWidth,scene.naturalHeight,CH.sceneSmall);
+  const x=a.x+(b2.x-a.x)*m,y=a.y+(b2.y-a.y)*m,ww=a.w+(b2.w-a.w)*m;scene.style.transform=`translate(${x}px,${y}px) scale(${ww/scene.naturalWidth})`;}
+ PAPERS.forEach((pp,i)=>{const n=PAPERS.length,a0=T.stack[0]+(T.stack[1]-T.stack[0])*i/n,o=eo(seg(p,a0,a0+(T.stack[1]-T.stack[0])/n*1.6));pp.el.style.opacity=o;pp.el.style.transform=`translate(${pp.cx-pp.w/2}px,${pp.cy-pp.h/2-(1-o)*60}px) rotate(${pp.rot}rad)`;});
+ cue.style.opacity=String(1-seg(p,.005,.025));
+ caps.forEach(c=>{const a=+c.dataset.a,b=+c.dataset.b;const o=(a<=0?1:seg(p,a,a+.02))*(1-seg(p,b-.02,b));c.style.opacity=o;c.style.transform=`translateY(${(1-o)*12}px)`;c.style.visibility=o>0?"visible":"hidden";});
+ // word-by-word reveal: black to white
+ words.forEach((el,i)=>{const n=words.length,w0=T.words[0]+(T.words[1]-T.words[0])*i/n,w1=w0+(T.words[1]-T.words[0])/n*1.4;el.style.color=css(mix([10,10,11],[242,242,244],eo(seg(p,w0,w1))));});
+ // radial light burst from the bulb
+ if(CH.bulb){const[bx,by,bh,bsc]=CH.bulb;const gl=seg(p,...T.glow);
+  if(gl>0&&bp<1){const gr=g.createRadialGradient(bx,by,0,bx,by,bh*(.35+.25*gl));gr.addColorStop(0,`rgba(255,240,190,${.85*gl})`);gr.addColorStop(1,"rgba(255,240,190,0)");g.fillStyle=gr;g.fillRect(0,0,W,H);}
+  if(bp>0&&bp<1){const maxR=Math.max(Math.hypot(bx,by),Math.hypot(W-bx,by),Math.hypot(bx,H-by),Math.hypot(W-bx,H-by))*1.05,rr=maxR*eo(bp);
+   g.save();g.lineCap="round";RAYS.forEach(([a,l])=>{g.strokeStyle=`rgba(255,226,150,${.55*(1-bp)})`;g.lineWidth=2+6*(1-bp);g.beginPath();g.moveTo(bx+Math.cos(a)*rr*.6,by+Math.sin(a)*rr*.6);g.lineTo(bx+Math.cos(a)*rr*(1+.6*l),by+Math.sin(a)*rr*(1+.6*l));g.stroke();});g.restore();
+   g.fillStyle=css(LT);g.beginPath();g.arc(bx,by,rr,0,7);g.fill();
+   const ring=g.createRadialGradient(bx,by,rr*.82,bx,by,rr*1.08);ring.addColorStop(0,"rgba(255,244,200,0)");ring.addColorStop(.7,`rgba(255,226,140,${.8*(1-bp*.6)})`);ring.addColorStop(1,"rgba(255,226,140,0)");g.fillStyle=ring;g.fillRect(0,0,W,H);}}
+ const tE=eo(seg(p,...T.E)),tU=eio(seg(p,...T.U)),tK=eio(seg(p,...T.K)),tB=eio(seg(p,...T.B)),tV=eio(seg(p,...T.Ev)),tN=eio(seg(p,...T.Nw)),tM=eio(seg(p,...T.Mp)),tZ=eio(seg(p,...T.Z));
+ const show=seg(p,T.E[0]-.01,T.E[0]+.005);
+ const rotU=(t/1000)*.02*(1-tK),ucx=CH.ucx,ucy=CH.ucy;
+ // underlays
+ const ev=win(p,T.Evg);
+ if(ev>0){const{ROWS,COLS,gx0,gy0,cw,chh}=CH;g.globalAlpha=ev;g.strokeStyle="#c3cdd6";g.lineWidth=1;g.font="10px 'Martian Mono',monospace";g.fillStyle="#4f5a74";
+  for(let i=0;i<=ROWS.length;i++){g.beginPath();g.moveTo(gx0,gy0+i*chh);g.lineTo(gx0+cw*COLS.length,gy0+i*chh);g.stroke();}
+  for(let j=0;j<=COLS.length;j++){g.beginPath();g.moveTo(gx0+j*cw,gy0);g.lineTo(gx0+j*cw,gy0+chh*ROWS.length);g.stroke();}
+  g.textAlign="right";ROWS.forEach((r2,i)=>g.fillText(r2,gx0-8,gy0+i*chh+chh/2+3));g.textAlign="center";COLS.forEach((c2,j)=>g.fillText(c2,gx0+j*cw+cw/2,gy0-10));
+  g.textAlign="right";g.fillText("worldwide; illustrative cell counts until the live counts are built",gx0+cw*COLS.length,gy0+chh*ROWS.length+18);g.globalAlpha=1;}
+ const mu=win(p,T.Mpu);
+ if(mu>0&&MAPU){const{mx0,my0,cell}=MAPU;g.globalAlpha=mu*.9;for(let rr=0;rr<RR;rr++){const row=RAS[rr];for(let cc=0;cc<RC;cc++){const ch=row[cc];if(ch===".")continue;g.fillStyle=css(MCOL[ch]);g.fillRect(mx0+cc*cell,my0+rr*cell,cell-1,cell-1);}}g.globalAlpha=1;}
+ const zu=seg(p,...T.Zu);
+ if(zu>0){const{zx0,zy0,cell}=ZU;g.globalAlpha=zu;for(let rr=0;rr<ZR.length;rr++){const row=ZR[rr];for(let cc=0;cc<row.length;cc++){const ch=row[cc];if(ch===".")continue;g.fillStyle=ch==="w"?"#e7f2f1":"#cfe9e6";g.fillRect(zx0+cc*cell,zy0+rr*cell,cell-1,cell-1);}}g.globalAlpha=1;}
+ const pos=new Map();
+ for(const q of P){
+  const st=(q.ci/YEARS.length)*.04;
+  let x=q.A[0],y=q.A[1];
+  x+=(q.E[0]-x)*tE;y+=(q.E[1]-y)*tE;
+  let ux=q.U[0]-ucx,uy=q.U[1]-ucy;const a2=rotU*(1+q.seed),cr=Math.cos(a2),sr=Math.sin(a2);
+  x+=(ucx+ux*cr-uy*sr-x)*tU;y+=(ucy+ux*sr+uy*cr-y)*tU;
+  x+=(q.K[0]-x)*tK;y+=(q.K[1]-y)*tK;
+  x+=(q.B[0]-x)*tB;y+=(q.B[1]-y)*tB;
+  const tC=eio(seg(p-st,...T.C));
+  x+=(q.C[0]-x)*tC;y+=(q.C[1]-y)*tC;
+  if(q.Ev){x+=(q.Ev[0]-x)*tV;y+=(q.Ev[1]-y)*tV;}
+  x+=(q.Nw[0]-x)*tN;y+=(q.Nw[1]-y)*tN;
+  x+=(q.Mp[0]-x)*tM;y+=(q.Mp[1]-y)*tM;
+  x+=(q.Z[0]-x)*tZ;y+=(q.Z[1]-y)*tZ;
+  pos.set(q,[x,y]);
+  let rgb=q.rgb;
+  rgb=mix(rgb,[255,214,120],tB*(1-tC));
+  rgb=mix(rgb,[196,128,24],bp*(1-tC));
+  rgb=mix(rgb,TEAL,tC);
+  rgb=mix(rgb,TEAL,tV);
+  rgb=mix(rgb,q.com===2?MATCH:TEAL,tN);
+  rgb=mix(rgb,MCOL[q.mch]||TEAL,tM);
+  rgb=mix(rgb,q.zc,tZ);
+  const alpha=reduce?1:show;
+  if(tM>.5){g.globalAlpha=alpha;g.fillStyle=css(rgb);const c=MAPU.cell+(ZU.cell-MAPU.cell)*tZ;g.fillRect(x-c/2,y-c/2,c-1,c-1);}
+  else if(tC>.65){g.globalAlpha=alpha;g.fillStyle=css(rgb);g.beginPath();g.arc(x,y,tN>.5?2.6:tV>.5?Math.max(1.2,(q.evsp||4)*.34):Math.max(1.3,CH.gap*.38),0,7);g.fill();}
+  else{const s=q.size*(1+.5*tU*(1-tB));shape(q,x,y,s,q.rot+q.spin*(tE+tU)*(1-tK),rgb,alpha);}
+ }
+ g.globalAlpha=1;
+ const kl=win(p,T.Kl);
+ if(kl>0){g.lineWidth=.55;g.strokeStyle=`rgba(225,228,236,${.3*kl})`;g.beginPath();KL.forEach(([a,b])=>{const A=pos.get(a),B=pos.get(b);g.moveTo(A[0],A[1]);g.lineTo(B[0],B[1]);});g.stroke();}
+ const bk=seg(p,T.B[1]-.01,T.B[1]+.02)*(1-seg(p,T.burst[0],T.burst[1]));
+ if(bk>0){const arr=[...pos.entries()].sort((a,b)=>a[0].bj-b[0].bj);g.lineWidth=1;g.strokeStyle=`rgba(255,220,140,${.6*bk})`;g.beginPath();arr.forEach(([q,[x,y]],i)=>{const prev=arr[i-1];if(prev&&Math.hypot(prev[1][0]-x,prev[1][1]-y)<40){g.moveTo(prev[1][0],prev[1][1]);g.lineTo(x,y);}});g.stroke();}
+ const ax=win(p,T.Cax);
+ if(ax>0){const{x0,x1,base,stride,gap}=CH;g.globalAlpha=ax;g.strokeStyle="#4f5a74";g.fillStyle="#4f5a74";g.lineWidth=1;g.beginPath();g.moveTo(x0,base+3);g.lineTo(x1,base+3);g.stroke();
+  g.font="10px 'Martian Mono',monospace";g.textAlign="center";
+  YEARS.forEach((y,i)=>{if(y%10===0||y===2026){const X=x0+i*stride+stride/2;g.beginPath();g.moveTo(X,base+3);g.lineTo(X,base+8);g.stroke();g.fillText(y,X,base+21);}});
+  g.strokeStyle="#0f6d69";g.lineWidth=1.6;g.beginPath();const lastI=Math.floor(seg(p,T.Cax[0],T.Cax[1]+.02)*(YEARS.length-1));
+  for(let i=0;i<=lastI;i++){const X=x0+i*stride+stride/2,Y=base-Math.ceil(colDots[i]/3)*gap-3;i?g.lineTo(X,Y):g.moveTo(X,Y);}g.stroke();
+  const i04=YEARS.indexOf(2004),X04=x0+i04*stride+stride/2;g.strokeStyle="#e5386d";g.setLineDash([3,3]);g.beginPath();g.moveTo(X04,base);const yL=Math.max(CH.chartTop+12,base-H*.22);g.lineTo(X04,yL);g.stroke();g.setLineDash([]);
+  g.fillStyle="#e5386d";g.textAlign="left";g.fillText("2004  Thompson et al., “Lost at sea: where is all the plastic?”",X04+6,yL+4);
+  const iL=YEARS.length-1,XL=x0+iL*stride+stride/2,YL=base-Math.ceil(colDots[iL]/3)*gap-12;g.fillStyle="#17203a";g.textAlign="right";
+  g.fillText(`2026 to date: ${VALS[iL].toLocaleString()} works`,XL,YL);g.globalAlpha=1;}
+ const nl=win(p,T.Nwl);
+ if(nl>0){g.lineWidth=.5;g.strokeStyle=`rgba(23,32,58,${.22*nl})`;g.beginPath();NL.forEach(([a,b])=>{const A=pos.get(a),B=pos.get(b);g.moveTo(A[0],A[1]);g.lineTo(B[0],B[1]);});g.stroke();}
+ requestAnimationFrame(frame);
+}
+function fitContain(nw,nh,box){const s=Math.min(box.w/nw,box.h/nh),w=nw*s,h=nh*s;return{x:box.x+(box.w-w)/2,y:box.y+(box.h-h)/2,w,h};}
+const stackEl=document.getElementById("stack");const PAPERS=[];
+function placeStack(box){const imgs=[...stackEl.querySelectorAll("img")];const pr=rng(21);const n=imgs.length;const ph=Math.min(box.h*.92,box.w*.6),pw=ph*.773;PAPERS.length=0;
+ imgs.forEach((im,i)=>{const t=n>1?i/(n-1):.5;const cx=box.x+pw/2+t*(box.w-pw)+(pr()-.5)*20,cy=box.y+box.h/2+(pr()-.5)*box.h*.08,rot=(pr()-.5)*.3;
+  im.style.width=pw+"px";im.style.height=ph+"px";const o={el:im,cx,cy,w:pw,h:ph,rot};
+  try{const oc=document.createElement("canvas");oc.width=im.naturalWidth;oc.height=im.naturalHeight;const c2=oc.getContext("2d",{willReadFrequently:true});c2.drawImage(im,0,0);o.data=c2.getImageData(0,0,oc.width,oc.height).data;o.iw=oc.width;o.ih=oc.height;}catch(err){}
+  PAPERS.push(o);});}
+async function start(){await Promise.all([...stackEl.querySelectorAll("img")].map(i=>i.decode().catch(()=>{})));const q=new URLSearchParams(location.search).get("scene");if(q==="dinner")scene.src="scene/web/dinner.jpg";
+ await scene.decode().catch(()=>{});layout();requestAnimationFrame(frame);}
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(start);else addEventListener("load",start);
+addEventListener("resize",()=>layout());
+
+// ---------- pixel map ----------
+const R=RAS,C=__CELL__,px=document.getElementById("px"),pg=px.getContext("2d"),pd=Math.min(2,devicePixelRatio||1);
+px.width=__MW__*pd;px.height=__MH__*pd;pg.scale(pd,pd);
+const colr={"0":"#e6ecef","1":"#cfe9e6","2":"#7dcdc6","3":"#1a9c96","c":"#e5386d"};
+function drawMap(n){for(let r=0;r<R.length;r++){const row=R[r];for(let c=0;c<Math.min(n,row.length);c++){const ch=row[c];if(ch===".")continue;pg.fillStyle=colr[ch];pg.fillRect(c*C,r*C,C-1,C-1);}}}
+const cols=R[0].length;
+if(reduce)drawMap(cols);else{let done=false;new IntersectionObserver((es,ob)=>{if(done||!es[0].isIntersecting)return;done=true;ob.disconnect();const t0=performance.now();let k=0;
+ (function step(t){const q=Math.min(1,(t-t0)/1400),n=Math.round((1-Math.pow(1-q,3))*cols);if(n>k){pg.save();pg.beginPath();pg.rect(k*C,0,(n-k)*C,__MH__);pg.clip();drawMap(n);pg.restore();k=n;}if(q<1)requestAnimationFrame(step);})(t0);},{threshold:.3}).observe(document.getElementById("mapbox"));}
+})();
+</script>
+</body></html>

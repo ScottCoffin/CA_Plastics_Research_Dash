@@ -144,6 +144,17 @@ check-ins, within everything else in this file.
       (Session entry steps only), and the first task to run.
    c. End with a message giving the owner actions and that prompt verbatim.
 
+## Cross-machine handoff
+The repo carries all agent state, so another machine can resume from a fresh clone.
+- Claude Code auto-memory is mirrored in `.claude/memory/`. On a new machine, copy
+  it to `~/.claude/projects/<project-slug>/memory/`. Whenever you save or change a
+  memory, write the same file to `.claude/memory/` too.
+- Keep agent work out of the OS temp scratchpad, because it does not travel.
+  Sources for anything the owner will iterate on (for example
+  `.impeccable/sketches/src/` for the landing prototype) belong in the repo.
+- Only runtime state stays ignored: locks, caches, Impeccable `questions/` and
+  `review/` state, and Quarto previews (`.agent/*.html`).
+
 ## Safety
 Never reset, clean, stash, or overwrite unrelated work. Do not read `.env` or
 print secrets. Do not deploy, change secrets, or add dependencies without

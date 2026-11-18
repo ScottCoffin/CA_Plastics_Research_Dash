@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Sorting Tray sketch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;600&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bench:#16201f;--bench-2:#1d2a28;--paper:#e9efed;--grid:#8cc9d3;--ink:#0f1716;--pe:#2f6fdb;--pp:#d8432e;--pet:#2e9e5b;--ps:#f2b830;--label:#f4f6f5;--muted:#9fb3ae}
+*{box-sizing:border-box}html,body{margin:0;width:1440px;height:900px;overflow:hidden}
+body{background:radial-gradient(1200px 700px at 70% 10%,var(--bench-2),var(--bench));color:var(--label);font:16px/1.5 "Public Sans",system-ui,sans-serif}
+nav{display:flex;align-items:center;gap:36px;height:64px;padding:0 56px;border-bottom:1px solid #2b3a37;font:600 14px/1 "Archivo",sans-serif;font-stretch:80%;letter-spacing:.06em;text-transform:uppercase}
+nav b{font-size:17px;letter-spacing:.02em;margin-right:auto;text-transform:none;font-stretch:75%}
+nav span{color:var(--muted)}
+.head{display:grid;grid-template-columns:1fr 470px;gap:48px;padding:52px 56px 0;align-items:end}
+h1{margin:0;font:800 104px/.9 "Archivo",sans-serif;font-stretch:62%;letter-spacing:-.01em;color:var(--label)}
+h1 em{font-style:normal;color:var(--grid)}
+.instr{margin:18px 0 0;font:600 26px/1.2 "Archivo",sans-serif;font-stretch:75%;color:var(--muted)}
+.search{background:var(--label);color:var(--ink);border-radius:3px;padding:14px 16px;display:grid;gap:8px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.search small{font:600 11px/1 "JetBrains Mono",monospace;letter-spacing:.08em;color:#4a5b58}
+.search div{display:flex;gap:8px}.search input{flex:1;font:16px "Public Sans";padding:12px;border:1px solid #9fb3ae;border-radius:2px;background:#fff}
+.search button{font:700 15px "Archivo";font-stretch:80%;letter-spacing:.05em;text-transform:uppercase;background:var(--ink);color:var(--label);border:0;padding:0 22px;border-radius:2px}
+.tray{position:absolute;left:0;right:0;top:420px;height:480px}
+.horizon{position:absolute;left:56px;right:56px;top:378px;border-top:1px solid #3a4d49}
+.dishes{position:absolute;left:56px;right:56px;top:440px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.dish{display:grid;justify-items:center;gap:14px;color:inherit;text-decoration:none}
+.dish svg{width:288px;height:288px;filter:drop-shadow(0 18px 24px rgba(0,0,0,.45))}
+.tag{width:100%;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:baseline}
+.tag strong{grid-column:1/-1;font:700 30px/1 "Archivo";font-stretch:68%;color:var(--label)}
+.tag i{width:10px;height:10px;border-radius:2px;display:block}
+.tag span{font:600 13px/1.3 "JetBrains Mono",monospace;color:var(--muted)}
+</style></head><body>
+<nav><b>CA Plastics Research Atlas</b><span>Explore</span><span>Data</span><span>Context</span><span>Reference</span></nav>
+<section class="head">
+  <div><h1>California plastics research, <em>sorted.</em></h1><p class="instr">Pick a dish. Every mark in it is one real record.</p></div>
+  <form class="search"><small>OR LABEL A SAMPLE</small><div><input placeholder="Search experts, institutions, topics, funders"><button>Search</button></div></form>
+</section>
+<div class="horizon"></div>
+<div class="dishes" id="dishes"></div>
+<script>
+const D=[
+ {t:"Find a researcher",n:2635,u:"authors",c:"--pe",k:"dot",s:"OpenAlex"},
+ {t:"See funding",n:503,u:"awards",c:"--pp",k:"sq",s:"Grant registries"},
+ {t:"Check monitoring data",n:298,u:"samples",c:"--pet",k:"tri",s:"CEDEN + 24 sources"},
+ {t:"Explore the evidence",n:1579,u:"works",c:"--ps",k:"fib",s:"OpenAlex"}];
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const host=document.getElementById("dishes"),css=getComputedStyle(document.documentElement);
+D.forEach((d,i)=>{const r=rng(7+i),col=css.getPropertyValue(d.c).trim();let g="";
+ for(let x=-130;x<=130;x+=10)g+=`<line x1="${x}" y1="-140" x2="${x}" y2="140" stroke="#8cc9d3" stroke-width="${x%50?0.4:0.9}"/><line y1="${x}" x1="-140" y2="${x}" x2="140" stroke="#8cc9d3" stroke-width="${x%50?0.4:0.9}"/>`;
+ let m="";for(let j=0;j<d.n;j++){const a=r()*6.283,q=Math.sqrt(r())*124,x=Math.cos(a)*q,y=Math.sin(a)*q,o=0.55+r()*0.45,rot=r()*180;
+  if(d.k=="dot")m+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.4" fill="${col}" opacity="${o}"/>`;
+  else if(d.k=="sq")m+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="4" height="3" fill="${col}" opacity="${o}" transform="rotate(${rot} ${x} ${y})"/>`;
+  else if(d.k=="tri")m+=`<path d="M${x},${y}l5,1l-3,4z" fill="${col}" opacity="${o}" transform="rotate(${rot} ${x} ${y})"/>`;
+  else m+=`<path d="M${x},${y}q4,-3 9,${(r()*6-3).toFixed(1)}" stroke="${col}" stroke-width="1.1" fill="none" opacity="${o}"/>`;}
+ host.insertAdjacentHTML("beforeend",`<a class="dish" href="#"><svg viewBox="-144 -144 288 288"><defs><clipPath id="c${i}"><circle r="134"/></clipPath></defs><circle r="140" fill="#cfdcd8"/><circle r="134" fill="#e9efed"/><g clip-path="url(#c${i})">${g}${m}</g><circle r="140" fill="none" stroke="#ffffff" stroke-opacity=".5" stroke-width="2"/></svg>
+ <span class="tag"><strong>${d.t}</strong><i style="background:${col}"></i><span>${d.n.toLocaleString("en-US")} ${d.u} · ${d.s}</span></span></a>`)});
+</script></body></html>

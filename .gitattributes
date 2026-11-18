@@ -14,3 +14,9 @@ Makefile text eol=lf
 *.json text eol=lf
 *.jsonl text eol=lf
 *.xml text eol=lf
+
+# Vendored agent skills (Impeccable): keep upstream bytes; engine-checksums.txt pins them.
+.agent/skills/** -whitespace
+.agents/skills/** -whitespace
+.claude/skills/** -whitespace
+.github/skills/** -whitespace

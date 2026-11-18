@@ -46,6 +46,8 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+# Design prototypes (Impeccable sketches) are throwaway scripts, not production code.
+extend-exclude = [".impeccable"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]

@@ -1,0 +1,8 @@
+{
+  "prompt": "Top-down flat-lay product photograph of a 1950s-style disposable plastic picnic set, every piece laid out separately with generous empty space between items so that no two items touch or overlap: two red plastic cups and one yellow, one blue and one white plastic cup seen from above, a yellow plastic plate, a pale blue plastic plate, a pink plastic plate, white plastic forks, spoons and knives, red and blue bendy drinking straws, a clear plastic soda bottle of red soda lying on its side, a red plastic squeeze ketchup bottle, a yellow squeeze mustard bottle, two cling-film wrapped sandwiches, a lidded plastic food container, a red and white beach ball, and a coiled plastic jump rope. Original photograph, Kodachrome colours, even studio light from directly above, crisp detail, transparent background, no cast shadows, no text, no logos, no brand names.",
+  "createdAt": "2026-11-18T01:53:12.768Z",
+  "tool": "impeccable generate-image",
+  "model": "gpt-image-2.6-sunburst",
+  "background": "transparent",
+  "outputFormat": "png"
+}
