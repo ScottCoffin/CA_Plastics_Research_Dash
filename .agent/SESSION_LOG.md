@@ -181,3 +181,4 @@
 | 2026-11-17 | PLAT-1 | California moved to /california/ (clean break, no redirects; expert.html and SEO pages under site/california/; search, feed, ntfy, llms retargeted); 6/6 UX tasks, axe 0 on 14 routes | this commit |
 | 2026-11-17 | PLAT-2a | World geometry and global country counts for the landing (40 credits); release design-plane-poster-2026-11-17 cut before the PLAT-1 deploy (owner request) | this commit |
 | 2026-11-17 | PLAT-2c | /ambassadors placeholder with the owner role list (QC institutions/experts, community groups, monitoring data, policy goals); axe 0 | this commit |
+| 2026-11-17 | PLAT-2 | Plastiverse Live landing: scroll-story engine port, offline assets, self-hosted fonts, check_plat2 0 failures, finish review 6 fixes, DESIGN.md; Lighthouse 85 local (control 84) | this commit |

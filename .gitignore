@@ -76,3 +76,6 @@ data/processed/p100.parquet
 # Agent state travels with the repo (owner, 2026-11-17): un-ignore the Claude local settings
 # (Impeccable hooks), which a global git ignore would otherwise hide.
 !.claude/settings.local.json
+
+# PLAT-2: landing images copied from site/assets/landing by framework/scripts/sync_shared.mjs.
+framework/src/assets/landing/

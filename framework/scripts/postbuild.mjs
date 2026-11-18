@@ -19,7 +19,10 @@ const FONT_PRELOAD =
   'as="font" type="font/woff2" crossorigin>';
 // Matches the preload at any depth (./ for root pages, ../ after nestAssets), so fixHtml is idempotent.
 const FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["'](?:\.\.?\/)+assets\/fonts\/Archivo-Variable-latin\.woff2["'])[^>]*>\s*/gi;
-const SKIP_LINK = '<a class="atlas-skip-link" href="#observablehq-main">Skip to content</a>';
+const LANDING_FONT_PRELOAD =
+  '<link rel="preload" href="./assets/fonts/SchibstedGrotesk-Variable-latin.woff2" ' +
+  'as="font" type="font/woff2" crossorigin>';
+const SKIP_LINK ='<a class="atlas-skip-link" href="#observablehq-main">Skip to content</a>';
 const CONFIG_HEAD = frameworkConfig.head;
 const GLOBAL_FONT_STYLE = CONFIG_HEAD.match(/<style\b[\s\S]*?<\/style>/i)?.[0];
 const GLOBAL_FAVICON = CONFIG_HEAD.match(
@@ -45,7 +48,14 @@ if (!GLOBAL_FONT_STYLE || !GLOBAL_FAVICON || !GLOBAL_SEARCH_STYLE || !GLOBAL_SEA
 // global page, "california/experts" for a California page (PLAT-1).
 export function fixHtml(html, page) {
   // Add stable page metadata first; fixTemplate then owns the final head ordering.
-  return nestAssets(fixShell(fixTemplate(addGlobalHead(addDescription(html, page))), page), page);
+  let fixed = fixShell(fixTemplate(addGlobalHead(addDescription(html, page))), page);
+  // The landing page sets its own faces and never uses Archivo: preload its text face instead
+  // (its LCP is header text, so the face must not queue behind the story's images).
+  if (page === "index") {
+    fixed = fixed.replace(FONT_PRELOAD_PATTERN, "");
+    if (!fixed.includes(LANDING_FONT_PRELOAD)) fixed = fixed.replace("</head>", `${LANDING_FONT_PRELOAD}\n</head>`);
+  }
+  return nestAssets(fixed, page);
 }
 
 // data/ and assets/ stay at the site root, so a page in a subfolder needs ../assets/ where the

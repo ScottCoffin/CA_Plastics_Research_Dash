@@ -1,0 +1,538 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-18T06:26:52+00:00",
+  "title": "Design System: Plastiverse Live",
+  "extensions": {
+    "colorMeta": {
+      "coral": {
+        "role": "primary",
+        "displayName": "Live Coral",
+        "canonical": "#fa6b68",
+        "tonalRamp": [
+          "#1e0102",
+          "#480a0d",
+          "#751d20",
+          "#a63334",
+          "#d74c4c",
+          "#f37c77",
+          "#ffaaa4",
+          "#ffd8d2"
+        ]
+      },
+      "coral-ink": {
+        "role": "primary",
+        "displayName": "Coral Ink",
+        "canonical": "#c53e39",
+        "tonalRamp": [
+          "#1e0101",
+          "#470c0b",
+          "#751f1d",
+          "#a43531",
+          "#d54f48",
+          "#f27e74",
+          "#ffaba1",
+          "#ffd9d0"
+        ]
+      },
+      "slate": {
+        "role": "secondary",
+        "displayName": "Data Slate",
+        "canonical": "#436487",
+        "tonalRamp": [
+          "#050c14",
+          "#182636",
+          "#2f445a",
+          "#486482",
+          "#6486aa",
+          "#8ba8c8",
+          "#b4cce7",
+          "#def1ff"
+        ]
+      },
+      "slate-2": {
+        "role": "secondary",
+        "displayName": "Mid Slate",
+        "canonical": "#86a9bf",
+        "tonalRamp": [
+          "#050c11",
+          "#192730",
+          "#304552",
+          "#4a6576",
+          "#66879c",
+          "#8daabc",
+          "#b5cddc",
+          "#e0f2fd"
+        ]
+      },
+      "mint": {
+        "role": "secondary",
+        "displayName": "Mint",
+        "canonical": "#c5eadf",
+        "tonalRamp": [
+          "#060d0b",
+          "#1a2924",
+          "#324741",
+          "#4c6860",
+          "#698b81",
+          "#8fada4",
+          "#b7cfc8",
+          "#e1f3ee"
+        ]
+      },
+      "wash": {
+        "role": "secondary",
+        "displayName": "Wash",
+        "canonical": "#e9f1ef",
+        "tonalRamp": [
+          "#0a0c0b",
+          "#232625",
+          "#3f4342",
+          "#5d6361",
+          "#7d8482",
+          "#a0a7a5",
+          "#c5cac9",
+          "#ebefee"
+        ]
+      },
+      "sun": {
+        "role": "tertiary",
+        "displayName": "Sun",
+        "canonical": "#fff49a",
+        "tonalRamp": [
+          "#0e0b00",
+          "#2b2600",
+          "#4a4304",
+          "#6c6314",
+          "#908429",
+          "#b0a760",
+          "#d2cc93",
+          "#f5f1c6"
+        ]
+      },
+      "gold": {
+        "role": "tertiary",
+        "displayName": "Gold",
+        "canonical": "#e2b714",
+        "tonalRamp": [
+          "#130900",
+          "#342200",
+          "#583e00",
+          "#7e5c00",
+          "#a57c00",
+          "#c4a12e",
+          "#e3c775",
+          "#ffedb2"
+        ]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Ground",
+        "canonical": "#f6f8f9",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "night": {
+        "role": "neutral",
+        "displayName": "Night",
+        "canonical": "#000000",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#17263d",
+        "tonalRamp": [
+          "#070b12",
+          "#1e2531",
+          "#374354",
+          "#536279",
+          "#71839f",
+          "#96a6bf",
+          "#bdcadf",
+          "#e5efff"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "#4d5d73",
+        "tonalRamp": [
+          "#080b11",
+          "#1e262f",
+          "#384351",
+          "#556275",
+          "#73849b",
+          "#98a6bb",
+          "#becadb",
+          "#e6effc"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "canonical": "#c4d0d6",
+        "tonalRamp": [
+          "#090c0d",
+          "#212628",
+          "#3c4347",
+          "#5a6367",
+          "#79848a",
+          "#9da7ac",
+          "#c3cbcf",
+          "#e9f0f3"
+        ]
+      },
+      "grid": {
+        "role": "neutral",
+        "displayName": "Grid",
+        "canonical": "#e4eaee",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232527",
+          "#3f4245",
+          "#5e6265",
+          "#7e8387",
+          "#a1a6a9",
+          "#c6cacc",
+          "#eceff1"
+        ]
+      },
+      "hatch": {
+        "role": "neutral",
+        "displayName": "Hatch",
+        "canonical": "#f0f3f5",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "on-dark": {
+        "role": "neutral",
+        "displayName": "On-dark",
+        "canonical": "#eef1f8",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242528",
+          "#404246",
+          "#5f6166",
+          "#808288",
+          "#a3a5aa",
+          "#c7c9ce",
+          "#edeef2"
+        ]
+      },
+      "on-dark-line": {
+        "role": "neutral",
+        "displayName": "On-dark Line",
+        "canonical": "#252c40",
+        "tonalRamp": [
+          "#090b11",
+          "#21252f",
+          "#3c4250",
+          "#5a6174",
+          "#79829a",
+          "#9da5ba",
+          "#c2c9da",
+          "#e9eefc"
+        ]
+      },
+      "credit": {
+        "role": "neutral",
+        "displayName": "Credit",
+        "canonical": "#9fb0bf",
+        "tonalRamp": [
+          "#080c0f",
+          "#1f262c",
+          "#39434c",
+          "#56636f",
+          "#758593",
+          "#99a7b3",
+          "#bfcbd5",
+          "#e7f0f8"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "the story's opening statement. The very first caption runs one step smaller (clamp 36 to 72 px)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "story caption headings, balanced wrapping. The chart caption runs smaller (clamp 26 to 42 px) so it sits over the empty early years."
+      },
+      "headline-section": {
+        "displayName": "Headline Section",
+        "purpose": "section headings after the story (\"The live evidence map.\")."
+      },
+      "statement": {
+        "displayName": "Statement",
+        "purpose": "bottom-anchored story sentences and the closing \"California is live; Norway is next.\""
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "feature-list item names."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "the paragraph under a headline."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "running text and picker rows."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "navigation links and buttons."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "picker header, link-actions (\"Open atlas\" at 14 px 600); notes at 13 px 400 in ink-2."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "\"PLASTIVERSE LIVE\" only."
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "source and citation lines, table headers, legends, chart axis labels."
+      },
+      "data-cell": {
+        "displayName": "Data Cell",
+        "purpose": "counts inside evidence cells."
+      }
+    },
+    "shadows": [
+      {
+        "name": "paper-page",
+        "value": "0 10px 30px rgb(0 0 0 / .55)",
+        "purpose": "Landing-only: real paper first pages stacked over the black story ground. The only shadow in the system."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-cubic",
+        "value": "t => 1 - (1 - t)^3",
+        "purpose": "Story entrances: item pops, shards flying, dots arriving (landing-only, canvas)."
+      },
+      {
+        "name": "ease-in-out-cubic",
+        "value": "t => t < .5 ? 4t^3 : 1 - (-2t + 2)^3 / 2",
+        "purpose": "Story scene moves and morphs between beats (landing-only, canvas)."
+      },
+      {
+        "name": "header-ground",
+        "value": "background, color, border-color .3s",
+        "purpose": "Header switching between on-dark and light."
+      },
+      {
+        "name": "first-paint",
+        "value": "opacity .45s ease-out",
+        "purpose": "The composed picnic image fading in on load (landing-only)."
+      },
+      {
+        "name": "scroll-cue",
+        "value": "scaleY 1 to .4, 1.6s ease-in-out infinite",
+        "purpose": "The scroll cue line (landing-only)."
+      },
+      {
+        "name": "live-breathe",
+        "value": "scale 1 to 1.2, 2.8s ease-in-out infinite",
+        "purpose": "California's coral fill on the world map."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none; transition: none",
+        "purpose": "prefers-reduced-motion: all animation stops; the story becomes stills."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "stack",
+        "value": "860px",
+        "purpose": "Grids stack, captions full width, header text links hide."
+      },
+      {
+        "name": "table-compact",
+        "value": "600px",
+        "purpose": "Evidence table drops min width and uses short labels."
+      },
+      {
+        "name": "header-min",
+        "value": "430px",
+        "purpose": "Header hides the solid Get updates button."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Default action: paper fill, 1 px ink border, square; inverts to ink on hover.",
+      "html": "<button class=\"ds-btn\">Regions <svg width=\"10\" height=\"7\" viewBox=\"0 0 10 7\" aria-hidden=\"true\"><path d=\"M1 1l4 4 4-4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"/></svg></button>",
+      "css": ".ds-btn { font-family: var(--pv-sans); font-size: 15px; border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); padding: 8px 14px; min-height: 40px; display: inline-flex; gap: 8px; align-items: center; border-radius: 0; cursor: pointer; } .ds-btn:hover { background: var(--pv-ink); color: var(--pv-paper); } .ds-btn:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; } .ds-btn[disabled] { opacity: .55; cursor: not-allowed; }"
+    },
+    {
+      "name": "Solid Button",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "Primary action (Get updates, the ambassador call to action).",
+      "html": "<a class=\"ds-btn-solid\" href=\"#\">Get updates</a>",
+      "css": ".ds-btn-solid { font-family: var(--pv-sans); font-size: 15px; border: 1px solid var(--pv-ink); background: var(--pv-ink); color: var(--pv-paper); padding: 8px 14px; min-height: 40px; display: inline-flex; align-items: center; text-decoration: none; border-radius: 0; } .ds-btn-solid:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }"
+    },
+    {
+      "name": "Header",
+      "kind": "nav",
+      "refersTo": "header",
+      "description": "Platform-wide fixed 60 px header: sunburst mark, wordmark with coral-ink LIVE, links and buttons.",
+      "html": "<header class=\"ds-top\"><a class=\"ds-brand\" href=\"#\"><svg class=\"ds-mark\" width=\"26\" height=\"26\" viewBox=\"0 0 26 26\" aria-hidden=\"true\"><circle cx=\"13\" cy=\"13\" r=\"5\"/><g><line x1=\"20.60\" y1=\"13.00\" x2=\"23.40\" y2=\"13.00\"/><line x1=\"20.02\" y1=\"15.91\" x2=\"23.72\" y2=\"17.44\"/><line x1=\"18.37\" y1=\"18.37\" x2=\"20.35\" y2=\"20.35\"/><line x1=\"15.91\" y1=\"20.02\" x2=\"17.44\" y2=\"23.72\"/><line x1=\"13.00\" y1=\"20.60\" x2=\"13.00\" y2=\"23.40\"/><line x1=\"10.09\" y1=\"20.02\" x2=\"8.56\" y2=\"23.72\"/><line x1=\"7.63\" y1=\"18.37\" x2=\"5.65\" y2=\"20.35\"/><line x1=\"5.98\" y1=\"15.91\" x2=\"2.28\" y2=\"17.44\"/><line x1=\"5.40\" y1=\"13.00\" x2=\"2.60\" y2=\"13.00\"/><line x1=\"5.98\" y1=\"10.09\" x2=\"2.28\" y2=\"8.56\"/><line x1=\"7.63\" y1=\"7.63\" x2=\"5.65\" y2=\"5.65\"/><line x1=\"10.09\" y1=\"5.98\" x2=\"8.56\" y2=\"2.28\"/><line x1=\"13.00\" y1=\"5.40\" x2=\"13.00\" y2=\"2.60\"/><line x1=\"15.91\" y1=\"5.98\" x2=\"17.44\" y2=\"2.28\"/><line x1=\"18.37\" y1=\"7.63\" x2=\"20.35\" y2=\"5.65\"/><line x1=\"20.02\" y1=\"10.09\" x2=\"23.72\" y2=\"8.56\"/></g></svg><span class=\"ds-wm\">PLASTIVERSE <b>LIVE</b></span></a><nav class=\"ds-nav\"><a href=\"#\">Evidence map</a><a href=\"#\">About</a></nav></header>",
+      "css": ".ds-top { height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 var(--pv-gut); background: var(--pv-ground); color: var(--pv-ink); border-bottom: 1px solid var(--pv-line); font-family: var(--pv-sans); } .ds-brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; } .ds-mark circle { fill: var(--pv-gold); } .ds-mark line { stroke: var(--pv-gold); stroke-width: 1.4; stroke-linecap: round; } .ds-wm { font-weight: 700; letter-spacing: .09em; font-size: 18px; } .ds-wm b { font-weight: 700; color: var(--pv-coral-ink); } .ds-nav { display: flex; gap: 28px; font-size: 15px; } .ds-nav a { color: inherit; text-decoration: none; } .ds-nav a:hover { text-decoration: underline; } .ds-nav a:focus-visible, .ds-brand:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }"
+    },
+    {
+      "name": "Region Picker",
+      "kind": "custom",
+      "refersTo": "picker",
+      "description": "Paper panel of regions; the live row carries the coral tint and swatch.",
+      "html": "<div class=\"ds-picker\"><div class=\"ds-pk-h\">Pick a region <span>2 regions</span></div><a class=\"ds-row live\" href=\"#\"><i class=\"ds-sw l\"></i><div><b>California</b><br><small>live atlas, daily build</small></div><span class=\"ds-go\">Open atlas</span></a><a class=\"ds-row\" href=\"#\"><i class=\"ds-sw s\"></i><div>Norway<br><small>in preparation</small></div><span class=\"ds-go quiet\">Help build it</span></a></div>",
+      "css": ".ds-picker { width: 420px; max-width: 100%; background: var(--pv-paper); color: var(--pv-ink); border: 1px solid var(--pv-ink); font-family: var(--pv-sans); } .ds-pk-h { font-size: 13px; font-weight: 600; padding: 11px 16px; border-bottom: 1px solid var(--pv-ink); display: flex; justify-content: space-between; } .ds-pk-h span, .ds-row small { font-weight: 400; color: var(--pv-ink-2); font-size: 13px; } .ds-row { display: grid; grid-template-columns: 14px 1fr auto; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--pv-line); font-size: 17px; color: inherit; text-decoration: none; } .ds-row.live { background: color-mix(in srgb, var(--pv-coral) 7%, var(--pv-paper)); } .ds-row.live b { font-weight: 600; } .ds-row:hover { background: color-mix(in srgb, var(--pv-coral) 12%, var(--pv-paper)); } .ds-row:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; } .ds-sw { width: 14px; height: 14px; display: block; } .ds-sw.l { background: var(--pv-coral); } .ds-sw.s { border: 1.5px dashed var(--pv-coral-ink); } .ds-go { font-size: 14px; font-weight: 600; color: var(--pv-coral-ink); } .ds-go.quiet { color: var(--pv-ink-2); }"
+    },
+    {
+      "name": "Feature Row",
+      "kind": "card",
+      "refersTo": "",
+      "description": "Ruled list row: SVG pictogram with one coral mark, title, description, coral-ink link.",
+      "html": "<ol class=\"ds-feat\"><li><svg viewBox=\"0 0 56 40\" aria-hidden=\"true\"><rect class=\"t\" x=\"8\" y=\"20\" width=\"8\" height=\"14\"/><rect class=\"t\" x=\"22\" y=\"10\" width=\"8\" height=\"24\"/><rect class=\"m\" x=\"36\" y=\"4\" width=\"8\" height=\"30\"/></svg><div><b>Compare institutions</b><span>Output, trends and leaders across universities and agencies.</span></div><a href=\"#\">Institutions</a></li></ol>",
+      "css": ".ds-feat { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--pv-ink); font-family: var(--pv-sans); color: var(--pv-ink); } .ds-feat li { display: grid; grid-template-columns: 56px 1fr auto; gap: 20px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--pv-line); } .ds-feat svg { width: 56px; height: 40px; } .ds-feat .t { fill: var(--pv-slate-2); } .ds-feat .m { fill: var(--pv-coral); } .ds-feat b { display: block; font-weight: 500; font-size: 20px; letter-spacing: -.01em; } .ds-feat span { color: var(--pv-ink-2); font-size: 15px; } .ds-feat a { font-size: 14px; font-weight: 600; color: var(--pv-coral-ink); text-decoration: none; } .ds-feat a:hover { text-decoration: underline; } .ds-feat a:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }"
+    },
+    {
+      "name": "Evidence Cells",
+      "kind": "custom",
+      "refersTo": "evidence-cell",
+      "description": "Count cells shaded by slate in proportion to value; hatched coral-ink gap cells.",
+      "html": "<table class=\"ds-evt\"><tr><td style=\"--v:1\" class=\"dk\">3900</td><td style=\"--v:.4\">1560</td><td style=\"--v:.1\">390</td><td class=\"gap\">gap</td></tr></table>",
+      "css": ".ds-evt { border-collapse: collapse; } .ds-evt td { border: 1px solid var(--pv-line); width: 96px; height: 64px; text-align: center; font-family: var(--pv-mono); font-size: 12px; font-variant-numeric: tabular-nums; color: var(--pv-ink); background: color-mix(in srgb, var(--pv-slate) calc(var(--v) * 100%), var(--pv-paper)); } .ds-evt td.dk { color: var(--pv-paper); } .ds-evt td.gap { background: repeating-linear-gradient(45deg, var(--pv-paper) 0 6px, var(--pv-hatch) 6px 12px); color: var(--pv-coral-ink); }"
+    },
+    {
+      "name": "Footer",
+      "kind": "custom",
+      "refersTo": "footer",
+      "description": "Platform-wide black footer: mint text, paper headings and underlined links.",
+      "html": "<footer class=\"ds-foot\"><div><b>Get updates</b><br>Weekly email (soon), <a href=\"#\">RSS feed</a>.</div><div><b>Plastiverse Live</b><br>Not a State product.</div></footer>",
+      "css": ".ds-foot { padding: 48px var(--pv-gut); display: flex; flex-wrap: wrap; gap: 24px 48px; justify-content: space-between; font-family: var(--pv-sans); font-size: 14px; background: var(--pv-night); color: var(--pv-mint); } .ds-foot b { color: var(--pv-paper); font-weight: 600; } .ds-foot a { color: var(--pv-paper); text-decoration: underline; } .ds-foot a:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }"
+    },
+    {
+      "name": "Story Caption",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Landing-only caption on the black stage: on-dark regular-weight headline and a mono source line.",
+      "html": "<div class=\"ds-cap\"><h2>Microplastics were first described in the ocean more than 50&nbsp;years ago.</h2><p class=\"src\">Carpenter et al. (1972), Science 178:749.</p></div>",
+      "css": ".ds-cap { background: var(--pv-night); padding: 32px; font-family: var(--pv-sans); max-width: 640px; } .ds-cap h2 { margin: 0; font-weight: 400; font-size: clamp(30px, 3.9vw, 56px); line-height: 1.03; letter-spacing: -.03em; color: var(--pv-on-dark); text-wrap: balance; } .ds-cap .src { margin: 14px 0 0; font-family: var(--pv-mono); font-size: 11px; color: var(--pv-mint); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "From Night to Daylight",
+    "overview": "Plastiverse Live is told as one passage from darkness into light. The story opens on a pure black ground where real photographed plastics and real paper pages sit under hard light; once the knowledge bulb bursts, the page turns to an airy, nearly white ground and everything after is flat data drawn in navy ink and slate, with a single coral mark for what is live. The light half is the working half of the system: calm, square, hairline-ruled, generous with air, and quiet enough that the one coral mark carries the meaning.\n\nThe system is restrained by default and dramatic only once, in the landing story. Type is a regular-weight grotesk set large with tight tracking, so headlines read as plain statements rather than shouts; a narrow monospace appears only where a number or a source is being cited. There are no rounded corners, no decorative shadows, and no ornament on the light ground beyond a faint 24 px grid behind the regions band.",
+    "keyCharacteristics": [
+      "Two grounds: black for the story and the footer, a cool near-white for everything else.",
+      "Navy ink, slate data, coral only for \"live\".",
+      "Regular-weight headlines with -0.03em tracking; monospace only for data and sources.",
+      "Square corners and 1 px hairlines; no rounded surfaces, no card shadows.",
+      "Real photographs and paper pages before the light; flat data marks after it."
+    ],
+    "rules": [
+      {
+        "name": "The Coral Ink Rule",
+        "body": "On a light ground coral is a fill or large text only; any coral text, arrow or focus ring at body size uses coral-ink. On the black ground, coral itself is used.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Live Mark Rule",
+        "body": "In every data graphic, coral marks the single live or featured thing (California, the live atlas row, the last mark of each pictogram); everything else is ink, slate or mint. If two things on one view are coral, one of them is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mint After Dark Rule",
+        "body": "Mint is text only on the black ground. On light it may appear only as a data-ramp fill step, never as text.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Is Evidence Rule",
+        "body": "Martian Mono sets numbers, axis and table labels, legends and source lines, and nothing else: never a heading, button, link or label above a heading.",
+        "section": "typography"
+      },
+      {
+        "name": "The Regular-Weight Headline Rule",
+        "body": "Headlines are weight 400 with negative tracking; size, not weight, makes hierarchy. Weight 700 belongs to the wordmark alone.",
+        "section": "typography"
+      },
+      {
+        "name": "The Measured Safe Zone Rule (landing-only)",
+        "body": "Story text never overlaps an image. Layout measures each caption's text box and places every visual right of the widest side caption plus 40 px (or 40% of the width, whichever is greater) on desktop, and between the top and bottom captions at 860 px or less.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Light Rule",
+        "body": "Nothing on the light ground casts a shadow. A surface that needs separating gets a hairline or a paper fill.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use the `--pv-*` tokens for every colour in CSS; canvas code mirrors them as constants.",
+      "Do use coral-ink for any coral text, arrow or focus ring on a light ground.",
+      "Do give every interactive element the 2 px coral-ink focus ring with a 3 px offset.",
+      "Do set headlines at weight 400 with -0.03em tracking and balanced wrapping.",
+      "Do keep corners square and separate surfaces with 1 px ink or line rules.",
+      "Do draw icons as inline SVG using `currentColor` or the token fills.",
+      "Do label illustrative data as illustrative, in an 11 px mono source line under it.",
+      "Do keep story text out of image boxes by measuring caption boxes, and test it."
+    ],
+    "donts": [
+      "Don't put an eyebrow or kicker label above a heading.",
+      "Don't use Martian Mono for headings, buttons or navigation.",
+      "Don't set mint text on a light ground.",
+      "Don't colour more than one thing coral in a data graphic.",
+      "Don't round corners or add shadows on the light ground.",
+      "Don't use gradient text or hard offset shadows.",
+      "Don't load fonts or scripts from external CDNs; fonts are self-hosted."
+    ]
+  }
+}

@@ -186,3 +186,34 @@ code,
   font-family: var(--atlas-font-mono);
   font-size: var(--atlas-type-id-size);
 }
+
+/* PLAT-2 (2026-11-17, ADR-PLAT2-SPECTRAL-STORY): Plastiverse Live brand tokens from the owner's logo
+   (docs/PLAT_2_LANDING_SPEC.md section 2). Used by the global landing page; VD-SM carries them
+   into the California pages later. Coral appears on light grounds only as fills and large text;
+   text, arrows and focus rings there use --pv-coral-ink. Mint is for the dark ground only. */
+:root {
+  --pv-ground: #f6f8f9;
+  --pv-night: #000000;
+  --pv-ink: #17263d;
+  --pv-ink-2: #4d5d73;
+  --pv-line: #c4d0d6;
+  --pv-grid: #e4eaee;
+  --pv-mint: #c5eadf;
+  --pv-slate: #436487;
+  --pv-slate-2: #86a9bf;
+  --pv-wash: #e9f1ef;
+  --pv-coral: #fa6b68;
+  /* The spec's #D9443F is 4.06:1 on --pv-ground; darkened to 4.6:1 for WCAG AA (PLAT-2 axe). */
+  --pv-coral-ink: #c53e39;
+  --pv-sun: #fff49a;
+  --pv-gold: #e2b714;
+  --pv-cream: #fff8df;
+  --pv-paper: #ffffff;
+  --pv-on-dark: #eef1f8;
+  --pv-on-dark-line: #252c40;
+  --pv-credit: #9fb0bf;
+  --pv-hatch: #f0f3f5;
+  --pv-sans: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --pv-mono: "Martian Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  --pv-gut: clamp(16px, 3.4vw, 48px);
+}

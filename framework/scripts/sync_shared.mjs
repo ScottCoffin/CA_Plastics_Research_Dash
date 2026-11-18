@@ -19,3 +19,12 @@ export const SHARED_FILES = [
 mkdirSync(join(target, "vendor"), {recursive: true});
 for (const file of SHARED_FILES) copyFileSync(join(siteAssets, file), join(target, file));
 console.log(`sync_shared: copied ${SHARED_FILES.length} files from site/assets`);
+
+// PLAT-2: the landing's static images (first paint = LCP, footer logo) are referenced from
+// framework/src/index.md, so Framework must find them under src/ to fingerprint them. The source of
+// truth stays site/assets/landing/ (scripts/build_landing_assets.py); the copies are gitignored.
+export const LANDING_STATIC = ["picnic_first_paint.webp", "picnic_first_paint_800.webp", "logo_564.webp"];
+const landingTarget = join(here, "..", "src", "assets", "landing");
+mkdirSync(landingTarget, {recursive: true});
+for (const file of LANDING_STATIC) copyFileSync(join(siteAssets, "landing", file), join(landingTarget, file));
+console.log(`sync_shared: copied ${LANDING_STATIC.length} landing images from site/assets/landing`);

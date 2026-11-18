@@ -147,6 +147,13 @@ jobs:
         run: |
           python scripts/build_institution_types.py
           python scripts/fetch_journal_metrics.py || echo "::warning::journal metrics not refreshed; keeping the committed file"
+          # PLAT-2 landing: global country counts (cached 7 days, ~40 credits per refresh) and the
+          # world raster built from them. A failure keeps yesterday's files.
+          if python scripts/build_global_counts.py; then
+            python scripts/build_landing_assets.py --raster-only
+          else
+            echo "::warning::global country counts not refreshed; keeping the committed files"
+          fi
 
       # AT-11: stop before committing if the raw/normalized schema changed or a payload is too big.
       - name: Schema and payload guards
@@ -254,7 +261,9 @@ jobs:
             site/data/network.json \
             site/data/search_index.json \
             site/data/expert_badges.json \
-            site/data/journal_metrics.json
+            site/data/journal_metrics.json \
+            site/data/global/global_counts.json \
+            site/data/global/world_raster.json
           git add -A site/data/authors site/data/institution_works site/data/bundle site/data/work_text
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"

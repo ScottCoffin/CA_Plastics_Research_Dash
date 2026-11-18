@@ -7,7 +7,7 @@ header: false
 <!-- PLAT-2c placeholder (docs/PLAT_2_LANDING_SPEC.md section 4.9; owner 2026-11-17: say what an
 ambassador does). Real onboarding comes later. -->
 
-<p class="pv-back"><a href="./">← Plastiverse Live</a></p>
+<p class="pv-back"><a href="./">Back to Plastiverse Live</a></p>
 
 # Become a local ambassador
 

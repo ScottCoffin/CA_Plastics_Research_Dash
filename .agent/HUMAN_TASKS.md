@@ -51,12 +51,7 @@ so search engines must re-crawl.
 2. Google Search Console > **Sitemaps** > submit `https://plastiverse.live/sitemap.xml` again.
 - **Done when:** Search Console shows the new submission date. Tell the agent "sitemap resubmitted".
 
-### H31. Rotate the OpenAI API key (5 minutes)
-The key pasted into the chat on 2026-11-17 was used for the landing images and must be treated as exposed.
-1. Go to https://platform.openai.com/api-keys and revoke that key.
-2. If agents should generate images again, create a new key and set it only in your own shell
-   environment as `OPENAI_API_KEY` (never paste it into a chat or a file in the repo).
-- **Done when:** the old key shows as revoked. Tell the agent "OpenAI key rotated".
+### H31 is done (2026-11-17): the owner revoked the exposed OpenAI key; the new key is only in the ignored `.env`.
 
 ### H30. Approve the global evidence-map cells (PLAT-2b, 10 minutes)
 The landing page and its live evidence map sort every study into 5 x 6 cells.
