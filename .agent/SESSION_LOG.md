@@ -189,3 +189,4 @@
 | 2026-11-18 | A3-INT | Add-on A3 integrated: 52 BQ tasks, A3-D/C/Q registers, ADR-GOLD-GLOBAL (proposed), ADR-A3-PUBMED, H36-H40, REUSE ledger, docs/A3_SOURCES.md, scripts/check_a3_scaffold.py in CI; owner rule: OpenAlex verified facts over spec | this commit |
 | 2026-11-18 | PLAT-2b | Live global evidence-map counts (30 cell queries/day, 300 credits), landing table + canvas use them; owner A3 answers recorded (A3-ANSWERS + Q8/Q11/Q15, PLAT-4a split) | this commit |
 | 2026-11-18 | BQ-0 | A3 [VERIFY] recon (root is global; no pmid stored; PubMed cap 10,000; NCBI 3/10 rps + tool/email registration, H41; T10753 via primary_topic.id; ca_basis/ca_any_author provenance); pyproject licence MIT; baseline 2,283 passed | this commit |
+| 2026-11-18 | BQ-S8 | Operator-limit test (burst 429 retried, 0.25 s throttle) + caller table; gap: run_at1_audit.py bypasses the client (manual --live) | this commit |
