@@ -31,3 +31,21 @@
   (`test_opc_actions_em17.py::test_committed_json_is_not_stale`, the owner's uncommitted H28 CSV).
 - Assembled preview (Playwright, 1280 px and 390 px): all 30 cells show formatted counts, no cell overflows,
   source line shows the fetch date; jsdom check by the worker: 8 invalid/404 cases keep the fallback.
+
+## v2: stricter cells (owner 2026-11-18, PLAT2B-GAP "stricter terms needed")
+- `evidence-cells-v2`: `row_field: title.search` sends the row (topic) terms as a second filter on the
+  title, ANDed in the same single count request; the active query and the column (setting) terms still
+  match title or abstract. OR lists are still never split (A3-C1). Closing-sentence mentions ("to inform
+  mitigation policy") no longer count.
+- Row terms rewritten for titles: effects gains "effects", "toxic", "exposure"; methods gains "method",
+  "detection", "protocol"; solutions gains "management", "governance", "legislation", "treaty", "removal",
+  "remediation"; fate gains "aging", "sinking"; occurrence gains "distribution", "presence",
+  "characteristics".
+- Probe before the switch (2 requests, 20 credits): solutions x ocean 8,533 -> 1,451 with the v1.1 terms in
+  titles; effects x ocean 909 (too low without "effects"), which led to the term additions above.
+- Live run 2026-11-18 (30 requests, 300 credits). Grid (v2): occurrence 4,473 / 3,278 / 1,568 / 617 /
+  2,258 / 1,253; effects 2,674 / 2,215 / 2,437 / 599 / 3,909 / 2,600; methods 2,440 / 1,803 / 1,166 / 471 /
+  1,606 / 1,185; fate and transport 2,488 / 2,102 / 2,290 / 465 / 1,157 / 795; solutions 2,864 / 2,807 /
+  2,027 / 481 / 2,197 / 1,525. Smallest cell 10% of the largest: no gap cells at `gap_share` 0.02.
+- The landing source line now says "the topic named in the title and the setting in the title or
+  abstract" when `row_field` is `title.search` (`plat2b.v1` payload gains `row_field`).

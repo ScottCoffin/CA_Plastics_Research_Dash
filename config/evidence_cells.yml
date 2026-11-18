@@ -16,7 +16,12 @@
 # `a2_compartments` and `taxonomy` link each column/row to the A2 vocabulary
 # (config/taxonomy.yml add_on_a2.compartment, environments, disciplines) for traceability;
 # they do not change the search.
-version: evidence-cells-v1.1   # v1.1: "regulation" dropped (stem collides with gene regulation)
+version: evidence-cells-v2   # v2 (owner 2026-11-18, PLAT2B-GAP "stricter terms"): row terms match the title only
+# v1.1 dropped "regulation" (stem collides with gene regulation).
+# row_field: title.search sends the row terms as a second filter in the same request, so a topic
+# counts only when the title names it (closing-sentence mentions such as "to inform mitigation
+# policy" no longer count). Query and column terms still match title or abstract.
+row_field: title.search
 status: owner_approved_cells_agent_terms   # terms drafted by the agent 2026-11-18
 gap_share: 0.02   # a cell under 2% of the largest cell is drawn as a gap (QUESTIONS PLAT2B-GAP)
 
@@ -25,27 +30,27 @@ rows:
     label: occurrence
     short: occur.
     taxonomy: [occurrence_and_monitoring]
-    terms: [occurrence, abundance, monitoring, "spatial distribution", "temporal trend", survey]
+    terms: [occurrence, abundance, monitoring, distribution, "temporal trend", survey, presence, characteristics]
   - id: effects
     label: effects
     short: effects
     taxonomy: [ecotoxicology_and_trophic_transfer, human_exposure_and_health_risk]
-    terms: [toxicity, ecotoxicity, toxicological, "adverse effect", "oxidative stress", inflammation, "health effect"]
+    terms: [effects, toxicity, ecotoxicity, toxicological, toxic, exposure, "adverse effect", "oxidative stress", inflammation]
   - id: methods
     label: methods
     short: methods
     taxonomy: [analytical_methods]
-    terms: ["analytical method", identification, quantification, "sample preparation", spectroscopy, Raman, FTIR, "pyrolysis gas chromatography"]
+    terms: [method, methods, detection, identification, quantification, "sample preparation", protocol, spectroscopy, Raman, FTIR, "pyrolysis gas chromatography"]
   - id: fate_transport
     label: fate and transport
     short: fate
     taxonomy: [fate_transport_and_sorption]
-    terms: [transport, fate, weathering, degradation, sedimentation, settling, "vertical distribution"]
+    terms: [transport, fate, weathering, degradation, aging, ageing, sedimentation, settling, sinking]
   - id: solutions
     label: solutions
     short: solutions
     taxonomy: [risk_assessment]
-    terms: [policy, ban, mitigation, "circular economy", "extended producer responsibility", recycling, "removal efficiency"]
+    terms: [policy, policies, ban, legislation, governance, treaty, management, mitigation, removal, remediation, recycling, "circular economy", "extended producer responsibility"]
 
 columns:
   - id: ocean

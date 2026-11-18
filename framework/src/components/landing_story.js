@@ -1143,7 +1143,8 @@ async function mountEvidenceMap() {
   const lede = section.querySelector("[data-plv='evidence-lede']");
   if (lede) lede.textContent = lede.textContent.replace(LEDE_ILLUSTRATIVE, "Rebuilt daily from OpenAlex.");
   const source = section.querySelector("[data-plv='evidence-src']");
-  if (source) source.textContent = `Works per cell: title and abstract matches of the reviewed plastics query, OpenAlex${date ? `, updated ${date}` : ""}. A work can count in several cells.`;
+  const how = data.row_field === "title.search" ? "the topic named in the title and the setting in the title or abstract, among works matching the reviewed plastics query" : "title and abstract matches of the reviewed plastics query";
+  if (source) source.textContent = `Works per cell: ${how}, OpenAlex${date ? `, updated ${date}` : ""}. A work can count in several cells.`;
 }
 // Set up at module start, not behind the story's load waits, so the table updates even if the story is skipped.
 const startEvidenceMap = () => mountEvidenceMap().catch((error) => console.error("evidence map:", error));

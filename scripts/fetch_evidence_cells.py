@@ -117,24 +117,38 @@ def load_cells_config(path: Path) -> dict[str, Any]:
     gap = raw.get("gap_share")
     if isinstance(gap, bool) or not isinstance(gap, (int, float)) or not 0 <= gap < 1:
         raise ValueError("evidence cells: gap_share must be a number from 0 up to 1")
+    row_field = raw.get("row_field")
+    if row_field not in (None, "title.search"):
+        raise ValueError("evidence cells: row_field must be omitted or 'title.search'")
     return {
         **raw,
+        "row_field": row_field,
         "rows": _axis(raw, "rows", ROW_IDS),
         "columns": _axis(raw, "columns", COLUMN_IDS),
     }
 
 
 def cell_url(
-    config: Mapping[str, Any], row_terms: Sequence[str], column_terms: Sequence[str]
+    config: Mapping[str, Any],
+    row_terms: Sequence[str],
+    column_terms: Sequence[str],
+    row_field: str | None = None,
 ) -> str:
-    """One count request: active query AND row terms AND column terms, plus type exclusions."""
+    """One count request: active query AND row terms AND column terms, plus type exclusions.
+
+    With ``row_field`` (``title.search``) the row terms must match the title, as a second filter
+    ANDed in the same request; the query and column terms still match title or abstract.
+    """
 
     field = config.get("openalex", {}).get("field", DEFAULT_FIELD)
     row = " OR ".join(_term(term) for term in row_terms)
     column = " OR ".join(_term(term) for term in column_terms)
     # render_query is already parenthesised and may end in " NOT (...)", so wrap it once more.
-    cell = f"{field}:({render_query(config)}) AND ({row}) AND ({column})"
-    filters = [cell, *type_filters(config)]
+    if row_field:
+        cells = [f"{field}:({render_query(config)}) AND ({column})", f"{row_field}:({row})"]
+    else:
+        cells = [f"{field}:({render_query(config)}) AND ({row}) AND ({column})"]
+    filters = [*cells, *type_filters(config)]
     params = {"filter": ",".join(filters), "per-page": "1", "select": "id"}
     url = f"{OPENALEX_BASE}/works?{urllib.parse.urlencode(params)}"
     if len(url) > MAX_URL_CHARS:
@@ -146,7 +160,10 @@ def cell_urls(config: Mapping[str, Any], cells: Mapping[str, Any]) -> list[list[
     """The 5 x 6 grid of count URLs, rows then columns in config order."""
 
     return [
-        [cell_url(config, row["terms"], column["terms"]) for column in cells["columns"]]
+        [
+            cell_url(config, row["terms"], column["terms"], cells.get("row_field"))
+            for column in cells["columns"]
+        ]
         for row in cells["rows"]
     ]
 
@@ -309,6 +326,7 @@ def build_payload(
         "source": SOURCE,
         "note": NOTE,
         "gap_share": cells["gap_share"],
+        "row_field": cells.get("row_field") or "title_and_abstract",
         "rows": [_axis_entry(entry) for entry in cells["rows"]],
         "columns": [_axis_entry(entry) for entry in cells["columns"]],
         "counts": counts,

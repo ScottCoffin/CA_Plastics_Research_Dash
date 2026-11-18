@@ -34,6 +34,7 @@ TOP_KEYS = {
     "columns",
     "counts",
     "max",
+    "row_field",
 }
 CELL_COUNT = 30  # 5 rows x 6 columns
 
@@ -162,11 +163,18 @@ def test_each_cell_filter_joins_the_query_row_and_column_once(
             filter_value = _filter_of(grid[r][c])
             row_terms = " OR ".join(fec._term(term) for term in row["terms"])
             column_terms = " OR ".join(fec._term(term) for term in column["terms"])
-            cell_part = filter_value.split(",")[0]
-            assert cell_part == (
-                f"title_and_abstract.search:({query}) AND ({row_terms}) AND ({column_terms})"
-            )
+            parts = filter_value.split(",")
+            if cells.get("row_field") == "title.search":
+                # v2: the row is a second filter on the title, ANDed in the same request.
+                assert parts[0] == f"title_and_abstract.search:({query}) AND ({column_terms})"
+                assert parts[1] == f"title.search:({row_terms})"
+            else:
+                assert parts[0] == (
+                    f"title_and_abstract.search:({query}) AND ({row_terms}) AND ({column_terms})"
+                )
             assert filter_value.count("title_and_abstract.search:") == 1
+            expected_title_filters = 1 if cells.get("row_field") == "title.search" else 0
+            assert filter_value.count("title.search:") == expected_title_filters
             for slug in config["exclude_types"]:
                 assert f"type:!{slug}" in filter_value
 
