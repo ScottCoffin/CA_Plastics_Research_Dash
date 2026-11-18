@@ -51,9 +51,9 @@ def test_network_page_has_no_internal_ids() -> None:
 
 def test_config_lists_network_after_experts() -> None:
     text = CONFIG.read_text(encoding="utf-8")
-    experts = text.index('{name: "Experts", path: "/california/experts"}')
+    authors = text.index('{name: "Authors", path: "/california/authors"}')
     network = text.index('{name: "Collaboration network", path: "/california/network"}')
-    assert experts < network
+    assert authors < network
     assert (COMPONENTS.parent / "california" / "network.md").is_file()
 
 
@@ -93,7 +93,7 @@ def test_view_draws_with_sigma_not_hand_built_svg() -> None:
     assert "mousemovebody" in text and "preventSigmaDefault" in text
     assert "animatedZoom" in text and "animatedUnzoom" in text and "animatedReset" in text
     assert "viewportToGraph" in text
-    assert "experts#author=" in text
+    assert "authors#author=" in text
     assert "./shared/topics.js" in text
 
 
@@ -174,7 +174,7 @@ def test_name_search_is_a_combobox_with_a_listbox_not_a_datalist() -> None:
     assert "foldSearchText(search.value).length < NAME_SEARCH_MIN" in view
     assert 'search.setAttribute("aria-activedescendant", option.id);' in view
     assert 'search.setAttribute("aria-expanded"' in view
-    assert '"No matching experts."' in view and "No matching experts" in page
+    assert '"No matching authors."' in view and "No matching authors" in page
     assert 'option.setAttribute("role", "option");' in view
     assert 'searchList.addEventListener("mousedown", (event) => event.preventDefault());' in view
     # A blur after a choice must not re-choose it (Close blurs the box first).

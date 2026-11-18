@@ -83,4 +83,4 @@ def test_expert_page_uses_parse_expert_id_and_canonical_hash() -> None:
     assert "parseExpertId(location.search, location.hash)" in html
     assert 'history.replaceState(null, "", `${location.pathname}#author=' in html
     assert "expert.html#author=A5046986222" in html, "no-ID message shows the profile address form"
-    assert 'href="experts"' in html, "message section links back to the Experts list"
+    assert 'href="authors"' in html, "message section links back to the Authors list"

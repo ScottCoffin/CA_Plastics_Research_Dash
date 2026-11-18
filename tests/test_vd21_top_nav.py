@@ -65,7 +65,7 @@ def _rules(body: str) -> list[tuple[list[str], str]]:
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
 def test_header_has_four_group_buttons_with_disclosure_attributes() -> None:
-    header = _header("/california/experts")
+    header = _header("/california/authors")
 
     for name in GROUPS:
         matches = [m for m in BUTTON.finditer(header) if m.group(2) == name]
@@ -84,7 +84,7 @@ def test_header_has_four_group_buttons_with_disclosure_attributes() -> None:
 @pytest.mark.parametrize(
     ("path", "group", "label"),
     [
-        ("/california/experts", "Explore", "Experts"),
+        ("/california/authors", "Explore", "Authors"),
         ("/california/evidence", "Data", "Evidence map"),
         ("/california/policy", "Context", "Policy"),
         ("/california/about", "Reference", "About"),
@@ -107,7 +107,7 @@ def test_top_nav_marks_the_current_link_and_its_group(path: str, group: str, lab
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
 def test_top_nav_script_handles_escape_focus_and_outside_clicks() -> None:
-    header = _header("/california/experts")
+    header = _header("/california/authors")
 
     assert '"Escape"' in header
     assert "focusout" in header
@@ -152,15 +152,15 @@ BUILD_OUT = os.environ.get("ATLAS_FW_OUT")
 
 
 @pytest.mark.skipif(
-    not BUILD_OUT or not (FRAMEWORK / BUILD_OUT / "california" / "experts.html").is_file(),
+    not BUILD_OUT or not (FRAMEWORK / BUILD_OUT / "california" / "authors.html").is_file(),
     reason="set ATLAS_FW_OUT to a folder built by `npm run build` in framework/",
 )
 def test_built_pages_carry_the_four_group_buttons() -> None:
-    html = (FRAMEWORK / BUILD_OUT / "california" / "experts.html").read_text(encoding="utf-8")
+    html = (FRAMEWORK / BUILD_OUT / "california" / "authors.html").read_text(encoding="utf-8")
 
     for name in GROUPS:
         pattern = (
             r'<button [^>]*aria-expanded="false"[^>]*'
             rf'aria-controls="atlas-topnav-{name.lower()}"[^>]*>{name}</button>'
         )
-        assert re.search(pattern, html), f"built experts page is missing the {name} group button"
+        assert re.search(pattern, html), f"built authors page is missing the {name} group button"

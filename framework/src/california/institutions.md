@@ -14,7 +14,7 @@ title: Institutions
 </header>
 <div class="atlas-callout atlas-callout--caution">
 <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg>
-<p class="panel-intro">Tagged-work volume is a descriptive count from the same data snapshot used by the Experts view; it is not a quality ranking. Each topic bar shows the share of topic tags across the institution's plastic-related works (a work can carry several topics).</p>
+<p class="panel-intro">Tagged-work volume is a descriptive count from the same data snapshot used by the Authors view; it is not a quality ranking. Each topic bar shows the share of topic tags across the institution's plastic-related works (a work can carry several topics).</p>
 </div>
 <div class="institution-toolbar">
 <div id="institution-type-chips" class="institution-type-chips" role="group" aria-label="Filter institutions by type"></div>

@@ -154,10 +154,10 @@ function topExpertsHtml(institution) {
   const experts = institution.top_experts || [];
   if (!experts.length) return "";
   const items = experts.map((expert) => {
-    const name = expert.in_atlas_index ? `<a class="expert-name" href="${escapeHtml(appUrl(`experts#author=${encodeURIComponent(expert.author_id)}`))}">${escapeHtml(expert.name || expert.author_id)}</a>` : `<span class="expert-name">${escapeHtml(expert.name || expert.author_id)}</span>`;
+    const name = expert.in_atlas_index ? `<a class="expert-name" href="${escapeHtml(appUrl(`authors#author=${encodeURIComponent(expert.author_id)}`))}">${escapeHtml(expert.name || expert.author_id)}</a>` : `<span class="expert-name">${escapeHtml(expert.name || expert.author_id)}</span>`;
     return `<li>${name}<span class="detail-meta">${expert.works} ${expert.works === 1 ? "work" : "works"}</span>${expert.topic ? topics().chip(expert.topic) : ""}</li>`;
   }).join("");
-  return `<div class="top-experts"><h3>Top experts</h3><ul>${items}</ul><a href="${escapeHtml(institutionPageUrl(institution.inst_id, "experts"))}">All experts at this institution</a></div>`;
+  return `<div class="top-experts"><h3>Top authors</h3><ul>${items}</ul><a href="${escapeHtml(institutionPageUrl(institution.inst_id, "experts"))}">All authors at this institution</a></div>`;
 }
 
 function collaboratorLine(institution) {
@@ -187,12 +187,12 @@ function sparkline(metric) {
 }
 
 function institutionExpertLink(institutionId) {
-  return `<button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institutionId)}">View experts</button>`;
+  return `<button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institutionId)}">View authors</button>`;
 }
 
 // Classic openInstitutionExperts switched tabs; the Experts page is its own Framework page now.
 function openInstitutionExperts(institutionId) {
-  window.location.assign(appUrl(`experts#institution=${encodeURIComponent(institutionId)}`));
+  window.location.assign(appUrl(`authors#institution=${encodeURIComponent(institutionId)}`));
 }
 
 // Tier names and card names open the institution detail page.
@@ -268,7 +268,7 @@ function renderInstitutionMapDetails() {
     const institution = metric.institution;
     const years = metric.works.length ? `${metric.trendYears[0]}–${metric.trendYears[metric.trendYears.length - 1]}` : (institution.years || []).length ? `${Math.min(...institution.years)}–${Math.max(...institution.years)}` : "—";
     const stat = (name, value) => `<div><dt>${name}</dt><dd>${escapeHtml(value)}</dd></div>`;
-    return `<section class="map-inst"><h4>${escapeHtml(institution.name)}</h4><div><span class="atlas-badge">${escapeHtml(institutionTypeLabel(institution.atlas_type || "other"))}</span></div><dl class="map-inst-stats">${stat("Works", metricNumber(institution.work_count))}${stat("Plastic-related works", metricNumber(metric.taggedCount))}${stat("Authors", metricNumber(institution.author_count))}${stat("Years active", years)}${stat("Recent 5 years", metricNumber(metric.recentCount))}</dl>${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 3)}${topExpertsHtml(institution)}<div class="institution-actions"><button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institution.inst_id)}">Show experts</button>${publicationsLink(institution.inst_id)}</div></section>`;
+    return `<section class="map-inst"><h4>${escapeHtml(institution.name)}</h4><div><span class="atlas-badge">${escapeHtml(institutionTypeLabel(institution.atlas_type || "other"))}</span></div><dl class="map-inst-stats">${stat("Works", metricNumber(institution.work_count))}${stat("Plastic-related works", metricNumber(metric.taggedCount))}${stat("Authors", metricNumber(institution.author_count))}${stat("Years active", years)}${stat("Recent 5 years", metricNumber(metric.recentCount))}</dl>${topicBar(metric.topics, institution.name)}${topicChipList(metric.topics, 3)}${topExpertsHtml(institution)}<div class="institution-actions"><button class="institution-expert-link" type="button" data-institution-id="${escapeHtml(institution.inst_id)}">Show authors</button>${publicationsLink(institution.inst_id)}</div></section>`;
   }).join("");
   panel.innerHTML = `<div class="map-details-card"><div class="map-details-head"><h3>${metrics.length} institution${metrics.length === 1 ? "" : "s"} selected</h3><div class="map-details-actions">${metrics.length > 1 ? "<button type=\"button\" data-map-fit>Zoom to these</button>" : ""}<button type="button" data-map-close>Close</button></div></div>${blocks}${metrics.length > shown.length ? `<p class="data-note">Showing the ${shown.length} largest of ${metrics.length} institutions; zoom in to separate the rest.</p>` : ""}</div>`;
 }

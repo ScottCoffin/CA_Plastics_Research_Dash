@@ -67,6 +67,6 @@ def test_pages_render_time_element_and_start_row() -> None:
         assert "<time datetime=${snapshot.refreshIso}>" in text
     # VD-25: the Start here row became the four door rows beside the California figure.
     assert '<ul class="overview-doors" aria-label="Start here">' in index
-    for href in ("./experts", "./funding", "./monitoring", "./evidence"):
+    for href in ("./authors", "./funding", "./monitoring", "./evidence"):
         assert 'class="overview-door" data-plane=' in index
         assert f'href="{href}" style="--c: var(--atlas-task-' in index

@@ -192,11 +192,6 @@ leak-check works wait for S5.7.
 
 ## Later (the agent will say when each is ready)
 
-- **H41. Optional: register the NCBI tool name and email (about 5 minutes).** NCBI asks E-utilities
-  developers to register the `tool` value and contact email; sending them is not enough on its own.
-  Email NCBI at the address on https://www.ncbi.nlm.nih.gov/books/NBK25497/ (section "Usage Guidelines") with
-  tool `plastiverse-atlas` and the email you put in `.env` as `NCBI_EMAIL`. Not blocking: our request
-  rates stay under NCBI's limits. Reply "NCBI registered" when done.
 
 - **H37. Approve guide addendum A3 (BQ-G0, A3-Q5).** The agent drafts
   `docs/LABELING_GUIDE_A3_ADDENDUM.md` (lens values, topic tag names, `plastics_centrality`
@@ -234,6 +229,7 @@ come with its own Streamlit app and run command here.
 
 ## Done
 
+- H41 (2026-11-18): dropped. NCBI tool/email registration is by email, not a portal, and is not needed while the API key keeps requests under 10/s (owner asked).
 - H36 (2026-11-18): A3-Q1..Q15 answered (Q8 adopt review facets with benchmark + caveat, Q11 no Module 5, Q15 split); the owner added the A3 sources they could obtain to Zotero. Optional R-package improvements (A3 §5.11) remain the owner's own choice.
 - H34 (2026-11-18): owner checked /explore on a phone ("looks good").
 - H35 (2026-11-18): GX decisions answered in the assessment: threshold 3+ works, top-20,000 SEO pages, licensed Wikidata photos shown automatically, OpenAlex author records as they are; R2 token: remind at GX-3.

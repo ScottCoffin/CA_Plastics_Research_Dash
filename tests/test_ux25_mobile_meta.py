@@ -15,7 +15,7 @@ FW = ROOT / "framework"
 PAGES = {
     "index",
     "california/index",
-    "california/experts",
+    "california/authors",
     "california/network",
     "california/institutions",
     "california/institution",

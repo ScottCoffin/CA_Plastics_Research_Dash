@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Expert profile · CA Plastics Research Atlas</title>
+    <title>Author profile · CA Plastics Research Atlas</title>
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
     <style>
       @font-face {
@@ -176,28 +176,28 @@
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
       <div class="header-inner">
-        <nav class="crumbs" aria-label="Breadcrumb"><a href="experts">&larr; All experts</a></nav>
-        <p class="eyebrow">Expert profile</p>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="authors">&larr; All authors</a></nav>
+        <p class="eyebrow">Author profile</p>
         <h1 id="expert-name">Loading…</h1>
-        <ul id="expert-badges" class="expert-badges" aria-label="Expert badges" hidden></ul>
+        <ul id="expert-badges" class="expert-badges" aria-label="Author badges" hidden></ul>
         <ul id="affil-primary" class="affil-primary" aria-label="Primary affiliations"></ul>
         <p id="expert-now" class="expert-now"></p>
         <p id="expertise-statement" class="expertise-statement" hidden></p>
         <p id="expert-meta" class="expert-meta"></p>
         <div class="header-meta">
           <span id="expert-status" class="status-pill" role="status" aria-live="polite">Loading…</span>
-          <a id="open-in-list" class="header-link" href="experts">Open in Experts list</a>
+          <a id="open-in-list" class="header-link" href="authors">Open in Authors list</a>
         </div>
       </div>
     </header>
 
     <main id="main-content" class="page-main">
-      <noscript><section class="panel"><p>This page needs JavaScript to show an expert profile.</p></section></noscript>
+      <noscript><section class="panel"><p>This page needs JavaScript to show an author profile.</p></section></noscript>
 
       <section id="message" class="panel" aria-labelledby="message-title" hidden>
         <h2 id="message-title"></h2>
         <p id="message-text" class="panel-intro"></p>
-        <p><a href="experts">Back to the Experts list</a></p>
+        <p><a href="authors">Back to the Authors list</a></p>
       </section>
 
       <div id="expert" hidden>
@@ -209,9 +209,9 @@
 
         <section class="panel" aria-labelledby="affil-h">
           <h2 id="affil-h">Affiliation history</h2>
-          <p class="panel-intro">Institutions from this expert's own publication record, most recent first, with the years they appear. Co-authors' institutions are not included.</p>
+          <p class="panel-intro">Institutions from this author's own publication record, most recent first, with the years they appear. Co-authors' institutions are not included.</p>
           <ol id="affil-history" class="affil-list"></ol>
-          <p id="affil-empty" class="muted" hidden>Affiliation history is not yet available for this expert.</p>
+          <p id="affil-empty" class="muted" hidden>Affiliation history is not yet available for this author.</p>
         </section>
 
         <section id="funding-panel" class="panel" aria-labelledby="funding-h" hidden>
@@ -296,8 +296,8 @@
 
       <p class="notice">Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.</p>
       <footer class="page-footer">
-        <p>Expert records come from the Atlas static snapshot. Publication lists are not a complete census of a researcher's output.</p>
-        <p><a href="experts">Back to the Experts list</a></p>
+        <p>Author records come from the Atlas static snapshot. Publication lists are not a complete census of a researcher's output.</p>
+        <p><a href="authors">Back to the Authors list</a></p>
         <nav aria-label="Footer links">
           <ul class="footer-links">
             <li><a href="./about">About</a></li>
@@ -315,7 +315,7 @@
 
       const { escapeHtml, safeHttpUrl, parseExpertId, filterWorks, sortWorks, mQuotientText, plasticShare, yearRangesText, coauthorCounts, tagScale, bylineNames, coauthorEntries, authorLineHtml, profileHtml, citationSeries, citationHistogramSvg, isoDate, fundingStatus, expertBadgesHtml, networkBadgesHtml, fundingHtml, datasetsHtml, coauthorInstitutionSummary, coauthorInstitutionsHtml, expertiseStatement } = AtlasExpert;
 
-      const RISING_TIP = "Trend in this expert's share of all Atlas experts' plastics citations over the last 5 complete years; percentile among experts";
+      const RISING_TIP = "Trend in this author's share of all Atlas authors' plastics citations over the last 5 complete years; percentile among authors";
       const CHART_LABEL = "Citations received per year, all and plastics-related";
       const RECENT_YEARS = 10;
       const COAUTHOR_SHOWN = 12;
@@ -435,7 +435,7 @@
         $("expert-now").innerHTML = "";
         $("expert-meta").textContent = "";
         setStatus("Not available", state || "error");
-        document.title = `${title} · Expert profile · CA Plastics Research Atlas`;
+        document.title = `${title} · Author profile · CA Plastics Research Atlas`;
       }
       function setStatus(text, state) {
         const el = $("expert-status");
@@ -467,7 +467,7 @@
         const meta = [`OpenAlex ${escapeHtml(author.author_id || S.id)}`];
         if (orcid) meta.push(`<a href="${escapeHtml(orcid)}" target="_blank" rel="noreferrer">ORCID profile</a>`);
         $("expert-meta").innerHTML = meta.join(" · ");
-        $("open-in-list").href = `experts#author=${encodeURIComponent(S.id)}`;
+        $("open-in-list").href = `authors#author=${encodeURIComponent(S.id)}`;
       }
 
       function renderProfile(profile) {
@@ -495,7 +495,7 @@
           },
           { label: "Plastics works", value: metricNumber(author.plastic_works_count) },
           { label: "CA-affiliated works", value: metricNumber(author.ca_works_count) },
-          { label: "Rising score percentile", value: risingPct === null ? "—" : ordinal(risingPct), title: RISING_TIP, note: "among Atlas experts" },
+          { label: "Rising score percentile", value: risingPct === null ? "—" : ordinal(risingPct), title: RISING_TIP, note: "among Atlas authors" },
           { label: "First publication", value: first === null ? "—" : String(first), note: author.early_career === true ? "Early-career researcher" : "" }
         ];
         $("metrics").innerHTML = tiles.map((t) => `<div class="metric"><dt>${escapeHtml(t.label)}</dt><dd${t.title ? ` title="${escapeHtml(t.title)}"` : ""}>${escapeHtml(t.value)}${t.note ? `<small>${escapeHtml(t.note)}</small>` : ""}</dd></div>`).join("");
@@ -637,7 +637,7 @@
         }
         const counts = coauthorCounts(S.works, id);
         if (!counts.length) {
-          body.innerHTML = '<p class="muted">No co-authors are recorded for this expert.</p>';
+          body.innerHTML = '<p class="muted">No co-authors are recorded for this author.</p>';
           S.coauthorsDone = true;
           return;
         }
@@ -657,7 +657,7 @@
           return `<li>${who} <span class="shared">· ${works}</span></li>`;
         });
         const notes = [];
-        if (expertNames === null) notes.push("The CA expert list could not be loaded, so experts are not linked.");
+        if (expertNames === null) notes.push("The CA author list could not be loaded, so authors are not linked.");
         if (entries.length > COAUTHOR_SHOWN) notes.push(`Plus ${metricNumber(entries.length - COAUTHOR_SHOWN)} more co-authors.`);
         body.innerHTML = `<ul class="coauthor-list">${items.join("")}</ul>${notes.map((n) => `<p class="muted">${escapeHtml(n)}</p>`).join("")}`;
       }
@@ -695,7 +695,7 @@
         S.tags = new Set();
         S.sort = "year";
         S.coauthorsDone = false;
-        document.title = `${S.name} · Expert profile · CA Plastics Research Atlas`;
+        document.title = `${S.name} · Author profile · CA Plastics Research Atlas`;
         renderHeader(author, institutions);
         renderProfile(detail.profile);
         renderMetrics(author);
@@ -723,13 +723,13 @@
         if (expert.status === "missing") {
           S.author = null;
           S.id = "";
-          showMessage("No expert selected", "To open a profile, choose an expert in the Experts list. Profile addresses look like expert.html#author=A5046986222.", "");
+          showMessage("No author selected", "To open a profile, choose an author in the Authors list. Profile addresses look like expert.html#author=A5046986222.", "");
           return;
         }
         if (expert.status === "malformed") {
           S.author = null;
           S.id = "";
-          showMessage("Invalid expert id", `"${expert.raw}" is not a valid OpenAlex author ID. An author ID is the letter A followed by digits, such as A5046986222.`, "error");
+          showMessage("Invalid author id", `"${expert.raw}" is not a valid OpenAlex author ID. An author ID is the letter A followed by digits, such as A5046986222.`, "error");
           return;
         }
         const raw = expert.id;
@@ -746,7 +746,7 @@
         $("expert-meta").textContent = "";
         $("affil-primary").innerHTML = "";
         $("expert-now").innerHTML = "";
-        $("open-in-list").href = `experts#author=${encodeURIComponent(raw)}`;
+        $("open-in-list").href = `authors#author=${encodeURIComponent(raw)}`;
         const [detail, institutions, badges, networks] = await Promise.all([
           fetchJson(`../data/authors/${encodeURIComponent(raw)}.json`).catch(() => null),
           loadInstitutions(),

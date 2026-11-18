@@ -6,7 +6,7 @@ head: '<meta name="robots" content="noindex, nofollow">'
 <header class="atlas-page-head">
   <p class="atlas-page-head__eyebrow">Search</p>
   <h1>Search the Atlas</h1>
-  <p class="atlas-page-head__lead">Find experts, institutions, research topics, funders, glossary terms and related resources in one place.</p>
+  <p class="atlas-page-head__lead">Find authors, institutions, research topics, funders, glossary terms and related resources in one place.</p>
 </header>
 
 <form class="site-search-page__form" action="./search" method="get" role="search" data-atlas-search-page>
@@ -23,6 +23,6 @@ head: '<meta name="robots" content="noindex, nofollow">'
 
 <noscript>
 
-Search results need JavaScript. You can still browse the [Experts](./experts), [Institutions](./institutions), [Funding](./funding) and [Glossary](./glossary) pages.
+Search results need JavaScript. You can still browse the [Authors](./authors), [Institutions](./institutions), [Funding](./funding) and [Glossary](./glossary) pages.
 
 </noscript>

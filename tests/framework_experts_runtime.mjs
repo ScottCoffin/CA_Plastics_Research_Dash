@@ -145,7 +145,7 @@ assert.equal(coSummary.coauthorCount, 5, "distinct co-author ids, unchanged by n
 assert.deepEqual(coSummary.namedCoauthors.map(([id, count]) => [id, count]), [["A200", 1], ["A300", 1]]);
 assert.deepEqual(coSummary.otherCoauthors, [{author_id: "A500", name: "Outside <Writer>", shared: 2}], "non-expert co-author named from the byline; unnamed A600 and A700 omitted");
 const drawerHtml = drawerContentHtml({author: {author_id: "A100", name: "Chelsea Rochman"}, works: bylineWorks, authorId: "A100", profile: null, expertsById: expertsForWorks, institutionsById: new Map(), histogramSvg: null});
-assert.ok(drawerHtml.includes("(2 CA experts, 1 others)"), "summary count text");
+assert.ok(drawerHtml.includes("(2 CA authors, 1 others)"), "summary count text");
 assert.ok(drawerHtml.includes("Outside &lt;Writer&gt; </span>") || drawerHtml.includes("<span>Outside &lt;Writer&gt;</span>"), "other co-author shown unlinked and escaped");
 assert.ok(!drawerHtml.includes("Co-author outside"), "old placeholder text is gone");
 assert.ok(drawerHtml.includes('<p class="work-authors"><strong>Chelsea Rochman</strong>'), "work byline in the drawer");

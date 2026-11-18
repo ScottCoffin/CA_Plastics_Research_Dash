@@ -122,7 +122,7 @@ Text never overlaps an image (section 4.10).
 | 10 | 20.7–23.45 | Dots re-sort into the evidence grid (rows: occurrence, effects, methods, fate and transport, solutions; columns: ocean, freshwater, soil, air, food and biota, people) | `h2` "See where the evidence is, worldwide, and where it is missing." (21.8); then (22.3) "A live evidence map sorts every study by what it examines and where." |
 | 11 | 23.5–26.25 | Collaboration network: 7 communities on damped springs; every 2.3 s one community is plucked and wobbles back | `h2` "See who works with whom, and forge new connections." (24.6); then (25.1) "Collaboration networks show the research communities and the people who bridge them." (source line removed by the owner 2026-11-17) |
 | 12 | 26.25–28.55 | Dots settle into the world pixel map; country shading underneath | `h2` "The problem is global." (27.3); then (27.75) "Plastics research now comes from almost every country." plus a source line (real counts: "Works by country, OpenAlex, <date>." Until then: "Illustrative shading until the global country counts are built.") |
-| 13 | 28.55–end | Zoom to California at local scale (coral and slate cells) | `h2` "Local knowledge and connections matter." (29.6); `p` (30.0) "Regional atlases zoom in on the people, monitoring, funding and policy of one place. Powered by local experts and community leaders."; button (30.35) "Join the movement, and become a local ambassador →" to `/ambassadors`; then (30.7) "California is live; Norway is next." |
+| 13 | 28.55–end | Zoom to California at local scale (coral and slate cells) | `h2` "Local knowledge and connections matter." (29.6); `p` (30.0) "Regional atlases zoom in on the people, monitoring, funding and policy of one place. Powered by local researchers and community leaders."; button (30.35) "Join the movement, and become a local ambassador →" to `/ambassadors`; then (30.7) "California is live; Norway is next." |
 
 ### 4.1 The picnic (beat 0)
 
@@ -196,7 +196,7 @@ Crack edges must be clean: cut shard masks at 2 px or finer, never on the 4 px s
 
 The `/ambassadors` page holds one paragraph:
 
-"Plastiverse Live grows region by region with local experts and community leaders who guide what
+"Plastiverse Live grows region by region with local researchers and community leaders who guide what
 we collect and check it. Ambassador onboarding opens soon. To get involved now, email
 theplastiverse@gmail.com."
 

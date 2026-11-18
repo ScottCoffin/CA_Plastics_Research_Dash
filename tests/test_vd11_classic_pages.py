@@ -25,8 +25,10 @@ FONT_FILES = {
 }
 # Re-pinned by UX-32: the metrics <small> note moved inside its <dd> (axe definition-list).
 # Re-pinned by PLAT-1 path move: the page moved to site/california/, so its data, asset and
-# list links are relative to that folder (../data/, experts#author=, institution#inst=).
-ROUTING_SCRIPT_SHA256 = "565de27aed6a02e0450078d35563e52fef2dc73caa3f1ab5d6453c696762f899"
+# list links are relative to that folder (../data/, authors#author=, institution#inst=).
+# Re-pinned by BQ-R1 (owner rename Experts -> Authors, A3-D0): visible copy, the page title and the
+# list link route (authors#author=) changed; the hash parsing and route logic did not.
+ROUTING_SCRIPT_SHA256 = "af3efceb9035593d0750efe91fae24364484d9e922e2c5b771c93c33a71158fa"
 HEX = re.compile(r"#[0-9a-fA-F]{6}\b")
 FACE = re.compile(r"@font-face\s*\{([^}]*)\}")
 REMOTE = re.compile(
@@ -145,7 +147,7 @@ def test_expert_hash_routing_is_unchanged() -> None:
         "parseExpertId(location.search, location.hash)",
         'window.addEventListener("hashchange", route);',
         "`${location.pathname}#author=${encodeURIComponent(raw)}`",
-        "`experts#author=${encodeURIComponent(raw)}`",
+        "`authors#author=${encodeURIComponent(raw)}`",
     ):
         assert snippet in html, snippet
 

@@ -35,8 +35,25 @@ FORBIDDEN_PATTERNS: list[re.Pattern[str]] = [
     re.compile(r"Coming with", re.IGNORECASE),
 ]
 
+# BQ-R1 (A3-D0): the public word is "Authors", never "Experts". Checked in HTML text nodes only.
+# Allow-list: text inside <cite>/<code>/<q>/<kbd> or an element marked data-public-text="quoted"
+# (work titles and other quoted text), and legacy file names / URLs (expert.html, experts/<id>/).
+TERMINOLOGY_PATTERN = re.compile(r"\bexperts?\b(?!\.html|/)", re.IGNORECASE)
+# Attribute values a reader sees or hears (checked like text nodes).
+VISIBLE_ATTRS = {"placeholder", "title", "aria-label", "alt"}
+# JSON string values under these top-level keys are public method text (terminology rule only).
+JSON_TEXT_KEYS = ("method",)  # Atlas-written method text; linkout descriptions quote stewards
+QUOTED_TAGS = {"cite", "code", "q", "kbd"}
+# The classic site/index.html is not deployed since PLAT-1 (only its head tags are reused).
+TERMINOLOGY_SKIP = {"site/index.html"}
+
 DEFAULT_HTML = ["site/index.html", "site/california/expert.html", "site/grants.html"]
-DEFAULT_JSON = ["site/data/dtsc_timeline.json", "site/data/linkouts.json"]
+DEFAULT_JSON = [
+    "site/data/dtsc_timeline.json",
+    "site/data/linkouts.json",
+    "site/data/network.json",
+    "site/data/expert_badges.json",
+]
 SKIP_TAGS = {"script", "style"}
 
 
@@ -49,27 +66,47 @@ class _TextCollector(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.chunks: list[tuple[int, str]] = []
+        self.quoted: list[bool] = []
         self._skip_depth = 0
+        self._quote_stack: list[tuple[str, bool]] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         if tag in SKIP_TAGS:
             self._skip_depth += 1
+        marked = tag in QUOTED_TAGS or dict(attrs).get("data-public-text") == "quoted"
+        if marked or self._quote_stack:
+            self._quote_stack.append((tag, marked))
+        if not self._skip_depth:
+            quoted = any(flag for _, flag in self._quote_stack)
+            for name, value in attrs:
+                if name in VISIBLE_ATTRS and value:
+                    self.chunks.append((self.getpos()[0], value))
+                    self.quoted.append(quoted)
 
     def handle_endtag(self, tag: str) -> None:
         if tag in SKIP_TAGS and self._skip_depth:
             self._skip_depth -= 1
+        for index in range(len(self._quote_stack) - 1, -1, -1):
+            if self._quote_stack[index][0] == tag:
+                del self._quote_stack[index:]
+                break
 
     def handle_data(self, data: str) -> None:
         if not self._skip_depth:
             self.chunks.append((self.getpos()[0], data))
+            self.quoted.append(any(marked for _, marked in self._quote_stack))
 
 
-def _html_text(text: str) -> list[tuple[str, str]]:
+def _html_text(text: str, *, include_quoted: bool = True) -> list[tuple[str, str]]:
     """Return (location, visible text) pairs for an HTML document."""
     parser = _TextCollector()
     parser.feed(text)
     parser.close()
-    return [(f"line {line}", chunk) for line, chunk in parser.chunks]
+    return [
+        (f"line {line}", chunk)
+        for (line, chunk), quoted in zip(parser.chunks, parser.quoted, strict=True)
+        if include_quoted or not quoted
+    ]
 
 
 def _json_strings(value: object, path: str = "$") -> list[tuple[str, str]]:
@@ -97,8 +134,21 @@ def find_matches(path: Path) -> list[tuple[str, str, str]]:
     else:
         pieces = _html_text(text)
     matches: list[tuple[str, str, str]] = []
-    for location, piece in pieces:
-        for pattern in FORBIDDEN_PATTERNS:
+    checks = [(location, piece, FORBIDDEN_PATTERNS) for location, piece in pieces]
+    rel = path.resolve().relative_to(ROOT).as_posix() if path.resolve().is_relative_to(ROOT) else ""
+    if path.suffix == ".json":
+        checks += [
+            (location, piece, [TERMINOLOGY_PATTERN])
+            for location, piece in pieces
+            if any(location.startswith(f"$.{key}") for key in JSON_TEXT_KEYS)
+        ]
+    elif rel not in TERMINOLOGY_SKIP:
+        checks += [
+            (location, piece, [TERMINOLOGY_PATTERN])
+            for location, piece in _html_text(text, include_quoted=False)
+        ]
+    for location, piece, patterns in checks:
+        for pattern in patterns:
             found = pattern.search(piece)
             if found:
                 snippet = " ".join(piece[max(0, found.start() - 40) : found.end() + 40].split())

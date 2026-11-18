@@ -7,7 +7,7 @@ Writes ``site/data/expert_badges.json``, read lazily by the full expert profile 
   principal-investigator name matches the expert's name at a California organisation. Name
   keys are (first given name, family name) after folding accents; a key shared by two experts
   is never used. Whether a grant is active is decided by the page from its end date.
-* Data stewardship: datasets the expert authored in DataCite (via ORCID,
+* Data stewardship: datasets the author created in DataCite (via ORCID,
   ``data/processed/expert_datacite_outputs.parquet``) that are plastic-related, one per
   dataset family (versions collapsed).
 
@@ -168,9 +168,9 @@ def write_badges(
         "schema_version": SCHEMA_VERSION,
         "generated_at": index.get("generated_at"),
         "method": {
-            "funding": "plastic-related grants linked to the expert's works, or whose "
-            "principal investigator's name matches the expert at a California organisation",
-            "datasets": "plastic-related DataCite datasets the expert authored (ORCID), "
+            "funding": "plastic-related grants linked to the author's works, or whose "
+            "principal investigator's name matches the author at a California organisation",
+            "datasets": "plastic-related DataCite datasets the author created (ORCID), "
             "versions collapsed",
         },
         "experts": badges,

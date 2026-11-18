@@ -150,10 +150,10 @@ def _topic_items(
     topic_labels: dict[str, str], matrix_labels: dict[str, str]
 ) -> list[tuple[str, str, str]]:
     rows = [
-        (label, "Research topic", _href("experts", tag=tag)) for tag, label in topic_labels.items()
+        (label, "Research topic", _href("authors", tag=tag)) for tag, label in topic_labels.items()
     ]
     rows += [
-        (label, "Matrix", _href("experts", tag=f"matrix:{key}"))
+        (label, "Matrix", _href("authors", tag=f"matrix:{key}"))
         for key, label in matrix_labels.items()
     ]
     return rows

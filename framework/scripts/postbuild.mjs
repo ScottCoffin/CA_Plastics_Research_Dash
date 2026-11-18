@@ -45,7 +45,7 @@ if (!GLOBAL_FONT_STYLE || !GLOBAL_FAVICON || !GLOBAL_SEARCH_STYLE || !GLOBAL_SEA
 }
 
 // `page` is the built file's path below dist without ".html", with "/" separators: "index" for the
-// global page, "california/experts" for a California page (PLAT-1).
+// global page, "california/authors" for a California page (PLAT-1).
 export function fixHtml(html, page) {
   // Add stable page metadata first; fixTemplate then owns the final head ordering.
   let fixed = fixShell(fixTemplate(addGlobalHead(addDescription(html, page))), page);
@@ -119,8 +119,8 @@ function fixTemplate(html) {
 export const PAGE_DESCRIPTIONS = {
   index: "Plastiverse Live: research on plastics and microplastics, organised region by region, starting with California.",
   "california/index": "Overview of the California Plastics Research Atlas, an independent guide to research on plastics in California.",
-  "california/experts": "Researchers working on plastics in California, with their publications and affiliations.",
-  "california/network": "Interactive map of who co-authors plastics research with whom among California experts.",
+  "california/authors": "Researchers working on plastics in California, with their publications and affiliations.",
+  "california/network": "Interactive map of who co-authors plastics research with whom among California authors.",
   "california/institutions": "Universities, agencies and other organisations active in California plastics research.",
   "california/institution": "One institution's plastics research: publications, lead authors, topics and collaborators.",
   "california/monitoring": "Monitoring programmes and observations of plastics in California, with sources, locations and licence details.",
@@ -139,6 +139,18 @@ export function addDescription(html, page) {
   const content = text.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
   return html.replace("</head>", `<meta name="description" content="${content}">
 </head>`);
+}
+
+// BQ-R1 (A3-C4): renamed routes keep a redirect stub at the old path (search and hash kept).
+export const ROUTE_STUBS = {"california/experts": "authors"};
+
+export function redirectStub(target) {
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Authors</title><meta name="robots" content="noindex">
+<link rel="canonical" href="./${target}"><meta http-equiv="refresh" content="0; url=./${target}">
+<script>location.replace("./${target}" + location.search + location.hash)</script></head>
+<body><p>This page moved to <a href="./${target}">Authors</a>.</p></body></html>
+`;
 }
 
 function walk(dir, out = []) {
@@ -161,5 +173,6 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
       changed += 1;
     }
   }
+  for (const [from, to] of Object.entries(ROUTE_STUBS)) writeFileSync(join(dist, `${from}.html`), redirectStub(to));
   console.log(`postbuild: fixed ${changed} HTML files in ${dist}`);
 }

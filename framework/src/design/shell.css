@@ -145,8 +145,8 @@
   display: none;
 }
 
-#observablehq-sidebar a[href$="/experts"],
-.atlas-topnav a[href$="/experts"] {
+#observablehq-sidebar a[href$="/authors"],
+.atlas-topnav a[href$="/authors"] {
   --atlas-route-icon: var(--atlas-accent);
   --atlas-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='8' r='3.6' fill='none' stroke='black' stroke-width='1.8'/%3E%3Cpath d='M4.5 20.5c.6-3.9 3.6-6 7.5-6s6.9 2.1 7.5 6' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
 }

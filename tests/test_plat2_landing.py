@@ -180,7 +180,7 @@ def test_ambassador_page_explains_the_role_and_shows_the_address_as_text() -> No
     text = _plain(page)
     assert "Ambassador onboarding opens soon." in text
     for duty in (
-        "local institutions and experts",
+        "local institutions and authors",
         "community groups and networks",
         "monitoring data",
         "policy goals",

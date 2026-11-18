@@ -6,10 +6,10 @@ title: Collaboration network
 <header class="atlas-page-head">
 <p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-network"></use></svg> Explore</p>
 <h1>Collaboration network</h1>
-<p class="atlas-page-head__lead">Each dot represents an Atlas expert who co-authored plastic-related work, and each line connects co-authors. The network shows relationships in the current data snapshot; it is not a geographic map or a measure of research quality.</p>
+<p class="atlas-page-head__lead">Each dot represents an Atlas author who co-authored plastic-related work, and each line connects co-authors. The network shows relationships in the current data snapshot; it is not a geographic map or a measure of research quality.</p>
 </header>
 </div>
-<p class="atlas-callout atlas-callout--info"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-info"></use></svg> <span><strong>Volume note.</strong> The network shows the 400 most active experts. Counts show volume, not quality: a well-connected expert is not necessarily a better researcher.</span></p>
+<p class="atlas-callout atlas-callout--info"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-info"></use></svg> <span><strong>Volume note.</strong> The network shows the 400 most active authors. Counts show volume, not quality: a well-connected author is not necessarily a better researcher.</span></p>
 
 <link rel="stylesheet" href="../components/network.css">
 
@@ -22,8 +22,8 @@ title: Collaboration network
 <div class="atlas-filters__body">
 <div class="atlas-filters__grid net-primary-grid">
 <div class="atlas-field">
-<label class="atlas-label" for="net-search">Find an expert</label>
-<div class="atlas-search" id="net-search-wrap"><input class="atlas-input net-search-input" id="net-search" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="net-search-list" autocomplete="off" spellcheck="false" placeholder="Type a name"><div class="net-search-popup" id="net-search-popup" hidden><ul class="net-search-list" id="net-search-list" role="listbox" aria-label="Matching experts"></ul><p class="net-search-empty" id="net-search-empty" hidden>No matching experts</p></div></div>
+<label class="atlas-label" for="net-search">Find an author</label>
+<div class="atlas-search" id="net-search-wrap"><input class="atlas-input net-search-input" id="net-search" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="net-search-list" autocomplete="off" spellcheck="false" placeholder="Type a name"><div class="net-search-popup" id="net-search-popup" hidden><ul class="net-search-list" id="net-search-list" role="listbox" aria-label="Matching authors"></ul><p class="net-search-empty" id="net-search-empty" hidden>No matching authors</p></div></div>
 <span class="net-sr-only" id="net-search-status" role="status" aria-live="polite"></span>
 </div>
 <div class="atlas-field">
@@ -67,8 +67,8 @@ title: Collaboration network
 </div>
 </details>
 
-<div class="atlas-help-row net-chart-heading"><h2 id="network-graph-heading">Network graph</h2><button type="button" class="atlas-help" aria-label="About this network: Each dot is an expert, and each line joins two experts who co-authored plastic-related work; thicker lines mean more shared works. Clusters are found automatically (Louvain) and named after the institution and topic most of their members share, and the force-directed layout (ForceAtlas2) has no geographic meaning." data-atlas-tip="Each dot is an expert, and each line joins two experts who co-authored plastic-related work; thicker lines mean more shared works. Clusters are found automatically (Louvain) and named after the institution and topic most of their members share, and the force-directed layout (ForceAtlas2) has no geographic meaning." aria-expanded="false"><svg class="atlas-help__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5M12 7.5h.01"/></svg></button></div>
-<div id="network-chart" class="net-chart" role="group" aria-label="Collaboration network graph of California experts. Each dot is an expert and a line joins two experts who wrote together. The table below lists the same experts.">
+<div class="atlas-help-row net-chart-heading"><h2 id="network-graph-heading">Network graph</h2><button type="button" class="atlas-help" aria-label="About this network: Each dot is an author, and each line joins two authors who co-authored plastic-related work; thicker lines mean more shared works. Clusters are found automatically (Louvain) and named after the institution and topic most of their members share, and the force-directed layout (ForceAtlas2) has no geographic meaning." data-atlas-tip="Each dot is an author, and each line joins two authors who co-authored plastic-related work; thicker lines mean more shared works. Clusters are found automatically (Louvain) and named after the institution and topic most of their members share, and the force-directed layout (ForceAtlas2) has no geographic meaning." aria-expanded="false"><svg class="atlas-help__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5M12 7.5h.01"/></svg></button></div>
+<div id="network-chart" class="net-chart" role="group" aria-label="Collaboration network graph of California authors. Each dot is an author and a line joins two authors who wrote together. The table below lists the same authors.">
 <p id="network-message" class="net-message"><span class="expert-spinner" aria-hidden="true"></span>Loading network…</p>
 <div class="net-body">
 <div id="network-stage" class="net-stage"></div>
@@ -80,7 +80,7 @@ title: Collaboration network
 <button id="net-layout" class="atlas-btn atlas-btn--secondary atlas-btn--icon net-btn" type="button" aria-label="Re-run layout" data-tooltip="Re-run layout" aria-pressed="false" data-needs-graph></button>
 <button id="net-restore" class="atlas-btn atlas-btn--secondary atlas-btn--icon net-btn" type="button" aria-label="Restore saved layout" data-tooltip="Restore saved layout" data-needs-graph></button>
 </div>
-<section id="network-panel" class="net-panel atlas-card" aria-label="Selected expert"><p class="net-panel-note">Select a dot on the chart, or search for a name, to see that expert's collaborations here.</p></section>
+<section id="network-panel" class="net-panel atlas-card" aria-label="Selected author"><p class="net-panel-note">Select a dot on the chart, or search for a name, to see that author's collaborations here.</p></section>
 </div>
 </div>
 
@@ -89,8 +89,8 @@ title: Collaboration network
 <summary>View as table</summary>
 <div class="net-table-wrap atlas-table-wrap">
 <table class="atlas-table">
-<caption id="network-table-caption">Loading experts…</caption>
-<thead><tr><th scope="col">Expert</th><th scope="col">Cluster</th><th scope="col">Collaborators</th><th scope="col">Plastic-related works</th></tr></thead>
+<caption id="network-table-caption">Loading authors…</caption>
+<thead><tr><th scope="col">Author</th><th scope="col">Cluster</th><th scope="col">Collaborators</th><th scope="col">Plastic-related works</th></tr></thead>
 <tbody id="network-rows"></tbody>
 </table>
 </div>

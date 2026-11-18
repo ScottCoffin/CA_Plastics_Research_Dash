@@ -5,12 +5,18 @@ title: Glossary
 <header class="atlas-page-head">
 <p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-book"></use></svg> Reference</p>
 <h1>Glossary</h1>
-<p class="atlas-page-head__lead">Plain-language meanings of the terms used on the Experts, Institutions and Monitoring pages. Each entry names where its wording comes from.</p>
+<p class="atlas-page-head__lead">Plain-language meanings of the terms used on the Authors, Institutions and Monitoring pages. Each entry names where its wording comes from.</p>
 </header>
 
 <link rel="stylesheet" href="../components/glossary.css">
 
 <dl class="glossary">
+
+<dt id="author"><a class="glossary-term-link" href="#author"><strong>Author</strong></a></dt>
+<dd>
+<p>A person listed on one or more works in the corpus, as identified by OpenAlex author IDs; profiles may split or merge people.</p>
+<p><small>Source: OpenAlex author records, with the Atlas's same-name, same-institution merges.</small></p>
+</dd>
 
 <dt id="access-tiers"><a class="glossary-term-link" href="#access-tiers"><strong>Access tiers A–D</strong></a></dt>
 <dd>
@@ -44,20 +50,20 @@ title: Glossary
 
 <dt id="rising-percentile"><a class="glossary-term-link" href="#rising-percentile"><strong>Rising percentile and its population</strong></a></dt>
 <dd>
-<p>Rising citation momentum measures whether an expert's share of all Atlas experts' plastics citations is growing. It is the slope of that share over the last 5 complete years, in percentage points per year, so growth in the field as a whole does not count as rising. The rising percentile is the expert's rank within that population. Its population is the scored experts: those with at least 10 plastics citations in the 5-year window. Experts below that threshold have no rising percentile.</p>
-<p><small>Source: the Atlas's expert metrics method. Wording to be confirmed.</small></p>
+<p>Rising citation momentum measures whether an author's share of all Atlas authors' plastics citations is growing. It is the slope of that share over the last 5 complete years, in percentage points per year, so growth in the field as a whole does not count as rising. The rising percentile is the author's rank within that population. Its population is the scored authors: those with at least 10 plastics citations in the 5-year window. Authors below that threshold have no rising percentile.</p>
+<p><small>Source: the Atlas's author metrics method. Wording to be confirmed.</small></p>
 </dd>
 
 <dt id="m-quotient"><a class="glossary-term-link" href="#m-quotient"><strong>m-quotient</strong></a></dt>
 <dd>
-<p>An h-index adjusted for career length: the h-index divided by the number of years since the first publication year (at least 1 year). The first year is the earliest year with at least 2 works, so isolated early works that are probably misattributed are skipped. A higher value means more citation impact per year of career. It is shown on the Experts page as "m-quotient (h per career year)".</p>
-<p><small>Source: the Atlas's expert metrics method. Wording to be confirmed.</small></p>
+<p>An h-index adjusted for career length: the h-index divided by the number of years since the first publication year (at least 1 year). The first year is the earliest year with at least 2 works, so isolated early works that are probably misattributed are skipped. A higher value means more citation impact per year of career. It is shown on the Authors page as "m-quotient (h per career year)".</p>
+<p><small>Source: the Atlas's author metrics method. Wording to be confirmed.</small></p>
 </dd>
 
 <dt id="current-affiliation"><a class="glossary-term-link" href="#current-affiliation"><strong>Current affiliation</strong></a></dt>
 <dd>
-<p>The expert's latest OpenAlex affiliations, the institutions listed on their most recent affiliation record. "In California now" means at least one of them is in the Atlas's California institution registry. "Outside California now" means none of them is. "Unknown" means OpenAlex lists no latest affiliation for the expert. The "last California affiliation" year is the latest year OpenAlex lists the expert at a California institution. Where the expert lives or where their work was done is not checked.</p>
-<p><small>Source: the Atlas's expert metrics method and California institution registry.</small></p>
+<p>The author's latest OpenAlex affiliations, the institutions listed on their most recent affiliation record. "In California now" means at least one of them is in the Atlas's California institution registry. "Outside California now" means none of them is. "Unknown" means OpenAlex lists no latest affiliation for the author. The "last California affiliation" year is the latest year OpenAlex lists the author at a California institution. Where the author lives or where their work was done is not checked.</p>
+<p><small>Source: the Atlas's author metrics method and California institution registry.</small></p>
 </dd>
 
 <dt id="ca-led"><a class="glossary-term-link" href="#ca-led"><strong>CA-led</strong></a></dt>
@@ -80,7 +86,7 @@ title: Glossary
 
 <dt id="matrix"><a class="glossary-term-link" href="#matrix"><strong>Matrix</strong></a></dt>
 <dd>
-<p>The kind of material a monitoring sample was taken from, such as surface water, sediment, stormwater or organism tissue. Concentrations measured in different matrices are not directly comparable. On the Experts page, a “domain or matrix tag” is a different, provisional topic tag taken from work titles and abstracts.</p>
+<p>The kind of material a monitoring sample was taken from, such as surface water, sediment, stormwater or organism tissue. Concentrations measured in different matrices are not directly comparable. On the Authors page, a “domain or matrix tag” is a different, provisional topic tag taken from work titles and abstracts.</p>
 <p><small>Source: standard usage in environmental monitoring. Wording to be confirmed.</small></p>
 </dd>
 

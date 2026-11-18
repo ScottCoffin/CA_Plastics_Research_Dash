@@ -1,4 +1,4 @@
-"""UX-7: glossary page, footer link, and inline term links on Institutions and Experts."""
+"""UX-7: glossary page, footer link, and inline term links on Institutions and Authors."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ FRAMEWORK = ROOT / "framework"
 GLOSSARY = FRAMEWORK / "src" / "california" / "glossary.md"
 CONFIG = FRAMEWORK / "observablehq.config.js"
 INSTITUTIONS = FRAMEWORK / "src" / "california" / "institutions.md"
-EXPERTS = FRAMEWORK / "src" / "california" / "experts.md"
+AUTHORS = FRAMEWORK / "src" / "california" / "authors.md"
 
 GLOSSARY_IDS = [
     "access-tiers",
@@ -64,7 +64,7 @@ def test_footer_links_to_glossary_and_page_is_listed() -> None:
 
 def test_institutions_and_experts_link_to_glossary_anchors() -> None:
     inst_links = _links(INSTITUTIONS.read_text(encoding="utf-8"))
-    exp_links = _links(EXPERTS.read_text(encoding="utf-8"))
+    exp_links = _links(AUTHORS.read_text(encoding="utf-8"))
     assert {"tier", "rank-range", "bootstrap-interval", "fractional-works"} <= inst_links
     assert {"m-quotient", "rising-percentile", "ca-led", "plastic-related"} <= exp_links
     known = set(GLOSSARY_IDS)

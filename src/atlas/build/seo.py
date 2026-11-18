@@ -32,7 +32,7 @@ PAGE_PATHS = (
     "/",
     "/explore",
     f"{REGION_PATH}/",
-    f"{REGION_PATH}/experts",
+    f"{REGION_PATH}/authors",
     f"{REGION_PATH}/network",
     f"{REGION_PATH}/institutions",
     f"{REGION_PATH}/monitoring",
@@ -317,9 +317,9 @@ def _expert_page(
         doi = _doi_url(work.get("doi"))
         link = f' <a href="{esc(doi)}" rel="noopener">DOI</a>' if doi else ""
         items.append(
-            "<li>"
+            '<li><span data-public-text="quoted">'
             + esc(_text(work.get("title")) or "Untitled work")
-            + '<br><span class="muted">'
+            + '</span><br><span class="muted">'
             + esc(meta)
             + "</span>"
             + link
@@ -373,7 +373,7 @@ def _expert_page(
     if topics:
         schema["knowsAbout"] = topics
     return _page(
-        title=f"{name} — plastics research expert | {ATLAS_NAME}",
+        title=f"{name} — plastics researcher | {ATLAS_NAME}",
         description=description,
         canonical=url,
         og_type="profile",
@@ -465,7 +465,7 @@ def _institution_page(
             if disclosure:
                 parts.append(f"<p>Disclosure: {esc(disclosure)}</p>")
     if linked:
-        parts.append("<h2>Top experts</h2>")
+        parts.append("<h2>Top authors</h2>")
         items = [
             f'<li><a href="{esc(base)}{REGION_PATH}/experts/{aid}/">{esc(ename)}</a></li>'
             for aid, ename in linked

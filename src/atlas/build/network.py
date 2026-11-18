@@ -200,12 +200,12 @@ def community_labels(rows: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
 
 
 COMMUNITY_LABELS_METHOD = (
-    f"Communities of at least {LABEL_MIN_SIZE} experts, in community order. Institution: the most "
+    f"Communities of at least {LABEL_MIN_SIZE} authors, in community order. Institution: the most "
     "common first primary affiliation among members (a member without one counts its first "
     "institution other than 'System'), kept when at least "
     f"{INSTITUTION_MIN_SHARE:.0%} of members and at least {INSTITUTION_MIN_COUNT} share it. "
     f"Topic: among tags on at least {TOPIC_MIN_SHARE:.0%} of members' topics, the one with the "
-    "highest lift (share in the community divided by share across all experts), ties by share "
+    "highest lift (share in the community divided by share across all authors), ties by share "
     f"then tag, kept when lift is at least {TOPIC_MIN_LIFT}. A null field means no label passed."
 )
 LAYOUT_METHOD = (

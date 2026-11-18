@@ -194,3 +194,4 @@
 | 2026-11-18 | BQ-G1 | Gold status: 38/150 evaluation works labelled (dev 17, test 21), no gold release; scripts/report_gold_status.py | this commit |
 | 2026-11-18 | BQ-1.2 | Failure taxonomy (20 classes, 2 pending BQ-S9 placeholders) seeded from REL-1 and A3 | this commit |
 | 2026-11-18 | BQ-1.6 | Count reconciliation: 1,919/1,583/1,849/2,037/1,749 traced to fields; possible bugs: >=10 curation exclusions match no work, Now line omits 70 works | this commit |
+| 2026-11-18 | BQ-R1 | "Authors" rename: /california/authors + redirect stub, visible text, glossary term, terminology lint (text, attributes, JSON method); Haiku review found the /explore PANELS bug (fixed) | this commit |

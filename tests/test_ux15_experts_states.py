@@ -15,7 +15,7 @@ SRC = ROOT / "framework" / "src"
 MODEL = SRC / "components" / "experts_model.js"
 COMPONENT = SRC / "components" / "experts.js"
 CSS = SRC / "components" / "experts.css"
-PAGE = SRC / "california" / "experts.md"
+PAGE = SRC / "california" / "authors.md"
 
 
 def _read(path: Path) -> str:
@@ -32,11 +32,11 @@ def test_virtual_row_is_a_div_listitem():
 def test_page_has_state_panel_above_hidden_list_and_loading_text():
     page = _read(PAGE)
     assert 'id="expert-state"' in page
-    assert "Loading experts…" in page
+    assert "Loading authors…" in page
     state_at = page.index('id="expert-state"')
     list_at = page.index('id="expert-list"')
     assert state_at < list_at
-    assert 'role="list" aria-label="Experts" aria-live="polite" hidden>' in page
+    assert 'role="list" aria-label="Authors" aria-live="polite" hidden>' in page
 
 
 def test_component_wires_loading_failure_retry_and_reset():
@@ -96,10 +96,10 @@ console.log(JSON.stringify({{
 }}));
 """
     out = _run_node(script)
-    assert out["zero"] == "0 of 5 experts"
-    assert out["one"] == "1 of 1 expert"
-    assert out["all"] == "2,614 of 2,614 experts"
+    assert out["zero"] == "0 of 5 authors"
+    assert out["one"] == "1 of 1 author"
+    assert out["all"] == "2,614 of 2,614 authors"
     assert out["rowStart"].startswith('<div class="virtual-row" role="listitem"'), out["rowStart"]
     assert out["rowEnd"].endswith("</div>"), out["rowEnd"]
     assert out["hasArticle"] is False
-    assert out["emptyText"] == "No experts match these filters."
+    assert out["emptyText"] == "No authors match these filters."

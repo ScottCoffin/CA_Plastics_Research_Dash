@@ -180,8 +180,8 @@ def test_expert_page_loads_topics_and_helpers_in_order() -> None:
 
 def test_expert_page_navigation_and_disclaimer() -> None:
     html = PAGE.read_text(encoding="utf-8")
-    assert 'href="experts"' in html, "back link to the Experts list"
-    assert "experts#author=" in html, "Open in Experts list link"
+    assert 'href="authors"' in html, "back link to the Authors list"
+    assert "authors#author=" in html, "Open in Authors list link"
     assert 'Created by <a href="https://scottcoff.in"' in html
     assert 'class="skip-link" href="#main-content"' in html
     assert "hashchange" in html, "a new author in the hash re-renders the page"

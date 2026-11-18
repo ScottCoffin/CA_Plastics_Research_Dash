@@ -109,7 +109,7 @@ def task_overview_profile(run: Run) -> None:
 
 def task_experts_export(run: Run) -> None:
     """2. Experts: topic + year range, export CSV, row count matches shown count."""
-    run.goto("california/experts")
+    run.goto("california/authors")
     tag = run.page.get_by_label("Domain or matrix tag")
     run.select(tag, "Domain or matrix tag", tag.locator("option").nth(1).inner_text())
     open_expert_more_filters(run)

@@ -11,7 +11,7 @@ title: Overview
 <h1 class="overview-title" id="overview-title">California plastics research, in four parts.</h1>
 <p class="overview-lead">Who studies plastics in California, what is monitored, what is funded, and what has been published. Rebuilt from open sources every day.</p>
 <ul class="overview-doors" aria-label="Start here">
-<li><a class="overview-door" data-plane="people" href="./experts" style="--c: var(--atlas-task-people)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">Find a researcher</strong><small class="overview-door__count" data-count-group><span data-count="authors" data-suffix=" authors"></span></small></a></li>
+<li><a class="overview-door" data-plane="people" href="./authors" style="--c: var(--atlas-task-people)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">Find a researcher</strong><small class="overview-door__count" data-count-group><span data-count="authors" data-suffix=" authors"></span></small></a></li>
 <li><a class="overview-door" data-plane="water" href="./monitoring" style="--c: var(--atlas-task-water)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">Check monitoring data</strong><small class="overview-door__count" data-count-group><span data-count="monitoring_samples" data-suffix=" samples"></span></small></a></li>
 <li><a class="overview-door" data-plane="money" href="./funding" style="--c: var(--atlas-task-money)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">See funding</strong><small class="overview-door__count" data-count-group><span data-count="awards" data-suffix=" awards"></span></small></a></li>
 <li><a class="overview-door" data-plane="evidence" href="./evidence" style="--c: var(--atlas-task-evidence)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">Explore the evidence</strong><small class="overview-door__count" data-count-group><span data-count="plastic_works" data-suffix=" works"></span></small></a></li>
@@ -19,7 +19,7 @@ title: Overview
 <form class="overview-search" action="./search" method="get" role="search" data-atlas-site-search>
 <label class="visually-hidden" for="overview-q">Search the whole Atlas</label>
 <p class="overview-caps" aria-hidden="true">Or search the whole Atlas</p>
-<div class="overview-search__field"><input id="overview-q" type="search" name="q" placeholder="Experts, institutions, topics, funders" autocomplete="off"><button type="submit">Search</button></div>
+<div class="overview-search__field"><input id="overview-q" type="search" name="q" placeholder="Authors, institutions, topics, funders" autocomplete="off"><button type="submit">Search</button></div>
 </form>
 </div>
 <figure class="overview-figure" id="overview-figure" aria-label="California drawn from four planes: researchers, monitoring, funding and evidence">
@@ -29,7 +29,7 @@ title: Overview
 <clipPath id="overview-ca"><path d="M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L0,-221L0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-149,-121L-143,-122L-132,-116L-129,-111L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L167,360L221,405L256,494L469,474Z"/></clipPath>
 </defs>
 <g class="overview-piece" data-plane="water"><g clip-path="url(#overview-ca)"><a href="./monitoring" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="water" points="-470,-575 560,-575 560,-150 -470,-150"/></a></g></g>
-<g class="overview-piece" data-plane="people"><g clip-path="url(#overview-ca)"><a href="./experts" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="people" points="-470,-150 70,-150 -70,205 -470,205"/></a></g><path d="M-330,70 A62,62 0 0 0 -206,70 Z" style="fill: var(--atlas-vermilion)" aria-hidden="true"/></g>
+<g class="overview-piece" data-plane="people"><g clip-path="url(#overview-ca)"><a href="./authors" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="people" points="-470,-150 70,-150 -70,205 -470,205"/></a></g><path d="M-330,70 A62,62 0 0 0 -206,70 Z" style="fill: var(--atlas-vermilion)" aria-hidden="true"/></g>
 <g class="overview-piece" data-plane="money"><g clip-path="url(#overview-ca)"><a href="./funding" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="money" points="70,-150 560,-150 560,250 -70,205"/></a></g></g>
 <g class="overview-piece" data-plane="evidence"><g clip-path="url(#overview-ca)"><a href="./evidence" tabindex="-1" aria-hidden="true"><polygon class="overview-plane" data-plane="evidence" points="-470,205 -70,205 560,250 560,520 -470,520"/></a></g></g>
 </svg>
@@ -45,10 +45,10 @@ title: Overview
 <p class="overview-band__text">Search California-affiliated authors by topic, institution and output, and see who publishes with whom. Profiles are built from OpenAlex and ROR records.</p>
 <ul class="overview-facts">
 <li data-count-group><b data-count="authors"></b><span>authors</span></li>
-<li data-count-group><b data-count="network_experts"></b><span>experts in the network, <span data-count="network_links"></span> links</span></li>
+<li data-count-group><b data-count="network_experts"></b><span>authors in the network, <span data-count="network_links"></span> links</span></li>
 <li data-count-group><b data-count="california_institutions"></b><span>California institutions</span></li>
 </ul>
-<div class="overview-go"><a href="./experts">Experts</a><a href="./network">Collaboration network</a><a href="./institutions">Institutions</a></div>
+<div class="overview-go"><a href="./authors">Authors</a><a href="./network">Collaboration network</a><a href="./institutions">Institutions</a></div>
 </div>
 </div>
 </section>

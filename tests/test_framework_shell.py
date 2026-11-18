@@ -26,7 +26,7 @@ def test_nav_covers_the_classic_tabs() -> None:
     check = _load("check_at5")
     # PLAT-1: the California pages sit under /california/ (nav paths and built page names).
     assert {
-        "california/experts",
+        "california/authors",
         "california/institutions",
         "california/monitoring",
         "california/funding",

@@ -85,7 +85,7 @@ def test_status_page_renders_run_names_as_text() -> None:
 def test_footer_and_about_corrections_are_mailto_links_without_target() -> None:
     config = _text(ROOT / "framework" / "observablehq.config.js")
     about = _text(ROOT / "framework" / "src" / "california" / "about.md")
-    experts = _text(ROOT / "framework" / "src" / "california" / "experts.md")
+    authors = _text(ROOT / "framework" / "src" / "california" / "authors.md")
     classic = _text(ROOT / "site" / "index.html")
     assert (
         f'<a href="mailto:{EMAIL}?subject=Atlas%20data%20correction" rel="external">'
@@ -95,12 +95,12 @@ def test_footer_and_about_corrections_are_mailto_links_without_target() -> None:
         f'<a href="mailto:{EMAIL}?subject=Atlas%20data%20correction" rel="external">'
         f"email {EMAIL}</a>" in about
     )
-    assert '<a id="drawer-issue-link" class="atlas-btn atlas-btn--ghost" href="mailto:' in experts
+    assert '<a id="drawer-issue-link" class="atlas-btn atlas-btn--ghost" href="mailto:' in authors
     # Framework adds target="_blank" to every scheme link unless rel="external" opts it out.
     for name, text in (
         ("observablehq.config.js", config),
         ("about.md", about),
-        ("experts.md", experts),
+        ("authors.md", authors),
         ("index.html", classic),
     ):
         for anchor in MAILTO_ANCHOR.findall(text):

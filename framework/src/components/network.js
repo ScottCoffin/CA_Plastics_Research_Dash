@@ -66,7 +66,7 @@ function expertUrl(id) {
 
 // Profile link for the side panel: the Framework experts page with the author in the hash.
 function profileUrl(id) {
-  return new URL(`experts#author=${encodeURIComponent(id)}`, document.baseURI).href;
+  return new URL(`authors#author=${encodeURIComponent(id)}`, document.baseURI).href;
 }
 
 function textEl(tag, text, className = "") {
@@ -172,7 +172,7 @@ export async function mountNetwork() {
     (edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target) && edge.source !== edge.target
   );
   if (!nodes.length) {
-    message.textContent = "The network export has no experts.";
+    message.textContent = "The network export has no authors.";
     status.textContent = "No network data.";
     return;
   }
@@ -375,7 +375,7 @@ export async function mountNetwork() {
         );
       })
       .join("");
-    caption.textContent = `${formatCount(rows.length)} experts shown, most collaborators first.`;
+    caption.textContent = `${formatCount(rows.length)} authors shown, most collaborators first.`;
   }
 
   function addFact(list, term, detail) {
@@ -387,7 +387,7 @@ export async function mountNetwork() {
     panel.replaceChildren();
     const node = selectedId === null ? null : byId.get(selectedId);
     if (!node) {
-      panel.append(textEl("p", "Select a dot on the chart, or search for a name, to see that expert's collaborations here.", "net-panel-note"));
+      panel.append(textEl("p", "Select a dot on the chart, or search for a name, to see that author's collaborations here.", "net-panel-note"));
       return;
     }
     // The close button clears the selection, which folds the panel away in full screen (VD-28).
@@ -401,7 +401,7 @@ export async function mountNetwork() {
     head.append(close);
     panel.append(head);
     if (!model.visible.has(node.id)) {
-      panel.append(textEl("p", "This expert is hidden by the current filters or legend. Reset the filters to see them on the chart.", "net-panel-note"));
+      panel.append(textEl("p", "This author is hidden by the current filters or legend. Reset the filters to see them on the chart.", "net-panel-note"));
     }
     const facts = document.createElement("dl");
     facts.className = "net-facts";
@@ -430,7 +430,7 @@ export async function mountNetwork() {
       }
       panel.append(list);
     }
-    const link = textEl("a", "Open expert profile", "net-profile-link");
+    const link = textEl("a", "Open author profile", "net-profile-link");
     link.href = profileUrl(node.id);
     panel.append(link);
   }
@@ -518,8 +518,8 @@ export async function mountNetwork() {
     search.setAttribute("aria-expanded", String(rows.length > 0));
     search.removeAttribute("aria-activedescendant");
     searchStatus.textContent = rows.length
-      ? `${rows.length} matching ${rows.length === 1 ? "expert" : "experts"}. Use the arrow keys to choose one.`
-      : "No matching experts.";
+      ? `${rows.length} matching ${rows.length === 1 ? "author" : "authors"}. Use the arrow keys to choose one.`
+      : "No matching authors.";
   }
 
   // The expert the search last chose. Leaving the box after a choice must not choose it again, or
@@ -576,7 +576,7 @@ export async function mountNetwork() {
         button.setAttribute("aria-pressed", String(!hiddenGroups.has(group.key)));
         const swatch = textEl("span", "", "net-swatch");
         swatch.style.background = group.colour;
-        button.append(swatch, textEl("span", `${group.label} (${formatCount(group.count)} experts)`));
+        button.append(swatch, textEl("span", `${group.label} (${formatCount(group.count)} authors)`));
         button.addEventListener("click", () => {
           if (hiddenGroups.has(group.key)) hiddenGroups.delete(group.key);
           else hiddenGroups.add(group.key);
@@ -611,8 +611,8 @@ export async function mountNetwork() {
     const links = attrs.edges.length;
     status.textContent =
       experts === 0
-        ? "No experts match these filters. Use Reset filters to see the whole network."
-        : `${formatCount(experts)} experts, ${formatCount(links)} links shown`;
+        ? "No authors match these filters. Use Reset filters to see the whole network."
+        : `${formatCount(experts)} authors, ${formatCount(links)} links shown`;
     renderTable(model.visible);
     refreshHighlight();
     if (selectedId !== null) renderPanel();
@@ -800,7 +800,7 @@ export async function mountNetwork() {
     updateClusterLabels();
   } catch (error) {
     showFallback(
-      "The network graphic could not start in this browser, so the table below lists the same experts."
+      "The network graphic could not start in this browser, so the table below lists the same authors."
     );
   }
 }

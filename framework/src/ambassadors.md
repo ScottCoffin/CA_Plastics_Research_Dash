@@ -11,13 +11,13 @@ ambassador does). Real onboarding comes later. -->
 
 # Become a local ambassador
 
-Plastiverse Live grows region by region with local experts and community leaders who guide what
+Plastiverse Live grows region by region with local researchers and community leaders who guide what
 we collect and check it. Ambassador onboarding opens soon.
 
 ## What an ambassador does
 
 <ul class="pv-roles">
-  <li><strong>Check local institutions and experts.</strong> Confirm that the universities, agencies and researchers listed for your region are the right ones, and flag who is missing.</li>
+  <li><strong>Check local institutions and authors.</strong> Confirm that the universities, agencies and researchers listed for your region are the right ones, and flag who is missing.</li>
   <li><strong>Find community groups and networks.</strong> Point us to the local organisations, coalitions and research networks working on plastic pollution.</li>
   <li><strong>Add local monitoring data.</strong> Help find and describe monitoring datasets for your region, so they can be added with their licences.</li>
   <li><strong>Identify local policy goals.</strong> Tell us which laws, plans and targets matter where you live, so the policy timeline reflects them.</li>

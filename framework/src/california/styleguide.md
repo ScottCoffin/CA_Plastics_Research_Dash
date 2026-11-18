@@ -25,9 +25,9 @@ import "../components/shared/topics.js";
 ## Pills and buttons
 
 <div class="atlas-card">
-  <p><span class="atlas-pill atlas-pill--brand">${icon("person")} <strong>2,614</strong> experts</span> <span class="atlas-pill">California-connected research</span></p>
+  <p><span class="atlas-pill atlas-pill--brand">${icon("person")} <strong>2,614</strong> authors</span> <span class="atlas-pill">California-connected research</span></p>
   <div class="atlas-demo-row" role="group" aria-label="Button examples">
-    <button class="atlas-btn atlas-btn--primary" type="button">${icon("search")} Browse experts</button>
+    <button class="atlas-btn atlas-btn--primary" type="button">${icon("search")} Browse authors</button>
     <button class="atlas-btn atlas-btn--secondary" type="button">${icon("download")} Download table</button>
     <button class="atlas-btn atlas-btn--ghost" type="button">View methods</button>
     <button class="atlas-btn atlas-btn--secondary atlas-btn--icon" type="button" aria-label="Open Atlas help">${icon("info")}</button>
@@ -81,7 +81,7 @@ import "../components/shared/topics.js";
 
 ## Result line and callouts
 
-<p class="atlas-result-line"><span>1,205 of 2,614 experts</span><span class="atlas-result-line__caption">Matching the current example filters</span></p>
+<p class="atlas-result-line"><span>1,205 of 2,614 authors</span><span class="atlas-result-line__caption">Matching the current example filters</span></p>
 
 <p class="atlas-callout atlas-callout--info">${icon("info")} <span><strong>Volume note.</strong> Counts describe indexed works in the current public snapshot.</span></p>
 <p class="atlas-callout atlas-callout--caution">${icon("alert")} <span><strong>Interpret with care.</strong> Topic labels are screening metadata, not a validated ranking of pollution or research quality.</span></p>
@@ -99,7 +99,7 @@ import "../components/shared/topics.js";
 ## Stat tiles
 
 <dl class="atlas-kpis" aria-label="Atlas snapshot statistics">
-  <div class="atlas-kpi"><dt class="atlas-kpi__label">${icon("person")} Experts</dt><dd class="atlas-kpi__value">2,614</dd><dd class="atlas-kpi__note">California-connected researchers</dd></div>
+  <div class="atlas-kpi"><dt class="atlas-kpi__label">${icon("person")} Authors</dt><dd class="atlas-kpi__value">2,614</dd><dd class="atlas-kpi__note">California-connected researchers</dd></div>
   <div class="atlas-kpi"><dt class="atlas-kpi__label">${icon("book")} Works</dt><dd class="atlas-kpi__value">18,420</dd><dd class="atlas-kpi__note">Indexed publication records</dd></div>
   <div class="atlas-kpi atlas-kpi--loading" aria-hidden="true"><dt class="atlas-kpi__label">Loading</dt><dd class="atlas-kpi__value">&mdash;</dd><dd class="atlas-kpi__note">Reserved space</dd></div>
 </dl>
@@ -107,9 +107,9 @@ import "../components/shared/topics.js";
 ## Cards
 
 <div class="atlas-demo-cards">
-  <a class="atlas-entry" href="./experts">
+  <a class="atlas-entry" href="./authors">
     <span class="atlas-entry__icon">${icon("person")}</span>
-    <span class="atlas-entry__body"><span class="atlas-entry__title">Explore experts</span><span class="atlas-entry__text">Browse researchers connected to California plastics work and open an expert profile.</span><span class="atlas-entry__meta">2,614 researchers</span></span>
+    <span class="atlas-entry__body"><span class="atlas-entry__title">Explore authors</span><span class="atlas-entry__text">Browse researchers connected to California plastics work and open an author profile.</span><span class="atlas-entry__meta">2,614 researchers</span></span>
   </a>
   <a class="atlas-task" href="./evidence">
     <span class="atlas-entry__icon">${icon("grid")}</span>

@@ -30,7 +30,7 @@ import {
 const $ = (id) => document.getElementById(id);
 const FILTER_IDS = ["expert-search", "institution-type-filter", "institution-filter", "tag-filter", "year-from", "year-to", "ca-basis-filter", "oa-filter", "now-filter", "expert-sort", "early-filter"];
 const OVERSCAN = 4;
-const LOADING_HTML = '<p class="expert-state-message"><span class="expert-spinner" aria-hidden="true"></span>Loading experts…</p>';
+const LOADING_HTML = '<p class="expert-state-message"><span class="expert-spinner" aria-hidden="true"></span>Loading authors…</p>';
 const EMPTY_RESULTS_HTML = `<p class="expert-state-message">${EMPTY_MATCH_TEXT}</p><button id="expert-state-reset" class="atlas-btn atlas-btn--secondary" type="button">Reset filters</button>`;
 
 const state = {
@@ -372,13 +372,13 @@ function exportCsv() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "ca-plastics-atlas-experts.csv";
+  link.download = "ca-plastics-atlas-authors.csv";
   link.click();
   URL.revokeObjectURL(url);
 }
 
 async function loadData() {
-  $("expert-count").textContent = "Loading experts…";
+  $("expert-count").textContent = "Loading authors…";
   $("expert-list").hidden = true;
   setStatePanel(LOADING_HTML);
   try {

@@ -50,7 +50,7 @@ CAPTIONS = (
     "Plastics research now comes from almost every country.",
     "Local knowledge and connections matter.",
     "Regional atlases zoom in on the people, monitoring, funding and policy of one place. "
-    "Powered by local experts and community leaders.",
+    "Powered by local researchers and community leaders.",
     "Join the movement, and become a local ambassador",
     "California is live; Norway is next.",
 )

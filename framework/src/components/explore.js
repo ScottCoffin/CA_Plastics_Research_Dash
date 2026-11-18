@@ -216,7 +216,7 @@ export async function mountExplore(root) {
   const ordinal = (n) => n + (["th", "st", "nd", "rd"][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] || "th");
 
   // ---- tabs ----------------------------------------------------------------------------
-  const TABS = [["countries", "Countries"], ["evidence", "Evidence map"], ["trend", "Trend"], ["experts", "Experts"], ["institutions", "Institutions"], ["network", "Network"], ["works", "Works"]];
+  const TABS = [["countries", "Countries"], ["evidence", "Evidence map"], ["trend", "Trend"], ["experts", "Authors"], ["institutions", "Institutions"], ["network", "Network"], ["works", "Works"]];
   const viewLabel = (id) => (id === "countries" && scope.kind === "country" ? "Overview" : TABS.find((t) => t[0] === id)[1]);
   function renderTabs() {
     $("#tabs").innerHTML = TABS.map(([id]) => `<button type="button" role="tab" class="tab" id="tab-${id}" aria-controls="panel-${id}" aria-selected="${id === tab}" tabindex="${id === tab ? 0 : -1}">${viewLabel(id)}</button>`).join("");
@@ -479,8 +479,8 @@ export async function mountExplore(root) {
   function overview(el) {
     const c = C[scope.iso], s = S[scope.iso], partners = partnersOf(scope.iso), at = ATLAS[scope.iso];
     const atlas = at ? (at.status === "live"
-      ? `<a class="atlasbox" href="${at.href}"><i class="sw live"></i><span><b>California has a live regional atlas.</b><small>Experts, institutions, monitoring, funding and policy, rebuilt daily · <span class="m">${fmt(at.works)}</span> works</small></span><span class="go">Open atlas ${ARROW}</span></a>`
-      : `<a class="atlasbox prep" href="${at.href}"><i class="sw prep"></i><span><b>A Norway atlas is in preparation.</b><small>Local experts check institutions, monitoring and policy before it goes live.</small></span><span class="go quiet">Help build it ${ARROW}</span></a>`) : "";
+      ? `<a class="atlasbox" href="${at.href}"><i class="sw live"></i><span><b>California has a live regional atlas.</b><small>Authors, institutions, monitoring, funding and policy, rebuilt daily · <span class="m">${fmt(at.works)}</span> works</small></span><span class="go">Open atlas ${ARROW}</span></a>`
+      : `<a class="atlasbox prep" href="${at.href}"><i class="sw prep"></i><span><b>A Norway atlas is in preparation.</b><small>Local researchers check institutions, monitoring and policy before it goes live.</small></span><span class="go quiet">Help build it ${ARROW}</span></a>`) : "";
     const yrs = s?.years ? Object.fromEntries(s.years.map((g) => [+g.key, g.count])) : null;
     el.innerHTML = `<h2>${esc(inName(c.iso)).replace(/^the /, "The ")} at a glance.</h2><p class="lede">Every panel below counts works with at least one author in ${esc(inName(c.iso))}.</p><div class="grid2">
     <div class="box"><h3>Works per year</h3><p class="lede">Works with at least one author in ${esc(inName(c.iso))}; ${lastYear} is the year to date.</p>${yrs ? `<div class="chart" id="ov-chart"></div>` : previewNotice("Yearly counts")}</div>
@@ -555,7 +555,7 @@ export async function mountExplore(root) {
   const qExp = {v: ""}, qInst = {v: ""};
   function expertsPanel(el) {
     const s = sampleOf();
-    if (!s?.authors) { el.innerHTML = `<h2>Experts</h2><p class="lede">The most published researchers in ${esc(scopeName())}.</p>${previewNotice("Expert rankings")}`; return wireGo(el); }
+    if (!s?.authors) { el.innerHTML = `<h2>Authors</h2><p class="lede">The most published researchers in ${esc(scopeName())}.</p>${previewNotice("Author rankings")}`; return wireGo(el); }
     rankTable(el, {title: scope.kind === "world" ? "The most published researchers." : `Most published researchers on ${esc(scopeName())} works.`,
       lede: "Ranked by works under the plastics query. Counts are works, not citations or quality.",
       items: s.authors.map((a, i) => ({...a, rank: i + 1})), unit: "works", linkBase: "https://openalex.org/authors/", q: qExp,

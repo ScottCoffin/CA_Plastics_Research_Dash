@@ -102,7 +102,7 @@ def test_network_page_header_caveat_disclosure_and_cards_are_present() -> None:
     assert "How to read the network" in page
     assert "zoom" in page and "drag" in page and "search" in page and "Click a dot" in page
     assert (
-        '<section id="network-panel" class="net-panel atlas-card" aria-label="Selected expert">'
+        '<section id="network-panel" class="net-panel atlas-card" aria-label="Selected author">'
         in page
     )
     assert '<aside id="network-panel"' not in page

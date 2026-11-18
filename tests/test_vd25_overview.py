@@ -18,7 +18,7 @@ REFERENCE = ROOT / "docs" / "design" / "intro_option_plane.html"
 
 # Plane, route and door title, in the reference order: researchers, monitoring, funding, evidence.
 DOORS = [
-    ("people", "./experts", "Find a researcher"),
+    ("people", "./authors", "Find a researcher"),
     ("water", "./monitoring", "Check monitoring data"),
     ("money", "./funding", "See funding"),
     ("evidence", "./evidence", "Explore the evidence"),
@@ -26,7 +26,7 @@ DOORS = [
 BANDS = ["people", "water", "money", "evidence"]
 BAND_LINKS = {
     "people": [
-        ("Experts", "./experts"),
+        ("Authors", "./authors"),
         ("Collaboration network", "./network"),
         ("Institutions", "./institutions"),
     ],
@@ -59,7 +59,7 @@ REFERENCE_COPY = [
     "verified sources",
     "plastic-related awards",
     "plastic-related works",
-    "experts in the network",
+    "authors in the network",
 ]
 SCHEDULE_JOBS = [
     "Keepalive",

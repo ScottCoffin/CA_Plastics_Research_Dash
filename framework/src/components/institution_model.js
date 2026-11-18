@@ -359,7 +359,7 @@ export function contributorSummary(network) {
     : "The consortium lists its contributors";
   const updated = date ? ` (page updated ${date})` : "";
   const atlas = atlasCount === 0
-    ? "none have Atlas expert profiles"
-    : `${atlasCount} ${atlasCount === 1 ? "has an Atlas expert profile" : "have Atlas expert profiles"}`;
+    ? "none have Atlas author profiles"
+    : `${atlasCount} ${atlasCount === 1 ? "has an Atlas author profile" : "have Atlas author profiles"}`;
   return `${lead}${updated}; ${atlas}.`;
 }

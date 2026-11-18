@@ -242,16 +242,16 @@ assert.equal(formatRosterDate("29 Oct 2026"), "");
 assert.equal(formatRosterDate(undefined), "");
 assert.equal(
   contributorSummary(consortium),
-  "The consortium lists 14 contributors (page updated 29 Oct 2026); 6 have Atlas expert profiles.",
+  "The consortium lists 14 contributors (page updated 29 Oct 2026); 6 have Atlas author profiles.",
 );
 assert.equal(
   contributorSummary({listed_contributor_count: 1, roster_as_of: "2026-01-05", atlas_contributors: [atlasPeople[0]]}),
-  "The consortium lists 1 contributor (page updated 5 Jan 2026); 1 has an Atlas expert profile.",
+  "The consortium lists 1 contributor (page updated 5 Jan 2026); 1 has an Atlas author profile.",
   "singular forms",
 );
 assert.equal(
   contributorSummary({listed_contributor_count: 3, roster_as_of: "2026-02-30", atlas_contributors: []}),
-  "The consortium lists 3 contributors; none have Atlas expert profiles.",
+  "The consortium lists 3 contributors; none have Atlas author profiles.",
   "an invalid roster date leaves out the page-updated note",
 );
 assert.equal(contributorSummary({listed_contributor_count: null, roster_as_of: "2026-10-29", atlas_contributors: []}), "", "nothing known, nothing said");

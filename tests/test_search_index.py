@@ -68,7 +68,7 @@ GLOSSARY_MD = (
 CONFIG_JS = """
 const PAGE_GROUPS = [
   {name: "Explore", pages: [
-    {name: "Experts", path: "/california/experts"},
+    {name: "Authors", path: "/california/authors"},
     {name: "Institutions", path: "/california/institutions"},
   ]},
   {name: "Reference", pages: [
@@ -82,7 +82,7 @@ def build(**overrides):
     sources = {
         "generated_at": "2026-11-16T04:41:04+00:00",
         "pages": [
-            ("Experts", "Explore", "california/experts"),
+            ("Authors", "Explore", "california/authors"),
             ("Glossary", "Reference", "california/glossary"),
         ],
         "authors": AUTHORS,
@@ -137,7 +137,7 @@ def test_build_is_deterministic_whatever_the_input_order() -> None:
 def test_every_type_is_built_with_its_own_source() -> None:
     index = build()
 
-    assert [item[1] for item in by_type(index, "page")] == ["Overview", "Experts", "Glossary"]
+    assert [item[1] for item in by_type(index, "page")] == ["Overview", "Authors", "Glossary"]
     assert [item[1] for item in by_type(index, "expert")] == ["Ana Rochman", "Zoe Análisis"]
     assert [item[1] for item in by_type(index, "institution")] == ["Davis Lab"]
     assert {item[1] for item in by_type(index, "topic")} == {"Air & atmosphere", "Air"}
@@ -159,13 +159,13 @@ def test_hrefs_use_the_route_each_page_reads() -> None:
 
     assert "california/expert.html#author=A2" in hrefs
     assert "california/institution#inst=I9" in hrefs
-    assert "california/experts#tag=air" in hrefs
-    assert "california/experts#tag=matrix%3Aair" in hrefs
+    assert "california/authors#tag=air" in hrefs
+    assert "california/authors#tag=matrix%3Aair" in hrefs
     assert "california/funding#fa=NSF" in hrefs
     assert "california/funding#q=National+Science+Foundation" in hrefs
     assert "california/glossary#access-tiers" in hrefs
     assert "https://www.globalplasticlaws.org/" in hrefs
-    assert "california/experts" in hrefs
+    assert "california/authors" in hrefs
     assert not any(href.startswith("/") for href in hrefs)
 
 
@@ -202,7 +202,7 @@ def test_experts_without_an_id_or_name_are_skipped() -> None:
 
 def test_parsers_read_the_config_glossary_and_label_tables() -> None:
     assert parse_page_groups(CONFIG_JS) == [
-        ("Experts", "Explore", "california/experts"),
+        ("Authors", "Explore", "california/authors"),
         ("Institutions", "Explore", "california/institutions"),
         ("Glossary", "Reference", "california/glossary"),
     ]
@@ -230,7 +230,7 @@ def test_real_nav_pages_exclude_the_results_page() -> None:
     config = (FW / "observablehq.config.js").read_text(encoding="utf-8")
     pages = [path for _, _, path in parse_page_groups(config)]
 
-    assert "california/experts" in pages and "california/glossary" in pages
+    assert "california/authors" in pages and "california/glossary" in pages
     assert "california/search" not in pages
     assert "/search" not in (ROOT / "site" / "llms.txt").read_text(encoding="utf-8")
     assert '"/search"' not in (ROOT / "src" / "atlas" / "build" / "seo.py").read_text(
@@ -272,7 +272,7 @@ def test_client_has_no_imports_and_implements_the_combobox_contract() -> None:
         assert attribute in script
     assert 'role: "listbox"' in script
     assert "search#" in script
-    assert "experts#" in script
+    assert "authors#" in script
     assert "PER_GROUP = 5" in script
     assert "data/search_index.json" in script
     assert script.isascii()

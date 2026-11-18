@@ -157,7 +157,7 @@ function headerHtml(institution) {
 function tilesHtml(stats) {
   const tiles = [
     ["Plastic-related works", fmt(stats.plasticWorks), ""],
-    ["Experts", fmt(stats.experts), ""],
+    ["Authors", fmt(stats.experts), ""],
     ["Citations to these works", fmt(stats.citations), ""],
     ["Open access", percent(stats.oaShare), "share of works"],
     ["California-led", percent(stats.caLedShare), "share of works"],
@@ -226,13 +226,13 @@ function updateTable() {
 
 function leadsHtml() {
   const rows = leadAuthors(state.experts, state.works);
-  if (!rows.length) return `<p class="empty">No experts are listed for this institution yet.</p>`;
+  if (!rows.length) return `<p class="empty">No authors are listed for this institution yet.</p>`;
   const expanded = state.leadsExpanded;
   const shown = expanded ? rows : rows.slice(0, LEAD_AUTHOR_LIMIT);
   const api = topics();
   const body = shown.map((row) => {
     const name = row.inAtlas
-      ? `<a href="${escapeHtml(appUrl(`experts#author=${encodeURIComponent(row.author_id)}`))}">${escapeHtml(row.name)}</a>`
+      ? `<a href="${escapeHtml(appUrl(`authors#author=${encodeURIComponent(row.author_id)}`))}">${escapeHtml(row.name)}</a>`
       : escapeHtml(row.name);
     const years = row.firstYear === null || row.lastYear === null ? "—" : `${row.firstYear}–${row.lastYear}`;
     const chips = row.topTopics.map((entry) => api.chip(entry.tag, entry.count)).join(" ");
@@ -242,7 +242,7 @@ function leadsHtml() {
   const toggle = rows.length > LEAD_AUTHOR_LIMIT
     ? `<p><button type="button" class="inst-button" data-leads-toggle aria-expanded="${expanded}">${expanded ? "Show fewer" : `Show all ${fmt(rows.length)}`}</button></p>`
     : "";
-  return `<div class="inst-table-scroll"><table class="inst-table"><caption>Experts ranked by works at this institution</caption>`
+  return `<div class="inst-table-scroll"><table class="inst-table"><caption>Authors ranked by works at this institution</caption>`
     + `<thead><tr><th scope="col">Name</th><th scope="col" class="num">Works here</th><th scope="col" class="num">First author</th>`
     + `<th scope="col" class="num">Last author</th><th scope="col">Active years</th><th scope="col">Top topics</th></tr></thead>`
     + `<tbody>${body}</tbody></table></div>${toggle}`;
@@ -329,8 +329,8 @@ function hostedNetworkHtml(network) {
     ? `<p class="inst-network-label">Focus areas</p><ul class="inst-network-focus">${network.focus_areas.map((area) => `<li class="inst-chip">${escapeHtml(area)}</li>`).join("")}</ul>`
     : "";
   const people = network.atlas_contributors.length
-    ? linkListHtml("Contributors with Atlas expert profiles", network.atlas_contributors.map((person) =>
-      `<li><a href="${escapeHtml(appUrl(`experts#author=${encodeURIComponent(person.author_id)}`))}">${escapeHtml(person.name)}</a></li>`))
+    ? linkListHtml("Contributors with Atlas author profiles", network.atlas_contributors.map((person) =>
+      `<li><a href="${escapeHtml(appUrl(`authors#author=${encodeURIComponent(person.author_id)}`))}">${escapeHtml(person.name)}</a></li>`))
     : "";
   const summary = contributorSummary(network);
   const related = network.related_links.length

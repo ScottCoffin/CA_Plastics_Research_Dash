@@ -12,7 +12,7 @@ FW_SRC = ROOT / "framework" / "src"
 MODEL = FW_SRC / "components" / "experts_model.js"
 COMPONENT = FW_SRC / "components" / "experts.js"
 CSS = FW_SRC / "components" / "experts.css"
-EXPERTS_PAGE = FW_SRC / "california" / "experts.md"
+EXPERTS_PAGE = FW_SRC / "california" / "authors.md"
 GLOSSARY = FW_SRC / "california" / "glossary.md"
 CLASSIC = ROOT / "site" / "index.html"
 PROFILE = ROOT / "site" / "california" / "expert.html"
@@ -122,7 +122,7 @@ def test_glossary_entry_has_anchor_and_definition() -> None:
     entry = glossary.split('<dt id="current-affiliation">', 1)[1].split("<dt ", 1)[0]
     assert "OpenAlex" in entry
     assert "California institution registry" in entry
-    assert "latest year OpenAlex lists the expert at a California institution" in entry
+    assert "latest year OpenAlex lists the author at a California institution" in entry
 
 
 def test_badge_contrast_meets_aa_in_every_surface() -> None:

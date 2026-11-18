@@ -11,7 +11,7 @@
   var PER_GROUP = 5;
   var GROUP_NAMES = {
     page: "Pages",
-    expert: "Experts",
+    expert: "Authors",
     institution: "Institutions",
     topic: "Topics",
     funder: "Funders and agencies",
@@ -146,7 +146,7 @@
   }
 
   function expertsUrl(query) {
-    return new URL("california/experts#" + new URLSearchParams({search: query}).toString(), BASE).href;
+    return new URL("california/authors#" + new URLSearchParams({search: query}).toString(), BASE).href;
   }
 
   function formOf(target) {
@@ -261,7 +261,7 @@
       },
       function () {
         hideList(state);
-        state.status.textContent = "Search is unavailable. Press Enter to search the experts list.";
+        state.status.textContent = "Search is unavailable. Press Enter to search the authors list.";
       }
     );
   }
@@ -423,7 +423,7 @@
         },
         function () {
           status.textContent =
-            "The search index could not be loaded. Browse the Experts page or try again later.";
+            "The search index could not be loaded. Browse the Authors page or try again later.";
         }
       );
     }

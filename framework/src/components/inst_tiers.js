@@ -25,7 +25,7 @@ export const instTiers = Object.freeze({
   },
   rowHtml(r, g) {
     const e = this.esc;
-    return `<li class="tier-row"><button class="tier-name" type="button" data-institution-id="${e(r.inst_id)}" title="View experts at ${e(r.name)}">${e(r.name)}</button><span class="chip">${e(r.atlas_type || "other")}</span><span class="tier-full">${r.works_full} works (full count)</span><span class="tier-frac">${this.fmt(r.works_frac)} (${this.fmt(r.frac_lo)}–${this.fmt(r.frac_hi)}) ${this.rangeSvg(r, g.scaleMin, g.scaleMax)}</span><span class="tier-rank">${this.rankText(r)}</span></li>`;
+    return `<li class="tier-row"><button class="tier-name" type="button" data-institution-id="${e(r.inst_id)}" title="View authors at ${e(r.name)}">${e(r.name)}</button><span class="chip">${e(r.atlas_type || "other")}</span><span class="tier-full">${r.works_full} works (full count)</span><span class="tier-frac">${this.fmt(r.works_frac)} (${this.fmt(r.frac_lo)}–${this.fmt(r.frac_hi)}) ${this.rangeSvg(r, g.scaleMin, g.scaleMax)}</span><span class="tier-rank">${this.rankText(r)}</span></li>`;
   },
   tiersHtml(rows, type) {
     const groups = this.groupTiers(rows, type);

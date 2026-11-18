@@ -24,7 +24,7 @@ def test_framework_experts_runtime() -> None:
 
 
 def test_removed_preset_and_url_pill_stay_removed() -> None:
-    page = (ROOT / "framework" / "src" / "california" / "experts.md").read_text(encoding="utf-8")
+    page = (ROOT / "framework" / "src" / "california" / "authors.md").read_text(encoding="utf-8")
     component = (ROOT / "framework" / "src" / "components" / "experts.js").read_text(
         encoding="utf-8"
     )
@@ -38,7 +38,7 @@ def test_removed_preset_and_url_pill_stay_removed() -> None:
 
 
 def test_more_filters_use_equal_columns_and_a_select_height_checkbox() -> None:
-    page = (ROOT / "framework" / "src" / "california" / "experts.md").read_text(encoding="utf-8")
+    page = (ROOT / "framework" / "src" / "california" / "authors.md").read_text(encoding="utf-8")
     css = (ROOT / "framework" / "src" / "components" / "experts.css").read_text(encoding="utf-8")
     assert '<div class="atlas-filters__grid expert-more-grid">' in page
     assert (

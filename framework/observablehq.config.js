@@ -21,7 +21,7 @@ const CA_MARK = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK).toString(
 const FAVICON = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK.replace(' aria-hidden="true" focusable="false"', "")).toString("base64");
 const PAGE_GROUPS = [
   {name: "Explore", pages: [
-    {name: "Experts", path: "/california/experts"},
+    {name: "Authors", path: "/california/authors"},
     {name: "Collaboration network", path: "/california/network"},
     {name: "Institutions", path: "/california/institutions"},
   ]},
@@ -40,7 +40,7 @@ const PAGE_GROUPS = [
   ]},
 ];
 // Framework resolves header and footer links against the site root and then makes them relative
-// to each page, so these fragments always write root-relative links ("./california/experts").
+// to each page, so these fragments always write root-relative links ("./california/authors").
 const PAGE_LABELS = new Map(PAGE_GROUPS.flatMap(({name, pages}) => pages.map(({name: label, path}) => [path, [label, name]])));
 
 // VD-21: the four PAGE_GROUPS as disclosure buttons for the desktop header (hidden at <= 52rem, where
@@ -107,7 +107,7 @@ function atlasHeader({title, path}) {
     '<a class="atlas-header__brand" href="./california/"><img src="' + CA_MARK + '" alt=""><span>CA Plastics Research Atlas</span></a>' +
     topNav(path) +
     '<nav class="atlas-header__breadcrumb" aria-label="Page location">' + breadcrumb + '</nav>' +
-    '<form class="atlas-header__search" action="./search" method="get" role="search" data-atlas-site-search><label for="atlas-header-search-input">Search the Atlas</label><input id="atlas-header-search-input" name="q" type="search" placeholder="Search experts, institutions, topics, funders…" autocomplete="off"><button type="submit">Search</button></form>' +
+    '<form class="atlas-header__search" action="./search" method="get" role="search" data-atlas-site-search><label for="atlas-header-search-input">Search the Atlas</label><input id="atlas-header-search-input" name="q" type="search" placeholder="Search authors, institutions, topics, funders…" autocomplete="off"><button type="submit">Search</button></form>' +
     '<button id="atlas-search-toggle" class="atlas-search-toggle" type="button" aria-label="Show search" aria-controls="atlas-header-search-input" aria-expanded="false"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></button>' +
     '<script>document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("observablehq-sidebar-toggle"),b=document.getElementById("atlas-menu-button");if(t&&b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))});document.addEventListener("click",e=>{const m=e.target.closest("#atlas-menu-button"),s=e.target.closest("#atlas-search-toggle"),t=document.getElementById("observablehq-sidebar-toggle");if(m&&t){t.click();m.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}if(s){const h=document.getElementById("observablehq-header"),i=document.getElementById("atlas-header-search-input"),x=s.getAttribute("aria-expanded")!=="true";h.classList.toggle("atlas-search-open",x);s.setAttribute("aria-expanded",String(x));s.setAttribute("aria-label",x?"Hide search":"Show search");if(x)i.focus()}if(t&&e.target===t){const b=document.getElementById("atlas-menu-button");if(b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}});' + TOP_NAV_JS + '</script>';
 }

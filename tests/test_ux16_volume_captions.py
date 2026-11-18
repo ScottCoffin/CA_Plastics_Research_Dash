@@ -9,7 +9,7 @@ import pytest
 SRC = Path(__file__).resolve().parents[1] / "framework" / "src"
 
 
-@pytest.mark.parametrize("page", ["experts.md", "funding.md", "evidence.md"])
+@pytest.mark.parametrize("page", ["authors.md", "funding.md", "evidence.md"])
 def test_count_views_have_volume_caption(page: str) -> None:
     text = (SRC / "california" / page).read_text(encoding="utf-8")
     assert text.count('class="data-note volume-caption"') == 1, page

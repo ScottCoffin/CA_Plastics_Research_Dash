@@ -53,7 +53,7 @@ DESIGN_CSS = ("design/tokens.css", "design/shell.css", "design/components.css")
 CA = "california/"
 ROUTES: dict[str, str] = {
     "home": CA,
-    "experts": CA + "experts",
+    "experts": CA + "authors",  # baseline key kept; the page moved to /authors (BQ-R1)
     "network": CA + "network",
     "institutions": CA + "institutions",
     "institution": CA + "institution#inst=I84218800",

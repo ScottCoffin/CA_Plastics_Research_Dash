@@ -1024,7 +1024,7 @@ const PICKER_HTML = `<div class="plv-pk-h">Pick a region <span>2 regions</span><
 <a class="plv-row live" href="./california/"><div class="plv-sw l"></div><div><b>California</b><br><small>live atlas, daily build</small></div><div class="plv-go">Open atlas <svg width="14" height="10" viewBox="0 0 14 10" aria-hidden="true"><path d="M1 5h11M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div></a>
 <a class="plv-row" href="./ambassadors"><div class="plv-sw s"></div><div>Norway<br><small>in preparation</small></div><div class="plv-go quiet">Help build it</div></a>
 <a class="plv-row" href="./ambassadors"><div class="plv-sw r"></div><div>Your region<br><small>opens on request</small></div><div class="plv-go quiet">Request</div></a>
-<p class="plv-pk-note">Regions open where people ask for them. Each needs local experts to guide the sources and check the data before it goes live.</p>`;
+<p class="plv-pk-note">Regions open where people ask for them. Each needs local researchers to guide the sources and check the data before it goes live.</p>`;
 
 export function mountPickers(root) {
   root.querySelectorAll("[data-plv='picker']").forEach((el) => (el.innerHTML = PICKER_HTML));

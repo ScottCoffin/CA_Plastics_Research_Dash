@@ -330,7 +330,7 @@ def test_host_institution_page_shows_network_disclosure_and_sub_organization(tmp
     assert "<h2>Research networks</h2>" in html
     assert f"<li>{NET_LINK} — hosted here</li>" in html
     assert f"<p>Disclosure: {NET_DISCLOSURE}</p>" in html
-    assert html.index("Research networks") < html.index("Top experts")
+    assert html.index("Research networks") < html.index("Top authors")
     assert _jsonld(html)["subOrganization"] == [
         {
             "@type": "Organization",

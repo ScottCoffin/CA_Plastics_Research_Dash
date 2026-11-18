@@ -37,7 +37,7 @@ head: |
   <a class="opt live" href="./california/"><i class="sw live"></i><span>California<small>live atlas, daily build</small></span><span class="go">Open atlas <svg class="i" viewBox="0 0 14 10" aria-hidden="true"><path d="M1 5h11M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span></a>
   <a class="opt" href="./ambassadors"><i class="sw prep"></i><span>Norway<small>in preparation</small></span><span class="go quiet">Help build it</span></a>
   <a class="opt" href="./ambassadors"><i class="sw ask"></i><span>Your region<small>opens on request</small></span><span class="go quiet">Request</span></a>
-  <p class="pop-note">Every country already has an automatic profile here. A regional atlas adds local experts, monitoring, funding and policy.</p>
+  <p class="pop-note">Every country already has an automatic profile here. A regional atlas adds local researchers, monitoring, funding and policy.</p>
 </div>
 <nav class="scope" aria-label="Scope">
   <div class="wrap">

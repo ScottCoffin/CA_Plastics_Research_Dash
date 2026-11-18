@@ -31,14 +31,14 @@ def _assert_no_skips(levels: list[int]) -> None:
 
 
 def test_experts_and_funding_have_one_visible_h1():
-    for rel in ("california/experts.md", "california/funding.md"):
+    for rel in ("california/authors.md", "california/funding.md"):
         text = _read(rel)
         assert re.search(r"<h1>[^<]+</h1>", text), f"{rel} needs a visible h1"
-        assert "<h2>Experts</h2>" not in text and "<h2>Funding</h2>" not in text
+        assert "<h2>Authors</h2>" not in text and "<h2>Funding</h2>" not in text
 
 
 def test_experts_page_heading_order_has_no_skips():
-    _assert_no_skips(_levels_in_order(_read("california/experts.md")))
+    _assert_no_skips(_levels_in_order(_read("california/authors.md")))
 
 
 def test_funding_page_heading_order_has_no_skips():
@@ -59,7 +59,7 @@ def test_institution_runtime_headings_follow_h1():
         '${escapeHtml(institutionPageUrl(institution.inst_id))}">'
         "${escapeHtml(institution.name)}</a></h2>"
     ) in js
-    assert '<div class="top-experts"><h3>Top experts</h3>' in js
+    assert '<div class="top-experts"><h3>Top authors</h3>' in js
     assert '<section class="map-inst"><h4>${escapeHtml(institution.name)}</h4>' in js
     assert '<div class="map-details-head"><h3>${metrics.length}' in js
 
@@ -71,8 +71,8 @@ def test_resources_emit_card_names_as_h2():
 
 
 def test_experts_runtime_cards_sit_under_a_section_heading():
-    text = _read("california/experts.md")
-    assert '<h2 class="expert-sr-only">Expert list</h2>' in text
+    text = _read("california/authors.md")
+    assert '<h2 class="expert-sr-only">Author list</h2>' in text
     # Expert cards are emitted as h3 by experts_model.js, so they need an h2 above them.
     assert text.index('<h2 class="expert-sr-only">') < text.index('id="expert-list"')
     assert "<h3><button" in _read("components/experts_model.js")

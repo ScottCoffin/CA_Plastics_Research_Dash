@@ -29,7 +29,7 @@ def test_sidebar_groups_header_search_and_footer_contract() -> None:
     script = (
         f"import({json.dumps(config_uri)}).then(m => {{"
         "const c=m.default;"
-        "process.stdout.write(JSON.stringify({pages:c.pages,header:c.header({title:'Experts',path:'/california/experts'}),footer:c.footer,home:c.home}));"
+        "process.stdout.write(JSON.stringify({pages:c.pages,header:c.header({title:'Authors',path:'/california/authors'}),footer:c.footer,home:c.home}));"
         "})"
     )
     result = subprocess.run(
@@ -49,7 +49,7 @@ def test_sidebar_groups_header_search_and_footer_contract() -> None:
         "Context",
         "Reference",
     ]
-    assert data["pages"][1]["pages"][0] == {"name": "Experts", "path": "/california/experts"}
+    assert data["pages"][1]["pages"][0] == {"name": "Authors", "path": "/california/authors"}
     assert data["pages"][2]["pages"][-1] == {"name": "Evidence map", "path": "/california/evidence"}
     assert "Plastiverse Live" in data["home"]
     assert "CA Plastics Research Atlas" in data["header"]
@@ -98,7 +98,7 @@ def test_shell_css_has_route_icons_and_mobile_controls() -> None:
     css = (FRAMEWORK / "src" / "design" / "shell.css").read_text(encoding="utf-8")
 
     for route in (
-        "experts",
+        "authors",
         "network",
         "institutions",
         "monitoring",
