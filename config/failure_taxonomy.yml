@@ -1,0 +1,255 @@
+# Failure taxonomy for corpus-quality work (A3 BQ-1.2; seeded from REL-1, 2026-11-13).
+#
+# Shared class list for error analysis, the BQ-1.1 error estimators and the review apps.
+# Each class names why a work is wrongly in or out of the corpus. A class never changes a
+# query or a label by itself: a query or label change needs its own decision and the
+# usual version bump (queries.yml versioning).
+#
+# Fields per class:
+# - direction: false_positive (wrongly in) | false_negative (wrongly out) | either
+# - stage: query | labels | abstract_qc | pubmed_qc (where the class is seen or addressed)
+# - status: seeded (named by REL-1 or the A3 spec) | pending_bq_s9 (placeholder until BQ-S9)
+# - detection: an existing repo mechanism where one exists, otherwise "none yet"
+# - source: "REL-1 §<section>" (docs/RELEVANCE_AUDIT_2026-11-13.md), "A3 Module 1" or
+#   "A3 §2" (docs/add_on_spec_3.md), or "repo: <path>" for a class seen only in repo code.
+#   Separate several sources with "; ".
+#
+# Stage values are proposals for orchestrator review (see the BQ-1.2 report).
+version: failure-taxonomy-v1
+status: draft
+
+classes:
+  - id: plasticity_collision
+    label: "Plasticity collision (soil, metal, neural)"
+    direction: false_positive
+    definition: "The stem 'plasticity' or 'microplasticity' is used for soil or landslide mechanics, metal deformation or neural plasticity, not for plastic pollution."
+    examples:
+      - "soil plasticity"
+      - "metal microplasticity"
+      - "serotonin pharmacology (neural sense inferred; REL-1 names no matched term)"
+    source: "A3 §2; REL-1 §Similar mis-tagged works; REL-1 §Relevant works we were losing"
+    detection: "queries.yml exclusions (applied as NOT terms by src/atlas/query.py), e.g. 'microplastic deformation', 'crystal plasticity', 'elastic-plastic', 'dislocation'. The queries.yml notes record that OpenAlex stems 'plastic' to 'plasticity'."
+    stage: query
+    status: seeded
+
+  - id: plastic_surgery
+    label: "Plastic surgery"
+    direction: false_positive
+    definition: "The bare word 'plastic' matches medical plastic surgery, which has no plastics-pollution or materials content."
+    examples:
+      - "plastic surgery"
+    source: "A3 §2; REL-1 §Similar mis-tagged works"
+    detection: "none yet; a query exclusion would change the query version (queries.yml versioning)"
+    stage: query
+    status: seeded
+
+  - id: plastic_responses
+    label: "Plastic responses (phenotypic plasticity wording)"
+    direction: false_positive
+    definition: "The ecology phrase 'plastic responses' (phenotypic plasticity) matches the bare word 'plastic' and has no plastics-pollution content."
+    examples:
+      - "'plastic responses' in ecology"
+    source: "A3 §2; REL-1 §Similar mis-tagged works"
+    detection: "none yet"
+    stage: query
+    status: seeded
+
+  - id: litter_beetles
+    label: "Litter beetles (leaf-litter ecology)"
+    direction: false_positive
+    definition: "Invertebrate ecology in leaf litter matches a litter term in the core rule, although the work is not about litter pollution."
+    examples:
+      - "litter beetles"
+    source: "A3 §2; REL-1 §Relevant works we were losing"
+    detection: "none yet; the reviewer sees the admitting term 'litter' through atlas.review_highlight"
+    stage: labels
+    status: seeded
+
+  - id: upcycling_non_plastic
+    label: "Upcycling outside plastics"
+    direction: false_positive
+    definition: "'Upcycling' is used in a non-plastics sense, for example in quantum chemistry, so the word alone does not show a plastics-relevant work."
+    examples:
+      - "quantum chemistry 'upcycling'"
+    source: "A3 §2; REL-1 §Relevant works we were losing"
+    detection: "none yet for the core rule; queries.yml title_relevant_patterns require a plastic term near 'upcycl' for the title-only rule"
+    stage: labels
+    status: seeded
+
+  - id: withheld_abstract
+    label: "Withheld abstract"
+    direction: false_positive
+    definition: "The publisher withholds the abstract, so the work matched the query on text that no reviewer or abstract rule can read, and its label rests on the title alone."
+    examples:
+      - "pottery residue paper W7225234225 (abstract_inverted_index null)"
+    source: "A3 §2; REL-1 §Why it appeared"
+    detection: "none yet; src/atlas/ingest/abstract_qc.py covers shared (mis-attached) abstracts, not missing ones"
+    stage: abstract_qc
+    status: seeded
+
+  - id: misattached_abstract
+    label: "Mis-attached abstract"
+    direction: false_positive
+    definition: "OpenAlex attaches one abstract to several unrelated works, so those works match or are labelled on text that is not theirs."
+    examples:
+      - "one micro-nano plastics teaser abstract on ten unrelated PNAS papers (1962-2023)"
+    source: "repo: src/atlas/ingest/abstract_qc.py docstring, found 2026-11-11, not in REL-1 or A3"
+    detection: "src/atlas/ingest/abstract_qc.py flags an abstract shared by min_works or more works with distinct DOI roots and title families; queries.yml always_relevant_patterns ignore such abstracts through atlas.nlp.labels.shared_abstract_ids"
+    stage: abstract_qc
+    status: seeded
+
+  - id: non_english_text
+    label: "Non-English text"
+    direction: either
+    definition: "The title or abstract is not in English, so English term rules can miss a relevant work or misread an unrelated one."
+    examples:
+      - "non-English text"
+    source: "A3 Module 1"
+    detection: "none yet"
+    stage: labels
+    status: seeded
+
+  - id: public_communication_item
+    label: "Public-communication item"
+    direction: either
+    definition: "A news item, commentary or similar public-communication piece is kept as a corpus work although it is not research, or dropped although it discusses plastics policy."
+    examples:
+      - "public-communication item"
+      - "Plastics Treaty commentary"
+    source: "A3 Module 1; REL-1 §Relevant works we were losing"
+    detection: "queries.yml exclude_types removes only erratum, peer-review, retraction and paratext (src/atlas/query.py); no class for commentary or news yet"
+    stage: labels
+    status: seeded
+
+  - id: generic_theme_drift
+    label: "Generic-theme drift"
+    direction: false_positive
+    definition: "A broad term that is not plastics-specific pulls in a work whose main subject is another field, such as paleoclimate chronology or aerosol chemistry."
+    examples:
+      - "Younger Dryas chronology"
+      - "atmospheric organic aerosol (labelled true, no screen decision)"
+      - "oil-spill remote sensing (labelled true, no screen decision)"
+    source: "A3 Module 1; REL-1 §Similar mis-tagged works"
+    detection: "none yet; the REL-1 examples were caught by the labels, not by a query check"
+    stage: query
+    status: seeded
+
+  - id: polysemous_framing_word
+    label: "Polysemous framing word"
+    direction: either
+    definition: "A framing word has a plastics-relevant sense and an unrelated one, for example 'Indigenous' as native species, 'export' as data export or 'discard' as fishery bycatch, so the bare word does not show relevance."
+    examples:
+      - "Indigenous"
+      - "export"
+      - "discard"
+    source: "A3 Module 1"
+    detection: "none yet; config/a2_keyword_rules.yml kw_equity_ej_tribal matches bare 'indigenous' with no sense check"
+    stage: labels
+    status: seeded
+
+  - id: abbreviation_collision
+    label: "Abbreviation collision"
+    direction: false_positive
+    definition: "A plastics abbreviation also expands to an unrelated term in other fields, for example positron emission tomography for PET, so the bare acronym matches works that are not about plastics."
+    examples:
+      - "PET"
+      - "PLA"
+    source: "A3 Module 1"
+    detection: "none yet; queries.yml title_relevant_patterns uses PET and PVC only next to a degradation term"
+    stage: query
+    status: seeded
+
+  - id: incidental_plastics
+    label: "Incidental plastics"
+    direction: false_positive
+    definition: "'Plastic' appears only as an incidental material, such as plastic film in greenhouse work, so the work is not about plastics."
+    examples:
+      - "plastic film in greenhouse papers"
+      - "incidental-plastics works in the lifecycle-and-society block"
+    source: "A3 Module 1; REL-1 §Protocol changes"
+    detection: "none yet; REL-1 protocol 2 kept abstracts out of the title-only patterns for this reason"
+    stage: labels
+    status: seeded
+
+  - id: plant_fibre_collision
+    label: "Fibre term with a plant-fibre sense"
+    direction: false_positive
+    definition: "A fibre term with a plant-fibre sense can match a qualified microfibre query; REL-1 infers this for a pottery-residue paper from a hidden abstract, since the text was not served."
+    examples:
+      - "microfibers in pottery residue (W7225234225)"
+    source: "REL-1 §Why it appeared"
+    detection: "none yet; the OpenAlex keyword 'microfibers' on the record was the only visible clue"
+    stage: query
+    status: seeded
+
+  - id: title_only_phrase_miss
+    label: "Title-only phrase miss (false negative)"
+    direction: false_negative
+    definition: "A relevant work carries a specific plastics phrase in its title that the labels missed, and a high-precision title-only pattern recovers it."
+    examples:
+      - "plastisphere paper (W1967071586)"
+      - "Plastics Treaty commentary"
+      - "ALDFG special issue"
+    source: "REL-1 §Relevant works we were losing; REL-1 §Protocol changes"
+    detection: "queries.yml title_relevant_patterns, applied by src/atlas/nlp/labels.py (REL-1, 2026-11-13)"
+    stage: labels
+    status: seeded
+
+  - id: unscreened_rule_false
+    label: "Unscreened rule-false work"
+    direction: false_negative
+    definition: "A work ingested after the Haiku screen has a rule-false label and no screen decision, so a relevant work can stay out until someone screens it."
+    examples:
+      - "ORCID DOI ingest"
+      - "eScholarship ingest"
+      - "Moore Institute ingest"
+    source: "REL-1 §Relevant works we were losing; REL-1 §Protocol changes"
+    detection: "REL-1 protocol 4 cross-tab: works in works_detail.json with no row in curation/work_relevance.csv (manual; REL-1 names no script)"
+    stage: labels
+    status: seeded
+
+  - id: tier2_chemical_haiku_false
+    label: "Chemicals-in-plastics tier 2 with low-confidence Haiku false"
+    direction: false_negative
+    definition: "A chemicals-in-plastics rule hit is marked false by the Haiku screen with low confidence, although the labelling guide counts that tier as plastic-related."
+    examples:
+      - "BPA"
+      - "phthalates"
+      - "6PPD"
+    source: "REL-1 §Protocol changes; REL-1 §Relevant works we were losing"
+    detection: "queries.yml relevance_policy.tier2_survives_low_confidence_false (true since 2026-11-13)"
+    stage: labels
+    status: seeded
+
+  - id: rule_hit_model_disagreement
+    label: "Core rule hit with low-confidence Haiku false"
+    direction: either
+    definition: "A core rule hit is marked false by the Haiku screen with low confidence, so either the rule admitted an unrelated work or the model dropped a relevant one, and the case goes to owner review (H2) rather than a rule change."
+    examples:
+      - "trash/litter surveys vs. particle physics"
+    source: "REL-1 §Relevant works we were losing"
+    detection: "owner review H2 (REL-1); no automatic check"
+    stage: labels
+    status: seeded
+
+  - id: pubmed_only_record
+    label: "PubMed-only record"
+    direction: false_negative
+    definition: "A plastics-relevant record that PubMed indexes is absent from the OpenAlex-based corpus, so no OpenAlex query or label can find it (placeholder; BQ-S9 defines the class)."
+    examples:
+      - "PubMed-miss classes from BQ-S9"
+    source: "A3 Module 1"
+    detection: "none yet; pending the BQ-S9 PubMed comparison"
+    stage: pubmed_qc
+    status: pending_bq_s9
+
+  - id: missing_abstract_in_openalex
+    label: "Abstract missing in OpenAlex"
+    direction: false_negative
+    definition: "OpenAlex serves no abstract for a relevant work, so OpenAlex rules and screens see only the title; unlike withheld_abstract, this is a recall class, and BQ-S9 decides whether PubMed fills the gap (placeholder)."
+    examples:
+      - "PubMed-miss classes from BQ-S9"
+    source: "A3 Module 1; REL-1 §Why it appeared"
+    detection: "none yet; pending the BQ-S9 PubMed comparison"
+    stage: pubmed_qc
+    status: pending_bq_s9
