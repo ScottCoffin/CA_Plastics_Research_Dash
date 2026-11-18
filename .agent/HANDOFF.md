@@ -14,8 +14,7 @@ and PLAT-4 (= PLAT-4b, after PLAT-3). H34 and H36 are done. Every spawned agent 
 - PLAT-2b (this commit). "regulation" dropped from the solutions row (gene-regulation stem collision).
 
 ## In flight / next (in this order)
-1. **BQ-0** seal: `docs/BQ_0_RECON.md` and the `pyproject.toml` MIT string are written (Haiku) and
-   uncommitted; record the test baseline (2,286 passed / 10 skipped on 2026-11-18) and seal.
+1. BQ-0 sealed (`docs/BQ_0_RECON.md`; licence string MIT; optional owner H41 NCBI registration).
 2. **BQ-S8**, **BQ-R1** `[E]`, then the agent-only BQ tasks (BQ-G0 draft, BQ-G1, BQ-G2, BQ-S1, BQ-S9 stage 1,
    BQ-V.0, BQ-3.1, BQ-S6, BQ-1.2, BQ-1.6), **PLAT-4a** once BQ-0 is sealed, VD-SM, PLAT-3, PLAT-4.
 3. Refresh `docs/A3_SOURCES.md` Zotero keys: the owner added the A3 sources they could obtain.

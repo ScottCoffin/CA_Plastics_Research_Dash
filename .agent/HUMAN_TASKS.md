@@ -192,6 +192,12 @@ leak-check works wait for S5.7.
 
 ## Later (the agent will say when each is ready)
 
+- **H41. Optional: register the NCBI tool name and email (about 5 minutes).** NCBI asks E-utilities
+  developers to register the `tool` value and contact email; sending them is not enough on its own.
+  Email NCBI at the address on https://www.ncbi.nlm.nih.gov/books/NBK25497/ (section "Usage Guidelines") with
+  tool `plastiverse-atlas` and the email you put in `.env` as `NCBI_EMAIL`. Not blocking: our request
+  rates stay under NCBI's limits. Reply "NCBI registered" when done.
+
 - **H37. Approve guide addendum A3 (BQ-G0, A3-Q5).** The agent drafts
   `docs/LABELING_GUIDE_A3_ADDENDUM.md` (lens values, topic tag names, `plastics_centrality`
   wording, the P4 precision target). Read it and reply "A3 guide approved" or list changes.
