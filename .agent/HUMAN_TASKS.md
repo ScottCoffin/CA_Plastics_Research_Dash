@@ -164,7 +164,7 @@ Open https://plastiverse.live/experts. The list is now sorted by plastics citati
 
 ### H9. Label the gold set (unblocks the whole S5 classifier chain)
 The S5 classifiers (and Haiku) are tested against your gold labels. You only need the
-**evaluation set: 150 works** (dev + test random sample; 13 already done). The 350 train
+**evaluation set: 150 works** (dev + test random sample; 38 done on 2026-11-18, `py -3.14 scripts/report_gold_status.py`). The 350 train
 works are not needed (training labels come from the active-learning app) and the 80
 leak-check works wait for S5.7.
 1. Run `py -3.14 -m streamlit run scripts/review_gold_labels_app.py` (restart it if it is
