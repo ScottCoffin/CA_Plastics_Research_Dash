@@ -7,17 +7,17 @@ This is an owner-supplied candidate rule layer, not a validated classifier. `lab
 
 | Check | Count |
 |---|---:|
-| Normalized work rows | 2036 |
-| Label rows | 2036 |
-| Raw OpenAlex work rows | 2073 |
+| Normalized work rows | 2037 |
+| Label rows | 2037 |
+| Raw OpenAlex work rows | 2074 |
 | Missing raw work rows | 0 |
-| Normalized topic ID rows | 6105 |
-| Matched raw topic-name rows | 6105 |
+| Normalized topic ID rows | 6108 |
+| Matched raw topic-name rows | 6108 |
 | Missing raw topic-name rows | 0 |
 | Missing primary-topic names | 0 |
-| Plastic-related rows | 1748 |
+| Plastic-related rows | 1749 |
 | Excluded rows | 0 |
-| Rows with provisional domain tags | 1344 |
+| Rows with provisional domain tags | 1345 |
 | Mis-attached (ignored) abstracts | 0 |
 | Always-relevant rule rows | 2 |
 
