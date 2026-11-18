@@ -193,11 +193,6 @@ leak-check works wait for S5.7.
 ## Later (the agent will say when each is ready)
 
 
-- **H37. Approve guide addendum A3 (BQ-G0, A3-Q5).** The agent drafts
-  `docs/LABELING_GUIDE_A3_ADDENDUM.md` (lens values, topic tag names, `plastics_centrality`
-  wording, the P4 precision target). Read it and reply "A3 guide approved" or list changes.
-  Global labelling cannot start before this. Owner pre-approved it 2026-11-18 (A3-Q5); the agent
-  still shows the draft before labelling starts.
 - **H38. Two boundary cases (BQ-G7, A3-Q6).** Owner confirmed `incidental` for both on 2026-11-18;
   the agent records them in BQ-G7, so no action is left here. Label Ashworth (2026) and Foellmer et al. (2022)
   in `curation/a3_boundary_cases.csv` (the agent fills the evidence and proposes "incidental"),
@@ -229,6 +224,7 @@ come with its own Streamlit app and run command here.
 
 ## Done
 
+- H37 (2026-11-18): owner approved the A3 guide addendum ("BQ-G0 approved"), incl. the P4 target; five labelled CA works are flagged review_optional in `curation/a3_lens_backfill.csv` (no action required).
 - H41 (2026-11-18): dropped. NCBI tool/email registration is by email, not a portal, and is not needed while the API key keeps requests under 10/s (owner asked).
 - H36 (2026-11-18): A3-Q1..Q15 answered (Q8 adopt review facets with benchmark + caveat, Q11 no Module 5, Q15 split); the owner added the A3 sources they could obtain to Zotero. Optional R-package improvements (A3 §5.11) remain the owner's own choice.
 - H34 (2026-11-18): owner checked /explore on a phone ("looks good").
