@@ -4,6 +4,7 @@
 //
 // Data and assets (all same-origin):
 //   data/trend_global.json              works per year (chart, beat 8-9)
+//   data/global/evidence_cells.json     live works per cell for the grid and #evidence (optional, PLAT-2b)
 //   data/global/world_raster.json       world and California pixel rasters (beats 12-13, #regions)
 //   assets/landing/picnic.json          picnic layout, item atlas rects and Voronoi seeds (offline,
 //                                       scripts/build_landing_assets.py); the browser cuts the shards
@@ -225,10 +226,16 @@ export async function mountLandingStory(root) {
   if (document.readyState !== "complete") await new Promise((resolve) => addEventListener("load", resolve, {once: true}));
   await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   await new Promise((resolve) => (window.requestIdleCallback ? requestIdleCallback(resolve, {timeout: 1500}) : setTimeout(resolve, 200)));
-  const [trend, picnic, papers, raster] = await Promise.all([
+  const [trend, picnic, papers, raster, evidence] = await Promise.all([
     json("data/trend_global.json"), json("assets/landing/picnic.json"),
     json("assets/landing/papers.json"), json("data/global/world_raster.json"),
+    evidenceCells(),
   ]);
+  // Footnote under the grid (canvas): live counts name their date; the illustrative grid says so.
+  const liveDate = String(evidence?.fetched_at || "").slice(0, 10);
+  const evidenceNote = evidence
+    ? {wide: `worldwide; works per cell, OpenAlex${liveDate ? `, ${liveDate}` : ""}`, narrow: "works per cell"}
+    : {wide: "worldwide; illustrative cell counts until the live counts are built", narrow: "illustrative counts"};
 
   // Chart data: 1970 to the latest year in the trend file.
   const byYear = trend.by_year || {};
@@ -504,10 +511,11 @@ export async function mountLandingStory(root) {
     order.forEach(([, i], j) => { const s = cs[j] || cs[cs.length - 1]; P[i].C = [s[0], s[1]]; P[i].cj = j / N; });
     annLayout();
     yield;
-    // Ev: the evidence grid (illustrative weights until PLAT-2b).
+    // Ev: the evidence grid. Live works per cell when evidence_cells.json is valid (PLAT-2b); until
+    // then, illustrative weights. The dot allocation below normalises either.
     const ROWS = narrow ? ["occur.", "effects", "methods", "fate", "solutions"] : ["occurrence", "effects", "methods", "fate and transport", "solutions"];
     const COLS = narrow ? ["ocean", "fresh", "soil", "air", "biota", "people"] : ["ocean", "freshwater", "soil", "air", "food and biota", "people"];
-    const WTS = [[30, 20, 8, 5, 12, 4], [18, 10, 4, 1, 16, 6], [10, 6, 3, 2, 3, 1], [8, 6, 3, 2, 1, 0], [4, 2, 0, 0, 1, 0]];
+    const WTS = evidence ? evidence.counts : [[30, 20, 8, 5, 12, 4], [18, 10, 4, 1, 16, 6], [10, 6, 3, 2, 3, 1], [8, 6, 3, 2, 1, 0], [4, 2, 0, 0, 1, 0]];
     const sw = WTS.flat().reduce((a, b) => a + b, 0), cnt = WTS.map((row) => row.map((v) => Math.floor((v / sw) * N)));
     cnt[0][0] += N - cnt.flat().reduce((a, b) => a + b, 0);
     const [ez0, ez1] = zone([".c5"]);
@@ -776,7 +784,7 @@ export async function mountLandingStory(root) {
       g.textAlign = "center";
       COLS.forEach((c2, j) => g.fillText(c2, gx0 + j * cw + cw / 2, gy0 - 10));
       g.textAlign = "right";
-      g.fillText(CH.narrow ? "illustrative counts" : "worldwide; illustrative cell counts until the live counts are built", gx0 + cw * COLS.length, gy0 + chh * ROWS.length + 18);
+      g.fillText(CH.narrow ? evidenceNote.narrow : evidenceNote.wide, gx0 + cw * COLS.length, gy0 + chh * ROWS.length + 18);
       g.globalAlpha = 1;
       if (debug.collect) debug.rects.push(["grid", gx0 - 120, gy0 - 22, gx0 + cw * COLS.length, gy0 + chh * ROWS.length + 22]);
     }
@@ -1094,3 +1102,50 @@ export function mountRegionsMap(root) {
   };
   new IntersectionObserver((entries, ob) => { if (entries[0].isIntersecting) { ob.disconnect(); start(); } }, {rootMargin: "400px"}).observe(box);
 }
+
+// ---- #evidence: live works per cell (PLAT-2b) -------------------------------------------------
+// The build writes data/global/evidence_cells.json. When it is valid, the grid on the canvas and the
+// #evidence table show its counts; otherwise both keep the illustrative numbers. One shared request.
+const LEDE_ILLUSTRATIVE = "Rebuilt daily from OpenAlex once the cell definitions are agreed.";
+let liveCells = null;
+/** The live cell counts, or null when the file is missing, unreadable or invalid. Never rejects. */
+function evidenceCells() {
+  if (!liveCells) liveCells = json("data/global/evidence_cells.json").then(validCells, () => null);
+  return liveCells;
+}
+/** The file when it is plat2b.v1: 5 rows of 6 non-negative integers, max > 0, and some work counted. */
+function validCells(data) {
+  if (!data || data.schema_version !== "plat2b.v1" || !Array.isArray(data.counts) || data.counts.length !== 5) return null;
+  const shapeOk = data.counts.every((row) => Array.isArray(row) && row.length === 6 && row.every((n) => Number.isInteger(n) && n >= 0));
+  if (!shapeOk || typeof data.max !== "number" || !(data.max > 0)) return null;
+  return data.counts.flat().some((n) => n > 0) ? data : null;
+}
+/** Rewrites the #evidence table, its caption, lede and source line from the live counts. Without valid
+ *  counts it changes nothing, so the illustrative markup stays. */
+async function mountEvidenceMap() {
+  const section = document.getElementById("evidence");
+  const table = section?.querySelector("[data-plv='evidence-table']");
+  const data = table ? await evidenceCells() : null;
+  if (!data) return;
+  const {max, counts} = data, gapBelow = (Number(data.gap_share) || 0) * max, date = String(data.fetched_at || "").slice(0, 10);
+  table.querySelectorAll("tbody tr").forEach((tr, r) => tr.querySelectorAll("td").forEach((td, c) => {
+    const n = counts[r]?.[c];
+    if (n === undefined) return;
+    const v = Math.min(1, n / max);
+    td.style.setProperty("--v", v.toFixed(2));
+    td.classList.toggle("dk", v >= 0.6);
+    td.classList.toggle("gap", n < gapBelow);
+    const span = td.querySelector("span");
+    if (span) span.textContent = n.toLocaleString("en-US");
+  }));
+  const caption = table.querySelector("[data-plv='evidence-caption']");
+  if (caption) caption.textContent = "Works per cell by topic and setting, worldwide, from OpenAlex";
+  const lede = section.querySelector("[data-plv='evidence-lede']");
+  if (lede) lede.textContent = lede.textContent.replace(LEDE_ILLUSTRATIVE, "Rebuilt daily from OpenAlex.");
+  const source = section.querySelector("[data-plv='evidence-src']");
+  if (source) source.textContent = `Works per cell: title and abstract matches of the reviewed plastics query, OpenAlex${date ? `, updated ${date}` : ""}. A work can count in several cells.`;
+}
+// Set up at module start, not behind the story's load waits, so the table updates even if the story is skipped.
+const startEvidenceMap = () => mountEvidenceMap().catch((error) => console.error("evidence map:", error));
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startEvidenceMap, {once: true});
+else startEvidenceMap();

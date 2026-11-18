@@ -1,0 +1,111 @@
+{
+ "schema_version": "plat2b.v1",
+ "query_version": "plastic-v3.1",
+ "cells_version": "evidence-cells-v1.1",
+ "fetched_at": "2026-11-18T22:22:16+00:00",
+ "source": "OpenAlex works count per cell (title and abstract search, active plastics query)",
+ "note": "Search hits, not classified works; a work can count in several cells.",
+ "gap_share": 0.02,
+ "rows": [
+  {
+   "id": "occurrence",
+   "label": "occurrence",
+   "short": "occur."
+  },
+  {
+   "id": "effects",
+   "label": "effects",
+   "short": "effects"
+  },
+  {
+   "id": "methods",
+   "label": "methods",
+   "short": "methods"
+  },
+  {
+   "id": "fate_transport",
+   "label": "fate and transport",
+   "short": "fate"
+  },
+  {
+   "id": "solutions",
+   "label": "solutions",
+   "short": "solutions"
+  }
+ ],
+ "columns": [
+  {
+   "id": "ocean",
+   "label": "ocean",
+   "short": "ocean"
+  },
+  {
+   "id": "freshwater",
+   "label": "freshwater",
+   "short": "fresh"
+  },
+  {
+   "id": "soil",
+   "label": "soil",
+   "short": "soil"
+  },
+  {
+   "id": "air",
+   "label": "air",
+   "short": "air"
+  },
+  {
+   "id": "food_biota",
+   "label": "food and biota",
+   "short": "biota"
+  },
+  {
+   "id": "people",
+   "label": "people",
+   "short": "people"
+  }
+ ],
+ "counts": [
+  [
+   12988,
+   8929,
+   5172,
+   1769,
+   8026,
+   3978
+  ],
+  [
+   4430,
+   4040,
+   3877,
+   1175,
+   6460,
+   4669
+  ],
+  [
+   7483,
+   6160,
+   4130,
+   1621,
+   5793,
+   3302
+  ],
+  [
+   10398,
+   8429,
+   8537,
+   2370,
+   7333,
+   4166
+  ],
+  [
+   8533,
+   6166,
+   6000,
+   1681,
+   7429,
+   4374
+  ]
+ ],
+ "max": 12988
+}

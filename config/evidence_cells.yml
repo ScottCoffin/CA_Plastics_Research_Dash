@@ -1,0 +1,86 @@
+# Global evidence-map cells (PLAT-2b; owner approved the rows and columns 2026-11-17, H30,
+# QUESTIONS PLAT2-EVIDENCE-CELLS). Shared definitions for the landing grid and, later, the
+# A3 Module 2/6 views (BQ-2.2, BQ-6.2 share this fetch path, A3-C11).
+#
+# Each cell is ONE OpenAlex count query on the active query's search field:
+#   (<active query, with exclusions>) AND (<row terms OR'd>) AND (<column terms OR'd>)
+# plus the active query's type exclusions. OR lists are never split across requests:
+# split counts cannot be summed (A3-C1). No paid filters (`from_updated_date`).
+#
+# Terms follow atlas.query._term: a single alphanumeric word is bare, anything else is
+# quoted. OpenAlex stems search terms (plastics -> plastic, oceans -> ocean), so a word
+# also matches its inflections; never add a term whose stem collides with an unrelated
+# word (MEMORY, Known pitfalls). Counts are search hits, not classified works: a work
+# can fall in several cells, and the grid totals are not a corpus size.
+#
+# `a2_compartments` and `taxonomy` link each column/row to the A2 vocabulary
+# (config/taxonomy.yml add_on_a2.compartment, environments, disciplines) for traceability;
+# they do not change the search.
+version: evidence-cells-v1.1   # v1.1: "regulation" dropped (stem collides with gene regulation)
+status: owner_approved_cells_agent_terms   # terms drafted by the agent 2026-11-18
+gap_share: 0.02   # a cell under 2% of the largest cell is drawn as a gap (QUESTIONS PLAT2B-GAP)
+
+rows:
+  - id: occurrence
+    label: occurrence
+    short: occur.
+    taxonomy: [occurrence_and_monitoring]
+    terms: [occurrence, abundance, monitoring, "spatial distribution", "temporal trend", survey]
+  - id: effects
+    label: effects
+    short: effects
+    taxonomy: [ecotoxicology_and_trophic_transfer, human_exposure_and_health_risk]
+    terms: [toxicity, ecotoxicity, toxicological, "adverse effect", "oxidative stress", inflammation, "health effect"]
+  - id: methods
+    label: methods
+    short: methods
+    taxonomy: [analytical_methods]
+    terms: ["analytical method", identification, quantification, "sample preparation", spectroscopy, Raman, FTIR, "pyrolysis gas chromatography"]
+  - id: fate_transport
+    label: fate and transport
+    short: fate
+    taxonomy: [fate_transport_and_sorption]
+    terms: [transport, fate, weathering, degradation, sedimentation, settling, "vertical distribution"]
+  - id: solutions
+    label: solutions
+    short: solutions
+    taxonomy: [risk_assessment]
+    terms: [policy, ban, mitigation, "circular economy", "extended producer responsibility", recycling, "removal efficiency"]
+
+columns:
+  - id: ocean
+    label: ocean
+    short: ocean
+    a2_compartments: [surface_water, sediment]
+    taxonomy: [marine, beach_and_coastal]
+    terms: [ocean, marine, sea, seawater, coastal, beach, estuary, estuarine]
+  - id: freshwater
+    label: freshwater
+    short: fresh
+    a2_compartments: [surface_water, drinking_water, wastewater_stream, stormwater_stream]
+    taxonomy: [freshwater, wastewater]
+    terms: [freshwater, river, lake, reservoir, groundwater, "drinking water", "tap water", wastewater, stormwater]
+  - id: soil
+    label: soil
+    short: soil
+    a2_compartments: [soil]
+    taxonomy: [soil_and_agriculture]
+    terms: [soil, farmland, "agricultural land", terrestrial, compost, mulch]
+  - id: air
+    label: air
+    short: air
+    a2_compartments: [air, indoor_air, indoor_dust]
+    taxonomy: [air]
+    terms: [airborne, atmosphere, atmospheric, aerosol, "indoor air", "indoor dust", "atmospheric deposition"]
+  - id: food_biota
+    label: food and biota
+    short: biota
+    a2_compartments: [biota, food]
+    taxonomy: [food_and_drink]
+    terms: [fish, seafood, food, biota, invertebrate, zooplankton, mussel, bivalve, "food web", wildlife, seabird]
+  - id: people
+    label: people
+    short: people
+    a2_compartments: [human_tissue]
+    taxonomy: []
+    terms: ["human health", "human exposure", "human tissue", placenta, blood, urine, feces, faeces, "daily intake"]

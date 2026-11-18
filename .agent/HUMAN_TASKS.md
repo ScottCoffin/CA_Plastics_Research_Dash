@@ -18,12 +18,6 @@ Last updated: 2026-11-18.
 
 ## Do now
 
-### H34. Check /explore, now with the phone menu and the bigger phone map (GA-2/GA-3, about 5 minutes)
-1. After the next deploy, open https://plastiverse.live/explore on a phone and on a computer.
-2. On the phone: tap the Menu bar under the header, choose a view and a country; check the map size.
-3. On the landing, check the "Explore the data" header link and the line under the regions map.
-- **Done when:** you reply "explore OK" or list changes.
-
 ### H31 is done (2026-11-17): the owner revoked the exposed OpenAI key; the new key is only in the ignored `.env`.
 
 ### H27 is done (2026-11-17): HTTPS is enforced and http:// redirects to https://.
@@ -196,20 +190,6 @@ leak-check works wait for S5.7.
 
 ---
 
-### H36. Finish the Add-on A3 questions (about 10 minutes; none blocks the next tasks)
-You answered A3-Q1..Q15 on 2026-11-18 (recorded in `.agent/QUESTIONS.md`). Three remain:
-1. **A3-Q8, A3-Q11, A3-Q15:** the agent explained each in chat on 2026-11-18. Reply with one line each
-   (for example "Q8 keep default", "Q11 reserved", "Q15 PLAT-3 first").
-2. Add the A3 sources missing from Zotero, so agents can quote-check them (`docs/A3_SOURCES.md`
-   lists what is there):
-   - Papers: Ashworth (2026) (needed first, for BQ-G7), Stoett (2024), Peryman et al. (2024),
-     Fuller et al. (2022), Gutberlet (2023), Céspedes et al. (2025), Liboiron (2021).
-   - Supplements: Tran et al. (2026) Additional File 1 and Ortiz-Balsero et al. (2026) Texts S1-S2
-     (both needed for BQ-S10); attach each to its existing Zotero item.
-3. Optional, outside this repo: the spec lists eight improvements to your R package
-   `PubMed_Systematic_Search` (A3 section 5.11, "Optional changes to the R package").
-- **Done when:** you reply to the three questions and say "A3 sources added".
-
 ## Later (the agent will say when each is ready)
 
 - **H37. Approve guide addendum A3 (BQ-G0, A3-Q5).** The agent drafts
@@ -248,6 +228,8 @@ come with its own Streamlit app and run command here.
 
 ## Done
 
+- H36 (2026-11-18): A3-Q1..Q15 answered (Q8 adopt review facets with benchmark + caveat, Q11 no Module 5, Q15 split); the owner added the A3 sources they could obtain to Zotero. Optional R-package improvements (A3 §5.11) remain the owner's own choice.
+- H34 (2026-11-18): owner checked /explore on a phone ("looks good").
 - H35 (2026-11-18): GX decisions answered in the assessment: threshold 3+ works, top-20,000 SEO pages, licensed Wikidata photos shown automatically, OpenAlex author records as they are; R2 token: remind at GX-3.
 - H33 (2026-11-18): owner approved the Global data app prototype ("global app OK"); GA-2 builds it.
 - H29 (2026-11-17): Buttondown secret added; digest workflow tested by the owner.
