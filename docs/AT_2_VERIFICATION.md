@@ -5,7 +5,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 ## Counts
 
-- Works in the v3.1 corpus: 2036; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
+- Works in the v3.1 corpus: 2037; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
 - California institutions with at least one non-excluded v3.1 work: 207.
 - Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 207, one row each in `config/institution_types.csv`.
 - type_source: owner_override 60, owner_reviewed 58, rule 89.
@@ -33,7 +33,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | 3 | I95457486 | University of California, Berkeley | 160 | UC | owner_reviewed | old top 100 |
 | 4 | I103635307 | University of California, Riverside | 127 | UC | owner_reviewed | old top 100 |
 | 5 | I36258959 | University of California San Diego | 106 | UC | owner_reviewed | old top 100 |
-| 6 | I154570441 | University of California, Santa Barbara | 100 | UC | owner_reviewed | old top 100 |
+| 6 | I154570441 | University of California, Santa Barbara | 101 | UC | owner_reviewed | old top 100 |
 | 7 | I161318765 | University of California, Los Angeles | 98 | UC | owner_reviewed | old top 100 |
 | 8 | I1174212 | University of Southern California | 65 | private | owner_reviewed | old top 100 |
 | 9 | I26538001 | San Diego State University | 64 | CSU | owner_reviewed | old top 100 |
