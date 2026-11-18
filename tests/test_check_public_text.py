@@ -85,7 +85,7 @@ def test_allow_glob_skips_matching_file(tmp_path: Path) -> None:
 def test_real_public_sources_pass() -> None:
     paths = [
         "site/index.html",
-        "site/expert.html",
+        "site/california/expert.html",
         "site/grants.html",
         "site/data/dtsc_timeline.json",
         "site/data/linkouts.json",

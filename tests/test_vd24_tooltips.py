@@ -17,10 +17,15 @@ TOOLTIP_JS = SRC / "components" / "shared" / "tooltip.js"
 EVIDENCE_CSS = SRC / "components" / "evidence.css"
 NETWORK_CSS = SRC / "components" / "network.css"
 MONITORING_CSS = SRC / "components" / "monitoring.css"
-INDEX = SRC / "index.md"
-HELP_PAGES = ("evidence.md", "network.md", "institutions.md", "monitoring.md")
+INDEX = SRC / "california" / "index.md"
+HELP_PAGES = (
+    "california/evidence.md",
+    "california/network.md",
+    "california/institutions.md",
+    "california/monitoring.md",
+)
 # funding.md only imports the module: its help button is built by components/funding_viz.js.
-IMPORT_PAGES = HELP_PAGES + ("funding.md",)
+IMPORT_PAGES = HELP_PAGES + ("california/funding.md",)
 HEAD_PATTERN = r'<header class="atlas-page-head[^"]*">(.*?)</header>'
 HELP_TEXT = re.compile(r'aria-label="About ([^":]+): ([^"]+)" data-atlas-tip="([^"]+)"')
 
@@ -60,7 +65,7 @@ def test_page_head_is_a_full_width_band_with_the_vd22_bleed() -> None:
 
 
 def test_evidence_title_and_lead_sit_inside_the_page_head() -> None:
-    page = (SRC / "evidence.md").read_text(encoding="utf-8")
+    page = (SRC / "california" / "evidence.md").read_text(encoding="utf-8")
     header = re.search(r'<header class="atlas-page-head">(.*?)</header>', page, flags=re.DOTALL)
     assert header is not None
     assert '<h1 id="evidence-map">Evidence map</h1>' in header.group(1)
@@ -112,7 +117,7 @@ def test_tooltip_module_exports_init_and_help_markup() -> None:
 def test_help_buttons_have_matching_label_and_tip_and_pages_import_the_module() -> None:
     for name in IMPORT_PAGES:
         page = (SRC / name).read_text(encoding="utf-8")
-        assert "./components/shared/tooltip.js" in page, name
+        assert "../components/shared/tooltip.js" in page, name
         assert "initTooltips(document);" in page, name
     assert "helpButtonHtml(" in (SRC / "components" / "funding_viz.js").read_text(encoding="utf-8")
     for name in HELP_PAGES:

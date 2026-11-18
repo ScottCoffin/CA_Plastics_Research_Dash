@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_CHECK = ROOT / "tests" / "framework_institutions_runtime.mjs"
 CLASSIC_PAGE = ROOT / "site" / "index.html"
 COMPONENTS = ROOT / "framework" / "src" / "components"
-PAGE = ROOT / "framework" / "src" / "institutions.md"
+PAGE = ROOT / "framework" / "src" / "california" / "institutions.md"
 
 
 def _code_lines(text: str) -> list[str]:

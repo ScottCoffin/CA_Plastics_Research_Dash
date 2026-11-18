@@ -142,11 +142,11 @@
   }
 
   function searchUrl(query) {
-    return new URL("search#" + new URLSearchParams({q: query}).toString(), BASE).href;
+    return new URL("california/search#" + new URLSearchParams({q: query}).toString(), BASE).href;
   }
 
   function expertsUrl(query) {
-    return new URL("experts#" + new URLSearchParams({search: query}).toString(), BASE).href;
+    return new URL("california/experts#" + new URLSearchParams({search: query}).toString(), BASE).href;
   }
 
   function formOf(target) {

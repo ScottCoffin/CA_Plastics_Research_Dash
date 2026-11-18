@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX = ROOT / "framework" / "src" / "index.md"
+INDEX = ROOT / "framework" / "src" / "california" / "index.md"
 CSS = ROOT / "framework" / "src" / "components" / "overview.css"
 
 # Live counts: the About stats (authors, California institutions) and metadata.counts (the rest).
@@ -39,7 +39,7 @@ def test_overview_stylesheet_does_not_replace_the_global_style() -> None:
     _, frontmatter, body = page.split("---", maxsplit=2)
 
     assert not re.search(r"(?m)^style:\s*", frontmatter)
-    assert '<link rel="stylesheet" href="./components/overview.css">' in body
+    assert '<link rel="stylesheet" href="../components/overview.css">' in body
 
 
 def test_overview_hero_copy_and_single_heading() -> None:
@@ -109,7 +109,7 @@ def test_counts_load_through_the_atlas_helpers_and_hide_when_missing() -> None:
     page = INDEX.read_text(encoding="utf-8")
     js = " ".join(re.findall(r"```js\s+(.*?)```", page, re.DOTALL))
 
-    assert 'import {loadJson, aboutViewModel, formatCount} from "./components/atlas.js";' in js
+    assert 'import {loadJson, aboutViewModel, formatCount} from "../components/atlas.js";' in js
     assert 'await loadJson("build_metadata.json")' in js
     assert "aboutViewModel(metadata, null)" in js
     assert "metadata?.counts" in js

@@ -2,7 +2,7 @@
 title: Experts
 ---
 
-<link rel="stylesheet" href="./components/experts.css">
+<link rel="stylesheet" href="../components/experts.css">
 
 <div id="experts-root">
 <header class="atlas-page-head experts-page-head">
@@ -122,7 +122,7 @@ title: Experts
 </div>
 
 ```js
-import {icon} from "./components/shared/icons.js";
-import {mountExperts} from "./components/experts.js";
+import {icon} from "../components/shared/icons.js";
+import {mountExperts} from "../components/experts.js";
 mountExperts();
 ```

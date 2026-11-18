@@ -2,8 +2,8 @@
 title: Funding
 ---
 
-<link rel="stylesheet" href="./components/funding.css">
-<link rel="stylesheet" href="./components/funding_viz.css">
+<link rel="stylesheet" href="../components/funding.css">
+<link rel="stylesheet" href="../components/funding_viz.css">
 
 <div id="funding-root">
 <header class="atlas-page-head funding-page-head">
@@ -78,9 +78,9 @@ title: Funding
 </div>
 
 ```js
-import "./components/shared/topics.js";
-import {mountFunding} from "./components/funding.js";
-import {initTooltips} from "./components/shared/tooltip.js";
+import "../components/shared/topics.js";
+import {mountFunding} from "../components/funding.js";
+import {initTooltips} from "../components/shared/tooltip.js";
 initTooltips(document);
 mountFunding();
 ```

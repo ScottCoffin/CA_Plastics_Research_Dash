@@ -392,7 +392,8 @@
       const url = safeHttpUrl(network.url);
       if (!listed || !name || !url.startsWith("https:")) return;
       const logo = String(network.logo?.path ?? "").trim();
-      const img = NETWORK_LOGO_RE.test(logo) ? `<img src="${escapeHtml(logo)}" alt="" width="18" height="18"> ` : "";
+      // Logo paths are relative to the site root; the profile page lives in california/ (PLAT-1).
+      const img = NETWORK_LOGO_RE.test(logo) ? `<img src="../${escapeHtml(logo)}" alt="" width="18" height="18"> ` : "";
       const date = proseDate(network.roster_as_of);
       const title = `Listed as a contributor on the consortium's page${date ? ` (updated ${date})` : ""}`;
       badges.push(`<li class="expert-badge expert-badge-network"><a href="${escapeHtml(url)}" title="${escapeHtml(title)}">${img}${escapeHtml(name)}</a></li>`);
@@ -503,7 +504,7 @@
     const items = summary.top.map((row) => {
       const label = escapeHtml(row.name || row.inst_id);
       const name = row.ca && INST_LINK_ID_RE.test(row.inst_id)
-        ? `<a href="sem.html#inst=${encodeURIComponent(row.inst_id)}">${label}</a>`
+        ? `<a href="institution#inst=${encodeURIComponent(row.inst_id)}">${label}</a>`
         : label;
       return `<li>${name} <span class="shared">· ${escapeHtml(countNoun(row.works, "work", "works"))}</span></li>`;
     });

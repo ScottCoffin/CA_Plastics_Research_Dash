@@ -26,7 +26,7 @@ def test_framework_evidence_runtime_helpers() -> None:
 
 
 def test_works_drawer_is_gone():
-    page = (FW_SRC / "evidence.md").read_text(encoding="utf-8")
+    page = (FW_SRC / "california" / "evidence.md").read_text(encoding="utf-8")
     source = (FW_SRC / "components" / "evidence.js").read_text(encoding="utf-8")
     css = (FW_SRC / "components" / "evidence.css").read_text(encoding="utf-8")
     for text in (page, source, css):
@@ -40,7 +40,7 @@ def test_works_drawer_is_gone():
 
 
 def test_page_lists_plastic_related_works_only():
-    page = (FW_SRC / "evidence.md").read_text(encoding="utf-8")
+    page = (FW_SRC / "california" / "evidence.md").read_text(encoding="utf-8")
     source = (FW_SRC / "components" / "evidence.js").read_text(encoding="utf-8")
     model = (FW_SRC / "components" / "evidence_model.js").read_text(encoding="utf-8")
     assert "The page lists plastic-related works only." in page
@@ -52,7 +52,7 @@ def test_page_lists_plastic_related_works_only():
 
 
 def test_heatmap_cells_narrow_the_publication_table():
-    page = (FW_SRC / "evidence.md").read_text(encoding="utf-8")
+    page = (FW_SRC / "california" / "evidence.md").read_text(encoding="utf-8")
     source = (FW_SRC / "components" / "evidence.js").read_text(encoding="utf-8")
     table = (FW_SRC / "components" / "ev_table.js").read_text(encoding="utf-8")
     assert "selecting heatmap cells narrows the publication table" in page.lower()
@@ -62,7 +62,7 @@ def test_heatmap_cells_narrow_the_publication_table():
 
 
 def test_selection_banner_sits_above_publication_table() -> None:
-    page = (FW_SRC / "evidence.md").read_text(encoding="utf-8")
+    page = (FW_SRC / "california" / "evidence.md").read_text(encoding="utf-8")
     banner = (
         '<div id="ev-table-selection" class="ev-table-selection ev-table-root" '
         'role="status" aria-live="polite" hidden></div>'
@@ -86,7 +86,7 @@ def test_headline_and_banner_name_the_heatmap_selection() -> None:
 
 def test_public_copy_has_no_internal_ids() -> None:
     for name in ("evidence.md",):
-        text = (FW_SRC / name).read_text(encoding="utf-8")
+        text = (FW_SRC / "california" / name).read_text(encoding="utf-8")
         assert not re.search(r"UX-\d+|EM-\d+|S\d+\.\d+|TODO", text), name
     for name in ("evidence.js", "components/ev_heatmap.js"):
         text = (FW_SRC / "components" / name.split("/")[-1]).read_text(encoding="utf-8")
@@ -134,11 +134,11 @@ def _read_fw(*parts: str) -> str:
 
 def test_impact_factor_is_always_qualified_as_the_open_analogue() -> None:
     texts = {
-        "evidence.md": _read_fw("evidence.md"),
+        "evidence.md": _read_fw("california", "evidence.md"),
         "evidence.js": _read_fw("components", "evidence.js"),
         "ev_table.js": _read_fw("components", "ev_table.js"),
         "ev_table_model.js": _read_fw("components", "ev_table_model.js"),
-        "glossary.md": _read_fw("glossary.md"),
+        "glossary.md": _read_fw("california", "glossary.md"),
     }
     for name, text in texts.items():
         # The glossary names Clarivate's proprietary metric only to say the Atlas does not use it.

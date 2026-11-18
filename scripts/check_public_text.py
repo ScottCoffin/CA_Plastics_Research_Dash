@@ -5,7 +5,7 @@ Stdlib only, offline. Usage:
 
     py -3.14 scripts/check_public_text.py [PATH ...] [--allow GLOB ...]
 
-With no PATH, checks framework/dist (if built), site/index.html, site/expert.html,
+With no PATH, checks framework/dist (if built), site/index.html, site/california/expert.html,
 site/grants.html, and the two public JSON files. A PATH may be an HTML/JSON file or a folder
 (folders are searched for *.html). Exit 0 when clean, 1 on any forbidden match, 2 on bad input.
 """
@@ -35,7 +35,7 @@ FORBIDDEN_PATTERNS: list[re.Pattern[str]] = [
     re.compile(r"Coming with", re.IGNORECASE),
 ]
 
-DEFAULT_HTML = ["site/index.html", "site/expert.html", "site/grants.html"]
+DEFAULT_HTML = ["site/index.html", "site/california/expert.html", "site/grants.html"]
 DEFAULT_JSON = ["site/data/dtsc_timeline.json", "site/data/linkouts.json"]
 SKIP_TAGS = {"script", "style"}
 

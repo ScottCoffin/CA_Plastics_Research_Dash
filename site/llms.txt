@@ -6,23 +6,24 @@ Independent research atlas; profiles are generated from public bibliographic dat
 
 ## Main pages
 
-- [Atlas home](https://plastiverse.live/): overview and entry points to every view
-- [Experts](https://plastiverse.live/experts): California-connected plastics researchers
-- [Collaboration network](https://plastiverse.live/network): who co-authors with whom
-- [Institutions](https://plastiverse.live/institutions): institutions with California-connected plastics research; one page per institution at https://plastiverse.live/institution#inst=<institution ID>
-- [Monitoring](https://plastiverse.live/monitoring): monitoring sources and samples
-- [Funding](https://plastiverse.live/funding): grants and awards
-- [Evidence map](https://plastiverse.live/evidence): publication and evidence views
-- [Policy](https://plastiverse.live/policy): policy context
-- [Related resources](https://plastiverse.live/resources): other data and tools
-- [Glossary](https://plastiverse.live/glossary): terms used in the Atlas
-- [About](https://plastiverse.live/about): method, scope and limitations
+- [Atlas home](https://plastiverse.live/california/): overview and entry points to every view
+- [Plastiverse Live](https://plastiverse.live/): the global home page; regional atlases start with California
+- [Experts](https://plastiverse.live/california/experts): California-connected plastics researchers
+- [Collaboration network](https://plastiverse.live/california/network): who co-authors with whom
+- [Institutions](https://plastiverse.live/california/institutions): institutions with California-connected plastics research; one page per institution at https://plastiverse.live/california/institution#inst=<institution ID>
+- [Monitoring](https://plastiverse.live/california/monitoring): monitoring sources and samples
+- [Funding](https://plastiverse.live/california/funding): grants and awards
+- [Evidence map](https://plastiverse.live/california/evidence): publication and evidence views
+- [Policy](https://plastiverse.live/california/policy): policy context
+- [Related resources](https://plastiverse.live/california/resources): other data and tools
+- [Glossary](https://plastiverse.live/california/glossary): terms used in the Atlas
+- [About](https://plastiverse.live/california/about): method, scope and limitations
 - [Sitemap](https://plastiverse.live/sitemap.xml): index of all static pages
 
 ## Entity pages (static, one per expert or institution)
 
-- Expert profiles: https://plastiverse.live/experts/<OpenAlex author ID>/
-- Institution profiles: https://plastiverse.live/institutions/<institution ID>/
+- Expert profiles: https://plastiverse.live/california/experts/<OpenAlex author ID>/
+- Institution profiles: https://plastiverse.live/california/institutions/<institution ID>/
 
 ## Data and licence
 

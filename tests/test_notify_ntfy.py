@@ -147,7 +147,7 @@ def test_dry_run_prints_the_request_and_sends_nothing(tmp_path: Path, capsys) ->
     assert opener.calls == []
     assert "POST https://ntfy.sh/plastiverse-california" in out
     assert "Title: 1 new California plastics paper" in out
-    assert "Click: https://plastiverse.live/evidence#ev-recent" in out
+    assert "Click: https://plastiverse.live/california/evidence#ev-recent" in out
     assert "Tags: microscope" in out
     assert "- New one" in out
 
@@ -165,7 +165,7 @@ def test_send_posts_one_message_with_click_and_tags(tmp_path: Path, capsys) -> N
     assert call["url"] == "https://ntfy.sh/plastiverse-california"
     assert call["title"] == "3 new California plastics papers"
     assert call["title"].isascii()
-    assert call["click"] == "https://plastiverse.live/evidence#ev-recent"
+    assert call["click"] == "https://plastiverse.live/california/evidence#ev-recent"
     assert call["tags"] == "microscope"
     assert call["body"] == "- Paper W1\n- Paper W2\n- Paper W3"
     assert call["timeout"] == notify.TIMEOUT_SECONDS

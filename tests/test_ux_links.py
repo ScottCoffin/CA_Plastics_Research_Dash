@@ -41,7 +41,11 @@ def test_postbuild_fix_html_rewrites_template():
         '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">'
         '<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">'
     )
-    script = "import(process.argv[1]).then(m => process.stdout.write(m.fixHtml(process.argv[2])))"
+    # fixHtml takes the page key as its second argument (PLAT-1); the global page is "index".
+    script = (
+        "import(process.argv[1]).then(m => "
+        "process.stdout.write(m.fixHtml(process.argv[2], 'index')))"
+    )
     module = (FW / "scripts" / "postbuild.mjs").resolve().as_uri()
     out = subprocess.run(
         ["node", "-e", script, module, sample], capture_output=True, text=True, check=True

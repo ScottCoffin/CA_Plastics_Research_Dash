@@ -8,7 +8,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_CHECK = ROOT / "tests" / "framework_policy_runtime.mjs"
-POLICY_MD = ROOT / "framework" / "src" / "policy.md"
+POLICY_MD = ROOT / "framework" / "src" / "california" / "policy.md"
 POLICY_CSS = ROOT / "framework" / "src" / "components" / "policy.css"
 
 

@@ -24,16 +24,23 @@ def test_static_guardrails_pass() -> None:
 
 def test_nav_covers_the_classic_tabs() -> None:
     check = _load("check_at5")
-    assert {"experts", "institutions", "monitoring", "funding", "about", "glossary"} <= set(
-        check.config_pages()
-    )
+    # PLAT-1: the California pages sit under /california/ (nav paths and built page names).
+    assert {
+        "california/experts",
+        "california/institutions",
+        "california/monitoring",
+        "california/funding",
+        "california/about",
+        "california/glossary",
+    } <= set(check.config_pages())
 
 
 def test_build_report_flags_external_hosts_and_root_paths(tmp_path: Path) -> None:
     check = _load("check_at5")
     for page in ["index", *check.config_pages()]:
+        (tmp_path / f"{page}.html").parent.mkdir(parents=True, exist_ok=True)
         (tmp_path / f"{page}.html").write_text("<main>ok</main>", encoding="utf-8")
-    (tmp_path / "about.html").write_text(
+    (tmp_path / "california" / "about.html").write_text(
         '<link rel="stylesheet" href="https://fonts.googleapis.com/x">'
         '<script src="/_observablehq/client.js"></script>',
         encoding="utf-8",

@@ -61,8 +61,8 @@ def test_labeled_works_tile_only_when_it_differs(result: dict) -> None:
 
 
 def test_pages_render_time_element_and_start_row() -> None:
-    index = (SRC / "index.md").read_text(encoding="utf-8")
-    about = (SRC / "about.md").read_text(encoding="utf-8")
+    index = (SRC / "california" / "index.md").read_text(encoding="utf-8")
+    about = (SRC / "california" / "about.md").read_text(encoding="utf-8")
     for text in (index, about):
         assert "<time datetime=${snapshot.refreshIso}>" in text
     # VD-25: the Start here row became the four door rows beside the California figure.

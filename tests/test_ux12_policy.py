@@ -12,7 +12,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 POLICY_JS = ROOT / "framework" / "src" / "components" / "policy.js"
-POLICY_MD = ROOT / "framework" / "src" / "policy.md"
+POLICY_MD = ROOT / "framework" / "src" / "california" / "policy.md"
 SYNC = ROOT / "framework" / "scripts" / "sync_shared.mjs"
 
 # Each term must be expanded with <abbr title="...">TERM</abbr> at its first use on the page.

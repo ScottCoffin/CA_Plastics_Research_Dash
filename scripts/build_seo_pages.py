@@ -1,7 +1,8 @@
 """Generate static SEO entity pages and sitemaps under ``site/`` (S3.8).
 
-Writes ``site/experts/<id>/index.html``, ``site/institutions/<id>/index.html``,
-``site/sitemap.xml`` and its child sitemaps. These are deploy-only outputs (gitignored).
+Writes ``site/california/experts/<id>/index.html``,
+``site/california/institutions/<id>/index.html``, ``site/sitemap.xml`` and its child
+sitemaps. These are deploy-only outputs (gitignored).
 The workflow step is best effort, so a failure here never blocks the Pages deploy.
 """
 

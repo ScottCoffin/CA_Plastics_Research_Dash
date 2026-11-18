@@ -15,7 +15,7 @@ SRC = ROOT / "framework" / "src"
 MODEL = SRC / "components" / "experts_model.js"
 COMPONENT = SRC / "components" / "experts.js"
 CSS = SRC / "components" / "experts.css"
-PAGE = SRC / "experts.md"
+PAGE = SRC / "california" / "experts.md"
 
 
 def _read(path: Path) -> str:

@@ -8,7 +8,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_CHECK = ROOT / "tests" / "framework_resources_runtime.mjs"
-PAGE = ROOT / "framework" / "src" / "resources.md"
+PAGE = ROOT / "framework" / "src" / "california" / "resources.md"
 JS = ROOT / "framework" / "src" / "components" / "resources.js"
 
 

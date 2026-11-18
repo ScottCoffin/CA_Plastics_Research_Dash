@@ -6,7 +6,7 @@ import Graph from "npm:graphology@0.26.0";
 import Sigma from "npm:sigma@3.0.3";
 import forceAtlas2 from "npm:graphology-layout-forceatlas2@0.10.1";
 import "./shared/topics.js";
-import {classicUrl, escapeHtml, formatCount, loadJson} from "./atlas.js";
+import {escapeHtml, formatCount, loadJson, pageUrl} from "./atlas.js";
 import {icon, injectIconSprite} from "./shared/icons.js";
 import {CHROME} from "./shared/palette.js";
 import {
@@ -61,7 +61,7 @@ function topicColour(tag) {
 }
 
 function expertUrl(id) {
-  return classicUrl(`expert.html#author=${encodeURIComponent(id)}`);
+  return pageUrl(`expert.html#author=${encodeURIComponent(id)}`);
 }
 
 // Profile link for the side panel: the Framework experts page with the author in the hash.

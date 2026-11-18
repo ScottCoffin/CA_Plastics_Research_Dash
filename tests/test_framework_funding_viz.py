@@ -12,7 +12,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "framework" / "src"
 COMP = SRC / "components"
-FUNDING_MD = SRC / "funding.md"
+FUNDING_MD = SRC / "california" / "funding.md"
 FUNDING_JS = COMP / "funding.js"
 VIZ_JS = COMP / "funding_viz.js"
 MODEL_JS = COMP / "funding_viz_model.js"
@@ -41,7 +41,7 @@ def test_funding_page_has_no_classic_link_or_inline_style() -> None:
 
 def test_funding_page_loads_viz_stylesheet_and_mount_point() -> None:
     md = _read(FUNDING_MD)
-    assert '<link rel="stylesheet" href="./components/funding_viz.css">' in md
+    assert '<link rel="stylesheet" href="../components/funding_viz.css">' in md
     assert (COMP / "funding_viz.css").is_file()
     assert 'id="grants-viz"' in md
     assert "grants-chart" not in md

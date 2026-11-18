@@ -44,6 +44,13 @@ The weekly Monday digest is built by a GitHub Action and sent through Buttondown
   7 a.m. Pacific). Until you invite other subscribers, that first send reaches only you and serves
   as the test. To see one sooner: GitHub > **Actions** > **Weekly digest** > **Run workflow**.
 
+### H32. Resubmit the sitemap after the /california move (PLAT-1, 2 minutes)
+PLAT-1 moved every California page to `https://plastiverse.live/california/...` with no redirects,
+so search engines must re-crawl.
+1. Wait until the deploy of the PLAT-1 commit is live (open https://plastiverse.live/california/).
+2. Google Search Console > **Sitemaps** > submit `https://plastiverse.live/sitemap.xml` again.
+- **Done when:** Search Console shows the new submission date. Tell the agent "sitemap resubmitted".
+
 ### H31. Rotate the OpenAI API key (5 minutes)
 The key pasted into the chat on 2026-11-17 was used for the landing images and must be treated as exposed.
 1. Go to https://platform.openai.com/api-keys and revoke that key.

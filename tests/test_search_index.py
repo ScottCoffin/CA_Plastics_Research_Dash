@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FW = ROOT / "framework"
 CLIENT = ROOT / "site" / "assets" / "site_search.js"
 STYLE = ROOT / "site" / "assets" / "site_search.css"
-SEARCH_PAGE = FW / "src" / "search.md"
+SEARCH_PAGE = FW / "src" / "california" / "search.md"
 
 AUTHORS = [
     {
@@ -68,11 +68,11 @@ GLOSSARY_MD = (
 CONFIG_JS = """
 const PAGE_GROUPS = [
   {name: "Explore", pages: [
-    {name: "Experts", path: "/experts"},
-    {name: "Institutions", path: "/institutions"},
+    {name: "Experts", path: "/california/experts"},
+    {name: "Institutions", path: "/california/institutions"},
   ]},
   {name: "Reference", pages: [
-    {name: "Glossary", path: "/glossary"},
+    {name: "Glossary", path: "/california/glossary"},
   ]},
 ];
 """
@@ -81,7 +81,10 @@ const PAGE_GROUPS = [
 def build(**overrides):
     sources = {
         "generated_at": "2026-11-16T04:41:04+00:00",
-        "pages": [("Experts", "Explore", "experts"), ("Glossary", "Reference", "glossary")],
+        "pages": [
+            ("Experts", "Explore", "california/experts"),
+            ("Glossary", "Reference", "california/glossary"),
+        ],
         "authors": AUTHORS,
         "institutions": INSTITUTIONS,
         "institution_types": {"UC": "University of California"},
@@ -154,22 +157,22 @@ def test_hrefs_use_the_route_each_page_reads() -> None:
     index = build()
     hrefs = {item[3] for item in index["items"]}
 
-    assert "expert.html#author=A2" in hrefs
-    assert "institution#inst=I9" in hrefs
-    assert "experts#tag=air" in hrefs
-    assert "experts#tag=matrix%3Aair" in hrefs
-    assert "funding#fa=NSF" in hrefs
-    assert "funding#q=National+Science+Foundation" in hrefs
-    assert "glossary#access-tiers" in hrefs
+    assert "california/expert.html#author=A2" in hrefs
+    assert "california/institution#inst=I9" in hrefs
+    assert "california/experts#tag=air" in hrefs
+    assert "california/experts#tag=matrix%3Aair" in hrefs
+    assert "california/funding#fa=NSF" in hrefs
+    assert "california/funding#q=National+Science+Foundation" in hrefs
+    assert "california/glossary#access-tiers" in hrefs
     assert "https://www.globalplasticlaws.org/" in hrefs
-    assert "experts" in hrefs
+    assert "california/experts" in hrefs
     assert not any(href.startswith("/") for href in hrefs)
 
 
 def test_resources_without_a_url_point_at_the_resources_page() -> None:
     index = build(resources=[{"name": "Portal without URL", "relation": "portal", "root_url": ""}])
 
-    assert by_type(index, "resource")[0][3] == "resources"
+    assert by_type(index, "resource")[0][3] == "california/resources"
 
 
 def test_only_california_institutions_are_indexed() -> None:
@@ -199,9 +202,9 @@ def test_experts_without_an_id_or_name_are_skipped() -> None:
 
 def test_parsers_read_the_config_glossary_and_label_tables() -> None:
     assert parse_page_groups(CONFIG_JS) == [
-        ("Experts", "Explore", "experts"),
-        ("Institutions", "Explore", "institutions"),
-        ("Glossary", "Reference", "glossary"),
+        ("Experts", "Explore", "california/experts"),
+        ("Institutions", "Explore", "california/institutions"),
+        ("Glossary", "Reference", "california/glossary"),
     ]
     assert parse_glossary(GLOSSARY_MD) == [
         ("access-tiers", "Access tiers A–D", "Each monitoring source is placed in one tier.")
@@ -227,8 +230,8 @@ def test_real_nav_pages_exclude_the_results_page() -> None:
     config = (FW / "observablehq.config.js").read_text(encoding="utf-8")
     pages = [path for _, _, path in parse_page_groups(config)]
 
-    assert "experts" in pages and "glossary" in pages
-    assert "search" not in pages
+    assert "california/experts" in pages and "california/glossary" in pages
+    assert "california/search" not in pages
     assert "/search" not in (ROOT / "site" / "llms.txt").read_text(encoding="utf-8")
     assert '"/search"' not in (ROOT / "src" / "atlas" / "build" / "seo.py").read_text(
         encoding="utf-8"
@@ -247,7 +250,7 @@ def test_results_page_is_unlisted_and_noindex() -> None:
 
 def test_header_and_hero_forms_are_the_site_search() -> None:
     config = (FW / "observablehq.config.js").read_text(encoding="utf-8")
-    index_md = (FW / "src" / "index.md").read_text(encoding="utf-8")
+    index_md = (FW / "src" / "california" / "index.md").read_text(encoding="utf-8")
 
     assert "data-atlas-site-search" in config
     assert 'action="./search"' in config
@@ -297,8 +300,9 @@ def test_postbuild_restores_site_search_assets_on_pages_with_their_own_head() ->
     expression = (
         f"const m = await import({json.dumps(module)});"
         'const once = m.fixHtml(\'<html><head><meta name="robots" content="noindex">'
-        "<title>Search | CA Plastics Research Atlas</title></head><body></body></html>', 'search');"
-        "const twice = m.fixHtml(once, 'search');"
+        "<title>Search | CA Plastics Research Atlas</title></head><body></body></html>', "
+        "'california/search');"
+        "const twice = m.fixHtml(once, 'california/search');"
         "process.stdout.write(JSON.stringify({once, same: once === twice}));"
     )
     result = subprocess.run(

@@ -47,22 +47,25 @@ CSS_GZIP_LIMIT = 12 * 1024
 COMPONENT_HEX_BASELINE = 53
 DESIGN_CSS = ("design/tokens.css", "design/shell.css", "design/components.css")
 
-# Route key -> path appended to the base URL. The keys are the baseline's route keys, in order.
+# Route key -> path appended to the base URL. The keys are the baseline's route keys, in order;
+# since PLAT-1 (2026-11-17) the California pages live under california/ and "home" is the
+# California overview.
+CA = "california/"
 ROUTES: dict[str, str] = {
-    "home": "",
-    "experts": "experts",
-    "network": "network",
-    "institutions": "institutions",
-    "institution": "institution#inst=I84218800",
-    "monitoring": "monitoring",
-    "funding": "funding",
-    "evidence": "evidence",
-    "policy": "policy",
-    "resources": "resources",
-    "about": "about",
-    "glossary": "glossary",
-    "expert_profile": "expert.html#author=A5036007957",
-    "institution_page": "institution#inst=I97018004",
+    "home": CA,
+    "experts": CA + "experts",
+    "network": CA + "network",
+    "institutions": CA + "institutions",
+    "institution": CA + "institution#inst=I84218800",
+    "monitoring": CA + "monitoring",
+    "funding": CA + "funding",
+    "evidence": CA + "evidence",
+    "policy": CA + "policy",
+    "resources": CA + "resources",
+    "about": CA + "about",
+    "glossary": CA + "glossary",
+    "expert_profile": CA + "expert.html#author=A5036007957",
+    "institution_page": CA + "institution#inst=I97018004",
 }
 DEFAULT_HEADER = ".atlas-page-head, .atlas-hero"  # the Overview hero is its page header (VD-5)
 HEADER_SELECTOR = {"expert_profile": "header.site-header"}

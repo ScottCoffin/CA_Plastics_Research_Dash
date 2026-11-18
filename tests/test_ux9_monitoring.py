@@ -9,7 +9,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 VIEW_MODULE = (ROOT / "framework" / "src" / "components" / "monitoring_view.js").as_uri()
-PAGE = ROOT / "framework" / "src" / "monitoring.md"
+PAGE = ROOT / "framework" / "src" / "california" / "monitoring.md"
 COMPONENT = ROOT / "framework" / "src" / "components" / "monitoring.js"
 
 # Node ES-module script: imports the Framework helpers and asserts the UX-9 behaviour.

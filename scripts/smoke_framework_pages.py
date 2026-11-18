@@ -4,6 +4,9 @@ Serves site/ + framework/<dist>/ like GitHub Pages (serve_framework_preview.py),
 page's DOM after scripts run, and fails when a page shows a Framework cell error or lacks the
 expected text. Needs a local Chromium-family browser; offline otherwise (reads committed data).
 
+Page names are California pages (PLAT-1: framework/src/california/); "index" is the California
+overview and "/" is the global page at the root.
+
 Usage:
     py -3.14 scripts/smoke_framework_pages.py about index --dist dist --port 8766
     py -3.14 scripts/smoke_framework_pages.py funding --expect funding=Award --show
@@ -106,7 +109,8 @@ def main() -> int:
     failures = 0
     try:
         for page in args.pages:
-            url = f"http://127.0.0.1:{args.port}{PREFIX}/app/{'' if page == 'index' else page}"
+            route = "" if page == "/" else "california/" + ("" if page == "index" else page)
+            url = f"http://127.0.0.1:{args.port}{PREFIX}/app/{route}"
             dom = dump_dom(browser, url, args.budget_ms)
             text = main_text(dom)
             problems = [f"cell error: {e}" for e in cell_errors(dom)]

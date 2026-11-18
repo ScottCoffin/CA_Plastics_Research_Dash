@@ -72,7 +72,7 @@ def test_funding_topn_range_slider_is_24px_tall() -> None:
 
 
 def test_expert_page_back_link_and_plastic_checkbox_are_24px() -> None:
-    html = _read("site/expert.html")
+    html = _read("site/california/expert.html")
     assert _px(_prop(_rule(html, ".crumbs a"), "min-height")) >= 24
     body = _rule(html, '.field input[type="checkbox"]')
     assert _px(_prop(body, "width")) >= 24
@@ -80,7 +80,7 @@ def test_expert_page_back_link_and_plastic_checkbox_are_24px() -> None:
 
 
 def test_expert_page_metrics_list_holds_only_div_groups() -> None:
-    html = _read("site/expert.html")
+    html = _read("site/california/expert.html")
     pattern = r'\$\("metrics"\)\.innerHTML = tiles\.map\(\(t\) => `(.*?)`\)\.join'
     match = re.search(pattern, html, re.S)
     assert match, "metrics template not found"

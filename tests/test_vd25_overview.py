@@ -11,7 +11,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX = ROOT / "framework" / "src" / "index.md"
+INDEX = ROOT / "framework" / "src" / "california" / "index.md"
 CSS = ROOT / "framework" / "src" / "components" / "overview.css"
 TOKENS = ROOT / "framework" / "src" / "design" / "tokens.css"
 REFERENCE = ROOT / "docs" / "design" / "intro_option_plane.html"

@@ -7,10 +7,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FRAMEWORK = ROOT / "framework"
-GLOSSARY = FRAMEWORK / "src" / "glossary.md"
+GLOSSARY = FRAMEWORK / "src" / "california" / "glossary.md"
 CONFIG = FRAMEWORK / "observablehq.config.js"
-INSTITUTIONS = FRAMEWORK / "src" / "institutions.md"
-EXPERTS = FRAMEWORK / "src" / "experts.md"
+INSTITUTIONS = FRAMEWORK / "src" / "california" / "institutions.md"
+EXPERTS = FRAMEWORK / "src" / "california" / "experts.md"
 
 GLOSSARY_IDS = [
     "access-tiers",
@@ -55,8 +55,8 @@ def test_glossary_entries_have_source_notes_and_no_task_ids() -> None:
 
 def test_footer_links_to_glossary_and_page_is_listed() -> None:
     config = CONFIG.read_text(encoding="utf-8")
-    assert '{name: "Glossary", path: "/glossary"}' in config
-    assert 'href="./glossary">Glossary</a>' in config
+    assert '{name: "Glossary", path: "/california/glossary"}' in config
+    assert 'href="./california/glossary">Glossary</a>' in config
     about = config.index('name: "About"')
     glossary = config.index('name: "Glossary"')
     assert about < glossary

@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "framework" / "src"
 COMP = SRC / "components"
-PAGE = SRC / "evidence.md"
+PAGE = SRC / "california" / "evidence.md"
 EVIDENCE_JS = COMP / "evidence.js"
 EVIDENCE_CSS = COMP / "evidence.css"
 TREND_JS = COMP / "v4_trend.js"
@@ -155,6 +155,6 @@ def test_views_add_no_data_loads() -> None:
 
 
 def test_evidence_eyebrow_has_its_nav_icon_and_the_sprite() -> None:
-    page = (ROOT / "framework" / "src" / "evidence.md").read_text(encoding="utf-8")
+    page = (ROOT / "framework" / "src" / "california" / "evidence.md").read_text(encoding="utf-8")
     assert '<use href="#i-grid"></use></svg> Data</p>' in page
     assert "injectIconSprite();" in page

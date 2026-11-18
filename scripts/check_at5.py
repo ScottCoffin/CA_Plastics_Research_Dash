@@ -3,7 +3,9 @@
 Static checks (always; no Node needed):
   - @observablehq/framework pinned to exactly 1.13.4 in package.json and package-lock.json;
   - the config drops external stylesheets (globalStylesheets: []), and every nav page has a source;
-  - every page sits at the top level of framework/src/ (data resolves from the site root);
+  - global pages (GLOBAL_PAGES) sit at the top of framework/src/; every other page sits in a
+    region folder
+    (framework/src/california/, PLAT-1); atlas.js resolves data/ from the site root;
   - data files named in loadJson("...")/dataUrl("...") literals exist in site/data/;
   - the shared helpers copied by scripts/sync_shared.mjs exist in site/assets/.
 Build checks (with --dist, after `npm run build`):
@@ -40,9 +42,16 @@ EXTERNAL_HOSTS = (
 )
 
 
+REGIONS = ("california",)
+# Global pages at the top level of src/ (the landing page and PLAT-2c).
+GLOBAL_PAGES = ("index.md", "ambassadors.md")
+
+
 def config_pages() -> list[str]:
+    """Nav page paths without the leading "/"; "california/" becomes "california/index"."""
     text = (FW / "observablehq.config.js").read_text(encoding="utf-8")
-    return re.findall(r'path:\s*"/([^"]+)"', text)
+    pages = re.findall(r'path:\s*"/([^"]+)"', text)
+    return [page + "index" if page.endswith("/") else page for page in pages]
 
 
 def static_problems() -> list[str]:
@@ -62,18 +71,20 @@ def static_problems() -> list[str]:
     if not pages:
         problems.append("observablehq.config.js lists no pages")
     for page in [*pages, "index"]:
-        if "/" in page:
-            problems.append(
-                f"page {page!r} must sit at the top level of src/ (data resolves from the root)"
-            )
+        if page.count("/") > 1 or ("/" in page and page.split("/")[0] not in REGIONS):
+            problems.append(f"page {page!r} must be index or sit in a region folder {REGIONS}")
         if not (SRC / f"{page}.md").is_file():
             problems.append(f"missing page source framework/src/{page}.md")
     for md in SRC.glob("**/*.md"):
-        if md.parent != SRC:
-            problems.append(f"{md.relative_to(ROOT).as_posix()}: pages must be top-level")
+        rel = md.relative_to(SRC)
+        in_region = len(rel.parts) == 2 and rel.parts[0] in REGIONS
+        if rel.as_posix() not in GLOBAL_PAGES and not in_region:
+            problems.append(
+                f"{md.relative_to(ROOT).as_posix()}: pages are {GLOBAL_PAGES} or src/<region>/*.md"
+            )
 
     referenced: set[str] = set()
-    for source in [*SRC.glob("*.md"), *SRC.glob("components/*.js")]:
+    for source in [*SRC.glob("*.md"), *SRC.glob("*/*.md"), *SRC.glob("components/*.js")]:
         text = source.read_text(encoding="utf-8")
         referenced.update(re.findall(r'(?:loadJson|dataUrl)\(\s*"([^"$`]+)"', text))
     for name in sorted(referenced):
@@ -110,10 +121,12 @@ def build_report(dist: Path) -> tuple[list[str], dict[str, int]]:
             problems.append(
                 f"{html_path.name} uses a root-absolute asset path (breaks the /app/ subpath)"
             )
-        assets = re.findall(r'<link rel="(?:modulepreload|stylesheet)" href="\./([^"]+)"', html)
+        assets = re.findall(
+            r'<link rel="(?:modulepreload|stylesheet)" href="((?:\.\./|\./)[^"]+)"', html
+        )
         total = gzip_size(html_path)
         for asset in dict.fromkeys(assets):
-            asset_path = dist / asset.split("?")[0]
+            asset_path = (html_path.parent / asset.split("?")[0]).resolve()
             if asset_path.is_file():
                 total += gzip_size(asset_path)
             else:

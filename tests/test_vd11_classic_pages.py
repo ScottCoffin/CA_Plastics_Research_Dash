@@ -17,14 +17,16 @@ from atlas.build.seo import build_site
 
 ROOT = Path(__file__).resolve().parents[1]
 TOKENS = ROOT / "framework" / "src" / "design" / "tokens.css"
-EXPERT = ROOT / "site" / "expert.html"
+EXPERT = ROOT / "site" / "california" / "expert.html"
 SITE = ROOT / "site"
 FONT_FILES = {
     600: "BarlowSemiCondensed-SemiBold-latin.woff2",
     700: "BarlowSemiCondensed-Bold-latin.woff2",
 }
 # Re-pinned by UX-32: the metrics <small> note moved inside its <dd> (axe definition-list).
-ROUTING_SCRIPT_SHA256 = "83dbfdaf9e794fb8dde966cc44d841c3efc001e7852e1232b6afd55443d2b789"
+# Re-pinned by PLAT-1 path move: the page moved to site/california/, so its data, asset and
+# list links are relative to that folder (../data/, experts#author=, institution#inst=).
+ROUTING_SCRIPT_SHA256 = "565de27aed6a02e0450078d35563e52fef2dc73caa3f1ab5d6453c696762f899"
 HEX = re.compile(r"#[0-9a-fA-F]{6}\b")
 FACE = re.compile(r"@font-face\s*\{([^}]*)\}")
 REMOTE = re.compile(
@@ -71,7 +73,7 @@ def _normalise(css: str) -> str:
     return re.sub(r"\s*:\s*", ":", re.sub(r"\s+", " ", css))
 
 
-def _check_font_faces(css: str, url_prefix: str) -> None:
+def _check_font_faces(css: str, url_prefix: str, page_dir: Path) -> None:
     faces: dict[int, str] = {}
     for body in FACE.findall(css):
         match = re.search(r"font-weight:\s*(\d+)", body)
@@ -83,7 +85,7 @@ def _check_font_faces(css: str, url_prefix: str) -> None:
         assert 'font-family:"Barlow Semi Condensed"' in body
         assert "font-display:swap" in body
         assert f'url("{url_prefix}{filename}") format("woff2")' in body
-        assert (SITE / url_prefix.lstrip("/") / filename).is_file(), filename
+        assert (page_dir / url_prefix.lstrip("/") / filename).is_file(), filename
 
 
 def test_expert_root_palette_matches_tokens() -> None:
@@ -111,13 +113,13 @@ def test_seo_stylesheet_uses_only_token_colours() -> None:
 def test_expert_page_declares_local_barlow_faces_with_swap() -> None:
     html = EXPERT.read_text(encoding="utf-8")
     style = html.split("<style>", 1)[1].split("</style>", 1)[0]
-    _check_font_faces(style, "assets/fonts/")
+    _check_font_faces(style, "../assets/fonts/", EXPERT.parent)
     assert "font-family: var(--font-display);" in style
     assert "--font-display:" in style
 
 
 def test_seo_stylesheet_declares_root_relative_barlow_faces() -> None:
-    _check_font_faces(SEO_CSS, "/assets/fonts/")
+    _check_font_faces(SEO_CSS, "/assets/fonts/", SITE)
 
 
 def test_no_remote_fonts_or_stylesheets() -> None:
@@ -143,7 +145,7 @@ def test_expert_hash_routing_is_unchanged() -> None:
         "parseExpertId(location.search, location.hash)",
         'window.addEventListener("hashchange", route);',
         "`${location.pathname}#author=${encodeURIComponent(raw)}`",
-        "`index.html#experts?author=${encodeURIComponent(raw)}`",
+        "`experts#author=${encodeURIComponent(raw)}`",
     ):
         assert snippet in html, snippet
 
@@ -165,14 +167,14 @@ def test_generated_seo_page_carries_tokens_and_keeps_profile_link(tmp_path: Path
     )
     _write(data / "authors" / "A1.json", {"works": []})
     build_site(site, "https://plastiverse.live")
-    page = (site / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
+    page = (site / "california" / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
 
     style = re.search(r"<style>(.*?)</style>", page, re.DOTALL)
     assert style, "the generated page keeps one inline stylesheet"
     assert style.group(1) == SEO_CSS
-    _check_font_faces(style.group(1), "/assets/fonts/")
+    _check_font_faces(style.group(1), "/assets/fonts/", SITE)
     assert not REMOTE.search(style.group(1))
-    assert 'href="https://plastiverse.live/expert.html#author=A1"' in page
+    assert 'href="https://plastiverse.live/california/expert.html#author=A1"' in page
     assert "<h1>Ana Lee</h1>" in page
 
 

@@ -9,18 +9,19 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "framework" / "src"
 ICONS = SRC / "components" / "shared" / "icons.js"
 CONFIG = ROOT / "framework" / "observablehq.config.js"
-SPRITE_IMPORT = 'import {injectIconSprite} from "./components/shared/icons.js";'
+SPRITE_IMPORT = 'import {injectIconSprite} from "../components/shared/icons.js";'
 EYEBROW = re.compile(
     r'<p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" '
     r'focusable="false" aria-hidden="true"><use href="#i-(\w+)"></use></svg> (\w+)</p>'
 )
 
 # page -> (nav group shown in the eyebrow, icon symbol for the route)
+# PLAT-1: the context pages live in framework/src/california/ (keys are paths below src/).
 PAGES = {
-    "policy.md": ("Context", "scale"),
-    "resources.md": ("Context", "link"),
-    "about.md": ("Reference", "info"),
-    "glossary.md": ("Reference", "book"),
+    "california/policy.md": ("Context", "scale"),
+    "california/resources.md": ("Context", "link"),
+    "california/about.md": ("Reference", "info"),
+    "california/glossary.md": ("Reference", "book"),
 }
 
 
@@ -80,22 +81,22 @@ def test_each_context_page_injects_the_icon_sprite_after_its_head() -> None:
 
 
 def test_do_not_regress_items_remain_visible() -> None:
-    policy = _read("policy.md")
+    policy = _read("california/policy.md")
     assert "Reference information with outbound links" in _header(policy)
     assert 'id="policy-timeline"' in policy
     assert "Department of Toxic Substances Control" in policy
 
-    resources = _read("resources.md")
+    resources = _read("california/resources.md")
     assert "does not copy, mirror or ingest their data" in _header(resources)
     assert "Descriptions are quoted as each steward states them." in resources
 
-    about = _read("about.md")
+    about = _read("california/about.md")
     assert 'class="about-card about-limitations-card"' in about
     assert "no validated precision or recall is available yet" in about
     assert "10.5281/zenodo.24124016" in about
     assert "<h3>Corrections and source work</h3>" in about
 
-    glossary = _read("glossary.md")
+    glossary = _read("california/glossary.md")
     ids = re.findall(r'<dt id="([^"]+)">', glossary)
     assert len(ids) == 16
     for term_id in ids:

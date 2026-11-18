@@ -2,7 +2,7 @@
 title: Monitoring
 ---
 
-<link rel="stylesheet" href="./components/monitoring.css">
+<link rel="stylesheet" href="../components/monitoring.css">
 
 <div id="monitoring-root">
   <header class="atlas-page-head">
@@ -82,8 +82,8 @@ title: Monitoring
 </div>
 
 ```js
-import {mountMonitoring} from "./components/monitoring.js";
-import {initTooltips} from "./components/shared/tooltip.js";
+import {mountMonitoring} from "../components/monitoring.js";
+import {initTooltips} from "../components/shared/tooltip.js";
 initTooltips(document);
 mountMonitoring();
 ```

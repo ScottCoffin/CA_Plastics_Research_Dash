@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FW_SRC = ROOT / "framework" / "src"
-PAGE = FW_SRC / "evidence.md"
+PAGE = FW_SRC / "california" / "evidence.md"
 SCRIPT = FW_SRC / "components" / "evidence.js"
 
 

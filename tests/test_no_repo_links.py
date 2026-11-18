@@ -84,8 +84,8 @@ def test_status_page_renders_run_names_as_text() -> None:
 
 def test_footer_and_about_corrections_are_mailto_links_without_target() -> None:
     config = _text(ROOT / "framework" / "observablehq.config.js")
-    about = _text(ROOT / "framework" / "src" / "about.md")
-    experts = _text(ROOT / "framework" / "src" / "experts.md")
+    about = _text(ROOT / "framework" / "src" / "california" / "about.md")
+    experts = _text(ROOT / "framework" / "src" / "california" / "experts.md")
     classic = _text(ROOT / "site" / "index.html")
     assert (
         f'<a href="mailto:{EMAIL}?subject=Atlas%20data%20correction" rel="external">'
@@ -110,7 +110,7 @@ def test_footer_and_about_corrections_are_mailto_links_without_target() -> None:
 
 
 def test_methods_point_to_archive_and_licence_names_link_public_texts() -> None:
-    about = _text(ROOT / "framework" / "src" / "about.md")
+    about = _text(ROOT / "framework" / "src" / "california" / "about.md")
     classic = _text(ROOT / "site" / "index.html")
     for text in (about, classic):
         assert "https://doi.org/10.5281/zenodo.24124016" in text

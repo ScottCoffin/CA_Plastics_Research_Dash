@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FRAMEWORK = ROOT / "framework"
-ABOUT = (FRAMEWORK / "src" / "about.md").read_text(encoding="utf-8")
+ABOUT = (FRAMEWORK / "src" / "california" / "about.md").read_text(encoding="utf-8")
 CSS = (FRAMEWORK / "src" / "components" / "about.css").read_text(encoding="utf-8")
 CONFIG = (FRAMEWORK / "observablehq.config.js").read_text(encoding="utf-8")
 
@@ -43,11 +43,11 @@ def test_weekly_digest_placeholder_is_present() -> None:
 
 
 def test_footer_links_to_get_updates_and_keeps_the_existing_links() -> None:
-    assert '<li><a href="./about#get-updates">Get updates</a></li>' in CONFIG
+    assert '<li><a href="./california/about#get-updates">Get updates</a></li>' in CONFIG
     for link in (
-        '<li><a href="./about">About</a></li>',
-        '<li><a href="./glossary">Glossary</a></li>',
-        '<li><a href="./about#how-to-cite">How to cite</a></li>',
+        '<li><a href="./california/about">About</a></li>',
+        '<li><a href="./california/glossary">Glossary</a></li>',
+        '<li><a href="./california/about#how-to-cite">How to cite</a></li>',
         "Report a correction",
     ):
         assert link in CONFIG, link

@@ -10,13 +10,13 @@ title: Related resources
 
 Descriptions are quoted as each steward states them. Each small icon is the steward's own site icon or logo, shown only to identify the link.
 
-<link rel="stylesheet" href="./components/resources.css">
+<link rel="stylesheet" href="../components/resources.css">
 
 <div id="resources-root"></div>
 
 ```js
-import {injectIconSprite} from "./components/shared/icons.js";
-import {mountResources} from "./components/resources.js";
+import {injectIconSprite} from "../components/shared/icons.js";
+import {mountResources} from "../components/resources.js";
 injectIconSprite();
 mountResources();
 ```

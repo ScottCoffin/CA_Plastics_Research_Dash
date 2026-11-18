@@ -138,8 +138,8 @@ def main(argv: list[str] | None = None) -> int:
 
     errors = check_robots(site, base) + check_sitemaps(site, base)
 
-    expert_pages = sorted((site / "experts").glob("*/index.html"))
-    institution_pages = sorted((site / "institutions").glob("*/index.html"))
+    expert_pages = sorted((site / "california" / "experts").glob("*/index.html"))
+    institution_pages = sorted((site / "california" / "institutions").glob("*/index.html"))
     if len(expert_pages) < MIN_EXPERT_SAMPLE:
         errors.append(f"only {len(expert_pages)} expert pages; need >= {MIN_EXPERT_SAMPLE}")
     if not institution_pages:

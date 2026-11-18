@@ -29,7 +29,7 @@ def test_sidebar_groups_header_search_and_footer_contract() -> None:
     script = (
         f"import({json.dumps(config_uri)}).then(m => {{"
         "const c=m.default;"
-        "process.stdout.write(JSON.stringify({pages:c.pages,header:c.header({title:'Experts',path:'/experts'}),footer:c.footer,home:c.home}));"
+        "process.stdout.write(JSON.stringify({pages:c.pages,header:c.header({title:'Experts',path:'/california/experts'}),footer:c.footer,home:c.home}));"
         "})"
     )
     result = subprocess.run(
@@ -41,24 +41,26 @@ def test_sidebar_groups_header_search_and_footer_contract() -> None:
     )
     data = json.loads(result.stdout)
 
+    # PLAT-1: the California overview is the first sidebar entry; the groups follow it.
     assert [section["name"] for section in data["pages"]] == [
+        "California overview",
         "Explore",
         "Data",
         "Context",
         "Reference",
     ]
-    assert data["pages"][0]["pages"][0] == {"name": "Experts", "path": "/experts"}
-    assert data["pages"][1]["pages"][-1] == {"name": "Evidence map", "path": "/evidence"}
-    assert "CA Plastics Research Atlas" in data["home"]
+    assert data["pages"][1]["pages"][0] == {"name": "Experts", "path": "/california/experts"}
+    assert data["pages"][2]["pages"][-1] == {"name": "Evidence map", "path": "/california/evidence"}
+    assert "Plastiverse Live" in data["home"]
     assert "CA Plastics Research Atlas" in data["header"]
     assert 'aria-label="Toggle navigation menu"' in data["header"]
     assert 'name="q"' in data["header"]
     assert 'action="./search"' in data["header"]
     assert "data-atlas-site-search" in data["header"]
     assert "Search the Atlas" in data["header"]
-    assert 'href="./about#how-to-cite">How to cite</a>' in data["footer"]
+    assert 'href="./california/about#how-to-cite">How to cite</a>' in data["footer"]
     # NOTIFY-AB: the footer links to the About page's Get updates section.
-    assert '<li><a href="./about#get-updates">Get updates</a></li>' in data["footer"]
+    assert '<li><a href="./california/about#get-updates">Get updates</a></li>' in data["footer"]
     # Owner 2026-11-17: the footer credits the creator; the former disclaimer was removed.
     assert 'Created by <a href="https://scottcoff.in"' in data["footer"]
     assert "not an official OEHHA" not in data["footer"]
@@ -69,8 +71,8 @@ def test_postbuild_places_skip_link_first_and_repairs_framework_sidebar() -> Non
     module_uri = (FRAMEWORK / "scripts" / "postbuild.mjs").resolve().as_uri()
     script = (
         f"import({json.dumps(module_uri)}).then(m => {{"
-        f"const once=m.fixHtml({json.dumps(SAMPLE)},'index');"
-        "const twice=m.fixHtml(once,'index');"
+        f"const once=m.fixHtml({json.dumps(SAMPLE)},'california/index');"
+        "const twice=m.fixHtml(once,'california/index');"
         "process.stdout.write(JSON.stringify([once,twice]));"
         "})"
     )

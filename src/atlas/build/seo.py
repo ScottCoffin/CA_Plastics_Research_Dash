@@ -23,21 +23,24 @@ MAX_URLS_PER_SITEMAP = 50_000
 DESCRIPTION_LIMIT = 160
 PROFILE_WORK_LIMIT = 10
 TOPIC_LIMIT = 5
-# Interactive app routes for the sitemap (the Framework app is the site root since the owner's
-# H16 switch, 2026-11-13; /app/ paths are redirects). Redirect stubs (grants.html, sem.html,
-# expert.html, /app/*) and feed.xml are deliberately absent.
+# PLAT-1 (2026-11-17): the California atlas lives under /california/ (clean break, no redirects);
+# the site root is the global Plastiverse Live page. Entity pages are written below
+# ``site_dir/california/``. The interactive expert profile (california/expert.html) and feed.xml
+# are deliberately absent from the sitemap.
+REGION_PATH = "/california"
 PAGE_PATHS = (
     "/",
-    "/experts",
-    "/network",
-    "/institutions",
-    "/monitoring",
-    "/funding",
-    "/evidence",
-    "/policy",
-    "/resources",
-    "/glossary",
-    "/about",
+    f"{REGION_PATH}/",
+    f"{REGION_PATH}/experts",
+    f"{REGION_PATH}/network",
+    f"{REGION_PATH}/institutions",
+    f"{REGION_PATH}/monitoring",
+    f"{REGION_PATH}/funding",
+    f"{REGION_PATH}/evidence",
+    f"{REGION_PATH}/policy",
+    f"{REGION_PATH}/resources",
+    f"{REGION_PATH}/glossary",
+    f"{REGION_PATH}/about",
 )
 SAFE_ID = re.compile(r"[A-Za-z0-9_-]+")
 TOPIC_LABEL = re.compile(r'^\s*([A-Za-z0-9_]+):\s*\{\s*label:\s*"([^"]+)"', re.MULTILINE)
@@ -247,14 +250,15 @@ def _page(
 def _chrome_top(base: str) -> list[str]:
     return [
         '<a class="skip" href="#main">Skip to content</a>',
-        f'<header class="wrap"><p><a href="{esc(base)}/">{esc(ATLAS_NAME)}</a></p></header>',
+        f'<header class="wrap"><p><a href="{esc(base)}{REGION_PATH}/">'
+        f"{esc(ATLAS_NAME)}</a></p></header>",
         '<main class="wrap" id="main">',
     ]
 
 
 def _chrome_bottom(base: str) -> list[str]:
     return [
-        f'<p><a href="{esc(base)}/">Back to the {esc(ATLAS_NAME)}</a></p>',
+        f'<p><a href="{esc(base)}{REGION_PATH}/">Back to the {esc(ATLAS_NAME)}</a></p>',
         "</main>",
         f'<footer class="wrap muted"><p>{esc(DISCLAIMER)}</p></footer>',
     ]
@@ -270,8 +274,8 @@ def _expert_page(
     topics = _top_topics(author.get("domain_tags") or [], labels)
     plastic_count = _int(author.get("plastic_works_count"))
     citations = _int(author.get("plastic_citations"))
-    url = f"{base}/experts/{aid}/"
-    interactive = f"{base}/expert.html#author={aid}"
+    url = f"{base}{REGION_PATH}/experts/{aid}/"
+    interactive = f"{base}{REGION_PATH}/expert.html#author={aid}"
     orcid = _orcid_url(author.get("orcid"))
 
     summary = f"{name}, {primary}." if primary else f"{name}."
@@ -423,7 +427,7 @@ def _institution_page(
     kind = _sentence(_text(inst.get("atlas_type")))
     count = _int(inst.get("work_count"))
     ror = _ror_url(inst.get("ror"))
-    url = f"{base}/institutions/{iid}/"
+    url = f"{base}{REGION_PATH}/institutions/{iid}/"
 
     place = f", {city}" if city else ""
     description = _clip(f"{name}{place}. {count} works in the {ATLAS_NAME}.")
@@ -462,7 +466,7 @@ def _institution_page(
     if linked:
         parts.append("<h2>Top experts</h2>")
         items = [
-            f'<li><a href="{esc(base)}/experts/{aid}/">{esc(ename)}</a></li>'
+            f'<li><a href="{esc(base)}{REGION_PATH}/experts/{aid}/">{esc(ename)}</a></li>'
             for aid, ename in linked
         ]
         parts.append("<ul>" + "".join(items) + "</ul>")
@@ -529,7 +533,7 @@ def _sitemap_index(entries: list[tuple[str, str | None]]) -> str:
 
 
 def build_site(site_dir: Path, base_url: str = DEFAULT_BASE_URL) -> dict[str, int]:
-    """Write expert/institution pages and sitemaps under ``site_dir``.
+    """Write expert/institution pages under ``site_dir/california`` and sitemaps under ``site_dir``.
 
     Returns counts of pages, sitemap URLs and bytes written. Input is read from
     ``site_dir/data``; topic labels come from ``site_dir/assets/topics.js`` when present.
@@ -538,6 +542,7 @@ def build_site(site_dir: Path, base_url: str = DEFAULT_BASE_URL) -> dict[str, in
     """
     base = _normalise_base(base_url)
     data_dir = site_dir / "data"
+    region_dir = site_dir / REGION_PATH.strip("/")
     index = _read_json(data_dir / "index.json")
 
     experts: dict[str, dict[str, Any]] = {}
@@ -553,7 +558,7 @@ def build_site(site_dir: Path, base_url: str = DEFAULT_BASE_URL) -> dict[str, in
         profile = _read_json(data_dir / "authors" / f"{aid}.json")
         works = profile.get("works") or []
         page = _expert_page(author, works, labels, base)
-        written += _write(site_dir / "experts" / aid / "index.html", page)
+        written += _write(region_dir / "experts" / aid / "index.html", page)
 
     institutions: dict[str, dict[str, Any]] = {}
     for inst in _read_json(data_dir / "institutions.json").get("institutions") or []:
@@ -563,14 +568,16 @@ def build_site(site_dir: Path, base_url: str = DEFAULT_BASE_URL) -> dict[str, in
             institutions.setdefault(inst["inst_id"], inst)
     for iid, inst in institutions.items():
         page = _institution_page(inst, expert_names, base, networks)
-        written += _write(site_dir / "institutions" / iid / "index.html", page)
+        written += _write(region_dir / "institutions" / iid / "index.html", page)
 
     lastmod = _lastmod(_read_json(data_dir / "build_metadata.json"))
     sitemaps = {
         "sitemap-pages.xml": [(f"{base}{path}", lastmod) for path in PAGE_PATHS],
-        "sitemap-experts.xml": [(f"{base}/experts/{aid}/", lastmod) for aid in experts],
+        "sitemap-experts.xml": [
+            (f"{base}{REGION_PATH}/experts/{aid}/", lastmod) for aid in experts
+        ],
         "sitemap-institutions.xml": [
-            (f"{base}/institutions/{iid}/", lastmod) for iid in institutions
+            (f"{base}{REGION_PATH}/institutions/{iid}/", lastmod) for iid in institutions
         ],
     }
     for filename, entries in sitemaps.items():

@@ -1,63 +1,38 @@
-"""Assemble the deployed site with the Observable Framework app at the root (owner H16 switch).
+"""Assemble the deployed site: classic ``site/`` plus the Observable Framework build (PLAT-1).
 
-The classic static site (``site/``) still supplies the data, assets, status page, feed and the
-deploy-built SEO pages. The Framework build is copied over it, so the Framework ``index.html``
-becomes the home page, and every retired address becomes a small redirect stub:
+The classic static site (``site/``) supplies the data, assets, status page, feed, robots.txt,
+llms.txt, the interactive expert profile (``california/expert.html``) and the deploy-built SEO
+pages. The Framework build is copied over it:
 
-* ``app/<page>`` (the app's address before the switch) -> ``<page>``
-* ``index.html#<tab>?<params>`` (classic tabs) -> ``<tab>#<params>`` (script in the new home page)
-* ``grants.html`` -> ``funding``; ``sem.html`` -> ``institution``. ``expert.html`` (the full
-  expert profile) stays as it is unless the app gains its own ``expert`` page.
-* ``experts/index.html`` and ``institutions/index.html`` -> the list pages, in case the host
-  serves the SEO folders ``experts/<id>/`` instead of ``experts.html`` for ``/experts``.
+* ``index.html`` is the global Plastiverse Live page;
+* ``california/*.html`` are the California atlas pages (``california/index.html`` is its home).
 
-Stubs keep the query string and the ``#hash``, carry ``noindex`` and a canonical link, and work
-without JavaScript through a meta refresh (which drops the hash). If the Framework build failed,
-the deploy skips this step and the classic site stays the root.
+PLAT-1 (2026-11-17) is a clean break: the addresses of the California pages before the move
+(``/experts``, ``/app/<page>``, ``grants.html``, ``sem.html``, ``expert.html``, the classic
+``index.html#<tab>`` links, root ``experts/<id>/`` pages) get no redirects. Their leftover copies
+are removed from the output so they cannot be served stale. The California home keeps the classic
+home's S3.8 metadata (canonical, Open Graph, Atom link, JSON-LD), retargeted to ``/california/``.
+If the Framework build failed, the deploy skips this step and the classic site stays the root.
 """
 
 from __future__ import annotations
 
-import html
-import json
 import re
 import shutil
 from pathlib import Path
 
 BASE_URL = "https://plastiverse.live"
-CLASSIC_TABS = ("experts", "institutions", "monitoring", "funding", "about")
-# Head elements of the classic home page that the new home page must keep (S3.8 metadata).
+REGION = "california"
+# Head elements of the classic home page that the California home must keep (S3.8 metadata).
 HEAD_KEEP = (
     re.compile(r'<link rel="canonical"[^>]*>'),
     re.compile(r'<meta property="og:[^"]+"[^>]*>'),
     re.compile(r'<link rel="alternate" type="application/atom\+xml"[^>]*>'),
     re.compile(r'<script type="application/ld\+json">.*?</script>', re.S),
 )
-LEGACY_HASH_SCRIPT = (
-    "<script>(function(){var m=location.hash.match(/^#("
-    + "|".join(CLASSIC_TABS)
-    + r')(?:\?(.*))?$/);if(m){location.replace(m[1]+(m[2]?"#"+m[2]:""));}})();</script>'
-)
-MARKER = "<!-- atlas-root-switch -->"
-
-
-def stub_html(target: str, *, canonical: str, title: str = "Page moved") -> str:
-    """A redirect page to ``target`` (relative URL) that keeps the query string and hash."""
-    t = html.escape(target, quote=True)
-    js_target = json.dumps(target)
-    return (
-        "<!doctype html>\n"
-        '<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-        '<meta name="robots" content="noindex">\n'
-        f"<title>{html.escape(title)} · CA Plastics Research Atlas</title>\n"
-        f'<link rel="canonical" href="{html.escape(canonical, quote=True)}">\n'
-        f"<script>location.replace({js_target} + location.search + location.hash);</script>\n"
-        f'<meta http-equiv="refresh" content="0; url={t}">\n'
-        "</head>\n<body>\n"
-        f'<p>This page has moved. Continue to <a href="{t}">the new page</a>.</p>\n'
-        "</body>\n</html>\n"
-    )
+# Retired addresses (relative to the output root) removed from the output.
+RETIRED = ("app", "grants.html", "sem.html", "expert.html", "experts", "institutions")
+MARKER = "<!-- atlas-head-metadata -->"
 
 
 def _write(path: Path, text: str) -> None:
@@ -66,66 +41,76 @@ def _write(path: Path, text: str) -> None:
 
 
 def _framework_pages(dist: Path) -> list[str]:
-    return sorted(p.stem for p in dist.glob("*.html") if p.stem not in {"index", "404"})
+    region = dist / REGION
+    return sorted(p.stem for p in region.glob("*.html") if p.stem != "404")
 
 
-def _home_head_extras(classic_index: Path) -> str:
+def home_head_extras(classic_index: Path, base_url: str = BASE_URL) -> str:
+    """The classic home's S3.8 head metadata, retargeted to the California home."""
     if not classic_index.is_file():
         return ""
-    text = classic_index.read_text(encoding="utf-8")
-    head = text.split("</head>", 1)[0]
+    head = classic_index.read_text(encoding="utf-8").split("</head>", 1)[0]
     found: list[str] = []
     for pattern in HEAD_KEEP:
         found.extend(match.group(0) for match in pattern.finditer(head))
-    return "\n".join(found)
+    base = base_url.rstrip("/")
+    text = "\n".join(found)
+    text = text.replace(f'"{base}/"', f'"{base}/{REGION}/"')
+    return text.replace('href="feed.xml"', 'href="../feed.xml"')
 
 
-def patch_home(home: Path, extras: str) -> None:
-    """Insert the classic head metadata and the legacy-tab redirect into the new home page."""
-    text = home.read_text(encoding="utf-8")
-    if MARKER in text:
+def root_head_extras(base_url: str = BASE_URL) -> str:
+    """Canonical link and Atom feed link for the global page."""
+    base = base_url.rstrip("/")
+    return (
+        f'<link rel="canonical" href="{base}/">\n'
+        '<link rel="alternate" type="application/atom+xml" '
+        'title="New CA plastics papers and awards" href="feed.xml">'
+    )
+
+
+def patch_head(page: Path, extras: str) -> None:
+    """Insert ``extras`` before ``</head>`` once (idempotent)."""
+    text = page.read_text(encoding="utf-8")
+    if MARKER in text or not extras:
         return
-    block = "\n".join([MARKER, LEGACY_HASH_SCRIPT, extras]).strip() + "\n"
     if "</head>" not in text:
-        raise ValueError(f"{home} has no </head>")
-    _write(home, text.replace("</head>", block + "</head>", 1))
+        raise ValueError(f"{page} has no </head>")
+    _write(page, text.replace("</head>", f"{MARKER}\n{extras}\n</head>", 1))
 
 
 def assemble(site: Path, dist: Path, out: Path, *, base_url: str = BASE_URL) -> dict[str, int]:
-    """Build ``out`` = classic ``site`` + Framework ``dist`` at the root + redirect stubs.
+    """Build ``out`` = classic ``site`` + Framework ``dist``, without the retired addresses.
 
     ``out`` may equal ``site`` (the deploy works in place on its checkout); otherwise ``site``
     is copied first and left untouched.
     """
     site, dist, out = Path(site), Path(dist), Path(out)
-    if not (dist / "index.html").is_file():
-        raise FileNotFoundError(f"{dist} has no index.html; build the Framework app first")
-    extras = _home_head_extras(site / "index.html")
+    if not (dist / "index.html").is_file() or not (dist / REGION / "index.html").is_file():
+        raise FileNotFoundError(
+            f"{dist} has no index.html or {REGION}/index.html; build the Framework app first"
+        )
+    extras = home_head_extras(site / "index.html", base_url)
     if out.resolve() != site.resolve():
         if out.exists():
             shutil.rmtree(out)
-        shutil.copytree(site, out, ignore=shutil.ignore_patterns("app"))
-    elif (out / "app").exists():
-        shutil.rmtree(out / "app")
-    shutil.copytree(dist, out, dirs_exist_ok=True)
-    patch_home(out / "index.html", extras)
+        top = site.resolve()
 
-    pages = _framework_pages(dist)
-    base = base_url.rstrip("/")
-    stubs: dict[str, tuple[str, str]] = {"app/index.html": ("../", f"{base}/")}
-    for page in pages:
-        stubs[f"app/{page}.html"] = (f"../{page}", f"{base}/{page}")
-    classic_moves = {
-        "grants.html": "funding",
-        "sem.html": "institution" if "institution" in pages else "institutions",
-    }
-    if "expert" in pages:
-        classic_moves["expert.html"] = "expert"
-    for name, target in classic_moves.items():
-        stubs[name] = (target, f"{base}/{target}")
-    for listing in ("experts", "institutions"):
-        if listing in pages and not (out / listing / "index.html").exists():
-            stubs[f"{listing}/index.html"] = (f"../{listing}.html", f"{base}/{listing}")
-    for rel, (target, canonical) in stubs.items():
-        _write(out / rel, stub_html(target, canonical=canonical))
-    return {"pages": len(pages), "stubs": len(stubs)}
+        def retired_at_top(folder: str, names: list[str]) -> set[str]:
+            # Only the root's entries: california/experts/ must survive.
+            return set(RETIRED) & set(names) if Path(folder).resolve() == top else set()
+
+        shutil.copytree(site, out, ignore=retired_at_top)
+    removed = 0
+    for name in RETIRED:
+        path = out / name
+        if path.is_dir():
+            shutil.rmtree(path)
+            removed += 1
+        elif path.exists():
+            path.unlink()
+            removed += 1
+    shutil.copytree(dist, out, dirs_exist_ok=True)
+    patch_head(out / REGION / "index.html", extras)
+    patch_head(out / "index.html", root_head_extras(base_url))
+    return {"pages": len(_framework_pages(dist)), "removed": removed}

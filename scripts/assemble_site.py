@@ -1,4 +1,4 @@
-"""Put the Observable Framework app at the site root with redirect stubs (owner H16 switch).
+"""Assemble the deploy: classic site/ plus the Framework build (PLAT-1: / and /california/).
 
 Usage:
     py -3.14 scripts/assemble_site.py --site site --dist framework/dist --out scratch/deploy
@@ -26,7 +26,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", required=True)
     args = parser.parse_args(argv)
     counts = assemble(Path(args.site), Path(args.dist), Path(args.out))
-    print(f"assembled: {counts['pages']} app pages at the root, {counts['stubs']} redirect stubs")
+    print(
+        f"assembled: {counts['pages']} California pages, "
+        f"{counts['removed']} retired paths removed (PLAT-1, no redirects)"
+    )
     return 0
 
 

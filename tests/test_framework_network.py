@@ -12,7 +12,7 @@ RUNTIME_CHECK = ROOT / "tests" / "framework_network_runtime.mjs"
 MODEL = COMPONENTS / "network_model.js"
 VIEW = COMPONENTS / "network.js"
 CSS = COMPONENTS / "network.css"
-PAGE = FRAMEWORK / "src" / "network.md"
+PAGE = FRAMEWORK / "src" / "california" / "network.md"
 CONFIG = FRAMEWORK / "observablehq.config.js"
 
 # Pinned npm imports for the WebGL graph (exact versions; no range specifiers).
@@ -51,10 +51,10 @@ def test_network_page_has_no_internal_ids() -> None:
 
 def test_config_lists_network_after_experts() -> None:
     text = CONFIG.read_text(encoding="utf-8")
-    experts = text.index('{name: "Experts", path: "/experts"}')
-    network = text.index('{name: "Collaboration network", path: "/network"}')
+    experts = text.index('{name: "Experts", path: "/california/experts"}')
+    network = text.index('{name: "Collaboration network", path: "/california/network"}')
     assert experts < network
-    assert (COMPONENTS.parent / "network.md").is_file()
+    assert (COMPONENTS.parent / "california" / "network.md").is_file()
 
 
 def test_model_imports_are_local_only() -> None:
@@ -108,8 +108,8 @@ def test_view_keeps_filters_hash_and_table() -> None:
 
 def test_page_loads_network_component() -> None:
     text = PAGE.read_text(encoding="utf-8")
-    assert '<link rel="stylesheet" href="./components/network.css">' in text
-    assert 'import {mountNetwork} from "./components/network.js";' in text
+    assert '<link rel="stylesheet" href="../components/network.css">' in text
+    assert 'import {mountNetwork} from "../components/network.js";' in text
     assert 'id="network-status"' in text and 'role="status"' in text
     assert 'id="network-stage"' in text
     assert 'id="net-search"' in text and 'id="net-search-list"' in text

@@ -8,7 +8,7 @@ title: Glossary
 <p class="atlas-page-head__lead">Plain-language meanings of the terms used on the Experts, Institutions and Monitoring pages. Each entry names where its wording comes from.</p>
 </header>
 
-<link rel="stylesheet" href="./components/glossary.css">
+<link rel="stylesheet" href="../components/glossary.css">
 
 <dl class="glossary">
 
@@ -118,6 +118,6 @@ title: Glossary
 </dl>
 
 ```js
-import {injectIconSprite} from "./components/shared/icons.js";
+import {injectIconSprite} from "../components/shared/icons.js";
 injectIconSprite();
 ```

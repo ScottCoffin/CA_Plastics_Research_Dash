@@ -8,7 +8,7 @@
 // Pages with their own frontmatter head lose the config head, so addGlobalHead restores the
 // font faces, favicon and site search (VD-19) there too.
 import {readdirSync, readFileSync, statSync, writeFileSync} from "node:fs";
-import {basename, dirname, join} from "node:path";
+import {dirname, join, relative, sep} from "node:path";
 import {fileURLToPath} from "node:url";
 import frameworkConfig from "../observablehq.config.js";
 
@@ -17,7 +17,8 @@ const dist = join(here, "..", process.env.ATLAS_FW_OUT || "dist");
 const FONT_PRELOAD =
   '<link rel="preload" href="./assets/fonts/Archivo-Variable-latin.woff2" ' +
   'as="font" type="font/woff2" crossorigin>';
-const FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["']\.\/assets\/fonts\/Archivo-Variable-latin\.woff2["'])[^>]*>\s*/gi;
+// Matches the preload at any depth (./ for root pages, ../ after nestAssets), so fixHtml is idempotent.
+const FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["'](?:\.\.?\/)+assets\/fonts\/Archivo-Variable-latin\.woff2["'])[^>]*>\s*/gi;
 const SKIP_LINK = '<a class="atlas-skip-link" href="#observablehq-main">Skip to content</a>';
 const CONFIG_HEAD = frameworkConfig.head;
 const GLOBAL_FONT_STYLE = CONFIG_HEAD.match(/<style\b[\s\S]*?<\/style>/i)?.[0];
@@ -40,9 +41,19 @@ if (!GLOBAL_FONT_STYLE || !GLOBAL_FAVICON || !GLOBAL_SEARCH_STYLE || !GLOBAL_SEA
   );
 }
 
+// `page` is the built file's path below dist without ".html", with "/" separators: "index" for the
+// global page, "california/experts" for a California page (PLAT-1).
 export function fixHtml(html, page) {
   // Add stable page metadata first; fixTemplate then owns the final head ordering.
-  return fixShell(fixTemplate(addGlobalHead(addDescription(html, page))), page);
+  return nestAssets(fixShell(fixTemplate(addGlobalHead(addDescription(html, page))), page), page);
+}
+
+// data/ and assets/ stay at the site root, so a page in a subfolder needs ../assets/ where the
+// config head (written for a root page) says ./assets/. Framework's own URLs never use ./assets/.
+export function nestAssets(html, page) {
+  const depth = page.split("/").length - 1;
+  if (!depth) return html;
+  return html.replace(/(["'(])\.\/assets\//g, `$1${"../".repeat(depth)}assets/`);
 }
 
 function addGlobalHead(html) {
@@ -71,7 +82,7 @@ function fixShell(html, page) {
     /(<li class="observablehq-link observablehq-link-active"><a)(?![^>]*\baria-current=)/g,
     '$1 aria-current="page"'
   );
-  if (page === "index") {
+  if (page === "california/index") {
     fixed = fixed.replace(
       /(<li class="observablehq-link observablehq-link-active"><a)(?![^>]*\baria-label=)/,
       '$1 aria-label="Overview"'
@@ -94,21 +105,22 @@ function fixTemplate(html) {
     .replace("</head>", `${FONT_PRELOAD}\n</head>`);
 }
 
-// Plain-language meta descriptions per built page (SEO audit). Keyed by page file name without .html.
+// Plain-language meta descriptions per built page (SEO audit). Keyed by page path without .html.
 export const PAGE_DESCRIPTIONS = {
-  index: "Overview of the California Plastics Research Atlas, an independent guide to research on plastics in California.",
-  experts: "Researchers working on plastics in California, with their publications and affiliations.",
-  network: "Interactive map of who co-authors plastics research with whom among California experts.",
-  institutions: "Universities, agencies and other organisations active in California plastics research.",
-  institution: "One institution's plastics research: publications, lead authors, topics and collaborators.",
-  monitoring: "Monitoring programmes and observations of plastics in California, with sources, locations and licence details.",
-  funding: "Grants and funding programmes that support California plastics research, with totals by source and year.",
-  evidence: "Evidence map of California plastics research: filter studies by topic, year and source.",
-  policy: "Timeline of California and related policies on plastics, with dates and the sources behind each entry.",
-  resources: "Related resources on plastics in California, including data portals, reports and the organisations that maintain them.",
-  about: "About the Atlas: what it covers, how the data is sourced, and how to cite it.",
-  glossary: "Plain-language definitions of terms used in the California Plastics Research Atlas.",
-  styleguide: "Reference for the shared styles, icons, filters, tables, charts and accessible components used throughout the California Plastics Research Atlas.",
+  index: "Plastiverse Live: research on plastics and microplastics, organised region by region, starting with California.",
+  "california/index": "Overview of the California Plastics Research Atlas, an independent guide to research on plastics in California.",
+  "california/experts": "Researchers working on plastics in California, with their publications and affiliations.",
+  "california/network": "Interactive map of who co-authors plastics research with whom among California experts.",
+  "california/institutions": "Universities, agencies and other organisations active in California plastics research.",
+  "california/institution": "One institution's plastics research: publications, lead authors, topics and collaborators.",
+  "california/monitoring": "Monitoring programmes and observations of plastics in California, with sources, locations and licence details.",
+  "california/funding": "Grants and funding programmes that support California plastics research, with totals by source and year.",
+  "california/evidence": "Evidence map of California plastics research: filter studies by topic, year and source.",
+  "california/policy": "Timeline of California and related policies on plastics, with dates and the sources behind each entry.",
+  "california/resources": "Related resources on plastics in California, including data portals, reports and the organisations that maintain them.",
+  "california/about": "About the Atlas: what it covers, how the data is sourced, and how to cite it.",
+  "california/glossary": "Plain-language definitions of terms used in the California Plastics Research Atlas.",
+  "california/styleguide": "Reference for the shared styles, icons, filters, tables, charts and accessible components used throughout the California Plastics Research Atlas.",
 };
 
 export function addDescription(html, page) {
@@ -132,7 +144,8 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   let changed = 0;
   for (const file of walk(dist)) {
     const before = readFileSync(file, "utf8");
-    const after = fixHtml(before, basename(file, ".html"));
+    const page = relative(dist, file).split(sep).join("/").replace(/\.html$/, "");
+    const after = fixHtml(before, page);
     if (after !== before) {
       writeFileSync(file, after);
       changed += 1;

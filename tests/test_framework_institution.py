@@ -10,7 +10,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_CHECK = ROOT / "tests" / "framework_institution_runtime.mjs"
 COMPONENTS = ROOT / "framework" / "src" / "components"
-PAGE = ROOT / "framework" / "src" / "institution.md"
+PAGE = ROOT / "framework" / "src" / "california" / "institution.md"
 CONFIG = ROOT / "framework" / "observablehq.config.js"
 INSTITUTIONS_JS = COMPONENTS / "institutions.js"
 DETAIL_JS = COMPONENTS / "institution.js"

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ABOUT = (ROOT / "framework" / "src" / "about.md").read_text(encoding="utf-8")
+ABOUT = (ROOT / "framework" / "src" / "california" / "about.md").read_text(encoding="utf-8")
 
 
 def test_how_to_cite_uses_the_release_doi_and_concept_doi() -> None:

@@ -11,7 +11,7 @@ COMPONENTS = SRC / "components"
 
 
 def test_policy_timeline_keeps_caveat_and_fits_narrow_viewports() -> None:
-    page = (SRC / "policy.md").read_text(encoding="utf-8")
+    page = (SRC / "california" / "policy.md").read_text(encoding="utf-8")
     styles = (COMPONENTS / "policy.css").read_text(encoding="utf-8")
     runtime = (COMPONENTS / "policy.js").read_text(encoding="utf-8")
 
@@ -26,7 +26,7 @@ def test_policy_timeline_keeps_caveat_and_fits_narrow_viewports() -> None:
 
 
 def test_resources_style_steward_and_reuse_as_badges() -> None:
-    page = (SRC / "resources.md").read_text(encoding="utf-8")
+    page = (SRC / "california" / "resources.md").read_text(encoding="utf-8")
     styles = (COMPONENTS / "resources.css").read_text(encoding="utf-8")
     runtime = (COMPONENTS / "resources.js").read_text(encoding="utf-8")
 
@@ -38,10 +38,10 @@ def test_resources_style_steward_and_reuse_as_badges() -> None:
 
 
 def test_about_citation_doi_is_monospace_and_limitations_remain_visible() -> None:
-    page = (SRC / "about.md").read_text(encoding="utf-8")
+    page = (SRC / "california" / "about.md").read_text(encoding="utf-8")
     styles = (COMPONENTS / "about.css").read_text(encoding="utf-8")
 
-    assert 'href="./components/about.css"' in page
+    assert 'href="../components/about.css"' in page
     assert 'class="about-card about-citation-card"' in page
     assert "10.5281/zenodo.24124016" in page
     assert 'class="about-card about-limitations-card"' in page
@@ -52,12 +52,12 @@ def test_about_citation_doi_is_monospace_and_limitations_remain_visible() -> Non
 
 
 def test_glossary_terms_link_to_preserved_hash_targets_and_highlight() -> None:
-    page = (SRC / "glossary.md").read_text(encoding="utf-8")
+    page = (SRC / "california" / "glossary.md").read_text(encoding="utf-8")
     styles = (COMPONENTS / "glossary.css").read_text(encoding="utf-8")
     ids = re.findall(r'<dt id="([^"]+)">', page)
     links = re.findall(r'<a class="glossary-term-link" href="#([^"]+)">', page)
 
-    assert 'href="./components/glossary.css"' in page
+    assert 'href="../components/glossary.css"' in page
     assert len(ids) == 16
     assert len(links) == 16
     assert links == ids

@@ -31,22 +31,22 @@ def _assert_no_skips(levels: list[int]) -> None:
 
 
 def test_experts_and_funding_have_one_visible_h1():
-    for rel in ("experts.md", "funding.md"):
+    for rel in ("california/experts.md", "california/funding.md"):
         text = _read(rel)
         assert re.search(r"<h1>[^<]+</h1>", text), f"{rel} needs a visible h1"
         assert "<h2>Experts</h2>" not in text and "<h2>Funding</h2>" not in text
 
 
 def test_experts_page_heading_order_has_no_skips():
-    _assert_no_skips(_levels_in_order(_read("experts.md")))
+    _assert_no_skips(_levels_in_order(_read("california/experts.md")))
 
 
 def test_funding_page_heading_order_has_no_skips():
-    _assert_no_skips(_levels_in_order(_read("funding.md")))
+    _assert_no_skips(_levels_in_order(_read("california/funding.md")))
 
 
 def test_institutions_page_heading_order_has_no_skips():
-    text = _read("institutions.md")
+    text = _read("california/institutions.md")
     assert "<h2>California institution map</h2>" in text
     _assert_no_skips(_levels_in_order(text))
 
@@ -71,7 +71,7 @@ def test_resources_emit_card_names_as_h2():
 
 
 def test_experts_runtime_cards_sit_under_a_section_heading():
-    text = _read("experts.md")
+    text = _read("california/experts.md")
     assert '<h2 class="expert-sr-only">Expert list</h2>' in text
     # Expert cards are emitted as h3 by experts_model.js, so they need an h2 above them.
     assert text.index('<h2 class="expert-sr-only">') < text.index('id="expert-list"')
@@ -79,7 +79,7 @@ def test_experts_runtime_cards_sit_under_a_section_heading():
 
 
 def test_about_has_no_h3_before_first_h2():
-    text = _read("about.md")
+    text = _read("california/about.md")
     first_h2 = re.search(r"^## \S", text, flags=re.MULTILINE)
     assert first_h2, "about.md must use ## for its section headings"
     assert not re.search(r"^### \S", text[: first_h2.start()], flags=re.MULTILINE)

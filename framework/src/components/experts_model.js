@@ -3,7 +3,7 @@
 // profileHtml, drawerStatsHtml, renderVirtualRows, openDrawer, the CSV export and the hash
 // read/write). No DOM access at module load; the Node runtime test imports this file.
 // Topic helpers come from the global AtlasTopics (components/shared/topics.js).
-import {classicUrl, escapeHtml} from "./atlas.js";
+import {escapeHtml, pageUrl} from "./atlas.js";
 
 export const SORT_KEYS = ["ca_works", "cited_by", "h_index", "plastic_citations", "plastic_works", "m_quotient", "rising"];
 export const SORT_FIELDS = Object.freeze({cited_by: "cited_by_count", h_index: "h_index", plastic_citations: "plastic_citations", plastic_works: "plastic_works_count", m_quotient: "m_quotient", rising: "rising_score"});
@@ -227,7 +227,7 @@ export function mQuotientTitle(author) {
 }
 
 export function expertPageUrl(authorId) {
-  return classicUrl(`expert.html#author=${encodeURIComponent(authorId)}`);
+  return pageUrl(`expert.html#author=${encodeURIComponent(authorId)}`);
 }
 
 // Metric line; the active sort key is bold. Plastics citations carry their basis in a tooltip.

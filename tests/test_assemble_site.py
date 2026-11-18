@@ -1,20 +1,21 @@
-"""Owner H16 switch: the Framework app becomes the site root with redirect stubs."""
+"""PLAT-1: the global page at the root, California at /california/, no redirect stubs."""
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 import pytest
 
-from atlas.build.assemble import CLASSIC_TABS, assemble, stub_html
+from atlas.build.assemble import RETIRED, assemble
 
 CLASSIC_HEAD = (
     '<html lang="en"><head><title>Classic</title>'
     '<link rel="canonical" href="https://plastiverse.live/">'
     '<meta property="og:title" content="CA Plastics Research Atlas">'
-    '<script type="application/ld+json">{"@type": "WebSite"}</script>'
-    "</head><body>classic tabs</body></html>"
+    '<meta property="og:url" content="https://plastiverse.live/">'
+    '<link rel="alternate" type="application/atom+xml" title="Feed" href="feed.xml">'
+    '<script type="application/ld+json">{"@type": "WebSite", "url": "https://plastiverse.live/"}'
+    "</script></head><body>classic tabs</body></html>"
 )
 
 
@@ -34,23 +35,27 @@ def layout(tmp_path: Path) -> tuple[Path, Path, Path]:
             "index.html": CLASSIC_HEAD,
             "grants.html": "classic grants",
             "sem.html": "classic sem",
-            "expert.html": "classic expert",
+            "expert.html": "stale root expert page",
+            "california/expert.html": "classic expert",
+            "california/experts/A1/index.html": "seo expert",
+            "california/institutions/I1/index.html": "seo institution",
             "status.html": "status",
             "feed.xml": "<feed/>",
             "data/index.json": "{}",
-            "experts/A1/index.html": "seo expert",
-            "institutions/I1/index.html": "seo institution",
+            "experts/A1/index.html": "stale root seo expert",
             "app/old.html": "stale app copy",
         },
     )
     _tree(
         dist,
         {
-            "index.html": "<html><head><title>App</title></head><body>app home</body></html>",
-            "experts.html": "app experts",
-            "institutions.html": "app institutions",
-            "institution.html": "app institution",
-            "funding.html": "app funding",
+            "index.html": "<html><head><title>Global</title></head><body>global home</body></html>",
+            "california/index.html": (
+                "<html><head><title>CA</title></head><body>ca home</body></html>"
+            ),
+            "california/experts.html": "app experts",
+            "california/institution.html": "app institution",
+            "california/funding.html": "app funding",
             "404.html": "not found",
             "_import/components/atlas.js": "export {}",
         },
@@ -58,79 +63,65 @@ def layout(tmp_path: Path) -> tuple[Path, Path, Path]:
     return site, dist, tmp_path / "out"
 
 
-def test_app_becomes_root_and_classic_files_stay(layout) -> None:
+def test_global_page_at_root_and_california_pages_below(layout) -> None:
     site, dist, out = layout
     counts = assemble(site, dist, out)
     home = (out / "index.html").read_text(encoding="utf-8")
-    assert "app home" in home and "classic tabs" not in home
-    assert (out / "experts.html").read_text(encoding="utf-8") == "app experts"
+    assert "global home" in home and "classic tabs" not in home
+    assert (out / "california" / "experts.html").read_text(encoding="utf-8") == "app experts"
     assert (out / "_import" / "components" / "atlas.js").is_file()
-    for kept in ("status.html", "feed.xml", "data/index.json", "experts/A1/index.html"):
+    for kept in (
+        "status.html",
+        "feed.xml",
+        "data/index.json",
+        "california/expert.html",
+        "california/experts/A1/index.html",
+        "california/institutions/I1/index.html",
+    ):
         assert (out / kept).is_file(), kept
-    assert not (out / "app" / "old.html").exists(), "a stale /app/ copy must not survive"
-    assert (site / "grants.html").read_text(encoding="utf-8") == "classic grants"
     assert counts["pages"] == 4
+    # The source tree is left untouched.
+    assert (site / "grants.html").read_text(encoding="utf-8") == "classic grants"
 
 
-def test_home_keeps_classic_metadata_and_redirects_tab_hashes(layout) -> None:
+def test_clean_break_leaves_no_old_addresses(layout) -> None:
     site, dist, out = layout
     assemble(site, dist, out)
-    home = (out / "index.html").read_text(encoding="utf-8")
-    assert '<link rel="canonical" href="https://plastiverse.live/">' in home
-    assert '<meta property="og:title"' in home
-    assert '"@type": "WebSite"' in home
-    for tab in CLASSIC_TABS:
-        assert tab in home
-    assert home.index("atlas-root-switch") < home.index("</head>")
+    for name in RETIRED:
+        assert not (out / name).exists(), name
+    assert not list(out.rglob("*.html.stub"))
+    assert "location.replace" not in (out / "california" / "index.html").read_text("utf-8")
+
+
+def test_california_home_keeps_metadata_retargeted(layout) -> None:
+    site, dist, out = layout
+    assemble(site, dist, out)
+    home = (out / "california" / "index.html").read_text(encoding="utf-8")
+    assert '<link rel="canonical" href="https://plastiverse.live/california/">' in home
+    assert '<meta property="og:url" content="https://plastiverse.live/california/">' in home
+    assert '"url": "https://plastiverse.live/california/"' in home
+    assert 'href="../feed.xml"' in home
+    root = (out / "index.html").read_text(encoding="utf-8")
+    assert '<link rel="canonical" href="https://plastiverse.live/">' in root
+    assert 'href="feed.xml"' in root
     assemble(site, dist, out)  # idempotent: rebuilding never duplicates the block
-    assert (out / "index.html").read_text(encoding="utf-8").count("atlas-root-switch") == 1
-
-
-def test_redirect_stubs(layout) -> None:
-    site, dist, out = layout
-    assemble(site, dist, out)
-
-    def target(rel: str) -> str:
-        text = (out / rel).read_text(encoding="utf-8")
-        assert '<meta name="robots" content="noindex">' in text
-        return re.search(r"location\.replace\(\"([^\"]*)\"", text).group(1)
-
-    assert target("app/index.html") == "../"
-    assert target("app/experts.html") == "../experts"
-    assert target("app/institution.html") == "../institution"
-    assert target("grants.html") == "funding"
-    assert target("sem.html") == "institution"
-    # No app expert page in this build: the classic full profile page stays.
-    assert (out / "expert.html").read_text(encoding="utf-8") == "classic expert"
-    # Safety net for hosts that serve the SEO folder for /experts: go to the file, not /experts.
-    assert target("experts/index.html") == "../experts.html"
-    assert target("institutions/index.html") == "../institutions.html"
-
-
-def test_expert_stub_prefers_app_expert_page(layout) -> None:
-    site, dist, out = layout
-    (dist / "expert.html").write_text("app expert page", encoding="utf-8")
-    assemble(site, dist, out)
-    assert 'location.replace("expert"' in (out / "expert.html").read_text(encoding="utf-8")
+    again = (out / "california" / "index.html").read_text(encoding="utf-8")
+    assert again.count("atlas-head-metadata") == 1
 
 
 def test_in_place_assembly_for_the_deploy(layout) -> None:
     site, dist, _ = layout
-    assemble(site, dist, site)
-    assert "app home" in (site / "index.html").read_text(encoding="utf-8")
-    assert not (site / "app" / "old.html").exists()
-    assert "location.replace" in (site / "app" / "index.html").read_text(encoding="utf-8")
-
-
-def test_stub_keeps_hash_and_works_without_javascript() -> None:
-    text = stub_html("funding", canonical="https://plastiverse.live/funding")
-    assert 'location.replace("funding" + location.search + location.hash)' in text
-    assert '<meta http-equiv="refresh" content="0; url=funding">' in text
-    assert '<a href="funding">' in text
+    counts = assemble(site, dist, site)
+    assert "global home" in (site / "index.html").read_text(encoding="utf-8")
+    for name in RETIRED:
+        assert not (site / name).exists(), name
+    assert counts["removed"] == 5  # app, grants, sem, root expert.html, root experts/
+    assert (site / "california" / "expert.html").is_file()
 
 
 def test_missing_build_is_an_error(tmp_path: Path) -> None:
     (tmp_path / "site").mkdir()
     (tmp_path / "dist").mkdir()
+    (tmp_path / "dist" / "index.html").write_text("x", encoding="utf-8")
     with pytest.raises(FileNotFoundError):
         assemble(tmp_path / "site", tmp_path / "dist", tmp_path / "out")

@@ -8,8 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "framework" / "src"
 COMPONENTS = SRC / "components"
-LIST_PAGE = SRC / "institutions.md"
-DETAIL_PAGE = SRC / "institution.md"
+LIST_PAGE = SRC / "california" / "institutions.md"
+DETAIL_PAGE = SRC / "california" / "institution.md"
 LIST_CSS = COMPONENTS / "institutions.css"
 DETAIL_CSS = COMPONENTS / "institution.css"
 LIST_JS = COMPONENTS / "institutions.js"

@@ -57,6 +57,9 @@ node_modules/
 data/private/
 
 # S3.8 SEO entity pages and sitemaps: generated at deploy time only, never committed.
+site/california/experts/
+site/california/institutions/
+# Before PLAT-1 (2026-11-17) the SEO pages were written at the root; keep stale local copies ignored.
 site/experts/
 site/institutions/
 site/sitemap*.xml

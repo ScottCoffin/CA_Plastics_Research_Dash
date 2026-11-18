@@ -11,7 +11,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 HELPERS = ROOT / "site" / "assets" / "expert_page.js"
-PAGE = ROOT / "site" / "expert.html"
+PAGE = ROOT / "site" / "california" / "expert.html"
 
 # Loads the helper module with require() (it exports through module.exports under Node), runs each
 # [search, hash] pair given as JSON on argv, and prints the results as a JSON array.
@@ -83,4 +83,4 @@ def test_expert_page_uses_parse_expert_id_and_canonical_hash() -> None:
     assert "parseExpertId(location.search, location.hash)" in html
     assert 'history.replaceState(null, "", `${location.pathname}#author=' in html
     assert "expert.html#author=A5046986222" in html, "no-ID message shows the profile address form"
-    assert 'href="index.html#experts"' in html, "message section links back to the Experts list"
+    assert 'href="experts"' in html, "message section links back to the Experts list"

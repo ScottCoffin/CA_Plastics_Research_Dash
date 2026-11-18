@@ -13,7 +13,7 @@ def test_overview_stats_define_california_institutions() -> None:
     atlas = (SRC / "components" / "atlas.js").read_text(encoding="utf-8")
     assert "California institutions with any published work" in atlas
     assert "only those with a plastic-related work" in atlas
-    for page in ("index.md", "about.md"):
+    for page in ("california/index.md", "california/about.md"):
         text = (SRC / page).read_text(encoding="utf-8")
         assert 'class="stat-note"' in text, page
 

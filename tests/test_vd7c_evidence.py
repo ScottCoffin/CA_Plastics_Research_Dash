@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "framework" / "src" / "evidence.md"
+PAGE = ROOT / "framework" / "src" / "california" / "evidence.md"
 EVIDENCE_CSS = ROOT / "framework" / "src" / "components" / "evidence.css"
 EVIDENCE_JS = ROOT / "framework" / "src" / "components" / "evidence.js"
 TABLE_CSS = ROOT / "framework" / "src" / "components" / "ev_table.css"
@@ -45,7 +45,7 @@ def test_evidence_runtime_waits_for_initial_paint_and_reports_failure() -> None:
     assert bootstrap is not None
     source = bootstrap.group(1)
 
-    assert 'import {mountEvidence} from "./components/evidence.js";' in source
+    assert 'import {mountEvidence} from "../components/evidence.js";' in source
     assert re.search(
         r"requestAnimationFrame\(\(\) =>\s*\{\s*"
         r"requestAnimationFrame\(\(\) =>\s*\{\s*"
@@ -66,7 +66,7 @@ def test_page_styles_load_before_markup_and_callouts_follow_filters() -> None:
         "ev_table.css",
     )
     stylesheet_links = list(
-        re.finditer(r'<link rel="stylesheet" href="\./components/([^"]+)">', page)
+        re.finditer(r'<link rel="stylesheet" href="\.\./components/([^"]+)">', page)
     )
     assert tuple(match.group(1) for match in stylesheet_links) == expected_stylesheets
     header_start = page.index('<header class="atlas-page-head">')

@@ -28,20 +28,22 @@ from typing import Any
 
 AXE = Path.home() / "tools" / "ux-audit" / "node_modules" / "axe-core" / "axe.min.js"
 AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]
+# PLAT-1 (2026-11-17): "" is the global page; the California pages live under california/.
 ROUTES = [
     "",
-    "experts",
-    "network",
-    "institutions",
-    "institution#inst=I84218800",
-    "monitoring",
-    "funding",
-    "evidence",
-    "policy",
-    "resources",
-    "about",
-    "glossary",
-    "expert.html#author=A5031423229",
+    "california/",
+    "california/experts",
+    "california/network",
+    "california/institutions",
+    "california/institution#inst=I84218800",
+    "california/monitoring",
+    "california/funding",
+    "california/evidence",
+    "california/policy",
+    "california/resources",
+    "california/about",
+    "california/glossary",
+    "california/expert.html#author=A5031423229",
     "status.html",
 ]
 MAX_TABS = 400

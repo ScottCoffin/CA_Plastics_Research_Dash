@@ -11,19 +11,21 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 FW = ROOT / "framework"
+# PLAT-1: California pages are keyed "california/<page>"; "index" is the global page.
 PAGES = {
     "index",
-    "experts",
-    "network",
-    "institutions",
-    "institution",
-    "monitoring",
-    "funding",
-    "evidence",
-    "policy",
-    "resources",
-    "about",
-    "glossary",
+    "california/index",
+    "california/experts",
+    "california/network",
+    "california/institutions",
+    "california/institution",
+    "california/monitoring",
+    "california/funding",
+    "california/evidence",
+    "california/policy",
+    "california/resources",
+    "california/about",
+    "california/glossary",
 }
 SAMPLE = (
     '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
@@ -52,9 +54,9 @@ def _descriptions() -> dict[str, str]:
 
 def test_every_app_page_has_a_plain_language_description():
     descriptions = _descriptions()
-    assert set(descriptions) - PAGES == {"styleguide"}
+    assert set(descriptions) - PAGES == {"california/styleguide"}
     assert PAGES <= set(descriptions)
-    styleguide = (FW / "src" / "styleguide.md").read_text(encoding="utf-8")
+    styleguide = (FW / "src" / "california" / "styleguide.md").read_text(encoding="utf-8")
     assert "title: Shared components\n" in styleguide
     assert '<meta name="robots" content="noindex, nofollow">' in styleguide
     for page, text in descriptions.items():
@@ -64,22 +66,22 @@ def test_every_app_page_has_a_plain_language_description():
 
 
 def test_fix_html_inserts_one_description_into_head():
-    html = _postbuild(f"m.fixHtml({json.dumps(SAMPLE)}, 'evidence')")
+    html = _postbuild(f"m.fixHtml({json.dumps(SAMPLE)}, 'california/evidence')")
     assert html.count('<meta name="description" content="') == 1
     head = html.split("</head>")[0]
     assert '<meta name="description"' in head
-    assert _descriptions()["evidence"] in head
+    assert _descriptions()["california/evidence"] in head
 
 
 def test_fix_html_is_idempotent_for_descriptions():
-    once = _postbuild(f"m.fixHtml({json.dumps(SAMPLE)}, 'funding')")
-    twice = _postbuild(f"m.fixHtml({json.dumps(once)}, 'funding')")
+    once = _postbuild(f"m.fixHtml({json.dumps(SAMPLE)}, 'california/funding')")
+    twice = _postbuild(f"m.fixHtml({json.dumps(once)}, 'california/funding')")
     assert once == twice
 
 
 def test_fix_html_keeps_an_existing_description():
     existing = SAMPLE.replace("<title>", '<meta name="description" content="Custom."><title>')
-    html = _postbuild(f"m.fixHtml({json.dumps(existing)}, 'about')")
+    html = _postbuild(f"m.fixHtml({json.dumps(existing)}, 'california/about')")
     assert html.count('name="description"') == 1
     assert 'content="Custom."' in html
 

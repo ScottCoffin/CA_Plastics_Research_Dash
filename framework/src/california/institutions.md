@@ -2,7 +2,7 @@
 title: Institutions
 ---
 
-<link rel="stylesheet" href="./components/institutions.css">
+<link rel="stylesheet" href="../components/institutions.css">
 
 <div id="institutions-root">
 <header class="atlas-page-head institutions-page-head">
@@ -46,10 +46,10 @@ title: Institutions
 </div>
 
 ```js
-import {injectIconSprite} from "./components/shared/icons.js";
-import "./components/shared/topics.js";
-import {mountInstitutions} from "./components/institutions.js";
-import {initTooltips} from "./components/shared/tooltip.js";
+import {injectIconSprite} from "../components/shared/icons.js";
+import "../components/shared/topics.js";
+import {mountInstitutions} from "../components/institutions.js";
+import {initTooltips} from "../components/shared/tooltip.js";
 injectIconSprite();
 initTooltips(document);
 mountInstitutions();

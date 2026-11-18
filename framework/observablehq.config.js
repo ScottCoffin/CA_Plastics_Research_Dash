@@ -2,7 +2,10 @@
 // Since the owner's H16 switch (2026-11-13) the deploy puts this build at the site root over
 // the classic site/ (scripts/assemble_site.py; /app/, grants.html, sem.html and expert.html
 // become redirects). Pages read site/data at runtime (components/atlas.js).
-// Every page lives at the top level of src/ (atlas.js resolves ../data/ from the page URL).
+// PLAT-1 (2026-11-17): the California pages live in src/california/ and deploy to /california/;
+// src/index.md is the global Plastiverse Live page. data/ and assets/ stay at the site root, so
+// California pages read ../data/ (atlas.js siteRoot) and postbuild rewrites their head's
+// ./assets/ URLs to ../assets/.
 // VD-25a, VD-27: the brand mark and the favicon are the Overview's paper California: the state
 // outline cut from four flat planes, one per task (indigo water, vermilion people, gold money, ink evidence).
 const CA_OUTLINE = "M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L0,-221L0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-149,-121L-143,-122L-132,-116L-129,-111L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L167,360L221,405L256,494L469,474Z";
@@ -18,24 +21,26 @@ const CA_MARK = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK).toString(
 const FAVICON = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK.replace(' aria-hidden="true" focusable="false"', "")).toString("base64");
 const PAGE_GROUPS = [
   {name: "Explore", pages: [
-    {name: "Experts", path: "/experts"},
-    {name: "Collaboration network", path: "/network"},
-    {name: "Institutions", path: "/institutions"},
+    {name: "Experts", path: "/california/experts"},
+    {name: "Collaboration network", path: "/california/network"},
+    {name: "Institutions", path: "/california/institutions"},
   ]},
   {name: "Data", pages: [
-    {name: "Monitoring", path: "/monitoring"},
-    {name: "Funding", path: "/funding"},
-    {name: "Evidence map", path: "/evidence"},
+    {name: "Monitoring", path: "/california/monitoring"},
+    {name: "Funding", path: "/california/funding"},
+    {name: "Evidence map", path: "/california/evidence"},
   ]},
   {name: "Context", pages: [
-    {name: "Policy", path: "/policy"},
-    {name: "Related resources", path: "/resources"},
+    {name: "Policy", path: "/california/policy"},
+    {name: "Related resources", path: "/california/resources"},
   ]},
   {name: "Reference", pages: [
-    {name: "About", path: "/about"},
-    {name: "Glossary", path: "/glossary"},
+    {name: "About", path: "/california/about"},
+    {name: "Glossary", path: "/california/glossary"},
   ]},
 ];
+// Framework resolves header and footer links against the site root and then makes them relative
+// to each page, so these fragments always write root-relative links ("./california/experts").
 const PAGE_LABELS = new Map(PAGE_GROUPS.flatMap(({name, pages}) => pages.map(({name: label, path}) => [path, [label, name]])));
 
 // VD-21: the four PAGE_GROUPS as disclosure buttons for the desktop header (hidden at <= 52rem, where
@@ -94,12 +99,12 @@ const TOP_NAV_JS = `
 
 function atlasHeader({title, path}) {
   const current = PAGE_LABELS.get(path);
-  const pageTitle = title || (path === "/index" ? "Overview" : "CA Plastics Research Atlas");
+  const pageTitle = title || (path === "/california/index" ? "Overview" : "CA Plastics Research Atlas");
   const breadcrumb = current
     ? '<span class="atlas-header__group">' + current[1] + '</span><span aria-hidden="true">/</span><span class="atlas-header__page">' + pageTitle + '</span>'
     : '<span class="atlas-header__page">' + pageTitle + '</span>';
   return '<button id="atlas-menu-button" class="atlas-menu-button" type="button" aria-label="Toggle navigation menu" aria-controls="observablehq-sidebar" aria-expanded="false"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>' +
-    '<a class="atlas-header__brand" href="./"><img src="' + CA_MARK + '" alt=""><span>CA Plastics Research Atlas</span></a>' +
+    '<a class="atlas-header__brand" href="./california/"><img src="' + CA_MARK + '" alt=""><span>CA Plastics Research Atlas</span></a>' +
     topNav(path) +
     '<nav class="atlas-header__breadcrumb" aria-label="Page location">' + breadcrumb + '</nav>' +
     '<form class="atlas-header__search" action="./search" method="get" role="search" data-atlas-site-search><label for="atlas-header-search-input">Search the Atlas</label><input id="atlas-header-search-input" name="q" type="search" placeholder="Search experts, institutions, topics, funders…" autocomplete="off"><button type="submit">Search</button></form>' +
@@ -138,14 +143,15 @@ export default {
   toc: false,
   pager: false,
   sidebar: true,
-  home: '<span class="atlas-home-brand"><img src="' + CA_MARK + '" alt=""><span>CA Plastics Research Atlas</span></span>',
-  pages: PAGE_GROUPS,
+  home: '<span class="atlas-home-brand"><img src="' + CA_MARK + '" alt=""><span>Plastiverse Live</span></span>',  // links to the global page (/)
+  // The sidebar's home link is the global page (/); the California overview is its first entry.
+  pages: [{name: "California overview", path: "/california/"}, ...PAGE_GROUPS],
   header: atlasHeader,
   // Owner 2026-11-17: the footer credits the creator instead of the former disclaimer.
   footer: '<p class="atlas-footer__note">Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.</p>' +
     '<nav aria-label="Footer links"><ul class="atlas-footer__links">' +
-    '<li><a href="./about">About</a></li><li><a href="./glossary">Glossary</a></li>' +
-    '<li><a href="./about#how-to-cite">How to cite</a></li>' +
-    '<li><a href="./about#get-updates">Get updates</a></li>' +
+    '<li><a href="./california/about">About</a></li><li><a href="./california/glossary">Glossary</a></li>' +
+    '<li><a href="./california/about#how-to-cite">How to cite</a></li>' +
+    '<li><a href="./california/about#get-updates">Get updates</a></li>' +
     '<li><a href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction" rel="external">Report a correction</a></li></ul></nav>'
 };

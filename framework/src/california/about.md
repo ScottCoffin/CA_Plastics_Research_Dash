@@ -8,12 +8,12 @@ title: About
 <p class="atlas-page-head__lead">What the Atlas collects, where it comes from, how works are screened and classified, and how to cite, reuse or correct it.</p>
 </header>
 
-<link rel="stylesheet" href="./components/about.css">
+<link rel="stylesheet" href="../components/about.css">
 
 ```js
-import {loadJson, aboutViewModel, releaseDoi, classicUrl} from "./components/atlas.js";
-import {injectIconSprite} from "./components/shared/icons.js";
-import {mountAboutFlow} from "./components/about_flow.js";
+import {loadJson, aboutViewModel, releaseDoi, classicUrl} from "../components/atlas.js";
+import {injectIconSprite} from "../components/shared/icons.js";
+import {mountAboutFlow} from "../components/about_flow.js";
 injectIconSprite();
 const [metadata, release, releaseFlow] = await Promise.all([
   loadJson("build_metadata.json"),

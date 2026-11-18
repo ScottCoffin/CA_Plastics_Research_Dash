@@ -12,7 +12,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "framework" / "src"
 COMP = SRC / "components"
-PAGE = SRC / "funding.md"
+PAGE = SRC / "california" / "funding.md"
 STYLES = COMP / "funding.css"
 VIZ_STYLES = COMP / "funding_viz.css"
 SCRIPT = COMP / "funding.js"

@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "framework" / "src" / "monitoring.md"
+PAGE = ROOT / "framework" / "src" / "california" / "monitoring.md"
 STYLES = ROOT / "framework" / "src" / "components" / "monitoring.css"
 SHARED_STYLES = ROOT / "framework" / "src" / "design" / "components.css"
 SCRIPT = ROOT / "framework" / "src" / "components" / "monitoring.js"

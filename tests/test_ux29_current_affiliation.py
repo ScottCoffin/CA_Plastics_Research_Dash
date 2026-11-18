@@ -12,10 +12,10 @@ FW_SRC = ROOT / "framework" / "src"
 MODEL = FW_SRC / "components" / "experts_model.js"
 COMPONENT = FW_SRC / "components" / "experts.js"
 CSS = FW_SRC / "components" / "experts.css"
-EXPERTS_PAGE = FW_SRC / "experts.md"
-GLOSSARY = FW_SRC / "glossary.md"
+EXPERTS_PAGE = FW_SRC / "california" / "experts.md"
+GLOSSARY = FW_SRC / "california" / "glossary.md"
 CLASSIC = ROOT / "site" / "index.html"
-PROFILE = ROOT / "site" / "expert.html"
+PROFILE = ROOT / "site" / "california" / "expert.html"
 
 OPTIONS = [
     '<option value="">Any</option>',

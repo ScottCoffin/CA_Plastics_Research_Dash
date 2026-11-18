@@ -7,7 +7,8 @@ Extensionless paths fall back to ``.html`` like GitHub Pages, so Framework's cle
 
 Usage:
     py -3.14 scripts/serve_framework_preview.py [--port 8766] [--dist dist]
-    then open http://127.0.0.1:8766/CA_Plastics_Research_Dash/app/
+    then open http://127.0.0.1:8766/CA_Plastics_Research_Dash/app/california/
+    (the global page is .../app/; California pages read data from <prefix>/data/)
 """
 
 from __future__ import annotations

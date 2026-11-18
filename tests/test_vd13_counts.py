@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "tests" / "fixtures" / "s2_2_openalex_works.json"
 INSTITUTIONS = ROOT / "data" / "processed" / "institutions.parquet"
 BUILD_NETWORK = ROOT / "scripts" / "build_network.py"
-INDEX_PAGE = ROOT / "framework" / "src" / "index.md"
+INDEX_PAGE = ROOT / "framework" / "src" / "california" / "index.md"
 EXPORT_SRC = ROOT / "src" / "atlas" / "build" / "export_site.py"
 NETWORK_SRC = ROOT / "src" / "atlas" / "build" / "network.py"
 SITE_DATA = ROOT / "docs" / "SITE_DATA.md"
@@ -277,7 +277,7 @@ def test_overview_cards_read_the_card_counts_from_build_metadata() -> None:
     assert "metadata?.flow?.by_type" in page
     # Four door counts and seven band facts, each hidden unless every value in it is present.
     assert len(re.findall(r"<(?:li|small)[^>]*data-count-group", page)) == 11
-    assert 'import {loadJson, aboutViewModel, formatCount} from "./components/atlas.js";' in page
+    assert 'import {loadJson, aboutViewModel, formatCount} from "../components/atlas.js";' in page
     assert "metadata?.counts" in page
     assert "countText(formatCount(metadataCounts[key]))" in page
     assert "group.hidden = !ready" in page

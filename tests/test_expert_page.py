@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "site" / "expert.html"
+PAGE = ROOT / "site" / "california" / "expert.html"
 HELPERS = ROOT / "site" / "assets" / "expert_page.js"
 FIXTURE = ROOT / "tests" / "fixtures" / "expert_page_author.json"
 
@@ -171,8 +171,8 @@ def test_expert_page_has_no_external_hosts() -> None:
 
 def test_expert_page_loads_topics_and_helpers_in_order() -> None:
     html = PAGE.read_text(encoding="utf-8")
-    topics = html.index('<script src="assets/topics.js"></script>')
-    helpers = html.index('<script src="assets/expert_page.js"></script>')
+    topics = html.index('<script src="../assets/topics.js"></script>')
+    helpers = html.index('<script src="../assets/expert_page.js"></script>')
     app = html.index('<script id="expert-app">')
     assert topics < helpers < app, "topics.js and expert_page.js must load before the page script"
     assert HELPERS.exists()
@@ -180,8 +180,8 @@ def test_expert_page_loads_topics_and_helpers_in_order() -> None:
 
 def test_expert_page_navigation_and_disclaimer() -> None:
     html = PAGE.read_text(encoding="utf-8")
-    assert 'href="index.html#experts"' in html, "back link to the Experts list"
-    assert "index.html#experts?author=" in html, "Open in Experts list link"
+    assert 'href="experts"' in html, "back link to the Experts list"
+    assert "experts#author=" in html, "Open in Experts list link"
     assert 'Created by <a href="https://scottcoff.in"' in html
     assert 'class="skip-link" href="#main-content"' in html
     assert "hashchange" in html, "a new author in the hash re-renders the page"
@@ -371,8 +371,8 @@ assert.equal(A.coauthorInstitutionSummary([], "A9", instMap).caShare, null);
 
 const instMarkup = A.coauthorInstitutionsHtml(summary);
 assert.ok(instMarkup.includes("Co-authors came from 4 institutions; 25% in California."));
-assert.ok(instMarkup.includes('<a href="sem.html#inst=I3">Agency CA</a>'), "California institutions link to their SEM page");
-assert.ok(instMarkup.includes("Univ Elsewhere") && !instMarkup.includes('href="sem.html#inst=I2"'), "other institutions are not linked");
+assert.ok(instMarkup.includes('<a href="institution#inst=I3">Agency CA</a>'), "California institutions link to their institution page");
+assert.ok(instMarkup.includes("Univ Elsewhere") && !instMarkup.includes('href="institution#inst=I2"'), "other institutions are not linked");
 assert.ok(instMarkup.includes("· 3 works") && instMarkup.includes("· 1 work<"));
 assert.ok(A.coauthorInstitutionsHtml({ count: 4, caShare: null, top: [] }).includes("Co-authors came from 4 institutions."));
 assert.equal(A.coauthorInstitutionsHtml({ count: 0, caShare: null, top: [] }), "");
@@ -415,7 +415,7 @@ def test_expert_page_badge_helpers_runtime(tmp_path: Path) -> None:
 
 def test_expert_page_badge_markup_and_sections() -> None:
     html = PAGE.read_text(encoding="utf-8")
-    assert 'fetchJson("data/expert_badges.json")' in html, (
+    assert 'fetchJson("../data/expert_badges.json")' in html, (
         "badges are fetched once from the site data folder"
     )
     assert "loadBadges()" in html and "renderBadgeSections(badges, institutions, networks)" in html
@@ -464,7 +464,7 @@ const network = {
 };
 
 // Exact markup for a listed author, with the roster date in prose.
-const expected = '<li class="expert-badge expert-badge-network"><a href="https://marinescience.ucdavis.edu/microplastics-consortium-source-solution" title="Listed as a contributor on the consortium&#39;s page (updated 29 Oct 2026)"><img src="assets/networks/land-to-sea-microplastics-consortium.png" alt="" width="18" height="18"> Land to Sea Microplastics Consortium</a></li>';
+const expected = '<li class="expert-badge expert-badge-network"><a href="https://marinescience.ucdavis.edu/microplastics-consortium-source-solution" title="Listed as a contributor on the consortium&#39;s page (updated 29 Oct 2026)"><img src="../assets/networks/land-to-sea-microplastics-consortium.png" alt="" width="18" height="18"> Land to Sea Microplastics Consortium</a></li>';
 assert.equal(A.networkBadgesHtml([network], ID), expected);
 
 // Only listed authors get a badge; bad input gives nothing.
@@ -525,7 +525,7 @@ def test_network_badge_helper_is_exported_and_guards_links() -> None:
 
 def test_expert_page_loads_research_networks_once_and_shows_them_in_the_header() -> None:
     html = PAGE.read_text(encoding="utf-8")
-    assert 'fetchJson("data/research_networks.json")' in html and "json.networks" in html, (
+    assert 'fetchJson("../data/research_networks.json")' in html and "json.networks" in html, (
         "networks are fetched once from the site data folder; a failed fetch means no badge"
     )
     assert "S.networksPromise" in html and "loadNetworks()" in html

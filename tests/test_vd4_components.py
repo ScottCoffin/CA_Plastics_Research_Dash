@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 ICONS = ROOT / "framework/src/components/shared/icons.js"
 STYLES = ROOT / "framework/src/design/components.css"
-STYLEGUIDE = ROOT / "framework/src/styleguide.md"
+STYLEGUIDE = ROOT / "framework/src/california/styleguide.md"
 FW = ROOT / "framework"
 STYLEGUIDE_SAMPLE = (
     '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
@@ -76,8 +76,8 @@ def test_styleguide_is_unlisted_and_noindex() -> None:
 
 
 def test_postbuild_restores_global_head_for_styleguide_once() -> None:
-    once = _postbuild(f"m.fixHtml({json.dumps(STYLEGUIDE_SAMPLE)}, 'styleguide')")
-    twice = _postbuild(f"m.fixHtml({json.dumps(once)}, 'styleguide')")
+    once = _postbuild(f"m.fixHtml({json.dumps(STYLEGUIDE_SAMPLE)}, 'california/styleguide')")
+    twice = _postbuild(f"m.fixHtml({json.dumps(once)}, 'california/styleguide')")
 
     assert once == twice
     assert '<meta name="robots" content="noindex, nofollow">' in once
@@ -87,7 +87,7 @@ def test_postbuild_restores_global_head_for_styleguide_once() -> None:
         len(
             re.findall(
                 r'<link\b(?=[^>]*\brel="preload")'
-                r'(?=[^>]*\bhref="\.\/assets\/fonts\/Archivo-Variable-latin\.woff2")[^>]*>',
+                r'(?=[^>]*\bhref="\.\.\/assets\/fonts\/Archivo-Variable-latin\.woff2")[^>]*>',
                 once,
             )
         )

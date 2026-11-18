@@ -1,18 +1,26 @@
 // Shared runtime helpers for the Framework pages (AT-5).
-// Data: pages fetch the site's committed payloads (site/data) at runtime. Every page sits at the
-// top level of src/. Since the owner's switch (2026-11-13) the deploy puts the app at the site
-// root (scripts/assemble_site.py), so data is ./data/; the side-by-side layout (app under /app/,
-// used by scripts/serve_framework_preview.py without --assembled) keeps ../data/.
+// Data: pages fetch the site's committed payloads (site/data) at runtime. Since PLAT-1
+// (2026-11-17) the California pages live in src/california/ and deploy to /california/, while
+// data/ and assets/ stay at the site root, so a California page reads ../data/. The side-by-side
+// layout (app under /app/, scripts/serve_framework_preview.py without --assembled) adds one more
+// level.
 
 // Resolved lazily so Node tests can import this module (and modules that import it).
 function pageBase() {
   return typeof document !== "undefined" ? document.baseURI : "http://localhost/app/";
 }
 
-// The folder that holds data/, assets/ and the classic pages, as an absolute URL.
+// The folder that holds data/, assets/, status.html and feed.xml, as an absolute URL.
 export function siteRoot(base = pageBase()) {
   const url = new URL(base);
-  return new URL(/\/app\/[^/]*$/.test(url.pathname) ? "../" : "./", url);
+  const depth = (/\/california\/[^/]*$/.test(url.pathname) ? 1 : 0) +
+    (/\/app\/(?:california\/)?[^/]*$/.test(url.pathname) ? 1 : 0);
+  return new URL(depth ? "../".repeat(depth) : "./", url);
+}
+
+// A file in the current page's folder (the California pages and expert.html share one folder).
+export function pageUrl(path, base = pageBase()) {
+  return new URL(String(path).replace(/^\/+/, ""), base).href;
 }
 
 export function dataUrl(path) {
@@ -83,12 +91,4 @@ export function aboutViewModel(metadata, index) {
 // A DOI is shown only when it looks like a DOI (same rule as the classic About tab).
 export function releaseDoi(release) {
   return release && typeof release.doi === "string" && /^10\.\d+\/[\w./-]+$/.test(release.doi) ? release.doi : null;
-}
-
-// Placeholder for views not yet ported: links to the matching classic-site tab.
-export function classicLink(tab, label) {
-  const a = document.createElement("a");
-  a.href = classicUrl(`index.html#${tab}`);
-  a.textContent = label;
-  return a;
 }

@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "framework" / "src"
-PAGE = SRC / "experts.md"
+PAGE = SRC / "california" / "experts.md"
 COMPONENT = SRC / "components" / "experts.js"
 CSS = SRC / "components" / "experts.css"
 

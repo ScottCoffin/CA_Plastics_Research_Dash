@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MONITORING_MD = ROOT / "framework" / "src" / "monitoring.md"
+MONITORING_MD = ROOT / "framework" / "src" / "california" / "monitoring.md"
 MONITORING_JS = ROOT / "framework" / "src" / "components" / "monitoring.js"
 MONITORING_CSS = ROOT / "framework" / "src" / "components" / "monitoring.css"
 GRANTS = ROOT / "site" / "grants.html"

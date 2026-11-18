@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "framework" / "src" / "network.md"
+PAGE = ROOT / "framework" / "src" / "california" / "network.md"
 CSS = ROOT / "framework" / "src" / "components" / "network.css"
 VIEW = ROOT / "framework" / "src" / "components" / "network.js"
 SHARED_CSS = ROOT / "framework" / "src" / "design" / "components.css"

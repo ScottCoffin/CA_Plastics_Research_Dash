@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Expert profile · CA Plastics Research Atlas</title>
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
     <style>
       @font-face {
         font-family: "Barlow Semi Condensed";
         font-style: normal;
         font-weight: 600;
         font-display: swap;
-        src: url("assets/fonts/BarlowSemiCondensed-SemiBold-latin.woff2") format("woff2");
+        src: url("../assets/fonts/BarlowSemiCondensed-SemiBold-latin.woff2") format("woff2");
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
           U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
@@ -20,7 +20,7 @@
         font-style: normal;
         font-weight: 700;
         font-display: swap;
-        src: url("assets/fonts/BarlowSemiCondensed-Bold-latin.woff2") format("woff2");
+        src: url("../assets/fonts/BarlowSemiCondensed-Bold-latin.woff2") format("woff2");
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
           U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
@@ -176,7 +176,7 @@
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
       <div class="header-inner">
-        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html#experts">&larr; All experts</a></nav>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="experts">&larr; All experts</a></nav>
         <p class="eyebrow">Expert profile</p>
         <h1 id="expert-name">Loading…</h1>
         <ul id="expert-badges" class="expert-badges" aria-label="Expert badges" hidden></ul>
@@ -186,7 +186,7 @@
         <p id="expert-meta" class="expert-meta"></p>
         <div class="header-meta">
           <span id="expert-status" class="status-pill" role="status" aria-live="polite">Loading…</span>
-          <a id="open-in-list" class="header-link" href="index.html#experts">Open in Experts list</a>
+          <a id="open-in-list" class="header-link" href="experts">Open in Experts list</a>
         </div>
       </div>
     </header>
@@ -197,7 +197,7 @@
       <section id="message" class="panel" aria-labelledby="message-title" hidden>
         <h2 id="message-title"></h2>
         <p id="message-text" class="panel-intro"></p>
-        <p><a href="index.html#experts">Back to the Experts list</a></p>
+        <p><a href="experts">Back to the Experts list</a></p>
       </section>
 
       <div id="expert" hidden>
@@ -297,7 +297,7 @@
       <p class="notice">Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.</p>
       <footer class="page-footer">
         <p>Expert records come from the Atlas static snapshot. Publication lists are not a complete census of a researcher's output.</p>
-        <p><a href="index.html#experts">Back to the Experts list</a></p>
+        <p><a href="experts">Back to the Experts list</a></p>
         <nav aria-label="Footer links">
           <ul class="footer-links">
             <li><a href="./about">About</a></li>
@@ -308,8 +308,8 @@
       </footer>
     </main>
 
-    <script src="assets/topics.js"></script>
-    <script src="assets/expert_page.js"></script>
+    <script src="../assets/topics.js"></script>
+    <script src="../assets/expert_page.js"></script>
     <script id="expert-app">
       "use strict";
 
@@ -369,7 +369,7 @@
       }
       function loadInstitutions() {
         if (!S.institutions) {
-          S.institutions = fetchJson("data/institutions.json")
+          S.institutions = fetchJson("../data/institutions.json")
             .then((json) => new Map((json.institutions || []).map((inst) => [inst.inst_id, inst])))
             .catch(() => new Map());
         }
@@ -380,13 +380,13 @@
         const label = escapeHtml(name || id || "Unnamed institution");
         const inst = institutions && institutions.get(id);
         return inst && inst.ca_flag === true && INST_ID_RE.test(String(id || ""))
-          ? `<a href="sem.html#inst=${encodeURIComponent(id)}">${label}</a>`
+          ? `<a href="institution#inst=${encodeURIComponent(id)}">${label}</a>`
           : label;
       }
       // Expert id -> name from data/index.json (about 2.5 MB). Fetched once; null when unavailable.
       function loadExpertNames() {
         if (!S.expertNamesPromise) {
-          S.expertNamesPromise = fetchJson("data/index.json")
+          S.expertNamesPromise = fetchJson("../data/index.json")
             .then((json) => {
               S.expertNames = new Map((json.authors || []).map((a) => [a.author_id, a.name]));
               return S.expertNames;
@@ -395,19 +395,19 @@
         }
         return S.expertNamesPromise;
       }
-      // Funding, dataset and method notes (data/expert_badges.json). Fetched once; null when unavailable,
+      // Funding, dataset and method notes (../data/expert_badges.json). Fetched once; null when unavailable,
       // which hides the new sections.
       function loadBadges() {
         if (!S.badgesPromise) {
-          S.badgesPromise = fetchJson("data/expert_badges.json").catch(() => null);
+          S.badgesPromise = fetchJson("../data/expert_badges.json").catch(() => null);
         }
         return S.badgesPromise;
       }
-      // Research network rosters (data/research_networks.json). Fetched once; null when unavailable, which
+      // Research network rosters (../data/research_networks.json). Fetched once; null when unavailable, which
       // shows no consortium badge.
       function loadNetworks() {
         if (!S.networksPromise) {
-          S.networksPromise = fetchJson("data/research_networks.json")
+          S.networksPromise = fetchJson("../data/research_networks.json")
             .then((json) => (json && Array.isArray(json.networks) ? json.networks : null))
             .catch(() => null);
         }
@@ -467,7 +467,7 @@
         const meta = [`OpenAlex ${escapeHtml(author.author_id || S.id)}`];
         if (orcid) meta.push(`<a href="${escapeHtml(orcid)}" target="_blank" rel="noreferrer">ORCID profile</a>`);
         $("expert-meta").innerHTML = meta.join(" · ");
-        $("open-in-list").href = `index.html#experts?author=${encodeURIComponent(S.id)}`;
+        $("open-in-list").href = `experts#author=${encodeURIComponent(S.id)}`;
       }
 
       function renderProfile(profile) {
@@ -746,9 +746,9 @@
         $("expert-meta").textContent = "";
         $("affil-primary").innerHTML = "";
         $("expert-now").innerHTML = "";
-        $("open-in-list").href = `index.html#experts?author=${encodeURIComponent(raw)}`;
+        $("open-in-list").href = `experts#author=${encodeURIComponent(raw)}`;
         const [detail, institutions, badges, networks] = await Promise.all([
-          fetchJson(`data/authors/${encodeURIComponent(raw)}.json`).catch(() => null),
+          fetchJson(`../data/authors/${encodeURIComponent(raw)}.json`).catch(() => null),
           loadInstitutions(),
           loadBadges(),
           loadNetworks()

@@ -17,8 +17,8 @@ COMPONENTS = SRC / "design" / "components.css"
 TOOLTIP_JS = SRC / "components" / "shared" / "tooltip.js"
 MONITORING_CSS = SRC / "components" / "monitoring.css"
 MONITORING_JS = SRC / "components" / "monitoring.js"
-MONITORING_PAGE = SRC / "monitoring.md"
-INSTITUTIONS_PAGE = SRC / "institutions.md"
+MONITORING_PAGE = SRC / "california" / "monitoring.md"
+INSTITUTIONS_PAGE = SRC / "california" / "institutions.md"
 REDUCED_MOTION = re.compile(r"@media \(prefers-reduced-motion: reduce\) \{.*?\n\}", re.S)
 
 

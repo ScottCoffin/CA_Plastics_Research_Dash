@@ -29,7 +29,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = ROOT / "config" / "notifications.yml"
 DEFAULT_CURRENT = ROOT / "site" / "data" / "works_detail.json"
-CLICK_URL = "https://plastiverse.live/evidence#ev-recent"
+CLICK_URL = "https://plastiverse.live/california/evidence#ev-recent"
 TAGS = "microscope"
 USER_AGENT = "ca-plastics-research-atlas-notify"
 TIMEOUT_SECONDS = 15

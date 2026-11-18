@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FUNDING_JS = ROOT / "framework" / "src" / "components" / "funding.js"
-FUNDING_MD = ROOT / "framework" / "src" / "funding.md"
+FUNDING_MD = ROOT / "framework" / "src" / "california" / "funding.md"
 GRANTS_HTML = ROOT / "site" / "grants.html"
 
 

@@ -1,4 +1,4 @@
-# Handoff — 2026-11-17 (night) — MAIL-1 selection fixed; next PLAT-1, PLAT-2a, PLAT-2
+# Handoff — 2026-11-17 (night) — MAIL-1 and PLAT-1 done; next PLAT-2a, PLAT-2
 
 ## State in one paragraph
 The global landing design is approved (ADR-PLAT2-SPECTRAL-STORY-2026-11-17); build spec
@@ -10,17 +10,14 @@ community groups and networks, populate local monitoring datasets, identify loca
 MAIL-1's selection is fixed and its Monday cron is back on, so CI is green again.
 
 ## Done this checkpoint
-- MAIL-1: `select_new_works(..., max_age_days=)` also requires `pub_date` within
-  `digest.max_age_days` (config, default 60) of the week's end; the 9-15 Nov dry run lists 19
-  works instead of 1,565. The workflow schedule (Monday 14:00 UTC) is enabled; without the
-  `BUTTONDOWN_API_KEY` secret it is a no-op. 40 digest tests; full gate 2143 passed, 10 skipped.
+- MAIL-1 (`2ba73047`): digest selection requires a recent `pub_date` (19 works, not 1,565); Monday
+  cron on (no-op without the secret).
+- PLAT-1: California moved to `/california/` with a clean break (ADR-PLAT1-LAYOUT-2026-11-17,
+  `docs/PLAT_1_VERIFICATION.md`). Root `framework/src/index.md` is a placeholder until PLAT-2.
+  Local assembled deploy: 6/6 UX tasks, axe 0 and no console errors on 14 routes. Owner: H32.
 
 ## In flight / next (in this order)
-1. **PLAT-1 move California to /california (clean break).** As in `docs/PLATFORM_ARCHITECTURE.md`:
-   move `framework/src/*.md` into `framework/src/california/`, fix imports and data paths,
-   nav/footer, SEO pages, sitemap, robots, llms, feed, search index, ntfy and digest URLs; remove the
-   redirect stubs in `scripts/assemble_site.py`; root `index.md` is a placeholder until PLAT-2.
-   Cross-cutting: the lead or an Opus worker implements, sonnet-reviewer reviews.
+1. (PLAT-1 done.)
 2. **PLAT-2a global data**: `scripts/build_world_map.py` and `scripts/build_global_counts.py`
    (spec section 6; at most 60 credits; never paid filters).
 3. **PLAT-2 build the landing** to `docs/PLAT_2_LANDING_SPEC.md`.
@@ -37,4 +34,4 @@ MAIL-1's selection is fixed and its Monday cron is back on, so CI is green again
 - H30: approve or edit the evidence-map cells (spec section 4.6), reply "cells OK".
 - H29: create the Buttondown account and secret, then say "Buttondown ready" (first Monday send reaches only you).
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).
-- After PLAT-1 deploys: resubmit `https://plastiverse.live/sitemap.xml` in Google Search Console.
+- H32: after the PLAT-1 deploy, resubmit `https://plastiverse.live/sitemap.xml` in Search Console.

@@ -147,15 +147,15 @@ def test_builds_expert_and_institution_pages_and_skips_bad_ids(built) -> None:
     site, counts = built
     assert counts["experts"] == 2
     assert counts["institutions"] == 1
-    assert sorted(p.name for p in (site / "experts").iterdir()) == ["A1", "A2"]
-    assert sorted(p.name for p in (site / "institutions").iterdir()) == ["I1"]
+    assert sorted(p.name for p in (site / "california" / "experts").iterdir()) == ["A1", "A2"]
+    assert sorted(p.name for p in (site / "california" / "institutions").iterdir()) == ["I1"]
     assert not (site / "escape").exists()
-    assert (site / "experts" / "A1" / "index.html").is_file()
+    assert (site / "california" / "experts" / "A1" / "index.html").is_file()
 
 
 def test_escapes_names_and_keeps_jsonld_parseable(built) -> None:
     site, _ = built
-    html = (site / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
+    html = (site / "california" / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
     assert "<script>alert" not in html
     assert "&lt;script&gt;" in html
     assert "&amp; Partners" in html
@@ -172,11 +172,11 @@ def test_escapes_names_and_keeps_jsonld_parseable(built) -> None:
 
 def test_head_tags_are_unique_and_canonical_is_absolute(built) -> None:
     site, _ = built
-    html = (site / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
+    html = (site / "california" / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
     assert html.count("<title>") == 1
     assert '<html lang="en">' in html
     assert html.count('<meta name="description"') == 1
-    assert '<link rel="canonical" href="https://plastiverse.live/experts/A1/">' in html
+    assert '<link rel="canonical" href="https://plastiverse.live/california/experts/A1/">' in html
     assert 'name="twitter:card" content="summary"' in html
     description = re.search(r'<meta name="description" content="([^"]*)"', html)
     assert description is not None
@@ -185,8 +185,8 @@ def test_head_tags_are_unique_and_canonical_is_absolute(built) -> None:
 
 def test_expert_page_links_app_and_works_without_leaking_data(built) -> None:
     site, _ = built
-    html = (site / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
-    assert "https://plastiverse.live/expert.html#author=A1" in html
+    html = (site / "california" / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
+    assert "https://plastiverse.live/california/expert.html#author=A1" in html
     assert "Open the interactive profile" in html
     assert "Microplastics in soil" in html
     assert 'href="https://doi.org/10.1000/xyz"' in html
@@ -199,17 +199,17 @@ def test_expert_page_links_app_and_works_without_leaking_data(built) -> None:
 
 def test_outside_california_line_only_for_non_ca_experts(built) -> None:
     site, _ = built
-    outside = (site / "experts" / "A2" / "index.html").read_text(encoding="utf-8")
-    inside = (site / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
+    outside = (site / "california" / "experts" / "A2" / "index.html").read_text(encoding="utf-8")
+    inside = (site / "california" / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
     assert "Now outside California (last California affiliation 2019)" in outside
     assert "Now outside California" not in inside
 
 
 def test_institution_page_links_only_known_experts_and_uses_ror(built) -> None:
     site, _ = built
-    html = (site / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
+    html = (site / "california" / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
     assert html.count("<title>") == 1
-    assert 'href="https://plastiverse.live/experts/A1/"' in html
+    assert 'href="https://plastiverse.live/california/experts/A1/"' in html
     assert "MISSING" not in html
     data = _jsonld(html)
     assert data["@type"] == "Organization"
@@ -229,19 +229,20 @@ def test_sitemap_index_and_children(built) -> None:
     pages = ET.parse(site / "sitemap-pages.xml").getroot()
     page_locs = [el.text for el in pages.iter(f"{SITEMAP_NS}loc")]
     assert f"{BASE}/" in page_locs
-    assert f"{BASE}/evidence" in page_locs
-    assert f"{BASE}/about" in page_locs
-    assert f"{BASE}/network" in page_locs
+    assert f"{BASE}/california/evidence" in page_locs
+    assert f"{BASE}/california/about" in page_locs
+    assert f"{BASE}/california/network" in page_locs
     # The Framework app is the root (H16); /app/ paths are redirect stubs, never listed.
     assert not any("/app/" in loc for loc in page_locs)
     assert not any("grants.html" in loc or "feed.xml" in loc for loc in page_locs)
     experts = ET.parse(site / "sitemap-experts.xml").getroot()
     assert [el.text for el in experts.iter(f"{SITEMAP_NS}loc")] == [
-        f"{BASE}/experts/A1/",
-        f"{BASE}/experts/A2/",
+        f"{BASE}/california/experts/A1/",
+        f"{BASE}/california/experts/A2/",
     ]
     institutions = ET.parse(site / "sitemap-institutions.xml").getroot()
-    assert [el.text for el in institutions.iter(f"{SITEMAP_NS}loc")] == [f"{BASE}/institutions/I1/"]
+    locs = [el.text for el in institutions.iter(f"{SITEMAP_NS}loc")]
+    assert locs == [f"{BASE}/california/institutions/I1/"]
     lastmods = [el.text for el in experts.iter(f"{SITEMAP_NS}lastmod")]
     assert lastmods == ["2026-11-13", "2026-11-13"]
 
@@ -324,7 +325,7 @@ def _site_with_networks(tmp_path: Path, payload: dict | None = None) -> Path:
 
 def test_host_institution_page_shows_network_disclosure_and_sub_organization(tmp_path) -> None:
     site = _site_with_networks(tmp_path, _network_payload())
-    html = (site / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
+    html = (site / "california" / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
     assert "<h2>Research networks</h2>" in html
     assert f"<li>{NET_LINK} — hosted here</li>" in html
     assert f"<p>Disclosure: {NET_DISCLOSURE}</p>" in html
@@ -342,7 +343,7 @@ def test_host_institution_page_shows_network_disclosure_and_sub_organization(tmp
 
 def test_member_institution_page_points_to_host_without_sub_organization(tmp_path) -> None:
     site = _site_with_networks(tmp_path, _network_payload())
-    html = (site / "institutions" / "I4" / "index.html").read_text(encoding="utf-8")
+    html = (site / "california" / "institutions" / "I4" / "index.html").read_text(encoding="utf-8")
     assert "<h2>Research networks</h2>" in html
     assert f"<li>{NET_LINK} — researchers here are listed contributors</li>" in html
     assert "hosted here" not in html
@@ -352,7 +353,7 @@ def test_member_institution_page_points_to_host_without_sub_organization(tmp_pat
 
 def test_no_networks_file_leaves_institution_page_unchanged(tmp_path) -> None:
     site = _site_with_networks(tmp_path)
-    html = (site / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
+    html = (site / "california" / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
     assert "Research networks" not in html
     assert "Disclosure" not in html
     assert "subOrganization" not in _jsonld(html)
@@ -361,7 +362,7 @@ def test_no_networks_file_leaves_institution_page_unchanged(tmp_path) -> None:
 def test_unsafe_network_url_is_not_shown(tmp_path) -> None:
     payload = _network_payload(url="http://consortium.example/home")
     site = _site_with_networks(tmp_path, payload)
-    html = (site / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
+    html = (site / "california" / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
     assert "Research networks" not in html
     assert "subOrganization" not in _jsonld(html)
 
@@ -370,7 +371,7 @@ def test_unsafe_logo_path_is_left_out_of_sub_organization(tmp_path) -> None:
     payload = _network_payload()
     payload["networks"][0]["logo"]["path"] = "../secret.png"
     site = _site_with_networks(tmp_path, payload)
-    html = (site / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
+    html = (site / "california" / "institutions" / "I1" / "index.html").read_text(encoding="utf-8")
     assert NET_LINK in html
     card = _jsonld(html)["subOrganization"][0]
     assert card["name"] == NET_NAME

@@ -2,11 +2,11 @@
 title: Evidence map
 ---
 
-<link rel="stylesheet" href="./components/evidence.css">
-<link rel="stylesheet" href="./components/v3_flow.css">
-<link rel="stylesheet" href="./components/v4_trend.css">
-<link rel="stylesheet" href="./components/ev_heatmap.css">
-<link rel="stylesheet" href="./components/ev_table.css">
+<link rel="stylesheet" href="../components/evidence.css">
+<link rel="stylesheet" href="../components/v3_flow.css">
+<link rel="stylesheet" href="../components/v4_trend.css">
+<link rel="stylesheet" href="../components/ev_heatmap.css">
+<link rel="stylesheet" href="../components/ev_table.css">
 
 <header class="atlas-page-head">
   <p class="atlas-page-head__eyebrow"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-grid"></use></svg> Data</p>
@@ -56,9 +56,9 @@ title: Evidence map
 </div>
 
 ```js
-import {mountEvidence} from "./components/evidence.js";
-import {injectIconSprite} from "./components/shared/icons.js";
-import {initTooltips} from "./components/shared/tooltip.js";
+import {mountEvidence} from "../components/evidence.js";
+import {injectIconSprite} from "../components/shared/icons.js";
+import {initTooltips} from "../components/shared/tooltip.js";
 injectIconSprite();
 initTooltips(document);
 requestAnimationFrame(() => {

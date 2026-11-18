@@ -1,4 +1,4 @@
-"""Naive-user Playwright checks for six UX-18 tasks on the Framework app (the site root).
+"""Naive-user Playwright checks for six UX-18 tasks (PLAT-1: / global, /california/ atlas).
 
 Each task navigates by visible text, role and label only. A task records its steps, the last
 element it touched, and a finding. A failed control lookup is itself a finding.
@@ -76,19 +76,23 @@ def open_expert_more_filters(run: Run) -> None:
         run.click(summary, "More filters (7)")
 
 
+# The California Overview's h1 (VD-25 copy, framework/src/california/index.md).
+OVERVIEW_H1 = re.compile(r"California plastics research", re.I)
+
+
 def task_overview_profile(run: Run) -> None:
     """1. Overview -> CA-led author -> profile."""
-    run.goto("")
+    run.goto("california/")
     run.check(
-        run.page.get_by_role("heading", name="CA Plastics Research Atlas").is_visible(),
+        run.page.get_by_role("heading", level=1, name=OVERVIEW_H1).is_visible(),
         "no Overview heading",
     )
     run.last_element = "Overview page text"
     run.step("look for a CA-led author list on the Overview")
     on_overview = run.page.get_by_text("CA-led").count()
     run.click(
-        run.page.get_by_role("link", name="Find a California researcher"),
-        "Find a California researcher",
+        run.page.get_by_role("link", name=re.compile(r"^Find a (California )?researcher")).first,
+        "Find a researcher",
     )
     open_expert_more_filters(run)
     run.select(run.page.get_by_label("CA basis"), "CA basis", "CA-led")
@@ -105,7 +109,7 @@ def task_overview_profile(run: Run) -> None:
 
 def task_experts_export(run: Run) -> None:
     """2. Experts: topic + year range, export CSV, row count matches shown count."""
-    run.goto("experts")
+    run.goto("california/experts")
     tag = run.page.get_by_label("Domain or matrix tag")
     run.select(tag, "Domain or matrix tag", tag.locator("option").nth(1).inner_text())
     open_expert_more_filters(run)
@@ -130,7 +134,7 @@ def task_experts_export(run: Run) -> None:
 
 def task_institution_tier(run: Run) -> None:
     """3. Institutions: explain from the page why two institutions share a tier."""
-    run.goto("institutions")
+    run.goto("california/institutions")
     shown_notes = [
         n for n in run.page.get_by_text("cannot be reliably ordered").all() if n.is_visible()
     ]
@@ -161,7 +165,7 @@ def task_institution_tier(run: Run) -> None:
 
 def task_monitoring_csv(run: Run) -> None:
     """4. Monitoring: filter to one matrix and download the CSV."""
-    run.goto("monitoring")
+    run.goto("california/monitoring")
     matrix = run.page.get_by_label("Sample matrix")
     option = matrix.locator("option").nth(1).inner_text()
     run.select(matrix, "Sample matrix", option)
@@ -184,7 +188,7 @@ def task_monitoring_csv(run: Run) -> None:
 
 def task_funding_basis(run: Run) -> None:
     """5. Funding: California-led awards, then the amount basis for NIH awards."""
-    run.goto("funding")
+    run.goto("california/funding")
     # VD-7b: "Led from California" sits under the "More filters" disclosure, as a visitor finds it.
     more = run.page.locator("#grants-more-filters")
     if more.count() and more.get_attribute("open") is None:
@@ -205,17 +209,21 @@ def task_funding_basis(run: Run) -> None:
     run.note = f"NIH RePORTER amount basis: '{cells[-1]}' (reported amount {cells[-2]})."
 
 
-def task_old_app_link(run: Run) -> None:
-    """6. An old /app/ address (bookmarks, shared links) still reaches the matching page."""
-    run.goto("app/experts")
-    run.page.wait_for_load_state("networkidle")
-    url = run.page.url.split("#", 1)[0].rstrip("/")
-    run.check(url.endswith("/experts") and "/app/" not in url, f"landed on {run.page.url}")
-    run.check(
-        run.page.get_by_role("heading", name=re.compile("Experts", re.I)).first.is_visible(),
-        "no Experts heading after the redirect",
+def task_global_to_california(run: Run) -> None:
+    """6. The global page (/) leads to the California atlas (PLAT-1 moved it to /california/)."""
+    run.goto("")
+    run.click(
+        run.page.get_by_role("link", name=re.compile("California", re.I)).first,
+        "first California link on the global page",
     )
-    run.note = f"Old /app/experts link redirected to {run.page.url}."
+    run.page.wait_for_load_state("networkidle")
+    url = run.page.url.split("#", 1)[0]
+    run.check("/california/" in url, f"landed on {run.page.url}")
+    run.check(
+        run.page.get_by_role("heading", level=1, name=OVERVIEW_H1).is_visible(),
+        "no California Overview heading",
+    )
+    run.note = f"Global page linked to {run.page.url}."
 
 
 TASKS: list[tuple[str, Callable[[Run], None]]] = [
@@ -224,7 +232,7 @@ TASKS: list[tuple[str, Callable[[Run], None]]] = [
     ("3_institution_tier", task_institution_tier),
     ("4_monitoring_csv", task_monitoring_csv),
     ("5_funding_basis", task_funding_basis),
-    ("6_old_app_link", task_old_app_link),
+    ("6_global_to_california", task_global_to_california),
 ]
 
 

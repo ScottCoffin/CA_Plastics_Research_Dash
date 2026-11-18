@@ -9,7 +9,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 HELPERS = ROOT / "site" / "assets" / "expert_page.js"
-PAGE = ROOT / "site" / "expert.html"
+PAGE = ROOT / "site" / "california" / "expert.html"
 DRAWER_MODEL = ROOT / "framework" / "src" / "components" / "experts_model.js"
 
 # Checks the byline, co-author and topic-scale helpers in site/assets/expert_page.js (Node VM, module exports).

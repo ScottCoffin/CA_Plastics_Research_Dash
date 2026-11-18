@@ -21,7 +21,7 @@ from atlas.build.seo import load_topic_labels
 
 SCHEMA_VERSION = 1
 TYPES = ("page", "expert", "institution", "topic", "funder", "term", "resource")
-OVERVIEW_PAGE = ("Overview", "Home", "./")
+OVERVIEW_PAGE = ("Overview", "Home", "california/")
 EXCERPT_LIMIT = 140
 FUNDER_TYPE_DETAIL = {
     "federal": "Federal agency",
@@ -61,9 +61,14 @@ def _excerpt(text: str) -> str:
     return cut.rstrip(",;:") + "…"
 
 
+# PLAT-1: hrefs are relative to the site root (site_search.js resolves them there), and the
+# California pages live under california/.
+REGION_PREFIX = "california/"
+
+
 def _href(path: str, **params: str) -> str:
-    """``path#key=value&...``; values are form-encoded the way URLSearchParams reads them."""
-    return f"{path}#{urlencode(params)}"
+    """``california/path#key=value&...``, form-encoded the way URLSearchParams reads it."""
+    return f"{REGION_PREFIX}{path}#{urlencode(params)}"
 
 
 def parse_page_groups(config_text: str) -> list[tuple[str, str, str]]:
@@ -119,7 +124,8 @@ def _expert_items(authors: Iterable[dict]) -> list[tuple[str, str, str]]:
         if isinstance(affiliations, str):
             affiliations = [affiliations]
         detail = _text(affiliations[0]) if affiliations else ""
-        rows.append((name, detail, f"expert.html#{urlencode({'author': author_id})}"))
+        href = f"{REGION_PREFIX}expert.html#{urlencode({'author': author_id})}"
+        rows.append((name, detail, href))
     return rows
 
 
@@ -187,7 +193,7 @@ def _resource_items(entries: Iterable[dict]) -> list[tuple[str, str, str]]:
         if not name:
             continue
         url = _text(entry.get("root_url"))
-        href = url if url.startswith(("https://", "http://")) else "resources"
+        href = url if url.startswith(("https://", "http://")) else f"{REGION_PREFIX}resources"
         rows.append((name, _text(entry.get("relation")), href))
     return rows
 
@@ -213,7 +219,7 @@ def build_search_index(
         "topic": _topic_items(topic_labels or {}, matrix_labels or {}),
         "funder": _funder_items(grants or {}),
         "term": [
-            (term, excerpt, f"glossary#{quote(term_id, safe='')}")
+            (term, excerpt, f"{REGION_PREFIX}glossary#{quote(term_id, safe='')}")
             for term_id, term, excerpt in glossary
         ],
         "resource": _resource_items(resources),
@@ -262,6 +268,8 @@ def load_sources(root: Path) -> dict[str, Any]:
         "topic_labels": load_topic_labels(root / "site" / "assets" / "topics.js"),
         "matrix_labels": parse_matrix_labels(topics_js),
         "grants": grants,
-        "glossary": parse_glossary((framework / "src" / "glossary.md").read_text(encoding="utf-8")),
+        "glossary": parse_glossary(
+            (framework / "src" / "california" / "glossary.md").read_text(encoding="utf-8")
+        ),
         "resources": linkouts.get("entries", []),
     }

@@ -106,5 +106,5 @@ def test_route_keys_match_baseline() -> None:
 
 
 def test_entity_routes_use_the_brief_ids() -> None:
-    assert design_snapshots.ROUTES["institution"] == "institution#inst=I84218800"
-    assert design_snapshots.ROUTES["expert_profile"] == "expert.html#author=A5036007957"
+    assert design_snapshots.ROUTES["institution"] == "california/institution#inst=I84218800"
+    assert design_snapshots.ROUTES["expert_profile"] == "california/expert.html#author=A5036007957"

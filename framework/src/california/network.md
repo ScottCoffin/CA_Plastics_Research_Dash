@@ -11,7 +11,7 @@ title: Collaboration network
 </div>
 <p class="atlas-callout atlas-callout--info"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-info"></use></svg> <span><strong>Volume note.</strong> The network shows the 400 most active experts. Counts show volume, not quality: a well-connected expert is not necessarily a better researcher.</span></p>
 
-<link rel="stylesheet" href="./components/network.css">
+<link rel="stylesheet" href="../components/network.css">
 
 <section class="net-page" aria-label="Collaboration network explorer">
 <section class="atlas-filters" aria-labelledby="network-filters-heading">
@@ -98,8 +98,8 @@ title: Collaboration network
 </section>
 
 ```js
-import {mountNetwork} from "./components/network.js";
-import {initTooltips} from "./components/shared/tooltip.js";
+import {mountNetwork} from "../components/network.js";
+import {initTooltips} from "../components/shared/tooltip.js";
 initTooltips(document);
 mountNetwork();
 ```

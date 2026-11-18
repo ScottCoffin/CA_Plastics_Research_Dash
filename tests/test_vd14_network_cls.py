@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "framework" / "src" / "network.md"
+PAGE = ROOT / "framework" / "src" / "california" / "network.md"
 CSS = ROOT / "framework" / "src" / "components" / "network.css"
 ICONS = ROOT / "framework" / "src" / "components" / "shared" / "icons.js"
 
@@ -26,7 +26,7 @@ def test_header_and_callout_are_static_markup_before_the_filters() -> None:
     callout = page.index('<p class="atlas-callout atlas-callout--info">')
     net_page = page.index('<section class="net-page"')
     assert header < callout < net_page
-    assert page.index('<link rel="stylesheet" href="./components/network.css">') < net_page
+    assert page.index('<link rel="stylesheet" href="../components/network.css">') < net_page
     # The only remaining JavaScript block is the mount call, which comes after the static markup.
     assert page.count("```js") == 1
     assert page.index("```js") > net_page

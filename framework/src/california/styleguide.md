@@ -4,8 +4,8 @@ head: '<meta name="robots" content="noindex, nofollow">'
 ---
 
 ```js
-import {icon} from "./components/shared/icons.js";
-import "./components/shared/topics.js";
+import {icon} from "../components/shared/icons.js";
+import "../components/shared/topics.js";
 ```
 
 <div class="atlas-page-head">
