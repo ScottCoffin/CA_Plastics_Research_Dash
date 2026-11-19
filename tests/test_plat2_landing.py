@@ -139,8 +139,9 @@ def test_footer_logo_is_the_motion_poster_at_282_square() -> None:
         'and a network of research"' in tag
     )
     assert "logo_564.webp" not in footer
-    assert 'import {mountLogoMotion} from "./components/logo_motion.js";' in page
+    assert 'import {mountLogoMotion, mountIntroLogo} from "./components/logo_motion.js";' in page
     assert 'mountLogoMotion(document.querySelector(".plv-foot"));' in page
+    assert 'mountIntroLogo(document.querySelector(".plv-intro"));' in page
 
 
 def test_logo_motion_module_respects_reduced_motion_and_loads_lazily() -> None:
@@ -152,6 +153,56 @@ def test_logo_motion_module_respects_reduced_motion_and_loads_lazily() -> None:
     assert 'new URL("assets/landing/plastiverse_live.mp4", siteRoot())' in js
     assert '"Pause logo animation"' in js and '"Play logo animation"' in js
     assert "aria-hidden" in js and 'role", "img"' in js
+
+
+def test_intro_logo_section_comes_first_and_holds_the_poster() -> None:
+    page = INDEX.read_text(encoding="utf-8")
+    assert page.index('<section class="plv-intro"') < page.index('id="plv-story"')
+    assert page.index('<header class="plv-top') < page.index('<section class="plv-intro"')
+    intro = page.split('<section class="plv-intro"', 1)[1].split("</section>", 1)[0]
+    tags = re.findall(r"<img [^>]*>", intro)
+    assert len(tags) == 1
+    tag = tags[0]
+    assert 'class="plv-ilogo"' in tag
+    assert 'src="./assets/landing/logo_motion_poster.webp"' in tag
+    assert 'width="564" height="564"' in tag
+    assert 'fetchpriority="high"' in tag
+    assert (
+        'alt="Plastiverse Live logo: scattered plastic fragments flow into a bright node '
+        'and a network of research"' in tag
+    )
+    cue = r'<div class="cue plv-icue" aria-hidden="true">.*</svg><span>scroll</span></div>'
+    assert re.search(cue, intro)
+    assert '<a class="skip" href="#evidence">Skip to the evidence map</a>' in intro
+    # The stage's first paint is no longer the page's priority image; the intro logo is.
+    assert re.search(r'<img class="plv-firstpaint[^>]*fetchpriority="low"', page)
+    assert 'id="plv-cue" aria-hidden="true"><svg class="cue-arrow"' in page
+    assert "<i></i>scroll" not in page
+
+
+def test_intro_logo_mount_checks_motion_and_never_loops() -> None:
+    js = MOTION.read_text(encoding="utf-8")
+    assert "export function mountIntroLogo(intro)" in js
+    body = js.split("export function mountIntroLogo(intro)", 1)[1]
+    assert "motion.matches" in body and "prefers-reduced-motion: reduce" in js
+    assert "canPlayMp4()" in body and '"static"' in body
+    assert not re.search(r"\.loop\s*=\s*true", body)
+    assert "IntersectionObserver" in body and "watch.observe(intro)" in body
+    assert 'new URL("assets/landing/plastiverse_live.mp4", siteRoot())' in body
+    for label in ("Pause logo animation", "Play logo animation", "Replay logo animation"):
+        assert f'"{label}"' in body, label
+    assert 'toggle.className = "plv-ilogo-toggle"' in body
+    # The MP4 ends on black, so the video fades out and the poster (the logo) shows.
+    assert 'video.classList.remove("playing")' in body
+
+
+def test_intro_cue_and_skip_are_doubled_and_the_arrow_is_an_svg() -> None:
+    css = STYLE.read_text(encoding="utf-8")
+    assert re.search(r"\.plv \.skip \{[^}]*font-size: 28px", css)
+    assert re.search(r"\.plv \.cue \{[^}]*font-size: 26px", css)
+    assert re.search(r"\.plv \.cue-arrow \{[^}]*width: 24px; height: 56px", css)
+    assert ".cue i" not in css and "plv-cue " not in css
+    assert re.search(r"\.plv-intro \{[^}]*height: 100vh", css)
 
 
 def test_footer_animation_is_a_small_mp4_and_the_poster_is_564_square() -> None:

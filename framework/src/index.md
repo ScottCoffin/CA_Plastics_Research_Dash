@@ -23,9 +23,14 @@ head: |
 <header class="plv-top on-dark"><a class="plv-brand" href="./" aria-label="Plastiverse Live home"><svg class="plv-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="5"/><g><line x1="20.60" y1="13.00" x2="23.40" y2="13.00"/><line x1="20.02" y1="15.91" x2="23.72" y2="17.44"/><line x1="18.37" y1="18.37" x2="20.35" y2="20.35"/><line x1="15.91" y1="20.02" x2="17.44" y2="23.72"/><line x1="13.00" y1="20.60" x2="13.00" y2="23.40"/><line x1="10.09" y1="20.02" x2="8.56" y2="23.72"/><line x1="7.63" y1="18.37" x2="5.65" y2="20.35"/><line x1="5.98" y1="15.91" x2="2.28" y2="17.44"/><line x1="5.40" y1="13.00" x2="2.60" y2="13.00"/><line x1="5.98" y1="10.09" x2="2.28" y2="8.56"/><line x1="7.63" y1="7.63" x2="5.65" y2="5.65"/><line x1="10.09" y1="5.98" x2="8.56" y2="2.28"/><line x1="13.00" y1="5.40" x2="13.00" y2="2.60"/><line x1="15.91" y1="5.98" x2="17.44" y2="2.28"/><line x1="18.37" y1="7.63" x2="20.35" y2="5.65"/><line x1="20.02" y1="10.09" x2="23.72" y2="8.56"/></g></svg><span class="plv-wm" aria-hidden="true">PLASTIVERSE <b>LIVE</b></span></a>
 <nav class="plv-nav" aria-label="Main"><a href="./explore">Explore the data</a><a href="#evidence">Evidence map</a><button type="button" class="plv-btn keep" id="plv-regions-btn" aria-expanded="false" aria-controls="plv-hdr-picker">Regions <svg width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="./california/about#how-works-are-screened">Methods</a><a href="./california/about">About</a><a class="plv-btn solid keep" href="#updates">Get updates</a></nav>
 <div class="plv-picker" id="plv-hdr-picker" data-plv="picker" hidden></div></header>
+<section class="plv-intro" id="plv-intro" aria-label="Plastiverse Live">
+<div class="plv-ilogo-box"><img class="plv-ilogo" src="./assets/landing/logo_motion_poster.webp" width="564" height="564" alt="Plastiverse Live logo: scattered plastic fragments flow into a bright node and a network of research" fetchpriority="high"></div>
+<div class="cue plv-icue" aria-hidden="true"><svg class="cue-arrow" width="24" height="56" viewBox="0 0 24 56" aria-hidden="true"><path d="M12 2v50M3 43l9 9 9-9" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>scroll</span></div>
+<a class="skip" href="#evidence">Skip to the evidence map</a>
+</section>
 <section class="plv-story" id="plv-story" aria-label="Why Plastiverse Live exists">
 <div class="plv-stage" id="plv-stage">
-<img class="plv-firstpaint in" id="plv-firstpaint" src="./assets/landing/picnic_first_paint.webp" srcset="./assets/landing/picnic_first_paint_800.webp 800w, ./assets/landing/picnic_first_paint.webp 1600w" sizes="100vw" width="1600" height="1067" alt="" fetchpriority="high">
+<img class="plv-firstpaint in" id="plv-firstpaint" src="./assets/landing/picnic_first_paint.webp" srcset="./assets/landing/picnic_first_paint_800.webp 800w, ./assets/landing/picnic_first_paint.webp 1600w" sizes="100vw" width="1600" height="1067" alt="" fetchpriority="low">
 <canvas id="plv-cv" aria-hidden="true"></canvas>
 <svg id="plv-bulbsrc" width="0" height="0" style="position:absolute" focusable="false" aria-hidden="true"><path d="M100 10 C150 10 186 46 186 96 C186 134 162 152 146 176 C138 188 136 196 136 206 L64 206 C64 196 62 188 54 176 C38 152 14 134 14 96 C14 46 50 10 100 10 Z"/><path d="M66 218 H134 M68 232 H132 M72 246 H128 M84 262 H116"/><path d="M82 206 L86 132 L94 118 L100 132 L106 118 L114 132 L118 206"/></svg>
 <p class="sr-only">A picnic laid out on a checked blanket, made entirely of disposable plastics: cups, plates, cutlery, straws, a soda bottle, squeeze bottles, wrapped sandwiches, a food tub, a beach ball and a jump rope. Scrolling, it shatters into microplastic particles that become published studies, then a chart of research output, an evidence map, a collaboration network and a world map.</p>
@@ -43,7 +48,7 @@ head: |
 <div class="cap c6" data-a="27.3" data-b="28.5"><h2>The problem is global.</h2><p data-a="27.75">Plastics research now comes from almost every country.</p><p class="src" data-a="27.75">Works by country, OpenAlex, <span data-plv="map-fetched"></span>.</p></div>
 <div class="cap c7" data-a="29.6" data-b="99"><h2>Local knowledge and connections matter.</h2><p data-a="30">Regional atlases zoom in on the people, monitoring, funding and policy of one place. Powered by local researchers and community leaders.</p><p class="cta" data-a="30.35"><a class="plv-btn solid" href="./ambassadors">Join the movement, and become a local ambassador <svg width="14" height="10" viewBox="0 0 14 10" aria-hidden="true"><path d="M1 5h11M8 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p><p class="sep" data-a="30.7">California is live; Norway is next.</p></div>
 <ul class="sr-only" id="plv-ann-list" aria-label="Chart annotations"></ul>
-<div class="cue" id="plv-cue" aria-hidden="true"><i></i>scroll</div>
+<div class="cue" id="plv-cue" aria-hidden="true"><svg class="cue-arrow" width="24" height="56" viewBox="0 0 24 56" aria-hidden="true"><path d="M12 2v50M3 43l9 9 9-9" fill="none" stroke="currentColor" stroke-width="2"/></svg>scroll</div>
 <a class="skip" href="#evidence">Skip to the evidence map</a>
 </div>
 <div class="plv-stills" id="plv-stills"></div>
@@ -86,10 +91,11 @@ head: |
 
 ```js
 import {mountLandingStory, mountPickers, mountRegionsMap} from "./components/landing_story.js";
-import {mountLogoMotion} from "./components/logo_motion.js";
+import {mountLogoMotion, mountIntroLogo} from "./components/logo_motion.js";
 const landingRoot = document.querySelector(".plv");
 mountPickers(landingRoot);
 mountRegionsMap(landingRoot);
 mountLandingStory(landingRoot).catch((error) => console.error("landing story:", error));
+mountIntroLogo(document.querySelector(".plv-intro"));
 mountLogoMotion(document.querySelector(".plv-foot"));
 ```

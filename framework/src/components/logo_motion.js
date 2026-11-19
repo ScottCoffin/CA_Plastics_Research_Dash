@@ -108,3 +108,107 @@ export function mountLogoMotion(footer) {
   near.observe(img);
   motion.addEventListener("change", onMotion);
 }
+
+// Intro logo (LAND-2, .plv-intro in index.md): the MP4 plays once, muted, over the poster. Its last
+// frames are black, so when it ends it fades out and the poster (the logo) shows. It pauses while the
+// intro is off screen and stays ended until the viewer replays it. Reduced motion, or a browser that
+// cannot play MP4, keeps the poster (the intro gets class "static").
+const INTRO_HOLD_AT = 5.6; // s; the 7.0 s MP4 shows the full logo from ~5.5 s, then fades to black
+
+export function mountIntroLogo(intro) {
+  const img = intro?.querySelector("img.plv-ilogo");
+  const motion = matchMedia("(prefers-reduced-motion: reduce)");
+  if (!img || motion.matches || !canPlayMp4()) {
+    intro?.classList.add("static");
+    return;
+  }
+
+  let watch = null;
+  let video = null;
+  let toggle = null;
+  let userPaused = false;
+  let finished = false;
+
+  // Back to the static poster: the observer and listener stop, the MP4 is paused and removed.
+  const showStatic = () => {
+    watch?.disconnect();
+    motion.removeEventListener("change", onMotion);
+    video?.pause();
+    video?.remove();
+    toggle?.remove();
+    video = null;
+    toggle = null;
+    intro.classList.add("static");
+  };
+  const onMotion = () => {
+    if (motion.matches) showStatic();
+  };
+  const playVideo = () => {
+    const started = video.play();
+    // play() rejects with AbortError when a pause() arrives first; that is not a failure.
+    started?.catch((error) => {
+      if (error.name !== "AbortError") showStatic();
+    });
+  };
+  const showToggle = () => {
+    const label = finished ? "Replay logo animation" : userPaused ? "Play logo animation" : "Pause logo animation";
+    toggle.innerHTML = finished || userPaused ? PLAY_ICON : PAUSE_ICON;
+    // The label names the next action, so no aria-pressed (a toggle's name must not change).
+    toggle.setAttribute("aria-label", label);
+  };
+  const onToggle = () => {
+    if (finished) {
+      finished = false;
+      userPaused = false;
+      video.currentTime = 0;
+      playVideo();
+    } else {
+      userPaused = !userPaused;
+      if (userPaused) video.pause();
+      else playVideo();
+    }
+    showToggle();
+  };
+
+  video = document.createElement("video");
+  video.className = "plv-ilogo-video";
+  video.muted = true;
+  video.setAttribute("muted", "");
+  video.playsInline = true;
+  video.autoplay = true;
+  video.preload = "auto";
+  video.setAttribute("aria-hidden", "true");
+  video.addEventListener("playing", () => video.classList.add("playing"));
+  // The MP4's last ~1.2 s fade the logo to black; stop just before that and let the poster (the
+  // same logo still, revealed underneath) show, so the intro holds on the logo.
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    video.pause();
+    video.classList.remove("playing");
+    showToggle();
+  };
+  video.addEventListener("timeupdate", () => {
+    if (video.currentTime >= INTRO_HOLD_AT) finish();
+  });
+  video.addEventListener("ended", finish);
+  video.addEventListener("error", showStatic);
+  video.src = new URL("assets/landing/plastiverse_live.mp4", siteRoot()).href;
+
+  toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "plv-ilogo-toggle";
+  toggle.addEventListener("click", onToggle);
+  img.after(video, toggle);
+  showToggle();
+
+  // Pause while the intro is off screen; resume on return unless the viewer paused or it ended.
+  watch = new IntersectionObserver((entries) => {
+    const [entry] = entries;
+    if (!entry) return;
+    if (!entry.isIntersecting) video.pause();
+    else if (!userPaused && !finished) playVideo();
+  });
+  watch.observe(intro);
+  motion.addEventListener("change", onMotion);
+}
