@@ -1,15 +1,15 @@
 {
-  "fetched": 106,
+  "fetched": 118,
   "incremental_field": "publication_date",
-  "incremental_from": "2026-10-15",
-  "last_publication_date": "2026-11-17",
-  "last_run_id": "openalex-works-20261118T185235Z",
-  "last_successful_run_utc": "2026-11-18T18:52:35.504895+00:00",
-  "last_updated_date": "2026-11-18",
+  "incremental_from": "2026-10-18",
+  "last_publication_date": "2026-11-18",
+  "last_run_id": "openalex-works-20261119T190016Z",
+  "last_successful_run_utc": "2026-11-19T19:00:16.650547+00:00",
+  "last_updated_date": "2026-11-19",
   "lookback_days": 30,
   "mode": "publication_date",
   "query_version": "plastic-v3.1",
   "requests": 164,
-  "rows_written": 2074,
+  "rows_written": 2077,
   "schema_version": 1
 }

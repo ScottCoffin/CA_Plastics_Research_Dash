@@ -1,16 +1,16 @@
 # OpenAlex normalization QC
 
-Generated at (UTC): `2026-11-18T18:54:14+00:00`
+Generated at (UTC): `2026-11-19T19:03:00+00:00`
 Source: `data/interim/works_raw.parquet`
 
 The normalizer treats the reviewed California institution registry as the authoritative resolved-CA set. `ca_led` is true only when the first authorship has a California basis; `ca_any_author` is true when any authorship does. An authorship's `ca_basis` is `registry` (resolved CA institution), `raw_affiliation` (strict California pattern in the raw affiliation string) or `author_carry_forward` (no affiliation at all, same author has a CA authorship within 2 years). A CA-like unresolved affiliation is reported when its affiliation contains `California` or a standalone `CA` token but no resolved CA institution is linked for that work.
 
 | Check | Count |
 |---|---:|
-| Source raw work rows | 2074 |
-| Normalized unique works | 2037 |
-| Authorship rows | 14499 |
-| Authors with non-null IDs | 9156 |
+| Source raw work rows | 2077 |
+| Normalized unique works | 2038 |
+| Authorship rows | 14514 |
+| Authors with non-null IDs | 9168 |
 | Linked/raw institution rows | 2403 |
 | Authorships with missing raw affiliation | 1181 |
 | Authorships with null author IDs | 792 |
@@ -18,15 +18,15 @@ The normalizer treats the reviewed California institution registry as the author
 | Null author IDs filled by ORCID (raw index or orcid_author_ids.csv) | 72 |
 | Null author IDs filled by name and institution (unique match) | 59 |
 | Authorships with null author IDs after repair | 661 |
-| Unresolved institution links | 11455 |
+| Unresolved institution links | 11487 |
 | Works with CA-like affiliation but no resolved CA institution | 134 |
-| Works with ca_led=true | 1064 |
-| Works with ca_any_author=true | 1981 |
-| Near-duplicate works collapsed into a kept work | 37 |
+| Works with ca_led=true | 1065 |
+| Works with ca_any_author=true | 1982 |
+| Near-duplicate works collapsed into a kept work | 39 |
 | Mis-attached OpenAlex abstracts blanked | 10 |
-| Near-duplicate groups | 34 |
+| Near-duplicate groups | 36 |
 | Same-title article pairs kept apart (distinct DOIs) | 10 |
-| Authorships CA by registry institution | 4568 |
+| Authorships CA by registry institution | 4573 |
 | Authorships CA by raw affiliation string | 498 |
 | Authorships CA by author carry-forward (no affiliation, +/-2 years) | 214 |
 | Carry-forwards dropped: ORCID dated non-CA employment covers the year | 35 |
