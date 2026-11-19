@@ -3,7 +3,7 @@
    --pv-* tokens in design/tokens.css. Everything is scoped under .plv. */
 
 /* Framework wrappers: the landing is full bleed, with its own header and footer. */
-body:has(.plv) { background: var(--pv-ground); }
+body:has(.plv) { background: var(--pv-ground); max-width: none; margin: 0; }
 body:has(.plv) #observablehq-center { margin: 0; padding: 0; max-width: none; }
 body:has(.plv) #observablehq-main { margin: 0; padding: 0; max-width: none; }
 body:has(.plv) #observablehq-footer { display: none; }
@@ -57,6 +57,10 @@ html:has(.plv) { scroll-behavior: smooth; }
 .plv-nav .plv-btn:hover { text-decoration: none; }
 .plv-top.on-dark .plv-btn { background: transparent; color: var(--pv-on-dark); border-color: var(--pv-on-dark); }
 .plv-top.on-dark .plv-btn.solid { background: var(--pv-on-dark); color: var(--pv-night); }
+/* Regions is a nav button: no box, so it reads like the sibling links (the caret stays). The
+   id selector outranks .plv-top.on-dark .plv-btn in both header states; min-height keeps 40px. */
+.plv-nav #plv-regions-btn, .plv-nav #plv-regions-btn:hover { background: transparent; border: 0 solid transparent; color: inherit; padding: 8px 0; }
+.plv-nav #plv-regions-btn:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 /* Region picker (header disclosure and the #regions section) */
 .plv-picker {
@@ -153,9 +157,10 @@ html:has(.plv) { scroll-behavior: smooth; }
 .plv-evt td {
   border: 1px solid var(--pv-line); height: 64px; text-align: center; vertical-align: middle;
   font-family: var(--pv-mono); font-size: 12px; font-variant-numeric: tabular-nums; color: var(--pv-ink);
-  background: color-mix(in srgb, var(--pv-slate) calc(var(--v) * 100%), var(--pv-paper));
+  /* LAND-1: the ramp tops out at 70% slate, where --pv-ink text keeps 4.76:1 (AA). Paper text
+     on 72-88% slate and ink text on it both fall below 4.5:1, so no white-text switch is used. */
+  background: color-mix(in srgb, var(--pv-slate) calc(var(--v) * 70%), var(--pv-paper));
 }
-.plv-evt td.dk { color: var(--pv-paper); }
 .plv-evt .plv-short { display: none; }
 .plv-evt td.gap { background: repeating-linear-gradient(45deg, var(--pv-paper) 0 6px, var(--pv-hatch) 6px 12px); color: var(--pv-coral-ink); }
 .plv-evsrc { font-family: var(--pv-mono); font-size: 11px; color: var(--pv-ink-2); margin-top: 12px; }

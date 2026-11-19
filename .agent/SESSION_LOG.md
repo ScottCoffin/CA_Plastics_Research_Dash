@@ -199,3 +199,4 @@
 | 2026-11-18 | LIC-1 | Code licence PolyForm Noncommercial 1.0.0 (owner); data licence question LICENSE-DATA-NC | this commit |
 | 2026-11-18 | PLAT-2b v2 | Stricter evidence cells (owner): topic terms in titles only, title vocabulary per row; live grid refreshed (300 credits) | this commit |
 | 2026-11-18 | LIC-2 | Atlas-made data licence CC BY-NC 4.0 (owner); third-party rows keep their terms | this commit |
+| 2026-11-19 | LAND-1 | Landing stage full bleed above 1440 px; Regions nav unboxed; evidence-table contrast (70% ramp) | this commit |

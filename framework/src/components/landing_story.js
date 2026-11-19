@@ -1133,7 +1133,6 @@ async function mountEvidenceMap() {
     if (n === undefined) return;
     const v = Math.min(1, n / max);
     td.style.setProperty("--v", v.toFixed(2));
-    td.classList.toggle("dk", v >= 0.6);
     td.classList.toggle("gap", n < gapBelow);
     const span = td.querySelector("span");
     if (span) span.textContent = n.toLocaleString("en-US");

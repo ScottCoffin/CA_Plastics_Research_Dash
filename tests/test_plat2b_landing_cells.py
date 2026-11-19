@@ -74,7 +74,10 @@ def test_engine_updater_sets_counts_shade_and_gap_class() -> None:
     engine = ENGINE.read_text(encoding="utf-8")
     assert 'toLocaleString("en-US")' in engine
     assert "toFixed(2)" in engine
-    assert 'classList.toggle("dk", v >= 0.6)' in engine
+    # LAND-1: no white-text switch; the CSS ramp stops at 70% slate so ink text stays AA.
+    assert 'classList.toggle("dk"' not in engine
+    css = (ENGINE.parent / "landing_story.css").read_text(encoding="utf-8")
+    assert "calc(var(--v) * 70%)" in css and "td.dk" not in css
     assert 'classList.toggle("gap", n < gapBelow)' in engine
     # The updater runs at module start, not behind the story's load waits.
     assert 'document.addEventListener("DOMContentLoaded", startEvidenceMap' in engine

@@ -1,33 +1,22 @@
-# Handoff — 2026-11-18 (night, late) — BQ-0/S8/R1/G0/G1/1.2/1.6/3.1, PLAT-2b v2, LIC-1/LIC-2 done; next BQ-S1, BQ-S9, BQ-G2
+# Handoff — 2026-11-19 — LAND-1 sealed; LAND-2 (landing logo intro) next
 
 ## State in one paragraph
-This session sealed PLAT-2b (live landing evidence counts; v2 matches topic terms in titles only, owner
-"stricter"), BQ-0 (A3 recon), BQ-S8 (operator-limit test), BQ-3.1 (network doc), BQ-G1 (gold 38/150),
-BQ-1.2 (failure taxonomy), BQ-1.6 (count reconciliation), BQ-R1 ("Authors": `/california/authors` live,
-redirect stub, terminology lint) and BQ-G0 (`guide_v3`, owner approved), plus LIC-1: code licence is now
-PolyForm Noncommercial 1.0.0 (ADR-LICENSE-PFNC-2026-11-18; earlier releases stay MIT), and LIC-2: Atlas-made
-data is CC BY-NC 4.0 (ADR-LICENSE-DATA-NC-2026-11-18; earlier data stays CC BY 4.0).
-All owner A3 questions are answered. Every spawned agent runs on `model: haiku`; `[E]` tasks get a Haiku
-read-only review (both reviews this session found real defects).
+Owner asked for three landing fixes (2026-11-19). LAND-1 is sealed: the story stage is full bleed at
+every width (Framework `layout.css` capped `body` at 1440 px), the header Regions control has no box and
+keeps its caret, and the gate exposed a PLAT-2b contrast bug in the evidence table (white numerals on
+60-88% slate), fixed by capping the ramp at 70% slate with ink text. LAND-2 (logo MP4 intro before the
+picnic story, 2x scroll cue with animated arrow, 2x skip link) is next.
 
 ## In flight / next (in this order)
-1. PLAT-2b v2 (`798fee8d`), LIC-1 (`4cd8db57`) and LIC-2 are pushed; confirm their CI and deploys.
-2. Agent-only BQ tasks now eligible: **BQ-S1** (vocabulary register; feeds the guide_v3 candidate sets),
-   **BQ-S9** stage 1 (PubMed coverage; NCBI key and email are in `.env` and CI secrets), **BQ-G2** (design
-   freeze), **BQ-V.0** (Sigma benchmark), **BQ-S6** after BQ-S1, **BQ-G7** (quote-check Ashworth/Foellmer
-   in Zotero PBHFXCHZ/ZE57F89A; labels already confirmed `incidental`).
-3. **PLAT-4a** (raw global fetch, unpublished; cost estimate first), **VD-SM**, **PLAT-3**, **PLAT-4**.
-4. Small follow-ups filed: CNT-1, CNT-2 (BQ-1.6 possible bugs), OA-2 (`run_at1_audit.py` bypasses the
-   throttled client), NET-2 (`select_nodes` docstring vs code).
-5. Refresh `docs/A3_SOURCES.md` for the other sources the owner added (only Ashworth and Peryman updated).
+1. LAND-2 (TODO). Then confirm CI and the deploy for LAND-1 and LAND-2.
+2. Agent-only BQ tasks: BQ-S1, BQ-S9 stage 1, BQ-G2, BQ-V.0, BQ-S6 after BQ-S1, BQ-G7.
+3. PLAT-4a, VD-SM, PLAT-3, PLAT-4. Follow-ups CNT-1, CNT-2, OA-2, NET-2.
 
 ## Open findings
 - `test_opc_actions_em17.py::test_committed_json_is_not_stale` fails locally only (owner's H28 CSV).
-- `/usage` output never pasted. `.agent/MEMORY.md` is over 200 lines; compact at a quiet checkout.
-- Ports 8833 and friends may have stale listeners; previews use 127.0.0.1 and a fresh port.
-- Lesson: never chain `git push` after a gate; read the gate output first (LESSONS 2026-11-18).
+- `.agent/MEMORY.md` is over 200 lines; compact at a quiet checkout.
+- Previews: 127.0.0.1 and a fresh port (stale listeners on 8781/8791/8794/8833).
 
 ## Owner actions (one line each)
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).
-- Optional: re-open any of the five `review_optional` CA works in `curation/a3_lens_backfill.csv`.
-- Paste the `/usage` output if you still want those fixes.
+- H2: 277 low-confidence work-relevance decisions (`scripts/review_work_relevance_app.py`).
