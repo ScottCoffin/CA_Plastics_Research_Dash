@@ -180,20 +180,37 @@ def test_intro_logo_section_comes_first_and_holds_the_poster() -> None:
     assert "<i></i>scroll" not in page
 
 
-def test_intro_logo_mount_checks_motion_and_never_loops() -> None:
+def test_intro_logo_mount_loops_checks_motion_and_has_no_hold_point() -> None:
     js = MOTION.read_text(encoding="utf-8")
     assert "export function mountIntroLogo(intro)" in js
     body = js.split("export function mountIntroLogo(intro)", 1)[1]
     assert "motion.matches" in body and "prefers-reduced-motion: reduce" in js
     assert "canPlayMp4()" in body and '"static"' in body
-    assert not re.search(r"\.loop\s*=\s*true", body)
+    # LAND-3: the intro loops; it has no hold point, no end handling and no Replay label.
+    assert re.search(r"video\.loop\s*=\s*true", body)
+    assert "INTRO_HOLD_AT" not in js and "Replay" not in body
+    assert 'video.addEventListener("ended"' not in body
     assert "IntersectionObserver" in body and "watch.observe(intro)" in body
     assert 'new URL("assets/landing/plastiverse_live.mp4", siteRoot())' in body
-    for label in ("Pause logo animation", "Play logo animation", "Replay logo animation"):
+    for label in ("Pause logo animation", "Play logo animation"):
         assert f'"{label}"' in body, label
+    assert 'setAttribute("aria-pressed"' not in body
     assert 'toggle.className = "plv-ilogo-toggle"' in body
-    # The MP4 ends on black, so the video fades out and the poster (the logo) shows.
-    assert 'video.classList.remove("playing")' in body
+    assert 'box.addEventListener("click", onToggle)' in body
+
+
+def test_intro_logo_is_twice_the_size_and_its_toggle_shows_only_on_focus() -> None:
+    css = STYLE.read_text(encoding="utf-8")
+    assert re.search(r"--ilogo: min\(100vh, 105vw\);", css)
+    assert re.search(r"\.plv-ilogo-box \{[^}]*width: var\(--ilogo\)", css)
+    assert "min(50vh, 80vw)" not in css
+    assert re.search(r"\.plv-intro \{[^}]*place-content: center", css)
+    assert "var(--ilogo) - 100vw" in css and "var(--ilogo) - 100vh + 60px" in css
+    assert re.search(r"\.plv-ilogo-box:has\(> \.plv-ilogo-video\) \{ cursor: pointer; \}", css)
+    hidden = re.search(r"\.plv-ilogo-toggle:not\(:focus-visible\) \{([^}]*)\}", css)
+    assert hidden is not None
+    for decl in ("position: absolute", "width: 1px", "height: 1px", "clip-path: inset(50%)"):
+        assert decl in hidden.group(1), decl
 
 
 def test_intro_cue_and_skip_are_doubled_and_the_arrow_is_an_svg() -> None:

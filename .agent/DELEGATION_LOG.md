@@ -244,3 +244,4 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-18 | BQ-R1, BQ-G0 review | Claude Haiku general-purpose x2 (read-only) | [E] tasks: independent review | See commit notes | 2 sessions |
 | 2026-11-19 | LAND-1 | Claude Haiku developer | Full-bleed stage (body cap), unboxed Regions control | Completed; its check_plat2 run exposed the PLAT-2b evidence-table contrast bug, fixed by the lead (70% ramp) | 1 session |
 | 2026-11-19 | LAND-2 | Claude Haiku developer | Logo MP4 intro, 2x cue with arrow, 2x skip link | See commit notes | 1 session |
+| 2026-11-19 | LAND-3 | Claude Haiku developer | Logo intro 2x, loop, hidden toggle | Completed; lead lowered the phone cap to 105vw after a screenshot review | 1 session |

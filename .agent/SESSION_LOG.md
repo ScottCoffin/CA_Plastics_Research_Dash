@@ -201,3 +201,4 @@
 | 2026-11-18 | LIC-2 | Atlas-made data licence CC BY-NC 4.0 (owner); third-party rows keep their terms | this commit |
 | 2026-11-19 | LAND-1 | Landing stage full bleed above 1440 px; Regions nav unboxed; evidence-table contrast (70% ramp) | this commit |
 | 2026-11-19 | LAND-2 | Landing logo intro (MP4 once, hold on poster), 2x scroll cue with arrow, 2x skip link | this commit |
+| 2026-11-19 | LAND-3 | Logo intro 2x (100vh box, 105vw on phones), continuous loop, toggle hidden until keyboard focus | this commit |
