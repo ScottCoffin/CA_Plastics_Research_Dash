@@ -42,7 +42,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - ADR-001: use official Pages actions, a daily off-peak deploy, a stale-run
   watchdog, and an opt-in monthly keepalive commit.
 - ADR-002: keep the repository public, use GitHub Actions Pages, enable guarded
-  repository writes, and CC BY for eligible derived data. Code licence since 2026-11-18:
+  repository writes. Data licence since 2026-11-18: CC BY-NC 4.0 (ADR-LICENSE-DATA-NC; earlier
+  data CC BY 4.0; third-party rows keep their terms). Code licence since 2026-11-18:
   PolyForm Noncommercial 1.0.0 (ADR-LICENSE-PFNC-2026-11-18; earlier releases stay MIT).
 - SPK-7/G-COST: 2026-11-09 OpenAlex measurement recorded 100/100 calls; free-only owner authorization; 10,000-credit/USD 1.00 daily account limit; owner rule 2026-11-11: may spend up to that limit every day (stop at USD 0.95 in `config/budget.yml`). A fallback free key (`OPEN_ALEX_API_KEY_ALT` in `.env`, CI secret `OPENALEX_API_KEY_ALT`) takes over on a non-burst 429; the guard then allows 2x the per-account ceilings. Free status: GET `/rate-limit` (no credits). Response metadata totaled USD 0.026 while the provider balance decrement implied USD 0.028; budget guard charges conservatively and retains the discrepancy. See `docs/api_notes/openalex_costs.md` and commit `79301e7`.
 - Add-on A3 (`docs/add_on_spec_3.md`, integrated 2026-11-18, ADR-A3-INTEGRATION): 52 BQ tasks in TODO section "BQ"; registers A3-D0..D24 and A3-C1..C14 in DECISIONS, A3-Q1..Q15 in QUESTIONS; H36-H40; scaffold `scripts/check_a3_scaffold.py`; Zotero keys for quote checks in `docs/A3_SOURCES.md`. Owner rule: for OpenAlex, verified repo facts override A3's claims (A3-C1: >5-operator searches are throttled, not refused; count queries are never OR-split). Global ingest is PLAT-4 (= BQ-V.2). Public word is "Authors" (BQ-R1); data keys unchanged.

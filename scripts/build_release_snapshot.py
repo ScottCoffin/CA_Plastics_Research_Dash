@@ -42,9 +42,9 @@ from atlas.release import (  # noqa: E402
 
 SCHEMA_VERSION = "s10.3"
 CODE_LICENSE = "PolyForm-Noncommercial-1.0.0"
-DATA_LICENSE = "CC BY 4.0"
+DATA_LICENSE = "CC BY-NC 4.0"
 LICENSE_STATUS = (
-    "code PolyForm Noncommercial 1.0.0 (owner 2026-11-18), data CC BY 4.0 (owner 2026-11-10); "
+    "code PolyForm Noncommercial 1.0.0 (owner 2026-11-18), data CC BY-NC 4.0 (owner 2026-11-18); "
     "see LICENSE and LICENSE-DATA.md"
 )
 REPO_URL = "https://github.com/ScottCoffin/CA_Plastics_Research_Dash"
@@ -143,9 +143,9 @@ def _readme(version: str, source_commit: str | None, release_name: str | None = 
     commit = source_commit or "not recorded"
     year = version[:4] if version[:4].isdigit() else "n.d."
     contents = [
-        "  site/data/*.json   public payloads (CC BY 4.0, derived data)",
-        "  site/feed.xml      Atom digest (CC BY 4.0)",
-        "  curation/          gold sets and split files (CC BY 4.0)",
+        "  site/data/*.json   public payloads (CC BY-NC 4.0, derived data)",
+        "  site/feed.xml      Atom digest (CC BY-NC 4.0)",
+        "  curation/          gold sets and split files (CC BY-NC 4.0)",
         "  config/            query and taxonomy definitions (PolyForm Noncommercial 1.0.0)",
     ]
     if release_name:

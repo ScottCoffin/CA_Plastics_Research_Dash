@@ -767,3 +767,13 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
 - **Consequences:** contributions from others need the contributor's agreement to these terms;
   `check_at10.py` compares the Zenodo and CFF licence ids case-insensitively; tests pin the verbatim
   licence text by hash (`tests/test_ux10_about.py`).
+
+## ADR-LICENSE-DATA-NC-2026-11-18: Atlas-made data under CC BY-NC 4.0 (supersedes ADR-002's CC BY choice)
+
+- **Decision (owner, 2026-11-18, QUESTIONS LICENSE-DATA-NC):** data the Atlas produces (`site/data/`,
+  `site/feed.xml`, gold and split files in `curation/`, release snapshots) is licensed CC BY-NC 4.0.
+  Gold publication follows `LICENSE-DATA.md` (A3-Q9), so gold is CC BY-NC 4.0 too.
+- **Limits (told to the owner):** data released before 2026-11-18 (including Zenodo v2026.11.11) stays
+  CC BY 4.0. Third-party content keeps its own terms: monitoring rows from CC BY 4.0 sources stay CC BY
+  4.0 (the NC term covers only the Atlas's contribution, never the licensed material itself), OpenAlex
+  metadata is CC0. Monitoring and glossary text that describes a source's CC BY licence is unchanged.

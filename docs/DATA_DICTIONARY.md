@@ -391,7 +391,7 @@ Licence: summaries are derived; the feed links to each source record for details
 
 Latest archived release, written from `config/release.yml` by
 `py -3.14 scripts/build_release_snapshot.py --write-site-release` (AT-10). The About tab
-links to it. CC BY 4.0.
+links to it. CC BY-NC 4.0.
 
 | Field | Type | Meaning |
 |---|---|---|
@@ -404,7 +404,7 @@ links to it. CC BY 4.0.
 ### `site/data/bundle/`
 
 AT-4 serving bundle (bit-set facets, title search, institution tiers, abstract-free
-Parquet). See `docs/SITE_DATA.md` and `docs/AT_4_VERIFICATION.md`. CC BY 4.0.
+Parquet). See `docs/SITE_DATA.md` and `docs/AT_4_VERIFICATION.md`. CC BY-NC 4.0.
 
 ## Files not listed
 

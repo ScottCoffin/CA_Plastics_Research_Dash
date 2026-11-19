@@ -79,7 +79,7 @@ def test_snapshot_contents_manifest_and_checksums(tmp_path: Path) -> None:
         assert all(not snapshot._is_excluded(name) for name in names)
         readme = archive.read("README.txt").decode("utf-8")
     assert "Coffin, S. (2026)" in readme
-    assert "CC BY 4.0" in readme
+    assert "CC BY-NC 4.0" in readme
 
 
 def test_snapshot_is_deterministic_for_fixed_inputs(tmp_path: Path) -> None:

@@ -16,7 +16,10 @@ def test_how_to_cite_uses_the_release_doi_and_concept_doi() -> None:
 
 def test_licence_matches_committed_licence_files() -> None:
     assert "<h3>Licence</h3>" in ABOUT
-    assert "CC BY 4.0" in ABOUT and "CC BY 4.0" in (ROOT / "LICENSE-DATA.md").read_text("utf-8")
+    assert "CC BY-NC 4.0" in ABOUT and "CC BY-NC 4.0" in (ROOT / "LICENSE-DATA.md").read_text(
+        "utf-8"
+    )
+    assert "including commercially" not in ABOUT
     assert "PolyForm Noncommercial License 1.0.0" in ABOUT
     licence = (ROOT / "LICENSE").read_text("utf-8")
     assert licence.startswith("Required Notice: Copyright (c) 2026 Scott Coffin")

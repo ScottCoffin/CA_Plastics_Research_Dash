@@ -79,9 +79,9 @@ pass, because it is the offline reference for the code.
 `dist/` path is ignored by `.gitignore`. The ZIP contains:
 
 - `site/data/*.json` (top-level payloads) and `site/feed.xml`: public, derived data
-  under CC BY 4.0.
+  under CC BY-NC 4.0.
 - `curation/gold_*.csv` and `curation/splits_v1*.{csv,json}`: gold set and split files,
-  CC BY 4.0.
+  CC BY-NC 4.0.
 - `config/queries.yml` and `config/taxonomy.yml`: query and taxonomy definitions, PolyForm Noncommercial 1.0.0.
 - `MANIFEST.json`: each file's path, bytes, SHA-256, and licence, plus the source commit.
 - `README.txt`: the citation and licence summary.
@@ -98,8 +98,8 @@ Two checks of the current outputs (2026-11-10):
   abstracts, so they are outside the release set.
 
 Snapshot licence status: code is PolyForm Noncommercial 1.0.0 (`LICENSE`, owner 2026-11-18;
-releases before that date were MIT) and derived data are CC BY 4.0 (`LICENSE-DATA.md`, owner
-2026-11-10); the manifest records this.
+releases before that date were MIT) and derived data are CC BY-NC 4.0 (`LICENSE-DATA.md`, owner
+2026-11-18; earlier releases CC BY 4.0); the manifest records this.
 
 ## 4. Release to Zenodo
 
@@ -135,7 +135,7 @@ Zenodo on deposit".
 ### Before the first release (open items)
 
 - Resolved: the code licence (PolyForm Noncommercial 1.0.0 since 2026-11-18, Zenodo id
-  `polyform-noncommercial-1.0.0`, checked against the Zenodo licence vocabulary) and the CC BY 4.0
+  `polyform-noncommercial-1.0.0`, checked against the Zenodo licence vocabulary) and the CC BY-NC 4.0
   data licence are owner-confirmed.
 - The release notes should say which upstream sources are included, following
   `docs/REUSE.md`.

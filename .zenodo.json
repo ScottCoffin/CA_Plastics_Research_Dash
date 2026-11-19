@@ -1,7 +1,7 @@
 {
   "upload_type": "software",
   "title": "CA Plastics Research Atlas",
-  "description": "<p>The CA Plastics Research Atlas is an open research dashboard that tracks plastic-related research and funding connected to California. This repository contains the pipeline code, query and taxonomy definitions, gold and split files, and the reproducibility package (fixture rebuild, documented live rebuild, and versioned release snapshot).</p><p>Code and configuration are released under the PolyForm Noncommercial License 1.0.0 (LICENSE): no commercial use. Versions released before 2026-11-18 were MIT-licensed. Derived data (site payloads, curation files, and the release snapshot) are released under CC BY 4.0. Third-party rows keep their upstream terms as recorded in docs/REUSE.md.</p>",
+  "description": "<p>The CA Plastics Research Atlas is an open research dashboard that tracks plastic-related research and funding connected to California. This repository contains the pipeline code, query and taxonomy definitions, gold and split files, and the reproducibility package (fixture rebuild, documented live rebuild, and versioned release snapshot).</p><p>Code and configuration are released under the PolyForm Noncommercial License 1.0.0 (LICENSE): no commercial use. Versions released before 2026-11-18 were MIT-licensed. Derived data (site payloads, curation files, and the release snapshot) are released under CC BY-NC 4.0 (no commercial use); data released before 2026-11-18 was CC BY 4.0. Third-party rows keep their upstream terms as recorded in docs/REUSE.md.</p>",
   "creators": [
     {
       "name": "Coffin, Scott"
