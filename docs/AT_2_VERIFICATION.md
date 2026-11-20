@@ -5,7 +5,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 ## Counts
 
-- Works in the v3.1 corpus: 2038; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
+- Works in the v3.1 corpus: 2040; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
 - California institutions with at least one non-excluded v3.1 work: 207.
 - Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 207, one row each in `config/institution_types.csv`.
 - type_source: owner_override 60, owner_reviewed 58, rule 89.
@@ -13,7 +13,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 - Old top-100 review list: 100 institutions; 54 remain in the v3.1 top 100; 46 drop out. 72 of the old list are on the site.
 - Newly in the v3.1 top 100: 46; written to `data/processed/institution_review_needs_v31.csv`.
 - Owner overrides: 71 rows; 60 apply to site institutions. Not used on the site (no v3.1 works): I1295908608, I204866599, I2801272649, I2801403999, I2802673095, I4210094059, I4210110459, I4210117038, I4210133819, I4210161945, I4405283712.
-- Rank 100 is a tie: 27 institutions share the cut-off count of 2 work(s) (ranks 93 to 119); ties are ordered by inst_id, so membership at the boundary is arbitrary.
+- Rank 100 is a tie: 26 institutions share the cut-off count of 2 work(s) (ranks 94 to 119); ties are ordered by inst_id, so membership at the boundary is arbitrary.
 
 ## Method
 
@@ -83,18 +83,18 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | 73 | I4210136348 | California Sea Grant | 4 | UC |
 | 77 | I4405264838 | Metropolitan Water District of Southern California | 4 | utility |
 | 78 | I99418890 | San Francisco Bay University | 4 | private |
-| 79 | I1290230355 | California Department of Toxic Substances Control | 3 | state-agency |
-| 80 | I1294537935 | Point Blue Conservation Science | 3 | nonprofit/NGO |
-| 83 | I172039944 | Dominican University of California | 3 | private |
-| 84 | I176611909 | California Lutheran University | 3 | private |
-| 85 | I184813773 | California State University, East Bay | 3 | CSU |
-| 86 | I197875241 | California State University, Stanislaus | 3 | CSU |
-| 87 | I4210090881 | National Marine Mammal Foundation | 3 | nonprofit/NGO |
-| 89 | I4210095563 | Sonoma Technology (United States) | 3 | company |
-| 91 | I4210164553 | Biospherical Instruments (United States) | 3 | company |
-| 92 | I4405269264 | Stanford Cardiovascular Institute | 3 | private |
-| 93 | CAAG-SLC | California State Lands Commission | 2 | state-agency |
-| 95 | I126031752 | Santa Barbara City College | 2 | community-college |
+| 79 | I126031752 | Santa Barbara City College | 3 | community-college |
+| 80 | I1290230355 | California Department of Toxic Substances Control | 3 | state-agency |
+| 81 | I1294537935 | Point Blue Conservation Science | 3 | nonprofit/NGO |
+| 84 | I172039944 | Dominican University of California | 3 | private |
+| 85 | I176611909 | California Lutheran University | 3 | private |
+| 86 | I184813773 | California State University, East Bay | 3 | CSU |
+| 87 | I197875241 | California State University, Stanislaus | 3 | CSU |
+| 88 | I4210090881 | National Marine Mammal Foundation | 3 | nonprofit/NGO |
+| 90 | I4210095563 | Sonoma Technology (United States) | 3 | company |
+| 92 | I4210164553 | Biospherical Instruments (United States) | 3 | company |
+| 93 | I4405269264 | Stanford Cardiovascular Institute | 3 | private |
+| 94 | CAAG-SLC | California State Lands Commission | 2 | state-agency |
 | 96 | I1295874195 | California Coastal Commission | 2 | state-agency |
 | 98 | I1327551190 | Zoological Society of San Diego | 2 | nonprofit/NGO |
 | 99 | I1328614147 | California Department of Transportation | 2 | state-agency |

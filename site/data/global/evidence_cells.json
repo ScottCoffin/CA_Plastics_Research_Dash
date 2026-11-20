@@ -2,7 +2,7 @@
  "schema_version": "plat2b.v1",
  "query_version": "plastic-v3.1",
  "cells_version": "evidence-cells-v2",
- "fetched_at": "2026-11-18T23:49:39+00:00",
+ "fetched_at": "2026-11-20T18:41:38+00:00",
  "source": "OpenAlex works count per cell (title and abstract search, active plastics query)",
  "note": "Search hits, not classified works; a work can count in several cells.",
  "gap_share": 0.02,
@@ -68,45 +68,45 @@
  ],
  "counts": [
   [
-   4473,
-   3278,
-   1568,
-   617,
-   2258,
-   1253
+   4478,
+   3282,
+   1565,
+   615,
+   2259,
+   1254
   ],
   [
-   2674,
-   2215,
-   2437,
+   2678,
+   2213,
+   2442,
    599,
-   3909,
-   2600
+   3912,
+   2605
   ],
   [
-   2440,
-   1803,
-   1166,
+   2449,
+   1808,
+   1169,
    471,
-   1606,
-   1185
+   1608,
+   1186
   ],
   [
-   2488,
-   2102,
-   2290,
-   465,
+   2487,
+   2104,
+   2293,
+   466,
    1157,
-   795
+   796
   ],
   [
-   2864,
-   2807,
-   2027,
+   2872,
+   2813,
+   2032,
    481,
-   2197,
-   1525
+   2204,
+   1526
   ]
  ],
- "max": 4473
+ "max": 4478
 }
