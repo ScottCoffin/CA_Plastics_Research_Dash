@@ -140,7 +140,7 @@ html:has(.plv) { scroll-behavior: smooth; }
   .plv .skip { font-size: 20px; max-width: 50vw; text-align: right; }
 }
 
-/* Intro (LAND-2, LAND-3): the logo, centred on the night ground above the story. The MP4 loops over
+/* Intro (LAND-2..4): the logo, centred on the night ground above the story. The MP4 plays once over
    the poster (logo_motion.js mountIntroLogo); the poster fades in late so it never shows before the MP4.
    The box is 100vh square, so it can be taller than the 100vh - 60px below the header, or wider than
    the screen on phones (105vw: the art fills ~85% of the frame, leaving ~20 px each side at 390 px). place-content centres it on both axes with the overhang split evenly:
@@ -148,14 +148,16 @@ html:has(.plv) { scroll-behavior: smooth; }
    in that crop; the logo art sits inside the box. */
 .plv-intro { position: relative; height: 100vh; padding-top: 60px; background: var(--pv-night); display: grid; place-items: center; place-content: center; overflow: hidden; }
 .plv-ilogo-box { --ilogo: min(100vh, 105vw); position: relative; width: var(--ilogo); aspect-ratio: 1 / 1; }
-.plv-ilogo-box:has(> .plv-ilogo-video) { cursor: pointer; }
-.plv-ilogo, .plv-ilogo-video { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; }
+.plv-ilogo, .plv-ilogo-video { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; clip-path: inset(0 0 18% 0); }
+/* LAND-4 (owner): the frame's "plastiverse.live" tagline (83.6-86.9% of its height) repeats the wordmark
+   just above it (ends at 80.3%), so the bottom 18% is clipped; the box moves down 4% to re-centre the art. */
+.plv-ilogo-box { translate: 0 4%; }
 @media (prefers-reduced-motion: no-preference) {
   .plv-ilogo { opacity: 0; animation: plv-reveal .4s ease-out 2.5s forwards; }
 }
 @keyframes plv-reveal { to { opacity: 1; } }
 .plv-intro.static .plv-ilogo { opacity: 1; animation: none; }
-/* The MP4 fades in on its first frame. It loops: its black fade-out at the end and the restart repeat. */
+/* The MP4 fades in on its first frame and stays, paused on the full logo, at the end (logo_motion.js). */
 .plv-ilogo-video { opacity: 0; transition: opacity .4s ease-out; }
 .plv-ilogo-video.playing { opacity: 1; }
 
@@ -229,22 +231,13 @@ html:has(.plv) { scroll-behavior: smooth; }
 .plv-flogo { display: block; width: min(282px, 60vw); height: auto; aspect-ratio: 1 / 1; flex-basis: 100%; max-width: 282px; }
 .plv-flogo-wrap { position: relative; display: block; width: min(282px, 60vw); aspect-ratio: 1 / 1; flex-basis: 100%; max-width: 282px; }
 .plv-flogo-wrap > .plv-flogo { width: 100%; }
-/* Pause/play buttons over the footer and intro logos (the intro's sits inside .plv-ilogo-box). */
-.plv-flogo-toggle, .plv-ilogo-toggle {
+/* Pause/play button over the footer logo. */
+.plv-flogo-toggle {
   position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; padding: 0;
   display: inline-flex; align-items: center; justify-content: center;
   background: transparent; color: var(--pv-on-dark); border: 1px solid var(--pv-on-dark); border-radius: 0; cursor: pointer;
 }
-.plv-flogo-toggle:hover, .plv-ilogo-toggle:hover { background: var(--pv-on-dark); color: var(--pv-night); }
-/* The intro's button is for keyboard and screen-reader users, so it is hidden until it takes keyboard
-   focus (a click or tap on the logo pauses it). The box overhangs the intro's bottom and, on phones,
-   its sides (see .plv-intro), so the button moves in by each overhang, keeping 8 px clear of the
-   visible corner. Without that, focus would scroll the clipped intro sideways. */
-.plv-ilogo-toggle {
-  right: calc(8px + max(0px, (var(--ilogo) - 100vw) / 2));
-  bottom: calc(8px + max(0px, (var(--ilogo) - 100vh + 60px) / 2));
-}
-.plv-ilogo-toggle:not(:focus-visible) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; padding: 0; }
+.plv-flogo-toggle:hover { background: var(--pv-on-dark); color: var(--pv-night); }
 .plv-pcred { flex-basis: 100%; font-size: 11px; line-height: 1.5; color: var(--pv-credit); }
 .plv-pcred summary { cursor: pointer; font-size: 12px; width: max-content; color: var(--pv-mint); }
 .plv-pcred p { margin-top: 8px; max-width: 150ch; }

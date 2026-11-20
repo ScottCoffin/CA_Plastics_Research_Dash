@@ -109,11 +109,14 @@ export function mountLogoMotion(footer) {
   motion.addEventListener("change", onMotion);
 }
 
-// Intro logo (LAND-2, .plv-intro in index.md; LAND-3 made it loop): the MP4 loops, muted, over the
-// poster. It pauses while the intro is off screen and resumes on return unless the viewer paused it.
-// The pause button is visually hidden until it takes keyboard focus (landing_story.css); a click or
-// tap on the logo also pauses or plays. Reduced motion, or a browser that cannot play MP4, keeps the
-// poster (the intro gets class "static").
+// Intro logo (LAND-2..4, .plv-intro in index.md): the MP4 plays once, muted and 20% faster, over the
+// poster. The clip's last ~1.2 s fade the logo to black, so playback stops at INTRO_HOLD_AT (media time)
+// and holds that frame: the intro ends on the full logo. At
+// 1.2x the motion lasts ~4.7 s, under the 5 s that would need a pause control (WCAG 2.2.2). Reduced
+// motion, or a browser that cannot play MP4, keeps the poster (the intro gets class "static").
+const INTRO_RATE = 1.2; // owner 2026-11-19: 20% faster
+const INTRO_HOLD_AT = 5.6; // s of media time; the 7.0 s MP4 shows the full logo from ~5.5 s
+
 export function mountIntroLogo(intro) {
   const img = intro?.querySelector("img.plv-ilogo");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -122,75 +125,46 @@ export function mountIntroLogo(intro) {
     return;
   }
 
-  let watch = null;
-  let box = null;
-  let video = null;
-  let toggle = null;
-  let userPaused = false;
-
-  // Back to the static poster: the observer and listeners stop, the MP4 is paused and removed.
+  const video = document.createElement("video");
+  // Back to the static poster (no MP4, a failed play, or reduced motion switched on).
   const showStatic = () => {
-    watch?.disconnect();
     motion.removeEventListener("change", onMotion);
-    box?.removeEventListener("click", onToggle);
-    video?.pause();
-    video?.remove();
-    toggle?.remove();
-    video = null;
-    toggle = null;
+    video.pause();
+    video.remove();
     intro.classList.add("static");
   };
   const onMotion = () => {
     if (motion.matches) showStatic();
   };
-  const playVideo = () => {
-    const started = video.play();
-    // play() rejects with AbortError when a pause() arrives first; that is not a failure.
-    started?.catch((error) => {
-      if (error.name !== "AbortError") showStatic();
-    });
-  };
-  const showToggle = () => {
-    toggle.innerHTML = userPaused ? PLAY_ICON : PAUSE_ICON;
-    // The label names the next action, so no aria-pressed (a toggle's name must not change).
-    toggle.setAttribute("aria-label", userPaused ? "Play logo animation" : "Pause logo animation");
-  };
-  // The button sits inside the box, so its clicks bubble up here too: one listener serves both.
-  const onToggle = () => {
-    userPaused = !userPaused;
-    if (userPaused) video.pause();
-    else playVideo();
-    showToggle();
+  // Stop before the fade to black and hold that frame: the full logo at the video's own resolution
+  // (sharper than the 564 px poster, which is only the fallback).
+  const finish = () => {
+    video.pause();
+    motion.removeEventListener("change", onMotion);
   };
 
-  video = document.createElement("video");
   video.className = "plv-ilogo-video";
   video.muted = true;
   video.setAttribute("muted", "");
-  video.loop = true;
   video.playsInline = true;
   video.autoplay = true;
   video.preload = "auto";
   video.setAttribute("aria-hidden", "true");
   video.addEventListener("playing", () => video.classList.add("playing"));
-  video.addEventListener("error", showStatic);
-  video.src = new URL("assets/landing/plastiverse_live.mp4", siteRoot()).href;
-
-  toggle = document.createElement("button");
-  toggle.type = "button";
-  toggle.className = "plv-ilogo-toggle";
-  box = img.parentElement;
-  box.addEventListener("click", onToggle);
-  img.after(video, toggle);
-  showToggle();
-
-  // Pause while the intro is off screen; resume on return unless the viewer paused it.
-  watch = new IntersectionObserver((entries) => {
-    const [entry] = entries;
-    if (!entry) return;
-    if (!entry.isIntersecting) video.pause();
-    else if (!userPaused) playVideo();
+  video.addEventListener("timeupdate", () => {
+    if (video.currentTime >= INTRO_HOLD_AT) finish();
   });
-  watch.observe(intro);
+  video.addEventListener("ended", finish);
+  video.addEventListener("error", showStatic);
+  // Loading a source resets playbackRate to defaultPlaybackRate, so set the default before src and
+  // the rate again once metadata arrives.
+  video.defaultPlaybackRate = INTRO_RATE;
+  video.addEventListener("loadedmetadata", () => (video.playbackRate = INTRO_RATE));
+  video.src = new URL("assets/landing/plastiverse_live.mp4", siteRoot()).href;
+  img.after(video);
+  // play() rejects with AbortError when a pause() arrives first; that is not a failure.
+  video.play()?.catch((error) => {
+    if (error.name !== "AbortError") showStatic();
+  });
   motion.addEventListener("change", onMotion);
 }

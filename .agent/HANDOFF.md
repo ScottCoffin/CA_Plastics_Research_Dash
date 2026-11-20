@@ -1,4 +1,4 @@
-# Handoff — 2026-11-19 — LAND-1..3 sealed (owner landing fixes); next BQ-S1, BQ-S9, BQ-G2
+# Handoff — 2026-11-19 — LAND-1..4 sealed (owner landing fixes); next BQ-S1, BQ-S9, BQ-G2
 
 ## State in one paragraph
 Owner asked for three landing fixes (2026-11-19); all are done. LAND-1 (deployed, `63726b95`): the story
@@ -7,10 +7,10 @@ control has no box and keeps its caret, and an evidence-table contrast bug (whit
 slate) is fixed by capping the ramp at 70% slate with ink text. LAND-2: the landing opens with the logo
 MP4 centred at 50% of the view height on black, plays once and holds on the logo (it stops at 5.6 s
 because the MP4 fades to black at the end), with a 2x scroll cue and animated arrow bottom-left and a 2x
-skip link; poster only under reduced motion. LAND-3 (owner follow-up): the logo is 2x (box `min(100vh, 105vw)`), loops continuously, and has no visible button (toggle visible only on keyboard focus; click on the logo toggles).
+skip link; poster only under reduced motion. LAND-3 (owner follow-up): the logo is 2x (box `min(100vh, 105vw)`), LAND-4 (owner follow-ups): the intro plays once at 1.2x, holds on the full logo (pauses at 5.6 s media time, before the clip's fade to black), has no pause control (~4.7 s of motion), and clips the "plastiverse.live" tagline.
 
 ## In flight / next (in this order)
-1. Confirm CI and the deploy for LAND-3 (LAND-1 and LAND-2 deployed and verified live).
+1. Confirm CI and the deploy for LAND-4 (LAND-1..3 deployed and verified live).
 2. Agent-only BQ tasks: BQ-S1, BQ-S9 stage 1, BQ-G2, BQ-V.0, BQ-S6 after BQ-S1, BQ-G7.
 3. PLAT-4a, VD-SM, PLAT-3, PLAT-4. Follow-ups CNT-1, CNT-2, OA-2, NET-2.
 
@@ -28,4 +28,4 @@ skip link; poster only under reduced motion. LAND-3 (owner follow-up): the logo 
 ## Owner actions (one line each)
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).
 - H2: 277 low-confidence work-relevance decisions (`scripts/review_work_relevance_app.py`).
-- Optional: decide whether the footer logo (and now the intro loop) should skip the clip's fade to black.
+- Optional: should the footer logo also drop the tagline, play once, or skip the clip's fade to black?

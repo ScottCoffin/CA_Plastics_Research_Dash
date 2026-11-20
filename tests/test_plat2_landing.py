@@ -180,37 +180,43 @@ def test_intro_logo_section_comes_first_and_holds_the_poster() -> None:
     assert "<i></i>scroll" not in page
 
 
-def test_intro_logo_mount_loops_checks_motion_and_has_no_hold_point() -> None:
+def test_intro_logo_plays_once_and_ends_on_the_full_logo() -> None:
     js = MOTION.read_text(encoding="utf-8")
     assert "export function mountIntroLogo(intro)" in js
     body = js.split("export function mountIntroLogo(intro)", 1)[1]
     assert "motion.matches" in body and "prefers-reduced-motion: reduce" in js
     assert "canPlayMp4()" in body and '"static"' in body
-    # LAND-3: the intro loops; it has no hold point, no end handling and no Replay label.
-    assert re.search(r"video\.loop\s*=\s*true", body)
-    assert "INTRO_HOLD_AT" not in js and "Replay" not in body
-    assert 'video.addEventListener("ended"' not in body
-    assert "IntersectionObserver" in body and "watch.observe(intro)" in body
+    # LAND-4 (owner): plays once and stops on the full logo before the clip's fade to black.
+    assert not re.search(r"video\.loop\s*=\s*true", body)
+    assert re.search(r"const INTRO_HOLD_AT = 5\.6;", js)
+    assert "video.currentTime >= INTRO_HOLD_AT" in body
+    assert 'video.addEventListener("ended", finish)' in body
     assert 'new URL("assets/landing/plastiverse_live.mp4", siteRoot())' in body
-    for label in ("Pause logo animation", "Play logo animation"):
-        assert f'"{label}"' in body, label
-    assert 'setAttribute("aria-pressed"' not in body
-    assert 'toggle.className = "plv-ilogo-toggle"' in body
-    assert 'box.addEventListener("click", onToggle)' in body
+    # ~4.7 s of motion at 1.2x needs no pause control (WCAG 2.2.2), so the intro has none.
+    assert "plv-ilogo-toggle" not in body and "Pause logo animation" not in body
+    assert "plv-ilogo-toggle" not in STYLE.read_text(encoding="utf-8")
 
 
-def test_intro_logo_is_twice_the_size_and_its_toggle_shows_only_on_focus() -> None:
+def test_intro_logo_plays_twenty_percent_faster() -> None:
+    js = MOTION.read_text(encoding="utf-8")
+    assert re.search(r"const INTRO_RATE = 1\.2;", js)
+    body = js.split("export function mountIntroLogo(intro)", 1)[1]
+    # Loading a source resets playbackRate, so the default rate is set before src.
+    assert body.index("video.defaultPlaybackRate = INTRO_RATE") < body.index("video.src = ")
+    assert "video.playbackRate = INTRO_RATE" in body
+    footer = js.split("export function mountLogoMotion(footer)", 1)[1]
+    footer = footer.split("export function", 1)[0]
+    assert "playbackRate" not in footer  # the footer logo keeps normal speed
+
+
+def test_intro_logo_is_twice_the_size() -> None:
     css = STYLE.read_text(encoding="utf-8")
     assert re.search(r"--ilogo: min\(100vh, 105vw\);", css)
     assert re.search(r"\.plv-ilogo-box \{[^}]*width: var\(--ilogo\)", css)
     assert "min(50vh, 80vw)" not in css
     assert re.search(r"\.plv-intro \{[^}]*place-content: center", css)
-    assert "var(--ilogo) - 100vw" in css and "var(--ilogo) - 100vh + 60px" in css
-    assert re.search(r"\.plv-ilogo-box:has\(> \.plv-ilogo-video\) \{ cursor: pointer; \}", css)
-    hidden = re.search(r"\.plv-ilogo-toggle:not\(:focus-visible\) \{([^}]*)\}", css)
-    assert hidden is not None
-    for decl in ("position: absolute", "width: 1px", "height: 1px", "clip-path: inset(50%)"):
-        assert decl in hidden.group(1), decl
+    # The tagline under the wordmark is clipped (owner 2026-11-19).
+    assert re.search(r"\.plv-ilogo, \.plv-ilogo-video \{[^}]*clip-path: inset\(0 0 18% 0\)", css)
 
 
 def test_intro_cue_and_skip_are_doubled_and_the_arrow_is_an_svg() -> None:
