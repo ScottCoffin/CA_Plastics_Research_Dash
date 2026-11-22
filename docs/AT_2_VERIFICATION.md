@@ -5,7 +5,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 ## Counts
 
-- Works in the v3.1 corpus: 2040; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
+- Works in the v3.1 corpus: 2061; excluded by `curation/overrides_works.csv` (`exclude` = true): 128.
 - California institutions with at least one non-excluded v3.1 work: 207.
 - Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): 207, one row each in `config/institution_types.csv`.
 - type_source: owner_override 60, owner_reviewed 58, rule 89.
@@ -28,22 +28,22 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 | Rank | inst_id | Name | v3.1 works | Type | Type source | Status |
 |---|---|---|---|---|---|---|
-| 1 | I84218800 | University of California, Davis | 200 | UC | owner_reviewed | old top 100 |
-| 2 | I97018004 | Stanford University | 185 | private | owner_reviewed | old top 100 |
-| 3 | I95457486 | University of California, Berkeley | 160 | UC | owner_reviewed | old top 100 |
-| 4 | I103635307 | University of California, Riverside | 127 | UC | owner_reviewed | old top 100 |
-| 5 | I36258959 | University of California San Diego | 107 | UC | owner_reviewed | old top 100 |
-| 6 | I154570441 | University of California, Santa Barbara | 101 | UC | owner_reviewed | old top 100 |
-| 7 | I161318765 | University of California, Los Angeles | 98 | UC | owner_reviewed | old top 100 |
-| 8 | I1174212 | University of Southern California | 65 | private | owner_reviewed | old top 100 |
-| 9 | I26538001 | San Diego State University | 64 | CSU | owner_reviewed | old top 100 |
+| 1 | I84218800 | University of California, Davis | 201 | UC | owner_reviewed | old top 100 |
+| 2 | I97018004 | Stanford University | 184 | private | owner_reviewed | old top 100 |
+| 3 | I95457486 | University of California, Berkeley | 161 | UC | owner_reviewed | old top 100 |
+| 4 | I103635307 | University of California, Riverside | 129 | UC | owner_reviewed | old top 100 |
+| 5 | I36258959 | University of California San Diego | 108 | UC | owner_reviewed | old top 100 |
+| 6 | I154570441 | University of California, Santa Barbara | 106 | UC | owner_reviewed | old top 100 |
+| 7 | I161318765 | University of California, Los Angeles | 100 | UC | owner_reviewed | old top 100 |
+| 8 | I26538001 | San Diego State University | 66 | CSU | owner_reviewed | old top 100 |
+| 9 | I1174212 | University of Southern California | 65 | private | owner_reviewed | old top 100 |
 | 10 | I150209017 | Scripps Institution of Oceanography | 63 | UC | owner_reviewed | old top 100 |
 | 11 | I180670191 | University of California, San Francisco | 51 | UC | owner_reviewed | old top 100 |
-| 12 | I11006740 | Southern California Coastal Water Research Project | 44 | JPA | owner_override | new |
-| 13 | I204250578 | University of California, Irvine | 44 | UC | owner_reviewed | old top 100 |
-| 14 | I185103710 | University of California, Santa Cruz | 43 | UC | owner_reviewed | old top 100 |
-| 15 | I2803209242 | University of California System | 38 | UC | owner_reviewed | old top 100 |
-| 16 | I149919469 | California Polytechnic State University | 30 | CSU | owner_reviewed | old top 100 |
+| 12 | I204250578 | University of California, Irvine | 46 | UC | owner_reviewed | old top 100 |
+| 13 | I11006740 | Southern California Coastal Water Research Project | 44 | JPA | owner_override | new |
+| 14 | I185103710 | University of California, Santa Cruz | 44 | UC | owner_reviewed | old top 100 |
+| 15 | I149919469 | California Polytechnic State University | 30 | CSU | owner_reviewed | old top 100 |
+| 16 | I2803209242 | University of California System | 30 | UC | owner_reviewed | old top 100 |
 | 17 | I4210111001 | San Francisco Estuary Institute | 26 | JPA | owner_override | new |
 | 18 | I4405266016 | Hopkins Marine Station | 24 | private | owner_override | old top 100 |
 | 19 | I157638225 | California State University, Northridge | 22 | CSU | owner_reviewed | old top 100 |
@@ -53,25 +53,25 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 | Rank | inst_id | Name | v3.1 works | Proposed type |
 |---|---|---|---|---|
-| 12 | I11006740 | Southern California Coastal Water Research Project | 44 | JPA |
+| 13 | I11006740 | Southern California Coastal Water Research Project | 44 | JPA |
 | 17 | I4210111001 | San Francisco Estuary Institute | 26 | JPA |
 | 21 | CAAG-SWRCB | State Water Resources Control Board | 21 | state-agency |
 | 27 | I194388944 | California State University, Channel Islands | 14 | CSU |
 | 32 | I1336788258 | California Department of Public Health | 12 | state-agency |
 | 34 | I1301553790 | J. Craig Venter Institute | 11 | nonprofit/NGO |
-| 37 | I4210109599 | NOAA National Marine Fisheries Service Southwest Fisheries Science Center | 10 | federal |
+| 35 | I4210109599 | NOAA National Marine Fisheries Service Southwest Fisheries Science Center | 11 | federal |
 | 38 | CAAG-OEHHA | Office of Environmental Health Hazard Assessment | 9 | state-agency |
 | 41 | I4210112098 | National University | 9 | private |
 | 44 | I118839592 | California State University, Bakersfield | 7 | CSU |
 | 45 | I124104796 | Marine Mammal Center | 7 | nonprofit/NGO |
 | 47 | I4210090234 | Marine Megafauna Foundation | 7 | nonprofit/NGO |
 | 48 | I4210103292 | California Marine Sanctuary Foundation | 7 | nonprofit/NGO |
-| 51 | I138285227 | Agilent Technologies (United States) | 6 | company |
-| 52 | I226560621 | California State University, San Marcos | 6 | CSU |
-| 53 | I38257878 | Energy Biosciences Institute | 6 | nonprofit/NGO |
-| 54 | I4210097936 | Terasaki Foundation | 6 | nonprofit/NGO |
-| 55 | I4210140879 | Brown and Caldwell (United States) | 6 | company |
-| 57 | I4405284138 | Kaiser Permanente Northern California | 6 | nonprofit/NGO |
+| 52 | I138285227 | Agilent Technologies (United States) | 6 | company |
+| 53 | I226560621 | California State University, San Marcos | 6 | CSU |
+| 54 | I38257878 | Energy Biosciences Institute | 6 | nonprofit/NGO |
+| 55 | I4210097936 | Terasaki Foundation | 6 | nonprofit/NGO |
+| 56 | I4210140879 | Brown and Caldwell (United States) | 6 | company |
+| 58 | I4405284138 | Kaiser Permanente Northern California | 6 | nonprofit/NGO |
 | 59 | I65137940 | California Environmental Protection Agency | 6 | state-agency |
 | 63 | I196333967 | Inter-American Tropical Tuna Commission | 5 | intergovernmental-organization |
 | 64 | I4210091954 | Global Alliance for Incinerator Alternatives | 5 | nonprofit/NGO |
