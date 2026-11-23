@@ -218,3 +218,4 @@
 | 2026-11-22 | BQ-3.2 | Collaboration network metrics payload | this commit |
 | 2026-11-22 | BQ-2.2 | Denominator fetch/cache, pollution-core v0, R2 rerun | this commit |
 | 2026-11-22 | BQ-1.5 | Anchor overlap probes (no large independent set) | this commit |
+| 2026-11-22 | BQ-S10 | Review-string replay (2 of 3) | this commit |

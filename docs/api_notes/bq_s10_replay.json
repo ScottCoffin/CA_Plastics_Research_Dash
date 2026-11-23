@@ -1,0 +1,222 @@
+{
+  "schema": "bq-s10-replay.v1",
+  "script_version": "bq_s10_replay.v1",
+  "generated_utc": "2026-11-23T05:55:06+00:00",
+  "v31_query_version": "plastic-v3.1",
+  "seed": "20261122",
+  "sample_size": 200,
+  "reviews": {
+    "ortiz_balsero_2026": {
+      "status": "not replayed",
+      "reason": "not available: supplementary Text S1 not in Zotero; owner to supply"
+    },
+    "ozkan_vardar_2026": {
+      "status": "replayed",
+      "citation": "Özkan Vardar and Vardar (2026), BMC Gastroenterology 26:705",
+      "source": "Table 1, PubMed row (Search Field Title / Abstract), PDF page 4; Zotero attachment JVGRJBTR",
+      "string_file": "config/pubmed/review_strings/ozkan_vardar_2026.txt",
+      "string_sha256": "42f34b864fc29d831785e07b39c55a6cfe9fe32102ea129c89e91f8bbfa1ab73",
+      "licence": "article licence CC BY 4.0 (Open Access statement); the string is a short factual search query, reproduced with citation to the source",
+      "included_study_list": "90 included studies; the main text gives Table 2 (major key studies) and cites Supplementary Material 1 (not retrieved); a full list of the 90 is not confirmed in the main text; nothing is compiled here",
+      "published": {
+        "pubmed_count": 1089,
+        "search_date": "2026-03-05",
+        "search_date_source": "Methods, literature searches completed on 5 March 2026; the string has no date limit",
+        "count_source": "Results, Study selection, records from PubMed (reported before duplicate removal)"
+      },
+      "replay": {
+        "date": "2026-11-23",
+        "date_window": "1800/01/01..3000/12/31 (no date limit in the string)",
+        "as_published_count": 1411,
+        "translation": "(\"microplastic*\"[Title/Abstract] OR \"micro plastic*\"[Title/Abstract] OR \"nanoplastic*\"[Title/Abstract] OR \"nano plastic*\"[Title/Abstract] OR \"plastic particle*\"[Title/Abstract] OR \"polymer particle*\"[Title/Abstract] OR \"polystyrene microplastic*\"[Title/Abstract] OR \"polyethylene microplastic*\"[Title/Abstract] OR \"polypropylene microplastic*\"[Title/Abstract]) AND (\"intestinal\"[Title/Abstract] OR \"gut\"[Title/Abstract] OR \"colon\"[Title/Abstract] OR \"colonic\"[Title/Abstract] OR \"intestinal epithelial\"[Title/Abstract] OR \"Caco-2\"[Title/Abstract] OR \"HT-29\"[Title/Abstract]) AND (\"toxic*\"[Title/Abstract] OR \"cytotoxic*\"[Title/Abstract] OR \"oxidative stress\"[Title/Abstract] OR \"ROS\"[Title/Abstract] OR \"inflammation\"[Title/Abstract] OR \"permeability\"[Title/Abstract] OR \"barrier function\"[Title/Abstract]) AND 1800/01/01:3000/12/31[Date - Publication]",
+        "count_query": "as_published",
+        "as_published_error": null,
+        "count_to_search_date": {
+          "window": "1800/01/01..2026/03/05",
+          "count": 1128,
+          "datetype": "pdat"
+        },
+        "positive_only_count": null,
+        "deduplicated": null,
+        "blocks": [
+          {
+            "block": 1,
+            "operands_raw": 9,
+            "operands_deduplicated": 9,
+            "repeated": [],
+            "preview": "microplastic*[tiab] OR micro-plastic*[tiab] OR nanoplastic*[tiab] OR nano-plastic*[tiab] OR \"plastic",
+            "count": 28433
+          },
+          {
+            "block": 2,
+            "operands_raw": 7,
+            "operands_deduplicated": 7,
+            "repeated": [],
+            "preview": "intestinal[tiab] OR gut[tiab] OR colon[tiab] OR colonic[tiab] OR \"intestinal epithelial\"[tiab] OR Ca",
+            "count": 783140
+          },
+          {
+            "block": 3,
+            "operands_raw": 7,
+            "operands_deduplicated": 7,
+            "repeated": [],
+            "preview": "toxic*[tiab] OR cytotoxic*[tiab] OR \"oxidative stress\"[tiab] OR ROS[tiab] OR inflammation[tiab] OR p",
+            "count": 2570755
+          }
+        ],
+        "entry_date_to_search_date": {
+          "datetype": "edat",
+          "window": "1800/01/01..2026/03/05",
+          "count": 1089,
+          "date": "2026-11-23"
+        }
+      },
+      "structure": {
+        "local_parse_as_published": "ok",
+        "repairs": [],
+        "and_blocks": 3,
+        "not_clause": false,
+        "operands_raw_total": 23,
+        "operands_deduplicated_total": 23,
+        "duplicates_found": 0
+      },
+      "sample": {
+        "seed": "20261122",
+        "method": "sha256(seed:pmid) order over the sorted PMID set; first 200",
+        "pmids_in_review_set": 1411,
+        "sample_drawn": 200
+      },
+      "openalex": {
+        "v31_query_version": "plastic-v3.1",
+        "note": null,
+        "sample": 200,
+        "in_openalex": {
+          "count": 200,
+          "share": 1.0,
+          "wilson95": [
+            0.9812,
+            1.0
+          ]
+        },
+        "v31_retrieved": {
+          "count": 195,
+          "share": 0.975,
+          "wilson95": [
+            0.9428,
+            0.9893
+          ]
+        },
+        "v31_share_of_in_openalex": 0.975,
+        "calls": 8,
+        "credits": 44
+      }
+    },
+    "tran_2026": {
+      "status": "replayed",
+      "citation": "Tran et al. (2026), BMC Environmental Health, doi:10.1186/s12940-026-01282-y",
+      "source": "Additional File 1 (12940_2026_1282_MOESM1_ESM.docx), Complete search strategies, PubMed row (Search Terms cell)",
+      "string_file": "config/pubmed/review_strings/tran_2026.txt",
+      "string_sha256": "bad529ea90ddfa10e06a6f22d4e835e2a290b1244093c2a27dd2f49f5e853050",
+      "licence": "article licence CC BY-NC-ND 4.0 (Rights and permissions statement), not CC BY; the string is a short factual search query, reproduced with citation to the source",
+      "included_study_list": "article Table 2 is titled List of included papers (open access, in the manuscript); its rows were not checked and nothing is compiled here",
+      "published": {
+        "pubmed_count": 2199,
+        "search_date": "2024-12-26",
+        "search_date_source": "article Methods, searched from inception to 26 December 2024; the string has no date limit",
+        "count_source": "Additional File 1, PubMed row, Results Retrieved column"
+      },
+      "replay": {
+        "date": "2026-11-23",
+        "date_window": "1800/01/01..3000/12/31 (no date limit in the string)",
+        "as_published_count": 2284,
+        "translation": "(((\"humans\"[MeSH Terms] OR \"infant\"[MeSH Terms] OR \"persons\"[MeSH Terms] OR \"adult\"[MeSH Terms] OR \"adolescent\"[MeSH Terms] OR \"aged\"[MeSH Terms] OR \"middle aged\"[MeSH Terms] OR \"child\"[MeSH Terms] OR \"young adult\"[MeSH Terms]) AND (\"microplastics\"[MeSH Terms] OR \"microplastics\"[All Fields] OR (\"plastic\"[All Fields] AND \"microparticles\"[All Fields]) OR \"plastic microparticles\"[All Fields] OR \"nanoplastics\"[All Fields] OR \"nanoplastic\"[All Fields]) AND (\"treatment outcome\"[MeSH Terms] OR \"health status\"[MeSH Terms] OR \"adverse effects\"[MeSH Subheading] OR \"toxicity\"[MeSH Subheading] OR \"risk assessment\"[MeSH Terms] OR \"public health\"[MeSH Terms])) NOT (\"review\"[Publication Type] OR \"editorial\"[Publication Type] OR \"comment\"[Publication Type] OR \"letter\"[Publication Type])) AND 1800/01/01:3000/12/31[Date - Publication]",
+        "count_query": "as_published",
+        "as_published_error": null,
+        "count_to_search_date": {
+          "window": "1800/01/01..2024/12/26",
+          "count": 1567,
+          "datetype": "pdat"
+        },
+        "positive_only_count": 3593,
+        "deduplicated": null,
+        "blocks": [
+          {
+            "block": 1,
+            "operands_raw": 9,
+            "operands_deduplicated": 9,
+            "repeated": [],
+            "preview": "\"humans\"[MeSH Terms] OR \"infant\"[MeSH Terms] OR \"persons\"[MeSH Terms] OR \"adult\"[MeSH Terms] OR \"ado",
+            "count": 24004110
+          },
+          {
+            "block": 2,
+            "operands_raw": 6,
+            "operands_deduplicated": 6,
+            "repeated": [],
+            "preview": "\"microplastics\"[MeSH Terms] OR \"microplastics\"[All Fields] OR (\"plastic\"[All Fields] AND \"microparti",
+            "count": 25622
+          },
+          {
+            "block": 3,
+            "operands_raw": 6,
+            "operands_deduplicated": 6,
+            "repeated": [],
+            "preview": "\"treatment outcome\"[MeSH Terms] OR \"health status\"[MeSH Terms] OR \"adverse effects\"[MeSH Subheading]",
+            "count": 12581331
+          }
+        ],
+        "entry_date_to_search_date": {
+          "datetype": "edat",
+          "window": "1800/01/01..2024/12/26",
+          "count": 1565,
+          "date": "2026-11-23"
+        }
+      },
+      "structure": {
+        "local_parse_as_published": "unbalanced ')' at character 655",
+        "repairs": [
+          {
+            "character": ")",
+            "index": 655,
+            "context": "risk assessment\"[MeSH Terms] OR \"public health\"[MeSH Terms])) NOT (revie"
+          }
+        ],
+        "and_blocks": 3,
+        "not_clause": true,
+        "operands_raw_total": 21,
+        "operands_deduplicated_total": 21,
+        "duplicates_found": 0
+      },
+      "sample": {
+        "seed": "20261122",
+        "method": "sha256(seed:pmid) order over the sorted PMID set; first 200",
+        "pmids_in_review_set": 2284,
+        "sample_drawn": 200
+      },
+      "openalex": {
+        "v31_query_version": "plastic-v3.1",
+        "note": null,
+        "sample": 200,
+        "in_openalex": {
+          "count": 199,
+          "share": 0.995,
+          "wilson95": [
+            0.9722,
+            0.9991
+          ]
+        },
+        "v31_retrieved": {
+          "count": 198,
+          "share": 0.99,
+          "wilson95": [
+            0.9643,
+            0.9973
+          ]
+        },
+        "v31_share_of_in_openalex": 0.995,
+        "calls": 8,
+        "credits": 44
+      }
+    }
+  }
+}

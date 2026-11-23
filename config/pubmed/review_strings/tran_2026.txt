@@ -1,0 +1,14 @@
+# review_id: tran_2026
+# citation: Tran et al. (2026), BMC Environmental Health, doi:10.1186/s12940-026-01282-y
+# source: Additional File 1 (12940_2026_1282_MOESM1_ESM.docx), Complete search strategies, PubMed row (Search Terms cell)
+# retrieved: 2026-11-22 from the MOESM1 link on the article page (static-content.springer.com, HTTP 200)
+# licence: article licence CC BY-NC-ND 4.0 (Rights and permissions statement), not CC BY; the string is a short factual search query, reproduced with citation to the source
+# search_date: 2024-12-26
+# search_date_source: article Methods, searched from inception to 26 December 2024; the string has no date limit
+# published_count: 2199
+# published_count_source: Additional File 1, PubMed row, Results Retrieved column
+# included_study_list: article Table 2 is titled List of included papers (open access, in the manuscript); its rows were not checked and nothing is compiled here
+# transcription: curly double quotes replaced by ASCII double quotes; no other change
+# defect: as published, 7 opening and 8 closing parentheses (one unmatched closing parenthesis); PubMed accepted the string without error; the local parser needs the repair in balance_repair
+# string:
+((("humans"[MeSH Terms] OR "infant"[MeSH Terms] OR "persons"[MeSH Terms] OR "adult"[MeSH Terms] OR "adolescent"[MeSH Terms] OR "aged"[MeSH Terms] OR "middle aged"[MeSH Terms] OR "child"[MeSH Terms] OR "young adult"[MeSH Terms])) AND ("microplastics"[MeSH Terms] OR "microplastics"[All Fields] OR ("plastic"[All Fields] AND "microparticles"[All Fields]) OR "plastic microparticles"[All Fields] OR "nanoplastics"[All Fields] OR "nanoplastic"[All Fields])) AND ("treatment outcome"[MeSH Terms] OR "health status"[MeSH Terms] OR "adverse effects"[MeSH Subheading] OR "toxicity"[MeSH Subheading] OR "risk assessment"[MeSH Terms] OR "public health"[MeSH Terms])) NOT (review[Publication Type] OR editorial[Publication Type] OR comment[Publication Type] OR letter[Publication Type])

@@ -1,0 +1,13 @@
+# review_id: ozkan_vardar_2026
+# citation: Özkan Vardar and Vardar (2026), BMC Gastroenterology 26:705
+# source: Table 1, PubMed row (Search Field Title / Abstract), PDF page 4; Zotero attachment JVGRJBTR
+# retrieved: 2026-11-22 from the Zotero PDF; pdfminer text checked against the rendered page
+# licence: article licence CC BY 4.0 (Open Access statement); the string is a short factual search query, reproduced with citation to the source
+# search_date: 2026-03-05
+# search_date_source: Methods, literature searches completed on 5 March 2026; the string has no date limit
+# published_count: 1089
+# published_count_source: Results, Study selection, records from PubMed (reported before duplicate removal)
+# included_study_list: 90 included studies; the main text gives Table 2 (major key studies) and cites Supplementary Material 1 (not retrieved); a full list of the 90 is not confirmed in the main text; nothing is compiled here
+# transcription: curly double quotes replaced by ASCII double quotes; line-wrap hyphens removed where they split a word (polyethyl-ene, poly-propylene); hyphens inside terms kept (micro-plastic, nano-plastic, Caco-2, HT-29)
+# string:
+(microplastic*[tiab] OR micro-plastic*[tiab] OR nanoplastic*[tiab] OR nano-plastic*[tiab] OR "plastic particle*"[tiab] OR "polymer particle*"[tiab] OR "polystyrene microplastic*"[tiab] OR "polyethylene microplastic*"[tiab] OR "polypropylene microplastic*"[tiab]) AND (intestinal[tiab] OR gut[tiab] OR colon[tiab] OR colonic[tiab] OR "intestinal epithelial"[tiab] OR Caco-2[tiab] OR HT-29[tiab]) AND (toxic*[tiab] OR cytotoxic*[tiab] OR "oxidative stress"[tiab] OR ROS[tiab] OR inflammation[tiab] OR permeability[tiab] OR "barrier function"[tiab])
