@@ -1,0 +1,185 @@
+/* Collaboration-structure panel on the California network page (BQ-3.4). Selectors use the .nm- prefix.
+   Colours come from the design tokens only (scripts/check_design_tokens.py). The chart card reuses the
+   shared .atlas-chart, .atlas-segmented, .atlas-table and .atlas-disclosure rules. */
+
+.nm-panel {
+  margin: var(--atlas-space-10) 0 0;
+  min-width: 0;
+}
+
+/* Full-width containers: Framework caps prose and block children at a measure, which would narrow them. */
+#observablehq-main .nm-panel :is(.nm-card, .nm-pane, .nm-mults, .nm-mult, .nm-key, .nm-table-wrap,
+  .nm-table, .nm-defs, .atlas-disclosure, .atlas-disclosure__body) {
+  max-width: none;
+}
+
+.nm-card[data-view="table"] .nm-pane--chart,
+.nm-card:not([data-view="table"]) .nm-pane--table {
+  display: none;
+}
+
+.nm-series--authors {
+  color: var(--atlas-brand-action);
+}
+
+.nm-series--institutions {
+  color: var(--atlas-accent-strong);
+}
+
+.nm-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-space-2) var(--atlas-space-5);
+  margin: 0;
+  padding: var(--atlas-space-4) var(--atlas-space-4) 0;
+  list-style: none;
+  color: var(--atlas-text);
+  font-size: var(--atlas-type-small-size);
+}
+
+.nm-key li {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--atlas-space-2);
+}
+
+.nm-key__mark {
+  flex: none;
+  width: 1.75rem;
+  height: 0.75rem;
+  overflow: visible;
+}
+
+.nm-mults {
+  display: grid;
+  gap: var(--atlas-space-5);
+  grid-template-columns: minmax(0, 1fr);
+  padding: var(--atlas-space-4);
+}
+
+@media (min-width: 40rem) {
+  .nm-mults {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.nm-mult {
+  min-width: 0;
+  margin: 0;
+}
+
+.nm-mult figcaption {
+  margin-bottom: var(--atlas-space-2);
+}
+
+.nm-mult figcaption strong {
+  display: block;
+  color: var(--atlas-ink);
+  font-weight: 650;
+}
+
+.nm-mult figcaption span {
+  display: block;
+  color: var(--atlas-muted);
+  font-size: var(--atlas-type-caption-size);
+}
+
+.nm-svg {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  height: auto;
+  overflow: visible;
+}
+
+.nm-svg text {
+  font: 600 13px / 1 var(--atlas-font-body);
+  fill: var(--atlas-muted);
+}
+
+/* The halo (paint-order) keeps a value label legible where it crosses a line or a gridline. */
+.nm-svg .nm-value {
+  fill: currentColor;
+  font-weight: 650;
+  paint-order: stroke;
+  stroke: var(--atlas-surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.nm-svg .nm-grid-line {
+  stroke: var(--atlas-chart-grid);
+  stroke-width: 1;
+}
+
+.nm-svg .nm-axis {
+  stroke: var(--atlas-boundary);
+  stroke-width: 1;
+}
+
+.nm-svg .nm-partial-band {
+  fill: var(--atlas-sunken);
+}
+
+.nm-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.nm-line--partial {
+  stroke-dasharray: 5 4;
+}
+
+.nm-point {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.nm-point--partial {
+  fill: var(--atlas-surface);
+}
+
+.nm-n {
+  display: block;
+  color: var(--atlas-muted);
+  font-size: var(--atlas-type-caption-size);
+}
+
+.nm-table-wrap:focus-visible {
+  outline: 2px solid var(--atlas-brand-action);
+  outline-offset: 2px;
+}
+
+.nm-defs-heading {
+  margin: var(--atlas-space-5) 0 var(--atlas-space-2);
+  font-size: var(--atlas-type-subsection-size);
+}
+
+.nm-defs {
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+  gap: var(--atlas-space-2) var(--atlas-space-4);
+  margin: 0;
+}
+
+.nm-defs dt {
+  font-weight: 650;
+}
+
+.nm-defs dd {
+  margin: 0;
+}
+
+@media (max-width: 40rem) {
+  .nm-defs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nm-defs dd {
+    margin-bottom: var(--atlas-space-2);
+  }
+}

@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 from pathlib import Path
 from typing import Any
 
 import pytest
 
 from atlas.analytics.network_metrics import (
+    ASCERTAINMENT_NOTE,
+    DEFINITIONS,
     SCHEMA_VERSION,
     build_metrics,
     comparable,
@@ -383,6 +386,26 @@ def test_committed_file_has_rounded_numbers_and_no_person_keys() -> None:
             assert round(value, 4) == value
     keys = {v for kind, v in _walk(payload) if kind == "key"}
     assert not keys & {"author_id", "name", "author_ids", "institution_ids", "inst_id"}
+
+
+# Public text (the ascertainment note and definitions) is shown on the network page. It must read in
+# plain words: no field names such as current_in_ca, and no library names.
+UNDERSCORE_IDENTIFIER = re.compile(r"\b[A-Za-z]+_[A-Za-z_]+\b")
+
+
+def _assert_plain_public_text(texts: list[str]) -> None:
+    for text in texts:
+        assert not UNDERSCORE_IDENTIFIER.search(text), text
+        assert "networkx" not in text.lower(), text
+
+
+def test_public_text_has_no_field_names_or_library_names() -> None:
+    _assert_plain_public_text([ASCERTAINMENT_NOTE, *DEFINITIONS.values()])
+
+
+def test_committed_public_text_has_no_field_names_or_library_names() -> None:
+    payload = _committed()
+    _assert_plain_public_text([payload["ascertainment_note"], *payload["definitions"].values()])
 
 
 def _load_script():

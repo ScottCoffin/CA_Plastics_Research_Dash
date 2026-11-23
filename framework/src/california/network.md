@@ -12,6 +12,7 @@ title: Collaboration network
 <p class="atlas-callout atlas-callout--info"><svg class="icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><use href="#i-info"></use></svg> <span><strong>Volume note.</strong> The network shows the 400 most active authors. Counts show volume, not quality: a well-connected author is not necessarily a better researcher.</span></p>
 
 <link rel="stylesheet" href="../components/network.css">
+<link rel="stylesheet" href="../components/network_metrics.css">
 
 <section class="net-page" aria-label="Collaboration network explorer">
 <section class="atlas-filters" aria-labelledby="network-filters-heading">
@@ -97,9 +98,22 @@ title: Collaboration network
 </details>
 </section>
 
+<section id="network-metrics" class="nm-panel" aria-labelledby="network-metrics-heading">
+<h2 id="network-metrics-heading">How California authors collaborate</h2>
+<p>These charts and tables describe how the authors and institutions on California plastic-related works link up, across four publication periods. They show totals and shares only. Nothing in this section names or ranks a person or an institution.</p>
+<p id="nm-status" class="result-count" role="status" aria-live="polite">Loading collaboration measures…</p>
+<section class="atlas-chart nm-card" data-view="chart" aria-labelledby="nm-card-heading"><div class="atlas-chart__head"><div><div class="atlas-help-row"><h3 id="nm-card-heading">Collaboration structure by period</h3><button type="button" class="atlas-help" aria-label="About these measures: Four headline measures are drawn as small charts, with authors as circles and institutions as squares. The table view lists every measure for each period. The 2026 period is partial, so it is drawn with a hollow marker and a dashed line. The counts cover plastic-related works in the Atlas index only." data-atlas-tip="Four headline measures are drawn as small charts, with authors as circles and institutions as squares. The table view lists every measure for each period. The 2026 period is partial, so it is drawn with a hollow marker and a dashed line. The counts cover plastic-related works in the Atlas index only." aria-expanded="false"><svg class="atlas-help__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5M12 7.5h.01"/></svg></button></div><p class="atlas-chart__source">Source: collaboration measures built from the Atlas works index. Totals and shares only.</p></div><div class="atlas-segmented" role="group" aria-label="Chart or table view: Collaboration structure by period"><button type="button" data-view="chart" aria-pressed="true">Chart</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div><div class="atlas-chart__body"><div id="nm-chart" class="nm-pane nm-pane--chart"></div><div id="nm-table" class="nm-pane nm-pane--table"></div></div></section>
+<details id="nm-notes" class="atlas-disclosure">
+<summary>About these measures and their limits</summary>
+<div id="nm-notes-body" class="atlas-disclosure__body"></div>
+</details>
+</section>
+
 ```js
 import {mountNetwork} from "../components/network.js";
+import {mountNetworkMetrics} from "../components/network_metrics.js";
 import {initTooltips} from "../components/shared/tooltip.js";
 initTooltips(document);
 mountNetwork();
+mountNetworkMetrics();
 ```
