@@ -207,3 +207,4 @@
 | 2026-11-22 | CNT-2 | California Now line remainder entry and population label | this commit |
 | 2026-11-22 | OA-2 | run_at1_audit routed through the shared OpenAlex client | this commit |
 | 2026-11-22 | BQ-G7 | Boundary cases recorded with verified quotes | this commit |
+| 2026-11-22 | BQ-S1 | Search vocabulary register (163 terms) with schema test | this commit |
