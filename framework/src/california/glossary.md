@@ -121,6 +121,109 @@ title: Glossary
 <p><small>Source: OpenAlex source summary statistics, refreshed by the Atlas's data pipeline.</small></p>
 </dd>
 
+<dt id="corporate-imperialism"><a class="glossary-term-link" href="#corporate-imperialism"><strong>Corporate imperialism</strong></a></dt>
+<dd>
+<p>A neoliberal trend in which companies expand across national borders, shaping how goods are produced and consumed and influencing government policy.</p>
+<p><small>Source: <a href="https://doi.org/10.1016/j.marpol.2024.106078">Peryman et al. 2024</a>.</small></p>
+</dd>
+
+<dt id="deficit-model-of-knowledge"><a class="glossary-term-link" href="#deficit-model-of-knowledge"><strong>Deficit model of knowledge</strong></a></dt>
+<dd>
+<p>A view that treats specialists as the authority and blames poor public decisions mainly on a shortage of information.</p>
+<p><small>Source: <a href="https://www.ncbi.nlm.nih.gov/books/NBK582037/">Foellmer et al. 2022</a>.</small></p>
+</dd>
+
+<dt id="descriptive-vs-prescriptive-norms"><a class="glossary-term-link" href="#descriptive-vs-prescriptive-norms"><strong>Descriptive vs prescriptive norms</strong></a></dt>
+<dd>
+<p>Descriptive norms are what people commonly do and accept. Prescriptive norms are what people judge to be the acceptable or right thing to do.</p>
+<p><small>Source: <a href="https://www.ncbi.nlm.nih.gov/books/NBK582037/">Foellmer et al. 2022</a>.</small></p>
+</dd>
+
+<dt id="environmental-justice"><a class="glossary-term-link" href="#environmental-justice"><strong>Environmental justice</strong></a></dt>
+<dd>
+<p>In the US Environmental Protection Agency's definition, no group, whatever its race, colour, national origin or income, should bear environmental harms unfairly, and everyone should be able to take a real part in environmental decisions.</p>
+<p><small>Source: <a href="https://19january2017snapshot.epa.gov/environmentaljustice/learn-about-environmental-justice_.html">US EPA, archived page (2017 snapshot)</a>.</small></p>
+</dd>
+
+<dt id="extended-producer-responsibility"><a class="glossary-term-link" href="#extended-producer-responsibility"><strong>Extended producer responsibility (EPR)</strong></a></dt>
+<dd>
+<p>A policy approach that makes producers responsible, financially, physically or both, for their products after they have been used or discarded.</p>
+<p><small>Source: <a href="https://doi.org/10.1787/9789264256385-en">OECD 2016</a>, Extended Producer Responsibility: Updated Guidance for Efficient Waste Management.</small></p>
+</dd>
+
+<dt id="garbage-patch"><a class="glossary-term-link" href="#garbage-patch"><strong>Garbage patch</strong></a></dt>
+<dd>
+<p>An area of ocean where rotating currents, called gyres, gather floating debris. It is not a solid island of trash, because much of the debris is spread through the water below the surface.</p>
+<p><small>Source: <a href="https://marinedebris.noaa.gov/info/patch.html">NOAA Marine Debris Program</a>.</small></p>
+</dd>
+
+<dt id="mnps"><a class="glossary-term-link" href="#mnps"><strong>MNPs (micro- and nanoplastics)</strong></a></dt>
+<dd>
+<p>Plastic particles in the micrometre and nanometre size ranges. Where the line between micro-, nano- and larger plastics falls depends on the source, so see the size note under <a href="#nanoplastic-size-conventions">Nanoplastic size conventions</a>.</p>
+<p><small>Source: the Atlas's own usage; the size note is linked above.</small></p>
+</dd>
+
+<dt id="nanoplastic-size-conventions"><a class="glossary-term-link" href="#nanoplastic-size-conventions"><strong>Nanoplastic size conventions</strong></a></dt>
+<dd>
+<p>Environmental and toxicology studies often treat particles smaller than 1 µm as nanoplastics. Nanomaterials research often uses a much smaller limit, below 100 nm.</p>
+<p><small>Source: <a href="https://doi.org/10.1016/j.jhazmat.2026.144102">Ortiz-Balsero et al. 2026</a>.</small></p>
+</dd>
+
+<dt id="safe-and-sustainable-by-design"><a class="glossary-term-link" href="#safe-and-sustainable-by-design"><strong>Safe and sustainable by design (SSbD)</strong></a></dt>
+<dd>
+<p>An optional European Union approach to developing chemicals and materials that are safe and sustainable over their full life cycle, including a way to assess them.</p>
+<p><small>Source: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022H2510">Commission Recommendation (EU) 2022/2510 of 8 December 2022</a>.</small></p>
+</dd>
+
+<dt id="scalar-mismatch"><a class="glossary-term-link" href="#scalar-mismatch"><strong>Scalar mismatch</strong></a></dt>
+<dd>
+<p>The condition in which a problem and the responses to it operate at different sizes or levels.</p>
+<p><small>Source: <a href="https://www.ncbi.nlm.nih.gov/books/NBK582037/">Foellmer et al. 2022</a>.</small></p>
+</dd>
+
+<dt id="scoping-review"><a class="glossary-term-link" href="#scoping-review"><strong>Scoping review</strong></a></dt>
+<dd>
+<p>A review design that maps how much research exists on a topic and what kinds of studies it contains, usually without pooling the results statistically.</p>
+<p><small>Source: the Atlas's plain-language definition.</small></p>
+</dd>
+
+<dt id="slow-violence"><a class="glossary-term-link" href="#slow-violence"><strong>Slow violence</strong></a></dt>
+<dd>
+<p>Environmental harm that builds up over years and across distances, and that is easy to overlook because it is seldom seen as violence.</p>
+<p><small>Source: Nixon 2011, <em>Slow Violence and the Environmentalism of the Poor</em>, Harvard University Press, p. 2.</small></p>
+</dd>
+
+<dt id="systematic-evidence-map"><a class="glossary-term-link" href="#systematic-evidence-map"><strong>Systematic evidence map</strong></a></dt>
+<dd>
+<p>A review design that charts the research on a topic in a structured set of categories, showing where evidence is dense and where it is missing, without pooling the results.</p>
+<p><small>Source: <a href="https://doi.org/10.1002/cl2.1402">Campbell et al. 2024</a>, a review protocol on methods for evidence and gap maps.</small></p>
+</dd>
+
+<dt id="umbrella-review"><a class="glossary-term-link" href="#umbrella-review"><strong>Umbrella review</strong></a></dt>
+<dd>
+<p>A review design that gathers and compares the findings of existing systematic reviews on a topic, rather than those of individual studies.</p>
+<p><small>Source: the Atlas's plain-language definition.</small></p>
+</dd>
+
+<dt id="waste-as-a-dynamic-social-construction"><a class="glossary-term-link" href="#waste-as-a-dynamic-social-construction"><strong>Waste as a dynamic social construction</strong></a></dt>
+<dd>
+<p>The view that how people perceive waste, and how waste is defined, varies with social and cultural context.</p>
+<p><small>Source: <a href="https://www.ncbi.nlm.nih.gov/books/NBK582037/">Foellmer et al. 2022</a>.</small></p>
+</dd>
+
+<dt id="waste-colonialism"><a class="glossary-term-link" href="#waste-colonialism"><strong>Waste colonialism</strong></a></dt>
+<dd>
+<p>In its first sense, the movement of waste from higher-income to lower-income countries, with the Basel Convention (1989) and the Bamako Convention (1991) as its starting points. In a second sense, the term is also applied to how plastic pollution science itself is carried out.</p>
+<p>See also <a href="https://discardstudies.com/">Discard Studies</a>.</p>
+<p><small>Source: <a href="https://doi.org/10.1016/j.marpol.2024.106078">Peryman et al. 2024</a> (working definition); <a href="https://www.basel.int/">Basel Convention</a>.</small></p>
+</dd>
+
+<dt id="waste-trade"><a class="glossary-term-link" href="#waste-trade"><strong>Waste trade</strong></a></dt>
+<dd>
+<p>Trade in waste across national borders, including plastic scrap. The Basel Convention's plastic waste amendments extend its controls on transboundary movement to more kinds of plastic waste.</p>
+<p><small>Source: <a href="https://www.basel.int/">Basel Convention</a>.</small></p>
+</dd>
+
 </dl>
 
 ```js

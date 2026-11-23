@@ -222,3 +222,4 @@
 | 2026-11-22 | BQ-2.3 | Trend metrics with CAGR CIs | this commit |
 | 2026-11-23 | BQ-S5 | Taxonomy crosswalk + owner proposal (D1-D10); open for H40 | this commit |
 | 2026-11-22 | BQ-3.4 | Collaboration panel on the network page | this commit |
+| 2026-11-22 | BQ-R2 | Glossary entries and Further reading | this commit |
