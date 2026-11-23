@@ -63,7 +63,7 @@ Credits use the 10-per-search rule above. A figure is cited only where the scrip
 | [scripts/audit_europepmc_recall.py](../../scripts/audit_europepmc_recall.py) via [src/atlas/ingest/europepmc_audit.py](../../src/atlas/ingest/europepmc_audit.py) | Yes. `fetch_openalex_by_doi` defaults to `with_query=True`, and this caller does not override it. | Yes (`fetch_openalex_urls` calls `oa._request_json`, 4 attempts) | One per batch of up to 50 DOIs | 10 per batch | Manual |
 | [scripts/audit_escholarship_openalex.py](../../scripts/audit_escholarship_openalex.py) | Yes (`page_url` uses `openalex_filter`) | Yes (via `fetch_openalex_urls`) | One per page, capped by `--max-credits` (default 1500) | 10 per page | Manual |
 | [scripts/ingest_orcid_dois.py](../../scripts/ingest_orcid_dois.py) | No. It passes `with_query=False`, a plain filter. | Yes | One per DOI batch | 1 per list call (europepmc_audit.py docstring) | Manual |
-| [scripts/run_at1_audit.py](../../scripts/run_at1_audit.py) | Yes (`config/query_v2.txt`, 43 operators) | **No.** Its own `_http_request` makes one `urlopen` call. It has no throttle and no burst retry. Any HTTP status of 400 or more raises `AuditStop` ("stopped without retry"). | Up to 80 (`MAX_REQUESTS`) | 10 per call (search rule); credit cap 1000 (`MAX_CREDITS`) | Manual, `--live` only |
+| [scripts/run_at1_audit.py](../../scripts/run_at1_audit.py) | Yes (`config/query_v2.txt`, 43 operators) | **Yes, since OA-2 (2026-11-22).** Searches go through `atlas.ingest.openalex._request_json` (throttle, burst-429 retry, 4 attempts, each attempt charged). The fallback key is removed for the run because the preflight checks only the primary account. Only the `/rate-limit` status call keeps its own `urlopen`. | Up to 80 (`MAX_REQUESTS`) | 10 per call (search rule); credit cap 1000 (`MAX_CREDITS`) | Manual, `--live` only |
 
 Callers that send no over-limit search:
 
@@ -84,10 +84,10 @@ Other paths checked:
 
 ## Gaps and risks
 
-1. **`scripts/run_at1_audit.py` has no throttle and no burst retry.** The first burst 429 stops
-   the audit. The script is manual (`--live`) and sends a 43-operator query. Fix by routing
-   its requests through `_request_json` or by adding the same throttle and burst retry. This
-   is outside this task's file scope, so it is left for review.
+1. **Fixed by OA-2 (2026-11-22).** `scripts/run_at1_audit.py` had no throttle and no burst
+   retry, so the first burst 429 stopped the audit. Its searches now use `_request_json`.
+   Open: transport errors (no HTTP response) retried by the shared client are not logged per
+   attempt, so the audit counts them only once.
 2. **`scripts/smoke/query_s1_5.py` makes a direct request with the active filter.** It is a
    smoke script, was not read in full, and was not run.
 3. **The retry depends on message wording.** A burst 429 worded differently is treated as a

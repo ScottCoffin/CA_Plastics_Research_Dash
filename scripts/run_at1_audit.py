@@ -15,7 +15,8 @@ import urllib.parse
 import urllib.request
 import uuid
 from collections import Counter
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Iterator, Mapping
+from contextlib import contextmanager
 from datetime import UTC, datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -25,7 +26,10 @@ import pyarrow.parquet as pq
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from atlas.ingest import openalex as openalex_client  # noqa: E402
 from atlas.util.budget import (  # noqa: E402
+    GATEWAY_STATUSES,
+    UNKNOWN_429_CREDITS,
     OpenAlexBudget,
     conservative_request_cost,
     daily_logged_usage,
@@ -39,6 +43,8 @@ QUERY_VERSION = "plastic-v2"
 MAX_COST_USD = Decimal("0.10")
 MAX_CREDITS = Decimal("1000")
 MAX_REQUESTS = 80
+# One logical search is at most this many HTTP attempts through the shared client (burst retries).
+MAX_HTTP_ATTEMPTS = 4
 MAX_TIMEOUT_SECONDS = 30
 MAX_RESET_HORIZON_SECONDS = 26 * 60 * 60
 RESET_CLOCK_SKEW_SECONDS = 5 * 60
@@ -144,6 +150,11 @@ def _http_request(
     api_key: str,
     timeout: int = MAX_TIMEOUT_SECONDS,
 ) -> tuple[int, dict[str, Any], Mapping[str, object]]:
+    """Raw GET for the /rate-limit status call only.
+
+    Searches use the shared client instead. Its success path requires an
+    X-RateLimit-Credits-Used header, which /rate-limit does not send.
+    """
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     request.add_header("Authorization", f"Bearer {api_key}")
     try:
@@ -534,6 +545,28 @@ def _validate_artifact_paths(
         seen[resolved] = label
 
 
+@contextmanager
+def _run_scoped_openalex_key(api_key: str) -> Iterator[None]:
+    """Send this run's searches with ``api_key`` only, then restore the environment.
+
+    The shared client reads its key from the environment and can switch to
+    OPENALEX_API_KEY_ALT after a daily-allowance 429. This audit checked only the primary
+    account's remaining allowance, so the fallback key is removed for the run.
+    """
+    names = (openalex_client.PRIMARY_KEY_VAR, openalex_client.FALLBACK_KEY_VAR)
+    saved = {name: os.environ.get(name) for name in names}
+    os.environ[openalex_client.PRIMARY_KEY_VAR] = api_key
+    os.environ.pop(openalex_client.FALLBACK_KEY_VAR, None)
+    try:
+        yield
+    finally:
+        for name, value in saved.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
+
+
 def run_audit(
     *,
     api_key: str,
@@ -588,7 +621,7 @@ def run_audit(
     status_state: dict[str, Decimal | str] | None = None
     failures: list[str] = []
 
-    with ApiCostLogger(run_id, usage_log) as logger:
+    with _run_scoped_openalex_key(api_key), ApiCostLogger(run_id, usage_log) as logger:
 
         def get_account_balance() -> dict[str, Decimal | str]:
             """Make one status observation outside metered per-request accounting."""
@@ -624,8 +657,31 @@ def run_audit(
                 raise AuditStop(f"rate-limit preflight: HTTP {status}; stopped")
             return state
 
-        def get_json(url: str, endpoint: str) -> dict[str, Any]:
+        def charge_attempts(first_new: int) -> None:
+            """Count and charge every shared-client HTTP attempt logged from ``first_new`` on."""
             nonlocal attempts, run_cost, run_credits, unknown_accounting
+            new_attempts = logger.request_metrics[first_new:]
+            # A failed call with no logged response (transport error) still used a request.
+            attempts += max(1, len(new_attempts))
+            for metric in new_attempts:
+                if metric["credits_known"] is True:
+                    credits = Decimal(str(metric["credits"]))
+                else:
+                    # Rejected (429) and gateway (502-504) attempts carry no credit header.
+                    # Charge the conservative per-request reserve, as daily_logged_usage does.
+                    if metric["status_code"] not in (429, *GATEWAY_STATUSES):
+                        unknown_accounting = True
+                    credits = UNKNOWN_429_CREDITS
+                run_cost += conservative_request_cost(
+                    metric["cost_usd"],
+                    credits,
+                    budget.cost_per_credit_usd,
+                    meta_cost_known=metric["cost_known"] is True,
+                )
+                run_credits += credits
+
+        def get_json(url: str, endpoint: str) -> dict[str, Any]:
+            nonlocal unknown_accounting
             if attempts >= MAX_REQUESTS:
                 raise AuditStop("maximum request count 80 reached")
             reserve_error = budget.reserve_error(
@@ -647,68 +703,43 @@ def run_audit(
                     raise AuditStop(
                         f"{endpoint}: provider daily credit headroom lacks request reserve"
                     )
-            attempts += 1
-            started = time.monotonic()
-            try:
-                status, body, headers = request_fn(url, api_key, MAX_TIMEOUT_SECONDS)
-            except Exception as error:
-                # Record an unknown-cost attempted request and stop; never retry.
-                unknown_accounting = True
-                logger.record(
-                    source="openalex",
-                    method="GET",
-                    url=url,
-                    status_code=0,
-                    credits=0,
-                    cost_usd=0,
-                    credits_known=False,
-                    cost_known=False,
-                )
+            # Retries are charged as they happen, so reserve the worst case before sending.
+            http_attempts = min(MAX_HTTP_ATTEMPTS, MAX_REQUESTS - attempts)
+            worst_credits = UNKNOWN_429_CREDITS * http_attempts
+            worst_error = budget.actual_error(
+                cost_usd=prior_cost + run_cost + worst_credits * budget.cost_per_credit_usd,
+                credits=prior_credits + run_credits + worst_credits,
+            )
+            if worst_error:
                 raise AuditStop(
-                    f"{endpoint}: request failed ({type(error).__name__}); no retry"
-                ) from None
-            latency_ms = round((time.monotonic() - started) * 1000, 3)
+                    f"{endpoint}: retries could exceed the run budget ({worst_error}); "
+                    "no request sent"
+                )
+            first_new = len(logger.request_metrics)
             try:
-                logger.record_openalex_response(
-                    method="GET", url=url, status_code=status, headers=headers, body=body
+                body = openalex_client._request_json(
+                    url, logger=logger, attempts=http_attempts, timeout=MAX_TIMEOUT_SECONDS
                 )
             except OpenAlexUsageMetadataError:
                 unknown_accounting = True
                 raise AuditStop(
                     f"{endpoint}: response missing valid credit header; stopped"
                 ) from None
-            credit_header = next(
-                (
-                    value
-                    for key, value in headers.items()
-                    if key.casefold() == "x-ratelimit-credits-used"
-                ),
-                None,
-            )
-            meta = body.get("meta")
-            meta_cost = meta.get("cost_usd") if isinstance(meta, Mapping) else None
-            try:
-                credits = Decimal(str(credit_header))
-                cost = conservative_request_cost(
-                    meta_cost,
-                    credits,
-                    budget.cost_per_credit_usd,
-                    meta_cost_known=meta_cost is not None,
-                )
-            except (InvalidOperation, TypeError, ValueError):
-                raise AuditStop(f"{endpoint}: response cost metadata invalid; stopped") from None
-            run_cost += cost
-            run_credits += credits
-            if status >= 400:
-                raise AuditStop(f"{endpoint}: HTTP {status}; stopped without retry")
+            except Exception as error:
+                # An HTTP error response was logged with its credit header. A transport
+                # failure was not logged, so its accounting is unknown.
+                if not isinstance(error.__cause__, urllib.error.HTTPError):
+                    unknown_accounting = True
+                detail = openalex_client.redact_secrets(str(error))
+                raise AuditStop(f"{endpoint}: {detail}; stopped") from None
+            finally:
+                charge_attempts(first_new)
             overrun = budget.actual_error(
                 cost_usd=prior_cost + run_cost,
                 credits=prior_credits + run_credits,
             )
             if overrun:
                 raise AuditStop(f"{endpoint}: {overrun}")
-            if logger.request_metrics[-1]["status_code"] != status:
-                raise AuditStop(f"{endpoint}: usage record mismatch after {latency_ms:.0f} ms")
             return body
 
         def persist_progress() -> dict[str, Any]:

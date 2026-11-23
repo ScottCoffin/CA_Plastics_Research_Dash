@@ -3,19 +3,124 @@
 from __future__ import annotations
 
 import csv
+import io
 import json
+import os
+import time
+import urllib.error
+import urllib.request
 from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
+from types import SimpleNamespace
+from typing import Any
 from urllib.parse import parse_qs, urlsplit
 
 import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 
+from atlas.ingest import openalex
 from atlas.util.budget import OpenAlexBudget
 from atlas.util.cost import ApiCostLogger
 from scripts import run_at1_audit as audit
+
+NOW = datetime(2026, 11, 9, 23, 55, tzinfo=UTC)
+
+
+@pytest.fixture(autouse=True)
+def offline_shared_client(monkeypatch):
+    """Keep every test offline and fast: no pacing sleeps, no fallback key, no network.
+
+    Returns the list of retry sleeps the shared client would have taken.
+    """
+    sleeps: list[float] = []
+
+    def no_network(*args, **kwargs):
+        raise AssertionError("offline test reached urlopen without a routed fake")
+
+    monkeypatch.setattr(urllib.request, "urlopen", no_network)
+    monkeypatch.setattr(openalex, "_throttle", lambda: None)
+    # Only the shared client's clock: the audit's own atomic-write retry keeps real sleeps.
+    monkeypatch.setattr(
+        openalex, "time", SimpleNamespace(sleep=sleeps.append, monotonic=time.monotonic)
+    )
+    monkeypatch.setattr(openalex, "_active_key_var", openalex.PRIMARY_KEY_VAR)
+    monkeypatch.delenv(openalex.PRIMARY_KEY_VAR, raising=False)
+    monkeypatch.delenv(openalex.FALLBACK_KEY_VAR, raising=False)
+    return sleeps
+
+
+class _FakeResponse:
+    """The subset of an urllib response that the shared client reads."""
+
+    def __init__(self, status: int, body: dict[str, Any], headers: dict[str, str]) -> None:
+        self.status = status
+        self.headers = dict(headers)
+        self._raw = json.dumps(body).encode("utf-8")
+
+    def read(self) -> bytes:
+        return self._raw
+
+    def __enter__(self) -> _FakeResponse:
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        return None
+
+
+def _route_openalex_gets(monkeypatch, request) -> list[str]:
+    """Send the shared client's urlopen calls to ``request(url, key, timeout)``.
+
+    Returns the list of bearer keys seen on those GETs. A status >= 400 is raised as
+    urllib's HTTPError, as the real opener does.
+    """
+    keys: list[str] = []
+
+    def urlopen(req, timeout=None):
+        url = req.full_url
+        key = req.get_header("Authorization", "").removeprefix("Bearer ")
+        keys.append(key)
+        status, body, headers = request(url, key, timeout)
+        if status >= 400:
+            raise urllib.error.HTTPError(
+                url, status, "error", dict(headers), io.BytesIO(json.dumps(body).encode())
+            )
+        return _FakeResponse(status, body, headers)
+
+    monkeypatch.setattr(urllib.request, "urlopen", urlopen)
+    return keys
+
+
+def _budget(**overrides: Decimal) -> OpenAlexBudget:
+    values = {
+        "max_cost_usd": Decimal("0.10"),
+        "max_credits": Decimal("1000"),
+        "cost_per_credit_usd": Decimal("0.0001"),
+        "reserve_cost_usd": Decimal("0.001"),
+        "reserve_credits": Decimal("10"),
+    }
+    values.update(overrides)
+    return OpenAlexBudget(**values)
+
+
+def _openalex_fake(url: str, key: str, timeout: int) -> tuple[int, dict[str, Any], dict[str, str]]:
+    """A fresh free-tier status, and a 1-credit, USD 0.0001 page for every works request."""
+    if url.endswith("/rate-limit"):
+        rate_limit = {
+            "daily_budget_usd": 1,
+            "daily_remaining_usd": 0.97,
+            "credits_limit": 10000,
+            "credits_remaining": 9000,
+            "credits_used": 1000,
+            "prepaid_remaining_usd": 0,
+            "onetime_credits_remaining": 0,
+            "resets_at": "2026-11-10T00:00:00.000Z",
+            "resets_in_seconds": 300,
+        }
+        return 200, {"rate_limit": rate_limit}, {}
+    body = {"meta": {"count": 1, "cost_usd": 0.0001}, "results": []}
+    return 200, body, {"X-RateLimit-Credits-Used": "1"}
 
 
 def _fixtures(tmp_path: Path) -> tuple[Path, Path, Path]:
@@ -197,7 +302,7 @@ def test_rate_limit_reset_must_be_fresh_and_countdown_consistent():
             raise AssertionError("stale or inconsistent reset evidence must stop")
 
 
-def test_undersized_stratum_is_saved_and_remaining_strata_continue(tmp_path):
+def test_undersized_stratum_is_saved_and_remaining_strata_continue(tmp_path, monkeypatch):
     query_path, review_path, registry_path = _fixtures(tmp_path)
     seen = []
 
@@ -266,6 +371,7 @@ def test_undersized_stratum_is_saved_and_remaining_strata_continue(tmp_path):
             {"X-RateLimit-Credits-Used": "1"},
         )
 
+    _route_openalex_gets(monkeypatch, request)
     output_csv = tmp_path / "out" / "sample.csv"
     output_json = tmp_path / "out" / "counts.json"
     progress_cache = tmp_path / "ignored" / "progress.json"
@@ -327,7 +433,7 @@ def test_undersized_stratum_is_saved_and_remaining_strata_continue(tmp_path):
     assert json.loads(output_json.read_text(encoding="utf-8"))["labelled_rows"] == 0
 
 
-def test_progress_survives_later_error_and_resume_skips_cached_calls(tmp_path):
+def test_progress_survives_later_error_and_resume_skips_cached_calls(tmp_path, monkeypatch):
     query_path, review_path, registry_path = _fixtures(tmp_path)
     output_csv = tmp_path / "docs" / "review.csv"
     output_json = tmp_path / "docs" / "counts.json"
@@ -415,6 +521,7 @@ def test_progress_survives_later_error_and_resume_skips_cached_calls(tmp_path):
             return 503, {"message": "temporarily unavailable"}, {"X-RateLimit-Credits-Used": "1"}
         return works_response(int(institution_id[1:]))
 
+    _route_openalex_gets(monkeypatch, first_request)
     try:
         audit.run_audit(
             api_key="secret-sentinel",
@@ -431,9 +538,16 @@ def test_progress_survives_later_error_and_resume_skips_cached_calls(tmp_path):
             now=now,
         )
     except audit.AuditStop as error:
-        assert "HTTP 503" in str(error)
+        # The shared client retries a 5xx up to its attempt cap, then reports the failure.
+        assert "temporarily unavailable" in str(error)
     else:
         raise AssertionError("the simulated HTTP 503 must stop this run")
+    failing_sample = [
+        url
+        for url in first_calls
+        if parse_qs(urlsplit(url).query).get("filter", [""])[0].endswith("institutions.id:I3")
+    ]
+    assert len(failing_sample) == audit.MAX_HTTP_ATTEMPTS
 
     cached = json.loads(progress_cache.read_text(encoding="utf-8"))
     assert set(cached["baselines"]) == {"global", "UCSF", "SLAC", "UC Davis"}
@@ -455,6 +569,7 @@ def test_progress_survives_later_error_and_resume_skips_cached_calls(tmp_path):
         assert institution_id not in {"I1", "I2"}, "valid cached sample strata must not be reissued"
         return works_response(int(institution_id[1:]))
 
+    _route_openalex_gets(monkeypatch, second_request)
     result = audit.run_audit(
         api_key="secret-sentinel",
         confirmation=audit.FREE_ONLY_CONFIRMATION,
@@ -530,7 +645,7 @@ def test_free_only_and_zero_prepaid_gate_fails_closed(tmp_path):
         raise AssertionError("nonzero prepaid balance must block the audit")
 
 
-def test_status_without_credit_header_is_snapshot_but_unknown_query_stops(tmp_path):
+def test_status_without_credit_header_is_snapshot_but_unknown_query_stops(tmp_path, monkeypatch):
     query_path, review_path, registry_path = _fixtures(tmp_path)
     calls = []
 
@@ -555,6 +670,7 @@ def test_status_without_credit_header_is_snapshot_but_unknown_query_stops(tmp_pa
             )
         return 200, {"meta": {"count": 2}}, {}
 
+    _route_openalex_gets(monkeypatch, request)
     usage_log = tmp_path / "logs/usage.jsonl"
     try:
         audit.run_audit(
@@ -601,3 +717,129 @@ def test_status_without_credit_header_is_snapshot_but_unknown_query_stops(tmp_pa
     assert failure_records[0]["credits_total"] is None
     assert failure_records[0]["accounted_cost_usd"] is None
     assert not (tmp_path / "out.csv").exists()
+
+
+def _run(tmp_path, request_fn, *, budget: OpenAlexBudget | None = None) -> dict[str, Any]:
+    """One full 20-stratum run with the offline budget and clock."""
+    query_path, review_path, registry_path = _fixtures(tmp_path)
+    return audit.run_audit(
+        api_key="secret-sentinel",
+        confirmation=audit.FREE_ONLY_CONFIRMATION,
+        request_fn=request_fn,
+        query_path=query_path,
+        review_path=review_path,
+        registry_path=registry_path,
+        usage_log=tmp_path / "logs" / "usage.jsonl",
+        output_csv=tmp_path / "out" / "sample.csv",
+        output_json=tmp_path / "out" / "counts.json",
+        progress_cache_path=tmp_path / "ignored" / "progress.json",
+        budget=budget or _budget(),
+        now=lambda: NOW,
+    )
+
+
+def test_search_gets_go_through_shared_openalex_client(
+    monkeypatch, tmp_path, offline_shared_client
+):
+    original = openalex._request_json
+    spied: list[tuple[str, dict[str, Any]]] = []
+
+    def spy(url, **kwargs):
+        spied.append((url, kwargs))
+        return original(url, **kwargs)
+
+    monkeypatch.setattr(openalex, "_request_json", spy)
+    keys = _route_openalex_gets(monkeypatch, _openalex_fake)
+    result = _run(tmp_path, _openalex_fake)
+
+    assert len(spied) == 24  # global count, three baselines, twenty samples
+    assert all("/works?" in url for url, _ in spied)
+    assert all(kwargs["timeout"] == audit.MAX_TIMEOUT_SECONDS for _, kwargs in spied)
+    assert all(kwargs["attempts"] == audit.MAX_HTTP_ATTEMPTS for _, kwargs in spied)
+    assert all(isinstance(kwargs["logger"], ApiCostLogger) for _, kwargs in spied)
+    # Searches use the run's key, pinned for the run, not whatever the environment holds.
+    assert keys == ["secret-sentinel"] * 24
+    assert result["request_count_this_run"] == 25  # status plus 24 searches, no retries
+    assert offline_shared_client == []
+
+
+def test_burst_429_is_retried_by_shared_client_and_charged(
+    monkeypatch, tmp_path, offline_shared_client
+):
+    burst_urls: list[str] = []
+
+    def fake(url, key, timeout):
+        if not burst_urls and not url.endswith("/rate-limit"):
+            burst_urls.append(url)
+            return 429, {"message": "Rate limit exceeded: wait 1s"}, {}
+        return _openalex_fake(url, key, timeout)
+
+    _route_openalex_gets(monkeypatch, fake)
+    result = _run(tmp_path, fake)
+
+    assert len(burst_urls) == 1
+    assert offline_shared_client == [1.0]  # no Retry-After header: wait 1 s, then resend
+    assert result["request_count_this_run"] == 26  # status, 24 searches, one burst retry
+    # 24 pages at 1 credit each, plus the rejected attempt charged the 10-credit reserve.
+    assert result["metered_credits_this_run"] == "34"
+    assert result["metered_accounted_cost_usd_this_run"] == "0.0034"
+    records = [
+        json.loads(line)
+        for line in (tmp_path / "logs" / "usage.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    rejected = [
+        row
+        for row in records
+        if row.get("record_type") == "request" and row.get("status_code") == 429
+    ]
+    assert len(rejected) == 1
+    assert rejected[0]["credits_known"] is False
+
+
+def test_non_burst_429_stops_without_switching_to_fallback_key(
+    monkeypatch, tmp_path, offline_shared_client
+):
+    monkeypatch.setenv(openalex.FALLBACK_KEY_VAR, "alt-sentinel")
+
+    def fake(url, key, timeout):
+        if url.endswith("/rate-limit"):
+            return _openalex_fake(url, key, timeout)
+        return 429, {"message": "Daily allowance exhausted"}, {}
+
+    keys = _route_openalex_gets(monkeypatch, fake)
+    with pytest.raises(audit.AuditStop, match="HTTP 429"):
+        _run(tmp_path, fake)
+
+    # The audit checked only the primary account's allowance, so it must not spend on another.
+    assert keys == ["secret-sentinel"]
+    assert os.environ[openalex.FALLBACK_KEY_VAR] == "alt-sentinel"  # restored after the run
+    assert openalex.PRIMARY_KEY_VAR not in os.environ
+
+
+def test_retry_worst_case_is_reserved_before_any_request(
+    monkeypatch, tmp_path, offline_shared_client
+):
+    keys = _route_openalex_gets(monkeypatch, _openalex_fake)
+    # Four attempts at 10 credits each would take this run past its 30-credit cap.
+    with pytest.raises(audit.AuditStop, match="could exceed the run budget"):
+        _run(tmp_path, _openalex_fake, budget=_budget(max_credits=Decimal("30")))
+    assert keys == []
+
+
+def test_transport_failure_after_retries_is_recorded_as_unknown_accounting(
+    monkeypatch, tmp_path, offline_shared_client
+):
+    def fake(url, key, timeout):
+        if url.endswith("/rate-limit"):
+            return _openalex_fake(url, key, timeout)
+        raise urllib.error.URLError("connection reset")
+
+    _route_openalex_gets(monkeypatch, fake)
+    with pytest.raises(audit.AuditStop, match="failed after 4 attempts"):
+        _run(tmp_path, fake)
+
+    assert offline_shared_client == [1, 2, 4]  # backoff between the four attempts
+    failure_path = tmp_path / "logs" / "at1_audit_failure.jsonl"
+    failure = json.loads(failure_path.read_text(encoding="utf-8").splitlines()[0])
+    assert failure["accounting_known"] is False
+    assert failure["credits_total"] is None
