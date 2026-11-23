@@ -382,3 +382,8 @@ until it reports.
 ## 2026-11-18: plan-file tests and chained pushes
 - A scaffold test that edits a TODO line by the prefix `- [ ] **<task>**` fails as soon as that task is checked off (BQ-G1 broke `test_check_a3_scaffold.py`). Match task lines open or done.
 - Never chain `git push` after a gate command with `&&` on an unrelated step: read the gate output first. A clean-worktree failure reached `main` once this way (fixed in the next commit).
+
+## 2026-11-22: Windows text writes and tracked ignored data
+- `Path.write_text` on Windows writes CRLF. In lead edit scripts use `write_bytes(text.encode("utf-8"))` (or `newline=""`), or Git warns and a later touch rewrites the whole file.
+- Committed normalized tables sit under an ignore rule: stage them with `git add -f` (the daily ingest does the same). After a normalize schema change, rebuild them with `scripts/normalize_openalex.py`, compare with the HEAD tables via DuckDB `EXCEPT` on the old columns, and revert `docs/normalization_qc.md` if only its timestamp and path changed.
+- Give pytest its own `--basetemp` when another session runs tests at the same time; the shared temp root causes spurious failures.
