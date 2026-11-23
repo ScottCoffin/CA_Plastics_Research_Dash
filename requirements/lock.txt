@@ -30,7 +30,7 @@ duckdb==2.0.0
     # via ca-plastics-atlas (pyproject.toml)
 et-xmlfile==2.0.0
     # via openpyxl
-filelock==4.2.10
+filelock==4.2.12
     # via
     #   python-discovery
     #   virtualenv
@@ -83,7 +83,7 @@ pdfminer-six==20260107
     # via ca-plastics-atlas (pyproject.toml)
 pillow==13.0.0
     # via matplotlib
-platformdirs==4.14.5
+platformdirs==4.14.8
     # via virtualenv
 pluggy==1.7.0
     # via pytest
@@ -111,13 +111,13 @@ python-dateutil==4.0.0
     # via
     #   matplotlib
     #   pandas
-python-discovery==1.9.5
+python-discovery==1.9.6
     # via virtualenv
 pyyaml==6.0.3
     # via
     #   ca-plastics-atlas (pyproject.toml)
     #   pre-commit
-ruff==0.17.4
+ruff==0.17.6
     # via ca-plastics-atlas (pyproject.toml)
 shapely==2.2.0
     # via
@@ -127,9 +127,9 @@ tzdata==2026.6
     # via
     #   pandas
     #   python-dateutil
-virtualenv==21.15.6
+virtualenv==21.15.9
     # via pre-commit
-scikit-learn==1.8.0
+scikit-learn==1.9.1
     # via ca-plastics-research-atlas (pyproject.toml, optional ml extra)
 sentence-transformers==5.4.1
     # via ca-plastics-research-atlas (pyproject.toml, optional ml extra)
