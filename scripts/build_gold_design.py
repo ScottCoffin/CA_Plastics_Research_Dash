@@ -85,6 +85,11 @@ def _sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def _text_sha256(path: Path) -> str:
+    """SHA-256 of a text file with CRLF folded to LF, so Windows and CI checkouts agree."""
+    return _sha256_bytes(path.read_bytes().replace(b"\r\n", b"\n"))
+
+
 def _sha256_or_none(data: bytes | None) -> str | None:
     return None if data is None else _sha256_bytes(data)
 
@@ -374,7 +379,7 @@ def build_payload() -> dict[str, Any]:
         "splits_file": {"path": SPLITS.as_posix(), "sha256": _sha256_bytes(split_bytes)},
         "manifest": {
             "path": MANIFEST.as_posix(),
-            "sha256": _sha256(MANIFEST),
+            "sha256": _text_sha256(MANIFEST),
             "version": manifest["version"],
             "seed": manifest["seed"],
             "requested_pool_sample_size": sample_size,

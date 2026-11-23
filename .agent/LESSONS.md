@@ -387,3 +387,6 @@ until it reports.
 - `Path.write_text` on Windows writes CRLF. In lead edit scripts use `write_bytes(text.encode("utf-8"))` (or `newline=""`), or Git warns and a later touch rewrites the whole file.
 - Committed normalized tables sit under an ignore rule: stage them with `git add -f` (the daily ingest does the same). After a normalize schema change, rebuild them with `scripts/normalize_openalex.py`, compare with the HEAD tables via DuckDB `EXCEPT` on the old columns, and revert `docs/normalization_qc.md` if only its timestamp and path changed.
 - Give pytest its own `--basetemp` when another session runs tests at the same time; the shared temp root causes spurious failures.
+- After a gate fails inside an `&&` chain, nothing after it ran: check `git diff --cached --stat` before every commit (a BQ-S9 commit once carried one file).
+- Hash committed text files with CRLF folded to LF (Windows working copies are CRLF, CI checkouts LF), or a stored hash fails in CI.
+- Editing `curation/overrides_works.csv` makes `config/institution_types.csv` and `docs/AT_2_VERIFICATION.md` stale: rerun `scripts/build_institution_types.py` in the same checkpoint.

@@ -103,7 +103,8 @@ def _split_rows() -> list[dict]:
 def _sha256(path: Path) -> str:
     import hashlib
 
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    # CRLF folded to LF: a Windows working copy and a CI checkout must hash the same.
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def _guide_rows() -> list[dict]:
