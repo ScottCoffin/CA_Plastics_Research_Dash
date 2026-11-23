@@ -209,3 +209,4 @@
 | 2026-11-22 | BQ-G7 | Boundary cases recorded with verified quotes | this commit |
 | 2026-11-22 | BQ-S1 | Search vocabulary register (163 terms) with schema test | this commit |
 | 2026-11-22 | BQ-V.0 | Sigma benchmark spike, N_MAX proposal | this commit |
+| 2026-11-22 | BQ-S6 | Theme anchor sets (42 anchors) | this commit |
