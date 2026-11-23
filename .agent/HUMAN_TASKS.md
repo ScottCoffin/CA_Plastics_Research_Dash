@@ -39,6 +39,13 @@ Global Plastic Laws topic. That link is a draft the agent proposed, so the page 
 - **Done when:** the sidebar shows 0 pending. Tell the agent "OPC mapping reviewed"; it rebuilds
   the page data and the draft badge disappears.
 
+### H40. Decide the taxonomy proposal (BQ-S5, about 20 minutes)
+1. Open `docs/TAXONOMY_PROPOSAL.md`. It has ten decision rows (D1-D10); each shows what would change, why,
+   and the default the agent recommends.
+2. In the **Owner decision** column write approve, change or reject, plus a short note where needed.
+3. Tell the agent "taxonomy decisions done". Nothing ships until then; approved rows are applied in a later
+   checkpoint.
+
 ### H42. Triage 43 PubMed records the Atlas does not have (BQ-S9, about 30 minutes)
 PubMed lists 43 California plastics records that are not in the Atlas. Some are real gaps; others the Atlas
 is right to leave out. Your labels decide which.
@@ -210,12 +217,6 @@ leak-check works wait for S5.7.
 
 - **H39. Global gold labelling rounds (BQ-G4, after H37).** Up to 350 works in rounds of 25, in a
   Streamlit app the agent builds; it tells you when to stop (a checkpoint met the precision goal).
-- **H40. Approve the taxonomy proposal (BQ-S5).** New topic tags, the lifecycle-and-society tier,
-  the lens facet and the candidate review facets; nothing ships until you approve.
-
-Each later review with more than 10 cases (H12 need cells) will
-come with its own Streamlit app and run command here.
-
 - **H8. Outreach emails (S9.6).** Now unblocked (H7 done, emails allowed in `data/private/`): approve the email template in
   `docs/OUTREACH.md`, then send the first batch from your own email account. The
   agent never sends email.

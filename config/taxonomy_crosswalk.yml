@@ -1,0 +1,774 @@
+# Taxonomy crosswalk (BQ-S5). PROPOSAL ONLY: no code, label, export, site file or
+# config/taxonomy.yml behaviour reads or changes this file. Nothing ships until the owner
+# approves each decision (A3-D7). Owner-facing summary: docs/TAXONOMY_PROPOSAL.md.
+#
+# Each entry: id, kind (topic_tag | tier | facet | facet_value | field), item (D1-D10 in
+# docs/TAXONOMY_PROPOSAL.md), current_location (list), proposed_action (keep | rename |
+# merge_into | split | add | add_experimental | defer), maps_to (list), source, notes,
+# reporting (in_P1_P6 | excluded_from_P1_P6 | not_applicable), decision (always pending here).
+version: taxonomy-crosswalk-v1
+status: proposal
+approval: A3-D7
+owner_summary: docs/TAXONOMY_PROPOSAL.md
+spec_sections: docs/add_on_spec_3.md §§5.4, 5.6, 5.10.3-5.10.6 (A3 §5.8 BQ-S5)
+guide: docs/LABELING_GUIDE_A3_ADDENDUM.md (guide_v3, candidate)
+
+# A3 §5.6 external schemes and the Atlas tags or facets they feed (as stated in A3 §5.6).
+scheme_crosswalk:
+  - scheme: "Zhang et al. (2020)"
+    atlas_targets: [occurrence_and_monitoring, fate_transport_and_sorption, analytical_methods, ecotoxicology_and_trophic_transfer]
+  - scheme: "Yang et al. (2023, soil)"
+    atlas_targets: [analytical_methods, ecotoxicology_and_trophic_transfer, fate_transport_and_sorption, occurrence_and_monitoring]
+    note: "Microbial-community effects are excluded from plastisphere by ADR-RELEVANCE-RULES (.agent/DECISIONS.md)."
+  - scheme: "Wong et al. (2020)"
+    atlas_targets: [ecotoxicology_and_trophic_transfer, human_exposure_and_health_risk]
+  - scheme: "ToMEx (Hampton et al. 2025)"
+    atlas_targets: [ecotoxicology_and_trophic_transfer, plastic_associated_chemicals]
+  - scheme: "Seewoo et al. (2023)"
+    atlas_targets: [plastic_associated_chemicals]
+  - scheme: "Hartmann et al. (2019)"
+    atlas_targets: [size_class (A2), origin (proposed facet), particle_shape (A3 §5.10.3)]
+  - scheme: "Foellmer et al. (2022, WHO HEN 75)"
+    atlas_targets: [behaviour_and_perception, policy_law_and_governance, analytic_lens responsibility_shifting]
+  - scheme: "Zuanazzi et al. (2026)"
+    atlas_targets: [review_type, environment_setting, polymer_type, particle_shape, model_organism_group, endpoint_technique]
+  - scheme: "Özkan Vardar and Vardar (2026)"
+    atlas_targets: [experimental_system, polymer_type, size_class (A2), particle_condition, endpoint_domain]
+  - scheme: "Tran et al. (2026)"
+    atlas_targets: [study_design, human_sample_matrix, organ_system, analytical_method, exposure_source]
+  - scheme: "Barchiesi et al. (2026)"
+    atlas_targets: [human_exposure_pathway, human_exposure_matrix]
+  - scheme: "Zimmermann et al. (2025)"
+    atlas_targets: [food_contact_article_type, size_definition_scheme, particle_shape]
+
+entries:
+  # ---- Existing topic tags (config/taxonomy.yml domain_tags, 11 IDs) ----
+  - id: occurrence_and_monitoring
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, config/taxonomy.yml disciplines, site/assets/topics.js, docs/LABELING_GUIDE.md §4, src/atlas/nlp/annotation.py DOMAIN_TAGS]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; config/taxonomy.yml provenance (owner candidate taxonomy, 2026-11-05)"
+    notes: "Same ID in all five lists. A3 §5.6: Zhang et al. (2020) cluster 1 and Yang et al. (2023) abundance map here."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: analytical_methods
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, config/taxonomy.yml disciplines, site/assets/topics.js, docs/LABELING_GUIDE.md §4, src/atlas/nlp/annotation.py DOMAIN_TAGS]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; config/taxonomy.yml provenance (2026-11-05)"
+    notes: "Receives the analytical_method facet values as co-terms (A3 §5.10.3, entry analytical_method)."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: fate_transport_and_sorption
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, config/taxonomy.yml disciplines, site/assets/topics.js, docs/LABELING_GUIDE.md §4, src/atlas/nlp/annotation.py DOMAIN_TAGS]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; config/taxonomy.yml provenance (2026-11-05)"
+    notes: "A3 §5.6: Zhang et al. (2020) cluster 2 and Yang et al. (2023) adsorption and porous media map here."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: wastewater_and_treatment
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, config/taxonomy.yml disciplines, site/assets/topics.js, docs/LABELING_GUIDE.md §4, src/atlas/nlp/annotation.py DOMAIN_TAGS]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; config/taxonomy.yml provenance (2026-11-05)"
+    notes: "No A3 §5.4-5.6 crosswalk row changes this tag."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: ecotoxicology_and_trophic_transfer
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, config/taxonomy.yml disciplines, site/assets/topics.js, docs/LABELING_GUIDE.md §4, src/atlas/nlp/annotation.py DOMAIN_TAGS]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; config/taxonomy.yml provenance (2026-11-05)"
+    notes: "A3 §5.6: Zhang et al. (2020) cluster 4, Wong et al. (2020) and ToMEx (Hampton et al. 2025) map here."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: soil_and_agriculture
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, site/assets/topics.js, docs/LABELING_GUIDE.md §4, src/atlas/nlp/annotation.py DOMAIN_TAGS]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; config/taxonomy.yml provenance (2026-11-05)"
+    notes: "Missing from the disciplines block (8 IDs) but present in the 8-tag guide list. This is the 8-vs-11 mismatch."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: human_exposure_and_health_risk
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, config/taxonomy.yml disciplines, site/assets/topics.js, docs/LABELING_GUIDE.md §4, src/atlas/nlp/annotation.py DOMAIN_TAGS]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; config/taxonomy.yml provenance (2026-11-05)"
+    notes: "A3 §5.6: Wong et al. (2020) maps here. Human-exposure facets are in §5.10.3 (items D9)."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: air
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, site/assets/topics.js, docs/LABELING_GUIDE.md §4, src/atlas/nlp/annotation.py DOMAIN_TAGS]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; config/taxonomy.yml provenance (2026-11-05)"
+    notes: "Not in the disciplines block. Guide §4: do not assign air for inhalation alone."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: risk_assessment
+    kind: topic_tag
+    item: D2
+    current_location: [config/taxonomy.yml domain_tags, config/taxonomy.yml disciplines, site/assets/topics.js]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; owner request 2026-11-11 (comment in config/taxonomy.yml)"
+    notes: "Missing from the 8-tag guide list and from src/atlas/nlp/annotation.py DOMAIN_TAGS, so no gold labels or F1 exist for it. Overlaps the study-type value modelling_risk (A2 addendum §1.1), which is a design, not a topic."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: plastisphere
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, config/taxonomy.yml disciplines, site/assets/topics.js]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tag; owner decisions 2026-11-11 (config/taxonomy.yml comments)"
+    notes: "Missing from the 8-tag guide list and from annotation.DOMAIN_TAGS, so it has no gold labels or F1 (same gap as risk_assessment)."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: plastic_associated_chemicals
+    kind: topic_tag
+    item: D1
+    current_location: [config/taxonomy.yml domain_tags, site/assets/topics.js (auxiliary), src/atlas/nlp/labels.py (PLASTIC_CHEMICALS_TAG)]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing auxiliary tag; owner decision REL-TIER2 (2026-11-13)"
+    notes: "Auxiliary on the site. Matches the chemicals-in-plastics tier. Not in the 8-tag guide list or annotation.DOMAIN_TAGS. A3 §5.4: stays."
+    reporting: in_P1_P6
+    decision: pending
+
+  # ---- Tiers ----
+  - id: lifecycle_and_society
+    kind: tier
+    item: D4
+    current_location: []
+    proposed_action: add
+    maps_to: ["plastic_tier value lifecycle_and_society"]
+    source: "A3 §5.4 (A3-D13); docs/LABELING_GUIDE_A3_ADDENDUM.md §2 (A3-D16 confirms the name)"
+    notes: "Tie-break: core keeps pollution-framed works; lifecycle_and_society takes plastics as a material, product, waste stream or policy object. Boundary defaults (A3-D12): bioplastics, packaging and SSbD in scope when the centrality gate passes. Code support is missing: src/atlas/nlp/annotation.py _TIERS allows only core and chemicals-in-plastics."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: core
+    kind: tier
+    item: D4
+    current_location: [src/atlas/nlp/annotation.py _TIERS, docs/LABELING_GUIDE.md §2]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tier; docs/LABELING_GUIDE.md §2 (guide_v1)"
+    notes: "Keeps plastic-pollution policy and mitigation under core (guide_v3 §2 tie-break)."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: chemicals-in-plastics
+    kind: tier
+    item: D4
+    current_location: [src/atlas/nlp/annotation.py _TIERS, docs/LABELING_GUIDE.md §2]
+    proposed_action: keep
+    maps_to: []
+    source: "Existing tier; docs/LABELING_GUIDE.md §2 (guide_v1)"
+    notes: "Used by plastic_associated_chemicals; no change proposed."
+    reporting: in_P1_P6
+    decision: pending
+
+  # ---- New topic tags, group Lifecycle and society (A3 §5.4) ----
+  - id: lca_and_sustainability
+    kind: topic_tag
+    item: D3
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.4 candidate list; docs/LABELING_GUIDE_A3_ADDENDUM.md §4"
+    notes: "Probe hits were noisy (generic packaging and an unrelated greenhouse-gas query). Seed words still to be written and tested."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: waste_management_and_recycling
+    kind: topic_tag
+    item: D3
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.4 candidate list; docs/LABELING_GUIDE_A3_ADDENDUM.md §4"
+    notes: "Covers collection, landfill, incineration and recycling of plastic waste. Sub-topic waste_trade_and_global_flows is listed separately."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: waste_trade_and_global_flows
+    kind: topic_tag
+    item: D3
+    current_location: []
+    proposed_action: add
+    maps_to: [waste_management_and_recycling]
+    source: "A3 §5.4 (sub-topic of waste_management_and_recycling); guide_v3 §4"
+    notes: "Plastic waste trade and import bans. Probe: 445 matches with on-topic top hits (A3 §5.4). Trade studies without the justice frame take no lens (A3 §5.4 item 3)."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: policy_law_and_governance
+    kind: topic_tag
+    item: D3
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.4 candidate list; docs/LABELING_GUIDE_A3_ADDENDUM.md §4"
+    notes: "Tags are independent of tier, so a core pollution-policy work can also carry this tag. Lens responsibility_shifting is the framing, not the subject."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: behaviour_and_perception
+    kind: topic_tag
+    item: D3
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.4 candidate list with A3-D20 extension; guide_v3 §4"
+    notes: "Individuals and consumers only. The A3-D20 extension (social norms, attitude-behaviour gaps, risk perception, disposal behaviour, stigma, wellbeing) applies only when plastics are primary or substantial. Systems and power analyses go to justice_colonialism_and_power. Fold of behavioural_and_psychosocial is item D6."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: justice_colonialism_and_power
+    kind: topic_tag
+    item: D3
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.4 (new tag, justice_colonialism_and_power); guide_v3 §4"
+    notes: "Used when justice, racism, colonialism, labour or power is the primary analytic subject. The lens facet records the framing separately (item D5)."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: litter_and_trash
+    kind: topic_tag
+    item: D3
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.4 candidate list; guide_v3 §4"
+    notes: "'Trash' never qualifies alone (A3 §5.4). Overlaps occurrence_and_monitoring for debris surveys: the owner may want a rule that litter_and_trash is used only for litter, clean-ups or littering behaviour."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: bioplastics_and_alternatives
+    kind: topic_tag
+    item: D3
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.4 candidate list; A3-D12 boundary default"
+    notes: "Bioplastics, compostable and biodegradable plastics, alternatives. Probe: 16,052 matches with materials-science and off-topic top hits (A3 §5.4), so seed words need work."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: safe_and_sustainable_by_design
+    kind: topic_tag
+    item: D3
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.4 candidate list (EU Recommendation 2022/2510); A3-D12 boundary default"
+    notes: "A design stage plus a safety and sustainability assessment for plastics or polymers. Probe: 105 matches with off-topic hits."
+    reporting: in_P1_P6
+    decision: pending
+
+  - id: culture_media_and_discourse
+    kind: topic_tag
+    item: D10
+    current_location: []
+    proposed_action: add_experimental
+    maps_to: []
+    source: "A3 §5.4 (A3-D17); guide_v3 §4"
+    notes: "Optional, low weight, assigned opportunistically. Experimental by default: fewer than 40 gold examples, or kappa below 0.7, or F1 below 0.70 (A2 rule). Same centrality gate. Proposed as a commented-out entry only: config/taxonomy.yml has no experimental or optional flag that code reads, so registration would be inert (see docs/TAXONOMY_PROPOSAL.md D10)."
+    reporting: excluded_from_P1_P6
+    decision: pending
+
+  # ---- Facets: lens, centrality, origin ----
+  - id: plastics_centrality
+    kind: field
+    item: D7
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3-D18; docs/LABELING_GUIDE_A3_ADDENDUM.md §5 and §7; A3 §5.4 scope gate"
+    notes: "Single value per work, set only for lifecycle-and-society candidates. Wording is listed as A3-Q5 in A3-D18. config/denominator_series.yml series B2 is 'not built' and waits for this label."
+    reporting: not_applicable
+    decision: pending
+
+  - id: primary
+    kind: facet_value
+    item: D7
+    current_location: []
+    proposed_action: add
+    maps_to: [plastics_centrality]
+    source: "docs/LABELING_GUIDE_A3_ADDENDUM.md §5"
+    notes: "Plastics, polymers, plastic products or a named plastic stream are the main object. In corpus."
+    reporting: not_applicable
+    decision: pending
+
+  - id: substantial
+    kind: facet_value
+    item: D7
+    current_location: []
+    proposed_action: add
+    maps_to: [plastics_centrality]
+    source: "docs/LABELING_GUIDE_A3_ADDENDUM.md §5"
+    notes: "Named, analysed plastics object plus plastics in title, abstract or keywords. In corpus."
+    reporting: not_applicable
+    decision: pending
+
+  - id: incidental
+    kind: facet_value
+    item: D7
+    current_location: []
+    proposed_action: add
+    maps_to: [plastics_centrality]
+    source: "docs/LABELING_GUIDE_A3_ADDENDUM.md §5"
+    notes: "One example in a list, or a passing sentence. Not in corpus; may appear in Related Resources."
+    reporting: not_applicable
+    decision: pending
+
+  - id: none
+    kind: facet_value
+    item: D7
+    current_location: []
+    proposed_action: add
+    maps_to: [plastics_centrality]
+    source: "docs/LABELING_GUIDE_A3_ADDENDUM.md §5"
+    notes: "No meaningful plastics content. Not in corpus."
+    reporting: not_applicable
+    decision: pending
+
+  - id: not_assessed
+    kind: facet_value
+    item: D7
+    current_location: []
+    proposed_action: add
+    maps_to: [plastics_centrality]
+    source: "docs/LABELING_GUIDE_A3_ADDENDUM.md §5 and §8 (A3-D15)"
+    notes: "Used for works outside the candidate set or labelled before guide_v3 (all 38 backfilled California works)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: analytic_lens
+    kind: facet
+    item: D5
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.4 implementation items 2-3 (A3-D14); docs/LABELING_GUIDE_A3_ADDENDUM.md §6"
+    notes: "Multi-value, optional, usable with any topic tag. Assigned only when the work adopts the frame and lens_evidence holds a quoted excerpt. Never inferred from topic. Values are in the facet_value entries below."
+    reporting: not_applicable
+    decision: pending
+
+  - id: colonialism_framing
+    kind: facet
+    item: D5
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens waste_colonialism]
+    source: "A3 §5.4 item 2; docs/LABELING_GUIDE_A3_ADDENDUM.md §6-7"
+    notes: "Values: transboundary_disposal, land_and_dispossession. Only with waste_colonialism."
+    reporting: not_applicable
+    decision: pending
+
+  - id: waste_colonialism_type
+    kind: facet
+    item: D5
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens waste_colonialism]
+    source: "A3 §5.4 item 2 (typology from Stoett 2024); docs/LABELING_GUIDE_A3_ADDENDUM.md §7"
+    notes: "Values: classical, neocolonial_export, incidental_accumulation, criminal_trade. Only with waste_colonialism."
+    reporting: not_applicable
+    decision: pending
+
+  - id: waste_colonialism
+    kind: facet_value
+    item: D5
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens]
+    source: "A3 §5.4 item 2 (A3-D14); guide_v3 §6"
+    notes: "Waste or pollution as domination of one group's homeland by another. Both senses are kept (transboundary disposal; land and dispossession)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: environmental_justice_and_racism
+    kind: facet_value
+    item: D5
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens]
+    source: "A3 §5.4 item 2; guide_v3 §6"
+    notes: "Fenceline, sacrifice-zone, wastescape and spatial-injustice framings; slow violence. Absorbs spatial_injustice (item D6)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: indigenous_and_community_governance
+    kind: facet_value
+    item: D5
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens]
+    source: "A3 §5.4 item 2; guide_v3 §6"
+    notes: "Indigenous participation or governance, anticolonial and decolonial approaches. Absorbs decolonial_and_indigenous_research (item D6)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: community_and_participatory_methods
+    kind: facet_value
+    item: D5
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens]
+    source: "A3 §5.4 item 2; guide_v3 §6"
+    notes: "Community science or participatory research methods (Duckett and Repaci 2015 as cited in A3)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: labour_and_informal_economy
+    kind: facet_value
+    item: D5
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens]
+    source: "A3 §5.4 item 2; guide_v3 §6"
+    notes: "Waste pickers, informal recycling, labour in plastic supply chains."
+    reporting: not_applicable
+    decision: pending
+
+  - id: circularity_critique_and_greenwashing
+    kind: facet_value
+    item: D5
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens]
+    source: "A3 §5.4 item 2; guide_v3 §6"
+    notes: "Critique of circular-economy or biodegradability claims, and greenwashing."
+    reporting: not_applicable
+    decision: pending
+
+  - id: political_economy_centre_periphery
+    kind: facet_value
+    item: D6
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens]
+    source: "A3-D20 (A3-Q7); A3 §5.4 item 2 (new value); guide_v3 §6"
+    notes: "New lens value. Waste flows, trade, dumping rights and import bans as power relations, including corporate imperialism."
+    reporting: not_applicable
+    decision: pending
+
+  - id: responsibility_shifting
+    kind: facet_value
+    item: D6
+    current_location: []
+    proposed_action: add
+    maps_to: [analytic_lens]
+    source: "A3-D20 (A3-Q7); A3 §5.4 item 2 (new value); guide_v3 §6"
+    notes: "New lens value. Critique of individual-responsibility framing, scalar mismatch and EPR design (Foellmer et al. 2022; Ashworth 2026, as cited in A3)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: spatial_injustice
+    kind: facet_value
+    item: D6
+    current_location: []
+    proposed_action: merge_into
+    maps_to: [environmental_justice_and_racism]
+    source: "A3 §5.4 reconciliation note 2 (A3-D20); guide_v3 §6"
+    notes: "Addendum candidate, not in config. Folded into environmental_justice_and_racism."
+    reporting: not_applicable
+    decision: pending
+
+  - id: decolonial_and_indigenous_research
+    kind: facet_value
+    item: D6
+    current_location: []
+    proposed_action: merge_into
+    maps_to: [indigenous_and_community_governance]
+    source: "A3 §5.4 reconciliation note 2 (A3-D20); guide_v3 §6"
+    notes: "Addendum candidate, not in config. Folded into indigenous_and_community_governance. Test terms (for example Indigenous political ecology) are BQ-S3 work."
+    reporting: not_applicable
+    decision: pending
+
+  - id: behavioural_and_psychosocial
+    kind: facet_value
+    item: D6
+    current_location: []
+    proposed_action: merge_into
+    maps_to: [behaviour_and_perception]
+    source: "A3 §5.4 reconciliation note 2 (A3-D20)"
+    notes: "Addendum candidate, not in config. Folded into the behaviour_and_perception topic tag (item D3)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: origin
+    kind: facet
+    item: D8
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.6 (Hartmann et al. 2019, origin primary/secondary, 'origin facet candidate'); docs/LABELING_GUIDE_A2_ADDENDUM.md §3 (DTSC splits primary and secondary microplastics)"
+    notes: "Optional facet. A3 gives no value list beyond primary and secondary; not_stated is the lead's addition. Apply only when the work states the origin."
+    reporting: not_applicable
+    decision: pending
+
+  - id: origin_primary
+    kind: facet_value
+    item: D8
+    current_location: []
+    proposed_action: add
+    maps_to: [origin]
+    source: "A3 §5.6 (Hartmann et al. 2019)"
+    notes: "Plastic made as small particles on purpose (for example microbeads, pellets)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: origin_secondary
+    kind: facet_value
+    item: D8
+    current_location: []
+    proposed_action: add
+    maps_to: [origin]
+    source: "A3 §5.6 (Hartmann et al. 2019)"
+    notes: "Plastic broken down from larger items (fragments, fibres from textiles)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: origin_not_stated
+    kind: facet_value
+    item: D8
+    current_location: []
+    proposed_action: add
+    maps_to: [origin]
+    source: "Lead proposal (not in A3)"
+    notes: "Used only when the work does not state an origin. Lead's addition."
+    reporting: not_applicable
+    decision: pending
+
+  # ---- Section 5.10.3 review-derived facets (A3-D21). Values are in notes; sources are verbatim. ----
+  - id: human_exposure_pathway
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.10.3 (Barchiesi et al. 2026, Table SI3); human_exposure_matrix is the same facet under the second name"
+    notes: "Overlaps the A2 compartment values air, indoor_air, indoor_dust, food and drinking_water; reconcile under D9. Inhalation to AIR: indoor air, indoor deposition, indoor dust, outdoor air, outdoor deposition, outdoor dust. Ingestion to BEVERAGES: tap water, bottled water, non-alcoholic drinks other than water, alcoholic drinks. Ingestion to FOOD: 17 groups (mollusks to food supplements). No dermal pathway in the source; add only if the owner wants it."
+    reporting: not_applicable
+    decision: pending
+
+  - id: exposure_source
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: merge_into
+    maps_to: [human_exposure_pathway]
+    source: "A3 §5.10.3 (Tran et al. 2026)"
+    notes: "Values: take-away food packaging, bottled water, seafood, dairy/formula milk, occupational. Overlaps the exposure-matrix values, so food and beverage values merge into human_exposure_pathway; occupational stays as its own value."
+    reporting: not_applicable
+    decision: pending
+
+  - id: human_sample_matrix
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: [compartment human_tissue (A2)]
+    source: "A3 §5.10.3 (Tran et al. 2026, Table 2)"
+    notes: "Refines the single A2 compartment value human_tissue. Values: feces, semen, urine, placental tissue, amniotic fluid, vitreous humor, thrombi, gastric fasting liquid, blood, prostate tumour/para-tumour tissue, cervical cancer tissue and blood, bronchoalveolar lavage fluid, uterine fibroids/myometrium, nasal and intestinal microbiota samples."
+    reporting: not_applicable
+    decision: pending
+
+  - id: organ_system
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.10.3 (Tran et al. 2026; Ortiz-Balsero et al. 2026)"
+    notes: "Values: cardiovascular, reproductive, gastrointestinal, respiratory, ocular, neurological. Add more only as the corpus needs them."
+    reporting: not_applicable
+    decision: pending
+
+  - id: study_design
+    kind: facet
+    item: D9
+    current_location: [docs/LABELING_GUIDE_A2_ADDENDUM.md §1.1 (study_type)]
+    proposed_action: defer
+    maps_to: [study_type]
+    source: "A3 §5.10.3 (Tran et al. 2026, human evidence)"
+    notes: "Values: cross-sectional, case-control, prospective cohort, quasi-experimental. Must be reconciled with study_type first. A3 says study_type has 16 values; the guide and config/taxonomy.yml list 15 (see D9 notes)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: experimental_system
+    kind: facet
+    item: D9
+    current_location: [config/taxonomy.yml add_on_a2 study_type exposure_lab_toxicity test_system]
+    proposed_action: add
+    maps_to: [study_type exposure_lab_toxicity]
+    source: "A3 §5.10.3 (Özkan Vardar and Vardar 2026, Fig. 2; Ortiz-Balsero et al. 2026)"
+    notes: "Values: in vitro; Caco-2-based; Caco-2 monoculture-like; multicellular co-/tri-culture; animal (in vivo component); advanced biomimetic (organoids, chip-based); named strains (C57BL/6J, Swiss Albino, ICR, BALB/c, Wistar, Sprague Dawley, Pietrain x Duroc). Counted by occurrence, not exclusive. Cross-references A2 test_system, which is coarser."
+    reporting: not_applicable
+    decision: pending
+
+  - id: model_organism_group
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.10.3 (Zuanazzi et al. 2026, Fig. 4A)"
+    notes: "Values: microorganisms, fish, plants, arthropods, humans, mammals, non-arthropod invertebrates, algae, birds, amphibians, reptiles. Birds, amphibians and reptiles are under-represented in reviews (source text)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: endpoint_domain
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.10.3 (Özkan Vardar and Vardar 2026; Ortiz-Balsero et al. 2026)"
+    notes: "What was measured. Intestinal: cytotoxicity, oxidative stress, inflammation, epithelial barrier integrity, gene expression. Neurotoxicity: behavioral, neurochemical, neurophysiological, neuropathological. Kept separate from endpoint_technique."
+    reporting: not_applicable
+    decision: pending
+
+  - id: endpoint_technique
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.10.3 (Zuanazzi et al. 2026)"
+    notes: "How it was measured. Values: biochemistry, molecular, microscopy analysis, histology, omics, apoptosis, morphophysiological, micronucleus, comet assay."
+    reporting: not_applicable
+    decision: pending
+
+  - id: polymer_type
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.10.3 (Zuanazzi et al. 2026, Fig. 3B; Ortiz-Balsero et al. 2026; Tran et al. 2026)"
+    notes: "Values: PE, PS, PP, PET, PVC, PA, PC, PU, PMMA, ABS, PLA, LDPE, PTFE, PA66, PE-co-PP, copolymer. Abbreviations are never searched on their own (A3 §5.1)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: particle_shape
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.10.3 (Zuanazzi et al. 2026, Fig. 3C; Zimmermann et al. 2025, Table 2.4)"
+    notes: "Keep a coarse set: particle, fiber, fragment, film, sphere, pellet, foam, granule, sheet, flake. Barchiesi et al. (2026) recommend at least separating fibres from other shapes. Shape is separate from origin (item D8)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: particle_condition
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.10.3 (Özkan Vardar and Vardar 2026, Fig. 5)"
+    notes: "Values: virgin, digestion-modified, aged or weathered, product-released, other or mixed. Mutually exclusive in the source."
+    reporting: not_applicable
+    decision: pending
+
+  - id: analytical_method
+    kind: facet
+    item: D9
+    current_location: [config/taxonomy.yml domain_tags analytical_methods]
+    proposed_action: add
+    maps_to: [analytical_methods]
+    source: "A3 §5.10.3 (Tran et al. 2026, Zimmermann et al. 2025 Table 3.2)"
+    notes: "Feeds the existing analytical_methods tag as co-terms. Core values: Py-GC/MS, Raman, LDIR, FTIR. Digestion reagents (KOH, H2O2, enzymes, Fenton's reagent) are co-terms only (Barchiesi et al. 2026)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: food_contact_article_type
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: []
+    source: "A3 §5.10.3 (Zimmermann et al. 2025, CC BY-NC-ND source)"
+    notes: "Values: bottles, unspecified containers, tea bags, cups, bags, baby bottles and feeding accessories, trays, cans, food processing and transport equipment, wrapping, other. Use type: single-use, repeat-use. Record values only; do not copy tables from the source."
+    reporting: not_applicable
+    decision: pending
+
+  - id: size_definition_scheme
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: add
+    maps_to: [size_class (A2)]
+    source: "A3 §5.10.4 (size-definition conflicts); A3 §5.10.3 (Zimmermann et al. 2025)"
+    notes: "Values: california, iso, eu, hartmann, tox_1_5000um, food_contact_sem, other, not_stated. Record only where a work states a scheme. Do not harmonise silently. Separate from A2 size_class (macro, micro, nano, unspecified)."
+    reporting: not_applicable
+    decision: pending
+
+  - id: review_type
+    kind: facet
+    item: D9
+    current_location: [config/taxonomy.yml add_on_a2 study_type review_synthesis]
+    proposed_action: merge_into
+    maps_to: [study_type review_synthesis]
+    source: "A3 §5.10.3 (Zuanazzi et al. 2026)"
+    notes: "Values: narrative or critical review, systematic review, meta-analysis, bibliometric review, mini-review, scoping review, rapid review, integrative review, umbrella review, unspecified. Reconcile with study_type review_synthesis: review_type becomes a sub-field of it."
+    reporting: not_applicable
+    decision: pending
+
+  - id: environment_setting
+    kind: facet
+    item: D9
+    current_location: [config/taxonomy.yml add_on_a2 compartment]
+    proposed_action: split
+    maps_to: [compartment (A2)]
+    source: "A3 §5.10.3 (Zuanazzi et al. 2026, Fig. 3A)"
+    notes: "Mixes compartments with settings. Split: values that match A2 compartment[] map there; the rest (for example glacier, mangrove, brackish water, flooded areas, bioassays, agroecosystems, urban waste, industrial) stay as setting values."
+    reporting: not_applicable
+    decision: pending
+
+  - id: particle_colour
+    kind: facet
+    item: D9
+    current_location: []
+    proposed_action: defer
+    maps_to: []
+    source: "A3 §5.10.3 (Zuanazzi et al. 2026: not recommended)"
+    notes: "Colour is rarely stated in titles or abstracts, so the expected yield is low. Not added unless the owner asks."
+    reporting: not_applicable
+    decision: pending
