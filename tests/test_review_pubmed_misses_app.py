@@ -48,6 +48,8 @@ def _load(name: str, path: Path) -> ModuleType:
 
 
 def _app() -> ModuleType:
+    # The app imports streamlit at module level; CI does not install it (review apps run locally).
+    pytest.importorskip("streamlit")
     return _load("review_pubmed_misses_app", APP)
 
 

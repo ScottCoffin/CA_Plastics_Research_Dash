@@ -390,3 +390,4 @@ until it reports.
 - After a gate fails inside an `&&` chain, nothing after it ran: check `git diff --cached --stat` before every commit (a BQ-S9 commit once carried one file).
 - Hash committed text files with CRLF folded to LF (Windows working copies are CRLF, CI checkouts LF), or a stored hash fails in CI.
 - Editing `curation/overrides_works.csv` makes `config/institution_types.csv` and `docs/AT_2_VERIFICATION.md` stale: rerun `scripts/build_institution_types.py` in the same checkpoint.
+- Keep pytest `--basetemp` outside the repo (for example `$(cygpath -w "$TEMP")/atlas_pt`): a temp folder inside the repo makes `test_release_at10` find git and fail.
