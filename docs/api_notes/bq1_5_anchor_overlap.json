@@ -1,0 +1,1102 @@
+{
+ "schema_version": "bq1_5_anchor_overlap.v1",
+ "query_version": "plastic-v3.1",
+ "query_fingerprint_sha256": "367355c570ef3a99e8a24cbcae7b146efbbe8e2b85b0703269578c9882e0d4ce",
+ "query_search_scope": "title_and_abstract, no California scope",
+ "type_filters": [
+  "type:!erratum",
+  "type:!peer-review",
+  "type:!retraction",
+  "type:!paratext"
+ ],
+ "probe": {
+  "select": "id",
+  "per_page": 50,
+  "batch_size": 50,
+  "reserved_credits_per_call": 10.0
+ },
+ "interval": {
+  "method": "Wilson score",
+  "level": 0.95,
+  "z": 1.959964
+ },
+ "credit_cap": 150.0,
+ "credits_total": 92.0,
+ "calls_total": 11,
+ "input_sha256": {
+  "config/queries.yml": "ef2cb1515864d3e5fd4fe3af6a0b29634daac8246ce6be38937d8f7f684a4425",
+  "data/interim/works_raw.parquet": "f7c6b2de867f845d1c605f8e9178389191f781247ee129252e87d5b67f9aa279",
+  "data/processed/normalized/works.parquet": "1ef376f8c163d2ab35410faa4a7d3844547694420b12355c992fec8189886288",
+  "site/data/index.json": "bf7c370949e15a10f17288cf7641717af1d487b615f37a1f5568a888e84b943c",
+  "site/data/pubmed_coverage.json": "f20a006865ee4839e56707690aae24e1efc39a73e73b0a52f20f019c2351ee58",
+  "data/interim/pubmed/r1_california_pmids.csv": "d3e932875f031a04e94eee8286a193698ab134029326c0b168ba0345748649a3",
+  "curation/work_relevance.csv": "6c0162617df8705096da658f8c3f8816ad8f78f78577f3c28d11a55eb0ed67e8",
+  "docs/S7_4_REAL_REVIEW.csv": "b664d9f94d44cbb59b9f85752b2f27dd724e73953c357efc3ab01d2c8ce6772a",
+  "tests/fixtures/s1_5_known_relevant.json": "89be0a22d0a8de8523c6e3083bc5dc135b06f9fb38321dfa54d1b6c506e45c33"
+ },
+ "caveats": [
+  "Anchor sets are not random samples of any population. They are the relevant works that an independent route reached, or an outside list.",
+  "An overlap is a probe of the v3.1 search on those works. It is not an estimate of how many relevant works the query finds.",
+  "A miss can reflect scope (for example tier-2 chemical terms, which v3.1 does not search) or OpenAlex matching. The title-level reason is only a hint.",
+  "Each probe asks OpenAlex only about the anchors listed in that call. It does not scan the corpus.",
+  "Sets are reported separately and never pooled."
+ ],
+ "sets": [
+  {
+   "set_id": "orcid_ror_doi",
+   "status": "probed",
+   "route": "ORCID DOI ingest (source_run_id family orcid-doi-ingest) and ROR researcher DOI ingest (ror-researcher-doi-ingest); published and plastic_related true in the index",
+   "independence": "Route: independent of the search. These works were fetched by DOI only, with the v3.1 search switched off (scripts/ingest_orcid_dois.py, with_query=False). Selection: not independent of the vocabulary. Before merge each record had to pass a local rule built from the v3.1 core, qualified and exclusion terms plus tier-2 chemical terms (passes_query), so every anchor matches those terms. Of the 144 anchors, 49 are judged plastic-related by the assisted model, 1 by owner review, 78 are kept by the chemical-term rule after the model said not plastic-related, and 16 rest on the rule alone.",
+   "verdict": "route independent of the search, but selection used the same term list: a consistency check, not independent coverage",
+   "anchor_key": "openalex",
+   "n_candidates": 144,
+   "n_anchors": 144,
+   "n_retrieved_by_v31": 51,
+   "share": 0.3542,
+   "wilson_low": 0.2808,
+   "wilson_high": 0.4351,
+   "missed_ids": [
+    "W1602352289",
+    "W1635896198",
+    "W1804989789",
+    "W1927679233",
+    "W1929605467",
+    "W1965283764",
+    "W1980911134",
+    "W1984254033",
+    "W1994555806",
+    "W2001506146",
+    "W2009591543",
+    "W2010933273",
+    "W2053475025",
+    "W2056137791",
+    "W2066976117",
+    "W2085135288",
+    "W2099694471",
+    "W2107684579",
+    "W2146673016",
+    "W2308244787",
+    "W2316708679",
+    "W2321215647",
+    "W2341720320",
+    "W2470390030",
+    "W2498253482",
+    "W2514360601",
+    "W2520610831",
+    "W2739566238",
+    "W2762445857",
+    "W2774922934",
+    "W2795203733",
+    "W2799626906",
+    "W2802923438",
+    "W2803338827",
+    "W2827316337",
+    "W2895585370",
+    "W2901473182",
+    "W2902095901",
+    "W2902863502",
+    "W2904456702",
+    "W2908879306",
+    "W2914661508",
+    "W2934384318",
+    "W2946765275",
+    "W2949831522",
+    "W2969437147",
+    "W2985810567",
+    "W2998037431",
+    "W3020151830",
+    "W3021568610",
+    "W3087400099",
+    "W3121420714",
+    "W3126773800",
+    "W3159139574",
+    "W3161874558",
+    "W3187417045",
+    "W3188551808",
+    "W3196598954",
+    "W3203637028",
+    "W3208526803",
+    "W3210246443",
+    "W3216072132",
+    "W3216545943",
+    "W3217402991",
+    "W4200059226",
+    "W4207005541",
+    "W4210944526",
+    "W4212857146",
+    "W4285037565",
+    "W4294838990",
+    "W4311521151",
+    "W4315652071",
+    "W4316928050",
+    "W4317802055",
+    "W4385971845",
+    "W4386810792",
+    "W4387523771",
+    "W4388915489",
+    "W4389913107",
+    "W4392811624",
+    "W4396527422",
+    "W4399795912",
+    "W4400906440",
+    "W4402620310",
+    "W4408939442",
+    "W4409416166",
+    "W4411814173",
+    "W4411918633",
+    "W4417296784",
+    "W7124928907",
+    "W7131876976",
+    "W7165058336",
+    "W7221543157"
+   ],
+   "misses": [
+    {
+     "id": "W1602352289",
+     "doi": null,
+     "title": "Vaginal douching and racial/ethnic disparities in phthalates exposures among reproductive-aged women: National Health and Nutrition Examination Survey 2001–2004",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W1635896198",
+     "doi": null,
+     "title": "Identification of California Condor Estrogen Receptors 1 and 2 and Their Activation by Endocrine Disrupting Chemicals",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W1804989789",
+     "doi": null,
+     "title": "Novel polyphenylene oxide microcapsules filled with epoxy resins",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W1927679233",
+     "doi": null,
+     "title": "Phthalate concentrations in house dust in relation to autism spectrum disorder and developmental delay in the CHildhood Autism Risks from Genetics and the Environment (CHARGE) study",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W1929605467",
+     "doi": null,
+     "title": "Dempster-Shafer theory applied to regulatory decision process for selecting safer alternatives to toxic chemicals in consumer products",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W1965283764",
+     "doi": null,
+     "title": "Temporal Trends in Phthalate Exposures: Findings from the National Health and Nutrition Examination Survey, 2001–2010",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W1980911134",
+     "doi": null,
+     "title": "Covalently Linked Plasticizers: Triazole Analogues of Phthalate Plasticizers Prepared by Mild Copper‐Free “Click” Reactions with Azide‐Functionalized PVC",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W1984254033",
+     "doi": null,
+     "title": "Bisphenol-A (BPA), BPA Glucuronide, and BPA Sulfate in Midgestation Umbilical Cord Serum in a Northern and Central California Population",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W1994555806",
+     "doi": null,
+     "title": "Flammability properties and mechanical performance of epoxy modified phenolic foams",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2001506146",
+     "doi": null,
+     "title": "Pulling Back the Curtain: Improving Reviews in Environmental Health",
+     "type": "editorial",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2009591543",
+     "doi": null,
+     "title": "Exposure to select phthalates and phenols through use of personal care products among Californian adults and their children",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2010933273",
+     "doi": null,
+     "title": "Estimated Daily Phthalate Exposures in a Population of Mothers of Male Infants Exhibiting Reduced Anogenital Distance",
+     "type": "editorial",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2053475025",
+     "doi": null,
+     "title": "Environmental Chemicals in Pregnant Women in the United States: NHANES 2003–2004",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2056137791",
+     "doi": null,
+     "title": "Fluorescence Characteristics of Bisphenol A in Room Temperature Ionic Liquids",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2066976117",
+     "doi": null,
+     "title": "Biodegradation and kinetic analysis of phthalates by an Arthrobacter strain isolated from constructed wetland soil",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2085135288",
+     "doi": null,
+     "title": "Polymeric phthalates: Potential nonmigratory macromolecular plasticizers",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2099694471",
+     "doi": null,
+     "title": "Invalid Controls Undermine Conclusions of FDA Studies",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2107684579",
+     "doi": null,
+     "title": "A round robin approach to the analysis of bisphenol a (BPA) in human blood samples",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2146673016",
+     "doi": null,
+     "title": "Determining source strength of semivolatile organic compounds using measured concentrations in indoor dust",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2308244787",
+     "doi": null,
+     "title": "DNA methylation: a mechanism linking environmental chemical exposures to risk of autism spectrum disorders?",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2316708679",
+     "doi": null,
+     "title": "Meisenheimer Complex Inspired Catalyst- and Solvent-Free Synthesis of Noncyclic Poly(aryl ether sulfone)s",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2321215647",
+     "doi": null,
+     "title": "Ketene-Based Route to rigid Cyclobutanediol Monomers for the Replacement of BPA in High Performance Polyesters",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2341720320",
+     "doi": null,
+     "title": "Direct measurement of Bisphenol A (BPA), BPA glucuronide and BPA sulfate in a diverse and low-income population of pregnant women reveals high exposure, with potential implications for previous exposure estimates: a cross-sectional study",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2470390030",
+     "doi": null,
+     "title": "Computational and experimental investigations of one-step conversion of poly(carbonate)s into value-added poly(aryl ether sulfone)s",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2498253482",
+     "doi": null,
+     "title": "Exposure to the BPA-Substitute Bisphenol S Causes Unique Alterations of Germline Function",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2514360601",
+     "doi": null,
+     "title": "A Novel Method for Calculating Potency-Weighted Cumulative Phthalates Exposure with Implications for Identifying Racial/Ethnic Disparities among U.S. Reproductive-Aged Women in NHANES 2001–2012",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2520610831",
+     "doi": null,
+     "title": "Consumer Product Chemicals in Indoor Dust: A Quantitative Meta-analysis of U.S. Studies",
+     "type": "review",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2739566238",
+     "doi": null,
+     "title": "Reducing chemical exposures at home: opportunities for action",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2762445857",
+     "doi": null,
+     "title": "Perinatal Bisphenol A Exposure Induces Chronic Inflammation in Rabbit Offspring via Modulation of Gut Bacteria and Their Metabolites",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2774922934",
+     "doi": null,
+     "title": "Photoreactivity of graphene oxide in aqueous system: Reactive oxygen species formation and bisphenol A degradation",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2795203733",
+     "doi": null,
+     "title": "Dietary sources of cumulative phthalates exposure among the U.S. general population in NHANES 2005–2014",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2799626906",
+     "doi": null,
+     "title": "Renewable Epoxy Thermosets from Fully Lignin-Derived Triphenols",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2802923438",
+     "doi": null,
+     "title": "Urinary Phthalate Metabolite Concentrations and Breast Cancer Incidence and Survival following Breast Cancer: The Long Island Breast Cancer Study Project",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2803338827",
+     "doi": null,
+     "title": "The Memory of Environmental Chemical Exposure in C. elegans Is Dependent on the Jumonji Demethylases jmjd-2 and jmjd-3/utx-1",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2827316337",
+     "doi": null,
+     "title": "Formaldehyde-Free Method for Incorporating Lignin into Epoxy Thermosets",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2895585370",
+     "doi": null,
+     "title": "Effects of HCO3– on Degradation of Toxic Contaminants of Emerging Concern by UV/NO3–",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2901473182",
+     "doi": null,
+     "title": "Variability of urinary concentrations of phthalate metabolites during pregnancy in first morning voids and pooled samples",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2902095901",
+     "doi": null,
+     "title": "Prenatal exposure to phthalates and autism spectrum disorder in the MARBLES study",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2902863502",
+     "doi": null,
+     "title": "Recyclable and Malleable Epoxy Thermoset Bearing Aromatic Imine Bonds",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2904456702",
+     "doi": null,
+     "title": "Exposure Assessment For Air-To-Skin Uptake of Semivolatile Organic Compounds (SVOCs) Indoors",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2908879306",
+     "doi": null,
+     "title": "Health risks of chemicals in consumer products: A review",
+     "type": "review",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2914661508",
+     "doi": null,
+     "title": "A Vault-Encapsulated Enzyme Approach for Efficient Degradation and Detoxification of Bisphenol A and Its Analogues",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2934384318",
+     "doi": null,
+     "title": "Bisphenol-A exposure induced neurotoxicity in glutamatergic neurons derived from human embryonic stem cells",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2946765275",
+     "doi": null,
+     "title": "Synthesis and Properties of Quinoxaline-Containing Benzoxazines and Polybenzoxazines",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2949831522",
+     "doi": null,
+     "title": "Prenatal Bisphenol A Exposure in Mice Induces Multitissue Multiomics Disruptions Linking to Cardiometabolic Disorders",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2969437147",
+     "doi": null,
+     "title": "BPA interferes with StAR-mediated mitochondrial cholesterol transport to induce germline dysfunctions",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2985810567",
+     "doi": null,
+     "title": "Consensus on the key characteristics of endocrine-disrupting chemicals as a basis for hazard identification",
+     "type": "review",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W2998037431",
+     "doi": null,
+     "title": "Transcriptomic Responses of Bisphenol S Predict Involvement of Immune Function in the Cardiotoxicity of Early Life-Stage Zebrafish (Danio rerio)",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3020151830",
+     "doi": null,
+     "title": "Gene expression profiles for low-dose exposure to diethyl phthalate in rodents and humans: a translational study with implications for breast carcinogenesis",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3021568610",
+     "doi": null,
+     "title": "Different temporal trends of exposure to Bisphenol A among international travelers between Los Angeles and Beijing",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3087400099",
+     "doi": null,
+     "title": "Temporal Trends of Exposure to Phthalates and Phthalate Alternatives in California Pregnant Women during 2007–2013: Comparison with Other Populations",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3121420714",
+     "doi": null,
+     "title": "Conjugation of Di-n-butyl Phthalate Metabolites in Arabidopsis thaliana and Potential Deconjugation in Human Microsomes",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3126773800",
+     "doi": null,
+     "title": "Gestational Exposure to Phthalates and Social Responsiveness Scores in Children Using Quantile Regression: The EARLI and HOME Studies",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3159139574",
+     "doi": null,
+     "title": "Effects of Bisphenol-A on the morphology and survival of larvae of the sand dollar Dendraster excentricus (Echinodermata, Echinoidea)",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3161874558",
+     "doi": null,
+     "title": "Kinetic multi‐layer model of film formation, growth, and chemistry (KM‐FILM): Boundary layer processes, multi‐layer adsorption, bulk diffusion, and heterogeneous reactions",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3187417045",
+     "doi": null,
+     "title": "Temporal Trends of Phenol, Paraben, and Triclocarban Exposure in California Pregnant Women during 2007–2014",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3188551808",
+     "doi": null,
+     "title": "Controlling Polymer Morphology in Blade-Coated All-Polymer Solar Cells",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3196598954",
+     "doi": null,
+     "title": "Bisphenol A derivatives act as novel coactivator-binding inhibitors for estrogen receptor β",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3203637028",
+     "doi": null,
+     "title": "Examining the Developmental Trajectory of an in Vitro Model of Mouse Primordial Germ Cells following Exposure to Environmentally Relevant Bisphenol A Levels",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3208526803",
+     "doi": null,
+     "title": "Internal plasticization of PVC",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3210246443",
+     "doi": null,
+     "title": "Phthalates and Phenols, Leukocyte Telomere Length, and Breast Cancer Risk and Mortality in the Long Island Breast Cancer Study Project",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3216072132",
+     "doi": null,
+     "title": "Effects of Dicyclohexyl Phthalate Exposure on PXR Activation and Lipid Homeostasis in Mice",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3216545943",
+     "doi": null,
+     "title": "Variability of Urinary Concentrations of Phenols, Parabens, and Triclocarban during Pregnancy in First Morning Voids and Pooled Samples",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W3217402991",
+     "doi": null,
+     "title": "Considering Toxic Chemicals in the Etiology of Autism",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4200059226",
+     "doi": null,
+     "title": "Preparation and Degradation of Waste Polycarbonate-Derived Epoxy Thermosets and Composites",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4207005541",
+     "doi": null,
+     "title": "Environmental exposures to pesticides, phthalates, phenols and trace elements are associated with neurodevelopment in the CHARGE study",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4210944526",
+     "doi": null,
+     "title": "Recycling Waste Polycarbonate to Bisphenol A-Based Oligoesters as Epoxy-Curing Agents, and Degrading Epoxy Thermosets and Carbon Fiber Composites into Useful Chemicals",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4212857146",
+     "doi": null,
+     "title": "Triglyceride profiles are associated with subacute exposure to bisphenol A in healthy young adults",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4285037565",
+     "doi": null,
+     "title": "Associations Between Prenatal Urinary Biomarkers of Phthalate Exposure and Preterm Birth",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4294838990",
+     "doi": null,
+     "title": "Maternal Serum and Placental Metabolomes in Association with Prenatal Phthalate Exposure and Neurodevelopmental Outcomes in the MARBLES Cohort",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4311521151",
+     "doi": null,
+     "title": "Conducting evaluations of evidence that are transparent, timely and can lead to health-protective actions",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4315652071",
+     "doi": null,
+     "title": "Advancing the science on chemical classes",
+     "type": "review",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4316928050",
+     "doi": null,
+     "title": "Congener-Specific Uptake and Metabolism of Bisphenols in Carrot Cells: Dissipation Kinetics, Biotransformation, and Enzyme Responses",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4317802055",
+     "doi": null,
+     "title": "Paternal phthalate exposure-elicited offspring metabolic disorders are associated with altered sperm small RNAs in mice",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4385971845",
+     "doi": null,
+     "title": "Machine Learning Assisted Discovery of Interactions between Pesticides, Phthalates, Phenols, and Trace Elements in Child Neurodevelopment",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4386810792",
+     "doi": null,
+     "title": "Exploratory profiles of phenols, parabens, and per- and poly-fluoroalkyl substances among NHANES study participants in association with previous cancer diagnoses",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4387523771",
+     "doi": null,
+     "title": "A Mixture of Urinary Phthalate Metabolite Concentrations During Pregnancy and Offspring Social Responsiveness Scale Scores",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4388915489",
+     "doi": null,
+     "title": "Evidence of transboundary movement of chemicals from Mexico to the U.S. in Tijuana River Estuary sediments",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4389913107",
+     "doi": null,
+     "title": "Chlorination of Emerging Contaminants for Application in Potable Wastewater Reuse: Disinfection Byproduct Formation, Estrogen Activity, and Cytotoxicity",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4392811624",
+     "doi": null,
+     "title": "Early childhood exposure to environmental phenols and parabens, phthalates, organophosphate pesticides, and trace elements in association with attention deficit hyperactivity disorder (ADHD) symptoms in the CHARGE study",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4396527422",
+     "doi": null,
+     "title": "Early childhood exposures to phthalates in association with attention-deficit/hyperactivity disorder behaviors in middle childhood and adolescence in the ReCHARGE study",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4399795912",
+     "doi": null,
+     "title": "Rapid identification of reproductive toxicants among environmental chemicals using an in vivo evaluation of gametogenesis in budding yeast Saccharomyces cerevisiae",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4400906440",
+     "doi": null,
+     "title": "Exposure to endocrine disrupting chemicals including phthalates, phenols, and parabens in infancy: Associations with neurodevelopmental outcomes in the MARBLES study",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4402620310",
+     "doi": null,
+     "title": "Storms mobilize organophosphate esters, bisphenols, PFASs, and vehicle-derived contaminants to San Francisco Bay watersheds",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4408939442",
+     "doi": null,
+     "title": "Identifying Potential Chemicals of Concern in Children’s Products in a Regulatory Context: A Systematic Evidence Mapping Approach",
+     "type": "review",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4409416166",
+     "doi": null,
+     "title": "Separating the Role of Gut Enzymatic Transformation in Modulating Internal Exposure to Three Major Phthalates",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4411814173",
+     "doi": null,
+     "title": "Exposures to Contemporary and Emerging Chemicals among Children Aged 2 to 4 Years in the United States Environmental Influences on the Child Health Outcome (ECHO) Cohort",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4411918633",
+     "doi": null,
+     "title": "Prenatal exposure to phthalates and alternative plasticizers and emotional and behavioral outcomes in early childhood in the Environmental influences on Child Health outcomes (ECHO) cohort",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W4417296784",
+     "doi": null,
+     "title": "A village-level cluster randomized controlled implementation trial to measure the effectiveness of a behavioral intervention aiming to reduce women’s exposures to household plastic waste burning in rural Guatemala: study protocol for the Ecolectivos trial",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W7124928907",
+     "doi": null,
+     "title": "Deglycosylation Enhances the Toxicity of Plant-Derived Glycosyl Bisphenol A during Gastrointestinal Digestion",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W7131876976",
+     "doi": null,
+     "title": "The impact of prenatal phthalate exposure on language development trajectories in siblings of children with Autism",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W7165058336",
+     "doi": null,
+     "title": "Gestational Exposure to 10 Classes of Priority Chemicals and Birth Outcomes in the ECHO Cohort",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    },
+    {
+     "id": "W7221543157",
+     "doi": null,
+     "title": "Benzaldehyde Is the Redox Mediator for Aerobic C–N Cleavage in Epoxy Composite Recycling",
+     "type": "article",
+     "reason": "matched on a tier-2 chemical term, which v3.1 does not search"
+    }
+   ],
+   "unresolved_in_openalex": [],
+   "subsets": {
+    "by_relevance_group": {
+     "model_true": {
+      "n_anchors": 49,
+      "n_retrieved_by_v31": 34,
+      "share": 0.6939,
+      "wilson_low": 0.5547,
+      "wilson_high": 0.8048
+     },
+     "owner_reviewed": {
+      "n_anchors": 1,
+      "n_retrieved_by_v31": 1,
+      "share": 1.0,
+      "wilson_low": 0.2065,
+      "wilson_high": 1.0
+     },
+     "rule_kept_after_model_false": {
+      "n_anchors": 78,
+      "n_retrieved_by_v31": 0,
+      "share": 0.0,
+      "wilson_low": 0.0,
+      "wilson_high": 0.0469
+     },
+     "rule_only": {
+      "n_anchors": 16,
+      "n_retrieved_by_v31": 16,
+      "share": 1.0,
+      "wilson_low": 0.8064,
+      "wilson_high": 1.0
+     }
+    },
+    "by_plastic_tier": {
+     "chemicals-in-plastics": {
+      "n_anchors": 93,
+      "n_retrieved_by_v31": 0,
+      "share": 0.0,
+      "wilson_low": 0.0,
+      "wilson_high": 0.0397
+     },
+     "core": {
+      "n_anchors": 51,
+      "n_retrieved_by_v31": 51,
+      "share": 1.0,
+      "wilson_low": 0.93,
+      "wilson_high": 1.0
+     }
+    }
+   },
+   "fetched_at": "2026-11-23T05:48:28+00:00",
+   "credits": 30.0,
+   "calls": [
+    {
+     "kind": "probe",
+     "n_keys": 50,
+     "url_sha256": "f8c3b98510b83d19",
+     "fetched_at": "2026-11-23T05:48:26+00:00",
+     "credits": 10.0
+    },
+    {
+     "kind": "probe",
+     "n_keys": 50,
+     "url_sha256": "3b5ffc3837a48304",
+     "fetched_at": "2026-11-23T05:48:27+00:00",
+     "credits": 10.0
+    },
+    {
+     "kind": "probe",
+     "n_keys": 44,
+     "url_sha256": "7e4ddd9d49f84124",
+     "fetched_at": "2026-11-23T05:48:28+00:00",
+     "credits": 10.0
+    }
+   ]
+  },
+  {
+   "set_id": "escholarship",
+   "status": "excluded",
+   "route": "eScholarship ingest (escholarship-ingest)",
+   "independence": "Not independent. The candidates are OpenAlex records fetched with a location filter, the v3.1 search and the type exclusions (scripts/audit_escholarship_openalex.py); the ingest merges only those records (scripts/ingest_escholarship_works.py).",
+   "verdict": "not independent: the route applied the v3.1 query; skipped",
+   "excluded_reason": "route applied the v3.1 query",
+   "n_anchors": null,
+   "n_retrieved_by_v31": null,
+   "share": null,
+   "wilson_low": null,
+   "wilson_high": null,
+   "missed_ids": null,
+   "misses": null,
+   "candidate_info": {
+    "raw_rows": 19,
+    "unique_openalex_ids": 19,
+    "published": 19,
+    "published_plastic_related": 12
+   },
+   "fetched_at": null,
+   "credits": 0,
+   "calls": []
+  },
+  {
+   "set_id": "europepmc_audit",
+   "status": "excluded",
+   "route": "Europe PMC audit (europepmc-audit): DOI list resolved in OpenAlex",
+   "independence": "Not independent. The DOI lookups applied the v3.1 search: build_doi_url defaults to with_query=True (src/atlas/ingest/europepmc_audit.py), so only works that matched the query were merged. The Europe PMC benchmark is an outside list, but this route did not reach the Atlas independently, so it is not probed here.",
+   "verdict": "not independent: the route applied the v3.1 query; skipped",
+   "excluded_reason": "route applied the v3.1 query",
+   "n_anchors": null,
+   "n_retrieved_by_v31": null,
+   "share": null,
+   "wilson_low": null,
+   "wilson_high": null,
+   "missed_ids": null,
+   "misses": null,
+   "candidate_info": {
+    "raw_rows": 10,
+    "unique_openalex_ids": 10,
+    "published": 8,
+    "published_plastic_related": 4
+   },
+   "fetched_at": null,
+   "credits": 0,
+   "calls": []
+  },
+  {
+   "set_id": "datacite_positive",
+   "status": "probed",
+   "route": "DataCite metadata search, S7.4 candidate review (docs/S7_4_REAL_REVIEW.csv, agent_review_label positive)",
+   "independence": "Route: independent of OpenAlex (DataCite search). Relevance: agent text review of DataCite metadata and landing-page excerpts, not owner labels. The positives are DataCite Dataset records (five DOIs, three projects), not articles, and none has an Atlas work ID. DOIs are resolved in OpenAlex first; unresolved DOIs are listed and not counted.",
+   "verdict": "outside source, but dataset records rather than articles; reported beside the article sets, not pooled",
+   "anchor_key": "doi",
+   "n_candidates": 5,
+   "n_anchors": 2,
+   "n_retrieved_by_v31": 1,
+   "share": 0.5,
+   "wilson_low": 0.0945,
+   "wilson_high": 0.9055,
+   "missed_ids": [
+    "W7128525232"
+   ],
+   "misses": [
+    {
+     "id": "W7128525232",
+     "doi": "10.5281/zenodo.18500697",
+     "title": "Fields of plastic: Tracking the growing footprint of agricultural plastics using remote sensing in California",
+     "type": "dataset",
+     "reason": "no v3.1 core or qualified term in title (abstract not checked)"
+    }
+   ],
+   "unresolved_in_openalex": [
+    "10.17882/72119",
+    "10.5281/zenodo.18038857",
+    "10.5281/zenodo.18500698"
+   ],
+   "subsets": {},
+   "fetched_at": "2026-11-23T05:48:29+00:00",
+   "credits": 11.0,
+   "calls": [
+    {
+     "kind": "lookup",
+     "n_keys": 5,
+     "url_sha256": "0bb72828eb0c68be",
+     "fetched_at": "2026-11-23T05:48:29+00:00",
+     "credits": 1.0
+    },
+    {
+     "kind": "probe",
+     "n_keys": 5,
+     "url_sha256": "25fde6bc72d6b015",
+     "fetched_at": "2026-11-23T05:48:29+00:00",
+     "credits": 10.0
+    }
+   ]
+  },
+  {
+   "set_id": "pubmed_r1_atlas",
+   "status": "probed",
+   "route": "PubMed R1, \"Microplastics\"[MeSH Terms] AND California[ad] (BQ-S9, data/interim/pubmed/r1_california_pmids.csv), restricted to published Atlas works (PMID join, then DOI)",
+   "independence": "Relevance: independent of the search (PubMed MeSH indexing). Membership: not independent. Each anchor is a published Atlas work, and 160 of 163 entered the Atlas through the v3.1 query route, so membership in this set reflects the query. The probe checks consistency with the query, not an independent overlap.",
+   "verdict": "partly independent: membership conditioned on the query route (see subsets)",
+   "anchor_key": "openalex",
+   "n_candidates": 163,
+   "n_anchors": 163,
+   "n_retrieved_by_v31": 163,
+   "share": 1.0,
+   "wilson_low": 0.977,
+   "wilson_high": 1.0,
+   "missed_ids": [],
+   "misses": [],
+   "unresolved_in_openalex": [],
+   "subsets": {
+    "by_entry_route": {
+     "entered_via_v31_query_route": {
+      "n_anchors": 160,
+      "n_retrieved_by_v31": 160,
+      "share": 1.0,
+      "wilson_low": 0.9766,
+      "wilson_high": 1.0
+     },
+     "not_via_v31_query_route": {
+      "n_anchors": 3,
+      "n_retrieved_by_v31": 3,
+      "share": 1.0,
+      "wilson_low": 0.4385,
+      "wilson_high": 1.0
+     }
+    }
+   },
+   "fetched_at": "2026-11-23T05:48:32+00:00",
+   "credits": 40.0,
+   "calls": [
+    {
+     "kind": "probe",
+     "n_keys": 50,
+     "url_sha256": "c1277bcfd4b4a9e1",
+     "fetched_at": "2026-11-23T05:48:30+00:00",
+     "credits": 10.0
+    },
+    {
+     "kind": "probe",
+     "n_keys": 50,
+     "url_sha256": "db60ac9fc31ed559",
+     "fetched_at": "2026-11-23T05:48:30+00:00",
+     "credits": 10.0
+    },
+    {
+     "kind": "probe",
+     "n_keys": 50,
+     "url_sha256": "220009fc8ece7696",
+     "fetched_at": "2026-11-23T05:48:31+00:00",
+     "credits": 10.0
+    },
+    {
+     "kind": "probe",
+     "n_keys": 13,
+     "url_sha256": "6f5fcd5cf6b943ba",
+     "fetched_at": "2026-11-23T05:48:32+00:00",
+     "credits": 10.0
+    }
+   ]
+  },
+  {
+   "set_id": "fixture_s1_5",
+   "status": "probed",
+   "route": "tests/fixtures/s1_5_known_relevant.json (four literature-informed works)",
+   "independence": "Outside list. The four works were chosen from the literature (see the basis field in the fixture), not through any Atlas route, so they do not depend on the query. They are microplastics works, not California-scoped. n = 4, so the interval is very wide.",
+   "verdict": "independent outside list; n = 4",
+   "anchor_key": "openalex",
+   "n_candidates": 4,
+   "n_anchors": 4,
+   "n_retrieved_by_v31": 4,
+   "share": 1.0,
+   "wilson_low": 0.5101,
+   "wilson_high": 1.0,
+   "missed_ids": [],
+   "misses": [],
+   "unresolved_in_openalex": [],
+   "subsets": {},
+   "fetched_at": "2026-11-23T05:48:33+00:00",
+   "credits": 11.0,
+   "calls": [
+    {
+     "kind": "lookup",
+     "n_keys": 4,
+     "url_sha256": "9e5d594549685eb2",
+     "fetched_at": "2026-11-23T05:48:33+00:00",
+     "credits": 1.0
+    },
+    {
+     "kind": "probe",
+     "n_keys": 4,
+     "url_sha256": "fc6d59c74eabba50",
+     "fetched_at": "2026-11-23T05:48:33+00:00",
+     "credits": 10.0
+    }
+   ]
+  },
+  {
+   "set_id": "plastiverse_overview",
+   "status": "excluded",
+   "route": "plastiverse.live overview page",
+   "independence": "Not independent and not probed: the overview is the Atlas's own published output, built from the corpus that the query populates, so it cannot test the query against an outside source.",
+   "verdict": "not independent; skipped",
+   "excluded_reason": "Atlas's own output",
+   "n_anchors": null,
+   "n_retrieved_by_v31": null,
+   "share": null,
+   "wilson_low": null,
+   "wilson_high": null,
+   "missed_ids": null,
+   "misses": null,
+   "candidate_info": null,
+   "fetched_at": null,
+   "credits": 0,
+   "calls": []
+  }
+ ]
+}
