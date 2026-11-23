@@ -1,4 +1,6 @@
 work_id,field,value,reason,reviewed_by,reviewed_at
+W4391214784,exclude,true,CNT-1: carried from W4391980109 (collapsed duplicate); AT-1 owner audit label (QUERY_AUDIT_REVIEW_V3.csv): not_relevant,agent-CNT-1,2026-11-22
+W4403000424,exclude,true,CNT-1: carried from W4400038731 (collapsed duplicate); AT-1 owner audit label (QUERY_AUDIT_REVIEW_V3.csv): not_relevant,agent-CNT-1,2026-11-22
 W130055956,exclude,true,AT-1 owner audit label (QUERY_AUDIT_REVIEW_V3.csv): not_relevant,SC,2026-11-11
 W13980626,exclude,true,AT-1 owner audit label (QUERY_AUDIT_REVIEW.csv): not_relevant,SC,2026-11-10
 W1784695552,exclude,true,AT-1 owner audit label (QUERY_AUDIT_REVIEW.csv): not_relevant,SC,2026-11-10
