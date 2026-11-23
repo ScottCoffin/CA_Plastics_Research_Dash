@@ -1,0 +1,3 @@
+# R1: PubMed MeSH indexing for microplastics. Comment lines are dropped by the reader.
+# The California[ad] restriction comes from --affiliation, not from this file.
+"Microplastics"[MeSH Terms]
