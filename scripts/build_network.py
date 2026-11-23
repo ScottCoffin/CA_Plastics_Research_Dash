@@ -2,7 +2,7 @@
 
 Usage: py -3.14 scripts/build_network.py [--cap 400] [--fractional] [--check]
 --check rebuilds in memory and fails when the committed file is stale.
-Needs networkx (not yet a declared dependency; QUESTIONS S9.4-DEP).
+Needs networkx (a declared project dependency).
 """
 
 from __future__ import annotations

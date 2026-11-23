@@ -4,8 +4,9 @@ Built from the public ``site/data/index.json`` only (no raw data), so the result
 reproducible from committed files. Edge weight = number of co-authored plastic-related works
 (Newman fractional counting optional). Louvain communities and a seeded spring layout use fixed
 seeds, so reruns give the same clusters. The stored positions are a ForceAtlas2 layout started
-from that spring layout (VD-20), so the page shows clusters on first load. ``networkx`` is
-imported lazily: it is not yet a declared project dependency (QUESTIONS S9.4-DEP).
+from that spring layout (VD-20), so the page shows clusters on first load. ``networkx`` is a
+declared project dependency; it is imported inside the functions that use it to keep importing
+this module cheap.
 """
 
 from __future__ import annotations
@@ -44,17 +45,20 @@ def select_nodes(
     """Top ``cap`` experts by co-authored-or-not plastic works in the corpus, then citations.
 
     Only experts with at least one plastic-related work that has another Atlas expert on it
-    are eligible (an isolated node carries no collaboration information).
+    are eligible (an isolated node carries no collaboration information). Co-authors that are
+    not in ``authors`` do not count as collaborators.
     """
+    experts = list(authors)
+    expert_ids = {str(a.get("author_id")) for a in experts}
     collaborative: Counter[str] = Counter()
     for work in _plastic_works(works):
-        ids = sorted({str(a) for a in work.get("author_ids") or [] if a})
+        ids = sorted({str(a) for a in work.get("author_ids") or [] if a} & expert_ids)
         if len(ids) < 2:
             continue
         for author_id in ids:
             collaborative[author_id] += 1
     ranked = sorted(
-        (a for a in authors if collaborative.get(str(a.get("author_id"))) or 0),
+        (a for a in experts if collaborative.get(str(a.get("author_id"))) or 0),
         key=lambda a: (
             -int(a.get("ca_plastic_works_count") or 0),
             -int(a.get("plastic_citations") or 0),
@@ -106,7 +110,7 @@ def forceatlas2_positions(
 
     Deterministic: the start layout is seeded and networkx adds no randomness once ``pos`` is given.
     """
-    import networkx as nx  # lazy: optional until S9.4-DEP is answered
+    import networkx as nx  # lazy: keeps module import cheap (networkx is a declared dependency)
 
     if graph.number_of_nodes() == 0:
         return {}
@@ -225,7 +229,7 @@ def build_network(
     generated_at: str = "",
 ) -> dict[str, Any]:
     """Network payload for ``site/data/network.json``."""
-    import networkx as nx  # lazy: optional until S9.4-DEP is answered
+    import networkx as nx  # lazy: keeps module import cheap (networkx is a declared dependency)
 
     authors = list(index.get("authors") or [])
     works = list(index.get("works") or [])

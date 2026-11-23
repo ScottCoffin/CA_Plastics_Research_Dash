@@ -37,6 +37,21 @@ def test_select_nodes_skips_isolated_and_non_plastic_and_ranks() -> None:
     assert select_nodes(AUTHORS, WORKS, cap=2) == ["A1", "A2"]
 
 
+def test_select_nodes_needs_another_atlas_expert_on_a_plastic_work() -> None:
+    authors = [
+        {"author_id": "E1", "name": "Lone", "ca_plastic_works_count": 4, "plastic_citations": 9},
+        {"author_id": "E2", "name": "Paired", "ca_plastic_works_count": 2, "plastic_citations": 1},
+        {"author_id": "E3", "name": "Partner", "ca_plastic_works_count": 1, "plastic_citations": 0},
+    ]
+    works = [
+        # E1's only plastic work is co-authored with X9, who is not in authors: not eligible.
+        {"work_id": "W1", "plastic_related": True, "year": 2020, "author_ids": ["E1", "X9"]},
+        # E2 and E3 are both Atlas experts on this plastic work: both eligible.
+        {"work_id": "W2", "plastic_related": True, "year": 2021, "author_ids": ["E2", "E3", "X9"]},
+    ]
+    assert select_nodes(authors, works) == ["E2", "E3"]
+
+
 def test_edge_weights_count_plastic_works_by_year() -> None:
     edges = edge_years(WORKS, ["A1", "A2", "A3", "A5"])
     assert edges[("A1", "A2")] == {2020: 1.0, 2021: 1.0}
