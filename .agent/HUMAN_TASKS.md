@@ -39,6 +39,21 @@ Global Plastic Laws topic. That link is a draft the agent proposed, so the page 
 - **Done when:** the sidebar shows 0 pending. Tell the agent "OPC mapping reviewed"; it rebuilds
   the page data and the draft badge disappears.
 
+### H42. Triage 48 PubMed records the Atlas does not have (BQ-S9, about 30 minutes)
+PubMed lists 48 California plastics records that are not in the Atlas. Some are real gaps; others the Atlas
+is right to leave out. Your labels decide which.
+1. Run `py -3.14 -m streamlit run scripts/review_pubmed_misses_app.py`.
+   A browser tab opens. If it does not, go to http://localhost:8501.
+2. Type your initials in the sidebar. The buttons stay off until you do.
+3. For each record, read the title and abstract (highlighted words are Atlas search terms). Click the class
+   that best explains why it is missing. Hover a button to see its definition. Two buttons mean the Atlas
+   was right: **Not California-affiliated after all** and **Plastics not central**.
+   - **Other (write a note)** needs a note and saves without a class.
+   Each click saves to `curation/pubmed_miss_triage_v1.csv` at once and moves on. To change a decision,
+   set **Show** to **All** and use **Previous**.
+- **Done when:** the sidebar shows 0 pending. Tell the agent "PubMed triage done"; it rebuilds
+  `site/data/pubmed_coverage.json` with the false-negative share.
+
 ### H2. Review the 277 low-confidence work-relevance decisions
 1. Run `py -3.14 -m streamlit run scripts/review_work_relevance_app.py`.
    A browser tab opens. If it does not, go to http://localhost:8501.

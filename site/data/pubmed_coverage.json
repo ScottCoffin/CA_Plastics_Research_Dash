@@ -1,0 +1,219 @@
+{
+  "schema_version": "bqs-pm-v1",
+  "generated_at": "2026-11-23T05:23:58+00:00",
+  "manifest_schema": "bqs-pm-manifest-v1",
+  "failure_taxonomy_version": "failure-taxonomy-v1",
+  "stage": 1,
+  "source": "NCBI PubMed E-utilities reference runs (stage 1, interim, not committed); Atlas works from data/processed/normalized/works.parquet, published subset from site/data/index.json",
+  "definition": "Coverage is the share of PubMed reference records that also appear among the published Atlas works, joined by PMID and then by DOI. Each reference set is a PubMed search for plastics papers with a California affiliation. Coverage is not a completeness rate for the field: the reference sets are search results, not samples of a defined population; the California filter (California[ad]) is approximate; and MeSH indexing lags and varies by record, so recent years look worse. A reference record that is not among the published works is a miss, and a miss is not automatically a false negative of the Atlas. False negatives are estimated only from a fixed-seed sample of misses that is triaged by hand into failure-taxonomy classes.",
+  "atlas_corpus": {
+    "published_works": 1939,
+    "published_with_pmid": 871,
+    "normalized_works": 2061,
+    "normalized_with_pmid": 897
+  },
+  "reference_sets": {
+    "r1": {
+      "description": "PubMed MeSH-indexed microplastics records, California affiliation (narrow set)",
+      "affiliation": "California",
+      "stage": 1,
+      "query_translation": "\"Microplastics\"[MeSH Terms] AND \"California\"[Affiliation] AND 1950/01/01:2026/11/21[Date - Publication]",
+      "run_timestamp": "2026-11-23T05:01:41+00:00",
+      "manifest_sha256": "5d3235057490d493383ca117e4fff24b32d299b1e0d2d8010b96560efbae0039",
+      "reference_pmids": 178,
+      "found_published": 163,
+      "found_published_by_pmid": 162,
+      "found_published_by_doi": 1,
+      "misses": 15,
+      "found_unpublished_corpus": 1,
+      "coverage_published": 0.9157,
+      "coverage_by_year": {
+        "2019": {
+          "reference": 2,
+          "found": 2,
+          "coverage": 1.0
+        },
+        "2020": {
+          "reference": 13,
+          "found": 12,
+          "coverage": 0.9231
+        },
+        "2021": {
+          "reference": 25,
+          "found": 23,
+          "coverage": 0.92
+        },
+        "2022": {
+          "reference": 30,
+          "found": 27,
+          "coverage": 0.9
+        },
+        "2023": {
+          "reference": 22,
+          "found": 19,
+          "coverage": 0.8636
+        },
+        "2024": {
+          "reference": 29,
+          "found": 26,
+          "coverage": 0.8966
+        },
+        "2025": {
+          "reference": 26,
+          "found": 24,
+          "coverage": 0.9231
+        },
+        "2026": {
+          "reference": 31,
+          "found": 30,
+          "coverage": 0.9677
+        }
+      },
+      "join_rate": {
+        "published": 0.4492,
+        "normalized": 0.4352
+      }
+    },
+    "r2": {
+      "description": "PubMed title and abstract plastics terms, California affiliation (broad set)",
+      "affiliation": "California",
+      "stage": 1,
+      "query_translation": "(\"microplastic\"[Title/Abstract] OR \"nanoplastic\"[Title/Abstract] OR \"micro-plastic\"[Title/Abstract] OR \"nano-plastic\"[Title/Abstract] OR \"micro-sized plastic\"[Title/Abstract] OR \"microsized plastics\"[Title/Abstract] OR \"plastic pollution\"[Title/Abstract] OR \"plastic debris\"[Title/Abstract] OR \"plastic litter\"[Title/Abstract] OR \"marine debris\"[Title/Abstract] OR \"marine litter\"[Title/Abstract] OR \"plastic particles\"[Title/Abstract] OR \"plastic fragments\"[Title/Abstract] OR \"plastic ingestion\"[Title/Abstract] OR \"resin pellet\"[Title/Abstract] OR \"plastic pellet\"[Title/Abstract] OR \"macroplastic\"[Title/Abstract] OR \"mesoplastic\"[Title/Abstract] OR \"plastics pollution\"[Title/Abstract] OR \"plastic pollutants\"[Title/Abstract] OR \"plastic trash\"[Title/Abstract] OR \"anthropogenic litter\"[Title/Abstract] OR \"anthropogenic debris\"[Title/Abstract] OR \"anthropogenic microparticles\"[Title/Abstract] OR \"anthropogenic microparticle\"[Title/Abstract] OR \"ingested plastic\"[Title/Abstract] OR \"ingested plastics\"[Title/Abstract] OR \"plastic contamination\"[Title/Abstract] OR \"plastic recycling\"[Title/Abstract] OR \"plastics recycling\"[Title/Abstract] OR \"recycled plastic\"[Title/Abstract] OR \"recycled plastics\"[Title/Abstract] OR \"single-use plastics\"[Title/Abstract] OR \"biodegradable plastic\"[Title/Abstract] OR \"biodegradable plastics\"[Title/Abstract]) AND \"California\"[Affiliation] AND 1950/01/01:2026/11/21[Date - Publication]",
+      "run_timestamp": "2026-11-23T05:02:37+00:00",
+      "manifest_sha256": "548a49ffc27ab6b03f88b1bd72b8f7fb1502657d409cbbcd8e65efcb710e87fc",
+      "reference_pmids": 387,
+      "found_published": 343,
+      "found_published_by_pmid": 341,
+      "found_published_by_doi": 2,
+      "misses": 44,
+      "found_unpublished_corpus": 4,
+      "coverage_published": 0.8863,
+      "coverage_by_year": {
+        "2002": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "2012": {
+          "reference": 2,
+          "found": 2,
+          "coverage": 1.0
+        },
+        "2013": {
+          "reference": 8,
+          "found": 8,
+          "coverage": 1.0
+        },
+        "2014": {
+          "reference": 6,
+          "found": 6,
+          "coverage": 1.0
+        },
+        "2015": {
+          "reference": 6,
+          "found": 5,
+          "coverage": 0.8333
+        },
+        "2016": {
+          "reference": 5,
+          "found": 4,
+          "coverage": 0.8
+        },
+        "2017": {
+          "reference": 5,
+          "found": 5,
+          "coverage": 1.0
+        },
+        "2018": {
+          "reference": 8,
+          "found": 5,
+          "coverage": 0.625
+        },
+        "2019": {
+          "reference": 21,
+          "found": 19,
+          "coverage": 0.9048
+        },
+        "2020": {
+          "reference": 27,
+          "found": 23,
+          "coverage": 0.8519
+        },
+        "2021": {
+          "reference": 39,
+          "found": 35,
+          "coverage": 0.8974
+        },
+        "2022": {
+          "reference": 36,
+          "found": 32,
+          "coverage": 0.8889
+        },
+        "2023": {
+          "reference": 43,
+          "found": 36,
+          "coverage": 0.8372
+        },
+        "2024": {
+          "reference": 61,
+          "found": 55,
+          "coverage": 0.9016
+        },
+        "2025": {
+          "reference": 62,
+          "found": 56,
+          "coverage": 0.9032
+        },
+        "2026": {
+          "reference": 57,
+          "found": 51,
+          "coverage": 0.8947
+        }
+      },
+      "join_rate": {
+        "published": 0.4492,
+        "normalized": 0.4352
+      }
+    }
+  },
+  "miss_triage": {
+    "sample_size": 48,
+    "seed": 20261122,
+    "sample_rule": "first min(50, misses) misses by sha256(seed:pmid)",
+    "misses_total": 48,
+    "triage_file": "curation/pubmed_miss_triage_v1.csv",
+    "labelled": 0,
+    "false_negative_classes": [
+      "title_only_phrase_miss",
+      "unscreened_rule_false",
+      "tier2_chemical_haiku_false",
+      "pubmed_only_record",
+      "missing_abstract_in_openalex"
+    ],
+    "status": "pending owner triage"
+  },
+  "triage_classes": [
+    "plasticity_collision",
+    "plastic_surgery",
+    "plastic_responses",
+    "litter_beetles",
+    "upcycling_non_plastic",
+    "withheld_abstract",
+    "misattached_abstract",
+    "non_english_text",
+    "public_communication_item",
+    "generic_theme_drift",
+    "polysemous_framing_word",
+    "abbreviation_collision",
+    "incidental_plastics",
+    "plant_fibre_collision",
+    "title_only_phrase_miss",
+    "unscreened_rule_false",
+    "tier2_chemical_haiku_false",
+    "rule_hit_model_disagreement",
+    "pubmed_only_record",
+    "missing_abstract_in_openalex",
+    "pubmed_affiliation_not_california",
+    "pubmed_plastics_not_central"
+  ]
+}

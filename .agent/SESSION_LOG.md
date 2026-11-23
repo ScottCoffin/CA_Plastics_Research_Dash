@@ -212,3 +212,4 @@
 | 2026-11-22 | BQ-S6 | Theme anchor sets (42 anchors) | this commit |
 | 2026-11-22 | CNT-1 | Unmatched exclusions classified; 2 carried to duplicate keepers | this commit |
 | 2026-11-22 | BQ-G2 | Gold design freeze with HT weights | this commit |
+| 2026-11-22 | BQ-S9 | PubMed coverage stage 1, payload, triage app | this commit |

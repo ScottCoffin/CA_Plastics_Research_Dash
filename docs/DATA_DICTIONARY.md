@@ -409,6 +409,28 @@ links to it. CC BY-NC 4.0.
 | `concept_doi` | string | Zenodo concept DOI (always resolves to the latest version). |
 | `doi_url`, `concept_url` | string | `https://doi.org/` links for the two DOIs. |
 
+### `site/data/pubmed_coverage.json`
+
+Purpose: the PubMed coverage check (BQ-S9 part C, Add-on A3 §5.11). Each reference set is a PubMed search for plastics papers with a California affiliation (stage 1, `data/interim/pubmed/`, not committed); coverage is the share of its PMIDs that appear among the published Atlas works, joined by PMID and then by DOI. Written by `py -3.14 scripts/build_pubmed_coverage_json.py` from the interim runs, `data/processed/normalized/works.parquet` and the published subset in `site/data/index.json`. No network calls. `--check` fails when the committed file is stale and exits 0 with a SKIP message when the interim runs are absent (CI). Coverage is not a completeness rate: read `definition` before quoting it.
+Top-level keys: `schema_version` (`bqs-pm-v1`), `generated_at`, `manifest_schema` (`bqs-pm-manifest-v1`), `failure_taxonomy_version`, `stage` (1), `source`, `definition` (plain-language text), `atlas_corpus` (`published_works`, `published_with_pmid`, `normalized_works`, `normalized_with_pmid`), `reference_sets` (keys `r1` and `r2`), `miss_triage` and `triage_classes` (class ids from `config/failure_taxonomy.yml`).
+Licence: derived counts. PMIDs, DOIs and years come from NCBI E-utilities; the Atlas side is as `index.json`.
+
+`reference_sets.<r1|r2>`:
+
+| Field | Meaning |
+|---|---|
+| `description`, `affiliation`, `stage` | Plain-language name of the set; the PubMed affiliation term (`California`); pipeline stage (1). |
+| `query_translation`, `run_timestamp`, `manifest_sha256` | From the run manifest: PubMed's query translation, run time (UTC), SHA-256 of the manifest file bytes. |
+| `reference_pmids` | Unique PMIDs in the set. |
+| `found_published`, `found_published_by_pmid`, `found_published_by_doi` | Reference PMIDs covered by a published Atlas work, and the split by join key. |
+| `misses` | `reference_pmids` minus `found_published`. |
+| `found_unpublished_corpus` | Misses found in the normalized works table but not published (curation or relevance drops; a diagnostic, not a coverage figure). |
+| `coverage_published` | `found_published` / `reference_pmids`, rounded to 4 decimals. |
+| `coverage_by_year` | Object keyed by publication year (`unknown` when the year is missing): `reference`, `found`, `coverage`. Recent years lag because MeSH indexing lags. |
+| `join_rate` | `published`: share of published works with a PMID; `normalized`: share of all normalized works with a PMID. |
+
+`miss_triage`: `sample_size`, `seed` (20261122), `sample_rule` (the first `min(50, misses)` misses ordered by SHA-256 of `seed:pmid`), `misses_total` (the union of both sets' misses, deduplicated by PMID), `triage_file` (`curation/pubmed_miss_triage_v1.csv`), `labelled` (rows with a non-blank `triage_class`) and `false_negative_classes` (taxonomy classes with direction `false_negative`). With no labels the block carries `status: "pending owner triage"`. Once `labelled` is above zero it carries `false_negative_share`: `count` (labelled rows in a false-negative class), `n` (= `labelled`), `share` and `wilson_95` (Wilson 95% interval). The triage sheet is never overwritten when it holds reviewer entries.
+
 ### `site/data/bundle/`
 
 AT-4 serving bundle (bit-set facets, title search, institution tiers, abstract-free

@@ -6,9 +6,11 @@
 # usual version bump (queries.yml versioning).
 #
 # Fields per class:
-# - direction: false_positive (wrongly in) | false_negative (wrongly out) | either
+# - direction: false_positive (wrongly in) | false_negative (wrongly out) | either |
+#   not_an_error (a PubMed miss the Atlas is right to leave out; BQ-S9)
 # - stage: query | labels | abstract_qc | pubmed_qc (where the class is seen or addressed)
-# - status: seeded (named by REL-1 or the A3 spec) | pending_bq_s9 (placeholder until BQ-S9)
+# - status: seeded (named by REL-1 or the A3 spec) | pending_bq_s9 (placeholder until BQ-S9) |
+#   defined_bq_s9 (defined by the BQ-S9 PubMed comparison, 2026-11-22)
 # - detection: an existing repo mechanism where one exists, otherwise "none yet"
 # - source: "REL-1 §<section>" (docs/RELEVANCE_AUDIT_2026-11-13.md), "A3 Module 1" or
 #   "A3 §2" (docs/add_on_spec_3.md), or "repo: <path>" for a class seen only in repo code.
@@ -235,21 +237,43 @@ classes:
   - id: pubmed_only_record
     label: "PubMed-only record"
     direction: false_negative
-    definition: "A plastics-relevant record that PubMed indexes is absent from the OpenAlex-based corpus, so no OpenAlex query or label can find it (placeholder; BQ-S9 defines the class)."
+    definition: "A plastics-relevant record that PubMed indexes is absent from the OpenAlex-based corpus, so no OpenAlex query or label can find it (BQ-S9)."
     examples:
       - "PubMed-miss classes from BQ-S9"
     source: "A3 Module 1"
-    detection: "none yet; pending the BQ-S9 PubMed comparison"
+    detection: "BQ-S9 PubMed coverage check (scripts/build_pubmed_coverage_json.py; owner triage app scripts/review_pubmed_misses_app.py)"
     stage: pubmed_qc
-    status: pending_bq_s9
+    status: defined_bq_s9
 
   - id: missing_abstract_in_openalex
     label: "Abstract missing in OpenAlex"
     direction: false_negative
-    definition: "OpenAlex serves no abstract for a relevant work, so OpenAlex rules and screens see only the title; unlike withheld_abstract, this is a recall class, and BQ-S9 decides whether PubMed fills the gap (placeholder)."
+    definition: "OpenAlex serves no abstract for a relevant work, so OpenAlex rules and screens see only the title; unlike withheld_abstract, this is a recall class, and PubMed may hold the abstract (BQ-S9)."
     examples:
       - "PubMed-miss classes from BQ-S9"
     source: "A3 Module 1; REL-1 §Why it appeared"
-    detection: "none yet; pending the BQ-S9 PubMed comparison"
+    detection: "BQ-S9 PubMed coverage check (scripts/build_pubmed_coverage_json.py; owner triage app scripts/review_pubmed_misses_app.py)"
     stage: pubmed_qc
-    status: pending_bq_s9
+    status: defined_bq_s9
+
+  - id: pubmed_affiliation_not_california
+    label: "Not California-affiliated after all"
+    direction: not_an_error
+    definition: "PubMed's California[ad] affiliation match is approximate: the record matched on a word such as a street, a company name or a non-author affiliation, and no author was at a California institution at the time, so the Atlas is right to leave it out."
+    examples:
+      - "an affiliation string naming a California company office for a co-author based elsewhere"
+    source: "A3 §5.11"
+    detection: "BQ-S9 owner triage (scripts/review_pubmed_misses_app.py)"
+    stage: pubmed_qc
+    status: defined_bq_s9
+
+  - id: pubmed_plastics_not_central
+    label: "Plastics not central"
+    direction: not_an_error
+    definition: "The PubMed record carries the Microplastics MeSH term or a core phrase, but plastics are not a central subject of the work, so the Atlas is right to leave it out (the incidental-plastics rule)."
+    examples:
+      - "a general toxicology review that lists microplastics once among many contaminants"
+    source: "A3 §5.11"
+    detection: "BQ-S9 owner triage (scripts/review_pubmed_misses_app.py)"
+    stage: pubmed_qc
+    status: defined_bq_s9

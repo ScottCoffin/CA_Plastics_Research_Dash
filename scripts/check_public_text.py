@@ -53,6 +53,7 @@ DEFAULT_JSON = [
     "site/data/linkouts.json",
     "site/data/network.json",
     "site/data/expert_badges.json",
+    "site/data/pubmed_coverage.json",
 ]
 SKIP_TAGS = {"script", "style"}
 

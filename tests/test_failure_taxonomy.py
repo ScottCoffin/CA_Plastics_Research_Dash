@@ -23,12 +23,12 @@ REQUIRED_KEYS = (
     "stage",
     "status",
 )
-DIRECTIONS = {"false_positive", "false_negative", "either"}
+DIRECTIONS = {"false_positive", "false_negative", "either", "not_an_error"}
 STAGES = {"query", "labels", "abstract_qc", "pubmed_qc"}
-STATUSES = {"seeded", "pending_bq_s9"}
+STATUSES = {"seeded", "pending_bq_s9", "defined_bq_s9"}
 SNAKE_CASE = re.compile(r"^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$")
 # Each ";"-separated source is REL-1 with a section, the A3 Module 1 or A3 §2 text, or a repo file.
-SOURCE_PART = re.compile(r"^(?:REL-1 §\S.*|A3 Module 1|A3 §2|repo: \S.*)$")
+SOURCE_PART = re.compile(r"^(?:REL-1 §\S.*|A3 Module 1|A3 §2|A3 §5\.11|repo: \S.*)$")
 REPO_PATH = re.compile(r"\b(?:src|config|docs|curation|tests)/[\w./-]+")
 
 SPEC_CLASS_IDS = {
@@ -95,7 +95,7 @@ def test_direction_and_stage_values_are_valid(classes: list[dict[str, Any]]) -> 
 def test_status_values_and_pending_placeholders(classes: list[dict[str, Any]]) -> None:
     for entry in classes:
         assert entry["status"] in STATUSES, entry["id"]
-        if entry["status"] == "pending_bq_s9":
+        if entry["status"] in {"pending_bq_s9", "defined_bq_s9"}:
             assert entry["stage"] == "pubmed_qc", entry["id"]
 
 
