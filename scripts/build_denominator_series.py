@@ -1,8 +1,10 @@
-"""Build data/processed/analytics/denominator_series.json (BQ-2.1).
+"""Build data/processed/analytics/denominator_series.json (BQ-2.1, BQ-2.2).
 
-Counts the available global-denominator series (A, C, D) by publication year from stored inputs.
-Pending series (B, B2) are listed with their status and not counted. No network calls. The output
-folder is gitignored; BQ-2.4 publishes site/data/denominators.json later from this file.
+Counts the global-denominator series by publication year from stored inputs: A (all types) and
+A-article_review, B and B-article_review come from the denominator cache written by
+scripts/fetch_denominator_series.py; C and D come from the normalized works, the raw works and the
+site index. B2 is listed with its status and not counted. No network calls. The output folder is
+gitignored; BQ-2.4 publishes site/data/denominators.json later from this file.
 
     py -3.14 scripts/build_denominator_series.py            # write the JSON
     py -3.14 scripts/build_denominator_series.py --check    # fail when the JSON is missing or stale
@@ -25,16 +27,17 @@ from atlas.analytics.denominators import (  # noqa: E402
     build_series,
     input_fingerprint,
     load_corpus_records,
+    load_denominator_cache,
     load_published_works,
     load_series_config,
-    load_trend_global,
     render_payload,
+    resolve_cache_entries,
 )
 from atlas.query import load_query_config  # noqa: E402
 
 CONFIG = ROOT / "config" / "denominator_series.yml"
 QUERY_CONFIG = ROOT / "config" / "queries.yml"
-TREND = ROOT / "site" / "data" / "trend_global.json"
+CACHE = ROOT / "data" / "interim" / "denominator_series_cache.json"
 INDEX = ROOT / "site" / "data" / "index.json"
 WORKS = ROOT / "data" / "processed" / "normalized" / "works.parquet"
 RAW = ROOT / "data" / "interim" / "works_raw.parquet"
@@ -65,7 +68,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args(argv)
 
-    inputs = {"trend_global": TREND, "index": INDEX, "works": WORKS, "raw": RAW}
+    inputs = {"denominator_cache": CACHE, "index": INDEX, "works": WORKS, "raw": RAW}
     absent = [_relative(path) for path in inputs.values() if not path.exists()]
     if absent:
         if args.check:
@@ -77,12 +80,15 @@ def main(argv: list[str] | None = None) -> int:
     as_of = args.as_of or datetime.now(UTC).date()
     try:
         specs = load_series_config(CONFIG)
-        query_version = str(load_query_config(QUERY_CONFIG).get("version") or "")
+        config = load_query_config(QUERY_CONFIG)
+        query_version = str(config.get("version") or "")
         payload = build_series(
             specs,
-            trend_global=load_trend_global(TREND),
             corpus_records=load_corpus_records(WORKS, RAW),
             published_works=load_published_works(INDEX, WORKS),
+            denominator_entries=resolve_cache_entries(
+                specs, load_denominator_cache(CACHE), query_config=config
+            ),
             as_of=as_of,
             expected_query_version=query_version,
         )
@@ -112,7 +118,8 @@ def main(argv: list[str] | None = None) -> int:
     for series_id, entry in payload["series"].items():
         row = next((r for r in entry["years"] if r["year"] == last), None)
         if row is not None:
-            summary.append(f"{series_id}={row['count']} in {last}")
+            stale = " (stale)" if entry.get("cache", {}).get("stale") else ""
+            summary.append(f"{series_id}={row['count']} in {last}{stale}")
     pending = ", ".join(
         f"{sid} ({info['status']})" for sid, info in payload["not_computed"].items()
     )

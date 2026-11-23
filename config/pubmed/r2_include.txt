@@ -1,5 +1,6 @@
-# R2: the v3.1 pollution-core terms from config/queries.yml (core_terms, plastic-v3.1),
-# each as an exact [tiab] phrase. Comment lines are dropped by the reader.
+# R2: the pollution-core v0 terms (A3 5.3 starting set; config/pollution_core_v0.yml core_terms),
+# each as an exact [tiab] phrase. Regenerate this file after any change to that config.
+# Comment lines are dropped by the reader.
 # The California[ad] restriction comes from --affiliation, not from this file.
 (
   "microplastic"[tiab] OR
@@ -26,17 +27,8 @@
   "anthropogenic litter"[tiab] OR
   "anthropogenic debris"[tiab] OR
   "anthropogenic microparticles"[tiab] OR
-  "anthropogenic microparticle"[tiab] OR
   "ingested plastic"[tiab] OR
   "ingested plastics"[tiab] OR
   "eat plastic"[tiab] OR
   "consuming plastic"[tiab] OR
-  "plastic contamination"[tiab] OR
-  "plastic recycling"[tiab] OR
-  "plastics recycling"[tiab] OR
-  "recycled plastic"[tiab] OR
-  "recycled plastics"[tiab] OR
-  "single-use plastics"[tiab] OR
-  "biodegradable plastic"[tiab] OR
-  "biodegradable plastics"[tiab] OR
-  "circular economy of plastics"[tiab])
+  "plastic contamination"[tiab])

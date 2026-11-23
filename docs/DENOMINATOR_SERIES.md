@@ -1,12 +1,15 @@
-# Global denominator series (BQ-2.1)
+# Global denominator series (BQ-2.1, BQ-2.2)
 
-Built by `py -3.14 scripts/build_denominator_series.py` from stored files only. No network calls.
+Built by `py -3.14 scripts/build_denominator_series.py` from stored files. The builder makes no
+network calls. The only fetcher for these series is `scripts/fetch_denominator_series.py` (BQ-2.2).
 Output: `data/processed/analytics/denominator_series.json` (gitignored; not published).
-BQ-2.4 publishes `site/data/denominators.json` later. This task does not change `site/data/`
+BQ-2.4 publishes `site/data/denominators.json` later. This work does not change `site/data/`
 or the Evidence Map panel.
 
 Series are declared in `config/denominator_series.yml`. The code is `src/atlas/analytics/denominators.py`.
-Counts below are from the build of 2026-11-23 (UTC). The last complete year is 2025.
+Counts below come from the live fetches of 2026-11-23 UTC (A-all and A-article_review at 05:41 UTC; B on
+the v0 set later that day) and the build of the same day.
+The last complete year is 2025.
 
 ## Counting units
 
@@ -15,6 +18,7 @@ There are two units. A ratio is allowed only inside one unit.
 - **OpenAlex records.** Each OpenAlex work ID is one record, counted in its publication year.
   Records of the types erratum, peer-review, retraction and paratext are removed. Duplicate records are
   counted, not merged. Retracted-flagged articles stay in. This is the unit of series A, B and C.
+  The article+review sensitivity series use the same unit, restricted to OpenAlex types article and review.
 - **Curated works.** One row per work in the published site index, after owner labels and
   curation removals. This is the unit of series D and B2.
 
@@ -22,35 +26,155 @@ There are two units. A ratio is allowed only inside one unit.
 
 | ID | What it counts | Scope | Status | 2025 count |
 |---|---|---|---|---|
-| A | Every OpenAlex record the plastics query v3.1 matches | global | available | 23,450 |
-| B | Pollution-core tier, same count basis as A | global | pending_fetch (BQ-2.2) | not computed |
+| A | Every OpenAlex record the plastics query v3.1 matches, all types | global | available (cache `A-all`) | 23,758 |
+| A-article_review | Same, OpenAlex types article or review only (sensitivity) | global | available (cache `A-article_review`) | 17,949 |
+| B | Pollution-core v0 (A3 section 5.3, 29 core terms): same exclusions and type filters as A | global | available (cache `B-all`) | 16,263 |
+| B-article_review | Same as B, types article or review only (sensitivity) | global | available (cache `B-article_review`) | 12,176 |
 | B2 | Lifecycle-and-society hits with plastics_centrality primary or substantial | global | waits_for BQ-S3 | not computed |
 | C | California-connected records that the OpenAlex query matched | California | available | 252 |
 | D | Published works with plastic_related true | California | available, beside only | 228 |
 
-Counts include the retracted records that are in each series. The 2026 values are partial (see below).
+Counts include the retracted records that are in each series. The 2026 values are partial.
 
-### A: global query count
+2025 shares: B/A is 68.5% (16,263 / 23,758). The article+review pair gives 67.8% (12,176 / 17,949).
+The v0 set replaced an earlier B that used all 38 `queries.yml` core terms (2025: 18,280, 76.9% of A).
+That set included lifecycle terms (recycling, single-use, biodegradable, circular economy), so it is not used.
+C/A is 1.06%. The builder reports these from the same fetch run, so the B/A pair is one snapshot.
 
-- **Is:** the number of OpenAlex records that match the active plastics query, minus the four excluded
-  types. It is fetched by `scripts/fetch_trend_global.py` with one `group_by` request.
-- **Is not:** a list of plastics papers. The query is a title and abstract search. It also matches
-  some records that are not about plastics. C carries the same false matches, because it is a subset
-  of the same query.
-- **Retractions:** A cannot leave them out. The `group_by` request has no retraction split, so the
-  `retracted` field is null for every year.
-- **Years:** the file has 175 years, 1853 to 2027. It has 25,576 records for 2026 (partial) and
-  7 future-dated records for 2027 (partial).
+## Fetch and cache (BQ-2.2)
 
-### B and B2: not yet computed
+    py -3.14 scripts/fetch_denominator_series.py --dry-run       # print the four URLs; no call
+    py -3.14 scripts/fetch_denominator_series.py                 # cached unless stale or changed
+    py -3.14 scripts/fetch_denominator_series.py --force         # refetch regardless of cache
+    py -3.14 scripts/fetch_denominator_series.py --allow-stale   # exit 0 on a refused refresh
 
-- **B** (pollution-core, global) needs a new OpenAlex fetch. BQ-2.2 adds it. Once fetched it uses
-  the same unit as A, so B/A can be a like-for-like share.
-- **B2** (lifecycle-and-society with plastics_centrality primary or substantial) is built from labels.
-  Its precision is estimated on its own (A3 P4). It waits for BQ-S3. It is shown beside A and never
-  divided until BQ-2.3 decides how to treat that precision.
+### The four requests
 
-### C: California-connected records the query matched
+Each series is one `group_by=publication_year` request on the works endpoint. The filter clauses are:
+
+| Series | Filter clauses |
+|---|---|
+| A-all | the v3.1 query (`title_and_abstract.search`, with its exclusions) and `exclude_types`. Same clauses as `scripts/fetch_trend_global.py`, which a test checks. |
+| A-article_review | A-all plus `type:article\|review` |
+| B-all | the pollution-core v0 terms from `config/pollution_core_v0.yml` (A3 section 5.3; 29 terms in `queries.yml` spelling), rendered like the query, with the query's exclusions and `exclude_types`. No qualified or lifecycle terms. B is inside A. |
+| B-article_review | B-all plus `type:article\|review` |
+
+There is no language filter in any series. A test checks every URL. Each URL is well under the
+8,000-character limit (about 1,600 characters for B and 3,500 for A).
+
+### Cache
+
+- File: `data/interim/denominator_series_cache.json` (gitignored). Schema `denominator_series_cache.v1`.
+- Key: `series id|query version|filter digest`. The digest is the first 16 hex characters of the
+  SHA-256 of the joined filter clauses, so any change to a term, a type or a sensitivity clause makes
+  a new key. A query version change therefore invalidates every entry.
+- Entry fields: `series_id`, `query_version`, `filter_digest`, `filter` (audit copy, no key),
+  `fetched_at`, `source`, `by_year`, `stale`, `stale_reason`, and `refused_at` when a refresh was refused.
+- Freshness: an entry is fresh for 30 days after `fetched_at`, unless it is flagged stale. Freshness is
+  checked per series, so one aged series is refetched alone.
+- Older entries for other keys are kept. They are never used for another key.
+
+### Shared request path
+
+Each request goes through the same pieces as `fetch_evidence_cells.py` and `fetch_trend_global.py`:
+
+- `atlas.ingest.openalex._request_json` with at most 3 HTTP attempts (`MAX_HTTP_ATTEMPTS`), so
+  its 429 back-off and key fallback apply.
+- The budget guard from `config/budget.yml`, with today's logged usage from `data/logs/api_usage.jsonl`.
+  The guard is checked before each request and again after each response.
+- A run credit cap of 100 credits (`RUN_CREDIT_CAP`). Before each request the run must have room for
+  that request's worst case (3 attempts at 10 credits each).
+- `ApiCostLogger`, run id `denominator-series-<timestamp>`.
+
+The OpenAlex key is loaded by the shared loader from `.env`, as in the other fetchers. The script
+does not print it.
+
+### Costs
+
+A full refresh is four requests at about 10 credits each: about 40 credits, roughly USD 0.004.
+A 30-day refresh cycle is therefore about 40 credits a month. The run cap is 100 credits. The daily
+guard in `config/budget.yml` still applies on top of that.
+
+Credits spent on 2026-11-23: 40 for the first four-series fetch (B on the earlier 38-term set), then
+20 for the B refetch on the v0 set (two requests). The old B entries stay in the cache under their old
+keys. The builder ignores them. A changed term set changes the B key, so it refetches B alone.
+
+### Refusals, stale values and exit codes
+
+A refused refresh is one of: HTTP 429 from OpenAlex, a plan refusal (HTTP 403 "plan upgrade
+required"), the local budget guard, or the run credit cap. A refusal never keeps the old values
+silently:
+
+- The run stops at the refusal. No further requests are sent.
+- Each series that could not be refreshed keeps its cached values, flagged `stale: true` with a
+  `stale_reason` and `refused_at`. The values are not deleted.
+- The script exits 1.
+- `--allow-stale` exits 0 when every refused series still has cached values. It prints a warning
+  that names the stale series. If a refused series has no cached values, the run still exits 1, because
+  there is nothing to serve.
+
+Any other failure (for example HTTP 500) also stops the run and exits 1, even with `--allow-stale`.
+Series not refreshed in that run are flagged stale in the same way.
+
+The daily job should use `--allow-stale`. The lead decides whether to add it to the daily workflow.
+This work does not add it.
+
+### Stale in the builder
+
+The builder reads the same cache. Each cache-backed series carries a `cache` object in
+`denominator_series.json`: `query_version`, `filter_digest`, `fetched_at`, `stale` and `stale_reason`.
+An entry is also stale when it was fetched 30 or more days before the as-of date, even without the flag.
+A missing entry for the active query and filters is an error: the builder never falls back to another entry.
+The builder's summary line marks a stale series with `(stale)`.
+
+## Sensitivity series
+
+`A-article_review`, `B-article_review` and any future sensitivity series declare `sensitivity: article_review`
+in the config. Their counting unit text names the restriction, so they are never compared with an
+all-types series. The ratio guard refuses a pair with different sensitivities, and it also refuses a
+pair whose counting unit text differs. OpenAlex document types are imprecise (Céspedes et al. 2025),
+so the sensitivity series show how far the type restriction moves the share.
+
+## Ratios
+
+| Ratio | Allowed | Why |
+|---|---|---|
+| B / A | Yes | Same OpenAlex-records unit, same sensitivity (all types), same fetch run. |
+| A-article_review / B-article_review | Yes | Same unit text and sensitivity. |
+| C / A | Yes | Same OpenAlex-records unit. C is the California share of the query count. |
+| A / B-article_review | No | Different sensitivity and unit text. The guard raises. |
+| anything with D | No | Curated works. Shown beside only. |
+| anything with B2 | No | Labelled precision. Shown beside only until BQ-2.3 decides. |
+
+The builder checks these rules when the config loads and again when series are built. A pair with
+different `counting_unit` text raises an error, and so does a pair with different sensitivity. So does a
+one-sided pair, or a beside-only series in a pair. The output lists the allowed pairs in `ratio_pairs`.
+
+## Changes from the BQ-2.1 build
+
+- **B is pollution-core v0, not all core terms.** BQ-2.1 named B as the query's `core_terms`. The first
+  BQ-2.2 fetch used all 38 of them, which included lifecycle terms. B now reads
+  `config/pollution_core_v0.yml` (A3 section 5.3). A test checks that every v0 term is a `queries.yml`
+  core term and that no lifecycle term is in v0.
+
+- **A (all types) now comes from the cache** (`A-all`), not from `site/data/trend_global.json`. Both
+  use the same filter. The cache entry was fetched in the same run as B, so B/A is one snapshot. The
+  2025 count moved from 23,450 (trend file, fetched 2026-11-12) to 23,758 (cache, 2026-11-23 UTC), which is
+  +308 (+1.3%). C/A now divides by the newer A.
+- The Evidence Map trend panel still reads `site/data/trend_global.json`. This work does not change it.
+- The builder no longer reads `site/data/trend_global.json`. Its inputs are the cache, `site/data/index.json`,
+  `works.parquet` and `works_raw.parquet`.
+
+## Current Evidence Map share (not changed here)
+
+The panel's California share divides the published index totals for each year by the trend file's A.
+The index has 268 works for 2025. Of those, 40 are labelled not plastic-related. C counts 283 California
+records for 2025 (252 on query routes plus 31 from DOI routes, duplicates included). The gap of 15 is
+duplicates and curation removals. So the current share is not like-for-like with A. It counts curated
+works, not OpenAlex records. It also counts works labelled not plastic-related. BQ-2.2 now provides a
+like-for-like B and cache-backed A. BQ-2.3 should decide whether to switch the panel to C or B.
+
+## Series C: California-connected records the query matched
 
 - **Is:** OpenAlex records whose corpus work has `ca_any_author` true, and whose route applied the
   OpenAlex query. Three routes qualify: the query ingest (`openalex-works`), the Europe PMC audit
@@ -68,16 +192,7 @@ Counts include the retracted records that are in each series. The 2026 values ar
   fetched without the query term. Stored fields cannot tell those apart from query matches. So C can
   overstate query-matched output by at most that residual.
 
-### D: published plastic-related works
-
-- **Is:** the published works in `site/data/index.json` with `plastic_related` true, counted by year.
-  Owner labels and curation removals apply. The count was 1,602 across all years.
-- **Is not:** a query count. Its unit is curated works, so it is never divided by A or C. It is
-  shown beside them.
-- **Retractions:** the index has no retraction field. The builder joins `is_retracted` from the
-  normalized works table by work ID. One published work is retracted.
-
-## Provenance of C (the [VERIFY] field)
+### Provenance of C (the [VERIFY] field)
 
 **Answer: the normalized table has no field that says how a row entered. The raw table has a route
 field (`source_run_id`) that shows whether the OpenAlex query applied. That gets close, but it is not
@@ -110,51 +225,54 @@ an exact query match.**
 records exactly. It cannot remove the Moore-scope residual. Exact matching would mean asking OpenAlex
 again for every record, which needs the network and is out of scope here.
 
-## Ratios
+### Series D: published plastic-related works
 
-| Ratio | Allowed | Why |
-|---|---|---|
-| C / A | Yes | Same OpenAlex-records unit. C is the California share of the query count. |
-| B / A | Later | Same unit. Allowed once BQ-2.2 fetches B. |
-| anything with D | No | Curated works. Shown beside only. |
-| anything with B2 | No | Labelled precision. Shown beside only until BQ-2.3 decides. |
+- **Is:** the published works in `site/data/index.json` with `plastic_related` true, counted by year.
+  Owner labels and curation removals apply. The count was 1,602 across all years.
+- **Is not:** a query count. Its unit is curated works, so it is never divided by A or C. It is
+  shown beside them.
+- **Retractions:** the index has no retraction field. The builder joins `is_retracted` from the
+  normalized works table by work ID. One published work is retracted.
 
-The builder checks these rules when the config loads and again when series are built. A pair with
-different `counting_unit` text raises an error. So does a one-sided pair, or a beside-only series in
-a pair. The output lists the allowed pairs in `ratio_pairs`. In this build it lists only `["A", "C"]`.
+## Known limits (for review)
 
-## Current Evidence Map share (not changed here)
-
-The panel's California share divides the published index totals for each year by A. The index
-has 268 works for 2025. Of those, 40 are labelled not plastic-related. C counts 283 California records
-for 2025 (252 on query routes plus 31 from DOI routes, duplicates included). The gap of 15 is
-duplicates and curation removals. So the current share is not like-for-like with A. It counts curated
-works, not OpenAlex records. It also counts works labelled not plastic-related. BQ-2.2 and BQ-2.3
-should decide whether to switch the panel to C.
-
-## Partial years
-
-`last_complete_year` is the as-of year minus one. Every year from the as-of year onward is flagged
-`partial_year` in every series. The as-of date defaults to today (UTC), so the flags move forward
-when the builder reruns.
+- **B is pollution-core v0 (A3 section 5.3), and v0 omits three qualified context terms.** A3 section
+  5.3 reads "plus qualified microfiber, tire wear and litter terms". The config lists them under
+  `qualified_not_included_v0` instead, so B has no qualified clauses. This follows the lead's instruction
+  and is the same B used for the PubMed R2 reference set. The lead should confirm the reading of A3.
+- **Excluded from v0.** Eight lifecycle core terms (recycling, recycled plastic, single-use and
+  biodegradable plastic, circular economy) and the qualified LCA and bioplastic terms are left out by
+  omission. The singular "anthropogenic microparticle" in `queries.yml` is also left out, because A3 lists
+  only "anthropogenic microparticles". It still counts in A, which uses the full query, but not in B. Confirm
+  whether it should join v0.
+- **PubMed R2 uses the same v0 terms.** `config/pubmed/r2_include.txt` was regenerated from
+  `config/pollution_core_v0.yml` (29 `[tiab]` phrases). The live PubMed query has not been run.
+- **Year range of the A-all response.** The live fetch returned 103 year groups for A-all (the fetch
+  reports 136,068 records in all years). The BQ-2.1 note described the trend file as having 175 years,
+  1853 to 2027. This build did not check the early years. Before relying on years before 1925, check
+  the year range of the cache entry.
+- **Partial years.** `last_complete_year` is the as-of year minus one. Every year from the as-of year
+  onward is flagged `partial_year` in every series. The as-of date defaults to today (UTC).
 
 ## Output file
 
 - `as_of`, `last_complete_year`, `query_version`.
-- `series`: one object per computed series with `counting_unit`, `scope`, `source`,
-  `comparable_with`, `beside_only`, `retractions`, `undated`, and `years`. C also has `route_records`,
-  the record count per route family over all records.
+- `series`: one object per computed series with `counting_unit`, `scope`, `source`, `status`,
+  `sensitivity`, `comparable_with`, `beside_only`, `retractions`, `undated`, and `years`. Cache-backed
+  series also have `cache` (see above). C also has `route_records`, the record count per route family
+  over all records.
 - `years`: one row per year from the earliest to the latest year in any series. Rows hold `count`,
   `retracted` and `partial_year`. C also has `other_route`.
-- `not_computed`: B and B2 with their status and the task they wait for.
+- `not_computed`: B2 with its status and the task it waits for.
 - `ratio_pairs`: the allowed pairs among computed series.
-- `inputs`: the path and SHA-256 of each input file. `--check` uses these to detect a stale output.
+- `inputs`: the path and SHA-256 of each input file, including the cache. `--check` uses these to detect a stale output.
 
 ## Commands
 
-    py -3.14 scripts/build_denominator_series.py           # write the JSON
-    py -3.14 scripts/build_denominator_series.py --check   # fail when stale; SKIP when inputs are absent
-    py -3.14 -m pytest -q tests/test_denominator_series.py
+    py -3.14 scripts/fetch_denominator_series.py --dry-run     # URLs and cache state; no call
+    py -3.14 scripts/build_denominator_series.py              # write the JSON
+    py -3.14 scripts/build_denominator_series.py --check      # fail when stale; SKIP when inputs are absent
+    py -3.14 -m pytest -q tests/test_fetch_denominator_series.py tests/test_denominator_series.py
 
 `--check` also reports stale when the date changes, because the partial-year flags depend on the
 as-of date.

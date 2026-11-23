@@ -39,8 +39,8 @@ Global Plastic Laws topic. That link is a draft the agent proposed, so the page 
 - **Done when:** the sidebar shows 0 pending. Tell the agent "OPC mapping reviewed"; it rebuilds
   the page data and the draft badge disappears.
 
-### H42. Triage 48 PubMed records the Atlas does not have (BQ-S9, about 30 minutes)
-PubMed lists 48 California plastics records that are not in the Atlas. Some are real gaps; others the Atlas
+### H42. Triage 43 PubMed records the Atlas does not have (BQ-S9, about 30 minutes)
+PubMed lists 43 California plastics records that are not in the Atlas. Some are real gaps; others the Atlas
 is right to leave out. Your labels decide which.
 1. Run `py -3.14 -m streamlit run scripts/review_pubmed_misses_app.py`.
    A browser tab opens. If it does not, go to http://localhost:8501.

@@ -1,7 +1,7 @@
-"""Offline tests for the global-denominator series (BQ-2.1).
+"""Offline tests for the global-denominator series (BQ-2.1, BQ-2.2).
 
 Tiny in-memory and tmp_path fixtures only. Nothing here reads the data/ tree, site/data or the
-network. The committed-config test reads config/denominator_series.yml and nothing else.
+network. The committed-config tests read config/denominator_series.yml and config/queries.yml only.
 """
 
 from __future__ import annotations
@@ -18,21 +18,35 @@ import pytest
 import yaml
 
 from atlas.analytics.denominators import (
+    POLLUTION_CORE_PATH,
     QUERY_ROUTES,
     build_series,
+    cache_key,
+    cache_rows,
     corpus_rows,
+    fetch_series_filters,
+    filter_digest,
     load_corpus_records,
+    load_denominator_cache,
+    load_pollution_core,
     load_published_works,
     load_series_config,
     render_payload,
+    resolve_cache_entries,
     route_family,
     trend_rows,
     validate_ratio_pairs,
 )
+from atlas.query import load_query_config
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build_denominator_series.py"
+QUERIES = ROOT / "config" / "queries.yml"
 AS_OF = date(2026, 11, 22)
+ARTICLE_UNIT = (
+    "OpenAlex records of type article or review by publication year; exclude_types removed; "
+    "duplicates not collapsed; retracted-flagged records included"
+)
 UNIT = (
     "OpenAlex records by publication year; exclude_types removed; duplicates not collapsed; "
     "retracted-flagged records included"
@@ -89,20 +103,31 @@ def _rows(payload: dict[str, Any], sid: str) -> dict[int, dict[str, Any]]:
 # --- config and ratio rules -------------------------------------------------------------------
 
 
-def test_committed_config_declares_the_expected_series_and_one_ratio_pair():
+def test_committed_config_declares_the_expected_series_and_ratio_pairs():
     specs = load_series_config(ROOT / "config" / "denominator_series.yml")
 
     assert {sid: spec.status for sid, spec in specs.items()} == {
         "A": "available",
-        "B": "pending_fetch",
+        "A-article_review": "available",
+        "B": "available",
+        "B-article_review": "available",
         "B2": "waits_for",
         "C": "available",
         "D": "available",
     }
-    assert specs["B"].waits_for == "BQ-2.2"
     assert specs["B2"].waits_for == "BQ-S3"
-    assert specs["A"].counting_unit == specs["C"].counting_unit
-    assert validate_ratio_pairs(specs) == [("A", "B"), ("A", "C")]
+    assert specs["A"].cache_series == "A-all"
+    assert specs["B"].cache_series == "B-all"
+    assert specs["A"].counting_unit == specs["B"].counting_unit == specs["C"].counting_unit
+    assert specs["A-article_review"].counting_unit == specs["B-article_review"].counting_unit
+    assert specs["A"].counting_unit != specs["A-article_review"].counting_unit
+    assert {frozenset(pair) for pair in validate_ratio_pairs(specs)} == {
+        frozenset({"A", "B"}),
+        frozenset({"A", "C"}),
+        frozenset({"A-article_review", "B-article_review"}),
+    }
+    for first, second in validate_ratio_pairs(specs):
+        assert specs[first].sensitivity == specs[second].sensitivity
     assert specs["D"].beside_only and specs["D"].comparable_with == ()
     assert all("D" not in spec.comparable_with for spec in specs.values())
 
@@ -454,18 +479,58 @@ def _load_script():
     return module
 
 
+def _cache_entry(series_id: str, by_year: dict[int, int], **overrides: Any) -> dict[str, Any]:
+    """A cache entry keyed the way scripts/fetch_denominator_series.py keys it (committed query)."""
+
+    config = load_query_config(QUERIES)
+    filters = fetch_series_filters(config, series_id)
+    entry: dict[str, Any] = {
+        "series_id": series_id,
+        "query_version": config["version"],
+        "filter_digest": filter_digest(filters),
+        "filter": ",".join(filters),
+        "fetched_at": "2026-11-22T10:00:00+00:00",
+        "source": "OpenAlex group_by publication_year",
+        "by_year": {str(year): count for year, count in by_year.items()},
+        "stale": False,
+        "stale_reason": None,
+    }
+    entry.update(overrides)
+    return entry
+
+
+def _cache_file(path: Path, entries: list[dict[str, Any]]) -> Path:
+    payload = {
+        "schema_version": "denominator_series_cache.v1",
+        "source": "OpenAlex group_by publication_year",
+        "entries": {
+            cache_key(e["series_id"], e["query_version"], e["filter_digest"]): e for e in entries
+        },
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    return path
+
+
 def test_cli_writes_then_checks_then_detects_staleness(tmp_path, monkeypatch):
     script = _load_script()
-    trend = tmp_path / "trend_global.json"
+    cache = _cache_file(
+        tmp_path / "denominator_series_cache.json",
+        [
+            _cache_entry("A-all", {2024: 5, 2025: 7}),
+            _cache_entry("A-article_review", {2024: 3, 2025: 4}),
+            _cache_entry("B-all", {2024: 2, 2025: 3}),
+            _cache_entry("B-article_review", {2024: 1, 2025: 2}),
+        ],
+    )
     index = tmp_path / "index.json"
     works = tmp_path / "works.parquet"
     raw = tmp_path / "works_raw.parquet"
     out = tmp_path / "out" / "denominator_series.json"
-    trend.write_text(json.dumps(_trend({2024: 5, 2025: 7})), encoding="utf-8")
     index.write_text(json.dumps({"works": []}), encoding="utf-8")
     pq.write_table(pa.Table.from_pylist([], schema=WORKS_SCHEMA), works)
     pq.write_table(pa.Table.from_pylist([], schema=RAW_SCHEMA), raw)
-    monkeypatch.setattr(script, "TREND", trend)
+    monkeypatch.setattr(script, "CACHE", cache)
     monkeypatch.setattr(script, "INDEX", index)
     monkeypatch.setattr(script, "WORKS", works)
     monkeypatch.setattr(script, "RAW", raw)
@@ -474,7 +539,13 @@ def test_cli_writes_then_checks_then_detects_staleness(tmp_path, monkeypatch):
     assert script.main(args) == 0
     payload = json.loads(out.read_text(encoding="utf-8"))
     assert payload["series"]["A"]["years"][-1]["year"] == 2025
-    assert payload["not_computed"]["B"]["status"] == "pending_fetch"
+    assert payload["series"]["B"]["years"][-1]["count"] == 3
+    assert payload["series"]["B-article_review"]["sensitivity"] == "article_review"
+    assert payload["series"]["B"]["cache"]["stale"] is False
+    assert set(payload["not_computed"]) == {"B2"}
+    assert ["A", "B"] in payload["ratio_pairs"]
+    assert ["A-article_review", "B-article_review"] in payload["ratio_pairs"]
+    assert payload["inputs"]["denominator_cache"]["path"].endswith("denominator_series_cache.json")
     assert script.main(["--check", *args]) == 0
 
     out.write_text(
@@ -483,9 +554,340 @@ def test_cli_writes_then_checks_then_detects_staleness(tmp_path, monkeypatch):
     assert script.main(["--check", *args]) == 1
 
 
+def test_cli_fails_without_a_cache_entry_for_a_series(tmp_path, monkeypatch, capsys):
+    script = _load_script()
+    cache = _cache_file(
+        tmp_path / "denominator_series_cache.json", [_cache_entry("A-all", {2025: 7})]
+    )
+    index = tmp_path / "index.json"
+    works = tmp_path / "works.parquet"
+    raw = tmp_path / "works_raw.parquet"
+    index.write_text(json.dumps({"works": []}), encoding="utf-8")
+    pq.write_table(pa.Table.from_pylist([], schema=WORKS_SCHEMA), works)
+    pq.write_table(pa.Table.from_pylist([], schema=RAW_SCHEMA), raw)
+    monkeypatch.setattr(script, "CACHE", cache)
+    monkeypatch.setattr(script, "INDEX", index)
+    monkeypatch.setattr(script, "WORKS", works)
+    monkeypatch.setattr(script, "RAW", raw)
+    args = ["--as-of", "2026-11-22", "--output", str(tmp_path / "out.json")]
+
+    assert script.main(args) == 1
+    err = capsys.readouterr().err
+    assert "has no A-article_review entry" in err
+    assert "run scripts/fetch_denominator_series.py" in err
+
+
 def test_cli_check_skips_when_inputs_are_absent(tmp_path, monkeypatch):
     script = _load_script()
-    monkeypatch.setattr(script, "TREND", tmp_path / "missing.json")
+    monkeypatch.setattr(script, "CACHE", tmp_path / "missing.json")
     output = str(tmp_path / "x.json")
     assert script.main(["--check", "--output", output]) == 0
     assert script.main(["--output", output]) == 1
+
+
+# --- BQ-2.2: cache-backed series and their guards ---------------------------------------------
+
+
+def _cache_specs(tmp_path: Path):
+    """A and B as cache-backed series with the same counting unit (the like-for-like pair)."""
+
+    return load_series_config(
+        _config(
+            tmp_path,
+            [
+                _entry(
+                    "A",
+                    comparable_with=["B"],
+                    compute="denominator_cache",
+                    cache_series="A-all",
+                ),
+                _entry(
+                    "B",
+                    comparable_with=["A"],
+                    compute="denominator_cache",
+                    cache_series="B-all",
+                ),
+            ],
+        )
+    )
+
+
+def test_cache_rows_are_counts_with_no_retraction_split():
+    rows = cache_rows({"series_id": "B-all", "by_year": {"2025": 3, "2026": 1}}, as_of=AS_OF)
+    assert rows == [
+        {"year": 2025, "count": 3, "retracted": None, "partial_year": False},
+        {"year": 2026, "count": 1, "retracted": None, "partial_year": True},
+    ]
+
+
+@pytest.mark.parametrize("bad", [{"2025": -1}, {"2025": 1.5}, {"2025": True}, {"2025": "3"}])
+def test_cache_counts_must_be_non_negative_integers(bad):
+    with pytest.raises(ValueError, match="non-negative integer"):
+        cache_rows({"series_id": "A-all", "by_year": bad}, as_of=AS_OF)
+
+
+def test_resolve_cache_entries_needs_the_active_query_version_and_filters(tmp_path):
+    specs = _cache_specs(tmp_path)
+    config = load_query_config(QUERIES)
+    cache = {"entries": {}}
+    entry_a = _cache_entry("A-all", {2025: 10})
+    cache["entries"][cache_key("A-all", config["version"], entry_a["filter_digest"])] = entry_a
+
+    with pytest.raises(ValueError, match="no B-all entry"):
+        resolve_cache_entries(specs, cache, query_config=config)
+
+    entry_b = _cache_entry("B-all", {2025: 4})
+    cache["entries"][cache_key("B-all", config["version"], entry_b["filter_digest"])] = entry_b
+    resolved = resolve_cache_entries(specs, cache, query_config=config)
+    assert resolved["A"]["by_year"] == {"2025": 10}
+    assert resolved["B"]["by_year"] == {"2025": 4}
+
+    # Another query version, or a changed term, finds no entry: nothing falls back to it.
+    with pytest.raises(ValueError, match="no A-all entry"):
+        resolve_cache_entries(specs, cache, query_config={**config, "version": "plastic-v3.2"})
+    changed = {**config, "core_terms": [*config["core_terms"], "plastic cups"]}
+    with pytest.raises(ValueError, match="no A-all entry"):
+        resolve_cache_entries(specs, cache, query_config=changed)
+
+
+def test_stale_flags_and_age_flow_into_the_output(tmp_path):
+    specs = _cache_specs(tmp_path)
+    config = load_query_config(QUERIES)
+    aged = _cache_entry("A-all", {2025: 10}, fetched_at="2026-10-01T00:00:00+00:00")
+    refused = _cache_entry("B-all", {2025: 4}, stale=True, stale_reason="OpenAlex HTTP 429")
+    fresh_cache = {
+        "entries": {
+            cache_key("A-all", config["version"], aged["filter_digest"]): aged,
+            cache_key("B-all", config["version"], refused["filter_digest"]): refused,
+        }
+    }
+    entries = resolve_cache_entries(specs, fresh_cache, query_config=config)
+
+    payload = build_series(
+        specs,
+        denominator_entries=entries,
+        as_of=AS_OF,
+        expected_query_version=config["version"],
+    )
+
+    assert payload["query_version"] == config["version"]
+    assert payload["series"]["A"]["cache"]["stale"] is True
+    assert payload["series"]["A"]["cache"]["stale_reason"] == (
+        "fetched 30 or more days before the as-of date"
+    )
+    assert payload["series"]["B"]["cache"] == {
+        "query_version": config["version"],
+        "filter_digest": refused["filter_digest"],
+        "fetched_at": "2026-11-22T10:00:00+00:00",
+        "stale": True,
+        "stale_reason": "OpenAlex HTTP 429",
+    }
+    assert payload["series"]["B"]["retractions"].startswith("not separated")
+
+
+def test_a_fresh_unflagged_entry_is_not_stale(tmp_path):
+    specs = _cache_specs(tmp_path)
+    fresh = _cache_entry("A-all", {2025: 10})
+    payload = build_series(
+        specs,
+        denominator_entries={"A": fresh, "B": _cache_entry("B-all", {2025: 4})},
+        as_of=AS_OF,
+        expected_query_version="plastic-v3.1",
+    )
+    assert payload["series"]["A"]["cache"]["stale"] is False
+    assert payload["series"]["A"]["cache"]["stale_reason"] is None
+
+
+def test_cache_series_without_an_entry_raises(tmp_path):
+    with pytest.raises(ValueError, match="denominator cache entry is missing"):
+        build_series(_cache_specs(tmp_path), as_of=AS_OF)
+
+
+def test_cache_entry_for_another_query_version_raises(tmp_path):
+    entries = {
+        "A": _cache_entry("A-all", {2025: 1}, query_version="plastic-v3.0"),
+        "B": _cache_entry("B-all", {2025: 1}),
+    }
+    with pytest.raises(ValueError, match="active query is 'plastic-v3.1'"):
+        build_series(
+            _cache_specs(tmp_path),
+            denominator_entries=entries,
+            as_of=AS_OF,
+            expected_query_version="plastic-v3.1",
+        )
+
+
+def test_ratio_guard_refuses_a_type_sensitivity_mismatch(tmp_path):
+    with pytest.raises(ValueError, match="crosses type sensitivity"):
+        load_series_config(
+            _config(
+                tmp_path,
+                [
+                    _entry("A", comparable_with=["B"]),
+                    _entry(
+                        "B",
+                        comparable_with=["A"],
+                        sensitivity="article_review",
+                        counting_unit=UNIT,
+                    ),
+                ],
+            )
+        )
+
+
+def test_article_review_pair_with_its_own_unit_is_allowed(tmp_path):
+    specs = load_series_config(
+        _config(
+            tmp_path,
+            [
+                _entry(
+                    "A-article_review",
+                    counting_unit=ARTICLE_UNIT,
+                    sensitivity="article_review",
+                    comparable_with=["B-article_review"],
+                ),
+                _entry(
+                    "B-article_review",
+                    counting_unit=ARTICLE_UNIT,
+                    sensitivity="article_review",
+                    comparable_with=["A-article_review"],
+                ),
+            ],
+        )
+    )
+    assert validate_ratio_pairs(specs) == [("A-article_review", "B-article_review")]
+
+
+def test_sensitivity_must_match_the_fetched_series(tmp_path):
+    with pytest.raises(ValueError, match="does not match A-all"):
+        load_series_config(
+            _config(
+                tmp_path,
+                [
+                    _entry(
+                        "A",
+                        compute="denominator_cache",
+                        cache_series="A-all",
+                        sensitivity="article_review",
+                    )
+                ],
+            )
+        )
+
+
+def test_denominator_cache_needs_a_known_cache_series(tmp_path):
+    with pytest.raises(ValueError, match="needs cache_series"):
+        load_series_config(_config(tmp_path, [_entry("A", compute="denominator_cache")]))
+    with pytest.raises(ValueError, match="needs cache_series"):
+        load_series_config(
+            _config(tmp_path, [_entry("A", compute="denominator_cache", cache_series="Z-all")])
+        )
+
+
+def test_cache_file_must_have_the_cache_schema(tmp_path):
+    path = tmp_path / "cache.json"
+    path.write_text(json.dumps({"schema_version": "other", "entries": {}}), encoding="utf-8")
+    with pytest.raises(ValueError, match="not a denominator cache"):
+        load_denominator_cache(path)
+
+
+# --- BQ-2.2: pollution-core v0 (A3 section 5.3) ------------------------------------------------
+
+# A3 section 5.3 as written, with "ingested plastic(s)" as its two forms.
+A3_V0_TERMS = (
+    "microplastic",
+    "nanoplastic",
+    "micro-plastic",
+    "nano-plastic",
+    "micro-sized plastic",
+    "microsized plastics",
+    "plastic pollution",
+    "plastic debris",
+    "plastic litter",
+    "marine debris",
+    "marine litter",
+    "plastic particles",
+    "plastic fragments",
+    "plastic ingestion",
+    "resin pellet",
+    "plastic pellet",
+    "macroplastic",
+    "mesoplastic",
+    "plastics pollution",
+    "plastic pollutants",
+    "plastic trash",
+    "anthropogenic litter",
+    "anthropogenic debris",
+    "anthropogenic microparticles",
+    "ingested plastic",
+    "ingested plastics",
+    "eat plastic",
+    "consuming plastic",
+    "plastic contamination",
+)
+LIFECYCLE_CORE_TERMS = (
+    "plastic recycling",
+    "plastics recycling",
+    "recycled plastic",
+    "recycled plastics",
+    "single-use plastics",
+    "biodegradable plastic",
+    "biodegradable plastics",
+    "circular economy of plastics",
+)
+
+
+def test_pollution_core_v0_is_the_a3_starting_set_in_queries_spelling():
+    queries = load_query_config(QUERIES)
+    core = load_pollution_core(POLLUTION_CORE_PATH)
+
+    assert core["version"] == "pollution-core-v0"
+    assert core["source"] == "A3 §5.3"
+    assert core["core_terms"] == list(A3_V0_TERMS)
+    assert all(term in queries["core_terms"] for term in core["core_terms"])
+    assert not set(core["core_terms"]) & set(core["excluded_lifecycle_terms"])
+    assert core["qualified_not_included_v0"] == ["microfiber", "tire wear", "litter"]
+
+
+def test_every_excluded_lifecycle_term_is_a_query_term():
+    queries = load_query_config(QUERIES)
+    query_terms = set(queries["core_terms"]) | {q["term"] for q in queries["qualified_terms"]}
+    core = load_pollution_core(POLLUTION_CORE_PATH)
+    assert set(core["excluded_lifecycle_terms"]) <= query_terms
+    assert set(LIFECYCLE_CORE_TERMS) <= set(core["excluded_lifecycle_terms"])
+
+
+def test_v0_leaves_out_only_the_lifecycle_core_terms_and_one_singular_form():
+    queries = load_query_config(QUERIES)
+    core = load_pollution_core(POLLUTION_CORE_PATH)
+    left_out = sorted(set(queries["core_terms"]) - set(core["core_terms"]))
+    assert left_out == sorted([*LIFECYCLE_CORE_TERMS, "anthropogenic microparticle"])
+
+
+def test_pollution_core_loader_rejects_overlap_duplicates_and_empty(tmp_path):
+    base = yaml.safe_load(POLLUTION_CORE_PATH.read_text(encoding="utf-8"))
+
+    def _write(payload):
+        path = tmp_path / "core.yml"
+        path.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
+        return path
+
+    overlap = {
+        **base,
+        "excluded_lifecycle_terms": [*base["excluded_lifecycle_terms"], "marine debris"],
+    }
+    with pytest.raises(ValueError, match="also excluded lifecycle terms"):
+        load_pollution_core(_write(overlap))
+    duplicate = {**base, "core_terms": [*base["core_terms"], "resin pellet"]}
+    with pytest.raises(ValueError, match="duplicate core terms"):
+        load_pollution_core(_write(duplicate))
+    empty = {**base, "core_terms": []}
+    with pytest.raises(ValueError, match="core_terms is empty"):
+        load_pollution_core(_write(empty))
+
+
+def test_fetch_series_filters_rejects_a_pollution_core_term_missing_from_queries():
+    config = load_query_config(QUERIES)
+    core = {**load_pollution_core(POLLUTION_CORE_PATH), "core_terms": ["not a query term"]}
+    with pytest.raises(ValueError, match="not in queries.yml core_terms"):
+        fetch_series_filters(config, "B-all", pollution_core=core)

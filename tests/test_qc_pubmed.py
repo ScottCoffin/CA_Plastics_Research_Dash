@@ -295,10 +295,13 @@ def test_read_query_rejects_unbalanced_include(tmp_path: Path) -> None:
         read_query(include)
 
 
-def test_r2_include_is_the_core_terms_as_tiab_phrases() -> None:
-    core = yaml.safe_load((ROOT / "config" / "queries.yml").read_text(encoding="utf-8"))
+def test_r2_include_is_the_pollution_core_v0_terms_as_tiab_phrases() -> None:
+    core = yaml.safe_load((ROOT / "config" / "pollution_core_v0.yml").read_text(encoding="utf-8"))
     terms = core["core_terms"]
-    assert split_include_chunks(read_query_file(R2)) == [f'"{term}"[tiab]' for term in terms]
+    chunks = split_include_chunks(read_query_file(R2))
+    assert chunks == [f'"{term}"[tiab]' for term in terms]
+    lifecycle = {f'"{term}"[tiab]' for term in core["excluded_lifecycle_terms"]}
+    assert not lifecycle & set(chunks)
 
 
 def test_r1_include_is_the_microplastics_mesh_term() -> None:
@@ -605,7 +608,8 @@ def test_cli_dry_run_without_contact_values_reports_them_as_unset(capsys: Any) -
     cli = _load_cli()
     assert cli.main(["--reference-set", "r2", "--affiliation", "California"], env={}) == 0
     out = capsys.readouterr().out
-    assert "OR chunks: 38" in out
+    core = yaml.safe_load((ROOT / "config" / "pollution_core_v0.yml").read_text(encoding="utf-8"))
+    assert f"OR chunks: {len(core['core_terms'])}" in out
     assert "contact email: not set" in out
     assert "email=" not in out.split("example request")[1]
 

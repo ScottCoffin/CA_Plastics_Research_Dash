@@ -1,0 +1,63 @@
+# Pollution-core v0 (A3 section 5.3, owner-approved starting set). Read by atlas.analytics.denominators
+# (series B and B-article_review, BQ-2.2) and used to regenerate config/pubmed/r2_include.txt.
+#
+# Every core term must be a core_terms entry of config/queries.yml, spelled the same way, and no
+# core term may appear in excluded_lifecycle_terms. The committed test checks both rules.
+#
+# v0 omits the qualified context terms (microfiber, tire wear, litter). Each of those needs a
+# context word before it counts, so v0 B is the bare core terms only. The lifecycle terms (recycling,
+# recycled plastic, single-use and biodegradable plastic, circular economy, life cycle assessment,
+# bioplastic) are left out by design: they are lifecycle-and-society themes, not pollution.
+
+version: pollution-core-v0
+source: "A3 §5.3"
+# Same terms as the A3 list, in queries.yml spelling and order. "ingested plastic(s)" is both forms.
+core_terms:
+  - microplastic
+  - nanoplastic
+  - micro-plastic
+  - nano-plastic
+  - micro-sized plastic
+  - microsized plastics
+  - plastic pollution
+  - plastic debris
+  - plastic litter
+  - marine debris
+  - marine litter
+  - plastic particles
+  - plastic fragments
+  - plastic ingestion
+  - resin pellet
+  - plastic pellet
+  - macroplastic
+  - mesoplastic
+  - plastics pollution
+  - plastic pollutants
+  - plastic trash
+  - anthropogenic litter
+  - anthropogenic debris
+  - anthropogenic microparticles
+  - ingested plastic
+  - ingested plastics
+  - eat plastic
+  - consuming plastic
+  - plastic contamination
+# Lifecycle-and-society themes that A3 excludes. The first eight are core_terms in queries.yml; the
+# last three are qualified terms there (LCA and bioplastics). They stay out of v0 by omission.
+excluded_lifecycle_terms:
+  - plastic recycling
+  - plastics recycling
+  - recycled plastic
+  - recycled plastics
+  - single-use plastics
+  - biodegradable plastic
+  - biodegradable plastics
+  - circular economy of plastics
+  - life cycle assessment
+  - bioplastic
+  - bioplastics
+# Qualified terms of queries.yml that v0 B does not include (no context clauses in v0).
+qualified_not_included_v0:
+  - microfiber
+  - tire wear
+  - litter

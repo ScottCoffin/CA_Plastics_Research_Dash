@@ -1,12 +1,16 @@
-# Global-denominator series (BQ-2.1; A3 section 7 Module 2). Read by atlas.analytics.denominators.
+# Global-denominator series (BQ-2.1, BQ-2.2; A3 section 7 Module 2). Read by atlas.analytics.denominators.
 #
 # Ratio rules, enforced when the config loads and again when series are built:
 # - A ratio is allowed only between two series that list each other in comparable_with AND
-#   share the same counting_unit text (exact match). A mismatch raises.
+#   share the same counting_unit text (exact match) AND the same sensitivity. A mismatch raises.
 # - beside_only series are shown next to a ratio, never divided. They must have an empty
 #   comparable_with and must not appear in any other series' comparable_with.
 # - status: available (computed now) | pending_fetch (needs a new OpenAlex fetch) |
 #   waits_for (needs a named task first). Pending series are listed with their status, not computed.
+# - compute denominator_cache reads one by-year entry from data/interim/denominator_series_cache.json,
+#   written by scripts/fetch_denominator_series.py. cache_series names the fetched series; the entry
+#   must match the active query version and filter digest.
+# - sensitivity: all (every OpenAlex type) or article_review (type article or review only).
 #
 # Counting units: "OpenAlex records" = one OpenAlex work ID per record, by publication year,
 # after the exclude_types filter. Retracted-flagged records stay in. Duplicates are not collapsed.
@@ -14,26 +18,56 @@
 
 series:
   - id: A
-    label: "Global plastics query v3.1 (all OpenAlex works matching the query)"
+    label: "Global plastics query v3.1 (all OpenAlex works matching the query, all types)"
     counting_unit: "OpenAlex records by publication year; exclude_types removed; duplicates not collapsed; retracted-flagged records included"
-    source: "site/data/trend_global.json (scripts/fetch_trend_global.py; one group_by publication_year request; query_version plastic-v3.1)"
+    source: "data/interim/denominator_series_cache.json (series A-all; scripts/fetch_denominator_series.py; one group_by publication_year request; query_version plastic-v3.1)"
     scope: global
     status: available
-    compute: trend_global
+    compute: denominator_cache
+    cache_series: A-all
+    sensitivity: all
     comparable_with: [B, C]
     beside_only: false
-    note: "Denominator for the California share. Counts every OpenAlex record the query matches, minus the erratum, peer-review, retraction and paratext types. A cannot exclude retracted articles: the group_by request has no retraction split, so the retracted column is null. The stored file has a few future-dated records (2027), which the builder keeps and flags as partial."
+    note: "Denominator for the California share and for B/A. Counts every OpenAlex record the query matches, minus the erratum, peer-review, retraction and paratext types. The same filter as the Evidence Map trend file (site/data/trend_global.json), but fetched in the same run as B, so B/A is one snapshot. A cannot exclude retracted articles: the group_by request has no retraction split, so the retracted column is null. The fetch can return future-dated records (2027), which the builder keeps and flags as partial."
+
+  - id: A-article_review
+    label: "Sensitivity: plastics query v3.1, OpenAlex types article and review only"
+    counting_unit: "OpenAlex records of type article or review by publication year; exclude_types removed; duplicates not collapsed; retracted-flagged records included"
+    source: "data/interim/denominator_series_cache.json (series A-article_review; scripts/fetch_denominator_series.py; adds type:article|review)"
+    scope: global
+    status: available
+    compute: denominator_cache
+    cache_series: A-article_review
+    sensitivity: article_review
+    comparable_with: [B-article_review]
+    beside_only: false
+    note: "Sensitivity series. OpenAlex document types are imprecise (Céspedes et al. 2025), so this shows how far the type restriction moves the share. Compared only with B-article_review, never with the all-types series."
 
   - id: B
-    label: "Pollution-core tier, global (same count basis as A)"
+    label: "Pollution-core v0 tier, global (A3 section 5.3 starting set; same count basis and exclusions as A)"
     counting_unit: "OpenAlex records by publication year; exclude_types removed; duplicates not collapsed; retracted-flagged records included"
-    source: "Not fetched yet. BQ-2.2 adds the fetch and cache (PLAT-2b path, query-version key, 30 days)."
+    source: "data/interim/denominator_series_cache.json (series B-all; scripts/fetch_denominator_series.py; config/pollution_core_v0.yml core terms, the query's exclusions and exclude_types; no language filter)"
     scope: global
-    status: pending_fetch
-    waits_for: BQ-2.2
+    status: available
+    compute: denominator_cache
+    cache_series: B-all
+    sensitivity: all
     comparable_with: [A]
     beside_only: false
-    note: "Pollution-core tier (particles, debris, pollution, ingestion). Same count basis as A, so B/A is a like-for-like share once fetched. No file exists yet; the builder skips it."
+    note: "Pollution-core v0: the 29 A3 section 5.3 core terms (in queries.yml spelling). v0 omits the qualified context terms (microfiber, tire wear, litter) and the lifecycle terms (recycling, recycled plastic, single-use and biodegradable plastic, circular economy, LCA, bioplastics). Same count basis as A and the same exclusions, so B is a subset of A and B/A is a like-for-like share from one fetch run."
+
+  - id: B-article_review
+    label: "Sensitivity: pollution-core tier, OpenAlex types article and review only"
+    counting_unit: "OpenAlex records of type article or review by publication year; exclude_types removed; duplicates not collapsed; retracted-flagged records included"
+    source: "data/interim/denominator_series_cache.json (series B-article_review; scripts/fetch_denominator_series.py; pollution-core v0 terms, adds type:article|review)"
+    scope: global
+    status: available
+    compute: denominator_cache
+    cache_series: B-article_review
+    sensitivity: article_review
+    comparable_with: [A-article_review]
+    beside_only: false
+    note: "Sensitivity series for B. Compared only with A-article_review."
 
   - id: B2
     label: "Lifecycle-and-society hits with plastics_centrality primary or substantial, global"

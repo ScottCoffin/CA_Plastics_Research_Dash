@@ -1,6 +1,6 @@
 {
   "schema_version": "bqs-pm-v1",
-  "generated_at": "2026-11-23T05:23:58+00:00",
+  "generated_at": "2026-11-23T05:51:41+00:00",
   "manifest_schema": "bqs-pm-manifest-v1",
   "failure_taxonomy_version": "failure-taxonomy-v1",
   "stage": 1,
@@ -78,16 +78,16 @@
       "description": "PubMed title and abstract plastics terms, California affiliation (broad set)",
       "affiliation": "California",
       "stage": 1,
-      "query_translation": "(\"microplastic\"[Title/Abstract] OR \"nanoplastic\"[Title/Abstract] OR \"micro-plastic\"[Title/Abstract] OR \"nano-plastic\"[Title/Abstract] OR \"micro-sized plastic\"[Title/Abstract] OR \"microsized plastics\"[Title/Abstract] OR \"plastic pollution\"[Title/Abstract] OR \"plastic debris\"[Title/Abstract] OR \"plastic litter\"[Title/Abstract] OR \"marine debris\"[Title/Abstract] OR \"marine litter\"[Title/Abstract] OR \"plastic particles\"[Title/Abstract] OR \"plastic fragments\"[Title/Abstract] OR \"plastic ingestion\"[Title/Abstract] OR \"resin pellet\"[Title/Abstract] OR \"plastic pellet\"[Title/Abstract] OR \"macroplastic\"[Title/Abstract] OR \"mesoplastic\"[Title/Abstract] OR \"plastics pollution\"[Title/Abstract] OR \"plastic pollutants\"[Title/Abstract] OR \"plastic trash\"[Title/Abstract] OR \"anthropogenic litter\"[Title/Abstract] OR \"anthropogenic debris\"[Title/Abstract] OR \"anthropogenic microparticles\"[Title/Abstract] OR \"anthropogenic microparticle\"[Title/Abstract] OR \"ingested plastic\"[Title/Abstract] OR \"ingested plastics\"[Title/Abstract] OR \"plastic contamination\"[Title/Abstract] OR \"plastic recycling\"[Title/Abstract] OR \"plastics recycling\"[Title/Abstract] OR \"recycled plastic\"[Title/Abstract] OR \"recycled plastics\"[Title/Abstract] OR \"single-use plastics\"[Title/Abstract] OR \"biodegradable plastic\"[Title/Abstract] OR \"biodegradable plastics\"[Title/Abstract]) AND \"California\"[Affiliation] AND 1950/01/01:2026/11/21[Date - Publication]",
-      "run_timestamp": "2026-11-23T05:02:37+00:00",
-      "manifest_sha256": "548a49ffc27ab6b03f88b1bd72b8f7fb1502657d409cbbcd8e65efcb710e87fc",
-      "reference_pmids": 387,
-      "found_published": 343,
-      "found_published_by_pmid": 341,
+      "query_translation": "(\"microplastic\"[Title/Abstract] OR \"nanoplastic\"[Title/Abstract] OR \"micro-plastic\"[Title/Abstract] OR \"nano-plastic\"[Title/Abstract] OR \"micro-sized plastic\"[Title/Abstract] OR \"microsized plastics\"[Title/Abstract] OR \"plastic pollution\"[Title/Abstract] OR \"plastic debris\"[Title/Abstract] OR \"plastic litter\"[Title/Abstract] OR \"marine debris\"[Title/Abstract] OR \"marine litter\"[Title/Abstract] OR \"plastic particles\"[Title/Abstract] OR \"plastic fragments\"[Title/Abstract] OR \"plastic ingestion\"[Title/Abstract] OR \"resin pellet\"[Title/Abstract] OR \"plastic pellet\"[Title/Abstract] OR \"macroplastic\"[Title/Abstract] OR \"mesoplastic\"[Title/Abstract] OR \"plastics pollution\"[Title/Abstract] OR \"plastic pollutants\"[Title/Abstract] OR \"plastic trash\"[Title/Abstract] OR \"anthropogenic litter\"[Title/Abstract] OR \"anthropogenic debris\"[Title/Abstract] OR \"anthropogenic microparticles\"[Title/Abstract] OR \"ingested plastic\"[Title/Abstract] OR \"ingested plastics\"[Title/Abstract] OR \"plastic contamination\"[Title/Abstract]) AND \"California\"[Affiliation] AND 1950/01/01:2026/11/21[Date - Publication]",
+      "run_timestamp": "2026-11-23T05:51:35+00:00",
+      "manifest_sha256": "5129bb8d94e74ef0ee2b3da07580e8643cef2b2858e00f9f87e4f42a0d90994b",
+      "reference_pmids": 352,
+      "found_published": 313,
+      "found_published_by_pmid": 311,
       "found_published_by_doi": 2,
-      "misses": 44,
-      "found_unpublished_corpus": 4,
-      "coverage_published": 0.8863,
+      "misses": 39,
+      "found_unpublished_corpus": 2,
+      "coverage_published": 0.8892,
       "coverage_by_year": {
         "2002": {
           "reference": 1,
@@ -125,14 +125,14 @@
           "coverage": 1.0
         },
         "2018": {
-          "reference": 8,
-          "found": 5,
-          "coverage": 0.625
+          "reference": 7,
+          "found": 4,
+          "coverage": 0.5714
         },
         "2019": {
-          "reference": 21,
-          "found": 19,
-          "coverage": 0.9048
+          "reference": 19,
+          "found": 17,
+          "coverage": 0.8947
         },
         "2020": {
           "reference": 27,
@@ -140,34 +140,34 @@
           "coverage": 0.8519
         },
         "2021": {
-          "reference": 39,
-          "found": 35,
-          "coverage": 0.8974
+          "reference": 35,
+          "found": 31,
+          "coverage": 0.8857
         },
         "2022": {
-          "reference": 36,
-          "found": 32,
-          "coverage": 0.8889
+          "reference": 33,
+          "found": 30,
+          "coverage": 0.9091
         },
         "2023": {
-          "reference": 43,
-          "found": 36,
-          "coverage": 0.8372
+          "reference": 36,
+          "found": 30,
+          "coverage": 0.8333
         },
         "2024": {
-          "reference": 61,
-          "found": 55,
-          "coverage": 0.9016
+          "reference": 53,
+          "found": 48,
+          "coverage": 0.9057
         },
         "2025": {
-          "reference": 62,
-          "found": 56,
-          "coverage": 0.9032
+          "reference": 59,
+          "found": 54,
+          "coverage": 0.9153
         },
         "2026": {
-          "reference": 57,
-          "found": 51,
-          "coverage": 0.8947
+          "reference": 50,
+          "found": 45,
+          "coverage": 0.9
         }
       },
       "join_rate": {
@@ -177,10 +177,10 @@
     }
   },
   "miss_triage": {
-    "sample_size": 48,
+    "sample_size": 43,
     "seed": 20261122,
     "sample_rule": "first min(50, misses) misses by sha256(seed:pmid)",
-    "misses_total": 48,
+    "misses_total": 43,
     "triage_file": "curation/pubmed_miss_triage_v1.csv",
     "labelled": 0,
     "false_negative_classes": [

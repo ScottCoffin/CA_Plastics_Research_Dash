@@ -13,12 +13,14 @@ not a sample of a defined population, so no confidence interval is given (A3-D24
 | Set | Query | PubMed records | In the published Atlas | Coverage |
 |---|---|---:|---:|---:|
 | R1 | `"Microplastics"[MeSH Terms] AND California[ad]` | 178 | 163 | 91.6% |
-| R2 | the 38 v3.1 core terms as `[tiab]` phrases, `AND California[ad]` | 387 | 343 | 88.6% |
+| R2 | the 29 pollution-core v0 terms (A3 §5.3, `config/pollution_core_v0.yml`) as `[tiab]` phrases, `AND California[ad]` | 352 | 313 | 88.9% |
 
 - Join: by PMID first (OpenAlex `ids.pmid`, now stored as `pmid` on normalized works), then by DOI. 871 of
   1,939 published works (45%) carry a PMID.
-- In the corpus but not published (dropped by curation or relevance): R1 1, R2 4.
-- Misses: 48 distinct PMIDs (R1 15, R2 44). All 48 form the fixed-seed triage sample
+- R2 was first run with all 38 `core_terms` of `config/queries.yml` (387 records, 88.6%). That list includes the
+  lifecycle terms A3 §5.3 excludes (recycling, single-use, biodegradable, ...), so R2 was rerun on 2026-11-23 with
+  the 29-term pollution core (BQ-2.2 shares the list).
+- Misses: 43 distinct PMIDs across R1 and R2. All 43 form the fixed-seed triage sample
   (`curation/pubmed_miss_triage_v1.csv`, seed 20261122; the 50 cap did not bind).
 - MeSH indexing lags, so recent years look worse; see `coverage_by_year` in the payload.
 
