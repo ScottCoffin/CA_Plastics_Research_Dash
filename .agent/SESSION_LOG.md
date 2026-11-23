@@ -204,3 +204,4 @@
 | 2026-11-19 | LAND-3 | Logo intro 2x (100vh box, 105vw on phones), continuous loop, toggle hidden until keyboard focus | this commit |
 | 2026-11-19 | LAND-4 | Intro logo 20% faster, plays once and holds on the full logo, tagline clipped, no toggle | this commit |
 | 2026-11-22 | NET-2 | select_nodes counts only Atlas co-authors; network rebuilt; stale networkx comments fixed | this commit |
+| 2026-11-22 | CNT-2 | California Now line remainder entry and population label | this commit |

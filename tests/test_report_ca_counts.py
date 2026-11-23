@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import shutil
+import subprocess
 from pathlib import Path
 from types import ModuleType
 
@@ -245,3 +247,63 @@ def test_json_output_and_table_are_ascii(tmp_path: Path, capsys: pytest.CaptureF
     table = report.render(report.collect(root))
     table.encode("ascii")  # raises if the console-unsafe characters creep in
     assert "| California page: plastic-related works | 5 | 1,582 | -1,577 |" in table
+
+
+PAGE = ROOT / "framework" / "src" / "california" / "index.md"
+
+# The Now line is the California page's own typeSummary, run in a fresh VM with formatCount
+# standing in for the atlas.js import. Prints one JSON string (or null) per input map.
+NOW_LINE_CHECK = r"""
+"use strict";
+const fs = require("node:fs");
+const vm = require("node:vm");
+const source = fs.readFileSync(process.argv[2], "utf8");
+const cases = JSON.parse(fs.readFileSync(process.argv[3], "utf8"));
+const context = { formatCount: (value) => new Intl.NumberFormat("en-US").format(value) };
+const typeSummary = vm.runInNewContext(`${source}\ntypeSummary`, context);
+console.log(JSON.stringify(cases.map((byType) => typeSummary(byType))));
+"""
+
+
+def _type_summary_source() -> str:
+    text = PAGE.read_text(encoding="utf-8")
+    start = text.index("function typeSummary(byType) {")
+    return text[start : text.index("\n}\n", start) + 3]
+
+
+def test_now_line_sums_unnamed_types_into_a_last_remainder_entry(tmp_path: Path) -> None:
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js is not on PATH; install Node.js 20+ to run the Now-line check.")
+    cases = [
+        {"article": 4, "review": 2, "editorial": 1},
+        {"editorial": 41, "other": 18, "review": 9, "letter": 5, "article": 4, "data-paper": 0},
+        {"article": 1416, "editorial": 1},
+        {"editorial": 1000, "letter": 0},
+        {"editorial": 0, "other": 0},
+        None,
+    ]
+    expected = [
+        "Now, all published works: 4 articles · 2 reviews · 1 work of other types.",
+        "Now, all published works: 9 reviews · 4 articles · 64 works of other types.",
+        "Now, all published works: 1,416 articles · 1 work of other types.",
+        "Now, all published works: 1,000 works of other types.",
+        None,
+        None,
+    ]
+    source = tmp_path / "typeSummary.js"
+    source.write_text(_type_summary_source(), encoding="utf-8")
+    cases_file = tmp_path / "cases.json"
+    cases_file.write_text(json.dumps(cases), encoding="utf-8")
+    script = tmp_path / "now_line_check.cjs"
+    script.write_text(NOW_LINE_CHECK, encoding="utf-8")
+
+    out = subprocess.run(
+        [node, str(script), str(source), str(cases_file)],
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout
+
+    assert json.loads(out) == expected

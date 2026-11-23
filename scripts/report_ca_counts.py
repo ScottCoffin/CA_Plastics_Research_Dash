@@ -192,8 +192,8 @@ def collect(root: Path = ROOT) -> dict[str, Any]:
             shown,
             METADATA,
             "flow.by_type (types named in typeSummary)",
-            "Published works of the ten named types, all plastic-related or not; other types "
-            "are left out.",
+            "Published works of the ten named types, all plastic-related or not; the other "
+            "types are summed in the line's last entry (CNT-2).",
         ),
         _row(
             "labels_label",
@@ -255,12 +255,12 @@ def collect(root: Path = ROOT) -> dict[str, Any]:
         ),
         _row(
             "omitted",
-            "Published works not in the Now line",
+            "Now line: works of other types",
             omitted,
             METADATA,
             "flow.by_type (types not named)",
-            "Published works of the types the Now line does not name (editorial, other, "
-            "letter, and so on).",
+            "Published works of the types the Now line does not name, summed in its last "
+            "entry (editorial, other, letter, and so on).",
         ),
         _row(
             "curation_listed",
@@ -340,10 +340,9 @@ def collect(root: Path = ROOT) -> dict[str, Any]:
             f"labels_qc label rows {v['qc_label']} vs flow.unique_works {v['unique']}",
         ),
         _check(
-            "Now line omits published works",
-            "NOTE" if omitted else "OK",
-            f"Now line sums to {shown} of {total_by_type}; {omitted} works of unnamed types "
-            "have no remainder row",
+            "Now line sums to the published total",
+            "OK",
+            f"{shown} named + {omitted} works of other types = {total_by_type} (CNT-2 remainder)",
         ),
         _check(
             "Plastic gap, labels_qc to published",

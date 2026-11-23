@@ -156,13 +156,19 @@ const counts = new Map([
   ["type_summary", typeSummary(metadata?.flow?.by_type)],
 ]);
 
-// Living output mix, e.g. "Now: 1,398 articles · 109 reviews · …". Hidden until the export carries flow.by_type.
+// Living output mix, e.g. "Now, all published works: 1,416 articles · 109 reviews · …". Named types come first,
+// largest first; every other type with works is summed into a last entry, so the line adds to the published total.
+// Hidden until the export carries flow.by_type.
 function typeSummary(byType) {
   const names = {article: "articles", review: "reviews", "conference-paper": "conference papers", preprint: "preprints",
     "book-chapter": "book chapters", "conference-abstract": "conference abstracts", dataset: "datasets",
     dissertation: "theses and dissertations", report: "reports", book: "books"};
-  const rows = Object.entries(byType ?? {}).filter(([type, n]) => names[type] && n > 0).sort((a, b) => b[1] - a[1]);
-  return rows.length ? `Now: ${rows.map(([type, n]) => `${formatCount(n)} ${names[type]}`).join(" · ")}.` : null;
+  const counted = Object.entries(byType ?? {}).filter(([, n]) => n > 0);
+  const rows = counted.filter(([type]) => Object.hasOwn(names, type)).sort((a, b) => b[1] - a[1]);
+  const other = counted.filter(([type]) => !Object.hasOwn(names, type)).reduce((sum, [, n]) => sum + n, 0);
+  const parts = rows.map(([type, n]) => `${formatCount(n)} ${names[type]}`);
+  if (other > 0) parts.push(`${formatCount(other)} ${other === 1 ? "work" : "works"} of other types`);
+  return parts.length ? `Now, all published works: ${parts.join(" · ")}.` : null;
 }
 for (const group of document.querySelectorAll("[data-count-group]")) {
   const pieces = [...group.querySelectorAll("[data-count]")];
