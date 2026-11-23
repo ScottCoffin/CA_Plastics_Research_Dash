@@ -777,3 +777,19 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
   CC BY 4.0. Third-party content keeps its own terms: monitoring rows from CC BY 4.0 sources stay CC BY
   4.0 (the NC term covers only the Atlas's contribution, never the licensed material itself), OpenAlex
   metadata is CC0. Monitoring and glossary text that describes a source's CC BY licence is unchanged.
+
+## ADR-GOLD-DESIGN-HT-2026-11-22: Horvitz-Thompson weights for the California gold pool (BQ-G2)
+
+- **Decision (lead, 2026-11-22):** `curation/gold_design_v1.json` weights the 500-work California pool with
+  Horvitz-Thompson inclusion probabilities, not the within-stratum ratio N_h/n_h. The S4.2 sampler visits the
+  873 pool strata once each in a seeded random order and takes one work per stratum, so only 500 strata are
+  sampled. A work's inclusion probability is (500/873) x (1/N_h) and its design weight is 1.746 x N_h (range
+  1.75 to 47.1). N_h/n_h would give weights summing to about 837 instead of the pool size of 1,456, leaving the
+  619 works in unsampled strata with no weight. A 200-seed simulation gives a mean HT total of 1,460.5 (se 4.3).
+  The within-stratum values are kept as `incl_prob_within_stratum` and `weight_within_stratum`.
+- **Consequences:** BQ-1.1 treats the design as two-stage (strata as primary units, one work per sampled
+  stratum), so its variance uses between-stratum variation (or the cluster bootstrap over author groups that A3
+  §4.3 already requires), not the usual stratified formula, which needs two or more draws per stratum. The
+  freeze is label-blind: it reads pipeline outputs at HEAD and at bc3abefa (the first commit with owner labels),
+  never the gold sheet. The source snapshot was recovered from git by its manifest hashes, and the 500-work
+  selection was reproduced exactly.

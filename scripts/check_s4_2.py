@@ -5,7 +5,11 @@ from __future__ import annotations
 import csv
 import json
 import sys
+from collections.abc import Mapping, Sequence
 from pathlib import Path
+from typing import Any
+
+import pyarrow.parquet as pq
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -22,6 +26,14 @@ SPLITS_V2 = Path("curation/splits_v2.csv")
 MANIFEST_V2 = Path("curation/splits_v2_manifest.json")
 LEAK_HITS = Path("curation/leak_gazetteer_hits_v1.csv")
 LEAK_RAW = Path("data/interim/leak_candidates.parquet")
+GUIDE_EXAMPLES = Path("curation/a3_guide_examples.csv")
+DOI_PREFIXES = (
+    "https://doi.org/",
+    "http://doi.org/",
+    "https://dx.doi.org/",
+    "http://dx.doi.org/",
+    "doi:",
+)
 V2_SEED = 42042
 V2_POOL = 500
 V2_LEAK = 80
@@ -134,11 +146,69 @@ def check_v1() -> str:
     return "fixture rebuild matched" if fixture_inputs_local else "fixture inputs superseded"
 
 
+def normalize_doi(value: str | None) -> str:
+    """Lower-case DOI without a resolver prefix; empty when absent."""
+    text = (value or "").strip().lower()
+    for prefix in DOI_PREFIXES:
+        if text.startswith(prefix):
+            return text[len(prefix) :].strip()
+    return text
+
+
+def load_doi_by_work(works_path: Path = WORKS) -> dict[str, str]:
+    """work_id -> DOI from the normalized works table (the split files carry no DOI)."""
+    rows = pq.read_table(works_path, columns=["work_id", "doi"]).to_pylist()
+    return {row["work_id"]: row["doi"] or "" for row in rows}
+
+
+def assert_guide_examples_excluded(
+    guide_rows: Sequence[Mapping[str, str]],
+    frames: Mapping[str, Sequence[Mapping[str, Any]]],
+    doi_by_work: Mapping[str, str],
+) -> int:
+    """Fail if a role=guide_example work_id or DOI appears in any named frame or split file.
+
+    Rows match on work_id, and on normalized DOI (the row's own ``doi`` or ``doi_by_work``).
+    Returns how many guide examples carry at least one identifier; a guide example with
+    neither identifier cannot be matched and is not counted.
+    """
+    guides = [row for row in guide_rows if (row.get("role") or "").strip() == "guide_example"]
+    if not guides:
+        raise AssertionError("no role=guide_example rows; the exclusion check would be vacuous")
+    guide_ids = {(row.get("work_id") or "").strip() for row in guides} - {""}
+    guide_dois = {normalize_doi(row.get("doi")) for row in guides} - {""}
+    for name, rows in frames.items():
+        for row in rows:
+            work_id = row["work_id"]
+            if work_id in guide_ids:
+                raise AssertionError(f"guide example work_id {work_id} appears in {name}")
+            doi = normalize_doi(row.get("doi") or doi_by_work.get(work_id))
+            if doi and doi in guide_dois:
+                raise AssertionError(f"guide example DOI {doi} appears in {name}")
+    return sum(
+        bool((row.get("work_id") or "").strip() or normalize_doi(row.get("doi"))) for row in guides
+    )
+
+
+def check_guide_examples() -> str:
+    """Hand-picked guide examples (role=guide_example) must sit outside splits_v1 and splits_v2."""
+    with GUIDE_EXAMPLES.open(encoding="utf-8-sig", newline="") as stream:
+        guides = list(csv.DictReader(stream))
+    frames = {}
+    for name, path in (("splits_v1", SPLITS), ("splits_v2", SPLITS_V2)):
+        with path.open(encoding="utf-8-sig", newline="") as stream:
+            frames[name] = list(csv.DictReader(stream))
+    checked = assert_guide_examples_excluded(guides, frames, load_doi_by_work())
+    return f"{checked} guide examples (by work_id or DOI) absent from splits_v1 and splits_v2"
+
+
 def main() -> None:
     v1_note = check_v1()
     v2_note = check_v2()
+    guide_note = check_guide_examples()
     print(f"S4.2 v1 (fixture) passed: {v1_note}")
     print(f"S4.2 v2 (v3.1 corpus) passed: {v2_note}")
+    print(f"S4.2 guide-example exclusion passed: {guide_note}")
 
 
 if __name__ == "__main__":
