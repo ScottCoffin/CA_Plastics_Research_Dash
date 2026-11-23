@@ -193,10 +193,6 @@ leak-check works wait for S5.7.
 ## Later (the agent will say when each is ready)
 
 
-- **H38. Two boundary cases (BQ-G7, A3-Q6).** Owner confirmed `incidental` for both on 2026-11-18;
-  the agent records them in BQ-G7, so no action is left here. Label Ashworth (2026) and Foellmer et al. (2022)
-  in `curation/a3_boundary_cases.csv` (the agent fills the evidence and proposes "incidental"),
-  one-line reason each.
 - **H39. Global gold labelling rounds (BQ-G4, after H37).** Up to 350 works in rounds of 25, in a
   Streamlit app the agent builds; it tells you when to stop (a checkpoint met the precision goal).
 - **H40. Approve the taxonomy proposal (BQ-S5).** New topic tags, the lifecycle-and-society tier,
@@ -223,6 +219,8 @@ come with its own Streamlit app and run command here.
 ---
 
 ## Done
+
+- H38 (2026-11-22): done. Both boundary cases are recorded as `incidental` (owner, 2026-11-18) in `curation/a3_boundary_cases.csv` with quotes checked against the PDFs (BQ-G7).
 
 - H37 (2026-11-18): owner approved the A3 guide addendum ("BQ-G0 approved"), incl. the P4 target; five labelled CA works are flagged review_optional in `curation/a3_lens_backfill.csv` (no action required).
 - H41 (2026-11-18): dropped. NCBI tool/email registration is by email, not a portal, and is not needed while the API key keeps requests under 10/s (owner asked).
