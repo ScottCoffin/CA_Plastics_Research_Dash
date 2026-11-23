@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import pyarrow as pa
 import pyarrow.parquet as pq
 
 from atlas.ingest.normalize import normalize_fixture
@@ -124,3 +125,29 @@ def test_is_retracted_is_carried_from_openalex(tmp_path: Path) -> None:
     second = works[1]["id"].rsplit("/", 1)[-1]
     assert rows[first]["is_retracted"] is True
     assert rows[second]["is_retracted"] is False
+
+
+def test_pmid_is_digits_from_openalex_ids_url_else_null(tmp_path: Path) -> None:
+    """BQ-S9: pmid is the digits of OpenAlex ids.pmid; null when absent or not digits."""
+    works = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    works[0]["ids"] = {"pmid": "https://pubmed.ncbi.nlm.nih.gov/35862566"}
+    works[1]["ids"] = {"doi": "https://doi.org/10.1000/example"}  # no pmid key
+    works[2]["ids"] = {"pmid": "https://pubmed.ncbi.nlm.nih.gov/PMC35862566"}  # malformed
+    works[3]["ids"] = {"pmid": None}
+    fixture = tmp_path / "works.json"
+    fixture.write_text(json.dumps(works), encoding="utf-8")
+    result = normalize_fixture(
+        fixture,
+        institution_path=INSTITUTIONS,
+        output_dir=tmp_path / "processed",
+        qc_path=tmp_path / "qc.md",
+        generated_at="test",
+    )
+    table = pq.read_table(result.output_dir / "works.parquet")
+    assert table.schema.field("pmid").type == pa.string()
+    rows = {r["work_id"]: r for r in table.to_pylist()}
+    ids = [w["id"].rsplit("/", 1)[-1] for w in works]
+    assert rows[ids[0]]["pmid"] == "35862566"
+    assert rows[ids[1]]["pmid"] is None
+    assert rows[ids[2]]["pmid"] is None
+    assert rows[ids[3]]["pmid"] is None

@@ -80,6 +80,14 @@ Internal, not exported: the normalized authorships table
 |---|---|---|
 | `author_id_source` | string | `openalex` (OpenAlex supplied the ID); `curated` (`curation/author_attach.csv`); `orcid` (ORCID index or `curation/orcid_author_ids.csv`); `name_institution` (the only known ID with the same full name at a shared institution); empty when no ID could be filled. Authorships with an empty `author_id` are not experts. |
 
+Internal, not exported: the normalized works table
+(`data/processed/normalized/works.parquet`) is not in `site/data/`. Its `pmid` column is the
+PubMed join key for the PubMed coverage check (BQ-S9).
+
+| Field | Type | Meaning |
+|---|---|---|
+| `pmid` | string or null | PubMed ID digits (for example `35862566`) from OpenAlex `ids.pmid`, which OpenAlex gives as a PubMed URL; the URL prefix is stripped. Null when OpenAlex has no `ids.pmid` or the value is not digits. Nullable. |
+
 ### `site/data/authors/<author_id>.json`
 
 Purpose: one detail document per author for the Experts drawer.

@@ -49,6 +49,8 @@ WORKS_SCHEMA = pa.schema(
     [
         ("work_id", pa.string()),
         ("doi", pa.string()),
+        # BQ-S9: PubMed ID digits from OpenAlex ids.pmid; null when absent or not digits.
+        ("pmid", pa.string()),
         ("title", pa.string()),
         ("abstract", pa.string()),
         ("year", pa.int64()),
@@ -318,6 +320,19 @@ def _float(value: object) -> float | None:
         return float(value) if value is not None and value != "" else None
     except (TypeError, ValueError):
         return None
+
+
+_PMID_DIGITS = re.compile(r"[0-9]+")
+
+
+def _pmid(work: Mapping[str, Any]) -> str | None:
+    """Return the PubMed ID digits from OpenAlex ``ids.pmid`` (a PubMed URL), else None."""
+
+    ids = work.get("ids")
+    if not isinstance(ids, Mapping):
+        return None
+    digits = compact_id(_string(ids.get("pmid")))
+    return digits if _PMID_DIGITS.fullmatch(digits) else None
 
 
 def _compact_ids(values: object) -> list[str]:
@@ -946,6 +961,7 @@ def normalize_records(
             {
                 "work_id": work_id,
                 "doi": _string(work.get("doi")),
+                "pmid": _pmid(work),
                 "title": _string(work.get("title")),
                 "abstract": redact_emails(
                     _abstract_from_inverted_index(work.get("abstract_inverted_index"))
