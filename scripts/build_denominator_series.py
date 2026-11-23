@@ -3,8 +3,10 @@
 Counts the global-denominator series by publication year from stored inputs: A (all types) and
 A-article_review, B and B-article_review come from the denominator cache written by
 scripts/fetch_denominator_series.py; C and D come from the normalized works, the raw works and the
-site index. B2 is listed with its status and not counted. No network calls. The output folder is
-gitignored; BQ-2.4 publishes site/data/denominators.json later from this file.
+site index. B2 is listed with its status and not counted. The ``metrics`` block (BQ-2.3) holds
+complete-year counts, index, shares for the allowed ratio pairs, and log-linear CAGR with a 95%
+interval. atlas.analytics.trend_metrics computes it from those counts. No network calls. The output
+folder is gitignored; BQ-2.4 publishes site/data/denominators.json later from this file.
 
     py -3.14 scripts/build_denominator_series.py            # write the JSON
     py -3.14 scripts/build_denominator_series.py --check    # fail when the JSON is missing or stale
@@ -33,6 +35,7 @@ from atlas.analytics.denominators import (  # noqa: E402
     render_payload,
     resolve_cache_entries,
 )
+from atlas.analytics.trend_metrics import build_metrics, load_metrics_options  # noqa: E402
 from atlas.query import load_query_config  # noqa: E402
 
 CONFIG = ROOT / "config" / "denominator_series.yml"
@@ -82,6 +85,7 @@ def main(argv: list[str] | None = None) -> int:
         specs = load_series_config(CONFIG)
         config = load_query_config(QUERY_CONFIG)
         query_version = str(config.get("version") or "")
+        metric_options = load_metrics_options(CONFIG)
         payload = build_series(
             specs,
             corpus_records=load_corpus_records(WORKS, RAW),
@@ -92,6 +96,7 @@ def main(argv: list[str] | None = None) -> int:
             as_of=as_of,
             expected_query_version=query_version,
         )
+        payload["metrics"] = build_metrics(payload, **metric_options)
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1

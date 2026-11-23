@@ -254,6 +254,87 @@ again for every record, which needs the network and is out of scope here.
 - **Partial years.** `last_complete_year` is the as-of year minus one. Every year from the as-of year
   onward is flagged `partial_year` in every series. The as-of date defaults to today (UTC).
 
+## Metrics (BQ-2.3)
+
+The builder adds a `metrics` block to `data/processed/analytics/denominator_series.json`. The code is
+`src/atlas/analytics/trend_metrics.py`. The block gives counts, index, shares for the allowed ratio pairs,
+and a log-linear CAGR with a 95% interval for each computed series. BQ-2.4 publishes it later. Nothing is
+written to `site/data/`.
+
+### Window, base year and exclusions
+
+- **Window.** Complete years only: from 2006 to `last_complete_year` (2025 for the 2026-11-23 build). The
+  as-of year and later (2026, 2027) are excluded and listed in `partial_years_excluded`. If the series starts
+  after 2006, the window starts at its first year. `window.requested_start` keeps the configured value.
+- **Base year.** `window.base_year` is the window start. The index is the value divided by the value in the
+  base year. It is blank when the base value is zero.
+- **Options.** An optional `metrics` block in `config/denominator_series.yml` can set `window_start` and
+  `base_year`. The committed config has no such block, so the defaults apply.
+- **Retractions, per series.** C and D exclude retracted-flagged records: count = records minus `retracted`.
+  A, A-article_review, B and B-article_review cannot exclude them, because the OpenAlex group_by has no
+  retraction split. Their counts include retracted-flagged records.
+- **Retractions, in shares.** Both sides of a share keep the declared unit, so retracted-flagged records are
+  included on both sides. C/A divides the C count that includes retractions. No share uses a
+  retraction-excluded count, so the pair stays like for like.
+
+### Ratios and shares
+
+| Share | Numerator / denominator | Sensitivity |
+|---|---|---|
+| `B/A` | B / A | all types |
+| `C/A` | C / A | all types. C has no article+review twin: no C sensitivity series is configured. |
+| `B-article_review/A-article_review` | B-article_review / A-article_review | article and review only |
+
+A share is taken only for a pair that `ratio_pairs` in the output lists. Each numerator is declared in
+`SHARE_NUMERATORS` in `trend_metrics.py`. An allowed pair with no declared numerator raises an error. Series D
+is beside-only and is never divided. B2 is not computed, so it has no metrics.
+
+### Index and CAGR
+
+- **Log-linear fit.** Ordinary least squares of ln(count) on calendar year over the years used. The slope is
+  `b`, and CAGR = exp(b) - 1. A year with a zero count is skipped, because ln 0 is undefined. It is listed in
+  `zero_years_skipped`, and `n_years` counts the years used. A share follows the same rule on ln(share), so
+  the share CAGR is the growth of the numerator relative to the denominator.
+- **95% interval.** exp(b ± t × SE(b)) - 1. SE(b) comes from the residual scatter, and t is the two-sided
+  0.975 Student t quantile at df = n - 2. A CAGR needs at least 2 years, and the interval needs at least 3.
+  With 2 years the CAGR is given without an interval.
+- **t quantile.** Computed from the regularized incomplete beta function, so no scipy dependency is needed.
+  `tests/test_trend_metrics.py` checks df 5, 10 and 18 against table values, and df 1 and 2 against closed
+  forms.
+- **What the interval means.** The interval reflects year-to-year scatter around a log-linear trend. It is
+  not sampling error.
+
+### Values from the 2026-11-23 build (window 2006 to 2025)
+
+| Series | CAGR | 95% interval | Count 2006 to 2025 | Index 2025 |
+|---|---|---|---|---|
+| A (all types; retractions included) | 25.2% a year | 23.0% to 27.4% | 399 to 23,758 | 59.5 |
+| A-article_review | 25.3% | 22.8% to 28.0% | 288 to 17,949 | 62.3 |
+| B (pollution-core v0) | 34.7% | 32.1% to 37.2% | 78 to 16,263 | 208.5 |
+| B-article_review | 34.7% | 31.8% to 37.6% | 57 to 12,176 | 213.6 |
+| C (retractions excluded) | 24.1% | 20.6% to 27.7% | 2 to 251 | 125.5 |
+| D (beside only; retractions excluded) | 25.9% | 22.2% to 29.7% | 2 to 228 | 114.0 |
+
+| Share | Share 2006 | Share 2025 | Share CAGR | 95% interval |
+|---|---|---|---|---|
+| `C/A` | 0.50% | 1.06% | -0.9% a year | -4.6% to 3.0% |
+| `B/A` | 19.5% | 68.5% | 7.6% a year | 6.6% to 8.5% |
+| `B-article_review/A-article_review` | 19.8% | 67.8% | 7.5% a year | 6.5% to 8.4% |
+
+The C/A share interval includes zero, so these data do not show a clear change in the California share of
+the query count over 2006 to 2025.
+
+### Limits for review
+
+- **Early years of C and D are small.** Both have 2 records in 2006. Their index and CAGR depend on the window
+  start, so a different `window_start` gives a different CAGR.
+- **Zero years are skipped.** If a zero is a real zero, skipping it biases the trend upward. The 2006 to 2025
+  window has no zero years in any series at this build.
+- **The interval is descriptive.** It describes scatter around the fitted trend. It is not an uncertainty
+  estimate for the population.
+- **Evidence Map panel unchanged.** The panel still reads `site/data/trend_global.json` and divides curated
+  works by A. Whether to switch it to C or B is an owner decision.
+
 ## Output file
 
 - `as_of`, `last_complete_year`, `query_version`.
@@ -266,13 +347,15 @@ again for every record, which needs the network and is out of scope here.
 - `not_computed`: B2 with its status and the task it waits for.
 - `ratio_pairs`: the allowed pairs among computed series.
 - `inputs`: the path and SHA-256 of each input file, including the cache. `--check` uses these to detect a stale output.
+- `metrics`: the BQ-2.3 block (see "Metrics (BQ-2.3)"): `window`, `partial_years_excluded`, `method`, `series` (counts,
+  index and trend per series) and `shares` (per allowed ratio pair).
 
 ## Commands
 
     py -3.14 scripts/fetch_denominator_series.py --dry-run     # URLs and cache state; no call
     py -3.14 scripts/build_denominator_series.py              # write the JSON
     py -3.14 scripts/build_denominator_series.py --check      # fail when stale; SKIP when inputs are absent
-    py -3.14 -m pytest -q tests/test_fetch_denominator_series.py tests/test_denominator_series.py
+    py -3.14 -m pytest -q tests/test_fetch_denominator_series.py tests/test_denominator_series.py tests/test_trend_metrics.py
 
 `--check` also reports stale when the date changes, because the partial-year flags depend on the
 as-of date.
