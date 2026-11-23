@@ -1,0 +1,6029 @@
+{
+ "schema_version": "bqs-v1",
+ "generated_at": "2026-11-23T05:29:58+00:00",
+ "query_version": "plastic-v3.1",
+ "vocabulary_version": "search_vocabulary_v1",
+ "source": "OpenAlex works API: title_and_abstract.search counts, group_by=language, a fixed-seed sample (sample and seed), and an ids.openalex overlap check against the main query",
+ "sample_seed": 20261122,
+ "sample_limit": 50,
+ "method": "Each term set is one OR-group of the strings registered for it in the project's search vocabulary register (the native-language probe rows only). For each set the probe asks OpenAlex for: the number of works whose title or abstract matches the group (count); how those works are labelled by language (language_label_counts, one request per set, skipped when the budget guard would refuse it); and a random sample of up to 50 works, drawn with the fixed seed 20261122 (sample). Each sampled work is then checked against the main plastics query, plastic-v3.1 with its type exclusions, to show which sampled works the main query also retrieves (sample_in_v31). That is an overlap on the sample only: a share of the sample, not a completeness rate for either query. Every request goes through the project's OpenAlex client and budget guard, and no paid filters are used. Cost is OpenAlex's reported credits at USD 0.0001 per credit, using for each request the larger of the reported cost and the credit price. Responses are cached, so the file can be rebuilt without network access.",
+ "cost": {
+  "credits": 640,
+  "usd": 0.064
+ },
+ "term_sets": [
+  {
+   "id": "zh-microplastic",
+   "languages": [
+    "zh"
+   ],
+   "terms": [
+    "微塑料"
+   ],
+   "query": "(\"微塑料\")",
+   "a3_count_2026_11_18": 2025,
+   "count": 127,
+   "language_label_counts": {
+    "en": 64,
+    "zh": 60,
+    "ja": 2,
+    "fr": 1
+   },
+   "fetched_at": "2026-11-23T05:27:30+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W7169504501",
+     "title": "Selection of FTIR Characteristic Spectra of Microplastics Based on EIS-CARS and ANN Recognition",
+     "language": "en",
+     "year": 2026,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W3120195880",
+     "title": "Research Status of Microplastics in the Water Environment",
+     "language": "en",
+     "year": 2021,
+     "venue": "Water pollution and treatment",
+     "in_v31": true
+    },
+    {
+     "id": "W7166115872",
+     "title": "地表水与地下水交互作用对水环境质量的影响机制",
+     "language": "zh",
+     "year": 2026,
+     "venue": "水利电力技术与应用",
+     "in_v31": false
+    },
+    {
+     "id": "W7216569565",
+     "title": "水环境中微塑料污染监测及其生态风险评估",
+     "language": "zh",
+     "year": 2024,
+     "venue": "生态环境与保护",
+     "in_v31": false
+    },
+    {
+     "id": "W4406408579",
+     "title": "Aggregation characterization and mechanism of microplastics and suspended sand in the Three Gorges Reservoir",
+     "language": "en",
+     "year": 2025,
+     "venue": "Journal of Lake Sciences",
+     "in_v31": true
+    },
+    {
+     "id": "W7155361118",
+     "title": "Distribution and Risk Analysis of Microplastics in Plateau Lakes",
+     "language": "en",
+     "year": 2026,
+     "venue": "Water pollution and treatment",
+     "in_v31": true
+    },
+    {
+     "id": "W4415361853",
+     "title": "A Review of Environmental Pollution Characteristics, Ecological Risks, and Management Strategies of Microplastics",
+     "language": "en",
+     "year": 2025,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W2400026182",
+     "title": "食盐怎么又和“微塑料”联系起来",
+     "language": "ja",
+     "year": 2016,
+     "venue": "科学养生",
+     "in_v31": false
+    },
+    {
+     "id": "W7213611221",
+     "title": "微塑料 / Mikroplastik",
+     "language": "zh",
+     "year": 2026,
+     "venue": "OpenAgrar",
+     "in_v31": false
+    },
+    {
+     "id": "W7164871364",
+     "title": "典型生物降解塑料的海洋降解特征及其次生微塑料生态效应",
+     "language": "zh",
+     "year": 2026,
+     "venue": "Knowledge Repository of Yantai Institute of Coastal Zone Research, CAS (Yantai Institute of Coastal Zone Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W7166410603",
+     "title": "微塑料吸附水环境中重金属的研究进展",
+     "language": "zh",
+     "year": 2023,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W4400739742",
+     "title": "三种常见微塑料的显微观察与分析",
+     "language": "zh",
+     "year": 2024,
+     "venue": "Shi dai ji shu.",
+     "in_v31": false
+    },
+    {
+     "id": "W4415018363",
+     "title": "Microplastics Promote the Occurrence and Development of Colorectal Cancer",
+     "language": "en",
+     "year": 2025,
+     "venue": "Advances in Clinical Medicine",
+     "in_v31": true
+    },
+    {
+     "id": "W7166543759",
+     "title": "土壤微塑料与丛枝菌根真菌的相互作用",
+     "language": "zh",
+     "year": 2026,
+     "venue": "Chinese Journal of Plant Ecology",
+     "in_v31": true
+    },
+    {
+     "id": "W7124440886",
+     "title": "Current Status of Research on the Toxic Effects of Microplastics on the Reproductive System",
+     "language": "en",
+     "year": 2026,
+     "venue": "Hans Journal of Biomedicine",
+     "in_v31": true
+    },
+    {
+     "id": "W3179698925",
+     "title": "垃圾填埋场中的塑料-微塑料-纳米塑料环境行为研究前瞻",
+     "language": "zh",
+     "year": 2021,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3035666383",
+     "title": "Study on Transport Mechanism of Microplastics in Vertically Fixed Porous Media",
+     "language": "en",
+     "year": 2020,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W7224877249",
+     "title": "端面优化光纤结合微流控芯片的微塑料荧光检测系统",
+     "language": "zh",
+     "year": 2026,
+     "venue": "Laser & Optoelectronics Progress",
+     "in_v31": true
+    },
+    {
+     "id": "W7164843304",
+     "title": "Distribution Characteristics of Microplastics in Urban Landscape Lakes",
+     "language": "en",
+     "year": 2026,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W4400019335",
+     "title": "Occurrence, adsorption and transport mechanism of microplastics in soil",
+     "language": "en",
+     "year": 2024,
+     "venue": "Scientia Sinica Chimica",
+     "in_v31": true
+    },
+    {
+     "id": "W7166404794",
+     "title": "水环境中微塑料污染物研究进展",
+     "language": "zh",
+     "year": 2022,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W7214926911",
+     "title": "基于光热效应的小尺寸微塑料富集与SERS检测",
+     "language": "zh",
+     "year": 2026,
+     "venue": "Acta Optica Sinica",
+     "in_v31": true
+    },
+    {
+     "id": "W4237103453",
+     "title": "Microplastics in Water: Pollution Status, Ecological Risks and Future Prospects",
+     "language": "en",
+     "year": 2021,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W3173907102",
+     "title": "环境中的微塑料：赋存、检测及其危害",
+     "language": "zh",
+     "year": 2020,
+     "venue": "Environmental Monitoring and Forewarning",
+     "in_v31": false
+    },
+    {
+     "id": "W4392860906",
+     "title": "Endoplasmic reticulum stress-induced NLRP3 inflammasome activation as a novel mechanism of polystyrene microplastics (PS-MPs)-induced pulmonary inflammation in chickens",
+     "language": "en",
+     "year": 2024,
+     "venue": "Journal of Zhejiang University SCIENCE B",
+     "in_v31": true
+    },
+    {
+     "id": "W7139749625",
+     "title": "硅藻胞外聚合物对微塑料沉降行为的影响",
+     "language": "zh",
+     "year": 2025,
+     "venue": "Knowledge Repository of Yantai Institute of Coastal Zone Research, CAS (Yantai Institute of Coastal Zone Research)",
+     "in_v31": true
+    },
+    {
+     "id": "W4396901547",
+     "title": "环境伦理研究和实践面对的机遇与挑战",
+     "language": "zh",
+     "year": 2024,
+     "venue": "SCIENTIA SINICA Terrae",
+     "in_v31": false
+    },
+    {
+     "id": "W7139101493",
+     "title": "Atmospheric Microplastics: Research Progress on Monitoring, Environmental Processes, and Health Risks",
+     "language": "en",
+     "year": 2026,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W7216450737",
+     "title": "饮用水中微塑料检测技术与发展现状研究",
+     "language": "zh",
+     "year": 2024,
+     "venue": "水电水利",
+     "in_v31": false
+    },
+    {
+     "id": "W7233542886",
+     "title": "食品级Saccharomyces boulardii通过吸附和肠道微生物群重塑，降低聚苯乙烯微塑料的生物可及性，在易感结肠炎小鼠中",
+     "language": "zh",
+     "year": 2026,
+     "venue": "Figshare",
+     "in_v31": false
+    },
+    {
+     "id": "W7118127202",
+     "title": "Composite Pollution of Microplastics and Heavy Metals in Agricultural Soils across a Plateau Lake Basin: Environmental Behavior and Risk Control",
+     "language": "en",
+     "year": 2026,
+     "venue": "Hans Journal of Soil Science",
+     "in_v31": true
+    },
+    {
+     "id": "W4391390622",
+     "title": "Microplastics in Urban Atmospheric Environments: An Overview of Research on Their Fate, Characteristics and Health Effects",
+     "language": "en",
+     "year": 2024,
+     "venue": "Sustainable Development",
+     "in_v31": true
+    },
+    {
+     "id": "W4415389001",
+     "title": "Research on Historical Deposition Records of Microplastics in Alpine Lakes within the Yangtze River Basin",
+     "language": "en",
+     "year": 2025,
+     "venue": "Advances in Geosciences",
+     "in_v31": true
+    },
+    {
+     "id": "W4384915433",
+     "title": "Design and Study of Device for Enrichment Treatment of Microplastics in Surface Water by Plasma-Electric Flotation Technology",
+     "language": "en",
+     "year": 2023,
+     "venue": "Water pollution and treatment",
+     "in_v31": true
+    },
+    {
+     "id": "W3113444359",
+     "title": "应用物种敏感性分布评估微(纳米)塑料对水生生物的生态风险",
+     "language": "zh",
+     "year": 2020,
+     "venue": "Asian Journal of Ecotoxicology",
+     "in_v31": false
+    },
+    {
+     "id": "W4411826842",
+     "title": "Research on the Effects of Aging Microplastics on Soil Nitrogen and Dissolved Organic Matter in Dryland Soil",
+     "language": "en",
+     "year": 2025,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W2997219837",
+     "title": "Mann+Hummel:超薄滤膜减少废水中的微塑料和多重耐药细菌",
+     "language": "zh",
+     "year": 2019,
+     "venue": "国际纺织导报",
+     "in_v31": false
+    },
+    {
+     "id": "W4391660386",
+     "title": "Microplastic Pollution in China’s Water Environment",
+     "language": "en",
+     "year": 2024,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W4406479192",
+     "title": "Research Progress and Prospects on the Pollution Status of Microplastics in the Yellow River Basin",
+     "language": "en",
+     "year": 2025,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W4281938044",
+     "title": "高寒地区小城镇塑料垃圾处置现状探讨——以中国甘孜州 石渠县为例",
+     "language": "zh",
+     "year": 2022,
+     "venue": "节能环保",
+     "in_v31": false
+    },
+    {
+     "id": "W7202080268",
+     "title": "废旧塑料回收处置过程污染防控技术研究",
+     "language": "zh",
+     "year": 2026,
+     "venue": "数据期刊",
+     "in_v31": false
+    },
+    {
+     "id": "W4417024945",
+     "title": "Bibliometric Analysis of Research Hotspots and Trends in Microplastic Identification Methods",
+     "language": "en",
+     "year": 2025,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W7215955674",
+     "title": "土壤环境中微塑料的研究进展",
+     "language": "zh",
+     "year": 2022,
+     "venue": "生态环境与保护",
+     "in_v31": false
+    },
+    {
+     "id": "W4390516132",
+     "title": "The Pollution Status of Marine Plastic Waste and Microplastics in China",
+     "language": "en",
+     "year": 2023,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W7225867678",
+     "title": "饮用水中胶体态新型微塑料的研究进展",
+     "language": "zh",
+     "year": 2026,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W7211920844",
+     "title": "微塑料与氟西汀对好氧颗粒污泥的复合毒性",
+     "language": "zh",
+     "year": 2026,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W4395077829",
+     "title": "Soil carbon cycling mediated by microplastics: Formation, mineralization, and sequestration",
+     "language": "en",
+     "year": 2024,
+     "venue": "Scientia Sinica Technologica",
+     "in_v31": true
+    },
+    {
+     "id": "W7171522209",
+     "title": "Migration and fate of microplastics in river basins, estuaries, nearshore areas, and the ocean: integrated land-sea coordination and transboundary transport",
+     "language": "en",
+     "year": 2026,
+     "venue": "Chinese Science Bulletin (Chinese Version)",
+     "in_v31": true
+    },
+    {
+     "id": "W4407795196",
+     "title": "食品中微塑料污染的检测与分析",
+     "language": "zh",
+     "year": 2024,
+     "venue": "农业科技与发展",
+     "in_v31": false
+    },
+    {
+     "id": "W3181092515",
+     "title": "环境中微/纳米塑料的污染现状、分析方法、毒性评价及健康效应研究进展",
+     "language": "zh",
+     "year": 2021,
+     "venue": "环境化学",
+     "in_v31": false
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 28,
+   "sample_language_label_counts": {
+    "zh": 25,
+    "en": 24,
+    "ja": 1
+   }
+  },
+  {
+   "id": "zh-nanoplastic",
+   "languages": [
+    "zh"
+   ],
+   "terms": [
+    "纳米塑料"
+   ],
+   "query": "(\"纳米塑料\")",
+   "a3_count_2026_11_18": 364,
+   "count": 23,
+   "language_label_counts": {
+    "zh": 13,
+    "en": 7,
+    "fr": 1,
+    "ja": 1,
+    "sl": 1
+   },
+   "fetched_at": "2026-11-23T05:27:32+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W7162548944",
+     "title": "Molecular networks and metabolic adaptations of Skeletonema costatum under polystyrene nanoplastic stress",
+     "language": "en",
+     "year": 2026,
+     "venue": "Marine Environmental Science",
+     "in_v31": true
+    },
+    {
+     "id": "W4292253523",
+     "title": "基于光热效应的纳米塑料捕获和SERS检测",
+     "language": "zh",
+     "year": 2022,
+     "venue": "Acta Optica Sinica",
+     "in_v31": false
+    },
+    {
+     "id": "W928835706",
+     "title": "纳米复合PVC—U塑料增强、增韧机理探讨",
+     "language": "sl",
+     "year": 2003,
+     "venue": "聚氯乙烯",
+     "in_v31": false
+    },
+    {
+     "id": "W3179698925",
+     "title": "垃圾填埋场中的塑料-微塑料-纳米塑料环境行为研究前瞻",
+     "language": "zh",
+     "year": 2021,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4394762106",
+     "title": "Nrf2-mediated ferroptosis of spermatogenic cells involved in male reproductive toxicity induced by polystyrene nanoplastics in mice",
+     "language": "en",
+     "year": 2024,
+     "venue": "Journal of Zhejiang University SCIENCE B",
+     "in_v31": true
+    },
+    {
+     "id": "W3113444359",
+     "title": "应用物种敏感性分布评估微(纳米)塑料对水生生物的生态风险",
+     "language": "zh",
+     "year": 2020,
+     "venue": "Asian Journal of Ecotoxicology",
+     "in_v31": false
+    },
+    {
+     "id": "W3117141340",
+     "title": "食品中微（纳米）塑料污染的研究进展",
+     "language": "ja",
+     "year": 2020,
+     "venue": "食品科学",
+     "in_v31": false
+    },
+    {
+     "id": "W3181092515",
+     "title": "环境中微/纳米塑料的污染现状、分析方法、毒性评价及健康效应研究进展",
+     "language": "zh",
+     "year": 2021,
+     "venue": "环境化学",
+     "in_v31": false
+    },
+    {
+     "id": "W4411003060",
+     "title": "The Influence of Root Exudates on the Aggregation Effect of Nanoplastic Particles",
+     "language": "en",
+     "year": 2025,
+     "venue": "Botanical Research",
+     "in_v31": true
+    },
+    {
+     "id": "W7139347608",
+     "title": "基于贵金属纳米粒子共组装单层膜的纳米塑料SERS检测",
+     "language": "zh",
+     "year": 2025,
+     "venue": "Knowledge Repository of Yantai Institute of Coastal Zone Research, CAS (Yantai Institute of Coastal Zone Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W4406002857",
+     "title": "Research Progress in Reproductive Toxicity of Micro- and Nanoplastics on Males and Its Mechanisms",
+     "language": "en",
+     "year": 2025,
+     "venue": "Hans Journal of Food and Nutrition Science",
+     "in_v31": true
+    },
+    {
+     "id": "W1002775230",
+     "title": "我国研制成功“令人惊奇”的纳米塑料",
+     "language": "zh",
+     "year": 2001,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3119354359",
+     "title": "聚苯乙烯纳米塑料(PSNPs)对大豆( Glycine max )种子发芽和幼苗生长的影响",
+     "language": "fr",
+     "year": 2020,
+     "venue": null,
+     "in_v31": true
+    },
+    {
+     "id": "W4393382505",
+     "title": "微纳米塑料在典型日用塑料制品使用过程中的释放规律及机制",
+     "language": "zh",
+     "year": 2024,
+     "venue": "Chinese Science Bulletin (Chinese Version)",
+     "in_v31": true
+    },
+    {
+     "id": "W7165426866",
+     "title": "纳米塑料/重金属复合物PMMA-Hg2+、PS-Cu2+体系暴露下生物硫醇与活性氧的荧光成像分析研究",
+     "language": "zh",
+     "year": 2026,
+     "venue": "Knowledge Repository of Yantai Institute of Coastal Zone Research, CAS (Yantai Institute of Coastal Zone Research)",
+     "in_v31": true
+    },
+    {
+     "id": "W1536964069",
+     "title": "纳米塑料——21世纪塑料的“超星”",
+     "language": "zh",
+     "year": 2001,
+     "venue": "化工进展",
+     "in_v31": false
+    },
+    {
+     "id": "W4410248943",
+     "title": "A review of micro-nanoplastics removal technologies and mechanisms from wastewater",
+     "language": "en",
+     "year": 2025,
+     "venue": "Chinese Science Bulletin (Chinese Version)",
+     "in_v31": true
+    },
+    {
+     "id": "W4409439992",
+     "title": "Amino-Functionalized Chromium-Based Metal-Organic Framework NH2-MIL-101(Cr) for the Removal of Nanoplastics from Water",
+     "language": "en",
+     "year": 2025,
+     "venue": "Material Sciences",
+     "in_v31": true
+    },
+    {
+     "id": "W3096018928",
+     "title": "环境中微(纳米)塑料的来源及毒理学研究进展",
+     "language": "zh",
+     "year": 2018,
+     "venue": "环境化学",
+     "in_v31": false
+    },
+    {
+     "id": "W3143634167",
+     "title": "农田中的（微）塑料污染：来源、迁移、环境生态效应及防治措施",
+     "language": "zh",
+     "year": 2021,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3208052722",
+     "title": "微/纳米塑料对淡水生物毒性、机理及其影响因素研究进展",
+     "language": "zh",
+     "year": 2021,
+     "venue": "Asian Journal of Ecotoxicology",
+     "in_v31": false
+    },
+    {
+     "id": "W7133346414",
+     "title": "聚苯乙烯纳米塑料对铜绿微囊藻生长的毒性效应",
+     "language": "zh",
+     "year": 2026,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W4411460925",
+     "title": "Advancements in environmental nanoplastics research",
+     "language": "en",
+     "year": 2025,
+     "venue": "Chinese Science Bulletin (Chinese Version)",
+     "in_v31": true
+    }
+   ],
+   "sample_size": 23,
+   "sample_in_v31": 10,
+   "sample_language_label_counts": {
+    "zh": 13,
+    "en": 7,
+    "fr": 1,
+    "ja": 1,
+    "sl": 1
+   }
+  },
+  {
+   "id": "zh-plastic-pollution",
+   "languages": [
+    "zh"
+   ],
+   "terms": [
+    "塑料污染"
+   ],
+   "query": "(\"塑料污染\")",
+   "a3_count_2026_11_18": 606,
+   "count": 56,
+   "language_label_counts": {
+    "zh": 28,
+    "en": 25,
+    "ja": 3
+   },
+   "fetched_at": "2026-11-23T05:27:35+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W7216569565",
+     "title": "水环境中微塑料污染监测及其生态风险评估",
+     "language": "zh",
+     "year": 2024,
+     "venue": "生态环境与保护",
+     "in_v31": false
+    },
+    {
+     "id": "W973152943",
+     "title": "解决“黑”“白”塑料污染的建议",
+     "language": "zh",
+     "year": 2004,
+     "venue": "发明与创新",
+     "in_v31": false
+    },
+    {
+     "id": "W4400019335",
+     "title": "Occurrence, adsorption and transport mechanism of microplastics in soil",
+     "language": "en",
+     "year": 2024,
+     "venue": "Scientia Sinica Chimica",
+     "in_v31": true
+    },
+    {
+     "id": "W7166404794",
+     "title": "水环境中微塑料污染物研究进展",
+     "language": "zh",
+     "year": 2022,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W7202096846",
+     "title": "再生塑料回收再加工项目技术经济性对比与产业化推广路径研究",
+     "language": "zh",
+     "year": 2026,
+     "venue": "数据期刊",
+     "in_v31": false
+    },
+    {
+     "id": "W4396901547",
+     "title": "环境伦理研究和实践面对的机遇与挑战",
+     "language": "zh",
+     "year": 2024,
+     "venue": "SCIENTIA SINICA Terrae",
+     "in_v31": false
+    },
+    {
+     "id": "W894038828",
+     "title": "“白色恐怖”何日不再？/收费使用不如让塑料“变性”",
+     "language": "ja",
+     "year": 2008,
+     "venue": "江淮法治",
+     "in_v31": false
+    },
+    {
+     "id": "W4409277898",
+     "title": "Advances in catalytic transformations of waste plastic resources with zeolites",
+     "language": "en",
+     "year": 2025,
+     "venue": "Scientia Sinica Chimica",
+     "in_v31": false
+    },
+    {
+     "id": "W3117141340",
+     "title": "食品中微（纳米）塑料污染的研究进展",
+     "language": "ja",
+     "year": 2020,
+     "venue": "食品科学",
+     "in_v31": false
+    },
+    {
+     "id": "W4391660386",
+     "title": "Microplastic Pollution in China’s Water Environment",
+     "language": "en",
+     "year": 2024,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W4281938044",
+     "title": "高寒地区小城镇塑料垃圾处置现状探讨——以中国甘孜州 石渠县为例",
+     "language": "zh",
+     "year": 2022,
+     "venue": "节能环保",
+     "in_v31": false
+    },
+    {
+     "id": "W7215955674",
+     "title": "土壤环境中微塑料的研究进展",
+     "language": "zh",
+     "year": 2022,
+     "venue": "生态环境与保护",
+     "in_v31": false
+    },
+    {
+     "id": "W7225867678",
+     "title": "饮用水中胶体态新型微塑料的研究进展",
+     "language": "zh",
+     "year": 2026,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W4395077829",
+     "title": "Soil carbon cycling mediated by microplastics: Formation, mineralization, and sequestration",
+     "language": "en",
+     "year": 2024,
+     "venue": "Scientia Sinica Technologica",
+     "in_v31": true
+    },
+    {
+     "id": "W7171522209",
+     "title": "Migration and fate of microplastics in river basins, estuaries, nearshore areas, and the ocean: integrated land-sea coordination and transboundary transport",
+     "language": "en",
+     "year": 2026,
+     "venue": "Chinese Science Bulletin (Chinese Version)",
+     "in_v31": true
+    },
+    {
+     "id": "W4407795196",
+     "title": "食品中微塑料污染的检测与分析",
+     "language": "zh",
+     "year": 2024,
+     "venue": "农业科技与发展",
+     "in_v31": false
+    },
+    {
+     "id": "W2920324009",
+     "title": "(微)塑料污染对土壤生态系统的影响:进展与思考",
+     "language": "zh",
+     "year": 2019,
+     "venue": "Nongye huanjing kexue xuebao",
+     "in_v31": true
+    },
+    {
+     "id": "W4388200091",
+     "title": "Dilemmas and Ways Out of the International Law Regulation for Marine Micro-Plastic Pollution",
+     "language": "en",
+     "year": 2023,
+     "venue": "Open Journal of Legal Science",
+     "in_v31": true
+    },
+    {
+     "id": "W7166159987",
+     "title": "聚丙烯降解过程中微塑料生成特征及控制策略研究",
+     "language": "zh",
+     "year": 2026,
+     "venue": "工程学研究与实用",
+     "in_v31": true
+    },
+    {
+     "id": "W4391912911",
+     "title": "Research on the Design of Public Welfare Posters on the Theme of Marine Plastic Pollution",
+     "language": "en",
+     "year": 2024,
+     "venue": "Design",
+     "in_v31": true
+    },
+    {
+     "id": "W7202250212",
+     "title": "Research on the Characteristics, Ecological Risks and Governance Pathways of Microplastic Pollution in the Coastal Waters of the Shandong Peninsula under the Background of Rural Revitalization",
+     "language": "en",
+     "year": 2026,
+     "venue": "International Journal of Ecology",
+     "in_v31": true
+    },
+    {
+     "id": "W2260767503",
+     "title": "浅析聚氯乙烯（PVC）塑料产品使用后的处理方法",
+     "language": "zh",
+     "year": 2010,
+     "venue": "科技促进发展",
+     "in_v31": false
+    },
+    {
+     "id": "W4417030115",
+     "title": "A new paradigm for closed-loop recyclable plastics: the sulfur-substitution strategy",
+     "language": "en",
+     "year": 2026,
+     "venue": "Scientia Sinica Chimica",
+     "in_v31": false
+    },
+    {
+     "id": "W4394729795",
+     "title": "Research on the Current Situation and Analysis and Evaluation Methods of Microplastic Pollution in Farmland",
+     "language": "en",
+     "year": 2024,
+     "venue": "Hans Journal of Agricultural Sciences",
+     "in_v31": true
+    },
+    {
+     "id": "W4288040075",
+     "title": "混凝优化控制地表水中微塑料污染研究",
+     "language": "zh",
+     "year": 2022,
+     "venue": "节能环保",
+     "in_v31": false
+    },
+    {
+     "id": "W7171486075",
+     "title": "贺兰山东麓葡萄种植区土壤微塑料赋存特征及源解析",
+     "language": "zh",
+     "year": 2026,
+     "venue": "农业科学",
+     "in_v31": false
+    },
+    {
+     "id": "W7203847641",
+     "title": "水环境中微塑料的去除研究进展",
+     "language": "zh",
+     "year": 2021,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W4414396020",
+     "title": "Microplastics: environmental distribution and degradation by aerobic/anaerobic microorganisms",
+     "language": "en",
+     "year": 2025,
+     "venue": "Scientia Sinica Vitae",
+     "in_v31": true
+    },
+    {
+     "id": "W7165429608",
+     "title": "高精度生物相容性电位型传感器的研制及在微塑料胁迫下双壳类生物体表离子通量监测中的应用",
+     "language": "zh",
+     "year": 2026,
+     "venue": "Knowledge Repository of Yantai Institute of Coastal Zone Research, CAS (Yantai Institute of Coastal Zone Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W7166402727",
+     "title": "化纤类微塑料对好氧颗粒污泥处理印染废水的影响",
+     "language": "zh",
+     "year": 2026,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W7222113654",
+     "title": "空气中微塑料污染危害、防治对策与研究展望",
+     "language": "zh",
+     "year": 2026,
+     "venue": "生态环境与保护",
+     "in_v31": false
+    },
+    {
+     "id": "W4416155940",
+     "title": "Depolymerization of polyesters catalyzed by binuclear metal complexes",
+     "language": "en",
+     "year": 2026,
+     "venue": "Scientia Sinica Chimica",
+     "in_v31": false
+    },
+    {
+     "id": "W4395094269",
+     "title": "Research Progress of Microplastic Pollution in Urban Stormwater Runoff",
+     "language": "en",
+     "year": 2024,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W4415428641",
+     "title": "Methylmercury formation in water triggered by light-independent plastic weathering",
+     "language": "en",
+     "year": 2025,
+     "venue": "Chinese Science Bulletin (Chinese Version)",
+     "in_v31": false
+    },
+    {
+     "id": "W2772253334",
+     "title": "Research advances on the ecological effects of microplastic pollution in the marine environment",
+     "language": "en",
+     "year": 2017,
+     "venue": "Acta Ecologica Sinica",
+     "in_v31": true
+    },
+    {
+     "id": "W4410248943",
+     "title": "A review of micro-nanoplastics removal technologies and mechanisms from wastewater",
+     "language": "en",
+     "year": 2025,
+     "venue": "Chinese Science Bulletin (Chinese Version)",
+     "in_v31": true
+    },
+    {
+     "id": "W7167458588",
+     "title": "Research progress on nitrogenation upcycling of polystyrene",
+     "language": "en",
+     "year": 2026,
+     "venue": "Chinese Science Bulletin (Chinese Version)",
+     "in_v31": true
+    },
+    {
+     "id": "W4249093695",
+     "title": "Research on the Control Policy of Disposable Plastic Pollution",
+     "language": "en",
+     "year": 2020,
+     "venue": "Sustainable Development",
+     "in_v31": true
+    },
+    {
+     "id": "W3143634167",
+     "title": "农田中的（微）塑料污染：来源、迁移、环境生态效应及防治措施",
+     "language": "zh",
+     "year": 2021,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4403696414",
+     "title": "Advances in the Study of Microplastic Contamination in Fish",
+     "language": "en",
+     "year": 2024,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W7161624036",
+     "title": "环保型纸吸管工艺要素的优化设计探究",
+     "language": "zh",
+     "year": 2026,
+     "venue": "工程管理",
+     "in_v31": false
+    },
+    {
+     "id": "W3134807073",
+     "title": "土壤环境中微塑料污染：来源、过程及风险",
+     "language": "zh",
+     "year": 2020,
+     "venue": "Knowledge Repository of Yantai Institute of Coastal Zone Research, CAS (Yantai Institute of Coastal Zone Research)",
+     "in_v31": true
+    },
+    {
+     "id": "W7223351047",
+     "title": "融合可持续发展理念的旅游景区服务系统设计框架——景区门票售卖机为例",
+     "language": "zh",
+     "year": 2026,
+     "venue": "社会经济导刊",
+     "in_v31": false
+    },
+    {
+     "id": "W4403355312",
+     "title": "高分子塑料及其应用研究",
+     "language": "zh",
+     "year": 2024,
+     "venue": "工程学研究与实用",
+     "in_v31": false
+    },
+    {
+     "id": "W4246514194",
+     "title": "Microplastic Pollution in Huangshi City,Hubei Province in the Past Century",
+     "language": "en",
+     "year": 2021,
+     "venue": "Geographical Science Research",
+     "in_v31": true
+    },
+    {
+     "id": "W4400840176",
+     "title": "基于环境效应的以竹代塑产品分级研究",
+     "language": "zh",
+     "year": 2024,
+     "venue": "SCIENTIA SINICA Terrae",
+     "in_v31": false
+    },
+    {
+     "id": "W4413414131",
+     "title": "Gem-dimethylation promotes reversible polymerization/deploymerization of thionolactones",
+     "language": "en",
+     "year": 2026,
+     "venue": "Scientia Sinica Chimica",
+     "in_v31": false
+    },
+    {
+     "id": "W7105824485",
+     "title": "Recent advances in plastic upcycling enabled by dynamic covalent cross-linking strategies",
+     "language": "en",
+     "year": 2026,
+     "venue": "Scientia Sinica Chimica",
+     "in_v31": true
+    },
+    {
+     "id": "W4399811555",
+     "title": "Research Progress on Control and Treatment of Microplastics Pollution in Soil",
+     "language": "en",
+     "year": 2024,
+     "venue": "Advances in Environmental Protection",
+     "in_v31": true
+    },
+    {
+     "id": "W7216185712",
+     "title": "老化轮胎磨损颗粒对生菜的毒性研究",
+     "language": "zh",
+     "year": 2025,
+     "venue": "生态环境与保护",
+     "in_v31": false
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 21,
+   "sample_language_label_counts": {
+    "zh": 25,
+    "en": 23,
+    "ja": 2
+   }
+  },
+  {
+   "id": "ja-microplastic",
+   "languages": [
+    "ja"
+   ],
+   "terms": [
+    "マイクロプラスチック"
+   ],
+   "query": "(\"マイクロプラスチック\")",
+   "a3_count_2026_11_18": 347,
+   "count": 332,
+   "language_label_counts": {
+    "ja": 202,
+    "en": 128,
+    "fi": 1,
+    "pl": 1
+   },
+   "fetched_at": "2026-11-23T05:27:36+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W4386576628",
+     "title": "Development of Sampling and Analytical Methods for Measuring Microplastics with Sizes Greater than 20 μm in Tap Water",
+     "language": "en",
+     "year": 2023,
+     "venue": "Journal of Japan Society on Water Environment",
+     "in_v31": true
+    },
+    {
+     "id": "W3157719264",
+     "title": "マイクロプラスチックの海洋物理学 (特集 海洋物理学の今)",
+     "language": "ja",
+     "year": 2020,
+     "venue": "ながれ : 日本流体力学会誌",
+     "in_v31": false
+    },
+    {
+     "id": "W4297151130",
+     "title": "Effect of wood pulp medium on root and shoot growth of tartary buckwheat (Fagopyrum tataricum Gaertn.) sprouts",
+     "language": "en",
+     "year": 2022,
+     "venue": "Root Research",
+     "in_v31": false
+    },
+    {
+     "id": "W7138099341",
+     "title": "マイクロプラスチック試料における分析手法の開発とその評価",
+     "language": "ja",
+     "year": 2026,
+     "venue": "ARIM Data Portal",
+     "in_v31": false
+    },
+    {
+     "id": "W4288874175",
+     "title": "Current Status and Perspectives Surrounding Bio-refinery: Procurement of Raw Materials for Bio-refinery and Related Issues",
+     "language": "en",
+     "year": 2021,
+     "venue": "Material Cycles and Waste Management Research",
+     "in_v31": false
+    },
+    {
+     "id": "W3179253130",
+     "title": "マイクロプラスチック分析におけるポンプ水試料対マンタ試料採取の代表性について【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2019,
+     "venue": "Environmental Pollution",
+     "in_v31": false
+    },
+    {
+     "id": "W2979858777",
+     "title": "マイクロプラスチック : 21世紀の環境問題(上)汚染の現状,生物影響,トレンド",
+     "language": "ja",
+     "year": 2017,
+     "venue": "化学経済",
+     "in_v31": false
+    },
+    {
+     "id": "W3190152565",
+     "title": "サンゴ地域におけるマイクロプラスチック表面バイオフィルムの組成と分布の調査【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2020,
+     "venue": "Chemosphere",
+     "in_v31": false
+    },
+    {
+     "id": "W7149879731",
+     "title": "都市近郊河川におけるマイクロプラスチックの年齢分布解析",
+     "language": "ja",
+     "year": 2026,
+     "venue": "Institutional Repositories DataBase (IRDB)",
+     "in_v31": false
+    },
+    {
+     "id": "W4312625617",
+     "title": "MICROPLASTIC POLLUTION OF SEABED IN FRONT OF FUNABASHI CITY",
+     "language": "en",
+     "year": 2022,
+     "venue": "Journal of Japan Society of Civil Engineers Ser B3 (Ocean Engineering)",
+     "in_v31": true
+    },
+    {
+     "id": "W3156210571",
+     "title": "Current Situation of Microplastics Contamination in Urban Water Circulation Systems",
+     "language": "en",
+     "year": 2020,
+     "venue": "Journal of Environmental Conservation Engineering",
+     "in_v31": true
+    },
+    {
+     "id": "W3171666895",
+     "title": "ハイパースペクトルイメージングに基づくフィルタ基板上のマイクロプラスチックのキャラクタリゼーション:実験室評価【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2020,
+     "venue": "Environmental Pollution",
+     "in_v31": false
+    },
+    {
+     "id": "W2983485848",
+     "title": "陸上の廃棄物管理に起因する海洋マイクロプラスチック汚染について (特集 プラスチックごみを考える)",
+     "language": "ja",
+     "year": 2019,
+     "venue": "Toshi seisō",
+     "in_v31": false
+    },
+    {
+     "id": "W3045785747",
+     "title": "水環境中のマイクロプラスチック汚染の現状と課題 (特集 マイクロプラスチック汚染)",
+     "language": "ja",
+     "year": 2020,
+     "venue": "EICA : journal of EICA : 環境システム計測制御学会誌",
+     "in_v31": false
+    },
+    {
+     "id": "W2520243349",
+     "title": "パーソナルケア製品中のスクラブ剤として使用されているマイクロプラスチックの含有量の調査 (京都大学環境衛生工学研究会 第38回シンポジウム講演論文集)",
+     "language": "ja",
+     "year": 2016,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3171065430",
+     "title": "Fragmentation of Microplastics and Its Dynamics on Aquatic Organisms",
+     "language": "en",
+     "year": 2020,
+     "venue": "Journal of Environmental Conservation Engineering",
+     "in_v31": true
+    },
+    {
+     "id": "W4408594189",
+     "title": "Investigation of Microplastics in Osaka City River Using Natural Water Flow Method and Net Towing Method",
+     "language": "en",
+     "year": 2025,
+     "venue": "Journal of Japan Society on Water Environment",
+     "in_v31": true
+    },
+    {
+     "id": "W4387160489",
+     "title": "ISO Standardization Related to Bio-plastics",
+     "language": "en",
+     "year": 2022,
+     "venue": "Material Cycles and Waste Management Research",
+     "in_v31": false
+    },
+    {
+     "id": "W7147486462",
+     "title": "(1) Solutions for Plastic Litter and Microplastics in Marine－International Standardization and Japanese Measures for These－",
+     "language": "en",
+     "year": 2021,
+     "venue": "Journal of The Adhesion Society of Japan",
+     "in_v31": true
+    },
+    {
+     "id": "W3189833584",
+     "title": "ティラピア筋肉中のスルファメトキサゾール残留に及ぼすマイクロプラスチック曝露の影響【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2018,
+     "venue": "Shengtai yu nongcun huanjing xuebao",
+     "in_v31": false
+    },
+    {
+     "id": "W3157831848",
+     "title": "マイクロプラスチックに関する日本でのHORIBAグループの活動 (特集 マイクロプラスチック分析)",
+     "language": "ja",
+     "year": 2020,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3102761521",
+     "title": "セルロース誘導体を用いた木粉の湿式押出成形: パイプ状成形品「ウッドストロー」の製作",
+     "language": "ja",
+     "year": 2020,
+     "venue": "JAPAN TAPPI JOURNAL",
+     "in_v31": false
+    },
+    {
+     "id": "W3119776290",
+     "title": "タイ南部の珊瑚礁に広がる10μm以上のマイクロプラスチックの汚染実態 (京都大学環境衛生工学研究会 第42回 シンポジウム講演論文集)",
+     "language": "ja",
+     "year": 2020,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3173441360",
+     "title": "粉体化粧料の材料設計から加工プロセス開発まで 第8回 マイクロプラスチック代替多孔質セルロース粉体による肌の透明感と保湿効果",
+     "language": "ja",
+     "year": 2021,
+     "venue": "化学装置",
+     "in_v31": false
+    },
+    {
+     "id": "W3173342730",
+     "title": "マイクロプラスチック問題と分散型持続可能な社会の実現 (特集 多様化する環境問題に挑む : ポストコロナ,気候変動,電磁環境,海洋MP汚染など)",
+     "language": "ja",
+     "year": 2021,
+     "venue": "公衆衛生",
+     "in_v31": false
+    },
+    {
+     "id": "W7145024996",
+     "title": "山口の沿岸と河川環境中のマイクロプラスチック汚染 : 量と分布、流出過程、生態リスク",
+     "language": "en",
+     "year": 2022,
+     "venue": "Institutional Repositories DataBase (IRDB)",
+     "in_v31": true
+    },
+    {
+     "id": "W3168653553",
+     "title": "海洋マイクロプラスチック汚染を下水道から防ぐ : 船橋市と日本大学の取組み (新春特集 あのころ、いま、これからの下水道)",
+     "language": "ja",
+     "year": 2021,
+     "venue": "月刊下水道 = Journal of sewerage, monthly",
+     "in_v31": false
+    },
+    {
+     "id": "W4206687711",
+     "title": "Methods for sampling, processing, identification,and quantification of microplastics in the marine environment",
+     "language": "en",
+     "year": 2020,
+     "venue": "Oceanography in Japan",
+     "in_v31": true
+    },
+    {
+     "id": "W2981286606",
+     "title": "マイクロプラスチックに関する研究の動向 (特集 海洋マイクロプラスチックの現状と課題)",
+     "language": "ja",
+     "year": 2019,
+     "venue": "マテリアルライフ学会誌",
+     "in_v31": false
+    },
+    {
+     "id": "W4411796077",
+     "title": "CONTENTS",
+     "language": "en",
+     "year": 2025,
+     "venue": "Kobunshi",
+     "in_v31": false
+    },
+    {
+     "id": "W3041180980",
+     "title": "新・環境法シリーズ(第79回)台湾におけるマイクロプラスチック規制 : 2017年8月公布「マイクロビーズ含有化粧品及び個人清潔用品の製造、輸入及び販売を制限」する告示(法規命令)について",
+     "language": "ja",
+     "year": 2018,
+     "venue": "Environmental Management",
+     "in_v31": false
+    },
+    {
+     "id": "W4205372433",
+     "title": "ISO International Standardization of Bioplastics: ISO Standards for Biodegradability and Biobased Content, etc.",
+     "language": "en",
+     "year": 2021,
+     "venue": "Oleoscience",
+     "in_v31": true
+    },
+    {
+     "id": "W7208388716",
+     "title": "ミャンマー共和国とその他アジア諸国から採取した道路粉塵中の既知および新規汚染物質（多環芳香族炭化水素類とマイクロプラスチック）の環境モニタリング",
+     "language": "en",
+     "year": 2019,
+     "venue": "Institutional Repositories DataBase (IRDB)",
+     "in_v31": false
+    },
+    {
+     "id": "W3176939295",
+     "title": "琴引浜に寄り来る漂着物 : 現今の海浜の様子プラスチックごみ,マイクロプラスチック問題",
+     "language": "ja",
+     "year": 2020,
+     "venue": "Institutional Repositories DataBase (IRDB)",
+     "in_v31": false
+    },
+    {
+     "id": "W4294552718",
+     "title": "Conversion from Paper Pulp to Cellulose Nanofibers（CNFs）",
+     "language": "en",
+     "year": 2022,
+     "venue": "JAPAN TAPPI JOURNAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7214797531",
+     "title": "ANALYSIS OF MICROPLASTIC DYNAMICS IN TOKYO BAY TAKING INTO ACCOUNT SEABED SSEDIMENTATION",
+     "language": "en",
+     "year": 2026,
+     "venue": "Japanese Journal of JSCE",
+     "in_v31": true
+    },
+    {
+     "id": "W3134440037",
+     "title": "海洋プラスチックごみ,マイクロプラスチックの現状と今後 : 3Rから6Rへ (特集 生分解プラ,バイオプラの開発,採用の動き(1))",
+     "language": "ja",
+     "year": 2021,
+     "venue": "マテリアルステージ",
+     "in_v31": false
+    },
+    {
+     "id": "W3169639009",
+     "title": "ナイロン(ポリアミド)マイクロプラスチックへの曝露によるGreat Pond Snail Lymnaea Stagnalisにおけるポリ臭化ジフェニルエーテルの蓄積とミクロビオーム応答【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2020,
+     "venue": "Ecotoxicology and Environmental Safety",
+     "in_v31": false
+    },
+    {
+     "id": "W3173735265",
+     "title": "ソースからシンクへ:湿地生態系におけるマイクロプラスチックのレビューと展望【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2021,
+     "venue": "The Science of The Total Environment",
+     "in_v31": false
+    },
+    {
+     "id": "W4391551833",
+     "title": "Microplastics Derived from Chemical Fibers",
+     "language": "en",
+     "year": 2023,
+     "venue": "Material Cycles and Waste Management Research",
+     "in_v31": true
+    },
+    {
+     "id": "W2980655195",
+     "title": "バイオマスプラスチックのナノファイバー化による再生医療足場材料への応用 (特集 マイクロプラスチック対策と生分解性プラスチック)",
+     "language": "ja",
+     "year": 2019,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3209271263",
+     "title": "アラビア湾西部からの商業的および生態学的重要性の魚におけるマイクロプラスチック【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2020,
+     "venue": "Marine Pollution Bulletin",
+     "in_v31": false
+    },
+    {
+     "id": "W3155704503",
+     "title": "河川から考える海洋プラスチックごみ・マイクロプラスチック対策 (特集 物質循環のための使用済みプラスチックの再資源化)",
+     "language": "ja",
+     "year": 2021,
+     "venue": "Chemical engineering",
+     "in_v31": false
+    },
+    {
+     "id": "W3040721993",
+     "title": "非結晶性シリカ「パミス」 : 化粧品向けマイクロビーズ代替材料としての可能性 (特集 海洋マイクロプラスチック,マイクロビーズ問題の動向,材料的な取組み)",
+     "language": "ja",
+     "year": 2019,
+     "venue": "マテリアルステージ",
+     "in_v31": false
+    },
+    {
+     "id": "W4402398685",
+     "title": "A Trial Survey on Atmospheric/Airborne Microplastics Using Micro-Raman Spectroscopy (μRaman)",
+     "language": "en",
+     "year": 2024,
+     "venue": "Journal of Environmental Chemistry",
+     "in_v31": true
+    },
+    {
+     "id": "W7214701762",
+     "title": "A FUNDAMENTAL STUDY ON MICROPLASTIC DEGRADATION BASED ON FIELD SURVEYS",
+     "language": "en",
+     "year": 2026,
+     "venue": "Japanese Journal of JSCE",
+     "in_v31": true
+    },
+    {
+     "id": "W2973417589",
+     "title": "マイクロプラスチックによる水環境汚染と生態系への影響 (特集 水環境におけるマイクロプラスチック)",
+     "language": "ja",
+     "year": 2017,
+     "venue": "Journal of Japan Society on Water Environment",
+     "in_v31": false
+    },
+    {
+     "id": "W3182555890",
+     "title": "イガイ(Mytilus edulis)腸内細菌叢に及ぼすマイクロプラスチック曝露の影響【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2020,
+     "venue": "The Science of The Total Environment",
+     "in_v31": false
+    },
+    {
+     "id": "W4294584072",
+     "title": "マイクロプラスチックは有害なのか?",
+     "language": "ja",
+     "year": 2021,
+     "venue": "Nature Digest",
+     "in_v31": false
+    },
+    {
+     "id": "W4415827272",
+     "title": "RESPONSES OF ANTIOXIDANT MARKERS AND VALVE ACTIVITY OF THE BRACKISH WATER CLAM CORBICULA JAPONICA UNDER SINGLE/COMBINED EXPOSURES OF POLYSTYRENE MICROPLASTICS AND THERMAL STRESS",
+     "language": "en",
+     "year": 2025,
+     "venue": "Japanese Journal of JSCE",
+     "in_v31": true
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 14,
+   "sample_language_label_counts": {
+    "ja": 30,
+    "en": 20
+   }
+  },
+  {
+   "id": "ja-nanoplastic",
+   "languages": [
+    "ja"
+   ],
+   "terms": [
+    "ナノプラスチック"
+   ],
+   "query": "(\"ナノプラスチック\")",
+   "a3_count_2026_11_18": 9,
+   "count": 9,
+   "language_label_counts": {
+    "ja": 6,
+    "en": 3
+   },
+   "fetched_at": "2026-11-23T05:27:38+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W4391378859",
+     "title": "Preparation of Nanoplastic Particles as Potential Standards for the Study of Nanoplastics",
+     "language": "ja",
+     "year": 2024,
+     "venue": "YAKUGAKU ZASSHI",
+     "in_v31": true
+    },
+    {
+     "id": "W7207892245",
+     "title": "土壌環境中ナノプラスチックの吸着挙動と移動特性に関する研究",
+     "language": "ja",
+     "year": 2026,
+     "venue": "Institutional Repositories DataBase (IRDB)",
+     "in_v31": false
+    },
+    {
+     "id": "W4391378664",
+     "title": "Toward Elucidation of Human Health Effects of Micro/nanoplastics",
+     "language": "ja",
+     "year": 2024,
+     "venue": "YAKUGAKU ZASSHI",
+     "in_v31": true
+    },
+    {
+     "id": "W3163787725",
+     "title": "マイクロおよびナノプラスチックへのヒト曝露定量化のためのデータのレビューおよび潜在的健康リスク【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2021,
+     "venue": "The Science of The Total Environment",
+     "in_v31": false
+    },
+    {
+     "id": "W3175135839",
+     "title": "淡水におけるナノプラスチックの研究進展【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2021,
+     "venue": "The Science of The Total Environment",
+     "in_v31": false
+    },
+    {
+     "id": "W4308411829",
+     "title": "Characterization of Microplastics by Advanced Analytical Techniques",
+     "language": "en",
+     "year": 2022,
+     "venue": "BUNSEKI KAGAKU",
+     "in_v31": true
+    },
+    {
+     "id": "W7143685529",
+     "title": "沖縄のマイクロプラスチックとナノプラスチック– プランクトン微細藻類および内共生渦鞭毛藻への潜在的影響",
+     "language": "en",
+     "year": 2020,
+     "venue": "Institutional Repositories DataBase (IRDB)",
+     "in_v31": true
+    },
+    {
+     "id": "W7162433088",
+     "title": "Evaluation and Control of Environmental Microbial Toxicity of Microplastics",
+     "language": "en",
+     "year": 2026,
+     "venue": "Hosokawa Powder Technology Foundation ANNUAL REPORT",
+     "in_v31": true
+    },
+    {
+     "id": "W3216298116",
+     "title": "プラスチック脳:ミクロおよびナノプラスチックの神経毒性【JST・京大機械翻訳】",
+     "language": "ja",
+     "year": 2020,
+     "venue": null,
+     "in_v31": false
+    }
+   ],
+   "sample_size": 9,
+   "sample_in_v31": 5,
+   "sample_language_label_counts": {
+    "ja": 6,
+    "en": 3
+   }
+  },
+  {
+   "id": "ko-fine-plastic",
+   "languages": [
+    "ko"
+   ],
+   "terms": [
+    "미세플라스틱"
+   ],
+   "query": "(\"미세플라스틱\")",
+   "a3_count_2026_11_18": 133,
+   "count": 124,
+   "language_label_counts": {
+    "ko": 80,
+    "en": 44
+   },
+   "fetched_at": "2026-11-23T05:27:40+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W2801821405",
+     "title": "입자상 잔류성 유기오염 물질에 의한 원형 미세플라스틱 오염 연구",
+     "language": "ko",
+     "year": 2016,
+     "venue": null,
+     "in_v31": true
+    },
+    {
+     "id": "W4401101282",
+     "title": "Comparative Analysis of Microplastics Research Trends in Korea, China, and Japan Using Text Mining",
+     "language": "en",
+     "year": 2024,
+     "venue": "The Journal of Next-generation Convergence Technology Association",
+     "in_v31": true
+    },
+    {
+     "id": "W3006311830",
+     "title": "매립장 유래 미세플라스틱 관리방안 : 침출수 발생원을 중심으로",
+     "language": "ko",
+     "year": 2019,
+     "venue": "기초연구보고서",
+     "in_v31": false
+    },
+    {
+     "id": "W2807937927",
+     "title": "“미세먼지, 해양쓰레기... 해양수산부문 환경관리 강화돼야” : 코엑스 컨퍼런스룸 402호“미세플라스틱 해양쓰레기 해수부 환경부 공동대응 필요”",
+     "language": "ko",
+     "year": 2018,
+     "venue": "해양한국",
+     "in_v31": false
+    },
+    {
+     "id": "W3216055867",
+     "title": "에탄올 유기용매 리그닌의 추출조건 및 함량에 따른 EOL-PLA blend 물성 평가",
+     "language": "ko",
+     "year": 2020,
+     "venue": "한국목재공학 학술발표논문집(Conference Proceedings)",
+     "in_v31": false
+    },
+    {
+     "id": "W2997215240",
+     "title": "서남해안 어촌의 갯벌이용형태와 지속가능한 어업 : - 갯벌세계유산 신청지역을 중심으로 -",
+     "language": "ko",
+     "year": 2019,
+     "venue": "남도민속연구",
+     "in_v31": false
+    },
+    {
+     "id": "W3009017426",
+     "title": "염색법 및 FT-IR을 이용한 먹는 물 중 미세플라스틱 분석법 비교",
+     "language": "ko",
+     "year": 2018,
+     "venue": "Proceedings of the Korean Environmental Sciences Society Conference",
+     "in_v31": false
+    },
+    {
+     "id": "W3041394971",
+     "title": "Regulation of Marine Pollution by Microplastics with a Focus on Normative Approach under the International Law",
+     "language": "en",
+     "year": 2020,
+     "venue": "서울국제법연구",
+     "in_v31": true
+    },
+    {
+     "id": "W3163687521",
+     "title": "해양 미세플라스틱 관련 신문기사 토픽 모델링",
+     "language": "ko",
+     "year": 2019,
+     "venue": "한국해양환경·에너지학회 학술대회논문집",
+     "in_v31": false
+    },
+    {
+     "id": "W4381621090",
+     "title": "A study on estimating economic benefits of government R&D programs for microplastic management",
+     "language": "en",
+     "year": 2023,
+     "venue": "Innovation studies",
+     "in_v31": true
+    },
+    {
+     "id": "W3201766650",
+     "title": "SEM-EDS와 Micro-Raman Spectrometer를 이용한 생수 내 미세플라스틱 식별 연구",
+     "language": "ko",
+     "year": 2019,
+     "venue": "대한지질학회 학술대회",
+     "in_v31": false
+    },
+    {
+     "id": "W2884541921",
+     "title": "물벼룩을 이용한 미세플라스틱과 니켈의 복합독성 :미세플라스틱 작용기의 영향",
+     "language": "ko",
+     "year": 2017,
+     "venue": "환경독성보건학회 심포지엄 및 학술대회",
+     "in_v31": false
+    },
+    {
+     "id": "W3204992378",
+     "title": "미세플라스틱 대응 ERC",
+     "language": "ko",
+     "year": 2021,
+     "venue": "BT NEWS",
+     "in_v31": false
+    },
+    {
+     "id": "W3214410630",
+     "title": "해양과기원·극지연·선박해양플랜트연, 2020 대표 브랜드과제 선정·지원 : ‘전기추진 차도선(카페리선) 개발’‘미세플라스틱 오염도 및 위해성 평가 연구’ ‘남극 내륙 코리안루트 개척’등 6개 대표 브랜드과제 선정",
+     "language": "ko",
+     "year": 2020,
+     "venue": "해양한국",
+     "in_v31": false
+    },
+    {
+     "id": "W3115934409",
+     "title": "Characteristics of Microplastics Content and Estimation of Microplastics Outflow in G City Sewage Treatment Plant",
+     "language": "en",
+     "year": 2020,
+     "venue": "Journal of Korean Society of Water Science and Technology",
+     "in_v31": true
+    },
+    {
+     "id": "W4389712049",
+     "title": "An issue analysis on microplastics using topic modeling",
+     "language": "en",
+     "year": 2023,
+     "venue": "Journal of the Korean Data and Information Science Society",
+     "in_v31": true
+    },
+    {
+     "id": "W3198716740",
+     "title": "포장도로변에서 타이어분진의 분포",
+     "language": "ko",
+     "year": 2017,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7223656397",
+     "title": "Microplastic Governance Research: Focusing on the Components of Platform Thinking for Realizing the Practical Full Life Cycle of Microplastic",
+     "language": "en",
+     "year": 2026,
+     "venue": "한국동북아논총",
+     "in_v31": true
+    },
+    {
+     "id": "W2972705960",
+     "title": "Recent Trends and Implications of Chemical Substance Management in the EU",
+     "language": "en",
+     "year": 2019,
+     "venue": "토지공법연구",
+     "in_v31": false
+    },
+    {
+     "id": "W7169954294",
+     "title": "담수환경 중 미세플라스틱 분포 특성연구-한강수계를 중심으로",
+     "language": "ko",
+     "year": 2022,
+     "venue": "Seoul National University Open Repository (Seoul National University)",
+     "in_v31": true
+    },
+    {
+     "id": "W3158522871",
+     "title": "2P-128 : 미세플라스틱 검출을 위한 PS-Au 색센서 개발",
+     "language": "ko",
+     "year": 2020,
+     "venue": "한국공업화학회 연구논문 초록집",
+     "in_v31": false
+    },
+    {
+     "id": "W3203686357",
+     "title": "서해안 인근 개펄 중 미세플라스틱 정량·정성 분석",
+     "language": "ko",
+     "year": 2017,
+     "venue": "한국폐기물자원순환학회 추계학술발표논문집",
+     "in_v31": false
+    },
+    {
+     "id": "W3157822521",
+     "title": "2LH-2 : 셀룰로오스 비드 제조 시 영향하는 인자들",
+     "language": "ko",
+     "year": 2020,
+     "venue": "한국공업화학회 연구논문 초록집",
+     "in_v31": false
+    },
+    {
+     "id": "W3030722397",
+     "title": "Identification of Microplastics in Sea Salts by Raman Microscopy and FT-IR Microscopy",
+     "language": "en",
+     "year": 2019,
+     "venue": "Analytical Science and Technology",
+     "in_v31": true
+    },
+    {
+     "id": "W4408787411",
+     "title": "Management of Microplastics in Accordance with Plastic Life-cycle – Focused on sewage and wastewater management",
+     "language": "en",
+     "year": 2025,
+     "venue": "Environmental Law and Policy",
+     "in_v31": true
+    },
+    {
+     "id": "W2925122747",
+     "title": "미세플라스틱 오염현황 및 주요 국가의 관리방안과 시사점",
+     "language": "ko",
+     "year": 2018,
+     "venue": "저널 물 정책·경제",
+     "in_v31": false
+    },
+    {
+     "id": "W3191992778",
+     "title": "BNR시스템에 있어서 하수중의 미세플라스틱 거동",
+     "language": "ko",
+     "year": 2020,
+     "venue": "Journal of Korean Society of Water Science and Technology",
+     "in_v31": false
+    },
+    {
+     "id": "W3165464359",
+     "title": "티백 내 미세플라스틱 분석",
+     "language": "ko",
+     "year": 2020,
+     "venue": "한국분석과학회 학술대회",
+     "in_v31": false
+    },
+    {
+     "id": "W4405530661",
+     "title": "The Impact of Uncertainty Cue Perception on the Acceptance of Microplastic Policy: Focusing on the Moderating Roles of Trust in Government and Cultural Worldviews",
+     "language": "en",
+     "year": 2024,
+     "venue": "The Journal of the Korea Contents Association",
+     "in_v31": true
+    },
+    {
+     "id": "W7237378154",
+     "title": "미세플라스틱과 벤조피렌이 금붕어의 생체축적과 스트레스 반응에 미치는 영향",
+     "language": "en",
+     "year": 2024,
+     "venue": "KMOU Repository (Korea Maritime and Ocean University)",
+     "in_v31": true
+    },
+    {
+     "id": "W3207027724",
+     "title": "양식장 폐기물의 자원순환을 위한 기술 연구",
+     "language": "ko",
+     "year": 2021,
+     "venue": "한국폐기물자원순환학회 춘계학술발표논문집",
+     "in_v31": false
+    },
+    {
+     "id": "W3107645714",
+     "title": "농업 토양에서의 토지이용도별 미세플라스틱 잔류특성과 의미",
+     "language": "ko",
+     "year": 2020,
+     "venue": "한국환경농학회 학술발표논문집",
+     "in_v31": false
+    },
+    {
+     "id": "W3056656532",
+     "title": "미세플라스틱 측정분석 기술 동향 및 전망",
+     "language": "ko",
+     "year": 2019,
+     "venue": "환경독성보건학회 심포지엄 및 학술대회",
+     "in_v31": false
+    },
+    {
+     "id": "W7152450576",
+     "title": "Bioactive Marine Macroalgae for Mitigating Health Risks Associated with Particulate Matter and Microplastics: A Review",
+     "language": "en",
+     "year": 2026,
+     "venue": "생약학회지",
+     "in_v31": true
+    },
+    {
+     "id": "W3206305821",
+     "title": "농촌지역의 지하수 내 미세플라스틱 분포 연구",
+     "language": "ko",
+     "year": 2020,
+     "venue": "대한지질학회 학술대회",
+     "in_v31": false
+    },
+    {
+     "id": "W7163806139",
+     "title": "A Synoptic Review of Marine Environmental Characteristics and Ecosystem Threats in Hampyeong Bay, Korea (1997-2024)",
+     "language": "en",
+     "year": 2026,
+     "venue": "Journal of the Korean Society for Marine Environment & Energy",
+     "in_v31": false
+    },
+    {
+     "id": "W3011069524",
+     "title": "미세플라스틱의 건강 피해 저감 연구",
+     "language": "ko",
+     "year": 2019,
+     "venue": "사업보고서",
+     "in_v31": false
+    },
+    {
+     "id": "W3111742569",
+     "title": "A review on occurrence and environmental risk assessment for microplastics in freshwater systems",
+     "language": "en",
+     "year": 2019,
+     "venue": "The Korean Journal of Public Health",
+     "in_v31": true
+    },
+    {
+     "id": "W3118228192",
+     "title": "자원순환 분야 관리 전략 수립을 위한 기획연구",
+     "language": "ko",
+     "year": 2020,
+     "venue": "기본연구보고서",
+     "in_v31": false
+    },
+    {
+     "id": "W4411138464",
+     "title": "Investigation of Soil-Dwelling Bacterial Community Changes Induced by Microplastic Ex posure Using Amplicon Sequencing",
+     "language": "en",
+     "year": 2025,
+     "venue": "Korean Science Education Society for the Gifted",
+     "in_v31": true
+    },
+    {
+     "id": "W3213180330",
+     "title": "미세플라스틱 개요 및 관련 연구동향",
+     "language": "ko",
+     "year": 2020,
+     "venue": "섬유기술과 산업",
+     "in_v31": false
+    },
+    {
+     "id": "W3120665889",
+     "title": "Application of Quartz Crystal Microbalance to Understanding the Transport of Microplastics in Soil and Groundwater",
+     "language": "en",
+     "year": 2020,
+     "venue": "Korean Journal of Mineralogy and Petrology",
+     "in_v31": true
+    },
+    {
+     "id": "W2986548304",
+     "title": "천일염 제조 공정에서의 미세플라스틱 저감화 연구",
+     "language": "ko",
+     "year": 2019,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3197168489",
+     "title": "하수슬러지 내 미세플라스틱 분석 방법 최적화",
+     "language": "ko",
+     "year": 2020,
+     "venue": "한국폐기물자원순환학회 춘계학술발표논문집",
+     "in_v31": false
+    },
+    {
+     "id": "W3141126184",
+     "title": "환경 리스크 커뮤니케이션 정책: 기후변화 리스크를 중심으로",
+     "language": "ko",
+     "year": 2019,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4406106698",
+     "title": "Analysis of Factors Influencing Acceptability of Microplastic Regulation: Intrinsic Factors and Trust in Government",
+     "language": "en",
+     "year": 2024,
+     "venue": "한국정책학회보",
+     "in_v31": true
+    },
+    {
+     "id": "W4402378371",
+     "title": "Fluid Flow and Structural Analysis for the Design of Portable Microplastic Collection System",
+     "language": "en",
+     "year": 2024,
+     "venue": "Journal of Power System Engineering",
+     "in_v31": true
+    },
+    {
+     "id": "W7165668580",
+     "title": "Analysis of Microplastics in Aerophone(Plastic Recorder) Through FT-IR Microscope",
+     "language": "en",
+     "year": 2026,
+     "venue": "The Korean Society of Music Education Technology",
+     "in_v31": true
+    },
+    {
+     "id": "W3014317019",
+     "title": "Microplastics in Wastewater Treatment Plants (WWTPs): A Review",
+     "language": "en",
+     "year": 2019,
+     "venue": "Journal of Korean Society of Water Science and Technology",
+     "in_v31": true
+    },
+    {
+     "id": "W3160354074",
+     "title": "Microplastics pollution of seafoods and processed seafood products distributed in Incheon area",
+     "language": "en",
+     "year": 2021,
+     "venue": "Korean Journal of Food Preservation",
+     "in_v31": true
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 21,
+   "sample_language_label_counts": {
+    "ko": 29,
+    "en": 21
+   }
+  },
+  {
+   "id": "ko-microplastic",
+   "languages": [
+    "ko"
+   ],
+   "terms": [
+    "마이크로플라스틱"
+   ],
+   "query": "(\"마이크로플라스틱\")",
+   "a3_count_2026_11_18": 5,
+   "count": 5,
+   "language_label_counts": {
+    "ko": 4,
+    "en": 1
+   },
+   "fetched_at": "2026-11-23T05:27:42+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W3206684750",
+     "title": "1P-654 : 위해성 평가를 위한 마이크로 플라스틱 제조",
+     "language": "ko",
+     "year": 2019,
+     "venue": "한국공업화학회 연구논문 초록집",
+     "in_v31": false
+    },
+    {
+     "id": "W2790470594",
+     "title": "Histological observation of micro/nano-plastic spheres in the mussel Mytilus galloprovincialis",
+     "language": "en",
+     "year": 2017,
+     "venue": "The Korean Journal of Malacology",
+     "in_v31": true
+    },
+    {
+     "id": "W2565606739",
+     "title": "마이크로플라스틱의 하천수질 및 호수질 영향",
+     "language": "ko",
+     "year": 2015,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3216508613",
+     "title": "3P-739 : 파이롤라이저 가스크로마토그래피 질량분석기를 이용한 섬유상의 미세플라스틱 정성 및 정량분석",
+     "language": "ko",
+     "year": 2020,
+     "venue": "한국공업화학회 연구논문 초록집",
+     "in_v31": false
+    },
+    {
+     "id": "W3010281959",
+     "title": "수환경에서의 마이크로플라스틱 분류 및 정의",
+     "language": "ko",
+     "year": 2019,
+     "venue": "Journal of The Korean Society of Water and Wastewater",
+     "in_v31": true
+    }
+   ],
+   "sample_size": 5,
+   "sample_in_v31": 2,
+   "sample_language_label_counts": {
+    "ko": 4,
+    "en": 1
+   }
+  },
+  {
+   "id": "de-microplastic",
+   "languages": [
+    "de"
+   ],
+   "terms": [
+    "Mikroplastik"
+   ],
+   "query": "(\"Mikroplastik\")",
+   "a3_count_2026_11_18": 1663,
+   "count": 1668,
+   "language_label_counts": {
+    "id": 734,
+    "de": 405,
+    "en": 356,
+    "tr": 113,
+    "pl": 23,
+    "ms": 17,
+    "uz": 5,
+    "da": 4,
+    "unlabelled": 3,
+    "fr": 2,
+    "ar": 1,
+    "az": 1,
+    "hr": 1,
+    "nl": 1,
+    "no": 1,
+    "zh": 1
+   },
+   "fetched_at": "2026-11-23T05:27:44+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W7117414339",
+     "title": "Strategi Pengurangan Jejak Mikroplastik Dalam Produksi Plastik Berdasarkan Analisis LCA (Life Cycle Assessment) Pada Mesin Bowler Di PT. Murni Mapan Makmur Pasuruan",
+     "language": "id",
+     "year": 2025,
+     "venue": "Journal of Industrial Engineering and Operation Management",
+     "in_v31": false
+    },
+    {
+     "id": "W7218078181",
+     "title": "PENGARUH PAPARAN POLIMER MIKROPLASTIK STIRENA TERHADAP TOKSISITAS PERILAKU IKAN Oryzias celebensis = EFFECT OF EXPOSURE TO STYRENE MICROPLASTIC POLYMER ON THE BEHAVIORAL TOXICITY OF Oryzias celebensis FISH",
+     "language": "id",
+     "year": 2025,
+     "venue": "Hasanuddin University Repository",
+     "in_v31": true
+    },
+    {
+     "id": "W7131976539",
+     "title": "Mikroplastik: Aktueller Kenntnisstand zu Wirkmechanismen und Gesundheitsrisiken",
+     "language": "de",
+     "year": 2025,
+     "venue": "OpenAgrar",
+     "in_v31": false
+    },
+    {
+     "id": "W4405217683",
+     "title": "Foresight und Technikfolgenabschätzung: Monitoring von Zukunftsthemen für das Österreichische Parlament Berichtsversion: November 2024",
+     "language": "de",
+     "year": 2024,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7160056344",
+     "title": "Mikroplastik di Ekosistem Laut dan Perairan Tawar Tropis: Sumber, Distribusi, Dampak Ekotoksikologis, dan Tantangan Kebijakan",
+     "language": "id",
+     "year": 2026,
+     "venue": "Water and Marine Pollution Journal PoluSea",
+     "in_v31": false
+    },
+    {
+     "id": "W7216095584",
+     "title": "Strategy for Developing Innovation and Environmental Awareness Through a Loofah Project-Based Learning Model: A Literature Review",
+     "language": "en",
+     "year": 2026,
+     "venue": "Bioeducation Journal",
+     "in_v31": true
+    },
+    {
+     "id": "W7130656007",
+     "title": "4 Versuchseinrichtung und Messverfahren",
+     "language": "de",
+     "year": 2025,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7130647994",
+     "title": "1 Einleitung und Motivation",
+     "language": "de",
+     "year": 2025,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7219422335",
+     "title": "Analisis Resepsi Anggota Forum Komunikasi Peduli Lingkungan Terhadap Konten TikTok Edukasi Limbah Mikroplastik Oleh Dino Augusto",
+     "language": "en",
+     "year": 2026,
+     "venue": "UMM Institutional Repository (Universitas Muhammadiyah Malang)",
+     "in_v31": false
+    },
+    {
+     "id": "W7155198005",
+     "title": "Wie Mikroplastik unseren Körper beeinflusst",
+     "language": "de",
+     "year": 2026,
+     "venue": "Springer eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7213429589",
+     "title": "Kontaminasi Mikroplastik pada Hewan Produksi: Implikasi terhadap Kesehatan, Keamanan Pangan, dan One Health",
+     "language": "en",
+     "year": 2026,
+     "venue": "Jurnal Riset Multidisiplin Agrisosco",
+     "in_v31": true
+    },
+    {
+     "id": "W7216352573",
+     "title": "A review of methods for identification of microplastics in municipal wastewater",
+     "language": "pl",
+     "year": 2022,
+     "venue": "INSTAL",
+     "in_v31": true
+    },
+    {
+     "id": "W4313588371",
+     "title": "Türkiye Kara Sularında Mikroplastik Kirliliğinin Biyota Üzerine Etkisi",
+     "language": "en",
+     "year": 2022,
+     "venue": "Turkish Journal of Agriculture - Food Science and Technology",
+     "in_v31": true
+    },
+    {
+     "id": "W4406030542",
+     "title": "MIKROPLASTIK - ŹRÓDŁA, TECHNIKI SEPARACJI I IDENTYFIKACJI",
+     "language": "en",
+     "year": 2023,
+     "venue": "Wiadomości Chemiczne",
+     "in_v31": true
+    },
+    {
+     "id": "W4367186318",
+     "title": "W poszukiwaniu brakującego ogniwa czyli nowa propozycja definiowania mikroplastiku.",
+     "language": "pl",
+     "year": 2023,
+     "venue": "Kosmos",
+     "in_v31": false
+    },
+    {
+     "id": "W7214101480",
+     "title": "Conceptual and Material-Based Applications in the Context of Ecological Art in Textile Art Inspired by Mucilage",
+     "language": "tr",
+     "year": 2026,
+     "venue": "Journal of Turkish Studies",
+     "in_v31": false
+    },
+    {
+     "id": "W4404095842",
+     "title": "Mikro- und Nanoplastik in Karotisplaque erhöht kardiovaskuläres Risiko",
+     "language": "de",
+     "year": 2024,
+     "venue": "DMW - Deutsche Medizinische Wochenschrift",
+     "in_v31": false
+    },
+    {
+     "id": "W7166617132",
+     "title": "Analisis mikroplastik pada ekosistem terumbu karang di Pantai Mutiara, Trenggalek",
+     "language": "en",
+     "year": 2025,
+     "venue": "Digilib UIN Sunan Ampel Surabaya (UIN Sunan Ampel)",
+     "in_v31": false
+    },
+    {
+     "id": "W7130653361",
+     "title": "2 Stand des Wissens",
+     "language": "de",
+     "year": 2025,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7217842730",
+     "title": "Darurat Mikroplastik di Indonesia: Analisis Urgensi Penetapan Baku Mutu Mikroplastik Untuk Perlindungan Generasi Muda dalam Kerangka Tujuan Pembangunan Berkelanjutan (SDGs)",
+     "language": "id",
+     "year": 2026,
+     "venue": "Jurnal Ilmiah Multidisipliner",
+     "in_v31": false
+    },
+    {
+     "id": "W7225784539",
+     "title": "Perancangan Iklan Layanan Masyarakat Edukasi Bahaya Sampah Plastik Di Laut Semarang",
+     "language": "id",
+     "year": 2026,
+     "venue": "Visual Heritage Jurnal Kreasi Seni dan Budaya",
+     "in_v31": false
+    },
+    {
+     "id": "W7167033547",
+     "title": "Paparan Subletal Mikroplastik Polistirena (PS) Menurunkan Kelangsungan Hidup, Pertumbuhan, dan Efisiensi Pemanfaatan Pakan pada Udang Vaname (Litopenaeus vannamei).",
+     "language": "id",
+     "year": 2026,
+     "venue": "Jurnal Aquaculture Indonesia",
+     "in_v31": false
+    },
+    {
+     "id": "W4409924588",
+     "title": "BİYOLOJİ EĞİTİMİ ÜZERİNE YAZILMIŞ TEZLERİNİN DEĞERLENDİRİLMESİ (2020- 2024)",
+     "language": "tr",
+     "year": 2025,
+     "venue": "the Journal of Academic Social Sciences",
+     "in_v31": false
+    },
+    {
+     "id": "W4409844666",
+     "title": "KANDUNGAN MIKROPLASTIK PADA SALURAN PENCERNAAN GOLDEN SNAPPER (Lutjanus johnii) YANG TERTANGKAP DI PERAIRAN MUARA SEMBILANG KECAMATAN SAMBOJA KABUPATEN KUTAI KARTANEGARA KALIMANTAN TIMUR",
+     "language": "id",
+     "year": 2025,
+     "venue": "Tropical Aquatic Sciences",
+     "in_v31": false
+    },
+    {
+     "id": "W4392842820",
+     "title": "Mikroplastik pada Terumbu Karang di Pulau Panjang Jepara",
+     "language": "id",
+     "year": 2023,
+     "venue": "Jurnal Pasir Laut",
+     "in_v31": false
+    },
+    {
+     "id": "W4402091932",
+     "title": "MicroBubbles: Der Gamechanger. Wie wir mit einer Sprunginnovation den Mikroplastikeintrag in unsere Meere senken",
+     "language": "de",
+     "year": 2024,
+     "venue": "SDG - Forschung, Konzepte, Lösungsansätze zur Nachhaltigkeit",
+     "in_v31": false
+    },
+    {
+     "id": "W7117686118",
+     "title": "Dampak Pencemaran Lingkungan Akibat Limbah Organik Terhadap Kualitas Lingkungan Perairan",
+     "language": "id",
+     "year": 2025,
+     "venue": "Jurnal Miyang Ronggolawe Fisheries and Marine Science Journal",
+     "in_v31": false
+    },
+    {
+     "id": "W4317905963",
+     "title": "Kajian Kelimpahan Mikroplastik Pada Berbagai Tekstur Sedimen Di Kawasan Pantai Wisata Mangrove Desa Labuhan",
+     "language": "ms",
+     "year": 2023,
+     "venue": "Juvenil Jurnal Ilmiah Kelautan dan Perikanan",
+     "in_v31": true
+    },
+    {
+     "id": "W3211740554",
+     "title": "Optimasi Waktu dan Suhu Refluk Pada Glikolisis Limbah Mikroplastik Polyethylene Terephthalate (PET) Dalam Garam Konsumsi di Kota Padang",
+     "language": "id",
+     "year": 2019,
+     "venue": null,
+     "in_v31": true
+    },
+    {
+     "id": "W4312905053",
+     "title": "Mikroplastik pada Tentakel dan Pencernaan Cumi – Cumi dari TPI Tambak Lorok",
+     "language": "id",
+     "year": 2022,
+     "venue": "Journal of Marine Research",
+     "in_v31": true
+    },
+    {
+     "id": "W4409369487",
+     "title": "Identifikasi Mikroplastik pada Kijing Taiwan (Anodonta woodina) dan Sedimen di Kali Surabaya",
+     "language": "id",
+     "year": 2025,
+     "venue": "Environmental Pollution Journal",
+     "in_v31": false
+    },
+    {
+     "id": "W7162225835",
+     "title": "Farklı Tip Atıksularda Ve Arıtma Çamurlarında Mikroplastik İnceleme Tekniklerinin Geliştirilmesi",
+     "language": "tr",
+     "year": 2019,
+     "venue": "Sakarya Üniversitesi Kurumsal Açık Akademik Arşivi",
+     "in_v31": false
+    },
+    {
+     "id": "W7166631696",
+     "title": "Perbandingan kelimpahan mikroplastik udara di wilayah pesisir Kecamatan Bulak Kota Surabaya dan Kecamatan Labang Kabupaten Bangkalan",
+     "language": "en",
+     "year": 2023,
+     "venue": "Digilib UIN Sunan Ampel Surabaya (UIN Sunan Ampel)",
+     "in_v31": false
+    },
+    {
+     "id": "W4415321938",
+     "title": "Kajian Mikroplastik Pada Kerang Hijau (Perna viridis) dari Lokasi Budidaya dan Pasar di Kota Semarang Serta Efektivitas Depurasinya",
+     "language": "id",
+     "year": 2025,
+     "venue": "BULETIN OSEANOGRAFI MARINA",
+     "in_v31": false
+    },
+    {
+     "id": "W4367844135",
+     "title": "Kajian Mikroplastik Pada Ikan Ekonomis di Pasar Tradisional Kota Palu",
+     "language": "id",
+     "year": 2023,
+     "venue": "Jurnal Kelautan Indonesian Journal of Marine Science and Technology",
+     "in_v31": true
+    },
+    {
+     "id": "W4405196183",
+     "title": "Konya ili tarım topraklarında mikroplastik kirlilik yükünün araştırılması",
+     "language": "tr",
+     "year": 2024,
+     "venue": "Ömer Halisdemir Üniversitesi Mühendislik Bilimleri Dergisi",
+     "in_v31": false
+    },
+    {
+     "id": "W7220275409",
+     "title": "Identifikasi Mikroplastik Pada Saluran Pencernaan Ikan Salam (Elagatis bipinnulata) di TPI Oeba Kota Kupang",
+     "language": "en",
+     "year": 2023,
+     "venue": "Jurnal Barracuda",
+     "in_v31": true
+    },
+    {
+     "id": "W3127480649",
+     "title": "Mikroplastik auf der Spur",
+     "language": "de",
+     "year": 2020,
+     "venue": "UmweltMagazin",
+     "in_v31": false
+    },
+    {
+     "id": "W7216447538",
+     "title": "KANDUNGAN DAN KELIMPAHAN MIKROPLASTIK PADA IKAN YANG DIDARATKAN DI PANTAI PASIR JAMBAK, PADANG",
+     "language": "en",
+     "year": 2023,
+     "venue": "Jurnal Katalisator",
+     "in_v31": true
+    },
+    {
+     "id": "W7110439038",
+     "title": "ANALISIS ONTOLOGIS MIKROPLASTIK DALAM TUBUH MANUSIA SEBAGAI ANCAMAN TERHADAP HAKIKAT EKSISTENSI DAN KESEHATAN BIOLOGIS MODERN",
+     "language": "en",
+     "year": 2025,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": true
+    },
+    {
+     "id": "W2955181974",
+     "title": "Mikroplastik durch die Luft",
+     "language": "de",
+     "year": 2019,
+     "venue": "Nachrichten aus der Chemie",
+     "in_v31": false
+    },
+    {
+     "id": "W4388427649",
+     "title": "Karakteristik Mikroplastik Pada Saluran Pencernaan Kerang Anadara granosa (Linnaeus, 1758) Menggunakan Metode Ekstraksi Basa",
+     "language": "id",
+     "year": 2023,
+     "venue": "SIMBIOSA",
+     "in_v31": false
+    },
+    {
+     "id": "W4408239557",
+     "title": "KOMPOSISI MIKROPLASTIK PADA AIR DAN SEDIMEN DI PULAU TEGAS, KABUPATEN PESAWARAN, LAMPUNG",
+     "language": "id",
+     "year": 2025,
+     "venue": "Jurnal Perikanan dan Kelautan",
+     "in_v31": false
+    },
+    {
+     "id": "W4387147518",
+     "title": "Identifikasi Jenis dan Kelimpahan Mikroplastik Air Kali Pelayaran Anak Sungai Brantas Kabupaten Sidoarjo Jawa Timur",
+     "language": "id",
+     "year": 2022,
+     "venue": "Environmental Pollution Journal",
+     "in_v31": false
+    },
+    {
+     "id": "W7154969819",
+     "title": "The Risk Exposure of Microplastics on Bottled Drinking Water For Kidney Health: Systematic Literature Review",
+     "language": "en",
+     "year": 2025,
+     "venue": "Buletin Keslingmas",
+     "in_v31": true
+    },
+    {
+     "id": "W3196390682",
+     "title": "SU KAYNAKLARINDA MİKROPLASTİKLERİN VARLIĞI VE İNSAN SAĞLIĞI AÇISINDAN ÖNEMİ",
+     "language": "tr",
+     "year": 2021,
+     "venue": "Veteriner Farmakoloji ve Toksikoloji Derneği Bülteni",
+     "in_v31": true
+    },
+    {
+     "id": "W7132593479",
+     "title": "Atıksu arıtma tesislerinde mikroplastik gideriminin araştırılması",
+     "language": "tr",
+     "year": 2022,
+     "venue": "Bursa Uludag University - AVESIS",
+     "in_v31": false
+    },
+    {
+     "id": "W7125514270",
+     "title": "Strategi Pengendalian Mikroplastik di Tingkat Rumah Tangga untuk Perlindungan Lingkungan dan Kesehatan",
+     "language": "id",
+     "year": 2025,
+     "venue": "Policy Brief Pertanian Kelautan dan Biosains Tropika",
+     "in_v31": false
+    },
+    {
+     "id": "W7126214120",
+     "title": "Analisis Kelimpahan Mikroplastik pada Air Sungai Bengawan Solo Wilayah Kelurahan Pucangsawit Kota Surakarta, Jawa Tengah",
+     "language": "en",
+     "year": 2026,
+     "venue": "Malahayati Nursing Journal",
+     "in_v31": true
+    },
+    {
+     "id": "W7225498972",
+     "title": "analisis kelimpahan mikroplastik udara dalam PM10 di jalan nusantara kota makassar",
+     "language": "id",
+     "year": 2026,
+     "venue": "Hasanuddin University Repository",
+     "in_v31": false
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 16,
+   "sample_language_label_counts": {
+    "id": 19,
+    "en": 12,
+    "de": 10,
+    "tr": 6,
+    "pl": 2,
+    "ms": 1
+   }
+  },
+  {
+   "id": "de-nanoplastic",
+   "languages": [
+    "de"
+   ],
+   "terms": [
+    "Nanoplastik"
+   ],
+   "query": "(\"Nanoplastik\")",
+   "a3_count_2026_11_18": 63,
+   "count": 62,
+   "language_label_counts": {
+    "de": 36,
+    "en": 9,
+    "id": 8,
+    "tr": 6,
+    "pl": 3
+   },
+   "fetched_at": "2026-11-23T05:27:46+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W4404095842",
+     "title": "Mikro- und Nanoplastik in Karotisplaque erhöht kardiovaskuläres Risiko",
+     "language": "de",
+     "year": 2024,
+     "venue": "DMW - Deutsche Medizinische Wochenschrift",
+     "in_v31": false
+    },
+    {
+     "id": "W7135070898",
+     "title": "Auswirkungen von Mikro- und Nanoplastik auf die Fertilität",
+     "language": "de",
+     "year": 2026,
+     "venue": "Gynäkologische Endokrinologie",
+     "in_v31": true
+    },
+    {
+     "id": "W4289223909",
+     "title": "Mikro‐ und Nanoplastik in Lebensmitteln",
+     "language": "de",
+     "year": 2022,
+     "venue": "Lebensmittelchemie",
+     "in_v31": false
+    },
+    {
+     "id": "W3207519053",
+     "title": "Kajian Kelimpahan Mikroplastik di Biota Perairan",
+     "language": "id",
+     "year": 2021,
+     "venue": "Jurnal Ilmu Lingkungan",
+     "in_v31": true
+    },
+    {
+     "id": "W7131557440",
+     "title": "Raman-spektroskopische Charakterisierung von Zellen und Gewebe nach Exposition mit Nanoplastik",
+     "language": "de",
+     "year": 2022,
+     "venue": "LIBDOC - Westsächsische Hochschule Zwickau",
+     "in_v31": true
+    },
+    {
+     "id": "W4391451904",
+     "title": "News",
+     "language": "en",
+     "year": 2024,
+     "venue": "ergopraxis",
+     "in_v31": false
+    },
+    {
+     "id": "W4404095817",
+     "title": "Kommentar zu „Mikro- und Nanoplastik in Karotisplaque erhöht kardiovaskuläres Risiko“",
+     "language": "de",
+     "year": 2024,
+     "venue": "DMW - Deutsche Medizinische Wochenschrift",
+     "in_v31": false
+    },
+    {
+     "id": "W4387145269",
+     "title": "Schöne Gifte – bedenkliche Stoffe in Kosmetika",
+     "language": "de",
+     "year": 2023,
+     "venue": "Springer eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W4412101502",
+     "title": "Effect of Polystyrene Nanoplastic on Colon, Liver, and Spleen Histopathology of Rats (Rattus norvegicus L.)",
+     "language": "en",
+     "year": 2025,
+     "venue": "LenteraBio Berkala Ilmiah Biologi",
+     "in_v31": true
+    },
+    {
+     "id": "W7131119641",
+     "title": "Towards toxicity risk assessment of environmental samples applying biological barriers in vitro models",
+     "language": "en",
+     "year": 2026,
+     "venue": "University of Vienna",
+     "in_v31": false
+    },
+    {
+     "id": "W7131939879",
+     "title": "Mikro- und Nanoplastik in der gesundheitlichen Risikobewertung",
+     "language": "de",
+     "year": 2025,
+     "venue": "OpenAgrar",
+     "in_v31": false
+    },
+    {
+     "id": "W4320077149",
+     "title": "Pemanfaatan Mikroorganisme untuk Biodegradasi Mikroplastik",
+     "language": "id",
+     "year": 2022,
+     "venue": "MAIYAH",
+     "in_v31": false
+    },
+    {
+     "id": "W4313261759",
+     "title": "Microplastics and nanoplastics in agriculture—A potential source of soil and groundwater contamination?",
+     "language": "en",
+     "year": 2022,
+     "venue": "Grundwasser",
+     "in_v31": true
+    },
+    {
+     "id": "W2912315072",
+     "title": "Mikroplastik \\ndalam Seafood dari Pantai Utara Jawa",
+     "language": "id",
+     "year": 2018,
+     "venue": "Unika Repository (Soegijapranata Catholic University)",
+     "in_v31": false
+    },
+    {
+     "id": "W4389304015",
+     "title": "Systematic Review: Efek Nanoplastik terhadap Metilasi DNA pada Manusia",
+     "language": "id",
+     "year": 2023,
+     "venue": "Media Gizi Kesmas",
+     "in_v31": true
+    },
+    {
+     "id": "W4376599738",
+     "title": "Innovatives, umweltverträgliches Verfahren zur Entfernung von Kohlenwasserstoffen und organischen Verbindungen aus Wässern mittels funktionalisierter und wiederverwendbarer Eisenoxidpartikel",
+     "language": "de",
+     "year": 2023,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W2897598845",
+     "title": "Identifizierung und biotechnologische Anwendungen Polymer-bindender Peptide",
+     "language": "de",
+     "year": 2017,
+     "venue": "Univ. Duesseldorf: Duesseldorfer Dokumenten- und Publikationsserver",
+     "in_v31": false
+    },
+    {
+     "id": "W7217939364",
+     "title": "KARAKTERISTIK MIKROPLASTIK PADA KERANG KONSUMSI DI DESA BONTOSUNGGU KABUPATEN JENEPONTO = Characteristics of Microplastics in Consumption Shellfish on Bontosunggu Village Jeneponto Regency",
+     "language": "id",
+     "year": 2023,
+     "venue": "Hasanuddin University Repository",
+     "in_v31": true
+    },
+    {
+     "id": "W7225446724",
+     "title": "Effects of nanoplastics on neurogenesis in Zebrafish embryos",
+     "language": "tr",
+     "year": 2024,
+     "venue": "Dspace Repository (Marmara Üniversitesi)",
+     "in_v31": true
+    },
+    {
+     "id": "W7224980870",
+     "title": "Mehr Mikroplastik, weniger Mais?",
+     "language": "de",
+     "year": 2026,
+     "venue": "Organic Eprints (International Centre for Research in Organic Food Systems, and Research Institute of Organic Agriculture)",
+     "in_v31": false
+    },
+    {
+     "id": "W4283714974",
+     "title": "Nanoplastiklerin Toksik Etkisi",
+     "language": "tr",
+     "year": 2022,
+     "venue": "Artıbilim Adana Alparslan Türkeş Bilim ve Teknoloji Üniversitesi Fen Bilimleri Dergisi",
+     "in_v31": false
+    },
+    {
+     "id": "W4416129359",
+     "title": "Kontaminasi dan Akumulasi Mikro-nanoplastik Dapat Menjadi Faktor Risiko Terbaru Penyakit Kardiovaskular",
+     "language": "en",
+     "year": 2025,
+     "venue": "Jurnal Ilmu Kedokteran (Journal of Medical Science)",
+     "in_v31": true
+    },
+    {
+     "id": "W7135157421",
+     "title": "Nanoplastik - Toxikologische Betrachtung und gesundheitliche Auswirkungen auf den Menschen",
+     "language": "de",
+     "year": 2023,
+     "venue": "Qucosa (Saxon State and University Library Dresden)",
+     "in_v31": false
+    },
+    {
+     "id": "W3166027081",
+     "title": "Analisis Kandungan Mikroplastik Pada Air di Waduk Dempok Kepanjen Malang",
+     "language": "id",
+     "year": 2020,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7233669926",
+     "title": "Rückhalt von Nanoplastik-Partikeln bei der Wasseraufbereitung",
+     "language": "de",
+     "year": 2023,
+     "venue": "DORA Eawag (Swiss Federal Institute of Aquatic Science and Technology (Eawag))",
+     "in_v31": false
+    },
+    {
+     "id": "W4281707152",
+     "title": "Mikro‐ und Nanoplastik haben nur einen unwesentlichen Einfluss auf den vertikalen Stofftransport organischer Schadstoffe in landwirtschaftlichen Böden",
+     "language": "de",
+     "year": 2022,
+     "venue": "Vom Wasser",
+     "in_v31": false
+    },
+    {
+     "id": "W4396524699",
+     "title": "Wenn Nanoplastik keines ist",
+     "language": "de",
+     "year": 2024,
+     "venue": "Konstruktion",
+     "in_v31": false
+    },
+    {
+     "id": "W7219254096",
+     "title": "Charakterisierung luftgetragener Reifen- und Straßenabriebpartikel (TRWP) innerhalb einer Reifeneinhausung mit REM-EDX",
+     "language": "de",
+     "year": 2026,
+     "venue": "elib (German Aerospace Center)",
+     "in_v31": false
+    },
+    {
+     "id": "W4410171679",
+     "title": "Physikochemische, strukturelle und zellbiologische Charakterisierung von Nanoplastik‐Protein‐Komplexen",
+     "language": "de",
+     "year": 2025,
+     "venue": "Lebensmittelchemie",
+     "in_v31": false
+    },
+    {
+     "id": "W4200278887",
+     "title": "Mikroplastik in limnischen Ökosystemen : Vorkommen, Interaktion mit Biota und Toxizität",
+     "language": "de",
+     "year": 2021,
+     "venue": "Publication Server of Goethe University Frankfurt am Main (Goethe University Frankfurt)",
+     "in_v31": false
+    },
+    {
+     "id": "W4415609027",
+     "title": "Neues, einfaches Nachweisverfahren für Nanoplastik",
+     "language": "de",
+     "year": 2025,
+     "venue": "Konstruktion",
+     "in_v31": false
+    },
+    {
+     "id": "W7216399853",
+     "title": "Nano- i mikroplastiki w środowisku pracy. Wpływ mikro- i nanoplastiku na komórki z układu oddechowego i bariery krew-mózg: Materiały informacyjne",
+     "language": "pl",
+     "year": 2025,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4400829327",
+     "title": "Mikro- und Nanoplastik – ein neuer kardiovaskulärer Risikofaktor",
+     "language": "de",
+     "year": 2024,
+     "venue": "Die Innere Medizin",
+     "in_v31": true
+    },
+    {
+     "id": "W7225762982",
+     "title": "Einleitung zur Risikobewertung und Risikowahrnehmung",
+     "language": "de",
+     "year": 2026,
+     "venue": "OpenAgrar",
+     "in_v31": false
+    },
+    {
+     "id": "W7166535726",
+     "title": "Die Grenzen des Wissens im umweltrechtlichen Genehmigungsverfahren",
+     "language": "de",
+     "year": 2025,
+     "venue": "University of Vienna",
+     "in_v31": false
+    },
+    {
+     "id": "W7132020902",
+     "title": "Wofür im Unterricht keine Zeit blieb: Mikro- und Nanoplastik in Lebensmitteln",
+     "language": "de",
+     "year": 2024,
+     "venue": "OpenAgrar",
+     "in_v31": false
+    },
+    {
+     "id": "W7132651039",
+     "title": "Organverteilung von Mikro- und Nanoplastik im Tierversuch",
+     "language": "de",
+     "year": 2024,
+     "venue": "OpenAgrar",
+     "in_v31": false
+    },
+    {
+     "id": "W4405559362",
+     "title": "Raman‐Mikrospektroskopie für die Bestimmung von Mikro‐ und Nanoplastik",
+     "language": "de",
+     "year": 2024,
+     "venue": "Vom Wasser",
+     "in_v31": false
+    },
+    {
+     "id": "W7117530336",
+     "title": "Çevresel Kılcal Plastiklerin (Mikro ve Nanoplastikler) Kardiyovasküler Sistem Üzerindeki Etkileri ve Toksikolojik Mekanizmalar",
+     "language": "tr",
+     "year": 2025,
+     "venue": "Özgür Yayınları eBooks",
+     "in_v31": true
+    },
+    {
+     "id": "W7147005628",
+     "title": "Use and Toxicological Effects of Microplastics and Nanoplastics in Personal Care Products: Traditional Review",
+     "language": "en",
+     "year": 2026,
+     "venue": "Journal of Literature Pharmacy Sciences",
+     "in_v31": true
+    },
+    {
+     "id": "W4313888629",
+     "title": "Mikro- und Nanoplastik im Trinkwasser: ein Gesundheitsrisiko?",
+     "language": "de",
+     "year": 2022,
+     "venue": "Public Health Forum",
+     "in_v31": false
+    },
+    {
+     "id": "W4405416392",
+     "title": "Gıda Endüstrisinde Küresel Plastik Kirliliği: Mikro-Nanoplastikler ve Çevresel Etkileri",
+     "language": "tr",
+     "year": 2024,
+     "venue": "Dicle Üniversitesi Veteriner Fakültesi Dergisi",
+     "in_v31": false
+    },
+    {
+     "id": "W3110374816",
+     "title": "Mikroplastik im Wasserkreislauf",
+     "language": "de",
+     "year": 2020,
+     "venue": "DepositOnce",
+     "in_v31": false
+    },
+    {
+     "id": "W7129083533",
+     "title": "Von Leiterplatten zu Windrotoren – chemisches Recycling",
+     "language": "de",
+     "year": 2026,
+     "venue": "Wissen hoch N",
+     "in_v31": false
+    },
+    {
+     "id": "W4413311737",
+     "title": "„Hooked for Decay“ mit hydrophob beschichteten magnetischen Nanopartikeln zum Fangen und Abbauen von Nanoplastik",
+     "language": "de",
+     "year": 2025,
+     "venue": "Angewandte Chemie",
+     "in_v31": false
+    },
+    {
+     "id": "W4281763568",
+     "title": "Mikro‐ und Nanoplastik",
+     "language": "de",
+     "year": 2022,
+     "venue": "Nachrichten aus der Chemie",
+     "in_v31": false
+    },
+    {
+     "id": "W4409020454",
+     "title": "Ein pulverisierter Plastiklöffel im Gehirn",
+     "language": "de",
+     "year": 2025,
+     "venue": "DNP – Die Neurologie & Psychiatrie",
+     "in_v31": false
+    },
+    {
+     "id": "W7221826814",
+     "title": "Analysis of light-absorbing snow impurities in the seasonal snow cover at Hoher Sonnblick",
+     "language": "en",
+     "year": 2026,
+     "venue": "reposiTUm (TU Wien)",
+     "in_v31": false
+    },
+    {
+     "id": "W4399243974",
+     "title": "DESAIN KONSEPTUAL MINI SHIP SEBAGAI PEMBERSIH SAMPAH DI LINGKUNGAN PANTAI WISATA",
+     "language": "id",
+     "year": 2024,
+     "venue": "Riset Sains dan Teknologi Kelautan",
+     "in_v31": false
+    },
+    {
+     "id": "W4387145264",
+     "title": "Kunststoffe – überall in unserer Umwelt",
+     "language": "de",
+     "year": 2023,
+     "venue": "Springer eBooks",
+     "in_v31": false
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 12,
+   "sample_language_label_counts": {
+    "de": 31,
+    "en": 7,
+    "id": 7,
+    "tr": 4,
+    "pl": 1
+   }
+  },
+  {
+   "id": "de-plastic-waste-pollution",
+   "languages": [
+    "de"
+   ],
+   "terms": [
+    "Plastikmüll",
+    "Kunststoffabfälle",
+    "Plastikverschmutzung"
+   ],
+   "query": "(\"Plastikmüll\" OR \"Kunststoffabfälle\" OR \"Plastikverschmutzung\")",
+   "a3_count_2026_11_18": 268,
+   "count": 274,
+   "language_label_counts": {
+    "de": 247,
+    "en": 24,
+    "unlabelled": 3
+   },
+   "fetched_at": "2026-11-23T05:27:48+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W4232232079",
+     "title": "Springer Professional",
+     "language": "en",
+     "year": 2016,
+     "venue": "WASSERWIRTSCHAFT",
+     "in_v31": false
+    },
+    {
+     "id": "W4393904762",
+     "title": "Wertvolle Öle aus Kunststoffabfällen",
+     "language": "de",
+     "year": 2024,
+     "venue": "VDI energie + umwelt",
+     "in_v31": false
+    },
+    {
+     "id": "W7215048869",
+     "title": "Fossile Moderne: Eine Naturgeschichte der Gegenwart",
+     "language": "de",
+     "year": 2026,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3114702631",
+     "title": "EU schränkt Plastikmüll-Exporte stark ein",
+     "language": "de",
+     "year": 2020,
+     "venue": "Tagesspiegel Background Energie & Klima",
+     "in_v31": false
+    },
+    {
+     "id": "W4413389623",
+     "title": "DIN EN 15347-4:2025-10, Kunststoffe_- Sortierte Kunststoffabfälle_- Teil_4: Qualitätsstufen von sortierten Polyethylenterephthalat(PET)-Abfällen und spezifische Prüfverfahren; Deutsche Fassung EN_15347-4:2025",
+     "language": "de",
+     "year": 2025,
+     "venue": "DIN Standards",
+     "in_v31": false
+    },
+    {
+     "id": "W7141474012",
+     "title": "PlasticObs_plus - Verbund - Kl: PlasticObs_plus - Maschinelles Lernen auf Multisensordaten der flugzeuggestützten Fernerkundung zur Bekämpfung von Plastikmüll in Meeren und Flüssen",
+     "language": "de",
+     "year": 2025,
+     "venue": "RENATE",
+     "in_v31": false
+    },
+    {
+     "id": "W4246641248",
+     "title": "EU-Kommission legt Grünbuch für eine europäische Strategie für Plastikmüll vor",
+     "language": "de",
+     "year": 2013,
+     "venue": "Wasser und Abfall",
+     "in_v31": false
+    },
+    {
+     "id": "W4406696894",
+     "title": "Plasmabeschichtetes Papier wird zum Kunststoffersatz",
+     "language": "de",
+     "year": 2025,
+     "venue": "Konstruktion",
+     "in_v31": false
+    },
+    {
+     "id": "W2916089250",
+     "title": "Unverpackt einkaufen: Mit neuen Routinen aus der Nische?",
+     "language": "de",
+     "year": 2018,
+     "venue": "Ökologisches Wirtschaften - Fachzeitschrift",
+     "in_v31": false
+    },
+    {
+     "id": "W7150032852",
+     "title": "Die EU nachhaltig digital vermitteln: Didaktische Potentiale der Erklärvideoproduktion zum Themenfeld Plastikmüll und Kreislaufwirtschaft für das europabezogene Lernen und einer Bildung für nachhaltige Entwicklung",
+     "language": "de",
+     "year": 2026,
+     "venue": "Politische Bildungen",
+     "in_v31": false
+    },
+    {
+     "id": "W2928983243",
+     "title": "20 Tipps, um Plastikmüll und dessen Eintrag in unsere Gewässer zu vermeiden",
+     "language": "de",
+     "year": 2019,
+     "venue": "Essentials",
+     "in_v31": false
+    },
+    {
+     "id": "W3131575152",
+     "title": "Plastikmüll in den Meeren",
+     "language": "de",
+     "year": 2021,
+     "venue": "Springer eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7167238372",
+     "title": "Transformation der chemischen Verfahrenstechnik - Effiziente Herstellungswege mit veränderter Rohstoffbasis",
+     "language": "de",
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W7111186900",
+     "title": "Sustainable Lab - Nachhaltigkeit in der praktischen MINT-Ausbildung verankern",
+     "language": "de",
+     "year": 2025,
+     "venue": "Repositorium der Technischen Hochschule Ingolstadt",
+     "in_v31": false
+    },
+    {
+     "id": "W2556556982",
+     "title": "Ausstellen & Vermitteln als integriertes Konzept: Die Ausstellung Endstation Meer? Das Plastikmüll-Projekt im Museum für Gestaltung Zürich",
+     "language": "de",
+     "year": 2016,
+     "venue": "transcript Verlag eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W2913929945",
+     "title": "Vom Land ins Meer - Modell zur Erfassung landbasierter Kunststoffabfälle",
+     "language": "de",
+     "year": 2019,
+     "venue": "Wasser und Abfall",
+     "in_v31": false
+    },
+    {
+     "id": "W4413389724",
+     "title": "DIN EN 15347-2:2025-10, Kunststoffe_- Sortierte Kunststoffabfälle_- Teil_2: Qualitätsstufen von sortierten Polyethylen(PE)-Abfällen und spezifische Prüfverfahren; Deutsche Fassung EN_15347-2:2025",
+     "language": "de",
+     "year": 2025,
+     "venue": "DIN Standards",
+     "in_v31": false
+    },
+    {
+     "id": "W7110690252",
+     "title": "Investigating plastic addives in children's toys",
+     "language": "en",
+     "year": 2024,
+     "venue": "BOK:ePub (Universitätsbibliothek der Universität f Bodenkultur Wien)",
+     "in_v31": false
+    },
+    {
+     "id": "W2603071269",
+     "title": "Das Ende der Ozeane - Warum wir ohne die Meere nicht überleben werden",
+     "language": "de",
+     "year": 2015,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W2035090883",
+     "title": "Vermüllung eines Meeres – Plastikmüll in der Nordsee",
+     "language": "de",
+     "year": 1991,
+     "venue": "Biologie in unserer Zeit",
+     "in_v31": false
+    },
+    {
+     "id": "W2888309343",
+     "title": "Profilbereich \"Molecular Science & Engineering (MSE)",
+     "language": "en",
+     "year": 2018,
+     "venue": "RWTH Publications (RWTH Aachen)",
+     "in_v31": false
+    },
+    {
+     "id": "W2795951316",
+     "title": "Sortierung von heterogenen Kunststofffraktionen",
+     "language": "de",
+     "year": 2010,
+     "venue": "VDM Verlag Dr. Müller eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W4385299667",
+     "title": "Grüne Sport-PR in Aktienunternehmen",
+     "language": "de",
+     "year": 2023,
+     "venue": "Sportmanagement",
+     "in_v31": false
+    },
+    {
+     "id": "W4413943481",
+     "title": "Zirkuläres Öl aus Kunststoffabfällen",
+     "language": "de",
+     "year": 2025,
+     "venue": "Nachhaltige Industrie",
+     "in_v31": false
+    },
+    {
+     "id": "W3013903920",
+     "title": "Von Plastikmüll zu Plastikwertstoffen — Polymerrecycling neu gedacht",
+     "language": "en",
+     "year": 2020,
+     "venue": "BIOspektrum",
+     "in_v31": true
+    },
+    {
+     "id": "W4391545773",
+     "title": "Zuverlässig Positionen erfassen",
+     "language": "de",
+     "year": 2024,
+     "venue": "DER KONSTRUKTEUR",
+     "in_v31": false
+    },
+    {
+     "id": "W4392293170",
+     "title": "Enzyme gegen die Plastikflut",
+     "language": "de",
+     "year": 2024,
+     "venue": "Nachrichten aus der Chemie",
+     "in_v31": false
+    },
+    {
+     "id": "W2570787775",
+     "title": "Auswirkungen des Plastikmülls im Meer",
+     "language": "de",
+     "year": 2016,
+     "venue": "Helmholtz-Zentrum für Polar-und Meeresforschung (Alfred-Wegener-Institut)",
+     "in_v31": false
+    },
+    {
+     "id": "W4404892103",
+     "title": "Anthropogene Einflüsse auf marine Lebensräume",
+     "language": "de",
+     "year": 2024,
+     "venue": "Springer eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W3010168000",
+     "title": "Mit Polyphosphat beschichteten Photokatalysatoren gegen Plastikmüll, SUMMIT UMWELTWIRTSCHAFT.NRW 2018, Essen, Germany, November 2018 (1st Innovation Price)",
+     "language": "de",
+     "year": 2018,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3185059927",
+     "title": "Einkaufen ohne Plastikmüll",
+     "language": "de",
+     "year": 2018,
+     "venue": "heiDOK (Heidelberg University)",
+     "in_v31": false
+    },
+    {
+     "id": "W7213513429",
+     "title": "hoch3 4/2012",
+     "language": "de",
+     "year": 2026,
+     "venue": "Technischen Universität Darmstadt",
+     "in_v31": false
+    },
+    {
+     "id": "W2787003751",
+     "title": "Müll im Meer- Schülerinnen und Schüler forschen zu Ursachen und Vorkommen von Plastikmüll im Meer",
+     "language": "de",
+     "year": 2017,
+     "venue": "Helmholtz-Zentrum für Polar-und Meeresforschung (Alfred-Wegener-Institut)",
+     "in_v31": false
+    },
+    {
+     "id": "W3108875592",
+     "title": "Titelbild: Dem Plastikmüll auf der Spur – Ein internationales Citizen‐Science‐Projekt zur Förderung der naturwissenschaftlichen Grundbildung von Schülerinnen und Schülern (CHEMKON 7/2020)",
+     "language": "de",
+     "year": 2020,
+     "venue": "CHEMKON",
+     "in_v31": false
+    },
+    {
+     "id": "W3133053930",
+     "title": "Greenwashing: Die Kunst der Scheinheiligkeit",
+     "language": "de",
+     "year": 2020,
+     "venue": "transcript Verlag eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W2473253452",
+     "title": "Katalysatoren für die Produktion von Biokunststoffen",
+     "language": "de",
+     "year": 2016,
+     "venue": "Chemie in unserer Zeit",
+     "in_v31": false
+    },
+    {
+     "id": "W4401798565",
+     "title": "Wie Plastikverschmutzung aquatische Tiere beeinflusst",
+     "language": "de",
+     "year": 2024,
+     "venue": "Springer eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W4312743376",
+     "title": "Plastikmüll für Hochleistungsstraßen",
+     "language": "de",
+     "year": 2022,
+     "venue": "VDI nachrichten",
+     "in_v31": false
+    },
+    {
+     "id": "W4387548634",
+     "title": "Lektion 19: Kunststoffabfälle",
+     "language": "de",
+     "year": 2021,
+     "venue": "Carl Hanser Verlag GmbH & Co. KG eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W3213247498",
+     "title": "Prokaryotic communities and plastic pollution in the ocean",
+     "language": "en",
+     "year": 2020,
+     "venue": null,
+     "in_v31": true
+    },
+    {
+     "id": "W2028532364",
+     "title": "Biologischer Abbau von Polymerwerkstoffen auf Basis nachwachsender Rohstoffe",
+     "language": "de",
+     "year": 1997,
+     "venue": "Fette Seifen Anstrichmittel",
+     "in_v31": false
+    },
+    {
+     "id": "W3197816270",
+     "title": "Party-Geschirr aus nachwachsenden Rohstoffen",
+     "language": "de",
+     "year": 2021,
+     "venue": "Lebensmittel Zeitung",
+     "in_v31": false
+    },
+    {
+     "id": "W4391370429",
+     "title": "Mordor im Plastikmüll",
+     "language": "de",
+     "year": 2022,
+     "venue": "Theater heute",
+     "in_v31": false
+    },
+    {
+     "id": "W2790388663",
+     "title": "Trendbericht Makromolekulare Chemie 2017: Kunststoffwirtschaft",
+     "language": "de",
+     "year": 2018,
+     "venue": "Nachrichten aus der Chemie",
+     "in_v31": false
+    },
+    {
+     "id": "W4287098990",
+     "title": "Verwertung von Kunststoffabfällen",
+     "language": "de",
+     "year": 2022,
+     "venue": "Springer eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W3194644174",
+     "title": "Aktuelle Bestandsaufnahme einer kundenindividuellen und nachhaltigen Lebensmittellogistik anhand einer Webscan-basierten Analyse",
+     "language": "de",
+     "year": 2021,
+     "venue": "Springer eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W3021357808",
+     "title": "Der EU-Plan gegen Plastikmüll – treffpunkteuropa.de",
+     "language": "de",
+     "year": 2021,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W1548674331",
+     "title": "Pyrolysis of polypropylene by Ziegler-Natta catalysts",
+     "language": "en",
+     "year": 2006,
+     "venue": null,
+     "in_v31": true
+    },
+    {
+     "id": "W4413389804",
+     "title": "DIN EN 15347-5:2025-10, Kunststoffe_- Sortierte Kunststoffabfälle_- Teil_5: Qualitätsstufen von sortierten Polyvinylchlorid(PVC)-Abfällen und spezifische Prüfverfahren; Deutsche Fassung EN_15347-5:2025",
+     "language": "de",
+     "year": 2025,
+     "venue": "DIN Standards",
+     "in_v31": false
+    },
+    {
+     "id": "W2983620229",
+     "title": "Chemisches Recycling von gemischten Kunststoffabfällen als ergänzender Recyclingpfad zur Erhöhung der Recyclingquote",
+     "language": "de",
+     "year": 2019,
+     "venue": "Österreichische Wasser- und Abfallwirtschaft",
+     "in_v31": true
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 4,
+   "sample_language_label_counts": {
+    "de": 44,
+    "en": 6
+   }
+  },
+  {
+   "id": "es-pt-microplastic",
+   "languages": [
+    "es",
+    "pt"
+   ],
+   "terms": [
+    "microplásticos"
+   ],
+   "query": "(\"microplásticos\")",
+   "a3_count_2026_11_18": 1817,
+   "count": 1816,
+   "language_label_counts": {
+    "es": 837,
+    "pt": 830,
+    "en": 135,
+    "ca": 6,
+    "hr": 2,
+    "vi": 2,
+    "eu": 1,
+    "fr": 1,
+    "gl": 1,
+    "vkp": 1
+   },
+   "fetched_at": "2026-11-23T05:27:49+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W4281564082",
+     "title": "A novel in situ and graded sampling system for seawater microplastics",
+     "language": "es",
+     "year": 2022,
+     "venue": "Tecnología y Ciencias del Agua",
+     "in_v31": true
+    },
+    {
+     "id": "W7203970410",
+     "title": "Poluição microplástica em um molusco bivalve comercial Anomalocardia flexuosa (Linnaeus, 1767) em um estuário da Costa Amazônica Maranhense",
+     "language": "pt",
+     "year": 2026,
+     "venue": "Revista Brasileira de Meio Ambiente",
+     "in_v31": true
+    },
+    {
+     "id": "W7134851004",
+     "title": "Contaminação por Microplásticos: Impactos na Saúde Humana e Ambiental",
+     "language": "pt",
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W7160083347",
+     "title": "Microplásticos: La contaminación silente que amenaza al Golfo de California",
+     "language": "es",
+     "year": 2025,
+     "venue": "Recursos Naturales y Sociedad",
+     "in_v31": false
+    },
+    {
+     "id": "W7151628402",
+     "title": "TÉCNICAS ANALÍTICAS PARA IDENTIFICAÇÃO E QUANTIFICAÇÃO DE MICROPLÁSTICOS EM SOLOS",
+     "language": "pt",
+     "year": 2026,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7159739754",
+     "title": "Presencia de microplásticos en la ciénaga Guartinaja, complejo cenagoso del Bajo Sinú",
+     "language": "es",
+     "year": 2023,
+     "venue": "Repositorio Universidad de Córdoba",
+     "in_v31": true
+    },
+    {
+     "id": "W4411193727",
+     "title": "EPIGENÉTICA E PRESSÃO AMBIENTAL: O IMPACTO DOS MICROPLÁSTICOS NA SAÚDE HUMANA",
+     "language": "pt",
+     "year": 2025,
+     "venue": "Congresso Brasileiro de Biotecnologia Aplicada",
+     "in_v31": false
+    },
+    {
+     "id": "W7119243496",
+     "title": "Poluição plástica e seus efeitos em organismos aquáticos",
+     "language": "pt",
+     "year": 2024,
+     "venue": "LA Referencia (Red Federada de Repositorios Institucionales de Publicaciones Científicas)",
+     "in_v31": false
+    },
+    {
+     "id": "W4412030207",
+     "title": "MICROPLÁSTICOS E NANOPLÁSTICOS EM ALIMENTOS: UMA REVISÃO SOBRE CONTAMINANTES EMERGENTES",
+     "language": "pt",
+     "year": 2025,
+     "venue": "Simpósio de Ensino, Pesquisa e Extensão (SIMPEX)",
+     "in_v31": false
+    },
+    {
+     "id": "W3080759138",
+     "title": "POLUIÇÃO POR RESÍDUOS SÓLIDOS E MICROPLÁSTICOS EM AMBIENTES COSTEIROS",
+     "language": "pt",
+     "year": 2020,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4408322043",
+     "title": "Fast Fashion: Impacto Ambiental, Explotación Laboral, Contaminación Masiva y la Necesidad Urgente de Búsqueda de Alternativas Sostenibles a Nivel Global",
+     "language": "es",
+     "year": 2025,
+     "venue": "Revista Científica de Salud y Desarrollo Humano",
+     "in_v31": false
+    },
+    {
+     "id": "W4402786456",
+     "title": "Microplásticos y nanoplásticos: una amenaza para la salud humana y el medio ambiente",
+     "language": "es",
+     "year": 2025,
+     "venue": "Mundo Nano Revista Interdisciplinaria en Nanociencia y Nanotecnología",
+     "in_v31": false
+    },
+    {
+     "id": "W4394612968",
+     "title": "2BF-MP BOMBA FILTRADORA DE MICROPLÁSTICO",
+     "language": "pt",
+     "year": 2022,
+     "venue": "Revista Tecnológica da FATEC",
+     "in_v31": false
+    },
+    {
+     "id": "W7225517686",
+     "title": "Determinación de la presencia de microplásticos en miel artesanal e industrial",
+     "language": "es",
+     "year": 2019,
+     "venue": "Repositorio Digital de la Universidad Central del Ecuador",
+     "in_v31": false
+    },
+    {
+     "id": "W7223104474",
+     "title": "Mecanismos bioquímicos de la toxicidad por microplásticos en la salud pública mexicana",
+     "language": "es",
+     "year": 2026,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3096269074",
+     "title": "Presencia de microplásticos en peces pelágicos de mayor comercialización, en el mercado de “Playita Mía” de la ciudad de Manta",
+     "language": "es",
+     "year": 2020,
+     "venue": null,
+     "in_v31": true
+    },
+    {
+     "id": "W4394594847",
+     "title": "El desarrollo de plástico biodegradable a partir del cáñamo por estímulo microbiano",
+     "language": "es",
+     "year": 2024,
+     "venue": "Revista Tecnología en Marcha",
+     "in_v31": false
+    },
+    {
+     "id": "W4403579591",
+     "title": "COMO A POLUIÇÃO POR MICROPLÁSTICOS AFETA DIRETA E INDIRETAMENTE A SUSTENTABILIDADE SOCIAL, AMBIENTAL E ECONÔMICA DOS 17 ODS",
+     "language": "pt",
+     "year": 2024,
+     "venue": "Home Editora eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W4402903115",
+     "title": "Quantificação de microplásticos de córrego urbano: um estudo de caso no córrego da Manga em Várzea Grande/ Mato Grosso – Brasil",
+     "language": "pt",
+     "year": 2024,
+     "venue": "E&S Engineering and Science",
+     "in_v31": false
+    },
+    {
+     "id": "W7217064950",
+     "title": "Diseño y construcción de un prototipo de vehículo marino de superficie no tripulado (USV) tipo catamarán para la recolección de macro plásticos en un ambiente controlado",
+     "language": "es",
+     "year": 2023,
+     "venue": "Repositorio Institucional de la Universidad de las Fuerzas Armadas ESPE (Universidad de las Fuerzas Armadas ESPE)",
+     "in_v31": false
+    },
+    {
+     "id": "W4387347293",
+     "title": "Microplastics in beaches within the influence area of the Veracruz Reef System National Park (PNSAV), Mexico",
+     "language": "en",
+     "year": 2023,
+     "venue": "Hidrobiológica",
+     "in_v31": true
+    },
+    {
+     "id": "W7112775906",
+     "title": "Evaluación de técnicas de visión por computador para la clasificación de microplásticos por color.",
+     "language": "es",
+     "year": 2025,
+     "venue": "Acceda (Universidad de Las Palmas de Gran Canaria)",
+     "in_v31": false
+    },
+    {
+     "id": "W4405639527",
+     "title": "Plásticos em ecossistemas costeiros e análise da co-gaseificação como alternativa para mitigação de seu impacto ambiental",
+     "language": "pt",
+     "year": 2023,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4402950195",
+     "title": "CAPÍTULO 2 - LEVANTAMENTO BÁSICO ARBÓREO DAS CINCO PRINCIPAIS PRAÇAS PÚBLICAS NO MUNICÍPIO DE SÃO JOÃO DO PIAUÍ",
+     "language": "pt",
+     "year": 2024,
+     "venue": "Wissen Editora eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7131826059",
+     "title": "Contaminación por microplásticos en tres peces marinos del Perú",
+     "language": "en",
+     "year": 2026,
+     "venue": "Revista de Investigaciones Veterinarias del Perú",
+     "in_v31": true
+    },
+    {
+     "id": "W4390604100",
+     "title": "Influencia de las condiciones ambientales sobre la distribución y tipos de microplásticos en aguas superficiales en la bahía de Tumaco, Pacífico colombiano",
+     "language": "es",
+     "year": 2024,
+     "venue": "Boletín de Investigaciones Marinas y Costeras",
+     "in_v31": false
+    },
+    {
+     "id": "W7164639148",
+     "title": "Estudio cualitativo del impacto ambiental de toallitas húmedas y desarrollo de un prototipo preliminar compostable de algodón",
+     "language": "es",
+     "year": 2026,
+     "venue": "UPCommons institutional repository (Universitat Politècnica de Catalunya)",
+     "in_v31": false
+    },
+    {
+     "id": "W4393170478",
+     "title": "PRESENÇA E DANOS CAUSADOS POR MICROPLÁSTICOS EM ORGANISMOS AQUÁTICOS",
+     "language": "pt",
+     "year": 2024,
+     "venue": "Even3 Publicações eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7233693934",
+     "title": "Microplásticos: Una amenaza invisible en los ríos",
+     "language": "es",
+     "year": 2025,
+     "venue": "Revista-Divulgación de Ciencia y Educación",
+     "in_v31": false
+    },
+    {
+     "id": "W7120733594",
+     "title": "Ocorrência e impactos de microplásticos no litoral sergipano: uma abordagem socioambiental",
+     "language": "pt",
+     "year": 2023,
+     "venue": "LA Referencia (Red Federada de Repositorios Institucionales de Publicaciones Científicas)",
+     "in_v31": true
+    },
+    {
+     "id": "W2898106093",
+     "title": "Microplásticos em córregos urbanos de Cuiabá e Várzea Grande-MT",
+     "language": "pt",
+     "year": 2018,
+     "venue": "X Mostra da Pós-Graduação: Direitos Humanos, trabalho coletivo e redes de pesquisa na Pós Graduação",
+     "in_v31": false
+    },
+    {
+     "id": "W7168196583",
+     "title": "AVALIAÇÃO DA ADSORÇÃO DE BISFENOL A EM MICROPLÁSTICOS DE POLIETILENO",
+     "language": "pt",
+     "year": 2026,
+     "venue": "Science & Business Connection: Congresso Científico Tecnológico",
+     "in_v31": false
+    },
+    {
+     "id": "W7120757525",
+     "title": "Synthetic fibers as a type of microplastics: pathways for the textile sector act to combat marine litter",
+     "language": "pt",
+     "year": 2023,
+     "venue": "LA Referencia (Red Federada de Repositorios Institucionales de Publicaciones Científicas)",
+     "in_v31": true
+    },
+    {
+     "id": "W7169478159",
+     "title": "Caracterización fisicoquímica de microplásticos en tres playas de la bahía de Huatulco, Oaxaca",
+     "language": "es",
+     "year": 2026,
+     "venue": "Repositorio Institucional Zaloamati (Universidad Autónoma Metropolitana)",
+     "in_v31": false
+    },
+    {
+     "id": "W7108227480",
+     "title": "Educação Ambiental como uma possível solução para a redução dos microplásticos – estudo de caso: Rio Pomba - Santo Antônio de Pádua/RJ",
+     "language": "pt",
+     "year": 2025,
+     "venue": "Revista Brasileira de Educação Ambiental (RevBEA)",
+     "in_v31": true
+    },
+    {
+     "id": "W4383532595",
+     "title": "Gestão de resíduos por alunos do ensino superior: caso das lentes de contacto",
+     "language": "pt",
+     "year": 2023,
+     "venue": "RevSALUS - Revista Científica da Rede Académica das Ciências da Saúde da Lusofonia",
+     "in_v31": false
+    },
+    {
+     "id": "W7133330935",
+     "title": "First report on the presence of microplastics in bovine and porcine livers from Costa Rica",
+     "language": "en",
+     "year": 2026,
+     "venue": "Uniciencia",
+     "in_v31": true
+    },
+    {
+     "id": "W4417078431",
+     "title": "Análise da degradação de PP e PET em solução de tamarindo por MEV e FTIR",
+     "language": "pt",
+     "year": 2025,
+     "venue": "Revista Semiárido De Visu",
+     "in_v31": false
+    },
+    {
+     "id": "W2285438570",
+     "title": "PRESENÇA DE LIXO MARINHO EM ESTÔMAGOS DE PEIXES NO LITORAL DE ILHÉUS E URUÇUCA/BA E SUA INFLUÊNCIA NA PESCA ARTESANAL",
+     "language": "pt",
+     "year": 2012,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7117301072",
+     "title": "AVALIAÇÃO COMPARATIVA DO CICLO DE VIDA AMBIENTAL DE PLÁSTICOS PET E PLA: FOCO NOS IMPACTOS RELACIONADOS À GERAÇÃO DE MACROPLÁSTICOS E MICROPLÁSTICOS",
+     "language": "pt",
+     "year": 2025,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7219361953",
+     "title": "Monitoramento de microplásticos em matrizes ambientais que servem de alimento: Monitoring microplastics in environmental matrices that serve as food",
+     "language": "en",
+     "year": 2021,
+     "venue": "Journal Archives of Health",
+     "in_v31": true
+    },
+    {
+     "id": "W4417252623",
+     "title": "A ambivalência da técnica: microplásticos como agente poluidor da água potável",
+     "language": "pt",
+     "year": 2025,
+     "venue": "Faculdade de Filosofia e Ciências eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7119274879",
+     "title": "Simulation of the transportation of microplastics on coastal zones applying the MOHID Platform: case studies in Macaé River estuary and in Guanabara",
+     "language": "pt",
+     "year": 2022,
+     "venue": "LA Referencia (Red Federada de Repositorios Institucionales de Publicaciones Científicas)",
+     "in_v31": true
+    },
+    {
+     "id": "W7117099002",
+     "title": "Programa de Ayuda al Litoral en Secundaria: PALS! Stop Marine Litter. Charla ‘Basuras marinas’",
+     "language": "es",
+     "year": 2023,
+     "venue": "Digital Repository (Polytechnic University of Cartagena)",
+     "in_v31": true
+    },
+    {
+     "id": "W7197291929",
+     "title": "Evaluación de características descriptivas de microplásticos reportadas en evaluaciones de riesgo ecológico sobre organismos filtradores marino-costeros: revisión sistemática con proyección a futuras evaluaciones en la costa peruana",
+     "language": "es",
+     "year": 2026,
+     "venue": "Universidad Peruana Cayetano Heredia Institutional Repository",
+     "in_v31": false
+    },
+    {
+     "id": "W4320724437",
+     "title": "Entre macrófitas e microplásticos: dieta de Crustacea Decapoda Dilocarcinus pagei (Stimpson, 1861) e Trichodactylus petropolitanus (Göldi, 1886) na região do Pantanal de Cáceres – MT",
+     "language": "pt",
+     "year": 2023,
+     "venue": "Research Society and Development",
+     "in_v31": false
+    },
+    {
+     "id": "W7209486202",
+     "title": "Recogida y caracterización de microplásticos en el litoral murciano (2021-2022)",
+     "language": "es",
+     "year": 2022,
+     "venue": "Digital Repository (Polytechnic University of Cartagena)",
+     "in_v31": false
+    },
+    {
+     "id": "W4390650131",
+     "title": "Interação dos vírus entéricos com poluentes ambientais",
+     "language": "pt",
+     "year": 2024,
+     "venue": "Instituto de Inteligência em Pesquisa e Consultoria Cientifica Ltda eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7160416365",
+     "title": "MICROPLÁSTICOS E SAÚDE HUMANA: UMA REVISÃO SISTEMÁTICA DAS EVIDÊNCIAS E IMPLICAÇÕES PARA A PROMOÇÃO DA SAÚDE",
+     "language": "pt",
+     "year": 2026,
+     "venue": "Revista Valore",
+     "in_v31": false
+    },
+    {
+     "id": "W4200245600",
+     "title": "Effect of temperature and microplastic concentration on the filtration rate of the mussel Semimytilus algosus (Myiloida: Mytilidae)",
+     "language": "es",
+     "year": 2021,
+     "venue": "Revista de Biología Tropical",
+     "in_v31": true
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 14,
+   "sample_language_label_counts": {
+    "pt": 27,
+    "es": 19,
+    "en": 4
+   }
+  },
+  {
+   "id": "es-marine-litter-pollution",
+   "languages": [
+    "es"
+   ],
+   "terms": [
+    "basura marina",
+    "contaminación por plásticos",
+    "residuos plásticos"
+   ],
+   "query": "(\"basura marina\" OR \"contaminación por plásticos\" OR \"residuos plásticos\")",
+   "a3_count_2026_11_18": 1738,
+   "count": 1787,
+   "language_label_counts": {
+    "es": 1138,
+    "pt": 558,
+    "en": 85,
+    "eu": 2,
+    "ca": 1,
+    "gl": 1,
+    "it": 1,
+    "vi": 1
+   },
+   "fetched_at": "2026-11-23T05:27:51+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W7198034874",
+     "title": "DESIGN ORIENTADO À SUSTENTABILIDADE: ESTUDO DE TECIDOS ALTERNATIVOS NO DESENVOLVIMENTO DE PANOS ENCERADOS",
+     "language": "pt",
+     "year": 2021,
+     "venue": "Repositório Digital Institucional da UFPR (Universidade Federal do Paraná)",
+     "in_v31": false
+    },
+    {
+     "id": "W7217258093",
+     "title": "Determinación de la capacidad de transporte de residuos plásticos en la cuenca Dupuy",
+     "language": "es",
+     "year": 2023,
+     "venue": "Repositorio Digital de la UNC (National University of Cordoba)",
+     "in_v31": false
+    },
+    {
+     "id": "W3005941884",
+     "title": "Impacto de la ingesta de residuos plásticos en peces",
+     "language": "es",
+     "year": 2020,
+     "venue": "Revista Kawsaypacha Sociedad y Medio Ambiente",
+     "in_v31": true
+    },
+    {
+     "id": "W3128567629",
+     "title": "Paneles de yeso adicionados con residuos plásticos de cables con mejora de las propiedades frente a humedades interiores",
+     "language": "es",
+     "year": 2020,
+     "venue": "Hispana",
+     "in_v31": false
+    },
+    {
+     "id": "W3015302438",
+     "title": "¿Qué estudiamos los ecólogos cuando investigamos los residuos plásticos en ambientes terrestres y dulceacuícolas de la Argentina?",
+     "language": "es",
+     "year": 2020,
+     "venue": "Ecología Austral",
+     "in_v31": true
+    },
+    {
+     "id": "W7160083347",
+     "title": "Microplásticos: La contaminación silente que amenaza al Golfo de California",
+     "language": "es",
+     "year": 2025,
+     "venue": "Recursos Naturales y Sociedad",
+     "in_v31": false
+    },
+    {
+     "id": "W7222922655",
+     "title": "Diseño de una máquina trituradora de botellas de plástico PET para la Escuela Militar de Aviación EMAVI",
+     "language": "es",
+     "year": 2026,
+     "venue": "Encuentro Internacional de Educación en Ingeniería",
+     "in_v31": false
+    },
+    {
+     "id": "W4410932820",
+     "title": "Gestión sostenible de residuos plásticos domésticos en la parroquia El Guayacán, cantón Quevedo",
+     "language": "es",
+     "year": 2025,
+     "venue": "e-Revista Multidisciplinaria del Saber",
+     "in_v31": false
+    },
+    {
+     "id": "W7167659283",
+     "title": "Estudio de factibilidad para la producción de diésel a partir del proceso de pirólisis de plásticos reciclados en Salta",
+     "language": "es",
+     "year": 2025,
+     "venue": "Repositorio Institucional UCASAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4414321443",
+     "title": "LOGÍSTICA REVERSA DO PLÁSTICO NO CENTRO DE MANAUS: PERCEPÇÃO DA POPULAÇÃO",
+     "language": "pt",
+     "year": 2025,
+     "venue": "Revista Ibero-Americana de Humanidades, Ciências e Educação",
+     "in_v31": false
+    },
+    {
+     "id": "W2964110860",
+     "title": "Modelos matemáticos emergentes en transformaciones de superficies con reciclables",
+     "language": "es",
+     "year": 2018,
+     "venue": "XV Conferencia Interamericana de Educación Matemática",
+     "in_v31": false
+    },
+    {
+     "id": "W3089671299",
+     "title": "ANÁLISE DA ESTÉTICA DO CONCRETO PRODUZIDO COM REJEITO PLÁSTICO PARA O USO NO DESIGN DE INTERIORES COM VIÉS SUSTENTÁVEL",
+     "language": "pt",
+     "year": 2020,
+     "venue": "MIX Sustentável",
+     "in_v31": false
+    },
+    {
+     "id": "W3123586801",
+     "title": "Deep sea litter and its interactions with the megafauna in the Gulf of Cadiz North Eastern Atlantic, Spain",
+     "language": "en",
+     "year": 2020,
+     "venue": "DIGITAL.CSIC (Spanish National Research Council (CSIC))",
+     "in_v31": true
+    },
+    {
+     "id": "W7119243496",
+     "title": "Poluição plástica e seus efeitos em organismos aquáticos",
+     "language": "pt",
+     "year": 2024,
+     "venue": "LA Referencia (Red Federada de Repositorios Institucionales de Publicaciones Científicas)",
+     "in_v31": false
+    },
+    {
+     "id": "W7165324513",
+     "title": "Business plan to create an edible straw manufacturing company in Bucaramanga",
+     "language": "es",
+     "year": 2026,
+     "venue": "Universidad Industrial de Santander",
+     "in_v31": false
+    },
+    {
+     "id": "W7127308232",
+     "title": "VALORIZAÇÃO DE PRODUTOS CEROSOS DA PIRÓLISE DE RESÍDUOS DE POLIETILENO POR PROCESSAMENTO EM ALTA PRESSÃO",
+     "language": "pt",
+     "year": 2026,
+     "venue": "Encontro Capixaba de Ciências Mecânicas (ECCM)",
+     "in_v31": false
+    },
+    {
+     "id": "W7148192659",
+     "title": "Aprovechamiento de residuos industriales en la elaboración de materiales biopoliméricos: elaboración y caracterización mecánica de materiales biopoliméricos a partir de residuos de cuesco de palma africana, quitosano y polivinil alcohol",
+     "language": "es",
+     "year": 2026,
+     "venue": "Repositorio Digital (Escuela Politécnica Nacional)",
+     "in_v31": false
+    },
+    {
+     "id": "W4385679405",
+     "title": "Contaminación ambiental producida por plásticos",
+     "language": "es",
+     "year": 1998,
+     "venue": "Revista de Educación en Biología",
+     "in_v31": false
+    },
+    {
+     "id": "W3113904290",
+     "title": "Estudio del efecto del catalizador dibutil dilaurato de estaño en la síntesis del copolímero de pu-ac",
+     "language": "es",
+     "year": 2006,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W2957611496",
+     "title": "Potencial de Reciclagem de Resíduos Plásticos",
+     "language": "pt",
+     "year": 2009,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4417207645",
+     "title": "Empaque a partir de fibra de agave y cáscara cacahuate",
+     "language": "es",
+     "year": 2025,
+     "venue": "PÄDI Boletín Científico de Ciencias Básicas e Ingenierías del ICBI",
+     "in_v31": false
+    },
+    {
+     "id": "W7120699811",
+     "title": "Estudo de processo de upgrading catalítico de vapores da pirólise de resíduos plásticos de equipamentos de informática em reator catalítico com carvão ativado impregnado com NaOH",
+     "language": "pt",
+     "year": 2023,
+     "venue": "LA Referencia (Red Federada de Repositorios Institucionales de Publicaciones Científicas)",
+     "in_v31": false
+    },
+    {
+     "id": "W4402903115",
+     "title": "Quantificação de microplásticos de córrego urbano: um estudo de caso no córrego da Manga em Várzea Grande/ Mato Grosso – Brasil",
+     "language": "pt",
+     "year": 2024,
+     "venue": "E&S Engineering and Science",
+     "in_v31": false
+    },
+    {
+     "id": "W4414171744",
+     "title": "Red de arrastre para la pesca de camarón como un método para extraer y contabilizar la basura que ingresa al Golfo de Tehuantepec, México",
+     "language": "es",
+     "year": 2025,
+     "venue": "Ciencia Pesquera",
+     "in_v31": false
+    },
+    {
+     "id": "W4408074157",
+     "title": "Mejoramiento de las Propiedades Físicas del Polibutilsuccinato Usando Estabilizantes de Origen Vegetal y Sintético",
+     "language": "es",
+     "year": 2025,
+     "venue": "Revista Politécnica",
+     "in_v31": false
+    },
+    {
+     "id": "W4402033661",
+     "title": "Contaminación ambiental por residuos plásticos: reutilización y educación ambiental",
+     "language": "es",
+     "year": 2024,
+     "venue": "Revista Mutis",
+     "in_v31": false
+    },
+    {
+     "id": "W7217064950",
+     "title": "Diseño y construcción de un prototipo de vehículo marino de superficie no tripulado (USV) tipo catamarán para la recolección de macro plásticos en un ambiente controlado",
+     "language": "es",
+     "year": 2023,
+     "venue": "Repositorio Institucional de la Universidad de las Fuerzas Armadas ESPE (Universidad de las Fuerzas Armadas ESPE)",
+     "in_v31": false
+    },
+    {
+     "id": "W3148502976",
+     "title": "METODOLOGIA ALTERNATIVA E SOCIAL: FABRICAÇÃO DE TIJOLOS A PARTIR DE RESÍDUOS PLÁSTICOS",
+     "language": "pt",
+     "year": 2021,
+     "venue": "Editora Científica Digital eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W4313169167",
+     "title": "Una revisión sobre investigaciones en basura marina en Colombia: Aportes, desafíos y oportunidades",
+     "language": "es",
+     "year": 2022,
+     "venue": "Editorial UNIMAR eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W4417430246",
+     "title": "Vestígios do Antropoceno à Beira-Mar",
+     "language": "pt",
+     "year": 2025,
+     "venue": "Revista Cadernos do Ceom",
+     "in_v31": false
+    },
+    {
+     "id": "W4405639527",
+     "title": "Plásticos em ecossistemas costeiros e análise da co-gaseificação como alternativa para mitigação de seu impacto ambiental",
+     "language": "pt",
+     "year": 2023,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4405294147",
+     "title": "Red de investigación en Iberoamérica para el tratamiento de los residuos plásticos y descontaminación de ríos y mares",
+     "language": "es",
+     "year": 2024,
+     "venue": "Dirección y Organización",
+     "in_v31": true
+    },
+    {
+     "id": "W7201933139",
+     "title": "Efecto de la adición de tereftalato de polietileno (PET) en la resistencia a la flexión de unidades de adoquín de concreto",
+     "language": "es",
+     "year": 2025,
+     "venue": "Repositorio Universidad Francisco de Paula Santander",
+     "in_v31": false
+    },
+    {
+     "id": "W4307182171",
+     "title": "Plasticvalor - Desenvolvimento de Metodologias Eficientes e Económicas para a Despolimerização Redutiva e Valorização de Resíduos Plásticos",
+     "language": "pt",
+     "year": 2022,
+     "venue": "Boletim da Sociedade Portuguesa de Química",
+     "in_v31": false
+    },
+    {
+     "id": "W7120593905",
+     "title": "Espresso coffee capsules recycling to development of composites reinforced with coffee grounds for a home composter design application",
+     "language": "pt",
+     "year": 2020,
+     "venue": "LA Referencia (Red Federada de Repositorios Institucionales de Publicaciones Científicas)",
+     "in_v31": false
+    },
+    {
+     "id": "W2901839785",
+     "title": "Avaliação das propriedades do concreto produzido com substituição parcial do agregado miúdo por resíduos de Polietileno Tereftalato (PET)",
+     "language": "pt",
+     "year": 2018,
+     "venue": "Anais da Mostra de Extensão, Inovação e Pesquisa",
+     "in_v31": false
+    },
+    {
+     "id": "W2966317641",
+     "title": "Propuestas para mejorar la sostenibilidad de los envases alimentarios",
+     "language": "es",
+     "year": 2019,
+     "venue": "Revista de plásticos modernos: Ciencia y tecnología de polímeros",
+     "in_v31": true
+    },
+    {
+     "id": "W7169948998",
+     "title": "Análisis de los factores estratégicos de la economía circular en España con enfoque en la industria del plástico y del envasado plástico.",
+     "language": "es",
+     "year": 2023,
+     "venue": "Comillas Repository (Comillas Pontifical University)",
+     "in_v31": false
+    },
+    {
+     "id": "W7217111533",
+     "title": "Propuesta de mejora de procesos basado en economía circular para la Empresa Doron Chile",
+     "language": "es",
+     "year": 2022,
+     "venue": "Repositorio Institucional Académico , Sistema de Bibliotecas Universidad Andrés Bello (UNAB) (Universidad Andrés Bello (UNAB))",
+     "in_v31": false
+    },
+    {
+     "id": "W4417078431",
+     "title": "Análise da degradação de PP e PET em solução de tamarindo por MEV e FTIR",
+     "language": "pt",
+     "year": 2025,
+     "venue": "Revista Semiárido De Visu",
+     "in_v31": false
+    },
+    {
+     "id": "W3158235295",
+     "title": "SÍNTESIS DE CATALIZADORES ÁCIDOS PARA SU USO EN LA DEGRADACIÓN DE RESIDUOS PLÁSTICOS MEDIANTE CRAQUEO CATALÍTICO.",
+     "language": "es",
+     "year": 2016,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4403382438",
+     "title": "Bioconversão de monômeros de polietileno tereftalato em produtos biotecnológicos por microrganismos",
+     "language": "pt",
+     "year": 2024,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7220644912",
+     "title": "UTILIZAÇÃO DE RESÍDUOS PLÁSTICOS COMO INSUMO PARA A CONFECÇÃO DE TIJOLOS ECOLÓGICOS",
+     "language": "pt",
+     "year": 2023,
+     "venue": "Revista Mangaio Acadêmico",
+     "in_v31": false
+    },
+    {
+     "id": "W7162927292",
+     "title": "\"Planta procesadora de plásticos en la Región de Los Lagos – PatagónPlast”",
+     "language": "es",
+     "year": 2025,
+     "venue": "Universidad de Chile",
+     "in_v31": false
+    },
+    {
+     "id": "W4412806725",
+     "title": "Tratamento de Águas Residuais por Wetlands Comparando os Sistemas de Leitos Construídos, Sistema Automatizado e Wetland Compacta",
+     "language": "pt",
+     "year": 2025,
+     "venue": "AYA Editora eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7117099002",
+     "title": "Programa de Ayuda al Litoral en Secundaria: PALS! Stop Marine Litter. Charla ‘Basuras marinas’",
+     "language": "es",
+     "year": 2023,
+     "venue": "Digital Repository (Polytechnic University of Cartagena)",
+     "in_v31": true
+    },
+    {
+     "id": "W3166249765",
+     "title": "La investigación artística como medio para la lucha contra la pobreza",
+     "language": "es",
+     "year": 2019,
+     "venue": "Institutional Repository University of Extremadura (University of Extremadura)",
+     "in_v31": false
+    },
+    {
+     "id": "W7214835613",
+     "title": "Estimación de la huella de carbono producida por las cirugías laparoscópicas y desarrollo de alternativas sostenibles a elementos de un solo uso para mitigar su impacto ambiental",
+     "language": "es",
+     "year": 2026,
+     "venue": "instname:Universidad de los Andes",
+     "in_v31": false
+    },
+    {
+     "id": "W7209486202",
+     "title": "Recogida y caracterización de microplásticos en el litoral murciano (2021-2022)",
+     "language": "es",
+     "year": 2022,
+     "venue": "Digital Repository (Polytechnic University of Cartagena)",
+     "in_v31": false
+    },
+    {
+     "id": "W2996393145",
+     "title": "Modelización de la deriva de basuras marinas en las aguas costeras del noroeste peninsular",
+     "language": "es",
+     "year": 2019,
+     "venue": "Investigo repository of University of Vigo (University of Vigo)",
+     "in_v31": false
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 6,
+   "sample_language_label_counts": {
+    "es": 31,
+    "pt": 18,
+    "en": 1
+   }
+  },
+  {
+   "id": "fr-microplastic",
+   "languages": [
+    "fr"
+   ],
+   "terms": [
+    "microplastiques"
+   ],
+   "query": "(\"microplastiques\")",
+   "a3_count_2026_11_18": 523,
+   "count": 518,
+   "language_label_counts": {
+    "fr": 485,
+    "en": 33
+   },
+   "fetched_at": "2026-11-23T05:27:53+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W3176005411",
+     "title": "Premiers résultats sur la pollution microplastique le long de filières de potabilisation : de la ressource à l'eau potable distribuée en Île-de-France",
+     "language": "fr",
+     "year": 2021,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7212101961",
+     "title": "La gestion des déchets plastiques: défis environnementaux et solutions durables",
+     "language": "fr",
+     "year": 2026,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W7151308287",
+     "title": "Detection and quantification of nanoplastics by Single Particle Inductively Coupled Plasma Mass Spectrometry (SP-ICP-MS)",
+     "language": "fr",
+     "year": 2021,
+     "venue": "theses.fr (ABES)",
+     "in_v31": true
+    },
+    {
+     "id": "W3132882427",
+     "title": "Impacts écotoxicologiques des microplastiques sur les écosystèmes terrestres : Etat de l’art et besoins de recherche",
+     "language": "fr",
+     "year": 2019,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7224979927",
+     "title": "Analyse des micro/nanoplastiques à l'aide de la sonde fluorescente 9-(2,2-dicyanovinyl) julolidine",
+     "language": "fr",
+     "year": 2026,
+     "venue": "Archipel (Université du Québec à Montréal)",
+     "in_v31": false
+    },
+    {
+     "id": "W3097121155",
+     "title": "Des microplastiques retrouvés au niveau mondial dans les selles humaines. Une étude pilote",
+     "language": "fr",
+     "year": 2018,
+     "venue": "HEGEL - HEpato-GastroEntérologie Libérale",
+     "in_v31": false
+    },
+    {
+     "id": "W7135323187",
+     "title": "Evaluation statistique des données sur les déchets microplastiques sur les littoraux de Ain- Temouchent et Annaba",
+     "language": "fr",
+     "year": 2025,
+     "venue": "Dépôt Institutionnel de lUniversité de Tlemcen",
+     "in_v31": false
+    },
+    {
+     "id": "W4403523749",
+     "title": "Dynamique dans les sols des microplastiques issus de plastiques compostables : dégradation et transferts.",
+     "language": "fr",
+     "year": 2024,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4287661346",
+     "title": "NOYÉS DANS LE PLASTIQUE : Le Canada doit cesser d'alimenter le désastre mondial du plasque",
+     "language": "fr",
+     "year": 2020,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W7151104532",
+     "title": "Impact of noise pollution on Mediterranean sparid settlers",
+     "language": "fr",
+     "year": 2021,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7151836799",
+     "title": "Transition vers l'élimination des microplastiques dans les pelliculants de semences",
+     "language": "fr",
+     "year": 2024,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7104430436",
+     "title": "Aux origines de la \"plasticose\" des champs : retours sur les premiers développements de la plasticulture en France",
+     "language": "fr",
+     "year": 2025,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4401489347",
+     "title": "Identification des sources anthropiques à l’origine des microplastiques et des particules de pneu en milieu urbain",
+     "language": "fr",
+     "year": 2023,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7199944554",
+     "title": "Étude de catalyseurs pour la gazéification hydrothermale sous-critique du polypropylène avec catalyseurs de zéolite",
+     "language": "en",
+     "year": 2025,
+     "venue": "Knowledge UdeS (Institutional Deposit of the University of Sherbrooke)",
+     "in_v31": false
+    },
+    {
+     "id": "W3086163206",
+     "title": "Les microplastiques dans les rivières et eaux de surfaces, exploration des méthodes d'échantillonnages et analyses en laboratoire : préparation à une application à l'exutoire de deux stations d'épurations Arlon et Libramont",
+     "language": "fr",
+     "year": 2020,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3153372383",
+     "title": "Mesures microbiologiques, chimiques, microplastiques et écotoxicologiques des eaux maritimes proches d'effluents de la presqu'île de Dakar et enquête auprès de la population littorale : campagnes AWATox 1, 2, 3 & 4 : rapport de mission",
+     "language": "fr",
+     "year": 2016,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4213409550",
+     "title": "Microplastiques et santé environnementale: identification des dangers environnementaux en Haïti",
+     "language": "fr",
+     "year": 2021,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7152626024",
+     "title": "Spatial variability of atmospheric deposition of microplastic in moutain environments",
+     "language": "fr",
+     "year": 2025,
+     "venue": "theses.fr (ABES)",
+     "in_v31": true
+    },
+    {
+     "id": "W7115813345",
+     "title": "Épilimnion",
+     "language": "fr",
+     "year": 2019,
+     "venue": "Infoscience (Ecole Polytechnique Fédérale de Lausanne)",
+     "in_v31": false
+    },
+    {
+     "id": "W3017138255",
+     "title": "Microplastique recouvert d’un biofilm",
+     "language": "fr",
+     "year": 2016,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7149268709",
+     "title": "Microplastic toxicity for fish : beyond simple vectors for pollutants?",
+     "language": "fr",
+     "year": 2020,
+     "venue": "theses.fr (ABES)",
+     "in_v31": true
+    },
+    {
+     "id": "W7225039608",
+     "title": "Microplastiques atmosphériques dans les métropoles mondiales : Vers une harmonisation internationale de la surveillance et des politiques publiques",
+     "language": "fr",
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W7151783619",
+     "title": "Micro-nanoplastiques et métaux : Élaboration de modèles et propriétés de sorption en milieu naturel",
+     "language": "fr",
+     "year": 2023,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7134096021",
+     "title": "Introduction : Contaminations de l'atmosphère et expositions aux contaminants en lien avec les pratiques agricoles",
+     "language": "fr",
+     "year": 2025,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7113481296",
+     "title": "Chimiophobie : quand les opinions irrationnelles prônent un retour vers le « naturel »",
+     "language": "fr",
+     "year": 2023,
+     "venue": "ORBi (University of Liège)",
+     "in_v31": false
+    },
+    {
+     "id": "W7130412187",
+     "title": "Chimie et eau",
+     "language": "fr",
+     "year": 2025,
+     "venue": "EDP Sciences eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7151686403",
+     "title": "Migration des microplastiques et nanoplastiques dans la chaîne alimentaire : le cas des animaux d’élevage",
+     "language": "fr",
+     "year": 2026,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4414408135",
+     "title": "Microplastiques, grossesse et placenta : ce que nous savons et ce que nous ignorons encore",
+     "language": "fr",
+     "year": 2025,
+     "venue": "The Conversation",
+     "in_v31": false
+    },
+    {
+     "id": "W7152091313",
+     "title": "Production d’eau potable par osmose inverse basse pression",
+     "language": "fr",
+     "year": 2024,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W4288316555",
+     "title": "Etat de l’art des impacts écotoxicologiques des microplastiques sur les écosystèmes terrestres",
+     "language": "fr",
+     "year": 2019,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4413064096",
+     "title": "Microplastiques, nanoplastiques : la menace (pas) fantôme",
+     "language": "fr",
+     "year": 2025,
+     "venue": "Ébullition(s).",
+     "in_v31": false
+    },
+    {
+     "id": "W7148882053",
+     "title": "Fragmentation des plastiques : effet de l’environnement et de la nature du polymère sur la taille et la forme des fragments générés",
+     "language": "fr",
+     "year": 2019,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7222459488",
+     "title": "comprendre la génération des micro- et nano-plastiques",
+     "language": "fr",
+     "year": 2025,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7164905563",
+     "title": "Séparation de microplastique primaire par tamis rotatif",
+     "language": "fr",
+     "year": 2026,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7152201749",
+     "title": "Impacts of plastics on freshwater microbial communities and their primary consumers",
+     "language": "fr",
+     "year": 2025,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7205714196",
+     "title": "Colonisation microbienne des masques chirurgicaux en polypropylène dans l'environnement",
+     "language": "fr",
+     "year": 2022,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7135308318",
+     "title": "Biodégradation du plastique par les microorganismes dans le sol",
+     "language": "fr",
+     "year": 2022,
+     "venue": "Dépôt Institutionnel de lUniversité de Tlemcen",
+     "in_v31": false
+    },
+    {
+     "id": "W7118411228",
+     "title": "Vers la plastification de l’environnement ?",
+     "language": "fr",
+     "year": 2022,
+     "venue": "Écologie & politique",
+     "in_v31": false
+    },
+    {
+     "id": "W7223433547",
+     "title": "Etude transcriptomique de la réponse hépatique à l’ingestion de microplastiques de PVC et de PA chez la souris",
+     "language": "en",
+     "year": 2024,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W3042392137",
+     "title": "Existe-t-il un transfert trophique des MP et quels sont les effets toxiques chez les larves et les juvéniles de soles ?",
+     "language": "fr",
+     "year": 2019,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7147016516",
+     "title": "Sensibilité d’un oiseau marin arctique aux changements environnementaux",
+     "language": "fr",
+     "year": 2016,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W2774323357",
+     "title": "Premières investigations de microplastiques en milieu urbain : cas de l’agglomération parisienne",
+     "language": "fr",
+     "year": 2014,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W3159180305",
+     "title": "Microplastiques en estuaire de Seine : synthèse des connaissances du projet Plastic-Seine sur les matrices abiotiques (2017-2020)",
+     "language": "fr",
+     "year": 2021,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7151806266",
+     "title": "Écologie microbienne associée à la biodégradabilité des plastiques en milieu marin",
+     "language": "fr",
+     "year": 2023,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7151590948",
+     "title": "Dignostic écotoxicologique de la pollution marine au Sénégal",
+     "language": "fr",
+     "year": 2022,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7168014614",
+     "title": "L'Écosystème Océanique sous l'Effet Domino Climatique : Modélisation Moléculaire, Cinétique d'Oxydation et Approches Analytiques des Microplastiques",
+     "language": "fr",
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W4406811519",
+     "title": "Projet Dymitria : DYnamique de dépôt et de transfert des MicroplasTiques en Rivière dans une région soumise à une forte Anthropisation urbaine et agricole",
+     "language": "fr",
+     "year": 2024,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4400801127",
+     "title": "Analyse de la pollution fluviale en microplastiques par l'étude d’archives sédimentaires.",
+     "language": "fr",
+     "year": 2024,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7148616309",
+     "title": "Développements analytiques pour la caractérisation et la quantification de la contamination en microplastiques de matrices sédimentaires et biologiques : application aux zones conchylicoles des Pays de la Loire",
+     "language": "fr",
+     "year": 2018,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7221255940",
+     "title": "L'écologie de l'ADN environnemental (ADNe) et de l'ARN environnemental (ARNe) pour le suivi des poissons",
+     "language": "fr",
+     "year": 2025,
+     "venue": "EspaceINRS (National Institute for Scientific Research (Canada))",
+     "in_v31": false
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 3,
+   "sample_language_label_counts": {
+    "fr": 48,
+    "en": 2
+   }
+  },
+  {
+   "id": "fr-plastic-waste-pollution",
+   "languages": [
+    "fr"
+   ],
+   "terms": [
+    "déchets plastiques",
+    "pollution plastique",
+    "nanoplastiques"
+   ],
+   "query": "(\"déchets plastiques\" OR \"pollution plastique\" OR \"nanoplastiques\")",
+   "a3_count_2026_11_18": 645,
+   "count": 643,
+   "language_label_counts": {
+    "fr": 611,
+    "en": 32
+   },
+   "fetched_at": "2026-11-23T05:27:55+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W4403116182",
+     "title": "Résumé",
+     "language": "fr",
+     "year": 2024,
+     "venue": "OECD eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7152671311",
+     "title": "Détection et caractérisation des macro-, micro- et nanoplastiques dans l'estuaire et golfe du fleuve Saint-Laurent, Canada",
+     "language": "fr",
+     "year": 2024,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7135270624",
+     "title": "Contribution à l'évaluation des macro déchets marins issus de la pêche, cas du port de Béni-Saf (Wilaya d’Aïn-Témouchent)",
+     "language": "fr",
+     "year": 2022,
+     "venue": "Dépôt Institutionnel de lUniversité de Tlemcen",
+     "in_v31": false
+    },
+    {
+     "id": "W4417086865",
+     "title": "Négociations sur le traité mondial contre la pollution plastique : waste(d) time ?",
+     "language": "fr",
+     "year": 2025,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7212101961",
+     "title": "La gestion des déchets plastiques: défis environnementaux et solutions durables",
+     "language": "fr",
+     "year": 2026,
+     "venue": "DOAJ (DOAJ: Directory of Open Access Journals)",
+     "in_v31": false
+    },
+    {
+     "id": "W7222901261",
+     "title": "GESTION DES DÉCHETS PLASTIQUES ET DÉVELOPPEMENT DURABLE URBAIN A BOMA (RDC) : ANALYSE DES PRATIQUES ET DES PERCEPTIONS DE 300 HABITANTS",
+     "language": "fr",
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W2517249992",
+     "title": "Étude expérimentale de la pyrolyse et de la combustion du polyamide-6,6 à haute température",
+     "language": "en",
+     "year": 1999,
+     "venue": "Environnement Ingénierie & Développement",
+     "in_v31": false
+    },
+    {
+     "id": "W7151308287",
+     "title": "Detection and quantification of nanoplastics by Single Particle Inductively Coupled Plasma Mass Spectrometry (SP-ICP-MS)",
+     "language": "fr",
+     "year": 2021,
+     "venue": "theses.fr (ABES)",
+     "in_v31": true
+    },
+    {
+     "id": "W620312637",
+     "title": "RECYCLAGE DES PLASTIQUES",
+     "language": "fr",
+     "year": 1980,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W2800673252",
+     "title": "Les nanoplastiques, prochain fléau des océans ?",
+     "language": "fr",
+     "year": 2018,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7152120513",
+     "title": "Détection des anomalies de type bourrage dans les centres de tri de déchets ménagers en production en temps réel à partir de séries temporelles grâce au développement et à l’implémentation d’algorithmes d’Intelligence Artificielle",
+     "language": "fr",
+     "year": 2025,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7224979927",
+     "title": "Analyse des micro/nanoplastiques à l'aide de la sonde fluorescente 9-(2,2-dicyanovinyl) julolidine",
+     "language": "fr",
+     "year": 2026,
+     "venue": "Archipel (Université du Québec à Montréal)",
+     "in_v31": false
+    },
+    {
+     "id": "W7151734686",
+     "title": "Transformer l'inhibition créative en ressource : la prise en soin art-thérapeutique de deux adolescentes en situation de handicap mental à l'I.M.E",
+     "language": "fr",
+     "year": 2024,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W4396944628",
+     "title": "LES DÉCHETS PLASTIQUES, REFLET DE LA RÉALITÉ ÉCONOMIQUE, POLITIQUE ET SOCIALE.DÉMONSTRATION PAR LA MODÉLISATION MACROÉCONOMICO ÉCOLOGIQUE",
+     "language": "fr",
+     "year": 2023,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4287661346",
+     "title": "NOYÉS DANS LE PLASTIQUE : Le Canada doit cesser d'alimenter le désastre mondial du plasque",
+     "language": "fr",
+     "year": 2020,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W4405252026",
+     "title": "Analyse de l'impact de la récupération des ressources pour la gestion des déchets plastiques dans les centres commerciaux : Une étude de cas à Bangkok, Thaïlande",
+     "language": "fr",
+     "year": 2024,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7104430436",
+     "title": "Aux origines de la \"plasticose\" des champs : retours sur les premiers développements de la plasticulture en France",
+     "language": "fr",
+     "year": 2025,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4396786355",
+     "title": "LA TECHNOLOGIE SAUVERA-T-ELLE L'OCÉAN DES PLASTIQUES?",
+     "language": "fr",
+     "year": 2020,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7199944554",
+     "title": "Étude de catalyseurs pour la gazéification hydrothermale sous-critique du polypropylène avec catalyseurs de zéolite",
+     "language": "en",
+     "year": 2025,
+     "venue": "Knowledge UdeS (Institutional Deposit of the University of Sherbrooke)",
+     "in_v31": false
+    },
+    {
+     "id": "W414373010",
+     "title": "Évaluation objective de la biodégradabilité des matériaux polymères : mise au point d'une méthode et d'un dispositif instrumental",
+     "language": "fr",
+     "year": 1998,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7150866263",
+     "title": "Identification, production et caractérisation de nanoplastiques environnementaux par l'utilisation d'outils géochimiques et de nanométrologie",
+     "language": "fr",
+     "year": 2021,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W3007008047",
+     "title": "Personnalisation de masse - Infographie",
+     "language": "fr",
+     "year": 2020,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4404778332",
+     "title": "Le tri des déchets plastiques pour recyclage - Historique et perspectives",
+     "language": "fr",
+     "year": 2024,
+     "venue": "Annales des Mines - Responsabilité et environnement",
+     "in_v31": false
+    },
+    {
+     "id": "W4213409550",
+     "title": "Microplastiques et santé environnementale: identification des dangers environnementaux en Haïti",
+     "language": "fr",
+     "year": 2021,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4413067214",
+     "title": "IMPACT DE PAVAGES SUR L’ILOT DE CHALEUR URBAIN",
+     "language": "fr",
+     "year": 2024,
+     "venue": "International Journal of Engineering Sciences and Technologies",
+     "in_v31": false
+    },
+    {
+     "id": "W7162071451",
+     "title": "Influences of environmental change on Short-tailed Shearwater population through multi-level monitoring",
+     "language": "fr",
+     "year": 2025,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W4391011166",
+     "title": "Approche théorique de la fragmentation et comparaison aux données océaniques",
+     "language": "fr",
+     "year": 2022,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W7151909409",
+     "title": "Communautés fongiques associées aux déchets plastiques marins et évaluation de leur potentiel en bioremédiation",
+     "language": "fr",
+     "year": 2024,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W2867178",
+     "title": "Gestion des déchets plastique à Nantes",
+     "language": "fr",
+     "year": 2007,
+     "venue": "Revue horticole: la revue technique des pépinieristes, horticulteurs et maraichers",
+     "in_v31": false
+    },
+    {
+     "id": "W3017138255",
+     "title": "Microplastique recouvert d’un biofilm",
+     "language": "fr",
+     "year": 2016,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4324144322",
+     "title": "Examen de l’OCDE des pêcheries 2022",
+     "language": "fr",
+     "year": 2023,
+     "venue": "Examen de l'OCDE des pêcheries : politiques et statistiques de base/Examen de l'OCDE des pêcheries: politiques et statistiques de base",
+     "in_v31": false
+    },
+    {
+     "id": "W4415033145",
+     "title": "Approche systémique de l’innovation dans le domaine des bioplastiques : une analyse croisée des dynamiques technologiques et socio-économiques",
+     "language": "fr",
+     "year": 2025,
+     "venue": "Innovations",
+     "in_v31": false
+    },
+    {
+     "id": "W7225039608",
+     "title": "Microplastiques atmosphériques dans les métropoles mondiales : Vers une harmonisation internationale de la surveillance et des politiques publiques",
+     "language": "fr",
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W4313070160",
+     "title": "Les solutions d’évitement de la pollution plastique ou de dépollution de la mer Méditerranée",
+     "language": "fr",
+     "year": 2022,
+     "venue": "Presses universitaires d’Aix-Marseille eBooks",
+     "in_v31": false
+    },
+    {
+     "id": "W7148450868",
+     "title": "Caractérisation physico-mécanique d’un composite bois polymère",
+     "language": "fr",
+     "year": 2017,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W7151783619",
+     "title": "Micro-nanoplastiques et métaux : Élaboration de modèles et propriétés de sorption en milieu naturel",
+     "language": "fr",
+     "year": 2023,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    },
+    {
+     "id": "W4413532739",
+     "title": "Les bernard-l’ermite déménagent dans des déchets plastiques… et intriguent les scientifiques",
+     "language": "fr",
+     "year": 2024,
+     "venue": "The Conversation",
+     "in_v31": false
+    },
+    {
+     "id": "W4283728343",
+     "title": "Valorisation des déchets plastiques en matériaux de construction",
+     "language": "fr",
+     "year": 2022,
+     "venue": "European Scientific Journal ESJ",
+     "in_v31": true
+    },
+    {
+     "id": "W7117153658",
+     "title": "Communication environnementale et l'engagement éco-citoyen face à la pollution plastiques en milieux universitaires : Cas de l'université de Bunia/ Ituri-RDC",
+     "language": "fr",
+     "year": 2025,
+     "venue": "Revue Internationale de la Recherche Scientifique et de l’Innovation (Revue-IRSI)",
+     "in_v31": false
+    },
+    {
+     "id": "W2771510144",
+     "title": "Valorisation et élimination des déchets",
+     "language": "fr",
+     "year": 1984,
+     "venue": "Plastiques et composites",
+     "in_v31": false
+    },
+    {
+     "id": "W7135259383",
+     "title": "Contribution à l’étude de la pollution de la cote de Marsa Ben-Mhidi par les déchets plastiques",
+     "language": "fr",
+     "year": 2022,
+     "venue": "Dépôt Institutionnel de lUniversité de Tlemcen",
+     "in_v31": false
+    },
+    {
+     "id": "W7151686403",
+     "title": "Migration des microplastiques et nanoplastiques dans la chaîne alimentaire : le cas des animaux d’élevage",
+     "language": "fr",
+     "year": 2026,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4415207534",
+     "title": "Pollution Plastique - La Biodiversité menacée",
+     "language": "fr",
+     "year": 2025,
+     "venue": "HEGEL - HEpato-GastroEntérologie Libérale",
+     "in_v31": false
+    },
+    {
+     "id": "W4412575782",
+     "title": "Les plastiques dans le Sud-Ouest de Madagascar : représentations et sensibilisations",
+     "language": "fr",
+     "year": 2024,
+     "venue": "VertigO",
+     "in_v31": false
+    },
+    {
+     "id": "W7148185213",
+     "title": "Impact de la variable macroéconomique technologique sur le comportement de recyclage du plastique des consommateurs",
+     "language": "fr",
+     "year": 2025,
+     "venue": "Constellation (Université du Québec à Chicoutimi)",
+     "in_v31": false
+    },
+    {
+     "id": "W7205965744",
+     "title": "Recycler pour que rien ne change ? Les paradoxes de l'emballage plastique",
+     "language": "en",
+     "year": 2025,
+     "venue": "HAL",
+     "in_v31": true
+    },
+    {
+     "id": "W4291340343",
+     "title": "Perspectives attendues par l'introduction de traceurs dans les matériaux polymères, en vue du tri automatisé de déchets plastiques de produits hors d'usage",
+     "language": "fr",
+     "year": 2007,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4285616711",
+     "title": "Déchets, d’une précarité à une autre. De l’esthétisation à l’émergence d’une éthique de l’objet plastique",
+     "language": "fr",
+     "year": 2021,
+     "venue": "HAL",
+     "in_v31": false
+    },
+    {
+     "id": "W4413064096",
+     "title": "Microplastiques, nanoplastiques : la menace (pas) fantôme",
+     "language": "fr",
+     "year": 2025,
+     "venue": "Ébullition(s).",
+     "in_v31": false
+    },
+    {
+     "id": "W7148882053",
+     "title": "Fragmentation des plastiques : effet de l’environnement et de la nature du polymère sur la taille et la forme des fragments générés",
+     "language": "fr",
+     "year": 2019,
+     "venue": "theses.fr (ABES)",
+     "in_v31": false
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 3,
+   "sample_language_label_counts": {
+    "fr": 47,
+    "en": 3
+   }
+  },
+  {
+   "id": "ru-microplastic",
+   "languages": [
+    "ru"
+   ],
+   "terms": [
+    "микропластик"
+   ],
+   "query": "(\"микропластик\")",
+   "a3_count_2026_11_18": 178,
+   "count": 55,
+   "language_label_counts": {
+    "ru": 46,
+    "en": 3,
+    "unlabelled": 3,
+    "kk": 2,
+    "de": 1
+   },
+   "fetched_at": "2026-11-23T05:27:57+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W4312334007",
+     "title": "ТРАНСПОРТНАЯ МОДЕЛЬ: МИКРОПЛАСТИК В ОЗЕРЕ БАЙКАЛ",
+     "language": "ru",
+     "year": 2022,
+     "venue": "XXVIII Международный симпозиум «Оптика атмосферы и океана. Физика атмосферы»",
+     "in_v31": false
+    },
+    {
+     "id": "W4415985118",
+     "title": "Modeling the Impact of Microplastics on Metabolic Rates and Mortality of Zooplankton",
+     "language": "ru",
+     "year": 2025,
+     "venue": "HYDROMETEOROLOGY AND ECOLOGY PROCEEDINGS OF THE RUSSIAN STATE HYDROMETEOROLOGICAL UNIVERSITY",
+     "in_v31": true
+    },
+    {
+     "id": "W7211886697",
+     "title": "Микропластик в молоке и молочных продуктах. Влияние технологических операций переработки на его распределение и обнаружение",
+     "language": "ru",
+     "year": 2026,
+     "venue": "Food processing industry",
+     "in_v31": true
+    },
+    {
+     "id": "W7212380519",
+     "title": "ПЛАСТИК МИКРОЗАРРАЧАЛАРИНИ ИСТЕЪМОЛ ҚИЛГАН ОҚ СИЧҚОНЛАР ЙЎҒОН ИЧАГИНИНГ МОРФОФУНКЦИОНАЛ ХУСУСИЯТЛАРИ",
+     "language": null,
+     "year": 2026,
+     "venue": "Science and Technology in the Modern World",
+     "in_v31": false
+    },
+    {
+     "id": "W4409129055",
+     "title": "Исследование и идентификация микропластиков в некоторых видах растительных масел",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Food processing industry",
+     "in_v31": false
+    },
+    {
+     "id": "W7222109474",
+     "title": "ОРГАНИЗМГА ТУШГАН ПЛАСТИК МИКРОЗАРРАЧАЛАРИНИ ЗАРАРСИЗЛАНТИРИШНИНГ ЗАМОНАВИЙ ЖИҲАТЛАРИ",
+     "language": null,
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W7108077406",
+     "title": "ПОДВОДНЫЕ ПРИЗРАКИ: МИКРОПЛАСТИК И ЕГО ВЛИЯНИЕ НА ГЛУБОКОВОДНЫЕ ЭКОСИСТЕМЫ И ЗДОРОВЬЕ ЧЕЛОВЕКА (ЧЕРЕЗ ПИЩЕВУЮ ЦЕПЬ)",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W3116765256",
+     "title": "Пластиковое загрязнение прибрежных поверхностных вод среднего и южного Байкала",
+     "language": "ru",
+     "year": 2020,
+     "venue": "Водные ресурсы",
+     "in_v31": false
+    },
+    {
+     "id": "W4312996034",
+     "title": "МИКРОПЛАСТИК В ОКРУЖАЮЩЕЙ СРЕДЕ ТАГАНРОГА, \"Наука юга России\"",
+     "language": "ru",
+     "year": 2022,
+     "venue": "Science in the South of Russia",
+     "in_v31": false
+    },
+    {
+     "id": "W4384257655",
+     "title": "Efficient treatment of surface runoff",
+     "language": "ru",
+     "year": 2023,
+     "venue": "Vodosnabzhenie i sanitarnaia tehnika",
+     "in_v31": true
+    },
+    {
+     "id": "W7166925470",
+     "title": "Микропластик от шин и тормозных колодок: почему даже электромобили загрязняют воздух мелкими частицами",
+     "language": "ru",
+     "year": 2026,
+     "venue": "Repository of Belarusian National Technical University (Belarusian National Technical University)",
+     "in_v31": false
+    },
+    {
+     "id": "W4389061101",
+     "title": "МИКРОПЛАСТИК В ПРЕСНОВОДНЫХ ВОДОЁМАХ: ИССЛЕДОВАНИЕ, ПОСЛЕДСТВИЯ И МЕРЫ ПРЕДОТВРАЩЕНИЯ",
+     "language": "ru",
+     "year": 2023,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7163528464",
+     "title": "АҒЫН СУЛАРДЫ ТАЗАРТУ ҮШІН КӨМІРТЕКТІ ТАЛШЫҚТЫ СҮЗГІЛЕУ МАТЕРИАЛДАРЫН АЛУ ЖӘНЕ СИПАТТАУ",
+     "language": "kk",
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W4408727928",
+     "title": "Microplastics in freshwater ecosystems: sources, research methods and environmental consequences. Experience of russian researchers and prospects for pollution control in Khanty-Mansiysk Autonomous Okrug – Yugra",
+     "language": "en",
+     "year": 2025,
+     "venue": "Bulletin of Nizhnevartovsk State University",
+     "in_v31": true
+    },
+    {
+     "id": "W4402685157",
+     "title": "Identification and Characteristics of Microplastics Found in Kieselguhr",
+     "language": "ru",
+     "year": 2024,
+     "venue": "Beer and beverages",
+     "in_v31": true
+    },
+    {
+     "id": "W7222824828",
+     "title": "ОРГАНИЗМГА ТУШГАН ПЛАСТИК МИКРОЗАРРАЧАЛАРИНИ ЗАРАРСИЗЛАНТИРИШНИНГ ЗАМОНАВИЙ ЖИҲАТЛАРИ",
+     "language": null,
+     "year": 2026,
+     "venue": "Innovative Research in the Modern World",
+     "in_v31": false
+    },
+    {
+     "id": "W4403685996",
+     "title": "ОЦЕНКА ИНФОРМИРОВАННОСТИ СТУДЕНТОВ О ВРЕДЕ МИКРОПЛАСТИКА НА ОРГАНИЗМ ЧЕЛОВЕКА",
+     "language": "ru",
+     "year": 2023,
+     "venue": "Ġylym men densaulyķ saķtau.",
+     "in_v31": true
+    },
+    {
+     "id": "W2796810264",
+     "title": "МИКРОПЛАСТИК В МОРСКОЙ СРЕДЕ: ОБЗОР МЕТОДОВ ОТБОРА, ПОДГОТОВКИ И АНАЛИЗА ПРОБ ВОДЫ, ДОННЫХ ОТЛОЖЕНИЙ И БЕРЕГОВЫХ НАНОСОВ, \"Океанология\"",
+     "language": "ru",
+     "year": 2018,
+     "venue": "Океанология",
+     "in_v31": false
+    },
+    {
+     "id": "W7117441802",
+     "title": "МИКРОПЛАСТИК В ВОДАХ БАЙКАЛА: ПРАВОВОЕ РЕГУЛИРОВАНИЕ РЕШЕНИЯ ПРОБЛЕМЫ ЗАГРЯЗНЕНИЯ ВОД",
+     "language": "ru",
+     "year": 2024,
+     "venue": "АГРАРНОЕ И ЗЕМЕЛЬНОЕ ПРАВО",
+     "in_v31": false
+    },
+    {
+     "id": "W3117036263",
+     "title": "MICROPLASTICS AS A NEW COMPONENT IN THE ECOSYSTEM OF THE LOWER ZONE OF THE VOLGA DELTA",
+     "language": "ru",
+     "year": 2020,
+     "venue": "Астраханский вестник экологического образования",
+     "in_v31": true
+    },
+    {
+     "id": "W7124579557",
+     "title": "ВЛИЯНИЕ МИКРОПЛАСТИКА НА МОРСКИХ ОБИТАТЕЛЕЙ",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W4392312012",
+     "title": "ИССЛЕДОВАНИЕ ВОЗНИКНОВЕНИЯ И УДАЛЕНИЯ МИКРОПЛАСТИКА НА ОЧИСТНЫХ СООРУЖЕНИЯХ КАНАЛИЗАЦИИ",
+     "language": "ru",
+     "year": 2023,
+     "venue": "Engineering and Construction Bulletin of the Caspian Region",
+     "in_v31": false
+    },
+    {
+     "id": "W7106683308",
+     "title": "ПРОБЛЕМА ЗАГРЯЗНЕНИЯ МИРОВОГО ОКЕАНА МИКРОПЛАСТИКОМ И ПУТИ ЕЕ РЕШЕНИЯ",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Cifra LLC Journals",
+     "in_v31": false
+    },
+    {
+     "id": "W7171538593",
+     "title": "Микропластик в пищевых и молочных продуктах. Анализ существующих методов концентрирования и экстракции",
+     "language": "ru",
+     "year": 2026,
+     "venue": "Food processing industry",
+     "in_v31": true
+    },
+    {
+     "id": "W4387813585",
+     "title": "Карта аналитики – 2022: миниатюрные приборы, COVID 19, микропластик, глубокая эвтектика",
+     "language": "ru",
+     "year": 2023,
+     "venue": "ANALYTICS Russia",
+     "in_v31": false
+    },
+    {
+     "id": "W4413891524",
+     "title": "ASSESSMENT OF THE CONTENT OF PLASTIC INCLUSIONS IN PET FOOD",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Высшая школа: научные исследования",
+     "in_v31": true
+    },
+    {
+     "id": "W7220895193",
+     "title": "Bulletin of Parliamentarism",
+     "language": "kk",
+     "year": 2026,
+     "venue": "Bulletin of Parliamentarism",
+     "in_v31": false
+    },
+    {
+     "id": "W4297186345",
+     "title": "MICROPLASTICS IN SOIL: IMPACTS ON ECOSYSTEMS, POTENTIAL SOURCES AND ANALYTICAL RESEARCH METHODS (REVIEW)",
+     "language": "ru",
+     "year": 2022,
+     "venue": "Южно-Сибирский научный вестник",
+     "in_v31": true
+    },
+    {
+     "id": "W4405020925",
+     "title": "МИКРОПЛАСТИК В ВОДЕ ТРАНСГРАНИЧНОГО ОЗЕРА ХАНКА И РЕК ЕГО БАССЕЙНА",
+     "language": "ru",
+     "year": 2024,
+     "venue": "География и природные ресурсы",
+     "in_v31": true
+    },
+    {
+     "id": "W7115362807",
+     "title": "МИКРОПЛАСТИК В ВОДЕ И ПИЩЕ: [НЕ]ОСВЕДОМЛЕННОСТЬ",
+     "language": "ru",
+     "year": 2024,
+     "venue": "Bulletin of Science and Practice",
+     "in_v31": false
+    },
+    {
+     "id": "W4414689267",
+     "title": "Карта науки – 2024: сенсоры, устойчивая аналитическая химия, микропластик",
+     "language": "ru",
+     "year": 2025,
+     "venue": "ANALYTICS Russia",
+     "in_v31": false
+    },
+    {
+     "id": "W7113473449",
+     "title": "Микропастик: что это такое и как с ним бороться?",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Online library Sukhoi State Technical University of Gome (Sukhoi State Technical University of Gomel)",
+     "in_v31": false
+    },
+    {
+     "id": "W4405066615",
+     "title": "Моделирование и разработка технологии съедобной посуды для предприятий индустрии питания",
+     "language": "ru",
+     "year": 2024,
+     "venue": "Food processing industry",
+     "in_v31": true
+    },
+    {
+     "id": "W4399920659",
+     "title": "Comprehensive Research and Identification of Microplastics in Low-alcohol Drinks",
+     "language": "ru",
+     "year": 2024,
+     "venue": "Beer and beverages",
+     "in_v31": true
+    },
+    {
+     "id": "W7117638759",
+     "title": "Осторожно – микропластик: влияние на организм человека и окружающую среду",
+     "language": "ru",
+     "year": 2024,
+     "venue": "Pediatrics Consilium Medicum",
+     "in_v31": false
+    },
+    {
+     "id": "W7235053734",
+     "title": "Микропластик - поиск оптимальных решений для сохранения природных экосистем и среды обитания гидробионтов",
+     "language": "de",
+     "year": 2026,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4410100309",
+     "title": "Микропластик в воде и проблемы его определения (на примере водных объектов Юга европейской части России)",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Вестник ВГУ Серия География Геоэкология",
+     "in_v31": false
+    },
+    {
+     "id": "W4414338634",
+     "title": "Микропластик: реальная угроза",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Životnovodstvo Rossii.",
+     "in_v31": false
+    },
+    {
+     "id": "W4399750357",
+     "title": "MICROPLASTIC IN SOIL: A REVIEW OF DETECTION METHODS",
+     "language": "ru",
+     "year": 2024,
+     "venue": "Проблемы агрохимии и экологии",
+     "in_v31": true
+    },
+    {
+     "id": "W4394748192",
+     "title": "Содержание микропластика в донных осадках озер особо охраняемых природных территорий на примере Кижских шхер ОНЕЖСКОГО ОЗЕРА и Водлозеро",
+     "language": "ru",
+     "year": 2023,
+     "venue": "Водные ресурсы",
+     "in_v31": false
+    },
+    {
+     "id": "W7225303769",
+     "title": "MICROPLASTICS IN FOOD SYSTEMS ARE A MACRO-PROBLEM FOR HUMAN HEALTH",
+     "language": "en",
+     "year": 2026,
+     "venue": "Technology and the study of mer-chandise of innovative foodstuffs",
+     "in_v31": true
+    },
+    {
+     "id": "W7212851330",
+     "title": "ВЛИЯНИЕ МИКРОПЛАСТИКА НА ЗДОРОВЬЕ: АКТУАЛЬНОСТЬ ПРОБЛЕМЫ И ПЕРСПЕКТИВЫ ИССЛЕДОВАНИЯ",
+     "language": "ru",
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W2954113427",
+     "title": "Микропластик в пище балтийской песчанки Ammodytes tobianus литорали Куршской косы Балтийского моря",
+     "language": "ru",
+     "year": 2019,
+     "venue": "Journal of Ichthyology",
+     "in_v31": false
+    },
+    {
+     "id": "W7208711735",
+     "title": "МОЛЕКУЛЯРНЫЙ АТЛАС СТАРЕНИЯ. МЕТА-ГРУППА 4. ЭКЗОГЕННЫЕ КСЕНОБИОТИКИ: АНТРОПОГЕННЫЙ УДАР, НАКАПЛИВАЮЩИЙСЯ С ДЕСЯТИЛЕТИЯМИ. ИНТЕГРАТИВНЫЙ ПОДХОД В КОНТЕКСТЕ ТЕОРИИ МЕТА-СРЕД И МЕТА-РЕГУЛЯТОРОВ",
+     "language": "ru",
+     "year": 2026,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+     "in_v31": false
+    },
+    {
+     "id": "W4405661328",
+     "title": "ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ ПРИОРИТЕТНЫХ НАПРАВЛЕНИЙ ОХРАНЫ ОКРУЖАЮЩЕЙ СРЕДЫ: МИКРОПЛАСТИК",
+     "language": "ru",
+     "year": 2024,
+     "venue": "Проблемы окружающей среды и природных ресурсов",
+     "in_v31": false
+    },
+    {
+     "id": "W7128429169",
+     "title": "СЛЕД МИКРОПЛАСТИКА В ГЕРОНТОЛОГИИ: МЕТААНАЛИЗ ЕГО РОЛИ В МОДУЛЯЦИИ ДОЛГОЛЕТИЯ",
+     "language": "ru",
+     "year": 2026,
+     "venue": "Успехи геронтологии",
+     "in_v31": true
+    },
+    {
+     "id": "W4407983588",
+     "title": "ЭКОЛОГИЧЕСКАЯ ПРОБЛЕМА ВЛИЯНИЯ МИКРОПЛАСТИКА НА СОСТОЯНИЕ РАСТЕНИЙ, ОКРУЖАЮЩУЮ СРЕДУ И ЗДОРОВЬЕ ЧЕЛОВЕКА",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Естественные и технические науки",
+     "in_v31": false
+    },
+    {
+     "id": "W7214113783",
+     "title": "Microplastics as a reservoir for fecal indicator microorganisms in recreational marine beach areas",
+     "language": "ru",
+     "year": 2026,
+     "venue": "Bulletin of Experimental Biology and Medicine",
+     "in_v31": true
+    },
+    {
+     "id": "W7117295562",
+     "title": "МИКРОПЛАСТИКИ В ПИЩЕВОЙ ПРОДУКЦИИ: УРОВНИ КОНТАМИНАЦИИ И ВКЛАД В СУММАРНОЕ ПОСТУПЛЕНИЕ (ОБЗОР ЛИТЕРАТУРЫ)",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Современные вопросы биомедицины",
+     "in_v31": false
+    },
+    {
+     "id": "W4414707532",
+     "title": "Микропластик в пищевых продуктах: анализ загрязненности и обзор способов идентификации",
+     "language": "ru",
+     "year": 2025,
+     "venue": "Food processing industry",
+     "in_v31": true
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 18,
+   "sample_language_label_counts": {
+    "ru": 42,
+    "unlabelled": 3,
+    "en": 2,
+    "kk": 2,
+    "de": 1
+   }
+  },
+  {
+   "id": "no-da-plastic-pollution",
+   "languages": [
+    "no",
+    "da"
+   ],
+   "terms": [
+    "mikroplast",
+    "plastforurensning",
+    "marint søppel"
+   ],
+   "query": "(\"mikroplast\" OR \"plastforurensning\" OR \"marint søppel\")",
+   "a3_count_2026_11_18": 98,
+   "count": 123,
+   "language_label_counts": {
+    "sv": 33,
+    "no": 30,
+    "en": 27,
+    "da": 19,
+    "nb": 11,
+    "cs": 1,
+    "de": 1,
+    "et": 1
+   },
+   "fetched_at": "2026-11-23T05:27:59+00:00",
+   "sample_seed": 20261122,
+   "sample": [
+    {
+     "id": "W3030607323",
+     "title": "Microplastics in Södertälje : From Lake Mälaren to the Baltic Sea",
+     "language": "de",
+     "year": 2019,
+     "venue": "DiVA (Digitala Vetenskapliga Arkivet)",
+     "in_v31": true
+    },
+    {
+     "id": "W4412316034",
+     "title": "Udtalelse om validiteten af målemetode anvendt i amerikansk undersøgelse, der viser mikroplast i drikkevand verden over",
+     "language": "da",
+     "year": 2017,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3088104309",
+     "title": "Mikroplast i dagvatten : problem och möjliga förebyggande åtgärder",
+     "language": "sv",
+     "year": 2020,
+     "venue": "Högskolan Kristianstad Publikationer",
+     "in_v31": false
+    },
+    {
+     "id": "W4412299754",
+     "title": "Udtalelse om validiteten af målemetode anvendt i dansk undersøgelse, der viser mikroplast i drikkevand fra taphaneprøver i 16 husstande i Københavnsområdet",
+     "language": "da",
+     "year": 2017,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3048153953",
+     "title": "Mikroplastforurensing i laksefilet og oppdrettsmiljø",
+     "language": "no",
+     "year": 2020,
+     "venue": "NORA - Norwegian Open Research Archives",
+     "in_v31": false
+    },
+    {
+     "id": "W4416724710",
+     "title": "Metodologiske utfordringer med forskning på mikroplast",
+     "language": "no",
+     "year": 2025,
+     "venue": "Norsk tidsskrift for ernæring",
+     "in_v31": false
+    },
+    {
+     "id": "W3217641791",
+     "title": "Characterisation and Studies of Microplastics in Marine Environments – Gradient from Bermuda to the Arctic and Laboratory Based Weathering.",
+     "language": "en",
+     "year": 2019,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": true
+    },
+    {
+     "id": "W3117423983",
+     "title": "Mikroplaster : Redovisning av regeringsuppdrag om källor till mikroplaster och förslag på åtgärder för minskade utsläpp i Sverige",
+     "language": "sv",
+     "year": 2017,
+     "venue": "DiVA (Digitala Vetenskapliga Arkivet)",
+     "in_v31": false
+    },
+    {
+     "id": "W7236878526",
+     "title": "Teamachine for modern brewing",
+     "language": "en",
+     "year": 2025,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W2582658161",
+     "title": "Opptak av mikroplast i hoppekrepsen Acartia tonsa.",
+     "language": "no",
+     "year": 2016,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W2969968115",
+     "title": "Vägdamm och mikroplast från Sveriges vägtransportsektor : Kan städning av vägbanan vara en möjlig åtgärd för reduktion av partiklar?",
+     "language": "sv",
+     "year": 2018,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7204516365",
+     "title": "Dolly rope som kilde til plastikforurening i danske farvande",
+     "language": "da",
+     "year": 2026,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7236970409",
+     "title": "Effekter av tungmetaller og mikroplast på antibiotikaresistensgener i avløpsrenseanlegg: En litteraturgjennomgang",
+     "language": "en",
+     "year": 2026,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W7236933347",
+     "title": "Plastikk, til begeistring eller besvær? – En sakprosaanalyse av bøkene Plasticus Maritimus og Søppelplasten i havet",
+     "language": "nb",
+     "year": 2026,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W2976845623",
+     "title": "Granulat på konstgräsplaner i Gävle kommun : Miljöpåverkan vid spridning via dagvattensystem",
+     "language": "sv",
+     "year": 2018,
+     "venue": "DiVA (University of Gävle)",
+     "in_v31": false
+    },
+    {
+     "id": "W7112683103",
+     "title": "Concept development of granular traps : A study to reduce the spread of microplastics from artificial turf",
+     "language": "sv",
+     "year": 2021,
+     "venue": "Digitala vetenskapliga arkivet (Diva) (Karlstad University)",
+     "in_v31": true
+    },
+    {
+     "id": "W4296683901",
+     "title": "Lite mikroplast i drikkevann",
+     "language": "no",
+     "year": 2018,
+     "venue": "Den norske tannlegeforenings Tidende",
+     "in_v31": false
+    },
+    {
+     "id": "W7154866498",
+     "title": "Om retlig prøvelse af EU’s regler om private selskabers årsregnskab om benchmarks for fremme af bæredygtige investeringer:Med kommentarer til Rettens dom i T-579/22 Client Earth og T-583/22 Fédération environnement m.fl. og om forskellen til en medicinmand",
+     "language": "da",
+     "year": 2026,
+     "venue": "Research at the University of Copenhagen (University of Copenhagen)",
+     "in_v31": false
+    },
+    {
+     "id": "W3014327133",
+     "title": "Miljøgiftundersøkelse av fisk fra Mærradalsbekken og Hovinbekken i 2019",
+     "language": "no",
+     "year": 2020,
+     "venue": "NORA - Norwegian Open Research Archives",
+     "in_v31": false
+    },
+    {
+     "id": "W3006595270",
+     "title": "Status for Miljøet i Norskehavet: Rapport fra Overvåkningsgruppen 2019",
+     "language": "no",
+     "year": 2019,
+     "venue": "NORA - Norwegian Open Research Archives",
+     "in_v31": false
+    },
+    {
+     "id": "W3118596815",
+     "title": "Spridningsmodeller för mikroplast från däck- och vägslitage : nuläge och möjligheter",
+     "language": "sv",
+     "year": 2020,
+     "venue": "DiVA (Digitala Vetenskapliga Arkivet)",
+     "in_v31": false
+    },
+    {
+     "id": "W3184966742",
+     "title": "Redovisning av regeringsuppdrag om mikroplast från vägtrafiken",
+     "language": "sv",
+     "year": 2021,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3084000555",
+     "title": "What happens to biodegradable plastics in soil and compost? : development and comparison of methods",
+     "language": "en",
+     "year": 2020,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": true
+    },
+    {
+     "id": "W3084706110",
+     "title": "Mikroplast i behandlat lakvatten : En fallstudie med åtta avfallsanläggningar",
+     "language": "sv",
+     "year": 2018,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7217341042",
+     "title": "FRAMTAGNING AV ANALYSMETOD FÖR UNDERSÖKNING AV MIKROPLASTER I GLACIÄRER MED ANALYSRESULTAT FRÅN GLACIÄREN VATNAJÖKULL PÅ ISLAND",
+     "language": "sv",
+     "year": 2023,
+     "venue": "Gothenburg University Publications Electronic Archive (Gothenburg University)",
+     "in_v31": true
+    },
+    {
+     "id": "W3042171858",
+     "title": "Mikroplastfibre i det marine miljø: Nedbrytning og utslipp av additiver som følge av UV-eksponering.",
+     "language": "no",
+     "year": 2020,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W4412338985",
+     "title": "Forslag til målemetode til brug for undersøgelser af mikroplast i taphanevand",
+     "language": "da",
+     "year": 2018,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7236887332",
+     "title": "Mikroplast i sedimenter fra Trøndelagskysten, Norge",
+     "language": "nb",
+     "year": 2021,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W2925203732",
+     "title": "Miljøgiftundersøkelser av ørret fra Akerselva og Lysakerelva i 2018",
+     "language": "no",
+     "year": 2018,
+     "venue": "NORA - Norwegian Open Research Archives",
+     "in_v31": false
+    },
+    {
+     "id": "W4412332523",
+     "title": "Bæredygtig og decentral rensning af vaskerispildevand, herunder fjernelse af mikroplast",
+     "language": "da",
+     "year": 2020,
+     "venue": null,
+     "in_v31": true
+    },
+    {
+     "id": "W4412310002",
+     "title": "Båndfilterteknologiens potentiale for at fjerne mikroplast i kombination med organisk stof i renseanlægs primærdel",
+     "language": "da",
+     "year": 2018,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W3010001853",
+     "title": "Accumulation of microplastic in fjord sediments - the Bunnefjord, inner Oslofjord, Norway",
+     "language": "en",
+     "year": 2019,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": true
+    },
+    {
+     "id": "W7236905209",
+     "title": "Characterization of the Polyester-Hydrolyzing Cutinase FsC from Fusarium solani pisi",
+     "language": "en",
+     "year": 2022,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W7236915766",
+     "title": "Marin plastforurensning i bærekraftsundervisning: Utvikling av et elevhefte og en lærerveiledning om marin plastforurensning og bærekraftig utvikling for undervisning i ungdomsskolen",
+     "language": "nb",
+     "year": 2026,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W3159299093",
+     "title": "Demonstrasjons- og testsenter for karakterisering og rensing av forurenset overvann - mulighetsstudie",
+     "language": "no",
+     "year": 2021,
+     "venue": "NORA - Norwegian Open Research Archives",
+     "in_v31": false
+    },
+    {
+     "id": "W2609203949",
+     "title": "Mikroplast i Spildevand – Resultater fra et forstudie",
+     "language": "da",
+     "year": 2016,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W7213722819",
+     "title": "Mikroplast Eesti rannikumere mererohuväljade setetes ja vees",
+     "language": "et",
+     "year": 2020,
+     "venue": "DSpace repository (University of Tartu)",
+     "in_v31": false
+    },
+    {
+     "id": "W3045273499",
+     "title": "Reningsmetoder för dagvatten innehållande mikroplaster från konstgräsplaner",
+     "language": "sv",
+     "year": 2018,
+     "venue": "KTH Publication Database DiVA (KTH Royal Institute of Technology)",
+     "in_v31": false
+    },
+    {
+     "id": "W2889772257",
+     "title": "Mikroplast och reningsverk – en del av ett större miljöproblem",
+     "language": "sv",
+     "year": 2018,
+     "venue": null,
+     "in_v31": true
+    },
+    {
+     "id": "W2950575099",
+     "title": "Fra et utvalg tannkremer – hvilke inneholder mikroplast?",
+     "language": "no",
+     "year": 2019,
+     "venue": "SPISS",
+     "in_v31": false
+    },
+    {
+     "id": "W2995606523",
+     "title": "Real-World Plastic Recognition using Deep Neural Networks for Mobile Platforms",
+     "language": "en",
+     "year": 2019,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W7236979422",
+     "title": "Preliminary Material Flow Analysis (MFA) to Map Macro-Plastics from Sea-based Aquaculture Equipment in Norway",
+     "language": "en",
+     "year": 2024,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W2977981594",
+     "title": "Konstgräs i park- och lekområden",
+     "language": "sv",
+     "year": 2019,
+     "venue": null,
+     "in_v31": false
+    },
+    {
+     "id": "W4417263745",
+     "title": "Mikroplast og human helse",
+     "language": "no",
+     "year": 2025,
+     "venue": "Naturen",
+     "in_v31": false
+    },
+    {
+     "id": "W7236891265",
+     "title": "Klesstil, identitet og bærekraftig utvikling; hva påvirker hvilke klær vi kjøper?",
+     "language": "nb",
+     "year": 2025,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W2997096819",
+     "title": "Mikroplast i marina livsmedelEn studie om förekomst, risker och överföring mellan trofinivåer",
+     "language": "sv",
+     "year": 2018,
+     "venue": "DiVA - Örebro University (Örebro universitet)",
+     "in_v31": false
+    },
+    {
+     "id": "W2968012004",
+     "title": "Microplastics in blue mussels and beach sediments : a study of Hovedøya in the inner Oslo Fjord",
+     "language": "en",
+     "year": 2019,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": true
+    },
+    {
+     "id": "W2314882028",
+     "title": "Stofbelastninger fra overløbsbygværker",
+     "language": "da",
+     "year": 2016,
+     "venue": "VBN Forskningsportal (Aalborg Universitet)",
+     "in_v31": false
+    },
+    {
+     "id": "W2925155843",
+     "title": "Pellets på avveie. Fra vugge til hav",
+     "language": "no",
+     "year": 2018,
+     "venue": "NVA (Nasjonalt vitenarkiv)",
+     "in_v31": false
+    },
+    {
+     "id": "W2974760110",
+     "title": "Provtagningsmetoder för mikroplast g300 μm i ytvatten : En jämförelsestudie mellan pump och trål",
+     "language": "sv",
+     "year": 2018,
+     "venue": null,
+     "in_v31": false
+    }
+   ],
+   "sample_size": 50,
+   "sample_in_v31": 9,
+   "sample_language_label_counts": {
+    "sv": 14,
+    "no": 12,
+    "da": 9,
+    "en": 9,
+    "nb": 4,
+    "de": 1,
+    "et": 1
+   }
+  }
+ ],
+ "caveats": [
+  "Many non-English papers have English titles and abstracts. A match on a native-language term shows that the string appears in OpenAlex's indexed title or abstract. It does not show the paper's own language, and sample titles are OpenAlex metadata, which can be translated.",
+  "OpenAlex language labels are imperfect. The project's planning notes cite Céspedes et al. 2025 for false positives among declared-language labels. That source has not been checked against its text, so no error rate is claimed here. The counts use OpenAlex's labels as given.",
+  "Native-language hits include public-communication items, which are written for the public rather than as research articles. The term counts do not exclude document types; the overlap check applies the project's type exclusions.",
+  "OpenAlex's search matches stemmed word forms. The project's query notes record this for English terms (for example, 'microplasticity' matches 'microplastic'). The native-language strings were not tested for it, so a count may include related forms.",
+  "Some strings are spelled the same in other languages, so a set can contain works in other languages. For example, OpenAlex's labels for the German Mikroplastik set include Indonesian and Turkish works, which use the same word. The counts are not restricted to the labelled language; language_label_counts shows the split.",
+  "The 纳米塑料 set has mixed senses. The vocabulary register notes a 2001 materials article among its hits, so the count includes works outside plastic pollution research.",
+  "microplásticos is one set for Spanish and Portuguese, and the Norwegian and Danish strings are one set. OpenAlex counts are not split by language there. The register labels these strings Spanish or Norwegian only; no Portuguese or Danish strings are registered.",
+  "Counts are OpenAlex totals taken on the run date, under the search form described in the method. The A3 probe counts (2026-11-18) are shown for comparison. Most sets agree with them within about 7 per cent. The Chinese, Russian and Norwegian and Danish sets differ by much more, and index growth does not explain that. This probe does not confirm the search form behind the A3 figures, so compare the counts with them with care.",
+  "Each sample is a fixed-seed random draw of up to 50 works. Where a term set has 50 or fewer works, the sample is the whole set, so the share describes that set. Shares from samples of this size carry wide uncertainty.",
+  "The overlap is measured on the sample only. It shows how many sampled works the main plastics query (plastic-v3.1) also retrieves. It is a share of the sample, not a completeness rate for either query.",
+  "The probe does not read abstracts. No person has checked the language or topic of any sampled work.",
+  "Only the registered strings are searched. A term that is not in the register, a translation or a transliteration is not counted, so these counts are not totals for native-language literature."
+ ],
+ "not_covered": [
+  "Lifecycle-and-society and lens terms in any language, for example waste-colonialism, justice and transboundary-trade terms.",
+  "Arabic, Turkish, Indonesian, Hindi, Dutch, Polish and other languages: no term strings are registered for them, so they are not searched as languages. Works in these languages can still match a registered string that is spelled the same (see the caveats).",
+  "Italian. The A3 probe gives a count of 85 but no term string, so Italian was not run.",
+  "Local-language terms registered for testing outside this probe (for example cartoneros and Te Moananui) were not run."
+ ]
+}

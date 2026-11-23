@@ -431,6 +431,28 @@ Licence: derived counts. PMIDs, DOIs and years come from NCBI E-utilities; the A
 
 `miss_triage`: `sample_size`, `seed` (20261122), `sample_rule` (the first `min(50, misses)` misses ordered by SHA-256 of `seed:pmid`), `misses_total` (the union of both sets' misses, deduplicated by PMID), `triage_file` (`curation/pubmed_miss_triage_v1.csv`), `labelled` (rows with a non-blank `triage_class`) and `false_negative_classes` (taxonomy classes with direction `false_negative`). With no labels the block carries `status: "pending owner triage"`. Once `labelled` is above zero it carries `false_negative_share`: `count` (labelled rows in a false-negative class), `n` (= `labelled`), `share` and `wilson_95` (Wilson 95% interval). The triage sheet is never overwritten when it holds reviewer entries.
 
+### `site/data/language_probe.json`
+
+Purpose: the native-language probe of OpenAlex (BQ-S4, Add-on A3 §5.7). There are sixteen term sets, one per group of registered native-language strings (`config/search_vocabulary_v1.yml`, the A3 §5.7 rows). For each set the file gives the OpenAlex count, the language labels of its works, a fixed-seed sample of up to 50 works, and the share of that sample that the main v3.1 query also retrieves. The overlap is a share of the sample, not a completeness rate. Written by `py -3.14 scripts/fetch_language_probe.py` (about 64 OpenAlex requests, cost recorded in `cost`; responses are cached under `data/interim/language_probe/`). `--offline` rebuilds the file from that cache with no network calls; `--check` validates the committed file and writes nothing; `--offline --check` also compares it with a rebuild from the cache. The probe stops when its own logged spend would exceed USD 0.09.
+Top-level keys: `schema_version` (`bqs-v1`), `generated_at` (UTC ISO 8601), `query_version` (`plastic-v3.1`), `vocabulary_version` (`search_vocabulary_v1`), `source`, `sample_seed` (20261122), `sample_limit` (50), `method` (plain-language text), `cost` (`credits` and `usd`: the OpenAlex credits behind the file and the conservative USD figure, at USD 0.0001 per credit), `term_sets` (array, below), `caveats` and `not_covered` (arrays of text).
+
+`term_sets[]`:
+
+| Field | Meaning |
+|---|---|
+| `id`, `languages`, `terms`, `query` | Probe identifier; language codes; the registered strings; the OpenAlex `title_and_abstract.search` expression built from them. |
+| `a3_count_2026_11_18` | The A3 §5.7 probe count, for comparison. The search form behind it is not confirmed by this probe (see `caveats`). |
+| `count` | OpenAlex `meta.count` for the works matching the set. |
+| `language_label_counts` | Works per OpenAlex language label, for the whole set. `unlabelled` is the remainder with no language label. `null` when the optional request was skipped by the budget guard. |
+| `fetched_at` | UTC time of the count request. |
+| `sample_seed`, `sample` | The fixed seed; up to 50 works as `{id, title, language, year, venue, in_v31}`: OpenAlex work ID, OpenAlex title, language label, publication year, primary-location venue, and whether the v3.1 query also retrieves the work. |
+| `sample_size` | Number of works in `sample` (`min(count, 50)`). |
+| `sample_in_v31` | Sample works with `in_v31` true. This is the overlap on the sample only. |
+| `sample_language_label_counts` | Language labels within the sample. |
+
+Titles and venues are OpenAlex metadata. No abstracts are published.
+Licence: derived from OpenAlex metadata; OpenAlex licence recorded as unknown in `docs/REUSE.md`. Owner decision pending.
+
 ### `site/data/bundle/`
 
 AT-4 serving bundle (bit-set facets, title search, institution tiers, abstract-free
