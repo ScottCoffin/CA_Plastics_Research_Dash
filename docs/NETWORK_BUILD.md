@@ -12,6 +12,9 @@ Files:
 | Library (graph, layout, communities, labels) | [`src/atlas/build/network.py`](../src/atlas/build/network.py) |
 | Command-line entry point | [`scripts/build_network.py`](../scripts/build_network.py) |
 | Output consumed by the `/network` page | [`site/data/network.json`](../site/data/network.json) |
+| Structure metrics library (BQ-3.2) | [`src/atlas/analytics/network_metrics.py`](../src/atlas/analytics/network_metrics.py) |
+| Structure metrics command (BQ-3.2) | [`scripts/build_network_metrics.py`](../scripts/build_network_metrics.py) |
+| Output of the structure metrics (BQ-3.2) | [`site/data/network_metrics.json`](../site/data/network_metrics.json) |
 | Daily run | [`.github/workflows/ingest_works.yml`](../.github/workflows/ingest_works.yml) |
 | Field reference | [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md) |
 | Renderer decision | [`.agent/DECISIONS.md`](../.agent/DECISIONS.md) (ADR-S9.4-SIGMA-2026-11-14) |
@@ -317,5 +320,83 @@ These are not set in this repository. Where networkx has a default, it applies.
 
 ## 13. Planned, not built
 
-A3 Module 3 (BQ-3.x) will add collaboration-structure metrics. Owner rule A3-D8 governs only new
-outputs. This page describes the current build only.
+The BQ-3.2 structure metrics are built; section 14 describes them. The other BQ-3.x outputs are
+not built. Owner rule A3-D8 governs only new outputs. Sections 1 to 12 describe `network.json`
+only.
+
+## 14. Metrics (BQ-3.2)
+
+`site/data/network_metrics.json` (schema `bq3-v1`) measures the collaboration structure in two
+graphs: authors (G-A) and institutions (G-I). It is separate from `network.json`. The page does
+not draw it. The build reads only committed site files, so it runs offline.
+
+Inputs (`scripts/build_network_metrics.py`):
+
+- `site/data/index.json`: works (`plastic_related`, `author_ids`, `institution_ids`, `year`,
+  `ca_any_author`) and authors (`author_id`, `institution_ids`, `current_in_ca`).
+- `site/data/institutions.json`: `inst_id`, `atlas_type` (sector) and `ca_flag`.
+- `site/data/build_metadata.json`: the index build time, copied to `source.index_build_timestamp`.
+  If the file is missing, the index's own `generated_at` is used.
+
+Scope and graphs (`src/atlas/analytics/network_metrics.py`, `build_metrics`):
+
+- All plastic-related works in the index are used, not the 400-node cap of `network.json`.
+- G-A nodes are Atlas authors (the `authors` list) listed on a plastic-related work in the
+  window. A co-author who is not in the list is not a node and creates no edge.
+- G-I nodes are the institutions in a work's `institution_ids`, whether or not they belong to a
+  California author.
+- Edge weight is the number of works in the window on which both ends are listed (a co-authored
+  work count, not Newman fractional weighting).
+- Windows: `all` (every plastic-related work, including works before 2011 and works with no
+  year), `2011-2015`, `2016-2020`, `2021-2025` (inclusive year ranges) and `2026` (`partial`
+  true). Works before 2011 appear only in `all`.
+
+Metrics per graph and window: `nodes`, `edges`, `components` (isolates count as components),
+`components_with_edges`, `giant_component_nodes` and `giant_component_share`, `density`
+(2 x edges / (n (n - 1))), `average_clustering` (networkx default: nodes with fewer than two
+neighbours count as 0), `isolates` and `isolate_share`, `degree` quantiles (min, p25, median,
+p75, p90, max), `communities` and `modularity` (Louvain, seed 42, run on nodes with at least one
+edge), and three edge fractions, each with `edges_considered`: `cross_institution`,
+`cross_sector` and `out_of_region`. The payload's `definitions` object gives the plain-language
+rule for each metric.
+
+Isolates: for authors, a node with no other Atlas author on any window work (single-author works,
+or works whose other authors are outside the authors list). For institutions, a node with no other
+institution on any window work.
+
+Ascertainment: the corpus is California-only. Collaborators outside California appear only through
+works co-authored with California researchers. The payload's `ascertainment_note` states this.
+`corpus.works_with_no_california_author` counts plastic-related works with no California author.
+
+Rebuilding:
+
+```
+py -3.14 scripts/build_network_metrics.py
+py -3.14 scripts/build_network_metrics.py --check
+py -3.14 scripts/build_network_metrics.py --index PATH --institutions PATH --metadata PATH --out PATH
+```
+
+`--check` exits 1 when the file is missing or differs from a rebuild. It ignores `generated_at`
+(the build time, UTC) and compares everything else, including `method.networkx`. A networkx
+upgrade can change the Louvain partition, so `--check` then reports the file as stale.
+
+Determinism: the Louvain result depends on the order nodes and edges are inserted, so the build
+sorts ids before it inserts them. The result is the same for any input order (tested in
+`tests/test_network_metrics.py`).
+
+Limits:
+
+1. Isolates and the author counts depend on the authors list. Co-authors outside it are dropped
+   (see above).
+2. `institutions.json` gives every non-California institution `atlas_type` `other`. That value is
+   treated as unclassified. So cross-sector is judged only on edges where both ends have a
+   California sector. The `edges_considered` count shows how many edges that is.
+3. The institution graph's `cross_institution` is always 1, because an institution edge joins two
+   different institutions. It is kept only so both graphs have the same fields.
+4. `out_of_region` is judged only where both ends are known. Authors with a null `current_in_ca`
+   are excluded.
+5. Average clustering counts isolates as 0, so it falls when isolates are more common.
+6. The daily ingest (`.github/workflows/ingest_works.yml`) does not run this builder. The file
+   goes stale when `index.json` changes until the builder is run again.
+7. The literature context figures quoted in the A3 Module 3 spec are not included in the payload
+   and were not checked here.
