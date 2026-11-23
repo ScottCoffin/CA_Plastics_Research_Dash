@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-16T20:38:08+00:00",
+  "checked_at": "2026-11-23T22:11:07+00:00",
   "history": [
     {
       "checked_at": "2026-11-09T22:09:18+00:00",
@@ -8,33 +8,34 @@
     {
       "checked_at": "2026-11-16T20:38:08+00:00",
       "digest": "64cef43d379eebc4b33efb49043db1743abca4cde9b80fcaae533271b7205d88"
+    },
+    {
+      "checked_at": "2026-11-23T22:11:07+00:00",
+      "digest": "cbbead44cbc5dd9e0c161d1c5cc854822b8d6d219f6e5cfde5663e3b239296be"
     }
   ],
   "schema_version": 1,
   "sources": {
     "ceden_2_microplastics": {
       "change": "access_or_metadata_changed",
-      "checked_at": "2026-11-16T20:38:08+00:00",
+      "checked_at": "2026-11-23T22:11:07+00:00",
       "name": "CEDEN 2.0 microplastics module",
       "next_review": "2027-01-15",
       "observation": {
-        "access_status": "unavailable_or_restricted",
         "bytes_read": 0,
-        "content_length": "883",
-        "etag": null,
-        "http_status": 503,
-        "last_modified": null,
+        "error": "TimeoutError",
+        "http_status": null,
         "method": "HEAD"
       },
-      "observation_digest": "8c7f178c6ca7abfcbe764b41ab967a1079daae859dd3ac8329727a4b0136ec5c",
+      "observation_digest": "5df47793ac3b9fa79462a35e26f39638567f99016b7cdc66cca3cefa3f5b257a",
       "reason": "CEDEN says microplastics data types will be added over time; implementation and data availability need confirmation.",
       "status": "manual_review",
       "tier": "C",
       "url": "https://ceden.org/"
     },
     "statewide_plastics_pilot_2027": {
-      "change": "access_or_metadata_changed",
-      "checked_at": "2026-11-16T20:38:08+00:00",
+      "change": "no_observed_change",
+      "checked_at": "2026-11-23T22:11:07+00:00",
       "name": "California statewide plastics monitoring pilot",
       "next_review": "2027-01-15",
       "observation": {
