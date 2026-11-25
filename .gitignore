@@ -81,3 +81,8 @@ data/processed/p100.parquet
 
 # PLAT-2: landing images copied from site/assets/landing by framework/scripts/sync_shared.mjs.
 framework/src/assets/landing/
+
+# Ambassador Worker (AMB-1 slice 1): local dependencies, wrangler state and local secrets
+worker/.wrangler/
+worker/.dev.vars
+worker/dist/

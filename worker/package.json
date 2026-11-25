@@ -1,0 +1,20 @@
+{
+  "name": "plastiverse-ambassadors",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Ambassador sign-in backend (AMB-1 slice 1, local only). Cloudflare Worker + D1.",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "migrate:local": "wrangler d1 migrations apply DB --local"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.23.0",
+    "@cloudflare/workers-types": "5.20261110.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.12",
+    "wrangler": "4.160.0"
+  }
+}

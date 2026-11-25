@@ -289,3 +289,54 @@ Recorded from `.impeccable/surfaces/impeccable-sketches-ambassadors-html.md`:
 - **Split rule (owner, after explanation):** a sub-unit splits into its own region automatically when it has its own
   verified ambassador AND at least 50 plastics works; the group's existing ambassadors stay with the group and the
   new ambassador leads the child; below 50 works the sub-unit stays in the group.
+
+## Backend slice 1 (local)
+
+Status: built and tested locally in `worker/` (AMB-1 backend, slice 1). Not deployed; no Cloudflare or Resend
+calls, no real email. Slice 2 (ORCID, submissions, moderation, proposals, emails, reminders, PR export) follows.
+
+**Routes** (JSON; `Cache-Control: no-store`):
+
+- `POST /auth/start` `{email, region, turnstileToken}`: validates the request (400), checks Turnstile (403
+  `bot_check_failed`), applies rate limits (429 `rate_limited`), then, when the email's domain is on the region's
+  allowlist, stores a single-use link and sends it. Always returns `200 {ok: true, message}` with the same text
+  otherwise.
+- `GET /auth/verify?token=`: consumes the link, finds or creates the ambassador, sets the session cookie and
+  redirects (302) to the workspace URL. Any failure redirects to the same URL with `?signin=failed`.
+- `GET /me`: the signed-in profile (401 `not_signed_in` otherwise). The email is returned masked only.
+- `POST /auth/signout`: deletes the server-side session and clears the cookie (idempotent).
+
+**Eligibility.** The Worker bundles the three `amb-v1` files (`site/data/<region>/ambassador_institutions.json`, with
+the owner overrides already applied). A domain matches when it, or a parent domain, is on the region's allowlist
+(`bio.uio.no` matches `uio.no`). Free-mail and its subdomains are always refused. A matching email under another
+region is refused.
+
+**Schema** (`worker/migrations/0001_init.sql`): `ambassadors` (id, email_hash, email, region, institution_id,
+display_name, public_credit, consent_at, created_at, status), `magic_links` (token_hash, email_hash, email transient,
+region, institution_id, created_at, expires_at, used_at), `sessions` (id_hash, ambassador_id, created_at, expires_at),
+`audit_log`, `rate_limits` (fixed windows) and `outbox` (local and test mail only). Indexes cover lookups and expiry.
+
+**Security notes**
+
+- Tokens and session ids are 32 random bytes; the database stores only their SHA-256 hashes. Links expire after
+  30 minutes and are single use (one conditional `UPDATE` claims them).
+- Email addresses are looked up by a keyed HMAC (purpose-prefixed, keyed with `SESSION_SIGNING_KEY`). Plain email is
+  kept for sign-in and notices only, never exported. `magic_links.email` is cleared when the link is used.
+- Session cookie: `__Host-plastiverse_session`, HttpOnly, Secure, SameSite=Lax, Path=/, 30 days. The value is
+  `<session id>.<HMAC-SHA256>`; the signature is checked in constant time, and the server-side row must be unexpired.
+- No account enumeration: the `/auth/start` response is the same for eligible, ineligible, free-mail and unknown
+  addresses. Rate limits count every request, eligible or not. A send failure is logged (error class only) and
+  answered the same way.
+- Rate limits: 5 requests per address per hour; 30 per client IP (`CF-Connecting-IP`) per hour.
+- Turnstile fails closed: a missing secret, a network error or a non-success answer is a bot-check failure.
+- CORS: only `ALLOWED_ORIGIN` may call, with credentials. Any other `Origin` header gets 403 before routing.
+- Secrets are Worker secrets only. A missing secret stops the request (fail closed); the outbox sender is for local
+  use (`MAIL_MODE=outbox`) and is never the production default.
+
+**Open for the owner (slice 1):** the route must sit under `plastiverse.live/api/*` so the session cookie is
+same-site with the site; the workspace path (`/ambassadors/`) is provisional; and the email hash key shares
+`SESSION_SIGNING_KEY`, so rotating that key also changes the email lookup keys (a dedicated key is planned for slice 2).
+
+**Slice 2 scope:** ORCID sign-in and linking, the first-sign-in profile and consent, submissions and moderation queue
+(owner and region leads), region proposals, the Resend notices and reminders, a scheduled export endpoint for the PR job,
+and a CI job for `worker/` tests.

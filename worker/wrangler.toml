@@ -1,0 +1,26 @@
+# Plastiverse ambassador Worker (AMB-1 slice 1, LOCAL ONLY).
+# No secrets in this file. Secrets are set with `wrangler secret put <NAME>` (owner-approved only)
+# or, for local dev, in worker/.dev.vars (gitignored). See README.md.
+name = "plastiverse-ambassadors"
+main = "src/index.ts"
+compatibility_date = "2026-08-22"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "plastiverse-ambassadors"
+# Placeholder. The real id is filled in only at owner-approved deploy time.
+database_id = "LOCAL-ONLY"
+migrations_dir = "migrations"
+
+[vars]
+SITE_ORIGIN = "https://plastiverse.live"
+# The only browser origin allowed to call the API with credentials (CORS).
+ALLOWED_ORIGIN = "https://plastiverse.live"
+# Provisional workspace path; the site owner confirms it before deploy.
+WORKSPACE_URL = "https://plastiverse.live/ambassadors/"
+# Public base URL of this Worker; sign-in links point to PUBLIC_API_URL/auth/verify.
+PUBLIC_API_URL = "https://plastiverse.live/api"
+MAIL_FROM = "Plastiverse <auth@plastiverse.live>"
+# "resend" (production default). Use "outbox" only for local dev and tests (writes to D1 table outbox).
+MAIL_MODE = "resend"
