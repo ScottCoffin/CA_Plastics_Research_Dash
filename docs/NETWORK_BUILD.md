@@ -472,3 +472,68 @@ Limits:
 
 `--check` recomputes everything except the null block and checks only that block's shape and R
 (about 7 s); `--check --check-null` recomputes the block too (about 17 minutes at R=100).
+
+## 16. Global institutions graph (BQ-V.1 slice 1)
+
+Data only, no author-level output. Builder: `src/atlas/build/global_graphs.py`; command:
+`py -3.14 scripts/build_global_graphs.py [--check]`. Output: `site/data/global/graphs/`
+(`institutions.json`, `institutions_phone.json`, `layout_institutions.bin`,
+`graphs_manifest.json`, schema `bqv-v1`, status `unscreened_query_hit`).
+
+- **Input.** The ignored raw store `data/raw/openalex_global/pages/*.jsonl.gz`, read in fetch-time
+  order so a later page replaces an earlier copy of a work. Each work's nodes are the distinct
+  institutions over all authorships (OpenAlex short id, e.g. `I170726198`). Authors are read for
+  nothing and written nowhere.
+- **Edges.** One per institution pair on the same work, weight = shared works. Works with more
+  than 50 distinct institutions still count toward node works but add no edges.
+- **Component and cap.** Largest connected component of the edge graph, then the top 20,000 nodes
+  by works (ties by id). The cap did not bind at the 2026-11-25 backfill (17,234 nodes in the
+  component); the cap is recorded in the manifest.
+- **Thinning (budgets).** Desktop: at most 60,000 edges (BQ-V.0 benchmarked budget). Phone: at most
+  15,000 edges. Rule (`thin_edges`): for each node keep its k strongest edges (ties: the other
+  node's works, then id, which is index order), keep the union. If over budget, drop weight-1
+  edges (last index first), never one that leaves an endpoint with no edge. If still over budget,
+  lower k by one and repeat. Desktop starts at k=8; phone at k=3, applied to the phone subset
+  alone. Every node keeps at least its strongest edge. The manifest records `k_used`, edge counts,
+  `weight_one_dropped`, `weight_retained_share` and `components_after` per file.
+- **Communities.** Louvain (networkx), seed 42, on the thinned desktop graph; community 0 is the
+  largest.
+- **Layout.** ForceAtlas2 (networkx, scaling ratio 10, strong gravity 0.05, node mass 1 + weighted
+  degree) run separately inside each community on the thinned graph for 150 iterations, from
+  seeded random points, then communities packed on a sunflower spiral. A single ForceAtlas2 run is
+  O(n²) per iteration in networkx (estimated from a 1,000-node timing: about 37 s per iteration at
+  20k nodes, with large dense arrays), so the layout is per community. Edges between communities
+  do not shape the layout.
+- **Positions.** Stored in `layout_institutions.bin` (float32 little-endian x, y in node order,
+  4-decimal values before packing). Chosen over inline JSON because 8 bytes per node is well under
+  the roughly 22 bytes per node that inline two-decimal coordinates would add (estimated). The
+  phone graph uses the first 5,000 entries.
+- **Phone subset.** `institutions_phone.json`: the first 5,000 nodes in canonical order (works
+  descending, then id) and the phone-thinned edges among them.
+- **Determinism.** Nodes are sorted by (works, id) before any graph step; edges by node index; all
+  seeds fixed. `--check` rebuilds from the raw store and compares bytes; without the raw store it
+  validates the committed files and reports `SKIP staleness`.
+- **Files.** Node rows `[id, display_name, ror, country_code, type, works, community]`; edge rows
+  `[source, target, weight]` with node indices (source < target). Manifest keys are documented in
+  the file itself (`what_this_is_and_is_not`, `caps`, per-graph `layout_method`).
+
+Current build (2026-11-25 raw store: 1,413 pages, 136,074 distinct works, 108,740 with
+institutions, 19,206 institutions seen; 212,846 institution pairs before thinning):
+
+| File | Nodes | Edges (before thinning) | k used | Weight kept | Weight-1 dropped | Components | Raw / gzip |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `institutions.json` | 17,234 | 60,000 (212,599) | 8 | 50.9% | 24,259 | 136 (giant: 16,909 nodes) | 2.55 MB / 0.75 MB |
+| `institutions_phone.json` | 5,000 | 12,952 (140,191) | 3 | 34.0% | 0 | 1 | 0.67 MB / 0.21 MB |
+
+Layout `layout_institutions.bin` 0.14 MB raw / 0.09 MB gzip; manifest 3.5 KB. Communities on the thinned
+desktop graph: 156 (largest 2,604 nodes; 15 before thinning).
+
+Thinning leaves 325 nodes outside the giant component in 135 small pieces (2 to 9 nodes). Each
+keeps its strongest edge, as the rule requires, but those pieces are not connected to the giant
+component. The giant component keeps 98% of nodes.
+
+Known limits: the desktop graph keeps about half the edge weight, and the phone graph about a
+third; the thinned graph is a picture of the strongest links, not the full co-occurrence. Phone
+edge count is now within the 15,000 budget but was 140k before thinning. Layout quality is not
+visually checked. The layout does not show inter-community links, and packed communities can
+overlap a little. Build time about 5.5 min (raw read about 80 s).
