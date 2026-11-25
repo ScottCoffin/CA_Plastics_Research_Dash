@@ -1,0 +1,86 @@
+{
+  "files": [
+    {
+      "bytes": 1327908,
+      "edges": 60000,
+      "file": "institutions.gexf.gz",
+      "format": "gexf",
+      "graph": "institutions",
+      "gzip": true,
+      "nodes": 17234,
+      "sha256": "08cecc9eddf4bb1b7bbe27d5dfc03aa5635dd0b6ac4e185dac2f6934d5592299",
+      "uncompressed_bytes": 11914266,
+      "uncompressed_sha256": "7c2bb2f09e8e70a519b829a24545e80489c341a974ca17af254e98f77454ecb3"
+    },
+    {
+      "bytes": 1159056,
+      "edges": 60000,
+      "file": "institutions.graphml.gz",
+      "format": "graphml",
+      "graph": "institutions",
+      "gzip": true,
+      "nodes": 17234,
+      "sha256": "ed064e3cd246d9874bb82d8678118d6245bae8491f38ed621fe6536508f6cbdc",
+      "uncompressed_bytes": 11877864,
+      "uncompressed_sha256": "165c387d0514aa18a0cd1a32343580cc8627aa739a366af91c38552dd2636a23"
+    },
+    {
+      "bytes": 1287115,
+      "edges": 60000,
+      "file": "authors.gexf.gz",
+      "format": "gexf",
+      "graph": "authors",
+      "gzip": true,
+      "nodes": 20000,
+      "sha256": "f9cac46495babbb4b759165e1082f32d0badd77934c5bd2b8118d089c93f9b9f",
+      "uncompressed_bytes": 10511320,
+      "uncompressed_sha256": "6481ab9fa5074e71dfd2d812e2df33308673a803108274c85f4644c517759dff"
+    },
+    {
+      "bytes": 1114768,
+      "edges": 60000,
+      "file": "authors.graphml.gz",
+      "format": "graphml",
+      "graph": "authors",
+      "gzip": true,
+      "nodes": 20000,
+      "sha256": "5c7a9f91e7550e2ebbd5f62f6fe09f24aa100f000717ec2c7afd034f47a27e99",
+      "uncompressed_bytes": 10708448,
+      "uncompressed_sha256": "6924de2019210c8d14fcfc889194309d6360d6cf4645b4e60e7bf2eb306c24b3"
+    },
+    {
+      "bytes": 204446,
+      "edges": 1322,
+      "file": "california_network.gexf",
+      "format": "gexf",
+      "graph": "california_network",
+      "gzip": false,
+      "nodes": 400,
+      "sha256": "4c1e6ef3964ca556c94e10cd7f2e71e281df9835b4b85a7687e4a20ff7eb1d75",
+      "uncompressed_bytes": 204446,
+      "uncompressed_sha256": "4c1e6ef3964ca556c94e10cd7f2e71e281df9835b4b85a7687e4a20ff7eb1d75"
+    },
+    {
+      "bytes": 217538,
+      "edges": 1322,
+      "file": "california_network.graphml",
+      "format": "graphml",
+      "graph": "california_network",
+      "gzip": false,
+      "nodes": 400,
+      "sha256": "356a0d26e2117936295dfaab18d389b13b23c569f6fa5f1f0b4e7544aebaf057",
+      "uncompressed_bytes": 217538,
+      "uncompressed_sha256": "356a0d26e2117936295dfaab18d389b13b23c569f6fa5f1f0b4e7544aebaf057"
+    }
+  ],
+  "formats": [
+    "gexf",
+    "graphml"
+  ],
+  "generated_at": "2026-11-25T15:42:44.357657+00:00",
+  "gzip_threshold_bytes": 5000000,
+  "licence": "CC BY-NC 4.0 derived from OpenAlex (CC0)",
+  "note": "Derived copies of the global graphs and the expert network file. Node attributes are a whitelist (label, works, community, country, type, ror); no emails, affiliations or ORCIDs.",
+  "schema_version": "bqv6-v1",
+  "screening": "unscreened search hits: not screened for relevance and not a measure of quality"
+}

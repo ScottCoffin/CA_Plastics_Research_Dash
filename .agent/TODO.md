@@ -296,7 +296,7 @@ Contract: [`docs/add_on_spec_3.md`](../docs/add_on_spec_3.md) (numbered plain-te
 - [ ] **BQ-V.3** Graph viewer component (sigma 3.0.3; legend, labels, URL state, DOM details panel, table fallback, reduced motion, `renderer.kill()` on teardown). Depends: BQ-V.1. Size: M.
 - [ ] **BQ-V.4** Views Authors, Institutions, Works in the seven-tab shell (A3-D2); node size = work count. The Works view delivers AT-9's embedding map (A3-C11). Depends: BQ-V.3. Size: M.
 - [ ] **BQ-V.5** Graph accessibility pass (axe 0, keyboard, table alternative). Depends: BQ-V.4. Size: M.
-- [ ] **BQ-V.6** Graph exports (GEXF/GraphML). Depends: BQ-V.1. Size: S.
+- [x] **BQ-V.6** (done 2026-11-25: `scripts/build_graph_exports.py [--check]` -> `site/data/global/graphs/exports/` GEXF + GraphML for institutions and authors (gzip, ~1.1-1.3 MB each) and the California network; round-trip counts and weights exact; creator line pinned so networkx 3.6/3.7 give identical bytes) Graph exports (GEXF/GraphML). Depends: BQ-V.1. Size: S.
 - [ ] **BQ-6.1** Location extraction for the evidence-gap heatmap, reusing S5.2/S5.4 (no second extractor; A3-C11); validate on gold excerpts; Unlocated category. Depends: BQ-G3. Size: L. Also needs S5.2 and S5.4 done.
 - [ ] **BQ-6.2** Evidence-gap cells: A2 compartments x region (lifecycle-and-society works = `not_applicable`), sharing the EM-8 heatmap component; optional second view owner-gated (A3-D21). Depends: BQ-6.1. Size: M.
 - [ ] **BQ-6.3** Evidence-gap page: volume-not-strength caption, blank-cell wording, per-cell abstract availability; `evidence_gap.json` (bq6-v1). Depends: BQ-6.2. Size: M.

@@ -586,3 +586,34 @@ files). Full build (both graphs, including the second raw read for the backbone)
 Known limits: the author graph is the backbone's strongest co-authorship links, not the full
 network; the cap of 20,000 takes the top authors by backbone works and can cut the giant component
 into pieces. Layout is not visually checked. Matching is a local approximation of OpenAlex's search.
+
+## 17. Exports (BQ-V.6)
+
+Builder: `src/atlas/build/graph_exports.py`; command `py -3.14 scripts/build_graph_exports.py [--check]`.
+It reads only committed files (offline, no raw store): the desktop graphs of sections 16 and 16b
+(`institutions.json`, `authors.json`, their `layout_*.bin` and `graphs_manifest.json`) and
+`site/data/california/network.json`. Phone subsets are not exported. Output goes to
+`site/data/global/graphs/exports/` (schema `bqv6-v1`):
+
+- `institutions.gexf`, `institutions.graphml`, `authors.gexf`, `authors.graphml`,
+  `california_network.gexf` and `california_network.graphml`, plus `manifest.json` (per file: graph,
+  format, nodes, edges, `bytes`, `sha256`, `gzip`, `uncompressed_bytes`, `uncompressed_sha256`).
+- A file above 5 MB is committed gzipped only (`*.gz`). The two global graphs are 10 to 12 MB each
+  uncompressed and about 1.1 to 1.3 MB gzipped.
+- Node attributes: `label` (display name; the expert name for the California network), `works`,
+  `community`, and `country` and `type` and `ror` where the source has them. GEXF positions are in
+  `viz:position` (z = 0); GraphML has `x` and `y` attributes. Edges carry `weight`. Graph-level
+  metadata: `source`, `generated_at` (copied from the source manifest or network file), `licence`
+  (CC BY-NC 4.0 derived from OpenAlex (CC0)), `screening` (unscreened search hits) and
+  `what_this_is`. Attributes are a whitelist: no emails, affiliation strings, ORCIDs or institution
+  lists.
+- Determinism: nodes sorted by id, edges by endpoint ids, positions rounded to four decimals, gzip
+  mtime 0. networkx writes today's date into GEXF `lastmodifieddate`, so the builder sets it to the
+  date of `generated_at`. The GEXF creator line records the networkx version; a networkx upgrade
+  changes the bytes, so `--check` then reports stale and the command needs rerunning.
+- `--check` rebuilds in memory and fails when a file is missing, differs, or an unexpected export
+  is present. It never writes. The graph manifest `graphs_manifest.json` is not changed.
+
+Limits: the exports carry the thinned graphs of sections 16 and 16b (the strongest links, not the
+full co-occurrence), and inherit the unscreened status of the query hits. Positions are the stored
+layouts, which are not visually checked. Tests: `tests/test_graph_exports.py` (synthetic graphs).

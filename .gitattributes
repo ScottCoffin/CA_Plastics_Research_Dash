@@ -20,3 +20,5 @@ Makefile text eol=lf
 .agents/skills/** -whitespace
 .claude/skills/** -whitespace
 .github/skills/** -whitespace
+*.gexf text eol=lf
+*.graphml text eol=lf
