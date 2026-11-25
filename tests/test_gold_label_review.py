@@ -796,7 +796,8 @@ def test_global_app_smoke_labels_one_work(tmp_path, monkeypatch):
 
     import pyarrow as pa
     import pyarrow.parquet as pq
-    import streamlit as st
+
+    st = pytest.importorskip("streamlit")
     from streamlit.testing.v1 import AppTest
 
     app = Path(__file__).resolve().parent.parent / "scripts" / "review_gold_labels_app.py"
