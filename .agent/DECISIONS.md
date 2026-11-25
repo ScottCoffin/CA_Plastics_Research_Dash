@@ -832,3 +832,20 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
   auto-excluded).
 - **Consequences:** BQ-G3 rebuilds the frame and BQ-G4 reruns round 0 before anything is committed; the owner labels
   round 0 (H39) only after that.
+
+
+## ADR-AMB-DEPLOY-2026-11-25: ambassador API live at api.plastiverse.live
+
+- **Context:** AMB-1 backend slices 1, 2a, 2b and 2c passed 126 local Worker tests; the owner set the Worker
+  secrets and AMB_EXPORT_TOKEN, gave the owner ORCID iD, and said "create the D1 database" and "deploy the Worker".
+- **Decision:** D1 `plastiverse-ambassadors` (id in `worker/wrangler.toml`, region ENAM); migrations 0001-0004
+  applied remotely; Worker deployed with the custom domain api.plastiverse.live (only that host is proxied; the
+  site stays on GitHub Pages) and the nightly cron 17 3 * * *. OWNER_ORCID is the owner's iD; the owner role is never
+  read from the database.
+- **Verification (live, 2026-11-25):** /orcid/start redirects to ORCID with redirect_uri
+  https://api.plastiverse.live/orcid/callback and ORCID serves the authorize page; /me and /export/approved return
+  401 without credentials; CORS preflight allows only https://plastiverse.live (others 403).
+- **Consequences:** the public front end still says "Sign-in opens soon" until the sign-up screens ship. Future
+  migrations go through `wrangler d1 migrations apply plastiverse-ambassadors --remote` and redeploys through
+  `wrangler deploy`, each only with the owner's go-ahead. Resend must have plastiverse.live verified for mail to send
+  from ambassadors@plastiverse.live.

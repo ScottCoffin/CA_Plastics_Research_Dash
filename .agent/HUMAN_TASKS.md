@@ -220,17 +220,6 @@ leak-check works wait for S5.7.
 ## Later (the agent will say when each is ready)
 
 
-- **H49. Ambassador API: last setup items (AMB-1).** Done 2026-11-25: ORCID redirect URI changed; Worker
-  secrets ORCID_CLIENT_ID, ORCID_CLIENT_SECRET, RESEND_API_KEY, TURNSTILE_SECRET, SESSION_SIGNING_KEY and
-  EMAIL_HASH_KEY set (the agent confirmed the names with `wrangler secret list`). Remaining, one line each:
-  1. Tell the agent your ORCID iD (it becomes OWNER_ORCID in `worker/wrangler.toml`; that account is the owner moderator).
-  2. Set one more secret for the pull-request job: in PowerShell from `worker`, `npx.cmd wrangler secret put EXPORT_TOKEN`
-     with a new random value (`node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`), and
-     save the same value as the GitHub Actions secret AMB_EXPORT_TOKEN (repo Settings > Secrets and variables > Actions).
-  3. Say "create the D1 database" (the agent runs `wrangler d1 create plastiverse-ambassadors` in your Cloudflare
-     account, free tier, and writes its id into `wrangler.toml`; no database exists yet).
-  4. Later, say "deploy the Worker" when you want it live.
-
 - **H50. Allow the ambassador export job to open pull requests (AMB-1, 1 minute).** GitHub repo Settings >
   Actions > General > Workflow permissions: tick "Allow GitHub Actions to create and approve pull requests", Save.
   (The AMB_EXPORT_TOKEN secret is already set.) Each daily PR is yours to review; nothing merges on its own.
@@ -251,6 +240,8 @@ leak-check works wait for S5.7.
 ---
 
 ## Done
+
+- H49 (2026-11-25): owner changed the ORCID redirect URI, set the seven Worker secrets and AMB_EXPORT_TOKEN, gave the owner ORCID iD, and approved creating D1 and deploying; the agent created D1 `plastiverse-ambassadors` (ENAM), applied migrations 0001-0004 and deployed the Worker to api.plastiverse.live (version 6fc9abeb).
 
 - H45 (2026-11-25): owner signed off the ambassador design (19-screen prototype) with the answers in docs/AMBASSADORS_SPEC.md section 12.
 - H48 (2026-11-25): owner approved docs/AMBASSADOR_TERMS.md as written.
