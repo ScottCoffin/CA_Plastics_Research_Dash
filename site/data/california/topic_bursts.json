@@ -1,0 +1,733 @@
+{
+  "alpha": 0.05,
+  "as_of": "2026-11-25",
+  "bursts": {
+    "reason": "Kleinberg-style bursts are not implemented (optional in A3). The rising-share trend test in this file answers the rising question; see docs/RISING_SHARE.md.",
+    "status": "not_computed"
+  },
+  "flagged": [
+    "analytical_methods",
+    "fate_transport_and_sorption",
+    "wastewater_and_treatment"
+  ],
+  "generated_at": "2026-11-25T18:11:24+00:00",
+  "last_complete_year": 2025,
+  "min_window_works": 10,
+  "schema": "bq4-v1",
+  "scope": "california",
+  "statistical_screen": "A rising flag is a statistical screen (Cochran-Armitage trend, volume, label-source and leave-one-institution-out checks). It has no correction for multiple testing across tags, so treat each flag as a prompt for review, not a confirmed finding.",
+  "tags": [
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "occurrence_and_monitoring",
+      "loio": {
+        "institutions_tested": 573,
+        "pass": false,
+        "worst_institution": "CAAG-SWRCB",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "occurrence_and_monitoring",
+      "total_complete_years": 375,
+      "trend": {
+        "p": 0.543789,
+        "slope_sign": "negative",
+        "z": -0.6071
+      },
+      "window_count": 146,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": true,
+      "label": "analytical_methods",
+      "loio": {
+        "institutions_tested": 337,
+        "pass": true,
+        "worst_institution": "I11006740",
+        "worst_p": 0.002437
+      },
+      "reasons_failed": [],
+      "sensitivity": {
+        "all_sources": "pass",
+        "owner_model_only": "not_testable",
+        "rule_only": "pass"
+      },
+      "tag": "analytical_methods",
+      "total_complete_years": 192,
+      "trend": {
+        "p": 0.000748,
+        "slope_sign": "positive",
+        "z": 3.3712
+      },
+      "window_count": 94,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": true,
+      "label": "fate_transport_and_sorption",
+      "loio": {
+        "institutions_tested": 288,
+        "pass": true,
+        "worst_institution": "I36258959",
+        "worst_p": 0.001123
+      },
+      "reasons_failed": [],
+      "sensitivity": {
+        "all_sources": "pass",
+        "owner_model_only": "not_testable",
+        "rule_only": "pass"
+      },
+      "tag": "fate_transport_and_sorption",
+      "total_complete_years": 219,
+      "trend": {
+        "p": 0.000313,
+        "slope_sign": "positive",
+        "z": 3.6046
+      },
+      "window_count": 112,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": true,
+      "label": "wastewater_and_treatment",
+      "loio": {
+        "institutions_tested": 143,
+        "pass": true,
+        "worst_institution": "I161318765",
+        "worst_p": 0.026486
+      },
+      "reasons_failed": [],
+      "sensitivity": {
+        "all_sources": "pass",
+        "owner_model_only": "not_testable",
+        "rule_only": "pass"
+      },
+      "tag": "wastewater_and_treatment",
+      "total_complete_years": 140,
+      "trend": {
+        "p": 0.011927,
+        "slope_sign": "positive",
+        "z": 2.5143
+      },
+      "window_count": 64,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "ecotoxicology_and_trophic_transfer",
+      "loio": {
+        "institutions_tested": 289,
+        "pass": false,
+        "worst_institution": "CAAG-SWRCB",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "ecotoxicology_and_trophic_transfer",
+      "total_complete_years": 179,
+      "trend": {
+        "p": 0.129675,
+        "slope_sign": "negative",
+        "z": -1.5154
+      },
+      "window_count": 63,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "soil_and_agriculture",
+      "loio": {
+        "institutions_tested": 234,
+        "pass": false,
+        "worst_institution": "I84218800",
+        "worst_p": 0.435372
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "soil_and_agriculture",
+      "total_complete_years": 189,
+      "trend": {
+        "p": 0.247137,
+        "slope_sign": "positive",
+        "z": 1.1573
+      },
+      "window_count": 86,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "human_exposure_and_health_risk",
+      "loio": {
+        "institutions_tested": 269,
+        "pass": false,
+        "worst_institution": "I100930933",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "human_exposure_and_health_risk",
+      "total_complete_years": 179,
+      "trend": {
+        "p": 0.044198,
+        "slope_sign": "negative",
+        "z": -2.0122
+      },
+      "window_count": 57,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "air",
+      "loio": {
+        "institutions_tested": 125,
+        "pass": false,
+        "worst_institution": "I161318765",
+        "worst_p": 0.332691
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "air",
+      "total_complete_years": 72,
+      "trend": {
+        "p": 0.154183,
+        "slope_sign": "positive",
+        "z": 1.4249
+      },
+      "window_count": 40,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "risk_assessment",
+      "loio": {
+        "institutions_tested": 119,
+        "pass": false,
+        "worst_institution": "I11006740",
+        "worst_p": 0.072109
+      },
+      "reasons_failed": [
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "pass",
+        "owner_model_only": "not_testable",
+        "rule_only": "pass"
+      },
+      "tag": "risk_assessment",
+      "total_complete_years": 51,
+      "trend": {
+        "p": 0.02729,
+        "slope_sign": "positive",
+        "z": 2.2073
+      },
+      "window_count": 29,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "plastisphere",
+      "loio": {
+        "institutions_tested": 27,
+        "pass": false,
+        "worst_institution": "I1174212",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "plastisphere",
+      "total_complete_years": 22,
+      "trend": {
+        "p": 0.377707,
+        "slope_sign": "negative",
+        "z": -0.8821
+      },
+      "window_count": 6,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "plastic_associated_chemicals",
+      "loio": {
+        "institutions_tested": 73,
+        "pass": false,
+        "worst_institution": "I102322142",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "plastic_associated_chemicals",
+      "total_complete_years": 89,
+      "trend": {
+        "p": 0.004595,
+        "slope_sign": "negative",
+        "z": -2.8341
+      },
+      "window_count": 18,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "Life-cycle & sustainability",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "lca_and_sustainability",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "Waste management & recycling",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "waste_management_and_recycling",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "Waste trade & global flows",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "waste_trade_and_global_flows",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "Policy, law & governance",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "policy_law_and_governance",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "Behaviour & perception",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "behaviour_and_perception",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "Justice, colonialism & power",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "justice_colonialism_and_power",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "Litter & trash",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "litter_and_trash",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "Bioplastics & alternatives",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "bioplastics_and_alternatives",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "Safe & sustainable by design",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "safe_and_sustainable_by_design",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    }
+  ],
+  "tags_excluded": [
+    {
+      "reason": "experimental",
+      "tag": "culture_media_and_discourse"
+    }
+  ],
+  "test": "cochran-armitage-normal-approximation",
+  "version": {
+    "builder": "scripts/build_topics_json.py",
+    "file": "topic_bursts.json",
+    "gold_f1_tags": [],
+    "inputs": {
+      "rising_share": {
+        "file": "rising_share.json",
+        "sha256": "69262a93b789500763a4e6f052f658a06c719b5d5f1ad718a2c4c0bdb788a21c"
+      },
+      "tag_cooccurrence": {
+        "file": "tag_cooccurrence.json",
+        "sha256": "52d34987c3599363fa2f8951f9310d62c7cc9f23387eacdad8f47838d3df9f57"
+      },
+      "topic_series": {
+        "file": "topic_series.json",
+        "sha256": "c6337c711e3e80f3e8cf10f91254e2b3b1f2108290bc91721373ae44061a3a02"
+      }
+    },
+    "labels_snapshot_content_sha256": "fe359f66588544889cc2fcadb71dfa80c88f8249dcb67d9ba28c7eec61855ab1",
+    "schema": "bq4-v1",
+    "source_schemas": {
+      "rising_share": "bq4-rising-v1",
+      "tag_cooccurrence": "bq4-cooc-v1",
+      "topic_series": "bq4-series-v1"
+    }
+  },
+  "window_years": [
+    2023,
+    2024,
+    2025
+  ]
+}

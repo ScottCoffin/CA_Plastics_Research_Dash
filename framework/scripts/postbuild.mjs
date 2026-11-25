@@ -131,6 +131,7 @@ export const PAGE_DESCRIPTIONS = {
   "california/about": "About the Atlas: what it covers, how the data is sourced, and how to cite it.",
   quality: "How accurate the global plastics search is: a labelled sample will show precision and recall, and no figure is published until it is complete.",
   "california/quality": "How accurate the California atlas labels are, how the labelled sample is built, and the current status of the checks.",
+  "california/topics": "How California plastics research topics change by year, which appear together, and which show a rising share, with each label's accuracy.",
   "california/glossary": "Plain-language definitions of terms used in the California Plastics Research Atlas.",
   "norway/index": "Norway: plastics research from the global OpenAlex corpus, with a regional atlas being built by local collaborators.",
   "belgium/index": "Belgium: plastics research from the global OpenAlex corpus, with a regional atlas being built by local collaborators.",

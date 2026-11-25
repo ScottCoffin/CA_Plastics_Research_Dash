@@ -20,6 +20,7 @@ PAGES = {
     "ambassador_terms",
     "quality",
     "california/quality",
+    "california/topics",
     "california/index",
     "california/authors",
     "california/network",

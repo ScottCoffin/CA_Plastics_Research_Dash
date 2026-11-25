@@ -1,0 +1,23 @@
+/* BQ-4.4: topic evolution page (/california/topics). Every rule sits under .tp, the root that
+   components/topics_page.js fills. Colours come from the Atlas tokens (no hex colours). Status and
+   flags are text; colour is never the only signal. */
+.tp { font: 400 16px/1.6 var(--atlas-sans, system-ui, sans-serif); color: var(--pv-ink, var(--atlas-ink)); max-width: 1040px; margin: 0 auto; padding: 0 16px 48px; }
+.tp h2 { font-size: 1.25rem; margin: 2rem 0 .5rem; }
+.tp h3 { font-size: 1rem; margin: 0 0 .35rem; }
+.tp p { margin: .5rem 0; }
+.tp-status { font-weight: 600; padding: 12px 16px; border-left: 4px solid var(--pv-gold, var(--atlas-task-money)); background: rgba(227, 169, 43, .12); }
+.tp-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
+.tp-panel { border: 1px solid rgba(20, 19, 17, .18); border-radius: 6px; padding: 12px 14px; background: var(--pv-paper); }
+.tp-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 .25rem; }
+.tp-badge { font-size: .8rem; border: 1px solid currentColor; border-radius: 4px; padding: 1px 6px; }
+.tp-muted { opacity: .6; }
+.tp-note { font-size: .9rem; opacity: .85; }
+.tp-scroll { overflow-x: auto; }
+.tp-table { border-collapse: collapse; width: 100%; font-size: .9rem; font-variant-numeric: tabular-nums; }
+.tp-table caption { text-align: left; font-weight: 600; padding: 4px 0; }
+.tp-table th, .tp-table td { border-bottom: 1px solid rgba(20, 19, 17, .14); padding: 4px 8px; text-align: left; vertical-align: top; }
+.tp-table thead th { white-space: nowrap; }
+.tp-sort { font: inherit; background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; }
+.tp-sortable th[aria-sort="ascending"]::after { content: " (ascending)"; }
+.tp-sortable th[aria-sort="descending"]::after { content: " (descending)"; }
+@media (prefers-reduced-motion: reduce) { .tp * { transition: none !important; animation: none !important; } }
