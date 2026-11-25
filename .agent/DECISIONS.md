@@ -793,3 +793,17 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
   freeze is label-blind: it reads pipeline outputs at HEAD and at bc3abefa (the first commit with owner labels),
   never the gold sheet. The source snapshot was recovered from git by its manifest hashes, and the 500-work
   selection was reproduced exactly.
+
+## ADR-BQS2-REVIEW-2026-11-25: lead review of the candidate plastic-v3.2 (BQ-S2, `[E]`)
+- **Context:** BQ-S2 builds `config/queries_v32_candidate.yml` from the BQ-S1 register. The owner asked that
+  every bounded task go to Haiku workers (2026-11-25), so a Haiku worker implemented this `[E]` task and the
+  lead reviewed it term by term, with one correction round and a live per-term probe.
+- **Decision:** (1) Microfibre uses the v3.1 microfiber context list (A3 §5.1 says so verbatim). (2) Register
+  rows with `handling: co_term` in the lens_evidence group are query terms (anchored), in theme
+  `waste_colonialism_lens`; rows with `handling: lens_evidence` stay evidence-only. (3) Terms that share one
+  context list are factored per theme at render time in `atlas.query_v32` (`((t1 OR ...) AND (anchors))`,
+  truth-table tested); the YAML keeps the per-term schema and `atlas.query` is unchanged. (4) Policy, trade and
+  justice terms stay co_term as registered; BQ-S3's isolated probes decide demotion to title-only (A3 §5.2).
+  (5) "recycler" is removed: OpenAlex stems it to "recycl", so it matched 23,264 anchored works alone.
+- **Consequences:** the combined candidate is one 5,175-character request; it adds about 1,800 records (+1.3%)
+  to v3.1. Not promoted: promotion follows only the existing precision rule after BQ-S3 (A3-D10).

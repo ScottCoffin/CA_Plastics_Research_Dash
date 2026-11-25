@@ -1,0 +1,724 @@
+# Candidate plastic query v3.2 (BQ-S2, A3 section 5.1 additions plus lifecycle-and-society terms
+# under the plastic-anchor rule, A3 section 5.2). NOT ACTIVE: config/queries.yml (v3.1) is the
+# active query and is unchanged. Rendering: src/atlas/query_v32.py. Evidence and term table:
+# docs/QUERY_V32_CANDIDATE.md. Promotion is only by the existing precision rule (A3-D10), after BQ-S3.
+version: plastic-v3.2-candidate
+status: candidate
+scope: title_and_abstract
+register: config/search_vocabulary_v1.yml (BQ-S1); rows cited as register_term
+anchor_phrases: &id001
+- plastic waste
+- plastic pollution
+- plastic debris
+- plastic litter
+- plastic bag
+- plastic bags
+- plastic bottle
+- plastic bottles
+- plastic packaging
+- plastic products
+- plastic production
+- plastic recycling
+- single-use plastic
+- single-use plastics
+- microplastic
+- microplastics
+- bioplastic
+- bioplastics
+- biodegradable plastic
+- biodegradable plastics
+- compostable plastic
+- compostable plastics
+- plastics industry
+core_terms:
+- microplastic
+- nanoplastic
+- micro-plastic
+- nano-plastic
+- micro-sized plastic
+- microsized plastics
+- plastic pollution
+- plastic debris
+- plastic litter
+- marine debris
+- marine litter
+- plastic particles
+- plastic fragments
+- plastic ingestion
+- resin pellet
+- plastic pellet
+- macroplastic
+- mesoplastic
+- plastics pollution
+- plastic pollutants
+- plastic trash
+- anthropogenic litter
+- anthropogenic debris
+- anthropogenic microparticles
+- anthropogenic microparticle
+- ingested plastic
+- ingested plastics
+- eat plastic
+- consuming plastic
+- plastic contamination
+- plastic recycling
+- plastics recycling
+- recycled plastic
+- recycled plastics
+- single-use plastics
+- biodegradable plastic
+- biodegradable plastics
+- circular economy of plastics
+qualified_terms:
+- term: microfiber
+  any_context:
+  - textile
+  - textiles
+  - laundry
+  - washing
+  - shedding
+  - wastewater
+  - microplastic
+- term: tire wear
+  any_context:
+  - particles
+  - microplastic
+  - runoff
+  - 6PPD
+  - stormwater
+  - pollution
+  - toxicity
+- term: plastic waste
+  any_context:
+  - ocean
+  - marine
+  - river
+  - soil
+  - environment
+  - pollution
+  - leakage
+- term: litter
+  any_context:
+  - cleanup
+  - cleanups
+  - roadside
+  - beach
+  - stormwater
+  - plastic
+  - cigarette
+- term: plastic packaging
+  any_context:
+  - waste
+  - food
+  - recycling
+  - recyclability
+  - environmental
+  - sustainable
+  - sustainability
+  - single-use
+  - consumer
+- term: life cycle assessment
+  any_context:
+  - plastic
+  - plastics
+  - polyethylene
+  - polypropylene
+  - polystyrene
+  - PVC
+  - polyethylene terephthalate
+  - polyester
+  - polyesters
+- term: chemical recycling
+  any_context:
+  - plastic
+  - plastics
+  - polyethylene
+  - polypropylene
+  - polystyrene
+  - PET
+  - PVC
+  - polymer
+  - packaging
+- term: mechanical recycling
+  any_context:
+  - plastic
+  - plastics
+  - polyethylene
+  - polypropylene
+  - polystyrene
+  - PET
+  - PVC
+  - polymer
+  - packaging
+- term: upcycling
+  any_context:
+  - plastic
+  - plastics
+  - polyethylene
+  - polypropylene
+  - polystyrene
+  - PET
+  - PVC
+  - polymer
+  - packaging
+- term: bioplastic
+  any_context:
+  - polyhydroxyalkanoate
+  - polyhydroxyalkanoates
+  - PHA
+  - PHB
+  - polyhydroxybutyrate
+  - polylactic acid
+  - PLA
+  - biodegradable
+  - biodegradation
+  - petrochemical plastics
+  - plastic waste
+  - packaging
+- term: bioplastics
+  any_context:
+  - polyhydroxyalkanoate
+  - polyhydroxyalkanoates
+  - PHA
+  - PHB
+  - polyhydroxybutyrate
+  - polylactic acid
+  - PLA
+  - biodegradable
+  - biodegradation
+  - petrochemical plastics
+  - plastic waste
+  - packaging
+- term: single-use plastic
+  any_context:
+  - pollution
+  - bag
+  - bags
+  - bottle
+  - bottles
+  - ban
+  - ocean
+  - marine
+  - litter
+- term: microfibre
+  any_context:
+  - textile
+  - textiles
+  - laundry
+  - washing
+  - shedding
+  - wastewater
+  - microplastic
+  register_term: microfibre
+  theme: particles_and_fibres
+  tier: B
+  handling: qualified
+  context_source: 'v3.1 microfiber any_context (A3 5.1: existing context list)'
+- term: plastic microfiber
+  any_context: *id001
+  register_term: plastic microfiber
+  theme: particles_and_fibres
+  tier: A
+  handling: qualified
+- term: microbead
+  any_context: *id001
+  register_term: microbead
+  theme: particles_and_fibres
+  tier: B
+  handling: qualified
+- term: plastic microbead
+  any_context: *id001
+  register_term: plastic microbead
+  theme: particles_and_fibres
+  tier: A
+  handling: qualified
+- term: large microplastic
+  any_context: *id001
+  register_term: large microplastic
+  theme: particles_and_fibres
+  tier: A
+  handling: qualified
+- term: synthetic polymer microparticle
+  any_context: *id001
+  register_term: synthetic polymer microparticle
+  theme: particles_and_fibres
+  tier: A
+  handling: qualified
+- term: plastic microparticle
+  any_context: *id001
+  register_term: plastic microparticle
+  theme: particles_and_fibres
+  tier: A
+  handling: qualified
+- term: plastic nanoparticle
+  any_context: *id001
+  register_term: plastic nanoparticle
+  theme: particles_and_fibres
+  tier: A
+  handling: qualified
+- term: microparticles plastics
+  any_context: *id001
+  register_term: microparticles plastics
+  theme: particles_and_fibres
+  tier: A
+  handling: qualified
+- term: nanoparticles plastics
+  any_context: *id001
+  register_term: nanoparticles plastics
+  theme: particles_and_fibres
+  tier: A
+  handling: qualified
+- term: tyre wear
+  any_context: *id001
+  register_term: tyre wear
+  theme: tyre_pellets_and_debris
+  tier: A
+  handling: qualified
+- term: nurdle
+  any_context: *id001
+  register_term: nurdle
+  theme: tyre_pellets_and_debris
+  tier: A
+  handling: qualified
+- term: pre-production pellet
+  any_context: *id001
+  register_term: pre-production pellet
+  theme: tyre_pellets_and_debris
+  tier: A
+  handling: qualified
+- term: garbage patch
+  any_context: *id001
+  register_term: garbage patch
+  theme: tyre_pellets_and_debris
+  tier: A
+  handling: co_term
+- term: waste plastics
+  any_context: *id001
+  register_term: waste plastics
+  theme: tyre_pellets_and_debris
+  tier: B
+  handling: qualified
+- term: MNP
+  any_context: *id001
+  register_term: MNP
+  theme: polymer_and_abbreviation_forms
+  tier: B
+  handling: co_term
+- term: MNPs
+  any_context: *id001
+  register_term: MNPs
+  theme: polymer_and_abbreviation_forms
+  tier: B
+  handling: co_term
+- term: thermoplastic
+  any_context: *id001
+  register_term: thermoplastic
+  theme: polymer_and_abbreviation_forms
+  tier: B
+  handling: co_term
+- term: plastic polymer
+  any_context: *id001
+  register_term: plastic polymer
+  theme: polymer_and_abbreviation_forms
+  tier: B
+  handling: co_term
+- term: plastic waste trade
+  any_context: *id001
+  register_term: plastic waste trade
+  theme: trade_and_policy
+  tier: A
+  handling: co_term
+- term: waste import ban
+  any_context: *id001
+  register_term: waste import ban
+  theme: trade_and_policy
+  tier: A
+  handling: co_term
+- term: Basel Convention plastic-waste amendments
+  any_context: *id001
+  register_term: Basel Convention plastic-waste amendments
+  theme: trade_and_policy
+  tier: A
+  handling: co_term
+- term: Basel Convention
+  any_context: *id001
+  register_term: Basel Convention
+  theme: trade_and_policy
+  tier: A
+  handling: co_term
+- term: Bamako Convention
+  any_context: *id001
+  register_term: Bamako Convention
+  theme: trade_and_policy
+  tier: A
+  handling: co_term
+- term: National Sword
+  any_context: *id001
+  register_term: National Sword
+  theme: trade_and_policy
+  tier: A
+  handling: co_term
+- term: environmental justice
+  any_context: *id001
+  register_term: environmental justice
+  theme: justice_and_labour
+  tier: B
+  handling: co_term
+- term: fenceline
+  any_context: *id001
+  register_term: fenceline
+  theme: justice_and_labour
+  tier: B
+  handling: co_term
+- term: Cancer Alley
+  any_context: *id001
+  register_term: Cancer Alley
+  theme: justice_and_labour
+  tier: B
+  handling: co_term
+- term: waste pickers
+  any_context: *id001
+  register_term: waste pickers
+  theme: justice_and_labour
+  tier: A
+  handling: co_term
+- term: informal recycling
+  any_context: *id001
+  register_term: informal recycling
+  theme: justice_and_labour
+  tier: A
+  handling: co_term
+- term: informal sector
+  any_context: *id001
+  register_term: informal sector
+  theme: justice_and_labour
+  tier: B
+  handling: co_term
+- term: urban recoverer
+  any_context: *id001
+  register_term: urban recoverer
+  theme: justice_and_labour
+  tier: B
+  handling: co_term
+- term: Small Island Developing States
+  any_context: *id001
+  register_term: Small Island Developing States
+  theme: justice_and_labour
+  tier: B
+  handling: co_term
+- term: plastic credits
+  any_context: *id001
+  register_term: plastic credits
+  theme: circularity_and_greenwashing
+  tier: A
+  handling: co_term
+- term: plastic offsets
+  any_context: *id001
+  register_term: plastic offsets
+  theme: circularity_and_greenwashing
+  tier: A
+  handling: co_term
+- term: greenwashing
+  any_context: *id001
+  register_term: greenwashing
+  theme: circularity_and_greenwashing
+  tier: B
+  handling: co_term
+- term: wishcycling
+  any_context: *id001
+  register_term: wishcycling
+  theme: circularity_and_greenwashing
+  tier: B
+  handling: co_term
+- term: recycling contamination
+  any_context: *id001
+  register_term: recycling contamination
+  theme: circularity_and_greenwashing
+  tier: B
+  handling: co_term
+- term: indoor dust
+  any_context: *id001
+  register_term: indoor dust
+  theme: exposure_matrix
+  tier: B
+  handling: co_term
+- term: atmospheric deposition
+  any_context: *id001
+  register_term: atmospheric deposition
+  theme: exposure_matrix
+  tier: B
+  handling: co_term
+- term: breast milk
+  any_context: *id001
+  register_term: breast milk
+  theme: exposure_matrix
+  tier: B
+  handling: co_term
+- term: infant formula
+  any_context: *id001
+  register_term: infant formula
+  theme: exposure_matrix
+  tier: B
+  handling: co_term
+- term: waste colonialism
+  any_context: *id001
+  register_term: waste colonialism
+  theme: waste_colonialism_lens
+  tier: A
+  handling: co_term
+- term: plastic colonialism
+  any_context: *id001
+  register_term: plastic colonialism
+  theme: waste_colonialism_lens
+  tier: A
+  handling: co_term
+- term: plastic waste colonialism
+  any_context: *id001
+  register_term: plastic waste colonialism
+  theme: waste_colonialism_lens
+  tier: A
+  handling: co_term
+- term: sacrifice zone
+  any_context: *id001
+  register_term: sacrifice zone
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: plastic wastescape
+  any_context: *id001
+  register_term: plastic wastescape
+  theme: waste_colonialism_lens
+  tier: A
+  handling: co_term
+- term: corporate imperialism
+  any_context: *id001
+  register_term: corporate imperialism
+  theme: waste_colonialism_lens
+  tier: A
+  handling: co_term
+- term: Indigenous political ecology
+  any_context: *id001
+  register_term: Indigenous political ecology
+  theme: waste_colonialism_lens
+  tier: A
+  handling: co_term
+- term: anticolonial approaches to plastic pollution science
+  any_context: *id001
+  register_term: anticolonial approaches to plastic pollution science
+  theme: waste_colonialism_lens
+  tier: A
+  handling: co_term
+- term: wastescape
+  any_context: *id001
+  register_term: wastescape
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: waste regime
+  any_context: *id001
+  register_term: waste regime
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: waste chains
+  any_context: *id001
+  register_term: waste chains
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: dumping rights
+  any_context: *id001
+  register_term: dumping rights
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: centre–periphery
+  any_context: *id001
+  register_term: centre–periphery
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: assimilative capacity
+  any_context: *id001
+  register_term: assimilative capacity
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: technique of power
+  any_context: *id001
+  register_term: technique of power
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: myth of purity
+  any_context: *id001
+  register_term: myth of purity
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: discard well
+  any_context: *id001
+  register_term: discard well
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+- term: waste well
+  any_context: *id001
+  register_term: waste well
+  theme: waste_colonialism_lens
+  tier: B
+  handling: co_term
+title_only_terms:
+- term: Indigenous peoples
+  any_context: *id001
+  register_term: Indigenous peoples
+  theme: indigenous_title
+  tier: B
+  handling: title_only
+- term: Indigenous knowledge
+  any_context: *id001
+  register_term: Indigenous knowledge
+  theme: indigenous_title
+  tier: B
+  handling: title_only
+- term: Indigenous-led
+  any_context: *id001
+  register_term: Indigenous-led
+  theme: indigenous_title
+  tier: B
+  handling: title_only
+- term: Indigenous communities
+  any_context: *id001
+  register_term: Indigenous communities
+  theme: indigenous_title
+  tier: B
+  handling: title_only
+themes:
+  particles_and_fibres:
+    terms:
+    - microfibre
+    - plastic microfiber
+    - microbead
+    - plastic microbead
+    - large microplastic
+    - synthetic polymer microparticle
+    - plastic microparticle
+    - plastic nanoparticle
+    - microparticles plastics
+    - nanoparticles plastics
+    title_only: []
+  tyre_pellets_and_debris:
+    terms:
+    - tyre wear
+    - nurdle
+    - pre-production pellet
+    - garbage patch
+    - waste plastics
+    title_only: []
+  polymer_and_abbreviation_forms:
+    terms:
+    - MNP
+    - MNPs
+    - thermoplastic
+    - plastic polymer
+    title_only: []
+  trade_and_policy:
+    terms:
+    - plastic waste trade
+    - waste import ban
+    - Basel Convention plastic-waste amendments
+    - Basel Convention
+    - Bamako Convention
+    - National Sword
+    title_only: []
+  justice_and_labour:
+    terms:
+    - environmental justice
+    - fenceline
+    - Cancer Alley
+    - waste pickers
+    - informal recycling
+    - informal sector
+    - urban recoverer
+    - Small Island Developing States
+    title_only: []
+  circularity_and_greenwashing:
+    terms:
+    - plastic credits
+    - plastic offsets
+    - greenwashing
+    - wishcycling
+    - recycling contamination
+    title_only: []
+  exposure_matrix:
+    terms:
+    - indoor dust
+    - atmospheric deposition
+    - breast milk
+    - infant formula
+    title_only: []
+  waste_colonialism_lens:
+    terms:
+    - waste colonialism
+    - plastic colonialism
+    - plastic waste colonialism
+    - sacrifice zone
+    - plastic wastescape
+    - corporate imperialism
+    - Indigenous political ecology
+    - anticolonial approaches to plastic pollution science
+    - wastescape
+    - waste regime
+    - waste chains
+    - dumping rights
+    - centre–periphery
+    - assimilative capacity
+    - technique of power
+    - myth of purity
+    - discard well
+    - waste well
+    title_only: []
+  indigenous_title:
+    terms: []
+    title_only:
+    - Indigenous peoples
+    - Indigenous knowledge
+    - Indigenous-led
+    - Indigenous communities
+tier_2_terms:
+- chemicals in plastics
+- plastic additives
+- bisphenol A
+- BPA
+- phthalates
+- 6PPD
+- 6PPD-quinone
+exclusions:
+- microplastic strain
+- microplastic deformation
+- internal friction
+- plastic behaviour of crystals
+- plastic behavior of crystals
+- crystal plasticity
+- strain gradient plasticity
+- ductile fracture
+- elastic-plastic
+- plastic embossing
+- gecko
+- dislocation
+- nanopillar
+- plastic deformation
+- perpendicular anisotropy
+- microplastic kinetics
+exclude_types:
+- erratum
+- peer-review
+- retraction
+- paratext
+openalex:
+  field: title_and_abstract.search
+promotion:
+  status: not promoted
+  decision: A3-D10 (candidate plastic-v3.2; promotion by the existing precision rule)
+  rule: promote when estimated precision >= v2 (82.8%) with no relevant v2-labelled work lost
+  requires: BQ-S3 per-theme and per-term precision and yield, then owner decision

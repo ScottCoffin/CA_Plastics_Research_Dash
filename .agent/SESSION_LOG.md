@@ -226,3 +226,4 @@
 | 2026-11-25 | BQ-1.3 | Language and theme recall probes (Wilson CIs, anchors 37/42, T10753 82%); new machine onboarded | this commit |
 | 2026-11-25 | BQ-2.4 | denominators.json + C/A share on V-4 + B/A on /explore Trend | this commit |
 | 2026-11-25 | PLAT-4a (partial) | Global raw fetch tooling + estimate; paging blocked on OpenAlex key (H43); budget guard 401/403 reserve | this commit |
+| 2026-11-25 | BQ-S2 | Candidate plastic-v3.2 (64 terms, +1.3% records), recycler removed after per-term probe | this commit |

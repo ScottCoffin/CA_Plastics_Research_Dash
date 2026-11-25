@@ -1,5 +1,14 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-25 -- Stem collisions in new query terms; gate in a clean worktree
+- OpenAlex stemming turns agent nouns into their activity: "recycler" matched every anchored recycling work
+  (23,264 vs about 500 for eight sibling terms). When a theme count is far above its siblings, probe each
+  term alone before trusting it; add a guard test for the removed term.
+- Workers run focused tests only, so a renamed JS argument broke a pinned assertion in an unrelated test
+  file (test_vd16). The lead's clean-worktree full suite caught it before the push; never skip that step.
+- On a fresh machine without Node, about 40 runtime tests fail and look like regressions; check the
+  toolchain (CLAUDE.md new-machine list) before debugging.
+
 ## 2026-11-15 -- Shared module tracking and semantic component references
 - `framework/src/components/shared/` is ignored because four legacy helpers are copied there before
   builds, but `sync_shared.mjs` copies a named list and does not clear the folder. A Framework-only
