@@ -1,6 +1,9 @@
 import { type Ctx, handleMe, handleSignout, handleStart, handleVerify } from "./auth";
+import { runCleanup } from "./cleanup";
 import type { Env } from "./env";
+import { handleExport } from "./export";
 import { json } from "./http";
+import { handlePromoteLead, handleQueue, handleDecide, handleSuspend } from "./moderation";
 import { type Fetch, liveFetch } from "./outbound";
 import {
   handleOrcidCallback,
@@ -10,6 +13,7 @@ import {
   handleSignupEmail,
   handleSignupLookup,
 } from "./signup";
+import { handleCaseAnswer, handleCaseAnswers, handleMySubmissions, handleSubmit } from "./submissions";
 
 const ALLOWED_METHODS = "GET, POST, OPTIONS";
 
@@ -80,6 +84,34 @@ export async function handle(
       case "/auth/signout":
         if (request.method !== "POST") return methodNotAllowed();
         return withCors(await handleSignout(request, env, ctx));
+      case "/cases/answer":
+        if (request.method !== "POST") return methodNotAllowed();
+        return withCors(await handleCaseAnswer(request, env, ctx));
+      case "/cases/answers":
+        if (request.method !== "GET") return methodNotAllowed();
+        return withCors(await handleCaseAnswers(request, env, ctx));
+      case "/submissions":
+        if (request.method !== "POST") return methodNotAllowed();
+        return withCors(await handleSubmit(request, env, ctx));
+      case "/submissions/mine":
+        if (request.method !== "GET") return methodNotAllowed();
+        return withCors(await handleMySubmissions(request, env, ctx));
+      case "/moderation/queue":
+        if (request.method !== "GET") return methodNotAllowed();
+        return withCors(await handleQueue(request, env, ctx));
+      case "/moderation/decide":
+        if (request.method !== "POST") return methodNotAllowed();
+        return withCors(await handleDecide(request, env, ctx));
+      case "/moderation/leads":
+        if (request.method !== "POST") return methodNotAllowed();
+        return withCors(await handlePromoteLead(request, env, ctx));
+      case "/moderation/suspend":
+        if (request.method !== "POST") return methodNotAllowed();
+        return withCors(await handleSuspend(request, env, ctx));
+      case "/export/approved":
+        // Read-only feed for the PR job (bearer token, server-to-server). No CORS.
+        if (request.method !== "GET") return json({ ok: false, error: "method_not_allowed" }, 405);
+        return handleExport(request, env, ctx);
       default:
         return withCors(json({ ok: false, error: "not_found" }, 404));
     }
@@ -93,5 +125,10 @@ export async function handle(
 export default {
   fetch(request: Request, env: Env): Promise<Response> {
     return handle(request, env);
+  },
+  /** Cron "17 3 * * *": expired sign-up state and stale pending sign-ups. Logs counts only. */
+  async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
+    const counts = await runCleanup(env.DB, Date.now());
+    console.log("cleanup", JSON.stringify(counts));
   },
 } satisfies ExportedHandler<Env>;

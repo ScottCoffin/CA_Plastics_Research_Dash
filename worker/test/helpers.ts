@@ -1,7 +1,12 @@
 import { SELF, env } from "cloudflare:test";
 import { afterEach, beforeEach } from "vitest";
+import { createSession } from "../src/auth";
+import { keyedHash } from "../src/crypto";
 
 const TABLES = [
+  "case_answers",
+  "submissions",
+  "region_leads",
   "audit_log",
   "outbox",
   "sessions",
@@ -146,4 +151,56 @@ export async function signIn(email: string, region = "norway"): Promise<string> 
   const res = await verify(await latestToken());
   if (res.status !== 302 || !res.headers.get("Set-Cookie")) throw new Error("verify failed");
   return sessionPair(res);
+}
+
+export interface SeedOptions {
+  orcid?: string | null;
+  role?: "ambassador" | "lead";
+  status?: "pending" | "active" | "suspended";
+  /** Email (sets email and email_hash). Omit for an ORCID-only pending sign-up. */
+  email?: string;
+  /** Region with an active membership row. */
+  region?: string;
+  created_at?: number;
+}
+
+/**
+ * Inserts an ambassador row directly (slice 2b tests). Active accounts also get a session; the cookie is returned
+ * as "name=value" for the Cookie header. No network and no mail.
+ */
+export async function seedAmbassador(options: SeedOptions = {}): Promise<{ id: string; cookie: string }> {
+  const id = crypto.randomUUID().replace(/-/g, "");
+  const now = options.created_at ?? Date.now();
+  const status = options.status ?? "active";
+  const emailHash = options.email ? await emailHashOf(options.email) : null;
+  await env.DB.prepare(
+    "INSERT INTO ambassadors (id, orcid, email, email_hash, status, role, created_at, display_name, credit_public) " +
+      "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 1)",
+  )
+    .bind(
+      id,
+      options.orcid ?? null,
+      options.email ?? null,
+      emailHash,
+      status,
+      options.role ?? "ambassador",
+      now,
+      `Ambassador ${id.slice(0, 6)}`,
+    )
+    .run();
+  if (options.region) {
+    await env.DB.prepare(
+      "INSERT INTO ambassador_regions (ambassador_id, region, status, joined_at) VALUES (?1, ?2, 'active', ?3)",
+    )
+      .bind(id, options.region, now)
+      .run();
+  }
+  if (status !== "active") return { id, cookie: "" };
+  const signed = await createSession(env, id, now);
+  return { id, cookie: `__Host-plastiverse_session=${signed}` };
+}
+
+/** Test-only hash of an address, as the Worker stores it (for asserting that exports carry no hashes). */
+export async function emailHashOf(email: string): Promise<string> {
+  return keyedHash(String(env.EMAIL_HASH_KEY), "email", email);
 }

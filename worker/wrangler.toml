@@ -25,3 +25,9 @@ PUBLIC_API_URL = "https://api.plastiverse.live"
 MAIL_FROM = "Plastiverse <auth@plastiverse.live>"
 # "resend" (production default). Use "outbox" only for local dev and tests (writes to D1 table outbox).
 MAIL_MODE = "resend"
+# ORCID iD of the owner account (slice 2b). PLACEHOLDER: the owner sets the real iD before deploy (owner action).
+OWNER_ORCID = "0000-0000-0000-0000"
+
+# Nightly cleanup (slice 2b): expired ORCID states, sign-up sessions and links; stale pending sign-ups.
+[triggers]
+crons = ["17 3 * * *"]

@@ -1,4 +1,4 @@
-# Ambassador Worker (AMB-1 slices 1 and 2a, local only)
+# Ambassador Worker (AMB-1 slices 1, 2a and 2b, local only)
 
 Cloudflare Worker with D1 for ambassador sign-in: ORCID-first sign-up (slice 2a) and the email-first magic link
 (slice 1, kept for compatibility). Spec: `docs/AMBASSADORS_SPEC.md` (sections 2, 3, 12, 13, "Backend slice 1 (local)"
@@ -39,7 +39,10 @@ client values; the tests cover the flow with a fake ORCID.
   `ORCID_CLIENT_ID`, `ORCID_CLIENT_SECRET`. Email lookups use `EMAIL_HASH_KEY` only (separate from the session key).
 - The ORCID redirect URI to register with ORCID: `https://api.plastiverse.live/orcid/callback`.
 - The allowlists are bundled from `site/data/<region>/ambassador_institutions.json` at build time.
-- Migrations: `0001_init.sql` (slice 1), `0002_orcid_signup.sql` (slice 2a). Read the migration note in 0002 before any
+- `OWNER_ORCID` (wrangler.toml `[vars]`) is a placeholder; the account with that ORCID iD is the owner. The owner sets the
+  real iD before deploy (owner action).
+- Secret `EXPORT_TOKEN` (owner-approved `wrangler secret put` only): the bearer token for `/export/approved`. Unset, the export refuses every request.
+- Migrations: `0001_init.sql` (slice 1), `0002_orcid_signup.sql` (slice 2a), `0003_submissions.sql` (slice 2b). Read the migration note in 0002 before any
   remote apply: slice-1 local rows were keyed with `SESSION_SIGNING_KEY` and must be reset, not re-hashed.
 
 ## Routes
@@ -50,6 +53,22 @@ client values; the tests cover the flow with a fake ORCID.
 - `POST /signup/claims` (signup cookie): claims from the checklist, regions tied to claimed eligible institutions, proposals.
 - `POST /signup/email` (signup cookie): one institutional email (Turnstile, rate limits), single-use link.
 - `POST /signup/profile` (session cookie): display name, credit (default on), terms `v1`.
+- `POST /cases/answer` (session, active member of the region): `{region, case_id, answer: agree|disagree|unsure,
+  correct_value?}` (`correct_value` required for `disagree` only). One answer per ambassador and case; a re-answer replaces it.
+  Returns the case's consensus (null until two active ambassadors agree).
+- `GET /cases/answers?region=`: the caller's own answers, each with its consensus. Other people's single answers are never returned.
+- `POST /submissions` (session, member): `{region, stream: confirm|knowledge, kind, payload}`, status `pending`.
+  Payload keys are allowed per kind (`src/submissions.ts`, `KINDS`); https URLs only; no HTML; length limits.
+- `GET /submissions/mine` (session): the caller's submissions with status and decision note.
+- `GET /moderation/queue?region=` (owner or lead): pending submissions and proposals. Owner and leads see every region.
+- `POST /moderation/decide` (owner or lead): `{type: submission|proposal, id, decision: approve|reject, note?}`. A
+  moderator cannot decide their own item. Audited. Approving a proposal records the decision only (no activation).
+- `POST /moderation/leads` (owner or lead): `{ambassador_id, region}` promotes an active member of that region to lead.
+- `POST /moderation/suspend` (owner only): `{ambassador_id}` sets `suspended` and deletes their sessions.
+- `GET /export/approved?since=<ms>` (bearer `EXPORT_TOKEN`, read-only): approved submissions and consensus case answers.
+  No emails, email hashes, ambassador ids or ORCID iDs.
+- Scheduled (cron `17 3 * * *`): deletes expired ORCID states, sign-up sessions and magic links, and pending sign-ups
+  older than 7 days with no email proof. Logs counts only.
 
 Outbound calls (ORCID token, ORCID employments, OpenAlex) go through `src/outbound.ts`; `handle()` takes the fetch as
 an argument, and the production default is the global `fetch`.
@@ -61,7 +80,7 @@ Do not run these without the owner's explicit approval for each step:
 1. Create the D1 database and put its real id in `wrangler.toml` (owner-approved only).
 2. `npx wrangler d1 migrations apply DB --remote` (owner-approved only).
 3. `npx wrangler secret put RESEND_API_KEY`, `TURNSTILE_SECRET`, `SESSION_SIGNING_KEY`, `EMAIL_HASH_KEY`,
-   `ORCID_CLIENT_ID`, `ORCID_CLIENT_SECRET` (owner-approved only).
+   `ORCID_CLIENT_ID`, `ORCID_CLIENT_SECRET`, `EXPORT_TOKEN` (owner-approved only). Set `OWNER_ORCID` in `wrangler.toml` first.
 4. Route the Worker under `api.plastiverse.live` (owner-approved only) and register the ORCID redirect URI above.
 5. `npx wrangler deploy` (owner-approved only).
 

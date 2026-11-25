@@ -74,9 +74,11 @@ describe("session cookie", () => {
 
   it("rejects a tampered signature", async () => {
     const cookie = await signIn("tamper@niva.no", "norway");
-    const value = cookie.split("=")[1];
-    const last = value.slice(-1) === "A" ? "B" : "A";
-    const forged = `__Host-plastiverse_session=${value.slice(0, -1)}${last}`;
+    const [id, sig] = cookie.split("=")[1].split(".");
+    // Change the first signature character: the last base64url character of a 32-byte MAC carries 2 unused bits, so
+    // swapping A and B there can decode to the same bytes and the test would pass a valid signature by chance.
+    const first = sig[0] === "A" ? "Q" : "A";
+    const forged = `__Host-plastiverse_session=${id}.${first}${sig.slice(1)}`;
     expect((await me(forged)).status).toBe(401);
   });
 

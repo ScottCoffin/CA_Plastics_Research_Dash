@@ -5,6 +5,8 @@ export interface Env {
   WORKSPACE_URL: string;
   PUBLIC_API_URL: string;
   MAIL_FROM: string;
+  /** ORCID iD of the owner account (non-secret, wrangler.toml). The account with this iD is the owner. */
+  OWNER_ORCID: string;
   /** "resend" (production) or "outbox" (local dev and tests only). */
   MAIL_MODE?: string;
   // Secrets (Worker secrets; never in wrangler.toml).
@@ -15,6 +17,8 @@ export interface Env {
   EMAIL_HASH_KEY?: string;
   ORCID_CLIENT_ID?: string;
   ORCID_CLIENT_SECRET?: string;
+  /** Bearer token for GET /export/approved (the PR job). Unset means the export refuses every request. */
+  EXPORT_TOKEN?: string;
 }
 
 /** Fail closed: a missing secret is a server error, never a silent fallback. */

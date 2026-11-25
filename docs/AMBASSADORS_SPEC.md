@@ -437,3 +437,54 @@ hashes. Email lookups use `EMAIL_HASH_KEY` (a secret separate from `SESSION_SIGN
 - Proposals are stored only; moderation review and the public map change come in slice 2b.
 - The ORCID sign-in for an already-active ambassador is an owner decision to confirm (it skips the email step).
 - Pending sign-ups that never confirm an email are not yet cleaned up.
+
+## Backend slice 2b (local)
+
+Status: built and tested locally in `worker/` (migration `0003_submissions.sql`; 102 vitest tests in total, 33 of them
+for slice 2b). Not deployed; no Cloudflare, Resend, ORCID or OpenAlex calls. Slice 2c (emails, reminders, PR job, front
+end) follows.
+
+**Roles.** The owner is the account whose ORCID iD equals `OWNER_ORCID` (a non-secret var in `wrangler.toml`, placeholder
+`0000-0000-0000-0000`, set by the owner before deploy). Leads are ambassadors promoted by the owner or another lead
+(`ambassadors.role = 'lead'`, with a `region_leads` row per region). The owner and leads moderate, and leads see every
+region's queues (owner answer, section 12). Ordinary ambassadors get 403 on every moderation route.
+
+**Routes** (JSON; `Cache-Control: no-store`; CORS as in earlier slices; every POST is rate limited per account):
+
+- `POST /cases/answer` and `GET /cases/answers?region=` (Stream A): one answer per ambassador and case, from active
+  members of the region. Consensus is two or more active ambassadors giving the same answer (and, for `disagree`, the
+  same correct value); `unsure` never counts. A case with two different agreed values has no consensus. Only the
+  caller's own answers and the consensus are returned; a single answer by someone else is never shown.
+- `POST /submissions` and `GET /submissions/mine` (Streams B and C): `{region, stream, kind, payload}`, status `pending`.
+  Kinds and their keys are fixed in code (`KINDS`). Plain strings only, up to the per-field length, no `<` or `>`, no
+  control characters, https URLs only, and no keys outside the kind. Refusals name the offending field, never its value.
+- `GET /moderation/queue?region=`: pending submissions and proposals (suspended accounts' items hidden).
+- `POST /moderation/decide`: approve or reject a submission or proposal. A moderator cannot decide their own item; every
+  decision is audited (`moderation.decide`). Approving a proposal records the decision only: no applicant is activated.
+- `POST /moderation/leads`: promotes an active region member to lead (`moderation.lead` audit row). Refuses the owner
+  account and self-promotion.
+- `POST /moderation/suspend` (owner only): status `suspended`; the account's sessions are deleted and it cannot sign in.
+- `GET /export/approved?since=<ms>`: bearer `EXPORT_TOKEN` (constant-time compare of SHA-256 digests; unset means 401).
+  Returns approved submissions and consensus case answers whose latest change is at or after `since`. It carries no
+  emails, email hashes, ambassador ids or ORCID iDs. A submitter's name appears only with public credit on.
+- Scheduled `17 3 * * *`: deletes expired `orcid_states`, `signup_sessions` and `magic_links`, and pending sign-ups older
+  than 7 days with no email proof (with their proposals and claims). Active and suspended accounts are untouched.
+
+**Schema** (`worker/migrations/0003_submissions.sql`): `ambassadors.role`; `region_leads`; `submissions`
+(pending/approved/rejected, with decision fields); `case_answers` (one row per ambassador, region and case); and
+`proposals` gains `decided_at`, `decided_by` and `decision_note`.
+
+**Decisions to review (owner)**
+
+- Consensus on a case is decided by the agreed answer and value. If two different values both reach two agreeing answers,
+  the case has no consensus.
+- A proposal has no region column. The queue lists it under a region when its applicant holds that region, and only in the
+  unfiltered queue otherwise.
+- Export is a snapshot: it returns what changed since `since`, but it cannot retract an approved item or a consensus that
+  later splits. The PR job must handle removals by hand.
+- `EXPORT_TOKEN` is a Worker secret that has not been set anywhere. Until the owner sets it, the export refuses everything.
+
+**Not in slice 2b (slice 2c or later):** the Resend notices (approval, rejection, reminders); the owner's view of single
+answers as suggestions; domain suspension; the scheduled PR job that reads `/export/approved`; the first-visit and
+workspace UI; and a rate limit on the existing `POST /signup/profile` and `POST /auth/signout` routes (owned by the
+pending signup review, not changed here).
