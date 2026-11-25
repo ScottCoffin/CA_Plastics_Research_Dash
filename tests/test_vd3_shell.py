@@ -50,7 +50,11 @@ def test_sidebar_groups_header_search_and_footer_contract() -> None:
         "Reference",
     ]
     assert data["pages"][1]["pages"][0] == {"name": "Authors", "path": "/california/authors"}
-    assert data["pages"][2]["pages"][-1] == {"name": "Evidence map", "path": "/california/evidence"}
+    # BQ-1.4 adds Quality after the Evidence map at the end of the Data group.
+    assert data["pages"][2]["pages"][-2:] == [
+        {"name": "Evidence map", "path": "/california/evidence"},
+        {"name": "Quality", "path": "/california/quality"},
+    ]
     assert "Plastiverse Live" in data["home"]
     assert "CA Plastics Research Atlas" in data["header"]
     assert 'aria-label="Toggle navigation menu"' in data["header"]
