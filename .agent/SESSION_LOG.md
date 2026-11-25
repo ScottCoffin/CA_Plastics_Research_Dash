@@ -264,3 +264,4 @@
 | 2026-11-25 | AMB-1 (backend slice 1) | Local Worker: magic-link sign-in, sessions, D1 schema, 43 tests; not deployed | this commit |
 | 2026-11-25 | BQ-V.3 | Reusable graph viewer for the global graphs | this commit |
 | 2026-11-25 | BQ-1.1 | Quality estimators (hand-value tested); real output waits for gold labels and a predictions export | this commit |
+| 2026-11-25 | AMB-1 (sign-up) | ORCID-first sign-up flow, spec section 13 | this commit |

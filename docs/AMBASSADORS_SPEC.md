@@ -340,3 +340,27 @@ same-site with the site; the workspace path (`/ambassadors/`) is provisional; an
 **Slice 2 scope:** ORCID sign-in and linking, the first-sign-in profile and consent, submissions and moderation queue
 (owner and region leads), region proposals, the Resend notices and reminders, a scheduled export endpoint for the PR job,
 and a CI job for `worker/` tests.
+
+## 13. ORCID-first sign-up (owner 2026-11-25; replaces the email-first entry of sections 3 and 11)
+
+1. **Verify ORCID.** "Sign up with ORCID" uses ORCID OAuth (`/authenticate`), so the iD is proven.
+2. **Find the author record.** The iD is cross-referenced to the Atlas author records (OpenAlex author ORCID,
+   `curation/orcid_author_ids.csv`, and the global partition). One match links it; several are shown to choose from;
+   none offers the name search, then moderator review.
+3. **Claim institutions.** A checklist of every institution on the linked record's affiliation history (OpenAlex
+   authorships, plus ORCID employments when the public record lists them), each marked eligible or not (on a
+   region's allowlist: education, government, non-profit or research institute, at least 3 plastics works there).
+   The ambassador ticks the ones to claim. **Any listed affiliation counts, current or past** (owner).
+4. **Choose regions.** The regions tied to the claimed eligible institutions (the region whose predicate contains
+   the institution: country, subdivision, registry region) are listed; the ambassador opts into one or more.
+5. **Prove one institution.** Confirm ONE email address at the domain of any claimed eligible institution (magic
+   link, section 3). Once confirmed, all ticked institutions and opted-in regions are active (owner: ORCID plus one
+   institutional email).
+6. **Propose something else.** Institutions or regions not on the record can be proposed (institution search over
+   OpenAlex/ROR or free text; region via the propose-a-region flow); these go to moderation and do not block the
+   rest of sign-up.
+7. Then the first-visit screen (display name, credit default on with opt-out, terms v1).
+
+Back end: the Worker stores the ORCID iD (public identifier), the linked author id, claimed institutions with their
+source (openalex_history, orcid_employment, proposed), regions joined, and the confirmed email's domain; regions
+an ambassador serves can grow later by claiming more institutions.
