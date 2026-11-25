@@ -205,3 +205,42 @@ Later slices:
 - **Slice 3:** the outputs move to `site/data/<region>/`. California outputs must stay byte-identical,
   and `regions/california/region.yml` `data_dir` changes to `site/data/california/`.
 - **Slice 4:** Framework dynamic routes (`[region]/*.md`) read the region from the URL.
+
+### Slice 2: `--region` on the pipeline commands
+
+Slice 2 reads the engine's scope values from the registry and adds `--region SLUG` (default
+`california`) to the pipeline commands. California behaviour is unchanged: the rendered OpenAlex
+URLs are byte-identical for a fixed config (tested), and the ca_flag and ROR logic is equivalent.
+The full pipeline outputs were not regenerated in this slice (offline, no live data).
+
+- `src/atlas/regions/scope.py` holds the helpers. Each takes an optional `Region` (`None` means
+  the registry's `california`, cached). They are `institution_filter`, `institution_region_names`,
+  `ror_subdivision_codes`, `country_codes` and `raw_affiliation_search_term`. It also holds the CLI
+  helpers `add_region_argument` and `resolve_cli_region`.
+- Constants now read from the registry:
+  - the institution seed filter `geo.region:California` (`src/atlas/ingest/institutions.py`,
+    `pull_openalex_institutions`, `supplement_government_institutions` and the
+    `openalex_filter` metadata) comes from `openalex_institution_filter`;
+  - the ROR subdivision check `== "CA"` (`_ror_location`) comes from `ror_subdivision_codes`;
+  - the institution `ca_flag` in `_read_registry` (`src/atlas/ingest/normalize.py`) comes from
+    `institution_region_names` and `country_codes`;
+  - `RAW_AFFILIATION_TERM` (`src/atlas/ingest/openalex.py`) is kept as an alias computed from
+    the first `raw_affiliation_terms` entry, and `ingest_live(region=...)` uses it.
+- Not yet registry-driven: the strict affiliation matcher `_CA_AFFILIATION_PATTERNS` and
+  `matches_california_affiliation` in `normalize.py`, the `CA_BASIS_*` values, and the
+  `", CA 9xxxx"` postal rule. The registry fields cannot express their case flags, anchors and
+  exclusions, so they stay in code until a schema decision.
+- Commands with `--region`:
+  - `scripts/ingest_openalex.py`: passes the Region to `ingest_live`;
+  - `scripts/normalize_openalex.py`: passes the Region through `normalize_raw_parquet` and
+    `normalize_fixture`;
+  - `scripts/run_daily_works.py` and `scripts/build_export_site.py`: validate the slug only. Their
+    callees (`run_daily_ingest`, `export_site`) do not take a region yet.
+- A slug other than `california` exits 2 with `region <slug> is registered but not yet supported
+  by this command (PLAT-3)`. An unknown slug exits 2 with the registry's `unknown region slug`
+  error.
+- The ratchet baseline fell from 286 to 280 matches (`institutions.py` 88 to 84,
+  `normalize.py` 17 to 16, `openalex.py` 7 to 6). Its file count is unchanged.
+- `tests/test_region_scope.py` covers the registry values, the byte-identical URLs, the ca_flag and
+  ROR helpers with an explicit region, and each CLI's accept and reject paths. The norway
+  `planned` entry exists only in a tmp-path copy of the registry.

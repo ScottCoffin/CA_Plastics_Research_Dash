@@ -12,6 +12,7 @@ from atlas.ingest.openalex import (
     load_institution_ids,
     load_openalex_key,
 )
+from atlas.regions.scope import add_region_argument, resolve_cli_region
 
 
 def main() -> None:
@@ -36,7 +37,9 @@ def main() -> None:
     parser.add_argument("--max-credits", type=float)
     parser.add_argument("--max-cost-usd", type=float)
     parser.add_argument("--allow-candidate", action="store_true")
+    add_region_argument(parser)
     args = parser.parse_args()
+    region = resolve_cli_region(parser, args.region)
 
     paths = OpenAlexPaths(
         raw_dir=args.raw_dir,
@@ -68,6 +71,7 @@ def main() -> None:
             max_credits=args.max_credits,
             max_cost_usd=args.max_cost_usd,
             budget_path=args.budget,
+            region=region,
         )
     print(result)
 

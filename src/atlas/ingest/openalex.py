@@ -37,6 +37,8 @@ from atlas.query import (
     openalex_filter,
     type_filters,
 )
+from atlas.regions.registry import Region
+from atlas.regions.scope import raw_affiliation_search_term
 from atlas.util.budget import (
     conservative_request_cost,
     daily_logged_usage,
@@ -192,7 +194,8 @@ def load_institution_ids(path: str | Path = "data/processed/institutions.parquet
 
 ANCHOR_AUTHORS_PER_UNIT = 25
 REJECTED_REQUEST_CREDITS = Decimal(10)
-RAW_AFFILIATION_TERM = "California"
+# Alias kept for existing imports; computed from the registry (PLAT-3 slice 2).
+RAW_AFFILIATION_TERM = raw_affiliation_search_term()
 
 
 def authorship_raw_affiliation(authorship: Mapping[str, Any]) -> str:
@@ -749,6 +752,7 @@ def ingest_live(
     raw_affiliation_scope: bool = False,
     publication_date_cap: str | None = None,
     lookback_days: int = INCREMENTAL_LOOKBACK_DAYS,
+    region: Region | None = None,
 ) -> dict[str, Any]:
     """Run a backfill or inclusive publication/update-date incremental pull.
 
@@ -758,7 +762,8 @@ def ingest_live(
     are kept only when the anchored author's authorship lacks an institution or has a
     California raw affiliation, recovering works the institution filter cannot see.
     ``raw_affiliation_scope`` adds one term-search unit on ``raw_affiliation_strings``
-    ("California"); its works are kept only when a raw affiliation passes the strict matcher.
+    (the region's search term, California by default); its works are kept only when a
+    raw affiliation passes the strict matcher.
     ``publication_date_cap`` (ISO date; the daily runner passes yesterday UTC, owner
     AT11-WINDOW 2026-11-12) adds ``to_publication_date`` so only complete days are pulled.
     ``lookback_days`` is the base incremental lookback; ``effective_lookback_days`` widens it
@@ -822,7 +827,7 @@ def ingest_live(
         units += [([], scope, [], None) for scope in always_include_filters(config)]
         units += [([], None, batch, None) for batch in chunks(anchor_ids, ANCHOR_AUTHORS_PER_UNIT)]
         if raw_affiliation_scope:
-            units.append(([], None, [], RAW_AFFILIATION_TERM))
+            units.append(([], None, [], raw_affiliation_search_term(region)))
         anchored_fetched = 0
         anchored_kept = 0
         raw_fetched = 0

@@ -228,3 +228,4 @@
 | 2026-11-25 | PLAT-4a (partial) | Global raw fetch tooling + estimate; paging blocked on OpenAlex key (H43); budget guard 401/403 reserve | this commit |
 | 2026-11-25 | BQ-S2 | Candidate plastic-v3.2 (64 terms, +1.3% records), recycler removed after per-term probe | this commit |
 | 2026-11-25 | PLAT-3 (slice 1) | Region registry, loader and region-name ratchet; no behaviour change | this commit |
+| 2026-11-25 | PLAT-3 (slice 2) | Scope constants from the registry, --region on pipeline CLIs; outputs unchanged | this commit |

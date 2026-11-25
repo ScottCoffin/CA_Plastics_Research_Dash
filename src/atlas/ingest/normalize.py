@@ -44,6 +44,8 @@ from atlas.ingest.state_agencies import (
     match_state_agencies,
     registry_row,
 )
+from atlas.regions.registry import Region
+from atlas.regions.scope import country_codes, institution_region_names
 
 WORKS_SCHEMA = pa.schema(
     [
@@ -468,9 +470,11 @@ def is_placeholder_affiliation(value: object) -> bool:
     return not text or bool(_AFFILIATION_PLACEHOLDER.search(text))
 
 
-def _read_registry(path: str | Path) -> dict[str, dict[str, Any]]:
+def _read_registry(path: str | Path, region: Region | None = None) -> dict[str, dict[str, Any]]:
     table = pq.read_table(path)
     result: dict[str, dict[str, Any]] = {}
+    region_names = {name.casefold() for name in institution_region_names(region)}
+    region_countries = {"", *(code.casefold() for code in country_codes(region))}
     for row in table.to_pylist():
         inst_id = compact_id(row.get("openalex_id"))
         if not inst_id:
@@ -492,7 +496,7 @@ def _read_registry(path: str | Path) -> dict[str, dict[str, Any]]:
                 if len(row.get("lineage") or []) > 1
                 else ""
             ),
-            "ca_flag": region.casefold() == "california" and country.casefold() in {"", "us"},
+            "ca_flag": region.casefold() in region_names and country.casefold() in region_countries,
         }
     return result
 
@@ -797,6 +801,7 @@ def normalize_records(
     orcid_profiles_path: str | Path | None = ORCID_PROFILES_PATH,
     author_attach_path: str | Path | None = DEFAULT_ATTACH_PATH,
     orcid_author_ids_path: str | Path | None = DEFAULT_ORCID_IDS_PATH,
+    region: Region | None = None,
 ) -> NormalizationResult:
     """Normalize raw OpenAlex work objects into C3-shaped Parquet tables.
 
@@ -806,7 +811,7 @@ def normalize_records(
     ``atlas.ingest.author_repair``; a missing curation file means no input from it.
     """
 
-    registry = _read_registry(institution_path)
+    registry = _read_registry(institution_path, region)
     agencies = (
         load_state_agencies(state_agencies_path)
         if state_agencies_path is not None and Path(state_agencies_path).exists()
@@ -1112,6 +1117,7 @@ def normalize_raw_parquet(
     generated_at: str | None = None,
     author_attach_path: str | Path | None = DEFAULT_ATTACH_PATH,
     orcid_author_ids_path: str | Path | None = DEFAULT_ORCID_IDS_PATH,
+    region: Region | None = None,
 ) -> NormalizationResult:
     """Read S2.1's raw Parquet and normalize each embedded work JSON object."""
 
@@ -1134,6 +1140,7 @@ def normalize_raw_parquet(
         generated_at=generated_at,
         author_attach_path=author_attach_path,
         orcid_author_ids_path=orcid_author_ids_path,
+        region=region,
     )
 
 
@@ -1148,6 +1155,7 @@ def normalize_fixture(
     generated_at: str | None = "fixture",
     author_attach_path: str | Path | None = DEFAULT_ATTACH_PATH,
     orcid_author_ids_path: str | Path | None = DEFAULT_ORCID_IDS_PATH,
+    region: Region | None = None,
 ) -> NormalizationResult:
     """Normalize a committed JSON fixture without contacting OpenAlex."""
 
@@ -1166,4 +1174,5 @@ def normalize_fixture(
         generated_at=generated_at,
         author_attach_path=author_attach_path,
         orcid_author_ids_path=orcid_author_ids_path,
+        region=region,
     )

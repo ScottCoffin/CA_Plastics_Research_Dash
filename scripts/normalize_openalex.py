@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 
 from atlas.ingest.normalize import normalize_fixture, normalize_raw_parquet
+from atlas.regions.scope import add_region_argument, resolve_cli_region
 
 
 def main() -> None:
@@ -19,13 +20,16 @@ def main() -> None:
     )
     parser.add_argument("--output-dir", type=Path, default=Path("data/processed/normalized"))
     parser.add_argument("--qc", type=Path, default=Path("docs/normalization_qc.md"))
+    add_region_argument(parser)
     args = parser.parse_args()
+    region = resolve_cli_region(parser, args.region)
     if args.input.exists():
         result = normalize_raw_parquet(
             args.input,
             institution_path=args.institution,
             output_dir=args.output_dir,
             qc_path=args.qc,
+            region=region,
         )
     else:
         result = normalize_fixture(
@@ -33,6 +37,7 @@ def main() -> None:
             institution_path=args.institution,
             output_dir=args.output_dir,
             qc_path=args.qc,
+            region=region,
         )
     print(f"S2.2 normalized {result.metrics['works']} works; QC: {result.qc_path}")
 

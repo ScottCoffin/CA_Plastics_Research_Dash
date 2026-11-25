@@ -30,6 +30,7 @@ from atlas.ingest.openalex import (
     redact_secrets,
 )
 from atlas.query import load_query_config
+from atlas.regions.scope import add_region_argument, resolve_cli_region
 
 BACKFILL_START_YEAR = 1950
 DEFAULT_AUTHORS_PARQUET = Path("data/processed/normalized/authors.parquet")
@@ -136,7 +137,10 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="on a failed run, write a redacted diagnostic to this path for the alert step",
     )
+    add_region_argument(parser)
     args = parser.parse_args(argv)
+    # Validated only: run_daily_ingest does not take a region yet (PLAT-3 slice 2 limit).
+    resolve_cli_region(parser, args.region)
 
     load_openalex_key()
     start_year = args.start_year

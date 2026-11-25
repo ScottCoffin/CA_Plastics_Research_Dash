@@ -6,6 +6,7 @@ import argparse
 
 from atlas.build.expert_profiles import load_expert_profiles
 from atlas.build.export_site import export_site
+from atlas.regions.scope import add_region_argument, resolve_cli_region
 
 
 def main() -> None:
@@ -39,7 +40,10 @@ def main() -> None:
     )
     parser.add_argument("--output-dir", default="site/data")
     parser.add_argument("--generated-at", default=None)
+    add_region_argument(parser)
     args = parser.parse_args()
+    # Validated only: export_site does not take a region yet (PLAT-3 slice 2 limit).
+    resolve_cli_region(parser, args.region)
     profiles = load_expert_profiles(args.orcid_profiles, args.photo_review)
     result = export_site(
         works_path=args.works,

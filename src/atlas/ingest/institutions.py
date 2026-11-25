@@ -26,6 +26,12 @@ from typing import Any, Literal
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from atlas.regions.registry import Region
+from atlas.regions.scope import (
+    institution_filter,
+    institution_region_names,
+    ror_subdivision_codes,
+)
 from atlas.util.budget import daily_logged_usage, resolve_openalex_budget
 from atlas.util.cost import ApiCostLogger
 
@@ -271,6 +277,7 @@ def pull_openalex_institutions(
     logger: ApiCostLogger,
     *,
     refresh: bool = False,
+    region: Region | None = None,
 ) -> list[dict[str, Any]]:
     """Return all OpenAlex institutions whose exact region is California."""
 
@@ -281,6 +288,8 @@ def pull_openalex_institutions(
     records: list[dict[str, Any]] = []
     page = 1
     expected = None
+    region_filter = institution_filter(region)
+    region_names = institution_region_names(region)
     selected = (
         "id,display_name,display_name_alternatives,ror,type,lineage,geo,works_count,updated_date"
     )
@@ -288,7 +297,7 @@ def pull_openalex_institutions(
         url = _openalex_url(
             "/institutions",
             {
-                "filter": "geo.region:California",
+                "filter": region_filter,
                 "select": selected,
                 "per_page": 100,
                 "page": page,
@@ -305,7 +314,7 @@ def pull_openalex_institutions(
         page += 1
     if len(records) != expected:
         raise RuntimeError(f"OpenAlex returned {len(records)} of {expected} expected institutions")
-    if any((record.get("geo") or {}).get("region") != "California" for record in records):
+    if any((record.get("geo") or {}).get("region") not in region_names for record in records):
         raise RuntimeError("OpenAlex California filter returned an unexpected region")
 
     temporary = path.with_suffix(path.suffix + ".tmp")
@@ -322,6 +331,7 @@ def supplement_government_institutions(
     logger: ApiCostLogger,
     *,
     max_pages: int = 3,
+    region: Region | None = None,
 ) -> list[dict[str, Any]]:
     """Add California ``type:government`` institutions absent from the geo seed.
 
@@ -331,6 +341,7 @@ def supplement_government_institutions(
     """
 
     budget = resolve_openalex_budget()
+    region_filter = institution_filter(region)
     prior_cost, prior_credits = daily_logged_usage(
         DEFAULT_USAGE_LOG, cost_per_credit_usd=budget.cost_per_credit_usd
     )
@@ -352,7 +363,7 @@ def supplement_government_institutions(
         url = _openalex_url(
             "/institutions",
             {
-                "filter": "type:government,geo.region:California",
+                "filter": f"type:government,{region_filter}",
                 "select": selected,
                 "per_page": 100,
                 "page": page,
@@ -879,15 +890,17 @@ def classify_atlas_type(record: Mapping[str, Any], lineage_names: Iterable[str])
     raise AssertionError("classification fallback failed")
 
 
-def _ror_location(record: Mapping[str, Any]) -> Mapping[str, Any]:
+def _ror_location(record: Mapping[str, Any], region: Region | None = None) -> Mapping[str, Any]:
     locations = record.get("locations") or []
     if not locations:
         return {}
+    subdivision_codes = ror_subdivision_codes(region)
     california = next(
         (
             item
             for item in locations
-            if (item.get("geonames_details") or {}).get("country_subdivision_code") == "CA"
+            if (item.get("geonames_details") or {}).get("country_subdivision_code")
+            in subdivision_codes
         ),
         locations[0],
     )
@@ -899,6 +912,7 @@ def build_rows(
     ror_records: Mapping[str, dict[str, Any]],
     counts: Mapping[str, int],
     overrides: Mapping[str, Mapping[str, str]],
+    region: Region | None = None,
 ) -> list[dict[str, Any]]:
     names_by_id = {
         _compact_openalex_id(record.get("id")): record.get("display_name", "")
@@ -919,7 +933,7 @@ def build_rows(
         if "atlas_type" in applied:
             rule = "manual-override"
         geo = record.get("geo") or {}
-        ror_geo = _ror_location(ror_record)
+        ror_geo = _ror_location(ror_record, region)
         row = {
             "openalex_id": openalex_id,
             "display_name": applied.get("display_name", record.get("display_name") or ""),
@@ -954,6 +968,7 @@ def write_outputs(
     usage: Mapping[str, object],
     *,
     openalex_authenticated: bool,
+    region: Region | None = None,
 ) -> None:
     paths.output_parquet.parent.mkdir(parents=True, exist_ok=True)
     schema = pa.schema(
@@ -981,7 +996,7 @@ def write_outputs(
     metadata = dict(table.schema.metadata or {})
     metadata.update(
         {
-            b"openalex_filter": b"geo.region:California",
+            b"openalex_filter": institution_filter(region).encode(),
             b"plastic_work_query": b"OpenAlex search=plastic",
             b"ror_doi": provenance["ror_doi"].encode(),
             b"ror_release": provenance["ror_release"].encode(),
@@ -1143,17 +1158,18 @@ def build_registry(
     refresh_counts: bool = False,
     supplement_government: bool = False,
     reuse_ror_dump: bool = False,
+    region: Region | None = None,
 ) -> dict[str, object]:
     openalex_authenticated = validate_openalex_key(logger)
     openalex_records = pull_openalex_institutions(
-        paths.raw_openalex, logger, refresh=refresh_openalex
+        paths.raw_openalex, logger, refresh=refresh_openalex, region=region
     )
     openalex_records = supplement_required_institutions(
         openalex_records, paths.raw_openalex, logger
     )
     if supplement_government:
         openalex_records = supplement_government_institutions(
-            openalex_records, paths.raw_openalex, logger
+            openalex_records, paths.raw_openalex, logger, region=region
         )
     institution_ids = [_compact_openalex_id(record["id"]) for record in openalex_records]
     counts = plastic_work_counts(
@@ -1175,6 +1191,7 @@ def build_registry(
         ror_records,
         counts,
         load_overrides(paths.overrides_csv),
+        region,
     )
     usage = logger.close()
     write_outputs(
@@ -1183,6 +1200,7 @@ def build_registry(
         provenance,
         usage,
         openalex_authenticated=openalex_authenticated,
+        region=region,
     )
     return {
         "institution_count": len(rows),
