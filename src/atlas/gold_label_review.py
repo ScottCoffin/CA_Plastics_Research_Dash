@@ -27,6 +27,8 @@ from atlas.ingest.normalize import _abstract_from_inverted_index
 from atlas.nlp.annotation import (
     _STATUSES,
     ANNOTATION_FIELDS,
+    EXPERIMENTAL_DOMAIN_TAGS,
+    LEGACY_ANNOTATION_FIELDS,
     _normalize_row,
     export_templates,
 )
@@ -54,9 +56,13 @@ VIEWS = (
 FORM_FIELDS = (
     "plastic_related",
     "plastic_tier",
+    "plastics_centrality",
     "ca_sampled",
     "study_type",
     "domain_tags",
+    "analytic_lens",
+    "lens_evidence",
+    "origin",
     "evidence_snippet",
     "evidence_source",
 )
@@ -66,6 +72,18 @@ FORM_FIELDS = (
 TIER_OPTIONS = ("core", "chemicals-in-plastics", "lifecycle_and_society")
 SAMPLING_OPTIONS = ("yes", "partial", "no", "unclear")
 SOURCE_OPTIONS = ("title", "abstract", "full_text_locator")
+CENTRALITY_OPTIONS = ("primary", "substantial", "incidental", "none", "not_assessed")
+ORIGIN_OPTIONS = ("primary", "secondary", "not_stated")
+LENS_OPTIONS = (
+    "waste_colonialism",
+    "environmental_justice_and_racism",
+    "indigenous_and_community_governance",
+    "community_and_participatory_methods",
+    "labour_and_informal_economy",
+    "circularity_critique_and_greenwashing",
+    "political_economy_centre_periphery",
+    "responsibility_shifting",
+)
 
 TIER_HELP = {
     "core": "Plastics, debris or particles are the primary subject (guide_v1 section 2).",
@@ -78,6 +96,57 @@ TIER_HELP = {
         "set plastics_centrality too (guide_v3 section 2; owner approved 2026-11-25, H40 D4)."
     ),
 }
+# Labeller-facing wording: guide_v3 sections 5 and 6 (docs/LABELING_GUIDE_TAXONOMY_2026-11.md).
+CENTRALITY_HELP = {
+    "primary": (
+        "Plastics, polymers, plastic products or a named plastic stream are the main object."
+    ),
+    "substantial": (
+        "Plastics are a named, analysed object with plastics-specific evidence, and appear in the "
+        "title, abstract or keywords."
+    ),
+    "incidental": (
+        "Plastics appear as one example in a list of waste types, or in a passing sentence."
+    ),
+    "none": "No meaningful plastics content.",
+    "not_assessed": (
+        "Default. Not assessed (set this only when the tier is lifecycle_and_society)."
+    ),
+}
+ORIGIN_HELP = {
+    "primary": "Plastic made as small particles on purpose (for example microbeads, pellets).",
+    "secondary": "Plastic broken down from larger items. Set only when the work states it.",
+    "not_stated": "The work does not say where the particles come from.",
+}
+LENS_HELP = {
+    "waste_colonialism": "waste or pollution as domination of one group's homeland by another.",
+    "environmental_justice_and_racism": (
+        "environmental justice or racism, including fenceline, sacrifice-zone and "
+        "spatial-injustice framings and slow violence."
+    ),
+    "indigenous_and_community_governance": (
+        "Indigenous participation or governance, including anticolonial or decolonial approaches."
+    ),
+    "community_and_participatory_methods": "community science or participatory research methods.",
+    "labour_and_informal_economy": (
+        "waste pickers, informal recycling, labour in plastic supply chains."
+    ),
+    "circularity_critique_and_greenwashing": (
+        "critique of circular-economy or biodegradability claims, greenwashing."
+    ),
+    "political_economy_centre_periphery": (
+        "waste flows, trade, dumping rights and import bans as power relations, "
+        "including corporate imperialism."
+    ),
+    "responsibility_shifting": (
+        "critique of individual-responsibility framing, scalar mismatch or extended producer "
+        "responsibility design."
+    ),
+}
+LENS_RULE = (
+    "Only when the work itself uses the frame, with the shortest exact excerpt in lens_evidence. "
+    "Never inferred from the topic."
+)
 SAMPLING_HELP = {
     "yes": "Explicit field collection or deployed monitoring in California land or state waters.",
     "partial": "Footprint straddles the CA boundary or includes offshore beyond 3 nm (G-4).",
@@ -150,6 +219,18 @@ def study_type_options(rows: Sequence[Mapping[str, str]]) -> list[str]:
     """The guide's design labels, then any new labels already saved in the sheet (sorted)."""
     custom = {row.get("study_type", "").strip() for row in rows} - set(STUDY_TYPES) - {""}
     return [*STUDY_TYPES, *sorted(custom)]
+
+
+def tag_label(tag: str) -> str:
+    """The domain tag ID, marked when it is an experimental topic (BQ-S5 D10)."""
+    return f"{tag} (experimental)" if tag in EXPERIMENTAL_DOMAIN_TAGS else tag
+
+
+def lens_error(lenses: Sequence[str], evidence: str) -> str | None:
+    """The message for a lens chosen without its quoted excerpt, or None when it is fine."""
+    if lenses and not evidence.strip():
+        return "A lens needs a quoted excerpt in lens_evidence. Paste it or clear the lens."
+    return None
 
 
 # --- corpus and sample -----------------------------------------------------------------
@@ -361,7 +442,11 @@ def _parse(path: Path) -> _Parsed:
         end = reader.line_num
         records.append(("".join(lines[start:end]), fields))
         start = end
-    if not records or records[0][1] != list(ANNOTATION_FIELDS):
+    # Sheets written before the BQ-S5 columns carry the legacy header (rows read as blank there).
+    if not records or records[0][1] not in (
+        list(ANNOTATION_FIELDS),
+        list(LEGACY_ANNOTATION_FIELDS),
+    ):
         raise ValueError(f"annotation header mismatch in {path}")
     return _Parsed(bom, records)
 
@@ -398,6 +483,19 @@ def _write_atomic(path: Path, text: str) -> None:
         raise
 
 
+def _pad_record(text: str, fields: list[str]) -> str:
+    """The raw record with trailing commas added up to the current column count.
+
+    Blank lines and rows already at full width come back unchanged. The line ending is kept
+    where it was, and no existing cell is touched.
+    """
+    missing = len(ANNOTATION_FIELDS) - len(fields)
+    if not fields or missing <= 0:
+        return text
+    body = text.rstrip("\r\n")
+    return body + "," * missing + text[len(body) :]
+
+
 def update_row(path: Path, work_id: str, values: Mapping[str, str]) -> None:
     """Rewrite one row's named fields. Other records keep their original bytes."""
     unknown = set(values) - set(ANNOTATION_FIELDS)
@@ -420,6 +518,16 @@ def update_row(path: Path, work_id: str, values: Mapping[str, str]) -> None:
         [row[field] for field in ANNOTATION_FIELDS]
     )
     records = list(parsed.records)
+    if records[0][1] != list(ANNOTATION_FIELDS):
+        # Legacy header: widen it to the current columns and pad every data row with empty
+        # trailing cells. Existing cells keep their bytes; only commas are appended.
+        header_end = "\r\n" if records[0][0].endswith("\r\n") else "\n"
+        header = io.StringIO(newline="")
+        csv.writer(header, lineterminator=header_end).writerow(ANNOTATION_FIELDS)
+        records[0] = (header.getvalue(), list(ANNOTATION_FIELDS))
+        records = [records[0]] + [
+            (_pad_record(text, fields), fields) for text, fields in records[1:]
+        ]
     records[index] = (buffer.getvalue(), fields)
     _write_atomic(path, parsed.bom + "".join(text for text, _ in records))
 
@@ -438,6 +546,15 @@ def validate_row(
     return _normalize_row(dict(row), dict(splits), guide_version)
 
 
+# The BQ-S5 facets for a work with no lens, no centrality and no origin (a negative or held work).
+NO_FACETS = {
+    "analytic_lens": "",
+    "lens_evidence": "",
+    "plastics_centrality": "not_assessed",
+    "origin": "",
+}
+
+
 def values_from_form(
     form: Mapping[str, Any], decision_status: str, *, title: str = ""
 ) -> dict[str, str]:
@@ -446,7 +563,9 @@ def values_from_form(
     A negative work gets no tier, domain tags, ca_sampled or study_type: once a work is
     marked not plastic-related nothing else is asked (owner, 2026-11-11). An adjudication
     hold clears every label, because the importer rejects labels on unresolved rows, and
-    keeps the evidence note, which the importer requires.
+    keeps the evidence note, which the importer requires. The BQ-S5 facets follow the same
+    rules: centrality is set only for the lifecycle-and-society tier, and a lens is kept only
+    with its quoted excerpt (refused otherwise, never saved without it).
     """
     if decision_status not in _STATUSES:
         raise ValueError(f"invalid decision_status: {decision_status!r}")
@@ -467,18 +586,35 @@ def values_from_form(
             "ca_sampled": "",
             "study_type": "",
             "domain_tags": "",
+            **NO_FACETS,
             "evidence_snippet": snippet,
             "evidence_source": source,
             "decision_status": decision_status,
         }
     related = text("plastic_related") == "true"
+    tier = text("plastic_tier") if related else ""
     tags = sorted({str(tag) for tag in (form.get("domain_tags") or []) if str(tag).strip()})
+    lenses = (
+        sorted({str(lens) for lens in (form.get("analytic_lens") or []) if str(lens).strip()})
+        if related
+        else []
+    )
+    evidence = text("lens_evidence") if lenses else ""
+    if message := lens_error(lenses, evidence):
+        raise ValueError(message)
+    centred = tier == "lifecycle_and_society"
     return {
         "plastic_related": text("plastic_related"),
-        "plastic_tier": text("plastic_tier") if related else "",
+        "plastic_tier": tier,
         "ca_sampled": text("ca_sampled") if related else "",
         "study_type": normalize_label(text("study_type")) if related else "",
         "domain_tags": "|".join(tags) if related else "",
+        "analytic_lens": "|".join(lenses),
+        "lens_evidence": evidence,
+        "plastics_centrality": (text("plastics_centrality") or "not_assessed")
+        if centred
+        else "not_assessed",
+        "origin": text("origin") if related else "",
         "evidence_snippet": snippet,
         "evidence_source": source,
         "decision_status": decision_status,

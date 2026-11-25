@@ -17,7 +17,12 @@ from atlas.nlp.annotation import (
     _TIERS,
     ANNOTATION_FIELDS,
     DOMAIN_TAGS,
+    EXPERIMENTAL_DOMAIN_TAGS,
     LABEL_FIELDS,
+    LEGACY_ANNOTATION_FIELDS,
+    LENS_VALUES,
+    ORIGIN_VALUES,
+    PLASTICS_CENTRALITY_VALUES,
     import_annotations,
 )
 
@@ -542,3 +547,146 @@ def test_load_works_keeps_a_blanked_abstract_blank(tmp_path: Path) -> None:
     assert not out["W1"]["abstract"]  # normalized blank wins
     assert out["W1"]["journal"] == "PNAS"  # display fields still filled
     assert not out["W2"]["abstract"]  # fallback-only work: same QC blanks it
+
+
+# --- BQ-S5 (approved 2026-11-25, H40): lifecycle tier, centrality, lens, origin ----------
+
+
+def test_bq_s5_option_lists_match_importer_and_taxonomy() -> None:
+    taxonomy = yaml.safe_load((ROOT / "config" / "taxonomy.yml").read_text(encoding="utf-8"))
+    facets = taxonomy["facets"]
+    assert set(gl.TIER_OPTIONS) == _TIERS == set(taxonomy["tiers"])
+    assert set(gl.LENS_OPTIONS) == LENS_VALUES == set(facets["analytic_lens"]["values"])
+    centrality = set(facets["plastics_centrality"]["values"])
+    assert set(gl.CENTRALITY_OPTIONS) == PLASTICS_CENTRALITY_VALUES == centrality
+    assert set(gl.ORIGIN_OPTIONS) == ORIGIN_VALUES == set(facets["origin"]["values"])
+    assert set(gl.LENS_HELP) == set(gl.LENS_OPTIONS)
+    assert set(gl.CENTRALITY_HELP) == set(gl.CENTRALITY_OPTIONS)
+    assert set(gl.ORIGIN_HELP) == set(gl.ORIGIN_OPTIONS)
+
+
+def test_domain_tag_choices_are_the_one_taxonomy_list_with_experimental_marked() -> None:
+    taxonomy = yaml.safe_load((ROOT / "config" / "taxonomy.yml").read_text(encoding="utf-8"))
+    assert list(DOMAIN_TAGS) == [entry["id"] for entry in taxonomy["domain_tags"]]
+    experimental = {entry["id"] for entry in taxonomy["domain_tags"] if entry.get("experimental")}
+    assert experimental == set(EXPERIMENTAL_DOMAIN_TAGS)
+    assert gl.tag_label("culture_media_and_discourse") == (
+        "culture_media_and_discourse (experimental)"
+    )
+    assert gl.tag_label("air") == "air"
+
+
+def test_lens_without_evidence_is_refused_and_nothing_is_written(tmp_path: Path) -> None:
+    form = {**COMPLETE_FORM, "analytic_lens": ["waste_colonialism"], "lens_evidence": "  "}
+    with pytest.raises(ValueError, match="needs a quoted excerpt"):
+        gl.values_from_form(form, "complete")
+    path = _sheet(tmp_path)
+    before = _raw_records(path)
+    with pytest.raises(ValueError, match="needs a quoted excerpt"):
+        gl.save_decision(path, "W1", form, "complete", gl.split_index(SPLITS))
+    assert _raw_records(path) == before
+
+
+def test_lens_with_evidence_is_saved_sorted(tmp_path: Path) -> None:
+    form = {
+        **COMPLETE_FORM,
+        "plastic_tier": "lifecycle_and_society",
+        "domain_tags": ["policy_law_and_governance"],
+        "analytic_lens": ["responsibility_shifting", "waste_colonialism"],
+        "lens_evidence": "waste colonialism names the export of plastic waste",
+    }
+    path = _sheet(tmp_path)
+    values = gl.save_decision(path, "W2", form, "complete", gl.split_index(SPLITS))
+    assert values["analytic_lens"] == "responsibility_shifting|waste_colonialism"
+    row = gl.read_rows(path)[1]
+    assert row["lens_evidence"] == "waste colonialism names the export of plastic waste"
+    assert row["analytic_lens"] == "responsibility_shifting|waste_colonialism"
+
+
+def test_centrality_is_kept_only_for_the_lifecycle_tier(tmp_path: Path) -> None:
+    lifecycle = {
+        **COMPLETE_FORM,
+        "plastic_tier": "lifecycle_and_society",
+        "domain_tags": ["lca_and_sustainability"],
+        "plastics_centrality": "substantial",
+        "origin": "secondary",
+    }
+    values = gl.values_from_form(lifecycle, "complete")
+    assert values["plastics_centrality"] == "substantial"
+    assert values["origin"] == "secondary"
+    # A centrality value sent with another tier is dropped, not saved.
+    core = gl.values_from_form({**COMPLETE_FORM, "plastics_centrality": "primary"}, "complete")
+    assert core["plastics_centrality"] == "not_assessed"
+    # A lifecycle work with no centrality chosen gets the D7 default.
+    blank = gl.values_from_form({**lifecycle, "plastics_centrality": None}, "complete")
+    assert blank["plastics_centrality"] == "not_assessed"
+    path = _sheet(tmp_path)
+    gl.save_decision(path, "W1", lifecycle, "complete", gl.split_index(SPLITS))
+    assert gl.read_rows(path)[0]["plastics_centrality"] == "substantial"
+
+
+def test_validator_rejects_centrality_on_a_non_lifecycle_row(tmp_path: Path) -> None:
+    row = {
+        **gl.read_rows(_sheet(tmp_path))[0],
+        **gl.values_from_form(COMPLETE_FORM, "complete"),
+        "plastics_centrality": "primary",
+    }
+    with pytest.raises(ValueError, match="only for lifecycle_and_society"):
+        gl.validate_row(row, gl.split_index(SPLITS))
+
+
+def test_hold_and_negative_work_clear_the_bq_s5_facets() -> None:
+    form = {
+        **COMPLETE_FORM,
+        "plastic_tier": "lifecycle_and_society",
+        "plastics_centrality": "primary",
+        "analytic_lens": ["waste_colonialism"],
+        "lens_evidence": "x",
+        "origin": "primary",
+    }
+    hold = gl.values_from_form(form, "adjudication_required")
+    assert hold["analytic_lens"] == hold["lens_evidence"] == hold["origin"] == ""
+    assert hold["plastics_centrality"] == "not_assessed"
+    negative = gl.values_from_form({**form, "plastic_related": "false"}, "complete")
+    assert negative["analytic_lens"] == negative["lens_evidence"] == negative["origin"] == ""
+    assert negative["plastics_centrality"] == "not_assessed"
+
+
+def test_legacy_sheet_rows_are_padded_and_keep_their_cells(tmp_path: Path) -> None:
+    path = tmp_path / "annotations" / "annotations_SC.csv"
+    assert gl.ensure_sheet(path, SPLITS[:3], WORKS) is True
+    # Rewrite the three rows with the pre-BQ-S5 header and CRLF line endings.
+    crlf = chr(13) + chr(10)
+    with path.open(encoding="utf-8-sig", newline="") as stream:
+        table = list(csv.reader(stream))
+    width = len(LEGACY_ANNOTATION_FIELDS)
+    keep = [ANNOTATION_FIELDS.index(f) for f in LEGACY_ANNOTATION_FIELDS]
+    legacy = [[line[i] for i in keep] for line in table]
+    with path.open("w", encoding="utf-8-sig", newline="") as stream:
+        csv.writer(stream, lineterminator=crlf).writerows(legacy)
+    before = _raw_records(path)
+    assert gl.read_rows(path)[0]["analytic_lens"] == ""  # old rows read as blank
+
+    gl.save_decision(path, "W2", COMPLETE_FORM, "complete", gl.split_index(SPLITS[:3]))
+
+    with path.open(encoding="utf-8-sig", newline="") as stream:
+        after = list(csv.reader(stream))
+    assert after[0] == list(ANNOTATION_FIELDS)
+    assert all(len(line) == len(ANNOTATION_FIELDS) for line in after)
+    for old_line, new_line in zip(legacy[1:], after[1:], strict=True):
+        if new_line[0] == "W2":
+            continue
+        assert new_line[:width] == old_line
+        assert set(new_line[width:]) == {""}
+    raw = path.read_bytes()
+    assert raw.startswith(bytes([0xEF, 0xBB, 0xBF]))
+    after_raw = _raw_records(path)
+    assert all(line.endswith(crlf) for line in after_raw)
+    padding = "," * (len(ANNOTATION_FIELDS) - width)
+    for old, new in zip(before[1:], after_raw[1:], strict=True):
+        if new.startswith("W2,"):
+            continue
+        assert new == old.rstrip(crlf) + padding + crlf
+    assert gl.read_rows(path)[1]["domain_tags"] == (
+        "occurrence_and_monitoring|wastewater_and_treatment"
+    )

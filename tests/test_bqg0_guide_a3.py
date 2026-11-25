@@ -35,7 +35,13 @@ def test_gold_template_has_the_a3_fields_after_the_guide_v2_fields() -> None:
         "plastics_centrality",
         "role",
     ]
-    assert header.split(",")[-6:] == expected
+    columns = header.split(",")
+    # The A3 block stays contiguous and in order after the guide_v2 fields; later approved
+    # columns (origin, H40 D8, 2026-11-25) may follow it.
+    start = columns.index(expected[0])
+    assert columns[start : start + 6] == expected
+    assert columns.index("guide_version") < start
+    assert set(columns[start + 6 :]) <= {"origin"}
     assert header.startswith("work_id,plastic_related,plastic_tier,")
 
 

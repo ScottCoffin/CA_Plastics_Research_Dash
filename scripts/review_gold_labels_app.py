@@ -37,6 +37,9 @@ CA_HELP = (
     "lab-only work do not count."
 )
 TIER_HELP_TEXT = "guide_v1 section 2. Shown only when plastic_related is yes."
+CENTRALITY_HELP_TEXT = "guide_v3 section 5. Shown only for the lifecycle_and_society tier."
+ORIGIN_HELP_TEXT = "guide_v3 section 5.6. Leave blank unless the work states the origin."
+LENS_HELP_TEXT = "\n\n".join([gl.LENS_RULE, *(f"**{k}**: {v}" for k, v in gl.LENS_HELP.items())])
 NEW_LABEL = "__new__"
 
 
@@ -119,15 +122,20 @@ def _defaults(row: dict[str, str], prior: dict[str, str] | None = None) -> dict[
     A prior relevance decision pre-selects plastic_related on an unlabelled row only.
     """
     tags = [tag for tag in row["domain_tags"].split("|") if tag in DOMAIN_TAGS]
+    lenses = [lens for lens in row["analytic_lens"].split("|") if lens in gl.LENS_OPTIONS]
     related = row["plastic_related"] or None
     if prior and row["decision_status"] == "":
         related = prior["value"]
     return {
         "plastic_related": related,
         "plastic_tier": row["plastic_tier"] or None,
+        "plastics_centrality": row["plastics_centrality"] or "not_assessed",
         "ca_sampled": row["ca_sampled"] or None,
         "study_type": row["study_type"],
         "domain_tags": tags,
+        "analytic_lens": lenses,
+        "lens_evidence": row["lens_evidence"],
+        "origin": row["origin"] or None,
         "evidence_snippet": row["evidence_snippet"],
         "evidence_source": row["evidence_source"],
     }
@@ -169,7 +177,7 @@ def _draw_form(
     )
     if related == "true":
         tiers = list(gl.TIER_OPTIONS)
-        st.radio(
+        tier = st.radio(
             "Plastic tier",
             tiers,
             index=tiers.index(init["plastic_tier"]) if init["plastic_tier"] in tiers else None,
@@ -177,10 +185,22 @@ def _draw_form(
             key=widget_key("plastic_tier"),
             help=TIER_HELP_TEXT,
         )
+        if tier == "lifecycle_and_society":
+            centres = list(gl.CENTRALITY_OPTIONS)
+            value = init["plastics_centrality"]
+            st.radio(
+                "plastics_centrality (scope gate for this tier)",
+                centres,
+                index=centres.index(value if value in centres else "not_assessed"),
+                format_func=lambda v: f"{v}: {gl.CENTRALITY_HELP[v]}",
+                key=widget_key("plastics_centrality"),
+                help=CENTRALITY_HELP_TEXT,
+            )
         st.multiselect(
-            "Domain tags (every supported tag; multi-label, guide_v1 section 4)",
+            "Domain tags (one list; experimental tags marked; multi-label, guide_v1 section 4)",
             list(DOMAIN_TAGS),
             default=init["domain_tags"],
+            format_func=gl.tag_label,
             key=widget_key("domain_tags"),
         )
 
@@ -219,6 +239,33 @@ def _draw_form(
             )
             if typed.strip():
                 st.caption(f"Will be saved as `{gl.normalize_label(typed)}`.")
+
+        st.markdown("**Framing** (guide_v3 sections 5-6; both optional)")
+        lenses = st.multiselect(
+            "analytic_lens (only when the work itself uses the frame)",
+            list(gl.LENS_OPTIONS),
+            default=init["analytic_lens"],
+            format_func=lambda v: v,
+            help=LENS_HELP_TEXT,
+            key=widget_key("analytic_lens"),
+        )
+        if lenses:
+            evidence = st.text_area(
+                "lens_evidence (required with a lens: the exact excerpt that shows the frame)",
+                value=init["lens_evidence"],
+                key=widget_key("lens_evidence"),
+            )
+            if message := gl.lens_error(lenses, evidence):
+                st.warning(message)
+        origins = list(gl.ORIGIN_OPTIONS)
+        st.radio(
+            "origin (only when the work states it)",
+            origins,
+            index=origins.index(init["origin"]) if init["origin"] in origins else None,
+            format_func=lambda v: f"{v}: {gl.ORIGIN_HELP[v]}",
+            key=widget_key("origin"),
+            help=ORIGIN_HELP_TEXT,
+        )
 
     st.markdown("**Evidence** (the shortest exact excerpt that supports the decision)")
     st.text_area(

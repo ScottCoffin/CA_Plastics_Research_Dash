@@ -1,5 +1,7 @@
 # Taxonomy reconciliation proposal (BQ-S5)
 
+Applied 2026-11-25: see [LABELING_GUIDE_TAXONOMY_2026-11.md](LABELING_GUIDE_TAXONOMY_2026-11.md) for the labeller-facing rules.
+
 This document asks you to decide ten taxonomy items: the new lifecycle-and-society tier, its topic tags and facets, and the mismatched tag lists. Nothing ships until you approve it (A3-D7), so no label, export, site page or `config/taxonomy.yml` behaviour changes now. For each item the table gives the change, the reason and the lead's default; please write your decision in the last column.
 
 ## How to reply

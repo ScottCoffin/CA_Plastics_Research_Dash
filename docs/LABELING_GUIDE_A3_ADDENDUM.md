@@ -5,6 +5,9 @@ day), including the `plastics_centrality` wording and the P4 target (section 9).
 section 2 and the scope list in section 3 were added after that approval, from the independent review;
 they restate rules already in `guide_v1` and the A3 spec and are marked **[review addition]**.
 
+**Applied 2026-11-25:** the owner's taxonomy decisions (BQ-S5) are stated for labellers in
+[LABELING_GUIDE_TAXONOMY_2026-11.md](LABELING_GUIDE_TAXONOMY_2026-11.md); where it is more specific, it applies.
+
 `guide_v3` = `guide_v2` ([LABELING_GUIDE.md](LABELING_GUIDE.md) `guide_v1`, unchanged, plus
 [LABELING_GUIDE_A2_ADDENDUM.md](LABELING_GUIDE_A2_ADDENDUM.md)) plus this addendum. `guide_v1` and
 `guide_v2` stay frozen. The California evaluation sheet keeps `guide_version = guide_v2`; works labelled
