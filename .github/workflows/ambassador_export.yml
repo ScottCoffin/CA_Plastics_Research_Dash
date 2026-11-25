@@ -1,0 +1,101 @@
+name: Ambassador export pull request
+
+# AMB-1 step 4: approved ambassador contributions become a reviewable pull request. The job never merges:
+# the owner reviews every pull request (docs/AMBASSADORS_SPEC.md section 5). See docs/AMBASSADOR_EXPORT.md.
+
+on:
+  schedule:
+    - cron: "23 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ambassador-export
+  cancel-in-progress: false
+
+jobs:
+  export:
+    name: Export approved contributions and open a pull request
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out the default branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      # Without the secret the job stops here with a notice. The secret is the Worker's EXPORT_TOKEN value.
+      - name: Check whether the export token is set
+        id: gate
+        env:
+          AMB_EXPORT_TOKEN: ${{ secrets.AMB_EXPORT_TOKEN }}
+        run: |
+          if [[ -n "$AMB_EXPORT_TOKEN" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::AMB_EXPORT_TOKEN is not set; the ambassador export is skipped."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Python
+        if: steps.gate.outputs.enabled == 'true'
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            pyproject.toml
+            requirements/lock.txt
+
+      - name: Install PyYAML
+        if: steps.gate.outputs.enabled == 'true'
+        run: python -m pip install -c requirements/lock.txt PyYAML
+
+      - name: Apply approved contributions to the repository files
+        id: export
+        if: steps.gate.outputs.enabled == 'true'
+        env:
+          AMB_EXPORT_TOKEN: ${{ secrets.AMB_EXPORT_TOKEN }}
+        run: |
+          set -euo pipefail
+          python scripts/ambassador_export_pr.py --summary-file "$RUNNER_TEMP/ambassador_summary.md"
+
+      # Opens one pull request per day. Re-runs the same day update the open pull request instead.
+      - name: Open or update the pull request when files changed
+        if: steps.gate.outputs.enabled == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          SUMMARY_FILE: ${{ runner.temp }}/ambassador_summary.md
+        run: |
+          set -euo pipefail
+          paths=(regions curation/ambassador_labels.csv curation/ambassador_export_state.json)
+          if [[ -z "$(git status --porcelain -- "${paths[@]}")" ]]; then
+            echo "No approved contributions to export; no pull request."
+            exit 0
+          fi
+          today=$(date -u +%F)
+          branch="ambassador-export/$today"
+          title="Ambassador contributions $today"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add -- "${paths[@]}"
+          git commit -m "$title" -m "Approved ambassador contributions; see the pull request body for counts."
+          git push --force origin "HEAD:refs/heads/$branch"
+          body="$RUNNER_TEMP/ambassador_pr_body.md"
+          {
+            cat "$SUMMARY_FILE"
+            echo
+            echo "Review every change in the diff before merging. Auto-merge is not enabled."
+          } > "$body"
+          number=$(gh pr list --head "$branch" --state open --json number --jq '.[0].number // empty')
+          if [[ -n "$number" ]]; then
+            gh pr edit "$number" --body-file "$body"
+          else
+            gh pr create --base "$DEFAULT_BRANCH" --head "$branch" --title "$title" --body-file "$body"
+          fi

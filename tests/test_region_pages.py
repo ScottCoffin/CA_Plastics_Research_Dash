@@ -405,3 +405,17 @@ def test_generated_at_is_not_the_clock(synthetic) -> None:
     # The payload takes countries.json's generated_at, so a rebuild is byte-identical.
     stamp = datetime(2026, 11, 25, 12, 0, tzinfo=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     assert _build(synthetic)["generated_at"] == stamp
+
+
+def test_not_relevant_items_validate_but_leave_the_page() -> None:
+    """AMB-1: an ambassador's "not relevant" keeps the item (positions are ids) and hides it."""
+    from atlas.build.region_pages import build_sections
+
+    config = yaml.safe_load(
+        (REPO_ROOT / "regions" / "norway" / "region.yml").read_text(encoding="utf-8")
+    )
+    first = config["sections"][0]["items"][0]
+    first["status"] = "not_relevant"
+    validate_config(config)
+    sections = build_sections(config)
+    assert first["name"] not in [item["name"] for item in sections[0]["items"]]

@@ -1,0 +1,48 @@
+# Small region.yml fixture for tests/test_ambassador_export_pr.py (copied into tmp_path; never edited).
+schema_version: 1
+slug: norway
+name: Norway
+iso: "NO"
+tier: A
+languages: [en, nb]
+local_search_terms:
+  - {term: "mikroplast", language: "nb", status: to_confirm, note: "Candidate term"}
+sections:
+  - id: funding
+    title: Funding
+    summary: Who pays for plastics research in Norway.
+    needs: A local collaborator to confirm the funders.
+    items:
+      - {name: "Research Council of Norway", url: "https://www.forskningsradet.no/", kind: funder, status: to_confirm, note: "URL not checked"}
+      - {name: "Handelens Miljofond", url: "", kind: funder, status: to_confirm, note: "No URL given"}
+  - id: monitoring
+    title: Monitoring
+    summary: Monitoring programmes in Norway.
+    needs: A local collaborator to confirm the programmes.
+    items:
+      - {name: "Norwegian Environment Agency", url: "https://www.miljodirektoratet.no/", kind: monitoring, status: to_confirm, note: "URL not checked"}
+      - {name: "MOSJ", url: "https://www.mosj.no/", kind: monitoring, status: to_confirm, note: "URL not checked"}
+  - id: policy
+    title: Policy
+    summary: Rules that shape plastics work in Norway.
+    needs: A local collaborator to confirm the strategy.
+    items:
+      - {name: "National plastics strategy", url: "", kind: policy, status: to_confirm, note: "No URL given"}
+  - id: research_networks
+    title: Research networks
+    summary: Institutes and networks in Norway.
+    needs: A local collaborator to confirm the institutes.
+    items:
+      - {name: "NIVA", url: "https://www.niva.no/", kind: institute, status: to_confirm, note: "URL not checked"}
+  - id: local_terms
+    title: Local search terms
+    summary: Norwegian search words.
+    needs: A local collaborator to confirm each term.
+    items:
+      - {name: "mikroplast", url: "", kind: search_term, status: to_confirm, note: "Candidate term"}
+  - id: geography
+    title: Geography
+    summary: The places the page covers.
+    needs: A local collaborator to confirm the boundaries.
+    items:
+      - {name: "Kartverket", url: "https://www.kartverket.no/", kind: geography, status: to_confirm, note: "URL not checked"}

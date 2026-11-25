@@ -36,7 +36,9 @@ SECTION_IDS = (
     "local_terms",
     "geography",
 )
-ITEM_STATUSES = ("to_confirm", "draft", "confirmed")
+# `not_relevant` (set by a local ambassador, AMB-1) keeps the item in region.yml so item
+# positions, which ambassador submissions use as ids, never shift; the page leaves such items out.
+ITEM_STATUSES = ("to_confirm", "draft", "confirmed", "not_relevant")
 TOP_TOPICS = 10
 TOP_INSTITUTIONS = 15
 TOP_RESEARCHERS = 15
@@ -195,6 +197,7 @@ def build_sections(config: Mapping[str, Any]) -> list[dict[str, Any]]:
         items = [
             {key: item[key] for key in ("name", "url", "kind", "status", "note")}
             for item in section["items"]
+            if item["status"] != "not_relevant"
         ]
         sections.append(
             {
