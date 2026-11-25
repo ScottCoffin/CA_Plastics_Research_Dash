@@ -1,0 +1,44 @@
+{
+  "regions": [
+    {
+      "country_codes": [
+        "BE"
+      ],
+      "eligible_institutions": 31,
+      "name": "Belgium",
+      "page": "./belgium/",
+      "slug": "belgium",
+      "status": "open_to_ambassadors",
+      "subdivision_names": []
+    },
+    {
+      "country_codes": [
+        "US"
+      ],
+      "eligible_institutions": 76,
+      "name": "California",
+      "page": "./california/",
+      "slug": "california",
+      "status": "open_to_ambassadors",
+      "subdivision_names": [
+        "California"
+      ]
+    },
+    {
+      "country_codes": [
+        "NO"
+      ],
+      "eligible_institutions": 43,
+      "name": "Norway",
+      "page": "./norway/",
+      "slug": "norway",
+      "status": "open_to_ambassadors",
+      "subdivision_names": []
+    }
+  ],
+  "schema": "amb-regions-v1",
+  "source": "regions/_registry.yml (status active or planned, with a page)",
+  "statuses": {
+    "open_to_ambassadors": "Open to ambassadors: the region can have verified ambassadors; none is reported yet."
+  }
+}

@@ -1,7 +1,7 @@
 """BQ-1.1 corpus-quality estimators (A3 section 7, Module 1). Writes the bq1-v1 JSON.
 
     py -3.14 scripts/bq1_estimate.py --synthetic [--out scratch/bq1/quality.json]
-    py -3.14 scripts/bq1_estimate.py [--predictions PATH] [--out PATH]
+    py -3.14 scripts/bq1_estimate.py [--predictions PATH --global-predictions PATH] [--out PATH]
 
 ``--synthetic`` builds a seeded synthetic dataset (strata, weights, labels, predictions) and runs
 the same estimators as the real path. The real path reads gold labels only from
@@ -393,6 +393,7 @@ def load_gold_rows(
     design: Path,
     global_draws: Path,
     predictions: Path | None,
+    global_predictions: Path | None = None,
 ) -> dict[str, Any]:
     """Join labelled rows to the design and predictions.
 
@@ -412,7 +413,8 @@ def load_gold_rows(
     for d in draws:
         n_per_stratum[d["stratum"]] = n_per_stratum.get(d["stratum"], 0) + 1
     global_by_id = {d["work_id"]: d for d in draws}
-    preds = _load_predictions(predictions)
+    ca_preds = _load_predictions(predictions)
+    global_preds = _load_predictions(global_predictions)
     rows: list[dict[str, Any]] = []
     missing = 0
     labelled_ca = 0
@@ -422,13 +424,13 @@ def load_gold_rows(
             continue
         is_pool = meta["sample_role"] == "pool"
         labelled_ca += int(is_pool)
-        if sheet_row["work_id"] not in preds:
+        if sheet_row["work_id"] not in ca_preds:
             missing += 1
             continue
         rows.append(
             _gold_row(
                 sheet_row,
-                preds[sheet_row["work_id"]],
+                ca_preds[sheet_row["work_id"]],
                 block="ca" if is_pool else "leak_test",
                 weight=meta.get("design_weight") if is_pool else None,
                 big_n=meta.get("N_h") if is_pool else None,
@@ -443,14 +445,14 @@ def load_gold_rows(
         if draw is None:
             continue
         labelled_global += 1
-        if sheet_row["work_id"] not in preds:
+        if sheet_row["work_id"] not in global_preds:
             missing += 1
             continue
         n_h = n_per_stratum[draw["stratum"]]
         rows.append(
             _gold_row(
                 sheet_row,
-                preds[sheet_row["work_id"]],
+                global_preds[sheet_row["work_id"]],
                 block="global",
                 weight=float(draw["N_h"]) / n_h,
                 big_n=int(draw["N_h"]),
@@ -468,7 +470,10 @@ def load_gold_rows(
             "global_drawn": len(draws),
             "predictions_missing": missing,
         },
-        "predictions_supplied": predictions is not None and predictions.exists(),
+        "predictions_supplied": predictions is not None
+        and predictions.exists()
+        and global_predictions is not None
+        and global_predictions.exists(),
         "ca_population_units": int(design_json.get("strata_count") or 0),
     }
 
@@ -590,7 +595,13 @@ def main(argv: list[str] | None = None) -> int:
         "--predictions",
         type=Path,
         default=None,
-        help="CSV of model predictions keyed by work_id (required before any real estimate)",
+        help="CA prediction CSV keyed by work_id (required before any real estimate)",
+    )
+    parser.add_argument(
+        "--global-predictions",
+        type=Path,
+        default=None,
+        help="global prediction CSV keyed by work_id (required before any real estimate)",
     )
     parser.add_argument("--min-n", type=int, default=q.DEFAULT_MIN_N)
     args = parser.parse_args(argv)
@@ -603,6 +614,7 @@ def main(argv: list[str] | None = None) -> int:
             design=DESIGN,
             global_draws=GLOBAL_DRAWS,
             predictions=args.predictions,
+            global_predictions=args.global_predictions,
         )
     report = build_report(
         synthetic=args.synthetic, real=real, min_n=args.min_n, generated_at=generated_at

@@ -20,6 +20,7 @@ from atlas.build.ambassadors import (
     MIN_WORKS,
     FetchLimitError,
     RorValues,
+    affiliation_acronyms,
     build_region,
     fetch_openalex,
     fetch_ror,
@@ -32,6 +33,8 @@ from atlas.build.ambassadors import (
     read_cache,
     registrable_domain,
     resolve_domains,
+    ror_names,
+    uc_aliases,
     validate_outputs,
 )
 from atlas.regions.registry import Predicate, Region
@@ -292,6 +295,8 @@ def test_validator_flags_forbidden_keys_and_bad_domains() -> None:
                 "works": 3,
                 "domains": ["gmail.com"],
                 "needs_domain": False,
+                "acronyms": [],
+                "aliases": [],
                 "email": "a@b.no",
             }
         ],
@@ -596,3 +601,58 @@ def test_check_never_uses_the_network(monkeypatch: pytest.MonkeyPatch) -> None:
     assert module.main(["--check", "--slug", "california"]) == 0
     with pytest.raises(SystemExit):
         module.main(["--check", "--fetch-domains"])
+
+
+def test_acronyms_come_from_bracketed_names_in_raw_affiliations() -> None:
+    raw = [
+        "Norwegian Institute for Water Research (NIVA), Gaustadalleen 21, Oslo, Norway",
+        "Department of Biology, Norwegian University of Science and Technology (NTNU), Trondheim",
+        "Flanders Marine Institute (VLIZ), InnovOcean site, Ostend, Belgium",
+    ]
+    assert affiliation_acronyms(raw, "Norwegian Institute for Water Research") == {"NIVA"}
+    assert affiliation_acronyms(raw, "Norwegian University of Science and Technology") == {"NTNU"}
+    assert affiliation_acronyms(raw, "Flanders Marine Institute") == {"VLIZ"}
+    # The name must match exactly: a different institution does not take the acronym.
+    assert affiliation_acronyms(raw, "Norwegian Institute") == set()
+    # Lower-case words in brackets are not acronyms.
+    assert affiliation_acronyms(["Lab (see note), Oslo"], "Lab") == set()
+
+
+def test_uc_campus_names_get_the_uc_alias() -> None:
+    assert uc_aliases("University of California, Davis") == {"UC Davis"}
+    assert uc_aliases("University of California San Diego") == set()
+    assert uc_aliases("Ghent University") == set()
+
+
+def test_ror_names_keep_acronyms_aliases_and_labels_only() -> None:
+    record = {
+        "names": [
+            {"value": "NIVA", "types": ["acronym"]},
+            {"value": "Norwegian Institute for Water Research", "types": ["ror_display", "label"]},
+            {"value": "Vannforsk", "types": ["alias"]},
+            {"value": "Other", "types": ["ror_display"]},
+            {"value": "", "types": ["alias"]},
+        ]
+    }
+    assert ror_names(record) == [
+        {"value": "NIVA", "types": ["acronym"]},
+        {"value": "Norwegian Institute for Water Research", "types": ["label"]},
+        {"value": "Vannforsk", "types": ["alias"]},
+    ]
+
+
+def test_validator_requires_acronym_and_alias_lists_of_strings() -> None:
+    row = {
+        "id": "I1",
+        "name": "X",
+        "type": "education",
+        "works": 3,
+        "domains": ["x.no"],
+        "needs_domain": False,
+        "acronyms": "NIVA",
+        "aliases": [],
+    }
+    institutions = {"schema": "amb-v1", "region": "norway", "institutions": [row]}
+    cases = {"schema": "amb-cases-v1", "region": "norway", "cases": []}
+    problems = validate_outputs(institutions, cases, "norway")
+    assert any("acronyms must be a list of strings" in p for p in problems)

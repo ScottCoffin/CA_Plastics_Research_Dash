@@ -396,6 +396,15 @@ Each entry is `[name, kind, parent, iso2, geom, population]`: `kind` and `parent
 Sources: countries from world-atlas `countries-50m.json` (Natural Earth 1:50m admin-0, public domain); regions from Natural Earth 10m admin-1 (public domain); cities from GeoNames `cities15000` (population of at least 15,000; CC BY 4.0, credited in `credit`). A place's parent is its region and country for a city (`Hordaland, Norway`), or its country.
 Missing file: `/explore` searches the countries in `explore.json` only and draws no small-country dots.
 
+### `site/data/california/quality.json` and `site/data/global/quality.json`
+
+Purpose: the public corpus-quality status for `/california/quality` and `/quality` (BQ-1.4, `scripts/build_quality_json.py`; estimators in `docs/QUALITY_ESTIMATORS.md`). Both files share schema `bq1-v1`.
+Top-level keys: `schema`, `generated_at`, `scope` (`california` or `global`), `status` (`ok` or `no_validated_estimate`), `status_text`, `checkpoint` (null until a final checkpoint), `labels` (`labelled`, `planned`, `unit`, `text` such as "38 of 500 California works labelled"), `what_this_is_and_is_not`, `design` (`text`, strata and sample counts), `estimands`, `note`.
+Each estimand has `id`, `label`, `what`, and `status`. While gold is incomplete, `status` is `no_validated_estimate` and the file carries no `point`, `interval`, `n` or other figure. Figures appear only when `checkpoint` is set and the estimand's status is `ok`.
+Estimands: California E1, E1s, E1l, E2, E3, E4; global E1g, E2g, E7 (see `ESTIMAND_TEXT` in the builder).
+Sources: curation/annotations/*.csv (decision_status complete), curation/gold_design_v1.json, curation/gold_global_draws_v1.csv. Predictions (`data/processed/quality/predictions_*.csv`, `scripts/build_quality_predictions.py`) are read only for a final checkpoint. Missing file: the page shows its static placeholder.
+`--check` regenerates the payload without `generated_at` and exits 1 when the committed file is stale.
+
 ### `site/assets/world/world.json`
 
 Purpose: the landing page's country outlines, the California outline and the small-country markers (PLAT-2a, AMB-1). Written by `py -3.14 scripts/build_world_map.py`; `site/assets/world/PROVENANCE.md` records the pinned inputs.
@@ -500,7 +509,7 @@ Purpose: region page payloads (REG-1, schema `region-v1`) for the Norway and Bel
 Purpose: ambassador data for the three regions (AMB-1 step 1; spec in `docs/AMBASSADORS_SPEC.md`). Written by
 `py -3.14 scripts/build_ambassador_data.py`. Institutions file (schema `amb-v1`): `generated_at`, `region`, `rule`,
 `min_works`, `eligible_types`, and `institutions` (`id` OpenAlex institution id, `name`, `type`, `works` plastics
-works in the region corpus, `domains` registrable domains, `needs_domain`). Cases file (schema `amb-cases-v1`):
+works in the region corpus, `domains` registrable domains, `needs_domain`, `acronyms` and `aliases`: lists of strings that may be empty). `acronyms` come from bracketed names in the corpus's raw affiliation strings (for example "Norwegian Institute for Water Research (NIVA)") and from ROR acronym names when a ROR record is cached; `aliases` are the UC campus rule ("University of California, Davis" gives "UC Davis") and ROR alias and label names when cached. The type-ahead matches acronyms as whole words and names, aliases and domains by their start or inside a word. Cases file (schema `amb-cases-v1`):
 `caps`, `available` (candidates before the cap), `counts` and `cases` (`case_id`, `kind`, `question`, `evidence`,
 `current_value`, `options`). No people, emails or abstracts. Owner overrides: `regions/<slug>/ambassador_domains.csv`. Domains come from the ignored cache `data/interim/ambassador_domains/`, which only `--fetch-domains` fills (OpenAlex and ROR records; capped at 20 OpenAlex credits per run).
 

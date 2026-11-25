@@ -48,7 +48,7 @@ html:has(.gx) { scroll-padding-top: calc(60px + 52px + 12px); } /* header 60px, 
 .gx .brand circle { fill: var(--pv-gold); } .gx .brand line { stroke: var(--pv-gold); stroke-width: 1.4; stroke-linecap: round; }
 .gx .wm { font-weight: 700; letter-spacing: .09em; font-size: 18px; } .gx .wm b { color: var(--pv-coral-ink); }
 .gx .nav { display: flex; gap: 28px; align-items: center; }
-.gx .nav > a { text-decoration: none; } .gx .nav > a:hover { text-decoration: underline; }
+.gx .nav > a { text-decoration: none; display: inline-flex; align-items: center; min-height: 24px; } .gx .nav > a:hover { text-decoration: underline; }
 .gx .nav > a[aria-current] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
 .gx .btn { border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); padding: 8px 14px; min-height: 40px; cursor: pointer;
   display: inline-flex; gap: 8px; align-items: center; text-decoration: none; white-space: nowrap; font-size: 15px; }
@@ -312,7 +312,7 @@ html:has(.gx) { scroll-padding-top: calc(60px + 52px + 12px); } /* header 60px, 
 /* Footer (the landing's) */
 .gx .foot { background: var(--pv-night); color: var(--pv-mint); padding: 48px var(--pv-gut) calc(48px + env(safe-area-inset-bottom, 0px)); display: flex; flex-wrap: wrap; gap: 24px 48px; justify-content: space-between; font-size: 14px; }
 .gx .foot b { color: var(--pv-paper); font-weight: 600; }
-.gx .foot a { color: var(--pv-paper); text-decoration: underline; text-underline-offset: 3px; }
+.gx .foot a { color: var(--pv-paper); text-decoration: underline; text-underline-offset: 3px; display: inline-block; min-height: 24px; line-height: 24px; }
 .gx .foot img { display: block; width: 282px; max-width: 100%; height: auto; }
 
 /* Mobile drawer: the vertical ladder */

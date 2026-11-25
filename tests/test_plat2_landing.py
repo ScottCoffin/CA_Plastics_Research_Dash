@@ -254,16 +254,19 @@ def test_sync_copies_the_motion_poster_with_the_other_landing_images() -> None:
 def test_ambassador_page_explains_the_role_and_shows_the_address_as_text() -> None:
     page = (SRC / "ambassadors.md").read_text(encoding="utf-8")
     text = _plain(page)
-    assert "Ambassador onboarding opens soon." in text
+    # AMB-1 (owner-approved design, 2026-11-25) replaced the PLAT-2c placeholder.
+    assert "Sign-in opens soon" in text
     for duty in (
-        "local institutions and authors",
-        "community groups and networks",
+        "Check doubtful matches",
+        "Confirm placeholders",
+        "Add local knowledge",
+        "community groups",
         "monitoring data",
-        "policy goals",
+        "local policies",
     ):
         assert duty in text, duty
-    assert '<span class="pv-address">theplastiverse@gmail.com</span>' in page
-    assert "mailto:theplastiverse@gmail.com" in page
+    # The address is shown as text (email links are unreliable in some viewers).
+    assert '<span class="addr">theplastiverse@gmail.com</span>' in page
 
 
 def test_overlap_helpers() -> None:

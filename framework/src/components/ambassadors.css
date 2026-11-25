@@ -1,0 +1,161 @@
+/* The ambassadors landing page and the contribution terms (AMB-1). Everything is scoped under .am.
+   Colours are the --pv-* tokens in design/tokens.css (no literals here). The font faces are in ambassadors.md's head. */
+.am { font: 400 16px/1.5 var(--pv-sans); color: var(--pv-ink); background: var(--pv-ground); min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-wrap: anywhere; }
+.am *, .am *::before, .am *::after { box-sizing: border-box; }
+.am a { color: var(--pv-ink); text-underline-offset: 3px; }
+.am button, .am input { font: inherit; color: inherit; }
+.am :focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+.am .skip { position: absolute; left: -999px; top: 0; background: var(--pv-paper); padding: 8px 12px; z-index: 50; }
+.am .skip:focus { left: 12px; top: 8px; }
+.am .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.am main, .am .foot { max-width: 1360px; margin: 0 auto; padding: 0 var(--pv-gut); }
+.am h1 { font-size: clamp(32px, 4.6vw, 52px); line-height: 1.08; letter-spacing: -.01em; margin: 40px 0 14px; max-width: 18ch; }
+.am h2 { font-size: 26px; line-height: 1.2; margin: 0; }
+.am h3 { font-size: 18px; margin: 0 0 4px; }
+.am .lede { font-size: 19px; max-width: 58ch; margin: 0 0 22px; }
+.am .hint, .am .sec-note { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: 70ch; }
+.am .credit { font-size: 14px; color: var(--pv-ink-2); margin: 10px 0 0; max-width: 70ch; }
+.am .status { font-size: 15px; color: var(--pv-ink-2); }
+.am .addr { font-weight: 600; user-select: all; }
+
+/* header */
+.am .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: 8px var(--pv-gut); border-bottom: 1px solid var(--pv-line); background: var(--pv-paper); flex-wrap: wrap; }
+.am .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; white-space: nowrap; }
+.am .brand circle { fill: var(--pv-gold); }
+.am .brand line { stroke: var(--pv-gold); stroke-width: 1.4; stroke-linecap: round; }
+.am .wm { font-weight: 700; letter-spacing: .08em; }
+.am .wm b { font-weight: 700; color: var(--pv-coral-ink); }
+.am .nav { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+.am .nav > a { text-decoration: none; }
+.am .nav > a:hover { text-decoration: underline; }
+.am .nav > a[aria-current] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.am .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); text-decoration: none; cursor: pointer; }
+.am .btn:hover, .am .btn.solid { background: var(--pv-ink); color: var(--pv-paper); }
+.am .btn.solid:hover { background: var(--pv-ink-2); }
+.am .btn[disabled] { opacity: .6; cursor: not-allowed; }
+.am .btn[disabled]:hover { background: var(--pv-paper); color: var(--pv-ink); }
+.am .btn.solid[disabled]:hover { background: var(--pv-ink); color: var(--pv-paper); }
+.am .link, .am .link-btn { color: var(--pv-ink); text-decoration: underline; text-underline-offset: 3px; background: none; border: 0; padding: 0; cursor: pointer; font-size: inherit; }
+.am .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 18px; }
+.am .hero { padding-bottom: 8px; }
+
+/* sections */
+.am .sec { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--pv-line); }
+.am .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 18px; }
+.am .rows { list-style: none; margin: 18px 0 0; padding: 0; max-width: 72ch; }
+.am .rows > li { padding: 14px 0; border-bottom: 1px solid var(--pv-line); }
+.am .rows > li:first-child { padding-top: 0; }
+.am .rows p { margin: 0; }
+.am .steps { margin: 18px 0 0; padding-left: 24px; max-width: 66ch; }
+.am .steps li { padding-left: 6px; margin-bottom: 14px; }
+.am .steps li::marker { font-weight: 600; font-family: var(--pv-mono); }
+
+/* place search (shared by the map and the checker) */
+.am .search-field { margin-top: 18px; }
+.am .search-field > label, .am .field > label { display: block; font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+.am .search-host { position: relative; max-width: 640px; }
+.am .search-host input { width: 100%; min-height: 44px; padding: 8px 12px 8px 36px; border: 1px solid var(--pv-ink); background: var(--pv-paper); font-size: 16px; }
+.am .search-host .i { position: absolute; left: 12px; top: 15px; width: 14px; height: 14px; pointer-events: none; color: var(--pv-ink-2); }
+.am .threshold { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: 70ch; }
+.am .pop { position: absolute; left: 0; right: 0; top: 100%; z-index: 25; margin: 0; padding: 0; list-style: none; background: var(--pv-paper); border: 1px solid var(--pv-ink); border-top: 0; max-height: 360px; overflow-y: auto; box-shadow: 0 8px 20px color-mix(in srgb, var(--pv-ink) 12%, transparent); }
+.am .pop[hidden] { display: none; }
+.am .pop .opt { min-height: 44px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2px 12px; padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--pv-line); font-size: 15px; }
+.am .pop .opt small { display: block; color: var(--pv-ink-2); font-size: 14px; }
+.am .pop .opt:hover { background: var(--pv-wash); }
+.am .pop .n { color: var(--pv-ink-2); font-size: 14px; }
+.am .pop-note { padding: 12px; font-size: 15px; color: var(--pv-ink-2); }
+
+/* geo grid: the map and the panel */
+.am .geo-grid { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); margin-top: 22px; }
+.am .geo-main { min-width: 0; }
+.am .amb-mapbox { position: relative; background: var(--pv-wash); border: 1px solid var(--pv-ink-2); overflow: hidden; }
+.am .amb-map { display: block; width: 100%; height: auto; touch-action: pan-y; user-select: none; }
+.am .amb-map:focus-visible { outline: 3px solid var(--pv-coral-ink); outline-offset: -3px; }
+.am .amb-map .sea { fill: var(--pv-wash); }
+.am .amb-map .c { fill: var(--pv-paper); stroke: var(--pv-slate-2); stroke-width: .5px; vector-effect: non-scaling-stroke; stroke-linejoin: round; cursor: pointer; }
+.am .amb-map .c.open, .am .amb-map .ca.open { fill: var(--pv-mint); stroke: var(--pv-ink-2); }
+.am .amb-map .c:hover { fill: var(--pv-wash); }
+.am .amb-map .c.open:hover, .am .amb-map .ca.open:hover { fill: var(--pv-mint); stroke: var(--pv-ink); }
+.am .amb-map .ca { stroke: var(--pv-ink-2); stroke-width: 1px; vector-effect: non-scaling-stroke; cursor: pointer; }
+.am .amb-map .sel { stroke: var(--pv-ink); stroke-width: 2.2px; vector-effect: non-scaling-stroke; }
+.am .amb-map path.bd { fill: none; stroke: var(--pv-ink-2); stroke-width: 1.2px; stroke-dasharray: 5 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.am .amb-map path.pg { fill: none; stroke: var(--pv-slate); stroke-width: 1.4px; stroke-dasharray: 1.5 3; stroke-linecap: round; vector-effect: non-scaling-stroke; pointer-events: none; }
+.am .amb-map .zoom-box { fill: none; stroke: var(--pv-ink); stroke-width: 1px; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.am .amb-map .sm { cursor: pointer; }
+.am .amb-map .sm-hit { fill: transparent; }
+.am .amb-map .sm-dot { fill: var(--pv-paper); stroke: var(--pv-ink-2); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.am .amb-map .sm.open .sm-dot { fill: var(--pv-mint); stroke: var(--pv-ink); }
+.am .amb-map .sm:focus { outline: none; }
+.am .amb-map .sm:focus-visible { outline: 3px solid var(--pv-coral-ink); outline-offset: 2px; }
+.am .amb-map .sm:focus-visible .sm-hit { fill: none; stroke: var(--pv-coral-ink); stroke-width: 3px; vector-effect: non-scaling-stroke; }
+.am .map-zoom { position: absolute; top: 8px; right: 8px; z-index: 2; display: flex; flex-direction: column; gap: 4px; }
+.am .map-zoom .btn { min-width: 44px; min-height: 44px; padding: 6px 10px; font-size: 20px; line-height: 1; background: var(--pv-paper); }
+.am .map-zoom .btn[aria-label="Reset map view"] { font-size: 14px; }
+.am .map-hint { position: absolute; left: 12px; bottom: 12px; z-index: 5; max-width: calc(100% - 80px); background: var(--pv-ink); color: var(--pv-paper); font-size: 13px; line-height: 1.35; padding: 6px 10px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.am .map-hint.show { opacity: 1; }
+.am .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 14px 0 0; padding: 0; list-style: none; font-size: 15px; }
+.am .legend li { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; }
+.am .sw { width: 22px; height: 16px; border: 1px solid var(--pv-ink); display: inline-block; flex: none; }
+.am .sw.st-open { background: var(--pv-mint); }
+.am .sw.st-none { background: var(--pv-paper); }
+.am .sw.line-disp, .am .sw.line-pac { height: 0; width: 26px; border: 0; border-top: 2px dashed var(--pv-ink-2); align-self: center; background: none; }
+.am .sw.line-pac { border-top: 2px dotted var(--pv-slate); }
+.am .tbl-wrap { margin-top: 14px; overflow-x: auto; }
+.am table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.am th, .am td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--pv-line); vertical-align: top; }
+.am thead th { font-size: 14px; color: var(--pv-ink-2); font-weight: 600; }
+.am .geo-panel { border-top: 2px solid var(--pv-ink); padding-top: 14px; min-width: 0; }
+.am .geo-panel h3 { font-size: 22px; margin: 6px 0 0; }
+.am .geo-panel .kv { margin: 14px 0 0; display: grid; grid-template-columns: max-content 1fr; gap: 8px 14px; font-size: 15px; }
+.am .geo-panel .kv dt { font-weight: 600; }
+.am .geo-panel .kv dd { margin: 0; }
+.am .geo-panel .actions { margin-top: 16px; }
+.am .geo-panel .status { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; }
+
+/* badge block and the Ambassador badge */
+.am .badge-block { margin-top: 28px; border-top: 1px solid var(--pv-line); padding-top: 18px; max-width: 760px; }
+.am .badge-lg { margin: 0 0 6px; }
+.am .amb { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; vertical-align: middle; font-size: 14px; line-height: 1.25; color: var(--pv-ink); }
+.am .amb .seal { width: 18px; height: 18px; flex: none; overflow: visible; }
+.am .amb .seal-body { fill: var(--pv-ink); stroke: var(--pv-coral); stroke-width: 1.4; stroke-linejoin: round; }
+.am .amb .seal-sun circle { fill: var(--pv-gold); }
+.am .amb .seal-sun path { fill: none; stroke: var(--pv-gold); stroke-width: 3.6; stroke-linecap: round; }
+.am .amb .amb-label { display: inline-block; min-width: 0; background: var(--pv-sun); border: 1px solid var(--pv-ink); padding: 2px 8px; overflow-wrap: anywhere; }
+.am .amb.lg { gap: 14px; font-size: 16px; }
+.am .amb.lg .seal { width: 64px; height: 64px; }
+.am .amb.lg .amb-label { padding: 6px 12px; }
+
+/* can I join */
+.am .check-box { margin-top: 18px; border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 22px; max-width: 1040px; }
+.am .check-row { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+.am .check-row .field { min-width: 0; }
+.am .check-btn { display: flex; }
+.am .check-btn .btn { width: 100%; }
+.am .result { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--pv-ink); background: var(--pv-wash); font-size: 15px; max-width: 70ch; }
+.am .result[data-state="no"] { background: var(--pv-cream); }
+.am .result[hidden] { display: none; }
+.am .result b { display: block; font-size: 16px; margin-bottom: 2px; }
+.am .pop [role="option"][aria-selected="true"] { background: var(--pv-sun); }
+
+/* terms */
+.am main.terms { padding-bottom: 48px; }
+.am main.terms h1 { margin-top: 32px; }
+.am main.terms h2 { font-size: 21px; margin-top: 28px; }
+.am main.terms ol { padding-left: 24px; max-width: 74ch; }
+.am main.terms li { margin-bottom: 12px; }
+.am main.terms p { max-width: 74ch; }
+
+.am .foot { border-top: 1px solid var(--pv-line); margin-top: 56px; padding-top: 18px; padding-bottom: 36px; font-size: 14px; color: var(--pv-ink-2); }
+
+/* wider screens: the checker on one aligned row; the map beside its panel */
+@media (min-width: 700px) {
+  .am .check-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto; align-items: end; }
+  .am .check-btn .btn { width: auto; }
+}
+/* The map takes the full content width; the panel sits beside it only on very wide screens, below it otherwise. */
+@media (min-width: 1600px) {
+  .am .geo-grid { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .am *, .am *::before, .am *::after { transition: none !important; animation: none !important; }
+}

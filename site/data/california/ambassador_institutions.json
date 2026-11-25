@@ -1,6 +1,6 @@
 {
   "schema": "amb-v1",
-  "generated_at": "2026-11-25T02:24:15Z",
+  "generated_at": "2026-11-25T16:17:12Z",
   "region": "california",
   "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
   "min_works": 3,
@@ -19,7 +19,11 @@
       "domains": [
         "ucdavis.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": [
+        "UC Davis"
+      ]
     },
     {
       "id": "I97018004",
@@ -29,7 +33,9 @@
       "domains": [
         "stanford.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I95457486",
@@ -39,7 +45,11 @@
       "domains": [
         "berkeley.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": [
+        "UC Berkeley"
+      ]
     },
     {
       "id": "I103635307",
@@ -49,7 +59,11 @@
       "domains": [
         "ucr.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": [
+        "UC Riverside"
+      ]
     },
     {
       "id": "I36258959",
@@ -59,7 +73,11 @@
       "domains": [
         "ucsd.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "UCSD"
+      ],
+      "aliases": []
     },
     {
       "id": "I161318765",
@@ -69,7 +87,11 @@
       "domains": [
         "ucla.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": [
+        "UC Los Angeles"
+      ]
     },
     {
       "id": "I154570441",
@@ -79,7 +101,11 @@
       "domains": [
         "ucsb.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": [
+        "UC Santa Barbara"
+      ]
     },
     {
       "id": "I1174212",
@@ -89,7 +115,9 @@
       "domains": [
         "usc.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I26538001",
@@ -99,7 +127,9 @@
       "domains": [
         "sdsu.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I150209017",
@@ -109,7 +139,9 @@
       "domains": [
         "ucsd.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I180670191",
@@ -119,7 +151,11 @@
       "domains": [
         "ucsf.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": [
+        "UC San Francisco"
+      ]
     },
     {
       "id": "I204250578",
@@ -129,7 +165,11 @@
       "domains": [
         "uci.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": [
+        "UC Irvine"
+      ]
     },
     {
       "id": "I185103710",
@@ -139,7 +179,11 @@
       "domains": [
         "ucsc.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": [
+        "UC Santa Cruz"
+      ]
     },
     {
       "id": "I11006740",
@@ -149,7 +193,11 @@
       "domains": [
         "sccwrp.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "SCCWRP"
+      ],
+      "aliases": []
     },
     {
       "id": "I149919469",
@@ -159,7 +207,9 @@
       "domains": [
         "calpoly.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2803209242",
@@ -169,7 +219,9 @@
       "domains": [
         "universityofcalifornia.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210111001",
@@ -179,7 +231,9 @@
       "domains": [
         "sfei.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4405266016",
@@ -189,7 +243,9 @@
       "domains": [
         "stanford.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I157638225",
@@ -199,7 +255,9 @@
       "domains": [
         "csun.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I53012624",
@@ -209,7 +267,9 @@
       "domains": [
         "jbei.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I122411786",
@@ -219,7 +279,9 @@
       "domains": [
         "caltech.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I59897056",
@@ -229,7 +291,9 @@
       "domains": [
         "csulb.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I98947143",
@@ -239,7 +303,9 @@
       "domains": [
         "cpp.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210085935",
@@ -249,7 +315,9 @@
       "domains": [
         "ibm.com"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I71838634",
@@ -259,7 +327,9 @@
       "domains": [
         "sfsu.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I194388944",
@@ -269,7 +339,9 @@
       "domains": [
         "csuci.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I36053171",
@@ -279,7 +351,9 @@
       "domains": [
         "csuchico.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I156087764",
@@ -289,7 +363,11 @@
       "domains": [
         "ucmerced.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": [
+        "UC Merced"
+      ]
     },
     {
       "id": "I1336788258",
@@ -299,7 +377,9 @@
       "domains": [
         "cdph.ca.gov"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1301553790",
@@ -309,7 +389,9 @@
       "domains": [
         "jcvi.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1319261023",
@@ -319,7 +401,11 @@
       "domains": [
         "mbari.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "MBARI"
+      ],
+      "aliases": []
     },
     {
       "id": "I4210109599",
@@ -329,7 +415,9 @@
       "domains": [
         "noaa.gov"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I119942576",
@@ -339,7 +427,9 @@
       "domains": [
         "pacific.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210140558",
@@ -349,7 +439,9 @@
       "domains": [
         "usda.gov"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I27825529",
@@ -359,7 +451,9 @@
       "domains": [
         "calstatela.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1334627681",
@@ -369,7 +463,9 @@
       "domains": [
         "nasa.gov"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210112098",
@@ -379,7 +475,9 @@
       "domains": [
         "nu.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2801935854",
@@ -389,7 +487,9 @@
       "domains": [
         "stanford.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I160856358",
@@ -399,7 +499,9 @@
       "domains": [
         "sandiego.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I142934699",
@@ -409,7 +511,9 @@
       "domains": [
         "fullerton.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I26347476",
@@ -419,7 +523,9 @@
       "domains": [
         "llu.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210103292",
@@ -429,7 +535,9 @@
       "domains": [
         "californiamsf.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I118839592",
@@ -439,7 +547,9 @@
       "domains": [
         "csub.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I124104796",
@@ -449,7 +559,9 @@
       "domains": [
         "marinemammalcenter.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210090234",
@@ -459,7 +571,9 @@
       "domains": [
         "marinemegafaunafoundation.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I51504820",
@@ -469,7 +583,9 @@
       "domains": [
         "sjsu.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1333577951",
@@ -479,7 +595,9 @@
       "domains": [
         "wildlife.ca.gov"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I65137940",
@@ -489,7 +607,9 @@
       "domains": [
         "calepa.ca.gov"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I226560621",
@@ -499,7 +619,9 @@
       "domains": [
         "csusm.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I38257878",
@@ -509,7 +631,9 @@
       "domains": [
         "energybiosciencesinstitute.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1343052199",
@@ -519,7 +643,9 @@
       "domains": [
         "kp.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I95850191",
@@ -530,7 +656,9 @@
         "calstate.edu",
         "sjsu.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210097936",
@@ -540,7 +668,9 @@
       "domains": [
         "terasaki.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I192389796",
@@ -550,7 +680,9 @@
       "domains": [
         "humboldt.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I67328108",
@@ -560,7 +692,9 @@
       "domains": [
         "csufresno.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I135369504",
@@ -570,7 +704,9 @@
       "domains": [
         "csumb.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210091954",
@@ -580,7 +716,11 @@
       "domains": [
         "no-burn.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "GAIA"
+      ],
+      "aliases": []
     },
     {
       "id": "I4210097074",
@@ -590,7 +730,9 @@
       "domains": [
         "theissresearch.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1316958739",
@@ -600,7 +742,11 @@
       "domains": [
         "arb.ca.gov"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "CARB"
+      ],
+      "aliases": []
     },
     {
       "id": "I127339247",
@@ -610,7 +756,9 @@
       "domains": [
         "calstate.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I43522216",
@@ -620,7 +768,9 @@
       "domains": [
         "csus.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I43369023",
@@ -630,7 +780,9 @@
       "domains": [
         "csusb.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4405264838",
@@ -640,7 +792,9 @@
       "domains": [
         "mwdh2o.com"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2801975132",
@@ -650,7 +804,9 @@
       "domains": [
         "ocean-institute.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I99418890",
@@ -660,7 +816,9 @@
       "domains": [
         "npu.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4405269264",
@@ -670,7 +828,9 @@
       "domains": [
         "stanford.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1290230355",
@@ -680,7 +840,9 @@
       "domains": [
         "dtsc.ca.gov"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I176611909",
@@ -690,7 +852,9 @@
       "domains": [
         "callutheran.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I184813773",
@@ -700,7 +864,9 @@
       "domains": [
         "csueastbay.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I197875241",
@@ -710,7 +876,9 @@
       "domains": [
         "csustan.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210095419",
@@ -720,7 +888,9 @@
       "domains": [
         "carnegiescience.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I172039944",
@@ -730,7 +900,9 @@
       "domains": [
         "dominican.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1282311441",
@@ -740,7 +912,9 @@
       "domains": [
         "llnl.gov"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210090881",
@@ -750,7 +924,9 @@
       "domains": [
         "nmmf.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1294537935",
@@ -760,7 +936,9 @@
       "domains": [
         "pointblue.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I126031752",
@@ -770,7 +948,9 @@
       "domains": [
         "sbcc.edu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     }
   ]
 }

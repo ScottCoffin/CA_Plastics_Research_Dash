@@ -1,0 +1,69 @@
+{
+  "checkpoint": null,
+  "design": {
+    "strata_in_corpus": 873,
+    "strata_sampled": 500,
+    "text": "The California sample draws one work from each of 500 of the 873 strata of the corpus. Each labelled work is weighted by the inverse of its chance of selection, so the labelled works stand for the whole corpus. Intervals resample author groups, so one prolific group cannot dominate them. A separate sample of leak-test works is labelled for checks only and is not weighted.",
+    "works_planned": 500
+  },
+  "estimands": {
+    "E1": {
+      "display": "No validated estimate yet",
+      "id": "E1",
+      "label": "Precision, California",
+      "status": "no_validated_estimate",
+      "what": "Of the California works the site shows as plastics research, the share that a human labeller confirms as plastics research."
+    },
+    "E1l": {
+      "display": "No validated estimate yet",
+      "id": "E1l",
+      "label": "Analytic lens agreement",
+      "status": "no_validated_estimate",
+      "what": "Of the works shown with an analytic lens, the share where the human label gives the same lens. Unweighted and indicative only."
+    },
+    "E1s": {
+      "display": "No validated estimate yet",
+      "id": "E1s",
+      "label": "Precision, lifecycle and society tier",
+      "status": "no_validated_estimate",
+      "what": "Of the works shown in the lifecycle-and-society tier, the share a human labeller rates as primary or substantial plastics centrality."
+    },
+    "E2": {
+      "display": "No validated estimate yet",
+      "id": "E2",
+      "label": "Recall, California",
+      "status": "no_validated_estimate",
+      "what": "Of the California works a human labeller confirms as plastics research, the share the site shows as plastics research."
+    },
+    "E3": {
+      "display": "No validated estimate yet",
+      "id": "E3",
+      "label": "Current model on held-out works",
+      "status": "no_validated_estimate",
+      "what": "Precision, recall and F1 of the current plastic-relevance model, on held-out test works only. Training and tuning works are never used."
+    },
+    "E4": {
+      "display": "No validated estimate yet",
+      "id": "E4",
+      "label": "Tag and study-type accuracy",
+      "status": "no_validated_estimate",
+      "what": "F1 for each domain tag and each study type, against human labels. Results are flagged when the sample is small or the score is below 0.70."
+    }
+  },
+  "generated_at": "2026-11-25T16:15:25+00:00",
+  "labels": {
+    "labelled": 38,
+    "planned": 500,
+    "text": "38 of 500 California works labelled",
+    "unit": "California works"
+  },
+  "note": "Reported only at a final checkpoint. Interim results are not published (A3 section 7).",
+  "schema": "bq1-v1",
+  "scope": "california",
+  "status": "no_validated_estimate",
+  "status_text": "No validated estimate yet",
+  "what_this_is_and_is_not": [
+    "This page reports how accurate the California research atlas is. It samples works from the California corpus and asks a human labeller whether each one is plastics research. The labels are compared with what the site shows.",
+    "It is not a final evaluation. No accuracy figure is published until the labelled sample is complete and analysed."
+  ]
+}

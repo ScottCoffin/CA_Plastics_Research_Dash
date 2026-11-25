@@ -50,6 +50,8 @@ TERMINOLOGY_SKIP = {"site/index.html"}
 DEFAULT_HTML = ["site/index.html", "site/california/expert.html", "site/grants.html"]
 DEFAULT_JSON = [
     "site/data/california/dtsc_timeline.json",
+    "site/data/california/quality.json",
+    "site/data/global/quality.json",
     "site/data/california/linkouts.json",
     "site/data/california/network.json",
     "site/data/california/expert_badges.json",

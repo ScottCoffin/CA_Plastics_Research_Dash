@@ -1,0 +1,13 @@
+/* BQ-1.4: quality page blocks (/quality and /california/quality). Every rule sits under .qx, the
+   root that components/quality.js fills, so the California design is unchanged. Colours fall back to
+   the Atlas tokens when the global --pv-* tokens are absent (California pages). No hex colours. */
+.qx { font: 400 16px/1.6 var(--atlas-sans, system-ui, sans-serif); color: var(--pv-ink, var(--atlas-ink)); max-width: 880px; margin: 0 auto; padding: 0 16px 48px; }
+.qx h2 { font-size: 1.25rem; margin: 2rem 0 .5rem; }
+.qx h3 { font-size: 1.05rem; margin: 0 0 .35rem; }
+.qx p { margin: .5rem 0; }
+.qx-status { font-weight: 600; padding: 12px 16px; border-left: 4px solid var(--pv-gold, var(--atlas-task-money)); background: rgba(227, 169, 43, .12); }
+.qx-cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); }
+.qx-card { border: 1px solid rgba(20, 19, 17, .18); border-radius: 6px; padding: 14px 16px; background: var(--pv-paper); }
+.qx-figure { font-variant-numeric: tabular-nums; font-weight: 600; }
+.qx-note { font-size: .9rem; opacity: .75; margin-top: 1.5rem; }
+@media (prefers-reduced-motion: reduce) { .qx * { transition: none !important; animation: none !important; } }

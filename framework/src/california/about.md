@@ -156,7 +156,7 @@ ${feedAddress}
 </article>
 <article class="about-card about-limitations-card" style="--c: var(--atlas-vermilion)">
 <h3>Limitations</h3>
-<p>Plastic-related and topic labels are provisional, rule-based screening metadata. A held-out gold set is being labelled, so no validated precision or recall is available yet. Provisional labels are not a pollution leaderboard; confirm the linked source work before drawing conclusions.</p>
+<p>Plastic-related and topic labels are provisional, rule-based screening metadata. No gold-set evaluation exists yet: as of 25 November 2026, 38 of 500 California works in the planned sample had been labelled, so no validated precision or recall is published. See the <a href="./quality">Quality page</a> for the current status. Provisional labels are not a pollution leaderboard; confirm the linked source work before drawing conclusions.</p>
 <p>OpenAlex coverage and affiliation records may be incomplete or incorrect, and author profiles can split one person's works or combine different people. An institution's location does not identify where a study sampled.</p>
 <p>The refresh time is when the site's data were last rebuilt, not when each source record was last updated.</p>
 </article>

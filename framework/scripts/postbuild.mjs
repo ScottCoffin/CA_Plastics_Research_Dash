@@ -129,9 +129,13 @@ export const PAGE_DESCRIPTIONS = {
   "california/policy": "Timeline of California and related policies on plastics, with dates and the sources behind each entry.",
   "california/resources": "Related resources on plastics in California, including data portals, reports and the organisations that maintain them.",
   "california/about": "About the Atlas: what it covers, how the data is sourced, and how to cite it.",
+  quality: "How accurate the global plastics search is: a labelled sample will show precision and recall, and no figure is published until it is complete.",
+  "california/quality": "How accurate the California atlas labels are, how the labelled sample is built, and the current status of the checks.",
   "california/glossary": "Plain-language definitions of terms used in the California Plastics Research Atlas.",
   "norway/index": "Norway: plastics research from the global OpenAlex corpus, with a regional atlas being built by local collaborators.",
   "belgium/index": "Belgium: plastics research from the global OpenAlex corpus, with a regional atlas being built by local collaborators.",
+  ambassadors: "Become a local ambassador: check whether your institution can join Plastiverse Live, and see which regions are open.",
+  ambassador_terms: "The contribution terms for Plastiverse Live ambassadors: what you agree to, how your name is shown and what happens to your information.",
   "california/styleguide": "Reference for the shared styles, icons, filters, tables, charts and accessible components used throughout the California Plastics Research Atlas.",
 };
 

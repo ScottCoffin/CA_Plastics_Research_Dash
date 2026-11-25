@@ -17,6 +17,13 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPLORE_JS = ROOT / "framework" / "src" / "components" / "explore.js"
 EXPLORE_CSS = ROOT / "framework" / "src" / "components" / "explore.css"
 RUNTIME_CHECK = ROOT / "tests" / "framework_explore_zoom_runtime.mjs"
+WORLD_MAP_JS = ROOT / "framework" / "src" / "components" / "world_map.js"
+
+
+def gesture_body() -> str:
+    """The shared gesture wiring (world_map.js attachMapGestures), moved from explore.js."""
+    source = WORLD_MAP_JS.read_text(encoding="utf-8")
+    return source[source.index("export function attachMapGestures(") :]
 
 
 def test_explore_zoom_helpers_runtime() -> None:
@@ -59,13 +66,14 @@ def test_map_takes_keyboard_focus_and_the_overlay_is_positioned_in_the_frame() -
 
 def test_zoom_wiring_covers_wheel_drag_pinch_double_click_and_keys() -> None:
     js = EXPLORE_JS.read_text(encoding="utf-8")
-    body = js[js.index("function wireZoom()") : js.index("const CONT_BOX")]
+    body = gesture_body()
+    assert "attachMapGestures(mapEl" in js and "function wireZoom()" in js
     for event in ("wheel", "dblclick", "pointerdown", "pointermove", "keydown"):
         assert f'addEventListener("{event}"' in body, event
     assert "passive: false" in body
     for key in ('"+"', '"-"', "ArrowLeft", '"0"'):
         assert key in body, key
-    assert "ZOOM_MAX" in js and "clampView(next, FULL)" in body
+    assert "ZOOM_MAX" in js and "clampView(next, frame)" in body
     # A drag ends with a click that must not select a country.
     assert "if (drag.moved) return;" in js
 
@@ -87,11 +95,13 @@ def test_boundary_layers_are_drawn_dashed_and_dotted_and_credited() -> None:
 def test_wheel_is_gated_and_touch_scrolls_the_page() -> None:
     js = EXPLORE_JS.read_text(encoding="utf-8")
     css = EXPLORE_CSS.read_text(encoding="utf-8")
-    body = js[js.index("function wireZoom()") : js.index("const CONT_BOX")]
+    body = gesture_body()
     gate = body.index("if (!wheelZooms(e, active))")
     # The page keeps scrolling: preventDefault comes only after the gate.
     assert gate < body.index("e.preventDefault();", gate)
-    assert "hint(WHEEL_HINT)" in body and "hint(TOUCH_HINT)" in body
+    assert "setHint(WHEEL_HINT)" in body and "setHint(TOUCH_HINT)" in body
+    # The how-to hint stays until the map is activated (owner, 2026-11-25); never timed.
+    assert 'hint.classList.toggle("show", !active)' in body and "setTimeout" not in body
     assert "touch-action: none" not in css
     assert "touch-action: pan-y" in css
     hint = js.index('<div class="map-hint" id="map-hint" aria-live="polite">')

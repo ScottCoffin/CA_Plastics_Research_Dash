@@ -1,6 +1,6 @@
 {
   "schema": "amb-v1",
-  "generated_at": "2026-11-25T02:31:27Z",
+  "generated_at": "2026-11-25T16:20:43Z",
   "region": "norway",
   "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
   "min_works": 3,
@@ -19,7 +19,11 @@
       "domains": [
         "ntnu.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "NTNU"
+      ],
+      "aliases": []
     },
     {
       "id": "I2802939387",
@@ -29,7 +33,11 @@
       "domains": [
         "niva.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "NIVA"
+      ],
+      "aliases": []
     },
     {
       "id": "I3019502701",
@@ -39,7 +47,9 @@
       "domains": [
         "sintef.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4432739",
@@ -49,7 +59,11 @@
       "domains": [
         "uib.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "UIB"
+      ],
+      "aliases": []
     },
     {
       "id": "I67061984",
@@ -60,7 +74,9 @@
         "nilu.com",
         "nilu.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210107808",
@@ -70,7 +86,9 @@
       "domains": [
         "norceresearch.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I78037679",
@@ -80,7 +98,9 @@
       "domains": [
         "uit.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2802153510",
@@ -90,7 +110,9 @@
       "domains": [
         "hi.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I54108979",
@@ -100,7 +122,11 @@
       "domains": [
         "nmbu.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "NMBU"
+      ],
+      "aliases": []
     },
     {
       "id": "I184942183",
@@ -110,7 +136,9 @@
       "domains": [
         "uio.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2802510431",
@@ -120,7 +148,9 @@
       "domains": [
         "grida.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210163231",
@@ -130,7 +160,9 @@
       "domains": [
         "framsenteret.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I87302398",
@@ -140,7 +172,11 @@
       "domains": [
         "npolar.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "NPI"
+      ],
+      "aliases": []
     },
     {
       "id": "I173888879",
@@ -150,7 +186,9 @@
       "domains": [
         "sintef.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2802079931",
@@ -160,7 +198,9 @@
       "domains": [
         "nord.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1333353642",
@@ -170,7 +210,11 @@
       "domains": [
         "fhi.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "NPIH"
+      ],
+      "aliases": []
     },
     {
       "id": "I92008406",
@@ -180,7 +224,9 @@
       "domains": [
         "uis.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4387930256",
@@ -190,7 +236,9 @@
       "domains": [
         "sintef.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2801380234",
@@ -200,7 +248,11 @@
       "domains": [
         "usn.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "USN"
+      ],
+      "aliases": []
     },
     {
       "id": "I4210143403",
@@ -210,7 +262,11 @@
       "domains": [
         "nibio.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "NIBIO"
+      ],
+      "aliases": []
     },
     {
       "id": "I1314042554",
@@ -220,7 +276,9 @@
       "domains": [
         "met.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1332882736",
@@ -230,7 +288,11 @@
       "domains": [
         "stami.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "STAMI"
+      ],
+      "aliases": []
     },
     {
       "id": "I184531372",
@@ -240,7 +302,9 @@
       "domains": [
         "oslomet.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210153706",
@@ -250,7 +314,11 @@
       "domains": [
         "nina.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "NINA"
+      ],
+      "aliases": []
     },
     {
       "id": "I4210095992",
@@ -260,7 +328,9 @@
       "domains": [
         "uit.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2799966484",
@@ -270,7 +340,9 @@
       "domains": [
         "uib.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1315672318",
@@ -280,7 +352,9 @@
       "domains": [
         "vegvesen.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2802159110",
@@ -290,7 +364,9 @@
       "domains": [
         "pfi.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I200650556",
@@ -300,7 +376,9 @@
       "domains": [
         "uia.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4401200256",
@@ -310,7 +388,9 @@
       "domains": [
         "nersc.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I96829481",
@@ -320,7 +400,9 @@
       "domains": [
         "nordlandsforskning.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210164950",
@@ -330,7 +412,9 @@
       "domains": [
         "vetinst.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210116649",
@@ -340,7 +424,9 @@
       "domains": [
         "inn.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I179863766",
@@ -350,7 +436,9 @@
       "domains": [
         "hvl.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I181046868",
@@ -360,7 +448,9 @@
       "domains": [
         "bi.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210152551",
@@ -370,7 +460,11 @@
       "domains": [
         "iris.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "IRIS"
+      ],
+      "aliases": []
     },
     {
       "id": "I931913249",
@@ -380,7 +474,9 @@
       "domains": [
         "nhh.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4405268339",
@@ -390,7 +486,9 @@
       "domains": [
         "porelab.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210104611",
@@ -400,7 +498,9 @@
       "domains": [
         "genok.com"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1296551785",
@@ -410,7 +510,9 @@
       "domains": [
         "ngu.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2800853303",
@@ -420,7 +522,9 @@
       "domains": [
         "norut.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4387930280",
@@ -430,7 +534,9 @@
       "domains": [
         "sintef.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210142273",
@@ -440,7 +546,9 @@
       "domains": [
         "sintef.no"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     }
   ]
 }

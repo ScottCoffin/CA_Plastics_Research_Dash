@@ -29,6 +29,7 @@ const PAGE_GROUPS = [
     {name: "Monitoring", path: "/california/monitoring"},
     {name: "Funding", path: "/california/funding"},
     {name: "Evidence map", path: "/california/evidence"},
+    {name: "Quality", path: "/california/quality"},
   ]},
   {name: "Context", pages: [
     {name: "Policy", path: "/california/policy"},
@@ -151,6 +152,7 @@ export default {
   footer: '<p class="atlas-footer__note">Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.</p>' +
     '<nav aria-label="Footer links"><ul class="atlas-footer__links">' +
     '<li><a href="./california/about">About</a></li><li><a href="./california/glossary">Glossary</a></li>' +
+    '<li><a href="./california/quality">Quality</a></li>' +
     '<li><a href="./california/about#how-to-cite">How to cite</a></li>' +
     '<li><a href="./california/about#get-updates">Get updates</a></li>' +
     '<li><a href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction" rel="external">Report a correction</a></li></ul></nav>'

@@ -1,6 +1,6 @@
 {
   "schema": "amb-v1",
-  "generated_at": "2026-11-25T02:24:16Z",
+  "generated_at": "2026-11-25T16:23:28Z",
   "region": "belgium",
   "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
   "min_works": 3,
@@ -19,7 +19,9 @@
       "domains": [
         "ugent.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I99464096",
@@ -29,7 +31,9 @@
       "domains": [
         "kuleuven.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2800387288",
@@ -39,7 +43,11 @@
       "domains": [
         "europa.eu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "EC"
+      ],
+      "aliases": []
     },
     {
       "id": "I149213910",
@@ -49,7 +57,11 @@
       "domains": [
         "uantwerpen.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "UA"
+      ],
+      "aliases": []
     },
     {
       "id": "I157674565",
@@ -59,7 +71,9 @@
       "domains": [
         "uliege.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I1293303778",
@@ -69,7 +83,11 @@
       "domains": [
         "vliz.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "VLIZ"
+      ],
+      "aliases": []
     },
     {
       "id": "I68522396",
@@ -79,7 +97,11 @@
       "domains": [
         "vito.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "VITO"
+      ],
+      "aliases": []
     },
     {
       "id": "I130929987",
@@ -89,7 +111,11 @@
       "domains": [
         "ac.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "UMONS"
+      ],
+      "aliases": []
     },
     {
       "id": "I13469542",
@@ -99,7 +125,11 @@
       "domains": [
         "vub.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "VUB"
+      ],
+      "aliases": []
     },
     {
       "id": "I95674353",
@@ -109,7 +139,9 @@
       "domains": [
         "uclouvain.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I878454856",
@@ -119,7 +151,9 @@
       "domains": [
         "uhasselt.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210145253",
@@ -129,7 +163,9 @@
       "domains": [
         "vlaanderen.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I132053463",
@@ -139,7 +175,11 @@
       "domains": [
         "ulb.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "ULB"
+      ],
+      "aliases": []
     },
     {
       "id": "I4210118628",
@@ -149,7 +189,11 @@
       "domains": [
         "europa.eu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "JRC"
+      ],
+      "aliases": []
     },
     {
       "id": "I4210153783",
@@ -159,7 +203,9 @@
       "domains": [
         "materianova.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210097779",
@@ -169,7 +215,9 @@
       "domains": [
         "centexbel.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I27895137",
@@ -179,7 +227,9 @@
       "domains": [
         "ac.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I202500258",
@@ -189,7 +239,11 @@
       "domains": [
         "inbo.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "INBO"
+      ],
+      "aliases": []
     },
     {
       "id": "I4210114974",
@@ -199,7 +253,9 @@
       "domains": [
         "imec.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I149768937",
@@ -209,7 +265,9 @@
       "domains": [
         "unamur.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4391768017",
@@ -219,7 +277,9 @@
       "domains": [
         "unamur.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2801223450",
@@ -229,7 +289,9 @@
       "domains": [
         "naturalsciences.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4405271821",
@@ -239,7 +301,9 @@
       "domains": [
         "europa.eu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210144364",
@@ -249,7 +313,11 @@
       "domains": [
         "capture-resources.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "CAPTURE"
+      ],
+      "aliases": []
     },
     {
       "id": "I42097590",
@@ -259,7 +327,11 @@
       "domains": [
         "ieep.eu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [
+        "IEEP"
+      ],
+      "aliases": []
     },
     {
       "id": "I4210088339",
@@ -269,7 +341,9 @@
       "domains": [
         "celabor.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210161702",
@@ -279,7 +353,9 @@
       "domains": [
         "europa.eu"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2801148265",
@@ -289,7 +365,9 @@
       "domains": [
         "bbeu.org"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I2802067006",
@@ -299,7 +377,9 @@
       "domains": [
         "fwo.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4405282759",
@@ -309,7 +389,9 @@
       "domains": [
         "brussels-school.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     },
     {
       "id": "I4210132797",
@@ -319,7 +401,9 @@
       "domains": [
         "flandershydraulics.be"
       ],
-      "needs_domain": false
+      "needs_domain": false,
+      "acronyms": [],
+      "aliases": []
     }
   ]
 }

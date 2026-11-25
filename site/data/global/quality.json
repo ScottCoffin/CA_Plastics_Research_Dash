@@ -1,0 +1,47 @@
+{
+  "checkpoint": null,
+  "design": {
+    "strata_sampled": 32,
+    "text": "The global sample draws works from the frozen query frame in strata defined by language block, theme group and relevance-score band. The allocation adapts to the variance seen so far (Neyman allocation). Each estimate is weighted by stratum size, and the ceiling for the low band is an upper bound, not a point estimate.",
+    "works_planned": 263
+  },
+  "estimands": {
+    "E1g": {
+      "display": "No validated estimate yet",
+      "id": "E1g",
+      "label": "Precision, global",
+      "status": "no_validated_estimate",
+      "what": "Of the global works that match the search queries, the share a human labeller confirms as plastics research. Global works are not screened by the site."
+    },
+    "E2g": {
+      "display": "No validated estimate yet",
+      "id": "E2g",
+      "label": "Recall, global",
+      "status": "no_validated_estimate",
+      "what": "Of the global plastics research a human labeller confirms, the share the query search finds."
+    },
+    "E7": {
+      "display": "No validated estimate yet",
+      "id": "E7",
+      "label": "Residual relevant works in the low band",
+      "status": "no_validated_estimate",
+      "what": "An upper bound, at 95% confidence, on the share of low-scoring global works that are plastics research."
+    }
+  },
+  "generated_at": "2026-11-25T16:15:25+00:00",
+  "labels": {
+    "labelled": 0,
+    "planned": 263,
+    "text": "0 of 263 global works labelled",
+    "unit": "global works"
+  },
+  "note": "Reported only at a final checkpoint. Interim results are not published (A3 section 7).",
+  "schema": "bq1-v1",
+  "scope": "global",
+  "status": "no_validated_estimate",
+  "status_text": "No validated estimate yet",
+  "what_this_is_and_is_not": [
+    "This page reports how accurate the global plastics search is. Global works are unscreened query hits, so a human labeller samples them to estimate how many are plastics research.",
+    "It is not a final evaluation. No accuracy figure is published until the labelled sample is complete and analysed."
+  ]
+}

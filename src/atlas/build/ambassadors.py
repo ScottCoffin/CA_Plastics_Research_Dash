@@ -142,7 +142,9 @@ FORBIDDEN_KEYS = frozenset(
         "abstract_inverted_index",
     }
 )
-INSTITUTION_KEYS = frozenset({"id", "name", "type", "works", "domains", "needs_domain"})
+INSTITUTION_KEYS = frozenset(
+    {"id", "name", "type", "works", "domains", "needs_domain", "acronyms", "aliases"}
+)
 CASE_KEYS = frozenset({"case_id", "kind", "question", "evidence", "current_value", "options"})
 
 
@@ -220,6 +222,8 @@ class Facts:
     in_region: bool = False
     signals: set[str] = field(default_factory=set)
     affiliations: set[str] = field(default_factory=set)
+    raw: set[str] = field(default_factory=set)  # raw affiliation strings, read for acronyms only
+    acronyms: set[str] = field(default_factory=set)
 
     def fill(self, name: str, type_: str | None, ror: str, hosts: Iterable[object]) -> None:
         if not self.name and name:
@@ -244,6 +248,49 @@ class Override:
     action: str
     domain: str
     note: str
+
+
+# A name followed by a bracketed acronym, as in "Norwegian Institute for Water Research (NIVA)".
+_NAME_ACRONYM = re.compile(r"([^(),]+?)\s*\(([A-Z][A-Z0-9&]{1,11})\)")
+_UC_NAME = "University of California, "
+
+
+def _fold_name(value: object) -> str:
+    return re.sub(r"\s+", " ", str(value or "")).strip().casefold()
+
+
+def affiliation_acronyms(raw_strings: Iterable[str], name: str) -> set[str]:
+    """Acronyms that raw affiliation strings give to an institution of this exact name."""
+    target = _fold_name(name)
+    found: set[str] = set()
+    for raw in raw_strings:
+        for match in _NAME_ACRONYM.finditer(raw):
+            if _fold_name(match.group(1)) == target:
+                found.add(match.group(2))
+    return found
+
+
+def uc_aliases(name: str) -> set[str]:
+    """University of California, Davis is also called UC Davis (a naming rule, not a guess)."""
+    if name.startswith(_UC_NAME) and len(name) > len(_UC_NAME):
+        return {"UC " + name[len(_UC_NAME) :]}
+    return set()
+
+
+ROR_NAME_TYPES = frozenset({"acronym", "alias", "label"})
+
+
+def ror_names(record: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Acronym, alias and label names of a ROR v2 record: [{"value", "types"}]."""
+    found: dict[str, set[str]] = {}
+    for entry in record.get("names") or []:
+        if not isinstance(entry, Mapping):
+            continue
+        types = {str(t) for t in entry.get("types") or []} & ROR_NAME_TYPES
+        value = str(entry.get("value") or "").strip()
+        if types and value:
+            found.setdefault(value, set()).update(types)
+    return [{"value": v, "types": sorted(found[v])} for v in sorted(found)]
 
 
 @dataclass(frozen=True)
@@ -456,6 +503,8 @@ def _collect_registry(region: Region, root: Path) -> tuple[dict[str, Facts], dic
             item = facts.setdefault(inst_id, Facts(in_region=True))
             item.works.add(work_id)
             bases.setdefault(inst_id, set()).add(basis)
+            if isinstance(row["raw_affiliation"], str):
+                item.raw.add(row["raw_affiliation"])
             if note:
                 item.affiliations.add(note)
     for inst_id, item in facts.items():
@@ -463,6 +512,8 @@ def _collect_registry(region: Region, root: Path) -> tuple[dict[str, Facts], dic
         item.fill(
             str(detail.get("name") or ""), detail.get("type"), str(detail.get("ror") or ""), []
         )
+        item.acronyms = affiliation_acronyms(item.raw, item.name)
+        item.raw = set()
         if inst_id not in registry_ids and bases[inst_id] <= {"raw_affiliation"}:
             item.signals.add("matched only by raw affiliation")
 
@@ -514,6 +565,7 @@ def _add_country_work(
                 [inst.get("homepage_url")] if isinstance(inst.get("homepage_url"), str) else [],
             )
             item.works.add(work_id)
+            item.raw.update(raw_strings)
             if country == iso:
                 item.in_region = True
                 in_region_work = True
@@ -551,6 +603,9 @@ def _collect_country(
                 work_id = _short(work.get("id"))
                 if work_id in corpus:
                     _add_country_work(facts, local_titles, work, work_id, iso, place)
+    for item in facts.values():
+        item.acronyms = affiliation_acronyms(item.raw, item.name)
+        item.raw = set()
     return facts, local_titles
 
 
@@ -764,6 +819,7 @@ def fetch_ror(
                 "found": True,
                 "domains": list(values.domains),
                 "websites": list(values.websites),
+                "names": ror_names(body),
             }
     for inst_id, ror in ror_by_id.items():
         if ror in results:
@@ -840,14 +896,22 @@ def _institution_rows(
         if openalex.get("homepage_url"):
             homepage.append(str(openalex["homepage_url"]))
         domains = resolve_domains(homepage, ror, overrides.get(inst_id, ()))
+        name = item.name or inst_id
+        ror_names_here = fetched.get("names", [])
+        ror_acronyms = {n["value"] for n in ror_names_here if "acronym" in n["types"]}
+        ror_aliases = {n["value"] for n in ror_names_here if "acronym" not in n["types"]}
+        acronyms = sorted({*item.acronyms, *ror_acronyms} - {""})
+        aliases = sorted({*uc_aliases(name), *ror_aliases} - {name, *acronyms} - {""})
         rows.append(
             {
                 "id": inst_id,
-                "name": item.name or inst_id,
+                "name": name,
                 "type": item.type,
                 "works": len(item.works),
                 "domains": domains,
                 "needs_domain": not domains,
+                "acronyms": acronyms,
+                "aliases": aliases,
             }
         )
     rows.sort(key=lambda r: (-r["works"], r["name"].casefold(), r["id"]))
@@ -1073,6 +1137,10 @@ def validate_outputs(
         for domain in row["domains"]:
             if registrable_domain(domain) != domain or is_free_mail(domain):
                 problems.append(f"institutions[{index}]: bad domain {domain!r}")
+        for key in ("acronyms", "aliases"):
+            values = row[key]
+            if not isinstance(values, list) or not all(isinstance(v, str) and v for v in values):
+                problems.append(f"institutions[{index}]: {key} must be a list of strings")
     ids: list[str] = []
     counts: dict[str, int] = {}
     for index, case in enumerate(cases.get("cases") or []):

@@ -36,6 +36,8 @@ data/processed/normalized/
 data/processed/analytics/
 # PLAT-4b global partition (unscreened query hits; never committed)
 data/processed/global/
+# BQ-1.1b quality predictions (label-derived model outputs; never committed)
+data/processed/quality/
 
 # Downloaded full text and local model artifacts
 *.pdf
