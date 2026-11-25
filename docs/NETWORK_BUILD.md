@@ -537,3 +537,52 @@ third; the thinned graph is a picture of the strongest links, not the full co-oc
 edge count is now within the 15,000 budget but was 140k before thinning. Layout quality is not
 visually checked. The layout does not show inter-community links, and packed communities can
 overlap a little. Build time about 5.5 min (raw read about 80 s).
+
+## 16b. Global authors graph (BQ-V.1 slice 2)
+
+Same builder and command as section 16 (`py -3.14 scripts/build_global_graphs.py [--check]`); the
+institution files are unchanged byte for byte. Added files: `authors.json`, `authors_phone.json`,
+`layout_authors.bin`; the manifest gains `graphs.authors`, `graphs.authors_phone` and an
+`author_graph` block (backbone counts, caps, rules). Owner decision 2026-11-25 (QUESTIONS
+GLOBAL-AUTHORS): author display names are published as public OpenAlex names. Emails, raw
+affiliation strings, ORCIDs and abstracts are never written.
+
+- **Backbone.** A work is on the backbone when a pollution-core v0 term (`config/pollution_core_v0.yml`,
+  loaded by `atlas.analytics.denominators.load_pollution_core`) matches its title or abstract. The
+  matcher is `atlas.review_highlight.term_pattern` (whole word, case-insensitive, plural allowed),
+  applied to the raw pages in memory. It is a local check, not OpenAlex's stemmed search.
+- **Nodes.** OpenAlex author short id, public display name (latest page), primary country (most
+  frequent institution `country_code` over the author's backbone authorships; each authorship counts
+  each country once; ties: lowest code; null if none), works = backbone works the author is on.
+- **Edges.** One per author pair sharing a backbone work; weight = shared works. Works with more
+  than 25 distinct authors count toward node works but add no edges (hyper-authorship cap).
+- **Component, cap, thinning.** Same rules as section 16: largest connected component, top 20,000
+  authors by works (ties by id), desktop budget 60,000 edges (k starts at 8); phone top 5,000 with
+  a 15,000 budget (k starts at 3, phone subset alone).
+- **Communities and layout.** Louvain (seed 42) on the thinned desktop graph; ForceAtlas2 per
+  community, packed as in section 16. Positions are float32 pairs in `layout_authors.bin`; the
+  phone file uses the first 5,000 entries.
+- **Fields.** Node rows `[id, display_name, country_code, works, community]`; edge rows
+  `[source, target, weight]`. No other person-level fields. `check_outputs` rejects any forbidden
+  key (`email`, `affiliations`, `raw_affiliation_strings`, `orcid`, `observed_orcids`) in the
+  author files.
+- **Determinism.** Pages are read in fetch-time order; authors sorted by (works, id) before any
+  graph step; all seeds fixed. `--check` rebuilds and compares bytes when the raw store is present.
+
+Build at the 2026-11-25 raw store (136,074 distinct works): 78,045 works match the core terms
+(backbone works with authors 75,941; 139 of them above the 25-author cap, no edges). 188,592
+authors seen; 779,021 author pairs with edges before thinning; the giant component has 112,939
+authors.
+
+| File | Nodes | Edges (before thinning) | k used | Weight kept | Weight-1 dropped | Components | Raw / gzip |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `authors.json` | 20,000 | 60,000 (117,259) | 8 | 77.6% | 25,455 | 956 | 1.73 MB / 0.63 MB |
+| `authors_phone.json` | 5,000 | 10,141 (33,586) | 3 | 62.8% | 0 | 127 | 0.36 MB / 0.14 MB |
+
+Layout `layout_authors.bin` 0.16 MB raw. Communities on the thinned desktop graph: 1,226 (both
+files). Full build (both graphs, including the second raw read for the backbone): about 11 min
+(the institution-only build of section 16 took about 5.5 min).
+
+Known limits: the author graph is the backbone's strongest co-authorship links, not the full
+network; the cap of 20,000 takes the top authors by backbone works and can cut the giant component
+into pieces. Layout is not visually checked. Matching is a local approximation of OpenAlex's search.

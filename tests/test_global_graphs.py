@@ -1,4 +1,4 @@
-"""Global institutions graph (BQ-V.1 slice 1) on synthetic raw pages."""
+"""Global institutions (BQ-V.1 slice 1) and authors (slice 2) graphs on synthetic raw pages."""
 
 from __future__ import annotations
 
@@ -9,14 +9,25 @@ from typing import Any
 
 import pytest
 
+from atlas.analytics.denominators import load_pollution_core
 from atlas.build.global_graphs import (
+    AUTHOR_GRAPH_NAME,
+    AUTHOR_NODE_FIELDS,
+    AUTHOR_PHONE_GRAPH_NAME,
     FILE_NAMES,
+    FORBIDDEN_KEYS,
+    GRAPH_NAME,
+    MAX_AUTHORS_PER_WORK,
     MAX_INSTITUTIONS_PER_WORK,
     NODE_FIELDS,
+    PHONE_GRAPH_NAME,
     SCHEMA_VERSION,
+    author_tables,
+    build_author_graph,
     build_graphs,
     check_outputs,
     co_occurrence,
+    read_backbone,
     read_raw_works,
     thin_edges,
 )
@@ -143,12 +154,10 @@ def test_build_is_deterministic(tmp_path: Path) -> None:
     assert first.files == second.files
 
 
-def test_output_has_no_person_level_data(tmp_path: Path) -> None:
+def test_institution_output_has_no_person_level_data(tmp_path: Path) -> None:
     build = build_graphs(_dataset(tmp_path), layout_iterations=5)
-    for key, blob in build.files.items():
-        if key == "layout":
-            continue
-        text = blob.decode("utf-8")
+    for key in (GRAPH_NAME, PHONE_GRAPH_NAME, "manifest"):
+        text = build.files[key].decode("utf-8")
         assert PERSON_NAME not in text
         assert PERSON_ID not in text
         assert "openalex.org/A" not in text
@@ -250,3 +259,227 @@ def test_built_graphs_obey_budgets_and_manifest_records_them(tmp_path: Path) -> 
 def test_missing_raw_store_raises(tmp_path: Path) -> None:
     with pytest.raises(NoRawStoreError):
         build_graphs(tmp_path / "absent", layout_iterations=5)
+
+
+def _author_entry(author_id: str, name: str, insts: list[tuple[str, str]]) -> dict[str, Any]:
+    """One authorship. It carries an ORCID, an email and a raw affiliation: none may be output."""
+    return {
+        "author": {
+            "id": f"https://openalex.org/{author_id}",
+            "display_name": name,
+            "orcid": "https://orcid.org/0000-0001-2345-6789",
+        },
+        "institutions": [
+            {
+                "id": f"https://openalex.org/{inst}",
+                "display_name": f"Institution {inst}",
+                "ror": f"https://ror.org/{inst.lower()}",
+                "country_code": country,
+                "type": "education",
+            }
+            for inst, country in insts
+        ],
+        "raw_affiliation_strings": [
+            f"Dept of Things, Institution {insts[0][0]}, {author_id.lower()}@example.org"
+        ],
+    }
+
+
+def _author_work(
+    work_id: str,
+    title: str,
+    abstract: dict[str, list[int]] | None,
+    authorships: list[dict[str, Any]],
+) -> dict[str, Any]:
+    work: dict[str, Any] = {
+        "id": f"https://openalex.org/{work_id}",
+        "title": title,
+        "authorships": authorships,
+    }
+    if abstract is not None:
+        work["abstract_inverted_index"] = abstract
+    return work
+
+
+def _author_dataset(tmp_path: Path, *, with_titles: bool = True) -> Path:
+    """Backbone works W1 (title), W2 (abstract only), W3 (title), W5 (26 authors, title).
+
+    W4 is off the backbone. With ``with_titles=False`` no work matches, so the author graph is
+    empty while the institution inputs stay identical.
+    """
+    raw = tmp_path / "raw"
+    if with_titles:
+        titles = (
+            "Microplastic in river sediment",
+            "Field survey",
+            "Plastic debris on beaches",
+            "Soil carbon dynamics",
+            "Nanoplastic exposure",
+        )
+    else:
+        titles = ("Untitled",) * 5
+    abstract = {"marine": [0], "debris": [1]} if with_titles else None
+    hyper = [_author_entry(f"A{10 + i}", f"Hyper Author {i}", [("I9", "US")]) for i in range(26)]
+    works = [
+        _author_work(
+            "W1",
+            titles[0],
+            None,
+            [
+                _author_entry("A1", "Ann Example", [("I1", "NL")]),
+                _author_entry("A2", "Bo Example", [("I2", "NL")]),
+            ],
+        ),
+        _author_work(
+            "W2",
+            titles[1],
+            abstract,
+            [
+                _author_entry("A2", "Bo Example", [("I2", "US")]),
+                _author_entry("A3", "Cy Example", [("I3", "US")]),
+            ],
+        ),
+        _author_work(
+            "W3",
+            titles[2],
+            None,
+            [
+                _author_entry("A1", "Ann Example", [("I1", "NL")]),
+                _author_entry("A2", "Bo Example", [("I2", "US")]),
+                _author_entry("A3", "Cy Example", [("I3", "DE")]),
+            ],
+        ),
+        _author_work(
+            "W4",
+            titles[3],
+            None,
+            [
+                _author_entry("A4", "Di Example", [("I4", "NL")]),
+                _author_entry("A5", "Ed Example", [("I4", "NL")]),
+            ],
+        ),
+        _author_work("W5", titles[4], None, hyper),
+    ]
+    _write_page(raw, "2022_00001.jsonl.gz", "2026-11-25T10:00:00+00:00", works)
+    return raw
+
+
+def _core_terms() -> list[str]:
+    return list(load_pollution_core()["core_terms"])
+
+
+def test_backbone_matches_title_or_abstract_only(tmp_path: Path) -> None:
+    backbone = read_backbone(_author_dataset(tmp_path), _core_terms())
+    assert backbone.seen == 5
+    assert backbone.matching == 4  # W4 has no core term
+    assert set(backbone.works) == {"W1", "W2", "W3", "W5"}
+    assert {ref.author_id for ref in backbone.works["W2"]} == {"A2", "A3"}  # abstract match
+
+
+def test_author_tables_count_backbone_works_and_pairs(tmp_path: Path) -> None:
+    backbone = read_backbone(_author_dataset(tmp_path), _core_terms()).works
+    tables = author_tables(backbone)
+    assert "A4" not in tables.works and "A5" not in tables.works
+    assert tables.works["A2"] == 3 and tables.works["A1"] == 2 and tables.works["A3"] == 2
+    assert dict(tables.edges) == {("A1", "A2"): 2, ("A2", "A3"): 2, ("A1", "A3"): 1}
+    assert tables.edge_works == 3 and tables.hyper_works == 1
+
+
+def test_hyper_authorship_work_adds_nodes_but_no_edges(tmp_path: Path) -> None:
+    backbone = read_backbone(_author_dataset(tmp_path), _core_terms()).works
+    assert MAX_AUTHORS_PER_WORK == 25
+    tables = author_tables(backbone)
+    hyper_ids = {f"A{10 + i}" for i in range(26)}
+    assert all(tables.works[author] == 1 for author in hyper_ids)
+    assert not any(a in hyper_ids or b in hyper_ids for a, b in tables.edges)
+    # Lifting the cap to 26 makes the same work add C(26, 2) = 325 pairs.
+    lifted = author_tables(backbone, max_authors=26)
+    assert len(lifted.edges) == len(tables.edges) + 325
+    assert lifted.hyper_works == 0
+
+
+def test_author_nodes_names_countries_and_weights(tmp_path: Path) -> None:
+    build = build_graphs(_author_dataset(tmp_path), layout_iterations=5)
+    authors = json.loads(build.files[AUTHOR_GRAPH_NAME])
+    rows = authors["nodes"]["rows"]
+    assert authors["nodes"]["fields"] == list(AUTHOR_NODE_FIELDS)
+    assert [row[0] for row in rows] == ["A2", "A1", "A3"]  # works desc, then id
+    assert [row[1] for row in rows] == ["Bo Example", "Ann Example", "Cy Example"]
+    assert [row[2] for row in rows] == ["US", "NL", "DE"]  # A3 ties US/DE: lowest code
+    assert [row[3] for row in rows] == [3, 2, 2]
+    assert sorted(authors["edges"]["rows"]) == [[0, 1, 2], [0, 2, 2], [1, 2, 1]]
+    assert len(build.files["authors_layout"]) == 8 * 3
+    assert build.manifest["graphs"][AUTHOR_GRAPH_NAME]["nodes"] == 3
+
+
+def test_author_caps_and_budgets(tmp_path: Path) -> None:
+    raw = _author_dataset(tmp_path)
+    capped = build_graphs(raw, layout_iterations=5, author_node_cap=2, author_phone_cap=1)
+    authors = json.loads(capped.files[AUTHOR_GRAPH_NAME])
+    phone = json.loads(capped.files[AUTHOR_PHONE_GRAPH_NAME])
+    assert [row[0] for row in authors["nodes"]["rows"]] == ["A2", "A1"]
+    assert authors["edges"]["rows"] == [[0, 1, 2]]
+    assert [row[0] for row in phone["nodes"]["rows"]] == ["A2"]
+    assert phone["edges"]["rows"] == []
+    assert len(capped.files["authors_layout"]) == 16
+
+    budgeted = build_graphs(
+        raw,
+        layout_iterations=5,
+        author_edge_budget=2,
+        author_start_k=1,
+        author_phone_edge_budget=2,
+        author_phone_start_k=1,
+    )
+    kept = json.loads(budgeted.files[AUTHOR_GRAPH_NAME])["edges"]["rows"]
+    assert len(kept) <= 2
+    assert {n for a, b, _ in kept for n in (a, b)} == {0, 1, 2}  # every node keeps an edge
+    manifest = budgeted.manifest["graphs"][AUTHOR_GRAPH_NAME]
+    assert manifest["thinning"]["budget"] == 2
+
+
+def test_author_build_is_deterministic(tmp_path: Path) -> None:
+    raw = _author_dataset(tmp_path)
+    first = build_graphs(raw, layout_iterations=20)
+    second = build_graphs(raw, layout_iterations=20)
+    assert first.files == second.files
+
+
+def test_author_outputs_have_no_email_orcid_or_affiliation(tmp_path: Path) -> None:
+    build = build_graphs(_author_dataset(tmp_path), layout_iterations=5)
+    assert set(AUTHOR_NODE_FIELDS).isdisjoint(FORBIDDEN_KEYS)
+    for key in (AUTHOR_GRAPH_NAME, AUTHOR_PHONE_GRAPH_NAME):
+        text = build.files[key].decode("utf-8")
+        for banned in ("@", "example.org", "orcid", "affiliation", "dept of things", "marine"):
+            assert banned not in text.lower(), banned
+        payload = json.loads(text)
+        assert set(payload) == {"communities", "edges", "graph", "nodes", "schema_version"}
+
+
+def test_institution_outputs_do_not_depend_on_author_backbone(tmp_path: Path) -> None:
+    with_titles = build_graphs(_author_dataset(tmp_path / "a"), layout_iterations=5)
+    without = build_graphs(_author_dataset(tmp_path / "b", with_titles=False), layout_iterations=5)
+    for key in (GRAPH_NAME, PHONE_GRAPH_NAME, "layout"):
+        assert with_titles.files[key] == without.files[key]
+    assert json.loads(without.files[AUTHOR_GRAPH_NAME])["nodes"]["rows"] == []
+
+
+def test_empty_backbone_gives_empty_author_graph(tmp_path: Path) -> None:
+    build = build_graphs(_author_dataset(tmp_path, with_titles=False), layout_iterations=5)
+    authors = json.loads(build.files[AUTHOR_GRAPH_NAME])
+    assert authors["nodes"]["rows"] == [] and authors["edges"]["rows"] == []
+    assert build.files["authors_layout"] == b""
+    assert build.manifest["author_graph"]["backbone"]["works_matching"] == 0
+    empty = build_author_graph({})
+    assert empty["ids"] == [] and empty["positions"] == []
+
+
+def test_check_outputs_covers_author_files(tmp_path: Path) -> None:
+    build = build_graphs(_author_dataset(tmp_path), layout_iterations=5)
+    out = tmp_path / "out"
+    out.mkdir()
+    for key, name in FILE_NAMES.items():
+        (out / name).write_bytes(build.files[key])
+    assert check_outputs(out) == []
+    (out / FILE_NAMES["authors_layout"]).write_bytes(b"\x00" * 4)
+    assert any("authors layout" in problem for problem in check_outputs(out))

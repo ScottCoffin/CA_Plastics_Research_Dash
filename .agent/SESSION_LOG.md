@@ -256,3 +256,4 @@
 | 2026-11-25 | BQ-V.1 (slice 1) | Global institution graph within benchmarked budgets (picked up after the worker stopped) | this commit |
 | 2026-11-25 | BQ-S5-APPLY (slice 1) | Approved taxonomy applied to config and code (tags, tier, lens, centrality, origin, facets registered) | this commit |
 | 2026-11-25 | BQ-S5-APPLY (slice 2) | Guide addendum + labelling-app fields; template keeps the A3 block contiguous | this commit |
+| 2026-11-25 | BQ-V.1 (slice 2) | Global author graph within benchmarked budgets; public names only | this commit |
