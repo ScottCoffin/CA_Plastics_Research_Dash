@@ -1,4 +1,4 @@
-# Handoff — 2026-11-25 — new machine onboarded; BQ-1.3, BQ-2.4, BQ-S2, BQ-3.3, PLAT-3 slices 1-3, PLAT-4 slices 1-2, PLAT-4a backfill day 1
+# Handoff — 2026-11-25 (late) — California data moved to site/data/california; global backfill complete; new machine onboarded; BQ-1.3, BQ-2.4, BQ-S2, BQ-3.3, PLAT-3 slices 1-3, PLAT-4 slices 1-2, PLAT-4a backfill day 1
 
 ## State in one paragraph
 New Windows machine set up (CLAUDE.md "Cross-machine handoff" lists the toolchain; owner added both OpenAlex keys
@@ -11,9 +11,7 @@ fetch + budget guard 401/403 reserve + 0.6 s spacing + network-error deferral), 
 partition with institution-registry join), UX-13 part a (Monitoring filters in the URL). Last commit 71df3a28.
 
 ## In flight / next (in this order)
-1. Backfill day 2 (after 00:00 UTC): `py -3.14 scripts/fetch_global_raw.py --start-year 1950 --max-credits 8400`
-   (resumes; 3 of 77 slices, about 550 pages, about 5,500 credits), then `py -3.14 scripts/partition_global.py`.
-   Day 1: 859 pages, 80,795 works; partition 23,859 with pmid, 1,277 matching california.
+1. Done: global backfill (136,086 works, all 77 slices) and partition (`data/processed/global/`, 37,925 with pmid, 1,972 california). California data moved to `site/data/california/` (owner; docs/DATA_LAYOUT.md), live and smoke-tested (0 failed data requests on 15 routes).
 2. Then PLAT-4 remaining: Tier B outputs per region from `data/processed/global/`; check BQ-V.2's acceptance
    (estimate, unscreened label, pmid, guard, no paid filters) and tick BQ-V.2 with PLAT-4.
 3. Unblocked by BQ-V.2: BQ-S9b (PubMed stage 2 on global works), BQ-V.1 (graph builder; check
@@ -30,9 +28,7 @@ partition with institution-registry join), UX-13 part a (Monitoring filters in t
 - The Evidence page filter list has one axe colour-contrast hit (`.ev-zero > .ev-option-name`), pre-existing.
 
 ## Owner actions (one line each)
-- PLAT3-DATA-PATH: keep California data at `site/data/` (default, in use) or move it to `site/data/california/`?
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).
 - H40: taxonomy decisions D1-D10 in `docs/TAXONOMY_PROPOSAL.md`.
 - H42: triage 43 PubMed misses (`py -3.14 -m streamlit run scripts/review_pubmed_misses_app.py`).
 - H2: 277 low-confidence work-relevance decisions (`scripts/review_work_relevance_app.py`).
-- BQ13-LENS: confirm the lens grouping used by BQ-1.3 (default: the A3 §4.3 theme groups).
