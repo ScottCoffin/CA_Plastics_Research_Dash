@@ -364,3 +364,76 @@ and a CI job for `worker/` tests.
 Back end: the Worker stores the ORCID iD (public identifier), the linked author id, claimed institutions with their
 source (openalex_history, orcid_employment, proposed), regions joined, and the confirmed email's domain; regions
 an ambassador serves can grow later by claiming more institutions.
+
+## Backend slice 2a (ORCID-first sign-up, local only)
+
+Status: built and tested locally in `worker/` (66 vitest tests, 23 of them for sign-up). Not deployed; no ORCID,
+OpenAlex, Resend or Cloudflare calls in tests. Slice 2b (moderation queue, proposals review, first-visit UI wiring,
+notices, reminders, PR export) follows.
+
+**Owner action: register the ORCID redirect URI** `https://api.plastiverse.live/orcid/callback` on the ORCID
+developer application (the API host is `api.plastiverse.live`, QUESTIONS AMB-API-HOST). Secrets to set with
+`wrangler secret put` (owner-approved only): `ORCID_CLIENT_ID`, `ORCID_CLIENT_SECRET`, `EMAIL_HASH_KEY`.
+
+**Routes** (JSON, `Cache-Control: no-store`; CORS only from `https://plastiverse.live` with credentials):
+
+- `GET /orcid/start`: sets a state and a browser nonce (both stored as hashes, 10 minutes, single use) and redirects to
+  `orcid.org/oauth/authorize` with `scope=/authenticate`.
+- `GET /orcid/callback?code&state`: checks the state and the nonce cookie, exchanges the code (client id and secret,
+  same redirect URI), keeps only the verified iD, and creates a pending ambassador and a 60-minute signup cookie
+  (`__Host-plastiverse_signup`). Then redirects to the workspace with `?signup=orcid`. Any failure redirects with
+  `?signin=failed`. An iD already linked to an active ambassador gets a normal session instead (`?signin=orcid`).
+- `GET /signup/profile` (signup cookie): OpenAlex author by ORCID (`api.openalex.org/authors/orcid:<iD>`, no key,
+  User-Agent `PlastiverseLive-Ambassadors`) and the public ORCID employments (`pub.orcid.org/v3.0/<iD>/employments`).
+  Returns the institution checklist (OpenAlex affiliations, then last-known institutions, then employments; each with
+  `eligible`, `regions`, `years`, `source`). No author gives an empty checklist and the proposal path (`author: null`).
+  The checklist snapshot is stored with the pending ambassador; claims are checked against it.
+- `POST /signup/claims` (signup cookie) `{institutions, regions, proposals}`: institutions must be on the checklist
+  (`unknown_institution`); at least one ticked institution must be eligible (`no_eligible_institution`), unless
+  proposals are sent, which then stored as `proposals_only`; each region must be tied to a claimed eligible
+  institution (`region_not_tied`); at least one region when an eligible institution is claimed (`region_required`).
+  Replaces earlier pending claims and proposals. Status `pending_email`.
+- `POST /signup/email` (signup cookie) `{email, turnstileToken}`: the domain must match a claimed eligible institution
+  (`domain_not_claimed`, free-mail refused); Turnstile and the slice-1 rate limits apply; sends one single-use link
+  (30 minutes) to `/auth/verify`. Needs claims (`claims_required`, 409).
+- `GET /auth/verify?token=` (existing): for a sign-up link, the pending ambassador becomes active with the email, the
+  claimed institutions get `claimed_at`, the pending regions become active, the signup session ends, and a normal
+  session cookie is set. The slice-1 email-first link still works for compatibility.
+- `POST /signup/profile` (session cookie) `{display_name, credit_public (default true), accept_terms_version: "v1"}`:
+  first-visit profile and consent (`consent_at`, `terms_version`).
+- `GET /me`: adds `orcid`, `author_id`, `institutions` (claimed, with name, source, eligible), `regions` (with status).
+
+**Data model** (`worker/migrations/0002_orcid_signup.sql`): `ambassadors` gains `orcid` (unique), `author_id`,
+`checklist_json` (pending only), `credit_public` (default 1; replaces `public_credit`), `terms_version`, and a
+`pending` status; `email`, `email_hash`, `region` and `institution_id` become nullable until the email proof.
+`ambassador_institutions` (ambassador, institution, source `openalex_history|orcid_employment|proposed`, eligible,
+claimed_at), `ambassador_regions` (ambassador, region, status `active|pending_email`, joined_at), `proposals`
+(kind `institution|region`, payload JSON of short strings, status `pending|approved|rejected`), `orcid_states` (state
+hash, nonce hash, expiry), `signup_sessions` (session id hash, ambassador, expiry). `magic_links.ambassador_id` links a
+sign-up link. `sessions` is rebuilt against the new `ambassadors`.
+
+**What is stored.** The ORCID iD (public), the OpenAlex author id, the checklist snapshot, the claims, the proposals,
+and the confirmed email (plain, for sign-in and notices only, never exported) with its keyed hash. The ORCID access
+token is discarded after the iD is read. States, nonces, session ids and link tokens are stored only as SHA-256
+hashes. Email lookups use `EMAIL_HASH_KEY` (a secret separate from `SESSION_SIGNING_KEY`); see the migration note in
+`0002_orcid_signup.sql` (slice-1 local rows must be reset, since they were keyed with the old key).
+
+**Security notes**
+
+- ORCID login CSRF: the state is single use and bound to a browser nonce cookie; a mismatch never reaches the token
+  exchange. The Worker does not send a PKCE challenge; the hashed nonce cookie is the browser binding.
+- Only the verified iD is trusted. Institutions come only from the checklist the server built; the browser cannot add
+  an institution or region that the record does not show.
+- The email step accepts only a domain of a claimed eligible institution, and an address already used by another
+  ambassador cannot be activated (the link fails).
+- Outbound calls (ORCID, OpenAlex, ORCID employments) go through one injectable fetch; tests fail on any other URL.
+
+**Open for the owner and slice 2b**
+
+- The amb-v1 allowlists carry no `ror` field, so ORCID employments cannot map to an allowlisted institution yet. They
+  are listed as ineligible (`ror:<url>` or `name:<organisation>`). Adding `ror` to the build is needed for employments to
+  count.
+- The OpenAlex lookup is a singleton, so "several matches to choose from" (section 13.2) is not built; no name search.
+- Proposals are stored only; moderation review and the public map change come in slice 2b.
+- The ORCID sign-in for an already-active ambassador is an owner decision to confirm (it skips the email step).
+- Pending sign-ups that never confirm an email are not yet cleaned up.

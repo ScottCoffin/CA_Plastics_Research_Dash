@@ -19,8 +19,9 @@ SITE_ORIGIN = "https://plastiverse.live"
 ALLOWED_ORIGIN = "https://plastiverse.live"
 # Provisional workspace path; the site owner confirms it before deploy.
 WORKSPACE_URL = "https://plastiverse.live/ambassadors/"
-# Public base URL of this Worker; sign-in links point to PUBLIC_API_URL/auth/verify.
-PUBLIC_API_URL = "https://plastiverse.live/api"
+# Public base URL of this Worker (API host, QUESTIONS AMB-API-HOST). Sign-in links point to
+# PUBLIC_API_URL/auth/verify; the ORCID redirect URI is PUBLIC_API_URL/orcid/callback.
+PUBLIC_API_URL = "https://api.plastiverse.live"
 MAIL_FROM = "Plastiverse <auth@plastiverse.live>"
 # "resend" (production default). Use "outbox" only for local dev and tests (writes to D1 table outbox).
 MAIL_MODE = "resend"

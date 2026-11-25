@@ -220,6 +220,10 @@ leak-check works wait for S5.7.
 ## Later (the agent will say when each is ready)
 
 
+- **H49. Deploy the ambassador API (AMB-1, when the agent says the Worker is ready).** In ORCID Developer
+  tools, change the redirect URI to `https://api.plastiverse.live/orcid/callback`. In `worker/`, run
+  `npx wrangler secret put` once each for ORCID_CLIENT_ID, ORCID_CLIENT_SECRET, EMAIL_HASH_KEY (a new random
+  value, not the session key), SESSION_SIGNING_KEY, RESEND_API_KEY and TURNSTILE_SECRET, then approve the deploy.
 - **H8. Outreach emails (S9.6).** Now unblocked (H7 done, emails allowed in `data/private/`): approve the email template in
   `docs/OUTREACH.md`, then send the first batch from your own email account. The
   agent never sends email.

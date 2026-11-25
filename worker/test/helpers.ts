@@ -1,36 +1,85 @@
 import { SELF, env } from "cloudflare:test";
 import { afterEach, beforeEach } from "vitest";
 
-const TABLES = ["audit_log", "outbox", "sessions", "magic_links", "ambassadors", "rate_limits"];
+const TABLES = [
+  "audit_log",
+  "outbox",
+  "sessions",
+  "signup_sessions",
+  "orcid_states",
+  "proposals",
+  "magic_links",
+  "ambassador_regions",
+  "ambassador_institutions",
+  "ambassadors",
+  "rate_limits",
+];
 
 export const SITE = "https://plastiverse.live";
+const API = "https://api.plastiverse.live";
 const TURNSTILE_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
-interface FakeNetwork {
+export interface FakeNetwork {
   turnstileTokens: string[];
   turnstileSuccess: boolean;
+  /** ORCID iD the fake OAuth exchange verifies (null: token endpoint refuses). */
+  orcidId: string | null;
+  /** Bodies of token exchanges, to check the redirect URI and secret were sent. */
+  orcidTokenForms: URLSearchParams[];
+  /** OpenAlex author answer: HTTP status and body (status 404 means no author). */
+  openalex: { status: number; body: unknown };
+  /** ORCID public employments answer. */
+  employments: { status: number; body: unknown };
+  /** User-Agent values seen on OpenAlex calls. */
+  openalexUserAgents: string[];
 }
 
 /**
  * Replaces globalThis.fetch for each test. Turnstile siteverify is answered locally; any other
  * outbound request throws, so no test can reach Cloudflare, Resend or the internet.
  */
-export const network: FakeNetwork = { turnstileTokens: [], turnstileSuccess: true };
+export const network: FakeNetwork = freshNetwork();
 const realFetch = globalThis.fetch;
+
+function freshNetwork(): FakeNetwork {
+  return {
+    turnstileTokens: [],
+    turnstileSuccess: true,
+    orcidId: "0000-0002-1825-0097",
+    orcidTokenForms: [],
+    openalex: { status: 404, body: {} },
+    employments: { status: 200, body: { "affiliation-group": [] } },
+    openalexUserAgents: [],
+  };
+}
+
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
+}
 
 beforeEach(async () => {
   // Each test starts from an empty local D1 (the migrations stay applied).
   for (const table of TABLES) await env.DB.prepare(`DELETE FROM ${table}`).run();
-  network.turnstileTokens = [];
-  network.turnstileSuccess = true;
+  Object.assign(network, freshNetwork());
   globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
     if (url === TURNSTILE_URL) {
       const form = init?.body as FormData;
       network.turnstileTokens.push(String(form.get("response")));
-      return new Response(JSON.stringify({ success: network.turnstileSuccess }), {
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ success: network.turnstileSuccess });
+    }
+    if (url === "https://orcid.org/oauth/token") {
+      network.orcidTokenForms.push(new URLSearchParams(String(init?.body)));
+      if (network.orcidId === null) return json({ error: "invalid_grant" }, 400);
+      return json({ orcid: network.orcidId, name: "Test Person", access_token: "not-stored" });
+    }
+    if (url.startsWith("https://pub.orcid.org/v3.0/") && url.endsWith("/employments")) {
+      return json(network.employments.body, network.employments.status);
+    }
+    if (url.startsWith("https://api.openalex.org/authors/orcid:")) {
+      const headers = new Headers(init?.headers);
+      network.openalexUserAgents.push(headers.get("User-Agent") ?? "");
+      return json(network.openalex.body, network.openalex.status);
     }
     throw new Error(`network disabled in tests: ${url}`);
   }) as typeof fetch;
