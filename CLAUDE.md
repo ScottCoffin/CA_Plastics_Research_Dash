@@ -154,6 +154,14 @@ The repo carries all agent state, so another machine can resume from a fresh clo
 - Claude Code auto-memory is mirrored in `.claude/memory/`. On a new machine, copy
   it to `~/.claude/projects/<project-slug>/memory/`. Whenever you save or change a
   memory, write the same file to `.claude/memory/` too.
+- New-machine toolchain (verified 2026-11-25 on a fresh Windows 11 machine; owner allows installs):
+  `py install 3.14`; `py -3.14 -m pip install --user -e ".[dev]" streamlit playwright`;
+  `py -3.14 -m playwright install chromium`; `winget install -e --id OpenJS.NodeJS.LTS` and
+  `--id GitHub.cli` (then `gh auth login`, an owner step; `git push` uses the credential manager);
+  add `/c/Program Files/nodejs` and `/c/Program Files/GitHub CLI` to PATH in `~/.bashrc`;
+  `cd framework && npm ci`; axe for `scripts/ux19_a11y_pass.py`: `npm install axe-core@4 lighthouse`
+  in `~/tools/ux-audit`. Rtools make is optional (use the direct equivalents). Without node, about
+  40 runtime tests fail; a green baseline is about 2,771 passed.
 - Keep agent work out of the OS temp scratchpad, because it does not travel.
   Sources for anything the owner will iterate on (for example
   `.impeccable/sketches/src/` for the landing prototype) belong in the repo.
