@@ -242,3 +242,4 @@
 | 2026-11-25 | Owner decisions | H40 approved (BQ-S5-APPLY queued); H25 design kept, VD-SM deferred; REG-1 Norway+Belgium and AMB-1 ambassadors added; H42 reminder | this commit |
 | 2026-11-25 | REG-1 | Norway and Belgium region pages (global theme, placeholders to confirm) | this commit |
 | 2026-11-25 | AMB-1 (spec) | Ambassador spec with owner decisions (Workers + D1, Resend, region leads, institutes eligible); H44 setup steps | this commit |
+| 2026-11-25 | AMB-1 (design) | Ambassador prototype, 12 screens, for owner review (H45) | this commit |

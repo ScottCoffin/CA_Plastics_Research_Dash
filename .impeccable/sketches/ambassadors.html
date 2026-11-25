@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Local ambassadors · Plastiverse Live (design prototype)</title>
+<style>
+@font-face { font-family: "Schibsted Grotesk"; src: url("../../site/assets/fonts/SchibstedGrotesk-Variable-latin.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: "Martian Mono"; src: url("../../site/assets/fonts/MartianMono-Regular-latin.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+:root {
+  --pv-ground: #f6f8f9; --pv-paper: #ffffff; --pv-night: #000000;
+  --pv-ink: #17263d; --pv-ink-2: #4d5d73; --pv-line: #c4d0d6; --pv-grid: #e4eaee;
+  --pv-wash: #e9f1ef; --pv-mint: #c5eadf; --pv-slate: #436487; --pv-slate-2: #86a9bf;
+  --pv-coral: #fa6b68; --pv-coral-ink: #c53e39; --pv-sun: #fff49a; --pv-gold: #e2b714;
+  --pv-cream: #fff8df; --pv-on-dark: #eef1f8; --pv-credit: #9fb0bf;
+  --pv-sans: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --pv-mono: "Martian Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  --pv-gut: clamp(16px, 3.4vw, 48px);
+  --pv-ease: cubic-bezier(.16, 1, .3, 1);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--pv-ground); color: var(--pv-ink); font: 400 16px/1.5 var(--pv-sans); -webkit-font-smoothing: antialiased; overflow-wrap: anywhere; }
+a { color: var(--pv-ink); text-underline-offset: 3px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+::selection { background: var(--pv-coral); color: var(--pv-ink); }
+[hidden] { display: none !important; }
+.mono { font-family: var(--pv-mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 60; background: var(--pv-ink); color: var(--pv-paper); padding: 10px 14px; text-decoration: none; }
+.skip:focus { top: 8px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: var(--pv-gut); }
+.note { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: 66ch; }
+.muted { color: var(--pv-ink-2); }
+
+/* Owner review switcher (prototype only, not part of the product) */
+.proto { background: var(--pv-ink); color: var(--pv-on-dark); }
+.proto-in { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding-block: 10px; }
+.proto-title { font-size: 14px; font-weight: 600; margin-right: auto; }
+.proto label { font-size: 14px; }
+.proto select { min-height: 40px; background: var(--pv-paper); color: var(--pv-ink); border: 1px solid var(--pv-paper); padding: 6px 10px; max-width: 100%; }
+.proto .btn { min-height: 40px; background: var(--pv-ink); color: var(--pv-on-dark); border-color: var(--pv-on-dark); }
+.proto .btn:hover { background: var(--pv-slate); color: var(--pv-paper); }
+.proto .btn:disabled { background: var(--pv-ink); color: var(--pv-on-dark); }
+.proto .check { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; }
+.proto input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--pv-coral); }
+.proto :focus-visible { outline-color: var(--pv-sun); }
+
+/* Site header */
+.top { position: sticky; top: 0; z-index: 30; background: var(--pv-ground); border-bottom: 1px solid var(--pv-line); padding-top: env(safe-area-inset-top, 0px); }
+.top-in { min-height: 60px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; padding-block: 8px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; white-space: nowrap; min-height: 44px; }
+.brand svg { width: 28px; height: 28px; flex: none; }
+.brand circle { fill: var(--pv-gold); } .brand line { stroke: var(--pv-gold); stroke-width: 1.4; stroke-linecap: round; }
+.wm { font-weight: 700; letter-spacing: .09em; font-size: 18px; }
+.wm b { color: var(--pv-coral-ink); }
+.nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 22px; font-size: 15px; }
+.nav a { display: inline-flex; align-items: center; min-height: 44px; }
+.nav a:hover { text-decoration: underline; }
+.nav a[aria-current="page"] { font-weight: 600; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; }
+.who { display: none; font-size: 15px; color: var(--pv-ink-2); }
+body[data-auth="in"] .who { display: inline; }
+body[data-auth="in"] .signin-link { display: none; }
+.signout { display: none; }
+body[data-auth="in"] .signout { display: inline-flex; }
+
+/* Buttons and fields */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); cursor: pointer; text-decoration: none; text-align: center; font-size: 15px; }
+.btn:hover { background: var(--pv-wash); }
+.btn.solid { background: var(--pv-ink); color: var(--pv-paper); }
+.btn.solid:hover { background: var(--pv-slate); border-color: var(--pv-slate); }
+.btn.coral { background: var(--pv-coral); color: var(--pv-ink); }
+.btn.coral:hover { background: var(--pv-ink); color: var(--pv-paper); }
+.btn:disabled { opacity: .6; cursor: not-allowed; background: var(--pv-paper); color: var(--pv-ink); }
+.btn[aria-pressed="true"] { background: var(--pv-ink); color: var(--pv-paper); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.link { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; color: var(--pv-coral-ink); }
+.field { display: grid; gap: 6px; margin-top: 18px; max-width: 560px; }
+.field > label, .field > .label { font-weight: 600; font-size: 15px; }
+.hint { font-size: 14px; color: var(--pv-ink-2); }
+input[type="text"], input[type="email"], input[type="url"], input[type="date"], input[type="search"], select, textarea {
+  width: 100%; min-height: 44px; padding: 9px 12px; background: var(--pv-paper); border: 1px solid var(--pv-ink-2); border-radius: 0; font-size: 16px; }
+textarea { min-height: 96px; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--pv-coral-ink); outline-offset: 1px; }
+.choice { display: flex; align-items: flex-start; gap: 12px; min-height: 44px; padding: 8px 0; cursor: pointer; max-width: 640px; }
+.choice input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--pv-ink); }
+.choice span { min-width: 0; }
+.choice small { display: block; color: var(--pv-ink-2); font-size: 14px; }
+fieldset { border: 0; margin: 22px 0 0; padding: 0; min-width: 0; }
+legend { font-weight: 600; font-size: 15px; padding: 0; margin-bottom: 4px; }
+.err-box { margin-top: 20px; padding: 14px 16px; background: var(--pv-paper); border: 2px solid var(--pv-coral-ink); max-width: 640px; }
+.err-box h2 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.err-box ul { margin: 0; padding-left: 20px; }
+.field-err { color: var(--pv-coral-ink); font-size: 14px; font-weight: 600; }
+.check-row { display: flex; align-items: flex-start; gap: 12px; margin-top: 18px; max-width: 640px; }
+.check-row input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--pv-ink); }
+.check-row label { min-height: 44px; display: block; }
+.preview { margin-top: 8px; padding: 10px 12px; background: var(--pv-wash); border: 1px solid var(--pv-line); font-size: 15px; max-width: 560px; }
+
+/* Screens */
+main { display: block; }
+.screen { padding-block: 40px 88px; }
+h1 { font-size: clamp(34px, 4.6vw, 58px); font-weight: 400; letter-spacing: -.03em; line-height: 1.04; margin: 0; text-wrap: balance; max-width: 22ch; }
+h2 { font-size: clamp(24px, 2.4vw, 31px); font-weight: 400; letter-spacing: -.02em; line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+h3 { font-size: 18px; font-weight: 600; margin: 0 0 4px; line-height: 1.3; }
+.lede { font-size: clamp(17px, 1.4vw, 19px); line-height: 1.5; color: var(--pv-ink-2); margin: 16px 0 0; max-width: 60ch; text-wrap: pretty; }
+.sec { margin-top: 56px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 24px; border-top: 2px solid var(--pv-ink); padding-top: 18px; }
+.rows { list-style: none; margin: 0; padding: 0; }
+.rows > li { padding-block: 16px; border-bottom: 1px solid var(--pv-line); }
+.rows > li:first-child { padding-top: 0; }
+.row-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 24px; align-items: center; }
+.row-main p { margin: 4px 0 0; color: var(--pv-ink-2); font-size: 15px; max-width: 62ch; }
+.badge { display: inline-flex; align-items: center; min-height: 28px; padding: 2px 10px; border: 1px solid var(--pv-ink); background: var(--pv-sun); color: var(--pv-ink); font-size: 14px; white-space: nowrap; }
+.badge.live { background: var(--pv-coral); }
+.badge.mint { background: var(--pv-mint); }
+.badge.plain { background: var(--pv-paper); }
+.badge.dash { border-style: dashed; background: var(--pv-paper); }
+.steps { margin: 0; padding-left: 22px; max-width: 64ch; }
+.steps li { padding-left: 6px; margin-bottom: 14px; }
+.steps li::marker { font-weight: 600; font-family: var(--pv-mono); }
+
+/* Landing eligibility checker */
+.check-box { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 22px; max-width: 760px; }
+.check-form { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+.check-form .field { margin-top: 0; max-width: none; }
+.result { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--pv-ink); background: var(--pv-wash); font-size: 15px; max-width: 70ch; }
+.result[data-state="no"] { background: var(--pv-cream); }
+.result b { display: block; font-size: 16px; margin-bottom: 2px; }
+.result .route { margin-top: 8px; }
+
+/* Sign in */
+.two { display: grid; gap: 40px 56px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.aside { border-top: 2px solid var(--pv-ink); padding-top: 16px; max-width: 46ch; }
+.aside p { margin: 0 0 12px; color: var(--pv-ink-2); font-size: 15px; }
+.turnstile { display: flex; align-items: center; gap: 12px; min-height: 65px; padding: 12px; border: 1px dashed var(--pv-ink-2); background: var(--pv-paper); max-width: 320px; font-size: 14px; }
+.stack { max-width: 62ch; }
+.stack p { color: var(--pv-ink-2); }
+.big-mail { font-family: var(--pv-mono); font-size: 16px; background: var(--pv-paper); border: 1px solid var(--pv-line); padding: 6px 10px; display: inline-block; overflow-wrap: anywhere; }
+
+/* Workspace */
+.ws-head { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; align-items: flex-end; }
+.ws-cols { display: grid; gap: 44px; grid-template-columns: minmax(0, 1fr); margin-top: 8px; }
+.progress { width: 100%; height: 10px; appearance: none; -webkit-appearance: none; border: 0; background: var(--pv-wash); margin-top: 10px; display: block; max-width: 420px; }
+.progress::-webkit-progress-bar { background: var(--pv-wash); }
+.progress::-webkit-progress-value { background: var(--pv-slate); }
+.progress::-moz-progress-bar { background: var(--pv-slate); }
+.stream-meta { display: grid; gap: 4px; justify-items: end; text-align: right; }
+.stream-meta .actions { margin-top: 8px; justify-content: flex-end; }
+.activity li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 4px 16px; padding-block: 12px; border-bottom: 1px solid var(--pv-line); font-size: 15px; }
+.activity li:first-child { padding-top: 0; }
+.activity time { font-family: var(--pv-mono); font-size: 13px; color: var(--pv-ink-2); }
+.next { counter-reset: n; list-style: none; margin: 0; padding: 0; }
+.next li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 4px 10px; padding-block: 10px; border-bottom: 1px solid var(--pv-line); font-size: 15px; }
+.next li > span:first-child { font-family: var(--pv-mono); font-size: 13px; color: var(--pv-ink-2); padding-top: 2px; }
+.lead-only { display: none; }
+body.lead .lead-only { display: block; }
+body.lead .lead-only.inline { display: inline-flex; }
+.owner-only { display: block; }
+body.lead .owner-only { display: none; }
+.lead-box { border: 2px solid var(--pv-ink); padding: 16px 18px; background: var(--pv-paper); max-width: 560px; }
+.lead-box p { margin: 6px 0 0; font-size: 15px; color: var(--pv-ink-2); }
+
+/* Review (one case per screen) */
+.rv-bar { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--pv-line); padding-bottom: 14px; }
+.rv-prog { display: grid; gap: 4px; min-width: 220px; flex: 1 1 260px; max-width: 420px; }
+.rv-prog span { font-size: 14px; color: var(--pv-ink-2); }
+.case { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); margin-top: 28px; }
+.q { font-size: clamp(22px, 2.4vw, 29px); line-height: 1.25; font-weight: 600; letter-spacing: -.01em; margin: 0; max-width: 34ch; text-wrap: balance; }
+.evidence { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 18px 20px; }
+.evidence dl { display: grid; gap: 14px; margin: 0; }
+.evidence dt { font-size: 13px; color: var(--pv-ink-2); }
+.evidence dd { margin: 2px 0 0; font-size: 16px; line-height: 1.5; }
+mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.machine { border-top: 2px solid var(--pv-ink); padding-top: 14px; font-size: 15px; }
+.machine b { font-weight: 600; }
+.machine p { margin: 6px 0 0; color: var(--pv-ink-2); }
+.decide { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.decide .btn { min-height: 56px; font-size: 16px; font-weight: 600; white-space: nowrap; padding-inline: 10px; gap: 6px; }
+.decide .btn kbd { font-family: var(--pv-mono); font-size: 12px; font-weight: 400; border: 1px solid currentColor; padding: 0 5px; margin-left: 6px; }
+.pick { margin-top: 18px; border-left: 0; background: var(--pv-wash); padding: 16px 18px; max-width: 640px; }
+.pick legend { font-weight: 600; }
+.saved { margin-top: 18px; padding: 12px 14px; border: 1px solid var(--pv-ink); background: var(--pv-mint); font-size: 15px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; max-width: 640px; }
+.keys { font-size: 14px; color: var(--pv-ink-2); }
+.keys kbd { font-family: var(--pv-mono); font-size: 12px; border: 1px solid var(--pv-ink-2); padding: 0 5px; background: var(--pv-paper); color: var(--pv-ink); }
+.rv-nav { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-top: 28px; border-top: 1px solid var(--pv-line); padding-top: 18px; }
+
+/* Stream B */
+.ph-name { font-size: 22px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }
+.kv { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin: 18px 0 0; border-top: 1px solid var(--pv-line); }
+.kv div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 4px 16px; padding-block: 10px; border-bottom: 1px solid var(--pv-line); font-size: 15px; }
+.kv dt { color: var(--pv-ink-2); }
+.kv dd { margin: 0; }
+
+/* Forms (stream C) */
+.seg { display: flex; flex-wrap: wrap; gap: 0; margin-top: 24px; border: 1px solid var(--pv-ink); width: max-content; max-width: 100%; }
+.seg a { min-height: 44px; display: inline-flex; align-items: center; padding: 8px 16px; text-decoration: none; background: var(--pv-paper); }
+.seg a + a { border-left: 1px solid var(--pv-ink); }
+.seg a[aria-current="page"] { background: var(--pv-ink); color: var(--pv-paper); }
+.form-grid { display: grid; gap: 0 28px; grid-template-columns: minmax(0, 1fr); max-width: 720px; }
+.counter { font-size: 14px; color: var(--pv-ink-2); text-align: right; }
+
+/* Moderation */
+.mod { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); margin-top: 28px; }
+.queue { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--pv-ink); }
+.queue li { border-bottom: 1px solid var(--pv-line); }
+.queue button { width: 100%; text-align: left; background: var(--pv-paper); border: 0; padding: 14px 14px 14px 12px; min-height: 64px; cursor: pointer; display: grid; gap: 2px; border-left: 0; }
+.queue button:hover { background: var(--pv-wash); }
+.queue button[aria-pressed="true"] { background: var(--pv-wash); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.queue small { color: var(--pv-ink-2); font-size: 14px; }
+.diff { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--pv-paper); }
+.diff th, .diff td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--pv-line); }
+.diff th { font-size: 14px; color: var(--pv-ink-2); font-weight: 600; }
+.diff .chg td { background: var(--pv-cream); }
+.diff .tag { font-size: 13px; font-weight: 600; display: block; color: var(--pv-ink); }
+.diff del { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--pv-ink-2); }
+.diff ins { text-decoration: none; background: var(--pv-mint); padding: 0 2px; }
+.diff-wrap { overflow-x: auto; border: 1px solid var(--pv-line); }
+.decision { margin-top: 22px; display: grid; gap: 10px; max-width: 640px; }
+.decision .btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.flow-note { border-top: 1px solid var(--pv-line); margin-top: 22px; padding-top: 14px; font-size: 15px; color: var(--pv-ink-2); max-width: 66ch; }
+
+/* Footer (black, as on the explore page) */
+.foot { background: var(--pv-night); color: var(--pv-mint); padding: 40px var(--pv-gut) calc(40px + env(safe-area-inset-bottom, 0px)); font-size: 14px; }
+.foot-in { max-width: 1120px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 16px 40px; justify-content: space-between; }
+.foot p { margin: 0; max-width: 60ch; }
+.foot b { color: var(--pv-on-dark); font-weight: 600; }
+.foot a { color: var(--pv-on-dark); text-decoration: underline; text-underline-offset: 3px; display: inline-flex; align-items: center; min-height: 44px; }
+
+/* Responsive */
+@media (min-width: 700px) {
+  .decide { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .form-grid .wide { grid-column: 1 / -1; }
+  .check-form { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+  .check-form .btn { margin-bottom: 0; }
+}
+@media (min-width: 960px) {
+  .two { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+  .ws-cols { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 56px; }
+  .mod { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.5fr); gap: 48px; }
+  .case { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); align-items: start; }
+  .case > .decision-col { grid-column: 2; }
+}
+@media (max-width: 700px) {
+  .row-grid { grid-template-columns: minmax(0, 1fr); }
+  .stream-meta { justify-items: start; text-align: left; }
+  .stream-meta .actions { justify-content: flex-start; }
+  .activity li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .kv div { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .decide .btn { min-height: 56px; }
+  .nav { gap: 4px 16px; }
+  .screen { padding-block: 28px 64px; }
+}
+</style>
+</head>
+<body data-auth="out">
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Owner review switcher: prototype only, not part of the product -->
+<div class="proto" role="region" aria-label="Prototype screen switcher (owner review only)">
+  <div class="wrap proto-in">
+    <p class="proto-title">Design review: <span class="sr">screen switcher.</span>Screen <span id="screen-count" aria-hidden="true"></span></p>
+    <label for="jump" class="sr">Go to screen</label>
+    <select id="jump">
+      <optgroup label="Ambassador entry and sign-in">
+        <option value="landing">1 Ambassadors landing</option>
+        <option value="signin">2 Sign in</option>
+        <option value="signin-sent">2a Sign in: check your email</option>
+        <option value="signin-expired">2b Sign in: expired link</option>
+        <option value="welcome">3 First visit</option>
+      </optgroup>
+      <optgroup label="Workspace">
+        <option value="workspace">4 Workspace dashboard</option>
+        <option value="review">5 Stream A reviewer: institution case</option>
+        <option value="review-language">5b Stream A reviewer: local-language case</option>
+        <option value="confirm">6 Stream B: confirm a placeholder</option>
+        <option value="add">7 Stream C: add a group or organisation</option>
+        <option value="add-policy">7b Stream C: local policy form</option>
+      </optgroup>
+      <optgroup label="Owner and region leads">
+        <option value="moderation">8 Moderation queue</option>
+      </optgroup>
+    </select>
+    <button class="btn" type="button" id="prev">Previous</button>
+    <button class="btn" type="button" id="next">Next</button>
+    <label class="check"><input type="checkbox" id="leadtoggle"> Show as region lead (Norway)</label>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#landing" aria-label="Plastiverse Live, home of ambassadors">
+      <svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="6" /><line x1="2" y1="14" x2="26" y2="14" /><line x1="14" y1="2" x2="14" y2="26" /></svg>
+      <span class="wm">PLASTI<b>VERSE</b> LIVE</span>
+    </a>
+    <nav class="nav" aria-label="Site">
+      <a href="#landing" class="signin-link" data-route="landing">Ambassadors</a>
+      <a href="global_app.html">Explore the data</a>
+      <span class="who">Norway · NIVA</span>
+      <a href="#landing" class="signout">Sign out</a>
+      <a class="btn solid signin-link" href="#signin" data-route="signin">Sign in</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<!-- 1. LANDING -->
+<section class="screen wrap" data-route="landing" aria-labelledby="h-landing">
+  <h1 id="h-landing">Become a local ambassador</h1>
+  <p class="lede">Plastiverse Live grows region by region. Researchers and community leaders who know a place check our data there and add what only locals know.</p>
+
+  <div class="sec">
+    <div class="sec-head"><h2>What ambassadors do</h2><span class="note">About an hour a month, from your own desk.</span></div>
+    <ul class="rows" style="margin-top:16px">
+      <li><div class="row-main"><h3>Check doubtful matches</h3><p>The automatic sorting is unsure about some works and institutions. You say whether it is right: a place name in the wrong country, or a Norwegian-language study that is about plastics.</p></div></li>
+      <li><div class="row-main"><h3>Confirm placeholders</h3><p>Some funders, monitoring programmes and policies on a region page are not yet checked. Confirm the name and link, correct them, or mark them not relevant.</p></div></li>
+      <li><div class="row-main"><h3>Add local knowledge</h3><p>Tell us about community groups, volunteer clean-ups, local policies with their dates, and monitoring data with its licence.</p></div></li>
+    </ul>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><h2>Regions</h2><span class="note">Each region has its own page and its own review queue.</span></div>
+    <ul class="rows" style="margin-top:16px">
+      <li><div class="row-grid">
+        <div class="row-main"><h3>California <span class="badge live" style="margin-left:6px">Live atlas</span></h3><p>The full Atlas is live. Ambassador tasks are open to researchers at California institutions.</p></div>
+        <a class="btn" href="#signin">Sign in for California</a></div></li>
+      <li><div class="row-grid">
+        <div class="row-main"><h3>Norway <span class="badge" style="margin-left:6px">Open to ambassadors</span></h3><p>The Norway page is in pilot with research institutes and universities listed for Norway.</p></div>
+        <a class="btn" href="#signin">Sign in for Norway</a></div></li>
+      <li><div class="row-grid">
+        <div class="row-main"><h3>Belgium <span class="badge" style="margin-left:6px">Open to ambassadors</span></h3><p>The Belgium page is in pilot. Institutions are listed by their email domain.</p></div>
+        <a class="btn" href="#signin">Sign in for Belgium</a></div></li>
+    </ul>
+  </div>
+
+  <div class="sec" aria-labelledby="h-check">
+    <h2 id="h-check">Can I join? Check your institution</h2>
+    <p class="note" style="margin-bottom:16px">Type your work email or your institution's name. We check it against the institutions already tagged for plastics research in the region.</p>
+    <form class="check-box" id="elig-form" novalidate>
+      <div class="check-form">
+        <div class="field">
+          <label for="elig-q">Work email or institution name</label>
+          <input type="text" id="elig-q" name="q" list="inst-list" autocomplete="off" placeholder="you@institution.no or NIVA" aria-describedby="elig-hint">
+          <datalist id="inst-list">
+            <option value="NIVA (niva.no)"></option>
+            <option value="NTNU (ntnu.no)"></option>
+            <option value="SINTEF Ocean (sintef.no)"></option>
+            <option value="VLIZ (vliz.be)"></option>
+            <option value="UC Santa Barbara (ucsb.edu)"></option>
+          </datalist>
+          <p class="hint" id="elig-hint">Free email services (Gmail, Outlook, Proton and similar) cannot be accepted.</p>
+        </div>
+        <div class="field" style="margin-top:0">
+          <label for="elig-region">Region</label>
+          <select id="elig-region">
+            <option value="norway">Norway</option>
+            <option value="belgium">Belgium</option>
+            <option value="california">California</option>
+          </select>
+        </div>
+        <div style="grid-column:1 / -1"><button class="btn solid" type="submit">Check eligibility</button></div>
+      </div>
+      <div id="elig-result" class="result" aria-live="polite" role="status" hidden></div>
+    </form>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><h2>How it works</h2><span class="note">Three steps. No passwords.</span></div>
+    <ol class="steps" style="margin-top:20px">
+      <li>Sign in with your institution email. We send a one-time link that works for 30 minutes.</li>
+      <li>Set your display name once and agree to the contribution terms (CC BY-NC 4.0, the same licence as the Atlas data).</li>
+      <li>Work on your region's three streams. Nothing you add reaches the Atlas until a reviewer approves it.</li>
+    </ol>
+    <div class="actions"><a class="btn solid" href="#signin">Sign in with your institution email</a></div>
+  </div>
+</section>
+
+<!-- 2. SIGN IN -->
+<section class="screen wrap" data-route="signin" aria-labelledby="h-signin">
+  <div class="two">
+    <div>
+      <h1 id="h-signin">Sign in as an ambassador</h1>
+      <p class="lede">Choose your region and enter your institution email. We send a link; there is no password to remember.</p>
+      <form id="signin-form" novalidate style="margin-top:28px">
+        <fieldset>
+          <legend>Region</legend>
+          <label class="choice"><input type="radio" name="region" value="norway" checked><span>Norway</span></label>
+          <label class="choice"><input type="radio" name="region" value="belgium"><span>Belgium</span></label>
+          <label class="choice"><input type="radio" name="region" value="california"><span>California</span></label>
+        </fieldset>
+        <div class="field">
+          <label for="si-email">Institution email</label>
+          <input type="email" id="si-email" name="email" autocomplete="email" placeholder="you@institution.no" aria-describedby="si-hint">
+          <p class="hint" id="si-hint">We check the domain against your region's list. Use your work address.</p>
+        </div>
+        <div class="field">
+          <span class="label">Bot check</span>
+          <div class="turnstile" role="group" aria-label="Bot check placeholder">
+            <span aria-hidden="true" style="width:22px;height:22px;border:1px solid var(--pv-ink-2);flex:none"></span>
+            <span>Verification widget placeholder (Cloudflare Turnstile). Final widget is added by the backend build.</span>
+          </div>
+        </div>
+        <div class="actions"><button class="btn solid" type="submit">Email me a sign-in link</button></div>
+      </form>
+      <div id="signin-errors" class="err-box" role="alert" tabindex="-1" hidden>
+        <h2>Please fix this to continue</h2>
+        <ul id="signin-error-list"></ul>
+      </div>
+    </div>
+    <aside class="aside" aria-label="About sign-in">
+      <h2 style="font-size:20px">What happens next</h2>
+      <p>The link is valid for 30 minutes and works once. The session lasts 30 days, bound to your region and institution.</p>
+      <p>Your email is used only to sign you in and to send notices about your submissions. It is never published, and you can ask us to delete it.</p>
+      <p><a class="link" href="#landing">Not eligible yet? Use the email route</a></p>
+    </aside>
+  </div>
+</section>
+
+<!-- 2a. CHECK YOUR EMAIL -->
+<section class="screen wrap" data-route="signin-sent" aria-labelledby="h-sent">
+  <div class="stack">
+    <h1 id="h-sent">Check your email</h1>
+    <p class="lede" style="color:var(--pv-ink)">We sent a sign-in link to <span class="big-mail">you@niva.no</span>. Open it on this device within 30 minutes.</p>
+    <ul class="steps" style="margin-top:24px">
+      <li>No email after two minutes? Check your spam folder for a message from plastiverse.live.</li>
+      <li>Still nothing? You can ask for one more link in 1 minute.</li>
+      <li>Wrong address? Start again with the right institution email.</li>
+    </ul>
+    <div class="actions">
+      <button class="btn" type="button" disabled aria-describedby="resend-note">Send again in 1 minute</button>
+      <a class="btn" href="#signin">Use a different email</a>
+    </div>
+    <p class="note" id="resend-note">The button becomes active after 60 seconds (timer not live in this prototype).</p>
+  </div>
+</section>
+
+<!-- 2b. EXPIRED LINK -->
+<section class="screen wrap" data-route="signin-expired" aria-labelledby="h-expired">
+  <div class="stack">
+    <h1 id="h-expired">This sign-in link has expired</h1>
+    <p class="lede" style="color:var(--pv-ink)">Sign-in links work for 30 minutes and only once. Nothing was changed on your account. Ask for a new link below.</p>
+    <div class="field">
+      <label for="ex-email">Institution email</label>
+      <input type="email" id="ex-email" value="you@niva.no" autocomplete="email">
+    </div>
+    <div class="actions"><a class="btn solid" href="#signin-sent">Email me a new link</a></div>
+    <p class="note">If you keep getting this message, write to <span class="big-mail">theplastiverse@gmail.com</span> and tell us which region you work in.</p>
+  </div>
+</section>
+
+<!-- 3. FIRST VISIT -->
+<section class="screen wrap" data-route="welcome" aria-labelledby="h-welcome">
+  <div class="stack" style="max-width:680px">
+    <h1 id="h-welcome">Set up your ambassador profile</h1>
+    <p class="lede">You only do this once. You can change these details later from your profile.</p>
+    <form id="welcome-form" novalidate style="margin-top:28px">
+      <div class="field" style="margin-top:0">
+        <label for="wf-name">Display name</label>
+        <input type="text" id="wf-name" autocomplete="name" aria-describedby="wf-name-hint" maxlength="60">
+        <p class="hint" id="wf-name-hint">Shown next to your reviews. Use your name or a pseudonym.</p>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="wf-credit" aria-describedby="wf-credit-prev">
+        <label for="wf-credit">Show a public credit on the region page (optional)</label>
+      </div>
+      <p class="preview" id="wf-credit-prev">Preview: <b>Ambassador:</b> <span id="wf-credit-name">your display name</span>, NIVA</p>
+      <div class="check-row" style="margin-top:26px">
+        <input type="checkbox" id="wf-terms" required aria-describedby="wf-terms-hint">
+        <div>
+          <label for="wf-terms">I agree that my contributions are licensed under <b>CC BY-NC 4.0</b>, the same licence as the Atlas data.</label>
+          <p class="hint" id="wf-terms-hint" style="margin:4px 0 0"><a href="#" class="link" style="min-height:44px">Read the contribution terms</a> (opens the full text)</p>
+        </div>
+      </div>
+      <p class="hint" style="margin-top:24px;max-width:60ch"><b style="color:var(--pv-ink)">Privacy.</b> Your email is used only to sign you in and to send notices about your submissions. It is not published.</p>
+      <div class="actions"><button class="btn solid" type="submit">Save and open my workspace</button></div>
+    </form>
+    <div id="welcome-errors" class="err-box" role="alert" tabindex="-1" hidden>
+      <h2>Please fix this to continue</h2>
+      <ul id="welcome-error-list"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- 4. WORKSPACE -->
+<section class="screen wrap" data-route="workspace" aria-labelledby="h-ws">
+  <div class="ws-head">
+    <div>
+      <h1 id="h-ws">Norway workspace</h1>
+      <p class="lede" style="margin-top:12px">Signed in for NIVA. Three streams, one region. Every answer is saved at once; anything that changes the Atlas waits for review.</p>
+    </div>
+    <p class="badge lead-only inline" style="flex:none">Region lead for Norway</p>
+  </div>
+
+  <div class="ws-cols">
+    <div>
+      <div class="sec" style="margin-top:36px">
+        <div class="sec-head"><h2>Your three streams</h2><span class="note">Start with what is due first.</span></div>
+        <ul class="rows" style="margin-top:8px">
+          <li><div class="row-grid">
+            <div class="row-main">
+              <h3>A. Check doubtful matches</h3>
+              <p>Cases where the automatic sorting is unsure about Norway: place names, institution types and Norwegian-language works.</p>
+              <progress class="progress" max="40" value="14" aria-label="Stream A: 14 of 40 cases checked">14 of 40</progress>
+            </div>
+            <div class="stream-meta"><span class="mono">14 of 40 checked</span><div class="actions"><a class="btn solid" href="#review">Continue checking</a></div></div>
+          </div></li>
+          <li><div class="row-grid">
+            <div class="row-main">
+              <h3>B. Confirm placeholders</h3>
+              <p>Funders, monitoring programmes, policies and networks on the Norway page that still say “to confirm”.</p>
+              <progress class="progress" max="9" value="3" aria-label="Stream B: 3 of 9 placeholders confirmed">3 of 9</progress>
+            </div>
+            <div class="stream-meta"><span class="mono">3 of 9 confirmed</span><div class="actions"><a class="btn" href="#confirm">Confirm next item</a></div></div>
+          </div></li>
+          <li><div class="row-grid">
+            <div class="row-main">
+              <h3>C. Add local knowledge</h3>
+              <p>Community groups, volunteer organisations, local policies with dates, monitoring datasets and corrections.</p>
+              <p class="mono" style="margin-top:8px;color:var(--pv-ink)">2 sent · 1 approved · 1 waiting</p>
+            </div>
+            <div class="stream-meta"><span class="mono">No quota</span><div class="actions"><a class="btn" href="#add">Add a group</a><a class="btn" href="#add-policy">Add a policy</a></div></div>
+          </div></li>
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-head"><h2>Recent activity</h2><span class="note">Sample entries for this design review.</span></div>
+        <ul class="rows activity" style="margin-top:8px">
+          <li><time datetime="2026-11-24T09:12">Today, 09:12</time><span>You disagreed on a place-name match (case 12). Saved.</span></li>
+          <li><time datetime="2026-11-22">Two days ago</time><span>You confirmed the monitoring programme name (placeholder 3 of 9).</span></li>
+          <li><time datetime="2026-11-19">Five days ago</time><span>Approved: a shoreline clean-up network, added to the Norway page.</span></li>
+          <li><time datetime="2026-11-17">Last week</time><span>Sent a municipal litter plan (policy). Waiting for review.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <aside>
+      <div class="sec" style="margin-top:36px">
+        <div class="sec-head"><h2 style="font-size:24px">What happens next</h2></div>
+        <ol class="next" style="margin-top:4px">
+          <li><span>1</span><span>Your answer is saved at once with your ambassador id and the time.</span></li>
+          <li><span>2</span><span>Two ambassadors who agree count as consensus. A single answer is shown to the owner as a suggestion.</span></li>
+          <li><span>3</span><span>Changes to the Atlas go in as a pull request. The owner reviews every pull request before it merges.</span></li>
+        </ol>
+      </div>
+      <div class="lead-box lead-only" style="margin-top:28px">
+        <h2 style="font-size:20px">Moderation for Norway</h2>
+        <p>3 items are waiting for you: 1 correction, 1 community group, 1 policy.</p>
+        <div class="actions"><a class="btn solid" href="#moderation">Open the moderation queue</a></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- 5. STREAM A REVIEWER: INSTITUTION CASE -->
+<section class="screen wrap" data-route="review" aria-labelledby="h-rv1">
+  <div class="rv-bar">
+    <nav aria-label="Stream A" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Stream A</nav>
+    <div class="rv-prog">
+      <span id="rv1-count">Case 15 of 40 · 14 checked</span>
+      <progress class="progress" max="40" value="14" aria-labelledby="rv1-count" style="margin-top:0"></progress>
+    </div>
+  </div>
+
+  <div class="case">
+    <div>
+      <p class="keys" style="margin:28px 0 0">Question kind: <b style="color:var(--pv-ink);font-weight:600">Is this institution in the region?</b></p>
+      <h1 id="h-rv1" class="q" style="margin-top:10px;max-width:none;font-size:clamp(24px,2.6vw,32px)">Is this institution in Norway?</h1>
+      <div class="evidence" style="margin-top:22px">
+        <dl>
+          <div><dt>Raw affiliation on the work</dt><dd>Marine Lab, <mark>Bergen</mark>, <mark>NL</mark></dd></div>
+          <div><dt>Matched institution</dt><dd>Bergen Marine Lab (sample record)</dd></div>
+          <div><dt>Work title</dt><dd>Microplastic load in coastal sediments near the harbour</dd></div>
+          <div><dt>Country code on the institution record</dt><dd><mark>NL</mark></dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="decision-col">
+      <div class="machine">
+        <p style="margin:0"><b>Machine decision</b></p>
+        <p style="margin-top:4px;color:var(--pv-ink)">In Norway, confidence 0.58.</p>
+        <p>Reason: the place name <i>Bergen</i> matched the Norway gazetteer. The country code was not used.</p>
+      </div>
+
+      <div class="decide" role="group" aria-label="Your decision" style="margin-top:22px">
+        <button class="btn" type="button" data-decide="agree" aria-keyshortcuts="A">Agree <kbd>A</kbd></button>
+        <button class="btn" type="button" data-decide="disagree" aria-keyshortcuts="D" aria-expanded="false" aria-controls="pick1">Disagree <kbd>D</kbd></button>
+        <button class="btn" type="button" data-decide="unsure" aria-keyshortcuts="U">Unsure <kbd>U</kbd></button>
+      </div>
+
+      <fieldset id="pick1" class="pick" hidden>
+        <legend>What is the right value?</legend>
+        <label class="choice"><input type="radio" name="pick1" value="1" data-pick><span>Not in Norway <small>Key 1</small></span></label>
+        <label class="choice"><input type="radio" name="pick1" value="2" data-pick><span>In Norway, but a different institution <small>Key 2</small></span></label>
+        <label class="choice"><input type="radio" name="pick1" value="3" data-pick><span>Not sure which <small>Key 3</small></span></label>
+      </fieldset>
+
+      <div class="saved" id="rv1-saved" role="status" tabindex="-1" hidden></div>
+      <p class="keys" style="margin-top:18px">Keys: <kbd>A</kbd> agree · <kbd>D</kbd> disagree, then <kbd>1</kbd>–<kbd>3</kbd> · <kbd>U</kbd> unsure · <kbd>N</kbd> next · <kbd>B</kbd> back</p>
+    </div>
+  </div>
+
+  <div class="rv-nav">
+    <a class="btn" href="#workspace">Back to workspace</a>
+    <div class="actions" style="margin-top:0">
+      <a class="btn" href="#review-language">Next case</a>
+    </div>
+  </div>
+</section>
+
+<!-- 5b. STREAM A REVIEWER: LOCAL-LANGUAGE CASE -->
+<section class="screen wrap" data-route="review-language" aria-labelledby="h-rv2">
+  <div class="rv-bar">
+    <nav aria-label="Stream A" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Stream A</nav>
+    <div class="rv-prog">
+      <span id="rv2-count">Case 16 of 40 · 15 checked</span>
+      <progress class="progress" max="40" value="15" aria-labelledby="rv2-count" style="margin-top:0"></progress>
+    </div>
+  </div>
+
+  <div class="case">
+    <div>
+      <p class="keys" style="margin:28px 0 0">Question kind: <b style="color:var(--pv-ink);font-weight:600">Is this local-language work about plastics?</b></p>
+      <h1 id="h-rv2" class="q" style="margin-top:10px;max-width:none;font-size:clamp(24px,2.6vw,32px)" lang="no">Is this Norwegian-language study about plastics?</h1>
+      <div class="evidence" style="margin-top:22px">
+        <dl>
+          <div><dt>Title (Norwegian, as published)</dt><dd lang="no"><mark lang="no">Mikroplast</mark> i sedimenter fra Oslofjorden: en kartlegging</dd></div>
+          <div><dt>Short abstract (Norwegian)</dt><dd lang="no">Denne studien kartlegger <mark lang="no">mikroplast</mark> og <mark lang="no">plastforurensning</mark> i <mark lang="no">sedimenter</mark> på tolv stasjoner i ytre Oslofjord.</dd></div>
+          <div><dt>Machine gloss (English, for reference)</dt><dd>Microplastics in sediments from the Oslo fjord: a survey. This study maps microplastic and plastic pollution in sediments at twelve stations in the outer fjord.</dd></div>
+        </dl>
+      </div>
+      <p class="note" style="margin-top:12px">Highlighted: terms that could admit this work. The English rules did not match <i>mikroplast</i>.</p>
+    </div>
+    <div class="decision-col">
+      <div class="machine">
+        <p style="margin:0"><b>Machine decision</b></p>
+        <p style="margin-top:4px;color:var(--pv-ink)">Not about plastics, score 0.31.</p>
+        <p>Reason: no English plastic term matched the title or abstract.</p>
+      </div>
+
+      <div class="decide" role="group" aria-label="Your decision" style="margin-top:22px">
+        <button class="btn" type="button" data-decide="agree" aria-keyshortcuts="A">Agree <kbd>A</kbd></button>
+        <button class="btn" type="button" data-decide="disagree" aria-keyshortcuts="D" aria-expanded="false" aria-controls="pick2">Disagree <kbd>D</kbd></button>
+        <button class="btn" type="button" data-decide="unsure" aria-keyshortcuts="U">Unsure <kbd>U</kbd></button>
+      </div>
+
+      <fieldset id="pick2" class="pick" hidden>
+        <legend>What is the right value?</legend>
+        <label class="choice"><input type="radio" name="pick2" value="1" data-pick><span>About plastics <small>Key 1</small></span></label>
+        <label class="choice"><input type="radio" name="pick2" value="2" data-pick><span>Partly about plastics <small>Key 2</small></span></label>
+        <label class="choice"><input type="radio" name="pick2" value="3" data-pick><span>Not about plastics <small>Key 3</small></span></label>
+      </fieldset>
+
+      <div class="saved" id="rv2-saved" role="status" tabindex="-1" hidden></div>
+      <p class="keys" style="margin-top:18px">Keys: <kbd>A</kbd> agree · <kbd>D</kbd> disagree, then <kbd>1</kbd>–<kbd>3</kbd> · <kbd>U</kbd> unsure · <kbd>N</kbd> next · <kbd>B</kbd> back</p>
+    </div>
+  </div>
+
+  <div class="rv-nav">
+    <a class="btn" href="#review">Back to case 15</a>
+    <div class="actions" style="margin-top:0"><a class="btn" href="#confirm">Next: a placeholder</a></div>
+  </div>
+</section>
+
+<!-- 6. STREAM B -->
+<section class="screen wrap" data-route="confirm" aria-labelledby="h-b">
+  <div class="rv-bar">
+    <nav aria-label="Stream B" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Stream B</nav>
+    <div class="rv-prog"><span id="b-count">Placeholder 4 of 9 · 3 confirmed</span><progress class="progress" max="9" value="3" aria-labelledby="b-count" style="margin-top:0"></progress></div>
+  </div>
+
+  <div style="max-width:760px">
+    <h1 id="h-b" style="font-size:clamp(28px,3.4vw,40px);margin-top:28px;max-width:none">Confirm this funder</h1>
+    <p class="lede" style="margin-top:10px">This name is on the Norway page as a placeholder. Check it, then choose one answer.</p>
+    <dl class="kv" style="margin-top:22px">
+      <div><dt>Name shown</dt><dd><p class="ph-name">Handelens Miljøfond — to confirm</p></dd></div>
+      <div><dt>Type</dt><dd>Funder</dd></div>
+      <div><dt>Web address</dt><dd>to confirm</dd></div>
+      <div><dt>Source</dt><dd>Region page placeholder (regions/norway/region.yml)</dd></div>
+    </dl>
+
+    <form id="b-form" novalidate style="margin-top:28px">
+      <fieldset>
+        <legend>Your answer</legend>
+        <label class="choice"><input type="radio" name="b-answer" value="confirm" checked><span>Confirm the name and type as shown</span></label>
+        <label class="choice"><input type="radio" name="b-answer" value="correct"><span>Correct the name or web address</span></label>
+        <label class="choice"><input type="radio" name="b-answer" value="notrelevant"><span>Not relevant to the Norway page</span></label>
+      </fieldset>
+
+      <div id="b-correct" hidden style="margin-top:14px;max-width:560px">
+        <div class="field" style="margin-top:0"><label for="b-name">Correct name</label><input type="text" id="b-name" placeholder="Name as the funder writes it"></div>
+        <div class="field"><label for="b-url">Web address (https)</label><input type="url" id="b-url" placeholder="https://"></div>
+      </div>
+
+      <div class="field">
+        <label for="b-note">Note for the reviewer (optional)</label>
+        <textarea id="b-note" rows="3" placeholder="Where did you find this? Keep it short."></textarea>
+      </div>
+
+      <div class="actions"><button class="btn solid" type="submit">Save answer</button><a class="btn" href="#confirm">Skip for now</a></div>
+    </form>
+    <div class="saved" id="b-saved" role="status" tabindex="-1" hidden></div>
+  </div>
+</section>
+
+<!-- 7. STREAM C: COMMUNITY GROUP OR ORGANISATION -->
+<section class="screen wrap" data-route="add" aria-labelledby="h-c">
+  <h1 id="h-c" style="font-size:clamp(30px,3.6vw,44px);max-width:none">Add a community group or volunteer organisation</h1>
+  <p class="lede">Groups that clean beaches or rivers, run citizen science, or work on plastic pollution in Norway. Only add what is public.</p>
+  <nav class="seg" aria-label="Kind of item">
+    <a href="#add" aria-current="page">Group or organisation</a>
+    <a href="#add-policy">Local policy</a>
+  </nav>
+
+  <form id="c-form" novalidate style="margin-top:28px">
+    <div class="form-grid">
+      <div class="field" style="margin-top:0"><label for="c-name">Name <span class="hint">(required)</span></label><input type="text" id="c-name" required></div>
+      <div class="field" style="margin-top:0"><label for="c-kind">Kind</label>
+        <select id="c-kind"><option>Community group</option><option>Volunteer organisation</option><option>Coalition or network</option><option>Citizen science project</option><option>Other</option></select></div>
+      <div class="field wide"><label for="c-url">Web address</label><input type="url" id="c-url" placeholder="https://" aria-describedby="c-url-h"><p class="hint" id="c-url-h">Leave blank if there is none. Must start with https://.</p></div>
+      <div class="field wide"><label for="c-desc">Short description</label><textarea id="c-desc" rows="3" maxlength="240" aria-describedby="c-desc-c"></textarea><p class="counter" id="c-desc-c">0 of 240 characters</p></div>
+      <div class="field"><label for="c-contact">Public contact route</label><input type="text" id="c-contact" aria-describedby="c-contact-h"><p class="hint" id="c-contact-h">A public email address or contact page. Leave blank if they have none.</p></div>
+      <div class="field"><label for="c-area">Area</label>
+        <select id="c-area"><option>Whole of Norway</option><option>Oslofjord</option><option>Western coast</option><option>Northern Norway</option></select></div>
+      <div class="field wide"><label for="c-licence">Licence for any data they hold</label>
+        <select id="c-licence" aria-describedby="c-licence-h"><option>Not applicable, no data</option><option>CC BY 4.0</option><option>CC0</option><option>CC BY-NC 4.0</option><option>Other or unknown (we will ask)</option></select>
+        <p class="hint" id="c-licence-h">Needed only when the group publishes data, such as clean-up counts.</p></div>
+    </div>
+    <div class="check-row" style="margin-top:22px">
+      <input type="checkbox" id="c-consent">
+      <label for="c-consent">I have the organisation's permission to list it here.</label>
+    </div>
+    <div class="actions"><button class="btn solid" type="submit">Send for review</button><a class="btn" href="#workspace">Cancel</a></div>
+  </form>
+  <div id="c-errors" class="err-box" role="alert" tabindex="-1" hidden><h2>Please fix this to continue</h2><ul id="c-error-list"></ul></div>
+  <p class="flow-note">After you send it, the item waits in the moderation queue. You will get a notice when it is approved or when a reviewer asks for changes.</p>
+</section>
+
+<!-- 7b. STREAM C: LOCAL POLICY -->
+<section class="screen wrap" data-route="add-policy" aria-labelledby="h-p">
+  <h1 id="h-p" style="font-size:clamp(30px,3.6vw,44px);max-width:none">Add a local policy</h1>
+  <p class="lede">A law, plan or target that matters where you live, with the dates it applies. Dates draw the policy timeline.</p>
+  <nav class="seg" aria-label="Kind of item">
+    <a href="#add">Group or organisation</a>
+    <a href="#add-policy" aria-current="page">Local policy</a>
+  </nav>
+
+  <form id="p-form" novalidate style="margin-top:28px">
+    <div class="form-grid">
+      <div class="field wide" style="margin-top:0"><label for="p-name">Policy or plan name <span class="hint">(required)</span></label><input type="text" id="p-name"></div>
+      <div class="field"><label for="p-level">Level</label>
+        <select id="p-level"><option>National</option><option>Regional (county)</option><option>Municipal</option></select></div>
+      <div class="field"><label for="p-url">Official web address</label><input type="url" id="p-url" placeholder="https://"></div>
+      <div class="field"><label for="p-adopted">Adopted on</label><input type="date" id="p-adopted"></div>
+      <div class="field"><label for="p-effective">Applies from</label><input type="date" id="p-effective" aria-describedby="p-dates-h"></div>
+      <div class="field wide"><label for="p-next">Next decision date (if known)</label><input type="date" id="p-next" aria-describedby="p-dates-h"><p class="hint" id="p-dates-h">Leave dates blank if unknown. We show unknown dates as “date not known”, never as a guess.</p></div>
+      <div class="field wide"><label for="p-summary">What it asks for</label><textarea id="p-summary" rows="3" maxlength="240" aria-describedby="p-summary-c"></textarea><p class="counter" id="p-summary-c">0 of 240 characters</p></div>
+    </div>
+    <div class="actions"><button class="btn solid" type="submit">Send for review</button><a class="btn" href="#workspace">Cancel</a></div>
+  </form>
+  <div id="p-errors" class="err-box" role="alert" tabindex="-1" hidden><h2>Please fix this to continue</h2><ul id="p-error-list"></ul></div>
+</section>
+
+<!-- 8. MODERATION -->
+<section class="screen wrap" data-route="moderation" aria-labelledby="h-m">
+  <h1 id="h-m" style="font-size:clamp(30px,3.6vw,44px);max-width:none">Moderation queue</h1>
+  <p class="lede"><span class="owner-only">Owner view: you can approve for every region. Every change still becomes a pull request that you review.</span><span class="lead-only">Norway · you are the region lead. Approvals for Norway are yours; the owner reviews every pull request.</span></p>
+
+  <div class="mod">
+    <div>
+      <h2 style="font-size:22px">Waiting (3)</h2>
+      <ul class="queue" aria-label="Pending submissions">
+        <li><button type="button" aria-pressed="true" data-item="0"><span>Correction: funder name</span><small>Stream B · Norway · 2 days ago</small></button></li>
+        <li><button type="button" aria-pressed="false" data-item="1"><span>New group: Oslofjord shoreline clean-up network</span><small>Stream C · Norway · 4 days ago</small></button></li>
+        <li><button type="button" aria-pressed="false" data-item="2"><span>New policy: municipal litter plan</span><small>Stream C · Norway · 5 days ago</small></button></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="badge plain" id="m-kind">Correction to a placeholder</p>
+      <h2 id="m-title" style="margin-top:12px;font-size:24px">Correction: funder name</h2>
+      <p class="note" id="m-sub">Submitted by an ambassador for NIVA. Stored with the ambassador id; the display name is shown here.</p>
+      <div class="diff-wrap" style="margin-top:18px">
+        <table class="diff" id="m-diff">
+          <caption class="sr">Changes to review, before and after</caption>
+          <thead><tr><th scope="col">Field</th><th scope="col">Before (current)</th><th scope="col">After (proposed)</th></tr></thead>
+          <tbody id="m-body"></tbody>
+        </table>
+      </div>
+      <p class="note" style="margin-top:8px">Changed rows are shaded and say “Changed” in the field column. Deleted text is struck through; added text is highlighted.</p>
+
+      <div class="decision">
+        <label for="m-note" class="field-err-label" style="font-weight:600">Note to the ambassador (required for reject or changes)</label>
+        <textarea id="m-note" rows="2" placeholder="Say what to change, or why it is rejected."></textarea>
+        <div class="btns">
+          <button class="btn solid" type="button" id="m-approve">Approve and add to the pull request</button>
+          <button class="btn" type="button" id="m-changes">Ask for changes</button>
+          <button class="btn" type="button" id="m-reject">Reject</button>
+        </div>
+        <p class="hint" id="m-result" role="status" tabindex="-1"></p>
+      </div>
+      <p class="flow-note">Approved items become a pull request on GitHub, opened by the scheduled job. The owner reviews every pull request before it merges. Nothing reaches the public pages before that.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <p><b>Plastiverse Live</b> · Contributions are licensed CC BY-NC 4.0. Your email is used only to sign you in and to send notices; it is never published.</p>
+    <p><a href="mailto:theplastiverse@gmail.com">theplastiverse@gmail.com</a> <span class="sr">(email address)</span> is the route for institutions not yet listed.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var ROUTES = ["landing","signin","signin-sent","signin-expired","welcome","workspace","review","review-language","confirm","add","add-policy","moderation"];
+  var SIGNED_IN = ["welcome","workspace","review","review-language","confirm","add","add-policy","moderation"];
+  var body = document.body;
+  var jump = document.getElementById("jump");
+  var main = document.getElementById("main");
+  var lead = document.getElementById("leadtoggle");
+
+  // ---- Routing (hash) and the owner switcher ----
+  function current() {
+    var h = (location.hash || "#landing").slice(1);
+    return ROUTES.indexOf(h) >= 0 ? h : "landing";
+  }
+  function show() {
+    var r = current();
+    document.querySelectorAll("section.screen").forEach(function (s) {
+      s.hidden = s.getAttribute("data-route") !== r;
+    });
+    jump.value = r;
+    body.setAttribute("data-auth", SIGNED_IN.indexOf(r) >= 0 ? "in" : "out");
+    document.querySelectorAll("a[data-route]").forEach(function (a) {
+      if (a.getAttribute("data-route") === "signin") return;
+      a.removeAttribute("aria-current");
+    });
+    document.title = document.querySelector('section[data-route="' + r + '"] h1').textContent + " · Plastiverse Live (design prototype)";
+    window.scrollTo(0, 0);
+    main.focus({ preventScroll: true });
+  }
+  window.addEventListener("hashchange", show);
+  ROUTES.forEach(function (r) {
+    var o = document.createElement("option");
+    o.value = r; o.textContent = r; o.hidden = true; jump.appendChild(o);
+  });
+  jump.addEventListener("change", function () { location.hash = jump.value; });
+  function step(d) {
+    var i = ROUTES.indexOf(current());
+    i = (i + d + ROUTES.length) % ROUTES.length;
+    location.hash = ROUTES[i];
+  }
+  document.getElementById("prev").addEventListener("click", function () { step(-1); });
+  document.getElementById("next").addEventListener("click", function () { step(1); });
+  document.getElementById("screen-count").textContent = "1 to 8, with sub-states";
+  lead.addEventListener("change", function () { body.classList.toggle("lead", lead.checked); });
+
+  // ---- Eligibility checker (sample data) ----
+  var INST = {
+    norway: [
+      { name: "NIVA", domain: "niva.no", kind: "Research institute" },
+      { name: "NTNU", domain: "ntnu.no", kind: "University" },
+      { name: "SINTEF Ocean", domain: "sintef.no", kind: "Research institute" }
+    ],
+    belgium: [
+      { name: "VLIZ", domain: "vliz.be", kind: "Research institute" }
+    ],
+    california: [
+      { name: "UC Santa Barbara", domain: "ucsb.edu", kind: "University" }
+    ]
+  };
+  var FREE = ["gmail.com","outlook.com","hotmail.com","proton.me","protonmail.com","yahoo.com","icloud.com"];
+  var eForm = document.getElementById("elig-form");
+  var eRes = document.getElementById("elig-result");
+  function setResult(state, html) {
+    eRes.hidden = false;
+    eRes.setAttribute("data-state", state);
+    eRes.innerHTML = html;
+  }
+  eForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var q = document.getElementById("elig-q").value.trim().toLowerCase();
+    var region = document.getElementById("elig-region").value;
+    var list = INST[region] || [];
+    var hit = null;
+    if (!q) { setResult("no", "<b>Type an email or an institution name first.</b>"); return; }
+    if (q.indexOf("@") >= 0) {
+      var dom = q.split("@").pop();
+      if (FREE.indexOf(dom) >= 0) {
+        setResult("no", "<b>Not eligible: free email services are not accepted.</b>Use your institution email, or use the email route below.<div class=\"route\">" + emailRoute() + "</div>");
+        return;
+      }
+      hit = list.filter(function (i) { return dom === i.domain || dom.slice(-(i.domain.length + 1)) === "." + i.domain; })[0];
+    } else {
+      hit = list.filter(function (i) { return i.name.toLowerCase().indexOf(q) >= 0; })[0];
+    }
+    if (hit) {
+      setResult("yes", "<b>Eligible: " + hit.name + " (" + hit.domain + ")</b>" + hit.kind + " tagged for plastics research in " + region.charAt(0).toUpperCase() + region.slice(1) + ". <a class=\"link\" href=\"#signin\">Sign in with your " + hit.name + " email</a>");
+    } else {
+      setResult("no", "<b>Not eligible yet: use the email route.</b>We do not list this institution for " + region.charAt(0).toUpperCase() + region.slice(1) + " yet. A person will check it by hand.<div class=\"route\">" + emailRoute() + "</div>");
+    }
+  });
+  function emailRoute() {
+    return "Write to <span class=\"big-mail\">theplastiverse@gmail.com</span> with your institution and region. <a class=\"link\" href=\"mailto:theplastiverse@gmail.com?subject=Plastiverse%20Live%20ambassador\">Open an email</a>";
+  }
+
+  // ---- Sign in validation ----
+  function fail(boxId, listId, items, fieldId) {
+    var box = document.getElementById(boxId), list = document.getElementById(listId);
+    list.innerHTML = "";
+    items.forEach(function (it) {
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + it.id; a.className = "link"; a.style.minHeight = "24px"; a.textContent = it.text;
+      li.appendChild(a); list.appendChild(li);
+    });
+    box.hidden = false; box.focus();
+  }
+  document.getElementById("signin-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = document.getElementById("si-email").value.trim();
+    var errs = [];
+    if (!email) errs.push({ id: "si-email", text: "Enter your institution email address." });
+    else if (email.indexOf("@") < 0) errs.push({ id: "si-email", text: "Add the @ sign and your institution domain, for example you@niva.no." });
+    else if (FREE.indexOf(email.split("@").pop().toLowerCase()) >= 0) errs.push({ id: "si-email", text: "Free email services cannot be used. Use your institution email." });
+    document.getElementById("signin-errors").hidden = true;
+    if (errs.length) { fail("signin-errors", "signin-error-list", errs); return; }
+    location.hash = "signin-sent";
+  });
+
+  // ---- First visit ----
+  var wName = document.getElementById("wf-name");
+  var wCredit = document.getElementById("wf-credit");
+  var wName2 = document.getElementById("wf-credit-name");
+  function refreshCredit() { wName2.textContent = wName.value.trim() || "your display name"; }
+  wName.addEventListener("input", refreshCredit);
+  refreshCredit();
+  document.getElementById("welcome-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var errs = [];
+    if (!wName.value.trim()) errs.push({ id: "wf-name", text: "Enter a display name." });
+    if (!document.getElementById("wf-terms").checked) errs.push({ id: "wf-terms", text: "Agree to the contribution terms (CC BY-NC 4.0) to open your workspace." });
+    document.getElementById("welcome-errors").hidden = true;
+    if (errs.length) { fail("welcome-errors", "welcome-error-list", errs); return; }
+    location.hash = "workspace";
+  });
+
+  // ---- Stream A reviewers ----
+  var SAVED_TEXT = {
+    agree: "Saved. Agreed with the machine decision. Stored with source ambassador, your id and the time.",
+    disagree: "Saved. Your correction is stored with source ambassador. The owner sees it as a suggestion until a second ambassador agrees.",
+    unsure: "Saved as unsure. This case stays available for the owner to look at."
+  };
+  function stamp() { return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+  function setupReviewer(route, pickName, savedId, nextHash) {
+    var section = document.querySelector('section[data-route="' + route + '"]');
+    var buttons = section.querySelectorAll("[data-decide]");
+    var pick = document.getElementById(pickName);
+    var saved = document.getElementById(savedId);
+    var last = null;
+    function save(kind, detail) {
+      saved.hidden = false;
+      saved.innerHTML = "";
+      var span = document.createElement("span");
+      span.textContent = SAVED_TEXT[kind] + (detail ? " Right value: " + detail + "." : "") + " (" + stamp() + ")";
+      var a = document.createElement("a");
+      a.className = "btn solid"; a.href = nextHash; a.textContent = "Next case";
+      saved.appendChild(span); saved.appendChild(a);
+      saved.focus();
+    }
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () {
+        var kind = b.getAttribute("data-decide");
+        buttons.forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+        if (kind === "disagree") {
+          pick.hidden = false;
+          b.setAttribute("aria-expanded", "true");
+          pick.querySelector("input").focus();
+          saved.hidden = true;
+          return;
+        }
+        pick.hidden = true;
+        section.querySelector('[data-decide="disagree"]').setAttribute("aria-expanded", "false");
+        last = kind;
+        save(kind, null);
+      });
+    });
+    pick.querySelectorAll("[data-pick]").forEach(function (r) {
+      r.addEventListener("change", function () {
+        var label = r.parentNode.textContent.replace(/Key \d/, "").trim();
+        last = "disagree";
+        save("disagree", label);
+      });
+    });
+    document.addEventListener("keydown", function (e) {
+      if (section.hidden || e.altKey || e.ctrlKey || e.metaKey || e.target.matches("input[type=text], input[type=url], input[type=email], textarea, select")) return;
+      var k = e.key.toLowerCase();
+      if (k === "a") { section.querySelector('[data-decide="agree"]').click(); }
+      else if (k === "d") { section.querySelector('[data-decide="disagree"]').click(); }
+      else if (k === "u") { section.querySelector('[data-decide="unsure"]').click(); }
+      else if (k === "n") { location.hash = nextHash; }
+      else if (k === "b") { history.back(); }
+      else if (/^[1-3]$/.test(k) && !pick.hidden) {
+        var target = pick.querySelectorAll("[data-pick]")[Number(k) - 1];
+        target.checked = true; target.dispatchEvent(new Event("change"));
+      }
+    });
+  }
+  setupReviewer("review", "pick1", "rv1-saved", "#review-language");
+  setupReviewer("review-language", "pick2", "rv2-saved", "#confirm");
+
+  // ---- Stream B ----
+  var bForm = document.getElementById("b-form");
+  bForm.querySelectorAll('input[name="b-answer"]').forEach(function (r) {
+    r.addEventListener("change", function () {
+      document.getElementById("b-correct").hidden = r.value !== "correct" || !r.checked;
+    });
+  });
+  bForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var answer = bForm.querySelector('input[name="b-answer"]:checked').value;
+    var url = document.getElementById("b-url").value.trim();
+    var box = document.getElementById("b-saved");
+    if (answer === "correct" && url && url.indexOf("https://") !== 0) {
+      box.hidden = true;
+      var fb = document.getElementById("b-url");
+      fb.setAttribute("aria-invalid", "true");
+      fb.focus();
+      box.hidden = false; box.textContent = "The web address must start with https://. Nothing was saved.";
+      return;
+    }
+    var text = { confirm: "Confirmed as shown. Your answer waits for the owner to check it.", correct: "Correction saved for review. It is not public until approved.", notrelevant: "Marked not relevant. The reviewer will remove it from the Norway page." }[answer];
+    box.hidden = false; box.textContent = text + " (" + stamp() + ")"; box.focus();
+  });
+
+  // ---- Stream C forms ----
+  function counter(id, out, max) {
+    var el = document.getElementById(id), o = document.getElementById(out);
+    if (!el || !o) return;
+    function up() { o.textContent = el.value.length + " of " + max + " characters"; }
+    el.addEventListener("input", up); up();
+  }
+  counter("c-desc", "c-desc-c", 240);
+  counter("p-summary", "p-summary-c", 240);
+  function formErrors(form, boxId, listId, checks) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var errs = checks();
+      document.getElementById(boxId).hidden = true;
+      if (errs.length) { fail(boxId, listId, errs); return; }
+      location.hash = "workspace";
+    });
+  }
+  formErrors(document.getElementById("c-form"), "c-errors", "c-error-list", function () {
+    var errs = [];
+    var n = document.getElementById("c-name");
+    var u = document.getElementById("c-url").value.trim();
+    if (!n.value.trim()) errs.push({ id: "c-name", text: "Enter the name of the group or organisation." });
+    if (u && u.indexOf("https://") !== 0) errs.push({ id: "c-url", text: "The web address must start with https://, or be left blank." });
+    if (!document.getElementById("c-consent").checked) errs.push({ id: "c-consent", text: "Confirm that you have the organisation's permission." });
+    return errs;
+  });
+  formErrors(document.getElementById("p-form"), "p-errors", "p-error-list", function () {
+    var errs = [];
+    if (!document.getElementById("p-name").value.trim()) errs.push({ id: "p-name", text: "Enter the policy or plan name." });
+    var a = document.getElementById("p-adopted").value, e2 = document.getElementById("p-effective").value;
+    if (a && e2 && e2 < a) errs.push({ id: "p-effective", text: "The applies-from date is before the adopted date. Check both dates." });
+    return errs;
+  });
+
+  // ---- Moderation ----
+  var ITEMS = [
+    {
+      kind: "Correction to a placeholder", title: "Correction: funder name",
+      sub: "Stream B. Submitted by a Norway ambassador. Current text is the region page placeholder.",
+      rows: [
+        ["Name", "Handelens Miljøfond — to confirm", "Handelens Miljøfond", true],
+        ["Web address", "to confirm", "to confirm", false],
+        ["Type", "Funder", "Funder", false]
+      ]
+    },
+    {
+      kind: "New community group", title: "New group: Oslofjord shoreline clean-up network",
+      sub: "Stream C. Volunteer clean-ups on the outer fjord. Public contact route given.",
+      rows: [
+        ["Name", "(none)", "Oslofjord shoreline clean-up network", true],
+        ["Kind", "(none)", "Volunteer organisation", true],
+        ["Web address", "(none)", "https://example.org/shoreline (sample)", true],
+        ["Licence for data", "(none)", "Not applicable, no data", true]
+      ]
+    },
+    {
+      kind: "New local policy", title: "New policy: municipal litter plan",
+      sub: "Stream C. Municipal plan with an adopted date and no decision date yet.",
+      rows: [
+        ["Policy", "(none)", "Municipal litter plan (sample)", true],
+        ["Level", "(none)", "Municipal", true],
+        ["Adopted on", "(none)", "date not known", true],
+        ["Applies from", "(none)", "date not known", true]
+      ]
+    }
+  ];
+  var btns = document.querySelectorAll("[data-item]");
+  function esc(s) { return s.replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[c]; }); }
+  function showItem(i) {
+    var it = ITEMS[i];
+    btns.forEach(function (b) { b.setAttribute("aria-pressed", String(Number(b.getAttribute("data-item")) === i)); });
+    document.getElementById("m-kind").textContent = it.kind;
+    document.getElementById("m-title").textContent = it.title;
+    document.getElementById("m-sub").textContent = it.sub;
+    document.getElementById("m-result").textContent = "";
+    var html = "";
+    it.rows.forEach(function (r) {
+      var before = r[1], after = r[2];
+      var changed = r[3];
+      var beforeHtml = changed && before !== "(none)" ? "<del>" + esc(before) + "</del>" : esc(before);
+      var afterHtml = changed ? "<ins>" + esc(after) + "</ins>" : esc(after);
+      html += "<tr class=\"" + (changed ? "chg" : "") + "\"><th scope=\"row\">" + esc(r[0]) + (changed ? "<span class=\"tag\">Changed</span>" : "<span class=\"tag\">Unchanged</span>") + "</th><td>" + beforeHtml + "</td><td>" + afterHtml + "</td></tr>";
+    });
+    document.getElementById("m-body").innerHTML = html;
+  }
+  btns.forEach(function (b) { b.addEventListener("click", function () { showItem(Number(b.getAttribute("data-item"))); }); });
+  function decide(verb, needNote) {
+    var note = document.getElementById("m-note").value.trim();
+    var out = document.getElementById("m-result");
+    if (needNote && !note) { out.textContent = "Add a short note so the ambassador knows what to change or why."; out.focus(); return; }
+    out.textContent = verb;
+    out.focus();
+  }
+  document.getElementById("m-approve").addEventListener("click", function () { decide("Approved. This item is added to the next pull request for Norway. Nothing is public until the owner merges it.", false); });
+  document.getElementById("m-changes").addEventListener("click", function () { decide("Changes requested. The ambassador gets your note and can resubmit.", true); });
+  document.getElementById("m-reject").addEventListener("click", function () { decide("Rejected. The ambassador gets your note.", true); });
+
+  showItem(0);
+  show();
+})();
+</script>
+</body>
+</html>

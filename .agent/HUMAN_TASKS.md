@@ -24,6 +24,16 @@ Last updated: 2026-11-18.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
+### H45. Review the ambassador design prototype (AMB-1, about 15 minutes)
+1. Double-click `.impeccable/sketches/ambassadors.html` in the repository folder (or run
+   `start .impeccable/sketches/ambassadors.html` in a terminal). It opens in your browser; nothing is sent anywhere.
+2. Use the dark bar at the top (Previous / Next or the list) to step through the 12 screens; tick
+   "Show as region lead" to see the moderator view.
+3. Read the open questions at the end of `.impeccable/surfaces/impeccable-sketches-ambassadors-html.md`.
+4. Reply with "design approved" or a list of changes, plus your answers to the open questions you care about
+   (anything you skip keeps the agent's default).
+- **Done when:** you reply. The agent builds the real pages and the sign-in backend after that (the backend also needs H44).
+
 ### H44. Prepare the ambassador sign-in services (AMB-1; not urgent, needed before the backend step, about 30 minutes)
 The ambassador sign-in needs two free accounts you own. The agent writes and tests all code locally first.
 1. **Resend:** sign up at https://resend.com with the project email. Add the domain `plastiverse.live`.
