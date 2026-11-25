@@ -14,6 +14,10 @@ The two inputs are cached under ``data/raw/world/`` (git-ignored) and checked ag
 SHA-256 digests. The first run downloads them; ``--offline`` reads the cache and never touches
 the network.
 
+The two Natural Earth line layers (``ne_50m_admin_0_boundary_lines_disputed_areas`` and
+``ne_10m_admin_0_pacific_groupings``) come from the nvkelso/natural-earth-vector v5.1.2 GeoJSON, are
+pinned the same way, and are stored in world.json as ``disputed`` and ``pacific_groups``.
+
 Usage:
     py -3.14 scripts/build_world_map.py             # download once if needed, then write
     py -3.14 scripts/build_world_map.py --offline   # cache only
@@ -40,11 +44,27 @@ COUNTRIES_SHA256 = "04342cdc1e3016bcd7db1630de95684d67b79fe3c8c460321e87aef46950
 STATES_SHA256 = "d76b391ccfa8bff601d51e3e3da5d43a89fa46cd5caca72ce731b383be5596d0"
 COUNTRIES_FILE = Path("countries") / "countries-50m.json"
 STATES_FILE = Path("states") / "states-10m.json"
+DISPUTED_URL = (
+    "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/"
+    "ne_50m_admin_0_boundary_lines_disputed_areas.geojson"
+)
+PACIFIC_URL = (
+    "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/"
+    "ne_10m_admin_0_pacific_groupings.geojson"
+)
+DISPUTED_SHA256 = "5bf5312a293cf038a367c2f150d34f295a3ccd2704affca26a1bbb1bb95bb64e"
+PACIFIC_SHA256 = "fa7fcc45efd94ab7f6912c9d70c4169a6023fa3053e145c71f26b674c2d914cf"
+DISPUTED_FILE = (
+    Path("boundaries") / "disputed" / "ne_50m_admin_0_boundary_lines_disputed_areas.geojson"
+)
+PACIFIC_FILE = Path("boundaries") / "pacific" / "ne_10m_admin_0_pacific_groupings.geojson"
 DEFAULT_RAW_DIR = ROOT / "data" / "raw" / "world"
 DEFAULT_OUTPUT = ROOT / "site" / "assets" / "world" / "world.json"
 SOURCE = (
     "world-atlas@2.0.2 countries-50m.json (Natural Earth 1:50m admin-0); "
     "us-atlas@3.0.1 states-10m.json (California, FIPS 06); "
+    "Natural Earth ne_50m_admin_0_boundary_lines_disputed_areas and "
+    "ne_10m_admin_0_pacific_groupings (natural-earth-vector v5.1.2); "
     "Natural Earth I projection (d3 geoNaturalEarth1)"
 )
 LICENCE = "Natural Earth, public domain"
@@ -401,6 +421,17 @@ def polygon_path(xy: Sequence[tuple[float, float]]) -> str:
     return "M" + "L".join(f"{x:.1f},{y:.1f}" for x, y in xy) + "Z"
 
 
+def seam_shifts(longitudes: Sequence[float]) -> list[int]:
+    """Longitude shifts that redraw a shape past the antimeridian on the other side of the map."""
+
+    shifts = [0]
+    if min(longitudes) < -180:
+        shifts.append(360)
+    if max(longitudes) > 180:
+        shifts.append(-360)
+    return shifts
+
+
 def ring_paths(points: Sequence[tuple[float, float]], step: int = 1) -> list[str]:
     """SVG subpaths for one ring: thinned, unwrapped, copied across the seam, tiny rings dropped.
 
@@ -413,21 +444,56 @@ def ring_paths(points: Sequence[tuple[float, float]], step: int = 1) -> list[str
     if step > 1:
         points = [*points[::step], points[-1]]
     unwrapped = unwrap_longitudes(points)
-    longitudes = [lon for lon, _ in unwrapped]
-    shifts = [0]
-    if min(longitudes) < -180:
-        shifts.append(360)
-    if max(longitudes) > 180:
-        shifts.append(-360)
     paths: list[str] = []
-    for shift in shifts:
+    for shift in seam_shifts([lon for lon, _ in unwrapped]):
         xy = [to_pixels(lon + shift, lat) for lon, lat in unwrapped]
-        xs = [x for x, _ in xy]
-        ys = [y for _, y in xy]
-        if max(xs) - min(xs) < MIN_RING_SPAN_PX and max(ys) - min(ys) < MIN_RING_SPAN_PX:
+        if _tiny(xy):
             continue
         paths.append(polygon_path(xy))
     return paths
+
+
+def _tiny(xy: Sequence[tuple[float, float]]) -> bool:
+    """True when a shape is under MIN_RING_SPAN_PX in both directions."""
+
+    xs = [x for x, _ in xy]
+    ys = [y for _, y in xy]
+    return max(xs) - min(xs) < MIN_RING_SPAN_PX and max(ys) - min(ys) < MIN_RING_SPAN_PX
+
+
+def line_path(points: Sequence[tuple[float, float]]) -> list[str]:
+    """Open SVG subpaths for one line: unwrapped, copied across the seam, tiny lines dropped."""
+
+    if len(points) < 2:
+        return []
+    unwrapped = unwrap_longitudes(points)
+    paths: list[str] = []
+    for shift in seam_shifts([lon for lon, _ in unwrapped]):
+        xy = [to_pixels(lon + shift, lat) for lon, lat in unwrapped]
+        if _tiny(xy):
+            continue
+        paths.append("M" + "L".join(f"{x:.1f},{y:.1f}" for x, y in xy))
+    return paths
+
+
+def linework_path(collection: Mapping[str, Any]) -> str:
+    """Concatenated SVG path for a GeoJSON collection of LineString or MultiLineString features.
+
+    Any other geometry type is refused, so a changed upstream layer fails the build.
+    """
+
+    parts: list[str] = []
+    for feature in collection.get("features", []):
+        geometry = feature.get("geometry") or {}
+        if geometry.get("type") == "LineString":
+            lines = [geometry["coordinates"]]
+        elif geometry.get("type") == "MultiLineString":
+            lines = geometry["coordinates"]
+        else:
+            raise WorldMapError(f"unexpected line geometry {geometry.get('type')!r}")
+        for line in lines:
+            parts.extend(line_path([(float(lon), float(lat)) for lon, lat, *_ in line]))
+    return "".join(parts)
 
 
 def geometry_path(
@@ -574,13 +640,20 @@ def _marker(iso: str, lon: float, lat: float) -> dict[str, Any]:
 
 
 def build_payload(
-    countries_topology: Mapping[str, Any], states_topology: Mapping[str, Any]
+    countries_topology: Mapping[str, Any],
+    states_topology: Mapping[str, Any],
+    disputed: Mapping[str, Any],
+    pacific: Mapping[str, Any],
 ) -> dict[str, Any]:
-    """The world.json payload: the prototype's keys plus source and licence."""
+    """The world.json payload: the prototype's keys, the two line layers, source and licence."""
 
     countries = country_outlines(countries_topology)
     if not countries:
         raise WorldMapError("no country outlines were produced")
+    disputed_d = linework_path(disputed)
+    pacific_d = linework_path(pacific)
+    if not disputed_d or not pacific_d:
+        raise WorldMapError("no boundary line outlines were produced")
     states_arcs = decode_arcs(states_topology)
     california = [
         geometry
@@ -603,6 +676,8 @@ def build_payload(
         "ca": ca,
         "ca_bbox": path_bbox(ca),
         "small": small_markers(countries_topology),
+        "disputed": disputed_d,
+        "pacific_groups": pacific_d,
         "source": SOURCE,
         "licence": LICENCE,
     }
@@ -662,7 +737,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         states = read_source(
             STATES_URL, args.raw_dir / STATES_FILE, STATES_SHA256, offline=args.offline
         )
-        payload = build_payload(countries, states)
+        disputed = read_source(
+            DISPUTED_URL, args.raw_dir / DISPUTED_FILE, DISPUTED_SHA256, offline=args.offline
+        )
+        pacific = read_source(
+            PACIFIC_URL, args.raw_dir / PACIFIC_FILE, PACIFIC_SHA256, offline=args.offline
+        )
+        payload = build_payload(countries, states, disputed, pacific)
     except WorldMapError as exc:
         print(f"error: {exc}; no file written", file=sys.stderr)
         return 1

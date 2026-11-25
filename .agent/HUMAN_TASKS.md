@@ -34,6 +34,13 @@ Last updated: 2026-11-18.
    (anything you skip keeps the agent's default).
 - **Done when:** you reply. The agent builds the real pages and the sign-in backend after that (the backend also needs H44).
 
+### H46. Check the world map on your phone (2 minutes, after the next deploy)
+1. On your phone, open https://plastiverse.live/explore and scroll down past the map with one finger:
+   the page should scroll, and a short hint "Use two fingers to move the map" may appear.
+2. Use two fingers on the map to move and pinch-zoom it; tap "Find a country", type Palau and pick it: the map
+   should zoom to Palau.
+- **Done when:** reply "phone map OK" or describe what went wrong (phone model and browser).
+
 ### H44. Prepare the ambassador sign-in services (AMB-1; not urgent, needed before the backend step, about 30 minutes)
 The ambassador sign-in needs two free accounts you own. The agent writes and tests all code locally first.
 1. **Resend:** sign up at https://resend.com with the project email. Add the domain `plastiverse.live`.

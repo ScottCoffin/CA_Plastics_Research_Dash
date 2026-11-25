@@ -155,6 +155,20 @@ html:has(.gx) { scroll-padding-top: calc(60px + 52px + 12px); } /* header 60px, 
 .gx .map-tools { position: absolute; left: 12px; top: 12px; display: flex; gap: 6px; z-index: 4; }
 .gx .map-tools:empty { display: none; }
 .gx .map-tools .btn { min-height: 36px; padding: 6px 10px; }
+/* Boundaries (world.json): Natural Earth disputed lines dashed, Pacific groupings as light dots. Not clickable. */
+.gx .map .bd { fill: none; stroke: var(--pv-ink-2); stroke-width: 1; stroke-dasharray: 4 3; opacity: .85; vector-effect: non-scaling-stroke; pointer-events: none; }
+.gx .map .pg { fill: none; stroke: var(--pv-slate-2); stroke-width: 1.2; stroke-linecap: round; stroke-dasharray: 0 3.2; vector-effect: non-scaling-stroke; pointer-events: none; }
+/* Zoom: the map takes wheel, drag and pinch itself; the overlay group sits inside the frame's bottom-right corner. */
+.gx .map#map { touch-action: pan-y; cursor: grab; }
+.gx .map#map:active { cursor: grabbing; }
+.gx .map#map:focus-visible { outline: 2px solid var(--pv-ink); outline-offset: -2px; }
+.gx .map-zoom { position: absolute; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 4px; z-index: 4; }
+.gx .map-hint { position: absolute; left: 12px; bottom: 12px; z-index: 5; max-width: calc(100% - 150px); background: var(--pv-ink); color: var(--pv-paper); font-size: 13px; line-height: 1.35; padding: 6px 10px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.gx .map-hint.show { opacity: 1; }
+.gx .map-zoom .btn { min-width: 36px; min-height: 36px; padding: 4px 8px; text-align: center; background: var(--pv-paper); }
+.gx .legend .keys { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; font-size: 13px; color: var(--pv-ink-2); }
+.gx .legend .keys span { display: inline-flex; align-items: center; gap: 6px; }
+.gx .legend .credit { margin: 0; font-size: 12px; color: var(--pv-ink-2); flex-basis: 100%; }
 .gx .callout { position: absolute; z-index: 3; background: var(--pv-paper); border: 1px solid var(--pv-ink); padding: 7px 11px 8px; display: grid; gap: 1px; font-size: 13px; text-decoration: none; line-height: 1.3; width: max-content; max-width: 220px; transition: opacity .2s; }
 .gx .callout b { font-weight: 600; display: flex; align-items: center; gap: 8px; }
 .gx .callout small { color: var(--pv-ink-2); font-size: 13px; }

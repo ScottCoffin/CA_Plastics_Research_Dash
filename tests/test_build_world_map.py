@@ -18,6 +18,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "tests" / "fixtures" / "plat2a_world_topology_mini.json"
+LINES_FIXTURE = ROOT / "tests" / "fixtures" / "plat2a_boundary_lines_mini.geojson"
 
 
 def _load_module() -> Any:
@@ -123,8 +124,26 @@ def test_geometry_path_skips_other_geometry_types(topology: dict[str, Any]) -> N
     assert bwm.geometry_path({"type": "Point", "arcs": [0]}, arcs) == ""
 
 
+def _lines() -> dict[str, Any]:
+    return json.loads(LINES_FIXTURE.read_text(encoding="utf-8"))
+
+
+def test_linework_path_copies_seam_lines_and_drops_specks() -> None:
+    # The seam line gets a copy across the antimeridian, the plain line one path, the speck none.
+    d = bwm.linework_path(_lines())
+    assert d.count("M") == 3
+    assert d.startswith("M") and "Z" not in d
+    assert bwm.linework_path({"features": []}) == ""
+
+
+def test_linework_path_refuses_other_geometry_types() -> None:
+    polygon = {"features": [{"geometry": {"type": "Polygon", "coordinates": []}}]}
+    with pytest.raises(bwm.WorldMapError, match="unexpected line geometry"):
+        bwm.linework_path(polygon)
+
+
 def test_build_payload_from_fixture_keeps_expected_countries(topology: dict[str, Any]) -> None:
-    payload = bwm.build_payload(topology, topology)
+    payload = bwm.build_payload(topology, topology, _lines(), _lines())
     assert set(payload) == {
         "sphere",
         "crop",
@@ -134,9 +153,13 @@ def test_build_payload_from_fixture_keeps_expected_countries(topology: dict[str,
         "ca",
         "ca_bbox",
         "small",
+        "disputed",
+        "pacific_groups",
         "source",
         "licence",
     }
+    assert payload["disputed"].count("M") == 3
+    assert payload["pacific_groups"] == payload["disputed"]
     # Antarctica is dropped by id; the 0.1-degree speck has no visible outline.
     assert [country["id"] for country in payload["countries"]] == ["250", "840"]
     by_id = {country["id"]: country for country in payload["countries"]}
@@ -195,12 +218,16 @@ def test_read_source_accepts_a_cached_file_with_matching_pin(
 
 
 def _stage_inputs(raw: Path) -> str:
-    """Copy the fixture in as both cached inputs and return its digest for the pins."""
+    """Copy the fixtures in as the cached inputs and return the TopoJSON digest for the pins."""
 
     (raw / "countries").mkdir(parents=True)
     (raw / "states").mkdir()
+    (raw / bwm.DISPUTED_FILE).parent.mkdir(parents=True)
+    (raw / bwm.PACIFIC_FILE).parent.mkdir(parents=True)
     shutil.copyfile(FIXTURE, raw / bwm.COUNTRIES_FILE)
     shutil.copyfile(FIXTURE, raw / bwm.STATES_FILE)
+    shutil.copyfile(LINES_FIXTURE, raw / bwm.DISPUTED_FILE)
+    shutil.copyfile(LINES_FIXTURE, raw / bwm.PACIFIC_FILE)
     return hashlib.sha256(FIXTURE.read_bytes()).hexdigest()
 
 
@@ -210,6 +237,9 @@ def test_main_offline_writes_identical_bytes_on_rerun(
     digest = _stage_inputs(tmp_path / "raw")
     monkeypatch.setattr(bwm, "COUNTRIES_SHA256", digest)
     monkeypatch.setattr(bwm, "STATES_SHA256", digest)
+    lines_digest = hashlib.sha256(LINES_FIXTURE.read_bytes()).hexdigest()
+    monkeypatch.setattr(bwm, "DISPUTED_SHA256", lines_digest)
+    monkeypatch.setattr(bwm, "PACIFIC_SHA256", lines_digest)
     monkeypatch.setattr(urllib.request, "urlopen", _no_network)
     out = tmp_path / "out" / "world.json"
     argv = ["--offline", "--raw-dir", str(tmp_path / "raw"), "--output", str(out)]
@@ -292,4 +322,9 @@ def test_committed_world_json_is_natural_earth_at_50m_with_small_islands() -> No
     # Palau has an outline; the tiny islands are at least marked.
     assert "PW" in outlined
     assert all(set(m) == {"iso", "x", "y", "lon", "lat"} for m in world["small"])
-    assert (ROOT / "site" / "assets" / "world" / "world.json").stat().st_size < 1_500_000
+    assert (ROOT / "site" / "assets" / "world" / "world.json").stat().st_size < 1_300_000
+    # The two Natural Earth line layers: disputed boundaries (50m) and Pacific groupings (10m).
+    assert world["disputed"].startswith("M") and world["disputed"].count("M") >= 20
+    assert world["pacific_groups"].startswith("M") and world["pacific_groups"].count("M") >= 50
+    assert "ne_50m_admin_0_boundary_lines_disputed_areas" in world["source"]
+    assert "ne_10m_admin_0_pacific_groupings" in world["source"]

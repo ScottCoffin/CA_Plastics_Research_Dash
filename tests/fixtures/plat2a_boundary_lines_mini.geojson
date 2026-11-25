@@ -1,0 +1,5 @@
+{"type": "FeatureCollection", "features": [
+  {"type": "Feature", "properties": {"NAME": "Seam"}, "geometry": {"type": "LineString", "coordinates": [[170, 0], [-170, 0]]}},
+  {"type": "Feature", "properties": {"NAME": "Plain"}, "geometry": {"type": "LineString", "coordinates": [[0, 0], [10, 10]]}},
+  {"type": "Feature", "properties": {"NAME": "Speck"}, "geometry": {"type": "LineString", "coordinates": [[0, 0], [0.0001, 0]]}}
+]}

@@ -134,7 +134,7 @@ def test_page_links_stay_site_relative_and_point_at_the_built_pages():
 
 def test_module_fetches_explore_json_through_site_root_and_exports_mount():
     js = MODULE.read_text(encoding="utf-8")
-    assert 'import {globalDataUrl} from "./atlas.js";' in js
+    assert 'import {globalDataUrl, siteRoot} from "./atlas.js";' in js
     assert 'fetch(globalDataUrl("explore.json"), {cache: "no-cache"})' in js
     assert re.search(r"^export async function mountExplore\(root\)", js, re.M)
     assert "window.__explore = {go, setTab" in js

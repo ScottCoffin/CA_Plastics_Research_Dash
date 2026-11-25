@@ -2,7 +2,7 @@
 // module. The markup is static in explore.md, inside <div class="gx">; this module fetches
 // explore.json, then fills the scope bar, the statement, the tabs and the panels, and keeps the
 // #scope= and &view= hash state. Every query runs inside root, so ids stay unique per page.
-import {globalDataUrl} from "./atlas.js";
+import {globalDataUrl, siteRoot} from "./atlas.js";
 import {denominatorShare, readDenominators} from "./v4_trend_model.js";
 
 // Pure helpers over countries.json (PLAT-4 slice 4: unscreened query hits, schema plat4b-v1). Exported for the
@@ -68,6 +68,47 @@ export function frameExtent(bbox) {
   const xy = pts.map(([lon, lat]) => frameXY(lon, lat));
   return [Math.min(...xy.map((p) => p[0])), Math.min(...xy.map((p) => p[1])), Math.max(...xy.map((p) => p[0])), Math.max(...xy.map((p) => p[1]))];
 }
+// ---- zoom and pan (pure; tested by tests/framework_explore_zoom_runtime.mjs) -------------------
+// Zoom 1 is the whole frame; ZOOM_MAX is the closest zoom. A view is [x, y, w, h] in frame units.
+export const ZOOM_MAX = 60;
+export function clampWidth(width, frameWidth) {
+  return Math.min(frameWidth, Math.max(frameWidth / ZOOM_MAX, width));
+}
+// Scale factor for one wheel event (deltaMode 0 pixels, 1 lines, 2 pages). Each event is capped so a fast wheel cannot jump.
+export function wheelFactor(deltaY, deltaMode = 0) {
+  const px = Math.max(-200, Math.min(200, deltaY * (deltaMode === 1 ? 16 : deltaMode === 2 ? 400 : 1)));
+  return Math.exp(-px * 0.002);
+}
+// Zoom a view by factor (above 1 zooms in) and keep the point (ax, ay) where it is on screen. The aspect is kept.
+export function zoomView(view, factor, ax, ay, frameWidth) {
+  const [x, y, w, h] = view;
+  const nw = clampWidth(w / factor, frameWidth), k = nw / w;
+  return [ax - (ax - x) * k, ay - (ay - y) * k, nw, h * k];
+}
+// Keep a view inside the frame. A view bigger than the frame in one direction is centred on it.
+export function clampView(view, frame) {
+  const [fx, fy, fw, fh] = frame, [x, y, w, h] = view;
+  const cx = w >= fw ? fx + (fw - w) / 2 : Math.max(fx, Math.min(x, fx + fw - w));
+  const cy = h >= fh ? fy + (fh - h) / 2 : Math.max(fy, Math.min(y, fy + fh - h));
+  return [cx, cy, w, h];
+}
+// ---- gestures (pure; tested by tests/framework_explore_zoom_runtime.mjs) ---------------------
+export const WHEEL_HINT = "Hold Ctrl and scroll to zoom, or click the map first";
+export const TOUCH_HINT = "Use two fingers to move the map";
+// A wheel zooms the map only with Ctrl or Cmd held, or while the map is active; otherwise the page scrolls.
+export function wheelZooms(event, active) {
+  return Boolean(event.ctrlKey || event.metaKey || active);
+}
+// The map is active after a press or focus inside it, and inactive after Escape, focus leaving it or a press outside.
+export function nextActive(active, kind) {
+  if (kind === "inside") return true;
+  if (kind === "escape" || kind === "leave" || kind === "outside") return false;
+  return active;
+}
+// One finger on touch scrolls the page (hint only); a mouse, or two or more fingers, pan the map.
+export function dragMode(pointerType, pointerCount) {
+  return pointerType === "touch" && pointerCount < 2 ? "hint" : "pan";
+}
 // Entries of places.json (schema places-v1) as objects; the compact arrays are documented in docs/SITE_DATA.md.
 export function placeRows(payload) {
   if (payload?.schema !== "places-v1" || !Array.isArray(payload.entries)) return [];
@@ -102,9 +143,10 @@ export function searchPlaces(rows, query, limit = 8) {
 }
 
 export async function mountExplore(root) {
-  const [response, placesResponse] = await Promise.all([
+  const [response, placesResponse, worldResponse] = await Promise.all([
     fetch(globalDataUrl("explore.json"), {cache: "no-cache"}),
     fetch(globalDataUrl("places.json"), {cache: "no-cache"}).catch(() => null),
+    fetch(new URL("assets/world/world.json", siteRoot()), {cache: "no-cache"}).catch(() => null),
   ]);
   if (!response.ok) throw new Error(`explore.json returned HTTP ${response.status}`);
   const D = await response.json();
@@ -114,6 +156,9 @@ export async function mountExplore(root) {
   const PLACE_GEO = Object.fromEntries(PLACE_ROWS.filter((r) => r.kind === "country").map((r) => [r.iso, r.geom]));
   const PLACE_NAME = Object.fromEntries(PLACE_ROWS.filter((r) => r.kind === "country").map((r) => [r.iso, r.name]));
   const MARKERS = Array.isArray(PLACES?.markers) ? PLACES.markers : [];
+  // The boundary layers come from world.json (same frame as the raster). Without it the map has no boundary lines.
+  const WORLD = worldResponse?.ok ? await worldResponse.json().catch(() => null) : null;
+  const BOUNDARY = {disputed: WORLD?.disputed || "", pacific: WORLD?.pacific_groups || ""};
   const G = D.grid, S = D.sample.scopes;
   const fmt = (n) => Number(n).toLocaleString("en-US");
   const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0) + "%";
@@ -397,6 +442,8 @@ export async function mountExplore(root) {
     return segs.join("");
   }
   let vb = FULL.slice(), vbAspect = ASPECT, mapEl = null, tween = 0;
+  // Set on pointerdown and kept until the next one: a drag must not also count as a click on a country.
+  const drag = {moved: false};
 
   // Small countries: one dot each at its centroid, focusable and clickable when the country has works.
   function markerSvg() {
@@ -416,19 +463,25 @@ export async function mountExplore(root) {
   }
   function mapHTML() {
     const paths = D.countries.filter((c) => c.runs.length).map((c) => `<path class="c ${step(c.works)}" data-iso="${c.iso}" d="${cellD(runsCells(c.runs))}"/>`).join("");
-    const body = `${paths}<path class="ca" d="${cellD(caCells)}"/><path class="no" d="${cellOutline(runsCells(C.NO.runs))}"/>`;
+    const body = `${paths}<path class="ca" d="${cellD(caCells)}"/><path class="no" d="${cellOutline(runsCells(C.NO.runs))}"/><path class="pg" d="${BOUNDARY.pacific}"/><path class="bd" d="${BOUNDARY.disputed}"/>`;
     // Each pane repeats the country paths in its own svg; the viewBox clips it to its part of the raster.
     const pane = ([label, [x, y, w, h]]) => `<figure class="mp"><figcaption class="mcap">${label}</figcaption><div class="mp-box" style="aspect-ratio:${w} / ${h}"><svg class="map" viewBox="${x} ${y} ${w} ${h}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${label}: plastics works by country.">${body}</svg></div></figure>`;
     return `<div class="mapcard"><div class="map-tools" id="map-tools"></div><div class="mapbox" id="mapbox" style="--ga-ar:${G.w} / ${(H + BAND).toFixed(1)}">
-    <svg class="map" id="map" viewBox="${vb.join(" ")}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="World map of plastics works by country. Every country is also listed in the table below. Small countries are buttons.">${body}${markerSvg()}<rect class="extent" id="extent" x="0" y="0" width="0" height="0" style="display:none"/></svg>
+    <svg class="map" id="map" tabindex="0" viewBox="${vb.join(" ")}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="World map of plastics works by country. Every country is also listed in the table below. Small countries are buttons. Hold Ctrl and scroll, or click the map first, to zoom; drag to pan; with the map focused, plus and minus zoom, arrow keys pan and 0 resets.">${body}${markerSvg()}<rect class="extent" id="extent" x="0" y="0" width="0" height="0" style="display:none"/></svg>
     <div class="panes" id="panes">${PAIR.map(pane).join("")}</div>
     <svg class="leaders" id="leaders" aria-hidden="true"></svg>
     <a class="callout live" id="co-ca" href="${ATLAS.US.href}"><b><i class="sw live"></i>California</b><small>live atlas · <span class="m">${fmt(D.california.works)}</span> works</small><span class="go">Open atlas ${ARROW}</span></a>
     <a class="callout" id="co-no" href="${ATLAS.NO.href}"><b><i class="sw prep"></i>Norway</b><span class="go quiet">Atlas in preparation ${ARROW}</span></a>
     <div class="maptip" id="tip" hidden></div>
+    <div class="map-zoom" role="group" aria-label="Map zoom">
+      <button type="button" class="btn" id="zoom-in" aria-label="Zoom in" title="Zoom in">+</button>
+      <button type="button" class="btn" id="zoom-out" aria-label="Zoom out" title="Zoom out">&minus;</button>
+      <button type="button" class="btn" id="zoom-reset" aria-label="Reset map view" title="Reset map view">Reset</button>
+    </div>
+    <div class="map-hint" id="map-hint" aria-live="polite"></div>
   </div>
   <div class="astrip"><a class="opt live" href="${ATLAS.US.href}"><i class="sw live"></i><span>California<small>live regional atlas</small></span><span class="go">Open ${ARROW}</span></a><a class="opt" href="${ATLAS.NO.href}"><i class="sw prep"></i><span>Norway<small>atlas in preparation</small></span><span class="go quiet">Help build it</span></a></div>
-  <div class="legend"><div class="ramp">works per country <i style="background:var(--pv-wash)"></i><i style="background:var(--pv-mint)"></i><i style="background:var(--pv-slate-2)"></i><i style="background:var(--pv-slate)"></i> under 30 · 30–299 · 300–2,999 · 3,000+</div><p>Select a country to scope every view to it. Countries too small for this map are in the table.</p></div></div>`;
+  <div class="legend"><div class="ramp">works per country <i style="background:var(--pv-wash)"></i><i style="background:var(--pv-mint)"></i><i style="background:var(--pv-slate-2)"></i><i style="background:var(--pv-slate)"></i> under 30 · 30–299 · 300–2,999 · 3,000+</div><p>Select a country to scope every view to it. Countries too small for this map are in the table.</p><p class="keys"><span><svg width="26" height="8" aria-hidden="true"><line x1="0" y1="4" x2="26" y2="4" stroke="var(--pv-ink-2)" stroke-width="1" stroke-dasharray="4 3"/></svg>Disputed boundary, as drawn by Natural Earth</span><span><svg width="26" height="8" aria-hidden="true"><line x1="0" y1="4" x2="26" y2="4" stroke="var(--pv-slate-2)" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="0 3.2"/></svg>Pacific grouping</span></p><p class="credit">Boundaries: Natural Earth, including its disputed-area lines. Hold Ctrl and scroll to zoom (or click the map first); two fingers pan and pinch on touch; double-click to zoom in; with the map focused, + and &minus; zoom, arrow keys pan, 0 resets.</p></div></div>`;
   }
   function wireMap() {
     mapEl = $("#map");
@@ -455,6 +508,7 @@ export async function mountExplore(root) {
       });
       svg.addEventListener("pointerleave", () => { hover(null); tip.hidden = true; });
       svg.addEventListener("click", (e) => {
+        if (drag.moved) return;
         const p = e.target.closest?.(".c");
         if (p) { if (C[p.dataset.iso].works) go({kind: "country", iso: p.dataset.iso}); return; }
         const m = e.target.closest?.(".sm");
@@ -467,6 +521,114 @@ export async function mountExplore(root) {
     });
     sizeMarkers();
     paintMapScope(false);
+    wireZoom();
+  }
+  // Zoom and pan inside the map. A wheel zooms only with Ctrl or Cmd held, or while the map is active (wheelZooms);
+  // otherwise the page scrolls. One finger scrolls the page (touch-action: pan-y); two fingers pan and pinch-zoom.
+  let outsideTap = null;
+  function wireZoom() {
+    const svg = mapEl, pts = new Map(), hintEl = $("#map-hint");
+    let press = {x: 0, y: 0}, active = false, hintTimer = 0;
+    const hint = (text) => {
+      if (!hintEl) return;
+      hintEl.textContent = text;
+      hintEl.classList.add("show");
+      clearTimeout(hintTimer);
+      hintTimer = setTimeout(() => hintEl.classList.remove("show"), 1500);
+    };
+    const setActive = (kind) => {
+      const next = nextActive(active, kind);
+      if (next === active) return;
+      active = next;
+      if (!active) { clearTimeout(hintTimer); hintEl?.classList.remove("show"); }
+    };
+    // A press anywhere else deactivates the map. Only the current render's listener is kept.
+    if (outsideTap) document.removeEventListener("pointerdown", outsideTap);
+    outsideTap = (e) => {
+      if (!svg.isConnected) { document.removeEventListener("pointerdown", outsideTap); outsideTap = null; return; }
+      if (!svg.contains(e.target)) setActive("outside");
+    };
+    document.addEventListener("pointerdown", outsideTap);
+    const mid = () => {
+      const v = [...pts.values()], n = v.length;
+      const x = v.reduce((s, p) => s + p.x, 0) / n, y = v.reduce((s, p) => s + p.y, 0) / n;
+      return {x, y, d: n > 1 ? Math.hypot(v[0].x - v[1].x, v[0].y - v[1].y) : 0};
+    };
+    const toView = (x, y) => {
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return null;
+      const p = svg.createSVGPoint();
+      p.x = x; p.y = y;
+      const q = p.matrixTransform(ctm.inverse());
+      return [q.x, q.y];
+    };
+    // A user gesture replaces any running scope animation and keeps the view inside the frame.
+    const setUserView = (next) => { cancelAnimationFrame(tween); vb = clampView(next, FULL); mapEl.setAttribute("viewBox", vb.join(" ")); sizeMarkers(); placeCallouts(); };
+    const zoomAt = (factor, ax = vb[0] + vb[2] / 2, ay = vb[1] + vb[3] / 2) => setUserView(zoomView(vb, factor, ax, ay, FULL[2]));
+    const panBy = (dx, dy) => setUserView([vb[0] + dx, vb[1] + dy, vb[2], vb[3]]);
+    svg.addEventListener("wheel", (e) => {
+      if (!wheelZooms(e, active)) { hint(WHEEL_HINT); return; }
+      e.preventDefault();
+      const at = toView(e.clientX, e.clientY);
+      if (at) zoomAt(wheelFactor(e.deltaY, e.deltaMode), at[0], at[1]);
+    }, {passive: false});
+    svg.addEventListener("dblclick", (e) => {
+      const at = toView(e.clientX, e.clientY);
+      if (at) zoomAt(2, at[0], at[1]);
+    });
+    svg.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      setActive("inside");
+      if (pts.size === 0) { press = {x: e.clientX, y: e.clientY}; drag.moved = false; cancelAnimationFrame(tween); }
+      pts.set(e.pointerId, {x: e.clientX, y: e.clientY});
+    });
+    const release = (e) => { pts.delete(e.pointerId); };
+    svg.addEventListener("pointerup", release);
+    svg.addEventListener("pointercancel", release);
+    svg.addEventListener("pointerleave", release);
+    svg.addEventListener("pointermove", (e) => {
+      if (!pts.has(e.pointerId)) return;
+      const before = mid();
+      pts.set(e.pointerId, {x: e.clientX, y: e.clientY});
+      const now = mid();
+      const travelled = Math.hypot(now.x - press.x, now.y - press.y);
+      if (dragMode(e.pointerType, pts.size) === "hint") {
+        if (travelled > 4) hint(TOUCH_HINT);
+        return;
+      }
+      if (!drag.moved && (pts.size > 1 || travelled > 4)) {
+        drag.moved = true;
+        try { svg.setPointerCapture(e.pointerId); } catch { /* the pointer may already be released */ }
+      }
+      if (!drag.moved) return;
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return;
+      // Pan with the midpoint, then pinch-zoom by the change in finger spacing, about the midpoint.
+      let next = [vb[0] - (now.x - before.x) / ctm.a, vb[1] - (now.y - before.y) / ctm.d, vb[2], vb[3]];
+      if (pts.size > 1 && before.d > 0 && now.d > 0) {
+        const at = toView(now.x, now.y);
+        if (at) next = zoomView(next, now.d / before.d, at[0], at[1], FULL[2]);
+      }
+      setUserView(next);
+    });
+    svg.addEventListener("focusin", () => setActive("inside"));
+    svg.addEventListener("focusout", (e) => { if (!svg.contains(e.relatedTarget)) setActive("leave"); });
+    svg.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") { setActive("escape"); return; }
+      if (e.target !== svg || e.altKey || e.ctrlKey || e.metaKey) return;
+      const step = vb[2] * 0.1;
+      const keys = {
+        "+": () => zoomAt(1.5), "=": () => zoomAt(1.5), "-": () => zoomAt(1 / 1.5), "_": () => zoomAt(1 / 1.5),
+        ArrowLeft: () => panBy(-step, 0), ArrowRight: () => panBy(step, 0), ArrowUp: () => panBy(0, -step), ArrowDown: () => panBy(0, step),
+        "0": () => paintMapScope(true),
+      };
+      if (!keys[e.key]) return;
+      e.preventDefault();
+      keys[e.key]();
+    });
+    $("#zoom-in")?.addEventListener("click", () => zoomAt(1.6));
+    $("#zoom-out")?.addEventListener("click", () => zoomAt(1 / 1.6));
+    $("#zoom-reset")?.addEventListener("click", () => paintMapScope(true));
   }
   const CONT_BOX = {"Europe": [76, 2, 114, 26], "Asia": [108, 2, 176, 46], "North America": [22, 0, 78, 40], "South America": [44, 34, 78, 72], "Africa": [80, 12, 120, 68], "Oceania": [138, 38, 184, 72]};
   // A country's main body for framing: the contiguous US without Alaska and Hawaii; elsewhere drop cells far from

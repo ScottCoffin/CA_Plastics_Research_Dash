@@ -193,7 +193,7 @@ domain; its point of view on disputed areas is the default Natural Earth view, s
 
 **Map controls.** Zoom and pan live in the map itself: wheel or trackpad zoom, drag to pan, pinch on touch,
 double-click to zoom in, keyboard (+, -, arrows, 0) when the map has focus, and a small on-map control group (zoom in,
-zoom out, reset) overlaid in a corner of the map frame, never outside it. Zoom is limited to sensible bounds.
+zoom out, reset) overlaid in a corner of the map frame, never outside it. Zoom is limited to sensible bounds. Gestures are cooperative so the page never gets stuck (lead, 2026-11-25): the wheel zooms only with Ctrl/Cmd held or after the map is activated by a click, tap or keyboard focus (Escape or leaving deactivates); otherwise the page scrolls and a short hint explains how to zoom; on touch, one finger scrolls the page and two fingers pan and pinch. `/explore` implements this first (`wheelZooms`, `nextActive`, `dragMode` in explore.js).
 
 **Propose-a-region view.** The proposal map opens centred and zoomed on the place selected on the previous
 page (the landing search or map selection). Selected units keep a visible, high-contrast boundary line drawn on top
