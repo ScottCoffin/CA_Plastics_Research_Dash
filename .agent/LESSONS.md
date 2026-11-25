@@ -405,3 +405,10 @@ until it reports.
 - Hash committed text files with CRLF folded to LF (Windows working copies are CRLF, CI checkouts LF), or a stored hash fails in CI.
 - Editing `curation/overrides_works.csv` makes `config/institution_types.csv` and `docs/AT_2_VERIFICATION.md` stale: rerun `scripts/build_institution_types.py` in the same checkpoint.
 - Keep pytest `--basetemp` outside the repo (for example `$(cygpath -w "$TEMP")/atlas_pt`): a temp folder inside the repo makes `test_release_at10` find git and fail.
+
+## 2026-11-25: ambassador Worker deploy and live checks
+- Cloudflare answers 403 (browser check) to Python's default `Python-urllib` User-Agent before the Worker runs; every script calling api.plastiverse.live must send a named User-Agent. A 403 where the Worker would say 401 means Cloudflare, not the token.
+- Worker tests read deploy vars from `wrangler.toml` through the test env; never hard-code a placeholder value there (OWNER_ORCID tests broke when the real iD was set).
+- base64url: the last character of a 32-byte MAC carries 2 unused bits, so tamper tests must change an earlier character.
+- Ids that are list positions (region.yml items) must never be deleted: mark them (`not_relevant`) so later ids keep pointing at the same item.
+- CI has no streamlit: Streamlit AppTest smoke tests use `pytest.importorskip("streamlit")`.
