@@ -193,8 +193,9 @@ export async function mountExplore(root) {
   // On phones this button is the menu: it names the current view and scope, then the scope's works.
   function paintMenuBtn() {
     const sb = $("#scope-btn"), label = viewLabel(tab);
-    sb.innerHTML = `${MENU}<span class="menu-t">${esc(label)} · ${esc(scopeName())}</span><span class="n">${fmt(scopeWorks())}</span>`;
-    sb.setAttribute("aria-label", `Menu: ${label}, ${scopeName()}. Open views and scope`);
+    sb.innerHTML = `${MENU}<span class="menu-t">${esc(label)} · ${esc(scopeName())}</span> <span class="n">${fmt(scopeWorks())}</span>`;
+    // The name starts with the visible text (WCAG 2.5.3); at phone width only the count shows.
+    sb.setAttribute("aria-label", `${label} · ${scopeName()} ${fmt(scopeWorks())} works. Open views and scope`);
   }
 
   // Choosing a place. A country with works scopes the page to it; a region or city scopes to its country and zooms

@@ -405,6 +405,14 @@ Estimands: California E1, E1s, E1l, E2, E3, E4; global E1g, E2g, E7 (see `ESTIMA
 Sources: curation/annotations/*.csv (decision_status complete), curation/gold_design_v1.json, curation/gold_global_draws_v1.csv. Predictions (`data/processed/quality/predictions_*.csv`, `scripts/build_quality_predictions.py`) are read only for a final checkpoint. Missing file: the page shows its static placeholder.
 `--check` regenerates the payload without `generated_at` and exits 1 when the committed file is stale.
 
+### `site/data/california/topics_timeseries.json` and `site/data/california/topic_bursts.json`
+
+Purpose: the topic-evolution page `/california/topics` (BQ-4.4, `scripts/build_topics_json.py`; full schema in `docs/TOPICS_PAGE.md`). Both files share schema `bq4-v1`.
+Shared keys: `schema`, `generated_at`, `scope` (`california`), `as_of`, `last_complete_year`, `version` (source schemas, source sha256s, labels snapshot `content_sha256`).
+`topics_timeseries.json`: `notice`, `page_scope`, `accuracy_rule`, `plastic_related_by_year`, `tags_excluded`, `tags[]` (`tag`, `label`, `approval`, `status`, `accuracy_state` = `validated` | `experimental` | `insufficient data`, `complete_works`, `by_year[]` with `year`, `count`, `share`, `partial`, `label_source_totals`), `lens` (separate from topics, with the framing rule), `cooccurrence` (`pairs[]` with `n_ab`, `n_a`, `n_b`, `N`, `jaccard`, `lift`, `phi`, `status` = `sufficient` | `insufficient_data`).
+`topic_bursts.json`: the rising-share screen (`test`, `alpha`, `window_years`, `min_window_works`, `statistical_screen`, `flagged`, `tags[]` with `flag`, `reasons_failed`, `trend`, `sensitivity`, `loio`) and `bursts` (`not_computed`).
+Sources: the gitignored BQ-4.1 to BQ-4.3 outputs in `data/processed/analytics/` (rule-based tag labels on a frozen snapshot). Counts only; no titles or abstracts. `--check` ignores `generated_at` and needs those inputs, so it runs on the owner machine only.
+
 ### `site/assets/world/world.json`
 
 Purpose: the landing page's country outlines, the California outline and the small-country markers (PLAT-2a, AMB-1). Written by `py -3.14 scripts/build_world_map.py`; `site/assets/world/PROVENANCE.md` records the pinned inputs.

@@ -222,7 +222,7 @@ leak-check works wait for S5.7.
 
 - **H49. Ambassador API secrets (AMB-1).** Redirect URI changed to `https://api.plastiverse.live/orcid/callback`
   (owner, 2026-11-25). Remaining, in PowerShell from the `worker` folder:
-  1. Put Node on this window's PATH: `$env:Path += ";C:\Program Files\nodejs"`, then check with `npx --version`.
+  1. Put Node on this window's PATH: `$env:Path += ";C:\Program Files\nodejs"`, then check with `npx.cmd --version`. Type `npx.cmd` (not `npx`) in every step below: PowerShell blocks `npx` because it is a script.
   2. Sign in once: `npx wrangler login` (a browser tab asks you to allow Wrangler).
   3. For each name below run `npx wrangler secret put NAME` and paste the value when asked (nothing is shown
      as you paste). If Wrangler asks to create the Worker `plastiverse-ambassadors`, answer yes: it only stores

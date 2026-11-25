@@ -10,9 +10,10 @@
 .tp-panel { border: 1px solid rgba(20, 19, 17, .18); border-radius: 6px; padding: 12px 14px; background: var(--pv-paper); }
 .tp-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 .25rem; }
 .tp-badge { font-size: .8rem; border: 1px solid currentColor; border-radius: 4px; padding: 1px 6px; }
-.tp-muted { opacity: .6; }
-.tp-note { font-size: .9rem; opacity: .85; }
+.tp-muted { color: var(--atlas-muted); }
+.tp-note { font-size: .9rem; color: var(--atlas-muted); }
 .tp-scroll { overflow-x: auto; }
+.tp-scroll:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 .tp-table { border-collapse: collapse; width: 100%; font-size: .9rem; font-variant-numeric: tabular-nums; }
 .tp-table caption { text-align: left; font-weight: 600; padding: 4px 0; }
 .tp-table th, .tp-table td { border-bottom: 1px solid rgba(20, 19, 17, .14); padding: 4px 8px; text-align: left; vertical-align: top; }
