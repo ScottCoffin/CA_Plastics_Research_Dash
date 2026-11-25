@@ -39,8 +39,16 @@ The ambassador sign-in needs two free accounts you own. The agent writes and tes
 1. **Resend:** sign up at https://resend.com with the project email. Add the domain `plastiverse.live`.
    Resend shows 3-4 DNS records (SPF, DKIM, optionally DMARC). Add them in Cloudflare DNS (plastiverse.live zone),
    then click Verify in Resend. Create an API key with "Sending access" only.
-2. **Cloudflare:** in the dashboard, Workers & Pages -> create nothing yet; under My Profile -> API Tokens, create a
-   token from the "Edit Cloudflare Workers" template and add the permission "D1: Edit". Restrict it to your account.
+2. **Cloudflare API token** (you do NOT create a Worker or a database yourself, and do not use the
+   "Worker + D1 Database" template; the agent creates both with this token):
+   a. In the Cloudflare dashboard, click the person icon at the top right -> **Profile** -> **API Tokens** ->
+      **Create Token**.
+   b. Next to **Edit Cloudflare Workers**, click **Use template**.
+   c. Under **Permissions**, click **+ Add more** and add: **Account** -> **D1** -> **Edit**.
+   d. **Account Resources**: Include -> your account. **Zone Resources**: Include -> Specific zone -> plastiverse.live.
+   e. **Continue to summary** -> **Create Token**, and copy the token (it is shown once).
+   f. Your **Account ID**: open the dashboard home; it is in the address bar (`dash.cloudflare.com/<account id>/...`)
+      or under **Account details** on the right of the account overview.
 3. **Turnstile:** Cloudflare dashboard -> Turnstile -> add a widget for `plastiverse.live` (managed mode). Note the
    site key (public) and secret key.
 4. Put the secrets in the ignored `.env` file, one per line: `RESEND_API_KEY=...`, `CLOUDFLARE_API_TOKEN=...`,
