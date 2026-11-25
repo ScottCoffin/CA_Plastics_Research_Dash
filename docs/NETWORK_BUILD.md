@@ -400,3 +400,75 @@ Limits:
    goes stale when `index.json` changes until the builder is run again.
 7. The literature context figures quoted in the A3 Module 3 spec are not included in the payload
    and were not checked here.
+
+## 15. Null model (BQ-3.3)
+
+`null_model` in `site/data/network_metrics.json` (added by
+`scripts/build_network_metrics.py`; code in `src/atlas/analytics/network_null.py`) asks whether
+the observed clustering, modularity and giant-component share are higher than chance, given how
+many collaborators each member has. It is additive: `schema_version` stays `bq3-v1`.
+
+Method:
+
+- Each replicate rewires the observed graph by random double-edge swaps. A swap takes two links
+  (a, b) and (c, d) and replaces them with (a, d) and (c, b), with the orientation chosen at
+  random. Each member keeps its number of links. Each link keeps its shared-work count, so the
+  weight multiset is unchanged. Swaps that would create a self-loop or a duplicate link are
+  rejected.
+- Target: 10 successful swaps per link (`nswap`). Attempts are capped at 20 times `nswap`
+  (`max_tries`). The swap counts (`swaps_succeeded`, `attempts_mean`) are in the block.
+- Replicate seeds: one base seed (42) draws one seed per replicate, so replicate i is the same
+  on every run. Louvain inside each replicate uses the BQ-3.2 seed (42).
+- Replicates R: 100 by default (`--null-replicates`). The null is run for G-A and G-I, for every
+  window (`all`, `2011-2015`, `2016-2020`, `2021-2025`, `2026`).
+- Statistics: the same functions as BQ-3.2 (`structure_metrics`): `average_clustering`,
+  `modularity` and `giant_component_share`. Observed, null mean, null sd (sample standard
+  deviation), `z = (observed - null mean) / null sd`, and `p_two_sided`. `z` is null when the
+  null sd is 0 or the observed value is missing. `p_two_sided = (1 + k) / (R + 1)`, where k counts
+  replicates at least as far from the null mean as the observed value.
+
+How to read `z`: a large positive z means the network is more clustered (or more divided into
+groups) than its collaborator counts alone would produce. Around 0 means the value is typical of
+chance. Negative z means less than chance. Compare z across windows only with the caveat that the
+windows differ in size. A small p means few replicates were as extreme as the observed value; with
+R = 100 the smallest possible p is 1/101.
+
+Sensitivity (`null_model.sensitivity`, G-A all years): how the observed statistics move when the
+profiles are grouped differently.
+
+- (a) Merge: authors with the same normalized display name (lower case, letters and digits only)
+  inside one connected component are merged into one node. This is a crude over-merge, because
+  two people can share a name. Merging never joins people across components.
+- (b) Split: a seeded 5% of authors with at least two collaborators are each split into two
+  nodes. Each of their works goes to one copy or the other at random.
+- Each variant reports its node count and the change (`delta`) in each statistic against the
+  observed value. Only aggregates are written; no ids or names.
+
+Runtime: the default build (R = 100) took about 17 minutes on the committed inputs (one run, 2026-11-25), mostly in
+the G-I all-years and 2021-2025 windows (about 5 seconds per replicate for G-I all years and about
+1 second for G-A all years). `--check` repeats this work, so pass the same `--null-replicates`
+value that the committed file used. `--null-replicates 0` leaves out the block.
+
+Limits:
+
+1. Profile splitting and merging. Two people can appear as one author, and one person can
+   appear as two. The sensitivity block shows the size of that effect for the merge and split
+   rules named above; the true error is unknown.
+2. The null keeps each member's number of collaborators and each link's shared-work count. It
+   does not keep which members work together by field, year or institution. A high z can
+   therefore reflect topic or institution clustering, not only collaboration habits.
+3. Ascertainment: the corpus is California-only (see section 14). The null describes the
+   Atlas corpus, not the whole field.
+4. Degree-preserving null is a test of structure given degree, not a test of causes.
+5. Windows are small: the 2026 window is partial and the 2011-2015 window has few links, so
+   z there is noisy.
+6. Projection artefact (lead review, 2026-11-25). Every work with k authors adds a complete
+   clique of k(k-1)/2 links, so a co-authorship graph is highly clustered by construction. The
+   rewired null breaks those cliques, which is why the all-years z values are in the hundreds
+   (authors: clustering 0.68 vs 0.013 in the null, modularity 0.88 vs 0.44, giant component share
+   0.48 vs 0.87). Read them as "far from random", not as a measure of how much more clustered.
+   A stricter baseline would rewire the bipartite author-work graph and keep work sizes; it is
+   not implemented.
+
+`--check` recomputes everything except the null block and checks only that block's shape and R
+(about 7 s); `--check --check-null` recomputes the block too (about 17 minutes at R=100).

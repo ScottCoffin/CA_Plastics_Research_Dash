@@ -1,16 +1,16 @@
 {
   "schema_version": "bq3-v1",
-  "generated_at": "2026-11-23T06:10:03+00:00",
+  "generated_at": "2026-11-25T13:07:35+00:00",
   "source": {
     "index": "site/data/index.json",
-    "index_build_timestamp": "2026-11-22T17:54:04+00:00",
+    "index_build_timestamp": "2026-11-24T20:43:43+00:00",
     "institutions": "site/data/institutions.json"
   },
   "method": {
     "edge_weight": "The number of plastic-related works in the period on which both members are listed. Each work counts once per pair. This is a count of shared works, not a fraction.",
     "communities": "Louvain (networkx louvain_communities), seed 42",
     "rounding": "Shares, density, clustering, modularity and quantiles are rounded to 4 decimal places. Counts are whole numbers.",
-    "networkx": "3.6.1"
+    "networkx": "3.7"
   },
   "ascertainment_note": "This build covers the California Atlas corpus only: the plastic-related works in the published index. The corpus is built around California authors. The build also counts how many plastic-related works in the file have no California author. Collaborators outside California appear only through works they co-wrote with California researchers. A co-author who is not on the Atlas author list is therefore not a member, and a California author whose only plastic-related co-authors are off that list is counted as having no links. The measures describe how California plastics research is connected, as the Atlas records it. They do not describe the whole field, and they should not be compared with a network built from a broader set of works.",
   "definitions": {
@@ -36,9 +36,9 @@
     "rounding": "Shares, density, clustering, modularity and quantiles are rounded to 4 decimal places. Counts are whole numbers."
   },
   "corpus": {
-    "atlas_authors": 2677,
-    "plastic_related_works": 1602,
-    "works_in_year_windows": 1537,
+    "atlas_authors": 2673,
+    "plastic_related_works": 1601,
+    "works_in_year_windows": 1536,
     "works_before_2011": 65,
     "works_without_year": 0,
     "works_with_no_california_author": 0
@@ -52,17 +52,17 @@
           "window": "all",
           "years": null,
           "partial": false,
-          "works": 1602,
-          "nodes": 2152,
+          "works": 1601,
+          "nodes": 2151,
           "edges": 6654,
-          "components": 476,
+          "components": 475,
           "components_with_edges": 194,
           "giant_component_nodes": 1029,
-          "giant_component_share": 0.4782,
+          "giant_component_share": 0.4784,
           "density": 0.0029,
-          "average_clustering": 0.6834,
-          "isolates": 282,
-          "isolate_share": 0.131,
+          "average_clustering": 0.6838,
+          "isolates": 281,
+          "isolate_share": 0.1306,
           "degree": {
             "min": 0.0,
             "p25": 2.0,
@@ -71,8 +71,8 @@
             "p90": 14.0,
             "max": 129.0
           },
-          "communities": 211,
-          "modularity": 0.8819,
+          "communities": 213,
+          "modularity": 0.8813,
           "cross_institution": {
             "fraction": 0.2525,
             "edges_considered": 6205
@@ -82,7 +82,7 @@
             "edges_considered": 5548
           },
           "out_of_region": {
-            "fraction": 0.3561,
+            "fraction": 0.3559,
             "edges_considered": 6454
           }
         },
@@ -112,8 +112,8 @@
             "p90": 7.0,
             "max": 26.0
           },
-          "communities": 31,
-          "modularity": 0.8867,
+          "communities": 32,
+          "modularity": 0.8869,
           "cross_institution": {
             "fraction": 0.1752,
             "edges_considered": 371
@@ -175,17 +175,17 @@
             2025
           ],
           "partial": false,
-          "works": 817,
-          "nodes": 1260,
+          "works": 816,
+          "nodes": 1259,
           "edges": 4093,
-          "components": 284,
+          "components": 283,
           "components_with_edges": 125,
           "giant_component_nodes": 441,
-          "giant_component_share": 0.35,
+          "giant_component_share": 0.3503,
           "density": 0.0052,
-          "average_clustering": 0.6942,
-          "isolates": 159,
-          "isolate_share": 0.1262,
+          "average_clustering": 0.6948,
+          "isolates": 158,
+          "isolate_share": 0.1255,
           "degree": {
             "min": 0.0,
             "p25": 2.0,
@@ -194,8 +194,8 @@
             "p90": 14.0,
             "max": 88.0
           },
-          "communities": 140,
-          "modularity": 0.8953,
+          "communities": 141,
+          "modularity": 0.8955,
           "cross_institution": {
             "fraction": 0.2872,
             "edges_considered": 3826
@@ -205,7 +205,7 @@
             "edges_considered": 3357
           },
           "out_of_region": {
-            "fraction": 0.3895,
+            "fraction": 0.3892,
             "edges_considered": 3985
           }
         },
@@ -260,17 +260,17 @@
           "window": "all",
           "years": null,
           "partial": false,
-          "works": 1602,
-          "nodes": 1910,
-          "edges": 27815,
+          "works": 1601,
+          "nodes": 1911,
+          "edges": 27817,
           "components": 30,
           "components_with_edges": 15,
-          "giant_component_nodes": 1846,
+          "giant_component_nodes": 1847,
           "giant_component_share": 0.9665,
-          "density": 0.0153,
-          "average_clustering": 0.782,
+          "density": 0.0152,
+          "average_clustering": 0.7814,
           "isolates": 15,
-          "isolate_share": 0.0079,
+          "isolate_share": 0.0078,
           "degree": {
             "min": 0.0,
             "p25": 5.0,
@@ -279,19 +279,19 @@
             "p90": 79.0,
             "max": 388.0
           },
-          "communities": 28,
-          "modularity": 0.5252,
+          "communities": 30,
+          "modularity": 0.5137,
           "cross_institution": {
             "fraction": 1.0,
-            "edges_considered": 27815
+            "edges_considered": 27817
           },
           "cross_sector": {
-            "fraction": 0.7143,
-            "edges_considered": 315
+            "fraction": 0.7152,
+            "edges_considered": 316
           },
           "out_of_region": {
-            "fraction": 0.9887,
-            "edges_considered": 27815
+            "fraction": 0.9886,
+            "edges_considered": 27817
           }
         },
         {
@@ -361,8 +361,8 @@
             "p90": 52.9,
             "max": 106.0
           },
-          "communities": 29,
-          "modularity": 0.5183,
+          "communities": 30,
+          "modularity": 0.5188,
           "cross_institution": {
             "fraction": 1.0,
             "edges_considered": 4961
@@ -383,9 +383,9 @@
             2025
           ],
           "partial": false,
-          "works": 817,
+          "works": 816,
           "nodes": 1417,
-          "edges": 20084,
+          "edges": 20083,
           "components": 23,
           "components_with_edges": 14,
           "giant_component_nodes": 1360,
@@ -402,11 +402,11 @@
             "p90": 79.0,
             "max": 311.0
           },
-          "communities": 27,
+          "communities": 25,
           "modularity": 0.5847,
           "cross_institution": {
             "fraction": 1.0,
-            "edges_considered": 20084
+            "edges_considered": 20083
           },
           "cross_sector": {
             "fraction": 0.722,
@@ -414,7 +414,7 @@
           },
           "out_of_region": {
             "fraction": 0.9898,
-            "edges_considered": 20084
+            "edges_considered": 20083
           }
         },
         {
@@ -425,40 +425,510 @@
           ],
           "partial": true,
           "works": 282,
-          "nodes": 589,
-          "edges": 3685,
+          "nodes": 591,
+          "edges": 3686,
           "components": 18,
           "components_with_edges": 11,
-          "giant_component_nodes": 548,
-          "giant_component_share": 0.9304,
-          "density": 0.0213,
-          "average_clustering": 0.8303,
+          "giant_component_nodes": 550,
+          "giant_component_share": 0.9306,
+          "density": 0.0211,
+          "average_clustering": 0.8297,
           "isolates": 7,
-          "isolate_share": 0.0119,
+          "isolate_share": 0.0118,
           "degree": {
             "min": 0.0,
             "p25": 4.0,
             "median": 7.0,
             "p75": 15.0,
             "p90": 35.0,
-            "max": 126.0
+            "max": 127.0
           },
           "communities": 25,
-          "modularity": 0.6647,
+          "modularity": 0.6641,
           "cross_institution": {
             "fraction": 1.0,
-            "edges_considered": 3685
+            "edges_considered": 3686
           },
           "cross_sector": {
-            "fraction": 0.6593,
-            "edges_considered": 91
+            "fraction": 0.663,
+            "edges_considered": 92
           },
           "out_of_region": {
-            "fraction": 0.9753,
-            "edges_considered": 3685
+            "fraction": 0.975,
+            "edges_considered": 3686
           }
         }
       ]
+    }
+  },
+  "null_model": {
+    "method": "For each window, the observed network is compared with random networks that keep the same number of collaborators for every member. Each random network is made by repeatedly choosing two links and swapping their ends, so that the links move between the same members in a new pairing. Each replicate uses its own fixed seed, derived from one base seed, so the results repeat exactly. The score is the same as in the window table.",
+    "reading": "z says how many standard deviations the observed value is from the average of the random networks. A large positive z means the network is more clustered, or more divided into groups, than its number of collaborators alone would produce. A z near 0 means the value is typical of chance. The two-sided p counts how often a random network lies at least as far from the average as the observed value, with a +1 correction. A z is not given when the random networks all give the same value.",
+    "limits": "The null keeps each member's number of collaborators but ignores the work they share, so it is a test of structure given degree only. Profiles may be split or merged: two people may appear as one member, or one person as two. The sensitivity block shows how much the statistics move under a crude over-merge and under a random split. The network covers only the Atlas corpus, so the null describes that corpus, not the whole field.",
+    "replicates": 100,
+    "seed": 42,
+    "graphs": {
+      "authors": {
+        "label": "G-A",
+        "windows": [
+          {
+            "window": "all",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 66540,
+            "max_tries": 1330800,
+            "swaps_succeeded": {
+              "min": 66540,
+              "mean": 66540.0,
+              "max": 66540
+            },
+            "attempts_mean": 69058.3,
+            "nodes": 2151,
+            "edges": 6654,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.6838,
+                "null_mean": 0.0128,
+                "null_sd": 0.0013,
+                "z": 508.9652,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.8813,
+                "null_mean": 0.4412,
+                "null_sd": 0.0019,
+                "z": 228.1626,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.4784,
+                "null_mean": 0.868,
+                "null_sd": 0.001,
+                "z": -387.9507,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          },
+          {
+            "window": "2011-2015",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 4010,
+            "max_tries": 80200,
+            "swaps_succeeded": {
+              "min": 4010,
+              "mean": 4010.0,
+              "max": 4010
+            },
+            "attempts_mean": 4436.5,
+            "nodes": 205,
+            "edges": 401,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.7223,
+                "null_mean": 0.028,
+                "null_sd": 0.0074,
+                "z": 93.2246,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.8869,
+                "null_mean": 0.5025,
+                "null_sd": 0.0074,
+                "z": 52.032,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.239,
+                "null_mean": 0.8799,
+                "null_sd": 0.0055,
+                "z": -115.9767,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          },
+          {
+            "window": "2016-2020",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 10580,
+            "max_tries": 211600,
+            "swaps_succeeded": {
+              "min": 10580,
+              "mean": 10580.0,
+              "max": 10580
+            },
+            "attempts_mean": 11289.1,
+            "nodes": 472,
+            "edges": 1058,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.7152,
+                "null_mean": 0.0198,
+                "null_sd": 0.0039,
+                "z": 180.5043,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.8966,
+                "null_mean": 0.5003,
+                "null_sd": 0.0044,
+                "z": 89.5486,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.3602,
+                "null_mean": 0.8767,
+                "null_sd": 0.0031,
+                "z": -168.2165,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          },
+          {
+            "window": "2021-2025",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 40930,
+            "max_tries": 818600,
+            "swaps_succeeded": {
+              "min": 40930,
+              "mean": 40930.0,
+              "max": 40930
+            },
+            "attempts_mean": 43101.7,
+            "nodes": 1259,
+            "edges": 4093,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.6948,
+                "null_mean": 0.0174,
+                "null_sd": 0.0019,
+                "z": 360.0884,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.8955,
+                "null_mean": 0.422,
+                "null_sd": 0.0024,
+                "z": 193.5166,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.3503,
+                "null_mean": 0.8729,
+                "null_sd": 0.0015,
+                "z": -339.8428,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          },
+          {
+            "window": "2026",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 14280,
+            "max_tries": 285600,
+            "swaps_succeeded": {
+              "min": 14280,
+              "mean": 14280.0,
+              "max": 14280
+            },
+            "attempts_mean": 15114.9,
+            "nodes": 591,
+            "edges": 1428,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.6918,
+                "null_mean": 0.016,
+                "null_sd": 0.0029,
+                "z": 229.3869,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.9495,
+                "null_mean": 0.4287,
+                "null_sd": 0.0042,
+                "z": 124.2707,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.0914,
+                "null_mean": 0.8548,
+                "null_sd": 0.0037,
+                "z": -208.2351,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          }
+        ]
+      },
+      "institutions": {
+        "label": "G-I",
+        "windows": [
+          {
+            "window": "all",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 278170,
+            "max_tries": 5563400,
+            "swaps_succeeded": {
+              "min": 278170,
+              "mean": 278170.0,
+              "max": 278170
+            },
+            "attempts_mean": 372542.1,
+            "nodes": 1911,
+            "edges": 27817,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.7814,
+                "null_mean": 0.1461,
+                "null_sd": 0.0028,
+                "z": 227.0075,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.5137,
+                "null_mean": 0.1655,
+                "null_sd": 0.0011,
+                "z": 306.9201,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.9665,
+                "null_mean": 0.9922,
+                "null_sd": 0.0002,
+                "z": -118.4263,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          },
+          {
+            "window": "2011-2015",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 7160,
+            "max_tries": 143200,
+            "swaps_succeeded": {
+              "min": 7160,
+              "mean": 7160.0,
+              "max": 7160
+            },
+            "attempts_mean": 9531.2,
+            "nodes": 189,
+            "edges": 716,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.747,
+                "null_mean": 0.1083,
+                "null_sd": 0.0101,
+                "z": 63.3704,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.6656,
+                "null_mean": 0.3283,
+                "null_sd": 0.0059,
+                "z": 57.0092,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.7831,
+                "null_mean": 0.9672,
+                "null_sd": 0.0032,
+                "z": -57.6154,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          },
+          {
+            "window": "2016-2020",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 49610,
+            "max_tries": 992200,
+            "swaps_succeeded": {
+              "min": 49610,
+              "mean": 49610.0,
+              "max": 49610
+            },
+            "attempts_mean": 83224.4,
+            "nodes": 522,
+            "edges": 4961,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.8003,
+                "null_mean": 0.2298,
+                "null_sd": 0.0073,
+                "z": 78.4914,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.5188,
+                "null_mean": 0.1741,
+                "null_sd": 0.0022,
+                "z": 156.7541,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.8697,
+                "null_mean": 0.9864,
+                "null_sd": 0.0007,
+                "z": -155.9976,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          },
+          {
+            "window": "2021-2025",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 200830,
+            "max_tries": 4016600,
+            "swaps_succeeded": {
+              "min": 200830,
+              "mean": 200830.0,
+              "max": 200830
+            },
+            "attempts_mean": 268830.8,
+            "nodes": 1417,
+            "edges": 20083,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.8089,
+                "null_mean": 0.1414,
+                "null_sd": 0.0031,
+                "z": 214.0857,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.5847,
+                "null_mean": 0.1575,
+                "null_sd": 0.0012,
+                "z": 363.0166,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.9598,
+                "null_mean": 0.9936,
+                "null_sd": 0.0002,
+                "z": -140.6435,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          },
+          {
+            "window": "2026",
+            "replicates": 100,
+            "seed": 42,
+            "nswap": 36860,
+            "max_tries": 737200,
+            "swaps_succeeded": {
+              "min": 36860,
+              "mean": 36860.0,
+              "max": 36860
+            },
+            "attempts_mean": 47148.6,
+            "nodes": 591,
+            "edges": 3686,
+            "statistics": {
+              "average_clustering": {
+                "observed": 0.8297,
+                "null_mean": 0.1118,
+                "null_sd": 0.0051,
+                "z": 142.0444,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "modularity": {
+                "observed": 0.6641,
+                "null_mean": 0.2546,
+                "null_sd": 0.0027,
+                "z": 153.4801,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              },
+              "giant_component_share": {
+                "observed": 0.9306,
+                "null_mean": 0.9881,
+                "null_sd": 0.0007,
+                "z": -85.8161,
+                "p_two_sided": 0.0099,
+                "replicates_used": 100
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sensitivity": {
+      "label": "G-A, all years",
+      "seed": 42,
+      "observed": {
+        "nodes": 2151,
+        "statistics": {
+          "average_clustering": 0.6838,
+          "modularity": 0.8813,
+          "giant_component_share": 0.4784
+        }
+      },
+      "merge_same_name_within_component": {
+        "nodes": 2148,
+        "statistics": {
+          "average_clustering": 0.6846,
+          "modularity": 0.8832,
+          "giant_component_share": 0.4781
+        },
+        "merged_away": 3,
+        "delta": {
+          "average_clustering": 0.0008,
+          "modularity": 0.0019,
+          "giant_component_share": -0.0003
+        }
+      },
+      "split_authors": {
+        "nodes": 2177,
+        "statistics": {
+          "average_clustering": 0.6823,
+          "modularity": 0.8802,
+          "giant_component_share": 0.4791
+        },
+        "authors_split": 83,
+        "split_share": 0.05,
+        "delta": {
+          "average_clustering": -0.0015,
+          "modularity": -0.0011,
+          "giant_component_share": 0.0007
+        }
+      }
     }
   }
 }
