@@ -29,13 +29,21 @@ Visual system: Plastiverse Live tokens as on the global app and region pages (gr
 ## Open questions for the owner
 
 1. Do Norway and Belgium ambassadors see the Belgium and California institution names, or only their own region's allowlist?
+-Only their region's allowlist - OR any region that they have previously been part of (based on their author profile's institution history)
 2. Should a single-ambassador answer be visible to that same ambassador as "suggestion pending", or only after consensus?
+- only after consensus
 3. Is "Show a public credit" default-off (as drafted) acceptable for the pilot?
+- I don't understand what's meant by this
 4. Should the stream A save auto-advance to the next case, or stay on the saved line as drafted (safer for review, one more click)?
+- stay on the saved line as drafted
 5. Final wording of the contribution terms and the link target (the full text does not exist yet).
+- Need more information
 6. Region lead promotion: who approves a lead, and can a lead see other regions' queues (drafted: no)?
+- I (Scott Coffin) approve leads, and leads can promote additional leads. A lead can see other region's qeues
 7. Sample names and domains (NIVA, NTNU, SINTEF Ocean, VLIZ, UC Santa Barbara) are illustrative; confirm the eligibility rule shows real allowlist data before pilot.
+-COnfirmed
 8. "Handelens Miljøfond — to confirm" stays a placeholder; no URL is invented.
+-Ok.
 
 ## Deliberately left out
 
@@ -68,14 +76,23 @@ Decisions taken in this round (recorded as defaults; owner can change):
 
 Open questions for the owner:
 1. City radius default: 25 km proposed. Should the radius be fixed by the region lead or chosen by the proposer?
+- Chosen by the proposer
 2. Do "proposed" regions (including ones waiting for review) appear on the public map, or only once approved? Drafted: proposed shows publicly as a hatched area; pending review is visible only in the panel text.
+- Only once approved
 3. Split threshold: own verified ambassador AND at least 50 plastics works (Tier B). Is that the final rule, and must the child also keep the parent's ambassador?
+- I need more information to answer this
 4. The 300 km minimum box leaves Palau's main islands at about a sixth of the map width. Should island states use a smaller minimum (about 120 km) so the islands fill more of the view?
+YEs
 5. Koror has about 11,000 people, below the 15,000 GeoNames rule for places. It is in the index because the owner named it. Keep it as a named exception?
+- No, it's too small. Be explicit and transparent about that threshold to users
 6. Subdivisions: California is drawn from a simplified outline; Vestland, Flanders and Alameda County are approximate boxes. Real admin-1 geometry (Natural Earth admin-1 or GADM) is needed before the pilot.
+- Cool, do it.
 7. Estimates for lead and owner tasks (moderation, region tree) are not set; the spec lists five kinds only.
+- Use best guesses for now
 8. Does the shared `/explore` map adopt the same search and minimum-box rule (spec section 8)? Not changed here; the prototype does not touch `/explore`.
+- YEs
 9. The Pacific Island countries group, Samoa, the National University of Samoa and all works and ambassador counts are sample data.
+- Use real data only on deployment
 
 Still not built: no real geocoder, no GeoNames data, no persistence, no real auth.
 
@@ -101,13 +118,21 @@ Decisions taken in this round (defaults; owner can change):
 
 Open questions for the owner:
 1. Should the badge text be "Ambassador · Norway" (as drafted) or add the institution as well?
+- don't add the institution
 2. Does a linked-but-pending author show on the public author page without the badge (drafted: yes, without badge)?
+- yes, without badge
 3. Sender address for the emails: `ambassadors@plastiverse.live` is a placeholder; confirm it.
+- COnfirmed
 4. Reminder time estimate: the reminder shows only the placeholder tasks (about 12 minutes) and lists stream A progress without a total; confirm whether stream A counts as a task.
+- Yes
 5. Is the map wheel capture acceptable on phones, or should page scroll win until the map is focused?
+- Acceptable
 6. Co-author eligibility uses the same allowlist as sign-in; confirm co-authors outside the list get the email route, not an error.
+- yes
 7. Sample names (co-authors, authors, Ole Vik, Marte Lie) are invented; replace with real corpus data before the pilot.
+- YEs replace with real names
 8. Natural Earth boundaries: confirm the default-view credit wording with the owner.
+- THat's fine.
 
 ## Lead review notes (round 3, 2026-11-25)
 
@@ -138,11 +163,17 @@ Credits and licences:
 
 Open questions for the owner:
 1. Badge label: "Ambassador" and region only, or also the institution (round 3 question 1, still open)?
+- ambassador and region only
 2. ORCID: owner registers the free public API client and the redirect URI on the Worker. Confirm the sample name "A. Example" for the mocked match.
+- Confirmed
 3. Share: should "Summaries only" be pre-selected, or should the owner be forced to choose (drafted: forced)?
+- FOrcred
 4. Share: place required at region granularity, or may it be any unit on the map?
+- Region granulatiry
 5. Touch: two-finger pan and pinch need a visible hint on phones; is the hint text enough?
+-YEs
 6. Ctrl/Cmd and activation: is the 1.8 s hint acceptable, or should the hint persist until the map is clicked?
+-Persist until clicked
 
 Verification (round 4 self-check, 2026-11-25; scratch/amb_design4/):
 - Eligibility row at 1440x900: place and email fields 44 px tall, same top (difference 0 px), button bottom-aligned (0 px). Stacked at 375 px.

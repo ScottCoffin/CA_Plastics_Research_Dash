@@ -252,3 +252,35 @@ under that licence. Datasets enter the same moderation queue and follow the moni
 
 **Proposal map size.** The propose-a-region map is the page's main element: full content width and at least 60% of
 the viewport height on desktop, with the unit list and summary beside it on very wide screens or below it otherwise.
+
+## 12. Owner answers to the design questions (2026-11-25)
+
+Recorded from `.impeccable/surfaces/impeccable-sketches-ambassadors-html.md`:
+- **Visible institutions:** an ambassador sees their own region's allowlist, plus the allowlists of any region they
+  belonged to before, judged from their linked author record's institution history.
+- **Single answers:** shown to the ambassador only after consensus (two agreeing ambassadors); before that, no
+  "pending suggestion" state is shown.
+- **After saving a case:** stay on the saved case (no auto-advance).
+- **Leads:** the owner (Scott Coffin) approves leads; leads can promote further leads; leads can see every
+  region's queues.
+- **City radius:** chosen by the proposer.
+- **Proposed regions:** appear on the public map only once approved.
+- **Island zoom:** island states use a smaller minimum box (about 120 km).
+- **Place index threshold:** no exceptions (Koror is not added); the search states the rule plainly ("cities and
+  towns over 15,000 people; smaller places by their state or county").
+- **Geometry:** real admin-1 boundaries (Natural Earth admin-1 or GADM) before the pilot.
+- **Lead and owner task estimates:** best guesses for now (moderation item about 1 minute, region-tree decision
+  about 3 minutes, lead promotion about 2 minutes).
+- **/explore:** adopts the same place search (countries, subdivisions, cities) and minimum-box rule.
+- **Data:** real data only on deployment; sample names replaced by real corpus data before the pilot.
+- **Badge:** "Ambassador · <region>" only (no institution). A linked author still pending review appears on public
+  pages without the badge.
+- **Email sender:** ambassadors@plastiverse.live (confirmed). Stream A counts as a task in reminders.
+- **Co-authors outside the allowlist:** get the email route, not an error.
+- **Natural Earth credit wording:** confirmed.
+- **Map gestures:** acceptable; the "how to zoom" hint persists until the map is clicked (all maps, including
+  /explore).
+- **Share monitoring data:** the publication choice is forced (no preselection); the place is chosen at region
+  granularity.
+- **Open (owner asked for more information):** public credit default, contribution terms wording, and the split
+  rule details.

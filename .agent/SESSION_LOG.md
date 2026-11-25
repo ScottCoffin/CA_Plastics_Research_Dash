@@ -258,3 +258,4 @@
 | 2026-11-25 | BQ-S5-APPLY (slice 2) | Guide addendum + labelling-app fields; template keeps the A3 block contiguous | this commit |
 | 2026-11-25 | BQ-V.1 (slice 2) | Global author graph within benchmarked budgets; public names only | this commit |
 | 2026-11-25 | BQ-V.6 | GEXF/GraphML exports of the global and California graphs | this commit |
+| 2026-11-25 | AMB-1 (owner answers) | Design questions answered; spec section 12; three items need explanation | this commit |
