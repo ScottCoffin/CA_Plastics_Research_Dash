@@ -220,10 +220,18 @@ leak-check works wait for S5.7.
 ## Later (the agent will say when each is ready)
 
 
-- **H49. Deploy the ambassador API (AMB-1, when the agent says the Worker is ready).** In ORCID Developer
-  tools, change the redirect URI to `https://api.plastiverse.live/orcid/callback`. In `worker/`, run
-  `npx wrangler secret put` once each for ORCID_CLIENT_ID, ORCID_CLIENT_SECRET, EMAIL_HASH_KEY (a new random
-  value, not the session key), SESSION_SIGNING_KEY, RESEND_API_KEY and TURNSTILE_SECRET, then approve the deploy.
+- **H49. Ambassador API secrets (AMB-1).** Redirect URI changed to `https://api.plastiverse.live/orcid/callback`
+  (owner, 2026-11-25). Remaining, in PowerShell from the `worker` folder:
+  1. Put Node on this window's PATH: `$env:Path += ";C:\Program Files\nodejs"`, then check with `npx --version`.
+  2. Sign in once: `npx wrangler login` (a browser tab asks you to allow Wrangler).
+  3. For each name below run `npx wrangler secret put NAME` and paste the value when asked (nothing is shown
+     as you paste). If Wrangler asks to create the Worker `plastiverse-ambassadors`, answer yes: it only stores
+     the secrets; no code runs until the deploy. Names: ORCID_CLIENT_ID, ORCID_CLIENT_SECRET, RESEND_API_KEY,
+     TURNSTILE_SECRET, SESSION_SIGNING_KEY, EMAIL_HASH_KEY. Use the values in `.env` where they exist; for a
+     missing key, make one with `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`.
+     EMAIL_HASH_KEY must be a new value, not the session key.
+  4. Tell the agent "H49 secrets set". The deploy waits for a separate "deploy the Worker" go-ahead.
+
 - **H8. Outreach emails (S9.6).** Now unblocked (H7 done, emails allowed in `data/private/`): approve the email template in
   `docs/OUTREACH.md`, then send the first batch from your own email account. The
   agent never sends email.
