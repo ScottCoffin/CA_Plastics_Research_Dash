@@ -45,7 +45,10 @@ EXTERNAL_HOSTS = (
 )
 
 
-REGIONS = ("california",)
+# Region folders under framework/src (docs/REGION_PAGES.md).
+REGIONS = ("california", "norway", "belgium")
+# Region pages sharing components/region_page.js (REG-1); not in the nav groups.
+REGION_PAGES = ("norway/index", "belgium/index")
 # Data helpers in framework/src/components/atlas.js -> folder under site/data/ ("" is site/data/).
 # loadJson(path) defaults to the California folder; its {url: helper} option picks another one.
 DATA_HELPER_FOLDERS = {"regionDataUrl": "california", "globalDataUrl": "global", "rootDataUrl": ""}
@@ -80,7 +83,7 @@ def static_problems() -> list[str]:
     pages = config_pages()
     if not pages:
         problems.append("observablehq.config.js lists no pages")
-    for page in [*pages, "index"]:
+    for page in [*pages, *REGION_PAGES, "index"]:
         if page.count("/") > 1 or ("/" in page and page.split("/")[0] not in REGIONS):
             problems.append(f"page {page!r} must be index or sit in a region folder {REGIONS}")
         if not (SRC / f"{page}.md").is_file():
@@ -125,7 +128,7 @@ def build_report(dist: Path) -> tuple[list[str], dict[str, int]]:
     payloads: dict[str, int] = {}
     if not dist.is_dir():
         return [f"build folder {dist} not found; run `npm run build` in framework/"], payloads
-    for page in ["index", *config_pages()]:
+    for page in ["index", *config_pages(), *REGION_PAGES]:
         html_path = dist / f"{page}.html"
         if not html_path.is_file():
             problems.append(f"page not rendered: {html_path.name}")

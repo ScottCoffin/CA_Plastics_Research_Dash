@@ -72,3 +72,24 @@ regions:
         - raw_affiliation
         - author_carry_forward
         - escholarship
+
+  # REG-1 (2026-11-25): region pages from the global corpus, built by scripts/build_region_pages.py.
+  # The predicate is the country code only (institution and author country); no local
+  # institution or raw-affiliation rules are claimed until a local collaborator confirms them.
+  - slug: norway
+    name: Norway
+    tier: A
+    parent: null
+    status: planned
+    site_data_dir: site/data/norway
+    predicate:
+      country_codes: ["NO"]
+
+  - slug: belgium
+    name: Belgium
+    tier: A
+    parent: null
+    status: planned
+    site_data_dir: site/data/belgium
+    predicate:
+      country_codes: ["BE"]

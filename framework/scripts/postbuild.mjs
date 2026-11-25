@@ -130,6 +130,8 @@ export const PAGE_DESCRIPTIONS = {
   "california/resources": "Related resources on plastics in California, including data portals, reports and the organisations that maintain them.",
   "california/about": "About the Atlas: what it covers, how the data is sourced, and how to cite it.",
   "california/glossary": "Plain-language definitions of terms used in the California Plastics Research Atlas.",
+  "norway/index": "Norway: plastics research from the global OpenAlex corpus, with a regional atlas being built by local collaborators.",
+  "belgium/index": "Belgium: plastics research from the global OpenAlex corpus, with a regional atlas being built by local collaborators.",
   "california/styleguide": "Reference for the shared styles, icons, filters, tables, charts and accessible components used throughout the California Plastics Research Atlas.",
 };
 

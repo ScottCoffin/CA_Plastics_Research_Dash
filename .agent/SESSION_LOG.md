@@ -240,3 +240,4 @@
 | 2026-11-25 | PLAT-4a | Global backfill complete (136,086 works); data move live | this commit |
 | 2026-11-25 | PLAT-4 (slice 3) + BQ-V.2 + BQ-S9b | Tier B country aggregates; global PubMed coverage 99.1% / 97.3% (one commit: shared doc files) | this commit |
 | 2026-11-25 | Owner decisions | H40 approved (BQ-S5-APPLY queued); H25 design kept, VD-SM deferred; REG-1 Norway+Belgium and AMB-1 ambassadors added; H42 reminder | this commit |
+| 2026-11-25 | REG-1 | Norway and Belgium region pages (global theme, placeholders to confirm) | this commit |

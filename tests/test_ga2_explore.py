@@ -129,7 +129,7 @@ def test_page_links_stay_site_relative_and_point_at_the_built_pages():
     ):
         assert target in page, target
     assert 'href: "./california/"' in module
-    assert 'href: "./ambassadors"' in module
+    assert 'href: "./norway/"' in module  # REG-1: the Norway region page
 
 
 def test_module_fetches_explore_json_through_site_root_and_exports_mount():

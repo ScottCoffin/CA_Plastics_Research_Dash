@@ -59,6 +59,8 @@ DEFAULT_JSON = [
     "site/data/global/denominators.json",
     "site/data/global/countries.json",
     "site/data/global/pubmed_coverage.json",
+    "site/data/norway/region.json",
+    "site/data/belgium/region.json",
 ]
 SKIP_TAGS = {"script", "style"}
 

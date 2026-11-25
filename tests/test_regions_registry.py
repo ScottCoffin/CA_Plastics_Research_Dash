@@ -58,7 +58,7 @@ def test_real_registry_has_global_and_california() -> None:
     registry = load_registry(DEFAULT_REGISTRY_PATH)
     assert registry.schema_version == 1
     slugs = [region.slug for region in registry.regions]
-    assert slugs == ["global", "california"]
+    assert slugs == ["global", "california", "norway", "belgium"]
 
     california = get_region("california")
     assert california.tier == "A"
@@ -79,6 +79,30 @@ def test_real_registry_has_global_and_california() -> None:
     )
 
 
+@pytest.mark.parametrize(
+    ("slug", "iso"),
+    [("norway", "NO"), ("belgium", "BE")],
+)
+def test_region_page_entries_are_planned_tier_a_with_country_predicate(slug: str, iso: str) -> None:
+    region = get_region(slug)
+    assert region.tier == "A"
+    assert region.status == "planned"
+    assert region.parent is None
+    assert region.site_data_dir == f"site/data/{slug}"
+    assert region.predicate is not None
+    assert region.predicate.country_codes == (iso,)
+    assert region.predicate.openalex_institution_filter is None
+    assert region.predicate.institution_registry is None
+
+
+def test_region_page_entries_have_matching_region_yml() -> None:
+    for slug in ("norway", "belgium"):
+        path = REPO_ROOT / "regions" / slug / "region.yml"
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        assert data["slug"] == slug
+        assert data["iso"] == get_region(slug).predicate.country_codes[0]
+
+
 def test_global_is_root_without_predicate() -> None:
     global_region = get_region("global")
     assert global_region.tier == "root"
@@ -86,7 +110,7 @@ def test_global_is_root_without_predicate() -> None:
 
 
 def test_regions_filters_by_tier() -> None:
-    assert [r.slug for r in regions(tier="A")] == ["california"]
+    assert [r.slug for r in regions(tier="A")] == ["california", "norway", "belgium"]
     assert [r.slug for r in regions(tier="root")] == ["global"]
     assert [r.slug for r in regions(tier="C")] == []
     with pytest.raises(ValueError, match="unknown tier"):

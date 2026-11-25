@@ -1,0 +1,871 @@
+{
+  "schema_version": "region-v1",
+  "generated_at": "2026-11-26T01:15:33Z",
+  "slug": "belgium",
+  "name": "Belgium",
+  "iso": "BE",
+  "status": "in_preparation",
+  "screening_status": "unscreened_query_hit",
+  "what_this_is_and_is_not": {
+    "is": "A regional page built from the global set of published plastics research. Each count is an unscreened query hit: an OpenAlex work that matched the plastics search, grouped by the country of its authors' institutions. Nothing has been checked for relevance to this country.",
+    "is_not": "Not a verified list of local funders, monitoring programmes, policies or institutes: every local item is a placeholder until a local collaborator confirms it. Not a share of world research, and not a ranking of people or organisations."
+  },
+  "stats": {
+    "works_total": 1260,
+    "first_year": 1987,
+    "last_complete_year": 2025,
+    "works_with_pmid": 527
+  },
+  "works_by_year": [
+    {
+      "year": 1970,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1971,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1972,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1973,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1974,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1975,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1976,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1977,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1978,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1979,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1980,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1981,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1982,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1983,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1984,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1985,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1986,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1987,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1988,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1989,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 1990,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1991,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1992,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1993,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1994,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 1995,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1996,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1997,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1998,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 1999,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2000,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2001,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2002,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 2003,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 2004,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 2005,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 2006,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2007,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 2008,
+      "count": 4,
+      "partial": false
+    },
+    {
+      "year": 2009,
+      "count": 5,
+      "partial": false
+    },
+    {
+      "year": 2010,
+      "count": 3,
+      "partial": false
+    },
+    {
+      "year": 2011,
+      "count": 8,
+      "partial": false
+    },
+    {
+      "year": 2012,
+      "count": 10,
+      "partial": false
+    },
+    {
+      "year": 2013,
+      "count": 18,
+      "partial": false
+    },
+    {
+      "year": 2014,
+      "count": 13,
+      "partial": false
+    },
+    {
+      "year": 2015,
+      "count": 30,
+      "partial": false
+    },
+    {
+      "year": 2016,
+      "count": 25,
+      "partial": false
+    },
+    {
+      "year": 2017,
+      "count": 26,
+      "partial": false
+    },
+    {
+      "year": 2018,
+      "count": 27,
+      "partial": false
+    },
+    {
+      "year": 2019,
+      "count": 37,
+      "partial": false
+    },
+    {
+      "year": 2020,
+      "count": 63,
+      "partial": false
+    },
+    {
+      "year": 2021,
+      "count": 108,
+      "partial": false
+    },
+    {
+      "year": 2022,
+      "count": 142,
+      "partial": false
+    },
+    {
+      "year": 2023,
+      "count": 138,
+      "partial": false
+    },
+    {
+      "year": 2024,
+      "count": 157,
+      "partial": false
+    },
+    {
+      "year": 2025,
+      "count": 214,
+      "partial": false
+    },
+    {
+      "year": 2026,
+      "count": 219,
+      "partial": true
+    }
+  ],
+  "top_topics": [
+    {
+      "id": "T10753",
+      "name": "Microplastics and Plastic Pollution",
+      "count": 556
+    },
+    {
+      "id": "T10389",
+      "name": "Polymer crystallization and properties",
+      "count": 86
+    },
+    {
+      "id": "T10661",
+      "name": "biodegradable polymer synthesis and properties",
+      "count": 81
+    },
+    {
+      "id": "T10435",
+      "name": "Environmental Impact and Sustainability",
+      "count": 42
+    },
+    {
+      "id": "T11108",
+      "name": "Municipal Solid Waste Management",
+      "count": 41
+    },
+    {
+      "id": "T12017",
+      "name": "Recycling and Waste Management Techniques",
+      "count": 32
+    },
+    {
+      "id": "T10088",
+      "name": "Thermochemical Biomass Conversion Processes",
+      "count": 31
+    },
+    {
+      "id": "T10488",
+      "name": "Nanocomposite Films for Food Packaging",
+      "count": 16
+    },
+    {
+      "id": "T13171",
+      "name": "Polymer Science and PVC",
+      "count": 12
+    },
+    {
+      "id": "T10539",
+      "name": "Sustainable Supply Chain Management",
+      "count": 11
+    }
+  ],
+  "top_institutions": [
+    {
+      "id": "I32597200",
+      "name": "Ghent University",
+      "ror": "https://ror.org/00cv9y106",
+      "type": "education",
+      "works": 445
+    },
+    {
+      "id": "I99464096",
+      "name": "KU Leuven",
+      "ror": "https://ror.org/05f950310",
+      "type": "education",
+      "works": 186
+    },
+    {
+      "id": "I2800387288",
+      "name": "European Commission",
+      "ror": "https://ror.org/00k4n6c32",
+      "type": "government",
+      "works": 111
+    },
+    {
+      "id": "I149213910",
+      "name": "University of Antwerp",
+      "ror": "https://ror.org/008x57b05",
+      "type": "education",
+      "works": 104
+    },
+    {
+      "id": "I157674565",
+      "name": "University of Liège",
+      "ror": "https://ror.org/00afp2z80",
+      "type": "education",
+      "works": 98
+    },
+    {
+      "id": "I1293303778",
+      "name": "Flanders Marine Institute",
+      "ror": "https://ror.org/0496vr396",
+      "type": "nonprofit",
+      "works": 82
+    },
+    {
+      "id": "I68522396",
+      "name": "Flemish Institute for Technological Research",
+      "ror": "https://ror.org/04gq0w522",
+      "type": "facility",
+      "works": 76
+    },
+    {
+      "id": "I130929987",
+      "name": "University of Mons",
+      "ror": "https://ror.org/02qnnz951",
+      "type": "education",
+      "works": 68
+    },
+    {
+      "id": "I13469542",
+      "name": "Vrije Universiteit Brussel",
+      "ror": "https://ror.org/006e5kg04",
+      "type": "education",
+      "works": 65
+    },
+    {
+      "id": "I95674353",
+      "name": "UCLouvain",
+      "ror": "https://ror.org/02495e989",
+      "type": "education",
+      "works": 37
+    },
+    {
+      "id": "I878454856",
+      "name": "Hasselt University",
+      "ror": "https://ror.org/04nbhqj75",
+      "type": "education",
+      "works": 35
+    },
+    {
+      "id": "I4210145253",
+      "name": "Instituut voor Landbouw en Visserijonderzoek",
+      "ror": "https://ror.org/05cjt1n05",
+      "type": "facility",
+      "works": 31
+    },
+    {
+      "id": "I132053463",
+      "name": "Université Libre de Bruxelles",
+      "ror": "https://ror.org/01r9htc13",
+      "type": "education",
+      "works": 28
+    },
+    {
+      "id": "I4210118628",
+      "name": "Joint Research Center",
+      "ror": "https://ror.org/02ef88m96",
+      "type": "government",
+      "works": 22
+    },
+    {
+      "id": "I4210116480",
+      "name": "Flanders Make (Belgium)",
+      "ror": "https://ror.org/02ndjfz59",
+      "type": "company",
+      "works": 19
+    }
+  ],
+  "top_researchers": [
+    {
+      "id": "A5046153013",
+      "name": "Steven De Meester",
+      "works": 79
+    },
+    {
+      "id": "A5004577558",
+      "name": "Kevin M. Van Geem",
+      "works": 77
+    },
+    {
+      "id": "A5063618622",
+      "name": "Gert Everaert",
+      "works": 45
+    },
+    {
+      "id": "A5091339898",
+      "name": "Ana Isabel Catarino",
+      "works": 45
+    },
+    {
+      "id": "A5025616848",
+      "name": "Colin Janssen",
+      "works": 40
+    },
+    {
+      "id": "A5062768733",
+      "name": "Kim Ragaert",
+      "works": 33
+    },
+    {
+      "id": "A5076108505",
+      "name": "Jana Asselman",
+      "works": 32
+    },
+    {
+      "id": "A5064579321",
+      "name": "Maaike Vercauteren",
+      "works": 29
+    },
+    {
+      "id": "A5040998762",
+      "name": "Jo P. Dewulf",
+      "works": 28
+    },
+    {
+      "id": "A5003536932",
+      "name": "Jean‐Marie Raquez",
+      "works": 25
+    },
+    {
+      "id": "A5061316107",
+      "name": "Milica Velimirović",
+      "works": 23
+    },
+    {
+      "id": "A5071842587",
+      "name": "Lisa Devriese",
+      "works": 22
+    },
+    {
+      "id": "A5056308660",
+      "name": "Marvin Kusenberg",
+      "works": 21
+    },
+    {
+      "id": "A5043624002",
+      "name": "Martijn Roosen",
+      "works": 20
+    },
+    {
+      "id": "A5076447558",
+      "name": "Pieter Billen",
+      "works": 18
+    }
+  ],
+  "partner_countries": [
+    {
+      "iso": "NL",
+      "name": "Netherlands",
+      "works": 193
+    },
+    {
+      "iso": "IT",
+      "name": "Italy",
+      "works": 183
+    },
+    {
+      "iso": "FR",
+      "name": "France",
+      "works": 165
+    },
+    {
+      "iso": "DE",
+      "name": "Germany",
+      "works": 141
+    },
+    {
+      "iso": "ES",
+      "name": "Spain",
+      "works": 131
+    },
+    {
+      "iso": "GB",
+      "name": "United Kingdom",
+      "works": 124
+    },
+    {
+      "iso": "CN",
+      "name": "China",
+      "works": 92
+    },
+    {
+      "iso": "US",
+      "name": "United States",
+      "works": 87
+    },
+    {
+      "iso": "NO",
+      "name": "Norway",
+      "works": 68
+    },
+    {
+      "iso": "SE",
+      "name": "Sweden",
+      "works": 52
+    }
+  ],
+  "sections": [
+    {
+      "id": "funding",
+      "title": "Funding",
+      "status": "placeholder",
+      "summary": "Who pays for plastics research and monitoring in Belgium.",
+      "items": [
+        {
+          "name": "FWO (Research Foundation Flanders)",
+          "url": "https://www.fwo.be/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "F.R.S.-FNRS",
+          "url": "https://www.frs-fnrs.be/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "BELSPO (BRAIN-be research programme)",
+          "url": "https://www.belspo.be/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked; BRAIN-be page not linked"
+        },
+        {
+          "name": "VLAIO (Flanders innovation agency)",
+          "url": "https://www.vlaio.be/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "EU CORDIS projects with Belgian partners",
+          "url": "https://cordis.europa.eu/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked; shared EU source"
+        },
+        {
+          "name": "Interreg North Sea",
+          "url": "https://www.interregnorthsea.eu/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        }
+      ],
+      "needs": "A local collaborator to confirm which funders and programmes are relevant and to name any missing ones."
+    },
+    {
+      "id": "monitoring",
+      "title": "Monitoring",
+      "status": "placeholder",
+      "summary": "Official programmes that measure litter and microplastics in Belgian rivers, beaches and the North Sea.",
+      "items": [
+        {
+          "name": "Royal Belgian Institute of Natural Sciences (marine monitoring of the Belgian North Sea)",
+          "url": "https://www.naturalsciences.be/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "VLIZ (Flanders Marine Institute)",
+          "url": "https://www.vliz.be/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "OSPAR beach litter, Belgian beaches",
+          "url": "https://www.ospar.org/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked; shared OSPAR source"
+        },
+        {
+          "name": "ILVO (agricultural and fisheries research, Flanders)",
+          "url": "https://www.ilvo.vlaanderen.be/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Flanders Environment Agency (VMM), rivers",
+          "url": "https://www.vmm.be/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Wallonia public service (SPW)",
+          "url": "https://spw.wallonie.be/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        }
+      ],
+      "needs": "A local collaborator to confirm which monitoring programmes and datasets are open and usable."
+    },
+    {
+      "id": "policy",
+      "title": "Policy",
+      "status": "placeholder",
+      "summary": "Federal and regional plans and rules that shape plastics work in Belgium.",
+      "items": [
+        {
+          "name": "OVAM (waste and materials agency, Flanders)",
+          "url": "https://www.ovam.be/",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Brussels Environment",
+          "url": "https://environnement.brussels/",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Wallonia environment plans",
+          "url": "",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "No URL given; a collaborator to name the plan"
+        },
+        {
+          "name": "Federal plan on plastics",
+          "url": "",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "No URL given; a collaborator to name the plan"
+        },
+        {
+          "name": "EU single-use plastics directive, Belgian transposition",
+          "url": "",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "No URL given; a collaborator to name the law"
+        },
+        {
+          "name": "EU REACH restriction on intentionally added microplastics",
+          "url": "",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "No URL given; applies through EU law to confirm"
+        },
+        {
+          "name": "UN plastics treaty negotiations",
+          "url": "",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "No URL given; a collaborator to confirm the current status"
+        }
+      ],
+      "needs": "A local collaborator to confirm the regional plans and how the EU rules were transposed."
+    },
+    {
+      "id": "research_networks",
+      "title": "Research networks",
+      "status": "placeholder",
+      "summary": "Institutes and networks that work on plastics and marine litter in Belgium.",
+      "items": [
+        {
+          "name": "Research networks to be named by a local collaborator",
+          "url": "",
+          "kind": "network",
+          "status": "to_confirm",
+          "note": "Placeholder; no network named yet"
+        }
+      ],
+      "needs": "A local collaborator to name the research networks. This section is a placeholder until then."
+    },
+    {
+      "id": "local_terms",
+      "title": "Local search terms",
+      "status": "placeholder",
+      "summary": "Dutch, French and German words used to search for plastics research beyond the English query.",
+      "items": [
+        {
+          "name": "microplastics",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "Dutch; see local_search_terms"
+        },
+        {
+          "name": "plasticvervuiling",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "Dutch; see local_search_terms"
+        },
+        {
+          "name": "zwerfvuil",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "Dutch; see local_search_terms"
+        },
+        {
+          "name": "microplastiques",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "French; see local_search_terms"
+        },
+        {
+          "name": "pollution plastique",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "French; see local_search_terms"
+        },
+        {
+          "name": "déchets plastiques",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "French; see local_search_terms"
+        },
+        {
+          "name": "Mikroplastik",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "German; see local_search_terms"
+        }
+      ],
+      "needs": "A local collaborator to confirm each term and suggest more."
+    },
+    {
+      "id": "geography",
+      "title": "Geography",
+      "status": "placeholder",
+      "summary": "The places the page covers - the three regions and the Belgian part of the North Sea.",
+      "items": [
+        {
+          "name": "Flanders",
+          "url": "https://www.vlaanderen.be/",
+          "kind": "geography",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Wallonia",
+          "url": "https://www.wallonie.be/",
+          "kind": "geography",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Brussels-Capital Region",
+          "url": "https://www.brussels.be/",
+          "kind": "geography",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Belgian part of the North Sea",
+          "url": "",
+          "kind": "geography",
+          "status": "to_confirm",
+          "note": "No URL given; a collaborator to name the boundary source"
+        }
+      ],
+      "needs": "A local collaborator to confirm the boundaries used for regional views."
+    }
+  ],
+  "ambassadors": {
+    "status": "recruiting",
+    "url": "/ambassadors"
+  }
+}

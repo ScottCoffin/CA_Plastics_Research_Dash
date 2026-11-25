@@ -1,0 +1,829 @@
+{
+  "schema_version": "region-v1",
+  "generated_at": "2026-11-26T01:15:33Z",
+  "slug": "norway",
+  "name": "Norway",
+  "iso": "NO",
+  "status": "in_preparation",
+  "screening_status": "unscreened_query_hit",
+  "what_this_is_and_is_not": {
+    "is": "A regional page built from the global set of published plastics research. Each count is an unscreened query hit: an OpenAlex work that matched the plastics search, grouped by the country of its authors' institutions. Nothing has been checked for relevance to this country.",
+    "is_not": "Not a verified list of local funders, monitoring programmes, policies or institutes: every local item is a placeholder until a local collaborator confirms it. Not a share of world research, and not a ranking of people or organisations."
+  },
+  "stats": {
+    "works_total": 1402,
+    "first_year": 2002,
+    "last_complete_year": 2025,
+    "works_with_pmid": 583
+  },
+  "works_by_year": [
+    {
+      "year": 1970,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1971,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1972,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1973,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1974,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1975,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1976,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1977,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1978,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1979,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1980,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1981,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1982,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1983,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1984,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1985,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1986,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1987,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1988,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1989,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1990,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1991,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1992,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1993,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1994,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1995,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1996,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1997,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1998,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1999,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 2000,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 2001,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 2002,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2003,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2004,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 2005,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2006,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 2007,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 2008,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2009,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2010,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 2011,
+      "count": 3,
+      "partial": false
+    },
+    {
+      "year": 2012,
+      "count": 4,
+      "partial": false
+    },
+    {
+      "year": 2013,
+      "count": 5,
+      "partial": false
+    },
+    {
+      "year": 2014,
+      "count": 6,
+      "partial": false
+    },
+    {
+      "year": 2015,
+      "count": 10,
+      "partial": false
+    },
+    {
+      "year": 2016,
+      "count": 23,
+      "partial": false
+    },
+    {
+      "year": 2017,
+      "count": 29,
+      "partial": false
+    },
+    {
+      "year": 2018,
+      "count": 57,
+      "partial": false
+    },
+    {
+      "year": 2019,
+      "count": 72,
+      "partial": false
+    },
+    {
+      "year": 2020,
+      "count": 112,
+      "partial": false
+    },
+    {
+      "year": 2021,
+      "count": 133,
+      "partial": false
+    },
+    {
+      "year": 2022,
+      "count": 165,
+      "partial": false
+    },
+    {
+      "year": 2023,
+      "count": 159,
+      "partial": false
+    },
+    {
+      "year": 2024,
+      "count": 175,
+      "partial": false
+    },
+    {
+      "year": 2025,
+      "count": 212,
+      "partial": false
+    },
+    {
+      "year": 2026,
+      "count": 225,
+      "partial": true
+    }
+  ],
+  "top_topics": [
+    {
+      "id": "T10753",
+      "name": "Microplastics and Plastic Pollution",
+      "count": 999
+    },
+    {
+      "id": "T10435",
+      "name": "Environmental Impact and Sustainability",
+      "count": 28
+    },
+    {
+      "id": "T10230",
+      "name": "Marine and fisheries research",
+      "count": 19
+    },
+    {
+      "id": "T10539",
+      "name": "Sustainable Supply Chain Management",
+      "count": 17
+    },
+    {
+      "id": "T10661",
+      "name": "biodegradable polymer synthesis and properties",
+      "count": 17
+    },
+    {
+      "id": "T11108",
+      "name": "Municipal Solid Waste Management",
+      "count": 15
+    },
+    {
+      "id": "T10122",
+      "name": "Toxic Organic Pollutants Impact",
+      "count": 11
+    },
+    {
+      "id": "T10686",
+      "name": "Effects and risks of endocrine disrupting chemicals",
+      "count": 10
+    },
+    {
+      "id": "T10088",
+      "name": "Thermochemical Biomass Conversion Processes",
+      "count": 9
+    },
+    {
+      "id": "T10841",
+      "name": "Economic and Environmental Valuation",
+      "count": 9
+    }
+  ],
+  "top_institutions": [
+    {
+      "id": "I204778367",
+      "name": "Norwegian University of Science and Technology",
+      "ror": "https://ror.org/05xg72x27",
+      "type": "education",
+      "works": 337
+    },
+    {
+      "id": "I2802939387",
+      "name": "Norwegian Institute for Water Research",
+      "ror": "https://ror.org/03hrf8236",
+      "type": "nonprofit",
+      "works": 300
+    },
+    {
+      "id": "I3019502701",
+      "name": "SINTEF Ocean",
+      "ror": "https://ror.org/004wre089",
+      "type": "facility",
+      "works": 134
+    },
+    {
+      "id": "I4432739",
+      "name": "University of Bergen",
+      "ror": "https://ror.org/03zga2b32",
+      "type": "education",
+      "works": 102
+    },
+    {
+      "id": "I67061984",
+      "name": "NILU",
+      "ror": "https://ror.org/00q7d9z06",
+      "type": "nonprofit",
+      "works": 99
+    },
+    {
+      "id": "I4210107808",
+      "name": "NORCE Research AS",
+      "ror": "https://ror.org/02gagpf75",
+      "type": "facility",
+      "works": 98
+    },
+    {
+      "id": "I78037679",
+      "name": "UiT The Arctic University of Norway",
+      "ror": "https://ror.org/00wge5k78",
+      "type": "education",
+      "works": 95
+    },
+    {
+      "id": "I2802153510",
+      "name": "Norwegian Institute of Marine Research",
+      "ror": "https://ror.org/05vg74d16",
+      "type": "facility",
+      "works": 93
+    },
+    {
+      "id": "I54108979",
+      "name": "Norwegian University of Life Sciences",
+      "ror": "https://ror.org/04a1mvv97",
+      "type": "education",
+      "works": 65
+    },
+    {
+      "id": "I184942183",
+      "name": "University of Oslo",
+      "ror": "https://ror.org/01xtthb56",
+      "type": "education",
+      "works": 63
+    },
+    {
+      "id": "I2802510431",
+      "name": "Grid-Arendal",
+      "ror": "https://ror.org/02grxeb87",
+      "type": "nonprofit",
+      "works": 57
+    },
+    {
+      "id": "I4210163231",
+      "name": "The FRAM Centre",
+      "ror": "https://ror.org/05x7v6y85",
+      "type": "facility",
+      "works": 53
+    },
+    {
+      "id": "I173888879",
+      "name": "SINTEF",
+      "ror": "https://ror.org/01f677e56",
+      "type": "facility",
+      "works": 45
+    },
+    {
+      "id": "I87302398",
+      "name": "Norwegian Polar Institute",
+      "ror": "https://ror.org/03avf6522",
+      "type": "facility",
+      "works": 45
+    },
+    {
+      "id": "I4210138062",
+      "name": "Akvaplan-niva",
+      "ror": "https://ror.org/03nrps502",
+      "type": "company",
+      "works": 35
+    }
+  ],
+  "top_researchers": [
+    {
+      "id": "A5017301678",
+      "name": "Andy M. Booth",
+      "works": 83
+    },
+    {
+      "id": "A5040710018",
+      "name": "Amy Lusher",
+      "works": 82
+    },
+    {
+      "id": "A5091297059",
+      "name": "Rachel R. Hurley",
+      "works": 66
+    },
+    {
+      "id": "A5007596095",
+      "name": "Luca Nizzetto",
+      "works": 60
+    },
+    {
+      "id": "A5020842159",
+      "name": "Martin Wagner",
+      "works": 60
+    },
+    {
+      "id": "A5012988770",
+      "name": "Alessio Gomiero",
+      "works": 51
+    },
+    {
+      "id": "A5043911400",
+      "name": "Dorte Herzke",
+      "works": 46
+    },
+    {
+      "id": "A5061666440",
+      "name": "Thomas Maes",
+      "works": 42
+    },
+    {
+      "id": "A5075057674",
+      "name": "Farhan R. Khan",
+      "works": 35
+    },
+    {
+      "id": "A5086582194",
+      "name": "Nikolaos Evangeliou",
+      "works": 34
+    },
+    {
+      "id": "A5078915253",
+      "name": "Michael S. Bank",
+      "works": 30
+    },
+    {
+      "id": "A5026992572",
+      "name": "Hans Peter H. Arp",
+      "works": 29
+    },
+    {
+      "id": "A5031174644",
+      "name": "Geir Wing Gabrielsen",
+      "works": 27
+    },
+    {
+      "id": "A5041615522",
+      "name": "Elisabeth S. Rødland",
+      "works": 25
+    },
+    {
+      "id": "A5019765244",
+      "name": "Lisbet Sørensen",
+      "works": 23
+    }
+  ],
+  "partner_countries": [
+    {
+      "iso": "DE",
+      "name": "Germany",
+      "works": 203
+    },
+    {
+      "iso": "GB",
+      "name": "United Kingdom",
+      "works": 182
+    },
+    {
+      "iso": "US",
+      "name": "United States",
+      "works": 154
+    },
+    {
+      "iso": "IT",
+      "name": "Italy",
+      "works": 146
+    },
+    {
+      "iso": "CN",
+      "name": "China",
+      "works": 143
+    },
+    {
+      "iso": "DK",
+      "name": "Denmark",
+      "works": 138
+    },
+    {
+      "iso": "SE",
+      "name": "Sweden",
+      "works": 133
+    },
+    {
+      "iso": "NL",
+      "name": "Netherlands",
+      "works": 132
+    },
+    {
+      "iso": "FR",
+      "name": "France",
+      "works": 102
+    },
+    {
+      "iso": "ES",
+      "name": "Spain",
+      "works": 100
+    }
+  ],
+  "sections": [
+    {
+      "id": "funding",
+      "title": "Funding",
+      "status": "placeholder",
+      "summary": "Who pays for plastics research and monitoring in Norway.",
+      "items": [
+        {
+          "name": "Research Council of Norway (Forskningsrådet)",
+          "url": "https://www.forskningsradet.no/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Research Council of Norway project bank (Prosjektbanken)",
+          "url": "https://prosjektbanken.forskningsradet.no/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "EU CORDIS projects with Norwegian partners",
+          "url": "https://cordis.europa.eu/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked; shared EU source"
+        },
+        {
+          "name": "Handelens Miljøfond (retail environment fund)",
+          "url": "https://www.handelensmiljofond.no/",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "URL not checked; a major plastics funder to confirm"
+        }
+      ],
+      "needs": "A local collaborator to confirm which funders and programmes are relevant and to name any missing ones."
+    },
+    {
+      "id": "monitoring",
+      "title": "Monitoring",
+      "status": "placeholder",
+      "summary": "Official programmes that measure litter and microplastics in Norwegian waters and on beaches and seabeds.",
+      "items": [
+        {
+          "name": "Norwegian Environment Agency monitoring programmes",
+          "url": "https://www.miljodirektoratet.no/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Vannmiljø (water environment database)",
+          "url": "",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "No URL given; a collaborator to name the page"
+        },
+        {
+          "name": "MOSJ (Svalbard and Norwegian marine monitoring)",
+          "url": "https://www.mosj.no/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "MAREANO seafloor litter",
+          "url": "https://www.mareano.no/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "OSPAR beach litter, Norwegian beaches",
+          "url": "https://www.ospar.org/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "URL not checked; shared OSPAR source"
+        }
+      ],
+      "needs": "A local collaborator to confirm which monitoring programmes and datasets are open and usable."
+    },
+    {
+      "id": "policy",
+      "title": "Policy",
+      "status": "placeholder",
+      "summary": "National and international rules and plans that shape plastics work in Norway.",
+      "items": [
+        {
+          "name": "Norway's national plastics strategy",
+          "url": "",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "No URL given; a collaborator to name the document"
+        },
+        {
+          "name": "EU single-use plastics directive (EEA rules)",
+          "url": "",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "No URL given; applies through the EEA agreement to confirm"
+        },
+        {
+          "name": "EU REACH restriction on intentionally added microplastics",
+          "url": "",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "No URL given; applies through the EEA agreement to confirm"
+        },
+        {
+          "name": "UN plastics treaty negotiations",
+          "url": "",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "No URL given; a collaborator to confirm the current status"
+        }
+      ],
+      "needs": "A local collaborator to confirm the national plastics strategy and the dates of each item."
+    },
+    {
+      "id": "research_networks",
+      "title": "Research networks",
+      "status": "placeholder",
+      "summary": "Institutes and networks that work on plastics and marine litter in Norway.",
+      "items": [
+        {
+          "name": "NIVA (Norwegian Institute for Water Research)",
+          "url": "https://www.niva.no/",
+          "kind": "institute",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "NILU (Norwegian Institute for Air Research)",
+          "url": "https://www.nilu.no/",
+          "kind": "institute",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "SINTEF",
+          "url": "https://www.sintef.no/",
+          "kind": "institute",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Akvaplan-niva",
+          "url": "https://www.akvaplan.niva.no/",
+          "kind": "institute",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "NORCE",
+          "url": "https://www.norceresearch.no/",
+          "kind": "institute",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Institute of Marine Research (Havforskningsinstituttet)",
+          "url": "https://www.hi.no/",
+          "kind": "institute",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        }
+      ],
+      "needs": "A local collaborator to confirm which institutes and networks to list, and to add any networks missing here."
+    },
+    {
+      "id": "local_terms",
+      "title": "Local search terms",
+      "status": "placeholder",
+      "summary": "Norwegian words used to search for plastics research beyond the English query.",
+      "items": [
+        {
+          "name": "mikroplast",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "Candidate term; see local_search_terms"
+        },
+        {
+          "name": "plastforurensning",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "Candidate term; see local_search_terms"
+        },
+        {
+          "name": "marint søppel",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "Candidate term; see local_search_terms"
+        },
+        {
+          "name": "nanoplast",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "Candidate term; see local_search_terms"
+        }
+      ],
+      "needs": "A local collaborator to confirm each term and suggest more."
+    },
+    {
+      "id": "geography",
+      "title": "Geography",
+      "status": "placeholder",
+      "summary": "The places the page covers - the mainland, Svalbard, and Norway's sea areas.",
+      "items": [
+        {
+          "name": "Kartverket (place names and boundaries)",
+          "url": "https://www.kartverket.no/",
+          "kind": "geography",
+          "status": "to_confirm",
+          "note": "URL not checked"
+        },
+        {
+          "name": "Norwegian territorial waters and EEZ",
+          "url": "",
+          "kind": "geography",
+          "status": "to_confirm",
+          "note": "No URL given; a collaborator to name the boundary source"
+        }
+      ],
+      "needs": "A local collaborator to confirm the boundaries used for regional views."
+    }
+  ],
+  "ambassadors": {
+    "status": "recruiting",
+    "url": "/ambassadors"
+  }
+}

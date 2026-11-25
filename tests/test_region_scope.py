@@ -243,6 +243,9 @@ def _tmp_registry_with_norway(tmp_path: Path) -> Path:
       ca_basis_values: []
 """
     path = tmp_path / "registry.yml"
+    # The real registry lists norway since REG-1 (2026-11-25); append only when absent.
+    if "slug: norway" in real:
+        norway = ""
     path.write_text(real + norway, encoding="utf-8")
     return path
 
@@ -265,7 +268,7 @@ def test_ingest_openalex_rejects_unknown_region(monkeypatch, tmp_path: Path, cap
     calls: list = []
     _stub_ingest(monkeypatch, module, calls)
     monkeypatch.setattr(
-        sys, "argv", ["ingest_openalex", "--region", "norway", "--start-year", "2020"]
+        sys, "argv", ["ingest_openalex", "--region", "atlantis", "--start-year", "2020"]
     )
     with pytest.raises(SystemExit) as exit_info:
         module.main()

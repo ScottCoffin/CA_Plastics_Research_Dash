@@ -57,7 +57,7 @@ export async function mountExplore(root) {
   const contOf = (name) => CONTS.find((c) => c.name === name);
   const ATLAS = {
     US: {name: "California", status: "live", works: D.california.works, href: "./california/"},
-    NO: {name: "Norway", status: "prep", href: "./ambassadors"},
+    NO: {name: "Norway", status: "prep", href: "./norway/"},
   };
   const PREVIEW = ["US", "CN", "NO"];
   const NOW_Y = new Date().getFullYear();

@@ -13,8 +13,9 @@ function pageBase() {
 // The folder that holds data/, assets/, status.html and feed.xml, as an absolute URL.
 export function siteRoot(base = pageBase()) {
   const url = new URL(base);
-  const depth = (/\/california\/[^/]*$/.test(url.pathname) ? 1 : 0) +
-    (/\/app\/(?:california\/)?[^/]*$/.test(url.pathname) ? 1 : 0);
+  // Region pages (California, Norway, Belgium; docs/REGION_PAGES.md) sit one folder deep.
+  const depth = (/\/(?:california|norway|belgium)\/[^/]*$/.test(url.pathname) ? 1 : 0) +
+    (/\/app\/(?:(?:california|norway|belgium)\/)?[^/]*$/.test(url.pathname) ? 1 : 0);
   return new URL(depth ? "../".repeat(depth) : "./", url);
 }
 
@@ -36,6 +37,11 @@ export function regionDataUrl(path) {
 
 export function globalDataUrl(path) {
   return dataFolderUrl("data/global/", path);
+}
+
+// A region's file under data/<slug>/ (docs/REGION_PAGES.md, region-v1). The slug names the folder only.
+export function regionFileUrl(slug, file) {
+  return new URL(`data/${String(slug).replace(/[^a-z0-9_-]/g, "")}/${String(file).replace(/^\/+/, "")}`, siteRoot()).href;
 }
 
 export function rootDataUrl(path) {

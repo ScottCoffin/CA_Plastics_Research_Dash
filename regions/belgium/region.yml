@@ -1,0 +1,80 @@
+# Region config for Belgium (REG-1, Tier A, planned). Read by scripts/build_region_pages.py.
+# Every candidate is a placeholder until a local collaborator confirms it: change its `status`
+# to `confirmed` (or `draft` while in review) and keep the `note` short.
+# URLs are homepages only (never invented deep links). No URL here has been checked online yet.
+schema_version: 1
+slug: belgium
+name: Belgium
+iso: "BE"
+tier: A
+languages: [nl, fr, de, en]
+local_search_terms:
+  - {term: "microplastics", language: "nl", status: to_confirm, note: "Dutch query term candidate"}
+  - {term: "plasticvervuiling", language: "nl", status: to_confirm, note: "Dutch for plastic pollution; query term candidate"}
+  - {term: "zwerfvuil", language: "nl", status: to_confirm, note: "Dutch for litter; query term candidate"}
+  - {term: "microplastiques", language: "fr", status: to_confirm, note: "French query term candidate"}
+  - {term: "pollution plastique", language: "fr", status: to_confirm, note: "French query term candidate"}
+  - {term: "déchets plastiques", language: "fr", status: to_confirm, note: "French for plastic waste; query term candidate"}
+  - {term: "Mikroplastik", language: "de", status: to_confirm, note: "German query term candidate"}
+sections:
+  - id: funding
+    title: Funding
+    summary: Who pays for plastics research and monitoring in Belgium.
+    needs: A local collaborator to confirm which funders and programmes are relevant and to name any missing ones.
+    items:
+      - {name: "FWO (Research Foundation Flanders)", url: "https://www.fwo.be/", kind: funder, status: to_confirm, note: "URL not checked"}
+      - {name: "F.R.S.-FNRS", url: "https://www.frs-fnrs.be/", kind: funder, status: to_confirm, note: "URL not checked"}
+      - {name: "BELSPO (BRAIN-be research programme)", url: "https://www.belspo.be/", kind: funder, status: to_confirm, note: "URL not checked; BRAIN-be page not linked"}
+      - {name: "VLAIO (Flanders innovation agency)", url: "https://www.vlaio.be/", kind: funder, status: to_confirm, note: "URL not checked"}
+      - {name: "EU CORDIS projects with Belgian partners", url: "https://cordis.europa.eu/", kind: funder, status: to_confirm, note: "URL not checked; shared EU source"}
+      - {name: "Interreg North Sea", url: "https://www.interregnorthsea.eu/", kind: funder, status: to_confirm, note: "URL not checked"}
+  - id: monitoring
+    title: Monitoring
+    summary: Official programmes that measure litter and microplastics in Belgian rivers, beaches and the North Sea.
+    needs: A local collaborator to confirm which monitoring programmes and datasets are open and usable.
+    items:
+      - {name: "Royal Belgian Institute of Natural Sciences (marine monitoring of the Belgian North Sea)", url: "https://www.naturalsciences.be/", kind: monitoring, status: to_confirm, note: "URL not checked"}
+      - {name: "VLIZ (Flanders Marine Institute)", url: "https://www.vliz.be/", kind: monitoring, status: to_confirm, note: "URL not checked"}
+      - {name: "OSPAR beach litter, Belgian beaches", url: "https://www.ospar.org/", kind: monitoring, status: to_confirm, note: "URL not checked; shared OSPAR source"}
+      - {name: "ILVO (agricultural and fisheries research, Flanders)", url: "https://www.ilvo.vlaanderen.be/", kind: monitoring, status: to_confirm, note: "URL not checked"}
+      - {name: "Flanders Environment Agency (VMM), rivers", url: "https://www.vmm.be/", kind: monitoring, status: to_confirm, note: "URL not checked"}
+      - {name: "Wallonia public service (SPW)", url: "https://spw.wallonie.be/", kind: monitoring, status: to_confirm, note: "URL not checked"}
+  - id: policy
+    title: Policy
+    summary: Federal and regional plans and rules that shape plastics work in Belgium.
+    needs: A local collaborator to confirm the regional plans and how the EU rules were transposed.
+    items:
+      - {name: "OVAM (waste and materials agency, Flanders)", url: "https://www.ovam.be/", kind: policy, status: to_confirm, note: "URL not checked"}
+      - {name: "Brussels Environment", url: "https://environnement.brussels/", kind: policy, status: to_confirm, note: "URL not checked"}
+      - {name: "Wallonia environment plans", url: "", kind: policy, status: to_confirm, note: "No URL given; a collaborator to name the plan"}
+      - {name: "Federal plan on plastics", url: "", kind: policy, status: to_confirm, note: "No URL given; a collaborator to name the plan"}
+      - {name: "EU single-use plastics directive, Belgian transposition", url: "", kind: policy, status: to_confirm, note: "No URL given; a collaborator to name the law"}
+      - {name: "EU REACH restriction on intentionally added microplastics", url: "", kind: policy, status: to_confirm, note: "No URL given; applies through EU law to confirm"}
+      - {name: "UN plastics treaty negotiations", url: "", kind: policy, status: to_confirm, note: "No URL given; a collaborator to confirm the current status"}
+  - id: research_networks
+    title: Research networks
+    summary: Institutes and networks that work on plastics and marine litter in Belgium.
+    needs: A local collaborator to name the research networks. This section is a placeholder until then.
+    items:
+      - {name: "Research networks to be named by a local collaborator", url: "", kind: network, status: to_confirm, note: "Placeholder; no network named yet"}
+  - id: local_terms
+    title: Local search terms
+    summary: Dutch, French and German words used to search for plastics research beyond the English query.
+    needs: A local collaborator to confirm each term and suggest more.
+    items:
+      - {name: "microplastics", url: "", kind: search_term, status: to_confirm, note: "Dutch; see local_search_terms"}
+      - {name: "plasticvervuiling", url: "", kind: search_term, status: to_confirm, note: "Dutch; see local_search_terms"}
+      - {name: "zwerfvuil", url: "", kind: search_term, status: to_confirm, note: "Dutch; see local_search_terms"}
+      - {name: "microplastiques", url: "", kind: search_term, status: to_confirm, note: "French; see local_search_terms"}
+      - {name: "pollution plastique", url: "", kind: search_term, status: to_confirm, note: "French; see local_search_terms"}
+      - {name: "déchets plastiques", url: "", kind: search_term, status: to_confirm, note: "French; see local_search_terms"}
+      - {name: "Mikroplastik", url: "", kind: search_term, status: to_confirm, note: "German; see local_search_terms"}
+  - id: geography
+    title: Geography
+    summary: The places the page covers - the three regions and the Belgian part of the North Sea.
+    needs: A local collaborator to confirm the boundaries used for regional views.
+    items:
+      - {name: "Flanders", url: "https://www.vlaanderen.be/", kind: geography, status: to_confirm, note: "URL not checked"}
+      - {name: "Wallonia", url: "https://www.wallonie.be/", kind: geography, status: to_confirm, note: "URL not checked"}
+      - {name: "Brussels-Capital Region", url: "https://www.brussels.be/", kind: geography, status: to_confirm, note: "URL not checked"}
+      - {name: "Belgian part of the North Sea", url: "", kind: geography, status: to_confirm, note: "No URL given; a collaborator to name the boundary source"}

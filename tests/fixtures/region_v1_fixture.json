@@ -1,0 +1,50 @@
+{
+  "schema_version": "region-v1",
+  "generated_at": "fixture",
+  "slug": "norway",
+  "name": "Norway",
+  "iso": "NO",
+  "status": "in_preparation",
+  "screening_status": "unscreened_query_hit",
+  "what_this_is_and_is_not": {
+    "is": "A regional view of plastics research with authors affiliated to Norway, built from the global OpenAlex corpus.",
+    "is_not": "Not a screened or verified list. Figures are unscreened query hits, and local sections are placeholders until a local researcher confirms them."
+  },
+  "stats": {"works_total": 1234, "first_year": 1998, "last_complete_year": 2025, "works_with_pmid": 567},
+  "works_by_year": [
+    {"year": 2024, "count": 180, "partial": false},
+    {"year": 2025, "count": 210, "partial": false},
+    {"year": 2026, "count": 96, "partial": true}
+  ],
+  "top_topics": [
+    {"id": "T1", "name": "Microplastics in marine environments", "count": 320},
+    {"id": "T2", "name": "Plastic waste management", "count": 210}
+  ],
+  "top_institutions": [
+    {"id": "I1", "name": "Example University", "ror": "https://ror.org/00example1", "type": "education", "works": 400}
+  ],
+  "top_researchers": [
+    {"id": "A1", "name": "Example Author One", "works": 45},
+    {"id": "A2", "name": "Example Author Two", "works": 30}
+  ],
+  "partner_countries": [
+    {"iso": "SE", "name": "Sweden", "works": 150},
+    {"iso": "DK", "name": "Denmark", "works": 90}
+  ],
+  "sections": [
+    {"id": "funding", "title": "Funding", "status": "placeholder", "summary": "Public funders that support plastics research.",
+     "items": [{"name": "Example funder", "url": "https://example.org/funder", "kind": "Funder", "status": "to_confirm", "note": "Candidate from the grants list."}],
+     "needs": "Which funders should be listed for this region."},
+    {"id": "monitoring", "title": "Monitoring", "status": "placeholder", "summary": "Monitoring programmes with local data.",
+     "items": [], "needs": "Which monitoring datasets exist and their licences."},
+    {"id": "policy", "title": "Policy", "status": "placeholder", "summary": "National and regional plans on plastics.",
+     "items": [{"name": "Example plan", "url": null, "kind": "Policy", "status": "to_confirm", "note": ""}], "needs": "Which plans matter for this region."},
+    {"id": "research_networks", "title": "Research networks", "status": "placeholder", "summary": "Networks and centres.",
+     "items": [], "needs": "Which networks and centres to list."},
+    {"id": "local_terms", "title": "Local search terms", "status": "placeholder", "summary": "Terms used locally that the global query may miss.",
+     "items": [], "needs": "Which local terms should be added to the search."},
+    {"id": "geography", "title": "Geography", "status": "placeholder", "summary": "Places and sites that matter locally.",
+     "items": [], "needs": "Which sites and places to name."}
+  ],
+  "ambassadors": {"status": "recruiting", "url": "/ambassadors"}
+}
