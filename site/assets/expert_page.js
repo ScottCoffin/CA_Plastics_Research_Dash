@@ -215,7 +215,7 @@
     return `<p class="pub-authors">${parts.join(", ")}</p>`;
   }
 
-  // Profile block from data/authors/<id>.json: photo credit, ORCID bio, keywords and links.
+  // Profile block from data/california/authors/<id>.json: photo credit, ORCID bio, keywords and links.
   // Returns "" when there is nothing to show. Only http(s) URLs are linked.
   function profileHtml(profile, name = "") {
     if (!profile || typeof profile !== "object") return "";
@@ -306,7 +306,7 @@
   }
 
   // ---- Funding, data stewardship and co-author institutions ------------------------------------
-  // Inputs come from data/expert_badges.json (grants, datasets, method) and data/institutions.json.
+  // Inputs come from data/california/expert_badges.json (grants, datasets, method) and data/california/institutions.json.
   const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
   const RECENT_START_YEARS = 5;
   const TOP_INSTITUTIONS = 8;
@@ -367,7 +367,7 @@
     return badges.join("");
   }
 
-  // Consortium badges from data/research_networks.json: one per network whose roster lists the author.
+  // Consortium badges from data/california/research_networks.json: one per network whose roster lists the author.
   // Only https links are shown (a network without one is skipped). The logo must be a file under assets/networks/.
   const NETWORK_LOGO_RE = /^assets\/networks\/[A-Za-z0-9._-]+$/;
   const MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -459,7 +459,7 @@
   // Co-author institutions. work.institution_ids lists every institution on the work; work.author_institution_ids
   // lists only this expert's own institutions on it (not aligned with author_ids). Co-author institutions are
   // therefore the work's institutions minus the expert's own ones. Works that list other author ids but not
-  // selfId are skipped. institutionsById is a Map or plain object from data/institutions.json (inst_id -> record).
+  // selfId are skipped. institutionsById is a Map or plain object from data/california/institutions.json (inst_id -> record).
   function coauthorInstitutionSummary(works, selfId, institutionsById) {
     const lookup = (id) => {
       if (!institutionsById) return undefined;

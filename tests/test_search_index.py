@@ -1,4 +1,4 @@
-"""Contract checks for the header search index (VD-19): site/data/search_index.json."""
+"""Contract checks for the header search index (VD-19): site/data/california/search_index.json."""
 
 from __future__ import annotations
 
@@ -274,7 +274,7 @@ def test_client_has_no_imports_and_implements_the_combobox_contract() -> None:
     assert "search#" in script
     assert "authors#" in script
     assert "PER_GROUP = 5" in script
-    assert "data/search_index.json" in script
+    assert "data/california/search_index.json" in script
     assert script.isascii()
 
 

@@ -19,7 +19,7 @@ def test_experts_workflow_has_filter_drawer_and_virtualization_hooks() -> None:
 
 
 def test_every_fixture_author_has_detail_payload() -> None:
-    data = ROOT / "site" / "data"
+    data = ROOT / "site" / "data" / "california"
     index = json.loads((data / "index.json").read_text(encoding="utf-8"))
     for author in index["authors"]:
         detail = json.loads(

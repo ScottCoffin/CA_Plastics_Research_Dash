@@ -23,16 +23,32 @@ export function pageUrl(path, base = pageBase()) {
   return new URL(String(path).replace(/^\/+/, ""), base).href;
 }
 
-export function dataUrl(path) {
-  return new URL(String(path).replace(/^\/+/, ""), new URL("data/", siteRoot())).href;
+// Data folders (docs/DATA_LAYOUT.md). California files live in data/california/, global files in
+// data/global/, and only release.json and status.json sit at data/ itself. Pages build data URLs
+// only through these helpers.
+function dataFolderUrl(folder, path) {
+  return new URL(String(path).replace(/^\/+/, ""), new URL(folder, siteRoot())).href;
+}
+
+export function regionDataUrl(path) {
+  return dataFolderUrl("data/california/", path);
+}
+
+export function globalDataUrl(path) {
+  return dataFolderUrl("data/global/", path);
+}
+
+export function rootDataUrl(path) {
+  return dataFolderUrl("data/", path);
 }
 
 export function classicUrl(path = "") {
   return new URL(String(path).replace(/^\/+/, ""), siteRoot()).href;
 }
 
-export async function loadJson(path, {optional = false} = {}) {
-  const response = await fetch(dataUrl(path), {cache: "no-cache"});
+// Loads a California file (data/california/<path>) unless {url} names another data folder helper.
+export async function loadJson(path, {optional = false, url = regionDataUrl} = {}) {
+  const response = await fetch(url(path), {cache: "no-cache"});
   if (!response.ok) {
     if (optional) return null;
     throw new Error(`${path} returned HTTP ${response.status}`);

@@ -57,7 +57,7 @@ scheduled workflow (`.github/workflows/weekly_digest.yml`) runs only when the re
 
 ## Known data limits
 
-- Awards are not in the digest. `site/data/grants.json` has no `first_seen`; `start` is the award
+- Awards are not in the digest. `site/data/california/grants.json` has no `first_seen`; `start` is the award
   start, not the date the Atlas added it.
 - Experts are not in the digest. "New expert" has no agreed definition yet.
 - Backfill: 1,397 plastic-related works share `first_seen` 2026-11-11. Any week that includes

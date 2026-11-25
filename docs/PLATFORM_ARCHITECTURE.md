@@ -276,3 +276,7 @@ are byte-identical for California (tested).
   (280 matches in 38 files).
 - Slice 4 (Framework dynamic routes `[region]/*.md`) stays deferred until a second region exists.
 - PLAT-4b slice 2: the default region's predicate names the reviewed institution registry (`institution_registry`), and region matches join authorship institution ids to it (basis `registry_institution`; `docs/api_notes/global_partition.md`).
+
+- PLAT-3 slice 3b (2026-11-25): the owner moved California's payloads to `site/data/california/`, and
+  `trend_global.json`, `language_probe.json` and `denominators.json` to `site/data/global/` (clean break, as in
+  PLAT-1; old URLs return 404). `release.json` and `status.json` stay at `site/data/`. See `docs/DATA_LAYOUT.md`.

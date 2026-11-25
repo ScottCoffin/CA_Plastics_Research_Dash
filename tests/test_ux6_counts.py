@@ -26,9 +26,9 @@ def test_institutions_count_line_defines_qualifying() -> None:
 def test_counts_differ_only_by_the_plastic_related_rule() -> None:
     """The Overview count is CA institutions with any work; Institutions keeps those with a
     plastic-related work. Checked on the committed payloads when they are present."""
-    inst_path = ROOT / "site" / "data" / "institutions.json"
-    index_path = ROOT / "site" / "data" / "index.json"
-    meta_path = ROOT / "site" / "data" / "build_metadata.json"
+    inst_path = ROOT / "site" / "data" / "california" / "institutions.json"
+    index_path = ROOT / "site" / "data" / "california" / "index.json"
+    meta_path = ROOT / "site" / "data" / "california" / "build_metadata.json"
     if not (inst_path.exists() and index_path.exists() and meta_path.exists()):
         return
     institutions = json.loads(inst_path.read_text(encoding="utf-8"))["institutions"]

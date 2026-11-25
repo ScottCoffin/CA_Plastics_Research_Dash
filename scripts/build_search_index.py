@@ -1,8 +1,8 @@
-"""Write site/data/search_index.json, the header search index (VD-19).
+"""Write site/data/california/search_index.json, the header search index (VD-19).
 
 Usage: py -3.14 scripts/build_search_index.py [--check]
 --check rebuilds in memory and fails when the committed file is stale.
-Reads site/data (index, institutions, grants, linkouts), site/assets/topics.js,
+Reads site/data/california (index, institutions, grants, linkouts), site/assets/topics.js,
 framework/src/components/shared/labels.js, framework/observablehq.config.js and
 framework/src/glossary.md. Stdlib only, so the daily ingest can run it on any Python 3.11.
 """
@@ -18,12 +18,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas.build.search_index import build_search_index, load_sources, serialize  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=str(ROOT))
-    parser.add_argument("--out", default=str(ROOT / "site" / "data" / "search_index.json"))
+    parser.add_argument("--out", default=str(region_data_dir() / "search_index.json"))
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
 

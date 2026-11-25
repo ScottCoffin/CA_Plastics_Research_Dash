@@ -61,7 +61,8 @@ def test_payload_is_loaded_through_site_root_and_lazily() -> None:
     assert "../data/" not in text
     atlas = ATLAS_JS.read_text(encoding="utf-8")
     assert "export async function loadJson" in atlas
-    assert 'new URL("data/", siteRoot())' in atlas
+    assert 'dataFolderUrl("data/california/", path)' in atlas
+    assert "new URL(folder, siteRoot())" in atlas
     # Lazy: the payload is fetched only when the panel nears the viewport.
     assert "IntersectionObserver" in text and "rootMargin" in text
     assert text.count("loadPanel(panel);") == 2

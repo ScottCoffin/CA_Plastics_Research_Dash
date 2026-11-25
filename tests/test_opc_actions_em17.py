@@ -17,7 +17,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
-COMMITTED = ROOT / "site" / "data" / "opc_actions.json"
+COMMITTED = ROOT / "site" / "data" / "california" / "opc_actions.json"
 REVIEW_SHEET = ROOT / "curation" / "opc_mapping_review.csv"
 REVIEW_APP = SCRIPTS / "review_opc_mapping_app.py"
 sys.path.insert(0, str(ROOT / "src"))

@@ -22,7 +22,7 @@ def main() -> None:
         "--samples", type=Path, default=Path("data/processed/normalized/sf_bay_5gyres/samples.json")
     )
     args = parser.parse_args()
-    path = Path("site/data/monitoring.json")
+    path = Path("site/data/california/monitoring.json")
     payload = json.loads(path.read_text(encoding="utf-8"))
     registry_payload = load_registry()
     assert payload["schema_version"] == "s7.5"

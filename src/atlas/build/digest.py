@@ -1,11 +1,11 @@
 """Weekly email digest of newly added California plastics papers (MAIL-1).
 
-The digest lists the plastic-related works in ``site/data/works_detail.json`` whose
+The digest lists the plastic-related works in the region's ``works_detail.json`` whose
 ``first_seen`` falls in one Monday-to-Sunday week (UTC) and whose ``pub_date`` is recent
 (``digest.max_age_days``, default 60). ``first_seen`` is the fetch time of the raw snapshot, so a
 full re-ingest resets it for old papers; the publication-date window keeps those out. Abstracts
 come from
-``site/data/work_text/abstracts.json``. The module renders an email-safe HTML body (table
+the region's ``work_text/abstracts.json``. The module renders an email-safe HTML body (table
 layout, inline CSS, Plane Poster colours) and a plain-text copy for previews.
 
 ``send_digest`` posts the HTML to the Buttondown API: it creates a draft, then publishes it.
@@ -29,12 +29,14 @@ from typing import Any
 
 import yaml
 
+from atlas.regions.scope import region_data_dir
+
 ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_CONFIG = ROOT / "config" / "notifications.yml"
 # A work counts as new only when published within this many days of the week's end.
 DEFAULT_MAX_AGE_DAYS = 60
-DEFAULT_WORKS = ROOT / "site" / "data" / "works_detail.json"
-DEFAULT_ABSTRACTS = ROOT / "site" / "data" / "work_text" / "abstracts.json"
+DEFAULT_WORKS = region_data_dir() / "works_detail.json"
+DEFAULT_ABSTRACTS = region_data_dir() / "work_text" / "abstracts.json"
 
 BUTTONDOWN_API = "https://api.buttondown.com/v1"
 API_KEY_ENV = "BUTTONDOWN_API_KEY"

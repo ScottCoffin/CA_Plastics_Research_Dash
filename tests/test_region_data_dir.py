@@ -59,8 +59,11 @@ def _region(site_data_dir: object = "absent", slug: str = "norway") -> Region:
 # --- default and explicit folders -------------------------------------------------------
 
 
-def test_california_data_dir_is_site_data() -> None:
-    assert scope.region_data_dir(get_region("california")) == REPO_ROOT / "site" / "data"
+def test_california_data_dir_is_site_data_california() -> None:
+    assert (
+        scope.region_data_dir(get_region("california"))
+        == REPO_ROOT / "site" / "data" / "california"
+    )
     assert scope.region_data_dir() == scope.region_data_dir(get_region("california"))
 
 
@@ -76,8 +79,8 @@ def test_explicit_field_is_used_and_normalised() -> None:
     assert scope.region_data_dir(region) == REPO_ROOT / "site" / "data" / "norway"
 
 
-def test_real_registry_california_field_is_site_data() -> None:
-    assert get_region("california").site_data_dir == "site/data"
+def test_real_registry_california_field_is_site_data_california() -> None:
+    assert get_region("california").site_data_dir == "site/data/california"
 
 
 def test_region_yml_data_dir_matches_registry_field() -> None:
@@ -163,7 +166,7 @@ def test_california_default_region_output_is_byte_identical(
     default = _export(normalized, region=None)
     explicit = _export(normalized, region=get_region("california"))
 
-    assert default.output_dir == fake_repo / "site" / "data"
+    assert default.output_dir == fake_repo / "site" / "data" / "california"
     assert explicit.output_dir == default.output_dir
     trees = _tree(default.output_dir)
     assert trees and "index.json" in trees

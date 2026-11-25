@@ -1,6 +1,6 @@
 """Run the daily-ingest CI guards and exit 1 when any problem is found.
 
-A clean CI checkout commits only ``site/data``, so the raw and normalized
+A clean CI checkout commits only ``site/data/california``, so the raw and normalized
 inputs are checked only when they exist, unless ``--require-raw`` or
 ``--require-normalized`` is given.
 """
@@ -14,7 +14,7 @@ from atlas.guards import run_all
 
 DEFAULT_RAW = Path("data/interim/works_raw.parquet")
 DEFAULT_NORMALIZED = Path("data/processed/normalized")
-DEFAULT_SITE = Path("site/data")
+DEFAULT_SITE = Path("site/data/california")
 
 
 def _format_metrics(metrics: dict[str, object]) -> str:

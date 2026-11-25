@@ -41,7 +41,10 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         default=None,
-        help="Output folder. Default: the region's data folder (site/data for california).",
+        help=(
+            "Output folder. Default: the region's data folder "
+            "(site/data/california for california)."
+        ),
     )
     parser.add_argument("--generated-at", default=None)
     add_region_argument(parser)

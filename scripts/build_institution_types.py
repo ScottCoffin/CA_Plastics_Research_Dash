@@ -63,7 +63,7 @@ class Paths:
     works_overrides: Path = ROOT / "curation/overrides_works.csv"
     type_overrides: Path = ROOT / "config/institution_overrides.csv"
     old_top100: Path = ROOT / "data/processed/institution_review_top100.csv"
-    site_institutions: Path = ROOT / "site/data/institutions.json"
+    site_institutions: Path = ROOT / "site/data/california/institutions.json"
     out_types: Path = ROOT / "config/institution_types.csv"
     out_review: Path = ROOT / "data/processed/institution_review_needs_v31.csv"
     out_doc: Path = ROOT / "docs/AT_2_VERIFICATION.md"
@@ -311,7 +311,8 @@ def render_doc(inputs: Inputs, result: Build) -> bytes:
         f"`curation/overrides_works.csv` (`exclude` = true): {s['works_excluded']}.",
         f"- California institutions with at least one non-excluded v3.1 work: "
         f"{s['ca_with_works']}.",
-        f"- Site institutions (`site/data/institutions.json`, ca_flag true, work_count >= 1): "
+        f"- Site institutions (`site/data/california/institutions.json`, ca_flag true, "
+        f"work_count >= 1): "
         f"{s['site_rows']}, one row each in `config/institution_types.csv`.",
         f"- type_source: owner_override {s['owner_override']}, "
         f"owner_reviewed {s['owner_reviewed']}, rule {s['rule']}.",

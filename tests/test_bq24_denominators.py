@@ -1,4 +1,5 @@
-"""BQ-2.4: site/data/denominators.json builder, --check, ratio rules, schema, text, V-4 helpers."""
+"""BQ-2.4: site/data/global/denominators.json builder, --check, ratio rules, schema, text, V-4
+helpers."""
 
 from __future__ import annotations
 
@@ -15,7 +16,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILDER_PATH = ROOT / "scripts" / "build_denominators_json.py"
-PUBLIC_JSON = ROOT / "site" / "data" / "denominators.json"
+PUBLIC_JSON = ROOT / "site" / "data" / "global" / "denominators.json"
 MODEL_JS = ROOT / "framework" / "src" / "components" / "v4_trend_model.js"
 PAGE_SOURCES = [
     ROOT / "framework" / "src" / "components" / "v4_trend.js",
@@ -131,7 +132,7 @@ def make_source() -> dict[str, Any]:
         "D": {
             "counting_unit": "curated published works by publication year; one row per work",
             "scope": "california",
-            "source": "site/data/index.json",
+            "source": "site/data/california/index.json",
             "status": "available",
             "sensitivity": "all",
             "comparable_with": [],
@@ -392,7 +393,7 @@ def test_public_text_uses_plain_terms() -> None:
 
 def test_public_file_is_listed_for_public_text_check() -> None:
     text = (ROOT / "scripts" / "check_public_text.py").read_text(encoding="utf-8")
-    assert '"site/data/denominators.json"' in text
+    assert '"site/data/global/denominators.json"' in text
 
 
 RUNTIME_SCRIPT = """

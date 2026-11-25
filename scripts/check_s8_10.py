@@ -1,6 +1,6 @@
 """S8.10 acceptance check: grants export payload, size budget, and Funding panel markup.
 
-Offline only. Validates the committed ``site/data/grants.json`` (schema, privacy, sort
+Offline only. Validates the committed ``site/data/california/grants.json`` (schema, privacy, sort
 order, aggregate totals, gzip budget) and confirms the Funding awards panel exists while
 the S8.9 "Open funding calls" panel remains intact below it.
 """
@@ -16,8 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas.build import grants_export as ge  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
-PAYLOAD = ROOT / "site" / "data" / "grants.json"
+PAYLOAD = region_data_dir() / "grants.json"
 INDEX = ROOT / "site" / "index.html"
 TOP_KEYS = {
     "schema_version",
@@ -42,11 +43,11 @@ PANEL_MARKERS = {
     "table container": 'id="grants-table"',
     "csv button": 'id="grants-csv"',
     "amount basis note": 'id="grants-basis"',
-    "lazy loader": 'const GRANTS_FILE = "data/grants.json";',
+    "lazy loader": 'const GRANTS_FILE = "data/california/grants.json";',
     "tab hook": 'if (state.tab === "funding") showFunding();',
     "caveat text": "not comparable or additive across sources",
     "open calls heading": 'id="open-calls-heading"',
-    "open calls loader": 'fetch("data/open_calls.json"',
+    "open calls loader": 'fetch("data/california/open_calls.json"',
     "open calls tab hook": 'if (state.tab === "funding") showOpenCalls();',
 }
 

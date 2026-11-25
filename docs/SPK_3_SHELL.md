@@ -18,7 +18,7 @@ Measured 2026-11-09 (ADR-SPK-AUTH). Harness: `py -3.14 spikes/spk3_shell/run_ben
   a 100-row windowed table (24 px rows, spacer scroll), and a map placeholder.
 - Datasets: `syn30k` and `syn100k` from `spikes/spk3_shell/gen_data.py`
   (seed 20261109+n, atlas works shape plus `institution_type` and `oa`), and the
-  real fixture `site/data/index.json` (4 works; lacks those two fields, so they
+  real fixture `site/data/california/index.json` (4 works; lacks those two fields, so they
   fall back to `unknown` / false).
 - Framework side: no loaders; the page fetches `/data/<ds>.json` itself.
   Single-file side: one `index.html`, vanilla JS, no dependencies.

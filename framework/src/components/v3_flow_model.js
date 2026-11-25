@@ -1,5 +1,5 @@
 // Pure view model for the V-3 pipeline flow (EM-6, Add-on A2 §5). No DOM access, so Node tests
-// can import it. The counts come from site/data/methods_flow.json, which is built from AT-10.
+// can import it. The counts come from site/data/california/methods_flow.json, which is built from AT-10.
 
 export const UNAVAILABLE = "Pipeline counts are unavailable.";
 

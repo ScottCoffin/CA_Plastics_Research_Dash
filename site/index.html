@@ -945,11 +945,11 @@
       (() => {
         "use strict";
         const DATA_FILES = {
-          index: "data/index.json",
-          institutions: "data/institutions.json",
-          aggregates: "data/aggregates.json",
-          metadata: "data/build_metadata.json",
-          monitoring: "data/monitoring.json"
+          index: "data/california/index.json",
+          institutions: "data/california/institutions.json",
+          aggregates: "data/california/aggregates.json",
+          metadata: "data/california/build_metadata.json",
+          monitoring: "data/california/monitoring.json"
         };
         const SORT_KEYS = ["ca_works", "cited_by", "h_index", "plastic_citations", "plastic_works", "m_quotient", "rising"];
         const SORT_FIELDS = { cited_by: "cited_by_count", h_index: "h_index", plastic_citations: "plastic_citations", plastic_works: "plastic_works_count", m_quotient: "m_quotient", rising: "rising_score" };
@@ -1004,7 +1004,7 @@
         let openCallsRequest = null;
         function loadOpenCalls() {
           if (!openCallsRequest) {
-            openCallsRequest = fetch("data/open_calls.json", { cache: "no-cache" })
+            openCallsRequest = fetch("data/california/open_calls.json", { cache: "no-cache" })
               .then((response) => {
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 return response.json();
@@ -1035,7 +1035,7 @@
               $("open-calls").innerHTML = '<p class="empty">Open calls could not be loaded right now.</p>';
             });
         }
-        const GRANTS_FILE = "data/grants.json";
+        const GRANTS_FILE = "data/california/grants.json";
         let grantsPageSize = 50;
         const GRANT_FUNDER_ORDER = ["federal", "state", "other"];
         const GRANT_FUNDER_COLORS = { federal: "#2f6f8f", state: "#2f8f6f", other: "#b8862b" };
@@ -1639,7 +1639,7 @@
             return "";
           }
         }
-        // Expert drawer profile from data/authors/<id>.json: owner-approved photo, ORCID bio, keywords and links.
+        // Expert drawer profile from data/california/authors/<id>.json: owner-approved photo, ORCID bio, keywords and links.
         // Returns "" when there is nothing to show. name labels the photo alt text.
         function profileHtml(profile, name = "") {
           if (!profile || typeof profile !== "object") return "";
@@ -1772,7 +1772,7 @@
           $("drawer-content").innerHTML = '<p class="detail-meta">Loading researcher details…</p>';
           $("drawer-close").focus();
           try {
-            const response = await fetch(`data/authors/${encodeURIComponent(authorId)}.json`, { cache: "no-cache" });
+            const response = await fetch(`data/california/authors/${encodeURIComponent(authorId)}.json`, { cache: "no-cache" });
             if (!response.ok) throw new Error(`author detail returned HTTP ${response.status}`);
             const detail = await response.json();
             const summary = authorSummaries().find((item) => item.author_id === authorId) || {};
@@ -2039,7 +2039,7 @@
         function ensureInstitutionTiers() {
           if (tiersStatus !== "idle") return;
           tiersStatus = "loading";
-          fetch("data/bundle/inst_tiers.json")
+          fetch("data/california/bundle/inst_tiers.json")
             .then((response) => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })
             .then((payload) => { if (!payload || !Array.isArray(payload.tiers) || !payload.tiers.length) throw new Error("no tiers"); tiersRows = payload.tiers; tiersStatus = "ready"; })
             .catch(() => { tiersStatus = "failed"; })

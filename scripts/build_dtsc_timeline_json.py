@@ -1,4 +1,6 @@
-"""Export the curated DTSC timeline to site/data/dtsc_timeline.json (Add-on A2 §7 Part B, EM-18).
+"""Export the curated DTSC timeline to site/data/california/dtsc_timeline.json.
+
+(Add-on A2 §7 Part B, EM-18).
 
 Every entry field from config/dtsc_timeline.yml is written unchanged (dates are never reformatted).
 --check exits 1 when the committed file differs from a fresh build.
@@ -16,10 +18,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas import dtsc_timeline  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
 SCHEMA_VERSION = "em18.v1"
 SOURCE = "config/dtsc_timeline.yml"
-OUTPUT_PATH = ROOT / "site" / "data" / "dtsc_timeline.json"
+OUTPUT_PATH = region_data_dir() / "dtsc_timeline.json"
 
 
 def build_payload(data: dict[str, Any] | None = None) -> dict[str, Any]:

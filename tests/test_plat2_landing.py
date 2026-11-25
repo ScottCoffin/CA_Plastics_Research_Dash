@@ -86,15 +86,17 @@ def test_header_and_regions_band_link_the_global_explore_page() -> None:
 def test_engine_reads_only_same_origin_data_and_assets() -> None:
     engine = ENGINE.read_text(encoding="utf-8")
     paths = set(re.findall(r'json\("([^"]+)"\)', engine))
+    global_names = set(re.findall(r'json\(globalDataUrl\("([^"]+)"\)\)', engine))
     assert paths >= {
-        "data/trend_global.json",
         "assets/landing/picnic.json",
         "assets/landing/papers.json",
-        "data/global/world_raster.json",
         "assets/world/world.json",
     }
+    assert global_names >= {"trend_global.json", "world_raster.json"}
     for path in paths:
         assert (ROOT / "site" / path).is_file(), path
+    for name in global_names:
+        assert (ROOT / "site" / "data" / "global" / name).is_file(), name
     assert "https://" not in re.sub(r"//.*", "", engine)
 
 

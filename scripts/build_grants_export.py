@@ -1,4 +1,4 @@
-"""Build ``site/data/grants.json`` for the Funding tab (S8.10).
+"""Build ``site/data/california/grants.json`` for the Funding tab (S8.10).
 
 Reads the S8.6 merged grants table, the S2.2 institutions table, and the S8.6
 dedupe map from local Parquet and CSV files. Recomputes ``plastic_related`` from
@@ -29,7 +29,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--institutions", type=Path, default=Path("data/processed/institutions.parquet")
     )
-    parser.add_argument("--output", type=Path, default=Path("site/data/grants.json"))
+    parser.add_argument("--output", type=Path, default=Path("site/data/california/grants.json"))
     parser.add_argument("--queries", type=Path, default=Path("config/queries.yml"))
     parser.add_argument("--relevance", type=Path, default=Path("curation/grant_relevance.csv"))
     args = parser.parse_args(argv)

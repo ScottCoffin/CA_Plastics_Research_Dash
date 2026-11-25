@@ -12,7 +12,7 @@ import argparse
 import warnings
 from collections.abc import Callable
 from functools import cache
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import pyarrow.parquet as pq
 
@@ -49,15 +49,24 @@ def _predicate(region: Region | None) -> Predicate:
     return resolved.predicate
 
 
-def region_data_dir(region: Region | None = None) -> Path:
-    """Absolute folder for the region's public site payloads (PLAT-3 slice 3).
+def region_data_rel(region: Region | None = None) -> PurePosixPath:
+    """Repo-relative folder for the region's public site payloads (PLAT-3 slice 3).
 
     The registry's ``site_data_dir`` (repo-relative, validated to sit under ``site/data``)
-    wins. A region without it gets ``site/data/<slug>``. California sets ``site/data``.
+    wins. A region without it gets ``site/data/<slug>``.
     """
     resolved = resolve_region(region)
-    relative = resolved.site_data_dir or str(SITE_DATA_ROOT / resolved.slug)
-    return REPO_ROOT / relative
+    return PurePosixPath(resolved.site_data_dir or SITE_DATA_ROOT / resolved.slug)
+
+
+def region_data_folder(region: Region | None = None) -> PurePosixPath:
+    """The region's folder under ``site/data`` (its slug by default); ``.`` for ``site/data``."""
+    return region_data_rel(region).relative_to(SITE_DATA_ROOT)
+
+
+def region_data_dir(region: Region | None = None) -> Path:
+    """Absolute folder for the region's public site payloads (see ``region_data_rel``)."""
+    return REPO_ROOT / region_data_rel(region)
 
 
 def institution_filter(region: Region | None = None) -> str:

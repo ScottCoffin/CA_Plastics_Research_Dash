@@ -114,7 +114,7 @@ def test_expert_page_wires_bylines_scaling_and_no_placeholder() -> None:
     assert "--tag-font:" in page
     assert "authorLineHtml(work, S.id, S.expertNames)" in page
     assert "Co-author outside the expert list" not in page
-    assert "data/index.json" in page  # expert names only, loaded once in the background
+    assert "data/california/index.json" in page  # expert names only, loaded once in the background
     assert "pub-authors" in page
 
 

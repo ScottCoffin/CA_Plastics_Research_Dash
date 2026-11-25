@@ -49,14 +49,14 @@ TERMINOLOGY_SKIP = {"site/index.html"}
 
 DEFAULT_HTML = ["site/index.html", "site/california/expert.html", "site/grants.html"]
 DEFAULT_JSON = [
-    "site/data/dtsc_timeline.json",
-    "site/data/linkouts.json",
-    "site/data/network.json",
-    "site/data/expert_badges.json",
-    "site/data/pubmed_coverage.json",
-    "site/data/network_metrics.json",
-    "site/data/language_probe.json",
-    "site/data/denominators.json",
+    "site/data/california/dtsc_timeline.json",
+    "site/data/california/linkouts.json",
+    "site/data/california/network.json",
+    "site/data/california/expert_badges.json",
+    "site/data/california/pubmed_coverage.json",
+    "site/data/california/network_metrics.json",
+    "site/data/global/language_probe.json",
+    "site/data/global/denominators.json",
 ]
 SKIP_TAGS = {"script", "style"}
 

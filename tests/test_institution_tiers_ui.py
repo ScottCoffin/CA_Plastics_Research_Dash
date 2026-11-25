@@ -82,7 +82,7 @@ def test_institutions_panel_wires_tiers_view() -> None:
         'data-inst-view="tiers"',
         'data-inst-view="list"',
         'id="institution-tier-groups"',
-        "data/bundle/inst_tiers.json",
+        "data/california/bundle/inst_tiers.json",
         "inst_view",
     ):
         assert needle in html, needle

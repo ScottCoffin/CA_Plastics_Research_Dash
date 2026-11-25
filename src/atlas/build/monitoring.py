@@ -12,6 +12,7 @@ import yaml
 
 from atlas.dataset_discovery import canonical_doi
 from atlas.ingest.monitoring.registry import load_registry
+from atlas.regions.scope import region_data_dir
 
 SCHEMA_VERSION = "s7.5"
 PUBLICATION_PATH = Path("config/monitoring_publication.yml")
@@ -212,8 +213,11 @@ def require_private_output_outside_site(
     return target
 
 
+DEFAULT_PUBLIC_OUTPUT = region_data_dir() / "monitoring.json"
+
+
 def build_public_export(
-    output: str | Path = "site/data/monitoring.json",
+    output: str | Path = DEFAULT_PUBLIC_OUTPUT,
     *,
     samples_path: str | Path | None = None,
 ) -> Path:

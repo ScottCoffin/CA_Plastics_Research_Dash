@@ -1,5 +1,5 @@
 // Related resources page (EM-16, Add-on A2 §8): one card per link-out registry entry.
-// Link, don't mirror: names, stewards and descriptions are quoted from site/data/linkouts.json
+// Link, don't mirror: names, stewards and descriptions are quoted from site/data/california/linkouts.json
 // as each steward states them; nothing is fetched from the linked resources. Pure helpers are
 // exported for Node tests, and nothing touches `document` at module load.
 import {classicUrl, loadJson} from "./atlas.js";

@@ -7,8 +7,8 @@ annotation (and a plain line locally) so the lead re-opens the decision. Exit co
 0 unless ``--strict`` is given.
 
 Triggers (any one fires):
-  T1 corpus size: exported works in site/data/index.json > 10,000
-  T2 payload: initial payload (top-level site/data files, gzip) > 1,500,000 bytes
+  T1 corpus size: exported works in site/data/california/index.json > 10,000
+  T2 payload: initial payload (top-level site/data/california files, gzip) > 1,500,000 bytes
      (half of the C5 3 MB budget)
   T3 A2 visual build-out: any of EM-5..EM-12 checked off, or EM-5 marked in progress
   T4 maintainability: site/index.html > 300,000 bytes, or more than 6 hand-built pages
@@ -32,7 +32,7 @@ A2_VISUAL_TASKS = [f"EM-{n}" for n in range(5, 13)]
 
 
 def measure(root: Path = ROOT) -> dict[str, object]:
-    data = root / "site" / "data"
+    data = root / "site" / "data" / "california"
     index = json.loads((data / "index.json").read_text(encoding="utf-8"))
     metadata = json.loads((data / "build_metadata.json").read_text(encoding="utf-8"))
     initial = sum(

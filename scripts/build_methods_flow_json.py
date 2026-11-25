@@ -1,4 +1,4 @@
-"""Export the V-3 pipeline flow to site/data/methods_flow.json (Add-on A2 §5, EM-6).
+"""Export the V-3 pipeline flow to site/data/california/methods_flow.json (Add-on A2 §5, EM-6).
 
 Counts are copied from the newest release/<YYYY-MM-DD>/methods_card.json (AT-10), so the flow
 numbers match the methods card (EAT-4). The ROSES flow template is credited under CC BY 4.0.
@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_VERSION = "em6.v1"
 RELEASE_DIR = ROOT / "release"
 RELEASE_JSON = ROOT / "site" / "data" / "release.json"
-OUTPUT_PATH = ROOT / "site" / "data" / "methods_flow.json"
+OUTPUT_PATH = ROOT / "site" / "data" / "california" / "methods_flow.json"
 TEMPLATE = {"name": "ROSES flow diagram for systematic maps", "licence": "CC BY 4.0"}
 PERFORMED = "performed"
 NOT_PERFORMED = "not performed"

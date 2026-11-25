@@ -39,7 +39,7 @@ search-result grid HTML is cached, under `data/raw/faast/` (git-ignored). Tests 
 - 14 requests: robots, home, main, 8 keyword searches, 2 detail fetches. No pager was needed.
 - Per-keyword awarded hits: trash 2, debris 1, all other keywords 0.
 - Unique awarded PINs: 2 (24090, 24184). Rejected: 0. Amount unparsed: 0.
-- After dedupe and export, 2 swrcb_faast rows reach `site/data/grants.json`. Both are
+- After dedupe and export, 2 swrcb_faast rows reach `site/data/california/grants.json`. Both are
   `plastic_related` false.
 
 ## Known limitation

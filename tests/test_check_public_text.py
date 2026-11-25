@@ -87,7 +87,7 @@ def test_real_public_sources_pass() -> None:
         "site/index.html",
         "site/california/expert.html",
         "site/grants.html",
-        "site/data/dtsc_timeline.json",
-        "site/data/linkouts.json",
+        "site/data/california/dtsc_timeline.json",
+        "site/data/california/linkouts.json",
     ]
     assert main(paths) == 0

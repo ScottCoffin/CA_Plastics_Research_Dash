@@ -1,6 +1,6 @@
 """S8.9 acceptance check: open funding-calls payload, pipeline self-test, and panel markup.
 
-Offline only.  Validates ``site/data/open_calls.json`` (schema, sort order, open status
+Offline only.  Validates ``site/data/california/open_calls.json`` (schema, sort order, open status
 and deadlines relative to its own snapshot date), runs the fixture CSV through the
 selection pipeline, and confirms the Funding panel markup and workflow step exist.
 """
@@ -19,8 +19,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas.ingest.grants import open_calls as oc  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
-PAYLOAD = ROOT / "site" / "data" / "open_calls.json"
+PAYLOAD = region_data_dir() / "open_calls.json"
 FIXTURE = ROOT / "tests" / "fixtures" / "s8_9_grants_portal.csv"
 INDEX = ROOT / "site" / "index.html"
 WORKFLOW = ROOT / ".github" / "workflows" / "build_deploy.yml"
@@ -39,7 +40,7 @@ PANEL_MARKERS = {
     "open calls heading": "Open funding calls",
     "status region": 'id="open-calls-status"',
     "list container": 'id="open-calls"',
-    "lazy loader": 'fetch("data/open_calls.json"',
+    "lazy loader": 'fetch("data/california/open_calls.json"',
     "tab hook": 'if (state.tab === "funding") showOpenCalls();',
     "public-domain note": (
         "Source: California Grants Portal (public domain), refreshed daily; "

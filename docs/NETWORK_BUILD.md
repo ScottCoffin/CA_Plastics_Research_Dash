@@ -1,6 +1,6 @@
 # Collaboration network build (S9.4)
 
-This page explains how `site/data/network.json` is built, what it contains, and where its
+This page explains how `site/data/california/network.json` is built, what it contains, and where its
 known limits are. It describes the code as checked on 2026-11-18. The build reads only
 committed site files, so it runs offline. The build was not run for this page; the constants
 and line numbers below come from reading the code.
@@ -11,10 +11,10 @@ Files:
 |---|---|
 | Library (graph, layout, communities, labels) | [`src/atlas/build/network.py`](../src/atlas/build/network.py) |
 | Command-line entry point | [`scripts/build_network.py`](../scripts/build_network.py) |
-| Output consumed by the `/network` page | [`site/data/network.json`](../site/data/network.json) |
+| Output consumed by the `/network` page | [`site/data/california/network.json`](../site/data/california/network.json) |
 | Structure metrics library (BQ-3.2) | [`src/atlas/analytics/network_metrics.py`](../src/atlas/analytics/network_metrics.py) |
 | Structure metrics command (BQ-3.2) | [`scripts/build_network_metrics.py`](../scripts/build_network_metrics.py) |
-| Output of the structure metrics (BQ-3.2) | [`site/data/network_metrics.json`](../site/data/network_metrics.json) |
+| Output of the structure metrics (BQ-3.2) | [`site/data/california/network_metrics.json`](../site/data/california/network_metrics.json) |
 | Daily run | [`.github/workflows/ingest_works.yml`](../.github/workflows/ingest_works.yml) |
 | Field reference | [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md) |
 | Renderer decision | [`.agent/DECISIONS.md`](../.agent/DECISIONS.md) (ADR-S9.4-SIGMA-2026-11-14) |
@@ -37,8 +37,8 @@ Both inputs are site files, not raw data (`src/atlas/build/network.py:3`).
 
 | Input | Default path | Used for | If missing |
 |---|---|---|---|
-| Index | `site/data/index.json` (`scripts/build_network.py:24`) | `authors` and `works` lists, `generated_at` | The build fails (`scripts/build_network.py:32`). |
-| Institutions | `site/data/institutions.json` (`scripts/build_network.py:25`) | Institution names and sector types | Optional. The build continues with no institution names or sectors (`scripts/build_network.py:35`). |
+| Index | `site/data/california/index.json` (`scripts/build_network.py:24`) | `authors` and `works` lists, `generated_at` | The build fails (`scripts/build_network.py:32`). |
+| Institutions | `site/data/california/institutions.json` (`scripts/build_network.py:25`) | Institution names and sector types | Optional. The build continues with no institution names or sectors (`scripts/build_network.py:35`). |
 
 The institutions file may be a JSON object with an `institutions` key or a bare list
 (`scripts/build_network.py:36-39`).
@@ -170,7 +170,7 @@ from the node rows:
   `null`, and the page then shows "Cluster n" (docstring `:178-179`).
 - The method text is `COMMUNITY_LABELS_METHOD` (`:202-210`), copied to `method.community_labels`.
 
-## 7. Output: `site/data/network.json`
+## 7. Output: `site/data/california/network.json`
 
 `scripts/build_network.py` writes one line of JSON, UTF-8, without ASCII escaping, with compact
 separators, sorted keys and a trailing newline (`scripts/build_network.py:41`, `:49`).
@@ -221,9 +221,9 @@ Flags (`scripts/build_network.py:24-29`):
 
 | Flag | Default | Effect |
 |---|---|---|
-| `--index PATH` | `site/data/index.json` | Input index |
-| `--institutions PATH` | `site/data/institutions.json` | Optional institutions input |
-| `--out PATH` | `site/data/network.json` | Output file |
+| `--index PATH` | `site/data/california/index.json` | Input index |
+| `--institutions PATH` | `site/data/california/institutions.json` | Optional institutions input |
+| `--out PATH` | `site/data/california/network.json` | Output file |
 | `--cap N` | `400` (integer) | Maximum number of nodes |
 | `--fractional` | off | Fractional edge weights |
 | `--check` | off | Rebuild in memory. Exit 1 if `--out` is missing or differs byte for byte; exit 0 if identical (`:43-48`) |
@@ -248,7 +248,7 @@ Networkx is imported lazily inside the functions that need it (`src/atlas/build/
 - It runs after "Build analytics and serving bundle" (`:115-120`). It runs only when
   `steps.refresh.outputs.status == 'success'` (`:124`). Otherwise the step is skipped and the
   committed file is not rebuilt.
-- The commit step's `git add -f` list (starts at `:247`) includes `site/data/network.json`
+- The commit step's `git add -f` list (starts at `:247`) includes `site/data/california/network.json`
   (`:267`).
 - The workflow comment calls this "the new export" (`:122`).
 
@@ -326,16 +326,16 @@ only.
 
 ## 14. Metrics (BQ-3.2)
 
-`site/data/network_metrics.json` (schema `bq3-v1`) measures the collaboration structure in two
+`site/data/california/network_metrics.json` (schema `bq3-v1`) measures the collaboration structure in two
 graphs: authors (G-A) and institutions (G-I). It is separate from `network.json`. The page does
 not draw it. The build reads only committed site files, so it runs offline.
 
 Inputs (`scripts/build_network_metrics.py`):
 
-- `site/data/index.json`: works (`plastic_related`, `author_ids`, `institution_ids`, `year`,
+- `site/data/california/index.json`: works (`plastic_related`, `author_ids`, `institution_ids`, `year`,
   `ca_any_author`) and authors (`author_id`, `institution_ids`, `current_in_ca`).
-- `site/data/institutions.json`: `inst_id`, `atlas_type` (sector) and `ca_flag`.
-- `site/data/build_metadata.json`: the index build time, copied to `source.index_build_timestamp`.
+- `site/data/california/institutions.json`: `inst_id`, `atlas_type` (sector) and `ca_flag`.
+- `site/data/california/build_metadata.json`: the index build time, copied to `source.index_build_timestamp`.
   If the file is missing, the index's own `generated_at` is used.
 
 Scope and graphs (`src/atlas/analytics/network_metrics.py`, `build_metrics`):
@@ -403,7 +403,7 @@ Limits:
 
 ## 15. Null model (BQ-3.3)
 
-`null_model` in `site/data/network_metrics.json` (added by
+`null_model` in `site/data/california/network_metrics.json` (added by
 `scripts/build_network_metrics.py`; code in `src/atlas/analytics/network_null.py`) asks whether
 the observed clustering, modularity and giant-component share are higher than chance, given how
 many collaborators each member has. It is additive: `schema_version` stays `bq3-v1`.

@@ -1,6 +1,6 @@
 """Collaboration-structure metrics (BQ-3.2): author graph (G-A) and institution graph (G-I).
 
-Built offline from committed site files. Plastic-related works in ``site/data/index.json`` are
+Built offline from committed site files. Plastic-related works in the region's ``index.json`` are
 split into year windows. In each window, G-A joins Atlas authors (the ``authors`` list) who are
 listed together on a work, and G-I joins institutions listed together on a work (the work-level
 ``institution_ids``). Edge weight is the number of works in the window on which both ends are
@@ -15,6 +15,8 @@ import math
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from itertools import combinations
 from typing import Any
+
+from atlas.regions.scope import region_data_rel
 
 SCHEMA_VERSION = "bq3-v1"
 SEED = 42
@@ -344,7 +346,7 @@ def build_metrics(
     index_build_timestamp: str = "",
     generated_at: str = "",
 ) -> dict[str, Any]:
-    """Payload for ``site/data/network_metrics.json`` (schema ``bq3-v1``)."""
+    """Payload for ``network_metrics.json`` in the region data folder (schema ``bq3-v1``)."""
     import networkx as nx  # lazy: keeps module import cheap (networkx is a declared dependency)
 
     authors = list(index.get("authors") or [])
@@ -368,9 +370,9 @@ def build_metrics(
         "schema_version": SCHEMA_VERSION,
         "generated_at": generated_at,
         "source": {
-            "index": "site/data/index.json",
+            "index": f"{region_data_rel().as_posix()}/index.json",
             "index_build_timestamp": index_build_timestamp,
-            "institutions": "site/data/institutions.json",
+            "institutions": f"{region_data_rel().as_posix()}/institutions.json",
         },
         "method": {
             "edge_weight": DEFINITIONS["edge_weight"],

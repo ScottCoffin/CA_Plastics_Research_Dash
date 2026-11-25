@@ -15,7 +15,7 @@ from atlas import networks
 REPO = Path(__file__).resolve().parents[1]
 SCRIPTS = REPO / "scripts"
 REGISTRY = REPO / "config" / "research_networks.yml"
-COMMITTED = REPO / "site" / "data" / "research_networks.json"
+COMMITTED = REPO / "site" / "data" / "california" / "research_networks.json"
 PUBLIC_NETWORK_KEYS = [
     "id",
     "name",
@@ -174,7 +174,8 @@ def test_load_registry_rejects_non_mapping(tmp_path):
 def test_committed_json_matches_fresh_build(build_script):
     fresh = build_script.render(build_script.build_payload())
     assert COMMITTED.read_bytes() == fresh.encode("utf-8"), (
-        "site/data/research_networks.json is stale; run scripts/build_research_networks_json.py"
+        "site/data/california/research_networks.json is stale; "
+        "run scripts/build_research_networks_json.py"
     )
 
 

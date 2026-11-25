@@ -13,7 +13,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "fetch_journal_metrics.py"
-OUTPUT = ROOT / "site" / "data" / "journal_metrics.json"
+OUTPUT = ROOT / "site" / "data" / "california" / "journal_metrics.json"
 
 
 def _load_script():

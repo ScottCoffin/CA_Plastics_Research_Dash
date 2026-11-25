@@ -1,11 +1,11 @@
 // Funding view for the Framework shell (AT-5b). A lift-and-shift of the classic site's Funding tab
 // (site/index.html: loadOpenCalls..showFunding and the funding event bindings). Markup, labels,
 // filters, sorting, paging, charts and the CSV export follow the classic code. The differences:
-// - data is fetched with dataUrl() from the classic site's data/ folder;
+// - data is fetched with regionDataUrl() from the classic site's data/california/ folder;
 // - the page hash has no "funding?" tab prefix (legacy "#funding?..." hashes are still read);
 // - nothing touches the DOM at module top level, so Node tests can import the pure helpers.
 // funding.md imports components/shared/topics.js (AtlasTopics) before this module runs.
-import {dataUrl, escapeHtml} from "./atlas.js";
+import {regionDataUrl, escapeHtml} from "./atlas.js";
 import {mountFundingViz} from "./funding_viz.js";
 import {institutionTypeLabel} from "./shared/labels.js";
 import {OTHER, SECONDARY} from "./shared/palette.js";
@@ -54,7 +54,7 @@ const state = {
 
 function loadOpenCalls() {
   if (!state.openCallsRequest) {
-    state.openCallsRequest = fetch(dataUrl("open_calls.json"), {cache: "no-cache"})
+    state.openCallsRequest = fetch(regionDataUrl("open_calls.json"), {cache: "no-cache"})
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
@@ -228,7 +228,7 @@ function writeFundingHash() {
 
 function loadGrants() {
   if (!state.grantsRequest) {
-    state.grantsRequest = fetch(dataUrl("grants.json"), {cache: "no-cache"})
+    state.grantsRequest = fetch(regionDataUrl("grants.json"), {cache: "no-cache"})
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();

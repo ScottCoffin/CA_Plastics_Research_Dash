@@ -9,7 +9,8 @@ from stored inputs and never calls the network:
   version and filter digest; a missing or other-version entry raises.
 - C: California-connected records that the OpenAlex query matched (``works.parquet`` joined to the
   raw works table for the run-id route).
-- D: published works with ``plastic_related`` true (``site/data/index.json``); shown beside, never
+- D: published works with ``plastic_related`` true (the region's ``index.json``); shown
+  beside, never
   divided.
 
 Ratios are allowed only between series that list each other in ``comparable_with`` and share the

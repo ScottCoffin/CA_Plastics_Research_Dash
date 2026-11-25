@@ -39,7 +39,7 @@ reproduce:
   funders, FAAST): these call external APIs or sites and need keys or polite crawling.
   The fixture stands in for their output only.
 - **Real corpus outputs**: the fixtures are synthetic or small. The committed
-  `site/data/*.json` reflect the live data at the time of their last build, not the
+  `site/data/**/*.json` reflect the live data at the time of their last build, not the
   fixtures.
 - **Monitoring** (`build_monitoring_export.py`): needs the local normalized SF Bay
   sample table (`samples.json`), which is not in the repository.
@@ -61,11 +61,11 @@ Run only the steps you need. Read the linked notes before any live call.
 | 2 | `py -3.14 scripts/ingest_openalex.py --start-year YYYY --end-year YYYY --allow-candidate` | Live. Requires `OPENALEX_API_KEY` in the environment, which is never stored in the repository. | Budgeted. See `config/budget.yml` and `docs/api_notes/openalex_costs.md`. Paid spend requires explicit owner approval. |
 | 3 | `py -3.14 scripts/normalize_openalex.py` | Offline. Reads `data/interim/works_raw.parquet` and writes `data/processed/normalized/`. | None. Without live raw data, falls back to the committed S2.2 fixture. |
 | 4 | `py -3.14 scripts/label_works.py` | Offline. | None. |
-| 5 | `py -3.14 scripts/build_export_site.py` | Offline. Writes `site/data/` directly. | None. Run it only as a deliberate publication step, not as a check. |
+| 5 | `py -3.14 scripts/build_export_site.py` | Offline. Writes `site/data/california/` (and `site/data/global/` for the global series) directly. | None. Run it only as a deliberate publication step, not as a check. |
 | 6 | `py -3.14 scripts/ingest_nih_reporter.py`, `ingest_nsf_awards.py`, `ingest_usaspending.py`, `ingest_ca_sea_grant.py`, `ingest_state_funders.py`, `ingest_faast.py` | Live public sources. NIH RePORTER, NSF, and USAspending are keyless. Crawlers are rate-limited and check robots.txt. | Source notes are in `docs/api_notes/`. Most sources take `--max-requests` to cap requests. See each script's help text. |
 | 7 | `py -3.14 scripts/dedupe_grants.py` | Offline. Reads `data/interim/grants/`. | None. |
-| 8 | `py -3.14 scripts/build_grants_export.py` | Offline. Writes `site/data/grants.json`. | None. |
-| 9 | `py -3.14 scripts/build_feed.py` | Offline. Reads `site/data/index.json` and `grants.json`. Writes `site/feed.xml`. | None. |
+| 8 | `py -3.14 scripts/build_grants_export.py` | Offline. Writes `site/data/california/grants.json`. | None. |
+| 9 | `py -3.14 scripts/build_feed.py` | Offline. Reads `site/data/california/index.json` and `grants.json`. Writes `site/feed.xml`. | None. |
 | 10 | `py -3.14 scripts/build_status_page.py` | May read GitHub Actions run history, using `GITHUB_TOKEN` when it is set. | Read-only. No paid spend. |
 | 11 | `py -3.14 scripts/build_release_snapshot.py --version YYYY.MM.DD` | Offline. Writes `dist/atlas-snapshot-<version>.zip`. | None. |
 
@@ -78,7 +78,7 @@ pass, because it is the offline reference for the code.
 `scripts/build_release_snapshot.py` writes `dist/atlas-snapshot-<version>.zip`. The
 `dist/` path is ignored by `.gitignore`. The ZIP contains:
 
-- `site/data/*.json` (top-level payloads) and `site/feed.xml`: public, derived data
+- `site/data/**/*.json` (payloads in `site/data/california/`, `site/data/global/` and the root) and `site/feed.xml`: public, derived data
   under CC BY-NC 4.0.
 - `curation/gold_*.csv` and `curation/splits_v1*.{csv,json}`: gold set and split files,
   CC BY-NC 4.0.
@@ -92,9 +92,9 @@ The builder refuses to package anything under `data/raw`, `data/interim`, or
 
 Two checks of the current outputs (2026-11-10):
 
-- No public payload contains an abstract field. `site/data/grants.json` has no
+- No public payload contains an abstract field. `site/data/california/grants.json` has no
   abstract key, and the slim `index.json` carries no abstract text.
-- `site/data/authors/*.json` is not packaged. These files hold full work rows, including
+- `site/data/california/authors/*.json` is not packaged. These files hold full work rows, including
   abstracts, so they are outside the release set.
 
 Snapshot licence status: code is PolyForm Noncommercial 1.0.0 (`LICENSE`, owner 2026-11-18;

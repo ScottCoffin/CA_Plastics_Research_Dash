@@ -1,4 +1,4 @@
-"""Refresh ``site/data/open_calls.json`` from the California Grants Portal CSV (S8.9).
+"""Refresh ``site/data/california/open_calls.json`` from the California Grants Portal CSV (S8.9).
 
 ``--csv PATH`` reads a local copy instead of fetching the portal (offline runs).
 A failed fetch or unusable CSV prints status ``deferred`` and exits 0 without
@@ -32,7 +32,7 @@ def main(argv: list[str] | None = None) -> int:
         "--csv", type=Path, default=None, help="read a local CSV instead of fetching"
     )
     parser.add_argument("--config", type=Path, default=Path("config/queries.yml"))
-    parser.add_argument("--output", type=Path, default=Path("site/data/open_calls.json"))
+    parser.add_argument("--output", type=Path, default=Path("site/data/california/open_calls.json"))
     parser.add_argument(
         "--today", type=date.fromisoformat, default=None, help="override the CA date (tests)"
     )

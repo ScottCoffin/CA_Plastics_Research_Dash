@@ -113,7 +113,7 @@ state are unknown, not non-California.
 
 ## Sector and funder agency (Funding visualizations, 2026-11-11)
 
-`site/data/grants.json` rows carry `sector` (`academia`, `nonprofit`, `jpa`,
+`site/data/california/grants.json` rows carry `sector` (`academia`, `nonprofit`, `jpa`,
 `government`, `industry`, `individual`, `unknown`), `sector_detail` (for example
 `federal`, `state`, `local`, `tribal` for government) and `funder_agency` (the first
 mapped element of `funder_chain`, skipping parent departments such as the Department of

@@ -5,7 +5,7 @@ Read-only and offline. Every row of ``curation/overrides_works.csv`` is placed a
 * ``data/processed/normalized/works.parquet``: unique works after duplicate collapse;
   ``duplicate_work_ids`` lists the OpenAlex IDs folded into each keeper.
 * ``data/interim/works_raw.parquet``: the raw OpenAlex pull (``openalex_id``, ``raw_json``).
-* ``site/data/index.json``: the published works.
+* ``site/data/california/index.json``: the published works.
 
 Classes for ``exclude`` rows:
 
@@ -46,7 +46,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OVERRIDES = ROOT / "curation" / "overrides_works.csv"
 NORMALIZED = ROOT / "data" / "processed" / "normalized" / "works.parquet"
 RAW = ROOT / "data" / "interim" / "works_raw.parquet"
-INDEX = ROOT / "site" / "data" / "index.json"
+INDEX = ROOT / "site" / "data" / "california" / "index.json"
 
 HEADER = ["work_id", "field", "value", "reason", "reviewed_by", "reviewed_at"]
 OPENALEX_PREFIX = "https://openalex.org/"

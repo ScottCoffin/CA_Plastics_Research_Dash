@@ -56,7 +56,7 @@ export function caShare(corpusByYear, globalByYear) {
   return rows.sort((a, b) => a.year - b.year);
 }
 
-// Schema tag of site/data/denominators.json (BQ-2.4).
+// Schema tag of site/data/global/denominators.json (BQ-2.4).
 export const DENOMINATORS_SCHEMA = "bq2-v1";
 
 // One series row of denominators.json, found by its id (the public file lists series as an array).

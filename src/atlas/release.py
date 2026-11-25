@@ -24,6 +24,7 @@ import pyarrow.parquet as pq
 import yaml
 
 from atlas.query import load_query_config, openalex_filter, render_query
+from atlas.regions.scope import region_data_rel
 
 REPO = Path(__file__).resolve().parents[2]
 SCHEMA_VERSION = "at10"
@@ -33,10 +34,11 @@ QUERY_CONFIG = Path("config/queries.yml")
 AUDIT_DOC = Path("docs/QUERY_AUDIT.md")
 RAW_WORKS = Path("data/interim/works_raw.parquet")
 NORMALIZED_WORKS = Path("data/processed/normalized/works.parquet")
-INDEX_JSON = Path("site/data/index.json")
+# Region payloads sit in the region data folder (region_data_rel); release.json stays at the root.
+INDEX_JSON = Path(region_data_rel() / "index.json")
 ANALYTICS_MANIFEST = Path("data/processed/analytics/manifest.json")
-BUNDLE_MANIFEST = Path("site/data/bundle/manifest.json")
-BUNDLE_PARQUET = Path("site/data/bundle/parquet")
+BUNDLE_MANIFEST = Path(region_data_rel() / "bundle/manifest.json")
+BUNDLE_PARQUET = Path(region_data_rel() / "bundle/parquet")
 RELEASE_YML = Path("config/release.yml")
 SITE_RELEASE_JSON = Path("site/data/release.json")
 CHECKSUMS_NAME = "checksums.sha256"

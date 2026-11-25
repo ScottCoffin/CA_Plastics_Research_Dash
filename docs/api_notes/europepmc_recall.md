@@ -24,7 +24,7 @@ records with a DOI whose normalized DOI (lowercase, resolver prefix stripped) is
 | With a DOI | 858 |
 | In corpus (DOI match) | 438 (51.0%) |
 | In corpus and `ca_any_author` | 438 (51.0%) |
-| Published on the site (`site/data/index.json`) | 428 |
+| Published on the site (`site/data/california/index.json`) | 428 |
 | Missing DOIs (planned for 9 OpenAlex batches of at most 50) | 420 |
 
 Recall before: 51.0% (438/858). Recall after: not measured (ingest deferred); the earlier

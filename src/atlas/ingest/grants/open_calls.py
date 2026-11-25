@@ -2,7 +2,7 @@
 
 The portal lists grants *offered* (funding calls), not awards.  This module reads
 its public-domain CSV, keeps rows that are open and plastic-related, and writes the
-``site/data/open_calls.json`` payload used by the Funding tab.
+region ``open_calls.json`` payload used by the Funding tab.
 
 Open means status ``active`` or ``forecasted`` and an application deadline that is
 today or later (or ``Ongoing``).  Plastic-related means the S2.3 classifier

@@ -48,8 +48,10 @@ LINK_RE = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 def public_data_files(repo: Path = REPO) -> list[Path]:
     """Return the public payloads: site/data JSON and GeoJSON, plus site/feed.xml."""
     data = repo / "site" / "data"
-    files = sorted(data.glob("*.json")) + sorted(data.glob("*.geojson"))
-    files += sorted(data.glob("authors/*.json"))
+    folders = [data, data / "california", data / "global"]
+    files = [p for folder in folders for p in sorted(folder.glob("*.json"))]
+    files += sorted((data / "california").glob("*.geojson"))
+    files += sorted((data / "california" / "authors").glob("*.json"))
     feed = repo / "site" / "feed.xml"
     if feed.exists():
         files.append(feed)
@@ -160,9 +162,10 @@ def check_checklist(repo: Path = REPO) -> list[str]:
 
 
 def expected_dictionary_names(repo: Path = REPO) -> list[str]:
-    names = [p.name for p in sorted((repo / "site" / "data").glob("*.json"))]
-    names += [p.name for p in sorted((repo / "site" / "data").glob("*.geojson"))]
-    if list((repo / "site" / "data" / "authors").glob("*.json")):
+    california = repo / "site" / "data" / "california"
+    names = [p.name for p in sorted(california.glob("*.json"))]
+    names += [p.name for p in sorted(california.glob("*.geojson"))]
+    if list((california / "authors").glob("*.json")):
         names.append("authors/<author_id>.json")
     if (repo / "site" / "feed.xml").exists():
         names.append("feed.xml")

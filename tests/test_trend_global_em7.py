@@ -11,7 +11,7 @@ from typing import Any
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMITTED = ROOT / "site" / "data" / "trend_global.json"
+COMMITTED = ROOT / "site" / "data" / "global" / "trend_global.json"
 
 
 def _load_module() -> Any:
@@ -165,7 +165,7 @@ def test_url_too_long_is_refused(config: dict[str, Any]) -> None:
 
 def test_committed_file_matches_active_query_version(config: dict[str, Any]) -> None:
     if not COMMITTED.exists():
-        pytest.skip("site/data/trend_global.json not committed yet")
+        pytest.skip("site/data/global/trend_global.json not committed yet")
     payload = json.loads(COMMITTED.read_text(encoding="utf-8"))
     assert payload["query_version"] == config["version"]
     assert payload["schema_version"] == "em7.v1"

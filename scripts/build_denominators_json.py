@@ -1,4 +1,4 @@
-"""Build site/data/denominators.json, the public global-denominator file (BQ-2.4).
+"""Build site/data/global/denominators.json, the public global-denominator file (BQ-2.4).
 
 Reads data/processed/analytics/denominator_series.json (written by
 scripts/build_denominator_series.py)
@@ -29,7 +29,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_INPUT = ROOT / "data" / "processed" / "analytics" / "denominator_series.json"
-DEFAULT_OUTPUT = ROOT / "site" / "data" / "denominators.json"
+DEFAULT_OUTPUT = ROOT / "site" / "data" / "global" / "denominators.json"
 SCHEMA_VERSION = "bq2-v1"
 INPUT_SCHEMA_VERSION = "denominator_series.v1"
 

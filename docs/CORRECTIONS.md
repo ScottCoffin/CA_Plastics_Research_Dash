@@ -37,7 +37,7 @@ link for disambiguation errors (spec F4). See the open items below.
    `reviewed_by`, so an unreviewed correction cannot reach the site.
 4. Run the export (`py -3.14 scripts/build_export_site.py`). The build reads the
    curation files on every run, so the action is applied in that build and
-   `site/data/build_metadata.json` records the counts under `curation`.
+   `site/data/california/build_metadata.json` records the counts under `curation`.
 5. Close the issue with a link to the commit or the snapshot that carries the change.
 
 | Action | File (header) | What the export does |

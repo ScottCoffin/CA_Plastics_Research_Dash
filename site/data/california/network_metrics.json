@@ -1,10 +1,10 @@
 {
   "schema_version": "bq3-v1",
-  "generated_at": "2026-11-25T13:07:35+00:00",
+  "generated_at": "2026-11-25T14:21:36+00:00",
   "source": {
-    "index": "site/data/index.json",
+    "index": "site/data/california/index.json",
     "index_build_timestamp": "2026-11-24T20:43:43+00:00",
-    "institutions": "site/data/institutions.json"
+    "institutions": "site/data/california/institutions.json"
   },
   "method": {
     "edge_weight": "The number of plastic-related works in the period on which both members are listed. Each work counts once per pair. This is a count of shared works, not a fraction.",

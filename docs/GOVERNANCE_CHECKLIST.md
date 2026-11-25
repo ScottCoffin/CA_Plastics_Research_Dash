@@ -41,7 +41,7 @@ not a sign-off.
 | Licence audit: derived-data licence (CC BY-NC 4.0) | [LICENSE-DATA.md](../LICENSE-DATA.md) | Found: CC BY-NC 4.0, owner 2026-11-18 (CC BY 4.0 from 2026-11-10); upstream terms per source in REUSE.md (some rows still incomplete, see next item) | SC | 2026-11-10 |
 | Licence audit: third-party register complete for shipped sources | [REUSE.md](REUSE.md) | Found: rows added for NIH, NSF, USAspending, CA Sea Grant, OPC, Delta, FAAST, ROR, OpenAlex and CA Grants Portal; terms not recorded for seven federal and state sources, marked TERMS-UNVERIFIED | SC | 2026-11-10 |
 | Monitoring rows limited to the rights-cleared dataset | [monitoring_publication.yml](../config/monitoring_publication.yml) | Found: 314 rows, one dataset (CC BY 4.0, owner determination) | SC | 2026-11-10 |
-| Monitoring registry entries with unknown licences (metadata only) | [monitoring.json](../site/data/monitoring.json) | Needs owner decision: 24 entries, most licences unknown | SC | 2026-11-10 |
+| Monitoring registry entries with unknown licences (metadata only) | [monitoring.json](../site/data/california/monitoring.json) | Needs owner decision: 24 entries, most licences unknown | SC | 2026-11-10 |
 | CITATION.cff parses and has CFF 1.2.0 required keys | [CITATION.cff](../CITATION.cff) | Found: keys present; license field follows the code licence decision | SC | 2026-11-10 |
 
 Owner sign-off for the whole package (optional, instead of per-row): ______________  Date: ____________

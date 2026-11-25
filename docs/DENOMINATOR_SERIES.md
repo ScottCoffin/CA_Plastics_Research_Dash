@@ -3,7 +3,7 @@
 Built by `py -3.14 scripts/build_denominator_series.py` from stored files. The builder makes no
 network calls. The only fetcher for these series is `scripts/fetch_denominator_series.py` (BQ-2.2).
 Output: `data/processed/analytics/denominator_series.json` (gitignored; not published).
-BQ-2.4 publishes `site/data/denominators.json` later. This work does not change `site/data/`
+BQ-2.4 publishes `site/data/global/denominators.json` later. This work does not change `site/data/`
 or the Evidence Map panel.
 
 Series are declared in `config/denominator_series.yml`. The code is `src/atlas/analytics/denominators.py`.
@@ -157,17 +157,17 @@ one-sided pair, or a beside-only series in a pair. The output lists the allowed 
   `config/pollution_core_v0.yml` (A3 section 5.3). A test checks that every v0 term is a `queries.yml`
   core term and that no lifecycle term is in v0.
 
-- **A (all types) now comes from the cache** (`A-all`), not from `site/data/trend_global.json`. Both
+- **A (all types) now comes from the cache** (`A-all`), not from `site/data/global/trend_global.json`. Both
   use the same filter. The cache entry was fetched in the same run as B, so B/A is one snapshot. The
   2025 count moved from 23,450 (trend file, fetched 2026-11-12) to 23,758 (cache, 2026-11-23 UTC), which is
   +308 (+1.3%). C/A now divides by the newer A.
-- The Evidence Map trend panel was moved to `site/data/denominators.json` by BQ-2.4 (see the share section above).
-- The builder no longer reads `site/data/trend_global.json`. Its inputs are the cache, `site/data/index.json`,
+- The Evidence Map trend panel was moved to `site/data/global/denominators.json` by BQ-2.4 (see the share section above).
+- The builder no longer reads `site/data/global/trend_global.json`. Its inputs are the cache, `site/data/california/index.json`,
   `works.parquet` and `works_raw.parquet`.
 
 ## Evidence Map share (BQ-2.4 changed it to C/A)
 
-Before BQ-2.4, the panel's California share divided the published index totals for each year by the trend file's A. That mixed curated works (one row per work, including works labelled not plastic-related) with OpenAlex records, so it was not like for like. The panel now shows C/A from `site/data/denominators.json`: California-connected OpenAlex records over all OpenAlex records matching the same query, for complete years. Published plastic-related works (D) sit beside the share and are never divided. The panel no longer reads `site/data/trend_global.json`; that file is unchanged.
+Before BQ-2.4, the panel's California share divided the published index totals for each year by the trend file's A. That mixed curated works (one row per work, including works labelled not plastic-related) with OpenAlex records, so it was not like for like. The panel now shows C/A from `site/data/global/denominators.json`: California-connected OpenAlex records over all OpenAlex records matching the same query, for complete years. Published plastic-related works (D) sit beside the share and are never divided. The panel no longer reads `site/data/global/trend_global.json`; that file is unchanged.
 
 ## Series C: California-connected records the query matched
 
@@ -222,7 +222,7 @@ again for every record, which needs the network and is out of scope here.
 
 ### Series D: published plastic-related works
 
-- **Is:** the published works in `site/data/index.json` with `plastic_related` true, counted by year.
+- **Is:** the published works in `site/data/california/index.json` with `plastic_related` true, counted by year.
   Owner labels and curation removals apply. The count was 1,602 across all years.
 - **Is not:** a query count. Its unit is curated works, so it is never divided by A or C. It is
   shown beside them.
@@ -331,7 +331,7 @@ the query count over 2006 to 2025.
 
 ## Published file (BQ-2.4)
 
-`site/data/denominators.json` (schema `bq2-v1`) publishes the output above. `scripts/build_denominators_json.py` reads the ignored `data/processed/analytics/denominator_series.json` and writes the committed file; run `scripts/build_denominator_series.py` first. Per series it holds the yearly counts (A, A-article_review, B, B-article_review, C, D; B2 is listed as not computed). It also holds the three allowed ratio pairs (`B/A`, `C/A`, `B-article_review/A-article_review`), the BQ-2.3 `metrics` block, a version block, and a plain-language "what this is and is not" text. The labels are public wording: the internal notes and dependency names are not copied.
+`site/data/global/denominators.json` (schema `bq2-v1`) publishes the output above. `scripts/build_denominators_json.py` reads the ignored `data/processed/analytics/denominator_series.json` and writes the committed file; run `scripts/build_denominator_series.py` first. Per series it holds the yearly counts (A, A-article_review, B, B-article_review, C, D; B2 is listed as not computed). It also holds the three allowed ratio pairs (`B/A`, `C/A`, `B-article_review/A-article_review`), the BQ-2.3 `metrics` block, a version block, and a plain-language "what this is and is not" text. The labels are public wording: the internal notes and dependency names are not copied.
 
 The builder refuses any pair that is not in its allowlist. It also refuses a pair whose two sides differ in counting unit, sensitivity or `comparable_with` listing. D and B2 are never a ratio part. `--check` validates the committed file. When the ignored input exists, it also fails when the file differs from a rebuild (stale). When the input is absent (CI has no `data/` tree), the staleness check prints SKIP and the command exits 0.
 

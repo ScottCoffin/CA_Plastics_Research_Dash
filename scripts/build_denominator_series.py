@@ -6,7 +6,7 @@ scripts/fetch_denominator_series.py; C and D come from the normalized works, the
 site index. B2 is listed with its status and not counted. The ``metrics`` block (BQ-2.3) holds
 complete-year counts, index, shares for the allowed ratio pairs, and log-linear CAGR with a 95%
 interval. atlas.analytics.trend_metrics computes it from those counts. No network calls. The output
-folder is gitignored; BQ-2.4 publishes site/data/denominators.json later from this file.
+folder is gitignored; BQ-2.4 publishes site/data/global/denominators.json later from this file.
 
     py -3.14 scripts/build_denominator_series.py            # write the JSON
     py -3.14 scripts/build_denominator_series.py --check    # fail when the JSON is missing or stale
@@ -37,11 +37,12 @@ from atlas.analytics.denominators import (  # noqa: E402
 )
 from atlas.analytics.trend_metrics import build_metrics, load_metrics_options  # noqa: E402
 from atlas.query import load_query_config  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
 CONFIG = ROOT / "config" / "denominator_series.yml"
 QUERY_CONFIG = ROOT / "config" / "queries.yml"
 CACHE = ROOT / "data" / "interim" / "denominator_series_cache.json"
-INDEX = ROOT / "site" / "data" / "index.json"
+INDEX = region_data_dir() / "index.json"
 WORKS = ROOT / "data" / "processed" / "normalized" / "works.parquet"
 RAW = ROOT / "data" / "interim" / "works_raw.parquet"
 OUTPUT = ROOT / "data" / "processed" / "analytics" / "denominator_series.json"

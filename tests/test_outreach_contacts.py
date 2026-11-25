@@ -208,8 +208,10 @@ def _synthetic_snapshot(root: Path) -> None:
             {"author_id": "A400", "name": "Synthetic Four"},
         ]
     }
-    (root / "site" / "data").mkdir(parents=True)
-    (root / "site" / "data" / "index.json").write_text(json.dumps(index), encoding="utf-8")
+    (root / "site" / "data" / "california").mkdir(parents=True)
+    (root / "site" / "data" / "california" / "index.json").write_text(
+        json.dumps(index), encoding="utf-8"
+    )
     private = root / "data" / "private"
     private.mkdir(parents=True)
     (private / "outreach_optout.csv").write_text("email\nkim@uni-fixture.edu\n", encoding="utf-8")

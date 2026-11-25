@@ -1,4 +1,4 @@
-"""Tests for site/data/dtsc_timeline.json (Add-on A2 §7 Part B, EM-18)."""
+"""Tests for site/data/california/dtsc_timeline.json (Add-on A2 §7 Part B, EM-18)."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from types import ModuleType
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
-COMMITTED = ROOT / "site" / "data" / "dtsc_timeline.json"
+COMMITTED = ROOT / "site" / "data" / "california" / "dtsc_timeline.json"
 SPEC_CAVEAT = (
     "Listing does not by itself create requirements; "
     "Priority Product designation is a separate rulemaking."

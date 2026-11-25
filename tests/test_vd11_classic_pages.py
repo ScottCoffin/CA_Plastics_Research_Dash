@@ -28,7 +28,8 @@ FONT_FILES = {
 # list links are relative to that folder (../data/, authors#author=, institution#inst=).
 # Re-pinned by BQ-R1 (owner rename Experts -> Authors, A3-D0): visible copy, the page title and the
 # list link route (authors#author=) changed; the hash parsing and route logic did not.
-ROUTING_SCRIPT_SHA256 = "af3efceb9035593d0750efe91fae24364484d9e922e2c5b771c93c33a71158fa"
+# Updated for PLAT-3 slice 3b: the only script change is the data path (data/california/...).
+ROUTING_SCRIPT_SHA256 = "40f2598b6e4dd79d2e0f93824dccfe662b195ef44ed40a51eb0df3f7a8968eb4"
 HEX = re.compile(r"#[0-9a-fA-F]{6}\b")
 FACE = re.compile(r"@font-face\s*\{([^}]*)\}")
 REMOTE = re.compile(
@@ -154,7 +155,7 @@ def test_expert_hash_routing_is_unchanged() -> None:
 
 def test_generated_seo_page_carries_tokens_and_keeps_profile_link(tmp_path: Path) -> None:
     site = tmp_path / "site"
-    data = site / "data"
+    data = site / "data" / "california"
     _write(
         data / "index.json",
         {

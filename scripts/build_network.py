@@ -1,4 +1,4 @@
-"""Write site/data/network.json, the expert collaboration network (S9.4).
+"""Write site/data/california/network.json, the expert collaboration network (S9.4).
 
 Usage: py -3.14 scripts/build_network.py [--cap 400] [--fractional] [--check]
 --check rebuilds in memory and fails when the committed file is stale.
@@ -17,13 +17,14 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from atlas.build.export_site import refresh_metadata_counts  # noqa: E402
 from atlas.build.network import DEFAULT_NODE_CAP, build_network, network_counts  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--index", default=str(ROOT / "site" / "data" / "index.json"))
-    parser.add_argument("--institutions", default=str(ROOT / "site" / "data" / "institutions.json"))
-    parser.add_argument("--out", default=str(ROOT / "site" / "data" / "network.json"))
+    parser.add_argument("--index", default=str(region_data_dir() / "index.json"))
+    parser.add_argument("--institutions", default=str(region_data_dir() / "institutions.json"))
+    parser.add_argument("--out", default=str(region_data_dir() / "network.json"))
     parser.add_argument("--cap", type=int, default=DEFAULT_NODE_CAP)
     parser.add_argument("--fractional", action="store_true")
     parser.add_argument("--check", action="store_true")

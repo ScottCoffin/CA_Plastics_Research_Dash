@@ -13,9 +13,9 @@ Each number counts one population. "Published" means on the site. "Plastic-relat
 | Number (today / A3) | What it counts | Where it appears | Source |
 |---|---|---|---|
 | **1,919 / 1,918** Explorer California | Every published work with at least one California-affiliated author, of any type, plastic-related or not. | Explorer, "live atlas · N works" | `site/data/global/explore.json` `california.works`, copied from `counts.works` at build time |
-| **1,919** California works (About "Works") | The same population as the Explorer figure. | About page (`aboutViewModel` in `framework/src/components/atlas.js`) | `site/data/build_metadata.json` `counts.works`; `site/data/index.json` `counts.works` and the `works` list (1,919 rows) |
-| **1,583 / 1,582** California page, plastic-related works | Published California works whose final plastic flag is true, after the rule, owner review, model labels and curation overrides. | Overview, "plastic-related works" card | `site/data/build_metadata.json` `counts.plastic_works` (equal to `flow.plastic_related`) |
-| **1,849 / 1,848** California page, type breakdown | Published works of ten named types (articles, reviews, conference papers, preprints, book chapters, conference abstracts, datasets, theses, reports, books). Not limited to plastic-related works. | Overview, "Now: …" line | `site/data/build_metadata.json` `flow.by_type`, summed over the ten names in `typeSummary` in [framework/src/california/index.md](../framework/src/california/index.md) |
+| **1,919** California works (About "Works") | The same population as the Explorer figure. | About page (`aboutViewModel` in `framework/src/components/atlas.js`) | `site/data/california/build_metadata.json` `counts.works`; `site/data/california/index.json` `counts.works` and the `works` list (1,919 rows) |
+| **1,583 / 1,582** California page, plastic-related works | Published California works whose final plastic flag is true, after the rule, owner review, model labels and curation overrides. | Overview, "plastic-related works" card | `site/data/california/build_metadata.json` `counts.plastic_works` (equal to `flow.plastic_related`) |
+| **1,849 / 1,848** California page, type breakdown | Published works of ten named types (articles, reviews, conference papers, preprints, book chapters, conference abstracts, datasets, theses, reports, books). Not limited to plastic-related works. | Overview, "Now: …" line | `site/data/california/build_metadata.json` `flow.by_type`, summed over the ten names in `typeSummary` in [framework/src/california/index.md](../framework/src/california/index.md) |
 | **2,037 / 2,036** labels_qc label rows | One rule-layer label row per unique work, California or not. | [docs/labels_qc.md](labels_qc.md), "Label rows" | written by `src/atlas/nlp/labels.py` |
 | **1,749 / 1,748** labels_qc plastic-related rows | Unique works, California or not, that the keyword rule calls plastic-related. This is before owner review, model labels, overrides and the California filter. | [docs/labels_qc.md](labels_qc.md), "Plastic-related rows" | written by `src/atlas/nlp/labels.py` |
 
@@ -48,18 +48,18 @@ Output (2026-11-18, HEAD `67133b55`):
 | Number | Today | A3 (2026-11-18) | Change | Source (file: field) | Definition |
 |---|---:|---:|---:|---|---|
 | Explorer: California works | 1,919 | 1,918 | +1 | site/data/global/explore.json: california.works | Published California works (all types, plastic-related or not), copied from counts.works when the explorer was built. |
-| California atlas: works | 1,919 |  |  | site/data/build_metadata.json: counts.works | Published works with a California author, after the California filter and curation. |
-| California page: plastic-related works | 1,583 | 1,582 | +1 | site/data/build_metadata.json: counts.plastic_works | Published California works whose final plastic_related flag is true. |
-| California page: type breakdown (Now line) | 1,849 | 1,848 | +1 | site/data/build_metadata.json: flow.by_type (types named in typeSummary) | Published works of the ten named types, all plastic-related or not; other types are left out. |
+| California atlas: works | 1,919 |  |  | site/data/california/build_metadata.json: counts.works | Published works with a California author, after the California filter and curation. |
+| California page: plastic-related works | 1,583 | 1,582 | +1 | site/data/california/build_metadata.json: counts.plastic_works | Published California works whose final plastic_related flag is true. |
+| California page: type breakdown (Now line) | 1,849 | 1,848 | +1 | site/data/california/build_metadata.json: flow.by_type (types named in typeSummary) | Published works of the ten named types, all plastic-related or not; other types are left out. |
 | labels_qc: label rows | 2,037 | 2,036 | +1 | docs/labels_qc.md: Label rows | One rule label row per unique work, California or not, before the California filter and curation. |
 | labels_qc: plastic-related rows | 1,749 | 1,748 | +1 | docs/labels_qc.md: Plastic-related rows | Unique works, California or not, that the keyword rule calls plastic-related, before owner review, model labels and overrides. |
-| Unique works (normalized table) | 2,037 |  |  | site/data/build_metadata.json: flow.unique_works | Works after OpenAlex duplicates are collapsed, before the California filter. |
-| Raw OpenAlex records | 2,074 |  |  | site/data/build_metadata.json: flow.records_retrieved | Raw records retrieved: unique works plus duplicates collapsed into them. |
-| Dropped: no California author | 56 |  |  | site/data/build_metadata.json: flow.no_ca_authorship | Unique works with no California authorship on any basis; not published. |
-| Dropped: removed by curation | 62 |  |  | site/data/build_metadata.json: flow.removed_by_curation | California works removed by curation; computed as unique minus no-CA minus published. |
-| Published, not plastic-related | 336 |  |  | site/data/build_metadata.json: flow.not_plastic_related | Published California works whose final plastic flag is not true. |
-| Published works not in the Now line | 70 |  |  | site/data/build_metadata.json: flow.by_type (types not named) | Published works of the types the Now line does not name (editorial, other, letter, and so on). |
-| Curation exclusions listed | 128 |  |  | site/data/build_metadata.json: curation.works_excluded_listed | Work overrides with exclude set to true; not every one removes a work. |
+| Unique works (normalized table) | 2,037 |  |  | site/data/california/build_metadata.json: flow.unique_works | Works after OpenAlex duplicates are collapsed, before the California filter. |
+| Raw OpenAlex records | 2,074 |  |  | site/data/california/build_metadata.json: flow.records_retrieved | Raw records retrieved: unique works plus duplicates collapsed into them. |
+| Dropped: no California author | 56 |  |  | site/data/california/build_metadata.json: flow.no_ca_authorship | Unique works with no California authorship on any basis; not published. |
+| Dropped: removed by curation | 62 |  |  | site/data/california/build_metadata.json: flow.removed_by_curation | California works removed by curation; computed as unique minus no-CA minus published. |
+| Published, not plastic-related | 336 |  |  | site/data/california/build_metadata.json: flow.not_plastic_related | Published California works whose final plastic flag is not true. |
+| Published works not in the Now line | 70 |  |  | site/data/california/build_metadata.json: flow.by_type (types not named) | Published works of the types the Now line does not name (editorial, other, letter, and so on). |
+| Curation exclusions listed | 128 |  |  | site/data/california/build_metadata.json: curation.works_excluded_listed | Work overrides with exclude set to true; not every one removes a work. |
 
 | Status | Check | Detail |
 |---|---|---|

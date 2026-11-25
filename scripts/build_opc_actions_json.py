@@ -1,4 +1,6 @@
-"""Export the curated OPC early actions to site/data/opc_actions.json (Add-on A2 §7 Part A, EM-17).
+"""Export the curated OPC early actions to site/data/california/opc_actions.json.
+
+(Add-on A2 §7 Part A, EM-17).
 
 Every field from config/opc_early_actions.yml is written unchanged (deadlines are not reformatted).
 The owner's review sheet (curation/opc_mapping_review.csv) is applied when it exists; a blank
@@ -17,10 +19,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas import opc_actions  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
 SCHEMA_VERSION = "em17.v1"
 SOURCE = "config/opc_early_actions.yml"
-OUTPUT_PATH = ROOT / "site" / "data" / "opc_actions.json"
+OUTPUT_PATH = region_data_dir() / "opc_actions.json"
 
 
 def _action_payload(action: dict[str, Any]) -> dict[str, Any]:

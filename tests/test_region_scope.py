@@ -144,7 +144,12 @@ def test_institution_seed_urls_are_byte_identical(tmp_path: Path) -> None:
         urls.append(url)
         return {"meta": {"count": 0}, "results": []}, None
 
-    with mock.patch.object(institutions, "_request_json", side_effect=fake_request):
+    # Hermetic: the government supplement checks the daily usage log before each call; the
+    # real log can already be at the daily stop (2026-11-25), so use an empty one.
+    with (
+        mock.patch.object(institutions, "_request_json", side_effect=fake_request),
+        mock.patch.object(institutions, "DEFAULT_USAGE_LOG", tmp_path / "usage.jsonl"),
+    ):
         institutions.pull_openalex_institutions(tmp_path / "seed.jsonl", mock.MagicMock())
         institutions.supplement_government_institutions(
             [], tmp_path / "gov.jsonl", mock.MagicMock()

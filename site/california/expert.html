@@ -369,7 +369,7 @@
       }
       function loadInstitutions() {
         if (!S.institutions) {
-          S.institutions = fetchJson("../data/institutions.json")
+          S.institutions = fetchJson("../data/california/institutions.json")
             .then((json) => new Map((json.institutions || []).map((inst) => [inst.inst_id, inst])))
             .catch(() => new Map());
         }
@@ -383,10 +383,10 @@
           ? `<a href="institution#inst=${encodeURIComponent(id)}">${label}</a>`
           : label;
       }
-      // Expert id -> name from data/index.json (about 2.5 MB). Fetched once; null when unavailable.
+      // Expert id -> name from data/california/index.json (about 2.5 MB). Fetched once; null when unavailable.
       function loadExpertNames() {
         if (!S.expertNamesPromise) {
-          S.expertNamesPromise = fetchJson("../data/index.json")
+          S.expertNamesPromise = fetchJson("../data/california/index.json")
             .then((json) => {
               S.expertNames = new Map((json.authors || []).map((a) => [a.author_id, a.name]));
               return S.expertNames;
@@ -395,19 +395,19 @@
         }
         return S.expertNamesPromise;
       }
-      // Funding, dataset and method notes (../data/expert_badges.json). Fetched once; null when unavailable,
+      // Funding, dataset and method notes (../data/california/expert_badges.json). Fetched once; null when unavailable,
       // which hides the new sections.
       function loadBadges() {
         if (!S.badgesPromise) {
-          S.badgesPromise = fetchJson("../data/expert_badges.json").catch(() => null);
+          S.badgesPromise = fetchJson("../data/california/expert_badges.json").catch(() => null);
         }
         return S.badgesPromise;
       }
-      // Research network rosters (../data/research_networks.json). Fetched once; null when unavailable, which
+      // Research network rosters (../data/california/research_networks.json). Fetched once; null when unavailable, which
       // shows no consortium badge.
       function loadNetworks() {
         if (!S.networksPromise) {
-          S.networksPromise = fetchJson("../data/research_networks.json")
+          S.networksPromise = fetchJson("../data/california/research_networks.json")
             .then((json) => (json && Array.isArray(json.networks) ? json.networks : null))
             .catch(() => null);
         }
@@ -748,7 +748,7 @@
         $("expert-now").innerHTML = "";
         $("open-in-list").href = `authors#author=${encodeURIComponent(raw)}`;
         const [detail, institutions, badges, networks] = await Promise.all([
-          fetchJson(`../data/authors/${encodeURIComponent(raw)}.json`).catch(() => null),
+          fetchJson(`../data/california/authors/${encodeURIComponent(raw)}.json`).catch(() => null),
           loadInstitutions(),
           loadBadges(),
           loadNetworks()

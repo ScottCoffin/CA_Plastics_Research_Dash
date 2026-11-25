@@ -30,7 +30,7 @@ def _write_json(path: Path, payload: object) -> None:
 
 def _make_site(tmp_path: Path) -> Path:
     site = tmp_path / "site"
-    data = site / "data"
+    data = site / "data" / "california"
     authors = [
         {
             "author_id": "A1",
@@ -312,14 +312,14 @@ def _network_payload(**changes: object) -> dict:
 
 def _site_with_networks(tmp_path: Path, payload: dict | None = None) -> Path:
     site = _make_site(tmp_path)
-    institutions = site / "data" / "institutions.json"
+    institutions = site / "data" / "california" / "institutions.json"
     data = json.loads(institutions.read_text(encoding="utf-8"))
     data["institutions"].append(
         {"inst_id": "I4", "name": "Member Lab", "city": "Davis", "work_count": 2, "ca_flag": True}
     )
     _write_json(institutions, data)
     if payload is not None:
-        _write_json(site / "data" / "research_networks.json", payload)
+        _write_json(site / "data" / "california" / "research_networks.json", payload)
     build_site(site, BASE)
     return site
 

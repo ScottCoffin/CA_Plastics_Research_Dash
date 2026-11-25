@@ -14,7 +14,7 @@ from atlas.ingest import openalex as oa
 from atlas.query import load_query_config
 
 WORKS = Path("data/processed/normalized/works.parquet")
-SITE_INDEX = Path("site/data/index.json")
+SITE_INDEX = Path("site/data/california/index.json")
 RAW_OUT = Path("data/interim/works_raw.parquet")
 
 

@@ -1,5 +1,5 @@
 // Collaboration-structure panel on the California network page (BQ-3.4; A3 section 7, Module 3).
-// It reads site/data/network_metrics.json (schema bq3-v1, aggregates only) once the panel nears the
+// It reads site/data/california/network_metrics.json (schema bq3-v1, aggregates only) once the panel nears the
 // viewport. The chart view draws four headline measures as small multiples, with Authors and
 // Institutions side by side and 2026 marked as a partial year. The table view lists every measure for
 // every period, one table per graph. The panel reads no author or institution id or name, so it cannot

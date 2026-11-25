@@ -166,7 +166,7 @@ Crack edges must be clean: cut shard masks at 2 px or finer, never on the 4 px s
 
 ### 4.5 Chart (beats 8–9)
 
-- **Data:** `site/data/trend_global.json` (`by_year`, `query_version`, `fetched_at`); years 1970 to the current year. The unit is a round number of works per dot giving about 900 dots: currently 150.
+- **Data:** `site/data/global/trend_global.json` (`by_year`, `query_version`, `fetched_at`); years 1970 to the current year. The unit is a round number of works per dot giving about 900 dots: currently 150.
 - **Dots:** columns of three dots per year. Dots leave the bulb in rank order (stagger 1.4 units).
 - **Space for the text and labels:** on desktop, column heights are capped so no dot enters the headline box, and the chart reserves headroom above the tallest column for the 2026 label.
 - **Annotations:** wrapped labels (head 600, title 400, 13 px; at most 250 px wide) placed clear of dots and the headline. Each has a coral-ink elbow arrow (quadratic curve with an arrowhead) and no vertical rules.
@@ -271,7 +271,7 @@ Budgets:
 
 | Need | Source | Status |
 |---|---|---|
-| Works per year (chart) | `site/data/trend_global.json` | exists (daily) |
+| Works per year (chart) | `site/data/global/trend_global.json` | exists (daily) |
 | Country counts (map shading) | `site/data/global/global_counts.json` (OpenAlex `group_by=authorships.countries`; total, by year, new this week) | PLAT-2a |
 | World and California rasters | `scripts/build_world_map.py` from Natural Earth 110m admin-0 (public domain) to `site/assets/world/` | PLAT-2a; method as in `.impeccable/sketches/src/build_geo.py` and `story.py` |
 | Evidence grid counts | 30 OpenAlex count queries a day (5 × 6 cells), about USD 0.03 a day, never paid filters | PLAT-2b, gated on owner cell definitions |

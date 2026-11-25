@@ -11,7 +11,7 @@ random samples, and they are never pooled.
 
 ## What was measured
 
-1. **Language probe (no network).** The committed `site/data/language_probe.json` (BQ-S4) holds, for
+1. **Language probe (no network).** The committed `site/data/global/language_probe.json` (BQ-S4) holds, for
    each of 16 native-language term sets, a fixed-seed sample of up to 50 OpenAlex works and the
    count of that sample that v3.1 also retrieves. The Wilson 95% interval is computed for each set.
 2. **Anchor overlap.** The 42 theme anchors from BQ-S6 (`tests/fixtures/theme_anchors.json`) are

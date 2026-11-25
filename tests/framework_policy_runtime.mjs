@@ -1,7 +1,7 @@
 // Runtime checks for the Framework Policy page helpers (EM-18 timeline, EM-17 OPC track).
 // The pure helpers live in framework/src/components/policy.js; the timeline check reads the
-// committed site/data/dtsc_timeline.json and asserts that dates are shown exactly as stated.
-// The OPC checks read the committed site/data/opc_actions.json.
+// committed site/data/california/dtsc_timeline.json and asserts that dates are shown exactly as stated.
+// The OPC checks read the committed site/data/california/opc_actions.json.
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
@@ -17,7 +17,7 @@ import {
   timelineItems
 } from "../framework/src/components/policy.js";
 
-const data = JSON.parse(readFileSync(fileURLToPath(new URL("../site/data/dtsc_timeline.json", import.meta.url)), "utf8"));
+const data = JSON.parse(readFileSync(fileURLToPath(new URL("../site/data/california/dtsc_timeline.json", import.meta.url)), "utf8"));
 
 // The hardcoded caveat is the spec sentence.
 assert.equal(CAVEAT, "Listing does not by itself create requirements; Priority Product designation is a separate rulemaking.");
@@ -63,7 +63,7 @@ assert.equal(isHttps(undefined), false);
 }
 
 // OPC Solutions track (EM-17): the disclaimer and strategy constants match the curated data.
-const opc = JSON.parse(readFileSync(fileURLToPath(new URL("../site/data/opc_actions.json", import.meta.url)), "utf8"));
+const opc = JSON.parse(readFileSync(fileURLToPath(new URL("../site/data/california/opc_actions.json", import.meta.url)), "utf8"));
 assert.equal(OPC_DISCLAIMER, "The Global Plastic Laws Database is an educational and research resource and should not be regarded as fully comprehensive or completely up to date for legal purposes.");
 assert.equal(opc.gpl.disclaimer, OPC_DISCLAIMER);
 assert.deepEqual(OPC_STRATEGY, opc.strategy);

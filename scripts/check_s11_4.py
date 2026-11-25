@@ -20,11 +20,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas.build import feed as fd  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
 ATOM = "{http://www.w3.org/2005/Atom}"
 FEED = ROOT / "site" / "feed.xml"
-INDEX_JSON = ROOT / "site" / "data" / "index.json"
-GRANTS_JSON = ROOT / "site" / "data" / "grants.json"
+INDEX_JSON = region_data_dir() / "index.json"
+GRANTS_JSON = region_data_dir() / "grants.json"
 INDEX_HTML = ROOT / "site" / "index.html"
 WORKFLOW = ROOT / ".github" / "workflows" / "build_deploy.yml"
 

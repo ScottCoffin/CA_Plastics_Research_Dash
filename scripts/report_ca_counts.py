@@ -19,9 +19,9 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 
-METADATA = "site/data/build_metadata.json"
+METADATA = "site/data/california/build_metadata.json"
 EXPLORE = "site/data/global/explore.json"
-INDEX = "site/data/index.json"
+INDEX = "site/data/california/index.json"
 TYPE_SUMMARY = "framework/src/california/index.md"
 LABELS_QC = "docs/labels_qc.md"
 

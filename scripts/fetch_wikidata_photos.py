@@ -22,8 +22,9 @@ from atlas.ingest.wikidata_photos import (  # noqa: E402
     summarize,
     write_expert_photos,
 )
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
-INDEX_PATH = ROOT / "site" / "data" / "index.json"
+INDEX_PATH = region_data_dir() / "index.json"
 CACHE_DIR = ROOT / "data" / "raw" / "wikidata"
 OUTPUT_PATH = ROOT / "data" / "processed" / "expert_photos.parquet"
 

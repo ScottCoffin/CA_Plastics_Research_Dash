@@ -1,6 +1,6 @@
 // Institution detail page: pure helpers with no DOM access (INST-PAGE). institution.js renders these;
 // tests/framework_institution_runtime.mjs checks them in Node. Inputs are the per-institution payload
-// (site/data/institution_works/<inst_id>.json) and the institution list (site/data/institutions.json).
+// (site/data/california/institution_works/<inst_id>.json) and the institution list (site/data/california/institutions.json).
 // Only plastic-related works count toward every statistic, chart and topic size (plastic_related === true).
 
 export const SECTION_IDS = ["experts", "publications", "topics"];
@@ -258,7 +258,7 @@ export function searchInstitutions(list, query, limit = SEARCH_LIMIT) {
   return {total: matches.length, shown: matches.slice(0, limit)};
 }
 
-// Research networks (site/data/research_networks.json). Each entry is cleaned here before the page
+// Research networks (site/data/california/research_networks.json). Each entry is cleaned here before the page
 // uses it: unsafe links are emptied, and entries without an id or a name are dropped.
 export const NETWORK_SCHEMA_VERSION = "net1.v1";
 const ASSET_PATH_PATTERN = /^assets\/[A-Za-z0-9._\/-]+\.(?:png|jpe?g|svg|webp)$/i;

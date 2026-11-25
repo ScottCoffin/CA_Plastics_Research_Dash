@@ -1,6 +1,7 @@
 """Journal metrics for the Evidence map publication table (VD-34).
 
-Writes ``site/data/journal_metrics.json``. Every work in ``site/data/works_detail.json`` is looked
+Writes ``site/data/california/journal_metrics.json``. Every work in
+``site/data/california/works_detail.json`` is looked
 up for its primary OpenAlex source (``/works``, 100 ids per call); each distinct source is then read
 for its ``summary_stats`` (``/sources``, 100 ids per call). Journals are keyed by the display name
 that ``works_detail.journal`` uses. A name whose works sit in more than one source takes the source
@@ -46,6 +47,7 @@ from atlas.ingest.openalex import (  # noqa: E402
     _request_json,
     load_openalex_key,
 )
+from atlas.regions.scope import region_data_dir  # noqa: E402
 from atlas.util.budget import daily_logged_usage, resolve_openalex_budget  # noqa: E402
 from atlas.util.cost import ApiCostLogger, OpenAlexUsageMetadataError  # noqa: E402
 
@@ -56,8 +58,8 @@ BATCH = 100
 MAX_RUN_CREDITS = Decimal(60)
 # A list call costs one credit; keep one in reserve before each request.
 RESERVE_CREDITS = Decimal(1)
-WORKS_DETAIL = ROOT / "site" / "data" / "works_detail.json"
-OUTPUT = ROOT / "site" / "data" / "journal_metrics.json"
+WORKS_DETAIL = region_data_dir() / "works_detail.json"
+OUTPUT = region_data_dir() / "journal_metrics.json"
 RAW_CACHE = ROOT / "data" / "interim" / "journal_metrics_raw.json"
 USAGE_LOG = ROOT / "data" / "logs" / "api_usage.jsonl"
 JOURNAL_KEYS = {"source_id", "issn_l", "two_yr_mean_citedness", "h_index", "type"}

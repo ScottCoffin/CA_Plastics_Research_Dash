@@ -1,7 +1,7 @@
 """Research networks and consortia registry (NET-1, owner request 2026-11-15).
 
 Reads config/research_networks.yml, validates it, and builds the public payload written to
-site/data/research_networks.json. Link, don't mirror: nothing is fetched or scraped, and the
+the region's ``research_networks.json``. Link, don't mirror: nothing is fetched or scraped, and the
 full contributor roster is not copied (only Atlas expert IDs and the roster size).
 """
 

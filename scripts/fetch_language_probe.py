@@ -6,7 +6,8 @@ works whose title or abstract matches it, the language labels of those works (on
 ``group_by=language`` request), a fixed-seed random sample of up to 50 works, and which sampled
 works the main v3.1 query also retrieves (the overlap on the sample).
 
-Writes ``site/data/language_probe.json`` (schema ``bqs-v1``). Every OpenAlex request goes through
+Writes ``site/data/global/language_probe.json`` (schema ``bqs-v1``). Every OpenAlex request
+goes through
 the shared client and budget guard, as in ``scripts/fetch_trend_global.py``. Responses are cached
 under ``data/interim/language_probe/`` (gitignored), so a rerun with the cache spends nothing.
 
@@ -68,7 +69,7 @@ SOURCE_TEXT = (
     "OpenAlex works API: title_and_abstract.search counts, group_by=language, a fixed-seed "
     "sample (sample and seed), and an ids.openalex overlap check against the main query"
 )
-DEFAULT_OUTPUT = ROOT / "site" / "data" / "language_probe.json"
+DEFAULT_OUTPUT = ROOT / "site" / "data" / "global" / "language_probe.json"
 DEFAULT_CONFIG = ROOT / "config" / "queries.yml"
 DEFAULT_VOCABULARY = ROOT / "config" / "search_vocabulary_v1.yml"
 DEFAULT_BUDGET = ROOT / "config" / "budget.yml"

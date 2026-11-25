@@ -8,8 +8,8 @@ from atlas import linkouts
 
 REPO = Path(__file__).resolve().parents[1]
 SCRIPTS = REPO / "scripts"
-COMMITTED = REPO / "site" / "data" / "linkouts.json"
-MANIFEST = REPO / "site" / "data" / "bundle" / "manifest.json"
+COMMITTED = REPO / "site" / "data" / "california" / "linkouts.json"
+MANIFEST = REPO / "site" / "data" / "california" / "bundle" / "manifest.json"
 PUBLIC_FIELDS = {
     "id",
     "name",
@@ -105,7 +105,7 @@ def test_strip_entries_rejects_invalid_registry():
 def test_committed_json_matches_fresh_build(build_script):
     fresh = build_script.render(build_script.build_payload())
     assert COMMITTED.read_bytes() == fresh.encode("utf-8"), (
-        "site/data/linkouts.json is stale; run scripts/build_linkouts_json.py"
+        "site/data/california/linkouts.json is stale; run scripts/build_linkouts_json.py"
     )
 
 

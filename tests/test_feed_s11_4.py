@@ -197,8 +197,8 @@ def test_no_abstract_or_contact_text_is_emitted() -> None:
 def test_write_feed_on_site_payloads_is_well_formed(tmp_path: Path) -> None:
     output = tmp_path / "feed.xml"
     counts = fd.write_feed(
-        ROOT / "site" / "data" / "index.json",
-        ROOT / "site" / "data" / "grants.json",
+        ROOT / "site" / "data" / "california" / "index.json",
+        ROOT / "site" / "data" / "california" / "grants.json",
         output,
     )
     root = _parse(output.read_bytes())

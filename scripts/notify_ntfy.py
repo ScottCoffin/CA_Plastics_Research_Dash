@@ -1,6 +1,7 @@
 """Post one ntfy alert when the daily refresh adds new California plastics papers (NOTIFY-AB).
 
-Counts works in ``site/data/works_detail.json`` that are plastic-related and whose ``work_id``
+Counts works in ``site/data/california/works_detail.json`` that are plastic-related and whose
+``work_id``
 is absent from the copy written before the run (``--previous``). Posts one message to the ntfy
 topic in ``config/notifications.yml`` when there are any, and nothing otherwise. The topic is
 public, so no secret is needed.
@@ -28,7 +29,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = ROOT / "config" / "notifications.yml"
-DEFAULT_CURRENT = ROOT / "site" / "data" / "works_detail.json"
+DEFAULT_CURRENT = ROOT / "site" / "data" / "california" / "works_detail.json"
 CLICK_URL = "https://plastiverse.live/california/evidence#ev-recent"
 TAGS = "microscope"
 USER_AGENT = "ca-plastics-research-atlas-notify"

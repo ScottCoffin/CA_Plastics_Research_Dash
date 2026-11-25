@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
-DATA = SITE / "data"
+DATA = SITE / "data" / "california"
 # Owner 2026-11-17 (ADR-CREDIT-2026-11-17): the disclaimer was replaced by a creator credit.
 DISCLAIMER = (
     'Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.'
@@ -165,7 +165,7 @@ def main() -> None:
         'id="about-freshness"',
         'id="about-stats"',
         "aboutViewModel(state.data.metadata, state.data.index)",
-        "data/build_metadata.json",
+        "data/california/build_metadata.json",
         'href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction"',
         "https://doi.org/10.5281/zenodo.24124016",
         "CA-sampled",

@@ -1,7 +1,7 @@
 """Slim grants export for the Funding tab (S8.10).
 
 Reads the S8.6 de-duplicated grants table and the S2.2 institutions table and
-writes ``site/data/grants.json``: one row per grant (no abstracts, no contact
+writes the region's ``grants.json``: one row per grant (no abstracts, no contact
 details), per-source amount basis captions, and precomputed aggregates. Output is
 deterministic for a fixed ``generated_at`` and input.
 

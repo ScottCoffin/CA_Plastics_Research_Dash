@@ -260,7 +260,7 @@ def _write_evidence_works(
 
     ``works_detail.json`` loads with the page; ``work_text/abstracts.json`` loads only when a
     reader first expands an abstract. It sits in a subfolder so the abstract-free release
-    snapshot (top-level ``site/data/*.json`` only) never packages it.
+    snapshot (top-level JSON of each data folder only) never packages it.
     """
     rows = []
     abstracts: dict[str, str] = {}
@@ -623,7 +623,7 @@ def export_site(
     """Build all S3.1 payloads from normalized C3 tables.
 
     ``output_dir`` wins when given. Otherwise the payloads go to the region's data folder
-    (``region_data_dir``; ``None`` means the default region, which is site/data).
+    (``region_data_dir``; ``None`` means the default region).
 
     ``ca_authors_only`` keeps the Experts index and author files to authors with at
     least one California-affiliated authorship (``ca_works_count > 0``).

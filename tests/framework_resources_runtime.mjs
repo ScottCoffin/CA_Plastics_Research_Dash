@@ -1,6 +1,6 @@
 // Runtime checks for the Framework Related resources page (EM-16).
 // The pure helpers live in framework/src/components/resources.js; the registry check reads the
-// committed site/data/linkouts.json (the same file the page loads at runtime).
+// committed site/data/california/linkouts.json (the same file the page loads at runtime).
 import assert from "node:assert/strict";
 import {existsSync, readFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
@@ -198,7 +198,7 @@ globalThis.document = {
 
 // Registry export: every entry links to https and the public file never names the excluded map.
 {
-  const path = fileURLToPath(new URL("../site/data/linkouts.json", import.meta.url));
+  const path = fileURLToPath(new URL("../site/data/california/linkouts.json", import.meta.url));
   const raw = readFileSync(path, "utf8");
   const payload = JSON.parse(raw);
   assert.ok(Array.isArray(payload.entries) && payload.entries.length > 0, "no entries");

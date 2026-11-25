@@ -258,19 +258,19 @@ jobs:
             data/processed/status_history.jsonl \
             docs/normalization_qc.md \
             docs/labels_qc.md \
-            site/data/index.json \
-            site/data/aggregates.json \
-            site/data/build_metadata.json \
-            site/data/institutions.json \
-            site/data/institutions.geojson \
-            site/data/works_detail.json \
-            site/data/network.json \
-            site/data/search_index.json \
-            site/data/expert_badges.json \
-            site/data/journal_metrics.json \
+            site/data/california/index.json \
+            site/data/california/aggregates.json \
+            site/data/california/build_metadata.json \
+            site/data/california/institutions.json \
+            site/data/california/institutions.geojson \
+            site/data/california/works_detail.json \
+            site/data/california/network.json \
+            site/data/california/search_index.json \
+            site/data/california/expert_badges.json \
+            site/data/california/journal_metrics.json \
             site/data/global/global_counts.json \
             site/data/global/world_raster.json             site/data/global/explore_sample.json             site/data/global/explore.json site/data/global/evidence_cells.json
-          git add -A site/data/authors site/data/institution_works site/data/bundle site/data/work_text
+          git add -A site/data/california/authors site/data/california/institution_works site/data/california/bundle site/data/california/work_text
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"
           git pull --rebase origin "$DEFAULT_BRANCH"
@@ -291,7 +291,7 @@ jobs:
             exit 0
           fi
           before="$RUNNER_TEMP/works_detail_before.json"
-          if ! git show "$RUN_SHA:site/data/works_detail.json" > "$before"; then
+          if ! git show "$RUN_SHA:site/data/california/works_detail.json" > "$before"; then
             echo "::warning::works_detail.json at the checkout commit not found; no ntfy alert."
             exit 0
           fi

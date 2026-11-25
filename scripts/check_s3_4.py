@@ -22,8 +22,10 @@ def main() -> None:
     for label, marker in required.items():
         assert marker in html, f"S3.4 shell is missing {label}: {marker}"
 
-    payload = json.loads((SITE / "data" / "institutions.json").read_text(encoding="utf-8"))
-    index = json.loads((SITE / "data" / "index.json").read_text(encoding="utf-8"))
+    payload = json.loads(
+        (SITE / "data" / "california" / "institutions.json").read_text(encoding="utf-8")
+    )
+    index = json.loads((SITE / "data" / "california" / "index.json").read_text(encoding="utf-8"))
     institutions = payload.get("institutions", [])
     works = index.get("works", [])
     qualifying = {

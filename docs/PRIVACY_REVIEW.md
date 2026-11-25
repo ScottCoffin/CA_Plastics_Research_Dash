@@ -11,7 +11,7 @@ decides each "needs owner decision" item.
 ## Method
 
 - Offline scan, run 2026-11-10 by `scripts/check_s10_2.py`, over every public payload:
-  `site/data/*.json`, `site/data/authors/*.json`, `site/data/*.geojson` and `site/feed.xml`.
+  `site/data/*.json`, `site/data/california/authors/*.json`, `site/data/*.geojson` and `site/feed.xml`.
 - Patterns: email-like (`local@domain.tld`), US-style phone (`NNN-NNN-NNNN` with optional
   separators and `+1`), and international-style phone (`+` country code followed by groups).
 - Strings were scanned as JSON keys and values, and as raw text for the feed. Matches are
@@ -54,19 +54,19 @@ These fields are personal or identifying. Each is public in its source. Each nee
 
 | Payload | Field | Count | Note |
 |---|---|---|---|
-| `site/data/index.json` | `authors[].name` | 4 rows | Display names from OpenAlex. Disambiguation may be wrong (F4 C8). |
-| `site/data/authors/*.json` | `author.name` | 4 files | Same names, in detail files. |
+| `site/data/california/index.json` | `authors[].name` | 4 rows | Display names from OpenAlex. Disambiguation may be wrong (F4 C8). |
+| `site/data/california/authors/*.json` | `author.name` | 4 files | Same names, in detail files. |
 | `site/data/**/*.json` | `orcid` (ORCID URL) | 2 string values across the JSON payloads (locations not itemized here) | Public identifiers supplied by OpenAlex. The repository has no ORCID for the owner (none is shown here). Owner decision whether ORCID links stay. |
-| `site/data/grants.json` | `rows[].pi_names` | 447 of 522 rows have at least one name | Principal-investigator names from public award records (NIH RePORTER, NSF, Sea Grant, OPC, USAspending). No contact details. Owner decision whether to keep names or show organization only. |
-| `site/data/monitoring.json` | `samples[].contributor` | 314 rows, 1 distinct value | Value not reproduced here. Owner to confirm it names an organization and not a person. |
-| `site/data/monitoring.json` | `samples[].lat`, `lon`, `date` | 314 rows | Sample-level coordinates and dates from the one cleared dataset. Public research data; no personal location. |
+| `site/data/california/grants.json` | `rows[].pi_names` | 447 of 522 rows have at least one name | Principal-investigator names from public award records (NIH RePORTER, NSF, Sea Grant, OPC, USAspending). No contact details. Owner decision whether to keep names or show organization only. |
+| `site/data/california/monitoring.json` | `samples[].contributor` | 314 rows, 1 distinct value | Value not reproduced here. Owner to confirm it names an organization and not a person. |
+| `site/data/california/monitoring.json` | `samples[].lat`, `lon`, `date` | 314 rows | Sample-level coordinates and dates from the one cleared dataset. Public research data; no personal location. |
 | Feed and index | `title`, `abstract`, `summary` | all works | Text supplied by OpenAlex and funders. Not checked line by line. |
 
 ## Monitoring rights (related to F4 "public bibliographic metadata only")
 
 - `config/monitoring_publication.yml` lists one cleared dataset, `sf_bay_5gyres_microplastics`,
   licensed CC BY 4.0 by owner determination (QUESTIONS S7.3-A, 2026-11-10).
-- `site/data/monitoring.json` carries 314 sample rows, all from that dataset (checked by
+- `site/data/california/monitoring.json` carries 314 sample rows, all from that dataset (checked by
   `dataset_id` count only).
 - The `datasets` array holds 24 source-registry entries. Most record their licence as unknown
   or provider-dependent and have no observations. The owner should confirm that a registry

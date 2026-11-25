@@ -11,13 +11,13 @@ title: About
 <link rel="stylesheet" href="../components/about.css">
 
 ```js
-import {loadJson, aboutViewModel, releaseDoi, classicUrl} from "../components/atlas.js";
+import {loadJson, aboutViewModel, releaseDoi, classicUrl, rootDataUrl} from "../components/atlas.js";
 import {injectIconSprite} from "../components/shared/icons.js";
 import {mountAboutFlow} from "../components/about_flow.js";
 injectIconSprite();
 const [metadata, release, releaseFlow] = await Promise.all([
   loadJson("build_metadata.json"),
-  loadJson("release.json", {optional: true}),
+  loadJson("release.json", {optional: true, url: rootDataUrl}),
   loadJson("methods_flow.json", {optional: true})
 ]);
 const snapshot = aboutViewModel(metadata, null);

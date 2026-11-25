@@ -61,22 +61,24 @@ def _fixture_root(tmp_path: Path, *, interim: bool = True, analytics: bool = Tru
     )
     (root / "docs").mkdir()
     (root / "docs/QUERY_AUDIT.md").write_text(AUDIT_FIXTURE, encoding="utf-8")
-    (root / "site/data/bundle").mkdir(parents=True)
-    (root / "site/data/bundle/manifest.json").write_text('{"n_works": 3}', encoding="utf-8")
+    (root / "site/data/california/bundle").mkdir(parents=True)
+    (root / "site/data/california/bundle/manifest.json").write_text(
+        '{"n_works": 3}', encoding="utf-8"
+    )
     works = [
         {"work_id": "W1", "plastic_related": True, "ca_any_author": True},
         {"work_id": "W2", "plastic_related": False, "ca_any_author": True},
         {"work_id": "W3", "plastic_related": None, "ca_any_author": False},
     ]
-    (root / "site/data/index.json").write_text(
+    (root / "site/data/california/index.json").write_text(
         json.dumps({"works": works, "authors": [], "counts": {}}), encoding="utf-8"
     )
     _parquet(
-        root / "site/data/bundle/parquet/works.parquet",
+        root / "site/data/california/bundle/parquet/works.parquet",
         {"work_id": ["W1", "W2", "W3"], "year": [2020, 2021, 2022]},
     )
     _parquet(
-        root / "site/data/bundle/parquet/year_tag.parquet",
+        root / "site/data/california/bundle/parquet/year_tag.parquet",
         {"year": [2020], "tag": ["x"], "n": [1]},
     )
     if interim:
@@ -153,12 +155,12 @@ def test_missing_inputs_become_null_with_reason(tmp_path: Path) -> None:
 
 def test_bundle_manifest_exclusions_are_used_when_analytics_absent(tmp_path: Path) -> None:
     root = _fixture_root(tmp_path, analytics=False)
-    (root / "site/data/bundle/manifest.json").write_text(
+    (root / "site/data/california/bundle/manifest.json").write_text(
         json.dumps({"exclusions": {"retracted": 0}}), encoding="utf-8"
     )
     card = release.methods_card(root, release_date=DATE)
     assert card["exclusions"]["value"] == {"retracted": 0}
-    assert card["exclusions"]["source"] == "site/data/bundle/manifest.json"
+    assert card["exclusions"]["source"] == "site/data/california/bundle/manifest.json"
 
 
 def test_audit_precision_is_not_invented_when_absent(tmp_path: Path) -> None:
@@ -216,7 +218,8 @@ def test_abstract_parquet_column_is_refused(tmp_path: Path) -> None:
 def test_write_release_refuses_before_writing_when_abstract_present(tmp_path: Path) -> None:
     root = _full_root(tmp_path)
     _parquet(
-        root / "site/data/bundle/parquet/works.parquet", {"work_id": ["W1"], "abstract": ["t"]}
+        root / "site/data/california/bundle/parquet/works.parquet",
+        {"work_id": ["W1"], "abstract": ["t"]},
     )
     with pytest.raises(release.ReleaseError, match="abstract"):
         release.write_release(DATE, out_root=tmp_path / "out", root=root)

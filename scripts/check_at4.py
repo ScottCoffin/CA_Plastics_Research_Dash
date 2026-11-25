@@ -4,7 +4,7 @@
 (b) no public Parquet column name contains "abstract"; every Parquet file reads with pyarrow
 (c) node runs site/assets/facets.js against the bundle for 25 seeded selections (with search
     tokens); totals, label counts and selected ids equal a Python reference computed from
-    site/data/index.json (OA from the bundle's public works Parquet)
+    site/data/california/index.json (OA from the bundle's public works Parquet)
 (d) institution tiers: non-decreasing in rank order; each member's rank_lo <= its leader's rank_hi
 
 Exit 1 on any failure. Does not read data/processed.
@@ -199,8 +199,8 @@ def _check_tiers(bundle: Path, manifest: dict) -> tuple[bool | None, str]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--bundle-dir", type=Path, default=REPO / "site/data/bundle")
-    ap.add_argument("--index", type=Path, default=REPO / "site/data/index.json")
+    ap.add_argument("--bundle-dir", type=Path, default=REPO / "site/data/california/bundle")
+    ap.add_argument("--index", type=Path, default=REPO / "site/data/california/index.json")
     args = ap.parse_args(argv)
     bundle = args.bundle_dir
     if not (bundle / "manifest.json").exists():

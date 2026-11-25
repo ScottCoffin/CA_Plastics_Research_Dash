@@ -82,4 +82,4 @@ def test_css_is_scoped_to_v4_trend() -> None:
 
 def test_data_dictionary_documents_trend_global() -> None:
     text = (ROOT / "docs" / "DATA_DICTIONARY.md").read_text(encoding="utf-8")
-    assert "### `site/data/trend_global.json`" in text
+    assert "### `site/data/global/trend_global.json`" in text

@@ -3,7 +3,7 @@
 // Spec: docs/PLAT_2_LANDING_SPEC.md. Plain canvas 2D, no animation library (ADR-VD30).
 //
 // Data and assets (all same-origin):
-//   data/trend_global.json              works per year (chart, beat 8-9)
+//   data/global/trend_global.json        works per year (chart, beat 8-9)
 //   data/global/evidence_cells.json     live works per cell for the grid and #evidence (optional, PLAT-2b)
 //   data/global/world_raster.json       world and California pixel rasters (beats 12-13, #regions)
 //   assets/landing/picnic.json          picnic layout, item atlas rects and Voronoi seeds (offline,
@@ -12,7 +12,7 @@
 //   assets/world/world.json             country outlines for the #regions map (loaded lazily)
 // Captions are real DOM text in the stage; the canvas is aria-hidden. Text never overlaps a visual:
 // layout() measures the caption text boxes and places every visual in a safe zone (spec 4.10).
-import {siteRoot} from "./atlas.js";
+import {globalDataUrl, siteRoot} from "./atlas.js";
 
 // ---- timeline -----------------------------------------------------------------------------
 // Positions in scroll units (one unit is about 95% of a viewport height). TOT is the story length.
@@ -227,8 +227,8 @@ export async function mountLandingStory(root) {
   await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   await new Promise((resolve) => (window.requestIdleCallback ? requestIdleCallback(resolve, {timeout: 1500}) : setTimeout(resolve, 200)));
   const [trend, picnic, papers, raster, evidence] = await Promise.all([
-    json("data/trend_global.json"), json("assets/landing/picnic.json"),
-    json("assets/landing/papers.json"), json("data/global/world_raster.json"),
+    json(globalDataUrl("trend_global.json")), json("assets/landing/picnic.json"),
+    json("assets/landing/papers.json"), json(globalDataUrl("world_raster.json")),
     evidenceCells(),
   ]);
   // Footnote under the grid (canvas): live counts name their date; the illustrative grid says so.
@@ -1045,7 +1045,7 @@ export function mountRegionsMap(root) {
   const start = async () => {
     if (started) return;
     started = true;
-    const [raster, world] = await Promise.all([json("data/global/world_raster.json"), json("assets/world/world.json")]);
+    const [raster, world] = await Promise.all([json(globalDataUrl("world_raster.json")), json("assets/world/world.json")]);
     const rows = String(raster.world).split("|"), cols = rows[0].length, cell = raster.cell || 7;
     const mw = cols * cell, mh = rows.length * cell;
     box.style.aspectRatio = `${mw} / ${mh}`;
@@ -1110,7 +1110,7 @@ const LEDE_ILLUSTRATIVE = "Rebuilt daily from OpenAlex once the cell definitions
 let liveCells = null;
 /** The live cell counts, or null when the file is missing, unreadable or invalid. Never rejects. */
 function evidenceCells() {
-  if (!liveCells) liveCells = json("data/global/evidence_cells.json").then(validCells, () => null);
+  if (!liveCells) liveCells = json(globalDataUrl("evidence_cells.json")).then(validCells, () => null);
   return liveCells;
 }
 /** The file when it is plat2b.v1: 5 rows of 6 non-negative integers, max > 0, and some work counted. */

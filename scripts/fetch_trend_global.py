@@ -1,7 +1,7 @@
 """Global works per publication year under the active plastics query (EM-7, V-4 trend panel).
 
 The CA share in the Evidence Map trend panel divides California-connected corpus works by
-the global count this script writes to ``site/data/trend_global.json``. One ``group_by``
+the global count this script writes to ``site/data/global/trend_global.json``. One ``group_by``
 request per run; the file is cached by query version and refreshed after 30 days.
 
 Usage:
@@ -39,7 +39,7 @@ MAX_AGE = timedelta(days=30)
 # One logical request; _request_json's attempts cap keeps retries inside this budget.
 MAX_HTTP_ATTEMPTS = 3
 MAX_URL_CHARS = 8000
-DEFAULT_OUTPUT = ROOT / "site" / "data" / "trend_global.json"
+DEFAULT_OUTPUT = ROOT / "site" / "data" / "global" / "trend_global.json"
 DEFAULT_CONFIG = ROOT / "config" / "queries.yml"
 DEFAULT_USAGE_LOG = ROOT / "data" / "logs" / "api_usage.jsonl"
 

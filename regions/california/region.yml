@@ -6,8 +6,8 @@ name: California
 tier: A
 site_path: /california/
 # Public data directory. Mirrors site_data_dir in regions/_registry.yml (the validated
-# source). PLAT-3 slice 3 keeps California at site/data/ (owner default PLAT3-DATA-PATH).
-data_dir: site/data/
+# source). Owner decision PLAT3-DATA-PATH (2026-11-25): California lives in site/data/california/.
+data_dir: site/data/california/
 # Existing California boundary asset (also read by scripts/build_geography.py:26).
 outline_asset: site/assets/ca_boundaries.geojson
 # California-specific code that exists today. Inventory only; PLAT-3 later slices move

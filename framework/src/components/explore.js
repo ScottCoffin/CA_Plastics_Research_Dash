@@ -2,11 +2,11 @@
 // module. The markup is static in explore.md, inside <div class="gx">; this module fetches
 // explore.json, then fills the scope bar, the statement, the tabs and the panels, and keeps the
 // #scope= and &view= hash state. Every query runs inside root, so ids stay unique per page.
-import {siteRoot} from "./atlas.js";
+import {globalDataUrl} from "./atlas.js";
 import {denominatorShare, readDenominators} from "./v4_trend_model.js";
 
 export async function mountExplore(root) {
-  const response = await fetch(new URL("data/global/explore.json", siteRoot()), {cache: "no-cache"});
+  const response = await fetch(globalDataUrl("explore.json"), {cache: "no-cache"});
   if (!response.ok) throw new Error(`explore.json returned HTTP ${response.status}`);
   const D = await response.json();
   const G = D.grid, S = D.sample.scopes;
@@ -526,7 +526,7 @@ export async function mountExplore(root) {
     // BQ-2.4: the pollution-core share (B/A) from denominators.json, fetched once when the Trend tab first
     // needs it. It is a line under the counts, with the same what-this-is-and-is-not text as the Evidence Map.
     async function pollutionShare(target) {
-      if (!trendPanel.denoms) trendPanel.denoms = fetch(new URL("data/denominators.json", siteRoot()), {cache: "no-cache"}).then((r) => (r.ok ? r.json() : null)).then(readDenominators).catch(() => null);
+      if (!trendPanel.denoms) trendPanel.denoms = fetch(globalDataUrl("denominators.json"), {cache: "no-cache"}).then((r) => (r.ok ? r.json() : null)).then(readDenominators).catch(() => null);
       const denoms = await trendPanel.denoms;
       if (!denoms || !target.isConnected || scope.kind !== "world" || target.querySelector("[data-bq-share]")) return;
       const last = denominatorShare(denoms, "B", "A").at(-1);

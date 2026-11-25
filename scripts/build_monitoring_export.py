@@ -54,7 +54,7 @@ def main() -> None:
     output = args.output or (
         Path("data/processed/normalized/sf_bay_5gyres/site_preview/data/monitoring.json")
         if args.private_preview
-        else Path("site/data/monitoring.json")
+        else Path("site/data/california/monitoring.json")
     )
     if args.private_preview:
         output = require_private_output_outside_site(output)

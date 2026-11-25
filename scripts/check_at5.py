@@ -6,7 +6,10 @@ Static checks (always; no Node needed):
   - global pages (GLOBAL_PAGES) sit at the top of framework/src/; every other page sits in a
     region folder
     (framework/src/california/, PLAT-1); atlas.js resolves data/ from the site root;
-  - data files named in loadJson("...")/dataUrl("...") literals exist in site/data/;
+  - data files named in regionDataUrl("..."), globalDataUrl("..."), rootDataUrl("...") and
+    loadJson("...") literals exist in the folder their helper names: site/data/california/ (the
+    default for regionDataUrl and loadJson), site/data/global/, or site/data/ (rootDataUrl, or
+    loadJson with {url: rootDataUrl}); see docs/DATA_LAYOUT.md;
   - the shared helpers copied by scripts/sync_shared.mjs exist in site/assets/.
 Build checks (with --dist, after `npm run build`):
   - every page rendered; no external CDN or font hosts; no root-absolute asset paths;
@@ -43,6 +46,13 @@ EXTERNAL_HOSTS = (
 
 
 REGIONS = ("california",)
+# Data helpers in framework/src/components/atlas.js -> folder under site/data/ ("" is site/data/).
+# loadJson(path) defaults to the California folder; its {url: helper} option picks another one.
+DATA_HELPER_FOLDERS = {"regionDataUrl": "california", "globalDataUrl": "global", "rootDataUrl": ""}
+DATA_LITERAL = re.compile(
+    r'\b(regionDataUrl|globalDataUrl|rootDataUrl)\(\s*"([^"$`]+)"'
+    r'|\bloadJson\(\s*"([^"$`]+)"(?:\s*,\s*\{[^}]*?\burl:\s*(\w+))?'
+)
 # Global pages at the top level of src/ (the landing page and PLAT-2c).
 GLOBAL_PAGES = ("index.md", "ambassadors.md", "explore.md")
 
@@ -83,13 +93,20 @@ def static_problems() -> list[str]:
                 f"{md.relative_to(ROOT).as_posix()}: pages are {GLOBAL_PAGES} or src/<region>/*.md"
             )
 
-    referenced: set[str] = set()
-    for source in [*SRC.glob("*.md"), *SRC.glob("*/*.md"), *SRC.glob("components/*.js")]:
+    referenced: set[tuple[str, str]] = set()
+    for source in [*SRC.glob("*.md"), *SRC.glob("*/*.md"), *SRC.glob("components/**/*.js")]:
         text = source.read_text(encoding="utf-8")
-        referenced.update(re.findall(r'(?:loadJson|dataUrl)\(\s*"([^"$`]+)"', text))
-    for name in sorted(referenced):
-        if not (SITE / "data" / name).exists():
-            problems.append(f"data file named in a page is missing: site/data/{name}")
+        for helper, literal, load_path, url_helper in DATA_LITERAL.findall(text):
+            if helper:
+                referenced.add((DATA_HELPER_FOLDERS[helper], literal))
+            else:
+                folder = DATA_HELPER_FOLDERS.get(url_helper or "regionDataUrl", "california")
+                referenced.add((folder, load_path))
+    for folder, name in sorted(referenced):
+        if name.endswith("/"):  # a folder such as regionDataUrl("bundle/"), not a file
+            continue
+        if not (SITE / "data" / folder / name).is_file():
+            problems.append(f"data file named in a page is missing: site/data/{folder}/{name}")
 
     sync = (FW / "scripts" / "sync_shared.mjs").read_text(encoding="utf-8")
     block = re.search(r"SHARED_FILES\s*=\s*\[(.*?)\]", sync, re.S)

@@ -47,7 +47,7 @@ def test_evidence_section_keeps_the_illustrative_fallback_markup() -> None:
 
 def test_engine_reads_the_live_cells_and_checks_the_schema() -> None:
     engine = ENGINE.read_text(encoding="utf-8")
-    assert 'json("data/global/evidence_cells.json")' in engine
+    assert 'json(globalDataUrl("evidence_cells.json"))' in engine
     assert '"plat2b.v1"' in engine
     assert "Number.isInteger(n) && n >= 0" in engine
     assert "data.max > 0" in engine

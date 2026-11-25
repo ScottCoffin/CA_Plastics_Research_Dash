@@ -22,9 +22,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas.ingest import orcid as oc  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
-INDEX_JSON = ROOT / "site" / "data" / "index.json"
-INSTITUTIONS_JSON = ROOT / "site" / "data" / "institutions.json"
+INDEX_JSON = region_data_dir() / "index.json"
+INSTITUTIONS_JSON = region_data_dir() / "institutions.json"
 INST_PARQUET = ROOT / "data" / "processed" / "institutions.parquet"
 AUTHORSHIPS = ROOT / "data" / "processed" / "normalized" / "authorships.parquet"
 WORKS = ROOT / "data" / "processed" / "normalized" / "works.parquet"

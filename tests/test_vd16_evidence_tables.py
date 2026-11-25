@@ -146,7 +146,7 @@ def test_views_add_no_data_loads() -> None:
     evidence = _read(EVIDENCE_JS)
     # works_detail.json, plus the optional journal_metrics.json (VD-34); no other data loads.
     assert evidence.count("loadJson(") == 2
-    assert evidence.count("dataUrl(") == 1
+    assert evidence.count("regionDataUrl(") == 1
     trend = _read(TREND_JS)
     assert trend.count("fetch(") == 1
     heatmap = _read(HEATMAP_JS)

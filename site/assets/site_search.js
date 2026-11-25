@@ -1,13 +1,13 @@
 /* Site-wide search (VD-19): the header combobox, the /search results page, and the expert hero
    form. A plain script with no imports or dependencies, loaded on every page from the config head.
-   The index (data/search_index.json, built by scripts/build_search_index.py) loads once, on the
+   The index (data/california/search_index.json, built by scripts/build_search_index.py) loads once, on the
    first focus or keystroke, and is matched in the browser. */
 (function () {
   "use strict";
 
   var script = document.currentScript;
   var BASE = script && script.src ? new URL("../", script.src) : new URL("./", location.href);
-  var INDEX_URL = new URL("data/search_index.json", BASE).href;
+  var INDEX_URL = new URL("data/california/search_index.json", BASE).href;
   var PER_GROUP = 5;
   var GROUP_NAMES = {
     page: "Pages",

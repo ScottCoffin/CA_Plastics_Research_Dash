@@ -1,7 +1,8 @@
-"""Build site/data/pubmed_coverage.json and the PubMed miss-triage sheet (BQ-S9 part C).
+"""Build site/data/california/pubmed_coverage.json and the PubMed miss-triage sheet (BQ-S9 part C).
 
 Inputs: the stage-1 PubMed reference runs in data/interim/pubmed/ (not committed), the committed
-normalized works table and site/data/index.json (the published subset). No network calls. Coverage
+normalized works table and site/data/california/index.json (the published subset).
+No network calls. Coverage
 counts come from atlas.qc.pubmed.coverage(); this script adds the miss sample, the triage sheet and
 the JSON layout.
 
@@ -39,6 +40,7 @@ from atlas.qc.pubmed import (  # noqa: E402
     _norm_pmid,
     coverage,
 )
+from atlas.regions.scope import region_data_dir  # noqa: E402
 
 SCHEMA_VERSION = "bqs-pm-v1"
 SAMPLE_SEED = 20261122
@@ -50,12 +52,12 @@ REFERENCE_DESCRIPTIONS = {
 }
 INTERIM_DIR = ROOT / "data" / "interim" / "pubmed"
 WORKS_PATH = ROOT / "data" / "processed" / "normalized" / "works.parquet"
-INDEX_PATH = ROOT / "site" / "data" / "index.json"
+INDEX_PATH = region_data_dir() / "index.json"
 TAXONOMY_PATH = ROOT / "config" / "failure_taxonomy.yml"
 TRIAGE_PATH = ROOT / "curation" / "pubmed_miss_triage_v1.csv"
-OUTPUT_PATH = ROOT / "site" / "data" / "pubmed_coverage.json"
+OUTPUT_PATH = region_data_dir() / "pubmed_coverage.json"
 TRIAGE_REL = "curation/pubmed_miss_triage_v1.csv"
-OUTPUT_REL = "site/data/pubmed_coverage.json"
+OUTPUT_REL = "site/data/california/pubmed_coverage.json"
 TRIAGE_COLUMNS = (
     "pmid",
     "doi",
@@ -71,7 +73,7 @@ TRIAGE_COLUMNS = (
 HUMAN_COLUMNS = ("triage_class", "note", "reviewer", "reviewed_at")
 SOURCE = (
     "NCBI PubMed E-utilities reference runs (stage 1, interim, not committed); Atlas works from "
-    "data/processed/normalized/works.parquet, published subset from site/data/index.json"
+    "data/processed/normalized/works.parquet, published subset from site/data/california/index.json"
 )
 DEFINITION = (
     "Coverage is the share of PubMed reference records that also appear among the published Atlas "
@@ -201,7 +203,7 @@ def load_atlas(works_path: Path, index_path: Path) -> AtlasWorks:
     index = json.loads(index_path.read_text(encoding="utf-8"))
     published_ids = [work["work_id"] for work in index["works"]]
     if len(set(published_ids)) != len(published_ids):
-        raise BuildError("site/data/index.json has duplicate work ids")
+        raise BuildError("site/data/california/index.json has duplicate work ids")
     absent = [work_id for work_id in published_ids if work_id not in by_id]
     if absent:
         raise BuildError(f"{len(absent)} published work ids are not in works.parquet")

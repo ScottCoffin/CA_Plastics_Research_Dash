@@ -1,6 +1,6 @@
 """Expert collaboration network (S9.4, spec Part E): co-authorship graph of California experts.
 
-Built from the public ``site/data/index.json`` only (no raw data), so the result is
+Built from the public region ``index.json`` only (no raw data), so the result is
 reproducible from committed files. Edge weight = number of co-authored plastic-related works
 (Newman fractional counting optional). Louvain communities and a seeded spring layout use fixed
 seeds, so reruns give the same clusters. The stored positions are a ForceAtlas2 layout started
@@ -228,7 +228,7 @@ def build_network(
     fractional: bool = False,
     generated_at: str = "",
 ) -> dict[str, Any]:
-    """Network payload for ``site/data/network.json``."""
+    """Network payload for the region's ``network.json``."""
     import networkx as nx  # lazy: keeps module import cheap (networkx is a declared dependency)
 
     authors = list(index.get("authors") or [])

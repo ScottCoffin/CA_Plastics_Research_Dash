@@ -27,7 +27,7 @@ from atlas.analytics.sql import build_analytics  # noqa: E402
 WORKS = Path("data/processed/normalized/works.parquet")
 AUTHORSHIPS = Path("data/processed/normalized/authorships.parquet")
 INSTITUTIONS = Path("data/processed/normalized/institutions.parquet")
-SCOPE = Path("site/data/index.json")
+SCOPE = Path("site/data/california/index.json")
 OUTPUT_DIR = Path("data/processed/analytics")
 N_INSTITUTIONS = 2000
 N_CA_INSTITUTIONS = 300

@@ -102,7 +102,7 @@ def rebuild(out: Path) -> Path:
     """
 
     site = out / "site"
-    data = site / "data"
+    data = site / "data" / "california"
     normalized_dir = out / "normalized"
     labels_dir = out / "labels"
     interim = out / "interim" / "grants"

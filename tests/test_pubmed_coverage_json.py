@@ -1,7 +1,7 @@
 """Offline tests for scripts/build_pubmed_coverage_json.py (BQ-S9 part C).
 
 Tiny in-memory fixtures only. Nothing here reads data/interim/ or the network. The committed-payload
-checks read site/data/pubmed_coverage.json and skip when it is not built.
+checks read site/data/california/pubmed_coverage.json and skip when it is not built.
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ from atlas.nlp.active_relevance import wilson_interval
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build_pubmed_coverage_json.py"
-OUTPUT = ROOT / "site" / "data" / "pubmed_coverage.json"
+OUTPUT = ROOT / "site" / "data" / "california" / "pubmed_coverage.json"
 TAXONOMY_PATH = ROOT / "config" / "failure_taxonomy.yml"
 
 
@@ -383,7 +383,9 @@ def test_fixture_payload_names_the_stage_version_and_triage_file() -> None:
     assert payload["triage_classes"] == TAXONOMY.class_ids
 
 
-@pytest.mark.skipif(not OUTPUT.exists(), reason="site/data/pubmed_coverage.json is not built")
+@pytest.mark.skipif(
+    not OUTPUT.exists(), reason="site/data/california/pubmed_coverage.json is not built"
+)
 def test_committed_payload_schema() -> None:
     text = OUTPUT.read_text(encoding="utf-8")
     payload = json.loads(text)

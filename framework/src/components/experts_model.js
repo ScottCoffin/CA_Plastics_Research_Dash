@@ -275,7 +275,7 @@ export function safeHttpUrl(value) {
   }
 }
 
-// Expert drawer profile from data/authors/<id>.json: owner-approved photo, ORCID bio, keywords and links.
+// Expert drawer profile from data/california/authors/<id>.json: owner-approved photo, ORCID bio, keywords and links.
 // Returns "" when there is nothing to show. name labels the photo alt text.
 export function profileHtml(profile, name = "") {
   if (!profile || typeof profile !== "object") return "";

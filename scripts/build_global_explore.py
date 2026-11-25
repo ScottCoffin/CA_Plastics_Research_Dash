@@ -34,13 +34,13 @@ GLOBAL = ROOT / "site" / "data" / "global"
 DEFAULT_RASTER = GLOBAL / "world_raster.json"
 DEFAULT_WORLD = ROOT / "site" / "assets" / "world" / "world.json"
 DEFAULT_COUNTS = GLOBAL / "global_counts.json"
-DEFAULT_TREND = ROOT / "site" / "data" / "trend_global.json"
+DEFAULT_TREND = ROOT / "site" / "data" / "global" / "trend_global.json"
 DEFAULT_SAMPLE = GLOBAL / "explore_sample.json"
 DEFAULT_OUTPUT = GLOBAL / "explore.json"
 
 CALIFORNIA = "US-CA"
 # The California atlas's own works count (counts.works in its build metadata, rebuilt daily).
-DEFAULT_METADATA = ROOT / "site" / "data" / "build_metadata.json"
+DEFAULT_METADATA = ROOT / "site" / "data" / "california" / "build_metadata.json"
 TREND_FIRST_YEAR = 1970
 # A small country's land cell must lie within 3 cells (squared distance 9) of its interior point.
 MAX_STEAL_DIST2 = 9

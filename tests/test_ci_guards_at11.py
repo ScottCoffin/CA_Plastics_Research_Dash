@@ -277,7 +277,7 @@ def test_missing_initial_file_is_detected(tmp_path: Path) -> None:
 
 
 def test_committed_site_data_passes_default_limits() -> None:
-    result = check_site_payload(ROOT / "site" / "data")
+    result = check_site_payload(ROOT / "site" / "data" / "california")
     assert result.problems == []
     assert result.metrics["initial_gzip_bytes"] <= 3_000_000
     assert result.metrics["largest_file_bytes"] <= 25_000_000

@@ -1,6 +1,7 @@
 """Write ``site/feed.xml``, the Atom digest of new CA-plastic papers and awards (S11.4).
 
-Reads only the public payloads ``site/data/index.json`` and ``site/data/grants.json``.
+Reads only the public payloads ``site/data/california/index.json`` and
+``site/data/california/grants.json``.
 Offline and deterministic: unchanged inputs give a byte-identical feed. The workflow
 step is best effort, so a failure here never blocks the Pages deploy.
 """

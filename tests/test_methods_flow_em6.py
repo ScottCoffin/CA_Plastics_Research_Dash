@@ -14,7 +14,7 @@ flow_build = importlib.util.module_from_spec(_SPEC)
 assert _SPEC.loader is not None
 _SPEC.loader.exec_module(flow_build)
 
-OUTPUT = REPO / "site" / "data" / "methods_flow.json"
+OUTPUT = REPO / "site" / "data" / "california" / "methods_flow.json"
 
 
 def _card() -> dict:

@@ -1,4 +1,4 @@
-"""Write site/data/network_metrics.json, the collaboration-structure metrics (BQ-3.2).
+"""Write site/data/california/network_metrics.json, the collaboration-structure metrics (BQ-3.2).
 
 Usage: py -3.14 scripts/build_network_metrics.py [--check] [--null-replicates R]
 Reads only committed site files (offline). --check rebuilds in memory and fails when the
@@ -58,7 +58,7 @@ def _null_block_problem(block: object, replicates: int) -> str | None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    site_data = ROOT / "site" / "data"
+    site_data = ROOT / "site" / "data" / "california"
     parser.add_argument("--index", default=str(site_data / "index.json"))
     parser.add_argument("--institutions", default=str(site_data / "institutions.json"))
     parser.add_argument("--metadata", default=str(site_data / "build_metadata.json"))

@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 JS = ROOT / "framework" / "src" / "components" / "resources.js"
-PAYLOAD = ROOT / "site" / "data" / "linkouts.json"
+PAYLOAD = ROOT / "site" / "data" / "california" / "linkouts.json"
 
 
 def test_card_uses_a_single_badge_instead_of_not_stated_fields() -> None:

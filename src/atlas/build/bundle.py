@@ -1,6 +1,6 @@
 """Public, abstract-free serving bundle (Add-on A1 Appendix C, AT-4).
 
-Inputs: the published site/data/index.json works, optionally the normalized works and
+Inputs: the published region ``index.json`` works, optionally the normalized works and
 institutions Parquet (never their abstract column), and optionally the AT-3 analytics
 tables. Outputs go into one directory: works_index.json, facets.json, facets.bin,
 inst_tiers.json, and parquet/*.parquet. The build writes a sibling staging directory and

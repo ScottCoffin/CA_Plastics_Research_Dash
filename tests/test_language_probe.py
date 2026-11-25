@@ -14,7 +14,7 @@ from typing import Any
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMITTED = ROOT / "site" / "data" / "language_probe.json"
+COMMITTED = ROOT / "site" / "data" / "global" / "language_probe.json"
 VOCABULARY = ROOT / "config" / "search_vocabulary_v1.yml"
 
 

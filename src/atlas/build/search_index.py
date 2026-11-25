@@ -1,4 +1,4 @@
-"""Header search index for the Atlas (VD-19): site/data/search_index.json.
+"""Header search index for the Atlas (VD-19): search_index.json in the region data folder.
 
 The header search fetches this one file on first use and matches it in the browser. Each item is
 ``[type_index, label, detail, href]``; ``types`` names the type indexes in display order. Hrefs are
@@ -18,6 +18,7 @@ from typing import Any
 from urllib.parse import quote, urlencode
 
 from atlas.build.seo import load_topic_labels
+from atlas.regions.scope import region_data_rel
 
 SCHEMA_VERSION = 1
 TYPES = ("page", "expert", "institution", "topic", "funder", "term", "resource")
@@ -245,7 +246,7 @@ def serialize(index: dict) -> str:
 
 def load_sources(root: Path) -> dict[str, Any]:
     """Read the committed site files and framework sources the index is built from."""
-    data = root / "site" / "data"
+    data = root / region_data_rel()
     site_index = json.loads((data / "index.json").read_text(encoding="utf-8"))
     institutions = json.loads((data / "institutions.json").read_text(encoding="utf-8"))
     if isinstance(institutions, dict):

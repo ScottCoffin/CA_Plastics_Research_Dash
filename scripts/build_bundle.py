@@ -19,10 +19,10 @@ from atlas.build.bundle import build_bundle  # noqa: E402
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--index", type=Path, default=REPO / "site/data/index.json")
+    ap.add_argument("--index", type=Path, default=REPO / "site/data/california/index.json")
     ap.add_argument("--normalized-dir", type=Path, default=REPO / "data/processed/normalized")
     ap.add_argument("--analytics-dir", type=Path, default=REPO / "data/processed/analytics")
-    ap.add_argument("--output-dir", type=Path, default=REPO / "site/data/bundle")
+    ap.add_argument("--output-dir", type=Path, default=REPO / "site/data/california/bundle")
     args = ap.parse_args(argv)
 
     manifest = build_bundle(

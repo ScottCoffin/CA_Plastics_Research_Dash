@@ -1,4 +1,4 @@
-"""Export the link-out registry to site/data/linkouts.json (Add-on A2 §8, EM-5a).
+"""Export the link-out registry to site/data/california/linkouts.json (Add-on A2 §8, EM-5a).
 
 Only the public display fields from atlas.linkouts.strip_entries are written, plus each card's
 icon and initials (config/linkout_icons.yml; VD-32) and its Atlas steward_inst_id
@@ -17,10 +17,11 @@ from typing import Any
 import yaml
 
 from atlas import linkouts
+from atlas.regions.scope import region_data_dir
 
 SCHEMA_VERSION = "em5.v1"
 SOURCE = "config/linkouts.yml"
-OUTPUT_PATH = linkouts.ROOT / "site" / "data" / "linkouts.json"
+OUTPUT_PATH = region_data_dir() / "linkouts.json"
 ICONS_PATH = linkouts.ROOT / "config" / "linkout_icons.yml"
 ICON_DIR = "assets/linkouts/"
 INITIALS_PATTERN = re.compile(r"^[A-Z0-9]{1,3}$")

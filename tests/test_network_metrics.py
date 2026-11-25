@@ -22,7 +22,7 @@ from atlas.analytics.network_metrics import (
 pytest.importorskip("networkx")
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMITTED = ROOT / "site" / "data" / "network_metrics.json"
+COMMITTED = ROOT / "site" / "data" / "california" / "network_metrics.json"
 SCRIPT = ROOT / "scripts" / "build_network_metrics.py"
 WINDOW_IDS = ["all", "2011-2015", "2016-2020", "2021-2025", "2026"]
 # Ids in the synthetic corpus; X is a co-author outside the authors list.
@@ -349,7 +349,7 @@ def test_generated_at_is_the_only_field_check_ignores() -> None:
 
 def _committed() -> dict[str, Any]:
     if not COMMITTED.exists():
-        pytest.skip("site/data/network_metrics.json not built yet")
+        pytest.skip("site/data/california/network_metrics.json not built yet")
     return json.loads(COMMITTED.read_text(encoding="utf-8"))
 
 

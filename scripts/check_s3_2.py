@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
-DATA = SITE / "data"
+DATA = SITE / "data" / "california"
 
 
 def _read_json(name: str) -> dict:
@@ -37,7 +37,7 @@ def main() -> None:
         "About tab": 'data-tab="about"',
         "hash state": "window.location.hash",
         "CSV export": "text/csv;charset=utf-8",
-        "data fetch": "data/index.json",
+        "data fetch": "data/california/index.json",
         "responsive layout": "@media (max-width",
     }
     for label, marker in required_markers.items():

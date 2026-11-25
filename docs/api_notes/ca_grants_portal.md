@@ -32,7 +32,7 @@
 - A call is an opportunity, not an award.
 
 ## Refresh
-- `py -3.14 scripts/build_open_calls.py` (live fetch) or `--csv PATH` (local copy). Output: `site/data/open_calls.json`.
+- `py -3.14 scripts/build_open_calls.py` (live fetch) or `--csv PATH` (local copy). Output: `site/data/california/open_calls.json`.
 - A failed fetch or unusable CSV is `deferred`, exits 0, and leaves the existing JSON untouched. The CI step `Refresh open funding calls` runs with `continue-on-error: true`.
 - The licence is public domain; no attribution is legally required, but the source is shown in the panel.
 

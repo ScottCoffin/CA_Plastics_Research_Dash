@@ -3,7 +3,8 @@
 These are PROBES, not recall estimates. No gold set exists yet, so nothing here says how many
 relevant works the v3.1 query finds. Every output is labelled as a probe in the JSON.
 
-1. Language probe (no network): for each of the 16 term sets in ``site/data/language_probe.json``,
+1. Language probe (no network): for each of the 16 term sets in
+   ``site/data/global/language_probe.json``,
    the share of its fixed-seed sample that the v3.1 query also retrieves, with a Wilson 95%
    interval. Sets are never pooled.
 2. Anchor overlap: the 42 theme anchors (``tests/fixtures/theme_anchors.json``, BQ-S6) are filtered
@@ -53,7 +54,7 @@ from atlas.util.cost import ApiCostLogger  # noqa: E402
 
 SCHEMA_VERSION = "bq13-v1"
 CONFIG = ROOT / "config" / "queries.yml"
-LANGUAGE_PROBE = ROOT / "site" / "data" / "language_probe.json"
+LANGUAGE_PROBE = ROOT / "site" / "data" / "global" / "language_probe.json"
 THEME_ANCHORS = ROOT / "tests" / "fixtures" / "theme_anchors.json"
 CACHE_DIR = ROOT / "data" / "interim" / "bq1_3"
 USAGE_LOG = ROOT / "data" / "logs" / "api_usage.jsonl"
@@ -444,7 +445,7 @@ def build_payload(
             ],
         },
         "language_probe": {
-            "source": "site/data/language_probe.json",
+            "source": "site/data/global/language_probe.json",
             "method": "Share of the fixed-seed sample of each term set also retrieved by v3.1; "
             "Wilson 95%; no network calls; term sets are not pooled.",
             "term_sets": list(language_rows),

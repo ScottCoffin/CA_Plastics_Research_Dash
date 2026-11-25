@@ -77,7 +77,7 @@ def _tree(root: Path) -> Path:
     """A small, internally consistent fixture: 10 unique, 2 no-CA, 1 curated, 7 published."""
     _write_json(
         root,
-        "site/data/build_metadata.json",
+        "site/data/california/build_metadata.json",
         {
             "counts": {"works": 7, "plastic_works": 5, "labeled_works": 7},
             "flow": {
@@ -97,7 +97,7 @@ def _tree(root: Path) -> Path:
     _write_json(root, "site/data/global/explore.json", {"california": {"cells": [], "works": 7}})
     _write_json(
         root,
-        "site/data/index.json",
+        "site/data/california/index.json",
         {
             "counts": {"works": 7},
             "works": [{"work_id": f"W{i}", "plastic_related": i < 5} for i in range(7)],
@@ -174,7 +174,11 @@ def test_disagreeing_sources_are_reported_as_diff(tmp_path: Path) -> None:
 
 def test_plastic_row_reads_counts_not_flow(tmp_path: Path) -> None:
     root = _tree(tmp_path)
-    _edit(root, "site/data/build_metadata.json", lambda d: d["counts"].update(plastic_works=4))
+    _edit(
+        root,
+        "site/data/california/build_metadata.json",
+        lambda d: d["counts"].update(plastic_works=4),
+    )
 
     result = report.collect(root)
 
@@ -186,7 +190,7 @@ def test_unexplained_exclusions_are_flagged_as_possible_bug(tmp_path: Path) -> N
     root = _tree(tmp_path)
     _edit(
         root,
-        "site/data/build_metadata.json",
+        "site/data/california/build_metadata.json",
         lambda d: d["curation"].update(works_excluded_listed=10),
     )
 
@@ -218,7 +222,7 @@ def test_missing_file_is_a_clear_error(tmp_path: Path, capsys: pytest.CaptureFix
 
 def test_missing_field_is_a_clear_error(tmp_path: Path) -> None:
     root = _tree(tmp_path)
-    _edit(root, "site/data/build_metadata.json", lambda d: d["flow"].pop("published"))
+    _edit(root, "site/data/california/build_metadata.json", lambda d: d["flow"].pop("published"))
 
     with pytest.raises(report.CountSourceError, match="missing field flow.published"):
         report.collect(root)

@@ -1,6 +1,7 @@
 """Package the versioned release snapshot ZIP for Zenodo archiving (S10.3, AT-10).
 
-The ZIP holds only public and curated files: ``site/data/*.json``, ``site/feed.xml``,
+The ZIP holds only public and curated files: the top-level ``*.json`` of each site data folder
+(``site/data``, ``site/data/california``, ``site/data/global``), ``site/feed.xml``,
 the gold and split files in ``curation/``, and the query and taxonomy definitions in
 ``config/``. It also holds a ``MANIFEST.json`` (path, bytes, sha256, license per file)
 and a ``README.txt`` with the citation. Raw and interim data, ``.env`` files, and any
@@ -118,7 +119,8 @@ def discover(root: Path) -> list[Entry]:
     """Return the snapshot inputs under ``root`` in sorted order."""
 
     entries: list[Entry] = []
-    for path in sorted((root / "site/data").glob("*.json")):
+    folders = [root / "site/data", root / "site/data/california", root / "site/data/global"]
+    for path in (p for folder in folders for p in sorted(folder.glob("*.json"))):
         if path.is_file():
             notes = ""
             if path.name == "monitoring.json":
@@ -143,7 +145,7 @@ def _readme(version: str, source_commit: str | None, release_name: str | None = 
     commit = source_commit or "not recorded"
     year = version[:4] if version[:4].isdigit() else "n.d."
     contents = [
-        "  site/data/*.json   public payloads (CC BY-NC 4.0, derived data)",
+        "  site/data/**/*.json   public payloads (CC BY-NC 4.0, derived data)",
         "  site/feed.xml      Atom digest (CC BY-NC 4.0)",
         "  curation/          gold sets and split files (CC BY-NC 4.0)",
         "  config/            query and taxonomy definitions (PolyForm Noncommercial 1.0.0)",

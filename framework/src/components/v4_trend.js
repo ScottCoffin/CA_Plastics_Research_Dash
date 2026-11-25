@@ -1,9 +1,9 @@
 // V-4 trend panel for the Evidence Map (EM-7): works per year by topic, and the California share of
-// matching records (C/A) from site/data/denominators.json (BQ-2.4). Published plastic-related works (D)
+// matching records (C/A) from site/data/global/denominators.json (BQ-2.4). Published plastic-related works (D)
 // sit beside the share and are never divided. Hand-built SVG; no chart library.
 // Inputs: idx is the AT-4 BitmaskIndex (window.AtlasFacets) that the Evidence Map page loads.
 import "./shared/topics.js";
-import {dataUrl} from "./atlas.js";
+import {globalDataUrl} from "./atlas.js";
 import {
   FIRST_YEAR,
   countsByYear,
@@ -26,7 +26,7 @@ const PLOT_H = H - M.top - M.bottom;
 
 async function loadDenominators() {
   try {
-    const response = await fetch(dataUrl("denominators.json"));
+    const response = await fetch(globalDataUrl("denominators.json"));
     if (!response.ok) return null;
     return readDenominators(await response.json());
   } catch (_error) {

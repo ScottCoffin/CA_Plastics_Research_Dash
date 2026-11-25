@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
-DATA = SITE / "data"
+DATA = SITE / "data" / "california"
 
 
 def main() -> None:

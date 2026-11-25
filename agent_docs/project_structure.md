@@ -26,7 +26,8 @@
   API verification notes under `docs/api_notes/`.
 - `tests/` contains pytest tests and bounded JSON/text fixtures.
 - `site/` contains the S3 static atlas shell, Experts and Institutions views,
-  and deterministic static data payloads under `site/data/`.
+  and deterministic static data payloads under `site/data/` (California in `site/data/california/`,
+  global series in `site/data/global/`).
 - `.github/workflows/` contains CI, Pages build/deploy, keepalive, and
   watchdog workflows.
 - `AGENTS.md` contains the repository-level continuous-checkpoint contract.

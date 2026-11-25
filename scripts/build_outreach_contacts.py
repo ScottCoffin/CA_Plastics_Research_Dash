@@ -1,7 +1,7 @@
 """Build the owner-only expert contact list for outreach (S9.6a).
 
 Reads raw OpenAlex work snapshots under ``data/raw/openalex_works/`` and the expert
-list in ``site/data/index.json``, then writes ``data/private/outreach_contacts.csv``.
+list in ``site/data/california/index.json``, then writes ``data/private/outreach_contacts.csv``.
 Only emails printed in a work's ``raw_affiliation_strings`` on that expert's own
 authorship are used. Opt-outs in ``data/private/outreach_optout.csv`` are removed. No network.
 
@@ -30,6 +30,7 @@ from atlas.outreach.contacts import (  # noqa: E402
     short_openalex_id,
     write_contacts,
 )
+from atlas.regions.scope import region_data_rel  # noqa: E402
 
 
 def _works_from_file(path: Path) -> list[dict] | None:
@@ -83,7 +84,7 @@ def main(argv: list[str] | None = None, root: Path = REPO_ROOT) -> int:
 
     private = root / "data" / "private"
     raw_dir = args.raw_dir or root / "data" / "raw" / "openalex_works"
-    index_path = args.index or root / "site" / "data" / "index.json"
+    index_path = args.index or root / region_data_rel() / "index.json"
     output = args.output or private / "outreach_contacts.csv"
 
     experts = _load_experts(index_path)

@@ -6,7 +6,7 @@ import "./shared/topics.js";
 import "./shared/expert_page.js";
 import {icon} from "./shared/icons.js";
 import {institutionTypeLabel} from "./shared/labels.js";
-import {dataUrl, escapeHtml} from "./atlas.js";
+import {regionDataUrl, escapeHtml} from "./atlas.js";
 import {
   EMPTY_MATCH_TEXT,
   buildAuthorSearchIndex,
@@ -242,7 +242,7 @@ async function openDrawer(authorId) {
   $("drawer-content").innerHTML = '<p class="detail-meta">Loading researcher details…</p>';
   $("drawer-close").focus();
   try {
-    const response = await fetch(dataUrl(`authors/${encodeURIComponent(authorId)}.json`), {cache: "no-cache"});
+    const response = await fetch(regionDataUrl(`authors/${encodeURIComponent(authorId)}.json`), {cache: "no-cache"});
     if (!response.ok) throw new Error(`author detail returned HTTP ${response.status}`);
     const detail = await response.json();
     const all = summaries();
@@ -383,7 +383,7 @@ async function loadData() {
   setStatePanel(LOADING_HTML);
   try {
     const [index, institutions] = await Promise.all(["index.json", "institutions.json"].map(async (path) => {
-      const response = await fetch(dataUrl(path), {cache: "no-cache"});
+      const response = await fetch(regionDataUrl(path), {cache: "no-cache"});
       if (!response.ok) throw new Error(`${path} returned HTTP ${response.status}`);
       return response.json();
     }));

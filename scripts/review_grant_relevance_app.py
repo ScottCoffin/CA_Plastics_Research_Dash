@@ -9,7 +9,7 @@ straight to curation/grant_relevance.csv (atomic save). Grant details are read
 from the local data/interim/grants/grants_merged.parquet when it exists and are
 only displayed here; abstracts are never printed or committed. Nothing is sent
 anywhere. After review, run ``py -3.14 scripts/build_grants_export.py`` to
-refresh site/data/grants.json.
+refresh site/data/california/grants.json.
 
 Haiku's suggestion is kept in ``assist_plastic_related``. Confirm and Not
 plastic-related set ``plastic_related`` to the owner's choice, and ``owner_review``

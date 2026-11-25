@@ -415,7 +415,7 @@ def test_expert_page_badge_helpers_runtime(tmp_path: Path) -> None:
 
 def test_expert_page_badge_markup_and_sections() -> None:
     html = PAGE.read_text(encoding="utf-8")
-    assert 'fetchJson("../data/expert_badges.json")' in html, (
+    assert 'fetchJson("../data/california/expert_badges.json")' in html, (
         "badges are fetched once from the site data folder"
     )
     assert "loadBadges()" in html and "renderBadgeSections(badges, institutions, networks)" in html
@@ -525,9 +525,9 @@ def test_network_badge_helper_is_exported_and_guards_links() -> None:
 
 def test_expert_page_loads_research_networks_once_and_shows_them_in_the_header() -> None:
     html = PAGE.read_text(encoding="utf-8")
-    assert 'fetchJson("../data/research_networks.json")' in html and "json.networks" in html, (
-        "networks are fetched once from the site data folder; a failed fetch means no badge"
-    )
+    assert (
+        'fetchJson("../data/california/research_networks.json")' in html and "json.networks" in html
+    ), "networks are fetched once from the site data folder; a failed fetch means no badge"
     assert "S.networksPromise" in html and "loadNetworks()" in html
     assert "renderExpert(detail, institutions, badges, networks)" in html
     assert "networkBadgesHtml(networks, S.id)" in html

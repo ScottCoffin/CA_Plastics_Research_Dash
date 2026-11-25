@@ -6,7 +6,7 @@
 // Pure helpers live in evidence_model.js; this file owns the DOM.
 import "./shared/facets.js";
 import "./shared/topics.js";
-import {dataUrl, formatCount, loadJson} from "./atlas.js";
+import {regionDataUrl, formatCount, loadJson} from "./atlas.js";
 import {mountV3Flow} from "./v3_flow.js";
 import {mountV4Trend} from "./v4_trend.js";
 import {mountHeatmap} from "./ev_heatmap.js";
@@ -340,7 +340,7 @@ async function loadBundle() {
   try {
     // The works detail names each work's journal. Without it the journal filter is left out, not the page.
     [index, detail] = await Promise.all([
-      window.AtlasFacets.BitmaskIndex.load(dataUrl("bundle/")),
+      window.AtlasFacets.BitmaskIndex.load(regionDataUrl("bundle/")),
       loadDetail().catch(() => null)
     ]);
   } catch {

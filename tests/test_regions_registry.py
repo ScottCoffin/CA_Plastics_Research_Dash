@@ -104,7 +104,7 @@ def test_region_yml_matches_registry() -> None:
     assert config["slug"] == california.slug
     assert config["tier"] == california.tier
     assert config["site_path"] == "/california/"
-    assert config["data_dir"] == "site/data/"
+    assert config["data_dir"] == "site/data/california/"
     assert (REPO_ROOT / config["outline_asset"]).is_file()
     for adapter in config["adapters"]:
         assert (REPO_ROOT / adapter["module"]).is_file(), adapter["module"]

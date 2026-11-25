@@ -1,7 +1,8 @@
 """Atom 1.0 digest feed of new CA-plastic papers and new awards (S11.4).
 
-Reads the public payloads ``site/data/index.json`` (works and authors) and
-``site/data/grants.json`` (awards) and renders ``site/feed.xml``. Stdlib only. The feed
+Reads the public payloads ``index.json`` (works and authors) and
+``grants.json`` (awards) in the region data folder and renders ``site/feed.xml``. Stdlib only.
+The feed
 carries titles, identifiers, links, dates, and short summaries. It never copies
 abstracts, contact fields, or any corpus data.
 
@@ -29,6 +30,8 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
 
+from atlas.regions.scope import region_data_dir
+
 ATOM_NS = "http://www.w3.org/2005/Atom"
 SITE_URL = "https://plastiverse.live/"
 # PLAT-1 (2026-11-17): the California atlas moved to /california/; the feed stays at the root.
@@ -44,8 +47,8 @@ MAX_AWARDS = 30
 EPOCH = "1970-01-01T00:00:00Z"
 PAPER_LINK_BASE = "https://openalex.org/"
 
-DEFAULT_INDEX = Path("site/data/index.json")
-DEFAULT_GRANTS = Path("site/data/grants.json")
+DEFAULT_INDEX = region_data_dir() / "index.json"
+DEFAULT_GRANTS = region_data_dir() / "grants.json"
 DEFAULT_OUTPUT = Path("site/feed.xml")
 
 _WORK_ID = re.compile(r"^W[0-9]+$")

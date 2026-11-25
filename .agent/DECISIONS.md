@@ -807,3 +807,12 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
   (5) "recycler" is removed: OpenAlex stems it to "recycl", so it matched 23,264 anchored works alone.
 - **Consequences:** the combined candidate is one 5,175-character request; it adds about 1,800 records (+1.3%)
   to v3.1. Not promoted: promotion follows only the existing precision rule after BQ-S3 (A3-D10).
+
+## ADR-PLAT3-DATA-PATH-2026-11-25: California data moves to site/data/california/
+- **Context:** PLAT-3 slice 3 kept California at `site/data/` by default (no public URL change). The owner chose
+  the per-region layout instead.
+- **Decision (owner, 2026-11-25):** move California's payloads to `site/data/california/` as a clean break (like
+  PLAT-1; old JSON URLs return 404). Lead defaults for mixed files: trend_global, language_probe and denominators
+  go to `site/data/global/`; release.json and status.json stay at the root. Layout and rules: docs/DATA_LAYOUT.md.
+- **Consequences:** one helper per side (Python `region_data_dir()`, front end `regionDataUrl()`); the daily ingest
+  commits the new paths; the release snapshot packages root, california and global top-level JSON.

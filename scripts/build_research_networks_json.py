@@ -1,4 +1,4 @@
-"""Export the research networks registry to site/data/research_networks.json (NET-1).
+"""Export the research networks registry to site/data/california/research_networks.json (NET-1).
 
 Only the public display fields from atlas.networks.public_payload are written. --check
 exits 1 when the committed file differs from a fresh build.
@@ -13,8 +13,9 @@ from pathlib import Path
 from typing import Any
 
 from atlas import networks
+from atlas.regions.scope import region_data_dir
 
-OUTPUT_PATH = networks.ROOT / "site" / "data" / "research_networks.json"
+OUTPUT_PATH = region_data_dir() / "research_networks.json"
 
 
 def build_payload(registry: dict[str, Any] | None = None) -> dict[str, Any]:

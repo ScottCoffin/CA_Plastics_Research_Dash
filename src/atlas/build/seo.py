@@ -1,6 +1,6 @@
 """Static SEO entity pages and sitemaps (S3.8).
 
-``build_site`` writes crawlable HTML for every expert in ``site/data/index.json`` and for
+``build_site`` writes crawlable HTML for every expert in the region's ``index.json`` and for
 every California-connected institution with works, plus ``sitemap.xml`` and its child
 sitemaps. The output is generated at deploy time (gitignored) and links into the
 interactive app. Only public bibliographic fields are written: abstracts and contact
@@ -15,6 +15,8 @@ import re
 from pathlib import Path
 from typing import Any
 from xml.sax.saxutils import escape as xml_escape
+
+from atlas.regions.scope import region_data_folder
 
 DEFAULT_BASE_URL = "https://plastiverse.live"
 ATLAS_NAME = "CA Plastics Research Atlas"
@@ -538,11 +540,11 @@ def build_site(site_dir: Path, base_url: str = DEFAULT_BASE_URL) -> dict[str, in
 
     Returns counts of pages, sitemap URLs and bytes written. Input is read from
     ``site_dir/data``; topic labels come from ``site_dir/assets/topics.js`` when present.
-    Research networks come from ``site_dir/data/research_networks.json`` when present (a
+    Research networks come from ``site_dir/data/<region>/research_networks.json`` when present (a
     missing file means no networks).
     """
     base = _normalise_base(base_url)
-    data_dir = site_dir / "data"
+    data_dir = site_dir / "data" / region_data_folder()
     region_dir = site_dir / REGION_PATH.strip("/")
     index = _read_json(data_dir / "index.json")
 

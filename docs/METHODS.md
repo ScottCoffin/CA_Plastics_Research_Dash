@@ -42,7 +42,7 @@ replacement for the later owner promotion review or the gold-set evaluation.
 
 The site is a static export of OpenAlex work, author, and institution metadata
 joined to the project's California institution registry. The browser reads the
-exported JSON and does not query OpenAlex. `site/data/build_metadata.json`
+exported JSON and does not query OpenAlex. `site/data/california/build_metadata.json`
 records the export's `generated_at` timestamp and the counts reported on the
 About tab. The timestamp is the time this static snapshot was built; it is not
 the last-modified time for every underlying OpenAlex record. The value

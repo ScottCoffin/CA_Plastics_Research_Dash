@@ -1,8 +1,9 @@
 """Expert profile badges (S9.3): funding and data stewardship evidence per expert.
 
-Writes ``site/data/expert_badges.json``, read lazily by the full expert profile page.
+Writes ``expert_badges.json`` in the region data folder, read lazily by the full expert
+profile page.
 
-* Funding: plastic-related grants in ``site/data/grants.json`` either linked to one of the
+* Funding: plastic-related grants in the region's ``grants.json`` either linked to one of the
   expert's works (``data/processed/work_grant_links.parquet``, OpenAlex award IDs) or whose
   principal-investigator name matches the expert's name at a California organisation. Name
   keys are (first given name, family name) after folding accents; a key shared by two experts

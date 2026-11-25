@@ -1,7 +1,9 @@
 # Static site data contract (S3.1)
 
 `scripts/build_export_site.py` converts the normalized C3 Parquet tables into
-small, deterministic JSON payloads under `site/data/`.  The exporter is a
+small, deterministic JSON payloads under `site/data/california/` (California; PLAT-3 slice 3b moved them
+there), `site/data/global/` (global series) and `site/data/` (release and status). See `docs/DATA_LAYOUT.md`.
+The exporter is a
 build step; the browser never needs PyArrow or Parquet support.
 
 All payloads use `schema_version: "s3.1"`, compact UTF-8/ASCII JSON, stable ID

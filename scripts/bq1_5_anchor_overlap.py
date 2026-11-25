@@ -45,6 +45,7 @@ from atlas.ingest.openalex import (  # noqa: E402
     load_openalex_key,
 )
 from atlas.query import load_query_config, openalex_filter, type_filters  # noqa: E402
+from atlas.regions.scope import region_data_dir  # noqa: E402
 from atlas.util.budget import daily_logged_usage, resolve_openalex_budget  # noqa: E402
 from atlas.util.cost import ApiCostLogger  # noqa: E402
 
@@ -52,8 +53,8 @@ SCHEMA_VERSION = "bq1_5_anchor_overlap.v1"
 CONFIG = ROOT / "config" / "queries.yml"
 WORKS_RAW = ROOT / "data" / "interim" / "works_raw.parquet"
 NORMALIZED_WORKS = ROOT / "data" / "processed" / "normalized" / "works.parquet"
-SITE_INDEX = ROOT / "site" / "data" / "index.json"
-PUBMED_PAYLOAD = ROOT / "site" / "data" / "pubmed_coverage.json"
+SITE_INDEX = region_data_dir() / "index.json"
+PUBMED_PAYLOAD = region_data_dir() / "pubmed_coverage.json"
 PUBMED_R1 = ROOT / "data" / "interim" / "pubmed" / "r1_california_pmids.csv"
 WORK_RELEVANCE = ROOT / "curation" / "work_relevance.csv"
 DATACITE_REVIEW = ROOT / "docs" / "S7_4_REAL_REVIEW.csv"
@@ -66,8 +67,8 @@ INPUT_FILES = {
     "config/queries.yml": CONFIG,
     "data/interim/works_raw.parquet": WORKS_RAW,
     "data/processed/normalized/works.parquet": NORMALIZED_WORKS,
-    "site/data/index.json": SITE_INDEX,
-    "site/data/pubmed_coverage.json": PUBMED_PAYLOAD,
+    "site/data/california/index.json": SITE_INDEX,
+    "site/data/california/pubmed_coverage.json": PUBMED_PAYLOAD,
     "data/interim/pubmed/r1_california_pmids.csv": PUBMED_R1,
     "curation/work_relevance.csv": WORK_RELEVANCE,
     "docs/S7_4_REAL_REVIEW.csv": DATACITE_REVIEW,

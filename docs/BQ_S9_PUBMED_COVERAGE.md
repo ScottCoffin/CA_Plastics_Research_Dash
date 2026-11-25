@@ -1,7 +1,7 @@
 # BQ-S9: PubMed coverage check, stage 1 (California)
 
 Run: 2026-11-23 05:01 UTC (NCBI E-utilities, no API key, 3 requests per second). Payload:
-`site/data/pubmed_coverage.json` (schema `bqs-pm-v1`), built by `scripts/build_pubmed_coverage_json.py`.
+`site/data/california/pubmed_coverage.json` (schema `bqs-pm-v1`), built by `scripts/build_pubmed_coverage_json.py`.
 
 ## What was measured
 

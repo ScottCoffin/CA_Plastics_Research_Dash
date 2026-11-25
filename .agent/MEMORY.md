@@ -94,6 +94,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   contains the recommended `ds3158_poly` state-waters multipolygon.
 
 ## Data locations and sizes (what's committed vs. gitignored; how to inspect)
+- Since 2026-11-25 (PLAT-3 slice 3b, docs/DATA_LAYOUT.md) California site payloads live in `site/data/california/` (read older `site/data/<file>` mentions below as that folder); global payloads in `site/data/global/` (incl. trend_global, language_probe, denominators); only release.json and status.json stay in `site/data/`. Python: `atlas.regions.scope.region_data_dir()`; front end: `regionDataUrl()`/`globalDataUrl()`/`rootDataUrl()` in components/atlas.js.
 - `data/raw/`, `data/interim/`, and `data/logs/` contents are ignored.
 - API request rows and per-run cost summaries append to
   `data/logs/api_usage.jsonl` through `atlas.util.cost.ApiCostLogger`.

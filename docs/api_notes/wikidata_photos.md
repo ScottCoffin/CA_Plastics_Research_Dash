@@ -6,7 +6,7 @@ displayed. Wikidata P496 (ORCID iD) links can point at the wrong person.
 
 ## Counts (full run, 1,605 ORCIDs)
 
-- Experts with an ORCID in `site/data/index.json`: 1,605 of 2,426 authors. All
+- Experts with an ORCID in `site/data/california/index.json`: 1,605 of 2,426 authors. All
   parsed as valid bare ORCIDs.
 - ORCIDs queried against Wikidata: 1,605 (9 SPARQL batches of at most 200).
 - Expert rows with a Wikidata item (P496 match): 843.

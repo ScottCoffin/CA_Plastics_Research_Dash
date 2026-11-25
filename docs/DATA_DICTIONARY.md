@@ -1,7 +1,8 @@
 # Data dictionary: public site payloads (S10.2)
 
 Prepared 2026-11-10 for owner sign-off through `docs/GOVERNANCE_CHECKLIST.md`.
-This page describes every public file under `site/data/` and the Atom feed at
+This page describes every public file under `site/data/` (California in `site/data/california/`, global
+series in `site/data/global/`, `release.json` and `status.json` at the root) and the Atom feed at
 `site/feed.xml`. Field names are taken from the committed exporters
 (`src/atlas/build/export_site.py`, `grants_export.py`, `monitoring.py`,
 `status.py`, `feed.py`) and the S3.1 contract in `docs/SITE_DATA.md`.
@@ -27,7 +28,7 @@ checklist for the owner decision.
 
 ## Files
 
-### `site/data/index.json`
+### `site/data/california/index.json`
 
 Purpose: slim browse index for the Experts view (works and authors).
 Top-level keys: `schema_version`, `generated_at`, `counts`, `works` (array), `authors` (array).
@@ -88,7 +89,7 @@ PubMed join key for the PubMed coverage check (BQ-S9).
 |---|---|---|
 | `pmid` | string or null | PubMed ID digits (for example `35862566`) from OpenAlex `ids.pmid`, which OpenAlex gives as a PubMed URL; the URL prefix is stripped. Null when OpenAlex has no `ids.pmid` or the value is not digits. Nullable. |
 
-### `site/data/authors/<author_id>.json`
+### `site/data/california/authors/<author_id>.json`
 
 Purpose: one detail document per author for the Experts drawer.
 Top-level keys: `schema_version`, `author` (object), `works` (array).
@@ -108,7 +109,7 @@ Licence: as `index.json`. These files are present for each indexed author.
 `profile` (optional): ORCID biography, keywords and links, plus `photo` (`thumb_url`, `license`,
 `credit`, `source_url`) for owner-approved photos; local photos live in `site/assets/experts/`.
 
-### `site/data/network.json`
+### `site/data/california/network.json`
 
 Purpose: expert collaboration network page (`/network`; sigma.js renderer since 2026-11-13). Top-level keys: `schema_version`,
 `generated_at`, `method` (edge weight, community and layout methods, networkx version),
@@ -125,14 +126,14 @@ plastic-related works), `institution_ids`, `institutions`, `sectors`, `primary_a
 `index.json` and `institutions.json`; `--check` fails when stale. The daily ingest rebuilds it
 (networkx is a declared dependency since 2026-11-13).
 
-### `site/data/network_metrics.json`
+### `site/data/california/network_metrics.json`
 Purpose: collaboration-structure metrics (BQ-3.2, Add-on A3 §7 Module 3). Written by `py -3.14 scripts/build_network_metrics.py` from `index.json`, `institutions.json` and `build_metadata.json` (offline). `--check` fails when stale and ignores `generated_at`. Top-level keys: `schema_version` (`bq3-v1`), `generated_at`, `source` (`index_build_timestamp`), `method`, `ascertainment_note`, `definitions` (plain-language text per metric), `corpus` (`plastic_related_works`, `works_in_year_windows`, `works_before_2011`, `works_without_year`, `works_with_no_california_author`) and `graphs` (`authors` = G-A and `institutions` = G-I; each has `label`, `unit` and `windows`). A window has `window` (`all`, `2011-2015`, `2016-2020`, `2021-2025` or `2026`), `years`, `partial` (true for 2026), `works`, `nodes`, `edges`, `components`, `components_with_edges`, `giant_component_nodes`, `giant_component_share`, `density`, `average_clustering`, `isolates`, `isolate_share`, `degree` (`min`, `p25`, `median`, `p75`, `p90`, `max`), `communities`, `modularity`, and `cross_institution`, `cross_sector`, `out_of_region` (each `{fraction, edges_considered}`). Edge weight is the number of works on which both ends are listed. Top-level `null_model` (BQ-3.3, added in the same schema `bq3-v1`; absent when `--null-replicates 0`): `replicates`, `seed` (42), `method`, `reading` and `limits` (plain-language text), `graphs` (`authors` and `institutions`, each with `label` and `windows`; a null window has `window`, `replicates`, `seed`, `nswap`, `max_tries`, `swaps_succeeded` (`min`, `mean`, `max`), `attempts_mean`, `nodes`, `edges` and `statistics`, keyed by `average_clustering`, `modularity` and `giant_component_share`, each with `observed`, `null_mean`, `null_sd`, `z`, `p_two_sided` and `replicates_used`) and `sensitivity` (G-A all years: `observed`, `merge_same_name_within_component` and `split_authors`, each with node counts, `statistics` and `delta`; the split block also has `authors_split` and `split_share`). Aggregates only: no author or institution ids or names. Licence: derived counts from `index.json`.
 
-### `site/data/search_index.json`
+### `site/data/california/search_index.json`
 
 Purpose: header search across the Atlas (VD-19; `site/assets/site_search.js`, results page `/search`). Top-level keys: `schema_version` (1), `generated_at` (from `index.json`), `types` (type names; an item's first value is its index here) and `items`, each `[type_index, label, detail, href]`. Types: `page` (nav pages), `expert` (`expert.html#author=<id>`), `institution` (California institutions, `institution#inst=<id>`), `topic` (`experts#tag=<tag>`; matrices use `matrix:<key>`), `funder` (`funding#fa=<agency>`, or `funding#q=<name>` for funder names that are not agency names), `term` (`glossary#<id>`) and `resource` (the resource's `root_url`, or `resources`). Detail is the primary affiliation, institution type and city, research or matrix label, funder type, glossary excerpt or resource relation. No abstracts or e-mail addresses. Written by `scripts/build_search_index.py` (daily ingest) from `index.json`, `institutions.json`, `grants.json`, `linkouts.json`, `site/assets/topics.js`, `framework/src/components/shared/labels.js`, `framework/observablehq.config.js` and `framework/src/glossary.md`; `--check` fails when stale. Licence: as `index.json`.
 
-### `site/data/expert_badges.json`
+### `site/data/california/expert_badges.json`
 
 Purpose: funding and data-stewardship badges on the expert profile page (`expert.html`).
 Top-level keys: `schema_version` (`s9.3-v1`), `generated_at`, `method` (plain-language source
@@ -147,7 +148,7 @@ plastic-related grants from `grants.json` count; the page decides "active" from 
 `index.json`, `grants.json`, `data/processed/work_grant_links.parquet` and
 `data/processed/expert_datacite_outputs.parquet`.
 
-### `site/data/works_detail.json`
+### `site/data/california/works_detail.json`
 
 Purpose: publication table on the Evidence map (one row per published work).
 Top-level keys: `schema_version`, `works` (array). Licence: as `index.json`.
@@ -156,14 +157,14 @@ Row fields: `work_id`, `title`, `year`, `pub_date`, `first_seen` (date first ing
 `domain_tags`, `facet_tags`, `authors` (array of names, first 20), `author_count`,
 `has_abstract` (boolean). Written by `scripts/build_export_site.py`.
 
-### `site/data/work_text/abstracts.json`
+### `site/data/california/work_text/abstracts.json`
 
 Purpose: abstracts for the Evidence map table, loaded only when a reader expands one. Kept in a
 subfolder so the abstract-free release snapshot does not package it.
 Top-level keys: `schema_version`, `abstracts` (object, work_id -> abstract text with email
 addresses redacted). Licence: abstracts as supplied by OpenAlex (as `authors/*.json`).
 
-### `site/data/institutions.json`
+### `site/data/california/institutions.json`
 
 Purpose: California institution registry used by the Institutions view.
 Top-level keys: `schema_version`, `generated_at`, `institutions` (array).
@@ -175,7 +176,7 @@ Licence: institution names and identifiers from OpenAlex and ROR. ROR and OpenAl
 `work_count` (integer), `author_count` (integer), `years` (array of integer),
 `domain_tags` (array of string).
 
-### `site/data/institutions.geojson`
+### `site/data/california/institutions.geojson`
 
 Purpose: map layer for California institutions with coordinates.
 Type: GeoJSON `FeatureCollection` of `Point` features. Each feature's `properties`
@@ -185,7 +186,7 @@ Licence: as `institutions.json`. Coordinates come from the OpenAlex institution 
 record, with the ROR location as fallback (`src/atlas/ingest/institutions.py`). Neither
 source's licence is recorded in `docs/REUSE.md`. Owner decision pending.
 
-### `site/data/aggregates.json`
+### `site/data/california/aggregates.json`
 
 Purpose: year, type and tag counts used by the site views.
 Top-level keys: `schema_version`, `generated_at`, `by_year`, `by_type`, `by_tag`.
@@ -195,7 +196,7 @@ Licence: derived counts; as `index.json`.
 - `by_type[]`: `type` (string), `count` (integer), `plastic_related_count` (integer).
 - `by_tag[]`: `tag` (string; domain or facet ID), `count` (integer), `plastic_related_count` (integer).
 
-### `site/data/build_metadata.json`
+### `site/data/california/build_metadata.json`
 
 Purpose: build log for the static export (timestamp, row counts, payload sizes).
 Top-level keys: `schema_version`, `generated_at`, `counts`, `files` (object keyed by
@@ -216,7 +217,7 @@ Licence: project operational output; no third-party content. Owner decision appl
   - `not_plastic_related`: `published` - `plastic_related` (integer).
   - `by_type`: object from OpenAlex work type to published count (`unknown` when empty); values sum to `published`.
 
-### `site/data/grants.json`
+### `site/data/california/grants.json`
 
 Purpose: public award records from named funders, shown in the Funding view.
 Top-level keys: `schema_version`, `generated_at`, `caveat` (string), `columns` (array of
@@ -248,7 +249,7 @@ Licence: award records are public funder records. Per-source licence terms are *
 | `domain_tags` | array of string | Provisional topic tags. |
 | `ca_led` | boolean | California-led flag carried from the source-record derivation in `grants_export.py` (provisional). |
 
-### `site/data/monitoring.json`
+### `site/data/california/monitoring.json`
 
 Purpose: monitoring-source catalogue and rights-cleared sample observations.
 Top-level keys: `schema_version`, `generated_at`, `publication_mode` (string;
@@ -286,7 +287,7 @@ Licence: project operational output; no third-party content.
   `works_added`, `works_total`, `labels_total` (integers), `api_spend` (number or null).
 - `spend`: `latest`, `runs_with_spend` (integer), `total_cost_usd` (number), `total_credits` (number).
 
-### `site/data/open_calls.json`
+### `site/data/california/open_calls.json`
 
 Purpose: open calls listed on the Funding view.
 Top-level keys: `generated_at`, `calls` (array), `licence` (string), `source_url` (string).
@@ -294,7 +295,7 @@ Licence: the file records `Other (Public Domain)` as stated by the source. This 
 
 `calls[]`: empty at the time of writing (0 rows). No field list is documented yet; add one when the first call is listed.
 
-### `site/data/journal_metrics.json`
+### `site/data/california/journal_metrics.json`
 
 Purpose: the journal column and the "2-yr mean citedness (OpenAlex)" sort on the Evidence map publication table
 (VD-34). Written by `py -3.14 scripts/fetch_journal_metrics.py` (live: one OpenAlex list call per 100 works and per
@@ -315,7 +316,7 @@ them is used).
 `repository`, or null).
 Licence: derived from OpenAlex source metadata; check OpenAlex's current terms before reuse.
 
-### `site/data/linkouts.json`
+### `site/data/california/linkouts.json`
 
 Purpose: the Evidence Map's related-resources strip (EM-5). Written from `config/linkouts.yml`
 by `py -3.14 scripts/build_linkouts_json.py` (`--check` fails when it is stale).
@@ -336,7 +337,7 @@ steward's terms are not stated), `url_status` (`as_stated`, `owner_confirmed`, `
 `unavailable`), `disclosure` (string, or null when none applies; the Atlas owner's stated interest,
 e.g. LO-8 and LO-13). The Related resources page (EM-16) lists every entry.
 
-### `site/data/research_networks.json`
+### `site/data/california/research_networks.json`
 
 Purpose: the research networks and consortia that the Atlas links to (NET-1). Written from
 `config/research_networks.yml` by `py -3.14 scripts/build_research_networks_json.py` (`--check`
@@ -357,7 +358,7 @@ either OpenAlex-style such as `I84218800` or a local ID such as `CAAG-OEHHA`), `
 `logo` (`path`, relative to the site root, and `alt`), `disclosure` (string). The name variants,
 URL status, logo source, terms and permission fields stay in the YAML only.
 
-### `site/data/dtsc_timeline.json`
+### `site/data/california/dtsc_timeline.json`
 
 Purpose: the Policy page's DTSC microplastics regulatory timeline (EM-18, Add-on A2 §7 Part B). Written from `config/dtsc_timeline.yml` by `py -3.14 scripts/build_dtsc_timeline_json.py` (`--check` fails when it is stale).
 Top-level keys: `schema_version` (`em18.v1`), `source` (string), `caveat` (the required "Listing does not by itself create requirements" sentence), `caveat_detail` (string), `order` (`newest_first`), `entries` (array).
@@ -365,14 +366,14 @@ Licence: curated by hand from DTSC pages and uploaded documents; no scraping. Da
 
 `entries[]`: `id` (`dtsc-NN`), `date_as_stated` (verbatim from DTSC), `date_iso` (`YYYY-MM-DD` or `YYYY-MM`), `event`, `source_label`, `source_url` (https or null), `kind` (`workshop`, `proposal`, `background`, `finalized`, `effective` or `work_plan`).
 
-### `site/data/opc_actions.json`
+### `site/data/california/opc_actions.json`
 
 Purpose: the Policy page's OPC Solutions track, the 22 recommended early actions in the Ocean Protection Council's Statewide Microplastics Strategy (EM-17, Add-on A2 §7 Part A), with a draft link to Global Plastic Laws topics. Written from `config/opc_early_actions.yml` by `py -3.14 scripts/build_opc_actions_json.py` (`--check` fails when it is stale).
 Top-level keys: `schema_version` (`em17.v1`), `source` (string), `mapping_status` (`draft` or `owner_reviewed`), `strategy` (`label`, `url` (https) and `adopted`), `gpl` (`name`, `steward`, `base_url` (https), `california_search_url` (https), `disclaimer` (the Global Plastic Laws sentence) and `topics`, an object that maps each topic slug to its name), `objectives` (array of `id` and `name`), `actions` (array).
 `actions[]`: `code` (`2A.N.N`), `objective` (an `objectives[].id`), `group`, `summary` (the Atlas's paraphrase, 200 characters or fewer), `deadline_as_stated` (verbatim from the Strategy), `deadline_year` (integer), `pdf_page`, `gpl_topics` (topic slugs from `gpl.topics`; may be empty), `atlas` (either `q`, search text, or `topic`, a key from `site/assets/topics.js`).
 Licence: curated by hand from the Strategy; no scraping. Summaries are the Atlas's own words, not the Council's.
 
-### `site/data/methods_flow.json`
+### `site/data/california/methods_flow.json`
 
 Purpose: the V-3 pipeline flow diagram on the Evidence Map (EM-6, Add-on A2 §5). Counts are copied from the newest `release/<date>/methods_card.json` (AT-10). Written by `py -3.14 scripts/build_methods_flow_json.py` (`--check` fails when it is stale).
 Top-level keys: `schema_version` (`em6.v1`), `release_date` (`YYYY-MM-DD`), `release_version` (string from `site/data/release.json` when its date matches, else null), `query_version` (string), `template` (`name`: ROSES flow diagram for systematic maps; `licence`: `CC BY 4.0`), `stages` (array, in flow order).
@@ -381,7 +382,7 @@ Licence: the ROSES template is credited under CC BY 4.0; counts are project meta
 `stages[]`: `stage` (string), `status` (`performed` or `not performed`), `steps` (array; empty for stages with no count), `note` (string or null).
 `stages[].steps[]`: `label` (string), `value` (integer count), `source` (string naming the methods-card field the count comes from).
 
-### `site/data/trend_global.json`
+### `site/data/global/trend_global.json`
 
 Purpose: the global denominator for the V-4 trend panel on the Evidence Map (EM-7, Add-on A2 §5). Works per publication year for all OpenAlex works matching the active plastics query (same type exclusions, no institution filter). Written by `py -3.14 scripts/fetch_trend_global.py` (one OpenAlex `group_by=publication_year` request; `--dry-run` prints the URL without a call; cached by `query_version` for 30 days, `--force` refetches).
 Top-level keys: `schema_version` (`em7.v1`), `query_version` (the active query, e.g. `plastic-v3.1`), `fetched_at` (UTC ISO 8601), `source` (`OpenAlex group_by publication_year`), `by_year` (object: year string to integer count, sorted by year).
@@ -412,9 +413,9 @@ links to it. CC BY-NC 4.0.
 | `concept_doi` | string | Zenodo concept DOI (always resolves to the latest version). |
 | `doi_url`, `concept_url` | string | `https://doi.org/` links for the two DOIs. |
 
-### `site/data/pubmed_coverage.json`
+### `site/data/california/pubmed_coverage.json`
 
-Purpose: the PubMed coverage check (BQ-S9 part C, Add-on A3 §5.11). Each reference set is a PubMed search for plastics papers with a California affiliation (stage 1, `data/interim/pubmed/`, not committed); coverage is the share of its PMIDs that appear among the published Atlas works, joined by PMID and then by DOI. Written by `py -3.14 scripts/build_pubmed_coverage_json.py` from the interim runs, `data/processed/normalized/works.parquet` and the published subset in `site/data/index.json`. No network calls. `--check` fails when the committed file is stale and exits 0 with a SKIP message when the interim runs are absent (CI). Coverage is not a completeness rate: read `definition` before quoting it.
+Purpose: the PubMed coverage check (BQ-S9 part C, Add-on A3 §5.11). Each reference set is a PubMed search for plastics papers with a California affiliation (stage 1, `data/interim/pubmed/`, not committed); coverage is the share of its PMIDs that appear among the published Atlas works, joined by PMID and then by DOI. Written by `py -3.14 scripts/build_pubmed_coverage_json.py` from the interim runs, `data/processed/normalized/works.parquet` and the published subset in `site/data/california/index.json`. No network calls. `--check` fails when the committed file is stale and exits 0 with a SKIP message when the interim runs are absent (CI). Coverage is not a completeness rate: read `definition` before quoting it.
 Top-level keys: `schema_version` (`bqs-pm-v1`), `generated_at`, `manifest_schema` (`bqs-pm-manifest-v1`), `failure_taxonomy_version`, `stage` (1), `source`, `definition` (plain-language text), `atlas_corpus` (`published_works`, `published_with_pmid`, `normalized_works`, `normalized_with_pmid`), `reference_sets` (keys `r1` and `r2`), `miss_triage` and `triage_classes` (class ids from `config/failure_taxonomy.yml`).
 Licence: derived counts. PMIDs, DOIs and years come from NCBI E-utilities; the Atlas side is as `index.json`.
 
@@ -434,7 +435,7 @@ Licence: derived counts. PMIDs, DOIs and years come from NCBI E-utilities; the A
 
 `miss_triage`: `sample_size`, `seed` (20261122), `sample_rule` (the first `min(50, misses)` misses ordered by SHA-256 of `seed:pmid`), `misses_total` (the union of both sets' misses, deduplicated by PMID), `triage_file` (`curation/pubmed_miss_triage_v1.csv`), `labelled` (rows with a non-blank `triage_class`) and `false_negative_classes` (taxonomy classes with direction `false_negative`). With no labels the block carries `status: "pending owner triage"`. Once `labelled` is above zero it carries `false_negative_share`: `count` (labelled rows in a false-negative class), `n` (= `labelled`), `share` and `wilson_95` (Wilson 95% interval). The triage sheet is never overwritten when it holds reviewer entries.
 
-### `site/data/language_probe.json`
+### `site/data/global/language_probe.json`
 
 Purpose: the native-language probe of OpenAlex (BQ-S4, Add-on A3 §5.7). There are sixteen term sets, one per group of registered native-language strings (`config/search_vocabulary_v1.yml`, the A3 §5.7 rows). For each set the file gives the OpenAlex count, the language labels of its works, a fixed-seed sample of up to 50 works, and the share of that sample that the main v3.1 query also retrieves. The overlap is a share of the sample, not a completeness rate. Written by `py -3.14 scripts/fetch_language_probe.py` (about 64 OpenAlex requests, cost recorded in `cost`; responses are cached under `data/interim/language_probe/`). `--offline` rebuilds the file from that cache with no network calls; `--check` validates the committed file and writes nothing; `--offline --check` also compares it with a rebuild from the cache. The probe stops when its own logged spend would exceed USD 0.09.
 Top-level keys: `schema_version` (`bqs-v1`), `generated_at` (UTC ISO 8601), `query_version` (`plastic-v3.1`), `vocabulary_version` (`search_vocabulary_v1`), `source`, `sample_seed` (20261122), `sample_limit` (50), `method` (plain-language text), `cost` (`credits` and `usd`: the OpenAlex credits behind the file and the conservative USD figure, at USD 0.0001 per credit), `term_sets` (array, below), `caveats` and `not_covered` (arrays of text).
@@ -456,11 +457,11 @@ Top-level keys: `schema_version` (`bqs-v1`), `generated_at` (UTC ISO 8601), `que
 Titles and venues are OpenAlex metadata. No abstracts are published.
 Licence: derived from OpenAlex metadata; OpenAlex licence recorded as unknown in `docs/REUSE.md`. Owner decision pending.
 
-### `site/data/denominators.json`
+### `site/data/global/denominators.json`
 
 Purpose: the public global-denominator file (BQ-2.4, Add-on A3 Module 2). It feeds the V-4 trend panel on `/california/evidence` and the Trend tab on `/explore`. Written by `py -3.14 scripts/build_denominators_json.py` from the ignored `data/processed/analytics/denominator_series.json` (run `scripts/build_denominator_series.py` first). `--check` validates the committed file (schema, allowed ratios only, no ratio with D or B2) and, when the ignored input exists, fails if the file is stale; with the input absent it prints SKIP for the staleness check and exits 0. Top-level keys: `schema_version` (`bq2-v1`), `generated_at`, `version` (`query_version`, `as_of`, `last_complete_year`, `window_start`, `window_end`), `source` (input schema and SHA-256), `what_this_is_and_is_not` (`is`, `is_not`), `series` (A, A-article_review, B, B-article_review, C, D: `id`, `label`, `counting_unit`, `sensitivity`, `beside_only`, `comparable_with`, `retraction_split`, `undated_records`, `years` with `year`, `count`, `retracted`, `partial_year`), `ratio_pairs` (B/A, C/A and B-article_review/A-article_review, each with `numerator`, `denominator`, `label`, `sensitivity`), `not_computed` (B2, listed only), and `metrics` (the BQ-2.3 block: window, partial years, CI level, method, per-series `trend` with CAGR and 95% interval, and `shares`). Counts are OpenAlex records by publication year. D is curated works, is beside-only, and is never divided.
 
-### `site/data/bundle/`
+### `site/data/california/bundle/`
 
 AT-4 serving bundle (bit-set facets, title search, institution tiers, abstract-free
 Parquet). See `docs/SITE_DATA.md` and `docs/AT_4_VERIFICATION.md`. CC BY-NC 4.0.

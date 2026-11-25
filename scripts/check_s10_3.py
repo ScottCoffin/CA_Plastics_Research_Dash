@@ -94,12 +94,16 @@ def check_make_and_docs(root: Path) -> list[str]:
 
 def check_rebuild(rebuild) -> list[str]:
     """Rebuild twice and require identical outputs; the repo outputs must not change."""
-    tracked = sorted((ROOT / "site/data").glob("*.json")) + [ROOT / "site/feed.xml"]
+    tracked = sorted((ROOT / "site/data/california").glob("*.json")) + [ROOT / "site/feed.xml"]
     before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in tracked}
     rows = rebuild.verify_determinism()
     errors: list[str] = []
     paths = {row.path for row in rows}
-    for required in ("site/data/index.json", "site/data/grants.json", "site/feed.xml"):
+    for required in (
+        "site/data/california/index.json",
+        "site/data/california/grants.json",
+        "site/feed.xml",
+    ):
         if required not in paths:
             errors.append(f"fixture rebuild did not produce {required}")
     after = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in tracked}

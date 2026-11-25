@@ -1,6 +1,6 @@
 # Funding data export and Funding tab (S8.10)
 
-`scripts/build_grants_export.py` writes `site/data/grants.json`, the slim payload
+`scripts/build_grants_export.py` writes `site/data/california/grants.json`, the slim payload
 behind the Awards section of the Funding tab in `site/index.html`. The export is
 built from the S8.6 de-duplicated grants table, so each award appears once on its
 lowest-level record. The browser loads the file only when the Funding tab opens.

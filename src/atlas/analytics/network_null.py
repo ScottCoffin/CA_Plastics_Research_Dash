@@ -328,7 +328,7 @@ def build_null_block(
     replicates: int = DEFAULT_REPLICATES,
     seed: int = NULL_SEED,
 ) -> dict[str, Any]:
-    """The ``null_model`` block for site/data/network_metrics.json (aggregates only)."""
+    """The ``null_model`` block for the region's network_metrics.json (aggregates only)."""
     authors = list(index.get("authors") or [])
     works = list(index.get("works") or [])
     corpus = {str(a.get("author_id")) for a in authors}
