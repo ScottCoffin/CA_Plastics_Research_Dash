@@ -27,7 +27,20 @@
       order: 11,
       pattern: "hatch",
       auxiliary: true
-    }
+    },
+    // BQ-S5 D3/D10 (owner approved 2026-11-25, H40): lifecycle-and-society topics, no seed words
+    // yet. They do not fit the validated 8-hue palette, so they take the OTHER grey (no hue).
+    lca_and_sustainability: { label: "Life-cycle & sustainability", color: "#8a9499", order: 12 },
+    waste_management_and_recycling: { label: "Waste management & recycling", color: "#8a9499", order: 13 },
+    waste_trade_and_global_flows: { label: "Waste trade & global flows", color: "#8a9499", order: 14 },
+    policy_law_and_governance: { label: "Policy, law & governance", color: "#8a9499", order: 15 },
+    behaviour_and_perception: { label: "Behaviour & perception", color: "#8a9499", order: 16 },
+    justice_colonialism_and_power: { label: "Justice, colonialism & power", color: "#8a9499", order: 17 },
+    litter_and_trash: { label: "Litter & trash", color: "#8a9499", order: 18 },
+    bioplastics_and_alternatives: { label: "Bioplastics & alternatives", color: "#8a9499", order: 19 },
+    safe_and_sustainable_by_design: { label: "Safe & sustainable by design", color: "#8a9499", order: 20 },
+    // Experimental (D10): optional topic, excluded from P1-P6 reporting.
+    culture_media_and_discourse: { label: "Culture, media & discourse", color: "#8a9499", order: 21, experimental: true }
   };
   // Shown wherever an auxiliary topic appears (chip tooltip, glossary, Evidence map).
   const AUXILIARY_NOTE =

@@ -10,15 +10,21 @@ environments:
   - air
   - food_and_drink
 
+# D1 (owner approved 2026-11-25, H40): one topic list. The disciplines block mirrors the
+# 11 original domain_tags; the lifecycle-and-society tags and the experimental topic are
+# topics too but are not added here until the owner decides (see docs/TAXONOMY_PROPOSAL.md).
 disciplines:
   - occurrence_and_monitoring
   - analytical_methods
   - fate_transport_and_sorption
   - wastewater_and_treatment
   - ecotoxicology_and_trophic_transfer
+  - soil_and_agriculture
   - human_exposure_and_health_risk
+  - air
   - risk_assessment
   - plastisphere
+  - plastic_associated_chemicals
 
 domain_tags:
   - id: occurrence_and_monitoring
@@ -70,6 +76,129 @@ domain_tags:
   # seeds; coverage is incomplete because the search targets plastics terms.
   - id: plastic_associated_chemicals
     seed_concepts: []
+
+  # BQ-S5 D3 (owner approved 2026-11-25, H40): lifecycle-and-society topics. No seed words yet
+  # (approved_no_seeds), so no rule assigns them; annotators assign them by hand. Definitions
+  # are the guide_v3 section 4 wording (docs/LABELING_GUIDE_A3_ADDENDUM.md).
+  - id: lca_and_sustainability
+    label: Life-cycle & sustainability
+    definition: life-cycle assessment, carbon footprint or sustainability assessment of plastics
+    status: approved_no_seeds
+    seed_concepts: []
+  - id: waste_management_and_recycling
+    label: Waste management & recycling
+    definition: collection, landfill, incineration, recycling of plastic waste
+    status: approved_no_seeds
+    seed_concepts: []
+  - id: waste_trade_and_global_flows
+    label: Waste trade & global flows
+    definition: plastic waste trade and import bans (sub-topic of waste_management_and_recycling)
+    parent: waste_management_and_recycling
+    status: approved_no_seeds
+    seed_concepts: []
+  - id: policy_law_and_governance
+    label: Policy, law & governance
+    definition: policy instruments, treaties, bans, levies, extended producer responsibility, regulation of plastics
+    status: approved_no_seeds
+    seed_concepts: []
+  - id: behaviour_and_perception
+    label: Behaviour & perception
+    definition: individual and consumer behaviour, attitudes and psychology
+    status: approved_no_seeds
+    seed_concepts: []
+  - id: justice_colonialism_and_power
+    label: Justice, colonialism & power
+    definition: justice, racism, colonialism, labour or power in relation to plastics as the primary analytic subject
+    status: approved_no_seeds
+    seed_concepts: []
+  - id: litter_and_trash
+    label: Litter & trash
+    definition: plastic litter, trash, clean-ups, littering behaviour ("trash" never qualifies alone)
+    status: approved_no_seeds
+    seed_concepts: []
+  - id: bioplastics_and_alternatives
+    label: Bioplastics & alternatives
+    definition: bioplastics, compostable and biodegradable plastics, alternatives to conventional plastics
+    status: approved_no_seeds
+    seed_concepts: []
+  - id: safe_and_sustainable_by_design
+    label: Safe & sustainable by design
+    definition: SSbD of plastics or polymers (a design stage plus a safety and sustainability assessment)
+    status: approved_no_seeds
+    seed_concepts: []
+  # BQ-S5 D10 (owner approved 2026-11-25, H40): optional experimental topic. Excluded from
+  # per-tag metrics (atlas.nlp.eval) and from P1-P6 reporting. Experimental until 40 gold
+  # examples and kappa 0.7 / F1 0.70 (A2 rule).
+  - id: culture_media_and_discourse
+    label: Culture, media & discourse
+    definition: humanities, material culture, art, media and discourse analyses of plastics (optional, low weight)
+    status: approved_no_seeds
+    experimental: true
+    reporting: excluded_from_P1_P6
+    seed_concepts: []
+
+# BQ-S5 D4 (owner approved 2026-11-25, H40): plastic tiers. Existing tiers unchanged.
+tiers:
+  - core
+  - chemicals-in-plastics
+  - lifecycle_and_society
+
+# BQ-S5 D5-D8 (owner approved 2026-11-25, H40). Facet values are validated in
+# atlas.nlp.annotation. Lens and origin are optional; plastics_centrality is set only for
+# lifecycle_and_society works.
+facets:
+  analytic_lens:  # D5/D6: multi-value; requires lens_evidence (a quoted excerpt)
+    multi_value: true
+    evidence_field: lens_evidence
+    values:
+      - waste_colonialism
+      - environmental_justice_and_racism
+      - indigenous_and_community_governance
+      - community_and_participatory_methods
+      - labour_and_informal_economy
+      - circularity_critique_and_greenwashing
+      - political_economy_centre_periphery  # A3-D20 addition
+      - responsibility_shifting  # A3-D20 addition
+    rule: use only when the work itself uses the frame; never infer a lens from the topic alone
+    folded_in:  # A3-D20: candidates folded into existing values
+      spatial_injustice: environmental_justice_and_racism
+      decolonial_and_indigenous_research: indigenous_and_community_governance
+      behavioural_and_psychosocial: behaviour_and_perception
+  plastics_centrality:  # D7: scope gate for the lifecycle_and_society tier (wording open, A3-Q5)
+    default: not_assessed
+    applies_to_tier: lifecycle_and_society
+    values: [primary, substantial, incidental, none, not_assessed]
+  origin:  # D8: optional
+    optional: true
+    values: [primary, secondary, not_stated]
+
+# BQ-S5 D9 (owner approved 2026-11-25, H40): review-derived facets, registered only.
+# No values are enforced and no UI shows them. Adopt one at a time with a benchmark (SPK-DEET
+# first facet). Merged: exposure_source into human_exposure_pathway; review_type into the
+# study-type value review_synthesis. Deferred: study_design (reconcile with study type first)
+# and particle_colour (its source advises against it).
+review_facets:
+  status: planned
+  note: adopt one at a time with a benchmark (SPK-DEET first facet)
+  facets:
+    - human_exposure_pathway
+    - exposure_source  # merged into human_exposure_pathway (D9)
+    - human_sample_matrix
+    - organ_system
+    - study_design  # deferred (D9)
+    - experimental_system
+    - model_organism_group
+    - endpoint_domain
+    - endpoint_technique
+    - polymer_type
+    - particle_shape
+    - particle_condition
+    - analytical_method
+    - food_contact_article_type
+    - size_definition_scheme
+    - review_type  # merged into review_synthesis (D9)
+    - environment_setting
+    - particle_colour  # deferred (D9)
 
 provenance:
   supplied_by: owner external query agent

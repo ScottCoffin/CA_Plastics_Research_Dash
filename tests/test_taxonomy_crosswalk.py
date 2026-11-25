@@ -95,7 +95,8 @@ def test_top_level_keys_and_status() -> None:
     for key in TOP_LEVEL_KEYS:
         assert key in data, f"missing top-level key {key}"
     assert data["version"] == "taxonomy-crosswalk-v1"
-    assert data["status"] == "proposal"
+    # Approved by the owner 2026-11-25 (H40); the lead applied the decisions in BQ-S5 slice 1.
+    assert data["status"] == "approved"
     assert data["approval"] == "A3-D7"
     assert len(data["scheme_crosswalk"]) == SCHEME_COUNT
     for row in data["scheme_crosswalk"]:
@@ -119,18 +120,19 @@ def test_entries_have_required_keys_and_valid_enums() -> None:
         assert isinstance(entry["notes"], str) and entry["notes"], entry["id"]
 
 
-def test_ids_are_unique_and_every_decision_is_pending() -> None:
+def test_ids_are_unique_and_every_decision_is_approved() -> None:
     entries = _load_crosswalk()["entries"]
     ids = [entry["id"] for entry in entries]
     assert len(ids) == len(set(ids)), "duplicate crosswalk ids"
-    assert {entry["decision"] for entry in entries} == {"pending"}
+    assert {entry["decision"] for entry in entries} == {"approved"}
+    assert {entry["decided"] for entry in entries} == {"2026-11-25 (owner, H40)"}
 
 
 def test_every_current_domain_tag_is_in_crosswalk() -> None:
     entries = _load_crosswalk()["entries"]
     topic_ids = {entry["id"] for entry in entries if entry["kind"] == "topic_tag"}
     current = _taxonomy_domain_ids()
-    assert len(current) == 11
+    assert len(current) == 21  # 11 original + 8 lifecycle + 1 sub-tag + 1 experimental (BQ-S5)
     missing = [tag for tag in current if tag not in topic_ids]
     assert missing == [], f"current tags missing from crosswalk: {missing}"
 
@@ -148,17 +150,17 @@ def test_a3_proposed_tags_lens_values_and_centrality_values_are_listed() -> None
     assert by_id["analytic_lens"]["kind"] == "facet"
 
 
-def test_proposed_only_tags_are_not_registered_in_taxonomy() -> None:
-    # Nothing ships until approved (A3-D7): an added tag must not be in taxonomy.yml yet.
+def test_approved_added_tags_are_registered_in_taxonomy() -> None:
+    # BQ-S5 slice 1 (approved 2026-11-25): every tag the crosswalk adds is now in taxonomy.yml.
     entries = _load_crosswalk()["entries"]
-    proposed = {
+    added = {
         entry["id"]
         for entry in entries
         if entry["kind"] == "topic_tag" and entry["proposed_action"] in {"add", "add_experimental"}
     }
     registered = set(_taxonomy_domain_ids())
-    assert proposed, "expected proposed topic tags"
-    assert proposed & registered == set(), "proposed tags are already in taxonomy.yml"
+    assert added, "expected added topic tags"
+    assert added <= registered, f"approved tags missing from taxonomy.yml: {added - registered}"
 
 
 def test_proposal_lists_exactly_the_ten_decision_items() -> None:

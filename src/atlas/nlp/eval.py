@@ -6,7 +6,7 @@ import math
 from pathlib import Path
 from typing import Any
 
-from atlas.nlp.annotation import DOMAIN_TAGS
+from atlas.nlp.annotation import DOMAIN_TAGS, EXPERIMENTAL_DOMAIN_TAGS
 
 THRESHOLDS = {
     "ca_sampled_yes_precision": 0.85,
@@ -17,7 +17,7 @@ THRESHOLDS = {
 }
 CLASSES = {
     "plastic_related": ("false", "true"),
-    "plastic_tier": ("core", "chemicals-in-plastics", "none"),
+    "plastic_tier": ("core", "chemicals-in-plastics", "lifecycle_and_society", "none"),
     "ca_sampled": ("yes", "partial", "no", "unclear"),
     # study_type is intentionally open vocabulary in the annotation schema.
 }
@@ -170,7 +170,10 @@ def evaluate(
             metrics[field]["recall"] = s["recall"]
             metrics[field]["f1"] = s["f1"]
     tags_report = {}
+    # Experimental topics (D10) are not scored: they stay out of per-tag metrics and P1-P6.
     for tag in DOMAIN_TAGS:
+        if tag in EXPERIMENTAL_DOMAIN_TAGS:
+            continue
         gv = [tag in gold_by_id[i]["domain_tags"] for i in ids]
         pv = [tag in pred_by_id[i]["domain_tags"] for i in ids]
         tags_report[tag] = _scores(

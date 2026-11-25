@@ -29,13 +29,22 @@ ANNOTATION_FIELDS = (
     "ca_sampled",
     "study_type",
     "domain_tags",
+    "analytic_lens",
+    "lens_evidence",
+    "plastics_centrality",
+    "origin",
     "evidence_snippet",
     "evidence_source",
     "decision_status",
     "adjudicated_value",
     "adjudication_rationale",
 )
+# BQ-S5 columns (owner approved 2026-11-25, H40). Annotation CSVs written before them carry
+# the legacy header; import accepts it and reads these columns as blank.
+BQ_S5_FIELDS = ("analytic_lens", "lens_evidence", "plastics_centrality", "origin")
+LEGACY_ANNOTATION_FIELDS = tuple(field for field in ANNOTATION_FIELDS if field not in BQ_S5_FIELDS)
 LABEL_FIELDS = ("plastic_related", "plastic_tier", "ca_sampled", "study_type")
+# One topic list (D1-D3, D10): config/taxonomy.yml domain_tags, in the same order.
 DOMAIN_TAGS = (
     "occurrence_and_monitoring",
     "analytical_methods",
@@ -45,9 +54,43 @@ DOMAIN_TAGS = (
     "soil_and_agriculture",
     "human_exposure_and_health_risk",
     "air",
+    "risk_assessment",
+    "plastisphere",
+    "plastic_associated_chemicals",
+    "lca_and_sustainability",
+    "waste_management_and_recycling",
+    "waste_trade_and_global_flows",
+    "policy_law_and_governance",
+    "behaviour_and_perception",
+    "justice_colonialism_and_power",
+    "litter_and_trash",
+    "bioplastics_and_alternatives",
+    "safe_and_sustainable_by_design",
+    "culture_media_and_discourse",
 )
+# Experimental topics (D10): excluded from per-tag metrics and P1-P6 reporting.
+EXPERIMENTAL_DOMAIN_TAGS = frozenset({"culture_media_and_discourse"})
 _TRUTH = {"true", "false"}
-_TIERS = {"core", "chemicals-in-plastics"}
+_TIERS = {"core", "chemicals-in-plastics", "lifecycle_and_society"}
+# D5/D6: analytic_lens is multi-value and needs lens_evidence (a quoted excerpt).
+LENS_VALUES = frozenset(
+    {
+        "waste_colonialism",
+        "environmental_justice_and_racism",
+        "indigenous_and_community_governance",
+        "community_and_participatory_methods",
+        "labour_and_informal_economy",
+        "circularity_critique_and_greenwashing",
+        "political_economy_centre_periphery",
+        "responsibility_shifting",
+    }
+)
+# D7: plastics_centrality is set only for lifecycle_and_society works.
+PLASTICS_CENTRALITY_VALUES = frozenset(
+    {"primary", "substantial", "incidental", "none", "not_assessed"}
+)
+# D8: optional origin facet; blank when a work does not say.
+ORIGIN_VALUES = frozenset({"primary", "secondary", "not_stated"})
 _SAMPLING = {"yes", "partial", "no", "unclear"}
 _SOURCES = {"title", "abstract", "full_text_locator"}
 _STATUSES = {"complete", "adjudication_required"}
@@ -154,6 +197,10 @@ def export_templates(
                         "ca_sampled": "",
                         "study_type": "",
                         "domain_tags": "",
+                        "analytic_lens": "",
+                        "lens_evidence": "",
+                        "plastics_centrality": "not_assessed",
+                        "origin": "",
                         "evidence_snippet": "",
                         "evidence_source": "",
                         "decision_status": "",
@@ -190,11 +237,24 @@ def _normalize_row(
         raise ValueError(f"missing annotator for {work_id}")
     result: dict[str, Any] = {key: (row.get(key) or "").strip() for key in ANNOTATION_FIELDS}
     result.update(split=expected["split"], sample_role=expected["sample_role"], annotator=annotator)
+    # Blank centrality means not assessed (D7 default); the value is checked against the tier below.
+    result["plastics_centrality"] = result["plastics_centrality"] or "not_assessed"
+    if result["plastics_centrality"] not in PLASTICS_CENTRALITY_VALUES:
+        raise ValueError(f"invalid plastics_centrality for {work_id}")
+    lenses = [value.strip() for value in result["analytic_lens"].split("|") if value.strip()]
+    if len(lenses) != len(set(lenses)) or set(lenses) - LENS_VALUES:
+        raise ValueError(f"invalid or duplicate analytic_lens for {work_id}")
+    if lenses and not result["lens_evidence"]:
+        raise ValueError(f"analytic_lens requires lens_evidence for {work_id}")
+    if result["origin"] and result["origin"] not in ORIGIN_VALUES:
+        raise ValueError(f"invalid origin for {work_id}")
     status = result["decision_status"]
     if status not in _STATUSES:
         raise ValueError(f"invalid decision_status for {work_id}: {status!r}")
     if status == "adjudication_required":
         if any(result[field] for field in LABEL_FIELDS) or result["domain_tags"]:
+            raise ValueError(f"unresolved work {work_id} must not contain labels")
+        if lenses or result["origin"] or result["plastics_centrality"] != "not_assessed":
             raise ValueError(f"unresolved work {work_id} must not contain labels")
         if not result["evidence_snippet"]:
             raise ValueError(f"unresolved work {work_id} needs evidence or a decision note")
@@ -216,6 +276,12 @@ def _normalize_row(
         if len(tags) != len(set(tags)) or set(tags) - set(DOMAIN_TAGS):
             raise ValueError(f"invalid or duplicate domain_tags for {work_id}")
         result["domain_tags"] = sorted(tags)
+        centred = result["plastics_centrality"] != "not_assessed"
+        if centred and result["plastic_tier"] != "lifecycle_and_society":
+            raise ValueError(
+                f"plastics_centrality is set only for lifecycle_and_society: {work_id}"
+            )
+        result["analytic_lens"] = "|".join(sorted(lenses))
         if bool(result["evidence_snippet"]) != bool(result["evidence_source"]):
             raise ValueError(f"evidence snippet and source must be supplied together for {work_id}")
         if result["evidence_source"] and result["evidence_source"] not in _SOURCES:
@@ -245,7 +311,7 @@ def import_annotations(
         path = Path(path_value)
         with path.open(encoding="utf-8-sig", newline="") as stream:
             reader = csv.DictReader(stream)
-            if reader.fieldnames != list(ANNOTATION_FIELDS):
+            if reader.fieldnames not in (list(ANNOTATION_FIELDS), list(LEGACY_ANNOTATION_FIELDS)):
                 raise ValueError(f"annotation header mismatch in {path}")
             for row in reader:
                 item = _normalize_row(row, split_index, guide_version)

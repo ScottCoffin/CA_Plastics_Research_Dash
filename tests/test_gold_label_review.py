@@ -304,16 +304,8 @@ def test_study_types_match_guide_v2_and_taxonomy() -> None:
     guide = (ROOT / "docs" / "LABELING_GUIDE_A2_ADDENDUM.md").read_text(encoding="utf-8")
     for value in gl.STUDY_TYPES:
         assert re.search(rf"^\| {value} \|", guide, re.MULTILINE), value
-    assert set(DOMAIN_TAGS) == {
-        "occurrence_and_monitoring",
-        "analytical_methods",
-        "fate_transport_and_sorption",
-        "wastewater_and_treatment",
-        "ecotoxicology_and_trophic_transfer",
-        "soil_and_agriculture",
-        "human_exposure_and_health_risk",
-        "air",
-    }
+    # BQ-S5 D1 (approved 2026-11-25): the 8-tag pin is replaced by the one taxonomy list.
+    assert list(DOMAIN_TAGS) == [entry["id"] for entry in taxonomy["domain_tags"]]
 
 
 def test_line_endings_are_kept_for_crlf_and_lf_sheets(tmp_path: Path) -> None:

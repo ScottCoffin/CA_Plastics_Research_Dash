@@ -63,7 +63,7 @@ FORM_FIELDS = (
 
 # Display order for the radio buttons. The sets are the importer's own (annotation.py);
 # tests check that these tuples cover exactly the same values.
-TIER_OPTIONS = ("core", "chemicals-in-plastics")
+TIER_OPTIONS = ("core", "chemicals-in-plastics", "lifecycle_and_society")
 SAMPLING_OPTIONS = ("yes", "partial", "no", "unclear")
 SOURCE_OPTIONS = ("title", "abstract", "full_text_locator")
 
@@ -72,6 +72,10 @@ TIER_HELP = {
     "chemicals-in-plastics": (
         "Additives or chemicals in, from or associated with plastics, when chemical identity "
         "or exposure is central (guide_v1 section 2)."
+    ),
+    "lifecycle_and_society": (
+        "Plastics as a material, product, waste stream or policy object rather than a pollutant; "
+        "set plastics_centrality too (guide_v3 section 2; owner approved 2026-11-25, H40 D4)."
     ),
 }
 SAMPLING_HELP = {
