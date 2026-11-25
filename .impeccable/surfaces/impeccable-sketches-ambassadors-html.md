@@ -112,3 +112,4 @@ Open questions for the owner:
 ## Lead review notes (round 3, 2026-11-25)
 
 - Screen 9 map shows a dashed box west of Bergen whose meaning is not labelled; identify it (city radius preview, grouping line or disputed line) or remove it.
+- The prototype map still captures the mouse wheel. The build uses the cooperative rule now live on /explore (spec section 10): Ctrl/Cmd or a click to zoom, one finger scrolls the page.
