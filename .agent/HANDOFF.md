@@ -23,7 +23,6 @@ partition with institution-registry join), UX-13 part a (Monitoring filters in t
 - `scripts/check_s2_2.py` and `scripts/check_s3_1.py` fail on this machine's local data at HEAD too (assert on a
   fixture work id W9000000103); not caused by this session; likely the checks read live data with fixture asserts.
 - OpenAlex free keys: >5-operator searches are limited to 2 req/s (was 5); MEMORY updated.
-- `.agent/MEMORY.md` is over 200 lines; compact at a quiet checkout. Registry row count is 4,677 (MEMORY says 4,637).
 - `network_metrics.json` goes stale when `index.json` changes; a full rebuild takes about 17 minutes (R=100).
 - The Evidence page filter list has one axe colour-contrast hit (`.ev-zero > .ev-option-name`), pre-existing.
 
