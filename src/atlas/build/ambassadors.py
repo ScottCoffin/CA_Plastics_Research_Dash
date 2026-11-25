@@ -1,0 +1,1097 @@
+"""Ambassador data per region (AMB-1 step 1, docs/AMBASSADORS_SPEC.md sections 2 and 4).
+
+Two public files per region folder, both built offline from ignored inputs and committed:
+
+- ``ambassador_institutions.json`` (schema ``amb-v1``): the eligible institutions (institutions
+  only, no people) with their registrable domains. An institution is eligible when at least
+  ``MIN_WORKS`` plastics works in the region's corpus have an author there and its OpenAlex type
+  is one of ``ELIGIBLE_TYPES``.
+- ``ambassador_cases.json`` (schema ``amb-cases-v1``): case queues for review stream A. Each case
+  carries public evidence only (titles, institution names, place names, short affiliation strings).
+  Case ids hash the region, kind and entity key, so answers survive rebuilds.
+
+Region inputs follow the registry predicate: a region with an ``institution_registry`` uses the
+curated corpus (authorships whose ``ca_basis`` is one of ``ca_basis_values``); a region with
+``country_codes`` uses the global partition (an authorship institution whose country is the code).
+
+Domains come from the domain cache under ``data/interim/ambassador_domains`` (ignored), which only
+--fetch-domains fills (OpenAlex institution records and ROR v2 records; the only network path).
+Precedence: ROR domains, then the OpenAlex homepage host, then ROR website links. Each host is
+reduced to its registrable domain with the suffix table below; subdomains are accepted. Free-mail
+and generic domains are always refused. Owner overrides live in
+``regions/<slug>/ambassador_domains.csv``.
+"""
+
+from __future__ import annotations
+
+import csv
+import gzip
+import hashlib
+import json
+import re
+import time
+import urllib.error
+import urllib.request
+from collections.abc import Iterable, Mapping, Sequence
+from dataclasses import dataclass, field
+from datetime import UTC, date, datetime
+from decimal import Decimal
+from pathlib import Path
+from typing import Any
+from urllib.parse import urlsplit
+
+import pyarrow.parquet as pq
+import yaml
+
+from atlas.ingest.global_partition import raw_page_paths
+from atlas.ingest.openalex import OPENALEX_BASE, _request_json
+from atlas.ingest.openalex import chunks as openalex_chunks
+from atlas.regions.registry import REPO_ROOT, Region
+from atlas.regions.scope import registry_row_matcher
+from atlas.util.budget import resolve_openalex_budget
+from atlas.util.cost import ApiCostLogger
+
+INSTITUTIONS_SCHEMA = "amb-v1"
+CASES_SCHEMA = "amb-cases-v1"
+MIN_WORKS = 3
+ELIGIBLE_TYPES = ("education", "government", "nonprofit", "facility")
+# Companies with this many works get a type check (they may be mislabelled research bodies).
+MANY_WORKS = 10
+TYPE_OPTIONS = (*ELIGIBLE_TYPES, "company", "healthcare", "archive", "other", "unsure")
+YES_NO_OPTIONS = ("agree", "disagree", "unsure")
+CASE_CAPS = {
+    "institution_in_region": 200,
+    "institution_type": 100,
+    "local_language_relevance": 200,
+}
+CASE_KINDS = (
+    "institution_in_region",
+    "institution_type",
+    "local_language_relevance",
+    "local_terms",
+)
+RULE = (
+    "An institution is eligible when at least 3 plastics works in this region's corpus have an "
+    "author at it, and its OpenAlex type is education, government, nonprofit or facility. "
+    "Domains come from the institution's homepage and ROR website, reduced to the registrable "
+    "domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains "
+    "are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove "
+    "domains. An institution with no known domain is listed with needs_domain true."
+)
+OVERRIDE_COLUMNS = ("institution_id", "domain", "action", "note")
+OVERRIDE_ACTIONS = ("add", "remove")
+GLOBAL_WORKS = Path("data/processed/global/works.parquet")
+NORMALIZED_AUTHORSHIPS = Path("data/processed/normalized/authorships.parquet")
+NORMALIZED_WORKS = Path("data/processed/normalized/works.parquet")
+RAW_DIR = Path("data/raw")
+RAW_PAGES = Path("data/raw/openalex_global")
+
+FREE_MAIL_DOMAINS = frozenset(
+    {
+        "gmail.com",
+        "googlemail.com",
+        "outlook.com",
+        "hotmail.com",
+        "live.com",
+        "msn.com",
+        "yahoo.com",
+        "proton.me",
+        "protonmail.com",
+        "pm.me",
+        "icloud.com",
+        "me.com",
+        "mac.com",
+        "aol.com",
+        "mail.com",
+        "qq.com",
+        "163.com",
+        "126.com",
+        "web.de",
+        "t-online.de",
+        "yandex.ru",
+        "zoho.com",
+        "gmx.net",
+    }
+)
+# Any domain whose first label is one of these is refused (gmx.de, yahoo.co.uk, outlook.fr, ...).
+FREE_MAIL_LABELS = frozenset({"gmx", "yahoo", "hotmail", "outlook", "live"})
+# Two-level public suffixes; a registrable domain keeps one label more under them.
+TWO_LEVEL_SUFFIXES = frozenset({"ca.gov", "ac.uk", "gov.uk", "co.uk", "org.uk", "edu.au", "gov.au"})
+
+_HOST_RE = re.compile(r"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$")
+_ROR_DUMP_NAME = re.compile(r"(?:^|[^a-z])ror(?:[^a-z]|$)")
+_OPENALEX_INSTITUTION = re.compile(r"^I\d+$")
+_TEXT_LIMIT = 160
+_TITLE_LIMIT = 1000
+
+# Keys that must never appear in public ambassador outputs (people, contact, text bodies).
+FORBIDDEN_KEYS = frozenset(
+    {
+        "email",
+        "emails",
+        "orcid",
+        "contact",
+        "author",
+        "authors",
+        "author_id",
+        "author_name",
+        "raw_author_name",
+        "affiliation",
+        "raw_affiliation",
+        "abstract",
+        "abstract_inverted_index",
+    }
+)
+INSTITUTION_KEYS = frozenset({"id", "name", "type", "works", "domains", "needs_domain"})
+CASE_KEYS = frozenset({"case_id", "kind", "question", "evidence", "current_value", "options"})
+
+
+# --- text and domain helpers ----------------------------------------------------------------
+
+
+def _short(value: object) -> str:
+    """Compact OpenAlex or ROR id: the last path segment of a URL, or the value itself."""
+    text = str(value or "").strip().rstrip("/")
+    return text.rsplit("/", 1)[-1] if text else ""
+
+
+def _country(value: object) -> str:
+    return str(value or "").strip().upper()
+
+
+def public_text(value: object, limit: int = _TEXT_LIMIT) -> str | None:
+    """Collapsed, truncated text for public evidence; None when empty or when it contains '@'."""
+    text = " ".join(str(value or "").split())
+    if not text or "@" in text:
+        return None
+    return text[:limit].rstrip()
+
+
+def host_of(value: object) -> str | None:
+    """Lower-case host of a URL or bare domain (no port, user info or leading ``www.``)."""
+    text = str(value or "").strip()
+    if not text:
+        return None
+    if "://" not in text:
+        text = "https://" + text
+    try:
+        host = urlsplit(text).hostname
+    except ValueError:
+        return None
+    if not host:
+        return None
+    host = host.lower().rstrip(".")
+    return host[4:] if host.startswith("www.") else host
+
+
+def registrable_domain(value: object) -> str | None:
+    """The registrable domain of a URL or host, or None when it is not a domain.
+
+    The last two labels, or the last three under a two-level suffix (``waterboards.ca.gov``).
+    ``ca.gov`` itself and bare suffixes return None.
+    """
+    host = host_of(value)
+    if host is None or not _HOST_RE.match(host):
+        return None
+    labels = host.split(".")
+    size = 3 if ".".join(labels[-2:]) in TWO_LEVEL_SUFFIXES else 2
+    if len(labels) < size:
+        return None
+    return ".".join(labels[-size:])
+
+
+def is_free_mail(domain: str) -> bool:
+    """True for free-mail and generic mail domains, which never qualify an institution."""
+    return domain in FREE_MAIL_DOMAINS or domain.split(".", 1)[0] in FREE_MAIL_LABELS
+
+
+# --- inputs ---------------------------------------------------------------------------------
+
+
+@dataclass
+class Facts:
+    """What the inputs say about one institution in a region's corpus."""
+
+    name: str = ""
+    type: str | None = None
+    ror: str = ""
+    hosts: set[str] = field(default_factory=set)
+    works: set[str] = field(default_factory=set)
+    in_region: bool = False
+    signals: set[str] = field(default_factory=set)
+    affiliations: set[str] = field(default_factory=set)
+
+    def fill(self, name: str, type_: str | None, ror: str, hosts: Iterable[object]) -> None:
+        if not self.name and name:
+            self.name = name
+        if self.type is None and type_:
+            self.type = type_
+        if not self.ror and ror:
+            self.ror = ror
+        self.hosts.update(str(h) for h in hosts if h)
+
+
+@dataclass
+class RegionCorpus:
+    facts: dict[str, Facts]
+    local_titles: dict[str, str | None]  # work id -> title, for works with a region author
+    languages: dict[str, str]  # work id -> language code from the global partition
+    terms: list[dict[str, str]]  # local search terms from regions/<slug>/region.yml
+
+
+@dataclass(frozen=True)
+class Override:
+    action: str
+    domain: str
+    note: str
+
+
+@dataclass(frozen=True)
+class RorValues:
+    """Domains and website links of one ROR record (from a local dump or the ROR API)."""
+
+    domains: tuple[str, ...] = ()
+    websites: tuple[str, ...] = ()
+
+
+def ror_values(record: Mapping[str, Any]) -> RorValues:
+    """Domains and website links of a ROR v2 record (``domains`` and ``links``)."""
+    domains = {str(d) for d in record.get("domains") or [] if d}
+    websites: set[str] = set()
+    for link in record.get("links") or []:
+        if isinstance(link, Mapping) and link.get("type") == "website" and link.get("value"):
+            websites.add(str(link["value"]))
+        elif isinstance(link, str) and link:
+            websites.add(link)
+    return RorValues(tuple(sorted(domains)), tuple(sorted(websites)))
+
+
+def load_ror_domains(raw_root: Path = REPO_ROOT / RAW_DIR) -> dict[str, RorValues]:
+    """ROR id -> values from a local ROR dump if one exists (never fetched).
+
+    A dump is any ``*.json`` or ``*.json.gz`` under ``raw_root`` whose file name has ``ror`` as a
+    word (``ror-v2.json``). It is a JSON list of ROR records.
+    """
+    found: dict[str, RorValues] = {}
+    if not raw_root.is_dir():
+        return {}
+    for path in sorted(raw_root.rglob("*")):
+        name = path.name.lower()
+        if not path.is_file() or not _ROR_DUMP_NAME.search(name):
+            continue
+        if not name.endswith((".json", ".json.gz")):
+            continue
+        opener = gzip.open if name.endswith(".gz") else open
+        with opener(path, "rt", encoding="utf-8") as handle:
+            records = json.load(handle)
+        if not isinstance(records, list):
+            continue
+        for record in records:
+            if not isinstance(record, Mapping):
+                continue
+            ror_id = _short(record.get("id"))
+            if not ror_id:
+                continue
+            new, old = ror_values(record), found.get(ror_id, RorValues())
+            found[ror_id] = RorValues(
+                tuple(sorted({*old.domains, *new.domains})),
+                tuple(sorted({*old.websites, *new.websites})),
+            )
+    return found
+
+
+def load_overrides(path: Path) -> dict[str, list[Override]]:
+    """Owner overrides by institution id, in file order. A missing file means no overrides.
+
+    Invalid rows raise ``ValueError`` so that an owner typo is seen at build time.
+    """
+    if not path.is_file():
+        return {}
+    found: dict[str, list[Override]] = {}
+    with path.open(encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        if tuple(reader.fieldnames or ()) != OVERRIDE_COLUMNS:
+            raise ValueError(f"{path}: header must be {','.join(OVERRIDE_COLUMNS)}")
+        for number, row in enumerate(reader, start=2):
+            inst_id = (row.get("institution_id") or "").strip()
+            domain_text = (row.get("domain") or "").strip()
+            if not inst_id and not domain_text:
+                continue
+            action = (row.get("action") or "").strip().lower()
+            if not _OPENALEX_INSTITUTION.match(inst_id):
+                raise ValueError(f"{path}:{number}: institution_id must look like I123")
+            if action not in OVERRIDE_ACTIONS:
+                raise ValueError(f"{path}:{number}: action must be add or remove")
+            domain = registrable_domain(domain_text)
+            if domain is None:
+                raise ValueError(f"{path}:{number}: {domain_text!r} is not a registrable domain")
+            if action == "add" and is_free_mail(domain):
+                raise ValueError(f"{path}:{number}: free-mail domain {domain} is refused")
+            note = (row.get("note") or "").strip()
+            found.setdefault(inst_id, []).append(Override(action, domain, note))
+    return found
+
+
+def _usable(values: Iterable[object]) -> set[str]:
+    """Registrable domains from URLs or hosts, without free-mail or generic domains."""
+    found: set[str] = set()
+    for value in values:
+        domain = registrable_domain(value)
+        if domain is not None and not is_free_mail(domain):
+            found.add(domain)
+    return found
+
+
+def resolve_domains(
+    homepage: Iterable[object], ror: RorValues, overrides: Sequence[Override]
+) -> list[str]:
+    """Sorted registrable domains for one institution, after owner overrides.
+
+    Owner precedence rule: ROR domains first, then the OpenAlex homepage host, then ROR website
+    links. The first group that yields a usable domain is used (groups are not merged); owner
+    overrides are applied afterwards in file order.
+    """
+    found: set[str] = set()
+    for group in (ror.domains, list(homepage), ror.websites):
+        found = _usable(group)
+        if found:
+            break
+    for override in overrides:
+        if override.action == "add":
+            found.add(override.domain)
+        else:
+            found.discard(override.domain)
+    return sorted(found)
+
+
+def load_region_terms(config_path: Path) -> tuple[list[dict[str, str]], list[str]]:
+    """(local search terms, geography item names) from a region.yml; empty when it is absent."""
+    if not config_path.is_file():
+        return [], []
+    data = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+    terms: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for entry in data.get("local_search_terms") or []:
+        if not isinstance(entry, Mapping) or not entry.get("term"):
+            continue
+        term = str(entry["term"]).strip()
+        if term.casefold() in seen:
+            continue
+        seen.add(term.casefold())
+        terms.append(
+            {
+                "term": term,
+                "language": str(entry.get("language") or ""),
+                "note": str(entry.get("note") or ""),
+            }
+        )
+    places: list[str] = []
+    for section in data.get("sections") or []:
+        if not isinstance(section, Mapping) or section.get("id") != "geography":
+            continue
+        for item in section.get("items") or []:
+            if isinstance(item, Mapping) and item.get("name"):
+                places.append(str(item["name"]))
+    return terms, places
+
+
+def _languages(path: Path) -> dict[str, str]:
+    if not path.is_file():
+        return {}
+    rows = pq.read_table(path, columns=["work_id", "language"]).to_pylist()
+    return {
+        _short(r["work_id"]): str(r["language"] or "").strip().lower() for r in rows if r["work_id"]
+    }
+
+
+def _collect_registry(region: Region, root: Path) -> tuple[dict[str, Facts], dict[str, str | None]]:
+    """Curated corpus: authorships whose ca_basis is in the predicate's ca_basis_values."""
+    predicate = region.predicate
+    assert predicate is not None and predicate.institution_registry is not None
+    values = frozenset(predicate.ca_basis_values)
+    inst_rows = pq.read_table(
+        root / predicate.institution_registry,
+        columns=[
+            "openalex_id",
+            "display_name",
+            "ror_id",
+            "openalex_type",
+            "country_code",
+            "region",
+        ],
+    ).to_pylist()
+    matches = registry_row_matcher(region)
+    registry_ids: set[str] = set()
+    details: dict[str, dict[str, str | None]] = {}
+    for row in inst_rows:
+        inst_id = _short(row["openalex_id"])
+        if not inst_id:
+            continue
+        details[inst_id] = {
+            "name": str(row["display_name"] or "").strip(),
+            "type": str(row["openalex_type"] or "").strip() or None,
+            "ror": _short(row["ror_id"]),
+        }
+        if matches(str(row["region"] or "").strip(), str(row["country_code"] or "").strip()):
+            registry_ids.add(inst_id)
+
+    facts: dict[str, Facts] = {}
+    bases: dict[str, set[str]] = {}
+    local: set[str] = set()
+    authorships = pq.read_table(
+        root / NORMALIZED_AUTHORSHIPS,
+        columns=["work_id", "institution_ids", "raw_affiliation", "ca_basis"],
+    ).to_pylist()
+    for row in authorships:
+        basis = row["ca_basis"] or ""
+        if basis not in values:
+            continue
+        work_id = _short(row["work_id"])
+        local.add(work_id)
+        note = public_text(row["raw_affiliation"]) if basis == "raw_affiliation" else None
+        for raw_id in row["institution_ids"] or []:
+            inst_id = _short(raw_id)
+            if not inst_id:
+                continue
+            item = facts.setdefault(inst_id, Facts(in_region=True))
+            item.works.add(work_id)
+            bases.setdefault(inst_id, set()).add(basis)
+            if note:
+                item.affiliations.add(note)
+    for inst_id, item in facts.items():
+        detail = details.get(inst_id, {})
+        item.fill(
+            str(detail.get("name") or ""), detail.get("type"), str(detail.get("ror") or ""), []
+        )
+        if inst_id not in registry_ids and bases[inst_id] <= {"raw_affiliation"}:
+            item.signals.add("matched only by raw affiliation")
+
+    titles: dict[str, str | None] = {}
+    for row in pq.read_table(root / NORMALIZED_WORKS, columns=["work_id", "title"]).to_pylist():
+        work_id = _short(row["work_id"])
+        if work_id in local:
+            titles[work_id] = public_text(row["title"], limit=_TITLE_LIMIT)
+    for work_id in local - titles.keys():
+        titles[work_id] = None
+    return facts, titles
+
+
+def _type_of(value: object) -> str | None:
+    text = str(value or "").strip()
+    return text or None
+
+
+def _add_country_work(
+    facts: dict[str, Facts],
+    local_titles: dict[str, str | None],
+    work: Mapping[str, Any],
+    work_id: str,
+    iso: str,
+    place: re.Pattern[str],
+) -> None:
+    in_region_work = False
+    for authorship in work.get("authorships") or []:
+        if not isinstance(authorship, Mapping):
+            continue
+        author_in_region = iso in {_country(c) for c in authorship.get("countries") or []}
+        raw_strings = [
+            s for s in authorship.get("raw_affiliation_strings") or [] if isinstance(s, str)
+        ]
+        places = sorted({m.group(0) for s in raw_strings for m in place.finditer(s)})
+        notes = [n for n in (public_text(s) for s in raw_strings) if n]
+        for inst in authorship.get("institutions") or []:
+            if not isinstance(inst, Mapping):
+                continue
+            inst_id = _short(inst.get("id"))
+            if not inst_id:
+                continue
+            country = _country(inst.get("country_code"))
+            item = facts.setdefault(inst_id, Facts())
+            item.fill(
+                str(inst.get("display_name") or "").strip(),
+                _type_of(inst.get("type")),
+                _short(inst.get("ror")),
+                [inst.get("homepage_url")] if isinstance(inst.get("homepage_url"), str) else [],
+            )
+            item.works.add(work_id)
+            if country == iso:
+                item.in_region = True
+                in_region_work = True
+                continue
+            if author_in_region:
+                item.signals.add(f"author country {iso}")
+                in_region_work = True
+            if places:
+                item.signals.update(f'affiliation mentions "{p}"' for p in places)
+                item.affiliations.update(notes)
+    if in_region_work:
+        local_titles[work_id] = public_text(work.get("title"), limit=_TITLE_LIMIT)
+
+
+def _collect_country(
+    region: Region, root: Path, places: Sequence[str]
+) -> tuple[dict[str, Facts], dict[str, str | None]]:
+    """Global partition: authorship institutions in the region's country, from raw pages."""
+    predicate = region.predicate
+    assert predicate is not None and len(predicate.country_codes) == 1
+    iso = predicate.country_codes[0]
+    names = sorted({region.name, *places}, key=len, reverse=True)
+    place = re.compile(r"\b(?:" + "|".join(re.escape(n) for n in names) + r")\b", re.IGNORECASE)
+    corpus = set(_languages(root / GLOBAL_WORKS))
+    needle = f'"{iso}"'
+    facts: dict[str, Facts] = {}
+    local_titles: dict[str, str | None] = {}
+    for path in raw_page_paths(root / RAW_PAGES):
+        with gzip.open(path, "rt", encoding="utf-8") as handle:
+            handle.readline()  # page_header
+            for line in handle:
+                if needle not in line and not place.search(line):
+                    continue
+                work = json.loads(line)
+                work_id = _short(work.get("id"))
+                if work_id in corpus:
+                    _add_country_work(facts, local_titles, work, work_id, iso, place)
+    return facts, local_titles
+
+
+def load_corpus(region: Region, root: Path = REPO_ROOT) -> RegionCorpus:
+    """Read the region's inputs under ``root`` (ignored partition, raw pages, normalized tables)."""
+    predicate = region.predicate
+    assert predicate is not None
+    terms, places = load_region_terms(root / "regions" / region.slug / "region.yml")
+    if predicate.institution_registry is not None:
+        facts, titles = _collect_registry(region, root)
+    else:
+        facts, titles = _collect_country(region, root, places)
+    return RegionCorpus(
+        facts=facts,
+        local_titles=titles,
+        languages=_languages(root / GLOBAL_WORKS),
+        terms=terms,
+    )
+
+
+def inputs_present(region: Region, root: Path = REPO_ROOT) -> bool:
+    """True when every ignored input this region needs exists (staleness can then be checked)."""
+    predicate = region.predicate
+    if predicate is None or not (root / GLOBAL_WORKS).is_file():
+        return False
+    if predicate.institution_registry is not None:
+        needed = [
+            NORMALIZED_AUTHORSHIPS,
+            NORMALIZED_WORKS,
+            Path(predicate.institution_registry),
+        ]
+        return all((root / path).is_file() for path in needed)
+    return bool(raw_page_paths(root / RAW_PAGES))
+
+
+# --- outputs --------------------------------------------------------------------------------
+
+
+def _eligible(corpus: RegionCorpus) -> list[tuple[str, Facts]]:
+    """Institutions in the region with enough works and an eligible type, by id."""
+    return [
+        (inst_id, item)
+        for inst_id, item in corpus.facts.items()
+        if item.in_region and len(item.works) >= MIN_WORKS and item.type in ELIGIBLE_TYPES
+    ]
+
+
+def eligible_ids(corpus: RegionCorpus) -> list[str]:
+    return sorted(inst_id for inst_id, _ in _eligible(corpus))
+
+
+# --- domain cache (ignored, data/interim) and the fetch mode ------------------------------
+
+DOMAIN_CACHE = Path("data/interim/ambassador_domains")
+USAGE_LOG = Path("data/logs/api_usage.jsonl")
+OPENALEX_SELECT = "id,display_name,homepage_url,ror"
+OPENALEX_BATCH = 100
+FETCH_CREDIT_CAP = Decimal(20)
+PLANNED_CREDITS_PER_CALL = Decimal(1)
+ROR_API = "https://api.ror.org/v2/organizations/{ror}"
+ROR_USER_AGENT = "ca-plastics-atlas/0.1 (research dashboard)"
+ROR_INTERVAL_SECONDS = 1.0
+_ROR_ID = re.compile(r"^0[a-z0-9]{8}$")
+
+
+class FetchLimitError(RuntimeError):
+    """The OpenAlex credit cap or the daily budget guard would be exceeded."""
+
+
+def cache_path(root: Path, inst_id: str) -> Path:
+    return root / DOMAIN_CACHE / f"{inst_id}.json"
+
+
+def read_cache(root: Path, ids: Iterable[str]) -> dict[str, dict[str, Any]]:
+    """Cached domain entries for the given institution ids (missing files are skipped)."""
+    found: dict[str, dict[str, Any]] = {}
+    for inst_id in ids:
+        path = cache_path(root, inst_id)
+        if path.is_file():
+            found[inst_id] = json.loads(path.read_text(encoding="utf-8"))
+    return found
+
+
+def _write_cache(root: Path, inst_id: str, entry: Mapping[str, Any]) -> None:
+    path = cache_path(root, inst_id)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".json.tmp")
+    text = json.dumps(entry, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(path)
+
+
+def _ror_id(item: Facts, entry: Mapping[str, Any]) -> str:
+    openalex = entry.get("openalex") or {}
+    return item.ror or str(openalex.get("ror") or "")
+
+
+def missing_domain_cache(root: Path, corpus: RegionCorpus) -> list[str]:
+    """Eligible ids whose OpenAlex record, or ROR record when a ROR id is known, is not cached."""
+    cached = read_cache(root, eligible_ids(corpus))
+    missing = []
+    for inst_id, item in _eligible(corpus):
+        entry = cached.get(inst_id, {})
+        if "openalex" not in entry or (_ror_id(item, entry) and "ror" not in entry):
+            missing.append(inst_id)
+    return sorted(missing)
+
+
+def fetch_openalex(
+    ids: Sequence[str],
+    root: Path,
+    *,
+    logger: Any,
+    budget: Any,
+    request_json: Any = _request_json,
+    today: str,
+) -> int:
+    """Fetch OpenAlex institution records for uncached ids in batches; returns the call count.
+
+    Each call is a plain filter (about 1 credit). The run stops before a call that would exceed
+    ``FETCH_CREDIT_CAP`` or the daily budget guard (``budget.reserve_error``).
+    """
+    cached = read_cache(root, ids)
+    todo = [i for i in ids if "openalex" not in cached.get(i, {})]
+    calls = 0
+    for batch in openalex_chunks(todo, OPENALEX_BATCH):
+        spent = Decimal(str(logger.credits_total))
+        if spent + PLANNED_CREDITS_PER_CALL > FETCH_CREDIT_CAP:
+            raise FetchLimitError(f"OpenAlex credit cap {FETCH_CREDIT_CAP} reached")
+        error = budget.reserve_error(cost_usd=Decimal(str(logger.cost_usd_total)), credits=spent)
+        if error:
+            raise FetchLimitError(error)
+        filter_ids = "|".join(batch)
+        url = (
+            f"{OPENALEX_BASE}/institutions?filter=openalex_id:{filter_ids}"
+            f"&select={OPENALEX_SELECT}&per-page={OPENALEX_BATCH}"
+        )
+        body = request_json(url, logger=logger)
+        calls += 1
+        records = {
+            _short(r.get("id")): r for r in body.get("results") or [] if isinstance(r, Mapping)
+        }
+        for inst_id in batch:
+            record = records.get(inst_id) or {}
+            entry = cached.get(inst_id, {})
+            entry["institution_id"] = inst_id
+            entry["openalex"] = {
+                "fetched": today,
+                "found": bool(record),
+                "display_name": str(record.get("display_name") or ""),
+                "homepage_url": record.get("homepage_url") or None,
+                "ror": _short(record.get("ror")),
+            }
+            cached[inst_id] = entry
+            _write_cache(root, inst_id, entry)
+    return calls
+
+
+def _get_ror(url: str) -> dict[str, Any] | None:
+    """One ROR API GET with a generic User-Agent; None for an unknown id (HTTP 404)."""
+    request = urllib.request.Request(
+        url, headers={"User-Agent": ROR_USER_AGENT, "Accept": "application/json"}
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            body = json.load(response)
+    except urllib.error.HTTPError as error:
+        if error.code == 404:
+            return None
+        raise
+    return body if isinstance(body, dict) else None
+
+
+def fetch_ror(
+    ror_by_id: Mapping[str, str],
+    root: Path,
+    *,
+    get_json: Any = _get_ror,
+    sleep: Any = time.sleep,
+    today: str,
+) -> int:
+    """Fetch ROR v2 records for an institution-to-ROR map, one request per unique uncached id.
+
+    Pauses ``ROR_INTERVAL_SECONDS`` between requests (ROR asks for one request per second).
+    Returns the number of ROR requests.
+    """
+    cached = read_cache(root, ror_by_id)
+    wanted = sorted({r for inst, r in ror_by_id.items() if "ror" not in cached.get(inst, {})})
+    results: dict[str, dict[str, Any]] = {}
+    calls = 0
+    for ror in wanted:
+        if not _ROR_ID.match(ror):
+            continue
+        if calls:
+            sleep(ROR_INTERVAL_SECONDS)
+        body = get_json(ROR_API.format(ror=ror))
+        calls += 1
+        if body is None:
+            results[ror] = {
+                "ror_id": ror,
+                "fetched": today,
+                "found": False,
+                "domains": [],
+                "websites": [],
+            }
+        else:
+            values = ror_values(body)
+            results[ror] = {
+                "ror_id": ror,
+                "fetched": today,
+                "found": True,
+                "domains": list(values.domains),
+                "websites": list(values.websites),
+            }
+    for inst_id, ror in ror_by_id.items():
+        if ror in results:
+            entry = cached.get(inst_id, {"institution_id": inst_id})
+            entry["ror"] = results[ror]
+            _write_cache(root, inst_id, entry)
+    return calls
+
+
+def run_fetch(
+    corpora: Mapping[str, RegionCorpus],
+    root: Path,
+    *,
+    usage_log: Path,
+    request_json: Any = _request_json,
+    get_json: Any = _get_ror,
+    sleep: Any = time.sleep,
+    budget: Any = None,
+    today: str | None = None,
+) -> dict[str, Any]:
+    """Fill the domain cache for every eligible institution of every region (network).
+
+    OpenAlex records first (batched, logged to ``usage_log``), then ROR records for the
+    institutions that have a ROR id. Returns request and credit counts.
+    """
+    stamp = today or date.today().isoformat()
+    budget = budget or resolve_openalex_budget()
+    items: dict[str, Facts] = {}
+    for corpus in corpora.values():
+        for inst_id, item in _eligible(corpus):
+            items.setdefault(inst_id, item)
+    with ApiCostLogger(f"ambassador-domains-{stamp}", usage_log) as logger:
+        calls = fetch_openalex(
+            sorted(items),
+            root,
+            logger=logger,
+            budget=budget,
+            request_json=request_json,
+            today=stamp,
+        )
+        cached = read_cache(root, items)
+        ror_by_id = {}
+        for inst_id, item in items.items():
+            ror = _ror_id(item, cached.get(inst_id, {}))
+            if ror:
+                ror_by_id[inst_id] = ror
+        ror_calls = fetch_ror(ror_by_id, root, get_json=get_json, sleep=sleep, today=stamp)
+        credits = Decimal(str(logger.credits_total))
+    return {
+        "institutions": len(items),
+        "openalex_calls": calls,
+        "ror_requests": ror_calls,
+        "credits": str(credits),
+    }
+
+
+def _institution_rows(
+    corpus: RegionCorpus,
+    ror_dump: Mapping[str, RorValues],
+    cache: Mapping[str, Mapping[str, Any]],
+    overrides: Mapping[str, Sequence[Override]],
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for inst_id, item in _eligible(corpus):
+        entry = cache.get(inst_id, {})
+        openalex = entry.get("openalex") or {}
+        fetched = entry.get("ror") or {}
+        local = ror_dump.get(_ror_id(item, entry), RorValues())
+        ror = RorValues(
+            tuple(sorted({*fetched.get("domains", []), *local.domains})),
+            tuple(sorted({*fetched.get("websites", []), *local.websites})),
+        )
+        homepage = [*sorted(item.hosts)]
+        if openalex.get("homepage_url"):
+            homepage.append(str(openalex["homepage_url"]))
+        domains = resolve_domains(homepage, ror, overrides.get(inst_id, ()))
+        rows.append(
+            {
+                "id": inst_id,
+                "name": item.name or inst_id,
+                "type": item.type,
+                "works": len(item.works),
+                "domains": domains,
+                "needs_domain": not domains,
+            }
+        )
+    rows.sort(key=lambda r: (-r["works"], r["name"].casefold(), r["id"]))
+    return rows
+
+
+def _case(
+    slug: str,
+    kind: str,
+    key: str,
+    question: str,
+    evidence: dict[str, Any],
+    current: str,
+    options: Sequence[str],
+) -> dict[str, Any]:
+    digest = hashlib.sha256(f"{slug}|{kind}|{key}".encode()).hexdigest()[:12]
+    return {
+        "case_id": f"amb-{digest}",
+        "kind": kind,
+        "question": question,
+        "evidence": evidence,
+        "current_value": current,
+        "options": list(options),
+    }
+
+
+def _case_rows(region: Region, corpus: RegionCorpus) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    """Case queues by kind (capped, deterministic) and the number of candidates before the cap."""
+    slug = region.slug
+    cases: list[dict[str, Any]] = []
+    available: dict[str, int] = {}
+
+    # Affiliation evidence (place names, raw-affiliation-only matches) ranks before
+    # author-country-only signals, so the cap keeps the disagreements a reviewer needs most.
+    region_cands = sorted(
+        ((i, f) for i, f in corpus.facts.items() if f.signals),
+        key=lambda pair: (
+            0
+            if any(s.startswith(("affiliation mentions", "matched only")) for s in pair[1].signals)
+            else 1,
+            -len(pair[1].works),
+            pair[0],
+        ),
+    )
+    available["institution_in_region"] = len(region_cands)
+    for inst_id, item in region_cands[: CASE_CAPS["institution_in_region"]]:
+        cases.append(
+            _case(
+                slug,
+                "institution_in_region",
+                inst_id,
+                f"Is this institution in {region.name}?",
+                {
+                    "institution_id": inst_id,
+                    "institution_name": item.name or None,
+                    "works": len(item.works),
+                    "signals": sorted(item.signals),
+                    "affiliation_examples": sorted(item.affiliations)[:3],
+                },
+                "in region" if item.in_region else "not in region",
+                YES_NO_OPTIONS,
+            )
+        )
+
+    type_cands = sorted(
+        (
+            (i, f)
+            for i, f in corpus.facts.items()
+            if f.in_region
+            and len(f.works) >= MIN_WORKS
+            and (f.type in (None, "other") or (f.type == "company" and len(f.works) >= MANY_WORKS))
+        ),
+        key=lambda pair: (-len(pair[1].works), pair[0]),
+    )
+    available["institution_type"] = len(type_cands)
+    for inst_id, item in type_cands[: CASE_CAPS["institution_type"]]:
+        cases.append(
+            _case(
+                slug,
+                "institution_type",
+                inst_id,
+                "Is this institution's type right?",
+                {
+                    "institution_id": inst_id,
+                    "institution_name": item.name or None,
+                    "works": len(item.works),
+                },
+                item.type or "missing",
+                TYPE_OPTIONS,
+            )
+        )
+
+    language_cands = []
+    for work_id in sorted(corpus.local_titles):
+        title = corpus.local_titles[work_id]
+        language = corpus.languages.get(work_id, "")
+        if title and language and language != "en":
+            language_cands.append((work_id, title, language))
+    available["local_language_relevance"] = len(language_cands)
+    for work_id, title, language in language_cands[: CASE_CAPS["local_language_relevance"]]:
+        cases.append(
+            _case(
+                slug,
+                "local_language_relevance",
+                work_id,
+                "Is this local-language work about plastics?",
+                {"work_id": work_id, "title": title, "language": language},
+                f"language {language}",
+                YES_NO_OPTIONS,
+            )
+        )
+
+    available["local_terms"] = len(corpus.terms)
+    for entry in corpus.terms:
+        cases.append(
+            _case(
+                slug,
+                "local_terms",
+                entry["term"].casefold(),
+                "Is this term used locally for plastic pollution?",
+                {"term": entry["term"], "language": entry["language"], "note": entry["note"]},
+                "listed in region config",
+                YES_NO_OPTIONS,
+            )
+        )
+    return cases, available
+
+
+def build_payloads(
+    region: Region,
+    corpus: RegionCorpus,
+    ror_dump: Mapping[str, RorValues],
+    cache: Mapping[str, Mapping[str, Any]],
+    overrides: Mapping[str, Sequence[Override]],
+    generated_at: str,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """(ambassador_institutions payload, ambassador_cases payload) for one region."""
+    rows = _institution_rows(corpus, ror_dump, cache, overrides)
+    institutions = {
+        "schema": INSTITUTIONS_SCHEMA,
+        "generated_at": generated_at,
+        "region": region.slug,
+        "rule": RULE,
+        "min_works": MIN_WORKS,
+        "eligible_types": list(ELIGIBLE_TYPES),
+        "institutions": rows,
+    }
+    cases, available = _case_rows(region, corpus)
+    counts = {kind: sum(1 for c in cases if c["kind"] == kind) for kind in CASE_KINDS}
+    queue = {
+        "schema": CASES_SCHEMA,
+        "generated_at": generated_at,
+        "region": region.slug,
+        "caps": CASE_CAPS,
+        "available": {kind: available.get(kind, 0) for kind in CASE_KINDS},
+        "counts": counts,
+        "cases": cases,
+    }
+    return institutions, queue
+
+
+def build_from_corpus(
+    region: Region, corpus: RegionCorpus, root: Path = REPO_ROOT, generated_at: str | None = None
+) -> tuple[dict, dict]:
+    """Both payloads from a loaded corpus, the local ROR dump, the domain cache and overrides."""
+    stamp = generated_at or datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return build_payloads(
+        region,
+        corpus,
+        load_ror_domains(root / RAW_DIR),
+        read_cache(root, corpus.facts),
+        load_overrides(root / "regions" / region.slug / "ambassador_domains.csv"),
+        stamp,
+    )
+
+
+def build_region(
+    region: Region, root: Path = REPO_ROOT, generated_at: str | None = None
+) -> tuple[dict, dict]:
+    """Load the region's inputs under ``root`` and build both payloads (offline)."""
+    return build_from_corpus(region, load_corpus(region, root), root, generated_at)
+
+
+def encode(payload: Mapping[str, Any]) -> str:
+    return json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+
+
+def _walk(value: Any, path: str = "$") -> Iterable[tuple[str, str]]:
+    """(path, problem) for forbidden keys and '@' inside any string of a payload."""
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            if key in FORBIDDEN_KEYS:
+                yield path, f"forbidden key {key!r}"
+            yield from _walk(item, f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            yield from _walk(item, f"{path}[{index}]")
+    elif isinstance(value, str) and "@" in value:
+        yield path, "string contains '@' (possible contact detail)"
+
+
+def validate_outputs(
+    institutions: Mapping[str, Any], cases: Mapping[str, Any], slug: str
+) -> list[str]:
+    """Schema, eligibility, case and privacy problems for one region's committed outputs."""
+    problems: list[str] = []
+    if institutions.get("schema") != INSTITUTIONS_SCHEMA:
+        problems.append("institutions: schema must be amb-v1")
+    if cases.get("schema") != CASES_SCHEMA:
+        problems.append("cases: schema must be amb-cases-v1")
+    for name, payload in (("institutions", institutions), ("cases", cases)):
+        if payload.get("region") != slug:
+            problems.append(f"{name}: region must be {slug}")
+        problems.extend(f"{name}: {where} {text}" for where, text in _walk(payload))
+    for index, row in enumerate(institutions.get("institutions") or []):
+        if set(row) != INSTITUTION_KEYS:
+            problems.append(f"institutions[{index}]: keys must be {sorted(INSTITUTION_KEYS)}")
+            continue
+        if row["works"] < MIN_WORKS or row["type"] not in ELIGIBLE_TYPES:
+            problems.append(f"institutions[{index}]: not eligible ({row['id']})")
+        if row["needs_domain"] != (not row["domains"]):
+            problems.append(f"institutions[{index}]: needs_domain disagrees with domains")
+        for domain in row["domains"]:
+            if registrable_domain(domain) != domain or is_free_mail(domain):
+                problems.append(f"institutions[{index}]: bad domain {domain!r}")
+    ids: list[str] = []
+    counts: dict[str, int] = {}
+    for index, case in enumerate(cases.get("cases") or []):
+        if set(case) != CASE_KEYS or case["kind"] not in CASE_KINDS:
+            problems.append(f"cases[{index}]: keys or kind invalid")
+            continue
+        ids.append(case["case_id"])
+        counts[case["kind"]] = counts.get(case["kind"], 0) + 1
+    if len(ids) != len(set(ids)):
+        problems.append("cases: duplicate case_id")
+    for kind, cap in CASE_CAPS.items():
+        if counts.get(kind, 0) > cap:
+            problems.append(f"cases: {kind} exceeds cap {cap}")
+    return problems
+
+
+def overrides_problems(path: Path) -> list[str]:
+    try:
+        load_overrides(path)
+    except ValueError as error:
+        return [str(error)]
+    return []

@@ -1,0 +1,4209 @@
+{
+  "schema": "amb-cases-v1",
+  "generated_at": "2026-11-25T02:31:27Z",
+  "region": "norway",
+  "caps": {
+    "institution_in_region": 200,
+    "institution_type": 100,
+    "local_language_relevance": 200
+  },
+  "available": {
+    "institution_in_region": 156,
+    "institution_type": 7,
+    "local_language_relevance": 12,
+    "local_terms": 4
+  },
+  "counts": {
+    "institution_in_region": 156,
+    "institution_type": 7,
+    "local_language_relevance": 12,
+    "local_terms": 4
+  },
+  "cases": [
+    {
+      "case_id": "amb-cd35df463abd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I19820366",
+        "institution_name": "Chinese Academy of Sciences",
+        "works": 2662,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "State Key Laboratory of Ultra Intense Laser Science and Technology, Shanghai Institute of Optics and Fine Mechanics, Chinese Academy of Sciences, Shanghai, 2018"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bce5cde303db",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I1294671590",
+        "institution_name": "Centre National de la Recherche Scientifique",
+        "works": 1307,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Aix Marseille University, Toulon University, CNRS, IRD, Mediterranean Institute of Oceanography (MIO), UM 110, Marseille, France",
+          "Aix-Marseille Univ., Toulon Univ., CNRS, IRD, Mediterranean Institute of Oceanography (M I O), UM 110, Marseille, France",
+          "Aix-Marseille Univ., Université de Toulon, CNRS, IRD, MIO, Marseille, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a7a554eba738",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210155236",
+        "institution_name": "National Research Council",
+        "works": 644,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "CNR- Istituto di Scienze Marine, Largo Fiera della Pesca, Ancona, Italy",
+          "Environmental Department, International Research Institute of Stavanger (IRIS), Mekjarvik 11, 4070, Randaberg, Norway",
+          "Environmental Department, International Research Institute of Stavanger (IRIS), Randaberg, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8d4095f8789b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I913481162",
+        "institution_name": "Wageningen University & Research",
+        "works": 549,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Agricultural Biosystems Engineering Group, Wageningen University and Research, Wageningen, 6700 AA, The Netherlands",
+          "Akvaplan-niva, Fram Centre, N-9296 Tromsø, Norway",
+          "Aquatic Ecology and Water Quality Management Group, Wageningen University & Research, P.O. Box 47, 6700 AA Wageningen, The Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-46c545478e31",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I66867065",
+        "institution_name": "East China Normal University",
+        "works": 521,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Key Laboratory of Marine Mineral Resources, Ministry of Natural Resources, Guangzhou Marine Geological Survey, China Geological Survey, Guangzhou, 511458, China",
+          "Norwegian Institute for Water Research (NIVA), Økernveien 94, 0579 Oslo, Norway",
+          "Norwegian Institute for Water Research, 94 Økernveien, Oslo 0579, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-454c518513f4",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I134820265",
+        "institution_name": "Consejo Superior de Investigaciones Científicas",
+        "works": 520,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Institut de Ciències del Mar (ICM-CSIC), Barcelona, Spain",
+          "Institut de Ciències del Mar (ICM-CSIC), Barcelona, Spain; Norwegian Institute for Water Research (NIVA), Marine Biology section, Oslo, Norway",
+          "Norwegian Institute for Water Research (NIVA), Marine Biology section, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b33b6476c952",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I205237279",
+        "institution_name": "Nankai University",
+        "works": 512,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Chemistry, Norwegian University of Science and Technology (NTNU), Trondheim, 7491, Norway",
+          "MOE Key Laboratory of Pollution Processes and Environmental Criteria, College of Environmental Science and Engineering, Nankai University, Tianjin, 300350, PR C"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f2dc7d988810",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I211433327",
+        "institution_name": "Ministry of Natural Resources",
+        "works": 379,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Key Laboratory of Marine Mineral Resources, Ministry of Natural Resources, Guangzhou Marine Geological Survey, China Geological Survey, Guangzhou, 511458, China",
+          "Norwegian Institute for Water Research (NIVA), Økernveien 94, 0579 Oslo, Norway",
+          "State Key Laboratory of Estuarine and Coastal Research, East China Normal University, Shanghai 200241, China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c5a867b59960",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210166444",
+        "institution_name": "Institut de Recherche pour le Développement",
+        "works": 346,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Aix Marseille University, Toulon University, CNRS, IRD, Mediterranean Institute of Oceanography (MIO), UM 110, Marseille, France",
+          "Aix-Marseille Univ., Toulon Univ., CNRS, IRD, Mediterranean Institute of Oceanography (M I O), UM 110, Marseille, France",
+          "Aix-Marseille Univ., Université de Toulon, CNRS, IRD, MIO, Marseille, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cc4fda808280",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I151201029",
+        "institution_name": "Consejo Nacional de Investigaciones Científicas y Técnicas",
+        "works": 345,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian Institute for Water Research (NIVA), Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d8025f677d4f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I897542642",
+        "institution_name": "University of Plymouth",
+        "works": 326,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Citizens, Environment and Safety (CES), Faculty of Social and Educational Sciences, Department of Psychology, Norwegian University of Science and Technology (NT",
+          "Department of Psychology, Norwegian University of Science and Technology (NTNU), Trondheim, Norway",
+          "Faculty of Health, School of Psychology, University of Plymouth, Plymouth, United Kingdom"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-059fc61226ac",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4391768061",
+        "institution_name": "State Key Laboratory of Estuarine and Coastal Research",
+        "works": 325,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Key Laboratory of Marine Mineral Resources, Ministry of Natural Resources, Guangzhou Marine Geological Survey, China Geological Survey, Guangzhou, 511458, China",
+          "Norwegian Institute for Water Research (NIVA), Økernveien 94, 0579 Oslo, Norway",
+          "Norwegian Institute for Water Research, 94 Økernveien, Oslo 0579, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-54c01887679b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I204983213",
+        "institution_name": "Harbin Institute of Technology",
+        "works": 308,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "International Joint Research Center for Persistent Toxic Substances (IJRC-PTS), State Key Laboratory of Urban-rural Water Resource and Environment, Harbin Insti"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-192c0f010c1f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I96673099",
+        "institution_name": "Technical University of Denmark",
+        "works": 299,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "DTU Aqua, Technical University of Denmark, Hirtshals, Denmark",
+          "DTU Aqua, Technical University of Denmark, Hirtshals, Denmark; UiT The Arctic University of Norway, Tromsø, Norway",
+          "Department of Environmental Engineering, Technical University of Denmark, Kongens Lyngby, Denmark"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ca078da95e1a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I165143802",
+        "institution_name": "The University of Queensland",
+        "works": 286,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department for Ecotoxicoloy and Risk Assessment, Norwegian Institute for Water Research (NIVA), Oslo Centre for Interdisciplinary Environmental and Social Resea",
+          "Faculty of Science, Van't Hoff Institute for Molecular Sciences, University of Amsterdam, Science Park, 904 GD Amsterdam, the Netherlands",
+          "Norwegian Institute for Water Research (NIVA), Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-97de012accbb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I193662353",
+        "institution_name": "Utrecht University",
+        "works": 278,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "CAGE - Centre for Arctic Gas Hydrate, Environment and Climate, Department of Geosciences, UiT The Arctic University of Norway, Tromsø, Norway",
+          "CAGE – Centre for Arctic Gas Hydrate, Environment and Climate, Arctic University of Norway, Tromsø, Norway",
+          "CAGE–Centre for Arctic Gas Hydrate, Environment and Climate, Department of Geosciences, UiT the Arctic University of Norway, 9037 Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8397bb835d1b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I1313323035",
+        "institution_name": "Russian Academy of Sciences",
+        "works": 238,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          ", Physical, Moscow, Russian Federation",
+          "Il’ichov Pacific Oceanological Institute, Far-East Branch of the Russian Academy of Sciences, Vladivostok 690041, Russia",
+          "Norwegian Institute for Water Research, 0349 Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e09c1812b056",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I24603500",
+        "institution_name": "University of Massachusetts Amherst",
+        "works": 224,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Environmental Conservation, University of Massachusetts Amherst, Amherst, Massachusetts 01003, United States",
+          "Department of Environmental Conservation, University of Massachusetts, Amherst, MA, USA",
+          "Institute of Marine Research Bergen Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-83465f21b699",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I9360294",
+        "institution_name": "University of Bologna",
+        "works": 221,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biological, Geological and Environmental Sciences and Interdepartmental Research Centre for Environmental Sciences, UO CoNISMa, University of Bolo",
+          "Department of Biological, Geological and Environmental Sciences, University of Bologna, Via S. Alberto 163, 48123 Ravenna, Italy",
+          "Department of Climate and Environment, SINTEF Ocean, Brattørkaia 17 C, 7010 Trondheim, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b0f321f5082a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I82951845",
+        "institution_name": "RMIT University",
+        "works": 218,
+        "signals": [
+          "affiliation mentions \"Norway\""
+        ],
+        "affiliation_examples": [
+          "Canada Argentina Brazil Chile Colombia Peru Atlantic Ocean USA South Africa Japan Italy Australia Spain Portugal Croatia Slovenia",
+          "Global Artificial Mussel Pollution Watch Program, Australia",
+          "Nigeria Moorea Hawaii Rapa Nui Ecuador Galapagos Ethiopia Tanzania Tunisia Iran Antarctic Ocean France Belgium Poland Saudi Arabia Sweden Thailand Fiji Vanuatu"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ba4fb66d34ae",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I204337017",
+        "institution_name": "Aarhus University",
+        "works": 208,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Affiliations ILP, MLM -Acadia University, Biology Department, Wolfville, Nova Scotia, B4P 2R6 Canada",
+          "BEG -Institute of Marine Research, 5817 Bergen, Norway",
+          "Biology Department, Acadia University, Wolfville, Canada"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f068ad7ef80c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I143593769",
+        "institution_name": "East China University of Science and Technology",
+        "works": 207,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering Norwegian University of Science and Technology Trondheim Norway",
+          "Department of Chemical Engineering, Norwegian University of Science and Technology, Trondheim 7491, Norway",
+          "Department of Chemical Engineering, Norwegian University of Science and Technology, Trondheim, 7491, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a7b6086cb31d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I1342547582",
+        "institution_name": "Environment and Climate Change Canada",
+        "works": 190,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Affiliations ILP, MLM -Acadia University, Biology Department, Wolfville, Nova Scotia, B4P 2R6 Canada",
+          "BEG -Institute of Marine Research, 5817 Bergen, Norway",
+          "Biology Department, Acadia University, Wolfville, Canada"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ad2c7e5c630b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I139660479",
+        "institution_name": "Central South University",
+        "works": 189,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Central South University, Xiangya Hospital, Department of Orthopaedics, Changsha, China;",
+          "Diakonhjemmet Hospital, Center for treatment of Rheumatic Musculoskeletal Diseases (REMEDY), Oslo, Norway;",
+          "University of Twente, Medical Cell Biophysics group, Enschede, Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f8f2057cf6b3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I5023651",
+        "institution_name": "McGill University",
+        "works": 185,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Affiliations ILP, MLM -Acadia University, Biology Department, Wolfville, Nova Scotia, B4P 2R6 Canada",
+          "BEG -Institute of Marine Research, 5817 Bergen, Norway",
+          "Biology Department, Acadia University, Wolfville, Canada"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-39d001b08df5",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I129774422",
+        "institution_name": "University of Vienna",
+        "works": 176,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "CBmed GmbH – Centre for Biomarker Research in Medicine, Graz, Styria, 8010, Austria",
+          "Department of Meteorology and Geophysics, University of Vienna, UZA II, Althanstraße 14, 1090 Vienna, Austria",
+          "Department of Meteorology and Geophysics, University of Vienna, UZA II, Althanstraße 14, 1090, Vienna, Austria"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-258e79f6b045",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I28407311",
+        "institution_name": "University of Manchester",
+        "works": 176,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Geography, The University of Manchester, Manchester, UK",
+          "Norwegian Institute for Water Research, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b6b4edf8e76f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I45129253",
+        "institution_name": "University College London",
+        "works": 172,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Behavioural Science and Health, University College London, London, United Kingdom,",
+          "Department of Comprehensive Dentistry, Tokushima University Graduate School of Biomedical Sciences, Tokushima, Japan",
+          "Department of Oral and Maxillofacial Surgery, Faculty of Medicine, Kindai University, Osaka, Japan,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-31aad57d32cb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I86987016",
+        "institution_name": "KTH Royal Institute of Technology",
+        "works": 172,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Energy and Process Engineering, Norwegian University of Science and Technology (NTNU) 4 , Trondheim, Norway",
+          "Department of Engineering Mechanics, Royal Institute of Technology, Sweden",
+          "FLOW, Department of Engineering Mechanics, KTH, Stockholm, Sweden; Department of Energy and Process Engineering, Norwegian University of Science and Technology"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-51094eb123ed",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I881427289",
+        "institution_name": "University of Gothenburg",
+        "works": 166,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian Institute for Water Research (NIVA), Gaustadalléen 21, Oslo, 0349, Norway",
+          "University of Gothenburg, Department of Marine Sciences, Kristineberg 566, Fiskebäckskil, SE, 45178, Sweden",
+          "University of Gothenburg, Department of Marine Sciences, Kristineberg 566, Fiskebäckskil, SE, 45178, Sweden; Norwegian Institute for Water Research (NIVA), Gaus"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-26b612e651ba",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I108290504",
+        "institution_name": "University of Pisa",
+        "works": 162,
+        "signals": [
+          "affiliation mentions \"Norway\""
+        ],
+        "affiliation_examples": [
+          "Department of Chemistry and Industrial Chemistry, University of Pisa, Pisa, Italy",
+          "Department of Chemistry and Industrial Chemistry, University of Pisa, Pisa, Italy; North Atlantic Microplastic Centre (NAMC), Norway",
+          "North Atlantic Microplastic Centre (NAMC), Bergen, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9c0e1a87784a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I114017466",
+        "institution_name": "University of Technology Sydney",
+        "works": 155,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Faculty of Engineering and IT, University of Technology Sydney, Broadway, P.O. Box 123, Ultimo, NSW 2007, Australia",
+          "Faculty of Sciences & Technology (RealTek), Norwegian University of Life Sciences, P.O. Box 5003, N-1432 Ås, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-91466b465739",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I193775966",
+        "institution_name": "Yonsei University",
+        "works": 155,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Institute of Chemistry, Bioscience and Environmental Engineering, Faculty of Science and Technology, University of Stavanger, Box 8600 Forus, 4036 Stavanger, No",
+          "Institute of Chemistry, Bioscience and Environmental Engineering, Faculty of Science and Technology, University of Stavanger, Box 8600, Forus, Stavanger, 4036,",
+          "School of Civil and Environmental Engineering, Yonsei University, Seoul 03722, Republic of Korea"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8ffa055f4ee0",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I891191580",
+        "institution_name": "Aalborg University",
+        "works": 145,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Aalborg University, Aalborg, Denmark",
+          "Aalborg University, Fredrik Bajers vej 7K, 9220 Aalborg East, Denmark",
+          "Applied Marine Microbiology Research Group, Western Norway University of Applied Sciences, Haugesund, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a2d4fad12d2b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I21491767",
+        "institution_name": "Aix-Marseille Université",
+        "works": 143,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Aix Marseille University, Toulon University, CNRS, IRD, Mediterranean Institute of Oceanography (MIO), UM 110, Marseille, France",
+          "Aix-Marseille Univ., Toulon Univ., CNRS, IRD, Mediterranean Institute of Oceanography (M I O), UM 110, Marseille, France",
+          "Aix-Marseille Univ., Université de Toulon, CNRS, IRD, MIO, Marseille, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b28c2e20b678",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I122534668",
+        "institution_name": "Marche Polytechnic University",
+        "works": 128,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Contaminants and biohazards, Institute of Marine Research, Bergen, Norway",
+          "Dipartimento di Scienze della Vita e dell’Ambiente, Università Politecnica delle Marche, Ancona, Italy",
+          "Norwegian University of Science and Technology, Department of Biology, Trondheim, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-97dc16dc29d1",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I130828816",
+        "institution_name": "University of Leeds",
+        "works": 122,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "NIVA Denmark Water Research, Njalsgade 76, 2300 Copenhagen S, Denmark",
+          "NIVA Denmark Water Research, Njalsgade 76, 2300, Copenhagen S, Denmark",
+          "NIVA, Økernveien 94, 0579 Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c6cb89c4ea30",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I166459259",
+        "institution_name": "Shiraz University",
+        "works": 120,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Centre for Biogeochemistry in the Anthropocene, University of Oslo, 0315, Oslo, Norway",
+          "Department of Chemistry, Faculty of Mathematics and Natural Sciences, University of Oslo (UiO), 0315, Oslo, Norway",
+          "Department of Earth Sciences, College of Sciences, Shiraz University, 71454, Shiraz, Iran"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a9dce0b338dc",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I170897317",
+        "institution_name": "Duke University",
+        "works": 120,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Nicholas Institute for Energy, Environment & Sustainability, Duke University, Durham, NC, United States; Norwegian Institute for Water Research (NIVA), Økernvei"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-deba40f20e3c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I40120149",
+        "institution_name": "University of Oxford",
+        "works": 118,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, University of Oxford, Oxford, UK",
+          "Norwegian Institute for Nature Research (NINA), Trondheim, Norway",
+          "Section for Aquatic Biology and Toxicology, Department of Biosciences, University of Oslo, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ebf0103fe1c9",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I124055696",
+        "institution_name": "University of Copenhagen",
+        "works": 113,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Environmental Engineering, Technical University of Denmark, Kongens Lyngby, Denmark",
+          "Department of Food and Resource Economics, University of Copenhagen, Rolighedsvej 23, Frederiksberg C 1958, Denmark",
+          "Marine Biology Section, University of Copenhagen, Copenhagen, Denmark"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f9a0a115bd9c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I161593684",
+        "institution_name": "Stockholm University",
+        "works": 113,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Philosophy, Classics, History of Art and Ideas, Oslo University, Oslo, Norway",
+          "Department of Social Anthropology, Stockholm University, Stockholm, Sweden"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-baa91066dd58",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I22299242",
+        "institution_name": "Kyoto University",
+        "works": 110,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Behavioural Science and Health, University College London, London, United Kingdom,",
+          "Department of Comprehensive Dentistry, Tokushima University Graduate School of Biomedical Sciences, Tokushima, Japan",
+          "Department of Oral and Maxillofacial Surgery, Faculty of Medicine, Kindai University, Osaka, Japan,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-dfcdb8c7204b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I130438778",
+        "institution_name": "Memorial University of Newfoundland",
+        "works": 108,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Affiliations ILP, MLM -Acadia University, Biology Department, Wolfville, Nova Scotia, B4P 2R6 Canada",
+          "BEG -Institute of Marine Research, 5817 Bergen, Norway",
+          "Biology Department, Acadia University, Wolfville, Canada"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-05750fac505a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I177477856",
+        "institution_name": "Politecnico di Torino",
+        "works": 107,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "FLOW, Department of Engineering Mechanics, KTH, Stockholm, Sweden; Department of Energy and Process Engineering, Norwegian University of Science and Technology"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-defa6125012d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210114340",
+        "institution_name": "Istituto di Scienze Marine del Consiglio Nazionale delle Ricerche",
+        "works": 103,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Environmental Department, International Research Institute of Stavanger (IRIS), Mekjarvik 11, 4070, Randaberg, Norway",
+          "Environmental Department, International Research Institute of Stavanger (IRIS), Randaberg, Norway",
+          "International Research Institute of Stavanger (IRIS), Environmental Dep., Mekjarvik 12, 4070 Randaberg, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e662c53eeb6f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I134635517",
+        "institution_name": "Bandung Institute of Technology",
+        "works": 102,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Mechanical and Structural Engineering and Materials Science, Faculty of Science and Technology, University of Stavanger, Kjølv Egeland hus, E bloc",
+          "Department of Mechanical and Structural Engineering and Materials Science, Faculty of Science and Technology, University of Stavanger, Kjølv Egelands Hus, E blo",
+          "School of Business and Management, Bandung Institute of Technology, Jl. Ganesa No. 10, Lebak Siliwangi, Coblong, Bandung, Jawa Barat 40132, Indonesia"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7c73ffab8c2e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I887064364",
+        "institution_name": "University of Amsterdam",
+        "works": 100,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Psychology, University of Amsterdam, Amsterdam, The Netherlands",
+          "Department of Psychology, University of Inland Norway, Elverum, Norway",
+          "Faculty of Science, Van't Hoff Institute for Molecular Sciences, University of Amsterdam, Science Park, 904 GD Amsterdam, the Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-68cea9d70a91",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I63966007",
+        "institution_name": "Massachusetts Institute of Technology",
+        "works": 97,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, Norwegian University of Science and Technology, Trondheim, Norway",
+          "Department of Materials Science and Engineering, Massachusetts Institute of Technology, Cambridge, United States"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d24e59d1a56e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I200284239",
+        "institution_name": "Universidade de Santiago de Compostela",
+        "works": 96,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Analytical Chemistry, Nutrition and Food Sciences, Institute for Research in Chemical and Biological Analysis (IAQBUS), Universidade de Santiago d",
+          "Norwegian University of Science and Technology (NTNU), 7024 Trondheim, Norway",
+          "Norwegian University of Science and Technology (NTNU), 7024 Trondheim, Norway; Department of Analytical Chemistry, Nutrition and Food Sciences, Institute for Re"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-33765b08118b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I205220096",
+        "institution_name": "Institute of Oceanology. PP Shirshov Russian Academy of Sciences",
+        "works": 96,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          ", Physical, Moscow, Russian Federation",
+          "Il’ichov Pacific Oceanological Institute, Far-East Branch of the Russian Academy of Sciences, Vladivostok 690041, Russia",
+          "Norwegian Institute for Water Research (NIVA), Gaustadalléen 21, 0349 Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-79be64921d3c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210099418",
+        "institution_name": "CoNISMa",
+        "works": 96,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biological, Geological and Environmental Sciences and Interdepartmental Research Centre for Environmental Sciences, UO CoNISMa, University of Bolo",
+          "Department of Climate and Environment, SINTEF Ocean, Brattørkaia 17 C, 7010, Trondheim, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e5fc29b369d3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I96908189",
+        "institution_name": "Xinjiang University",
+        "works": 96,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Chemistry and Centre for Pharmacy, University of Bergen, Bergen, 5007, Norway",
+          "Xinjiang Key Laboratory of Oil and Gas Fine Chemicals, School of Chemical Engineering and Technology, Xinjiang University, Urumqi, 830046, China",
+          "Xinjiang Key Laboratory of Oil and Gas Fine Chemicals, School of Chemical Engineering and Technology, Xinjiang University, Urumqi, 830046, China; Department of"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0b5aafa2ee36",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I21449261",
+        "institution_name": "Masaryk University",
+        "works": 93,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Masaryk University",
+          "Masaryk University, Brno, Czech Republic",
+          "Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-eb2baf325d60",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I149213910",
+        "institution_name": "University of Antwerp",
+        "works": 88,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, Behavioural Ecology and Ecophysiology Group, University of Antwerp, Antwerp, Belgium",
+          "Norwegian Institute for Nature Research (NINA), Trondheim, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0f7ffc19314d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I159176309",
+        "institution_name": "Universität Hamburg",
+        "works": 85,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian University of Science and Technology (NTNU), Trondhjem Biological Station, Department of Biology, Trondheim, NO-7491, Norway; Institute of Marine Ecos"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-270ba94bfbb0",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4387152517",
+        "institution_name": "Instituto Superior Técnico",
+        "works": 84,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Instituto Superior Técnico , Ramboll Norway AS , Trondheim / Lisbon , Norway / Portugal",
+          "Norwegian University of Science and Technology , Trondheim , Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2212c007115c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I107707843",
+        "institution_name": "Roskilde University",
+        "works": 83,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biosciences, University of Oslo, PO Box 1066, N-0316 Oslo, Norway",
+          "Department of Science and Environment, Roskilde University, Universitetsvej 1, 4000 Roskilde, Denmark",
+          "Department of Science and Environment, Roskilde University, Universitetsvej 1, PO Box 260, 4000 Roskilde, Denmark"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-452181fe9c0d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I2800424308",
+        "institution_name": "Finnish Environment Institute",
+        "works": 82,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Finnish Environment Institute, Latokartanonkaari 11, 00790 Helsinki, Finland",
+          "Institute of Transport Economics Norway, Gaustadalléen 21, 0349 Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-22d24157fb65",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I71920554",
+        "institution_name": "King Abdullah University of Science and Technology",
+        "works": 80,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian Institute for Water Research (NIVA), Oslo, Norway",
+          "Red Sea Research Center (RSRC) and Computational Bioscience Research Center (CBRC), King Abdullah University of Science and Technology (KAUST), Thuwal, Saudi Ar"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6c70a15a8563",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I1332124652",
+        "institution_name": "Centre for Environment, Fisheries and Aquaculture Science",
+        "works": 78,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Centre for Environment, Fisheries and Aquaculture Science (Cefas), Lowestoft Laboratory, Lowestoft, Suffolk, UK",
+          "Centre for Environment, Fisheries and Aquaculture Science (Cefas), Pakefield Road, Lowestoft, Suffolk NR33 0HT, UK",
+          "Centre for Environment, Fisheries and Aquaculture Science (Cefas), Pakefield Road, Lowestoft, Suffolk NR33 0HT, UK; GRID-Arendal, Teaterplassen 3, 4836, Arendal"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-227c34403eaf",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I143002897",
+        "institution_name": "Université de Toulon",
+        "works": 77,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Aix Marseille University, Toulon University, CNRS, IRD, Mediterranean Institute of Oceanography (MIO), UM 110, Marseille, France",
+          "Aix-Marseille Univ., Université de Toulon, CNRS, IRD, MIO, Marseille, France",
+          "NILU, The FRAM Centre, P.O. Box 6606, 9296, Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-aeb0a48b97cf",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210113999",
+        "institution_name": "RECETOX",
+        "works": 77,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Masaryk University",
+          "Norway",
+          "Norwegian Institute for Water Research"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-31905c384ba9",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210151560",
+        "institution_name": "Institut de Ciències del Mar",
+        "works": 76,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Institut de Ciències del Mar (ICM-CSIC), Barcelona, Spain",
+          "Institut de Ciències del Mar (ICM-CSIC), Barcelona, Spain; Norwegian Institute for Water Research (NIVA), Marine Biology section, Oslo, Norway",
+          "Norwegian Institute for Water Research (NIVA), Marine Biology section, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6a03bece740d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I183638586",
+        "institution_name": "Parthenope University of Naples",
+        "works": 74,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "International PhD Programme/UNESCO Chair \"Environment, Resources and Sustainable Development\", Department of Science and Technology, Parthenope University of Na",
+          "International PhD Programme/UNESCO Chair \"Environment, Resources and Sustainable Development,\" Department of Science and Technology, Parthenope University of Na",
+          "Norwegian Institute for Sustainability Research (NORSUS) Kråkerøy Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c57c798907db",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210155331",
+        "institution_name": "Institut Méditerranéen d’Océanologie",
+        "works": 74,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Aix Marseille University, Toulon University, CNRS, IRD, Mediterranean Institute of Oceanography (MIO), UM 110, Marseille, France",
+          "Aix-Marseille Univ., Toulon Univ., CNRS, IRD, Mediterranean Institute of Oceanography (M I O), UM 110, Marseille, France",
+          "Aix-Marseille Univ., Université de Toulon, CNRS, IRD, MIO, Marseille, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-39528db05352",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210156066",
+        "institution_name": "State Key Laboratory of Chemical Engineering",
+        "works": 74,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering Norwegian University of Science and Technology Trondheim Norway",
+          "Department of Chemical Engineering, Norwegian University of Science and Technology, Trondheim 7491, Norway",
+          "State Key Laboratory of Chemical Engineering and Low-Carbon Technology, School of Chemical Engineering, East China University of Science and Technology, Shangha"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0b937ea02e5b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I115752224",
+        "institution_name": "University of Insubria",
+        "works": 71,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Climate Change Research Centre (CCRC), University of Insubria, Varese, Italy",
+          "DISAT Department of Science and High Technology, University of Insubria, Via Valleggio 11, 22100 Como, Italy",
+          "Department of Science and High Technology, University of Insubria, Como, Italy"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-659c2bcc7d0f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4405292316",
+        "institution_name": "Queensland Alliance for Environmental Health Sciences",
+        "works": 71,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department for Ecotoxicoloy and Risk Assessment, Norwegian Institute for Water Research (NIVA), Oslo Centre for Interdisciplinary Environmental and Social Resea",
+          "Faculty of Science, Van't Hoff Institute for Molecular Sciences, University of Amsterdam, Science Park, 904 GD Amsterdam, the Netherlands",
+          "Norwegian Institute for Water Research (NIVA), Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6592f6390c1f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I114090438",
+        "institution_name": "Goethe University Frankfurt",
+        "works": 70,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department Aquatic Ecotoxicology, Goethe University Frankfurt am Main, Max-von-Laue-Str. 13",
+          "Department Aquatic Ecotoxicology, Goethe University Frankfurt am Main, Max-von-Laue-Str. 13, Frankfurt, Germany",
+          "Department of Aquatic Ecotoxicology, Goethe University Frankfurt am Main, Max-von-Laue Strasse 13, 60438 Frankfurt am Main, Germany"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3616fa213093",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I142910587",
+        "institution_name": "University of Salento",
+        "works": 70,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian University of Science and Technology, Department of Industrial and Mechanical Engineering, S.P. Andersens vei, 5, NO-7491 Trondheim, Norway",
+          "University of Salento, Department of Innovation Engineering, Via per Monteroni, 73100 Lecce, Italy"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bf3e4e6a6a57",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I172828483",
+        "institution_name": "University of Sri Jayewardenepura",
+        "works": 69,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Materials & Mechanical Technology, Faculty of Technology, University of Sri Jayewardenepura, Homagama, 10200, Sri Lanka",
+          "Department of Process, Energy and Environmental Technology, Faculty of Technology, Natural Sciences and Maritime Sciences, University of South-Eastern Norway, P",
+          "Faculty of Graduate Studies, University of Sri Jayewardenepura, Nugegoda, 10250, Sri Lanka"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a4a2e1262737",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4387154004",
+        "institution_name": "Institute for Marine Biological Resources and Biotechnology",
+        "works": 68,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "National Research Council (CNR), Institute for Biological Resources and Marine Biotechnology (IRBIM), L.go Fiera della Pesca, 2, 60125 Ancona, Italy",
+          "Norwegian Research Centre-Norce, Environmental Dep., Mekjarvik 11, 4070 Randaberg, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a8b4ac5471c2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I1321296531",
+        "institution_name": "National Institute of Standards and Technology",
+        "works": 62,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biotechnology and Nanomedicine, SINTEF Industry, Trondheim, Norway",
+          "National Institute of Standards and Technology, Materials Measurement Science Division, Gaithersburg, MD, 20899, USA"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-af8417cdbd5a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I197681013",
+        "institution_name": "Université Paris-Est Créteil",
+        "works": 61,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Laboratoire Eau Environnement et Systèmes urbains (LEESU), Université Paris-Est Créteil, 61 avenue du Général de Gaulle, 94010 Cedex Créteil, France",
+          "Norwegian Polar Institute, Fram Centre, NO-9296 Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-df219fd23b3b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210107283",
+        "institution_name": "Royal Netherlands Institute for Sea Research",
+        "works": 61,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "CAGE - Centre for Arctic Gas Hydrate, Environment and Climate, Department of Geosciences, UiT The Arctic University of Norway, Tromsø, Norway",
+          "CAGE – Centre for Arctic Gas Hydrate, Environment and Climate, Arctic University of Norway, Tromsø, Norway",
+          "CAGE–Centre for Arctic Gas Hydrate, Environment and Climate, Department of Geosciences, UiT the Arctic University of Norway, 9037 Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bf49f1711cdb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I92688161",
+        "institution_name": "Acadia University",
+        "works": 59,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Affiliations ILP, MLM -Acadia University, Biology Department, Wolfville, Nova Scotia, B4P 2R6 Canada",
+          "BEG -Institute of Marine Research, 5817 Bergen, Norway",
+          "Biology Department, Acadia University, Wolfville, Canada"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6469cadba575",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I169333911",
+        "institution_name": "Gdańsk University of Technology",
+        "works": 58,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          ") Department of Inorganic Chemistry , Chemical Faculty , Gdansk University of Technology , Narutowicza 11/12 , 80-233 , Gdańsk , Poland;",
+          "Aquateam COWI AS , Oslo , Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-36350497e115",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I45683168",
+        "institution_name": "Polytechnique Montréal",
+        "works": 58,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "CIRAIG, and Department of Mathematics and Industrial Engineering, Polytechnique Montréal (QC), Canada",
+          "Industrial Ecology Program, Norwegian University of Science and Technology (NTNU), Trondheim, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-43421f14204e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210162190",
+        "institution_name": "China University of Petroleum, East China",
+        "works": 56,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, Norwegian University of Science and Technology, Trondheim 7591, Norway",
+          "State Key Lab of Heavy Oil Processing, China University of Petroleum, Qingdao 266580, China",
+          "State Key Laboratory of Heavy Oil Processing, China University of Petroleum, Qingdao 266580, Shandong, China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-21148324fa79",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I94624287",
+        "institution_name": "University of Twente",
+        "works": 56,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Central South University, Xiangya Hospital, Department of Orthopaedics, Changsha, China;",
+          "Diakonhjemmet Hospital, Center for treatment of Rheumatic Musculoskeletal Diseases (REMEDY), Oslo, Norway;",
+          "University of Twente, Medical Cell Biophysics group, Enschede, Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ecb0c1a04148",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I147009085",
+        "institution_name": "Technical University of Liberec",
+        "works": 55,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Centre for Biosafety, Postboks 6418, 9294 Tromsø, Norway",
+          "Institute for Nanomaterials, Advanced Technologies and Innovation, Technical University of Liberec, Bendlova 1409/7, 461 17 Liberec, Czech Republic",
+          "Institute for Nanomaterials, Advanced Technologies and Innovation, Technical University of Liberec, Bendlova 1409/7, 461 17 Liberec, Czech Republic; Centre for"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f3a80174a18a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I182712176",
+        "institution_name": "Montanuniversität Leoben",
+        "works": 55,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Energy and Process Engineering, Norwegian University of Science and Technology (NTNU), 7034 Trondheim, Norway",
+          "Department of Process Technology and Environmental Protection, Montanuniversitaet Leoben, 8700 Leoben, Austria"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-498767b40fcd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210126119",
+        "institution_name": "Laboratoire Eau, Environnement et Systèmes Urbains",
+        "works": 52,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Laboratoire Eau Environnement et Systèmes urbains (LEESU), Université Paris-Est Créteil, 61 avenue du Général de Gaulle, 94010 Cedex Créteil, France",
+          "Norwegian Polar Institute, Fram Centre, NO-9296 Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-67a1712bdb1e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4391768235",
+        "institution_name": "State Key Laboratory of Heavy Oil",
+        "works": 52,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, Norwegian University of Science and Technology, Trondheim 7591, Norway",
+          "State Key Lab of Heavy Oil Processing, China University of Petroleum, Qingdao 266580, China",
+          "State Key Laboratory of Heavy Oil Processing, China University of Petroleum, Qingdao 266580, Shandong, China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f59a6279c078",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I200763008",
+        "institution_name": "Justus-Liebig-Universität Gießen",
+        "works": 47,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Animal Ecology & Systematics, Justus Liebig University, Giessen, Germany",
+          "Department of Animal Ecology & Systematics, Justus Liebig University, Giessen, Germany; Department of Geoscience, University of Oslo, Oslo, Norway",
+          "Department of Geoscience, University of Oslo, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8b1ce4333af3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I90267481",
+        "institution_name": "Umeå University",
+        "works": 46,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Chemistry",
+          "N-0806 Oslo",
+          "Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-afd93e924dfd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I26437253",
+        "institution_name": "Örebro University",
+        "works": 44,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, Norwegian University of Science and Technology (NTNU), 7491, Trondheim, Norway",
+          "Man-Technology-Environment Research Centre (MTM), School of Science and Technology, Örebro University, Fakultetsgatan 1, S-701 82, Örebro, Sweden",
+          "Man-Technology-Environment Research Centre (MTM), School of Science and Technology, Örebro University, Fakultetsgatan 1, S-701 82, Örebro, Sweden; Department of"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9a0c1851b8a8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I3123212020",
+        "institution_name": "Universidad Politécnica de Cartagena",
+        "works": 42,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Engineering, Østfold University College, Fredrikstad, Norway",
+          "Department of Mechanical, Materials and Manufacturing Engineering, Technical University of Cartagena, Spain"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d6b8df682cd9",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I899635006",
+        "institution_name": "Université Grenoble Alpes",
+        "works": 41,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian University of Science and Technology, Department of Biology, Trondheim, Norway",
+          "Université Grenoble Alpes, Faculty of Pharmacy, La Tronche, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f1d153f1ac14",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I27765905",
+        "institution_name": "North-West University",
+        "works": 40,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Faculty of Biosciences and Aquaculture, Nord University, 8026 Bodø, Norway; Unit for Environmental Sciences and Management, Faculty of Natural and Agricultural",
+          "GenØk – Centre for Biosafety, Tromsø, Norway",
+          "NORCE;"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-42b9fb57b851",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I8087733",
+        "institution_name": "University of Tübingen",
+        "works": 40,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biomaterials, Faculty of Dentistry, Oslo, Norway",
+          "Department of Microphysiological Systems, Institute of Biomedical Engineering, Faculty of Medicine of the Eberhard Karls University of Tübingen, Waldhörnlestr.",
+          "University of Oslo, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2f7f0b13d559",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I123387679",
+        "institution_name": "Uppsala University",
+        "works": 38,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Physics University of Oslo, Blindern Oslo N‐0316 Norway",
+          "Tandem Laboratory Uppsala University PO Box 529 Uppsala SE‐751 21 Sweden"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-829c96cb03c2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I2799486974",
+        "institution_name": "China Geological Survey",
+        "works": 38,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Key Laboratory of Marine Mineral Resources, Ministry of Natural Resources, Guangzhou Marine Geological Survey, China Geological Survey, Guangzhou, 511458, China",
+          "Norwegian Institute for Water Research (NIVA), Økernveien 94, 0579 Oslo, Norway",
+          "State Key Laboratory of Estuarine and Coastal Research, East China Normal University, Shanghai 200241, China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cf3db054d504",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I69552723",
+        "institution_name": "University of Pretoria",
+        "works": 37,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of General Hygiene, I.M. Sechenov First Moscow State Medical University, Moscow, Russia",
+          "Department of Public Health and Nursing, Faculty of Medicine and Health Science, NTNU, Trondheim, Norway",
+          "School of Health Systems and Public Health, Faculty of Health Sciences, University of Pretoria, Pretoria, South Africa"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1bdb55d625e4",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I181631907",
+        "institution_name": "University of Ibadan",
+        "works": 36,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, Norwegian University of Science and Technology (NTNU), Høgskoleringen 5, N-7491, Trondheim, Norway",
+          "Department of Zoology, University of Ibadan, Ibadan, Nigeria"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a3f12997a0eb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I28166907",
+        "institution_name": "Karolinska Institutet",
+        "works": 31,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Institute of Environmental Medicine, Karolinska Institutet, Stockholm, Sweden",
+          "Section for Aquatic Biology and Toxicology, Department of Biosciences, University of Oslo, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3de2e321b730",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210159865",
+        "institution_name": "Xiangya Hospital Central South University",
+        "works": 30,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Central South University, Xiangya Hospital, Department of Orthopaedics, Changsha, China;",
+          "Diakonhjemmet Hospital, Center for treatment of Rheumatic Musculoskeletal Diseases (REMEDY), Oslo, Norway;",
+          "University of Twente, Medical Cell Biophysics group, Enschede, Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b88455eec0c8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210147092",
+        "institution_name": "V.I. Il'ichev Pacific Oceanological Institute",
+        "works": 26,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Il’ichov Pacific Oceanological Institute, Far-East Branch of the Russian Academy of Sciences, Vladivostok 690041, Russia",
+          "Norwegian Institute for Water Research, 0579 Oslo, Norway",
+          "Norwegian Institute for Water Research, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e82a9d022069",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210133753",
+        "institution_name": "Instituto Nacional de Limnología",
+        "works": 25,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian Institute for Water Research (NIVA), Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a371246b8e85",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I102134673",
+        "institution_name": "Linköping University",
+        "works": 24,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Water and Environmental Studies, Linköping University, Linköping, Sweden",
+          "Norwegian Institute for Air Research, Fram Centre, NO-9296-Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0d7c96cdc1e1",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I1443707",
+        "institution_name": "Jimma University",
+        "works": 24,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Mechanical and Structural Engineering, University of Stavanger, Stavanger, 4036, Norway",
+          "Faculty of Mechanical Engineering, Jimma Institute of Technology, Jimma University, Jimma, Ethiopia"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-98c934763f0c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210090744",
+        "institution_name": "Guangzhou Marine Geological Survey",
+        "works": 24,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Key Laboratory of Marine Mineral Resources, Ministry of Natural Resources, Guangzhou Marine Geological Survey, China Geological Survey, Guangzhou, 511458, China",
+          "Norwegian Institute for Water Research (NIVA), Økernveien 94, 0579 Oslo, Norway",
+          "State Key Laboratory of Estuarine and Coastal Research, East China Normal University, Shanghai 200241, China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f42c4bfbd105",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I155660961",
+        "institution_name": "University of Turku",
+        "works": 23,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, University of Turku, 20014, Turku, Finland",
+          "Norwegian Polar Institute, Fram Centre, P.O. Box 6606 Langnes, NO-9296, Tromsø, Norway",
+          "Norwegian Polar Institute, Fram Centre, P.O. Box 6606 Langnes, NO-9296, Tromsø, Norway; Department of Biology, University of Turku, 20014, Turku, Finland"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-947c7c373738",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I195740183",
+        "institution_name": "University of Moratuwa",
+        "works": 23,
+        "signals": [
+          "affiliation mentions \"Norway\""
+        ],
+        "affiliation_examples": [
+          "University of Moratuwa , Department of Chemical and Process Engineering , Sri Lanka",
+          "Vow ASA , Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-588fe9d36889",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I128559575",
+        "institution_name": "University of Ruhuna",
+        "works": 22,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Limnology and Water Technology, Faculty of Fisheries and Marine Sciences & Technology, University of Ruhuna, Matara, Sri Lanka",
+          "UiT The Arctic University of Norway, Postbox 6050 Stakkevollan, Tromsø, 9037, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b89132eaffc2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4405260432",
+        "institution_name": "CIRAIG",
+        "works": 22,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "CIRAIG, and Department of Mathematics and Industrial Engineering, Polytechnique Montréal (QC), Canada",
+          "Industrial Ecology Program, Norwegian University of Science and Technology (NTNU), Trondheim, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8b28d21c0742",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I12450925",
+        "institution_name": "Nha Trang University",
+        "works": 16,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Nha Trang University, Nha Trang, Vietnam",
+          "Norwegian College of Fishery Science, UiT The Arctic University of Norway, Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6260c1b0b051",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I1317774081",
+        "institution_name": "International Institute for Applied Systems Analysis",
+        "works": 16,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "International Institute for Applied Systems Analysis (IIASA), 2361 Laxenburg, Austria",
+          "Norwegian Institute for Air Research (NILU), Instituttveien 18, 2007 Kjeller, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e3bf05f0620f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I201841394",
+        "institution_name": "Université Côte d'Azur",
+        "works": 16,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "GREDEG, CNRS, Université Côte d’Azur, Nice, France",
+          "UiT, The Artic University of Norway, Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8376e44d5de0",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I31944674",
+        "institution_name": "Universidad de Costa Rica",
+        "works": 16,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Materials Science and Engineering Research Center (CICIMA), University of Costa Rica, San Pedro 11501-2060, Costa Rica",
+          "SINTEF Helgeland AS, Halvor Heyerdahls vei 33, Mo i Rana 8626, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bcc53451843a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I1320745970",
+        "institution_name": "Food and Agriculture Organization of the United Nations",
+        "works": 15,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian College of Fisheries Science, UiT The Arctic University of Norway, Tromso, Norway",
+          "Products, Trade and Marketing Branch (FIAM), Fisheries and Aquaculture Department, Food and Agriculture Organization of the United Nations, Rome, Italy"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-eae22a0bf31c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210128031",
+        "institution_name": "Center For Biomarker Research In Medicine",
+        "works": 15,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "CBmed GmbH – Centre for Biomarker Research in Medicine, Graz, Styria, 8010, Austria",
+          "Department of Pharmaceutical Science, University of Vienna, Vienna, 1090, Austria",
+          "Department of Pharmacy, University of Oslo, Sem Sælands vei 3, Oslo, 0371, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-240acc89fcef",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210147263",
+        "institution_name": "Material Measurement Laboratory",
+        "works": 15,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biotechnology and Nanomedicine, SINTEF Industry, Trondheim, Norway",
+          "National Institute of Standards and Technology, Materials Measurement Science Division, Gaithersburg, MD, 20899, USA"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1e4de3d4e105",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210148470",
+        "institution_name": "Far Eastern Branch of the Russian Academy of Sciences",
+        "works": 15,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Il’ichov Pacific Oceanological Institute, Far-East Branch of the Russian Academy of Sciences, Vladivostok 690041, Russia",
+          "Norwegian Institute for Water Research, 0579 Oslo, Norway",
+          "Norwegian Institute for Water Research, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b28c0af1a30f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I77063589",
+        "institution_name": "Kōchi University",
+        "works": 14,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Natural Sciences and Environmental Health, University of South-Eastern Norway, Gullbringvegen 36, 3800 Bø, Norway",
+          "Laboratory of Coastal Ecology and Conservation, Faculty of Agriculture and Marine Science, Kochi University, 200 Otsu, Monobe, Nankoku City, Kochi 783-8502, Jap"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8c49ffb5efba",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I83328450",
+        "institution_name": "Miami University",
+        "works": 14,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "BI Norwegian Business School, Department of Marketing, N-0442, Oslo, Norway",
+          "Farmer School of Business, Miami University, Oxford, Ohio, USA"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d60714e4a582",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I201954162",
+        "institution_name": "University of Kochi",
+        "works": 13,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Natural Sciences and Environmental Health, University of South-Eastern Norway, Gullbringvegen 36, 3800 Bø, Norway",
+          "Laboratory of Coastal Ecology and Conservation, Faculty of Agriculture and Marine Science, Kochi University, 200 Otsu, Monobe, Nankoku City, Kochi 783-8502, Jap"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8781ecc34761",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I916559398",
+        "institution_name": "Kindai University",
+        "works": 12,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Behavioural Science and Health, University College London, London, United Kingdom,",
+          "Department of Comprehensive Dentistry, Tokushima University Graduate School of Biomedical Sciences, Tokushima, Japan",
+          "Department of Oral and Maxillofacial Surgery, Faculty of Medicine, Kindai University, Osaka, Japan,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0e9c5ff17fe2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I3970730",
+        "institution_name": "University of Calabar",
+        "works": 11,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, Norwegian University of Science and Technology (NTNU), Høgskoleringen 5, N-7491, Trondheim, Norway",
+          "Department of Zoology and Environmental Biology, University of Calabar, Calabar, Nigeria"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-fe7454ed1ca3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I181727666",
+        "institution_name": "University of Economics Ho Chi Minh City",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian College of Fishery Science, UiT The Arctic University of Norway, Tromsø, Norway",
+          "School of Economics, University of Economics Ho Chi Minh City (UEH), Ho Chi Minh City, Viet Nam",
+          "UiT The Arctic University of Norway, Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ed5bc26f8231",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I35722693",
+        "institution_name": "University of Hawaii at Hilo",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, University of Bergen, Bergen, Norway",
+          "Marine Science Department, University of Hawai'i at Hilo, 200 W. Kawili St., Hilo, HI 96720, USA",
+          "Marine Science Department, University of Hawai'i at Hilo, 200 W. Kawili St., Hilo, HI 96720, USA; Department of Biology, University of Bergen, Bergen, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a471171be6c0",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I43968019",
+        "institution_name": "Karlstad University",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Karlstad University, Karlstad, Sweden",
+          "Norwegian Institute of Sustainability Research (NORSUS), Fredrikstad, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ec8d3a4b21ca",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I922474255",
+        "institution_name": "Tokushima University",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Behavioural Science and Health, University College London, London, United Kingdom,",
+          "Department of Comprehensive Dentistry, Tokushima University Graduate School of Biomedical Sciences, Tokushima, Japan",
+          "Department of Oral and Maxillofacial Surgery, Faculty of Medicine, Kindai University, Osaka, Japan,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-636a35744acc",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I116152951",
+        "institution_name": "Latvia University of Life Sciences and Technologies",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "ASEMlab – Laboratory of Advanced and Sustainable Engineering Materials, Department of Manufacturing and Civil Engineering, NTNU – Norwegian University of Scienc",
+          "Latvia University of Life Sciences and Technologies, Faculty of Forest and Environmental Sciences, Institute of Civil Engineering and Woodworking, MEI Core Grou"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-93733eee5fb2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I83291730",
+        "institution_name": "University for Development Studies",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Paraclinical Sciences, Faculty of Veterinary Medicine, Norwegian University of Life Sciences, 1433 Ås, Norway",
+          "School of Veterinary Sciences, University for Development Studies, P.O. Box TL 1350, Tamale, Ghana"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9948dc4ac4c3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210108813",
+        "institution_name": "Azienda Ospedaliero-Universitaria delle Marche",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Contaminants and biohazards, Institute of Marine Research, Bergen, Norway",
+          "Dipartimento di Scienze della Vita e dell’Ambiente, Università Politecnica delle Marche, Ancona, Italy"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-579cae0f4904",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4405253351",
+        "institution_name": "Rani Lakshmi Bai Central Agricultural University, Jhansi",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Faculty of Biosciences and Aquaculture, Nord University, Universitetsalléen 11, 8026 Bodø, Norway",
+          "Faculty of Biosciences and Aquaculture, Nord University, Universitetsalléen 11, 8026 Bodø, Norway; Rani Lakshmi Bai Central Agricultural University, Jhansi 2840",
+          "Rani Lakshmi Bai Central Agricultural University, Jhansi 284003, Uttar Pradesh, India"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7538bfbdddc1",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I1288214837",
+        "institution_name": "United States Naval Research Laboratory",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Physics and Technology, University of Bergen, Bergen, Norway",
+          "Remote Sensing Division, US Naval Research Laboratory, Washington, DC, USA"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5aaac5b68054",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I17877952",
+        "institution_name": "Sechenov University",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of General Hygiene, I.M. Sechenov First Moscow State Medical University, Moscow, Russia",
+          "Department of Public Health and Nursing, Faculty of Medicine and Health Science, NTNU, Trondheim, Norway",
+          "School of Health Systems and Public Health, Faculty of Health Sciences, University of Pretoria, Pretoria, South Africa"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-35cc8cece399",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210098398",
+        "institution_name": "University Centre of the Westfjords",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Norwegian Institute for Water Research (NIVA), Fram Centre, Hjalmar Johansens gate 14, 9007 Tromsø, Norway",
+          "Norwegian Institute for Water Research (NIVA), Framsenteret, Hjalmar Johansens gate 14, 9007 Tromsø, Norway",
+          "Norwegian Institute for Water Research (NIVA), Framsenteret, Hjalmar Johansens gate 14, 9007 Tromsø, Norway; University Centre of the Westfjords, Suðurgata 12,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b7e60b32549a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210116663",
+        "institution_name": "VieCuri Medisch Centrum",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Central South University, Xiangya Hospital, Department of Orthopaedics, Changsha, China;",
+          "Diakonhjemmet Hospital, Center for treatment of Rheumatic Musculoskeletal Diseases (REMEDY), Oslo, Norway;",
+          "University of Twente, Medical Cell Biophysics group, Enschede, Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7ab9824b9021",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I49451415",
+        "institution_name": "University Centre in Svalbard",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Arctic Biology, The University Centre in Svalbard, Longyearbyen, Norway",
+          "Department of Arctic Biology, University Centre in Svalbard, Longyearbyen, Norway",
+          "Department of Arctic Technology, University Centre in Svalbard (UNIS), Longyearbyen, 9171, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c291424a9495",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I20581793",
+        "institution_name": "University of Kent",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Nofima AS, Deptartment of Processing Technology, Muninbakken 9-13, Tromsø 9291, Norway;",
+          "University of Kent, School of Physical Sciences, Canterbury CT2 7NH, UK;",
+          "Veterinary and Food Safety Laboratory, Department of Food Safety, 700115 Iasi, Romania;"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d3413bc95497",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I33278361",
+        "institution_name": "University of Zambia",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Animal Science, School of Agricultural Sciences, University of Zambia, P.O. Box 32379, Lusaka, Zambia",
+          "Department of Paraclinical Sciences, Faculty of Veterinary Medicine, Norwegian University of Life Sciences, 1433 Ås, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1824e6bfee71",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210107682",
+        "institution_name": "Laboratoire National de Métrologie et d'Essais",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Laboratoire National de Métrologie et d'Essais, Paris, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4a9a0b0b1689",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I269685040",
+        "institution_name": "Koszalin University of Technology",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Business Administration, Faculty of Business Administration and Social Sciences, Western Norway University of Applied Sciences, NO-6856 Sogndal, N",
+          "Department of Economics, Faculty of Economic Sciences, Koszalin University of Technology, 75-453 Koszalin, Poland"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-91c4e6b84c74",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I91044043",
+        "institution_name": "Universidad del Valle de Guatemala",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Natural Sciences and Environmental Health, Faculty of Technology, Natural Sciences and Maritime Sciences, University of South-Eastern Norway, 3800"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9ef719e2f3eb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210101907",
+        "institution_name": "Lilongwe University of Agriculture and Natural Resources",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Paraclinical Sciences, Faculty of Veterinary Medicine, Norwegian University of Life Sciences, 1433 Ås, Norway",
+          "Department of Veterinary Public Health and Epidemiology, Lilongwe University of Agriculture and Natural Resources, Lilongwe, Malawi"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0a31fe87baa4",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4388482714",
+        "institution_name": "Naval Research Laboratory Remote Sensing Division",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Physics and Technology, University of Bergen, Bergen, Norway",
+          "Remote Sensing Division, US Naval Research Laboratory, Washington, DC, USA"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3dec3cee3497",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4389425441",
+        "institution_name": "University of the Arctic",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a07d0602fb26",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210088115",
+        "institution_name": "Ospedale Santa Chiara",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Urology, Santa Chiara Regional and Teaching Hospital, Trento, Italy",
+          "Institute of Clinical Medicine, University of Oslo, Oslo, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2e6731c2d185",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210096615",
+        "institution_name": "Groupe de Recherche en Droit, Économie, Gestion",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "GREDEG, CNRS, Université Côte d’Azur, Nice, France",
+          "UiT, The Artic University of Norway, Tromsø, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-887257313c9d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210103991",
+        "institution_name": "Swedish e-Science Research Centre",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Department of Energy and Process Engineering, Norwegian University of Science and Technology (NTNU) 4 , Trondheim, Norway",
+          "SeRC (Swedish e-Science Research Centre) and FLOW, Department of Engineering Mechanics, KTH 1 , SE-10044 Stockholm, Sweden"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-71a14bc37a0d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210135349",
+        "institution_name": "Shanghai Institute of Optics and Fine Mechanics",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "State Key Laboratory of Ultra Intense Laser Science and Technology, Shanghai Institute of Optics and Fine Mechanics, Chinese Academy of Sciences, Shanghai, 2018"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7fac1dd5dc9f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210100222",
+        "institution_name": "Institute of Physics",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "Computational Materials Laboratory LCCMat Institute of Physics University of Brasília Brasília Brazil",
+          "Department of Physics Norwegian University of Science and Technology (NTNU) Trondheim Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3cb55081afb8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210100987",
+        "institution_name": "University of Teacher Education Styria",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Norway\"",
+          "author country NO"
+        ],
+        "affiliation_examples": [
+          "University College of Teacher Education Styria, Graz, Austria and Inland Norway University of Applied Sciences, Hamar, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bd74e95be6b2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210103266",
+        "institution_name": "Deltares",
+        "works": 61,
+        "signals": [
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7df45c6caa9e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I11983389",
+        "institution_name": "Manchester Metropolitan University",
+        "works": 37,
+        "signals": [
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6a47b4e1b199",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I51314090",
+        "institution_name": "University of Osijek",
+        "works": 20,
+        "signals": [
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-912b8ba9e350",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I184903800",
+        "institution_name": "Environment Agency",
+        "works": 15,
+        "signals": [
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-62a1c4a7b23a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210105310",
+        "institution_name": "National Institute of Occupational Health",
+        "works": 2,
+        "signals": [
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-90e29aa3cd02",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I2800646544",
+        "institution_name": "Danish Maritime Authority",
+        "works": 1,
+        "signals": [
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-67886ad8b04a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4210094348",
+        "institution_name": "Environment Agency of Iceland",
+        "works": 1,
+        "signals": [
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-30b6a697166e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4403386658",
+        "institution_name": "IFP School",
+        "works": 1,
+        "signals": [
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-40e95f4e9417",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Norway?",
+      "evidence": {
+        "institution_id": "I4405255476",
+        "institution_name": "eDNA solutions AB (Sweden)",
+        "works": 1,
+        "signals": [
+          "author country NO"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a900f76e67c4",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210138062",
+        "institution_name": "Akvaplan-niva",
+        "works": 35
+      },
+      "current_value": "company",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2069784e00f6",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I125968788",
+        "institution_name": "Norwegian Geotechnical Institute",
+        "works": 32
+      },
+      "current_value": "other",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-894c5fe68ca2",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210151339",
+        "institution_name": "Salt (Norway)",
+        "works": 24
+      },
+      "current_value": "company",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bedc31783353",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210121781",
+        "institution_name": "Nofima",
+        "works": 17
+      },
+      "current_value": "company",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-733febe8627d",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210109781",
+        "institution_name": "Norwegian Institute for Sustainability Research",
+        "works": 13
+      },
+      "current_value": "other",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2531dbb9e672",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I2800020546",
+        "institution_name": "Norwegian Environment Agency",
+        "works": 4
+      },
+      "current_value": "other",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ea080d34086c",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210092862",
+        "institution_name": "Arctic Monitoring And Assessment Programme",
+        "works": 4
+      },
+      "current_value": "other",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5bd3581e1321",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W2266658013",
+        "title": "Sammenheng mellom nedbør i forhold til utløsende og dynamiske faktorer til jordskred : en studie av Jordal i Fjærland, vest i Norge",
+        "language": "no"
+      },
+      "current_value": "language no",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cad4add304ef",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W2463308633",
+        "title": "Miljøriktig materialvalg i drikkevannsnettet : livsløpsanalyser av fire utvalgte rørmaterialer",
+        "language": "no"
+      },
+      "current_value": "language no",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5674cfec72b2",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W2468200794",
+        "title": "Plastavfall i det marine miljø og som kilde for persistente orgraniske miljøgifter i norsk Arktis",
+        "language": "no"
+      },
+      "current_value": "language no",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-79ac63a897c6",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W2761699316",
+        "title": "Makroplast ved Norsjø, Telemark : Kartlegging og kategorisering av makroplast langs utvalgte strandlinjer ved ferskvann basert på Guideline for Monitoring Marine Litter on the Beaches in the OSPAR Maritime Area.",
+        "language": "no"
+      },
+      "current_value": "language no",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6f465f01f0e4",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W291144126",
+        "title": "Innsamling og behandling av plastavfall",
+        "language": "no"
+      },
+      "current_value": "language no",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ee4f1bca5ad1",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W3124016452",
+        "title": "Samarbeid mot plastforsøpling: Et offentlig–privat partnerskap",
+        "language": "no"
+      },
+      "current_value": "language no",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-41aff32ab7b3",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W4318816630",
+        "title": "Problemi pravne (ne)reguliranosti (mikro)plastike u morskom i riječnom okolišu",
+        "language": "hr"
+      },
+      "current_value": "language hr",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6c351aa7a10c",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W4391813581",
+        "title": "تأثیر انسانی: آلودگی پلاستیکی",
+        "language": "fa"
+      },
+      "current_value": "language fa",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7091731ced4c",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W4399668929",
+        "title": "Intestinal effects of ingested PVC microplastic in Wistar rats",
+        "language": "no"
+      },
+      "current_value": "language no",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2c054781e2c0",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W4416724655",
+        "title": "Microplastics in the Human Food Chain: Exposure and Health Implications",
+        "language": "no"
+      },
+      "current_value": "language no",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c40642bb6bc8",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W7160089701",
+        "title": "Interface‐Engineered Electron‐Deficient Nickel Species for Efficient Depolymerization of Polyethylene Terephthalate",
+        "language": "de"
+      },
+      "current_value": "language de",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a39bcaf18791",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W7166619065",
+        "title": "Environmental sustainability of offshore wind turbines: circular economy challenges",
+        "language": "uk"
+      },
+      "current_value": "language uk",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b38bb863eff0",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "mikroplast",
+        "language": "nb",
+        "note": "Norwegian for microplastics; query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1a3462007b1a",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "plastforurensning",
+        "language": "nb",
+        "note": "Norwegian for plastic pollution; query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-78f255b5fcb4",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "marint søppel",
+        "language": "nb",
+        "note": "Norwegian for marine litter; query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4ac8f9e7dcda",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "nanoplast",
+        "language": "nb",
+        "note": "Norwegian for nanoplastics; query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    }
+  ]
+}

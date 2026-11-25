@@ -1,0 +1,776 @@
+{
+  "schema": "amb-v1",
+  "generated_at": "2026-11-25T02:24:15Z",
+  "region": "california",
+  "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
+  "min_works": 3,
+  "eligible_types": [
+    "education",
+    "government",
+    "nonprofit",
+    "facility"
+  ],
+  "institutions": [
+    {
+      "id": "I84218800",
+      "name": "University of California, Davis",
+      "type": "education",
+      "works": 207,
+      "domains": [
+        "ucdavis.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I97018004",
+      "name": "Stanford University",
+      "type": "education",
+      "works": 192,
+      "domains": [
+        "stanford.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I95457486",
+      "name": "University of California, Berkeley",
+      "type": "education",
+      "works": 167,
+      "domains": [
+        "berkeley.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I103635307",
+      "name": "University of California, Riverside",
+      "type": "education",
+      "works": 131,
+      "domains": [
+        "ucr.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I36258959",
+      "name": "University of California San Diego",
+      "type": "education",
+      "works": 112,
+      "domains": [
+        "ucsd.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I161318765",
+      "name": "University of California, Los Angeles",
+      "type": "education",
+      "works": 107,
+      "domains": [
+        "ucla.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I154570441",
+      "name": "University of California, Santa Barbara",
+      "type": "education",
+      "works": 107,
+      "domains": [
+        "ucsb.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1174212",
+      "name": "University of Southern California",
+      "type": "education",
+      "works": 68,
+      "domains": [
+        "usc.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I26538001",
+      "name": "San Diego State University",
+      "type": "education",
+      "works": 66,
+      "domains": [
+        "sdsu.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I150209017",
+      "name": "Scripps Institution of Oceanography",
+      "type": "facility",
+      "works": 64,
+      "domains": [
+        "ucsd.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I180670191",
+      "name": "University of California, San Francisco",
+      "type": "education",
+      "works": 58,
+      "domains": [
+        "ucsf.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I204250578",
+      "name": "University of California, Irvine",
+      "type": "education",
+      "works": 55,
+      "domains": [
+        "uci.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I185103710",
+      "name": "University of California, Santa Cruz",
+      "type": "education",
+      "works": 48,
+      "domains": [
+        "ucsc.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I11006740",
+      "name": "Southern California Coastal Water Research Project",
+      "type": "facility",
+      "works": 44,
+      "domains": [
+        "sccwrp.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I149919469",
+      "name": "California Polytechnic State University",
+      "type": "education",
+      "works": 35,
+      "domains": [
+        "calpoly.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2803209242",
+      "name": "University of California System",
+      "type": "education",
+      "works": 35,
+      "domains": [
+        "universityofcalifornia.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210111001",
+      "name": "San Francisco Estuary Institute",
+      "type": "nonprofit",
+      "works": 26,
+      "domains": [
+        "sfei.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4405266016",
+      "name": "Hopkins Marine Station",
+      "type": "facility",
+      "works": 24,
+      "domains": [
+        "stanford.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I157638225",
+      "name": "California State University, Northridge",
+      "type": "education",
+      "works": 23,
+      "domains": [
+        "csun.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I53012624",
+      "name": "Joint BioEnergy Institute",
+      "type": "facility",
+      "works": 22,
+      "domains": [
+        "jbei.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I122411786",
+      "name": "California Institute of Technology",
+      "type": "education",
+      "works": 21,
+      "domains": [
+        "caltech.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I59897056",
+      "name": "California State University, Long Beach",
+      "type": "education",
+      "works": 20,
+      "domains": [
+        "csulb.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I98947143",
+      "name": "California State Polytechnic University",
+      "type": "education",
+      "works": 16,
+      "domains": [
+        "cpp.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210085935",
+      "name": "IBM Research - Almaden",
+      "type": "facility",
+      "works": 15,
+      "domains": [
+        "ibm.com"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I71838634",
+      "name": "San Francisco State University",
+      "type": "education",
+      "works": 15,
+      "domains": [
+        "sfsu.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I194388944",
+      "name": "California State University, Channel Islands",
+      "type": "education",
+      "works": 14,
+      "domains": [
+        "csuci.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I36053171",
+      "name": "California State University, Chico",
+      "type": "education",
+      "works": 14,
+      "domains": [
+        "csuchico.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I156087764",
+      "name": "University of California, Merced",
+      "type": "education",
+      "works": 14,
+      "domains": [
+        "ucmerced.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1336788258",
+      "name": "California Department of Public Health",
+      "type": "government",
+      "works": 12,
+      "domains": [
+        "cdph.ca.gov"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1301553790",
+      "name": "J. Craig Venter Institute",
+      "type": "nonprofit",
+      "works": 12,
+      "domains": [
+        "jcvi.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1319261023",
+      "name": "Monterey Bay Aquarium Research Institute",
+      "type": "nonprofit",
+      "works": 12,
+      "domains": [
+        "mbari.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210109599",
+      "name": "NOAA National Marine Fisheries Service Southwest Fisheries Science Center",
+      "type": "government",
+      "works": 11,
+      "domains": [
+        "noaa.gov"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I119942576",
+      "name": "University of the Pacific",
+      "type": "education",
+      "works": 11,
+      "domains": [
+        "pacific.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210140558",
+      "name": "Western Regional Research Center",
+      "type": "government",
+      "works": 11,
+      "domains": [
+        "usda.gov"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I27825529",
+      "name": "California State University Los Angeles",
+      "type": "education",
+      "works": 10,
+      "domains": [
+        "calstatela.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1334627681",
+      "name": "Jet Propulsion Laboratory",
+      "type": "facility",
+      "works": 10,
+      "domains": [
+        "nasa.gov"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210112098",
+      "name": "National University",
+      "type": "education",
+      "works": 9,
+      "domains": [
+        "nu.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2801935854",
+      "name": "SLAC National Accelerator Laboratory",
+      "type": "facility",
+      "works": 9,
+      "domains": [
+        "stanford.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I160856358",
+      "name": "University of San Diego",
+      "type": "education",
+      "works": 9,
+      "domains": [
+        "sandiego.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I142934699",
+      "name": "California State University, Fullerton",
+      "type": "education",
+      "works": 8,
+      "domains": [
+        "fullerton.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I26347476",
+      "name": "Loma Linda University",
+      "type": "education",
+      "works": 8,
+      "domains": [
+        "llu.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210103292",
+      "name": "California Marine Sanctuary Foundation",
+      "type": "nonprofit",
+      "works": 7,
+      "domains": [
+        "californiamsf.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I118839592",
+      "name": "California State University, Bakersfield",
+      "type": "education",
+      "works": 7,
+      "domains": [
+        "csub.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I124104796",
+      "name": "Marine Mammal Center",
+      "type": "nonprofit",
+      "works": 7,
+      "domains": [
+        "marinemammalcenter.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210090234",
+      "name": "Marine Megafauna Foundation",
+      "type": "nonprofit",
+      "works": 7,
+      "domains": [
+        "marinemegafaunafoundation.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I51504820",
+      "name": "San Jose State University",
+      "type": "education",
+      "works": 7,
+      "domains": [
+        "sjsu.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1333577951",
+      "name": "California Department of Fish and Wildlife",
+      "type": "government",
+      "works": 6,
+      "domains": [
+        "wildlife.ca.gov"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I65137940",
+      "name": "California Environmental Protection Agency",
+      "type": "government",
+      "works": 6,
+      "domains": [
+        "calepa.ca.gov"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I226560621",
+      "name": "California State University, San Marcos",
+      "type": "education",
+      "works": 6,
+      "domains": [
+        "csusm.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I38257878",
+      "name": "Energy Biosciences Institute",
+      "type": "facility",
+      "works": 6,
+      "domains": [
+        "energybiosciencesinstitute.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1343052199",
+      "name": "Kaiser Permanente",
+      "type": "nonprofit",
+      "works": 6,
+      "domains": [
+        "kp.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I95850191",
+      "name": "Moss Landing Marine Laboratories",
+      "type": "facility",
+      "works": 6,
+      "domains": [
+        "calstate.edu",
+        "sjsu.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210097936",
+      "name": "Terasaki Foundation",
+      "type": "facility",
+      "works": 6,
+      "domains": [
+        "terasaki.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I192389796",
+      "name": "Cal Poly Humboldt",
+      "type": "education",
+      "works": 5,
+      "domains": [
+        "humboldt.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I67328108",
+      "name": "California State University, Fresno",
+      "type": "education",
+      "works": 5,
+      "domains": [
+        "csufresno.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I135369504",
+      "name": "California State University, Monterey Bay",
+      "type": "education",
+      "works": 5,
+      "domains": [
+        "csumb.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210091954",
+      "name": "Global Alliance for Incinerator Alternatives",
+      "type": "nonprofit",
+      "works": 5,
+      "domains": [
+        "no-burn.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210097074",
+      "name": "Theiss Research",
+      "type": "nonprofit",
+      "works": 5,
+      "domains": [
+        "theissresearch.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1316958739",
+      "name": "California Air Resources Board",
+      "type": "government",
+      "works": 4,
+      "domains": [
+        "arb.ca.gov"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I127339247",
+      "name": "California State University System",
+      "type": "education",
+      "works": 4,
+      "domains": [
+        "calstate.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I43522216",
+      "name": "California State University, Sacramento",
+      "type": "education",
+      "works": 4,
+      "domains": [
+        "csus.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I43369023",
+      "name": "California State University, San Bernardino",
+      "type": "education",
+      "works": 4,
+      "domains": [
+        "csusb.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4405264838",
+      "name": "Metropolitan Water District of Southern California",
+      "type": "government",
+      "works": 4,
+      "domains": [
+        "mwdh2o.com"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2801975132",
+      "name": "Ocean Institute",
+      "type": "nonprofit",
+      "works": 4,
+      "domains": [
+        "ocean-institute.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I99418890",
+      "name": "San Francisco Bay University",
+      "type": "education",
+      "works": 4,
+      "domains": [
+        "npu.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4405269264",
+      "name": "Stanford Cardiovascular Institute",
+      "type": "facility",
+      "works": 4,
+      "domains": [
+        "stanford.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1290230355",
+      "name": "California Department of Toxic Substances Control",
+      "type": "government",
+      "works": 3,
+      "domains": [
+        "dtsc.ca.gov"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I176611909",
+      "name": "California Lutheran University",
+      "type": "education",
+      "works": 3,
+      "domains": [
+        "callutheran.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I184813773",
+      "name": "California State University, East Bay",
+      "type": "education",
+      "works": 3,
+      "domains": [
+        "csueastbay.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I197875241",
+      "name": "California State University, Stanislaus",
+      "type": "education",
+      "works": 3,
+      "domains": [
+        "csustan.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210095419",
+      "name": "Carnegie Department of Plant Biology",
+      "type": "facility",
+      "works": 3,
+      "domains": [
+        "carnegiescience.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I172039944",
+      "name": "Dominican University of California",
+      "type": "education",
+      "works": 3,
+      "domains": [
+        "dominican.edu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1282311441",
+      "name": "Lawrence Livermore National Laboratory",
+      "type": "facility",
+      "works": 3,
+      "domains": [
+        "llnl.gov"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210090881",
+      "name": "National Marine Mammal Foundation",
+      "type": "nonprofit",
+      "works": 3,
+      "domains": [
+        "nmmf.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1294537935",
+      "name": "Point Blue Conservation Science",
+      "type": "nonprofit",
+      "works": 3,
+      "domains": [
+        "pointblue.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I126031752",
+      "name": "Santa Barbara City College",
+      "type": "education",
+      "works": 3,
+      "domains": [
+        "sbcc.edu"
+      ],
+      "needs_domain": false
+    }
+  ]
+}

@@ -61,6 +61,12 @@ DEFAULT_JSON = [
     "site/data/global/pubmed_coverage.json",
     "site/data/norway/region.json",
     "site/data/belgium/region.json",
+    "site/data/california/ambassador_institutions.json",
+    "site/data/california/ambassador_cases.json",
+    "site/data/norway/ambassador_institutions.json",
+    "site/data/norway/ambassador_cases.json",
+    "site/data/belgium/ambassador_institutions.json",
+    "site/data/belgium/ambassador_cases.json",
 ]
 SKIP_TAGS = {"script", "style"}
 

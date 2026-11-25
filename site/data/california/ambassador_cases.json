@@ -1,0 +1,2903 @@
+{
+  "schema": "amb-cases-v1",
+  "generated_at": "2026-11-25T02:24:15Z",
+  "region": "california",
+  "caps": {
+    "institution_in_region": 200,
+    "institution_type": 100,
+    "local_language_relevance": 200
+  },
+  "available": {
+    "institution_in_region": 56,
+    "institution_type": 72,
+    "local_language_relevance": 3,
+    "local_terms": 0
+  },
+  "counts": {
+    "institution_in_region": 56,
+    "institution_type": 72,
+    "local_language_relevance": 3,
+    "local_terms": 0
+  },
+  "cases": [
+    {
+      "case_id": "amb-d96e3cd07b20",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I1280536761",
+        "institution_name": null,
+        "works": 3,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "NASA Ames Research Center Moffett field, CA, United States",
+          "NASA Ames Research Center, Moffett Field, CA, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-608c33fd9e8e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I24603500",
+        "institution_name": null,
+        "works": 3,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Advanced Institute for Materials Research, Tohoku University, Sendai 980-8577, Japan | Materials Sciences Division, Lawrence Berkeley National Laboratory, Berke",
+          "Department of Polymer Science and Engineering, University of Massachusetts Amherst, Amherst, Massachusetts 01003, United States | Materials Sciences Division, L",
+          "Department of Polymer Science and Engineering, University of Massachusetts, Amherst, MA, USA | Materials Sciences Division, Lawrence Berkeley National Laborator"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b2bb434c5c7a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4387152530",
+        "institution_name": null,
+        "works": 3,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Advanced Light Source, Lawrence Berkeley National Laboratory, Berkeley, CA 94720, USA",
+          "Advanced Light Source, Lawrence Berkeley National Laboratory, Berkeley, CA, USA | Lawrence Berkeley National Laboratory (LBNL), Berkeley, CA (United States)",
+          "Advanced Light Source, Lawrence Berkeley National Laboratory, Berkeley, California 94720, United States"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3afbb244e11f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4405256182",
+        "institution_name": null,
+        "works": 3,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Algalita Marine Research Foundation, CA, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9087ee5cd59c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I173664879",
+        "institution_name": null,
+        "works": 2,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Faculty of Chemical Sciences and Engineering, Autonomous University of Baja, California, CP, 22390, Tijuana, Baja California, Mexico. Electronic address: [email",
+          "Faculty of Chemical Sciences and Engineering, Autonomous University of Baja, California, CP, Tijuana 22390, Baja California, Mexico | Tecnologico de Monterrey,"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ccd2a8933d24",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I203455613",
+        "institution_name": null,
+        "works": 2,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Schrödinger, Inc. , , , | Schrödinger, Inc., San Diego, California 92121, United States",
+          "Schrödinger, LLC, San Diego, California 92121, United States"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-781cb888c332",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210103265",
+        "institution_name": null,
+        "works": 2,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Enthalpy Analytical (formerly Nautilus Environmental), San Diego, California 92120, United States",
+          "Nautilus Environmental, San Diego, California, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-18b58ec8a983",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210142480",
+        "institution_name": null,
+        "works": 2,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Thermo Fisher Scientific, Pleasanton, CA, 94566, USA",
+          "Thermo Fisher Scientific, San Jose, California 95134, United States"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ff3198feee72",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I79619799",
+        "institution_name": null,
+        "works": 2,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Birmingham Law School, University of Birmingham , Birmingham, United Kingdom | Centre for Environmental Research and Justice, University of Birmingham , Birming",
+          "Birmingham Law School, University of Birmingham , Birmingham, United Kingdom | Lip Service Alliance , San Pedro, CA, United States",
+          "Centre for Environmental Research and Justice, University of Birmingham , Birmingham, United Kingdom | School of Geography, Earth and Environmental Sciences, Un"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2f76ca3c9f3a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I1288403368",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Rodale Institute, California Organic Center, 1012 W Ventura Blvd., Camarillo, CA 93010, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c0669b926fd0",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I130828816",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Department of Ichthyology, California Academy of Sciences, San Francisco, CA, USA | Faculty of Biological Sciences, University of Leeds, Leeds, UK"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-870f3f289f7a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I1308548392",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Brain Capital Alliance, San Francisco, CA, USA; Euro-Mediterranean Economists Association, Barcelona, Spain; Rebuilding Macroeconomics, University College Londo"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a6c936528449",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I1329765538",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Universities Space Research Association, Mountain View, CA, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2fd0ec2b4a14",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I13383945",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Exponent, Santa Rosa, California, USA | Exponent Inc"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9dd5576e9cd8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I134820265",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Centro de Investigaciones Biológicas Margarita Salas, Consejo Superior de Investigaciones Científicas (CIB-CSIC) C/Ramiro de Maeztu 9, Madrid 28040, Spain | Joi"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1df250873394",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I137902535",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Lawrence Berkeley National Laboratory | Advanced Biofuels and Bioproducts Process Development Unit, Lawrence Berkeley National Laboratory, Berkeley, CA, 94720;",
+          "North Carolina State University | Advanced Biofuels and Bioproducts Process Development Unit, Lawrence Berkeley National Laboratory, Berkeley, CA, 94720; | Depa"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b9e6b5504d7f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I149251103",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Cambium Biomaterials, 626 Bancroft Way, Suite A, Berkeley, California 94710, United States"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-dd230fa6ad55",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I164936912",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Department of Biological Sciences, University of Texas at El Paso | Eastern Pacific Hawksbill Initiative | ProCosta | Department of Biological Sciences, Univers"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1ab21715d4af",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I16970960",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Scripps College, Claremont, CA, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4869e2f78ca3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I17626003",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Graduate School of Oceanography, University of Rhode Island, Narragansett, RI, USA. [email removed] | The 5 Gyres Institute, Santa Monica, CA, USA. [email remov"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6db310fe886e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I17974374",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Center for Marine Biology, University of São Paulo, São Sebastião, Brazil. [email removed] | Department of Ichthyology, California Academy of Sciences, San Fran"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-19865395ef74",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I180825142",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Brain Capital Alliance, San Francisco, CA, USA; Euro-Mediterranean Economists Association, Barcelona, Spain; Bayes Business School, City College London, London,"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-81f88e08442f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I184565670",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Boz Life Science Research and Teaching Institute, San Diego, CA, 92109, USA; Georgetown University, Washington, DC, 20035, USA | Boz Life Science Research and T"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4057ac67eb50",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I190082696",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "School of Biological and Biomedical Sciences, Durham University, South Road, Durham DH1 3LE, UK | Section of Ichthyology, California Academy of Sciences, 55 Mus"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1773cff1e5bc",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I201537933",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Advanced Institute for Materials Research, Tohoku University, Sendai 980-8577, Japan | Materials Sciences Division, Lawrence Berkeley National Laboratory, Berke"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9a1cd3f16031",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I27804330",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Brown University, Providence, RI 02912, United States of America | The 5 Gyres Institute, Los Angeles, CA, United States of America"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cd8297e11e11",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I2801250486",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Ocean Conservancy, Santa Cruz, California, United States of America"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7673645e7307",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I2801780550",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "California Pacific Medical Center Research Institute, Sutter Hospital, San Francisco, CA, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e3815ff9b16e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I2801986924",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Marine Conservation Institute, Glen Ellen, CA, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-16c817b06301",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I2802042752",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Center for Environmental Microplastics Studies, Guangdong Key Laboratory of Environmental Pollution and Health, School of Environment, Jinan University, Guangzh"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-45472609eae2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210086988",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Brain Capital Alliance, San Francisco, CA, USA; Euro-Mediterranean Economists Association, Barcelona, Spain; Bayes Business School, City College London, London,",
+          "Brain Capital Alliance, San Francisco, CA, USA; Euro-Mediterranean Economists Association, Barcelona, Spain; NeuroCentury, Brussels, Belgium; European Policy Ce"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-59b19639e6f7",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210106439",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Neurolixis Inc., Dana Point, California, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bbf268d8019c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210109350",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Carl Zeiss Meditec, Inc., California, United States"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1f8ad5ee928a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210109616",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Bay Area Environmental Research Institute, Moffett Field, CA, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bb5564b7ba27",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210127542",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "U.S. National Oceanic and Atmospheric Administration, Marine Debris Program, 1301 Clay St, Oakland, CA 94612, USA; I.M. Systems Group, 3206 Tower Oaks Blvd, Roc"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-00c5d737d2b9",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210141545",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Cooperative Extension Santa Cruz County, University of California Agriculture and Natural Resources, 1430 Freedom Boulevard, Suite E, Watsonville, CA 95076, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6376d8156c5a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210144221",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Department of Commerce, National Oceanic and Atmospheric Administration, Office of National Marine Sanctuaries, Greater Farallones National Marine Sanctuary, Sa"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-dd5f73cf655c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210147167",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Bureau of Ocean Energy Management (BOEM), 760 Paseo Camarillo, Suite 102, Camarillo, CA, 93010, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5ae59b3a6903",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210147680",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Centro de Investigaciones Biológicas Margarita Salas, Consejo Superior de Investigaciones Científicas (CIB-CSIC) C/Ramiro de Maeztu 9, Madrid 28040, Spain | Joi"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8af7c281ad53",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210148653",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "San Diego Zoo Institute for Conservation Research (R.G.F., C.C.S., B.S.D., C.W.T.), Escondido, California 92027"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-60d0cf93950b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210150258",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Eurofins Environment Testing, West Sacramento, CA 95605, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7b8e45f050d1",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210151590",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Robert Louis Stevenson School, 3152 Forest Lake Rd, Pebble Beach, CA, 93953"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8182e8618bef",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210155636",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Remote Sensing Solutions, Los Angeles, CA, United States"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1018281a1ea4",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4210158008",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Michael Baker International, 5 Hutton Centre Drive, Suite 500, Santa Ana, CA, 92707, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9fdec5e57e02",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4387152364",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "U.S. Geological Survey, Western Ecological Research Center, Santa Cruz Field Station, Santa Cruz, CA, USA",
+          "U.S. Geological Survey, Western Ecological Research Center, Santa Cruz Field Station, Santa Cruz, CA, USA | United States Geological Survey, Santa Cruz, CA, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3333387b71e6",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4387153615",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Agile BioFoundry | BOTTLE Consortium | National Renewable Energy Laboratory | Renewable Resources and Enabling Sciences Center | Agile BioFoundry, Emeryville, C",
+          "Agile BioFoundry | National Renewable Energy Laboratory | Renewable Resources and Enabling Sciences Center | Agile BioFoundry, Emeryville, California 94608, Uni"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5599c7c2afca",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4391768063",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "VMWare Inc., Palo Alto, CA, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cc04c204ffaf",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4392738073",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "American Bird Conservancy, Santa Cruz, California, USA | American Bird Conservancy, Santa Cruz, CA 95060, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5c683a900760",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4404532904",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Westcliff University,Dept. of CSE,California,USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4bb1b96ccf2e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4404532912",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "California University of Science and Medicine, Colton, California, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-235f20da951a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4405259425",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "American Bird Conservancy, Santa Cruz, California, USA | American Bird Conservancy, Santa Cruz, CA 95060, USA"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-44c983bc8190",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4405273082",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Hawai‘i Institute of Marine Biology, University of Hawaii, Kāne‘ohe, HI, 97644, USA | National Center for Ecological Analysis and Synthesis, 735 State St, Santa"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e82c4c4828c4",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I4405286224",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Advanced Institute for Materials Research, Tohoku University, Sendai 980-8577, Japan | Materials Sciences Division, Lawrence Berkeley National Laboratory, Berke"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-21aed86e8517",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I51361536",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Departmento de Medicina Veterinaria, Universidad de El Salvador | Eastern Pacific Hawksbill Initiative | ProCosta | Departmento de Medicina Veterinaria, Univers"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5821f0bd661f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I76214153",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Key Laboratory of Western China's Environmental Systems (Ministry of Education), College of Earth and Environmental Sciences, Lanzhou University, Lanzhou, Gansu"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a3bed8cb9af8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I864088423",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "Veeco Instruments, Inc, San Jose, California, United States"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e29c35f55a10",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I148283060",
+        "institution_name": null,
+        "works": 59
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8d046fc71a38",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "CAAG-SWRCB",
+        "institution_name": null,
+        "works": 21
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c0f2dcb64862",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1308126019",
+        "institution_name": null,
+        "works": 15
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1cab182b043d",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4387154492",
+        "institution_name": null,
+        "works": 15
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d6caf4af0758",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1302368450",
+        "institution_name": null,
+        "works": 14
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-602afe57079a",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1312222531",
+        "institution_name": null,
+        "works": 14
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0353e56f21a6",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I185261750",
+        "institution_name": null,
+        "works": 14
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-26ba29354e40",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I27781120",
+        "institution_name": null,
+        "works": 14
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ebfd75df34d0",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I2803094215",
+        "institution_name": null,
+        "works": 14
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-31692471bcc9",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I142207940",
+        "institution_name": null,
+        "works": 10
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-174124fa7e29",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210100421",
+        "institution_name": null,
+        "works": 10
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0e29d926a793",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "CAAG-OEHHA",
+        "institution_name": null,
+        "works": 9
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-abd802fe64dc",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1280640908",
+        "institution_name": null,
+        "works": 8
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ecf647fd4007",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210120900",
+        "institution_name": null,
+        "works": 8
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-49b6c1c07b88",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1336096307",
+        "institution_name": null,
+        "works": 7
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b0d57ddfc0ad",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I136199984",
+        "institution_name": null,
+        "works": 7
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3d26c3203438",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I76130692",
+        "institution_name": null,
+        "works": 7
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0a44426293cf",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I879563668",
+        "institution_name": null,
+        "works": 7
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-22d499608e4c",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I96673099",
+        "institution_name": null,
+        "works": 7
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-594de40f2788",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I131249849",
+        "institution_name": null,
+        "works": 6
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-dd0023398cbe",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I193531525",
+        "institution_name": null,
+        "works": 6
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-27ab1c7ab4db",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I204465549",
+        "institution_name": null,
+        "works": 6
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-dc35fce2f9b6",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I2801134892",
+        "institution_name": null,
+        "works": 6
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d5852aa47356",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I103922791",
+        "institution_name": null,
+        "works": 5
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d6b14ef80cca",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I189196454",
+        "institution_name": null,
+        "works": 5
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b7750a95d619",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I192454743",
+        "institution_name": null,
+        "works": 5
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0affbb78fb45",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I196333967",
+        "institution_name": "Inter-American Tropical Tuna Commission",
+        "works": 5
+      },
+      "current_value": "other",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c10e37967b44",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I31746571",
+        "institution_name": null,
+        "works": 5
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-374706f05213",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I93860229",
+        "institution_name": null,
+        "works": 5
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b86982bc9e01",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1286329397",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-dd7cbe2addec",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I149581226",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-79940372797c",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I170897317",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-94019293ad5d",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I17145004",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e28c9b2bba15",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I176790772",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b0cf5284b0a9",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I196679689",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-38d4d22ad92a",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210090490",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9fbe0f7c3b3b",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210136348",
+        "institution_name": "California Sea Grant",
+        "works": 4
+      },
+      "current_value": "other",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-69537b346014",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210145761",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a4577ae3b1c9",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4405252610",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-452e601165b5",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I52158045",
+        "institution_name": null,
+        "works": 4
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2eafb10c1616",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I102322142",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d25668402788",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I106745318",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6eded30bc4ce",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I117965899",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-01b37f1b7989",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I124055696",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-dd09e07ad06e",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I124386471",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-586d8a66b656",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1280536761",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-577e9eba041c",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1297288678",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2525910dffef",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I130238516",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-de8c33520c77",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1312857945",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ed16fba01c5e",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1321296531",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-66f1f54e269c",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1331384533",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a73f04391b81",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I1344073410",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-658e3b8207fe",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I139264467",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-87a59f0e59bd",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I145311948",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a25c7c7a74e2",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I157674565",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8d5ba46373eb",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I159948400",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d99617b9d9eb",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I177607063",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c54bfca26699",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I196817621",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-991e6d9e79e3",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I19820366",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-211aaa2fb507",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I205783295",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bd40dfaf2ba9",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I2279609970",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-eb0dadce7223",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I24603500",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e41c15a907b1",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I2800884089",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-038766022ba7",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210088668",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-fd001966e5de",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210104735",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b0bdb05f1e44",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4387152347",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5cdf15d74aee",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4387152401",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6ad441e830d3",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4387152530",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-406d2102c941",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4403928320",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6e254eb8dad2",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4405256182",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8ef7b34ca734",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4647051",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e6ccf2bb47c1",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I87216513",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9af4894de034",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W4286615442",
+        "title": "Ionic Compatibilization of Polymers",
+        "language": "fr"
+      },
+      "current_value": "language fr",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-67f4ef62fed7",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W4390967967",
+        "title": "Spatiotemporal Study of Microplastics on Tioman Island",
+        "language": "eo"
+      },
+      "current_value": "language eo",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0779490376f4",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W4393124741",
+        "title": "How many microplastics do you need to (sub)sample?",
+        "language": "ceb"
+      },
+      "current_value": "language ceb",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "schema": "amb-v1",
+  "generated_at": "2026-11-25T02:24:16Z",
+  "region": "belgium",
+  "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
+  "min_works": 3,
+  "eligible_types": [
+    "education",
+    "government",
+    "nonprofit",
+    "facility"
+  ],
+  "institutions": [
+    {
+      "id": "I32597200",
+      "name": "Ghent University",
+      "type": "education",
+      "works": 445,
+      "domains": [
+        "ugent.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I99464096",
+      "name": "KU Leuven",
+      "type": "education",
+      "works": 186,
+      "domains": [
+        "kuleuven.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2800387288",
+      "name": "European Commission",
+      "type": "government",
+      "works": 111,
+      "domains": [
+        "europa.eu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I149213910",
+      "name": "University of Antwerp",
+      "type": "education",
+      "works": 104,
+      "domains": [
+        "uantwerpen.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I157674565",
+      "name": "University of Liège",
+      "type": "education",
+      "works": 98,
+      "domains": [
+        "uliege.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1293303778",
+      "name": "Flanders Marine Institute",
+      "type": "nonprofit",
+      "works": 82,
+      "domains": [
+        "vliz.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I68522396",
+      "name": "Flemish Institute for Technological Research",
+      "type": "facility",
+      "works": 76,
+      "domains": [
+        "vito.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I130929987",
+      "name": "University of Mons",
+      "type": "education",
+      "works": 68,
+      "domains": [
+        "ac.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I13469542",
+      "name": "Vrije Universiteit Brussel",
+      "type": "education",
+      "works": 65,
+      "domains": [
+        "vub.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I95674353",
+      "name": "UCLouvain",
+      "type": "education",
+      "works": 37,
+      "domains": [
+        "uclouvain.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I878454856",
+      "name": "Hasselt University",
+      "type": "education",
+      "works": 35,
+      "domains": [
+        "uhasselt.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210145253",
+      "name": "Instituut voor Landbouw en Visserijonderzoek",
+      "type": "facility",
+      "works": 31,
+      "domains": [
+        "vlaanderen.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I132053463",
+      "name": "Université Libre de Bruxelles",
+      "type": "education",
+      "works": 28,
+      "domains": [
+        "ulb.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210118628",
+      "name": "Joint Research Center",
+      "type": "government",
+      "works": 22,
+      "domains": [
+        "europa.eu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210153783",
+      "name": "Materia Nova",
+      "type": "nonprofit",
+      "works": 18,
+      "domains": [
+        "materianova.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210097779",
+      "name": "Centexbel",
+      "type": "nonprofit",
+      "works": 15,
+      "domains": [
+        "centexbel.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I27895137",
+      "name": "Gembloux Agro-Bio Tech",
+      "type": "education",
+      "works": 11,
+      "domains": [
+        "ac.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I202500258",
+      "name": "Research Institute for Nature and Forest",
+      "type": "facility",
+      "works": 10,
+      "domains": [
+        "inbo.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210114974",
+      "name": "IMEC",
+      "type": "nonprofit",
+      "works": 9,
+      "domains": [
+        "imec.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I149768937",
+      "name": "University of Namur",
+      "type": "education",
+      "works": 9,
+      "domains": [
+        "unamur.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4391768017",
+      "name": "Institute of Life, Earth and Environment",
+      "type": "facility",
+      "works": 8,
+      "domains": [
+        "unamur.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2801223450",
+      "name": "Institute of Natural Sciences",
+      "type": "facility",
+      "works": 8,
+      "domains": [
+        "naturalsciences.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4405271821",
+      "name": "Directorate-General for Environment",
+      "type": "government",
+      "works": 7,
+      "domains": [
+        "europa.eu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210144364",
+      "name": "Centre for Advanced Process Technology for Urban Resource Recovery",
+      "type": "facility",
+      "works": 6,
+      "domains": [
+        "capture-resources.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I42097590",
+      "name": "Institute for European Environmental Policy",
+      "type": "nonprofit",
+      "works": 6,
+      "domains": [
+        "ieep.eu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210088339",
+      "name": "Celabor",
+      "type": "facility",
+      "works": 5,
+      "domains": [
+        "celabor.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210161702",
+      "name": "Directorate-General Joint Research Centre",
+      "type": "government",
+      "works": 5,
+      "domains": [
+        "europa.eu"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2801148265",
+      "name": "Bio Base Europe",
+      "type": "facility",
+      "works": 4,
+      "domains": [
+        "bbeu.org"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2802067006",
+      "name": "Research Foundation - Flanders",
+      "type": "government",
+      "works": 4,
+      "domains": [
+        "fwo.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4405282759",
+      "name": "Brussels School of Governance",
+      "type": "education",
+      "works": 3,
+      "domains": [
+        "brussels-school.be"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210132797",
+      "name": "Flanders Hydraulics",
+      "type": "facility",
+      "works": 3,
+      "domains": [
+        "flandershydraulics.be"
+      ],
+      "needs_domain": false
+    }
+  ]
+}

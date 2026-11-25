@@ -472,6 +472,15 @@ Purpose: Tier B country aggregates from the global partition (PLAT-4b slice 3; d
 
 Purpose: region page payloads (REG-1, schema `region-v1`) for the Norway and Belgium region pages, one file per region folder. Written by `py -3.14 scripts/build_region_pages.py` (`--slug S` for one region; `--check` validates the committed files, checks that the counts equal `countries.json`, and fails when stale against the ignored partition, SKIP for the staleness check when it is absent). Every region in `regions/_registry.yml` with status `planned` or `active` and a `country_codes` predicate gets a file; the default region is skipped. Top-level keys: `schema_version`, `generated_at` (copied from `countries.json`), `slug`, `name`, `iso`, `status` (always `in_preparation`), `screening_status` (always `unscreened_query_hit`), `what_this_is_and_is_not` (`is`, `is_not`), `stats` (`works_total`, `first_year`, `last_complete_year`, `works_with_pmid`), `works_by_year` (`year`, `count`, `partial`; the same series as `countries.json` for the ISO code), `top_topics` (10: `id`, `name`, `count`), `top_institutions` (15: `id`, `name`, `ror`, `type`, `works`; institutions whose country is the ISO code), `top_researchers` (15: `id`, `name`, `works` only; authors with an authorship in the country; no ORCID, email or affiliation), `partner_countries` (10: `iso`, `name`, `works`; other countries on the same works), `sections` (six sections in page order: `funding`, `monitoring`, `policy`, `research_networks`, `local_terms`, `geography`; each has `status` `placeholder`, `draft` or `confirmed`, `summary`, `items` with `name`, `url`, `kind`, `status`, `note`, and `needs`), and `ambassadors` (`status`, `url`). Every local item starts as `to_confirm` (a placeholder, copied from `regions/<slug>/region.yml`). A work counts toward every country it touches. Counts are unscreened query hits, not a relevance-screened count. Licence: derived counts and public OpenAlex names.
 
+### `site/data/<slug>/ambassador_institutions.json`, `site/data/<slug>/ambassador_cases.json`
+
+Purpose: ambassador data for the three regions (AMB-1 step 1; spec in `docs/AMBASSADORS_SPEC.md`). Written by
+`py -3.14 scripts/build_ambassador_data.py`. Institutions file (schema `amb-v1`): `generated_at`, `region`, `rule`,
+`min_works`, `eligible_types`, and `institutions` (`id` OpenAlex institution id, `name`, `type`, `works` plastics
+works in the region corpus, `domains` registrable domains, `needs_domain`). Cases file (schema `amb-cases-v1`):
+`caps`, `available` (candidates before the cap), `counts` and `cases` (`case_id`, `kind`, `question`, `evidence`,
+`current_value`, `options`). No people, emails or abstracts. Owner overrides: `regions/<slug>/ambassador_domains.csv`. Domains come from the ignored cache `data/interim/ambassador_domains/`, which only `--fetch-domains` fills (OpenAlex and ROR records; capped at 20 OpenAlex credits per run).
+
 ### `site/data/california/bundle/`
 
 AT-4 serving bundle (bit-set facets, title search, institution tiers, abstract-free

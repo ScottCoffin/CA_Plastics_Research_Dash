@@ -1,0 +1,5150 @@
+{
+  "schema": "amb-cases-v1",
+  "generated_at": "2026-11-25T02:24:16Z",
+  "region": "belgium",
+  "caps": {
+    "institution_in_region": 200,
+    "institution_type": 100,
+    "local_language_relevance": 200
+  },
+  "available": {
+    "institution_in_region": 274,
+    "institution_type": 4,
+    "local_language_relevance": 4,
+    "local_terms": 7
+  },
+  "counts": {
+    "institution_in_region": 200,
+    "institution_type": 4,
+    "local_language_relevance": 4,
+    "local_terms": 7
+  },
+  "cases": [
+    {
+      "case_id": "amb-e9fe7bf943e3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210118689",
+        "institution_name": "Joint Research Centre",
+        "works": 97,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "European Commission - Joint Research Centre, Institute for Environment and Sustainability (IES), Via E. Fermi 2749, 21027 Ispra, Italy",
+          "European Commission, Joint Research Centre (JRC), 2440, Geel, Belgium",
+          "European Commission, Joint Research Centre (JRC), Geel, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f3e46fd5d589",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1294671590",
+        "institution_name": "Centre National de la Recherche Scientifique",
+        "works": 82,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "CNRS, CEFE",
+          "Centre d'Ecologie Fonctionnelle et Evolutive unit, CNRS, Univ Montpellier, EPHE, IRD, Montpellier, France;",
+          "Centre d’Innovation et de Recherche Des Matériaux Et Polymères, Service Des Matériaux Polymères Et Composites, Université de Mons, Mons, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-db06ec43473c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I913481162",
+        "institution_name": "Wageningen University & Research",
+        "works": 56,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "affiliation mentions \"Flanders\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Aquatic Ecology and Water Quality Management Group, Department of Environmental Sciences, Wageningen University, P.O. Box 47, 6700 AA Wageningen, The Netherland",
+          "Aquatic Ecology and Water Quality Management Group, Wageningen University & Research, P.O. Box 47, 6700 AA Wageningen, The Netherlands",
+          "ECOSPHERE, Department of Biology, Universiteit Antwerpen, Groenenborgerlaan 171, 2020 Antwerpen, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-56dca1baaecf",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I154202486",
+        "institution_name": "Ifremer",
+        "works": 43,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Laboratoire Comportement des Structures en Mer, Ifremer, Centre de Bretagne, 29280 Plouzané, France",
+          "Laboratory of Polymeric and Composite Materials (LPCM), Center of Innovation and Research in Materials and Polymers (CIRMAP), University of Mons, Place du Parc"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b4d26d8d8807",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210162697",
+        "institution_name": "Joint Research Centre",
+        "works": 36,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "European Commission, Joint Research Centre (JRC) Geel Belgium",
+          "European Commission, Joint Research Centre (JRC), 2440, Geel, Belgium",
+          "European Commission, Joint Research Centre (JRC), Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4cce28fa9e7c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I34352273",
+        "institution_name": "Maastricht University",
+        "works": 32,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Aachen-Maastricht Institute for Biobased Materials (AMIBM), Maastricht University, Brightlands Chemelot Campus, Urmonderbaan 22, 6167 RD Geleen, the Netherlands",
+          "B4Plastics, IQ-Parklaan 2A, 3650 Lanklaar, Belgium",
+          "Circular Plastics Department of Circular Chemical Engineering Faculty of Science and Engineering Maastricht University PO Box 616 6200 MD Maastricht, The Nether"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-573d007bc1f4",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I96673099",
+        "institution_name": "Technical University of Denmark",
+        "works": 29,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Environmental and Resource Engineering, Technical University of Denmark, Lyngby, Denmark",
+          "Department of Green Chemistry and Technology, University of Ghent, Ghent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a6e08b51c813",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I169108374",
+        "institution_name": "University of the Basque Country",
+        "works": 20,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Center for Education and Research on Macromolecules (CERM), CESAM Research Unit, University of Liege, Sart-Tilman B6a, 4000 Liege, Belgium",
+          "Department of Analytical Chemistry, University of the Basque Country (UPV/EHU), Sarriena Auzoa, Leioa 48940, Spain; Research Centre for Experimental Marine Biol",
+          "Department of Green Chemistry and Technology, Ghent University, Graaf Karel De Goedelaan 5, Kortrijk 8500, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f02e42ae1ca3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210166444",
+        "institution_name": "Institut de Recherche pour le Développement",
+        "works": 20,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "CNRS, CEFE",
+          "Centre d'Ecologie Fonctionnelle et Evolutive unit, CNRS, Univ Montpellier, EPHE, IRD, Montpellier, France;",
+          "Centre d’Innovation et de Recherche Des Matériaux Et Polymères, Service Des Matériaux Polymères Et Composites, Université de Mons, Mons, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1da0a7eebad9",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I2279609970",
+        "institution_name": "Université de Lille",
+        "works": 18,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centre d’Innovation et de Recherche Des Matériaux Et Polymères, Service Des Matériaux Polymères Et Composites, Université de Mons, Mons, Belgium",
+          "Centre d’Innovation et de Recherche des Matériaux et Polymères (CIRMAP), Service des Matériaux Polymères et Composites (SMPC), Université de Mons, France, Belgi",
+          "Centre d’Innovation et de Recherche des Matériaux et Polymères (CIRMAP), Service des Matériaux Polymères et Composites (SMPC), Université de Mons, Mons, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-81bb0e5734a6",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I887064364",
+        "institution_name": "University of Amsterdam",
+        "works": 16,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Earth and Environmental Sciences, KU Leuven, Leuven, Belgium",
+          "Department of Ecosystem and Landscape Dynamics, Institute for Biodiversity and Ecosystem Dynamics, University of Amsterdam, Amsterdam, The Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-271b57e0b1ab",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I35440088",
+        "institution_name": "ETH Zurich",
+        "works": 15,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "ETH Zürich, Department of Civil, Environmental and Geomatic Engineering, Institute of Science, Technology and Policy, Hauptgebäude Rämistrasse 101, 8092 Zürich,",
+          "Ghent University, Green Chemistry and Technology, Coupure Links 653, 9000 Ghent, Belgium",
+          "Ghent University, Green Chemistry and Technology, Coupure Links 653, 9000 Ghent, Belgium; ETH Zürich, Department of Civil, Environmental and Geomatic Engineerin"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2012e9a4fab7",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I134820265",
+        "institution_name": "Consejo Superior de Investigaciones Científicas",
+        "works": 14,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "(Institute of Materials Science of Madrid (ICMM, CSIC),",
+          "AIZCE Technical Committee, Interprofesional Asociation of Juices and Citric Concentrates",
+          "Centre for Biomedical Technology, Polytechnical University of Madrid, Spain"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b2d4709db142",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210166174",
+        "institution_name": "Joint Research Center",
+        "works": 14,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Directorate B─Growth and Innovation, Unit B5─Circular Economy and Industrial Leadership, Joint Research Centre of the European Commission, Calle Inca Garcilaso,",
+          "Joint Research Centre of the European Commission, Calle Inca Garcilaso, 41092 Seville, Spain",
+          "Laboratory for Circular Process Engineering (LCPE), Department of Green Chemistry and Technology, Faculty of Bioscience Engineering, Ghent University, Graaf Kar"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-73fc3a441a8c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210103266",
+        "institution_name": "Deltares",
+        "works": 13,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Ecosystem and Sediment Dynamics, Deltares , P.O. Box 177, Delft, The Netherlands, 2600 MH",
+          "Ecosystem and Sediment Dynamics, Deltares, P.O. Box 177, 2600 MH Delft, The Netherlands",
+          "Hydraulics and Geotechnics, Department of Civil Engineering, KU Leuven, Kasteelpark Arenberg 40, 3001 Leuven, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3f4c56aedbf0",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I865915315",
+        "institution_name": "Vrije Universiteit Amsterdam",
+        "works": 13,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "affiliation mentions \"Flanders\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Environment and Health, Vrije Universiteit Amsterdam, De Boelelaan 1087, 1081 HV Amsterdam, The Netherlands",
+          "Department#R#of Environment and Health, Vrije Universiteit Amsterdam, De Boelelaan#R#1087, 1081 HV Amsterdam, The Netherlands",
+          "Dept. of Environment and Health, Vrije Universiteit, De Boelelaan 1087, 1081 HV Amsterdam, The Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3840c0c91e5d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I7876267",
+        "institution_name": "Open University of the Netherlands",
+        "works": 11,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centre for Environmental Sciences, Department of Biology, Hasselt University, Agoralaan Building D, 3590 Diepenbeek, Belgium",
+          "Centre for Environmental Sciences, Department of Biology, Hasselt University, Hasselt, Belgium",
+          "Centre for Environmental Sciences, Hasselt University, Agoralaan Building D, 3590 Diepenbeek, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9d2b88c19d56",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I25112270",
+        "institution_name": "Universidade Federal de Pernambuco",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-02e1d03b885f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4068193",
+        "institution_name": "University of Belgrade",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Center for Food Chemistry and Technology, Ghent University Global Campus, Incheon 21985, Republic of Korea",
+          "Center for Food Chemistry and Technology, Ghent University Global Campus, Incheon, Republic of Korea",
+          "Center for Food Chemistry and Technology, Ghent University Global Campus, Incheon, South Korea"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0fe1cf371039",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210091775",
+        "institution_name": "Instituto Español de Oceanografía",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centro Oceanográfico de Baleares, Instituto Español de Oceanografía (IEO-CSIC), Palma, Spain",
+          "Department of Biology, Marine Biology, Ghent University, Ghent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e931ccf2b715",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210132857",
+        "institution_name": "Ghent University Global Campus",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Bio Environmental Science and Technology (BEST) Lab, Ghent University Global Campus, 119-5, Songdomunhwa-ro, Incheon, 21985, Republic of Korea",
+          "Center for Biosystems and Biotech Data Science, Ghent University Global Campus, Incheon, South Korea",
+          "Center for Biotech Data Science, Ghent University Global Campus, Incheon, South Korea"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c10f733f11ef",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210138501",
+        "institution_name": "Chinese Academy of Agricultural Sciences",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Feed Research Institute, Chinese Academy of Agricultural Science, Beijing 100081, China",
+          "Functional and Evolutionary Entomology, Gembloux Agro-Bio Tech, University of Liege, 5030 Gembloux, Belgium",
+          "Functional and Evolutionary Entomology, Gembloux Agro-Bio Tech, University of Liege, Gembloux, Belgium; Institute of Animal Science, Chinese Academy of Agricult"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5b829e2d9d09",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I71503853",
+        "institution_name": "University of Algarve",
+        "works": 10,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1d282d6d5dbd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I21370196",
+        "institution_name": "Aristotle University of Thessaloniki",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Laboratory for Chemical Technology, Department of Materials, Textiles, and Chemical Engineering, Faculty of Engineering and Architecture, Ghent University, Tech",
+          "Laboratory for Circular Process Engineering (LCPE), Department of Green Chemistry and Technology, Ghent University, Belgium",
+          "Laboratory for Circular Process Engineering (LCPE), Department of Green Chemistry and Technology, Ghent University, Sint-Martens-Latemlaan 2B, 8500 Kortrijk, Be"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-53f8c169dddf",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210098496",
+        "institution_name": "Polymat",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Center for Education and Research on Macromolecules (CERM), CESAM Research Unit, University of Liege, Sart-Tilman B6a, 4000 Liege, Belgium",
+          "Department of Green Chemistry and Technology, Ghent University, Graaf Karel De Goedelaan 5, Kortrijk 8500, Belgium",
+          "Laboratory for Circular Process Engineering (LCPE), Department of Green Chemistry and Technology, Ghent University, Graaf Karel De Goedelaan 5, Kortrijk 8500, B"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-710c97955555",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210115674",
+        "institution_name": "Fraunhofer Institute for Process Engineering and Packaging",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Polymer recycling and process development Fraunhofer Institute for Process Engineering and Packaging IVV Freising Germany; Laboratory for Chemical"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-de04bfd7f72c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210141930",
+        "institution_name": "Unité de Catalyse et Chimie du Solide",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Sustainable Materials Lab, Department of Chemical Engineering, KU Leuven, campus Kulak Kortrijk, Etienne Sabbelaan 53, Box 7659, B-8500 Kortrijk, Belgium",
+          "Univ. Lille, CNRS, Centrale Lille, Univ. Artois, UMR 8181 - UCCS - Unité de Catalyse et Chimie du Solide, F-59000 Lille, France; Sustainable Materials Lab, Depa",
+          "Univ. Lille, CNRS, Centrale Lille, Univ. Artois, UMR 8181 – UCCS – Unité de Catalyse et Chimie du Solide, F-59000 Lille, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c291d5305dcd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I54009628",
+        "institution_name": "University of Bayreuth",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemistry, University of Antwerp, Belgium",
+          "Department of Chemistry, University of Bayreuth, Germany"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b1803136d261",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I63072094",
+        "institution_name": "University of Portsmouth",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Aquatic Ecology and Water Quality Management Group, Department of Environmental Sciences, Wageningen University, P.O. Box 47, 6700 AA Wageningen, The Netherland",
+          "Ghent University, Ghent, Belgium",
+          "IMARES − Institute for Marine Resources & Ecosystem Studies, Wageningen UR , P.O. Box 68, AB IJmuiden, The Netherlands, 1970"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-36c4857bfe5a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I90183372",
+        "institution_name": "Université de Lorraine",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Present address: Université de Lorraine, UMR CNRS 7053 L2CM Faculté des Sciences et Technologies, BP 70239 54506 Vandoeuvre-lès-Nancy Cedex France",
+          "Supramolecular Chemistry Group Centre of Macromolecular Chemistry (CMaC) Department of Organic and Macromolecular Chemistry Ghent University Krijgslaan 281 S4 9",
+          "Supramolecular Chemistry Group, Centre of Macromolecular Chemistry (CMaC), Department of Organic and Macromolecular Chemistry, Ghent University, Krijgslaan 281"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1c1f63f3788a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I9360294",
+        "institution_name": "University of Bologna",
+        "works": 9,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Intelligence in Processes, Advanced Catalysts and Solvents (iPRACS), Faculty of Applied Engineering, University of Antwerp, Groenenborgerlaan 171, 2020, Antwerp",
+          "University of Bologna, Via Zamboni, 33, 40126, Bologna BO, Italy",
+          "Zernike Institute for Advanced Materials, Faculteit Science and Engineering, University of Groningen, Nijenborgh 3, 9747 AG, Groningen, the Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5f0a519eea83",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I124055696",
+        "institution_name": "University of Copenhagen",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Proteomics and Microbiology department, University of Mons, 20 place du parc, 7000 Mons, Belgium",
+          "Proteomics and Microbiology department, University of Mons, 20 place du parc, 7000 Mons, Belgium; Section of Microbiology, Department of Biology, University of",
+          "Section of Microbiology, Department of Biology, University of Copenhagen, Universitetsparken 15, 2100 Copenhagen Ø, 1, Bygning, 1-1-215, Denmark"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4c07c2c3127f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I32062511",
+        "institution_name": "Heriot-Watt University",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "affiliation mentions \"Flanders\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Flanders Marine Institute (VLIZ), InnovOcean Campus, Jacobsenstraat 1, 8400 Ostend, Belgium",
+          "Institute of Life and Earth Sciences, School of Energy, Geoscience, Infrastructure and Society, Heriot-Watt University, Edinburgh EH144AS, UK",
+          "The School of Energy, Geoscience, Infrastructure and Society, Heriot-Watt University, Edinburgh, EH14 4AS, UK"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9381fb0643eb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210113529",
+        "institution_name": "Jožef Stefan International Postgraduate School",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "International Postgraduate School Jožef Stefan, Ljubljana, Slovenia",
+          "KU Leuven, Department of Materials Engineering, Leuven, Belgium",
+          "Slovenian National Building and Civil Engineering Institute, Ljubljana, Slovenia"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4f63c2b086bd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210161208",
+        "institution_name": "Laboratoire d’Océanologie et de Géosciences",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centre d’Innovation et de Recherche Des Matériaux Et Polymères, Service Des Matériaux Polymères Et Composites, Université de Mons, Mons, Belgium",
+          "Centre d’Innovation et de Recherche des Matériaux et Polymères (CIRMAP), Service des Matériaux Polymères et Composites (SMPC), Université de Mons, France, Belgi",
+          "Centre d’Innovation et de Recherche des Matériaux et Polymères (CIRMAP), Service des Matériaux Polymères et Composites (SMPC), Université de Mons, Mons, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b5c86b9543bb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4405253792",
+        "institution_name": "Wageningen Marine Research",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Aquatic Ecology and Water Quality Management Group, Department of Environmental Sciences, Wageningen University, P.O. Box 47, 6700 AA Wageningen, The Netherland",
+          "Ghent University, Ghent, Belgium",
+          "IMARES − Institute for Marine Resources & Ecosystem Studies, Wageningen UR , P.O. Box 68, AB IJmuiden, The Netherlands, 1970"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e169d88b9453",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I45084792",
+        "institution_name": "University of Florence",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, Faculty of Math, Physics and Natural Sciences, Universita degli Studi di Firenze (UniFi), 50121 Firenze, Italy",
+          "Department of Civil and Environmental Engineering, University of Firenze, Via di S. Marta 3, 50139, Florence, Italy",
+          "Department of Civil and Environmental Engineering, University of Firenze, Via di s. Marta 5, 50139, Florence, Italy"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b287b3eda9af",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I71999127",
+        "institution_name": "Universitat de Barcelona",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "GRC Geociències Marines, Departament d′Estratigrafia, Paleontologia i Geociències Marines, Facultat de Geologia, Universitat de Barcelona, Campus de Pedralbes,",
+          "Renard Centre of Marine Geology (RCMG), Department of Geology and Soil Science, Ghent University, Gent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cd9425725459",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I7454413",
+        "institution_name": "Centrale Lille Institut",
+        "works": 8,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Sustainable Materials Lab, Department of Chemical Engineering, KU Leuven, campus Kulak Kortrijk, Etienne Sabbelaan 53, Box 7659, B-8500 Kortrijk, Belgium",
+          "Univ. Lille, CNRS, Centrale Lille, Univ. Artois, UMR 8181 - UCCS - Unité de Catalyse et Chimie du Solide, F-59000 Lille, France; Sustainable Materials Lab, Depa",
+          "Univ. Lille, CNRS, Centrale Lille, Univ. Artois, UMR 8181 – UCCS – Unité de Catalyse et Chimie du Solide, F-59000 Lille, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8b6daba5393a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1281029379",
+        "institution_name": "International Atomic Energy Agency",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "International Atomic Energy Agency, Environment Laboratories, 4a, Quai Antoine 1er, MC-98000, Monaco, Principality of Monaco",
+          "International Atomic Energy Agency, Marine Environment Laboratories, Radioecology Laboratory, 4a, Quai Antoine 1er, MC-98000 Monaco, Principality of Monaco",
+          "Laboratoire de Biologie marine (CP 160/15), Université Libre de Bruxelles, Av. F.D. Roosevelt 50, B-1050 Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4b8ccec10551",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1338511612",
+        "institution_name": "Serbian Academy of Sciences and Arts",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Center for Food Chemistry and Technology, Ghent University Global Campus, Incheon 21985, Republic of Korea",
+          "Center for Food Chemistry and Technology, Ghent University Global Campus, Incheon, Republic of Korea",
+          "Center for Food Chemistry and Technology, Ghent University Global Campus, Incheon, South Korea"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5e015bc1df6b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I169381384",
+        "institution_name": "University of Groningen",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Intelligence in Processes, Advanced Catalysts and Solvents (iPRACS), Faculty of Applied Engineering, University of Antwerp, Groenenborgerlaan 171, 2020, Antwerp",
+          "University of Bologna, Via Zamboni, 33, 40126, Bologna BO, Italy",
+          "Zernike Institute for Advanced Materials, Faculteit Science and Engineering, University of Groningen, Nijenborgh 3, 9747 AG, Groningen, the Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0e4c8916dff2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I181369854",
+        "institution_name": "Friedrich-Alexander-Universität Erlangen-Nürnberg",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Polymer recycling and process development Fraunhofer Institute for Process Engineering and Packaging IVV Freising Germany; Laboratory for Chemical",
+          "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU), Chair of Aroma and Smell Research, Department of Chemistry and Pharmacy, Henkestraße 9, 91054 Erlangen,",
+          "Laboratory for Circular Process Engineering, Department of Green Chemistry and Technology, Ghent University, Graaf Karel De Goedelaan 5, 8500 Kortrijk, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-745c9c8f5f5a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I277688954",
+        "institution_name": "Université Paris-Saclay",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centre d'Etudes Economiques et Sociales de l'Environnement-Centre Emile Bernheim (CEESE-CEB), Université Libre de Bruxelles, Faculté Solvay Brussels School - E.",
+          "Centre d’Etudes Economiques et Sociales de l’Environnement-Centre Emile Bernheim (CEESE-CEB), Faculté Solvay Brussels School—E.M., Campus du Solbosch—CP 140/01,",
+          "Department of Otolaryngology and Head and Neck Surgery, CHU Saint‐Pierre Brussels Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-add97ea343e6",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210116113",
+        "institution_name": "Istituto Superiore per la Protezione e la Ricerca Ambientale",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f889c8904b9d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I99065089",
+        "institution_name": "Tsinghua University",
+        "works": 7,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "affiliation mentions \"Flanders\"",
+          "author country BE"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3779ea20572a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I100930933",
+        "institution_name": "University College Dublin",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bd904e9eb8ae",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I122534668",
+        "institution_name": "Marche Polytechnic University",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "C.I.I./Dipartimento di Ingegneria dell’Informazione, Università Politecnica delle Marche, Via Brecce Bianche 12, Ancona, 60131, Italy",
+          "Cardiovascular Center Aalst, OLV Hospital, Aalst, Belgium",
+          "Departments of Advanced Medical and Surgical Sciences, Precision Medicine, Engineering, and Mental Health and Public Medicine, Section of Statistics, University"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-fb9efd31b9b2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I157696592",
+        "institution_name": "Universiti Malaysia Terengganu",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "BioTeC+ - Chemical and Biochemical Process Technology and Control, Department of Chemical Engineering, KU Leuven, Gebroeders De Smetstraat 1, 9000 Gent, Belgium",
+          "BioTeC+ - Chemical and Biochemical Process Technology and Control, KU Leuven, Ghent, Belgium",
+          "BioTeC+ – Chemical and Biochemical Process Technology and Control, Department of Chemical Engineering, KU Leuven, Gebroeders De Smetstraat 1, 9000 Gent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1e0aa4ec6323",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I40120149",
+        "institution_name": "University of Oxford",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, Process and Environmental Technology Lab, KU Leuven, J. De Nayerlaan 5, Sint-Katelijne-Waver, Belgium",
+          "Department of Engineering Science, University of Oxford, Oxford, United Kingdom"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2711457b76b2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210099501",
+        "institution_name": "International Atomic Energy Agency",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "International Atomic Energy Agency, Environment Laboratories, 4a, Quai Antoine 1er, MC-98000, Monaco, Principality of Monaco",
+          "International Atomic Energy Agency, Marine Environment Laboratories, Radioecology Laboratory, 4a, Quai Antoine 1er, MC-98000 Monaco, Principality of Monaco",
+          "Laboratoire de Biologie marine (CP 160/15), Université Libre de Bruxelles, Av. F.D. Roosevelt 50, B-1050 Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7044b753bb08",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210112527",
+        "institution_name": "Luxembourg Institute of Science and Technology",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "RDI Unit Life Cycle Sustainability and Risk Assessment (LiSRA), Department of Environmental Research & Innovation (ERIN), Luxembourg Institute of Science and Te",
+          "Research Group Environmental Organic Chemistry and Technology (EnVOC), Faculty of Bioscience Engineering, Ghent University, Coupure Links 653, B-9000 Ghent, Bel"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9c2892b4eda6",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I60770847",
+        "institution_name": "Notre Dame University – Louaize",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"BELGIUM\"",
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Chemical Engineering Program Notre Dame University-Louaize Zouk Mosbeh 1211 Lebanon",
+          "Chemical Engineering Program, Notre Dame University-Louaize, Zouk Mosbeh 1211, Lebanon",
+          "Flemish Institute for Technological Research (VITO N.V.) Boeretang 200 2400 Mol Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4aff89656ffb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I6289922",
+        "institution_name": "Universidade de Vigo",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c932f844aaa8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I88060688",
+        "institution_name": "Universidad Politécnica de Madrid",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "(Institute of Materials Science of Madrid (ICMM, CSIC),",
+          "AIZCE Technical Committee, Interprofesional Asociation of Juices and Citric Concentrates",
+          "Centre for Biomedical Technology, Polytechnical University of Madrid, Spain"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cba8ff143c25",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I891191580",
+        "institution_name": "Aalborg University",
+        "works": 6,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": [
+          "Aalborg Universitet",
+          "Ghent , Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e72f4a65a6e1",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I12093191",
+        "institution_name": "University of Stirling",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Proteomics and Microbiology Department, University of Mons, 20 Place du Parc, 7000, Mons, Belgium",
+          "Proteomics and Microbiology Department, University of Mons, 20 Place du Parc, 7000, Mons, Belgium; University of Stirling, Division of Biological and Environmen",
+          "University of Stirling, Division of Biological and Environmental Sciences, Faculty of Natural Sciences, FK9 4LA, Stirling, UK"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6322c90b6903",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I159885104",
+        "institution_name": "École Pratique des Hautes Études",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "CNRS, CEFE",
+          "Centre d'Ecologie Fonctionnelle et Evolutive unit, CNRS, Univ Montpellier, EPHE, IRD, Montpellier, France;",
+          "Functional and Evolutionary Morphology Lab, University of Liège, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7e8849c54e45",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I165143802",
+        "institution_name": "The University of Queensland",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Ghent University, Marine Biology Research Group, Krijgslaan 281/S8 B-9000, Gent, Belgium",
+          "Ghent University, Marine Biology Research Group, Krijgslaan 281/S8 B-9000, Gent, Belgium; Moreton Bay Research Station, The University of Queensland, Dunwich, Q",
+          "Moreton Bay Research Station, The University of Queensland, Dunwich, QLD 4183, Australia"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cb478417f98b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I197940685",
+        "institution_name": "National Oceanography Centre",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Faculty of Sciences, University of Liège, Liège, Belgium",
+          "National Oceanography Center, University of Southampton, Southampton, United Kingdom",
+          "Ocean and Earth Science, University of Southampton, National Oceanography Centre, Southampton, United Kingdom"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3cc1db0c0851",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I37696226",
+        "institution_name": "University of Maribor",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "International Postgraduate School Jožef Stefan, Ljubljana, Slovenia",
+          "KU Leuven, Department of Materials Engineering, Leuven, Belgium",
+          "Slovenian National Building and Civil Engineering Institute, Ljubljana, Slovenia"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-51615aedfa3a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I60053951",
+        "institution_name": "Universitat Politècnica de València",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Ghent University, Faculty of Bioscience Engineering, Department of Green Chemistry and Technology, Graaf Karel de Goedelaan 5, 8500 Kortrijk, Belgium",
+          "Instituto Universitario de Ingeniería del Agua y Medio Ambiente – Universitat Politècnica de València, Spain",
+          "Laboratory for Industrial Water and Ecotechnology (LIWET), Department of Green Chemistry and Technology, Ghent University Campus Kortrijk, Graaf Karel de Goedel"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-825c34883f81",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I60587646",
+        "institution_name": "Brno University of Technology",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Bio Base Europe Pilot Plant VZW, Rodenhuizekaai 1, Desteldonk, Gent, 9042, Belgium",
+          "Brno University of Technology, Institute of Chemistry and Technology of Environmental Protection, Purkyňova 118, Brno, 612 00, Czech Republic",
+          "Brno University of Technology, Institute of Chemistry and Technology of Environmental Protection, Purkyňova 118, Brno, 612 00, Czech Republic; Bio Base Europe P"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6b63a915b518",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I79619799",
+        "institution_name": "University of Birmingham",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Jinan University - University of Birmingham Joint Institute, Jinan University, Guangzhou 511436, China",
+          "Laboratory of Biomass and Green Technologies, University of Liege, Gembloux 2 B-5030, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2a9ea9f19156",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I98358874",
+        "institution_name": "Delft University of Technology",
+        "works": 5,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "EEMMeCS Department, Ghent University, Technologiepark 903, 9052 Zwijnaarde-Gent, Belgium",
+          "Materials Science and Engineering Department, Delft University of Technology, Mekelweg 2, 2628CD Delft, The Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e4e7a4563e59",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I100532134",
+        "institution_name": "Lyon 1 Université",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "ISARA (ISARA Lyon Agrapole 23 rue Jean Baldassini 69364 LYON Cedex 07 / ISARA Avignon 105 Rue Pierre Bayle 84918 AVIGNON Cedex 9 - France)",
+          "Institut Supérieur d’Agriculture et Agroalimentaire Rhône-Alpes (ISARA), 23 Rue Jean Baldassini, CEDEX 07, 69364 Lyon, France",
+          "LAGEPP - Laboratoire d'automatique, de génie des procédés et de génie pharmaceutique (bât 308G ESCPE-Lyon, 2ème étage 43 bd du 11 Novembre 1918 69622 Villeurban"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4a7dd2d1e524",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I121748325",
+        "institution_name": "Universidad Complutense de Madrid",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "(Institute of Materials Science of Madrid (ICMM, CSIC),",
+          "AIZCE Technical Committee, Interprofesional Asociation of Juices and Citric Concentrates",
+          "Centre for Biomedical Technology, Polytechnical University of Madrid, Spain"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2d74d82d6e5a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I123044942",
+        "institution_name": "Universitat Autònoma de Barcelona",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Faculty of Bioscience Engineering, Ghent University, Ghent, Belgium and Department of Biology, Vegetal Biology and Ecology, Universitat Autònoma de Barcelona, C"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-313f4242b59e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1321067030",
+        "institution_name": "Zoological Society of London",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Ecology & Biodiversity Research Unit, Department of Biology, Vrije Universiteit Brussel-VUB, 1050 Brussels, Belgium",
+          "Ecology, Evolution & Genetics Research Group (bDIV), Department of Biology, Vrije Universiteit Brussel, VUB, Pleinlaan 2, B-1050, Brussels, Belgium",
+          "Interfaculty Institute of Social-Ecological Transitions - iiTSE, Université Libre de Bruxelles (ULB), Av. Roosevelt 50, CPi 264/1, B-1050, Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1a68b709777e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I136199984",
+        "institution_name": "Harvard University",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Oral Health Policy and Epidemiology, Harvard School of Dental Medicine, Harvard University, Boston, United States",
+          "European Network of Smoking and Tobacco Prevention, Brussels, Belgium",
+          "Laboratory of Toxicology, School of Medicine, University of Crete, Heraklion, 70013, Crete, Greece"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0319bf95f7d2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I138689650",
+        "institution_name": "University of Padua",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"BELGIUM\"",
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Industrial Engineering University of Padova Via Marzolo 9 35131 Padova Italy",
+          "Ghent University: Universiteit Gent LCPE BELGIUM",
+          "Laboratory for Circular Process Engineering (LCPE) Department of Green Chemistry and Technology Ghent University Campus Kortrijk Sint‐Martens‐Latemlaan 2B 8500"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a9913b336d2a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I142617266",
+        "institution_name": "University of Crete",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Oral Health Policy and Epidemiology, Harvard School of Dental Medicine, Harvard University, Boston, United States",
+          "European Network of Smoking and Tobacco Prevention, Brussels, Belgium",
+          "Laboratory of Toxicology, School of Medicine, University of Crete, Heraklion, 70013, Crete, Greece"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e27a754032cb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1443707",
+        "institution_name": "Jimma University",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Materials, Textiles and Chemical Engineering, Ghent University, 9000 Gent, Belgium",
+          "Department of Materials, Textiles and Chemical Engineering, Ghent University, 9000, Ghent, Belgium",
+          "Faculty of Engineering Science, KU Leuven University, 3001, Leuven, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4f25d11c55fc",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I151295451",
+        "institution_name": "Université de Perpignan",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "UCL - Université Catholique de Louvain = Catholic University of Louvain (Place de l'Université 1 - 1348 Louvain-La-Neuve - Belgium)",
+          "Université de Perpignan, Perpignan, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-bc62e3e8d3ec",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I174458059",
+        "institution_name": "National Technical University of Athens",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Laboratory for Chemical Technology (LCT), Department of Materials, Textiles and Chemical Engineering, Faculty of Engineering & Architecture, Ghent University, B",
+          "Laboratory for Chemical Technology (LCT), Department of Materials, Textiles and Chemical Engineering, Faculty of Engineering & Architecture, Ghent University, T",
+          "Laboratory for Chemical Technology (LCT), Ghent University, Technologiepark 125, Ghent B-9052, Belgium; School of Chemical Engineering, National Technical Unive"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-547f6f3d052c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I182712176",
+        "institution_name": "Montanuniversität Leoben",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Faculty of Bioscience Engineering, Ghent University, Coupure Links 653, 9000 Gent, Belgium",
+          "Faculty of Engineering and Architecture, Centre for Polymer and Material Technologies, Ghent University, Technologiepark Zwijnaarde 130 (Zone C3), 9052 Zwijnaar",
+          "Polymer Processing, Montanuniversitaet Leoben, Otto-Gloeckel-Straße 2, 8700 Leoben, Austria"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-99d8a2f8d4ee",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I183067930",
+        "institution_name": "Shanghai Jiao Tong University",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e0eb228bc719",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I185103710",
+        "institution_name": "University of California, Santa Cruz",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a0b1c18f52bd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I195731000",
+        "institution_name": "Université de Versailles Saint-Quentin-en-Yvelines",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "CEARC - Cultures, Environnements, Arctique, Représentations, Climat (Observatoire de Versailles Saint-Quentin-en-Yvelines Université de Versailles Saint-Quentin",
+          "Centre d'Etudes Economiques et Sociales de l'Environnement-Centre Emile Bernheim (CEESE-CEB), Université Libre de Bruxelles, Faculté Solvay Brussels School - E.",
+          "Centre d'Etudes Economiques et Sociales de l'Environnement-Centre Emile Bernheim (Université Libre de Bruxelles, 44 Avenue Jeanne, C.P. 124, 1050 Brussels - Bel"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-046517661bcd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210089824",
+        "institution_name": "Centre d'Écologie Fonctionnelle et Évolutive",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "CNRS, CEFE",
+          "Centre d'Ecologie Fonctionnelle et Evolutive unit, CNRS, Univ Montpellier, EPHE, IRD, Montpellier, France;",
+          "Research Unit Food Microbiology and Food Preservation, Department of Food Technology, Safety and Health, Faculty Bio-Science Engineering, Ghent University, Belg"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-404c0dd22368",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210107087",
+        "institution_name": "BASF (Germany)",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": [
+          "BASF SE, Carl-Bosch-Str. 38, 67056 Ludwigshafen, Germany",
+          "Cefic aisbl, Rue Belliard 40 (box 15) – 1040, Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-30a59737dd4c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210111104",
+        "institution_name": "Institute For European Environmental Policy",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Institute for European Environmental Policy (IEEP), Rue Joseph II 36-38, 1000 Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-574d80559be3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I71267560",
+        "institution_name": "University of Naples Federico II",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Cardiovascular Center Aalst, OLV Hospital, Aalst, Belgium",
+          "Departments of Advanced Medical and Surgical Sciences, Precision Medicine, Engineering, and Mental Health and Public Medicine, Section of Statistics, University"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-907f4a597b6f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I82951845",
+        "institution_name": "RMIT University",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": [
+          "Canada Argentina Brazil Chile Colombia Peru Atlantic Ocean USA South Africa Japan Italy Australia Spain Portugal Croatia Slovenia",
+          "Global Artificial Mussel Pollution Watch Program, Australia",
+          "Nigeria Moorea Hawaii Rapa Nui Ecuador Galapagos Ethiopia Tanzania Tunisia Iran Antarctic Ocean France Belgium Poland Saudi Arabia Sweden Thailand Fiji Vanuatu"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-20a11f915820",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I84218800",
+        "institution_name": "University of California, Davis",
+        "works": 4,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Geography, Ghent University. 9000 Ghent, Belgium",
+          "Institute of Transportation Studies, University of California, Davis, USA"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-fc7991b1d87d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I103084370",
+        "institution_name": "Total (France)",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "International Joint Laboratory - iC2MC: Complex Matrices Molecular Characterization, TRTG, Harfleur, France",
+          "One Tech – R&D – Downstream Processes & Polymers - TOTAL Research & Technology Gonfreville, Harfleur, France",
+          "Organic and Biological Analytical Chemistry Group, MolSys Research Unit, University of Liège, Liège, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f055147d2073",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I119439378",
+        "institution_name": "University of Verona",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Biochemistry and Industrial Biotechnology (BIB) Laboratory, Department of Biotechnology, University of Verona, 37134, Verona, Italy; PhotoBioCatalysis Unit, Bru",
+          "Biochemistry and Industrial Biotechnology (BIB) Laboratory, Department of Biotechnology, Verona, Italy",
+          "PhotoBioCatalysis Unit, Bruxelles School of Bioengineering, Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-357aa590eaae",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I122346577",
+        "institution_name": "University of Modena and Reggio Emilia",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Life Sciences (Agro‐Food Science Area) BIOGEST – SITEIA Interdepartmental Centre, University of Modena and Reggio Emilia Reggio Emilia Italy",
+          "Department of Microbial and Molecular Systems (M2S), Faculty of Engineering Technology, Lab4Food Campus Geel, KU Leuven Geel Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9a5c516668e2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1317774081",
+        "institution_name": "International Institute for Applied Systems Analysis",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Water and Climate, Vrije Universiteit Brussel (VUB), 1050 Brussel, Belgium",
+          "Water Security Research Group, Biodiversity and Natural Resources Program, International Institute for Applied Systems Analysis (IIASA), Schlossplatz 1, A-2361"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ed9dbf86a185",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I142208455",
+        "institution_name": "VSB - Technical University of Ostrava",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, KU Leuven, Celestijnenlaan 200F, B-3001 Leuven, Belgium",
+          "Department of Chemical and Biochemical Engineering, Korea University, 145 Anam-Ro, Sungbuk-Gu, Seoul 02841, Republic of Korea",
+          "Nanotechnology Centre, CEET, VSB-Technical University of Ostrava, 17 listopadu 2172/15, 708 00 Ostrava-Poruba, Czechia"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0bfb8c16686b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I169744251",
+        "institution_name": "Damanhour University",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Faculty of Science, Damanhour University, Damanhour 5842001, Egypt",
+          "Faculty of Sciences, Botany and Microbiology Department, Damanhour University, Egypt",
+          "Research Group of Microbiology, Department of Bioengineering Sciences, Vrije Universiteit Brussel (VUB), 1050 Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3334f8cc9932",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I178232147",
+        "institution_name": "Guizhou University",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, Vrije Universiteit Brussel (VUB), 1050 Brussels, Belgium",
+          "Institute of Entomology, Guizhou University, Guiyang 550025, China",
+          "Institute of Entomology, Guizhou University, Guiyang, Guizhou 550025, China; Department of Biology, Vrije Universiteit Brussel (VUB), Brussels, 1050, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-693505b084b7",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I187400657",
+        "institution_name": "South China Normal University",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Analytical, Environmental and Geochemistry (AMGC), Vrije Universiteit Brussel (VUB), Brussel, Belgium",
+          "Environmental Research Institute, School of Environment, Guangdong Provincial Key Laboratory of Chemical Pollution and Environmental Safety, MOE Key Laboratory",
+          "SCNU Environmental Research Institute, Guangdong Provincial Key Laboratory of Chemical Pollution and Environmental Safety & MOE Key Laboratory of Theoretical Ch"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a2d95870438b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I197347611",
+        "institution_name": "Korea University",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, KU Leuven, Celestijnenlaan 200F, B-3001 Leuven, Belgium",
+          "Department of Chemical and Biochemical Engineering, Korea University, 145 Anam-Ro, Sungbuk-Gu, Seoul 02841, Republic of Korea",
+          "Nanotechnology Centre, CEET, VSB-Technical University of Ostrava, 17 listopadu 2172/15, 708 00 Ostrava-Poruba, Czechia"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c590ddbbffde",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I197809005",
+        "institution_name": "University of Campania \"Luigi Vanvitelli\"",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Cardiovascular Center Aalst, OLV Hospital, Aalst, Belgium",
+          "Departments of Advanced Medical and Surgical Sciences, Precision Medicine, Engineering, and Mental Health and Public Medicine, Section of Statistics, University"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-9cb962ea8df6",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I2746051580",
+        "institution_name": "Université Paris Sciences et Lettres",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Functional and Evolutionary Morphology Lab, University of Liège, Belgium",
+          "PSL Research University, EPHE-UPVD-CNRS, USR3278 CRIOBE, 98729 Papetoai, Moorea, French Polynesia",
+          "PSL Research University, EPHE-UPVD-CNRS, USR3278 CRIOBE, 98729 Papetoai, Moorea, French Polynesia; Functional and Evolutionary Morphology Lab, University of Liè"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-90d7a1e57c72",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I27765905",
+        "institution_name": "North-West University",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "KU Leuven, Department of Mechanical Engineering, Group T campus Leuven, Leuven, Belgium",
+          "Material Science, Innovation and Modelling (MaSIM), North-West University, Mmabatho, South Africa",
+          "North-West University, Vanderbijlpark National Institute for Theoretical and Computational Sciences (NITheCS),Belgium Campus ITversity, Pretoria Optentia Resear"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ff01ad7570dd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I31683504",
+        "institution_name": "Beijing Forestry University",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "State Key Laboratory of Efficient Production of Forest Resources Beijing Forestry University Beijing China",
+          "Supramolecular Chemistry Group Centre of Macromolecular Chemistry (CMaC) Department of Organic and Macromolecular Chemistry Ghent University Ghent Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-83235e6935bd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210092970",
+        "institution_name": "Universidad Del Pacífico Ecuador",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Facultad Del Mar y Medio Ambiente, Universidad Del Pacifico, Guayaquil, Ecuador",
+          "Faculty of Bioscience Engineering, Ghent University, Ghent, Belgium",
+          "Faculty of the Sea and Environment, Universidad Del Pacífico, Guayaquil, Ecuador"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cbe14349d135",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210094922",
+        "institution_name": "MultiMedica",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Cardiovascular Center Aalst, OLV Hospital, Aalst, Belgium",
+          "Departments of Advanced Medical and Surgical Sciences, Precision Medicine, Engineering, and Mental Health and Public Medicine, Section of Statistics, University"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-35c4cb419b25",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210098357",
+        "institution_name": "International Union for Conservation of Nature (United Kingdom)",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Ecology & Biodiversity Research Unit, Department of Biology, Vrije Universiteit Brussel-VUB, 1050 Brussels, Belgium",
+          "Ecology, Evolution & Genetics Research Group (bDIV), Department of Biology, Vrije Universiteit Brussel, VUB, Pleinlaan 2, B-1050, Brussels, Belgium",
+          "Interfaculty Institute of Social-Ecological Transitions - iiTSE, Université Libre de Bruxelles (ULB), Av. Roosevelt 50, CPi 264/1, B-1050, Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-82582d4a7b11",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210100320",
+        "institution_name": "Ineos (Germany)",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "INEOS Styrolution Belgium N.V., Scheldelaan 600, 2040 Antwerpen, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a5480be21788",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210149219",
+        "institution_name": "Feed Research Institute",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Feed Research Institute, Chinese Academy of Agricultural Science, Beijing 100081, China",
+          "Functional and Evolutionary Entomology, Gembloux Agro-Bio Tech, University of Liege, 5030 Gembloux, Belgium",
+          "Institute of Animal Science, Chinese Academy of Agriculture Sciences, Beijing 100193, China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-77139efaa91d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210149494",
+        "institution_name": "Institute of Animal Sciences",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Feed Research Institute, Chinese Academy of Agricultural Science, Beijing 100081, China",
+          "Functional and Evolutionary Entomology, Gembloux Agro-Bio Tech, University of Liege, 5030 Gembloux, Belgium",
+          "Functional and Evolutionary Entomology, Gembloux Agro-Bio Tech, University of Liege, Gembloux, Belgium; Institute of Animal Science, Chinese Academy of Agricult"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-68d3ae3497fc",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210153706",
+        "institution_name": "Norwegian Institute for Nature Research",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, Behavioural Ecology and Ecophysiology Group, University of Antwerp, Antwerp, Belgium",
+          "Norwegian Institute for Nature Research (NINA), Trondheim, Norway"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2b1015f8b797",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4387153710",
+        "institution_name": "Laboratoire Lorrain de Chimie Moléculaire",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Present address: Université de Lorraine, UMR CNRS 7053 L2CM Faculté des Sciences et Technologies, BP 70239 54506 Vandoeuvre-lès-Nancy Cedex France",
+          "Supramolecular Chemistry Group Centre of Macromolecular Chemistry (CMaC) Department of Organic and Macromolecular Chemistry Ghent University Krijgslaan 281 S4 9",
+          "Supramolecular Chemistry Group, Centre of Macromolecular Chemistry (CMaC), Department of Organic and Macromolecular Chemistry, Ghent University, Krijgslaan 281"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-78dfeaab55c3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4390039275",
+        "institution_name": "Cultures, Environnements, Arctique, Représentations, Climat",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "CEARC - Cultures, Environnements, Arctique, Représentations, Climat (Observatoire de Versailles Saint-Quentin-en-Yvelines Université de Versailles Saint-Quentin",
+          "Centre d'Etudes Economiques et Sociales de l'Environnement-Centre Emile Bernheim (CEESE-CEB), Université Libre de Bruxelles, Faculté Solvay Brussels School - E.",
+          "Centre d'Etudes Economiques et Sociales de l'Environnement-Centre Emile Bernheim (Université Libre de Bruxelles, 44 Avenue Jeanne, C.P. 124, 1050 Brussels - Bel"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2aae9d8f72c8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4405257157",
+        "institution_name": "IUCN Species Survival Commission",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Ecology & Biodiversity Research Unit, Department of Biology, Vrije Universiteit Brussel-VUB, 1050 Brussels, Belgium",
+          "Ecology, Evolution & Genetics Research Group (bDIV), Department of Biology, Vrije Universiteit Brussel, VUB, Pleinlaan 2, B-1050, Brussels, Belgium",
+          "Interfaculty Institute of Social-Ecological Transitions - iiTSE, Université Libre de Bruxelles (ULB), Av. Roosevelt 50, CPi 264/1, B-1050, Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d5873a034797",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4510145",
+        "institution_name": "Jiangxi University of Science and Technology",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, KU Leuven, Celestijnenlaan 200F, Leuven, Belgium",
+          "Jiangxi Province Key Laboratory of Water Ecological Conservation in Headwater Regions, Jiangxi University of Science and Technology, 1958 Ke-jia Road, Ganzhou,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8e1c1f14c6ee",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I52418104",
+        "institution_name": "Universidade Federal do Paraná",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Center for Marine Studies, Universidade Federal do Paraná (UFPR), Av. Beira Mar, Caixa Postal 61, Pontal do Paraná, PR 83.255-976, Brazil",
+          "Ghent University, Marine Biology Research Group, Krijgslaan 281/S8, B-9000 Ghent, Belgium",
+          "Ghent University, Marine Biology Research Group, Krijgslaan 281/S8, B-9000 Ghent, Belgium; Center for Marine Studies, Universidade Federal do Paraná (UFPR), Av."
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b9fb4efe16ce",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I70349855",
+        "institution_name": "Vietnam Academy of Science and Technology",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Environmental Management and Technology, Institute of Life Sciences, Vietnam Academy of Science and Technology, 85 Tran Quoc Toan, Dist. 3, Ho Chi",
+          "Department of Environmental Management and Technology, Institute of Life Sciences, Vietnam Academy of Science and Technology, 85 Tran Quoc Toan, Dist.3, Ho Chi",
+          "Marine Biology Research Group, Biology Department, Ghent University, Krijgslaan 281, S8, 9000 Ghent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7e3287fd3814",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I74801974",
+        "institution_name": "The University of Tokyo",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Chemical Engineering Department, Vrije University Brussel, Brussel, Belgium",
+          "Institute of Industrial Science, University of Tokyo, Tokyo, Japan"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-56b74e12ab3c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I83019370",
+        "institution_name": "Eindhoven University of Technology",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centre for Polymer and Material Technologies (CPMT), Department of Materials, Textiles and Chemical Engineering, Ghent University, Technologiepark 130, 9052 Zwi",
+          "Laboratory of Physical Chemistry (SPC), Department of Chemical Engineering and Chemistry, Eindhoven University of Technology, Groene Loper 3,5612 AE, Eindhoven,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-eca6afc49195",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I862322245",
+        "institution_name": "Universidad EAFIT",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "affiliation mentions \"Flanders\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Applied Optics Group, School of Applied Science and Engineering, Universidad EAFIT, Medellín, Colombia",
+          "Brussels Photonics, Department of Applied Physics and Photonics, Vrije Universiteit Brussel and Flanders Make, Pleinlaan 2, B-1050 Brussels, Belgium",
+          "Brussels Photonics, Department of Applied Physics and Photonics, Vrije Universiteit Brussel, Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5954addea7aa",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I9073902",
+        "institution_name": "University of Chemistry and Technology, Prague",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Sustainable Fuels and Green Chemistry, University of Chemistry and Technology Prague, Technická 5, 166 28 Prague 6, Czech Republic",
+          "Ghent University, Laboratory for Chemical Technology, Technologiepark 125, 9052, Ghent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-490d6bdba1d8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I923382979",
+        "institution_name": "ExxonMobil (United States)",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": [
+          "ExxonMobil Chemical Europe, Inc. European Technology Center, Hermeslaan 2, 1831 Machelen, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1040fdee5001",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I98702875",
+        "institution_name": "Université de Caen Normandie",
+        "works": 3,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centre National de Recherches sur L’Environnement (CNRE), Rue Rasamimanana Fiadanana, BP 1739 Antananarivo 101, Madagascar",
+          "Plateforme Proteogen, Université de Caen Normandie, Esplanade de la paix, 14032 Caen, France",
+          "University of Namur, Research Unit in Environmental and Evolutionary Biology (URBE), Institute of Life, Earth & Environment, Rue de Bruxelles, 61 - 5000 Namur,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0ad89fd19bb5",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I113741061",
+        "institution_name": "Southeast Asian Fisheries Development Center",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Laboratory of Aquaculture & Artemia Reference Center - Faculty of Bioscience Engineering - Blok F; Ghent University; Gent Belgium",
+          "Southeast Asian Fisheries Development Centre/Aquaculture Department (SEAFDEC/AQD); Tigbauan Iloilo Philippines"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ea53ebb246ad",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I131729948",
+        "institution_name": "University of Salerno",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Cardiovascular Center Aalst, OLV Hospital, Aalst, Belgium",
+          "Departments of Advanced Medical and Surgical Sciences, Precision Medicine, Engineering, and Mental Health and Public Medicine, Section of Statistics, University"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1e9880403a5c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1331070479",
+        "institution_name": "Université de Yaoundé I",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Institute of Condensed Matter and Nanosciences—Bio & Soft Matter (IMCN/BSMA), UCLouvain, 1348 Louvain-la-Neuve, Belgium",
+          "Institute of Mechanics, Materials and Civil Engineering, UC Louvain, 2 Place Sainte Barbe, Louvain-la-Neuve, 1348, Belgium",
+          "Institute of Mechanics, Materials and Civil Engineering, UCLouvain, 1348 Louvain-la-Neuve, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1f0a19c19299",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1334415907",
+        "institution_name": "University Medical Center Groningen",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Institute for Materials Research (IMO), Hasselt University, Martelarenlaan 42, 3500 Hasselt, Belgium",
+          "Institute for Materials Research (IMO), Hasselt University, Martelarenlaan 42, Hasselt, 3500, Belgium",
+          "University Medical Centre Groningen, Department of Biomaterials & Biomedical Technology, A. Deusinglaan 1, Building 3215, Groningen, 9713AV, the Netherlands"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8723dedd47a7",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I137724175",
+        "institution_name": "University of Antananarivo",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centre National de Recherches Sur L'Environnement (CNRE), Antananarivo, Madagascar",
+          "Department of Fundamental and Applied Biochemistry, Faculty of Science, University of Antananarivo, Antananarivo, Madagascar",
+          "Research Unit in Environmental and Evolutionary Biology (URBE), Institute of Life, Earth & Environment, University of Namur, Rue Bruxelles 61, 5000, Namur, Belg"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0da2d030a60f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I157725225",
+        "institution_name": "University of Illinois Urbana-Champaign",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "2Ven Te Chow Hydrosystems Laboratory, Department of Civil and Environmental Engineering, University of Illinois at Urbana-Champaign, 205 North Mathews Avenue, U"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c6b6d3c31379",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I162148367",
+        "institution_name": "Pontificia Universidad Católica de Chile",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centro de Conservación Marina, Estación Costera de Investigaciones Marinas, Departamento de Ecología, Facultad de Ciencias Biológicas, Pontificia Universidad Ca",
+          "Ghent University, Marine Biology Research Group, Krijgslaan 281/S8, B-9000 Ghent, Belgium",
+          "Ghent University, Marine Biology Research Group, Krijgslaan 281/S8, B-9000 Ghent, Belgium; Centro de Conservación Marina, Estación Costera de Investigaciones Ma"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-800ca7650ba6",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I162290304",
+        "institution_name": "Scuola Superiore Sant'Anna",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Green Chemistry and Technology, Ghent University, Coupure Links 653, block B, 9000 Ghent, Belgium",
+          "EMbeDS - Institute of Management, Scuola Superiore Sant'Anna, Piazza Martiri della Libertà, 33, 56127 Pisa, Italy"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-52a1275436e8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I165779595",
+        "institution_name": "The University of Melbourne",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Faculty of Psychology and Educational Sciences, KU Leuven, 3000 Leuven, Belgium",
+          "Melbourne School of Psychological Sciences, The University of Melbourne, Parkville, VIC 3010, Australia;"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b7c6c94be5df",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I170013655",
+        "institution_name": "Isfahan University of Technology",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, Isfahan University of Technology, Isfahan, 84156-83111, Iran",
+          "Department of Chemical Engineering, Isfahan University of Technology, Isfahan, Iran",
+          "Department of Chemical Engineering, Vrije Universiteit Brussel, 1050, Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-35913e1c4486",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I182078086",
+        "institution_name": "University of Dar es Salaam",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Vrije Universiteit Brussel, Belgium & Institute of Marine Sciences, University of Dar es Salaam, Tanzania"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-55934444310c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I182627622",
+        "institution_name": "Université Sorbonne Nouvelle",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Otolaryngology and Head and Neck Surgery, CHU Saint‐Pierre Brussels Belgium",
+          "Department of Otolaryngology and Head and Neck Surgery, Elsan Hospital, 75008 Paris, France",
+          "Department of Otolaryngology and Head and Neck Surgery, Foch Hospital, Paris Saclay University, Phonetics and Phonology Laboratory (UMR 7018 CNRS Université Sor"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5a4c748d6804",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I20089843",
+        "institution_name": "Princeton University",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Present Address: Princeton University, 86 Olden St, Princeton, NJ 08540 USA",
+          "University of Antwerp, Prinsstraat 13, 2000, Antwerpen, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-973b232d188c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I201726411",
+        "institution_name": "United Arab Emirates University",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, KU Leuven, Celestijnenlaan 200F, B-3001 Leuven, Belgium",
+          "Department of Civil and Environmental Engineering, College of Engineering, United Arab Emirates University, 15551, Al Ain, United Arab Emirates",
+          "ISARA (ISARA Lyon Agrapole 23 rue Jean Baldassini 69364 LYON Cedex 07 / ISARA Avignon 105 Rue Pierre Bayle 84918 AVIGNON Cedex 9 - France)"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-59c7d0dd9433",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I227486990",
+        "institution_name": "University of Szeged",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Institute of Condensed Matter and Nanosciences - Bio and Soft Matter, Louvain-la-Neuve, Belgium",
+          "MTA-SZTE Momentum Biocolloids Research Group, Department of Physical Chemistry and Materials Science, Interdisciplinary Centre of Excellence, Szeged, Hungary",
+          "University of Szeged, Szeged, Hungary"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1f4fb57062dd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I240042149",
+        "institution_name": "Abdelmalek Essaâdi University",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Laboratory of Environment, Oceanology and Natural Resources, Department of Earth Sciences, Faculty of Sciences and Technologies Tangier Abdelmalek Essaadi Unive",
+          "University of Mons (UMONS) ‐ Laboratory of Polymeric and Composite Materials (LPCM), Center of Innovation and Research in Materials and Polymers (CIRMAP) Mons B"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e53bf4234342",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I255234318",
+        "institution_name": "Universidad de Zaragoza",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Research Institute for Energy and Resource Efficiency of Aragón (ENERGAIA), University of Zaragoza, 50018 Zaragoza, Spain",
+          "Sustainable Systems Engineering (STEN), Faculty of Bioscience Engineering, Gent University, 9000 Gent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f47d19b15ec8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I27837315",
+        "institution_name": "University of Michigan",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Aquatic Ecology and Water Quality Management Group, Department of Environmental Sciences, Wageningen University, P.O. Box 47, 6700 AA Wageningen, The Netherland",
+          "Ghent University, Ghent, Belgium",
+          "IMARES − Institute for Marine Resources & Ecosystem Studies, Wageningen UR , P.O. Box 68, AB IJmuiden, The Netherlands, 1970"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-479b939c547d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I2801952686",
+        "institution_name": "Erasmus MC",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Analytical Chemistry, Ghent University, Proeftuinstraat 86, 9000 Ghent, Belgium, Center for Optical Diagnostics and Therapy, Department of Dermato"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a6b1e9bc9b58",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I3132291312",
+        "institution_name": "University of Toliara",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ab7fb9d8d5dd",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I37796252",
+        "institution_name": "Beijing University of Technology",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "National Engineering Laboratory for Advanced Municipal Wastewater Treatment and Reuse Technology, Beijing University of Technology, Beijing, 100124, China; Arch"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b1f2aa09aa63",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210085921",
+        "institution_name": "Instituto de Catálisis y Petroleoquímica",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "(Institute of Materials Science of Madrid (ICMM, CSIC),",
+          "AIZCE Technical Committee, Interprofesional Asociation of Juices and Citric Concentrates",
+          "Centre for Biomedical Technology, Polytechnical University of Madrid, Spain"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d0925358d9f7",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210087333",
+        "institution_name": "Innovation Center of NanoMedicine",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Present address: Innovation Center of NanoMedicine Kawasaki Institute of Industrial Promotion 3-25-14, Tonomachi, Kawasaki-ku Kawasaki 210-0821 Japan",
+          "Present address: Innovation Center of NanoMedicine Kawasaki Institute of Industrial Promotion 3-25-14, Tonomachi, Kawasaki-ku Kawasaki 210-0821 Japan; Supramole",
+          "Present address: Innovation Center of NanoMedicine, Kawasaki Institute of Industrial Promotion, 3-25-14, Tonomachi, Kawasaki-ku, Kawasaki, 210-0821 Japan"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8cbe21ded768",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210094590",
+        "institution_name": "Laboratoire de Phonétique et Phonologie",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Otolaryngology and Head and Neck Surgery, CHU Saint‐Pierre Brussels Belgium",
+          "Department of Otolaryngology and Head and Neck Surgery, Elsan Hospital, 75008 Paris, France",
+          "Department of Otolaryngology and Head and Neck Surgery, Foch Hospital, Paris Saclay University, Phonetics and Phonology Laboratory (UMR 7018 CNRS Université Sor"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-43a258dc9cba",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210095245",
+        "institution_name": "Max Planck Institute for Polymer Research",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemistry, KU Leuven, Celestijnenlaan 200 F, Leuven 3001, Belgium",
+          "Department of Chemistry, KU Leuven, Celestijnenlaan 200F, Leuven, 3001 Belgium",
+          "Department of Molecular Spectroscopy, Max Planck Institute for Polymer Research, Ackermannweg 10, 55128 Mainz, Germany"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b32be1f59d9b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210098410",
+        "institution_name": "Centre National de Recherches sur l'Environnement",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centre National de Recherches Sur L'Environnement (CNRE), Antananarivo, Madagascar",
+          "Centre National de Recherches sur L’Environnement (CNRE), Rue Rasamimanana Fiadanana, BP 1739 Antananarivo 101, Madagascar",
+          "Department of Fundamental and Applied Biochemistry, Faculty of Science, University of Antananarivo, Antananarivo, Madagascar"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4df1ecb3f267",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210105918",
+        "institution_name": "Normandie Université",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "IMCN - Institut de la matière condensée et des nanosciences / Institute of Condensed Matter and Nanosciences (1/6, Place L. Pasteur -1348 Louvain-la-Neuve - Bel",
+          "Normandie Université, INSA Rouen Normandie, CNRS UMR 6270, 685 Avenue de l’Université, 76800, Saint Etienne du Rouvray, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-fbaed278fca7",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210118429",
+        "institution_name": "Instituto de Ciencia de Materiales de Madrid",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "(Institute of Materials Science of Madrid (ICMM, CSIC),",
+          "AIZCE Technical Committee, Interprofesional Asociation of Juices and Citric Concentrates",
+          "Centre for Biomedical Technology, Polytechnical University of Madrid, Spain"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-b1e66c8ba5b1",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210124574",
+        "institution_name": "Centre de Recherches Insulaires et Observatoire de l'Environnement",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Functional and Evolutionary Morphology Lab, University of Liège, Belgium",
+          "PSL Research University, EPHE-UPVD-CNRS, USR3278 CRIOBE, 98729 Papetoai, Moorea, French Polynesia",
+          "PSL Research University, EPHE-UPVD-CNRS, USR3278 CRIOBE, 98729 Papetoai, Moorea, French Polynesia; Functional and Evolutionary Morphology Lab, University of Liè"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-769bfed12419",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210138594",
+        "institution_name": "Rede de Química e Tecnologia",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Diepenbeek Campus, University of Leuven, 3590 Diepenbeek, Belgium",
+          "REQUIMTE/LAQV, Instituto Superior de Engenharia do Porto, Instituto Politécnico do Porto, Rua Dr. António Bernardino de Almeida 431, 4249-015 Porto, Portugal"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7b8e8f102e3c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210161504",
+        "institution_name": "International Union for Conservation of Nature",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Ecology & Biodiversity Research Unit, Department of Biology, Vrije Universiteit Brussel-VUB, 1050 Brussels, Belgium",
+          "Mangrove Research Unit (MARU), Institute of Oceanography and Environment (INOS), Universiti Malaysia Terengganu (UMT), Kuala Nerus 21300, Malaysia",
+          "Mangrove Specialist Group (MSG), Species Survival Commission (SSC), International Union for the Conservation of Nature (IUCN), c/o Zoological Society of London,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cffb0569157a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I43439940",
+        "institution_name": "University of Southampton",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Faculty of Sciences, University of Liège, Liège, Belgium",
+          "National Oceanography Center, University of Southampton, Southampton, United Kingdom",
+          "Ocean and Earth Science, University of Southampton, National Oceanography Centre, Southampton, United Kingdom"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-da1083a2e85f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4387152675",
+        "institution_name": "Rheinland-Pfälzische Technische Universität Kaiserslautern-Landau",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "affiliation mentions \"Flanders\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Flanders Marine Institute (VLIZ), Oostende, Belgium; Institute for Environmental Sciences, RPTU Kaiserslautern-Landau, Landau, Germany"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ac84ec8d096f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4387154462",
+        "institution_name": "Centro de Ciências do Mar do Algarve",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3259bf8d5c50",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4399598474",
+        "institution_name": "China University of Mining and Technology - Beijing",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "KU Leuven, Department of Chemical Engineering, Process and Environmental Technology Lab, J. De Nayerlaan 5, B-2860 Sint-Katelijne-Waver, Belgium",
+          "LIWET, Department of Green Chemistry and Technology, Ghent University, Campus Kortrijk, Graaf Karel De Goedelaan 5, B-8500 Kortrijk, Belgium",
+          "LIWET, Department of Green Chemistry and Technology, Ghent University, Campus Kortrijk, Graaf Karel De Goedelaan 5, B-8500 Kortrijk, Belgium; School of Chemical"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d499b268de24",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4405254174",
+        "institution_name": "Institute of Science, Technology and Policy",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "ETH Zürich, Department of Civil, Environmental and Geomatic Engineering, Institute of Science, Technology and Policy, Hauptgebäude Rämistrasse 101, 8092 Zürich,",
+          "Ghent University, Green Chemistry and Technology, Coupure Links 653, 9000 Ghent, Belgium",
+          "Ghent University, Green Chemistry and Technology, Coupure Links 653, 9000 Ghent, Belgium; ETH Zürich, Department of Civil, Environmental and Geomatic Engineerin"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-1e1a3138ac46",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4405278154",
+        "institution_name": "Viện Khoa học sự sống",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Environmental Management and Technology, Institute of Life Sciences, Vietnam Academy of Science and Technology, 85 Tran Quoc Toan, Dist. 3, Ho Chi",
+          "Department of Environmental Management and Technology, Institute of Life Sciences, Vietnam Academy of Science and Technology, 85 Tran Quoc Toan, Dist.3, Ho Chi",
+          "Marine Biology Research Group, Biology Department, Ghent University, Krijgslaan 281, S8, 9000 Ghent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-eb2fe8840802",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4405280465",
+        "institution_name": "Institut Oseanografi dan Sekitaran",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Mangrove Research Unit (MARU), Institute of Oceanography and Environment (INOS), Universiti Malaysia Terengganu (UMT), Kuala Nerus 21300, Malaysia",
+          "Mangrove Specialist Group (MSG), Species Survival Commission (SSC), International Union for the Conservation of Nature (IUCN), c/o Zoological Society of London,",
+          "Systems Ecology and Resource Management Research Unit (SERM), Université Libre de Bruxelles-ULB, 1050 Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a5707e15e204",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4405287318",
+        "institution_name": "Institute of Industrial Science, The University of Tokyo",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Chemical Engineering Department, Vrije University Brussel, Brussel, Belgium",
+          "Institute of Industrial Science, University of Tokyo, Tokyo, Japan"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2f4379826ad7",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I55712492",
+        "institution_name": "Zhejiang University of Technology",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Laboratory for Industrial Water and Ecotechnology (LIWET), Department of Green Chemistry and Technology, Ghent University Campus Kortrijk, Graaf Karel de Goedel",
+          "Laboratory of Environmental Science and Engineering, College of Environment, Zhejiang University of Technology, Hangzhou 310032, PR China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-5e37289aaf90",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I68947357",
+        "institution_name": "Université de Strasbourg",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "ISARA (ISARA Lyon Agrapole 23 rue Jean Baldassini 69364 LYON Cedex 07 / ISARA Avignon 105 Rue Pierre Bayle 84918 AVIGNON Cedex 9 - France)",
+          "Institut Supérieur d’Agriculture et Agroalimentaire Rhône-Alpes (ISARA), 23 Rue Jean Baldassini, CEDEX 07, 69364 Lyon, France",
+          "LAGEPP - Laboratoire d'automatique, de génie des procédés et de génie pharmaceutique (bât 308G ESCPE-Lyon, 2ème étage 43 bd du 11 Novembre 1918 69622 Villeurban"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-4c237da2fd4c",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I71824836",
+        "institution_name": "Empa",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Cellulose & Wood Materials Group, Swiss Federal Laboratories for Materials Science and Technology (Empa), Ueberlandstrasse 129, 8600 Dübendorf, Switzerland",
+          "Sustainable Polymer Technologies (SPOT) Team, Flemish Institute for Technological Research (VITO), Boeretang 200, Mol, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-de8e4001d096",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I75778554",
+        "institution_name": "Universidad Técnica Federico Santa María",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Comercial Engineering, Universidad Técnica Federico Santa Maria, Av. Santa Maria 6400, Santiago, Chile",
+          "Department of Engineering Management, University of Antwerp, Prinsstraat 13, 2000 Antwerp, Belgium",
+          "Intelligence in Processes, Advanced Catalysts and Solvents (iPRACS), Faculty of Applied Engineering, University of Antwerp, Groenenborgerlaan 171, 2020 Antwerp,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0478ae589bb8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I7882870",
+        "institution_name": "University of Glasgow",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemistry, KU Leuven, Leuven, Belgium",
+          "School of Chemistry, The University of Glasgow, Glasgow, United Kingdom"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-f94a7594145e",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I80947539",
+        "institution_name": "Fuzhou University",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "College of Environment and Safety Engineering, Fuzhou University, Fuzhou 350116, China",
+          "Department of Chemical Engineering, KU Leuven, Celestijnenlaan 200F, B-3001 Leuven, Belgium",
+          "School of Future Technology & State Key Laboratory of Green and Efficient Development of Phosphorus Resources, Fuzhou University, Fuzhou 350108, China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e47bc909a139",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I861853513",
+        "institution_name": "Sapienza University of Rome",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Cardiovascular Center Aalst, OLV Hospital, Aalst, Belgium",
+          "Departments of Advanced Medical and Surgical Sciences, Precision Medicine, Engineering, and Mental Health and Public Medicine, Section of Statistics, University"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e762b2741dfe",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I88814501",
+        "institution_name": "Institut National des Sciences Appliquées Rouen Normandie",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "IMCN - Institut de la matière condensée et des nanosciences / Institute of Condensed Matter and Nanosciences (1/6, Place L. Pasteur -1348 Louvain-la-Neuve - Bel",
+          "Normandie Université, INSA Rouen Normandie, CNRS UMR 6270, 685 Avenue de l’Université, 76800, Saint Etienne du Rouvray, France"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-fbb88dbd9f6a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I9617848",
+        "institution_name": "Universitat Politècnica de Catalunya",
+        "works": 2,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering, Universitat Politècnica de Catalunya, Escola d'Enginyeria de Barcelona Est, C/ Eduard Maristany 16, Barcelona 08019, Spain",
+          "Department of Chemical Engineering, Université de Liège, Allée de la Chimie B6a, Liège, Sart Tilman, 4000, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a4fd5aff1c55",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I102516824",
+        "institution_name": "Université de Technologie de Compiègne",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "ISARA (ISARA Lyon Agrapole 23 rue Jean Baldassini 69364 LYON Cedex 07 / ISARA Avignon 105 Rue Pierre Bayle 84918 AVIGNON Cedex 9 - France)",
+          "Institut Supérieur d’Agriculture et Agroalimentaire Rhône-Alpes (ISARA), 23 Rue Jean Baldassini, CEDEX 07, 69364 Lyon, France",
+          "LAGEPP - Laboratoire d'automatique, de génie des procédés et de génie pharmaceutique (bât 308G ESCPE-Lyon, 2ème étage 43 bd du 11 Novembre 1918 69622 Villeurban"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c42580518b47",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I112859197",
+        "institution_name": "Università di Camerino",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "EMSEA – European Marine Science Educators Association, Gent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6734ed17cca5",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I11892038",
+        "institution_name": "University of Nigeria",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Green Chemistry and Technology, Ghent University, Ghent, Belgium",
+          "National Center for Energy Research, University of Nigeria, Nsukka, Nigeria"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-34380e03f517",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I120250893",
+        "institution_name": "New York University Abu Dhabi",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Division of Science and Math, New York University Abu Dhabi, Abu Dhabi 129188, United Arab Emirates",
+          "Laboratory of Viral Interactomes Networks, Unit of Molecular Biology of Diseases, Interdisciplinary Cluster for Applied Genoproteomics (GIGA Institute), Univers"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-88dbe5cd1a3a",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I122147150",
+        "institution_name": "Universidad Mayor de San Andrés",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Veterinary and Biosciences, Faculty of Veterinary Medicine, Ghent University, Merelbeke, Belgium",
+          "Unidad de Ecología Acuática, Instituto de Ecología, Facultad de Ciencias Puras y Naturales, Universidad Mayor de San Andrés, La Paz, Bolivia"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-81099045d6bb",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I123565023",
+        "institution_name": "Vietnam National University Ho Chi Minh City",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Food Technology, School of Biotechnology, International University, Quarter 6, Linh Trung Ward, Thu Duc City, Ho Chi Minh City 700000, Vietnam",
+          "Laboratory of Biomass and Green Technologies, University of Liege, Gembloux 2 B-5030, Belgium",
+          "Vietnam National University, Ho Chi Minh City 700000, Vietnam"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-fbd3833cd202",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I126231945",
+        "institution_name": "Queen's University Belfast",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Ghent University, Faculty of Veterinary Medicine, Department of Veterinary Public Health and Food Safety, Laboratory of Chemical Analysis, Merelbeke, Belgium",
+          "Queen's University, School of Biological Sciences, Molecular Biosciences, Institute for Global Food Security, Belfast, Northern Ireland, UK"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-fd957881a548",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1295562517",
+        "institution_name": "Naturalis Biodiversity Center",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Naturalis Biodiversity Center, Leiden, the Netherlands; Biology Department, Ghent University, Ghent, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-cd0444f1c1ba",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I1312732213",
+        "institution_name": "Coca Cola (United States)",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": [
+          "Scientific Regulatory Affairs, Coca-Cola Greater Europe, Chaussee de Mons, 1424, 1070, Brussels, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-780b49d78fe8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I133190216",
+        "institution_name": "Shahjalal University of Science and Technology",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Flemish Institute for Technological Research (VITO), Business Unit Separation and Conversion Technology, Boeretang 200, 2400 Mol, Belgium",
+          "Ghent University, Department of Biosystems Engineering, Coupure Links 653, 9000 Gent, Belgium",
+          "Shahjalal University of Science and Technology, Department of Chemical Engineering and Polymer Science, Sylhet 3114, Bangladesh"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e1103872fcc7",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I151727225",
+        "institution_name": "Harbin Engineering University",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Earth & Life Institute , Catholic University of Louvain , 1348 Louvain-la-Neuve , Belgium",
+          "Qingdao Innovation and Development Center , Harbin Engineering University , Qingdao 266000 , China;"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ee697382a591",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I157536573",
+        "institution_name": "Institut Pasteur",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "CARAH ASBL, Rue Paul Pastur, 11, 7800 Ath, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-02d3d6607c39",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I15766117",
+        "institution_name": "University of Graz",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Biology, University of Antwerp, Groenenborgerlaan 171, 2020 Antwerp, 11 Belgium",
+          "Institute of Biology, University of Graz, Universitätsplatz 2, 8010 Graz, Austria",
+          "Institute of Biology, University of Graz, Universitätsplatz 2, 8010 Graz, Austria; Department of Biology, University of Antwerp, Groenenborgerlaan 171, 2020 Ant"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ee7e1d69886d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I159948400",
+        "institution_name": "Jinan University",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Jinan University - University of Birmingham Joint Institute, Jinan University, Guangzhou 511436, China",
+          "Laboratory of Biomass and Green Technologies, University of Liege, Gembloux 2 B-5030, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-410acef40fdf",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I161321875",
+        "institution_name": "University of Beira Interior",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-506ee4c70b7f",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I167322064",
+        "institution_name": "Università degli Studi eCampus",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": [
+          "C.I.I./Dipartimento di Ingegneria dell’Informazione, Università Politecnica delle Marche, Via Brecce Bianche 12, Ancona, 60131, Italy",
+          "EUAbout, Bruxelles, 1000, Belgium",
+          "Università Telematica eCampus, Novedrate, CO, 22060, Italy"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-a4a7b52a32a8",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I172675005",
+        "institution_name": "Nanyang Technological University",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Membrane Separations, Adsorption, Catalysis, and Spectroscopy for Sustainable Solutions (cMACS), Department of Microbial and Molecular Systems, KU Leuven, Celes",
+          "School of Chemistry, Chemical Engineering and Biotechnology, Nanyang Technological University, 21 Nanyang Link, Singapore, 637371"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-59e6cc3dc1c0",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I180825142",
+        "institution_name": "City, University of London",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Bayes Business School, City College London, London, UK",
+          "Brain Capital Alliance, San Francisco, CA, USA",
+          "Brain Capital Alliance, San Francisco, CA, USA; Euro-Mediterranean Economists Association, Barcelona, Spain; Bayes Business School, City College London, London,"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-3ec455fef836",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I181727666",
+        "institution_name": "University of Economics Ho Chi Minh City",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "LL.M Globalisation and Law, Faculty of Law, Maastricht University, Maastricht, The Netherlands",
+          "LL.M, Master of Laws in International and European Law: International and National Legal Orders, Ghent University, Ghent, Belgium",
+          "The School of Law, University of Economics Ho Chi Minh City (UEH), Ho Chi Minh, Vietnam"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-31e2abfbe319",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I183263030",
+        "institution_name": "Graduate University of Advanced Technology",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Ghent University, Evolutionary Morphology of Vertebrates, K.L. Ledeganckstraat 35, B-9000, Gent, Belgium",
+          "Institute of Science and High Technology and Environmental Sciences, Graduate University of Advanced Technology, Kerman, Iran"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d42a3c58b710",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I189914110",
+        "institution_name": "University of Cuenca",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Center for Environmental Studies, University of Cuenca, Campus Quinta Balzay, Av. Victor Manuel Albornoz, Cuenca, Ecuador",
+          "KU Leuven, Department of Mechanical Engineering, Celestijnenlaan 300A, Box 2422, 3001 Leuven, Belgium",
+          "KU Leuven, Department of Mechanical Engineering, Celestijnenlaan 300A, Box 2422, 3001 Leuven, Belgium; Center for Environmental Studies, University of Cuenca, C"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ac88b08e7c7d",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I201324441",
+        "institution_name": "University of Ferrara",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Organic and Biological Analytical Chemistry Group, MolSys Research Unit, University of Liège, Liège, Belgium",
+          "University of Ferrara, Department of Chemical, Pharmaceutical, and Agricultural Sciences, via L. Borsari 46, Ferrara, Italy"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-48cf00886464",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I21642278",
+        "institution_name": "Ningxia University",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Research Group RecyCon, Department of Civil Engineering, KU Leuven, Campus Bruges, Brugge, 8200, Belgium",
+          "School of Civil and Hydraulic Engineering, Ningxia University, Yinchuan, Ningxia, 750021, China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-af54cd09e342",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I228151691",
+        "institution_name": "Ho Chi Minh City International University",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Food Technology, School of Biotechnology, International University, Quarter 6, Linh Trung Ward, Thu Duc City, Ho Chi Minh City 700000, Vietnam",
+          "Laboratory of Biomass and Green Technologies, University of Liege, Gembloux 2 B-5030, Belgium",
+          "Vietnam National University, Ho Chi Minh City 700000, Vietnam"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-c57f5400f820",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I24185976",
+        "institution_name": "Sichuan University",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Centre for Polymer and Material Technologies, Department of Materials, Textiles and Chemical Engineering, Faculty of Engineering and Architecture, Ghent Univers",
+          "College of Polymer Science and Engineering, State Key Laboratory of Polymer Materials Engineering, Sichuan University, Chengdu 610065, China"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-e851d0e5e303",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I246010334",
+        "institution_name": "Università degli Studi di Enna Kore",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Medicine and Surgery, Enna Kore University, Catania, Italy",
+          "Department of Surgery, UMONS Research Institute for Health Sciences and Technology, University of Mons, Mons, Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ccdef934c61b",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I2801043613",
+        "institution_name": "Firmenich (Switzerland)",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": [
+          "Legal and Compliance, Global Registration Services, Firmenich Belgium, Louvain La Neuve Belgium"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8acfca296ed3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I2802401942",
+        "institution_name": "University \"St. Kliment Ohridski\" - Bitola",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Faculty of Economics and Business Administration, Ghent University, Ghent, Belgium",
+          "Faculty of Economics, Prilep, University St. Kliment Ohridski, Bitola, North Macedonia"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ff9101d2d4c0",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I3018288129",
+        "institution_name": "Istituto Neurologico Mediterraneo",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Cardiovascular Center Aalst, OLV Hospital, Aalst, Belgium",
+          "Departments of Advanced Medical and Surgical Sciences, Precision Medicine, Engineering, and Mental Health and Public Medicine, Section of Statistics, University"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-0472dd7e6355",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I3125347698",
+        "institution_name": "Babeș-Bolyai University",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Economy and Rural Development, Faculty of Gembloux Agro-Bio Tech, University of Liège, Gembloux, Belgium",
+          "Department of Hospitality Services, Faculty of Business, Babes-Bolyai University, Cluj-Napoca, Cluj, Romania",
+          "Doctoral School “International Relations and Security Studies”, Babes-Bolyai University, Cluj-Napoca, Romania"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-379e46cffa67",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I32881790",
+        "institution_name": "Université de Poitiers",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "IC2MP (UMR CNRS 7285), Université de Poitiers, 1 rue Marcel Doré, 86000 Poitiers, France; Department of Green Chemistry and Technology, Ghent University, Coupur"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-238d09cf7de4",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I38476204",
+        "institution_name": "Urmia University",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Biology , Faculty of Science , Urmia University , Urmia , Iran;",
+          "Faculty of Bioscience , Gent University , Belgium",
+          "Urmia University"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6b57bbb51e14",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I39481719",
+        "institution_name": "Institut National de la Recherche Scientifique",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Department of Chemical Engineering-Nanomaterials, Catalysis & Electrochemistry, University of Liège, Liège, Belgium",
+          "INRS Water, Earth and Environment, Québec, Canada"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-969735194694",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I40790370",
+        "institution_name": "Yalova University",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\"",
+          "author country BE"
+        ],
+        "affiliation_examples": [
+          "Advanced Functional Polymers (AFP) Laboratory, Institute for Materials Research (IUMAT), Hasselt University, Martelarenlaan 42, 3500 Hasselt, Belgium",
+          "Property Protection and Security Department, Yalova Vocational School, Yalova, Türkiye",
+          "Yalova University, Yalova, Türkiye"
+        ]
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-feee6584d4c3",
+      "kind": "institution_in_region",
+      "question": "Is this institution in Belgium?",
+      "evidence": {
+        "institution_id": "I4210085911",
+        "institution_name": "Portuguese Environment Agency",
+        "works": 1,
+        "signals": [
+          "affiliation mentions \"Belgium\""
+        ],
+        "affiliation_examples": []
+      },
+      "current_value": "not in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-6b03a7337cdf",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210116480",
+        "institution_name": "Flanders Make (Belgium)",
+        "works": 19
+      },
+      "current_value": "company",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7000eee2b91d",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210163766",
+        "institution_name": "Organic Waste Systems (Belgium)",
+        "works": 11
+      },
+      "current_value": "company",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2eeb006f526c",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210129930",
+        "institution_name": "Plastics Recyclers Europe",
+        "works": 7
+      },
+      "current_value": "other",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-01ecfadbe530",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I4210135891",
+        "institution_name": "PlasticsEurope",
+        "works": 6
+      },
+      "current_value": "other",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-7a2e0177435c",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W2233197153",
+        "title": "Accumulation de particules de microplastiques dans le neuston en Méditerranée Occidentale et au large de la Corse",
+        "language": "fr"
+      },
+      "current_value": "language fr",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-2cbb08b08d2c",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W2518980632",
+        "title": "Life Cycle Assessment of Biobased Fibre-Reinforced Polymer Composites (Levenscyclusanalyse van biogebaseerde, vezelversterkte polymeercomposieten)",
+        "language": "nl"
+      },
+      "current_value": "language nl",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-11d0395b85d9",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W4378375083",
+        "title": "Welkom in het Antropoceen: transformaties in het sociologische denken over natuur",
+        "language": "nl"
+      },
+      "current_value": "language nl",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-95c8363e256a",
+      "kind": "local_language_relevance",
+      "question": "Is this local-language work about plastics?",
+      "evidence": {
+        "work_id": "W7163959400",
+        "title": "[Microplastics and thrombo-inflammation in acute ischemic stroke : adding fuel to the fire].",
+        "language": "fr"
+      },
+      "current_value": "language fr",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-588d1eef2f14",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "microplastics",
+        "language": "nl",
+        "note": "Dutch query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-d375f4ada454",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "plasticvervuiling",
+        "language": "nl",
+        "note": "Dutch for plastic pollution; query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-ead3963fdc07",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "zwerfvuil",
+        "language": "nl",
+        "note": "Dutch for litter; query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-8ce516ad5c47",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "microplastiques",
+        "language": "fr",
+        "note": "French query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-21e1c0834313",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "pollution plastique",
+        "language": "fr",
+        "note": "French query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-042b7b7a4330",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "déchets plastiques",
+        "language": "fr",
+        "note": "French for plastic waste; query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-28eee0a4de34",
+      "kind": "local_terms",
+      "question": "Is this term used locally for plastic pollution?",
+      "evidence": {
+        "term": "Mikroplastik",
+        "language": "de",
+        "note": "German query term candidate"
+      },
+      "current_value": "listed in region config",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    }
+  ]
+}

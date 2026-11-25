@@ -1,0 +1,446 @@
+{
+  "schema": "amb-v1",
+  "generated_at": "2026-11-25T02:31:27Z",
+  "region": "norway",
+  "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
+  "min_works": 3,
+  "eligible_types": [
+    "education",
+    "government",
+    "nonprofit",
+    "facility"
+  ],
+  "institutions": [
+    {
+      "id": "I204778367",
+      "name": "Norwegian University of Science and Technology",
+      "type": "education",
+      "works": 337,
+      "domains": [
+        "ntnu.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2802939387",
+      "name": "Norwegian Institute for Water Research",
+      "type": "nonprofit",
+      "works": 300,
+      "domains": [
+        "niva.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I3019502701",
+      "name": "SINTEF Ocean",
+      "type": "facility",
+      "works": 134,
+      "domains": [
+        "sintef.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4432739",
+      "name": "University of Bergen",
+      "type": "education",
+      "works": 102,
+      "domains": [
+        "uib.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I67061984",
+      "name": "NILU",
+      "type": "nonprofit",
+      "works": 99,
+      "domains": [
+        "nilu.com",
+        "nilu.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210107808",
+      "name": "NORCE Research AS",
+      "type": "facility",
+      "works": 98,
+      "domains": [
+        "norceresearch.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I78037679",
+      "name": "UiT The Arctic University of Norway",
+      "type": "education",
+      "works": 95,
+      "domains": [
+        "uit.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2802153510",
+      "name": "Norwegian Institute of Marine Research",
+      "type": "facility",
+      "works": 93,
+      "domains": [
+        "hi.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I54108979",
+      "name": "Norwegian University of Life Sciences",
+      "type": "education",
+      "works": 65,
+      "domains": [
+        "nmbu.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I184942183",
+      "name": "University of Oslo",
+      "type": "education",
+      "works": 63,
+      "domains": [
+        "uio.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2802510431",
+      "name": "Grid-Arendal",
+      "type": "nonprofit",
+      "works": 57,
+      "domains": [
+        "grida.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210163231",
+      "name": "The FRAM Centre",
+      "type": "facility",
+      "works": 53,
+      "domains": [
+        "framsenteret.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I87302398",
+      "name": "Norwegian Polar Institute",
+      "type": "facility",
+      "works": 45,
+      "domains": [
+        "npolar.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I173888879",
+      "name": "SINTEF",
+      "type": "facility",
+      "works": 45,
+      "domains": [
+        "sintef.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2802079931",
+      "name": "Nord University",
+      "type": "education",
+      "works": 22,
+      "domains": [
+        "nord.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1333353642",
+      "name": "Norwegian Institute of Public Health",
+      "type": "government",
+      "works": 22,
+      "domains": [
+        "fhi.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I92008406",
+      "name": "University of Stavanger",
+      "type": "education",
+      "works": 22,
+      "domains": [
+        "uis.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4387930256",
+      "name": "SINTEF Industry",
+      "type": "facility",
+      "works": 21,
+      "domains": [
+        "sintef.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2801380234",
+      "name": "University of South-Eastern Norway",
+      "type": "education",
+      "works": 16,
+      "domains": [
+        "usn.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210143403",
+      "name": "Norwegian Institute of Bioeconomy Research",
+      "type": "government",
+      "works": 13,
+      "domains": [
+        "nibio.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1314042554",
+      "name": "Norwegian Meteorological Institute",
+      "type": "government",
+      "works": 13,
+      "domains": [
+        "met.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1332882736",
+      "name": "National Institute of Occupational Health",
+      "type": "government",
+      "works": 11,
+      "domains": [
+        "stami.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I184531372",
+      "name": "OsloMet – Oslo Metropolitan University",
+      "type": "education",
+      "works": 11,
+      "domains": [
+        "oslomet.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210153706",
+      "name": "Norwegian Institute for Nature Research",
+      "type": "facility",
+      "works": 10,
+      "domains": [
+        "nina.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210095992",
+      "name": "Centre for Arctic Gas Hydrate, Environment and Climate",
+      "type": "facility",
+      "works": 8,
+      "domains": [
+        "uit.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2799966484",
+      "name": "Bjerknes Centre for Climate Research",
+      "type": "facility",
+      "works": 6,
+      "domains": [
+        "uib.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1315672318",
+      "name": "Norwegian Public Roads Administration",
+      "type": "government",
+      "works": 6,
+      "domains": [
+        "vegvesen.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2802159110",
+      "name": "Paper and Fibre Research Institute",
+      "type": "facility",
+      "works": 6,
+      "domains": [
+        "pfi.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I200650556",
+      "name": "University of Agder",
+      "type": "education",
+      "works": 6,
+      "domains": [
+        "uia.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4401200256",
+      "name": "Nansen Environmental and Remote Sensing Center",
+      "type": "nonprofit",
+      "works": 5,
+      "domains": [
+        "nersc.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I96829481",
+      "name": "Nordland Research Institute",
+      "type": "facility",
+      "works": 5,
+      "domains": [
+        "nordlandsforskning.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210164950",
+      "name": "Norwegian Veterinary Institute",
+      "type": "facility",
+      "works": 5,
+      "domains": [
+        "vetinst.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210116649",
+      "name": "University of Inland Norway",
+      "type": "education",
+      "works": 5,
+      "domains": [
+        "inn.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I179863766",
+      "name": "Western Norway University of Applied Sciences",
+      "type": "education",
+      "works": 5,
+      "domains": [
+        "hvl.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I181046868",
+      "name": "BI Norwegian Business School",
+      "type": "education",
+      "works": 4,
+      "domains": [
+        "bi.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210152551",
+      "name": "International Research Institute of Stavanger",
+      "type": "facility",
+      "works": 4,
+      "domains": [
+        "iris.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I931913249",
+      "name": "Norwegian School of Economics",
+      "type": "education",
+      "works": 4,
+      "domains": [
+        "nhh.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4405268339",
+      "name": "PoreLab",
+      "type": "facility",
+      "works": 4,
+      "domains": [
+        "porelab.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210104611",
+      "name": "GenØk",
+      "type": "nonprofit",
+      "works": 3,
+      "domains": [
+        "genok.com"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I1296551785",
+      "name": "Geological Survey of Norway",
+      "type": "government",
+      "works": 3,
+      "domains": [
+        "ngu.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I2800853303",
+      "name": "Northern Research Institute",
+      "type": "nonprofit",
+      "works": 3,
+      "domains": [
+        "norut.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4387930280",
+      "name": "SINTEF Community",
+      "type": "facility",
+      "works": 3,
+      "domains": [
+        "sintef.no"
+      ],
+      "needs_domain": false
+    },
+    {
+      "id": "I4210142273",
+      "name": "SINTEF Energy Research",
+      "type": "facility",
+      "works": 3,
+      "domains": [
+        "sintef.no"
+      ],
+      "needs_domain": false
+    }
+  ]
+}
