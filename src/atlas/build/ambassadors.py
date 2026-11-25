@@ -252,7 +252,6 @@ class Override:
 
 # A name followed by a bracketed acronym, as in "Norwegian Institute for Water Research (NIVA)".
 _NAME_ACRONYM = re.compile(r"([^(),]+?)\s*\(([A-Z][A-Z0-9&]{1,11})\)")
-_UC_NAME = "University of California, "
 
 
 def _fold_name(value: object) -> str:
@@ -270,11 +269,32 @@ def affiliation_acronyms(raw_strings: Iterable[str], name: str) -> set[str]:
     return found
 
 
-def uc_aliases(name: str) -> set[str]:
-    """University of California, Davis is also called UC Davis (a naming rule, not a guess)."""
-    if name.startswith(_UC_NAME) and len(name) > len(_UC_NAME):
-        return {"UC " + name[len(_UC_NAME) :]}
-    return set()
+def prefix_aliases(name: str, rules: Sequence[tuple[str, str]]) -> set[str]:
+    """Aliases from a region's naming rules: (prefix, alias prefix) pairs in region.yml.
+
+    A rule such as ("Some University, ", "SU ") turns "Some University, Campus" into "SU Campus".
+    Region names live in the region config, not in this module (region-name ratchet).
+    """
+    found: set[str] = set()
+    for prefix, alias_prefix in rules:
+        if prefix and name.startswith(prefix) and len(name) > len(prefix):
+            found.add(alias_prefix + name[len(prefix) :])
+    return found
+
+
+def load_alias_rules(root: Path, slug: str) -> tuple[tuple[str, str], ...]:
+    """`name_alias_rules` from regions/<slug>/region.yml: [{prefix, alias_prefix}] (optional)."""
+    path = root / "regions" / slug / "region.yml"
+    if not path.exists():
+        return ()
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    rules = []
+    for rule in data.get("name_alias_rules") or []:
+        prefix = str(rule.get("prefix") or "")
+        alias_prefix = str(rule.get("alias_prefix") or "")
+        if prefix and alias_prefix:
+            rules.append((prefix, alias_prefix))
+    return tuple(rules)
 
 
 ROR_NAME_TYPES = frozenset({"acronym", "alias", "label"})
@@ -881,6 +901,7 @@ def _institution_rows(
     ror_dump: Mapping[str, RorValues],
     cache: Mapping[str, Mapping[str, Any]],
     overrides: Mapping[str, Sequence[Override]],
+    alias_rules: Sequence[tuple[str, str]] = (),
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for inst_id, item in _eligible(corpus):
@@ -901,7 +922,9 @@ def _institution_rows(
         ror_acronyms = {n["value"] for n in ror_names_here if "acronym" in n["types"]}
         ror_aliases = {n["value"] for n in ror_names_here if "acronym" not in n["types"]}
         acronyms = sorted({*item.acronyms, *ror_acronyms} - {""})
-        aliases = sorted({*uc_aliases(name), *ror_aliases} - {name, *acronyms} - {""})
+        aliases = sorted(
+            {*prefix_aliases(name, alias_rules), *ror_aliases} - {name, *acronyms} - {""}
+        )
         rows.append(
             {
                 "id": inst_id,
@@ -1047,9 +1070,10 @@ def build_payloads(
     cache: Mapping[str, Mapping[str, Any]],
     overrides: Mapping[str, Sequence[Override]],
     generated_at: str,
+    alias_rules: Sequence[tuple[str, str]] = (),
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """(ambassador_institutions payload, ambassador_cases payload) for one region."""
-    rows = _institution_rows(corpus, ror_dump, cache, overrides)
+    rows = _institution_rows(corpus, ror_dump, cache, overrides, alias_rules)
     institutions = {
         "schema": INSTITUTIONS_SCHEMA,
         "generated_at": generated_at,
@@ -1085,6 +1109,7 @@ def build_from_corpus(
         read_cache(root, corpus.facts),
         load_overrides(root / "regions" / region.slug / "ambassador_domains.csv"),
         stamp,
+        load_alias_rules(root, region.slug),
     )
 
 

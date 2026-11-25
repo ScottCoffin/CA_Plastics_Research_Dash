@@ -26,15 +26,16 @@ from atlas.build.ambassadors import (
     fetch_ror,
     inputs_present,
     is_free_mail,
+    load_alias_rules,
     load_corpus,
     load_overrides,
     load_ror_domains,
     missing_domain_cache,
+    prefix_aliases,
     read_cache,
     registrable_domain,
     resolve_domains,
     ror_names,
-    uc_aliases,
     validate_outputs,
 )
 from atlas.regions.registry import Predicate, Region
@@ -619,9 +620,11 @@ def test_acronyms_come_from_bracketed_names_in_raw_affiliations() -> None:
 
 
 def test_uc_campus_names_get_the_uc_alias() -> None:
-    assert uc_aliases("University of California, Davis") == {"UC Davis"}
-    assert uc_aliases("University of California San Diego") == set()
-    assert uc_aliases("Ghent University") == set()
+    rules = load_alias_rules(Path(__file__).resolve().parents[1], "california")
+    assert prefix_aliases("University of California, Davis", rules) == {"UC Davis"}
+    assert prefix_aliases("University of California San Diego", rules) == set()
+    assert prefix_aliases("Ghent University", rules) == set()
+    assert load_alias_rules(Path(__file__).resolve().parents[1], "norway") == ()
 
 
 def test_ror_names_keep_acronyms_aliases_and_labels_only() -> None:

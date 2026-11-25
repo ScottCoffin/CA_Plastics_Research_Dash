@@ -55,3 +55,8 @@ adapters:
   - kind: geo
     name: California GeoNames gazetteer
     module: src/atlas/geo/gazetteer.py
+# Institution naming rules for the ambassador type-ahead (moved out of src/atlas, 2026-11-25):
+# "University of California, Davis" is also called "UC Davis".
+name_alias_rules:
+  - prefix: "University of California, "
+    alias_prefix: "UC "
