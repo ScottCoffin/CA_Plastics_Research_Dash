@@ -220,10 +220,6 @@ leak-check works wait for S5.7.
 ## Later (the agent will say when each is ready)
 
 
-- **H50. Allow the ambassador export job to open pull requests (AMB-1, 1 minute).** GitHub repo Settings >
-  Actions > General > Workflow permissions: tick "Allow GitHub Actions to create and approve pull requests", Save.
-  (The AMB_EXPORT_TOKEN secret is already set.) Each daily PR is yours to review; nothing merges on its own.
-
 - **H8. Outreach emails (S9.6).** Now unblocked (H7 done, emails allowed in `data/private/`): approve the email template in
   `docs/OUTREACH.md`, then send the first batch from your own email account. The
   agent never sends email.
@@ -240,6 +236,8 @@ leak-check works wait for S5.7.
 ---
 
 ## Done
+
+- H50 (2026-11-25): owner allowed GitHub Actions to create pull requests (ambassador export job); confirmed plastiverse.live is verified in Resend; gave the public Turnstile site key (used by the sign-up page).
 
 - H49 (2026-11-25): owner changed the ORCID redirect URI, set the seven Worker secrets and AMB_EXPORT_TOKEN, gave the owner ORCID iD, and approved creating D1 and deploying; the agent created D1 `plastiverse-ambassadors` (ENAM), applied migrations 0001-0004 and deployed the Worker to api.plastiverse.live (version 6fc9abeb).
 
