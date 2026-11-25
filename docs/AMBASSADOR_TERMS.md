@@ -1,7 +1,6 @@
-# Plastiverse Live ambassador contribution terms (DRAFT for owner review)
+# Plastiverse Live ambassador contribution terms
 
-Status: draft written by the agent on 2026-11-25 for the owner's review (HUMAN_TASKS H48). This is not legal advice;
-consider a review by your institution or a lawyer before launch. Ambassadors see this text, in this plain form, on
+Status: approved by the owner as written on 2026-11-25 (H48). Version 1. Ambassadors see this text, in this plain form, on
 their first visit and must accept it before contributing.
 
 ## What you agree to

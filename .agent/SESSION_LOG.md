@@ -260,3 +260,4 @@
 | 2026-11-25 | BQ-V.6 | GEXF/GraphML exports of the global and California graphs | this commit |
 | 2026-11-25 | AMB-1 (owner answers) | Design questions answered; spec section 12; three items need explanation | this commit |
 | 2026-11-25 | AMB-1 (terms) | Draft contribution terms; credit on by default with opt-out; split rule ambassador + 50 works; H48 | this commit |
+| 2026-11-25 | AMB-1 (sign-off) | H45 design signed off; H48 terms approved | this commit |

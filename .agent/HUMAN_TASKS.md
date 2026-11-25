@@ -24,22 +24,6 @@ Last updated: 2026-11-18.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
-### H45. Review the ambassador design prototype (AMB-1, about 15 minutes)
-1. Double-click `.impeccable/sketches/ambassadors.html` in the repository folder (or run
-   `start .impeccable/sketches/ambassadors.html` in a terminal). It opens in your browser; nothing is sent anywhere.
-2. Use the dark bar at the top (Previous / Next or the list) to step through the 19 screens (the map needs an internet connection: it loads pinned d3 and Natural Earth files); tick
-   "Show as region lead" to see the moderator view.
-3. Read the open questions at the end of `.impeccable/surfaces/impeccable-sketches-ambassadors-html.md`.
-4. Reply with "design approved" or a list of changes, plus your answers to the open questions you care about
-   (anything you skip keeps the agent's default).
-- **Done when:** you reply. The agent builds the real pages and the sign-in backend after that (the backend also needs H44).
-
-### H48. Review the ambassador contribution terms (AMB-1, about 10 minutes)
-1. Open `docs/AMBASSADOR_TERMS.md` (a draft the agent wrote; not legal advice).
-2. Edit anything you want changed directly in the file, or list the changes.
-3. Optional: ask your institution or a lawyer to look at it before launch.
-- **Done when:** tell the agent "terms approved" (with any edits saved in the file).
-
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
 Global Plastic Laws topic. That link is a draft the agent proposed, so the page shows a
@@ -244,6 +228,9 @@ leak-check works wait for S5.7.
 ---
 
 ## Done
+
+- H45 (2026-11-25): owner signed off the ambassador design (19-screen prototype) with the answers in docs/AMBASSADORS_SPEC.md section 12.
+- H48 (2026-11-25): owner approved docs/AMBASSADOR_TERMS.md as written.
 
 - H44 (2026-11-25): owner set up Resend (domain verified), a Cloudflare API token (Workers + D1 edit) and account ID, and a Turnstile widget; keys in `.env`. The agent deploys the Worker only after the design is approved (H45).
 
