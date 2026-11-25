@@ -245,3 +245,6 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-19 | LAND-1 | Claude Haiku developer | Full-bleed stage (body cap), unboxed Regions control | Completed; its check_plat2 run exposed the PLAT-2b evidence-table contrast bug, fixed by the lead (70% ramp) | 1 session |
 | 2026-11-19 | LAND-2 | Claude Haiku developer | Logo MP4 intro, 2x cue with arrow, 2x skip link | See commit notes | 1 session |
 | 2026-11-19 | LAND-3 | Claude Haiku developer | Logo intro 2x, loop, hidden toggle | Completed; lead lowered the phone cap to 105vw after a screenshot review | 1 session |
+| 2026-11-25 | BQ-G3, BQ-G4, BQ-1.1, BQ-1.4, BQ-4.1 | Claude Haiku developer x5 | Gold frame, adaptive sampler, estimators, quality payloads, topic series | Completed; lead finished G3/G4 after a turn limit, fixed the ratchet/About/ruff gate failures | 5 sessions |
+| 2026-11-25 | BQ-V.4, AMB-1 slice 2a | Claude Haiku developer x2 | /explore graph views; ORCID-first sign-up Worker routes | Completed; lead security-read signup.ts/orcid.ts, recorded AMB-ORCID-RESIGNIN and AMB-PROPOSALS-ONLY defaults | 2 sessions |
+| 2026-11-25 | BQ-4.2, BQ-4.3, AMB-1 ror | Claude Haiku developer x3 | Rising-share flag; tag co-occurrence; ROR in allowlists + ORCID employment match | Dispatched | 3 sessions |
