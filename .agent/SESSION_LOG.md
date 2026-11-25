@@ -246,3 +246,4 @@
 | 2026-11-25 | AMB-1 (step 1) | Eligibility allowlists with domains (150 institutions) + case queues; spec sections 8-9 (map, search, region proposals, time estimates) | this commit |
 | 2026-11-25 | SPK-DEET (queued) | Owner asked for a DEET evaluation spike before the first D9 facet | this commit |
 | 2026-11-25 | AMB-1 (design round 2) | Map-first landing, place search + zoom, region proposals, splits, time estimates | this commit |
+| 2026-11-25 | AMB-1 (map foundation) | 50m world map in Natural Earth I, small-country markers, place index, Palau zoom fix; landing raster and explore grid realigned | this commit |

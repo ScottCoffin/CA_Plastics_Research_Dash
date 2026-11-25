@@ -388,6 +388,20 @@ Purpose: the global denominator for the V-4 trend panel on the Evidence Map (EM-
 Top-level keys: `schema_version` (`em7.v1`), `query_version` (the active query, e.g. `plastic-v3.1`), `fetched_at` (UTC ISO 8601), `source` (`OpenAlex group_by publication_year`), `by_year` (object: year string to integer count, sorted by year).
 Missing file: the panel shows the per-topic chart and "Global comparison unavailable."
 
+### `site/data/global/places.json`
+
+Purpose: the place-search index on `/explore` (AMB-1, `scripts/build_places_index.py`). Countries, first-level regions and cities, so that a search zooms the map to the place. The map zooms to a place's bounding box with a minimum extent of about 300 km.
+Top-level keys: `schema` (`places-v1`), `fields` (`name`, `kind`, `parent`, `iso2`, `geom`, `population`), `kinds` (`country`, `admin1`, `city`), `parents` (the parent labels, indexed by an entry's `parent`), `geom` (the rule for `geom`), `counts` (entries per kind), `licence` (per source), `credit` (the credit line to show), `aliases` (ISO2 to alternative country names, for search only), `markers` (`[iso, lon, lat]` for each small country, the same points as `world.json` `small`), `entries`.
+Each entry is `[name, kind, parent, iso2, geom, population]`: `kind` and `parent` are indices into `kinds` and `parents`; `geom` is `[west, south, east, north]` degrees for a bounding box, or `[lon, lat]` for a point (a city, or a country with no outline); `population` is set for cities only. Coordinates have two decimals.
+Sources: countries from world-atlas `countries-50m.json` (Natural Earth 1:50m admin-0, public domain); regions from Natural Earth 10m admin-1 (public domain); cities from GeoNames `cities15000` (population of at least 15,000; CC BY 4.0, credited in `credit`). A place's parent is its region and country for a city (`Hordaland, Norway`), or its country.
+Missing file: `/explore` searches the countries in `explore.json` only and draws no small-country dots.
+
+### `site/assets/world/world.json`
+
+Purpose: the landing page's country outlines, the California outline and the small-country markers (PLAT-2a, AMB-1). Written by `py -3.14 scripts/build_world_map.py`; `site/assets/world/PROVENANCE.md` records the pinned inputs.
+Projection: Natural Earth I (d3 `geoNaturalEarth1`), viewBox `0 0 1000 520`. Country outlines come from world-atlas `countries-50m.json` (Natural Earth 1:50m admin-0); the outline of California from us-atlas `states-10m.json`.
+Keys: `sphere`, `crop` (top and bottom of the drawn band), `w`, `h`, `countries` (`{id, name, iso_a2, d}`; a country with several geometries is one entry), `ca`, `ca_bbox`, `small` (`{iso, x, y, lon, lat}`: a centroid marker for each country whose projected land area is under 4 square pixels at world scale, plus Tuvalu, which world-atlas omits), `source`, `licence`.
+
 ### `site/feed.xml`
 
 Purpose: Atom feed of newly indexed California-connected papers and newly recorded awards.

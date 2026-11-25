@@ -475,7 +475,11 @@ def _ca_raster(b, carings) -> str:
 
 
 def world_raster(world: dict, tiers: dict[str, str]) -> dict:
-    """Equal Earth pixel raster: '.' sea or outside the sphere, 'c' California, else tier."""
+    """Natural Earth I pixel raster: '.' sea or outside the sphere, 'c' California, else tier.
+
+    The grid is laid over world.json's own frame (its w, crop and outlines), so the raster and the
+    outlines drawn over it in landing_story.js always agree. No projection is done here.
+    """
     k = MW / world["w"]
     c0, c1 = world["crop"]
     cols, rows = int(MW // CELL), int((c1 - c0) * k // CELL)
@@ -714,7 +718,7 @@ def provenance_md(papers: list[dict], counts: dict, world_source: str, first_q: 
 
 
 WORLD_SOURCE = (
-    "world.json (world-atlas countries-110m and us-atlas states-10m) with "
+    "world.json (world-atlas countries-50m and us-atlas states-10m, Natural Earth I) with "
     "total_by_country shading in four steps; port of .impeccable/sketches/src/story.py, "
     "fixed log breaks at 30, 300 and 3,000 works"
 )

@@ -167,9 +167,9 @@ def test_blanket_seeds_come_from_bright_grid_cells():
 def _synthetic_world():
     return {
         "w": 1000.0,
-        "h": 486.7,
-        "crop": [2.0, 436.7],
-        "sphere": "M0,2L920,2L920,436.7L0,436.7Z",
+        "h": 520.0,
+        "crop": [7.3, 442.0],
+        "sphere": "M0,7.3L920,7.3L920,442L0,442Z",
         "ca": "M150,150L170,150L170,170L150,170Z",
         "ca_bbox": [140.0, 140.0, 180.0, 180.0],
         "countries": [
@@ -184,7 +184,7 @@ def _cell(ux_target, uy_target):
     """Column and row whose centre is nearest the target, on the raster grid."""
     k = ba.MW / 1000.0
     col = int(ux_target * k // ba.CELL)
-    row = int((uy_target - 2.0) * k // ba.CELL)
+    row = int((uy_target - 7.3) * k // ba.CELL)
     return row, col
 
 

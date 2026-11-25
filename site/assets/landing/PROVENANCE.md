@@ -68,5 +68,5 @@ Papers with an empty title in credits.json: `papers/p00.webp`.
 
 ## World and California raster
 
-- `site/data/global/world_raster.json`: world.json (world-atlas countries-110m and us-atlas states-10m) with total_by_country shading in four steps; port of .impeccable/sketches/src/story.py, fixed log breaks at 30, 300 and 3,000 works.
+- `site/data/global/world_raster.json`: world.json (world-atlas countries-50m and us-atlas states-10m, Natural Earth I, frame 1000 x 520) with total_by_country shading in four steps; port of .impeccable/sketches/src/story.py, fixed log breaks at 30, 300 and 3,000 works. Rebuilt 2026-11-24 with `--raster-only`; the grid is laid over world.json's own frame, so no projection is done here. See `site/assets/world/PROVENANCE.md`.
 - Country counts: `site/data/global/global_counts.json`, query `plastic-v3.1`, fetched `2026-11-18T04:06:10+00:00`.

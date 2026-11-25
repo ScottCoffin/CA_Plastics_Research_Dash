@@ -95,7 +95,7 @@ NAME_FIX = {
     "EH": "Western Sahara",
     "TF": "French Southern Lands",
 }
-# Names for the codes that the 110m map lacks, used when world.json has no name for a code.
+# Names for the codes that the world map lacks, used when world.json has no name for a code.
 FALLBACK_NAMES = {
     "AG": "Antigua and Barbuda",
     "AW": "Aruba",

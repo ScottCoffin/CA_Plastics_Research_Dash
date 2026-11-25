@@ -29,10 +29,91 @@ export function topTopics(entry, n = 3) {
   return (entry?.top_primary_topics || []).slice(0, n);
 }
 
+// ---- places and zoom (AMB-1) -----------------------------------------------------------------
+// Natural Earth I (d3 geoNaturalEarth1), the one projection for every global map. world.json, the
+// raster in explore.json and the places index are all in this frame, so markers and places are
+// projected here with the same polynomial and the same frame as scripts/build_world_map.py.
+// Natural Earth I in radians on the unit sphere (Patterson, 2007), as scripts/build_world_map.py.
+function neRad(lam, phi) {
+  const p2 = phi * phi, p4 = p2 * p2;
+  const x = lam * (0.8707 - 0.131979 * p2 + p4 * (-0.013791 + p4 * (0.003971 * p2 - 0.001529 * p4)));
+  const y = phi * (1.007226 + p2 * (0.015085 + p4 * (-0.044475 + 0.028874 * p2 - 0.005916 * p4)));
+  return [x, y];
+}
+// Frame: x from 0 at longitude -180 to 1000 at +180; y from 0 at latitude 90 down. Same as world.json's viewBox.
+const NE = {XM: neRad(Math.PI, 0)[0], YM: neRad(0, Math.PI / 2)[1], W: 1000};
+NE.SCALE = NE.W / (2 * NE.XM);
+export function frameXY(lon, lat) {
+  const [x, y] = neRad((lon * Math.PI) / 180, (lat * Math.PI) / 180);
+  return [(x + NE.XM) * NE.SCALE, (NE.YM - y) * NE.SCALE];
+}
+// The smallest zoom extent, in kilometres, and the box that holds a [west, south, east, north] box at least that big.
+export const MIN_EXTENT_KM = 300;
+export function minimumBox(bbox, minKm = MIN_EXTENT_KM) {
+  const [w, s, e, n] = bbox;
+  const midLat = (s + n) / 2, kmDegLat = 111.32;
+  const kmDegLon = kmDegLat * Math.max(Math.cos((midLat * Math.PI) / 180), 0.05);
+  const cx = (w + e) / 2, cy = (s + n) / 2;
+  const width = Math.max(e - w, minKm / kmDegLon), height = Math.max(n - s, minKm / kmDegLat);
+  return [cx - width / 2, Math.max(cy - height / 2, -90), cx + width / 2, Math.min(cy + height / 2, 90)];
+}
+// A place's extent in frame units: the projected bounds of its box, sampled along each edge.
+export function frameExtent(bbox) {
+  const [w, s, e, n] = bbox;
+  const pts = [];
+  for (let i = 0; i <= 8; i++) {
+    const f = i / 8;
+    pts.push([w + (e - w) * f, s], [w + (e - w) * f, n], [w, s + (n - s) * f], [e, s + (n - s) * f]);
+  }
+  const xy = pts.map(([lon, lat]) => frameXY(lon, lat));
+  return [Math.min(...xy.map((p) => p[0])), Math.min(...xy.map((p) => p[1])), Math.max(...xy.map((p) => p[0])), Math.max(...xy.map((p) => p[1]))];
+}
+// Entries of places.json (schema places-v1) as objects; the compact arrays are documented in docs/SITE_DATA.md.
+export function placeRows(payload) {
+  if (payload?.schema !== "places-v1" || !Array.isArray(payload.entries)) return [];
+  const aliases = payload.aliases || {};
+  return payload.entries.map(([name, k, p, iso, geom, population]) => ({
+    name, kind: payload.kinds[k], parent: payload.parents[p], iso, geom, population,
+    key: foldName(name), alt: (aliases[iso] || []).map(foldName),
+  }));
+}
+export function foldName(s) {
+  return String(s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+const KIND_RANK = {country: 0, admin1: 1, city: 2};
+// Matches ranked by how well the name matches (exact, then word start, then inside), then kind, then population.
+export function searchPlaces(rows, query, limit = 8) {
+  const q = foldName(query);
+  if (!q) return [];
+  const scored = [];
+  for (const r of rows) {
+    const names = [r.key, ...r.alt];
+    let score = -1;
+    for (const n of names) {
+      if (n === q) { score = 0; break; }
+      if (n.startsWith(q)) score = score < 0 || score > 1 ? 1 : score;
+      else if (n.split(/[\s,.()'-]+/).some((word) => word.startsWith(q))) score = score < 0 || score > 2 ? 2 : score;
+      else if (n.includes(q)) score = score < 0 || score > 3 ? 3 : score;
+    }
+    if (score >= 0) scored.push({r, score});
+  }
+  scored.sort((a, b) => a.score - b.score || KIND_RANK[a.r.kind] - KIND_RANK[b.r.kind] || (b.r.population || 0) - (a.r.population || 0) || a.r.name.localeCompare(b.r.name));
+  return scored.slice(0, limit).map((s) => s.r);
+}
+
 export async function mountExplore(root) {
-  const response = await fetch(globalDataUrl("explore.json"), {cache: "no-cache"});
+  const [response, placesResponse] = await Promise.all([
+    fetch(globalDataUrl("explore.json"), {cache: "no-cache"}),
+    fetch(globalDataUrl("places.json"), {cache: "no-cache"}).catch(() => null),
+  ]);
   if (!response.ok) throw new Error(`explore.json returned HTTP ${response.status}`);
   const D = await response.json();
+  // places.json is optional: without it the search falls back to the countries in explore.json.
+  const PLACES = placesResponse?.ok ? await placesResponse.json().catch(() => null) : null;
+  const PLACE_ROWS = placeRows(PLACES);
+  const PLACE_GEO = Object.fromEntries(PLACE_ROWS.filter((r) => r.kind === "country").map((r) => [r.iso, r.geom]));
+  const PLACE_NAME = Object.fromEntries(PLACE_ROWS.filter((r) => r.kind === "country").map((r) => [r.iso, r.name]));
+  const MARKERS = Array.isArray(PLACES?.markers) ? PLACES.markers : [];
   const G = D.grid, S = D.sample.scopes;
   const fmt = (n) => Number(n).toLocaleString("en-US");
   const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0) + "%";
@@ -70,6 +151,8 @@ export async function mountExplore(root) {
 
   // scope: {kind: "world"} | {kind: "cont", name} | {kind: "country", iso}
   let scope = {kind: "world"}, tab = "countries";
+  // A place picked from search (a region or city) zooms to its box inside its country's scope; null otherwise.
+  let focusGeo = null;
   const scopeKey = (s) => (s.kind === "world" ? "world" : s.kind === "cont" ? "cont:" + s.name : s.iso);
   const parseScope = (k) => (!k || k === "world" ? {kind: "world"} : k.startsWith("cont:") && contOf(k.slice(5)) ? {kind: "cont", name: k.slice(5)} : C[k] && C[k].works ? {kind: "country", iso: k} : {kind: "world"});
   const THE = new Set(["US", "GB", "NL", "AE", "PH", "DO", "CF", "BS", "GM", "MV", "KM", "SB", "SC", "CD", "CG", "CZ"]);
@@ -174,33 +257,46 @@ export async function mountExplore(root) {
     sb.setAttribute("aria-label", `Menu: ${label}, ${scopeName()}. Open views and scope`);
   }
 
-  // ---- find a country (combobox) --------------------------------------------------------
+  // Choosing a place. A country with works scopes the page to it; a region or city scopes to its country and zooms
+  // to its own box; a place with no works in explore.json only zooms the map, and the scope stays the world.
+  function selectPlace(iso, box = null) {
+    if (C[iso]?.works > 0) go({kind: "country", iso}, {focus: box});
+    else go({kind: "world"}, {focus: box || PLACE_GEO[iso] || null});
+  }
+
+  // ---- find a place (combobox): countries, first-level regions and cities ----------------------
+  // A place is offered when its country has works to scope to. Without places.json the list is the countries.
+  const KIND_LABEL = {country: "Country", admin1: "Region", city: "City"};
+  // A place whose country has no works in explore.json still zooms the map (see selectPlace).
+  const SEARCH_ROWS = PLACE_ROWS.length
+    ? PLACE_ROWS
+    : COUNTRIES.map((c) => ({name: c.name, kind: "country", parent: "", iso: c.iso, geom: null, key: foldName(c.name), alt: [], population: c.works}));
   function mountFind(host, id) {
-    host.innerHTML = `${SEARCH}<input type="search" id="${id}" placeholder="Find a country" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="${id}-list" aria-autocomplete="list"><div class="pop" id="${id}-list" role="listbox" hidden></div>`;
+    host.innerHTML = `${SEARCH}<input type="search" id="${id}" placeholder="Find a country or place" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="${id}-list" aria-autocomplete="list"><div class="pop" id="${id}-list" role="listbox" hidden></div>`;
     const input = host.querySelector("input"), list = host.querySelector(".pop");
     let hits = [], active = -1;
+    const sub = (r) => (r.kind === "country" ? C[r.iso]?.continent || "Country" : `${KIND_LABEL[r.kind]}, ${r.parent}`);
     const paint = () => {
       list.innerHTML = hits.length
-        ? hits.map((c, i) => `<div role="option" class="opt" id="${id}-o${i}" data-iso="${c.iso}" aria-selected="${i === active}"><span></span><span>${esc(c.name)}<small>${esc(c.continent)}</small></span><span class="n">${fmt(c.works)}</span></div>`).join("")
-        : `<p class="pop-note" style="border:0">No country matches “${esc(input.value)}”.</p>`;
+        ? hits.map((r, i) => `<div role="option" class="opt" id="${id}-o${i}" data-i="${i}" aria-selected="${i === active}"><span></span><span>${esc(r.name)}<small>${esc(sub(r))}</small></span><span class="n">${r.kind === "country" && C[r.iso] ? fmt(C[r.iso].works) : ""}</span></div>`).join("")
+        : `<p class="pop-note" style="border:0">No place matches “${esc(input.value)}”.</p>`;
       input.setAttribute("aria-activedescendant", active >= 0 ? `${id}-o${active}` : "");
       list.querySelectorAll(".opt").forEach((o, i) => o.style.background = i === active ? "color-mix(in srgb, var(--pv-slate) 10%, var(--pv-paper))" : "");
     };
     const open = (v) => { list.hidden = !v; input.setAttribute("aria-expanded", String(v)); };
     input.addEventListener("input", () => {
-      const q = input.value.trim().toLowerCase();
-      hits = q ? COUNTRIES.filter((c) => c.name.toLowerCase().includes(q) || c.iso.toLowerCase() === q).slice(0, 8) : [];
+      hits = searchPlaces(SEARCH_ROWS, input.value);
       active = hits.length ? 0 : -1;
-      paint(); open(!!q);
+      paint(); open(!!input.value.trim());
     });
     input.addEventListener("keydown", (e) => {
       if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (hits.length) { active = (active + (e.key === "ArrowDown" ? 1 : -1) + hits.length) % hits.length; paint(); } }
-      else if (e.key === "Enter" && hits[active]) { e.preventDefault(); pick(hits[active].iso); }
+      else if (e.key === "Enter" && hits[active]) { e.preventDefault(); pick(hits[active]); }
       else if (e.key === "Escape") { open(false); }
     });
     input.addEventListener("blur", () => setTimeout(() => open(false), 150));
-    list.addEventListener("mousedown", (e) => { const o = e.target.closest("[data-iso]"); if (o) { e.preventDefault(); pick(o.dataset.iso); } });
-    const pick = (iso) => { input.value = ""; open(false); closeDrawer(false); go({kind: "country", iso}); };
+    list.addEventListener("mousedown", (e) => { const o = e.target.closest("[data-i]"); if (o) { e.preventDefault(); pick(hits[+o.dataset.i]); } });
+    const pick = (r) => { input.value = ""; open(false); closeDrawer(false); selectPlace(r.iso, r.kind === "country" ? null : r.geom); };
   }
 
   // ---- mobile drawer ---------------------------------------------------------------------
@@ -302,13 +398,29 @@ export async function mountExplore(root) {
   }
   let vb = FULL.slice(), vbAspect = ASPECT, mapEl = null, tween = 0;
 
+  // Small countries: one dot each at its centroid, focusable and clickable when the country has works.
+  function markerSvg() {
+    return MARKERS.map(([iso, lon, lat]) => {
+      const c = C[iso], name = c?.name || PLACE_NAME[iso] || iso, on = c?.works > 0;
+      const [x, y] = frameXY(lon, lat);
+      const at = `cx="${x.toFixed(1)}" cy="${y.toFixed(1)}"`;
+      const works = on ? `${fmt(c.works)} works` : "no works counted";
+      return `<g class="sm${on ? "" : " none"}" data-iso="${iso}" tabindex="0" role="button" aria-label="${esc(name)}, ${works}. Select to zoom the map to it."><circle class="sm-hit" ${at} r="8"/><circle class="sm-dot" ${at} r="3"/></g>`;
+    }).join("");
+  }
+  // Dots and hit areas keep a constant size on screen: their radius follows the viewBox width.
+  function sizeMarkers() {
+    const k = vb[2];
+    mapEl?.querySelectorAll(".sm-dot").forEach((d) => d.setAttribute("r", (k * 0.005).toFixed(3)));
+    mapEl?.querySelectorAll(".sm-hit").forEach((d) => d.setAttribute("r", (k * 0.014).toFixed(3)));
+  }
   function mapHTML() {
     const paths = D.countries.filter((c) => c.runs.length).map((c) => `<path class="c ${step(c.works)}" data-iso="${c.iso}" d="${cellD(runsCells(c.runs))}"/>`).join("");
     const body = `${paths}<path class="ca" d="${cellD(caCells)}"/><path class="no" d="${cellOutline(runsCells(C.NO.runs))}"/>`;
     // Each pane repeats the country paths in its own svg; the viewBox clips it to its part of the raster.
     const pane = ([label, [x, y, w, h]]) => `<figure class="mp"><figcaption class="mcap">${label}</figcaption><div class="mp-box" style="aspect-ratio:${w} / ${h}"><svg class="map" viewBox="${x} ${y} ${w} ${h}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${label}: plastics works by country.">${body}</svg></div></figure>`;
     return `<div class="mapcard"><div class="map-tools" id="map-tools"></div><div class="mapbox" id="mapbox" style="--ga-ar:${G.w} / ${(H + BAND).toFixed(1)}">
-    <svg class="map" id="map" viewBox="${vb.join(" ")}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="World map of plastics works by country. Every country is also listed in the table below.">${body}</svg>
+    <svg class="map" id="map" viewBox="${vb.join(" ")}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="World map of plastics works by country. Every country is also listed in the table below. Small countries are buttons.">${body}${markerSvg()}<rect class="extent" id="extent" x="0" y="0" width="0" height="0" style="display:none"/></svg>
     <div class="panes" id="panes">${PAIR.map(pane).join("")}</div>
     <svg class="leaders" id="leaders" aria-hidden="true"></svg>
     <a class="callout live" id="co-ca" href="${ATLAS.US.href}"><b><i class="sw live"></i>California</b><small>live atlas · <span class="m">${fmt(D.california.works)}</span> works</small><span class="go">Open atlas ${ARROW}</span></a>
@@ -331,19 +443,29 @@ export async function mountExplore(root) {
     };
     box.querySelectorAll("svg.map").forEach((svg) => {
       svg.addEventListener("pointermove", (e) => {
-        const p = e.target.closest?.(".c");
-        hover(p ? p.dataset.iso : null);
+        const p = e.target.closest?.(".c, .sm");
+        hover(p && p.classList.contains("c") ? p.dataset.iso : null);
         if (!p) { tip.hidden = true; return; }
-        const c = C[p.dataset.iso], r = box.getBoundingClientRect();
-        tip.innerHTML = `${esc(c.name)}<br><span class="m">${c.works ? fmt(c.works) + " works · " + pct(c.recent5, c.works) + " last 5 y" : "no works counted"}</span>`;
+        const iso = p.dataset.iso, c = C[iso], r = box.getBoundingClientRect();
+        tip.innerHTML = `${esc(c?.name || PLACE_NAME[iso] || iso)}<br><span class="m">${c?.works ? fmt(c.works) + " works · " + pct(c.recent5, c.works) + " last 5 y" : "no works counted"}</span>`;
         tip.hidden = false;
         const x = e.clientX - r.left, y = e.clientY - r.top;
         tip.style.left = Math.min(x + 14, r.width - tip.offsetWidth - 6) + "px";
         tip.style.top = Math.max(y - tip.offsetHeight - 12, 6) + "px";
       });
       svg.addEventListener("pointerleave", () => { hover(null); tip.hidden = true; });
-      svg.addEventListener("click", (e) => { const p = e.target.closest?.(".c"); if (p && C[p.dataset.iso].works) go({kind: "country", iso: p.dataset.iso}); });
+      svg.addEventListener("click", (e) => {
+        const p = e.target.closest?.(".c");
+        if (p) { if (C[p.dataset.iso].works) go({kind: "country", iso: p.dataset.iso}); return; }
+        const m = e.target.closest?.(".sm");
+        if (m) selectPlace(m.dataset.iso, PLACE_GEO[m.dataset.iso] || null);
+      });
+      svg.addEventListener("keydown", (e) => {
+        const m = e.target.closest?.(".sm");
+        if (m && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); selectPlace(m.dataset.iso, PLACE_GEO[m.dataset.iso] || null); }
+      });
     });
+    sizeMarkers();
     paintMapScope(false);
   }
   const CONT_BOX = {"Europe": [76, 2, 114, 26], "Asia": [108, 2, 176, 46], "North America": [22, 0, 78, 40], "South America": [44, 34, 78, 72], "Africa": [80, 12, 120, 68], "Oceania": [138, 38, 184, 72]};
@@ -367,9 +489,27 @@ export async function mountExplore(root) {
     const y = aspect === ASPECT ? Math.max(Math.min(cy - h / 2, FULL[1] + FULL[3] - h), FULL[1]) : cy - h / 2;
     return [x, y, w, h];
   }
+  // A place's geometry is a [west, south, east, north] box or a [lon, lat] point. Its zoom box is the minimum
+  // box (about 300 km) projected into the frame, with the usual padding and at least 120 units wide.
+  const boxOf = (g) => (g.length === 4 ? g : [g[0], g[1], g[0], g[1]]);
+  const placeExtent = (g) => frameExtent(minimumBox(boxOf(g)));
+  function geoFrame(g, aspect) {
+    const [x0, y0, x1, y1] = placeExtent(g);
+    const w = Math.max((x1 - x0) * 1.3, 120);
+    return frameOf((x0 + x1) / 2, (y0 + y1) / 2, w, w / aspect, aspect);
+  }
+  // The dashed outline of a zoomed place that has no raster cells (its minimum box), or null.
+  function extentBox() {
+    if (focusGeo) return placeExtent(focusGeo);
+    if (scope.kind === "country" && !C[scope.iso].runs.length && PLACE_GEO[scope.iso]) return placeExtent(PLACE_GEO[scope.iso]);
+    return null;
+  }
   function targetBox(aspect = ASPECT) {
+    if (focusGeo) return geoFrame(focusGeo, aspect);
     if (scope.kind === "world") return worldFrame(aspect);
+    if (scope.kind === "country" && !C[scope.iso].runs.length && PLACE_GEO[scope.iso]) return geoFrame(PLACE_GEO[scope.iso], aspect);
     const cells = scope.kind === "cont" ? null : runsCells(C[scope.iso].runs);
+
     if (cells && !cells.length) return worldFrame(aspect);
     const [c0, r0, c1, r1] = cells ? bboxCells(mainCells(cells, scope.iso)) : CONT_BOX[scope.name];
     const pad = cells ? 1.3 : 1.08;
@@ -382,7 +522,12 @@ export async function mountExplore(root) {
     const inScope = scope.kind === "world" ? null : new Set(scope.kind === "cont" ? contOf(scope.name).list.map((c) => c.iso) : [scope.iso]);
     const box = $("#mapbox");
     box.querySelectorAll("svg.map").forEach((s) => s.classList.toggle("scoped", !!inScope));
-    box.querySelectorAll(".c").forEach((p) => p.classList.toggle("out", !!inScope && !inScope.has(p.dataset.iso)));
+    box.querySelectorAll(".c, .sm").forEach((p) => p.classList.toggle("out", !!inScope && !inScope.has(p.dataset.iso)));
+    const ex = box.querySelector("#extent"), ext = extentBox();
+    if (ex) {
+      ex.style.display = ext ? "" : "none";
+      if (ext) { ex.setAttribute("x", ext[0]); ex.setAttribute("y", ext[1]); ex.setAttribute("width", ext[2] - ext[0]); ex.setAttribute("height", ext[3] - ext[1]); }
+    }
     const mode = layoutMap();
     const tools = $("#map-tools");
     tools.innerHTML = scope.kind === "world" ? "" : `<button type="button" class="btn" id="map-up">${scope.kind === "country" ? "Back to " + esc(C[scope.iso].continent) : "Whole world"}</button>`;
@@ -393,13 +538,14 @@ export async function mountExplore(root) {
     const aspect = mode === "portrait" ? PORTRAIT : ASPECT;
     const to = targetBox(aspect), from = vbAspect === aspect ? vb.slice() : worldFrame(aspect);
     vbAspect = aspect;
-    if (!animate || reduced.matches) { vb = to.slice(); mapEl.setAttribute("viewBox", vb.join(" ")); placeCallouts(); return; }
+    if (!animate || reduced.matches) { vb = to.slice(); mapEl.setAttribute("viewBox", vb.join(" ")); sizeMarkers(); placeCallouts(); return; }
     hideCallouts();
     const t0 = performance.now(), dur = 450, ease = (t) => 1 - Math.pow(1 - t, 3);
     const frame = (now) => {
       const t = Math.min((now - t0) / dur, 1), k = ease(t);
       vb = from.map((v, i) => v + (to[i] - v) * k);
       mapEl.setAttribute("viewBox", vb.join(" "));
+      sizeMarkers();
       if (t < 1) tween = requestAnimationFrame(frame); else placeCallouts();
     };
     tween = requestAnimationFrame(frame);
@@ -460,7 +606,7 @@ export async function mountExplore(root) {
 
   function countriesPanel(el) {
     const country = scope.kind === "country";
-    el.innerHTML = `<div class="sec">${mapHTML()}<p class="src">${SRC} A work counts once for every country among its authors, so country totals overlap.</p></div>
+    el.innerHTML = `<div class="sec">${mapHTML()}<p class="src">${SRC} A work counts once for every country among its authors, so country totals overlap.${PLACE_ROWS.length ? " Place names: GeoNames (CC BY 4.0) and Natural Earth." : ""}</p></div>
     <div class="sec" id="below"></div>`;
     wireMap();
     if (country) overview($("#below")); else countryTable($("#below"));
@@ -744,9 +890,10 @@ export async function mountExplore(root) {
     const h = `#scope=${encodeURIComponent(scopeKey(scope))}${tab !== "countries" ? "&view=" + tab : ""}`;
     if (location.hash !== h) history.replaceState(null, "", h);
   }
-  function go(next, {push = true} = {}) {
+  function go(next, {push = true, focus = null} = {}) {
     const prev = scope;
     scope = next;
+    focusGeo = focus;
     if (scope.kind !== "country") tableState.q = "";
     if (push) history.pushState(null, "", `#scope=${encodeURIComponent(scopeKey(scope))}${tab !== "countries" ? "&view=" + tab : ""}`);
     renderLadder(); renderHead();
@@ -763,6 +910,7 @@ export async function mountExplore(root) {
   function readHash() {
     const p = new URLSearchParams(location.hash.slice(1));
     scope = parseScope(p.get("scope"));
+    focusGeo = null;
     tab = TABS.some((t) => t[0] === p.get("view")) ? p.get("view") : "countries";
   }
   addEventListener("popstate", () => { if (!attached()) return; readHash(); renderAll(); });

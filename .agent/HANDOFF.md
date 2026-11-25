@@ -27,6 +27,8 @@ partition with institution-registry join), UX-13 part a (Monitoring filters in t
 - `network_metrics.json` goes stale when `index.json` changes; a full rebuild takes about 17 minutes (R=100).
 - The Evidence page filter list has one axe colour-contrast hit (`.ev-zero > .ev-option-name`), pre-existing.
 
+- The global landing page (`framework/src/index.md`) has no h1: `scripts/check_plat2.py` fails axe page-has-heading-one on the live site too (pre-existing, 2026-11-25).
+
 ## Owner actions (one line each)
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).
 - H40: taxonomy decisions D1-D10 in `docs/TAXONOMY_PROPOSAL.md`.

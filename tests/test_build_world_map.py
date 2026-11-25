@@ -8,6 +8,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import math
 import shutil
 import urllib.request
 from pathlib import Path
@@ -41,11 +42,14 @@ def _no_network(*args: Any, **kwargs: Any) -> None:
     raise AssertionError("the test must not touch the network")
 
 
-def test_equal_earth_origin_and_extent() -> None:
-    assert bwm.equal_earth(0, 0) == pytest.approx((0.0, 0.0), abs=1e-12)
-    # The published extent is rounded to four decimals, so allow 1e-3 units.
-    assert bwm.equal_earth(180, 0)[0] == pytest.approx(bwm.EE_XM, abs=1e-3)
-    assert bwm.equal_earth(0, 90)[1] == pytest.approx(bwm.EE_YM, abs=1e-3)
+def test_natural_earth_origin_and_extent() -> None:
+    assert bwm.natural_earth(0, 0) == pytest.approx((0.0, 0.0), abs=1e-12)
+    # On the equator x is linear in longitude with the published 0.8707 factor.
+    assert bwm.natural_earth(90, 0)[0] == pytest.approx(0.8707 * math.pi / 2, abs=1e-9)
+    assert bwm.natural_earth(180, 0)[0] == pytest.approx(bwm.NE_XM, abs=1e-12)
+    assert bwm.natural_earth(0, 90)[1] == pytest.approx(bwm.NE_YM, abs=1e-12)
+    # Natural Earth I, not Equal Earth: the pole sits at about 1.4224 and the polynomial is d3's.
+    assert bwm.NE_YM == pytest.approx(1.4224, abs=1e-4)
 
 
 def test_projection_centre_and_edges() -> None:
@@ -54,10 +58,10 @@ def test_projection_centre_and_edges() -> None:
     assert bwm.to_pixels(0, 90)[1] == pytest.approx(0.0, abs=0.5)
 
 
-def test_viewbox_matches_prototype() -> None:
-    # .impeccable/sketches/src/geo/world.json uses w=1000.0 and h=486.7.
+def test_viewbox_is_natural_earth_aspect() -> None:
+    # Natural Earth I is about 1.92:1 (w:h); the Equal Earth prototype viewBox was 1000 x 486.7.
     assert bwm.WIDTH == 1000.0
-    assert bwm.HEIGHT == 486.7
+    assert bwm.HEIGHT == 520.0
 
 
 def test_decode_arcs_undoes_quantization() -> None:
@@ -129,6 +133,7 @@ def test_build_payload_from_fixture_keeps_expected_countries(topology: dict[str,
         "countries",
         "ca",
         "ca_bbox",
+        "small",
         "source",
         "licence",
     }
@@ -155,6 +160,9 @@ def test_iso_table_is_well_formed() -> None:
     assert table["250"] == "FR"
     assert table["840"] == "US"
     assert table["578"] == "NO"
+    assert table["585"] == "PW"
+    assert table["520"] == "NR"
+    assert table["798"] == "TV"
     assert "010" not in table  # Antarctica is dropped, not mapped
 
 
@@ -169,7 +177,7 @@ def test_read_source_offline_never_downloads(
 
 
 def test_read_source_rejects_a_cached_file_that_fails_its_pin(tmp_path: Path) -> None:
-    path = tmp_path / "countries-110m.json"
+    path = tmp_path / bwm.COUNTRIES_FILE.name
     path.write_bytes(FIXTURE.read_bytes())
     with pytest.raises(bwm.WorldMapError, match="does not match the pinned"):
         bwm.read_source(bwm.COUNTRIES_URL, path, bwm.COUNTRIES_SHA256, offline=True)
@@ -224,3 +232,64 @@ def test_main_offline_without_cache_fails_without_writing(
     argv = ["--offline", "--raw-dir", str(tmp_path / "empty"), "--output", str(out)]
     assert bwm.main(argv) == 1
     assert not out.exists()
+
+
+def _square_topology(country_id: str, lon0: float, lat0: float, size: float) -> dict[str, Any]:
+    """A one-geometry topology with an unquantized square ring of the given size in degrees."""
+
+    ring = [[lon0, lat0], [lon0 + size, lat0], [lon0 + size, lat0 + size], [lon0, lat0]]
+    return {
+        "arcs": [ring],
+        "objects": {
+            "countries": {
+                "geometries": [{"type": "Polygon", "id": country_id, "arcs": [[0]]}],
+            }
+        },
+    }
+
+
+def test_small_markers_mark_only_countries_under_the_area_threshold() -> None:
+    # 0.05 degrees of longitude and latitude is a few square kilometres: far under 4 px^2.
+    # Tuvalu is always added from MANUAL_MARKERS, so these tests ignore it.
+    tiny = _square_topology("585", 134.5, 7.4, 0.05)
+    assert [m["iso"] for m in bwm.small_markers(tiny) if m["iso"] != "TV"] == ["PW"]
+    # A 20 degree square (France-sized) covers many square pixels and gets no marker.
+    big = _square_topology("250", 0.0, 40.0, 20.0)
+    assert [m["iso"] for m in bwm.small_markers(big) if m["iso"] != "TV"] == []
+
+
+def test_small_markers_pool_geometries_of_one_country() -> None:
+    # world-atlas splits some countries into a main geometry and a separate islet. The islet is
+    # tiny, the main body is large: the country gets no marker.
+    topology = _square_topology("036", 110.0, -40.0, 30.0)
+    islet = [[120.0, -12.0], [120.05, -12.0], [120.05, -11.95], [120.0, -12.0]]
+    topology["arcs"].append(islet)
+    topology["objects"]["countries"]["geometries"].append(
+        {"type": "Polygon", "id": "036", "arcs": [[1]]}
+    )
+    assert [m["iso"] for m in bwm.small_markers(topology) if m["iso"] != "TV"] == []
+
+
+def test_small_markers_place_tuvalu_from_the_manual_table() -> None:
+    # Tuvalu is absent from world-atlas countries-50m, so its marker comes from MANUAL_MARKERS.
+    markers = bwm.small_markers({"arcs": [], "objects": {"countries": {"geometries": []}}})
+    assert [m["iso"] for m in markers] == ["TV"]
+    assert markers[0]["lon"] == pytest.approx(179.2)
+
+
+def test_committed_world_json_is_natural_earth_at_50m_with_small_islands() -> None:
+    world = json.loads(
+        (ROOT / "site" / "assets" / "world" / "world.json").read_text(encoding="utf-8")
+    )
+    assert "Natural Earth I" in world["source"]
+    assert "countries-50m" in world["source"]
+    assert world["h"] == 520.0
+    markers = {m["iso"] for m in world["small"]}
+    outlined = {c["iso_a2"] for c in world["countries"]}
+    required = "PW NR TV MH FM KI MV SC MT SG LI MC SM AD VA".split()
+    for iso in required:
+        assert iso in markers, iso
+    # Palau has an outline; the tiny islands are at least marked.
+    assert "PW" in outlined
+    assert all(set(m) == {"iso", "x", "y", "lon", "lat"} for m in world["small"])
+    assert (ROOT / "site" / "assets" / "world" / "world.json").stat().st_size < 1_500_000

@@ -189,7 +189,7 @@ Crack edges must be clean: cut shard masks at 2 px or finer, never on the 4 px s
 
 ### 4.8 World map and California (beats 12–13)
 
-- **World map:** an Equal Earth pixel raster of Natural Earth admin-0, with antimeridian unwrapping and a sphere clip. Country shading uses `global_counts.json` (PLAT-2a) in four steps (wash, mint, slate-2, slate); California is coral.
+- **World map:** a Natural Earth I pixel raster of Natural Earth admin-0 (1:50m, the owner's shared global projection), with antimeridian unwrapping and a sphere clip. Country shading uses `global_counts.json` (PLAT-2a) in four steps (wash, mint, slate-2, slate); California is coral.
 - **California raster:** at local scale, from the California outline.
 
 ### 4.9 Ambassador placeholder (PLAT-2c)
@@ -273,7 +273,7 @@ Budgets:
 |---|---|---|
 | Works per year (chart) | `site/data/global/trend_global.json` | exists (daily) |
 | Country counts (map shading) | `site/data/global/global_counts.json` (OpenAlex `group_by=authorships.countries`; total, by year, new this week) | PLAT-2a |
-| World and California rasters | `scripts/build_world_map.py` from Natural Earth 110m admin-0 (public domain) to `site/assets/world/` | PLAT-2a; method as in `.impeccable/sketches/src/build_geo.py` and `story.py` |
+| World and California rasters | `scripts/build_world_map.py` from Natural Earth 1:50m admin-0 (public domain), Natural Earth I projection to `site/assets/world/` | PLAT-2a; method as in `.impeccable/sketches/src/build_geo.py` and `story.py` |
 | Evidence grid counts | 30 OpenAlex count queries a day (5 × 6 cells), about USD 0.03 a day, never paid filters | PLAT-2b, gated on owner cell definitions |
 | Network | illustrative | labelled |
 | Paper first pages | Zotero PDFs, CC BY only | done (`credits.json`) |
