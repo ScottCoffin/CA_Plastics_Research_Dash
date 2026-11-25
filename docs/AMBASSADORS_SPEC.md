@@ -219,3 +219,36 @@ and one-click unsubscribe for non-essential mail; sign-in links are the only mai
    tasks are open with the time estimate ("about 12 minutes"), the region's progress, and a link straight to the
    next task. No reminder when nothing is open; reminders pause after three unanswered ones until the ambassador
    returns.
+
+## 11. Owner round 4 (2026-11-25): badge, consistent region choice, ORCID, workspace map, monitoring data
+
+**Badge.** A real badge, not a text chip: a vector seal (a rosette or shield shape from an open icon set such as
+Lucide, ISC licence, credited) carrying the Plastiverse Live sun mark and the words "Ambassador" and the region,
+in brand colours (coral, butter, ink), legible at 16 px inline and 64 px on profiles; an accessible name
+("Plastiverse Live ambassador for Norway"). Stored as one SVG component, so every page draws the same badge.
+A raster variant made with Codex image generation is optional (Codex is not installed on the current machine).
+
+**One way to choose a place.** Every place choice (eligibility check, sign-in, proposals) uses the same control as
+the landing page: the place search with type-ahead and a map, pre-filled with the place chosen earlier. No radio
+buttons or bare drop-downs for regions. The eligibility checker puts the place field and the institution field on
+one aligned row (same height and baseline) on desktop, stacked on phones.
+
+**ORCID.** "Connect your ORCID" uses ORCID's own sign-in (ORCID OAuth, `/authenticate` scope, so the iD is proven,
+not typed). The Atlas then cross-references the iD against its author records (the ORCID on OpenAlex authors and
+`curation/orcid_author_ids.csv`): an exact match links the author record automatically and the badge appears without
+moderation; no match leaves the manual author search as fallback. ORCID needs a free public API client registered by
+the owner (redirect URI on the Worker).
+
+**Workspace map.** The ambassador's workspace opens with a map zoomed to their region (the same map component),
+showing the region outline, eligible institutions as points, and open tasks by place where tasks have one.
+
+**Share monitoring data.** A flow for sharing a monitoring dataset as an individual or on behalf of a group or
+organisation: who shares (person, or organisation with the sharer's role and a confirmation that they may share
+it), dataset description (name, sampling period, place on the map, matrices such as water, sediment, biota, air,
+size range, methods, QA notes), access (public link, DOI or repository; or a file upload stored privately until
+reviewed), licence (CC0, CC BY 4.0, ODC-BY, other, not sure) and permission for the Atlas to publish summaries or rows
+under that licence. Datasets enter the same moderation queue and follow the monitoring licence rules
+(`config/monitoring_publication.yml`): nothing is published until its licence is cleared.
+
+**Proposal map size.** The propose-a-region map is the page's main element: full content width and at least 60% of
+the viewport height on desktop, with the unit list and summary beside it on very wide screens or below it otherwise.

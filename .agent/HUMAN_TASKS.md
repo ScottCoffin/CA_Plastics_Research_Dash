@@ -34,12 +34,15 @@ Last updated: 2026-11-18.
    (anything you skip keeps the agent's default).
 - **Done when:** you reply. The agent builds the real pages and the sign-in backend after that (the backend also needs H44).
 
-### H46. Check the world map on your phone (2 minutes, after the next deploy)
-1. On your phone, open https://plastiverse.live/explore and scroll down past the map with one finger:
-   the page should scroll, and a short hint "Use two fingers to move the map" may appear.
-2. Use two fingers on the map to move and pinch-zoom it; tap "Find a country", type Palau and pick it: the map
-   should zoom to Palau.
-- **Done when:** reply "phone map OK" or describe what went wrong (phone model and browser).
+### H47. Register an ORCID public API client (AMB-1 "Connect your ORCID"; not urgent, 10 minutes, with H44)
+1. Sign in to https://orcid.org with your own ORCID account, open the account menu -> Developer tools, and register
+   for the free Public API.
+2. Application name: Plastiverse Live. Website: https://plastiverse.live. Description: "Ambassadors connect their
+   ORCID iD so we can link their author record."
+3. Redirect URI: the agent will give you the exact Worker URL when the backend exists; until then use
+   https://plastiverse.live/ambassadors/ (you can edit it later).
+4. Put the Client ID and Client secret in the ignored `.env`: `ORCID_CLIENT_ID=...` and `ORCID_CLIENT_SECRET=...`.
+- **Done when:** tell the agent "ORCID client ready".
 
 ### H44. Prepare the ambassador sign-in services (AMB-1; not urgent, needed before the backend step, about 30 minutes)
 The ambassador sign-in needs two free accounts you own. The agent writes and tests all code locally first.
@@ -258,6 +261,8 @@ leak-check works wait for S5.7.
 ---
 
 ## Done
+
+- H46 (2026-11-25): owner checked /explore on a phone: one-finger page scroll and two-finger map gestures work.
 
 - H40 (2026-11-25): owner approved all ten taxonomy defaults (D1-D10); the agent applies them in BQ-S5-APPLY.
 
