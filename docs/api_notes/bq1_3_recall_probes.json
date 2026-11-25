@@ -1,0 +1,440 @@
+{
+ "schema_version": "bq13-v1",
+ "probe_label": "PROBE",
+ "note": "PROBE, not a recall estimate. No gold set exists yet; the shares say what the v3.1 query returns for these sets, not how many relevant works it finds.",
+ "generated_at": "2026-11-25T10:41:39+00:00",
+ "query_version": "plastic-v3.1",
+ "query_fingerprint_sha256": "367355c570ef3a99e8a24cbcae7b146efbbe8e2b85b0703269578c9882e0d4ce",
+ "cost": {
+  "calls": 4,
+  "credits": 31.0,
+  "usd_estimate": 0.0031,
+  "credit_cap": 300.0,
+  "calls_detail": [
+   {
+    "label": "anchor_probe_1",
+    "credits": 10.0,
+    "fetched_at": "2026-11-25T10:41:36+00:00",
+    "url_sha256": "f080572453c47f01f1f7aa4861999d36466bbcc0da39d8051026d78921246eef"
+   },
+   {
+    "label": "t10753_count",
+    "credits": 1.0,
+    "fetched_at": "2026-11-25T10:41:37+00:00",
+    "url_sha256": "f42a5d730dbde525f2622672638c54ac89a79a6f7f939341d8d807fd396f3d40"
+   },
+   {
+    "label": "v31_and_t10753_count",
+    "credits": 10.0,
+    "fetched_at": "2026-11-25T10:41:39+00:00",
+    "url_sha256": "887af29e0caa5d3bfab1bdeb69ce6c5aab006595f0f07eb1412eac5cc1a9e2c8"
+   },
+   {
+    "label": "v31_count",
+    "credits": 10.0,
+    "fetched_at": "2026-11-25T10:41:37+00:00",
+    "url_sha256": "36e9ab52a4068bc6662e936900cb813a09938f24da57e096885602fe9b085a33"
+   }
+  ]
+ },
+ "language_probe": {
+  "source": "site/data/language_probe.json",
+  "method": "Share of the fixed-seed sample of each term set also retrieved by v3.1; Wilson 95%; no network calls; term sets are not pooled.",
+  "term_sets": [
+   {
+    "label": "zh-microplastic",
+    "k": 28,
+    "n": 50,
+    "share": 0.56,
+    "wilson95_low": 0.4231,
+    "wilson95_high": 0.6884,
+    "languages": [
+     "zh"
+    ],
+    "openalex_count": 127
+   },
+   {
+    "label": "zh-nanoplastic",
+    "k": 10,
+    "n": 23,
+    "share": 0.4348,
+    "wilson95_low": 0.2563,
+    "wilson95_high": 0.6319,
+    "languages": [
+     "zh"
+    ],
+    "openalex_count": 23
+   },
+   {
+    "label": "zh-plastic-pollution",
+    "k": 21,
+    "n": 50,
+    "share": 0.42,
+    "wilson95_low": 0.2938,
+    "wilson95_high": 0.5577,
+    "languages": [
+     "zh"
+    ],
+    "openalex_count": 56
+   },
+   {
+    "label": "ja-microplastic",
+    "k": 14,
+    "n": 50,
+    "share": 0.28,
+    "wilson95_low": 0.1747,
+    "wilson95_high": 0.4167,
+    "languages": [
+     "ja"
+    ],
+    "openalex_count": 332
+   },
+   {
+    "label": "ja-nanoplastic",
+    "k": 5,
+    "n": 9,
+    "share": 0.5556,
+    "wilson95_low": 0.2667,
+    "wilson95_high": 0.8112,
+    "languages": [
+     "ja"
+    ],
+    "openalex_count": 9
+   },
+   {
+    "label": "ko-fine-plastic",
+    "k": 21,
+    "n": 50,
+    "share": 0.42,
+    "wilson95_low": 0.2938,
+    "wilson95_high": 0.5577,
+    "languages": [
+     "ko"
+    ],
+    "openalex_count": 124
+   },
+   {
+    "label": "ko-microplastic",
+    "k": 2,
+    "n": 5,
+    "share": 0.4,
+    "wilson95_low": 0.1176,
+    "wilson95_high": 0.7693,
+    "languages": [
+     "ko"
+    ],
+    "openalex_count": 5
+   },
+   {
+    "label": "de-microplastic",
+    "k": 16,
+    "n": 50,
+    "share": 0.32,
+    "wilson95_low": 0.2076,
+    "wilson95_high": 0.4581,
+    "languages": [
+     "de"
+    ],
+    "openalex_count": 1668
+   },
+   {
+    "label": "de-nanoplastic",
+    "k": 12,
+    "n": 50,
+    "share": 0.24,
+    "wilson95_low": 0.143,
+    "wilson95_high": 0.3741,
+    "languages": [
+     "de"
+    ],
+    "openalex_count": 62
+   },
+   {
+    "label": "de-plastic-waste-pollution",
+    "k": 4,
+    "n": 50,
+    "share": 0.08,
+    "wilson95_low": 0.0315,
+    "wilson95_high": 0.1884,
+    "languages": [
+     "de"
+    ],
+    "openalex_count": 274
+   },
+   {
+    "label": "es-pt-microplastic",
+    "k": 14,
+    "n": 50,
+    "share": 0.28,
+    "wilson95_low": 0.1747,
+    "wilson95_high": 0.4167,
+    "languages": [
+     "es",
+     "pt"
+    ],
+    "openalex_count": 1816
+   },
+   {
+    "label": "es-marine-litter-pollution",
+    "k": 6,
+    "n": 50,
+    "share": 0.12,
+    "wilson95_low": 0.0562,
+    "wilson95_high": 0.238,
+    "languages": [
+     "es"
+    ],
+    "openalex_count": 1787
+   },
+   {
+    "label": "fr-microplastic",
+    "k": 3,
+    "n": 50,
+    "share": 0.06,
+    "wilson95_low": 0.0206,
+    "wilson95_high": 0.1622,
+    "languages": [
+     "fr"
+    ],
+    "openalex_count": 518
+   },
+   {
+    "label": "fr-plastic-waste-pollution",
+    "k": 3,
+    "n": 50,
+    "share": 0.06,
+    "wilson95_low": 0.0206,
+    "wilson95_high": 0.1622,
+    "languages": [
+     "fr"
+    ],
+    "openalex_count": 643
+   },
+   {
+    "label": "ru-microplastic",
+    "k": 18,
+    "n": 50,
+    "share": 0.36,
+    "wilson95_low": 0.2414,
+    "wilson95_high": 0.4986,
+    "languages": [
+     "ru"
+    ],
+    "openalex_count": 55
+   },
+   {
+    "label": "no-da-plastic-pollution",
+    "k": 9,
+    "n": 50,
+    "share": 0.18,
+    "wilson95_low": 0.0977,
+    "wilson95_high": 0.308,
+    "languages": [
+     "no",
+     "da"
+    ],
+    "openalex_count": 123
+   }
+  ]
+ },
+ "anchor_overlap": {
+  "source": "tests/fixtures/theme_anchors.json (BQ-S6)",
+  "method": "One OpenAlex request filters the anchors by ID and applies the v3.1 search and type exclusions; Wilson 95%.",
+  "lens_basis": "Lens groups are a default assumption: each theme is assigned to an A3 section 4.3 stratum (see docs/BQ_1_3_RECALL_PROBES.md).",
+  "overall": {
+   "label": "all anchors",
+   "k": 37,
+   "n": 42,
+   "share": 0.881,
+   "wilson95_low": 0.75,
+   "wilson95_high": 0.9481,
+   "misses": [
+    "10.1038/s41893-025-01672-z",
+    "10.1016/j.jhazmat.2017.10.014",
+    "10.1016/j.cogsc.2021.100513",
+    "10.1007/978-3-031-51358-9_1",
+    "10.1017/plc.2025.10005"
+   ]
+  },
+  "per_theme": [
+   {
+    "label": "waste_recycling",
+    "k": 6,
+    "n": 6,
+    "share": 1.0,
+    "wilson95_low": 0.6097,
+    "wilson95_high": 1.0,
+    "misses": []
+   },
+   {
+    "label": "policy",
+    "k": 5,
+    "n": 5,
+    "share": 1.0,
+    "wilson95_low": 0.5655,
+    "wilson95_high": 1.0,
+    "misses": []
+   },
+   {
+    "label": "behaviour",
+    "k": 3,
+    "n": 3,
+    "share": 1.0,
+    "wilson95_low": 0.4385,
+    "wilson95_high": 1.0,
+    "misses": []
+   },
+   {
+    "label": "lca_bioplastics",
+    "k": 3,
+    "n": 3,
+    "share": 1.0,
+    "wilson95_low": 0.4385,
+    "wilson95_high": 1.0,
+    "misses": []
+   },
+   {
+    "label": "litter",
+    "k": 2,
+    "n": 2,
+    "share": 1.0,
+    "wilson95_low": 0.3424,
+    "wilson95_high": 1.0,
+    "misses": []
+   },
+   {
+    "label": "ssbd",
+    "k": 0,
+    "n": 1,
+    "share": 0.0,
+    "wilson95_low": 0.0,
+    "wilson95_high": 0.7935,
+    "misses": [
+     "10.1038/s41893-025-01672-z"
+    ]
+   },
+   {
+    "label": "chemicals",
+    "k": 0,
+    "n": 2,
+    "share": 0.0,
+    "wilson95_low": 0.0,
+    "wilson95_high": 0.6576,
+    "misses": [
+     "10.1016/j.jhazmat.2017.10.014",
+     "10.1016/j.cogsc.2021.100513"
+    ]
+   },
+   {
+    "label": "waste_colonialism_justice",
+    "k": 4,
+    "n": 6,
+    "share": 0.6667,
+    "wilson95_low": 0.3,
+    "wilson95_high": 0.9032,
+    "misses": [
+     "10.1007/978-3-031-51358-9_1",
+     "10.1017/plc.2025.10005"
+    ]
+   },
+   {
+    "label": "labour_critique",
+    "k": 4,
+    "n": 4,
+    "share": 1.0,
+    "wilson95_low": 0.5101,
+    "wilson95_high": 1.0,
+    "misses": []
+   },
+   {
+    "label": "book",
+    "k": 1,
+    "n": 1,
+    "share": 1.0,
+    "wilson95_low": 0.2065,
+    "wilson95_high": 1.0,
+    "misses": []
+   },
+   {
+    "label": "pollution_exposure_health",
+    "k": 4,
+    "n": 4,
+    "share": 1.0,
+    "wilson95_low": 0.5101,
+    "wilson95_high": 1.0,
+    "misses": []
+   },
+   {
+    "label": "reviews_2025_2026",
+    "k": 5,
+    "n": 5,
+    "share": 1.0,
+    "wilson95_low": 0.5655,
+    "wilson95_high": 1.0,
+    "misses": []
+   }
+  ],
+  "per_lens_group": [
+   {
+    "label": "lifecycle_and_society",
+    "k": 23,
+    "n": 24,
+    "share": 0.9583,
+    "wilson95_low": 0.7976,
+    "wilson95_high": 0.9926,
+    "misses": [
+     "10.1038/s41893-025-01672-z"
+    ]
+   },
+   {
+    "label": "pollution_core",
+    "k": 6,
+    "n": 8,
+    "share": 0.75,
+    "wilson95_low": 0.4093,
+    "wilson95_high": 0.9285,
+    "misses": [
+     "10.1016/j.jhazmat.2017.10.014",
+     "10.1016/j.cogsc.2021.100513"
+    ]
+   },
+   {
+    "label": "lens_candidate",
+    "k": 8,
+    "n": 10,
+    "share": 0.8,
+    "wilson95_low": 0.4902,
+    "wilson95_high": 0.9433,
+    "misses": [
+     "10.1007/978-3-031-51358-9_1",
+     "10.1017/plc.2025.10005"
+    ]
+   }
+  ]
+ },
+ "t10753_overlap": {
+  "topic_id": "T10753",
+  "filter": "primary_topic.id:T10753",
+  "type_exclusions_applied": true,
+  "count_t10753_works": 78671,
+  "count_v31_works": 136323,
+  "count_intersection": 64606,
+  "share_t10753_retrieved_by_v31": {
+   "label": "T10753 works also in v3.1",
+   "k": 64606,
+   "n": 78671,
+   "share": 0.8212,
+   "wilson95_low": 0.8185,
+   "wilson95_high": 0.8239
+  },
+  "share_v31_in_t10753": {
+   "label": "v3.1 works with T10753 primary topic",
+   "k": 64606,
+   "n": 136323,
+   "share": 0.4739,
+   "wilson95_low": 0.4713,
+   "wilson95_high": 0.4766
+  },
+  "limitation": "Topic assignment is OpenAlex's primary_topic classifier, not a relevance judgement."
+ }
+}
