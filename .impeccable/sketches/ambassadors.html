@@ -37,7 +37,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .muted { color: var(--pv-ink-2); }
 
 /* Owner review switcher (prototype only, not part of the product) */
-.proto { background: var(--pv-ink); color: var(--pv-on-dark); }
+.proto { background: var(--pv-ink); color: var(--pv-on-dark); padding-block: 12px; }
 .proto-in { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding-block: 10px; }
 .proto-title { font-size: 14px; font-weight: 600; margin-right: auto; }
 .proto label { font-size: 14px; }
@@ -206,7 +206,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 /* Moderation */
 .mod { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); margin-top: 28px; }
 .queue { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--pv-ink); }
-.queue li { border-bottom: 1px solid var(--pv-line); }
+.queue li { border-bottom: 1px solid var(--pv-line); padding-block: 12px; }
 .queue button { width: 100%; text-align: left; background: var(--pv-paper); border: 0; padding: 14px 14px 14px 12px; min-height: 64px; cursor: pointer; display: grid; gap: 2px; border-left: 0; }
 .queue button:hover { background: var(--pv-wash); }
 .queue button[aria-pressed="true"] { background: var(--pv-wash); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }

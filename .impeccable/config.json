@@ -32,6 +32,15 @@
         "value": "mono\",monospace",
         "createdAt": "2026-11-18T15:54:02.514Z",
         "reason": "agent: font shorthand fallback stack parsed as a family; Martian Mono is DESIGN.md data font"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/sketches/ambassadors.html"
+        ],
+        "createdAt": "2026-11-25T02:00:05.569Z",
+        "reason": "lead (agent): false positives - the detector flags rows that already set padding-block 10-16px and wrappers whose cells are padded; screenshots in scratch/amb_design show the inset; real gaps (.queue li, .proto) were fixed"
       }
     ]
   }
