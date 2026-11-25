@@ -1,0 +1,66 @@
+# Region registry (PLAT-3 slice 1). Read by src/atlas/regions/registry.py.
+# Every region has: slug, name, tier (root | A | B | C), parent (slug or null),
+# status (active | planned | retired), predicate (null for root).
+# A predicate describes which authorships/institutions belong to the region.
+# Values below record what the code does TODAY; they are not new policy.
+schema_version: 1
+regions:
+  - slug: global
+    name: Global
+    tier: root
+    parent: null
+    status: active
+    predicate: null
+
+  - slug: california
+    name: California
+    tier: A
+    # Parent is null: California is a curated Tier A region in its own right.
+    # The US (or a future `us` Tier B region) is not a registry entry yet.
+    parent: null
+    status: active
+    predicate:
+      # src/atlas/ingest/institutions.py:269-294 (pull_openalex_institutions):
+      # the institution registry seed is OpenAlex /institutions filtered by the exact
+      # `geo.region:California` (also institutions.py:984 and :1052).
+      openalex_institution_filter: "geo.region:California"
+      # src/atlas/ingest/institutions.py:882-894 (_ror_location): a ROR location counts as
+      # California when its GeoNames country_subdivision_code is "CA" (the GeoNames
+      # admin code, not the ISO form "US-CA"; ISO form is used in
+      # scripts/build_geography.py:42 and scripts/build_global_explore.py:41).
+      ror_subdivision_codes: ["CA"]
+      # src/atlas/ingest/normalize.py:495 (institution ca_flag):
+      # region casefold == "california" and country in {"", "us"}.
+      country_codes: ["US"]
+      # src/atlas/ingest/institutions.py:933 (region = OpenAlex geo.region, or the ROR
+      # country_subdivision_name) and src/atlas/ingest/normalize.py:495 (ca_flag rule).
+      institution_region_names: ["California"]
+      # src/atlas/ingest/openalex.py:195 (RAW_AFFILIATION_TERM = "California", used as the
+      # raw-affiliation works search at openalex.py:825). The strict affiliation test is
+      # src/atlas/ingest/normalize.py:428-449 (_CA_AFFILIATION_PATTERNS): "California"
+      # (not Baja/PA), ", CA 9xxxx", ", CA, USA", the UC campuses, Scripps, Caltech,
+      # Moss Landing Marine Laboratories, Stanford University.
+      raw_affiliation_terms:
+        - "California"
+        - "UC Berkeley"
+        - "UC Davis"
+        - "UC Irvine"
+        - "UC Los Angeles"
+        - "UC Merced"
+        - "UC Riverside"
+        - "UC San Diego"
+        - "UC San Francisco"
+        - "UC Santa Barbara"
+        - "UC Santa Cruz"
+        - "Scripps Institution of Oceanography"
+        - "Caltech"
+        - "Moss Landing Marine Laborator"
+        - "Stanford University"
+      # src/atlas/ingest/normalize.py:401-404 (CA_BASIS_* constants), set per authorship at
+      # normalize.py:913-917 (registry, raw_affiliation) and :780 (author_carry_forward),
+      # :734 (escholarship).
+      ca_basis_values:
+        - registry
+        - raw_affiliation
+        - author_carry_forward
+        - escholarship

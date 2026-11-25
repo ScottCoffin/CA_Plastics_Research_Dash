@@ -208,6 +208,8 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 
 - BQ-S2 (2026-11-25): candidate `plastic-v3.2-candidate` lives in `config/queries_v32_candidate.yml` (queries.yml schema plus `themes`, `anchor_phrases`, `title_only_terms`); render with `atlas.query_v32` (factors shared contexts), count with `scripts/count_query_v32_candidate.py` (400-credit cap, cache `data/interim/query_v32/`). v3.1 stays active until BQ-S3 measures precision.
 
+- PLAT-3 slice 1 (2026-11-25): region registry `regions/_registry.yml` + `atlas.regions` (`get_region`, `regions`); a ratchet test fails when a src/atlas file gains region names (lower `tests/fixtures/region_names_baseline.json` when counts fall). Registry path defaults to the repo root (editable installs only).
+
 ## Known pitfalls (top 10; details in LESSONS.md)
 - OpenAlex `title_and_abstract.search` stems terms: `microplasticity` matches `microplastic`, `plastic` matches `plasticity`, `plastics` matches `plastic`. Never use them as exclusions or context words; test every exclusion against the labelled AT-1 set (`docs/QUERY_AUDIT.md`).
 - GNU Make is not on PATH; call Rtools as `/c/rtools45/usr/bin/make.exe PYTHON="py -3.14" APPDATA="$APPDATA" USERPROFILE="$USERPROFILE" <target>`. The Rtools shell drops APPDATA (pytest/ruff live in user site-packages) and USERPROFILE (matplotlib home), giving false `No module named pytest` or `test_eval` failures; bare `python` is 3.15 without deps.

@@ -164,3 +164,44 @@ its existing tests unchanged after PLAT-3 (regression gate).
   paid filters.
 - **Licences:** each new monitoring or funding source needs the same rights check as S7.2
   before rows are published.
+
+## 10. Region registry (PLAT-3 slice 1)
+
+Slice 1 adds the registry only. No pipeline, export, site or Framework behaviour changes.
+
+- `regions/_registry.yml` lists every region: `slug`, `name`, `tier` (`root`, `A`, `B`, `C`),
+  `parent` (slug or null), `status` (`active`, `planned`, `retired`) and `predicate`
+  (null for `root`, required otherwise). It has `schema_version: 1`.
+- `regions/california/region.yml` holds the California site path (`/california/`), the
+  current data directory (`site/data/`), the outline asset (`site/assets/ca_boundaries.geojson`)
+  and an inventory of the California-specific adapters that exist today. Nothing moves yet.
+- `src/atlas/regions/registry.py` provides the `Predicate` and `Region` dataclasses and
+  `load_registry(path)`, `get_region(slug)` and `regions(tier=None)`. Validation is strict:
+  unknown or missing keys, duplicate slugs, unknown parents, bad tiers or statuses, and
+  malformed predicates all raise `ValueError`. Nothing calls the loader yet.
+- `tests/test_regions_registry.py` loads the real registry and checks it against tmp-path
+  fixtures.
+- `tests/test_region_names_ratchet.py` counts region-name terms (`California`, `Californian`,
+  `RWQCB`, `CEDEN`, `DTSC`, `OPC`, `Sea Grant`) per `src/atlas/**/*.py` file, excluding
+  `src/atlas/regions/`. It compares the counts with `tests/fixtures/region_names_baseline.json`.
+  A file may not gain matches and a new file may not contain any. Counts may fall. To lower
+  the baseline after removing names, run `py -3.14 tests/test_region_names_ratchet.py --write-baseline`.
+
+The California predicate describes today's behaviour and cites each source in a comment in
+`regions/_registry.yml`. It has these fields:
+
+| Field | Meaning today | Source |
+|---|---|---|
+| `openalex_institution_filter` | `geo.region:California`, the exact OpenAlex filter for the institution seed | `src/atlas/ingest/institutions.py` |
+| `ror_subdivision_codes` | `CA`, the GeoNames `country_subdivision_code` on a ROR location | `src/atlas/ingest/institutions.py` (`_ror_location`) |
+| `country_codes` | `US` | `src/atlas/ingest/normalize.py` (institution `ca_flag`) |
+| `institution_region_names` | `California`, matched against the institution `region` | `src/atlas/ingest/institutions.py`, `normalize.py` |
+| `raw_affiliation_terms` | the search term `California` and the strict affiliation patterns | `src/atlas/ingest/openalex.py`, `src/atlas/ingest/normalize.py` |
+| `ca_basis_values` | `registry`, `raw_affiliation`, `author_carry_forward`, `escholarship` | `src/atlas/ingest/normalize.py` |
+
+Later slices:
+
+- **Slice 2:** `--region` on the pipeline commands reads the registry. The default stays `california`.
+- **Slice 3:** the outputs move to `site/data/<region>/`. California outputs must stay byte-identical,
+  and `regions/california/region.yml` `data_dir` changes to `site/data/california/`.
+- **Slice 4:** Framework dynamic routes (`[region]/*.md`) read the region from the URL.

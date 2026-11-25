@@ -15,6 +15,8 @@
   checks, and bounded external-service smoke tests.
 - `config/` contains source, query, taxonomy, gazetteer, author, and
   institution configuration and override tables.
+- `regions/` holds the region registry (`_registry.yml`) and per-region config
+  folders such as `regions/california/`; loaded by `src/atlas/regions/`.
 - `data/raw/`, `data/interim/`, `data/processed/`, and `data/logs/` separate
   downloaded inputs, intermediate pipeline state, processed reference and
   geography artifacts, and API usage logs. Raw, interim, and log contents are

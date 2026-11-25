@@ -1,0 +1,56 @@
+# Tier A region config for California (PLAT-3 slice 1: inventory only, nothing moves).
+# The predicate lives in regions/_registry.yml; this file holds the site and adapter wiring.
+schema_version: 1
+slug: california
+name: California
+tier: A
+site_path: /california/
+# Today's data directory. PLAT-3 slice 3 moves it to site/data/california/.
+data_dir: site/data/
+# Existing California boundary asset (also read by scripts/build_geography.py:26).
+outline_asset: site/assets/ca_boundaries.geojson
+# California-specific code that exists today. Inventory only; PLAT-3 later slices move
+# these behind adapters/ without changing behaviour.
+adapters:
+  - kind: grants
+    name: California Sea Grant research projects
+    module: src/atlas/ingest/grants/ca_sea_grant.py
+  - kind: grants
+    name: California Grants Portal open calls
+    module: src/atlas/ingest/grants/open_calls.py
+  - kind: grants
+    name: State funders (OPC, Delta Science Tracker, CSU COAST, SCC)
+    module: src/atlas/ingest/grants/state_funders.py
+  - kind: institutions
+    name: California state agencies without an OpenAlex record
+    module: src/atlas/ingest/state_agencies.py
+    config: config/ca_state_agencies.yml
+  - kind: monitoring
+    name: CEDEN microplastics watch and matching
+    module: src/atlas/ingest/monitoring/ceden.py
+  - kind: monitoring
+    name: CEDEN metadata watch (data.ca.gov)
+    module: src/atlas/ceden_watch.py
+  - kind: monitoring
+    name: SF Bay / 5 Gyres workbook normalization
+    module: src/atlas/ingest/monitoring/sfbay.py
+  - kind: monitoring
+    name: Curated literature monitoring values
+    module: src/atlas/ingest/monitoring/literature.py
+  - kind: policy
+    name: DTSC regulatory timeline
+    module: src/atlas/dtsc_timeline.py
+    config: config/dtsc_timeline.yml
+  - kind: policy
+    name: OPC Solutions track (early actions)
+    module: src/atlas/opc_actions.py
+    config: config/opc_early_actions.yml
+  - kind: geo
+    name: Regional Water Board (RWQCB) assignment
+    module: src/atlas/geo/rwqcb.py
+  - kind: geo
+    name: California land and state-waters polygons
+    module: src/atlas/geo/ca_polygons.py
+  - kind: geo
+    name: California GeoNames gazetteer
+    module: src/atlas/geo/gazetteer.py
