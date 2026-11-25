@@ -127,8 +127,16 @@ def year_windows(start_year: int, end_year: int, today: date) -> list[dict[str, 
     return windows
 
 
+def daily_stop_usd(environ: Mapping[str, str] | None = None) -> float:
+    """USD 0.95 per free account per day; a fallback key adds a second account (owner rule
+    2026-11-11, the same scaling as ``resolve_openalex_budget``)."""
+
+    env = os.environ if environ is None else environ
+    return DAILY_STOP_USD * (2 if env.get("OPENALEX_API_KEY_ALT") else 1)
+
+
 def _daily_budget(budget_path: str | Path) -> OpenAlexBudget:
-    return resolve_openalex_budget(budget_path, max_cost_usd=DAILY_STOP_USD)
+    return resolve_openalex_budget(budget_path, max_cost_usd=daily_stop_usd())
 
 
 def _accounted(

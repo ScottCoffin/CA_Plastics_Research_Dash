@@ -529,3 +529,12 @@ def test_cli_dry_run_exits_zero_without_network(
     assert module.main(["--dry-run", "--config", str(CONFIG), "--start-year", "2024"]) == 0
     assert fake.urls == []
     assert "first_page_url" in capsys.readouterr().out
+
+
+def test_daily_stop_scales_with_the_fallback_key() -> None:
+    # Owner rule 2026-11-11: a fallback key is a second free daily allowance.
+    from atlas.ingest.global_raw import DAILY_STOP_USD, daily_stop_usd
+
+    assert daily_stop_usd({}) == DAILY_STOP_USD
+    assert daily_stop_usd({"OPENALEX_API_KEY_ALT": "x"}) == 2 * DAILY_STOP_USD
+    assert daily_stop_usd({"OPENALEX_API_KEY_ALT": ""}) == DAILY_STOP_USD
