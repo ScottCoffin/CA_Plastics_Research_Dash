@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-25T10:41:09Z",
+  "generated_at": "2026-11-25T20:02:25Z",
   "metrics": {
     "as_of": "2026-11-25",
     "ci_level": 0.95,
@@ -23,137 +23,137 @@
         "basis": "retracted-flagged records included; cannot be excluded (OpenAlex group_by has no retraction split)",
         "beside_only": false,
         "trend": {
-          "cagr": 0.2517012719,
+          "cagr": 0.252539755,
           "ci95": [
-            0.2301728223,
-            0.2736064767
+            0.2310395389,
+            0.2744154742
           ],
           "df": 18,
           "n_years": 20,
           "note": null,
-          "slope": 0.2245036435,
-          "slope_se": 0.0082577924,
+          "slope": 0.225173294,
+          "slope_se": 0.0082412996,
           "t_crit": 2.1009220402,
           "zero_years_skipped": []
         },
         "years": [
           {
-            "count": 401,
+            "count": 399,
             "index": 1.0,
             "retracted": null,
             "year": 2006
           },
           {
-            "count": 450,
-            "index": 1.1221945137,
+            "count": 443,
+            "index": 1.1102756892,
             "retracted": null,
             "year": 2007
           },
           {
-            "count": 514,
-            "index": 1.2817955112,
+            "count": 507,
+            "index": 1.2706766917,
             "retracted": null,
             "year": 2008
           },
           {
-            "count": 505,
-            "index": 1.2593516209,
+            "count": 501,
+            "index": 1.2556390977,
             "retracted": null,
             "year": 2009
           },
           {
-            "count": 682,
-            "index": 1.7007481297,
+            "count": 681,
+            "index": 1.7067669173,
             "retracted": null,
             "year": 2010
           },
           {
-            "count": 849,
-            "index": 2.1172069825,
+            "count": 848,
+            "index": 2.1253132832,
             "retracted": null,
             "year": 2011
           },
           {
-            "count": 920,
-            "index": 2.2942643392,
+            "count": 912,
+            "index": 2.2857142857,
             "retracted": null,
             "year": 2012
           },
           {
-            "count": 1075,
-            "index": 2.680798005,
+            "count": 1070,
+            "index": 2.6817042607,
             "retracted": null,
             "year": 2013
           },
           {
-            "count": 1288,
-            "index": 3.2119700748,
+            "count": 1284,
+            "index": 3.2180451128,
             "retracted": null,
             "year": 2014
           },
           {
-            "count": 1485,
-            "index": 3.7032418953,
+            "count": 1479,
+            "index": 3.7067669173,
             "retracted": null,
             "year": 2015
           },
           {
-            "count": 2006,
-            "index": 5.0024937656,
+            "count": 2003,
+            "index": 5.0200501253,
             "retracted": null,
             "year": 2016
           },
           {
-            "count": 2319,
-            "index": 5.783042394,
+            "count": 2314,
+            "index": 5.7994987469,
             "retracted": null,
             "year": 2017
           },
           {
-            "count": 3576,
-            "index": 8.9177057357,
+            "count": 3577,
+            "index": 8.9649122807,
             "retracted": null,
             "year": 2018
           },
           {
-            "count": 4992,
-            "index": 12.4488778055,
+            "count": 4990,
+            "index": 12.5062656642,
             "retracted": null,
             "year": 2019
           },
           {
-            "count": 7194,
-            "index": 17.9401496259,
+            "count": 7196,
+            "index": 18.0350877193,
             "retracted": null,
             "year": 2020
           },
           {
-            "count": 8793,
-            "index": 21.927680798,
+            "count": 8800,
+            "index": 22.0551378446,
             "retracted": null,
             "year": 2021
           },
           {
-            "count": 11782,
-            "index": 29.3815461347,
+            "count": 11789,
+            "index": 29.5463659148,
             "retracted": null,
             "year": 2022
           },
           {
-            "count": 14007,
-            "index": 34.9301745636,
+            "count": 14031,
+            "index": 35.1654135338,
             "retracted": null,
             "year": 2023
           },
           {
-            "count": 18591,
-            "index": 46.36159601,
+            "count": 18621,
+            "index": 46.6691729323,
             "retracted": null,
             "year": 2024
           },
           {
-            "count": 23739,
-            "index": 59.1995012469,
+            "count": 23780,
+            "index": 59.5989974937,
             "retracted": null,
             "year": 2025
           }
@@ -163,137 +163,137 @@
         "basis": "retracted-flagged records included; cannot be excluded (OpenAlex group_by has no retraction split)",
         "beside_only": false,
         "trend": {
-          "cagr": 0.2537953928,
+          "cagr": 0.2552086672,
           "ci95": [
-            0.2279952558,
-            0.2801375898
+            0.229334234,
+            0.2816276931
           ],
           "df": 18,
           "n_years": 20,
           "note": null,
-          "slope": 0.2261752652,
-          "slope_se": 0.0098967494,
+          "slope": 0.2273018275,
+          "slope_se": 0.0099142555,
           "t_crit": 2.1009220402,
           "zero_years_skipped": []
         },
         "years": [
           {
-            "count": 285,
+            "count": 282,
             "index": 1.0,
             "retracted": null,
             "year": 2006
           },
           {
-            "count": 324,
-            "index": 1.1368421053,
+            "count": 316,
+            "index": 1.1205673759,
             "retracted": null,
             "year": 2007
           },
           {
-            "count": 349,
-            "index": 1.2245614035,
+            "count": 339,
+            "index": 1.2021276596,
             "retracted": null,
             "year": 2008
           },
           {
-            "count": 363,
-            "index": 1.2736842105,
+            "count": 354,
+            "index": 1.2553191489,
             "retracted": null,
             "year": 2009
           },
           {
-            "count": 495,
-            "index": 1.7368421053,
+            "count": 491,
+            "index": 1.7411347518,
             "retracted": null,
             "year": 2010
           },
           {
-            "count": 621,
-            "index": 2.1789473684,
+            "count": 619,
+            "index": 2.195035461,
             "retracted": null,
             "year": 2011
           },
           {
-            "count": 647,
-            "index": 2.2701754386,
+            "count": 632,
+            "index": 2.2411347518,
             "retracted": null,
             "year": 2012
           },
           {
-            "count": 759,
-            "index": 2.6631578947,
+            "count": 755,
+            "index": 2.6773049645,
             "retracted": null,
             "year": 2013
           },
           {
-            "count": 889,
-            "index": 3.1192982456,
+            "count": 884,
+            "index": 3.134751773,
             "retracted": null,
             "year": 2014
           },
           {
-            "count": 994,
-            "index": 3.4877192982,
+            "count": 981,
+            "index": 3.4787234043,
             "retracted": null,
             "year": 2015
           },
           {
-            "count": 1241,
-            "index": 4.3543859649,
+            "count": 1224,
+            "index": 4.3404255319,
             "retracted": null,
             "year": 2016
           },
           {
-            "count": 1516,
-            "index": 5.3192982456,
+            "count": 1504,
+            "index": 5.3333333333,
             "retracted": null,
             "year": 2017
           },
           {
-            "count": 2183,
-            "index": 7.6596491228,
+            "count": 2176,
+            "index": 7.7163120567,
             "retracted": null,
             "year": 2018
           },
           {
-            "count": 3375,
-            "index": 11.8421052632,
+            "count": 3357,
+            "index": 11.9042553191,
             "retracted": null,
             "year": 2019
           },
           {
-            "count": 4984,
-            "index": 17.4877192982,
+            "count": 4975,
+            "index": 17.6418439716,
             "retracted": null,
             "year": 2020
           },
           {
-            "count": 6722,
-            "index": 23.5859649123,
+            "count": 6714,
+            "index": 23.8085106383,
             "retracted": null,
             "year": 2021
           },
           {
-            "count": 8605,
-            "index": 30.1929824561,
+            "count": 8583,
+            "index": 30.4361702128,
             "retracted": null,
             "year": 2022
           },
           {
-            "count": 10584,
-            "index": 37.1368421053,
+            "count": 10568,
+            "index": 37.475177305,
             "retracted": null,
             "year": 2023
           },
           {
-            "count": 13723,
-            "index": 48.150877193,
+            "count": 13701,
+            "index": 48.585106383,
             "retracted": null,
             "year": 2024
           },
           {
-            "count": 17926,
-            "index": 62.898245614,
+            "count": 17902,
+            "index": 63.4822695035,
             "retracted": null,
             "year": 2025
           }
@@ -303,16 +303,16 @@
         "basis": "retracted-flagged records included; cannot be excluded (OpenAlex group_by has no retraction split)",
         "beside_only": false,
         "trend": {
-          "cagr": 0.3465313267,
+          "cagr": 0.3469869684,
           "ci95": [
-            0.321224581,
-            0.3723227981
+            0.3217912949,
+            0.3726629158
           ],
           "df": 18,
           "n_years": 20,
           "note": null,
-          "slope": 0.2975318983,
-          "slope_se": 0.0090307391,
+          "slope": 0.2978702228,
+          "slope_se": 0.008987656,
           "t_crit": 2.1009220402,
           "zero_years_skipped": []
         },
@@ -324,8 +324,8 @@
             "year": 2006
           },
           {
-            "count": 108,
-            "index": 1.3846153846,
+            "count": 106,
+            "index": 1.358974359,
             "retracted": null,
             "year": 2007
           },
@@ -354,8 +354,8 @@
             "year": 2011
           },
           {
-            "count": 241,
-            "index": 3.0897435897,
+            "count": 240,
+            "index": 3.0769230769,
             "retracted": null,
             "year": 2012
           },
@@ -366,20 +366,20 @@
             "year": 2013
           },
           {
-            "count": 438,
-            "index": 5.6153846154,
+            "count": 439,
+            "index": 5.6282051282,
             "retracted": null,
             "year": 2014
           },
           {
-            "count": 605,
-            "index": 7.7564102564,
+            "count": 604,
+            "index": 7.7435897436,
             "retracted": null,
             "year": 2015
           },
           {
-            "count": 969,
-            "index": 12.4230769231,
+            "count": 968,
+            "index": 12.4102564103,
             "retracted": null,
             "year": 2016
           },
@@ -390,50 +390,50 @@
             "year": 2017
           },
           {
-            "count": 2097,
-            "index": 26.8846153846,
+            "count": 2099,
+            "index": 26.9102564103,
             "retracted": null,
             "year": 2018
           },
           {
-            "count": 2880,
-            "index": 36.9230769231,
+            "count": 2882,
+            "index": 36.9487179487,
             "retracted": null,
             "year": 2019
           },
           {
-            "count": 4553,
-            "index": 58.3717948718,
+            "count": 4556,
+            "index": 58.4102564103,
             "retracted": null,
             "year": 2020
           },
           {
-            "count": 5558,
-            "index": 71.2564102564,
+            "count": 5566,
+            "index": 71.358974359,
             "retracted": null,
             "year": 2021
           },
           {
-            "count": 7981,
-            "index": 102.3205128205,
+            "count": 7987,
+            "index": 102.3974358974,
             "retracted": null,
             "year": 2022
           },
           {
-            "count": 9290,
-            "index": 119.1025641026,
+            "count": 9303,
+            "index": 119.2692307692,
             "retracted": null,
             "year": 2023
           },
           {
-            "count": 12830,
-            "index": 164.4871794872,
+            "count": 12848,
+            "index": 164.7179487179,
             "retracted": null,
             "year": 2024
           },
           {
-            "count": 16254,
-            "index": 208.3846153846,
+            "count": 16274,
+            "index": 208.641025641,
             "retracted": null,
             "year": 2025
           }
@@ -443,137 +443,137 @@
         "basis": "retracted-flagged records included; cannot be excluded (OpenAlex group_by has no retraction split)",
         "beside_only": false,
         "trend": {
-          "cagr": 0.3476984417,
+          "cagr": 0.3490977467,
           "ci95": [
-            0.3191407068,
-            0.3768744155
+            0.3207715214,
+            0.3780314769
           ],
           "df": 18,
           "n_years": 20,
           "note": null,
-          "slope": 0.2983982795,
-          "slope_se": 0.0101944452,
+          "slope": 0.2994360333,
+          "slope_se": 0.0101003184,
           "t_crit": 2.1009220402,
           "zero_years_skipped": []
         },
         "years": [
           {
-            "count": 56,
+            "count": 55,
             "index": 1.0,
             "retracted": null,
             "year": 2006
           },
           {
-            "count": 73,
-            "index": 1.3035714286,
+            "count": 71,
+            "index": 1.2909090909,
             "retracted": null,
             "year": 2007
           },
           {
-            "count": 95,
-            "index": 1.6964285714,
+            "count": 92,
+            "index": 1.6727272727,
             "retracted": null,
             "year": 2008
           },
           {
             "count": 92,
-            "index": 1.6428571429,
+            "index": 1.6727272727,
             "retracted": null,
             "year": 2009
           },
           {
             "count": 129,
-            "index": 2.3035714286,
+            "index": 2.3454545455,
             "retracted": null,
             "year": 2010
           },
           {
-            "count": 168,
-            "index": 3.0,
+            "count": 167,
+            "index": 3.0363636364,
             "retracted": null,
             "year": 2011
           },
           {
-            "count": 175,
-            "index": 3.125,
+            "count": 169,
+            "index": 3.0727272727,
             "retracted": null,
             "year": 2012
           },
           {
             "count": 215,
-            "index": 3.8392857143,
+            "index": 3.9090909091,
             "retracted": null,
             "year": 2013
           },
           {
-            "count": 298,
-            "index": 5.3214285714,
+            "count": 299,
+            "index": 5.4363636364,
             "retracted": null,
             "year": 2014
           },
           {
-            "count": 407,
-            "index": 7.2678571429,
+            "count": 404,
+            "index": 7.3454545455,
             "retracted": null,
             "year": 2015
           },
           {
-            "count": 547,
-            "index": 9.7678571429,
+            "count": 541,
+            "index": 9.8363636364,
             "retracted": null,
             "year": 2016
           },
           {
-            "count": 723,
-            "index": 12.9107142857,
+            "count": 722,
+            "index": 13.1272727273,
             "retracted": null,
             "year": 2017
           },
           {
-            "count": 1247,
-            "index": 22.2678571429,
+            "count": 1246,
+            "index": 22.6545454545,
             "retracted": null,
             "year": 2018
           },
           {
-            "count": 2010,
-            "index": 35.8928571429,
+            "count": 2004,
+            "index": 36.4363636364,
             "retracted": null,
             "year": 2019
           },
           {
-            "count": 3203,
-            "index": 57.1964285714,
+            "count": 3204,
+            "index": 58.2545454545,
             "retracted": null,
             "year": 2020
           },
           {
-            "count": 4305,
-            "index": 76.875,
+            "count": 4306,
+            "index": 78.2909090909,
             "retracted": null,
             "year": 2021
           },
           {
-            "count": 5737,
-            "index": 102.4464285714,
+            "count": 5720,
+            "index": 104.0,
             "retracted": null,
             "year": 2022
           },
           {
-            "count": 7001,
-            "index": 125.0178571429,
+            "count": 6983,
+            "index": 126.9636363636,
             "retracted": null,
             "year": 2023
           },
           {
-            "count": 9329,
-            "index": 166.5892857143,
+            "count": 9303,
+            "index": 169.1454545455,
             "retracted": null,
             "year": 2024
           },
           {
-            "count": 12165,
-            "index": 217.2321428571,
+            "count": 12132,
+            "index": 220.5818181818,
             "retracted": null,
             "year": 2025
           }
@@ -866,118 +866,118 @@
         "denominator": "A-article_review",
         "numerator": "B-article_review",
         "trend": {
-          "cagr": 0.0748950342,
+          "cagr": 0.0747995787,
           "ci95": [
-            0.0655343949,
-            0.0843379061
+            0.0653262131,
+            0.0843571858
           ],
           "df": 18,
           "n_years": 20,
           "note": null,
-          "slope": 0.0722230143,
-          "slope_se": 0.0041632014,
+          "slope": 0.0721342058,
+          "slope_se": 0.0042139356,
           "t_crit": 2.1009220402,
           "zero_years_skipped": []
         },
         "years": [
           {
             "index": 1.0,
-            "share": 0.1964912281,
+            "share": 0.195035461,
             "year": 2006
           },
           {
-            "index": 1.1466600529,
-            "share": 0.225308642,
+            "index": 1.152013809,
+            "share": 0.2246835443,
             "year": 2007
           },
           {
-            "index": 1.3853356529,
-            "share": 0.2722063037,
+            "index": 1.3914722446,
+            "share": 0.2713864307,
             "year": 2008
           },
           {
-            "index": 1.2898465171,
-            "share": 0.2534435262,
+            "index": 1.3325115562,
+            "share": 0.2598870056,
             "year": 2009
           },
           {
-            "index": 1.3262987013,
-            "share": 0.2606060606,
+            "index": 1.3470838734,
+            "share": 0.2627291242,
             "year": 2010
           },
           {
-            "index": 1.3768115942,
-            "share": 0.270531401,
+            "index": 1.3832868263,
+            "share": 0.2697899838,
             "year": 2011
           },
           {
-            "index": 1.3765455951,
-            "share": 0.2704791345,
+            "index": 1.3710586881,
+            "share": 0.2674050633,
             "year": 2012
           },
           {
-            "index": 1.4416290232,
-            "share": 0.2832674572,
+            "index": 1.4600842866,
+            "share": 0.2847682119,
             "year": 2013
           },
           {
-            "index": 1.7059697895,
-            "share": 0.335208099,
+            "index": 1.7342245989,
+            "share": 0.3382352941,
             "year": 2014
           },
           {
-            "index": 2.0838423398,
-            "share": 0.4094567404,
+            "index": 2.1115373923,
+            "share": 0.4118246687,
             "year": 2015
           },
           {
-            "index": 2.2432226315,
-            "share": 0.4407735697,
+            "index": 2.2662210339,
+            "share": 0.4419934641,
             "year": 2016
           },
           {
-            "index": 2.4271461553,
-            "share": 0.4769129288,
+            "index": 2.4613636364,
+            "share": 0.4800531915,
             "year": 2017
           },
           {
-            "index": 2.9071641254,
-            "share": 0.5712322492,
+            "index": 2.9359291444,
+            "share": 0.5726102941,
             "year": 2018
           },
           {
-            "index": 3.030952381,
-            "share": 0.5955555556,
+            "index": 3.0607847916,
+            "share": 0.5969615728,
             "year": 2019
           },
           {
-            "index": 3.2706625487,
-            "share": 0.6426565008,
+            "index": 3.3020666971,
+            "share": 0.6440201005,
             "year": 2020
           },
           {
-            "index": 3.259353615,
-            "share": 0.6404343945,
+            "index": 3.288358112,
+            "share": 0.6413464403,
             "year": 2021
           },
           {
-            "index": 3.3930542874,
-            "share": 0.6667054038,
+            "index": 3.4169870675,
+            "share": 0.6664336479,
             "year": 2022
           },
           {
-            "index": 3.3664105523,
-            "share": 0.6614701436,
+            "index": 3.3879395775,
+            "share": 0.6607683573,
             "year": 2023
           },
           {
-            "index": 3.4597352203,
-            "share": 0.6798076222,
+            "index": 3.4814260406,
+            "share": 0.6790015327,
             "year": 2024
           },
           {
-            "index": 3.4537075039,
-            "share": 0.6786232288,
+            "index": 3.4746996273,
+            "share": 0.6776896436,
             "year": 2025
           }
         ]
@@ -987,118 +987,118 @@
         "denominator": "A",
         "numerator": "B",
         "trend": {
-          "cagr": 0.0757609319,
+          "cagr": 0.0754045634,
           "ci95": [
-            0.0660067362,
-            0.0856043807
+            0.0656779002,
+            0.0852200038
           ],
           "df": 18,
           "n_years": 20,
           "note": null,
-          "slope": 0.0730282549,
-          "slope_se": 0.0043355297,
+          "slope": 0.0726969288,
+          "slope_se": 0.0043246755,
           "t_crit": 2.1009220402,
           "zero_years_skipped": []
         },
         "years": [
           {
             "index": 1.0,
-            "share": 0.1945137157,
+            "share": 0.1954887218,
             "year": 2006
           },
           {
-            "index": 1.2338461538,
-            "share": 0.24,
+            "index": 1.2239972217,
+            "share": 0.2392776524,
             "year": 2007
           },
           {
-            "index": 1.290257408,
-            "share": 0.2509727626,
+            "index": 1.3015475649,
+            "share": 0.2544378698,
             "year": 2008
           },
           {
-            "index": 1.3437928408,
-            "share": 0.2613861386,
+            "index": 1.3477660064,
+            "share": 0.2634730539,
             "year": 2009
           },
           {
-            "index": 1.3267162945,
-            "share": 0.2580645161,
+            "index": 1.3220377273,
+            "share": 0.2584434655,
             "year": 2010
           },
           {
-            "index": 1.3140195101,
-            "share": 0.2555948174,
+            "index": 1.3090076197,
+            "share": 0.2558962264,
             "year": 2011
           },
           {
-            "index": 1.3467251951,
-            "share": 0.2619565217,
+            "index": 1.3461538462,
+            "share": 0.2631578947,
             "year": 2012
           },
           {
-            "index": 1.4825283244,
-            "share": 0.288372093,
+            "index": 1.4820273185,
+            "share": 0.2897196262,
             "year": 2013
           },
           {
-            "index": 1.7482680363,
-            "share": 0.3400621118,
+            "index": 1.7489515936,
+            "share": 0.3419003115,
             "year": 2014
           },
           {
-            "index": 2.0944919278,
-            "share": 0.4074074074,
+            "index": 2.0890414521,
+            "share": 0.4083840433,
             "year": 2015
           },
           {
-            "index": 2.4833767927,
-            "share": 0.4830508475,
+            "index": 2.4721379469,
+            "share": 0.4832750874,
             "year": 2016
           },
           {
-            "index": 2.4762939375,
-            "share": 0.481673135,
+            "index": 2.4692673359,
+            "share": 0.4827139153,
             "year": 2017
           },
           {
-            "index": 3.0147457408,
-            "share": 0.586409396,
+            "index": 3.0017311456,
+            "share": 0.5868045848,
             "year": 2018
           },
           {
-            "index": 2.9659763314,
-            "share": 0.5769230769,
+            "index": 2.9544165254,
+            "share": 0.5775551102,
             "year": 2019
           },
           {
-            "index": 3.2536961,
-            "share": 0.6328885182,
+            "index": 3.2387009877,
+            "share": 0.6331295164,
             "year": 2020
           },
           {
-            "index": 3.2496099753,
-            "share": 0.6320937109,
+            "index": 3.2354807692,
+            "share": 0.6325,
             "year": 2021
           },
           {
-            "index": 3.4824754406,
-            "share": 0.6773892378,
+            "index": 3.4656524661,
+            "share": 0.6774959708,
             "year": 2022
           },
           {
-            "index": 3.4097328625,
-            "share": 0.6632398087,
+            "index": 3.3916629661,
+            "share": 0.663031858,
             "year": 2023
           },
           {
-            "index": 3.5479188303,
-            "share": 0.6901188747,
+            "index": 3.5294807765,
+            "share": 0.6899736856,
             "year": 2024
           },
           {
-            "index": 3.5200400509,
-            "share": 0.6846960698,
+            "index": 3.5007472343,
+            "share": 0.6843566022,
             "year": 2025
           }
         ]
@@ -1108,118 +1108,118 @@
         "denominator": "A",
         "numerator": "C",
         "trend": {
-          "cagr": -0.0086797534,
+          "cagr": -0.0093433693,
           "ci95": [
-            -0.0459071808,
-            0.0300002384
+            -0.0465114639,
+            0.0292735809
           ],
           "df": 18,
           "n_years": 20,
           "note": null,
-          "slope": -0.0087176419,
-          "slope_se": 0.018218989,
+          "slope": -0.0093872924,
+          "slope_se": 0.0182018104,
           "t_crit": 2.1009220402,
           "zero_years_skipped": []
         },
         "years": [
           {
             "index": 1.0,
-            "share": 0.0049875312,
+            "share": 0.0050125313,
             "year": 2006
           },
           {
-            "index": 2.6733333333,
-            "share": 0.0133333333,
+            "index": 2.7020316027,
+            "share": 0.0135440181,
             "year": 2007
           },
           {
-            "index": 1.9503891051,
-            "share": 0.0097276265,
+            "index": 1.9674556213,
+            "share": 0.0098619329,
             "year": 2008
           },
           {
-            "index": 6.3524752475,
-            "share": 0.0316831683,
+            "index": 6.371257485,
+            "share": 0.0319361277,
             "year": 2009
           },
           {
-            "index": 4.1158357771,
-            "share": 0.0205278592,
+            "index": 4.1013215859,
+            "share": 0.0205580029,
             "year": 2010
           },
           {
-            "index": 7.0848056537,
-            "share": 0.035335689,
+            "index": 7.0577830189,
+            "share": 0.0353773585,
             "year": 2011
           },
           {
-            "index": 5.0125,
-            "share": 0.025,
+            "index": 5.03125,
+            "share": 0.0252192982,
             "year": 2012
           },
           {
-            "index": 5.4088372093,
-            "share": 0.0269767442,
+            "index": 5.4070093458,
+            "share": 0.0271028037,
             "year": 2013
           },
           {
-            "index": 4.3586956522,
-            "share": 0.0217391304,
+            "index": 4.3504672897,
+            "share": 0.0218068536,
             "year": 2014
           },
           {
-            "index": 4.8606060606,
-            "share": 0.0242424242,
+            "index": 4.8559837728,
+            "share": 0.0243407708,
             "year": 2015
           },
           {
-            "index": 4.0979561316,
-            "share": 0.0204386839,
+            "index": 4.0836245632,
+            "share": 0.0204692961,
             "year": 2016
           },
           {
-            "index": 3.4583872359,
-            "share": 0.0172488141,
+            "index": 3.448573898,
+            "share": 0.0172860847,
             "year": 2017
           },
           {
-            "index": 3.2519574944,
-            "share": 0.0162192394,
+            "index": 3.2348336595,
+            "share": 0.0162147051,
             "year": 2018
           },
           {
-            "index": 3.7754407051,
-            "share": 0.0188301282,
+            "index": 3.7581162325,
+            "share": 0.0188376754,
             "year": 2019
           },
           {
-            "index": 3.6788990826,
-            "share": 0.0183486239,
+            "index": 3.6595330739,
+            "share": 0.0183435242,
             "year": 2020
           },
           {
-            "index": 2.5994541112,
-            "share": 0.0129648584,
+            "index": 2.5844318182,
+            "share": 0.0129545455,
             "year": 2021
           },
           {
-            "index": 2.569640129,
-            "share": 0.0128161602,
+            "index": 2.5553057935,
+            "share": 0.0128085503,
             "year": 2022
           },
           {
-            "index": 2.3045977011,
-            "share": 0.0114942529,
+            "index": 2.289181099,
+            "share": 0.011474592,
             "year": 2023
           },
           {
-            "index": 2.6207035662,
-            "share": 0.0130708407,
+            "index": 2.6034316095,
+            "share": 0.0130497825,
             "year": 2024
           },
           {
-            "index": 2.1283963099,
-            "share": 0.0106154429,
+            "index": 2.1141295206,
+            "share": 0.0105971405,
             "year": 2025
           }
         ]
@@ -1999,7 +1999,7 @@
           "year": 1972
         },
         {
-          "count": 24,
+          "count": 23,
           "partial_year": false,
           "retracted": null,
           "year": 1973
@@ -2023,7 +2023,7 @@
           "year": 1976
         },
         {
-          "count": 23,
+          "count": 22,
           "partial_year": false,
           "retracted": null,
           "year": 1977
@@ -2059,7 +2059,7 @@
           "year": 1982
         },
         {
-          "count": 33,
+          "count": 32,
           "partial_year": false,
           "retracted": null,
           "year": 1983
@@ -2101,13 +2101,13 @@
           "year": 1989
         },
         {
-          "count": 120,
+          "count": 118,
           "partial_year": false,
           "retracted": null,
           "year": 1990
         },
         {
-          "count": 115,
+          "count": 118,
           "partial_year": false,
           "retracted": null,
           "year": 1991
@@ -2131,7 +2131,7 @@
           "year": 1994
         },
         {
-          "count": 205,
+          "count": 204,
           "partial_year": false,
           "retracted": null,
           "year": 1995
@@ -2149,7 +2149,7 @@
           "year": 1997
         },
         {
-          "count": 215,
+          "count": 214,
           "partial_year": false,
           "retracted": null,
           "year": 1998
@@ -2161,13 +2161,13 @@
           "year": 1999
         },
         {
-          "count": 234,
+          "count": 233,
           "partial_year": false,
           "retracted": null,
           "year": 2000
         },
         {
-          "count": 247,
+          "count": 246,
           "partial_year": false,
           "retracted": null,
           "year": 2001
@@ -2185,145 +2185,145 @@
           "year": 2003
         },
         {
-          "count": 318,
+          "count": 315,
           "partial_year": false,
           "retracted": null,
           "year": 2004
         },
         {
-          "count": 384,
+          "count": 381,
           "partial_year": false,
           "retracted": null,
           "year": 2005
         },
         {
-          "count": 401,
+          "count": 399,
           "partial_year": false,
           "retracted": null,
           "year": 2006
         },
         {
-          "count": 450,
+          "count": 443,
           "partial_year": false,
           "retracted": null,
           "year": 2007
         },
         {
-          "count": 514,
+          "count": 507,
           "partial_year": false,
           "retracted": null,
           "year": 2008
         },
         {
-          "count": 505,
+          "count": 501,
           "partial_year": false,
           "retracted": null,
           "year": 2009
         },
         {
-          "count": 682,
+          "count": 681,
           "partial_year": false,
           "retracted": null,
           "year": 2010
         },
         {
-          "count": 849,
+          "count": 848,
           "partial_year": false,
           "retracted": null,
           "year": 2011
         },
         {
-          "count": 920,
+          "count": 912,
           "partial_year": false,
           "retracted": null,
           "year": 2012
         },
         {
-          "count": 1075,
+          "count": 1070,
           "partial_year": false,
           "retracted": null,
           "year": 2013
         },
         {
-          "count": 1288,
+          "count": 1284,
           "partial_year": false,
           "retracted": null,
           "year": 2014
         },
         {
-          "count": 1485,
+          "count": 1479,
           "partial_year": false,
           "retracted": null,
           "year": 2015
         },
         {
-          "count": 2006,
+          "count": 2003,
           "partial_year": false,
           "retracted": null,
           "year": 2016
         },
         {
-          "count": 2319,
+          "count": 2314,
           "partial_year": false,
           "retracted": null,
           "year": 2017
         },
         {
-          "count": 3576,
+          "count": 3577,
           "partial_year": false,
           "retracted": null,
           "year": 2018
         },
         {
-          "count": 4992,
+          "count": 4990,
           "partial_year": false,
           "retracted": null,
           "year": 2019
         },
         {
-          "count": 7194,
+          "count": 7196,
           "partial_year": false,
           "retracted": null,
           "year": 2020
         },
         {
-          "count": 8793,
+          "count": 8800,
           "partial_year": false,
           "retracted": null,
           "year": 2021
         },
         {
-          "count": 11782,
+          "count": 11789,
           "partial_year": false,
           "retracted": null,
           "year": 2022
         },
         {
-          "count": 14007,
+          "count": 14031,
           "partial_year": false,
           "retracted": null,
           "year": 2023
         },
         {
-          "count": 18591,
+          "count": 18621,
           "partial_year": false,
           "retracted": null,
           "year": 2024
         },
         {
-          "count": 23739,
+          "count": 23780,
           "partial_year": false,
           "retracted": null,
           "year": 2025
         },
         {
-          "count": 26667,
+          "count": 26823,
           "partial_year": true,
           "retracted": null,
           "year": 2026
         },
         {
-          "count": 18,
+          "count": 19,
           "partial_year": true,
           "retracted": null,
           "year": 2027
@@ -2961,7 +2961,7 @@
           "year": 1955
         },
         {
-          "count": 3,
+          "count": 2,
           "partial_year": false,
           "retracted": null,
           "year": 1956
@@ -3027,7 +3027,7 @@
           "year": 1966
         },
         {
-          "count": 12,
+          "count": 11,
           "partial_year": false,
           "retracted": null,
           "year": 1967
@@ -3063,7 +3063,7 @@
           "year": 1972
         },
         {
-          "count": 20,
+          "count": 19,
           "partial_year": false,
           "retracted": null,
           "year": 1973
@@ -3087,7 +3087,7 @@
           "year": 1976
         },
         {
-          "count": 20,
+          "count": 19,
           "partial_year": false,
           "retracted": null,
           "year": 1977
@@ -3105,7 +3105,7 @@
           "year": 1979
         },
         {
-          "count": 27,
+          "count": 26,
           "partial_year": false,
           "retracted": null,
           "year": 1980
@@ -3123,7 +3123,7 @@
           "year": 1982
         },
         {
-          "count": 27,
+          "count": 25,
           "partial_year": false,
           "retracted": null,
           "year": 1983
@@ -3141,37 +3141,37 @@
           "year": 1985
         },
         {
-          "count": 26,
+          "count": 24,
           "partial_year": false,
           "retracted": null,
           "year": 1986
         },
         {
-          "count": 53,
+          "count": 52,
           "partial_year": false,
           "retracted": null,
           "year": 1987
         },
         {
-          "count": 55,
+          "count": 54,
           "partial_year": false,
           "retracted": null,
           "year": 1988
         },
         {
-          "count": 62,
+          "count": 61,
           "partial_year": false,
           "retracted": null,
           "year": 1989
         },
         {
-          "count": 91,
+          "count": 89,
           "partial_year": false,
           "retracted": null,
           "year": 1990
         },
         {
-          "count": 88,
+          "count": 89,
           "partial_year": false,
           "retracted": null,
           "year": 1991
@@ -3183,7 +3183,7 @@
           "year": 1992
         },
         {
-          "count": 115,
+          "count": 114,
           "partial_year": false,
           "retracted": null,
           "year": 1993
@@ -3195,7 +3195,7 @@
           "year": 1994
         },
         {
-          "count": 147,
+          "count": 144,
           "partial_year": false,
           "retracted": null,
           "year": 1995
@@ -3207,13 +3207,13 @@
           "year": 1996
         },
         {
-          "count": 131,
+          "count": 127,
           "partial_year": false,
           "retracted": null,
           "year": 1997
         },
         {
-          "count": 147,
+          "count": 145,
           "partial_year": false,
           "retracted": null,
           "year": 1998
@@ -3225,13 +3225,13 @@
           "year": 1999
         },
         {
-          "count": 163,
+          "count": 162,
           "partial_year": false,
           "retracted": null,
           "year": 2000
         },
         {
-          "count": 179,
+          "count": 177,
           "partial_year": false,
           "retracted": null,
           "year": 2001
@@ -3249,139 +3249,139 @@
           "year": 2003
         },
         {
-          "count": 239,
+          "count": 236,
           "partial_year": false,
           "retracted": null,
           "year": 2004
         },
         {
-          "count": 268,
+          "count": 265,
           "partial_year": false,
           "retracted": null,
           "year": 2005
         },
         {
-          "count": 285,
+          "count": 282,
           "partial_year": false,
           "retracted": null,
           "year": 2006
         },
         {
-          "count": 324,
+          "count": 316,
           "partial_year": false,
           "retracted": null,
           "year": 2007
         },
         {
-          "count": 349,
+          "count": 339,
           "partial_year": false,
           "retracted": null,
           "year": 2008
         },
         {
-          "count": 363,
+          "count": 354,
           "partial_year": false,
           "retracted": null,
           "year": 2009
         },
         {
-          "count": 495,
+          "count": 491,
           "partial_year": false,
           "retracted": null,
           "year": 2010
         },
         {
-          "count": 621,
+          "count": 619,
           "partial_year": false,
           "retracted": null,
           "year": 2011
         },
         {
-          "count": 647,
+          "count": 632,
           "partial_year": false,
           "retracted": null,
           "year": 2012
         },
         {
-          "count": 759,
+          "count": 755,
           "partial_year": false,
           "retracted": null,
           "year": 2013
         },
         {
-          "count": 889,
+          "count": 884,
           "partial_year": false,
           "retracted": null,
           "year": 2014
         },
         {
-          "count": 994,
+          "count": 981,
           "partial_year": false,
           "retracted": null,
           "year": 2015
         },
         {
-          "count": 1241,
+          "count": 1224,
           "partial_year": false,
           "retracted": null,
           "year": 2016
         },
         {
-          "count": 1516,
+          "count": 1504,
           "partial_year": false,
           "retracted": null,
           "year": 2017
         },
         {
-          "count": 2183,
+          "count": 2176,
           "partial_year": false,
           "retracted": null,
           "year": 2018
         },
         {
-          "count": 3375,
+          "count": 3357,
           "partial_year": false,
           "retracted": null,
           "year": 2019
         },
         {
-          "count": 4984,
+          "count": 4975,
           "partial_year": false,
           "retracted": null,
           "year": 2020
         },
         {
-          "count": 6722,
+          "count": 6714,
           "partial_year": false,
           "retracted": null,
           "year": 2021
         },
         {
-          "count": 8605,
+          "count": 8583,
           "partial_year": false,
           "retracted": null,
           "year": 2022
         },
         {
-          "count": 10584,
+          "count": 10568,
           "partial_year": false,
           "retracted": null,
           "year": 2023
         },
         {
-          "count": 13723,
+          "count": 13701,
           "partial_year": false,
           "retracted": null,
           "year": 2024
         },
         {
-          "count": 17926,
+          "count": 17902,
           "partial_year": false,
           "retracted": null,
           "year": 2025
         },
         {
-          "count": 19447,
+          "count": 19540,
           "partial_year": true,
           "retracted": null,
           "year": 2026
@@ -4127,7 +4127,7 @@
           "year": 1972
         },
         {
-          "count": 10,
+          "count": 9,
           "partial_year": false,
           "retracted": null,
           "year": 1973
@@ -4313,7 +4313,7 @@
           "year": 2003
         },
         {
-          "count": 66,
+          "count": 65,
           "partial_year": false,
           "retracted": null,
           "year": 2004
@@ -4331,7 +4331,7 @@
           "year": 2006
         },
         {
-          "count": 108,
+          "count": 106,
           "partial_year": false,
           "retracted": null,
           "year": 2007
@@ -4361,7 +4361,7 @@
           "year": 2011
         },
         {
-          "count": 241,
+          "count": 240,
           "partial_year": false,
           "retracted": null,
           "year": 2012
@@ -4373,19 +4373,19 @@
           "year": 2013
         },
         {
-          "count": 438,
+          "count": 439,
           "partial_year": false,
           "retracted": null,
           "year": 2014
         },
         {
-          "count": 605,
+          "count": 604,
           "partial_year": false,
           "retracted": null,
           "year": 2015
         },
         {
-          "count": 969,
+          "count": 968,
           "partial_year": false,
           "retracted": null,
           "year": 2016
@@ -4397,61 +4397,61 @@
           "year": 2017
         },
         {
-          "count": 2097,
+          "count": 2099,
           "partial_year": false,
           "retracted": null,
           "year": 2018
         },
         {
-          "count": 2880,
+          "count": 2882,
           "partial_year": false,
           "retracted": null,
           "year": 2019
         },
         {
-          "count": 4553,
+          "count": 4556,
           "partial_year": false,
           "retracted": null,
           "year": 2020
         },
         {
-          "count": 5558,
+          "count": 5566,
           "partial_year": false,
           "retracted": null,
           "year": 2021
         },
         {
-          "count": 7981,
+          "count": 7987,
           "partial_year": false,
           "retracted": null,
           "year": 2022
         },
         {
-          "count": 9290,
+          "count": 9303,
           "partial_year": false,
           "retracted": null,
           "year": 2023
         },
         {
-          "count": 12830,
+          "count": 12848,
           "partial_year": false,
           "retracted": null,
           "year": 2024
         },
         {
-          "count": 16254,
+          "count": 16274,
           "partial_year": false,
           "retracted": null,
           "year": 2025
         },
         {
-          "count": 18394,
+          "count": 18482,
           "partial_year": true,
           "retracted": null,
           "year": 2026
         },
         {
-          "count": 15,
+          "count": 16,
           "partial_year": true,
           "retracted": null,
           "year": 2027
@@ -5089,7 +5089,7 @@
           "year": 1955
         },
         {
-          "count": 1,
+          "count": 0,
           "partial_year": false,
           "retracted": null,
           "year": 1956
@@ -5191,7 +5191,7 @@
           "year": 1972
         },
         {
-          "count": 9,
+          "count": 8,
           "partial_year": false,
           "retracted": null,
           "year": 1973
@@ -5233,7 +5233,7 @@
           "year": 1979
         },
         {
-          "count": 12,
+          "count": 11,
           "partial_year": false,
           "retracted": null,
           "year": 1980
@@ -5251,7 +5251,7 @@
           "year": 1982
         },
         {
-          "count": 11,
+          "count": 10,
           "partial_year": false,
           "retracted": null,
           "year": 1983
@@ -5269,13 +5269,13 @@
           "year": 1985
         },
         {
-          "count": 14,
+          "count": 13,
           "partial_year": false,
           "retracted": null,
           "year": 1986
         },
         {
-          "count": 31,
+          "count": 30,
           "partial_year": false,
           "retracted": null,
           "year": 1987
@@ -5287,7 +5287,7 @@
           "year": 1988
         },
         {
-          "count": 38,
+          "count": 37,
           "partial_year": false,
           "retracted": null,
           "year": 1989
@@ -5311,7 +5311,7 @@
           "year": 1992
         },
         {
-          "count": 37,
+          "count": 36,
           "partial_year": false,
           "retracted": null,
           "year": 1993
@@ -5335,7 +5335,7 @@
           "year": 1996
         },
         {
-          "count": 39,
+          "count": 37,
           "partial_year": false,
           "retracted": null,
           "year": 1997
@@ -5377,31 +5377,31 @@
           "year": 2003
         },
         {
-          "count": 51,
+          "count": 50,
           "partial_year": false,
           "retracted": null,
           "year": 2004
         },
         {
-          "count": 61,
+          "count": 60,
           "partial_year": false,
           "retracted": null,
           "year": 2005
         },
         {
-          "count": 56,
+          "count": 55,
           "partial_year": false,
           "retracted": null,
           "year": 2006
         },
         {
-          "count": 73,
+          "count": 71,
           "partial_year": false,
           "retracted": null,
           "year": 2007
         },
         {
-          "count": 95,
+          "count": 92,
           "partial_year": false,
           "retracted": null,
           "year": 2008
@@ -5419,13 +5419,13 @@
           "year": 2010
         },
         {
-          "count": 168,
+          "count": 167,
           "partial_year": false,
           "retracted": null,
           "year": 2011
         },
         {
-          "count": 175,
+          "count": 169,
           "partial_year": false,
           "retracted": null,
           "year": 2012
@@ -5437,79 +5437,79 @@
           "year": 2013
         },
         {
-          "count": 298,
+          "count": 299,
           "partial_year": false,
           "retracted": null,
           "year": 2014
         },
         {
-          "count": 407,
+          "count": 404,
           "partial_year": false,
           "retracted": null,
           "year": 2015
         },
         {
-          "count": 547,
+          "count": 541,
           "partial_year": false,
           "retracted": null,
           "year": 2016
         },
         {
-          "count": 723,
+          "count": 722,
           "partial_year": false,
           "retracted": null,
           "year": 2017
         },
         {
-          "count": 1247,
+          "count": 1246,
           "partial_year": false,
           "retracted": null,
           "year": 2018
         },
         {
-          "count": 2010,
+          "count": 2004,
           "partial_year": false,
           "retracted": null,
           "year": 2019
         },
         {
-          "count": 3203,
+          "count": 3204,
           "partial_year": false,
           "retracted": null,
           "year": 2020
         },
         {
-          "count": 4305,
+          "count": 4306,
           "partial_year": false,
           "retracted": null,
           "year": 2021
         },
         {
-          "count": 5737,
+          "count": 5720,
           "partial_year": false,
           "retracted": null,
           "year": 2022
         },
         {
-          "count": 7001,
+          "count": 6983,
           "partial_year": false,
           "retracted": null,
           "year": 2023
         },
         {
-          "count": 9329,
+          "count": 9303,
           "partial_year": false,
           "retracted": null,
           "year": 2024
         },
         {
-          "count": 12165,
+          "count": 12132,
           "partial_year": false,
           "retracted": null,
           "year": 2025
         },
         {
-          "count": 13205,
+          "count": 13241,
           "partial_year": true,
           "retracted": null,
           "year": 2026
@@ -6573,7 +6573,7 @@
           "year": 2025
         },
         {
-          "count": 312,
+          "count": 318,
           "partial_year": true,
           "retracted": 0,
           "year": 2026
@@ -7635,7 +7635,7 @@
           "year": 2025
         },
         {
-          "count": 282,
+          "count": 288,
           "partial_year": true,
           "retracted": 0,
           "year": 2026
@@ -7651,7 +7651,7 @@
   ],
   "source": {
     "schema_version": "denominator_series.v1",
-    "sha256": "e426cd97bac58b74644566c081b48ad42c89d305441c8f31659f8c407a2eadf2"
+    "sha256": "754381a3474f728732117774b77ce619dec20472085f4e282893af6a6205c5d3"
   },
   "version": {
     "as_of": "2026-11-25",

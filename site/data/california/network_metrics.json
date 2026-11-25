@@ -1,16 +1,16 @@
 {
   "schema_version": "bq3-v1",
-  "generated_at": "2026-11-25T14:21:36+00:00",
+  "generated_at": "2026-11-25T20:02:25+00:00",
   "source": {
     "index": "site/data/california/index.json",
-    "index_build_timestamp": "2026-11-24T20:43:43+00:00",
+    "index_build_timestamp": "2026-11-25T20:00:41+00:00",
     "institutions": "site/data/california/institutions.json"
   },
   "method": {
     "edge_weight": "The number of plastic-related works in the period on which both members are listed. Each work counts once per pair. This is a count of shared works, not a fraction.",
     "communities": "Louvain (networkx louvain_communities), seed 42",
     "rounding": "Shares, density, clustering, modularity and quantiles are rounded to 4 decimal places. Counts are whole numbers.",
-    "networkx": "3.7"
+    "networkx": "3.6.1"
   },
   "ascertainment_note": "This build covers the California Atlas corpus only: the plastic-related works in the published index. The corpus is built around California authors. The build also counts how many plastic-related works in the file have no California author. Collaborators outside California appear only through works they co-wrote with California researchers. A co-author who is not on the Atlas author list is therefore not a member, and a California author whose only plastic-related co-authors are off that list is counted as having no links. The measures describe how California plastics research is connected, as the Atlas records it. They do not describe the whole field, and they should not be compared with a network built from a broader set of works.",
   "definitions": {
@@ -36,9 +36,9 @@
     "rounding": "Shares, density, clustering, modularity and quantiles are rounded to 4 decimal places. Counts are whole numbers."
   },
   "corpus": {
-    "atlas_authors": 2673,
-    "plastic_related_works": 1601,
-    "works_in_year_windows": 1536,
+    "atlas_authors": 2680,
+    "plastic_related_works": 1607,
+    "works_in_year_windows": 1542,
     "works_before_2011": 65,
     "works_without_year": 0,
     "works_with_no_california_author": 0
@@ -52,17 +52,17 @@
           "window": "all",
           "years": null,
           "partial": false,
-          "works": 1601,
-          "nodes": 2151,
-          "edges": 6654,
-          "components": 475,
-          "components_with_edges": 194,
-          "giant_component_nodes": 1029,
-          "giant_component_share": 0.4784,
+          "works": 1607,
+          "nodes": 2159,
+          "edges": 6666,
+          "components": 476,
+          "components_with_edges": 196,
+          "giant_component_nodes": 1030,
+          "giant_component_share": 0.4771,
           "density": 0.0029,
-          "average_clustering": 0.6838,
-          "isolates": 281,
-          "isolate_share": 0.1306,
+          "average_clustering": 0.6846,
+          "isolates": 280,
+          "isolate_share": 0.1297,
           "degree": {
             "min": 0.0,
             "p25": 2.0,
@@ -71,19 +71,19 @@
             "p90": 14.0,
             "max": 129.0
           },
-          "communities": 213,
-          "modularity": 0.8813,
+          "communities": 214,
+          "modularity": 0.8811,
           "cross_institution": {
-            "fraction": 0.2525,
-            "edges_considered": 6205
+            "fraction": 0.2543,
+            "edges_considered": 6226
           },
           "cross_sector": {
             "fraction": 0.1453,
-            "edges_considered": 5548
+            "edges_considered": 5554
           },
           "out_of_region": {
-            "fraction": 0.3559,
-            "edges_considered": 6454
+            "fraction": 0.3585,
+            "edges_considered": 6477
           }
         },
         {
@@ -112,8 +112,8 @@
             "p90": 7.0,
             "max": 26.0
           },
-          "communities": 32,
-          "modularity": 0.8869,
+          "communities": 31,
+          "modularity": 0.8867,
           "cross_institution": {
             "fraction": 0.1752,
             "edges_considered": 371
@@ -164,8 +164,8 @@
             "edges_considered": 875
           },
           "out_of_region": {
-            "fraction": 0.4608,
-            "edges_considered": 1020
+            "fraction": 0.4733,
+            "edges_considered": 1031
           }
         },
         {
@@ -194,18 +194,18 @@
             "p90": 14.0,
             "max": 88.0
           },
-          "communities": 141,
-          "modularity": 0.8955,
+          "communities": 140,
+          "modularity": 0.8953,
           "cross_institution": {
-            "fraction": 0.2872,
-            "edges_considered": 3826
+            "fraction": 0.2895,
+            "edges_considered": 3838
           },
           "cross_sector": {
             "fraction": 0.1707,
             "edges_considered": 3357
           },
           "out_of_region": {
-            "fraction": 0.3892,
+            "fraction": 0.3895,
             "edges_considered": 3985
           }
         },
@@ -216,17 +216,17 @@
             2026
           ],
           "partial": true,
-          "works": 282,
-          "nodes": 591,
-          "edges": 1428,
-          "components": 174,
-          "components_with_edges": 90,
+          "works": 288,
+          "nodes": 604,
+          "edges": 1441,
+          "components": 179,
+          "components_with_edges": 94,
           "giant_component_nodes": 54,
-          "giant_component_share": 0.0914,
-          "density": 0.0082,
-          "average_clustering": 0.6918,
-          "isolates": 84,
-          "isolate_share": 0.1421,
+          "giant_component_share": 0.0894,
+          "density": 0.0079,
+          "average_clustering": 0.6935,
+          "isolates": 85,
+          "isolate_share": 0.1407,
           "degree": {
             "min": 0.0,
             "p25": 1.0,
@@ -235,19 +235,19 @@
             "p90": 12.0,
             "max": 31.0
           },
-          "communities": 91,
-          "modularity": 0.9495,
+          "communities": 95,
+          "modularity": 0.9503,
           "cross_institution": {
-            "fraction": 0.1899,
-            "edges_considered": 1364
+            "fraction": 0.1914,
+            "edges_considered": 1374
           },
           "cross_sector": {
-            "fraction": 0.1201,
-            "edges_considered": 1299
+            "fraction": 0.1202,
+            "edges_considered": 1306
           },
           "out_of_region": {
-            "fraction": 0.1193,
-            "edges_considered": 1392
+            "fraction": 0.1224,
+            "edges_considered": 1405
           }
         }
       ]
@@ -260,15 +260,15 @@
           "window": "all",
           "years": null,
           "partial": false,
-          "works": 1601,
-          "nodes": 1911,
-          "edges": 27817,
+          "works": 1607,
+          "nodes": 1913,
+          "edges": 27821,
           "components": 30,
           "components_with_edges": 15,
-          "giant_component_nodes": 1847,
+          "giant_component_nodes": 1849,
           "giant_component_share": 0.9665,
           "density": 0.0152,
-          "average_clustering": 0.7814,
+          "average_clustering": 0.7807,
           "isolates": 15,
           "isolate_share": 0.0078,
           "degree": {
@@ -276,22 +276,22 @@
             "p25": 5.0,
             "median": 10.0,
             "p75": 40.0,
-            "p90": 79.0,
-            "max": 388.0
+            "p90": 78.8,
+            "max": 389.0
           },
-          "communities": 30,
-          "modularity": 0.5137,
+          "communities": 28,
+          "modularity": 0.524,
           "cross_institution": {
             "fraction": 1.0,
-            "edges_considered": 27817
+            "edges_considered": 27821
           },
           "cross_sector": {
-            "fraction": 0.7152,
-            "edges_considered": 316
+            "fraction": 0.7161,
+            "edges_considered": 317
           },
           "out_of_region": {
             "fraction": 0.9886,
-            "edges_considered": 27817
+            "edges_considered": 27821
           }
         },
         {
@@ -361,8 +361,8 @@
             "p90": 52.9,
             "max": 106.0
           },
-          "communities": 30,
-          "modularity": 0.5188,
+          "communities": 29,
+          "modularity": 0.5183,
           "cross_institution": {
             "fraction": 1.0,
             "edges_considered": 4961
@@ -402,8 +402,8 @@
             "p90": 79.0,
             "max": 311.0
           },
-          "communities": 25,
-          "modularity": 0.5847,
+          "communities": 24,
+          "modularity": 0.5846,
           "cross_institution": {
             "fraction": 1.0,
             "edges_considered": 20083
@@ -424,15 +424,15 @@
             2026
           ],
           "partial": true,
-          "works": 282,
-          "nodes": 591,
-          "edges": 3686,
+          "works": 288,
+          "nodes": 593,
+          "edges": 3691,
           "components": 18,
           "components_with_edges": 11,
-          "giant_component_nodes": 550,
-          "giant_component_share": 0.9306,
-          "density": 0.0211,
-          "average_clustering": 0.8297,
+          "giant_component_nodes": 552,
+          "giant_component_share": 0.9309,
+          "density": 0.021,
+          "average_clustering": 0.8254,
           "isolates": 7,
           "isolate_share": 0.0118,
           "degree": {
@@ -440,22 +440,22 @@
             "p25": 4.0,
             "median": 7.0,
             "p75": 15.0,
-            "p90": 35.0,
+            "p90": 34.8,
             "max": 127.0
           },
-          "communities": 25,
-          "modularity": 0.6641,
+          "communities": 26,
+          "modularity": 0.6667,
           "cross_institution": {
             "fraction": 1.0,
-            "edges_considered": 3686
+            "edges_considered": 3691
           },
           "cross_sector": {
-            "fraction": 0.663,
-            "edges_considered": 92
+            "fraction": 0.6667,
+            "edges_considered": 93
           },
           "out_of_region": {
-            "fraction": 0.975,
-            "edges_considered": 3686
+            "fraction": 0.9748,
+            "edges_considered": 3691
           }
         }
       ]
