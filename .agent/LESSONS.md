@@ -10,6 +10,7 @@
   burst retries after ~470 pages. Read the 429 text: it states the current limit.
 - OpenAlex cursor-paged list results omit retracted works: `is_retracted:true` counts 65 for v3.1, none are in the
   136k paged records, yet per-year totals match. Never publish a retraction share from paged data.
+- CI runs Python 3.11 with networkx 3.6.1 (lock file); this machine has 3.14 with networkx 3.7. forceatlas2_layout in 3.6 needs numpy start positions (tuples fail with "tuple has no attribute copy"). A local green gate does not cover version-pinned CI: watch the CI run after every push.
 - On a fresh machine without Node, about 40 runtime tests fail and look like regressions; check the
   toolchain (CLAUDE.md new-machine list) before debugging.
 

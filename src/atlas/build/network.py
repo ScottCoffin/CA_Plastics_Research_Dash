@@ -114,10 +114,12 @@ def forceatlas2_positions(
 
     if graph.number_of_nodes() == 0:
         return {}
+    import numpy as np  # networkx 3.6 (Python 3.11 lock) calls .copy() on each start position
+
     mass = {node: 1.0 + float(strength) for node, strength in graph.degree(weight="weight")}
     raw = nx.forceatlas2_layout(
         graph,
-        pos=dict(start),
+        pos={node: np.asarray(point, dtype=float) for node, point in start.items()},
         max_iter=iterations,
         jitter_tolerance=1.0,
         scaling_ratio=LAYOUT_SCALING_RATIO,
