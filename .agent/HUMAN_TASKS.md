@@ -27,7 +27,7 @@ Last updated: 2026-11-18.
 ### H45. Review the ambassador design prototype (AMB-1, about 15 minutes)
 1. Double-click `.impeccable/sketches/ambassadors.html` in the repository folder (or run
    `start .impeccable/sketches/ambassadors.html` in a terminal). It opens in your browser; nothing is sent anywhere.
-2. Use the dark bar at the top (Previous / Next or the list) to step through the 12 screens; tick
+2. Use the dark bar at the top (Previous / Next or the list) to step through the 14 screens (the map needs an internet connection: it loads pinned d3 and Natural Earth files); tick
    "Show as region lead" to see the moderator view.
 3. Read the open questions at the end of `.impeccable/surfaces/impeccable-sketches-ambassadors-html.md`.
 4. Reply with "design approved" or a list of changes, plus your answers to the open questions you care about

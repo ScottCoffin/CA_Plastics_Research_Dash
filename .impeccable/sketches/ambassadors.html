@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:,">
 <title>Local ambassadors · Plastiverse Live (design prototype)</title>
 <style>
 @font-face { font-family: "Schibsted Grotesk"; src: url("../../site/assets/fonts/SchibstedGrotesk-Variable-latin.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
@@ -230,6 +231,88 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 .foot b { color: var(--pv-on-dark); font-weight: 600; }
 .foot a { color: var(--pv-on-dark); text-decoration: underline; text-underline-offset: 3px; display: inline-flex; align-items: center; min-height: 44px; }
 
+/* Map, search and region proposals (round 2) */
+.legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 14px 0 0; padding: 0; list-style: none; font-size: 15px; }
+.legend li { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; }
+.sw { width: 22px; height: 16px; border: 1px solid var(--pv-ink); display: inline-block; flex: none; }
+.sw.st-active { background: var(--pv-coral); }
+.sw.st-proposed { background: repeating-linear-gradient(45deg, var(--pv-slate-2) 0 4px, var(--pv-slate) 4px 6px); }
+.sw.st-open { background: var(--pv-paper); }
+.sw.st-pick { background: var(--pv-slate); }
+.geo-grid { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); margin-top: 16px; }
+.geo-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.geo-tools .btn { min-width: 44px; padding-inline: 12px; }
+.geo-stage { position: relative; background: var(--pv-wash); border: 1px solid var(--pv-ink-2); overflow: hidden; touch-action: none; cursor: grab; }
+.geo-stage:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+.geo-stage svg { display: block; width: 100%; height: auto; aspect-ratio: 960 / 500; user-select: none; }
+.geo-sea { fill: var(--pv-wash); }
+.geo-stage path.c { stroke: var(--pv-ink-2); stroke-width: .6px; vector-effect: non-scaling-stroke; cursor: pointer; stroke-linejoin: round; }
+.geo-stage .dot { stroke: var(--pv-ink); stroke-width: 1.2px; vector-effect: non-scaling-stroke; cursor: pointer; }
+.geo-stage .sub { stroke: var(--pv-coral-ink); stroke-width: 2px; vector-effect: non-scaling-stroke; cursor: pointer; }
+.geo-stage .sub.approx { stroke-dasharray: 6 4; }
+.geo-stage .hl { fill: none; stroke: var(--pv-ink); stroke-width: 2.5px; vector-effect: non-scaling-stroke; pointer-events: none; }
+.geo-stage .pin { fill: var(--pv-ink); stroke: var(--pv-paper); stroke-width: 2px; vector-effect: non-scaling-stroke; pointer-events: none; }
+.geo-stage [data-key]:focus { outline: none; stroke: var(--pv-coral-ink); stroke-width: 3px; }
+.geo-stage [data-key]:focus-visible { outline: 3px solid var(--pv-coral-ink); }
+.st-active { fill: var(--pv-coral); }
+.st-open { fill: var(--pv-paper); }
+.st-pick { fill: var(--pv-slate); }
+.st-proposed { fill: var(--pv-slate-2); }
+.geo-zoomnote { position: absolute; left: 8px; bottom: 8px; background: var(--pv-paper); border: 1px solid var(--pv-ink); padding: 2px 8px; font-family: var(--pv-mono); font-size: 13px; margin: 0; }
+.geo-panel { border-top: 2px solid var(--pv-ink); padding-top: 14px; min-width: 0; }
+.geo-stage { max-width: 100%; }
+.geo-panel h3 { font-size: 20px; margin: 6px 0 0; }
+.geo-panel .kv { margin-top: 12px; }
+.geo-panel .actions { margin-top: 14px; }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--pv-line); background: var(--pv-paper); margin-top: 14px; }
+.tbl-wrap table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 520px; }
+.tbl-wrap th, .tbl-wrap td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--pv-line); }
+.tbl-wrap th { font-size: 14px; color: var(--pv-ink-2); }
+.search { position: relative; max-width: 620px; margin-top: 10px; }
+.results { position: absolute; left: 0; right: 0; top: 100%; z-index: 25; margin: 0; padding: 0; list-style: none; background: var(--pv-paper); border: 1px solid var(--pv-ink); border-top: 0; max-height: 360px; overflow-y: auto; box-shadow: 0 8px 20px rgba(23,38,61,.12); }
+.results [role="option"] { min-height: 44px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2px 12px; padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--pv-line); font-size: 15px; }
+.results [role="option"] small { color: var(--pv-ink-2); font-size: 14px; }
+.results [role="option"][aria-selected="true"] { background: var(--pv-sun); }
+.results [role="option"]:hover { background: var(--pv-wash); }
+.results .none { padding: 12px; font-size: 15px; color: var(--pv-ink-2); }
+.geo-help { font-size: 14px; color: var(--pv-ink-2); margin: 10px 0 0; max-width: 66ch; }
+.prop-grid { display: grid; gap: 36px; grid-template-columns: minmax(0, 1fr); margin-top: 28px; }
+.units { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--pv-ink); }
+.units li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; align-items: center; padding-block: 10px; border-bottom: 1px solid var(--pv-line); font-size: 15px; }
+.units small { color: var(--pv-ink-2); display: block; font-size: 14px; }
+.units .radius { grid-column: 1 / -1; display: grid; gap: 4px; }
+.units .radius input { width: 100%; accent-color: var(--pv-ink); min-height: 32px; }
+.sum { margin-top: 22px; border: 1px solid var(--pv-ink); background: var(--pv-wash); padding: 14px 16px; max-width: 640px; }
+.sum dl { display: grid; gap: 10px; margin: 0; }
+.sum dl > div { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.sum dt { font-size: 14px; color: var(--pv-ink-2); }
+.sum dd { margin: 0; font-size: 15px; }
+.rule { margin-top: 16px; font-size: 15px; max-width: 640px; }
+.rule .mono { display: block; background: var(--pv-paper); border: 1px solid var(--pv-line); padding: 8px 10px; margin-top: 4px; overflow-wrap: anywhere; font-size: 14px; }
+.tree { list-style: none; margin: 16px 0 0; padding: 0 0 0 4px; border-left: 2px solid var(--pv-ink); max-width: 66ch; }
+.tree li { position: relative; padding: 8px 0 8px 18px; font-size: 15px; }
+.tree li::before { content: ""; position: absolute; left: 0; top: 19px; width: 14px; border-top: 2px solid var(--pv-ink); }
+.tree ul { list-style: none; margin: 0; padding: 0 0 0 6px; }
+.tree .tree-note { color: var(--pv-ink-2); font-size: 14px; display: block; }
+.split { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); margin-top: 24px; }
+.split-box { border-top: 2px solid var(--pv-ink); padding-top: 16px; max-width: 760px; }
+.split-cols { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); margin-top: 14px; }
+.split-col { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 12px 14px; font-size: 15px; }
+.split-col b { display: block; font-weight: 600; margin-bottom: 4px; }
+.split-col ul { margin: 6px 0 0; padding-left: 18px; color: var(--pv-ink-2); }
+.plan-out { margin-top: 14px; border: 1px solid var(--pv-ink); background: var(--pv-wash); padding: 14px 16px; max-width: 680px; font-size: 15px; }
+.plan-out ol { margin: 8px 0 0; padding-left: 22px; }
+.est { font-family: var(--pv-mono); font-size: 13px; color: var(--pv-ink-2); }
+.session-fs { margin-top: 14px; }
+.session-fs .opts { display: flex; flex-wrap: wrap; border: 1px solid var(--pv-ink); width: max-content; max-width: 100%; margin-top: 6px; }
+.session-fs .opts label { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; cursor: pointer; background: var(--pv-paper); font-size: 15px; }
+.session-fs .opts label + label { border-left: 1px solid var(--pv-ink); }
+.session-fs .opts input { width: 20px; height: 20px; accent-color: var(--pv-ink); }
+.session-fs .opts label:has(input:checked) { background: var(--pv-ink); color: var(--pv-paper); }
+.task-table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 14px; max-width: 760px; }
+.task-table th, .task-table td { text-align: left; vertical-align: top; padding: 9px 10px; border-bottom: 1px solid var(--pv-line); }
+.task-table th { font-size: 14px; color: var(--pv-ink-2); font-weight: 600; }
+.task-wrap { overflow-x: auto; }
 /* Responsive */
 @media (min-width: 700px) {
   .decide { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -254,6 +337,13 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   .decide .btn { min-height: 56px; }
   .nav { gap: 4px 16px; }
   .screen { padding-block: 28px 64px; }
+  .tree li { padding-left: 16px; }
+}
+@media (min-width: 960px) {
+  .geo-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .geo-panel { max-width: 720px; }
+  .prop-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; }
+  .split-cols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
 </style>
 </head>
@@ -267,7 +357,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     <label for="jump" class="sr">Go to screen</label>
     <select id="jump">
       <optgroup label="Ambassador entry and sign-in">
-        <option value="landing">1 Ambassadors landing</option>
+        <option value="landing">1 Ambassadors landing (world map)</option>
         <option value="signin">2 Sign in</option>
         <option value="signin-sent">2a Sign in: check your email</option>
         <option value="signin-expired">2b Sign in: expired link</option>
@@ -281,8 +371,12 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
         <option value="add">7 Stream C: add a group or organisation</option>
         <option value="add-policy">7b Stream C: local policy form</option>
       </optgroup>
+      <optgroup label="Map and proposals">
+        <option value="propose">9 Propose a region</option>
+      </optgroup>
       <optgroup label="Owner and region leads">
         <option value="moderation">8 Moderation queue</option>
+        <option value="granularity">10 Region tree and splitting</option>
       </optgroup>
     </select>
     <button class="btn" type="button" id="prev">Previous</button>
@@ -314,27 +408,57 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   <h1 id="h-landing">Become a local ambassador</h1>
   <p class="lede">Plastiverse Live grows region by region. Researchers and community leaders who know a place check our data there and add what only locals know.</p>
 
+  <div class="sec" id="regions" aria-labelledby="h-regions">
+    <div class="sec-head"><h2 id="h-regions">Regions on the world map</h2><span class="note">Natural Earth projection. Search, or pick a shape or dot.</span></div>
+
+    <div style="margin-top:18px">
+      <label for="place-q" style="font-weight:600;font-size:15px;display:block">Search a country, state, county or city</label>
+      <div class="search">
+        <input type="text" id="place-q" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="place-list" aria-activedescendant="" autocomplete="off" placeholder="Try Palau, Koror, Bergen or Alameda County" aria-describedby="place-hint">
+        <ul id="place-list" role="listbox" class="results" aria-label="Matching places" hidden></ul>
+      </div>
+      <p class="hint" id="place-hint">Type, then use the arrow keys and Enter. Choosing a place zooms the map to it.</p>
+      <p class="sr" id="place-status" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="geo-grid">
+      <div>
+        <div class="geo-tools">
+          <p class="hint" style="margin:0">Keys on the map: plus and minus zoom, arrows move, 0 resets.</p>
+          <div class="actions" style="margin-top:0">
+            <button class="btn" type="button" id="zoom-out-landing" aria-label="Zoom out of the world map">&minus;</button>
+            <button class="btn" type="button" id="zoom-in-landing" aria-label="Zoom in on the world map">+</button>
+            <button class="btn" type="button" id="zoom-reset-landing">Reset view</button>
+          </div>
+        </div>
+        <div class="geo-stage" id="map-landing" tabindex="0" role="group" aria-label="World map of ambassador regions. Choose a shape or dot to open its panel."></div>
+        <ul class="legend" aria-label="Map legend">
+          <li><span class="sw st-active" aria-hidden="true"></span>Ambassadors active</li>
+          <li><span class="sw st-proposed" aria-hidden="true"></span>Proposed, gathering members</li>
+          <li><span class="sw st-open" aria-hidden="true"></span>Open</li>
+        </ul>
+        <p class="geo-help">California is outlined on the US map. Small countries have a dot you can focus. Map: Natural Earth 1:50m countries (public domain).</p>
+        <div class="actions"><button type="button" class="btn" id="table-toggle" aria-expanded="false" aria-controls="map-table-wrap">Show the regions as a table</button></div>
+        <div class="tbl-wrap" id="map-table-wrap" hidden>
+          <table>
+            <caption class="sr">Regions, their status and the next step</caption>
+            <thead><tr><th scope="col">Region</th><th scope="col">Status</th><th scope="col">Ambassadors</th><th scope="col">Next step</th></tr></thead>
+            <tbody id="map-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <aside class="geo-panel" id="geo-panel" aria-live="polite" aria-label="Selected region">
+        <p class="hint" style="margin:0">Choose a coloured shape or dot on the map, or search above. This panel shows who is working there and what you can do.</p>
+      </aside>
+    </div>
+  </div>
+
   <div class="sec">
     <div class="sec-head"><h2>What ambassadors do</h2><span class="note">About an hour a month, from your own desk.</span></div>
     <ul class="rows" style="margin-top:16px">
       <li><div class="row-main"><h3>Check doubtful matches</h3><p>The automatic sorting is unsure about some works and institutions. You say whether it is right: a place name in the wrong country, or a Norwegian-language study that is about plastics.</p></div></li>
       <li><div class="row-main"><h3>Confirm placeholders</h3><p>Some funders, monitoring programmes and policies on a region page are not yet checked. Confirm the name and link, correct them, or mark them not relevant.</p></div></li>
       <li><div class="row-main"><h3>Add local knowledge</h3><p>Tell us about community groups, volunteer clean-ups, local policies with their dates, and monitoring data with its licence.</p></div></li>
-    </ul>
-  </div>
-
-  <div class="sec">
-    <div class="sec-head"><h2>Regions</h2><span class="note">Each region has its own page and its own review queue.</span></div>
-    <ul class="rows" style="margin-top:16px">
-      <li><div class="row-grid">
-        <div class="row-main"><h3>California <span class="badge live" style="margin-left:6px">Live atlas</span></h3><p>The full Atlas is live. Ambassador tasks are open to researchers at California institutions.</p></div>
-        <a class="btn" href="#signin">Sign in for California</a></div></li>
-      <li><div class="row-grid">
-        <div class="row-main"><h3>Norway <span class="badge" style="margin-left:6px">Open to ambassadors</span></h3><p>The Norway page is in pilot with research institutes and universities listed for Norway.</p></div>
-        <a class="btn" href="#signin">Sign in for Norway</a></div></li>
-      <li><div class="row-grid">
-        <div class="row-main"><h3>Belgium <span class="badge" style="margin-left:6px">Open to ambassadors</span></h3><p>The Belgium page is in pilot. Institutions are listed by their email domain.</p></div>
-        <a class="btn" href="#signin">Sign in for Belgium</a></div></li>
     </ul>
   </div>
 
@@ -374,7 +498,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     <ol class="steps" style="margin-top:20px">
       <li>Sign in with your institution email. We send a one-time link that works for 30 minutes.</li>
       <li>Set your display name once and agree to the contribution terms (CC BY-NC 4.0, the same licence as the Atlas data).</li>
-      <li>Work on your region's three streams. Nothing you add reaches the Atlas until a reviewer approves it.</li>
+      <li>Work on your region's three streams. Contributions to the data are reviewed before they reach the Atlas. A region you propose from inside your own institution goes live at once; other proposals wait for review.</li>
     </ol>
     <div class="actions"><a class="btn solid" href="#signin">Sign in with your institution email</a></div>
   </div>
@@ -496,18 +620,40 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     <p class="badge lead-only inline" style="flex:none">Region lead for Norway</p>
   </div>
 
+  <section class="sec" style="margin-top:36px" aria-labelledby="h-plan">
+    <div class="sec-head"><h2 id="h-plan">Plan a session</h2><span class="note">Times are estimates. Read the note below.</span></div>
+    <p class="lede" style="margin-top:12px;font-size:17px">About 15 minutes for the next 30 cases of stream A.</p>
+    <fieldset class="session-fs">
+      <legend>Session length</legend>
+      <div class="opts">
+        <label><input type="radio" name="session" value="5"> 5 minutes</label>
+        <label><input type="radio" name="session" value="15" checked> 15 minutes</label>
+        <label><input type="radio" name="session" value="30"> 30 minutes</label>
+      </div>
+    </fieldset>
+    <div class="plan-out" id="plan-out" role="status" aria-live="polite"></div>
+    <div class="task-wrap">
+      <table class="task-table">
+        <caption class="sr">Tasks, their estimated time and how many fit the chosen session</caption>
+        <thead><tr><th scope="col">Task</th><th scope="col">Estimate</th><th scope="col">Fits this session</th></tr></thead>
+        <tbody id="task-body"></tbody>
+      </table>
+    </div>
+    <p class="note">Estimates are design defaults. Stream A has 14 of 20 answers recorded. After 20 answers of a kind, its estimate switches to the median time ambassadors actually take, and the label says so.</p>
+  </section>
+
   <div class="ws-cols">
     <div>
       <div class="sec" style="margin-top:36px">
-        <div class="sec-head"><h2>Your three streams</h2><span class="note">Start with what is due first.</span></div>
+        <div class="sec-head"><h2>Your streams and proposals</h2><span class="note">Start with what is due first.</span></div>
         <ul class="rows" style="margin-top:8px">
           <li><div class="row-grid">
             <div class="row-main">
               <h3>A. Check doubtful matches</h3>
               <p>Cases where the automatic sorting is unsure about Norway: place names, institution types and Norwegian-language works.</p>
-              <progress class="progress" max="40" value="14" aria-label="Stream A: 14 of 40 cases checked">14 of 40</progress>
+              <progress class="progress" max="60" value="14" aria-label="Stream A: 14 of 60 cases checked">14 of 60</progress>
             </div>
-            <div class="stream-meta"><span class="mono">14 of 40 checked</span><div class="actions"><a class="btn solid" href="#review">Continue checking</a></div></div>
+            <div class="stream-meta"><span class="mono">14 of 60 checked</span><span class="est">About 30 seconds per case</span><span class="est">46 left, about 23 minutes</span><div class="actions"><a class="btn solid" href="#review">Continue checking</a></div></div>
           </div></li>
           <li><div class="row-grid">
             <div class="row-main">
@@ -515,7 +661,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
               <p>Funders, monitoring programmes, policies and networks on the Norway page that still say “to confirm”.</p>
               <progress class="progress" max="9" value="3" aria-label="Stream B: 3 of 9 placeholders confirmed">3 of 9</progress>
             </div>
-            <div class="stream-meta"><span class="mono">3 of 9 confirmed</span><div class="actions"><a class="btn" href="#confirm">Confirm next item</a></div></div>
+            <div class="stream-meta"><span class="mono">3 of 9 confirmed</span><span class="est">About 2 minutes each</span><span class="est">6 left, about 12 minutes</span><div class="actions"><a class="btn" href="#confirm">Confirm next item</a></div></div>
           </div></li>
           <li><div class="row-grid">
             <div class="row-main">
@@ -523,7 +669,14 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
               <p>Community groups, volunteer organisations, local policies with dates, monitoring datasets and corrections.</p>
               <p class="mono" style="margin-top:8px;color:var(--pv-ink)">2 sent · 1 approved · 1 waiting</p>
             </div>
-            <div class="stream-meta"><span class="mono">No quota</span><div class="actions"><a class="btn" href="#add">Add a group</a><a class="btn" href="#add-policy">Add a policy</a></div></div>
+            <div class="stream-meta"><span class="mono">No quota</span><span class="est">Group about 5 minutes, policy about 8 minutes</span><div class="actions"><a class="btn" href="#add">Add a group</a><a class="btn" href="#add-policy">Add a policy</a></div></div>
+          </div></li>
+          <li><div class="row-grid">
+            <div class="row-main">
+              <h3>D. Propose a region</h3>
+              <p>Pick the countries, states, counties or cities you speak for. Inside your institution's region it goes live at once; otherwise it waits for review.</p>
+            </div>
+            <div class="stream-meta"><span class="est">About 5 minutes</span><div class="actions"><a class="btn" href="#propose">Propose a region</a></div></div>
           </div></li>
         </ul>
       </div>
@@ -562,8 +715,8 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   <div class="rv-bar">
     <nav aria-label="Stream A" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Stream A</nav>
     <div class="rv-prog">
-      <span id="rv1-count">Case 15 of 40 · 14 checked</span>
-      <progress class="progress" max="40" value="14" aria-labelledby="rv1-count" style="margin-top:0"></progress>
+      <span class="est">About 30 seconds per case</span><span id="rv1-count">Case 15 of 60 · 14 checked</span>
+      <progress class="progress" max="60" value="14" aria-labelledby="rv1-count" style="margin-top:0"></progress>
     </div>
   </div>
 
@@ -618,8 +771,8 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   <div class="rv-bar">
     <nav aria-label="Stream A" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Stream A</nav>
     <div class="rv-prog">
-      <span id="rv2-count">Case 16 of 40 · 15 checked</span>
-      <progress class="progress" max="40" value="15" aria-labelledby="rv2-count" style="margin-top:0"></progress>
+      <span class="est">About 30 seconds per case</span><span id="rv2-count">Case 16 of 60 · 15 checked</span>
+      <progress class="progress" max="60" value="15" aria-labelledby="rv2-count" style="margin-top:0"></progress>
     </div>
   </div>
 
@@ -671,7 +824,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 <section class="screen wrap" data-route="confirm" aria-labelledby="h-b">
   <div class="rv-bar">
     <nav aria-label="Stream B" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Stream B</nav>
-    <div class="rv-prog"><span id="b-count">Placeholder 4 of 9 · 3 confirmed</span><progress class="progress" max="9" value="3" aria-labelledby="b-count" style="margin-top:0"></progress></div>
+    <div class="rv-prog"><span class="est">About 2 minutes each</span><span id="b-count">Placeholder 4 of 9 · 3 confirmed</span><progress class="progress" max="9" value="3" aria-labelledby="b-count" style="margin-top:0"></progress></div>
   </div>
 
   <div style="max-width:760px">
@@ -711,6 +864,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 <!-- 7. STREAM C: COMMUNITY GROUP OR ORGANISATION -->
 <section class="screen wrap" data-route="add" aria-labelledby="h-c">
   <h1 id="h-c" style="font-size:clamp(30px,3.6vw,44px);max-width:none">Add a community group or volunteer organisation</h1>
+  <p class="est" style="margin-top:12px">About 5 minutes</p>
   <p class="lede">Groups that clean beaches or rivers, run citizen science, or work on plastic pollution in Norway. Only add what is public.</p>
   <nav class="seg" aria-label="Kind of item">
     <a href="#add" aria-current="page">Group or organisation</a>
@@ -744,6 +898,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 <!-- 7b. STREAM C: LOCAL POLICY -->
 <section class="screen wrap" data-route="add-policy" aria-labelledby="h-p">
   <h1 id="h-p" style="font-size:clamp(30px,3.6vw,44px);max-width:none">Add a local policy</h1>
+  <p class="est" style="margin-top:12px">About 8 minutes</p>
   <p class="lede">A law, plan or target that matters where you live, with the dates it applies. Dates draw the policy timeline.</p>
   <nav class="seg" aria-label="Kind of item">
     <a href="#add">Group or organisation</a>
@@ -809,6 +964,180 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   </div>
 </section>
 
+<!-- 9. PROPOSE A REGION -->
+<section class="screen wrap" data-route="propose" aria-labelledby="h-prop">
+  <div class="rv-bar">
+    <nav aria-label="Propose a region" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Propose a region</nav>
+    <div class="rv-prog"><span class="est">About 5 minutes</span><span>Units picked: <span id="pr-count">0</span></span></div>
+  </div>
+
+  <h1 id="h-prop" style="font-size:clamp(30px,3.6vw,44px);margin-top:28px;max-width:none">Propose a region</h1>
+  <p class="lede">Pick the places you speak for: a country, a state or county, or a city with a radius. Name the region and send it. Everything you pick shows on the map as you go.</p>
+
+  <div class="prop-grid">
+    <div>
+      <div class="field" style="margin-top:0">
+        <label for="pr-q">Search for a place to add</label>
+        <div class="search">
+          <input type="text" id="pr-q" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="pr-list" aria-activedescendant="" autocomplete="off" placeholder="For example: Palau, Koror, Ghent" aria-describedby="pr-q-hint">
+          <ul id="pr-list" role="listbox" class="results" aria-label="Matching places" hidden></ul>
+        </div>
+        <p class="hint" id="pr-q-hint">Choose a result to add it. Remove any unit with its Remove button.</p>
+      </div>
+      <div class="actions" style="margin-top:16px">
+        <button class="btn" type="button" id="pr-group">Add the Pacific Island countries</button>
+        <button class="btn" type="button" id="pr-clear">Clear all places</button>
+      </div>
+      <div class="geo-tools" style="margin-top:18px">
+        <p class="hint" style="margin:0">Click a country, state or county to add or remove it. Click a city dot to add a city.</p>
+        <div class="actions" style="margin-top:0">
+          <button class="btn" type="button" id="zoom-out-propose" aria-label="Zoom out of the pick map">&minus;</button>
+          <button class="btn" type="button" id="zoom-in-propose" aria-label="Zoom in on the pick map">+</button>
+          <button class="btn" type="button" id="zoom-reset-propose">Reset view</button>
+        </div>
+      </div>
+      <div class="geo-stage" id="map-propose" tabindex="0" role="group" aria-label="Map to pick the places in your region. Plus and minus zoom, arrows move."></div>
+      <ul class="legend" aria-label="Pick map legend">
+        <li><span class="sw st-pick" aria-hidden="true"></span>Picked for this region</li>
+        <li><span class="sw st-active" aria-hidden="true"></span>Ambassadors active</li>
+        <li><span class="sw st-proposed" aria-hidden="true"></span>Proposed</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 style="font-size:24px">Units in this region</h2>
+      <ol class="units" id="pr-units" aria-label="Units in this region"></ol>
+      <p class="hint" id="pr-empty">No places yet. Search, add the Pacific group, or click the map.</p>
+
+      <div class="sum" aria-labelledby="sum-h">
+        <h3 id="sum-h">Running summary (sample figures)</h3>
+        <dl>
+          <div><dt>Units</dt><dd id="sum-units">0</dd></div>
+          <div><dt>Eligible institutions inside</dt><dd id="sum-insts">none yet</dd></div>
+          <div><dt>Plastics works inside (sample)</dt><dd id="sum-works">0</dd></div>
+        </dl>
+      </div>
+
+      <form id="pr-form" novalidate style="margin-top:26px">
+        <div class="field" style="margin-top:0">
+          <label for="pr-name">Region name <span class="hint">(required)</span></label>
+          <input type="text" id="pr-name" maxlength="60" placeholder="For example: Oslofjord">
+        </div>
+        <div class="field">
+          <label for="pr-inst">Your institution</label>
+          <select id="pr-inst" aria-describedby="pr-inst-h">
+            <option value="niva">NIVA, Oslo (Norway)</option>
+            <option value="ntnu">NTNU, Trondheim (Norway)</option>
+            <option value="vliz">VLIZ, Ostend (Belgium)</option>
+            <option value="ucsb">UC Santa Barbara (California)</option>
+            <option value="nus">National University of Samoa, Apia</option>
+          </select>
+          <p class="hint" id="pr-inst-h">Inside the region, it goes live at once. Outside it, the proposal waits for review.</p>
+        </div>
+        <div class="rule">
+          <p style="margin:0"><b>Stored rule (plain)</b></p>
+          <span class="mono" id="pr-pred">countries: none yet</span>
+          <p class="hint" id="pr-plain" style="margin-top:6px"></p>
+        </div>
+        <div class="actions"><button class="btn solid" type="submit">Send the proposal</button><a class="btn" href="#workspace">Cancel</a></div>
+      </form>
+      <div id="pr-errors" class="err-box" role="alert" tabindex="-1" hidden><h2>Please fix this to continue</h2><ul id="pr-error-list"></ul></div>
+      <div id="pr-outcome" class="saved" role="status" tabindex="-1" hidden></div>
+    </div>
+  </div>
+  <p class="flow-note">Auto-approved regions appear on the map at once. Regions waiting for review stay private until approved. Every approved region is also copied into the repository by a pull request that the owner reviews.</p>
+</section>
+
+<!-- 10. REGION TREE AND GRANULARITY (owner and region lead) -->
+<section class="screen wrap" data-route="granularity" aria-labelledby="h-gr">
+  <div class="rv-bar">
+    <nav aria-label="Region tree" class="keys" style="font-size:15px"><a class="link" href="#moderation" style="min-height:44px">Moderation</a> / Region tree</nav>
+    <div class="rv-prog"><span>Owner and region lead view</span></div>
+  </div>
+
+  <h1 id="h-gr" style="font-size:clamp(30px,3.6vw,44px);margin-top:28px;max-width:none">Region tree</h1>
+  <p class="lede">A group keeps its places until one of them has its own ambassador and at least 50 plastics works. Then that place can split out. Nothing is deleted, and earlier contributions stay with the places they were about.</p>
+
+  <ul class="tree" aria-label="Region tree">
+    <li><b>Pacific Island countries</b> · group · proposed
+      <span class="tree-note">11 countries, no ambassador yet for the group</span>
+      <ul>
+        <li><span id="tree-samoa">Samoa · child region · ready to split</span>
+          <span class="tree-note">National University of Samoa ambassador · 52 plastics works</span></li>
+        <li>10 other countries · stay in the group</li>
+      </ul>
+    </li>
+    <li><b>California</b> · state · active
+      <span class="tree-note">3 ambassadors</span>
+      <ul>
+        <li><span id="tree-oakland">Oakland · city child · ready to split</span>
+          <span class="tree-note">Sample institution in Oakland, ambassador · 58 plastics works</span></li>
+        <li>The rest of California · stays in the state</li>
+      </ul>
+    </li>
+    <li><b>Norway</b> · active · no child regions yet</li>
+    <li><b>Belgium</b> · active · no child regions yet</li>
+  </ul>
+
+  <div class="split">
+    <section class="split-box" aria-labelledby="h-samoa">
+      <h2 id="h-samoa" style="font-size:24px">Samoa is ready to become its own region</h2>
+      <p class="note" style="max-width:66ch">Samoa has its own verified ambassador, from the National University of Samoa, and 52 plastics works. The rule below is met.</p>
+      <div class="rule">
+        <p style="margin:0"><b>Rule</b> for a child region (Tier B)</p>
+        <span class="mono">own verified ambassador AND at least 50 plastics works</span>
+        <p class="hint" style="margin-top:6px">Samoa: ambassador yes · works 52 of 50 needed.</p>
+      </div>
+      <div class="split-cols">
+        <div class="split-col">
+          <b>Before: the group only</b>
+          Pacific Island countries · 11 countries · 0 ambassadors
+          <ul><li>Samoa is inside the group</li></ul>
+        </div>
+        <div class="split-col">
+          <b>After: parent and child</b>
+          Pacific Island countries · 10 countries · keeps the group
+          <ul><li>Samoa · child region · 1 ambassador · 52 works</li></ul>
+        </div>
+      </div>
+      <p class="note">Contributions already made for Samoa stay attached to Samoa.</p>
+      <div class="actions">
+        <button class="btn solid" type="button" id="split-samoa">Split Samoa out now</button>
+        <button class="btn" type="button" id="keep-samoa">Keep grouped</button>
+      </div>
+      <p class="hint" id="samoa-status" role="status" tabindex="-1"></p>
+    </section>
+
+    <section class="split-box" aria-labelledby="h-oak">
+      <h2 id="h-oak" style="font-size:24px">Second example: Oakland, a city inside California</h2>
+      <p class="note" style="max-width:66ch">A city region works the same way. It is a child of its state. Oakland has its own verified ambassador and 58 plastics works, so the rule is met.</p>
+      <div class="rule">
+        <p style="margin:0"><b>Rule</b> for a child region (Tier B)</p>
+        <span class="mono">own verified ambassador AND at least 50 plastics works</span>
+        <p class="hint" style="margin-top:6px">Oakland: ambassador yes · works 58 of 50 needed.</p>
+      </div>
+      <div class="split-cols">
+        <div class="split-col">
+          <b>Before: the state only</b>
+          California · state · 3 ambassadors
+          <ul><li>Oakland is inside California</li></ul>
+        </div>
+        <div class="split-col">
+          <b>After: parent and child</b>
+          California · keeps the rest of the state
+          <ul><li>Oakland · city child · 1 ambassador · 58 works</li></ul>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn solid" type="button" id="split-oak">Split Oakland out now</button>
+        <button class="btn" type="button" id="keep-oak">Keep inside California</button>
+      </div>
+      <p class="hint" id="oak-status" role="status" tabindex="-1"></p>
+    </section>
+  </div>
+  <p class="flow-note">Split threshold, Tier B: owner decision 2026-11-25. Whether a split region is shown on the public map is an open question (see the surface brief).</p>
+</section>
+
 </main>
 
 <footer class="foot">
@@ -821,8 +1150,8 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 <script>
 (function () {
   "use strict";
-  var ROUTES = ["landing","signin","signin-sent","signin-expired","welcome","workspace","review","review-language","confirm","add","add-policy","moderation"];
-  var SIGNED_IN = ["welcome","workspace","review","review-language","confirm","add","add-policy","moderation"];
+  var ROUTES = ["landing","signin","signin-sent","signin-expired","welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity"];
+  var SIGNED_IN = ["welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity"];
   var body = document.body;
   var jump = document.getElementById("jump");
   var main = document.getElementById("main");
@@ -861,7 +1190,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   }
   document.getElementById("prev").addEventListener("click", function () { step(-1); });
   document.getElementById("next").addEventListener("click", function () { step(1); });
-  document.getElementById("screen-count").textContent = "1 to 8, with sub-states";
+  document.getElementById("screen-count").textContent = "1 to 10, with sub-states";
   lead.addEventListener("change", function () { body.classList.toggle("lead", lead.checked); });
 
   // ---- Eligibility checker (sample data) ----
@@ -1142,6 +1471,703 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 
   showItem(0);
   show();
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  // ---- Shared helpers and sample data (design prototype; figures are sample) ----
+  var VW = 960, VH = 500, MAXK = 150;
+  var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c]; }); }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function norm(s) { return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+  function slug(s) { return norm(s).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
+  function km(lat1, lon1, lat2, lon2) {
+    var R = 6371, r = Math.PI / 180;
+    var a = Math.sin((lat2 - lat1) * r / 2) * Math.sin((lat2 - lat1) * r / 2) +
+      Math.cos(lat1 * r) * Math.cos(lat2 * r) * Math.sin((lon2 - lon1) * r / 2) * Math.sin((lon2 - lon1) * r / 2);
+    return 2 * R * Math.asin(Math.min(1, Math.sqrt(a)));
+  }
+  function rectPoly(w, s, e, n) { return { type: "Polygon", coordinates: [[[w, s], [w, n], [e, n], [e, s], [w, s]]] }; }
+
+  var PAC = ["585", "583", "584", "520", "296", "798", "882", "776", "242", "548", "090"];
+  var DOT_IDS = ["585", "583", "584", "520", "296", "798", "882", "776", "462", "470", "702", "492", "438"];
+  var CA_RING = [[-124.4, 42.0], [-120.0, 42.0], [-120.0, 39.0], [-114.6, 35.0], [-114.7, 32.7], [-117.1, 32.5], [-117.3, 33.0], [-118.4, 33.9], [-119.5, 34.4], [-120.6, 34.6], [-121.9, 36.6], [-122.5, 37.8], [-123.0, 38.0], [-123.8, 39.5], [-124.4, 40.4]];
+
+  // id, ISO alpha-2, name, centre [lon, lat], population (ranking only), sample works, optional zoom box, optional flag
+  var COUNTRY_ROWS = [
+    ["585", "PW", "Palau", [134.55, 7.5], 18000, 14], ["583", "FM", "Micronesia", [158.2, 6.9], 115000, 6],
+    ["584", "MH", "Marshall Islands", [171.2, 7.1], 42000, 5], ["520", "NR", "Nauru", [166.93, -0.52], 12000, 3],
+    ["296", "KI", "Kiribati", [173.0, 1.4], 120000, 4], ["798", "TV", "Tuvalu", [178.7, -7.1], 11000, 2],
+    ["882", "WS", "Samoa", [-172.1, -13.8], 220000, 52], ["776", "TO", "Tonga", [-175.2, -21.2], 105000, 9],
+    ["242", "FJ", "Fiji", [178.0, -17.7], 900000, 27, null, true], ["548", "VU", "Vanuatu", [167.5, -16.3], 320000, 8],
+    ["090", "SB", "Solomon Islands", [160.2, -9.6], 720000, 7],
+    ["578", "NO", "Norway", [10.5, 61.0], 5500000, 260, [4.0, 57.9, 31.2, 71.2]],
+    ["056", "BE", "Belgium", [4.5, 50.6], 11600000, 140, [2.5, 49.5, 6.4, 51.5]],
+    ["840", "US", "United States", [-98, 39], 340000000, 2100, [-125, 24, -66, 50]],
+    ["462", "MV", "Maldives", [73.5, 3.2], 520000, 1], ["470", "MT", "Malta", [14.45, 35.9], 520000, 3],
+    ["702", "SG", "Singapore", [103.82, 1.35], 5900000, 40], ["492", "MC", "Monaco", [7.42, 43.73], 39000, 0],
+    ["438", "LI", "Liechtenstein", [9.55, 47.14], 39000, 0], ["124", "CA", "Canada", [-98, 60], 39000000, 600],
+    ["076", "BR", "Brazil", [-53, -10], 215000000, 380], ["356", "IN", "India", [80, 22], 1400000000, 900],
+    ["156", "CN", "China", [104, 35], 1400000000, 1200], ["392", "JP", "Japan", [138, 36], 125000000, 700],
+    ["826", "GB", "United Kingdom", [-2, 54], 67000000, 820], ["276", "DE", "Germany", [10, 51], 84000000, 640],
+    ["528", "NL", "Netherlands", [5.3, 52.1], 17700000, 180], ["752", "SE", "Sweden", [16, 62], 10500000, 150],
+    ["208", "DK", "Denmark", [10, 56], 5900000, 70], ["484", "MX", "Mexico", [-102, 23], 128000000, 250],
+    ["360", "ID", "Indonesia", [118, -2], 275000000, 300], ["404", "KE", "Kenya", [37.9, 0.2], 54000000, 30],
+    ["710", "ZA", "South Africa", [24, -29], 60000000, 300], ["554", "NZ", "New Zealand", [172, -41], 5100000, 290],
+    ["598", "PG", "Papua New Guinea", [145, -6], 10300000, 8]
+  ];
+  // Subdivisions: California is drawn from a simplified outline; the others are approximate boxes (sample, see brief).
+  var SUB_ROWS = [
+    { slug: "california", name: "California", parent: "United States", kind: "state", country: "840", code: "US-CA", ring: CA_RING, pt: [-119.6, 37.2], pop: 39000000, works: 212 },
+    { slug: "vestland", name: "Vestland", parent: "Norway", kind: "county", country: "578", code: "NO-46", bbox: [4.2, 59.6, 8.0, 62.3], approx: true, pt: [6.0, 61.0], pop: 630000, works: 80 },
+    { slug: "flanders", name: "Flanders", parent: "Belgium", kind: "region", country: "056", code: "BE-VLG", bbox: [2.5, 50.7, 5.9, 51.5], approx: true, pt: [4.2, 51.05], pop: 6600000, works: 120 },
+    { slug: "alameda-county", name: "Alameda County", parent: "California", kind: "county", country: "840", code: "US-CA-001", bbox: [-122.4, 37.45, -121.2, 37.9], approx: true, pt: [-121.9, 37.65], pop: 1670000, works: 96 }
+  ];
+  // Populated places (sample index). Koror is below the 15,000 GeoNames rule; the owner named it, so it is included.
+  var CITY_ROWS = [
+    ["Koror", "Palau", "585", [134.48, 7.34], 11000, 6], ["Majuro", "Marshall Islands", "584", [171.38, 7.09], 28000, 4],
+    ["Palikir", "Micronesia", "583", [158.16, 6.92], 6000, 2], ["Apia", "Samoa", "882", [-171.76, -13.83], 37000, 30],
+    ["Nuku'alofa", "Tonga", "776", [-175.2, -21.13], 22000, 4], ["Suva", "Fiji", "242", [178.44, -18.14], 93000, 16],
+    ["Port Vila", "Vanuatu", "548", [168.32, -17.73], 51000, 5], ["Honiara", "Solomon Islands", "090", [159.97, -9.43], 84000, 3],
+    ["Bergen", "Vestland, Norway", "578", [5.32, 60.39], 285000, 40], ["Oslo", "Norway", "578", [10.75, 59.91], 709000, 210],
+    ["Trondheim", "Norway", "578", [10.4, 63.43], 212000, 60], ["Ghent", "Flanders, Belgium", "056", [3.72, 51.05], 264000, 40],
+    ["Antwerp", "Belgium", "056", [4.4, 51.22], 530000, 45], ["Ostend", "Belgium", "056", [2.92, 51.23], 71000, 12],
+    ["Brussels", "Belgium", "056", [4.35, 50.85], 1200000, 70], ["Oakland", "California", "840", [-122.27, 37.8], 440000, 58],
+    ["Los Angeles", "California", "840", [-118.24, 34.05], 3800000, 420], ["San Diego", "California", "840", [-117.16, 32.72], 1400000, 180],
+    ["Santa Barbara", "California", "840", [-119.7, 34.42], 88000, 95], ["San Francisco", "California", "840", [-122.42, 37.77], 870000, 300],
+    ["Sacramento", "California", "840", [-121.49, 38.58], 530000, 70]
+  ];
+  // Island states: zoom to a 300 km box around the main islands (their feature bounds include far atolls)
+  var POINT_ZOOM = { "585": 1, "583": 1, "584": 1, "520": 1, "296": 1, "798": 1, "882": 1, "776": 1, "548": 1, "090": 1, "242": 1 };
+  var KIND_NAME = { c: "country", s: "subdivision", ci: "city" };
+  var KIND_ORDER = { c: 0, s: 1, ci: 2 };
+  var CODE_BY_ID = {};
+
+  // Sample institutions (names as on the landing page, plus one new sample institution for Samoa)
+  var INSTS = [
+    { id: "niva", name: "NIVA", place: "Oslo", cid: "578", lon: 10.72, lat: 59.94 },
+    { id: "ntnu", name: "NTNU", place: "Trondheim", cid: "578", lon: 10.4, lat: 63.42 },
+    { id: "sintef", name: "SINTEF Ocean", place: "Trondheim", cid: "578", lon: 10.41, lat: 63.43 },
+    { id: "vliz", name: "VLIZ", place: "Ostend", cid: "056", sub: "s:flanders", lon: 2.92, lat: 51.23 },
+    { id: "ucsb", name: "UC Santa Barbara", place: "Santa Barbara", cid: "840", sub: "s:california", lon: -119.85, lat: 34.41 },
+    { id: "nus", name: "National University of Samoa", place: "Apia", cid: "882", lon: -171.75, lat: -13.83 }
+  ];
+
+  // ---- Unit registry (every country, subdivision and city the map or search can point at) ----
+  var UNITS = {}, PLACES = [];
+  COUNTRY_ROWS.forEach(function (r) {
+    var u = { key: "c:" + r[0], t: "c", id: r[0], code: r[1], name: r[2], parent: "", kind: "country", pt: r[3], pop: r[4], works: r[5], box: r[6] || null, fb: !r[7] };
+    CODE_BY_ID[r[0]] = r[1];
+    UNITS[u.key] = u; PLACES.push(u);
+  });
+  SUB_ROWS.forEach(function (s) {
+    var u = { key: "s:" + s.slug, t: "s", name: s.name, parent: s.parent, kind: s.kind, code: s.code, country: s.country, pt: s.pt, pop: s.pop, works: s.works, ring: s.ring || null, bbox: s.bbox || null, approx: !!s.approx };
+    UNITS[u.key] = u; PLACES.push(u);
+  });
+  CITY_ROWS.forEach(function (c) {
+    var u = { key: "ci:" + slug(c[0]), t: "ci", name: c[0], parent: c[1], kind: "city", code: CODE_BY_ID[c[2]] || "", country: c[2], pt: c[3], pop: c[4], works: c[5] };
+    UNITS[u.key] = u; PLACES.push(u);
+  });
+  var CITY_UNITS = PLACES.filter(function (u) { return u.t === "ci"; });
+  var SUB_UNITS = PLACES.filter(function (u) { return u.t === "s"; });
+  var DOT_UNITS = DOT_IDS.map(function (id) { return UNITS["c:" + id]; });
+
+  // ---- Shared state (sample regions; statuses: active, proposed, open) ----
+  var STATE = {
+    regions: [
+      { id: "california", name: "California", status: "active", units: ["s:california"], ambassadors: 3, radius: {}, works: 212 },
+      { id: "norway", name: "Norway", status: "active", units: ["c:578"], ambassadors: 2, radius: {}, works: 260 },
+      { id: "belgium", name: "Belgium", status: "active", units: ["c:056"], ambassadors: 1, radius: {}, works: 140 },
+      { id: "pacific", name: "Pacific Island countries", status: "proposed", units: PAC.map(function (id) { return "c:" + id; }), ambassadors: 0, radius: {}, works: 137 }
+    ]
+  };
+  var MAPS = [], LANDING = null, PROP = null, PREFILL = null;
+
+  function regionOf(key) {
+    for (var i = 0; i < STATE.regions.length; i++) if (STATE.regions[i].units.indexOf(key) >= 0) return STATE.regions[i];
+    return null;
+  }
+  function statusOf(key) { var r = regionOf(key); return r ? r.status : "open"; }
+  function statusWord(key) {
+    var r = regionOf(key);
+    if (!r) return "open, no ambassador yet";
+    if (r.status === "active") return "ambassadors active";
+    return r.pending ? "proposed, waiting for review" : "proposed, gathering members";
+  }
+  function instsInside(keys, radius) {
+    return INSTS.filter(function (inst) {
+      return keys.some(function (k) {
+        var u = UNITS[k]; if (!u) return false;
+        if (u.t === "c") return u.id === inst.cid;
+        if (u.t === "s") return u.key === inst.sub;
+        if (u.t === "ci") return km(u.pt[1], u.pt[0], inst.lat, inst.lon) <= ((radius && radius[k]) || 25);
+        return false;
+      });
+    });
+  }
+  function worksOf(keys) { return keys.reduce(function (n, k) { return n + ((UNITS[k] && UNITS[k].works) || 0); }, 0); }
+  function ruleLines(keys, radius) {
+    var cs = [], ss = [], cis = [];
+    keys.forEach(function (k) {
+      var u = UNITS[k]; if (!u) return;
+      if (u.t === "c") cs.push(u.code || u.name);
+      else if (u.t === "s") ss.push(u.code);
+      else cis.push(u.name + " (" + ((radius && radius[k]) || 25) + " km)");
+    });
+    var lines = [];
+    if (cs.length) lines.push("countries: " + cs.join(", "));
+    if (ss.length) lines.push("subdivisions: " + ss.join(", "));
+    if (cis.length) lines.push("places: " + cis.join(", "));
+    return lines;
+  }
+  function plainList(keys) {
+    var names = keys.map(function (k) { return UNITS[k] ? UNITS[k].name : k; });
+    if (names.length <= 1) return names.join("");
+    return names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
+  }
+
+  // ---- d3 map (Natural Earth projection, world-atlas 1:50m countries) ----
+  var WORLD = null, FEATURES = [], BYID = {}, PROJ = null, PATH = null;
+  function loadWorld() {
+    if (!window.d3 || !window.topojson) return Promise.reject(new Error("The map library did not load."));
+    return fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json").then(function (r) {
+      if (!r.ok) throw new Error("The map data did not load (HTTP " + r.status + ").");
+      return r.json();
+    }).then(function (w) {
+      WORLD = w;
+      PROJ = d3.geoNaturalEarth1().fitExtent([[8, 8], [VW - 8, VH - 8]], { type: "Sphere" });
+      PATH = d3.geoPath(PROJ);
+      FEATURES = topojson.feature(w, w.objects.countries).features;
+      FEATURES.forEach(function (f) { (BYID[f.id] = BYID[f.id] || []).push(f); });
+      // Any country on the map without a registry row gets a generic unit, so every shape can be picked.
+      FEATURES.forEach(function (f) {
+        var key = "c:" + f.id;
+        if (!UNITS[key]) {
+          var cen = d3.geoCentroid(f);
+          var u = { key: key, t: "c", id: f.id, code: "", name: (f.properties && f.properties.name) || ("Country " + f.id), parent: "", kind: "country", pt: cen, pop: 0, works: 0, box: null, fb: true };
+          UNITS[key] = u;
+        }
+      });
+    });
+  }
+  function geoOf(u) {
+    if (u.t === "s") return u.ring ? { type: "Polygon", coordinates: [u.ring.concat([u.ring[0]])] } : rectPoly(u.bbox[0], u.bbox[1], u.bbox[2], u.bbox[3]);
+    return null;
+  }
+  function minBox(lon, lat) {
+    var half = 150 / 111.2;
+    var dLon = half / Math.max(0.3, Math.cos(lat * Math.PI / 180));
+    return PATH.bounds(rectPoly(lon - dLon, lat - half, lon + dLon, lat + half));
+  }
+  function unionB(a, b) {
+    return [[Math.min(a[0][0], b[0][0]), Math.min(a[0][1], b[0][1])], [Math.max(a[1][0], b[1][0]), Math.max(a[1][1], b[1][1])]];
+  }
+  function boundsOf(u) {
+    var b = null;
+    if (u.box) b = PATH.bounds(rectPoly(u.box[0], u.box[1], u.box[2], u.box[3]));
+    else if (u.t === "c" && !POINT_ZOOM[u.id] && BYID[u.id]) b = PATH.bounds({ type: "FeatureCollection", features: BYID[u.id] });
+    else if (u.t === "s") b = PATH.bounds(geoOf(u));
+    var m = minBox(u.pt[0], u.pt[1]);
+    return b && isFinite(b[0][0]) && isFinite(b[1][1]) ? unionB(b, m) : m;
+  }
+  function fillFor(key, m) {
+    if (m.picks && m.sel[key]) return "var(--pv-slate)";
+    var st = statusOf(key);
+    if (st === "active") return "var(--pv-coral)";
+    if (st === "proposed") return "url(#" + m.id + "-hatch)";
+    return "var(--pv-paper)";
+  }
+  function applyView(m, animate) {
+    var t = "translate(" + m.tx + "," + m.ty + ") scale(" + m.k + ")";
+    m.view.interrupt();
+    if (animate && !reduceMotion) m.view.transition().duration(420).attr("transform", t);
+    else m.view.attr("transform", t);
+    m.dots.attr("r", function (u) { return (u.t === "ci" ? 4.5 : 6) / m.k; });
+  }
+  function clampView(m) {
+    m.tx = Math.min(0, Math.max(VW - VW * m.k, m.tx));
+    m.ty = Math.min(0, Math.max(VH - VH * m.k, m.ty));
+  }
+  function zoomBy(m, f) {
+    var cx = (VW / 2 - m.tx) / m.k, cy = (VH / 2 - m.ty) / m.k;
+    m.k = clamp(m.k * f, 1, MAXK);
+    m.tx = VW / 2 - cx * m.k; m.ty = VH / 2 - cy * m.k;
+    clampView(m); applyView(m, true);
+  }
+  function zoomToBounds(m, b, animate) {
+    var w = Math.max(1e-3, b[1][0] - b[0][0]), h = Math.max(1e-3, b[1][1] - b[0][1]);
+    var k = clamp(Math.min(VW * 0.9 / w, VH * 0.9 / h), 1, MAXK);
+    var cx = (b[0][0] + b[1][0]) / 2, cy = (b[0][1] + b[1][1]) / 2;
+    m.k = k; m.tx = VW / 2 - cx * k; m.ty = VH / 2 - cy * k;
+    clampView(m); applyView(m, animate);
+    return k;
+  }
+  function resetView(m) { m.k = 1; m.tx = 0; m.ty = 0; applyView(m, true); }
+
+  function makeMap(o) {
+    var stage = $(o.stageId);
+    stage.innerHTML = "";
+    var m = { id: o.id, picks: !!o.picks, sel: {}, focus: null, k: 1, tx: 0, ty: 0, pick: null, onPick: o.onPick, suppress: false };
+    var svg = d3.select(stage).append("svg").attr("viewBox", "0 0 " + VW + " " + VH).attr("preserveAspectRatio", "xMidYMid meet");
+    var defs = svg.append("defs");
+    var pat = defs.append("pattern").attr("id", m.id + "-hatch").attr("width", 7).attr("height", 7).attr("patternUnits", "userSpaceOnUse").attr("patternTransform", "rotate(45)");
+    pat.append("rect").attr("width", 7).attr("height", 7).style("fill", "var(--pv-slate-2)");
+    pat.append("rect").attr("width", 3).attr("height", 7).style("fill", "var(--pv-slate)");
+    svg.append("rect").attr("class", "geo-sea").attr("width", VW).attr("height", VH);
+    m.view = svg.append("g");
+    var gC = m.view.append("g"), gS = m.view.append("g"), gH = m.view.append("g"), gD = m.view.append("g");
+    m.svg = svg; m.stage = stage;
+
+    m.countryEls = gC.selectAll("path").data(FEATURES).enter().append("path")
+      .attr("class", "c").attr("d", PATH)
+      .attr("data-key", function (d) { return "c:" + d.id; })
+      .on("click", function (e, d) { m.doPick("c:" + d.id); });
+
+    var markers = [UNITS["s:california"]].concat(DOT_UNITS);
+    if (o.allSubs) markers = markers.concat(SUB_UNITS.filter(function (u) { return u.key !== "s:california"; }));
+    if (o.showCities) markers = markers.concat(CITY_UNITS);
+    m.markers = markers;
+    m.dots = gD.selectAll("circle").data(markers).enter().append("circle")
+      .attr("class", function (u) { return u.t === "ci" ? "dot city" : "dot"; })
+      .attr("cx", function (u) { return PROJ(u.pt)[0]; })
+      .attr("cy", function (u) { return PROJ(u.pt)[1]; })
+      .attr("data-key", function (u) { return u.key; })
+      .attr("role", "button").attr("tabindex", "0")
+      .on("click", function (e, u) { m.doPick(u.key); })
+      .on("keydown", function (e, u) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); m.doPick(u.key); } });
+
+    m.drawSubs = function () {
+      var subs = SUB_UNITS.filter(function (u) { return o.allSubs || u.key === "s:california" || u.key === m.focus || m.sel[u.key]; });
+      var sel = gS.selectAll("path").data(subs, function (u) { return u.key; });
+      sel.exit().remove();
+      sel.enter().append("path").merge(sel)
+        .attr("class", function (u) { return "sub" + (u.approx ? " approx" : ""); })
+        .attr("d", function (u) { return PATH(geoOf(u)); })
+        .attr("data-key", function (u) { return u.key; })
+        .style("fill", function (u) { return fillFor(u.key, m); })
+        .on("click", function (e, u) { m.doPick(u.key); });
+    };
+    m.drawFocus = function () {
+      gH.selectAll("*").remove();
+      if (!m.focus || !UNITS[m.focus]) return;
+      var u = UNITS[m.focus];
+      if (u.t === "ci") {
+        gH.append("circle").attr("class", "pin").attr("cx", PROJ(u.pt)[0]).attr("cy", PROJ(u.pt)[1]).attr("r", 5 / m.k);
+      } else if (u.t === "c") {
+        var feats = BYID[u.id] || [];
+        if (feats.length) gH.append("path").attr("class", "hl").attr("d", PATH({ type: "FeatureCollection", features: feats }));
+      } else {
+        gH.append("path").attr("class", "hl").attr("d", PATH(geoOf(u)));
+      }
+    };
+    m.paint = function () {
+      m.countryEls.style("fill", function (d) { return fillFor("c:" + d.id, m); });
+      m.drawSubs();
+      m.dots.style("fill", function (u) { return fillFor(u.key, m); })
+        .attr("aria-label", function (u) {
+          return u.name + ", " + (u.t === "ci" ? "city" : u.t === "s" ? u.kind : "country") + ", " + statusWord(u.key) + (m.picks && m.sel[u.key] ? ", picked" : "");
+        });
+      m.drawFocus();
+      applyView(m, false);
+    };
+    m.doPick = function (key) {
+      if (m.suppress || !UNITS[key]) return;
+      if (o.onPick) o.onPick(key);
+    };
+    m.setFocus = function (key) { m.focus = key; m.paint(); };
+    m.setSel = function (keys) { m.sel = {}; keys.forEach(function (k) { m.sel[k] = true; }); m.paint(); };
+    m.zoomToKey = function (key) { var u = UNITS[key]; if (!u) return; zoomToBounds(m, boundsOf(u), true); };
+
+    // Pointer pan, with a click suppressed after a real drag
+    var drag = null;
+    svg.on("pointerdown", function (e) { drag = { x: e.clientX, y: e.clientY, tx: m.tx, ty: m.ty }; m.suppress = false; });
+    window.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      var rect = svg.node().getBoundingClientRect(), s = VW / rect.width;
+      var dx = (e.clientX - drag.x) * s, dy = (e.clientY - drag.y) * s;
+      if (Math.abs(dx) + Math.abs(dy) > 4) {
+        m.suppress = true; m.tx = drag.tx + dx; m.ty = drag.ty + dy; clampView(m); applyView(m, false);
+      }
+    });
+    window.addEventListener("pointerup", function () { drag = null; setTimeout(function () { m.suppress = false; }, 0); });
+    // Keyboard on the map frame: + and - zoom, arrows move, 0 resets
+    stage.addEventListener("keydown", function (e) {
+      var k = e.key, step = 60 / m.k;
+      if (k === "+" || k === "=") zoomBy(m, 1.5);
+      else if (k === "-" || k === "_") zoomBy(m, 1 / 1.5);
+      else if (k === "0") resetView(m);
+      else if (k === "ArrowLeft") { m.tx += 60; }
+      else if (k === "ArrowRight") { m.tx -= 60; }
+      else if (k === "ArrowUp") { m.ty += 60; }
+      else if (k === "ArrowDown") { m.ty -= 60; }
+      else return;
+      e.preventDefault();
+      clampView(m); applyView(m, false);
+    });
+    MAPS.push(m);
+    m.paint();
+    return m;
+  }
+  function bindZoom(m, suffix) {
+    var a = $("zoom-in-" + suffix), b = $("zoom-out-" + suffix), c = $("zoom-reset-" + suffix);
+    if (a) a.addEventListener("click", function () { zoomBy(m, 1.5); });
+    if (b) b.addEventListener("click", function () { zoomBy(m, 1 / 1.5); });
+    if (c) c.addEventListener("click", function () { resetView(m); });
+  }
+  function mapFailed(id, msg) {
+    var el = $(id);
+    if (el) el.innerHTML = '<p class="hint" style="padding:16px;margin:0">' + esc(msg) + ' Search and the table still work.</p>';
+  }
+
+  // ---- Place search (combobox with arrow keys, Enter, Escape) ----
+  function searchPlaces(q) {
+    var n = norm(q.trim());
+    if (!n) return [];
+    var out = [];
+    PLACES.forEach(function (u) {
+      var name = norm(u.name), par = norm(u.parent || "");
+      var score = -1;
+      if (name === n) score = 0;
+      else if (name.indexOf(n) === 0) score = 1;
+      else if (name.split(/[\s',]+/).some(function (w) { return w.indexOf(n) === 0; })) score = 2;
+      else if (name.indexOf(n) > 0) score = 3;
+      else if (par.indexOf(n) >= 0) score = 4;
+      if (score >= 0) out.push({ u: u, score: score });
+    });
+    out.sort(function (a, b) {
+      return a.score - b.score || KIND_ORDER[a.u.t] - KIND_ORDER[b.u.t] || b.u.pop - a.u.pop;
+    });
+    return out.slice(0, 12).map(function (x) { return x.u; });
+  }
+  function placeLabel(u) {
+    var kind = u.t === "c" ? "country" : u.kind;
+    return u.name + " · " + kind + (u.parent ? " · " + u.parent : "");
+  }
+  function bindCombo(input, list, onChoose, announce) {
+    var items = [], active = -1;
+    function close() { list.hidden = true; input.setAttribute("aria-expanded", "false"); input.setAttribute("aria-activedescendant", ""); active = -1; }
+    function open() { list.hidden = false; input.setAttribute("aria-expanded", "true"); }
+    function mark(i) {
+      active = i;
+      Array.prototype.forEach.call(list.children, function (li, j) { li.setAttribute("aria-selected", String(j === i)); });
+      input.setAttribute("aria-activedescendant", i >= 0 ? list.children[i].id : "");
+      if (i >= 0) list.children[i].scrollIntoView({ block: "nearest" });
+    }
+    function choose(i) {
+      var u = items[i]; if (!u) return;
+      input.value = u.name; close(); onChoose(u);
+      if (announce) announce(u);
+    }
+    function render() {
+      items = searchPlaces(input.value);
+      list.innerHTML = "";
+      if (!input.value.trim()) { close(); return; }
+      if (!items.length) {
+        var none = document.createElement("li"); none.className = "none"; none.textContent = "No match. Try a country, state, county or city name.";
+        list.appendChild(none); open(); mark(-1); return;
+      }
+      items.forEach(function (u, i) {
+        var li = document.createElement("li");
+        li.id = input.id + "-opt-" + i; li.setAttribute("role", "option"); li.setAttribute("aria-selected", "false");
+        var a = document.createElement("span"); a.textContent = u.name;
+        var b = document.createElement("small"); b.textContent = placeLabel(u).replace(u.name + " · ", "");
+        li.appendChild(a); li.appendChild(b);
+        li.addEventListener("mousedown", function (e) { e.preventDefault(); choose(i); });
+        list.appendChild(li);
+      });
+      open(); mark(-1);
+    }
+    input.addEventListener("input", render);
+    input.addEventListener("keydown", function (e) {
+      if (list.hidden && (e.key === "ArrowDown") && input.value.trim()) { render(); }
+      if (list.hidden) return;
+      var n = items.length;
+      if (e.key === "ArrowDown") { e.preventDefault(); mark(n ? (active + 1) % n : -1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); mark(n ? (active <= 0 ? n - 1 : active - 1) : -1); }
+      else if (e.key === "Enter") { if (active >= 0) { e.preventDefault(); choose(active); } }
+      else if (e.key === "Escape") { close(); }
+    });
+    input.addEventListener("blur", function () { setTimeout(close, 120); });
+  }
+
+  // ---- Landing: panel, table, search ----
+  function panelFor(key) {
+    var u = UNITS[key], r = regionOf(key);
+    var title = r ? r.name : u.name;
+    var keys = r ? r.units : [key];
+    var radius = r ? r.radius : {};
+    var st = r ? r.status : "open";
+    var amb = r ? r.ambassadors : 0;
+    var insts = instsInside(keys, radius).map(function (i) { return i.name; });
+    var statusTxt = st === "active" ? "Ambassadors active" : st === "proposed" ? (r && r.pending ? "Proposed, waiting for review" : "Proposed, gathering members") : "Open: no ambassador yet";
+    var badge = st === "active" ? '<span class="badge live">Ambassadors active</span>' : st === "proposed" ? '<span class="badge">Proposed</span>' : '<span class="badge plain">Open</span>';
+    var action;
+    if (st === "active") action = '<a class="btn solid" href="#signin">Join as an ambassador</a>';
+    else if (st === "proposed") action = '<a class="btn solid" href="#signin">Join this proposed region</a>';
+    else action = '<button type="button" class="btn solid" data-propose="' + esc(key) + '">Propose a region with ' + esc(u.name) + '</button>';
+    var members = keys.length > 1 ? '<p class="hint" style="margin-top:8px">Includes ' + keys.length + ' units: ' + esc(plainList(keys)) + '.</p>' : "";
+    var html = badge + '<h3 id="geo-panel-h" tabindex="-1">' + esc(title) + "</h3>" + members +
+      '<dl class="kv">' +
+      '<div><dt>Status</dt><dd>' + esc(statusTxt) + "</dd></div>" +
+      '<div><dt>Ambassadors</dt><dd>' + amb + "</dd></div>" +
+      '<div><dt>Institutions eligible here</dt><dd>' + (insts.length ? esc(insts.join(", ")) : "None listed yet") + "</dd></div>" +
+      '<div><dt>Plastics works (sample)</dt><dd>' + worksOf(keys) + "</dd></div>" +
+      "</dl>" +
+      '<div class="actions">' + action + "</div>";
+    return html;
+  }
+  function showPanel(key) {
+    var panel = $("geo-panel");
+    panel.innerHTML = panelFor(key);
+    if (LANDING) LANDING.setFocus(key);
+  }
+  function buildTable() {
+    var body = $("map-table-body");
+    if (!body) return;
+    var rows = STATE.regions.map(function (r) {
+      var st = r.status === "active" ? "Ambassadors active" : (r.pending ? "Waiting for review" : "Proposed, gathering members");
+      var act = r.status === "active" ? '<a href="#signin">Sign in for ' + esc(r.name) + "</a>" : '<a href="#signin">Join</a>';
+      return "<tr><th scope=\"row\">" + esc(r.name) + "</th><td>" + st + "</td><td>" + r.ambassadors + "</td><td>" + act + "</td></tr>";
+    });
+    rows.push('<tr><th scope="row">Everywhere else (open)</th><td>Open</td><td>0</td><td><a href="#propose">Propose a region</a></td></tr>');
+    body.innerHTML = rows.join("");
+  }
+  function initTable() {
+    var tbtn = $("table-toggle"), twrap = $("map-table-wrap");
+    tbtn.addEventListener("click", function () {
+      var on = twrap.hidden;
+      twrap.hidden = !on;
+      tbtn.setAttribute("aria-expanded", String(on));
+      tbtn.textContent = on ? "Hide the table" : "Show the regions as a table";
+    });
+    buildTable();
+    // Clicking Propose inside a panel carries the chosen unit into the propose screen
+    $("geo-panel").addEventListener("click", function (e) {
+      var b = e.target.closest("[data-propose]");
+      if (!b) return;
+      PREFILL = b.getAttribute("data-propose");
+      location.hash = "propose";
+    });
+  }
+  function landingAnnounce(u) {
+    $("place-status").textContent = "Zoomed to " + placeLabel(u) + ".";
+  }
+  function initLanding() {
+    LANDING = makeMap({
+      id: "landing", stageId: "map-landing", showCities: false, allSubs: false,
+      onPick: function (key) { showPanel(key); }
+    });
+    bindZoom(LANDING, "landing");
+    bindCombo($("place-q"), $("place-list"), function (u) {
+      LANDING.setFocus(u.key);
+      LANDING.zoomToKey(u.key);
+      showPanel(u.key);
+      $("place-q").setAttribute("aria-activedescendant", "");
+    }, landingAnnounce);
+  }
+
+  // ---- Propose a region ----
+  var PR = { units: [], radius: {} };
+  function addUnit(key) { if (UNITS[key] && PR.units.indexOf(key) < 0) PR.units.push(key); }
+  function toggleUnit(key) {
+    var i = PR.units.indexOf(key);
+    if (i >= 0) PR.units.splice(i, 1); else PR.units.push(key);
+    renderPropose();
+  }
+  function renderUnits() {
+    var ol = $("pr-units");
+    ol.innerHTML = "";
+    PR.units.forEach(function (key) {
+      var u = UNITS[key];
+      var li = document.createElement("li");
+      var text = document.createElement("div");
+      var name = document.createElement("span"); name.textContent = u.name;
+      var small = document.createElement("small");
+      small.textContent = u.t === "c" ? "Country" : u.t === "s" ? (u.kind[0].toUpperCase() + u.kind.slice(1) + ", " + u.parent) : ("City, " + u.parent);
+      text.appendChild(name); text.appendChild(small);
+      var rm = document.createElement("button");
+      rm.type = "button"; rm.className = "btn"; rm.textContent = "Remove"; rm.setAttribute("aria-label", "Remove " + u.name);
+      rm.addEventListener("click", function () { toggleUnit(key); });
+      li.appendChild(text); li.appendChild(rm);
+      if (u.t === "ci") {
+        var r = PR.radius[key] || 25;
+        var wrap = document.createElement("div"); wrap.className = "radius";
+        var lab = document.createElement("label"); lab.setAttribute("for", "rad-" + u.key.replace(":", "-"));
+        lab.textContent = "Radius around " + u.name + ": " + r + " km";
+        var inp = document.createElement("input");
+        inp.type = "range"; inp.min = "5"; inp.max = "100"; inp.step = "5"; inp.value = String(r);
+        inp.id = "rad-" + u.key.replace(":", "-");
+        inp.addEventListener("input", function () { PR.radius[key] = Number(inp.value); lab.textContent = "Radius around " + u.name + ": " + inp.value + " km"; renderSummary(); });
+        wrap.appendChild(lab); wrap.appendChild(inp); li.appendChild(wrap);
+      }
+      ol.appendChild(li);
+    });
+    $("pr-empty").hidden = PR.units.length > 0;
+    $("pr-count").textContent = String(PR.units.length);
+  }
+  function renderSummary() {
+    var insts = instsInside(PR.units, PR.radius);
+    $("sum-units").textContent = String(PR.units.length);
+    $("sum-insts").textContent = insts.length ? insts.map(function (i) { return i.name; }).join(", ") : "none yet";
+    $("sum-works").textContent = String(worksOf(PR.units));
+    var lines = ruleLines(PR.units, PR.radius);
+    $("pr-pred").innerHTML = lines.length ? lines.map(esc).join("<br>") : "countries: none yet";
+    $("pr-plain").textContent = PR.units.length ? "This region covers " + plainList(PR.units) + "." : "Add at least one place to see the rule.";
+  }
+  function renderPropose() {
+    renderUnits();
+    renderSummary();
+    if (PROP) PROP.setSel(PR.units);
+  }
+  function initPropose() {
+    PROP = makeMap({
+      id: "propose", stageId: "map-propose", picks: true, showCities: true, allSubs: true,
+      onPick: function (key) { toggleUnit(key); }
+    });
+    bindZoom(PROP, "propose");
+    bindCombo($("pr-q"), $("pr-list"), function (u) { addUnit(u.key); renderPropose(); $("pr-q").value = ""; },
+      function (u) { $("pr-q").setAttribute("aria-activedescendant", ""); });
+    $("pr-group").addEventListener("click", function () { PAC.forEach(function (id) { addUnit("c:" + id); }); renderPropose(); });
+    $("pr-clear").addEventListener("click", function () { PR.units = []; PR.radius = {}; renderPropose(); });
+    $("pr-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var errs = [];
+      var name = $("pr-name").value.trim();
+      if (!name) errs.push({ id: "pr-name", text: "Name the region." });
+      if (!PR.units.length) errs.push({ id: "pr-q", text: "Add at least one place: search, add the Pacific group, or click the map." });
+      var box = $("pr-errors"), list = $("pr-error-list");
+      box.hidden = true; $("pr-outcome").hidden = true;
+      if (errs.length) {
+        list.innerHTML = "";
+        errs.forEach(function (x) {
+          var li = document.createElement("li"), a = document.createElement("a");
+          a.href = "#" + x.id; a.className = "link"; a.textContent = x.text; li.appendChild(a); list.appendChild(li);
+        });
+        box.hidden = false; box.focus(); return;
+      }
+      var instId = $("pr-inst").value;
+      var inst = INSTS.filter(function (i) { return i.id === instId; })[0];
+      var inside = instsInside(PR.units, PR.radius).some(function (i) { return i.id === inst.id; });
+      // Insiders: the proposer's own institution decides the route.
+      var region = {
+        id: slug(name), name: name, units: PR.units.slice(), radius: JSON.parse(JSON.stringify(PR.radius)), ambassadors: 1, works: worksOf(PR.units),
+        status: inside ? "active" : "proposed", pending: !inside
+      };
+      STATE.regions.push(region);
+      MAPS.forEach(function (m) { m.paint(); });
+      buildTable();
+      var out = $("pr-outcome");
+      out.className = "saved " + (inside ? "outcome-a" : "outcome-b");
+      var rule = ruleLines(PR.units, PR.radius).join(" · ");
+      if (inside) {
+        out.innerHTML = "<span><b>Your institution is inside this region, so it is live now.</b> " + esc(name) + " shows on the map as active. Stored rule: <span class=\"mono\">" + esc(rule) + "</span></span>" +
+          '<a class="btn solid" href="#landing">See it on the map</a>';
+      } else {
+        out.innerHTML = "<span><b>Sent for review.</b> " + esc(inst.name) + " is outside this region, so a reviewer checks it first. " + esc(name) + " shows as proposed while it waits. Stored rule: <span class=\"mono\">" + esc(rule) + "</span></span>" +
+          '<a class="btn" href="#moderation">Open the moderation queue</a>';
+      }
+      out.hidden = false; out.focus();
+    });
+    renderPropose();
+  }
+
+  // ---- Region tree: split actions (owner and region lead, prototype state) ----
+  function initTree() {
+    $("split-samoa").addEventListener("click", function () {
+      $("tree-samoa").textContent = "Samoa · own region · split out";
+      $("samoa-status").textContent = "Samoa is now its own region with its own ambassador. Pacific Island countries keeps the other 10 countries. Earlier contributions stay with Samoa.";
+    });
+    $("keep-samoa").addEventListener("click", function () {
+      $("tree-samoa").textContent = "Samoa · child region · ready to split";
+      $("samoa-status").textContent = "Kept grouped. Samoa still meets the rule, so it can split later.";
+    });
+    $("split-oak").addEventListener("click", function () {
+      $("tree-oakland").textContent = "Oakland · city region · split out";
+      $("oak-status").textContent = "Oakland is now its own city region under California. Earlier contributions stay with Oakland.";
+    });
+    $("keep-oak").addEventListener("click", function () {
+      $("tree-oakland").textContent = "Oakland · city child · ready to split";
+      $("oak-status").textContent = "Kept inside California. Oakland still meets the rule, so it can split later.";
+    });
+  }
+
+  // ---- Session planner (dashboard, section 9 of the spec). Times in seconds. ----
+  var PLAN_TASKS = [
+    { name: "Stream A: one doubtful-match case", sec: 30, cap: 46, est: "About 30 seconds" },
+    { name: "Stream B: confirm one placeholder", sec: 120, cap: 6, est: "About 2 minutes" },
+    { name: "Stream C: add a community group or organisation", sec: 300, est: "About 5 minutes" },
+    { name: "Stream C: add a local policy with dates", sec: 480, est: "About 8 minutes" },
+    { name: "Propose a region", sec: 300, est: "About 5 minutes" }
+  ];
+  function minutesText(s) { return Math.round(s / 6) / 10 + " minutes"; }
+  function makePlan(T) {
+    var rem = T, items = [], a = Math.min(20, 46, Math.floor(rem / 30));
+    if (a > 0) { items.push("Stream A: " + a + " cases, about " + minutesText(a * 30)); rem -= a * 30; }
+    var b = Math.min(6, Math.floor(rem / 120));
+    if (b > 0) { items.push("Stream B: " + b + " placeholder" + (b > 1 ? "s" : "") + ", about " + minutesText(b * 120)); rem -= b * 120; }
+    if (rem >= 300) { items.push("Add one group or organisation, about 5 minutes"); rem -= 300; }
+    if (rem >= 480) { items.push("Add one local policy with dates, about 8 minutes"); rem -= 480; }
+    if (rem >= 300) { items.push("Propose a region, about 5 minutes"); rem -= 300; }
+    return { items: items, used: T - rem, spare: rem };
+  }
+  function renderPlanner() {
+    var checked = document.querySelector('input[name="session"]:checked');
+    var mins = checked ? Number(checked.value) : 15;
+    var T = mins * 60;
+    var plan = makePlan(T);
+    var out = $("plan-out");
+    out.innerHTML = "<p style=\"margin:0\"><b>A " + mins + "-minute session</b> fits:</p><ol>" +
+      plan.items.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") +
+      "</ol><p style=\"margin:8px 0 0\" class=\"hint\">Planned about " + minutesText(plan.used) + ". " +
+      (plan.spare > 0 ? "About " + minutesText(plan.spare) + " spare." : "No time spare.") + "</p>";
+    var tb = $("task-body");
+    tb.innerHTML = PLAN_TASKS.map(function (t) {
+      var n = Math.floor(T / t.sec);
+      if (t.cap) n = Math.min(n, t.cap);
+      var fit = n > 0 ? "Yes: " + n + (n === 1 ? " time" : " times") + (t.cap && n === t.cap ? " (all remaining)" : "") : "No, too long for this session";
+      return "<tr><th scope=\"row\" style=\"font-weight:400\">" + esc(t.name) + "</th><td class=\"est\">" + esc(t.est) + "</td><td>" + esc(fit) + "</td></tr>";
+    }).join("");
+  }
+  function initPlanner() {
+    Array.prototype.forEach.call(document.querySelectorAll('input[name="session"]'), function (r) {
+      r.addEventListener("change", renderPlanner);
+    });
+    renderPlanner();
+  }
+
+  // ---- Start ----
+  function startAll() {
+    initTable();
+    initTree();
+    initPlanner();
+    loadWorld().then(function () {
+      initLanding();
+      initPropose();
+    }).catch(function (err) {
+      mapFailed("map-landing", "The world map could not load. " + err.message);
+      mapFailed("map-propose", "The pick map could not load. " + err.message);
+      $("place-status").textContent = "The map could not load. Search still works, but zoom is off.";
+      $("geo-panel").innerHTML = '<p class="hint" style="margin:0">The map is not available, so pick a region from the table, or search for a place.</p>';
+      $("pr-empty").textContent = "The map did not load. Search for a place to add it.";
+      bindCombo($("pr-q"), $("pr-list"), function (u) { addUnit(u.key); renderPropose(); $("pr-q").value = ""; });
+      bindCombo($("place-q"), $("place-list"), function (u) { $("geo-panel").innerHTML = panelFor(u.key); $("place-status").textContent = "Showing " + placeLabel(u) + "."; });
+      renderPropose();
+    });
+  }
+  window.addEventListener("hashchange", function () {
+    if (location.hash === "#propose" && PREFILL) {
+      addUnit(PREFILL); PREFILL = null;
+      renderPropose();
+    }
+  });
+  // Lead-view split controls and the planner do not need the map
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startAll);
+  else startAll();
 })();
 </script>
 </body>
