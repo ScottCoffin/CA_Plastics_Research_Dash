@@ -6,9 +6,9 @@ and logged in `gh`, H43 done). Every bounded task went to Haiku workers; the lea
 clean worktree and pushed. Sealed and pushed, CI green: BQ-1.3 (recall probes), BQ-2.4 (`denominators.json`; V-4
 share is now C/A), BQ-S2 (candidate plastic-v3.2, ADR-BQS2-REVIEW; "recycler" removed as a stem collision),
 BQ-3.3 (null model; `--check` skips the 17-minute null recompute), PLAT-3 slices 1-3 (region registry,
-`--region`, per-region data folder; California unchanged under default PLAT3-DATA-PATH), PLAT-4a (global raw
+`--region`, per-region data folder; slice 3b moved California to site/data/california per owner), PLAT-4a (global raw
 fetch + budget guard 401/403 reserve + 0.6 s spacing + network-error deferral), PLAT-4 slices 1-2 (local
-partition with institution-registry join), UX-13 part a (Monitoring filters in the URL). Last commit 71df3a28.
+partition with institution-registry join), UX-13 part a (Monitoring filters in the URL). Last commit 1ecf1053.
 
 ## In flight / next (in this order)
 1. Done: global backfill (136,086 works, all 77 slices) and partition (`data/processed/global/`, 37,925 with pmid, 1,972 california). California data moved to `site/data/california/` (owner; docs/DATA_LAYOUT.md), live and smoke-tested (0 failed data requests on 15 routes).
