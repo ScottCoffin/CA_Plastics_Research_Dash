@@ -220,19 +220,16 @@ leak-check works wait for S5.7.
 ## Later (the agent will say when each is ready)
 
 
-- **H49. Ambassador API secrets (AMB-1).** Redirect URI changed to `https://api.plastiverse.live/orcid/callback`
-  (owner, 2026-11-25). Remaining, in PowerShell from the `worker` folder:
-  1. Put Node on this window's PATH: `$env:Path += ";C:\Program Files\nodejs"`, then check with `npx.cmd --version`. Type `npx.cmd` (not `npx`) in every step below: PowerShell blocks `npx` because it is a script.
-  2. Sign in once: `npx wrangler login` (a browser tab asks you to allow Wrangler).
-  3. For each name below run `npx wrangler secret put NAME` and paste the value when asked (nothing is shown
-     as you paste). If Wrangler asks to create the Worker `plastiverse-ambassadors`, answer yes: it only stores
-     the secrets; no code runs until the deploy. Names: ORCID_CLIENT_ID, ORCID_CLIENT_SECRET, RESEND_API_KEY,
-     TURNSTILE_SECRET, SESSION_SIGNING_KEY, EMAIL_HASH_KEY. Use the values in `.env` where they exist; for a
-     missing key, make one with `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`.
-     EMAIL_HASH_KEY must be a new value, not the session key.
-     Also add EXPORT_TOKEN (a new random value made the same way; the pull-request job will use it). In
-     `worker/wrangler.toml`, the agent will set OWNER_ORCID to your ORCID iD once you tell it (one line).
-  4. Tell the agent "H49 secrets set". The deploy waits for a separate "deploy the Worker" go-ahead.
+- **H49. Ambassador API: last setup items (AMB-1).** Done 2026-11-25: ORCID redirect URI changed; Worker
+  secrets ORCID_CLIENT_ID, ORCID_CLIENT_SECRET, RESEND_API_KEY, TURNSTILE_SECRET, SESSION_SIGNING_KEY and
+  EMAIL_HASH_KEY set (the agent confirmed the names with `wrangler secret list`). Remaining, one line each:
+  1. Tell the agent your ORCID iD (it becomes OWNER_ORCID in `worker/wrangler.toml`; that account is the owner moderator).
+  2. Set one more secret for the pull-request job: in PowerShell from `worker`, `npx.cmd wrangler secret put EXPORT_TOKEN`
+     with a new random value (`node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`), and
+     save the same value as the GitHub Actions secret AMB_EXPORT_TOKEN (repo Settings > Secrets and variables > Actions).
+  3. Say "create the D1 database" (the agent runs `wrangler d1 create plastiverse-ambassadors` in your Cloudflare
+     account, free tier, and writes its id into `wrangler.toml`; no database exists yet).
+  4. Later, say "deploy the Worker" when you want it live.
 
 - **H8. Outreach emails (S9.6).** Now unblocked (H7 done, emails allowed in `data/private/`): approve the email template in
   `docs/OUTREACH.md`, then send the first batch from your own email account. The
