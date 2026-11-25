@@ -125,7 +125,7 @@ h3 { font-size: 18px; font-weight: 600; margin: 0 0 4px; line-height: 1.3; }
 .steps li::marker { font-weight: 600; font-family: var(--pv-mono); }
 
 /* Landing eligibility checker */
-.check-box { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 22px; max-width: 760px; }
+.check-box { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 22px; max-width: 980px; }
 .check-form { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
 .check-form .field { margin-top: 0; max-width: none; }
 .result { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--pv-ink); background: var(--pv-wash); font-size: 15px; max-width: 70ch; }
@@ -242,7 +242,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 .geo-grid { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); margin-top: 16px; }
 .geo-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .geo-tools .btn { min-width: 44px; padding-inline: 12px; }
-.geo-stage { position: relative; background: var(--pv-wash); border: 1px solid var(--pv-ink-2); overflow: hidden; touch-action: none; cursor: grab; }
+.geo-stage { position: relative; background: var(--pv-wash); border: 1px solid var(--pv-ink-2); overflow: hidden; touch-action: pan-y; cursor: grab; }
 .geo-stage:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
 .geo-stage svg { display: block; width: 100%; height: auto; aspect-ratio: 960 / 500; user-select: none; }
 .geo-sea { fill: var(--pv-wash); }
@@ -318,8 +318,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   .decide { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .form-grid .wide { grid-column: 1 / -1; }
-  .check-form { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
-  .check-form .btn { margin-bottom: 0; }
+  .check-form { grid-template-columns: minmax(0, .8fr) minmax(0, 1.3fr) auto; align-items: end; gap: 12px 16px; }
 }
 @media (min-width: 960px) {
   .two { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
@@ -357,8 +356,6 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 .sw.line-disp, .sw.line-pac { height: 0; width: 26px; border: 0; border-top: 2px dashed var(--pv-ink-2); align-self: center; background: none; }
 .sw.line-pac { border-top: 2px dotted var(--pv-slate); }
 .credit { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: 66ch; }
-.amb { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 10px 2px 8px; border: 1px solid var(--pv-ink); background: var(--pv-mint); color: var(--pv-ink); font-size: 14px; line-height: 1.3; max-width: 100%; }
-.amb::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--pv-gold); border: 1px solid var(--pv-ink); flex: none; }
 .nm { font-weight: 600; }
 .badge-block { margin-top: 28px; border-top: 1px solid var(--pv-line); padding-top: 18px; max-width: 760px; }
 .demo-grid { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); margin-top: 14px; }
@@ -411,6 +408,77 @@ body[data-badge="hidden"] .amb-self { display: none; }
 @media (min-width: 700px) { .co-row { grid-template-columns: minmax(0, 1fr) auto; align-items: center; } }
 @media (min-width: 960px) { .demo-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 .field-fixed { font-size: 15px; margin: 12px 0 0; }
+
+/* Round 4: badge seal, eligibility row, sign-in place, ORCID, workspace map, share form, cooperative maps */
+.amb { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; vertical-align: middle; font-size: 14px; line-height: 1.25; color: var(--pv-ink); }
+.amb .seal { width: 18px; height: 18px; flex: none; overflow: visible; }
+.amb .seal-body { fill: var(--pv-ink); stroke: var(--pv-coral); stroke-width: 1.4; stroke-linejoin: round; }
+.amb .seal-sun circle { fill: var(--pv-gold); }
+.amb .seal-sun path { fill: none; stroke: var(--pv-gold); stroke-width: 3.6; stroke-linecap: round; }
+.amb .amb-label { display: inline-block; min-width: 0; background: var(--pv-sun); border: 1px solid var(--pv-ink); padding: 2px 8px; overflow-wrap: anywhere; }
+.amb.lg { gap: 14px; font-size: 16px; }
+.amb.lg .seal { width: 64px; height: 64px; }
+.amb.lg .amb-label { display: inline-grid; padding: 6px 12px; line-height: 1.2; }
+.amb.lg .amb-word { font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.amb.lg .amb-reg { font-size: 20px; font-weight: 600; }
+.amb.lg .amb-word, .amb.lg .amb-reg { display: block; }
+.amb.lg .amb-sep { display: none; }
+.badge-lg { margin: 0 0 16px; }
+.link-btn { background: none; border: 0; padding: 0 4px; min-height: 44px; color: var(--pv-coral-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: 15px; }
+.form-stack { display: grid; gap: 0; max-width: 640px; }
+.form-stack .field { margin-top: 18px; }
+.check-btn { display: flex; align-items: end; }
+.check-btn .btn { width: 100%; }
+@media (min-width: 700px) { .check-btn .btn { width: auto; } }
+.sign-place { margin-top: 28px; max-width: 640px; }
+.sign-for { font-size: 16px; margin: 0; }
+#si-place-wrap .search { max-width: none; }
+.geo-stage.geo-mini { height: 240px; max-width: 640px; margin-top: 14px; }
+.geo-stage.geo-mini svg { height: 100%; width: 100%; aspect-ratio: auto; }
+.ws-map-sec { margin-top: 36px; }
+.geo-stage.ws-map { height: clamp(360px, 62vh, 600px); max-width: none; }
+.geo-stage.ws-map svg { height: 100%; width: 100%; aspect-ratio: auto; }
+.sw.line-ws { background: none; border: 2px solid var(--pv-ink); }
+.sw-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--pv-paper); border: 1.5px solid var(--pv-ink); display: inline-block; flex: none; margin: 0 5px; }
+.sw-task { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--pv-ink); background: var(--pv-sun); font-family: var(--pv-mono); font-size: 12px; flex: none; }
+.geo-stage circle.inst { fill: var(--pv-paper); stroke: var(--pv-ink); stroke-width: 1.2px; vector-effect: non-scaling-stroke; }
+.geo-stage g.task { cursor: pointer; }
+.geo-stage g.task circle { fill: var(--pv-sun); stroke: var(--pv-ink); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+.geo-stage g.task text { font-family: var(--pv-mono); font-size: 11px; font-weight: 700; fill: var(--pv-ink); pointer-events: none; }
+.geo-stage g.task:focus { outline: none; }
+.geo-stage g.task:focus circle, .geo-stage g.task:focus-visible circle { stroke: var(--pv-coral-ink); stroke-width: 3px; }
+.geo-hint { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 3; margin: 0; max-width: calc(100% - 24px); background: var(--pv-paper); border: 1px solid var(--pv-ink); padding: 8px 12px; font-size: 14px; box-shadow: 0 4px 12px rgba(23, 38, 61, .12); }
+.geo-stage.is-active { box-shadow: inset 0 0 0 2px var(--pv-coral-ink); }
+.wrap.wide { max-width: 1360px; }
+.geo-stage.big { height: clamp(420px, 66vh, 760px); max-width: none; }
+.geo-stage.big svg { height: 100%; width: 100%; aspect-ratio: auto; }
+.prop-grid { grid-template-columns: minmax(0, 1fr); margin-top: 22px; gap: 32px; }
+.prop-main, .prop-side { min-width: 0; }
+@media (max-width: 959px) { .geo-stage.big { height: auto; } .geo-stage.big svg { height: auto; aspect-ratio: 960 / 500; } }
+@media (min-width: 1600px) { .prop-grid { grid-template-columns: minmax(0, 1fr) 380px; align-items: start; gap: 40px; } }
+.orcid { border-top: 2px solid var(--pv-ink); padding-top: 16px; margin-top: 28px; max-width: 640px; }
+.orcid-btn { gap: 10px; background: var(--pv-paper); color: var(--pv-ink); border: 1px solid var(--pv-ink); }
+.orcid-btn:hover { background: var(--pv-wash); }
+.orcid-btn svg { width: 22px; height: 22px; flex: none; }
+.orcid-state { margin-top: 14px; padding: 12px 14px; border: 1px solid var(--pv-ink); background: var(--pv-paper); font-size: 15px; max-width: 640px; }
+.orcid-state[data-state="verified"] { background: var(--pv-wash); }
+.orcid-state[data-state="matched"] { background: var(--pv-mint); }
+.orcid-state[data-state="nomatch"] { background: var(--pv-cream); }
+.orcid-state small { display: block; color: var(--pv-ink-2); font-size: 14px; margin-top: 4px; }
+.orcid-match { margin-top: 12px; max-width: 640px; }
+.chip-set { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.chip { position: relative; display: inline-flex; }
+.chip input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid var(--pv-ink); background: var(--pv-paper); font-size: 15px; cursor: pointer; }
+.chip input:checked + span { background: var(--pv-ink); color: var(--pv-paper); }
+.chip input:focus-visible + span { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+.lic-list { display: grid; gap: 8px; margin-top: 8px; max-width: 640px; }
+.lic { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 2px 12px; align-items: start; border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 12px 14px; cursor: pointer; }
+.lic input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--pv-ink); }
+.lic b { font-weight: 600; }
+.lic small { grid-column: 2; color: var(--pv-ink-2); font-size: 14px; }
+.lic:has(input:checked) { background: var(--pv-wash); border-color: var(--pv-ink); border-width: 2px; padding: 11px 13px; }
+.lic:has(input:focus-visible) { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
 </style>
 </head>
 <body data-auth="out">
@@ -436,6 +504,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
         <option value="confirm">6 Stream B: confirm a placeholder</option>
         <option value="add">7 Stream C: add a group or organisation</option>
         <option value="add-policy">7b Stream C: local policy form</option>
+        <option value="share">15 Share monitoring data</option>
       </optgroup>
       <optgroup label="Map and proposals">
         <option value="propose">9 Propose a region</option>
@@ -454,6 +523,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
     <button class="btn" type="button" id="prev">Previous</button>
     <button class="btn" type="button" id="next">Next</button>
     <label class="check"><input type="checkbox" id="leadtoggle"> Show as region lead (Norway)</label>
+    <label class="check"><input type="checkbox" id="orcid-nomatch"> ORCID mock: no match</label>
   </div>
 </div>
 
@@ -496,7 +566,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
     <div class="geo-grid">
       <div>
         <div class="geo-tools">
-          <p class="hint" style="margin:0">Wheel or pinch to zoom, drag to pan, double-click to zoom in. With the map focused, plus and minus zoom, arrows pan, 0 resets.</p>
+          <p class="hint" style="margin:0">Hold Ctrl (Cmd on Mac) and scroll to zoom with the wheel, or click the map first. Drag to pan; two fingers pan and pinch on touch. With the map focused, plus and minus zoom, arrows pan, 0 resets.</p>
         </div>
         <div class="geo-stage" id="map-landing" tabindex="0" role="group" aria-label="World map of ambassador regions. Choose a shape or dot to open its panel."></div>
         <ul class="legend" aria-label="Map legend">
@@ -528,22 +598,24 @@ body[data-badge="hidden"] .amb-self { display: none; }
     <ul class="rows" style="margin-top:16px">
       <li><div class="row-main"><h3>Check doubtful matches</h3><p>The automatic sorting is unsure about some works and institutions. You say whether it is right: a place name in the wrong country, or a Norwegian-language study that is about plastics.</p></div></li>
       <li><div class="row-main"><h3>Confirm placeholders</h3><p>Some funders, monitoring programmes and policies on a region page are not yet checked. Confirm the name and link, correct them, or mark them not relevant.</p></div></li>
-      <li><div class="row-main"><h3>Add local knowledge</h3><p>Tell us about community groups, volunteer clean-ups, local policies with their dates, and monitoring data with its licence.</p></div></li>
+      <li><div class="row-main"><h3>Add local knowledge</h3><p>Tell us about community groups, volunteer clean-ups, local policies with their dates, and monitoring data with its licence.</p>
+        <p><a class="link" href="#share">Share a monitoring dataset</a></p></div></li>
     </ul>
     <div class="badge-block" aria-labelledby="h-badge">
+      <p class="badge-lg"><span class="amb" data-amb="norway" data-big></span></p>
       <h3 id="h-badge">Show your Ambassador badge</h3>
       <p class="hint">Once your author record is linked and confirmed, your name shows a badge with your region. You can hide it in settings, and it is removed when you leave the programme.</p>
       <div class="demo-grid">
         <div class="demo">
           <p class="demo-cap">Region page: top researchers (sample)</p>
           <ol class="demo-list">
-            <li><span class="nm">Ole Vik</span><span class="amb" role="img" aria-label="Ambassador for Norway">Ambassador · Norway</span><small>SINTEF Ocean · 22 works</small></li>
+            <li><span class="nm">Ole Vik</span><span class="amb" data-amb="norway"></span><small>SINTEF Ocean · 22 works</small></li>
             <li><span class="nm">Marte Lie</span><small>NILU · 9 works</small></li>
           </ol>
         </div>
         <div class="demo">
           <p class="demo-cap">Search result (sample)</p>
-          <div class="demo-res"><span class="nm">Ingrid Haugland</span><span class="amb" role="img" aria-label="Ambassador for Norway">Ambassador · Norway</span><small>NIVA · 18 works</small></div>
+          <div class="demo-res"><span class="nm">Ingrid Haugland</span><span class="amb" data-amb="norway"></span><small>NIVA · 18 works</small></div>
         </div>
       </div>
       <p style="margin-top:14px"><a class="link" href="#author-link">Link your author record</a></p>
@@ -556,24 +628,24 @@ body[data-badge="hidden"] .amb-self { display: none; }
     <form class="check-box" id="elig-form" novalidate>
       <div class="check-form">
         <div class="field">
+          <label for="elig-place">Place</label>
+          <div class="search">
+            <input type="text" id="elig-place" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="elig-place-list" aria-activedescendant="" autocomplete="off">
+            <ul id="elig-place-list" role="listbox" class="results" aria-label="Matching places" hidden></ul>
+          </div>
+          <p class="sr" id="elig-place-status" role="status" aria-live="polite"></p>
+        </div>
+        <div class="field">
           <label for="elig-q">Work email or institution name</label>
           <div class="search">
             <input type="text" id="elig-q" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="elig-list" aria-activedescendant="" autocomplete="off" placeholder="you@institution.no or NIVA" aria-describedby="elig-hint">
             <ul id="elig-list" role="listbox" class="results" aria-label="Matching institutions" hidden></ul>
           </div>
           <p class="sr" id="elig-status" role="status" aria-live="polite"></p>
-          <p class="hint" id="elig-hint">Type a name, acronym or email domain, then use the arrow keys and Enter. Free email services (Gmail, Outlook, Proton and similar) cannot be accepted.</p>
         </div>
-        <div class="field" style="margin-top:0">
-          <label for="elig-region">Region</label>
-          <select id="elig-region">
-            <option value="norway">Norway</option>
-            <option value="belgium">Belgium</option>
-            <option value="california">California</option>
-          </select>
-        </div>
-        <div style="grid-column:1 / -1"><button class="btn solid" type="submit">Check eligibility</button></div>
+        <div class="check-btn"><button class="btn solid" type="submit">Check eligibility</button></div>
       </div>
+      <p class="hint" id="elig-hint" style="margin-top:12px">The place comes from the map above. Type a name, acronym or email domain, then use the arrow keys and Enter. Free email services (Gmail, Outlook, Proton and similar) cannot be accepted.</p>
       <div id="elig-result" class="result" aria-live="polite" role="status" hidden></div>
     </form>
   </div>
@@ -594,14 +666,23 @@ body[data-badge="hidden"] .amb-self { display: none; }
   <div class="two">
     <div>
       <h1 id="h-signin">Sign in as an ambassador</h1>
-      <p class="lede">Choose your region and enter your institution email. We send a link; there is no password to remember.</p>
+      <p class="lede">Enter your institution email. We send a link; there is no password to remember.</p>
       <form id="signin-form" novalidate style="margin-top:28px">
-        <fieldset>
-          <legend>Region</legend>
-          <label class="choice"><input type="radio" name="region" value="norway" checked><span>Norway</span></label>
-          <label class="choice"><input type="radio" name="region" value="belgium"><span>Belgium</span></label>
-          <label class="choice"><input type="radio" name="region" value="california"><span>California</span></label>
-        </fieldset>
+        <div class="sign-place">
+          <p class="sign-for">Signing in for: <b id="si-place-name">Norway</b> — <button type="button" class="link-btn" id="si-change" aria-expanded="false" aria-controls="si-place-wrap">change</button></p>
+          <div id="si-place-wrap" hidden>
+            <div class="field" style="margin-top:12px">
+              <label for="si-place">Search a country, state, county or city</label>
+              <div class="search">
+                <input type="text" id="si-place" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="si-place-list" aria-activedescendant="" autocomplete="off" placeholder="Try Palau, Koror, Bergen or Alameda County">
+                <ul id="si-place-list" role="listbox" class="results" aria-label="Matching places" hidden></ul>
+              </div>
+              <p class="sr" id="si-place-status" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="geo-stage geo-mini" id="map-signin" tabindex="0" role="group" aria-label="Map preview of the place you sign in for. Click a shape to change it."></div>
+          <p class="hint" style="margin-top:8px">Pre-filled from the place you chose on the landing map. Click a shape or use change to pick another place.</p>
+        </div>
         <div class="field">
           <label for="si-email">Institution email</label>
           <input type="email" id="si-email" name="email" autocomplete="email" placeholder="you@institution.no" aria-describedby="si-hint">
@@ -700,11 +781,22 @@ body[data-badge="hidden"] .amb-self { display: none; }
   <div class="ws-head">
     <div>
       <h1 id="h-ws">Norway workspace</h1>
-      <p style="margin:12px 0 0"><span class="amb amb-self" role="img" aria-label="Ambassador for Norway">Ambassador · Norway</span></p>
+      <p style="margin:12px 0 0"><span class="amb amb-self" data-amb="norway"></span></p>
       <p class="lede" style="margin-top:12px">Signed in for NIVA. Three streams, one region. Every answer is saved at once; anything that changes the Atlas waits for review.</p>
     </div>
     <p class="badge lead-only inline" style="flex:none">Region lead for Norway</p>
   </div>
+
+  <section class="ws-map-sec" aria-labelledby="h-wmap">
+    <div class="sec-head"><h2 id="h-wmap">Your region on the map</h2><span class="note">Norway, zoomed in. Institution points are sample data.</span></div>
+    <div class="geo-stage ws-map" id="map-ws" tabindex="0" role="group" aria-label="Map of Norway with eligible institutions and numbered tasks that have a place"></div>
+    <ul class="legend" aria-label="Workspace map legend">
+      <li><span class="sw line-ws" aria-hidden="true"></span>Norway outline</li>
+      <li><span class="sw-dot" aria-hidden="true"></span>Eligible institution (sample)</li>
+      <li><span class="sw-task" aria-hidden="true">1</span>Numbered task with a place. Select it to open the task.</li>
+    </ul>
+    <p class="credit">Map: Natural Earth 1:50m countries (public domain). Institution points are sample data.</p>
+  </section>
 
   <section class="sec" style="margin-top:36px" aria-labelledby="h-plan">
     <div class="sec-head"><h2 id="h-plan">Plan a session</h2><span class="note">Times are estimates. Read the note below.</span></div>
@@ -755,7 +847,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
               <p>Community groups, volunteer organisations, local policies with dates, monitoring datasets and corrections.</p>
               <p class="mono" style="margin-top:8px;color:var(--pv-ink)">2 sent · 1 approved · 1 waiting</p>
             </div>
-            <div class="stream-meta"><span class="mono">No quota</span><span class="est">Group about 5 minutes, policy about 8 minutes</span><div class="actions"><a class="btn" href="#add">Add a group</a><a class="btn" href="#add-policy">Add a policy</a></div></div>
+            <div class="stream-meta"><span class="mono">No quota</span><span class="est">Group about 5 minutes, policy about 8 minutes</span><div class="actions"><a class="btn" href="#add">Add a group</a><a class="btn" href="#add-policy">Add a policy</a><a class="btn" href="#share">Share monitoring data</a></div></div>
           </div></li>
           <li><div class="row-grid">
             <div class="row-main">
@@ -1059,7 +1151,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
 </section>
 
 <!-- 9. PROPOSE A REGION -->
-<section class="screen wrap" data-route="propose" aria-labelledby="h-prop">
+<section class="screen wrap wide" data-route="propose" aria-labelledby="h-prop">
   <div class="rv-bar">
     <nav aria-label="Propose a region" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Propose a region</nav>
     <div class="rv-prog"><span class="est">About 5 minutes</span><span>Units picked: <span id="pr-count">0</span></span></div>
@@ -1069,7 +1161,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
   <p class="lede">Pick the places you speak for: a country, a state or county, or a city with a radius. Name the region and send it. Everything you pick shows on the map as you go.</p>
 
   <div class="prop-grid">
-    <div>
+    <div class="prop-main">
       <div class="field" style="margin-top:0">
         <label for="pr-q">Search for a place to add</label>
         <div class="search">
@@ -1079,14 +1171,12 @@ body[data-badge="hidden"] .amb-self { display: none; }
         <p class="hint" id="pr-q-hint">Choose a result to add it. Remove any unit with its Remove button.</p>
         <p class="sr" id="pr-q-status" role="status" aria-live="polite"></p>
       </div>
-      <div class="actions" style="margin-top:16px">
+      <div class="actions" style="margin-top:12px">
         <button class="btn" type="button" id="pr-group">Add the Pacific Island countries</button>
         <button class="btn" type="button" id="pr-clear">Clear all places</button>
       </div>
-      <div class="geo-tools" style="margin-top:18px">
-        <p class="hint" style="margin:0">Click a country, state or county to add or remove it. Click a city dot to add a city. Wheel or pinch to zoom, drag to pan. With the map focused, plus and minus zoom, arrows pan, 0 resets.</p>
-      </div>
-      <div class="geo-stage" id="map-propose" tabindex="0" role="group" aria-label="Map to pick the places in your region. Plus and minus zoom, arrows move."></div>
+      <p class="hint" style="margin:14px 0 10px">Click a country, state or county to add or remove it. Click a city dot to add a city. Zoom: hold Ctrl (Cmd on Mac) and scroll, or click the map first. Two fingers pan and pinch on touch. With the map focused, plus and minus zoom, arrows move, 0 resets.</p>
+      <div class="geo-stage big" id="map-propose" tabindex="0" role="group" aria-label="Map to pick the places in your region. Plus and minus zoom, arrows move."></div>
       <ul class="legend" aria-label="Pick map legend">
         <li><span class="sw st-pick" aria-hidden="true"></span>Picked for this region</li>
         <li><span class="sw st-active" aria-hidden="true"></span>Ambassadors active</li>
@@ -1097,7 +1187,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
       <p class="credit" id="credit-propose">Map: Natural Earth 1:50m countries (public domain). Boundaries: Natural Earth 5.1.2 disputed boundary lines, shown as Natural Earth's default view, and Pacific groupings (10m). Natural Earth is public domain.</p>
     </div>
 
-    <div>
+    <div class="prop-side">
       <h2 style="font-size:24px">Units in this region</h2>
       <ol class="units" id="pr-units" aria-label="Units in this region"></ol>
       <p class="hint" id="pr-empty">No places yet. Search, add the Pacific group, or click the map.</p>
@@ -1125,7 +1215,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
           <p class="sr" id="pr-inst-status" role="status" aria-live="polite"></p>
           <p class="hint" id="pr-inst-h">Type a name, acronym, alternate name or email domain, then choose from the list. Inside the region, it goes live at once. Outside it, the proposal waits for review.</p>
         </div>
-                <div class="rule">
+        <div class="rule">
           <p style="margin:0"><b>Stored rule (plain)</b></p>
           <span class="mono" id="pr-pred">countries: none yet</span>
           <p class="hint" id="pr-plain" style="margin-top:6px"></p>
@@ -1139,7 +1229,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
   <p class="flow-note">Auto-approved regions appear on the map at once. Regions waiting for review stay private until approved. Every approved region is also copied into the repository by a pull request that the owner reviews.</p>
 </section>
 
-<!-- 10. REGION TREE AND GRANULARITY (owner and region lead) -->
+ <!-- 10. REGION TREE AND GRANULARITY (owner and region lead) -->
 <section class="screen wrap" data-route="granularity" aria-labelledby="h-gr">
   <div class="rv-bar">
     <nav aria-label="Region tree" class="keys" style="font-size:15px"><a class="link" href="#moderation" style="min-height:44px">Moderation</a> / Region tree</nav>
@@ -1234,7 +1324,16 @@ body[data-badge="hidden"] .amb-self { display: none; }
   <div class="stack" style="max-width:760px">
     <h1 id="h-al">Link your author record</h1>
     <p class="lede">Find your name among the Norway authors, then pick the matching OpenAlex author record. Your Ambassador badge shows once the link is confirmed.</p>
-    <form id="al-form" novalidate style="margin-top:28px">
+    <section class="orcid" aria-labelledby="h-orcid">
+      <h2 id="h-orcid" style="font-size:22px">Find your author record</h2>
+      <p class="hint">Connect your ORCID and we prove your iD through ORCID's own sign-in, so you do not type it. No ORCID? Search your name below.</p>
+      <div class="actions" style="margin-top:12px"><button type="button" class="btn orcid-btn" id="orcid-go" aria-describedby="orcid-hint"><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><circle cx="128" cy="128" r="128" fill="#A6CE39"/><text x="128" y="128" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="700" text-anchor="middle" dominant-baseline="central">iD</text></svg><span>Connect your ORCID</span></button></div>
+      <p class="hint" id="orcid-hint">The iD icon is ORCID's green iD mark. The redirect is mocked in this prototype.</p>
+      <div id="orcid-state" class="orcid-state" role="status" aria-live="polite" hidden></div>
+      <div id="orcid-match" class="orcid-match" hidden></div>
+    </section>
+    <p class="hint" style="margin-top:24px">Or search for your name.</p>
+    <form id="al-form" novalidate style="margin-top:12px">
       <div class="field" style="margin-top:0">
         <label for="al-name">Your name as published</label>
         <input type="text" id="al-name" value="Ingrid Haugland" autocomplete="name" aria-describedby="al-name-h">
@@ -1262,7 +1361,8 @@ body[data-badge="hidden"] .amb-self { display: none; }
     </div>
     <div class="profile" aria-label="Author profile, linked state (mock)">
       <p class="hint" style="margin:0">Author profile header (mock, linked)</p>
-      <div class="nm-row"><h3 style="margin:0">Ingrid Haugland</h3><span class="amb amb-self" role="img" aria-label="Ambassador for Norway">Ambassador · Norway</span></div>
+      <p><span class="amb amb-self" data-amb="norway" data-big></span></p>
+      <div class="nm-row"><h3 style="margin:0">Ingrid Haugland</h3><span class="amb amb-self" data-amb="norway"></span></div>
       <p>NIVA · 18 works (sample) · OpenAlex A-sample-101 · ORCID 0000-0000-0000-0101 (sample)</p>
     </div>
   </div>
@@ -1356,6 +1456,117 @@ body[data-badge="hidden"] .amb-self { display: none; }
   </div>
 </section>
 
+<!-- 15. SHARE MONITORING DATA -->
+<section class="screen wrap" data-route="share" aria-labelledby="h-sh">
+  <div class="rv-bar">
+    <nav aria-label="Share monitoring data" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Share monitoring data</nav>
+    <div class="rv-prog"><span class="est">About 10 minutes</span></div>
+  </div>
+
+  <h1 id="h-sh" style="font-size:clamp(30px,3.6vw,44px);margin-top:28px;max-width:none">Share monitoring data</h1>
+  <p class="lede">Share a monitoring dataset you hold, as yourself or on behalf of a group or organisation. It goes into the same review queue as other contributions and follows the licence you choose. Nothing is published until its licence is cleared.</p>
+
+  <form id="share-form" novalidate style="margin-top:28px;max-width:760px">
+    <fieldset>
+      <legend>Who shares this?</legend>
+      <label class="choice"><input type="radio" name="sh-who" value="me" checked><span>Me, as an individual</span></label>
+      <label class="choice"><input type="radio" name="sh-who" value="org"><span>On behalf of a group or organisation</span></label>
+    </fieldset>
+    <div id="sh-org-wrap" class="form-stack" hidden>
+      <div class="field">
+        <label for="sh-org">Organisation name</label>
+        <div class="search">
+          <input type="text" id="sh-org" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="sh-org-list" aria-activedescendant="" autocomplete="off" aria-describedby="sh-org-h">
+          <ul id="sh-org-list" role="listbox" class="results" aria-label="Matching institutions" hidden></ul>
+        </div>
+        <p class="sr" id="sh-org-status" role="status" aria-live="polite"></p>
+        <p class="hint" id="sh-org-h">Type a name, acronym or email domain and choose from the list. If it is not listed, type the name as it is written. We check it before anything is published.</p>
+      </div>
+      <div class="field"><label for="sh-role">Your role there</label><input type="text" id="sh-role" placeholder="For example: monitoring lead"></div>
+      <div class="check-row"><input type="checkbox" id="sh-allowed"><label for="sh-allowed">I am allowed to share this dataset on the organisation's behalf.</label></div>
+    </div>
+
+    <h2 style="font-size:24px;margin-top:40px">The dataset</h2>
+    <div class="field" style="margin-top:12px"><label for="sh-dname">Dataset name <span class="hint">(required)</span></label><input type="text" id="sh-dname" maxlength="120" placeholder="For example: Oslofjord sediment survey"></div>
+    <fieldset style="margin-top:22px">
+      <legend>Sampling period</legend>
+      <div class="form-grid" style="margin-top:8px">
+        <div class="field" style="margin-top:0"><label for="sh-from">From</label><input type="date" id="sh-from"></div>
+        <div class="field" style="margin-top:0"><label for="sh-to">To</label><input type="date" id="sh-to"></div>
+      </div>
+      <p class="hint" style="margin-top:6px">Leave blank if you do not know the dates. We show them as “date not known”.</p>
+    </fieldset>
+    <fieldset style="margin-top:28px">
+      <legend>Place on the map</legend>
+      <div class="field" style="margin-top:8px">
+        <label for="sh-place-q">Search a place</label>
+        <div class="search">
+          <input type="text" id="sh-place-q" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="sh-place-list" aria-activedescendant="" autocomplete="off" placeholder="Try Koror, Bergen or Ghent">
+          <ul id="sh-place-list" role="listbox" class="results" aria-label="Matching places" hidden></ul>
+        </div>
+        <p class="sr" id="sh-place-status" role="status" aria-live="polite"></p>
+      </div>
+      <div class="geo-stage geo-mini" id="map-share" tabindex="0" role="group" aria-label="Map to pick the place this dataset covers. Click a shape."></div>
+      <p class="hint" id="sh-place-now" style="margin-top:8px">Nothing picked yet. Search, or click a shape on the map.</p>
+    </fieldset>
+    <fieldset style="margin-top:28px">
+      <legend>Matrices (choose all that apply)</legend>
+      <div class="chip-set">
+        <label class="chip"><input type="checkbox" name="matrix" id="sh-matrix-water" value="water"><span>Water</span></label>
+        <label class="chip"><input type="checkbox" name="matrix" value="sediment"><span>Sediment</span></label>
+        <label class="chip"><input type="checkbox" name="matrix" value="biota"><span>Biota</span></label>
+        <label class="chip"><input type="checkbox" name="matrix" value="air"><span>Air</span></label>
+        <label class="chip"><input type="checkbox" name="matrix" value="shoreline"><span>Shoreline litter</span></label>
+        <label class="chip"><input type="checkbox" name="matrix" value="other"><span>Other</span></label>
+      </div>
+    </fieldset>
+    <fieldset style="margin-top:28px">
+      <legend>Size range (number of records)</legend>
+      <div class="chip-set">
+        <label class="chip"><input type="radio" name="sh-size" id="sh-size-1" value="s1"><span>Under 100</span></label>
+        <label class="chip"><input type="radio" name="sh-size" value="s2"><span>100 to 1,000</span></label>
+        <label class="chip"><input type="radio" name="sh-size" value="s3"><span>1,000 to 10,000</span></label>
+        <label class="chip"><input type="radio" name="sh-size" value="s4"><span>Over 10,000</span></label>
+      </div>
+    </fieldset>
+    <div class="field" style="margin-top:28px"><label for="sh-methods">Methods</label><textarea id="sh-methods" rows="3" placeholder="How were samples taken and analysed? Keep it short."></textarea></div>
+    <div class="field"><label for="sh-qa">QA notes</label><textarea id="sh-qa" rows="3" placeholder="Blanks, detection limits, checks you ran."></textarea></div>
+
+    <fieldset style="margin-top:28px">
+      <legend>How people get the data</legend>
+      <label class="choice"><input type="radio" name="sh-acc" id="sh-acc-link" value="link"><span>A public link, DOI or repository address</span></label>
+      <label class="choice"><input type="radio" name="sh-acc" id="sh-acc-file" value="file"><span>Upload a file for review</span></label>
+    </fieldset>
+    <div id="sh-url-wrap" class="field" hidden><label for="sh-url">Address (https)</label><input type="url" id="sh-url" placeholder="https://"></div>
+    <div id="sh-file-wrap" class="field" hidden>
+      <label for="sh-file">File (CSV, XLSX or ZIP)</label>
+      <input type="file" id="sh-file" accept=".csv,.xlsx,.zip">
+      <p class="hint">The file is stored privately until reviewed. It is never published straight from the upload.</p>
+    </div>
+
+    <fieldset style="margin-top:28px">
+      <legend>Licence</legend>
+      <div class="lic-list">
+        <label class="lic"><input type="radio" name="sh-lic" id="sh-lic-cc0" value="cc0"><b>CC0</b><small>Anyone can use it for any purpose, without credit. You give up your rights to it.</small></label>
+        <label class="lic"><input type="radio" name="sh-lic" value="ccby"><b>CC BY 4.0</b><small>Anyone can use it, including for business, if they credit you.</small></label>
+        <label class="lic"><input type="radio" name="sh-lic" value="odc"><b>ODC-BY</b><small>Anyone can use and share it if they credit you. Written for datasets.</small></label>
+        <label class="lic"><input type="radio" name="sh-lic" value="other"><b>Other</b><small>A licence you or your organisation already use. We check its terms first.</small></label>
+        <label class="lic"><input type="radio" name="sh-lic" value="unsure"><b>Not sure</b><small>We help you choose. Nothing is published until the licence is cleared.</small></label>
+      </div>
+    </fieldset>
+    <fieldset style="margin-top:28px">
+      <legend>What may the Atlas publish under that licence?</legend>
+      <label class="choice"><input type="radio" name="sh-pub" id="sh-pub-sum" value="summary"><span>Summaries only<small>Counts, date ranges and region-level figures.</small></span></label>
+      <label class="choice"><input type="radio" name="sh-pub" value="rows"><span>Summaries and rows<small>The individual records as well, under the same licence.</small></span></label>
+    </fieldset>
+    <div class="check-row" style="margin-top:22px"><input type="checkbox" id="sh-rights"><label for="sh-rights">I have the right to share this dataset.</label></div>
+    <div class="actions"><button class="btn solid" type="submit">Send for review</button><a class="btn" href="#workspace">Cancel</a></div>
+  </form>
+  <div id="share-errors" class="err-box" role="alert" tabindex="-1" hidden><h2>Please fix this to continue</h2><ul id="share-error-list"></ul></div>
+  <div id="share-outcome" class="saved" role="status" tabindex="-1" hidden></div>
+  <p class="flow-note">Datasets follow the monitoring licence rules. Nothing is published until its licence is cleared.</p>
+</section>
+
 </main>
 
 <footer class="foot">
@@ -1368,8 +1579,8 @@ body[data-badge="hidden"] .amb-self { display: none; }
 <script>
 (function () {
   "use strict";
-  var ROUTES = ["landing","signin","signin-sent","signin-expired","welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity","author-link","emails","coauthors","settings"];
-  var SIGNED_IN = ["welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity","author-link","emails","coauthors","settings"];
+  var ROUTES = ["landing","signin","signin-sent","signin-expired","welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity","author-link","emails","coauthors","settings","share"];
+  var SIGNED_IN = ["welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity","author-link","emails","coauthors","settings","share"];
   var body = document.body;
   var jump = document.getElementById("jump");
   var main = document.getElementById("main");
@@ -1408,7 +1619,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
   }
   document.getElementById("prev").addEventListener("click", function () { step(-1); });
   document.getElementById("next").addEventListener("click", function () { step(1); });
-  document.getElementById("screen-count").textContent = "1 to 14, with sub-states";
+  document.getElementById("screen-count").textContent = "1 to 15, with sub-states";
   lead.addEventListener("change", function () { body.classList.toggle("lead", lead.checked); });
 
   // ---- Institutions: sample catalogue (Norway, Belgium, California; one Samoa sample for the proposal screen) ----
@@ -1545,13 +1756,16 @@ body[data-badge="hidden"] .amb-self { display: none; }
   }
   window.AMB = { INST_CAT: INST_CAT, instMatches: instMatches, instRow: instRow, combo: combo, normText: normText, REGION_NAME: REGION_NAME };
 
-  // ---- Eligibility checker: institution type-ahead over the selected region ----
+  // ---- Eligibility checker: place (same search as the landing map) and institution type-ahead over that place's region ----
   var FREE = ["gmail.com","outlook.com","hotmail.com","proton.me","protonmail.com","yahoo.com","icloud.com"];
   var eForm = document.getElementById("elig-form");
   var eRes = document.getElementById("elig-result");
   var eInput = document.getElementById("elig-q");
-  var eRegion = document.getElementById("elig-region");
   var eChosen = null;
+  var eligRegion = "norway";
+  var eCombo = null;
+  // The map script calls this when the place changes (landing map, place search or the eligibility place field).
+  window.AMB.setEligRegion = function (region) { eligRegion = region || null; eChosen = null; if (eCombo) eCombo.close(); };
   function setResult(state, html) {
     eRes.hidden = false;
     eRes.setAttribute("data-state", state);
@@ -1560,21 +1774,21 @@ body[data-badge="hidden"] .amb-self { display: none; }
   function emailRoute() {
     return "Write to <span class=\"big-mail\">theplastiverse@gmail.com</span> with your institution and region. <a class=\"link\" href=\"mailto:theplastiverse@gmail.com?subject=Plastiverse%20Live%20ambassador\">Open an email</a>";
   }
-  var eCombo = combo({
+  eCombo = combo({
     input: eInput, list: document.getElementById("elig-list"), status: document.getElementById("elig-status"), all: true,
-    items: function (q) { return instMatches(q, eRegion.value); },
+    items: function (q) { return eligRegion ? instMatches(q, eligRegion) : []; },
     label: function (u) { return u.name; },
     render: instRow,
-    noneText: "No institution in this region matches. Type your email, or use the email route below.",
+    noneText: "No institution here matches. Type your email, or use the email route below.",
     onType: function () { eChosen = null; },
     onChoose: function (u) { eChosen = u; }
   });
-  eRegion.addEventListener("change", function () { eChosen = null; if (document.activeElement === eInput) eCombo.render(); });
   eForm.addEventListener("submit", function (e) {
     e.preventDefault();
     eCombo.close();
     var raw = eInput.value.trim(), q = normText(raw);
-    var region = eRegion.value, rname = REGION_NAME[region];
+    var region = eligRegion, rname = REGION_NAME[region];
+    if (!region) { setResult("no", "<b>No institution list for this place yet.</b>Pick a place that has a list, or use the email route.<div class=\"route\">" + emailRoute() + "</div>"); return; }
     var list = INST_CAT.filter(function (u) { return u.region === region; });
     if (!q) { setResult("no", "<b>Type an email or an institution name first.</b>"); return; }
     var hit = eChosen && eChosen.region === region ? eChosen : null;
@@ -1597,6 +1811,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
       var li = document.createElement("li");
       var a = document.createElement("a");
       a.href = "#" + it.id; a.className = "link"; a.style.minHeight = "24px"; a.textContent = it.text;
+      a.addEventListener("click", function (e) { e.preventDefault(); var t = document.getElementById(it.id); if (t) t.focus(); });
       li.appendChild(a); list.appendChild(li);
     });
     box.hidden = false; box.focus();
@@ -1945,6 +2160,107 @@ body[data-badge="hidden"] .amb-self { display: none; }
   });
   setBadgeHidden(false);
 
+  // ---- Ambassador badge: one SVG seal component, drawn into every [data-amb] element ----
+  // Seal shape: Lucide "badge" icon path (ISC licence, credited in the surface brief). Sun mark: the header mark.
+  var SEAL_BODY = "M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z";
+  function badgeMarkup(region) {
+    var name = REGION_NAME[region] || region;
+    return '<svg class="seal" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+      '<path class="seal-body" d="' + SEAL_BODY + '"/>' +
+      '<g class="seal-sun" transform="translate(12 12) scale(.36) translate(-14 -14)"><circle cx="14" cy="14" r="6"/><path d="M2 14H26M14 2V26"/></g>' +
+      '</svg>' +
+      '<span class="amb-label"><span class="amb-word">Ambassador</span><span class="amb-sep" aria-hidden="true"> · </span><span class="amb-reg">' + esc(name) + '</span></span>';
+  }
+  function renderBadges() {
+    document.querySelectorAll("[data-amb]").forEach(function (el) {
+      var region = el.getAttribute("data-amb");
+      el.classList.add("amb");
+      if (el.hasAttribute("data-big")) el.classList.add("lg");
+      el.setAttribute("role", "img");
+      el.setAttribute("aria-label", "Plastiverse Live ambassador for " + (REGION_NAME[region] || region));
+      el.innerHTML = badgeMarkup(region);
+    });
+  }
+
+  // ---- Screen 11: ORCID (mocked redirect), then the automatic cross-reference ----
+  var ORCID_ID = "0000-0002-1825-0097";
+  function orcidSet(state, html) {
+    var box = document.getElementById("orcid-state");
+    box.hidden = false; box.setAttribute("data-state", state); box.innerHTML = html;
+  }
+  document.getElementById("orcid-go").addEventListener("click", function () {
+    var go = document.getElementById("orcid-go"), match = document.getElementById("orcid-match");
+    go.disabled = true; match.hidden = true;
+    orcidSet("connecting", "<b>Connecting to ORCID...</b><small>Prototype: this stands in for the redirect to ORCID's sign-in page and back.</small>");
+    setTimeout(function () {
+      orcidSet("verified", "<b>ORCID verified: " + ORCID_ID + "</b><small>ORCID's own sign-in proved this iD. Nothing was typed.</small>");
+      setTimeout(function () {
+        if (document.getElementById("orcid-nomatch").checked) {
+          orcidSet("nomatch", "<b>No match yet — search your name instead</b><small>No author record in Norway carries this iD yet. The name search below is the fallback.</small>");
+          document.getElementById("al-name").focus();
+        } else {
+          orcidSet("matched", "<b>Matched to your Plastiverse Live author record: A. Example, NIVA, 18 works — badge active</b><small>Matched on ORCID iD, so no moderator check is needed.</small>");
+          match.hidden = false;
+          match.innerHTML = '<span class="amb amb-self" data-amb="norway"></span>';
+          renderBadges();
+        }
+      }, 900);
+    }, 1200);
+  });
+
+  // ---- Screen 15: share monitoring data ----
+  function checkedOf(name) { var r = document.querySelector('input[name="' + name + '"]:checked'); return r ? r.value : null; }
+  function syncShareWraps() {
+    document.getElementById("sh-org-wrap").hidden = checkedOf("sh-who") !== "org";
+    document.getElementById("sh-url-wrap").hidden = checkedOf("sh-acc") !== "link";
+    document.getElementById("sh-file-wrap").hidden = checkedOf("sh-acc") !== "file";
+  }
+  document.querySelectorAll('input[name="sh-who"], input[name="sh-acc"]').forEach(function (r) { r.addEventListener("change", syncShareWraps); });
+  syncShareWraps();
+  var SHORG = null;
+  combo({
+    input: document.getElementById("sh-org"), list: document.getElementById("sh-org-list"), status: document.getElementById("sh-org-status"), all: false,
+    items: function (q) { return instMatches(q, ""); },
+    label: function (u) { return u.name; },
+    render: instRow,
+    noneText: "Not listed. Keep the name as it is written; we check it before anything is published.",
+    onType: function () { SHORG = null; },
+    onChoose: function (u) { SHORG = u; }
+  });
+  document.getElementById("share-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var errs = [];
+    if (checkedOf("sh-who") === "org") {
+      if (!document.getElementById("sh-org").value.trim()) errs.push({ id: "sh-org", text: "Enter the organisation's name." });
+      if (!document.getElementById("sh-role").value.trim()) errs.push({ id: "sh-role", text: "Enter your role in the organisation." });
+      if (!document.getElementById("sh-allowed").checked) errs.push({ id: "sh-allowed", text: "Confirm that you may share this on the organisation's behalf." });
+    }
+    if (!document.getElementById("sh-dname").value.trim()) errs.push({ id: "sh-dname", text: "Name the dataset." });
+    var f = document.getElementById("sh-from").value, t = document.getElementById("sh-to").value;
+    if (f && t && t < f) errs.push({ id: "sh-from", text: "The period ends before it starts. Check both dates." });
+    if (!window.AMB.sharePlace) errs.push({ id: "sh-place-q", text: "Pick the place on the map or search for it." });
+    if (!document.querySelector('input[name="matrix"]:checked')) errs.push({ id: "sh-matrix-water", text: "Choose at least one matrix." });
+    if (!checkedOf("sh-size")) errs.push({ id: "sh-size-1", text: "Choose a size range." });
+    if (checkedOf("sh-acc") === "link") {
+      if (document.getElementById("sh-url").value.trim().indexOf("https://") !== 0) errs.push({ id: "sh-url", text: "The link must start with https://." });
+    } else if (checkedOf("sh-acc") === "file") {
+      if (!document.getElementById("sh-file").files.length) errs.push({ id: "sh-file", text: "Choose the file to upload, or pick a public link instead." });
+    } else {
+      errs.push({ id: "sh-acc-link", text: "Say how people can get the data: a link, or an upload." });
+    }
+    if (!checkedOf("sh-lic")) errs.push({ id: "sh-lic-cc0", text: "Choose a licence." });
+    if (!checkedOf("sh-pub")) errs.push({ id: "sh-pub-sum", text: "Choose what the Atlas may publish." });
+    if (!document.getElementById("sh-rights").checked) errs.push({ id: "sh-rights", text: "Confirm that you have the right to share this dataset." });
+    document.getElementById("share-errors").hidden = true;
+    document.getElementById("share-outcome").hidden = true;
+    if (errs.length) { fail("share-errors", "share-error-list", errs); return; }
+    var lic = { cc0: "CC0", ccby: "CC BY 4.0", odc: "ODC-BY", other: "another licence (we check its terms)", unsure: "not sure yet (we help you choose)" }[checkedOf("sh-lic")];
+    var out = document.getElementById("share-outcome");
+    out.hidden = false;
+    out.innerHTML = "<span><b>In review; nothing is published until its licence is cleared.</b> " + esc(document.getElementById("sh-dname").value.trim()) + ", licence: " + esc(lic) + ". The owner sees it in the moderation queue.</span>";
+    out.focus();
+  });
+
   // ---- Hash state: #route or #route?place=KEY (the landing selection travels with the page) ----
   function hashParts() {
     var h = (location.hash || "#landing").slice(1);
@@ -1958,6 +2274,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
   }
   window.AMB_HASH = hashParts;
 
+  renderBadges();
   showItem(0);
   show();
 })();
@@ -2161,7 +2478,8 @@ body[data-badge="hidden"] .amb-self { display: none; }
   }
   function boundsOf(u) {
     var b = null;
-    if (u.box) b = PATH.bounds(rectPoly(u.box[0], u.box[1], u.box[2], u.box[3]));
+    if (u.t === "c" && u.id === "578" && norwayMainland()) b = PATH.bounds(norwayMainland());
+    else if (u.box) b = PATH.bounds(rectPoly(u.box[0], u.box[1], u.box[2], u.box[3]));
     else if (u.t === "c" && !POINT_ZOOM[u.id] && BYID[u.id]) b = PATH.bounds({ type: "FeatureCollection", features: BYID[u.id] });
     else if (u.t === "s") b = PATH.bounds(geoOf(u));
     var m = minBox(u.pt[0], u.pt[1]);
@@ -2176,8 +2494,36 @@ body[data-badge="hidden"] .amb-self { display: none; }
     return "var(--pv-paper)";
   }
   function applyDotR(m) {
-    if (!m.dots) return;
-    m.dots.attr("r", function (u) { return (u.t === "ci" ? 4.5 : 6) / m.k; });
+    if (m.dots) m.dots.attr("r", function (u) { return (u.t === "ci" ? 4.5 : 6) / m.k; });
+    if (m.instEls) m.instEls.attr("r", 3.5 / m.k);
+    if (m.taskEls) m.taskEls.attr("transform", function (t) { var p = PROJ(UNITS[t.key].pt); return "translate(" + p[0] + "," + p[1] + ") scale(" + (1 / m.k) + ")"; });
+  }
+  // Cooperative gestures (spec 10): the wheel zooms only with Ctrl/Cmd or once the map is active;
+  // one finger scrolls the page, two fingers pan and pinch. A blocked wheel shows a short hint.
+  function gestureAllowed(m, e) {
+    if (e.type === "wheel") {
+      if (e.ctrlKey || e.metaKey || m.active) return true;
+      flashHint(m);
+      return false;
+    }
+    if (e.type.indexOf("touch") === 0) return !!e.touches && e.touches.length >= 2;
+    return !e.button && !e.ctrlKey;
+  }
+  function flashHint(m) {
+    var h = m.stage && m.stage.querySelector(".geo-hint");
+    if (!h) return;
+    h.hidden = false;
+    clearTimeout(m.hintT);
+    m.hintT = setTimeout(function () { h.hidden = true; }, 1800);
+  }
+  // Active = clicked, tapped or focused. Escape, focus leaving the map or the pointer leaving deactivates.
+  function setupCoop(m, stage) {
+    function set(on) { m.active = on; stage.classList.toggle("is-active", on); }
+    stage.addEventListener("pointerdown", function () { set(true); });
+    stage.addEventListener("focusin", function () { set(true); });
+    stage.addEventListener("focusout", function (e) { if (!e.relatedTarget || !stage.contains(e.relatedTarget)) set(false); });
+    stage.addEventListener("pointerleave", function () { set(false); });
+    stage.addEventListener("keydown", function (e) { if (e.key === "Escape") set(false); });
   }
   // Move a map to transform t. animate uses a named transition so repeated calls replace each other.
   function goTo(m, t, animate) {
@@ -2201,7 +2547,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
     svg.append("rect").attr("class", "geo-sea").attr("width", VW).attr("height", VH);
     m.svg = svg; m.stage = stage;
     m.view = svg.append("g");
-    var gC = m.view.append("g"), gS = m.view.append("g"), gB = m.view.append("g").attr("class", "bnd"), gSel = m.view.append("g"), gH = m.view.append("g"), gD = m.view.append("g");
+    var gC = m.view.append("g"), gS = m.view.append("g"), gB = m.view.append("g").attr("class", "bnd"), gSel = m.view.append("g"), gH = m.view.append("g"), gI = m.view.append("g").attr("class", "insts"), gD = m.view.append("g"), gT = m.view.append("g").attr("class", "tasks");
 
     // Natural Earth boundary lines: disputed (dashed) and Pacific groupings (dotted). Pure line paths, pointer-transparent.
     gB.selectAll("path.bd-disp").data(BND_DISP).enter().append("path").attr("class", "bd-disp").attr("d", function (f) { return PATH(f); });
@@ -2215,6 +2561,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
     var markers = [UNITS["s:california"]].concat(DOT_UNITS);
     if (o.allSubs) markers = markers.concat(SUB_UNITS.filter(function (u) { return u.key !== "s:california"; }));
     if (o.showCities) markers = markers.concat(CITY_UNITS);
+    if (o.dots === false) markers = [];
     m.markers = markers;
     m.dots = gD.selectAll("circle").data(markers).enter().append("circle")
       .attr("class", function (u) { return u.t === "ci" ? "dot city" : "dot"; })
@@ -2225,6 +2572,23 @@ body[data-badge="hidden"] .amb-self { display: none; }
       .on("click", function (e, u) { m.doPick(u.key, e); })
       .on("keydown", function (e, u) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); m.doPick(u.key); } });
 
+    // Optional layers: eligible institutions (points) and numbered tasks (markers at a place).
+    if (o.insts) {
+      var IL = INSTS.filter(function (i) { return i.region === o.insts; });
+      var ic = gI.selectAll("circle").data(IL).enter().append("circle").attr("class", "inst")
+        .attr("cx", function (i) { return PROJ([i.lon, i.lat])[0]; })
+        .attr("cy", function (i) { return PROJ([i.lon, i.lat])[1]; });
+      ic.append("title").text(function (i) { return i.name + ", " + i.city + " (sample)"; });
+      m.instEls = ic;
+    }
+    if (o.tasks) {
+      m.taskEls = gT.selectAll("g.task").data(o.tasks).enter().append("g").attr("class", "task")
+        .attr("role", "button").attr("tabindex", "0").attr("aria-label", function (t) { return t.label; })
+        .on("click", function (e, t) { location.hash = t.href; })
+        .on("keydown", function (e, t) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); location.hash = t.href; } });
+      m.taskEls.append("circle").attr("r", 9);
+      m.taskEls.append("text").attr("text-anchor", "middle").attr("dy", "0.35em").text(function (t) { return t.n; });
+    }
     m.drawSubs = function () {
       var subs = SUB_UNITS.filter(function (u) { return o.allSubs || u.key === "s:california" || u.key === m.focus || m.sel[u.key]; });
       var sel = gS.selectAll("path").data(subs, function (u) { return u.key; });
@@ -2258,7 +2622,8 @@ body[data-badge="hidden"] .amb-self { display: none; }
         gH.append("circle").attr("class", "pin").attr("cx", PROJ(u.pt)[0]).attr("cy", PROJ(u.pt)[1]).attr("r", 5 / m.k);
       } else if (u.t === "c") {
         var feats = BYID[u.id] || [];
-        if (feats.length) gH.append("path").attr("class", "hl").attr("d", PATH({ type: "FeatureCollection", features: feats }));
+        if (m.focusGeom) gH.append("path").attr("class", "hl").attr("d", PATH(m.focusGeom));
+        else if (feats.length) gH.append("path").attr("class", "hl").attr("d", PATH({ type: "FeatureCollection", features: feats }));
       } else {
         gH.append("path").attr("class", "hl").attr("d", PATH(geoOf(u)));
       }
@@ -2294,8 +2659,19 @@ body[data-badge="hidden"] .amb-self { display: none; }
       return k;
     };
 
+    m.zoomToGeom = function (geom, animate) {
+      var b = PATH.bounds(geom);
+      var w = Math.max(1e-3, b[1][0] - b[0][0]), h = Math.max(1e-3, b[1][1] - b[0][1]);
+      var k = clamp(Math.min(VW * 0.94 / w, VH * 0.94 / h), 1, MAXK);
+      var cx = (b[0][0] + b[1][0]) / 2, cy = (b[0][1] + b[1][1]) / 2;
+      var tx = clamp(VW / 2 - cx * k, VW - VW * k, 0), ty = clamp(VH / 2 - cy * k, VH - VH * k, 0);
+      goTo(m, d3.zoomIdentity.translate(tx, ty).scale(k), animate);
+      return k;
+    };
+
     // d3-zoom: wheel or trackpad, drag, pinch, double-click. Scale and pan bounded by the map.
     m.zoom = d3.zoom().scaleExtent([1, MAXK]).extent([[0, 0], [VW, VH]]).translateExtent([[0, 0], [VW, VH]])
+      .filter(function (e) { return gestureAllowed(m, e); })
       .on("zoom", function (e) {
         var t = e.transform;
         m.k = t.k; m.tx = t.x; m.ty = t.y;
@@ -2305,6 +2681,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
       })
       .on("end", function () { setTimeout(function () { m.suppress = false; }, 0); });
     svg.call(m.zoom);
+    setupCoop(m, stage);
 
     // Overlaid control group inside the map frame (no controls outside it).
     var ctl = document.createElement("div");
@@ -2313,6 +2690,10 @@ body[data-badge="hidden"] .amb-self { display: none; }
       '<button type="button" class="btn" data-z="out" aria-label="Zoom out">&minus;</button>' +
       '<button type="button" class="btn reset" data-z="reset" aria-label="Reset map view">Reset</button>';
     stage.appendChild(ctl);
+    var hint = document.createElement("p");
+    hint.className = "geo-hint"; hint.hidden = true; hint.setAttribute("role", "status");
+    hint.textContent = "Hold Ctrl (Cmd on Mac) and scroll to zoom, or click the map first. Scrolling the page works as usual.";
+    stage.appendChild(hint);
     ctl.addEventListener("click", function (e) {
       var b = e.target.closest("[data-z]"); if (!b) return;
       var z = b.getAttribute("data-z");
@@ -2406,6 +2787,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
     $("geo-panel").innerHTML = panelFor(key);
     LANDING_SEL = key;
     if (LANDING) LANDING.setFocus(key);
+    syncPlace(key);
   }
   function buildTable() {
     var body = $("map-table-body");
@@ -2548,7 +2930,9 @@ body[data-badge="hidden"] .amb-self { display: none; }
         list.innerHTML = "";
         errs.forEach(function (x) {
           var li = document.createElement("li"), a = document.createElement("a");
-          a.href = "#" + x.id; a.className = "link"; a.textContent = x.text; li.appendChild(a); list.appendChild(li);
+          a.href = "#" + x.id; a.className = "link"; a.textContent = x.text;
+          a.addEventListener("click", function (e) { e.preventDefault(); var t = document.getElementById(x.id); if (t) t.focus(); });
+          li.appendChild(a); list.appendChild(li);
         });
         box.hidden = false; box.focus(); return;
       }
@@ -2645,18 +3029,121 @@ body[data-badge="hidden"] .amb-self { display: none; }
     renderPlanner();
   }
 
+  // ---- One place choice (landing, eligibility, sign-in, share): regions and place sync ----
+  var REG_OF_COUNTRY = { "578": "norway", "056": "belgium", "840": "california", "882": "samoa" };
+  function regionForUnit(u) {
+    if (!u) return null;
+    return REG_OF_COUNTRY[u.t === "c" ? u.id : u.country] || null;
+  }
+  var SIGN_KEY = null, SIGN_MAP = null, SHARE_MAP = null;
+  // Landing selection pre-fills the eligibility place and the sign-in place.
+  function syncPlace(key) {
+    var u = UNITS[key]; if (!u) return;
+    SIGN_KEY = key;
+    $("si-place-name").textContent = u.name;
+    $("elig-place").value = u.name;
+    window.AMB.setEligRegion(regionForUnit(u));
+    if (SIGN_MAP) { SIGN_MAP.setFocus(key); }
+  }
+  function bindEligPlace() {
+    var start = UNITS[LANDING_SEL || "c:578"];
+    $("elig-place").value = start.name;
+    window.AMB.setEligRegion(regionForUnit(start));
+    bindPlaceCombo($("elig-place"), $("elig-place-list"), $("elig-place-status"), function (v) {
+      window.AMB.setEligRegion(regionForUnit(v));
+    });
+  }
+  // Sign-in: the same place search and a small map, pre-filled with the previous selection.
+  function setSignPlace(key) {
+    var u = UNITS[key]; if (!u) return;
+    SIGN_KEY = key;
+    $("si-place-name").textContent = u.name;
+    if (SIGN_MAP) { SIGN_MAP.setFocus(key); SIGN_MAP.zoomToKey(key, true); }
+  }
+  function bindSignPlace() {
+    SIGN_KEY = LANDING_SEL || "c:578";
+    $("si-place-name").textContent = UNITS[SIGN_KEY].name;
+    var btn = $("si-change"), wrap = $("si-place-wrap");
+    btn.addEventListener("click", function () {
+      var open = wrap.hidden;
+      wrap.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      if (open) $("si-place").focus();
+    });
+    bindPlaceCombo($("si-place"), $("si-place-list"), $("si-place-status"), function (u) { setSignPlace(u.key); });
+  }
+  function initSignin() {
+    SIGN_MAP = makeMap({ id: "signin", stageId: "map-signin", showCities: false, allSubs: false, onPick: setSignPlace });
+    SIGN_MAP.setFocus(SIGN_KEY);
+    SIGN_MAP.zoomToKey(SIGN_KEY, false);
+  }
+  function refreshSignin() {
+    if (!SIGN_MAP) return;
+    SIGN_MAP.setFocus(SIGN_KEY);
+    SIGN_MAP.zoomToKey(SIGN_KEY, false);
+  }
+  // Workspace: region map zoomed to Norway, sample institutions, numbered tasks with a place.
+  var WS_TASKS = [
+    { n: "1", key: "ci:oslo", label: "Task 1: confirm a placeholder, Oslo. Opens the task.", href: "#confirm" },
+    { n: "2", key: "ci:bergen", label: "Task 2: check a doubtful match, Bergen. Opens the case.", href: "#review" },
+    { n: "3", key: "ci:trondheim", label: "Task 3: add a local policy, Trondheim. Opens the form.", href: "#add-policy" }
+  ];
+  // Norway's mainland only: the country shape also holds Svalbard, Jan Mayen and Bouvet, which would pull the view away.
+  function norwayMainland() {
+    var f = (BYID["578"] || [])[0];
+    if (!f) return null;
+    var polys = f.geometry.type === "MultiPolygon" ? f.geometry.coordinates : [f.geometry.coordinates];
+    var keep = polys.filter(function (poly) {
+      var c = d3.geoCentroid({ type: "Polygon", coordinates: poly });
+      return c[0] > 0 && c[0] < 35 && c[1] > 55 && c[1] < 72;
+    });
+    return keep.length ? { type: "MultiPolygon", coordinates: keep } : null;
+  }
+  function initWorkspace() {
+    var ws = makeMap({ id: "ws", stageId: "map-ws", insts: "norway", tasks: WS_TASKS, dots: false, showCities: false, allSubs: false });
+    var main = norwayMainland();
+    if (main) { ws.focusGeom = main; ws.zoomToGeom(main, false); } else { ws.zoomToKey("c:578", false); }
+    ws.setFocus("c:578");
+  }
+  // Share: place picked on a small map or by search; the form reads window.AMB.sharePlace.
+  function shareSetPlace(key) {
+    var u = UNITS[key]; if (!u) return;
+    window.AMB.sharePlace = placeLabel(u);
+    if (SHARE_MAP) { SHARE_MAP.setSel([key]); SHARE_MAP.setFocus(key); }
+    $("sh-place-now").textContent = "Picked: " + placeLabel(u) + ". Click another shape or search to change it.";
+  }
+  function bindSharePlace() {
+    bindPlaceCombo($("sh-place-q"), $("sh-place-list"), $("sh-place-status"), function (u) {
+      shareSetPlace(u.key);
+      if (SHARE_MAP) SHARE_MAP.zoomToKey(u.key, true);
+    });
+  }
+  function initShare() {
+    SHARE_MAP = makeMap({ id: "share", stageId: "map-share", picks: true, showCities: true, allSubs: true, onPick: shareSetPlace });
+    SHARE_MAP.zoomToKey("c:578", false);
+  }
+
   // ---- Start ----
   function startAll() {
     initTable();
     initTree();
     initPlanner();
     initProposeForms();
+    bindEligPlace();
+    bindSignPlace();
+    bindSharePlace();
     loadWorld().then(function () {
       initLanding();
       initPropose();
+      initWorkspace();
+      initSignin();
+      initShare();
     }).catch(function (err) {
       mapFailed("map-landing", "The world map could not load. " + err.message);
       mapFailed("map-propose", "The pick map could not load. " + err.message);
+      mapFailed("map-ws", "The region map could not load. " + err.message);
+      mapFailed("map-signin", "The map preview could not load. " + err.message);
+      mapFailed("map-share", "The map could not load. " + err.message);
       $("place-status").textContent = "The map could not load. Search still works, but zoom is off.";
       $("geo-panel").innerHTML = '<p class="hint" style="margin:0">The map is not available, so pick a region from the table, or search for a place.</p>';
       $("pr-empty").textContent = "The map did not load. Search for a place to add it.";
@@ -2669,6 +3156,7 @@ body[data-badge="hidden"] .amb-self { display: none; }
     });
   }
   window.addEventListener("hashchange", focusProposeFromHash);
+  window.addEventListener("hashchange", function () { if (window.AMB_HASH().route === "signin") refreshSignin(); });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startAll);
   else startAll();
 })();

@@ -250,3 +250,4 @@
 | 2026-11-25 | AMB-1 (design round 3) | Spec section 10 + prototype: institution type-ahead, NE disputed/Pacific lines, in-map zoom, badges, emails, co-author invitations | this commit |
 | 2026-11-25 | AMB-1 (live map round 3) | /explore: NE disputed + Pacific lines, in-map zoom, cooperative gestures; H46 phone check | this commit |
 | 2026-11-25 | H46 | Owner confirmed touch gestures on /explore | this commit |
+| 2026-11-25 | AMB-1 (design round 4) | Badge, aligned place/institution, ORCID, workspace map, share monitoring data, bigger proposal map | this commit |

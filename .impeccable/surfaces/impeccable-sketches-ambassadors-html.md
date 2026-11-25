@@ -113,3 +113,47 @@ Open questions for the owner:
 
 - Screen 9 map shows a dashed box west of Bergen whose meaning is not labelled; identify it (city radius preview, grouping line or disputed line) or remove it.
 - The prototype map still captures the mouse wheel. The build uses the cooperative rule now live on /explore (spec section 10): Ctrl/Cmd or a click to zoom, one finger scrolls the page.
+
+## Round 4 (AMB-1 design, spec section 11, 2026-11-25)
+
+New and changed screens:
+- Badge: one SVG seal component (`badgeMarkup`), drawn into every `[data-amb]` element. Seal 18 px inline and 64 px on the landing explainer and the author profile header. Label ribbon: "Ambassador" and the region. Accessible name "Plastiverse Live ambassador for <Region>" (role img). Ink seal with the gold sun mark from the header, coral ring (decorative), butter ribbon with ink text (13.5:1). Gold sun on ink is 8.0:1.
+- Eligibility row: place field (same combobox as the landing map, pre-filled from the landing selection, default Norway) and institution or email field on one row at 700 px and wider. Labels are one line, both fields 44 px, the button is bottom-aligned. Stacked below 700 px. No select.
+- Sign-in: region radios removed. "Signing in for: <place> — change" with a small map preview; change reveals the same place search.
+- Screen 11: "Connect your ORCID" first. ORCID iD icon, then states: "Connecting to ORCID...", "ORCID verified: 0000-0002-1825-0097", then either "Matched to your Plastiverse Live author record: A. Example, NIVA, 18 works — badge active" or "No match yet — search your name instead" (falls back to the name search). Proto bar switch "ORCID mock: no match" shows the second outcome.
+- Workspace opens with the Norway region map: mainland outline, 13 sample institution points, numbered task markers (1 Oslo, 2 Bergen, 3 Trondheim), legend.
+- Screen 9: the map is the main element. Content width (max 1360 px wrap), height clamp(420 px, 66vh, 760 px): 594 px at 1440x900. Units list and summary sit beside the map at 1600 px and wider, below it otherwise.
+- Screen 15 "Share monitoring data": who (me, or an organisation with type-ahead or free text, role, permission checkbox), dataset name, sampling period, place (search and map), matrix chips, size chips, methods, QA notes, access (public link or DOI, or a file upload stub "stored privately until reviewed"), five licence cards with one-line explanations, publication choice (summaries only, or summaries and rows), rights confirmation. Submit shows "In review; nothing is published until its licence is cleared." Linked from workspace stream C and the landing "Add local knowledge" text.
+- Cooperative gestures on every map (spec 10): wheel zooms with Ctrl/Cmd, or after the map is activated by click, tap or focus. Escape, focus leaving or the pointer leaving deactivates. A blocked wheel scrolls the page and shows a hint for 1.8 s. Touch: `touch-action: pan-y`; the zoom filter accepts only two-finger gestures.
+
+Decisions taken (defaults; owner can change):
+- Region for a place: Norway, Belgium, California or Samoa from the sample catalogue. Places with no institution list get the email route with a plain message.
+- Workspace map centres on Norway's mainland. Svalbard, Jan Mayen and Bouvet are kept out of the framing (the country shape includes them).
+- ORCID iD in the mock is ORCID's documented example iD (0000-0002-1825-0097, the one used in ORCID's own docs); it is not a real person's record.
+- Share: no publication option or licence is pre-selected; the form requires both.
+
+Credits and licences:
+- Badge seal: outline adapted from Lucide's `badge` icon (ISC licence, https://lucide.dev). Credit comment is in the HTML. The path was written from the Lucide icon as recalled, not copied from a fetched file; check it against lucide.dev before build.
+- ORCID iD icon: a simplified stand-in (green #A6CE39 circle with white "iD" text). Replace with the official iD file from ORCID's brand guidelines page before build. White on that green is 1.8:1, as in ORCID's own mark; the icon is aria-hidden and the button label carries the name.
+
+Open questions for the owner:
+1. Badge label: "Ambassador" and region only, or also the institution (round 3 question 1, still open)?
+2. ORCID: owner registers the free public API client and the redirect URI on the Worker. Confirm the sample name "A. Example" for the mocked match.
+3. Share: should "Summaries only" be pre-selected, or should the owner be forced to choose (drafted: forced)?
+4. Share: place required at region granularity, or may it be any unit on the map?
+5. Touch: two-finger pan and pinch need a visible hint on phones; is the hint text enough?
+6. Ctrl/Cmd and activation: is the 1.8 s hint acceptable, or should the hint persist until the map is clicked?
+
+Verification (round 4 self-check, 2026-11-25; scratch/amb_design4/):
+- Eligibility row at 1440x900: place and email fields 44 px tall, same top (difference 0 px), button bottom-aligned (0 px). Stacked at 375 px.
+- Propose map: 594 px tall at 1440x900 (0.66 of the viewport).
+- Workspace map: Norway outline centred (0 px offset).
+- Wheel over an inactive map scrolls the page with the map unchanged; Ctrl-wheel zooms; click activates; Escape deactivates.
+- Badges: 6 Norway badges, each with the accessible name.
+- No horizontal overflow at 375 px on any screen. No page or console errors.
+- axe-core NOT run: it is not on disk and the sandbox rules block fetching it. Run it before the build.
+
+## Lead review notes (round 4, 2026-11-25)
+
+- axe-core run by the lead on all 19 screens at 1440x900 and 375x800: 0 violations.
+- Before the build, replace the hand-drawn Lucide badge outline and the simplified ORCID iD icon with the official assets (Lucide ISC; ORCID brand guidelines).
