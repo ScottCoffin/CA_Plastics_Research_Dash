@@ -244,3 +244,4 @@
 | 2026-11-25 | AMB-1 (spec) | Ambassador spec with owner decisions (Workers + D1, Resend, region leads, institutes eligible); H44 setup steps | this commit |
 | 2026-11-25 | AMB-1 (design) | Ambassador prototype, 12 screens, for owner review (H45) | this commit |
 | 2026-11-25 | AMB-1 (step 1) | Eligibility allowlists with domains (150 institutions) + case queues; spec sections 8-9 (map, search, region proposals, time estimates) | this commit |
+| 2026-11-25 | SPK-DEET (queued) | Owner asked for a DEET evaluation spike before the first D9 facet | this commit |
