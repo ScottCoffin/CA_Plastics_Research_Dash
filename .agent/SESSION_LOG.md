@@ -234,3 +234,4 @@
 | 2026-11-25 | PLAT-4 (slice 1) | Local partition of the global raw store (unscreened, pmid, regions); data/processed/global ignored | this commit |
 | 2026-11-25 | PLAT-4 (slice 2) | Institution-registry join for region predicates; shared ca_flag rule | this commit |
 | 2026-11-25 | PLAT-4a (fix) | OpenAlex request spacing 0.6 s (free keys: 2 boolean-heavy req/s); H43 done | this commit |
+| 2026-11-25 | PLAT-4a (backfill day 1) | 80,795 global works fetched; network errors defer instead of crashing | this commit |

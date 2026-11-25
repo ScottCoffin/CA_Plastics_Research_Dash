@@ -63,6 +63,19 @@ in `data/logs/api_usage.jsonl`. The estimate is also written to
 - An HTTP 429 that is not a burst limit (`atlas.ingest.openalex` rules) exits 0 with
   `reason: rate_limited` and progress saved. Burst 429s are retried inside the request
   helper.
+- A network failure (DNS, refused or timed-out connection, no HTTP response) that persists
+  after the request helper's retries exits 0 with `reason: network_error` and progress
+  saved. The message is fixed text with no URL or key. Re-running resumes at the saved
+  cursor. HTTP error responses (for example 401) are not deferred; they raise.
+
+Deferral reasons (`status: deferred`, `reason` field, also `state.json` `last_run.stop_reason`):
+
+| `reason` | Cause |
+|---|---|
+| `run_credit_cap` | `--max-credits` for this run would be exceeded |
+| `budget_exceeded` | the daily USD stop would be passed |
+| `rate_limited` | non-burst HTTP 429 from OpenAlex |
+| `network_error` | no HTTP response after retries (transport failure) |
 
 Because the stop is daily, the full pull spreads over about two UTC days at the default
 settings, and longer if other OpenAlex runs share the budget.

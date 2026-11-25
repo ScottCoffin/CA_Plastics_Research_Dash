@@ -15,7 +15,7 @@ from typing import Any
 
 import pytest
 
-from atlas.ingest import openalex
+from atlas.ingest import global_raw, openalex
 from atlas.ingest.global_raw import (
     StateMismatchError,
     build_global_url,
@@ -395,6 +395,101 @@ def test_non_burst_429_defers_with_progress_saved(
     assert state["pages_done"] == 1
     assert state["slices"]["2024"]["cursor"] == "c2"
     assert state["last_run"]["stop_reason"] == "rate_limited"
+
+
+def unreachable(url: str) -> object:
+    raise urllib.error.URLError("getaddrinfo failed")
+
+
+def test_network_failure_on_page_two_defers_and_resumes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    run_estimate(tmp_path, monkeypatch)
+    # The request helper retries a transport failure 4 times before it gives up.
+    install(monkeypatch, [ok(page([work(1)], "c2"))] + [unreachable] * 4)
+    deferred = fetch_global(
+        config_path=CONFIG,
+        budget_path=BUDGET,
+        start_year=2024,
+        end_year=2025,
+        now=NOW,
+        max_credits=1000,
+        **paths(tmp_path),
+    )
+    assert deferred["status"] == "deferred"
+    assert deferred["reason"] == "network_error"
+    assert deferred["pages_this_run"] == 1
+    assert "http" not in deferred["message"].lower()
+    assert (tmp_path / "raw" / "pages" / "2024_00001.jsonl.gz").exists()
+    assert not (tmp_path / "raw" / "pages" / "2024_00002.jsonl.gz").exists()
+    state = read_state(tmp_path)
+    assert state["slices"]["2024"]["cursor"] == "c2"
+    assert state["slices"]["2024"]["pages"] == 1
+    assert state["pages_done"] == 1
+    assert state["last_run"]["stop_reason"] == "network_error"
+
+    fake = install(
+        monkeypatch,
+        [
+            ok(page([work(2)], None)),
+            ok(page([work(3, "2025-02-02")], None)),
+        ],
+    )
+    resumed = fetch_global(
+        config_path=CONFIG,
+        budget_path=BUDGET,
+        start_year=2024,
+        end_year=2025,
+        now=NOW,
+        max_credits=1000,
+        **paths(tmp_path),
+    )
+    assert resumed["status"] == "success"
+    assert "cursor=c2" in fake.urls[0]
+    assert resumed["slices_done"] == 2
+
+
+def test_non_network_runtime_error_still_raises(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    run_estimate(tmp_path, monkeypatch)
+
+    def boom(url: str, **kwargs: Any) -> object:
+        raise RuntimeError("OpenAlex request failed after 4 attempts")
+
+    monkeypatch.setattr(global_raw, "_request_json", boom)
+    with pytest.raises(RuntimeError, match="after 4 attempts"):
+        fetch_global(
+            config_path=CONFIG,
+            budget_path=BUDGET,
+            start_year=2024,
+            end_year=2025,
+            now=NOW,
+            max_credits=1000,
+            **paths(tmp_path),
+        )
+
+
+def test_http_error_is_not_treated_as_network_failure(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    run_estimate(tmp_path, monkeypatch)
+
+    def unauthorised(url: str) -> object:
+        headers = {CREDIT_HEADER: "0"}
+        raise urllib.error.HTTPError(url, 401, "Unauthorized", headers, io.BytesIO(b"{}"))
+
+    install(monkeypatch, [unauthorised])
+    with pytest.raises(RuntimeError, match="HTTP 401"):
+        fetch_global(
+            config_path=CONFIG,
+            budget_path=BUDGET,
+            start_year=2024,
+            end_year=2025,
+            now=NOW,
+            max_credits=1000,
+            **paths(tmp_path),
+        )
 
 
 def test_paging_refuses_without_recorded_estimate(

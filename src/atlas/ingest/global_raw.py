@@ -18,6 +18,7 @@ import json
 import math
 import os
 import tempfile
+import urllib.error
 from collections.abc import Mapping, Sequence
 from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
@@ -190,6 +191,25 @@ def _write_page(
     lines.extend(json.dumps(work, sort_keys=True, separators=(",", ":")) for work in works)
     data = gzip.compress(("\n".join(lines) + "\n").encode("utf-8"), mtime=0)
     _atomic_write_bytes(path, data)
+
+
+NETWORK_ERROR_MESSAGE = (
+    "OpenAlex could not be reached after retries; progress is saved, re-run to resume"
+)
+
+
+def _is_network_failure(error: BaseException) -> bool:
+    """True for a transport failure (no HTTP response), e.g. DNS, refused or timed-out connection.
+
+    ``_request_json`` wraps transport errors in a RuntimeError whose ``__cause__`` is the
+    underlying OSError. HTTP errors (``HTTPError``, a URLError subclass) are excluded because
+    they carry a status code and are handled as real failures.
+    """
+
+    cause = error.__cause__ if isinstance(error, RuntimeError) else error
+    if cause is None or isinstance(cause, urllib.error.HTTPError):
+        return False
+    return isinstance(cause, urllib.error.URLError | TimeoutError | ConnectionError)
 
 
 def _max_iso_date(current: str | None, values: Sequence[object]) -> str | None:
@@ -391,8 +411,9 @@ def fetch_global(
     """Cursor-page the global query into ``raw_dir``, resuming from ``state.json``.
 
     Stops cleanly (status ``deferred``, progress saved) when the per-run credit cap or the
-    daily USD guard would be exceeded, or on a non-burst HTTP 429. Re-running resumes at
-    the saved cursor. Pages are written before the state that points at them.
+    daily USD guard would be exceeded, on a non-burst HTTP 429, or when OpenAlex cannot be
+    reached (``network_error``). Re-running resumes at the saved cursor. Pages are written
+    before the state that points at them. Other request failures are raised.
     """
 
     clock = now or datetime.now(UTC)
@@ -449,6 +470,11 @@ def fetch_global(
                     body = _request_json(url, logger=logger)
                 except OpenAlexRateLimitError as error:
                     stop = ("rate_limited", str(error))
+                    break
+                except (RuntimeError, urllib.error.URLError) as error:
+                    if not _is_network_failure(error):
+                        raise
+                    stop = ("network_error", NETWORK_ERROR_MESSAGE)
                     break
                 credits, cost = _accounted(logger, before, cost_rate)
                 run_credits += credits
