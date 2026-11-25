@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 
@@ -21,6 +22,7 @@ from atlas.ingest.global_partition import (
     work_row,
 )
 from atlas.regions import scope
+from atlas.regions.registry import Predicate, Region
 from atlas.regions.registry import regions as registry_regions
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -255,3 +257,123 @@ def test_cli_check_passes_after_build(raw_dir: Path, tmp_path: Path) -> None:
     out = tmp_path / "out"
     assert cli.main(["--raw-dir", str(raw_dir), "--out-dir", str(out)]) == 0
     assert cli.main(["--raw-dir", str(raw_dir), "--out-dir", str(out), "--check"]) == 0
+
+
+TESTLAND = Region(
+    slug="testland",
+    name="Testland",
+    tier="A",
+    parent=None,
+    status="planned",
+    predicate=Predicate(
+        institution_registry="inst.parquet",
+        country_codes=("US",),
+        institution_region_names=("Testland",),
+    ),
+)
+
+
+def _write_registry(root: Path) -> None:
+    """Tmp institution registry: I555 belongs to the region; I556 and I557 do not."""
+    rows = [
+        {"openalex_id": "https://openalex.org/I555", "region": "Testland", "country_code": "US"},
+        {"openalex_id": "https://openalex.org/I556", "region": "Elsewhere", "country_code": "US"},
+        {"openalex_id": "https://openalex.org/I557", "region": "Testland", "country_code": "MX"},
+    ]
+    schema = pa.schema([(name, pa.string()) for name in ("openalex_id", "region", "country_code")])
+    pq.write_table(pa.Table.from_pylist(rows, schema=schema), root / "inst.parquet")
+
+
+@pytest.fixture
+def tmp_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """Point the registry-relative path at tmp_path so tests never touch data/."""
+    monkeypatch.setattr(scope, "REPO_ROOT", tmp_path)
+    _write_registry(tmp_path)
+    return tmp_path
+
+
+def test_registry_institution_ids_follow_region_rule(tmp_repo: Path) -> None:
+    assert scope.region_institution_ids(TESTLAND) == frozenset({"I555"})
+
+
+def test_registry_institution_match_has_basis(tmp_repo: Path) -> None:
+    work = _work(
+        "W10",
+        authorships=[
+            _authorship(institutions=[{"id": "https://openalex.org/I555", "country_code": "US"}])
+        ],
+    )
+    ids = {TESTLAND.slug: scope.region_institution_ids(TESTLAND)}
+    bases = work_region_bases(work, [TESTLAND], ids)
+    assert bases[("registry_region", "testland")] == "registry_institution"
+
+
+def test_unknown_institution_without_affiliation_text_does_not_match(tmp_repo: Path) -> None:
+    work = _work(
+        "W11",
+        authorships=[
+            _authorship(institutions=[{"id": "https://openalex.org/I999", "country_code": "US"}])
+        ],
+    )
+    ids = {TESTLAND.slug: scope.region_institution_ids(TESTLAND)}
+    assert ("registry_region", "testland") not in work_region_bases(work, [TESTLAND], ids)
+
+
+def test_registry_institution_join_in_build(tmp_repo: Path, tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    _write_page(
+        raw,
+        "2025_00001.jsonl.gz",
+        _header("2026-01-01T00:00:00Z", 1),
+        [
+            _work(
+                "W20",
+                authorships=[
+                    _authorship(
+                        institutions=[{"id": "https://openalex.org/I555", "country_code": "US"}]
+                    )
+                ],
+            ),
+            _work(
+                "W21",
+                authorships=[
+                    _authorship(
+                        institutions=[{"id": "https://openalex.org/I556", "country_code": "US"}]
+                    )
+                ],
+            ),
+        ],
+    )
+    out = tmp_path / "out"
+    build_partition(raw, out, regions=[TESTLAND])
+    rows = pq.read_table(out / "work_regions.parquet").to_pylist()
+    matched = [(r["work_id"], r["basis"]) for r in rows if r["region_kind"] == "registry_region"]
+    assert matched == [("W20", "registry_institution")]
+    assert check_outputs(out) == []
+
+
+def test_missing_registry_file_warns_and_matches_nothing(tmp_repo: Path) -> None:
+    region = Region(
+        slug="testland",
+        name="Testland",
+        tier="A",
+        parent=None,
+        status="planned",
+        predicate=Predicate(institution_registry="absent.parquet", country_codes=("US",)),
+    )
+    with pytest.warns(UserWarning, match="absent.parquet not found"):
+        ids = {region.slug: scope.region_institution_ids(region)}
+    assert ids == {region.slug: frozenset()}
+    work = _work(
+        "W22",
+        authorships=[
+            _authorship(institutions=[{"id": "https://openalex.org/I555", "country_code": "US"}])
+        ],
+    )
+    assert ("registry_region", "testland") not in work_region_bases(work, [region], ids)
+
+
+def test_default_region_reads_committed_registry_ids() -> None:
+    ids = scope.region_institution_ids()
+    assert ids, "the reviewed institution registry should yield California ids"
+    assert all(inst_id.startswith("I") for inst_id in ids)

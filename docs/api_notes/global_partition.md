@@ -45,11 +45,11 @@ kind and code, so repeated builds from the same pages give the same bytes.
 |---|---|---|
 | country | ISO alpha-2 from `authorships[].institutions[].country_code` (`institution_country`) or `authorships[].countries` (`author_country`) | `institution_country`, `author_country` |
 | subdivision | ISO `CC-SUB` from `institutions[].geo.country_subdivision_code`, with the institution's country prefixed when the code has no dash | `institution_country` |
-| registry_region | registry slug from `regions/_registry.yml` | `registry_predicate` (institution geo region or subdivision, with the predicate's country codes), `raw_affiliation` (raw affiliation text) |
+| registry_region | registry slug from `regions/_registry.yml` | `registry_institution` (an authorship institution id is in the region's institution registry), `registry_predicate` (institution geo region or subdivision, with the predicate's country codes), `raw_affiliation` (raw affiliation text) |
 
 When two bases apply to the same (work, region), the stronger one is kept:
-institution over author for countries, and registry predicate over raw affiliation for
-regions.
+institution over author for countries, and for regions registry institution, then registry
+predicate, then raw affiliation.
 
 ## Region predicates
 
@@ -66,14 +66,25 @@ holds no region names.
 - Raw-affiliation match, other registry regions: a case-insensitive, word-bounded match on
   the registry's `raw_affiliation_terms`. No other region is registered yet.
 
+## Institution registry join (PLAT-4b slice 2)
+
+The default region's predicate sets `institution_registry: data/processed/institutions.parquet`
+(the reviewed California institution registry, 4,677 OpenAlex ids). `scope.region_institution_ids`
+reads it and keeps the rows that pass the same rule as `normalize`'s `ca_flag`
+(`scope.registry_row_matcher`, shared by both). The partition loads the ids once per run.
+A work matches the region with basis `registry_institution` when any `authorships[].institutions[].id`
+is in that set. The raw-affiliation rule still applies on its own. A missing registry file gives
+an empty set and a warning, so only raw-affiliation matches remain.
+
+The field is validated: repo-relative, no `..`, no drive, `.parquet` suffix.
+
 ## Gaps (for orchestrator review)
 
-1. **No institution geo in work records.** OpenAlex work records carry `institutions[]`
-   with `country_code`, `ror` and `lineage`, but not `geo`. The trial page confirms this
-   (483 institutions, 0 with `geo`). So institution-based region matches and subdivision
-   rows only appear if a record carries `geo`. Matching the institution registry (`geo.region`
-   from `/institutions`) by institution id would close the gap. That is a later join,
-   and it is not built here.
+1. **No institution geo in work records (closed for the default region by slice 2).** OpenAlex
+   work records carry `institutions[]` with `country_code`, `ror` and `lineage`, but not `geo`.
+   The trial page confirms this (483 institutions, 0 with `geo`). The registry join matches the
+   institution id instead, so the default region no longer depends on `geo`. Subdivision rows
+   still appear only if a record carries `geo`.
 2. **No ROR subdivision in records.** The ROR field is a URL. The GeoNames subdivision code is
    not in the record, so `ror_subdivision_codes` matches only through the `geo` path above.
 3. **Strict raw-affiliation rule is not a scope helper.** Only the default region has the
@@ -97,7 +108,8 @@ holds no region names.
 
 - works: 100; works with pmid: 31; records without an OpenAlex id: 0
 - top countries (works): IN 16, US 13, CN 9, IT 8, GB 7, ID 6, MY 6, ES 5, PK 5, JP 4
-- works matching the default registry region: 1 (raw affiliation)
+- works matching the default registry region: 1 (basis `registry_institution`; the count was
+  also 1 before the registry join)
 - `work_regions.parquet`: 127 rows
 
 `--check` passes on these outputs. A full run waits for the PLAT-4a backfill. Paging is

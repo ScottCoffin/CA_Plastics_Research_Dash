@@ -9,8 +9,12 @@ point them at a tmp-path registry through ``REGISTRY_PATH``.
 from __future__ import annotations
 
 import argparse
+import warnings
+from collections.abc import Callable
 from functools import cache
 from pathlib import Path
+
+import pyarrow.parquet as pq
 
 from atlas.regions.registry import (
     DEFAULT_REGISTRY_PATH,
@@ -67,6 +71,58 @@ def institution_filter(region: Region | None = None) -> str:
 def institution_region_names(region: Region | None = None) -> tuple[str, ...]:
     """Values of an institution's region (OpenAlex ``geo.region``) that belong to the region."""
     return _predicate(region).institution_region_names
+
+
+def registry_row_matcher(region: Region | None = None) -> Callable[[str, str], bool]:
+    """The institution-registry row rule: ``(region value, country code) -> belongs to region``.
+
+    Shared by ``normalize`` (``ca_flag``) and ``region_institution_ids``. Both arguments are
+    stripped strings; an empty country code is accepted.
+    """
+    names = frozenset(name.casefold() for name in institution_region_names(region))
+    countries = frozenset({"", *(code.casefold() for code in country_codes(region))})
+
+    def matches(region_value: str, country_value: str) -> bool:
+        return region_value.casefold() in names and country_value.casefold() in countries
+
+    return matches
+
+
+def _compact_openalex_id(value: object) -> str:
+    text = str(value or "").strip().rstrip("/")
+    return text.rsplit("/", 1)[-1] if text else ""
+
+
+def region_institution_ids(region: Region | None = None) -> frozenset[str]:
+    """Compact OpenAlex ids (``I12345``) of registry rows that belong to the region.
+
+    The file is the predicate's ``institution_registry`` (repo-relative). A missing file gives
+    an empty set and a warning, so the region then matches by raw affiliation only.
+    """
+    resolved = resolve_region(region)
+    relative = _predicate(resolved).institution_registry
+    if relative is None:
+        return frozenset()
+    path = REPO_ROOT / relative
+    if not path.is_file():
+        warnings.warn(
+            f"institution registry {relative} not found; region {resolved.slug!r} "
+            "matches by raw affiliation only",
+            stacklevel=2,
+        )
+        return frozenset()
+    table = pq.read_table(path, columns=["openalex_id", "region", "country_code"])
+    matches = registry_row_matcher(resolved)
+    ids: set[str] = set()
+    for row in table.to_pylist():
+        inst_id = _compact_openalex_id(row["openalex_id"])
+        if inst_id and matches(_text(row["region"]), _text(row["country_code"])):
+            ids.add(inst_id)
+    return frozenset(ids)
+
+
+def _text(value: object) -> str:
+    return str(value).strip() if value is not None else ""
 
 
 def ror_subdivision_codes(region: Region | None = None) -> tuple[str, ...]:

@@ -232,3 +232,4 @@
 | 2026-11-25 | UX-13 (part a) | Monitoring filters saved in the URL hash; PLAT3-DATA-PATH question recorded | this commit |
 | 2026-11-25 | PLAT-3 (slice 3) | Region data folder from the registry; California stays at site/data (default PLAT3-DATA-PATH) | this commit |
 | 2026-11-25 | PLAT-4 (slice 1) | Local partition of the global raw store (unscreened, pmid, regions); data/processed/global ignored | this commit |
+| 2026-11-25 | PLAT-4 (slice 2) | Institution-registry join for region predicates; shared ca_flag rule | this commit |

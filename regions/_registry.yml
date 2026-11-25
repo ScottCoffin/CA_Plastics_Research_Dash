@@ -27,6 +27,10 @@ regions:
       # the institution registry seed is OpenAlex /institutions filtered by the exact
       # `geo.region:California` (also institutions.py:984 and :1052).
       openalex_institution_filter: "geo.region:California"
+      # src/atlas/ingest/normalize.py:_read_registry (ca_flag rule over this file): the reviewed
+      # institution registry. Its OpenAlex ids join to work authorships in the global partition
+      # (PLAT-4b slice 2) through atlas.regions.scope.region_institution_ids.
+      institution_registry: data/processed/institutions.parquet
       # src/atlas/ingest/institutions.py:882-894 (_ror_location): a ROR location counts as
       # California when its GeoNames country_subdivision_code is "CA" (the GeoNames
       # admin code, not the ISO form "US-CA"; ISO form is used in

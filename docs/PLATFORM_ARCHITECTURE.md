@@ -275,3 +275,4 @@ are byte-identical for California (tested).
 - Ratchet: no region-name count changed in this slice, so `region_names_baseline.json` is unchanged
   (280 matches in 38 files).
 - Slice 4 (Framework dynamic routes `[region]/*.md`) stays deferred until a second region exists.
+- PLAT-4b slice 2: the default region's predicate names the reviewed institution registry (`institution_registry`), and region matches join authorship institution ids to it (basis `registry_institution`; `docs/api_notes/global_partition.md`).

@@ -26,7 +26,9 @@ PREDICATE_LIST_KEYS = (
     "raw_affiliation_terms",
     "ca_basis_values",
 )
-PREDICATE_KEYS = frozenset({"openalex_institution_filter", *PREDICATE_LIST_KEYS})
+PREDICATE_KEYS = frozenset(
+    {"openalex_institution_filter", "institution_registry", *PREDICATE_LIST_KEYS}
+)
 SLUG_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_REGISTRY_PATH = REPO_ROOT / "regions" / "_registry.yml"
@@ -37,6 +39,8 @@ class Predicate:
     """Which authorships and institutions belong to a region. Empty fields are unused."""
 
     openalex_institution_filter: str | None = None
+    # Repo-relative Parquet with an ``openalex_id`` column (PLAT-4b slice 2); None means unused.
+    institution_registry: str | None = None
     ror_subdivision_codes: tuple[str, ...] = ()
     country_codes: tuple[str, ...] = ()
     institution_region_names: tuple[str, ...] = ()
@@ -92,18 +96,37 @@ def _check_keys(
         raise _fail(where, f"missing keys {sorted(missing)}")
 
 
+def _parse_institution_registry(where: str, raw: Any) -> str | None:
+    """Validate an optional ``institution_registry``: repo-relative, ``.parquet``, no ``..``."""
+    if raw is None:
+        return None
+    if not isinstance(raw, str) or not raw.strip():
+        raise _fail(where, "institution_registry must be a non-empty string or null")
+    if "\\" in raw or ":" in raw:
+        raise _fail(where, f"institution_registry {raw!r} must use forward slashes and no drive")
+    path = PurePosixPath(raw)
+    if path.is_absolute() or ".." in path.parts:
+        raise _fail(where, f"institution_registry {raw!r} must be repo-relative, no '..'")
+    if path.suffix != ".parquet":
+        raise _fail(where, f"institution_registry {raw!r} must be a .parquet file")
+    return str(path)
+
+
 def _parse_predicate(where: str, raw: Any) -> Predicate:
     _check_keys(where, raw, PREDICATE_KEYS, frozenset())
     filter_value = raw.get("openalex_institution_filter")
     if filter_value is not None and (not isinstance(filter_value, str) or not filter_value):
         raise _fail(where, "openalex_institution_filter must be a non-empty string or null")
+    registry_path = _parse_institution_registry(where, raw.get("institution_registry"))
     lists: dict[str, tuple[str, ...]] = {}
     for key in PREDICATE_LIST_KEYS:
         value = raw.get(key, [])
         if not isinstance(value, list) or not all(isinstance(v, str) and v for v in value):
             raise _fail(where, f"{key} must be a list of non-empty strings")
         lists[key] = tuple(value)
-    return Predicate(openalex_institution_filter=filter_value, **lists)
+    return Predicate(
+        openalex_institution_filter=filter_value, institution_registry=registry_path, **lists
+    )
 
 
 def _parse_site_data_dir(where: str, raw: Any) -> str | None:

@@ -135,6 +135,23 @@ def test_valid_fixture_parses(tmp_path: Path) -> None:
         (lambda d: _region(d, 0, predicate={}), "root tier must have predicate null"),
         (lambda d: _region(d, 0, parent="norway"), "root tier must have parent null"),
         (lambda d: _region(d, 1, slug="Norway!"), "must be lowercase"),
+        (lambda d: _region(d, 1, predicate={"institution_registry": ""}), "non-empty string"),
+        (
+            lambda d: _region(d, 1, predicate={"institution_registry": "/abs/x.parquet"}),
+            "repo-relative",
+        ),
+        (
+            lambda d: _region(d, 1, predicate={"institution_registry": "../x.parquet"}),
+            "repo-relative",
+        ),
+        (
+            lambda d: _region(d, 1, predicate={"institution_registry": "data\\x.parquet"}),
+            "forward slashes",
+        ),
+        (
+            lambda d: _region(d, 1, predicate={"institution_registry": "data/x.csv"}),
+            "must be a .parquet file",
+        ),
         (lambda d: d.update(regions=[]), "non-empty list"),
     ],
 )
@@ -155,3 +172,17 @@ def test_missing_key_is_rejected(tmp_path: Path) -> None:
 def test_top_level_must_be_mapping() -> None:
     with pytest.raises(ValueError, match="expected a mapping"):
         parse_registry(["global"])
+
+
+def test_institution_registry_is_optional_and_parsed(tmp_path: Path) -> None:
+    data = _doc()
+    _region(data, 1, predicate={"country_codes": ["NO"], "institution_registry": "data/x.parquet"})
+    norway = load_registry(_write(tmp_path, data)).get("norway")
+    assert norway.predicate.institution_registry == "data/x.parquet"
+    plain = load_registry(_write(tmp_path, _doc())).get("norway")
+    assert plain.predicate.institution_registry is None
+
+
+def test_california_predicate_names_committed_institution_registry() -> None:
+    predicate = get_region("california").predicate
+    assert predicate.institution_registry == "data/processed/institutions.parquet"

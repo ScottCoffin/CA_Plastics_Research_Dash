@@ -9,6 +9,8 @@ then one unmodified OpenAlex work per line) and writes two ignored Parquet table
   (ISO alpha-2), ``subdivision`` (ISO ``CC-SUB`` form, only when the record carries a
   subdivision code) and ``registry_region`` (slug of each registry region whose predicate
   matches). Assigning a work to every region it touches is a local join; nothing is fetched.
+  A registry region also matches when an authorship institution id is in the region's
+  institution registry (``registry_institution``, PLAT-4b slice 2).
 
 Region names are never written here: predicates come from ``regions/_registry.yml`` through
 ``atlas.regions.scope``. The strict raw-affiliation rule for the default region is the
@@ -44,10 +46,17 @@ WORK_REGIONS_FILE = "work_regions.parquet"
 
 SCREENING_UNSCREENED = "unscreened_query_hit"
 REGION_KINDS = ("country", "subdivision", "registry_region")
-BASES = ("institution_country", "author_country", "raw_affiliation", "registry_predicate")
+BASES = (
+    "institution_country",
+    "author_country",
+    "raw_affiliation",
+    "registry_predicate",
+    "registry_institution",
+)
 # Strongest evidence first; the first basis that applies to a (work, region) pair wins.
 BASIS_PREFERENCE = (
     "institution_country",
+    "registry_institution",
     "registry_predicate",
     "author_country",
     "raw_affiliation",
@@ -218,9 +227,14 @@ def _institution_hit(region: Region, institution: Mapping[str, Any], country: st
 
 
 def work_region_bases(
-    work: Mapping[str, Any], regions: Sequence[Region]
+    work: Mapping[str, Any],
+    regions: Sequence[Region],
+    institution_ids: Mapping[str, frozenset[str]] | None = None,
 ) -> dict[tuple[str, str], str]:
-    """``{(region_kind, region_code): basis}`` for one work; strongest basis per pair."""
+    """``{(region_kind, region_code): basis}`` for one work; strongest basis per pair.
+
+    ``institution_ids`` maps a region slug to its registry institution ids (loaded once per run).
+    """
     found: dict[tuple[str, str], str] = {}
 
     def offer(kind: str, code: str, basis: str) -> None:
@@ -230,12 +244,16 @@ def work_region_bases(
 
     authorships = [a for a in work.get("authorships") or [] if isinstance(a, Mapping)]
     institutions: list[tuple[Mapping[str, Any], str | None]] = []
+    work_institution_ids: set[str] = set()
     for authorship in authorships:
         for institution in authorship.get("institutions") or []:
             if not isinstance(institution, Mapping):
                 continue
             country = _country(institution.get("country_code"))
             institutions.append((institution, country))
+            inst_id = _short_id(institution.get("id"))
+            if inst_id:
+                work_institution_ids.add(inst_id)
             if country:
                 offer("country", country, "institution_country")
                 geo = institution.get("geo") or {}
@@ -256,9 +274,12 @@ def work_region_bases(
     for region in regions:
         if region.predicate is None:
             continue
+        registry_ids = (institution_ids or {}).get(region.slug, frozenset())
+        if work_institution_ids & registry_ids:
+            offer("registry_region", region.slug, "registry_institution")
         if any(_institution_hit(region, inst, country) for inst, country in institutions):
             offer("registry_region", region.slug, "registry_predicate")
-        elif any(_raw_affiliation_hit(region, text) for text in raw_texts):
+        if any(_raw_affiliation_hit(region, text) for text in raw_texts):
             offer("registry_region", region.slug, "raw_affiliation")
     return found
 
@@ -295,6 +316,12 @@ def build_partition(
 
     if regions is None:
         regions = load_registry(scope.REGISTRY_PATH).regions
+    # Registry institution ids are read once per run, not once per work.
+    institution_ids = {
+        region.slug: scope.region_institution_ids(region)
+        for region in regions
+        if region.predicate is not None and region.predicate.institution_registry
+    }
     rows: dict[str, dict[str, Any]] = {}
     bases: dict[str, dict[tuple[str, str], str]] = {}
     skipped = 0
@@ -305,7 +332,7 @@ def build_partition(
                 skipped += 1
                 continue
             rows[row["work_id"]] = row
-            bases[row["work_id"]] = work_region_bases(work, regions)
+            bases[row["work_id"]] = work_region_bases(work, regions, institution_ids)
 
     works = [rows[key] for key in sorted(rows)]
     region_rows = [

@@ -45,7 +45,7 @@ from atlas.ingest.state_agencies import (
     registry_row,
 )
 from atlas.regions.registry import Region
-from atlas.regions.scope import country_codes, institution_region_names
+from atlas.regions.scope import registry_row_matcher
 
 WORKS_SCHEMA = pa.schema(
     [
@@ -473,8 +473,7 @@ def is_placeholder_affiliation(value: object) -> bool:
 def _read_registry(path: str | Path, region: Region | None = None) -> dict[str, dict[str, Any]]:
     table = pq.read_table(path)
     result: dict[str, dict[str, Any]] = {}
-    region_names = {name.casefold() for name in institution_region_names(region)}
-    region_countries = {"", *(code.casefold() for code in country_codes(region))}
+    matches_region = registry_row_matcher(region)
     for row in table.to_pylist():
         inst_id = compact_id(row.get("openalex_id"))
         if not inst_id:
@@ -496,7 +495,7 @@ def _read_registry(path: str | Path, region: Region | None = None) -> dict[str, 
                 if len(row.get("lineage") or []) > 1
                 else ""
             ),
-            "ca_flag": region.casefold() in region_names and country.casefold() in region_countries,
+            "ca_flag": matches_region(region, country),
         }
     return result
 
