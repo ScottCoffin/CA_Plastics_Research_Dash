@@ -68,6 +68,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--check-null", action="store_true", help="with --check, also recompute the null block"
     )
+    parser.add_argument(
+        "--reuse-null",
+        action="store_true",
+        help="keep the committed null block instead of recomputing it (daily ingest)",
+    )
     args = parser.parse_args(argv)
     if args.null_replicates < 0:
         parser.error("--null-replicates must be 0 or more")
@@ -82,7 +87,15 @@ def main(argv: list[str] | None = None) -> int:
     )
     out = Path(args.out)
     # The null block takes ~17 min at R=100, so --check compares it only with --check-null.
-    if args.null_replicates and (not args.check or args.check_null):
+    reused = False
+    if args.reuse_null and not args.check and out.exists():
+        # Daily ingest (30-minute job): keep the committed null block (about 17 minutes to
+        # recompute); the weekly workflow recomputes it. Everything else is rebuilt.
+        previous = json.loads(out.read_text(encoding="utf-8")).get("null_model")
+        if isinstance(previous, dict) and previous.get("replicates") == args.null_replicates:
+            payload["null_model"] = previous
+            reused = True
+    if args.null_replicates and not reused and (not args.check or args.check_null):
         payload["null_model"] = build_null_block(index, replicates=args.null_replicates)
     if args.check:
         if not out.exists():

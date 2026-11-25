@@ -161,6 +161,24 @@ jobs:
           # PLAT-2b landing evidence grid: 30 count queries (~300 credits, daily cache). A failure keeps yesterday's file.
           python scripts/fetch_evidence_cells.py || echo "::warning::evidence cells not refreshed; keeping the committed file"
 
+      # 2026-11-25 (owner): trend denominators (BQ-2.2/2.4) and collaboration metrics (BQ-3.2/3.3).
+      # The denominator cache (30 days, about 40-60 credits per refresh) is committed below, so most
+      # days refetch nothing. Network metrics reuse the committed null block (the weekly
+      # network_null_weekly.yml recomputes it); everything else is rebuilt from today's export.
+      - name: Refresh trend denominators and collaboration metrics
+        if: steps.refresh.outputs.status == 'success'
+        env:
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+          OPENALEX_API_KEY_ALT: ${{ secrets.OPENALEX_API_KEY_ALT }}
+        run: |
+          python scripts/fetch_denominator_series.py --allow-stale || echo "::warning::denominator counts not refreshed; keeping the cached values"
+          if python scripts/build_denominator_series.py; then
+            python scripts/build_denominators_json.py || echo "::warning::denominators.json not rebuilt; keeping the committed file"
+          else
+            echo "::warning::denominator series not built; keeping the committed file"
+          fi
+          python scripts/build_network_metrics.py --reuse-null || echo "::warning::network metrics not rebuilt; keeping the committed file"
+
       # AT-11: stop before committing if the raw/normalized schema changed or a payload is too big.
       - name: Schema and payload guards
         if: steps.refresh.outputs.status == 'success'
@@ -269,7 +287,11 @@ jobs:
             site/data/california/expert_badges.json \
             site/data/california/journal_metrics.json \
             site/data/global/global_counts.json \
-            site/data/global/world_raster.json             site/data/global/explore_sample.json             site/data/global/explore.json site/data/global/evidence_cells.json
+            site/data/global/world_raster.json             site/data/global/explore_sample.json             site/data/global/explore.json site/data/global/evidence_cells.json \
+            site/data/global/denominators.json \
+            site/data/california/network_metrics.json
+          # The denominator cache is optional on the first run (created by the fetch above).
+          if [[ -f data/interim/denominator_series_cache.json ]]; then git add -f data/interim/denominator_series_cache.json; fi
           git add -A site/data/california/authors site/data/california/institution_works site/data/california/bundle site/data/california/work_text
           git diff --cached --quiet && echo "No generated output changes" && exit 0
           git commit -m "chore: refresh OpenAlex works data"

@@ -478,3 +478,27 @@ def test_cli_falls_back_to_index_timestamp_and_missing_institutions(tmp_path: Pa
     assert institutions_all["cross_sector"]["edges_considered"] == 0
     assert institutions_all["out_of_region"]["edges_considered"] == 0
     assert institutions_all["nodes"] > 0
+
+
+def test_reuse_null_keeps_the_committed_null_block_and_rebuilds_the_rest(tmp_path: Path) -> None:
+    # Daily ingest mode (2026-11-25): the null block is copied, not recomputed.
+    module = _load_script()
+    index_path = tmp_path / "index.json"
+    index_path.write_text(json.dumps(_index()), encoding="utf-8")
+    inst_path = tmp_path / "institutions.json"
+    inst_path.write_text(json.dumps({"institutions": INSTITUTIONS}), encoding="utf-8")
+    meta_path = tmp_path / "build_metadata.json"
+    meta_path.write_text(
+        json.dumps({"generated_at": "2026-11-22T17:54:04+00:00"}), encoding="utf-8"
+    )
+    out = tmp_path / "network_metrics.json"
+    common = ["--index", str(index_path), "--institutions", str(inst_path)]
+    common += ["--metadata", str(meta_path), "--out", str(out), "--null-replicates", "3"]
+    assert module.main(common) == 0
+    marker = json.loads(out.read_text(encoding="utf-8"))
+    marker["null_model"]["marker"] = "kept"
+    out.write_text(json.dumps(marker), encoding="utf-8")
+    module.build_null_block = lambda *a, **k: (_ for _ in ()).throw(AssertionError("recomputed"))
+    assert module.main([*common, "--reuse-null"]) == 0
+    assert json.loads(out.read_text(encoding="utf-8"))["null_model"]["marker"] == "kept"
+    assert module.main(["--check", *common]) == 0

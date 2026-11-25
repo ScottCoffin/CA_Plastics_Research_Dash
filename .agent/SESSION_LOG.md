@@ -251,3 +251,4 @@
 | 2026-11-25 | AMB-1 (live map round 3) | /explore: NE disputed + Pacific lines, in-map zoom, cooperative gestures; H46 phone check | this commit |
 | 2026-11-25 | H46 | Owner confirmed touch gestures on /explore | this commit |
 | 2026-11-25 | AMB-1 (design round 4) | Badge, aligned place/institution, ORCID, workspace map, share monitoring data, bigger proposal map | this commit |
+| 2026-11-25 | Daily wiring | Denominators + network metrics (reuse-null) in the daily ingest; weekly null-model workflow; global builds stay local (GLOBAL-RAW-HOME) | this commit |
