@@ -134,7 +134,8 @@ capped at 200) and `local_terms` (one per `local_search_terms` entry in `regions
 Selection is deterministic (sorted by the rules above; no sampling).
 
 Files (per region folder, committed): `ambassador_institutions.json` (schema `amb-v1`) and `ambassador_cases.json`
-(schema `amb-cases-v1`). Override files were created with headers only.
+(schema `amb-cases-v1`). Each amb-v1 institution has `ror`: the short ROR URL (`https://ror.org/<id>`, lowercase), or null
+when no ROR id is known. Override files were created with headers only.
 
 ## 8. Landing map, search and region proposals (owner 2026-11-25, second round)
 
@@ -430,9 +431,8 @@ hashes. Email lookups use `EMAIL_HASH_KEY` (a secret separate from `SESSION_SIGN
 
 **Open for the owner and slice 2b**
 
-- The amb-v1 allowlists carry no `ror` field, so ORCID employments cannot map to an allowlisted institution yet. They
-  are listed as ineligible (`ror:<url>` or `name:<organisation>`). Adding `ror` to the build is needed for employments to
-  count.
+- ROR matching is fixed: an ORCID employment whose normalised ROR URL equals an allowlist `ror` becomes that eligible
+  institution. Other employments stay ineligible (`ror:<url>` or `name:<organisation>`).
 - The OpenAlex lookup is a singleton, so "several matches to choose from" (section 13.2) is not built; no name search.
 - Proposals are stored only; moderation review and the public map change come in slice 2b.
 - The ORCID sign-in for an already-active ambassador is an owner decision to confirm (it skips the email step).

@@ -1,6 +1,6 @@
 {
   "schema": "amb-v1",
-  "generated_at": "2026-11-25T16:23:28Z",
+  "generated_at": "2026-11-25T22:50:50Z",
   "region": "belgium",
   "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
   "min_works": 3,
@@ -20,6 +20,7 @@
         "ugent.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00cv9y106",
       "acronyms": [],
       "aliases": []
     },
@@ -32,6 +33,7 @@
         "kuleuven.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05f950310",
       "acronyms": [],
       "aliases": []
     },
@@ -44,6 +46,7 @@
         "europa.eu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00k4n6c32",
       "acronyms": [
         "EC"
       ],
@@ -58,6 +61,7 @@
         "uantwerpen.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/008x57b05",
       "acronyms": [
         "UA"
       ],
@@ -72,6 +76,7 @@
         "uliege.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00afp2z80",
       "acronyms": [],
       "aliases": []
     },
@@ -84,6 +89,7 @@
         "vliz.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/0496vr396",
       "acronyms": [
         "VLIZ"
       ],
@@ -98,6 +104,7 @@
         "vito.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04gq0w522",
       "acronyms": [
         "VITO"
       ],
@@ -112,6 +119,7 @@
         "ac.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02qnnz951",
       "acronyms": [
         "UMONS"
       ],
@@ -126,6 +134,7 @@
         "vub.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/006e5kg04",
       "acronyms": [
         "VUB"
       ],
@@ -140,6 +149,7 @@
         "uclouvain.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02495e989",
       "acronyms": [],
       "aliases": []
     },
@@ -152,6 +162,7 @@
         "uhasselt.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04nbhqj75",
       "acronyms": [],
       "aliases": []
     },
@@ -164,6 +175,7 @@
         "vlaanderen.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05cjt1n05",
       "acronyms": [],
       "aliases": []
     },
@@ -176,6 +188,7 @@
         "ulb.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/01r9htc13",
       "acronyms": [
         "ULB"
       ],
@@ -190,6 +203,7 @@
         "europa.eu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02ef88m96",
       "acronyms": [
         "JRC"
       ],
@@ -204,6 +218,7 @@
         "materianova.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05a2hgt53",
       "acronyms": [],
       "aliases": []
     },
@@ -216,6 +231,7 @@
         "centexbel.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00tjjak64",
       "acronyms": [],
       "aliases": []
     },
@@ -228,6 +244,7 @@
         "ac.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00bmzhb16",
       "acronyms": [],
       "aliases": []
     },
@@ -240,6 +257,7 @@
         "inbo.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00j54wy13",
       "acronyms": [
         "INBO"
       ],
@@ -254,6 +272,7 @@
         "imec.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02kcbn207",
       "acronyms": [],
       "aliases": []
     },
@@ -266,6 +285,7 @@
         "unamur.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03d1maw17",
       "acronyms": [],
       "aliases": []
     },
@@ -278,6 +298,7 @@
         "unamur.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/055kfjr35",
       "acronyms": [],
       "aliases": []
     },
@@ -290,6 +311,7 @@
         "naturalsciences.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02y22ws83",
       "acronyms": [],
       "aliases": []
     },
@@ -302,6 +324,7 @@
         "europa.eu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03410sy33",
       "acronyms": [],
       "aliases": []
     },
@@ -314,6 +337,7 @@
         "capture-resources.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04s6red60",
       "acronyms": [
         "CAPTURE"
       ],
@@ -328,6 +352,7 @@
         "ieep.eu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04ja8dc86",
       "acronyms": [
         "IEEP"
       ],
@@ -342,6 +367,7 @@
         "celabor.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/005cv6b38",
       "acronyms": [],
       "aliases": []
     },
@@ -354,6 +380,7 @@
         "europa.eu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04j5wtv36",
       "acronyms": [],
       "aliases": []
     },
@@ -366,6 +393,7 @@
         "bbeu.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05s43gd64",
       "acronyms": [],
       "aliases": []
     },
@@ -378,6 +406,7 @@
         "fwo.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03qtxy027",
       "acronyms": [],
       "aliases": []
     },
@@ -390,6 +419,7 @@
         "brussels-school.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00dqsbt93",
       "acronyms": [],
       "aliases": []
     },
@@ -402,6 +432,7 @@
         "flandershydraulics.be"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03rhhdt14",
       "acronyms": [],
       "aliases": []
     }

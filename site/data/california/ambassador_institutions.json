@@ -1,6 +1,6 @@
 {
   "schema": "amb-v1",
-  "generated_at": "2026-11-25T16:17:12Z",
+  "generated_at": "2026-11-25T20:26:20Z",
   "region": "california",
   "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
   "min_works": 3,
@@ -20,6 +20,7 @@
         "ucdavis.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05rrcem69",
       "acronyms": [],
       "aliases": [
         "UC Davis"
@@ -34,6 +35,7 @@
         "stanford.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00f54p054",
       "acronyms": [],
       "aliases": []
     },
@@ -46,6 +48,7 @@
         "berkeley.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/01an7q238",
       "acronyms": [],
       "aliases": [
         "UC Berkeley"
@@ -55,11 +58,12 @@
       "id": "I103635307",
       "name": "University of California, Riverside",
       "type": "education",
-      "works": 131,
+      "works": 132,
       "domains": [
         "ucr.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03nawhv43",
       "acronyms": [],
       "aliases": [
         "UC Riverside"
@@ -74,6 +78,7 @@
         "ucsd.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/0168r3w48",
       "acronyms": [
         "UCSD"
       ],
@@ -83,11 +88,12 @@
       "id": "I161318765",
       "name": "University of California, Los Angeles",
       "type": "education",
-      "works": 107,
+      "works": 108,
       "domains": [
         "ucla.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/046rm7j60",
       "acronyms": [],
       "aliases": [
         "UC Los Angeles"
@@ -97,11 +103,12 @@
       "id": "I154570441",
       "name": "University of California, Santa Barbara",
       "type": "education",
-      "works": 107,
+      "works": 108,
       "domains": [
         "ucsb.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02t274463",
       "acronyms": [],
       "aliases": [
         "UC Santa Barbara"
@@ -111,11 +118,12 @@
       "id": "I1174212",
       "name": "University of Southern California",
       "type": "education",
-      "works": 68,
+      "works": 70,
       "domains": [
         "usc.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03taz7m60",
       "acronyms": [],
       "aliases": []
     },
@@ -128,6 +136,7 @@
         "sdsu.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/0264fdx42",
       "acronyms": [],
       "aliases": []
     },
@@ -140,6 +149,7 @@
         "ucsd.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04v7hvq31",
       "acronyms": [],
       "aliases": []
     },
@@ -152,6 +162,7 @@
         "ucsf.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/043mz5j54",
       "acronyms": [],
       "aliases": [
         "UC San Francisco"
@@ -166,6 +177,7 @@
         "uci.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04gyf1771",
       "acronyms": [],
       "aliases": [
         "UC Irvine"
@@ -180,6 +192,7 @@
         "ucsc.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03s65by71",
       "acronyms": [],
       "aliases": [
         "UC Santa Cruz"
@@ -194,6 +207,7 @@
         "sccwrp.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00yzwgc71",
       "acronyms": [
         "SCCWRP"
       ],
@@ -203,11 +217,12 @@
       "id": "I149919469",
       "name": "California Polytechnic State University",
       "type": "education",
-      "works": 35,
+      "works": 36,
       "domains": [
         "calpoly.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/001gpfp45",
       "acronyms": [],
       "aliases": []
     },
@@ -220,6 +235,7 @@
         "universityofcalifornia.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00pjdza24",
       "acronyms": [],
       "aliases": []
     },
@@ -232,6 +248,7 @@
         "sfei.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/025et0929",
       "acronyms": [],
       "aliases": []
     },
@@ -244,6 +261,7 @@
         "stanford.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04c524341",
       "acronyms": [],
       "aliases": []
     },
@@ -256,6 +274,7 @@
         "csun.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/005f5hv41",
       "acronyms": [],
       "aliases": []
     },
@@ -268,6 +287,7 @@
         "jbei.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03ww55028",
       "acronyms": [],
       "aliases": []
     },
@@ -280,6 +300,7 @@
         "caltech.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05dxps055",
       "acronyms": [],
       "aliases": []
     },
@@ -292,6 +313,7 @@
         "csulb.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/0080fxk18",
       "acronyms": [],
       "aliases": []
     },
@@ -304,6 +326,7 @@
         "cpp.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05by5hm18",
       "acronyms": [],
       "aliases": []
     },
@@ -316,6 +339,7 @@
         "ibm.com"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/005w8dd04",
       "acronyms": [],
       "aliases": []
     },
@@ -328,6 +352,7 @@
         "sfsu.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05ykr0121",
       "acronyms": [],
       "aliases": []
     },
@@ -340,6 +365,7 @@
         "csuci.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04v097707",
       "acronyms": [],
       "aliases": []
     },
@@ -352,6 +378,7 @@
         "csuchico.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/027bzz146",
       "acronyms": [],
       "aliases": []
     },
@@ -364,6 +391,7 @@
         "ucmerced.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00d9ah105",
       "acronyms": [],
       "aliases": [
         "UC Merced"
@@ -378,6 +406,7 @@
         "cdph.ca.gov"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/011cc8156",
       "acronyms": [],
       "aliases": []
     },
@@ -390,6 +419,7 @@
         "jcvi.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/049r1ts75",
       "acronyms": [],
       "aliases": []
     },
@@ -402,6 +432,7 @@
         "mbari.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02nb3aq72",
       "acronyms": [
         "MBARI"
       ],
@@ -416,6 +447,7 @@
         "noaa.gov"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/022d75229",
       "acronyms": [],
       "aliases": []
     },
@@ -428,6 +460,7 @@
         "pacific.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05ma4gw77",
       "acronyms": [],
       "aliases": []
     },
@@ -440,6 +473,7 @@
         "usda.gov"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03x7fn667",
       "acronyms": [],
       "aliases": []
     },
@@ -452,6 +486,7 @@
         "calstatela.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/0294hxs80",
       "acronyms": [],
       "aliases": []
     },
@@ -464,6 +499,7 @@
         "nasa.gov"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/027k65916",
       "acronyms": [],
       "aliases": []
     },
@@ -476,6 +512,7 @@
         "nu.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/01zjrck77",
       "acronyms": [],
       "aliases": []
     },
@@ -488,6 +525,7 @@
         "stanford.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05gzmn429",
       "acronyms": [],
       "aliases": []
     },
@@ -500,6 +538,7 @@
         "sandiego.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03jbbze48",
       "acronyms": [],
       "aliases": []
     },
@@ -512,6 +551,7 @@
         "fullerton.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02avqqw26",
       "acronyms": [],
       "aliases": []
     },
@@ -524,6 +564,7 @@
         "llu.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04bj28v14",
       "acronyms": [],
       "aliases": []
     },
@@ -536,6 +577,7 @@
         "californiamsf.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/015tjr078",
       "acronyms": [],
       "aliases": []
     },
@@ -548,6 +590,7 @@
         "csub.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/019ts0j55",
       "acronyms": [],
       "aliases": []
     },
@@ -560,6 +603,7 @@
         "marinemammalcenter.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/01wbbse44",
       "acronyms": [],
       "aliases": []
     },
@@ -572,6 +616,7 @@
         "marinemegafaunafoundation.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00b691416",
       "acronyms": [],
       "aliases": []
     },
@@ -584,6 +629,7 @@
         "sjsu.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04qyvz380",
       "acronyms": [],
       "aliases": []
     },
@@ -596,6 +642,7 @@
         "wildlife.ca.gov"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02v6w2r95",
       "acronyms": [],
       "aliases": []
     },
@@ -608,6 +655,7 @@
         "calepa.ca.gov"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02gkqqp86",
       "acronyms": [],
       "aliases": []
     },
@@ -620,6 +668,7 @@
         "csusm.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/01j8e0j24",
       "acronyms": [],
       "aliases": []
     },
@@ -632,6 +681,7 @@
         "energybiosciencesinstitute.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04pgv9784",
       "acronyms": [],
       "aliases": []
     },
@@ -644,6 +694,7 @@
         "kp.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00t60zh31",
       "acronyms": [],
       "aliases": []
     },
@@ -657,6 +708,7 @@
         "sjsu.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/01c8f2y33",
       "acronyms": [],
       "aliases": []
     },
@@ -669,6 +721,7 @@
         "terasaki.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/012381002",
       "acronyms": [],
       "aliases": []
     },
@@ -681,6 +734,7 @@
         "humboldt.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02qt0xs84",
       "acronyms": [],
       "aliases": []
     },
@@ -693,6 +747,7 @@
         "csufresno.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03enmdz06",
       "acronyms": [],
       "aliases": []
     },
@@ -705,6 +760,7 @@
         "csumb.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00mjdtw98",
       "acronyms": [],
       "aliases": []
     },
@@ -717,6 +773,7 @@
         "no-burn.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00gbn4v29",
       "acronyms": [
         "GAIA"
       ],
@@ -731,6 +788,7 @@
         "theissresearch.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00scjnx30",
       "acronyms": [],
       "aliases": []
     },
@@ -743,6 +801,7 @@
         "arb.ca.gov"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/021h56y19",
       "acronyms": [
         "CARB"
       ],
@@ -757,6 +816,7 @@
         "calstate.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/020qm1538",
       "acronyms": [],
       "aliases": []
     },
@@ -769,6 +829,7 @@
         "csus.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03e26wv14",
       "acronyms": [],
       "aliases": []
     },
@@ -781,6 +842,7 @@
         "csusb.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02n651896",
       "acronyms": [],
       "aliases": []
     },
@@ -793,6 +855,7 @@
         "mwdh2o.com"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/034chen23",
       "acronyms": [],
       "aliases": []
     },
@@ -805,6 +868,7 @@
         "ocean-institute.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03574zr06",
       "acronyms": [],
       "aliases": []
     },
@@ -817,6 +881,7 @@
         "npu.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05wn69s11",
       "acronyms": [],
       "aliases": []
     },
@@ -829,6 +894,7 @@
         "stanford.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03kk52s14",
       "acronyms": [],
       "aliases": []
     },
@@ -841,6 +907,7 @@
         "dtsc.ca.gov"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04fq21t14",
       "acronyms": [],
       "aliases": []
     },
@@ -853,6 +920,7 @@
         "callutheran.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05qpen692",
       "acronyms": [],
       "aliases": []
     },
@@ -865,6 +933,7 @@
         "csueastbay.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04jaeba88",
       "acronyms": [],
       "aliases": []
     },
@@ -877,6 +946,7 @@
         "csustan.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00ejm2g54",
       "acronyms": [],
       "aliases": []
     },
@@ -889,6 +959,7 @@
         "carnegiescience.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00tdyb139",
       "acronyms": [],
       "aliases": []
     },
@@ -901,6 +972,7 @@
         "dominican.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/056d3gw71",
       "acronyms": [],
       "aliases": []
     },
@@ -913,6 +985,7 @@
         "llnl.gov"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/041nk4h53",
       "acronyms": [],
       "aliases": []
     },
@@ -925,6 +998,7 @@
         "nmmf.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00dbnf369",
       "acronyms": [],
       "aliases": []
     },
@@ -937,6 +1011,7 @@
         "pointblue.org"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03sn6yr77",
       "acronyms": [],
       "aliases": []
     },
@@ -949,6 +1024,7 @@
         "sbcc.edu"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/022j4a796",
       "acronyms": [],
       "aliases": []
     }

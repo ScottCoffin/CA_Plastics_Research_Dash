@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { requireSecret } from "../src/env";
-import { institutionName, matchInstitution } from "../src/eligibility";
+import { institutionIdForRor, institutionName, matchInstitution } from "../src/eligibility";
 import { ResendSender, chooseSender } from "../src/mail";
 import { randomToken } from "../src/crypto";
+import norway from "../../site/data/norway/ambassador_institutions.json";
 
 describe("eligibility allowlists", () => {
+  it("maps an allowlisted ROR URL to its institution id, exactly", () => {
+    const listed = norway.institutions.find((inst) => inst.ror);
+    expect(listed?.ror).toBeTruthy();
+    expect(institutionIdForRor(listed!.ror!)).toBe(listed!.id);
+    expect(institutionIdForRor("https://ror.org/03yrm5c26")).toBeNull();
+  });
+
   it("matches a registrable domain and its subdomains", () => {
     expect(matchInstitution("norway", "niva.no")?.domain).toBe("niva.no");
     expect(matchInstitution("norway", "bio.uio.no")?.domain).toBe("uio.no");

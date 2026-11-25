@@ -1,6 +1,6 @@
 {
   "schema": "amb-v1",
-  "generated_at": "2026-11-25T16:20:43Z",
+  "generated_at": "2026-11-25T20:28:20Z",
   "region": "norway",
   "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
   "min_works": 3,
@@ -20,6 +20,7 @@
         "ntnu.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05xg72x27",
       "acronyms": [
         "NTNU"
       ],
@@ -34,6 +35,7 @@
         "niva.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03hrf8236",
       "acronyms": [
         "NIVA"
       ],
@@ -48,6 +50,7 @@
         "sintef.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/004wre089",
       "acronyms": [],
       "aliases": []
     },
@@ -60,6 +63,7 @@
         "uib.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03zga2b32",
       "acronyms": [
         "UIB"
       ],
@@ -75,6 +79,7 @@
         "nilu.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00q7d9z06",
       "acronyms": [],
       "aliases": []
     },
@@ -87,6 +92,7 @@
         "norceresearch.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02gagpf75",
       "acronyms": [],
       "aliases": []
     },
@@ -99,6 +105,7 @@
         "uit.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00wge5k78",
       "acronyms": [],
       "aliases": []
     },
@@ -111,6 +118,7 @@
         "hi.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05vg74d16",
       "acronyms": [],
       "aliases": []
     },
@@ -123,6 +131,7 @@
         "nmbu.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04a1mvv97",
       "acronyms": [
         "NMBU"
       ],
@@ -137,6 +146,7 @@
         "uio.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/01xtthb56",
       "acronyms": [],
       "aliases": []
     },
@@ -149,6 +159,7 @@
         "grida.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02grxeb87",
       "acronyms": [],
       "aliases": []
     },
@@ -161,6 +172,7 @@
         "framsenteret.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05x7v6y85",
       "acronyms": [],
       "aliases": []
     },
@@ -173,6 +185,7 @@
         "npolar.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03avf6522",
       "acronyms": [
         "NPI"
       ],
@@ -187,6 +200,7 @@
         "sintef.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/01f677e56",
       "acronyms": [],
       "aliases": []
     },
@@ -199,6 +213,7 @@
         "nord.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/030mwrt98",
       "acronyms": [],
       "aliases": []
     },
@@ -211,6 +226,7 @@
         "fhi.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/046nvst19",
       "acronyms": [
         "NPIH"
       ],
@@ -225,6 +241,7 @@
         "uis.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02qte9q33",
       "acronyms": [],
       "aliases": []
     },
@@ -237,6 +254,7 @@
         "sintef.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/0422tvz87",
       "acronyms": [],
       "aliases": []
     },
@@ -249,6 +267,7 @@
         "usn.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05ecg5h20",
       "acronyms": [
         "USN"
       ],
@@ -263,6 +282,7 @@
         "nibio.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04aah1z61",
       "acronyms": [
         "NIBIO"
       ],
@@ -277,6 +297,7 @@
         "met.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/001n36p86",
       "acronyms": [],
       "aliases": []
     },
@@ -289,6 +310,7 @@
         "stami.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04g3t6s80",
       "acronyms": [
         "STAMI"
       ],
@@ -303,6 +325,7 @@
         "oslomet.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04q12yn84",
       "acronyms": [],
       "aliases": []
     },
@@ -315,6 +338,7 @@
         "nina.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04aha0598",
       "acronyms": [
         "NINA"
       ],
@@ -329,6 +353,7 @@
         "uit.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00p8r6x45",
       "acronyms": [],
       "aliases": []
     },
@@ -341,6 +366,7 @@
         "uib.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/011n96f14",
       "acronyms": [],
       "aliases": []
     },
@@ -353,6 +379,7 @@
         "vegvesen.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/009kqch10",
       "acronyms": [],
       "aliases": []
     },
@@ -365,6 +392,7 @@
         "pfi.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/053qb6g74",
       "acronyms": [],
       "aliases": []
     },
@@ -377,6 +405,7 @@
         "uia.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03x297z98",
       "acronyms": [],
       "aliases": []
     },
@@ -389,6 +418,7 @@
         "nersc.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05ey0h058",
       "acronyms": [],
       "aliases": []
     },
@@ -401,6 +431,7 @@
         "nordlandsforskning.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02wvb2a30",
       "acronyms": [],
       "aliases": []
     },
@@ -413,6 +444,7 @@
         "vetinst.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05m6y3182",
       "acronyms": [],
       "aliases": []
     },
@@ -425,6 +457,7 @@
         "inn.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/02dx4dc92",
       "acronyms": [],
       "aliases": []
     },
@@ -437,6 +470,7 @@
         "hvl.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/05phns765",
       "acronyms": [],
       "aliases": []
     },
@@ -449,6 +483,7 @@
         "bi.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/03ez40v33",
       "acronyms": [],
       "aliases": []
     },
@@ -461,6 +496,7 @@
         "iris.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/0502t5s28",
       "acronyms": [
         "IRIS"
       ],
@@ -475,6 +511,7 @@
         "nhh.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04v53s997",
       "acronyms": [],
       "aliases": []
     },
@@ -487,6 +524,7 @@
         "porelab.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/00n8a1j31",
       "acronyms": [],
       "aliases": []
     },
@@ -499,6 +537,7 @@
         "genok.com"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/027arfy53",
       "acronyms": [],
       "aliases": []
     },
@@ -511,6 +550,7 @@
         "ngu.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/036dwbr90",
       "acronyms": [],
       "aliases": []
     },
@@ -523,6 +563,7 @@
         "norut.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/04wdcx151",
       "acronyms": [],
       "aliases": []
     },
@@ -535,6 +576,7 @@
         "sintef.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/01zj15q98",
       "acronyms": [],
       "aliases": []
     },
@@ -547,6 +589,7 @@
         "sintef.no"
       ],
       "needs_domain": false,
+      "ror": "https://ror.org/0590dbq33",
       "acronyms": [],
       "aliases": []
     }

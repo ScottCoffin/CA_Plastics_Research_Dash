@@ -1,6 +1,6 @@
 {
   "schema": "amb-cases-v1",
-  "generated_at": "2026-11-25T16:17:12Z",
+  "generated_at": "2026-11-25T20:26:20Z",
   "region": "california",
   "caps": {
     "institution_in_region": 200,
@@ -8,14 +8,14 @@
     "local_language_relevance": 200
   },
   "available": {
-    "institution_in_region": 56,
-    "institution_type": 72,
+    "institution_in_region": 57,
+    "institution_type": 73,
     "local_language_relevance": 3,
     "local_terms": 0
   },
   "counts": {
-    "institution_in_region": 56,
-    "institution_type": 72,
+    "institution_in_region": 57,
+    "institution_type": 73,
     "local_language_relevance": 3,
     "local_terms": 0
   },
@@ -1236,6 +1236,28 @@
         ],
         "affiliation_examples": [
           "Key Laboratory of Western China's Environmental Systems (Ministry of Education), College of Earth and Environmental Sciences, Lanzhou University, Lanzhou, Gansu"
+        ]
+      },
+      "current_value": "in region",
+      "options": [
+        "agree",
+        "disagree",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-be6c58cda4a2",
+      "kind": "institution_in_region",
+      "question": "Is this institution in California?",
+      "evidence": {
+        "institution_id": "I79983796",
+        "institution_name": null,
+        "works": 1,
+        "signals": [
+          "matched only by raw affiliation"
+        ],
+        "affiliation_examples": [
+          "The Harker School, San Jose, CA 95129, USA"
         ]
       },
       "current_value": "in region",
@@ -2835,6 +2857,28 @@
       "question": "Is this institution's type right?",
       "evidence": {
         "institution_id": "I87216513",
+        "institution_name": null,
+        "works": 3
+      },
+      "current_value": "missing",
+      "options": [
+        "education",
+        "government",
+        "nonprofit",
+        "facility",
+        "company",
+        "healthcare",
+        "archive",
+        "other",
+        "unsure"
+      ]
+    },
+    {
+      "case_id": "amb-722104f171c8",
+      "kind": "institution_type",
+      "question": "Is this institution's type right?",
+      "evidence": {
+        "institution_id": "I91045830",
         "institution_name": null,
         "works": 3
       },

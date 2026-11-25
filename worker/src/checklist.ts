@@ -50,6 +50,8 @@ export function buildChecklist(author: OpenAlexAuthor | null, employments: Emplo
     add({ id: inst.id, name: inst.name, source: "openalex_history", country: inst.country, type: inst.type, years: inst.years });
   }
   for (const emp of employments) {
+    // ROR first: an exact normalised ROR URL that an allowlist carries maps to its institution id.
+    // Otherwise the employment stays unmapped (ror:<url> or name:<organisation>) and is ineligible.
     const mapped = emp.ror ? institutionIdForRor(emp.ror) : null;
     const id = mapped ?? (emp.ror ? `ror:${emp.ror}` : `name:${emp.orgName}`);
     add({

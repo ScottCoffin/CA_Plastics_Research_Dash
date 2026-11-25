@@ -1,6 +1,7 @@
 import { SELF, env } from "cloudflare:test";
 import { describe, expect, it } from "vitest";
 import { keyedHash, sha256Hex } from "../src/crypto";
+import norway from "../../site/data/norway/ambassador_institutions.json";
 import { latestToken, network, outboxCount } from "./helpers";
 
 // ORCID-first sign-up (AMB-1 slice 2a). ORCID, OpenAlex and Turnstile are answered by the fake network in
@@ -41,28 +42,35 @@ const AUTHOR = {
   ],
 };
 
-const ROR_EMPLOYMENT = {
-  "affiliation-group": [
-    {
-      summaries: [
-        {
-          "employment-summary": {
-            organization: {
-              name: "Some Institute",
-              address: { country: "US" },
-              "disambiguated-organization": {
-                "disambiguated-organization-identifier": "https://ror.org/03yrm5c26",
-                "disambiguation-source": "ROR",
+// ORCID employments answer with one organisation. A null ror means no disambiguated organisation.
+function employmentAt(ror: string | null, orgName = "Some Institute") {
+  return {
+    "affiliation-group": [
+      {
+        summaries: [
+          {
+            "employment-summary": {
+              organization: {
+                name: orgName,
+                address: { country: "US" },
+                "disambiguated-organization": ror
+                  ? { "disambiguated-organization-identifier": ror, "disambiguation-source": "ROR" }
+                  : null,
               },
+              "start-date": { year: { value: "2015" } },
+              "end-date": null,
             },
-            "start-date": { year: { value: "2015" } },
-            "end-date": null,
           },
-        },
-      ],
-    },
-  ],
-};
+        ],
+      },
+    ],
+  };
+}
+
+// Not on any allowlist (checked by the unmapped-ROR test below).
+const ROR_EMPLOYMENT = employmentAt("https://ror.org/03yrm5c26");
+// The first norway allowlist entry (it carries a ROR URL).
+const LISTED_WITH_ROR = norway.institutions.find((inst) => inst.ror);
 
 function pair(res: Response, name: string): string {
   const raw = res.headers.getSetCookie().find((c) => c.startsWith(`${name}=`));
@@ -223,6 +231,37 @@ describe("author lookup and claims", () => {
     const again = await send("GET", "/signup/profile", undefined, signup);
     expect(again.status).toBe(200);
     expect(await again.json()).toMatchObject({ employments_checked: false });
+  });
+
+  it("maps an ORCID employment through its ROR to an eligible allowlisted institution", async () => {
+    expect(LISTED_WITH_ROR?.ror).toMatch(/^https:\/\/ror\.org\/0[a-z0-9]{8}$/);
+    network.employments = { status: 200, body: employmentAt(LISTED_WITH_ROR!.ror, LISTED_WITH_ROR!.name) };
+    const signup = await orcidSignUp();
+    const body = (await (await send("GET", "/signup/profile", undefined, signup)).json()) as {
+      institutions: { id: string; name: string; eligible: boolean; regions: string[]; source: string }[];
+    };
+    expect(body.institutions).toEqual([
+      expect.objectContaining({
+        id: LISTED_WITH_ROR!.id,
+        name: LISTED_WITH_ROR!.name,
+        eligible: true,
+        regions: expect.arrayContaining(["norway"]),
+        source: "orcid_employment",
+      }),
+    ]);
+  });
+
+  it("an employment without a ROR is never matched to an allowlisted institution by name", async () => {
+    // Every current allowlist entry carries a ror, so a null-ror entry cannot be bundled; this checks
+    // the no-ROR path that a null-ror entry would take (matching by organisation name is not done).
+    network.employments = { status: 200, body: employmentAt(null, LISTED_WITH_ROR!.name) };
+    const signup = await orcidSignUp();
+    const body = (await (await send("GET", "/signup/profile", undefined, signup)).json()) as {
+      institutions: { id: string; eligible: boolean; source: string }[];
+    };
+    expect(body.institutions).toEqual([
+      expect.objectContaining({ id: `name:${LISTED_WITH_ROR!.name}`, eligible: false, source: "orcid_employment" }),
+    ]);
   });
 
   it("with no OpenAlex author: empty checklist, proposal path, proposals stored pending and replaced", async () => {

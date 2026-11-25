@@ -143,7 +143,7 @@ FORBIDDEN_KEYS = frozenset(
     }
 )
 INSTITUTION_KEYS = frozenset(
-    {"id", "name", "type", "works", "domains", "needs_domain", "acronyms", "aliases"}
+    {"id", "name", "type", "works", "domains", "needs_domain", "ror", "acronyms", "aliases"}
 )
 CASE_KEYS = frozenset({"case_id", "kind", "question", "evidence", "current_value", "options"})
 
@@ -689,6 +689,7 @@ ROR_API = "https://api.ror.org/v2/organizations/{ror}"
 ROR_USER_AGENT = "ca-plastics-atlas/0.1 (research dashboard)"
 ROR_INTERVAL_SECONDS = 1.0
 _ROR_ID = re.compile(r"^0[a-z0-9]{8}$")
+_ROR_URL = re.compile(r"^https://ror\.org/0[a-z0-9]{8}$")
 
 
 class FetchLimitError(RuntimeError):
@@ -917,6 +918,7 @@ def _institution_rows(
         if openalex.get("homepage_url"):
             homepage.append(str(openalex["homepage_url"]))
         domains = resolve_domains(homepage, ror, overrides.get(inst_id, ()))
+        ror_id = _ror_id(item, entry).lower()
         name = item.name or inst_id
         ror_names_here = fetched.get("names", [])
         ror_acronyms = {n["value"] for n in ror_names_here if "acronym" in n["types"]}
@@ -933,6 +935,8 @@ def _institution_rows(
                 "works": len(item.works),
                 "domains": domains,
                 "needs_domain": not domains,
+                # Short ROR URL (https://ror.org/<id>), or null when no ROR id is known.
+                "ror": f"https://ror.org/{ror_id}" if _ROR_ID.match(ror_id) else None,
                 "acronyms": acronyms,
                 "aliases": aliases,
             }
@@ -1159,6 +1163,8 @@ def validate_outputs(
             problems.append(f"institutions[{index}]: not eligible ({row['id']})")
         if row["needs_domain"] != (not row["domains"]):
             problems.append(f"institutions[{index}]: needs_domain disagrees with domains")
+        if row["ror"] is not None and not _ROR_URL.match(str(row["ror"])):
+            problems.append(f"institutions[{index}]: ror must be null or https://ror.org/<id>")
         for domain in row["domains"]:
             if registrable_domain(domain) != domain or is_free_mail(domain):
                 problems.append(f"institutions[{index}]: bad domain {domain!r}")

@@ -18,8 +18,8 @@ interface AllowlistFile {
     works: number;
     domains: string[];
     needs_domain?: boolean;
-    /** ROR URL, when the allowlist carries one (not yet present in amb-v1; ORCID employments map through it). */
-    ror?: string;
+    /** Short ROR URL (https://ror.org/<id>), or null when unknown. ORCID employments match through it. */
+    ror: string | null;
   }[];
 }
 

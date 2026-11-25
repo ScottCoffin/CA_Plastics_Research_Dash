@@ -241,6 +241,25 @@ def test_overrides_add_and_remove(country_root: Path) -> None:
     assert rows["I1"]["needs_domain"] is True
 
 
+def test_ror_is_a_short_lowercase_url_or_null(tmp_path: Path) -> None:
+    works: list[dict] = []
+    languages: dict[str, str] = {}
+    for inst_id, name, ror in (
+        ("I10", "Uni Nord", "https://ror.org/02ABC1234"),
+        ("I11", "Uni Syd", ""),
+    ):
+        for n in range(3):
+            wid = f"{inst_id}-{n}"
+            works.append(_work(wid, "en", [_inst(inst_id, name, "education", ror=ror)]))
+            languages[wid] = "en"
+    _write_global(tmp_path, works, languages)
+    institutions, cases = build_region(_norway(), tmp_path, GENERATED)
+    rows = _rows(institutions)
+    assert rows["I10"]["ror"] == "https://ror.org/02abc1234"
+    assert rows["I11"]["ror"] is None
+    assert validate_outputs(institutions, cases, "norway") == []
+
+
 def test_institutions_are_sorted_by_works(country_root: Path) -> None:
     institutions, _ = build_region(_norway(), country_root, GENERATED)
     counts = [row["works"] for row in institutions["institutions"]]
@@ -296,6 +315,7 @@ def test_validator_flags_forbidden_keys_and_bad_domains() -> None:
                 "works": 3,
                 "domains": ["gmail.com"],
                 "needs_domain": False,
+                "ror": "https://ror.org/02abc1234",
                 "acronyms": [],
                 "aliases": [],
                 "email": "a@b.no",
@@ -306,6 +326,30 @@ def test_validator_flags_forbidden_keys_and_bad_domains() -> None:
     problems = validate_outputs(institutions, cases, "norway")
     assert any("forbidden key 'email'" in p for p in problems)
     assert any("bad domain" in p or "keys" in p for p in problems)
+
+
+def test_validator_requires_ror_to_be_null_or_a_short_ror_url() -> None:
+    row = {
+        "id": "I1",
+        "name": "X",
+        "type": "education",
+        "works": 3,
+        "domains": ["x.no"],
+        "needs_domain": False,
+        "acronyms": [],
+        "aliases": [],
+        "ror": None,
+    }
+    cases = {"schema": "amb-cases-v1", "region": "norway", "cases": []}
+
+    def problems(ror: object) -> list[str]:
+        payload = {"schema": "amb-v1", "region": "norway", "institutions": [{**row, "ror": ror}]}
+        return validate_outputs(payload, cases, "norway")
+
+    assert problems(None) == []
+    assert problems("https://ror.org/02abc1234") == []
+    assert any("ror must be" in p for p in problems("https://ror.org/02ABC1234"))
+    assert any("ror must be" in p for p in problems("02abc1234"))
 
 
 def test_registry_path_uses_ca_basis_and_raw_affiliation_only(tmp_path: Path) -> None:
@@ -652,6 +696,7 @@ def test_validator_requires_acronym_and_alias_lists_of_strings() -> None:
         "works": 3,
         "domains": ["x.no"],
         "needs_domain": False,
+        "ror": None,
         "acronyms": "NIVA",
         "aliases": [],
     }
