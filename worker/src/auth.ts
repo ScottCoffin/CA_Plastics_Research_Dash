@@ -4,6 +4,8 @@ import { REGIONS, type Region, institutionDisplayName, institutionName, isRegion
 import type { Fetch } from "./outbound";
 import { SESSION_COOKIE, SESSION_MAX_AGE_S, clearSessionCookie, json, readCookie, redirect, sessionCookie } from "./http";
 import { chooseSender } from "./mail";
+import { countInvitationSignup, inviteHashOf } from "./invitations";
+import { markSignedIn, queueWelcome } from "./notifications";
 import { EMAIL_LIMIT, IP_LIMIT, withinRateLimit } from "./rate_limit";
 import { verifyTurnstile } from "./turnstile";
 
@@ -41,6 +43,7 @@ export interface MagicLinkRow {
   region: string;
   institution_id: string;
   ambassador_id: string | null;
+  invite_hash: string | null;
 }
 
 export function maskEmail(email: string): string {
@@ -67,7 +70,7 @@ export async function createSession(env: Env, ambassadorId: string, now: number)
 
 /** POST /auth/start {email, region, turnstileToken} */
 export async function handleStart(request: Request, env: Env, ctx: Ctx): Promise<Response> {
-  let body: { email?: unknown; region?: unknown; turnstileToken?: unknown };
+  let body: { email?: unknown; region?: unknown; turnstileToken?: unknown; invite?: unknown };
   try {
     body = (await request.json()) as typeof body;
   } catch {
@@ -98,11 +101,21 @@ export async function handleStart(request: Request, env: Env, ctx: Ctx): Promise
   if (match) {
     try {
       const token = randomToken(32);
+      // Optional invitation token (slice 2c): only its hash is kept, and only to count a sign-up.
       await env.DB.prepare(
-        "INSERT INTO magic_links (token_hash, email_hash, email, region, institution_id, created_at, expires_at) " +
-          "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+        "INSERT INTO magic_links (token_hash, email_hash, email, region, institution_id, created_at, expires_at, invite_hash) " +
+          "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
       )
-        .bind(await sha256Hex(token), emailHash, email, region, match.institutionId, ctx.now, ctx.now + LINK_TTL_MS)
+        .bind(
+          await sha256Hex(token),
+          emailHash,
+          email,
+          region,
+          match.institutionId,
+          ctx.now,
+          ctx.now + LINK_TTL_MS,
+          await inviteHashOf(body.invite),
+        )
         .run();
       const link = `${env.PUBLIC_API_URL}/auth/verify?token=${token}`;
       await chooseSender(env).send({
@@ -169,7 +182,7 @@ export async function handleVerify(url: URL, env: Env, ctx: Ctx): Promise<Respon
 
   const tokenHash = await sha256Hex(token);
   const link = await env.DB.prepare(
-    "SELECT email, email_hash, region, institution_id, ambassador_id FROM magic_links " +
+    "SELECT email, email_hash, region, institution_id, ambassador_id, invite_hash FROM magic_links " +
       "WHERE token_hash = ?1 AND used_at IS NULL AND expires_at > ?2",
   )
     .bind(tokenHash, ctx.now)
@@ -211,6 +224,10 @@ export async function handleVerify(url: URL, env: Env, ctx: Ctx): Promise<Respon
       .run();
     await audit(env.DB, ctx.now, "auth.verify", link.email_hash, { region: link.region });
   }
+  // Slice 2c hooks: sign-in time and reminder reset; welcome once per ambassador; invitation sign-up count.
+  await markSignedIn(env.DB, ambassadorId, ctx.now);
+  const firstJoin = await queueWelcome(env, ambassadorId, ctx.now);
+  if (firstJoin) await countInvitationSignup(env.DB, link.invite_hash, ambassadorId);
 
   const cookie = await createSession(env, ambassadorId, ctx.now);
   return redirect(env.WORKSPACE_URL, { "Set-Cookie": sessionCookie(cookie) });

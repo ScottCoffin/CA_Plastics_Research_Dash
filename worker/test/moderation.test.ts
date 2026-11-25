@@ -4,10 +4,10 @@ import worker from "../src/index";
 import { seedAmbassador } from "./helpers";
 
 // Roles, moderation decisions, leads, suspension and the nightly cleanup (AMB-1 slice 2b). Everything runs against the
-// local D1 in workerd; no network. OWNER_ORCID is the wrangler.toml placeholder.
+// local D1 in workerd; no network. OWNER_ORCID comes from wrangler.toml through the test env.
 
 const API = "https://api.plastiverse.live";
-const OWNER_ORCID = "0000-0000-0000-0000";
+const OWNER_ORCID = env.OWNER_ORCID;
 const DAY = 24 * 60 * 60 * 1000;
 
 function req(method: string, path: string, body?: unknown, cookie?: string): Promise<Response> {

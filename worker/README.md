@@ -33,7 +33,7 @@ client values; the tests cover the flow with a fake ORCID.
 
 ## Configuration
 
-- `wrangler.toml` holds names, the D1 binding (placeholder `database_id = "LOCAL-ONLY"`) and non-secret vars.
+- `wrangler.toml` holds names, the D1 binding (the production database id, created 2026-11-25) and non-secret vars.
   `PUBLIC_API_URL` is the API host `https://api.plastiverse.live` (QUESTIONS AMB-API-HOST).
 - Secrets (never in the repo): `RESEND_API_KEY`, `TURNSTILE_SECRET`, `SESSION_SIGNING_KEY`, `EMAIL_HASH_KEY`,
   `ORCID_CLIENT_ID`, `ORCID_CLIENT_SECRET`. Email lookups use `EMAIL_HASH_KEY` only (separate from the session key).
@@ -42,7 +42,9 @@ client values; the tests cover the flow with a fake ORCID.
 - `OWNER_ORCID` (wrangler.toml `[vars]`) is a placeholder; the account with that ORCID iD is the owner. The owner sets the
   real iD before deploy (owner action).
 - Secret `EXPORT_TOKEN` (owner-approved `wrangler secret put` only): the bearer token for `/export/approved`. Unset, the export refuses every request.
-- Migrations: `0001_init.sql` (slice 1), `0002_orcid_signup.sql` (slice 2a), `0003_submissions.sql` (slice 2b). Read the migration note in 0002 before any
+- `PUBLIC_SITE_URL` (wrangler.toml `[vars]`, `https://plastiverse.live`): the only host the reminder pass reads case files from.
+- Migrations: `0001_init.sql` (slice 1), `0002_orcid_signup.sql` (slice 2a), `0003_submissions.sql` (slice 2b),
+  `0004_notifications.sql` (slice 2c). Read the migration note in 0002 before any
   remote apply: slice-1 local rows were keyed with `SESSION_SIGNING_KEY` and must be reset, not re-hashed.
 
 ## Routes
@@ -67,6 +69,16 @@ client values; the tests cover the flow with a fake ORCID.
 - `POST /moderation/suspend` (owner only): `{ambassador_id}` sets `suspended` and deletes their sessions.
 - `GET /export/approved?since=<ms>` (bearer `EXPORT_TOKEN`, read-only): approved submissions and consensus case answers.
   No emails, email hashes, ambassador ids or ORCID iDs.
+- Slice 2c (local): `GET /me/notifications` and `POST /me/notifications` (session) `{reminders?, product_news?}`
+  (reminders on and product news off by default); `GET /unsubscribe?t=` (confirmation page, changes nothing) and
+  `POST /unsubscribe?t=` (RFC 8058 one-click, turns reminders off); `POST /invitations` (session; returns `url` and a
+  `mailto:` href with no recipient; 50 per 30 days); `GET /invite?t=` (records nothing, redirects to
+  `SITE_ORIGIN/ambassadors/?invited=1`). `POST /auth/start` accepts an optional `invite` token, counted once when that
+  sign-up joins. Welcome mail once per ambassador (on `/auth/verify`). Mail templates: `src/templates.ts`.
+- Scheduled (cron `17 3 * * *`), after the cleanup: the fortnightly reminder pass (`src/reminders.ts`). A reminder goes to an
+  active opted-in ambassador with open stream A tasks in the home region, 14 days after the last reminder (or the welcome,
+  or the sign-up). It pauses after three unanswered reminders until sign-in or an answer. Batch: 200 candidates per run.
+  Logs counts only.
 - Scheduled (cron `17 3 * * *`): deletes expired ORCID states, sign-up sessions and magic links, and pending sign-ups
   older than 7 days with no email proof. Logs counts only.
 

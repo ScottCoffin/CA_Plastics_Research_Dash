@@ -2,9 +2,12 @@ import { type Ctx, handleMe, handleSignout, handleStart, handleVerify } from "./
 import { runCleanup } from "./cleanup";
 import type { Env } from "./env";
 import { handleExport } from "./export";
+import { handleCreateInvitation, handleInvite } from "./invitations";
 import { json } from "./http";
+import { handleGetNotifications, handleSetNotifications, handleUnsubscribe, handleUnsubscribePage } from "./notifications";
 import { handlePromoteLead, handleQueue, handleDecide, handleSuspend } from "./moderation";
 import { type Fetch, liveFetch } from "./outbound";
+import { runReminders } from "./reminders";
 import {
   handleOrcidCallback,
   handleOrcidStart,
@@ -108,6 +111,22 @@ export async function handle(
       case "/moderation/suspend":
         if (request.method !== "POST") return methodNotAllowed();
         return withCors(await handleSuspend(request, env, ctx));
+      case "/me/notifications":
+        if (request.method === "GET") return withCors(await handleGetNotifications(request, env, ctx));
+        if (request.method === "POST") return withCors(await handleSetNotifications(request, env, ctx));
+        return methodNotAllowed();
+      case "/invitations":
+        if (request.method !== "POST") return methodNotAllowed();
+        return withCors(await handleCreateInvitation(request, env, ctx));
+      case "/invite":
+        // Personal invitation link opened by the invitee (top-level GET). Records nothing. No CORS.
+        if (request.method !== "GET") return json({ ok: false, error: "method_not_allowed" }, 405);
+        return handleInvite(env);
+      case "/unsubscribe":
+        // Mail links and one-click POST from mail clients (no Origin, no CORS). The GET only shows a page.
+        if (request.method === "GET") return handleUnsubscribePage(url, env);
+        if (request.method === "POST") return handleUnsubscribe(url, env, ctx.now);
+        return json({ ok: false, error: "method_not_allowed" }, 405);
       case "/export/approved":
         // Read-only feed for the PR job (bearer token, server-to-server). No CORS.
         if (request.method !== "GET") return json({ ok: false, error: "method_not_allowed" }, 405);
@@ -126,9 +145,14 @@ export default {
   fetch(request: Request, env: Env): Promise<Response> {
     return handle(request, env);
   },
-  /** Cron "17 3 * * *": expired sign-up state and stale pending sign-ups. Logs counts only. */
+  /**
+   * Cron "17 3 * * *": expired sign-up state and stale pending sign-ups (cleanup), then the fortnightly reminder pass.
+   * Logs counts only.
+   */
   async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
     const counts = await runCleanup(env.DB, Date.now());
     console.log("cleanup", JSON.stringify(counts));
+    const reminders = await runReminders(env, Date.now(), liveFetch);
+    console.log("reminders", JSON.stringify(reminders));
   },
 } satisfies ExportedHandler<Env>;

@@ -5,6 +5,10 @@ export interface OutgoingMail {
   to: string;
   subject: string;
   text: string;
+  /** Optional minimal HTML body (no tracking pixels, no external images). */
+  html?: string;
+  /** Optional extra headers, e.g. RFC 8058 List-Unsubscribe on non-essential mail. */
+  headers?: Record<string, string>;
 }
 
 export interface EmailSender {
@@ -23,7 +27,14 @@ export class ResendSender implements EmailSender {
     const response = await this.fetchImpl("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${this.apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: this.from, to: [mail.to], subject: mail.subject, text: mail.text }),
+      body: JSON.stringify({
+        from: this.from,
+        to: [mail.to],
+        subject: mail.subject,
+        text: mail.text,
+        ...(mail.html !== undefined ? { html: mail.html } : {}),
+        ...(mail.headers !== undefined ? { headers: mail.headers } : {}),
+      }),
     });
     if (!response.ok) throw new Error(`resend responded ${response.status}`);
   }
@@ -35,8 +46,8 @@ export class OutboxSender implements EmailSender {
 
   async send(mail: OutgoingMail): Promise<void> {
     await this.db
-      .prepare("INSERT INTO outbox (created_at, to_address, subject, body) VALUES (?1, ?2, ?3, ?4)")
-      .bind(Date.now(), mail.to, mail.subject, mail.text)
+      .prepare("INSERT INTO outbox (created_at, to_address, subject, body, headers) VALUES (?1, ?2, ?3, ?4, ?5)")
+      .bind(Date.now(), mail.to, mail.subject, mail.text, mail.headers ? JSON.stringify(mail.headers) : null)
       .run();
   }
 }

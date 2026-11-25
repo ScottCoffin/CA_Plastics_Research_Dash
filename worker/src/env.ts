@@ -4,6 +4,8 @@ export interface Env {
   ALLOWED_ORIGIN: string;
   WORKSPACE_URL: string;
   PUBLIC_API_URL: string;
+  /** Public site origin (slice 2c): the only host the reminder pass fetches case files from. */
+  PUBLIC_SITE_URL: string;
   MAIL_FROM: string;
   /** ORCID iD of the owner account (non-secret, wrangler.toml). The account with this iD is the owner. */
   OWNER_ORCID: string;

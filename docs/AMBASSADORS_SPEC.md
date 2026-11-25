@@ -488,3 +488,48 @@ region's queues (owner answer, section 12). Ordinary ambassadors get 403 on ever
 answers as suggestions; domain suspension; the scheduled PR job that reads `/export/approved`; the first-visit and
 workspace UI; and a rate limit on the existing `POST /signup/profile` and `POST /auth/signout` routes (owned by the
 pending signup review, not changed here).
+
+## Backend slice 2c (local)
+
+Status: built and tested locally in `worker/` (migration `0004_notifications.sql`; 126 vitest tests in total, 24 of them
+for slice 2c). Not deployed; no Resend, Cloudflare, ORCID or OpenAlex calls. The reminder pass reads the public case file
+only through the injected fetch, and tests fail on any other URL.
+
+**Emails** (owner rules, section 10). Every non-essential mail carries a link to notification settings and a one-click
+unsubscribe link with RFC 8058 `List-Unsubscribe` and `List-Unsubscribe-Post: List-Unsubscribe=One-Click` headers. The
+sign-in link has neither and cannot be switched off. Sender: `MAIL_FROM` = `Plastiverse <ambassadors@plastiverse.live>`
+(owner answer, section 12; this also changes the sign-in sender). Templates are in
+`worker/src/templates.ts`: plain text and minimal HTML, no tracking pixels, no external images.
+
+1. *Welcome*: queued once per ambassador on the first `/auth/verify` that activates them (`welcome_sent_at` is claimed
+   by a conditional update; a failed send releases the claim so the next sign-in retries).
+2. *Invite your co-authors*: `POST /invitations` returns a personal `url` (`/invite?t=`) and a `mailto:` href with the
+   subject and body pre-filled and no recipient. The Atlas never shows or stores co-authors' addresses. `GET /invite?t=`
+   records nothing and redirects to `/ambassadors/?invited=1`. A sign-up whose `POST /auth/start` carried the token
+   increments `invitations.signups` once (a count only).
+3. *Fortnightly reminder*: daily cron, after the cleanup. Sent only to active, opted-in ambassadors with open stream A
+   tasks in their home region (cases in `ambassador_cases.json` minus their own answers). Stream B items are not counted.
+   The mail gives the number of open tasks, "about N minutes" (a case's optional `minutes` field, else 1 minute), the
+   region's confirmed progress and a link to the next task. No mail when nothing is open. Anchor: 14 days after the last
+   reminder, else the welcome, else the sign-up. After three reminders with no answer, reminders pause until the
+   ambassador signs in or answers. Batch: 200 candidates per run.
+
+**Preferences and unsubscribe.** `notification_prefs` (no row = reminders on, product news off). `GET`/`POST
+/me/notifications` (session). `GET /unsubscribe?t=` shows a confirmation page and changes nothing; `POST /unsubscribe?t=`
+turns reminders off. Each mail gets its own token; only its SHA-256 hash is stored (`unsubscribe_tokens`), so older links
+keep working.
+
+**Schema** (`0004_notifications.sql`): `ambassadors` gains `last_seen_at`, `welcome_sent_at`, `reminders_unanswered`,
+`last_reminder_at`; new tables `notification_prefs`, `unsubscribe_tokens`, `invitations`; `magic_links.invite_hash`;
+`outbox.headers` (local outbox only). No email address is added to any new table.
+
+**Owner decisions to review**
+
+- The reminder compares the count with the home region only (`ambassadors.region`), not every region the ambassador joined.
+- The reminder batch is the first 200 due candidates, ordered by due date. A large population with no open tasks could delay
+  others; the daily cron moves the queue along.
+- Invitation sign-ups are counted on the email route (`/auth/start`). The ORCID route does not carry the token yet; the
+  public page must pass it through `invite` once the workspace UI is built.
+- The welcome mail is not suppressed by preferences (it is sent once, on joining); unsubscribing turns off reminders only.
+- `MAIL_FROM` now uses `ambassadors@plastiverse.live` for all Worker mail, sign-in included (previously `auth@`). Confirm the
+  address is verified in Resend before deploy (owner action).

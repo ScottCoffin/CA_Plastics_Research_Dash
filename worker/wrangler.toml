@@ -1,4 +1,4 @@
-# Plastiverse ambassador Worker (AMB-1 slice 1, LOCAL ONLY).
+# Plastiverse ambassador Worker (AMB-1). Deployed by the owner's go-ahead on 2026-11-25 to api.plastiverse.live.
 # No secrets in this file. Secrets are set with `wrangler secret put <NAME>` (owner-approved only)
 # or, for local dev, in worker/.dev.vars (gitignored). See README.md.
 name = "plastiverse-ambassadors"
@@ -6,11 +6,14 @@ main = "src/index.ts"
 compatibility_date = "2026-08-22"
 compatibility_flags = ["nodejs_compat"]
 
+# API host (QUESTIONS AMB-API-HOST): a Worker custom domain on the plastiverse.live zone; the site itself is untouched.
+routes = [{ pattern = "api.plastiverse.live", custom_domain = true }]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "plastiverse-ambassadors"
-# Placeholder. The real id is filled in only at owner-approved deploy time.
-database_id = "LOCAL-ONLY"
+# Created 2026-11-25 (owner-approved, region ENAM). Not a secret: access needs the account credentials.
+database_id = "a7a4c91f-bec0-4c9d-abd2-fff28d6a6296"
 migrations_dir = "migrations"
 
 [vars]
@@ -22,11 +25,13 @@ WORKSPACE_URL = "https://plastiverse.live/ambassadors/"
 # Public base URL of this Worker (API host, QUESTIONS AMB-API-HOST). Sign-in links point to
 # PUBLIC_API_URL/auth/verify; the ORCID redirect URI is PUBLIC_API_URL/orcid/callback.
 PUBLIC_API_URL = "https://api.plastiverse.live"
-MAIL_FROM = "Plastiverse <auth@plastiverse.live>"
+# Public site origin (slice 2c): reminders read each region's public ambassador_cases.json from here only.
+PUBLIC_SITE_URL = "https://plastiverse.live"
+MAIL_FROM = "Plastiverse <ambassadors@plastiverse.live>"
 # "resend" (production default). Use "outbox" only for local dev and tests (writes to D1 table outbox).
 MAIL_MODE = "resend"
-# ORCID iD of the owner account (slice 2b). PLACEHOLDER: the owner sets the real iD before deploy (owner action).
-OWNER_ORCID = "0000-0000-0000-0000"
+# ORCID iD of the owner account (slice 2b; owner 2026-11-25). This account is the owner moderator.
+OWNER_ORCID = "0000-0002-7035-1282"
 
 # Nightly cleanup (slice 2b): expired ORCID states, sign-up sessions and links; stale pending sign-ups.
 [triggers]

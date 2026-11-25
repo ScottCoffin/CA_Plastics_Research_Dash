@@ -4,6 +4,9 @@ import { createSession } from "../src/auth";
 import { keyedHash } from "../src/crypto";
 
 const TABLES = [
+  "invitations",
+  "unsubscribe_tokens",
+  "notification_prefs",
   "case_answers",
   "submissions",
   "region_leads",
@@ -109,7 +112,8 @@ export function startSignIn(
 
 /** The newest sign-in link token sent to the local outbox (dev and test sender). */
 export async function latestToken(): Promise<string> {
-  const row = await env.DB.prepare("SELECT body FROM outbox ORDER BY id DESC LIMIT 1").first<{ body: string }>();
+  // Newest message that carries a sign-in link (welcome and reminder mails do not, and may arrive after a verify).
+  const row = await env.DB.prepare("SELECT body FROM outbox WHERE body LIKE '%token=%' ORDER BY id DESC LIMIT 1").first<{ body: string }>();
   const match = row?.body.match(/token=([A-Za-z0-9_-]{43})/);
   if (!match) throw new Error("no sign-in link in outbox");
   return match[1];
