@@ -24,6 +24,19 @@ Last updated: 2026-11-18.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
+### H44. Prepare the ambassador sign-in services (AMB-1; not urgent, needed before the backend step, about 30 minutes)
+The ambassador sign-in needs two free accounts you own. The agent writes and tests all code locally first.
+1. **Resend:** sign up at https://resend.com with the project email. Add the domain `plastiverse.live`.
+   Resend shows 3-4 DNS records (SPF, DKIM, optionally DMARC). Add them in Cloudflare DNS (plastiverse.live zone),
+   then click Verify in Resend. Create an API key with "Sending access" only.
+2. **Cloudflare:** in the dashboard, Workers & Pages -> create nothing yet; under My Profile -> API Tokens, create a
+   token from the "Edit Cloudflare Workers" template and add the permission "D1: Edit". Restrict it to your account.
+3. **Turnstile:** Cloudflare dashboard -> Turnstile -> add a widget for `plastiverse.live` (managed mode). Note the
+   site key (public) and secret key.
+4. Put the secrets in the ignored `.env` file, one per line: `RESEND_API_KEY=...`, `CLOUDFLARE_API_TOKEN=...`,
+   `CLOUDFLARE_ACCOUNT_ID=...`, `TURNSTILE_SECRET=...`, and the public `TURNSTILE_SITE_KEY=...`.
+- **Done when:** tell the agent "ambassador services ready". It deploys the Worker only after you approve the design.
+
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
 Global Plastic Laws topic. That link is a draft the agent proposed, so the page shows a
