@@ -177,6 +177,8 @@ check("table sort is numeric for works and textual for name", () => {
   const nodes = nodesFromRows(instJson);
   assert.deepEqual(sortNodes(nodes, "works", "desc").map((n) => n.id), ["I1", "I3", "I2", "I4"]);
   assert.deepEqual(sortNodes(nodes, "works", "asc").map((n) => n.id), ["I4", "I2", "I3", "I1"]);
+  const linked = nodes.map((n, i) => ({...n, links: [1, 3, 0, 2][i]}));
+  assert.deepEqual(sortNodes(linked, "links", "desc").map((n) => n.id), ["I2", "I4", "I1", "I3"]);
   assert.deepEqual(sortNodes(nodes, "name", "asc").map((n) => n.name)[0], "Alpha University");
   assert.equal(sortNodes(nodes, "community", "asc").at(-1).id, "I2");
 });

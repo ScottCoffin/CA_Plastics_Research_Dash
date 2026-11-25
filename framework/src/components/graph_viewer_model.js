@@ -162,7 +162,7 @@ export function matchNodes(nodes, query, limit = Infinity) {
   return [...starts.sort(byWorks), ...inside.sort(byWorks)].slice(0, limit);
 }
 
-// Table sort. Works sorts numerically; name and country sort as text. Ties keep the canonical order.
+// Table sort. Works and links sort numerically; name and country sort as text. Ties keep the canonical order.
 export function sortNodes(nodes, key = "works", direction = "desc") {
   const sign = direction === "asc" ? 1 : -1;
   return [...nodes].sort((a, b) => {
@@ -170,6 +170,7 @@ export function sortNodes(nodes, key = "works", direction = "desc") {
     if (key === "name") diff = foldText(a.name).localeCompare(foldText(b.name));
     else if (key === "country") diff = String(a.country ?? "").localeCompare(String(b.country ?? ""));
     else if (key === "community") diff = (Number(a.community) || 0) - (Number(b.community) || 0);
+    else if (key === "links") diff = (a.links ?? 0) - (b.links ?? 0);
     else diff = a.works - b.works;
     return (sign * diff) || (a.index - b.index);
   });

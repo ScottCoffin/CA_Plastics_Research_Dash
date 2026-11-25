@@ -70,9 +70,10 @@ def test_hash_prefix_and_note_options_are_wired() -> None:
     assert "export function exportFiles(manifest, name)" in model
 
 
-def test_canvas_is_hidden_and_table_fallback_exists() -> None:
+def test_canvas_is_focusable_and_table_fallback_exists() -> None:
     text = COMPONENT.read_text(encoding="utf-8")
-    assert 'data-gv="stage" aria-hidden="true"' in text
+    assert 'data-gv="stage" role="application" tabindex="0"' in text
+    assert 'data-gv="table-toggle" aria-expanded="false"' in text
     assert "Show as table" in text and 'data-gv="table"' in text
     assert "aria-sort" in text and 'data-gv="filter"' in text
     assert "Unscreened search hits" in text

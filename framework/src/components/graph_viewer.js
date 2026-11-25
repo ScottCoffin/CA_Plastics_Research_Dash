@@ -42,7 +42,8 @@ const HOME_VIEW = Object.freeze({x: 0.5, y: 0.5, ratio: 1, angle: 0});
 const WHEEL_HINT = "Hold Ctrl (or Cmd) and scroll to zoom, or click the graph first.";
 const TOUCH_HINT = "Use two fingers to move the graph. One finger scrolls the page.";
 const GRAPH_TITLES = {institutions: "Institutions", authors: "Authors"};
-const SORTABLE = {name: "Name", country: "Country or type", works: "Works", community: "Community"};
+const SORTABLE = {name: "Name", country: "Country or type", works: "Works", links: "Links", community: "Community"};
+const PAN_STEP = 0.15;  // share of the visible width or height that one arrow key press moves the view
 
 const reduceMotion = () => Boolean(window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
 
@@ -86,13 +87,15 @@ ${withNote ? `<div class="gv-head">
 <p class="gv-status" role="status" aria-live="polite" data-gv="status">Loading the graph.</p>
 <div class="gv-main">
   <div class="gv-figure">
-    <div class="gv-stage" data-gv="stage" aria-hidden="true"></div>
+    <div class="gv-stage" data-gv="stage" role="application" tabindex="0" aria-label="Network graph loading." aria-describedby="${id}-keys"></div>
+    <p class="gv-sr" id="${id}-keys">Keys when the graph has focus: plus and minus zoom, arrow keys move the view, 0 resets the view, Escape clears the selection. Use the Show as table button to read every node as a list.</p>
     <p class="gv-hint" data-gv="hint" aria-hidden="true" hidden></p>
     <div class="gv-legend" data-gv="legend"></div>
   </div>
   <aside class="gv-details" aria-labelledby="${id}-details-title" data-gv="details">
-    <h2 class="gv-details__title" id="${id}-details-title">Selected</h2>
-    <p data-gv="details-body">Select a dot on the graph, search for a name, or pick a row in the table.</p>
+    <h2 class="gv-details__title" id="${id}-details-title" data-gv="details-title" tabindex="-1">Selected</h2>
+    <p class="gv-sr" data-gv="announce" aria-live="polite"></p>
+    <div data-gv="details-body"><p>Select a dot on the graph, search for a name, or pick a row in the table.</p></div>
   </aside>
 </div>
 <section class="gv-table-wrap" id="${id}-table" data-gv="table" hidden aria-labelledby="${id}-table-title">
@@ -104,6 +107,7 @@ ${withNote ? `<div class="gv-head">
   </div>
   <div class="gv-table-scroll">
     <table class="gv-table">
+      <caption class="gv-sr">${GRAPH_TITLES[name]} in the graph, sorted by the buttons in the column headers. Strongest links name the neighbours that share the most works.</caption>
       <thead><tr data-gv="sort-row"></tr></thead>
       <tbody data-gv="rows"></tbody>
     </table>
@@ -132,7 +136,8 @@ export function mountGraph(root, options = {}) {
     note: q("note"), search: q("search"), results: q("results"), searchStatus: q("search-status"),
     colour: q("colour"), zoomIn: q("zoom-in"), zoomOut: q("zoom-out"), reset: q("reset"),
     tableToggle: q("table-toggle"), status: q("status"), stage: q("stage"), hint: q("hint"),
-    legend: q("legend"), details: q("details"), detailsBody: q("details-body"), table: q("table"),
+    legend: q("legend"), details: q("details"), detailsTitle: q("details-title"),
+    announce: q("announce"), detailsBody: q("details-body"), table: q("table"),
     filter: q("filter"), tableCount: q("table-count"), sortRow: q("sort-row"), rows: q("rows")
   };
   const initial = parseGraphHash(window.location.hash, prefix);
@@ -159,6 +164,7 @@ export function mountGraph(root, options = {}) {
   let disposed = false;
   let observer = null;
   let manifestNote = "";
+  let returnFocus = null;  // where focus goes when Escape clears a selection made from a control
 
   const setStatus = (text) => { ui.status.textContent = text; };
 
@@ -223,19 +229,63 @@ export function mountGraph(root, options = {}) {
     flash(event.type === "wheel" ? WHEEL_HINT : TOUCH_HINT);
   }
 
-  function select(id, {pan = false, zoom = ZOOM_TO_NODE} = {}) {
+  // focus: move focus to the details heading (keyboard and search selections); pointer clicks on the
+  // canvas leave focus where it is. The live region announces each change of selection.
+  function select(id, {pan = false, zoom = ZOOM_TO_NODE, focus = false} = {}) {
     if (id !== null && !(graph && graph.hasNode(id))) return false;
+    const changed = id !== selectedId;
     selectedId = id;
     neighbourIds = id === null ? new Set() : new Set(graph.neighbors(id));
     renderer?.refresh();
     renderDetails();
     renderTableRows();
+    if (changed) {
+      const node = id === null ? null : byId.get(id);
+      ui.announce.textContent = node ? `Selected ${node.name}, ${formatWorks(node.works)}.` : "Selection cleared.";
+    }
     if (id !== null && pan && renderer) {
       const point = renderer.getNodeDisplayData(id);
       if (point) moveCamera({x: point.x, y: point.y, ratio: zoom, angle: camera.getState().angle});
     }
+    if (focus && id !== null) ui.detailsTitle.focus();
     scheduleHash();
     return true;
+  }
+
+  // Escape: clear the selection and return focus to the control that made it (or the graph or table toggle).
+  function clearSelection() {
+    const target = returnFocus?.isConnected ? returnFocus : (tableShown ? ui.tableToggle : ui.stage);
+    returnFocus = null;
+    select(null);
+    target.focus({preventScroll: true});
+  }
+
+  function resetView() {
+    select(null);
+    moveCamera({...HOME_VIEW}, 300);
+  }
+
+  function panBy(dx, dy) {
+    if (!camera) return;
+    const state = camera.getState();
+    moveCamera({...state, x: state.x + dx * state.ratio * PAN_STEP, y: state.y + dy * state.ratio * PAN_STEP}, 150);
+  }
+
+  // Keys on the focused graph (the stage) and on the details panel. Modified keys are left to the browser.
+  function onGraphKey(event) {
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    switch (event.key) {
+      case "+": case "=": zoomBy(1.5); break;
+      case "-": case "_": zoomBy(1 / 1.5); break;
+      case "0": resetView(); break;
+      case "ArrowLeft": panBy(-1, 0); break;
+      case "ArrowRight": panBy(1, 0); break;
+      case "ArrowUp": panBy(0, -1); break;
+      case "ArrowDown": panBy(0, 1); break;
+      case "Escape": if (selectedId !== null) clearSelection(); return;
+      default: return;
+    }
+    event.preventDefault();
   }
 
   function nodeReducer(id, data) {
@@ -308,7 +358,7 @@ export function mountGraph(root, options = {}) {
     const body = ui.detailsBody;
     body.replaceChildren();
     const node = selectedId === null ? null : byId.get(selectedId);
-    const heading = ui.details.querySelector(".gv-details__title");
+    const heading = ui.detailsTitle;
     if (!node) {
       heading.textContent = "Selected";
       body.append(el("p", {}, "Select a dot on the graph, search for a name, or pick a row in the table."));
@@ -343,7 +393,7 @@ export function mountGraph(root, options = {}) {
       const other = nodes[index];
       const li = el("li");
       const button = el("button", {class: "gv-link", type: "button"}, other.name);
-      button.addEventListener("click", () => select(other.id, {pan: true}), {signal});
+      button.addEventListener("click", () => { returnFocus = button; select(other.id, {pan: true, focus: true}); }, {signal});
       li.append(button, el("span", {class: "gv-muted"}, ` ${formatCount(weight)} shared`));
       list.append(li);
     }
@@ -371,6 +421,7 @@ export function mountGraph(root, options = {}) {
       th.append(button);
       ui.sortRow.append(th);
     }
+    ui.sortRow.append(el("th", {scope: "col"}, "Strongest links"));
   }
 
   function renderTableRows() {
@@ -383,11 +434,14 @@ export function mountGraph(root, options = {}) {
       const tr = el("tr", {class: node.id === selectedId ? "gv-row gv-row--selected" : "gv-row"});
       const nameCell = el("th", {scope: "row"});
       const button = el("button", {class: "gv-link", type: "button"}, node.name);
-      button.addEventListener("click", () => select(node.id, {pan: true}), {signal});
+      button.addEventListener("click", () => { returnFocus = button; select(node.id, {pan: true, focus: true}); }, {signal});
       nameCell.append(button);
       const kind = name === "authors" ? (node.country ?? "No country") : [node.country, node.type].filter(Boolean).join(", ") || "Not recorded";
+      const strongest = topNeighbours(adjacency, node.index, 3).map(({index}) => nodes[index].name).join("; ") || "No links";
       tr.append(nameCell, el("td", {}, kind), el("td", {class: "gv-num"}, formatCount(node.works)),
-        el("td", {}, node.community === null ? "Not assigned" : String(Number(node.community) + 1)));
+        el("td", {class: "gv-num"}, formatCount(node.links)),
+        el("td", {}, node.community === null ? "Not assigned" : String(Number(node.community) + 1)),
+        el("td", {}, strongest));
       ui.rows.append(tr);
     }
     const total = filtered.length;
@@ -424,8 +478,8 @@ export function mountGraph(root, options = {}) {
 
   function chooseFromSearch(id) {
     ui.results.hidden = true;
-    select(id, {pan: true});
-    ui.search.focus({preventScroll: true});
+    returnFocus = ui.search;
+    select(id, {pan: true, focus: true});
   }
 
   function bindControls() {
@@ -443,7 +497,19 @@ export function mountGraph(root, options = {}) {
       }
     }, {signal});
     ui.results.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") { ui.results.hidden = true; ui.search.focus(); }
+      if (event.key === "Escape") { ui.results.hidden = true; ui.search.focus(); return; }
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+      const buttons = [...ui.results.querySelectorAll("button")];
+      const at = buttons.indexOf(document.activeElement);
+      if (at < 0) return;
+      event.preventDefault();
+      const next = event.key === "ArrowDown" ? Math.min(at + 1, buttons.length - 1) : at - 1;
+      if (next < 0) ui.search.focus();
+      else buttons[next].focus();
+    }, {signal});
+    ui.stage.addEventListener("keydown", onGraphKey, {signal});
+    ui.details.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && selectedId !== null) { event.preventDefault(); clearSelection(); }
     }, {signal});
     ui.colour.addEventListener("change", () => {
       colourMode = ui.colour.value === "country" ? "country" : "community";
@@ -452,7 +518,7 @@ export function mountGraph(root, options = {}) {
     }, {signal});
     ui.zoomIn.addEventListener("click", () => zoomBy(1.5), {signal});
     ui.zoomOut.addEventListener("click", () => zoomBy(1 / 1.5), {signal});
-    ui.reset.addEventListener("click", () => { select(null); moveCamera({...HOME_VIEW}, 300); }, {signal});
+    ui.reset.addEventListener("click", resetView, {signal});
     ui.tableToggle.addEventListener("click", () => setTable(!tableShown), {signal});
     ui.filter.addEventListener("input", renderTableRows, {signal});
     document.addEventListener("pointerdown", (event) => {
@@ -507,6 +573,7 @@ export function mountGraph(root, options = {}) {
         label: labelSet.has(node.index) ? node.name : undefined
       });
     }
+    for (const node of nodes) node.links = adjacency[node.index].length;
     for (const {source, target} of edges) {
       const a = nodes[source].id;
       const b = nodes[target].id;
@@ -528,6 +595,7 @@ export function mountGraph(root, options = {}) {
       edgeReducer
     });
     camera = renderer.getCamera();
+    ui.stage.querySelectorAll("canvas").forEach((canvas) => canvas.setAttribute("aria-hidden", "true"));
     renderer.on("clickNode", ({node}) => select(node, {pan: false}));
     renderer.on("clickStage", () => select(null));
     camera.on("updated", scheduleHash);
@@ -564,6 +632,7 @@ export function mountGraph(root, options = {}) {
     }
     renderLegend();
     renderSortHeaders();
+    ui.stage.setAttribute("aria-label", `${GRAPH_TITLES[name]} network graph: ${formatCount(nodes.length)} nodes and ${formatCount(graph.size)} links. The same nodes are listed in the table; use the Show as table button.`);
     root.dataset.state = "ready";
     root.dataset.readyMs = String(Math.round(performance.now()));
     setStatus(`${formatCount(nodes.length)} ${name === "authors" ? "authors" : "institutions"} and ${formatCount(graph.size)} links.`);

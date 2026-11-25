@@ -69,6 +69,9 @@
   cursor: pointer;
 }
 .gv-button:hover { border-color: var(--atlas-ink); }
+.gv-stage:focus-visible,
+.gv-details__title:focus-visible,
+.gv-table-scroll:focus-visible,
 .gv-input:focus-visible,
 .gv-select:focus-visible,
 .gv-button:focus-visible,
@@ -219,7 +222,11 @@
   padding: 0;
   margin: var(--atlas-space-3) 0 0;
 }
-.gv-links a { color: var(--atlas-brand-action); }
+.gv-links a {
+  color: var(--atlas-brand-action);
+  display: inline-block;
+  min-height: 1.5rem;
+}
 .gv-neighbours {
   margin: 0;
   padding-left: var(--atlas-space-4);
@@ -228,6 +235,8 @@
 .gv-muted { color: var(--atlas-muted); font-size: var(--atlas-type-small-size); }
 .gv-link {
   font: inherit;
+  display: inline-block;
+  min-height: 1.5rem;
   padding: 0;
   border: 0;
   background: none;
@@ -286,6 +295,9 @@
 .gv-sort {
   font: inherit;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
   padding: 0;
   border: 0;
   background: none;
