@@ -34,16 +34,6 @@ Last updated: 2026-11-18.
    (anything you skip keeps the agent's default).
 - **Done when:** you reply. The agent builds the real pages and the sign-in backend after that (the backend also needs H44).
 
-### H47. Register an ORCID public API client (AMB-1 "Connect your ORCID"; not urgent, 10 minutes, with H44)
-1. Sign in to https://orcid.org with your own ORCID account, open the account menu -> Developer tools, and register
-   for the free Public API.
-2. Application name: Plastiverse Live. Website: https://plastiverse.live. Description: "Ambassadors connect their
-   ORCID iD so we can link their author record."
-3. Redirect URI: the agent will give you the exact Worker URL when the backend exists; until then use
-   https://plastiverse.live/ambassadors/ (you can edit it later).
-4. Put the Client ID and Client secret in the ignored `.env`: `ORCID_CLIENT_ID=...` and `ORCID_CLIENT_SECRET=...`.
-- **Done when:** tell the agent "ORCID client ready".
-
 ### H44. Prepare the ambassador sign-in services (AMB-1; not urgent, needed before the backend step, about 30 minutes)
 The ambassador sign-in needs two free accounts you own. The agent writes and tests all code locally first.
 1. **Resend:** sign up at https://resend.com with the project email. Add the domain `plastiverse.live`.
@@ -261,6 +251,8 @@ leak-check works wait for S5.7.
 ---
 
 ## Done
+
+- H47 (2026-11-25): owner registered the ORCID public API client (keys in `.env`; redirect URI set to https://plastiverse.live/ambassadors/ for now). When the Worker exists, the agent gives the owner the final redirect URI to update in ORCID Developer tools.
 
 - H46 (2026-11-25): owner checked /explore on a phone: one-finger page scroll and two-finger map gestures work.
 
