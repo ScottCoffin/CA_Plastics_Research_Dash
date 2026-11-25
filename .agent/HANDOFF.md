@@ -27,7 +27,6 @@ partition with institution-registry join), UX-13 part a (Monitoring filters in t
 - `network_metrics.json` goes stale when `index.json` changes; a full rebuild takes about 17 minutes (R=100).
 - The Evidence page filter list has one axe colour-contrast hit (`.ev-zero > .ev-option-name`), pre-existing.
 
-- The global landing page (`framework/src/index.md`) has no h1: `scripts/check_plat2.py` fails axe page-has-heading-one on the live site too (pre-existing, 2026-11-25).
 
 - Global builds (raw top-up, partition, countries.json, region pages, global graphs) run only on this machine: the raw store is too large for git. QUESTIONS GLOBAL-RAW-HOME asks whether to keep weekly local runs (default) or move the raw store to R2 so CI can run them.
 

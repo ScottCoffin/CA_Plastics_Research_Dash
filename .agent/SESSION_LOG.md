@@ -252,3 +252,4 @@
 | 2026-11-25 | H46 | Owner confirmed touch gestures on /explore | this commit |
 | 2026-11-25 | AMB-1 (design round 4) | Badge, aligned place/institution, ORCID, workspace map, share monitoring data, bigger proposal map | this commit |
 | 2026-11-25 | Daily wiring | Denominators + network metrics (reuse-null) in the daily ingest; weekly null-model workflow; global builds stay local (GLOBAL-RAW-HOME) | this commit |
+| 2026-11-25 | Landing h1 | Screen-reader h1 on the landing page; first caption is h2 (same size); check_plat2 0 failures | this commit |

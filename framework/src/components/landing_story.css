@@ -110,7 +110,7 @@ html:has(.plv) { scroll-behavior: smooth; }
 .plv .cap .src { font-family: var(--pv-mono); font-size: 11px; margin-top: 14px; color: var(--pv-ink-2); }
 .plv :is(.c1, .c1n, .c2, .cb, .c4, .c5, .c7, .c2b) { max-width: min(36vw, 560px); }
 .plv .c0 { top: calc(60px + 4vh); max-width: min(38vw, 600px); }
-.plv .c0 h1 { font-size: clamp(36px, 4.6vw, 72px); }
+.plv .c0 :is(h1, h2) { font-size: clamp(36px, 4.6vw, 72px); }
 .plv .cap.bot { top: auto; bottom: calc(7vh + 24px); }
 .plv .bot p { margin: 0; font-size: clamp(19px, 1.8vw, 27px); line-height: 1.3; letter-spacing: -.01em; color: var(--pv-on-dark); }
 .plv .c3 { top: calc(60px + 17vh); max-width: none; }

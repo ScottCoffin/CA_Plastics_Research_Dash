@@ -24,6 +24,7 @@ head: |
 <nav class="plv-nav" aria-label="Main"><a href="./explore">Explore the data</a><a href="#evidence">Evidence map</a><button type="button" class="plv-btn keep" id="plv-regions-btn" aria-expanded="false" aria-controls="plv-hdr-picker">Regions <svg width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="./california/about#how-works-are-screened">Methods</a><a href="./california/about">About</a><a class="plv-btn solid keep" href="#updates">Get updates</a></nav>
 <div class="plv-picker" id="plv-hdr-picker" data-plv="picker" hidden></div></header>
 <section class="plv-intro" id="plv-intro" aria-label="Plastiverse Live">
+<h1 class="sr-only">Plastiverse Live: plastics research, worldwide and local</h1>
 <div class="plv-ilogo-box"><img class="plv-ilogo" src="./assets/landing/logo_motion_poster.webp" width="564" height="564" alt="Plastiverse Live logo: scattered plastic fragments flow into a bright node and a network of research" fetchpriority="high"></div>
 <div class="cue plv-icue" aria-hidden="true"><svg class="cue-arrow" width="24" height="56" viewBox="0 0 24 56" aria-hidden="true"><path d="M12 2v50M3 43l9 9 9-9" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>scroll</span></div>
 <a class="skip" href="#evidence">Skip to the evidence map</a>
@@ -35,7 +36,7 @@ head: |
 <svg id="plv-bulbsrc" width="0" height="0" style="position:absolute" focusable="false" aria-hidden="true"><path d="M100 10 C150 10 186 46 186 96 C186 134 162 152 146 176 C138 188 136 196 136 206 L64 206 C64 196 62 188 54 176 C38 152 14 134 14 96 C14 46 50 10 100 10 Z"/><path d="M66 218 H134 M68 232 H132 M72 246 H128 M84 262 H116"/><path d="M82 206 L86 132 L94 118 L100 132 L106 118 L114 132 L118 206"/></svg>
 <p class="sr-only">A picnic laid out on a checked blanket, made entirely of disposable plastics: cups, plates, cutlery, straws, a soda bottle, squeeze bottles, wrapped sandwiches, a food tub, a beach ball and a jump rope. Scrolling, it shatters into microplastic particles that become published studies, then a chart of research output, an evidence map, a collaboration network and a world map.</p>
 <div class="plv-stack" id="plv-stack" aria-hidden="true"></div>
-<div class="cap c0 dk" data-a=".45" data-b="1.45"><h1>Plastic is everywhere&hellip;</h1></div>
+<div class="cap c0 dk" data-a=".45" data-b="1.45"><h2>Plastic is everywhere&hellip;</h2></div>
 <div class="cap c1 dk" data-a="4.0" data-b="5.4"><h2>Microplastics were first described in the ocean more than 50&nbsp;years ago.</h2><p class="src">Carpenter et al. (1972), &ldquo;Polystyrene spherules in coastal waters,&rdquo; Science 178:749. doi:10.1126/science.178.4062.749</p></div>
 <div class="cap c1n dk" data-a="5.4" data-b="7.2"><h2>Now picture every particle as a published study. Thousands more arrive every year.</h2></div>
 <div class="cap c2 dk" data-a="8.5" data-b="10.5"><h2>Connected, studies become knowledge.</h2></div>
