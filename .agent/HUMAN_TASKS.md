@@ -34,6 +34,12 @@ Last updated: 2026-11-18.
    (anything you skip keeps the agent's default).
 - **Done when:** you reply. The agent builds the real pages and the sign-in backend after that (the backend also needs H44).
 
+### H48. Review the ambassador contribution terms (AMB-1, about 10 minutes)
+1. Open `docs/AMBASSADOR_TERMS.md` (a draft the agent wrote; not legal advice).
+2. Edit anything you want changed directly in the file, or list the changes.
+3. Optional: ask your institution or a lawyer to look at it before launch.
+- **Done when:** tell the agent "terms approved" (with any edits saved in the file).
+
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
 Global Plastic Laws topic. That link is a draft the agent proposed, so the page shows a

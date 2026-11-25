@@ -282,5 +282,10 @@ Recorded from `.impeccable/surfaces/impeccable-sketches-ambassadors-html.md`:
   /explore).
 - **Share monitoring data:** the publication choice is forced (no preselection); the place is chosen at region
   granularity.
-- **Open (owner asked for more information):** public credit default, contribution terms wording, and the split
-  rule details.
+- **Public credit (owner, after explanation):** on by default; ambassadors can opt out ("Confirmed by a local
+  ambassador"). The first-visit screen and the terms say so plainly.
+- **Contribution terms:** the agent drafts them for owner review: docs/AMBASSADOR_TERMS.md (CC BY-NC 4.0, right to
+  share, names shown by default with opt-out, no personal data about others, review, withdrawal).
+- **Split rule (owner, after explanation):** a sub-unit splits into its own region automatically when it has its own
+  verified ambassador AND at least 50 plastics works; the group's existing ambassadors stay with the group and the
+  new ambassador leads the child; below 50 works the sub-unit stays in the group.
