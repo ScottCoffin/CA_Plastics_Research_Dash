@@ -143,12 +143,15 @@ def test_throttle_keeps_consecutive_requests_apart(clock: _Clock) -> None:
         clock.sends.append(clock.now)
     gaps = [later - earlier for earlier, later in zip(clock.sends, clock.sends[1:])]
     assert all(gap >= openalex.MIN_REQUEST_INTERVAL_SECONDS - 1e-9 for gap in gaps)
-    assert clock.sleeps == pytest.approx([0.25, 0.25, 0.25])
+    interval = openalex.MIN_REQUEST_INTERVAL_SECONDS
+    assert clock.sleeps == pytest.approx([interval, interval, interval])
+    # 2026-11-25: free keys get 2 boolean-heavy requests per second; stay below that.
+    assert interval >= 0.5
 
 
 def test_throttle_does_not_delay_a_request_that_is_already_spaced(clock: _Clock) -> None:
     openalex._throttle()
-    clock.now += 0.5
+    clock.now += openalex.MIN_REQUEST_INTERVAL_SECONDS + 0.1
     openalex._throttle()
     assert clock.sleeps == []
 

@@ -22,16 +22,7 @@ Last updated: 2026-11-18.
 
 ### H27 is done (2026-11-17): HTTPS is enforced and http:// redirects to https://.
 
-### H43. Finish setting up this machine (new Windows machine, 2026-11-25, about 5 minutes)
-The agent installed Python 3.14, Node.js, the GitHub CLI and the test tools. Two steps need you:
-1. Open the ignored `.env` file in the repository root and add the two OpenAlex keys from your old
-   machine's `.env` (or from your OpenAlex account), one per line:
-   `OPENALEX_API_KEY=...` and `OPENALEX_API_KEY_ALT=...`. Copy any other keys the old `.env` had too.
-   Without a key, OpenAlex refuses cursor paging, so the global raw fetch (PLAT-4a) and the daily
-   corpus refresh cannot run on this machine.
-2. In a terminal run `gh auth login` and follow the prompts (GitHub.com, HTTPS, log in with a browser).
-   The agent uses it to read CI results after pushing.
-- **Done when:** tell the agent "keys added"; it runs the global fetch trial again.
+### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a

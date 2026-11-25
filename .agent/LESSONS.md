@@ -6,6 +6,8 @@
   term alone before trusting it; add a guard test for the removed term.
 - Workers run focused tests only, so a renamed JS argument broke a pinned assertion in an unrelated test
   file (test_vd16). The lead's clean-worktree full suite caught it before the push; never skip that step.
+- OpenAlex lowered the free-key rate for >5-operator searches to 2 req/s (2026-11-25); 0.25 s spacing exhausted the
+  burst retries after ~470 pages. Read the 429 text: it states the current limit.
 - On a fresh machine without Node, about 40 runtime tests fail and look like regressions; check the
   toolchain (CLAUDE.md new-machine list) before debugging.
 

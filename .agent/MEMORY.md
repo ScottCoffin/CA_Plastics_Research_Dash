@@ -60,9 +60,9 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 - AT-10 pipeline 2026-11-11: release metadata lives in `config/release.yml` (update it after each GitHub release; `build_release_snapshot.py --write-site-release` regenerates `site/data/release.json`). `.zenodo.json` is what Zenodo reads; `check_at10.py` asserts CITATION.cff agrees. Institutions tab defaults to tiers (`#institutions?inst_view=list` for cards).
 - ORCID/Wikidata (2026-11-11): `scripts/fetch_orcid_profiles.py` (public API, ~4.8k requests at 8 rps, 30-day cache, `--offline`) and `scripts/fetch_wikidata_photos.py` (SPARQL P496 -> P18 + Commons extmetadata). Never store emails: ORCID `/person` emails and expanded-search `email` are stripped before caching; biographies are redacted.
 ## Verified API facts
-- OpenAlex (2026-11-11): boolean title_and_abstract searches cost 10 credits/call and are
-  limited to 5 req/s when they have >5 operators (429 "wait 1s"); the client throttles
-  and retries that 429. Rejected 429s carry no credit header; the budget guard charges
+- OpenAlex (2026-11-11; limit updated 2026-11-25): boolean title_and_abstract searches cost 10 credits/call and,
+  with >5 operators, are limited to 2 req/s per free key (429 "limited to 2 a second for this key", daily budget
+  unaffected; Member+ gets 5); the client spaces requests 0.6 s apart and retries that 429. Rejected 429s carry no credit header; the budget guard charges
   them the 10-credit reserve. Every live call must go through the budget guard.
 - CORE API v3 (2026-11-11): owner key in `.env` (no code uses CORE yet; since 2026-11-15 ask the owner to renew only when a task needs it, HUMAN_TASKS H1); Bearer auth; 150-token bucket per window; good for full text by DOI and CA place-name phrase searches (theses/grey lit), useless for CA affiliation discovery. See `docs/api_notes/supplementary_sources.md`.
 - NSF Award Search (2026-11-10): `api.nsf.gov/services/v1/awards.json`; uppercase OR only; two quoted phrases OR'd silently return 0, so use one phrase per query; `awardeeStateCode`/`perfStateCode`; dates mm/dd/yyyy filter the `date` field; errors can arrive as HTTP 200 with `serviceNotification`. See `docs/api_notes/nsf_awards.md`.
@@ -208,6 +208,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
 
 - BQ-S2 (2026-11-25): candidate `plastic-v3.2-candidate` lives in `config/queries_v32_candidate.yml` (queries.yml schema plus `themes`, `anchor_phrases`, `title_only_terms`); render with `atlas.query_v32` (factors shared contexts), count with `scripts/count_query_v32_candidate.py` (400-credit cap, cache `data/interim/query_v32/`). v3.1 stays active until BQ-S3 measures precision.
 
+- New machine 2026-11-25: owner keys in `.env` (OPENALEX_API_KEY + _ALT); `gh` is logged in. Global raw store (PLAT-4a): `data/raw/openalex_global/` (resumable; `scripts/fetch_global_raw.py --start-year 1950 --max-credits N`).
 - PLAT-3 slice 1 (2026-11-25): region registry `regions/_registry.yml` + `atlas.regions` (`get_region`, `regions`); a ratchet test fails when a src/atlas file gains region names (lower `tests/fixtures/region_names_baseline.json` when counts fall). Registry path defaults to the repo root (editable installs only).
 
 ## Known pitfalls (top 10; details in LESSONS.md)

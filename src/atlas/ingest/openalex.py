@@ -335,12 +335,14 @@ def build_works_url(
     return f"{OPENALEX_BASE}/works?{urllib.parse.urlencode(params)}"
 
 
-MIN_REQUEST_INTERVAL_SECONDS = 0.25
+# 2026-11-25: OpenAlex now limits searches with more than 5 boolean operators to 2 requests/s
+# per free key (429 "limited to 2 a second for this key"; Member+ plans get 5). 0.6 s stays below.
+MIN_REQUEST_INTERVAL_SECONDS = 0.6
 _last_request_at = 0.0
 
 
 def _throttle() -> None:
-    """Keep below OpenAlex's 5 requests/second limit for boolean-heavy searches."""
+    """Keep below OpenAlex's 2 requests/second limit for boolean-heavy searches (free keys)."""
     global _last_request_at
     wait = _last_request_at + MIN_REQUEST_INTERVAL_SECONDS - time.monotonic()
     if wait > 0:
