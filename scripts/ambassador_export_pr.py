@@ -478,7 +478,12 @@ def fetch_export(api_url: str, since: int, token: str) -> dict:
     query = urllib.parse.urlencode({"since": since})
     request = urllib.request.Request(
         f"{api_url.rstrip('/')}/export/approved?{query}",
-        headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
+        # Cloudflare's browser check answers 403 to the default Python-urllib agent before the Worker runs.
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/json",
+            "User-Agent": "plastiverse-export-job/1.0",
+        },
     )
     try:
         with urllib.request.urlopen(request, timeout=60) as response:
