@@ -178,3 +178,44 @@ ambassadors actually take (shown once 20 answers exist): ground-truth case about
 placeholder about 2 minutes; add a community group or organisation about 5 minutes; add a policy with dates about
 8 minutes; propose a region about 5 minutes. The dashboard sums them ("about 15 minutes for the next 30 cases")
 and lets ambassadors pick a session length (5, 15 or 30 minutes) that selects the next tasks to fit.
+
+## 10. Owner round 3 (2026-11-25): institution search, boundaries, map controls, badges, emails
+
+**Institution entry.** Regions have many institutions, so every institution choice (sign-in eligibility check,
+"Your institution" in a proposal) is a text field with type-ahead matching over the region's eligible institutions
+(name, acronym, alternate names and email domain; e.g. "NIVA", "Norwegian Institute for Water Research",
+"niva.no" all match), showing the type and city. No long drop-down lists.
+
+**Boundaries.** The global map draws disputed boundaries from Natural Earth (`ne_50m_admin_0_boundary_lines_disputed_areas`,
+dashed, with a legend line "Disputed boundary, as drawn by Natural Earth") and the Pacific grouping lines from
+Natural Earth (`ne_10m_admin_0_pacific_groupings`) that box small Pacific island states. Natural Earth is public
+domain; its point of view on disputed areas is the default Natural Earth view, stated in the map credit.
+
+**Map controls.** Zoom and pan live in the map itself: wheel or trackpad zoom, drag to pan, pinch on touch,
+double-click to zoom in, keyboard (+, -, arrows, 0) when the map has focus, and a small on-map control group (zoom in,
+zoom out, reset) overlaid in a corner of the map frame, never outside it. Zoom is limited to sensible bounds.
+
+**Propose-a-region view.** The proposal map opens centred and zoomed on the place selected on the previous
+page (the landing search or map selection). Selected units keep a visible, high-contrast boundary line drawn on top
+of the selection fill (line colour from the ink token, at least 3:1 against the fill and the surrounding map).
+
+**Ambassador badges.** An ambassador links their author record (search their name among the region's authors,
+pick the matching OpenAlex author; ORCID shown when known); a moderator confirms the link unless name and institution
+match exactly. The confirmed author then shows an "Ambassador" badge (with region) next to their name wherever the
+Atlas shows that author: region pages (top researchers), author profile pages, author lists and search results,
+and the network view's details panel. The become-an-ambassador page shows the badge and explains it. The badge is
+opt-out (an ambassador can hide it) and is removed when the ambassador leaves.
+
+**Emails** (all through Resend from a plastiverse.live address; every message has a link to notification settings
+and one-click unsubscribe for non-essential mail; sign-in links are the only mail that cannot be switched off):
+1. *Welcome and thanks*, sent when an ambassador first joins: thanks them, says what happens next, links the
+   workspace, and invites them to bring colleagues.
+2. *Invite your co-authors*: the workspace lists their co-authors from the corpus (name, institution, whether the
+   institution is eligible and in which region). One click opens a ready-made invitation in the ambassador's own
+   email program (subject and body pre-filled, with a personal invitation link). The Atlas never shows or stores
+   co-authors' email addresses; the ambassador adds the address. Invitations sent are not tracked beyond the
+   invitation link's sign-ups.
+3. *Fortnightly reminder*: every 14 days, only if the ambassador has open tasks and has not opted out: how many
+   tasks are open with the time estimate ("about 12 minutes"), the region's progress, and a link straight to the
+   next task. No reminder when nothing is open; reminders pause after three unanswered ones until the ambassador
+   returns.

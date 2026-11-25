@@ -78,3 +78,37 @@ Open questions for the owner:
 9. The Pacific Island countries group, Samoa, the National University of Samoa and all works and ambassador counts are sample data.
 
 Still not built: no real geocoder, no GeoNames data, no persistence, no real auth.
+
+## Round 3 (AMB-1 design, spec section 10, 2026-11-25)
+
+New and changed screens:
+- Institution entry (landing eligibility checker and "Your institution" on screen 9): text field with an ARIA combobox (name, acronym, alternate names, email domain; type and city shown). Sample catalogue of 40 institutions: 12 Norway, 12 Belgium, 15 California, 1 Samoa (National University of Samoa, kept so the Samoa proposal example works). No drop-downs remain for institutions.
+- Boundaries on every world map: Natural Earth disputed boundary lines (dashed) and Pacific groupings (dotted), loaded from jsDelivr v5.1.2 (`ne_50m_admin_0_boundary_lines_disputed_areas.geojson`, `ne_10m_admin_0_pacific_groupings.geojson`). Legend entries and a credit line state the default Natural Earth view on disputed areas. If either file fails, the map still works and the credit says so.
+- Map controls: d3-zoom (wheel or trackpad, drag, pinch, double-click). Keyboard + - arrows 0 when the map has focus. The external buttons are gone; an overlaid control group sits in the map frame's top-right corner. Zoom is bounded (1x to 150x; 150x is needed for the 300 km island minimum box). Strokes are non-scaling.
+- Screen 9 opens centred on the landing selection (hash parameter `propose?place=KEY`, else the landing selection, else Norway). Selected units use a mint fill with an ink outline drawn on top.
+- Ambassador badge ("Ambassador · Norway") on the landing "Show your Ambassador badge" block (top researchers and search-result mocks), the workspace header, and the linked author profile on screen 11. One switch hides it on screens 11 and 14.
+- Screen 11 Link your author record: name search, radio list of OpenAlex records with ORCID when known, linked when name and institution match exactly, otherwise pending moderator check.
+- Screen 12 Emails: welcome, fortnightly reminder (with the pause rule), and the "nothing else is sent automatically" statement.
+- Screen 13 Invite your co-authors: eligibility by region, mailto Draft invitation (empty recipient, subject and body), Copy invitation with the personal link. No co-author address is shown or stored.
+- Screen 14 Notification settings: reminders switch, fixed two-week frequency, badge switch, unsubscribe.
+
+Decisions taken in this round (defaults; owner can change):
+- Selected-unit fill changed from slate to mint. Ink on slate is about 2.5:1, which fails the 3:1 rule; ink on mint is 11.7:1, and ink against the sea wash is 13.3:1.
+- The eligibility combobox lists the institutions of the selected region only; the proposal's institution combobox lists all regions.
+- Pacific groupings use slate dotted lines (not light slate) so they meet 3:1 on the paper and sea colours.
+- Map wheel zoom captures page scroll while the pointer is over the map (touch-action none). Accepted for the prototype.
+- Co-author invitations are sent from the ambassador's own program only; the Atlas stores none of them.
+
+Open questions for the owner:
+1. Should the badge text be "Ambassador · Norway" (as drafted) or add the institution as well?
+2. Does a linked-but-pending author show on the public author page without the badge (drafted: yes, without badge)?
+3. Sender address for the emails: `ambassadors@plastiverse.live` is a placeholder; confirm it.
+4. Reminder time estimate: the reminder shows only the placeholder tasks (about 12 minutes) and lists stream A progress without a total; confirm whether stream A counts as a task.
+5. Is the map wheel capture acceptable on phones, or should page scroll win until the map is focused?
+6. Co-author eligibility uses the same allowlist as sign-in; confirm co-authors outside the list get the email route, not an error.
+7. Sample names (co-authors, authors, Ole Vik, Marte Lie) are invented; replace with real corpus data before the pilot.
+8. Natural Earth boundaries: confirm the default-view credit wording with the owner.
+
+## Lead review notes (round 3, 2026-11-25)
+
+- Screen 9 map shows a dashed box west of Bergen whose meaning is not labelled; identify it (city radius preview, grouping line or disputed line) or remove it.

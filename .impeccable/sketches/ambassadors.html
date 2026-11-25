@@ -345,6 +345,72 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   .prop-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; }
   .split-cols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
+/* Round 3: map controls, boundaries, badges, switches, emails, co-authors, settings */
+.geo-stage .map-ctl { position: absolute; top: 8px; right: 8px; z-index: 2; display: flex; flex-direction: column; gap: 4px; }
+.geo-stage .map-ctl .btn { min-width: 44px; min-height: 44px; padding: 6px 10px; font-size: 20px; line-height: 1; background: var(--pv-paper); }
+.geo-stage .map-ctl .btn:hover { background: var(--pv-wash); }
+.geo-stage .map-ctl .btn.reset { font-size: 14px; }
+.geo-stage path.bd-disp { fill: none; stroke: var(--pv-ink-2); stroke-width: 1.2px; stroke-dasharray: 5 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.geo-stage path.bd-pac { fill: none; stroke: var(--pv-slate); stroke-width: 1.4px; stroke-dasharray: 1.5 3; stroke-linecap: round; vector-effect: non-scaling-stroke; pointer-events: none; }
+.geo-stage path.sel-edge { fill: none; stroke: var(--pv-ink); stroke-width: 2.2px; stroke-linejoin: round; vector-effect: non-scaling-stroke; pointer-events: none; }
+.sw.st-pick { background: var(--pv-mint); }
+.sw.line-disp, .sw.line-pac { height: 0; width: 26px; border: 0; border-top: 2px dashed var(--pv-ink-2); align-self: center; background: none; }
+.sw.line-pac { border-top: 2px dotted var(--pv-slate); }
+.credit { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: 66ch; }
+.amb { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 10px 2px 8px; border: 1px solid var(--pv-ink); background: var(--pv-mint); color: var(--pv-ink); font-size: 14px; line-height: 1.3; max-width: 100%; }
+.amb::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--pv-gold); border: 1px solid var(--pv-ink); flex: none; }
+.nm { font-weight: 600; }
+.badge-block { margin-top: 28px; border-top: 1px solid var(--pv-line); padding-top: 18px; max-width: 760px; }
+.demo-grid { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); margin-top: 14px; }
+.demo { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 14px 16px; min-width: 0; }
+.demo-cap { font-size: 14px; color: var(--pv-ink-2); margin: 0 0 8px; }
+.demo-list { list-style: none; margin: 0; padding: 0; }
+.demo-list li { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--pv-line); font-size: 15px; }
+.demo-list li:last-child { border-bottom: 0; }
+.demo-list small { color: var(--pv-ink-2); font-size: 14px; }
+.demo-res { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 15px; }
+.demo-res small { color: var(--pv-ink-2); font-size: 14px; flex-basis: 100%; }
+.switch { position: relative; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 6px 0; cursor: pointer; max-width: 640px; font-size: 15px; }
+.switch input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.switch .track { position: relative; width: 44px; height: 24px; border: 2px solid var(--pv-ink-2); background: var(--pv-paper); border-radius: 999px; flex: none; }
+.switch .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--pv-ink-2); transition: left .2s var(--pv-ease); }
+.switch input:checked + .track { background: var(--pv-ink); border-color: var(--pv-ink); }
+.switch input:checked + .track::after { left: 22px; background: var(--pv-paper); }
+.switch input:focus-visible + .track { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+body[data-badge="hidden"] .amb-self { display: none; }
+.al-opts { border-top: 2px solid var(--pv-ink); margin-top: 10px; max-width: 640px; }
+.al-opts .choice { border-bottom: 1px solid var(--pv-line); padding: 10px 0; }
+.al-state { margin-top: 18px; border: 1px solid var(--pv-ink); background: var(--pv-paper); padding: 14px 16px; max-width: 640px; font-size: 15px; }
+.al-state[data-state="linked"] { background: var(--pv-mint); }
+.al-state[data-state="pending"], .al-state[data-state="no"] { background: var(--pv-cream); }
+.profile { border-top: 2px solid var(--pv-ink); padding-top: 12px; margin-top: 12px; max-width: 640px; }
+.profile .nm-row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.profile p { margin: 4px 0 0; color: var(--pv-ink-2); font-size: 15px; }
+.state-pair { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); max-width: 760px; margin-top: 12px; }
+.state-pair > div { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 12px 14px; font-size: 15px; }
+.state-pair h3 { font-size: 16px; }
+.mail { max-width: 680px; margin-top: 24px; background: var(--pv-paper); border: 1px solid var(--pv-ink-2); }
+.mail-h { padding: 12px 16px; background: var(--pv-wash); border-bottom: 1px solid var(--pv-line); }
+.mail-h dl { display: grid; gap: 6px; margin: 0; font-size: 14px; }
+.mail-h dl > div { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 8px; }
+.mail-h dt { color: var(--pv-ink-2); }
+.mail-h dd { margin: 0; overflow-wrap: anywhere; }
+.mail-b { padding: 18px 16px; font-size: 16px; line-height: 1.55; }
+.mail-b p { margin: 0 0 12px; }
+.mail-b a, .mail-f a { color: var(--pv-coral-ink); font-weight: 600; }
+.mail-b .cta { display: inline-block; background: #17263d; color: #ffffff; padding: 10px 16px; text-decoration: none; font-weight: 600; min-height: 44px; }
+.mail-f { padding: 12px 16px; border-top: 1px solid var(--pv-line); font-size: 13px; color: var(--pv-ink-2); }
+.mail-f p { margin: 0; }
+.mail-f a { display: inline-flex; align-items: center; min-height: 32px; }
+.mail.sys { border-style: dashed; }
+.co-list { list-style: none; margin: 16px 0 0; padding: 0; border-top: 2px solid var(--pv-ink); max-width: 820px; }
+.co-row { display: grid; gap: 8px 16px; grid-template-columns: minmax(0, 1fr); padding: 14px 0; border-bottom: 1px solid var(--pv-line); }
+.co-row p { margin: 2px 0 0; font-size: 15px; color: var(--pv-ink-2); }
+.co-row .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.co-row .btn { min-height: 44px; }
+@media (min-width: 700px) { .co-row { grid-template-columns: minmax(0, 1fr) auto; align-items: center; } }
+@media (min-width: 960px) { .demo-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.field-fixed { font-size: 15px; margin: 12px 0 0; }
 </style>
 </head>
 <body data-auth="out">
@@ -373,6 +439,12 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       </optgroup>
       <optgroup label="Map and proposals">
         <option value="propose">9 Propose a region</option>
+      </optgroup>
+      <optgroup label="Profile, emails and settings">
+        <option value="author-link">11 Link your author record</option>
+        <option value="emails">12 Emails we send</option>
+        <option value="coauthors">13 Invite your co-authors</option>
+        <option value="settings">14 Notification settings</option>
       </optgroup>
       <optgroup label="Owner and region leads">
         <option value="moderation">8 Moderation queue</option>
@@ -424,20 +496,18 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     <div class="geo-grid">
       <div>
         <div class="geo-tools">
-          <p class="hint" style="margin:0">Keys on the map: plus and minus zoom, arrows move, 0 resets.</p>
-          <div class="actions" style="margin-top:0">
-            <button class="btn" type="button" id="zoom-out-landing" aria-label="Zoom out of the world map">&minus;</button>
-            <button class="btn" type="button" id="zoom-in-landing" aria-label="Zoom in on the world map">+</button>
-            <button class="btn" type="button" id="zoom-reset-landing">Reset view</button>
-          </div>
+          <p class="hint" style="margin:0">Wheel or pinch to zoom, drag to pan, double-click to zoom in. With the map focused, plus and minus zoom, arrows pan, 0 resets.</p>
         </div>
         <div class="geo-stage" id="map-landing" tabindex="0" role="group" aria-label="World map of ambassador regions. Choose a shape or dot to open its panel."></div>
         <ul class="legend" aria-label="Map legend">
           <li><span class="sw st-active" aria-hidden="true"></span>Ambassadors active</li>
           <li><span class="sw st-proposed" aria-hidden="true"></span>Proposed, gathering members</li>
           <li><span class="sw st-open" aria-hidden="true"></span>Open</li>
+          <li><span class="sw line-disp" aria-hidden="true"></span>Disputed boundary, as drawn by Natural Earth</li>
+          <li><span class="sw line-pac" aria-hidden="true"></span>Pacific island grouping line (Natural Earth)</li>
         </ul>
-        <p class="geo-help">California is outlined on the US map. Small countries have a dot you can focus. Map: Natural Earth 1:50m countries (public domain).</p>
+        <p class="geo-help">California is outlined on the US map. Small countries have a dot you can focus.</p>
+        <p class="credit" id="credit-landing">Map: Natural Earth 1:50m countries (public domain). Boundaries: Natural Earth 5.1.2 disputed boundary lines, shown as Natural Earth's default view, and Pacific groupings (10m). Natural Earth is public domain.</p>
         <div class="actions"><button type="button" class="btn" id="table-toggle" aria-expanded="false" aria-controls="map-table-wrap">Show the regions as a table</button></div>
         <div class="tbl-wrap" id="map-table-wrap" hidden>
           <table>
@@ -460,6 +530,24 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       <li><div class="row-main"><h3>Confirm placeholders</h3><p>Some funders, monitoring programmes and policies on a region page are not yet checked. Confirm the name and link, correct them, or mark them not relevant.</p></div></li>
       <li><div class="row-main"><h3>Add local knowledge</h3><p>Tell us about community groups, volunteer clean-ups, local policies with their dates, and monitoring data with its licence.</p></div></li>
     </ul>
+    <div class="badge-block" aria-labelledby="h-badge">
+      <h3 id="h-badge">Show your Ambassador badge</h3>
+      <p class="hint">Once your author record is linked and confirmed, your name shows a badge with your region. You can hide it in settings, and it is removed when you leave the programme.</p>
+      <div class="demo-grid">
+        <div class="demo">
+          <p class="demo-cap">Region page: top researchers (sample)</p>
+          <ol class="demo-list">
+            <li><span class="nm">Ole Vik</span><span class="amb" role="img" aria-label="Ambassador for Norway">Ambassador · Norway</span><small>SINTEF Ocean · 22 works</small></li>
+            <li><span class="nm">Marte Lie</span><small>NILU · 9 works</small></li>
+          </ol>
+        </div>
+        <div class="demo">
+          <p class="demo-cap">Search result (sample)</p>
+          <div class="demo-res"><span class="nm">Ingrid Haugland</span><span class="amb" role="img" aria-label="Ambassador for Norway">Ambassador · Norway</span><small>NIVA · 18 works</small></div>
+        </div>
+      </div>
+      <p style="margin-top:14px"><a class="link" href="#author-link">Link your author record</a></p>
+    </div>
   </div>
 
   <div class="sec" aria-labelledby="h-check">
@@ -469,15 +557,12 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       <div class="check-form">
         <div class="field">
           <label for="elig-q">Work email or institution name</label>
-          <input type="text" id="elig-q" name="q" list="inst-list" autocomplete="off" placeholder="you@institution.no or NIVA" aria-describedby="elig-hint">
-          <datalist id="inst-list">
-            <option value="NIVA (niva.no)"></option>
-            <option value="NTNU (ntnu.no)"></option>
-            <option value="SINTEF Ocean (sintef.no)"></option>
-            <option value="VLIZ (vliz.be)"></option>
-            <option value="UC Santa Barbara (ucsb.edu)"></option>
-          </datalist>
-          <p class="hint" id="elig-hint">Free email services (Gmail, Outlook, Proton and similar) cannot be accepted.</p>
+          <div class="search">
+            <input type="text" id="elig-q" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="elig-list" aria-activedescendant="" autocomplete="off" placeholder="you@institution.no or NIVA" aria-describedby="elig-hint">
+            <ul id="elig-list" role="listbox" class="results" aria-label="Matching institutions" hidden></ul>
+          </div>
+          <p class="sr" id="elig-status" role="status" aria-live="polite"></p>
+          <p class="hint" id="elig-hint">Type a name, acronym or email domain, then use the arrow keys and Enter. Free email services (Gmail, Outlook, Proton and similar) cannot be accepted.</p>
         </div>
         <div class="field" style="margin-top:0">
           <label for="elig-region">Region</label>
@@ -615,6 +700,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   <div class="ws-head">
     <div>
       <h1 id="h-ws">Norway workspace</h1>
+      <p style="margin:12px 0 0"><span class="amb amb-self" role="img" aria-label="Ambassador for Norway">Ambassador · Norway</span></p>
       <p class="lede" style="margin-top:12px">Signed in for NIVA. Three streams, one region. Every answer is saved at once; anything that changes the Atlas waits for review.</p>
     </div>
     <p class="badge lead-only inline" style="flex:none">Region lead for Norway</p>
@@ -700,6 +786,14 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
           <li><span>2</span><span>Two ambassadors who agree count as consensus. A single answer is shown to the owner as a suggestion.</span></li>
           <li><span>3</span><span>Changes to the Atlas go in as a pull request. The owner reviews every pull request before it merges.</span></li>
         </ol>
+      </div>
+      <div class="sec" style="margin-top:28px">
+        <div class="sec-head"><h2 style="font-size:24px">Your profile and mail</h2></div>
+        <ul class="rows" style="margin-top:8px">
+          <li><a class="link" href="#author-link">Link your author record</a></li>
+          <li><a class="link" href="#coauthors">Invite your co-authors</a></li>
+          <li><a class="link" href="#settings">Notification settings</a> · <a class="link" href="#emails">The emails we send</a></li>
+        </ul>
       </div>
       <div class="lead-box lead-only" style="margin-top:28px">
         <h2 style="font-size:20px">Moderation for Norway</h2>
@@ -983,25 +1077,24 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
           <ul id="pr-list" role="listbox" class="results" aria-label="Matching places" hidden></ul>
         </div>
         <p class="hint" id="pr-q-hint">Choose a result to add it. Remove any unit with its Remove button.</p>
+        <p class="sr" id="pr-q-status" role="status" aria-live="polite"></p>
       </div>
       <div class="actions" style="margin-top:16px">
         <button class="btn" type="button" id="pr-group">Add the Pacific Island countries</button>
         <button class="btn" type="button" id="pr-clear">Clear all places</button>
       </div>
       <div class="geo-tools" style="margin-top:18px">
-        <p class="hint" style="margin:0">Click a country, state or county to add or remove it. Click a city dot to add a city.</p>
-        <div class="actions" style="margin-top:0">
-          <button class="btn" type="button" id="zoom-out-propose" aria-label="Zoom out of the pick map">&minus;</button>
-          <button class="btn" type="button" id="zoom-in-propose" aria-label="Zoom in on the pick map">+</button>
-          <button class="btn" type="button" id="zoom-reset-propose">Reset view</button>
-        </div>
+        <p class="hint" style="margin:0">Click a country, state or county to add or remove it. Click a city dot to add a city. Wheel or pinch to zoom, drag to pan. With the map focused, plus and minus zoom, arrows pan, 0 resets.</p>
       </div>
       <div class="geo-stage" id="map-propose" tabindex="0" role="group" aria-label="Map to pick the places in your region. Plus and minus zoom, arrows move."></div>
       <ul class="legend" aria-label="Pick map legend">
         <li><span class="sw st-pick" aria-hidden="true"></span>Picked for this region</li>
         <li><span class="sw st-active" aria-hidden="true"></span>Ambassadors active</li>
         <li><span class="sw st-proposed" aria-hidden="true"></span>Proposed</li>
+        <li><span class="sw line-disp" aria-hidden="true"></span>Disputed boundary, as drawn by Natural Earth</li>
+        <li><span class="sw line-pac" aria-hidden="true"></span>Pacific island grouping line (Natural Earth)</li>
       </ul>
+      <p class="credit" id="credit-propose">Map: Natural Earth 1:50m countries (public domain). Boundaries: Natural Earth 5.1.2 disputed boundary lines, shown as Natural Earth's default view, and Pacific groupings (10m). Natural Earth is public domain.</p>
     </div>
 
     <div>
@@ -1024,17 +1117,15 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
           <input type="text" id="pr-name" maxlength="60" placeholder="For example: Oslofjord">
         </div>
         <div class="field">
-          <label for="pr-inst">Your institution</label>
-          <select id="pr-inst" aria-describedby="pr-inst-h">
-            <option value="niva">NIVA, Oslo (Norway)</option>
-            <option value="ntnu">NTNU, Trondheim (Norway)</option>
-            <option value="vliz">VLIZ, Ostend (Belgium)</option>
-            <option value="ucsb">UC Santa Barbara (California)</option>
-            <option value="nus">National University of Samoa, Apia</option>
-          </select>
-          <p class="hint" id="pr-inst-h">Inside the region, it goes live at once. Outside it, the proposal waits for review.</p>
+          <label for="pr-inst-q">Your institution</label>
+          <div class="search">
+            <input type="text" id="pr-inst-q" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="pr-inst-list" aria-activedescendant="" autocomplete="off" value="NIVA, Oslo, Norway" aria-describedby="pr-inst-h">
+            <ul id="pr-inst-list" role="listbox" class="results" aria-label="Matching institutions" hidden></ul>
+          </div>
+          <p class="sr" id="pr-inst-status" role="status" aria-live="polite"></p>
+          <p class="hint" id="pr-inst-h">Type a name, acronym, alternate name or email domain, then choose from the list. Inside the region, it goes live at once. Outside it, the proposal waits for review.</p>
         </div>
-        <div class="rule">
+                <div class="rule">
           <p style="margin:0"><b>Stored rule (plain)</b></p>
           <span class="mono" id="pr-pred">countries: none yet</span>
           <p class="hint" id="pr-plain" style="margin-top:6px"></p>
@@ -1138,6 +1229,133 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   <p class="flow-note">Split threshold, Tier B: owner decision 2026-11-25. Whether a split region is shown on the public map is an open question (see the surface brief).</p>
 </section>
 
+<!-- 11. LINK YOUR AUTHOR RECORD -->
+<section class="screen wrap" data-route="author-link" aria-labelledby="h-al">
+  <div class="stack" style="max-width:760px">
+    <h1 id="h-al">Link your author record</h1>
+    <p class="lede">Find your name among the Norway authors, then pick the matching OpenAlex author record. Your Ambassador badge shows once the link is confirmed.</p>
+    <form id="al-form" novalidate style="margin-top:28px">
+      <div class="field" style="margin-top:0">
+        <label for="al-name">Your name as published</label>
+        <input type="text" id="al-name" value="Ingrid Haugland" autocomplete="name" aria-describedby="al-name-h">
+        <p class="hint" id="al-name-h">Use the name on your papers. We compare it with the author record; it is not shown on your badge.</p>
+      </div>
+      <div class="actions" style="margin-top:14px"><button class="btn" type="button" id="al-find">Find my name among Norway authors</button></div>
+      <p class="hint" id="al-find-status" role="status" style="margin-top:10px"></p>
+      <fieldset style="margin-top:20px">
+        <legend>Which author record is yours?</legend>
+        <p class="hint">Sample records from the Norway corpus. OpenAlex ids are sample ids. ORCID appears when one is known.</p>
+        <div id="al-options" class="al-opts"></div>
+      </fieldset>
+      <div class="actions"><button class="btn solid" type="submit">Link this author record</button></div>
+    </form>
+    <div id="al-status" class="al-state" role="status" tabindex="-1" hidden></div>
+    <div style="margin-top:28px">
+      <label class="switch"><input type="checkbox" role="switch" id="al-hide-switch"><span class="track" aria-hidden="true"></span><span>Hide my Ambassador badge</span></label>
+      <p class="hint" id="al-badge-state" role="status" style="margin:4px 0 0"></p>
+    </div>
+    <h2 style="font-size:24px;margin-top:40px">Two states</h2>
+    <p class="note">A match on both name and institution is linked at once. Anything else waits for a moderator.</p>
+    <div class="state-pair">
+      <div><h3>Pending moderator check</h3><p class="hint">The name or institution differs from the record, so a moderator checks it. No badge is shown until then.</p><p><span class="badge dash">Pending moderator check</span></p></div>
+      <div><h3>Linked</h3><p class="hint">The name and institution match exactly. The badge shows next to your name wherever the Atlas lists you.</p><p><span class="badge mint">Linked</span></p></div>
+    </div>
+    <div class="profile" aria-label="Author profile, linked state (mock)">
+      <p class="hint" style="margin:0">Author profile header (mock, linked)</p>
+      <div class="nm-row"><h3 style="margin:0">Ingrid Haugland</h3><span class="amb amb-self" role="img" aria-label="Ambassador for Norway">Ambassador · Norway</span></div>
+      <p>NIVA · 18 works (sample) · OpenAlex A-sample-101 · ORCID 0000-0000-0000-0101 (sample)</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12. EMAILS -->
+<section class="screen wrap" data-route="emails" aria-labelledby="h-em">
+  <div class="stack" style="max-width:760px">
+    <h1 id="h-em">Emails we send</h1>
+    <p class="lede">Three kinds of message. Every email links to notification settings and offers one-click unsubscribe, except sign-in links, which are the only mail that cannot be switched off.</p>
+
+    <article class="mail" aria-labelledby="em1-s">
+      <header class="mail-h"><dl>
+        <div><dt>From</dt><dd>Plastiverse Live &lt;ambassadors@plastiverse.live&gt; <span class="hint">(address to confirm)</span></dd></div>
+        <div><dt>To</dt><dd>The ambassador's institution email</dd></div>
+        <div><dt>Subject</dt><dd id="em1-s">Thank you for joining as an ambassador for Norway</dd></div>
+        <div><dt>When</dt><dd>Once, when an ambassador first joins</dd></div>
+      </dl></header>
+      <div class="mail-b">
+        <p>Hello Ingrid,</p>
+        <p>Thank you for joining Plastiverse Live as an ambassador for Norway. Your local knowledge makes the Atlas more accurate for the places you know.</p>
+        <p>What happens next: your workspace has three streams. Start with a few doubtful-match cases; each takes about 30 seconds.</p>
+        <p><a class="cta" href="#workspace">Open your workspace</a></p>
+        <p>Know colleagues who work on plastics in the region? Invite them with a ready invitation from your workspace.</p>
+        <p>Thank you,<br>The Plastiverse Live team</p>
+      </div>
+      <footer class="mail-f"><p>You get this because you joined as an ambassador. <a href="#settings">Notification settings</a> <span aria-hidden="true">·</span> <a href="#settings">Unsubscribe from non-essential mail</a></p></footer>
+    </article>
+
+    <article class="mail" aria-labelledby="em2-s">
+      <header class="mail-h"><dl>
+        <div><dt>From</dt><dd>Plastiverse Live &lt;ambassadors@plastiverse.live&gt;</dd></div>
+        <div><dt>To</dt><dd>The ambassador's institution email</dd></div>
+        <div><dt>Subject</dt><dd id="em2-s">1 open task for Norway, about 12 minutes</dd></div>
+        <div><dt>When</dt><dd>Every two weeks, only while tasks are open</dd></div>
+      </dl></header>
+      <div class="mail-b">
+        <p>Hello Ingrid,</p>
+        <p>You have 1 open task for Norway: confirm 6 placeholders on the Norway page. It takes about 12 minutes in total, about 2 minutes each.</p>
+        <p>Region progress: 14 of 60 doubtful-match cases checked and 3 of 9 placeholders confirmed. Doubtful-match cases are optional, and you can pick them up any time.</p>
+        <p><a class="cta" href="#confirm">Confirm the next placeholder (about 2 minutes)</a></p>
+        <p>Reminders come every two weeks, and only while you have open tasks. They pause after three unanswered reminders until you come back.</p>
+        <p>Thank you,<br>The Plastiverse Live team</p>
+      </div>
+      <footer class="mail-f"><p>You get this because reminders are on. <a href="#settings">Notification settings</a> <span aria-hidden="true">·</span> <a href="#settings">Unsubscribe from reminders</a></p></footer>
+    </article>
+
+    <section class="mail sys" aria-labelledby="em3-h">
+      <div class="mail-b">
+        <h2 id="em3-h" style="font-size:20px;margin:0 0 10px">Nothing else is sent automatically</h2>
+        <p>We send no other email on our own. Your sign-in link is the only other mail, and it cannot be switched off. An invitation to a co-author leaves only when you choose Draft invitation, and it goes from your own email program, not from us.</p>
+        <p>The Atlas never shows or stores your co-authors' email addresses.</p>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- 13. INVITE YOUR CO-AUTHORS -->
+<section class="screen wrap" data-route="coauthors" aria-labelledby="h-co">
+  <div class="rv-bar">
+    <nav aria-label="Invite co-authors" class="keys" style="font-size:15px"><a class="link" href="#workspace" style="min-height:44px">Norway workspace</a> / Co-authors</nav>
+  </div>
+  <h1 id="h-co" style="font-size:clamp(30px,3.6vw,44px);margin-top:28px;max-width:none">Invite your co-authors</h1>
+  <p class="lede">These people co-wrote works in the corpus with you. Each shows whether their institution is eligible and in which region. Draft invitation opens a ready email in your own email program. Copy invitation copies the text and your personal link.</p>
+  <p class="hint">Sample data. Names and institutions are illustrative.</p>
+  <ul class="co-list" id="co-list" aria-label="Your co-authors"></ul>
+  <p class="hint" id="co-status" role="status" aria-live="polite" style="margin-top:12px"></p>
+  <p class="flow-note">We never show or store your co-authors' email addresses. You add the address yourself in your email program.</p>
+</section>
+
+<!-- 14. NOTIFICATION SETTINGS -->
+<section class="screen wrap" data-route="settings" aria-labelledby="h-set">
+  <div class="stack" style="max-width:720px">
+    <h1 id="h-set">Notification settings</h1>
+    <p class="lede">Choose what we email you about. Sign-in links are always sent and cannot be switched off.</p>
+    <form id="set-form" novalidate style="margin-top:28px">
+      <fieldset>
+        <legend>Reminders</legend>
+        <label class="switch"><input type="checkbox" role="switch" id="set-remind" checked><span class="track" aria-hidden="true"></span><span>Send me a reminder when I have open tasks</span></label>
+        <p class="hint">Sent only while tasks are open. Reminders pause after three unanswered reminders until you come back.</p>
+        <p class="field-fixed"><b>How often:</b> every two weeks. This is fixed.</p>
+      </fieldset>
+      <fieldset style="margin-top:28px">
+        <legend>Ambassador badge</legend>
+        <label class="switch"><input type="checkbox" role="switch" id="set-badge"><span class="track" aria-hidden="true"></span><span>Hide my Ambassador badge</span></label>
+        <p class="hint">Hiding it removes the badge from your name on region pages, author profiles, lists and search results. It is removed for good when you leave the programme.</p>
+      </fieldset>
+      <div class="actions"><button class="btn solid" type="submit">Save settings</button><button class="btn" type="button" id="set-unsub">Unsubscribe from reminders</button></div>
+    </form>
+    <p class="hint" id="set-status" role="status" style="margin-top:16px"></p>
+  </div>
+</section>
+
 </main>
 
 <footer class="foot">
@@ -1150,8 +1368,8 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 <script>
 (function () {
   "use strict";
-  var ROUTES = ["landing","signin","signin-sent","signin-expired","welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity"];
-  var SIGNED_IN = ["welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity"];
+  var ROUTES = ["landing","signin","signin-sent","signin-expired","welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity","author-link","emails","coauthors","settings"];
+  var SIGNED_IN = ["welcome","workspace","review","review-language","confirm","add","add-policy","moderation","propose","granularity","author-link","emails","coauthors","settings"];
   var body = document.body;
   var jump = document.getElementById("jump");
   var main = document.getElementById("main");
@@ -1159,8 +1377,8 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 
   // ---- Routing (hash) and the owner switcher ----
   function current() {
-    var h = (location.hash || "#landing").slice(1);
-    return ROUTES.indexOf(h) >= 0 ? h : "landing";
+    var r = hashParts().route;
+    return ROUTES.indexOf(r) >= 0 ? r : "landing";
   }
   function show() {
     var r = current();
@@ -1190,57 +1408,186 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   }
   document.getElementById("prev").addEventListener("click", function () { step(-1); });
   document.getElementById("next").addEventListener("click", function () { step(1); });
-  document.getElementById("screen-count").textContent = "1 to 10, with sub-states";
+  document.getElementById("screen-count").textContent = "1 to 14, with sub-states";
   lead.addEventListener("change", function () { body.classList.toggle("lead", lead.checked); });
 
-  // ---- Eligibility checker (sample data) ----
-  var INST = {
-    norway: [
-      { name: "NIVA", domain: "niva.no", kind: "Research institute" },
-      { name: "NTNU", domain: "ntnu.no", kind: "University" },
-      { name: "SINTEF Ocean", domain: "sintef.no", kind: "Research institute" }
-    ],
-    belgium: [
-      { name: "VLIZ", domain: "vliz.be", kind: "Research institute" }
-    ],
-    california: [
-      { name: "UC Santa Barbara", domain: "ucsb.edu", kind: "University" }
-    ]
-  };
+  // ---- Institutions: sample catalogue (Norway, Belgium, California; one Samoa sample for the proposal screen) ----
+  var REGION_NAME = { norway: "Norway", belgium: "Belgium", california: "California", samoa: "Samoa" };
+  var CID = { norway: "578", belgium: "056", california: "840", samoa: "882" };
+  function normText(s) { return String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim(); }
+  function I(id, name, alt, domains, type, city, region, lon, lat, sub) {
+    return { id: id, name: name, alt: alt, domains: domains, type: type, city: city, region: region, cid: CID[region], sub: sub || (region === "california" ? "s:california" : null), lon: lon, lat: lat };
+  }
+  var INST_CAT = [
+    I("niva", "NIVA", ["Norwegian Institute for Water Research", "Norsk institutt for vannforskning"], ["niva.no"], "Research institute", "Oslo", "norway", 10.72, 59.94),
+    I("ntnu", "NTNU", ["Norwegian University of Science and Technology", "Norges teknisk-naturvitenskapelige universitet"], ["ntnu.no"], "University", "Trondheim", "norway", 10.4, 63.42),
+    I("sintef", "SINTEF Ocean", ["SINTEF Ocean AS", "SINTEF"], ["sintef.no"], "Research institute", "Trondheim", "norway", 10.41, 63.43),
+    I("nilu", "NILU", ["Norwegian Institute for Air Research", "Norsk institutt for luftforskning"], ["nilu.no", "nilu.com"], "Research institute", "Kjeller", "norway", 11.04, 59.97),
+    I("uio", "University of Oslo", ["UiO", "Universitetet i Oslo"], ["uio.no"], "University", "Oslo", "norway", 10.71, 59.94),
+    I("uib", "University of Bergen", ["UiB", "Universitetet i Bergen"], ["uib.no"], "University", "Bergen", "norway", 5.33, 60.38),
+    I("imr", "Institute of Marine Research", ["IMR", "Havforskningsinstituttet"], ["hi.no"], "Research institute", "Bergen", "norway", 5.32, 60.39),
+    I("norce", "NORCE", ["NORCE Norwegian Research Centre", "Norwegian Research Centre"], ["norceresearch.no"], "Research institute", "Bergen", "norway", 5.33, 60.37),
+    I("uit", "UiT The Arctic University of Norway", ["UiT", "University of Tromsø", "Arctic University of Norway"], ["uit.no"], "University", "Tromsø", "norway", 18.96, 69.68),
+    I("uis", "University of Stavanger", ["UiS"], ["uis.no"], "University", "Stavanger", "norway", 5.73, 58.97),
+    I("nmbu", "Norwegian University of Life Sciences", ["NMBU", "Norges miljø- og biovitenskapelige universitet"], ["nmbu.no"], "University", "Ås", "norway", 10.77, 59.66),
+    I("miljo", "Norwegian Environment Agency", ["Miljødirektoratet", "Miljodirektoratet"], ["miljodirektoratet.no"], "Government agency", "Trondheim", "norway", 10.4, 63.43),
+    I("akvaplan", "Akvaplan-niva", ["Akvaplan"], ["akvaplan.niva.no"], "Research company", "Tromsø", "norway", 18.95, 69.66),
+    I("ugent", "Ghent University", ["UGent", "Universiteit Gent"], ["ugent.be"], "University", "Ghent", "belgium", 3.72, 51.05, "s:flanders"),
+    I("kuleuven", "KU Leuven", ["Katholieke Universiteit Leuven", "University of Leuven"], ["kuleuven.be"], "University", "Leuven", "belgium", 4.70, 50.88, "s:flanders"),
+    I("vliz", "VLIZ", ["Flanders Marine Institute", "Vlaams Instituut voor de Zee"], ["vliz.be"], "Research institute", "Ostend", "belgium", 2.92, 51.23, "s:flanders"),
+    I("vub", "Vrije Universiteit Brussel", ["VUB", "VU Brussels"], ["vub.be", "vub.ac.be"], "University", "Brussels", "belgium", 4.38, 50.82),
+    I("ulb", "Université libre de Bruxelles", ["ULB", "Free University of Brussels"], ["ulb.be"], "University", "Brussels", "belgium", 4.38, 50.81),
+    I("uantwerp", "University of Antwerp", ["UAntwerpen", "Universiteit Antwerpen"], ["uantwerpen.be"], "University", "Antwerp", "belgium", 4.41, 51.17, "s:flanders"),
+    I("uliege", "University of Liège", ["ULiège", "Université de Liège"], ["uliege.be"], "University", "Liège", "belgium", 5.57, 50.58),
+    I("uclouvain", "UCLouvain", ["Université catholique de Louvain", "UC Louvain"], ["uclouvain.be"], "University", "Louvain-la-Neuve", "belgium", 4.68, 50.67),
+    I("rbins", "Royal Belgian Institute of Natural Sciences", ["RBINS", "KBIN", "Koninklijk Belgisch Instituut voor Natuurwetenschappen"], ["naturalsciences.be"], "Research institute", "Brussels", "belgium", 4.37, 50.84),
+    I("vito", "VITO", ["Flemish Institute for Technological Research"], ["vito.be"], "Research institute", "Mol", "belgium", 5.11, 51.19, "s:flanders"),
+    I("uhasselt", "Hasselt University", ["UHasselt", "Universiteit Hasselt"], ["uhasselt.be"], "University", "Hasselt", "belgium", 5.35, 50.93, "s:flanders"),
+    I("ilvo", "ILVO", ["Flanders Research Institute for Agriculture, Fisheries and Food"], ["ilvo.vlaanderen.be"], "Research institute", "Melle", "belgium", 3.80, 51.03, "s:flanders"),
+    I("ucdavis", "UC Davis", ["University of California, Davis", "UCD"], ["ucdavis.edu"], "University", "Davis", "california", -121.75, 38.54),
+    I("stanford", "Stanford University", ["Stanford", "Leland Stanford Junior University"], ["stanford.edu"], "University", "Stanford", "california", -122.17, 37.43),
+    I("ucsb", "UC Santa Barbara", ["UCSB", "University of California, Santa Barbara"], ["ucsb.edu"], "University", "Santa Barbara", "california", -119.85, 34.41),
+    I("ucb", "UC Berkeley", ["UCB", "University of California, Berkeley", "Berkeley"], ["berkeley.edu"], "University", "Berkeley", "california", -122.26, 37.87),
+    I("ucla", "UCLA", ["University of California, Los Angeles"], ["ucla.edu"], "University", "Los Angeles", "california", -118.45, 34.07),
+    I("ucsd", "UC San Diego", ["UCSD", "University of California, San Diego"], ["ucsd.edu"], "University", "La Jolla", "california", -117.24, 32.88),
+    I("scripps", "Scripps Institution of Oceanography", ["SIO", "Scripps"], ["scripps.ucsd.edu"], "Research institute", "La Jolla", "california", -117.25, 32.87),
+    I("ucsc", "UC Santa Cruz", ["UCSC", "University of California, Santa Cruz"], ["ucsc.edu"], "University", "Santa Cruz", "california", -122.06, 36.99),
+    I("ucr", "UC Riverside", ["UCR", "University of California, Riverside"], ["ucr.edu"], "University", "Riverside", "california", -117.34, 33.97),
+    I("caltech", "California Institute of Technology", ["Caltech"], ["caltech.edu"], "University", "Pasadena", "california", -118.13, 34.14),
+    I("usc", "University of Southern California", ["USC"], ["usc.edu"], "University", "Los Angeles", "california", -118.28, 34.02),
+    I("sjsu", "San José State University", ["SJSU", "San Jose State"], ["sjsu.edu"], "University", "San José", "california", -121.88, 37.34),
+    I("csulb", "California State University, Long Beach", ["Cal State Long Beach", "CSULB"], ["csulb.edu"], "University", "Long Beach", "california", -118.11, 33.78),
+    I("mlml", "Moss Landing Marine Laboratories", ["MLML"], ["mlml.calstate.edu"], "Research institute", "Moss Landing", "california", -121.79, 36.80),
+    I("mbari", "Monterey Bay Aquarium Research Institute", ["MBARI"], ["mbari.org"], "Research institute", "Moss Landing", "california", -121.79, 36.81),
+    I("calacademy", "California Academy of Sciences", ["Cal Academy"], ["calacademy.org"], "Museum and research", "San Francisco", "california", -122.47, 37.77),
+    I("nus", "National University of Samoa", ["NUS"], ["nus.edu.ws"], "University", "Apia", "samoa", -171.75, -13.83)
+  ];
+  // Matches name, acronym, alternate names and email domain. An email is matched on its domain.
+  function instMatches(q, region) {
+    var list = INST_CAT.filter(function (u) { return !region || u.region === region; });
+    var raw = normText(q);
+    if (!raw) return list.slice();
+    var n = raw.indexOf("@") >= 0 ? raw.split("@").pop() : raw;
+    var words = n.split(/\s+/).filter(Boolean);
+    var out = [];
+    list.forEach(function (u) {
+      var names = [u.name].concat(u.alt).map(normText);
+      var doms = u.domains.map(function (d) { return d.toLowerCase(); });
+      var all = names.join(" ");
+      var s = -1;
+      if (names.indexOf(n) >= 0 || doms.indexOf(n) >= 0) s = 0;
+      else if (names.some(function (x) { return x.indexOf(n) === 0; }) || doms.some(function (d) { return d.indexOf(n) === 0; })) s = 1;
+      else if (names.some(function (x) { return x.indexOf(n) >= 0; }) || doms.some(function (d) { return d.indexOf(n) >= 0; })) s = 2;
+      else if (words.length > 1 && words.every(function (w) { return all.indexOf(w) >= 0; })) s = 3;
+      if (s >= 0) out.push({ u: u, s: s });
+    });
+    out.sort(function (a, b) { return a.s - b.s || a.u.name.localeCompare(b.u.name); });
+    return out.slice(0, 12).map(function (x) { return x.u; });
+  }
+  function instRow(u) {
+    return { main: u.name, meta: u.type + " · " + u.city + " · " + REGION_NAME[u.region] + " · " + u.domains[0] };
+  }
+  // ARIA combobox: text field, listbox, arrow keys, Enter, Escape. o.all lists every item when the field is empty.
+  function combo(o) {
+    var input = o.input, list = o.list, status = o.status, uid = input.id;
+    var items = [], active = -1;
+    function setOpen(on) {
+      list.hidden = !on;
+      input.setAttribute("aria-expanded", on ? "true" : "false");
+      if (!on) { active = -1; input.setAttribute("aria-activedescendant", ""); }
+    }
+    function mark(i) {
+      active = i;
+      var opts = list.querySelectorAll('[role="option"]');
+      Array.prototype.forEach.call(opts, function (li, j) { li.setAttribute("aria-selected", String(j === i)); });
+      input.setAttribute("aria-activedescendant", i >= 0 && opts[i] ? uid + "-opt-" + i : "");
+      if (i >= 0 && opts[i] && opts[i].scrollIntoView) opts[i].scrollIntoView({ block: "nearest" });
+    }
+    function choose(i) {
+      var u = items[i]; if (!u) return;
+      input.value = o.label(u);
+      setOpen(false);
+      if (o.onChoose) o.onChoose(u);
+    }
+    function render() {
+      var q = input.value.trim();
+      if (o.onType) o.onType(q);
+      items = (q || o.all) ? o.items(q) : [];
+      list.innerHTML = "";
+      if (!q && !o.all) { setOpen(false); if (status) status.textContent = ""; return; }
+      if (!items.length) { setOpen(false); if (status) status.textContent = o.noneText; return; }
+      items.forEach(function (u, i) {
+        var r = o.render(u), li = document.createElement("li");
+        li.id = uid + "-opt-" + i; li.setAttribute("role", "option"); li.setAttribute("aria-selected", "false");
+        var a = document.createElement("span"); a.textContent = r.main;
+        var b = document.createElement("small"); b.textContent = r.meta;
+        li.appendChild(a); li.appendChild(b);
+        li.addEventListener("mousedown", function (e) { e.preventDefault(); choose(i); });
+        list.appendChild(li);
+      });
+      if (status) status.textContent = items.length + (items.length === 1 ? " match." : " matches.") + " Use the arrow keys and Enter to choose.";
+      setOpen(true); mark(-1);
+    }
+    input.addEventListener("input", render);
+    input.addEventListener("keydown", function (e) {
+      if (list.hidden) {
+        if (e.key === "ArrowDown" && (input.value.trim() || o.all)) { e.preventDefault(); render(); if (!list.hidden && items.length) mark(0); }
+        return;
+      }
+      var n = items.length;
+      if (e.key === "ArrowDown") { e.preventDefault(); mark(n ? (active + 1) % n : -1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); mark(n ? (active <= 0 ? n - 1 : active - 1) : -1); }
+      else if (e.key === "Enter") { if (active >= 0) { e.preventDefault(); choose(active); } }
+      else if (e.key === "Escape") { e.preventDefault(); setOpen(false); }
+    });
+    input.addEventListener("blur", function () { setTimeout(function () { setOpen(false); }, 150); });
+    return { render: render, close: function () { setOpen(false); }, choose: choose };
+  }
+  window.AMB = { INST_CAT: INST_CAT, instMatches: instMatches, instRow: instRow, combo: combo, normText: normText, REGION_NAME: REGION_NAME };
+
+  // ---- Eligibility checker: institution type-ahead over the selected region ----
   var FREE = ["gmail.com","outlook.com","hotmail.com","proton.me","protonmail.com","yahoo.com","icloud.com"];
   var eForm = document.getElementById("elig-form");
   var eRes = document.getElementById("elig-result");
+  var eInput = document.getElementById("elig-q");
+  var eRegion = document.getElementById("elig-region");
+  var eChosen = null;
   function setResult(state, html) {
     eRes.hidden = false;
     eRes.setAttribute("data-state", state);
     eRes.innerHTML = html;
   }
-  eForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var q = document.getElementById("elig-q").value.trim().toLowerCase();
-    var region = document.getElementById("elig-region").value;
-    var list = INST[region] || [];
-    var hit = null;
-    if (!q) { setResult("no", "<b>Type an email or an institution name first.</b>"); return; }
-    if (q.indexOf("@") >= 0) {
-      var dom = q.split("@").pop();
-      if (FREE.indexOf(dom) >= 0) {
-        setResult("no", "<b>Not eligible: free email services are not accepted.</b>Use your institution email, or use the email route below.<div class=\"route\">" + emailRoute() + "</div>");
-        return;
-      }
-      hit = list.filter(function (i) { return dom === i.domain || dom.slice(-(i.domain.length + 1)) === "." + i.domain; })[0];
-    } else {
-      hit = list.filter(function (i) { return i.name.toLowerCase().indexOf(q) >= 0; })[0];
-    }
-    if (hit) {
-      setResult("yes", "<b>Eligible: " + hit.name + " (" + hit.domain + ")</b>" + hit.kind + " tagged for plastics research in " + region.charAt(0).toUpperCase() + region.slice(1) + ". <a class=\"link\" href=\"#signin\">Sign in with your " + hit.name + " email</a>");
-    } else {
-      setResult("no", "<b>Not eligible yet: use the email route.</b>We do not list this institution for " + region.charAt(0).toUpperCase() + region.slice(1) + " yet. A person will check it by hand.<div class=\"route\">" + emailRoute() + "</div>");
-    }
-  });
   function emailRoute() {
     return "Write to <span class=\"big-mail\">theplastiverse@gmail.com</span> with your institution and region. <a class=\"link\" href=\"mailto:theplastiverse@gmail.com?subject=Plastiverse%20Live%20ambassador\">Open an email</a>";
   }
+  var eCombo = combo({
+    input: eInput, list: document.getElementById("elig-list"), status: document.getElementById("elig-status"), all: true,
+    items: function (q) { return instMatches(q, eRegion.value); },
+    label: function (u) { return u.name; },
+    render: instRow,
+    noneText: "No institution in this region matches. Type your email, or use the email route below.",
+    onType: function () { eChosen = null; },
+    onChoose: function (u) { eChosen = u; }
+  });
+  eRegion.addEventListener("change", function () { eChosen = null; if (document.activeElement === eInput) eCombo.render(); });
+  eForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    eCombo.close();
+    var raw = eInput.value.trim(), q = normText(raw);
+    var region = eRegion.value, rname = REGION_NAME[region];
+    var list = INST_CAT.filter(function (u) { return u.region === region; });
+    if (!q) { setResult("no", "<b>Type an email or an institution name first.</b>"); return; }
+    var hit = eChosen && eChosen.region === region ? eChosen : null;
+    if (!hit && raw.indexOf("@") >= 0) {
+      var dom = q.split("@").pop();
+      if (FREE.indexOf(dom) >= 0) { setResult("no", "<b>Not eligible: free email services are not accepted.</b>Use your institution email, or use the email route below.<div class=\"route\">" + emailRoute() + "</div>"); return; }
+      hit = list.filter(function (u) { return u.domains.some(function (d) { return dom === d || dom.slice(-(d.length + 1)) === "." + d; }); })[0] || null;
+    } else if (!hit) {
+      hit = list.filter(function (u) { return [u.name].concat(u.alt).some(function (x) { return normText(x) === q; }); })[0] || null;
+    }
+    if (hit) setResult("yes", "<b>Eligible: " + hit.name + " (" + hit.domains[0] + ")</b>" + hit.type + " in " + hit.city + ", tagged for plastics research in " + rname + ". <a class=\"link\" href=\"#signin\">Sign in with your " + hit.name + " email</a>");
+    else setResult("no", "<b>Not eligible yet: use the email route.</b>We do not list this institution for " + rname + " yet. A person will check it by hand.<div class=\"route\">" + emailRoute() + "</div>");
+  });
 
   // ---- Sign in validation ----
   function fail(boxId, listId, items, fieldId) {
@@ -1469,6 +1816,148 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   document.getElementById("m-changes").addEventListener("click", function () { decide("Changes requested. The ambassador gets your note and can resubmit.", true); });
   document.getElementById("m-reject").addEventListener("click", function () { decide("Rejected. The ambassador gets your note.", true); });
 
+  // ---- Ambassador badge: one switch, shared by the workspace header, screen 11 and screen 14 ----
+  var badgeSwitches = [document.getElementById("al-hide-switch"), document.getElementById("set-badge")];
+  function setBadgeHidden(on) {
+    body.setAttribute("data-badge", on ? "hidden" : "shown");
+    badgeSwitches.forEach(function (s) { s.checked = on; });
+    document.getElementById("al-badge-state").textContent = on ? "Your badge is hidden. Other people do not see it next to your name." : "Your badge is shown next to your name.";
+  }
+  badgeSwitches.forEach(function (s) { s.addEventListener("change", function () { setBadgeHidden(s.checked); }); });
+
+  // ---- Screen 11: link the author record (sample corpus; the signed-in ambassador is USER) ----
+  var USER = { name: "Ingrid Haugland", inst: "niva" };
+  var AUTHORS = [
+    { id: "A-sample-101", name: "Ingrid Haugland", inst: "niva", instName: "NIVA", works: 18, orcid: "0000-0000-0000-0101" },
+    { id: "A-sample-102", name: "Ingrid Haugland", inst: "ntnu", instName: "NTNU", works: 4, orcid: null },
+    { id: "A-sample-103", name: "I. Haugland", inst: "niva", instName: "NIVA", works: 7, orcid: null },
+    { id: "A-sample-104", name: "Ole Vik", inst: "sintef", instName: "SINTEF Ocean", works: 22, orcid: "0000-0000-0000-0104" },
+    { id: "A-sample-105", name: "Marte Lie", inst: "nilu", instName: "NILU", works: 9, orcid: null }
+  ];
+  var alOpts = document.getElementById("al-options"), alStatus = document.getElementById("al-status"), alFind = document.getElementById("al-find-status");
+  function renderAuthors(name) {
+    var last = normText(name).split(/\s+/).filter(Boolean).pop() || "";
+    var found = AUTHORS.filter(function (a) { return !last || normText(a.name).indexOf(last) >= 0; });
+    alOpts.innerHTML = "";
+    if (!found.length) { alFind.textContent = "No author records match that name in Norway. Check the spelling."; return; }
+    alFind.textContent = found.length + (found.length === 1 ? " record" : " records") + " found. Pick the one that is yours.";
+    found.forEach(function (a, i) {
+      var lab = document.createElement("label"); lab.className = "choice";
+      var inp = document.createElement("input"); inp.type = "radio"; inp.name = "al-pick"; inp.value = a.id; inp.id = "al-pick-" + i;
+      var sp = document.createElement("span"); sp.textContent = a.name;
+      var sm = document.createElement("small");
+      sm.textContent = a.instName + " · " + a.works + " works (sample) · OpenAlex " + a.id + " · " + (a.orcid ? "ORCID " + a.orcid + " (sample)" : "ORCID not known");
+      sp.appendChild(sm); lab.appendChild(inp); lab.appendChild(sp); alOpts.appendChild(lab);
+    });
+  }
+  document.getElementById("al-find").addEventListener("click", function () { renderAuthors(document.getElementById("al-name").value); });
+  document.getElementById("al-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var picked = document.querySelector('#al-form input[name="al-pick"]:checked');
+    var name = document.getElementById("al-name").value.trim();
+    alStatus.hidden = false;
+    if (!picked) {
+      alStatus.setAttribute("data-state", "no");
+      alStatus.textContent = "Pick the author record that is yours first.";
+      alStatus.focus(); return;
+    }
+    var a = AUTHORS.filter(function (x) { return x.id === picked.value; })[0];
+    var exact = normText(a.name) === normText(name) && a.inst === USER.inst;
+    alStatus.setAttribute("data-state", exact ? "linked" : "pending");
+    alStatus.innerHTML = exact
+      ? "<b>Linked.</b> " + esc(a.name) + " (" + esc(a.id) + ") is your author record. The name and institution match exactly, so no moderator check is needed. Your Ambassador badge shows next to your name unless you hide it."
+      : "<b>Pending moderator check.</b> The name or institution differs from the record, so a moderator confirms the link first. No badge shows until then.";
+    alStatus.focus();
+  });
+  renderAuthors(USER.name);
+
+  // ---- Screen 13: co-authors, one-click draft in the ambassador's own mail program, copy text ----
+  var CO = [
+    { first: "Mette", name: "Mette Solheim", inst: "nilu" },
+    { first: "Jonas", name: "Jonas Ravn", inst: "uio" },
+    { first: "Lotte", name: "Lotte Peeters", inst: "kuleuven" },
+    { first: "Daan", name: "Daan Verhoeven", inst: null, instName: "Uppsala University", instCountry: "Sweden" },
+    { first: "Priya", name: "Priya Natarajan", inst: "ucdavis" },
+    { first: "Samuel", name: "Samuel Ortiz", inst: null, instName: "University of Copenhagen", instCountry: "Denmark" }
+  ];
+  var COPY = [];
+  function coRender() {
+    var ul = document.getElementById("co-list");
+    ul.innerHTML = "";
+    CO.forEach(function (c, i) {
+      var inst = c.inst ? AMB.INST_CAT.filter(function (u) { return u.id === c.inst; })[0] : null;
+      var instLine = inst ? inst.name + ", " + inst.city : c.instName + ", " + c.instCountry;
+      var token = "sample-ing-" + String(i + 1).padStart(2, "0");
+      var link = "https://plastiverse.live/invite/" + token;
+      var subject = "Join me on Plastiverse Live as an ambassador for Norway";
+      var body = "Hello " + c.first + ",\n\n" +
+        "I am checking the Plastiverse Live atlas of plastics research for Norway and adding what only locals know. Your work is in the corpus, so I thought you might want to join too.\n\n" +
+        "You can sign up with your institution email here: " + link + "\n\n" +
+        "Starting takes about 5 minutes, and you can stop at any time. Contributions are licensed CC BY-NC 4.0, the same as the Atlas data.\n\n" +
+        "Best wishes,\nIngrid";
+      COPY[i] = subject + "\n\n" + body;
+      var li = document.createElement("li"); li.className = "co-row";
+      var txt = document.createElement("div");
+      var h = document.createElement("p"); h.className = "nm"; h.style.fontSize = "18px"; h.style.margin = "0"; h.textContent = c.name;
+      var p1 = document.createElement("p"); p1.textContent = instLine + " · " + (i % 2 ? "2" : "3") + " shared works (sample)";
+      var p2 = document.createElement("p");
+      var badge = document.createElement("span");
+      badge.className = inst ? "badge mint" : "badge plain";
+      badge.textContent = inst ? "Eligible: yes (" + REGION_NAME_OF(inst) + ")" : "Eligible: no, not on a region list yet";
+      p2.appendChild(badge);
+      txt.appendChild(h); txt.appendChild(p1); txt.appendChild(p2);
+      var btns = document.createElement("div"); btns.className = "btns";
+      var mail = document.createElement("a");
+      mail.className = "btn solid";
+      mail.href = "mailto:?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      mail.textContent = "Draft invitation";
+      var sr = document.createElement("span"); sr.className = "sr"; sr.textContent = " for " + c.name; mail.appendChild(sr);
+      var copy = document.createElement("button");
+      copy.type = "button"; copy.className = "btn"; copy.setAttribute("data-copy", String(i));
+      copy.textContent = "Copy invitation";
+      var sr2 = document.createElement("span"); sr2.className = "sr"; sr2.textContent = " for " + c.name; copy.appendChild(sr2);
+      btns.appendChild(mail); btns.appendChild(copy);
+      li.appendChild(txt); li.appendChild(btns);
+      ul.appendChild(li);
+    });
+  }
+  function REGION_NAME_OF(inst) { return AMB.REGION_NAME[inst.region]; }
+  document.getElementById("co-list").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-copy]");
+    if (!b) return;
+    var txt = COPY[Number(b.getAttribute("data-copy"))];
+    var st = document.getElementById("co-status");
+    var ok = navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject(new Error("no clipboard"));
+    ok.then(function () { st.textContent = "Invitation copied, with your personal link. Paste it into your own email program and add the address there."; })
+      .catch(function () { st.textContent = "Copy did not work in this browser. Use Draft invitation instead."; });
+  });
+  coRender();
+
+  // ---- Screen 14: notification settings ----
+  document.getElementById("set-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var on = document.getElementById("set-remind").checked;
+    document.getElementById("set-status").textContent = "Saved. Reminders are " + (on ? "on" : "off") + ". Your badge is " + (body.getAttribute("data-badge") === "hidden" ? "hidden" : "shown") + ". Sign-in links are always sent.";
+  });
+  document.getElementById("set-unsub").addEventListener("click", function () {
+    document.getElementById("set-remind").checked = false;
+    document.getElementById("set-status").textContent = "Reminders are off. You will still get sign-in links.";
+  });
+  setBadgeHidden(false);
+
+  // ---- Hash state: #route or #route?place=KEY (the landing selection travels with the page) ----
+  function hashParts() {
+    var h = (location.hash || "#landing").slice(1);
+    var i = h.indexOf("?");
+    var route = i >= 0 ? h.slice(0, i) : h, params = {};
+    if (i >= 0) h.slice(i + 1).split("&").forEach(function (kv) {
+      var p = kv.split("=");
+      if (p[0]) params[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || "");
+    });
+    return { route: route, params: params };
+  }
+  window.AMB_HASH = hashParts;
+
   showItem(0);
   show();
 })();
@@ -1478,13 +1967,14 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
 <script>
 (function () {
   "use strict";
-  // ---- Shared helpers and sample data (design prototype; figures are sample) ----
+  var AMB = window.AMB;
+  var INSTS = AMB.INST_CAT;
   var VW = 960, VH = 500, MAXK = 150;
   var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c]; }); }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-  function norm(s) { return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+  function norm(s) { return String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); }
   function slug(s) { return norm(s).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
   function km(lat1, lon1, lat2, lon2) {
     var R = 6371, r = Math.PI / 180;
@@ -1544,19 +2034,9 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
   ];
   // Island states: zoom to a 300 km box around the main islands (their feature bounds include far atolls)
   var POINT_ZOOM = { "585": 1, "583": 1, "584": 1, "520": 1, "296": 1, "798": 1, "882": 1, "776": 1, "548": 1, "090": 1, "242": 1 };
-  var KIND_NAME = { c: "country", s: "subdivision", ci: "city" };
   var KIND_ORDER = { c: 0, s: 1, ci: 2 };
   var CODE_BY_ID = {};
-
-  // Sample institutions (names as on the landing page, plus one new sample institution for Samoa)
-  var INSTS = [
-    { id: "niva", name: "NIVA", place: "Oslo", cid: "578", lon: 10.72, lat: 59.94 },
-    { id: "ntnu", name: "NTNU", place: "Trondheim", cid: "578", lon: 10.4, lat: 63.42 },
-    { id: "sintef", name: "SINTEF Ocean", place: "Trondheim", cid: "578", lon: 10.41, lat: 63.43 },
-    { id: "vliz", name: "VLIZ", place: "Ostend", cid: "056", sub: "s:flanders", lon: 2.92, lat: 51.23 },
-    { id: "ucsb", name: "UC Santa Barbara", place: "Santa Barbara", cid: "840", sub: "s:california", lon: -119.85, lat: 34.41 },
-    { id: "nus", name: "National University of Samoa", place: "Apia", cid: "882", lon: -171.75, lat: -13.83 }
-  ];
+  var INST_SAMPLE = INSTS; // institution catalogue (window.AMB), used for sample sums
 
   // ---- Unit registry (every country, subdivision and city the map or search can point at) ----
   var UNITS = {}, PLACES = [];
@@ -1586,7 +2066,8 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       { id: "pacific", name: "Pacific Island countries", status: "proposed", units: PAC.map(function (id) { return "c:" + id; }), ambassadors: 0, radius: {}, works: 137 }
     ]
   };
-  var MAPS = [], LANDING = null, PROP = null, PREFILL = null;
+  var MAPS = [], LANDING = null, PROP = null, PREFILL = null, LANDING_SEL = null;
+  var BND_NOTE = { disp: true, pac: true };
 
   function regionOf(key) {
     for (var i = 0; i < STATE.regions.length; i++) if (STATE.regions[i].units.indexOf(key) >= 0) return STATE.regions[i];
@@ -1631,27 +2112,38 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     return names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
   }
 
-  // ---- d3 map (Natural Earth projection, world-atlas 1:50m countries) ----
-  var WORLD = null, FEATURES = [], BYID = {}, PROJ = null, PATH = null;
+  // ---- d3 map (Natural Earth projection; world-atlas 1:50m countries; Natural Earth boundary lines) ----
+  var WORLD = null, FEATURES = [], BYID = {}, PROJ = null, PATH = null, BND_DISP = [], BND_PAC = [];
+  var NE = "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@v5.1.2/geojson/";
+  function geoJson(url) {
+    return fetch(url).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }
   function loadWorld() {
     if (!window.d3 || !window.topojson) return Promise.reject(new Error("The map library did not load."));
-    return fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json").then(function (r) {
-      if (!r.ok) throw new Error("The map data did not load (HTTP " + r.status + ").");
-      return r.json();
-    }).then(function (w) {
+    return Promise.all([
+      geoJson("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json"),
+      geoJson(NE + "ne_50m_admin_0_boundary_lines_disputed_areas.geojson").catch(function () { BND_NOTE.disp = false; return { features: [] }; }),
+      geoJson(NE + "ne_10m_admin_0_pacific_groupings.geojson").catch(function () { BND_NOTE.pac = false; return { features: [] }; })
+    ]).then(function (res) {
+      var w = res[0];
       WORLD = w;
       PROJ = d3.geoNaturalEarth1().fitExtent([[8, 8], [VW - 8, VH - 8]], { type: "Sphere" });
       PATH = d3.geoPath(PROJ);
       FEATURES = topojson.feature(w, w.objects.countries).features;
       FEATURES.forEach(function (f) { (BYID[f.id] = BYID[f.id] || []).push(f); });
+      BND_DISP = res[1].features || [];
+      BND_PAC = res[2].features || [];
       // Any country on the map without a registry row gets a generic unit, so every shape can be picked.
       FEATURES.forEach(function (f) {
         var key = "c:" + f.id;
         if (!UNITS[key]) {
           var cen = d3.geoCentroid(f);
-          var u = { key: key, t: "c", id: f.id, code: "", name: (f.properties && f.properties.name) || ("Country " + f.id), parent: "", kind: "country", pt: cen, pop: 0, works: 0, box: null, fb: true };
-          UNITS[key] = u;
+          UNITS[key] = { key: key, t: "c", id: f.id, code: "", name: (f.properties && f.properties.name) || ("Country " + f.id), parent: "", kind: "country", pt: cen, pop: 0, works: 0, box: null, fb: true };
         }
+      });
+      ["credit-landing", "credit-propose"].forEach(function (id) {
+        var el = $(id);
+        if (el && (!BND_NOTE.disp || !BND_NOTE.pac)) el.textContent += " Some boundary lines did not load; the country map still works.";
       });
     });
   }
@@ -1675,58 +2167,50 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     var m = minBox(u.pt[0], u.pt[1]);
     return b && isFinite(b[0][0]) && isFinite(b[1][1]) ? unionB(b, m) : m;
   }
+  // Selected units use the mint token (contrast for the ink outline is checked in the surface brief).
   function fillFor(key, m) {
-    if (m.picks && m.sel[key]) return "var(--pv-slate)";
+    if (m.picks && m.sel[key]) return "var(--pv-mint)";
     var st = statusOf(key);
     if (st === "active") return "var(--pv-coral)";
     if (st === "proposed") return "url(#" + m.id + "-hatch)";
     return "var(--pv-paper)";
   }
-  function applyView(m, animate) {
-    var t = "translate(" + m.tx + "," + m.ty + ") scale(" + m.k + ")";
-    m.view.interrupt();
-    if (animate && !reduceMotion) m.view.transition().duration(420).attr("transform", t);
-    else m.view.attr("transform", t);
+  function applyDotR(m) {
+    if (!m.dots) return;
     m.dots.attr("r", function (u) { return (u.t === "ci" ? 4.5 : 6) / m.k; });
   }
-  function clampView(m) {
-    m.tx = Math.min(0, Math.max(VW - VW * m.k, m.tx));
-    m.ty = Math.min(0, Math.max(VH - VH * m.k, m.ty));
+  // Move a map to transform t. animate uses a named transition so repeated calls replace each other.
+  function goTo(m, t, animate) {
+    if (animate && !reduceMotion) m.svg.transition("goto").duration(420).call(m.zoom.transform, t);
+    else m.svg.interrupt("goto").call(m.zoom.transform, t);
   }
   function zoomBy(m, f) {
-    var cx = (VW / 2 - m.tx) / m.k, cy = (VH / 2 - m.ty) / m.k;
-    m.k = clamp(m.k * f, 1, MAXK);
-    m.tx = VW / 2 - cx * m.k; m.ty = VH / 2 - cy * m.k;
-    clampView(m); applyView(m, true);
+    m.svg.transition().duration(reduceMotion ? 0 : 250).call(m.zoom.scaleBy, f);
   }
-  function zoomToBounds(m, b, animate) {
-    var w = Math.max(1e-3, b[1][0] - b[0][0]), h = Math.max(1e-3, b[1][1] - b[0][1]);
-    var k = clamp(Math.min(VW * 0.9 / w, VH * 0.9 / h), 1, MAXK);
-    var cx = (b[0][0] + b[1][0]) / 2, cy = (b[0][1] + b[1][1]) / 2;
-    m.k = k; m.tx = VW / 2 - cx * k; m.ty = VH / 2 - cy * k;
-    clampView(m); applyView(m, animate);
-    return k;
-  }
-  function resetView(m) { m.k = 1; m.tx = 0; m.ty = 0; applyView(m, true); }
+  function resetView(m) { goTo(m, d3.zoomIdentity, true); }
 
   function makeMap(o) {
     var stage = $(o.stageId);
     stage.innerHTML = "";
-    var m = { id: o.id, picks: !!o.picks, sel: {}, focus: null, k: 1, tx: 0, ty: 0, pick: null, onPick: o.onPick, suppress: false };
+    var m = { id: o.id, picks: !!o.picks, sel: {}, focus: null, k: 1, tx: 0, ty: 0, suppress: false, onPick: o.onPick };
     var svg = d3.select(stage).append("svg").attr("viewBox", "0 0 " + VW + " " + VH).attr("preserveAspectRatio", "xMidYMid meet");
     var defs = svg.append("defs");
     var pat = defs.append("pattern").attr("id", m.id + "-hatch").attr("width", 7).attr("height", 7).attr("patternUnits", "userSpaceOnUse").attr("patternTransform", "rotate(45)");
     pat.append("rect").attr("width", 7).attr("height", 7).style("fill", "var(--pv-slate-2)");
     pat.append("rect").attr("width", 3).attr("height", 7).style("fill", "var(--pv-slate)");
     svg.append("rect").attr("class", "geo-sea").attr("width", VW).attr("height", VH);
-    m.view = svg.append("g");
-    var gC = m.view.append("g"), gS = m.view.append("g"), gH = m.view.append("g"), gD = m.view.append("g");
     m.svg = svg; m.stage = stage;
+    m.view = svg.append("g");
+    var gC = m.view.append("g"), gS = m.view.append("g"), gB = m.view.append("g").attr("class", "bnd"), gSel = m.view.append("g"), gH = m.view.append("g"), gD = m.view.append("g");
+
+    // Natural Earth boundary lines: disputed (dashed) and Pacific groupings (dotted). Pure line paths, pointer-transparent.
+    gB.selectAll("path.bd-disp").data(BND_DISP).enter().append("path").attr("class", "bd-disp").attr("d", function (f) { return PATH(f); });
+    gB.selectAll("path.bd-pac").data(BND_PAC).enter().append("path").attr("class", "bd-pac").attr("d", function (f) { return PATH(f); });
 
     m.countryEls = gC.selectAll("path").data(FEATURES).enter().append("path")
       .attr("class", "c").attr("d", PATH)
       .attr("data-key", function (d) { return "c:" + d.id; })
-      .on("click", function (e, d) { m.doPick("c:" + d.id); });
+      .on("click", function (e, d) { m.doPick("c:" + d.id, e); });
 
     var markers = [UNITS["s:california"]].concat(DOT_UNITS);
     if (o.allSubs) markers = markers.concat(SUB_UNITS.filter(function (u) { return u.key !== "s:california"; }));
@@ -1738,7 +2222,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       .attr("cy", function (u) { return PROJ(u.pt)[1]; })
       .attr("data-key", function (u) { return u.key; })
       .attr("role", "button").attr("tabindex", "0")
-      .on("click", function (e, u) { m.doPick(u.key); })
+      .on("click", function (e, u) { m.doPick(u.key, e); })
       .on("keydown", function (e, u) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); m.doPick(u.key); } });
 
     m.drawSubs = function () {
@@ -1750,7 +2234,21 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
         .attr("d", function (u) { return PATH(geoOf(u)); })
         .attr("data-key", function (u) { return u.key; })
         .style("fill", function (u) { return fillFor(u.key, m); })
-        .on("click", function (e, u) { m.doPick(u.key); });
+        .on("click", function (e, u) { m.doPick(u.key, e); });
+    };
+    // Selected units get an ink outline drawn on top of the fill (contrast: see the surface brief).
+    m.drawSel = function () {
+      var items = [];
+      Object.keys(m.sel).forEach(function (k) {
+        if (!m.sel[k]) return;
+        var u = UNITS[k]; if (!u || u.t === "ci") return;
+        if (u.t === "c") (BYID[u.id] || []).forEach(function (f) { items.push({ key: k, g: f }); });
+        else items.push({ key: k, g: geoOf(u) });
+      });
+      gSel.selectAll("path.sel-edge").data(items).join("path")
+        .attr("class", "sel-edge")
+        .attr("data-key", function (d) { return d.key; })
+        .attr("d", function (d) { return PATH(d.g); });
     };
     m.drawFocus = function () {
       gH.selectAll("*").remove();
@@ -1772,59 +2270,79 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
         .attr("aria-label", function (u) {
           return u.name + ", " + (u.t === "ci" ? "city" : u.t === "s" ? u.kind : "country") + ", " + statusWord(u.key) + (m.picks && m.sel[u.key] ? ", picked" : "");
         });
+      m.drawSel();
       m.drawFocus();
-      applyView(m, false);
+      applyDotR(m);
     };
-    m.doPick = function (key) {
+    m.doPick = function (key, e) {
       if (m.suppress || !UNITS[key]) return;
+      // A second click of a double-click only zooms; it does not toggle the unit again.
+      if (e && e.detail > 1) return;
       if (o.onPick) o.onPick(key);
     };
     m.setFocus = function (key) { m.focus = key; m.paint(); };
     m.setSel = function (keys) { m.sel = {}; keys.forEach(function (k) { m.sel[k] = true; }); m.paint(); };
-    m.zoomToKey = function (key) { var u = UNITS[key]; if (!u) return; zoomToBounds(m, boundsOf(u), true); };
+    // Zoom to a unit's bounds, bounded to the map. Returns the zoom factor.
+    m.zoomToKey = function (key, animate) {
+      var u = UNITS[key]; if (!u) return 1;
+      var b = boundsOf(u);
+      var w = Math.max(1e-3, b[1][0] - b[0][0]), h = Math.max(1e-3, b[1][1] - b[0][1]);
+      var k = clamp(Math.min(VW * 0.9 / w, VH * 0.9 / h), 1, MAXK);
+      var cx = (b[0][0] + b[1][0]) / 2, cy = (b[0][1] + b[1][1]) / 2;
+      var tx = clamp(VW / 2 - cx * k, VW - VW * k, 0), ty = clamp(VH / 2 - cy * k, VH - VH * k, 0);
+      goTo(m, d3.zoomIdentity.translate(tx, ty).scale(k), animate);
+      return k;
+    };
 
-    // Pointer pan, with a click suppressed after a real drag
-    var drag = null;
-    svg.on("pointerdown", function (e) { drag = { x: e.clientX, y: e.clientY, tx: m.tx, ty: m.ty }; m.suppress = false; });
-    window.addEventListener("pointermove", function (e) {
-      if (!drag) return;
-      var rect = svg.node().getBoundingClientRect(), s = VW / rect.width;
-      var dx = (e.clientX - drag.x) * s, dy = (e.clientY - drag.y) * s;
-      if (Math.abs(dx) + Math.abs(dy) > 4) {
-        m.suppress = true; m.tx = drag.tx + dx; m.ty = drag.ty + dy; clampView(m); applyView(m, false);
-      }
+    // d3-zoom: wheel or trackpad, drag, pinch, double-click. Scale and pan bounded by the map.
+    m.zoom = d3.zoom().scaleExtent([1, MAXK]).extent([[0, 0], [VW, VH]]).translateExtent([[0, 0], [VW, VH]])
+      .on("zoom", function (e) {
+        var t = e.transform;
+        m.k = t.k; m.tx = t.x; m.ty = t.y;
+        m.view.attr("transform", t.toString());
+        applyDotR(m);
+        if (e.sourceEvent && /move$/.test(e.sourceEvent.type)) m.suppress = true;
+      })
+      .on("end", function () { setTimeout(function () { m.suppress = false; }, 0); });
+    svg.call(m.zoom);
+
+    // Overlaid control group inside the map frame (no controls outside it).
+    var ctl = document.createElement("div");
+    ctl.className = "map-ctl";
+    ctl.innerHTML = '<button type="button" class="btn" data-z="in" aria-label="Zoom in">+</button>' +
+      '<button type="button" class="btn" data-z="out" aria-label="Zoom out">&minus;</button>' +
+      '<button type="button" class="btn reset" data-z="reset" aria-label="Reset map view">Reset</button>';
+    stage.appendChild(ctl);
+    ctl.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-z]"); if (!b) return;
+      var z = b.getAttribute("data-z");
+      if (z === "in") zoomBy(m, 1.5); else if (z === "out") zoomBy(m, 1 / 1.5); else resetView(m);
     });
-    window.addEventListener("pointerup", function () { drag = null; setTimeout(function () { m.suppress = false; }, 0); });
-    // Keyboard on the map frame: + and - zoom, arrows move, 0 resets
+
+    // Keyboard on the focused map: + and - zoom, arrows pan, 0 resets.
     stage.addEventListener("keydown", function (e) {
-      var k = e.key, step = 60 / m.k;
+      var k = e.key;
       if (k === "+" || k === "=") zoomBy(m, 1.5);
       else if (k === "-" || k === "_") zoomBy(m, 1 / 1.5);
       else if (k === "0") resetView(m);
-      else if (k === "ArrowLeft") { m.tx += 60; }
-      else if (k === "ArrowRight") { m.tx -= 60; }
-      else if (k === "ArrowUp") { m.ty += 60; }
-      else if (k === "ArrowDown") { m.ty -= 60; }
-      else return;
+      else if (k === "ArrowLeft" || k === "ArrowRight" || k === "ArrowUp" || k === "ArrowDown") {
+        var dx = k === "ArrowLeft" ? 60 : k === "ArrowRight" ? -60 : 0;
+        var dy = k === "ArrowUp" ? 60 : k === "ArrowDown" ? -60 : 0;
+        m.svg.call(m.zoom.translateBy, dx, dy);
+      } else return;
       e.preventDefault();
-      clampView(m); applyView(m, false);
     });
+
     MAPS.push(m);
     m.paint();
     return m;
-  }
-  function bindZoom(m, suffix) {
-    var a = $("zoom-in-" + suffix), b = $("zoom-out-" + suffix), c = $("zoom-reset-" + suffix);
-    if (a) a.addEventListener("click", function () { zoomBy(m, 1.5); });
-    if (b) b.addEventListener("click", function () { zoomBy(m, 1 / 1.5); });
-    if (c) c.addEventListener("click", function () { resetView(m); });
   }
   function mapFailed(id, msg) {
     var el = $(id);
     if (el) el.innerHTML = '<p class="hint" style="padding:16px;margin:0">' + esc(msg) + ' Search and the table still work.</p>';
   }
 
-  // ---- Place search (combobox with arrow keys, Enter, Escape) ----
+  // ---- Place search (combobox, arrow keys, Enter, Escape) ----
   function searchPlaces(q) {
     var n = norm(q.trim());
     if (!n) return [];
@@ -1848,51 +2366,15 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     var kind = u.t === "c" ? "country" : u.kind;
     return u.name + " · " + kind + (u.parent ? " · " + u.parent : "");
   }
-  function bindCombo(input, list, onChoose, announce) {
-    var items = [], active = -1;
-    function close() { list.hidden = true; input.setAttribute("aria-expanded", "false"); input.setAttribute("aria-activedescendant", ""); active = -1; }
-    function open() { list.hidden = false; input.setAttribute("aria-expanded", "true"); }
-    function mark(i) {
-      active = i;
-      Array.prototype.forEach.call(list.children, function (li, j) { li.setAttribute("aria-selected", String(j === i)); });
-      input.setAttribute("aria-activedescendant", i >= 0 ? list.children[i].id : "");
-      if (i >= 0) list.children[i].scrollIntoView({ block: "nearest" });
-    }
-    function choose(i) {
-      var u = items[i]; if (!u) return;
-      input.value = u.name; close(); onChoose(u);
-      if (announce) announce(u);
-    }
-    function render() {
-      items = searchPlaces(input.value);
-      list.innerHTML = "";
-      if (!input.value.trim()) { close(); return; }
-      if (!items.length) {
-        var none = document.createElement("li"); none.className = "none"; none.textContent = "No match. Try a country, state, county or city name.";
-        list.appendChild(none); open(); mark(-1); return;
-      }
-      items.forEach(function (u, i) {
-        var li = document.createElement("li");
-        li.id = input.id + "-opt-" + i; li.setAttribute("role", "option"); li.setAttribute("aria-selected", "false");
-        var a = document.createElement("span"); a.textContent = u.name;
-        var b = document.createElement("small"); b.textContent = placeLabel(u).replace(u.name + " · ", "");
-        li.appendChild(a); li.appendChild(b);
-        li.addEventListener("mousedown", function (e) { e.preventDefault(); choose(i); });
-        list.appendChild(li);
-      });
-      open(); mark(-1);
-    }
-    input.addEventListener("input", render);
-    input.addEventListener("keydown", function (e) {
-      if (list.hidden && (e.key === "ArrowDown") && input.value.trim()) { render(); }
-      if (list.hidden) return;
-      var n = items.length;
-      if (e.key === "ArrowDown") { e.preventDefault(); mark(n ? (active + 1) % n : -1); }
-      else if (e.key === "ArrowUp") { e.preventDefault(); mark(n ? (active <= 0 ? n - 1 : active - 1) : -1); }
-      else if (e.key === "Enter") { if (active >= 0) { e.preventDefault(); choose(active); } }
-      else if (e.key === "Escape") { close(); }
+  function bindPlaceCombo(input, list, status, onChoose) {
+    return AMB.combo({
+      input: input, list: list, status: status, all: false,
+      items: function (q) { return searchPlaces(q); },
+      label: function (u) { return u.name; },
+      render: function (u) { return { main: u.name, meta: placeLabel(u).replace(u.name + " · ", "") }; },
+      noneText: "No match. Try a country, state, county or city name.",
+      onChoose: onChoose
     });
-    input.addEventListener("blur", function () { setTimeout(close, 120); });
   }
 
   // ---- Landing: panel, table, search ----
@@ -1911,7 +2393,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     else if (st === "proposed") action = '<a class="btn solid" href="#signin">Join this proposed region</a>';
     else action = '<button type="button" class="btn solid" data-propose="' + esc(key) + '">Propose a region with ' + esc(u.name) + '</button>';
     var members = keys.length > 1 ? '<p class="hint" style="margin-top:8px">Includes ' + keys.length + ' units: ' + esc(plainList(keys)) + '.</p>' : "";
-    var html = badge + '<h3 id="geo-panel-h" tabindex="-1">' + esc(title) + "</h3>" + members +
+    return badge + '<h3 id="geo-panel-h" tabindex="-1">' + esc(title) + "</h3>" + members +
       '<dl class="kv">' +
       '<div><dt>Status</dt><dd>' + esc(statusTxt) + "</dd></div>" +
       '<div><dt>Ambassadors</dt><dd>' + amb + "</dd></div>" +
@@ -1919,11 +2401,10 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       '<div><dt>Plastics works (sample)</dt><dd>' + worksOf(keys) + "</dd></div>" +
       "</dl>" +
       '<div class="actions">' + action + "</div>";
-    return html;
   }
   function showPanel(key) {
-    var panel = $("geo-panel");
-    panel.innerHTML = panelFor(key);
+    $("geo-panel").innerHTML = panelFor(key);
+    LANDING_SEL = key;
     if (LANDING) LANDING.setFocus(key);
   }
   function buildTable() {
@@ -1946,33 +2427,30 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       tbtn.textContent = on ? "Hide the table" : "Show the regions as a table";
     });
     buildTable();
-    // Clicking Propose inside a panel carries the chosen unit into the propose screen
+    // Propose inside a panel carries the chosen unit and the landing place into the propose screen
     $("geo-panel").addEventListener("click", function (e) {
       var b = e.target.closest("[data-propose]");
       if (!b) return;
-      PREFILL = b.getAttribute("data-propose");
-      location.hash = "propose";
+      var key = b.getAttribute("data-propose");
+      PREFILL = key;
+      location.hash = "propose?place=" + encodeURIComponent(key);
     });
-  }
-  function landingAnnounce(u) {
-    $("place-status").textContent = "Zoomed to " + placeLabel(u) + ".";
   }
   function initLanding() {
     LANDING = makeMap({
       id: "landing", stageId: "map-landing", showCities: false, allSubs: false,
       onPick: function (key) { showPanel(key); }
     });
-    bindZoom(LANDING, "landing");
-    bindCombo($("place-q"), $("place-list"), function (u) {
-      LANDING.setFocus(u.key);
-      LANDING.zoomToKey(u.key);
+    bindPlaceCombo($("place-q"), $("place-list"), $("place-status"), function (u) {
+      LANDING.zoomToKey(u.key, true);
       showPanel(u.key);
-      $("place-q").setAttribute("aria-activedescendant", "");
-    }, landingAnnounce);
+      $("place-status").textContent = "Zoomed to " + placeLabel(u) + ".";
+    });
   }
 
   // ---- Propose a region ----
   var PR = { units: [], radius: {} };
+  var PR_INST = null;
   function addUnit(key) { if (UNITS[key] && PR.units.indexOf(key) < 0) PR.units.push(key); }
   function toggleUnit(key) {
     var i = PR.units.indexOf(key);
@@ -2024,14 +2502,37 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     renderSummary();
     if (PROP) PROP.setSel(PR.units);
   }
-  function initPropose() {
-    PROP = makeMap({
-      id: "propose", stageId: "map-propose", picks: true, showCities: true, allSubs: true,
-      onPick: function (key) { toggleUnit(key); }
+  // Opens the proposal map on the place chosen on the landing page (hash param, else landing selection, else Norway).
+  function proposePlace(params) {
+    if (params.place && UNITS[params.place]) return params.place;
+    if (LANDING_SEL && UNITS[LANDING_SEL]) return LANDING_SEL;
+    return "c:578";
+  }
+  function focusProposeFromHash() {
+    var h = window.AMB_HASH();
+    if (h.route !== "propose") return;
+    if (PREFILL) { addUnit(PREFILL); PREFILL = null; renderPropose(); }
+    if (PROP) PROP.zoomToKey(proposePlace(h.params), false);
+  }
+  function initProposeForms() {
+    AMB.combo({
+      input: $("pr-q"), list: $("pr-list"), status: $("pr-q-status"), all: false,
+      items: function (q) { return searchPlaces(q); },
+      label: function (u) { return u.name; },
+      render: function (u) { return { main: u.name, meta: placeLabel(u).replace(u.name + " · ", "") }; },
+      noneText: "No match. Try a country, state, county or city name.",
+      onChoose: function (u) { addUnit(u.key); $("pr-q").value = ""; renderPropose(); }
     });
-    bindZoom(PROP, "propose");
-    bindCombo($("pr-q"), $("pr-list"), function (u) { addUnit(u.key); renderPropose(); $("pr-q").value = ""; },
-      function (u) { $("pr-q").setAttribute("aria-activedescendant", ""); });
+    PR_INST = INSTS.filter(function (i) { return i.id === "niva"; })[0];
+    AMB.combo({
+      input: $("pr-inst-q"), list: $("pr-inst-list"), status: $("pr-inst-status"), all: true,
+      items: function (q) { return AMB.instMatches(q, ""); },
+      label: function (u) { return u.name + ", " + u.city + ", " + AMB.REGION_NAME[u.region]; },
+      render: AMB.instRow,
+      noneText: "No institution matches. Try the name, an acronym or the email domain.",
+      onType: function () { PR_INST = null; },
+      onChoose: function (u) { PR_INST = u; }
+    });
     $("pr-group").addEventListener("click", function () { PAC.forEach(function (id) { addUnit("c:" + id); }); renderPropose(); });
     $("pr-clear").addEventListener("click", function () { PR.units = []; PR.radius = {}; renderPropose(); });
     $("pr-form").addEventListener("submit", function (e) {
@@ -2040,6 +2541,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       var name = $("pr-name").value.trim();
       if (!name) errs.push({ id: "pr-name", text: "Name the region." });
       if (!PR.units.length) errs.push({ id: "pr-q", text: "Add at least one place: search, add the Pacific group, or click the map." });
+      if (!PR_INST) errs.push({ id: "pr-inst-q", text: "Choose your institution from the list. Type its name or email domain, then pick it." });
       var box = $("pr-errors"), list = $("pr-error-list");
       box.hidden = true; $("pr-outcome").hidden = true;
       if (errs.length) {
@@ -2050,10 +2552,8 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
         });
         box.hidden = false; box.focus(); return;
       }
-      var instId = $("pr-inst").value;
-      var inst = INSTS.filter(function (i) { return i.id === instId; })[0];
+      var inst = PR_INST;
       var inside = instsInside(PR.units, PR.radius).some(function (i) { return i.id === inst.id; });
-      // Insiders: the proposer's own institution decides the route.
       var region = {
         id: slug(name), name: name, units: PR.units.slice(), radius: JSON.parse(JSON.stringify(PR.radius)), ambassadors: 1, works: worksOf(PR.units),
         status: inside ? "active" : "proposed", pending: !inside
@@ -2074,6 +2574,13 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       out.hidden = false; out.focus();
     });
     renderPropose();
+  }
+  function initPropose() {
+    PROP = makeMap({
+      id: "propose", stageId: "map-propose", picks: true, showCities: true, allSubs: true,
+      onPick: function (key) { toggleUnit(key); }
+    });
+    focusProposeFromHash();
   }
 
   // ---- Region tree: split actions (owner and region lead, prototype state) ----
@@ -2096,7 +2603,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     });
   }
 
-  // ---- Session planner (dashboard, section 9 of the spec). Times in seconds. ----
+  // ---- Session planner (dashboard). Times in seconds. ----
   var PLAN_TASKS = [
     { name: "Stream A: one doubtful-match case", sec: 30, cap: 46, est: "About 30 seconds" },
     { name: "Stream B: confirm one placeholder", sec: 120, cap: 6, est: "About 2 minutes" },
@@ -2120,13 +2627,11 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     var mins = checked ? Number(checked.value) : 15;
     var T = mins * 60;
     var plan = makePlan(T);
-    var out = $("plan-out");
-    out.innerHTML = "<p style=\"margin:0\"><b>A " + mins + "-minute session</b> fits:</p><ol>" +
+    $("plan-out").innerHTML = "<p style=\"margin:0\"><b>A " + mins + "-minute session</b> fits:</p><ol>" +
       plan.items.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") +
       "</ol><p style=\"margin:8px 0 0\" class=\"hint\">Planned about " + minutesText(plan.used) + ". " +
       (plan.spare > 0 ? "About " + minutesText(plan.spare) + " spare." : "No time spare.") + "</p>";
-    var tb = $("task-body");
-    tb.innerHTML = PLAN_TASKS.map(function (t) {
+    $("task-body").innerHTML = PLAN_TASKS.map(function (t) {
       var n = Math.floor(T / t.sec);
       if (t.cap) n = Math.min(n, t.cap);
       var fit = n > 0 ? "Yes: " + n + (n === 1 ? " time" : " times") + (t.cap && n === t.cap ? " (all remaining)" : "") : "No, too long for this session";
@@ -2145,6 +2650,7 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
     initTable();
     initTree();
     initPlanner();
+    initProposeForms();
     loadWorld().then(function () {
       initLanding();
       initPropose();
@@ -2154,18 +2660,15 @@ mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 3px; box-deco
       $("place-status").textContent = "The map could not load. Search still works, but zoom is off.";
       $("geo-panel").innerHTML = '<p class="hint" style="margin:0">The map is not available, so pick a region from the table, or search for a place.</p>';
       $("pr-empty").textContent = "The map did not load. Search for a place to add it.";
-      bindCombo($("pr-q"), $("pr-list"), function (u) { addUnit(u.key); renderPropose(); $("pr-q").value = ""; });
-      bindCombo($("place-q"), $("place-list"), function (u) { $("geo-panel").innerHTML = panelFor(u.key); $("place-status").textContent = "Showing " + placeLabel(u) + "."; });
+      bindPlaceCombo($("place-q"), $("place-list"), $("place-status"), function (u) {
+        LANDING_SEL = u.key;
+        $("geo-panel").innerHTML = panelFor(u.key);
+        $("place-status").textContent = "Showing " + placeLabel(u) + ".";
+      });
       renderPropose();
     });
   }
-  window.addEventListener("hashchange", function () {
-    if (location.hash === "#propose" && PREFILL) {
-      addUnit(PREFILL); PREFILL = null;
-      renderPropose();
-    }
-  });
-  // Lead-view split controls and the planner do not need the map
+  window.addEventListener("hashchange", focusProposeFromHash);
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startAll);
   else startAll();
 })();
