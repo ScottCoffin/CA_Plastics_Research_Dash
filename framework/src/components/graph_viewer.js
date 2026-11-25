@@ -3,6 +3,9 @@
 // draws a precomputed layout with sigma.js (WebGL) and offers the same information as a DOM details
 // panel and a sortable table. The canvas is aria-hidden; the table and details carry the content.
 // Pure helpers live in graph_viewer_model.js. Teardown runs when root leaves the document.
+// Options: graph ("institutions" | "authors"), phone ("auto" | true | false), hashPrefix (default "":
+// a host page that keeps its own hash keys passes e.g. "gv." so the viewer uses gv.g, gv.n, gv.z,
+// gv.x, gv.y), note (default true: the manifest's plain-language note; false when the host shows its own).
 import Graph from "npm:graphology@0.26.0";
 import Sigma from "npm:sigma@3.0.3";
 import {formatCount, globalDataUrl} from "./atlas.js";
@@ -16,6 +19,7 @@ import {
   formatWorks,
   graphFileKey,
   graphName,
+  hashPrefixOk,
   labelIndices,
   LABEL_COUNT,
   maxWorks,
@@ -54,15 +58,15 @@ function el(tag, attrs = {}, text = null) {
   return node;
 }
 
-function shell(name, phone) {
+function shell(name, phone, withNote) {
   const id = `gv-${name}-${phone ? "phone" : "desktop"}`;
   const colourOptions = name === "authors"
     ? '<option value="community">Collaboration community</option><option value="country">Primary country</option>'
     : '<option value="community">Collaboration community</option>';
   return `
-<div class="gv-head">
+${withNote ? `<div class="gv-head">
   <p class="gv-note"><span class="gv-badge">Unscreened search hits</span> <span data-gv="note"></span></p>
-</div>
+</div>` : ""}
 <div class="gv-toolbar">
   <div class="gv-search">
     <label class="gv-label" for="${id}-search">Find a name</label>
@@ -119,7 +123,10 @@ export function mountGraph(root, options = {}) {
   root.dataset.graph = name;
   root.dataset.phone = String(phone);
   root.dataset.state = "loading";
-  root.innerHTML = shell(name, phone);
+  const prefix = options.hashPrefix ?? "";
+  if (!hashPrefixOk(prefix)) throw new Error("hashPrefix may hold letters, digits, dot, dash or underscore only");
+  const withNote = options.note !== false;
+  root.innerHTML = shell(name, phone, withNote);
   const q = (key) => root.querySelector(`[data-gv="${key}"]`);
   const ui = {
     note: q("note"), search: q("search"), results: q("results"), searchStatus: q("search-status"),
@@ -128,7 +135,7 @@ export function mountGraph(root, options = {}) {
     legend: q("legend"), details: q("details"), detailsBody: q("details-body"), table: q("table"),
     filter: q("filter"), tableCount: q("table-count"), sortRow: q("sort-row"), rows: q("rows")
   };
-  const initial = parseGraphHash(window.location.hash);
+  const initial = parseGraphHash(window.location.hash, prefix);
   // The hash belongs to a viewer whose graph matches it (or to a page with no graph named).
   const ownsHash = !initial.graph || initial.graph === name;
 
@@ -195,10 +202,10 @@ export function mountGraph(root, options = {}) {
   function writeHash() {
     if (disposed || !camera || !ownsHash) return;
     const state = camera.getState();
-    const hash = formatGraphHash({graph: name, node: selectedId, zoom: state.ratio, x: state.x, y: state.y});
-    const target = `${window.location.pathname}${window.location.search}${hash}`;
-    if (`${window.location.pathname}${window.location.search}${window.location.hash}` === target) return;
-    window.history.replaceState(window.history.state, "", target);
+    // Other keys in the hash (the host page's own state) are kept.
+    const hash = formatGraphHash({graph: name, node: selectedId, zoom: state.ratio, x: state.x, y: state.y}, prefix, window.location.hash);
+    if (hash === window.location.hash) return;
+    window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}${hash}`);
   }
 
   function scheduleHash() {
@@ -459,7 +466,7 @@ export function mountGraph(root, options = {}) {
     ui.stage.addEventListener("touchstart", gate, {capture: true, passive: true, signal});
     ui.stage.addEventListener("touchmove", gate, {capture: true, passive: true, signal});
     window.addEventListener("hashchange", () => {
-      const next = parseGraphHash(window.location.hash);
+      const next = parseGraphHash(window.location.hash, prefix);
       if (next.graph && next.graph !== name) return;
       const node = next.node ?? null;
       if (node !== selectedId) select(node, {pan: next.zoom === undefined && node !== null});
@@ -533,7 +540,7 @@ export function mountGraph(root, options = {}) {
     const entry = manifest.graphs?.[graphFileKey(name, phone)];
     if (!entry) throw new Error(`manifest has no entry for ${graphFileKey(name, phone)}`);
     manifestNote = noteText(name === "authors" ? manifest.author_graph?.what_this_is_and_is_not : manifest.what_this_is_and_is_not);
-    ui.note.textContent = manifestNote;
+    if (ui.note) ui.note.textContent = manifestNote;
     const [json, bytes] = await Promise.all([
       getJson(globalDataUrl(`graphs/${entry.file}`)),
       getBuffer(globalDataUrl(`graphs/${entry.layout_file}`))
@@ -548,7 +555,7 @@ export function mountGraph(root, options = {}) {
       showFallback("The graphic could not start in this browser, so the table lists the same nodes.");
       return;
     }
-    const at = parseGraphHash(window.location.hash);
+    const at = parseGraphHash(window.location.hash, prefix);
     if (ownsHash && (at.zoom !== undefined || at.x !== undefined || at.y !== undefined)) {
       camera.setState({x: at.x ?? HOME_VIEW.x, y: at.y ?? HOME_VIEW.y, ratio: at.zoom ?? HOME_VIEW.ratio, angle: 0});
     }

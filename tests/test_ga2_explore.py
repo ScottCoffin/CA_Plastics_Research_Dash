@@ -345,3 +345,55 @@ def test_overview_and_trend_share_the_countries_json_series() -> None:
     assert 'if (ovSeries?.length) columns($("#ov-chart"), ovSeries' in js
     # The sample is the fallback for absent countries only, and is labelled as a sample.
     assert "Sample counts for" in js
+
+
+# BQ-V.4: the Network tab at world scope mounts the global graph viewer lazily under gv.
+def test_network_tab_loads_the_graph_viewer_lazily_under_the_gv_namespace():
+    js = MODULE.read_text(encoding="utf-8")
+    assert not re.search(r"^import [^\n]*graph_viewer\.js", js, re.M)
+    assert 'import("./graph_viewer.js")' in js
+    assert 'const GRAPH_PREFIX = "gv.";' in js
+    assert "hashPrefix: GRAPH_PREFIX, note: false" in js
+    assert 'phone: "auto"' in js
+    # Default graph is institutions; the toggle offers Authors and Institutions.
+    assert 'parseGraphHash(location.hash, GRAPH_PREFIX).graph ?? "institutions"' in js
+    assert '["authors", "institutions"]' in js
+    # Only the world scope mounts the viewer; country and continent scopes keep the country network.
+    assert 'if (scope.kind !== "world") return countryNetworkPanel(el);' in js
+    assert "function countryNetworkPanel(el)" in js
+
+
+def test_network_download_links_point_at_the_exports_manifest_files():
+    js = MODULE.read_text(encoding="utf-8")
+    assert 'globalDataUrl("graphs/exports/manifest.json")' in js
+    assert 'globalDataUrl("graphs/graphs_manifest.json")' in js
+    assert "exportFiles(exportsManifest, graph)" in js
+    assert "globalDataUrl(`graphs/exports/${f.file}`)" in js
+    assert " download>" in js
+    assert 'from "./graph_viewer_model.js"' in js
+
+
+def test_network_viewer_is_torn_down_on_tab_or_scope_change():
+    js = MODULE.read_text(encoding="utf-8")
+    assert 'if (tab !== "network") closeNetwork();' in js
+    assert "netViewer?.teardown()" in js
+    assert "netToken += 1" in js
+    # A late import from a closed panel is ignored.
+    assert js.count("if (token !== netToken || !host.isConnected) return;") >= 2
+
+
+def test_explore_hash_keeps_scope_and_view_beside_the_viewer_keys():
+    js = MODULE.read_text(encoding="utf-8")
+    assert "function hashFor()" in js
+    assert 'p.set("scope", scopeKey(scope));' in js
+    assert 'p.set("view", tab)' in js and 'p.delete("view")' in js
+    assert "#scope=${encodeURIComponent" not in js
+    assert js.count("hashFor()") >= 3
+
+
+def test_explore_page_links_the_viewer_stylesheet():
+    page = PAGE.read_text(encoding="utf-8")
+    assert '<link rel="stylesheet" href="./components/graph_viewer.css">' in page
+    style = STYLE.read_text(encoding="utf-8")
+    network_css = _strip_css_comments(style).split(".gx .gg", 1)[1]
+    assert ".gx .gg-files" in style and not HEX_COLOUR.search(network_css)

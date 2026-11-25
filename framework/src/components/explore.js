@@ -5,6 +5,7 @@
 import {globalDataUrl, siteRoot} from "./atlas.js";
 import {attachMapGestures, boundaryPaths, foldName, frameXY, mountPlaceSearch, placeExtent, placeRows} from "./world_map.js";
 import {denominatorShare, readDenominators} from "./v4_trend_model.js";
+import {exportFiles, formatGraphHash, noteText, parseGraphHash} from "./graph_viewer_model.js";
 
 // Pure helpers over countries.json (PLAT-4 slice 4: unscreened query hits, schema plat4b-v1). Exported for the
 // Node runtime test. A country absent from the file gives null, and the page keeps its sample or preview.
@@ -753,7 +754,71 @@ export async function mountExplore(root) {
       note: scope.kind === "world" ? "" : `Includes partner institutions abroad; the global build keeps only institutions located in ${esc(scopeName())}.`});
   }
 
+  // ---- Network tab: the global graph viewer (world scope) --------------------------------
+  // graph_viewer.js loads only when this tab opens at world scope. Its hash keys sit under gv. (graph,
+  // node, zoom, x, y) so scope= and view= stay explore's. closeNetwork() tears the viewer down (renderer.kill)
+  // when the tab, the scope or the graph choice changes; a late import is ignored by the token check.
+  const GRAPH_PREFIX = "gv.";
+  const GRAPH_LABEL = {institutions: "Institutions", authors: "Authors"};
+  let netViewer = null, netToken = 0, graphMeta = null;
+  function closeNetwork() { netToken += 1; netViewer?.teardown(); netViewer = null; }
+  // graphs_manifest.json (captions) and exports/manifest.json (download files), fetched once per page.
+  function loadGraphMeta() {
+    graphMeta ??= Promise.all([
+      fetch(globalDataUrl("graphs/graphs_manifest.json"), {cache: "no-cache"}).then((r) => (r.ok ? r.json() : null)),
+      fetch(globalDataUrl("graphs/exports/manifest.json"), {cache: "no-cache"}).then((r) => (r.ok ? r.json() : null)),
+    ]).catch(() => [null, null]);
+    return graphMeta;
+  }
+  function globalGraphPanel(host) {
+    const token = netToken;
+    const graph = parseGraphHash(location.hash, GRAPH_PREFIX).graph ?? "institutions";
+    host.innerHTML = `<section class="gg" aria-labelledby="gg-h">
+      <div class="gg-tools">
+        <h2 id="gg-h">${esc(GRAPH_LABEL[graph])} graph</h2>
+        <div class="seg" role="group" aria-label="Graph to show">${["authors", "institutions"].map((g) => `<button type="button" class="btn" data-g="${g}" aria-pressed="${g === graph}">${GRAPH_LABEL[g]}</button>`).join("")}</div>
+      </div>
+      <p class="lede gg-cap" id="gg-cap"></p>
+      <p class="gg-dl">Download (GEXF, GraphML)</p>
+      <ul class="gg-files" id="gg-files"><li>Loading the file list.</li></ul>
+      <div class="gg-mount" id="gg-mount"></div>
+    </section>`;
+    host.querySelectorAll("[data-g]").forEach((b) => b.addEventListener("click", () => {
+      if (b.dataset.g === graph) return;
+      // The new choice starts its own view: the old node, zoom and position do not carry over.
+      history.replaceState(null, "", formatGraphHash({graph: b.dataset.g}, GRAPH_PREFIX, location.hash));
+      closeNetwork();
+      globalGraphPanel(host);
+      host.querySelector(`[data-g="${b.dataset.g}"]`)?.focus();
+    }));
+    loadGraphMeta().then(([manifest, exportsManifest]) => {
+      if (token !== netToken || !host.isConnected) return;
+      $("#gg-cap", host).textContent = noteText(graph === "authors" ? manifest?.author_graph?.what_this_is_and_is_not : manifest?.what_this_is_and_is_not);
+      const files = exportFiles(exportsManifest, graph);
+      $("#gg-files", host).innerHTML = files.length
+        ? files.map((f) => `<li><a href="${esc(globalDataUrl(`graphs/exports/${f.file}`))}" download>${esc(f.label)}</a>${f.bytes ? ` (${(f.bytes / 1048576).toFixed(1)} MB)` : ""}</li>`).join("")
+        : "<li>No export files are listed for this graph yet.</li>";
+    });
+    import("./graph_viewer.js").then((viewer) => {
+      if (token !== netToken || !host.isConnected) return;
+      netViewer = viewer.mountGraph($("#gg-mount", host), {graph, phone: "auto", hashPrefix: GRAPH_PREFIX, note: false});
+    }).catch((error) => {
+      if (token !== netToken) return;
+      $("#gg-mount", host).textContent = "The graph viewer could not load. Try again later.";
+      console.error("graph viewer:", error);
+    });
+  }
+
+  // Country and continent scopes keep the country network below; the world scope adds the viewer above it.
   function networkPanel(el) {
+    closeNetwork();
+    if (scope.kind !== "world") return countryNetworkPanel(el);
+    el.innerHTML = `<div id="gx-global"></div><div id="gx-countries"></div>`;
+    globalGraphPanel($("#gx-global", el));
+    countryNetworkPanel($("#gx-countries", el));
+  }
+
+  function countryNetworkPanel(el) {
     const ego = scope.kind === "country" ? scope.iso : null;
     let nodes, links;
     if (ego) {
@@ -823,14 +888,22 @@ export async function mountExplore(root) {
 
   const PANELS = {countries: countriesPanel, evidence: evidencePanel, trend: trendPanel, experts: expertsPanel, institutions: institutionsPanel, network: networkPanel, works: worksPanel};
   function renderPanel() {
+    if (tab !== "network") closeNetwork();
     if (tab !== "countries") mapEl = null;
     const el = $("#panel-" + tab);
     PANELS[tab](el);
   }
 
   // ---- navigation ------------------------------------------------------------------------
+  // explore owns scope= and view=; other keys in the hash (the graph viewer's gv.*) are kept.
+  function hashFor() {
+    const p = new URLSearchParams(location.hash.slice(1));
+    p.set("scope", scopeKey(scope));
+    if (tab !== "countries") p.set("view", tab); else p.delete("view");
+    return `#${p}`;
+  }
   function writeHash() {
-    const h = `#scope=${encodeURIComponent(scopeKey(scope))}${tab !== "countries" ? "&view=" + tab : ""}`;
+    const h = hashFor();
     if (location.hash !== h) history.replaceState(null, "", h);
   }
   function go(next, {push = true, focus = null} = {}) {
@@ -838,7 +911,7 @@ export async function mountExplore(root) {
     scope = next;
     focusGeo = focus;
     if (scope.kind !== "country") tableState.q = "";
-    if (push) history.pushState(null, "", `#scope=${encodeURIComponent(scopeKey(scope))}${tab !== "countries" ? "&view=" + tab : ""}`);
+    if (push) history.pushState(null, "", hashFor());
     renderLadder(); renderHead();
     root.querySelectorAll(".tab").forEach((t) => { if (t.id === "tab-countries") t.textContent = scope.kind === "country" ? "Overview" : "Countries"; });
     if (tab === "countries" && mapEl && prev) {

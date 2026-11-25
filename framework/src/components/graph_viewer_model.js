@@ -176,15 +176,23 @@ export function sortNodes(nodes, key = "works", direction = "desc") {
 }
 
 // URL state: #g=<graph>&n=<nodeId>&z=<camera ratio>&x=<camera x>&y=<camera y>. Smaller z is closer.
+// A host page can prefix the keys (hashPrefix, e.g. "gv." gives #gv.g=...) so other keys in the same
+// hash (explore's scope= and view=) coexist with the viewer's.
 const NODE_ID = /^[A-Za-z0-9]{1,24}$/;
+const HASH_PREFIX = /^[A-Za-z0-9_.-]{0,16}$/;
+export const GRAPH_HASH_KEYS = Object.freeze(["g", "n", "z", "x", "y"]);
 
-export function parseGraphHash(hash) {
+export function hashPrefixOk(prefix) {
+  return typeof prefix === "string" && HASH_PREFIX.test(prefix);
+}
+
+export function parseGraphHash(hash, prefix = "") {
   const params = new URLSearchParams(String(hash ?? "").replace(/^#/, ""));
   const out = {};
-  if (GRAPHS.includes(params.get("g"))) out.graph = params.get("g");
-  if (NODE_ID.test(params.get("n") ?? "")) out.node = params.get("n");
+  if (GRAPHS.includes(params.get(`${prefix}g`))) out.graph = params.get(`${prefix}g`);
+  if (NODE_ID.test(params.get(`${prefix}n`) ?? "")) out.node = params.get(`${prefix}n`);
   const num = (key, test) => {
-    const raw = params.get(key);
+    const raw = params.get(`${prefix}${key}`);
     if (raw === null || raw.trim() === "") return undefined;
     const value = Number(raw);
     return Number.isFinite(value) && test(value) ? value : undefined;
@@ -200,14 +208,18 @@ export function parseGraphHash(hash) {
 
 const round = (value, digits) => String(Number(Number(value).toFixed(digits)));
 
-export function formatGraphHash(state = {}) {
-  const parts = [];
-  if (GRAPHS.includes(state.graph)) parts.push(`g=${state.graph}`);
-  if (state.node && NODE_ID.test(String(state.node))) parts.push(`n=${state.node}`);
-  if (Number.isFinite(state.zoom) && state.zoom > 0) parts.push(`z=${round(state.zoom, 4)}`);
-  if (Number.isFinite(state.x)) parts.push(`x=${round(state.x, 5)}`);
-  if (Number.isFinite(state.y)) parts.push(`y=${round(state.y, 5)}`);
-  return parts.length ? `#${parts.join("&")}` : "";
+// Returns the whole hash: the viewer's keys are replaced (or dropped when state is empty) and every
+// other key in `current` is kept, so a page can keep its own state beside the viewer's.
+export function formatGraphHash(state = {}, prefix = "", current = "") {
+  const params = new URLSearchParams(String(current ?? "").replace(/^#/, ""));
+  for (const key of GRAPH_HASH_KEYS) params.delete(`${prefix}${key}`);
+  if (GRAPHS.includes(state.graph)) params.set(`${prefix}g`, state.graph);
+  if (state.node && NODE_ID.test(String(state.node))) params.set(`${prefix}n`, String(state.node));
+  if (Number.isFinite(state.zoom) && state.zoom > 0) params.set(`${prefix}z`, round(state.zoom, 4));
+  if (Number.isFinite(state.x)) params.set(`${prefix}x`, round(state.x, 5));
+  if (Number.isFinite(state.y)) params.set(`${prefix}y`, round(state.y, 5));
+  const text = params.toString();
+  return text ? `#${text}` : "";
 }
 
 // The manifest's plain-language note: a string, or an {is, is_not} object.
@@ -226,4 +238,16 @@ export function formatWorks(value) {
 
 export function openAlexUrl(id) {
   return NODE_ID.test(String(id ?? "")) ? `https://openalex.org/${id}` : null;
+}
+
+// Download rows for one graph from site/data/global/graphs/exports/manifest.json (GEXF and GraphML).
+// Only files whose `graph` matches are listed; the file name must be a plain name (no folders).
+const FORMAT_LABEL = Object.freeze({gexf: "GEXF", graphml: "GraphML"});
+export function exportFiles(manifest, name) {
+  if (!GRAPHS.includes(name)) return [];
+  const files = Array.isArray(manifest?.files) ? manifest.files : [];
+  return files
+    .filter((f) => f && f.graph === name && /^[A-Za-z0-9_.-]+$/.test(String(f.file ?? "")) && FORMAT_LABEL[f.format])
+    .map((f) => ({file: f.file, format: f.format, label: FORMAT_LABEL[f.format], bytes: Number(f.bytes) || 0}))
+    .sort((a, b) => Object.keys(FORMAT_LABEL).indexOf(a.format) - Object.keys(FORMAT_LABEL).indexOf(b.format));
 }

@@ -31,7 +31,7 @@ def test_runtime_helpers_under_node() -> None:
         [node, str(RUNTIME_CHECK)], cwd=ROOT, capture_output=True, text=True, check=False
     )
     assert result.returncode == 0, result.stderr[-2000:]
-    assert "19 checks passed" in result.stdout
+    assert "21 checks passed" in result.stdout
 
 
 def test_component_uses_the_shared_contract() -> None:
@@ -52,6 +52,22 @@ def test_component_teardown_kills_the_renderer_and_listeners() -> None:
     assert "new MutationObserver" in text and "root.isConnected" in text
     assert "abort.abort()" in text
     assert "{signal" in text
+
+
+def test_hash_prefix_and_note_options_are_wired() -> None:
+    # explore mounts the viewer with hashPrefix "gv." so its scope= and view= keys survive;
+    # the default
+    # (no prefix) keeps the bare g/n/z/x/y keys that /dev_graph uses.
+    text = COMPONENT.read_text(encoding="utf-8")
+    assert 'const prefix = options.hashPrefix ?? "";' in text
+    assert "hashPrefixOk(prefix)" in text
+    assert "parseGraphHash(window.location.hash, prefix)" in text
+    assert "x: state.x, y: state.y}, prefix, window.location.hash)" in text
+    assert "options.note !== false" in text
+    assert "if (ui.note) ui.note.textContent = manifestNote;" in text
+    model = MODEL.read_text(encoding="utf-8")
+    assert 'export function formatGraphHash(state = {}, prefix = "", current = "")' in model
+    assert "export function exportFiles(manifest, name)" in model
 
 
 def test_canvas_is_hidden_and_table_fallback_exists() -> None:

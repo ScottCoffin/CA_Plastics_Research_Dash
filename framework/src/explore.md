@@ -19,6 +19,7 @@ head: |
      Styles: components/explore.css. Data: data/global/explore.json (fetched at runtime). -->
 
 <link rel="stylesheet" href="./components/explore.css">
+<link rel="stylesheet" href="./components/graph_viewer.css">
 
 <div class="gx">
 <a class="skip" href="#main">Skip to the data</a>

@@ -7,10 +7,12 @@ import {
   colourOf,
   decodeLayout,
   edgesFromRows,
+  exportFiles,
   formatGraphHash,
   formatWorks,
   graphFileKey,
   graphName,
+  hashPrefixOk,
   labelIndices,
   matchNodes,
   nodeSize,
@@ -208,6 +210,38 @@ check("works wording and OpenAlex links", () => {
   assert.equal(formatWorks(2970), "2,970 works");
   assert.equal(openAlexUrl("A5023220319"), "https://openalex.org/A5023220319");
   assert.equal(openAlexUrl("../x"), null);
+});
+
+check("hash prefix keeps the viewer keys apart from the page's own keys", () => {
+  assert.equal(hashPrefixOk("gv."), true);
+  assert.equal(hashPrefixOk(""), true);
+  assert.equal(hashPrefixOk("gv.<x>"), false);
+  const page = "#scope=cont%3AEurope&view=network&gv.g=authors&gv.n=A5023220319&gv.z=0.25";
+  assert.deepEqual(parseGraphHash(page, "gv."), {graph: "authors", node: "A5023220319", zoom: 0.25});
+  assert.deepEqual(parseGraphHash(page), {});
+  // Writing replaces only the viewer's keys and keeps scope= and view=.
+  const written = formatGraphHash({graph: "institutions", node: "I19820366", zoom: 0.5, x: 0.1, y: 0.2}, "gv.", page);
+  assert.equal(written, "#scope=cont%3AEurope&view=network&gv.g=institutions&gv.n=I19820366&gv.z=0.5&gv.x=0.1&gv.y=0.2");
+  assert.deepEqual(parseGraphHash(written, "gv."), {graph: "institutions", node: "I19820366", zoom: 0.5, x: 0.1, y: 0.2});
+  // An empty state drops only the viewer's keys; with no prefix the viewer keys are the bare names.
+  assert.equal(formatGraphHash({}, "gv.", page), "#scope=cont%3AEurope&view=network");
+  assert.equal(formatGraphHash({graph: "authors"}, "", "#scope=world&g=institutions"), "#scope=world&g=authors");
+});
+
+check("export rows: only the graph's GEXF and GraphML files, plain names, GEXF first", () => {
+  const manifest = {files: [
+    {file: "authors.graphml.gz", format: "graphml", graph: "authors", bytes: 1114768},
+    {file: "institutions.graphml.gz", format: "graphml", graph: "institutions", bytes: 1159056},
+    {file: "institutions.gexf.gz", format: "gexf", graph: "institutions", bytes: 1327908},
+    {file: "../evil.gexf", format: "gexf", graph: "institutions", bytes: 1},
+    {file: "california_network.gexf", format: "gexf"}
+  ]};
+  assert.deepEqual(exportFiles(manifest, "institutions"), [
+    {file: "institutions.gexf.gz", format: "gexf", label: "GEXF", bytes: 1327908},
+    {file: "institutions.graphml.gz", format: "graphml", label: "GraphML", bytes: 1159056}
+  ]);
+  assert.deepEqual(exportFiles(manifest, "other"), []);
+  assert.deepEqual(exportFiles(null, "authors"), []);
 });
 
 console.log(`framework graph viewer runtime: ${passed} checks passed`);
