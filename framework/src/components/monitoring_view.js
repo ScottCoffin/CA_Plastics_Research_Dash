@@ -86,6 +86,39 @@ export function samplesCsv(rows, datasets, downloadedOn) {
   return `${lines.join("\r\n")}\r\n`;
 }
 
+// ---- Page hash (UX-13) ------------------------------------------------------------------------
+// Filter state round-trips through the URL, e.g. #tier=A&q=sea+water&region=land. Only these six keys
+// are read; empty and default values are omitted from the hash. The map selection and the open/closed
+// facet panels stay out of the URL. Values that the loaded data does not offer are dropped by the page.
+export const MONITORING_HASH_KEYS = Object.freeze({tier: "tier", search: "q", contributor: "contrib", matrix: "matrix", year: "year", region: "region"});
+const MONITORING_REGIONS = ["land", "state_waters", "outside", "unknown"];
+
+export function monitoringParamsFromHash(hash) {
+  const params = new URLSearchParams(String(hash || "").replace(/^#/, ""));
+  const read = (key) => (params.get(key) || "").trim();
+  const contributor = read(MONITORING_HASH_KEYS.contributor);
+  const year = read(MONITORING_HASH_KEYS.year);
+  const region = read(MONITORING_HASH_KEYS.region);
+  return {
+    tier: read(MONITORING_HASH_KEYS.tier),
+    search: read(MONITORING_HASH_KEYS.search),
+    contributor: contributor === "true" || contributor === "false" ? contributor : "",
+    matrix: read(MONITORING_HASH_KEYS.matrix),
+    year: /^\d{4}$/.test(year) || year === monitoringView.unknownYear ? year : "",
+    region: MONITORING_REGIONS.includes(region) ? region : ""
+  };
+}
+
+export function monitoringHashFromFilters(filters) {
+  const params = new URLSearchParams();
+  Object.entries(MONITORING_HASH_KEYS).forEach(([name, key]) => {
+    const value = String((filters && filters[name]) ?? "").trim();
+    if (value) params.set(key, value);
+  });
+  const text = params.toString();
+  return text ? `#${text}` : "";
+}
+
 export const monitoringView = Object.freeze({
   unknownMatrix: "__unknown__",
   unknownYear: "__unknown__",

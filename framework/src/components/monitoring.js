@@ -2,8 +2,18 @@
 // (filteredMonitoringSamples, drawMonitoringMap, renderMonitoringMapDetails, facet state, renderMonitoring
 // and the event bindings). Markup lives in src/monitoring.md; pure helpers in monitoring_view.js and
 // shared map code in svg_map.js. Nothing touches the DOM until mountMonitoring() runs.
+// Page hash (UX-13, same convention as funding.js): the filters round-trip through the URL.
+//   #tier=A           access tier (A-D)
+//   #q=sea+water      source or steward text (trimmed)
+//   #contrib=true     contributor in California ("true" or "false")
+//   #matrix=...       sample matrix; "__unknown__" is the Unknown matrix option
+//   #year=2020        four-digit year; "__unknown__" is the Unknown date option
+//   #region=land      land, state_waters, outside or unknown
+// Empty and default values are omitted; unknown keys and invalid values are ignored; values the data
+// does not offer are dropped on load. Writes use history.replaceState, so filter changes add no history
+// entries. The map selection and the facet panels are not stored in the URL.
 import {loadJson, escapeHtml} from "./atlas.js";
-import {monitoringView, formatSampleDate, licenceGloss, samplesCsv, sharedUnit} from "./monitoring_view.js";
+import {monitoringView, formatSampleDate, licenceGloss, monitoringHashFromFilters, monitoringParamsFromHash, samplesCsv, sharedUnit} from "./monitoring_view.js";
 import {monitoringMap, attachMapInteractions, ensureCaBasemap, caBasemapFeatures, caBasemapState} from "./svg_map.js";
 import {icon, injectIconSprite} from "./shared/icons.js";
 
@@ -29,6 +39,42 @@ const state = {
   mapExpanded: false, // map full screen via the viewport fallback when the Fullscreen API is unavailable
   frame: 0
 };
+
+// ---- Page hash (UX-13) ------------------------------------------------------------------------
+
+function filtersEqual(a, b) {
+  return Object.keys(a).every((key) => a[key] === b[key]);
+}
+
+// Clears filter values that the loaded data does not offer (an unknown matrix, for example).
+function knownFilters(filters, payload) {
+  const { matrices, years, hasUnknownMatrix, hasUnknownYear } = monitoringView.filterOptions(payload.samples || []);
+  const optionValues = (id) => new Set([...$(id).options].map((option) => option.value));
+  const allowed = {
+    tier: optionValues("monitoring-tier"),
+    contributor: optionValues("monitoring-contributor"),
+    region: optionValues("monitoring-region"),
+    matrix: new Set(["", ...matrices, ...(hasUnknownMatrix ? [monitoringView.unknownMatrix] : [])]),
+    year: new Set(["", ...years, ...(hasUnknownYear ? [monitoringView.unknownYear] : [])])
+  };
+  const next = {...filters};
+  Object.entries(allowed).forEach(([key, values]) => { if (!values.has(next[key])) next[key] = ""; });
+  return next;
+}
+
+function writeMonitoringHash() {
+  const next = monitoringHashFromFilters(state.filters);
+  if (window.location.hash !== next) window.history.replaceState(null, "", next || window.location.pathname + window.location.search);
+}
+
+function onMonitoringHashChange() {
+  if (!state.data) return;
+  const next = knownFilters(monitoringParamsFromHash(window.location.hash), state.data);
+  if (filtersEqual(next, state.filters)) return;
+  state.filters = next;
+  state.page = 0;
+  render();
+}
 
 function evidenceLabel(type) {
   return EVIDENCE_LABELS[type] || "Unrecognized evidence";
@@ -398,10 +444,12 @@ function onFilterInput() {
   f.region = $("monitoring-region").value;
   state.page = 0;
   render();
+  writeMonitoringHash();
 }
 
 function bindEvents() {
   $("monitoring-filters").addEventListener("submit", preventMonitoringFilterSubmit);
+  window.addEventListener("hashchange", onMonitoringHashChange);
   ["monitoring-tier", "monitoring-search", "monitoring-contributor", "monitoring-matrix", "monitoring-year", "monitoring-region"].forEach((id) => {
     $(id).addEventListener("input", onFilterInput);
     $(id).addEventListener("change", onFilterInput);
@@ -452,13 +500,17 @@ function bindEvents() {
 export async function mountMonitoring() {
   injectIconSprite();
   wrapFilterSidebar();
+  // Read the URL filters before the first render; render() copies state.filters into the controls.
+  state.filters = monitoringParamsFromHash(window.location.hash);
   try {
     const payload = await loadJson("monitoring.json");
     if (!payload || payload.schema_version !== "s7.5") throw new Error("monitoring.json does not match the S7.5 contract");
     state.data = payload;
+    state.filters = knownFilters(state.filters, payload);
     restoreFacetState();
     bindEvents();
     render();
+    writeMonitoringHash();
   } catch (error) {
     $("monitoring-status").textContent = "Monitoring data unavailable.";
     $("monitoring-sources").innerHTML = `<p class="empty">${escapeHtml(error.message)}<br>Run the site through a web server and rebuild the S7.5 data export.</p>`;

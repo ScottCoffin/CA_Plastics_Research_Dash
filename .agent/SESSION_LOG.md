@@ -229,3 +229,4 @@
 | 2026-11-25 | BQ-S2 | Candidate plastic-v3.2 (64 terms, +1.3% records), recycler removed after per-term probe | this commit |
 | 2026-11-25 | PLAT-3 (slice 1) | Region registry, loader and region-name ratchet; no behaviour change | this commit |
 | 2026-11-25 | PLAT-3 (slice 2) | Scope constants from the registry, --region on pipeline CLIs; outputs unchanged | this commit |
+| 2026-11-25 | UX-13 (part a) | Monitoring filters saved in the URL hash; PLAT3-DATA-PATH question recorded | this commit |
