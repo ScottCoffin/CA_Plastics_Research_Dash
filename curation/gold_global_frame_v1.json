@@ -1,0 +1,180 @@
+{
+  "schema": "gold-global-frame-v1",
+  "generated_at": "2026-11-25T16:17:33Z",
+  "seed": 42043,
+  "model_version": "rules-v3.1-proxy",
+  "score_definition": "points = 2 per core term in title + 1 per core term in abstract (queries.yml core_terms) + 1 per qualified term with a context + 1 per tier_2_terms hit; 0 if any exclusions hit; score = min(1, points / 4), 4 decimals",
+  "band_thresholds": {
+    "low": "< 0.34 (includes zero score)",
+    "medium": "0.34 to < 0.67",
+    "high": ">= 0.67"
+  },
+  "stratum_scheme": "global_english: theme x band (low incl. zero, medium, high) for pollution-core, lifecycle-and-society, other, plus one lens-candidate stratum (band all); registry_region and global_non_english: theme only (band all), lens merged into lifecycle-and-society. 16 strata.",
+  "score_snapshot_sha256": "be1c7eb38e823034b6d14026bb15cf328b732a5372615ba43bd3746329cff724",
+  "frame_file": "curation/gold_global_frame_v1.csv.gz",
+  "frame_sha256": "2c7be1b7b0a3fc45e85c6d83e6637509e5420564c92dced42df1164fbe283da0",
+  "frame_uncompressed_sha256": "49b462282f766c66f298acf7326757e3f97344033b061af2df538862a511280b",
+  "frame_rows": 136072,
+  "csv_row_policy": "all_works",
+  "csv_bytes": 18960301,
+  "gz_bytes": 3469705,
+  "population_works": 136072,
+  "universe_works": 136074,
+  "guide_examples_checked": 5,
+  "guide_example_exclusion_count": 2,
+  "missing_abstract_works": 0,
+  "missing_language_works": 18,
+  "zero_score_works_by_block": {
+    "registry_region": 305,
+    "global_english": 17639,
+    "global_non_english": 383
+  },
+  "strata": [
+    {
+      "stratum": "global_english|pollution-core|low",
+      "block": "global_english",
+      "theme_group": "pollution-core",
+      "band": "low",
+      "N_h": 10945,
+      "rows_in_csv": 10945
+    },
+    {
+      "stratum": "global_english|pollution-core|medium",
+      "block": "global_english",
+      "theme_group": "pollution-core",
+      "band": "medium",
+      "N_h": 28414,
+      "rows_in_csv": 28414
+    },
+    {
+      "stratum": "global_english|pollution-core|high",
+      "block": "global_english",
+      "theme_group": "pollution-core",
+      "band": "high",
+      "N_h": 34560,
+      "rows_in_csv": 34560
+    },
+    {
+      "stratum": "global_english|lifecycle-and-society|low",
+      "block": "global_english",
+      "theme_group": "lifecycle-and-society",
+      "band": "low",
+      "N_h": 259,
+      "rows_in_csv": 259
+    },
+    {
+      "stratum": "global_english|lifecycle-and-society|medium",
+      "block": "global_english",
+      "theme_group": "lifecycle-and-society",
+      "band": "medium",
+      "N_h": 139,
+      "rows_in_csv": 139
+    },
+    {
+      "stratum": "global_english|lifecycle-and-society|high",
+      "block": "global_english",
+      "theme_group": "lifecycle-and-society",
+      "band": "high",
+      "N_h": 229,
+      "rows_in_csv": 229
+    },
+    {
+      "stratum": "global_english|other|low",
+      "block": "global_english",
+      "theme_group": "other",
+      "band": "low",
+      "N_h": 41179,
+      "rows_in_csv": 41179
+    },
+    {
+      "stratum": "global_english|other|medium",
+      "block": "global_english",
+      "theme_group": "other",
+      "band": "medium",
+      "N_h": 8500,
+      "rows_in_csv": 8500
+    },
+    {
+      "stratum": "global_english|other|high",
+      "block": "global_english",
+      "theme_group": "other",
+      "band": "high",
+      "N_h": 4776,
+      "rows_in_csv": 4776
+    },
+    {
+      "stratum": "global_english|lens-candidate|all",
+      "block": "global_english",
+      "theme_group": "lens-candidate",
+      "band": "all",
+      "N_h": 28,
+      "rows_in_csv": 28
+    },
+    {
+      "stratum": "registry_region|pollution-core|all",
+      "block": "registry_region",
+      "theme_group": "pollution-core",
+      "band": "all",
+      "N_h": 1190,
+      "rows_in_csv": 1190
+    },
+    {
+      "stratum": "registry_region|lifecycle-and-society|all",
+      "block": "registry_region",
+      "theme_group": "lifecycle-and-society",
+      "band": "all",
+      "N_h": 11,
+      "rows_in_csv": 11
+    },
+    {
+      "stratum": "registry_region|other|all",
+      "block": "registry_region",
+      "theme_group": "other",
+      "band": "all",
+      "N_h": 771,
+      "rows_in_csv": 771
+    },
+    {
+      "stratum": "global_non_english|pollution-core|all",
+      "block": "global_non_english",
+      "theme_group": "pollution-core",
+      "band": "all",
+      "N_h": 2312,
+      "rows_in_csv": 2312
+    },
+    {
+      "stratum": "global_non_english|lifecycle-and-society|all",
+      "block": "global_non_english",
+      "theme_group": "lifecycle-and-society",
+      "band": "all",
+      "N_h": 34,
+      "rows_in_csv": 34
+    },
+    {
+      "stratum": "global_non_english|other|all",
+      "block": "global_non_english",
+      "theme_group": "other",
+      "band": "all",
+      "N_h": 2725,
+      "rows_in_csv": 2725
+    }
+  ],
+  "block_totals": {
+    "registry_region": 1972,
+    "global_english": 129029,
+    "global_non_english": 5071
+  },
+  "input_hashes": {
+    "data/processed/global/works.parquet": "a9f927980a51d3eb43501b6d30fe99e27cb0912dc71fe80dec88861be3b31b0b",
+    "data/processed/global/work_regions.parquet": "35bfa6904f709a9195b89d86a53a225e165d092d044e7fa64bca1579dcbbfd14",
+    "data/raw/openalex_global/pages (sorted per-file sha256)": "ef2d907312a5b314040fe514f57d8765167cc4e960a5e474d85129fdd9e6c23d",
+    "raw_page_files": 1413,
+    "config/queries.yml": "ef2cb1515864d3e5fd4fe3af6a0b29634daac8246ce6be38937d8f7f684a4425",
+    "config/queries_v32_candidate.yml": "271014b3e06749d9f0344eb8444a41a8cb608c325196ddce7520815e72dca763",
+    "config/pollution_core_v0.yml": "dd3f31d3bceea29a0f8bb7d312dfc33d2afbb2adbe997d5ed92fa5d43017d305",
+    "config/search_vocabulary_v1.yml": "0b34ac6dc36ba17bb8cc6241a49806ab4fb45482010382519afc6c9fab5a094a",
+    "curation/a3_guide_examples.csv": "cc1f6a979a9571896a9c25a5ec08e8119e8a957def12e69242eec6e3712bacd5",
+    "site/data/global/language_probe.json": "442f0200ee2d899690bf55575c362c97422b2a6bf9ab31c477f9aa830c9e9386",
+    "docs/LABELING_GUIDE_A3_ADDENDUM.md": "cf22b6a835c3f84df7ffae39d7f76fbd7fa69335c256d255f57edbe1277f1a86"
+  }
+}

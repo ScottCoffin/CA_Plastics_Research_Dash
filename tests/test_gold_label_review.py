@@ -690,3 +690,177 @@ def test_legacy_sheet_rows_are_padded_and_keep_their_cells(tmp_path: Path) -> No
     assert gl.read_rows(path)[1]["domain_tags"] == (
         "occurrence_and_monitoring|wastewater_and_treatment"
     )
+
+
+# --- global adaptive block (BQ-G4) -------------------------------------------------------
+
+
+def _global_draws() -> list[dict[str, str]]:
+    return [
+        {"round": "0", "stratum": "s|a|low", "work_id": "W1"},
+        {"round": "0", "stratum": "s|a|low", "work_id": "W2"},
+        {"round": "1", "stratum": "t|b|high", "work_id": "W3"},
+    ]
+
+
+def test_global_sheet_is_created_then_only_appended(tmp_path):
+    sheet = tmp_path / "annotations_global_SC.csv"
+    assert gl.sync_global_sheet(sheet, _global_draws()) == 3
+    first = sheet.read_bytes()
+    assert first.decode("utf-8").splitlines()[0] == ",".join(gl.GLOBAL_FIELDS)
+    assert all(row["title"] == "" and row["abstract"] == "" for row in gl.read_rows(sheet))
+    assert gl.sync_global_sheet(sheet, _global_draws()) == 0  # nothing new: no rewrite
+    more = [*_global_draws(), {"round": "2", "stratum": "t|b|high", "work_id": "W4"}]
+    assert gl.sync_global_sheet(sheet, more) == 1
+    assert sheet.read_bytes().startswith(first)
+
+
+def test_global_save_uses_guide_v3_and_leaves_other_rows_alone(tmp_path):
+    sheet = tmp_path / "annotations_global_SC.csv"
+    gl.sync_global_sheet(sheet, _global_draws())
+    before = sheet.read_bytes()
+    index = gl.global_split_index(_global_draws())
+    form = {"plastic_related": "false"}
+    with pytest.raises(ValueError):
+        gl.save_decision(sheet, "W1", form, "complete", index)  # default guide_v2 is refused
+    assert sheet.read_bytes() == before
+    gl.save_decision(sheet, "W1", form, "complete", index, guide_version=gl.GLOBAL_GUIDE_VERSION)
+    rows = {row["work_id"]: row for row in gl.read_rows(sheet)}
+    assert rows["W1"]["decision_status"] == "complete"
+    assert rows["W1"]["round"] == "0" and rows["W1"]["stratum"] == "s|a|low"
+    assert rows["W2"]["decision_status"] == ""
+    after = sheet.read_text(encoding="utf-8").splitlines()
+    assert after[2] == before.decode("utf-8").splitlines()[2]  # W2 row bytes unchanged
+
+
+def test_global_views_queue_and_progress(tmp_path):
+    sheet = tmp_path / "annotations_global_SC.csv"
+    gl.sync_global_sheet(sheet, _global_draws())
+    index = gl.global_split_index(_global_draws())
+    gl.save_decision(
+        sheet,
+        "W1",
+        {"plastic_related": "false"},
+        "complete",
+        index,
+        guide_version=gl.GLOBAL_GUIDE_VERSION,
+    )
+    rows = gl.read_rows(sheet)
+    assert gl.global_round_views(rows) == [
+        "Unlabelled (all rounds)",
+        "All",
+        "Needs adjudication",
+        "Round 0: unlabelled",
+        "Round 0: all",
+        "Round 1: unlabelled",
+        "Round 1: all",
+    ]
+    assert [r["work_id"] for r in gl.global_queue(rows, "Round 0: unlabelled")] == ["W2"]
+    assert [r["work_id"] for r in gl.global_queue(rows, "Round 0: all")] == ["W1", "W2"]
+    assert [r["work_id"] for r in gl.global_queue(rows, "Unlabelled (all rounds)")] == ["W2", "W3"]
+    assert gl.global_progress(rows) == {"s|a|low": (1, 2), "t|b|high": (0, 1)}
+    with pytest.raises(ValueError):
+        gl.global_queue(rows, "Evaluation set: all")
+
+
+def test_global_sheet_rejects_a_ca_sheet(tmp_path):
+    ca = tmp_path / "annotations_SC.csv"
+    ca.write_text(",".join(gl.ANNOTATION_FIELDS) + "\n", encoding="utf-8")
+    with pytest.raises(ValueError):
+        gl.sync_global_sheet(ca, _global_draws())
+
+
+def test_load_global_abstracts_reads_local_pages_only(tmp_path):
+    import gzip
+    import json
+
+    pages = tmp_path / "pages"
+    pages.mkdir()
+    record = {
+        "id": "https://openalex.org/W9",
+        "abstract_inverted_index": {"plastic": [0], "waste": [1]},
+    }
+    with gzip.open(pages / "1950_00001.jsonl.gz", "wt", encoding="utf-8") as handle:
+        handle.write('{"header": true}\n')
+        handle.write(json.dumps(record) + "\n")
+    found = gl.load_global_abstracts(pages, {"W9", "W404"})
+    assert found == {"W9": "plastic waste"}
+    assert sorted(p.name for p in tmp_path.rglob("*")) == ["1950_00001.jsonl.gz", "pages"]
+
+
+def test_global_app_smoke_labels_one_work(tmp_path, monkeypatch):
+    """Streamlit AppTest on a tiny fixture: one work per screen, one click saves, no score shown."""
+    import gzip
+    import json
+    import sys
+
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+    import streamlit as st
+    from streamlit.testing.v1 import AppTest
+
+    app = Path(__file__).resolve().parent.parent / "scripts" / "review_gold_labels_app.py"
+    works = tmp_path / "works.parquet"
+    pq.write_table(
+        pa.Table.from_pylist(
+            [
+                {
+                    "work_id": "W1",
+                    "title": "Microplastic debris in rivers",
+                    "publication_year": 2020,
+                },
+                {"work_id": "W2", "title": "Plastic bag policy review", "publication_year": 2021},
+            ]
+        ),
+        works,
+    )
+    pages = tmp_path / "pages"
+    pages.mkdir()
+    with gzip.open(pages / "p_00001.jsonl.gz", "wt", encoding="utf-8") as handle:
+        handle.write("{}\n")
+        for work_id, words in (("W1", ["microplastic", "rivers"]), ("W2", ["bag", "policy"])):
+            index = {word: [i] for i, word in enumerate(words)}
+            handle.write(
+                json.dumps(
+                    {"id": f"https://openalex.org/{work_id}", "abstract_inverted_index": index}
+                )
+                + "\n"
+            )
+    ledger = tmp_path / "draws.csv"
+    ledger.write_text("round,stratum,work_id\n0,s|a|low,W1\n0,s|a|low,W2\n", encoding="utf-8")
+    sheet = tmp_path / "annotations_global_SC.csv"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(app),
+            "--global",
+            "--ledger",
+            str(ledger),
+            "--works",
+            str(works),
+            "--pages",
+            str(pages),
+            "--sheet",
+            str(sheet),
+        ],
+    )
+    st.cache_resource.clear()
+    at = AppTest.from_file(str(app), default_timeout=120).run()
+    assert not at.exception
+    import re
+
+    markup = " ".join(str(element.value) for element in at.get("html"))
+    shown = re.sub(r"<[^>]+>", "", markup)  # highlight marks split words; compare the text
+    assert "Microplastic debris in rivers" in shown
+    assert "microplastic rivers" in shown.lower()
+    assert "s|a|low" not in shown and "low" not in " ".join(c.value for c in at.caption)
+    at.radio(key="W1|plastic_related").set_value("false")
+    save = next(button for button in at.button if button.label == "Save and next")
+    save.click().run()
+    assert not at.exception
+    rows = {row["work_id"]: row for row in gl.read_rows(sheet)}
+    assert rows["W1"]["decision_status"] == "complete"
+    assert rows["W1"]["plastic_related"] == "false"
+    assert rows["W2"]["decision_status"] == ""
+    st.cache_resource.clear()

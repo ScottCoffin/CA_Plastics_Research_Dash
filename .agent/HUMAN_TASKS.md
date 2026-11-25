@@ -24,6 +24,16 @@ Last updated: 2026-11-18.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
+### H39. Label the first global gold round (BQ-G4, 160 works, about 1 minute each)
+The global quality numbers stay blank until a person labels a sample. Round 0 is drawn: 160 works,
+10 in each of 16 strata. Labels save on every click, so you can stop and resume any time.
+1. In Git Bash, from the repo folder, run:
+   `py -3.14 -m streamlit run scripts/review_gold_labels_app.py -- --global`
+2. Your browser opens the app. For each work, read the title and abstract (search terms are
+   highlighted) and click one decision per question. The app moves to the next work.
+3. When the progress bar reads "Drawn works labelled 160 of 160", close the browser tab and tell the agent "H39 round 0 done".
+   The agent then draws the next round of 25 and says when the precision goal is met (at most 350).
+
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
 Global Plastic Laws topic. That link is a draft the agent proposed, so the page shows a
@@ -210,8 +220,6 @@ leak-check works wait for S5.7.
 ## Later (the agent will say when each is ready)
 
 
-- **H39. Global gold labelling rounds (BQ-G4, after H37).** Up to 350 works in rounds of 25, in a
-  Streamlit app the agent builds; it tells you when to stop (a checkpoint met the precision goal).
 - **H8. Outreach emails (S9.6).** Now unblocked (H7 done, emails allowed in `data/private/`): approve the email template in
   `docs/OUTREACH.md`, then send the first batch from your own email account. The
   agent never sends email.

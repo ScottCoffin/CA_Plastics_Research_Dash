@@ -50,7 +50,7 @@
       "what": "F1 for each domain tag and each study type, against human labels. Results are flagged when the sample is small or the score is below 0.70."
     }
   },
-  "generated_at": "2026-11-25T16:15:25+00:00",
+  "generated_at": "2026-11-25T17:37:05+00:00",
   "labels": {
     "labelled": 38,
     "planned": 500,

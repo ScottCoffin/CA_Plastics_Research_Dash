@@ -4,6 +4,14 @@ Run from the repository root:
 
     py -3.14 -m streamlit run scripts/review_gold_labels_app.py
 
+Global adaptive block (BQ-G4), after ``scripts/bq_gold_sampler.py round0``:
+
+    py -3.14 -m streamlit run scripts/review_gold_labels_app.py -- --global
+
+It shows the drawn works of ``curation/gold_global_draws_v1.csv`` and saves to
+``curation/annotations/annotations_global_SC.csv``. Titles and abstracts come from the local
+works parquet and OpenAlex pages and are never saved. The score and score band are not shown.
+
 Shows one work at a time from ``curation/splits_v2.csv``, with its title and abstract
 (abstract from ``data/processed/normalized/works.parquet``) and the search terms highlighted.
 "Save and next" validates the row with the rules of ``atlas.nlp.annotation`` and rewrites
@@ -15,6 +23,8 @@ on first run if it is missing and is never overwritten. Nothing is sent anywhere
 from __future__ import annotations
 
 import argparse
+import csv
+import hashlib
 import sys
 from pathlib import Path
 from typing import Any
@@ -32,6 +42,10 @@ from atlas.query import load_query_config  # noqa: E402
 SPLITS_CSV = ROOT / "curation" / "splits_v2.csv"
 WORKS_PARQUET = ROOT / "data" / "processed" / "normalized" / "works.parquet"
 DEFAULT_SHEET = ROOT / "curation" / "annotations" / gl.SHEET_NAME
+DEFAULT_GLOBAL_SHEET = ROOT / "curation" / "annotations" / gl.GLOBAL_SHEET_NAME
+DEFAULT_LEDGER = ROOT / "curation" / "gold_global_draws_v1.csv"
+GLOBAL_WORKS_PARQUET = ROOT / "data" / "processed" / "global" / "works.parquet"
+GLOBAL_PAGES = ROOT / "data" / "raw" / "openalex_global" / "pages"
 CA_HELP = (
     "guide_v1 section 3. California land or state waters only; mentions, affiliations and "
     "lab-only work do not count."
@@ -43,25 +57,70 @@ LENS_HELP_TEXT = "\n\n".join([gl.LENS_RULE, *(f"**{k}**: {v}" for k, v in gl.LEN
 NEW_LABEL = "__new__"
 
 
-def _sheet_path() -> Path:
+def _options() -> argparse.Namespace:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--sheet", default="")
+    parser.add_argument("--global", dest="global_block", action="store_true")
+    parser.add_argument("--ledger", default="")
+    parser.add_argument("--works", default="")
+    parser.add_argument("--pages", default="")
     args, _ = parser.parse_known_args()
-    path = Path(args.sheet) if args.sheet else DEFAULT_SHEET
+    return args
+
+
+def _root_path(text: str, default: Path) -> Path:
+    if not text:
+        return default
+    path = Path(text)
     return path if path.is_absolute() else ROOT / path
 
 
-SHEET = _sheet_path()
+OPTIONS = _options()
+GLOBAL = bool(OPTIONS.global_block)
+GUIDE_VERSION = gl.GLOBAL_GUIDE_VERSION if GLOBAL else gl.GUIDE_VERSION
+LEDGER = _root_path(OPTIONS.ledger, DEFAULT_LEDGER)
+GLOBAL_WORKS = _root_path(OPTIONS.works, GLOBAL_WORKS_PARQUET)
+PAGES = _root_path(OPTIONS.pages, GLOBAL_PAGES)
+SHEET = _root_path(OPTIONS.sheet, DEFAULT_GLOBAL_SHEET if GLOBAL else DEFAULT_SHEET)
+
+
+def _ledger_draws() -> list[dict[str, str]]:
+    """Drawn works from the draw ledger (read only here)."""
+    if not LEDGER.exists():
+        return []
+    with LEDGER.open(encoding="utf-8", newline="") as handle:
+        return [dict(row) for row in csv.DictReader(handle)]
+
+
+def _opaque(stratum: str) -> str:
+    """A stratum label that does not reveal the score band to the labeller."""
+    return "Stratum " + hashlib.sha1(stratum.encode("utf-8")).hexdigest()[:6]
 
 
 @st.cache_resource(show_spinner=False)
 def _splits() -> list[dict[str, str]]:
+    if GLOBAL:
+        return [
+            {"work_id": wid, **meta} for wid, meta in gl.global_split_index(_ledger_draws()).items()
+        ]
     return gl.load_splits(SPLITS_CSV)
 
 
 @st.cache_resource(show_spinner=False)
 def _works() -> dict[str, dict[str, Any]]:
-    return gl.load_works(WORKS_PARQUET, [str(row["work_id"]) for row in _splits()])
+    ids = [str(row["work_id"]) for row in _splits()]
+    if not GLOBAL:
+        return gl.load_works(WORKS_PARQUET, ids)
+    works = gl.load_works(GLOBAL_WORKS, ids, fallbacks=(), authorships=None)
+    abstracts = gl.load_global_abstracts(PAGES, set(ids))
+    for work_id in ids:
+        record = works.setdefault(work_id, {"work_id": work_id})
+        record["abstract"] = abstracts.get(work_id, "")
+    return works
+
+
+def _queue(rows: list[dict[str, str]], view: str) -> list[dict[str, str]]:
+    return gl.global_queue(rows, view) if GLOBAL else gl.queue(rows, view)
 
 
 @st.cache_resource(show_spinner=False)
@@ -71,6 +130,8 @@ def _rules() -> list[hl.Rule]:
 
 @st.cache_resource(show_spinner=False)
 def _prior() -> dict[str, dict[str, str]]:
+    if GLOBAL:
+        return {}  # the global block is label-blind: no earlier relevance decision is shown
     return gl.load_prior_relevance(
         ROOT / "curation" / "overrides_works.csv", ROOT / "curation" / "work_relevance.csv"
     )
@@ -89,7 +150,7 @@ def _go(delta: int) -> None:
 def _save(work_id: str, status: str) -> None:
     """Callback: validate, write one row, move on. Errors stay on screen, nothing is written."""
     view = st.session_state.view
-    before = [row["work_id"] for row in gl.queue(gl.read_rows(SHEET), view)]
+    before = [row["work_id"] for row in _queue(gl.read_rows(SHEET), view)]
     form = {field: st.session_state.get(_key(work_id, field)) for field in gl.FORM_FIELDS}
     if form["study_type"] == NEW_LABEL:
         typed = gl.normalize_label(st.session_state.get(_key(work_id, "study_type_new")) or "")
@@ -98,11 +159,13 @@ def _save(work_id: str, status: str) -> None:
             return
         form["study_type"] = typed
     try:
-        gl.save_decision(SHEET, work_id, form, status, gl.split_index(_splits()))
+        gl.save_decision(
+            SHEET, work_id, form, status, gl.split_index(_splits()), guide_version=GUIDE_VERSION
+        )
     except (ValueError, KeyError) as error:
         st.session_state.flash = ("error", f"Not saved: {error}")
         return
-    after = [row["work_id"] for row in gl.queue(gl.read_rows(SHEET), view)]
+    after = [row["work_id"] for row in _queue(gl.read_rows(SHEET), view)]
     st.session_state.pos = gl.position_after(before, after, work_id, st.session_state.pos)
     st.session_state.search = ""
     label = "adjudication hold" if status == "adjudication_required" else "complete"
@@ -111,7 +174,7 @@ def _save(work_id: str, status: str) -> None:
 
 def _skip(work_id: str) -> None:
     view = st.session_state.view
-    ids = [row["work_id"] for row in gl.queue(gl.read_rows(SHEET), view)]
+    ids = [row["work_id"] for row in _queue(gl.read_rows(SHEET), view)]
     st.session_state.pos = gl.position_after(ids, ids, work_id, st.session_state.pos)
     st.session_state.search = ""
 
@@ -284,40 +347,67 @@ def _draw_form(
     )
 
 
+def _open_rows(works: dict[str, dict[str, Any]]) -> tuple[list[dict[str, str]], bool]:
+    """(sheet rows, created). The global sheet gains rows for newly drawn works; old rows stay."""
+    if GLOBAL:
+        created = not SHEET.exists()
+        gl.sync_global_sheet(SHEET, _ledger_draws())
+        return gl.read_rows(SHEET), created
+    created = gl.ensure_sheet(SHEET, _splits(), works)
+    return gl.read_rows(SHEET), created
+
+
 def main() -> None:
     st.set_page_config(page_title="Atlas gold labels", layout="wide")
-    st.markdown("### Gold labels: plastic relevance, CA sampling, design, domains")
+    if GLOBAL:
+        st.markdown("### Global gold labels (BQ-G4): relevance, CA sampling, design, domains")
+    else:
+        st.markdown("### Gold labels: plastic relevance, CA sampling, design, domains")
 
-    splits = _splits()
     works = _works()
     try:
-        created = gl.ensure_sheet(SHEET, splits, works)
-        rows = gl.read_rows(SHEET)
-    except (ValueError, OSError) as error:
+        rows, created = _open_rows(works)
+    except (ValueError, OSError, KeyError) as error:
         st.error(f"Cannot open the sheet: {error}")
         return
     if created:
-        st.toast(f"Created {SHEET.name} from {SPLITS_CSV.name}.")
+        st.toast(f"Created {SHEET.name}.")
 
     if flash := st.session_state.pop("flash", None):
         kind, message = flash
         (st.success if kind == "success" else st.error)(message)
 
     with st.sidebar:
-        st.caption(f"Annotator `{gl.ANNOTATOR}` · `{gl.GUIDE_VERSION}`")
+        st.caption(f"Annotator `{gl.ANNOTATOR}` · `{GUIDE_VERSION}`")
         st.caption(f"Sheet: `{SHEET.relative_to(ROOT) if SHEET.is_relative_to(ROOT) else SHEET}`")
-        done, total = gl.eval_progress(rows)
-        st.progress(
-            done / total if total else 1.0,
-            text=f"Evaluation set: labelled {done} of {total}",
-        )
-        st.caption(
-            "Train (350) and leak-check (80) works are not needed now: train labels come from "
-            "active learning, leak-check works wait for S5.7."
-        )
-        for split, (done, total) in gl.progress(rows).items():
-            st.progress(done / total if total else 1.0, text=f"{split}: labelled {done} of {total}")
-        view = st.selectbox("Show", gl.VIEWS, key="view")
+        if GLOBAL:
+            done = sum(1 for row in rows if row["decision_status"] == "complete")
+            st.progress(
+                done / len(rows) if rows else 1.0,
+                text=f"Drawn works labelled {done} of {len(rows)}",
+            )
+            for stratum, (stratum_done, total) in gl.global_progress(rows).items():
+                st.progress(
+                    stratum_done / total,
+                    text=f"{_opaque(stratum)}: labelled {stratum_done} of {total}",
+                )
+            views = gl.global_round_views(rows)
+            view = st.selectbox("Show (round)", views, key="view")
+        else:
+            done, total = gl.eval_progress(rows)
+            st.progress(
+                done / total if total else 1.0,
+                text=f"Evaluation set: labelled {done} of {total}",
+            )
+            st.caption(
+                "Train (350) and leak-check (80) works are not needed now: train labels come from "
+                "active learning, leak-check works wait for S5.7."
+            )
+            for split, (done, total) in gl.progress(rows).items():
+                st.progress(
+                    done / total if total else 1.0, text=f"{split}: labelled {done} of {total}"
+                )
+            view = st.selectbox("Show", gl.VIEWS, key="view")
         st.text_input("Work ID search", key="search", placeholder="W1234567 or 1234567")
         with st.expander("Highlight legend"):
             st.html(hl.legend_html())
@@ -327,7 +417,7 @@ def main() -> None:
         st.session_state["view_seen"] = view
     st.session_state.setdefault("pos", 0)
 
-    queue = gl.queue(rows, view)
+    queue = _queue(rows, view)
     st.session_state.queue_len = len(queue)
     found = None
     if st.session_state.get("search", "").strip():
@@ -382,11 +472,17 @@ def main() -> None:
     )
     st.html(blocks.summary)
     st.html(blocks.abstract)
-    st.caption(
-        f"**{work_id}** · split "
-        f"`{current['split']}` · role `{current['sample_role']}` · status "
-        f"`{current['decision_status'] or 'unlabelled'}`"
-    )
+    if GLOBAL:
+        st.caption(
+            f"**{work_id}** · round {current['round']} · status "
+            f"`{current['decision_status'] or 'unlabelled'}`"
+        )
+    else:
+        st.caption(
+            f"**{work_id}** · split "
+            f"`{current['split']}` · role `{current['sample_role']}` · status "
+            f"`{current['decision_status'] or 'unlabelled'}`"
+        )
     if current["decision_status"] in ("complete", "adjudication_required"):
         st.caption("Already recorded: saving again overwrites this row.")
 

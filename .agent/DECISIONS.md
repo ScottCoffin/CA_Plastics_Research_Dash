@@ -816,3 +816,19 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
   go to `site/data/global/`; release.json and status.json stay at the root. Layout and rules: docs/DATA_LAYOUT.md.
 - **Consequences:** one helper per side (Python `region_data_dir()`, front end `regionDataUrl()`); the daily ingest
   commits the new paths; the release snapshot packages root, california and global top-level JSON.
+
+## ADR-GOLD-GLOBAL-SAMPLER-2026-11-25: global gold frame and adaptive sampler (BQ-G3, BQ-G4; lead review of `[E]` work)
+- **Context:** the first frame left 18,327 zero-score works undrawable, used 32 strata (round 0 = 263 labels, above
+  the A3 §4.4 global ceiling of 200), and the simulated adaptive Neyman allocation showed a -1.18% relative bias
+  (-2.6 SE over 500 runs) against A3 §4.3 item 7 ("label once").
+- **Decision (lead):** (1) every query hit is drawable: zero-score works join the low band, and the frame is stored as
+  `curation/gold_global_frame_v1.csv.gz`; (2) strata collapse to 16: global English keeps theme (pollution-core,
+  lifecycle-and-society, other) x band (low incl. zero, medium, high) plus one lens-candidate stratum (10); the
+  California-region and global non-English blocks keep theme only, with lens merged into lifecycle-and-society
+  (3 + 3); round 0 = 10 per stratum = 160, leaving 40 for adaptive rounds inside the 200 ceiling; (3) the adaptive
+  allocation stays (A3 §4.3 item 3) with its bias documented (under a quarter of the 0.05 half-width target); within
+  strata, draws follow the frozen random order, so item 7 holds within strata; BQ-1.1 reports the simulated bias next
+  to the estimate; (4) P3 for global works is the low band including zero-score works (global works are not
+  auto-excluded).
+- **Consequences:** BQ-G3 rebuilds the frame and BQ-G4 reruns round 0 before anything is committed; the owner labels
+  round 0 (H39) only after that.

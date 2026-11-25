@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import csv
+import gzip
+import io
 import json
 import sys
 from collections.abc import Mapping, Sequence
@@ -27,6 +29,7 @@ MANIFEST_V2 = Path("curation/splits_v2_manifest.json")
 LEAK_HITS = Path("curation/leak_gazetteer_hits_v1.csv")
 LEAK_RAW = Path("data/interim/leak_candidates.parquet")
 GUIDE_EXAMPLES = Path("curation/a3_guide_examples.csv")
+GLOBAL_FRAME = Path("curation/gold_global_frame_v1.csv.gz")
 DOI_PREFIXES = (
     "https://doi.org/",
     "http://doi.org/",
@@ -195,11 +198,25 @@ def check_guide_examples() -> str:
     with GUIDE_EXAMPLES.open(encoding="utf-8-sig", newline="") as stream:
         guides = list(csv.DictReader(stream))
     frames = {}
-    for name, path in (("splits_v1", SPLITS), ("splits_v2", SPLITS_V2)):
-        with path.open(encoding="utf-8-sig", newline="") as stream:
-            frames[name] = list(csv.DictReader(stream))
+    for name, path in (
+        ("splits_v1", SPLITS),
+        ("splits_v2", SPLITS_V2),
+        ("global_frame", GLOBAL_FRAME),
+    ):
+        if name == "global_frame" and not path.exists():
+            continue
+        if path.suffix == ".gz":
+            text = gzip.decompress(path.read_bytes()).decode("utf-8-sig")
+            frames[name] = list(csv.DictReader(io.StringIO(text, newline="")))
+        else:
+            with path.open(encoding="utf-8-sig", newline="") as stream:
+                frames[name] = list(csv.DictReader(stream))
     checked = assert_guide_examples_excluded(guides, frames, load_doi_by_work())
-    return f"{checked} guide examples (by work_id or DOI) absent from splits_v1 and splits_v2"
+    frame_rows = len(frames.get("global_frame", []))
+    return (
+        f"{checked} guide examples (by work_id or DOI) absent from splits_v1 and splits_v2"
+        f"; global frame ({frame_rows} rows) also clean"
+    )
 
 
 def main() -> None:

@@ -1,9 +1,9 @@
 {
   "checkpoint": null,
   "design": {
-    "strata_sampled": 32,
+    "strata_sampled": 16,
     "text": "The global sample draws works from the frozen query frame in strata defined by language block, theme group and relevance-score band. The allocation adapts to the variance seen so far (Neyman allocation). Each estimate is weighted by stratum size, and the ceiling for the low band is an upper bound, not a point estimate.",
-    "works_planned": 263
+    "works_planned": 160
   },
   "estimands": {
     "E1g": {
@@ -28,11 +28,11 @@
       "what": "An upper bound, at 95% confidence, on the share of low-scoring global works that are plastics research."
     }
   },
-  "generated_at": "2026-11-25T16:15:25+00:00",
+  "generated_at": "2026-11-25T17:37:05+00:00",
   "labels": {
     "labelled": 0,
-    "planned": 263,
-    "text": "0 of 263 global works labelled",
+    "planned": 160,
+    "text": "0 of 160 global works labelled",
     "unit": "global works"
   },
   "note": "Reported only at a final checkpoint. Interim results are not published (A3 section 7).",

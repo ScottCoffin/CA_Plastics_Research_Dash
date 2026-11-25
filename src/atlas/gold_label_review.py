@@ -10,6 +10,7 @@ one being saved keep their exact bytes (including the UTF-8 BOM written by
 from __future__ import annotations
 
 import csv
+import gzip
 import io
 import json
 import os
@@ -36,6 +37,13 @@ from atlas.nlp.annotation import (
 ANNOTATOR = "SC"
 GUIDE_VERSION = "guide_v2"
 SHEET_NAME = f"annotations_{ANNOTATOR}.csv"
+# Global adaptive block (BQ-G4): same columns as the CA sheet plus the draw round and stratum.
+GLOBAL_SHEET_NAME = f"annotations_global_{ANNOTATOR}.csv"
+GLOBAL_GUIDE_VERSION = "guide_v3"
+GLOBAL_SPLIT = "global"
+GLOBAL_SAMPLE_ROLE = "gold_global"
+GLOBAL_EXTRA_FIELDS = ("round", "stratum")
+GLOBAL_FIELDS = (*ANNOTATION_FIELDS, *GLOBAL_EXTRA_FIELDS)
 MAX_SNIPPET_CHARS = 1000
 SPLIT_ORDER = ("test", "dev", "train")
 # Dev and test are labelled before train: dev sets thresholds, test is frozen (F3).
@@ -428,6 +436,7 @@ def ensure_sheet(
 class _Parsed:
     bom: str
     records: list[tuple[str, list[str]]]  # (raw text including line ending, fields)
+    names: tuple[str, ...]  # the column names of this sheet (CA or global)
 
 
 def _parse(path: Path) -> _Parsed:
@@ -443,12 +452,14 @@ def _parse(path: Path) -> _Parsed:
         records.append(("".join(lines[start:end]), fields))
         start = end
     # Sheets written before the BQ-S5 columns carry the legacy header (rows read as blank there).
-    if not records or records[0][1] not in (
-        list(ANNOTATION_FIELDS),
-        list(LEGACY_ANNOTATION_FIELDS),
-    ):
+    header = records[0][1] if records else []
+    if header == list(GLOBAL_FIELDS):
+        names: tuple[str, ...] = GLOBAL_FIELDS
+    elif header in (list(ANNOTATION_FIELDS), list(LEGACY_ANNOTATION_FIELDS)):
+        names = ANNOTATION_FIELDS
+    else:
         raise ValueError(f"annotation header mismatch in {path}")
-    return _Parsed(bom, records)
+    return _Parsed(bom, records, names)
 
 
 def _as_dicts(parsed: _Parsed) -> list[tuple[int, dict[str, str]]]:
@@ -457,8 +468,8 @@ def _as_dicts(parsed: _Parsed) -> list[tuple[int, dict[str, str]]]:
     for index, (_, fields) in enumerate(parsed.records[1:], start=1):
         if not fields:
             continue
-        padded = fields + [""] * (len(ANNOTATION_FIELDS) - len(fields))
-        out.append((index, dict(zip(ANNOTATION_FIELDS, padded, strict=False))))
+        padded = fields + [""] * (len(parsed.names) - len(fields))
+        out.append((index, dict(zip(parsed.names, padded, strict=False))))
     return out
 
 
@@ -510,21 +521,20 @@ def update_row(path: Path, work_id: str, values: Mapping[str, str]) -> None:
     index = matches[0]
     raw, fields = parsed.records[index]
     terminator = "\r\n" if raw.endswith("\r\n") else "\n"
-    padded = fields + [""] * (len(ANNOTATION_FIELDS) - len(fields))
-    row = dict(zip(ANNOTATION_FIELDS, padded, strict=False))
+    names = parsed.names
+    padded = fields + [""] * (len(names) - len(fields))
+    row = dict(zip(names, padded, strict=False))
     row.update({key: str(value) for key, value in values.items()})
     buffer = io.StringIO(newline="")
-    csv.writer(buffer, lineterminator=terminator).writerow(
-        [row[field] for field in ANNOTATION_FIELDS]
-    )
+    csv.writer(buffer, lineterminator=terminator).writerow([row[field] for field in names])
     records = list(parsed.records)
-    if records[0][1] != list(ANNOTATION_FIELDS):
+    if records[0][1] != list(names):
         # Legacy header: widen it to the current columns and pad every data row with empty
         # trailing cells. Existing cells keep their bytes; only commas are appended.
         header_end = "\r\n" if records[0][0].endswith("\r\n") else "\n"
         header = io.StringIO(newline="")
-        csv.writer(header, lineterminator=header_end).writerow(ANNOTATION_FIELDS)
-        records[0] = (header.getvalue(), list(ANNOTATION_FIELDS))
+        csv.writer(header, lineterminator=header_end).writerow(names)
+        records[0] = (header.getvalue(), list(names))
         records = [records[0]] + [
             (_pad_record(text, fields), fields) for text, fields in records[1:]
         ]
@@ -636,13 +646,14 @@ def save_decision(
     form: Mapping[str, Any],
     decision_status: str,
     splits: Mapping[str, Mapping[str, Any]],
+    guide_version: str = GUIDE_VERSION,
 ) -> dict[str, str]:
     """Validate the merged row, then write only that row. Raises ValueError on bad input."""
     current = {row["work_id"]: row for row in read_rows(path)}
     if work_id not in current:
         raise KeyError(work_id)
     values = values_from_form(form, decision_status, title=current[work_id].get("title", ""))
-    validate_row({**current[work_id], **values}, splits)
+    validate_row({**current[work_id], **values}, splits, guide_version)
     update_row(path, work_id, values)
     return values
 
@@ -768,3 +779,124 @@ def position_after(before: Sequence[str], after: Sequence[str], work_id: str, po
         return pos
     index = before.index(work_id)
     return index if work_id not in after else index + 1
+
+
+# --- global adaptive block (BQ-G4) -------------------------------------------------------
+# The global sheet has the CA columns plus ``round`` and ``stratum``. Titles and abstracts are
+# never written to it: the app reads them from the local works parquet and OpenAlex pages.
+# The frame carries no labels or scores that the labeller sees; the sheet holds none either.
+
+GLOBAL_FIXED_VIEWS = ("Unlabelled (all rounds)", "All", "Needs adjudication")
+_GLOBAL_ROUND_VIEW = re.compile(r"^Round (\d+): (unlabelled|all)$")
+
+
+def global_split_index(draws: Sequence[Mapping[str, str]]) -> dict[str, dict[str, str]]:
+    """The split metadata ``_normalize_row`` checks for the global sheet's rows."""
+    return {
+        str(row["work_id"]): {"split": GLOBAL_SPLIT, "sample_role": GLOBAL_SAMPLE_ROLE}
+        for row in draws
+    }
+
+
+def global_round_views(rows: Sequence[Mapping[str, str]]) -> list[str]:
+    """View names for the app's selector: fixed views, then one pair per drawn round."""
+    rounds = sorted({int(row["round"]) for row in rows if str(row.get("round", "")).isdigit()})
+    views = list(GLOBAL_FIXED_VIEWS)
+    for number in rounds:
+        views += [f"Round {number}: unlabelled", f"Round {number}: all"]
+    return views
+
+
+def global_queue(rows: Sequence[Mapping[str, str]], view: str) -> list[dict[str, str]]:
+    """Work list for one global view, ordered by round, stratum and work_id."""
+    drawn = [row for row in rows if str(row.get("round", "")).strip()]
+    if view == "All":
+        members = drawn
+    elif view == "Unlabelled (all rounds)":
+        members = [row for row in drawn if is_unlabelled(row)]
+    elif view == "Needs adjudication":
+        members = [row for row in drawn if row["decision_status"] == "adjudication_required"]
+    elif match := _GLOBAL_ROUND_VIEW.match(view):
+        number = int(match.group(1))
+        members = [row for row in drawn if int(row["round"]) == number]
+        if match.group(2) == "unlabelled":
+            members = [row for row in members if is_unlabelled(row)]
+    else:
+        raise ValueError(f"unknown view: {view!r}")
+    ordered = sorted(members, key=lambda r: (int(r["round"]), r["stratum"], r["work_id"]))
+    return [dict(row) for row in ordered]
+
+
+def global_progress(rows: Sequence[Mapping[str, str]]) -> dict[str, tuple[int, int]]:
+    """stratum -> (complete, drawn) for the progress bars. Counts only."""
+    out: dict[str, tuple[int, int]] = {}
+    for row in rows:
+        if not str(row.get("stratum", "")).strip():
+            continue
+        done, total = out.get(row["stratum"], (0, 0))
+        out[row["stratum"]] = (done + (row["decision_status"] == "complete"), total + 1)
+    return dict(sorted(out.items()))
+
+
+def sync_global_sheet(path: Path, draws: Sequence[Mapping[str, str]]) -> int:
+    """Create the global sheet, or append rows for drawn works it does not list yet.
+
+    Existing rows are never rewritten. Returns the number of rows added. Draw records need
+    ``work_id``, ``round`` and ``stratum``.
+    """
+    existed = path.exists()
+    listed: set[str] = set()
+    if existed:
+        parsed = _parse(path)
+        if parsed.names != GLOBAL_FIELDS:
+            raise ValueError(f"{path} is not a global sheet (header mismatch)")
+        listed = {row["work_id"] for _, row in _as_dicts(parsed)}
+    new = [draw for draw in draws if str(draw["work_id"]) not in listed]
+    if not new and existed:
+        return 0
+    buffer = io.StringIO(newline="")
+    writer = csv.writer(buffer, lineterminator="\n")
+    if not existed:
+        writer.writerow(GLOBAL_FIELDS)
+    for draw in new:
+        values = {
+            "work_id": str(draw["work_id"]),
+            "split": GLOBAL_SPLIT,
+            "sample_role": GLOBAL_SAMPLE_ROLE,
+            "annotator": ANNOTATOR,
+            "guide_version": GLOBAL_GUIDE_VERSION,
+            "round": str(draw["round"]),
+            "stratum": str(draw["stratum"]),
+        }
+        writer.writerow([values.get(field, "") for field in GLOBAL_FIELDS])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if existed:
+        with path.open("a", encoding="utf-8", newline="") as handle:
+            handle.write(buffer.getvalue())
+    else:
+        _write_atomic(path, buffer.getvalue())
+    return len(new)
+
+
+def load_global_abstracts(pages_dir: Path, wanted: set[str]) -> dict[str, str]:
+    """work_id -> abstract from the local gzip OpenAlex pages (JSON lines). Read only; not saved."""
+    out: dict[str, str] = {}
+    if not wanted or not Path(pages_dir).is_dir():
+        return out
+    for page in sorted(Path(pages_dir).glob("*.jsonl.gz")):
+        with gzip.open(page, "rt", encoding="utf-8") as handle:
+            for line in handle:
+                if not line.strip():
+                    continue
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                work_id = str(record.get("id") or "").rsplit("/", 1)[-1]
+                if work_id in wanted and work_id not in out:
+                    out[work_id] = _abstract_from_inverted_index(
+                        record.get("abstract_inverted_index")
+                    )
+        if wanted <= out.keys():
+            break
+    return out
