@@ -230,6 +230,8 @@ leak-check works wait for S5.7.
      TURNSTILE_SECRET, SESSION_SIGNING_KEY, EMAIL_HASH_KEY. Use the values in `.env` where they exist; for a
      missing key, make one with `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`.
      EMAIL_HASH_KEY must be a new value, not the session key.
+     Also add EXPORT_TOKEN (a new random value made the same way; the pull-request job will use it). In
+     `worker/wrangler.toml`, the agent will set OWNER_ORCID to your ORCID iD once you tell it (one line).
   4. Tell the agent "H49 secrets set". The deploy waits for a separate "deploy the Worker" go-ahead.
 
 - **H8. Outreach emails (S9.6).** Now unblocked (H7 done, emails allowed in `data/private/`): approve the email template in
