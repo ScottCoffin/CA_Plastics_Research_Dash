@@ -602,3 +602,43 @@ def test_unknown_credit_429_is_charged_reserve_not_blocking(tmp_path: Path) -> N
     path.write_text(json.dumps(unknown_500) + "\n", "utf-8")
     with pytest.raises(ValueError, match="unknown credits"):
         daily_logged_usage(path, cost_per_credit_usd=Decimal("0.0001"), day=date(2026, 11, 9))
+
+
+@pytest.mark.parametrize("status", [401, 403])
+def test_unknown_credit_client_refusal_is_charged_reserve_not_blocking(
+    tmp_path: Path, status: int
+) -> None:
+    path = tmp_path / "usage.jsonl"
+    refused = {
+        "record_type": "request",
+        "source": "openalex",
+        "timestamp_utc": "2026-11-09T12:00:00Z",
+        "url": "https://api.openalex.org/works?cursor=*",
+        "status_code": status,
+        "credits": 0,
+        "credits_known": False,
+        "cost_known": False,
+    }
+    path.write_text(json.dumps(refused) + "\n", "utf-8")
+    costs, credits = daily_logged_usage(
+        path, cost_per_credit_usd=Decimal("0.0001"), day=date(2026, 11, 9)
+    )
+    assert credits == Decimal(10) and costs == Decimal("0.001")
+
+
+@pytest.mark.parametrize("status", [404, 500])
+def test_unknown_credit_other_status_still_blocks(tmp_path: Path, status: int) -> None:
+    path = tmp_path / "usage.jsonl"
+    row = {
+        "record_type": "request",
+        "source": "openalex",
+        "timestamp_utc": "2026-11-09T12:00:00Z",
+        "url": "https://api.openalex.org/works?filter=x",
+        "status_code": status,
+        "credits": 0,
+        "credits_known": False,
+        "cost_known": False,
+    }
+    path.write_text(json.dumps(row) + "\n", "utf-8")
+    with pytest.raises(ValueError, match="unknown credits"):
+        daily_logged_usage(path, cost_per_credit_usd=Decimal("0.0001"), day=date(2026, 11, 9))

@@ -161,6 +161,9 @@ def conservative_request_cost(
 UNKNOWN_429_CREDITS = Decimal(10)
 # Gateway failures (owner run 2026-11-12: HTTP 504 on group_by) are charged like a 429.
 GATEWAY_STATUSES = (502, 503, 504)
+# Client refusals (401 missing key, 403 forbidden) are rejected before any metered
+# work, so no credits are spent; charging the reserve anyway is conservative.
+CLIENT_REFUSAL_STATUSES = (401, 403)
 
 
 def daily_logged_usage(
@@ -202,12 +205,13 @@ def daily_logged_usage(
                 continue
             status = record.get("status_code")
             if record.get("credits_known", True) is not True and (
-                status in (429, *GATEWAY_STATUSES)
+                status in (429, *GATEWAY_STATUSES, *CLIENT_REFUSAL_STATUSES)
             ):
-                # A rate-limited (429) or gateway-failed (502/503/504, e.g. a gateway
-                # timeout) request carries no credit header. Charge it the conservative
-                # per-request reserve instead of blocking the rest of the day. Origin
-                # errors (500) stay blocking: they may have been metered.
+                # A rate-limited (429), gateway-failed (502/503/504, e.g. a gateway
+                # timeout) or client-refused (401/403) request carries no credit header.
+                # Charge it the conservative per-request reserve instead of blocking the
+                # rest of the day. Origin errors (500) and other statuses stay blocking:
+                # they may have been metered.
                 credits_total += UNKNOWN_429_CREDITS
                 cost_total += UNKNOWN_429_CREDITS * cost_per_credit_usd
                 continue
