@@ -231,6 +231,10 @@ leak-check works wait for S5.7.
      account, free tier, and writes its id into `wrangler.toml`; no database exists yet).
   4. Later, say "deploy the Worker" when you want it live.
 
+- **H50. Allow the ambassador export job to open pull requests (AMB-1, 1 minute).** GitHub repo Settings >
+  Actions > General > Workflow permissions: tick "Allow GitHub Actions to create and approve pull requests", Save.
+  (The AMB_EXPORT_TOKEN secret is already set.) Each daily PR is yours to review; nothing merges on its own.
+
 - **H8. Outreach emails (S9.6).** Now unblocked (H7 done, emails allowed in `data/private/`): approve the email template in
   `docs/OUTREACH.md`, then send the first batch from your own email account. The
   agent never sends email.

@@ -18,7 +18,7 @@ records:
 - `version`: for example `gold_v1`. Unique across the manifest.
 - `files`: an object that maps each repo-relative file path to its sha256 (lowercase hex).
 - `release_date`: ISO date (YYYY-MM-DD).
-- `licence`: `CC BY 4.0` (owner answer A3-Q9).
+- `licence`: `CC BY-NC 4.0` (owner 2026-11-25: all labels and data in this repo; `LICENSE-DATA.md`).
 
 Labels in `curation/annotations/` are not released until they appear in the manifest. Until then
 they may change freely.
@@ -56,10 +56,9 @@ A published gold release contains:
 A release never contains personal data, full abstracts, or full titles where they are not needed
 for the excerpt. Full-text sources are not redistributed.
 
-All published gold files are licensed under **CC BY 4.0** (owner answer A3-Q9). The licence text is
-at https://creativecommons.org/licenses/by/4.0/. `LICENSE-DATA.md` at the repo root states the
-project's general data licence; the gold-specific licence stated here applies to published gold
-files. See "Open licence question" below.
+All published gold files are licensed under **CC BY-NC 4.0**, like every label and data file in this
+repo (owner 2026-11-25, superseding A3-Q9's CC BY 4.0; `LICENSE-DATA.md`). The licence text is at
+https://creativecommons.org/licenses/by-nc/4.0/. Commercial use is not permitted.
 
 ## Where a release is published
 
@@ -71,13 +70,6 @@ step waits for the first gold release.
 Each release is accompanied by agreement statistics computed from the labelling rounds it covers
 (inter-annotator agreement and the adjudication counts). The statistics are published with the
 release, not as a separate untracked file.
-
-## Open licence question
-
-`LICENSE-DATA.md` (owner decision 2026-11-18) places curation files under CC BY-NC 4.0 and keeps
-CC BY 4.0 only for data released before 2026-11-18. A3-Q9 says published gold uses CC BY 4.0.
-This policy follows A3-Q9. The owner should confirm whether `LICENSE-DATA.md` needs a
-gold-specific exception before the first release.
 
 ## Changelog
 
