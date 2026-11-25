@@ -34,6 +34,8 @@ data/logs/*
 !data/logs/.gitkeep
 data/processed/normalized/
 data/processed/analytics/
+# PLAT-4b global partition (unscreened query hits; never committed)
+data/processed/global/
 
 # Downloaded full text and local model artifacts
 *.pdf
