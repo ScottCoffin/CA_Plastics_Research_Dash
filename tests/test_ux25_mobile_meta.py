@@ -14,6 +14,8 @@ FW = ROOT / "framework"
 # PLAT-1: California pages are keyed "california/<page>"; "index" is the global page.
 PAGES = {
     "index",
+    "norway/index",
+    "belgium/index",
     "california/index",
     "california/authors",
     "california/network",
