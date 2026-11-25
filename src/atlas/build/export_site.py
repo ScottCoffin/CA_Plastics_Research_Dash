@@ -34,6 +34,8 @@ from atlas.build.network import network_counts
 from atlas.ingest.abstract_qc import misattached_abstract_ids
 from atlas.nlp.labels import always_relevant, title_relevant
 from atlas.query import load_query_config
+from atlas.regions.registry import Region
+from atlas.regions.scope import region_data_dir
 
 SCHEMA_VERSION = "s3.1"
 
@@ -612,12 +614,16 @@ def export_site(
     model_relevance_path: str | Path | None = None,
     author_metrics_path: str | Path | None = None,
     query_config_path: str | Path | None = None,
-    output_dir: str | Path = "site/data",
+    output_dir: str | Path | None = None,
     generated_at: str | None = None,
     ca_authors_only: bool = True,
     profiles: Mapping[str, Mapping[str, Any]] | None = None,
+    region: Region | None = None,
 ) -> ExportResult:
     """Build all S3.1 payloads from normalized C3 tables.
+
+    ``output_dir`` wins when given. Otherwise the payloads go to the region's data folder
+    (``region_data_dir``; ``None`` means the default region, which is site/data).
 
     ``ca_authors_only`` keeps the Experts index and author files to authors with at
     least one California-affiliated authorship (``ca_works_count > 0``).
@@ -996,7 +1002,7 @@ def export_site(
             }
         )
 
-    output = Path(output_dir)
+    output = Path(output_dir) if output_dir is not None else region_data_dir(region)
     output.mkdir(parents=True, exist_ok=True)
     timestamp = generated_at or datetime.now(UTC).replace(microsecond=0).isoformat()
     counts = {

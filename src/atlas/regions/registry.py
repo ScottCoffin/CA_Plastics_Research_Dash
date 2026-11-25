@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 import yaml
@@ -17,6 +17,8 @@ SCHEMA_VERSION = 1
 TIERS = frozenset({"root", "A", "B", "C"})
 STATUSES = frozenset({"active", "planned", "retired"})
 REGION_KEYS = frozenset({"slug", "name", "tier", "parent", "status", "predicate"})
+OPTIONAL_REGION_KEYS = frozenset({"site_data_dir"})
+SITE_DATA_ROOT = PurePosixPath("site/data")
 PREDICATE_LIST_KEYS = (
     "ror_subdivision_codes",
     "country_codes",
@@ -50,6 +52,8 @@ class Region:
     parent: str | None
     status: str
     predicate: Predicate | None = field(default=None)
+    # Repo-relative data folder (PLAT-3 slice 3). None means the default site/data/<slug>.
+    site_data_dir: str | None = field(default=None)
 
 
 @dataclass(frozen=True)
@@ -102,6 +106,22 @@ def _parse_predicate(where: str, raw: Any) -> Predicate:
     return Predicate(openalex_institution_filter=filter_value, **lists)
 
 
+def _parse_site_data_dir(where: str, raw: Any) -> str | None:
+    """Validate an optional ``site_data_dir``: repo-relative, inside ``site/data``, no ``..``."""
+    if raw is None:
+        return None
+    if not isinstance(raw, str) or not raw.strip():
+        raise _fail(where, "site_data_dir must be a non-empty string or absent")
+    if "\\" in raw or ":" in raw:
+        raise _fail(where, f"site_data_dir {raw!r} must use forward slashes and no drive")
+    path = PurePosixPath(raw)
+    if path.is_absolute() or ".." in path.parts:
+        raise _fail(where, f"site_data_dir {raw!r} must be relative and must not contain '..'")
+    if path.parts[: len(SITE_DATA_ROOT.parts)] != SITE_DATA_ROOT.parts:
+        raise _fail(where, f"site_data_dir {raw!r} must stay under site/data")
+    return str(path)
+
+
 def parse_registry(data: Any) -> Registry:
     """Validate an already-loaded registry mapping and return it."""
     if not isinstance(data, dict):
@@ -120,7 +140,7 @@ def parse_registry(data: Any) -> Registry:
     raw_regions: list[tuple[str, dict[str, Any]]] = []
     for index, entry in enumerate(entries):
         where = f"regions[{index}]"
-        _check_keys(where, entry, REGION_KEYS, REGION_KEYS)
+        _check_keys(where, entry, REGION_KEYS | OPTIONAL_REGION_KEYS, REGION_KEYS)
         slug = entry["slug"]
         if not isinstance(slug, str) or not SLUG_RE.match(slug):
             raise _fail(where, f"slug {slug!r} must be lowercase letters, digits or hyphens")
@@ -163,6 +183,7 @@ def parse_registry(data: Any) -> Registry:
                 parent=parent,
                 status=entry["status"],
                 predicate=predicate,
+                site_data_dir=_parse_site_data_dir(where, entry.get("site_data_dir")),
             )
         )
     return Registry(schema_version=SCHEMA_VERSION, regions=tuple(regions))

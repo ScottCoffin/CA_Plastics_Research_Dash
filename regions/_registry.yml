@@ -19,6 +19,9 @@ regions:
     # The US (or a future `us` Tier B region) is not a registry entry yet.
     parent: null
     status: active
+    # Repo-relative public data folder (PLAT-3 slice 3, owner default PLAT3-DATA-PATH):
+    # California keeps site/data so no public URL moves. Must stay under site/data.
+    site_data_dir: site/data
     predicate:
       # src/atlas/ingest/institutions.py:269-294 (pull_openalex_institutions):
       # the institution registry seed is OpenAlex /institutions filtered by the exact

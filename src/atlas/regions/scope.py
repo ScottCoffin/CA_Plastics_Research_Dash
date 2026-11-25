@@ -14,6 +14,8 @@ from pathlib import Path
 
 from atlas.regions.registry import (
     DEFAULT_REGISTRY_PATH,
+    REPO_ROOT,
+    SITE_DATA_ROOT,
     Predicate,
     Region,
     get_region,
@@ -41,6 +43,17 @@ def _predicate(region: Region | None) -> Predicate:
     if resolved.predicate is None:
         raise ValueError(f"region {resolved.slug!r} has no predicate (root tier)")
     return resolved.predicate
+
+
+def region_data_dir(region: Region | None = None) -> Path:
+    """Absolute folder for the region's public site payloads (PLAT-3 slice 3).
+
+    The registry's ``site_data_dir`` (repo-relative, validated to sit under ``site/data``)
+    wins. A region without it gets ``site/data/<slug>``. California sets ``site/data``.
+    """
+    resolved = resolve_region(region)
+    relative = resolved.site_data_dir or str(SITE_DATA_ROOT / resolved.slug)
+    return REPO_ROOT / relative
 
 
 def institution_filter(region: Region | None = None) -> str:

@@ -12,6 +12,7 @@ from atlas.ingest.openalex import (
     OpenAlexRateLimitError,
     ingest_live,
 )
+from atlas.regions.registry import Region
 
 
 def run_daily_ingest(
@@ -32,6 +33,7 @@ def run_daily_ingest(
     publication_date_cap: str | None = None,
     lookback_days: int | None = None,
     ingest: Callable[..., Mapping[str, Any]] = ingest_live,
+    region: Region | None = None,
 ) -> dict[str, Any]:
     """Run one refresh and convert expected budget stops into a clean outcome.
 
@@ -60,6 +62,8 @@ def run_daily_ingest(
             **({"publication_date_cap": publication_date_cap} if publication_date_cap else {}),
             # 2026-11-17: the weekly deep sweep widens the base lookback (None keeps 30 days).
             **({"lookback_days": lookback_days} if lookback_days is not None else {}),
+            # PLAT-3: None keeps the registry default region. Daily outputs live under data/.
+            **({"region": region} if region is not None else {}),
         )
     except OpenAlexRateLimitError as error:
         return {

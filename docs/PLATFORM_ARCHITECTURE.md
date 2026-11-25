@@ -244,3 +244,34 @@ The full pipeline outputs were not regenerated in this slice (offline, no live d
 - `tests/test_region_scope.py` covers the registry values, the byte-identical URLs, the ca_flag and
   ROR helpers with an explicit region, and each CLI's accept and reject paths. The norway
   `planned` entry exists only in a tmp-path copy of the registry.
+
+### Slice 3: region data folder
+
+Slice 3 makes each region's public data folder an explicit, validated registry field. California
+keeps `site/data/`, so no public URL moves (owner default, QUESTIONS PLAT3-DATA-PATH). Outputs
+are byte-identical for California (tested).
+
+- Field: `site_data_dir` on a region entry in `regions/_registry.yml`. It is optional. California
+  sets `site_data_dir: site/data`. It must be a repo-relative path with forward slashes, under
+  `site/data`, with no `..`, no drive letter and no absolute path. `parse_registry` rejects any
+  other value with `ValueError`.
+- Default: a region without the field gets `site/data/<slug>`.
+- `regions/california/region.yml` `data_dir` (`site/data/`) mirrors the registry field. The
+  registry is the validated source. The stale "moves to site/data/california/" note is removed.
+- `atlas.regions.scope.region_data_dir(region=None) -> Path` returns the absolute folder under the
+  repo root. `None` means the default region.
+- Threaded through:
+  - `atlas.build.export_site.export_site(..., output_dir=None, region=None)`: an explicit
+    `output_dir` wins. Otherwise the output goes to `region_data_dir(region)`. The
+    `scripts/build_export_site.py` `--output-dir` default is now unset, so the region folder
+    is used.
+  - `atlas.ingest.daily.run_daily_ingest(..., region=None)`: passes `region` to `ingest_live` only
+    when given. Daily outputs live under `data/`, not `site/data/`, so no output root moves.
+  - `scripts/run_daily_works.py` and `scripts/build_export_site.py` pass the validated Region
+    through. A registered but unsupported slug still exits 2.
+- Tests: `tests/test_region_data_dir.py` covers the default and explicit folders, validation,
+  the `region.yml` mirror, byte-identical export for `region=None` and the California region, and
+  the explicit-output priority.
+- Ratchet: no region-name count changed in this slice, so `region_names_baseline.json` is unchanged
+  (280 matches in 38 files).
+- Slice 4 (Framework dynamic routes `[region]/*.md`) stays deferred until a second region exists.

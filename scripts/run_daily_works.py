@@ -139,8 +139,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     add_region_argument(parser)
     args = parser.parse_args(argv)
-    # Validated only: run_daily_ingest does not take a region yet (PLAT-3 slice 2 limit).
-    resolve_cli_region(parser, args.region)
+    region = resolve_cli_region(parser, args.region)
 
     load_openalex_key()
     start_year = args.start_year
@@ -203,6 +202,7 @@ def main(argv: list[str] | None = None) -> int:
                 else (datetime.now(UTC).date() - timedelta(days=1)).isoformat()
             ),
             lookback_days=lookback_days,
+            region=region,
         )
     except Exception as error:
         # The failure still propagates (non-zero exit); the note only feeds the alert issue.

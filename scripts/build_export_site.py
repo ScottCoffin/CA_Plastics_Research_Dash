@@ -38,12 +38,15 @@ def main() -> None:
         help="Owner photo review; only rows with owner_decision=approve are used. "
         "Empty string disables.",
     )
-    parser.add_argument("--output-dir", default="site/data")
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help="Output folder. Default: the region's data folder (site/data for california).",
+    )
     parser.add_argument("--generated-at", default=None)
     add_region_argument(parser)
     args = parser.parse_args()
-    # Validated only: export_site does not take a region yet (PLAT-3 slice 2 limit).
-    resolve_cli_region(parser, args.region)
+    region = resolve_cli_region(parser, args.region)
     profiles = load_expert_profiles(args.orcid_profiles, args.photo_review)
     result = export_site(
         works_path=args.works,
@@ -61,6 +64,7 @@ def main() -> None:
         output_dir=args.output_dir,
         generated_at=args.generated_at,
         profiles=profiles,
+        region=region,
     )
     print(
         f"S3.1 exported {result.counts['works']} works, {result.counts['authors']} authors, "
