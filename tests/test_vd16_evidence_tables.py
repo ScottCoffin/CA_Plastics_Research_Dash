@@ -85,7 +85,8 @@ def test_each_chart_has_a_table_pane_next_to_its_chart_pane() -> None:
     chart_pane = flow.index('setAttribute("data-pane", "chart")')
     table_pane = flow.index('setAttribute("data-pane", "table")')
     assert chart_pane < table_pane
-    assert "dataTable(data, rows, globalByYear, version)" in trend
+    # BQ-2.4: the table takes the C/A share rows and the denominators payload.
+    assert "dataTable(data, shareRows, denoms, version)" in trend
     assert "countsHtml(model, mode)" in heatmap
 
 

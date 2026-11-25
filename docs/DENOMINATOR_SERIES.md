@@ -161,18 +161,13 @@ one-sided pair, or a beside-only series in a pair. The output lists the allowed 
   use the same filter. The cache entry was fetched in the same run as B, so B/A is one snapshot. The
   2025 count moved from 23,450 (trend file, fetched 2026-11-12) to 23,758 (cache, 2026-11-23 UTC), which is
   +308 (+1.3%). C/A now divides by the newer A.
-- The Evidence Map trend panel still reads `site/data/trend_global.json`. This work does not change it.
+- The Evidence Map trend panel was moved to `site/data/denominators.json` by BQ-2.4 (see the share section above).
 - The builder no longer reads `site/data/trend_global.json`. Its inputs are the cache, `site/data/index.json`,
   `works.parquet` and `works_raw.parquet`.
 
-## Current Evidence Map share (not changed here)
+## Evidence Map share (BQ-2.4 changed it to C/A)
 
-The panel's California share divides the published index totals for each year by the trend file's A.
-The index has 268 works for 2025. Of those, 40 are labelled not plastic-related. C counts 283 California
-records for 2025 (252 on query routes plus 31 from DOI routes, duplicates included). The gap of 15 is
-duplicates and curation removals. So the current share is not like-for-like with A. It counts curated
-works, not OpenAlex records. It also counts works labelled not plastic-related. BQ-2.2 now provides a
-like-for-like B and cache-backed A. BQ-2.3 should decide whether to switch the panel to C or B.
+Before BQ-2.4, the panel's California share divided the published index totals for each year by the trend file's A. That mixed curated works (one row per work, including works labelled not plastic-related) with OpenAlex records, so it was not like for like. The panel now shows C/A from `site/data/denominators.json`: California-connected OpenAlex records over all OpenAlex records matching the same query, for complete years. Published plastic-related works (D) sit beside the share and are never divided. The panel no longer reads `site/data/trend_global.json`; that file is unchanged.
 
 ## Series C: California-connected records the query matched
 
@@ -332,8 +327,15 @@ the query count over 2006 to 2025.
   window has no zero years in any series at this build.
 - **The interval is descriptive.** It describes scatter around the fitted trend. It is not an uncertainty
   estimate for the population.
-- **Evidence Map panel unchanged.** The panel still reads `site/data/trend_global.json` and divides curated
-  works by A. Whether to switch it to C or B is an owner decision.
+- **Evidence Map panel.** Since BQ-2.4 the panel shows C/A from `denominators.json`. Whether to show B/A there too is an owner decision.
+
+## Published file (BQ-2.4)
+
+`site/data/denominators.json` (schema `bq2-v1`) publishes the output above. `scripts/build_denominators_json.py` reads the ignored `data/processed/analytics/denominator_series.json` and writes the committed file; run `scripts/build_denominator_series.py` first. Per series it holds the yearly counts (A, A-article_review, B, B-article_review, C, D; B2 is listed as not computed). It also holds the three allowed ratio pairs (`B/A`, `C/A`, `B-article_review/A-article_review`), the BQ-2.3 `metrics` block, a version block, and a plain-language "what this is and is not" text. The labels are public wording: the internal notes and dependency names are not copied.
+
+The builder refuses any pair that is not in its allowlist. It also refuses a pair whose two sides differ in counting unit, sensitivity or `comparable_with` listing. D and B2 are never a ratio part. `--check` validates the committed file. When the ignored input exists, it also fails when the file differs from a rebuild (stale). When the input is absent (CI has no `data/` tree), the staleness check prints SKIP and the command exits 0.
+
+Pages read the file lazily. The V-4 trend panel on `/california/evidence` draws C/A, with D shown beside it and never divided. The Trend tab on `/explore` shows B/A at world scope as a line under the counts. Both show the file's "what this is and is not" text.
 
 ## Output file
 

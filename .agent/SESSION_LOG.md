@@ -224,3 +224,4 @@
 | 2026-11-22 | BQ-3.4 | Collaboration panel on the network page | this commit |
 | 2026-11-22 | BQ-R2 | Glossary entries and Further reading | this commit |
 | 2026-11-25 | BQ-1.3 | Language and theme recall probes (Wilson CIs, anchors 37/42, T10753 82%); new machine onboarded | this commit |
+| 2026-11-25 | BQ-2.4 | denominators.json + C/A share on V-4 + B/A on /explore Trend | this commit |

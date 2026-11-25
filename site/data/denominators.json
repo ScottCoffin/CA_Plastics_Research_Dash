@@ -1,0 +1,7667 @@
+{
+  "generated_at": "2026-11-25T10:41:09Z",
+  "metrics": {
+    "as_of": "2026-11-25",
+    "ci_level": 0.95,
+    "method": {
+      "cagr": "Ordinary least squares of ln(value) on calendar year over the used years, slope b. CAGR = exp(b) - 1. A CAGR needs at least 2 used years; the 95% interval needs at least 3. Interval = exp(b -/+ t * SE(b)) - 1, with SE(b) from the residual scatter and t the two-sided 95% Student t quantile at df = n - 2.",
+      "index": "index = value / value in window.base_year (value is a count or a share).",
+      "retractions": "C and D: counts exclude retracted-flagged records (count = records minus retracted). A and B: the OpenAlex group_by cannot split retractions, so counts include them. Shares use both sides with retracted-flagged records included (the unit of A), so C/A stays like for like. No share uses a retraction-excluded count.",
+      "shares": "The share trend is the same fit on ln(share), so it is the growth of the numerator relative to the denominator.",
+      "uncertainty": "The CI reflects year-to-year scatter around a log-linear trend, not sampling error.",
+      "unit": "Series A, B and C: OpenAlex records by publication year (duplicates not collapsed). Series D: curated works, one row per work. A ratio is taken only between the pairs listed in ratio_pairs, which share a counting unit and a type sensitivity. D is shown beside them and is never divided.",
+      "window": "Complete years only, from window.start to window.end (last_complete_year). The as-of year and later are excluded and listed in partial_years_excluded. window.start is the requested start, or the first year in the series when that is later.",
+      "zero_counts": "A zero count is skipped in the log-linear fit (ln 0 is undefined) and listed in zero_years_skipped. n_years counts the years used. A zero share (zero numerator) is skipped the same way, and a year with a zero denominator has no share."
+    },
+    "partial_years_excluded": [
+      2026,
+      2027
+    ],
+    "schema_version": "denominator_metrics.v1",
+    "series": {
+      "A": {
+        "basis": "retracted-flagged records included; cannot be excluded (OpenAlex group_by has no retraction split)",
+        "beside_only": false,
+        "trend": {
+          "cagr": 0.2517012719,
+          "ci95": [
+            0.2301728223,
+            0.2736064767
+          ],
+          "df": 18,
+          "n_years": 20,
+          "note": null,
+          "slope": 0.2245036435,
+          "slope_se": 0.0082577924,
+          "t_crit": 2.1009220402,
+          "zero_years_skipped": []
+        },
+        "years": [
+          {
+            "count": 401,
+            "index": 1.0,
+            "retracted": null,
+            "year": 2006
+          },
+          {
+            "count": 450,
+            "index": 1.1221945137,
+            "retracted": null,
+            "year": 2007
+          },
+          {
+            "count": 514,
+            "index": 1.2817955112,
+            "retracted": null,
+            "year": 2008
+          },
+          {
+            "count": 505,
+            "index": 1.2593516209,
+            "retracted": null,
+            "year": 2009
+          },
+          {
+            "count": 682,
+            "index": 1.7007481297,
+            "retracted": null,
+            "year": 2010
+          },
+          {
+            "count": 849,
+            "index": 2.1172069825,
+            "retracted": null,
+            "year": 2011
+          },
+          {
+            "count": 920,
+            "index": 2.2942643392,
+            "retracted": null,
+            "year": 2012
+          },
+          {
+            "count": 1075,
+            "index": 2.680798005,
+            "retracted": null,
+            "year": 2013
+          },
+          {
+            "count": 1288,
+            "index": 3.2119700748,
+            "retracted": null,
+            "year": 2014
+          },
+          {
+            "count": 1485,
+            "index": 3.7032418953,
+            "retracted": null,
+            "year": 2015
+          },
+          {
+            "count": 2006,
+            "index": 5.0024937656,
+            "retracted": null,
+            "year": 2016
+          },
+          {
+            "count": 2319,
+            "index": 5.783042394,
+            "retracted": null,
+            "year": 2017
+          },
+          {
+            "count": 3576,
+            "index": 8.9177057357,
+            "retracted": null,
+            "year": 2018
+          },
+          {
+            "count": 4992,
+            "index": 12.4488778055,
+            "retracted": null,
+            "year": 2019
+          },
+          {
+            "count": 7194,
+            "index": 17.9401496259,
+            "retracted": null,
+            "year": 2020
+          },
+          {
+            "count": 8793,
+            "index": 21.927680798,
+            "retracted": null,
+            "year": 2021
+          },
+          {
+            "count": 11782,
+            "index": 29.3815461347,
+            "retracted": null,
+            "year": 2022
+          },
+          {
+            "count": 14007,
+            "index": 34.9301745636,
+            "retracted": null,
+            "year": 2023
+          },
+          {
+            "count": 18591,
+            "index": 46.36159601,
+            "retracted": null,
+            "year": 2024
+          },
+          {
+            "count": 23739,
+            "index": 59.1995012469,
+            "retracted": null,
+            "year": 2025
+          }
+        ]
+      },
+      "A-article_review": {
+        "basis": "retracted-flagged records included; cannot be excluded (OpenAlex group_by has no retraction split)",
+        "beside_only": false,
+        "trend": {
+          "cagr": 0.2537953928,
+          "ci95": [
+            0.2279952558,
+            0.2801375898
+          ],
+          "df": 18,
+          "n_years": 20,
+          "note": null,
+          "slope": 0.2261752652,
+          "slope_se": 0.0098967494,
+          "t_crit": 2.1009220402,
+          "zero_years_skipped": []
+        },
+        "years": [
+          {
+            "count": 285,
+            "index": 1.0,
+            "retracted": null,
+            "year": 2006
+          },
+          {
+            "count": 324,
+            "index": 1.1368421053,
+            "retracted": null,
+            "year": 2007
+          },
+          {
+            "count": 349,
+            "index": 1.2245614035,
+            "retracted": null,
+            "year": 2008
+          },
+          {
+            "count": 363,
+            "index": 1.2736842105,
+            "retracted": null,
+            "year": 2009
+          },
+          {
+            "count": 495,
+            "index": 1.7368421053,
+            "retracted": null,
+            "year": 2010
+          },
+          {
+            "count": 621,
+            "index": 2.1789473684,
+            "retracted": null,
+            "year": 2011
+          },
+          {
+            "count": 647,
+            "index": 2.2701754386,
+            "retracted": null,
+            "year": 2012
+          },
+          {
+            "count": 759,
+            "index": 2.6631578947,
+            "retracted": null,
+            "year": 2013
+          },
+          {
+            "count": 889,
+            "index": 3.1192982456,
+            "retracted": null,
+            "year": 2014
+          },
+          {
+            "count": 994,
+            "index": 3.4877192982,
+            "retracted": null,
+            "year": 2015
+          },
+          {
+            "count": 1241,
+            "index": 4.3543859649,
+            "retracted": null,
+            "year": 2016
+          },
+          {
+            "count": 1516,
+            "index": 5.3192982456,
+            "retracted": null,
+            "year": 2017
+          },
+          {
+            "count": 2183,
+            "index": 7.6596491228,
+            "retracted": null,
+            "year": 2018
+          },
+          {
+            "count": 3375,
+            "index": 11.8421052632,
+            "retracted": null,
+            "year": 2019
+          },
+          {
+            "count": 4984,
+            "index": 17.4877192982,
+            "retracted": null,
+            "year": 2020
+          },
+          {
+            "count": 6722,
+            "index": 23.5859649123,
+            "retracted": null,
+            "year": 2021
+          },
+          {
+            "count": 8605,
+            "index": 30.1929824561,
+            "retracted": null,
+            "year": 2022
+          },
+          {
+            "count": 10584,
+            "index": 37.1368421053,
+            "retracted": null,
+            "year": 2023
+          },
+          {
+            "count": 13723,
+            "index": 48.150877193,
+            "retracted": null,
+            "year": 2024
+          },
+          {
+            "count": 17926,
+            "index": 62.898245614,
+            "retracted": null,
+            "year": 2025
+          }
+        ]
+      },
+      "B": {
+        "basis": "retracted-flagged records included; cannot be excluded (OpenAlex group_by has no retraction split)",
+        "beside_only": false,
+        "trend": {
+          "cagr": 0.3465313267,
+          "ci95": [
+            0.321224581,
+            0.3723227981
+          ],
+          "df": 18,
+          "n_years": 20,
+          "note": null,
+          "slope": 0.2975318983,
+          "slope_se": 0.0090307391,
+          "t_crit": 2.1009220402,
+          "zero_years_skipped": []
+        },
+        "years": [
+          {
+            "count": 78,
+            "index": 1.0,
+            "retracted": null,
+            "year": 2006
+          },
+          {
+            "count": 108,
+            "index": 1.3846153846,
+            "retracted": null,
+            "year": 2007
+          },
+          {
+            "count": 129,
+            "index": 1.6538461538,
+            "retracted": null,
+            "year": 2008
+          },
+          {
+            "count": 132,
+            "index": 1.6923076923,
+            "retracted": null,
+            "year": 2009
+          },
+          {
+            "count": 176,
+            "index": 2.2564102564,
+            "retracted": null,
+            "year": 2010
+          },
+          {
+            "count": 217,
+            "index": 2.7820512821,
+            "retracted": null,
+            "year": 2011
+          },
+          {
+            "count": 241,
+            "index": 3.0897435897,
+            "retracted": null,
+            "year": 2012
+          },
+          {
+            "count": 310,
+            "index": 3.9743589744,
+            "retracted": null,
+            "year": 2013
+          },
+          {
+            "count": 438,
+            "index": 5.6153846154,
+            "retracted": null,
+            "year": 2014
+          },
+          {
+            "count": 605,
+            "index": 7.7564102564,
+            "retracted": null,
+            "year": 2015
+          },
+          {
+            "count": 969,
+            "index": 12.4230769231,
+            "retracted": null,
+            "year": 2016
+          },
+          {
+            "count": 1117,
+            "index": 14.3205128205,
+            "retracted": null,
+            "year": 2017
+          },
+          {
+            "count": 2097,
+            "index": 26.8846153846,
+            "retracted": null,
+            "year": 2018
+          },
+          {
+            "count": 2880,
+            "index": 36.9230769231,
+            "retracted": null,
+            "year": 2019
+          },
+          {
+            "count": 4553,
+            "index": 58.3717948718,
+            "retracted": null,
+            "year": 2020
+          },
+          {
+            "count": 5558,
+            "index": 71.2564102564,
+            "retracted": null,
+            "year": 2021
+          },
+          {
+            "count": 7981,
+            "index": 102.3205128205,
+            "retracted": null,
+            "year": 2022
+          },
+          {
+            "count": 9290,
+            "index": 119.1025641026,
+            "retracted": null,
+            "year": 2023
+          },
+          {
+            "count": 12830,
+            "index": 164.4871794872,
+            "retracted": null,
+            "year": 2024
+          },
+          {
+            "count": 16254,
+            "index": 208.3846153846,
+            "retracted": null,
+            "year": 2025
+          }
+        ]
+      },
+      "B-article_review": {
+        "basis": "retracted-flagged records included; cannot be excluded (OpenAlex group_by has no retraction split)",
+        "beside_only": false,
+        "trend": {
+          "cagr": 0.3476984417,
+          "ci95": [
+            0.3191407068,
+            0.3768744155
+          ],
+          "df": 18,
+          "n_years": 20,
+          "note": null,
+          "slope": 0.2983982795,
+          "slope_se": 0.0101944452,
+          "t_crit": 2.1009220402,
+          "zero_years_skipped": []
+        },
+        "years": [
+          {
+            "count": 56,
+            "index": 1.0,
+            "retracted": null,
+            "year": 2006
+          },
+          {
+            "count": 73,
+            "index": 1.3035714286,
+            "retracted": null,
+            "year": 2007
+          },
+          {
+            "count": 95,
+            "index": 1.6964285714,
+            "retracted": null,
+            "year": 2008
+          },
+          {
+            "count": 92,
+            "index": 1.6428571429,
+            "retracted": null,
+            "year": 2009
+          },
+          {
+            "count": 129,
+            "index": 2.3035714286,
+            "retracted": null,
+            "year": 2010
+          },
+          {
+            "count": 168,
+            "index": 3.0,
+            "retracted": null,
+            "year": 2011
+          },
+          {
+            "count": 175,
+            "index": 3.125,
+            "retracted": null,
+            "year": 2012
+          },
+          {
+            "count": 215,
+            "index": 3.8392857143,
+            "retracted": null,
+            "year": 2013
+          },
+          {
+            "count": 298,
+            "index": 5.3214285714,
+            "retracted": null,
+            "year": 2014
+          },
+          {
+            "count": 407,
+            "index": 7.2678571429,
+            "retracted": null,
+            "year": 2015
+          },
+          {
+            "count": 547,
+            "index": 9.7678571429,
+            "retracted": null,
+            "year": 2016
+          },
+          {
+            "count": 723,
+            "index": 12.9107142857,
+            "retracted": null,
+            "year": 2017
+          },
+          {
+            "count": 1247,
+            "index": 22.2678571429,
+            "retracted": null,
+            "year": 2018
+          },
+          {
+            "count": 2010,
+            "index": 35.8928571429,
+            "retracted": null,
+            "year": 2019
+          },
+          {
+            "count": 3203,
+            "index": 57.1964285714,
+            "retracted": null,
+            "year": 2020
+          },
+          {
+            "count": 4305,
+            "index": 76.875,
+            "retracted": null,
+            "year": 2021
+          },
+          {
+            "count": 5737,
+            "index": 102.4464285714,
+            "retracted": null,
+            "year": 2022
+          },
+          {
+            "count": 7001,
+            "index": 125.0178571429,
+            "retracted": null,
+            "year": 2023
+          },
+          {
+            "count": 9329,
+            "index": 166.5892857143,
+            "retracted": null,
+            "year": 2024
+          },
+          {
+            "count": 12165,
+            "index": 217.2321428571,
+            "retracted": null,
+            "year": 2025
+          }
+        ]
+      },
+      "C": {
+        "basis": "retracted-flagged records excluded (count = records minus retracted)",
+        "beside_only": false,
+        "trend": {
+          "cagr": 0.2407009352,
+          "ci95": [
+            0.2057121791,
+            0.2767050357
+          ],
+          "df": 18,
+          "n_years": 20,
+          "note": null,
+          "slope": 0.2156764903,
+          "slope_se": 0.0136159635,
+          "t_crit": 2.1009220402,
+          "zero_years_skipped": []
+        },
+        "years": [
+          {
+            "count": 2,
+            "index": 1.0,
+            "retracted": 0,
+            "year": 2006
+          },
+          {
+            "count": 6,
+            "index": 3.0,
+            "retracted": 0,
+            "year": 2007
+          },
+          {
+            "count": 5,
+            "index": 2.5,
+            "retracted": 0,
+            "year": 2008
+          },
+          {
+            "count": 16,
+            "index": 8.0,
+            "retracted": 0,
+            "year": 2009
+          },
+          {
+            "count": 14,
+            "index": 7.0,
+            "retracted": 0,
+            "year": 2010
+          },
+          {
+            "count": 30,
+            "index": 15.0,
+            "retracted": 0,
+            "year": 2011
+          },
+          {
+            "count": 23,
+            "index": 11.5,
+            "retracted": 0,
+            "year": 2012
+          },
+          {
+            "count": 29,
+            "index": 14.5,
+            "retracted": 0,
+            "year": 2013
+          },
+          {
+            "count": 28,
+            "index": 14.0,
+            "retracted": 0,
+            "year": 2014
+          },
+          {
+            "count": 36,
+            "index": 18.0,
+            "retracted": 0,
+            "year": 2015
+          },
+          {
+            "count": 41,
+            "index": 20.5,
+            "retracted": 0,
+            "year": 2016
+          },
+          {
+            "count": 40,
+            "index": 20.0,
+            "retracted": 0,
+            "year": 2017
+          },
+          {
+            "count": 58,
+            "index": 29.0,
+            "retracted": 0,
+            "year": 2018
+          },
+          {
+            "count": 94,
+            "index": 47.0,
+            "retracted": 0,
+            "year": 2019
+          },
+          {
+            "count": 132,
+            "index": 66.0,
+            "retracted": 0,
+            "year": 2020
+          },
+          {
+            "count": 114,
+            "index": 57.0,
+            "retracted": 0,
+            "year": 2021
+          },
+          {
+            "count": 151,
+            "index": 75.5,
+            "retracted": 0,
+            "year": 2022
+          },
+          {
+            "count": 161,
+            "index": 80.5,
+            "retracted": 0,
+            "year": 2023
+          },
+          {
+            "count": 242,
+            "index": 121.0,
+            "retracted": 1,
+            "year": 2024
+          },
+          {
+            "count": 251,
+            "index": 125.5,
+            "retracted": 1,
+            "year": 2025
+          }
+        ]
+      },
+      "D": {
+        "basis": "retracted-flagged records excluded (count = records minus retracted)",
+        "beside_only": true,
+        "trend": {
+          "cagr": 0.2587723219,
+          "ci95": [
+            0.2217663915,
+            0.2968991204
+          ],
+          "df": 18,
+          "n_years": 20,
+          "note": null,
+          "slope": 0.2301368983,
+          "slope_se": 0.0142029187,
+          "t_crit": 2.1009220402,
+          "zero_years_skipped": []
+        },
+        "years": [
+          {
+            "count": 2,
+            "index": 1.0,
+            "retracted": 0,
+            "year": 2006
+          },
+          {
+            "count": 5,
+            "index": 2.5,
+            "retracted": 0,
+            "year": 2007
+          },
+          {
+            "count": 2,
+            "index": 1.0,
+            "retracted": 0,
+            "year": 2008
+          },
+          {
+            "count": 11,
+            "index": 5.5,
+            "retracted": 0,
+            "year": 2009
+          },
+          {
+            "count": 11,
+            "index": 5.5,
+            "retracted": 0,
+            "year": 2010
+          },
+          {
+            "count": 21,
+            "index": 10.5,
+            "retracted": 0,
+            "year": 2011
+          },
+          {
+            "count": 17,
+            "index": 8.5,
+            "retracted": 0,
+            "year": 2012
+          },
+          {
+            "count": 23,
+            "index": 11.5,
+            "retracted": 0,
+            "year": 2013
+          },
+          {
+            "count": 27,
+            "index": 13.5,
+            "retracted": 0,
+            "year": 2014
+          },
+          {
+            "count": 28,
+            "index": 14.0,
+            "retracted": 0,
+            "year": 2015
+          },
+          {
+            "count": 39,
+            "index": 19.5,
+            "retracted": 0,
+            "year": 2016
+          },
+          {
+            "count": 36,
+            "index": 18.0,
+            "retracted": 0,
+            "year": 2017
+          },
+          {
+            "count": 55,
+            "index": 27.5,
+            "retracted": 0,
+            "year": 2018
+          },
+          {
+            "count": 78,
+            "index": 39.0,
+            "retracted": 0,
+            "year": 2019
+          },
+          {
+            "count": 114,
+            "index": 57.0,
+            "retracted": 0,
+            "year": 2020
+          },
+          {
+            "count": 114,
+            "index": 57.0,
+            "retracted": 0,
+            "year": 2021
+          },
+          {
+            "count": 134,
+            "index": 67.0,
+            "retracted": 0,
+            "year": 2022
+          },
+          {
+            "count": 144,
+            "index": 72.0,
+            "retracted": 0,
+            "year": 2023
+          },
+          {
+            "count": 195,
+            "index": 97.5,
+            "retracted": 1,
+            "year": 2024
+          },
+          {
+            "count": 228,
+            "index": 114.0,
+            "retracted": 0,
+            "year": 2025
+          }
+        ]
+      }
+    },
+    "shares": {
+      "B-article_review/A-article_review": {
+        "basis": "both sides include retracted-flagged records, the counting unit of the denominator; the pair stays like for like",
+        "denominator": "A-article_review",
+        "numerator": "B-article_review",
+        "trend": {
+          "cagr": 0.0748950342,
+          "ci95": [
+            0.0655343949,
+            0.0843379061
+          ],
+          "df": 18,
+          "n_years": 20,
+          "note": null,
+          "slope": 0.0722230143,
+          "slope_se": 0.0041632014,
+          "t_crit": 2.1009220402,
+          "zero_years_skipped": []
+        },
+        "years": [
+          {
+            "index": 1.0,
+            "share": 0.1964912281,
+            "year": 2006
+          },
+          {
+            "index": 1.1466600529,
+            "share": 0.225308642,
+            "year": 2007
+          },
+          {
+            "index": 1.3853356529,
+            "share": 0.2722063037,
+            "year": 2008
+          },
+          {
+            "index": 1.2898465171,
+            "share": 0.2534435262,
+            "year": 2009
+          },
+          {
+            "index": 1.3262987013,
+            "share": 0.2606060606,
+            "year": 2010
+          },
+          {
+            "index": 1.3768115942,
+            "share": 0.270531401,
+            "year": 2011
+          },
+          {
+            "index": 1.3765455951,
+            "share": 0.2704791345,
+            "year": 2012
+          },
+          {
+            "index": 1.4416290232,
+            "share": 0.2832674572,
+            "year": 2013
+          },
+          {
+            "index": 1.7059697895,
+            "share": 0.335208099,
+            "year": 2014
+          },
+          {
+            "index": 2.0838423398,
+            "share": 0.4094567404,
+            "year": 2015
+          },
+          {
+            "index": 2.2432226315,
+            "share": 0.4407735697,
+            "year": 2016
+          },
+          {
+            "index": 2.4271461553,
+            "share": 0.4769129288,
+            "year": 2017
+          },
+          {
+            "index": 2.9071641254,
+            "share": 0.5712322492,
+            "year": 2018
+          },
+          {
+            "index": 3.030952381,
+            "share": 0.5955555556,
+            "year": 2019
+          },
+          {
+            "index": 3.2706625487,
+            "share": 0.6426565008,
+            "year": 2020
+          },
+          {
+            "index": 3.259353615,
+            "share": 0.6404343945,
+            "year": 2021
+          },
+          {
+            "index": 3.3930542874,
+            "share": 0.6667054038,
+            "year": 2022
+          },
+          {
+            "index": 3.3664105523,
+            "share": 0.6614701436,
+            "year": 2023
+          },
+          {
+            "index": 3.4597352203,
+            "share": 0.6798076222,
+            "year": 2024
+          },
+          {
+            "index": 3.4537075039,
+            "share": 0.6786232288,
+            "year": 2025
+          }
+        ]
+      },
+      "B/A": {
+        "basis": "both sides include retracted-flagged records, the counting unit of the denominator; the pair stays like for like",
+        "denominator": "A",
+        "numerator": "B",
+        "trend": {
+          "cagr": 0.0757609319,
+          "ci95": [
+            0.0660067362,
+            0.0856043807
+          ],
+          "df": 18,
+          "n_years": 20,
+          "note": null,
+          "slope": 0.0730282549,
+          "slope_se": 0.0043355297,
+          "t_crit": 2.1009220402,
+          "zero_years_skipped": []
+        },
+        "years": [
+          {
+            "index": 1.0,
+            "share": 0.1945137157,
+            "year": 2006
+          },
+          {
+            "index": 1.2338461538,
+            "share": 0.24,
+            "year": 2007
+          },
+          {
+            "index": 1.290257408,
+            "share": 0.2509727626,
+            "year": 2008
+          },
+          {
+            "index": 1.3437928408,
+            "share": 0.2613861386,
+            "year": 2009
+          },
+          {
+            "index": 1.3267162945,
+            "share": 0.2580645161,
+            "year": 2010
+          },
+          {
+            "index": 1.3140195101,
+            "share": 0.2555948174,
+            "year": 2011
+          },
+          {
+            "index": 1.3467251951,
+            "share": 0.2619565217,
+            "year": 2012
+          },
+          {
+            "index": 1.4825283244,
+            "share": 0.288372093,
+            "year": 2013
+          },
+          {
+            "index": 1.7482680363,
+            "share": 0.3400621118,
+            "year": 2014
+          },
+          {
+            "index": 2.0944919278,
+            "share": 0.4074074074,
+            "year": 2015
+          },
+          {
+            "index": 2.4833767927,
+            "share": 0.4830508475,
+            "year": 2016
+          },
+          {
+            "index": 2.4762939375,
+            "share": 0.481673135,
+            "year": 2017
+          },
+          {
+            "index": 3.0147457408,
+            "share": 0.586409396,
+            "year": 2018
+          },
+          {
+            "index": 2.9659763314,
+            "share": 0.5769230769,
+            "year": 2019
+          },
+          {
+            "index": 3.2536961,
+            "share": 0.6328885182,
+            "year": 2020
+          },
+          {
+            "index": 3.2496099753,
+            "share": 0.6320937109,
+            "year": 2021
+          },
+          {
+            "index": 3.4824754406,
+            "share": 0.6773892378,
+            "year": 2022
+          },
+          {
+            "index": 3.4097328625,
+            "share": 0.6632398087,
+            "year": 2023
+          },
+          {
+            "index": 3.5479188303,
+            "share": 0.6901188747,
+            "year": 2024
+          },
+          {
+            "index": 3.5200400509,
+            "share": 0.6846960698,
+            "year": 2025
+          }
+        ]
+      },
+      "C/A": {
+        "basis": "both sides include retracted-flagged records, the counting unit of the denominator; the pair stays like for like",
+        "denominator": "A",
+        "numerator": "C",
+        "trend": {
+          "cagr": -0.0086797534,
+          "ci95": [
+            -0.0459071808,
+            0.0300002384
+          ],
+          "df": 18,
+          "n_years": 20,
+          "note": null,
+          "slope": -0.0087176419,
+          "slope_se": 0.018218989,
+          "t_crit": 2.1009220402,
+          "zero_years_skipped": []
+        },
+        "years": [
+          {
+            "index": 1.0,
+            "share": 0.0049875312,
+            "year": 2006
+          },
+          {
+            "index": 2.6733333333,
+            "share": 0.0133333333,
+            "year": 2007
+          },
+          {
+            "index": 1.9503891051,
+            "share": 0.0097276265,
+            "year": 2008
+          },
+          {
+            "index": 6.3524752475,
+            "share": 0.0316831683,
+            "year": 2009
+          },
+          {
+            "index": 4.1158357771,
+            "share": 0.0205278592,
+            "year": 2010
+          },
+          {
+            "index": 7.0848056537,
+            "share": 0.035335689,
+            "year": 2011
+          },
+          {
+            "index": 5.0125,
+            "share": 0.025,
+            "year": 2012
+          },
+          {
+            "index": 5.4088372093,
+            "share": 0.0269767442,
+            "year": 2013
+          },
+          {
+            "index": 4.3586956522,
+            "share": 0.0217391304,
+            "year": 2014
+          },
+          {
+            "index": 4.8606060606,
+            "share": 0.0242424242,
+            "year": 2015
+          },
+          {
+            "index": 4.0979561316,
+            "share": 0.0204386839,
+            "year": 2016
+          },
+          {
+            "index": 3.4583872359,
+            "share": 0.0172488141,
+            "year": 2017
+          },
+          {
+            "index": 3.2519574944,
+            "share": 0.0162192394,
+            "year": 2018
+          },
+          {
+            "index": 3.7754407051,
+            "share": 0.0188301282,
+            "year": 2019
+          },
+          {
+            "index": 3.6788990826,
+            "share": 0.0183486239,
+            "year": 2020
+          },
+          {
+            "index": 2.5994541112,
+            "share": 0.0129648584,
+            "year": 2021
+          },
+          {
+            "index": 2.569640129,
+            "share": 0.0128161602,
+            "year": 2022
+          },
+          {
+            "index": 2.3045977011,
+            "share": 0.0114942529,
+            "year": 2023
+          },
+          {
+            "index": 2.6207035662,
+            "share": 0.0130708407,
+            "year": 2024
+          },
+          {
+            "index": 2.1283963099,
+            "share": 0.0106154429,
+            "year": 2025
+          }
+        ]
+      }
+    },
+    "window": {
+      "base_year": 2006,
+      "end": 2025,
+      "requested_start": 2006,
+      "start": 2006,
+      "years": 20
+    }
+  },
+  "not_computed": [
+    {
+      "id": "B2",
+      "label": "Lifecycle and society records by labelled centrality (not computed; shown beside only)",
+      "status": "not computed"
+    }
+  ],
+  "ratio_pairs": [
+    {
+      "denominator": "A",
+      "id": "B/A",
+      "label": "Pollution-core share of matching records",
+      "numerator": "B",
+      "sensitivity": "all"
+    },
+    {
+      "denominator": "A",
+      "id": "C/A",
+      "label": "California share of matching records",
+      "numerator": "C",
+      "sensitivity": "all"
+    },
+    {
+      "denominator": "A-article_review",
+      "id": "B-article_review/A-article_review",
+      "label": "Pollution-core share, article and review types only",
+      "numerator": "B-article_review",
+      "sensitivity": "article_review"
+    }
+  ],
+  "schema_version": "bq2-v1",
+  "series": [
+    {
+      "beside_only": false,
+      "comparable_with": [
+        "B",
+        "C"
+      ],
+      "counting_unit": "OpenAlex records by publication year; exclude_types removed; duplicates not collapsed; retracted-flagged records included",
+      "id": "A",
+      "label": "All matching records (all OpenAlex types)",
+      "retraction_split": false,
+      "sensitivity": "all",
+      "undated_records": 0,
+      "years": [
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1853
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1854
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1855
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1856
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1857
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1858
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1859
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1860
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1861
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1862
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1863
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1864
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1865
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1866
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1867
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1868
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1869
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1870
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1871
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1872
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1873
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1874
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1875
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1876
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1877
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1878
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1879
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1880
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1881
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1882
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1883
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1884
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1885
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1886
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1887
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1888
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1889
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1890
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1891
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1892
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1893
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1894
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1895
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1896
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1897
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1898
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1899
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1900
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1901
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1902
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1903
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1904
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1905
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1906
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1907
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1908
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1909
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1910
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1911
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1912
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1913
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1914
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1915
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1916
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1917
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1918
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1919
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1920
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1921
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1922
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1923
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1924
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1925
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1926
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1927
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1928
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1929
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1930
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1931
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1932
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1933
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1934
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1935
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1936
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1937
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1938
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1939
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1940
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1941
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1942
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1943
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1944
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1945
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1946
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1947
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1948
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1949
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1950
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1951
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1952
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1953
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1954
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1955
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1956
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1957
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1958
+        },
+        {
+          "count": 8,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1959
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1960
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1961
+        },
+        {
+          "count": 10,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1962
+        },
+        {
+          "count": 8,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1963
+        },
+        {
+          "count": 7,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1964
+        },
+        {
+          "count": 5,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1965
+        },
+        {
+          "count": 17,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1966
+        },
+        {
+          "count": 14,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1967
+        },
+        {
+          "count": 13,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1968
+        },
+        {
+          "count": 16,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1969
+        },
+        {
+          "count": 13,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1970
+        },
+        {
+          "count": 20,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1971
+        },
+        {
+          "count": 20,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1972
+        },
+        {
+          "count": 24,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1973
+        },
+        {
+          "count": 32,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1974
+        },
+        {
+          "count": 19,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1975
+        },
+        {
+          "count": 15,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1976
+        },
+        {
+          "count": 23,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1977
+        },
+        {
+          "count": 33,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1978
+        },
+        {
+          "count": 19,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1979
+        },
+        {
+          "count": 34,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1980
+        },
+        {
+          "count": 19,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1981
+        },
+        {
+          "count": 39,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1982
+        },
+        {
+          "count": 33,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1983
+        },
+        {
+          "count": 31,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1984
+        },
+        {
+          "count": 44,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1985
+        },
+        {
+          "count": 41,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1986
+        },
+        {
+          "count": 62,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1987
+        },
+        {
+          "count": 75,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1988
+        },
+        {
+          "count": 84,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1989
+        },
+        {
+          "count": 120,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1990
+        },
+        {
+          "count": 115,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1991
+        },
+        {
+          "count": 134,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1992
+        },
+        {
+          "count": 157,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1993
+        },
+        {
+          "count": 142,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1994
+        },
+        {
+          "count": 205,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1995
+        },
+        {
+          "count": 145,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1996
+        },
+        {
+          "count": 216,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1997
+        },
+        {
+          "count": 215,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1998
+        },
+        {
+          "count": 209,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1999
+        },
+        {
+          "count": 234,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2000
+        },
+        {
+          "count": 247,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2001
+        },
+        {
+          "count": 286,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2002
+        },
+        {
+          "count": 325,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2003
+        },
+        {
+          "count": 318,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2004
+        },
+        {
+          "count": 384,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2005
+        },
+        {
+          "count": 401,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2006
+        },
+        {
+          "count": 450,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2007
+        },
+        {
+          "count": 514,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2008
+        },
+        {
+          "count": 505,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2009
+        },
+        {
+          "count": 682,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2010
+        },
+        {
+          "count": 849,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2011
+        },
+        {
+          "count": 920,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2012
+        },
+        {
+          "count": 1075,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2013
+        },
+        {
+          "count": 1288,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2014
+        },
+        {
+          "count": 1485,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2015
+        },
+        {
+          "count": 2006,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2016
+        },
+        {
+          "count": 2319,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2017
+        },
+        {
+          "count": 3576,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2018
+        },
+        {
+          "count": 4992,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2019
+        },
+        {
+          "count": 7194,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2020
+        },
+        {
+          "count": 8793,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2021
+        },
+        {
+          "count": 11782,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2022
+        },
+        {
+          "count": 14007,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2023
+        },
+        {
+          "count": 18591,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2024
+        },
+        {
+          "count": 23739,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2025
+        },
+        {
+          "count": 26667,
+          "partial_year": true,
+          "retracted": null,
+          "year": 2026
+        },
+        {
+          "count": 18,
+          "partial_year": true,
+          "retracted": null,
+          "year": 2027
+        }
+      ]
+    },
+    {
+      "beside_only": false,
+      "comparable_with": [
+        "B-article_review"
+      ],
+      "counting_unit": "OpenAlex records of type article or review by publication year; exclude_types removed; duplicates not collapsed; retracted-flagged records included",
+      "id": "A-article_review",
+      "label": "Matching records, article and review types only",
+      "retraction_split": false,
+      "sensitivity": "article_review",
+      "undated_records": 0,
+      "years": [
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1853
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1854
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1855
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1856
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1857
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1858
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1859
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1860
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1861
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1862
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1863
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1864
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1865
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1866
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1867
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1868
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1869
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1870
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1871
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1872
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1873
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1874
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1875
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1876
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1877
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1878
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1879
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1880
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1881
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1882
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1883
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1884
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1885
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1886
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1887
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1888
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1889
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1890
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1891
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1892
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1893
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1894
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1895
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1896
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1897
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1898
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1899
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1900
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1901
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1902
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1903
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1904
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1905
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1906
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1907
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1908
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1909
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1910
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1911
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1912
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1913
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1914
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1915
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1916
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1917
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1918
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1919
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1920
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1921
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1922
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1923
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1924
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1925
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1926
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1927
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1928
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1929
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1930
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1931
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1932
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1933
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1934
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1935
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1936
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1937
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1938
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1939
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1940
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1941
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1942
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1943
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1944
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1945
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1946
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1947
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1948
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1949
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1950
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1951
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1952
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1953
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1954
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1955
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1956
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1957
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1958
+        },
+        {
+          "count": 7,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1959
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1960
+        },
+        {
+          "count": 5,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1961
+        },
+        {
+          "count": 8,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1962
+        },
+        {
+          "count": 7,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1963
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1964
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1965
+        },
+        {
+          "count": 17,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1966
+        },
+        {
+          "count": 12,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1967
+        },
+        {
+          "count": 12,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1968
+        },
+        {
+          "count": 11,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1969
+        },
+        {
+          "count": 8,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1970
+        },
+        {
+          "count": 12,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1971
+        },
+        {
+          "count": 13,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1972
+        },
+        {
+          "count": 20,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1973
+        },
+        {
+          "count": 25,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1974
+        },
+        {
+          "count": 16,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1975
+        },
+        {
+          "count": 11,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1976
+        },
+        {
+          "count": 20,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1977
+        },
+        {
+          "count": 26,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1978
+        },
+        {
+          "count": 15,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1979
+        },
+        {
+          "count": 27,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1980
+        },
+        {
+          "count": 16,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1981
+        },
+        {
+          "count": 34,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1982
+        },
+        {
+          "count": 27,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1983
+        },
+        {
+          "count": 26,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1984
+        },
+        {
+          "count": 35,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1985
+        },
+        {
+          "count": 26,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1986
+        },
+        {
+          "count": 53,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1987
+        },
+        {
+          "count": 55,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1988
+        },
+        {
+          "count": 62,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1989
+        },
+        {
+          "count": 91,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1990
+        },
+        {
+          "count": 88,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1991
+        },
+        {
+          "count": 95,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1992
+        },
+        {
+          "count": 115,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1993
+        },
+        {
+          "count": 99,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1994
+        },
+        {
+          "count": 147,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1995
+        },
+        {
+          "count": 101,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1996
+        },
+        {
+          "count": 131,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1997
+        },
+        {
+          "count": 147,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1998
+        },
+        {
+          "count": 161,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1999
+        },
+        {
+          "count": 163,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2000
+        },
+        {
+          "count": 179,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2001
+        },
+        {
+          "count": 204,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2002
+        },
+        {
+          "count": 241,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2003
+        },
+        {
+          "count": 239,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2004
+        },
+        {
+          "count": 268,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2005
+        },
+        {
+          "count": 285,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2006
+        },
+        {
+          "count": 324,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2007
+        },
+        {
+          "count": 349,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2008
+        },
+        {
+          "count": 363,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2009
+        },
+        {
+          "count": 495,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2010
+        },
+        {
+          "count": 621,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2011
+        },
+        {
+          "count": 647,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2012
+        },
+        {
+          "count": 759,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2013
+        },
+        {
+          "count": 889,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2014
+        },
+        {
+          "count": 994,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2015
+        },
+        {
+          "count": 1241,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2016
+        },
+        {
+          "count": 1516,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2017
+        },
+        {
+          "count": 2183,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2018
+        },
+        {
+          "count": 3375,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2019
+        },
+        {
+          "count": 4984,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2020
+        },
+        {
+          "count": 6722,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2021
+        },
+        {
+          "count": 8605,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2022
+        },
+        {
+          "count": 10584,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2023
+        },
+        {
+          "count": 13723,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2024
+        },
+        {
+          "count": 17926,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2025
+        },
+        {
+          "count": 19447,
+          "partial_year": true,
+          "retracted": null,
+          "year": 2026
+        },
+        {
+          "count": 7,
+          "partial_year": true,
+          "retracted": null,
+          "year": 2027
+        }
+      ]
+    },
+    {
+      "beside_only": false,
+      "comparable_with": [
+        "A"
+      ],
+      "counting_unit": "OpenAlex records by publication year; exclude_types removed; duplicates not collapsed; retracted-flagged records included",
+      "id": "B",
+      "label": "Pollution-core records (all OpenAlex types)",
+      "retraction_split": false,
+      "sensitivity": "all",
+      "undated_records": 0,
+      "years": [
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1853
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1854
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1855
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1856
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1857
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1858
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1859
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1860
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1861
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1862
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1863
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1864
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1865
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1866
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1867
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1868
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1869
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1870
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1871
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1872
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1873
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1874
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1875
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1876
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1877
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1878
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1879
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1880
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1881
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1882
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1883
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1884
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1885
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1886
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1887
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1888
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1889
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1890
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1891
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1892
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1893
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1894
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1895
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1896
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1897
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1898
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1899
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1900
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1901
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1902
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1903
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1904
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1905
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1906
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1907
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1908
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1909
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1910
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1911
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1912
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1913
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1914
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1915
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1916
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1917
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1918
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1919
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1920
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1921
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1922
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1923
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1924
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1925
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1926
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1927
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1928
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1929
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1930
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1931
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1932
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1933
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1934
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1935
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1936
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1937
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1938
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1939
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1940
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1941
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1942
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1943
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1944
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1945
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1946
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1947
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1948
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1949
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1950
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1951
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1952
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1953
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1954
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1955
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1956
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1957
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1958
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1959
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1960
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1961
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1962
+        },
+        {
+          "count": 5,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1963
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1964
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1965
+        },
+        {
+          "count": 13,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1966
+        },
+        {
+          "count": 8,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1967
+        },
+        {
+          "count": 9,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1968
+        },
+        {
+          "count": 12,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1969
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1970
+        },
+        {
+          "count": 11,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1971
+        },
+        {
+          "count": 5,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1972
+        },
+        {
+          "count": 10,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1973
+        },
+        {
+          "count": 17,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1974
+        },
+        {
+          "count": 11,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1975
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1976
+        },
+        {
+          "count": 15,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1977
+        },
+        {
+          "count": 18,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1978
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1979
+        },
+        {
+          "count": 14,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1980
+        },
+        {
+          "count": 8,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1981
+        },
+        {
+          "count": 18,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1982
+        },
+        {
+          "count": 14,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1983
+        },
+        {
+          "count": 16,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1984
+        },
+        {
+          "count": 22,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1985
+        },
+        {
+          "count": 22,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1986
+        },
+        {
+          "count": 34,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1987
+        },
+        {
+          "count": 39,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1988
+        },
+        {
+          "count": 48,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1989
+        },
+        {
+          "count": 57,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1990
+        },
+        {
+          "count": 46,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1991
+        },
+        {
+          "count": 43,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1992
+        },
+        {
+          "count": 49,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1993
+        },
+        {
+          "count": 28,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1994
+        },
+        {
+          "count": 44,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1995
+        },
+        {
+          "count": 41,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1996
+        },
+        {
+          "count": 81,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1997
+        },
+        {
+          "count": 36,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1998
+        },
+        {
+          "count": 34,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1999
+        },
+        {
+          "count": 45,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2000
+        },
+        {
+          "count": 46,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2001
+        },
+        {
+          "count": 64,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2002
+        },
+        {
+          "count": 63,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2003
+        },
+        {
+          "count": 66,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2004
+        },
+        {
+          "count": 79,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2005
+        },
+        {
+          "count": 78,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2006
+        },
+        {
+          "count": 108,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2007
+        },
+        {
+          "count": 129,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2008
+        },
+        {
+          "count": 132,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2009
+        },
+        {
+          "count": 176,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2010
+        },
+        {
+          "count": 217,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2011
+        },
+        {
+          "count": 241,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2012
+        },
+        {
+          "count": 310,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2013
+        },
+        {
+          "count": 438,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2014
+        },
+        {
+          "count": 605,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2015
+        },
+        {
+          "count": 969,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2016
+        },
+        {
+          "count": 1117,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2017
+        },
+        {
+          "count": 2097,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2018
+        },
+        {
+          "count": 2880,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2019
+        },
+        {
+          "count": 4553,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2020
+        },
+        {
+          "count": 5558,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2021
+        },
+        {
+          "count": 7981,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2022
+        },
+        {
+          "count": 9290,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2023
+        },
+        {
+          "count": 12830,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2024
+        },
+        {
+          "count": 16254,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2025
+        },
+        {
+          "count": 18394,
+          "partial_year": true,
+          "retracted": null,
+          "year": 2026
+        },
+        {
+          "count": 15,
+          "partial_year": true,
+          "retracted": null,
+          "year": 2027
+        }
+      ]
+    },
+    {
+      "beside_only": false,
+      "comparable_with": [
+        "A-article_review"
+      ],
+      "counting_unit": "OpenAlex records of type article or review by publication year; exclude_types removed; duplicates not collapsed; retracted-flagged records included",
+      "id": "B-article_review",
+      "label": "Pollution-core records, article and review types only",
+      "retraction_split": false,
+      "sensitivity": "article_review",
+      "undated_records": 0,
+      "years": [
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1853
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1854
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1855
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1856
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1857
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1858
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1859
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1860
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1861
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1862
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1863
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1864
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1865
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1866
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1867
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1868
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1869
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1870
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1871
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1872
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1873
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1874
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1875
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1876
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1877
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1878
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1879
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1880
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1881
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1882
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1883
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1884
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1885
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1886
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1887
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1888
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1889
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1890
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1891
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1892
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1893
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1894
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1895
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1896
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1897
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1898
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1899
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1900
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1901
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1902
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1903
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1904
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1905
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1906
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1907
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1908
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1909
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1910
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1911
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1912
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1913
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1914
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1915
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1916
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1917
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1918
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1919
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1920
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1921
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1922
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1923
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1924
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1925
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1926
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1927
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1928
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1929
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1930
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1931
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1932
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1933
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1934
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1935
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1936
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1937
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1938
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1939
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1940
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1941
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1942
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1943
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1944
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1945
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1946
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1947
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1948
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1949
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1950
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1951
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1952
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1953
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1954
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1955
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1956
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1957
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1958
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1959
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1960
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1961
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1962
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1963
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1964
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1965
+        },
+        {
+          "count": 13,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1966
+        },
+        {
+          "count": 7,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1967
+        },
+        {
+          "count": 8,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1968
+        },
+        {
+          "count": 7,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1969
+        },
+        {
+          "count": 5,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1970
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1971
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1972
+        },
+        {
+          "count": 9,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1973
+        },
+        {
+          "count": 11,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1974
+        },
+        {
+          "count": 9,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1975
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1976
+        },
+        {
+          "count": 12,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1977
+        },
+        {
+          "count": 13,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1978
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1979
+        },
+        {
+          "count": 12,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1980
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1981
+        },
+        {
+          "count": 15,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1982
+        },
+        {
+          "count": 11,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1983
+        },
+        {
+          "count": 15,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1984
+        },
+        {
+          "count": 18,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1985
+        },
+        {
+          "count": 14,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1986
+        },
+        {
+          "count": 31,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1987
+        },
+        {
+          "count": 28,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1988
+        },
+        {
+          "count": 38,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1989
+        },
+        {
+          "count": 47,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1990
+        },
+        {
+          "count": 35,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1991
+        },
+        {
+          "count": 31,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1992
+        },
+        {
+          "count": 37,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1993
+        },
+        {
+          "count": 23,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1994
+        },
+        {
+          "count": 35,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1995
+        },
+        {
+          "count": 32,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1996
+        },
+        {
+          "count": 39,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1997
+        },
+        {
+          "count": 31,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1998
+        },
+        {
+          "count": 29,
+          "partial_year": false,
+          "retracted": null,
+          "year": 1999
+        },
+        {
+          "count": 28,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2000
+        },
+        {
+          "count": 33,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2001
+        },
+        {
+          "count": 53,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2002
+        },
+        {
+          "count": 50,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2003
+        },
+        {
+          "count": 51,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2004
+        },
+        {
+          "count": 61,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2005
+        },
+        {
+          "count": 56,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2006
+        },
+        {
+          "count": 73,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2007
+        },
+        {
+          "count": 95,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2008
+        },
+        {
+          "count": 92,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2009
+        },
+        {
+          "count": 129,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2010
+        },
+        {
+          "count": 168,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2011
+        },
+        {
+          "count": 175,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2012
+        },
+        {
+          "count": 215,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2013
+        },
+        {
+          "count": 298,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2014
+        },
+        {
+          "count": 407,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2015
+        },
+        {
+          "count": 547,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2016
+        },
+        {
+          "count": 723,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2017
+        },
+        {
+          "count": 1247,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2018
+        },
+        {
+          "count": 2010,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2019
+        },
+        {
+          "count": 3203,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2020
+        },
+        {
+          "count": 4305,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2021
+        },
+        {
+          "count": 5737,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2022
+        },
+        {
+          "count": 7001,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2023
+        },
+        {
+          "count": 9329,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2024
+        },
+        {
+          "count": 12165,
+          "partial_year": false,
+          "retracted": null,
+          "year": 2025
+        },
+        {
+          "count": 13205,
+          "partial_year": true,
+          "retracted": null,
+          "year": 2026
+        },
+        {
+          "count": 5,
+          "partial_year": true,
+          "retracted": null,
+          "year": 2027
+        }
+      ]
+    },
+    {
+      "beside_only": false,
+      "comparable_with": [
+        "A"
+      ],
+      "counting_unit": "OpenAlex records by publication year; exclude_types removed; duplicates not collapsed; retracted-flagged records included",
+      "id": "C",
+      "label": "California-connected matching records",
+      "retraction_split": true,
+      "sensitivity": "all",
+      "undated_records": 0,
+      "years": [
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1853
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1854
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1855
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1856
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1857
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1858
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1859
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1860
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1861
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1862
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1863
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1864
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1865
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1866
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1867
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1868
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1869
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1870
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1871
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1872
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1873
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1874
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1875
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1876
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1877
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1878
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1879
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1880
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1881
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1882
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1883
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1884
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1885
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1886
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1887
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1888
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1889
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1890
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1891
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1892
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1893
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1894
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1895
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1896
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1897
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1898
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1899
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1900
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1901
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1902
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1903
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1904
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1905
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1906
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1907
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1908
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1909
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1910
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1911
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1912
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1913
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1914
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1915
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1916
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1917
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1918
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1919
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1920
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1921
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1922
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1923
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1924
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1925
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1926
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1927
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1928
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1929
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1930
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1931
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1932
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1933
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1934
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1935
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1936
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1937
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1938
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1939
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1940
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1941
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1942
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1943
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1944
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1945
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1946
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1947
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1948
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1949
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1950
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1951
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1952
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1953
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1954
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1955
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1956
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1957
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1958
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1959
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1960
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1961
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1962
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1963
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1964
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1965
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1966
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1967
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1968
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1969
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1970
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1971
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1972
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1973
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1974
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1975
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1976
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1977
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1978
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1979
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1980
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1981
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1982
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1983
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1984
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1985
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1986
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1987
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1988
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1989
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1990
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1991
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1992
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1993
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1994
+        },
+        {
+          "count": 7,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1995
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1996
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1997
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1998
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1999
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2000
+        },
+        {
+          "count": 4,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2001
+        },
+        {
+          "count": 10,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2002
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2003
+        },
+        {
+          "count": 7,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2004
+        },
+        {
+          "count": 9,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2005
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2006
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2007
+        },
+        {
+          "count": 5,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2008
+        },
+        {
+          "count": 16,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2009
+        },
+        {
+          "count": 14,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2010
+        },
+        {
+          "count": 30,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2011
+        },
+        {
+          "count": 23,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2012
+        },
+        {
+          "count": 29,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2013
+        },
+        {
+          "count": 28,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2014
+        },
+        {
+          "count": 36,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2015
+        },
+        {
+          "count": 41,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2016
+        },
+        {
+          "count": 40,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2017
+        },
+        {
+          "count": 58,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2018
+        },
+        {
+          "count": 94,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2019
+        },
+        {
+          "count": 132,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2020
+        },
+        {
+          "count": 114,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2021
+        },
+        {
+          "count": 151,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2022
+        },
+        {
+          "count": 161,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2023
+        },
+        {
+          "count": 243,
+          "partial_year": false,
+          "retracted": 1,
+          "year": 2024
+        },
+        {
+          "count": 252,
+          "partial_year": false,
+          "retracted": 1,
+          "year": 2025
+        },
+        {
+          "count": 312,
+          "partial_year": true,
+          "retracted": 0,
+          "year": 2026
+        },
+        {
+          "count": 0,
+          "partial_year": true,
+          "retracted": 0,
+          "year": 2027
+        }
+      ]
+    },
+    {
+      "beside_only": true,
+      "comparable_with": [],
+      "counting_unit": "curated published works by publication year; one row per work; owner labels and curation removals applied",
+      "id": "D",
+      "label": "Published plastic-related works, California (curated; shown beside only)",
+      "retraction_split": true,
+      "sensitivity": "all",
+      "undated_records": 0,
+      "years": [
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1853
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1854
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1855
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1856
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1857
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1858
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1859
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1860
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1861
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1862
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1863
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1864
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1865
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1866
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1867
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1868
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1869
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1870
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1871
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1872
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1873
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1874
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1875
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1876
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1877
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1878
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1879
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1880
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1881
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1882
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1883
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1884
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1885
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1886
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1887
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1888
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1889
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1890
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1891
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1892
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1893
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1894
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1895
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1896
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1897
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1898
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1899
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1900
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1901
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1902
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1903
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1904
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1905
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1906
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1907
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1908
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1909
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1910
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1911
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1912
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1913
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1914
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1915
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1916
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1917
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1918
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1919
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1920
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1921
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1922
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1923
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1924
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1925
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1926
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1927
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1928
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1929
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1930
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1931
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1932
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1933
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1934
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1935
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1936
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1937
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1938
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1939
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1940
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1941
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1942
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1943
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1944
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1945
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1946
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1947
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1948
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1949
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1950
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1951
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1952
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1953
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1954
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1955
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1956
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1957
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1958
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1959
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1960
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1961
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1962
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1963
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1964
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1965
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1966
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1967
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1968
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1969
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1970
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1971
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1972
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1973
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1974
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1975
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1976
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1977
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1978
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1979
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1980
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1981
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1982
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1983
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1984
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1985
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1986
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1987
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1988
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1989
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1990
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1991
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1992
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1993
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1994
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1995
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1996
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1997
+        },
+        {
+          "count": 1,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1998
+        },
+        {
+          "count": 0,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 1999
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2000
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2001
+        },
+        {
+          "count": 5,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2002
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2003
+        },
+        {
+          "count": 3,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2004
+        },
+        {
+          "count": 6,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2005
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2006
+        },
+        {
+          "count": 5,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2007
+        },
+        {
+          "count": 2,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2008
+        },
+        {
+          "count": 11,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2009
+        },
+        {
+          "count": 11,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2010
+        },
+        {
+          "count": 21,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2011
+        },
+        {
+          "count": 17,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2012
+        },
+        {
+          "count": 23,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2013
+        },
+        {
+          "count": 27,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2014
+        },
+        {
+          "count": 28,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2015
+        },
+        {
+          "count": 39,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2016
+        },
+        {
+          "count": 36,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2017
+        },
+        {
+          "count": 55,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2018
+        },
+        {
+          "count": 78,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2019
+        },
+        {
+          "count": 114,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2020
+        },
+        {
+          "count": 114,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2021
+        },
+        {
+          "count": 134,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2022
+        },
+        {
+          "count": 144,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2023
+        },
+        {
+          "count": 196,
+          "partial_year": false,
+          "retracted": 1,
+          "year": 2024
+        },
+        {
+          "count": 228,
+          "partial_year": false,
+          "retracted": 0,
+          "year": 2025
+        },
+        {
+          "count": 282,
+          "partial_year": true,
+          "retracted": 0,
+          "year": 2026
+        },
+        {
+          "count": 0,
+          "partial_year": true,
+          "retracted": 0,
+          "year": 2027
+        }
+      ]
+    }
+  ],
+  "source": {
+    "schema_version": "denominator_series.v1",
+    "sha256": "e426cd97bac58b74644566c081b48ad42c89d305441c8f31659f8c407a2eadf2"
+  },
+  "version": {
+    "as_of": "2026-11-25",
+    "last_complete_year": 2025,
+    "query_version": "plastic-v3.1",
+    "window_end": 2025,
+    "window_start": 2006
+  },
+  "what_this_is_and_is_not": {
+    "is": "Counts of OpenAlex records by publication year. Each record is one OpenAlex work ID, and duplicate records are not merged. A is every record that matches the plastics search query. C is the part of those matching records that has an author at a California institution, so C/A is the California share of matching records. B is a narrower set that also matches the pollution-core terms, so B/A is the pollution-core share of matching records.",
+    "is_not": "It is not a share of all plastics research, and it is not a Web of Science total. The published plastic-related works (D) are curated works, so they are shown beside the counts and never divided. Retracted-flagged records stay in the all-types counts, because OpenAlex cannot separate them there."
+  }
+}

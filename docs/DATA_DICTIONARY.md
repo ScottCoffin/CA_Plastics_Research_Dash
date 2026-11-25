@@ -456,6 +456,10 @@ Top-level keys: `schema_version` (`bqs-v1`), `generated_at` (UTC ISO 8601), `que
 Titles and venues are OpenAlex metadata. No abstracts are published.
 Licence: derived from OpenAlex metadata; OpenAlex licence recorded as unknown in `docs/REUSE.md`. Owner decision pending.
 
+### `site/data/denominators.json`
+
+Purpose: the public global-denominator file (BQ-2.4, Add-on A3 Module 2). It feeds the V-4 trend panel on `/california/evidence` and the Trend tab on `/explore`. Written by `py -3.14 scripts/build_denominators_json.py` from the ignored `data/processed/analytics/denominator_series.json` (run `scripts/build_denominator_series.py` first). `--check` validates the committed file (schema, allowed ratios only, no ratio with D or B2) and, when the ignored input exists, fails if the file is stale; with the input absent it prints SKIP for the staleness check and exits 0. Top-level keys: `schema_version` (`bq2-v1`), `generated_at`, `version` (`query_version`, `as_of`, `last_complete_year`, `window_start`, `window_end`), `source` (input schema and SHA-256), `what_this_is_and_is_not` (`is`, `is_not`), `series` (A, A-article_review, B, B-article_review, C, D: `id`, `label`, `counting_unit`, `sensitivity`, `beside_only`, `comparable_with`, `retraction_split`, `undated_records`, `years` with `year`, `count`, `retracted`, `partial_year`), `ratio_pairs` (B/A, C/A and B-article_review/A-article_review, each with `numerator`, `denominator`, `label`, `sensitivity`), `not_computed` (B2, listed only), and `metrics` (the BQ-2.3 block: window, partial years, CI level, method, per-series `trend` with CAGR and 95% interval, and `shares`). Counts are OpenAlex records by publication year. D is curated works, is beside-only, and is never divided.
+
 ### `site/data/bundle/`
 
 AT-4 serving bundle (bit-set facets, title search, institution tiers, abstract-free

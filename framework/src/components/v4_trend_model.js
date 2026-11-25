@@ -56,6 +56,40 @@ export function caShare(corpusByYear, globalByYear) {
   return rows.sort((a, b) => a.year - b.year);
 }
 
+// Schema tag of site/data/denominators.json (BQ-2.4).
+export const DENOMINATORS_SCHEMA = "bq2-v1";
+
+// One series row of denominators.json, found by its id (the public file lists series as an array).
+function seriesById(payload, id) {
+  const list = payload && Array.isArray(payload.series) ? payload.series : [];
+  return list.find((row) => row && row.id === id) || null;
+}
+
+// The denominators payload when it carries the expected schema and the A and C series, else null.
+export function readDenominators(payload) {
+  const ok = payload && payload.schema_version === DENOMINATORS_SCHEMA && seriesById(payload, "A") && seriesById(payload, "C");
+  return ok ? payload : null;
+}
+
+// Counts of one series keyed by year. Partial (not yet complete) years are left out, so a share never
+// divides an incomplete year.
+export function countsByYear(payload, seriesId) {
+  const series = seriesById(payload, seriesId);
+  const out = {};
+  for (const row of (series && series.years) || []) {
+    if (row.partial_year) continue;
+    out[row.year] = Number(row.count) || 0;
+  }
+  return out;
+}
+
+// Share rows for a like-for-like pair of series in denominators.json: numerator over denominator, by
+// year, with the caShare row shape ({year, corpus: numerator, global: denominator, share}). The default
+// pair is C/A, the California share of matching records.
+export function denominatorShare(payload, numerator = "C", denominator = "A") {
+  return caShare(countsByYear(payload, numerator), countsByYear(payload, denominator));
+}
+
 // True when a calendar year overlaps the 12 months ending at refDate. That is the year before
 // refDate's year onward, because the previous year always overlaps the 12-month span. Such years are
 // drawn lighter: their indexing is still settling.

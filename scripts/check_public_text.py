@@ -56,6 +56,7 @@ DEFAULT_JSON = [
     "site/data/pubmed_coverage.json",
     "site/data/network_metrics.json",
     "site/data/language_probe.json",
+    "site/data/denominators.json",
 ]
 SKIP_TAGS = {"script", "style"}
 

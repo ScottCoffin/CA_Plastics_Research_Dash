@@ -3,6 +3,7 @@
 // explore.json, then fills the scope bar, the statement, the tabs and the panels, and keeps the
 // #scope= and &view= hash state. Every query runs inside root, so ids stay unique per page.
 import {siteRoot} from "./atlas.js";
+import {denominatorShare, readDenominators} from "./v4_trend_model.js";
 
 export async function mountExplore(root) {
   const response = await fetch(new URL("data/global/explore.json", siteRoot()), {cache: "no-cache"});
@@ -517,10 +518,24 @@ export async function mountExplore(root) {
     const view = trendPanel.view || "chart", from = scope.kind === "world" ? 1970 : 1990, rows = data.filter(([y]) => y >= from && y <= lastYear);
     el.innerHTML = `<div class="toolbar"><div><h2>Works per year</h2><p class="lede" style="margin:0">Works under the plastics query${scope.kind === "world" ? "" : " with an author in " + esc(scope.kind === "country" ? inName(scope.iso) : scopeName())}, ${from} to ${lastYear}; the hatched year is to date.</p></div>
     <div class="seg" style="margin-left:auto" role="group" aria-label="Show as"><button type="button" class="btn" aria-pressed="${view === "chart"}" data-v="chart">Chart</button><button type="button" class="btn" aria-pressed="${view === "table"}" data-v="table">Table</button></div></div>
-    <div class="box">${view === "chart" ? `<div class="chart" id="tr-chart"></div>` : `<div class="tw" style="max-height:420px;overflow:auto"><table class="t"><thead><tr><th><span>year</span></th><th class="n"><span>works</span></th></tr></thead><tbody>${rows.slice().reverse().map(([y, n]) => `<tr><td class="m">${y}${y === lastYear ? " (to date)" : ""}</td><td class="n">${fmt(n)}</td></tr>`).join("")}</tbody></table></div>`}</div>
+    <div class="box">${view === "chart" ? `<div class="chart" id="tr-chart"></div>` : `<div class="tw" style="max-height:420px;overflow:auto" tabindex="0" role="region" aria-label="Works per year table, scrollable"><table class="t"><thead><tr><th><span>year</span></th><th class="n"><span>works</span></th></tr></thead><tbody>${rows.slice().reverse().map(([y, n]) => `<tr><td class="m">${y}${y === lastYear ? " (to date)" : ""}</td><td class="n">${fmt(n)}</td></tr>`).join("")}</tbody></table></div>`}</div>
     <p class="src">${SRC}${scope.kind === "world" ? " Carpenter et al. (1972), Science 178:749, first described plastic spherules in coastal waters." : ""}</p>`;
     if (view === "chart") columns($("#tr-chart"), rows, {h: 340, ann: scope.kind === "world" ? {year: 1972, text: "1972: first ocean microplastics paper"} : null});
     el.querySelectorAll("[data-v]").forEach((b) => b.addEventListener("click", () => { trendPanel.view = b.dataset.v; trendPanel(el); }));
+    if (scope.kind === "world") pollutionShare(el);
+    // BQ-2.4: the pollution-core share (B/A) from denominators.json, fetched once when the Trend tab first
+    // needs it. It is a line under the counts, with the same what-this-is-and-is-not text as the Evidence Map.
+    async function pollutionShare(target) {
+      if (!trendPanel.denoms) trendPanel.denoms = fetch(new URL("data/denominators.json", siteRoot()), {cache: "no-cache"}).then((r) => (r.ok ? r.json() : null)).then(readDenominators).catch(() => null);
+      const denoms = await trendPanel.denoms;
+      if (!denoms || !target.isConnected || scope.kind !== "world" || target.querySelector("[data-bq-share]")) return;
+      const last = denominatorShare(denoms, "B", "A").at(-1);
+      if (!last) return;
+      const what = denoms.what_this_is_and_is_not || {};
+      target.insertAdjacentHTML("beforeend", `<div class="box" data-bq-share><h3>Pollution-core share</h3>` +
+        `<p class="lede">In ${last.year}, ${fmt(last.corpus)} of ${fmt(last.global)} works matching the plastics query (${(last.share * 100).toFixed(1)}%) also match the pollution-core terms.</p>` +
+        `<p class="src"><b>What this is.</b> ${esc(what.is)} <b>What this is not.</b> ${esc(what.is_not)}</p></div>`);
+    }
   }
 
   const EV_ROWS = ["occurrence", "effects", "methods", "fate and transport", "solutions"];

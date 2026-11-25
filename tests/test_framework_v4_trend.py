@@ -40,8 +40,10 @@ def test_view_exports_mount_and_imports_shared_helpers() -> None:
     assert "seriesFromRows(initialRows, years, topics)" in text
     assert "seriesByTopic(countsFor(idx), years, topics)" in text
     assert 'import "./shared/topics.js";' in text
-    assert "trend_global.json" in text
-    assert "Global comparison unavailable." in text
+    assert "denominators.json" in text
+    assert "Share comparison unavailable." in text
+    assert "What this is and is not" in text
+    assert "trend_global.json" not in text
     assert "Last 12 months: still being indexed" in text
 
 

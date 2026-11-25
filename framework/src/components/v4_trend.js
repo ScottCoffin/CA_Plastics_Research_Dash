@@ -1,14 +1,17 @@
-// V-4 trend panel for the Evidence Map (EM-7): works per year by topic, and the California share
-// of global output under the same query version. Hand-built SVG; no chart library.
+// V-4 trend panel for the Evidence Map (EM-7): works per year by topic, and the California share of
+// matching records (C/A) from site/data/denominators.json (BQ-2.4). Published plastic-related works (D)
+// sit beside the share and are never divided. Hand-built SVG; no chart library.
 // Inputs: idx is the AT-4 BitmaskIndex (window.AtlasFacets) that the Evidence Map page loads.
 import "./shared/topics.js";
 import {dataUrl} from "./atlas.js";
 import {
   FIRST_YEAR,
-  caShare,
+  countsByYear,
+  denominatorShare,
   escapeHtml,
   isRecent,
   niceMax,
+  readDenominators,
   refDateFor,
   seriesByTopic,
   seriesFromRows,
@@ -21,12 +24,11 @@ const M = {top: 14, right: 12, bottom: 36, left: 52};
 const PLOT_W = W - M.left - M.right;
 const PLOT_H = H - M.top - M.bottom;
 
-async function loadGlobal() {
+async function loadDenominators() {
   try {
-    const response = await fetch(dataUrl("trend_global.json"));
+    const response = await fetch(dataUrl("denominators.json"));
     if (!response.ok) return null;
-    const payload = await response.json();
-    return payload && payload.by_year ? payload : null;
+    return readDenominators(await response.json());
   } catch (_error) {
     return null;
   }
@@ -52,6 +54,10 @@ function topicKeys(idx) {
 
 function pct(value) {
   return `${Number(value.toPrecision(2))}%`;
+}
+
+function count(value) {
+  return value == null ? "" : Number(value).toLocaleString("en-US");
 }
 
 function xFor(index, count) {
@@ -101,7 +107,7 @@ function barChart(data, refDate) {
 
 function shareChart(rows, years, version, refDate) {
   const inRange = rows.filter((row) => years.includes(row.year));
-  if (!inRange.length) return '<p class="v4-note">No overlapping years with a global count.</p>';
+  if (!inRange.length) return '<p class="v4-note">No complete years with a share to draw.</p>';
   const max = niceMax(Math.max(...inRange.map((row) => row.share * 100)));
   const y = (value) => M.top + PLOT_H - (value / max) * PLOT_H;
   const points = inRange.map((row) => ({
@@ -122,7 +128,7 @@ function shareChart(rows, years, version, refDate) {
   const ticks = yearTicks(years)
     .map(({year, i}) => `<text class="v4-tick" x="${xFor(i, years.length).toFixed(1)}" y="${H - 14}" text-anchor="middle">${year}</text>`)
     .join("");
-  return svg(`California share of global works per year under query ${version}`, grid + line + dots + ticks);
+  return svg(`California share of matching records per year under query ${version}`, grid + line + dots + ticks);
 }
 
 function svg(label, body) {
@@ -138,59 +144,87 @@ function legend(topics) {
   return `<ul class="v4-legend">${items.join("")}</ul>`;
 }
 
-function dataTable(data, rows, globalByYear, version) {
+// Table alternative: the bar counts, plus the share columns when denominators.json loaded.
+// Share and denominator columns cover complete years only; a blank cell is an incomplete year.
+function dataTable(data, shareRows, denoms, version) {
   const api = window.AtlasTopics;
+  const counts = denoms
+    ? {C: countsByYear(denoms, "C"), A: countsByYear(denoms, "A"), D: countsByYear(denoms, "D")}
+    : null;
+  const shareByYear = new Map(shareRows.map((row) => [row.year, row]));
   const head = [
     "<th scope=\"col\">Year</th>",
     '<th scope="col">Works</th>',
     ...data.series.map((s) => `<th scope="col">${escapeHtml(api.label(s.topic))}</th>`),
-    ...(globalByYear ? ['<th scope="col">Global works</th>', '<th scope="col">CA share</th>'] : [])
+    ...(counts
+      ? [
+          '<th scope="col">California records (C)</th>',
+          '<th scope="col">Matching records (A)</th>',
+          '<th scope="col">California share (C/A)</th>',
+          '<th scope="col">Published plastic-related works (D, not divided)</th>'
+        ]
+      : [])
   ].join("");
   const body = data.years
     .map((year, i) => {
-      const row = rows.find((r) => r.year === year);
+      const row = shareByYear.get(year);
       const cells = [
         `<th scope="row">${year}</th>`,
         `<td>${data.totals[i]}</td>`,
         ...data.series.map((s) => `<td>${s.values[i]}</td>`),
-        ...(globalByYear
-          ? [`<td>${globalByYear[year] ?? ""}</td>`, `<td>${row ? pct(row.share * 100) : ""}</td>`]
+        ...(counts
+          ? [
+              `<td>${count(counts.C[year])}</td>`,
+              `<td>${count(counts.A[year])}</td>`,
+              `<td>${row ? pct(row.share * 100) : ""}</td>`,
+              `<td>${count(counts.D[year])}</td>`
+            ]
           : [])
       ];
       return `<tr>${cells.join("")}</tr>`;
     })
     .join("");
   return `<div class="atlas-table-wrap" role="region" aria-label="Works per year table, scrollable" tabindex="0">` +
-    `<table class="atlas-table"><caption>Works per year by topic${globalByYear ? `, and CA share under query ${escapeHtml(version)}` : ""}</caption>` +
+    `<table class="atlas-table"><caption>Works per year by topic${counts ? `, and California share of matching records under query ${escapeHtml(version)} (complete years)` : ""}</caption>` +
     `<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 
 // Renders the whole corpus first; update(rows) redraws from the rows that match the page filters.
-// The global denominator is never filtered, so the share note says so when filters are on.
+// The share comes from denominators.json and is never filtered, so the note says so when filters are on.
 export async function mountV4Trend(container, idx, initialRows = null) {
   if (!container) throw new Error("mountV4Trend needs a container element");
   container.classList.add("v4-trend");
   container.innerHTML = '<p class="v4-status" role="status">Loading the trend panel…</p>';
-  const globalPayload = await loadGlobal();
+  const denoms = await loadDenominators();
   const today = new Date();
-  const refDate = refDateFor(globalPayload, today);
+  const refDate = refDateFor(denoms && {fetched_at: denoms.generated_at}, today);
   const years = yearRange(FIRST_YEAR, today.getUTCFullYear());
   const topics = topicKeys(idx);
-  const globalByYear = globalPayload ? globalPayload.by_year : null;
-  const version = globalPayload ? String(globalPayload.query_version || "") : "";
+  const version = denoms ? String(denoms.version.query_version || "") : "";
+  const shareRows = denoms ? denominatorShare(denoms, "C", "A") : [];
+
+  function shareSection() {
+    if (!denoms) return '<p class="v4-note v4-unavailable">Share comparison unavailable.</p>';
+    const latest = shareRows.filter((row) => years.includes(row.year)).at(-1);
+    const dCounts = countsByYear(denoms, "D");
+    const latestNote = latest
+      ? `In ${latest.year}, ${latest.corpus.toLocaleString("en-US")} of ${latest.global.toLocaleString("en-US")} matching records ` +
+        `have a California author (${pct(latest.share * 100)}). Published plastic-related works in California that year: ` +
+        `${count(dCounts[latest.year])}, shown beside the share and not divided.`
+      : "";
+    const what = denoms.what_this_is_and_is_not || {};
+    return (
+      '<h3 class="v4-heading">California share of matching records</h3>' +
+      shareChart(shareRows, years, version, refDate) +
+      `<p class="v4-note">Under query ${escapeHtml(version)}, by publication year, complete years only. The share is not filtered.</p>` +
+      (latestNote ? `<p class="v4-note">${escapeHtml(latestNote)}</p>` : "") +
+      `<div class="v4-what"><h4 class="v4-heading">What this is and is not</h4>` +
+      `<p class="v4-note"><strong>This is:</strong> ${escapeHtml(what.is || "")}</p>` +
+      `<p class="v4-note"><strong>This is not:</strong> ${escapeHtml(what.is_not || "")}</p></div>`
+    );
+  }
 
   function draw(data, filtered) {
-    const corpusByYear = Object.fromEntries(years.map((year, i) => [year, data.totals[i]]));
-    const rows = globalByYear ? caShare(corpusByYear, globalByYear) : [];
-    const scope = filtered ? "Works matching the current filters" : "California-connected works";
-    const globalSection = globalPayload
-      ? `<h3 class="v4-heading">California share of global output</h3>` +
-        shareChart(rows, years, version, refDate) +
-        `<p class="v4-note">Under query ${escapeHtml(version)}: ${scope.toLowerCase()} as a share of all OpenAlex works ` +
-        `matching the same query, by publication year. Global counts fetched ${escapeHtml(globalPayload.fetched_at)}.` +
-        (filtered ? " The global count is not filtered, so with topic or other filters on this compares a subset with all plastics research." : "") +
-        `</p>`
-      : '<p class="v4-note v4-unavailable">Global comparison unavailable.</p>';
     // Two panes: the chart, and the same numbers in a table. The card's Chart/Table control shows one of them.
     container.innerHTML =
       '<div data-pane="chart">' +
@@ -198,9 +232,9 @@ export async function mountV4Trend(container, idx, initialRows = null) {
       barChart(data, refDate) +
       legend(topics) +
       `<p class="v4-note">A work with several topic tags is counted under each. Works before ${FIRST_YEAR} are not shown.</p>` +
-      globalSection +
+      shareSection() +
       "</div>" +
-      `<div data-pane="table">${dataTable(data, rows, globalByYear, version)}</div>`;
+      `<div data-pane="table">${dataTable(data, shareRows, denoms, version)}</div>`;
   }
 
   const initialData = initialRows === null ? seriesByTopic(countsFor(idx), years, topics) : seriesFromRows(initialRows, years, topics);
