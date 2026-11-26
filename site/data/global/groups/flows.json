@@ -1,0 +1,36 @@
+{
+ "activity_combinations": {
+  "combinations": [],
+  "min_group_size": 3,
+  "ordering": "by frequency of tag combinations",
+  "other": {
+   "combinations": 0,
+   "groups": 0
+  }
+ },
+ "denominator_note": "Based on 0 of 2708 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
+ "generated_from": "2026-11-26",
+ "participation": {
+  "counts": {
+   "co_created": 0,
+   "collaborative": 0,
+   "collegial": 0,
+   "contractual": 0,
+   "contributory": 0,
+   "not_applicable": 0,
+   "not_set": 0
+  },
+  "research_monitoring_n": 0,
+  "with_f5_value_n": 0
+ },
+ "sankey": {
+  "links": [],
+  "nodes": [],
+  "stages": [
+   "sector",
+   "centrality",
+   "activity"
+  ]
+ },
+ "schema": "cg-flows-v1"
+}

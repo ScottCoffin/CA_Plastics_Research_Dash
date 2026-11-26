@@ -1,0 +1,2055 @@
+{
+ "by_ambassador_region": {
+  "belgium": {
+   "roster": 23,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 23
+   },
+   "tagged": 0
+  },
+  "none": {
+   "roster": 2681,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2681
+   },
+   "tagged": 0
+  },
+  "norway": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  }
+ },
+ "by_country": {
+  "AE": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "AF": {
+   "roster": 194,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 194
+   },
+   "tagged": 0
+  },
+  "AG": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "AL": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "AM": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "AR": {
+   "roster": 23,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 23
+   },
+   "tagged": 0
+  },
+  "AT": {
+   "roster": 12,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 12
+   },
+   "tagged": 0
+  },
+  "AU": {
+   "roster": 40,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 40
+   },
+   "tagged": 0
+  },
+  "BA": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "BD": {
+   "roster": 25,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 25
+   },
+   "tagged": 0
+  },
+  "BE": {
+   "roster": 23,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 23
+   },
+   "tagged": 0
+  },
+  "BF": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "BG": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "BJ": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "BM": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "BR": {
+   "roster": 43,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 43
+   },
+   "tagged": 0
+  },
+  "BS": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "BT": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "BW": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "BY": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "CA": {
+   "roster": 53,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 53
+   },
+   "tagged": 0
+  },
+  "CD": {
+   "roster": 17,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 17
+   },
+   "tagged": 0
+  },
+  "CF": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "CH": {
+   "roster": 21,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 21
+   },
+   "tagged": 0
+  },
+  "CI": {
+   "roster": 10,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 10
+   },
+   "tagged": 0
+  },
+  "CL": {
+   "roster": 12,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 12
+   },
+   "tagged": 0
+  },
+  "CM": {
+   "roster": 25,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 25
+   },
+   "tagged": 0
+  },
+  "CO": {
+   "roster": 20,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 20
+   },
+   "tagged": 0
+  },
+  "CR": {
+   "roster": 7,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 7
+   },
+   "tagged": 0
+  },
+  "CV": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "CY": {
+   "roster": 5,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 5
+   },
+   "tagged": 0
+  },
+  "CZ": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "DE": {
+   "roster": 47,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 47
+   },
+   "tagged": 0
+  },
+  "DK": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "DO": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "EC": {
+   "roster": 9,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 9
+   },
+   "tagged": 0
+  },
+  "EE": {
+   "roster": 8,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 8
+   },
+   "tagged": 0
+  },
+  "EG": {
+   "roster": 5,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 5
+   },
+   "tagged": 0
+  },
+  "ES": {
+   "roster": 51,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 51
+   },
+   "tagged": 0
+  },
+  "ET": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "FJ": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "FR": {
+   "roster": 38,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 38
+   },
+   "tagged": 0
+  },
+  "GA": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "GB": {
+   "roster": 105,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 105
+   },
+   "tagged": 0
+  },
+  "GE": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "GH": {
+   "roster": 31,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 31
+   },
+   "tagged": 0
+  },
+  "GM": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "GN": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "GR": {
+   "roster": 11,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 11
+   },
+   "tagged": 0
+  },
+  "HK": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "HN": {
+   "roster": 6,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 6
+   },
+   "tagged": 0
+  },
+  "HR": {
+   "roster": 5,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 5
+   },
+   "tagged": 0
+  },
+  "HT": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "HU": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "ID": {
+   "roster": 62,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 62
+   },
+   "tagged": 0
+  },
+  "IE": {
+   "roster": 13,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 13
+   },
+   "tagged": 0
+  },
+  "IL": {
+   "roster": 5,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 5
+   },
+   "tagged": 0
+  },
+  "IN": {
+   "roster": 144,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 144
+   },
+   "tagged": 0
+  },
+  "IQ": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "IT": {
+   "roster": 19,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 19
+   },
+   "tagged": 0
+  },
+  "JM": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "JO": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "JP": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "KE": {
+   "roster": 52,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 52
+   },
+   "tagged": 0
+  },
+  "KH": {
+   "roster": 7,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 7
+   },
+   "tagged": 0
+  },
+  "KR": {
+   "roster": 19,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 19
+   },
+   "tagged": 0
+  },
+  "KW": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "KY": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "KZ": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "LA": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "LB": {
+   "roster": 7,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 7
+   },
+   "tagged": 0
+  },
+  "LC": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "LK": {
+   "roster": 21,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 21
+   },
+   "tagged": 0
+  },
+  "LR": {
+   "roster": 7,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 7
+   },
+   "tagged": 0
+  },
+  "LS": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "LT": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "LV": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "LY": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "MA": {
+   "roster": 7,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 7
+   },
+   "tagged": 0
+  },
+  "MD": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "ME": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "MK": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "MM": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "MN": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "MT": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "MU": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "MV": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "MW": {
+   "roster": 10,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 10
+   },
+   "tagged": 0
+  },
+  "MX": {
+   "roster": 20,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 20
+   },
+   "tagged": 0
+  },
+  "MY": {
+   "roster": 27,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 27
+   },
+   "tagged": 0
+  },
+  "MZ": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "NG": {
+   "roster": 105,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 105
+   },
+   "tagged": 0
+  },
+  "NI": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "NL": {
+   "roster": 27,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 27
+   },
+   "tagged": 0
+  },
+  "NO": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "NP": {
+   "roster": 12,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 12
+   },
+   "tagged": 0
+  },
+  "NZ": {
+   "roster": 19,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 19
+   },
+   "tagged": 0
+  },
+  "OM": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "PA": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "PE": {
+   "roster": 10,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 10
+   },
+   "tagged": 0
+  },
+  "PH": {
+   "roster": 151,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 151
+   },
+   "tagged": 0
+  },
+  "PK": {
+   "roster": 11,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 11
+   },
+   "tagged": 0
+  },
+  "PL": {
+   "roster": 11,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 11
+   },
+   "tagged": 0
+  },
+  "PR": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "PS": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "PT": {
+   "roster": 15,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 15
+   },
+   "tagged": 0
+  },
+  "PY": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "RE": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "RO": {
+   "roster": 6,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 6
+   },
+   "tagged": 0
+  },
+  "RS": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "RU": {
+   "roster": 9,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 9
+   },
+   "tagged": 0
+  },
+  "RW": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "SA": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "SD": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "SE": {
+   "roster": 5,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 5
+   },
+   "tagged": 0
+  },
+  "SG": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "SI": {
+   "roster": 5,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 5
+   },
+   "tagged": 0
+  },
+  "SK": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "SL": {
+   "roster": 8,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 8
+   },
+   "tagged": 0
+  },
+  "SN": {
+   "roster": 7,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 7
+   },
+   "tagged": 0
+  },
+  "SO": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "SR": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "SS": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "ST": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "SV": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "TG": {
+   "roster": 6,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 6
+   },
+   "tagged": 0
+  },
+  "TH": {
+   "roster": 12,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 12
+   },
+   "tagged": 0
+  },
+  "TL": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "TN": {
+   "roster": 21,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 21
+   },
+   "tagged": 0
+  },
+  "TR": {
+   "roster": 8,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 8
+   },
+   "tagged": 0
+  },
+  "TW": {
+   "roster": 8,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 8
+   },
+   "tagged": 0
+  },
+  "TZ": {
+   "roster": 44,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 44
+   },
+   "tagged": 0
+  },
+  "UA": {
+   "roster": 16,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 16
+   },
+   "tagged": 0
+  },
+  "UG": {
+   "roster": 26,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 26
+   },
+   "tagged": 0
+  },
+  "UM": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "US": {
+   "roster": 659,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 659
+   },
+   "tagged": 0
+  },
+  "UY": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "VE": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "VN": {
+   "roster": 21,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 21
+   },
+   "tagged": 0
+  },
+  "WS": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "ZA": {
+   "roster": 29,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 29
+   },
+   "tagged": 0
+  },
+  "ZM": {
+   "roster": 7,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 7
+   },
+   "tagged": 0
+  },
+  "ZW": {
+   "roster": 4,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 4
+   },
+   "tagged": 0
+  },
+  "unknown": {
+   "roster": 25,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 25
+   },
+   "tagged": 0
+  }
+ },
+ "by_region": {
+  "Australia and New Zealand": {
+   "roster": 59,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 59
+   },
+   "tagged": 0
+  },
+  "Caribbean": {
+   "roster": 9,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 9
+   },
+   "tagged": 0
+  },
+  "Central America": {
+   "roster": 44,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 44
+   },
+   "tagged": 0
+  },
+  "Central Asia": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "Eastern Africa": {
+   "roster": 158,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 158
+   },
+   "tagged": 0
+  },
+  "Eastern Asia": {
+   "roster": 34,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 34
+   },
+   "tagged": 0
+  },
+  "Eastern Europe": {
+   "roster": 55,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 55
+   },
+   "tagged": 0
+  },
+  "Melanesia": {
+   "roster": 3,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 3
+   },
+   "tagged": 0
+  },
+  "Micronesia": {
+   "roster": 2,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 2
+   },
+   "tagged": 0
+  },
+  "Middle Africa": {
+   "roster": 46,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 46
+   },
+   "tagged": 0
+  },
+  "Northern Africa": {
+   "roster": 35,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 35
+   },
+   "tagged": 0
+  },
+  "Northern America": {
+   "roster": 714,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 714
+   },
+   "tagged": 0
+  },
+  "Northern Europe": {
+   "roster": 142,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 142
+   },
+   "tagged": 0
+  },
+  "Polynesia": {
+   "roster": 1,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 1
+   },
+   "tagged": 0
+  },
+  "South America": {
+   "roster": 124,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 124
+   },
+   "tagged": 0
+  },
+  "South-eastern Asia": {
+   "roster": 292,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 292
+   },
+   "tagged": 0
+  },
+  "Southern Africa": {
+   "roster": 32,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 32
+   },
+   "tagged": 0
+  },
+  "Southern Asia": {
+   "roster": 410,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 410
+   },
+   "tagged": 0
+  },
+  "Southern Europe": {
+   "roster": 125,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 125
+   },
+   "tagged": 0
+  },
+  "Western Africa": {
+   "roster": 185,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 185
+   },
+   "tagged": 0
+  },
+  "Western Asia": {
+   "roster": 44,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 44
+   },
+   "tagged": 0
+  },
+  "Western Europe": {
+   "roster": 168,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 168
+   },
+   "tagged": 0
+  },
+  "region_unknown": {
+   "roster": 25,
+   "status": {
+    "ambassador_tagged": 0,
+    "assigned": 0,
+    "cannot_determine": 0,
+    "group_confirmed": 0,
+    "reviewed": 0,
+    "unlabelled": 25
+   },
+   "tagged": 0
+  }
+ },
+ "denominator_note": "Based on 0 of 2708 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
+ "generated_from": "2026-11-26",
+ "languages": {},
+ "roster_total": 2708,
+ "schema": "cg-coverage-v1",
+ "tagged_total": 0,
+ "weekly_tagged": []
+}

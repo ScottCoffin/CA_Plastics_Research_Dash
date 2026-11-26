@@ -310,10 +310,14 @@ def test_missing_required_key_is_reported() -> None:
 def test_bad_country_and_url_are_reported() -> None:
     rec = _base()
     rec["country"] = "usa"
-    rec["url"] = "http://example.org"
+    rec["url"] = "example.org without a scheme"
     problems = validate_group(rec, known_group_ids=KNOWN)
     assert any("country" in p for p in problems)
     assert any("url" in p for p in problems)
+    # http and https are both accepted (many group sites are still http).
+    rec2 = _base()
+    rec2["url"] = "http://example.org"
+    assert not any("url" in p for p in validate_group(rec2, known_group_ids=KNOWN))
 
 
 def test_place_codes_accept_iso_3166_2_and_reject_lowercase() -> None:

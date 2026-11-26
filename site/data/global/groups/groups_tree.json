@@ -1,0 +1,3654 @@
+{
+ "default_hierarchy": "geography",
+ "denominator_note": "Based on 0 of 2708 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
+ "generated_from": "2026-11-26",
+ "hierarchies": {
+  "centrality": {
+   "children": [
+    {
+     "count": 2708,
+     "counts": {
+      "distinct": 0,
+      "roster": 2708,
+      "tagged": 0
+     },
+     "id": "centrality/not_yet_tagged",
+     "label": "Not yet tagged (2708)",
+     "level": "not_yet_tagged"
+    }
+   ],
+   "counts": {
+    "distinct": 0,
+    "roster": 2708,
+    "tagged": 0
+   },
+   "id": "centrality",
+   "label": "centrality",
+   "level": "root"
+  },
+  "function": {
+   "children": [
+    {
+     "count": 2708,
+     "counts": {
+      "distinct": 0,
+      "roster": 2708,
+      "tagged": 0
+     },
+     "id": "function/not_yet_tagged",
+     "label": "Not yet tagged (2708)",
+     "level": "not_yet_tagged"
+    }
+   ],
+   "counts": {
+    "distinct": 0,
+    "roster": 2708,
+    "tagged": 0
+   },
+   "id": "function",
+   "label": "function",
+   "level": "root"
+  },
+  "geography": {
+   "children": [
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 40,
+         "counts": {
+          "distinct": 0,
+          "roster": 40,
+          "tagged": 0
+         },
+         "id": "geography/Australia and New Zealand/AU/not_yet_tagged",
+         "label": "Not yet tagged (40)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 40,
+        "tagged": 0
+       },
+       "id": "geography/Australia and New Zealand/AU",
+       "label": "AU",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 19,
+         "counts": {
+          "distinct": 0,
+          "roster": 19,
+          "tagged": 0
+         },
+         "id": "geography/Australia and New Zealand/NZ/not_yet_tagged",
+         "label": "Not yet tagged (19)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 19,
+        "tagged": 0
+       },
+       "id": "geography/Australia and New Zealand/NZ",
+       "label": "NZ",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 59,
+      "tagged": 0
+     },
+     "id": "geography/Australia and New Zealand",
+     "label": "Australia and New Zealand",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Caribbean/AG/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Caribbean/AG",
+       "label": "AG",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Caribbean/BS/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Caribbean/BS",
+       "label": "BS",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Caribbean/DO/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Caribbean/DO",
+       "label": "DO",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Caribbean/HT/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Caribbean/HT",
+       "label": "HT",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Caribbean/JM/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Caribbean/JM",
+       "label": "JM",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Caribbean/KY/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Caribbean/KY",
+       "label": "KY",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Caribbean/LC/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Caribbean/LC",
+       "label": "LC",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Caribbean/PR/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Caribbean/PR",
+       "label": "PR",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 9,
+      "tagged": 0
+     },
+     "id": "geography/Caribbean",
+     "label": "Caribbean",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 7,
+         "counts": {
+          "distinct": 0,
+          "roster": 7,
+          "tagged": 0
+         },
+         "id": "geography/Central America/CR/not_yet_tagged",
+         "label": "Not yet tagged (7)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 7,
+        "tagged": 0
+       },
+       "id": "geography/Central America/CR",
+       "label": "CR",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 6,
+         "counts": {
+          "distinct": 0,
+          "roster": 6,
+          "tagged": 0
+         },
+         "id": "geography/Central America/HN/not_yet_tagged",
+         "label": "Not yet tagged (6)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 6,
+        "tagged": 0
+       },
+       "id": "geography/Central America/HN",
+       "label": "HN",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 20,
+         "counts": {
+          "distinct": 0,
+          "roster": 20,
+          "tagged": 0
+         },
+         "id": "geography/Central America/MX/not_yet_tagged",
+         "label": "Not yet tagged (20)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 20,
+        "tagged": 0
+       },
+       "id": "geography/Central America/MX",
+       "label": "MX",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/Central America/NI/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/Central America/NI",
+       "label": "NI",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/Central America/PA/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/Central America/PA",
+       "label": "PA",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Central America/SV/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Central America/SV",
+       "label": "SV",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 44,
+      "tagged": 0
+     },
+     "id": "geography/Central America",
+     "label": "Central America",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Central Asia/KZ/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Central Asia/KZ",
+       "label": "KZ",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 1,
+      "tagged": 0
+     },
+     "id": "geography/Central Asia",
+     "label": "Central Asia",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/ET/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/ET",
+       "label": "ET",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 52,
+         "counts": {
+          "distinct": 0,
+          "roster": 52,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/KE/not_yet_tagged",
+         "label": "Not yet tagged (52)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 52,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/KE",
+       "label": "KE",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/MU/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/MU",
+       "label": "MU",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 10,
+         "counts": {
+          "distinct": 0,
+          "roster": 10,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/MW/not_yet_tagged",
+         "label": "Not yet tagged (10)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 10,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/MW",
+       "label": "MW",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/MZ/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/MZ",
+       "label": "MZ",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/RE/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/RE",
+       "label": "RE",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/RW/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/RW",
+       "label": "RW",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/SO/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/SO",
+       "label": "SO",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/SS/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/SS",
+       "label": "SS",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 44,
+         "counts": {
+          "distinct": 0,
+          "roster": 44,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/TZ/not_yet_tagged",
+         "label": "Not yet tagged (44)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 44,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/TZ",
+       "label": "TZ",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 26,
+         "counts": {
+          "distinct": 0,
+          "roster": 26,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/UG/not_yet_tagged",
+         "label": "Not yet tagged (26)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 26,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/UG",
+       "label": "UG",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 7,
+         "counts": {
+          "distinct": 0,
+          "roster": 7,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/ZM/not_yet_tagged",
+         "label": "Not yet tagged (7)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 7,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/ZM",
+       "label": "ZM",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Africa/ZW/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Africa/ZW",
+       "label": "ZW",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 158,
+      "tagged": 0
+     },
+     "id": "geography/Eastern Africa",
+     "label": "Eastern Africa",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Asia/HK/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Asia/HK",
+       "label": "HK",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Asia/JP/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Asia/JP",
+       "label": "JP",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 19,
+         "counts": {
+          "distinct": 0,
+          "roster": 19,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Asia/KR/not_yet_tagged",
+         "label": "Not yet tagged (19)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 19,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Asia/KR",
+       "label": "KR",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Asia/MN/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Asia/MN",
+       "label": "MN",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 8,
+         "counts": {
+          "distinct": 0,
+          "roster": 8,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Asia/TW/not_yet_tagged",
+         "label": "Not yet tagged (8)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 8,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Asia/TW",
+       "label": "TW",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 34,
+      "tagged": 0
+     },
+     "id": "geography/Eastern Asia",
+     "label": "Eastern Asia",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/BG/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/BG",
+       "label": "BG",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/BY/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/BY",
+       "label": "BY",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/CZ/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/CZ",
+       "label": "CZ",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/HU/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/HU",
+       "label": "HU",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/MD/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/MD",
+       "label": "MD",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 11,
+         "counts": {
+          "distinct": 0,
+          "roster": 11,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/PL/not_yet_tagged",
+         "label": "Not yet tagged (11)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 11,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/PL",
+       "label": "PL",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 6,
+         "counts": {
+          "distinct": 0,
+          "roster": 6,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/RO/not_yet_tagged",
+         "label": "Not yet tagged (6)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 6,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/RO",
+       "label": "RO",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 9,
+         "counts": {
+          "distinct": 0,
+          "roster": 9,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/RU/not_yet_tagged",
+         "label": "Not yet tagged (9)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 9,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/RU",
+       "label": "RU",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/SK/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/SK",
+       "label": "SK",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 16,
+         "counts": {
+          "distinct": 0,
+          "roster": 16,
+          "tagged": 0
+         },
+         "id": "geography/Eastern Europe/UA/not_yet_tagged",
+         "label": "Not yet tagged (16)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 16,
+        "tagged": 0
+       },
+       "id": "geography/Eastern Europe/UA",
+       "label": "UA",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 55,
+      "tagged": 0
+     },
+     "id": "geography/Eastern Europe",
+     "label": "Eastern Europe",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Melanesia/FJ/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Melanesia/FJ",
+       "label": "FJ",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 3,
+      "tagged": 0
+     },
+     "id": "geography/Melanesia",
+     "label": "Melanesia",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Micronesia/UM/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Micronesia/UM",
+       "label": "UM",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 2,
+      "tagged": 0
+     },
+     "id": "geography/Micronesia",
+     "label": "Micronesia",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 17,
+         "counts": {
+          "distinct": 0,
+          "roster": 17,
+          "tagged": 0
+         },
+         "id": "geography/Middle Africa/CD/not_yet_tagged",
+         "label": "Not yet tagged (17)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 17,
+        "tagged": 0
+       },
+       "id": "geography/Middle Africa/CD",
+       "label": "CD",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Middle Africa/CF/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Middle Africa/CF",
+       "label": "CF",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 25,
+         "counts": {
+          "distinct": 0,
+          "roster": 25,
+          "tagged": 0
+         },
+         "id": "geography/Middle Africa/CM/not_yet_tagged",
+         "label": "Not yet tagged (25)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 25,
+        "tagged": 0
+       },
+       "id": "geography/Middle Africa/CM",
+       "label": "CM",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Middle Africa/GA/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Middle Africa/GA",
+       "label": "GA",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Middle Africa/ST/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Middle Africa/ST",
+       "label": "ST",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 46,
+      "tagged": 0
+     },
+     "id": "geography/Middle Africa",
+     "label": "Middle Africa",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 5,
+         "counts": {
+          "distinct": 0,
+          "roster": 5,
+          "tagged": 0
+         },
+         "id": "geography/Northern Africa/EG/not_yet_tagged",
+         "label": "Not yet tagged (5)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 5,
+        "tagged": 0
+       },
+       "id": "geography/Northern Africa/EG",
+       "label": "EG",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Northern Africa/LY/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Northern Africa/LY",
+       "label": "LY",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 7,
+         "counts": {
+          "distinct": 0,
+          "roster": 7,
+          "tagged": 0
+         },
+         "id": "geography/Northern Africa/MA/not_yet_tagged",
+         "label": "Not yet tagged (7)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 7,
+        "tagged": 0
+       },
+       "id": "geography/Northern Africa/MA",
+       "label": "MA",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Northern Africa/SD/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Northern Africa/SD",
+       "label": "SD",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 21,
+         "counts": {
+          "distinct": 0,
+          "roster": 21,
+          "tagged": 0
+         },
+         "id": "geography/Northern Africa/TN/not_yet_tagged",
+         "label": "Not yet tagged (21)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 21,
+        "tagged": 0
+       },
+       "id": "geography/Northern Africa/TN",
+       "label": "TN",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 35,
+      "tagged": 0
+     },
+     "id": "geography/Northern Africa",
+     "label": "Northern Africa",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Northern America/BM/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Northern America/BM",
+       "label": "BM",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 53,
+         "counts": {
+          "distinct": 0,
+          "roster": 53,
+          "tagged": 0
+         },
+         "id": "geography/Northern America/CA/not_yet_tagged",
+         "label": "Not yet tagged (53)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 53,
+        "tagged": 0
+       },
+       "id": "geography/Northern America/CA",
+       "label": "CA",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 659,
+         "counts": {
+          "distinct": 0,
+          "roster": 659,
+          "tagged": 0
+         },
+         "id": "geography/Northern America/US/not_yet_tagged",
+         "label": "Not yet tagged (659)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 659,
+        "tagged": 0
+       },
+       "id": "geography/Northern America/US",
+       "label": "US",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 714,
+      "tagged": 0
+     },
+     "id": "geography/Northern America",
+     "label": "Northern America",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Northern Europe/DK/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Northern Europe/DK",
+       "label": "DK",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 8,
+         "counts": {
+          "distinct": 0,
+          "roster": 8,
+          "tagged": 0
+         },
+         "id": "geography/Northern Europe/EE/not_yet_tagged",
+         "label": "Not yet tagged (8)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 8,
+        "tagged": 0
+       },
+       "id": "geography/Northern Europe/EE",
+       "label": "EE",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 105,
+         "counts": {
+          "distinct": 0,
+          "roster": 105,
+          "tagged": 0
+         },
+         "id": "geography/Northern Europe/GB/not_yet_tagged",
+         "label": "Not yet tagged (105)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 105,
+        "tagged": 0
+       },
+       "id": "geography/Northern Europe/GB",
+       "label": "GB",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 13,
+         "counts": {
+          "distinct": 0,
+          "roster": 13,
+          "tagged": 0
+         },
+         "id": "geography/Northern Europe/IE/not_yet_tagged",
+         "label": "Not yet tagged (13)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 13,
+        "tagged": 0
+       },
+       "id": "geography/Northern Europe/IE",
+       "label": "IE",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Northern Europe/LT/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Northern Europe/LT",
+       "label": "LT",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Northern Europe/LV/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Northern Europe/LV",
+       "label": "LV",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/Northern Europe/NO/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/Northern Europe/NO",
+       "label": "NO",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 5,
+         "counts": {
+          "distinct": 0,
+          "roster": 5,
+          "tagged": 0
+         },
+         "id": "geography/Northern Europe/SE/not_yet_tagged",
+         "label": "Not yet tagged (5)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 5,
+        "tagged": 0
+       },
+       "id": "geography/Northern Europe/SE",
+       "label": "SE",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 142,
+      "tagged": 0
+     },
+     "id": "geography/Northern Europe",
+     "label": "Northern Europe",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Polynesia/WS/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Polynesia/WS",
+       "label": "WS",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 1,
+      "tagged": 0
+     },
+     "id": "geography/Polynesia",
+     "label": "Polynesia",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 23,
+         "counts": {
+          "distinct": 0,
+          "roster": 23,
+          "tagged": 0
+         },
+         "id": "geography/South America/AR/not_yet_tagged",
+         "label": "Not yet tagged (23)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 23,
+        "tagged": 0
+       },
+       "id": "geography/South America/AR",
+       "label": "AR",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 43,
+         "counts": {
+          "distinct": 0,
+          "roster": 43,
+          "tagged": 0
+         },
+         "id": "geography/South America/BR/not_yet_tagged",
+         "label": "Not yet tagged (43)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 43,
+        "tagged": 0
+       },
+       "id": "geography/South America/BR",
+       "label": "BR",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 12,
+         "counts": {
+          "distinct": 0,
+          "roster": 12,
+          "tagged": 0
+         },
+         "id": "geography/South America/CL/not_yet_tagged",
+         "label": "Not yet tagged (12)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 12,
+        "tagged": 0
+       },
+       "id": "geography/South America/CL",
+       "label": "CL",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 20,
+         "counts": {
+          "distinct": 0,
+          "roster": 20,
+          "tagged": 0
+         },
+         "id": "geography/South America/CO/not_yet_tagged",
+         "label": "Not yet tagged (20)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 20,
+        "tagged": 0
+       },
+       "id": "geography/South America/CO",
+       "label": "CO",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 9,
+         "counts": {
+          "distinct": 0,
+          "roster": 9,
+          "tagged": 0
+         },
+         "id": "geography/South America/EC/not_yet_tagged",
+         "label": "Not yet tagged (9)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 9,
+        "tagged": 0
+       },
+       "id": "geography/South America/EC",
+       "label": "EC",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 10,
+         "counts": {
+          "distinct": 0,
+          "roster": 10,
+          "tagged": 0
+         },
+         "id": "geography/South America/PE/not_yet_tagged",
+         "label": "Not yet tagged (10)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 10,
+        "tagged": 0
+       },
+       "id": "geography/South America/PE",
+       "label": "PE",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/South America/PY/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/South America/PY",
+       "label": "PY",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/South America/SR/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/South America/SR",
+       "label": "SR",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/South America/UY/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/South America/UY",
+       "label": "UY",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/South America/VE/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/South America/VE",
+       "label": "VE",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 124,
+      "tagged": 0
+     },
+     "id": "geography/South America",
+     "label": "South America",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 62,
+         "counts": {
+          "distinct": 0,
+          "roster": 62,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/ID/not_yet_tagged",
+         "label": "Not yet tagged (62)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 62,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/ID",
+       "label": "ID",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 7,
+         "counts": {
+          "distinct": 0,
+          "roster": 7,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/KH/not_yet_tagged",
+         "label": "Not yet tagged (7)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 7,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/KH",
+       "label": "KH",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/LA/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/LA",
+       "label": "LA",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/MM/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/MM",
+       "label": "MM",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 27,
+         "counts": {
+          "distinct": 0,
+          "roster": 27,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/MY/not_yet_tagged",
+         "label": "Not yet tagged (27)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 27,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/MY",
+       "label": "MY",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 151,
+         "counts": {
+          "distinct": 0,
+          "roster": 151,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/PH/not_yet_tagged",
+         "label": "Not yet tagged (151)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 151,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/PH",
+       "label": "PH",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/SG/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/SG",
+       "label": "SG",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 12,
+         "counts": {
+          "distinct": 0,
+          "roster": 12,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/TH/not_yet_tagged",
+         "label": "Not yet tagged (12)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 12,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/TH",
+       "label": "TH",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/TL/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/TL",
+       "label": "TL",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 21,
+         "counts": {
+          "distinct": 0,
+          "roster": 21,
+          "tagged": 0
+         },
+         "id": "geography/South-eastern Asia/VN/not_yet_tagged",
+         "label": "Not yet tagged (21)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 21,
+        "tagged": 0
+       },
+       "id": "geography/South-eastern Asia/VN",
+       "label": "VN",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 292,
+      "tagged": 0
+     },
+     "id": "geography/South-eastern Asia",
+     "label": "South-eastern Asia",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Southern Africa/BW/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Southern Africa/BW",
+       "label": "BW",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Southern Africa/LS/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Southern Africa/LS",
+       "label": "LS",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 29,
+         "counts": {
+          "distinct": 0,
+          "roster": 29,
+          "tagged": 0
+         },
+         "id": "geography/Southern Africa/ZA/not_yet_tagged",
+         "label": "Not yet tagged (29)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 29,
+        "tagged": 0
+       },
+       "id": "geography/Southern Africa/ZA",
+       "label": "ZA",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 32,
+      "tagged": 0
+     },
+     "id": "geography/Southern Africa",
+     "label": "Southern Africa",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 194,
+         "counts": {
+          "distinct": 0,
+          "roster": 194,
+          "tagged": 0
+         },
+         "id": "geography/Southern Asia/AF/not_yet_tagged",
+         "label": "Not yet tagged (194)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 194,
+        "tagged": 0
+       },
+       "id": "geography/Southern Asia/AF",
+       "label": "AF",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 25,
+         "counts": {
+          "distinct": 0,
+          "roster": 25,
+          "tagged": 0
+         },
+         "id": "geography/Southern Asia/BD/not_yet_tagged",
+         "label": "Not yet tagged (25)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 25,
+        "tagged": 0
+       },
+       "id": "geography/Southern Asia/BD",
+       "label": "BD",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Southern Asia/BT/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Southern Asia/BT",
+       "label": "BT",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 144,
+         "counts": {
+          "distinct": 0,
+          "roster": 144,
+          "tagged": 0
+         },
+         "id": "geography/Southern Asia/IN/not_yet_tagged",
+         "label": "Not yet tagged (144)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 144,
+        "tagged": 0
+       },
+       "id": "geography/Southern Asia/IN",
+       "label": "IN",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 21,
+         "counts": {
+          "distinct": 0,
+          "roster": 21,
+          "tagged": 0
+         },
+         "id": "geography/Southern Asia/LK/not_yet_tagged",
+         "label": "Not yet tagged (21)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 21,
+        "tagged": 0
+       },
+       "id": "geography/Southern Asia/LK",
+       "label": "LK",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Southern Asia/MV/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Southern Asia/MV",
+       "label": "MV",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 12,
+         "counts": {
+          "distinct": 0,
+          "roster": 12,
+          "tagged": 0
+         },
+         "id": "geography/Southern Asia/NP/not_yet_tagged",
+         "label": "Not yet tagged (12)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 12,
+        "tagged": 0
+       },
+       "id": "geography/Southern Asia/NP",
+       "label": "NP",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 11,
+         "counts": {
+          "distinct": 0,
+          "roster": 11,
+          "tagged": 0
+         },
+         "id": "geography/Southern Asia/PK/not_yet_tagged",
+         "label": "Not yet tagged (11)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 11,
+        "tagged": 0
+       },
+       "id": "geography/Southern Asia/PK",
+       "label": "PK",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 410,
+      "tagged": 0
+     },
+     "id": "geography/Southern Asia",
+     "label": "Southern Asia",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/AL/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/AL",
+       "label": "AL",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/BA/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/BA",
+       "label": "BA",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 51,
+         "counts": {
+          "distinct": 0,
+          "roster": 51,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/ES/not_yet_tagged",
+         "label": "Not yet tagged (51)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 51,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/ES",
+       "label": "ES",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 11,
+         "counts": {
+          "distinct": 0,
+          "roster": 11,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/GR/not_yet_tagged",
+         "label": "Not yet tagged (11)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 11,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/GR",
+       "label": "GR",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 5,
+         "counts": {
+          "distinct": 0,
+          "roster": 5,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/HR/not_yet_tagged",
+         "label": "Not yet tagged (5)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 5,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/HR",
+       "label": "HR",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 19,
+         "counts": {
+          "distinct": 0,
+          "roster": 19,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/IT/not_yet_tagged",
+         "label": "Not yet tagged (19)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 19,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/IT",
+       "label": "IT",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/ME/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/ME",
+       "label": "ME",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/MK/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/MK",
+       "label": "MK",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/MT/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/MT",
+       "label": "MT",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 15,
+         "counts": {
+          "distinct": 0,
+          "roster": 15,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/PT/not_yet_tagged",
+         "label": "Not yet tagged (15)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 15,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/PT",
+       "label": "PT",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/RS/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/RS",
+       "label": "RS",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 5,
+         "counts": {
+          "distinct": 0,
+          "roster": 5,
+          "tagged": 0
+         },
+         "id": "geography/Southern Europe/SI/not_yet_tagged",
+         "label": "Not yet tagged (5)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 5,
+        "tagged": 0
+       },
+       "id": "geography/Southern Europe/SI",
+       "label": "SI",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 125,
+      "tagged": 0
+     },
+     "id": "geography/Southern Europe",
+     "label": "Southern Europe",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/BF/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/BF",
+       "label": "BF",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 4,
+         "counts": {
+          "distinct": 0,
+          "roster": 4,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/BJ/not_yet_tagged",
+         "label": "Not yet tagged (4)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 4,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/BJ",
+       "label": "BJ",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 10,
+         "counts": {
+          "distinct": 0,
+          "roster": 10,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/CI/not_yet_tagged",
+         "label": "Not yet tagged (10)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 10,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/CI",
+       "label": "CI",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/CV/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/CV",
+       "label": "CV",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 31,
+         "counts": {
+          "distinct": 0,
+          "roster": 31,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/GH/not_yet_tagged",
+         "label": "Not yet tagged (31)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 31,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/GH",
+       "label": "GH",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/GM/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/GM",
+       "label": "GM",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/GN/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/GN",
+       "label": "GN",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 7,
+         "counts": {
+          "distinct": 0,
+          "roster": 7,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/LR/not_yet_tagged",
+         "label": "Not yet tagged (7)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 7,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/LR",
+       "label": "LR",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 105,
+         "counts": {
+          "distinct": 0,
+          "roster": 105,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/NG/not_yet_tagged",
+         "label": "Not yet tagged (105)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 105,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/NG",
+       "label": "NG",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 8,
+         "counts": {
+          "distinct": 0,
+          "roster": 8,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/SL/not_yet_tagged",
+         "label": "Not yet tagged (8)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 8,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/SL",
+       "label": "SL",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 7,
+         "counts": {
+          "distinct": 0,
+          "roster": 7,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/SN/not_yet_tagged",
+         "label": "Not yet tagged (7)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 7,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/SN",
+       "label": "SN",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 6,
+         "counts": {
+          "distinct": 0,
+          "roster": 6,
+          "tagged": 0
+         },
+         "id": "geography/Western Africa/TG/not_yet_tagged",
+         "label": "Not yet tagged (6)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 6,
+        "tagged": 0
+       },
+       "id": "geography/Western Africa/TG",
+       "label": "TG",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 185,
+      "tagged": 0
+     },
+     "id": "geography/Western Africa",
+     "label": "Western Africa",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/AE/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/AE",
+       "label": "AE",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/AM/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/AM",
+       "label": "AM",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 5,
+         "counts": {
+          "distinct": 0,
+          "roster": 5,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/CY/not_yet_tagged",
+         "label": "Not yet tagged (5)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 5,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/CY",
+       "label": "CY",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/GE/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/GE",
+       "label": "GE",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 5,
+         "counts": {
+          "distinct": 0,
+          "roster": 5,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/IL/not_yet_tagged",
+         "label": "Not yet tagged (5)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 5,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/IL",
+       "label": "IL",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 1,
+         "counts": {
+          "distinct": 0,
+          "roster": 1,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/IQ/not_yet_tagged",
+         "label": "Not yet tagged (1)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 1,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/IQ",
+       "label": "IQ",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/JO/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/JO",
+       "label": "JO",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/KW/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/KW",
+       "label": "KW",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 7,
+         "counts": {
+          "distinct": 0,
+          "roster": 7,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/LB/not_yet_tagged",
+         "label": "Not yet tagged (7)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 7,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/LB",
+       "label": "LB",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 2,
+         "counts": {
+          "distinct": 0,
+          "roster": 2,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/OM/not_yet_tagged",
+         "label": "Not yet tagged (2)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 2,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/OM",
+       "label": "OM",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/PS/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/PS",
+       "label": "PS",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 3,
+         "counts": {
+          "distinct": 0,
+          "roster": 3,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/SA/not_yet_tagged",
+         "label": "Not yet tagged (3)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 3,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/SA",
+       "label": "SA",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 8,
+         "counts": {
+          "distinct": 0,
+          "roster": 8,
+          "tagged": 0
+         },
+         "id": "geography/Western Asia/TR/not_yet_tagged",
+         "label": "Not yet tagged (8)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 8,
+        "tagged": 0
+       },
+       "id": "geography/Western Asia/TR",
+       "label": "TR",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 44,
+      "tagged": 0
+     },
+     "id": "geography/Western Asia",
+     "label": "Western Asia",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 12,
+         "counts": {
+          "distinct": 0,
+          "roster": 12,
+          "tagged": 0
+         },
+         "id": "geography/Western Europe/AT/not_yet_tagged",
+         "label": "Not yet tagged (12)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 12,
+        "tagged": 0
+       },
+       "id": "geography/Western Europe/AT",
+       "label": "AT",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 23,
+         "counts": {
+          "distinct": 0,
+          "roster": 23,
+          "tagged": 0
+         },
+         "id": "geography/Western Europe/BE/not_yet_tagged",
+         "label": "Not yet tagged (23)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 23,
+        "tagged": 0
+       },
+       "id": "geography/Western Europe/BE",
+       "label": "BE",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 21,
+         "counts": {
+          "distinct": 0,
+          "roster": 21,
+          "tagged": 0
+         },
+         "id": "geography/Western Europe/CH/not_yet_tagged",
+         "label": "Not yet tagged (21)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 21,
+        "tagged": 0
+       },
+       "id": "geography/Western Europe/CH",
+       "label": "CH",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 47,
+         "counts": {
+          "distinct": 0,
+          "roster": 47,
+          "tagged": 0
+         },
+         "id": "geography/Western Europe/DE/not_yet_tagged",
+         "label": "Not yet tagged (47)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 47,
+        "tagged": 0
+       },
+       "id": "geography/Western Europe/DE",
+       "label": "DE",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 38,
+         "counts": {
+          "distinct": 0,
+          "roster": 38,
+          "tagged": 0
+         },
+         "id": "geography/Western Europe/FR/not_yet_tagged",
+         "label": "Not yet tagged (38)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 38,
+        "tagged": 0
+       },
+       "id": "geography/Western Europe/FR",
+       "label": "FR",
+       "level": "country"
+      },
+      {
+       "children": [
+        {
+         "count": 27,
+         "counts": {
+          "distinct": 0,
+          "roster": 27,
+          "tagged": 0
+         },
+         "id": "geography/Western Europe/NL/not_yet_tagged",
+         "label": "Not yet tagged (27)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 27,
+        "tagged": 0
+       },
+       "id": "geography/Western Europe/NL",
+       "label": "NL",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 168,
+      "tagged": 0
+     },
+     "id": "geography/Western Europe",
+     "label": "Western Europe",
+     "level": "region"
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "count": 25,
+         "counts": {
+          "distinct": 0,
+          "roster": 25,
+          "tagged": 0
+         },
+         "id": "geography/region_unknown/unknown/not_yet_tagged",
+         "label": "Not yet tagged (25)",
+         "level": "not_yet_tagged"
+        }
+       ],
+       "counts": {
+        "distinct": 0,
+        "roster": 25,
+        "tagged": 0
+       },
+       "id": "geography/region_unknown/unknown",
+       "label": "Not stated",
+       "level": "country"
+      }
+     ],
+     "counts": {
+      "distinct": 0,
+      "roster": 25,
+      "tagged": 0
+     },
+     "id": "geography/region_unknown",
+     "label": "region_unknown",
+     "level": "region"
+    }
+   ],
+   "counts": {
+    "distinct": 0,
+    "roster": 2708,
+    "tagged": 0
+   },
+   "id": "geography",
+   "label": "All roster organisations",
+   "level": "root"
+  }
+ },
+ "schema": "cg-tree-v1"
+}

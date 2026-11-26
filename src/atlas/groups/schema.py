@@ -109,7 +109,8 @@ NULLABLE_ENUMS = {
 }
 
 _DATE_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
-_HTTPS_RE = re.compile(r"https://[^\s/]+\S*")
+# Group websites are often still http (2026-11-26 roster), so both schemes are accepted.
+_HTTPS_RE = re.compile(r"https?://[^\s/]+\S*")
 _COUNTRY_RE = re.compile(r"[A-Z]{2}")
 _PLACE_RE = re.compile(r"[A-Z]{2}(-[A-Z0-9]{1,3})?")
 _LANG_RE = re.compile(r"[a-z]{2}")
@@ -216,7 +217,7 @@ def _check_shape(record: Mapping[str, Any], vocab: Mapping[str, Any], problems: 
         if key in record and not _is_nonempty_str(record[key]):
             problems.append(f"SCHEMA: {key} must be a non-empty string")
     if "url" in record and record["url"] is not None and not _is_https(record["url"]):
-        problems.append("SCHEMA: url must be an https URL or null")
+        problems.append("SCHEMA: url must be an http(s) URL or null")
     if "country" in record and record["country"] is not None:
         if not isinstance(record["country"], str) or not _COUNTRY_RE.fullmatch(record["country"]):
             problems.append("SCHEMA: country must be an ISO 3166-1 alpha-2 code or null")
@@ -301,7 +302,7 @@ def _check_evidence_item(
     if facet_required and not _is_nonempty_str(item.get("facet")):
         problems.append(f"SCHEMA: {where}.facet must be a non-empty string")
     if not _is_https(item.get("url")):
-        problems.append(f"SCHEMA: {where}.url must be an https URL")
+        problems.append(f"SCHEMA: {where}.url must be an http(s) URL")
     if not _is_date(item.get("accessed_at")):
         problems.append(f"SCHEMA: {where}.accessed_at must be YYYY-MM-DD")
     quote = item.get("quote")

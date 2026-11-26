@@ -1,0 +1,174 @@
+{
+ "cannot_determine_reasons": {
+  "conflict_of_interest": 0,
+  "dead_link": 0,
+  "insufficient_information": 0,
+  "language_barrier": 0,
+  "no_web_presence": 0,
+  "not_an_organisation": 0
+ },
+ "coverage_by_region": {
+  "Australia and New Zealand": {
+   "coverage": 0.0,
+   "roster": 59,
+   "tagged": 0
+  },
+  "Caribbean": {
+   "coverage": 0.0,
+   "roster": 9,
+   "tagged": 0
+  },
+  "Central America": {
+   "coverage": 0.0,
+   "roster": 44,
+   "tagged": 0
+  },
+  "Central Asia": {
+   "coverage": 0.0,
+   "roster": 1,
+   "tagged": 0
+  },
+  "Eastern Africa": {
+   "coverage": 0.0,
+   "roster": 158,
+   "tagged": 0
+  },
+  "Eastern Asia": {
+   "coverage": 0.0,
+   "roster": 34,
+   "tagged": 0
+  },
+  "Eastern Europe": {
+   "coverage": 0.0,
+   "roster": 55,
+   "tagged": 0
+  },
+  "Melanesia": {
+   "coverage": 0.0,
+   "roster": 3,
+   "tagged": 0
+  },
+  "Micronesia": {
+   "coverage": 0.0,
+   "roster": 2,
+   "tagged": 0
+  },
+  "Middle Africa": {
+   "coverage": 0.0,
+   "roster": 46,
+   "tagged": 0
+  },
+  "Northern Africa": {
+   "coverage": 0.0,
+   "roster": 35,
+   "tagged": 0
+  },
+  "Northern America": {
+   "coverage": 0.0,
+   "roster": 714,
+   "tagged": 0
+  },
+  "Northern Europe": {
+   "coverage": 0.0,
+   "roster": 142,
+   "tagged": 0
+  },
+  "Polynesia": {
+   "coverage": 0.0,
+   "roster": 1,
+   "tagged": 0
+  },
+  "South America": {
+   "coverage": 0.0,
+   "roster": 124,
+   "tagged": 0
+  },
+  "South-eastern Asia": {
+   "coverage": 0.0,
+   "roster": 292,
+   "tagged": 0
+  },
+  "Southern Africa": {
+   "coverage": 0.0,
+   "roster": 32,
+   "tagged": 0
+  },
+  "Southern Asia": {
+   "coverage": 0.0,
+   "roster": 410,
+   "tagged": 0
+  },
+  "Southern Europe": {
+   "coverage": 0.0,
+   "roster": 125,
+   "tagged": 0
+  },
+  "Western Africa": {
+   "coverage": 0.0,
+   "roster": 185,
+   "tagged": 0
+  },
+  "Western Asia": {
+   "coverage": 0.0,
+   "roster": 44,
+   "tagged": 0
+  },
+  "Western Europe": {
+   "coverage": 0.0,
+   "roster": 168,
+   "tagged": 0
+  },
+  "region_unknown": {
+   "coverage": 0.0,
+   "roster": 25,
+   "tagged": 0
+  }
+ },
+ "denominator_note": "Based on 0 of 2708 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
+ "facets": {
+  "entity_type": {
+   "agreement": null,
+   "agreement_reason": "no double-tagged sample yet",
+   "reviewed_n": 0,
+   "tagged_n": 0,
+   "with_evidence_n": 0
+  },
+  "geographic_scope": {
+   "agreement": null,
+   "agreement_reason": "no double-tagged sample yet",
+   "reviewed_n": 0,
+   "tagged_n": 0,
+   "with_evidence_n": 0
+  },
+  "plastics_centrality": {
+   "agreement": null,
+   "agreement_reason": "no double-tagged sample yet",
+   "reviewed_n": 0,
+   "tagged_n": 0,
+   "with_evidence_n": 0
+  },
+  "primary_activities": {
+   "agreement": null,
+   "agreement_reason": "no double-tagged sample yet",
+   "reviewed_n": 0,
+   "tagged_n": 0,
+   "with_evidence_n": 0
+  },
+  "sector": {
+   "agreement": null,
+   "agreement_reason": "no double-tagged sample yet",
+   "reviewed_n": 0,
+   "tagged_n": 0,
+   "with_evidence_n": 0
+  }
+ },
+ "generated_from": "2026-11-26",
+ "schema": "cg-precision-v1",
+ "tier1_facets": [
+  "entity_type",
+  "sector",
+  "plastics_centrality",
+  "primary_activities",
+  "geographic_scope"
+ ]
+}
