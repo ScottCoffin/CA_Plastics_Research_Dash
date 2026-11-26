@@ -29,7 +29,14 @@ const ERROR_TEXT = {
   invalid_ambassador: "Enter the ambassador's id.",
   invalid_region: "Choose a region.",
   cannot_suspend_owner: "The owner's account cannot be suspended.",
+  allowlist_fields_required: "To approve an institution, choose its region, enter its email domain and choose its type.",
+  invalid_domain: "Enter the domain in lowercase, such as oehha.ca.gov, with no www. and no path.",
+  free_mail_domain: "A free-mail provider cannot be an institution's domain. Enter the institution's own domain.",
+  invalid_institution_type: "Choose one of the four institution types.",
 };
+
+/** Institution types an approved proposal can carry (the Worker's list, in the same order). */
+export const INSTITUTION_TYPE_NAMES = {education: "Education", government: "Government", nonprofit: "Nonprofit", facility: "Facility"};
 
 /** Maps a Worker error code to a plain sentence. `action` is "decide", "lead" or "suspend" (for the 403 text). */
 export function moderationErrorText(code, action = "") {
@@ -151,11 +158,47 @@ export function noteProblem(note) {
   return null;
 }
 
+/**
+ * The email domain to prefill from a proposal's URL: its host, lowercase, with a leading "www." removed. "" when the
+ * value is not an http(s) address. Moderators can edit it before approving.
+ */
+export function prefillDomain(url) {
+  const href = safeHref(url);
+  if (!href) return "";
+  try {
+    return new URL(href).hostname.toLowerCase().replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+}
+
+/** Whether a proposal is an institution, the only kind whose approval needs region, domain and type. */
+export function needsAllowlist(item) {
+  return Boolean(item) && item.type === "proposal" && item.kind === "institution";
+}
+
+/** The three allowlist fields, trimmed. The Worker checks the domain's format and free-mail status. */
+export function allowlistBody({region, domain, institution_type}) {
+  return {region: String(region ?? ""), domain: String(domain ?? "").trim(), institution_type: String(institution_type ?? "")};
+}
+
+export function checkAllowlist({region, domain, institution_type}) {
+  const errors = [];
+  if (!Object.prototype.hasOwnProperty.call(REGION_NAMES, region)) errors.push({field: "allow-region", message: "Choose a region."});
+  if (!String(domain ?? "").trim()) errors.push({field: "allow-domain", message: "Enter the institution's email domain."});
+  if (!Object.prototype.hasOwnProperty.call(INSTITUTION_TYPE_NAMES, institution_type)) {
+    errors.push({field: "allow-type", message: "Choose an institution type."});
+  }
+  return errors;
+}
+
 // ---- request bodies and checks (pure) ------------------------------------------------------------------------
-export function decisionBody({type, id, decision, note}) {
+/** The decision body. Only an approval carries the allowlist fields (the Worker needs them for institutions). */
+export function decisionBody({type, id, decision, note, allowlist}) {
   const body = {type, id, decision};
   const text = String(note ?? "").trim();
   if (text) body.note = text;
+  if (decision === "approve" && allowlist) Object.assign(body, allowlistBody(allowlist));
   return body;
 }
 
@@ -271,6 +314,29 @@ function setBusy(busy) {
   view.approve.disabled = locked;
   view.reject.disabled = locked;
   view.note.disabled = locked;
+  if (view.allow) {
+    for (const field of Object.values(view.allow)) field.disabled = locked;
+  }
+}
+
+/** Region, email domain and type for an institution proposal. The domain is prefilled from the proposal's URL. */
+function allowlistFields(item) {
+  const region = el("select", {id: "mod-allow-region", name: "region", class: "mod-select"}, [
+    el("option", {value: ""}, ["Choose a region"]),
+    ...Object.entries(REGION_NAMES).map(([slug, label]) => el("option", {value: slug}, [label])),
+  ]);
+  const domain = el("input", {id: "mod-allow-domain", name: "domain", type: "text", maxlength: "253", autocomplete: "off", spellcheck: "false", value: prefillDomain(item.payload?.url)});
+  const type = el("select", {id: "mod-allow-type", name: "institution_type", class: "mod-select"}, [
+    el("option", {value: ""}, ["Choose a type"]),
+    ...Object.entries(INSTITUTION_TYPE_NAMES).map(([slug, label]) => el("option", {value: slug}, [label])),
+  ]);
+  const group = el("fieldset", {class: "mod-allow"}, [
+    el("legend", {}, ["If approved, this institution joins the eligible list"]),
+    el("div", {class: "field"}, [el("label", {for: "mod-allow-region"}, ["Region"]), region]),
+    el("div", {class: "field"}, [el("label", {for: "mod-allow-domain"}, ["Email domain"]), domain]),
+    el("div", {class: "field"}, [el("label", {for: "mod-allow-type"}, ["Type"]), type]),
+  ]);
+  return {group, fields: {region, domain, institution_type: type}};
 }
 
 function itemDetails(item) {
@@ -307,7 +373,8 @@ function renderItem(item, index, total) {
   const approve = el("button", {type: "button", class: "btn solid"}, ["Approve"]);
   const reject = el("button", {type: "button", class: "btn"}, ["Reject"]);
   const next = el("button", {type: "button", class: "btn"}, ["Next item"]);
-  view = {heading, approve, reject, note, result, item};
+  const allow = needsAllowlist(item) ? allowlistFields(item) : null;
+  view = {heading, approve, reject, note, result, item, allow: allow ? allow.fields : null};
   approve.addEventListener("click", () => decide(item, "approve"));
   reject.addEventListener("click", () => decide(item, "reject"));
   next.addEventListener("click", () => {
@@ -321,6 +388,7 @@ function renderItem(item, index, total) {
     itemFields(item),
     ...(item.own ? [el("p", {class: "hint"}, ["This one is your own. Another moderator must decide it."])] : []),
     el("div", {class: "field"}, [el("label", {for: "mod-note"}, ["Note (optional)"]), note]),
+    ...(allow ? [allow.group] : []),
     el("div", {class: "btns"}, [approve, reject]),
     result,
     el("div", {class: "btns"}, [next]),
@@ -358,15 +426,25 @@ function renderQueue() {
   setStatus(`${view.heading.textContent}.`);
 }
 
+/** The current values of an institution's allowlist fields on screen. */
+function readAllowlist(fields) {
+  return {region: fields.region.value, domain: fields.domain.value, institution_type: fields.institution_type.value};
+}
+
 async function decide(item, decision) {
   if (item.status || !view || view.item !== item) return;
   const problem = noteProblem(view.note.value);
   if (problem) return setResult(problem, true);
+  const allowlist = view.allow && decision === "approve" ? readAllowlist(view.allow) : null;
+  if (allowlist) {
+    const errors = checkAllowlist(allowlist);
+    if (errors.length) return setResult(errors[0].message, true);
+  }
   setBusy(true);
   setResult("Saving your decision.");
   const response = await api("/moderation/decide", {
     method: "POST",
-    body: decisionBody({type: item.type, id: item.id, decision, note: view.note.value}),
+    body: decisionBody({type: item.type, id: item.id, decision, note: view.note.value, allowlist}),
   });
   if (view.item !== item) return undefined; // the page moved on while the request ran
   if (!response.ok) {

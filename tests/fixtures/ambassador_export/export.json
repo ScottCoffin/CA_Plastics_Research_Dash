@@ -24,5 +24,13 @@
     {"region": "norway", "case_id": "amb-0123456789ab", "answer": "yes", "correct_value": null, "answered_at": 3000},
     {"region": "norway", "case_id": "amb-0123456789ab", "answer": "no", "correct_value": "2", "answered_at": 4000},
     {"region": "norway", "case_id": "amb-ba9876543210", "answer": "yes", "correct_value": null, "answered_at": 3500}
+  ],
+  "institutions": [
+    {"id": 101, "region": "norway", "name": "Fixture Lab", "url": "https://fixture-lab.no/", "domain": "fixture-lab.no", "institution_type": "education", "decided_at": 2500},
+    {"id": 102, "region": "norway", "name": "Fixture Lab (older)", "url": null, "domain": "fixture-lab.no", "institution_type": "nonprofit", "decided_at": 2000},
+    {"id": 103, "region": "norway", "name": "Bad Domain", "url": null, "domain": "BAD_DOMAIN", "institution_type": "education", "decided_at": 2600},
+    {"id": 104, "region": "norway", "name": "Angle <b>bracket</b>", "url": null, "domain": "angle-lab.no", "institution_type": "education", "decided_at": 2700},
+    {"id": 105, "region": "norway", "name": "Agency", "url": "https://agency.no/", "domain": "agency.no", "institution_type": "government", "decided_at": 3500},
+    {"id": 106, "region": "atlantis", "name": "Nowhere", "url": null, "domain": "nowhere.example", "institution_type": "education", "decided_at": 2800}
   ]
 }

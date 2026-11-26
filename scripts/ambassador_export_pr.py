@@ -6,6 +6,9 @@ Reads GET {api}/export/approved (or a saved export with --input) and applies:
   in ``regions/<slug>/region.yml``. ``item_id`` is ``<slug>:<section or kind>:<0-based index>``.
 - stream ``knowledge``: appends a ``draft`` item to the matching section (``correction`` edits one).
 - consensus ``case_answers``: rows in ``curation/ambassador_labels.csv``, newest per (region, case).
+- ``institutions`` (optional key, missing means none): approved institution proposals, written to
+  ``curation/ambassador_institution_additions.csv``, newest per (region, domain). The builder
+  then adds them to the region's eligible list.
 
 Every payload string is validated again here; an invalid item is skipped with a printed reason.
 Region files are edited line by line, so comments and untouched items keep their bytes. The
@@ -41,9 +44,24 @@ DEFAULT_API_URL = "https://api.plastiverse.live"
 DEFAULT_STATE = ROOT / "curation" / "ambassador_export_state.json"
 DEFAULT_LABELS = ROOT / "curation" / "ambassador_labels.csv"
 DEFAULT_REGIONS = ROOT / "regions"
+DEFAULT_ADDITIONS = ROOT / "curation" / "ambassador_institution_additions.csv"
 TOKEN_ENV = "AMB_EXPORT_TOKEN"
 LABEL_COLUMNS = ("region", "case_id", "answer", "correct_value", "answered_at_iso", "source")
 LABEL_SOURCE = "ambassador_consensus"
+ADDITION_COLUMNS = (
+    "region",
+    "name",
+    "url",
+    "domain",
+    "institution_type",
+    "approved_at_iso",
+    "source",
+)
+ADDITION_SOURCE = "approved_proposal"
+# The four types the amb-v1 builder treats as eligible (ELIGIBLE_TYPES in src/atlas/build).
+INSTITUTION_TYPES = frozenset({"education", "government", "nonprofit", "facility"})
+# Same pattern as the owner spec for institution domains; the builder also checks registrable form.
+DOMAIN_RE = re.compile(r"(?=.{3,253}$)([a-z0-9-]+\.)+[a-z]{2,}")
 
 # Same section ids and item fields that scripts/build_region_pages.py enforces (region-v1).
 SECTION_IDS = ("funding", "monitoring", "policy", "research_networks", "local_terms", "geography")
@@ -187,6 +205,40 @@ def region_problem(data: dict) -> str | None:
     return None
 
 
+def clean_institution(inst: dict, at: int, regions_dir: Path) -> tuple[dict | None, str | None]:
+    """(addition row, None) for a valid approved institution, or (None, skip reason)."""
+    region = inst.get("region")
+    if not isinstance(region, str) or not SLUG_RE.match(region):
+        return None, "invalid region"
+    if not (regions_dir / region / "region.yml").is_file():
+        return None, "no regions/<slug>/region.yml for this region"
+    domain = inst.get("domain")
+    if not isinstance(domain, str) or not DOMAIN_RE.fullmatch(domain):
+        return None, "invalid domain"
+    name = clean_text(inst.get("name"), "name")  # 200 characters, no control characters or HTML
+    if name is None:
+        return None, "invalid name"
+    ok_url, url = optional(inst, "url", clean_url)
+    if not ok_url:
+        return None, "invalid url (https only)"
+    if inst.get("institution_type") not in INSTITUTION_TYPES:
+        return None, "invalid institution_type"
+    return {
+        "region": region,
+        "domain": domain,
+        "ms": at,
+        "row": {
+            "region": region,
+            "name": name,
+            "url": url or "",
+            "domain": domain,
+            "institution_type": inst["institution_type"],
+            "approved_at_iso": iso_from_ms(at),
+            "source": ADDITION_SOURCE,
+        },
+    }, None
+
+
 # ---------------------------------------------------------------- region.yml line editing
 
 
@@ -244,13 +296,20 @@ def render_region(text: str, original: dict, data: dict) -> str:
 class Applier:
     """Holds the region files and label rows in memory; nothing touches disk until write_all()."""
 
-    def __init__(self, regions_dir: Path, labels: dict[tuple[str, str], dict]) -> None:
+    def __init__(
+        self,
+        regions_dir: Path,
+        labels: dict[tuple[str, str], dict],
+        additions: dict[tuple[str, str], dict],
+    ) -> None:
         self.regions_dir = regions_dir
         self.original: dict[str, tuple[str, dict]] = {}
         self.docs: dict[str, dict] = {}
         self.changed: set[str] = set()
         self.labels = labels
         self.labels_changed = False
+        self.additions = additions
+        self.additions_changed = False
         self.applied: Counter = Counter()
         self.skipped: list[tuple[str, str]] = []
 
@@ -398,6 +457,20 @@ class Applier:
             item["note"] = f"{item['note']} Corrected by {credit}."
         return None
 
+    def institution(self, item: dict) -> str | None:
+        """Keep the newest approved institution per (region, domain). Identical rows are no-ops."""
+        key = (item["region"], item["domain"])
+        existing = self.additions.get(key)
+        if existing is not None:
+            if existing["ms"] > item["ms"]:
+                return "older than the stored addition for this domain"
+            if existing["row"] == item["row"]:
+                return None
+        self.additions[key] = {"ms": item["ms"], "row": item["row"]}
+        self.additions_changed = True
+        self.applied[(item["region"], "institution")] += 1
+        return None
+
     def consensus(self, row: dict) -> str | None:
         """Keep the newest consensus answer per (region, case_id)."""
         slug = row.get("region")
@@ -533,6 +606,34 @@ def write_labels(path: Path, labels: dict[tuple[str, str], dict]) -> None:
     write_text(path, buffer.getvalue())
 
 
+def read_additions(path: Path) -> dict[tuple[str, str], dict]:
+    additions: dict[tuple[str, str], dict] = {}
+    if not path.exists():
+        return additions
+    with path.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if not (row.get("region") and row.get("domain")):
+                continue
+            try:
+                ms = ms_from_iso(row["approved_at_iso"])
+            except (KeyError, TypeError, ValueError):
+                raise ExportError(f"{path.name} has a row with a bad approved_at_iso") from None
+            additions[(row["region"], row["domain"])] = {
+                "ms": ms,
+                "row": {col: row.get(col, "") or "" for col in ADDITION_COLUMNS},
+            }
+    return additions
+
+
+def write_additions(path: Path, additions: dict[tuple[str, str], dict]) -> None:
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=ADDITION_COLUMNS, lineterminator="\n")
+    writer.writeheader()
+    for key in sorted(additions):
+        writer.writerow(additions[key]["row"])
+    write_text(path, buffer.getvalue())
+
+
 def summary_markdown(applier: Applier, since_before: int, since_after: int) -> str:
     rows = sorted(applier.applied.items())
     lines = [
@@ -560,7 +661,8 @@ def run(args: argparse.Namespace) -> int:
     export = load_export(args, since)
 
     labels = read_labels(args.labels_file)
-    applier = Applier(args.regions_dir, labels)
+    additions = read_additions(args.additions_file)
+    applier = Applier(args.regions_dir, labels, additions)
     times: list[int] = []
     sub_times: list[tuple[int, int | None]] = []
 
@@ -582,6 +684,24 @@ def run(args: argparse.Namespace) -> int:
         if reason is not None:
             applier.skip(label, reason)
             print(f"skip submission {label}: {reason}")
+
+    for inst in export.get("institutions") or []:
+        if not isinstance(inst, dict):
+            continue
+        label = str(inst.get("id")) if is_int(inst.get("id")) else "?"
+        at = inst.get("decided_at")
+        if not is_int(at) or not 0 <= at <= MAX_MS:
+            applier.skip(label, "invalid decided_at")
+            continue
+        times.append(at)
+        if at < since:
+            continue
+        item, reason = clean_institution(inst, at, args.regions_dir)
+        if item is not None:
+            reason = applier.institution(item)
+        if reason is not None:
+            applier.skip(label, reason)
+            print(f"skip institution {label}: {reason}")
 
     for row in export.get("case_answers") or []:
         if not isinstance(row, dict):
@@ -627,11 +747,17 @@ def run(args: argparse.Namespace) -> int:
         write_text(path, text)
     if applier.labels_changed:
         write_labels(args.labels_file, applier.labels)
+    if applier.additions_changed:
+        write_additions(args.additions_file, applier.additions)
     if args.summary_file:
         write_text(args.summary_file, summary_markdown(applier, since, newest))
     write_text(args.since_file, json.dumps(new_state, indent=2) + "\n")
     labels_state = "updated" if applier.labels_changed else "unchanged"
-    print(f"wrote {len(texts)} region file(s); labels {labels_state}")
+    additions_state = "updated" if applier.additions_changed else "unchanged"
+    print(
+        f"wrote {len(texts)} region file(s); labels {labels_state}; "
+        f"institution additions {additions_state}"
+    )
     return 0
 
 
@@ -642,6 +768,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--api-url", default=DEFAULT_API_URL)
     parser.add_argument("--regions-dir", type=Path, default=DEFAULT_REGIONS)
     parser.add_argument("--labels-file", type=Path, default=DEFAULT_LABELS)
+    parser.add_argument("--additions-file", type=Path, default=DEFAULT_ADDITIONS)
     parser.add_argument("--summary-file", type=Path, help="write a counts-only markdown summary")
     parser.add_argument("--dry-run", action="store_true", help="report only; write nothing")
     return parser

@@ -2,6 +2,8 @@
 // framework/src/components/ambassador_moderation.js; the DOM flow is checked in a browser (mocked API).
 import assert from "node:assert/strict";
 import {
+  INSTITUTION_TYPE_NAMES,
+  checkAllowlist,
   checkLead,
   checkSuspend,
   countsText,
@@ -13,9 +15,11 @@ import {
   fieldRows,
   leadBody,
   moderationErrorText,
+  needsAllowlist,
   noteProblem,
   normaliseItems,
   pendingItems,
+  prefillDomain,
   queueUrl,
   safeHref,
   sortQueue,
@@ -129,6 +133,45 @@ check("credit name shows only when credit is public", () => {
   assert.equal(creditName({display_name: "Ada", credit_public: false}), null);
   assert.equal(creditName({display_name: "Ada"}), null);
   assert.equal(creditName({display_name: "  ", credit_public: true}), null);
+});
+
+check("prefilled domain is the lowercase host without a leading www.; non-http values give nothing", () => {
+  assert.equal(prefillDomain("https://oehha.ca.gov/programmes"), "oehha.ca.gov");
+  assert.equal(prefillDomain("https://www.OEHHA.ca.gov/"), "oehha.ca.gov");
+  assert.equal(prefillDomain("http://www.example.org"), "example.org");
+  assert.equal(prefillDomain("javascript:alert(1)"), "");
+  assert.equal(prefillDomain(undefined), "");
+  assert.equal(prefillDomain(""), "");
+});
+
+check("only institution proposals need the allowlist fields", () => {
+  assert.equal(needsAllowlist({type: "proposal", kind: "institution"}), true);
+  assert.equal(needsAllowlist({type: "proposal", kind: "region"}), false);
+  assert.equal(needsAllowlist({type: "submission", kind: "institution"}), false);
+  assert.equal(needsAllowlist(null), false);
+  assert.deepEqual(Object.keys(INSTITUTION_TYPE_NAMES), ["education", "government", "nonprofit", "facility"]);
+});
+
+check("allowlist checks: region, domain and type are each required before approval", () => {
+  assert.deepEqual(checkAllowlist({region: "norway", domain: "niva.no", institution_type: "nonprofit"}), []);
+  assert.deepEqual(checkAllowlist({region: "", domain: " ", institution_type: ""}).map((e) => e.field), ["allow-region", "allow-domain", "allow-type"]);
+  assert.deepEqual(checkAllowlist({region: "mars", domain: "x.org", institution_type: "company"}).map((e) => e.field), ["allow-region", "allow-type"]);
+});
+
+check("an approval carries the trimmed allowlist fields; a rejection carries none", () => {
+  const allowlist = {region: "california", domain: " oehha.ca.gov ", institution_type: "government"};
+  assert.deepEqual(decisionBody({type: "proposal", id: 2, decision: "approve", allowlist}), {
+    type: "proposal", id: 2, decision: "approve", region: "california", domain: "oehha.ca.gov", institution_type: "government",
+  });
+  assert.deepEqual(decisionBody({type: "proposal", id: 2, decision: "reject", allowlist}), {type: "proposal", id: 2, decision: "reject"});
+  assert.deepEqual(decisionBody({type: "submission", id: 7, decision: "approve"}), {type: "submission", id: 7, decision: "approve"});
+});
+
+check("allowlist error codes get plain sentences", () => {
+  assert.match(moderationErrorText("allowlist_fields_required", "decide"), /choose its region, enter its email domain and choose its type/);
+  assert.match(moderationErrorText("free_mail_domain", "decide"), /free-mail provider/);
+  assert.match(moderationErrorText("invalid_domain", "decide"), /oehha\.ca\.gov/);
+  assert.match(moderationErrorText("invalid_institution_type", "decide"), /four institution types/);
 });
 
 check("dates are UTC calendar days; bad timestamps have a fallback", () => {

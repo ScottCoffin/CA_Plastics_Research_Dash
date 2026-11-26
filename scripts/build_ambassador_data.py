@@ -35,9 +35,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas.build.ambassadors import (  # noqa: E402
+    ADDITIONS_CSV,
     USAGE_LOG,
     FetchLimitError,
     RegionCorpus,
+    additions_problems,
     build_from_corpus,
     encode,
     inputs_present,
@@ -107,7 +109,14 @@ def _fetch(regions: list[Region]) -> dict[str, RegionCorpus]:
 def _write(regions: list[Region], corpora: dict[str, RegionCorpus]) -> int:
     for region in regions:
         corpus = corpora.get(region.slug) or load_corpus(region, ROOT)
-        institutions, cases = build_from_corpus(region, corpus, ROOT)
+        notes: list[str] = []
+        try:
+            institutions, cases = build_from_corpus(region, corpus, ROOT, notes=notes)
+        except ValueError as error:
+            print(f"ERROR: {region.slug}: {error}", file=sys.stderr)
+            return 1
+        for note in notes:
+            print(f"note: {note}")
         problems = validate_outputs(institutions, cases, region.slug)
         if problems:
             for problem in problems[:20]:
@@ -130,6 +139,9 @@ def _write(regions: list[Region], corpora: dict[str, RegionCorpus]) -> int:
 
 def _check(regions: list[Region]) -> int:
     failed = False
+    for problem in additions_problems(ROOT / ADDITIONS_CSV):
+        print(f"FAIL: {_rel(ROOT / ADDITIONS_CSV)}: {problem}")
+        failed = True
     for region in regions:
         folder = region_data_dir(region)
         label = region.slug
@@ -170,6 +182,8 @@ def _check(regions: list[Region]) -> int:
             )
             continue
         stamp = committed[INSTITUTIONS_FILE]["generated_at"]
+        if additions_problems(ROOT / ADDITIONS_CSV):
+            continue  # reported above; the rebuild would stop on the same rows
         institutions, cases = build_from_corpus(region, corpus, ROOT, generated_at=stamp)
         stale = [
             name

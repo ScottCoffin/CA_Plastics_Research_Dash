@@ -42,6 +42,9 @@ def work(tmp_path: Path) -> Path:
     (tmp_path / "curation" / "ambassador_labels.csv").write_text(
         "region,case_id,answer,correct_value,answered_at_iso,source\n", "utf-8"
     )
+    (tmp_path / "curation" / "ambassador_institution_additions.csv").write_text(
+        "region,name,url,domain,institution_type,approved_at_iso,source\n", "utf-8"
+    )
     shutil.copy(FIXTURES / "export.json", tmp_path / "export.json")
     return tmp_path
 
@@ -54,6 +57,8 @@ def _args(root: Path, *extra: str) -> list[str]:
         str(root / "curation" / "ambassador_export_state.json"),
         "--labels-file",
         str(root / "curation" / "ambassador_labels.csv"),
+        "--additions-file",
+        str(root / "curation" / "ambassador_institution_additions.csv"),
         "--regions-dir",
         str(root / "regions"),
         *extra,
@@ -235,3 +240,90 @@ def test_locate_item_accepts_section_id_and_kind(work: Path) -> None:
     section, item = MOD.locate_item(data, "norway:monitoring:0", "norway")
     assert section["id"] == "monitoring" and item["name"] == "Norwegian Environment Agency"
     assert MOD.locate_item(data, "belgium:funder:0", "norway") is None
+
+
+def _additions(root: Path) -> list[dict]:
+    path = root / "curation" / "ambassador_institution_additions.csv"
+    with path.open(encoding="utf-8", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def _export_with(root: Path, institutions: list[dict]) -> list[str]:
+    export = json.loads((FIXTURES / "export.json").read_text("utf-8"))
+    export["institutions"] = institutions
+    path = root / "later.json"
+    path.write_text(json.dumps(export), "utf-8")
+    return ["--input", str(path), *_args(root)[2:]]
+
+
+def test_approved_institutions_are_written_deduped_and_counted(work: Path, tmp_path: Path) -> None:
+    summary = tmp_path / "summary.md"
+    assert MOD.main(_args(work, "--summary-file", str(summary))) == 0
+    rows = _additions(work)
+    assert [(r["domain"], r["name"]) for r in rows] == [
+        ("agency.no", "Agency"),
+        ("fixture-lab.no", "Fixture Lab"),
+    ]
+    lab = rows[1]
+    assert lab["region"] == "norway"
+    assert lab["url"] == "https://fixture-lab.no/"
+    assert lab["institution_type"] == "education"
+    assert lab["approved_at_iso"] == "1970-01-01T00:00:02Z"
+    assert lab["source"] == "approved_proposal"
+    assert "| norway | institution | 2 |" in summary.read_text("utf-8")
+
+
+def test_invalid_and_older_institutions_are_skipped_with_a_reason(work: Path, capsys) -> None:
+    assert MOD.main(_args(work)) == 0
+    out = capsys.readouterr().out
+    assert "skip institution 102: older than the stored addition for this domain" in out
+    assert "skip institution 103: invalid domain" in out
+    assert "skip institution 104: invalid name" in out
+    assert "skip institution 106: no regions/<slug>/region.yml for this region" in out
+
+
+def test_newer_decision_replaces_the_stored_addition(work: Path) -> None:
+    assert MOD.main(_args(work)) == 0
+    later = [
+        {
+            "id": 201,
+            "region": "norway",
+            "name": "Fixture Lab renamed",
+            "url": None,
+            "domain": "fixture-lab.no",
+            "institution_type": "facility",
+            "decided_at": 4100,
+        }
+    ]
+    assert MOD.main(_export_with(work, later)) == 0
+    lab = [r for r in _additions(work) if r["domain"] == "fixture-lab.no"]
+    assert len(lab) == 1
+    assert lab[0]["name"] == "Fixture Lab renamed"
+    assert lab[0]["url"] == ""
+    assert lab[0]["institution_type"] == "facility"
+
+
+def test_missing_institutions_key_is_fine(work: Path, tmp_path: Path) -> None:
+    export = json.loads((FIXTURES / "export.json").read_text("utf-8"))
+    del export["institutions"]
+    path = tmp_path / "no_institutions.json"
+    path.write_text(json.dumps(export), "utf-8")
+    assert MOD.main(["--input", str(path), *_args(work)[2:]]) == 0
+    assert _additions(work) == []
+    assert _state(work)["since"] == 4000
+
+
+def test_second_run_is_idempotent_for_institutions(work: Path) -> None:
+    assert MOD.main(_args(work)) == 0
+    path = work / "curation" / "ambassador_institution_additions.csv"
+    first = path.read_text("utf-8")
+    assert MOD.main(_args(work)) == 0
+    assert path.read_text("utf-8") == first
+
+
+def test_dry_run_leaves_the_additions_file_alone(work: Path, capsys) -> None:
+    path = work / "curation" / "ambassador_institution_additions.csv"
+    before = path.read_bytes()
+    assert MOD.main(_args(work, "--dry-run")) == 0
+    assert path.read_bytes() == before
+    assert "skip institution 103: invalid domain" in capsys.readouterr().out

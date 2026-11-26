@@ -1,8 +1,8 @@
 {
   "schema": "amb-v1",
-  "generated_at": "2026-11-25T22:50:50Z",
+  "generated_at": "2026-11-26T04:25:30Z",
   "region": "belgium",
-  "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
+  "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true. An institution an owner or region lead approved as a proposal is listed with its domain, without the works minimum (source approved_proposal).",
   "min_works": 3,
   "eligible_types": [
     "education",
@@ -22,7 +22,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/00cv9y106",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I99464096",
@@ -35,7 +36,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/05f950310",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2800387288",
@@ -50,7 +52,8 @@
       "acronyms": [
         "EC"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I149213910",
@@ -65,7 +68,8 @@
       "acronyms": [
         "UA"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I157674565",
@@ -78,7 +82,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/00afp2z80",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I1293303778",
@@ -93,7 +98,8 @@
       "acronyms": [
         "VLIZ"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I68522396",
@@ -108,7 +114,8 @@
       "acronyms": [
         "VITO"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I130929987",
@@ -123,7 +130,8 @@
       "acronyms": [
         "UMONS"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I13469542",
@@ -138,7 +146,8 @@
       "acronyms": [
         "VUB"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I95674353",
@@ -151,7 +160,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/02495e989",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I878454856",
@@ -164,7 +174,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/04nbhqj75",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210145253",
@@ -177,7 +188,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/05cjt1n05",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I132053463",
@@ -192,7 +204,8 @@
       "acronyms": [
         "ULB"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210118628",
@@ -207,7 +220,8 @@
       "acronyms": [
         "JRC"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210153783",
@@ -220,7 +234,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/05a2hgt53",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210097779",
@@ -233,7 +248,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/00tjjak64",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I27895137",
@@ -246,7 +262,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/00bmzhb16",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I202500258",
@@ -261,7 +278,8 @@
       "acronyms": [
         "INBO"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210114974",
@@ -274,7 +292,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/02kcbn207",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I149768937",
@@ -287,7 +306,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/03d1maw17",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4391768017",
@@ -300,7 +320,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/055kfjr35",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2801223450",
@@ -313,7 +334,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/02y22ws83",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4405271821",
@@ -326,7 +348,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/03410sy33",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210144364",
@@ -341,7 +364,8 @@
       "acronyms": [
         "CAPTURE"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I42097590",
@@ -356,7 +380,8 @@
       "acronyms": [
         "IEEP"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210088339",
@@ -369,7 +394,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/005cv6b38",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210161702",
@@ -382,7 +408,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/04j5wtv36",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2801148265",
@@ -395,7 +422,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/05s43gd64",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2802067006",
@@ -408,7 +436,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/03qtxy027",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4405282759",
@@ -421,7 +450,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/00dqsbt93",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210132797",
@@ -434,7 +464,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/03rhhdt14",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     }
   ]
 }

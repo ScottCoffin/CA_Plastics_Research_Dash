@@ -15,12 +15,16 @@ import pyarrow.parquet as pq
 import pytest
 
 from atlas.build.ambassadors import (
+    ADDITION_COLUMNS,
+    ADDITIONS_CSV,
     CASE_KINDS,
     ELIGIBLE_TYPES,
     MIN_WORKS,
     FetchLimitError,
     RorValues,
+    additions_problems,
     affiliation_acronyms,
+    build_from_corpus,
     build_region,
     fetch_openalex,
     fetch_ror,
@@ -28,6 +32,7 @@ from atlas.build.ambassadors import (
     is_free_mail,
     load_alias_rules,
     load_corpus,
+    load_institution_additions,
     load_overrides,
     load_ror_domains,
     missing_domain_cache,
@@ -318,6 +323,7 @@ def test_validator_flags_forbidden_keys_and_bad_domains() -> None:
                 "ror": "https://ror.org/02abc1234",
                 "acronyms": [],
                 "aliases": [],
+                "source": "openalex",
                 "email": "a@b.no",
             }
         ],
@@ -339,6 +345,7 @@ def test_validator_requires_ror_to_be_null_or_a_short_ror_url() -> None:
         "acronyms": [],
         "aliases": [],
         "ror": None,
+        "source": "openalex",
     }
     cases = {"schema": "amb-cases-v1", "region": "norway", "cases": []}
 
@@ -699,8 +706,151 @@ def test_validator_requires_acronym_and_alias_lists_of_strings() -> None:
         "ror": None,
         "acronyms": "NIVA",
         "aliases": [],
+        "source": "openalex",
     }
     institutions = {"schema": "amb-v1", "region": "norway", "institutions": [row]}
     cases = {"schema": "amb-cases-v1", "region": "norway", "cases": []}
     problems = validate_outputs(institutions, cases, "norway")
     assert any("acronyms must be a list of strings" in p for p in problems)
+
+
+# --- approved institution proposals (curation/ambassador_institution_additions.csv) ---------
+
+
+def _addition(**extra: str) -> dict[str, str]:
+    row = {
+        "region": "norway",
+        "name": "Test Agency",
+        "url": "https://agency.no/",
+        "domain": "agency.no",
+        "institution_type": "government",
+        "approved_at_iso": "2026-11-26T00:00:00Z",
+        "source": "approved_proposal",
+    }
+    row.update(extra)
+    return row
+
+
+def _write_additions(root: Path, rows: list[dict[str, str]]) -> None:
+    columns = ",".join(ADDITION_COLUMNS)
+    lines = [columns]
+    lines += [",".join(row.get(col, "") for col in ADDITION_COLUMNS) for row in rows]
+    (root / "curation").mkdir(exist_ok=True)
+    (root / ADDITIONS_CSV).write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def test_approved_domain_joins_the_eligible_list(country_root: Path) -> None:
+    _write_additions(country_root, [_addition()])
+    institutions, cases = build_region(_norway(), country_root, GENERATED)
+    row = _rows(institutions)["add:agency.no"]
+    assert row == {
+        "id": "add:agency.no",
+        "name": "Test Agency",
+        "type": "government",
+        "works": 0,
+        "domains": ["agency.no"],
+        "needs_domain": False,
+        "ror": None,
+        "acronyms": [],
+        "aliases": [],
+        "source": "approved_proposal",
+    }
+    assert validate_outputs(institutions, cases, "norway") == []
+
+
+def test_approved_domain_already_listed_is_skipped_with_a_note(country_root: Path) -> None:
+    _write_additions(country_root, [_addition(domain="niva.no", name="NIVA again")])
+    notes: list[str] = []
+    institutions, _ = build_from_corpus(
+        _norway(), load_corpus(_norway(), country_root), country_root, GENERATED, notes
+    )
+    assert "add:niva.no" not in _rows(institutions)
+    assert _rows(institutions)["I1"]["domains"] == ["niva.no"]
+    assert notes == ["norway: niva.no is already listed; approved proposal not added"]
+
+
+def test_approved_rows_for_other_regions_are_ignored(country_root: Path) -> None:
+    _write_additions(country_root, [_addition(region="belgium", domain="agency.be")])
+    institutions, _ = build_region(_norway(), country_root, GENERATED)
+    assert not any(row["id"].startswith("add:") for row in institutions["institutions"])
+
+
+def test_missing_or_header_only_additions_file_adds_nothing(country_root: Path) -> None:
+    assert load_institution_additions(country_root / ADDITIONS_CSV) == []
+    _write_additions(country_root, [])
+    assert load_institution_additions(country_root / ADDITIONS_CSV) == []
+    assert additions_problems(country_root / ADDITIONS_CSV) == []
+
+
+def test_newest_addition_wins_per_region_and_domain(tmp_path: Path) -> None:
+    _write_additions(
+        tmp_path,
+        [
+            _addition(name="Old name", approved_at_iso="2026-11-20T00:00:00Z"),
+            _addition(name="New name", approved_at_iso="2026-11-26T00:00:00Z"),
+            _addition(name="Older again", approved_at_iso="2026-11-01T00:00:00Z"),
+        ],
+    )
+    rows = load_institution_additions(tmp_path / ADDITIONS_CSV)
+    assert [(row["domain"], row["name"]) for row in rows] == [("agency.no", "New name")]
+
+
+@pytest.mark.parametrize(
+    ("change", "fragment"),
+    [
+        ({"domain": "gmail.com"}, "non-free-mail"),
+        ({"domain": "lab.agency.no"}, "registrable"),
+        ({"institution_type": "company"}, "institution_type"),
+        ({"url": "http://agency.no/"}, "url must be https"),
+        ({"name": "<b>Agency</b>"}, "name must be"),
+        ({"approved_at_iso": "26/11/2026"}, "approved_at_iso"),
+        ({"source": "manual"}, "source must be"),
+    ],
+)
+def test_invalid_addition_rows_stop_the_build_with_a_line_number(
+    tmp_path: Path, change: dict[str, str], fragment: str
+) -> None:
+    _write_additions(tmp_path, [_addition(**change)])
+    with pytest.raises(ValueError, match=rf":2: .*{fragment}"):
+        load_institution_additions(tmp_path / ADDITIONS_CSV)
+    assert additions_problems(tmp_path / ADDITIONS_CSV)
+
+
+def test_addition_file_header_must_match(tmp_path: Path) -> None:
+    path = tmp_path / ADDITIONS_CSV
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("region,name\n", encoding="utf-8")
+    assert "header must be" in additions_problems(path)[0]
+
+
+def test_validator_checks_approved_rows() -> None:
+    def row(**extra: object) -> dict:
+        base = {
+            "id": "add:agency.no",
+            "name": "Test Agency",
+            "type": "government",
+            "works": 0,
+            "domains": ["agency.no"],
+            "needs_domain": False,
+            "ror": None,
+            "acronyms": [],
+            "aliases": [],
+            "source": "approved_proposal",
+        }
+        base.update(extra)
+        return base
+
+    cases = {"schema": "amb-cases-v1", "region": "norway", "cases": []}
+
+    def problems(rows: list[dict]) -> list[str]:
+        institutions = {"schema": "amb-v1", "region": "norway", "institutions": rows}
+        return validate_outputs(institutions, cases, "norway")
+
+    assert problems([row()]) == []
+    assert any("bad approved proposal" in p for p in problems([row(works=3)]))
+    assert any("bad approved proposal" in p for p in problems([row(id="add:other.no")]))
+    assert any("source must be" in p for p in problems([row(source="manual")]))
+    openalex_low = row(id="I9", source="openalex", works=2, domains=["nine.no"])
+    assert any("not eligible" in p for p in problems([openalex_low]))
+    dup = row(id="I2", source="openalex", works=3, domains=["agency.no"])
+    assert any("listed twice" in p for p in problems([row(), dup]))

@@ -21,6 +21,7 @@ Script: `scripts/ambassador_export_pr.py`.
 | stream `knowledge`, kinds funder, policy, dataset, research_network, institution, community_group, volunteer_group, community_knowledge | a new item with `status: draft` is appended to the matching section of `regions/<slug>/region.yml` |
 | stream `knowledge`, kind `correction` | the named item's fields are replaced and its `status` becomes `draft` |
 | consensus `case_answers` | a row in `curation/ambassador_labels.csv` with `source = ambassador_consensus`; one row per (region, case), newest answer wins |
+| top-level `institutions` (optional key; missing means none), an institution approved as a proposal | a row in `curation/ambassador_institution_additions.csv` (`region, name, url, domain, institution_type, approved_at_iso, source = approved_proposal`); one row per (region, domain), newest `decided_at` wins. The build adds it to the region's eligible list at the next build (docs/AMBASSADORS_SPEC.md, "Approved proposals join the eligible list (part 2)") |
 
 Knowledge kinds map to sections as follows. `community_group`, `volunteer_group` and `community_knowledge`
 go to `research_networks` with item kind `community`, because the region-v1 schema has no `community`
@@ -75,3 +76,10 @@ and apply the usual override precedence: owner > ambassador consensus > model
   exact format is assumed from the Worker's test fixtures and is open for owner confirmation.
 - Consensus answers are written newest-wins per (region, case). The Worker already filters to consensus answers.
 - The job writes the watermark even when every record was skipped, so a bad record is reported once.
+- The commit step in `.github/workflows/ambassador_export.yml` lists its paths explicitly
+  (`regions`, `curation/ambassador_labels.csv`, `curation/ambassador_export_state.json`). Until
+  `curation/ambassador_institution_additions.csv` is added to that list, approved institutions are written to the
+  runner's checkout but never committed to the pull request.
+- The institution rows are checked against the same rules as `scripts/build_ambassador_data.py` (eligible type,
+  registrable non-free-mail domain). The PR job checks the domain pattern only, so a subdomain such as
+  `lab.example.no` is written and then stops the next build with a line number. The owner should reject it in review.

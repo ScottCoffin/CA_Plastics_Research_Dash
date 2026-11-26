@@ -65,10 +65,13 @@ client values; the tests cover the flow with a fake ORCID.
 - `GET /moderation/queue?region=` (owner or lead): pending submissions and proposals. Owner and leads see every region.
 - `POST /moderation/decide` (owner or lead): `{type: submission|proposal, id, decision: approve|reject, note?}`. A
   moderator cannot decide their own item. Audited. Approving a proposal records the decision only (no activation).
+  Approving an institution proposal also needs `region`, `domain` (lowercase registrable host, no free-mail) and
+  `institution_type` (education|government|nonprofit|facility), else `allowlist_fields_required` (400). Migration 0005.
 - `POST /moderation/leads` (owner or lead): `{ambassador_id, region}` promotes an active member of that region to lead.
 - `POST /moderation/suspend` (owner only): `{ambassador_id}` sets `suspended` and deletes their sessions.
 - `GET /export/approved?since=<ms>` (bearer `EXPORT_TOKEN`, read-only): approved submissions and consensus case answers.
-  No emails, email hashes, ambassador ids or ORCID iDs.
+  No emails, email hashes, ambassador ids or ORCID iDs. `institutions` lists approved institution proposals decided
+  at or after `since` (region, name, url, domain, institution_type, decided_at).
 - Slice 2c (local): `GET /me/notifications` and `POST /me/notifications` (session) `{reminders?, product_news?}`
   (reminders on and product news off by default); `GET /unsubscribe?t=` (confirmation page, changes nothing) and
   `POST /unsubscribe?t=` (RFC 8058 one-click, turns reminders off); `POST /invitations` (session; returns `url` and a

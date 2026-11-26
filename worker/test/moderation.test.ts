@@ -130,7 +130,8 @@ describe("decisions", () => {
     const owner = await seedAmbassador({ orcid: OWNER_ORCID });
     const applicant = await seedAmbassador({ status: "pending", email: undefined, created_at: Date.now() });
     const id = await insertProposal(applicant.id);
-    const res = await req("POST", "/moderation/decide", { type: "proposal", id, decision: "approve" }, owner.cookie);
+    const allowlist = { region: "norway", domain: "niva.no", institution_type: "nonprofit" };
+    const res = await req("POST", "/moderation/decide", { type: "proposal", id, decision: "approve", ...allowlist }, owner.cookie);
     expect(res.status).toBe(200);
     const proposal = await env.DB.prepare("SELECT status, decided_by FROM proposals WHERE id = ?1")
       .bind(id)

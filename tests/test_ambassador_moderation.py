@@ -114,6 +114,25 @@ def test_styles_use_tokens_only() -> None:
     assert not re.search(r"#[0-9a-fA-F]{3,8}\b", _text(PAGE).split("<style", 1)[0])
 
 
+def test_institution_approval_asks_for_region_domain_and_type() -> None:
+    """Approving an institution proposal sends region, domain and institution_type (part 1)."""
+    source = _text(MODULE)
+    for field_id in ("mod-allow-region", "mod-allow-domain", "mod-allow-type"):
+        assert f'id: "{field_id}"' in source, field_id
+    assert 'name: "institution_type"' in source
+    assert "Email domain" in source and "Region" in source
+    assert "prefillDomain(item.payload?.url)" in source
+    assert "needsAllowlist(item) ? allowlistFields(item) : null" in source
+    assert "allowlist_fields_required" in source
+    assert "institution_type: String(institution_type" in source
+    assert "Object.assign(body, allowlistBody(allowlist))" in source
+    # Only an institution proposal shows the fields, and the fields are locked with the buttons.
+    assert "for (const field of Object.values(view.allow))" in source
+    # The domain prefill comes from the URL host and never from a raw string written as HTML.
+    assert "new URL(href).hostname" in source
+    assert 'replace(/^www\\./, "")' in source
+
+
 def test_runtime_checks_pass_in_node() -> None:
     node = shutil.which("node")
     if node is None:

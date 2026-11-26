@@ -597,3 +597,41 @@ through the sign-up's `api()` helper, and reads the public `ambassador_cases.jso
 - **Not in this slice:** the zoomed region map header, keyboard shortcuts, stream C forms, and settings.
 - **Tests:** `tests/framework_ambassador_workspace_runtime.mjs` (pure helpers) and `tests/test_ambassador_workspace.py`
   (static wiring). The browser walk ran at 1440 and 390 against mocked API routes only (no real network).
+
+## Approved proposals join the eligible list (part 1)
+
+Owner decision 2026-11-26 (QUESTIONS AMB-PROPOSAL-ALLOWLIST): an institution proposal approved by the owner or a region
+lead joins that region's eligible list, with its email domain, at the next build. The 3-work rule and the institution
+types are unchanged. The motivation: OpenAlex folds OEHHA and the State Water Resources Control Board into CalEPA, so
+real ambassadors' institutions are otherwise ineligible.
+
+- **Decision:** `POST /moderation/decide` with `type: "proposal"` and `decision: "approve"` on an institution proposal
+  requires `region` (california|norway|belgium), `domain` and `institution_type` (education|government|nonprofit|facility).
+  A missing field returns `allowlist_fields_required`. The domain must be a lowercase registrable host such as
+  `oehha.ca.gov` and must not be free-mail (or a subdomain of one). Rejections need none of the three fields.
+- **Moderation page:** Region, Email domain (prefilled from the proposal URL's host with a leading `www.` removed, editable)
+  and Type sit above Approve.
+- **Export:** `GET /export/approved` gains a top-level `institutions` array. Each entry is approved institution proposals
+  decided at or after `since`, in this shape exactly:
+
+  ```json
+  {"id": 12, "region": "california", "name": "OEHHA", "url": "https://oehha.ca.gov/", "domain": "oehha.ca.gov",
+   "institution_type": "government", "decided_at": 1764201600000}
+  ```
+
+  `name` and `url` come from the proposal payload (`url` is `null` when absent). No ambassador id, ORCID iD, email or
+  applicant name appears. Existing keys (`submissions`, `case_answers`, `ok`, `generated_at`, `since`) are unchanged.
+  Approved proposals from before migration 0005 have no region and are not exported.
+- **Build:** the build side reads `institutions` and adds each domain to its region's allowlist. That consumer is a
+  later part of this task.
+- **Tests:** `worker/test/proposal_allowlist.test.ts` (validation, storage, export shape) and
+  `tests/test_ambassador_moderation.py` with `tests/framework_ambassador_moderation_runtime.mjs` (page fields, prefill).
+
+## Approved proposals join the eligible list (part 2)
+
+Part 1 is the Worker side. Part 2 is the repository side: the export job writes approved institutions to a curation CSV, and the build adds them to the region's eligible list. The 3-work rule and the institution types are unchanged (owner decision 2026-11-26).
+
+- **Export job** (`scripts/ambassador_export_pr.py`): reads the optional top-level `institutions` array (missing means none). Each entry is checked again: the region has a `regions/<slug>/region.yml`; the domain matches the pattern `^(?=.{3,253}$)([a-z0-9-]+\.)+[a-z]{2,}$`; the type is one of education, government, nonprofit, facility; the name is at most 200 characters with no HTML or control characters; the url is https or null. A valid entry is written to `curation/ambassador_institution_additions.csv` (`region, name, url, domain, institution_type, approved_at_iso, source = approved_proposal`), newest `decided_at` per (region, domain). An invalid entry is skipped with a printed reason. `decided_at` moves the watermark like the other streams. The PR body counts the entries as `institution` rows per region.
+- **Build** (`src/atlas/build/ambassadors.py`): each CSV row for a region adds an allowlist entry, unless an eligible entry already lists that domain (the build prints a note and adds nothing). The entry has `id` `add:<domain>`, its name and type, `works` 0, `domains` `[domain]`, `needs_domain` false, `ror` null, empty `acronyms` and `aliases`, and `source` `approved_proposal`. It bypasses `MIN_WORKS` but keeps the eligible type. Every entry now carries `source` (`openalex` for corpus institutions), so `validate_outputs` stays strict: an approved entry needs the `add:<domain>` id, works 0, one domain, and a domain that no other entry lists.
+- **Worker matching:** `worker/src/eligibility.ts` builds each region's allowlist from `domains` of entries whose `needs_domain` is not set, with no works check, and matches an email by its domain or a parent of it. An approved entry therefore matches with no Worker change. The Worker ignores `source`.
+- **Review:** the PR job checks the domain pattern but not registrable form. A subdomain such as `lab.example.no` is written to the CSV and then stops the next build with a line number. The owner rejects it in the pull request.

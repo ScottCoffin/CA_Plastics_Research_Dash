@@ -20,7 +20,8 @@ export async function tokenMatches(presented: string, expected: string): Promise
 /**
  * GET /export/approved?since=<ms>: read-only feed for the PR job. Bearer EXPORT_TOKEN. Returns approved submissions
  * and consensus case answers whose latest change is at or after `since`. Never returns emails, email hashes, ambassador
- * ids or ORCID iDs. Ambassador names appear only where the ambassador kept public credit.
+ * ids or ORCID iDs. Ambassador names appear only where the ambassador kept public credit. `institutions` lists approved
+ * institution proposals (region, name, url, domain, institution_type, decided_at) and never the applicant.
  * Unset EXPORT_TOKEN refuses every request (fail closed).
  */
 export async function handleExport(request: Request, env: Env, ctx: Ctx): Promise<Response> {
@@ -51,6 +52,16 @@ export async function handleExport(request: Request, env: Env, ctx: Ctx): Promis
       decided_at: number;
       credit_name: string | null;
     }>();
+
+  // Approved institution proposals with their allowlist fields (AMB-1 proposals-to-allowlist, part 1). Rows approved
+  // before migration 0005 have no region and are not exported. Only the public name and URL from the payload appear.
+  const institutionRows = await env.DB.prepare(
+    "SELECT p.id, p.region, p.domain, p.institution_type, p.payload, p.decided_at FROM proposals p " +
+      "WHERE p.kind = 'institution' AND p.status = 'approved' AND p.decided_at >= ?1 " +
+      "AND p.region IS NOT NULL AND p.domain IS NOT NULL AND p.institution_type IS NOT NULL ORDER BY p.decided_at, p.id",
+  )
+    .bind(since)
+    .all<{ id: number; region: string; domain: string; institution_type: string; payload: string; decided_at: number }>();
 
   // Consensus per case (not 'unsure'). Only cases whose latest agreeing answer is at or after `since` are exported.
   const caseRows: { region: string; case_id: string; answer: string; correct_value: string | null; answered_at: number }[] = [];
@@ -84,5 +95,17 @@ export async function handleExport(request: Request, env: Env, ctx: Ctx): Promis
       credit_name: s.credit_name,
     })),
     case_answers: caseRows,
+    institutions: institutionRows.results.map((p) => {
+      const payload = JSON.parse(p.payload) as { name?: unknown; url?: unknown };
+      return {
+        id: p.id,
+        region: p.region,
+        name: typeof payload.name === "string" ? payload.name : null,
+        url: typeof payload.url === "string" ? payload.url : null,
+        domain: p.domain,
+        institution_type: p.institution_type,
+        decided_at: p.decided_at,
+      };
+    }),
   });
 }

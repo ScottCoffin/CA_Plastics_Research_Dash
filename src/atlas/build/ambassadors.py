@@ -76,9 +76,26 @@ RULE = (
     "Domains come from the institution's homepage and ROR website, reduced to the registrable "
     "domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains "
     "are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove "
-    "domains. An institution with no known domain is listed with needs_domain true."
+    "domains. An institution with no known domain is listed with needs_domain true. An institution "
+    "an owner or region lead approved as a proposal is listed with its domain, without the works "
+    "minimum (source approved_proposal)."
 )
 OVERRIDE_COLUMNS = ("institution_id", "domain", "action", "note")
+ADDITIONS_CSV = Path("curation/ambassador_institution_additions.csv")
+ADDITION_COLUMNS = (
+    "region",
+    "name",
+    "url",
+    "domain",
+    "institution_type",
+    "approved_at_iso",
+    "source",
+)
+ADDITION_SOURCE = "approved_proposal"
+OPENALEX_SOURCE = "openalex"
+_ADDITION_SLUG = re.compile(r"[a-z][a-z0-9-]{0,40}")
+_ADDITION_NAME_BAD = re.compile(r"[<>\x00-\x1f\x7f]")
+_UTC_ISO = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z")
 OVERRIDE_ACTIONS = ("add", "remove")
 GLOBAL_WORKS = Path("data/processed/global/works.parquet")
 NORMALIZED_AUTHORSHIPS = Path("data/processed/normalized/authorships.parquet")
@@ -143,7 +160,18 @@ FORBIDDEN_KEYS = frozenset(
     }
 )
 INSTITUTION_KEYS = frozenset(
-    {"id", "name", "type", "works", "domains", "needs_domain", "ror", "acronyms", "aliases"}
+    {
+        "id",
+        "name",
+        "type",
+        "works",
+        "domains",
+        "needs_domain",
+        "ror",
+        "acronyms",
+        "aliases",
+        "source",
+    }
 )
 CASE_KEYS = frozenset({"case_id", "kind", "question", "evidence", "current_value", "options"})
 
@@ -397,6 +425,95 @@ def load_overrides(path: Path) -> dict[str, list[Override]]:
             note = (row.get("note") or "").strip()
             found.setdefault(inst_id, []).append(Override(action, domain, note))
     return found
+
+
+def _addition_problem(row: Mapping[str, str]) -> str | None:
+    if not _ADDITION_SLUG.fullmatch(row["region"]):
+        return "region must be a lowercase slug"
+    name = row["name"]
+    if not name or len(name) > 200 or _ADDITION_NAME_BAD.search(name):
+        return "name must be 1 to 200 characters with no HTML or control characters"
+    url = row["url"]
+    if url and (not url.startswith("https://") or re.search(r"\s", url)):
+        return "url must be https or empty"
+    domain = row["domain"]
+    if registrable_domain(domain) != domain or is_free_mail(domain):
+        return f"domain {domain!r} must be a registrable, non-free-mail domain"
+    if row["institution_type"] not in ELIGIBLE_TYPES:
+        return f"institution_type must be one of {', '.join(ELIGIBLE_TYPES)}"
+    if not _UTC_ISO.fullmatch(row["approved_at_iso"]):
+        return "approved_at_iso must look like 2026-11-26T00:00:00Z"
+    if row["source"] != ADDITION_SOURCE:
+        return f"source must be {ADDITION_SOURCE}"
+    return None
+
+
+def load_institution_additions(path: Path) -> list[dict[str, str]]:
+    """Approved institution proposals, newest per (region, domain). A missing file means none.
+
+    Invalid rows raise ``ValueError`` so that a bad row is seen at build time.
+    """
+    if not path.is_file():
+        return []
+    found: dict[tuple[str, str], dict[str, str]] = {}
+    with path.open(encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        if tuple(reader.fieldnames or ()) != ADDITION_COLUMNS:
+            raise ValueError(f"{path}: header must be {','.join(ADDITION_COLUMNS)}")
+        for number, raw in enumerate(reader, start=2):
+            row = {col: (raw.get(col) or "").strip() for col in ADDITION_COLUMNS}
+            if not any(row.values()):
+                continue
+            problem = _addition_problem(row)
+            if problem is not None:
+                raise ValueError(f"{path}:{number}: {problem}")
+            key = (row["region"], row["domain"])
+            kept = found.get(key)
+            if kept is None or row["approved_at_iso"] >= kept["approved_at_iso"]:
+                found[key] = row
+    return list(found.values())
+
+
+def additions_problems(path: Path) -> list[str]:
+    try:
+        load_institution_additions(path)
+    except ValueError as error:
+        return [str(error)]
+    return []
+
+
+def _approved_rows(
+    slug: str,
+    additions: Sequence[Mapping[str, str]],
+    listed: Sequence[Mapping[str, Any]],
+    notes: list[str] | None,
+) -> list[dict[str, Any]]:
+    """Allowlist rows for this region's approved proposals; a domain already listed is skipped."""
+    listed_domains = {domain for row in listed for domain in row["domains"]}
+    rows: list[dict[str, Any]] = []
+    for addition in additions:
+        if addition["region"] != slug:
+            continue
+        domain = addition["domain"]
+        if domain in listed_domains:
+            if notes is not None:
+                notes.append(f"{slug}: {domain} is already listed; approved proposal not added")
+            continue
+        rows.append(
+            {
+                "id": f"add:{domain}",
+                "name": addition["name"],
+                "type": addition["institution_type"],
+                "works": 0,
+                "domains": [domain],
+                "needs_domain": False,
+                "ror": None,
+                "acronyms": [],
+                "aliases": [],
+                "source": ADDITION_SOURCE,
+            }
+        )
+    return rows
 
 
 def _usable(values: Iterable[object]) -> set[str]:
@@ -939,6 +1056,7 @@ def _institution_rows(
                 "ror": f"https://ror.org/{ror_id}" if _ROR_ID.match(ror_id) else None,
                 "acronyms": acronyms,
                 "aliases": aliases,
+                "source": OPENALEX_SOURCE,
             }
         )
     rows.sort(key=lambda r: (-r["works"], r["name"].casefold(), r["id"]))
@@ -1075,9 +1193,16 @@ def build_payloads(
     overrides: Mapping[str, Sequence[Override]],
     generated_at: str,
     alias_rules: Sequence[tuple[str, str]] = (),
+    additions: Sequence[Mapping[str, str]] = (),
+    notes: list[str] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """(ambassador_institutions payload, ambassador_cases payload) for one region."""
     rows = _institution_rows(corpus, ror_dump, cache, overrides, alias_rules)
+    approved = _approved_rows(region.slug, additions, rows, notes)
+    if approved:
+        rows = sorted(
+            [*rows, *approved], key=lambda r: (-r["works"], r["name"].casefold(), r["id"])
+        )
     institutions = {
         "schema": INSTITUTIONS_SCHEMA,
         "generated_at": generated_at,
@@ -1102,7 +1227,11 @@ def build_payloads(
 
 
 def build_from_corpus(
-    region: Region, corpus: RegionCorpus, root: Path = REPO_ROOT, generated_at: str | None = None
+    region: Region,
+    corpus: RegionCorpus,
+    root: Path = REPO_ROOT,
+    generated_at: str | None = None,
+    notes: list[str] | None = None,
 ) -> tuple[dict, dict]:
     """Both payloads from a loaded corpus, the local ROR dump, the domain cache and overrides."""
     stamp = generated_at or datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -1114,6 +1243,8 @@ def build_from_corpus(
         load_overrides(root / "regions" / region.slug / "ambassador_domains.csv"),
         stamp,
         load_alias_rules(root, region.slug),
+        load_institution_additions(root / ADDITIONS_CSV),
+        notes,
     )
 
 
@@ -1159,8 +1290,20 @@ def validate_outputs(
         if set(row) != INSTITUTION_KEYS:
             problems.append(f"institutions[{index}]: keys must be {sorted(INSTITUTION_KEYS)}")
             continue
-        if row["works"] < MIN_WORKS or row["type"] not in ELIGIBLE_TYPES:
-            problems.append(f"institutions[{index}]: not eligible ({row['id']})")
+        source = row["source"]
+        if source == OPENALEX_SOURCE:
+            if row["works"] < MIN_WORKS or row["type"] not in ELIGIBLE_TYPES:
+                problems.append(f"institutions[{index}]: not eligible ({row['id']})")
+        elif source == ADDITION_SOURCE:
+            if (
+                row["works"] != 0
+                or row["type"] not in ELIGIBLE_TYPES
+                or len(row["domains"]) != 1
+                or row["id"] != f"add:{row['domains'][0] if row['domains'] else ''}"
+            ):
+                problems.append(f"institutions[{index}]: bad approved proposal ({row['id']})")
+        else:
+            problems.append(f"institutions[{index}]: source must be openalex or approved_proposal")
         if row["needs_domain"] != (not row["domains"]):
             problems.append(f"institutions[{index}]: needs_domain disagrees with domains")
         if row["ror"] is not None and not _ROR_URL.match(str(row["ror"])):
@@ -1172,6 +1315,12 @@ def validate_outputs(
             values = row[key]
             if not isinstance(values, list) or not all(isinstance(v, str) and v for v in values):
                 problems.append(f"institutions[{index}]: {key} must be a list of strings")
+    for index, row in enumerate(institutions.get("institutions") or []):
+        if set(row) != INSTITUTION_KEYS or row["source"] != ADDITION_SOURCE:
+            continue
+        for other in institutions["institutions"]:
+            if other is not row and set(row["domains"]) & set(other.get("domains") or []):
+                problems.append(f"institutions[{index}]: approved domain is listed twice")
     ids: list[str] = []
     counts: dict[str, int] = {}
     for index, case in enumerate(cases.get("cases") or []):

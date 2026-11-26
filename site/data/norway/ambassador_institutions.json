@@ -1,8 +1,8 @@
 {
   "schema": "amb-v1",
-  "generated_at": "2026-11-25T20:28:20Z",
+  "generated_at": "2026-11-26T04:23:25Z",
   "region": "norway",
-  "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true.",
+  "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true. An institution an owner or region lead approved as a proposal is listed with its domain, without the works minimum (source approved_proposal).",
   "min_works": 3,
   "eligible_types": [
     "education",
@@ -24,7 +24,8 @@
       "acronyms": [
         "NTNU"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2802939387",
@@ -39,7 +40,8 @@
       "acronyms": [
         "NIVA"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I3019502701",
@@ -52,7 +54,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/004wre089",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4432739",
@@ -67,7 +70,8 @@
       "acronyms": [
         "UIB"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I67061984",
@@ -81,7 +85,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/00q7d9z06",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210107808",
@@ -94,7 +99,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/02gagpf75",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I78037679",
@@ -107,7 +113,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/00wge5k78",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2802153510",
@@ -120,7 +127,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/05vg74d16",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I54108979",
@@ -135,7 +143,8 @@
       "acronyms": [
         "NMBU"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I184942183",
@@ -148,7 +157,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/01xtthb56",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2802510431",
@@ -161,7 +171,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/02grxeb87",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210163231",
@@ -174,7 +185,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/05x7v6y85",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I87302398",
@@ -189,7 +201,8 @@
       "acronyms": [
         "NPI"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I173888879",
@@ -202,7 +215,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/01f677e56",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2802079931",
@@ -215,7 +229,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/030mwrt98",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I1333353642",
@@ -230,7 +245,8 @@
       "acronyms": [
         "NPIH"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I92008406",
@@ -243,7 +259,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/02qte9q33",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4387930256",
@@ -256,7 +273,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/0422tvz87",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2801380234",
@@ -271,7 +289,8 @@
       "acronyms": [
         "USN"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210143403",
@@ -286,7 +305,8 @@
       "acronyms": [
         "NIBIO"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I1314042554",
@@ -299,7 +319,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/001n36p86",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I1332882736",
@@ -314,7 +335,8 @@
       "acronyms": [
         "STAMI"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I184531372",
@@ -327,7 +349,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/04q12yn84",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210153706",
@@ -342,7 +365,8 @@
       "acronyms": [
         "NINA"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210095992",
@@ -355,7 +379,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/00p8r6x45",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2799966484",
@@ -368,7 +393,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/011n96f14",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I1315672318",
@@ -381,7 +407,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/009kqch10",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2802159110",
@@ -394,7 +421,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/053qb6g74",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I200650556",
@@ -407,7 +435,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/03x297z98",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4401200256",
@@ -420,7 +449,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/05ey0h058",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I96829481",
@@ -433,7 +463,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/02wvb2a30",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210164950",
@@ -446,7 +477,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/05m6y3182",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210116649",
@@ -459,7 +491,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/02dx4dc92",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I179863766",
@@ -472,7 +505,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/05phns765",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I181046868",
@@ -485,7 +519,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/03ez40v33",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210152551",
@@ -500,7 +535,8 @@
       "acronyms": [
         "IRIS"
       ],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I931913249",
@@ -513,7 +549,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/04v53s997",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4405268339",
@@ -526,7 +563,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/00n8a1j31",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210104611",
@@ -539,7 +577,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/027arfy53",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I1296551785",
@@ -552,7 +591,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/036dwbr90",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I2800853303",
@@ -565,7 +605,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/04wdcx151",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4387930280",
@@ -578,7 +619,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/01zj15q98",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     },
     {
       "id": "I4210142273",
@@ -591,7 +633,8 @@
       "needs_domain": false,
       "ror": "https://ror.org/0590dbq33",
       "acronyms": [],
-      "aliases": []
+      "aliases": [],
+      "source": "openalex"
     }
   ]
 }

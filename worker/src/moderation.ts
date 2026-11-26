@@ -1,6 +1,6 @@
 import { audit, currentAmbassador, type AmbassadorRow, type Ctx } from "./auth";
 import type { Env } from "./env";
-import { REGIONS, isRegion } from "./eligibility";
+import { REGIONS, isRegion, type Region } from "./eligibility";
 import { json } from "./http";
 import { withinRateLimit } from "./rate_limit";
 
@@ -138,9 +138,59 @@ export async function handleQueue(request: Request, env: Env, ctx: Ctx): Promise
   });
 }
 
+/** Institution types an approved proposal may carry onto a region's eligible list (the 3-work rule is unchanged). */
+export const INSTITUTION_TYPES = ["education", "government", "nonprofit", "facility"] as const;
+export type InstitutionType = (typeof INSTITUTION_TYPES)[number];
+/** Lowercase registrable host such as oehha.ca.gov (2 to 253 characters, at least one dot). */
+const DOMAIN_RE = /^(?=.{3,253}$)([a-z0-9-]+\.)+[a-z]{2,}$/;
+/**
+ * Free-mail providers, mirrored from FREE_MAIL in eligibility.ts (not exported there). A domain or any subdomain of
+ * one of these can never be an institution. Keep the two lists in step.
+ */
+const FREE_MAIL_HOSTS = [
+  "gmail.com", "googlemail.com", "outlook.com", "outlook.fr", "hotmail.com", "hotmail.co.uk", "live.com",
+  "live.co.uk", "msn.com", "yahoo.com", "yahoo.co.uk", "yahoo.fr", "ymail.com", "aol.com", "icloud.com",
+  "me.com", "mac.com", "proton.me", "protonmail.com", "pm.me", "gmx.com", "gmx.net", "gmx.de", "web.de",
+  "mail.com", "zoho.com", "yandex.com", "yandex.ru", "qq.com", "163.com", "126.com", "hey.com", "fastmail.com",
+  "tutanota.com", "tuta.io", "mailbox.org", "seznam.cz", "wp.pl", "orange.fr", "free.fr", "laposte.net",
+];
+
+export interface AllowlistFields {
+  region: Region;
+  domain: string;
+  institution_type: InstitutionType;
+}
+
+/** True when the domain or one of its parent domains is free-mail (suffix match, as eligibility.ts does). */
+export function isFreeMailDomain(domain: string): boolean {
+  const labels = domain.split(".");
+  for (let i = 0; i < labels.length - 1; i++) {
+    if (FREE_MAIL_HOSTS.includes(labels.slice(i).join("."))) return true;
+  }
+  return false;
+}
+
+/**
+ * The region, domain and type an approval of an institution proposal must carry. Returns the first problem as an
+ * error code (allowlist_fields_required when any field is absent, otherwise the specific check that failed).
+ */
+export function parseAllowlistFields(body: Record<string, unknown>): AllowlistFields | { error: string } {
+  if (body.region === undefined || body.domain === undefined || body.institution_type === undefined) {
+    return { error: "allowlist_fields_required" };
+  }
+  if (!isRegion(body.region)) return { error: "invalid_region" };
+  if (typeof body.domain !== "string" || !DOMAIN_RE.test(body.domain.trim())) return { error: "invalid_domain" };
+  const domain = body.domain.trim();
+  if (isFreeMailDomain(domain)) return { error: "free_mail_domain" };
+  if (!(INSTITUTION_TYPES as readonly unknown[]).includes(body.institution_type)) return { error: "invalid_institution_type" };
+  return { region: body.region, domain, institution_type: body.institution_type as InstitutionType };
+}
+
 /**
  * POST /moderation/decide {type: submission|proposal, id, decision: approve|reject, note?}. The decision is recorded
- * and audited. Approving a proposal does not activate anyone: activation is a later slice.
+ * and audited. Approving an institution proposal also needs {region, domain, institution_type} (ignored otherwise): the
+ * approved row then joins that region's eligible list at the next build (GET /export/approved). Approving a proposal
+ * does not activate anyone: activation is a later slice.
  */
 export async function handleDecide(request: Request, env: Env, ctx: Ctx): Promise<Response> {
   const m = await moderator(request, env, ctx);
@@ -164,21 +214,42 @@ export async function handleDecide(request: Request, env: Env, ctx: Ctx): Promis
 
   // The table name comes from this fixed mapping, never from the request.
   const table = type === "submission" ? "submissions" : "proposals";
-  const item = await env.DB.prepare(`SELECT ambassador_id, status FROM ${table} WHERE id = ?1`)
+  const item = await env.DB.prepare(`SELECT ambassador_id, status, kind FROM ${table} WHERE id = ?1`)
     .bind(id)
-    .first<{ ambassador_id: string; status: string }>();
+    .first<{ ambassador_id: string; status: string; kind: string }>();
   if (!item) return err("not_found", 404);
   if (item.ambassador_id === m.a.id) return err("self_decision", 403);
   if (item.status !== "pending") return err("already_decided", 409);
 
+  // An approved institution proposal joins its region's eligible list, so its region, domain and type are required.
+  let allowlist: AllowlistFields | null = null;
+  if (type === "proposal" && decision === "approve" && item.kind === "institution") {
+    const parsed = parseAllowlistFields(body);
+    if ("error" in parsed) return err(parsed.error, 400);
+    allowlist = parsed;
+  }
+
   const status = decision === "approve" ? "approved" : "rejected";
-  const changed = await env.DB.prepare(
-    `UPDATE ${table} SET status = ?1, decided_at = ?2, decided_by = ?3, decision_note = ?4 WHERE id = ?5 AND status = 'pending'`,
-  )
-    .bind(status, ctx.now, m.a.id, note, id)
-    .run();
+  const changed = allowlist
+    ? await env.DB.prepare(
+        "UPDATE proposals SET status = ?1, decided_at = ?2, decided_by = ?3, decision_note = ?4, " +
+          "region = ?5, domain = ?6, institution_type = ?7 WHERE id = ?8 AND status = 'pending'",
+      )
+        .bind(status, ctx.now, m.a.id, note, allowlist.region, allowlist.domain, allowlist.institution_type, id)
+        .run()
+    : await env.DB.prepare(
+        `UPDATE ${table} SET status = ?1, decided_at = ?2, decided_by = ?3, decision_note = ?4 WHERE id = ?5 AND status = 'pending'`,
+      )
+        .bind(status, ctx.now, m.a.id, note, id)
+        .run();
   if (changed.meta.changes !== 1) return err("already_decided", 409);
-  await audit(env.DB, ctx.now, "moderation.decide", m.a.id, { type, id, decision, by: m.role });
+  await audit(env.DB, ctx.now, "moderation.decide", m.a.id, {
+    type,
+    id,
+    decision,
+    by: m.role,
+    ...(allowlist ? { region: allowlist.region, institution_type: allowlist.institution_type } : {}),
+  });
   return json({ ok: true, type, id, status });
 }
 
