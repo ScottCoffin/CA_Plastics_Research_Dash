@@ -255,7 +255,7 @@ def test_ambassador_page_explains_the_role_and_shows_the_address_as_text() -> No
     page = (SRC / "ambassadors.md").read_text(encoding="utf-8")
     text = _plain(page)
     # AMB-1 (owner-approved design, 2026-11-25) replaced the PLAT-2c placeholder.
-    assert "Sign-in opens soon" in text
+    assert "Sign up with ORCID" in text
     for duty in (
         "Check doubtful matches",
         "Confirm placeholders",

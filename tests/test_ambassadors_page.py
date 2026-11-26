@@ -61,16 +61,14 @@ def test_no_cdn_script_or_stylesheet_loads() -> None:
         assert "<script src" not in text.lower(), path.name
 
 
-def test_sign_in_is_present_but_disabled_until_the_worker_exists() -> None:
+def test_sign_up_is_a_live_orcid_link_not_a_disabled_button() -> None:
+    # Slice 2a: the hero and the how-it-works section link to the Worker's ORCID start route.
     page = _text(PAGE)
-    buttons = re.findall(r"<button[^>]*>[^<]*</button>", page)
-    sign_in = [b for b in buttons if "Sign-in opens soon" in b]
-    assert len(sign_in) >= 2, "the hero and the how-it-works section both show the disabled sign-in"
-    for button in sign_in:
-        assert " disabled>" in button, button
-    controls = re.findall(r"<(a|button)\b[^>]*>[^<]*Sign[- ]in[^<]*</\1>", page)
-    assert controls == ["button"] * len(controls) and len(controls) == len(sign_in)
-    assert "<a " not in "".join(re.findall(r"<a [^>]*>[^<]*Sign[- ]in", page)), "no sign-in link"
+    assert "Sign-in opens soon" not in page
+    assert not re.findall(r"<button[^>]*>[^<]*Sign[- ]in[^<]*</button>", page)
+    links = re.findall(r"<a [^>]*>[^<]*Sign up with ORCID</a>", page)
+    assert len(links) == 2, links
+    assert "https://api.plastiverse.live/orcid/start" in page
 
 
 def test_region_index_is_current_and_lists_only_real_regions() -> None:

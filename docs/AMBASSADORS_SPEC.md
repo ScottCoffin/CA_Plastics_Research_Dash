@@ -533,3 +533,22 @@ keep working.
 - The welcome mail is not suppressed by preferences (it is sent once, on joining); unsubscribing turns off reminders only.
 - `MAIL_FROM` now uses `ambassadors@plastiverse.live` for all Worker mail, sign-in included (previously `auth@`). Confirm the
   address is verified in Resend before deploy (owner action).
+
+## Front end slice 2a
+
+Status: built in `framework/src/components/ambassador_signup.js` (mounted from `ambassadors.md`; styles appended to
+`ambassadors.css`). Calls only the Worker routes in section 13 and Backend slice 2a.
+
+- **Entry:** "Sign up with ORCID" (hero and how-it-works) and "Sign in with ORCID" link to `/orcid/start`.
+- **Query router:** `?signup=orcid` runs the four steps; `?signin=orcid` or a valid session (`GET /me`) shows the
+  signed-in panel, or the first-visit profile when `needs_profile` is true; `?signin=failed` shows a plain error with
+  retry. The query is removed with `history.replaceState` after it is read.
+- **Steps:** record (`GET /signup/profile`), institutions (eligible ticks; ineligible shown with the reason; a proposal
+  form), regions (none preselected; sent with `POST /signup/claims`, which also carries every proposal), and one
+  institutional email (`POST /signup/email`). Turnstile loads only on step 4, with the public site key.
+- **First visit:** display name, "Show my name as a contributor" (checked by default), terms v1, then
+  `POST /signup/profile`.
+- **Limits:** a reload mid-flow restarts from the landing state (the signup cookie is not used to resume). "Propose a
+  region" is a mailto link to the public address; no in-page region form exists yet.
+- **Tests:** `tests/framework_ambassador_signup_runtime.mjs` (pure helpers) and `tests/test_ambassador_signup.py`
+  (static). The browser walk ran against mocked API and Turnstile routes only.

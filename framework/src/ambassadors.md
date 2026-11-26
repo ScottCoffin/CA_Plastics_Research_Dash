@@ -10,7 +10,7 @@ pager: false
 <!-- AMB-1 slice 1: the public ambassadors landing page (no sign-in yet). Markup is static here; components/ambassadors.js
      fills the world map, the place search, the region panel, the table and the "Can I join?" checker from real data
      (site/data/global/ambassador_regions.json and each region's ambassador_institutions.json). Styles: components/ambassadors.css.
-     The badge is components/ambassador_badge.js. Sign-in stays disabled until the Worker is deployed. -->
+     The badge is components/ambassador_badge.js. The ORCID-first sign-up (#amb-signup) is components/ambassador_signup.js. -->
 
 <link rel="stylesheet" href="./components/ambassadors.css">
 
@@ -31,9 +31,15 @@ pager: false
   <h1>Become a local ambassador</h1>
   <p class="lede">Plastiverse Live grows region by region. Researchers and community leaders who know a place check our data there and add what only locals know.</p>
   <div class="actions">
-    <button type="button" class="btn solid" disabled>Sign-in opens soon</button>
+    <a class="btn solid" href="https://api.plastiverse.live/orcid/start" data-orcid-start>Sign up with ORCID</a>
     <a class="btn" href="#can-i-join">Check if you can join</a>
   </div>
+  <p class="hint">Already an ambassador? <a class="link" href="https://api.plastiverse.live/orcid/start" data-orcid-start>Sign in with ORCID</a></p>
+</section>
+
+<section class="sec signup" id="amb-signup" aria-label="Ambassador sign-up" hidden>
+  <p class="sr" id="amb-signup-status" role="status" aria-live="polite"></p>
+  <div id="amb-signup-body"></div>
 </section>
 
 <section class="sec" id="regions" aria-labelledby="h-regions">
@@ -113,12 +119,12 @@ pager: false
 <section class="sec" aria-labelledby="h-how">
   <div class="sec-head"><h2 id="h-how">How it works</h2><span class="sec-note">Three steps. No passwords.</span></div>
   <ol class="steps">
-    <li>Sign in with your institution email. We send a one-time link that works for 30 minutes.</li>
-    <li>Set your display name once and agree to the contribution terms (CC BY-NC 4.0, the same licence as the Atlas data).</li>
+    <li>Sign up with your ORCID iD. We check your author record and the institutions on it, and you tick the ones you can speak for.</li>
+    <li>Confirm one institutional email. We send a one-time link that works for 30 minutes. Then set your display name once and agree to the contribution terms (CC BY-NC 4.0, the same licence as the Atlas data).</li>
     <li>Work on your region's three streams. Contributions to the data are reviewed before they reach the Atlas. A region you propose from inside your own institution goes live at once; other proposals wait for review.</li>
   </ol>
   <div class="actions">
-    <button type="button" class="btn solid" disabled>Sign-in opens soon</button>
+    <a class="btn solid" href="https://api.plastiverse.live/orcid/start" data-orcid-start>Sign up with ORCID</a>
     <a class="link" href="./ambassador_terms">Read the contribution terms</a>
   </div>
 </section>
@@ -132,5 +138,7 @@ pager: false
 
 ```js
 import {mountAmbassadors} from "./components/ambassadors.js";
+import {mountSignup} from "./components/ambassador_signup.js";
 mountAmbassadors(document.querySelector(".am")).catch((error) => console.error("ambassadors:", error));
+mountSignup(document.querySelector(".am")).catch((error) => console.error("sign-up:", error));
 ```

@@ -199,7 +199,7 @@ function resultHTML(result, place, regions) {
   const placeName = place ? place.name : "";
   switch (result.state) {
     case "eligible":
-      return `<b>Eligible: ${esc(result.institution.name)}</b>Your institution is listed for ${esc(result.region.name)}. Sign-in opens soon; you will sign in with your work email address.`;
+      return `<b>Eligible: ${esc(result.institution.name)}</b>Your institution is listed for ${esc(result.region.name)}. Sign up with ORCID above, then confirm one email address at your institution.`;
     case "other_region":
       return `<b>Not eligible for ${esc(placeName || result.placeRegion || "this place")} yet</b>${esc(result.institution.name)} is listed for ${esc(result.region.name)}. Choose ${esc(result.region.name)} on the map to join there.`;
     case "not_eligible": {

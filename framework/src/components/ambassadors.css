@@ -159,3 +159,42 @@
 @media (prefers-reduced-motion: reduce) {
   .am *, .am *::before, .am *::after { transition: none !important; animation: none !important; }
 }
+
+/* ORCID-first sign-up (AMB-1 front end slice 2a; ambassador_signup.js). Tokens only. */
+.am .signup { max-width: 760px; }
+.am .signup [hidden] { display: none; }
+.am .signup p { max-width: 66ch; }
+.am .signup h2 { margin: 0 0 12px; }
+.am .signup .step-n { font: 600 14px/1.4 var(--pv-mono); color: var(--pv-ink-2); margin: 0 0 6px; }
+.am .signup fieldset { border: 0; margin: 20px 0 0; padding: 0; min-width: 0; }
+.am .signup legend { font-weight: 600; font-size: 16px; margin-bottom: 6px; padding: 0; }
+.am .signup h3 { font-size: 16px; margin: 22px 0 0; }
+.am .signup .group { margin-top: 20px; }
+.am .signup .check { display: flex; align-items: flex-start; gap: 12px; min-height: 44px; padding: 8px 0; cursor: pointer; }
+.am .signup .check input { width: 24px; height: 24px; margin: 2px 0 0; flex: none; accent-color: var(--pv-ink); }
+.am .signup .check > span { display: block; min-width: 0; }
+.am .signup .check small { display: block; font-size: 14px; color: var(--pv-ink-2); }
+.am .signup .field { margin-top: 20px; }
+.am .signup .field > label { display: block; font-weight: 600; margin-bottom: 6px; }
+.am .signup .field input { width: 100%; max-width: 480px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--pv-ink); background: var(--pv-paper); font-size: 16px; }
+.am .signup .plain { list-style: none; margin: 10px 0 0; padding: 0; }
+.am .signup .plain li { padding: 8px 0; border-bottom: 1px solid var(--pv-line); }
+.am .signup .plain li small { display: block; color: var(--pv-ink-2); font-size: 14px; }
+.am .signup .link-btn { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; }
+.am .signup .proposal { margin-top: 22px; }
+.am .signup .sub { margin-top: 14px; padding: 16px; border: 1px solid var(--pv-line); background: var(--pv-paper); max-width: 560px; }
+.am .signup .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.am .signup .btns .btn { min-width: 128px; }
+.am .signup .err-sum { margin-top: 16px; padding: 12px 14px; border: 2px solid var(--pv-ink); background: var(--pv-cream); max-width: 66ch; }
+.am .signup .err-sum p { margin: 0 0 6px; font-weight: 600; }
+.am .signup .err-sum ul { margin: 0; padding-left: 20px; }
+.am .signup .err-sum a { display: inline-block; min-height: 24px; }
+.am .signup .turnstile { min-height: 65px; margin-top: 18px; }
+.am .signup .status { margin-top: 18px; }
+@media (max-width: 480px) {
+  .am .signup .btns .btn { width: 100%; }
+  .am .signup .field input { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .am .signup, .am .signup * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
