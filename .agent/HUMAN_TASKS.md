@@ -24,19 +24,10 @@ Last updated: 2026-11-26.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
-### H57. Authorize the Worker deploy for group name corrections
-Ambassadors will be able to propose a corrected group name while tagging. The Worker must accept the new field before the form shows it.
-Reply **deploy the Worker** to authorize it. No database migration is needed. The agent deploys, checks the live routes, and then turns on the name field in the form.
+### H57 is answered (2026-11-26): the owner authorized the Worker deploy. The agent deploys it together with the pool simplification (AMB-POOL) so the Worker changes ship once.
 
-### H58. Review the community groups roster (about 225 cases, a few seconds each)
-The agent merged obvious duplicates and removed placeholder names. The rest needs a person.
-1. In Git Bash, from the repo folder, run:
-   `py -3.14 -m streamlit run scripts/review_group_roster_app.py`
-2. Pick a queue in the sidebar:
-   - **Likely duplicates**: click **Same, keep A**, **Same, keep B** or **Different groups**.
-   - **Suspect names**: click **Name is OK**, or type the correct name and click **Save corrected name**.
-   Every click saves at once, so you can stop and resume.
-3. Tell the agent "H58 done" (or "H58 partly done"). The agent rebuilds the roster and publishes it.
+### H58. Review the community groups roster (now optional)
+You do not need to finish this. Ambassadors will answer the same duplicate and name questions while they tag (AMB-ROSTER-QC). Your 5 decisions so far are kept. If you want to spot-check, run `py -3.14 -m streamlit run scripts/review_group_roster_app.py` and click through as many cases as you like; every click saves at once.
 
 ### H39. Label the first global gold round (BQ-G4, 160 works, about 1 minute each)
 The global quality numbers stay blank until a person labels a sample. Round 0 is drawn: 160 works,

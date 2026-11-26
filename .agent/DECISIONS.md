@@ -860,6 +860,20 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
 - **Consequence:** the ambassador knowledge form's group kinds (community_group, volunteer_group, research_network) move to A4's record and suggest-a-group path when CG-6 lands (QUESTIONS AMB-KNOWLEDGE-EXTRAS). No A1-A3 schema, gate, query or gold file changes.
 - **Decided by:** owner (spec decisions and the precedence rule); lead at integration.
 
+## ADR-GLOBAL-PARITY-2026-11-26: the main site gets every California Atlas feature, for every region
+
+- Status: accepted (owner 2026-11-26); work not started (TODO section GP).
+- Context: the California Atlas has author profiles, the author network, the policy tracker, the funding Sankey, topic tags and full cross-navigation between works, authors and institutions. The project outgrew a single region (ADR-A4-INTEGRATION, A4-C11).
+- Decision: fold all of it into the main Plastiverse Live site. A region filter on the main site gives the same functionality as the California Atlas, for every region with data. Nothing the California Atlas does today may be lost or degraded; GP-1 records a California regression contract that every slice must pass. The owner wrote "plastiverse.org"; the site is plastiverse.live, which is what this ADR means.
+- Relation to earlier decisions: builds on PLAT-3/PLAT-4 and GX-1..7. The California design freeze (owner 2026-11-25, VD-SM deferred) still holds for the California pages until a GP slice replaces a page, and then the replacement must match its function.
+
+## ADR-AMB-POOL-2026-11-26: no visible leases in the group pool
+
+- Status: accepted (owner 2026-11-26); work not started (TODO AMB-POOL).
+- Decision: drop "Renew lease" and "Return this group to the pool". A tagged group leaves every pool. Simultaneous work on one group never shows an error: the first tag wins and a later one is kept as a blind second tag for agreement (CG-7). A short invisible hold keeps simultaneous claims apart. Supersedes the 30-day renewable lease of CG-6a (spec §5.2 lease proposal).
+- H57 (Worker deploy for group name corrections) is authorized by the owner the same day; the lead deploys it together with AMB-POOL so the Worker changes ship once.
+- H58 (owner roster review) becomes optional: AMB-ROSTER-QC moves duplicate and name checks into the ambassadors' tagging form.
+
 ## Add-on A4 decisions (register)
 
 Copied from `docs/BFFP.md` §2. Status as of integration; "Owner" means confirmed or resolved by the owner in the spec or on 2026-11-26.
