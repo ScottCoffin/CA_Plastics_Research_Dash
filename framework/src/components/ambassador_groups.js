@@ -1,5 +1,4 @@
-// Signed-in group tagging (CG-6c; streamlined in AMB-GROUPS-UX). Each operation is a separate Worker call: leases are
-// claimed/renewed/released independently from tag and suggestion submissions. Two screens share this module:
+// Signed-in group tagging. Assignments use short background holds. Two screens share this module:
 // mountGroups ("Tag local groups") and mountGroupSuggest ("Suggest a missing group").
 import {escapeHtml} from "./atlas.js";
 import {safeUrl} from "./region_page.js";
@@ -198,15 +197,12 @@ const ERRORS = {
   upstream_unavailable: "The group roster could not be read. Your work is safe; retry in a few minutes.",
   not_signed_in: "Your sign-in has ended. Sign in again to continue.",
   not_region_member: "This region is no longer open to your account. Reload your tasks.",
-  lease_not_found: "This task is no longer assigned to you. Reload the batch to see available work.",
-  renewal_used: "This task has already been renewed. You can keep working until its expiry.",
-  renewal_refused: "The lease changed before it could be renewed. Reload the batch and try again.",
+  group_not_in_region: "This group is unavailable for tagging in your region. Your draft is still open.",
   invalid_group_id: "This group's task details are no longer valid. Reload your assignments.",
   invalid_request: "The service could not read this request. Reload your assignments and retry.",
   invalid_region: "This region is no longer open for group tasks.",
   not_found: "Group tasks are not available on this service yet. Try again after the service update.",
   http_404: "Group tasks are not available on this service yet. Try again after the service update.",
-  not_leased: "This task is no longer assigned to you. Reload the batch before submitting.",
   invalid_payload: "Some answers do not match the tagging rules. Check the highlighted field and retry.",
   rate_limited: "Too many submissions were sent in a short time. Wait a moment and retry.",
 };
@@ -317,19 +313,22 @@ function tier2HTML(draft = {}) {
 function sentHTML(ctx) {
   const sent = (ctx.submissions || []).filter((row) => row?.region === ctx.region && row.stream === "knowledge" && ["group_tag", "group_suggest"].includes(row.kind)).sort((a, b) => (Number(b.created_at) || 0) - (Number(a.created_at) || 0));
   if (!sent.length) return "";
-  return `<section class="g-history" aria-labelledby="g-history-h"><h3 id="g-history-h">Group work you sent</h3><ul>${sent.map((row) => `<li><strong>${row.kind === "group_suggest" ? esc(row.payload?.name || "Group suggestion") : "Group tag"}</strong><span>${row.status === "approved" ? "Approved" : row.status === "rejected" ? "Not accepted" : "Waiting for review"}</span></li>`).join("")}</ul></section>`;
+  const status = (row) => row.second_tag ? "Saved for the agreement check" : row.status === "approved" ? "Approved" : row.status === "rejected" ? "Not accepted" : "Waiting for review";
+  return `<section class="g-history" aria-labelledby="g-history-h"><h3 id="g-history-h">Group work you sent</h3><ul>${sent.map((row) => `<li><strong>${row.kind === "group_suggest" ? esc(row.payload?.name || "Group suggestion") : "Group tag"}</strong><span>${status(row)}</span></li>`).join("")}</ul></section>`;
 }
 
 const crumb = '<p class="ws-crumb"><button type="button" class="link-btn" data-ws-action="home">Back to your tasks</button></p>';
-const TIP_RENEW = "Keep this group reserved for you for another 30 days. You can renew once.";
-const TIP_RELEASE = "Give this group back so another ambassador can tag it. Anything you entered for it is discarded.";
+const HOLD_REFRESH_MS = 15 * 60 * 1000;
+const SECOND_TAG_NOTICE = "Someone else just tagged this group. Your answers still help check agreement.";
 
 /** Mounts one assignment at a time and guards detached/stale responses after navigation. */
 export function mountGroups(host, ctx) {
   const state = {leases: [], remaining: 0, index: 0, loading: true, busy: false, error: "", formError: "", notice: "", generation: 0, drafts: {}, activityOrder: []};
   let alive = true;
+  let holdTimer;
   const current = () => state.leases[state.index] || null;
   const detached = () => !alive || !host.isConnected;
+  const batchPath = `/groups/batch?region=${encodeURIComponent(ctx.region)}`;
   const orgChoice = () => host.querySelector("[data-g-org][aria-pressed='true']")?.dataset.gOrg;
   const pickerCodes = (key) => [...host.querySelectorAll(`[data-g-chips="${key}"] > li`)].map((li) => li.dataset.code);
   const fieldValue = (name) => host.querySelector(`[data-g-field="${name}"]`)?.value || "";
@@ -340,7 +339,6 @@ export function mountGroups(host, ctx) {
     state.activityOrder = Array.isArray(draft.primary_activities) ? [...draft.primary_activities] : [];
     const picks = {places: draft.places ?? placeDefaults(ctx.region, group), website_languages: draft.website_languages ?? languageDefaults(ctx.region)};
     const groupLink = safeUrl(group?.url);
-    const expiry = group?.expires_at ? new Date(group.expires_at).toLocaleDateString() : "";
     host.innerHTML = `${crumb}
       <h2 tabindex="-1">Tag local groups</h2><p class="lede">Check each group's public pages and record what they say about their work in ${esc(ctx.regionName)}. Do not guess.</p>
       <p class="ws-error" role="alert" tabindex="-1" data-g-error${state.error ? "" : " hidden"}>${esc(state.error)}</p>
@@ -349,12 +347,8 @@ export function mountGroups(host, ctx) {
       ${state.notice ? `<p class="g-success" role="status">${esc(state.notice)}</p>` : ""}
       ${!state.loading && !state.error && !group ? `<section class="g-empty"><h3>No groups assigned right now</h3><p>${state.remaining > 0 ? `${state.remaining} more groups are available in this region. Reload to claim the next batch.` : "There are no more unclaimed groups in this region right now."}</p><button type="button" class="btn" data-g-action="reload"${state.busy ? " disabled" : ""}>Reload assignments</button></section>` : ""}
       ${group ? `<div class="g-progress"><p>Group ${state.index + 1} of ${state.leases.length} in your batch</p><progress aria-label="Group progress" max="${state.leases.length}" value="${state.index + 1}"></progress></div>
-        <section class="g-group" aria-labelledby="g-group-name"><h3 id="g-group-name" tabindex="-1">${esc(group.name)}</h3><p class="g-meta">${esc(group.country)}${expiry ? ` · Lease until ${esc(expiry)}` : ""}</p>
+        <section class="g-group" aria-labelledby="g-group-name"><h3 id="g-group-name" tabindex="-1">${esc(group.name)}</h3><p class="g-meta">${esc(group.country)}</p>
         ${groupLink ? `<p class="g-open-site"><a class="btn solid" href="${esc(groupLink)}" target="_blank" rel="noopener noreferrer">Open their website<span class="sr"> (opens in a new tab)</span></a></p>` : `<p class="hint">No website is listed for this group. Enter the page you read in the evidence section.</p>`}
-        <div class="g-lease-actions">
-          <span class="g-tip-wrap"><button type="button" class="btn" data-g-action="renew" aria-describedby="g-tip-renew"${group.renewals > 0 || state.busy ? " disabled" : ""}>${group.renewals > 0 ? "Lease renewed" : "Renew lease"}</button><span class="g-tip" id="g-tip-renew" role="tooltip">${TIP_RENEW}</span></span>
-          <span class="g-tip-wrap"><button type="button" class="link-btn" data-g-action="release" aria-describedby="g-tip-release"${state.busy ? " disabled" : ""}>Return this group to the pool</button><span class="g-tip" id="g-tip-release" role="tooltip">${TIP_RELEASE}</span></span>
-        </div>
         <form data-g-tag-form novalidate aria-busy="${state.busy}">
         ${orgChoiceHTML({attr: "data-g-org", choice: draft.notOrganisation === true ? "no" : draft.notOrganisation === false ? "yes" : "", question: "Is this a collective organisation, rather than an individual or single-person practice?", yes: "Yes, a collective organisation", no: "No, a personal profile or individual"})}
         <div data-g-tag-fields>${tagFieldsHTML(group, draft, picks)}</div>
@@ -367,16 +361,25 @@ export function mountGroups(host, ctx) {
     if (group) applyTagVisibility();
   };
   const actionError = (code) => errorText(code, ctx.errorText);
+  function keepHoldOpen(refreshNow = false) {
+    clearTimeout(holdTimer);
+    const group = current();
+    if (detached() || !group) return;
+    if (refreshNow && !state.busy) void ctx.api(`${batchPath}&group_id=${encodeURIComponent(group.group_id)}`);
+    holdTimer = setTimeout(() => keepHoldOpen(true), HOLD_REFRESH_MS);
+  }
   async function reload() {
     if (detached() || state.busy) return;
     state.loading = true; state.error = ""; state.notice = ""; state.leases = []; state.index = 0;
+    keepHoldOpen();
     const generation = ++state.generation; render();
-    const result = await ctx.api(`/groups/batch?region=${encodeURIComponent(ctx.region)}`);
+    const result = await ctx.api(batchPath);
     if (detached() || generation !== state.generation) return;
     state.loading = false;
     if (!result?.ok) state.error = actionError(result?.error);
     else { state.leases = Array.isArray(result.data?.leases) ? result.data.leases : []; state.remaining = Number(result.data?.remaining_in_region) || 0; }
     render();
+    keepHoldOpen();
   }
   /** Reads every field of the tag form into one values object (also the draft shape). */
   function tagValues() {
@@ -470,43 +473,33 @@ export function mountGroups(host, ctx) {
     if (detached() || generation !== state.generation) return;
     state.busy = false;
     if (!result?.ok) { setBusy(false); const message = actionError(result?.error); state.formError = message; showError("[data-g-form-error]", message); ctx.say?.(message); return; }
-    ctx.onSubmitted?.({id: result.data?.id, region: ctx.region, stream: "knowledge", kind: "group_tag", payload: body.payload, status: "pending", created_at: Date.now(), decided_at: null, decision_note: null});
+    const secondTag = result.data?.second_tag === true;
+    const id = result.data?.id;
+    if (id != null && !ctx.submissions?.some((row) => row.id === id)) {
+      ctx.onSubmitted?.({id, region: ctx.region, stream: "knowledge", kind: "group_tag", payload: body.payload, status: result.data?.status || "pending", second_tag: secondTag, created_at: Date.now(), decided_at: null, decision_note: null});
+    }
     delete state.drafts[group.group_id];
     state.leases = state.leases.filter((g) => g.group_id !== group.group_id);
     state.index = Math.min(state.index, Math.max(0, state.leases.length - 1));
     state.error = ""; state.formError = "";
     const next = current();
-    state.notice = next ? `Sent. Next group: ${next.name}` : "Sent. No more groups in this batch.";
+    state.notice = secondTag ? SECOND_TAG_NOTICE : next ? `Sent. Next group: ${next.name}` : "Sent. No more groups in this batch.";
     ctx.say?.(state.notice); render();
+    keepHoldOpen(true);
     host.querySelector(next ? "#g-group-name" : "h2")?.focus();
   }
-  async function leaseAction(action) {
+  function moveToGroup(action) {
     if (state.busy || !current()) return;
-    const group = current();
-    if (action === "next" || action === "previous") {
-      state.index = Math.max(0, Math.min(state.index + (action === "next" ? 1 : -1), state.leases.length - 1));
-      state.notice = ""; state.activityOrder = []; render(); host.querySelector("#g-group-name")?.focus(); return;
-    }
-    state.busy = true; const generation = state.generation; setBusy(true);
-    const result = await ctx.api(`/groups/${action}`, {method: "POST", body: {group_id: group.group_id}});
-    if (detached() || generation !== state.generation) return;
-    state.busy = false;
-    if (!result?.ok) { setBusy(false); state.error = actionError(result?.error); showError("[data-g-error]", state.error); ctx.say?.(state.error); return; }
-    else if (action === "renew") {
-      Object.assign(group, {expires_at: result.data.expires_at, renewals: result.data.renewals});
-      const button = host.querySelector('[data-g-action="renew"]'); if (button) { button.disabled = true; button.textContent = "Lease renewed"; }
-      const meta = host.querySelector(".g-meta"); if (meta && group.expires_at) meta.textContent = `${group.country} · Lease until ${new Date(group.expires_at).toLocaleDateString()}`;
-      setBusy(false); ctx.say?.("Lease renewed for 30 days."); return;
-    }
-    else {
-      delete state.drafts[group.group_id];
-      state.leases = state.leases.filter((g) => g.group_id !== group.group_id); state.index = Math.min(state.index, Math.max(0, state.leases.length - 1));
-    }
+    state.index = Math.max(0, Math.min(state.index + (action === "next" ? 1 : -1), state.leases.length - 1));
+    state.notice = "";
+    state.formError = "";
     render();
+    keepHoldOpen(true);
+    host.querySelector("#g-group-name")?.focus();
   }
   function setBusy(on) {
     const form = host.querySelector("[data-g-tag-form]"); if (form) form.setAttribute("aria-busy", on ? "true" : "false");
-    host.querySelectorAll("[data-g-submit], [data-g-action]").forEach((button) => { button.disabled = on || button.dataset.gAction === "renew" && current()?.renewals > 0; });
+    host.querySelectorAll("[data-g-submit], [data-g-action]").forEach((button) => { button.disabled = on; });
     const tag = host.querySelector("[data-g-submit]"); if (tag) tag.textContent = on ? "Sending…" : orgChoice() === "no" ? "Mark not an organisation" : "Send tag for review";
   }
   function focusFailure(error) {
@@ -572,7 +565,7 @@ export function mountGroups(host, ctx) {
     const button = target.closest?.("[data-g-action]"); if (!button) return;
     saveDraft();
     if (button.dataset.gAction === "reload") return reload();
-    leaseAction(button.dataset.gAction);
+    moveToGroup(button.dataset.gAction);
   });
   host.addEventListener("keydown", (event) => {
     const key = event.target.dataset?.gPickerInput;
@@ -591,7 +584,7 @@ export function mountGroups(host, ctx) {
   });
   render();
   reload();
-  return () => { alive = false; state.generation += 1; };
+  return () => { alive = false; state.generation += 1; clearTimeout(holdTimer); };
 }
 
 /** The "Suggest a missing group" screen: a collective organisation the lists do not have yet. */

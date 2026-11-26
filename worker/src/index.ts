@@ -17,7 +17,7 @@ import {
   handleSignupEmail,
   handleSignupLookup,
 } from "./signup";
-import { handleGroupBatch, handleGroupRelease, handleGroupRenew } from "./groups";
+import { handleGroupBatch } from "./groups";
 import { handleCaseAnswer, handleCaseAnswers, handleMySubmissions, handleSubmit } from "./submissions";
 
 const ALLOWED_METHODS = "GET, POST, OPTIONS";
@@ -104,12 +104,6 @@ export async function handle(
       case "/groups/batch":
         if (request.method !== "GET") return methodNotAllowed();
         return withCors(await handleGroupBatch(request, env, ctx));
-      case "/groups/renew":
-        if (request.method !== "POST") return methodNotAllowed();
-        return withCors(await handleGroupRenew(request, env, ctx));
-      case "/groups/release":
-        if (request.method !== "POST") return methodNotAllowed();
-        return withCors(await handleGroupRelease(request, env, ctx));
       case "/moderation/queue":
         if (request.method !== "GET") return methodNotAllowed();
         return withCors(await handleQueue(request, env, ctx));

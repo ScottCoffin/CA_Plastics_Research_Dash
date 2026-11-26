@@ -5,8 +5,8 @@ import { json } from "./http";
 import { accountWithinLimit, err, plainText, readBody } from "./moderation";
 import {
   type PayloadResult,
-  holdsGroupLease,
-  releaseLeaseStatement,
+  REGION_COUNTRY,
+  loadRoster,
   validateGroupSuggest,
   validateGroupTag,
 } from "./groups";
@@ -229,21 +229,52 @@ export async function handleSubmit(request: Request, env: Env, ctx: Ctx): Promis
   if (!(await accountWithinLimit(env.DB, "submit", a.id, SUBMIT_LIMIT.limit, SUBMIT_LIMIT.windowMs, ctx.now))) {
     return err("rate_limited", 429);
   }
+  if (body.kind === "group_tag") {
+    const groupId = (JSON.parse(checked.json) as { group_id: string }).group_id;
+    const country = REGION_COUNTRY[region];
+    if (country === undefined) return err("group_not_in_region", 403);
+    // A past hold or tag is enough to establish assignment even after a roster refresh.
+    const assigned = await env.DB.prepare(
+      "SELECT EXISTS (SELECT 1 FROM group_leases WHERE group_id=?1 AND ambassador_id=?2 AND region=?3) " +
+      "OR EXISTS (SELECT 1 FROM submissions WHERE kind='group_tag' AND region=?3 " +
+      "AND json_extract(payload,'$.group_id')=?1) AS known",
+    ).bind(groupId, a.id, region).first<{ known: number }>();
+    if (!assigned?.known) {
+      const roster = await loadRoster(env, ctx.fetch);
+      if (roster === null) return err("upstream_unavailable", 502);
+      if (!roster.some((g) => g.group_id === groupId && g.country === country)) {
+        return err("group_not_in_region", 403);
+      }
+    }
 
-  const insert = env.DB.prepare(
+    // D1 decides primary vs. second at insert time and excludes concurrent retries of the same submission.
+    const conditional = env.DB.prepare(
+      "INSERT INTO submissions (ambassador_id, region, stream, kind, payload, status, created_at) " +
+      "SELECT ?1, ?2, ?3, 'group_tag', COALESCE((SELECT json_set(?4, '$.second_tag_for', " +
+      "COALESCE(json_extract(prior.payload, '$.second_tag_for'), prior.id)) FROM submissions prior " +
+      "WHERE prior.kind='group_tag' AND json_extract(prior.payload, '$.group_id')=?6 ORDER BY prior.id LIMIT 1), ?4), " +
+      "'pending', ?5 WHERE NOT EXISTS (SELECT 1 FROM submissions own WHERE own.kind='group_tag' " +
+      "AND own.ambassador_id=?1 AND json_extract(own.payload, '$.group_id')=?6) " +
+      "RETURNING id, status, json_extract(payload,'$.second_tag_for') AS second_tag_for",
+    ).bind(a.id, region, kind.stream, checked.json, ctx.now, groupId);
+    const clearHold = env.DB.prepare("DELETE FROM group_leases WHERE group_id=?1").bind(groupId);
+    const receipt = env.DB.prepare(
+      "SELECT id, status, json_extract(payload, '$.second_tag_for') AS second_tag_for FROM submissions " +
+      "WHERE ambassador_id=?1 AND kind='group_tag' AND json_extract(payload, '$.group_id')=?2 ORDER BY id LIMIT 1",
+    ).bind(a.id, groupId);
+    const [inserted, , existing] = await env.DB.batch<{ id: number; status: string; second_tag_for: number | null }>(
+      [conditional, clearHold, receipt],
+    );
+    const saved = inserted.results[0] ?? existing.results[0];
+    if (!saved) return err("tag_save_failed", 500);
+    if (inserted.results[0]) await audit(env.DB, ctx.now, "submission.create", a.id, { region, stream: kind.stream, kind: body.kind });
+    return json({ ok: true, id: saved.id, status: saved.status, ...(saved.second_tag_for !== null ? { second_tag: true } : {}) }, 201);
+  }
+
+  const row = await env.DB.prepare(
     "INSERT INTO submissions (ambassador_id, region, stream, kind, payload, status, created_at) " +
       "VALUES (?1, ?2, ?3, ?4, ?5, 'pending', ?6) RETURNING id",
-  ).bind(a.id, region, kind.stream, body.kind, checked.json, ctx.now);
-  let row: { id: number } | null;
-  if (body.kind === "group_tag") {
-    // A tag is accepted only from the ambassador holding the group's lease, and the tag ends that lease (CG-6a).
-    const groupId = (JSON.parse(checked.json) as { group_id: string }).group_id;
-    if (!(await holdsGroupLease(env.DB, a.id, groupId, ctx.now))) return err("not_leased", 403);
-    const [inserted] = await env.DB.batch<{ id: number }>([insert, releaseLeaseStatement(env.DB, a.id, groupId)]);
-    row = inserted.results[0] ?? null;
-  } else {
-    row = await insert.first<{ id: number }>();
-  }
+  ).bind(a.id, region, kind.stream, body.kind, checked.json, ctx.now).first<{ id: number }>();
   await audit(env.DB, ctx.now, "submission.create", a.id, { region, stream: kind.stream, kind: body.kind });
   return json({ ok: true, id: row?.id ?? null, status: "pending" }, 201);
 }
@@ -270,16 +301,15 @@ export async function handleMySubmissions(request: Request, env: Env, ctx: Ctx):
     }>();
   return json({
     ok: true,
-    submissions: rows.results.map((r) => ({
-      id: r.id,
-      region: r.region,
-      stream: r.stream,
-      kind: r.kind,
-      payload: JSON.parse(r.payload) as unknown,
-      status: r.status,
-      created_at: r.created_at,
-      decided_at: r.decided_at,
-      decision_note: r.decision_note,
-    })),
+    submissions: rows.results.map((r) => {
+      const payload = JSON.parse(r.payload) as Record<string, unknown>;
+      const secondTag = r.kind === "group_tag" && typeof payload.second_tag_for === "number";
+      if (secondTag) delete payload.second_tag_for;
+      return {
+        ...r,
+        payload,
+        ...(secondTag ? { second_tag: true } : {}),
+      };
+    }),
   });
 }

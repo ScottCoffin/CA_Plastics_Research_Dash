@@ -90,6 +90,7 @@ export async function handleQueue(request: Request, env: Env, ctx: Ctx): Promise
     "SELECT s.id, s.region, s.stream, s.kind, s.payload, s.created_at, s.ambassador_id, a.display_name " +
       "FROM submissions s JOIN ambassadors a ON a.id = s.ambassador_id " +
       "WHERE s.status = 'pending' AND a.status <> 'suspended' AND (?1 IS NULL OR s.region = ?1) " +
+      "AND NOT (s.kind = 'group_tag' AND json_extract(s.payload, '$.second_tag_for') IS NOT NULL) " +
       "ORDER BY s.created_at, s.id LIMIT ?2",
   )
     .bind(region, QUEUE_LIMIT)
@@ -260,11 +261,15 @@ export async function handleDecide(request: Request, env: Env, ctx: Ctx): Promis
   // The table name comes from this fixed mapping, never from the request.
   const table = type === "submission" ? "submissions" : "proposals";
   const item = await env.DB.prepare(
-    `SELECT ambassador_id, status, kind, ${type === "proposal" ? "email_confirmed_at" : "NULL"} AS email_confirmed_at FROM ${table} WHERE id = ?1`,
+    `SELECT ambassador_id, status, kind, ${type === "proposal" ? "email_confirmed_at" : "NULL"} AS email_confirmed_at, ` +
+      `${type === "submission" ? "json_extract(payload, '$.second_tag_for')" : "NULL"} AS second_tag_for FROM ${table} WHERE id = ?1`,
   )
     .bind(id)
-    .first<{ ambassador_id: string; status: string; kind: string; email_confirmed_at: number | null }>();
+    .first<{ ambassador_id: string; status: string; kind: string; email_confirmed_at: number | null; second_tag_for: number | null }>();
   if (!item) return err("not_found", 404);
+  if (type === "submission" && item.kind === "group_tag" && item.second_tag_for !== null) {
+    return err("blind_second_tag", 409);
+  }
   if (item.ambassador_id === m.a.id) return err("self_decision", 403);
   if (item.status !== "pending") return err("already_decided", 409);
 

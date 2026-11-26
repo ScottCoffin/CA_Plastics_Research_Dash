@@ -67,6 +67,7 @@ client values; the tests cover the flow with a fake ORCID.
 - `POST /submissions` (session, member): `{region, stream: confirm|knowledge, kind, payload}`, status `pending`.
   Payload keys are allowed per kind (`src/submissions.ts`, `KINDS`); https URLs only; no HTML; length limits.
 - `GET /submissions/mine` (session): the caller's submissions with status and decision note.
+- `GET /groups/batch?region=` (session, active member): returns `leases` (group id, name, country, URL) and remaining count; claims up to 25 untagged groups only when the caller has no active holds in that region. Holds expire after two hours. `GET /groups/batch?region=&group_id=` silently refreshes that caller's still-active, untagged hold and returns `{ok:true}` even when it cannot refresh. A group tag is authorized by the caller's own hold in that region (even if expired), a prior tag in that region, or a roster match to the region's country. Every accepted group tag permanently removes the group from all pools; the first tag is canonical and a later tag by another ambassador is retained as a blind `second_tag_for` row.
 - `GET /moderation/queue?region=` (owner or lead): pending submissions and proposals. Owner and leads see every region.
 - `POST /moderation/decide` (owner or lead): `{type: submission|proposal, id, decision: approve|reject, note?}`. A
   moderator cannot decide their own item. Audited. Approving an institution proposal also needs `region`, `domain`

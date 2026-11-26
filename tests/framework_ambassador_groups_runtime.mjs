@@ -7,7 +7,7 @@ import {
 import {GROUP_LABELS, groupLabel} from "../framework/src/components/group_labels.js";
 
 const check = (name, fn) => { fn(); console.log(`ok - ${name}`); };
-const GROUP = {group_id: "cg_0123456789abcdef", name: "Coastal Group", country: "US", url: "https://example.org", expires_at: Date.now() + 1000, renewals: 0};
+const GROUP = {group_id: "cg_0123456789abcdef", name: "Coastal Group", country: "US", url: "https://example.org"};
 const QUOTE = "We run beach cleanups and plastics education in our community.";
 /** Form values as the tag screen reads them: one shared quote and one page, with no optional facet quotes. */
 const base = (overrides = {}) => ({

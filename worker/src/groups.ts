@@ -2,7 +2,7 @@ import { currentAmbassador, type Ctx } from "./auth";
 import type { Env } from "./env";
 import { REGIONS, type Region, isRegion } from "./eligibility";
 import { json } from "./http";
-import { err, plainText, readBody } from "./moderation";
+import { err, plainText } from "./moderation";
 import type { Fetch } from "./outbound";
 import {
   CANNOT_DETERMINE_REASON,
@@ -24,10 +24,10 @@ import {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 export const BATCH_SIZE = 25;
-export const LEASE_DAYS = 30;
-const LEASE_MS = LEASE_DAYS * DAY_MS;
-/** One renewal per lease (renewals < RENEWALS_MAX). */
-const RENEWALS_MAX = 1;
+export const LEASE_HOURS = 2;
+const LEASE_MS = LEASE_HOURS * 60 * 60 * 1000;
+// Each round uses one D1 batch and one count query. Leave room for auth and roster queries on the Free plan.
+const MAX_CLAIM_ROUNDS = 20;
 const ROSTER_PATH = "/data/global/groups/roster.json";
 const ROSTER_CACHE_SECONDS = DAY_MS / 1000;
 /** Same User-Agent as the other outbound reads in this worker (kept as a literal). */
@@ -62,8 +62,6 @@ export interface RosterGroup {
 
 interface LeaseRow {
   group_id: string;
-  expires_at: number;
-  renewals: number;
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -149,26 +147,27 @@ async function isActiveMember(db: D1Database, ambassadorId: string, region: Regi
 async function activeLeases(db: D1Database, ambassadorId: string, region: Region, now: number): Promise<LeaseRow[]> {
   const rows = await db
     .prepare(
-      "SELECT group_id, expires_at, renewals FROM group_leases " +
-        "WHERE ambassador_id = ?1 AND region = ?2 AND expires_at > ?3",
+      "SELECT group_id FROM group_leases " +
+      "WHERE ambassador_id = ?1 AND region = ?2 AND MIN(expires_at, leased_at + ?4) > ?3 " +
+      "AND NOT EXISTS (SELECT 1 FROM submissions s WHERE s.kind='group_tag' AND json_extract(s.payload,'$.group_id')=group_leases.group_id)",
     )
-    .bind(ambassadorId, region, now)
+    .bind(ambassadorId, region, now, LEASE_MS)
     .all<LeaseRow>();
   return rows.results;
 }
 
-/** Group ids with an unexpired lease held by anyone. */
+/** Group ids with an effective, unexpired hold held by anyone (clamps legacy 30-day rows). */
 async function leasedGroupIds(db: D1Database, now: number): Promise<Set<string>> {
-  const rows = await db.prepare("SELECT group_id FROM group_leases WHERE expires_at > ?1").bind(now).all<{ group_id: string }>();
+  const rows = await db.prepare("SELECT group_id FROM group_leases WHERE MIN(expires_at, leased_at + ?2) > ?1").bind(now, LEASE_MS).all<{ group_id: string }>();
   return new Set(rows.results.map((r) => r.group_id));
 }
 
-/** Group ids with a pending or approved group_tag submission (rejected tags return the group to the pool). */
+/** Any accepted tag removes the group globally, including after a moderation rejection. */
 async function taggedGroupIds(db: D1Database): Promise<Set<string>> {
   const rows = await db
     .prepare(
       "SELECT DISTINCT json_extract(payload, '$.group_id') AS group_id FROM submissions " +
-        "WHERE kind = 'group_tag' AND status IN ('pending', 'approved')",
+        "WHERE kind = 'group_tag'",
     )
     .all<{ group_id: string | null }>();
   return new Set(rows.results.flatMap((r) => (r.group_id === null ? [] : [r.group_id])));
@@ -185,10 +184,13 @@ async function unclaimedGroups(db: D1Database, roster: RosterGroup[], country: s
  * another ambassador has just leased is left alone.
  */
 const UPSERT_LEASE =
-  "INSERT INTO group_leases (group_id, ambassador_id, region, leased_at, expires_at, renewals) VALUES (?1, ?2, ?3, ?4, ?5, 0) " +
+  "INSERT INTO group_leases (group_id, ambassador_id, region, leased_at, expires_at, renewals) " +
+  "SELECT ?1, ?2, ?3, ?4, ?5, 0 WHERE NOT EXISTS (SELECT 1 FROM submissions s WHERE s.kind='group_tag' " +
+  "AND json_extract(s.payload,'$.group_id')=?1) AND (SELECT COUNT(*) FROM group_leases l WHERE l.ambassador_id=?2 " +
+  "AND l.region=?3 AND MIN(l.expires_at,l.leased_at + ?6) > ?4) < ?7 " +
   "ON CONFLICT (group_id) DO UPDATE SET ambassador_id = excluded.ambassador_id, region = excluded.region, " +
   "leased_at = excluded.leased_at, expires_at = excluded.expires_at, renewals = 0 " +
-  "WHERE group_leases.expires_at <= excluded.leased_at";
+  "WHERE MIN(group_leases.expires_at, group_leases.leased_at + ?6) <= ?4";
 
 async function claimBatch(
   db: D1Database,
@@ -198,20 +200,31 @@ async function claimBatch(
   country: string,
   now: number,
 ): Promise<void> {
-  const batch = (await unclaimedGroups(db, roster, country, now)).slice(0, BATCH_SIZE);
-  if (batch.length === 0) return;
-  await db.batch(
-    batch.map((g) => db.prepare(UPSERT_LEASE).bind(g.group_id, ambassadorId, region, now, now + LEASE_MS)),
-  );
+  const candidates = await unclaimedGroups(db, roster, country, now);
+  for (let offset = 0; offset < candidates.length && offset < BATCH_SIZE * MAX_CLAIM_ROUNDS; offset += BATCH_SIZE) {
+    const chunk = candidates.slice(offset, offset + BATCH_SIZE);
+    await db.batch(chunk.map((g) =>
+      db.prepare(UPSERT_LEASE).bind(g.group_id, ambassadorId, region, now, now + LEASE_MS, LEASE_MS, BATCH_SIZE),
+    ));
+    if ((await activeLeases(db, ambassadorId, region, now)).length >= BATCH_SIZE) break;
+  }
 }
 
-/** GET /groups/batch?region=: the caller's active leases, claiming a batch first when they hold none. */
+/** GET /groups/batch?region=: active holds, claiming a batch only when none remain. */
 export async function handleGroupBatch(request: Request, env: Env, ctx: Ctx): Promise<Response> {
   const a = await currentAmbassador(request, env, ctx.now);
   if (!a) return err("not_signed_in", 401);
-  const param = new URL(request.url).searchParams.get("region");
+  const params = new URL(request.url).searchParams;
+  const param = params.get("region");
   if (!isRegion(param)) return err("invalid_region", 400, { regions: REGIONS });
   if (!(await isActiveMember(env.DB, a.id, param))) return err("not_region_member", 403);
+  const groupId = params.get("group_id");
+  if (groupId !== null) {
+    if (!GROUP_ID_RE.test(groupId)) return err("invalid_group_id", 400);
+    await env.DB.prepare("UPDATE group_leases SET leased_at = ?1, expires_at = ?2 WHERE group_id = ?3 AND ambassador_id = ?4 AND region = ?5 AND MIN(expires_at, leased_at + ?6) > ?1 AND NOT EXISTS (SELECT 1 FROM submissions s WHERE s.kind='group_tag' AND json_extract(s.payload,'$.group_id')=?3)")
+      .bind(ctx.now, ctx.now + LEASE_MS, groupId, a.id, param, LEASE_MS).run();
+    return json({ ok: true });
+  }
   const roster = await loadRoster(env, ctx.fetch);
   if (roster === null) return err("upstream_unavailable", 502);
 
@@ -229,69 +242,11 @@ export async function handleGroupBatch(request: Request, env: Env, ctx: Ctx): Pr
         name: g.name,
         country: g.country,
         url: g.url,
-        expires_at: lease.expires_at,
-        renewals: lease.renewals,
       });
     }
   }
   const remaining = country === undefined ? 0 : (await unclaimedGroups(env.DB, roster, country, ctx.now)).length;
   return json({ ok: true, region: param, leases, remaining_in_region: remaining });
-}
-
-/** POST /groups/renew {group_id}: once per lease, adds LEASE_DAYS to an unexpired lease the caller holds. */
-export async function handleGroupRenew(request: Request, env: Env, ctx: Ctx): Promise<Response> {
-  const a = await currentAmbassador(request, env, ctx.now);
-  if (!a) return err("not_signed_in", 401);
-  const body = await readBody(request);
-  if (!body) return err("invalid_request", 400);
-  const groupId = body.group_id;
-  if (typeof groupId !== "string" || !GROUP_ID_RE.test(groupId)) return err("invalid_group_id", 400);
-  const lease = await env.DB.prepare(
-    "SELECT renewals FROM group_leases WHERE group_id = ?1 AND ambassador_id = ?2 AND expires_at > ?3",
-  )
-    .bind(groupId, a.id, ctx.now)
-    .first<{ renewals: number }>();
-  if (!lease) return err("lease_not_found", 404);
-  if (lease.renewals >= RENEWALS_MAX) return err("renewal_used", 409);
-  // The conditions repeat in the UPDATE, so a concurrent renewal cannot apply twice.
-  const res = await env.DB.prepare(
-    "UPDATE group_leases SET expires_at = expires_at + ?4, renewals = renewals + 1 " +
-      "WHERE group_id = ?1 AND ambassador_id = ?2 AND expires_at > ?3 AND renewals < ?5",
-  )
-    .bind(groupId, a.id, ctx.now, LEASE_MS, RENEWALS_MAX)
-    .run();
-  if (res.meta.changes < 1) return err("renewal_refused", 409);
-  const updated = await env.DB.prepare("SELECT expires_at, renewals FROM group_leases WHERE group_id = ?1")
-    .bind(groupId)
-    .first<{ expires_at: number; renewals: number }>();
-  return json({ ok: true, group_id: groupId, expires_at: updated?.expires_at ?? null, renewals: updated?.renewals ?? 0 });
-}
-
-/** POST /groups/release {group_id}: the caller gives the group back to the pool. */
-export async function handleGroupRelease(request: Request, env: Env, ctx: Ctx): Promise<Response> {
-  const a = await currentAmbassador(request, env, ctx.now);
-  if (!a) return err("not_signed_in", 401);
-  const body = await readBody(request);
-  if (!body) return err("invalid_request", 400);
-  const groupId = body.group_id;
-  if (typeof groupId !== "string" || !GROUP_ID_RE.test(groupId)) return err("invalid_group_id", 400);
-  const res = await releaseLeaseStatement(env.DB, a.id, groupId).run();
-  if (res.meta.changes < 1) return err("lease_not_found", 404);
-  return json({ ok: true, group_id: groupId, released: true });
-}
-
-/** True when the ambassador holds an unexpired lease on the group. Used by the group_tag submission path. */
-export async function holdsGroupLease(db: D1Database, ambassadorId: string, groupId: string, now: number): Promise<boolean> {
-  const row = await db
-    .prepare("SELECT 1 AS ok FROM group_leases WHERE group_id = ?1 AND ambassador_id = ?2 AND expires_at > ?3")
-    .bind(groupId, ambassadorId, now)
-    .first();
-  return row !== null;
-}
-
-/** Deletes the caller's lease on the group (the statement, so a caller can batch it with the tag insert). */
-export function releaseLeaseStatement(db: D1Database, ambassadorId: string, groupId: string): D1PreparedStatement {
-  return db.prepare("DELETE FROM group_leases WHERE group_id = ?1 AND ambassador_id = ?2").bind(groupId, ambassadorId);
 }
 
 // ---------------------------------------------------------------------------------------------------------------

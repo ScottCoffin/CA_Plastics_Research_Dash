@@ -8,8 +8,7 @@ import { seedAmbassador } from "./helpers";
 
 const API = "https://api.plastiverse.live";
 const ROSTER_URL = "https://plastiverse.live/data/global/groups/roster.json";
-const DAY_MS = 24 * 60 * 60 * 1000;
-const LEASE_MS = 30 * DAY_MS;
+const HOLD_MS = 2 * 60 * 60 * 1000;
 const GID = "cg_0123456789abcdef";
 
 /** Roster ids: cg_ + 16 hex digits from the number. Groups 1-30 are US (California); 201-203 are NO. */
@@ -88,7 +87,7 @@ function submitKind(cookie: string, kind: string, payload: unknown, region = "ca
 interface BatchBody {
   ok: boolean;
   region?: string;
-  leases: { group_id: string; name: string; country: string; url: string | null; expires_at: number; renewals: number }[];
+  leases: { group_id: string; name: string; country: string; url: string | null; [key: string]: unknown }[];
   remaining_in_region?: number;
   error?: string;
 }
@@ -107,10 +106,10 @@ function range(from: number, to: number): string[] {
   return out;
 }
 
-async function leaseRow(groupId: string): Promise<{ ambassador_id: string; expires_at: number; renewals: number } | null> {
-  return env.DB.prepare("SELECT ambassador_id, expires_at, renewals FROM group_leases WHERE group_id = ?1")
+async function leaseRow(groupId: string): Promise<{ ambassador_id: string; expires_at: number } | null> {
+  return env.DB.prepare("SELECT ambassador_id, expires_at FROM group_leases WHERE group_id = ?1")
     .bind(groupId)
-    .first<{ ambassador_id: string; expires_at: number; renewals: number }>();
+    .first<{ ambassador_id: string; expires_at: number }>();
 }
 
 /** The two evidence entries of the base tag: plastics_centrality (quoted) and primary_activities (not stated). */
@@ -161,19 +160,47 @@ describe("batch claims", () => {
     expect(body.ok).toBe(true);
     expect(leaseIds(body)).toEqual(range(1, 25));
     expect(body.remaining_in_region).toBe(5);
-    expect(body.leases[0]).toEqual(
-      expect.objectContaining({ group_id: gid(1), name: "Group 1", country: "US", url: "https://group1.example.org/", renewals: 0 }),
-    );
-    const expires = body.leases[0].expires_at;
-    expect(Math.abs(expires - (Date.now() + LEASE_MS))).toBeLessThan(60_000);
+    expect(body.leases[0]).toEqual({ group_id: gid(1), name: "Group 1", country: "US", url: "https://group1.example.org/" });
+    expect(body.leases[0]).not.toHaveProperty("expires_at");
+    expect(body.leases[0]).not.toHaveProperty("renewals");
+    const expires = (await leaseRow(gid(1)))?.expires_at ?? 0;
+    expect(Math.abs(expires - (Date.now() + HOLD_MS))).toBeLessThan(60_000);
   });
 
-  it("a repeat call returns the same leases and claims nothing more", async () => {
+  it("a repeat call returns the same leases without claiming more", async () => {
     const a = await seedAmbassador({ region: "california", email: "a@example.org" });
     const first = await batchBody(a.cookie);
     const second = await batchBody(a.cookie);
     expect(leaseIds(second)).toEqual(leaseIds(first));
     expect(second.remaining_in_region).toBe(5);
+    expect(second.leases).toEqual(first.leases);
+  });
+
+  it("simultaneous same-user batch GETs stay within the 25-group claim cap", async () => {
+    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
+    const [left, right] = await Promise.all([batchBody(a.cookie), batchBody(a.cookie)]);
+    expect(leaseIds(left)).toEqual(leaseIds(right));
+    expect(leaseIds(left)).toHaveLength(25);
+    const count = await env.DB.prepare("SELECT COUNT(*) AS n FROM group_leases WHERE ambassador_id = ?1 AND MIN(expires_at, leased_at + ?2) > ?3")
+      .bind(a.id, HOLD_MS, Date.now()).first<{ n: number }>();
+    expect(count?.n).toBe(25);
+  });
+
+  it("a repeated group_id GET succeeds and extends only the caller's active hold", async () => {
+    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
+    const b = await seedAmbassador({ region: "california", email: "b@example.org" });
+    await batchBody(a.cookie);
+    const before = (await leaseRow(gid(1)))?.expires_at ?? 0;
+    const repeat = await req("GET", `/groups/batch?region=california&group_id=${gid(1)}`, undefined, a.cookie);
+    expect(repeat.status).toBe(200);
+    expect(await repeat.json()).toEqual({ ok: true });
+    expect((await leaseRow(gid(1)))?.expires_at).toBeGreaterThan(before);
+    const otherBefore = (await leaseRow(gid(2)))?.expires_at;
+    const denied = await req("GET", `/groups/batch?region=california&group_id=${gid(1)}`, undefined, b.cookie);
+    expect(denied.status).toBe(200);
+    expect(await denied.json()).toEqual({ ok: true });
+    expect((await leaseRow(gid(1)))?.ambassador_id).toBe(a.id);
+    expect((await leaseRow(gid(2)))?.expires_at).toBe(otherBefore);
   });
 
   it("a second ambassador gets only the unleased remainder (no double leasing)", async () => {
@@ -185,6 +212,24 @@ describe("batch claims", () => {
     expect(bBody.remaining_in_region).toBe(0);
     const count = await env.DB.prepare("SELECT COUNT(DISTINCT group_id) AS n FROM group_leases").first<{ n: number }>();
     expect(count?.n).toBe(30);
+  });
+
+  it("concurrent batch claims do not overlap and the later claim finds candidates after the first batch", async () => {
+    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
+    const b = await seedAmbassador({ region: "california", email: "b@example.org" });
+    const [aBody, bBody] = await Promise.all([batchBody(a.cookie), batchBody(b.cookie)]);
+    expect(new Set([...leaseIds(aBody), ...leaseIds(bBody)]).size).toBe(leaseIds(aBody).length + leaseIds(bBody).length);
+  });
+
+  it("treats legacy 30-day rows older than two hours as expired", async () => {
+    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
+    const b = await seedAmbassador({ region: "california", email: "b@example.org" });
+    await batchBody(a.cookie);
+    const oldStart = Date.now() - 3 * 60 * 60 * 1000;
+    await env.DB.prepare("UPDATE group_leases SET leased_at = ?1, expires_at = ?2 WHERE group_id = ?3")
+      .bind(oldStart, oldStart + 30 * 24 * 60 * 60 * 1000, gid(1)).run();
+    expect(leaseIds(await batchBody(b.cookie))).toContain(gid(1));
+    expect((await leaseRow(gid(1)))?.ambassador_id).toBe(b.id);
   });
 
   it("expired leases are reusable by another ambassador", async () => {
@@ -211,15 +256,30 @@ describe("batch claims", () => {
     expect(body.remaining_in_region).toBe(4);
   });
 
-  it("a rejected tag returns its group to the pool", async () => {
+  it("pending and approved cannot_determine tags are also removed from every pool", async () => {
+    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
+    const tagger = await seedAmbassador({ region: "california", email: "t@example.org" });
+    const cannot = JSON.stringify({ group_id: gid(1), status: "cannot_determine", cannot_determine_reason: "no_web_presence" });
+    await env.DB.prepare("INSERT INTO submissions (ambassador_id, region, stream, kind, payload, status, created_at) VALUES (?1, 'california', 'knowledge', 'group_tag', ?2, 'pending', 1)")
+      .bind(tagger.id, cannot).run();
+    await env.DB.prepare("INSERT INTO submissions (ambassador_id, region, stream, kind, payload, status, created_at) VALUES (?1, 'california', 'knowledge', 'group_tag', ?2, 'approved', 1)")
+      .bind(tagger.id, JSON.stringify({ ...JSON.parse(cannot), group_id: gid(2) })).run();
+    expect(leaseIds(await batchBody(a.cookie))).toEqual(range(3, 27));
+  });
+
+  it("a tag remains out of the pool after later rejection", async () => {
     const tagger = await seedAmbassador({ region: "california", email: "t@example.org" });
     const a = await seedAmbassador({ region: "california", email: "a@example.org" });
-    await env.DB.prepare(
-      "INSERT INTO submissions (ambassador_id, region, stream, kind, payload, status, created_at) VALUES (?1, 'california', 'knowledge', 'group_tag', ?2, 'rejected', 1)",
-    )
-      .bind(tagger.id, JSON.stringify({ group_id: gid(1), status: "ambassador_tagged" }))
-      .run();
-    expect(leaseIds(await batchBody(a.cookie))).toEqual(range(1, 25));
+    await batchBody(tagger.cookie);
+    const created = await submitKind(tagger.cookie, "group_tag", tag());
+    expect(created.status).toBe(201);
+    const first = (await created.json()) as { id: number };
+    await env.DB.prepare("UPDATE submissions SET status = 'rejected' WHERE id = ?1").bind(first.id).run();
+    await env.DB.prepare("UPDATE group_leases SET expires_at = 1 WHERE ambassador_id = ?1").bind(tagger.id).run();
+    expect(leaseIds(await batchBody(a.cookie))).toEqual(range(2, 26));
+    const after = await env.DB.prepare("SELECT id FROM submissions WHERE kind = 'group_tag' AND json_extract(payload, '$.group_id') = ?1")
+      .bind(gid(1)).first<{ id: number }>();
+    expect(after?.id).toBe(first.id);
   });
 
   it("a region with no roster country gets no groups (Belgium has none in the roster)", async () => {
@@ -255,57 +315,23 @@ describe("batch claims", () => {
   });
 });
 
-describe("renew and release", () => {
-  it("a lease renews once: +30 days, then 409", async () => {
+describe("removed lease endpoints", () => {
+  it("renew and release return 404", async () => {
     const a = await seedAmbassador({ region: "california", email: "a@example.org" });
-    await batchBody(a.cookie);
-    const before = (await leaseRow(gid(1)))?.expires_at ?? 0;
-    const first = await renew(a.cookie, gid(1));
-    expect(first.status).toBe(200);
-    const body = (await first.json()) as { expires_at: number; renewals: number };
-    expect(body.renewals).toBe(1);
-    expect(body.expires_at).toBe(before + LEASE_MS);
-    const second = await renew(a.cookie, gid(1));
-    expect(second.status).toBe(409);
-    expect(((await second.json()) as { error: string }).error).toBe("renewal_used");
-  });
-
-  it("renewal refuses a lease the caller does not hold, an expired one, or a bad id", async () => {
-    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
-    const b = await seedAmbassador({ region: "california", email: "b@example.org" });
-    await batchBody(a.cookie);
-    expect((await renew(b.cookie, gid(1))).status).toBe(404);
-    await env.DB.prepare("UPDATE group_leases SET expires_at = 1 WHERE ambassador_id = ?1").bind(a.id).run();
     expect((await renew(a.cookie, gid(1))).status).toBe(404);
-    expect((await renew(a.cookie, "cg_XYZ")).status).toBe(400);
-  });
-
-  it("release frees the group for another ambassador", async () => {
-    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
-    const b = await seedAmbassador({ region: "california", email: "b@example.org" });
-    await batchBody(a.cookie);
-    expect((await release(a.cookie, gid(1))).status).toBe(200);
-    expect(await leaseRow(gid(1))).toBeNull();
     expect((await release(a.cookie, gid(1))).status).toBe(404);
-    expect((await release(b.cookie, gid(2))).status).toBe(404);
-    // Group 1 is free again; the other ambassador's batch takes it with the untaken groups 26-30.
-    expect(leaseIds(await batchBody(b.cookie))).toEqual([gid(1), ...range(26, 30)]);
   });
 });
 
 describe("group_tag and group_suggest submissions", () => {
-  it("a tag without a lease is refused (403 not_leased)", async () => {
+  it("refuses unknown and off-region groups without a valid roster claim", async () => {
     const a = await seedAmbassador({ region: "california", email: "a@example.org" });
-    const res = await submitKind(a.cookie, "group_tag", tag());
-    expect(res.status).toBe(403);
-    expect(((await res.json()) as { error: string }).error).toBe("not_leased");
-  });
-
-  it("a tag under an expired lease is refused", async () => {
-    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
-    await batchBody(a.cookie);
-    await env.DB.prepare("UPDATE group_leases SET expires_at = 1 WHERE ambassador_id = ?1").bind(a.id).run();
-    expect((await submitKind(a.cookie, "group_tag", tag())).status).toBe(403);
+    const unknown = await submitKind(a.cookie, "group_tag", tag({}, 999));
+    expect(unknown.status).toBe(403);
+    expect(await unknown.json()).toEqual({ ok: false, error: "group_not_in_region" });
+    const offRegion = await submitKind(a.cookie, "group_tag", tag({}, 201));
+    expect(offRegion.status).toBe(403);
+    expect(await offRegion.json()).toEqual({ ok: false, error: "group_not_in_region" });
   });
 
   it("a tag under a lease is stored as a knowledge submission and deletes the lease", async () => {
@@ -324,6 +350,73 @@ describe("group_tag and group_suggest submissions", () => {
     const after = await batchBody(a.cookie);
     expect(after.leases).toHaveLength(24);
     expect(after.remaining_in_region).toBe(5);
+  });
+
+  it("accepts an expired holder's submission after another ambassador has claimed the group", async () => {
+    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
+    const b = await seedAmbassador({ region: "california", email: "b@example.org" });
+    await batchBody(a.cookie);
+    await env.DB.prepare("UPDATE group_leases SET expires_at = 1 WHERE group_id = ?1").bind(gid(1)).run();
+    expect(leaseIds(await batchBody(b.cookie))).toContain(gid(1));
+    const res = await submitKind(a.cookie, "group_tag", tag());
+    expect(res.status).toBe(201);
+    expect(((await res.json()) as { status: string }).status).toBe("pending");
+  });
+
+  it("same-ambassador retries are idempotent", async () => {
+    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
+    await batchBody(a.cookie);
+    const first = await submitKind(a.cookie, "group_tag", tag());
+    const firstBody = (await first.json()) as { id: number };
+    const second = await submitKind(a.cookie, "group_tag", tag({ name_correction: "Updated Retry Name" }));
+    expect(second.status).toBe(201);
+    expect((await second.json() as { id: number }).id).toBe(firstBody.id);
+    const rows = await env.DB.prepare("SELECT id FROM submissions WHERE ambassador_id = ?1 AND kind = 'group_tag' AND json_extract(payload, '$.group_id') = ?2")
+      .bind(a.id, gid(1)).all<{ id: number }>();
+    expect(rows.results).toHaveLength(1);
+  });
+
+  it("concurrent ambassadors get one primary and one blind second tag linked server-side", async () => {
+    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
+    const b = await seedAmbassador({ region: "california", email: "b@example.org" });
+    await batchBody(a.cookie);
+    await env.DB.prepare("UPDATE group_leases SET expires_at = 1 WHERE group_id = ?1").bind(gid(1)).run();
+    await batchBody(b.cookie);
+    const [ra, rb] = await Promise.all([
+      submitKind(a.cookie, "group_tag", tag()),
+      submitKind(b.cookie, "group_tag", tag({ name_correction: "Second Researcher Name" })),
+    ]);
+    expect([ra.status, rb.status]).toEqual([201, 201]);
+    const bodies = [(await ra.json()) as Record<string, unknown>, (await rb.json()) as Record<string, unknown>];
+    expect(bodies.filter((body) => body.second_tag === true)).toHaveLength(1);
+    const rows = await env.DB.prepare("SELECT id, ambassador_id, payload FROM submissions WHERE kind = 'group_tag' AND json_extract(payload, '$.group_id') = ?1 ORDER BY id")
+      .bind(gid(1)).all<{ id: number; ambassador_id: string; payload: string }>();
+    expect(rows.results).toHaveLength(2);
+    const first = rows.results[0];
+    const second = rows.results[1];
+    expect(JSON.parse(first.payload)).not.toHaveProperty("second_tag_for");
+    expect(JSON.parse(second.payload).second_tag_for).toBe(first.id);
+    expect(second.ambassador_id).not.toBe(first.ambassador_id);
+    const retry = await submitKind(second.ambassador_id === a.id ? a.cookie : b.cookie, "group_tag", tag({ name_correction: "Retry Name" }));
+    expect(retry.status).toBe(201);
+    expect(await retry.json()).toEqual({ ok: true, id: second.id, status: "pending", second_tag: true });
+    const secondCookie = second.ambassador_id === a.id ? a.cookie : b.cookie;
+    const mine = await req("GET", "/submissions/mine", undefined, secondCookie);
+    const mineBody = (await mine.json()) as { submissions: { id: number; payload: Record<string, unknown>; second_tag?: boolean }[] };
+    const ownSecond = mineBody.submissions.find((entry) => entry.id === second.id);
+    expect(ownSecond?.second_tag).toBe(true);
+    expect(ownSecond?.payload).not.toHaveProperty("second_tag_for");
+    const owner = await seedAmbassador({ orcid: env.OWNER_ORCID, email: "owner@example.org" });
+    const queue = await req("GET", "/moderation/queue", undefined, owner.cookie);
+    const queueRows = (await queue.json() as { submissions: { id: number; payload: Record<string, unknown> }[] }).submissions;
+    expect(queueRows.map((entry) => entry.id)).toContain(first.id);
+    expect(queueRows.map((entry) => entry.id)).not.toContain(second.id);
+    expect(queueRows.find((entry) => entry.id === first.id)?.payload).not.toHaveProperty("second_tag_for");
+    const decision = await req("POST", "/moderation/decide", { type: "submission", id: second.id, decision: "approve" }, owner.cookie);
+    expect(decision.status).toBe(409);
+    expect(await decision.json()).toEqual({ ok: false, error: "blind_second_tag" });
+    expect(leaseIds(await batchBody(a.cookie))).not.toContain(gid(1));
+    expect(leaseIds(await batchBody(b.cookie))).not.toContain(gid(1));
   });
 
   it("a group_tag sent on the confirm stream is refused as a stream mismatch", async () => {
@@ -356,6 +449,7 @@ describe("validateGroupTag", () => {
 
   it("refuses unknown keys, a malformed group_id and an unknown status", () => {
     expect(tagField(tag({ owner_note: "x" }))).toBe("owner_note");
+    expect(tagField(tag({ second_tag_for: 123 }))).toBe("second_tag_for");
     expect(tagField(tag({ group_id: "cg_XYZ" }))).toBe("group_id");
     expect(tagField(tag({ status: "reviewed" }))).toBe("status");
     expect(tagField("not an object")).toBe("payload");

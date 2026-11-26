@@ -24,7 +24,8 @@ Last updated: 2026-11-26.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
-### H57 is answered (2026-11-26): the owner authorized the Worker deploy. The agent deploys it together with the pool simplification (AMB-POOL) so the Worker changes ship once.
+### H59. Authorize the CG-7b D1 migration and Worker deploy
+After the local CG-7b checks pass, approve applying D1 migration 0008 and deploying the Worker for the sampled blind second tags, reviewer checks and audit log. Reply **H59 approved** to authorize both production operations, or specify which one to approve. H57 covered AMB-POOL and the name-correction backend.
 
 ### H58. Review the community groups roster (now optional)
 You do not need to finish this. Ambassadors will answer the same duplicate and name questions while they tag (AMB-ROSTER-QC). Your 5 decisions so far are kept. If you want to spot-check, run `py -3.14 -m streamlit run scripts/review_group_roster_app.py` and click through as many cases as you like; every click saves at once.
@@ -241,6 +242,8 @@ leak-check works wait for S5.7.
 ---
 
 ## Done
+
+- H57 (2026-11-26): the authorized AMB-POOL Worker deploy shipped the existing name-correction backend. Version be02af19-ebc2-4425-bc43-17a887aaf563. The two live batch requests returned 401 without a session. Both retired routes returned 404. D1 0007 was sufficient.
 
 - H56 (2026-11-26): owner approved the community groups deploy; the agent applied D1 migration 0007 and deployed Worker version cb95ec35 (group routes live, 401 without a session).
 - H55 (2026-11-26): owner approved the group-tagging guide, adding the sector joint_power_authority, allowing one to five activities and removing the conflict-of-interest rule (A4-D25..D27).

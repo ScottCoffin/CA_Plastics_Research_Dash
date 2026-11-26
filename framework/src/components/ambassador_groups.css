@@ -8,10 +8,6 @@
 .am .g-meta { color: var(--pv-ink-2); font-size: 14px; margin: 0; }
 .am .g-open-site { margin: 16px 0 0; }
 .am .g-open-site .btn { min-height: 48px; font-size: 17px; }
-.am .g-lease-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin: 16px 0 8px; }
-.am .g-tip-wrap { position: relative; display: inline-flex; align-items: center; }
-.am .g-tip { display: none; position: absolute; z-index: 2; top: calc(100% + 6px); left: 0; width: min(320px, 80vw); padding: 10px 12px; border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); font-size: 14px; line-height: 1.4; }
-.am .g-tip-wrap:hover .g-tip, .am .g-tip-wrap:focus-within .g-tip { display: block; }
 .am .g-org-check, .am .g-activities, .am .g-evidence, .am .g-chip-set { border: 0; border-top: 1px solid var(--pv-line); margin: 22px 0 0; padding: 16px 0 0; min-width: 0; }
 .am .g-org-check legend, .am .g-activities legend, .am .g-evidence legend, .am .g-chip-set legend { font-weight: 600; padding: 0 8px 0 0; }
 .am .g-org-check > p { margin: 0 0 10px; }

@@ -80,7 +80,7 @@ def test_stream_uses_only_authenticated_workspace_api_and_separate_routes() -> N
     assert "Tag assigned organisations or suggest a missing group" not in workspace
     assert 'ctx.api("/submissions", {method: "POST", body})' in module
     assert "`/groups/batch?region=${encodeURIComponent(ctx.region)}`" in module
-    assert "ctx.api(`/groups/${action}`" in module
+    assert "`${batchPath}&group_id=${encodeURIComponent(group.group_id)}`" in module
     assert 'kind: "group_tag"' in module and 'kind: "group_suggest"' in module
     assert "export function mountGroupSuggest(host, ctx)" in module
     assert "https://api.plastiverse.live" not in module
@@ -95,8 +95,8 @@ def test_stream_exposes_reviewable_forms_states_and_accessible_hooks() -> None:
     for hook in (
         "data-g-tag-form",
         "data-g-submit",
-        'data-g-action="renew"',
-        'data-g-action="release"',
+        'data-g-action="next"',
+        'data-g-action="previous"',
         "data-g-suggest-form",
         "data-g-suggest-submit",
         "aria-busy",
@@ -126,23 +126,13 @@ def test_targeted_runtime_checks_pass() -> None:
     assert result.returncode == 0, result.stdout + result.stderr
 
 
-def test_lease_actions_have_described_tooltips_not_title_only() -> None:
+def test_pool_holds_are_invisible_and_second_tags_get_a_status_message() -> None:
     module = _text(MODULE)
-    assert (
-        'aria-describedby="g-tip-renew"' in module and 'id="g-tip-renew" role="tooltip"' in module
-    )
-    assert (
-        'aria-describedby="g-tip-release"' in module
-        and 'id="g-tip-release" role="tooltip"' in module
-    )
-    assert "Keep this group reserved for you for another 30 days. You can renew once." in module
-    assert (
-        "Give this group back so another ambassador can tag it. "
-        "Anything you entered for it is discarded." in module
-    )
+    for old_control in ('data-g-action="renew"', 'data-g-action="release"', "Lease until"):
+        assert old_control not in module
+    assert "Someone else just tagged this group. Your answers still help check agreement." in module
+    assert 'class="g-success" role="status"' in module
     assert "title=" not in module
-    css = _text(CSS)
-    assert ".g-tip-wrap:focus-within .g-tip" in css and ".g-tip-wrap:hover .g-tip" in css
 
 
 def test_visible_wording_has_no_iso_codes_or_internal_ids() -> None:

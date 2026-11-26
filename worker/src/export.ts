@@ -40,7 +40,8 @@ export async function handleExport(request: Request, env: Env, ctx: Ctx): Promis
     "SELECT s.id, s.region, s.stream, s.kind, s.payload, s.decided_at, " +
       "CASE WHEN a.credit_public = 1 THEN a.display_name ELSE NULL END AS credit_name " +
       "FROM submissions s JOIN ambassadors a ON a.id = s.ambassador_id " +
-      "WHERE s.status = 'approved' AND s.decided_at >= ?1 ORDER BY s.decided_at, s.id",
+      "WHERE s.status = 'approved' AND s.decided_at >= ?1 " +
+      "AND NOT (s.kind = 'group_tag' AND json_extract(s.payload, '$.second_tag_for') IS NOT NULL) ORDER BY s.decided_at, s.id",
   )
     .bind(since)
     .all<{

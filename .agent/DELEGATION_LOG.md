@@ -279,3 +279,5 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-26 | AMB-GROUPS-UX (fix) | Claude Haiku developer | Picker prefix match, not-stated plastics, plain labels | Dispatched | 1 session |
 | 2026-11-26 | CG-7a | Claude Haiku developer | Agreement statistics, precision card v2 | Completed; lead checked formulas; 130 focused tests | 1 session |
 | 2026-11-26 | CG-14 | Claude Haiku developer | Groups methods section, correction link | Completed; lead reviewed diff; 26 page tests, build ok | 1 session |
+| 2026-11-26 | AMB-POOL Worker | Codex Luna | Atomic two-hour holds, blind second tags and routes | Implemented, reviewed and integrated by lead | 1 session |
+| 2026-11-26 | AMB-POOL verification | Codex Luna | D1 concurrency, retries and moderation isolation | 46 focused tests passed; lead ran all 211 Worker tests | 2 dispatches |

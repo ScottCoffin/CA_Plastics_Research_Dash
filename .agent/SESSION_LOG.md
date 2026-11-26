@@ -283,3 +283,4 @@
 | 2026-11-26 | H56 | D1 migration 0007 applied, Worker cb95ec35 deployed, group routes verified live; CG-6 closed | this commit |
 | 2026-11-26 | CG-11, AMB-GROUPS-UX, GRP-NAME-CLEAN, GRP-ROSTER-QC, GRP-NAME-FIX (backend) | Network view; under-a-minute tagging form; roster name cleaning, auto-merge and the owner review app; name-correction backend (deploy pending H57) | this commit |
 | 2026-11-26 | Owner notes, CG-7a, CG-14 | Roadmap gets AMB-POOL, AMB-ROSTER-QC, FAVICON-MAIN, GP; agreement stats and precision card v2; groups methods section and correction link; clean-worktree pytest 3,829 passed, 18 skipped; handoff to Codex | this commit |
+| 2026-11-26 | AMB-POOL and H57 | Two-hour holds and first-wins blind tags; 211 Worker tests, clean 3,829 passed / 18 skipped, browser and live no-session probes passed; Worker be02af19 deployed without a D1 migration | this commit |

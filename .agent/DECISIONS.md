@@ -869,9 +869,10 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
 
 ## ADR-AMB-POOL-2026-11-26: no visible leases in the group pool
 
-- Status: accepted (owner 2026-11-26); work not started (TODO AMB-POOL).
+- Status: implemented and deployed (owner 2026-11-26, TODO AMB-POOL, H57).
 - Decision: drop "Renew lease" and "Return this group to the pool". A tagged group leaves every pool. Simultaneous work on one group never shows an error: the first tag wins and a later one is kept as a blind second tag for agreement (CG-7). A short invisible hold keeps simultaneous claims apart. Supersedes the 30-day renewable lease of CG-6a (spec §5.2 lease proposal).
-- H57 (Worker deploy for group name corrections) is authorized by the owner the same day; the lead deploys it together with AMB-POOL so the Worker changes ship once.
+- Each open form silently refreshes its two-hour hold every 15 minutes. Expired drafts are accepted from active regional members using a same-region hold, prior tag, or current roster entry. An accepted tag stays out of the primary pool after moderation rejection. The first accepted tag is the canonical candidate and later tags from different ambassadors retain a private link to it. Same-account retries return the original receipt.
+- H57 shipped AMB-POOL and the existing name-correction backend in Worker version be02af19-ebc2-4425-bc43-17a887aaf563. D1 0007 was sufficient.
 - H58 (owner roster review) becomes optional: AMB-ROSTER-QC moves duplicate and name checks into the ambassadors' tagging form.
 
 ## Add-on A4 decisions (register)
