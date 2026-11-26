@@ -18,7 +18,7 @@ CG_TASK_IDS = (
 ).split()
 DECISION_IDS = [f"A4-D{n}" for n in range(25)]
 CONSTRAINT_IDS = [f"A4-C{n}" for n in range(1, 12)]
-QUESTION_IDS = [f"A4-Q{n}" for n in range(1, 9)]
+QUESTION_IDS = [f"A4-Q{n}" for n in range(1, 10)]
 DECISION_HEADINGS = ("## ADR-A4-INTEGRATION-2026-11-26",)
 GITIGNORE_LINES = (
     "data/raw/bffp/",
