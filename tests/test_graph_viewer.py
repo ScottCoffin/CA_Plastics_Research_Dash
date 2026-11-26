@@ -31,7 +31,7 @@ def test_runtime_helpers_under_node() -> None:
         [node, str(RUNTIME_CHECK)], cwd=ROOT, capture_output=True, text=True, check=False
     )
     assert result.returncode == 0, result.stderr[-2000:]
-    assert "27 checks passed" in result.stdout
+    assert "32 checks passed" in result.stdout
 
 
 def test_component_uses_the_shared_contract() -> None:
@@ -172,3 +172,22 @@ def test_works_graph_names_its_communities_by_topic() -> None:
     )
     # A works graph links similar texts, not collaborators.
     assert 'name === "works" ? "Topic community" : "Collaboration community"' in viewer
+
+
+def test_works_view_controls_exist_only_for_works() -> None:
+    text = COMPONENT.read_text(encoding="utf-8")
+    # The Show controls (slider, year fields, reset) are rendered and bound for works only.
+    assert 'name === "works" ? showMarkup(id) : ""' in text
+    assert 'if (name === "works") bindShowControls();' in text
+    assert 'if (name === "works") initWorksFilter();' in text
+    assert "Most cited works shown" in text
+    assert "From year" in text and "To year" in text
+    # Hidden works go through the sigma reducers; the graph is not rebuilt for a filter change.
+    assert "if (hiddenIds.has(id)) return {...data, hidden: true};" in text
+    assert "if (hiddenIds.has(a) || hiddenIds.has(b)) return {...data, hidden: true};" in text
+    assert "filterTimer = window.setTimeout(flushWorks, 150);" in text
+    # The status line announces the count; the summary line is visual only (no double announcement).
+    assert 'data-gv="show-summary"></p>' in text
+    assert "formatWorksFilter(worksState, prefix, hash, worksDefaults)" in text
+    style = STYLE.read_text(encoding="utf-8")
+    assert ".gv-range {" in style and "min-height: 2.75rem" in style

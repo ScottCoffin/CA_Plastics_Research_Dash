@@ -272,3 +272,4 @@
 | 2026-11-26 | CG-0 | Add-on A4 (community groups, docs/BFFP.md) integrated: CG-0..CG-16, A4-D0..D24, A4-C1..C11 (repo decisions win), A4-Q1..Q8, H53, scaffold check in CI | this commit |
 | 2026-11-26 | REG-CA, CG-5, AMB-COAUTHORS-GLOBAL (built) | California region.json; docs/ambassador_infrastructure.md; global co-authors route (deploy waits for H54) | this commit |
 | 2026-11-26 | CG-1, CG-4 | BFFP discovery doc (member API found, no stop condition); cg-v2 taxonomy and V1-V14 validator | this commit |
+| 2026-11-26 | WORKS-FILTER; H53/H54 | Works view slider and year range; Worker deployed (cbc9e050); BFFP permission recorded | this commit |

@@ -17,6 +17,7 @@ import {
   edgesFromRows,
   formatGraphHash,
   formatWorks,
+  formatWorksFilter,
   graphFileKey,
   graphName,
   hashPrefixOk,
@@ -29,14 +30,19 @@ import {
   decodeLayout,
   nodeSize,
   nodesFromRows,
+  normaliseWorksFilter,
   openAlexUrl,
   parseGraphHash,
+  parseWorksFilter,
   sizeValue,
   sortNodes,
   SEARCH_LIMIT,
   TABLE_LIMIT,
   topNeighbours,
+  topSteps,
   usePhone,
+  visibleWorks,
+  worksFilterDefaults,
   ZOOM_TO_NODE
 } from "./graph_viewer_model.js";
 
@@ -61,6 +67,28 @@ function el(tag, attrs = {}, text = null) {
   }
   if (text !== null && text !== undefined) node.textContent = text;
   return node;
+}
+
+// Works only: the "Show" controls. Their values are set once the data has loaded (see syncShowControls).
+function showMarkup(id) {
+  return `
+<fieldset class="gv-show">
+  <legend class="gv-show__legend">Show</legend>
+  <div class="gv-show__row">
+    <div class="gv-show__top">
+      <label class="gv-label" for="${id}-top" data-gv="top-label">Most cited works shown</label>
+      <input class="gv-range" id="${id}-top" data-gv="top-range" type="range" min="0" max="0" step="1" value="0" disabled>
+    </div>
+    <div class="gv-show__years">
+      <label class="gv-label" for="${id}-from">From year</label>
+      <input class="gv-input gv-year" id="${id}-from" data-gv="year-from" type="number" step="1" disabled>
+      <label class="gv-label" for="${id}-to">To year</label>
+      <input class="gv-input gv-year" id="${id}-to" data-gv="year-to" type="number" step="1" disabled>
+    </div>
+    <button class="gv-button" type="button" data-gv="show-reset" disabled>Reset</button>
+  </div>
+  <p class="gv-show__summary" data-gv="show-summary"></p>
+</fieldset>`;
 }
 
 function shell(name, phone, withNote) {
@@ -91,6 +119,7 @@ ${withNote ? `<div class="gv-head">
     <button class="gv-button" type="button" data-gv="table-toggle" aria-expanded="false" aria-controls="${id}-table">Show as table</button>
   </div>
 </div>
+${name === "works" ? showMarkup(id) : ""}
 <p class="gv-status" role="status" aria-live="polite" data-gv="status">Loading the graph.</p>
 <div class="gv-main">
   <div class="gv-figure">
@@ -145,7 +174,9 @@ export function mountGraph(root, options = {}) {
     tableToggle: q("table-toggle"), status: q("status"), stage: q("stage"), hint: q("hint"),
     legend: q("legend"), details: q("details"), detailsTitle: q("details-title"),
     announce: q("announce"), detailsBody: q("details-body"), table: q("table"),
-    filter: q("filter"), tableCount: q("table-count"), sortRow: q("sort-row"), rows: q("rows")
+    filter: q("filter"), tableCount: q("table-count"), sortRow: q("sort-row"), rows: q("rows"),
+    topRange: q("top-range"), topLabel: q("top-label"), yearFrom: q("year-from"), yearTo: q("year-to"),
+    showReset: q("show-reset"), showSummary: q("show-summary")
   };
   const initial = parseGraphHash(window.location.hash, prefix);
   // The hash belongs to a viewer whose graph matches it (or to a page with no graph named).
@@ -171,6 +202,13 @@ export function mountGraph(root, options = {}) {
   let disposed = false;
   let observer = null;
   let returnFocus = null;  // where focus goes when Escape clears a selection made from a control
+  // Works view: the current {top, yearMin, yearMax} (null for other graphs), the node ids the controls
+  // hide, and a change waiting for the debounce timer.
+  let worksDefaults = null;
+  let worksState = null;
+  let hiddenIds = new Set();
+  let pendingWorks = null;
+  let filterTimer = 0;
 
   const setStatus = (text) => { ui.status.textContent = text; };
 
@@ -189,6 +227,7 @@ export function mountGraph(root, options = {}) {
     observer?.disconnect();
     cancelAnimationFrame(hashFrame);
     clearTimeout(hintTimer);
+    clearTimeout(filterTimer);
     renderer?.kill();
     renderer = null;
     camera = null;
@@ -215,7 +254,8 @@ export function mountGraph(root, options = {}) {
     if (disposed || !camera || !ownsHash) return;
     const state = camera.getState();
     // Other keys in the hash (the host page's own state) are kept.
-    const hash = formatGraphHash({graph: name, node: selectedId, zoom: state.ratio, x: state.x, y: state.y}, prefix, window.location.hash);
+    let hash = formatGraphHash({graph: name, node: selectedId, zoom: state.ratio, x: state.x, y: state.y}, prefix, window.location.hash);
+    if (worksState) hash = formatWorksFilter(worksState, prefix, hash, worksDefaults);
     if (hash === window.location.hash) return;
     window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}${hash}`);
   }
@@ -295,6 +335,7 @@ export function mountGraph(root, options = {}) {
   }
 
   function nodeReducer(id, data) {
+    if (hiddenIds.has(id)) return {...data, hidden: true};
     if (selectedId === null) return data;
     if (id === selectedId) return {...data, highlighted: true, zIndex: 2};
     if (neighbourIds.has(id)) return {...data, zIndex: 1};
@@ -302,10 +343,96 @@ export function mountGraph(root, options = {}) {
   }
 
   function edgeReducer(id, data) {
-    if (selectedId === null) return data;
+    if (!hiddenIds.size && selectedId === null) return data;
     const [a, b] = graph.extremities(id);
+    if (hiddenIds.has(a) || hiddenIds.has(b)) return {...data, hidden: true};
+    if (selectedId === null) return data;
     if (a === selectedId || b === selectedId) return {...data, color: CHROME.axis};
     return {...data, color: CHROME.page};
+  }
+
+  // Works view: the nodes the Show controls leave out. The table, search and neighbour lists use these.
+  const shownNodes = () => (hiddenIds.size ? nodes.filter((node) => !hiddenIds.has(node.id)) : nodes);
+
+  function shownNeighbours(index, limit) {
+    if (!hiddenIds.size) return topNeighbours(adjacency, index, limit);
+    return topNeighbours(adjacency, index, Infinity)
+      .filter((neighbour) => !hiddenIds.has(nodes[neighbour.index].id))
+      .slice(0, limit);
+  }
+
+  function shownLinkCount() {
+    let links = 0;
+    graph.forEachEdge((edge, attributes, source, target) => {
+      if (!hiddenIds.has(source) && !hiddenIds.has(target)) links += 1;
+    });
+    return links;
+  }
+
+  function worksSummary() {
+    return `Showing ${formatCount(nodes.length - hiddenIds.size)} works and ${formatCount(shownLinkCount())} links.`;
+  }
+
+  function showTopLabel(top) {
+    const text = `Most cited works shown: ${formatCount(top)} of ${formatCount(worksDefaults.top)}`;
+    ui.topLabel.textContent = text;
+    ui.topRange.setAttribute("aria-valuetext", text);
+  }
+
+  // Writes the state into the controls (slider, label and year fields). Typing is not interrupted:
+  // the year fields are written only on change and by Reset.
+  function syncShowControls() {
+    const steps = topSteps(worksDefaults.top);
+    ui.topRange.max = String(Math.max(0, steps.length - 1));
+    ui.topRange.value = String(Math.max(0, steps.indexOf(worksState.top)));
+    ui.topRange.disabled = steps.length === 0;
+    showTopLabel(worksState.top);
+    const years = worksDefaults.yearMin !== null;
+    for (const input of [ui.yearFrom, ui.yearTo]) {
+      input.disabled = !years;
+      if (years) {
+        input.min = String(worksDefaults.yearMin);
+        input.max = String(worksDefaults.yearMax);
+      }
+    }
+    ui.yearFrom.value = worksState.yearMin ?? "";
+    ui.yearTo.value = worksState.yearMax ?? "";
+    ui.showReset.disabled = false;
+  }
+
+  // Hides or shows nodes through the reducers. The graph and its layout are not rebuilt.
+  function applyWorksState(next) {
+    worksState = normaliseWorksFilter(next, worksDefaults);
+    const shown = visibleWorks(nodes, worksState);
+    hiddenIds = new Set(nodes.filter((node) => !shown.has(node.index)).map((node) => node.id));
+    if (selectedId !== null && hiddenIds.has(selectedId)) select(null);
+    renderer?.refresh();
+    renderTableRows();
+    const text = worksSummary();
+    ui.showSummary.textContent = text;
+    if (root.dataset.state === "ready") setStatus(text);
+    scheduleHash();
+  }
+
+  // Slider and year changes are debounced (150 ms) so a drag or typing does not redraw on every step.
+  function changeWorks(patch) {
+    pendingWorks = {...(pendingWorks ?? worksState), ...patch};
+    clearTimeout(filterTimer);
+    filterTimer = window.setTimeout(flushWorks, 150);
+  }
+
+  function flushWorks() {
+    clearTimeout(filterTimer);
+    if (!pendingWorks) return;
+    const next = pendingWorks;
+    pendingWorks = null;
+    applyWorksState(next);
+  }
+
+  function initWorksFilter() {
+    worksDefaults = worksFilterDefaults(nodes);
+    applyWorksState(ownsHash ? parseWorksFilter(window.location.hash, prefix, worksDefaults) : worksDefaults);
+    syncShowControls();
   }
 
   function nodeColour(node) {
@@ -397,7 +524,7 @@ export function mountGraph(root, options = {}) {
     if (openalex) links.append(linkItem("OpenAlex record", openalex));
     if (links.children.length) body.append(links);
 
-    const neighbours = topNeighbours(adjacency, node.index, 10);
+    const neighbours = shownNeighbours(node.index, 10);
     body.append(el("h3", {class: "gv-subhead"}, name === "works" ? "Most similar works" : "Strongest links (shared works)"));
     if (!neighbours.length) {
       body.append(el("p", {}, "No links in this graph."));
@@ -443,7 +570,7 @@ export function mountGraph(root, options = {}) {
 
   function renderTableRows() {
     if (!tableShown || !nodes.length) return;
-    const filtered = ui.filter.value.trim() ? matchNodes(nodes, ui.filter.value) : nodes;
+    const filtered = ui.filter.value.trim() ? matchNodes(shownNodes(), ui.filter.value) : shownNodes();
     const ordered = sortNodes(filtered, sortKey, sortDir);
     const shown = ordered.slice(0, TABLE_LIMIT);
     ui.rows.replaceChildren();
@@ -458,7 +585,7 @@ export function mountGraph(root, options = {}) {
       else if (name === "authors") kind = node.country ?? "No country";
       else kind = [node.country, node.type].filter(Boolean).join(", ") || "Not recorded";
       const cells = name === "works" ? node.cited_by_count ?? 0 : node.works;
-      const strongest = topNeighbours(adjacency, node.index, 3).map(({index}) => nodes[index].name).join("; ") || "No links";
+      const strongest = shownNeighbours(node.index, 3).map(({index}) => nodes[index].name).join("; ") || "No links";
       tr.append(nameCell, el("td", {}, String(kind)), el("td", {class: "gv-num"}, formatCount(cells)),
         el("td", {class: "gv-num"}, formatCount(node.links)),
         el("td", {}, node.community === null ? "Not assigned" : String(Number(node.community) + 1)),
@@ -483,7 +610,7 @@ export function mountGraph(root, options = {}) {
 
   // Search: type-ahead over the node names; a chosen name is selected and brought to the centre.
   function renderResults() {
-    const matches = matchNodes(nodes, ui.search.value, SEARCH_LIMIT);
+    const matches = matchNodes(shownNodes(), ui.search.value, SEARCH_LIMIT);
     ui.results.replaceChildren();
     ui.results.hidden = matches.length === 0;
     for (const node of matches) {
@@ -513,7 +640,7 @@ export function mountGraph(root, options = {}) {
         return;
       }
       if (event.key === "Enter") {
-        const first = matchNodes(nodes, ui.search.value, 1)[0];
+        const first = matchNodes(shownNodes(), ui.search.value, 1)[0];
         if (first) { event.preventDefault(); chooseFromSearch(first.id); }
       }
     }, {signal});
@@ -552,14 +679,41 @@ export function mountGraph(root, options = {}) {
     ui.stage.addEventListener("wheel", gate, {capture: true, passive: true, signal});
     ui.stage.addEventListener("touchstart", gate, {capture: true, passive: true, signal});
     ui.stage.addEventListener("touchmove", gate, {capture: true, passive: true, signal});
+    if (name === "works") bindShowControls();
     window.addEventListener("hashchange", () => {
       const next = parseGraphHash(window.location.hash, prefix);
       if (next.graph && next.graph !== name) return;
-      const node = next.node ?? null;
+      if (worksDefaults) {
+        const filter = parseWorksFilter(window.location.hash, prefix, worksDefaults);
+        const same = filter.top === worksState.top && filter.yearMin === worksState.yearMin && filter.yearMax === worksState.yearMax;
+        if (!same) {
+          pendingWorks = null;
+          applyWorksState(filter);
+          syncShowControls();
+        }
+      }
+      const node = next.node && !hiddenIds.has(next.node) ? next.node : null;
       if (node !== selectedId) select(node, {pan: next.zoom === undefined && node !== null});
       if (camera && (next.zoom !== undefined || next.x !== undefined)) {
         moveCamera({x: next.x ?? HOME_VIEW.x, y: next.y ?? HOME_VIEW.y, ratio: next.zoom ?? HOME_VIEW.ratio, angle: 0}, 0);
       }
+    }, {signal});
+  }
+
+  function bindShowControls() {
+    ui.topRange.addEventListener("input", () => {
+      const top = topSteps(worksDefaults.top)[Number(ui.topRange.value)];
+      showTopLabel(top);
+      changeWorks({top});
+    }, {signal});
+    for (const input of [ui.yearFrom, ui.yearTo]) {
+      input.addEventListener("input", () => changeWorks(input === ui.yearFrom ? {yearMin: input.value} : {yearMax: input.value}), {signal});
+      input.addEventListener("change", () => { flushWorks(); syncShowControls(); }, {signal});
+    }
+    ui.showReset.addEventListener("click", () => {
+      pendingWorks = null;
+      applyWorksState(worksDefaults);
+      syncShowControls();
     }, {signal});
   }
 
@@ -637,6 +791,7 @@ export function mountGraph(root, options = {}) {
     const layout = decodeLayout(bytes, json.nodes.rows.length);
     buildGraph(json, layout);
     if (disposed) return;
+    if (name === "works") initWorksFilter();
     try {
       createRenderer();
     } catch {
@@ -647,7 +802,7 @@ export function mountGraph(root, options = {}) {
     if (ownsHash && (at.zoom !== undefined || at.x !== undefined || at.y !== undefined)) {
       camera.setState({x: at.x ?? HOME_VIEW.x, y: at.y ?? HOME_VIEW.y, ratio: at.zoom ?? HOME_VIEW.ratio, angle: 0});
     }
-    if (ownsHash && at.node !== undefined && graph.hasNode(at.node)) {
+    if (ownsHash && at.node !== undefined && graph.hasNode(at.node) && !hiddenIds.has(at.node)) {
       select(at.node, {pan: at.zoom === undefined && at.x === undefined});
     }
     renderLegend();
@@ -655,6 +810,12 @@ export function mountGraph(root, options = {}) {
     ui.stage.setAttribute("aria-label", `${GRAPH_TITLES[name]} network graph: ${formatCount(nodes.length)} nodes and ${formatCount(graph.size)} links. The same nodes are listed in the table; use the Show as table button.`);
     root.dataset.state = "ready";
     root.dataset.readyMs = String(Math.round(performance.now()));
+    if (name === "works") {
+      const summary = worksSummary();
+      setStatus(summary);
+      ui.showSummary.textContent = summary;
+      return;
+    }
     const noun = {authors: "authors", works: "works", institutions: "institutions"}[name];
     setStatus(`${formatCount(nodes.length)} ${noun} and ${formatCount(graph.size)} links.`);
   }

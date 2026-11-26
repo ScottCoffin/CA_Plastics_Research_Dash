@@ -90,7 +90,9 @@ def test_table_has_caption_scoped_headers_and_keyboard_sort_buttons() -> None:
     assert 'el("th", {scope: "row"})' in text
     # Header order and row cells must line up: name, kind, works, links, community, strongest links.
     assert 'links: "Links"' in text
-    assert "topNeighbours(adjacency, node.index, 3)" in text
+    # Strongest links: the three strongest, skipping works hidden by the Works view controls.
+    assert "shownNeighbours(node.index, 3)" in text
+    assert "topNeighbours(adjacency, index, limit)" in text
 
 
 def test_sort_supports_links() -> None:

@@ -25,8 +25,14 @@ import {
   parseGraphHash,
   sizeValue,
   sortNodes,
+  formatWorksFilter,
+  normaliseWorksFilter,
+  parseWorksFilter,
   topNeighbours,
-  usePhone
+  topSteps,
+  usePhone,
+  visibleWorks,
+  worksFilterDefaults
 } from "../framework/src/components/graph_viewer_model.js";
 import {OTHER, SECONDARY_ALL_PAIRS} from "../framework/src/components/shared/palette.js";
 
@@ -311,6 +317,69 @@ check("works table sorts by citations and by year", () => {
 check("works hash selects the works graph and keeps the page's keys", () => {
   assert.deepEqual(parseGraphHash("#gv.g=works&gv.n=W1", "gv."), {graph: "works", node: "W1"});
   assert.deepEqual(parseGraphHash("#g=works"), {graph: "works"});
+});
+
+// Works view controls. Defaults come from the data; null years are ignored when the range is set.
+const yearNodes = [
+  {index: 0, year: 2019}, {index: 1, year: null}, {index: 2, year: 2011}, {index: 3, year: 2015}
+];
+
+check("works filter defaults: the data's top count and year range, null years ignored", () => {
+  assert.deepEqual(worksFilterDefaults(yearNodes), {top: 4, yearMin: 2011, yearMax: 2019});
+  assert.deepEqual(worksFilterDefaults([{index: 0, year: null}]), {top: 1, yearMin: null, yearMax: null});
+  assert.deepEqual(topSteps(15000), [500, 1000, 2000, 5000, 10000, 15000]);
+  assert.deepEqual(topSteps(5000), [500, 1000, 2000, 5000]);
+  assert.deepEqual(topSteps(3000), [500, 1000, 2000, 3000]);
+  assert.deepEqual(topSteps(0), []);
+});
+
+const worksDefaults = {top: 15000, yearMin: 2000, yearMax: 2020};
+
+check("works filter clamps top to the nearest step and years to the data range", () => {
+  assert.equal(normaliseWorksFilter({top: 1234}, worksDefaults).top, 1000);
+  assert.equal(normaliseWorksFilter({top: 100}, worksDefaults).top, 500);
+  assert.equal(normaliseWorksFilter({top: 99999}, worksDefaults).top, 15000);
+  assert.equal(normaliseWorksFilter({top: "abc"}, worksDefaults).top, 15000);
+  assert.deepEqual(normaliseWorksFilter({yearMin: 1990, yearMax: 2100}, worksDefaults), {top: 15000, yearMin: 2000, yearMax: 2020});
+  assert.equal(normaliseWorksFilter({yearMin: 2010.4}, worksDefaults).yearMin, 2010);
+  assert.equal(normaliseWorksFilter({yearMin: null}, worksDefaults).yearMin, 2000);
+});
+
+check("works filter hash round trip keeps other keys and leaves out defaults", () => {
+  const state = {top: 2000, yearMin: 2005, yearMax: 2010};
+  const hash = formatWorksFilter(state, "gv.", "#g=works&gv.n=W1", worksDefaults);
+  assert.equal(hash, "#g=works&gv.n=W1&gv.top=2000&gv.y0=2005&gv.y1=2010");
+  assert.deepEqual(parseWorksFilter(hash, "gv.", worksDefaults), state);
+  assert.equal(formatWorksFilter(worksDefaults, "gv.", "#g=works&gv.n=W1", worksDefaults), "#g=works&gv.n=W1");
+  assert.equal(formatWorksFilter(worksDefaults, "gv.", "#gv.top=2000&gv.y0=2005", worksDefaults), "");
+  assert.equal(formatWorksFilter({top: 2000, yearMin: null, yearMax: 2010}, "", ""), "#top=2000&y1=2010");
+  assert.deepEqual(parseWorksFilter("#top=1&y0=abc", "", worksDefaults), {top: 500, yearMin: 2000, yearMax: 2020});
+});
+
+// 1200 works: every 7th has no year; the others run 2000 to 2009 (index order is citation order).
+const gridNodes = Array.from({length: 1200}, (_, i) => ({index: i, id: `W${i}`, year: i % 7 === 0 ? null : 2000 + (i % 10)}));
+const indices = (set) => [...set].sort((a, b) => a - b);
+const expectedWorks = (top, from, to) => gridNodes
+  .filter((n) => n.index < top && n.year !== null && n.year >= from && n.year <= to)
+  .map((n) => n.index);
+
+check("visible works: top only (null years shown on the full range), years only, both", () => {
+  const full = worksFilterDefaults(gridNodes);
+  assert.deepEqual([full.top, full.yearMin, full.yearMax], [1200, 2000, 2009]);
+  const topOnly = visibleWorks(gridNodes, {top: 1000, yearMin: 2000, yearMax: 2009});
+  assert.equal(topOnly.size, 1000);
+  assert.ok(topOnly.has(0) && topOnly.has(999) && !topOnly.has(1000));
+  assert.deepEqual(indices(visibleWorks(gridNodes, {top: 1200, yearMin: 2003, yearMax: 2004})), expectedWorks(1200, 2003, 2004));
+  assert.deepEqual(indices(visibleWorks(gridNodes, {top: 500, yearMin: 2003, yearMax: 2004})), expectedWorks(500, 2003, 2004));
+});
+
+check("visible works: null-year works are hidden once the year range is narrowed", () => {
+  const full = visibleWorks(gridNodes, {top: 1200, yearMin: 2000, yearMax: 2009});
+  assert.equal(full.size, 1200);
+  assert.ok(full.has(0));
+  const narrowed = visibleWorks(gridNodes, {top: 1200, yearMin: 2000, yearMax: 2008});
+  assert.ok(!narrowed.has(0));
+  assert.ok([...narrowed].every((i) => gridNodes[i].year !== null));
 });
 
 console.log(`framework graph viewer runtime: ${passed} checks passed`);

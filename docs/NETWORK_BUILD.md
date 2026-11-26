@@ -624,6 +624,11 @@ make each other stale.
   With the raw store and a complete cache it rebuilds in memory with an embedder that refuses to
   embed and fails when a file is stale; otherwise it prints SKIP for the staleness part.
 
+- **Viewer controls (WORKS-FILTER, owner 2026-11-26).** The Works view keeps all 15,000 works loaded and lets the
+  viewer narrow them: a slider for the most cited 500 to 15,000 (phone: up to 5,000) and a publication-year range.
+  Hidden works and their links are filtered in the browser (sigma reducers), the layout does not change, and the
+  state is kept in the URL hash (`gv.top`, `gv.y0`, `gv.y1`). Works without a year show only with the full range.
+
 Build at the 2026-11-25 raw store (136,074 distinct works; 78,045 backbone candidates): 15,000 nodes,
 60,000 edges (61,005 before the budget), 5,000 phone nodes with 12,125 edges, 51 communities, 37
 low-quality (non-English) nodes; `works.json` 3.2 MB (1.04 MB gzip), `works_phone.json` 0.29 MB

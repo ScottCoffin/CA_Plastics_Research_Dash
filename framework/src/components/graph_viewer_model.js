@@ -246,6 +246,112 @@ export function formatGraphHash(state = {}, prefix = "", current = "") {
   return text ? `#${text}` : "";
 }
 
+// Works view controls. Works nodes are in descending citation order, so `top` keeps the first `top`
+// indices. The state is {top, yearMin, yearMax}; the years are null when the data has no year.
+// Hash keys (with the prefix): top, y0 (from year), y1 (to year). A key is left out at its default.
+export const TOP_STEPS = Object.freeze([500, 1000, 2000, 5000, 10000, 15000]);
+export const WORKS_HASH_KEYS = Object.freeze(["top", "y0", "y1"]);
+
+// The slider steps for `count` works: the TOP_STEPS below count, then count itself.
+export function topSteps(count) {
+  const n = Math.max(0, Math.floor(Number(count) || 0));
+  const steps = TOP_STEPS.filter((step) => step < n);
+  if (n > 0) steps.push(n);
+  return steps;
+}
+
+function yearOf(node) {
+  const value = node?.year;
+  if (value === null || value === undefined || value === "") return null;
+  const year = Number(value);
+  return Number.isFinite(year) ? year : null;
+}
+
+// The full view: every work, and the first and last recorded years (null when none is recorded).
+export function worksFilterDefaults(nodes) {
+  const list = Array.isArray(nodes) ? nodes : [];
+  let yearMin = null;
+  let yearMax = null;
+  for (const node of list) {
+    const year = yearOf(node);
+    if (year === null) continue;
+    yearMin = yearMin === null ? year : Math.min(yearMin, year);
+    yearMax = yearMax === null ? year : Math.max(yearMax, year);
+  }
+  return {top: list.length, yearMin, yearMax};
+}
+
+const finiteOrNull = (value) => {
+  if (value === null || value === undefined || String(value).trim() === "") return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+};
+
+// Clamps a state to the data: top snaps to the nearest slider step; years are whole numbers inside
+// the data range. A missing or unreadable value takes the default.
+export function normaliseWorksFilter(state, defaults) {
+  const s = state ?? {};
+  const steps = topSteps(defaults.top);
+  const wanted = finiteOrNull(s.top);
+  let top = defaults.top;
+  if (wanted !== null && steps.length) {
+    const clamped = Math.min(steps.at(-1), Math.max(steps[0], wanted));
+    top = steps.reduce((best, step) => (Math.abs(step - clamped) < Math.abs(best - clamped) ? step : best));
+  }
+  const year = (value, fallback) => {
+    if (fallback === null) return null;
+    const y = finiteOrNull(value) ?? fallback;
+    return Math.min(defaults.yearMax, Math.max(defaults.yearMin, Math.round(y)));
+  };
+  return {top, yearMin: year(s.yearMin, defaults.yearMin), yearMax: year(s.yearMax, defaults.yearMax)};
+}
+
+export function parseWorksFilter(hash, prefix, defaults) {
+  const params = new URLSearchParams(String(hash ?? "").replace(/^#/, ""));
+  return normaliseWorksFilter({
+    top: params.get(`${prefix}top`),
+    yearMin: params.get(`${prefix}y0`),
+    yearMax: params.get(`${prefix}y1`)
+  }, defaults);
+}
+
+// Returns the whole hash, like formatGraphHash. With `defaults`, the state is clamped first and keys
+// equal to the defaults are left out; without it, every finite value is written.
+export function formatWorksFilter(state = {}, prefix = "", current = "", defaults = null) {
+  const params = new URLSearchParams(String(current ?? "").replace(/^#/, ""));
+  for (const key of WORKS_HASH_KEYS) params.delete(`${prefix}${key}`);
+  const s = defaults ? normaliseWorksFilter(state, defaults) : state;
+  const write = (key, value, fallback) => {
+    if (!Number.isFinite(value) || (defaults && value === fallback)) return;
+    params.set(`${prefix}${key}`, String(value));
+  };
+  write("top", s.top, defaults?.top);
+  write("y0", s.yearMin, defaults?.yearMin);
+  write("y1", s.yearMax, defaults?.yearMax);
+  const text = params.toString();
+  return text ? `#${text}` : "";
+}
+
+// The indices (node.index) of the works the state shows. A work with no year is shown only while the
+// years are the full default range.
+export function visibleWorks(nodes, state) {
+  const list = Array.isArray(nodes) ? nodes : [];
+  const defaults = worksFilterDefaults(list);
+  const s = normaliseWorksFilter(state ?? {}, defaults);
+  const allYears = s.yearMin === defaults.yearMin && s.yearMax === defaults.yearMax;
+  const shown = new Set();
+  for (const node of list) {
+    if (node.index >= s.top) continue;
+    const year = yearOf(node);
+    if (year === null) {
+      if (allYears) shown.add(node.index);
+    } else if (year >= s.yearMin && year <= s.yearMax) {
+      shown.add(node.index);
+    }
+  }
+  return shown;
+}
+
 // The manifest's plain-language note: a string, or an {is, is_not} object.
 export function noteText(value) {
   if (typeof value === "string") return value;
