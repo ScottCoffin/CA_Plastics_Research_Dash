@@ -3,6 +3,7 @@
 // site/data/global/groups/groups.json and coverage.json. Pure helpers are exported for the Node runtime test
 // (tests/framework_groups_runtime.mjs). Every value is escaped before it reaches innerHTML.
 import {escapeHtml} from "./atlas.js";
+import {groupsTreeHtml, mountGroupsTree, treeHashState} from "./groups_tree.js";
 
 export const CONTACT_EMAIL = "theplastiverse@gmail.com";
 export const PAGE_SIZE = 50;
@@ -84,6 +85,7 @@ export function filterGroups(groups, filters = {}) {
     (!q || searchKey(group.name).includes(q)) &&
     (!filters.region || (text(group.region) || "region_unknown") === filters.region) &&
     (!filters.country || text(group.country).toUpperCase() === filters.country) &&
+    (!filters.without_tags || !isTagged(group)) &&
     (!filters.status || statusKey(group.status) === filters.status));
 }
 
@@ -116,6 +118,7 @@ export function parseHash(hash = "") {
   const params = new URLSearchParams(String(hash).replace(/^#/, ""));
   const state = {...DEFAULT_STATE};
   for (const key of ["q", "region", "country", "group"]) if (params.has(key)) state[key] = params.get(key);
+  if (params.get("without_tags") === "1") state.without_tags = true;
   if (STATUS_OPTIONS.some((option) => option.value === params.get("status"))) state.status = params.get("status");
   if (SORT_KEYS.includes(params.get("sort"))) state.sort = params.get("sort");
   if (params.get("dir") === "desc") state.dir = "desc";
@@ -128,6 +131,7 @@ export function formatHash(state = {}) {
   const value = {...DEFAULT_STATE, ...state};
   const params = new URLSearchParams();
   for (const key of ["q", "region", "country", "status", "group"]) if (value[key]) params.set(key, value[key]);
+  if (value.without_tags) params.set("without_tags", "1");
   if (value.sort !== DEFAULT_STATE.sort) params.set("sort", value.sort);
   if (value.dir !== DEFAULT_STATE.dir) params.set("dir", value.dir);
   if (value.page > 1) params.set("page", String(value.page));
@@ -310,7 +314,7 @@ function resultsHtml(groups, state) {
     </nav>` : ""}`;
 }
 
-// Mounts the page into root. load() resolves to {groups, coverage} (the two JSON files).
+// Mounts the page into root. load() resolves to {groups, coverage, tree}; tree may be unavailable.
 export async function mountGroups(root, load) {
   root.innerHTML = '<p class="gv-status">Loading the roster…</p>';
   let data;
@@ -324,8 +328,10 @@ export async function mountGroups(root, load) {
   const byId = new Map(groups.map((group) => [group.group_id, group]));
   let state = {...DEFAULT_STATE, ...parseHash(location.hash)};
   root.innerHTML = `${coverageHtml(data?.coverage ?? {})}
+    ${groupsTreeHtml(data?.tree, treeHashState(location.hash), treeHashState(location.hash).query)}
     <section class="gv-panel" aria-labelledby="gv-table-title">
       <h2 id="gv-table-title">Roster</h2>
+      <p class="gv-tree-filter-note" id="gv-tree-filter-note"${state.without_tags ? "" : " hidden"} aria-live="polite">Showing only groups without tags, including groups that could not be tagged from public pages. <button type="button" class="gv-name" data-action="clear">Clear this filter</button></p>
       ${controlsHtml(groups, state)}
       <div id="gv-results"></div>
     </section>
@@ -333,7 +339,13 @@ export async function mountGroups(root, load) {
   const results = root.querySelector("#gv-results");
   const dialog = root.querySelector("#gv-card");
 
-  const syncHash = () => history.replaceState(null, "", `${location.pathname}${location.search}${formatHash(state)}`);
+  const syncHash = () => {
+    const params = new URLSearchParams(formatHash(state).replace(/^#/, ""));
+    const current = new URLSearchParams(location.hash.replace(/^#/, ""));
+    for (const key of ["tree", "tree_all", "tree_open", "tree_closed", "tree_find"]) if (current.has(key)) params.set(key, current.get(key));
+    const value = params.toString();
+    history.replaceState(null, "", `${location.pathname}${location.search}${value ? `#${value}` : ""}`);
+  };
   const syncControls = () => {
     root.querySelector("#gv-q").value = state.q;
     root.querySelector("#gv-region").value = state.region;
@@ -344,6 +356,8 @@ export async function mountGroups(root, load) {
     const pg = pageOf(filterGroups(groups, state).length, state.page);
     state.page = pg.page;
     results.innerHTML = resultsHtml(groups, state);
+    const note = root.querySelector("#gv-tree-filter-note");
+    if (note) note.hidden = !state.without_tags;
   };
   const setState = (patch) => {
     state = {...state, ...patch};
@@ -362,12 +376,27 @@ export async function mountGroups(root, load) {
   };
   const refocus = (selector) => root.querySelector(selector)?.focus();
 
+  mountGroupsTree(root, data?.tree, {
+    onGroup: (id) => {
+      if (showCard(id)) { state = {...state, group: id}; syncHash(); }
+    },
+    onRoster: (filters) => {
+      state = {...state, region: "", country: "", ...filters, q: "", status: "", without_tags: true, page: 1, group: ""};
+      syncControls();
+      renderResults();
+      syncHash();
+      const result = root.querySelector("#gv-count");
+      result?.focus({preventScroll: true});
+      result?.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"});
+    },
+  });
+
   root.addEventListener("input", (event) => {
-    if (event.target.id === "gv-q") setState({q: event.target.value, page: 1});
+    if (event.target.id === "gv-q") setState({q: event.target.value, page: 1, without_tags: false});
   });
   root.addEventListener("change", (event) => {
     const field = {"gv-region": "region", "gv-country": "country", "gv-status": "status"}[event.target.id];
-    if (field) setState({[field]: event.target.value, page: 1});
+    if (field) setState({[field]: event.target.value, page: 1, without_tags: false});
   });
   root.addEventListener("click", (event) => {
     const button = event.target.closest("button");
@@ -386,7 +415,7 @@ export async function mountGroups(root, load) {
       setState({page: Number(button.dataset.pageTarget)});
       refocus("#gv-page-status");
     } else if (button.dataset.action === "clear") {
-      state = {...DEFAULT_STATE, sort: state.sort, dir: state.dir};
+      state = {...DEFAULT_STATE, sort: state.sort, dir: state.dir, without_tags: false};
       syncControls();
       renderResults();
       syncHash();

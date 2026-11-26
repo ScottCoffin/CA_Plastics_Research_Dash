@@ -25,10 +25,11 @@ from atlas.groups.build import (
     OUTPUT_FILES,
     GroupsBuildError,
     build_groups,
+    build_tree,
     check_flow_conservation,
     denominator_note,
 )
-from atlas.groups.schema import validate_groups
+from atlas.groups.schema import load_taxonomy, validate_groups
 
 REPO = Path(__file__).resolve().parents[1]
 BUILD_SCRIPT = REPO / "scripts" / "build_groups.py"
@@ -325,6 +326,40 @@ def test_tree_counts_are_tagged_roster_and_distinct() -> None:
     assert countries["FR"]["counts"] == {"tagged": 1, "roster": 1, "distinct": 1}
     assert countries["BE"]["counts"] == {"tagged": 0, "roster": 1, "distinct": 0}
     assert tree["default_hierarchy"] == "geography"
+
+
+def test_all_activities_variant_repeats_groups_but_counts_distinct_organisations() -> None:
+    tree = _json(_build(), "groups_tree.json")
+    for name, hierarchy in tree["hierarchies_all_activities"].items():
+        placed = Counter(leaf["group_id"] for leaf in _leaves(hierarchy, "group"))
+        assert placed == Counter({CORE: 2, ADJ: 1}), name
+        assert hierarchy["counts"] == {"tagged": 2, "roster": 5, "distinct": 2}, name
+
+
+def test_california_subnational_node_requires_explicit_place_evidence(tmp_path: Path) -> None:
+    row = {**CORE_TAG, "places": "US-CA"}
+    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), _curation(tmp_path, tags=[row]))
+    geography = _json(outputs, "groups_tree.json")["hierarchies"]["geography"]
+    ca_nodes = [node for node in _walk(geography) if node.get("level") == "subnational"]
+    assert [node["label"] for node in ca_nodes] == ["US-CA"]
+    assert any(leaf.get("group_id") == CORE for leaf in _leaves(ca_nodes[0], "group"))
+
+    no_place_row = {**CORE_TAG, "places": ""}
+    without_place = BUILD.build_outputs(
+        copy.deepcopy(ROSTER), _curation(tmp_path / "without_place", tags=[no_place_row])
+    )
+    geography = _json(without_place, "groups_tree.json")["hierarchies"]["geography"]
+    assert not [node for node in _walk(geography) if node.get("level") == "subnational"]
+
+    # Even if an untagged record later carries a place value, its roster aggregate stays
+    # directly under its country rather than being routed into the California subnode.
+    records = _json(outputs, "groups.json")["groups"]
+    next(record for record in records if record["group_id"] == CD)["places"] = ["US-CA"]
+    tree = build_tree(records, load_taxonomy(), DATE)
+    geography = tree["hierarchies"]["geography"]
+    us_country = next(node for node in _walk(geography) if node["id"].endswith("/US"))
+    us_aggregates = _leaves(us_country, "not_yet_tagged")
+    assert len(us_aggregates) == 1 and us_aggregates[0]["count"] == 2
 
 
 # ---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
-"""Checks for the CG-13 community groups page (/groups): wording, links, sorting and styling.
+"""Checks for the CG-13/CG-10 community groups page (/groups): wording, links, tree and styling.
 
-Runs tests/framework_groups_runtime.mjs (pure helpers, Node) and reads the page source statically.
+Runs focused groups and tree runtime helpers (Node) and reads the page source statically.
 No browser and no build: the rendered page is checked by the lead's browser pass.
 """
 
@@ -18,6 +18,7 @@ PAGE = ROOT / "framework" / "src" / "groups.md"
 MODULE = ROOT / "framework" / "src" / "components" / "groups.js"
 STYLES = ROOT / "framework" / "src" / "components" / "groups.css"
 RUNTIME = ROOT / "tests" / "framework_groups_runtime.mjs"
+TREE_RUNTIME = ROOT / "tests" / "framework_groups_tree_runtime.mjs"
 CONTACT = "theplastiverse@gmail.com"
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
@@ -45,6 +46,16 @@ def test_node_runtime_helpers_pass() -> None:
     )
     assert result.returncode == 0, result.stderr or result.stdout
     assert "all assertions passed" in result.stdout
+    tree_result = subprocess.run(
+        [node, str(TREE_RUNTIME)],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert tree_result.returncode == 0, tree_result.stderr or tree_result.stdout
+    assert "groups tree runtime assertions passed" in tree_result.stdout
 
 
 def test_page_title_and_global_theme() -> None:

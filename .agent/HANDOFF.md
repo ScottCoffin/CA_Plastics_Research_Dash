@@ -1,29 +1,29 @@
-# Handoff — 2026-11-26 — CG-6c
+# Handoff — 2026-11-26 — CG-6c and CG-10
 
 ## Done
 
-- The signed-in ambassador workspace has a **Tag local groups** stream for regional assignments. It supports lease renewal and release, organisation checks, Tier 1 evidence, optional Tier 2 fields, stated affiliations, and suggestions. The workspace preserves drafts on retry and keeps group submission history with the group task.
-- Approved `not_an_organisation` rows are applied to the public roster and its manifest. The ambassador export workflow rebuilds and checks the roster and derived group files in the same owner-reviewed pull request. See [Ambassador export](../docs/AMBASSADOR_EXPORT.md).
-- The clean-worktree full suite passed with 3,712 tests and 17 skips. The Framework build and mocked browser walk passed at 1440 and 390 px, with zero axe violations, overflow, or page errors. The ignored walk and screenshots are in `scratch/cg6c_*`.
+- CG-6c (`ee1b3819`) adds the signed-in **Tag local groups** workspace, lease actions, evidence and suggestions. Approved group removals update the roster and derived files in one reviewed export pull request. GitHub CI and Pages deployment passed.
+- CG-10 adds the keyboard-operable tree on `/groups`. Geography opens at region level. Function and plastics-focus views support all-activities placement with distinct organisation counts. Tree search and disclosure state share the URL hash with the existing roster and group card.
+- The tree builder adds `hierarchies_all_activities` to `cg-tree-v1`. Explicit `US-CA` place evidence puts tagged US records under California. Untagged records remain aggregated by country.
 
-## State of the repo
+## Verification
 
-- CG-6a, CG-6b and CG-6c are implemented. CG-6 still requires production D1 migration 0007 and deployment of the group routes in `worker/src/groups.ts` under H56.
-- The live Worker already serves existing ambassador flows and global co-authors (version cbc9e050, owner H54). The new group screen handles the pre-deployment 404 and can retry.
+- CG-10 clean-worktree suite: 3,714 passed and 17 skipped. Ruff lint and format, design tokens, and all six group assets passed their checks.
+- The mocked Framework walk passed at 1440 and 390 px. It exercised keyboard navigation, expanded views, hash roundtrip, group-card and roster navigation, and distinct counts. Axe, page errors, and document and tree overflow were zero. The 5,000-group fixture rendered in 0.23 s on this checkout.
+- Ignored browser harnesses and screenshots are in `scratch/cg6c_*` and `scratch/cg10_*`. Use the current committed files as the base for each clean gate.
 
 ## Next task
 
-1. When the owner authorizes H56, apply migration 0007 for `plastiverse-ambassadors` under `worker/`, deploy the Worker, and verify the group routes. Mark CG-6 complete once the production gate passes.
-2. CG-7 follows CG-6 and covers the review queue, double tagging, and agreement statistics. While H56 is pending, CG-10 is eligible through CG-9. Continue with CG-11, CG-12, CG-12b, CG-14, the owner-led CG-15 pilot, and CG-16 as their dependencies permit.
-3. Owner-queued tasks after the groups work are AMB-PARENT-REGION, AMB-MAIL-STYLE, and ALERTS-GLOBAL. The handoff roadmap then calls for BQ-S9b and BQ-G3.
+1. H56 still requires the owner's explicit approval. When authorized, apply D1 migration 0007 for `plastiverse-ambassadors` under `worker/`, deploy the group routes, and verify production. CG-6 can then close and unlock CG-7 review and agreement work.
+2. While H56 is pending, take CG-11. Read [BFFP V-NET](../docs/BFFP.md) §9.4 and T-GRAPH, the `groups_graph.json` builder, and the existing `framework/src/components/graph_viewer.js`. The task adds the group-to-facet view, quoted stated affiliations, and the labeled tag co-occurrence projection. Keep edge types distinct and reuse the existing group card.
+3. Follow with CG-12, CG-12b, CG-14, the owner-led CG-15 pilot, and CG-16 as dependencies permit. Then resume AMB-PARENT-REGION, AMB-MAIL-STYLE, ALERTS-GLOBAL, BQ-S9b, and BQ-G3.
 
-## Gotchas
+## Claude Code entry
 
-- The local ignored data can make `tests/test_bq24_denominators.py::test_check_mode_on_committed_file_exits_zero` fail in the main checkout. The clean gate passes. Rebuild `site/data/global/denominators.json` at the next global refresh.
-- On this Windows checkout the direct Python 3.14 executable worked where the WindowsApps launcher could not run. Gate in a clean worktree with pytest `--basetemp` outside the repo. See [memory](MEMORY.md).
-- The BFFP country defaults are in [questions](QUESTIONS.md). A4-D24 applies to published artifacts, docs, commit messages, and CI logs. The upstream member endpoint requires the already approved headless page workflow.
+Start with [CLAUDE.md](../CLAUDE.md) for the worker-role mapping and Windows commands. Delegate bounded work to Luna workers when possible. The lead owns clean-worktree verification, the handoff files, and each narrow commit and push. See [resume prompt](RESUME_PROMPT.md).
 
-## Owner input
+## Gotchas and owner input
 
-- H56 in [human tasks](HUMAN_TASKS.md) records the Worker deployment approval. The existing owner reviews include H39, H28, H42 and H2. Group decisions are in [questions](QUESTIONS.md).
-- The earlier authenticated smoke still calls for trying a knowledge item, a setting, and the global co-author invitation list.
+- Gate with pytest `--basetemp` outside the repository. The WindowsApps launcher was inaccessible here, and the direct Python 3.14 executable worked. The ignored local data can make the denominator check fail in the main checkout, while clean worktrees pass. Rebuild denominators at the next global refresh.
+- A4-D24 binds published assets, docs, commits and CI logs. Group defaults and country artefacts are in [questions](QUESTIONS.md). The upstream member endpoint uses the approved headless page workflow.
+- H56 and the existing H39, H28, H42 and H2 reviews are in [human tasks](HUMAN_TASKS.md). The earlier authenticated smoke still asks for a knowledge item, a setting, and the global co-author invitation list.

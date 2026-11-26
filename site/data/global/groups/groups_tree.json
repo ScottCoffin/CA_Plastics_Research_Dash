@@ -3650,5 +3650,53 @@
    "level": "root"
   }
  },
+ "hierarchies_all_activities": {
+  "centrality": {
+   "children": [
+    {
+     "count": 2708,
+     "counts": {
+      "distinct": 0,
+      "roster": 2708,
+      "tagged": 0
+     },
+     "id": "centrality/not_yet_tagged",
+     "label": "Not yet tagged (2708)",
+     "level": "not_yet_tagged"
+    }
+   ],
+   "counts": {
+    "distinct": 0,
+    "roster": 2708,
+    "tagged": 0
+   },
+   "id": "centrality",
+   "label": "centrality",
+   "level": "root"
+  },
+  "function": {
+   "children": [
+    {
+     "count": 2708,
+     "counts": {
+      "distinct": 0,
+      "roster": 2708,
+      "tagged": 0
+     },
+     "id": "function/not_yet_tagged",
+     "label": "Not yet tagged (2708)",
+     "level": "not_yet_tagged"
+    }
+   ],
+   "counts": {
+    "distinct": 0,
+    "roster": 2708,
+    "tagged": 0
+   },
+   "id": "function",
+   "label": "function",
+   "level": "root"
+  }
+ },
  "schema": "cg-tree-v1"
 }

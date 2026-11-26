@@ -8,7 +8,7 @@
 .gv h2 { font-size: 1.25rem; margin: 0 0 .5rem; }
 .gv h3 { font-size: 1rem; margin: 1rem 0 .35rem; }
 .gv p { margin: .5rem 0; }
-.gv :focus-visible { outline: 3px solid var(--pv-ink); outline-offset: 2px; }
+.gv :focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
 .gv .gv-panel { margin: 1.75rem 0; }
 .gv .gv-caption { font-size: .9rem; opacity: .85; margin: .25rem 0 .75rem; }
 .gv .gv-status { font-weight: 600; padding: 12px 16px; border: 1px solid rgba(23, 38, 61, .2); border-radius: 6px; background: rgba(23, 38, 61, .04); }
@@ -53,6 +53,33 @@
 .gv .gv-meta { font-size: .85rem; margin: 0 0 .5rem; }
 .gv .gv-affiliations { padding-left: 1.2em; }
 .gv .gv-provenance, .gv .gv-standing, .gv .gv-correct { font-size: .92rem; margin-top: .75rem; }
+.gv .gv-tree-panel { border-top: 1px solid var(--pv-ink); padding-top: 14px; }
+.gv .gv-tree-controls { display: grid; grid-template-columns: minmax(180px, .8fr) minmax(190px, 1fr) minmax(220px, 1.2fr) auto; gap: 12px; align-items: end; margin: 1rem 0; }
+.gv .gv-field > span, .gv .gv-tree-controls .gv-field > label { display: block; font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
+.gv .gv-tree-controls select, .gv .gv-tree-controls input { width: 100%; min-height: 44px; padding: 8px 10px; color: var(--pv-ink); background: var(--pv-ground); border: 1px solid var(--pv-ink); border-radius: 0; font: inherit; }
+.gv .gv-tree-check { display: flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 600; }
+.gv .gv-tree-check input { width: 20px; height: 20px; accent-color: var(--pv-ink); }
+.gv .gv-tree-check span { color: var(--pv-ink-2); font-weight: 400; }
+.gv .gv-tree-actions { display: flex; gap: 8px; }
+.gv .gv-tree-actions .gv-btn { white-space: nowrap; }
+.gv .gv-tree-result { min-height: 1.4em; font-size: .9rem; }
+.gv .gv-tree-scroll { max-width: 100%; overflow-x: hidden; border-top: 1px solid var(--pv-line); border-bottom: 1px solid var(--pv-line); }
+.gv .gv-tree, .gv .gv-tree ul { list-style: none; margin: 0; padding: 0; }
+.gv .gv-tree ul { margin-left: 18px; padding-left: 14px; border-left: 1px solid var(--pv-line); }
+.gv .gv-tree li { min-width: 0; }
+.gv .gv-tree [role="treeitem"] { display: block; min-width: 0; color: var(--pv-ink); outline: none; }
+.gv .gv-tree-row { display: flex; width: 100%; min-height: 40px; flex-wrap: wrap; align-items: center; gap: 6px 9px; padding: 5px 8px; border-bottom: 1px solid var(--pv-line); cursor: pointer; }
+.gv .gv-tree-row:hover { background: color-mix(in srgb, var(--pv-slate) 8%, var(--pv-paper)); }
+.gv .gv-tree [role="treeitem"]:focus-visible { outline: none; }
+.gv .gv-tree [role="treeitem"]:focus-visible > .gv-tree-row { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; position: relative; z-index: 1; }
+.gv .gv-tree [role="treeitem"][hidden] { display: none; }
+.gv .gv-tree-caret { display: inline-grid; width: 20px; min-width: 20px; height: 20px; place-items: center; border: 1px solid var(--pv-line); font-size: 1rem; line-height: 1; }
+.gv .gv-tree-label { min-width: 0; flex: 1 1 180px; font-weight: 550; overflow-wrap: anywhere; }
+.gv .gv-tree-count { margin-left: auto; color: var(--pv-ink-2); font-size: .82rem; font-variant-numeric: tabular-nums; white-space: normal; overflow-wrap: anywhere; text-align: right; }
+.gv .gv-tree .gv-badge { margin-left: 4px; }
+@media (max-width: 760px) { .gv .gv-tree-controls { grid-template-columns: 1fr 1fr; } .gv .gv-tree-search { grid-column: 1 / -1; } }
+@media (max-width: 520px) { .gv .gv-tree-controls { grid-template-columns: 1fr; } .gv .gv-tree-search { grid-column: auto; } .gv .gv-tree-actions { flex-wrap: wrap; } }
+@media (max-width: 560px) { .gv .gv-tree ul { margin-left: 10px; padding-left: 8px; } .gv .gv-tree-row { align-items: flex-start; } .gv .gv-tree-count { flex: 1 1 calc(100% - 30px); margin-left: 29px; text-align: left; } .gv .gv-tree .gv-badge { margin-left: 29px; } }
 @media (max-width: 560px) {
   .gv .gv-fact { grid-template-columns: 1fr; gap: 2px; }
   .gv .gv-card-body { padding: 16px; }

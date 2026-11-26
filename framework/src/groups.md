@@ -14,8 +14,8 @@ head: |
   <meta name="theme-color" content="#000000">
 ---
 
-<!-- CG-13 (Add-on A4): /groups, the public community groups page. components/groups.js fills #groups-root from
-     site/data/global/groups/groups.json and coverage.json. Styles: components/groups.css (scoped to .gv). -->
+<!-- CG-13 / CG-10 (Add-on A4): /groups. components/groups.js fills #groups-root from the groups data payloads.
+     The tree payload loads independently so a tree error never blocks the roster. Styles are scoped to .gv. -->
 
 <link rel="stylesheet" href="./components/explore.css">
 <link rel="stylesheet" href="./components/groups.css">
@@ -56,5 +56,6 @@ await mountGroups(root, async () => ({
   // groups.json is {schema, generated_from, groups: [...]}; the table needs the list.
   groups: (await loadJson("groups/groups.json", {url: globalDataUrl}))?.groups ?? [],
   coverage: await loadJson("groups/coverage.json", {url: globalDataUrl}),
+  tree: await loadJson("groups/groups_tree.json", {url: globalDataUrl}).catch(() => null),
 }));
 ```

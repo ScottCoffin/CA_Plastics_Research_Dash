@@ -292,9 +292,14 @@ def _render(
                 "counts": {"tagged": 0, "roster": count, "distinct": 0},
             }
         )
+    # A multi-activity group may appear in several descendant branches. Counts at
+    # every branch describe distinct organisations, not placements.
+    untagged_count = sum(
+        child["counts"]["roster"] - child["counts"]["tagged"] for child in children
+    )
     counts = {
-        "tagged": sum(child["counts"]["tagged"] for child in children),
-        "roster": sum(child["counts"]["roster"] for child in children),
+        "tagged": len(ids),
+        "roster": len(ids) + untagged_count,
         "distinct": len(ids),
     }
     node = {
@@ -325,42 +330,56 @@ def build_tree(
         "centrality": _index(vocab, "plastics_centrality"),
     }
     roots = {name: _new_branch("root", name) for name in ("geography", "function", "centrality")}
+    roots_all = {name: _new_branch("root", name) for name in ("function", "centrality")}
     roots["geography"]["label"] = "All roster organisations"
+    geography_nodes = {}
     for record in records:
-        geo = _descend(
-            roots["geography"],
-            [("region", record["region"]), ("country", record["country"] or UNKNOWN_KEY)],
-        )
+        geo_steps = [("region", record["region"]), ("country", record["country"] or UNKNOWN_KEY)]
+        if is_tagged(record) and record["country"] == "US" and "US-CA" in record.get("places", []):
+            geo_steps.append(("subnational", "US-CA"))
+        geo = _descend(roots["geography"], geo_steps)
+        geography_nodes[record["group_id"]] = geo
         if not is_tagged(record):
             geo["untagged"] += 1
             roots["function"]["untagged"] += 1
             roots["centrality"]["untagged"] += 1
+            roots_all["function"]["untagged"] += 1
+            roots_all["centrality"]["untagged"] += 1
     for record in tagged:
-        principal = record["primary_activities"][0]
+        activities = record["primary_activities"] or [UNKNOWN_KEY]
+        principals = [activities[0]]
+        geography_path = geography_nodes[record["group_id"]]
         _descend(
-            roots["geography"],
-            [
-                ("region", record["region"]),
-                ("country", record["country"] or UNKNOWN_KEY),
-                ("layer", record["layer"]),
-                ("sector", record["sector"]),
-            ],
+            geography_path,
+            [("layer", record["layer"]), ("sector", record["sector"])],
         )["leaves"].append(_group_leaf(record))
-        _descend(
-            roots["function"],
-            [("layer", record["layer"]), ("sector", record["sector"]), ("activity", principal)],
-        )["leaves"].append(_group_leaf(record))
-        _descend(
-            roots["centrality"],
-            [("centrality", record["plastics_centrality"]), ("activity", principal)],
-        )["leaves"].append(_group_leaf(record))
+        for function_root, centrality_root, selected_activities in (
+            (roots["function"], roots["centrality"], principals),
+            (roots_all["function"], roots_all["centrality"], activities),
+        ):
+            for activity in selected_activities:
+                function_steps = [
+                    ("layer", record["layer"]),
+                    ("sector", record["sector"]),
+                    ("activity", activity),
+                ]
+                centrality_steps = [
+                    ("centrality", record["plastics_centrality"]),
+                    ("activity", activity),
+                ]
+                _descend(function_root, function_steps)["leaves"].append(_group_leaf(record))
+                _descend(centrality_root, centrality_steps)["leaves"].append(_group_leaf(record))
     hierarchies = {}
     for name, root in roots.items():
         hierarchies[name], _ = _render(root, name, orders)
+    hierarchies_all = {}
+    for name, root in roots_all.items():
+        hierarchies_all[name], _ = _render(root, name, orders)
     return {
         **_meta(generated_from, len(tagged), len(records), DERIVED_SCHEMAS["groups_tree.json"]),
         "default_hierarchy": "geography",
         "hierarchies": hierarchies,
+        "hierarchies_all_activities": hierarchies_all,
     }
 
 

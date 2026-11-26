@@ -279,3 +279,4 @@
 | 2026-11-26 | AMB-NAV, AMB-CHOICE-CUES, AMB-FULLWIDTH | Owner UI requests: nav links, chosen-button cues, full-width ambassador pages | this commit |
 | 2026-11-26 | CG-6b | Approved group tags flow from the Worker export into curation CSVs and the groups build | this commit |
 | 2026-11-26 | CG-6c | Group-tagging workspace, retry and browser gates, matching public roster rebuild | this commit |
+| 2026-11-26 | CG-10 | Keyboard tree, distinct counts, hash and roster integration, desktop and phone browser gate | this commit |
