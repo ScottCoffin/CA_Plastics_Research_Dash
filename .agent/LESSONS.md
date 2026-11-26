@@ -412,3 +412,4 @@ until it reports.
 - base64url: the last character of a 32-byte MAC carries 2 unused bits, so tamper tests must change an earlier character.
 - Ids that are list positions (region.yml items) must never be deleted: mark them (`not_relevant`) so later ids keep pointing at the same item.
 - CI has no streamlit: Streamlit AppTest smoke tests use `pytest.importorskip("streamlit")`.
+- GitHub Pages serves Framework pages at `/name` only; `/name/` is a 404. Every redirect or link the Worker builds (WORKSPACE_URL, invite, reminder links) must omit the trailing slash.
