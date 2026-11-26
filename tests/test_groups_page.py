@@ -81,6 +81,53 @@ def test_lede_states_who_is_listed_and_what_not_yet_tagged_means() -> None:
     assert "The Atlas is independent of Break Free From Plastic." in text
 
 
+METHODS_OPEN = (
+    '<section class="gv-panel gv-root" aria-labelledby="gv-methods-title" id="gv-methods">'
+)
+
+
+def _methods_section() -> str:
+    text = _visible_source(PAGE)
+    start = text.index(METHODS_OPEN)
+    return text[start : text.index("</section>", start)]
+
+
+def test_methods_section_has_four_topics() -> None:
+    section = _methods_section()
+    assert '<h2 id="gv-methods-title">How this list is made</h2>' in section
+    for topic in ("Source", "Organisations only", "Tags", "Corrections and removal"):
+        assert f"<h3>{topic}</h3>" in section, topic
+    assert "Break Free From Plastic" in section
+    assert "within 14 days" in section
+    for badge in ("Volunteer-tagged", "Reviewed", "Confirmed by group"):
+        assert badge in section, badge
+
+
+def test_methods_section_never_counts_exclusions() -> None:
+    section = _methods_section()
+    assert not re.search(r"\d\D{0,40}\b(excluded|left out)\b", section, re.IGNORECASE)
+    assert not re.search(r"\b(excluded|left out)\b\D{0,40}\d", section, re.IGNORECASE)
+    assert not re.search(r"\bexclusions?\b", section, re.IGNORECASE)
+
+
+def test_independence_sentence_appears_once() -> None:
+    sentence = "The Atlas is independent of Break Free From Plastic."
+    assert _visible_source(PAGE).count(sentence) == 1
+
+
+def test_methods_contact_matches_the_card_contact() -> None:
+    assert f"<b>{CONTACT}</b>" in _methods_section()
+    assert f'CONTACT_EMAIL = "{CONTACT}"' in _read(MODULE)
+
+
+def test_card_correction_link_and_methods_link() -> None:
+    module = _read(MODULE)
+    assert 'rel="external"' in module
+    assert "Suggest a correction or ask for removal" in module
+    assert 'href="#gv-methods" data-close data-methods' in module
+    assert 'document.getElementById("gv-methods")' in module
+
+
 def test_provenance_wording_is_present() -> None:
     assert "Listed as a BFFP member as of " in _read(MODULE)
 

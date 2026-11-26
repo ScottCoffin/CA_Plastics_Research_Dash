@@ -168,6 +168,14 @@ assert.ok(card.includes("Listed as a BFFP member as of 2026-11-26"));
 assert.ok(card.includes(STANDING_NOTE), "standing note is verbatim");
 assert.ok(card.includes("Suggest a correction"));
 assert.ok(card.includes(CONTACT_EMAIL));
+// Correction link: the mailto subject carries the encoded group name and id; the methods link targets the section.
+const subject = encodeURIComponent(`Group correction: ${fixtures[1].name} (${fixtures[1].group_id})`);
+assert.ok(card.includes(`mailto:${CONTACT_EMAIL}?subject=${subject}`), "mailto subject names the group");
+assert.ok(card.includes(`href="#gv-methods" data-close`), "methods link closes the card and points at the section");
+const hostile = cardHtml(group({group_id: "cg_x<&>", name: "<script>alert(1)</script>"}));
+assert.ok(!hostile.includes("<script>"), "group name is escaped in the card");
+assert.ok(hostile.includes("&lt;script&gt;"), "escaped name is shown as text");
+assert.ok(hostile.includes(`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Group correction: <script>alert(1)</script> (cg_x<&>)")}`), "subject is percent-encoded and the href is escaped");
 const withEvidence = cardHtml(group({
   evidence: [{quote: "We clean the coast monthly.", url: "https://alpha.example.org/about", accessed_at: "2026-11-20"}],
   stated_affiliations: [{relation: "member_of", target_name: "Beta Network", evidence: {quote: "Member of Beta Network.", url: "https://alpha.example.org/", accessed_at: "2026-11-20"}}],

@@ -228,6 +228,12 @@ function quoteHtml(evidence) {
   return `<blockquote>${escapeHtml(quote)}</blockquote>${meta ? `<p class="gv-meta">${meta}</p>` : ""}`;
 }
 
+// Correction mailto: the subject names the group and its id so a reviewer can find the record.
+export function correctionMailto(group) {
+  const subject = `Group correction: ${text(group?.name) || "Unnamed group"} (${text(group?.group_id)})`;
+  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
+}
+
 // Group card (§9.2): only the fields that exist are shown; null or empty tag fields are omitted.
 export function cardHtml(group) {
   const site = safeUrl(group?.url);
@@ -263,7 +269,7 @@ export function cardHtml(group) {
     ${affiliations.length ? `<h3>Stated affiliations</h3><ul class="gv-affiliations">${affiliations.join("")}</ul>` : ""}
     ${provenance ? `<p class="gv-provenance">${escapeHtml(provenance)}</p>` : ""}
     <p class="gv-standing">${escapeHtml(STANDING_NOTE)}</p>
-    <p class="gv-correct"><b>Suggest a correction.</b> Write to ${escapeHtml(CONTACT_EMAIL)} with the group name and what should change.</p>
+    <p class="gv-correct"><a href="${escapeHtml(correctionMailto(group))}" rel="external">Suggest a correction or ask for removal</a>. Write to ${escapeHtml(CONTACT_EMAIL)} with the group name and what should change. <a href="#gv-methods" data-close data-methods>How this list is made</a></p>
     <div class="gv-card-foot"><button type="button" class="gv-btn" data-close>Close</button></div>
   </div>`;
 }
@@ -425,7 +431,11 @@ export async function mountGroups(root, load) {
     }
   });
   dialog.addEventListener("click", (event) => {
+    // The methods link closes the card first, then scrolls to the section without a hash change (a hash change would reset the roster filters).
+    const methods = event.target.closest?.("[data-methods]");
+    if (methods) event.preventDefault();
     if (event.target === dialog || event.target.closest("[data-close]")) dialog.close();
+    if (methods) document.getElementById("gv-methods")?.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"});
   });
   dialog.addEventListener("close", () => {
     if (state.group) {

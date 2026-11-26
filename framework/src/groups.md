@@ -37,13 +37,25 @@ head: |
   <p>This list has two sources. Most groups are members of Break Free From Plastic (BFFP). The rest are groups that volunteer ambassadors have suggested. Only organisations are listed. Individual people are not.</p>
   <p>Volunteer ambassadors add tags from public evidence, such as a group's own website and its public statements. Each group shows the date it was listed as a BFFP member, and the evidence behind each tag. Select a group name to open its card.</p>
   <p><b>Not yet tagged</b> means the group has not been tagged yet. It never means the group has no plastics work.</p>
-  <p>The Atlas is independent of Break Free From Plastic. BFFP membership is shown only as the place a group was listed. It is not evidence of a group's commitment.</p>
 </div>
 <div id="groups-root" class="gv-root"><p class="gv-status">Loading the roster…</p></div>
 <section class="gv-panel gv-net-panel gv-root" aria-labelledby="gv-net-title" id="gv-network">
   <h2 id="gv-net-title">Network</h2>
   <p class="gv-caption">This view shows tagged groups only. Each link joins a group to a tag, or shows a stated affiliation that the group has published. A missing link means the data is missing, not that no work exists.</p>
   <div id="groups-network"></div>
+</section>
+<section class="gv-panel gv-root" aria-labelledby="gv-methods-title" id="gv-methods">
+<h2 id="gv-methods-title">How this list is made</h2>
+<h3>Source</h3>
+<p>The roster comes from the public member list of Break Free From Plastic (BFFP), used with BFFP's permission. The Atlas is independent of Break Free From Plastic. BFFP membership is shown only as the place a group was listed. It is not evidence of a group's commitment.</p>
+<h3>Organisations only</h3>
+<p>Only collective organisations are listed. Individuals and single-person practices, such as a freelance consultant, a sole trader, or an artist trading under their own name, are left out when the list is read and are not kept.</p>
+<h3>Tags</h3>
+<p>Volunteer ambassadors tag each group from the group's own public pages. Each tag is backed by a quote of at most 25 words from those pages, with a link to the source.</p>
+<p>Untagged groups appear only in the roster table and the counts. The badges mean: <b>Volunteer-tagged</b>, an ambassador tag from public evidence; <b>Reviewed</b>, checked by a reviewer; <b>Confirmed by group</b>, the group has confirmed its own tags.</p>
+<h3>Corrections and removal</h3>
+<p>Anyone can ask for a correction, and a group can ask to be removed. A removal request sent from the group's own web domain is honoured within 14 days and takes precedence over ambassador tags. Other corrections are checked by a reviewer.</p>
+<p>To ask for a correction or removal, write to <b>theplastiverse@gmail.com</b> with the group name and what should change.</p>
 </section>
 </main>
 
