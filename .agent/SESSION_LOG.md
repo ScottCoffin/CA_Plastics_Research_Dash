@@ -268,3 +268,4 @@
 | 2026-11-25 | AMB-1 FE slice 1 + BQ-1.4 | Public ambassadors landing and terms; quality payloads and pages (no numbers until gold); shared nav/footer target sizes | this commit |
 | 2026-11-26 | AMB-1 FE slice 3 | Add local knowledge, notification settings and co-author invitations screens; mail links open settings and the reminder's case | this commit |
 | 2026-11-26 | BQ-V.1 slice 3 | Global works similarity graph (15,000 works, k=5 bge-small, 60,000 edges); BQ-V.1 complete | this commit |
+| 2026-11-26 | BQ-V.4 Works view + owner answers | Works graph in /explore Network (works.json now shares the institution file shape); BQ-V.4 complete; owner answers recorded (H52/H51 done, three AMB questions answered, AMB-COAUTHORS-GLOBAL and REG-CA queued) | this commit |

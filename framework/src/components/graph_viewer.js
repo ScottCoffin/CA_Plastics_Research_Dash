@@ -22,14 +22,16 @@ import {
   hashPrefixOk,
   labelIndices,
   LABEL_COUNT,
+  manifestNoteFor,
+  manifestPathFor,
   maxWorks,
   matchNodes,
   decodeLayout,
   nodeSize,
   nodesFromRows,
-  noteText,
   openAlexUrl,
   parseGraphHash,
+  sizeValue,
   sortNodes,
   SEARCH_LIMIT,
   TABLE_LIMIT,
@@ -41,8 +43,10 @@ import {
 const HOME_VIEW = Object.freeze({x: 0.5, y: 0.5, ratio: 1, angle: 0});
 const WHEEL_HINT = "Hold Ctrl (or Cmd) and scroll to zoom, or click the graph first.";
 const TOUCH_HINT = "Use two fingers to move the graph. One finger scrolls the page.";
-const GRAPH_TITLES = {institutions: "Institutions", authors: "Authors"};
+const GRAPH_TITLES = {institutions: "Institutions", authors: "Authors", works: "Works"};
 const SORTABLE = {name: "Name", country: "Country or type", works: "Works", links: "Links", community: "Community"};
+// Works rows: the title, the year, the citation count (display and sort) instead of the author or institution fields.
+const WORKS_SORTABLE = {name: "Title", year: "Year", cited: "Times cited", links: "Links", community: "Community"};
 const PAN_STEP = 0.15;  // share of the visible width or height that one arrow key press moves the view
 
 const reduceMotion = () => Boolean(window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
@@ -61,9 +65,12 @@ function el(tag, attrs = {}, text = null) {
 
 function shell(name, phone, withNote) {
   const id = `gv-${name}-${phone ? "phone" : "desktop"}`;
+  const caption = name === "works"
+    ? "Works in the graph, sorted by the buttons in the column headers. Strongest links name the most similar works."
+    : `${GRAPH_TITLES[name]} in the graph, sorted by the buttons in the column headers. Strongest links name the neighbours that share the most works.`;
   const colourOptions = name === "authors"
     ? '<option value="community">Collaboration community</option><option value="country">Primary country</option>'
-    : '<option value="community">Collaboration community</option>';
+    : `<option value="community">${name === "works" ? "Topic community" : "Collaboration community"}</option>`;
   return `
 ${withNote ? `<div class="gv-head">
   <p class="gv-note"><span class="gv-badge">Unscreened search hits</span> <span data-gv="note"></span></p>
@@ -107,7 +114,7 @@ ${withNote ? `<div class="gv-head">
   </div>
   <div class="gv-table-scroll">
     <table class="gv-table">
-      <caption class="gv-sr">${GRAPH_TITLES[name]} in the graph, sorted by the buttons in the column headers. Strongest links name the neighbours that share the most works.</caption>
+      <caption class="gv-sr">${caption}</caption>
       <thead><tr data-gv="sort-row"></tr></thead>
       <tbody data-gv="rows"></tbody>
     </table>
@@ -155,7 +162,7 @@ export function mountGraph(root, options = {}) {
   let labelSet = new Set();
   let selectedId = null;
   let neighbourIds = new Set();
-  let sortKey = "works";
+  let sortKey = name === "works" ? "cited" : "works";
   let sortDir = "desc";
   let tableShown = false;
   let engaged = false;
@@ -163,7 +170,6 @@ export function mountGraph(root, options = {}) {
   let hashFrame = 0;
   let disposed = false;
   let observer = null;
-  let manifestNote = "";
   let returnFocus = null;  // where focus goes when Escape clears a selection made from a control
 
   const setStatus = (text) => { ui.status.textContent = text; };
@@ -241,7 +247,7 @@ export function mountGraph(root, options = {}) {
     renderTableRows();
     if (changed) {
       const node = id === null ? null : byId.get(id);
-      ui.announce.textContent = node ? `Selected ${node.name}, ${formatWorks(node.works)}.` : "Selection cleared.";
+      ui.announce.textContent = node ? `Selected ${node.name}${name === "works" ? "." : `, ${formatWorks(node.works)}.`}` : "Selection cleared.";
     }
     if (id !== null && pan && renderer) {
       const point = renderer.getNodeDisplayData(id);
@@ -318,7 +324,7 @@ export function mountGraph(root, options = {}) {
   function renderLegend() {
     const legend = ui.legend;
     legend.replaceChildren();
-    const title = colourMode === "country" ? "Primary country" : "Collaboration community";
+    const title = colourMode === "country" ? "Primary country" : name === "works" ? "Topic community" : "Collaboration community";
     const list = el("ul", {class: "gv-legend__list", "aria-label": `${title} colours`});
     for (const row of colours.legend) {
       const label = colourMode === "country" ? `Country ${row.key}` : `Community ${Number(row.key) + 1}`;
@@ -335,16 +341,17 @@ export function mountGraph(root, options = {}) {
       li.append(swatch, el("span", {}, `Other (${formatCount(colours.otherCount)})`));
       list.append(li);
     }
-    const sizeTitle = el("p", {class: "gv-legend__title"}, "Dot size: works");
+    const sizeTitle = el("p", {class: "gv-legend__title"}, name === "works" ? "Dot size: links" : "Dot size: works");
     const sizeKey = el("ul", {class: "gv-size-key", "aria-label": "Dot size key"});
-    const top = maxWorks(nodes);
-    for (const works of [1, Math.max(1, Math.round(top / 10)), top]) {
-      const size = nodeSize(works, top);
+    const top = maxWorks(nodes, name);
+    for (const value of [1, Math.max(1, Math.round(top / 10)), top]) {
+      const size = nodeSize(value, top);
       const li = el("li", {class: "gv-size-key__item"});
       const dot = el("span", {class: "gv-size-key__dot", "aria-hidden": "true"});
       dot.style.width = `${size * 2}px`;
       dot.style.height = `${size * 2}px`;
-      li.append(dot, el("span", {}, formatWorks(works)));
+      const sizeText = name === "works" ? `${formatCount(value)} ${value === 1 ? "link" : "links"}` : formatWorks(value);
+      li.append(dot, el("span", {}, sizeText));
       sizeKey.append(li);
     }
     legend.append(el("p", {class: "gv-legend__title"}, title), list, sizeTitle, sizeKey);
@@ -366,12 +373,20 @@ export function mountGraph(root, options = {}) {
     }
     heading.textContent = node.name;
     const dl = el("dl", {class: "gv-facts"});
-    detailRow(dl, "Works", formatWorks(node.works));
-    if (name === "authors") {
-      detailRow(dl, "Primary country", node.country ?? "Not recorded");
+    if (name === "works") {
+      detailRow(dl, "Title", node.name);
+      detailRow(dl, "Year", node.year ?? "Not recorded");
+      detailRow(dl, "Times cited", formatCount(node.cited_by_count ?? 0));
+      detailRow(dl, "Text quality", node.embedding_quality === "low"
+        ? "Not English: similarity is less reliable" : "English text");
     } else {
-      detailRow(dl, "Country", node.country ?? "Not recorded");
-      detailRow(dl, "Type", node.type ?? "Not recorded");
+      detailRow(dl, "Works", formatWorks(node.works));
+      if (name === "authors") {
+        detailRow(dl, "Primary country", node.country ?? "Not recorded");
+      } else {
+        detailRow(dl, "Country", node.country ?? "Not recorded");
+        detailRow(dl, "Type", node.type ?? "Not recorded");
+      }
     }
     detailRow(dl, "Community", node.community === null ? "Not assigned" : `Community ${Number(node.community) + 1}`);
     body.append(dl);
@@ -383,7 +398,7 @@ export function mountGraph(root, options = {}) {
     if (links.children.length) body.append(links);
 
     const neighbours = topNeighbours(adjacency, node.index, 10);
-    body.append(el("h3", {class: "gv-subhead"}, "Strongest links (shared works)"));
+    body.append(el("h3", {class: "gv-subhead"}, name === "works" ? "Most similar works" : "Strongest links (shared works)"));
     if (!neighbours.length) {
       body.append(el("p", {}, "No links in this graph."));
       return;
@@ -394,7 +409,9 @@ export function mountGraph(root, options = {}) {
       const li = el("li");
       const button = el("button", {class: "gv-link", type: "button"}, other.name);
       button.addEventListener("click", () => { returnFocus = button; select(other.id, {pan: true, focus: true}); }, {signal});
-      li.append(button, el("span", {class: "gv-muted"}, ` ${formatCount(weight)} shared`));
+      // Works edges weigh the similarity of the two titles and abstracts (0 to 1), shown as a percentage.
+      const label = name === "works" ? `${Math.round(weight * 100)}% similar` : `${formatCount(weight)} shared`;
+      li.append(button, el("span", {class: "gv-muted"}, ` ${label}`));
       list.append(li);
     }
     body.append(list);
@@ -409,7 +426,7 @@ export function mountGraph(root, options = {}) {
 
   function renderSortHeaders() {
     ui.sortRow.replaceChildren();
-    for (const [key, label] of Object.entries(SORTABLE)) {
+    for (const [key, label] of Object.entries(name === "works" ? WORKS_SORTABLE : SORTABLE)) {
       const th = el("th", {scope: "col", "aria-sort": sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : "none"});
       const button = el("button", {class: "gv-sort", type: "button", "data-sort": key}, label);
       button.addEventListener("click", () => {
@@ -436,9 +453,13 @@ export function mountGraph(root, options = {}) {
       const button = el("button", {class: "gv-link", type: "button"}, node.name);
       button.addEventListener("click", () => { returnFocus = button; select(node.id, {pan: true, focus: true}); }, {signal});
       nameCell.append(button);
-      const kind = name === "authors" ? (node.country ?? "No country") : [node.country, node.type].filter(Boolean).join(", ") || "Not recorded";
+      let kind;
+      if (name === "works") kind = node.year ?? "Not recorded";
+      else if (name === "authors") kind = node.country ?? "No country";
+      else kind = [node.country, node.type].filter(Boolean).join(", ") || "Not recorded";
+      const cells = name === "works" ? node.cited_by_count ?? 0 : node.works;
       const strongest = topNeighbours(adjacency, node.index, 3).map(({index}) => nodes[index].name).join("; ") || "No links";
-      tr.append(nameCell, el("td", {}, kind), el("td", {class: "gv-num"}, formatCount(node.works)),
+      tr.append(nameCell, el("td", {}, String(kind)), el("td", {class: "gv-num"}, formatCount(cells)),
         el("td", {class: "gv-num"}, formatCount(node.links)),
         el("td", {}, node.community === null ? "Not assigned" : String(Number(node.community) + 1)),
         el("td", {}, strongest));
@@ -558,8 +579,9 @@ export function mountGraph(root, options = {}) {
     nodes = nodesFromRows(json);
     const edges = edgesFromRows(json, nodes.length);
     adjacency = buildAdjacency(edges, nodes.length);
-    const top = maxWorks(nodes);
-    labelSet = labelIndices(nodes, phone ? LABEL_COUNT.phone : LABEL_COUNT.desktop);
+    for (const node of nodes) node.links = adjacency[node.index].length;
+    const top = maxWorks(nodes, name);
+    labelSet = labelIndices(nodes, phone ? LABEL_COUNT.phone : LABEL_COUNT.desktop, name);
     colours = colourGroups(nodes.map((node) => (colourMode === "country" ? node.country : node.community)));
     graph = new Graph({type: "undirected", multi: false, allowSelfLoops: false});
     byId = new Map();
@@ -568,12 +590,11 @@ export function mountGraph(root, options = {}) {
       graph.addNode(node.id, {
         x: layout[2 * node.index],
         y: layout[2 * node.index + 1],
-        size: nodeSize(node.works, top),
+        size: nodeSize(sizeValue(node, name), top),
         color: nodeColour(node),
         label: labelSet.has(node.index) ? node.name : undefined
       });
     }
-    for (const node of nodes) node.links = adjacency[node.index].length;
     for (const {source, target} of edges) {
       const a = nodes[source].id;
       const b = nodes[target].id;
@@ -603,12 +624,11 @@ export function mountGraph(root, options = {}) {
 
   async function start() {
     setStatus(`Loading ${GRAPH_TITLES[name].toLowerCase()} graph.`);
-    const manifest = await getJson(globalDataUrl("graphs/graphs_manifest.json"));
+    const manifest = await getJson(globalDataUrl(manifestPathFor(name)));
     if (disposed) return;
     const entry = manifest.graphs?.[graphFileKey(name, phone)];
     if (!entry) throw new Error(`manifest has no entry for ${graphFileKey(name, phone)}`);
-    manifestNote = noteText(name === "authors" ? manifest.author_graph?.what_this_is_and_is_not : manifest.what_this_is_and_is_not);
-    if (ui.note) ui.note.textContent = manifestNote;
+    if (ui.note) ui.note.textContent = manifestNoteFor(name, manifest);
     const [json, bytes] = await Promise.all([
       getJson(globalDataUrl(`graphs/${entry.file}`)),
       getBuffer(globalDataUrl(`graphs/${entry.layout_file}`))
@@ -635,7 +655,8 @@ export function mountGraph(root, options = {}) {
     ui.stage.setAttribute("aria-label", `${GRAPH_TITLES[name]} network graph: ${formatCount(nodes.length)} nodes and ${formatCount(graph.size)} links. The same nodes are listed in the table; use the Show as table button.`);
     root.dataset.state = "ready";
     root.dataset.readyMs = String(Math.round(performance.now()));
-    setStatus(`${formatCount(nodes.length)} ${name === "authors" ? "authors" : "institutions"} and ${formatCount(graph.size)} links.`);
+    const noun = {authors: "authors", works: "works", institutions: "institutions"}[name];
+    setStatus(`${formatCount(nodes.length)} ${noun} and ${formatCount(graph.size)} links.`);
   }
 
   function showFallback(message) {

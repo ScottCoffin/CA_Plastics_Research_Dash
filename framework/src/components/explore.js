@@ -5,7 +5,7 @@
 import {globalDataUrl, siteRoot} from "./atlas.js";
 import {attachMapGestures, boundaryPaths, foldName, frameXY, mountPlaceSearch, placeExtent, placeRows} from "./world_map.js";
 import {denominatorShare, readDenominators} from "./v4_trend_model.js";
-import {exportFiles, formatGraphHash, noteText, parseGraphHash} from "./graph_viewer_model.js";
+import {exportFiles, formatGraphHash, manifestNoteFor, parseGraphHash} from "./graph_viewer_model.js";
 
 // Pure helpers over countries.json (PLAT-4 slice 4: unscreened query hits, schema plat4b-v1). Exported for the
 // Node runtime test. A country absent from the file gives null, and the page keeps its sample or preview.
@@ -760,8 +760,8 @@ export async function mountExplore(root) {
   // node, zoom, x, y) so scope= and view= stay explore's. closeNetwork() tears the viewer down (renderer.kill)
   // when the tab, the scope or the graph choice changes; a late import is ignored by the token check.
   const GRAPH_PREFIX = "gv.";
-  const GRAPH_LABEL = {institutions: "Institutions", authors: "Authors"};
-  let netViewer = null, netToken = 0, graphMeta = null;
+  const GRAPH_LABEL = {institutions: "Institutions", authors: "Authors", works: "Works"};
+  let netViewer = null, netToken = 0, graphMeta = null, worksMeta = null;
   function closeNetwork() { netToken += 1; netViewer?.teardown(); netViewer = null; }
   // graphs_manifest.json (captions) and exports/manifest.json (download files), fetched once per page.
   function loadGraphMeta() {
@@ -771,13 +771,18 @@ export async function mountExplore(root) {
     ]).catch(() => [null, null]);
     return graphMeta;
   }
+  // works_manifest.json (the works caption) is fetched only when the Works graph is chosen, once per page.
+  function loadWorksMeta() {
+    worksMeta ??= fetch(globalDataUrl("graphs/works_manifest.json"), {cache: "no-cache"}).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    return worksMeta;
+  }
   function globalGraphPanel(host) {
     const token = netToken;
     const graph = parseGraphHash(location.hash, GRAPH_PREFIX).graph ?? "institutions";
     host.innerHTML = `<section class="gg" aria-labelledby="gg-h">
       <div class="gg-tools">
         <h2 id="gg-h">${esc(GRAPH_LABEL[graph])} graph</h2>
-        <div class="seg" role="group" aria-label="Graph to show">${["authors", "institutions"].map((g) => `<button type="button" class="btn" data-g="${g}" aria-pressed="${g === graph}">${GRAPH_LABEL[g]}</button>`).join("")}</div>
+        <div class="seg" role="group" aria-label="Graph to show">${["authors", "institutions", "works"].map((g) => `<button type="button" class="btn" data-g="${g}" aria-pressed="${g === graph}">${GRAPH_LABEL[g]}</button>`).join("")}</div>
       </div>
       <p class="lede gg-cap" id="gg-cap"></p>
       <p class="gg-dl">Download (GEXF, GraphML)</p>
@@ -792,9 +797,10 @@ export async function mountExplore(root) {
       globalGraphPanel(host);
       host.querySelector(`[data-g="${b.dataset.g}"]`)?.focus();
     }));
-    loadGraphMeta().then(([manifest, exportsManifest]) => {
+    const captionFrom = graph === "works" ? loadWorksMeta() : loadGraphMeta().then(([manifest]) => manifest);
+    Promise.all([captionFrom, loadGraphMeta()]).then(([manifest, [, exportsManifest]]) => {
       if (token !== netToken || !host.isConnected) return;
-      $("#gg-cap", host).textContent = noteText(graph === "authors" ? manifest?.author_graph?.what_this_is_and_is_not : manifest?.what_this_is_and_is_not);
+      $("#gg-cap", host).textContent = manifestNoteFor(graph, manifest);
       const files = exportFiles(exportsManifest, graph);
       $("#gg-files", host).innerHTML = files.length
         ? files.map((f) => `<li><a href="${esc(globalDataUrl(`graphs/exports/${f.file}`))}" download>${esc(f.label)}</a>${f.bytes ? ` (${(f.bytes / 1048576).toFixed(1)} MB)` : ""}</li>`).join("")

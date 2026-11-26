@@ -14,12 +14,16 @@ import {
   graphName,
   hashPrefixOk,
   labelIndices,
+  manifestNoteFor,
+  manifestPathFor,
   matchNodes,
+  maxWorks,
   nodeSize,
   nodesFromRows,
   noteText,
   openAlexUrl,
   parseGraphHash,
+  sizeValue,
   sortNodes,
   topNeighbours,
   usePhone
@@ -244,6 +248,69 @@ check("export rows: only the graph's GEXF and GraphML files, plain names, GEXF f
   ]);
   assert.deepEqual(exportFiles(manifest, "other"), []);
   assert.deepEqual(exportFiles(null, "authors"), []);
+});
+
+const worksJson = {
+  graph: "works",
+  nodes: {
+    fields: ["id", "title", "year", "cited_by_count", "embedding_quality", "community"],
+    rows: [
+      ["W1", "Microplastics in soil", 2019, 120, "ok", 0],
+      ["W2", "Plastique en mer", 2011, 4, "low", 1],
+      ["W3", "Plastic litter on beaches", 2015, 40, "ok", 0]
+    ]
+  },
+  edges: {fields: ["source", "target", "weight"], rows: [[0, 1, 0.912], [0, 2, 0.8]]}
+};
+
+check("works: graph name, file keys and the works manifest path", () => {
+  assert.equal(graphName("works"), "works");
+  assert.equal(graphFileKey("works", true), "works_phone");
+  assert.equal(graphFileKey("works", false), "works");
+  assert.equal(manifestPathFor("works"), "graphs/works_manifest.json");
+  assert.equal(manifestPathFor("authors"), "graphs/graphs_manifest.json");
+  assert.equal(manifestPathFor("institutions"), "graphs/graphs_manifest.json");
+});
+
+check("manifest note for each graph reads its own manifest field", () => {
+  assert.equal(manifestNoteFor("works", {what_this_is: "Works note."}), "Works note.");
+  assert.equal(manifestNoteFor("authors", {author_graph: {what_this_is_and_is_not: {is: "A.", is_not: "B."}}}), "A. B.");
+  assert.equal(manifestNoteFor("institutions", {what_this_is_and_is_not: "Inst note."}), "Inst note.");
+  assert.equal(manifestNoteFor("works", null), "");
+});
+
+check("works rows load as nodes: title becomes the name, quality and year are kept", () => {
+  const nodes = nodesFromRows(worksJson);
+  assert.equal(nodes[1].id, "W2");
+  assert.equal(nodes[1].name, "Plastique en mer");
+  assert.equal(nodes[1].embedding_quality, "low");
+  assert.equal(nodes[1].year, 2011);
+  assert.equal(nodes[1].cited_by_count, 4);
+  const edges = edgesFromRows(worksJson, nodes.length);
+  assert.deepEqual(edges[0], {source: 0, target: 1, weight: 0.912});
+});
+
+check("works dots size by links, other graphs by works", () => {
+  const nodes = nodesFromRows(worksJson);
+  const adjacency = buildAdjacency(edgesFromRows(worksJson, nodes.length), nodes.length);
+  nodes.forEach((node) => { node.links = adjacency[node.index].length; });
+  assert.equal(sizeValue(nodes[0], "works"), 2);
+  assert.equal(sizeValue(nodes[1], "works"), 1);
+  assert.equal(sizeValue(nodes[0], "institutions"), 0);
+  assert.equal(maxWorks(nodes, "works"), 2);
+  assert.equal(maxWorks(nodes), 0);
+  assert.deepEqual([...labelIndices(nodes, 1, "works")], [0]);
+});
+
+check("works table sorts by citations and by year", () => {
+  const nodes = nodesFromRows(worksJson);
+  assert.deepEqual(sortNodes(nodes, "cited", "desc").map((n) => n.id), ["W1", "W3", "W2"]);
+  assert.deepEqual(sortNodes(nodes, "year", "asc").map((n) => n.id), ["W2", "W3", "W1"]);
+});
+
+check("works hash selects the works graph and keeps the page's keys", () => {
+  assert.deepEqual(parseGraphHash("#gv.g=works&gv.n=W1", "gv."), {graph: "works", node: "W1"});
+  assert.deepEqual(parseGraphHash("#g=works"), {graph: "works"});
 });
 
 console.log(`framework graph viewer runtime: ${passed} checks passed`);

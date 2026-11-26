@@ -613,8 +613,11 @@ make each other stale.
 - **Communities and layout.** Louvain (seed 42) on the desktop graph with negative similarities clipped
   to 0, communities ordered largest first; `community_layout` as in section 16; the phone file uses the
   first 5,000 positions of `layout_works.bin`.
-- **Fields.** Node rows `[id, title, year, cited_by_count, embedding_quality, community]` (title cut
-  to 160 characters); edge rows `[source, target, weight]`. No abstracts, authors, ORCIDs or
+- **Fields.** Same file shape as `institutions.json` (`nodes.fields`/`nodes.rows`, `edges.fields`/`edges.rows`,
+  `communities`); node rows `[id, title, year, cited_by_count, embedding_quality, community]` (title cut
+  to 160 characters); edge rows `[source, target, weight]`. `works_manifest.json` carries a `graphs` table
+  (`works`, `works_phone`: file, layout_file, nodes, edges, communities) in the shape of
+  `graphs_manifest.json`, so the viewer reads either manifest the same way. No abstracts, authors, ORCIDs or
   affiliation strings.
 - **Check.** `--check` validates the files (schema, caps, phone = first desktop ids, index ranges,
   every node has an edge, layout length, manifest counts, forbidden keys, desktop gzip at most 2 MB).

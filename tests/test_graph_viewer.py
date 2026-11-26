@@ -31,7 +31,7 @@ def test_runtime_helpers_under_node() -> None:
         [node, str(RUNTIME_CHECK)], cwd=ROOT, capture_output=True, text=True, check=False
     )
     assert result.returncode == 0, result.stderr[-2000:]
-    assert "21 checks passed" in result.stdout
+    assert "27 checks passed" in result.stdout
 
 
 def test_component_uses_the_shared_contract() -> None:
@@ -41,9 +41,25 @@ def test_component_uses_the_shared_contract() -> None:
     assert "npm:" not in re.sub(r'import [^\n]*"npm:[^"]+";', "", text)
     assert "export function mountGraph(root, options = {})" in text
     assert 'from "./graph_viewer_model.js"' in text
-    assert 'globalDataUrl("graphs/graphs_manifest.json")' in text
+    assert "globalDataUrl(manifestPathFor(name))" in text
+    assert "manifest.graphs?.[graphFileKey(name, phone)]" in text
     assert "globalDataUrl(`graphs/${entry.file}`)" in text
     assert "globalDataUrl(`graphs/${entry.layout_file}`)" in text
+
+
+def test_works_graph_is_wired_into_the_viewer_and_explore() -> None:
+    model = MODEL.read_text(encoding="utf-8")
+    assert 'export const GRAPHS = Object.freeze(["institutions", "authors", "works"]);' in model
+    assert '"graphs/works_manifest.json"' in model
+    text = COMPONENT.read_text(encoding="utf-8")
+    assert 'works: "Works"' in text
+    assert "WORKS_SORTABLE" in text
+    explore = (ROOT / "framework/src/components/explore.js").read_text(encoding="utf-8")
+    labels = 'GRAPH_LABEL = {institutions: "Institutions", authors: "Authors", works: "Works"}'
+    assert labels in explore
+    assert '["authors", "institutions", "works"]' in explore
+    assert 'globalDataUrl("graphs/works_manifest.json")' in explore
+    assert "manifestNoteFor(graph, manifest)" in explore
 
 
 def test_component_teardown_kills_the_renderer_and_listeners() -> None:
@@ -64,7 +80,7 @@ def test_hash_prefix_and_note_options_are_wired() -> None:
     assert "parseGraphHash(window.location.hash, prefix)" in text
     assert "x: state.x, y: state.y}, prefix, window.location.hash)" in text
     assert "options.note !== false" in text
-    assert "if (ui.note) ui.note.textContent = manifestNote;" in text
+    assert "if (ui.note) ui.note.textContent = manifestNoteFor(name, manifest);" in text
     model = MODEL.read_text(encoding="utf-8")
     assert 'export function formatGraphHash(state = {}, prefix = "", current = "")' in model
     assert "export function exportFiles(manifest, name)" in model
@@ -148,3 +164,11 @@ def test_author_graph_carries_no_person_level_contact_fields() -> None:
     graph = json.loads((GRAPHS / "authors.json").read_text(encoding="utf-8"))
     assert graph["nodes"]["fields"] == ["id", "display_name", "country_code", "works", "community"]
     assert "email" not in json.dumps(graph).lower()
+
+
+def test_works_graph_names_its_communities_by_topic() -> None:
+    viewer = (ROOT / "framework" / "src" / "components" / "graph_viewer.js").read_text(
+        encoding="utf-8"
+    )
+    # A works graph links similar texts, not collaborators.
+    assert 'name === "works" ? "Topic community" : "Collaboration community"' in viewer

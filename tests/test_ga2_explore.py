@@ -355,9 +355,9 @@ def test_network_tab_loads_the_graph_viewer_lazily_under_the_gv_namespace():
     assert 'const GRAPH_PREFIX = "gv.";' in js
     assert "hashPrefix: GRAPH_PREFIX, note: false" in js
     assert 'phone: "auto"' in js
-    # Default graph is institutions; the toggle offers Authors and Institutions.
+    # Default graph is institutions; the toggle offers Authors, Institutions and Works.
     assert 'parseGraphHash(location.hash, GRAPH_PREFIX).graph ?? "institutions"' in js
-    assert '["authors", "institutions"]' in js
+    assert '["authors", "institutions", "works"]' in js
     # Only the world scope mounts the viewer; country and continent scopes keep the country network.
     assert 'if (scope.kind !== "world") return countryNetworkPanel(el);' in js
     assert "function countryNetworkPanel(el)" in js

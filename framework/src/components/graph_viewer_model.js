@@ -4,7 +4,7 @@
 // `nodes.fields`; edge rows are [source, target, weight] with node indices.
 import {OTHER, SECONDARY_ALL_PAIRS} from "./shared/palette.js";
 
-export const GRAPHS = Object.freeze(["institutions", "authors"]);
+export const GRAPHS = Object.freeze(["institutions", "authors", "works"]);
 export const PHONE_MAX_WIDTH = 860;
 export const NODE_SIZE = Object.freeze({min: 2.5, max: 16});
 export const LABEL_COUNT = Object.freeze({desktop: 40, phone: 20});
@@ -28,6 +28,20 @@ export function graphFileKey(name, phone) {
   return phone ? `${graphName(name)}_phone` : graphName(name);
 }
 
+// The works graph has its own manifest (works_manifest.json); the other two share graphs_manifest.json.
+export function manifestPathFor(name) {
+  return graphName(name) === "works" ? "graphs/works_manifest.json" : "graphs/graphs_manifest.json";
+}
+
+// The plain-language note for the graph's caption. Each manifest keeps its note in a different place.
+export function manifestNoteFor(name, manifest) {
+  const graph = graphName(name);
+  if (graph === "works") return noteText(manifest?.what_this_is);
+  if (graph === "authors") return noteText(manifest?.author_graph?.what_this_is_and_is_not);
+  return noteText(manifest?.what_this_is_and_is_not);
+}
+
+
 // Layout: float32 little-endian x, y pairs in node order (node i at bytes 8i to 8i+7).
 export function decodeLayout(buffer, count) {
   const n = Number(count);
@@ -42,7 +56,7 @@ export function decodeLayout(buffer, count) {
   return out;
 }
 
-const FIELD_MAP = {display_name: "name", country_code: "country"};
+const FIELD_MAP = {display_name: "name", title: "name", country_code: "country"};
 
 // Rows -> node objects. Fields may be missing for one graph (type, ror); they become null.
 export function nodesFromRows(json) {
@@ -117,13 +131,20 @@ export function nodeSize(works, maxWorks) {
   return min + (max - min) * Math.sqrt(Math.min(1, works / maxWorks));
 }
 
-export function maxWorks(nodes) {
-  return nodes.reduce((best, node) => Math.max(best, node.works), 0);
+// The value that sets a dot's size and its label rank. Works nodes have no works count (their
+// `works` is 0), so the works graph sizes by links (degree) instead. Other graphs use works.
+export function sizeValue(node, name) {
+  return graphName(name, "") === "works" ? (node.links ?? 0) : node.works;
 }
 
-// Labels only for the top-N nodes by works (ties: the canonical index order). Returns a Set of indices.
-export function labelIndices(nodes, count) {
-  const order = nodes.map((node) => node.index).sort((a, b) => (nodes[b].works - nodes[a].works) || (a - b));
+export function maxWorks(nodes, name) {
+  return nodes.reduce((best, node) => Math.max(best, sizeValue(node, name)), 0);
+}
+
+// Labels only for the top-N nodes by dot size (ties: the canonical index order). Returns a Set of indices.
+export function labelIndices(nodes, count, name) {
+  const size = (node) => sizeValue(node, name);
+  const order = nodes.map((node) => node.index).sort((a, b) => (size(nodes[b]) - size(nodes[a])) || (a - b));
   return new Set(order.slice(0, Math.max(0, count)));
 }
 
@@ -171,6 +192,8 @@ export function sortNodes(nodes, key = "works", direction = "desc") {
     else if (key === "country") diff = String(a.country ?? "").localeCompare(String(b.country ?? ""));
     else if (key === "community") diff = (Number(a.community) || 0) - (Number(b.community) || 0);
     else if (key === "links") diff = (a.links ?? 0) - (b.links ?? 0);
+    else if (key === "year") diff = (Number(a.year) || 0) - (Number(b.year) || 0);
+    else if (key === "cited") diff = (Number(a.cited_by_count) || 0) - (Number(b.cited_by_count) || 0);
     else diff = a.works - b.works;
     return (sign * diff) || (a.index - b.index);
   });

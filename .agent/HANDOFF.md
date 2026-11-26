@@ -1,4 +1,4 @@
-# Handoff — 2026-11-26 — AMB-1 front end slice 3 (live) and BQ-V.1 slice 3 (global works graph; BQ-V.1 complete)
+# Handoff — 2026-11-26 — AMB-1 slice 3 (live), BQ-V.1 and BQ-V.4 complete (works graph and Works view); owner answers in
 
 ## State in one paragraph
 The signed-in ambassador dashboard's three "Coming next" cards are now real screens, each its own module mounted by
@@ -19,8 +19,9 @@ machine. Cached rebuild about 4 minutes, byte-identical. Docs: NETWORK_BUILD §1
 1. After the Pages deploy: open https://plastiverse.live/ambassadors signed in and check the three screens on the live
    site (one real knowledge item into the moderation queue, toggle a setting, copy an invitation).
 2. AMB-1 build order step 5: pilot with Norway and Belgium (needs local leads; owner).
-3. BQ-V.4 Works view (front end for `graphs/works.json`; delivers AT-9's embedding map), then PLAT-4 remaining
-   (per-region pages are REG-1; graphs now done), BQ-S9b, BQ-G3.
+3. Owner 2026-11-26 queue: REG-CA (California region.json like Norway/Belgium), A4 integration (docs/BFFP.md
+   -> CG tasks; existing decisions win over the spec), AMB-COAUTHORS-GLOBAL (Worker route; deploy needs go-ahead).
+   Then BQ-S9b, BQ-G3. Rebuild denominators.json at the next global data refresh (owner).
 4. Design-led, waiting on owner review (H25): VD-SM, UX-13 part b.
 
 ## Open findings
@@ -34,9 +35,8 @@ machine. Cached rebuild about 4 minutes, byte-identical. Docs: NETWORK_BUILD §1
   `network_metrics.json` goes stale when `index.json` changes; Evidence filter contrast hit (`.ev-zero`).
 
 ## Owner actions (one line each)
-- H52: add the `_dmarc` TXT record in Cloudflare so sign-in mail reaches university inboxes.
 - H39: label the first global gold round (`py -3.14 -m streamlit run scripts/review_gold_labels_app.py -- --global`).
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).
 - H42: triage 43 PubMed misses (`py -3.14 -m streamlit run scripts/review_pubmed_misses_app.py`).
 - H40: taxonomy decisions D1-D10 in `docs/TAXONOMY_PROPOSAL.md`. H2: 277 low-confidence work-relevance decisions.
-- Answer or accept the four new defaults in `.agent/QUESTIONS.md` (three AMB, one WORKS-GRAPH-SELECT).
+- Accept or change WORKS-GRAPH-SELECT in `.agent/QUESTIONS.md` (works graph shows the 15,000 most cited).

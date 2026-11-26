@@ -12,7 +12,7 @@ spreadsheet to edit by hand. Small reviews (10 or fewer) may stay as a file edit
 All commands run from the repository folder in Git Bash:
 `cd ~/R_new/CA_Plastics_Research_Dash`
 
-Last updated: 2026-11-18.
+Last updated: 2026-11-26.
 
 ---
 
@@ -33,23 +33,6 @@ The global quality numbers stay blank until a person labels a sample. Round 0 is
    highlighted) and click one decision per question. The app moves to the next work.
 3. When the progress bar reads "Drawn works labelled 160 of 160", close the browser tab and tell the agent "H39 round 0 done".
    The agent then draws the next round of 25 and says when the precision goal is met (at most 350).
-
-### H52. Add a DMARC record so sign-in email reaches university inboxes (AMB-1, 2 minutes)
-The first real confirmation email to a ucr.edu address was accepted by Resend but never arrived (not in spam).
-DKIM (resend._domainkey) and SPF (send.plastiverse.live) are set; DMARC is missing, which Google, Yahoo and
-Microsoft now require.
-1. Cloudflare > plastiverse.live > DNS > Records > Add record: Type TXT, Name `_dmarc`, Content `v=DMARC1; p=none;`. Save.
-2. After about 5 minutes, recheck the domain in Resend, then sign up again (the earlier link expired).
-3. If the email still does not arrive, tell the agent its status in Resend > Emails (Delivered, Sent or Bounced and the reason).
-
-### H51. Be the first real ambassador sign-up (AMB-1, about 5 minutes)
-Sign-up is live and was tested only with stand-in responses. A real run checks ORCID, OpenAlex, Turnstile and
-Resend end to end.
-1. Open https://plastiverse.live/ambassadors and click **Sign up with ORCID**; sign in at ORCID.
-2. Tick your institution(s), choose your region(s), and enter your work email; complete the bot check.
-3. Open the email from ambassadors@plastiverse.live and click the link; set your display name and accept the terms.
-4. Tell the agent what you saw at any step that looked wrong (or "H51 worked"). Your account becomes the owner
-   moderator automatically (your ORCID iD is OWNER_ORCID).
 
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
@@ -254,6 +237,8 @@ leak-check works wait for S5.7.
 
 ## Done
 
+- H52 (2026-11-26): owner added the DMARC record for plastiverse.live.
+- H51 (2026-11-26): owner's real ORCID sign-ups worked end to end (after the trailing-slash fix; an oehha.ca.gov address too).
 - H50 (2026-11-25): owner allowed GitHub Actions to create pull requests (ambassador export job); confirmed plastiverse.live is verified in Resend; gave the public Turnstile site key (used by the sign-up page).
 
 - H49 (2026-11-25): owner changed the ORCID redirect URI, set the seven Worker secrets and AMB_EXPORT_TOKEN, gave the owner ORCID iD, and approved creating D1 and deploying; the agent created D1 `plastiverse-ambassadors` (ENAM), applied migrations 0001-0004 and deployed the Worker to api.plastiverse.live (version 6fc9abeb).

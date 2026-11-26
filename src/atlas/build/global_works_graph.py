@@ -298,10 +298,10 @@ def _works_payload(
         "schema_version": SCHEMA_VERSION,
         "graph": name,
         "screening_status": SCREENING_STATUS,
-        "node_fields": list(WORKS_NODE_FIELDS),
-        "edge_fields": list(EDGE_FIELDS),
-        "nodes": rows,
-        "edges": [[a, b, w] for a, b, w in edges],
+        # Same shape as institutions.json and authors.json, so the graph viewer reads it as is.
+        "communities": len(set(communities)),
+        "nodes": {"fields": list(WORKS_NODE_FIELDS), "rows": rows},
+        "edges": {"fields": list(EDGE_FIELDS), "rows": [[a, b, w] for a, b, w in edges]},
     }
 
 
@@ -390,6 +390,23 @@ def build_works_graph(
         "layout_method": LAYOUT_METHOD,
         "layout_iterations": layout_iterations,
         "layout_format": LAYOUT_FORMAT,
+        # Per-graph entries in the shape of graphs_manifest.json `graphs`, for the viewer.
+        "graphs": {
+            GRAPH_NAME: {
+                "file": FILE_NAMES[GRAPH_NAME],
+                "layout_file": FILE_NAMES["layout"],
+                "nodes": count,
+                "edges": len(desktop_edges),
+                "communities": len(ordered_comm),
+            },
+            PHONE_GRAPH_NAME: {
+                "file": FILE_NAMES[PHONE_GRAPH_NAME],
+                "layout_file": FILE_NAMES["layout"],
+                "nodes": len(phone),
+                "edges": len(phone_edges),
+                "communities": len(set(communities[: len(phone)])),
+            },
+        },
         "files": {
             name: {"bytes": len(data), "gzip_bytes": len(gzip.compress(data, mtime=0))}
             for name, data in (
@@ -445,8 +462,8 @@ def check_works_outputs(out_dir: str | Path) -> list[str]:
     if files.get(FILE_NAMES["layout"], {}).get("bytes") != layout_size:
         problems.append("manifest layout bytes are stale")
 
-    desk_rows = desktop.get("nodes") or []
-    phone_rows = phone.get("nodes") or []
+    desk_rows = (desktop.get("nodes") or {}).get("rows") or []
+    phone_rows = (phone.get("nodes") or {}).get("rows") or []
     for key, payload, rows, cap, k_value in (
         (GRAPH_NAME, desktop, desk_rows, WORKS_NODE_CAP, manifest.get("k")),
         (PHONE_GRAPH_NAME, phone, phone_rows, WORKS_PHONE_NODE_CAP, manifest.get("phone_k")),
@@ -455,10 +472,13 @@ def check_works_outputs(out_dir: str | Path) -> list[str]:
             problems.append(f"{key}: schema or graph name mismatch")
         if payload.get("screening_status") != SCREENING_STATUS:
             problems.append(f"{key}: screening_status mismatch")
-        if payload.get("node_fields") != list(WORKS_NODE_FIELDS):
-            problems.append(f"{key}: node_fields mismatch")
-        if payload.get("edge_fields") != list(EDGE_FIELDS):
-            problems.append(f"{key}: edge_fields mismatch")
+        if (payload.get("nodes") or {}).get("fields") != list(WORKS_NODE_FIELDS):
+            problems.append(f"{key}: nodes.fields mismatch")
+        if (payload.get("edges") or {}).get("fields") != list(EDGE_FIELDS):
+            problems.append(f"{key}: edges.fields mismatch")
+        entry = (manifest.get("graphs") or {}).get(key) or {}
+        if entry.get("nodes") != len(rows) or entry.get("file") != FILE_NAMES[key]:
+            problems.append(f"{key}: manifest graphs entry is stale")
         if len(rows) > cap:
             problems.append(f"{key}: {len(rows)} nodes break cap {cap}")
         if not all(isinstance(r, list) and len(r) == len(WORKS_NODE_FIELDS) for r in rows):
@@ -467,7 +487,7 @@ def check_works_outputs(out_dir: str | Path) -> list[str]:
             problems.append(f"{key}: title longer than {TITLE_MAX_CHARS} characters")
         elif any(r[4] not in ("ok", "low") for r in rows):
             problems.append(f"{key}: embedding_quality must be ok or low")
-        edges = payload.get("edges") or []
+        edges = (payload.get("edges") or {}).get("rows") or []
         n = len(rows)
         if any(not (isinstance(e, list) and len(e) == 3 and 0 <= e[0] < e[1] < n) for e in edges):
             problems.append(f"{key}: edge index out of range or not source < target")
@@ -501,8 +521,8 @@ def check_works_outputs(out_dir: str | Path) -> list[str]:
     expected = {
         "desktop_nodes": len(desk_rows),
         "phone_nodes": len(phone_rows),
-        "desktop_edges": len(desktop.get("edges") or []),
-        "phone_edges": len(phone.get("edges") or []),
+        "desktop_edges": len((desktop.get("edges") or {}).get("rows") or []),
+        "phone_edges": len((phone.get("edges") or {}).get("rows") or []),
         "communities": len({r[5] for r in desk_rows}),
         "low_quality_nodes": sum(1 for r in desk_rows if r[4] == "low"),
     }

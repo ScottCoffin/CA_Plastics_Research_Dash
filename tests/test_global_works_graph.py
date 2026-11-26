@@ -209,25 +209,25 @@ def test_build_selects_desktop_then_phone_prefix(tmp_path: Path) -> None:
     build = _build(raw, tmp_path, node_cap=3, phone_cap=2, k=1, phone_k=1)
     desktop = json.loads(build.files["works"])
     phone = json.loads(build.files["works_phone"])
-    assert [row[0] for row in desktop["nodes"]] == ["W1", "W2", "W6"]
-    assert [row[0] for row in phone["nodes"]] == ["W1", "W2"]
+    assert [row[0] for row in desktop["nodes"]["rows"]] == ["W1", "W2", "W6"]
+    assert [row[0] for row in phone["nodes"]["rows"]] == ["W1", "W2"]
     assert build.manifest["counts"]["candidates"] == 4
     assert build.manifest["counts"]["desktop_nodes"] == 3
     assert build.manifest["counts"]["phone_nodes"] == 2
-    assert all(a < b for a, b, _ in desktop["edges"])
-    assert 2 <= len(desktop["edges"]) <= 3  # k=1 on three nodes: at least 2 distinct pairs
+    assert all(a < b for a, b, _ in desktop["edges"]["rows"])
+    assert 2 <= len(desktop["edges"]["rows"]) <= 3  # k=1 on three nodes: at least 2 distinct pairs
 
 
 def test_each_node_keeps_k_neighbours_and_edges_are_union(tmp_path: Path) -> None:
     build = _build(_dataset(tmp_path), tmp_path, k=2)
     desktop = json.loads(build.files["works"])
-    n = len(desktop["nodes"])
+    n = len(desktop["nodes"]["rows"])
     degree = [0] * n
-    for a, b, _ in desktop["edges"]:
+    for a, b, _ in desktop["edges"]["rows"]:
         degree[a] += 1
         degree[b] += 1
     assert min(degree) >= min(2, n - 1)
-    assert build.manifest["counts"]["desktop_edges"] == len(desktop["edges"])
+    assert build.manifest["counts"]["desktop_edges"] == len(desktop["edges"]["rows"])
 
 
 def test_phone_recomputes_knn_inside_its_subset(tmp_path: Path) -> None:
@@ -237,13 +237,13 @@ def test_phone_recomputes_knn_inside_its_subset(tmp_path: Path) -> None:
     texts = [c.text for c in ordered_candidates(read_works(raw, CORE["core_terms"]).candidates)]
     vectors = _fake_embedder(texts[:3])
     expected = {(a, b) for a, b, _ in knn_edges(vectors, 1)}
-    assert {(a, b) for a, b, _ in phone["edges"]} == expected
-    assert all(a < b < 3 for a, b, _ in phone["edges"])
+    assert {(a, b) for a, b, _ in phone["edges"]["rows"]} == expected
+    assert all(a < b < 3 for a, b, _ in phone["edges"]["rows"])
 
 
 def test_embedding_quality_and_title_truncation(tmp_path: Path) -> None:
     build = _build(_dataset(tmp_path), tmp_path)
-    rows = {row[0]: row for row in json.loads(build.files["works"])["nodes"]}
+    rows = {row[0]: row for row in json.loads(build.files["works"])["nodes"]["rows"]}
     assert rows["W1"][4] == "ok"
     assert rows["W6"][4] == "low"  # French
     assert rows["W7"][4] == "low"  # no language recorded
