@@ -753,4 +753,4 @@ Owner: depart from the California-only scope and scale globally (QUESTIONS AMB-C
 - Checks: `worker/test/coauthors.test.ts` (9 tests; 165 Worker tests in total), `rowsFromCoauthors` in
   `tests/framework_ambassador_invite_runtime.mjs`; mocked browser walk at 1440 and 390 px (global list with
   eligibility across regions, and the California fallback), axe 0.
-- Deploy: waits for the owner's go-ahead (HUMAN_TASKS H54). No migration.
+- Deployed 2026-11-26 with the owner's go-ahead (H54): Worker version cbc9e050; live check: `GET /me/coauthors` answers 401 without a session. No migration.

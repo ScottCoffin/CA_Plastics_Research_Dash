@@ -34,20 +34,6 @@ The global quality numbers stay blank until a person labels a sample. Round 0 is
 3. When the progress bar reads "Drawn works labelled 160 of 160", close the browser tab and tell the agent "H39 round 0 done".
    The agent then draws the next round of 25 and says when the precision goal is met (at most 350).
 
-### H54. Approve deploying the ambassador Worker update: global co-author invitations (1 minute)
-The "Invite your co-authors" screen can now list co-authors for any ambassador worldwide, read from OpenAlex by
-the Worker (no email addresses, nothing stored). It needs one Worker deploy (no database change). Until then the
-screen keeps the California-only list.
-1. Tell the agent "deploy the Worker" (or "not yet").
-- **Done when:** the agent reports the new Worker version and a live check of the route.
-
-### H53. Record the BFFP permission details (Add-on A4, 2 minutes)
-You said BFFP gave explicit permission to use their data. The groups spec asks that the details be on record.
-1. Tell the agent, in one message: the date, whether it was written or verbal, who at BFFP gave it (their role is
-   enough), and any conditions they set (pages, how often, attribution, whether member names may be shown).
-2. If it was by email, saying "by email from <role> on <date>" is enough; do not paste personal addresses.
-- **Done when:** the agent has recorded it under A4-D1 in `.agent/DECISIONS.md`.
-
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
 Global Plastic Laws topic. That link is a draft the agent proposed, so the page shows a
@@ -251,6 +237,8 @@ leak-check works wait for S5.7.
 
 ## Done
 
+- H54 (2026-11-26): owner approved the Worker deploy; the agent deployed version cbc9e050 (GET /me/coauthors live, 401 without a session).
+- H53 (2026-11-26): owner recorded BFFP's verbal permission to use all of their data with no conditions (A4-D1).
 - H52 (2026-11-26): owner added the DMARC record for plastiverse.live.
 - H51 (2026-11-26): owner's real ORCID sign-ups worked end to end (after the trailing-slash fix; an oehha.ca.gov address too).
 - H50 (2026-11-25): owner allowed GitHub Actions to create pull requests (ambassador export job); confirmed plastiverse.live is verified in Resend; gave the public Turnstile site key (used by the sign-up page).

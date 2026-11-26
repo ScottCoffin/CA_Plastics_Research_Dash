@@ -867,7 +867,7 @@ Copied from `docs/BFFP.md` §2. Status as of integration; "Owner" means confirme
 | ID | Decision | Status |
 |---|---|---|
 | A4-D0 | Groups layer is an add-on module; no change to A1-A3 paper-level schemas | Owner (spec: confirmed) |
-| A4-D1 | Roster extraction is built by the agent; BFFP gave the owner permission for retrieval from its site (owner 2026-11-26: "We have EXPLICIT PERMISSION from BFFP to use their data"); discovery precedes extraction | Owner; permission details (form, who, scope, conditions) open as A4-Q1 |
+| A4-D1 | Roster extraction is built by the agent; BFFP gave the owner permission for retrieval from its site (owner 2026-11-26: "We have EXPLICIT PERMISSION from BFFP to use their data"); discovery precedes extraction | Owner. Permission record (owner 2026-11-26, H53): verbal permission from BFFP to use all of their data, with no conditions; scope includes every region on BFFP's member map and all listed groups, read from BFFP's own data host `coremember.breakfreefromplastic.org` (docs/bffp_roster_discovery.md). Individuals stay excluded by the project's own rule (A4-D20) |
 | A4-D2 | Individuals are excluded from all outputs | Owner (see A4-D20) |
 | A4-D3 | Groups without a plastics focus are shown in a separate, clearly named adjacent layer; Ambassadors can fill in details | Owner |
 | A4-D4 | Taxonomy facets F1-F14 (spec §3); Tier 1 required, Tier 2 optional | Owner 2026-11-26 by deferral to the spec (QUESTIONS AMB-KNOWLEDGE-EXTRAS) |
