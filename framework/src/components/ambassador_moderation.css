@@ -1,8 +1,8 @@
 /* The moderation page (AMB-1 front end slice 2c). Scoped under .am like ambassadors.css; colours are --pv-* tokens. */
-.am .mod-tools { margin-top: 18px; max-width: 640px; }
+.am .mod-tools { margin-top: 18px; max-width: none; }
 .am .mod-select { width: 100%; max-width: 360px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--pv-ink); background: var(--pv-paper); font-size: 16px; }
 .am .mod-count { font-weight: 600; margin: 14px 0 0; }
-.am .mod-queue { margin-top: 18px; max-width: 760px; }
+.am .mod-queue { margin-top: 18px; max-width: none; }
 .am .mod-item { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 20px; }
 .am .mod-heading { font-size: 22px; margin: 0 0 12px; }
 .am .mod-heading:focus { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
@@ -13,7 +13,7 @@
 .am .mod-item .field { margin-top: 18px; }
 .am .mod-item .field > label { display: block; font-weight: 600; margin-bottom: 6px; }
 .am .mod-item textarea { width: 100%; max-width: 560px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--pv-ink); background: var(--pv-paper); font: inherit; font-size: 16px; }
-.am .mod-form { margin-top: 18px; max-width: 560px; }
+.am .mod-form { margin-top: 18px; max-width: none; }
 .am .mod-form .field { margin-top: 16px; }
 .am .mod-form .field > label { display: block; font-weight: 600; margin-bottom: 6px; }
 .am .mod-form input { width: 100%; max-width: 360px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--pv-ink); background: var(--pv-paper); font-size: 16px; }
@@ -26,7 +26,7 @@
 .am .mod-item .btn, .am .mod-form .btn, .am .mod-queue .btn { min-width: 128px; min-height: 44px; }
 .am .mod-result { min-height: 1.5em; margin-top: 12px; }
 .am .mod-result.is-error { color: var(--pv-ink); font-weight: 600; border-left: 3px solid var(--pv-coral-ink); padding-left: 10px; }
-.am .mod-confirm { margin-top: 18px; max-width: 560px; border: 2px solid var(--pv-ink); background: var(--pv-cream); padding: 16px; }
+.am .mod-confirm { margin-top: 18px; max-width: none; border: 2px solid var(--pv-ink); background: var(--pv-cream); padding: 16px; }
 .am .mod-confirm h3 { margin: 0 0 8px; }
 .am .mod-confirm h3:focus { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
 @media (max-width: 480px) {

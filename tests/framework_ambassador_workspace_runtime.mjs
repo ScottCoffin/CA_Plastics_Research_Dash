@@ -9,6 +9,7 @@ import {
   answerBody,
   caseChoices,
   caseProgress,
+  choiceText,
   deepLinkFrom,
   knowledgeStatus,
   cleanText,
@@ -244,6 +245,16 @@ check("latest submission per item for one region, newest first", () => {
   assert.equal(reviewText("approved"), "Accepted");
   assert.equal(reviewText("rejected"), "Not accepted");
   assert.equal(reviewText("other"), "");
+});
+
+check("stream B choice text names the choice and the review state", () => {
+  assert.equal(choiceText({kind: "confirm", status: "pending"}), "Confirmed. Waiting for review.");
+  assert.equal(choiceText({kind: "not_relevant", status: "pending"}), "Marked not relevant. Waiting for review.");
+  assert.equal(choiceText({kind: "correct", status: "pending"}), "Correction sent. Waiting for review.");
+  assert.equal(choiceText({kind: "confirm", status: "approved"}), "Confirmed. Accepted.");
+  assert.equal(choiceText({kind: "correct", status: "rejected"}), "Correction sent. Not accepted.");
+  assert.equal(choiceText({kind: "other", status: "pending"}), "");
+  assert.equal(choiceText(undefined), "");
 });
 
 check("active regions only, in order", () => {

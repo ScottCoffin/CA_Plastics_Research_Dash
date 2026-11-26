@@ -22,6 +22,7 @@ head: '<meta name="robots" content="noindex, nofollow">'
   <nav class="nav" aria-label="Main">
     <a href="./explore">Explore the data</a>
     <a href="./ambassadors">Ambassadors</a>
+    <a href="./groups">Community groups</a>
   </nav>
 </header>
 

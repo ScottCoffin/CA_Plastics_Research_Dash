@@ -276,3 +276,4 @@
 | 2026-11-26 | CG-2, CG-3 | BFFP roster extractor and organisations-only admission; first roster published (2,708 organisations, 143 countries) | this commit |
 | 2026-11-26 | CG-9 | groups.json (cg-v2) and five derived files from the BFFP roster | this commit |
 | 2026-11-26 | CG-13 | Public /groups page: coverage, roster table, group card | this commit |
+| 2026-11-26 | AMB-NAV, AMB-CHOICE-CUES, AMB-FULLWIDTH | Owner UI requests: nav links, chosen-button cues, full-width ambassador pages | this commit |

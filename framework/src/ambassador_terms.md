@@ -15,7 +15,7 @@ pager: false
 <div class="am">
 <header class="top">
   <a class="brand" href="./" aria-label="Plastiverse Live home"><span class="wm">PLASTI<b>VERSE</b> LIVE</span></a>
-  <nav class="nav" aria-label="Main"><a href="./ambassadors">Ambassadors</a><a href="./explore">Explore the data</a></nav>
+  <nav class="nav" aria-label="Main"><a href="./ambassadors">Ambassadors</a><a href="./groups">Community groups</a><a href="./explore">Explore the data</a></nav>
 </header>
 <main id="main" tabindex="-1" class="terms">
 

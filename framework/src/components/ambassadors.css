@@ -9,12 +9,15 @@
 .am .skip:focus { left: 12px; top: 8px; }
 .am .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .am main, .am .foot { max-width: 1360px; margin: 0 auto; padding: 0 var(--pv-gut); }
-.am h1 { font-size: clamp(32px, 4.6vw, 52px); line-height: 1.08; letter-spacing: -.01em; margin: 40px 0 14px; max-width: 18ch; }
+/* Full-width text (owner 2026-11-26, AMB-FULLWIDTH): undo Framework's default 640px cap on prose, lists and tables. */
+/* Also undo style.css `#observablehq-main p { max-width: 70ch }`; the id selector needs the id here too. */
+#observablehq-main .am :is(p, ul, ol, dl, table, figure, blockquote, h1, h2, h3, h4, h5, h6) { max-width: none; }
+.am h1 { font-size: clamp(32px, 4.6vw, 52px); line-height: 1.08; letter-spacing: -.01em; margin: 40px 0 14px; max-width: none; }
 .am h2 { font-size: 26px; line-height: 1.2; margin: 0; }
 .am h3 { font-size: 18px; margin: 0 0 4px; }
-.am .lede { font-size: 19px; max-width: 58ch; margin: 0 0 22px; }
-.am .hint, .am .sec-note { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: 70ch; }
-.am .credit { font-size: 14px; color: var(--pv-ink-2); margin: 10px 0 0; max-width: 70ch; }
+.am .lede { font-size: 19px; max-width: none; margin: 0 0 22px; }
+.am .hint, .am .sec-note { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: none; }
+.am .credit { font-size: 14px; color: var(--pv-ink-2); margin: 10px 0 0; max-width: none; }
 .am .status { font-size: 15px; color: var(--pv-ink-2); }
 .am .addr { font-weight: 600; user-select: all; }
 
@@ -42,11 +45,11 @@
 /* sections */
 .am .sec { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--pv-line); }
 .am .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 18px; }
-.am .rows { list-style: none; margin: 18px 0 0; padding: 0; max-width: 72ch; }
+.am .rows { list-style: none; margin: 18px 0 0; padding: 0; max-width: none; }
 .am .rows > li { padding: 14px 0; border-bottom: 1px solid var(--pv-line); }
 .am .rows > li:first-child { padding-top: 0; }
 .am .rows p { margin: 0; }
-.am .steps { margin: 18px 0 0; padding-left: 24px; max-width: 66ch; }
+.am .steps { margin: 18px 0 0; padding-left: 24px; max-width: none; }
 .am .steps li { padding-left: 6px; margin-bottom: 14px; }
 .am .steps li::marker { font-weight: 600; font-family: var(--pv-mono); }
 
@@ -56,7 +59,7 @@
 .am .search-host { position: relative; max-width: 640px; }
 .am .search-host input { width: 100%; min-height: 44px; padding: 8px 12px 8px 36px; border: 1px solid var(--pv-ink); background: var(--pv-paper); font-size: 16px; }
 .am .search-host .i { position: absolute; left: 12px; top: 15px; width: 14px; height: 14px; pointer-events: none; color: var(--pv-ink-2); }
-.am .threshold { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: 70ch; }
+.am .threshold { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: none; }
 .am .pop { position: absolute; left: 0; right: 0; top: 100%; z-index: 25; margin: 0; padding: 0; list-style: none; background: var(--pv-paper); border: 1px solid var(--pv-ink); border-top: 0; max-height: 360px; overflow-y: auto; box-shadow: 0 8px 20px color-mix(in srgb, var(--pv-ink) 12%, transparent); }
 .am .pop[hidden] { display: none; }
 .am .pop .opt { min-height: 44px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2px 12px; padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--pv-line); font-size: 15px; }
@@ -113,7 +116,7 @@
 .am .geo-panel .status { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; }
 
 /* badge block and the Ambassador badge */
-.am .badge-block { margin-top: 28px; border-top: 1px solid var(--pv-line); padding-top: 18px; max-width: 760px; }
+.am .badge-block { margin-top: 28px; border-top: 1px solid var(--pv-line); padding-top: 18px; max-width: none; }
 .am .badge-lg { margin: 0 0 6px; }
 .am .amb { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; vertical-align: middle; font-size: 14px; line-height: 1.25; color: var(--pv-ink); }
 .am .amb .seal { width: 18px; height: 18px; flex: none; overflow: visible; }
@@ -126,12 +129,12 @@
 .am .amb.lg .amb-label { padding: 6px 12px; }
 
 /* can I join */
-.am .check-box { margin-top: 18px; border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 22px; max-width: 1040px; }
+.am .check-box { margin-top: 18px; border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 22px; max-width: none; }
 .am .check-row { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
 .am .check-row .field { min-width: 0; }
 .am .check-btn { display: flex; }
 .am .check-btn .btn { width: 100%; }
-.am .result { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--pv-ink); background: var(--pv-wash); font-size: 15px; max-width: 70ch; }
+.am .result { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--pv-ink); background: var(--pv-wash); font-size: 15px; max-width: none; }
 .am .result[data-state="no"] { background: var(--pv-cream); }
 .am .result[hidden] { display: none; }
 .am .result b { display: block; font-size: 16px; margin-bottom: 2px; }
@@ -141,9 +144,9 @@
 .am main.terms { padding-bottom: 48px; }
 .am main.terms h1 { margin-top: 32px; }
 .am main.terms h2 { font-size: 21px; margin-top: 28px; }
-.am main.terms ol { padding-left: 24px; max-width: 74ch; }
+.am main.terms ol { padding-left: 24px; max-width: none; }
 .am main.terms li { margin-bottom: 12px; }
-.am main.terms p { max-width: 74ch; }
+.am main.terms p { max-width: none; }
 
 .am .foot { border-top: 1px solid var(--pv-line); margin-top: 56px; padding-top: 18px; padding-bottom: 36px; font-size: 14px; color: var(--pv-ink-2); }
 
@@ -161,9 +164,9 @@
 }
 
 /* ORCID-first sign-up (AMB-1 front end slice 2a; ambassador_signup.js). Tokens only. */
-.am .signup { max-width: 760px; }
+.am .signup { max-width: none; }
 .am .signup [hidden] { display: none; }
-.am .signup p { max-width: 66ch; }
+.am .signup p { max-width: none; }
 .am .signup h2 { margin: 0 0 12px; }
 .am .signup .step-n { font: 600 14px/1.4 var(--pv-mono); color: var(--pv-ink-2); margin: 0 0 6px; }
 .am .signup fieldset { border: 0; margin: 20px 0 0; padding: 0; min-width: 0; }
@@ -188,10 +191,10 @@
 .am .signup .plain li small { display: block; color: var(--pv-ink-2); font-size: 14px; }
 .am .signup .link-btn { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; }
 .am .signup .proposal { margin-top: 22px; }
-.am .signup .sub { margin-top: 14px; padding: 16px; border: 1px solid var(--pv-line); background: var(--pv-paper); max-width: 560px; }
+.am .signup .sub { margin-top: 14px; padding: 16px; border: 1px solid var(--pv-line); background: var(--pv-paper); max-width: none; }
 .am .signup .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 .am .signup .btns .btn { min-width: 128px; }
-.am .signup .err-sum { margin-top: 16px; padding: 12px 14px; border: 2px solid var(--pv-ink); background: var(--pv-cream); max-width: 66ch; }
+.am .signup .err-sum { margin-top: 16px; padding: 12px 14px; border: 2px solid var(--pv-ink); background: var(--pv-cream); max-width: none; }
 .am .signup .err-sum p { margin: 0 0 6px; font-weight: 600; }
 .am .signup .err-sum ul { margin: 0; padding-left: 20px; }
 .am .signup .err-sum a { display: inline-block; min-height: 24px; }
@@ -208,17 +211,17 @@
 /* Ambassador workspace (AMB-1 front end slice 2b; ambassador_workspace.js). Tokens only; targets 44px. */
 /* Page mode (owner 2026-11-26): data-mode on .am. Checking and dashboard hide the recruiting sections. */
 .am .only-checking { display: none; }
-.am[data-mode="checking"] .only-checking { display: block; max-width: 960px; padding-top: 40px; }
+.am[data-mode="checking"] .only-checking { display: block; max-width: none; padding-top: 40px; }
 .am[data-mode="checking"] .recruit, .am[data-mode="dashboard"] .recruit { display: none; }
-.am .ws-skel { display: grid; gap: 12px; max-width: 960px; }
+.am .ws-skel { display: grid; gap: 12px; max-width: none; }
 .am .ws-skel span { display: block; height: 56px; background: var(--pv-wash); }
 .am[data-mode="dashboard"] main { padding-bottom: 48px; }
 .am[data-mode="dashboard"] .signup { max-width: none; margin-top: 8px; padding-top: 0; border-top: 0; }
-.am .ws { max-width: 960px; padding-top: 8px; }
+.am .ws { max-width: none; padding-top: 8px; }
 .am .ws [hidden] { display: none; }
 .am .ws h2 { margin: 0 0 12px; }
 .am .ws h3 { font-size: 16px; margin: 24px 0 8px; }
-.am .ws p { max-width: 66ch; }
+.am .ws p { max-width: none; }
 .am .ws .ws-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px 24px; padding: 24px 0 20px; border-bottom: 1px solid var(--pv-line); }
 .am .ws .ws-hello { display: grid; gap: 10px; min-width: 0; }
 .am .ws .ws-top h1 { margin: 0; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.1; letter-spacing: -.02em; max-width: none; }
@@ -280,6 +283,10 @@
 .am .ws .ws-items { list-style: none; margin: 0; padding: 0; }
 .am .ws .ws-item { padding: 12px 0; border-bottom: 1px solid var(--pv-line); }
 .am .ws .ws-item-name { font-weight: 600; margin: 0; }
+/* A chosen button stays filled with a check mark; the row states the choice in words (AMB-CHOICE-CUES). */
+.am .ws .ws-item-actions .btn[aria-pressed="true"] { background: var(--pv-ink); color: var(--pv-paper); }
+.am .ws .ws-check { display: inline-block; flex: none; margin-right: 4px; vertical-align: -1px; }
+.am .ws .ws-state { margin: 6px 0 0; font-weight: 600; }
 .am .ws .ws-edit { margin-top: 10px; padding: 12px; border: 1px solid var(--pv-line); }
 .am .ws .ws-edit textarea { resize: vertical; }
 .am .ws .ws-review { color: var(--pv-ink-2); }
@@ -289,7 +296,7 @@
 /* Wide screens: tasks on the left, the larger region map and the progress summary on the right. Tablets (1024px and
    below) and phones stay in one column, tasks first. */
 @media (min-width: 1100px) {
-  .am .ws.is-dash { max-width: 1200px; }
+  .am .ws.is-dash { max-width: none; }
   .am .ws .ws-dash { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 48px; }
 }
 @media (prefers-reduced-motion: reduce) {

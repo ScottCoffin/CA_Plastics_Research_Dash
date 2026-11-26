@@ -1,6 +1,6 @@
 /* Invite your co-authors screen (AMB-1 front end slice 3c). Tokens only; every selector sits under .am .iv-.
    The screen sits inside the workspace (.am .ws), which supplies .ws-crumb, .link-btn, .hint and .sr. */
-.am .iv-list { list-style: none; margin: 16px 0 0; padding: 0; border-top: 2px solid var(--pv-ink); max-width: 820px; }
+.am .iv-list { list-style: none; margin: 16px 0 0; padding: 0; border-top: 2px solid var(--pv-ink); max-width: none; }
 .am .iv-row { display: grid; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--pv-line); }
 .am .iv-who { min-width: 0; }
 .am .iv-who p { margin: 4px 0 0; font-size: 15px; }
@@ -9,7 +9,7 @@
 .am .iv-elig { margin: 0; }
 .am .iv-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .am .iv-actions .btn { flex: 1 1 auto; min-height: 44px; }
-.am .iv-root > .iv-elig { margin: 16px 0 12px; max-width: 70ch; font-size: 16px; color: var(--pv-ink); }
+.am .iv-root > .iv-elig { margin: 16px 0 12px; max-width: none; font-size: 16px; color: var(--pv-ink); }
 .am .iv-root > .hint { margin-top: 12px; }
 .am .iv-status { min-height: 1.5em; margin-top: 12px; color: var(--pv-ink); }
 .am .iv-copy { display: block; width: 100%; max-width: 820px; margin-top: 12px; padding: 12px; font: inherit; font-size: 15px; color: var(--pv-ink); background: var(--pv-paper); border: 1px solid var(--pv-ink); }

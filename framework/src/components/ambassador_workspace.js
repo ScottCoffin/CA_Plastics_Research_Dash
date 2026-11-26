@@ -248,9 +248,22 @@ export function reviewText(status) {
   return "";
 }
 
+/** The text state of a stream B choice, from the person's latest submission for the item ("" when none). */
+export function choiceText(row) {
+  const said = {confirm: "Confirmed.", correct: "Correction sent.", not_relevant: "Marked not relevant."}[row?.kind];
+  if (!said) return "";
+  if (row.status === "pending") return `${said} Waiting for review.`;
+  if (row.status === "approved") return `${said} Accepted.`;
+  if (row.status === "rejected") return `${said} Not accepted.`;
+  return said;
+}
+
 // ---- DOM ----------------------------------------------------------------------------------------------------
 const esc = (value) => escapeHtml(value);
 const regionName = (slug) => REGION_NAMES[slug] || slug;
+// A check mark shown inside the button the person chose (colour is never the only cue).
+const CHECK = '<svg class="ws-check" width="12" height="10" viewBox="0 0 12 10" aria-hidden="true" focusable="false"><path d="M1 5l3.2 3.2L11 1.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
+const chosenMark = (on) => (on ? CHECK : "");
 
 let state = null;
 let wrap = null;
@@ -571,7 +584,7 @@ function streamAHTML() {
       )}" aria-describedby="ws-correct-hint"><p class="hint" id="ws-correct-hint">Plain text, up to 200 characters.</p></div>`;
   const buttons = ANSWERS.map(
     (answer) =>
-      `<button type="button" class="ws-answer" data-ws-action="answer" data-answer="${answer}" aria-pressed="${saved?.answer === answer}">${ANSWER_LABELS[answer]}</button>`,
+      `<button type="button" class="ws-answer" data-ws-action="answer" data-answer="${answer}" aria-pressed="${saved?.answer === answer}">${chosenMark(saved?.answer === answer)}${ANSWER_LABELS[answer]}</button>`,
   ).join("");
   const rows = evidenceRows(item)
     .map(([label, html]) => `<div><dt>${esc(label)}</dt><dd>${html}</dd></div>`)
@@ -610,18 +623,21 @@ function streamBHTML() {
         .map((item, index) => ({item, index}))
         .filter(({item}) => item.section_id === section.id)
         .map(({item, index}) => {
-          const review = reviewText(latest.get(item.item_id)?.status);
+          const chosen = latest.get(item.item_id);
+          const state = choiceText(chosen);
+          const pressed = (kind) => `aria-pressed="${chosen?.kind === kind}"`;
           const link = safeUrl(item.url);
           const name = link ? `<a class="link" href="${esc(link)}" rel="noopener">${esc(item.name)}</a>` : esc(item.name);
           const open = state.editOpen === index;
           return `<li class="ws-item" data-item-row="${index}">
             <p class="ws-item-name">${name}</p>
-            <p class="hint">${item.status === "draft" ? "Draft" : "To be confirmed"}${review ? `. ${esc(review)}` : ""}</p>
+            <p class="hint">${item.status === "draft" ? "Draft" : "To be confirmed"}</p>
+            ${state ? `<p class="ws-state">${esc(state)}</p>` : ""}
             ${item.note ? `<p class="hint">${esc(item.note)}</p>` : ""}
             <div class="ws-item-actions">
-              <button type="button" class="btn" data-ws-action="item-confirm" data-index="${index}">Confirm</button>
-              <button type="button" class="btn" data-ws-action="item-not-relevant" data-index="${index}">Not relevant</button>
-              <button type="button" class="btn" data-ws-action="item-edit" data-index="${index}" aria-expanded="${open}" aria-controls="ws-edit-${index}">Correct or add a note</button>
+              <button type="button" class="btn" data-ws-action="item-confirm" data-index="${index}" ${pressed("confirm")}>${chosenMark(chosen?.kind === "confirm")}Confirm</button>
+              <button type="button" class="btn" data-ws-action="item-not-relevant" data-index="${index}" ${pressed("not_relevant")}>${chosenMark(chosen?.kind === "not_relevant")}Not relevant</button>
+              <button type="button" class="btn" data-ws-action="item-edit" data-index="${index}" aria-expanded="${open}" aria-controls="ws-edit-${index}" ${pressed("correct")}>${chosenMark(chosen?.kind === "correct")}Correct or add a note</button>
             </div>
             <div class="ws-edit" id="ws-edit-${index}"${open ? "" : " hidden"}>
               <div class="field"><label for="ws-name-${index}">New name</label><input id="ws-name-${index}" type="text" maxlength="200" aria-describedby="ws-name-hint-${index}"><p class="hint" id="ws-name-hint-${index}">Leave blank to keep: ${esc(item.name)}</p></div>

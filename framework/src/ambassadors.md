@@ -25,6 +25,7 @@ pager: false
   <nav class="nav" aria-label="Main">
     <a href="./explore">Explore the data</a>
     <a href="./ambassadors" aria-current="page">Ambassadors</a>
+    <a href="./groups">Community groups</a>
     <a href="./california/about">About</a>
   </nav>
 </header>

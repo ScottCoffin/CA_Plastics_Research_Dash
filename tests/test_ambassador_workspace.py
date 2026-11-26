@@ -173,11 +173,49 @@ def test_dashboard_is_two_columns_on_wide_screens_only() -> None:
     # The two columns start at 1100px; the tablet width (1024px) keeps one column.
     assert "@media (min-width: 1100px)" in added
     assert "grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr)" in added
-    assert "max-width: 1200px" in added
+    # The dashboard uses the page width (no 1200px cap); the grid itself starts at 1100px.
+    assert "max-width: 1200px" not in added
     # The map box reserves the shared frame's aspect ratio inline, so the layout does not shift.
     assert 'style="aspect-ratio: ${w} / ${h}"' in workspace
     assert "export function mapFrame(world)" in workspace
     assert "aspect-ratio: 2 / 1" in added
+
+
+def test_a_choice_shows_as_pressed_with_a_check_and_a_text_state() -> None:
+    workspace = _text(WORKSPACE)
+    # Stream B: each chosen button carries aria-pressed and a check mark; the row states the choice.
+    for kind in ("confirm", "not_relevant", "correct"):
+        assert f'${{pressed("{kind}")}}' in workspace, kind
+    assert 'const pressed = (kind) => `aria-pressed="${chosen?.kind === kind}"`;' in workspace
+    assert "choiceText(chosen)" in workspace
+    assert 'class="ws-state"' in workspace
+    # Stream A: the chosen answer is pressed and marked, and its text says what was answered.
+    assert 'aria-pressed="${saved?.answer === answer}"' in workspace
+    assert "chosenMark(saved?.answer === answer)" in workspace
+    assert "Your answer: ${ANSWER_LABELS[saved.answer]}." in workspace
+    # The check icon is decorative; the state is text and the check is hidden from assistive tech.
+    assert (
+        'class="ws-check"' in workspace
+        and 'aria-hidden="true"' in workspace.split("const CHECK")[1][:200]
+    )
+    styles = _text(STYLES)
+    added = styles[styles.index("Ambassador workspace (AMB-1 front end slice 2b") :]
+    assert '.am .ws .ws-item-actions .btn[aria-pressed="true"]' in added
+    assert ".am .ws .ws-state" in added
+
+
+def test_ambassador_text_uses_the_page_width() -> None:
+    # Owner 2026-11-26: no narrow column limits on headings or prose; inputs keep their own widths.
+    styles = _text(STYLES)
+    for name in (
+        "ambassador_knowledge.css",
+        "ambassador_settings.css",
+        "ambassador_invite.css",
+        "ambassador_moderation.css",
+    ):
+        styles += _text(COMPONENTS / name)
+    for old in ("max-width: 18ch", "max-width: 58ch", "max-width: 760px", "max-width: 960px"):
+        assert old not in styles, old
 
 
 def test_progress_summary_is_text_and_a_bar() -> None:
