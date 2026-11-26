@@ -1,0 +1,51 @@
+{
+  "schema": "cg-v2",
+  "group_id": "cg_ex001",
+  "name": "Example Coastal Cleanup Group",
+  "name_alt": [],
+  "url": "https://example.org",
+  "country": "US",
+  "region": "Northern America",
+  "places": ["US-CA"],
+  "source": "bffp_roster",
+  "org_status": "source_declared_org",
+  "bffp_listed": true,
+  "bffp_listed_asof": "2026-11-26",
+  "status": "ambassador_tagged",
+  "cannot_determine_reason": null,
+  "layer": "core",
+  "entity_type": "organisation",
+  "sector": "ngo_civil_society",
+  "plastics_centrality": "primary",
+  "primary_activities": ["cleanup_removal", "education_awareness"],
+  "geographic_scope": "subnational",
+  "legal_form": "registered_nonprofit",
+  "legal_form_note": null,
+  "participation_in_science": null,
+  "website_languages": ["en"],
+  "themes": [],
+  "analytic_lens": [],
+  "constituency": [],
+  "parent_group_id": null,
+  "stated_affiliations": [],
+  "evidence": [
+    {
+      "facet": "plastics_centrality",
+      "url": "https://example.org/about",
+      "accessed_at": "2026-11-26",
+      "quote": "We remove plastic litter from California beaches.",
+      "not_stated": false,
+      "note": null
+    },
+    {
+      "facet": "primary_activities",
+      "url": "https://example.org/programmes",
+      "accessed_at": "2026-11-26",
+      "quote": "Our programmes include beach cleanups and school education days.",
+      "not_stated": false,
+      "note": null
+    }
+  ],
+  "tagged_at": "2026-11-26",
+  "reviewed_at": null
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "cg-v2",
+  "group_id": "cg_cd001",
+  "name": "Example Unreachable Group",
+  "name_alt": [],
+  "url": "https://example.com/",
+  "country": "US",
+  "region": "Northern America",
+  "places": [],
+  "source": "bffp_roster",
+  "org_status": "source_declared_org",
+  "bffp_listed": true,
+  "bffp_listed_asof": "2026-11-26",
+  "status": "cannot_determine",
+  "cannot_determine_reason": "no_web_presence",
+  "layer": "untagged",
+  "entity_type": null,
+  "sector": null,
+  "plastics_centrality": "cannot_determine",
+  "primary_activities": [],
+  "geographic_scope": null,
+  "legal_form": null,
+  "legal_form_note": null,
+  "participation_in_science": null,
+  "website_languages": [],
+  "themes": [],
+  "analytic_lens": [],
+  "constituency": [],
+  "parent_group_id": null,
+  "stated_affiliations": [],
+  "evidence": [
+    {
+      "facet": "plastics_centrality",
+      "url": "https://example.com/",
+      "accessed_at": "2026-11-26",
+      "quote": null,
+      "not_stated": true,
+      "note": "Site unavailable on the access date"
+    }
+  ],
+  "tagged_at": null,
+  "reviewed_at": null
+}

@@ -1,0 +1,139 @@
+# Community groups layer: controlled vocabularies for the cg-v2 record (Add-on A4).
+#
+# Values come from docs/BFFP.md section 3 (facets F1-F14), section 4.4 (org_status), section 5.3
+# (status), section 5.4 (cannot_determine reasons) and section 8.2 (record enums). Keep each list in
+# the order the spec gives: the order drives later views (tree, Sankey, heatmaps), so never sort it.
+# Changes need a DECISIONS entry (A4 rule 10).
+#
+# GPML labels: the sector (F2) and primary_activities (F4) labels are derived from the GPML
+# stakeholder types and initiative categories and are still [VERIFY] at the time of writing.
+# Read by src/atlas/groups/schema.py (load_taxonomy).
+
+schema: cg-v2
+
+# F1
+entity_type:
+  - organisation
+  - network_coalition
+  - programme_project
+  - campaign
+  - informal_group
+  - chapter_branch
+  - other
+
+# F2
+sector:
+  - ngo_civil_society
+  - community_informal
+  - foundation
+  - academia_research
+  - private_sector
+  - government
+  - igo
+  - other
+
+# F3 (drives layer, V1)
+plastics_centrality:
+  - primary
+  - substantial
+  - incidental
+  - none
+  - cannot_determine
+
+# F4 (working labels; [VERIFY] against GPML)
+primary_activities:
+  - advocacy_campaigning
+  - policy_governance
+  - research_monitoring
+  - education_awareness
+  - cleanup_removal
+  - waste_management_recycling
+  - reuse_refill_alternatives
+  - business_innovation
+  - community_organising_justice
+  - coalition_building_capacity
+  - funding_grantmaking
+  - legal_action
+  - other
+
+# F5
+participation_in_science:
+  - contractual
+  - contributory
+  - collaborative
+  - co_created
+  - collegial
+  - not_applicable
+
+# F6
+legal_form:
+  - registered_nonprofit
+  - unincorporated
+  - company
+  - public_body
+  - university
+  - unknown
+
+# F7 (scope; places are ISO codes, not an enum)
+geographic_scope:
+  - local
+  - subnational
+  - national
+  - regional_multi_country
+  - global
+
+# F11
+constituency:
+  - frontline_fenceline
+  - indigenous
+  - youth
+  - waste_workers
+  - coastal_fishing
+  - faith
+  - consumers
+  - industry
+  - other
+
+# F13
+relation:
+  - member_of
+  - partner_of
+  - fiscal_sponsor
+  - parent_of
+  - funded_by
+
+# section 8.2 / 5.3
+status:
+  - unlabelled
+  - assigned
+  - ambassador_tagged
+  - reviewed
+  - group_confirmed
+  - cannot_determine
+
+# derived (V1); listed so that the derived value has a vocabulary too
+layer:
+  - core
+  - adjacent
+  - untagged
+
+# section 8.2
+source:
+  - bffp_roster
+  - ambassador_suggested
+  - other
+
+# section 4.4: only the admitted values (A4-D20); other values fail V12
+org_status:
+  - source_declared_org
+  - heuristic_org
+  - human_confirmed_org
+
+# section 5.4 step 6
+cannot_determine_reason:
+  - no_web_presence
+  - dead_link
+  - language_barrier
+  - insufficient_information
+  - not_an_organisation
+  - conflict_of_interest
