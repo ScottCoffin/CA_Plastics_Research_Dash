@@ -40,6 +40,11 @@ head: |
   <p>The Atlas is independent of Break Free From Plastic. BFFP membership is shown only as the place a group was listed. It is not evidence of a group's commitment.</p>
 </div>
 <div id="groups-root" class="gv-root"><p class="gv-status">Loading the roster…</p></div>
+<section class="gv-panel gv-net-panel gv-root" aria-labelledby="gv-net-title" id="gv-network">
+  <h2 id="gv-net-title">Network</h2>
+  <p class="gv-caption">This view shows tagged groups only. Each link joins a group to a tag, or shows a stated affiliation that the group has published. A missing link means the data is missing, not that no work exists.</p>
+  <div id="groups-network"></div>
+</section>
 </main>
 
 <footer class="foot">
@@ -58,4 +63,18 @@ await mountGroups(root, async () => ({
   coverage: await loadJson("groups/coverage.json", {url: globalDataUrl}),
   tree: await loadJson("groups/groups_tree.json", {url: globalDataUrl}).catch(() => null),
 }));
+```
+
+```js
+import {mountGroupsNetwork} from "./components/groups_network.js";
+import {globalDataUrl as networkDataUrl, loadJson as loadNetworkJson} from "./components/atlas.js";
+// The network loads on its own, so a missing graph never blocks the roster. Opening a card reuses the roster's
+// dialog through the hash key group=<id>; the network's own keys (net_*) are kept in the hash.
+mountGroupsNetwork(document.getElementById("groups-network"), await loadNetworkJson("groups/groups_graph.json", {url: networkDataUrl}).catch(() => null), {
+  onOpenGroup: (id) => {
+    const params = new URLSearchParams(location.hash.replace(/^#/, ""));
+    params.set("group", id);
+    location.hash = params.toString();
+  }
+});
 ```

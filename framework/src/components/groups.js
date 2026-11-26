@@ -4,6 +4,7 @@
 // (tests/framework_groups_runtime.mjs). Every value is escaped before it reaches innerHTML.
 import {escapeHtml} from "./atlas.js";
 import {groupsTreeHtml, mountGroupsTree, treeHashState} from "./groups_tree.js";
+import {groupLabel} from "./group_labels.js";
 
 export const CONTACT_EMAIL = "theplastiverse@gmail.com";
 export const PAGE_SIZE = 50;
@@ -231,12 +232,12 @@ function quoteHtml(evidence) {
 export function cardHtml(group) {
   const site = safeUrl(group?.url);
   const places = list(group?.places).map((code) => countryName(code) || text(code)).filter(Boolean);
-  const activities = list(group?.primary_activities).map(text).filter(Boolean);
+  const activities = list(group?.primary_activities).map((value) => groupLabel("primary_activities", text(value))).filter(Boolean);
   const languages = list(group?.website_languages).map(text).filter(Boolean);
   const evidence = list(group?.evidence).map(quoteHtml).filter(Boolean);
   const affiliations = list(group?.stated_affiliations).map((item) => {
     const target = text(item?.target_name) || text(item?.target_group_id);
-    const relation = text(item?.relation).replace(/_/g, " ");
+    const relation = groupLabel("relation", text(item?.relation));
     const quote = quoteHtml(item?.evidence);
     return target ? `<li><b>${escapeHtml(relation || "Affiliated with")}</b>: ${escapeHtml(target)}${quote}</li>` : "";
   }).filter(Boolean);
@@ -246,8 +247,8 @@ export function cardHtml(group) {
     fact("Country", escapeHtml(countryName(group?.country))),
     fact("Places", places.length ? escapeHtml(places.join(", ")) : ""),
     fact("Status", badgeHtml(group?.status)),
-    fact("Entity type", escapeHtml(text(group?.entity_type).replace(/_/g, " "))),
-    fact("Sector", escapeHtml(text(group?.sector).replace(/_/g, " "))),
+    fact("Entity type", escapeHtml(groupLabel("entity_type", text(group?.entity_type)))),
+    fact("Sector", escapeHtml(groupLabel("sector", text(group?.sector)))),
     fact("Plastics focus", escapeHtml(centralityLabel(group?.plastics_centrality))),
     fact("Activities", activities.length ? `<ol class="gv-list">${activities.map((a) => `<li>${escapeHtml(a)}</li>`).join("")}</ol>` : ""),
     fact("Website languages", languages.length ? escapeHtml(languages.join(", ")) : ""),
@@ -343,6 +344,8 @@ export async function mountGroups(root, load) {
     const params = new URLSearchParams(formatHash(state).replace(/^#/, ""));
     const current = new URLSearchParams(location.hash.replace(/^#/, ""));
     for (const key of ["tree", "tree_all", "tree_open", "tree_closed", "tree_find"]) if (current.has(key)) params.set(key, current.get(key));
+    // The network view (groups_network.js) owns the net* keys; keep them too.
+    for (const [key, val] of current) if (key === "net" || key.startsWith("net_")) params.set(key, val);
     const value = params.toString();
     history.replaceState(null, "", `${location.pathname}${location.search}${value ? `#${value}` : ""}`);
   };

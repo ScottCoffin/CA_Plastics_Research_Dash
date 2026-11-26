@@ -30,7 +30,7 @@
   },
   "Eastern Africa": {
    "coverage": 0.0,
-   "roster": 158,
+   "roster": 155,
    "tagged": 0
   },
   "Eastern Asia": {
@@ -40,7 +40,7 @@
   },
   "Eastern Europe": {
    "coverage": 0.0,
-   "roster": 55,
+   "roster": 53,
    "tagged": 0
   },
   "Melanesia": {
@@ -55,7 +55,7 @@
   },
   "Middle Africa": {
    "coverage": 0.0,
-   "roster": 46,
+   "roster": 45,
    "tagged": 0
   },
   "Northern Africa": {
@@ -65,12 +65,12 @@
   },
   "Northern America": {
    "coverage": 0.0,
-   "roster": 714,
+   "roster": 706,
    "tagged": 0
   },
   "Northern Europe": {
    "coverage": 0.0,
-   "roster": 142,
+   "roster": 140,
    "tagged": 0
   },
   "Polynesia": {
@@ -80,22 +80,22 @@
   },
   "South America": {
    "coverage": 0.0,
-   "roster": 124,
+   "roster": 123,
    "tagged": 0
   },
   "South-eastern Asia": {
    "coverage": 0.0,
-   "roster": 292,
+   "roster": 286,
    "tagged": 0
   },
   "Southern Africa": {
    "coverage": 0.0,
-   "roster": 32,
+   "roster": 31,
    "tagged": 0
   },
   "Southern Asia": {
    "coverage": 0.0,
-   "roster": 410,
+   "roster": 407,
    "tagged": 0
   },
   "Southern Europe": {
@@ -105,17 +105,17 @@
   },
   "Western Africa": {
    "coverage": 0.0,
-   "roster": 185,
+   "roster": 179,
    "tagged": 0
   },
   "Western Asia": {
    "coverage": 0.0,
-   "roster": 44,
+   "roster": 43,
    "tagged": 0
   },
   "Western Europe": {
    "coverage": 0.0,
-   "roster": 168,
+   "roster": 167,
    "tagged": 0
   },
   "region_unknown": {
@@ -124,7 +124,7 @@
    "tagged": 0
   }
  },
- "denominator_note": "Based on 0 of 2708 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
+ "denominator_note": "Based on 0 of 2673 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
  "facets": {
   "entity_type": {
    "agreement": null,

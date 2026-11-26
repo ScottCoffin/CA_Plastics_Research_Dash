@@ -1,6 +1,6 @@
 {
  "caution": "The view reflects tagged groups only; absence of edges reflects missing data. Co-occurrence of tags is not a partnership.",
- "denominator_note": "Based on 0 of 2708 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
+ "denominator_note": "Based on 0 of 2673 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
  "edge_types": [
   "assignment",
   "affiliation",
@@ -8,6 +8,15 @@
  ],
  "edges": [],
  "generated_from": "2026-11-26",
+ "layout": {
+  "algorithm": "ForceAtlas2 (networkx)",
+  "edge_types": [
+   "assignment",
+   "affiliation"
+  ],
+  "iterations": 200,
+  "seed": 42
+ },
  "nodes": [],
  "schema": "cg-graph-v1"
 }

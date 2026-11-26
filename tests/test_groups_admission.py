@@ -50,6 +50,60 @@ def test_original_script_is_kept_verbatim() -> None:
 @pytest.mark.parametrize(
     ("raw", "expected"),
     [
+        ("/11th Hour Project", "11th Hour Project"),
+        ("  - Surfrider Foundation, ", "Surfrider Foundation"),
+        ('"Ocean Allies"', "Ocean Allies"),
+        ("\u201cOcean Allies\u201d", "Ocean Allies"),
+        ("'Ocean Allies'", "Ocean Allies"),
+        ('"Ocean Allies', "Ocean Allies"),
+        ("Ocean Allies\u201d", "Ocean Allies"),
+        ("R.I.S.E.", "R.I.S.E."),
+        ("Example Co.", "Example Co."),
+        (".Reef Watch", "Reef Watch"),
+        ("Zero Waste / Basura Cero", "Zero Waste / Basura Cero"),
+        ("Plastic-Free Seas", "Plastic-Free Seas"),
+        ("Ocean's Allies", "Ocean's Allies"),
+        ("Mar \u2022 Sin Pl\u00e1stico \u00b7", "Mar \u2022 Sin Pl\u00e1stico"),
+        ("  Example   Reef  ~|_", "Example Reef"),
+        ("\u4e1c\u6d77 \u201c\u6d77\u6d0b\u201d", "\u4e1c\u6d77 \u201c\u6d77\u6d0b\u201d"),
+        ("///", "///"),
+        ('"', '"'),
+        ("", ""),
+        (None, ""),
+    ],
+)
+def test_display_name_strips_stray_edge_punctuation(raw, expected) -> None:
+    assert admission.clean_display_name(raw) == expected
+
+
+def test_display_name_is_never_empty_when_the_input_is_not() -> None:
+    for raw in ("///", "-", " ~ ", '""'):
+        assert admission.clean_display_name(raw) != ""
+
+
+def test_display_name_cleaning_keeps_the_group_id_of_the_raw_name(registry) -> None:
+    raw = "/11th Hour Project"
+    result = _admit([RawEntry(raw, "Belgium", "https://11thhour.example.org")], registry)
+    (record,) = result.records
+    assert record["name"] == "11th Hour Project"
+    assert record["name_alt"] == []
+    domain = admission.registrable_domain("https://11thhour.example.org")
+    assert record["group_id"] == admission.group_id_for(admission.normalise_text(raw), "BE", domain)
+
+
+def test_name_alt_takes_the_cleaned_form_and_never_the_raw_form(registry) -> None:
+    entries = [
+        RawEntry("/example reef society", "Norway", "https://example-reef.no"),
+        RawEntry("/Example Reef Society", "Norway", "https://example-reef.no"),
+    ]
+    (record,) = _admit(entries, registry).records
+    assert record["name"] == "example reef society"
+    assert record["name_alt"] == ["Example Reef Society"]
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
         ("example-reef.org", "https://example-reef.org"),
         ("https://www.example-reef.org/about", "https://www.example-reef.org/about"),
         ("http://example-shore.org.uk", "http://example-shore.org.uk"),
@@ -302,3 +356,207 @@ def test_an_email_address_as_the_name_is_excluded() -> None:
     assert (
         classify("Example River Keepers", "https://example.org").org_status == "source_declared_org"
     )
+
+
+# ---------------------------------------------------------------------------
+# Roster QC (CG-ROSTER-QC): entities, placeholders, automatic and reviewed merges
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("name", ["-", "N/A", "Tbc", "Tes", "hhh", "??", "none"])
+def test_placeholder_names_are_quarantined_not_published(registry, name) -> None:
+    result = _admit([RawEntry(name, "Norway", None)], registry)
+    assert result.records == []
+    assert [row["reason"] for row in result.ambiguous] == ["placeholder name"]
+    assert result.placeholders == 1
+
+
+@pytest.mark.parametrize("name", ["USP", "FNE", "SIO"])
+def test_real_short_acronyms_are_kept(registry, name) -> None:
+    result = _admit([RawEntry(name, "Norway", "https://example-acro.no")], registry)
+    assert [r["name"] for r in result.records] == [name]
+    assert result.placeholders == 0
+
+
+def test_html_entities_are_decoded_but_the_id_hashes_the_raw_name(registry) -> None:
+    raw = "Example Rivers &amp; Lakes"
+    result = _admit([RawEntry(raw, "Norway", "https://example-rivers.no")], registry)
+    (record,) = result.records
+    assert record["name"] == "Example Rivers & Lakes"
+    assert record["group_id"] == admission.group_id_for(raw, "NO", "example-rivers.no")
+
+
+@pytest.mark.parametrize(
+    ("left", "right"),
+    [
+        ("a tip: tap e.V.", "a tip: tap"),
+        ("The Example Group Ltd", "Example Group"),
+        ("BAN Toxics, Inc.", "BAN Toxics"),
+        ("Less Plastic CIC", "Less Plastic"),
+        ("Example S.A.", "Example"),
+        ("Example gGmbH", "example"),
+        ("Café Verde", "Cafe Verde"),
+        ("Plastic-Free Delaware", "Plastic Free Delaware"),
+        ("Let's Do It! TOGO", "Let’s Do It TOGO"),
+    ],
+)
+def test_merge_key_treats_punctuation_legal_form_and_the_as_noise(left, right) -> None:
+    assert admission.merge_key(left) == admission.merge_key(right)
+
+
+def test_merge_key_keeps_generic_words() -> None:
+    assert admission.merge_key("Example Foundation") != admission.merge_key("Example")
+    assert admission.merge_key("Example Association") != admission.merge_key("Example")
+
+
+def test_auto_merge_collapses_within_a_country_only(registry) -> None:
+    entries = [
+        RawEntry("a tip: tap", "Germany", "https://atiptap.org/"),
+        RawEntry("a tip: tap e.V.", "Germany", "https://www.atiptap.org"),
+        RawEntry("a tip: tap e.V.", "France", "https://atiptap.fr"),
+    ]
+    result = _admit(entries, registry)
+    assert len(result.records) == 2
+    (german,) = [r for r in result.records if r["country"] == "DE"]
+    assert german["name"] == "a tip: tap e.V."
+    assert german["name_alt"] == ["a tip: tap"]
+    assert result.dupe_review == []
+    assert len(result.auto_merges) == 1
+    assert result.auto_merges[0]["name_drop"] == "a tip: tap"
+
+
+def test_auto_merge_keeper_prefers_a_website_then_no_double_question_mark(registry) -> None:
+    entries = [
+        RawEntry("Example Plastic Watch CIC", "Norway", None),
+        RawEntry("Example Plastic Watch Ltd", "Norway", "https://example-watch.no"),
+        RawEntry("Let??s Do It Ghana", "Ghana", None),
+        RawEntry("Let's Do It Ghana", "Ghana", "https://letsdo.example.gh"),
+    ]
+    result = _admit(entries, registry)
+    by_name = {r["name"]: r for r in result.records}
+    assert set(by_name) == {"Example Plastic Watch Ltd", "Let's Do It Ghana"}
+    assert by_name["Example Plastic Watch Ltd"]["name_alt"] == ["Example Plastic Watch CIC"]
+    assert by_name["Let's Do It Ghana"]["name_alt"] == ["Let??s Do It Ghana"]
+
+
+def test_generic_word_pairs_are_not_auto_merged(registry) -> None:
+    entries = [
+        RawEntry("Example Foundation", "Norway", "https://example-found.no"),
+        RawEntry("Example", "Norway", "https://example-plain.no"),
+    ]
+    assert len(_admit(entries, registry).records) == 2
+
+
+def _two_norwegian_groups():
+    return [
+        RawEntry("Example Reef Society", "Norway", "https://example-reef.no"),
+        RawEntry("Example Lagoon Forum", "Norway", "https://www.example-reef.no/forum"),
+    ]
+
+
+def test_reviewed_different_suppresses_the_pair_from_review(registry) -> None:
+    entries = _two_norwegian_groups()
+    first = _admit(entries, registry)
+    keep_id, drop_id = (r["group_id"] for r in first.records)
+    merge = {
+        "group_id_keep": keep_id,
+        "group_id_drop": drop_id,
+        "decided_at": "2026-11-26T00:00:00Z",
+        "decision": "different",
+    }
+    result = admission.admit(entries, retrieved_on=RETRIEVED, registry=registry, merges=[merge])
+    assert len(result.records) == 2
+    assert result.dupe_review == []
+
+
+def test_reviewed_same_merges_the_drop_into_the_keep(registry) -> None:
+    entries = _two_norwegian_groups()
+    first = _admit(entries, registry)
+    ids = {r["name"]: r["group_id"] for r in first.records}
+    merge = {
+        "group_id_keep": ids["Example Reef Society"],
+        "group_id_drop": ids["Example Lagoon Forum"],
+        "decided_at": "2026-11-26T00:00:00Z",
+        "decision": "same",
+    }
+    result = admission.admit(entries, retrieved_on=RETRIEVED, registry=registry, merges=[merge])
+    (record,) = result.records
+    assert record["name"] == "Example Reef Society"
+    assert record["name_alt"] == ["Example Lagoon Forum"]
+    assert result.reviewed_merges_applied == 1
+    assert result.dupe_review == []
+
+
+def test_reviewed_merge_with_an_unknown_id_is_counted_not_applied(registry) -> None:
+    merge = {
+        "group_id_keep": "cg_0000000000000000",
+        "group_id_drop": "cg_1111111111111111",
+        "decided_at": "2026-11-26T00:00:00Z",
+        "decision": "same",
+    }
+    result = admission.admit(
+        _two_norwegian_groups(), retrieved_on=RETRIEVED, registry=registry, merges=[merge]
+    )
+    assert len(result.records) == 2
+    assert result.reviewed_merges_unmatched == 1
+
+
+def test_read_merges_header_only_missing_and_invalid(tmp_path: Path) -> None:
+    header_only = tmp_path / "group_merges.csv"
+    header_only.write_text("group_id_keep,group_id_drop,decided_at,decision\n", encoding="utf-8")
+    assert admission.read_merges(header_only) == []
+    assert admission.read_merges(tmp_path / "missing.csv") == []
+    header_only.write_text(
+        "group_id_keep,group_id_drop,decided_at,decision\ncg_a,cg_b,2026-11-26,maybe\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError):
+        admission.read_merges(header_only)
+
+
+def test_excluded_hosts_never_make_a_same_host_pair() -> None:
+    def rec(gid: str, url: str, country: str = "NO") -> dict:
+        return {"group_id": gid, "name": gid, "name_alt": [], "country": country, "url": url}
+
+    records = [
+        rec("a", "https://sites.google.com/view/a"),
+        rec("b", "https://sites.google.com/view/b"),
+        rec("c", "https://facebook.com/c"),
+        rec("d", "https://www.facebook.com/d"),
+        rec("e", "https://bit.ly/e"),
+        rec("f", "https://bit.ly/f"),
+        rec("g", "https://example-host.no/x/http://broken.example/y"),
+        rec("h", "https://example-host.no/y"),
+        rec("i", "https://example-host.no/z"),
+        rec("j", "https://example-host.no/w", country="SE"),
+    ]
+    pairs = admission.same_host_pairs(records)
+    assert [(p["group_id_a"], p["group_id_b"]) for p in pairs] == [("h", "i")]
+    assert admission.excluded_host("https://bit.ly/q")
+    assert not admission.excluded_host("https://example-host.no/q")
+
+
+def test_name_correction_keeps_the_old_name_and_is_idempotent() -> None:
+    from atlas.groups.build import merge_records
+
+    record = {
+        "group_id": "cg_1",
+        "name": "old name",
+        "name_alt": ["other"],
+        "country": "NO",
+        "region": "Northern Europe",
+        "ambassador_region": None,
+        "url": None,
+        "bffp_listed": True,
+        "bffp_listed_asof": RETRIEVED,
+        "org_status": "source_declared_org",
+        "roster_retrieved_at": RETRIEVED,
+    }
+    admission.apply_name_correction(record, "New Name")
+    assert record["name"] == "New Name"
+    assert record["name_alt"] == ["other", "old name"]
+    once = merge_records([record], None, {"cg_1": "New Name"})
+    twice = merge_records([record], None, {"cg_1": "New Name"})
+    assert once == twice
+    assert once[0]["name"] == "New Name"
+    assert once[0]["name_alt"] == ["other", "old name"]

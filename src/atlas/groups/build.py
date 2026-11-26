@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import copy
 import json
+import random
 import re
 from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
@@ -169,11 +170,14 @@ def _base_record(entry: Mapping[str, Any]) -> dict[str, Any]:
 def merge_records(
     roster_records: Iterable[Mapping[str, Any]],
     submissions: Iterable[Mapping[str, Any]] | None = None,
+    name_corrections: Mapping[str, str] | None = None,
 ) -> list[dict[str, Any]]:
     """Return one cg-v2 record per roster organisation, sorted by group_id.
 
-    Each submission row (keyed by ``group_id``) overwrites the base fields it carries. ``layer`` is
-    always derived from ``plastics_centrality`` (V1), never taken from a submission.
+    Each submission row (keyed by ``group_id``) overwrites the base fields it carries. A name
+    correction replaces ``name``; the old name joins ``name_alt``. Corrections for ids that are not
+    in the roster are ignored here (the caller counts them). ``layer`` is always derived from
+    ``plastics_centrality`` (V1), never taken from a submission.
     """
     by_id: dict[str, dict[str, Any]] = {}
     for entry in roster_records:
@@ -194,6 +198,16 @@ def merge_records(
         by_id[group_id].update(
             {key: copy.deepcopy(value) for key, value in row.items() if key != "group_id"}
         )
+    for group_id, corrected in (name_corrections or {}).items():
+        record = by_id.get(group_id)
+        # Already corrected at the roster stage (or unchanged): nothing to do (idempotent).
+        if record is None or record["name"] == corrected:
+            continue
+        previous = record["name"]
+        record["name"] = corrected
+        record["name_alt"] = [alt for alt in record["name_alt"] if alt != corrected]
+        if previous != corrected and previous not in record["name_alt"]:
+            record["name_alt"].append(previous)
     records = []
     for group_id in sorted(by_id):
         record = by_id[group_id]
@@ -388,6 +402,36 @@ def build_tree(
 # ---------------------------------------------------------------------------
 
 GRAPH_EDGE_TYPES = ("assignment", "affiliation", "co_occurrence")
+GRAPH_LAYOUT_EDGE_TYPES = ("assignment", "affiliation")
+GRAPH_LAYOUT_SEED = 42
+GRAPH_LAYOUT_ITERATIONS = 200
+
+
+def _graph_layout(
+    node_ids: Sequence[str], edges: Sequence[Mapping[str, Any]]
+) -> dict[str, tuple[float, float]]:
+    """Build-time ForceAtlas2 positions in [-1, 1], rounded to 4 decimals (V-NET).
+
+    Only assignment and affiliation edges pull on the layout; co-occurrence never does. The start
+    layout is a seeded gauss draw over the sorted node ids, so the result is deterministic.
+    """
+    if not node_ids:
+        return {}
+    if len(node_ids) == 1:
+        return {node_ids[0]: (0.0, 0.0)}
+    import networkx as nx  # lazy, as in atlas.build.network
+
+    from atlas.build.network import forceatlas2_positions
+
+    graph = nx.Graph()
+    graph.add_nodes_from(node_ids)
+    graph.add_edges_from(
+        (e["source"], e["target"]) for e in edges if e["edge_type"] in GRAPH_LAYOUT_EDGE_TYPES
+    )
+    rng = random.Random(GRAPH_LAYOUT_SEED)
+    start = {node: (rng.gauss(0.0, 1.0), rng.gauss(0.0, 1.0)) for node in node_ids}
+    positions = forceatlas2_positions(graph, start, iterations=GRAPH_LAYOUT_ITERATIONS)
+    return {node: (round(x, 4), round(y, 4)) for node, (x, y) in positions.items()}
 
 
 def build_graph(
@@ -400,6 +444,8 @@ def build_graph(
     Only tagged groups become nodes. Facet nodes (activity, theme, place) exist only when a tagged
     group uses them. An affiliation edge needs a quoted stated affiliation and, for a roster target,
     a tagged target; an untagged roster target is never drawn. External targets become ghost nodes.
+    Every node carries a build-time ForceAtlas2 ``x``/``y`` (assignment and affiliation edges only),
+    described by the top-level ``layout`` key; the schema string is unchanged.
     """
     tagged = [r for r in records if is_tagged(r)]
     tagged_ids = {r["group_id"] for r in tagged}
@@ -479,6 +525,9 @@ def build_graph(
             degree[edge["target"]] += 1
     for node_id, node in nodes.items():
         node["degree"] = degree[node_id]
+    positions = _graph_layout(sorted(nodes), edges)
+    for node_id, node in nodes.items():
+        node["x"], node["y"] = positions[node_id]
     edges.sort(
         key=lambda e: (
             e["edge_type"],
@@ -491,6 +540,12 @@ def build_graph(
     return {
         **_meta(generated_from, len(tagged), len(records), DERIVED_SCHEMAS["groups_graph.json"]),
         "edge_types": list(GRAPH_EDGE_TYPES),
+        "layout": {
+            "algorithm": "ForceAtlas2 (networkx)",
+            "seed": GRAPH_LAYOUT_SEED,
+            "iterations": GRAPH_LAYOUT_ITERATIONS,
+            "edge_types": list(GRAPH_LAYOUT_EDGE_TYPES),
+        },
         "caution": (
             "The view reflects tagged groups only; absence of edges reflects missing data. "
             "Co-occurrence of tags is not a partnership."
@@ -724,15 +779,17 @@ def build_groups(
     roster: Mapping[str, Any],
     submissions: Iterable[Mapping[str, Any]] | None = None,
     taxonomy: Mapping[str, Sequence[str]] | None = None,
+    name_corrections: Mapping[str, str] | None = None,
 ) -> dict[str, bytes]:
     """Return file name -> deterministic bytes for the six group files.
 
-    ``roster`` is the parsed roster.json (``retrieved_at`` and ``records``). Raises
-    ``GroupsBuildError`` when the inputs or any built record fail validation.
+    ``roster`` is the parsed roster.json (``retrieved_at`` and ``records``). ``name_corrections``
+    maps group_id to the corrected display name. Raises ``GroupsBuildError`` when the inputs or any
+    built record fail validation.
     """
     vocab = dict(taxonomy) if taxonomy is not None else load_taxonomy()
     generated_from = roster["retrieved_at"]
-    records = merge_records(roster["records"], submissions)
+    records = merge_records(roster["records"], submissions, name_corrections)
     problems = validate_groups(records, taxonomy=vocab) + chapter_problems(records)
     if problems:
         shown = "; ".join(problems[:20])

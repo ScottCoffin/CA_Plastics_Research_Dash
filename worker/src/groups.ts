@@ -318,6 +318,7 @@ const TAG_KEYS = [
   "stated_affiliations",
   "evidence",
   "not_an_organisation",
+  "name_correction",
 ];
 /** Facets that must all be absent when not_an_organisation is true. */
 const FACET_KEYS = [
@@ -449,6 +450,13 @@ function affiliation(value: unknown): Obj | null {
   return cite === null ? null : { target_name: name, relation, evidence: cite };
 }
 
+/** A proposed display name: 2 to 200 characters of plain text that is not an email address, or null. */
+function nameCorrection(value: unknown): string | null {
+  const name = text(value, 200);
+  if (name === null || name.length < 2 || EMAIL_RE.test(name)) return null;
+  return name;
+}
+
 /** Validates a group_tag payload (tier 1 and tier 2 rules). Returns the stored JSON, or the first failing field. */
 export function validateGroupTag(payload: unknown): PayloadResult {
   if (!isPlainObject(payload)) return fail("payload");
@@ -559,6 +567,13 @@ export function validateGroupTag(payload: unknown): PayloadResult {
       if (facet !== undefined) return fail(facet);
     }
     out.not_an_organisation = p.not_an_organisation;
+  }
+
+  // Any status may propose a corrected display name (a wrong name can be why a group is hard to find).
+  if (p.name_correction !== undefined) {
+    const name = nameCorrection(p.name_correction);
+    if (name === null) return fail("name_correction");
+    out.name_correction = name;
   }
 
   // Tier 1 (V2, V4): an ambassador_tagged group has the five core facets and evidence for two of them.

@@ -503,3 +503,31 @@ describe("validateGroupSuggest", () => {
     expect(suggestField({ name: "x", url: "https://e.org", note: "ask jo@example.org" })).toBe("email");
   });
 });
+
+describe("validateGroupTag name_correction", () => {
+  it("accepts a valid corrected name, trimmed, and stores it", () => {
+    const res = validateGroupTag(tag({ name_correction: "  Coastal Cleanup Collective  " }));
+    expect(res.ok).toBe(true);
+    if (res.ok) expect(JSON.parse(res.json)).toEqual(expect.objectContaining({ name_correction: "Coastal Cleanup Collective" }));
+  });
+
+  it("accepts a name correction with cannot_determine and not_an_organisation", () => {
+    const base = { group_id: GID, status: "cannot_determine", cannot_determine_reason: "not_an_organisation", not_an_organisation: true };
+    expect(tagField({ ...base, name_correction: "Real Group Name" })).toBeUndefined();
+    expect(tagField({ group_id: GID, status: "cannot_determine", cannot_determine_reason: "no_web_presence", name_correction: "Real Group Name" })).toBeUndefined();
+  });
+
+  it("rejects a non-string, an empty or one-character name, and a name over 200 characters", () => {
+    expect(tagField(tag({ name_correction: 42 }))).toBe("name_correction");
+    expect(tagField(tag({ name_correction: "   " }))).toBe("name_correction");
+    expect(tagField(tag({ name_correction: "A" }))).toBe("name_correction");
+    expect(tagField(tag({ name_correction: "x".repeat(201) }))).toBe("name_correction");
+    expect(tagField(tag({ name_correction: "x".repeat(200) }))).toBeUndefined();
+  });
+
+  it("rejects angle brackets, control characters and an email address", () => {
+    expect(tagField(tag({ name_correction: "<b>Bold</b> Group" }))).toBe("name_correction");
+    expect(tagField(tag({ name_correction: "Group\u0007Name" }))).toBe("name_correction");
+    expect(tagField(tag({ name_correction: "contact ada@example.org" }))).toBe("name_correction");
+  });
+});

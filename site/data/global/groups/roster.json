@@ -2787,19 +2787,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_85c2b019942ad888",
-      "name": "hhh",
-      "name_alt": [],
-      "country": "AF",
-      "region": "Southern Asia",
-      "ambassador_region": null,
-      "url": "https://www.facebook.com/morrie.tolibas/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_a116574c30c3a5eb",
       "name": "kohsar university Murree",
       "name_alt": [],
@@ -3372,19 +3359,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_5593cb319efe5920",
-      "name": "#PlasticFreeProduce",
-      "name_alt": [],
-      "country": "AU",
-      "region": "Australia and New Zealand",
-      "ambassador_region": null,
-      "url": "https://anitahoran.com",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_05c76320051784b2",
       "name": "Action for Dolphins",
       "name_alt": [],
@@ -3587,6 +3561,19 @@
       "region": "Australia and New Zealand",
       "ambassador_region": null,
       "url": "http://www.plasticnotfantastic.com.au",
+      "bffp_listed": true,
+      "bffp_listed_asof": "2026-11-26",
+      "org_status": "source_declared_org",
+      "roster_retrieved_at": "2026-11-26"
+    },
+    {
+      "group_id": "cg_5593cb319efe5920",
+      "name": "PlasticFreeProduce",
+      "name_alt": [],
+      "country": "AU",
+      "region": "Australia and New Zealand",
+      "ambassador_region": null,
+      "url": "https://anitahoran.com",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -4010,7 +3997,7 @@
     },
     {
       "group_id": "cg_11a297e146140ae6",
-      "name": "Centre for Environment, Human Rights &amp; Development Forum- CEHRDF",
+      "name": "Centre for Environment, Human Rights & Development Forum- CEHRDF",
       "name_alt": [],
       "country": "BD",
       "region": "Southern Asia",
@@ -4063,20 +4050,9 @@
     {
       "group_id": "cg_3022ef7dcbbb1877",
       "name": "Environment and Social Development Organization - ESDO",
-      "name_alt": [],
-      "country": "BD",
-      "region": "Southern Asia",
-      "ambassador_region": null,
-      "url": "http://esdo.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_b1001a93afd8c29a",
-      "name": "Environment and Social Development Organization-ESDO",
-      "name_alt": [],
+      "name_alt": [
+        "Environment and Social Development Organization-ESDO"
+      ],
       "country": "BD",
       "region": "Southern Asia",
       "ambassador_region": null,
@@ -5232,7 +5208,7 @@
     },
     {
       "group_id": "cg_326e1cebc6b4e2d1",
-      "name": "Waste&amp;Citizenship Forum of Metropolitan Region of Campinas",
+      "name": "Waste&Citizenship Forum of Metropolitan Region of Campinas",
       "name_alt": [],
       "country": "BR",
       "region": "South America",
@@ -5803,22 +5779,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_c9a58673bb29a003",
-      "name": "Surfrider Foundation Pacific Rim Chapter",
-      "name_alt": [],
-      "country": "CA",
-      "region": "Northern America",
-      "ambassador_region": null,
-      "url": "https://www.pacificrim.surfrider.org/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_b238d5c4ae408070",
       "name": "Surfrider Foundation, Pacific Rim Chapter",
-      "name_alt": [],
+      "name_alt": [
+        "Surfrider Foundation Pacific Rim Chapter"
+      ],
       "country": "CA",
       "region": "Northern America",
       "ambassador_region": null,
@@ -6024,22 +5989,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_369ae83d34bb4602",
-      "name": "CENTRE FOR HUMAN RIGHTS & GOVERNANCE",
-      "name_alt": [],
-      "country": "CD",
-      "region": "Middle Africa",
-      "ambassador_region": null,
-      "url": "http://chrgsolace.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_312d6147f984575f",
-      "name": "Centre for Human Rights &amp; Governance",
-      "name_alt": [],
+      "name": "Centre for Human Rights & Governance",
+      "name_alt": [
+        "CENTRE FOR HUMAN RIGHTS & GOVERNANCE"
+      ],
       "country": "CD",
       "region": "Middle Africa",
       "ambassador_region": null,
@@ -6402,7 +6356,7 @@
     },
     {
       "group_id": "cg_4247ca74d272c91d",
-      "name": "KYMA sea conservation &amp; research",
+      "name": "KYMA sea conservation & research",
       "name_alt": [],
       "country": "CH",
       "region": "Western Europe",
@@ -6506,7 +6460,7 @@
     },
     {
       "group_id": "cg_fcd9a567a63afc15",
-      "name": "WEHDI Water Environment &amp;Human Development Initiative",
+      "name": "WEHDI Water Environment &Human Development Initiative",
       "name_alt": [],
       "country": "CH",
       "region": "Western Europe",
@@ -7363,22 +7317,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_10dabf8a15d26804",
-      "name": "Vamos a Hacerlo Colombia",
-      "name_alt": [],
-      "country": "CO",
-      "region": "South America",
-      "ambassador_region": null,
-      "url": "http://www.vamosahacerlo.co",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_d9a048dc09c24a16",
       "name": "Vamos a hacerlo, ¡Colombia!",
-      "name_alt": [],
+      "name_alt": [
+        "Vamos a Hacerlo Colombia"
+      ],
       "country": "CO",
       "region": "South America",
       "ambassador_region": null,
@@ -7534,24 +7477,13 @@
     {
       "group_id": "cg_48a80b881678ebd1",
       "name": "Friends of the Earth (Cyprus)",
-      "name_alt": [],
+      "name_alt": [
+        "Friends of the Earth Cyprus"
+      ],
       "country": "CY",
       "region": "Western Asia",
       "ambassador_region": null,
       "url": "https://www.foecyprus.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_620f12a39c31a309",
-      "name": "Friends of the Earth Cyprus",
-      "name_alt": [],
-      "country": "CY",
-      "region": "Western Asia",
-      "ambassador_region": null,
-      "url": "http://www.foecyprus.org/contact/",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -8130,22 +8062,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_450eca832d75c95e",
-      "name": "a tip: tap",
-      "name_alt": [],
-      "country": "DE",
-      "region": "Western Europe",
-      "ambassador_region": null,
-      "url": "https://atiptap.org/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_69a161b5379fcdbb",
       "name": "a tip: tap e.V.",
-      "name_alt": [],
+      "name_alt": [
+        "a tip: tap"
+      ],
       "country": "DE",
       "region": "Western Europe",
       "ambassador_region": null,
@@ -8431,24 +8352,13 @@
     {
       "group_id": "cg_6028e7170d6b612d",
       "name": "People for the Sea, MTU",
-      "name_alt": [],
+      "name_alt": [
+        "People for the Sea,MTU"
+      ],
       "country": "EE",
       "region": "Northern Europe",
       "ambassador_region": null,
       "url": "https://www.facebook.com/groups/1032392493766531/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_b3feb29d749d52a2",
-      "name": "People for the Sea,MTU",
-      "name_alt": [],
-      "country": "EE",
-      "region": "Northern Europe",
-      "ambassador_region": null,
-      "url": null,
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -10068,7 +9978,7 @@
     },
     {
       "group_id": "cg_f5465b1580fee509",
-      "name": "Friends of the Earth England, Wales &amp; Northern Ireland",
+      "name": "Friends of the Earth England, Wales & Northern Ireland",
       "name_alt": [],
       "country": "GB",
       "region": "Northern Europe",
@@ -10314,22 +10224,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_513ad54c38d22354",
-      "name": "Less Plastic",
-      "name_alt": [],
-      "country": "GB",
-      "region": "Northern Europe",
-      "ambassador_region": null,
-      "url": "https://lessplastic.co.uk/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_9437e6a79e3c1f59",
       "name": "Less Plastic CIC",
-      "name_alt": [],
+      "name_alt": [
+        "Less Plastic"
+      ],
       "country": "GB",
       "region": "Northern Europe",
       "ambassador_region": null,
@@ -11134,7 +11033,7 @@
     },
     {
       "group_id": "cg_c65a503090767c76",
-      "name": "https://www.facebook.com/letsdoitlondon/",
+      "name": "https://www.facebook.com/letsdoitlondon",
       "name_alt": [],
       "country": "GB",
       "region": "Northern Europe",
@@ -11380,19 +11279,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_b4f082e5fec681af",
-      "name": "Green Africa Youth Organization",
-      "name_alt": [],
-      "country": "GH",
-      "region": "Western Africa",
-      "ambassador_region": null,
-      "url": "http://greenafricayouth.com",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_3a247c15351e6300",
       "name": "Green Africa Youth Organization (GAYO)",
       "name_alt": [],
@@ -11432,22 +11318,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_01bec5b4896c7c16",
-      "name": "Let's Do It Ghana",
-      "name_alt": [],
-      "country": "GH",
-      "region": "Western Africa",
-      "ambassador_region": null,
-      "url": null,
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_43efc14fc8468ffa",
       "name": "Let??s Do It Ghana",
-      "name_alt": [],
+      "name_alt": [
+        "Let's Do It Ghana"
+      ],
       "country": "GH",
       "region": "Western Africa",
       "ambassador_region": null,
@@ -11525,7 +11400,9 @@
     {
       "group_id": "cg_1e4e22c2b2e167c3",
       "name": "The Green Africa Youth Organization",
-      "name_alt": [],
+      "name_alt": [
+        "Green Africa Youth Organization"
+      ],
       "country": "GH",
       "region": "Western Africa",
       "ambassador_region": null,
@@ -11627,19 +11504,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_531be4575439b3e8",
-      "name": "Carbone Guinée",
-      "name_alt": [],
-      "country": "GN",
-      "region": "Western Africa",
-      "ambassador_region": null,
-      "url": "http://www.ongcarboneguinee.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_9524afa33476b1a3",
       "name": "JEUNES DE GUINEE POUR L'ENVIRONNEMENT",
       "name_alt": [],
@@ -11655,7 +11519,9 @@
     {
       "group_id": "cg_724c5e515bdbc039",
       "name": "NGO Carbone Guinée",
-      "name_alt": [],
+      "name_alt": [
+        "Carbone Guinée"
+      ],
       "country": "GN",
       "region": "Western Africa",
       "ambassador_region": null,
@@ -12024,19 +11890,6 @@
       "region": "Eastern Europe",
       "ambassador_region": null,
       "url": "https://www.zoldovezet.info",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_ca30e00e6533fa22",
-      "name": "-",
-      "name_alt": [],
-      "country": "ID",
-      "region": "South-eastern Asia",
-      "ambassador_region": null,
-      "url": null,
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -13305,7 +13158,7 @@
     },
     {
       "group_id": "cg_c30e721aeb7e52cc",
-      "name": "Centre for Organisation Research &amp; Education",
+      "name": "Centre for Organisation Research & Education",
       "name_alt": [],
       "country": "IN",
       "region": "Southern Asia",
@@ -14528,24 +14381,13 @@
     {
       "group_id": "cg_f3623808840c60e0",
       "name": "Solid Waste Management Roundtable ( SWMRT)",
-      "name_alt": [],
+      "name_alt": [
+        "Solid Waste Management Roundtable (SWMRT)"
+      ],
       "country": "IN",
       "region": "Southern Asia",
       "ambassador_region": null,
       "url": "http://www.swmrt.com",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_4bff32b80f7380ea",
-      "name": "Solid Waste Management Roundtable (SWMRT)",
-      "name_alt": [],
-      "country": "IN",
-      "region": "Southern Asia",
-      "ambassador_region": null,
-      "url": "https://www.swmrt.com/",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -15203,7 +15045,7 @@
     },
     {
       "group_id": "cg_16481af1550a0bb1",
-      "name": "Mitigation &amp; Adaptation to Climate Change Organization (MACC Org)",
+      "name": "Mitigation & Adaptation to Climate Change Organization (MACC Org)",
       "name_alt": [],
       "country": "JM",
       "region": "Caribbean",
@@ -17022,22 +16864,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_7a5c3b9abfb31be3",
-      "name": "EcoDigital",
-      "name_alt": [],
-      "country": "MD",
-      "region": "Eastern Europe",
-      "ambassador_region": null,
-      "url": "https://www.facebook.com/ecodigitalmoldova",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_5c3cdbdff7e442a3",
       "name": "EcoDigital NGO",
-      "name_alt": [],
+      "name_alt": [
+        "EcoDigital"
+      ],
       "country": "MD",
       "region": "Eastern Europe",
       "ambassador_region": null,
@@ -19377,24 +19208,13 @@
     {
       "group_id": "cg_c0721f28224c1cab",
       "name": "Women, Children and Elderly Rights Initiative (WOCERIN)",
-      "name_alt": [],
+      "name_alt": [
+        "Women, Children and Elderly Rights Initiative WOCERIN"
+      ],
       "country": "NG",
       "region": "Western Africa",
       "ambassador_region": null,
       "url": "http://www.woecrin.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_83b5c55f462911b2",
-      "name": "Women, Children and Elderly Rights Initiative WOCERIN",
-      "name_alt": [],
-      "country": "NG",
-      "region": "Western Africa",
-      "ambassador_region": null,
-      "url": null,
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -19935,7 +19755,7 @@
     },
     {
       "group_id": "cg_4e0aa403229f663a",
-      "name": "Center for Public Health and Environmental Development (CEPHED),",
+      "name": "Center for Public Health and Environmental Development (CEPHED)",
       "name_alt": [],
       "country": "NP",
       "region": "Southern Asia",
@@ -20338,7 +20158,7 @@
     },
     {
       "group_id": "cg_c45dcb264a2479bb",
-      "name": "YAS Center for Envirinment &amp; Health (an unit of YAS Medical Center)",
+      "name": "YAS Center for Envirinment & Health (an unit of YAS Medical Center)",
       "name_alt": [],
       "country": "OM",
       "region": "Western Asia",
@@ -20532,19 +20352,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_46b3f9f2df47f3ba",
-      "name": "#MakeManilaPlasticFree",
-      "name_alt": [],
-      "country": "PH",
-      "region": "South-eastern Asia",
-      "ambassador_region": null,
-      "url": "https://www.facebook.com/PlasticFreeMNL",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_8e0348c7757143eb",
       "name": "5 pcs Daily Habit",
       "name_alt": [],
@@ -20701,22 +20508,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_7b408f582fa69b2f",
-      "name": "BAN Toxics",
-      "name_alt": [],
-      "country": "PH",
-      "region": "South-eastern Asia",
-      "ambassador_region": null,
-      "url": "https://bantoxics.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_0f7dbccfd5a6a77c",
       "name": "BAN Toxics, Inc.",
-      "name_alt": [],
+      "name_alt": [
+        "BAN Toxics"
+      ],
       "country": "PH",
       "region": "South-eastern Asia",
       "ambassador_region": null,
@@ -20870,22 +20666,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_114eadaed85816e2",
-      "name": "Community Legal Help and Public Interest Centre",
-      "name_alt": [],
-      "country": "PH",
-      "region": "South-eastern Asia",
-      "ambassador_region": null,
-      "url": "https://communitylegalhelp.wordpress.com/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_c21c931665d66244",
       "name": "Community Legal Help and Public Interest Centre, Inc.",
-      "name_alt": [],
+      "name_alt": [
+        "Community Legal Help and Public Interest Centre"
+      ],
       "country": "PH",
       "region": "South-eastern Asia",
       "ambassador_region": null,
@@ -21247,22 +21032,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_12e2f1bfc9608db4",
-      "name": "Interfacing Development Interventions for Sustainability (IDIS)",
-      "name_alt": [],
-      "country": "PH",
-      "region": "South-eastern Asia",
-      "ambassador_region": null,
-      "url": "https://www.idisphil.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_60697086954621f3",
       "name": "Interfacing Development Interventions for Sustainability (IDIS), Inc.",
-      "name_alt": [],
+      "name_alt": [
+        "Interfacing Development Interventions for Sustainability (IDIS)"
+      ],
       "country": "PH",
       "region": "South-eastern Asia",
       "ambassador_region": null,
@@ -21423,6 +21197,19 @@
       "region": "South-eastern Asia",
       "ambassador_region": null,
       "url": "https://makakalikasanproject.org/",
+      "bffp_listed": true,
+      "bffp_listed_asof": "2026-11-26",
+      "org_status": "source_declared_org",
+      "roster_retrieved_at": "2026-11-26"
+    },
+    {
+      "group_id": "cg_46b3f9f2df47f3ba",
+      "name": "MakeManilaPlasticFree",
+      "name_alt": [],
+      "country": "PH",
+      "region": "South-eastern Asia",
+      "ambassador_region": null,
+      "url": "https://www.facebook.com/PlasticFreeMNL",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -22079,19 +21866,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_c07870337ae263e7",
-      "name": "Test",
-      "name_alt": [],
-      "country": "PH",
-      "region": "South-eastern Asia",
-      "ambassador_region": null,
-      "url": "http://test.com",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_5682d02a74d001a2",
       "name": "The Climate Reality Project Philippines",
       "name_alt": [],
@@ -22393,24 +22167,13 @@
     {
       "group_id": "cg_9f6059e15f8f4336",
       "name": "Zero Waste Youth - Negros Oriental",
-      "name_alt": [],
+      "name_alt": [
+        "Zero Waste Youth Negros Oriental"
+      ],
       "country": "PH",
       "region": "South-eastern Asia",
       "ambassador_region": null,
       "url": "https://www.facebook.com/zerowasteyouthnegor/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_b3146f978cc1d78c",
-      "name": "Zero Waste Youth Negros Oriental",
-      "name_alt": [],
-      "country": "PH",
-      "region": "South-eastern Asia",
-      "ambassador_region": null,
-      "url": "https://www.facebook.com/zerowasteyouthnegor",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -22522,7 +22285,7 @@
     },
     {
       "group_id": "cg_59d1f3f480ea1317",
-      "name": "Fundamental Human Rights &amp; Rural Development Association FHRRDA",
+      "name": "Fundamental Human Rights & Rural Development Association FHRRDA",
       "name_alt": [],
       "country": "PK",
       "region": "Southern Asia",
@@ -22723,19 +22486,6 @@
       "region": "Eastern Europe",
       "ambassador_region": null,
       "url": "http://www.tpn.pl",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_7d259d3690854577",
-      "name": "Tes",
-      "name_alt": [],
-      "country": "PL",
-      "region": "Eastern Europe",
-      "ambassador_region": null,
-      "url": "https://www.google.com",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -23899,19 +23649,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_42c25b0474e54057",
-      "name": "Let's Do It! TOGO",
-      "name_alt": [],
-      "country": "TG",
-      "region": "Western Africa",
-      "ambassador_region": null,
-      "url": "https://m.facebook.com/2020worldcleanupDayTOGO/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_fa460754eb4d099a",
       "name": "Let's Doit! TOGO",
       "name_alt": [],
@@ -23927,24 +23664,14 @@
     {
       "group_id": "cg_362474b528a883de",
       "name": "Let`s Do It! TOGO",
-      "name_alt": [],
+      "name_alt": [
+        "Let's Do It! TOGO",
+        "Let’s Do It!TOGO"
+      ],
       "country": "TG",
       "region": "Western Africa",
       "ambassador_region": null,
       "url": "https://www.facebook.com/Worldcleanupday-TOGO",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_3a1fa2eecfdc22f5",
-      "name": "Let’s Do It!TOGO",
-      "name_alt": [],
-      "country": "TG",
-      "region": "Western Africa",
-      "ambassador_region": null,
-      "url": "https://www.facebook.com/WorldcleanupdayTOGO",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -24926,19 +24653,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_1a1e307e0d533874",
-      "name": "N/A",
-      "name_alt": [],
-      "country": "TZ",
-      "region": "Eastern Africa",
-      "ambassador_region": null,
-      "url": null,
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_6d9afd717a259ef5",
       "name": "Nipe Fagio",
       "name_alt": [],
@@ -25539,20 +25253,9 @@
     {
       "group_id": "cg_222c4e00bfe28561",
       "name": "End Plastic Pollution - Uganda",
-      "name_alt": [],
-      "country": "UG",
-      "region": "Eastern Africa",
-      "ambassador_region": null,
-      "url": "https://endplasticpollutionow.blogspot.com",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_eaf5160ab3be7694",
-      "name": "End Plastic Pollution Uganda",
-      "name_alt": [],
+      "name_alt": [
+        "End Plastic Pollution Uganda"
+      ],
       "country": "UG",
       "region": "Eastern Africa",
       "ambassador_region": null,
@@ -25772,7 +25475,7 @@
     },
     {
       "group_id": "cg_8dd87f4f6a9daf35",
-      "name": "/11th Hour Project",
+      "name": "11th Hour Project",
       "name_alt": [],
       "country": "US",
       "region": "Northern America",
@@ -26187,19 +25890,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_18edb891274ddcaf",
-      "name": "Azulita Project",
-      "name_alt": [],
-      "country": "US",
-      "region": "Northern America",
-      "ambassador_region": null,
-      "url": "https://www.azulitaproject.org/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_6526cabd84d6b7a3",
       "name": "Azurewings",
       "name_alt": [],
@@ -26553,24 +26243,13 @@
     {
       "group_id": "cg_38398b3e27f35599",
       "name": "Big Blue & You, Inc.",
-      "name_alt": [],
+      "name_alt": [
+        "Big Blue & You"
+      ],
       "country": "US",
       "region": "Northern America",
       "ambassador_region": null,
       "url": "https://bigblueandyou.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_cda55fdc15fb9606",
-      "name": "Big Blue &amp; You",
-      "name_alt": [],
-      "country": "US",
-      "region": "Northern America",
-      "ambassador_region": null,
-      "url": "https://bigblueandyou.org/",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -26643,7 +26322,7 @@
     },
     {
       "group_id": "cg_ddaf4fbc61f8161e",
-      "name": "Bliss &amp; Wisdom Los Angeles + Little Parrot Farm",
+      "name": "Bliss & Wisdom Los Angeles + Little Parrot Farm",
       "name_alt": [],
       "country": "US",
       "region": "Northern America",
@@ -26903,7 +26582,7 @@
     },
     {
       "group_id": "cg_75c29f3213af1561",
-      "name": "California Institute of Environmental Design &amp; management (CIEDM)",
+      "name": "California Institute of Environmental Design & management (CIEDM)",
       "name_alt": [],
       "country": "US",
       "region": "Northern America",
@@ -27501,7 +27180,7 @@
     },
     {
       "group_id": "cg_9879677e6e1dbe15",
-      "name": "Climate Reality Pittsburgh &amp; SWPA",
+      "name": "Climate Reality Pittsburgh & SWPA",
       "name_alt": [],
       "country": "US",
       "region": "Northern America",
@@ -27800,7 +27479,7 @@
     },
     {
       "group_id": "cg_025881e7ea739b26",
-      "name": "County of Maui Environmental Protection &amp; Sustainability Division",
+      "name": "County of Maui Environmental Protection & Sustainability Division",
       "name_alt": [],
       "country": "US",
       "region": "Northern America",
@@ -27865,7 +27544,7 @@
     },
     {
       "group_id": "cg_1fdef21feafc5c97",
-      "name": "Cuyahoga Soil &amp; Water Conservation District",
+      "name": "Cuyahoga Soil & Water Conservation District",
       "name_alt": [],
       "country": "US",
       "region": "Northern America",
@@ -28190,7 +27869,7 @@
     },
     {
       "group_id": "cg_2973daab3d2b6fbb",
-      "name": "Energy &amp; Sustainability Bureau of NYS Parks, Recreation, and Historic Preservation",
+      "name": "Energy & Sustainability Bureau of NYS Parks, Recreation, and Historic Preservation",
       "name_alt": [],
       "country": "US",
       "region": "Northern America",
@@ -28333,7 +28012,7 @@
     },
     {
       "group_id": "cg_6b96a025c40f70e6",
-      "name": "Environmental Justice Committee of the Dallas Peace &amp; Justice Center",
+      "name": "Environmental Justice Committee of the Dallas Peace & Justice Center",
       "name_alt": [],
       "country": "US",
       "region": "Northern America",
@@ -30503,19 +30182,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_35bdc618ca55e482",
-      "name": "Ocean Protection Coalition of Mendocino County",
-      "name_alt": [],
-      "country": "US",
-      "region": "Northern America",
-      "ambassador_region": null,
-      "url": "http://.oceanprotection.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_4fa573617514f5fe",
       "name": "Ocean Uprise",
       "name_alt": [],
@@ -31140,19 +30806,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_d1a3a1d00eb613c9",
-      "name": "Planeteers of Southern Maine",
-      "name_alt": [],
-      "country": "US",
-      "region": "Northern America",
-      "ambassador_region": null,
-      "url": "http://www.SoMePlaneteers.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_c8fdf04ed41d7902",
       "name": "Plastic Footprint Project",
       "name_alt": [],
@@ -31186,19 +30839,6 @@
       "region": "Northern America",
       "ambassador_region": null,
       "url": "Http://Www.plasticfreecurriculum.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_f4965713ac97ffa9",
-      "name": "Plastic Free Delaware",
-      "name_alt": [],
-      "country": "US",
-      "region": "Northern America",
-      "ambassador_region": null,
-      "url": "https://plasticfreedelaware.org",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",
@@ -31270,22 +30910,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_e47b8b2d1e1d3bbe",
-      "name": "Plastic Ocean Project",
-      "name_alt": [],
-      "country": "US",
-      "region": "Northern America",
-      "ambassador_region": null,
-      "url": "https://www.plasticoceanproject.org",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_7539d6f7cb5d8dfd",
       "name": "Plastic Ocean Project, Inc.",
-      "name_alt": [],
+      "name_alt": [
+        "Plastic Ocean Project"
+      ],
       "country": "US",
       "region": "Northern America",
       "ambassador_region": null,
@@ -31337,7 +30966,9 @@
     {
       "group_id": "cg_b65d7f53278b2cb0",
       "name": "Plastic-Free Delaware",
-      "name_alt": [],
+      "name_alt": [
+        "Plastic Free Delaware"
+      ],
       "country": "US",
       "region": "Northern America",
       "ambassador_region": null,
@@ -31400,22 +31031,11 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_b916f72cbfbf2852",
-      "name": "Post Landfill Action Network",
-      "name_alt": [],
-      "country": "US",
-      "region": "Northern America",
-      "ambassador_region": null,
-      "url": "https://www.postlandfill.org/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_aeabe086dc01e113",
       "name": "Post-Landfill Action Network",
-      "name_alt": [],
+      "name_alt": [
+        "Post Landfill Action Network"
+      ],
       "country": "US",
       "region": "Northern America",
       "ambassador_region": null,
@@ -32545,7 +32165,7 @@
     },
     {
       "group_id": "cg_ec0dc9006b1f8ed7",
-      "name": "Susie King Taylor Women's Institute &amp; Ecology Center",
+      "name": "Susie King Taylor Women's Institute & Ecology Center",
       "name_alt": [],
       "country": "US",
       "region": "Northern America",
@@ -32806,7 +32426,9 @@
     {
       "group_id": "cg_5ca21ab48feed4f3",
       "name": "The Azulita Project",
-      "name_alt": [],
+      "name_alt": [
+        "Azulita Project"
+      ],
       "country": "US",
       "region": "Northern America",
       "ambassador_region": null,
@@ -33027,7 +32649,9 @@
     {
       "group_id": "cg_d20e4350349293cb",
       "name": "The Ocean Protection Coalition of Mendocino County",
-      "name_alt": [],
+      "name_alt": [
+        "Ocean Protection Coalition of Mendocino County"
+      ],
       "country": "US",
       "region": "Northern America",
       "ambassador_region": null,
@@ -33040,7 +32664,9 @@
     {
       "group_id": "cg_26f6ec8a1cf394b2",
       "name": "The Planeteers of Southern Maine",
-      "name_alt": [],
+      "name_alt": [
+        "Planeteers of Southern Maine"
+      ],
       "country": "US",
       "region": "Northern America",
       "ambassador_region": null,
@@ -34949,19 +34575,6 @@
       "roster_retrieved_at": "2026-11-26"
     },
     {
-      "group_id": "cg_929e58912f693686",
-      "name": "Tbc",
-      "name_alt": [],
-      "country": "ZA",
-      "region": "Southern Africa",
-      "ambassador_region": null,
-      "url": null,
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
       "group_id": "cg_3dc0b0997263f11c",
       "name": "The Endangered Wildlife Trust",
       "name_alt": [],
@@ -35073,19 +34686,6 @@
       "region": "Eastern Africa",
       "ambassador_region": null,
       "url": "https://www.facebook.com/centre4zerowastedev/",
-      "bffp_listed": true,
-      "bffp_listed_asof": "2026-11-26",
-      "org_status": "source_declared_org",
-      "roster_retrieved_at": "2026-11-26"
-    },
-    {
-      "group_id": "cg_af34b78de730ff00",
-      "name": "Centre for Zero Waste &amp; Development",
-      "name_alt": [],
-      "country": "ZM",
-      "region": "Eastern Africa",
-      "ambassador_region": null,
-      "url": "https://web.facebook.com/centre4zerowastedev/?modal=admin_todo_tour",
       "bffp_listed": true,
       "bffp_listed_asof": "2026-11-26",
       "org_status": "source_declared_org",

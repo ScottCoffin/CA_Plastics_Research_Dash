@@ -175,9 +175,13 @@ const withEvidence = cardHtml(group({
 }));
 assert.ok(withEvidence.includes("We clean the coast monthly."));
 assert.ok(withEvidence.includes("accessed 2026-11-20"));
-assert.ok(withEvidence.includes("member of"), "relation is shown in plain words");
+assert.ok(withEvidence.includes("Member of"), "relation is shown in plain words");
 assert.ok(withEvidence.includes("Beta Network"));
 assert.ok(withEvidence.includes("Substantial plastics focus"));
+const labelled = cardHtml(group({sector: "joint_power_authority", entity_type: "chapter_branch", primary_activities: ["cleanup_removal"]}));
+assert.ok(labelled.includes("Joint powers authority") && labelled.includes("Chapter or branch"), "sector and entity type use plain labels");
+assert.ok(labelled.includes("Clean-ups and litter removal"), "activities use plain labels");
+assert.ok(!labelled.includes("cleanup_removal") && !labelled.includes("joint_power_authority"), "no raw keys in the card");
 assert.ok(!withEvidence.includes("cg-v2") && !withEvidence.includes("org_status"), "no internal field names in the card");
 
 // The real roster, when it has been built: every group is listed once and the filters partition it.

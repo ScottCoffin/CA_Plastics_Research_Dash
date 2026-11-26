@@ -16,7 +16,9 @@ from __future__ import annotations
 import csv
 import difflib
 import hashlib
+import html
 import io
+import itertools
 import json
 import re
 import unicodedata
@@ -35,14 +37,23 @@ __all__ = [
     "AdmissionResult",
     "admit",
     "ambassador_region_map",
+    "apply_name_correction",
+    "apply_reviewed_merges",
+    "auto_merge",
+    "excluded_host",
     "classify",
     "group_id_for",
+    "is_placeholder_name",
     "iso_for_country",
     "m49_subregion",
+    "merge_key",
     "normalise_text",
     "normalise_url",
+    "read_merges",
+    "read_name_corrections",
     "registrable_domain",
     "region_for",
+    "same_host_pairs",
 ]
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -196,6 +207,32 @@ ORG_KEYWORDS = frozenset(
     }
 )  # fmt: skip
 _TOKEN_RE = re.compile(r"[^\W_]+(?:[-'’][^\W_]+)*", re.UNICODE)
+# Stand-in names (casefolded, stripped). Quarantined as ambiguous, never published.
+PLACEHOLDER_NAMES = frozenset(
+    {"-", "n/a", "na", "tbc", "tbd", "test", "tes", "hhh", "xxx", "none", "null", "unknown", "?"}
+)
+# Hosts shared by many unrelated groups, and link shorteners: a shared host is not a duplicate key.
+SHARED_HOST_SUFFIXES = frozenset(
+    {
+        "sites.google.com", "docs.google.com", "drive.google.com", "blogspot.com",
+        "wordpress.com", "wixsite.com", "wix.com", "weebly.com", "github.io", "gitlab.io",
+        "notion.site", "squarespace.com", "carrd.co", "linktr.ee", "linktree.com", "bit.ly",
+        "tinyurl.com", "t.co", "ow.ly", "lnkd.in", "goo.gl", "is.gd", "buff.ly", "rebrand.ly",
+        "shorturl.at", "bit.do", "medium.com", "yolasite.com", "webnode.com", "jimdo.com",
+        "vk.com", "t.me", "wa.me", "whatsapp.com", "eventbrite.com",
+    }
+)  # fmt: skip
+# Legal-form tokens removed from the merge key (single tokens, and token pairs for "e.V.", "S.A.").
+LEGAL_FORM_TOKENS = frozenset(
+    {"ggmbh", "gmbh", "inc", "ltd", "llc", "cic", "cio", "asbl", "vzw", "ngo", "ong", "plc", "gug",
+     "ev"}
+)  # fmt: skip
+LEGAL_FORM_PAIRS = frozenset({("e", "v"), ("s", "a"), ("a", "s")})
+_NON_WORD_RE = re.compile(r"[\W_]+")
+AUTO_MERGE_HEADER = ["group_id_keep", "group_id_drop", "country", "name_keep", "name_drop"]
+MERGE_HEADER = ["group_id_keep", "group_id_drop", "decided_at", "decision"]
+MERGE_DECISIONS = ("same", "different")
+NAME_CORRECTION_HEADER = ["group_id", "name", "submitted_at"]
 
 
 # ---------------------------------------------------------------------------
@@ -208,6 +245,43 @@ def normalise_text(value: str | None) -> str:
     if not value:
         return ""
     return " ".join(unicodedata.normalize("NFC", value).split())
+
+
+# Stray punctuation that is stripped from the published display name only (CG-NAME-CLEAN).
+# The group_id still hashes the normalised name, so cleaning never changes an id.
+_CLEAN_LEADING = "/\\|_-.,;:*#•·~"
+_CLEAN_TRAILING = "/\\|,;:*#•·~_-"  # a trailing "." is kept (R.I.S.E., Co.)
+_CLEAN_PAIRS = (('"', '"'), ("'", "'"), ("“", "”"), ("‘", "’"))
+# An opening quote with no closing partner later in the name is stray, and so is a closing one.
+_CLOSER_FOR_OPENER = {'"': '"', "'": "'", "“": "”", "‘": "’"}
+_OPENER_FOR_CLOSER = {'"': '"', "”": "“"}
+
+
+def clean_display_name(name: str) -> str:
+    """Display form of an organisation name: stray edge punctuation and wrapping quotes removed.
+
+    Inner punctuation and script are kept. Never returns an empty string: if cleaning would
+    leave nothing, the normalised input is returned instead.
+    """
+    base = normalise_text(name)
+    text = base
+    while True:
+        previous = text
+        text = text.strip().lstrip(_CLEAN_LEADING).rstrip(_CLEAN_TRAILING).strip()
+        if len(text) >= 2 and (text[0], text[-1]) in _CLEAN_PAIRS:
+            text = text[1:-1].strip()
+        if text and text[0] in _CLOSER_FOR_OPENER and _CLOSER_FOR_OPENER[text[0]] not in text[1:]:
+            text = text[1:]
+        if (
+            text
+            and text[-1] in _OPENER_FOR_CLOSER
+            and _OPENER_FOR_CLOSER[text[-1]] not in text[:-1]
+        ):
+            text = text[:-1]
+        if text == previous:
+            break
+    cleaned = normalise_text(text)
+    return cleaned or base
 
 
 def _fold(value: str) -> str:
@@ -414,6 +488,206 @@ def classify(name: str, url: str | None) -> Verdict:
 
 
 # ---------------------------------------------------------------------------
+# Placeholders, merge keys and reviewed decisions (CG-ROSTER-QC)
+# ---------------------------------------------------------------------------
+
+
+def is_placeholder_name(name: str) -> bool:
+    """True for a name with no letter or digit, or a stand-in word from PLACEHOLDER_NAMES."""
+    text = name.strip().casefold()
+    return text in PLACEHOLDER_NAMES or not any(ch.isalnum() for ch in text)
+
+
+def merge_key(name: str) -> str:
+    """Key for the automatic merge: equal keys within one country name the same organisation.
+
+    The name is unescaped, accent-free and casefolded. A leading "the" and legal-form tokens are
+    removed, and every other run of non-word characters becomes a space. Generic words such as
+    Foundation are kept, so those pairs are reviewed rather than merged.
+    """
+    text = html.unescape(name or "")
+    decomposed = unicodedata.normalize("NFKD", text)
+    stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch)).casefold()
+    tokens = _NON_WORD_RE.sub(" ", stripped).split()
+    if tokens[:1] == ["the"]:
+        tokens = tokens[1:]
+    kept: list[str] = []
+    index = 0
+    while index < len(tokens):
+        if tuple(tokens[index : index + 2]) in LEGAL_FORM_PAIRS:
+            index += 2
+            continue
+        if tokens[index] not in LEGAL_FORM_TOKENS:
+            kept.append(tokens[index])
+        index += 1
+    return " ".join(kept)
+
+
+def apply_name_correction(record: dict[str, Any], corrected: str) -> None:
+    """Replace a display name; the old name joins name_alt. A name already equal is left alone."""
+    if record["name"] == corrected:
+        return
+    previous = record["name"]
+    alternates = [alt for alt in record["name_alt"] if alt != corrected]
+    if previous not in alternates:
+        alternates.append(previous)
+    record["name"] = corrected
+    record["name_alt"] = alternates
+
+
+def _absorb(keep: dict[str, Any], drop: dict[str, Any]) -> None:
+    """Move the dropped record's names into the kept record's name_alt, without repeats."""
+    for name in [drop["name"], *drop["name_alt"]]:
+        if name != keep["name"] and name not in keep["name_alt"]:
+            keep["name_alt"].append(name)
+
+
+def _keeper_rank(record: Mapping[str, Any]) -> tuple[bool, bool, int, str]:
+    # Sort order: has a website, no "??" in the name, longer name, lowest group_id.
+    return (record["url"] is None, "??" in record["name"], -len(record["name"]), record["group_id"])
+
+
+def auto_merge(
+    records: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    """Collapse records whose merge keys match within one country. Returns (records, merge log)."""
+    clusters: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for record in records:
+        key = merge_key(record["name"])
+        if record["country"] is not None and key:
+            clusters.setdefault((record["country"], key), []).append(record)
+    dropped: set[str] = set()
+    log: list[dict[str, str]] = []
+    for (country, _key), members in clusters.items():
+        if len(members) < 2:
+            continue
+        members.sort(key=_keeper_rank)
+        keep = members[0]
+        for drop in members[1:]:
+            _absorb(keep, drop)
+            dropped.add(drop["group_id"])
+            log.append(
+                {
+                    "group_id_keep": keep["group_id"],
+                    "group_id_drop": drop["group_id"],
+                    "country": country,
+                    "name_keep": keep["name"],
+                    "name_drop": drop["name"],
+                }
+            )
+    return [r for r in records if r["group_id"] not in dropped], log
+
+
+def read_merges(path: Path) -> list[dict[str, str]]:
+    """Reviewed merge decisions (curation/group_merges.csv). Header-only or missing gives []."""
+    if not path.exists():
+        return []
+    with path.open(encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        missing = [c for c in MERGE_HEADER if c not in (reader.fieldnames or [])]
+        if missing:
+            raise ValueError(f"{path.name} is missing column(s) {', '.join(missing)}")
+        rows = [{c: (row.get(c) or "").strip() for c in MERGE_HEADER} for row in reader]
+    for row in rows:
+        if row["decision"] not in MERGE_DECISIONS:
+            raise ValueError(f"{path.name}: decision must be same or different")
+        keep, drop = row["group_id_keep"], row["group_id_drop"]
+        if not keep or not drop or keep == drop:
+            raise ValueError(f"{path.name}: each row needs two different group ids")
+    return rows
+
+
+def decided_pairs(
+    merges: Iterable[Mapping[str, str]], decision: str | None = None
+) -> set[frozenset[str]]:
+    """Unordered id pairs with a reviewed decision (or with the given decision only)."""
+    return {
+        frozenset((m["group_id_keep"], m["group_id_drop"]))
+        for m in merges
+        if decision is None or m["decision"] == decision
+    }
+
+
+def apply_reviewed_merges(
+    records: list[dict[str, Any]], merges: Iterable[Mapping[str, str]]
+) -> tuple[list[dict[str, Any]], int, int]:
+    """Apply "same" decisions. Returns (records, applied, unmatched); unknown ids are unmatched."""
+    by_id = {r["group_id"]: r for r in records}
+    applied = unmatched = 0
+    for row in merges:
+        if row["decision"] != "same":
+            continue
+        keep = by_id.get(row["group_id_keep"])
+        drop = by_id.get(row["group_id_drop"])
+        if keep is None or drop is None:
+            unmatched += 1
+            continue
+        _absorb(keep, drop)
+        del by_id[row["group_id_drop"]]
+        applied += 1
+    return [r for r in records if r["group_id"] in by_id], applied, unmatched
+
+
+def read_name_corrections(path: Path) -> dict[str, str]:
+    """group_id -> corrected name from curation/group_name_corrections.csv; the last row wins."""
+    if not path.exists():
+        return {}
+    corrections: dict[str, str] = {}
+    with path.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            name = normalise_text(row.get("name"))
+            if not name:
+                raise ValueError(f"{path.name} has a row with no name")
+            corrections[(row.get("group_id") or "").strip()] = name
+    return corrections
+
+
+def _is_broken_url(url: str) -> bool:
+    """A URL with a second scheme inside it, for example 'http://a.org/http://b.org'."""
+    rest = url.split("://", 1)[-1].lower()
+    return "http:" in rest or "https:" in rest or _host(url).startswith("http")
+
+
+def _host_matches(host: str, hosts: frozenset[str]) -> bool:
+    return any(host == h or host.endswith("." + h) for h in hosts)
+
+
+def excluded_host(url: str | None) -> bool:
+    """True for a social, shared or link-shortener host, or a broken URL: never a duplicate key."""
+    if not url:
+        return False
+    host = _host(url)
+    return (
+        _is_broken_url(url) or not host or _host_matches(host, SOCIAL_HOSTS | SHARED_HOST_SUFFIXES)
+    )
+
+
+def same_host_pairs(records: Iterable[Mapping[str, Any]]) -> list[dict[str, str]]:
+    """Pairs in one country whose websites share an exact host (input to the review queue)."""
+    clusters: dict[tuple[str, str], list[Mapping[str, Any]]] = {}
+    for record in records:
+        url = record.get("url")
+        if not url or record.get("country") is None or excluded_host(url):
+            continue
+        clusters.setdefault((record["country"], _host(url)), []).append(record)
+    pairs: list[dict[str, str]] = []
+    for (country, host), members in sorted(clusters.items()):
+        for first, second in itertools.combinations(members, 2):
+            pairs.append(
+                {
+                    "country": country,
+                    "reason": "same website host",
+                    "host": host,
+                    "group_id_a": first["group_id"],
+                    "name_a": first["name"],
+                    "group_id_b": second["group_id"],
+                    "name_b": second["name"],
+                }
+            )
+    return pairs
+
+
+# ---------------------------------------------------------------------------
 # Admission
 # ---------------------------------------------------------------------------
 
@@ -429,6 +703,10 @@ class AdmissionResult:
     ambiguous: list[dict[str, str]] = field(default_factory=list)
     duplicates_collapsed: int = 0
     dupe_review: list[dict[str, str]] = field(default_factory=list)
+    placeholders: int = 0
+    auto_merges: list[dict[str, str]] = field(default_factory=list)
+    reviewed_merges_applied: int = 0
+    reviewed_merges_unmatched: int = 0
 
 
 def _similar_names(a: str, b: str) -> bool:
@@ -437,7 +715,9 @@ def _similar_names(a: str, b: str) -> bool:
     return difflib.SequenceMatcher(None, key_a, key_b).ratio() >= NEAR_DUPLICATE_RATIO
 
 
-def _near_duplicates(records: list[dict[str, Any]]) -> list[dict[str, str]]:
+def _near_duplicates(
+    records: list[dict[str, Any]], suppressed: set[frozenset[str]] = frozenset()
+) -> list[dict[str, str]]:
     pairs: list[dict[str, str]] = []
     by_country: dict[str, list[dict[str, Any]]] = {}
     for record in records:
@@ -457,6 +737,8 @@ def _near_duplicates(records: list[dict[str, Any]]) -> list[dict[str, str]]:
                     reason = "similar name"
                 else:
                     continue
+                if frozenset((first["group_id"], second["group_id"])) in suppressed:
+                    continue
                 pairs.append(
                     {
                         "country": country,
@@ -475,23 +757,33 @@ def admit(
     *,
     retrieved_on: str,
     registry: Registry | None = None,
+    merges: Iterable[Mapping[str, str]] = (),
 ) -> AdmissionResult:
-    """Normalise, classify, dedupe and map regions for a fetched list of raw entries."""
+    """Normalise, classify, dedupe and map regions for a fetched list of raw entries.
+
+    ``merges`` holds the reviewed decisions from curation/group_merges.csv (see read_merges).
+    """
     ambassador_map = ambassador_region_map(registry or load_registry())
     rows = list(entries)
-    by_status: dict[str, int] = {status: 0 for status in ADMITTED_STATUSES}
+    merges = list(merges)
     excluded = 0
+    placeholders = 0
     ambiguous: list[dict[str, str]] = []
     seen: dict[str, dict[str, Any]] = {}
     duplicates = 0
 
     for row in rows:
-        name = normalise_text(row.organization)
+        raw_name = normalise_text(row.organization)
         iso = iso_for_country(row.country)
         url = normalise_url(row.website)
         domain = registrable_domain(url)
-        group_id = group_id_for(name, iso, domain)
-        verdict = classify(name, url)
+        # The id hashes the raw normalised name (entities included), so cleaning never changes it.
+        group_id = group_id_for(raw_name, iso, domain)
+        display = clean_display_name(html.unescape(raw_name))
+        verdict = classify(display, url)
+        if verdict.org_status == "source_declared_org" and is_placeholder_name(display):
+            verdict = Verdict("ambiguous", "placeholder name")
+            placeholders += 1
         if verdict.org_status == "excluded_individual":
             excluded += 1
             continue
@@ -499,7 +791,7 @@ def admit(
             ambiguous.append(
                 {
                     "group_id": group_id,
-                    "name": name,
+                    "name": display,
                     "country": iso or "",
                     "url": url or "",
                     "reason": verdict.reason,
@@ -509,13 +801,13 @@ def admit(
         if group_id in seen:
             duplicates += 1
             kept = seen[group_id]
-            if name != kept["name"] and name not in kept["name_alt"]:
-                kept["name_alt"].append(name)
+            if display != kept["name"] and display not in kept["name_alt"]:
+                kept["name_alt"].append(display)
             continue
         ambassador, region = region_for(iso, ambassador_map)
         seen[group_id] = {
             "group_id": group_id,
-            "name": name,
+            "name": display,
             "name_alt": [],
             "country": iso,
             "region": region,
@@ -527,11 +819,15 @@ def admit(
             "roster_retrieved_at": retrieved_on,
             "_domain": domain,
         }
-        by_status[verdict.org_status] += 1
 
     admitted = sorted(seen.values(), key=lambda r: (r["country"] or "", r["name"]))
-    dupe_review = _near_duplicates(admitted)
+    admitted, auto_log = auto_merge(admitted)
+    admitted, applied, unmatched = apply_reviewed_merges(admitted, merges)
+    dupe_review = _near_duplicates(admitted, decided_pairs(merges, "different"))
     records = [{k: v for k, v in r.items() if k != "_domain"} for r in admitted]
+    by_status = {status: 0 for status in ADMITTED_STATUSES}
+    for record in records:
+        by_status[record["org_status"]] += 1
     return AdmissionResult(
         records=records,
         admitted_by_status=by_status,
@@ -540,6 +836,10 @@ def admit(
         ambiguous=ambiguous,
         duplicates_collapsed=duplicates,
         dupe_review=dupe_review,
+        placeholders=placeholders,
+        auto_merges=auto_log,
+        reviewed_merges_applied=applied,
+        reviewed_merges_unmatched=unmatched,
     )
 
 

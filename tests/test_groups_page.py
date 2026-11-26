@@ -19,6 +19,9 @@ MODULE = ROOT / "framework" / "src" / "components" / "groups.js"
 STYLES = ROOT / "framework" / "src" / "components" / "groups.css"
 RUNTIME = ROOT / "tests" / "framework_groups_runtime.mjs"
 TREE_RUNTIME = ROOT / "tests" / "framework_groups_tree_runtime.mjs"
+NETWORK_RUNTIME = ROOT / "tests" / "framework_groups_network_runtime.mjs"
+NETWORK_MODEL = ROOT / "framework" / "src" / "components" / "groups_network_model.js"
+NETWORK = ROOT / "framework" / "src" / "components" / "groups_network.js"
 CONTACT = "theplastiverse@gmail.com"
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
@@ -175,3 +178,58 @@ def test_table_wrapper_contains_hidden_labels() -> None:
     css = (ROOT / "framework" / "src" / "components" / "groups.css").read_text(encoding="utf-8")
     # Without position: relative the hidden labels widened the page at 390 px.
     assert ".gv .gv-table-wrap { position: relative; overflow-x: auto;" in css
+
+
+def test_network_runtime_helpers_pass() -> None:
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("node is not on PATH (source ~/.bashrc puts it there)")
+    result = subprocess.run(
+        [node, str(NETWORK_RUNTIME)],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr or result.stdout
+    assert "groups network runtime assertions passed" in result.stdout
+
+
+def test_network_section_wording_and_hash_keys() -> None:
+    page = _visible_source(PAGE)
+    assert '<h2 id="gv-net-title">Network</h2>' in page
+    assert 'id="groups-network"' in page
+    assert "This view shows tagged groups only." in page
+    module = _read(NETWORK)
+    model = _read(NETWORK_MODEL)
+    assert "No groups are tagged yet, so there is no network to draw." in module
+    assert 'href="./ambassadors"' in module
+    assert 'href="./ambassadors/"' not in module
+    assert "Adjacent organisations (no stated plastics focus)" in module
+    assert "co-occurrence of tags, not partnerships" in module
+    assert "Size shows the number of tags, not importance." in module
+    assert 'rel="noopener nofollow"' in module
+    assert "<q>" in module
+    assert "aria-hidden" in module
+    assert "groups_graph.json" in _read(PAGE)
+    # Every network hash key starts with "net", so groups.js and tree keys are untouched.
+    keys = set(re.findall(r'"(net[a-z_]*)"', model))
+    assert keys and all(key.startswith("net") for key in keys)
+    assert not re.search(r'params\.(set|get|delete)\("(q|group|tree|page|status)"', model)
+
+
+def test_network_visible_text_has_no_internal_ids() -> None:
+    for path in (PAGE, NETWORK, NETWORK_MODEL):
+        text = _visible_source(path)
+        for term in ("CG-11", "CG-13", "V-NET", "T-GRAPH", "A4-", "BFFP-", "excluded"):
+            assert term not in text, f"{term} in {path.name}"
+    assert not re.search(r"scores?", _visible_source(NETWORK).lower())
+
+
+def test_network_module_has_no_npm_import_in_model() -> None:
+    model = _read(NETWORK_MODEL)
+    assert "npm:" not in model
+    assert "document" not in _visible_source(NETWORK_MODEL)
+    assert 'import Graph from "npm:graphology@0.26.0";' in _read(NETWORK)
+    assert 'import Sigma from "npm:sigma@3.0.3";' in _read(NETWORK)

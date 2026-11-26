@@ -8,6 +8,8 @@ Reads GET {api}/export/approved (or a saved export with --input) and applies:
   Kinds ``group_tag`` and ``group_suggest`` (CG-6b) never touch region.yml: tags go to
   ``curation/group_tags.csv`` (newest per group_id) with stated affiliations in
   ``curation/group_affiliations.csv``; suggestions go to ``curation/group_suggestions.csv``.
+  A tag's optional ``name_correction`` goes to ``curation/group_name_corrections.csv`` (newest per
+  group_id); the group build applies it.
 - consensus ``case_answers``: rows in ``curation/ambassador_labels.csv``, newest per (region, case).
 - ``institutions`` (optional key, missing means none): approved institution proposals, written to
   ``curation/ambassador_institution_additions.csv``, newest per (region, domain). The builder
@@ -69,6 +71,7 @@ ADDITION_SOURCE = "approved_proposal"
 DEFAULT_GROUP_TAGS = ROOT / "curation" / "group_tags.csv"
 DEFAULT_GROUP_AFFILIATIONS = ROOT / "curation" / "group_affiliations.csv"
 DEFAULT_GROUP_SUGGESTIONS = ROOT / "curation" / "group_suggestions.csv"
+DEFAULT_GROUP_NAME_CORRECTIONS = ROOT / "curation" / "group_name_corrections.csv"
 # The four types the amb-v1 builder treats as eligible (ELIGIBLE_TYPES in src/atlas/build).
 INSTITUTION_TYPES = frozenset({"education", "government", "nonprofit", "facility"})
 # Same pattern as the owner spec for institution domains; the builder also checks registrable form.
@@ -609,6 +612,7 @@ GROUP_TAG_KEYS = frozenset(
         "status",
         "cannot_determine_reason",
         "not_an_organisation",
+        "name_correction",
         "legal_form_note",
         "stated_affiliations",
         "evidence",
@@ -658,6 +662,7 @@ GROUP_AFFILIATION_COLUMNS = (
     "evidence_quote",
 )
 GROUP_SUGGESTION_COLUMNS = ("name", "url", "country", "note", "suggested_at")
+GROUP_NAME_CORRECTION_COLUMNS = ("group_id", "name", "submitted_at")
 GROUP_ID_RE = re.compile(r"cg_[0-9a-f]{16}")
 GROUP_PLACE_RE = re.compile(r"[A-Z]{2}(-[A-Z0-9]{1,3})?")
 GROUP_LANGUAGE_RE = re.compile(r"[a-z]{2}")
@@ -878,6 +883,12 @@ def clean_group_tag(
                 return _bad(facet)
         out["not_an_organisation"] = flag
 
+    if payload.get("name_correction") is not None:
+        name = bounded_text(payload["name_correction"], 200)
+        if name is None or len(name) < 2 or EMAIL_RE.search(name):
+            return _bad("name_correction")
+        out["name_correction"] = name
+
     # Tier 1 (V2, V4): an ambassador_tagged group has the five core facets and evidence for two.
     if status == "ambassador_tagged":
         for key in GROUP_TIER1:
@@ -971,7 +982,8 @@ class GroupStore:
     """Group tags, affiliations and suggestions for one export run; nothing is written yet.
 
     ``tags`` maps group_id to {"ms", "row"}; the newest approval wins and replaces the group's
-    affiliations too. ``suggestions`` maps url to {"ms", "row"}, newest wins.
+    affiliations too. ``suggestions`` maps url to {"ms", "row"}, newest wins. ``name_corrections``
+    maps group_id to {"ms", "row"}, newest wins; only a tag that carries a name_correction sets it.
     """
 
     def __init__(
@@ -980,11 +992,13 @@ class GroupStore:
         affiliations: dict[str, list[dict]],
         suggestions: dict[str, dict],
         taxonomy: Mapping[str, tuple[str, ...]],
+        name_corrections: dict[str, dict] | None = None,
     ) -> None:
         self.tags = tags
         self.affiliations = affiliations
         self.suggestions = suggestions
         self.taxonomy = taxonomy
+        self.name_corrections = name_corrections if name_corrections is not None else {}
         self.dirty: set[str] = set()
 
     def submission(self, sub: dict, credit: str | None) -> str | None:
@@ -1014,6 +1028,16 @@ class GroupStore:
         self.tags[group_id] = {"ms": at, "row": row}
         self.affiliations[group_id] = affiliation_rows(tag)
         self.dirty.update({"tags", "affiliations"})
+        if "name_correction" in tag:
+            name_row = {
+                "group_id": group_id,
+                "name": tag["name_correction"],
+                "submitted_at": iso_day_of(at),
+            }
+            known = self.name_corrections.get(group_id)
+            if known is None or known["ms"] <= at:
+                self.name_corrections[group_id] = {"ms": at, "row": name_row}
+                self.dirty.add("names")
         return None
 
     def _suggest(self, payload: Mapping[str, Any], at: int) -> str | None:
@@ -1076,6 +1100,31 @@ def read_group_suggestions(path: Path) -> dict[str, dict]:
             "row": {col: row.get(col, "") for col in GROUP_SUGGESTION_COLUMNS},
         }
     return suggestions
+
+
+def read_group_name_corrections(path: Path) -> dict[str, dict]:
+    corrections: dict[str, dict] = {}
+    for row in _csv_rows(path):
+        if not row.get("group_id"):
+            continue
+        try:
+            ms = ms_from_iso(f"{row['submitted_at']}T00:00:00Z")
+        except (KeyError, TypeError, ValueError):
+            raise ExportError(f"{path.name} has a row with a bad submitted_at") from None
+        corrections[row["group_id"]] = {
+            "ms": ms,
+            "row": {col: row.get(col, "") for col in GROUP_NAME_CORRECTION_COLUMNS},
+        }
+    return corrections
+
+
+def write_group_name_corrections(path: Path, corrections: dict[str, dict]) -> None:
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=GROUP_NAME_CORRECTION_COLUMNS, lineterminator="\n")
+    writer.writeheader()
+    for group_id in sorted(corrections):
+        writer.writerow(corrections[group_id]["row"])
+    write_text(path, buffer.getvalue())
 
 
 def write_group_tags(path: Path, tags: dict[str, dict]) -> None:
@@ -1266,6 +1315,7 @@ def run(args: argparse.Namespace) -> int:
         read_group_affiliations(args.group_affiliations_file),
         read_group_suggestions(args.group_suggestions_file),
         load_taxonomy(),
+        read_group_name_corrections(args.group_name_corrections_file),
     )
     applier = Applier(args.regions_dir, labels, additions, groups)
     times: list[int] = []
@@ -1360,6 +1410,8 @@ def run(args: argparse.Namespace) -> int:
         write_group_affiliations(args.group_affiliations_file, groups.affiliations)
     if "suggestions" in groups.dirty:
         write_group_suggestions(args.group_suggestions_file, groups.suggestions)
+    if "names" in groups.dirty:
+        write_group_name_corrections(args.group_name_corrections_file, groups.name_corrections)
     if args.summary_file:
         write_text(args.summary_file, summary_markdown(applier, since, newest))
     write_text(args.since_file, json.dumps(new_state, indent=2) + "\n")
@@ -1383,6 +1435,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--group-tags-file", type=Path, default=DEFAULT_GROUP_TAGS)
     parser.add_argument("--group-affiliations-file", type=Path, default=DEFAULT_GROUP_AFFILIATIONS)
     parser.add_argument("--group-suggestions-file", type=Path, default=DEFAULT_GROUP_SUGGESTIONS)
+    parser.add_argument(
+        "--group-name-corrections-file", type=Path, default=DEFAULT_GROUP_NAME_CORRECTIONS
+    )
     parser.add_argument("--summary-file", type=Path, help="write a counts-only markdown summary")
     parser.add_argument("--dry-run", action="store_true", help="report only; write nothing")
     return parser

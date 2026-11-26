@@ -14,7 +14,7 @@ from types import ModuleType
 
 import pytest
 
-from atlas.groups import roster
+from atlas.groups import admission, roster
 
 REPO = Path(__file__).resolve().parents[1]
 FIXTURES = REPO / "tests" / "fixtures" / "groups"
@@ -445,3 +445,98 @@ def test_page_fetcher_waits_for_the_page_request_and_sets_no_origin() -> None:
     # The Origin header is never set by hand; the page makes its own request.
     assert "Origin" not in source.replace("Origin not allowed", "")
     assert "extra_http_headers" not in source
+
+
+# ---------------------------------------------------------------------------
+# Roster QC (CG-ROSTER-QC): placeholders, automatic merge, reviewed curation
+# ---------------------------------------------------------------------------
+
+QC_CSV = (
+    "organization,country,website,type\n"
+    "a tip: tap,Germany,https://atiptap.org/,cm\n"
+    "a tip: tap e.V.,Germany,https://www.atiptap.org,cm\n"
+    "-,Indonesia,,cm\n"
+    "Example Reef Society,Norway,https://example-reef.no,cm\n"
+)
+REEF_ID = admission.group_id_for("Example Reef Society", "NO", "example-reef.no")
+
+
+def _qc_curation(base: Path, *, correction: str | None = None) -> Path:
+    curation = base / "curation"
+    curation.mkdir(parents=True, exist_ok=True)
+    (curation / "group_merges.csv").write_text(
+        "group_id_keep,group_id_drop,decided_at,decision\n", encoding="utf-8"
+    )
+    lines = ["group_id,name,submitted_at"]
+    if correction is not None:
+        lines.append(f"{REEF_ID},{correction},2026-11-26T10:00:00Z")
+    (curation / "group_name_corrections.csv").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return curation
+
+
+def test_qc_build_merges_quarantines_and_applies_a_name_correction(tmp_path: Path) -> None:
+    source = tmp_path / "export.csv"
+    source.write_text(QC_CSV, encoding="utf-8")
+    paths = _paths(tmp_path)
+    _qc_curation(tmp_path, correction="Example Reef Society (Norway)")
+    code = build_script.main(["--input", str(source)], paths=paths, today=TODAY)
+    assert code == 0
+    payload = json.loads((paths.site_dir / "roster.json").read_text(encoding="utf-8"))
+    names = {r["group_id"]: r for r in payload["records"]}
+    assert len(names) == 2
+    assert all(any(c.isalnum() for c in r["name"]) for r in payload["records"])
+    german = [r for r in payload["records"] if r["country"] == "DE"]
+    assert [r["name"] for r in german] == ["a tip: tap e.V."]
+    assert german[0]["name_alt"] == ["a tip: tap"]
+    reef = names[REEF_ID]
+    assert reef["name"] == "Example Reef Society (Norway)"
+    assert reef["name_alt"] == ["Example Reef Society"]
+    local = json.loads((paths.interim_dir / "roster_manifest.local.json").read_text("utf-8"))
+    assert local["placeholders_quarantined"] == 1
+    assert local["auto_merged_records"] == 1
+    assert "auto_merges.csv" not in json.dumps(payload)
+    assert (paths.interim_dir / "auto_merges.csv").exists()
+
+
+def test_qc_check_passes_after_a_rebuild_with_curation(tmp_path: Path) -> None:
+    raw_root = tmp_path / "raw" / TODAY.isoformat()
+    raw_root.mkdir(parents=True)
+    (raw_root / roster.RAW_FILE_NAME).write_text(
+        json.dumps(
+            {
+                "error": 0,
+                "data": [
+                    {
+                        "organization": "Example Reef Society",
+                        "country": "Norway",
+                        "website": "https://example-reef.no",
+                        "type": "cm",
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    paths = _paths(tmp_path)
+    _qc_curation(tmp_path, correction="Example Reef Society (Norway)")
+    assert (
+        build_script.main(
+            ["--input", str(raw_root / roster.RAW_FILE_NAME)], paths=paths, today=TODAY
+        )
+        == 0
+    )
+    assert build_script.main([], paths=paths, today=TODAY) == 0
+
+
+def test_qc_invalid_name_correction_fails_without_writing(tmp_path: Path, capsys) -> None:
+    source = tmp_path / "export.csv"
+    source.write_text(QC_CSV, encoding="utf-8")
+    paths = _paths(tmp_path)
+    curation = _qc_curation(tmp_path)
+    (curation / "group_name_corrections.csv").write_text(
+        f"group_id,name,submitted_at\n{REEF_ID},,2026-11-26T10:00:00Z\n", encoding="utf-8"
+    )
+    code = build_script.main(["--input", str(source)], paths=paths, today=TODAY)
+    assert code == 1
+    assert not (paths.site_dir / "roster.json").exists()
+    assert "invalid group curation" in capsys.readouterr().err

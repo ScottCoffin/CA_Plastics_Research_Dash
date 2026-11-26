@@ -68,6 +68,8 @@ def _args(root: Path, *extra: str) -> list[str]:
         str(root / "curation" / "group_affiliations.csv"),
         "--group-suggestions-file",
         str(root / "curation" / "group_suggestions.csv"),
+        "--group-name-corrections-file",
+        str(root / "curation" / "group_name_corrections.csv"),
         *extra,
     ]
 
@@ -586,3 +588,89 @@ def test_not_an_organisation_row_is_exported_without_facets(work: Path, capsys) 
     assert row["not_an_organisation"] == "true"
     assert row["cannot_determine_reason"] == "not_an_organisation"
     assert row["sector"] == ""
+
+
+def _names(root: Path) -> list[dict]:
+    path = root / "curation" / "group_name_corrections.csv"
+    return _csv_of(root, "group_name_corrections.csv") if path.exists() else []
+
+
+def test_approved_name_correction_is_written_to_its_own_csv(work: Path) -> None:
+    assert (
+        _export(
+            work,
+            [
+                _sub(
+                    1,
+                    "group_tag",
+                    _tag(name_correction="  Coastal Cleanup Collective "),
+                    _ms("2026-11-20"),
+                )
+            ],
+        )
+        == 0
+    )
+    assert _names(work) == [
+        {"group_id": GROUP_A, "name": "Coastal Cleanup Collective", "submitted_at": "2026-11-20"}
+    ]
+    [row] = _csv_of(work, "group_tags.csv")
+    assert "name_correction" not in row
+
+
+def test_name_correction_is_kept_for_cannot_determine(work: Path) -> None:
+    tag = {
+        "group_id": GROUP_A,
+        "status": "cannot_determine",
+        "cannot_determine_reason": "no_web_presence",
+        "name_correction": "Real Group Name",
+    }
+    assert _export(work, [_sub(1, "group_tag", tag, _ms("2026-11-20"))]) == 0
+    assert _names(work) == [
+        {"group_id": GROUP_A, "name": "Real Group Name", "submitted_at": "2026-11-20"}
+    ]
+
+
+def test_latest_name_correction_wins(work: Path) -> None:
+    assert (
+        _export(
+            work,
+            [
+                _sub(1, "group_tag", _tag(name_correction="Older Name"), _ms("2026-11-20")),
+                _sub(2, "group_tag", _tag(name_correction="Newer Name"), _ms("2026-11-22")),
+                _sub(3, "group_tag", _tag(GROUP_B), _ms("2026-11-23")),
+            ],
+        )
+        == 0
+    )
+    assert _names(work) == [
+        {"group_id": GROUP_A, "name": "Newer Name", "submitted_at": "2026-11-22"}
+    ]
+
+
+def test_invalid_name_correction_is_skipped_with_reason(work: Path, capsys) -> None:
+    assert (
+        _export(
+            work,
+            [
+                _sub(1, "group_tag", _tag(name_correction=""), _ms("2026-11-20")),
+                _sub(2, "group_tag", _tag(name_correction="<i>Name</i>"), _ms("2026-11-20")),
+                _sub(
+                    3, "group_tag", _tag(name_correction="write ada@example.org"), _ms("2026-11-20")
+                ),
+                _sub(4, "group_tag", _tag(name_correction=7), _ms("2026-11-20")),
+            ],
+        )
+        == 0
+    )
+    out = capsys.readouterr().out
+    assert "skip submission 1: invalid name_correction" in out
+    assert "skip submission 2: invalid name_correction" in out
+    assert "skip submission 3: invalid name_correction" in out
+    assert "skip submission 4: invalid name_correction" in out
+    assert _names(work) == []
+    assert not (work / "curation" / "group_tags.csv").exists()
+
+
+def test_name_corrections_file_is_not_written_when_there_are_none(work: Path) -> None:
+    assert _export(work, [_sub(1, "group_tag", _tag(), _ms("2026-11-20"))]) == 0
+    assert (work / "curation" / "group_name_corrections.csv").exists() is False

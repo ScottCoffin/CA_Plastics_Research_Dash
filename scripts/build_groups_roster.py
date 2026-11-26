@@ -8,8 +8,11 @@ Usage:
   py -3.14 scripts/build_groups_roster.py --check                         # validate committed files
 
 Published (committed) files: site/data/global/groups/roster.json and roster_manifest.json.
+Reviewed curation read at build time: curation/group_merges.csv (same/different decisions),
+curation/group_name_corrections.csv (display names; the group_id never changes).
 Local only (gitignored): data/interim/bffp/roster_manifest.local.json, roster_quarantine.csv,
-dupe_review.csv. Excluded counts and names never reach a published file (A4-D20, A4-D24).
+dupe_review.csv, auto_merges.csv. Excluded counts and names never reach a published file
+(A4-D20, A4-D24).
 Exit codes: 0 ok or SKIP, 1 failure or fetch refused, 2 structural-change guard tripped.
 """
 
@@ -55,6 +58,8 @@ FORBIDDEN_KEY_PARTS = ("total", "exclud", "ambig", "fetch", "individual")
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 QUARANTINE_HEADER = ["group_id", "name", "country", "url", "reason"]
 DUPE_HEADER = ["country", "reason", "group_id_a", "name_a", "group_id_b", "name_b"]
+MERGES_FILE = "group_merges.csv"
+NAME_CORRECTIONS_FILE = "group_name_corrections.csv"
 
 
 @dataclass(frozen=True)
@@ -110,6 +115,10 @@ def _write_local(paths: Paths, result: admission.AdmissionResult, meta: dict[str
         "ambiguous": len(result.ambiguous),
         "duplicates_collapsed": result.duplicates_collapsed,
         "near_duplicate_pairs": len(result.dupe_review),
+        "placeholders_quarantined": result.placeholders,
+        "auto_merged_records": len(result.auto_merges),
+        "reviewed_merges_applied": result.reviewed_merges_applied,
+        "reviewed_merges_unmatched": result.reviewed_merges_unmatched,
     }
     (paths.interim_dir / "roster_manifest.local.json").write_text(_dump(local), encoding="utf-8")
     (paths.interim_dir / "roster_quarantine.csv").write_text(
@@ -118,6 +127,23 @@ def _write_local(paths: Paths, result: admission.AdmissionResult, meta: dict[str
     (paths.interim_dir / "dupe_review.csv").write_text(
         admission.render_csv(DUPE_HEADER, result.dupe_review), encoding="utf-8"
     )
+    (paths.interim_dir / "auto_merges.csv").write_text(
+        admission.render_csv(admission.AUTO_MERGE_HEADER, result.auto_merges), encoding="utf-8"
+    )
+
+
+def _curation_inputs(curation_dir: Path) -> tuple[list[dict[str, str]], dict[str, str]]:
+    """Reviewed merges and name corrections. Raises ValueError or OSError when they are invalid."""
+    merges = admission.read_merges(curation_dir / MERGES_FILE)
+    corrections = admission.read_name_corrections(curation_dir / NAME_CORRECTIONS_FILE)
+    return merges, corrections
+
+
+def _apply_corrections(records: list[dict[str, Any]], corrections: dict[str, str]) -> None:
+    """Apply corrected display names in place; each old name is kept in name_alt."""
+    for record in records:
+        if record["group_id"] in corrections:
+            admission.apply_name_correction(record, corrections[record["group_id"]])
 
 
 def _not_organisations(curation_dir: Path, records: list[dict[str, Any]]) -> set[str]:
@@ -206,7 +232,17 @@ def build(
     except roster.RosterStructureError as exc:
         print(f"GUARD: {exc}", file=sys.stderr)
         return 2
-    result = admission.admit(entries, retrieved_on=day.isoformat(), registry=load_registry())
+    try:
+        merges, corrections = _curation_inputs(paths.curation_dir)
+    except (OSError, csv.Error, ValueError) as exc:
+        print(
+            f"ERROR: invalid group curation ({exc}); public roster was not written", file=sys.stderr
+        )
+        return 1
+    result = admission.admit(
+        entries, retrieved_on=day.isoformat(), registry=load_registry(), merges=merges
+    )
+    _apply_corrections(result.records, corrections)
     meta = {
         "retrieved_at": day.isoformat(),
         "parser_version": roster.PARSER_VERSION,
@@ -290,11 +326,18 @@ def check(paths: Paths) -> int:
             return 1
         print("PASS (structure); SKIP rebuild comparison: no raw cache")
         return 0
+    try:
+        merges, corrections = _curation_inputs(paths.curation_dir)
+    except (OSError, csv.Error, ValueError):
+        problems.append("group curation (merges or name corrections): invalid")
+        merges, corrections = [], {}
     rebuilt = admission.admit(
         roster.read_raw_file(raw),
         retrieved_on=str(payload.get("retrieved_at", "")),
         registry=load_registry(),
+        merges=merges,
     )
+    _apply_corrections(rebuilt.records, corrections)
     try:
         excluded_ids = _not_organisations(paths.curation_dir, rebuilt.records)
     except (OSError, csv.Error, ValueError):

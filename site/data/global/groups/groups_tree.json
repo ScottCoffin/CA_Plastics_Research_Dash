@@ -1,25 +1,25 @@
 {
  "default_hierarchy": "geography",
- "denominator_note": "Based on 0 of 2708 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
+ "denominator_note": "Based on 0 of 2673 roster organisations tagged (0.0%). Tagged groups are not a random sample.",
  "generated_from": "2026-11-26",
  "hierarchies": {
   "centrality": {
    "children": [
     {
-     "count": 2708,
+     "count": 2673,
      "counts": {
       "distinct": 0,
-      "roster": 2708,
+      "roster": 2673,
       "tagged": 0
      },
      "id": "centrality/not_yet_tagged",
-     "label": "Not yet tagged (2708)",
+     "label": "Not yet tagged (2673)",
      "level": "not_yet_tagged"
     }
    ],
    "counts": {
     "distinct": 0,
-    "roster": 2708,
+    "roster": 2673,
     "tagged": 0
    },
    "id": "centrality",
@@ -29,20 +29,20 @@
   "function": {
    "children": [
     {
-     "count": 2708,
+     "count": 2673,
      "counts": {
       "distinct": 0,
-      "roster": 2708,
+      "roster": 2673,
       "tagged": 0
      },
      "id": "function/not_yet_tagged",
-     "label": "Not yet tagged (2708)",
+     "label": "Not yet tagged (2673)",
      "level": "not_yet_tagged"
     }
    ],
    "counts": {
     "distinct": 0,
-    "roster": 2708,
+    "roster": 2673,
     "tagged": 0
    },
    "id": "function",
@@ -702,20 +702,20 @@
       {
        "children": [
         {
-         "count": 44,
+         "count": 43,
          "counts": {
           "distinct": 0,
-          "roster": 44,
+          "roster": 43,
           "tagged": 0
          },
          "id": "geography/Eastern Africa/TZ/not_yet_tagged",
-         "label": "Not yet tagged (44)",
+         "label": "Not yet tagged (43)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 44,
+        "roster": 43,
         "tagged": 0
        },
        "id": "geography/Eastern Africa/TZ",
@@ -725,20 +725,20 @@
       {
        "children": [
         {
-         "count": 26,
+         "count": 25,
          "counts": {
           "distinct": 0,
-          "roster": 26,
+          "roster": 25,
           "tagged": 0
          },
          "id": "geography/Eastern Africa/UG/not_yet_tagged",
-         "label": "Not yet tagged (26)",
+         "label": "Not yet tagged (25)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 26,
+        "roster": 25,
         "tagged": 0
        },
        "id": "geography/Eastern Africa/UG",
@@ -748,20 +748,20 @@
       {
        "children": [
         {
-         "count": 7,
+         "count": 6,
          "counts": {
           "distinct": 0,
-          "roster": 7,
+          "roster": 6,
           "tagged": 0
          },
          "id": "geography/Eastern Africa/ZM/not_yet_tagged",
-         "label": "Not yet tagged (7)",
+         "label": "Not yet tagged (6)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 7,
+        "roster": 6,
         "tagged": 0
        },
        "id": "geography/Eastern Africa/ZM",
@@ -794,7 +794,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 158,
+      "roster": 155,
       "tagged": 0
      },
      "id": "geography/Eastern Africa",
@@ -1025,20 +1025,20 @@
       {
        "children": [
         {
-         "count": 3,
+         "count": 2,
          "counts": {
           "distinct": 0,
-          "roster": 3,
+          "roster": 2,
           "tagged": 0
          },
          "id": "geography/Eastern Europe/MD/not_yet_tagged",
-         "label": "Not yet tagged (3)",
+         "label": "Not yet tagged (2)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 3,
+        "roster": 2,
         "tagged": 0
        },
        "id": "geography/Eastern Europe/MD",
@@ -1048,20 +1048,20 @@
       {
        "children": [
         {
-         "count": 11,
+         "count": 10,
          "counts": {
           "distinct": 0,
-          "roster": 11,
+          "roster": 10,
           "tagged": 0
          },
          "id": "geography/Eastern Europe/PL/not_yet_tagged",
-         "label": "Not yet tagged (11)",
+         "label": "Not yet tagged (10)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 11,
+        "roster": 10,
         "tagged": 0
        },
        "id": "geography/Eastern Europe/PL",
@@ -1163,7 +1163,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 55,
+      "roster": 53,
       "tagged": 0
      },
      "id": "geography/Eastern Europe",
@@ -1245,20 +1245,20 @@
       {
        "children": [
         {
-         "count": 17,
+         "count": 16,
          "counts": {
           "distinct": 0,
-          "roster": 17,
+          "roster": 16,
           "tagged": 0
          },
          "id": "geography/Middle Africa/CD/not_yet_tagged",
-         "label": "Not yet tagged (17)",
+         "label": "Not yet tagged (16)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 17,
+        "roster": 16,
         "tagged": 0
        },
        "id": "geography/Middle Africa/CD",
@@ -1360,7 +1360,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 46,
+      "roster": 45,
       "tagged": 0
      },
      "id": "geography/Middle Africa",
@@ -1522,20 +1522,20 @@
       {
        "children": [
         {
-         "count": 53,
+         "count": 52,
          "counts": {
           "distinct": 0,
-          "roster": 53,
+          "roster": 52,
           "tagged": 0
          },
          "id": "geography/Northern America/CA/not_yet_tagged",
-         "label": "Not yet tagged (53)",
+         "label": "Not yet tagged (52)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 53,
+        "roster": 52,
         "tagged": 0
        },
        "id": "geography/Northern America/CA",
@@ -1545,20 +1545,20 @@
       {
        "children": [
         {
-         "count": 659,
+         "count": 652,
          "counts": {
           "distinct": 0,
-          "roster": 659,
+          "roster": 652,
           "tagged": 0
          },
          "id": "geography/Northern America/US/not_yet_tagged",
-         "label": "Not yet tagged (659)",
+         "label": "Not yet tagged (652)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 659,
+        "roster": 652,
         "tagged": 0
        },
        "id": "geography/Northern America/US",
@@ -1568,7 +1568,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 714,
+      "roster": 706,
       "tagged": 0
      },
      "id": "geography/Northern America",
@@ -1603,20 +1603,20 @@
       {
        "children": [
         {
-         "count": 8,
+         "count": 7,
          "counts": {
           "distinct": 0,
-          "roster": 8,
+          "roster": 7,
           "tagged": 0
          },
          "id": "geography/Northern Europe/EE/not_yet_tagged",
-         "label": "Not yet tagged (8)",
+         "label": "Not yet tagged (7)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 8,
+        "roster": 7,
         "tagged": 0
        },
        "id": "geography/Northern Europe/EE",
@@ -1626,20 +1626,20 @@
       {
        "children": [
         {
-         "count": 105,
+         "count": 104,
          "counts": {
           "distinct": 0,
-          "roster": 105,
+          "roster": 104,
           "tagged": 0
          },
          "id": "geography/Northern Europe/GB/not_yet_tagged",
-         "label": "Not yet tagged (105)",
+         "label": "Not yet tagged (104)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 105,
+        "roster": 104,
         "tagged": 0
        },
        "id": "geography/Northern Europe/GB",
@@ -1764,7 +1764,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 142,
+      "roster": 140,
       "tagged": 0
      },
      "id": "geography/Northern Europe",
@@ -1880,20 +1880,20 @@
       {
        "children": [
         {
-         "count": 20,
+         "count": 19,
          "counts": {
           "distinct": 0,
-          "roster": 20,
+          "roster": 19,
           "tagged": 0
          },
          "id": "geography/South America/CO/not_yet_tagged",
-         "label": "Not yet tagged (20)",
+         "label": "Not yet tagged (19)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 20,
+        "roster": 19,
         "tagged": 0
        },
        "id": "geography/South America/CO",
@@ -2041,7 +2041,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 124,
+      "roster": 123,
       "tagged": 0
      },
      "id": "geography/South America",
@@ -2053,20 +2053,20 @@
       {
        "children": [
         {
-         "count": 62,
+         "count": 61,
          "counts": {
           "distinct": 0,
-          "roster": 62,
+          "roster": 61,
           "tagged": 0
          },
          "id": "geography/South-eastern Asia/ID/not_yet_tagged",
-         "label": "Not yet tagged (62)",
+         "label": "Not yet tagged (61)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 62,
+        "roster": 61,
         "tagged": 0
        },
        "id": "geography/South-eastern Asia/ID",
@@ -2168,20 +2168,20 @@
       {
        "children": [
         {
-         "count": 151,
+         "count": 146,
          "counts": {
           "distinct": 0,
-          "roster": 151,
+          "roster": 146,
           "tagged": 0
          },
          "id": "geography/South-eastern Asia/PH/not_yet_tagged",
-         "label": "Not yet tagged (151)",
+         "label": "Not yet tagged (146)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 151,
+        "roster": 146,
         "tagged": 0
        },
        "id": "geography/South-eastern Asia/PH",
@@ -2283,7 +2283,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 292,
+      "roster": 286,
       "tagged": 0
      },
      "id": "geography/South-eastern Asia",
@@ -2341,20 +2341,20 @@
       {
        "children": [
         {
-         "count": 29,
+         "count": 28,
          "counts": {
           "distinct": 0,
-          "roster": 29,
+          "roster": 28,
           "tagged": 0
          },
          "id": "geography/Southern Africa/ZA/not_yet_tagged",
-         "label": "Not yet tagged (29)",
+         "label": "Not yet tagged (28)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 29,
+        "roster": 28,
         "tagged": 0
        },
        "id": "geography/Southern Africa/ZA",
@@ -2364,7 +2364,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 32,
+      "roster": 31,
       "tagged": 0
      },
      "id": "geography/Southern Africa",
@@ -2376,20 +2376,20 @@
       {
        "children": [
         {
-         "count": 194,
+         "count": 193,
          "counts": {
           "distinct": 0,
-          "roster": 194,
+          "roster": 193,
           "tagged": 0
          },
          "id": "geography/Southern Asia/AF/not_yet_tagged",
-         "label": "Not yet tagged (194)",
+         "label": "Not yet tagged (193)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 194,
+        "roster": 193,
         "tagged": 0
        },
        "id": "geography/Southern Asia/AF",
@@ -2399,20 +2399,20 @@
       {
        "children": [
         {
-         "count": 25,
+         "count": 24,
          "counts": {
           "distinct": 0,
-          "roster": 25,
+          "roster": 24,
           "tagged": 0
          },
          "id": "geography/Southern Asia/BD/not_yet_tagged",
-         "label": "Not yet tagged (25)",
+         "label": "Not yet tagged (24)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 25,
+        "roster": 24,
         "tagged": 0
        },
        "id": "geography/Southern Asia/BD",
@@ -2445,20 +2445,20 @@
       {
        "children": [
         {
-         "count": 144,
+         "count": 143,
          "counts": {
           "distinct": 0,
-          "roster": 144,
+          "roster": 143,
           "tagged": 0
          },
          "id": "geography/Southern Asia/IN/not_yet_tagged",
-         "label": "Not yet tagged (144)",
+         "label": "Not yet tagged (143)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 144,
+        "roster": 143,
         "tagged": 0
        },
        "id": "geography/Southern Asia/IN",
@@ -2560,7 +2560,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 410,
+      "roster": 407,
       "tagged": 0
      },
      "id": "geography/Southern Asia",
@@ -2952,20 +2952,20 @@
       {
        "children": [
         {
-         "count": 31,
+         "count": 29,
          "counts": {
           "distinct": 0,
-          "roster": 31,
+          "roster": 29,
           "tagged": 0
          },
          "id": "geography/Western Africa/GH/not_yet_tagged",
-         "label": "Not yet tagged (31)",
+         "label": "Not yet tagged (29)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 31,
+        "roster": 29,
         "tagged": 0
        },
        "id": "geography/Western Africa/GH",
@@ -2998,20 +2998,20 @@
       {
        "children": [
         {
-         "count": 3,
+         "count": 2,
          "counts": {
           "distinct": 0,
-          "roster": 3,
+          "roster": 2,
           "tagged": 0
          },
          "id": "geography/Western Africa/GN/not_yet_tagged",
-         "label": "Not yet tagged (3)",
+         "label": "Not yet tagged (2)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 3,
+        "roster": 2,
         "tagged": 0
        },
        "id": "geography/Western Africa/GN",
@@ -3044,20 +3044,20 @@
       {
        "children": [
         {
-         "count": 105,
+         "count": 104,
          "counts": {
           "distinct": 0,
-          "roster": 105,
+          "roster": 104,
           "tagged": 0
          },
          "id": "geography/Western Africa/NG/not_yet_tagged",
-         "label": "Not yet tagged (105)",
+         "label": "Not yet tagged (104)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 105,
+        "roster": 104,
         "tagged": 0
        },
        "id": "geography/Western Africa/NG",
@@ -3113,20 +3113,20 @@
       {
        "children": [
         {
-         "count": 6,
+         "count": 4,
          "counts": {
           "distinct": 0,
-          "roster": 6,
+          "roster": 4,
           "tagged": 0
          },
          "id": "geography/Western Africa/TG/not_yet_tagged",
-         "label": "Not yet tagged (6)",
+         "label": "Not yet tagged (4)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 6,
+        "roster": 4,
         "tagged": 0
        },
        "id": "geography/Western Africa/TG",
@@ -3136,7 +3136,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 185,
+      "roster": 179,
       "tagged": 0
      },
      "id": "geography/Western Africa",
@@ -3194,20 +3194,20 @@
       {
        "children": [
         {
-         "count": 5,
+         "count": 4,
          "counts": {
           "distinct": 0,
-          "roster": 5,
+          "roster": 4,
           "tagged": 0
          },
          "id": "geography/Western Asia/CY/not_yet_tagged",
-         "label": "Not yet tagged (5)",
+         "label": "Not yet tagged (4)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 5,
+        "roster": 4,
         "tagged": 0
        },
        "id": "geography/Western Asia/CY",
@@ -3447,7 +3447,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 44,
+      "roster": 43,
       "tagged": 0
      },
      "id": "geography/Western Asia",
@@ -3528,20 +3528,20 @@
       {
        "children": [
         {
-         "count": 47,
+         "count": 46,
          "counts": {
           "distinct": 0,
-          "roster": 47,
+          "roster": 46,
           "tagged": 0
          },
          "id": "geography/Western Europe/DE/not_yet_tagged",
-         "label": "Not yet tagged (47)",
+         "label": "Not yet tagged (46)",
          "level": "not_yet_tagged"
         }
        ],
        "counts": {
         "distinct": 0,
-        "roster": 47,
+        "roster": 46,
         "tagged": 0
        },
        "id": "geography/Western Europe/DE",
@@ -3597,7 +3597,7 @@
      ],
      "counts": {
       "distinct": 0,
-      "roster": 168,
+      "roster": 167,
       "tagged": 0
      },
      "id": "geography/Western Europe",
@@ -3642,7 +3642,7 @@
    ],
    "counts": {
     "distinct": 0,
-    "roster": 2708,
+    "roster": 2673,
     "tagged": 0
    },
    "id": "geography",
@@ -3654,20 +3654,20 @@
   "centrality": {
    "children": [
     {
-     "count": 2708,
+     "count": 2673,
      "counts": {
       "distinct": 0,
-      "roster": 2708,
+      "roster": 2673,
       "tagged": 0
      },
      "id": "centrality/not_yet_tagged",
-     "label": "Not yet tagged (2708)",
+     "label": "Not yet tagged (2673)",
      "level": "not_yet_tagged"
     }
    ],
    "counts": {
     "distinct": 0,
-    "roster": 2708,
+    "roster": 2673,
     "tagged": 0
    },
    "id": "centrality",
@@ -3677,20 +3677,20 @@
   "function": {
    "children": [
     {
-     "count": 2708,
+     "count": 2673,
      "counts": {
       "distinct": 0,
-      "roster": 2708,
+      "roster": 2673,
       "tagged": 0
      },
      "id": "function/not_yet_tagged",
-     "label": "Not yet tagged (2708)",
+     "label": "Not yet tagged (2673)",
      "level": "not_yet_tagged"
     }
    ],
    "counts": {
     "distinct": 0,
-    "roster": 2708,
+    "roster": 2673,
     "tagged": 0
    },
    "id": "function",

@@ -11,6 +11,7 @@ import copy
 import csv
 import importlib.util
 import json
+import math
 import re
 import subprocess
 import sys
@@ -22,8 +23,11 @@ from typing import Any
 import pytest
 
 from atlas.groups.build import (
+    GRAPH_LAYOUT_ITERATIONS,
+    GRAPH_LAYOUT_SEED,
     OUTPUT_FILES,
     GroupsBuildError,
+    _graph_layout,
     build_groups,
     build_tree,
     check_flow_conservation,
@@ -403,6 +407,45 @@ def test_graph_external_ghost_and_co_occurrence() -> None:
 
 def test_graph_is_empty_but_valid_without_tags() -> None:
     graph = _json(_build(None), "groups_graph.json")
+    assert graph["nodes"] == [] and graph["edges"] == []
+
+
+def test_graph_nodes_carry_finite_build_time_positions() -> None:
+    graph = _json(_build(), "groups_graph.json")
+    assert graph["nodes"]
+    for node in graph["nodes"]:
+        for axis in ("x", "y"):
+            value = node[axis]
+            assert isinstance(value, float) and math.isfinite(value)
+            assert -1.0 <= value <= 1.0
+    assert graph["layout"] == {
+        "algorithm": "ForceAtlas2 (networkx)",
+        "seed": GRAPH_LAYOUT_SEED,
+        "iterations": GRAPH_LAYOUT_ITERATIONS,
+        "edge_types": ["assignment", "affiliation"],
+    }
+    assert graph["schema"] == "cg-graph-v1"
+
+
+def test_graph_layout_is_deterministic() -> None:
+    assert _build()["groups_graph.json"] == _build()["groups_graph.json"]
+
+
+def test_graph_layout_ignores_co_occurrence_edges() -> None:
+    nodes = ["activity:a", "activity:b", "group:1"]
+    assignment = [{"edge_type": "assignment", "source": "group:1", "target": "activity:a"}]
+    co = [{"edge_type": "co_occurrence", "source": "activity:a", "target": "activity:b"}]
+    assert _graph_layout(nodes, assignment) == _graph_layout(nodes, assignment + co)
+
+
+def test_graph_layout_edge_cases() -> None:
+    assert _graph_layout([], []) == {}
+    assert _graph_layout(["group:only"], []) == {"group:only": (0.0, 0.0)}
+
+
+def test_graph_empty_is_valid_with_layout() -> None:
+    graph = _json(_build(None), "groups_graph.json")
+    assert graph["layout"]["seed"] == GRAPH_LAYOUT_SEED
     assert graph["nodes"] == [] and graph["edges"] == []
 
 
@@ -796,3 +839,87 @@ def test_export_csv_round_trips_into_the_build(tmp_path: Path) -> None:
     assert record["stated_affiliations"][0]["target_name"] == "Example Network"
     # The approving ambassador's credit stays in the curation CSV and is never published.
     assert all(b"Ada Example" not in data for data in outputs.values())
+
+
+NAME_CORRECTION_HEADER = ("group_id", "name", "submitted_at")
+
+
+def _names_file(root: Path, rows: list[dict] = ()) -> Path:
+    curation = root / "curation"
+    curation.mkdir(parents=True, exist_ok=True)
+    _write_rows(curation / "group_name_corrections.csv", NAME_CORRECTION_HEADER, list(rows))
+    return curation
+
+
+def test_committed_name_corrections_file_is_header_only() -> None:
+    lines = (
+        (REPO / "curation" / "group_name_corrections.csv").read_text(encoding="utf-8").splitlines()
+    )
+    assert lines == [",".join(NAME_CORRECTION_HEADER)]
+
+
+def test_header_only_name_corrections_give_the_same_bytes(tmp_path: Path) -> None:
+    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), _names_file(tmp_path))
+    assert outputs == _build(None)
+
+
+def test_name_correction_renames_keeps_the_id_and_moves_the_old_name_to_alt(tmp_path: Path) -> None:
+    curation = _names_file(
+        tmp_path, [{"group_id": CORE, "name": "Coastal Cleanup Collective", "submitted_at": DATE}]
+    )
+    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), curation)
+    record = _record(outputs, CORE)
+    assert record["group_id"] == CORE
+    assert record["name"] == "Coastal Cleanup Collective"
+    assert record["name_alt"] == ["Core Clean Org"]
+    assert _record(outputs, ADJ)["name"] == "Adjacent Fund"
+
+
+def test_name_correction_keeps_existing_alternates_without_duplicates(tmp_path: Path) -> None:
+    roster = copy.deepcopy(ROSTER)
+    next(r for r in roster["records"] if r["group_id"] == CORE)["name_alt"] = [
+        "Core Clean Org",
+        "Old Alias",
+    ]
+    curation = _names_file(
+        tmp_path, [{"group_id": CORE, "name": "Core Clean Org Renamed", "submitted_at": DATE}]
+    )
+    record = _record(BUILD.build_outputs(roster, curation), CORE)
+    assert record["name"] == "Core Clean Org Renamed"
+    assert record["name_alt"] == ["Core Clean Org", "Old Alias"]
+
+
+def test_corrected_name_reaches_the_derived_files(tmp_path: Path) -> None:
+    curation = _curation(tmp_path, tags=[CORE_TAG])
+    _names_file(
+        tmp_path, [{"group_id": CORE, "name": "Coastal Cleanup Collective", "submitted_at": DATE}]
+    )
+    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), curation)
+    assert "Coastal Cleanup Collective" in outputs["groups_tree.json"].decode("utf-8")
+    assert "Coastal Cleanup Collective" in outputs["groups_graph.json"].decode("utf-8")
+
+
+def test_last_row_per_group_wins_and_unknown_ids_are_ignored_with_a_count(
+    tmp_path: Path, capsys
+) -> None:
+    curation = _names_file(
+        tmp_path,
+        [
+            {"group_id": CORE, "name": "First Pick", "submitted_at": DATE},
+            {"group_id": "cg_0000000000000000", "name": "Nobody", "submitted_at": DATE},
+            {"group_id": CORE, "name": "Second Pick", "submitted_at": DATE},
+            {"group_id": "cg_1111111111111111", "name": "Nobody Either", "submitted_at": DATE},
+        ],
+    )
+    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), curation)
+    assert _record(outputs, CORE)["name"] == "Second Pick"
+    assert "Nobody" not in outputs["groups.json"].decode("utf-8")
+    err = capsys.readouterr().err
+    assert "2 row(s)" in err
+    assert "Nobody" not in err
+
+
+def test_blank_correction_name_fails_the_build(tmp_path: Path) -> None:
+    curation = _names_file(tmp_path, [{"group_id": CORE, "name": "  ", "submitted_at": DATE}])
+    with pytest.raises(BUILD.GroupsBuildError, match="no name"):
+        BUILD.build_outputs(copy.deepcopy(ROSTER), curation)

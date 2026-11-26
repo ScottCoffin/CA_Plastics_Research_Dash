@@ -69,5 +69,7 @@ Conflict notes are in `.agent/DECISIONS.md` (A4-C2, A4-C3, A4-C4).
 | Review and double tagging (§7) | Moderation page, region leads, audit log | Second-tagger assignment, agreement statistics (CG-7) |
 | Suggest a group | Add local knowledge | The group kinds move to the A4 record (QUESTIONS AMB-KNOWLEDGE-EXTRAS) |
 
+A `group_tag` may carry an optional `name_correction` (2 to 200 plain characters, no email address, any status). The export writes it to `curation/group_name_corrections.csv` (newest per `group_id`), and the group build renames the group; the `group_id` never changes and the old name moves to `name_alt`.
+
 Every schema change is an additive D1 migration, and every Worker deploy waits for the owner's
 go-ahead, as for earlier slices.

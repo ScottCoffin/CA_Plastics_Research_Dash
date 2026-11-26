@@ -9,7 +9,8 @@ Reads site/data/global/groups/roster.json and writes into site/data/global/group
 0 ok, 1 validation failure or a committed file that differs from the rebuild.
 
 Curated submissions (CG-6b, written by scripts/ambassador_export_pr.py) are read from
-curation/group_tags.csv and curation/group_affiliations.csv when present. A row whose group_id is
+curation/group_tags.csv and curation/group_affiliations.csv when present. Corrected display names
+come from curation/group_name_corrections.csv (the group_id never changes). A row whose group_id is
 not on the roster is skipped with a printed reason. A tag with not_an_organisation true removes the
 group from the roster used for every output (spec section 4.4, rule 5). Status reviewed is never set
 here; reviews come later.
@@ -34,6 +35,7 @@ ROSTER_PATH = GROUPS_DIR / "roster.json"
 CURATION_DIR = ROOT / "curation"
 TAGS_FILE = "group_tags.csv"
 AFFILIATIONS_FILE = "group_affiliations.csv"
+NAME_CORRECTIONS_FILE = "group_name_corrections.csv"
 # Facets with evidence columns in group_tags.csv (section 8.3), in column order.
 TAG_FACETS = (
     "entity_type",
@@ -150,12 +152,38 @@ def load_curated_submissions(
     return list(submissions.values()), excluded
 
 
+def load_name_corrections(curation_dir: Path, roster_ids: set[str]) -> dict[str, str]:
+    """group_id -> corrected name from group_name_corrections.csv; the last row per group_id wins.
+
+    Rows for ids not on the roster are ignored; only their count is reported. A header-only or
+    missing file gives no corrections.
+    """
+    corrections: dict[str, str] = {}
+    unknown = 0
+    for row in _rows(curation_dir / NAME_CORRECTIONS_FILE):
+        name = row.get("name", "").strip()
+        if not name:
+            raise GroupsBuildError(f"{NAME_CORRECTIONS_FILE} has a row with no name")
+        group_id = row.get("group_id", "")
+        if group_id not in roster_ids:
+            unknown += 1
+            continue
+        corrections[group_id] = name
+    if unknown:
+        print(
+            f"skip {NAME_CORRECTIONS_FILE} rows: {unknown} row(s) not on the roster",
+            file=sys.stderr,
+        )
+    return corrections
+
+
 def build_outputs(roster: dict[str, Any], curation_dir: Path) -> dict[str, bytes]:
     """Return file name -> bytes for the six group files, with curated submissions applied."""
     roster_ids = {record.get("group_id") for record in roster["records"]}
     submissions, excluded = load_curated_submissions(curation_dir, roster_ids)
+    names = load_name_corrections(curation_dir, roster_ids)
     kept = [record for record in roster["records"] if record.get("group_id") not in excluded]
-    return build_groups({**roster, "records": kept}, submissions)
+    return build_groups({**roster, "records": kept}, submissions, name_corrections=names)
 
 
 def main(argv: list[str] | None = None) -> int:
