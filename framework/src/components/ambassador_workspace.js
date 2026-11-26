@@ -11,6 +11,9 @@ import {REGION_SCHEMA, safeUrl} from "./region_page.js";
 import {badgeHTML} from "./ambassador_badge.js";
 import {placeRows} from "./world_map.js";
 import {placeView} from "./ambassadors.js";
+import {mountKnowledge, mySubmissions} from "./ambassador_knowledge.js";
+import {mountSettings} from "./ambassador_settings.js";
+import {mountInvite} from "./ambassador_invite.js";
 
 export const CASES_SCHEMA = "amb-cases-v1";
 /** Time estimates from the design notes: 30 seconds per case, 2 minutes per placeholder. */
@@ -83,6 +86,19 @@ export function estimateText(minutes) {
 
 export function filterCases(cases, kind) {
   return kind && kind !== "all" ? cases.filter((c) => c.kind === kind) : cases.slice();
+}
+
+/** Screens reached from the mailed links: the settings link (`#notifications`) and the reminder's next-task link
+ *  (`?region=<slug>&case=<case_id>`). Returns {region, caseId, screen}, each null when absent or malformed. */
+export function deepLinkFrom(search, hash) {
+  const params = new URLSearchParams(search || "");
+  const region = params.get("region");
+  const caseId = params.get("case");
+  return {
+    region: region && /^[a-z0-9_-]{1,40}$/.test(region) ? region : null,
+    caseId: caseId && /^amb-[0-9a-f]{12}$/.test(caseId) ? caseId : null,
+    screen: hash === "#notifications" ? "settings" : null,
+  };
 }
 
 /** Counts for a stream: answered cases, total cases, and what is left. `answers` is a Map by case_id. */
@@ -291,12 +307,22 @@ export function regionMapHTML(geo, slug) {
 /** Mounts the workspace (the signed-in dashboard) into `root`, the sign-up body, for a signed-in ambassador. */
 export function mountWorkspace(root, ambassador, {focus = true, announce = null} = {}) {
   const regions = activeRegions(ambassador);
+  const deep = deepLinkFrom(location.search, location.hash);
+  if (deep.region || deep.caseId || deep.screen) {
+    // The links carry no personal data; drop them from the address bar once read.
+    const url = new URL(location.href);
+    url.search = "";
+    url.hash = "";
+    history.replaceState(history.state, "", url.href);
+  }
   state = {
     root,
+    ambassador,
+    pendingCase: deep.caseId,
     name: ambassador.display_name || "",
     regions,
-    region: regions[0] || "",
-    screen: "home",
+    region: deep.region && regions.includes(deep.region) ? deep.region : regions[0] || "",
+    screen: deep.screen || "home",
     loading: regions.length > 0,
     loadError: "",
     busy: false,
@@ -336,12 +362,31 @@ function render({focus = null} = {}) {
   if (!host) return;
   headEl().innerHTML = headerHTML();
   wrap.classList.toggle("is-dash", state.screen === "home" && state.regions.length > 0);
-  if (state.loading) host.innerHTML = loadingHTML();
+  if (MODULE_SCREENS.has(state.screen) && (!state.loading || state.screen !== "C")) mountModule(host);
+  else if (state.loading) host.innerHTML = loadingHTML();
   else if (state.screen === "A") host.innerHTML = streamAHTML();
   else if (state.screen === "B") host.innerHTML = streamBHTML();
   else host.innerHTML = homeHTML();
   if (focus === "title") headEl().querySelector("h1")?.focus();
   else if (focus === "heading") host.querySelector("h2")?.focus();
+}
+
+// Screens drawn by their own modules. Each renders its back link and h2 synchronously and keeps its own state.
+const MODULE_SCREENS = new Set(["C", "settings", "invite"]);
+function mountModule(main) {
+  // A fresh element per mount, so a module's listeners leave with its screen.
+  main.innerHTML = "<div data-ws-module></div>";
+  const host = main.firstElementChild;
+  const ctx = {api, errorText: workspaceErrorText, say};
+  if (state.screen === "settings") return mountSettings(host, ctx);
+  if (state.screen === "invite") return mountInvite(host, {...ctx, ambassador: state.ambassador});
+  return mountKnowledge(host, {
+    ...ctx,
+    region: state.region,
+    regionName: regionName(state.region),
+    submissions: state.submissions,
+    onSubmitted: (row) => state.submissions.unshift(row),
+  });
 }
 
 const crumb = '<p class="ws-crumb"><button type="button" class="link-btn" data-ws-action="home">Back to your tasks</button></p>';
@@ -380,8 +425,17 @@ function streamCard(stream, name, {done, total, time, label, empty = ""}) {
     ${total ? `<button type="button" class="btn solid" data-ws-action="open" data-stream="${stream}">${action}<span class="sr"> ${esc(name)}</span></button>` : ""}</li>`;
 }
 
-function soonCard(name) {
-  return `<li class="ws-card is-soon" aria-disabled="true"><div class="ws-card-main"><h4 class="ws-card-name">${esc(name)}</h4><p class="ws-card-status">Coming next</p></div></li>`;
+/** A card with no progress bar: name, one status line and an action button. */
+function plainCard(stream, name, status, action) {
+  return `<li class="ws-card"><div class="ws-card-main"><h4 class="ws-card-name">${esc(name)}</h4><p class="ws-card-status">${esc(status)}</p></div>
+    <button type="button" class="btn${stream === "C" ? " solid" : ""}" data-ws-action="open" data-stream="${stream}">${esc(action)}<span class="sr"> ${esc(name)}</span></button></li>`;
+}
+
+/** The local-knowledge card's status: what was sent for this region and how much is approved. */
+export function knowledgeStatus(rows) {
+  if (!rows.length) return "Groups, policies, datasets and more · about 5 minutes each";
+  const approved = rows.filter((row) => row.status === "approved").length;
+  return `${rows.length} sent for review · ${approved} approved`;
 }
 
 function homeHTML() {
@@ -419,9 +473,12 @@ function homeHTML() {
           label: "items sent for review",
           empty: "Nothing to confirm",
         })}
-        ${soonCard("Add local knowledge")}
-        ${soonCard("Notification settings")}
-        ${soonCard("Invitations")}
+        ${plainCard("C", "Add local knowledge", knowledgeStatus(mySubmissions(state.submissions, state.region)), "Add an item")}
+      </ul>
+      <h3 class="ws-more-h">More</h3>
+      <ul class="ws-cards">
+        ${plainCard("invite", "Invite your co-authors", "A ready-made message with your personal invitation link", "Invite")}
+        ${plainCard("settings", "Notification settings", "Reminders and news we send you", "Open settings")}
       </ul>
     </section>
     <div class="ws-side">
@@ -624,6 +681,16 @@ async function loadRegion(slug, focus) {
   state.loadError = errors.join(" ");
   state.loading = false;
   state.index = Math.max(0, firstUnanswered(filterCases(state.cases, state.filter), state.answers));
+  if (state.pendingCase) {
+    const at = state.cases.findIndex((item) => item.case_id === state.pendingCase);
+    state.pendingCase = null;
+    if (at >= 0) {
+      Object.assign(state, {screen: "A", filter: "all", index: at});
+      focus = true;
+    }
+  }
+  // Settings and invitations do not use the region data; re-drawing them would reset what the person is doing.
+  if (state.screen === "settings" || state.screen === "invite") return undefined;
   render({focus: focus ? "heading" : null});
   return undefined;
 }

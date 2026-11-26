@@ -1,0 +1,21 @@
+/* Notification settings (AMB-1 front end slice 3b; ambassador_settings.js). Tokens only; every target is 44px.
+   The screen sits inside the workspace (.am .ws), which supplies .ws-crumb, .ws-error and .link-btn. */
+.am .ns-group { border: 0; margin: 28px 0 0; padding: 0; min-width: 0; max-width: 720px; }
+.am .ns-group legend { font-weight: 600; padding: 0; margin-bottom: 4px; }
+.am .ns-switch { position: relative; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; min-height: 44px; padding: 6px 0; cursor: pointer; max-width: 640px; font-size: 15px; }
+.am .ns-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.am .ns-switch input:disabled { cursor: progress; }
+.am .ns-track { position: relative; width: 44px; height: 24px; border: 2px solid var(--pv-ink-2); background: var(--pv-paper); border-radius: 999px; flex: none; }
+.am .ns-track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--pv-ink-2); transition: left 0.2s; }
+.am .ns-switch input:checked + .ns-track { background: var(--pv-ink); border-color: var(--pv-ink); }
+.am .ns-switch input:checked + .ns-track::after { left: 22px; background: var(--pv-paper); }
+.am .ns-switch input:focus-visible + .ns-track { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+.am .ns-switch input:disabled + .ns-track { border-style: dashed; }
+.am .ns-label { flex: 1 1 240px; }
+.am .ns-state { min-width: 4.5em; font-weight: 600; color: var(--pv-ink-2); }
+.am .ns-switch.is-saving .ns-state { color: var(--pv-ink); }
+.am .ns-group .hint { max-width: 640px; }
+.am .ns-fixed { font-size: 14px; color: var(--pv-ink-2); margin: 8px 0 0; max-width: 640px; }
+@media (prefers-reduced-motion: reduce) {
+  .am .ns-track::after { transition: none; }
+}

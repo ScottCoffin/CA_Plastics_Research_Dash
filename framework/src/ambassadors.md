@@ -14,6 +14,9 @@ pager: false
 
 <link rel="stylesheet" href="./components/ambassadors.css">
 <link rel="stylesheet" href="./components/ambassador_signup_map.css">
+<link rel="stylesheet" href="./components/ambassador_knowledge.css">
+<link rel="stylesheet" href="./components/ambassador_settings.css">
+<link rel="stylesheet" href="./components/ambassador_invite.css">
 
 <div class="am" data-mode="checking">
 <a class="skip" href="#main">Skip to the content</a>

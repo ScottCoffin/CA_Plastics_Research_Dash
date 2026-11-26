@@ -243,7 +243,7 @@
 .am .ws .ws-progress-stream progress { height: 8px; }
 .am .ws .ws-cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .am .ws .ws-card { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; padding: 16px; border: 1px solid var(--pv-ink); background: var(--pv-paper); }
-.am .ws .ws-card.is-soon { border-style: dashed; border-color: var(--pv-ink-2); background: var(--pv-ground); color: var(--pv-ink-2); }
+.am .ws .ws-more-h { margin-top: 28px; font-size: 18px; }
 .am .ws .ws-card-main { flex: 1 1 240px; min-width: 0; display: grid; gap: 6px; }
 .am .ws .ws-card-name { margin: 0; font-size: 17px; font-weight: 600; }
 .am .ws .ws-card-status { margin: 0; font-size: 14px; color: var(--pv-ink-2); }

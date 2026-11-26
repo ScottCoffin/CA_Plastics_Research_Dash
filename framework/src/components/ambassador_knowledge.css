@@ -1,0 +1,30 @@
+/* Add local knowledge (the ambassador workspace's knowledge task). Every selector sits under .am; colours are the
+   --pv-* tokens (no literals). Buttons, fields, hints and the error box reuse the workspace classes. */
+.am .kn-kind { max-width: 560px; margin-top: 22px; }
+.am .kn-est { margin: 8px 0 0; font-weight: 600; }
+.am .kn-kind select, .am .kn-form input, .am .kn-form select, .am .kn-form textarea { width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); }
+.am .kn-form textarea { min-height: 96px; }
+.am .kn-form { margin-top: 24px; }
+.am .kn-grid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+.am .kn-grid .field { margin-top: 0; min-width: 0; }
+.am .kn-form .counter { font-size: 14px; color: var(--pv-ink-2); margin: 6px 0 0; }
+@media (min-width: 720px) {
+  .am .kn-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .am .kn-grid .kn-wide { grid-column: 1 / -1; }
+}
+.am .kn-check { display: flex; gap: 12px; align-items: flex-start; margin-top: 22px; }
+.am .kn-check input[type="checkbox"] { width: 24px; height: 24px; min-height: 24px; margin: 10px 0 0; flex: none; }
+.am .kn-check label { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
+.am .kn-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 22px; }
+.am .kn-actions .btn { min-height: 44px; }
+.am .kn-errors { color: var(--pv-ink); background: var(--pv-sun); border: 1px solid var(--pv-ink); padding: 8px 12px; margin: 18px 0 0; }
+.am .kn-errors:focus { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+.am .kn-errors-title { margin: 0; }
+.am .kn-errors ul { margin: 6px 0 0; padding-left: 20px; }
+.am .kn-errors a { display: inline-flex; align-items: center; min-height: 44px; color: var(--pv-ink); }
+.am .kn-sent { margin-top: 36px; border-top: 1px solid var(--pv-line); padding-top: 18px; }
+.am .kn-sent h3 { font-size: 20px; margin: 0 0 10px; }
+.am .kn-sent-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.am .kn-sent-item { background: var(--pv-wash); border: 1px solid var(--pv-line); padding: 10px 14px; }
+.am .kn-sent-name { font-weight: 600; margin: 0; }
+.am .kn-sent-item .hint { margin-top: 4px; }

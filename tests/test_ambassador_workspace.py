@@ -126,13 +126,29 @@ def test_one_heading_per_screen_and_focus_on_navigation() -> None:
     )
 
 
-def test_stream_c_and_settings_are_shown_as_coming_next() -> None:
+def test_local_knowledge_invitations_and_settings_open_their_screens() -> None:
     workspace = _text(WORKSPACE)
-    # The dashboard shows the three later cards as "Coming next" (soonCard), not as streams.
-    assert "Coming next" in workspace
-    for name in ("Add local knowledge", "Notification settings", "Invitations"):
+    # Slice 3: the three later cards open real screens drawn by their own modules.
+    assert "Coming next" not in workspace
+    for name in ("Add local knowledge", "Invite your co-authors", "Notification settings"):
         assert name in workspace
-    assert 'data-ws-action="open" data-stream="C"' not in workspace
+    for module, mount in (
+        ("ambassador_knowledge.js", "mountKnowledge"),
+        ("ambassador_settings.js", "mountSettings"),
+        ("ambassador_invite.js", "mountInvite"),
+    ):
+        assert f'from "./{module}"' in workspace and f"{mount}(host" in workspace
+    assert 'const MODULE_SCREENS = new Set(["C", "settings", "invite"]);' in workspace
+    page = _text(ROOT / "framework" / "src" / "ambassadors.md")
+    for css in ("ambassador_knowledge.css", "ambassador_settings.css", "ambassador_invite.css"):
+        assert f'href="./components/{css}"' in page
+
+
+def test_email_links_open_their_screens_and_leave_the_address_bar() -> None:
+    workspace = _text(WORKSPACE)
+    # The settings link in every mail ends in #notifications; the reminder links to ?region=&case=.
+    assert "deepLinkFrom(location.search, location.hash)" in workspace
+    assert 'history.replaceState(history.state, "", url.href)' in workspace
 
 
 def test_the_workspace_has_no_hex_colours_and_the_css_uses_tokens() -> None:

@@ -9,6 +9,8 @@ import {
   answerBody,
   caseChoices,
   caseProgress,
+  deepLinkFrom,
+  knowledgeStatus,
   cleanText,
   estimateText,
   filterCases,
@@ -39,6 +41,21 @@ const cases = [
   {case_id: "amb-000000000003", kind: "local_terms", term: "plastique"},
   {case_id: "amb-000000000004", kind: "institution_in_region"},
 ];
+
+check("email links: settings hash and the reminder's region and case", () => {
+  assert.deepEqual(deepLinkFrom("", "#notifications"), {region: null, caseId: null, screen: "settings"});
+  assert.deepEqual(deepLinkFrom("?region=norway&case=amb-0123456789ab", ""), {
+    region: "norway",
+    caseId: "amb-0123456789ab",
+    screen: null,
+  });
+  assert.deepEqual(deepLinkFrom("?region=No%20Way&case=1", "#x"), {region: null, caseId: null, screen: null});
+});
+
+check("local knowledge card: invitation when empty, counts after", () => {
+  assert.match(knowledgeStatus([]), /about 5 minutes each/);
+  assert.equal(knowledgeStatus([{status: "pending"}, {status: "approved"}]), "2 sent for review · 1 approved");
+});
 
 check("progress counts answered cases and what is left", () => {
   const answers = new Map([[cases[0].case_id, {answer: "agree"}], [cases[2].case_id, {answer: "unsure"}]]);
