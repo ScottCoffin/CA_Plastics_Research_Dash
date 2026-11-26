@@ -11,7 +11,7 @@
 .gv :focus-visible { outline: 3px solid var(--pv-ink); outline-offset: 2px; }
 .gv .gv-panel { margin: 1.75rem 0; }
 .gv .gv-caption { font-size: .9rem; opacity: .85; margin: .25rem 0 .75rem; }
-.gv .gv-status { font-weight: 600; padding: 12px 16px; border-left: 4px solid var(--pv-ink); }
+.gv .gv-status { font-weight: 600; padding: 12px 16px; border: 1px solid rgba(23, 38, 61, .2); border-radius: 6px; background: rgba(23, 38, 61, .04); }
 .gv .gv-bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .gv .gv-bar { display: grid; gap: 4px; }
 .gv .gv-bar-label { font-weight: 600; }
@@ -49,7 +49,7 @@
 .gv .gv-fact dt { font-weight: 600; }
 .gv .gv-fact dd { margin: 0; overflow-wrap: anywhere; }
 .gv .gv-list { margin: 0; padding-left: 1.2em; }
-.gv blockquote { margin: .5rem 0 .25rem; padding-left: 12px; border-left: 3px solid var(--pv-ink); }
+.gv blockquote { margin: .5rem 0 .25rem; padding: 8px 12px; font-style: italic; background: rgba(23, 38, 61, .04); border: 1px solid rgba(23, 38, 61, .12); border-radius: 4px; }
 .gv .gv-meta { font-size: .85rem; margin: 0 0 .5rem; }
 .gv .gv-affiliations { padding-left: 1.2em; }
 .gv .gv-provenance, .gv .gv-standing, .gv .gv-correct { font-size: .92rem; margin-top: .75rem; }
