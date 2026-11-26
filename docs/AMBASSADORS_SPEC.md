@@ -635,3 +635,68 @@ Part 1 is the Worker side. Part 2 is the repository side: the export job writes 
 - **Build** (`src/atlas/build/ambassadors.py`): each CSV row for a region adds an allowlist entry, unless an eligible entry already lists that domain (the build prints a note and adds nothing). The entry has `id` `add:<domain>`, its name and type, `works` 0, `domains` `[domain]`, `needs_domain` false, `ror` null, empty `acronyms` and `aliases`, and `source` `approved_proposal`. It bypasses `MIN_WORKS` but keeps the eligible type. Every entry now carries `source` (`openalex` for corpus institutions), so `validate_outputs` stays strict: an approved entry needs the `add:<domain>` id, works 0, one domain, and a domain that no other entry lists.
 - **Worker matching:** `worker/src/eligibility.ts` builds each region's allowlist from `domains` of entries whose `needs_domain` is not set, with no works check, and matches an email by its domain or a parent of it. An approved entry therefore matches with no Worker change. The Worker ignores `source`.
 - **Review:** the PR job checks the domain pattern but not registrable form. A subdomain such as `lab.example.no` is written to the CSV and then stops the next build with a line number. The owner rejects it in the pull request.
+
+## Unlisted institutions (owner 2026-11-26)
+
+Owner decision (QUESTIONS AMB-UNLISTED-EMAIL): a person with a public-sector address whose ORCID or OpenAlex record links no
+eligible institution must still be able to sign up and add their institution. The path is: propose the institution with its
+email domain; the email step accepts that domain when it ends in a trusted suffix of the region; a confirmed email marks the
+proposal "email confirmed"; until a moderator approves, the person sees only a pending notice (no session, no workspace);
+approval activates them, and the institution joins the list at the next build (approved institution proposals already export
+region, domain and institution_type).
+
+- **Allowlist field:** each `site/data/<region>/ambassador_institutions.json` gains top-level `trusted_email_suffixes`
+  (string array, for example `["ca.gov","ca.us","edu","gov"]`). A missing key means `[]`. Norway and Belgium have none yet.
+- **Trusted domain** (`isTrustedDomain(region, domain)` in `worker/src/eligibility.ts`): the domain is lowercase, a valid host,
+  not free-mail (also not a subdomain of a free-mail provider), and equals a trusted suffix or ends with "." plus one. A host
+  such as `gmail.com.ca.gov` sits under `ca.gov`, so it is accepted (the suffix rule decides; the owner's rule is suffix-based).
+- **Claims:** `POST /signup/claims` accepts proposals `{kind:"institution", region:"<slug>", payload:{name, url?, domain}}`.
+  The domain must match `^(?=.{3,253}$)([a-z0-9-]+\.)+[a-z]{2,}$` (else `invalid_domain`) and be trusted for the region (else
+  `untrusted_domain`). With no eligible institution ticked and exactly one such proposal, the status is
+  `pending_email_proposal` and the proposal is marked as awaiting the email. Regions must be empty on this path
+  (`region_not_tied` otherwise). Other cases keep `pending_email` or `proposals_only`.
+- **Email:** `POST /signup/email` on this path accepts an address whose domain equals the proposed domain or is a subdomain of
+  it (else `domain_not_proposed`), and that is still trusted (`untrusted_domain`). The single-use link carries the proposal id
+  (`magic_links.proposal_id`, migration 0006). The response message is unchanged.
+- **Verify:** `GET /auth/verify` for such a link sets `ambassadors.review_state` to `pending_review` (status stays `pending`), stores the email (for the later
+  welcome), sets `proposals.email_confirmed_at` and `confirmed_domain`, and ends the signup session. It creates no session and
+  redirects to `${WORKSPACE_URL}?signup=pending_review`.
+- **ORCID:** a sign-in for an ambassador with `review_state` `pending_review` redirects to `${WORKSPACE_URL}?signup=pending_review` with no session
+  cookie.
+- **Queue:** each proposal item gains `email_confirmed` (boolean), `confirmed_domain` (string or null), `proposed_region` and
+  `proposed_domain` (for prefilling the approval form). A region filter also matches `proposed_region`.
+- **Decide:** approving an email-confirmed institution proposal (the allowlist fields stay required) sets the ambassador
+  `active` (review_state cleared) with region and home institution `add:<domain>`, records a claimed institution `add:<domain>`
+  (source `proposed`, eligible 1), activates the region row, and queues the welcome mail (with the workspace link). Rejecting it
+  clears review_state and the email (status stays `pending`) and keeps the decision note on the proposal. Nothing is deleted.
+- **Cleanup:** the nightly cleanup never deletes an ambassador with `review_state` `pending_review` (they have a proven email and
+  wait for a moderator).
+- **Status and review_state:** `ambassadors.status` keeps its values (`pending`, `active`, `suspended`). `review_state` is a new
+  nullable column (`NULL` or `pending_review`). Signup sessions and the signup lookup ignore a row with review_state set.
+- **Migration 0006 is additive only:** ADD COLUMN on ambassadors (review_state), magic_links (proposal_id) and proposals
+  (proposed_region, proposed_domain, awaiting_email, email_confirmed_at, confirmed_domain), plus two indexes. No table is
+  rebuilt, so the live rows are untouched.
+
+## Unlisted institutions: page and allowlist
+
+Front end and builder for the owner decision above (AMB-1, task AMB-UNLISTED; the Worker side is specified above).
+
+- **Builder:** `regions/<slug>/region.yml` may list `trusted_email_suffixes` (lower-case labels such as `ca.gov`, no leading dot,
+  never a free-mail domain; a bad value stops the build). `scripts/build_ambassador_data.py` writes the list as the top-level
+  key `trusted_email_suffixes` of that region's `ambassador_institutions.json` (schema stays `amb-v1`). The California list is
+  `[ca.gov, ca.us, edu, gov]`; Norway and Belgium have none, so their key is `[]`.
+- **Sign-up, Institutions step:** the "My institution isn't listed" block is always shown and is outlined when no eligible
+  institution is ticked. Fields: institution name, website (optional, https), region (a select of the three regions) and work
+  email domain. The hint under the domain is built from the region's own suffixes (`suffixHintText`). The client check uses the
+  same rule as the Worker (`domainHasTrustedSuffix`: the suffix itself or a subdomain of it; look-alikes such as `evilca.gov`
+  do not match `ca.gov`).
+- **Claims:** with no eligible institution ticked, the Regions step is skipped and the claims body sends `regions: []` and the
+  unlisted proposal `{kind, region, payload:{name, url?, domain}}`. On `pending_email_proposal` the Email step asks for an address
+  at the proposed domain or a subdomain of it. Errors `invalid_domain`, `invalid_region`, `untrusted_domain` and
+  `domain_not_proposed` are shown as plain sentences on the matching field.
+- **Pending review:** `?signup=pending_review` (the emailed link, or ORCID sign-in while pending) shows "Your sign-up is with
+  moderation": the email is confirmed and a moderator will review the institution. The page makes no API call on that route,
+  since there is no session. The institution name is not shown there (the link carries no name).
+- **Moderation:** an email-confirmed proposal shows "Email confirmed at <confirmed_domain>", and the region and domain fields are
+  prefilled from `proposed_region` and `proposed_domain`; the URL host is the fallback.
+- **Display names:** an approved institution with no name yet shows its domain in the sign-up lists.

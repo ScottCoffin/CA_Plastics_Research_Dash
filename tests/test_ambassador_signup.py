@@ -131,6 +131,38 @@ def test_sign_up_fields_have_labels_and_targets_are_24px_or_more() -> None:
     assert "@media (prefers-reduced-motion: reduce)" in styles
 
 
+def test_unlisted_institution_is_on_the_institutions_step_and_skips_regions() -> None:
+    text = _text(MODULE)
+    assert "My institution isn't listed" in text
+    assert "data-unlisted-area" in text and 'id="signup-unlisted"' in text
+    # Highlighted only when no eligible institution is ticked.
+    assert 'class="unlisted${noEligible ? " is-key" : ""}"' in text
+    # Region is a select, not radio buttons (the region-choice UI is checkboxes or a select).
+    assert 'type="radio"' not in text
+    # The unlisted institution skips the regions step through the same claims sender.
+    assert 'return sendClaims(form, "signup-institutions");' in text
+    assert text.count('api("/signup/claims"') == 1
+
+
+def test_pending_review_route_makes_no_session_call_and_untrusted_domain_is_plain_text() -> None:
+    text = _text(MODULE)
+    assert '"pending_review"' in text and "showPendingReview()" in text
+    pending = re.search(r"function showPendingReview\(\) \{(.*?)\n\}\n", text, re.S)
+    assert pending is not None
+    assert "api(" not in pending.group(1)
+    assert "Thanks, your email is confirmed." in pending.group(1)
+    assert "untrusted_domain:" in text
+    assert "pending_email_proposal" in text
+
+
+def test_trusted_suffix_check_has_no_region_names_and_reads_the_region_file() -> None:
+    text = _text(MODULE)
+    assert "trusted_email_suffixes" in text
+    # The hint is built from the data; the suffixes are not hard-coded in the module.
+    for suffix in ("ca.gov", "ca.us"):
+        assert f'"{suffix}"' not in text
+
+
 def test_runtime_helpers_pass_in_node() -> None:
     node = shutil.which("node")
     if node is None:

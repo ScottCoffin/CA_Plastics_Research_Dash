@@ -44,6 +44,8 @@ export interface MagicLinkRow {
   institution_id: string;
   ambassador_id: string | null;
   invite_hash: string | null;
+  /** Set on an unlisted-institution confirmation link (proposals.id); null otherwise. */
+  proposal_id: number | null;
 }
 
 export function maskEmail(email: string): string {
@@ -143,8 +145,10 @@ export async function handleStart(request: Request, env: Env, ctx: Ctx): Promise
  */
 async function activatePendingAmbassador(env: Env, link: MagicLinkRow & { email: string }, now: number): Promise<boolean> {
   const id = link.ambassador_id as string;
-  const pending = await env.DB.prepare("SELECT status FROM ambassadors WHERE id = ?1").bind(id).first<{ status: string }>();
-  if (!pending || pending.status !== "pending") return false;
+  const pending = await env.DB.prepare("SELECT status, review_state FROM ambassadors WHERE id = ?1")
+    .bind(id)
+    .first<{ status: string; review_state: string | null }>();
+  if (!pending || pending.status !== "pending" || pending.review_state !== null) return false;
   const taken = await env.DB.prepare("SELECT id FROM ambassadors WHERE email_hash = ?1 AND id <> ?2")
     .bind(link.email_hash, id)
     .first();
@@ -170,6 +174,55 @@ async function activatePendingAmbassador(env: Env, link: MagicLinkRow & { email:
   return after?.status === "active";
 }
 
+/**
+ * Unlisted institution (owner 2026-11-26): the proven address is stored on the pending ambassador, the proposal is marked
+ * email confirmed, and the ambassador waits for a moderator (review_state 'pending_review', status unchanged). No session is created and no welcome is
+ * sent. Returns false when the ambassador or the proposal is no longer waiting.
+ */
+async function confirmUnlistedEmail(
+  env: Env,
+  link: { email: string; email_hash: string; ambassador_id: string | null },
+  proposalId: number,
+  now: number,
+): Promise<boolean> {
+  const id = link.ambassador_id;
+  if (!id) return false;
+  const pending = await env.DB.prepare("SELECT status, review_state FROM ambassadors WHERE id = ?1")
+    .bind(id)
+    .first<{ status: string; review_state: string | null }>();
+  if (!pending || pending.status !== "pending" || pending.review_state !== null) return false;
+  const taken = await env.DB.prepare("SELECT id FROM ambassadors WHERE email_hash = ?1 AND id <> ?2")
+    .bind(link.email_hash, id)
+    .first();
+  if (taken) return false;
+  const proposal = await env.DB.prepare(
+    "SELECT id FROM proposals WHERE id = ?1 AND ambassador_id = ?2 AND status = 'pending' AND awaiting_email = 1",
+  )
+    .bind(proposalId, id)
+    .first();
+  if (!proposal) return false;
+  const confirmedDomain = link.email.slice(link.email.indexOf("@") + 1);
+  try {
+    await env.DB.batch([
+      env.DB.prepare(
+        "UPDATE ambassadors SET review_state = 'pending_review', email = ?1, email_hash = ?2 WHERE id = ?3 AND status = 'pending' AND review_state IS NULL",
+      ).bind(link.email, link.email_hash, id),
+      env.DB.prepare(
+        "UPDATE proposals SET email_confirmed_at = ?1, confirmed_domain = ?2, awaiting_email = 0 " +
+          "WHERE id = ?3 AND ambassador_id = ?4 AND status = 'pending'",
+      ).bind(now, confirmedDomain, proposalId, id),
+      env.DB.prepare("DELETE FROM signup_sessions WHERE ambassador_id = ?1").bind(id),
+    ]);
+  } catch (err) {
+    console.error("unlisted confirmation failed", err instanceof Error ? err.name : "unknown");
+    return false;
+  }
+  const after = await env.DB.prepare("SELECT review_state FROM ambassadors WHERE id = ?1").bind(id).first<{ review_state: string | null }>();
+  if (after?.review_state !== "pending_review") return false;
+  await audit(env.DB, now, "signup.email_confirmed", link.email_hash, { proposal: proposalId });
+  return true;
+}
+
 /** GET /auth/verify?token= : single-use link, then a session cookie and a redirect to the workspace. */
 export async function handleVerify(url: URL, env: Env, ctx: Ctx): Promise<Response> {
   const failure = (): Response => {
@@ -182,7 +235,7 @@ export async function handleVerify(url: URL, env: Env, ctx: Ctx): Promise<Respon
 
   const tokenHash = await sha256Hex(token);
   const link = await env.DB.prepare(
-    "SELECT email, email_hash, region, institution_id, ambassador_id, invite_hash FROM magic_links " +
+    "SELECT email, email_hash, region, institution_id, ambassador_id, invite_hash, proposal_id FROM magic_links " +
       "WHERE token_hash = ?1 AND used_at IS NULL AND expires_at > ?2",
   )
     .bind(tokenHash, ctx.now)
@@ -196,6 +249,15 @@ export async function handleVerify(url: URL, env: Env, ctx: Ctx): Promise<Respon
     .bind(ctx.now, tokenHash)
     .run();
   if (claimed.meta.changes !== 1) return failure();
+
+  if (link.proposal_id !== null) {
+    // Unlisted institution: no session and no welcome until a moderator approves (owner 2026-11-26).
+    const ok = await confirmUnlistedEmail(env, { ...link, email: link.email }, link.proposal_id, ctx.now);
+    if (!ok) return failure();
+    const target = new URL(env.WORKSPACE_URL);
+    target.searchParams.set("signup", "pending_review");
+    return redirect(target.toString());
+  }
 
   let ambassadorId: string;
   if (link.ambassador_id) {

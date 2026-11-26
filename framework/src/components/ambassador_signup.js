@@ -21,6 +21,8 @@ export const REGION_NAMES = {belgium: "Belgium", california: "California", norwa
 const PENDING = "PENDING-OWNER";
 const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]{1,253}\.[^\s@]{2,}$/;
 const URL_RE = /^https?:\/\/\S+$/i;
+const HTTPS_URL_RE = /^https:\/\/\S+$/i;
+const DOMAIN_RE = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/;
 
 const ERROR_TEXT = {
   network: "We could not reach the sign-up service. Check your connection and try again.",
@@ -42,6 +44,10 @@ const ERROR_TEXT = {
   invalid_display_name: "Enter a display name of up to 80 characters.",
   invalid_credit: "Choose whether to show your name, then try again.",
   terms_version_required: "Agree to the contribution terms to continue.",
+  untrusted_domain: "That email domain cannot confirm an institution for this region. Use the domain shown in the hint.",
+  invalid_domain: "Enter a work email domain such as oehha.ca.gov, without the @ or a web address.",
+  invalid_region: "Choose the region for the institution you are proposing.",
+  domain_not_proposed: "That address is not at the domain of the institution you proposed.",
 };
 const GENERIC_ERROR = "Something went wrong on our side. Try again in a few minutes.";
 
@@ -54,12 +60,15 @@ export function apiUrl(path) {
   return `${API_BASE}${path}`;
 }
 
-/** Query state on page load: "signup" (ORCID returned, step flow), "signin" (ORCID sign-in), "failed", or null. */
+/** Query state on page load: "signup" (ORCID returned, step flow), "signin" (ORCID sign-in), "failed",
+ *  "pending_review" (email confirmed, waiting for a moderator), or null. */
 export function routeFromSearch(search) {
   const params = new URLSearchParams(search || "");
   if (params.get("signup") === "orcid") return "signup";
   if (params.get("signin") === "failed") return "failed";
   if (params.get("signin") === "orcid") return "signin";
+  // Set by the emailed link (or ORCID sign-in) for a sign-up waiting on moderation. No session is kept.
+  if (params.get("signup") === "pending_review") return "pending_review";
   return null;
 }
 
@@ -101,6 +110,11 @@ export function allowedDomains(files, ticked) {
   return [...out].sort();
 }
 
+/** The name to show for a checklist item. An approved proposal may have no name yet: its domain is shown instead. */
+export function displayName(item) {
+  return item?.name || item?.domain || "Institution awaiting details";
+}
+
 export function yearsText(years) {
   if (!years) return "";
   const {from = null, to = null} = years;
@@ -111,8 +125,8 @@ export function yearsText(years) {
 }
 
 // ---- validation (pure). Each problem is {field, message}; field is the id of the element to focus. -----------
-export function checkInstitutions({ticked, proposals, checklist}) {
-  if (eligibleTicked(checklist, ticked).length === 0 && (proposals || []).length === 0) {
+export function checkInstitutions({ticked, proposals, checklist, unlisted = null}) {
+  if (eligibleTicked(checklist, ticked).length === 0 && (proposals || []).length === 0 && !unlisted) {
     return [{field: "signup-institutions", message: "Tick at least one eligible institution, or propose one."}];
   }
   return [];
@@ -146,6 +160,60 @@ export function domainMatches(domain, base) {
   return domain === base || domain.endsWith(`.${base}`);
 }
 
+/** The trusted email suffixes of a region's allowlist file, lower case. Missing means none. */
+export function trustedSuffixesFor(file) {
+  const values = Array.isArray(file?.trusted_email_suffixes) ? file.trusted_email_suffixes : [];
+  return values.filter((value) => typeof value === "string" && value).map((value) => value.toLowerCase());
+}
+
+/**
+ * True when the domain is a suffix itself or ends in ".<suffix>" (subdomains included). A look-alike such as
+ * evilca.gov does not match ca.gov, and a bare label such as "edu" is not a domain.
+ */
+export function domainHasTrustedSuffix(domain, suffixes) {
+  const value = String(domain || "").trim().toLowerCase();
+  if (!DOMAIN_RE.test(value)) return false;
+  return (suffixes || []).some((suffix) => value === suffix || value.endsWith(`.${suffix}`));
+}
+
+/** The hint under the work email field, built from the region's suffixes. */
+export function suffixHintText(region, suffixes) {
+  const label = regionLabel(region);
+  if (!suffixes || suffixes.length === 0) return `Email addresses cannot confirm an institution for ${label} yet.`;
+  const list = suffixes.map((suffix) => `.${suffix}`);
+  const text = list.length === 1 ? list[0] : `${list.slice(0, -1).join(", ")} or ${list[list.length - 1]}`;
+  return `Addresses ending in ${text} can be confirmed for ${label}.`;
+}
+
+/** The proposal payload for an unlisted institution: name, optional https web address, and the email domain. */
+export function unlistedPayload({name, url, domain}) {
+  const payload = {name: String(name || "").trim()};
+  const web = String(url || "").trim();
+  if (web) payload.url = web;
+  payload.domain = String(domain || "").trim().toLowerCase();
+  return payload;
+}
+
+/** Checks the unlisted-institution form. `suffixes` are the trusted suffixes of the chosen region. */
+export function checkUnlisted({name, url, region, domain}, suffixes) {
+  const errors = [];
+  const trimmedName = String(name || "").trim();
+  const web = String(url || "").trim();
+  if (!trimmedName) errors.push({field: "unl-name", message: "Enter the institution's name."});
+  else if (trimmedName.length > 200) errors.push({field: "unl-name", message: "The name is too long. Use 200 characters at most."});
+  if (web && (web.length > 300 || !HTTPS_URL_RE.test(web))) {
+    errors.push({field: "unl-url", message: "Enter a web address starting with https://, or leave it empty."});
+  }
+  if (!Object.prototype.hasOwnProperty.call(REGION_NAMES, region)) errors.push({field: "unl-region", message: "Choose a region."});
+  const host = String(domain || "").trim().toLowerCase();
+  if (!host) {
+    errors.push({field: "unl-domain", message: "Enter the email domain your institution uses, such as oehha.ca.gov."});
+  } else if (!domainHasTrustedSuffix(host, suffixes)) {
+    errors.push({field: "unl-domain", message: `${suffixHintText(region, suffixes)} Check the work email domain.`});
+  }
+  return errors;
+}
+
 /** Email format, then the domain check when the ticked institutions list domains. The server decides the rest. */
 export function checkEmail(email, allowed) {
   const value = String(email || "").trim().toLowerCase();
@@ -169,16 +237,15 @@ export function checkProfile({name, accepted}) {
 }
 
 // ---- request bodies (pure) ---------------------------------------------------------------------------------
-export function claimsBody({ticked, regions, proposals}) {
-  return {
-    institutions: [...(ticked || [])],
-    regions: [...(regions || [])],
-    // Each claims call replaces the earlier proposals, so every call sends the full list.
-    proposals: (proposals || []).map((p) => ({
-      kind: "institution",
-      payload: p.url ? {name: p.name.trim(), url: p.url.trim()} : {name: p.name.trim()},
-    })),
-  };
+export function claimsBody({ticked, regions, proposals, unlisted = null}) {
+  // Each claims call replaces the earlier proposals, so every call sends the full list.
+  const items = (proposals || []).map((p) => ({
+    kind: "institution",
+    payload: p.url ? {name: p.name.trim(), url: p.url.trim()} : {name: p.name.trim()},
+  }));
+  // An unlisted institution carries its region and work email domain (the Worker checks the domain's suffix).
+  if (unlisted) items.push({kind: "institution", region: unlisted.region, payload: unlistedPayload(unlisted)});
+  return {institutions: [...(ticked || [])], regions: [...(regions || [])], proposals: items};
 }
 
 export function profileBody({name, creditPublic}) {
@@ -216,7 +283,10 @@ let flow = freshFlow();
 let turnstileLoading = null;
 
 function freshFlow() {
-  return {step: 1, profile: null, ticked: [], regions: [], proposals: [], proposalOpen: false, domains: [], token: "", widgetId: null};
+  return {
+    step: 1, profile: null, ticked: [], regions: [], proposals: [], proposalOpen: false, domains: [], token: "", widgetId: null,
+    unlisted: null, proposalOnly: false, suffixes: {},
+  };
 }
 
 const $ = (selector) => body.querySelector(selector);
@@ -298,13 +368,40 @@ function ticksHTML(items) {
     const regions = (item.regions || []).map(regionLabel).join(", ");
     const years = yearsText(item.years);
     return `<li><label class="check"><input type="checkbox" name="institution" value="${esc(item.id)}"${flow.ticked.includes(item.id) ? " checked" : ""}>` +
-      `<span>${esc(item.name)}${years ? ` (${esc(years)})` : ""}<small>Eligible for ${esc(regions)}</small></span></label></li>`;
+      `<span>${esc(displayName(item))}${years ? ` (${esc(years)})` : ""}<small>Eligible for ${esc(regions)}</small></span></label></li>`;
   }).join("");
 }
 
 function proposalsHTML() {
   return flow.proposals.map((p, i) => `<li>${esc(p.name)}${p.url ? ` <small>${esc(p.url)}</small>` : ""}
     <button type="button" class="link-btn" data-action="remove-proposal" data-index="${i}" aria-label="Remove the proposal for ${esc(p.name)}">Remove</button></li>`).join("");
+}
+
+/** "My institution isn't listed": always shown; highlighted when no eligible institution exists. */
+function unlistedHTML(noEligible) {
+  const u = flow.unlisted;
+  const summary = u
+    ? `<p>Proposed: <strong>${esc(u.name)}</strong>, email domain <span class="addr">${esc(u.domain)}</span>, ${esc(regionLabel(u.region))}.
+        <button type="button" class="link-btn" data-action="remove-unlisted" aria-label="Remove the institution ${esc(u.name)}">Remove</button></p>`
+    : `<div class="field"><label for="unl-name">Institution name</label><input id="unl-name" type="text" maxlength="200" autocomplete="organization"></div>
+        <div class="field"><label for="unl-url">Website (optional)</label><input id="unl-url" type="url" maxlength="300" placeholder="https://" autocomplete="url"></div>
+        <div class="field"><label for="unl-region">Region</label><select id="unl-region" class="mod-select">
+          <option value="">Choose a region</option>${Object.keys(REGION_NAMES).map((slug) => `<option value="${esc(slug)}">${esc(regionLabel(slug))}</option>`).join("")}
+        </select></div>
+        <div class="field"><label for="unl-domain">Work email domain</label><input id="unl-domain" type="text" maxlength="253" placeholder="oehha.ca.gov" autocomplete="off" spellcheck="false" aria-describedby="unl-domain-hint">
+          <p class="hint" id="unl-domain-hint">Choose a region to see which email domains can confirm it.</p></div>
+        <div class="btns"><button type="button" class="btn" data-action="add-unlisted">Add this institution</button></div>`;
+  return `<fieldset id="signup-unlisted" class="unlisted${noEligible ? " is-key" : ""}" tabindex="-1" data-unlisted-area>
+    <legend>My institution isn't listed</legend>
+    <p class="hint">${noEligible ? "None of your institutions is on the eligible list yet. " : ""}Add your institution and a work email domain. We send a link to that address; a moderator then reviews the request.</p>
+    ${summary}
+  </fieldset>`;
+}
+
+function updateUnlistedHint() {
+  const hint = $("#unl-domain-hint");
+  const region = $("#unl-region")?.value || "";
+  if (hint) hint.textContent = region ? suffixHintText(region, flow.suffixes[region] || []) : "Choose a region to see which email domains can confirm it.";
 }
 
 function stepInstitutions() {
@@ -317,7 +414,7 @@ function stepInstitutions() {
     : "";
   const ineligibleBlock = ineligible.length
     ? `<h3>Not eligible yet</h3><ul class="plain">${ineligible.map((item) =>
-      `<li><span>${esc(item.name)}</span><small class="hint"> Not yet on a region's list of eligible institutions, so it cannot be claimed here.</small></li>`).join("")}</ul>`
+      `<li><span>${esc(displayName(item))}</span><small class="hint"> Not yet on a region's list of eligible institutions, so it cannot be claimed here.</small></li>`).join("")}</ul>`
     : "";
   show(`${stepHead(2, STEP_TITLES[2])}
     ${message}${eligibleBlock}${ineligibleBlock}
@@ -330,6 +427,7 @@ function stepInstitutions() {
       </div>
       <ul class="plain" aria-label="Proposed institutions">${proposalsHTML()}</ul>
     </div>
+    ${unlistedHTML(eligibleTicked(items, flow.ticked).length === 0)}
     <form data-form="institutions" novalidate>
       <div class="btns">${backButton()}<button type="submit" class="btn solid">Continue</button></div>
     </form>`, true);
@@ -353,15 +451,20 @@ function stepRegions() {
     </form>`);
 }
 
-async function loadDomains(ticked, checklist) {
-  const slugs = new Set();
-  for (const item of eligibleTicked(checklist, ticked)) for (const region of item.regions || []) slugs.add(region);
+/** The allowlist file of each region (same-origin, no credentials). A missing file maps to null. */
+async function loadRegionFiles(slugs) {
   const files = {};
   await Promise.all([...slugs].map(async (slug) => {
     const response = await fetch(regionFileUrl(slug, "ambassador_institutions.json"), {cache: "no-cache"}).catch(() => null);
     files[slug] = response?.ok ? await response.json().catch(() => null) : null;
   }));
-  return allowedDomains(files, ticked);
+  return files;
+}
+
+async function loadDomains(ticked, checklist) {
+  const slugs = new Set();
+  for (const item of eligibleTicked(checklist, ticked)) for (const region of item.regions || []) slugs.add(region);
+  return allowedDomains(await loadRegionFiles(slugs), ticked);
 }
 
 function loadTurnstile() {
@@ -412,10 +515,12 @@ async function mountTurnstile() {
 }
 
 async function stepEmail() {
-  flow.domains = await loadDomains(flow.ticked, flow.profile.institutions);
-  const domains = flow.domains.length
+  const onlyUnlisted = flow.proposalOnly && flow.unlisted;
+  flow.domains = onlyUnlisted ? [flow.unlisted.domain] : await loadDomains(flow.ticked, flow.profile.institutions);
+  let domains = flow.domains.length
     ? `Use your address at one of these domains: ${esc(flow.domains.join(", "))}.`
     : "The institutions you ticked do not list a domain yet. Email the address in the contribution terms for help.";
+  if (onlyUnlisted) domains = `Your address must be at ${esc(flow.unlisted.domain)} or one of its subdomains.`;
   const captcha = TURNSTILE_SITE_KEY === PENDING
     ? '<p class="status" id="signup-captcha">Email confirmation opens soon.</p>'
     : '<div id="signup-turnstile" class="turnstile"></div>';
@@ -458,6 +563,14 @@ function showProposalsSent() {
     <p>Thank you. Moderation reviews each proposal; it does not block anything else. To confirm an email you need at least one eligible institution on your record. You can sign up again when one is listed.</p>
     <p><a class="link" href="./ambassadors">Back to the ambassador page</a></p>`);
   setStatus("Your proposals were sent to moderation.");
+}
+
+/** Email confirmed for an unlisted institution: no session exists yet, so nothing else is loaded. */
+function showPendingReview() {
+  show(`<h2 tabindex="-1">Your sign-up is with moderation</h2>
+    <p>Thanks, your email is confirmed. A moderator will review your institution and you'll get an email when your account is active.</p>
+    <p><a class="link" href="./ambassadors">Back to the ambassador page</a></p>`);
+  setStatus("Your email is confirmed. A moderator will review your institution.");
 }
 
 function showFirstVisit() {
@@ -506,12 +619,13 @@ function showAccount(ambassador, focus = true) {
 }
 
 async function startSignup() {
-  const response = await api("/signup/profile");
+  const [response, files] = await Promise.all([api("/signup/profile"), loadRegionFiles(Object.keys(REGION_NAMES))]);
   if (!response.ok) {
     const again = response.error === "not_signed_in" ? orcidLink("Sign up with ORCID") : retryButton;
     return showMessage("We could not start your sign-up", errorText(response.error), again);
   }
   flow = freshFlow();
+  for (const slug of Object.keys(REGION_NAMES)) flow.suffixes[slug] = trustedSuffixesFor(files[slug]);
   flow.profile = response.data;
   renderStep(1);
 }
@@ -545,12 +659,47 @@ async function submitRegions(form) {
   const eligibleCount = eligibleTicked(flow.profile.institutions, flow.ticked).length;
   const errors = checkRegions({regions: flow.regions, eligibleCount});
   if (errors.length) return showErrors(errors);
+  return sendClaims(form, "signup-regions");
+}
+
+/** Saves the ticks, regions and proposals. Moves on to the email step, or to moderation when nothing needs an email. */
+async function sendClaims(form, field) {
   setBusy(form, true);
-  const response = await api("/signup/claims", {method: "POST", body: claimsBody({ticked: flow.ticked, regions: flow.regions, proposals: flow.proposals})});
+  const response = await api("/signup/claims", {
+    method: "POST",
+    body: claimsBody({ticked: flow.ticked, regions: flow.regions, proposals: flow.proposals, unlisted: flow.unlisted}),
+  });
   setBusy(form, false);
-  if (!response.ok) return showErrors([{field: "signup-regions", message: errorText(response.error)}]);
-  if (response.data.status === "pending_email") return renderStep(4);
+  if (!response.ok) {
+    // Errors about the unlisted institution point at its fields; they are on the same step when it was sent.
+    const unlistedField = {invalid_domain: "unl-domain", untrusted_domain: "unl-domain", invalid_region: "unl-region"}[response.error];
+    return showErrors([{field: unlistedField && flow.unlisted ? unlistedField : field, message: errorText(response.error)}]);
+  }
+  if (response.data.status === "pending_email_proposal") {
+    flow.proposalOnly = true;
+    return renderStep(4);
+  }
+  if (response.data.status === "pending_email") {
+    flow.proposalOnly = false;
+    return renderStep(4);
+  }
   return showProposalsSent();
+}
+
+function addUnlisted() {
+  captureStep();
+  const values = {
+    name: $("#unl-name")?.value ?? "",
+    url: $("#unl-url")?.value ?? "",
+    region: $("#unl-region")?.value ?? "",
+    domain: $("#unl-domain")?.value ?? "",
+  };
+  const errors = checkUnlisted(values, flow.suffixes[values.region] || []);
+  if (errors.length) return showErrors(errors);
+  flow.unlisted = {name: values.name.trim(), url: values.url.trim(), region: values.region, domain: values.domain.trim().toLowerCase()};
+  renderStep(2);
+  setStatus(`Institution proposal added: ${flow.unlisted.name}. It is sent when you continue.`);
+  return undefined;
 }
 
 async function submitEmail(form) {
@@ -564,7 +713,12 @@ async function submitEmail(form) {
   flow.token = "";
   if (flow.widgetId !== null && window.turnstile) window.turnstile.reset(flow.widgetId);
   syncSubmit();
-  if (!response.ok) return showErrors([{field: "signup-email", message: errorText(response.error)}]);
+  if (!response.ok) {
+    const message = response.error === "domain_not_proposed" && flow.unlisted
+      ? `Use an address at ${flow.unlisted.domain}, the institution you proposed.`
+      : errorText(response.error);
+    return showErrors([{field: "signup-email", message}]);
+  }
   return showInbox();
 }
 
@@ -586,8 +740,13 @@ function onSubmit(form) {
   if (kind === "record") return renderStep(2);
   if (kind === "institutions") {
     captureStep();
-    const errors = checkInstitutions({ticked: flow.ticked, proposals: flow.proposals, checklist: flow.profile.institutions});
+    const errors = checkInstitutions({ticked: flow.ticked, proposals: flow.proposals, checklist: flow.profile.institutions, unlisted: flow.unlisted});
     if (errors.length) return showErrors(errors);
+    // With no eligible institution ticked, the unlisted institution's region is used, so the regions step is skipped.
+    if (flow.unlisted && eligibleTicked(flow.profile.institutions, flow.ticked).length === 0) {
+      flow.regions = [];
+      return sendClaims(form, "signup-institutions");
+    }
     return renderStep(3);
   }
   if (kind === "regions") return submitRegions(form);
@@ -600,7 +759,15 @@ async function onAction(action, el) {
   if (action === "back") {
     captureStep();
     if (flow.step <= 1) return showLanding();
+    if (flow.step === 4 && flow.proposalOnly) return renderStep(2);
     return renderStep(flow.step - 1);
+  }
+  if (action === "add-unlisted") return addUnlisted();
+  if (action === "remove-unlisted") {
+    captureStep();
+    flow.unlisted = null;
+    renderStep(2);
+    return setStatus("Institution proposal removed.");
   }
   if (action === "toggle-proposal") {
     captureStep();
@@ -655,12 +822,20 @@ export async function mountSignup(root) {
       event.preventDefault();
       addProposal();
     }
+    if (event.key === "Enter" && event.target.closest("[data-unlisted-area]") && event.target.tagName === "INPUT") {
+      event.preventDefault();
+      addUnlisted();
+    }
   });
   panel.addEventListener("input", syncSubmit);
+  panel.addEventListener("change", (event) => {
+    if (event.target.id === "unl-region") updateUnlistedHint();
+  });
 
   const route = routeFromSearch(location.search);
   if (route) history.replaceState(history.state, "", stripQuery(location.href));
   if (route === "failed") return showFailed();
+  if (route === "pending_review") return showPendingReview();
   if (route === "signup") return startSignup();
   const me = await api("/me");
   if (me.ok) return showAccount(me.data.ambassador, route !== null);

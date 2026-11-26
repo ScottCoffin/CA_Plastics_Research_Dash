@@ -184,7 +184,12 @@ def _check(regions: list[Region]) -> int:
         stamp = committed[INSTITUTIONS_FILE]["generated_at"]
         if additions_problems(ROOT / ADDITIONS_CSV):
             continue  # reported above; the rebuild would stop on the same rows
-        institutions, cases = build_from_corpus(region, corpus, ROOT, generated_at=stamp)
+        try:
+            institutions, cases = build_from_corpus(region, corpus, ROOT, generated_at=stamp)
+        except ValueError as error:
+            print(f"FAIL: {label}: {error}")
+            failed = True
+            continue
         stale = [
             name
             for name, payload in ((INSTITUTIONS_FILE, institutions), (CASES_FILE, cases))

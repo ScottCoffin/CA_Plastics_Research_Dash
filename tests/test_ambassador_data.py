@@ -35,12 +35,14 @@ from atlas.build.ambassadors import (
     load_institution_additions,
     load_overrides,
     load_ror_domains,
+    load_trusted_suffixes,
     missing_domain_cache,
     prefix_aliases,
     read_cache,
     registrable_domain,
     resolve_domains,
     ror_names,
+    trusted_suffix_problems,
     validate_outputs,
 )
 from atlas.regions.registry import Predicate, Region
@@ -854,3 +856,53 @@ def test_validator_checks_approved_rows() -> None:
     assert any("not eligible" in p for p in problems([openalex_low]))
     dup = row(id="I2", source="openalex", works=3, domains=["agency.no"])
     assert any("listed twice" in p for p in problems([row(), dup]))
+
+
+def _region_file(root: Path, slug: str, text: str) -> None:
+    folder = root / "regions" / slug
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "region.yml").write_text(text, encoding="utf-8")
+
+
+def test_trusted_suffixes_load_from_region_file(tmp_path: Path) -> None:
+    _region_file(tmp_path, "california", "trusted_email_suffixes: [ca.gov, ca.us, edu, gov]\n")
+    _region_file(tmp_path, "norway", "slug: norway\n")
+    assert load_trusted_suffixes(tmp_path, "california") == ("ca.gov", "ca.us", "edu", "gov")
+    assert load_trusted_suffixes(tmp_path, "norway") == ()  # missing key means none
+    assert load_trusted_suffixes(tmp_path, "belgium") == ()  # no region file at all
+
+
+@pytest.mark.parametrize(
+    "value",
+    [".ca.gov", "CA.gov", "ca gov", "ca.gov.", "gmail.com", "com", "yahoo.fr", "edu edu", "a..b"],
+)
+def test_trusted_suffix_rules_refuse_bad_labels_and_free_mail(value: str) -> None:
+    assert trusted_suffix_problems([value]), value
+
+
+def test_trusted_suffix_rules_accept_valid_lists_and_refuse_other_shapes() -> None:
+    assert trusted_suffix_problems(["ca.gov", "edu", "ca.us"]) == []
+    assert trusted_suffix_problems(None) == []
+    assert trusted_suffix_problems("ca.gov")
+    assert trusted_suffix_problems(["ca.gov", "ca.gov"])
+
+
+def test_bad_trusted_suffix_in_region_file_stops_the_build(tmp_path: Path) -> None:
+    _region_file(tmp_path, "california", "trusted_email_suffixes: [gmail.com]\n")
+    with pytest.raises(ValueError, match="trusted_email_suffixes"):
+        load_trusted_suffixes(tmp_path, "california")
+
+
+def test_payload_carries_trusted_suffixes_and_validator_checks_them(country_root: Path) -> None:
+    institutions, cases = build_region(_norway(), country_root, GENERATED)
+    assert institutions["trusted_email_suffixes"] == []
+    assert validate_outputs(institutions, cases, "norway") == []
+    institutions["trusted_email_suffixes"] = ["gmail.com"]
+    assert any(
+        "trusted_email_suffixes" in p for p in validate_outputs(institutions, cases, "norway")
+    )
+    institutions["trusted_email_suffixes"] = []
+    institutions["surprise"] = 1
+    assert any(
+        "unknown top-level keys" in p for p in validate_outputs(institutions, cases, "norway")
+    )

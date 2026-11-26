@@ -53,7 +53,11 @@ client values; the tests cover the flow with a fake ORCID.
 - `GET /orcid/start`, `GET /orcid/callback`: ORCID OAuth (`/authenticate`), state and nonce hashed, single use.
 - `GET /signup/profile` (signup cookie): OpenAlex author and ORCID employments, returns the institution checklist.
 - `POST /signup/claims` (signup cookie): claims from the checklist, regions tied to claimed eligible institutions, proposals.
-- `POST /signup/email` (signup cookie): one institutional email (Turnstile, rate limits), single-use link.
+  Unlisted institution (migration 0006): an institution proposal `{kind:"institution", region, payload:{name, url?, domain}}`
+  whose domain is valid and trusted for that region (`trusted_email_suffixes`, `untrusted_domain` otherwise). With no
+  eligible institution and exactly one such proposal the status is `pending_email_proposal`; regions must then be empty.
+- `POST /signup/email` (signup cookie): one institutional email (Turnstile, rate limits), single-use link. On the unlisted
+  path the address must equal the proposed domain or sit under it (`domain_not_proposed` otherwise).
 - `POST /signup/profile` (session cookie): display name, credit (default on), terms `v1`.
 - `POST /cases/answer` (session, active member of the region): `{region, case_id, answer: agree|disagree|unsure,
   correct_value?}` (`correct_value` required for `disagree` only). One answer per ambassador and case; a re-answer replaces it.
@@ -64,9 +68,10 @@ client values; the tests cover the flow with a fake ORCID.
 - `GET /submissions/mine` (session): the caller's submissions with status and decision note.
 - `GET /moderation/queue?region=` (owner or lead): pending submissions and proposals. Owner and leads see every region.
 - `POST /moderation/decide` (owner or lead): `{type: submission|proposal, id, decision: approve|reject, note?}`. A
-  moderator cannot decide their own item. Audited. Approving a proposal records the decision only (no activation).
-  Approving an institution proposal also needs `region`, `domain` (lowercase registrable host, no free-mail) and
-  `institution_type` (education|government|nonprofit|facility), else `allowlist_fields_required` (400). Migration 0005.
+  moderator cannot decide their own item. Audited. Approving an institution proposal also needs `region`, `domain`
+  (lowercase registrable host, no free-mail) and `institution_type` (education|government|nonprofit|facility), else
+  `allowlist_fields_required` (400). Migration 0005. For an email-confirmed (unlisted) proposal, approval activates the
+  proposer (`add:<domain>`, region active, welcome mail queued); rejection returns them to `pending` and keeps the note.
 - `POST /moderation/leads` (owner or lead): `{ambassador_id, region}` promotes an active member of that region to lead.
 - `POST /moderation/suspend` (owner only): `{ambassador_id}` sets `suspended` and deletes their sessions.
 - `GET /export/approved?since=<ms>` (bearer `EXPORT_TOKEN`, read-only): approved submissions and consensus case answers.

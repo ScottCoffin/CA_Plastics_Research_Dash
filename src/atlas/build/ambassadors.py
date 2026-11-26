@@ -174,6 +174,23 @@ INSTITUTION_KEYS = frozenset(
     }
 )
 CASE_KEYS = frozenset({"case_id", "kind", "question", "evidence", "current_value", "options"})
+INSTITUTIONS_TOP_KEYS = frozenset(
+    {
+        "schema",
+        "generated_at",
+        "region",
+        "rule",
+        "min_works",
+        "eligible_types",
+        "trusted_email_suffixes",
+        "institutions",
+    }
+)
+TRUSTED_SUFFIXES_KEY = "trusted_email_suffixes"
+# Lower-case labels joined by dots, no leading or trailing dot ("ca.gov", "edu").
+_SUFFIX_RE = re.compile(
+    r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*"
+)
 
 
 # --- text and domain helpers ----------------------------------------------------------------
@@ -323,6 +340,40 @@ def load_alias_rules(root: Path, slug: str) -> tuple[tuple[str, str], ...]:
         if prefix and alias_prefix:
             rules.append((prefix, alias_prefix))
     return tuple(rules)
+
+
+def trusted_suffix_problems(values: object) -> list[str]:
+    """Problems with a ``trusted_email_suffixes`` list (empty when it is valid or absent)."""
+    if values is None:
+        return []
+    if not isinstance(values, list):
+        return ["must be a list of suffixes such as ca.gov"]
+    problems: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        if not isinstance(value, str) or not _SUFFIX_RE.fullmatch(value):
+            problems.append(f"has {value!r}: use lower-case labels with no leading dot")
+        elif value in seen:
+            problems.append(f"lists {value!r} twice")
+        elif is_free_mail(value) or any(
+            domain == value or domain.endswith("." + value) for domain in FREE_MAIL_DOMAINS
+        ):
+            problems.append(f"lists the free-mail domain {value!r}")
+        seen.add(str(value))
+    return problems
+
+
+def load_trusted_suffixes(root: Path, slug: str) -> tuple[str, ...]:
+    """``trusted_email_suffixes`` from regions/<slug>/region.yml (optional; missing means none)."""
+    path = root / "regions" / slug / "region.yml"
+    if not path.exists():
+        return ()
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    values = data.get(TRUSTED_SUFFIXES_KEY)
+    problems = trusted_suffix_problems(values)
+    if problems:
+        raise ValueError(f"regions/{slug}/region.yml: {TRUSTED_SUFFIXES_KEY} {problems[0]}")
+    return tuple(values or ())
 
 
 ROR_NAME_TYPES = frozenset({"acronym", "alias", "label"})
@@ -1195,6 +1246,7 @@ def build_payloads(
     alias_rules: Sequence[tuple[str, str]] = (),
     additions: Sequence[Mapping[str, str]] = (),
     notes: list[str] | None = None,
+    trusted_suffixes: Sequence[str] = (),
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """(ambassador_institutions payload, ambassador_cases payload) for one region."""
     rows = _institution_rows(corpus, ror_dump, cache, overrides, alias_rules)
@@ -1210,6 +1262,7 @@ def build_payloads(
         "rule": RULE,
         "min_works": MIN_WORKS,
         "eligible_types": list(ELIGIBLE_TYPES),
+        TRUSTED_SUFFIXES_KEY: list(trusted_suffixes),
         "institutions": rows,
     }
     cases, available = _case_rows(region, corpus)
@@ -1245,6 +1298,7 @@ def build_from_corpus(
         load_alias_rules(root, region.slug),
         load_institution_additions(root / ADDITIONS_CSV),
         notes,
+        load_trusted_suffixes(root, region.slug),
     )
 
 
@@ -1280,6 +1334,13 @@ def validate_outputs(
     problems: list[str] = []
     if institutions.get("schema") != INSTITUTIONS_SCHEMA:
         problems.append("institutions: schema must be amb-v1")
+    unknown = sorted(set(institutions) - INSTITUTIONS_TOP_KEYS)
+    if unknown:
+        problems.append(f"institutions: unknown top-level keys {unknown}")
+    problems.extend(
+        f"institutions: {TRUSTED_SUFFIXES_KEY} {text}"
+        for text in trusted_suffix_problems(institutions.get(TRUSTED_SUFFIXES_KEY, []))
+    )
     if cases.get("schema") != CASES_SCHEMA:
         problems.append("cases: schema must be amb-cases-v1")
     for name, payload in (("institutions", institutions), ("cases", cases)):

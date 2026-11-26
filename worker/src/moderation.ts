@@ -1,6 +1,7 @@
 import { audit, currentAmbassador, type AmbassadorRow, type Ctx } from "./auth";
 import type { Env } from "./env";
-import { REGIONS, isRegion, type Region } from "./eligibility";
+import { DOMAIN_RE, REGIONS, isRegion, type Region } from "./eligibility";
+import { queueWelcome } from "./notifications";
 import { json } from "./http";
 import { withinRateLimit } from "./rate_limit";
 
@@ -103,14 +104,27 @@ export async function handleQueue(request: Request, env: Env, ctx: Ctx): Promise
       display_name: string | null;
     }>();
   const proposals = await env.DB.prepare(
-    "SELECT p.id, p.kind, p.payload, p.created_at, p.ambassador_id, a.display_name " +
+    "SELECT p.id, p.kind, p.payload, p.created_at, p.ambassador_id, a.display_name, p.proposed_region, p.proposed_domain, " +
+      "p.email_confirmed_at, p.confirmed_domain " +
       "FROM proposals p JOIN ambassadors a ON a.id = p.ambassador_id " +
       "WHERE p.status = 'pending' AND a.status <> 'suspended' " +
-      "AND (?1 IS NULL OR EXISTS (SELECT 1 FROM ambassador_regions r WHERE r.ambassador_id = p.ambassador_id AND r.region = ?1)) " +
+      "AND (?1 IS NULL OR p.proposed_region = ?1 " +
+      "OR EXISTS (SELECT 1 FROM ambassador_regions r WHERE r.ambassador_id = p.ambassador_id AND r.region = ?1)) " +
       "ORDER BY p.created_at, p.id LIMIT ?2",
   )
     .bind(region, QUEUE_LIMIT)
-    .all<{ id: number; kind: string; payload: string; created_at: number; ambassador_id: string; display_name: string | null }>();
+    .all<{
+      id: number;
+      kind: string;
+      payload: string;
+      created_at: number;
+      ambassador_id: string;
+      display_name: string | null;
+      proposed_region: string | null;
+      proposed_domain: string | null;
+      email_confirmed_at: number | null;
+      confirmed_domain: string | null;
+    }>();
 
   return json({
     ok: true,
@@ -134,6 +148,11 @@ export async function handleQueue(request: Request, env: Env, ctx: Ctx): Promise
       created_at: p.created_at,
       submitter: { display_name: p.display_name },
       own: p.ambassador_id === m.a.id,
+      // Unlisted institutions (owner 2026-11-26): prefill the approval form from the proposal.
+      email_confirmed: p.email_confirmed_at !== null,
+      confirmed_domain: p.confirmed_domain,
+      proposed_region: p.proposed_region,
+      proposed_domain: p.proposed_domain,
     })),
   });
 }
@@ -141,8 +160,6 @@ export async function handleQueue(request: Request, env: Env, ctx: Ctx): Promise
 /** Institution types an approved proposal may carry onto a region's eligible list (the 3-work rule is unchanged). */
 export const INSTITUTION_TYPES = ["education", "government", "nonprofit", "facility"] as const;
 export type InstitutionType = (typeof INSTITUTION_TYPES)[number];
-/** Lowercase registrable host such as oehha.ca.gov (2 to 253 characters, at least one dot). */
-const DOMAIN_RE = /^(?=.{3,253}$)([a-z0-9-]+\.)+[a-z]{2,}$/;
 /**
  * Free-mail providers, mirrored from FREE_MAIL in eligibility.ts (not exported there). A domain or any subdomain of
  * one of these can never be an institution. Keep the two lists in step.
@@ -187,10 +204,38 @@ export function parseAllowlistFields(body: Record<string, unknown>): AllowlistFi
 }
 
 /**
+ * Unlisted institution approved (owner 2026-11-26): the ambassador with review_state 'pending_review' becomes active in the approved region
+ * with the claimed institution add:<domain> (source 'proposed', eligible), the region row becomes active, and the
+ * welcome mail (with the workspace link) is queued once. The guarded first UPDATE makes this idempotent.
+ */
+async function activateUnlisted(env: Env, ambassadorId: string, fields: AllowlistFields, now: number): Promise<void> {
+  const institutionId = `add:${fields.domain}`;
+  const flipped = await env.DB.prepare(
+    "UPDATE ambassadors SET status = 'active', region = ?1, institution_id = ?2, review_state = NULL " +
+      "WHERE id = ?3 AND status = 'pending' AND review_state = 'pending_review'",
+  )
+    .bind(fields.region, institutionId, ambassadorId)
+    .run();
+  if (flipped.meta.changes !== 1) return;
+  await env.DB.batch([
+    env.DB.prepare(
+      "INSERT INTO ambassador_institutions (ambassador_id, institution_id, source, eligible, claimed_at) VALUES (?1, ?2, 'proposed', 1, ?3) " +
+        "ON CONFLICT (ambassador_id, institution_id) DO UPDATE SET eligible = 1, claimed_at = excluded.claimed_at",
+    ).bind(ambassadorId, institutionId, now),
+    env.DB.prepare(
+      "INSERT INTO ambassador_regions (ambassador_id, region, status, joined_at) VALUES (?1, ?2, 'active', ?3) " +
+        "ON CONFLICT (ambassador_id, region) DO UPDATE SET status = 'active', joined_at = excluded.joined_at",
+    ).bind(ambassadorId, fields.region, now),
+  ]);
+  await queueWelcome(env, ambassadorId, now);
+}
+
+/**
  * POST /moderation/decide {type: submission|proposal, id, decision: approve|reject, note?}. The decision is recorded
  * and audited. Approving an institution proposal also needs {region, domain, institution_type} (ignored otherwise): the
- * approved row then joins that region's eligible list at the next build (GET /export/approved). Approving a proposal
- * does not activate anyone: activation is a later slice.
+ * approved row then joins that region's eligible list at the next build (GET /export/approved). An approval of an
+ * email-confirmed (unlisted) institution also activates the proposer and queues the welcome mail; a rejection of one
+ * returns the proposer to 'pending' with the decision note kept on the proposal.
  */
 export async function handleDecide(request: Request, env: Env, ctx: Ctx): Promise<Response> {
   const m = await moderator(request, env, ctx);
@@ -214,9 +259,11 @@ export async function handleDecide(request: Request, env: Env, ctx: Ctx): Promis
 
   // The table name comes from this fixed mapping, never from the request.
   const table = type === "submission" ? "submissions" : "proposals";
-  const item = await env.DB.prepare(`SELECT ambassador_id, status, kind FROM ${table} WHERE id = ?1`)
+  const item = await env.DB.prepare(
+    `SELECT ambassador_id, status, kind, ${type === "proposal" ? "email_confirmed_at" : "NULL"} AS email_confirmed_at FROM ${table} WHERE id = ?1`,
+  )
     .bind(id)
-    .first<{ ambassador_id: string; status: string; kind: string }>();
+    .first<{ ambassador_id: string; status: string; kind: string; email_confirmed_at: number | null }>();
   if (!item) return err("not_found", 404);
   if (item.ambassador_id === m.a.id) return err("self_decision", 403);
   if (item.status !== "pending") return err("already_decided", 409);
@@ -243,6 +290,18 @@ export async function handleDecide(request: Request, env: Env, ctx: Ctx): Promis
         .bind(status, ctx.now, m.a.id, note, id)
         .run();
   if (changed.meta.changes !== 1) return err("already_decided", 409);
+  // Unlisted institution with a confirmed email (owner 2026-11-26): approval activates the proposer, rejection returns
+  // them to 'pending' (no session either way). The proposal row keeps the decision note.
+  if (type === "proposal" && item.email_confirmed_at !== null) {
+    if (allowlist) await activateUnlisted(env, item.ambassador_id, allowlist, ctx.now);
+    else if (decision === "reject") {
+      await env.DB.prepare(
+        "UPDATE ambassadors SET email = NULL, email_hash = NULL, review_state = NULL WHERE id = ?1 AND review_state = 'pending_review'",
+      )
+        .bind(item.ambassador_id)
+        .run();
+    }
+  }
   await audit(env.DB, ctx.now, "moderation.decide", m.a.id, {
     type,
     id,

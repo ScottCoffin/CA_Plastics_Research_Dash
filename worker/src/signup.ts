@@ -1,7 +1,7 @@
 import { EMAIL_RE, type Ctx, LINK_TTL_MS, audit, createSession, currentAmbassador } from "./auth";
 import { buildChecklist, type ChecklistItem } from "./checklist";
 import { type Env, requireSecret } from "./env";
-import { REGIONS, isRegion, matchClaimedInstitution } from "./eligibility";
+import { DOMAIN_RE, REGIONS, type Region, isFreeMail, isRegion, isTrustedDomain, matchClaimedInstitution } from "./eligibility";
 import { keyedHash, randomHex, randomToken, sha256Hex, signSessionId, verifySignedSessionId } from "./crypto";
 import {
   ORCID_NONCE_COOKIE,
@@ -65,7 +65,7 @@ async function currentSignup(request: Request, env: Env, now: number): Promise<S
   if (!id) return null;
   return env.DB.prepare(
     "SELECT a.id, a.orcid, a.checklist_json, a.status FROM signup_sessions s JOIN ambassadors a ON a.id = s.ambassador_id " +
-      "WHERE s.id_hash = ?1 AND s.expires_at > ?2 AND a.status = 'pending'",
+      "WHERE s.id_hash = ?1 AND s.expires_at > ?2 AND a.status = 'pending' AND a.review_state IS NULL",
   )
     .bind(await sha256Hex(id), now)
     .first<SignupRow>();
@@ -126,15 +126,21 @@ export async function handleOrcidCallback(url: URL, request: Request, env: Env, 
   await env.DB.prepare("INSERT INTO ambassadors (id, orcid, status, created_at) VALUES (?1, ?2, 'pending', ?3) ON CONFLICT (orcid) DO NOTHING")
     .bind(randomHex(16), orcid, ctx.now)
     .run();
-  const row = await env.DB.prepare("SELECT id, status FROM ambassadors WHERE orcid = ?1")
+  const row = await env.DB.prepare("SELECT id, status, review_state FROM ambassadors WHERE orcid = ?1")
     .bind(orcid)
-    .first<{ id: string; status: string }>();
+    .first<{ id: string; status: string; review_state: string | null }>();
   if (!row || row.status === "suspended") return fail();
   await audit(env.DB, ctx.now, "signup.orcid", await sha256Hex(orcid), { status: row.status });
 
   if (row.status === "active") {
     const res = redirect(workspaceUrl(env, { signin: "orcid" }));
     res.headers.append("Set-Cookie", await sessionSetCookie(env, row.id, ctx.now));
+    return res;
+  }
+  if (row.review_state === "pending_review") {
+    // Unlisted institution waiting for a moderator: no session and no signup cookie (owner 2026-11-26).
+    const res = redirect(workspaceUrl(env, { signup: "pending_review" }));
+    res.headers.append("Set-Cookie", hostCookie(ORCID_NONCE_COOKIE, "", 0));
     return res;
   }
   const res = redirect(workspaceUrl(env, { signup: "orcid" }));
@@ -196,22 +202,47 @@ function stringList(value: unknown, max: number): string[] | null {
   return [...new Set(value as string[])];
 }
 
-/** Proposals: plain string fields only, bounded in size. Returns the stored JSON per proposal, or null if invalid. */
-function parseProposals(value: unknown): { kind: string; payload: string }[] | null {
+export interface ParsedProposal {
+  kind: string;
+  /** Stored JSON. For a domain-bearing institution the domain is the normalised (lowercase) one. */
+  payload: string;
+  /** Set only for an institution with a domain (unlisted-institution path, owner 2026-11-26). */
+  region: Region | null;
+  domain: string | null;
+}
+
+/**
+ * Proposals: plain string fields only, bounded in size. An institution whose payload carries a domain must also name
+ * its region, and the domain must be valid and trusted for that region (eligibility.isTrustedDomain). Returns the
+ * first problem as an error code.
+ */
+function parseProposals(value: unknown): ParsedProposal[] | { error: string } {
   if (value === undefined) return [];
-  if (!Array.isArray(value) || value.length > MAX_PROPOSALS) return null;
-  const out: { kind: string; payload: string }[] = [];
+  if (!Array.isArray(value) || value.length > MAX_PROPOSALS) return { error: "invalid_proposal" };
+  const out: ParsedProposal[] = [];
   for (const item of value as unknown[]) {
-    if (!item || typeof item !== "object") return null;
-    const { kind, payload } = item as { kind?: unknown; payload?: unknown };
-    if (kind !== "institution" && kind !== "region") return null;
-    if (!payload || typeof payload !== "object" || Array.isArray(payload)) return null;
-    const entries = Object.entries(payload as Record<string, unknown>);
-    if (entries.length === 0 || entries.length > 10) return null;
-    if (!entries.every(([k, v]) => k.length <= 40 && typeof v === "string" && v.length <= 300)) return null;
-    const json = JSON.stringify(payload);
-    if (json.length > 2000) return null;
-    out.push({ kind, payload: json });
+    if (!item || typeof item !== "object") return { error: "invalid_proposal" };
+    const { kind, payload, region } = item as { kind?: unknown; payload?: unknown; region?: unknown };
+    if (kind !== "institution" && kind !== "region") return { error: "invalid_proposal" };
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) return { error: "invalid_proposal" };
+    const fields = { ...(payload as Record<string, unknown>) };
+    const entries = Object.entries(fields);
+    if (entries.length === 0 || entries.length > 10) return { error: "invalid_proposal" };
+    if (!entries.every(([k, v]) => k.length <= 40 && typeof v === "string" && v.length <= 300)) return { error: "invalid_proposal" };
+    let domain: string | null = null;
+    let proposedRegion: Region | null = null;
+    if (kind === "institution" && fields.domain !== undefined) {
+      if (typeof fields.domain !== "string") return { error: "invalid_domain" };
+      domain = fields.domain.trim().toLowerCase();
+      if (!isRegion(region)) return { error: "invalid_region" };
+      if (!DOMAIN_RE.test(domain)) return { error: "invalid_domain" };
+      if (!isTrustedDomain(region, domain)) return { error: "untrusted_domain" };
+      proposedRegion = region;
+      fields.domain = domain;
+    }
+    const json = JSON.stringify(fields);
+    if (json.length > 2000) return { error: "invalid_proposal" };
+    out.push({ kind, payload: json, region: proposedRegion, domain });
   }
   return out;
 }
@@ -232,9 +263,10 @@ export async function handleSignupClaims(request: Request, env: Env, ctx: Ctx): 
   }
   const institutionIds = stringList(body.institutions, 100);
   const regionIds = stringList(body.regions, REGIONS.length);
-  const proposals = parseProposals(body.proposals);
+  const parsed = parseProposals(body.proposals);
   if (!institutionIds || !regionIds) return err("invalid_request", 400);
-  if (!proposals) return err("invalid_proposal", 400);
+  if (!Array.isArray(parsed)) return err(parsed.error, 400);
+  const proposals = parsed;
   if (!s.checklist_json) return err("lookup_required", 409);
 
   const checklist = JSON.parse(s.checklist_json) as ChecklistItem[];
@@ -253,7 +285,12 @@ export async function handleSignupClaims(request: Request, env: Env, ctx: Ctx): 
     if (!isRegion(region) || !tied.has(region)) return err("region_not_tied", 400);
   }
   if (eligible.length > 0 && regionIds.length === 0) return err("region_required", 400);
-  const status = eligible.length > 0 ? "pending_email" : "proposals_only";
+  // Unlisted institution (owner 2026-11-26): with no eligible institution and exactly one domain-bearing institution
+  // proposal, the email step confirms that domain (pending_email_proposal). Regions must be empty on that path.
+  const domainProposals = proposals.filter((p) => p.domain !== null);
+  const status =
+    eligible.length > 0 ? "pending_email" : domainProposals.length === 1 ? "pending_email_proposal" : "proposals_only";
+  const awaitingEmail = status === "pending_email_proposal" ? domainProposals[0] : null;
 
   await env.DB.batch([
     env.DB.prepare("DELETE FROM ambassador_institutions WHERE ambassador_id = ?1").bind(s.id),
@@ -269,8 +306,10 @@ export async function handleSignupClaims(request: Request, env: Env, ctx: Ctx): 
         .bind(s.id, region, ctx.now),
     ),
     ...proposals.map((p) =>
-      env.DB.prepare("INSERT INTO proposals (ambassador_id, kind, payload, status, created_at) VALUES (?1, ?2, ?3, 'pending', ?4)")
-        .bind(s.id, p.kind, p.payload, ctx.now),
+      env.DB.prepare(
+        "INSERT INTO proposals (ambassador_id, kind, payload, status, created_at, proposed_region, proposed_domain, awaiting_email) " +
+          "VALUES (?1, ?2, ?3, 'pending', ?4, ?5, ?6, ?7)",
+      ).bind(s.id, p.kind, p.payload, ctx.now, p.region, p.domain, p === awaitingEmail ? 1 : 0),
     ),
   ]);
   await audit(env.DB, ctx.now, "signup.claims", await sha256Hex(s.orcid), {
@@ -312,44 +351,70 @@ export async function handleSignupEmail(request: Request, env: Env, ctx: Ctx): P
   const ipOk = await withinRateLimit(env.DB, "ip", await sha256Hex(ip ?? "unknown"), IP_LIMIT.limit, IP_LIMIT.windowMs, ctx.now);
   if (!emailOk || !ipOk) return err("rate_limited", 429);
 
-  const claimed = await env.DB.prepare("SELECT institution_id FROM ambassador_institutions WHERE ambassador_id = ?1 AND eligible = 1")
+  // Unlisted institution (owner 2026-11-26): the address must sit under the proposed domain, and that domain is trusted.
+  const awaiting = await env.DB.prepare(
+    "SELECT id, proposed_region, proposed_domain FROM proposals " +
+      "WHERE ambassador_id = ?1 AND awaiting_email = 1 AND status = 'pending' AND kind = 'institution'",
+  )
     .bind(s.id)
-    .all<{ institution_id: string }>();
-  const pendingRegions = await env.DB.prepare("SELECT region FROM ambassador_regions WHERE ambassador_id = ?1 AND status = 'pending_email'")
-    .bind(s.id)
-    .all<{ region: string }>();
-  if (claimed.results.length === 0 || pendingRegions.results.length === 0) return err("claims_required", 409);
+    .first<{ id: number; proposed_region: string | null; proposed_domain: string | null }>();
 
   const domain = email.slice(email.indexOf("@") + 1);
-  const match = matchClaimedInstitution(
-    claimed.results.map((r) => r.institution_id),
-    domain,
-  );
-  if (!match) return err("domain_not_claimed", 400);
-  const wanted = pendingRegions.results.map((r) => r.region);
-  const region = match.regions.find((r) => wanted.includes(r)) ?? match.regions[0];
+  let region: string;
+  let institutionId: string;
+  let proposalId: number | null = null;
+  if (awaiting) {
+    const proposed = awaiting.proposed_domain ?? "";
+    if (!isRegion(awaiting.proposed_region) || !proposed) return err("domain_not_proposed", 400);
+    if (domain !== proposed && !domain.endsWith(`.${proposed}`)) return err("domain_not_proposed", 400);
+    if (!isTrustedDomain(awaiting.proposed_region, domain)) return err("untrusted_domain", 400);
+    region = awaiting.proposed_region;
+    institutionId = `add:${proposed}`;
+    proposalId = awaiting.id;
+  } else {
+    const claimed = await env.DB.prepare("SELECT institution_id FROM ambassador_institutions WHERE ambassador_id = ?1 AND eligible = 1")
+      .bind(s.id)
+      .all<{ institution_id: string }>();
+    const pendingRegions = await env.DB.prepare("SELECT region FROM ambassador_regions WHERE ambassador_id = ?1 AND status = 'pending_email'")
+      .bind(s.id)
+      .all<{ region: string }>();
+    if (claimed.results.length === 0 || pendingRegions.results.length === 0) return err("claims_required", 409);
+
+    const match = matchClaimedInstitution(
+      claimed.results.map((r) => r.institution_id),
+      domain,
+    );
+    if (!match) return err("domain_not_claimed", 400);
+    const wanted = pendingRegions.results.map((r) => r.region);
+    region = match.regions.find((r) => wanted.includes(r)) ?? match.regions[0];
+    institutionId = match.institutionId;
+  }
 
   try {
     const token = randomToken(32);
     await env.DB.prepare(
-      "INSERT INTO magic_links (token_hash, email_hash, email, region, institution_id, created_at, expires_at, ambassador_id) " +
-        "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+      "INSERT INTO magic_links (token_hash, email_hash, email, region, institution_id, created_at, expires_at, ambassador_id, proposal_id) " +
+        "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
     )
-      .bind(await sha256Hex(token), emailHash, email, region, match.institutionId, ctx.now, ctx.now + LINK_TTL_MS, s.id)
+      .bind(await sha256Hex(token), emailHash, email, region, institutionId, ctx.now, ctx.now + LINK_TTL_MS, s.id, proposalId)
       .run();
+    const link = `${env.PUBLIC_API_URL}/auth/verify?token=${token}`;
     await chooseSender(env).send({
       to: email,
       subject: "Confirm your Plastiverse ambassador sign-up",
       text:
         "Confirm your institutional email for the Plastiverse ambassador sign-up (valid 30 minutes, one use):\n\n" +
-        `${env.PUBLIC_API_URL}/auth/verify?token=${token}\n\n` +
+        `${link}\n\n` +
+        (proposalId === null
+          ? ""
+          : "Your institution proposal is then reviewed by a moderator. You get a sign-in link only after approval.\n\n") +
         "If you did not ask for this, ignore this message.",
     });
   } catch (e) {
     console.error("signup email failed", e instanceof Error ? e.name : "unknown");
     return err("mail_failed", 502);
   }
-  await audit(env.DB, ctx.now, "signup.email_sent", emailHash, { region });
+  await audit(env.DB, ctx.now, "signup.email_sent", emailHash, { region, proposal: proposalId !== null });
   return json({ ok: true, message: "A confirmation link has been sent to your institutional address. It expires in 30 minutes." });
 }
 

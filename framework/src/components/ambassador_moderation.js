@@ -83,6 +83,11 @@ export function normaliseItems(queue) {
     submitter: p.submitter || {},
     own: Boolean(p.own),
     status: null,
+    // An unlisted institution whose work email was confirmed: the domain it was confirmed at, and what was proposed.
+    email_confirmed: Boolean(p.email_confirmed),
+    confirmed_domain: p.confirmed_domain || null,
+    proposed_region: p.proposed_region || null,
+    proposed_domain: p.proposed_domain || null,
   }));
   return sortQueue([...submissions, ...proposals]);
 }
@@ -170,6 +175,24 @@ export function prefillDomain(url) {
   } catch {
     return "";
   }
+}
+
+/** "Email confirmed at <domain>" for a proposal whose work email was confirmed; "" otherwise. */
+export function confirmedText(item) {
+  return item?.type === "proposal" && item.email_confirmed && item.confirmed_domain
+    ? `Email confirmed at ${item.confirmed_domain}`
+    : "";
+}
+
+/** The region to prefill for an approval: the proposal's own region when it is a known slug, else "". */
+export function prefillRegion(item) {
+  const slug = item?.proposed_region;
+  return slug && Object.prototype.hasOwnProperty.call(REGION_NAMES, slug) ? slug : "";
+}
+
+/** The domain to prefill: the proposed domain when the proposal has one, else the URL's host (prefillDomain). */
+export function prefillAllowDomain(item) {
+  return item?.proposed_domain || prefillDomain(item?.payload?.url);
 }
 
 /** Whether a proposal is an institution, the only kind whose approval needs region, domain and type. */
@@ -325,7 +348,8 @@ function allowlistFields(item) {
     el("option", {value: ""}, ["Choose a region"]),
     ...Object.entries(REGION_NAMES).map(([slug, label]) => el("option", {value: slug}, [label])),
   ]);
-  const domain = el("input", {id: "mod-allow-domain", name: "domain", type: "text", maxlength: "253", autocomplete: "off", spellcheck: "false", value: prefillDomain(item.payload?.url)});
+  region.value = prefillRegion(item);
+  const domain = el("input", {id: "mod-allow-domain", name: "domain", type: "text", maxlength: "253", autocomplete: "off", spellcheck: "false", value: prefillAllowDomain(item)});
   const type = el("select", {id: "mod-allow-type", name: "institution_type", class: "mod-select"}, [
     el("option", {value: ""}, ["Choose a type"]),
     ...Object.entries(INSTITUTION_TYPE_NAMES).map(([slug, label]) => el("option", {value: slug}, [label])),
@@ -345,6 +369,8 @@ function itemDetails(item) {
     el("dt", {}, ["Region"]), el("dd", {}, [item.region ? REGION_NAMES[item.region] || item.region : "Not stated"]),
     el("dt", {}, ["Date"]), el("dd", {}, [dateText(item.created_at)]),
   ]);
+  const confirmed = confirmedText(item);
+  if (confirmed) list.append(el("dt", {}, ["Email"]), el("dd", {}, [confirmed]));
   const name = creditName(item.submitter);
   if (name) list.append(el("dt", {}, ["Submitted by"]), el("dd", {}, [name]));
   return list;

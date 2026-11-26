@@ -60,3 +60,7 @@ adapters:
 name_alias_rules:
   - prefix: "University of California, "
     alias_prefix: "UC "
+# Email domains that can confirm an unlisted institution (owner decision AMB-UNLISTED-EMAIL, 2026-11-26):
+# a sign-up whose institution is not on the eligible list may confirm an address at one of these
+# suffixes (or a subdomain). Norway and Belgium have none yet, so they list no suffixes.
+trusted_email_suffixes: [ca.gov, ca.us, edu, gov]

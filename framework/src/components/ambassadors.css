@@ -173,6 +173,12 @@
 .am .signup .check { display: flex; align-items: flex-start; gap: 12px; min-height: 44px; padding: 8px 0; cursor: pointer; }
 .am .signup .check input { width: 24px; height: 24px; margin: 2px 0 0; flex: none; accent-color: var(--pv-ink); }
 .am .signup .check > span { display: block; min-width: 0; }
+/* Unlisted institution (AMB-UNLISTED): quiet by default, outlined when no eligible institution exists. */
+.am .signup .unlisted { margin-top: 28px; padding: 16px; border: 1px solid var(--pv-line); background: var(--pv-wash); }
+.am .signup .unlisted.is-key { border: 2px solid var(--pv-ink); background: var(--pv-paper); }
+.am .signup .unlisted .field { margin-top: 12px; }
+.am .signup .unlisted select { display: block; width: 100%; max-width: 360px; min-height: 44px; font: inherit; color: var(--pv-ink); }
+.am .signup .unlisted .addr { font-family: var(--pv-mono); overflow-wrap: anywhere; }
 .am .signup .check small { display: block; font-size: 14px; color: var(--pv-ink-2); }
 .am .signup .field { margin-top: 20px; }
 .am .signup .field > label { display: block; font-weight: 600; margin-bottom: 6px; }

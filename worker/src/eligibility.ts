@@ -21,6 +21,8 @@ interface AllowlistFile {
     /** Short ROR URL (https://ror.org/<id>), or null when unknown. ORCID employments match through it. */
     ror: string | null;
   }[];
+  /** Email domain suffixes that confirm an unlisted-institution proposal (e.g. ca.gov). Missing = none. */
+  trusted_email_suffixes?: string[];
 }
 
 export interface InstitutionMatch {
@@ -38,6 +40,22 @@ const FREE_MAIL = new Set([
   "mail.com", "zoho.com", "yandex.com", "yandex.ru", "qq.com", "163.com", "126.com", "hey.com", "fastmail.com",
   "tutanota.com", "tuta.io", "mailbox.org", "seznam.cz", "wp.pl", "orange.fr", "free.fr", "laposte.net",
 ]);
+
+/** Lowercase registrable host, 3 to 253 characters with at least one dot (the proposal validator uses it too). */
+export const DOMAIN_RE = /^(?=.{3,253}$)([a-z0-9-]+\.)+[a-z]{2,}$/;
+
+/** Suffixes are lowercase labels joined by dots; a bare top-level label such as "gov" or "edu" is allowed. */
+const SUFFIX_RE = /^[a-z0-9-]+(\.[a-z0-9-]+)*$/;
+
+const TRUSTED: Record<Region, string[]> = {
+  california: trustedList(california as AllowlistFile),
+  norway: trustedList(norway as AllowlistFile),
+  belgium: trustedList(belgium as AllowlistFile),
+};
+
+function trustedList(file: AllowlistFile): string[] {
+  return (file.trusted_email_suffixes ?? []).filter((s) => typeof s === "string" && s.length <= 253 && SUFFIX_RE.test(s));
+}
 
 const ALLOWLISTS: Record<Region, Map<string, { id: string; name: string }>> = {
   california: buildAllowlist(california as AllowlistFile),
@@ -105,6 +123,26 @@ export function regionsForInstitution(institutionId: string): Region[] {
 /** Display name from the bundled allowlists, or null when the institution is not listed. */
 export function institutionDisplayName(institutionId: string): string | null {
   return DISPLAY_NAMES.get(institutionId) ?? null;
+}
+
+/** Trusted public-sector email suffixes for a region (empty when the allowlist carries none). */
+export function trustedSuffixes(region: Region): string[] {
+  return [...TRUSTED[region]];
+}
+
+/** True when the domain is free-mail or a subdomain of a free-mail provider. */
+export function isFreeMail(domain: string): boolean {
+  return suffixes(domain.toLowerCase()).some((name) => FREE_MAIL.has(name));
+}
+
+/**
+ * Unlisted-institution rule (owner 2026-11-26): the domain is a valid host, not free-mail, and equals a trusted suffix
+ * or ends with "." + one. A host such as gmail.com.ca.gov sits under ca.gov, so it counts as trusted (documented).
+ */
+export function isTrustedDomain(region: Region, domain: string): boolean {
+  const d = domain.toLowerCase();
+  if (!DOMAIN_RE.test(d) || isFreeMail(d)) return false;
+  return TRUSTED[region].some((suffix) => d === suffix || d.endsWith(`.${suffix}`));
 }
 
 /** Allowlist institution id for a ROR URL (only when an allowlist carries its ror field), or null. */

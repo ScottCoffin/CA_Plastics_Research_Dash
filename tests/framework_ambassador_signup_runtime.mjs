@@ -16,8 +16,14 @@ import {
   keepSelected,
   profileBody,
   regionsFor,
+  checkUnlisted,
+  displayName,
+  domainHasTrustedSuffix,
   routeFromSearch,
   stripQuery,
+  suffixHintText,
+  trustedSuffixesFor,
+  unlistedPayload,
   yearsText,
 } from "../framework/src/components/ambassador_signup.js";
 
@@ -155,6 +161,78 @@ check("years text reads from, to and open-ended ranges", () => {
   assert.equal(yearsText({from: 2020, to: 2021}), "2020 to 2021");
   assert.equal(yearsText({from: 2019, to: 2019}), "2019");
   assert.equal(yearsText(null), "");
+});
+
+const CA_SUFFIXES = ["ca.gov", "ca.us", "edu", "gov"];
+
+check("pending_review is its own route and is cleaned from the URL like the others", () => {
+  assert.equal(routeFromSearch("?signup=pending_review"), "pending_review");
+  assert.equal(routeFromSearch("?signup=orcid"), "signup");
+  assert.equal(stripQuery("https://plastiverse.live/ambassadors?signup=pending_review#x"), "https://plastiverse.live/ambassadors#x");
+});
+
+check("trusted suffix matching: exact suffix, subdomains and the suffix itself; look-alikes do not match", () => {
+  assert.equal(domainHasTrustedSuffix("oehha.ca.gov", CA_SUFFIXES), true);
+  assert.equal(domainHasTrustedSuffix("ca.gov", CA_SUFFIXES), true);
+  assert.equal(domainHasTrustedSuffix("mail.Berkeley.EDU", CA_SUFFIXES), true);
+  assert.equal(domainHasTrustedSuffix("evilca.gov", ["ca.gov"]), false, "look-alike must not match ca.gov");
+  assert.equal(domainHasTrustedSuffix("evil-ca.gov", ["ca.gov"]), false);
+  assert.equal(domainHasTrustedSuffix("evilca.gov", CA_SUFFIXES), true, "it is a .gov domain, so the gov suffix applies");
+  assert.equal(domainHasTrustedSuffix("ca.gov.evil.com", CA_SUFFIXES), false);
+  assert.equal(domainHasTrustedSuffix("notgov", CA_SUFFIXES), false);
+  assert.equal(domainHasTrustedSuffix("edu", CA_SUFFIXES), false, "a bare suffix is not a domain");
+  assert.equal(domainHasTrustedSuffix("gmail.com", CA_SUFFIXES), false);
+  assert.equal(domainHasTrustedSuffix("oehha.ca.gov", []), false, "no suffixes, no match");
+  assert.equal(domainHasTrustedSuffix("", CA_SUFFIXES), false);
+});
+
+check("trusted suffixes come from the region file; missing or bad entries give none", () => {
+  assert.deepEqual(trustedSuffixesFor({trusted_email_suffixes: ["CA.gov", "edu", 3, ""]}), ["ca.gov", "edu"]);
+  assert.deepEqual(trustedSuffixesFor({institutions: []}), []);
+  assert.deepEqual(trustedSuffixesFor(null), []);
+});
+
+check("suffix hint is built from the region's suffixes", () => {
+  assert.equal(suffixHintText("california", CA_SUFFIXES), "Addresses ending in .ca.gov, .ca.us, .edu or .gov can be confirmed for California.");
+  assert.equal(suffixHintText("norway", []), "Email addresses cannot confirm an institution for Norway yet.");
+  assert.equal(suffixHintText("california", ["gov"]), "Addresses ending in .gov can be confirmed for California.");
+});
+
+check("unlisted check: name, https website, region and a domain under a trusted suffix", () => {
+  const good = {name: "OEHHA", url: "https://oehha.ca.gov", region: "california", domain: "OEHHA.ca.gov"};
+  assert.deepEqual(checkUnlisted(good, CA_SUFFIXES), []);
+  const fields = (values, suffixes = CA_SUFFIXES) => checkUnlisted({...good, ...values}, suffixes).map((e) => e.field);
+  assert.deepEqual(fields({name: " "}), ["unl-name"]);
+  assert.deepEqual(fields({url: "http://oehha.ca.gov"}), ["unl-url"], "website must be https");
+  assert.deepEqual(fields({region: "constructor"}, []), ["unl-region", "unl-domain"]);
+  assert.deepEqual(fields({domain: "evilca.gov"}, ["ca.gov"]), ["unl-domain"]);
+  assert.deepEqual(fields({domain: ""}), ["unl-domain"]);
+  assert.deepEqual(fields({domain: "oehha.ca.gov"}, []), ["unl-domain"], "a region with no suffixes refuses every domain");
+  assert.equal(checkUnlisted({...good, url: ""}, CA_SUFFIXES).length, 0, "website is optional");
+});
+
+check("unlisted proposal payload: name, optional url, lowercase domain; claims carry the region", () => {
+  assert.deepEqual(unlistedPayload({name: " OEHHA ", url: "", domain: "OEHHA.ca.gov"}), {name: "OEHHA", domain: "oehha.ca.gov"});
+  const body = claimsBody({
+    ticked: [],
+    regions: [],
+    proposals: [],
+    unlisted: {name: "OEHHA", url: "https://oehha.ca.gov", region: "california", domain: "oehha.ca.gov"},
+  });
+  assert.deepEqual(body.proposals, [
+    {kind: "institution", region: "california", payload: {name: "OEHHA", url: "https://oehha.ca.gov", domain: "oehha.ca.gov"}},
+  ]);
+  assert.deepEqual(claimsBody({ticked: [], regions: [], proposals: [{name: "Lab", url: ""}]}).proposals, [
+    {kind: "institution", payload: {name: "Lab"}},
+  ]);
+});
+
+check("names: an approved proposal with no name shows its domain; unknown errors stay plain text", () => {
+  assert.equal(displayName({name: null, domain: "oehha.ca.gov"}), "oehha.ca.gov");
+  assert.equal(displayName({name: "OEHHA"}), "OEHHA");
+  assert.equal(errorText("domain_not_proposed"), "That address is not at the domain of the institution you proposed.");
+  assert.equal(errorText("invalid_domain").includes("invalid_domain"), false);
+  assert.equal(errorText("untrusted_domain").includes("untrusted_domain"), false);
 });
 
 console.log(`${passed} ambassador sign-up runtime checks passed`);

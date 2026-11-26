@@ -17,7 +17,10 @@ import {
   moderationErrorText,
   needsAllowlist,
   noteProblem,
+  confirmedText,
   normaliseItems,
+  prefillAllowDomain,
+  prefillRegion,
   pendingItems,
   prefillDomain,
   queueUrl,
@@ -177,6 +180,37 @@ check("allowlist error codes get plain sentences", () => {
 check("dates are UTC calendar days; bad timestamps have a fallback", () => {
   assert.equal(dateText(Date.UTC(2026, 10, 25, 12)), "2026-11-25");
   assert.equal(dateText(undefined), "Date not recorded");
+});
+
+check("unlisted proposals carry email confirmation and the proposed region and domain", () => {
+  const [item] = normaliseItems({
+    proposals: [
+      {
+        id: "p1",
+        kind: "institution",
+        payload: {name: "OEHHA", domain: "oehha.ca.gov", url: "https://oehha.ca.gov"},
+        created_at: 1,
+        email_confirmed: true,
+        confirmed_domain: "oehha.ca.gov",
+        proposed_region: "california",
+        proposed_domain: "oehha.ca.gov",
+      },
+    ],
+  });
+  assert.equal(item.email_confirmed, true);
+  assert.equal(confirmedText(item), "Email confirmed at oehha.ca.gov");
+  assert.equal(prefillRegion(item), "california");
+  assert.equal(prefillAllowDomain(item), "oehha.ca.gov");
+});
+
+check("older proposals without the new fields keep the URL-host prefill; unknown regions prefill nothing", () => {
+  const [item] = normaliseItems({proposals: [{id: "p2", kind: "institution", payload: {name: "Lab", url: "https://www.lab.example.org/x"}, created_at: 1}]});
+  assert.equal(item.email_confirmed, false);
+  assert.equal(confirmedText(item), "");
+  assert.equal(prefillRegion(item), "");
+  assert.equal(prefillAllowDomain(item), "lab.example.org");
+  assert.equal(prefillRegion({type: "proposal", proposed_region: "mars"}), "");
+  assert.equal(confirmedText({type: "submission", email_confirmed: true, confirmed_domain: "x.edu"}), "");
 });
 
 console.log(`${passed} ambassador moderation runtime checks passed`);

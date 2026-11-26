@@ -1,6 +1,6 @@
 {
   "schema": "amb-v1",
-  "generated_at": "2026-11-26T04:20:45Z",
+  "generated_at": "2026-11-26T04:39:30Z",
   "region": "california",
   "rule": "An institution is eligible when at least 3 plastics works in this region's corpus have an author at it, and its OpenAlex type is education, government, nonprofit or facility. Domains come from the institution's homepage and ROR website, reduced to the registrable domain (the last two labels, or three under a two-level suffix such as ca.gov); subdomains are accepted. Free-mail and generic domains are never listed. Owner overrides add or remove domains. An institution with no known domain is listed with needs_domain true. An institution an owner or region lead approved as a proposal is listed with its domain, without the works minimum (source approved_proposal).",
   "min_works": 3,
@@ -9,6 +9,12 @@
     "government",
     "nonprofit",
     "facility"
+  ],
+  "trusted_email_suffixes": [
+    "ca.gov",
+    "ca.us",
+    "edu",
+    "gov"
   ],
   "institutions": [
     {
