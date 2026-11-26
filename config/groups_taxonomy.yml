@@ -29,6 +29,7 @@ sector:
   - academia_research
   - private_sector
   - government
+  - joint_power_authority  # owner 2026-11-26, A4-D25 (not in the spec)
   - igo
   - other
 

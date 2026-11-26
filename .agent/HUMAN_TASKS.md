@@ -34,14 +34,6 @@ The global quality numbers stay blank until a person labels a sample. Round 0 is
 3. When the progress bar reads "Drawn works labelled 160 of 160", close the browser tab and tell the agent "H39 round 0 done".
    The agent then draws the next round of 25 and says when the precision goal is met (at most 350).
 
-### H55. Review the group-tagging guide and calibration set (Add-on A4, about 20 minutes)
-Volunteers will tag BFFP member groups with this guide. It is a draft.
-1. Read `docs/GROUPS_TAGGING_GUIDE.md` (about 5 pages) and `docs/groups_calibration_set.md`.
-2. In the calibration table, fill or change the "to decide" values (Inland Ocean Coalition, UNIDOS; the sector of
-   the PNW Consortium) and mark anything you want worded differently.
-3. Tell the agent "guide approved" or list the changes. The agent then captures the evidence quotes for the five cases.
-- **Done when:** the guide and the set are signed off (A4-Q7).
-
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
 Global Plastic Laws topic. That link is a draft the agent proposed, so the page shows a
@@ -245,6 +237,7 @@ leak-check works wait for S5.7.
 
 ## Done
 
+- H55 (2026-11-26): owner approved the group-tagging guide, adding the sector joint_power_authority, allowing one to five activities and removing the conflict-of-interest rule (A4-D25..D27).
 - H54 (2026-11-26): owner approved the Worker deploy; the agent deployed version cbc9e050 (GET /me/coauthors live, 401 without a session).
 - H53 (2026-11-26): owner recorded BFFP's verbal permission to use all of their data with no conditions (A4-D1).
 - H52 (2026-11-26): owner added the DMARC record for plastiverse.live.

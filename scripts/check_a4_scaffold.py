@@ -16,7 +16,7 @@ CG_TASK_IDS = (
     "CG-0 CG-1 CG-2 CG-3 CG-4 CG-5 CG-6 CG-7 CG-8 CG-9 CG-10 CG-11 CG-12 CG-12b "
     "CG-13 CG-14 CG-15 CG-16 CG-X1 CG-X2"
 ).split()
-DECISION_IDS = [f"A4-D{n}" for n in range(25)]
+DECISION_IDS = [f"A4-D{n}" for n in range(28)]
 CONSTRAINT_IDS = [f"A4-C{n}" for n in range(1, 12)]
 QUESTION_IDS = [f"A4-Q{n}" for n in range(1, 10)]
 DECISION_HEADINGS = ("## ADR-A4-INTEGRATION-2026-11-26",)

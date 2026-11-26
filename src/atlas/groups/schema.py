@@ -58,7 +58,7 @@ AMBASSADOR_KEYS = frozenset({"ambassador_id", "tagged_by", "reviewed_by"})
 MAX_QUOTE_WORDS = 25
 MAX_NOTE_CHARS = 200
 MAX_PLACES = 5
-MAX_PRIMARY_ACTIVITIES = 3
+MAX_PRIMARY_ACTIVITIES = 5  # owner 2026-11-26, A4-D26 (spec: 3)
 
 REQUIRED_KEYS = (
     "schema",
@@ -351,7 +351,9 @@ def _check_v5(record: Mapping[str, Any], problems: list[str]) -> None:
                 f"(max {MAX_PRIMARY_ACTIVITIES})"
             )
         if not activities and record.get("status") in TAGGED_STATUSES:
-            problems.append("V5: primary_activities needs 1-3 values for a tagged status")
+            problems.append(
+                f"V5: primary_activities needs 1-{MAX_PRIMARY_ACTIVITIES} values when tagged"
+            )
 
 
 def _check_v6(record: Mapping[str, Any], problems: list[str]) -> None:

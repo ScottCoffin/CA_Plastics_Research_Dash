@@ -891,6 +891,9 @@ Copied from `docs/BFFP.md` §2. Status as of integration; "Owner" means confirme
 | A4-D22 | The agent may add one small permissively licensed Sankey layout package and one map geometry/centroid asset; log name, version, licence and source here before use | Owner (map asset: reuse the Natural Earth assets already in the repo, A4-C8) |
 | A4-D23 | Raw-cache retention 30 days (or sooner once parsing is verified) | Owner |
 | A4-D24 | No public display or committed record of the count of entries excluded as individuals or single-person practices; methods may state the rule but not a number | Owner |
+| A4-D25 | Sector value `joint_power_authority` added after `government` (not in the spec; for joint-powers authorities) | Owner 2026-11-26 (guide review H55) |
+| A4-D26 | Primary activities: one to five values (spec: one to three); V5 enforces at most 5 | Owner 2026-11-26 (guide review H55) |
+| A4-D27 | No conflict-of-interest rule for tagging (spec §5.2 and §5.4); the guide has no such section and CG-6 builds no COI return; the reason value `conflict_of_interest` stays in the vocabulary, unused | Owner 2026-11-26 (guide review H55) |
 
 ## Add-on A4 conflicts with repo decisions (register)
 

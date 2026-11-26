@@ -103,6 +103,8 @@ def _too_many_activities(rec: dict[str, Any]) -> None:
         "advocacy_campaigning",
         "policy_governance",
         "legal_action",
+        "education_awareness",
+        "cleanup_removal",
         "other",
     ]
 
@@ -416,7 +418,15 @@ def _spec_values(facet: str) -> list[str]:
 )
 def test_taxonomy_order_matches_spec_section_3(taxonomy_key: str, facet: str) -> None:
     taxonomy = load_taxonomy()
-    assert list(taxonomy[taxonomy_key]) == _spec_values(facet)
+    expected = _spec_values(facet)
+    # Owner-approved additions, each logged in DECISIONS (A4 rule 10).
+    for after, value in OWNER_ADDITIONS.get(taxonomy_key, ()):
+        expected.insert(expected.index(after) + 1, value)
+    assert list(taxonomy[taxonomy_key]) == expected
+
+
+# key -> [(insert after, value)]: values the owner added to the spec's lists.
+OWNER_ADDITIONS = {"sector": [("government", "joint_power_authority")]}  # A4-D25
 
 
 def test_taxonomy_has_every_controlled_vocabulary() -> None:

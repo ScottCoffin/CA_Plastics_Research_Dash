@@ -84,6 +84,7 @@ The sector describes what kind of body the group is. It does not describe the to
 - `academia_research`: a university or research institute.
 - `private_sector`: a business or industry body.
 - `government`: a government body.
+- `joint_power_authority`: a joint-power authority.
 - `igo`: an intergovernmental organisation.
 - `other`: none of the above fits.
 
@@ -108,13 +109,15 @@ Rules that apply to every group:
 
 ### 4.4 Primary activities (`primary_activities`)
 
-Choose **one to three** values. List the most central first. The first value is the group's principal activity, and the Atlas uses it in its charts.
+Choose **one to five** values. List the most central first. The first value is the group's principal activity, and the Atlas uses it in its charts.
 
 Record what the group says it does, not what it supports. A group that gives grants to others is a funder, even if it cares about litter.
 
 - `advocacy_campaigning`: public campaigns and pressure for change
 - `policy_governance`: laws, rules, policy design or governance work
-- `research_monitoring`: research, surveys, monitoring or data
+- `research_monitoring`: surveys, monitoring or data
+- `research_toxicology`: research concerning toxicity testing
+- `research_other`: additional research activities
 - `education_awareness`: schools, public information or outreach
 - `cleanup_removal`: litter pick-ups and removal of waste from land or water
 - `waste_management_recycling`: collection, sorting or recycling services
@@ -152,7 +155,7 @@ Each Tier 1 facet needs its own evidence entry. Section 5 explains how to write 
 For each facet you fill, record:
 
 - **url**: the web address of the page you used.
-- **accessed_at**: the date you read the page, as `YYYY-MM-DD`.
+- **accessed_at**: the date you read the page, as `YYYY-MM-DD`. Autofill this for the user based on current date.
 - **quote**: the exact words from the page that support the value. Use **25 words or fewer**. Copy the words in the page's own language. Do not translate, correct or reword them. If the quote is too long, choose a shorter part of the page.
 - Or **not_stated**, if the page does not support a value.
 
@@ -176,9 +179,8 @@ Fill these only when the group's own pages say so. If you are not sure, leave th
 - **Website languages** (`website_languages`): the language codes (ISO 639-1, for example `en` or `no`) of the languages the group's own pages use.
 - **External codes**: do not type these. The Atlas looks them up.
 
-## 7. Conflict of interest, language, corrections and credit
+## 7. Language, corrections and credit
 
-**Conflict of interest.** Do not tag an organisation that you work for, lead or fund. If you have a conflict, choose `cannot_determine` with the reason `conflict_of_interest`. If you are not sure whether a conflict applies, ask the coordinator first.
 
 **Language.** Tag a group only if you can read its pages well enough to quote them accurately. If you cannot, do not guess. Either choose `cannot_determine` with `language_barrier`, or mark the entry **needs language support**. The coordinator then sends it to an Ambassador who reads that language.
 
