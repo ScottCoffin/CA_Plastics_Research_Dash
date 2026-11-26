@@ -1,0 +1,59 @@
+/* CG-13: community groups page (/groups). Every rule sits under .gv (the page root, inside .gx from explore.css),
+   so the other Plastiverse Live pages are unchanged. Colours come from the --pv-* tokens; no hex values.
+   Targets are at least 44px; focus is a visible outline; status is carried by text and border style, not colour alone. */
+.gv .gv-intro, .gv .gv-root { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+.gv .gv-intro h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.15; margin: 1.5rem 0 .75rem; }
+.gv .gv-intro p { max-width: 70ch; margin: .5rem 0; }
+.gv .gv-root { padding-bottom: 48px; }
+.gv h2 { font-size: 1.25rem; margin: 0 0 .5rem; }
+.gv h3 { font-size: 1rem; margin: 1rem 0 .35rem; }
+.gv p { margin: .5rem 0; }
+.gv :focus-visible { outline: 3px solid var(--pv-ink); outline-offset: 2px; }
+.gv .gv-panel { margin: 1.75rem 0; }
+.gv .gv-caption { font-size: .9rem; opacity: .85; margin: .25rem 0 .75rem; }
+.gv .gv-status { font-weight: 600; padding: 12px 16px; border-left: 4px solid var(--pv-ink); }
+.gv .gv-bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.gv .gv-bar { display: grid; gap: 4px; }
+.gv .gv-bar-label { font-weight: 600; }
+.gv .gv-track { display: block; height: 14px; border-radius: 3px; background: rgba(23, 38, 61, .12); overflow: hidden; }
+.gv .gv-fill { display: block; height: 100%; background: var(--pv-ink); }
+.gv .gv-bar-value { font-size: .9rem; font-variant-numeric: tabular-nums; }
+.gv .gv-controls { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); align-items: end; margin: 1rem 0; }
+.gv .gv-field label { display: block; font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
+.gv .gv-field input, .gv .gv-field select { width: 100%; min-height: 44px; font: inherit; padding: 8px 10px; color: inherit; background: var(--pv-ground); border: 1px solid rgba(23, 38, 61, .45); border-radius: 4px; }
+.gv .gv-btn { min-height: 44px; min-width: 44px; padding: 8px 14px; font: inherit; color: var(--pv-ink); background: transparent; border: 1px solid var(--pv-ink); border-radius: 4px; cursor: pointer; }
+.gv .gv-btn:disabled { opacity: .5; cursor: default; }
+.gv .gv-sort { min-height: 44px; padding: 0 4px; font: inherit; font-weight: 600; color: inherit; background: none; border: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.gv .gv-results-caption { font-weight: 600; }
+/* position: relative contains the absolutely positioned screen-reader labels, which would otherwise widen the page. */
+.gv .gv-table-wrap { position: relative; overflow-x: auto; max-width: 100%; border: 1px solid rgba(23, 38, 61, .2); border-radius: 6px; }
+.gv .gv-table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: .92rem; }
+.gv .gv-table th, .gv .gv-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid rgba(23, 38, 61, .15); vertical-align: top; }
+.gv .gv-table thead th { font-weight: 600; background: rgba(23, 38, 61, .06); }
+.gv .gv-table a { display: inline-flex; align-items: center; min-height: 44px; }
+.gv .gv-name { min-height: 44px; padding: 0; font: inherit; font-weight: 600; color: inherit; text-align: left; background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.gv .gv-badge { display: inline-block; padding: 2px 8px; font-size: .82rem; white-space: nowrap; border: 1px solid var(--pv-ink); border-radius: 999px; }
+.gv .gv-badge--not_tagged { border-style: dashed; }
+.gv .gv-badge--cannot { border-style: dotted; }
+.gv .gv-badge--confirmed { font-weight: 700; }
+.gv .gv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.gv .gv-pager { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; margin: 1rem 0; }
+.gv .gv-card { width: min(680px, calc(100% - 24px)); max-height: 90vh; overflow: auto; padding: 0; color: var(--pv-ink); background: var(--pv-ground); border: 1px solid var(--pv-ink); border-radius: 8px; font: inherit; }
+.gv .gv-card::backdrop { background: rgba(23, 38, 61, .45); }
+.gv .gv-card-body { padding: 20px; }
+.gv .gv-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.gv .gv-card-head h2 { margin: 0; font-size: 1.2rem; }
+.gv .gv-card-foot { margin-top: 16px; text-align: right; }
+.gv .gv-facts { display: grid; gap: 8px; margin: 1rem 0 0; }
+.gv .gv-fact { display: grid; grid-template-columns: minmax(120px, 170px) 1fr; gap: 8px; }
+.gv .gv-fact dt { font-weight: 600; }
+.gv .gv-fact dd { margin: 0; overflow-wrap: anywhere; }
+.gv .gv-list { margin: 0; padding-left: 1.2em; }
+.gv blockquote { margin: .5rem 0 .25rem; padding-left: 12px; border-left: 3px solid var(--pv-ink); }
+.gv .gv-meta { font-size: .85rem; margin: 0 0 .5rem; }
+.gv .gv-affiliations { padding-left: 1.2em; }
+.gv .gv-provenance, .gv .gv-standing, .gv .gv-correct { font-size: .92rem; margin-top: .75rem; }
+@media (max-width: 560px) {
+  .gv .gv-fact { grid-template-columns: 1fr; gap: 2px; }
+  .gv .gv-card-body { padding: 16px; }
+}

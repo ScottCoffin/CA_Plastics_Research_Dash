@@ -23,8 +23,8 @@ machine. Cached rebuild about 4 minutes, byte-identical. Docs: NETWORK_BUILD §1
    CG-5 (`docs/ambassador_infrastructure.md`), AMB-COAUTHORS-GLOBAL built (`GET /me/coauthors`; deploy waits for H54).
    CG-1, CG-4, CG-2, CG-3 done; WORKS-FILTER done; Worker cbc9e050 deployed (global co-authors). Roster published:
    `site/data/global/groups/roster.json` (2,708 organisations, 143 countries); CG-9 done (groups.json + derived files);
-   CG-8 draft waits for owner review (H55). Next: CG-13 (roster table, coverage panel, group card page), CG-6 (Worker
-   tagging stream; deploy go-ahead), then CG-10..12b views; owner-queued AMB-NAV, AMB-CHOICE-CUES, AMB-FULLWIDTH
+   CG-8 approved (H55, A4-D25..D27); CG-13 `/groups` page done. Next: CG-6 (Worker tagging stream; deploy go-ahead),
+   then CG-10..12b views; owner-queued AMB-NAV, AMB-CHOICE-CUES, AMB-FULLWIDTH
    (small, front end), AMB-PARENT-REGION, AMB-MAIL-STYLE, ALERTS-GLOBAL; BQ-S9b, BQ-G3. Rebuild denominators.json at the next global
    data refresh (owner).
 4. Design-led, waiting on owner review (H25): VD-SM, UX-13 part b.

@@ -1,0 +1,166 @@
+"""Checks for the CG-13 community groups page (/groups): wording, links, sorting and styling.
+
+Runs tests/framework_groups_runtime.mjs (pure helpers, Node) and reads the page source statically.
+No browser and no build: the rendered page is checked by the lead's browser pass.
+"""
+
+from __future__ import annotations
+
+import re
+import shutil
+import subprocess
+from pathlib import Path
+
+import pytest
+
+ROOT = Path(__file__).resolve().parent.parent
+PAGE = ROOT / "framework" / "src" / "groups.md"
+MODULE = ROOT / "framework" / "src" / "components" / "groups.js"
+STYLES = ROOT / "framework" / "src" / "components" / "groups.css"
+RUNTIME = ROOT / "tests" / "framework_groups_runtime.mjs"
+CONTACT = "theplastiverse@gmail.com"
+EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
+
+
+def _read(path: Path) -> str:
+    return path.read_text(encoding="utf-8")
+
+
+def _visible_source(path: Path) -> str:
+    """Source without comments (HTML comments in the page, // and /* */ in the modules)."""
+    text = _read(path)
+    if path.suffix == ".md":
+        return HTML_COMMENT.sub("", text)
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
+    return "\n".join(line for line in text.splitlines() if not line.lstrip().startswith("//"))
+
+
+def test_node_runtime_helpers_pass() -> None:
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("node is not on PATH (source ~/.bashrc puts it there)")
+    result = subprocess.run(
+        [node, str(RUNTIME)], cwd=ROOT, capture_output=True, text=True, timeout=120, check=False
+    )
+    assert result.returncode == 0, result.stderr or result.stdout
+    assert "all assertions passed" in result.stdout
+
+
+def test_page_title_and_global_theme() -> None:
+    text = _read(PAGE)
+    assert text.startswith("---\n")
+    assert "title: Community groups · Plastiverse Live" in text
+    assert 'href="./components/groups.css"' in text
+    assert 'import {mountGroups} from "./components/groups.js"' in text
+    assert 'aria-current="page">Community groups' in text
+
+
+def test_lede_states_who_is_listed_and_what_not_yet_tagged_means() -> None:
+    text = _visible_source(PAGE)
+    assert "Break Free From Plastic" in text
+    assert "volunteer ambassadors" in text.lower()
+    assert "Only organisations are listed" in text
+    assert "**Not yet tagged**" not in text
+    assert "<b>Not yet tagged</b> means the group has not been tagged yet." in text
+    assert "It never means the group has no plastics work." in text
+    assert "The Atlas is independent of Break Free From Plastic." in text
+
+
+def test_provenance_wording_is_present() -> None:
+    assert "Listed as a BFFP member as of " in _read(MODULE)
+
+
+def test_no_excluded_count_wording() -> None:
+    for path in (PAGE, MODULE):
+        text = _visible_source(path).lower()
+        assert not re.search(r"\bexcluded\b|\bexclusions?\b|\brejected\b", text), path.name
+
+
+def test_no_score_sorting_and_only_name_or_country_sort_keys() -> None:
+    for path in (PAGE, MODULE):
+        assert "score" not in _visible_source(path).lower(), path.name
+    module = _read(MODULE)
+    assert re.search(r'SORT_KEYS = \["name", "country"\]', module)
+
+
+def test_help_links_use_ambassadors_without_trailing_slash() -> None:
+    for path in (PAGE, MODULE):
+        text = _visible_source(path)
+        assert "./ambassadors/" not in text, path.name
+    assert 'href="./ambassadors"' in _read(MODULE)
+
+
+def test_external_links_are_noopener_nofollow() -> None:
+    module = _read(MODULE)
+    assert module.count('rel="noopener nofollow"') >= 2
+
+
+def test_only_the_public_contact_address_appears() -> None:
+    found: set[str] = set()
+    for path in (PAGE, MODULE):
+        found |= set(EMAIL.findall(_visible_source(path)))
+    assert found == {CONTACT}
+
+
+def test_no_internal_vocabulary_in_visible_text() -> None:
+    for path in (PAGE, MODULE):
+        text = _visible_source(path)
+        for term in ("cg-v2", "CG-13", "org_status"):
+            assert term not in text, f"{term} in {path.name}"
+
+
+def test_card_and_standing_note_wording() -> None:
+    module = _read(MODULE)
+    assert (
+        "Tags were entered by volunteers from public sources and have not been verified "
+        "by the group unless marked Confirmed." in module
+    )
+    assert "Suggest a correction" in module
+    assert "data-close" in module and "showModal" in module
+
+
+def test_status_labels_are_the_public_words() -> None:
+    module = _read(MODULE)
+    for label in (
+        "Not yet tagged",
+        "Volunteer-tagged",
+        "Reviewed",
+        "Confirmed by group",
+    ):
+        assert f'label: "{label}"' in module
+
+
+def test_state_is_kept_in_the_url_hash() -> None:
+    module = _read(MODULE)
+    assert "history.replaceState" in module
+    assert '"hashchange"' in module
+
+
+def test_stylesheet_is_scoped_44px_and_token_only() -> None:
+    css = re.sub(r"/\*.*?\*/", "", _read(STYLES), flags=re.DOTALL)
+    assert not re.search(r"#[0-9a-fA-F]{3,8}\b", css), "no hex colours; use the --pv-* tokens"
+    for match in re.finditer(r"([^{}]+)\{[^{}]*\}", css):
+        selector = match.group(1).strip()
+        for part in selector.split(","):
+            assert part.strip().startswith(".gv"), f"unscoped selector: {part.strip()!r}"
+    assert "min-height: 44px" in css
+    assert ":focus-visible" in css
+
+
+def test_page_source_has_no_inline_scripts_or_handlers() -> None:
+    text = _read(PAGE)
+    assert not re.search(r"\son[a-z]+=", text)
+    assert "javascript:" not in text.lower()
+
+
+def test_page_passes_the_group_list_not_the_file_object() -> None:
+    page = (ROOT / "framework" / "src" / "groups.md").read_text(encoding="utf-8")
+    # groups.json wraps the records in {"groups": [...]}; the object alone gave an empty table.
+    assert '(await loadJson("groups/groups.json", {url: globalDataUrl}))?.groups ?? []' in page
+
+
+def test_table_wrapper_contains_hidden_labels() -> None:
+    css = (ROOT / "framework" / "src" / "components" / "groups.css").read_text(encoding="utf-8")
+    # Without position: relative the hidden labels widened the page at 390 px.
+    assert ".gv .gv-table-wrap { position: relative; overflow-x: auto;" in css

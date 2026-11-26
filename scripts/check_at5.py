@@ -65,6 +65,7 @@ GLOBAL_PAGES = (
     "dev_graph.md",
     "ambassador_moderation.md",
     "quality.md",
+    "groups.md",
 )
 
 
