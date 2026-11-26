@@ -5,6 +5,30 @@
 import {globalDataUrl} from "./atlas.js";
 import {denominatorShare, readDenominators} from "./v4_trend_model.js";
 
+// Pure helpers over countries.json (PLAT-4 slice 4: unscreened query hits, schema plat4b-v1). Exported for the
+// Node runtime test. A country absent from the file gives null, and the page keeps its sample or preview.
+const COUNTRIES_SCHEMA = "plat4b-v1";
+export function countrySeries(payload, iso) {
+  if (payload?.schema_version !== COUNTRIES_SCHEMA || !Array.isArray(payload.countries)) return null;
+  const entry = payload.countries.find((c) => c.iso === iso);
+  if (!entry) return null;
+  const years = payload.years || {};
+  const rows = [];
+  let partial = null;
+  for (const g of entry.works_by_year || []) {
+    if (g.partial) partial = [g.year, g.count];
+    else rows.push([g.year, g.count]);
+  }
+  rows.sort((a, b) => a[0] - b[0]);
+  return {entry, from: years.first ?? rows[0]?.[0] ?? null, last: years.last_complete ?? null, partial, rows};
+}
+export function tierNote(entry) {
+  return entry?.tier === "C" ? "Few works (under 50); treat as indicative." : null;
+}
+export function topTopics(entry, n = 3) {
+  return (entry?.top_primary_topics || []).slice(0, n);
+}
+
 export async function mountExplore(root) {
   const response = await fetch(globalDataUrl("explore.json"), {cache: "no-cache"});
   if (!response.ok) throw new Error(`explore.json returned HTTP ${response.status}`);
@@ -53,6 +77,18 @@ export async function mountExplore(root) {
   const scopeName = (s = scope) => (s.kind === "world" ? "World" : s.kind === "cont" ? s.name : C[s.iso].name);
   const scopeWorks = (s = scope) => (s.kind === "world" ? totalWorld : s.kind === "cont" ? contOf(s.name).works : C[s.iso].works);
   const sampleOf = (s = scope) => (s.kind === "world" ? S.world : s.kind === "country" ? S[s.iso] : null);
+  // countries.json, fetched once when a country scope first needs it. undefined: not loaded yet; null: absent.
+  let countryFile;
+  let countryLoad = null;
+  function loadCountryFile() {
+    if (!countryLoad) {
+      countryLoad = fetch(globalDataUrl("countries.json"), {cache: "no-cache"})
+        .then((r) => (r.ok ? r.json() : null))
+        .then((p) => (countryFile = p?.schema_version === COUNTRIES_SCHEMA ? p : null))
+        .catch(() => (countryFile = null));
+    }
+    return countryLoad;
+  }
 
   // ---- popovers -------------------------------------------------------------------------
   let openPop = null;
@@ -477,24 +513,44 @@ export async function mountExplore(root) {
     const s = S[iso]; if (!s?.countries) return null;
     return s.countries.filter((g) => g.key !== iso && C[g.key]).slice(0, 10).map((g) => ({name: C[g.key].name, count: g.count, iso: g.key}));
   }
+  // Unscreened totals and top primary topics from countries.json; the first load re-renders the overview.
+  function factsBox(entry) {
+    const note = tierNote(entry);
+    return `<div class="box"><h3>Works and topics, unscreened</h3><p class="lede">Query hits with at least one author in ${esc(inName(entry.iso))}. Not a relevance-screened count.</p>
+    <p><span class="m">${fmt(entry.works_total)}</span> works, the first in ${entry.first_year}.${note ? ` ${note}` : ""}</p>
+    ${hbars(topTopics(entry, 3).map((t) => ({name: t.name, count: t.count})))}</div>`;
+  }
   function overview(el) {
+    if (countryFile === undefined) loadCountryFile().then(() => { if (el.isConnected && tab === "countries" && scope.kind === "country") overview(el); });
+    const series = countryFile ? countrySeries(countryFile, scope.iso) : null;
     const c = C[scope.iso], s = S[scope.iso], partners = partnersOf(scope.iso), at = ATLAS[scope.iso];
     const atlas = at ? (at.status === "live"
       ? `<a class="atlasbox" href="${at.href}"><i class="sw live"></i><span><b>California has a live regional atlas.</b><small>Authors, institutions, monitoring, funding and policy, rebuilt daily · <span class="m">${fmt(at.works)}</span> works</small></span><span class="go">Open atlas ${ARROW}</span></a>`
       : `<a class="atlasbox prep" href="${at.href}"><i class="sw prep"></i><span><b>A Norway atlas is in preparation.</b><small>Local researchers check institutions, monitoring and policy before it goes live.</small></span><span class="go quiet">Help build it ${ARROW}</span></a>`) : "";
-    const yrs = s?.years ? Object.fromEntries(s.years.map((g) => [+g.key, g.count])) : null;
+    // Yearly counts: the countries.json series when the country is in the file (the same series as the Trend
+    // tab); otherwise the fixed-seed sample, labelled as a sample.
+    const ovSeries = series ? [...series.rows, ...(series.partial ? [series.partial] : [])] : null;
+    const ovSample = !series && s?.years ? Object.fromEntries(s.years.map((g) => [+g.key, g.count])) : null;
+    const ovPartial = series ? (series.partial ? series.partial[0] : null) : lastYear;
+    const yearsLede = series
+      ? `Works under the plastics query with an author in ${esc(inName(c.iso))}, unscreened query hits; the hatched year is to date.`
+      : `Sample counts for ${esc(inName(c.iso))}, a fixed-seed preview; ${lastYear} is the year to date.`;
     el.innerHTML = `<h2>${esc(inName(c.iso)).replace(/^the /, "The ")} at a glance.</h2><p class="lede">Every panel below counts works with at least one author in ${esc(inName(c.iso))}.</p><div class="grid2">
-    <div class="box"><h3>Works per year</h3><p class="lede">Works with at least one author in ${esc(inName(c.iso))}; ${lastYear} is the year to date.</p>${yrs ? `<div class="chart" id="ov-chart"></div>` : previewNotice("Yearly counts")}</div>
+    ${series ? factsBox(series.entry) : ""}
+    <div class="box"><h3>Works per year</h3><p class="lede">${yearsLede}</p>${ovSeries?.length || ovSample ? `<div class="chart" id="ov-chart"></div>` : previewNotice("Yearly counts")}</div>
     <div class="box"><h3>Who they publish with</h3><p class="lede">Co-author countries on the same works. Select one to open it.</p>${partners ? hbars(partners, {link: true}) : previewNotice("Co-author countries")}</div>
     <div class="box"><h3>Most frequent topics</h3><p class="lede">OpenAlex primary topic of each work.</p>${s?.topics ? hbars(s.topics.slice(0, 8).map((t) => ({name: t.name, count: t.count}))) : previewNotice("Topics")}</div>
     <div class="box"><h3>Where it sits</h3><p class="lede">Rank among ${COUNTRIES.length} countries by works.</p>${hbars(COUNTRIES.slice(Math.max(c.rank - 3, 0), c.rank + 2).map((k) => ({name: `${k.rank}. ${k.name}`, count: k.works, iso: k.iso === c.iso ? null : k.iso})), {link: true})}${atlas}</div>
   </div><p class="src">${SRC}</p>`;
-    if (yrs) columns($("#ov-chart"), Object.entries(yrs).map(([y, n]) => [+y, n]).filter(([y]) => y >= 1990 && y <= lastYear), {h: 220});
+    if (ovSeries?.length) columns($("#ov-chart"), ovSeries, {h: 220, partial: ovPartial});
+    else if (ovSample) columns($("#ov-chart"), Object.entries(ovSample).map(([y, n]) => [+y, n]).filter(([y]) => y >= 1990 && y <= lastYear), {h: 220});
     wireGo(el);
   }
 
   // Column chart: real years, last year hatched as "to date".
-  function columns(el, data, {h = 300, ann} = {}) {
+  // partial: the year to hatch (null for none); the default is the world view's last year.
+  function columns(el, data, {h = 300, ann, partial} = {}) {
+    const part = partial === undefined ? lastYear : partial;
     const W = Math.max(el.clientWidth || 900, 300); h = W < 560 ? Math.round(h * 0.7) : h;
     const pad = {l: 52, r: 8, t: 16, b: 28}, iw = W - pad.l - pad.r, ih = h - pad.t - pad.b;
     const max = Math.max(...data.map((d) => d[1])), mag = Math.pow(10, Math.floor(Math.log10(max))), top = Math.ceil(max / mag) * mag;
@@ -506,12 +562,18 @@ export async function mountExplore(root) {
     for (const t of ticks) s += `<line class="gl" x1="${pad.l}" x2="${W - pad.r}" y1="${y(t)}" y2="${y(t)}"/><text x="${pad.l - 8}" y="${y(t) + 3.5}" text-anchor="end">${fmt(t)}</text>`;
     data.forEach(([yr], i) => { if (yr % every === 0) s += `<text x="${pad.l + i * bw + bw / 2}" y="${h - 8}" text-anchor="middle">${yr}</text>`; });
     s += `</g>`;
-    data.forEach(([yr, n], i) => { s += `<rect class="col${yr === lastYear ? " part" : ""}" x="${(pad.l + i * bw + bw * 0.12).toFixed(1)}" y="${y(n).toFixed(1)}" width="${(bw * 0.76).toFixed(1)}" height="${(ih - (y(n) - pad.t)).toFixed(1)}"><title>${yr}${yr === lastYear ? " (to date)" : ""}: ${fmt(n)} works</title></rect>`; });
+    data.forEach(([yr, n], i) => { s += `<rect class="col${yr === part ? " part" : ""}" x="${(pad.l + i * bw + bw * 0.12).toFixed(1)}" y="${y(n).toFixed(1)}" width="${(bw * 0.76).toFixed(1)}" height="${(ih - (y(n) - pad.t)).toFixed(1)}"><title>${yr}${yr === part ? " (to date)" : ""}: ${fmt(n)} works</title></rect>`; });
     s += `<line class="base" x1="${pad.l}" x2="${W - pad.r}" y1="${pad.t + ih}" y2="${pad.t + ih}"/>`;
     if (ann) { const i = data.findIndex((d) => d[0] === ann.year); if (i >= 0) { const x = pad.l + i * bw + bw / 2; s += `<g class="ann"><line x1="${x}" x2="${x}" y1="${pad.t + ih - 4}" y2="${pad.t + ih * 0.45}"/><text x="${x + 6}" y="${pad.t + ih * 0.45 + 4}">${esc(ann.text)}</text></g>`; } }
     el.innerHTML = s + `</svg>`;
   }
   function trendPanel(el) {
+    if (scope.kind === "country" && countryFile === undefined) {
+      el.innerHTML = `<h2>Works per year</h2><p class="lede">Loading the yearly counts for ${esc(scopeName())}.</p>`;
+      return void loadCountryFile().then(() => { if (el.isConnected && tab === "trend") trendPanel(el); });
+    }
+    const series = scope.kind === "country" && countryFile ? countrySeries(countryFile, scope.iso) : null;
+    if (series) return countryTrend(el, series);
     const s = sampleOf();
     const data = scope.kind === "world" ? years : s?.years ? s.years.map((g) => [+g.key, g.count]).sort((a, b) => a[0] - b[0]) : null;
     if (!data) { el.innerHTML = `<h2>Works per year</h2><p class="lede">How fast research grows in ${esc(scopeName())}.</p>${previewNotice("Yearly counts")}`; return wireGo(el); }
@@ -536,6 +598,23 @@ export async function mountExplore(root) {
         `<p class="lede">In ${last.year}, ${fmt(last.corpus)} of ${fmt(last.global)} works matching the plastics query (${(last.share * 100).toFixed(1)}%) also match the pollution-core terms.</p>` +
         `<p class="src"><b>What this is.</b> ${esc(what.is)} <b>What this is not.</b> ${esc(what.is_not)}</p></div>`);
     }
+  }
+
+  // Country scope with a countries.json entry: complete years from the file, the partial year hatched, and the
+  // unscreened caption with the file's own what-this-is text. Chart/Table share the world view's controls.
+  function countryTrend(el, {entry, from, last, partial, rows}) {
+    const view = trendPanel.view || "chart";
+    const data = partial ? [...rows, partial] : rows;
+    const partialYear = partial ? partial[0] : null;
+    const what = countryFile.what_this_is_and_is_not || {};
+    const note = tierNote(entry);
+    el.innerHTML = `<div class="toolbar"><div><h2>Works per year</h2><p class="lede" style="margin:0">Works under the plastics query with an author in ${esc(inName(entry.iso))}, unscreened query hits, ${from} to ${partialYear ?? last}; the hatched year is to date.</p></div>
+    <div class="seg" style="margin-left:auto" role="group" aria-label="Show as"><button type="button" class="btn" aria-pressed="${view === "chart"}" data-v="chart">Chart</button><button type="button" class="btn" aria-pressed="${view === "table"}" data-v="table">Table</button></div></div>
+    ${note ? `<p class="lede">${esc(note)}</p>` : ""}
+    <div class="box">${view === "chart" ? `<div class="chart" id="tr-chart"></div>` : `<div class="tw" style="max-height:420px;overflow:auto" tabindex="0" role="region" aria-label="Works per year table, scrollable"><table class="t"><thead><tr><th><span>year</span></th><th class="n"><span>works</span></th></tr></thead><tbody>${data.slice().reverse().map(([y, n]) => `<tr><td class="m">${y}${y === partialYear ? " (to date)" : ""}</td><td class="n">${fmt(n)}</td></tr>`).join("")}</tbody></table></div>`}</div>
+    <p class="src"><b>What this is.</b> ${esc(what.is)} <b>What this is not.</b> ${esc(what.is_not)} Source: OpenAlex, plastics query ${esc(countryFile.query_version)}.</p>`;
+    if (view === "chart") columns($("#tr-chart"), data, {h: 340, partial: partialYear});
+    el.querySelectorAll("[data-v]").forEach((b) => b.addEventListener("click", () => { trendPanel.view = b.dataset.v; trendPanel(el); }));
   }
 
   const EV_ROWS = ["occurrence", "effects", "methods", "fate and transport", "solutions"];

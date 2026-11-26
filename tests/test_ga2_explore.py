@@ -10,7 +10,11 @@ from __future__ import annotations
 
 import importlib.util
 import re
+import shutil
+import subprocess
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "framework" / "src"
@@ -246,3 +250,98 @@ def test_narrow_world_map_is_two_stacked_panes_with_captions():
     assert ".gx .mapcard.pair #map { display: none; }" in css
     assert ".gx .mapcard.portrait .mapbox { aspect-ratio: 3 / 5; }" in css
     assert "function targetBox(aspect = ASPECT)" in js
+
+
+# PLAT-4 slice 4: country scope reads countries.json (lazily, via globalDataUrl) for Trend.
+COUNTRIES_JSON = ROOT / "site" / "data" / "global" / "countries.json"
+COUNTRIES_RUNTIME = """
+import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
+import {countrySeries, tierNote, topTopics} from "MODULE_URL";
+
+const payload = JSON.parse(readFileSync(process.argv[2], "utf8"));
+
+// A tier B country: complete years in order, partial year split out, first year kept.
+const br = countrySeries(payload, "BR");
+assert.equal(br.entry.name, "Brazil");
+assert.equal(br.from, 1970);
+assert.equal(br.last, 2025);
+assert.deepEqual(br.partial, [2026, 578]);
+assert.equal(br.rows.at(-1)[0], 2025);
+assert.ok(br.rows.every((row, i, all) => i === 0 || row[0] > all[i - 1][0]));
+assert.equal(br.rows.length, 2025 - 1970 + 1);
+assert.equal(tierNote(br.entry), null);
+
+// A tier C country: the counts stay, with the indicative note.
+const af = countrySeries(payload, "AF");
+assert.equal(af.entry.tier, "C");
+assert.equal(tierNote(af.entry), "Few works (under 50); treat as indicative.");
+
+// Absent countries, wrong schema, or no payload give null, so the caller keeps its fallback.
+assert.equal(countrySeries(payload, "ZZ"), null);
+assert.equal(countrySeries({...payload, schema_version: "plat4b-v0"}, "BR"), null);
+assert.equal(countrySeries(null, "BR"), null);
+
+// Top topics keep the file's order and default to three.
+const ids = (list) => list.map((t) => t.id);
+assert.deepEqual(ids(topTopics(br.entry)), ids(br.entry.top_primary_topics.slice(0, 3)));
+assert.equal(topTopics(br.entry).length, 3);
+assert.deepEqual(topTopics(null), []);
+
+// A synthetic payload: a missing partial year yields partial null, and rows sort by year.
+const synthetic = {schema_version: "plat4b-v1", years: {first: 1970, last_complete: 2001},
+  countries: [{iso: "XX", name: "X", tier: "B", works_total: 5, first_year: 2000,
+    top_primary_topics: [],
+    works_by_year: [{year: 2001, count: 3}, {year: 2000, count: 2}]}]};
+const xx = countrySeries(synthetic, "XX");
+assert.equal(xx.partial, null);
+assert.deepEqual(xx.rows, [[2000, 2], [2001, 3]]);
+console.log("ok", br.rows.at(-1)[0], br.partial[1]);
+"""
+
+
+def test_node_runtime_helpers_for_country_scope(tmp_path: Path) -> None:
+    node = shutil.which("node")
+    if node is None:
+        pytest.fail("Node.js is required for the PLAT-4 runtime test; install Node.js 20 or newer.")
+    script = tmp_path / "plat4_countries_runtime.mjs"
+    script.write_text(COUNTRIES_RUNTIME.replace("MODULE_URL", MODULE.as_uri()), encoding="utf-8")
+    result = subprocess.run(
+        [node, str(script), str(COUNTRIES_JSON)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.startswith("ok 2025 578")
+
+
+def test_module_reads_countries_json_lazily_through_site_root() -> None:
+    js = MODULE.read_text(encoding="utf-8")
+    assert 'fetch(globalDataUrl("countries.json"), {cache: "no-cache"})' in js
+    assert js.count('globalDataUrl("countries.json")') == 1
+    # The file loads once, from the country scope only; the world view never waits for it.
+    assert "function loadCountryFile()" in js and "if (!countryLoad)" in js
+    assert 'scope.kind === "country" && countryFile === undefined' in js
+    # Every data URL goes through the helpers; no literal data/ path in the module.
+    assert not re.search(r"[\"'`]data/", js)
+
+
+def test_country_trend_is_unscreened_and_has_no_retraction_share() -> None:
+    js = MODULE.read_text(encoding="utf-8")
+    assert "unscreened query hits" in js
+    assert "What this is not." in js
+    assert "countryTrend(el, series)" in js
+    assert "retract" not in js.lower()
+    # The partial year is hatched through the same column chart as the world view.
+    assert "const part = partial === undefined ? lastYear : partial;" in js
+
+
+def test_overview_and_trend_share_the_countries_json_series() -> None:
+    js = MODULE.read_text(encoding="utf-8")
+    # Both views build their yearly counts from the same helper and file, so they cannot disagree.
+    assert js.count("countrySeries(countryFile, scope.iso)") == 2
+    assert "const ovSeries = series ? [...series.rows" in js
+    assert 'if (ovSeries?.length) columns($("#ov-chart"), ovSeries' in js
+    # The sample is the fallback for absent countries only, and is labelled as a sample.
+    assert "Sample counts for" in js
