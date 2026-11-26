@@ -142,6 +142,14 @@ def test_confirmed_unlisted_proposals_show_the_domain_and_prefill_from_the_propo
         assert field in text, field
 
 
+def test_item_card_region_line_shows_the_proposed_region() -> None:
+    text = _text(MODULE)
+    assert "export function regionText(item)" in text
+    assert "const slug = item?.region || item?.proposed_region;" in text
+    assert 'el("dd", {}, [regionText(item)])' in text
+    assert '"Not stated"' in text.split("export function regionText")[1].split("}")[0]
+
+
 def test_runtime_checks_pass_in_node() -> None:
     node = shutil.which("node")
     if node is None:

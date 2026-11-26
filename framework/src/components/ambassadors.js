@@ -123,13 +123,34 @@ export function regionForPlace(place, regions) {
 export function countryRegion(iso, regions) {
   return regions.find((r) => !(r.subdivision_names || []).length && (r.country_codes || []).includes(iso)) || null;
 }
-// The view (frame units) that shows a place: its zoom extent with a little room, at least minWidth units wide, kept
-// inside the frame. aspect is the map's width over height.
-export function placeView(geom, iso, aspect, frame, minWidth = 120) {
-  const [x0, y0, x1, y1] = placeExtent(geom, iso);
+// The view (frame units) that holds the given extents ([x0, y0, x1, y1] each, non-empty): their union with a little
+// room, at least minWidth units wide, kept inside the frame. aspect is the map's width over height.
+export function unionView(extents, aspect, frame, minWidth = 120) {
+  const x0 = Math.min(...extents.map((e) => e[0])), y0 = Math.min(...extents.map((e) => e[1]));
+  const x1 = Math.max(...extents.map((e) => e[2])), y1 = Math.max(...extents.map((e) => e[3]));
   const w = Math.min(Math.max((x1 - x0) * 1.3, minWidth), frame[2]);
   const h = w / aspect;
   return clampView([(x0 + x1) / 2 - w / 2, (y0 + y1) / 2 - h / 2, w, h], frame);
+}
+// The view (frame units) that shows a place: its zoom extent with a little room.
+export function placeView(geom, iso, aspect, frame, minWidth = 120) {
+  return unionView([placeExtent(geom, iso)], aspect, frame, minWidth);
+}
+
+// ---- sign-up highlight (pure) ----------------------------------------------------------------
+// The sign-up (ambassador_signup.js) dispatches this event on the page root with {suggested, chosen} region slugs.
+export const SIGNUP_REGIONS_EVENT = "amb:regions";
+// The regions for a list of slugs, in the order given. A slug with no region on this page is kept as the slug.
+export function regionsBySlug(slugs, regions) {
+  return (slugs || []).map((slug) => regions.find((r) => r.slug === slug)).filter(Boolean);
+}
+export function regionNames(slugs, regions) {
+  return (slugs || []).map((slug) => regions.find((r) => r.slug === slug)?.name || slug);
+}
+// The text list beside the map (read by screen readers too). Empty when nothing is highlighted.
+export function highlightText(suggestedNames, chosenNames) {
+  if (!suggestedNames.length && !chosenNames.length) return "";
+  return `Suggested: ${suggestedNames.join(", ") || "none"} · Chosen: ${chosenNames.join(", ") || "none yet"}`;
 }
 
 // ---- page -----------------------------------------------------------------------------------
@@ -163,6 +184,10 @@ function mapMarkup(world, regions, placeByIso) {
       <button type="button" class="btn" id="amb-zoom-reset" aria-label="Reset map view" title="Reset map view">Reset</button>
     </div>
     <div class="map-hint" id="amb-hint" aria-live="polite"></div>
+  </div>
+  <div class="amb-sig-map">
+    <p class="amb-sig-list" id="amb-sig-list" aria-live="polite"></p>
+    <p class="amb-sig-key" id="amb-sig-key" hidden>Dashed outline: suggested by your institutions. Solid outline and deeper fill: chosen by you.</p>
   </div>`;
 }
 
@@ -214,6 +239,12 @@ function resultHTML(result, place, regions) {
 }
 
 export async function mountAmbassadors(root) {
+  // Listens before any await, so a sign-up step that reports early is not missed. The map paints it once ready.
+  let signupRegions = null, mapReady = false;
+  root.addEventListener(SIGNUP_REGIONS_EVENT, (event) => {
+    signupRegions = event.detail || null;
+    if (mapReady) paintSignupRegions(signupRegions);
+  });
   const [regionsResponse, placesResponse, worldResponse] = await Promise.all([
     fetch(globalDataUrl("ambassador_regions.json"), {cache: "no-cache"}),
     fetch(globalDataUrl("places.json"), {cache: "no-cache"}).catch(() => null),
@@ -306,6 +337,40 @@ export async function mountAmbassadors(root) {
     if (region.subdivision_names?.length) svg.querySelector(`[data-region="${region.slug}"]`)?.classList.add("sel");
     else region.country_codes.forEach((iso) => svg.querySelectorAll(`[data-iso="${iso}"]`).forEach((el) => el.classList.add("sel")));
   };
+
+  // ---- sign-up highlight (owner 2026-11-26) ----------------------------------------------------
+  // Suggested regions get a dashed outline; chosen regions a solid outline and deeper fill (never colour alone: the
+  // text list says which is which). The view zooms to the union of the highlighted regions, once per change, and
+  // instantly (no animation, so reduced motion needs nothing more). Nothing scrolls.
+  const sigList = $("#amb-sig-list"), sigKey = $("#amb-sig-key");
+  let signupZoomed = false, signupKey = "";
+  function markRegion(region, cls) {
+    if (region.subdivision_names?.length) svg.querySelector(`[data-region="${region.slug}"]`)?.classList.add(cls);
+    else region.country_codes.forEach((iso) => svg.querySelectorAll(`[data-iso="${iso}"]`).forEach((el) => el.classList.add(cls)));
+  }
+  function paintSignupRegions(detail) {
+    const suggestedSlugs = detail?.suggested || [], chosenSlugs = detail?.chosen || [];
+    if (sigList) sigList.textContent = highlightText(regionNames(suggestedSlugs, REGIONS), regionNames(chosenSlugs, REGIONS));
+    if (sigKey) sigKey.hidden = !(suggestedSlugs.length || chosenSlugs.length);
+    if (!svg) return;
+    svg.querySelectorAll(".sug, .cho").forEach((el) => el.classList.remove("sug", "cho"));
+    const chosen = regionsBySlug(chosenSlugs, REGIONS);
+    const chosenIds = new Set(chosen.map((r) => r.slug));
+    for (const region of regionsBySlug(suggestedSlugs, REGIONS)) if (!chosenIds.has(region.slug)) markRegion(region, "sug");
+    for (const region of chosen) markRegion(region, "cho");
+    const shown = regionsBySlug([...new Set([...suggestedSlugs, ...chosenSlugs])], REGIONS);
+    const key = shown.map((r) => r.slug).sort().join(",");
+    if (key === signupKey) return;
+    signupKey = key;
+    const extents = shown.map((r) => placeFor(r)).filter(Boolean).map((p) => placeExtent(p.geom, p.iso));
+    if (extents.length && FULL) {
+      showView(unionView(extents, aspect(), FULL));
+      signupZoomed = true;
+    } else if (signupZoomed && FULL) {
+      showView(FULL.slice());
+      signupZoomed = false;
+    }
+  }
 
   // ---- selection: panel, zoom, status ----------------------------------------------------------
   const panel = $("#amb-panel");
@@ -445,4 +510,7 @@ export async function mountAmbassadors(root) {
     options = []; paintOptions();
     runCheck();
   });
+
+  mapReady = true;
+  if (signupRegions) paintSignupRegions(signupRegions);
 }

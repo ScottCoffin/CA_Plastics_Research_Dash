@@ -146,6 +146,35 @@ def test_the_workspace_has_no_hex_colours_and_the_css_uses_tokens() -> None:
     assert "@media (prefers-reduced-motion: reduce)" in added
 
 
+def test_dashboard_is_two_columns_on_wide_screens_only() -> None:
+    workspace = _text(WORKSPACE)
+    styles = _text(STYLES)
+    added = styles[styles.index("Ambassador workspace (AMB-1 front end slice 2b") :]
+    # Tasks come first in the DOM (one column below 1100px); the side column holds map and progress.
+    assert 'class="ws-dash"' in workspace and 'class="ws-side"' in workspace
+    assert workspace.index('class="ws-tasks"') < workspace.index('class="ws-side"')
+    assert 'wrap.classList.toggle("is-dash"' in workspace
+    # The two columns start at 1100px; the tablet width (1024px) keeps one column.
+    assert "@media (min-width: 1100px)" in added
+    assert "grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr)" in added
+    assert "max-width: 1200px" in added
+    # The map box reserves the shared frame's aspect ratio inline, so the layout does not shift.
+    assert 'style="aspect-ratio: ${w} / ${h}"' in workspace
+    assert "export function mapFrame(world)" in workspace
+    assert "aspect-ratio: 2 / 1" in added
+
+
+def test_progress_summary_is_text_and_a_bar() -> None:
+    workspace = _text(WORKSPACE)
+    assert "export function progressSummary(streams)" in workspace
+    assert "export function timeLeftText(minutes)" in workspace
+    assert "Time left: ${estimateText(minutes)}" in workspace
+    assert 'class="ws-progress-line"' in workspace
+    # Each bar has a text label and the count and share are written out, not only shown as colour.
+    assert 'aria-label="Region progress: ' in workspace
+    assert "(${row.percent}%)" in workspace
+
+
 def test_runtime_helpers_pass_in_node() -> None:
     node = shutil.which("node")
     if node is None:

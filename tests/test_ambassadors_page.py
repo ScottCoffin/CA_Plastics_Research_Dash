@@ -29,6 +29,7 @@ ASSETS = [
     TERMS_PAGE,
     COMPONENTS / "ambassadors.js",
     COMPONENTS / "ambassadors.css",
+    COMPONENTS / "ambassador_signup_map.css",
     COMPONENTS / "ambassador_badge.js",
     COMPONENTS / "world_map.js",
 ]

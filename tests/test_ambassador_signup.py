@@ -171,3 +171,65 @@ def test_runtime_helpers_pass_in_node() -> None:
         [node, str(RUNTIME_CHECK)], cwd=ROOT, capture_output=True, text=True, check=False
     )
     assert result.returncode == 0, result.stderr or result.stdout
+
+
+def test_sign_up_reports_its_regions_to_the_map_on_the_page_root() -> None:
+    """Owner 2026-11-26: the map highlights the suggested and chosen regions while the sign-up runs.
+
+    The sign-up dispatches amb:regions on the page root (no network call); the map listens for it.
+    The clear runs when the flow ends or is cancelled, so the highlight does not outlive it.
+    """
+    signup = _text(COMPONENTS / "ambassador_signup.js")
+    landing = _text(COMPONENTS / "ambassadors.js")
+    assert 'export const REGIONS_EVENT = "amb:regions"' in signup
+    assert 'SIGNUP_REGIONS_EVENT = "amb:regions"' in landing
+    assert (
+        "pageRoot?.dispatchEvent(new CustomEvent(REGIONS_EVENT, {bubbles: true, detail}))" in signup
+    )
+    assert "publishRegions();" in signup and "signupRegionState({" in signup
+    # Ticks and regions update the map on change, not only when a step is drawn.
+    assert (
+        'event.target.name === "institution"' in signup
+        and 'event.target.name === "region"' in signup
+    )
+    # Every terminal screen and the landing reset: showLanding, showInbox, showMessage (failed,
+    # signed out), showProposalsSent, showPendingReview and showAccount.
+    assert signup.count("clearRegions();") == 6
+    for name in (
+        "showLanding",
+        "showInbox",
+        "showMessage",
+        "showProposalsSent",
+        "showPendingReview",
+        "showAccount",
+    ):
+        body = signup.split(f"function {name}(", 1)[1].split("\n}", 1)[0]
+        assert "clearRegions();" in body, name
+    # The unlisted proposal's region is part of the suggestion (the regions step is skipped for it).
+    assert "unlisted?.region" in signup
+    # The sign-up does not scroll the page for the map.
+    helper = signup.split("export function signupRegionState", 1)[1][:400]
+    assert "scrollIntoView" not in helper
+
+
+def test_map_highlight_is_announced_and_reduces_motion() -> None:
+    landing = _text(COMPONENTS / "ambassadors.js")
+    page = _text(PAGE)
+    css = _text(COMPONENTS / "ambassador_signup_map.css")
+    assert 'id="amb-sig-list" aria-live="polite"' in landing
+    assert 'id="amb-sig-key" hidden' in landing
+    assert "Suggested: " in landing and "Chosen: " in landing
+    assert "Dashed outline" in landing and "Solid outline and deeper fill" in landing
+    # The map reads the event in its listener, which is attached before the first await.
+    listener = landing.split("root.addEventListener(SIGNUP_REGIONS_EVENT", 1)[1][:200]
+    assert "paintSignupRegions" in listener
+    body = landing.split("// ---- sign-up highlight (owner 2026-11-26)", 1)[1].split(
+        "// ---- selection", 1
+    )[0]
+    # No animated zoom: the view changes at once; nothing scrolls or animates in the highlight code.
+    for banned in ("requestAnimationFrame", "scrollIntoView", "animate(", "setTimeout"):
+        assert banned not in body, banned
+    assert "@media (prefers-reduced-motion: reduce)" in css
+    assert "transition: none" in css
+    assert 'href="./components/ambassador_signup_map.css"' in page
+    assert not re.search(r"#[0-9a-fA-F]{3,8}\b", css)

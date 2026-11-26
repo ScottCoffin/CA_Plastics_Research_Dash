@@ -13,9 +13,14 @@ import {
   institutionHasDomain,
   institutionPool,
   isFreeMail,
+  SIGNUP_REGIONS_EVENT,
+  highlightText,
   placeView,
   regionForPlace,
+  regionNames,
+  regionsBySlug,
   suggestInstitutions,
+  unionView,
 } from "../framework/src/components/ambassadors.js";
 import {
   FRAME_WIDTH,
@@ -190,5 +195,23 @@ const fraction = (placeExtent(palau.geom, "PW")[2] - placeExtent(palau.geom, "PW
 assert.ok(fraction > 0.05, `Palau fills a useful share of the view (${fraction.toFixed(3)})`);
 const bergenView = placeView(bergen.geom, "NO", aspect, FULL);
 assert.ok(inside(bergenView));
+
+// ---- sign-up highlight: the event, the text list and the union view --------------------------
+assert.equal(SIGNUP_REGIONS_EVENT, "amb:regions");
+const named = [{slug: "norway", name: "Norway"}, {slug: "california", name: "California"}];
+assert.deepEqual(regionsBySlug(["california", "nowhere", "norway"], named).map((r) => r.slug), ["california", "norway"]);
+assert.deepEqual(regionNames(["norway", "nowhere"], named), ["Norway", "nowhere"], "an unknown slug is shown as its slug");
+assert.equal(highlightText([], []), "", "nothing highlighted: no text");
+assert.equal(highlightText(["California", "Norway"], ["Norway"]), "Suggested: California, Norway · Chosen: Norway");
+assert.equal(highlightText(["Norway"], []), "Suggested: Norway · Chosen: none yet");
+assert.equal(highlightText([], ["Norway"]), "Suggested: none · Chosen: Norway");
+const norwayExtent = placeExtent(bergen.geom, "NO");
+const palauExtent = placeExtent(palau.geom, "PW");
+const both = unionView([norwayExtent, palauExtent], aspect, FULL);
+assert.ok(inside(both), "the union view stays inside the map");
+close(both[2] / both[3], aspect, 1e-6, "the union view keeps the map's aspect");
+const left = Math.min(norwayExtent[0], palauExtent[0]), right = Math.max(norwayExtent[2], palauExtent[2]);
+assert.ok(both[0] <= left + 1e-6 && both[0] + both[2] >= right - 1e-6, "the union view holds both extents");
+assert.deepEqual(unionView([norwayExtent], aspect, FULL), placeView(bergen.geom, "NO", aspect, FULL), "one extent is the place view");
 
 console.log("ambassadors helpers: ok");

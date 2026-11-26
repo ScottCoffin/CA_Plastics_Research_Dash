@@ -17,7 +17,10 @@ import {
   httpsAddress,
   itemsToConfirm,
   latestSubmissionByItem,
+  mapFrame,
+  progressSummary,
   progressText,
+  timeLeftText,
   reviewText,
   submissionBody,
   workspaceErrorText,
@@ -274,6 +277,36 @@ check("the region map: the region is highlighted and the view zooms to it; Calif
   assert.equal(regionPlace({country_codes: ["US"], subdivision_names: ["California"]}, rows).name, "California");
   assert.equal(regionPlace({country_codes: ["NO"], subdivision_names: []}, rows).name, "Norway");
   assert.equal(regionPlace({country_codes: []}, rows), null);
+});
+
+check("progress summary: per-stream answered, share and minutes left, and the region's overall share", () => {
+  // Stream A: 2 of 4 cases answered, 30 seconds each -> 1 minute left. Stream B: 1 of 3 items sent, 2 minutes each -> 4.
+  const summary = progressSummary([
+    {done: 2, total: 4, minutes: 0.5},
+    {done: 1, total: 3, minutes: 2},
+  ]);
+  assert.deepEqual(summary.streams[0], {done: 2, total: 4, remaining: 2, percent: 50, minutes: 1});
+  assert.deepEqual(summary.streams[1], {done: 1, total: 3, remaining: 2, percent: 33, minutes: 4});
+  assert.deepEqual(
+    {done: summary.done, total: summary.total, remaining: summary.remaining, percent: summary.percent, minutes: summary.minutes},
+    {done: 3, total: 7, remaining: 4, percent: 43, minutes: 5},
+  );
+  assert.equal(timeLeftText(summary.minutes), "Time left: about 5 minutes");
+  // Everything answered: nothing left; an empty region has no share and nothing to do.
+  const done = progressSummary([{done: 4, total: 4, minutes: 0.5}, {done: 0, total: 0, minutes: 2}]);
+  assert.equal(done.percent, 100);
+  assert.equal(timeLeftText(done.minutes), "Nothing left to do");
+  const empty = progressSummary([]);
+  assert.deepEqual({done: empty.done, total: empty.total, percent: empty.percent}, {done: 0, total: 0, percent: 0});
+  // Counts are clamped: more answers than cases never go negative, and a single minute reads singular.
+  const over = progressSummary([{done: 9, total: 4, minutes: 0.5}, {done: 2, total: 3, minutes: 0.5}]);
+  assert.equal(over.streams[0].remaining, 0);
+  assert.equal(over.streams[0].done, 4);
+  assert.equal(timeLeftText(over.streams[1].minutes), "Time left: about 1 minute");
+});
+
+check("the map frame is the shared world_map.js frame, so the map box can reserve its aspect ratio", () => {
+  assert.deepEqual(mapFrame({crop: [10, 210], w: 1000}), [0, 10, 1000, 200]);
 });
 
 console.log(`${passed} workspace runtime checks passed`);

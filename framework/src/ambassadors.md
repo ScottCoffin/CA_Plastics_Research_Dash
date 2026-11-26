@@ -13,6 +13,7 @@ pager: false
      The badge is components/ambassador_badge.js. The ORCID-first sign-up (#amb-signup) is components/ambassador_signup.js. -->
 
 <link rel="stylesheet" href="./components/ambassadors.css">
+<link rel="stylesheet" href="./components/ambassador_signup_map.css">
 
 <div class="am" data-mode="checking">
 <a class="skip" href="#main">Skip to the content</a>

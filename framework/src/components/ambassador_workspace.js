@@ -95,6 +95,29 @@ export function progressText({answered, total}) {
   return `${answered} of ${total} answered`;
 }
 
+/**
+ * Progress across the task streams. Each stream is {done, total, minutes} where minutes is the time one remaining
+ * item takes. Returns each stream's counts, share and minutes left, and the region's overall count, share and minutes.
+ */
+export function progressSummary(streams) {
+  const share = (done, total) => (total ? Math.round((done / total) * 100) : 0);
+  const rows = (streams || []).map(({done, total, minutes}) => {
+    const all = Math.max(0, Number(total) || 0);
+    const got = Math.min(Math.max(0, Number(done) || 0), all);
+    const remaining = all - got;
+    return {done: got, total: all, remaining, percent: share(got, all), minutes: remaining * minutes};
+  });
+  const done = rows.reduce((sum, r) => sum + r.done, 0);
+  const total = rows.reduce((sum, r) => sum + r.total, 0);
+  const minutes = rows.reduce((sum, r) => sum + r.minutes, 0);
+  return {streams: rows, done, total, remaining: total - done, percent: share(done, total), minutes};
+}
+
+/** "Time left: about N minutes", or "Nothing left to do" when no minutes are left. */
+export function timeLeftText(minutes) {
+  return minutes > 0 ? `Time left: ${estimateText(minutes)}` : "Nothing left to do";
+}
+
 /** Index of the first case without an answer, or -1 when every case is answered. */
 export function firstUnanswered(cases, answers) {
   return cases.findIndex((c) => !answers.has(c.case_id));
@@ -241,13 +264,18 @@ export function regionPlace(region, rows) {
   return rows.find((r) => r.kind === "country" && r.iso === iso) || null;
 }
 
+/** The shared world_map.js frame [x, y, w, h]; a zoomed view keeps its aspect ratio, so the map box can reserve it. */
+export function mapFrame(world) {
+  const [top, bottom] = world.crop;
+  return [0, top, world.w, bottom - top];
+}
+
 /** The region's map: the world outline with the region highlighted and the view zoomed to it (shared world_map.js frame). */
 export function regionMapHTML(geo, slug) {
   const region = geo.regions.find((r) => r.slug === slug);
   const world = geo.world;
   if (!region || !world) return "";
-  const [top, bottom] = world.crop;
-  const frame = [0, top, world.w, bottom - top];
+  const frame = mapFrame(world);
   const place = regionPlace(region, geo.rows);
   const view = place ? placeView(place.geom, place.iso, frame[2] / frame[3], frame, 120) : frame;
   // A subdivided region (California) highlights its outline only; its country is drawn plain.
@@ -307,6 +335,7 @@ function render({focus = null} = {}) {
   const host = mainEl();
   if (!host) return;
   headEl().innerHTML = headerHTML();
+  wrap.classList.toggle("is-dash", state.screen === "home" && state.regions.length > 0);
   if (state.loading) host.innerHTML = loadingHTML();
   else if (state.screen === "A") host.innerHTML = streamAHTML();
   else if (state.screen === "B") host.innerHTML = streamBHTML();
@@ -363,31 +392,30 @@ function homeHTML() {
   const progress = caseProgress(state.cases, state.answers);
   const latest = latestSubmissionByItem(state.submissions, state.region);
   const sentCount = state.items.filter((item) => latest.has(item.item_id)).length;
-  const toSend = state.items.length - sentCount;
+  const summary = progressSummary([
+    {done: progress.answered, total: progress.total, minutes: CASE_MINUTES},
+    {done: sentCount, total: state.items.length, minutes: ITEM_MINUTES},
+  ]);
+  const [caseRow, itemRow] = summary.streams;
   const errors = state.loadError ? `<p class="ws-error">${esc(state.loadError)}</p>` : "";
-  const map = state.geo ? regionMapHTML(state.geo, state.region) : "";
-  return `<section class="ws-regionhead" aria-labelledby="ws-region-h">
-      <div class="ws-regionhead-text">
-        <h2 id="ws-region-h" tabindex="-1">${esc(regionName(state.region))}</h2>
-        <p class="hint">Your tasks for this region. Each answer is saved as soon as you give it.</p>
-      </div>
-      <figure class="ws-map">${map}<figcaption class="sr">Map of ${esc(regionName(state.region))}, highlighted.</figcaption></figure>
-    </section>
+  const figure = state.geo ? mapFigureHTML(state.geo, state.region) : "";
+  // Tasks come first (the next step on a phone); on wide screens the right column holds the map and the progress.
+  return `<div class="ws-dash">
     <section class="ws-tasks" aria-labelledby="ws-tasks-h">
-      <h3 id="ws-tasks-h">Your tasks</h3>
+      <h2 id="ws-tasks-h">Your tasks</h2>
       ${errors}
       <ul class="ws-cards">
         ${streamCard("A", "Check classifier cases", {
-          done: progress.answered,
-          total: progress.total,
-          time: progress.remaining > 0 ? estimateText(progress.remaining * CASE_MINUTES) : "all answered",
+          done: caseRow.done,
+          total: caseRow.total,
+          time: caseRow.remaining > 0 ? estimateText(caseRow.minutes) : "all answered",
           label: "cases answered",
           empty: "No cases yet",
         })}
         ${streamCard("B", "Confirm the region page", {
-          done: sentCount,
-          total: state.items.length,
-          time: toSend > 0 ? estimateText(toSend * ITEM_MINUTES) : "all sent",
+          done: itemRow.done,
+          total: itemRow.total,
+          time: itemRow.remaining > 0 ? estimateText(itemRow.minutes) : "all sent",
           label: "items sent for review",
           empty: "Nothing to confirm",
         })}
@@ -395,7 +423,44 @@ function homeHTML() {
         ${soonCard("Notification settings")}
         ${soonCard("Invitations")}
       </ul>
-    </section>`;
+    </section>
+    <div class="ws-side">
+      <section class="ws-regionhead" aria-labelledby="ws-region-h">
+        <h2 id="ws-region-h" tabindex="-1">${esc(regionName(state.region))}</h2>
+        <p class="hint">Your tasks for this region. Each answer is saved as soon as you give it.</p>
+        ${figure}
+      </section>
+      <section class="ws-progress" aria-labelledby="ws-progress-h">
+        <h3 id="ws-progress-h">Progress</h3>
+        <p class="ws-progress-all">${summary.done} of ${summary.total} done for this region (${summary.percent}%)</p>
+        ${summary.total ? `<progress value="${summary.done}" max="${summary.total}" aria-label="Region progress: ${summary.done} of ${summary.total} done"></progress>` : ""}
+        <p class="ws-progress-time">${esc(timeLeftText(summary.minutes))}</p>
+        <ul class="ws-progress-streams">
+          ${progressStreamHTML("Check classifier cases", caseRow, "cases answered", "No cases yet")}
+          ${progressStreamHTML("Confirm the region page", itemRow, "items sent for review", "Nothing to confirm")}
+        </ul>
+      </section>
+    </div>
+  </div>`;
+}
+
+/** One stream's line in the progress summary: name, count and share as text, with a bar. */
+function progressStreamHTML(name, row, label, empty = "Nothing to show yet") {
+  // Same empty wording as the matching task card.
+  const text = row.total ? `${row.done} of ${row.total} ${label} (${row.percent}%)` : empty;
+  const bar = row.total
+    ? `<progress value="${row.done}" max="${row.total}" aria-label="${esc(name)}: ${row.done} of ${row.total} ${esc(label)}"></progress>`
+    : "";
+  return `<li class="ws-progress-stream"><p class="ws-progress-line"><span>${esc(name)}</span><span>${esc(text)}</span></p>${bar}</li>`;
+}
+
+/** The map box at the frame's aspect ratio, so the map takes its height before the SVG is drawn. */
+function mapFigureHTML(geo, slug) {
+  const world = geo.world;
+  const svg = regionMapHTML(geo, slug);
+  if (!svg || !world) return "";
+  const [, , w, h] = mapFrame(world);
+  return `<figure class="ws-map" style="aspect-ratio: ${w} / ${h}">${svg}<figcaption class="sr">Map of ${esc(regionName(slug))}, highlighted.</figcaption></figure>`;
 }
 
 function evidenceRows(item) {

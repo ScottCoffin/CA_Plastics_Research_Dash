@@ -17,6 +17,8 @@ import {
   keepSelected,
   profileBody,
   regionsFor,
+  REGIONS_EVENT,
+  signupRegionState,
   checkUnlisted,
   displayName,
   domainHasTrustedSuffix,
@@ -245,6 +247,32 @@ check("page mode: a signed-in ambassador with a profile is the dashboard; everyo
   assert.equal(pageMode({ok: false, status: 0, error: "network"}), "public");
   assert.equal(pageMode(null), "public");
   assert.equal(pageMode({ok: true, data: {}}), "public");
+});
+
+check("map highlight: suggested from the ticked eligible institutions and the unlisted region; chosen from the ticks", () => {
+  assert.equal(REGIONS_EVENT, "amb:regions");
+  const checklist = [
+    {id: "n1", eligible: true, regions: ["norway"]},
+    {id: "c1", eligible: true, regions: ["california"]},
+    {id: "x", eligible: false, regions: ["belgium"]},
+  ];
+  // Ticked: a Norway and a California institution. Only Norway is ticked on the Regions step.
+  assert.deepEqual(signupRegionState({checklist, ticked: ["n1", "c1", "x"], regions: ["norway"]}), {
+    suggested: ["california", "norway"], chosen: ["norway"],
+  });
+  // An ineligible tick never suggests its region; an unticked institution suggests nothing.
+  assert.deepEqual(signupRegionState({checklist, ticked: ["x"], regions: ["belgium"]}), {suggested: [], chosen: []});
+  assert.deepEqual(signupRegionState({checklist, ticked: ["c1"], regions: ["norway"]}), {
+    suggested: ["california"], chosen: [],
+  }, "a chosen region that is not suggested is dropped");
+  // The unlisted proposal's region is suggested even with no eligible institution; there is no regions step, so nothing is chosen.
+  const unlisted = {name: "OEHHA", region: "california", domain: "oehha.ca.gov"};
+  assert.deepEqual(signupRegionState({checklist, ticked: [], regions: [], unlisted}), {suggested: ["california"], chosen: []});
+  assert.deepEqual(signupRegionState({checklist, ticked: ["n1"], regions: ["norway"], unlisted}), {
+    suggested: ["california", "norway"], chosen: ["norway"],
+  });
+  // Nothing ticked and no proposal: nothing is highlighted; a missing checklist is safe.
+  assert.deepEqual(signupRegionState({checklist: null, ticked: [], regions: null}), {suggested: [], chosen: []});
 });
 
 console.log(`${passed} ambassador sign-up runtime checks passed`);

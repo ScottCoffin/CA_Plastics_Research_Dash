@@ -97,6 +97,17 @@ export function keepSelected(selected, available) {
   return (selected || []).filter((region) => available.includes(region));
 }
 
+/** The event the page root carries for the map (ambassadors.js listens; the same string there). */
+export const REGIONS_EVENT = "amb:regions";
+/**
+ * The regions the map shows during sign-up. suggested: the regions of the ticked eligible institutions plus the region
+ * of an unlisted institution proposal. chosen: the ticked regions that are suggested (never more than suggested).
+ */
+export function signupRegionState({checklist, ticked, regions, unlisted = null}) {
+  const suggested = [...new Set([...regionsFor(checklist, ticked), ...(unlisted?.region ? [unlisted.region] : [])])].sort();
+  return {suggested, chosen: keepSelected(regions, suggested).sort()};
+}
+
 /** Email domains accepted for the ticked institutions, from each region's allowlist file. */
 export function allowedDomains(files, ticked) {
   const out = new Set();
@@ -317,6 +328,20 @@ function setStatus(text) {
   if (statusEl) statusEl.textContent = text;
 }
 
+/** Tells the map which regions to highlight. Nothing is sent to the Worker. */
+function emitRegions(detail) {
+  pageRoot?.dispatchEvent(new CustomEvent(REGIONS_EVENT, {bubbles: true, detail}));
+}
+function publishRegions() {
+  emitRegions(flow.profile
+    ? signupRegionState({checklist: flow.profile.institutions, ticked: flow.ticked, regions: flow.regions, unlisted: flow.unlisted})
+    : {suggested: [], chosen: []});
+}
+/** The sign-up has ended or was cancelled: the map drops its highlight. */
+function clearRegions() {
+  emitRegions({suggested: [], chosen: []});
+}
+
 function show(html, focus = true) {
   body.innerHTML = html;
   panel.hidden = false;
@@ -329,6 +354,7 @@ function showLanding(message = "") {
   body.innerHTML = "";
   flow = freshFlow();
   setStatus(message);
+  clearRegions();
 }
 
 function showErrors(errors) {
@@ -357,6 +383,7 @@ const STEP_TITLES = {1: "Your record", 2: "Institutions", 3: "Regions", 4: "Conf
 function renderStep(n) {
   flow.step = n;
   setStatus(`Step ${n} of ${STEP_COUNT}: ${STEP_TITLES[n]}.`);
+  publishRegions();
   if (n === 1) return stepRecord();
   if (n === 2) return stepInstitutions();
   if (n === 3) return stepRegions();
@@ -561,6 +588,7 @@ async function stepEmail() {
 }
 
 function showInbox() {
+  clearRegions();
   show(`<p class="step-n">Email sent</p><h2 tabindex="-1">Check your inbox</h2>
     <p>We sent a confirmation link to your institutional address. It works once and expires in 30 minutes. Open it in this browser to finish signing up.</p>
     <p class="hint">Nothing else is needed on this page.</p>`);
@@ -568,6 +596,7 @@ function showInbox() {
 }
 
 function showMessage(title, text, actions = "") {
+  clearRegions();
   show(`<h2 tabindex="-1">${esc(title)}</h2><p>${esc(text)}</p>${actions ? `<div class="btns">${actions}</div>` : ""}`);
   setStatus(title);
 }
@@ -580,6 +609,7 @@ function showFailed() {
 }
 
 function showProposalsSent() {
+  clearRegions();
   show(`<h2 tabindex="-1">Your proposals are with moderation</h2>
     <p>Thank you. Moderation reviews each proposal; it does not block anything else. To confirm an email you need at least one eligible institution on your record. You can sign up again when one is listed.</p>
     <p><a class="link" href="./ambassadors">Back to the ambassador page</a></p>`);
@@ -588,6 +618,7 @@ function showProposalsSent() {
 
 /** Email confirmed for an unlisted institution: no session exists yet, so nothing else is loaded. */
 function showPendingReview() {
+  clearRegions();
   show(`<h2 tabindex="-1">Your sign-up is with moderation</h2>
     <p>Thanks, your email is confirmed. A moderator will review your institution and you'll get an email when your account is active.</p>
     <p><a class="link" href="./ambassadors">Back to the ambassador page</a></p>`);
@@ -618,6 +649,7 @@ function showFirstVisit() {
 
 /** Shows the right screen for a signed-in ambassador: the first-visit profile when it is missing, else the dashboard. */
 function showAccount(ambassador, focus = true) {
+  clearRegions();
   if (ambassador.needs_profile) {
     showFirstVisit();
     if (!focus) body.querySelector("h2")?.blur();
@@ -854,6 +886,15 @@ async function mountSignupFlow(root, report) {
   panel.addEventListener("input", syncSubmit);
   panel.addEventListener("change", (event) => {
     if (event.target.id === "unl-region") updateUnlistedHint();
+    // Ticks and regions update the map as they change, not only when the step is drawn.
+    if (event.target.name === "institution") {
+      flow.ticked = checkedValues("institution");
+      publishRegions();
+    }
+    if (event.target.name === "region") {
+      flow.regions = checkedValues("region");
+      publishRegions();
+    }
   });
 
   const route = routeFromSearch(location.search);

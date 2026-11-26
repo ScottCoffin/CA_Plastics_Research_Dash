@@ -21,6 +21,7 @@ import {
   normaliseItems,
   prefillAllowDomain,
   prefillRegion,
+  regionText,
   pendingItems,
   prefillDomain,
   queueUrl,
@@ -211,6 +212,14 @@ check("older proposals without the new fields keep the URL-host prefill; unknown
   assert.equal(prefillAllowDomain(item), "lab.example.org");
   assert.equal(prefillRegion({type: "proposal", proposed_region: "mars"}), "");
   assert.equal(confirmedText({type: "submission", email_confirmed: true, confirmed_domain: "x.edu"}), "");
+});
+
+check("the region line shows the proposed region for an unlisted proposal, else Not stated", () => {
+  assert.equal(regionText({type: "proposal", region: null, proposed_region: "california"}), "California");
+  assert.equal(regionText({type: "proposal", region: null, proposed_region: null}), "Not stated");
+  assert.equal(regionText({type: "proposal", region: null}), "Not stated");
+  assert.equal(regionText({type: "submission", region: "norway"}), "Norway");
+  assert.equal(regionText({type: "proposal", proposed_region: "mars"}), "mars");
 });
 
 console.log(`${passed} ambassador moderation runtime checks passed`);

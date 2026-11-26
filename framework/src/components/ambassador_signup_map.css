@@ -1,0 +1,39 @@
+/* ORCID sign-up on /ambassadors: the regions the map highlights (owner 2026-11-26). Loaded by ambassadors.md after
+   ambassadors.css. Set by components/ambassadors.js from the amb:regions event (ambassador_signup.js). Suggested
+   regions have a dashed outline; chosen regions a solid outline and a deeper fill. The text list beside the map
+   says which is which, so colour is never the only cue. Tokens only. */
+
+.am .amb-map .c.sug, .am .amb-map .ca.sug {
+  fill: color-mix(in srgb, var(--pv-mint) 45%, var(--pv-paper));
+  stroke: var(--pv-ink);
+  stroke-width: 1.4px;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+}
+.am .amb-map .c.cho, .am .amb-map .ca.cho {
+  fill: color-mix(in srgb, var(--pv-slate) 60%, var(--pv-mint));
+  stroke: var(--pv-ink);
+  stroke-width: 2.4px;
+  stroke-dasharray: none;
+  vector-effect: non-scaling-stroke;
+}
+.am .amb-map .sm.sug .sm-dot {
+  fill: color-mix(in srgb, var(--pv-mint) 45%, var(--pv-paper));
+  stroke: var(--pv-ink);
+  stroke-dasharray: 2 1.5;
+}
+.am .amb-map .sm.cho .sm-dot {
+  fill: color-mix(in srgb, var(--pv-slate) 60%, var(--pv-mint));
+  stroke: var(--pv-ink);
+  stroke-width: 2px;
+}
+
+.am .amb-map .c, .am .amb-map .ca, .am .amb-map .sm-dot { transition: fill .2s ease, stroke .2s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .am .amb-map .c, .am .amb-map .ca, .am .amb-map .sm-dot { transition: none; }
+}
+
+.am .amb-sig-map { margin: 10px 0 0; color: var(--pv-ink); font-size: 14px; line-height: 1.4; }
+.am .amb-sig-list { margin: 0; font-weight: 600; }
+.am .amb-sig-list:empty { margin: 0; }
+.am .amb-sig-key { margin: 4px 0 0; color: var(--pv-ink-2); font-size: 13px; }

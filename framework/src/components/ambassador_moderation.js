@@ -363,10 +363,16 @@ function allowlistFields(item) {
   return {group, fields: {region, domain, institution_type: type}};
 }
 
+/** The region line of an item card: the region, or for an unlisted proposal the region it proposed; else "Not stated". */
+export function regionText(item) {
+  const slug = item?.region || item?.proposed_region;
+  return slug ? REGION_NAMES[slug] || slug : "Not stated";
+}
+
 function itemDetails(item) {
   const list = el("dl", {class: "mod-facts"}, [
     el("dt", {}, ["Kind"]), el("dd", {}, [item.kind || "Not stated"]),
-    el("dt", {}, ["Region"]), el("dd", {}, [item.region ? REGION_NAMES[item.region] || item.region : "Not stated"]),
+    el("dt", {}, ["Region"]), el("dd", {}, [regionText(item)]),
     el("dt", {}, ["Date"]), el("dd", {}, [dateText(item.created_at)]),
   ]);
   const confirmed = confirmedText(item);
