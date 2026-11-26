@@ -1,5 +1,9 @@
 # Lessons (newest first; append-only)
 
+## 2026-11-26 — Windows test and browser gates
+- If the WindowsApps `py` launcher is inaccessible on this checkout, call `C:/Users/scoff/AppData/Local/Python/pythoncore-3.14-64/python.exe` directly. Use an explicit pytest `--basetemp` outside the worktree.
+- Axe and overflow checks passed while the phone checkbox labels wrapped a letter at a time. Check the active form screenshot and label layout as well as the empty and submitted states.
+
 ## 2026-11-25 -- Stem collisions in new query terms; gate in a clean worktree
 - OpenAlex stemming turns agent nouns into their activity: "recycler" matched every anchored recycling work
   (23,264 vs about 500 for eight sibling terms). When a theme count is far above its siblings, probe each

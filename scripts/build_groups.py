@@ -122,21 +122,25 @@ def load_curated_submissions(
     """Return (submissions, group ids not counted as organisations) from the curation CSVs."""
     submissions: dict[str, dict[str, Any]] = {}
     excluded: set[str] = set()
+    seen: set[str] = set()
     for row in _rows(curation_dir / TAGS_FILE):
         group_id = row.get("group_id", "")
+        if group_id in seen:
+            raise GroupsBuildError(f"{TAGS_FILE} has duplicate group rows")
+        seen.add(group_id)
+        is_not_organisation = _flag(row.get("not_an_organisation", ""), TAGS_FILE) is True
+        if is_not_organisation:
+            # Remember even when the roster was already filtered, so offline export logs stay quiet.
+            excluded.add(group_id)
+            continue
         if group_id not in roster_ids:
             print(f"skip group_tags row: group_id {group_id!r} is not on the roster")
-            continue
-        if group_id in submissions or group_id in excluded:
-            raise GroupsBuildError(f"{TAGS_FILE} has more than one row for {group_id}")
-        if _flag(row.get("not_an_organisation", ""), TAGS_FILE) is True:
-            excluded.add(group_id)
             continue
         submissions[group_id] = tag_submission(row)
     for row in _rows(curation_dir / AFFILIATIONS_FILE):
         group_id = row.get("group_id", "")
         if group_id in excluded:
-            print(f"skip group_affiliations row: group_id {group_id} is not an organisation")
+            continue
         elif group_id not in submissions:
             print(f"skip group_affiliations row: group_id {group_id!r} has no tag row")
         else:

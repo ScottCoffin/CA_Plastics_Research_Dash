@@ -16,6 +16,7 @@ Exit codes: 0 ok or SKIP, 1 failure or fetch refused, 2 structural-change guard 
 from __future__ import annotations
 
 import argparse
+import csv
 import datetime as dt
 import json
 import re
@@ -61,6 +62,7 @@ class Paths:
     raw_root: Path
     site_dir: Path
     interim_dir: Path
+    curation_dir: Path = ROOT / "curation"
 
 
 def default_paths() -> Paths:
@@ -68,6 +70,7 @@ def default_paths() -> Paths:
         raw_root=roster.DEFAULT_RAW_ROOT,
         site_dir=ROOT / "site" / "data" / "global" / "groups",
         interim_dir=ROOT / "data" / "interim" / "bffp",
+        curation_dir=ROOT / "curation",
     )
 
 
@@ -117,9 +120,34 @@ def _write_local(paths: Paths, result: admission.AdmissionResult, meta: dict[str
     )
 
 
-def _write_public(paths: Paths, result: admission.AdmissionResult, day: dt.date) -> None:
+def _not_organisations(curation_dir: Path, records: list[dict[str, Any]]) -> set[str]:
+    """Read the approved hash IDs that must be removed from every public denominator."""
+    path = curation_dir / "group_tags.csv"
+    if not path.exists():
+        return set()
+    with path.open(encoding="utf-8", newline="") as handle:
+        rows = csv.DictReader(handle)
+        excluded: set[str] = set()
+        roster_ids = {str(record["group_id"]) for record in records}
+        for row in rows:
+            group_id = (row.get("group_id") or "").strip()
+            flag = (row.get("not_an_organisation") or "").strip()
+            if flag not in ("", "true", "false"):
+                raise ValueError("group_tags.csv contains an invalid not_an_organisation flag")
+            if flag == "true" and group_id in roster_ids:
+                excluded.add(group_id)
+        return excluded
+
+
+def _write_public(
+    paths: Paths, result: admission.AdmissionResult, day: dt.date, excluded_ids: set[str]
+) -> None:
     paths.site_dir.mkdir(parents=True, exist_ok=True)
-    records = [{key: record[key] for key in PUBLIC_RECORD_KEYS} for record in result.records]
+    kept = [record for record in result.records if record["group_id"] not in excluded_ids]
+    records = [{key: record[key] for key in PUBLIC_RECORD_KEYS} for record in kept]
+    admitted_by_status = {status: 0 for status in admission.ADMITTED_STATUSES}
+    for record in kept:
+        admitted_by_status[record["org_status"]] += 1
     roster_payload = {
         "schema": SCHEMA,
         "retrieved_at": day.isoformat(),
@@ -130,7 +158,7 @@ def _write_public(paths: Paths, result: admission.AdmissionResult, day: dt.date)
     manifest = {
         "retrieved_at": day.isoformat(),
         "parser_version": roster.PARSER_VERSION,
-        "admitted_by_org_status": result.admitted_by_status,
+        "admitted_by_org_status": admitted_by_status,
         "source_urls": [roster.BFFP_MEMBERS_ORG_URL],
     }
     # Site JSON is LF-pinned; write LF on Windows too so a rebuild matches the committed bytes.
@@ -187,13 +215,16 @@ def build(
         "raw_sha256": roster.sha256_file(raw_path),
         "drop_acknowledged": acknowledge_drop,
     }
-    _write_public(paths, result, day)
+    try:
+        excluded_ids = _not_organisations(paths.curation_dir, result.records)
+    except (OSError, csv.Error, ValueError):
+        print("ERROR: invalid group curation; public roster was not written", file=sys.stderr)
+        return 1
+    _write_public(paths, result, day, excluded_ids)
     _write_local(paths, result, meta)
     roster.purge_raw_cache(paths.raw_root, dt.datetime.combine(day, dt.time(), tzinfo=dt.UTC))
-    counts = ", ".join(f"{k}={v}" for k, v in result.admitted_by_status.items())
-    # Admitted counts only: a fetched total would reveal how many entries were dropped (A4-D24),
-    # and CI logs of this public repository are public. The local manifest keeps the rest.
-    print(f"OK: admitted: {counts}; records={len(result.records)}")
+    # Keep public logs silent about record volumes; the private local manifest retains diagnostics.
+    print("OK: roster files written")
     return 0
 
 
@@ -247,6 +278,13 @@ def check(paths: Paths) -> int:
         problems.append("roster_manifest.json: admitted counts do not match the records")
     raw = _latest_raw(paths.raw_root)
     if raw is None:
+        try:
+            excluded_ids = _not_organisations(paths.curation_dir, records)
+        except (OSError, csv.Error, ValueError):
+            problems.append("group_tags.csv: invalid roster exclusion curation")
+            excluded_ids = set()
+        if any(record.get("group_id") in excluded_ids for record in records):
+            problems.append("roster.json: does not apply current group curation")
         if problems:
             print("FAIL:\n  " + "\n  ".join(problems))
             return 1
@@ -257,17 +295,51 @@ def check(paths: Paths) -> int:
         retrieved_on=str(payload.get("retrieved_at", "")),
         registry=load_registry(),
     )
+    try:
+        excluded_ids = _not_organisations(paths.curation_dir, rebuilt.records)
+    except (OSError, csv.Error, ValueError):
+        problems.append("group_tags.csv: invalid roster exclusion curation")
+        excluded_ids = set()
+    rebuilt_records = [r for r in rebuilt.records if r["group_id"] not in excluded_ids]
     volatile = ("bffp_listed_asof", "roster_retrieved_at")
 
     def stable(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [{k: v for k, v in r.items() if k not in volatile} for r in items]
 
-    if stable(rebuilt.records) != stable(records):
+    if stable(rebuilt_records) != stable(records):
         problems.append("roster.json: does not match a rebuild from the raw cache")
     if problems:
         print("FAIL:\n  " + "\n  ".join(problems))
         return 1
     print("PASS (structure and rebuild comparison)")
+    return 0
+
+
+def apply_curation(paths: Paths) -> int:
+    """Apply approved organisation removals to the committed roster without raw source data."""
+    roster_path = paths.site_dir / "roster.json"
+    manifest_path = paths.site_dir / "roster_manifest.json"
+    try:
+        payload = json.loads(roster_path.read_text(encoding="utf-8"))
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        records = payload["records"]
+        excluded_ids = _not_organisations(paths.curation_dir, records)
+    except (OSError, KeyError, TypeError, json.JSONDecodeError, csv.Error, ValueError):
+        print("ERROR: committed roster or group curation is invalid", file=sys.stderr)
+        return 1
+    kept = [record for record in records if record.get("group_id") not in excluded_ids]
+    by_status = {status: 0 for status in admission.ADMITTED_STATUSES}
+    try:
+        for record in kept:
+            by_status[record["org_status"]] += 1
+    except (KeyError, TypeError):
+        print("ERROR: committed roster is invalid", file=sys.stderr)
+        return 1
+    payload["records"] = kept
+    manifest["admitted_by_org_status"] = by_status
+    (paths.site_dir / "roster.json").write_bytes(_dump(payload).encode("utf-8"))
+    (paths.site_dir / "roster_manifest.json").write_bytes(_dump(manifest).encode("utf-8"))
+    print("OK: applied current group curation to the roster")
     return 0
 
 
@@ -287,6 +359,14 @@ def main(
     )
     mode.add_argument("--input", type=Path, help="saved members_org JSON or CSV export")
     mode.add_argument("--check", action="store_true", help="validate committed files")
+    mode.add_argument(
+        "--apply-curation",
+        action="store_true",
+        help=(
+            "apply approved removals without raw data; restoration requires clearing the curation "
+            "flag and rebuilding from raw source"
+        ),
+    )
     parser.add_argument(
         "--acknowledge-drop", action="store_true", help="accept a >20%% drop in entry count"
     )
@@ -294,6 +374,8 @@ def main(
     resolved = paths or default_paths()
     if args.check:
         return check(resolved)
+    if args.apply_curation:
+        return apply_curation(resolved)
     day = today or dt.datetime.now(dt.UTC).date()
     return build(
         args.input,

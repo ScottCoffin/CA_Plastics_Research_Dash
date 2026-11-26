@@ -40,7 +40,14 @@ def _worker_knowledge_kinds() -> dict[str, tuple[list[str], list[str]]]:
             continue
         kind = match.group(1)
         # correction is on the region-page screen, the group kinds on the group screen (CG-6).
-        if kind in ("correction", "group_tag", "group_suggest"):
+        if kind in (
+            "correction",
+            "group_tag",
+            "group_suggest",
+            "community_group",
+            "volunteer_group",
+            "research_network",
+        ):
             continue
         required = re.findall(r'"(\w+)"', match.group(3))
         optional = re.findall(r'"(\w+)"', match.group(4))
@@ -50,13 +57,14 @@ def _worker_knowledge_kinds() -> dict[str, tuple[list[str], list[str]]]:
 
 def test_form_offers_the_worker_knowledge_kinds_minus_correction() -> None:
     worker = _worker_knowledge_kinds()
-    assert len(worker) == 11, worker.keys()
+    assert len(worker) == 8, worker.keys()
     assert "correction" not in worker
     node = shutil.which("node")
     if node is None:
         pytest.fail("Node.js is required to read KNOWLEDGE_KINDS")
     script = (
-        "const m = await import(process.argv[1]); console.log(JSON.stringify(m.KNOWLEDGE_KINDS));"
+        "const m = await import(process.argv[1]); "
+        "console.log(JSON.stringify(m.OFFERED_KNOWLEDGE_KINDS));"
     )
     result = subprocess.run(
         [node, "--input-type=module", "-e", script, KNOWLEDGE.as_uri()],
@@ -88,6 +96,7 @@ def test_the_only_worker_route_is_submissions_and_no_hard_coded_origin() -> None
     assert routes == {"/submissions"}, routes
     assert 'ctx.api("/submissions", {method: "POST", body})' in text
     assert 'stream: "knowledge"' in text
+    assert 'data-ws-action="open" data-stream="D">Tag local groups' in text
 
 
 def test_the_module_imports_no_sign_up_or_workspace_code() -> None:

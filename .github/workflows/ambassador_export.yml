@@ -62,6 +62,13 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/ambassador_export_pr.py --summary-file "$RUNNER_TEMP/ambassador_summary.md"
+          group_paths=(curation/group_tags.csv curation/group_affiliations.csv)
+          if [[ -n "$(git status --porcelain -- "${group_paths[@]}")" ]]; then
+            python scripts/build_groups_roster.py --apply-curation
+            python scripts/build_groups_roster.py --check
+            python scripts/build_groups.py
+            python scripts/build_groups.py --check
+          fi
 
       # Opens one pull request per day. Re-runs the same day update the open pull request instead.
       - name: Open or update the pull request when files changed
@@ -73,7 +80,23 @@ jobs:
           SUMMARY_FILE: ${{ runner.temp }}/ambassador_summary.md
         run: |
           set -euo pipefail
-          paths=(regions curation/ambassador_labels.csv curation/ambassador_institution_additions.csv curation/ambassador_export_state.json curation/group_tags.csv curation/group_affiliations.csv curation/group_suggestions.csv)
+          paths=(
+            regions
+            curation/ambassador_labels.csv
+            curation/ambassador_institution_additions.csv
+            curation/ambassador_export_state.json
+            curation/group_tags.csv
+            curation/group_affiliations.csv
+            curation/group_suggestions.csv
+            site/data/global/groups/roster.json
+            site/data/global/groups/roster_manifest.json
+            site/data/global/groups/groups.json
+            site/data/global/groups/groups_tree.json
+            site/data/global/groups/groups_graph.json
+            site/data/global/groups/coverage.json
+            site/data/global/groups/flows.json
+            site/data/global/groups/precision_card.json
+          )
           if [[ -z "$(git status --porcelain -- "${paths[@]}")" ]]; then
             echo "No approved contributions to export; no pull request."
             exit 0

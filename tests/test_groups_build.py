@@ -655,7 +655,7 @@ def test_cannot_determine_row_is_ingested_as_untagged_with_its_reason(tmp_path: 
     assert record["evidence"] == []
 
 
-def test_not_an_organisation_removes_the_group_from_every_output(tmp_path: Path) -> None:
+def test_not_an_organisation_removes_the_group_from_every_output(tmp_path: Path, capsys) -> None:
     flag = {
         "group_id": ADJ,
         "status": "cannot_determine",
@@ -663,13 +663,29 @@ def test_not_an_organisation_removes_the_group_from_every_output(tmp_path: Path)
         "not_an_organisation": "true",
         "tagged_at": DATE,
     }
-    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), _curation(tmp_path, tags=[flag]))
+    outputs = BUILD.build_outputs(
+        copy.deepcopy(ROSTER),
+        _curation(tmp_path, tags=[flag], affiliations=[{**CORE_AFFILIATION, "group_id": ADJ}]),
+    )
+    assert capsys.readouterr().out == ""
     groups = _json(outputs, "groups.json")["groups"]
     assert ADJ not in {g["group_id"] for g in groups}
     assert len(groups) == len(ROSTER["records"]) - 1
     for name, data in outputs.items():
         assert ADJ.encode() not in data, name
         assert b"Adjacent Fund" not in data, name
+
+
+@pytest.mark.parametrize("exclude_first", [True, False])
+def test_duplicate_exclusion_rows_fail_without_identifying_group(
+    tmp_path: Path, exclude_first: bool
+) -> None:
+    excluded = {"group_id": ADJ, "not_an_organisation": "true"}
+    ordinary = {**CORE_TAG, "group_id": ADJ, "not_an_organisation": "false"}
+    rows = [excluded, ordinary] if exclude_first else [ordinary, excluded]
+    with pytest.raises(GroupsBuildError, match="duplicate group rows") as exc:
+        BUILD.build_outputs(copy.deepcopy(ROSTER), _curation(tmp_path, tags=rows))
+    assert ADJ not in str(exc.value)
 
 
 def test_rows_for_unknown_groups_are_skipped_with_a_reason(tmp_path: Path, capsys) -> None:

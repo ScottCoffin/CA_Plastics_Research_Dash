@@ -69,7 +69,10 @@ build_script = _load_script()
 
 def _paths(base: Path) -> object:
     return build_script.Paths(
-        raw_root=base / "raw", site_dir=base / "site", interim_dir=base / "interim"
+        raw_root=base / "raw",
+        site_dir=base / "site",
+        interim_dir=base / "interim",
+        curation_dir=base / "curation",
     )
 
 
@@ -280,6 +283,41 @@ def test_only_admitted_statuses_reach_the_public_roster(tmp_path: Path) -> None:
     assert statuses <= {"source_declared_org", "heuristic_org", "human_confirmed_org"}
     names = {r["name"] for r in payload["records"]}
     assert AMBIGUOUS_NAME not in names
+
+
+def test_approved_not_organisation_is_removed_from_roster_and_manifest(
+    tmp_path: Path, capsys
+) -> None:
+    paths = _paths(tmp_path)
+    build_script.main(["--input", str(SAMPLE)], paths=paths, today=TODAY)
+    roster_path = paths.site_dir / "roster.json"
+    before = json.loads(roster_path.read_text(encoding="utf-8"))
+    removed_id = before["records"][0]["group_id"]
+    paths.curation_dir.mkdir()
+    (paths.curation_dir / "group_tags.csv").write_text(
+        f"group_id,not_an_organisation\n{removed_id},true\n", encoding="utf-8"
+    )
+    assert build_script.main(["--input", str(SAMPLE)], paths=paths, today=TODAY) == 0
+    output = capsys.readouterr().out
+    after = json.loads(roster_path.read_text(encoding="utf-8"))
+    manifest = json.loads((paths.site_dir / "roster_manifest.json").read_text(encoding="utf-8"))
+    assert removed_id not in {record["group_id"] for record in after["records"]}
+    assert sum(manifest["admitted_by_org_status"].values()) == len(after["records"])
+    assert output == "OK: roster files written\n" * 2
+    assert len(output) < 100
+
+
+def test_apply_curation_updates_committed_roster_without_raw_cache(tmp_path: Path) -> None:
+    paths = _paths(tmp_path)
+    build_script.main(["--input", str(SAMPLE)], paths=paths, today=TODAY)
+    payload = json.loads((paths.site_dir / "roster.json").read_text(encoding="utf-8"))
+    removed_id = payload["records"][0]["group_id"]
+    paths.curation_dir.mkdir()
+    (paths.curation_dir / "group_tags.csv").write_text(
+        f"group_id,not_an_organisation\n{removed_id},true\n", encoding="utf-8"
+    )
+    assert build_script.main(["--apply-curation"], paths=paths, today=TODAY) == 0
+    assert build_script.main(["--check"], paths=paths, today=TODAY) == 0
 
 
 def test_excluded_and_ambiguous_names_appear_in_no_written_file(tmp_path: Path, capsys) -> None:

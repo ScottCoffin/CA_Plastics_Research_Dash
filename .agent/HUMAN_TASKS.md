@@ -24,6 +24,10 @@ Last updated: 2026-11-26.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
+### H56. Authorize the community groups Worker deployment
+CG-6c is implemented and verified. The signed-in group task needs D1 migration 0007 and the group routes in the production Worker.
+Reply **deploy the Worker** to authorize the migration and deploy. The agent will run both commands and verify the production routes.
+
 ### H39. Label the first global gold round (BQ-G4, 160 works, about 1 minute each)
 The global quality numbers stay blank until a person labels a sample. Round 0 is drawn: 160 works,
 10 in each of 16 strata. Labels save on every click, so you can stop and resume any time.

@@ -169,6 +169,7 @@ The canonical product and implementation contract is `spec.md` v1.0 (2026-11-05)
   `curation/grant_relevance.csv`; abstract-only mentions default to false.
 - `.github/workflows/ci.yml` runs lint, tests, and the build on pushes, pull
   requests, and manual dispatches.
+- The ambassador export workflow rebuilds the public group files when approved tags or affiliations change. Use `scripts/build_groups_roster.py --apply-curation` to apply approved removals without a raw roster cache, then `scripts/build_groups.py`. See `docs/AMBASSADOR_EXPORT.md`.
 - `build_deploy.yml` publishes `site/` on pushes, manual dispatches, and daily at
   10:15 UTC; `watchdog.yml` checks at 11:47 UTC and redispatches after 25 hours.
 - `keepalive.yml` runs monthly at 09:42 UTC. It commits only when the repository

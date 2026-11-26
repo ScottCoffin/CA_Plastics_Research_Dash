@@ -1,40 +1,29 @@
-# Handoff — 2026-11-26 (end of Claude session) — ambassadors slice 3 live, global co-authors live, works graph and Works view, Add-on A4 groups layer through CG-6b
+# Handoff — 2026-11-26 — CG-6c
 
-## State in one paragraph
-All work is committed and pushed; the tree is clean. Sealed today, in order: AMB-1 front end slice 3 (local knowledge
-forms, notification settings, co-author invitations; email links open settings and the reminder's case), BQ-V.1 slice 3
-(global works similarity graph) and BQ-V.4 (Works view), WORKS-FILTER (slider and year range), REG-CA (California
-region.json), AMB-COAUTHORS-GLOBAL (Worker route deployed, version cbc9e050, owner H54), Add-on A4 integration (CG-0;
-spec docs/BFFP.md; A4-D0..D27, A4-C1..C11, A4-Q1..Q9) and CG-1, CG-2, CG-3, CG-4, CG-5, CG-8 (guide approved, H55),
-CG-9, CG-13 (/groups page), CG-6a (Worker routes, NOT deployed), CG-6b (export and ingest), plus owner UI requests
-AMB-NAV, AMB-CHOICE-CUES, AMB-FULLWIDTH. Every checkpoint passed the full gate in a clean worktree (latest 3,703
-passed). Browser walks (mocked API, axe 0 at 1440/390) are scripts in scratch/ (ignored; e.g. scratch/trio_walk.py).
+## Done
 
-## In flight / next (in this order)
-1. CG-6c: "Tag local groups" stream in the ambassador workspace (a new module like ambassador_knowledge.js): calls
-   `GET /groups/batch?region=`, shows the leased groups (renew/release), the tagging form per docs/BFFP.md §5.4 and the
-   approved guide docs/GROUPS_TAGGING_GUIDE.md (Tier 1 + evidence; activities 1-5; sector incl. joint_power_authority;
-   no conflict-of-interest rule), posts `POST /submissions {stream: "knowledge", kind: "group_tag" | "group_suggest"}`.
-   Validators: worker/src/groups.ts. Also apply QUESTIONS CG-NOT-ORG-REMOVAL (roster build drops not_an_organisation ids).
-2. Then ask the owner for the Worker deploy (D1 migration 0007 group_leases + group routes):
-   `cd worker && npx wrangler d1 migrations apply plastiverse-ambassadors --remote && npx wrangler deploy`.
-3. CG-7 (review queue, double-tag sample, agreement stats), CG-10..CG-12b (tree, network, coverage/map/heat/comp,
-   Sankey and others), CG-14, CG-15 pilot (owner), CG-16.
-4. Owner-queued: AMB-PARENT-REGION (sub-region ambassadors also get country tasks; parent region + Worker deploy),
-   AMB-MAIL-STYLE (styled emails; Worker deploy), ALERTS-GLOBAL (design first, owner review).
-5. Roadmap: BQ-S9b, BQ-G3; rebuild site/data/global/denominators.json at the next global data refresh (owner).
+- The signed-in ambassador workspace has a **Tag local groups** stream for regional assignments. It supports lease renewal and release, organisation checks, Tier 1 evidence, optional Tier 2 fields, stated affiliations, and suggestions. The workspace preserves drafts on retry and keeps group submission history with the group task.
+- Approved `not_an_organisation` rows are applied to the public roster and its manifest. The ambassador export workflow rebuilds and checks the roster and derived group files in the same owner-reviewed pull request. See [Ambassador export](../docs/AMBASSADOR_EXPORT.md).
+- The clean-worktree full suite passed with 3,712 tests and 17 skips. The Framework build and mocked browser walk passed at 1440 and 390 px, with zero axe violations, overflow, or page errors. The ignored walk and screenshots are in `scratch/cg6c_*`.
 
-## Open findings
-- `tests/test_bq24_denominators.py::test_check_mode_on_committed_file_exits_zero` fails only on this machine's working
-  tree (local ignored data); clean worktrees pass. Owner: rebuild at the next global refresh.
-- BFFP data quirks (QUESTIONS BFFP-COUNTRY-ARTEFACTS): "eSwatini<" maps to no country; Afghanistan entries kept as
-  listed. The member endpoint refuses scripted requests ("Origin not allowed"); `--fetch` uses one headless page view.
-- A4-D24 binds code comments, docs, commit messages and CI logs: never write how many BFFP entries were dropped.
-- Windows: write files with LF (`write_bytes(s.encode())`); `Path.write_text` writes CRLF (LESSONS 2026-11-26).
-- Run pytest with `--basetemp` outside the repo when gating in a worktree (the AT-10 release test needs to be outside git).
+## State of the repo
 
-## Owner actions (one line each)
-- Try the live ambassador screens signed in (a knowledge item, a setting, the worldwide "Invite your co-authors" list).
-- Accept or change the defaults in `.agent/QUESTIONS.md`: BFFP-COUNTRY-ARTEFACTS, CG-NOT-ORG-REMOVAL, A4-Q2..Q6, A4-Q8.
-- H39 global gold labels; H28 OPC mapping; H42 PubMed misses; H2 low-confidence relevance (see HUMAN_TASKS).
-- When CG-6c is ready: say "deploy the Worker" (migration 0007 + group routes).
+- CG-6a, CG-6b and CG-6c are implemented. CG-6 still requires production D1 migration 0007 and deployment of the group routes in `worker/src/groups.ts` under H56.
+- The live Worker already serves existing ambassador flows and global co-authors (version cbc9e050, owner H54). The new group screen handles the pre-deployment 404 and can retry.
+
+## Next task
+
+1. When the owner authorizes H56, apply migration 0007 for `plastiverse-ambassadors` under `worker/`, deploy the Worker, and verify the group routes. Mark CG-6 complete once the production gate passes.
+2. CG-7 follows CG-6 and covers the review queue, double tagging, and agreement statistics. While H56 is pending, CG-10 is eligible through CG-9. Continue with CG-11, CG-12, CG-12b, CG-14, the owner-led CG-15 pilot, and CG-16 as their dependencies permit.
+3. Owner-queued tasks after the groups work are AMB-PARENT-REGION, AMB-MAIL-STYLE, and ALERTS-GLOBAL. The handoff roadmap then calls for BQ-S9b and BQ-G3.
+
+## Gotchas
+
+- The local ignored data can make `tests/test_bq24_denominators.py::test_check_mode_on_committed_file_exits_zero` fail in the main checkout. The clean gate passes. Rebuild `site/data/global/denominators.json` at the next global refresh.
+- On this Windows checkout the direct Python 3.14 executable worked where the WindowsApps launcher could not run. Gate in a clean worktree with pytest `--basetemp` outside the repo. See [memory](MEMORY.md).
+- The BFFP country defaults are in [questions](QUESTIONS.md). A4-D24 applies to published artifacts, docs, commit messages, and CI logs. The upstream member endpoint requires the already approved headless page workflow.
+
+## Owner input
+
+- H56 in [human tasks](HUMAN_TASKS.md) records the Worker deployment approval. The existing owner reviews include H39, H28, H42 and H2. Group decisions are in [questions](QUESTIONS.md).
+- The earlier authenticated smoke still calls for trying a knowledge item, a setting, and the global co-author invitation list.

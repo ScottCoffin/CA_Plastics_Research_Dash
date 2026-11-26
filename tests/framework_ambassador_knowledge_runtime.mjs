@@ -3,6 +3,8 @@
 import assert from "node:assert/strict";
 import {
   KNOWLEDGE_KINDS,
+  OFFERED_KNOWLEDGE_KINDS,
+  GROUP_KINDS,
   httpsAddress,
   isIsoDate,
   knowledgeBody,
@@ -45,6 +47,13 @@ check("the form offers the eleven knowledge kinds of the Worker, without correct
   assert.deepEqual([...kinds].sort(), Object.keys(WORKER).sort());
   assert.ok(!kinds.includes("correction"));
   assert.ok(!kinds.includes("confirm"));
+});
+check("new group entries route to the group stream while historical names remain readable", () => {
+  assert.deepEqual(GROUP_KINDS, ["community_group", "volunteer_group", "research_network"]);
+  assert.equal(OFFERED_KNOWLEDGE_KINDS.length, 8);
+  assert.ok(OFFERED_KNOWLEDGE_KINDS.every((item) => !GROUP_KINDS.includes(item.kind)));
+  assert.equal(knowledgeKindLabel("community_group"), "Community group or coalition");
+  assert.equal(knowledgeKindLabel("research_network"), "Research network or lab");
 });
 
 check("each kind mirrors the Worker's required and optional fields and has a plain label", () => {
@@ -239,6 +248,8 @@ check("mySubmissions keeps this region's knowledge rows, newest first, without d
     {id: "d", region: REGION, stream: "confirm", created_at: 500},
     {id: "b", region: REGION, stream: "knowledge", created_at: 300},
     {id: "e", region: REGION, stream: "knowledge", created_at: "2026-05-01T00:00:00Z"},
+    {id: "g1", region: REGION, stream: "knowledge", kind: "group_tag", created_at: 600},
+    {id: "g2", region: REGION, stream: "knowledge", kind: "group_suggest", created_at: 700},
   ];
   assert.deepEqual(mySubmissions(rows, REGION).map((r) => r.id), ["e", "b", "a"]);
   assert.deepEqual(mySubmissions(undefined, REGION), []);

@@ -27,6 +27,10 @@ export const KNOWLEDGE_KINDS = [
   {kind: "event", label: "Local event or conference", group: "Events and media", required: ["name"], optional: ["url", "description", "note"], minutes: 5},
   {kind: "media", label: "Local media or outreach channel", group: "Events and media", required: ["name", "url"], optional: ["description", "note"], minutes: 5},
 ];
+// These definitions stay available for historical rows and helper compatibility. New submissions
+// for them use the dedicated A4 group stream.
+export const GROUP_KINDS = ["community_group", "volunteer_group", "research_network"];
+export const OFFERED_KNOWLEDGE_KINDS = KNOWLEDGE_KINDS.filter((item) => !GROUP_KINDS.includes(item.kind));
 
 /** Fields the form adds that have no Worker slot. They are folded into the note, or (permission) must be ticked. */
 const EXTRA_FIELDS = {
@@ -187,7 +191,7 @@ export function mySubmissions(submissions, region) {
   const seen = new Set();
   const rows = [];
   for (const row of submissions || []) {
-    if (!row || row.region !== region || row.stream !== "knowledge") continue;
+    if (!row || row.region !== region || row.stream !== "knowledge" || row.kind === "group_tag" || row.kind === "group_suggest") continue;
     if (row.id !== undefined) {
       if (seen.has(row.id)) continue;
       seen.add(row.id);
@@ -258,7 +262,7 @@ function fieldHTML(kind, key, values) {
 export function mountKnowledge(host, ctx) {
   const region = ctx.region;
   const local = [];
-  const state = {kind: KNOWLEDGE_KINDS[0].kind, values: {}, busy: false};
+  const state = {kind: OFFERED_KNOWLEDGE_KINDS[0].kind, values: {}, busy: false};
 
   function readValues() {
     const values = {};
@@ -269,10 +273,10 @@ export function mountKnowledge(host, ctx) {
   }
 
   function kindOptions() {
-    const groups = [...new Set(KNOWLEDGE_KINDS.map((item) => item.group))];
+    const groups = [...new Set(OFFERED_KNOWLEDGE_KINDS.map((item) => item.group))];
     return groups
       .map((group) => {
-        const options = KNOWLEDGE_KINDS.filter((item) => item.group === group)
+        const options = OFFERED_KNOWLEDGE_KINDS.filter((item) => item.group === group)
           .map((item) => `<option value="${esc(item.kind)}"${item.kind === state.kind ? " selected" : ""}>${esc(item.label)}</option>`)
           .join("");
         return `<optgroup label="${esc(group)}">${options}</optgroup>`;
@@ -302,6 +306,7 @@ export function mountKnowledge(host, ctx) {
       : "";
     return `<p class="ws-crumb"><button type="button" class="link-btn" data-ws-action="home">Back to your tasks</button></p><h2 tabindex="-1">Add local knowledge</h2>
 <p class="lede">Add what you know about local work in ${esc(ctx.regionName)}. Only add what is public.</p>
+<p class="kn-groups-route">For community groups, volunteer organisations and research networks, use the dedicated tagging form: <button type="button" class="link-btn" data-ws-action="open" data-stream="D">Tag local groups</button>.</p>
 <p class="est kn-est">${esc(estimateLabel(spec.minutes))}</p>
 <div class="field kn-kind"><label for="kn-kind">What are you adding?</label><select id="kn-kind" data-kn-kind>${kindOptions()}</select></div>
 <form class="kn-form" data-kn-form novalidate>

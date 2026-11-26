@@ -130,17 +130,28 @@ def test_local_knowledge_invitations_and_settings_open_their_screens() -> None:
     workspace = _text(WORKSPACE)
     # Slice 3: the three later cards open real screens drawn by their own modules.
     assert "Coming next" not in workspace
-    for name in ("Add local knowledge", "Invite your co-authors", "Notification settings"):
+    for name in (
+        "Add local knowledge",
+        "Tag local groups",
+        "Invite your co-authors",
+        "Notification settings",
+    ):
         assert name in workspace
     for module, mount in (
         ("ambassador_knowledge.js", "mountKnowledge"),
+        ("ambassador_groups.js", "mountGroups"),
         ("ambassador_settings.js", "mountSettings"),
         ("ambassador_invite.js", "mountInvite"),
     ):
         assert f'from "./{module}"' in workspace and f"{mount}(host" in workspace
-    assert 'const MODULE_SCREENS = new Set(["C", "settings", "invite"]);' in workspace
+    assert 'const MODULE_SCREENS = new Set(["C", "D", "settings", "invite"]);' in workspace
     page = _text(ROOT / "framework" / "src" / "ambassadors.md")
-    for css in ("ambassador_knowledge.css", "ambassador_settings.css", "ambassador_invite.css"):
+    for css in (
+        "ambassador_knowledge.css",
+        "ambassador_groups.css",
+        "ambassador_settings.css",
+        "ambassador_invite.css",
+    ):
         assert f'href="./components/{css}"' in page
 
 

@@ -8,6 +8,5 @@ Session entry (about five reads): `git status --short && git log --oneline -15`;
 read `.agent/HANDOFF.md`; `grep -n '^- \[ \]' .agent/TODO.md`; `git diff HEAD -- .agent/QUESTIONS.md`;
 remind the owner of the "Do now" items in `.agent/HUMAN_TASKS.md`.
 
-Resume at the 2026-11-26 handoff. First task: CG-6c, the "Tag local groups" stream in the ambassador workspace
-(see HANDOFF "In flight" item 1; backend worker/src/groups.ts is built but not deployed). Never deploy the Worker
-without the owner's explicit go-ahead. Then continue in the HANDOFF order.
+Resume at the latest HANDOFF. The production Worker migration and deployment require the owner's explicit go-ahead
+(H56 for the community groups routes). Continue with the first eligible task in the HANDOFF order while owner approval is pending.

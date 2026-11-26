@@ -12,6 +12,7 @@ import {badgeHTML} from "./ambassador_badge.js";
 import {placeRows} from "./world_map.js";
 import {placeView} from "./ambassadors.js";
 import {mountKnowledge, mySubmissions} from "./ambassador_knowledge.js";
+import {mountGroups} from "./ambassador_groups.js";
 import {mountSettings} from "./ambassador_settings.js";
 import {mountInvite} from "./ambassador_invite.js";
 
@@ -385,7 +386,7 @@ function render({focus = null} = {}) {
 }
 
 // Screens drawn by their own modules. Each renders its back link and h2 synchronously and keeps its own state.
-const MODULE_SCREENS = new Set(["C", "settings", "invite"]);
+const MODULE_SCREENS = new Set(["C", "D", "settings", "invite"]);
 function mountModule(main) {
   // A fresh element per mount, so a module's listeners leave with its screen.
   main.innerHTML = "<div data-ws-module></div>";
@@ -393,6 +394,13 @@ function mountModule(main) {
   const ctx = {api, errorText: workspaceErrorText, say};
   if (state.screen === "settings") return mountSettings(host, ctx);
   if (state.screen === "invite") return mountInvite(host, {...ctx, ambassador: state.ambassador});
+  if (state.screen === "D") return mountGroups(host, {
+    ...ctx,
+    region: state.region,
+    regionName: regionName(state.region),
+    submissions: state.submissions,
+    onSubmitted: (row) => state.submissions.unshift(row),
+  });
   return mountKnowledge(host, {
     ...ctx,
     region: state.region,
@@ -487,6 +495,7 @@ function homeHTML() {
           empty: "Nothing to confirm",
         })}
         ${plainCard("C", "Add local knowledge", knowledgeStatus(mySubmissions(state.submissions, state.region)), "Add an item")}
+        ${plainCard("D", "Tag local groups", "Tag assigned organisations or suggest a missing group", "Open tasks")}
       </ul>
       <h3 class="ws-more-h">More</h3>
       <ul class="ws-cards">

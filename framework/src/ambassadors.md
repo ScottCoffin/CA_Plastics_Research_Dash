@@ -15,6 +15,7 @@ pager: false
 <link rel="stylesheet" href="./components/ambassadors.css">
 <link rel="stylesheet" href="./components/ambassador_signup_map.css">
 <link rel="stylesheet" href="./components/ambassador_knowledge.css">
+<link rel="stylesheet" href="./components/ambassador_groups.css">
 <link rel="stylesheet" href="./components/ambassador_settings.css">
 <link rel="stylesheet" href="./components/ambassador_invite.css">
 

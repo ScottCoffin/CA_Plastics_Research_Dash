@@ -37,6 +37,14 @@ section (`scripts/build_region_pages.py` requires exactly six sections). Kinds w
    `Ambassador contributions <date>`. The body lists counts per region and kind. It carries no names, emails or
    ambassador ids. A same-day re-run updates the open pull request.
 
+When approved `curation/group_tags.csv` or `curation/group_affiliations.csv` changes, the workflow also rebuilds
+the public group outputs before opening the pull request. It applies the removal flags to the checked-in roster
+with `scripts/build_groups_roster.py --apply-curation` (no raw BFFP cache is needed), then rebuilds and checks the
+derived files with `scripts/build_groups.py`. The PR includes the roster, its manifest and all six derived group
+files for owner review. This offline operation only removes records. To restore one, clear its curation flag and
+rebuild the roster from raw source data with `scripts/build_groups_roster.py --input FILE` or `--fetch` before
+rebuilding the derived files.
+
 `--dry-run` prints the same report and writes nothing. `--input FILE` reads a saved export instead of calling the
 API; the tests use it.
 
@@ -76,10 +84,8 @@ and apply the usual override precedence: owner > ambassador consensus > model
   exact format is assumed from the Worker's test fixtures and is open for owner confirmation.
 - Consensus answers are written newest-wins per (region, case). The Worker already filters to consensus answers.
 - The job writes the watermark even when every record was skipped, so a bad record is reported once.
-- The commit step in `.github/workflows/ambassador_export.yml` lists its paths explicitly
-  (`regions`, `curation/ambassador_labels.csv`, `curation/ambassador_export_state.json`). Until
-  `curation/ambassador_institution_additions.csv` is added to that list, approved institutions are written to the
-  runner's checkout but never committed to the pull request.
+- The commit step in `.github/workflows/ambassador_export.yml` lists its paths explicitly, including the
+  institution additions file and the rebuilt group roster and derived files.
 - The institution rows are checked against the same rules as `scripts/build_ambassador_data.py` (eligible type,
   registrable non-free-mail domain). The PR job checks the domain pattern only, so a subdomain such as
   `lab.example.no` is written and then stops the next build with a line number. The owner should reject it in review.
