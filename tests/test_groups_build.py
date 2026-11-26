@@ -26,14 +26,17 @@ from atlas.groups.build import (
     GRAPH_LAYOUT_ITERATIONS,
     GRAPH_LAYOUT_SEED,
     OUTPUT_FILES,
+    TIER1_FACETS,
     GroupsBuildError,
     _graph_layout,
     build_groups,
+    build_precision,
     build_tree,
     check_flow_conservation,
     denominator_note,
 )
 from atlas.groups.schema import load_taxonomy, validate_groups
+from atlas.nlp.quality import wilson_interval
 
 REPO = Path(__file__).resolve().parents[1]
 BUILD_SCRIPT = REPO / "scripts" / "build_groups.py"
@@ -197,7 +200,7 @@ def test_six_files_carry_schema_generated_from_and_denominator_note() -> None:
         "groups_graph.json": "cg-graph-v1",
         "coverage.json": "cg-coverage-v1",
         "flows.json": "cg-flows-v1",
-        "precision_card.json": "cg-precision-v1",
+        "precision_card.json": "cg-precision-v2",
     }
     note = (
         "Based on 2 of 5 roster organisations tagged (40.0%). "
@@ -520,6 +523,179 @@ def test_precision_card_counts_and_refuses_agreement_without_a_sample() -> None:
         "roster": 3,
         "coverage": 0.3333,
     }
+
+
+# ---------------------------------------------------------------------------
+# Precision card v2: agreement, reviewer checks and by-region (CG-7a)
+# ---------------------------------------------------------------------------
+
+VOCAB = load_taxonomy()
+CENTRALITY_LEVELS = ("primary", "substantial", "incidental", "none")
+
+
+def _minimal_record(group_id: str, region: str) -> dict[str, Any]:
+    """A tagged record with the fields build_precision reads."""
+    return {
+        "group_id": group_id,
+        "region": region,
+        "status": "ambassador_tagged",
+        "cannot_determine_reason": None,
+        "entity_type": VOCAB["entity_type"][0],
+        "sector": VOCAB["sector"][0],
+        "plastics_centrality": "primary",
+        "primary_activities": [VOCAB["primary_activities"][0]],
+        "geographic_scope": VOCAB["geographic_scope"][0],
+        "evidence": [],
+        "reviewed_at": None,
+    }
+
+
+def _double(group_id: str, facet: str, value_a: str, value_b: str) -> dict[str, str]:
+    return {"group_id": group_id, "facet": facet, "value_a": value_a, "value_b": value_b}
+
+
+def _review(group_id: str, facet: str, outcome: str, reason: str = "") -> dict[str, str]:
+    return {
+        "group_id": group_id,
+        "facet": facet,
+        "outcome": outcome,
+        "reason_code": reason,
+        "reviewed_at": DATE,
+    }
+
+
+def _build_with(**kwargs: Any) -> dict[str, bytes]:
+    return build_groups(copy.deepcopy(ROSTER), copy.deepcopy(SUBMISSIONS), **kwargs)
+
+
+def test_precision_card_v2_schema_and_new_keys_present() -> None:
+    card = _json(_build(), "precision_card.json")
+    assert card["schema"] == "cg-precision-v2"
+    assert card["tier1_facets"] == list(TIER1_FACETS)
+    assert "by_region" in card
+    for facet in card["tier1_facets"]:
+        assert card["facets"][facet]["agreement"] is None
+        assert card["facets"][facet]["review"] is None
+
+
+def test_fewer_than_ten_double_tagged_pairs_gives_no_agreement() -> None:
+    value = VOCAB["entity_type"][0]
+    rows = [_double(CORE, "entity_type", value, value)]
+    card = _json(_build_with(double_tags=rows), "precision_card.json")
+    entity = card["facets"]["entity_type"]
+    assert entity["agreement"] is None
+    assert entity["agreement_reason"] == "fewer than 10 double-tagged pairs"
+
+
+def test_centrality_agreement_with_ten_pairs_reports_kappa_and_drops_cannot_determine() -> None:
+    records = [_minimal_record(f"g{i:02d}", "Northern America") for i in range(12)]
+    rows = [
+        _double(
+            f"g{i:02d}", "plastics_centrality", CENTRALITY_LEVELS[i % 4], CENTRALITY_LEVELS[i % 4]
+        )
+        for i in range(10)
+    ]
+    rows.append(_double("g10", "plastics_centrality", "primary", "cannot_determine"))
+    card = build_precision(records, DATE, VOCAB, rows)
+    facet = card["facets"]["plastics_centrality"]
+    assert facet["agreement_reason"] is None
+    agreement = facet["agreement"]
+    assert agreement["n_pairs"] == 10
+    assert agreement["dropped_cannot_determine_n"] == 1
+    assert agreement["observed"] == 1.0
+    # primary appears 3 times per rater over 10 pairs: 6 of 20 labels.
+    assert agreement["prevalence"] == 0.3
+    assert set(agreement["statistics"]) == {"weighted_kappa"}
+    assert agreement["statistics"]["weighted_kappa"] == {"value": 1.0, "ci95": [1.0, 1.0]}
+
+
+def test_other_facets_report_pabak_and_ac1_on_principal_activity_only() -> None:
+    acts = VOCAB["primary_activities"]
+    records = [_minimal_record(f"g{i:02d}", "Northern America") for i in range(10)]
+    rows = [
+        _double(f"g{i:02d}", "primary_activities", f"{acts[i % 2]};{acts[2]}", acts[i % 2])
+        for i in range(10)
+    ]
+    card = build_precision(records, DATE, VOCAB, rows)
+    agreement = card["facets"]["primary_activities"]["agreement"]
+    assert agreement["n_pairs"] == 10
+    assert agreement["observed"] == 1.0
+    assert agreement["statistics"]["pabak"]["value"] == 1.0
+    assert agreement["statistics"]["gwet_ac1"]["value"] == 1.0
+    assert "principal" in agreement["note"]
+    assert "weighted_kappa" not in agreement["statistics"]
+
+
+def test_reviewer_agreement_uses_wilson_interval_and_counts_edit_reasons() -> None:
+    records = [_minimal_record(f"g{i:02d}", "Northern America") for i in range(4)]
+    reviews = [
+        _review("g00", "sector", "agree"),
+        _review("g01", "sector", "agree"),
+        _review("g02", "sector", "agree"),
+        _review("g03", "sector", "edit", "wrong_sector"),
+    ]
+    card = build_precision(records, DATE, VOCAB, reviews=reviews)
+    review = card["facets"]["sector"]["review"]
+    lo, hi = wilson_interval(3, 4)
+    assert review["audited_n"] == 4
+    assert review["agree_n"] == 3
+    assert review["agree_share"] == 0.75
+    assert review["ci95"] == [round(lo, 4), round(hi, 4)]
+    assert review["edit_reasons"] == {"wrong_sector": 1}
+    assert card["facets"]["entity_type"]["review"] is None
+    northern = card["by_region"]["Northern America"]
+    assert northern["facets"]["sector"]["audited_n"] == 4
+    assert northern["facets"]["sector"]["agree_share"] == 0.75
+    assert northern["facets"]["entity_type"]["audited_n"] == 0
+    assert northern["facets"]["entity_type"]["ci95"] == [None, None]
+
+
+def test_by_region_counts_roster_tagged_coverage_and_cannot_determine() -> None:
+    cannot = _minimal_record("g02", "Western Europe")
+    cannot.update(
+        status="cannot_determine",
+        cannot_determine_reason="no_web_presence",
+        plastics_centrality="cannot_determine",
+    )
+    records = [
+        _minimal_record("g00", "Northern America"),
+        _minimal_record("g01", "Western Europe"),
+        cannot,
+    ]
+    card = build_precision(records, DATE, VOCAB)
+    europe = card["by_region"]["Western Europe"]
+    assert europe["roster"] == 2
+    assert europe["tagged"] == 1
+    assert europe["cannot_determine"] == 1
+    assert europe["coverage"] == 0.5
+    assert card["coverage_by_region"]["Western Europe"] == {
+        "tagged": 1,
+        "roster": 2,
+        "coverage": 0.5,
+    }
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"double_tags": [_double("nope", "sector", VOCAB["sector"][0], VOCAB["sector"][0])]},
+        {"reviews": [_review("nope", "sector", "agree")]},
+    ],
+)
+def test_rows_for_unknown_group_ids_raise(kwargs: dict[str, Any]) -> None:
+    with pytest.raises(GroupsBuildError, match="not in the groups records"):
+        _build_with(**kwargs)
+
+
+def test_malformed_review_and_double_tag_rows_raise() -> None:
+    with pytest.raises(GroupsBuildError, match="not a Tier-1 facet"):
+        _build_with(reviews=[_review(CORE, "legal_form", "agree")])
+    with pytest.raises(GroupsBuildError, match="needs a reason_code"):
+        _build_with(reviews=[_review(CORE, "sector", "edit", "")])
+    with pytest.raises(GroupsBuildError, match="must leave reason_code empty"):
+        _build_with(reviews=[_review(CORE, "sector", "agree", "wrong_sector")])
+    with pytest.raises(GroupsBuildError, match="not a valid sector value"):
+        _build_with(double_tags=[_double(CORE, "sector", "not_a_sector", "not_a_sector")])
 
 
 # ---------------------------------------------------------------------------

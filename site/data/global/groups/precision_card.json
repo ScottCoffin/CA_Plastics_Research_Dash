@@ -1,4 +1,1110 @@
 {
+ "by_region": {
+  "Australia and New Zealand": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 59,
+   "tagged": 0
+  },
+  "Caribbean": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 9,
+   "tagged": 0
+  },
+  "Central America": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 44,
+   "tagged": 0
+  },
+  "Central Asia": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 1,
+   "tagged": 0
+  },
+  "Eastern Africa": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 155,
+   "tagged": 0
+  },
+  "Eastern Asia": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 34,
+   "tagged": 0
+  },
+  "Eastern Europe": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 53,
+   "tagged": 0
+  },
+  "Melanesia": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 3,
+   "tagged": 0
+  },
+  "Micronesia": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 2,
+   "tagged": 0
+  },
+  "Middle Africa": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 45,
+   "tagged": 0
+  },
+  "Northern Africa": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 35,
+   "tagged": 0
+  },
+  "Northern America": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 706,
+   "tagged": 0
+  },
+  "Northern Europe": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 140,
+   "tagged": 0
+  },
+  "Polynesia": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 1,
+   "tagged": 0
+  },
+  "South America": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 123,
+   "tagged": 0
+  },
+  "South-eastern Asia": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 286,
+   "tagged": 0
+  },
+  "Southern Africa": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 31,
+   "tagged": 0
+  },
+  "Southern Asia": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 407,
+   "tagged": 0
+  },
+  "Southern Europe": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 125,
+   "tagged": 0
+  },
+  "Western Africa": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 179,
+   "tagged": 0
+  },
+  "Western Asia": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 43,
+   "tagged": 0
+  },
+  "Western Europe": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 167,
+   "tagged": 0
+  },
+  "region_unknown": {
+   "cannot_determine": 0,
+   "coverage": 0.0,
+   "facets": {
+    "entity_type": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "geographic_scope": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "plastics_centrality": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "primary_activities": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    },
+    "sector": {
+     "agree_share": null,
+     "audited_n": 0,
+     "ci95": [
+      null,
+      null
+     ]
+    }
+   },
+   "roster": 25,
+   "tagged": 0
+  }
+ },
  "cannot_determine_reasons": {
   "conflict_of_interest": 0,
   "dead_link": 0,
@@ -129,6 +1235,7 @@
   "entity_type": {
    "agreement": null,
    "agreement_reason": "no double-tagged sample yet",
+   "review": null,
    "reviewed_n": 0,
    "tagged_n": 0,
    "with_evidence_n": 0
@@ -136,6 +1243,7 @@
   "geographic_scope": {
    "agreement": null,
    "agreement_reason": "no double-tagged sample yet",
+   "review": null,
    "reviewed_n": 0,
    "tagged_n": 0,
    "with_evidence_n": 0
@@ -143,6 +1251,7 @@
   "plastics_centrality": {
    "agreement": null,
    "agreement_reason": "no double-tagged sample yet",
+   "review": null,
    "reviewed_n": 0,
    "tagged_n": 0,
    "with_evidence_n": 0
@@ -150,6 +1259,7 @@
   "primary_activities": {
    "agreement": null,
    "agreement_reason": "no double-tagged sample yet",
+   "review": null,
    "reviewed_n": 0,
    "tagged_n": 0,
    "with_evidence_n": 0
@@ -157,13 +1267,14 @@
   "sector": {
    "agreement": null,
    "agreement_reason": "no double-tagged sample yet",
+   "review": null,
    "reviewed_n": 0,
    "tagged_n": 0,
    "with_evidence_n": 0
   }
  },
  "generated_from": "2026-11-26",
- "schema": "cg-precision-v1",
+ "schema": "cg-precision-v2",
  "tier1_facets": [
   "entity_type",
   "sector",

@@ -10,7 +10,9 @@ Reads site/data/global/groups/roster.json and writes into site/data/global/group
 
 Curated submissions (CG-6b, written by scripts/ambassador_export_pr.py) are read from
 curation/group_tags.csv and curation/group_affiliations.csv when present. Corrected display names
-come from curation/group_name_corrections.csv (the group_id never changes). A row whose group_id is
+come from curation/group_name_corrections.csv (the group_id never changes). Blind second tags
+(curation/group_double_tags.csv) and reviewer checks (curation/group_reviews.csv) feed the
+precision card; a missing file means no rows. A row whose group_id is
 not on the roster is skipped with a printed reason. A tag with not_an_organisation true removes the
 group from the roster used for every output (spec section 4.4, rule 5). Status reviewed is never set
 here; reviews come later.
@@ -28,7 +30,12 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from atlas.groups.build import OUTPUT_FILES, GroupsBuildError, build_groups  # noqa: E402
+from atlas.groups.build import (  # noqa: E402
+    OUTPUT_FILES,
+    TIER1_FACETS,
+    GroupsBuildError,
+    build_groups,
+)
 
 GROUPS_DIR = ROOT / "site" / "data" / "global" / "groups"
 ROSTER_PATH = GROUPS_DIR / "roster.json"
@@ -36,6 +43,9 @@ CURATION_DIR = ROOT / "curation"
 TAGS_FILE = "group_tags.csv"
 AFFILIATIONS_FILE = "group_affiliations.csv"
 NAME_CORRECTIONS_FILE = "group_name_corrections.csv"
+DOUBLE_TAGS_FILE = "group_double_tags.csv"
+REVIEWS_FILE = "group_reviews.csv"
+REVIEW_OUTCOMES = ("agree", "edit")
 # Facets with evidence columns in group_tags.csv (section 8.3), in column order.
 TAG_FACETS = (
     "entity_type",
@@ -177,13 +187,45 @@ def load_name_corrections(curation_dir: Path, roster_ids: set[str]) -> dict[str,
     return corrections
 
 
+def load_double_tags(curation_dir: Path) -> list[dict[str, str]]:
+    """Blind second-tag rows (CG-7a): group_id, facet, value_a, value_b. Missing file = no rows."""
+    rows = _rows(curation_dir / DOUBLE_TAGS_FILE)
+    for row in rows:
+        if row.get("facet", "") not in TIER1_FACETS:
+            raise GroupsBuildError(
+                f"{DOUBLE_TAGS_FILE}: facet {row.get('facet')!r} is not a Tier-1 facet"
+            )
+    return rows
+
+
+def load_reviews(curation_dir: Path) -> list[dict[str, str]]:
+    """Reviewer checks (CG-7a): group_id, facet, outcome, reason_code, reviewed_at."""
+    rows = _rows(curation_dir / REVIEWS_FILE)
+    for row in rows:
+        if row.get("facet", "") not in TIER1_FACETS:
+            raise GroupsBuildError(
+                f"{REVIEWS_FILE}: facet {row.get('facet')!r} is not a Tier-1 facet"
+            )
+        if row.get("outcome", "") not in REVIEW_OUTCOMES:
+            raise GroupsBuildError(
+                f"{REVIEWS_FILE}: outcome {row.get('outcome')!r} must be agree or edit"
+            )
+    return rows
+
+
 def build_outputs(roster: dict[str, Any], curation_dir: Path) -> dict[str, bytes]:
     """Return file name -> bytes for the six group files, with curated submissions applied."""
     roster_ids = {record.get("group_id") for record in roster["records"]}
     submissions, excluded = load_curated_submissions(curation_dir, roster_ids)
     names = load_name_corrections(curation_dir, roster_ids)
     kept = [record for record in roster["records"] if record.get("group_id") not in excluded]
-    return build_groups({**roster, "records": kept}, submissions, name_corrections=names)
+    return build_groups(
+        {**roster, "records": kept},
+        submissions,
+        name_corrections=names,
+        double_tags=load_double_tags(curation_dir),
+        reviews=load_reviews(curation_dir),
+    )
 
 
 def main(argv: list[str] | None = None) -> int:

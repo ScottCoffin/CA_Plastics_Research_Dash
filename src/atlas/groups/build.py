@@ -26,7 +26,16 @@ from collections.abc import Iterable, Mapping, Sequence
 from itertools import combinations
 from typing import Any
 
+from atlas.agreement import (
+    bootstrap_interval,
+    gwet_ac1,
+    observed_agreement,
+    pabak,
+    prevalence,
+    weighted_kappa,
+)
 from atlas.groups.schema import TAGGED_STATUSES, derive_layer, load_taxonomy, validate_groups
+from atlas.nlp.quality import wilson_interval
 
 __all__ = [
     "DERIVED_SCHEMAS",
@@ -54,7 +63,7 @@ DERIVED_SCHEMAS = {
     "groups_graph.json": "cg-graph-v1",
     "coverage.json": "cg-coverage-v1",
     "flows.json": "cg-flows-v1",
-    "precision_card.json": "cg-precision-v1",
+    "precision_card.json": "cg-precision-v2",
 }
 OUTPUT_FILES = (GROUPS_FILE, *DERIVED_SCHEMAS)
 # Tier-1 facets (docs/BFFP.md section 4.4): F1, F2, F3, F4 and F7, by record field name.
@@ -602,42 +611,211 @@ def build_coverage(
     }
 
 
+PRECISION_MIN_PAIRS = 10
+PRECISION_NO_SAMPLE = "no double-tagged sample yet"
+PRECISION_TOO_FEW = "fewer than 10 double-tagged pairs"
+CENTRALITY_FACET = "plastics_centrality"
+CANNOT_DETERMINE = "cannot_determine"
+PRINCIPAL_ACTIVITY_NOTE = (
+    "Compares the first (principal) activity only; the other listed activities are not compared."
+)
+REVIEW_OUTCOMES = ("agree", "edit")
+
+
+def _rounded(value: float | None) -> float | None:
+    return None if value is None else round(value, 4)
+
+
+def _interval(bounds: tuple[float | None, float | None]) -> list[float | None]:
+    return [_rounded(bounds[0]), _rounded(bounds[1])]
+
+
+def _checked_rows(
+    rows: Sequence[Mapping[str, str]], by_id: Mapping[str, Any], label: str
+) -> dict[str, list[Mapping[str, str]]]:
+    """Group rows by facet after checking each group_id is a record and each facet is Tier 1."""
+    grouped: dict[str, list[Mapping[str, str]]] = {}
+    for row in rows:
+        group_id, facet = row.get("group_id", ""), row.get("facet", "")
+        if group_id not in by_id:
+            raise GroupsBuildError(f"{label}: group_id {group_id!r} is not in the groups records")
+        if facet not in TIER1_FACETS:
+            raise GroupsBuildError(f"{label}: facet {facet!r} is not a Tier-1 facet")
+        grouped.setdefault(facet, []).append(row)
+    return grouped
+
+
+def _double_tag_labels(
+    facet: str, rows: Sequence[Mapping[str, str]], vocab: Mapping[str, Sequence[str]]
+) -> tuple[list[str], list[str], int]:
+    """Return (rater a labels, rater b labels, pairs dropped as cannot_determine) for one facet.
+
+    primary_activities compares the principal (first) activity only. Values outside the facet
+    vocabulary or blank values are a malformed file.
+    """
+    allowed = set(vocab[facet])
+    labels_a: list[str] = []
+    labels_b: list[str] = []
+    dropped = 0
+    for row in rows:
+        sides = []
+        for key in ("value_a", "value_b"):
+            parts = [part for part in row.get(key, "").split(";") if part]
+            if not parts or any(part not in allowed for part in parts):
+                raise GroupsBuildError(
+                    f"double_tags: {key} {row.get(key)!r} is not a valid {facet} value"
+                )
+            sides.append(parts[0] if facet == "primary_activities" else ";".join(parts))
+        if facet == CENTRALITY_FACET and CANNOT_DETERMINE in sides:
+            dropped += 1
+            continue
+        labels_a.append(sides[0])
+        labels_b.append(sides[1])
+    return labels_a, labels_b, dropped
+
+
+def _facet_statistics(
+    facet: str, labels_a: list[str], labels_b: list[str], categories: list[str]
+) -> dict[str, Any]:
+    if facet == CENTRALITY_FACET:
+        fns = {"weighted_kappa": lambda x, y: weighted_kappa(x, y, categories)}
+    else:
+        fns = {
+            "pabak": lambda x, y: pabak(x, y, categories),
+            "gwet_ac1": lambda x, y: gwet_ac1(x, y, categories),
+        }
+    return {
+        name: {
+            "value": _rounded(fn(labels_a, labels_b)),
+            "ci95": _interval(bootstrap_interval(fn, labels_a, labels_b)),
+        }
+        for name, fn in fns.items()
+    }
+
+
+def _agreement_block(
+    facet: str, rows: Sequence[Mapping[str, str]], vocab: Mapping[str, Sequence[str]]
+) -> tuple[dict[str, Any] | None, str | None]:
+    """Return (agreement, agreement_reason) for one facet; agreement is None below 10 pairs."""
+    if not rows:
+        return None, PRECISION_NO_SAMPLE
+    labels_a, labels_b, dropped = _double_tag_labels(facet, rows, vocab)
+    if len(labels_a) < PRECISION_MIN_PAIRS:
+        return None, PRECISION_TOO_FEW
+    categories = list(vocab[facet])
+    if facet == CENTRALITY_FACET:
+        categories = [c for c in categories if c != CANNOT_DETERMINE]
+    block: dict[str, Any] = {
+        "n_pairs": len(labels_a),
+        "observed": _rounded(observed_agreement(labels_a, labels_b)),
+        "prevalence": _rounded(prevalence(labels_a, labels_b)),
+        "statistics": _facet_statistics(facet, labels_a, labels_b, categories),
+    }
+    if facet == CENTRALITY_FACET:
+        block["dropped_cannot_determine_n"] = dropped
+    if facet == "primary_activities":
+        block["note"] = PRINCIPAL_ACTIVITY_NOTE
+    return block, None
+
+
+def _review_stats(rows: Sequence[Mapping[str, str]]) -> tuple[int, int]:
+    return len(rows), sum(1 for row in rows if row["outcome"] == "agree")
+
+
+def _review_block(rows: Sequence[Mapping[str, str]]) -> dict[str, Any] | None:
+    if not rows:
+        return None
+    audited, agree = _review_stats(rows)
+    reasons = Counter(row["reason_code"] for row in rows if row["outcome"] == "edit")
+    return {
+        "audited_n": audited,
+        "agree_n": agree,
+        "agree_share": _rounded(agree / audited),
+        "ci95": _interval(wilson_interval(agree, audited)),
+        "edit_reasons": dict(sorted(reasons.items())),
+    }
+
+
 def build_precision(
     records: Sequence[Mapping[str, Any]],
     generated_from: str,
     vocab: Mapping[str, Sequence[str]],
+    double_tags: Sequence[Mapping[str, str]] = (),
+    reviews: Sequence[Mapping[str, str]] = (),
 ) -> dict[str, Any]:
-    """Return the per-facet precision card (section 7.4); no agreement without a sample."""
+    """Return the per-facet precision card (section 7.4), schema cg-precision-v2.
+
+    Agreement needs at least PRECISION_MIN_PAIRS double-tagged pairs per facet; reviewer agreement
+    is a Wilson 95% interval over the audited records. No target is claimed until the pilot.
+    """
     tagged = [r for r in records if is_tagged(r)]
+    by_id = {r["group_id"]: r for r in records}
+    region_of = {r["group_id"]: r["region"] for r in records}
+    doubles = _checked_rows(double_tags, by_id, "double_tags")
+    for facet_rows in doubles.values():
+        seen = Counter((row["group_id"], row["facet"]) for row in facet_rows)
+        if any(count > 1 for count in seen.values()):
+            raise GroupsBuildError("double_tags: duplicate group_id and facet row")
+    review_rows = _checked_rows(reviews, by_id, "reviews")
+    for facet_rows in review_rows.values():
+        for row in facet_rows:
+            outcome, reason = row.get("outcome", ""), row.get("reason_code", "")
+            if outcome not in REVIEW_OUTCOMES:
+                raise GroupsBuildError(f"reviews: outcome {outcome!r} must be agree or edit")
+            if outcome == "edit" and not reason:
+                raise GroupsBuildError("reviews: an edit needs a reason_code")
+            if outcome == "agree" and reason:
+                raise GroupsBuildError("reviews: an agree row must leave reason_code empty")
+
     facets: dict[str, dict[str, Any]] = {}
     for facet in TIER1_FACETS:
         with_value = [r for r in tagged if r[facet] not in (None, [])]
         with_evidence = [r for r in tagged if any(e["facet"] == facet for e in r["evidence"])]
         reviewed = [r for r in with_value if r["reviewed_at"] is not None]
+        agreement, reason = _agreement_block(facet, doubles.get(facet, []), vocab)
         facets[facet] = {
             "tagged_n": len(with_value),
             "with_evidence_n": len(with_evidence),
             "reviewed_n": len(reviewed),
-            "agreement": None,
-            "agreement_reason": "no double-tagged sample yet",
+            "agreement": agreement,
+            "agreement_reason": reason,
+            "review": _review_block(review_rows.get(facet, [])),
         }
     reasons = {reason: 0 for reason in vocab["cannot_determine_reason"]}
     for record in records:
         if record["status"] == "cannot_determine":
             reasons[record["cannot_determine_reason"]] += 1
+
     by_region: dict[str, dict[str, Any]] = {}
     for record in records:
-        bucket = by_region.setdefault(record["region"], {"tagged": 0, "roster": 0})
+        bucket = by_region.setdefault(
+            record["region"],
+            {"tagged": 0, "roster": 0, "cannot_determine": 0, "facets": {}},
+        )
         bucket["roster"] += 1
         bucket["tagged"] += int(is_tagged(record))
-    for bucket in by_region.values():
+        bucket["cannot_determine"] += int(record["status"] == "cannot_determine")
+    for region, bucket in by_region.items():
         bucket["coverage"] = round(bucket["tagged"] / bucket["roster"], 4)
+        for facet in TIER1_FACETS:
+            rows = [r for r in review_rows.get(facet, []) if region_of[r["group_id"]] == region]
+            audited, agree = _review_stats(rows)
+            bucket["facets"][facet] = {
+                "audited_n": audited,
+                "agree_share": _rounded(agree / audited) if audited else None,
+                "ci95": _interval(wilson_interval(agree, audited)),
+            }
+    coverage = {
+        region: {"tagged": b["tagged"], "roster": b["roster"], "coverage": b["coverage"]}
+        for region, b in by_region.items()
+    }
     return {
         **_meta(generated_from, len(tagged), len(records), DERIVED_SCHEMAS["precision_card.json"]),
         "tier1_facets": list(TIER1_FACETS),
         "facets": facets,
         "cannot_determine_reasons": reasons,
-        "coverage_by_region": dict(sorted(by_region.items())),
+        "coverage_by_region": dict(sorted(coverage.items())),
+        "by_region": dict(sorted(by_region.items())),
     }
 
 
@@ -780,6 +958,8 @@ def build_groups(
     submissions: Iterable[Mapping[str, Any]] | None = None,
     taxonomy: Mapping[str, Sequence[str]] | None = None,
     name_corrections: Mapping[str, str] | None = None,
+    double_tags: Sequence[Mapping[str, str]] | None = None,
+    reviews: Sequence[Mapping[str, str]] | None = None,
 ) -> dict[str, bytes]:
     """Return file name -> deterministic bytes for the six group files.
 
@@ -805,7 +985,9 @@ def build_groups(
         "groups_graph.json": build_graph(records, vocab, generated_from),
         "coverage.json": build_coverage(roster["records"], records, vocab, generated_from),
         "flows.json": build_flows(records, vocab, generated_from),
-        "precision_card.json": build_precision(records, generated_from, vocab),
+        "precision_card.json": build_precision(
+            records, generated_from, vocab, double_tags or (), reviews or ()
+        ),
     }
     outputs = {name: to_bytes(document) for name, document in documents.items()}
     leaks = public_output_problems(outputs)
