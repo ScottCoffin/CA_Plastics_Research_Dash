@@ -733,3 +733,24 @@ The three screens the dashboard listed as "Coming next". The Worker routes were 
 - **Invite your co-authors** (`components/ambassador_invite.js`, `.css`): co-authors from the ambassador's own California author file (`data/california/authors/<author_id>.json`), counted by shared works, top 50, each with the first primary affiliation from `data/california/index.json` (loaded only on this screen) and the regions where any of their institutions is eligible (each region's `ambassador_institutions.json`). Co-authors outside the California index show "Institution not known. They can still sign up." Without an author file the screen offers one general invitation (QUESTIONS AMB-COAUTHORS-SCOPE). "Draft invitation" opens the Worker's `mailto:` (no recipient); "Copy invitation" copies subject, body and link, with a read-only text box when the clipboard is unavailable. One `POST /invitations` per screen visit; later clicks reuse the link. No email address is asked for, shown or stored.
 - **Links from the mails**: the settings link (`/ambassadors#notifications`) opens the settings screen; the reminder's next-task link (`/ambassadors?region=<slug>&case=<case_id>`) opens "Check classifier cases" at that case (`deepLinkFrom`). Both are removed from the address bar once read.
 - Checks: `tests/framework_ambassador_{knowledge,settings,invite}_runtime.mjs` and `tests/test_ambassador_{knowledge,settings,invite}.py`; `tests/framework_ambassador_workspace_runtime.mjs` (`deepLinkFrom`, `knowledgeStatus`); `tests/test_ambassador_workspace.py` (module wiring, stylesheet links, mail links). Browser walk with every Worker call mocked and all other network blocked, at 1440 and 390 px: dashboard cards; empty submit lists errors and focuses the box; a group and a policy are sent with the expected bodies, listed once each; settings save and a failed save reverts; `#notifications` and `?region=&case=` open their screens; 50 co-authors listed, two copies make one invitation request; no-author state; axe (wcag2a/aa, 21a/aa, 22aa) 0 violations on every screen; no horizontal scroll.
+
+## Global co-author invitations (owner 2026-11-26)
+
+Owner: depart from the California-only scope and scale globally (QUESTIONS AMB-COAUTHORS-SCOPE).
+
+- Route `GET /me/coauthors` (session; `worker/src/coauthors.ts`): one OpenAlex call for the ambassador's own author
+  record, `works?filter=author.id:<id>&per-page=200&select=id,authorships&sort=publication_date:desc` (the 200 most
+  recent works). Each co-author is counted once per work; self is excluded. Rows: `id`, `name`, `shared`,
+  `institution_ids` (up to 5), `institution` (from their most recent shared work), `regions` (every region whose
+  eligible list holds one of those institutions). Top 50 by shared works, plus `total` and `works_read`. No emails or
+  ORCIDs are read, returned or stored; nothing is written to D1.
+- No author record: `{ok: true, coauthors: [], reason: "no_author_record"}` and no OpenAlex call. OpenAlex failure:
+  502 `upstream_unavailable`. Uncached reads are limited to 30 per hour per ambassador (`accountWithinLimit`, scope
+  `coauthors`). Answers are cached per author for 7 days in the Workers Cache API (per data centre); a cache fault
+  only costs a fresh read.
+- Front end (`components/ambassador_invite.js`): calls the route first; on any error, including the route not being
+  deployed yet, it falls back to the California author files, so the live page keeps working until the deploy.
+- Checks: `worker/test/coauthors.test.ts` (9 tests; 165 Worker tests in total), `rowsFromCoauthors` in
+  `tests/framework_ambassador_invite_runtime.mjs`; mocked browser walk at 1440 and 390 px (global list with
+  eligibility across regions, and the California fallback), axe 0.
+- Deploy: waits for the owner's go-ahead (HUMAN_TASKS H54). No migration.

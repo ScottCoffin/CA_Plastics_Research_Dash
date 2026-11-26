@@ -34,6 +34,13 @@ The global quality numbers stay blank until a person labels a sample. Round 0 is
 3. When the progress bar reads "Drawn works labelled 160 of 160", close the browser tab and tell the agent "H39 round 0 done".
    The agent then draws the next round of 25 and says when the precision goal is met (at most 350).
 
+### H54. Approve deploying the ambassador Worker update: global co-author invitations (1 minute)
+The "Invite your co-authors" screen can now list co-authors for any ambassador worldwide, read from OpenAlex by
+the Worker (no email addresses, nothing stored). It needs one Worker deploy (no database change). Until then the
+screen keeps the California-only list.
+1. Tell the agent "deploy the Worker" (or "not yet").
+- **Done when:** the agent reports the new Worker version and a live check of the route.
+
 ### H53. Record the BFFP permission details (Add-on A4, 2 minutes)
 You said BFFP gave explicit permission to use their data. The groups spec asks that the details be on record.
 1. Tell the agent, in one message: the date, whether it was written or verbal, who at BFFP gave it (their role is

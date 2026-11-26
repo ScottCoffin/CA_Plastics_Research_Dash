@@ -8,6 +8,7 @@ import {
   eligibilityText,
   eligibleRegions,
   parseMailto,
+  rowsFromCoauthors,
 } from "../framework/src/components/ambassador_invite.js";
 
 let passed = 0;
@@ -144,6 +145,30 @@ check("parseMailto keeps a literal plus and tolerates missing fields", () => {
   assert.deepEqual(parseMailto("mailto:?subject=A+B&body=C"), {subject: "A+B", body: "C"});
   assert.deepEqual(parseMailto("mailto:?body=%E0%A4"), {subject: "", body: "%E0%A4"});
   assert.deepEqual(parseMailto(""), {subject: "", body: ""});
+});
+
+check("rowsFromCoauthors maps the Worker answer to rows with region names", () => {
+  const response = {
+    ok: true,
+    total: 2,
+    works_read: 3,
+    coauthors: [
+      {id: "A1", name: "Bo Berg", shared: 2, institution_ids: ["I1"], institution: "University of Oslo", regions: ["norway", "belgium"]},
+      {id: "A2", name: "", shared: 1, institution_ids: [], institution: null, regions: []},
+    ],
+  };
+  assert.deepEqual(rowsFromCoauthors(response, regionNames), [
+    {id: "A1", name: "Bo Berg", shared: 2, institution: "University of Oslo", regions: ["Norway", "Belgium"]},
+    {id: "A2", name: "A2", shared: 1, institution: null, regions: []},
+  ]);
+});
+
+check("rowsFromCoauthors gives no rows for a missing or empty answer and caps at 50", () => {
+  assert.deepEqual(rowsFromCoauthors({ok: true, coauthors: []}, regionNames), []);
+  assert.deepEqual(rowsFromCoauthors(null, regionNames), []);
+  assert.deepEqual(rowsFromCoauthors({}, regionNames), []);
+  const many = {coauthors: Array.from({length: 60}, (_, i) => ({id: `A${i}`, name: `P${i}`, shared: 1, regions: []}))};
+  assert.equal(rowsFromCoauthors(many, regionNames).length, 50);
 });
 
 check("copyText puts the subject, a blank line, then the body", () => {

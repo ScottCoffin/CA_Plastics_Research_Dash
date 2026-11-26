@@ -47,11 +47,12 @@ def test_invite_module_exports_helpers_and_mount() -> None:
         assert name in invite, name
 
 
-def test_only_worker_route_is_invitations() -> None:
+def test_only_worker_routes_are_invitations_and_coauthors() -> None:
     invite = _text(INVITE)
     routes = re.findall(r"api\(\s*[\"'`]([^\"'`]*)[\"'`]", invite)
-    assert routes == ["/invitations"]
+    assert set(routes) == {"/invitations", "/me/coauthors"}
     assert '"/invitations", {method: "POST", body: {}}' in invite
+    assert 'ctx.api("/me/coauthors")' in invite
     assert "https://api.plastiverse.live" not in invite
     assert "https://api.plastiverse.live" not in _text(STYLES)
 

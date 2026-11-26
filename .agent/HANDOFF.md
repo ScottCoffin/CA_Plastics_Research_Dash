@@ -1,4 +1,4 @@
-# Handoff — 2026-11-26 — AMB-1 slice 3 (live), BQ-V.1 and BQ-V.4 complete (works graph and Works view); owner answers in
+# Handoff — 2026-11-26 — AMB-1 slice 3 live; BQ-V.1/BQ-V.4 done; CG-0 (A4 integrated), CG-5, REG-CA done; global co-authors built
 
 ## State in one paragraph
 The signed-in ambassador dashboard's three "Coming next" cards are now real screens, each its own module mounted by
@@ -19,9 +19,11 @@ machine. Cached rebuild about 4 minutes, byte-identical. Docs: NETWORK_BUILD §1
 1. After the Pages deploy: open https://plastiverse.live/ambassadors signed in and check the three screens on the live
    site (one real knowledge item into the moderation queue, toggle a setting, copy an invitation).
 2. AMB-1 build order step 5: pilot with Norway and Belgium (needs local leads; owner).
-3. Owner 2026-11-26 queue: REG-CA (California region.json like Norway/Belgium), A4 integration (docs/BFFP.md
-   -> CG tasks; existing decisions win over the spec), AMB-COAUTHORS-GLOBAL (Worker route; deploy needs go-ahead).
-   Then BQ-S9b, BQ-G3. Rebuild denominators.json at the next global data refresh (owner).
+3. Done this session: REG-CA (`site/data/california/region.json`), CG-0 (A4 integrated, ADR-A4-INTEGRATION),
+   CG-5 (`docs/ambassador_infrastructure.md`), AMB-COAUTHORS-GLOBAL built (`GET /me/coauthors`; deploy waits for H54).
+   Next eligible: CG-1 (BFFP discovery, live but polite reads of public pages), CG-4 (cg-v2 schema + V1-V14),
+   then CG-2/CG-3, CG-6 (Worker; deploy go-ahead), BQ-S9b, BQ-G3. Rebuild denominators.json at the next global
+   data refresh (owner).
 4. Design-led, waiting on owner review (H25): VD-SM, UX-13 part b.
 
 ## Open findings
@@ -39,4 +41,5 @@ machine. Cached rebuild about 4 minutes, byte-identical. Docs: NETWORK_BUILD §1
 - H28: review the 22 OPC mapping rows (`py -3.14 -m streamlit run scripts/review_opc_mapping_app.py`).
 - H42: triage 43 PubMed misses (`py -3.14 -m streamlit run scripts/review_pubmed_misses_app.py`).
 - H40: taxonomy decisions D1-D10 in `docs/TAXONOMY_PROPOSAL.md`. H2: 277 low-confidence work-relevance decisions.
+- H54: say "deploy the Worker" for global co-author invitations. H53: BFFP permission details (one message).
 - Accept or change WORKS-GRAPH-SELECT in `.agent/QUESTIONS.md` (works graph shows the 15,000 most cited).

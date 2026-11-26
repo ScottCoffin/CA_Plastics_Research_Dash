@@ -1,5 +1,6 @@
 import { type Ctx, handleMe, handleSignout, handleStart, handleVerify } from "./auth";
 import { runCleanup } from "./cleanup";
+import { handleCoauthors } from "./coauthors";
 import type { Env } from "./env";
 import { handleExport } from "./export";
 import { handleCreateInvitation, handleInvite } from "./invitations";
@@ -115,6 +116,9 @@ export async function handle(
         if (request.method === "GET") return withCors(await handleGetNotifications(request, env, ctx));
         if (request.method === "POST") return withCors(await handleSetNotifications(request, env, ctx));
         return methodNotAllowed();
+      case "/me/coauthors":
+        if (request.method !== "GET") return methodNotAllowed();
+        return withCors(await handleCoauthors(request, env, ctx));
       case "/invitations":
         if (request.method !== "POST") return methodNotAllowed();
         return withCors(await handleCreateInvitation(request, env, ctx));

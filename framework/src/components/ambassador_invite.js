@@ -55,6 +55,21 @@ export function coAuthorRows(list, indexAuthors, eligibleBySlug, regionNames, li
   });
 }
 
+/** Rows from the Worker's GET /me/coauthors answer: {id, name, shared, institution, regions (region names)}. */
+export function rowsFromCoauthors(response, regionNames) {
+  const list = Array.isArray(response?.coauthors) ? response.coauthors : [];
+  return list.slice(0, MAX_ROWS).map((person) => {
+    const regions = Array.isArray(person?.regions) ? person.regions : [];
+    return {
+      id: String(person?.id ?? ""),
+      name: String(person?.name || person?.id || ""),
+      shared: Number(person?.shared) || 0,
+      institution: person?.institution ? String(person.institution) : null,
+      regions: regions.map((slug) => regionNames[slug] || slug),
+    };
+  });
+}
+
 function joinNames(names) {
   if (names.length <= 1) return names.join("");
   return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
@@ -227,7 +242,25 @@ export function mountInvite(host, ctx) {
     root.innerHTML = `<ul class="iv-list" aria-label="Your co-authors">${rows.map(rowHTML).join("")}</ul>${more}`;
   }
 
-  async function load() {
+  // The Worker answer (GET /me/coauthors). Returns false on any failure, so the static path below takes over.
+  async function loadFromWorker() {
+    const response = await ctx.api("/me/coauthors");
+    if (!root.isConnected) return true;
+    if (!response.ok) return false;
+    const data = response.data || {};
+    if (data.reason === "no_author_record") {
+      renderGeneral(NOT_IN_ATLAS);
+      return true;
+    }
+    const rows = rowsFromCoauthors(data, REGION_NAMES);
+    if (!rows.length) renderGeneral(NO_CO_AUTHORS);
+    else renderList(rows, Number(data.total) || rows.length);
+    return true;
+  }
+
+  // Fallback until the Worker route is deployed: the California author file and the eligible lists, read as static files.
+  async function loadFromStatic() {
+    if (!AUTHOR_ID.test(authorId)) return renderGeneral(NOT_IN_ATLAS);
     const file = await loadJson(regionFileUrl("california", `authors/${authorId}.json`));
     if (!root.isConnected) return;
     if (!file.ok && file.status === 404) return renderGeneral(NOT_IN_ATLAS);
@@ -247,6 +280,10 @@ export function mountInvite(host, ctx) {
     return renderList(rows, people.length);
   }
 
-  if (!AUTHOR_ID.test(authorId)) renderGeneral(NOT_IN_ATLAS);
-  else load();
+  async function load() {
+    if (typeof ctx?.api === "function" && (await loadFromWorker())) return;
+    return loadFromStatic();
+  }
+
+  load();
 }

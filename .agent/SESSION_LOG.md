@@ -270,3 +270,4 @@
 | 2026-11-26 | BQ-V.1 slice 3 | Global works similarity graph (15,000 works, k=5 bge-small, 60,000 edges); BQ-V.1 complete | this commit |
 | 2026-11-26 | BQ-V.4 Works view + owner answers | Works graph in /explore Network (works.json now shares the institution file shape); BQ-V.4 complete; owner answers recorded (H52/H51 done, three AMB questions answered, AMB-COAUTHORS-GLOBAL and REG-CA queued) | this commit |
 | 2026-11-26 | CG-0 | Add-on A4 (community groups, docs/BFFP.md) integrated: CG-0..CG-16, A4-D0..D24, A4-C1..C11 (repo decisions win), A4-Q1..Q8, H53, scaffold check in CI | this commit |
+| 2026-11-26 | REG-CA, CG-5, AMB-COAUTHORS-GLOBAL (built) | California region.json; docs/ambassador_infrastructure.md; global co-authors route (deploy waits for H54) | this commit |
