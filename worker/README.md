@@ -44,7 +44,8 @@ client values; the tests cover the flow with a fake ORCID.
 - Secret `EXPORT_TOKEN` (owner-approved `wrangler secret put` only): the bearer token for `/export/approved`. Unset, the export refuses every request.
 - `PUBLIC_SITE_URL` (wrangler.toml `[vars]`, `https://plastiverse.live`): the only host the reminder pass reads case files from.
 - Migrations: `0001_init.sql` (slice 1), `0002_orcid_signup.sql` (slice 2a), `0003_submissions.sql` (slice 2b),
-  `0004_notifications.sql` (slice 2c). Read the migration note in 0002 before any
+  `0004_notifications.sql` (slice 2c), `0005_proposal_allowlist.sql`, `0006_unlisted_institutions.sql`,
+  `0007_group_leases.sql` (CG-6a; applied remotely 2026-11-26). Read the migration note in 0002 before any
   remote apply: slice-1 local rows were keyed with `SESSION_SIGNING_KEY` and must be reset, not re-hashed.
 
 ## Routes

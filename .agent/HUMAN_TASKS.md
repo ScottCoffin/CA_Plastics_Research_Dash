@@ -24,10 +24,6 @@ Last updated: 2026-11-26.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
-### H56. Authorize the community groups Worker deployment
-CG-6c is implemented and verified. The signed-in group task needs D1 migration 0007 and the group routes in the production Worker.
-Reply **deploy the Worker** to authorize the migration and deploy. The agent will run both commands and verify the production routes.
-
 ### H39. Label the first global gold round (BQ-G4, 160 works, about 1 minute each)
 The global quality numbers stay blank until a person labels a sample. Round 0 is drawn: 160 works,
 10 in each of 16 strata. Labels save on every click, so you can stop and resume any time.
@@ -241,6 +237,7 @@ leak-check works wait for S5.7.
 
 ## Done
 
+- H56 (2026-11-26): owner approved the community groups deploy; the agent applied D1 migration 0007 and deployed Worker version cb95ec35 (group routes live, 401 without a session).
 - H55 (2026-11-26): owner approved the group-tagging guide, adding the sector joint_power_authority, allowing one to five activities and removing the conflict-of-interest rule (A4-D25..D27).
 - H54 (2026-11-26): owner approved the Worker deploy; the agent deployed version cbc9e050 (GET /me/coauthors live, 401 without a session).
 - H53 (2026-11-26): owner recorded BFFP's verbal permission to use all of their data with no conditions (A4-D1).

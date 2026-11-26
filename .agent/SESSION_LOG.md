@@ -280,3 +280,4 @@
 | 2026-11-26 | CG-6b | Approved group tags flow from the Worker export into curation CSVs and the groups build | this commit |
 | 2026-11-26 | CG-6c | Group-tagging workspace, retry and browser gates, matching public roster rebuild | this commit |
 | 2026-11-26 | CG-10 | Keyboard tree, distinct counts, hash and roster integration, desktop and phone browser gate | this commit |
+| 2026-11-26 | H56 | D1 migration 0007 applied, Worker cb95ec35 deployed, group routes verified live; CG-6 closed | this commit |
