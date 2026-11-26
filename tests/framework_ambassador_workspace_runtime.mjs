@@ -3,6 +3,8 @@
 import assert from "node:assert/strict";
 import {
   activeRegions,
+  regionMapHTML,
+  regionPlace,
   admittingTerms,
   answerBody,
   caseChoices,
@@ -240,6 +242,38 @@ check("error text: workspace codes first, then the shared sign-up map, then the 
   assert.match(workspaceErrorText("not_region_member"), /not open/);
   assert.match(workspaceErrorText("rate_limited"), /too many attempts/);
   assert.match(workspaceErrorText("SQLITE_BUSY stack"), /Something went wrong/);
+});
+
+check("the region map: the region is highlighted and the view zooms to it; California outlines, not the country", () => {
+  const world = {
+    crop: [0, 400], w: 1000, sphere: "M0 0", ca: "M1 1Z",
+    countries: [{iso_a2: "US", d: "M2 2"}, {iso_a2: "NO", d: "M3 3"}],
+  };
+  const rows = [
+    {kind: "country", iso: "US", name: "United States", geom: [-125, 32, -114, 42]},
+    {kind: "admin1", iso: "US", name: "California", geom: [-124.4, 32.5, -114.1, 42]},
+    {kind: "country", iso: "NO", name: "Norway", geom: [5, 58, 31, 71]},
+  ];
+  const geo = {
+    world,
+    rows,
+    regions: [
+      {slug: "california", country_codes: ["US"], subdivision_names: ["California"]},
+      {slug: "norway", country_codes: ["NO"], subdivision_names: []},
+    ],
+  };
+  const ca = regionMapHTML(geo, "california");
+  assert.match(ca, /viewBox="\d/);
+  assert.match(ca, /<path class="ca open" d="M1 1Z"\/>/);
+  assert.doesNotMatch(ca, /class="c open" d="M2 2"/);
+  assert.match(ca, /class="c" d="M2 2"/);
+  const no = regionMapHTML(geo, "norway");
+  assert.match(no, /class="c open" d="M3 3"/);
+  assert.doesNotMatch(no, /class="ca open"/);
+  assert.equal(regionMapHTML(geo, "nowhere"), "");
+  assert.equal(regionPlace({country_codes: ["US"], subdivision_names: ["California"]}, rows).name, "California");
+  assert.equal(regionPlace({country_codes: ["NO"], subdivision_names: []}, rows).name, "Norway");
+  assert.equal(regionPlace({country_codes: []}, rows), null);
 });
 
 console.log(`${passed} workspace runtime checks passed`);

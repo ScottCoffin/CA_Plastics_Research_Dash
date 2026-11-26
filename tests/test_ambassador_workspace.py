@@ -107,7 +107,10 @@ def test_highlight_escapes_before_it_marks() -> None:
     assert "export function highlightHtml" in workspace
     assert "escapeHtml(part)" in workspace
     assert "`<mark>${escapeHtml(part)}</mark>`" in workspace
-    assert 'import {escapeHtml, regionFileUrl} from "./atlas.js";' in workspace
+    assert (
+        'import {escapeHtml, globalDataUrl, regionFileUrl, siteRoot} from "./atlas.js";'
+        in workspace
+    )
 
 
 def test_one_heading_per_screen_and_focus_on_navigation() -> None:
@@ -125,8 +128,11 @@ def test_one_heading_per_screen_and_focus_on_navigation() -> None:
 
 def test_stream_c_and_settings_are_shown_as_coming_next() -> None:
     workspace = _text(WORKSPACE)
-    assert workspace.count("Coming next") == 2
-    assert "Add local knowledge" in workspace and "Settings" in workspace
+    # The dashboard shows the three later cards as "Coming next" (soonCard), not as streams.
+    assert "Coming next" in workspace
+    for name in ("Add local knowledge", "Notification settings", "Invitations"):
+        assert name in workspace
+    assert 'data-ws-action="open" data-stream="C"' not in workspace
 
 
 def test_the_workspace_has_no_hex_colours_and_the_css_uses_tokens() -> None:

@@ -700,3 +700,14 @@ Front end and builder for the owner decision above (AMB-1, task AMB-UNLISTED; th
 - **Moderation:** an email-confirmed proposal shows "Email confirmed at <confirmed_domain>", and the region and domain fields are
   prefilled from `proposed_region` and `proposed_domain`; the URL host is the fallback.
 - **Display names:** an approved institution with no name yet shows its domain in the sign-up lists.
+
+## Signed-in dashboard (owner 2026-11-26)
+
+Owner: after signing in, an ambassador should no longer see "Become a local ambassador", the recruiting text, "Regions on the world map", "What ambassadors do", the badge explainer, "Can I join?" or "How it works". They get the dashboard with the tasks.
+
+- Page mode: `data-mode` on the `.am` root, set by `ambassador_signup.js`. `checking` is the markup default until GET /me answers (a neutral skeleton shows, and the recruiting sections are hidden). `dashboard` is set when /me is ok and the profile is complete (`pageMode(me)`). `public` is everything else: signed out, a failed /me, the sign-up and failure routes, and a missing profile (the profile form shows on the recruiting page, as before). Sign-out returns the page to `public`. The recruiting sections carry the `recruit` class and are hidden by CSS in `checking` and `dashboard`; the markup is not removed.
+- Dashboard: a header with the greeting (`h1`, the only heading level 1 in this mode), the region's Ambassador badge, the region switcher when there are several regions, and sign out. Below it, the region heading with the shared world map (`world_map.js` frame and `placeView` zoom) highlighting the region (California outlines only; other regions fill their countries). Then "Your tasks": stream A and stream B cards with progress, time estimates, and Start, Continue or Review; "Add local knowledge", "Notification settings" and "Invitations" are "Coming next" cards.
+- A signed-in account with no active region sees the dashboard with a "No region is open to your account yet" state.
+- Focus: on mount the dashboard heading takes focus only after a sign-in route (as the profile screen did); a plain page load does not move focus. Screens inside the dashboard move focus to their heading as before.
+- Title: the browser tab reads "Your ambassador dashboard" in dashboard mode and the page title otherwise.
+- Checks: `tests/framework_ambassador_signup_runtime.mjs` (`pageMode`), `tests/framework_ambassador_workspace_runtime.mjs` (`regionMapHTML`, `regionPlace`), `tests/test_ambassadors_page.py` (mode switch markup and CSS). Browser check (mocked API, never the live API): signed out, one region, two regions and needs-profile states at 1440 and 390 px; axe (wcag2a/aa, 21a/aa, 22aa) reports 0 violations in each state; no horizontal scroll.

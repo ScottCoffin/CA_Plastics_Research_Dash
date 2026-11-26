@@ -281,6 +281,27 @@ let body = null;
 let statusEl = null;
 let flow = freshFlow();
 let turnstileLoading = null;
+let pageRoot = null;
+
+/**
+ * The page mode after GET /me: "dashboard" for a signed-in ambassador whose profile is complete, else "public"
+ * (the recruiting page, as today). A failed or missing /me is public too.
+ */
+export function pageMode(me) {
+  const ambassador = me && me.ok && me.data ? me.data.ambassador : null;
+  return ambassador && !ambassador.needs_profile ? "dashboard" : "public";
+}
+
+const DASHBOARD_TITLE = "Your ambassador dashboard · Plastiverse Live";
+let publicTitle = null;
+
+/** Sets data-mode on the page root (the CSS hides the recruiting sections in dashboard and checking modes). */
+export function setPageMode(mode) {
+  if (!pageRoot) return;
+  pageRoot.dataset.mode = mode;
+  if (publicTitle === null) publicTitle = document.title;
+  document.title = mode === "dashboard" ? DASHBOARD_TITLE : publicTitle;
+}
 
 function freshFlow() {
   return {
@@ -595,27 +616,15 @@ function showFirstVisit() {
     </form>`);
 }
 
-function showSignedIn(ambassador) {
-  const names = (ambassador.regions || []).map((r) => regionLabel(r.region));
-  show(`<h2 tabindex="-1">Signed in as ${esc(ambassador.display_name)}</h2>
-    <p>${names.length ? `Regions: ${esc(names.join(", "))}.` : "No region is linked yet."}</p>
-    <p class="actions"><button type="button" class="link-btn" data-action="signout">Sign out</button></p>`);
-  setStatus(`Signed in as ${ambassador.display_name}.`);
-}
-
-/** Shows the right screen for a signed-in ambassador: the first-visit profile when it is missing, else the panel. */
+/** Shows the right screen for a signed-in ambassador: the first-visit profile when it is missing, else the dashboard. */
 function showAccount(ambassador, focus = true) {
   if (ambassador.needs_profile) {
     showFirstVisit();
     if (!focus) body.querySelector("h2")?.blur();
     return;
   }
-  if (activeRegions(ambassador).length) {
-    panel.hidden = false;
-    return mountWorkspace(body, ambassador, {focus, announce: setStatus});
-  }
-  showSignedIn(ambassador);
-  if (!focus) body.querySelector("h2")?.blur();
+  panel.hidden = false;
+  return mountWorkspace(body, ambassador, {focus, announce: setStatus});
 }
 
 async function startSignup() {
@@ -787,13 +796,28 @@ async function onAction(action, el) {
     // A visible message, not only the status line: the panel is hidden when the landing page shows.
     const response = await api("/auth/signout", {method: "POST"});
     if (!response.ok) return showMessage("We could not sign you out", errorText(response.error));
+    setPageMode("public");
     return showMessage("You have signed out", "Your session has ended on this device.", orcidLink("Sign in with ORCID"));
   }
   return undefined;
 }
 
-/** Mounts the sign-up. Call once after the page markup is in the DOM. */
+/** Mounts the sign-up. Call once after the page markup is in the DOM. The page stays in its checking mode until /me answers. */
 export async function mountSignup(root) {
+  pageRoot = root;
+  let modeSet = false;
+  const report = (mode) => {
+    modeSet = true;
+    setPageMode(mode);
+  };
+  try {
+    return await mountSignupFlow(root, report);
+  } finally {
+    if (!modeSet) setPageMode("public");
+  }
+}
+
+async function mountSignupFlow(root, report) {
   panel = root.querySelector("#amb-signup");
   body = root.querySelector("#amb-signup-body");
   statusEl = root.querySelector("#amb-signup-status");
@@ -834,10 +858,12 @@ export async function mountSignup(root) {
 
   const route = routeFromSearch(location.search);
   if (route) history.replaceState(history.state, "", stripQuery(location.href));
+  if (route && route !== "signin") report("public");
   if (route === "failed") return showFailed();
   if (route === "pending_review") return showPendingReview();
   if (route === "signup") return startSignup();
   const me = await api("/me");
+  report(pageMode(me));
   if (me.ok) return showAccount(me.data.ambassador, route !== null);
   if (route === "signin") return showFailed();
   return undefined;

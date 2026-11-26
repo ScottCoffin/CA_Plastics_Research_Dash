@@ -150,3 +150,27 @@ def test_search_states_the_fifteen_thousand_threshold_plainly() -> None:
     page = _text(PAGE)
     assert "15,000 people or more" in page
     assert "state, province or county" in page
+
+
+def test_signed_in_mode_switch_hides_the_recruiting_sections() -> None:
+    """Owner 2026-11-26: a signed-in ambassador sees only the dashboard.
+
+    The recruiting sections stay in the markup and data-mode hides them (checking and dashboard), so
+    signed-out visitors keep the page as it was.
+    """
+    page = _text(PAGE)
+    assert '<div class="am" data-mode="checking">' in page
+    assert page.count('class="sec recruit"') + page.count('class="hero recruit"') == 5
+    for heading in (
+        "Become a local ambassador",
+        "Regions on the world map",
+        "What ambassadors do",
+        "How it works",
+    ):
+        assert heading in page
+    css = _text(COMPONENTS / "ambassadors.css")
+    assert '.am[data-mode="checking"] .recruit, .am[data-mode="dashboard"] .recruit' in css
+    signup = _text(COMPONENTS / "ambassador_signup.js")
+    assert "export function pageMode(me)" in signup
+    assert "pageMode(me)" in signup and "setPageMode(mode)" in signup
+    assert "only-checking" in page and "ws-skel" in page

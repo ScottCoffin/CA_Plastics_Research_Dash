@@ -5,9 +5,12 @@
 // and region files are same-origin public JSON. Pure helpers are exported for
 // tests/framework_ambassador_workspace_runtime.mjs and touch no DOM at import time. Nothing personal is kept in the
 // browser: no browser storage of personal data, and none in the URL.
-import {escapeHtml, regionFileUrl} from "./atlas.js";
+import {escapeHtml, globalDataUrl, regionFileUrl, siteRoot} from "./atlas.js";
 import {REGION_NAMES, api, errorText} from "./ambassador_signup.js";
 import {REGION_SCHEMA, safeUrl} from "./region_page.js";
+import {badgeHTML} from "./ambassador_badge.js";
+import {placeRows} from "./world_map.js";
+import {placeView} from "./ambassadors.js";
 
 export const CASES_SCHEMA = "amb-cases-v1";
 /** Time estimates from the design notes: 30 seconds per case, 2 minutes per placeholder. */
@@ -213,15 +216,60 @@ const regionName = (slug) => REGION_NAMES[slug] || slug;
 let state = null;
 let wrap = null;
 
-/** Mounts the workspace into `root` (the sign-up body) for a signed-in ambassador with active regions. */
+// The map data for the region header: the shared world outline, the place index and the region list. Loaded once.
+let geoPromise = null;
+export function loadGeo() {
+  if (!geoPromise) {
+    const fetchJson = (url) => fetch(url, {cache: "no-cache"}).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    geoPromise = Promise.all([
+      fetchJson(new URL("assets/world/world.json", siteRoot())),
+      fetchJson(globalDataUrl("places.json")),
+      fetchJson(globalDataUrl("ambassador_regions.json")),
+    ]).then(([world, places, index]) => ({world, rows: placeRows(places), regions: index?.regions || []}));
+  }
+  return geoPromise;
+}
+
+/** The place a region is zoomed to: its subdivision (California) or its country. Null when none matches. */
+export function regionPlace(region, rows) {
+  const iso = (region.country_codes || [])[0];
+  if (!iso) return null;
+  if ((region.subdivision_names || []).length) {
+    const sub = rows.find((r) => r.kind === "admin1" && r.iso === iso && region.subdivision_names.includes(r.name));
+    if (sub) return sub;
+  }
+  return rows.find((r) => r.kind === "country" && r.iso === iso) || null;
+}
+
+/** The region's map: the world outline with the region highlighted and the view zoomed to it (shared world_map.js frame). */
+export function regionMapHTML(geo, slug) {
+  const region = geo.regions.find((r) => r.slug === slug);
+  const world = geo.world;
+  if (!region || !world) return "";
+  const [top, bottom] = world.crop;
+  const frame = [0, top, world.w, bottom - top];
+  const place = regionPlace(region, geo.rows);
+  const view = place ? placeView(place.geom, place.iso, frame[2] / frame[3], frame, 120) : frame;
+  // A subdivided region (California) highlights its outline only; its country is drawn plain.
+  const subdivided = (region.subdivision_names || []).length > 0;
+  const onCountries = new Set(subdivided ? [] : region.country_codes || []);
+  const paths = world.countries
+    .map((c) => `<path class="c${onCountries.has(c.iso_a2) ? " open" : ""}" d="${c.d}"/>`)
+    .join("");
+  const outline = subdivided && world.ca ? `<path class="ca open" d="${world.ca}"/>` : "";
+  return `<svg class="amb-map" viewBox="${view.map((n) => n.toFixed(1)).join(" ")}" preserveAspectRatio="xMidYMid meet" focusable="false" aria-hidden="true"><path class="sea" d="${world.sphere}"/>${paths}${outline}</svg>`;
+}
+
+/** Mounts the workspace (the signed-in dashboard) into `root`, the sign-up body, for a signed-in ambassador. */
 export function mountWorkspace(root, ambassador, {focus = true, announce = null} = {}) {
   const regions = activeRegions(ambassador);
   state = {
     root,
+    name: ambassador.display_name || "",
     regions,
     region: regions[0] || "",
     screen: "home",
-    loading: true,
+    loading: regions.length > 0,
     loadError: "",
     busy: false,
     cases: [],
@@ -234,47 +282,47 @@ export function mountWorkspace(root, ambassador, {focus = true, announce = null}
     items: [],
     editOpen: null,
     submissions: [],
+    geo: null,
   };
-  root.innerHTML = '<div class="ws" data-ws><p class="sr" role="status" aria-live="polite" data-ws-live></p><div data-ws-main></div></div>';
+  root.innerHTML = '<div class="ws" data-ws><p class="sr" role="status" aria-live="polite" data-ws-live></p><header class="ws-top" data-ws-head></header><div data-ws-main></div></div>';
   wrap = root.querySelector("[data-ws]");
   wrap.addEventListener("click", onClick);
   wrap.addEventListener("change", onChange);
   if (announce) announce(`Signed in as ${ambassador.display_name}.`);
-  render({focus: focus ? "heading" : null});
-  return loadRegion(state.region, focus);
+  render({focus: focus ? "title" : null});
+  if (!regions.length) return undefined;
+  // Focus stays on the dashboard heading; the region data loads behind it.
+  return loadRegion(state.region, false);
 }
 
 const mainEl = () => wrap.querySelector("[data-ws-main]");
+const headEl = () => wrap.querySelector("[data-ws-head]");
 function say(text) {
   const live = wrap.querySelector("[data-ws-live]");
   if (live) live.textContent = text;
 }
 
+// focus: "title" moves focus to the dashboard heading (on mount); "heading" to the heading of the current screen.
 function render({focus = null} = {}) {
   const host = mainEl();
   if (!host) return;
+  headEl().innerHTML = headerHTML();
   if (state.loading) host.innerHTML = loadingHTML();
   else if (state.screen === "A") host.innerHTML = streamAHTML();
   else if (state.screen === "B") host.innerHTML = streamBHTML();
   else host.innerHTML = homeHTML();
-  if (focus === "heading") host.querySelector("h2")?.focus();
-  else if (focus) host.querySelector(focus)?.focus();
+  if (focus === "title") headEl().querySelector("h1")?.focus();
+  else if (focus === "heading") host.querySelector("h2")?.focus();
 }
 
 const crumb = '<p class="ws-crumb"><button type="button" class="link-btn" data-ws-action="home">Back to your tasks</button></p>';
 
 function loadingHTML() {
-  return `<h2 tabindex="-1">Your workspace</h2><p class="status">Loading your tasks for ${esc(regionName(state.region))}.</p>`;
+  return `<h2 tabindex="-1">Your tasks</h2><p class="status">Loading your tasks for ${esc(regionName(state.region))}.</p>`;
 }
 
-function streamButton(stream, name, count, time) {
-  return `<button type="button" class="ws-stream" data-ws-action="open" data-stream="${stream}">
-    <span class="ws-stream-name">${esc(name)}</span><span class="ws-stream-count">${esc(count)}</span><span class="ws-stream-time">${esc(time)}</span></button>`;
-}
-
-function homeHTML() {
-  const progress = caseProgress(state.cases, state.answers);
-  const toConfirm = state.items.length;
+/** The dashboard header: greeting with the display name, the region's badge, the region switcher and sign out. */
+function headerHTML() {
   const switcher =
     state.regions.length > 1
       ? `<div class="ws-chips" role="group" aria-label="Choose a region">${state.regions
@@ -284,22 +332,70 @@ function homeHTML() {
           )
           .join("")}</div>`
       : "";
-  const caseCount = progress.total ? progressText(progress) : "No cases yet";
-  const caseTime = progress.remaining > 0 ? estimateText(progress.remaining * CASE_MINUTES) : "all answered";
-  const itemCount = toConfirm ? `${toConfirm} to confirm` : "Nothing to confirm";
-  const itemTime = toConfirm ? estimateText(toConfirm * ITEM_MINUTES) : "all confirmed";
-  return `<p class="ws-region">Ambassador workspace</p>
-    <h2 tabindex="-1">${esc(regionName(state.region))}</h2>
-    <p class="hint">Your tasks for this region. Each answer is saved as soon as you give it.</p>
-    ${switcher}
-    ${state.loadError ? `<p class="ws-error">${esc(state.loadError)}</p>` : ""}
-    <ul class="ws-streams">
-      <li>${streamButton("A", "Check classifier cases", caseCount, caseTime)}</li>
-      <li>${streamButton("B", "Confirm the region page", itemCount, itemTime)}</li>
-      <li><div class="ws-stream is-soon" aria-disabled="true"><span class="ws-stream-name">Add local knowledge</span><span class="ws-stream-count">Coming next</span></div></li>
-      <li><div class="ws-stream is-soon" aria-disabled="true"><span class="ws-stream-name">Settings</span><span class="ws-stream-count">Coming next</span></div></li>
-    </ul>
-    <p class="actions"><button type="button" class="link-btn" data-action="signout">Sign out</button></p>`;
+  const badge = state.region ? badgeHTML(regionName(state.region)) : "";
+  return `<div class="ws-hello"><h1 tabindex="-1">Welcome back${state.name ? `, ${esc(state.name)}` : ""}</h1>${badge}</div>
+    <div class="ws-top-end">${switcher}<button type="button" class="link-btn" data-action="signout">Sign out</button></div>`;
+}
+
+/** One task stream as a card: name, progress, time left, and Start, Continue or Review. */
+function streamCard(stream, name, {done, total, time, label, empty = ""}) {
+  const action = total > 0 && done >= total ? "Review" : done > 0 ? "Continue" : "Start";
+  const meter = total
+    ? `<progress value="${done}" max="${total}" aria-label="${esc(name)}: ${done} of ${total} ${esc(label)}"></progress>`
+    : "";
+  return `<li class="ws-card"><div class="ws-card-main">
+      <h4 class="ws-card-name">${esc(name)}</h4>
+      <p class="ws-card-status">${total ? `${done} of ${total} ${esc(label)} · ${esc(time)}` : esc(empty || "Nothing to show yet")}</p>
+      ${meter}
+    </div>
+    ${total ? `<button type="button" class="btn solid" data-ws-action="open" data-stream="${stream}">${action}<span class="sr"> ${esc(name)}</span></button>` : ""}</li>`;
+}
+
+function soonCard(name) {
+  return `<li class="ws-card is-soon" aria-disabled="true"><div class="ws-card-main"><h4 class="ws-card-name">${esc(name)}</h4><p class="ws-card-status">Coming next</p></div></li>`;
+}
+
+function homeHTML() {
+  if (!state.regions.length) {
+    return `<section class="ws-empty" aria-labelledby="ws-empty-h"><h2 id="ws-empty-h">No region is open to your account yet</h2>
+      <p class="hint">When a region is linked to your author record, its tasks appear here. To ask for a region, write to the Atlas team at the address in the page footer.</p></section>`;
+  }
+  const progress = caseProgress(state.cases, state.answers);
+  const latest = latestSubmissionByItem(state.submissions, state.region);
+  const sentCount = state.items.filter((item) => latest.has(item.item_id)).length;
+  const toSend = state.items.length - sentCount;
+  const errors = state.loadError ? `<p class="ws-error">${esc(state.loadError)}</p>` : "";
+  const map = state.geo ? regionMapHTML(state.geo, state.region) : "";
+  return `<section class="ws-regionhead" aria-labelledby="ws-region-h">
+      <div class="ws-regionhead-text">
+        <h2 id="ws-region-h" tabindex="-1">${esc(regionName(state.region))}</h2>
+        <p class="hint">Your tasks for this region. Each answer is saved as soon as you give it.</p>
+      </div>
+      <figure class="ws-map">${map}<figcaption class="sr">Map of ${esc(regionName(state.region))}, highlighted.</figcaption></figure>
+    </section>
+    <section class="ws-tasks" aria-labelledby="ws-tasks-h">
+      <h3 id="ws-tasks-h">Your tasks</h3>
+      ${errors}
+      <ul class="ws-cards">
+        ${streamCard("A", "Check classifier cases", {
+          done: progress.answered,
+          total: progress.total,
+          time: progress.remaining > 0 ? estimateText(progress.remaining * CASE_MINUTES) : "all answered",
+          label: "cases answered",
+          empty: "No cases yet",
+        })}
+        ${streamCard("B", "Confirm the region page", {
+          done: sentCount,
+          total: state.items.length,
+          time: toSend > 0 ? estimateText(toSend * ITEM_MINUTES) : "all sent",
+          label: "items sent for review",
+          empty: "Nothing to confirm",
+        })}
+        ${soonCard("Add local knowledge")}
+        ${soonCard("Notification settings")}
+        ${soonCard("Invitations")}
+      </ul>
+    </section>`;
 }
 
 function evidenceRows(item) {
@@ -438,13 +534,15 @@ async function readJson(url) {
 
 async function loadRegion(slug, focus) {
   const current = state;
-  const [cases, regionFile, answers, mine] = await Promise.all([
+  const [cases, regionFile, answers, mine, geo] = await Promise.all([
     readJson(regionFileUrl(slug, "ambassador_cases.json")),
     readJson(regionFileUrl(slug, "region.json")),
     api(`/cases/answers?region=${encodeURIComponent(slug)}`),
     api("/submissions/mine"),
+    loadGeo(),
   ]);
   if (current !== state) return undefined;
+  state.geo = geo;
   const errors = [];
   const caseList = cases && cases.schema === CASES_SCHEMA && Array.isArray(cases.cases) ? cases.cases : null;
   if (!caseList) errors.push("The cases for this region could not be read just now. Try again in a few minutes.");

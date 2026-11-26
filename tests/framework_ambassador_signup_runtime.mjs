@@ -2,6 +2,7 @@
 // framework/src/components/ambassador_signup.js; the DOM flow is checked in a browser (mocked API).
 import assert from "node:assert/strict";
 import {
+  pageMode,
   allowedDomains,
   apiUrl,
   checkEmail,
@@ -233,6 +234,17 @@ check("names: an approved proposal with no name shows its domain; unknown errors
   assert.equal(errorText("domain_not_proposed"), "That address is not at the domain of the institution you proposed.");
   assert.equal(errorText("invalid_domain").includes("invalid_domain"), false);
   assert.equal(errorText("untrusted_domain").includes("untrusted_domain"), false);
+});
+
+check("page mode: a signed-in ambassador with a profile is the dashboard; everyone else sees the public page", () => {
+  const me = (ambassador) => ({ok: true, status: 200, data: {ambassador}});
+  assert.equal(pageMode(me({display_name: "A", needs_profile: false, regions: []})), "dashboard");
+  assert.equal(pageMode(me({display_name: "A", needs_profile: false, regions: [{region: "california", status: "active"}]})), "dashboard");
+  assert.equal(pageMode(me({display_name: "A", needs_profile: true})), "public");
+  assert.equal(pageMode({ok: false, status: 401, error: "not_signed_in"}), "public");
+  assert.equal(pageMode({ok: false, status: 0, error: "network"}), "public");
+  assert.equal(pageMode(null), "public");
+  assert.equal(pageMode({ok: true, data: {}}), "public");
 });
 
 console.log(`${passed} ambassador sign-up runtime checks passed`);

@@ -14,7 +14,7 @@ pager: false
 
 <link rel="stylesheet" href="./components/ambassadors.css">
 
-<div class="am">
+<div class="am" data-mode="checking">
 <a class="skip" href="#main">Skip to the content</a>
 <header class="top">
   <a class="brand" href="./" aria-label="Plastiverse Live home"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="5"/><line x1="2.6" y1="13" x2="23.4" y2="13"/><line x1="13" y1="2.6" x2="13" y2="23.4"/></svg><span class="wm">PLASTI<b>VERSE</b> LIVE</span></a>
@@ -27,7 +27,14 @@ pager: false
 
 <main id="main" tabindex="-1">
 
-<section class="hero">
+<!-- Page mode (owner 2026-11-26): data-mode is "checking" until GET /me answers, then "public" (this recruiting page) or
+     "dashboard" (a signed-in ambassador). The .recruit sections are hidden in both checking and dashboard modes. -->
+<section class="only-checking" aria-labelledby="h-checking">
+  <h2 id="h-checking" class="sr">Checking your sign-in</h2>
+  <div class="ws-skel" aria-hidden="true"><span></span><span></span><span></span></div>
+</section>
+
+<section class="hero recruit">
   <h1>Become a local ambassador</h1>
   <p class="lede">Plastiverse Live grows region by region. Researchers and community leaders who know a place check our data there and add what only locals know.</p>
   <div class="actions">
@@ -42,7 +49,7 @@ pager: false
   <div id="amb-signup-body"></div>
 </section>
 
-<section class="sec" id="regions" aria-labelledby="h-regions">
+<section class="sec recruit" id="regions" aria-labelledby="h-regions">
   <div class="sec-head"><h2 id="h-regions">Regions on the world map</h2><span class="sec-note">Natural Earth projection</span></div>
 
   <div class="search-field">
@@ -79,7 +86,7 @@ pager: false
   </div>
 </section>
 
-<section class="sec" aria-labelledby="h-do">
+<section class="sec recruit" aria-labelledby="h-do">
   <div class="sec-head"><h2 id="h-do">What ambassadors do</h2><span class="sec-note">Work from your own desk</span></div>
   <ul class="rows">
     <li><div><h3>Check doubtful matches</h3><p>The automatic sorting is unsure about some works and institutions. You say whether it is right: a place name in the wrong country, or a local-language study that is about plastics.</p></div></li>
@@ -93,7 +100,7 @@ pager: false
   </div>
 </section>
 
-<section class="sec" id="can-i-join" aria-labelledby="h-check">
+<section class="sec recruit" id="can-i-join" aria-labelledby="h-check">
   <h2 id="h-check">Can I join? Check your institution</h2>
   <p class="sec-note">Type your work email or your institution's name. We check it against the institutions already tagged for plastics research in each region.</p>
   <form class="check-box" id="amb-check-form" novalidate>
@@ -116,7 +123,7 @@ pager: false
   </form>
 </section>
 
-<section class="sec" aria-labelledby="h-how">
+<section class="sec recruit" aria-labelledby="h-how">
   <div class="sec-head"><h2 id="h-how">How it works</h2><span class="sec-note">Three steps. No passwords.</span></div>
   <ol class="steps">
     <li>Sign up with your ORCID iD. We check your author record and the institutions on it, and you tick the ones you can speak for.</li>

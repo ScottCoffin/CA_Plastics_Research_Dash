@@ -188,3 +188,7 @@ Verification (round 4 self-check, 2026-11-25; scratch/amb_design4/):
 
 - axe-core run by the lead on all 19 screens at 1440x900 and 375x800: 0 violations.
 - Before the build, replace the hand-drawn Lucide badge outline and the simplified ORCID iD icon with the official assets (Lucide ISC; ORCID brand guidelines).
+
+## Signed-in dashboard (2026-11-26, owner request)
+
+Operate mode for the signed-in dashboard. Decisions: a calm work tool with no marketing copy; one h1 (greeting); the region heading with a small shared-frame world map that zooms to and highlights the region; task cards for stream A and B with progress, time estimate and Start, Continue or Review; later streams shown as dashed "Coming next" cards; Plastiverse tokens only, square corners, 44 px targets; reduced motion respected. Recorded in docs/AMBASSADORS_SPEC.md ("Signed-in dashboard").
