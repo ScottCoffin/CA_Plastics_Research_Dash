@@ -724,3 +724,113 @@ def test_cli_reports_a_partition_error_without_a_traceback(
     )
     assert rc == 1
     assert "2020/01/05" in capsys.readouterr().err
+
+
+# --- Stage 2 (--scope global) and --offline -----------------------------------------------------
+
+
+def _global_args(reference_set: str, out_dir: Path, cache_dir: Path, *extra: str) -> list[str]:
+    return [
+        "--reference-set",
+        reference_set,
+        "--scope",
+        "global",
+        "--start",
+        "2020/01/01",
+        "--end",
+        "2020/01/31",
+        "--out-dir",
+        str(out_dir),
+        "--cache-dir",
+        str(cache_dir),
+        *extra,
+    ]
+
+
+def test_cli_global_scope_drops_affiliation_and_splits_a_large_range(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(time, "sleep", lambda seconds: None)
+    cli = _load_cli()
+    out_dir = tmp_path / "out"
+    rc = cli.main(
+        _global_args("r1", out_dir, tmp_path / "cache", "--live", "--cap", "50", "--margin", "10"),
+        env={},
+        opener=FakePubMed(_window_records()),
+    )
+    assert rc == 0
+    manifest = json.loads((out_dir / "r1_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["affiliation"] is None
+    assert "[ad]" not in manifest["query_text"]
+    partitions = manifest["chunks"][0]["partitions"]
+    # 120 records exceed the 40-record threshold (cap 50 minus margin 10), so the range is split.
+    assert len(partitions) > 1
+    assert all(part["count"] <= 40 for part in partitions)
+    assert manifest["total_unique_pmids"] == 120
+    assert len((out_dir / "r1_pmids.csv").read_text(encoding="utf-8").splitlines()) == 121
+
+
+def test_cli_global_scope_rejects_an_affiliation(tmp_path: Path, capsys: Any) -> None:
+    cli = _load_cli()
+    rc = cli.main(
+        [
+            "--reference-set",
+            "r1",
+            "--scope",
+            "global",
+            "--affiliation",
+            "California",
+            "--out-dir",
+            str(tmp_path / "out"),
+        ],
+        env={},
+    )
+    assert rc == 1
+    assert "takes no --affiliation" in capsys.readouterr().err
+    assert not (tmp_path / "out").exists()
+
+
+def test_cli_offline_rebuilds_the_same_pmid_table_from_the_cache(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(time, "sleep", lambda seconds: None)
+    cli = _load_cli()
+    cache = tmp_path / "cache"
+    live_out = tmp_path / "live"
+    rc = cli.main(
+        _global_args("r1", live_out, cache, "--live"),
+        env={},
+        opener=FakePubMed(_window_records()),
+    )
+    assert rc == 0
+    offline_out = tmp_path / "offline"
+    # ScriptedOpener() has no replies, so any network attempt would fail the run.
+    rc = cli.main(
+        _global_args("r1", offline_out, cache, "--offline"), env={}, opener=ScriptedOpener()
+    )
+    assert rc == 0
+    assert (offline_out / "r1_pmids.csv").read_text(encoding="utf-8") == (
+        live_out / "r1_pmids.csv"
+    ).read_text(encoding="utf-8")
+
+
+def test_cli_offline_fails_on_a_cache_miss_without_writing(tmp_path: Path, capsys: Any) -> None:
+    cli = _load_cli()
+    rc = cli.main(
+        _global_args("r1", tmp_path / "out", tmp_path / "empty-cache", "--offline"),
+        env={},
+        opener=FakePubMed(_window_records()),
+    )
+    assert rc == 1
+    assert "no cached response" in capsys.readouterr().err
+    assert not (tmp_path / "out" / "r1_pmids.csv").exists()
+
+
+def test_cli_offline_needs_the_cache(tmp_path: Path, capsys: Any) -> None:
+    cli = _load_cli()
+    rc = cli.main(
+        _global_args("r1", tmp_path / "out", tmp_path / "cache", "--offline", "--no-cache"),
+        env={},
+    )
+    assert rc == 1
+    assert "needs the request cache" in capsys.readouterr().err

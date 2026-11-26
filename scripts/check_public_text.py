@@ -57,6 +57,8 @@ DEFAULT_JSON = [
     "site/data/california/network_metrics.json",
     "site/data/global/language_probe.json",
     "site/data/global/denominators.json",
+    "site/data/global/countries.json",
+    "site/data/global/pubmed_coverage.json",
 ]
 SKIP_TAGS = {"script", "style"}
 

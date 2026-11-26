@@ -8,9 +8,15 @@ the JSON layout.
 
     py -3.14 scripts/build_pubmed_coverage_json.py          # write the JSON and the triage sheet
     py -3.14 scripts/build_pubmed_coverage_json.py --check  # fail when the committed JSON is stale
+    py -3.14 scripts/build_pubmed_coverage_json.py --scope global          # BQ-S9 stage 2 payload
+    py -3.14 scripts/build_pubmed_coverage_json.py --scope global --check
 
 --check exits 0 with a SKIP message when the interim inputs are absent (CI has no interim data).
 A triage sheet with any human entry is never overwritten; the JSON is rebuilt from its labels.
+
+``--scope global`` (stage 2) joins the reference runs in data/interim/pubmed_global/ to the ignored
+global works (data/processed/global/works.parquet) and writes site/data/global/pubmed_coverage.json.
+Its miss lists go only to data/interim/pubmed_global/ (ignored); the public payload has no PMIDs.
 """
 
 from __future__ import annotations
@@ -51,6 +57,37 @@ REFERENCE_DESCRIPTIONS = {
     "r2": "PubMed title and abstract plastics terms, California affiliation (broad set)",
 }
 INTERIM_DIR = ROOT / "data" / "interim" / "pubmed"
+INTERIM_GLOBAL_DIR = ROOT / "data" / "interim" / "pubmed_global"
+GLOBAL_WORKS_PATH = ROOT / "data" / "processed" / "global" / "works.parquet"
+GLOBAL_WORKS_REL = "data/processed/global/works.parquet"
+OUTPUT_GLOBAL_PATH = ROOT / "site" / "data" / "global" / "pubmed_coverage.json"
+OUTPUT_GLOBAL_REL = "site/data/global/pubmed_coverage.json"
+GLOBAL_STAGE = 2
+GLOBAL_REFERENCE_DESCRIPTIONS = {
+    "r1": "PubMed MeSH-indexed microplastics records, all affiliations (broad set)",
+    "r2": "PubMed title and abstract pollution-core terms, all affiliations (broad set)",
+}
+GLOBAL_CAVEAT = (
+    "The Atlas side is unscreened query hits, so coverage here measures the query, not curation."
+)
+GLOBAL_SOURCE = (
+    "NCBI PubMed E-utilities reference runs without an affiliation clause (stage 2, interim, not "
+    "committed); Atlas side is the ignored global works table data/processed/global/works.parquet"
+)
+GLOBAL_DEFINITION = (
+    "Stage 2 of the PubMed coverage check. Each reference set is the stage-1 PubMed search without "
+    "the California affiliation clause, so it covers all of PubMed. Coverage is the share of "
+    "reference records that also appear among the global works, joined by PMID and then by DOI. "
+    "It is a coverage share for a reference set, not a completeness rate, and no confidence "
+    "interval is given (A3-D24). "
+    "The global works are unscreened query hits, so the figures measure the query, not curation. "
+    "MeSH indexing lags, so recent years look worse. No PMID lists are published."
+)
+GLOBAL_JOIN_METHOD = (
+    "PubMed PMID matched to a global work pmid; otherwise the PubMed DOI (lowercased, doi.org "
+    "prefix removed) matched to the work doi. The DOI is used only where the PubMed summary "
+    "carries one."
+)
 WORKS_PATH = ROOT / "data" / "processed" / "normalized" / "works.parquet"
 INDEX_PATH = region_data_dir() / "index.json"
 TAXONOMY_PATH = ROOT / "config" / "failure_taxonomy.yml"
@@ -179,16 +216,20 @@ def read_reference_rows(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
-def load_reference_run(name: str, interim_dir: Path) -> ReferenceRun:
-    """Load ``<name>_california_pmids.csv`` and its manifest, checking the manifest's counts."""
-    manifest_path = interim_dir / f"{name}_california_manifest.json"
+def load_reference_run(name: str, interim_dir: Path, stem: str | None = None) -> ReferenceRun:
+    """Load ``<stem>_pmids.csv`` and its manifest, checking the manifest's counts.
+
+    ``stem`` defaults to ``<name>_california`` (stage 1); stage 2 files are named ``<name>``.
+    """
+    stem = stem or f"{name}_california"
+    manifest_path = interim_dir / f"{stem}_manifest.json"
     manifest_bytes = manifest_path.read_bytes()
     manifest = json.loads(manifest_bytes.decode("utf-8"))
     if manifest.get("schema") != MANIFEST_SCHEMA:
         raise BuildError(f"{manifest_path.name}: schema must be {MANIFEST_SCHEMA}")
     if manifest.get("reference_set") != name:
         raise BuildError(f"{manifest_path.name}: reference_set must be {name}")
-    rows = read_reference_rows(interim_dir / f"{name}_california_pmids.csv")
+    rows = read_reference_rows(interim_dir / f"{stem}_pmids.csv")
     if manifest.get("total_unique_pmids") != len(rows):
         raise BuildError(f"{manifest_path.name}: total_unique_pmids does not match the PMID CSV")
     return ReferenceRun(name, rows, manifest, hashlib.sha256(manifest_bytes).hexdigest())
@@ -208,6 +249,19 @@ def load_atlas(works_path: Path, index_path: Path) -> AtlasWorks:
     if absent:
         raise BuildError(f"{len(absent)} published work ids are not in works.parquet")
     return AtlasWorks(normalized, [by_id[work_id] for work_id in published_ids])
+
+
+def load_global_works(path: Path) -> list[dict[str, Any]]:
+    """Read work_id, doi, pmid and publication_year from the global works table."""
+    columns = ["work_id", "doi", "pmid", "publication_year"]
+    rows = pq.read_table(path, columns=columns).to_pylist()
+    if len({row["work_id"] for row in rows}) != len(rows):
+        raise BuildError("global works.parquet has duplicate work_id values")
+    return rows
+
+
+def sha256_of(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def load_taxonomy(path: Path) -> Taxonomy:
@@ -360,6 +414,95 @@ def _set_block(run: ReferenceRun, atlas: AtlasWorks, published: _JoinIndex) -> d
     }
 
 
+def _global_set_block(
+    run: ReferenceRun, works: Sequence[Mapping[str, Any]], index: _JoinIndex
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Stage-2 block for one set, and its misses (kept out of the public payload)."""
+    result = coverage(run.rows, works)
+    misses = [row for row in run.rows if index.match(row) is None]
+    manifest = run.manifest
+    block = {
+        "description": GLOBAL_REFERENCE_DESCRIPTIONS[run.name],
+        "affiliation": None,
+        "stage": GLOBAL_STAGE,
+        "query_translation": manifest.get("query_translation"),
+        "run_timestamp": manifest.get("run_timestamp"),
+        "manifest_sha256": run.manifest_sha256,
+        "reference_pmids": result["reference_total"],
+        "found_global": result["covered_total"],
+        "found_global_by_pmid": result["matched_by_pmid"],
+        "found_global_by_doi": result["matched_by_doi"],
+        "misses": result["reference_total"] - result["covered_total"],
+        "coverage": _round(result["coverage"]),
+        "coverage_by_year": {
+            year: {
+                "reference": bucket["reference_total"],
+                "found": bucket["covered_total"],
+                "coverage": _round(bucket["coverage"]),
+            }
+            for year, bucket in result["by_year"].items()
+        },
+        "join_rate": {"global_works_with_pmid": _round(result["join_rate"])},
+    }
+    return block, misses
+
+
+def build_global_payload(
+    *,
+    runs: Sequence[ReferenceRun],
+    works: Sequence[Mapping[str, Any]],
+    works_sha256: str,
+    generated_at: str,
+) -> tuple[dict[str, Any], dict[str, list[dict[str, Any]]]]:
+    """Return ``(payload, misses_by_set)`` for stage 2 (global works, no affiliation clause)."""
+    for run in runs:
+        if run.manifest.get("affiliation") is not None:
+            raise BuildError(f"{run.name}: stage-2 runs must have no affiliation clause")
+    index = _JoinIndex(works)
+    reference_sets: dict[str, Any] = {}
+    misses_by_set: dict[str, list[dict[str, Any]]] = {}
+    for run in runs:
+        block, misses = _global_set_block(run, works, index)
+        reference_sets[run.name] = block
+        misses_by_set[run.name] = misses
+    payload: dict[str, Any] = {
+        "schema_version": SCHEMA_VERSION,
+        "generated_at": generated_at,
+        "manifest_schema": MANIFEST_SCHEMA,
+        "scope": "global",
+        "stage": GLOBAL_STAGE,
+        "source": GLOBAL_SOURCE,
+        "definition": GLOBAL_DEFINITION,
+        "caveat": GLOBAL_CAVEAT,
+        "join_method": GLOBAL_JOIN_METHOD,
+        "atlas_corpus": {
+            "works": len(works),
+            "with_pmid": sum(1 for work in works if _norm_pmid(work.get("pmid")) is not None),
+            "with_doi": sum(1 for work in works if _norm_doi(work.get("doi")) is not None),
+            "works_file": GLOBAL_WORKS_REL,
+            "works_sha256": works_sha256,
+        },
+        "reference_sets": reference_sets,
+    }
+    return payload, misses_by_set
+
+
+def write_global_misses(
+    directory: Path, misses_by_set: Mapping[str, Sequence[Mapping[str, Any]]]
+) -> None:
+    """Write each set's misses to the ignored interim folder only (never to site/data)."""
+    directory.mkdir(parents=True, exist_ok=True)
+    for name, misses in misses_by_set.items():
+        buffer = io.StringIO()
+        writer = csv.DictWriter(buffer, fieldnames=("pmid", "doi", "pub_year"), lineterminator="\n")
+        writer.writeheader()
+        for row in misses:
+            writer.writerow(
+                {"pmid": row["pmid"], "doi": row["doi"] or "", "pub_year": row["pub_year"] or ""}
+            )
+        (directory / f"{name}_misses.csv").write_text(buffer.getvalue(), encoding="utf-8")
+
+
 def _triage_block(
     sample: Sequence[Mapping[str, Any]],
     misses: Sequence[Mapping[str, Any]],
@@ -475,12 +618,71 @@ def _interim_inputs(interim_dir: Path) -> list[Path]:
     ]
 
 
+def _global_inputs_absent() -> list[Path]:
+    paths = [
+        INTERIM_GLOBAL_DIR / f"{name}_{kind}"
+        for name in REFERENCE_SETS
+        for kind in ("pmids.csv", "manifest.json")
+    ]
+    return [path for path in [*paths, GLOBAL_WORKS_PATH] if not path.exists()]
+
+
+def _main_global(check: bool) -> int:
+    absent = _global_inputs_absent()
+    if absent:
+        if check:
+            print("SKIP: stage-2 PubMed or global works inputs are absent; nothing checked")
+            return 0
+        print(f"FAIL: missing stage-2 input {absent[0]}", file=sys.stderr)
+        return 1
+    now = datetime.now(UTC).isoformat(timespec="seconds")
+    try:
+        runs = [load_reference_run(name, INTERIM_GLOBAL_DIR, stem=name) for name in REFERENCE_SETS]
+        works = load_global_works(GLOBAL_WORKS_PATH)
+        payload, misses = build_global_payload(
+            runs=runs,
+            works=works,
+            works_sha256=sha256_of(GLOBAL_WORKS_PATH),
+            generated_at=now,
+        )
+    except (BuildError, OSError, ValueError, KeyError) as exc:
+        print(f"FAIL: {exc}", file=sys.stderr)
+        return 1
+
+    if check:
+        try:
+            committed = json.loads(OUTPUT_GLOBAL_PATH.read_bytes().decode("utf-8"))
+        except OSError:
+            print(f"FAIL: {OUTPUT_GLOBAL_REL} is missing; run without --check", file=sys.stderr)
+            return 1
+        if not same_payload(committed, payload):
+            print(f"FAIL: {OUTPUT_GLOBAL_REL} is stale; rerun without --check", file=sys.stderr)
+            return 1
+        print(f"OK: {OUTPUT_GLOBAL_REL} is current")
+        return 0
+
+    write_global_misses(INTERIM_GLOBAL_DIR, misses)
+    print("wrote miss lists to data/interim/pubmed_global/ (ignored)")
+    OUTPUT_GLOBAL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_GLOBAL_PATH.write_bytes(render_payload(payload).encode("utf-8"))
+    print(f"wrote {OUTPUT_GLOBAL_REL}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
         "--check", action="store_true", help="fail when the committed JSON is stale"
     )
+    parser.add_argument(
+        "--scope",
+        choices=("california", "global"),
+        default="california",
+        help="california (stage 1, default) or global (stage 2)",
+    )
     args = parser.parse_args(argv)
+    if args.scope == "global":
+        return _main_global(args.check)
 
     absent = [path for path in _interim_inputs(INTERIM_DIR) if not path.exists()]
     if absent:

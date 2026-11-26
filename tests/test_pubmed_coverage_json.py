@@ -421,3 +421,178 @@ def test_committed_payload_schema() -> None:
     assert payload["triage_classes"] == taxonomy.class_ids
     assert "recall" not in text.lower()
     assert "expert" not in text.lower()
+
+
+# --- Stage 2 (global works, no affiliation clause) ----------------------------------------------
+
+GLOBAL_OUTPUT = ROOT / "site" / "data" / "global" / "pubmed_coverage.json"
+GEN = "2026-11-25T00:00:00+00:00"
+
+
+def _global_run(name: str, rows: list[dict[str, Any]], affiliation: str | None = None) -> Any:
+    manifest = {
+        "schema": builder.MANIFEST_SCHEMA,
+        "reference_set": name,
+        "affiliation": affiliation,
+        "query_translation": f"{name} global translation",
+        "run_timestamp": "2026-11-25T05:00:00+00:00",
+    }
+    return builder.ReferenceRun(name, rows, manifest, "b" * 64)
+
+
+def _global_fixture() -> tuple[list[Any], list[dict[str, Any]]]:
+    """PMIDs 1 and 2 join by PMID, 3 joins by DOI only, 4 and 900005 are misses."""
+    r1 = _global_run(
+        "r1",
+        [
+            _ref(1, year=2019),
+            _ref(2, year=2020),
+            _ref(3, doi="10.5/Three", year=2020),
+            _ref(4, year=2021),
+            _ref(900005, doi="10.5/five", year=2021),
+        ],
+    )
+    r2 = _global_run("r2", [_ref(1, year=2019), _ref(6, year=2022)])
+    works = [
+        _work("G1", pmid="1"),
+        _work("G2", pmid="2", doi="10.9/two"),
+        _work("G3", doi="https://doi.org/10.5/three"),
+        _work("G4"),
+    ]
+    return [r1, r2], works
+
+
+def _has_list(value: Any) -> bool:
+    if isinstance(value, list):
+        return True
+    if isinstance(value, dict):
+        return any(_has_list(child) for child in value.values())
+    return False
+
+
+def test_global_join_is_pmid_then_doi_with_coverage_and_years() -> None:
+    runs, works = _global_fixture()
+    payload, misses = builder.build_global_payload(
+        runs=runs, works=works, works_sha256="c" * 64, generated_at=GEN
+    )
+    r1 = payload["reference_sets"]["r1"]
+    assert r1["reference_pmids"] == 5
+    assert r1["found_global"] == 3
+    assert r1["found_global_by_pmid"] == 2
+    assert r1["found_global_by_doi"] == 1
+    assert r1["misses"] == 2
+    assert r1["coverage"] == 0.6
+    assert r1["coverage_by_year"]["2019"] == {"reference": 1, "found": 1, "coverage": 1.0}
+    assert r1["coverage_by_year"]["2020"] == {"reference": 2, "found": 2, "coverage": 1.0}
+    assert r1["coverage_by_year"]["2021"] == {"reference": 2, "found": 0, "coverage": 0.0}
+    assert r1["affiliation"] is None
+    assert r1["stage"] == 2
+    assert payload["reference_sets"]["r2"]["coverage"] == 0.5
+    assert sorted(row["pmid"] for row in misses["r1"]) == ["4", "900005"]
+
+
+def test_global_payload_publishes_counts_only_and_no_miss_list() -> None:
+    runs, works = _global_fixture()
+    payload, _ = builder.build_global_payload(
+        runs=runs, works=works, works_sha256="c" * 64, generated_at=GEN
+    )
+    assert "900005" not in json.dumps(payload)
+    assert not _has_list(payload)
+
+
+def test_global_payload_carries_scope_caveat_and_works_hash() -> None:
+    runs, works = _global_fixture()
+    payload, _ = builder.build_global_payload(
+        runs=runs, works=works, works_sha256="c" * 64, generated_at=GEN
+    )
+    assert payload["schema_version"] == "bqs-pm-v1"
+    assert payload["scope"] == "global"
+    assert payload["stage"] == 2
+    assert "measures the query, not curation" in payload["caveat"]
+    corpus = payload["atlas_corpus"]
+    assert corpus["works"] == 4
+    assert corpus["with_pmid"] == 2
+    assert corpus["with_doi"] == 2
+    assert corpus["works_sha256"] == "c" * 64
+    text = json.dumps(payload).lower()
+    assert "recall" not in text
+    assert "expert" not in text
+
+
+def test_global_run_with_an_affiliation_clause_is_rejected() -> None:
+    runs = [_global_run("r1", [_ref(1)], affiliation="California")]
+    with pytest.raises(builder.BuildError, match="no affiliation clause"):
+        builder.build_global_payload(
+            runs=runs, works=[_work("G1", pmid="1")], works_sha256="c" * 64, generated_at=GEN
+        )
+
+
+def test_global_misses_are_written_only_as_interim_csv(tmp_path: Path) -> None:
+    runs, works = _global_fixture()
+    _, misses = builder.build_global_payload(
+        runs=runs, works=works, works_sha256="c" * 64, generated_at=GEN
+    )
+    builder.write_global_misses(tmp_path, misses)
+    lines = (tmp_path / "r1_misses.csv").read_text(encoding="utf-8").splitlines()
+    assert lines[0] == "pmid,doi,pub_year"
+    assert any(line.startswith("900005,") for line in lines)
+
+
+def test_global_inputs_load_from_stage_two_names_and_parquet(tmp_path: Path) -> None:
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    (tmp_path / "r1_pmids.csv").write_text(
+        "pmid,doi,pub_year,chunk_id,partition\n1,,2019,c001,p\n", encoding="utf-8"
+    )
+    manifest = {"schema": builder.MANIFEST_SCHEMA, "reference_set": "r1", "affiliation": None}
+    manifest["total_unique_pmids"] = 1
+    (tmp_path / "r1_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    run = builder.load_reference_run("r1", tmp_path, stem="r1")
+    assert [row["pmid"] for row in run.rows] == ["1"]
+
+    works_path = tmp_path / "works.parquet"
+    table = pa.table(
+        {
+            "work_id": ["G1", "G2"],
+            "doi": [None, "10.9/x"],
+            "pmid": [1, None],
+            "publication_year": [2019, 2020],
+        }
+    )
+    pq.write_table(table, works_path)
+    works = builder.load_global_works(works_path)
+    assert works[0]["pmid"] == 1
+    assert works[1]["doi"] == "10.9/x"
+
+
+@pytest.mark.skipif(
+    not GLOBAL_OUTPUT.exists(), reason="site/data/global/pubmed_coverage.json is not built"
+)
+def test_committed_global_payload_schema() -> None:
+    text = GLOBAL_OUTPUT.read_text(encoding="utf-8")
+    payload = json.loads(text)
+    assert payload["schema_version"] == "bqs-pm-v1"
+    assert payload["scope"] == "global"
+    assert payload["stage"] == 2
+    assert set(payload["reference_sets"]) == {"r1", "r2"}
+    assert not _has_list(payload)
+    assert "measures the query, not curation" in payload["caveat"]
+    assert "recall" not in text.lower()
+    assert "expert" not in text.lower()
+    for block in payload["reference_sets"].values():
+        assert {
+            "reference_pmids",
+            "found_global",
+            "found_global_by_pmid",
+            "found_global_by_doi",
+            "coverage",
+            "coverage_by_year",
+            "manifest_sha256",
+            "run_timestamp",
+            "query_translation",
+            "affiliation",
+            "stage",
+        } <= set(block)
+        assert block["affiliation"] is None
+        assert len(block["manifest_sha256"]) == 64

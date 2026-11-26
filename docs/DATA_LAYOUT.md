@@ -7,7 +7,7 @@ under `site/data/<region>/`; the region registry (`regions/_registry.yml`, field
 | Folder | Contents | Written by |
 |---|---|---|
 | `site/data/california/` | `aggregates.json`, `authors/`, `build_metadata.json`, `bundle/`, `dtsc_timeline.json`, `expert_badges.json`, `grants.json`, `index.json`, `institution_works/`, `institutions.geojson`, `institutions.json`, `journal_metrics.json`, `linkouts.json`, `methods_flow.json`, `monitoring.json`, `network.json`, `network_metrics.json`, `opc_actions.json`, `open_calls.json`, `pubmed_coverage.json`, `research_networks.json`, `search_index.json`, `work_text/`, `works_detail.json` | the California pipeline (export, network, search index, policy, funding, monitoring builders) |
-| `site/data/global/` | `evidence_cells.json`, `explore.json`, `explore_sample.json`, `global_counts.json`, `world_raster.json`, plus (moved here) `trend_global.json`, `language_probe.json`, `denominators.json` | global builders; the denominator series mixes global series (A, B) with California series (C, D) and is read by both `/explore` and `/california/evidence` |
+| `site/data/global/` | `countries.json` (PLAT-4b Tier B aggregates), `pubmed_coverage.json` (BQ-S9b stage 2), `evidence_cells.json`, `explore.json`, `explore_sample.json`, `global_counts.json`, `world_raster.json`, plus (moved here) `trend_global.json`, `language_probe.json`, `denominators.json` | global builders; the denominator series mixes global series (A, B) with California series (C, D) and is read by both `/explore` and `/california/evidence` |
 | `site/data/` (root) | `release.json`, `status.json` | site-wide metadata (release pipeline, status) |
 
 Rules:

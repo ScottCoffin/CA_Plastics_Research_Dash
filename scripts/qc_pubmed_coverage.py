@@ -9,9 +9,15 @@ Optional environment: ``NCBI_EMAIL`` is sent as the contact ``email`` parameter 
 ``NCBI_API_KEY`` as ``api_key`` (10 requests per second instead of 3). Neither value is printed
 or written to outputs.
 
+``--scope global`` (BQ-S9 stage 2) drops the affiliation clause, so the reference sets cover all of
+PubMed; its outputs go to ``data/interim/pubmed_global/`` by default. ``--offline`` rebuilds the
+same outputs from the request cache with no network call (it fails on a cache miss).
+
 Usage:
     py -3.14 scripts/qc_pubmed_coverage.py --reference-set r1 --affiliation California
     py -3.14 scripts/qc_pubmed_coverage.py --reference-set r2 --affiliation California --live
+    py -3.14 scripts/qc_pubmed_coverage.py --reference-set r1 --scope global --live
+    py -3.14 scripts/qc_pubmed_coverage.py --reference-set r1 --scope global --offline
 """
 
 from __future__ import annotations
@@ -55,12 +61,20 @@ REFERENCE_FILES = {
 DEFAULT_START = "1950/01/01"
 DEFAULT_OUT_DIR = ROOT / "data" / "interim" / "pubmed"
 DEFAULT_CACHE_DIR = ROOT / "data" / "interim" / "pubmed_cache"
+DEFAULT_GLOBAL_OUT_DIR = ROOT / "data" / "interim" / "pubmed_global"
+DEFAULT_GLOBAL_CACHE_DIR = ROOT / "data" / "interim" / "pubmed_global" / "cache"
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="PubMed reference-set coverage (BQ-S9 part A).")
     parser.add_argument("--reference-set", required=True, choices=sorted(REFERENCE_FILES))
     parser.add_argument("--affiliation", help="PubMed [ad] restriction, e.g. California")
+    parser.add_argument(
+        "--scope",
+        choices=("california", "global"),
+        default="california",
+        help="california (stage 1, default folders) or global (stage 2: no affiliation clause)",
+    )
     parser.add_argument("--start", default=DEFAULT_START, help="first publication date, YYYY/MM/DD")
     parser.add_argument("--end", help="last publication date, YYYY/MM/DD (default: yesterday)")
     parser.add_argument(
@@ -76,10 +90,16 @@ def _parser() -> argparse.ArgumentParser:
         help="safety margin below the cap (default 500)",
     )
     parser.add_argument(
-        "--out-dir", type=Path, default=DEFAULT_OUT_DIR, help="output folder (gitignored data/)"
+        "--out-dir",
+        type=Path,
+        default=None,
+        help="output folder (gitignored data/; default depends on --scope)",
     )
     parser.add_argument(
-        "--cache-dir", type=Path, default=DEFAULT_CACHE_DIR, help="request cache folder"
+        "--cache-dir",
+        type=Path,
+        default=None,
+        help="request cache folder (default depends on --scope)",
     )
     parser.add_argument(
         "--no-cache", action="store_true", help="neither read nor write the request cache"
@@ -92,6 +112,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     mode.add_argument(
         "--live", action="store_true", help="query NCBI E-utilities and write the outputs"
+    )
+    mode.add_argument(
+        "--offline",
+        action="store_true",
+        help="rebuild the outputs from the request cache; no network call (fails on a miss)",
     )
     return parser
 
@@ -170,6 +195,11 @@ def _print_plan(
     print("re-run with --live to query NCBI and write the PMID CSV and manifest")
 
 
+def _cache_only(url: str) -> bytes:
+    """Stand-in for the network in ``--offline`` runs: every uncached request is an error."""
+    raise EUtilsError("offline rebuild: no cached response for a request; run with --live first")
+
+
 def _csv_text(rows: Sequence[Mapping[str, Any]]) -> str:
     buffer = io.StringIO()
     writer = csv.DictWriter(buffer, fieldnames=ROW_FIELDS, lineterminator="\n")
@@ -196,6 +226,15 @@ def main(
 ) -> int:
     args = _parser().parse_args(argv)
     environ = os.environ if env is None else env
+    is_global = args.scope == "global"
+    if is_global and args.affiliation:
+        print("error: --scope global takes no --affiliation", file=sys.stderr)
+        return 1
+    if args.offline and args.no_cache:
+        print("error: --offline needs the request cache; drop --no-cache", file=sys.stderr)
+        return 1
+    out_dir = args.out_dir or (DEFAULT_GLOBAL_OUT_DIR if is_global else DEFAULT_OUT_DIR)
+    cache_dir = args.cache_dir or (DEFAULT_GLOBAL_CACHE_DIR if is_global else DEFAULT_CACHE_DIR)
     api_key = environ.get("NCBI_API_KEY") or None
     email = environ.get("NCBI_EMAIL") or None
     rps = args.rps if args.rps is not None else (RPS_WITH_KEY if api_key else RPS_WITHOUT_KEY)
@@ -213,13 +252,13 @@ def main(
         exclude = read_query_file(exclude_path) if exclude_path else ""
         _, chunk_terms = build_terms(include, exclude, args.affiliation)
         client = EUtilsClient(
-            opener=opener,
+            opener=_cache_only if args.offline else opener,
             rps=rps,
             api_key=api_key,
             email=email,
-            cache_dir=None if args.no_cache else args.cache_dir,
+            cache_dir=None if args.no_cache else cache_dir,
         )
-        if not args.live:
+        if not (args.live or args.offline):
             _print_plan(
                 reference_set=args.reference_set,
                 include_path=include_path,
@@ -251,9 +290,9 @@ def main(
         _assert_no_contact_values(csv_text + manifest_text, secrets)
 
         stem = _file_stem(args.reference_set, args.affiliation)
-        args.out_dir.mkdir(parents=True, exist_ok=True)
-        csv_path = args.out_dir / f"{stem}_pmids.csv"
-        manifest_path = args.out_dir / f"{stem}_manifest.json"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        csv_path = out_dir / f"{stem}_pmids.csv"
+        manifest_path = out_dir / f"{stem}_manifest.json"
         csv_path.write_text(csv_text, encoding="utf-8", newline="")
         manifest_path.write_text(manifest_text, encoding="utf-8")
         partitions = sum(len(chunk["partitions"]) for chunk in manifest["chunks"])

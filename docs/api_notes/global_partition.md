@@ -30,7 +30,8 @@ kind and code, so repeated builds from the same pages give the same bytes.
 ## Schemas
 
 `works.parquet`: `work_id`, `doi`, `pmid`, `title`, `publication_year` (int32),
-`publication_date`, `type`, `language`, `primary_topic_id`, `is_retracted`,
+`publication_date`, `type`, `language`, `primary_topic_id`, `primary_topic_name`,
+`primary_topic_field` (from the record's `primary_topic` display names; null when absent), `is_retracted`,
 `cited_by_count`, `screening_status`, `query_version`, `query_hash`.
 
 - `work_id` is the short OpenAlex id (`W...`). `primary_topic_id` is short too (`T...`).
@@ -115,8 +116,31 @@ The field is validated: repo-relative, no `..`, no drive, `.parquet` suffix.
 `--check` passes on these outputs. A full run waits for the PLAT-4a backfill. Paging is
 blocked until the OpenAlex key (owner H43) is loaded, so only one page exists today.
 
+## Tier B outputs (slice 3)
+
+`py -3.14 scripts/build_tier_b.py` (`src/atlas/build/tier_b.py`) reads the two tables and writes
+`site/data/global/countries.json` (schema `plat4b-v1`, about 0.45 MB for 136,074 works). It has
+no network call. Each country with at least one work gets `works_total`, `works_by_year` (1970 to
+the last complete year, then the current year flagged `partial`), `works_outside_years`,
+`works_with_pmid`, `works_retracted`, `share_retracted`, `first_year` and the 10 most frequent
+`primary_topic_id` values with names (`top_primary_topics`). Tier B is 50 or more works (`tier_for`),
+otherwise tier C. Registry regions get the same block, labelled `matched_by: region_predicate`.
+
+- Every block is labelled `screening_status: unscreened_query_hit`. Counts are unscreened query hits.
+- A work counts toward every country it touches (institution and author country codes).
+- No author names or ids, ORCIDs or abstracts. `validate` fails on any key containing `author`,
+  `person`, `orcid` or `abstract`.
+- `--check` validates the committed file. With the ignored tables present it also rebuilds the
+  file with the committed `generated_at` and fails when the bytes differ. Without them it prints
+  SKIP for the staleness check and exits 0.
+- Country names come from `site/data/global/explore.json` (the code is used when missing).
+
+Trial numbers at the full backfill (2026-11-25): 203 countries (89 tier B, 114 tier C); the largest
+is CN with 24,268 works. `scripts/check_public_text.py` lists the file.
+
 ## Not published
 
 The tables keep raw affiliation strings out (only the derived region rows are written), but
-titles and DOIs are in `works.parquet`. Nothing publishes from `data/processed/global/`.
-Any later publishing step must apply the redaction used in `atlas.ingest.openalex`.
+titles and DOIs are in `works.parquet`. Nothing publishes the tables from `data/processed/global/`.
+The only published derivative is the aggregate `countries.json` (Tier B). Any later publishing
+step must apply the redaction used in `atlas.ingest.openalex`.

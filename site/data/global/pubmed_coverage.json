@@ -1,0 +1,378 @@
+{
+  "schema_version": "bqs-pm-v1",
+  "generated_at": "2026-11-26T01:13:27+00:00",
+  "manifest_schema": "bqs-pm-manifest-v1",
+  "scope": "global",
+  "stage": 2,
+  "source": "NCBI PubMed E-utilities reference runs without an affiliation clause (stage 2, interim, not committed); Atlas side is the ignored global works table data/processed/global/works.parquet",
+  "definition": "Stage 2 of the PubMed coverage check. Each reference set is the stage-1 PubMed search without the California affiliation clause, so it covers all of PubMed. Coverage is the share of reference records that also appear among the global works, joined by PMID and then by DOI. It is a coverage share for a reference set, not a completeness rate, and no confidence interval is given (A3-D24). The global works are unscreened query hits, so the figures measure the query, not curation. MeSH indexing lags, so recent years look worse. No PMID lists are published.",
+  "caveat": "The Atlas side is unscreened query hits, so coverage here measures the query, not curation.",
+  "join_method": "PubMed PMID matched to a global work pmid; otherwise the PubMed DOI (lowercased, doi.org prefix removed) matched to the work doi. The DOI is used only where the PubMed summary carries one.",
+  "atlas_corpus": {
+    "works": 136074,
+    "with_pmid": 37925,
+    "with_doi": 121741,
+    "works_file": "data/processed/global/works.parquet",
+    "works_sha256": "a9f927980a51d3eb43501b6d30fe99e27cb0912dc71fe80dec88861be3b31b0b"
+  },
+  "reference_sets": {
+    "r1": {
+      "description": "PubMed MeSH-indexed microplastics records, all affiliations (broad set)",
+      "affiliation": null,
+      "stage": 2,
+      "query_translation": "\"Microplastics\"[MeSH Terms] AND 1950/01/01:2026/11/24[Date - Publication]",
+      "run_timestamp": "2026-11-26T01:09:49+00:00",
+      "manifest_sha256": "e0d480fbfe83363fd5bb0110efc1a9d6108eb9700242447acb753138283ba196",
+      "reference_pmids": 16076,
+      "found_global": 15932,
+      "found_global_by_pmid": 15920,
+      "found_global_by_doi": 12,
+      "misses": 144,
+      "coverage": 0.991,
+      "coverage_by_year": {
+        "2019": {
+          "reference": 121,
+          "found": 113,
+          "coverage": 0.9339
+        },
+        "2020": {
+          "reference": 871,
+          "found": 856,
+          "coverage": 0.9828
+        },
+        "2021": {
+          "reference": 1280,
+          "found": 1257,
+          "coverage": 0.982
+        },
+        "2022": {
+          "reference": 2267,
+          "found": 2255,
+          "coverage": 0.9947
+        },
+        "2023": {
+          "reference": 2500,
+          "found": 2471,
+          "coverage": 0.9884
+        },
+        "2024": {
+          "reference": 3024,
+          "found": 3003,
+          "coverage": 0.9931
+        },
+        "2025": {
+          "reference": 2977,
+          "found": 2959,
+          "coverage": 0.994
+        },
+        "2026": {
+          "reference": 3009,
+          "found": 2991,
+          "coverage": 0.994
+        },
+        "2027": {
+          "reference": 27,
+          "found": 27,
+          "coverage": 1.0
+        }
+      },
+      "join_rate": {
+        "global_works_with_pmid": 0.2787
+      }
+    },
+    "r2": {
+      "description": "PubMed title and abstract pollution-core terms, all affiliations (broad set)",
+      "affiliation": null,
+      "stage": 2,
+      "query_translation": "(\"microplastic\"[Title/Abstract] OR \"nanoplastic\"[Title/Abstract] OR \"micro-plastic\"[Title/Abstract] OR \"nano-plastic\"[Title/Abstract] OR \"micro-sized plastic\"[Title/Abstract] OR \"microsized plastics\"[Title/Abstract] OR \"plastic pollution\"[Title/Abstract] OR \"plastic debris\"[Title/Abstract] OR \"plastic litter\"[Title/Abstract] OR \"marine debris\"[Title/Abstract] OR \"marine litter\"[Title/Abstract] OR \"plastic particles\"[Title/Abstract] OR \"plastic fragments\"[Title/Abstract] OR \"plastic ingestion\"[Title/Abstract] OR \"resin pellet\"[Title/Abstract] OR \"plastic pellet\"[Title/Abstract] OR \"macroplastic\"[Title/Abstract] OR \"mesoplastic\"[Title/Abstract] OR \"plastics pollution\"[Title/Abstract] OR \"plastic pollutants\"[Title/Abstract] OR \"plastic trash\"[Title/Abstract] OR \"anthropogenic litter\"[Title/Abstract] OR \"anthropogenic debris\"[Title/Abstract] OR \"anthropogenic microparticles\"[Title/Abstract] OR \"ingested plastic\"[Title/Abstract] OR \"ingested plastics\"[Title/Abstract] OR \"plastic contamination\"[Title/Abstract]) AND 1950/01/01:2026/11/24[Date - Publication]",
+      "run_timestamp": "2026-11-26T01:13:12+00:00",
+      "manifest_sha256": "9aa10ed8a44dc0f960e363bdbe50f771790b7476428216f496e967685a8ea9fe",
+      "reference_pmids": 20285,
+      "found_global": 19733,
+      "found_global_by_pmid": 19720,
+      "found_global_by_doi": 13,
+      "misses": 552,
+      "coverage": 0.9728,
+      "coverage_by_year": {
+        "1965": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "1969": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "1972": {
+          "reference": 2,
+          "found": 2,
+          "coverage": 1.0
+        },
+        "1974": {
+          "reference": 2,
+          "found": 2,
+          "coverage": 1.0
+        },
+        "1975": {
+          "reference": 3,
+          "found": 3,
+          "coverage": 1.0
+        },
+        "1976": {
+          "reference": 1,
+          "found": 0,
+          "coverage": 0.0
+        },
+        "1977": {
+          "reference": 2,
+          "found": 2,
+          "coverage": 1.0
+        },
+        "1978": {
+          "reference": 2,
+          "found": 2,
+          "coverage": 1.0
+        },
+        "1979": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "1982": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "1983": {
+          "reference": 2,
+          "found": 2,
+          "coverage": 1.0
+        },
+        "1984": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "1985": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "1986": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "1987": {
+          "reference": 3,
+          "found": 3,
+          "coverage": 1.0
+        },
+        "1988": {
+          "reference": 2,
+          "found": 2,
+          "coverage": 1.0
+        },
+        "1989": {
+          "reference": 6,
+          "found": 6,
+          "coverage": 1.0
+        },
+        "1990": {
+          "reference": 4,
+          "found": 4,
+          "coverage": 1.0
+        },
+        "1991": {
+          "reference": 2,
+          "found": 2,
+          "coverage": 1.0
+        },
+        "1992": {
+          "reference": 5,
+          "found": 5,
+          "coverage": 1.0
+        },
+        "1993": {
+          "reference": 3,
+          "found": 3,
+          "coverage": 1.0
+        },
+        "1994": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "1995": {
+          "reference": 4,
+          "found": 4,
+          "coverage": 1.0
+        },
+        "1996": {
+          "reference": 3,
+          "found": 3,
+          "coverage": 1.0
+        },
+        "1997": {
+          "reference": 3,
+          "found": 3,
+          "coverage": 1.0
+        },
+        "1998": {
+          "reference": 1,
+          "found": 1,
+          "coverage": 1.0
+        },
+        "1999": {
+          "reference": 4,
+          "found": 4,
+          "coverage": 1.0
+        },
+        "2000": {
+          "reference": 6,
+          "found": 6,
+          "coverage": 1.0
+        },
+        "2001": {
+          "reference": 8,
+          "found": 8,
+          "coverage": 1.0
+        },
+        "2002": {
+          "reference": 14,
+          "found": 13,
+          "coverage": 0.9286
+        },
+        "2003": {
+          "reference": 10,
+          "found": 10,
+          "coverage": 1.0
+        },
+        "2004": {
+          "reference": 13,
+          "found": 13,
+          "coverage": 1.0
+        },
+        "2005": {
+          "reference": 12,
+          "found": 12,
+          "coverage": 1.0
+        },
+        "2006": {
+          "reference": 5,
+          "found": 5,
+          "coverage": 1.0
+        },
+        "2007": {
+          "reference": 11,
+          "found": 11,
+          "coverage": 1.0
+        },
+        "2008": {
+          "reference": 13,
+          "found": 12,
+          "coverage": 0.9231
+        },
+        "2009": {
+          "reference": 24,
+          "found": 24,
+          "coverage": 1.0
+        },
+        "2010": {
+          "reference": 23,
+          "found": 23,
+          "coverage": 1.0
+        },
+        "2011": {
+          "reference": 33,
+          "found": 33,
+          "coverage": 1.0
+        },
+        "2012": {
+          "reference": 55,
+          "found": 55,
+          "coverage": 1.0
+        },
+        "2013": {
+          "reference": 72,
+          "found": 70,
+          "coverage": 0.9722
+        },
+        "2014": {
+          "reference": 115,
+          "found": 108,
+          "coverage": 0.9391
+        },
+        "2015": {
+          "reference": 142,
+          "found": 139,
+          "coverage": 0.9789
+        },
+        "2016": {
+          "reference": 205,
+          "found": 199,
+          "coverage": 0.9707
+        },
+        "2017": {
+          "reference": 290,
+          "found": 285,
+          "coverage": 0.9828
+        },
+        "2018": {
+          "reference": 501,
+          "found": 486,
+          "coverage": 0.9701
+        },
+        "2019": {
+          "reference": 725,
+          "found": 703,
+          "coverage": 0.9697
+        },
+        "2020": {
+          "reference": 1246,
+          "found": 1216,
+          "coverage": 0.9759
+        },
+        "2021": {
+          "reference": 1662,
+          "found": 1610,
+          "coverage": 0.9687
+        },
+        "2022": {
+          "reference": 2171,
+          "found": 2099,
+          "coverage": 0.9668
+        },
+        "2023": {
+          "reference": 2598,
+          "found": 2531,
+          "coverage": 0.9742
+        },
+        "2024": {
+          "reference": 3254,
+          "found": 3160,
+          "coverage": 0.9711
+        },
+        "2025": {
+          "reference": 3386,
+          "found": 3293,
+          "coverage": 0.9725
+        },
+        "2026": {
+          "reference": 3594,
+          "found": 3513,
+          "coverage": 0.9775
+        },
+        "2027": {
+          "reference": 35,
+          "found": 35,
+          "coverage": 1.0
+        }
+      },
+      "join_rate": {
+        "global_works_with_pmid": 0.2787
+      }
+    }
+  }
+}

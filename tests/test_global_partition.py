@@ -176,6 +176,24 @@ def test_work_row_uses_ids_pmid_and_unscreened_label() -> None:
     assert row["query_hash"] == QUERY_HASH
 
 
+def test_work_row_keeps_primary_topic_name_and_field() -> None:
+    work = _work("W10")
+    work["primary_topic"] = {
+        "id": "https://openalex.org/T77",
+        "display_name": "Microplastics in soils",
+        "field": {"id": "https://openalex.org/fields/23", "display_name": "Environmental Science"},
+    }
+    row = work_row(work, _header("t"))
+    assert row is not None
+    assert row["primary_topic_id"] == "T77"
+    assert row["primary_topic_name"] == "Microplastics in soils"
+    assert row["primary_topic_field"] == "Environmental Science"
+    bare = work_row(_work("W11"), _header("t"))
+    assert bare is not None
+    assert bare["primary_topic_name"] == "x"
+    assert bare["primary_topic_field"] is None
+
+
 def test_multi_country_work_gets_one_row_per_country() -> None:
     work = _work(
         "W2",
