@@ -239,3 +239,4 @@
 | 2026-11-25 | PLAT-3 (slice 3b) | California data moved to site/data/california (owner); 0 failed data requests on 15 routes | this commit |
 | 2026-11-25 | PLAT-4a | Global backfill complete (136,086 works); data move live | this commit |
 | 2026-11-25 | PLAT-4 (slice 3) + BQ-V.2 + BQ-S9b | Tier B country aggregates; global PubMed coverage 99.1% / 97.3% (one commit: shared doc files) | this commit |
+| 2026-11-25 | Owner decisions | H40 approved (BQ-S5-APPLY queued); H25 design kept, VD-SM deferred; REG-1 Norway+Belgium and AMB-1 ambassadors added; H42 reminder | this commit |

@@ -41,14 +41,7 @@ Global Plastic Laws topic. That link is a draft the agent proposed, so the page 
 - **Done when:** the sidebar shows 0 pending. Tell the agent "OPC mapping reviewed"; it rebuilds
   the page data and the draft badge disappears.
 
-### H40. Decide the taxonomy proposal (BQ-S5, about 20 minutes)
-1. Open `docs/TAXONOMY_PROPOSAL.md`. It has ten decision rows (D1-D10); each shows what would change, why,
-   and the default the agent recommends.
-2. In the **Owner decision** column write approve, change or reject, plus a short note where needed.
-3. Tell the agent "taxonomy decisions done". Nothing ships until then; approved rows are applied in a later
-   checkpoint.
-
-### H42. Triage 43 PubMed records the Atlas does not have (BQ-S9, about 30 minutes)
+### H42. Triage 43 PubMed records the Atlas does not have (BQ-S9, about 30 minutes) — owner is working on it (2026-11-25); the agent reminds each session until done
 PubMed lists 43 California plastics records that are not in the Atlas. Some are real gaps; others the Atlas
 is right to leave out. Your labels decide which.
 1. Run `py -3.14 -m streamlit run scripts/review_pubmed_misses_app.py`.
@@ -231,12 +224,12 @@ leak-check works wait for S5.7.
 - **H1. CORE API key (renew only when asked).** No pipeline code calls CORE (checked
   2026-11-15), so daily renewal stopped. The agent will ask you to renew the key in `.env`
   when a task actually needs CORE (S6 full text by DOI, or a theses search).
-- **H25. Final design review (VD-12).** Owner feedback received 2026-11-16 (14 items) and
-  turned into VD-18 (visual polish), VD-19 (site-wide search) and VD-20 (network layout and
-  cluster labels). After they deploy, re-check the live site and reply "design OK" or list changes.
+- **H25.** Done 2026-11-25: owner keeps the current California design for now; a redesign later is flagged (VD-SM).
 ---
 
 ## Done
+
+- H40 (2026-11-25): owner approved all ten taxonomy defaults (D1-D10); the agent applies them in BQ-S5-APPLY.
 
 - H38 (2026-11-22): done. Both boundary cases are recorded as `incidental` (owner, 2026-11-18) in `curation/a3_boundary_cases.csv` with quotes checked against the PDFs (BQ-G7).
 

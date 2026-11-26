@@ -12,3 +12,5 @@ On 2026-11-11 the owner asked to be reminded, at the start of each session and w
 
 **Why:** they defer reviews ("will work on later") and want a nudge rather than silence, plus instructions they can follow without the chat history.
 **How to apply:** at session start, list the "Do now" items of `.agent/HUMAN_TASKS.md` (as of 2026-11-11: CORE key renewal, 215 low-confidence works, AT2-REVIEW institution types, 44 photo approvals, 3 open questions, optional release). Whenever work becomes owner-gated, add a task there with numbered steps, the exact file or app, and a "Done when" line; move finished items to "Done". Related: [[overnight-mode]].
+
+Update 2026-11-25: the owner is working on H42 (43 PubMed misses, `scripts/review_pubmed_misses_app.py`) and asked to be reminded if it is still open after a while: check `curation/pubmed_miss_triage_v1.csv` at each session start and nudge while rows are unlabelled.
