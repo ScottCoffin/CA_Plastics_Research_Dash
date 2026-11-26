@@ -1,0 +1,8 @@
+{
+  "error": 0,
+  "data": [
+    {"organization": "Example River Keepers", "country": "Mainland China", "website": "example-river-keepers.org", "type": "cm"},
+    {"organization": "Example Coast Alliance", "country": "Norway", "website": "https://www.example-coast.no", "type": "m"},
+    {"organization": "Example Bay Collective", "country": "Belgium", "website": "example-bay.be", "type": "cm"}
+  ]
+}

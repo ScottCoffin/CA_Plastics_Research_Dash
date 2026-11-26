@@ -202,3 +202,9 @@ Contract: `docs/add_on_spec_3.md` §0 rule 14 and §9. Store only metadata, abst
 | Zimmermann et al. (2025), npj Science of Food | CC BY-NC-ND 4.0 | Link-only; facet values recorded, tables not copied | Link-only |
 | Ortiz-Balsero et al. (2026), J Hazard Mater | Publisher reserves text and data mining and AI training | Link-only, metadata only | Link-only |
 | Tran et al. (2026); Özkan Vardar and Vardar (2026); Zuanazzi et al. (2026); Ashworth (2026) | Not recorded in A3; check before any reuse beyond metadata | Link-only, metadata only | Link-only |
+
+## Add-on A4 sources (2026-11-26)
+
+| Source | URL | Licence or terms | Reused material | Use and attribution |
+|---|---|---|---|---|
+| Break Free From Plastic member organisations | https://www.breakfreefromplastic.org/about/ (data from `coremember.breakfreefromplastic.org/api/members_org`) | No public licence; BFFP gave the owner verbal permission to use all of its data with no conditions (owner, 2026-11-26; A4-D1) | Organisation name, country and website only (allow-list); BFFP's membership tier and every other field are dropped at read time | `site/data/global/groups/roster.json`; shown as "Listed as a BFFP member as of <date>" (A4-D12); the Atlas is independent of BFFP unless BFFP agrees otherwise (spec §10.4) |

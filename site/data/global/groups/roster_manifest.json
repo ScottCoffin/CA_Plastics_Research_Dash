@@ -1,0 +1,12 @@
+{
+  "retrieved_at": "2026-11-26",
+  "parser_version": "cg-roster-parser-1",
+  "admitted_by_org_status": {
+    "source_declared_org": 2708,
+    "heuristic_org": 0,
+    "human_confirmed_org": 0
+  },
+  "source_urls": [
+    "https://coremember.breakfreefromplastic.org/api/members_org"
+  ]
+}

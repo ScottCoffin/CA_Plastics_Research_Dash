@@ -413,3 +413,9 @@ until it reports.
 - Ids that are list positions (region.yml items) must never be deleted: mark them (`not_relevant`) so later ids keep pointing at the same item.
 - CI has no streamlit: Streamlit AppTest smoke tests use `pytest.importorskip("streamlit")`.
 - GitHub Pages serves Framework pages at `/name` only; `/name/` is a 404. Every redirect or link the Worker builds (WORKSPACE_URL, invite, reminder links) must omit the trailing slash.
+
+## 2026-11-26: BFFP member data and the groups roster
+- BFFP's member endpoint answers only requests made by BFFP's own pages (403 "Origin not allowed" otherwise). Never fake the Origin header; the owner chose one headless view of the public About page, keeping the response the page itself loads (`roster.page_fetcher`).
+- Source "organisation" names can be email addresses (including phone-to-SMS gateways); treat them as personal identifiers and drop them at read time. The `--check` email scan caught it before anything was published.
+- A4-D24 also binds code comments, TODO notes and commit messages: write admitted counts only, never how many entries were dropped.
+- Python's `Path.write_text` on Windows writes CRLF; write `.agent` and docs edits with `write_bytes(s.encode())` (or `newline="\n"`) so diffs stay small.

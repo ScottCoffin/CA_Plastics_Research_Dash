@@ -1,0 +1,19 @@
+{
+  "error": 0,
+  "data": [
+    {"organization": "Example River Keepers", "country": "Mainland China", "website": "example-river-keepers.org", "type": "cm"},
+    {"organization": "Example Coast Alliance", "country": "Norway", "website": "https://www.example-coast.no", "type": "m"},
+    {"organization": "Example Bay Collective", "country": "Belgium", "website": "example-bay.be", "type": "cm"},
+    {"organization": "Example Harbour Trust", "country": "USA", "website": "https://www.example-harbour.org", "type": "cm"},
+    {"organization": "Example Shore Network", "country": "UK", "website": "http://example-shore.org.uk", "type": "m"},
+    {"organization": "Example Dune Institute", "country": "Korea, Republic of", "website": "https://example-dune.kr", "type": "cm"},
+    {"organization": "Example Reef Society", "country": "Atlantis", "website": "https://example-reef.org", "type": "m"},
+    {"organization": "Example Plastics Council", "country": "Germany", "website": "example-council.de", "type": "cm"},
+    {"organization": "  example   river keepers ", "country": "Mainland China", "website": "https://example-river-keepers.org", "type": "m"},
+    {"organization": "Example Coast Alliances", "country": "Norway", "website": "https://example-coast-alliance.no", "type": "m"},
+    {"organization": "Example Tide Group", "country": "Spain", "website": "n/a", "type": "m"},
+    {"organization": "Zara Quillfeather", "country": "Norway", "website": "gmail.com", "type": "m"},
+    {"organization": "Ilse Morrowind", "country": "Belgium", "website": "https://www.linkedin.com/in/ilse-morrowind", "type": "m"},
+    {"organization": "Pieter Dunmore", "country": "Belgium", "website": "", "type": "m"}
+  ]
+}

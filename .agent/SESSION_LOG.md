@@ -273,3 +273,4 @@
 | 2026-11-26 | REG-CA, CG-5, AMB-COAUTHORS-GLOBAL (built) | California region.json; docs/ambassador_infrastructure.md; global co-authors route (deploy waits for H54) | this commit |
 | 2026-11-26 | CG-1, CG-4 | BFFP discovery doc (member API found, no stop condition); cg-v2 taxonomy and V1-V14 validator | this commit |
 | 2026-11-26 | WORKS-FILTER; H53/H54 | Works view slider and year range; Worker deployed (cbc9e050); BFFP permission recorded | this commit |
+| 2026-11-26 | CG-2, CG-3 | BFFP roster extractor and organisations-only admission; first roster published (2,708 organisations, 143 countries) | this commit |

@@ -21,9 +21,10 @@ machine. Cached rebuild about 4 minutes, byte-identical. Docs: NETWORK_BUILD §1
 2. AMB-1 build order step 5: pilot with Norway and Belgium (needs local leads; owner).
 3. Done this session: REG-CA (`site/data/california/region.json`), CG-0 (A4 integrated, ADR-A4-INTEGRATION),
    CG-5 (`docs/ambassador_infrastructure.md`), AMB-COAUTHORS-GLOBAL built (`GET /me/coauthors`; deploy waits for H54).
-   CG-1 (discovery, docs/bffp_roster_discovery.md) and CG-4 (schema + validator) done. Next: CG-2 extractor and CG-3
-   admission filter (A4-Q9 default: members_org = source_declared_org), CG-8 guide draft, CG-6 (Worker; deploy
-   go-ahead), BQ-S9b, BQ-G3. Rebuild denominators.json at the next global
+   CG-1, CG-4, CG-2, CG-3 done; WORKS-FILTER done; Worker cbc9e050 deployed (global co-authors). Roster published:
+   `site/data/global/groups/roster.json` (2,708 organisations, 143 countries). Next: CG-9 (groups.json and derived
+   files from the roster), CG-13 (roster table, coverage panel, group card), CG-8 guide draft, CG-6 (Worker tagging
+   stream; deploy go-ahead), then CG-10..12b views, BQ-S9b, BQ-G3. Rebuild denominators.json at the next global
    data refresh (owner).
 4. Design-led, waiting on owner review (H25): VD-SM, UX-13 part b.
 
