@@ -587,6 +587,48 @@ Known limits: the author graph is the backbone's strongest co-authorship links, 
 network; the cap of 20,000 takes the top authors by backbone works and can cut the giant component
 into pieces. Layout is not visually checked. Matching is a local approximation of OpenAlex's search.
 
+## 16c. Global works graph (BQ-V.1 slice 3)
+
+Command: `py -3.14 scripts/build_global_works_graph.py [--check] [--raw-dir] [--out-dir] [--cache]`
+(module `atlas.build.global_works_graph`). Needs the optional `ml` extra (`pip install -e ".[ml]"`,
+sentence-transformers) for a build; `--check` never loads the model. A separate manifest,
+`works_manifest.json`, keeps `graphs_manifest.json` (section 16) untouched, so the two builders never
+make each other stale.
+
+- **Candidates.** Backbone works as in section 16b (pollution-core v0 term in title or abstract; latest
+  raw page wins) whose title-and-abstract text is not empty. The text stays in memory and is never
+  written.
+- **Selection before embedding.** Candidates sorted by (cited_by_count descending, id); the first
+  15,000 are the desktop nodes and the first 5,000 of those the phone nodes. Only the desktop nodes are
+  embedded, so a build embeds 15,000 texts, not the whole backbone (QUESTIONS WORKS-GRAPH-SELECT).
+- **Embeddings.** `BAAI/bge-small-en-v1.5` through `atlas.nlp.active_relevance.embed_cached`
+  (L2-normalised; cache `data/interim/embeddings/global_works_bge_small.npz`, keyed by work id and a
+  hash of the text, so a rebuild embeds only new or changed works). The model is English-only:
+  `embedding_quality` is `ok` for works whose OpenAlex `language` is `en` and `low` otherwise (A3).
+- **Edges.** For each node its 5 most similar other nodes by cosine (ties: lower index), computed in
+  blocks of 2,048 rows; the undirected union of those pairs, weight = cosine rounded to 3 decimals.
+  The phone file recomputes 3 neighbours inside its 5,000 nodes. Above the BQ-V.0 budgets (desktop
+  60,000, phone 15,000 edges) the weakest edges are dropped (ties: higher indices first) while both
+  ends keep another edge (`fit_budget`).
+- **Communities and layout.** Louvain (seed 42) on the desktop graph with negative similarities clipped
+  to 0, communities ordered largest first; `community_layout` as in section 16; the phone file uses the
+  first 5,000 positions of `layout_works.bin`.
+- **Fields.** Node rows `[id, title, year, cited_by_count, embedding_quality, community]` (title cut
+  to 160 characters); edge rows `[source, target, weight]`. No abstracts, authors, ORCIDs or
+  affiliation strings.
+- **Check.** `--check` validates the files (schema, caps, phone = first desktop ids, index ranges,
+  every node has an edge, layout length, manifest counts, forbidden keys, desktop gzip at most 2 MB).
+  With the raw store and a complete cache it rebuilds in memory with an embedder that refuses to
+  embed and fails when a file is stale; otherwise it prints SKIP for the staleness part.
+
+Build at the 2026-11-25 raw store (136,074 distinct works; 78,045 backbone candidates): 15,000 nodes,
+60,000 edges (61,005 before the budget), 5,000 phone nodes with 12,125 edges, 51 communities, 37
+low-quality (non-English) nodes; `works.json` 3.2 MB (1.04 MB gzip), `works_phone.json` 0.29 MB
+gzip, layout 120 KB. With the embedding cache a rebuild takes about 4 minutes on CPU (measured 225 s; the bytes match
+the first build); the first build (model download and 15,000 embeddings) was not timed. Spot check: "Plastic waste inputs from land into the ocean" sits next to
+"Accumulation and fragmentation of plastic debris in global environments" (0.915) and "River plastic
+emissions to the world's oceans" (0.906).
+
 ## 17. Exports (BQ-V.6)
 
 Builder: `src/atlas/build/graph_exports.py`; command `py -3.14 scripts/build_graph_exports.py [--check]`.

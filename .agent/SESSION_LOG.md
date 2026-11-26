@@ -267,3 +267,4 @@
 | 2026-11-25 | AMB-1 (sign-up) | ORCID-first sign-up flow, spec section 13 | this commit |
 | 2026-11-25 | AMB-1 FE slice 1 + BQ-1.4 | Public ambassadors landing and terms; quality payloads and pages (no numbers until gold); shared nav/footer target sizes | this commit |
 | 2026-11-26 | AMB-1 FE slice 3 | Add local knowledge, notification settings and co-author invitations screens; mail links open settings and the reminder's case | this commit |
+| 2026-11-26 | BQ-V.1 slice 3 | Global works similarity graph (15,000 works, k=5 bge-small, 60,000 edges); BQ-V.1 complete | this commit |
