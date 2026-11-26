@@ -312,6 +312,31 @@ Contract: [`docs/add_on_spec_3.md`](../docs/add_on_spec_3.md) (numbered plain-te
 
 - [x] **LIC-1** (done 2026-11-18, ADR-LICENSE-PFNC-2026-11-18) Code licence MIT -> PolyForm Noncommercial 1.0.0 (owner): LICENSE verbatim + Required Notice, pyproject, CITATION.cff, .zenodo.json, README, About, llms.txt, LICENSE-DATA, release snapshot, checks and tests.
 - [x] **LIC-2** (done 2026-11-18, ADR-LICENSE-DATA-NC-2026-11-18) Atlas-made data CC BY 4.0 -> CC BY-NC 4.0 (owner): LICENSE-DATA, README, About, llms.txt, .zenodo.json, release snapshot, data dictionary, docs, checks and tests.
+## CG Add-on A4: community groups layer (spec `docs/BFFP.md`, integrated 2026-11-26)
+
+Contract: [`docs/BFFP.md`](../docs/BFFP.md) (numbered plain-text sections; find them with `grep -nE '^[0-9]+(\.[0-9]+)? [A-Z]' docs/BFFP.md`). Decisions register A4-D0..D24, conflicts A4-C1..C11 (the repo decision wins) and ADR-A4-INTEGRATION in DECISIONS; open owner items A4-Q1..Q8 in QUESTIONS. Rules that bind every CG task: no automated tagging (spec §0 rule 1), organisations only, no count of excluded entries anywhere public (A4-D24), evidence or not_stated.
+
+- [x] **CG-0** (done 2026-11-26, ADR-A4-INTEGRATION) Repo and `.agent/` entries for A4: TODO section, A4-D0..D24 and A4-C1..C11 in DECISIONS, A4-Q1..Q8 in QUESTIONS, H53, `.gitignore` entries for the local-only files, `scripts/check_a4_scaffold.py` in CI. Size: S.
+- [ ] **CG-1** BFFP discovery (spec §4.2) -> `docs/bffp_roster_discovery.md`: member pages, whether the list is server-rendered or loaded by a request the page makes (URL pattern, pagination, fields), robots.txt / privacy / terms quoted with URL and date, the organisation-vs-individual field, sitemap. No bulk retrieval; stop conditions apply (login, CAPTCHA, robots disallow, terms). Permission details from H53 recorded under A4-D1 when the owner gives them. Depends: CG-0. Size: S.
+- [ ] **CG-2** Roster extractor (spec §4.3): `RosterSource` seam (BFFP public adapter, CSV adapter), two manifests (local-only and publishable, A4-D24), raw cache under ignored `data/raw/bffp/<date>/` with sha256 manifest and 30-day purge (A4-D23), politeness (<=1 request/s, cache, robots, stop on 403/429, two retries, checkpoint), structural-change guard, fixtures only in CI. User-Agent per A4-C9. Depends: CG-1. Size: M.
+- [ ] **CG-3** Organisations-only admission (spec §4.4: org_status values, positive admission, single-person exclusion, quarantine, no excluded names anywhere), normalisation (NFC, allow-list fields, stable group_id), dedupe with human review of near-matches, region mapping per A4-C3. Depends: CG-2. Size: M.
+- [ ] **CG-4** Schema cg-v2 and validation V1-V14 (spec §8.2) as a Python validator with a failing fixture per rule; confirm the GPML labels for F2/F4 ([VERIFY]). Depends: CG-0. Size: M.
+- [ ] **CG-5** `docs/ambassador_infrastructure.md`: answer spec §5.5 questions 1-5 from the repo (Worker + D1, A4-C2) and define the adapter: assignments, group-tag submissions in the CSV contract (§8.3), opaque ambassador_id. Depends: CG-0. Size: S.
+- [ ] **CG-6** Assignment engine and submission ingest in the Worker (only what CG-5 shows missing): batches of 20-30 by region, 30-day lease, one holder per entry, COI return, tagging form (spec §5.4) and suggest-a-group in the ambassador workspace; additive D1 migration; export rows in the CSV contract; deploy with the owner's go-ahead. Depends: CG-4, CG-5. Size: L.
+- [ ] **CG-7** Review queue, audit log and agreement statistics (spec §7: 10% double-tag sample, weighted kappa / PABAK / AC1 with intervals, review sampling, precision card). Depends: CG-6. Size: M.
+- [ ] **CG-8** Ambassador guide (<= 6 pages), calibration set (spec §6.4 plus the two synthetic organisation-check cases), agreement text. Draft by the agent; `owner: review` (coordinator content). Depends: CG-4. Size: M.
+- [ ] **CG-9** Build `groups.json` (cg-v2) and the derived files (spec §9.5: groups_tree, groups_graph, coverage, flows, precision_card) with `scripts/build_groups.py [--check]` into `site/data/global/groups/` (A4-C5, A4-C6). Depends: CG-3, CG-4. Size: M.
+- [ ] **CG-10** V-TREE: indented, keyboard-operable collapsible tree, geography-first default plus function-first and centrality-first (A4-D19), badges n tagged / M roster, untagged only as aggregates, state in the URL hash. Depends: CG-9. Size: M.
+- [ ] **CG-11** V-NET: bipartite group-to-facet graph, stated-affiliation layer, tag co-occurrence projection, on the existing Sigma viewer. Depends: CG-9. Size: M.
+- [ ] **CG-12** V-COV, V-MAP (Natural Earth assets already in the repo, A4-C8), V-HEAT, V-COMP, V-EVID. Depends: CG-9. Size: M.
+- [ ] **CG-12b** V-SANKEY (log the Sankey package under A4-D22 before use; Plot fallback), V-PART, V-COOC, V-LANG. Depends: CG-9. Size: M.
+- [ ] **CG-13** Roster table, coverage panel, "Help tag this group" call-to-action, group card with provenance line and standing note. Depends: CG-9. Size: M.
+- [ ] **CG-14** Correction channel and methods page (exclusion rule in words, no count; BFFP independence statement). Response target and removal policy are A4-Q4. Depends: CG-13. Size: S.
+- [ ] **CG-15** Pilot batch (California first, A4-C11) and retrospective; set precision targets by ADR. `owner: pilot`. Depends: CG-6, CG-7, CG-8, CG-13. Size: M.
+- [ ] **CG-16** Docs and DECISIONS updates for the layer (METHODS, DATA_DICTIONARY, SITE_DATA, REUSE). Depends: CG-15. Size: S.
+- [ ] **CG-X1** Optional: link-rot check (one cached HEAD per URL). Needs owner approval. Depends: CG-3. Size: S.
+- [ ] **CG-X2** Optional, off by default: ambassador-side assistive tooling that never writes tags; needs an ADR. Depends: CG-6. Size: M.
+
 ## S11 Fallback/extras
 - [ ] **S11.1** Optional stlite fallback reading shared outputs. Acceptance: static runtime and Pyodide compatibility tested. Dropped 2026-11-11 (owner left it to the lead): the static site covers every view; a Pyodide fallback adds a large runtime for no current user need.
 - [ ] **S11.2** Optional evidence-map heatmaps. Superseded by Add-on A2 EM-8 (A2-C5); do not implement separately. 2026-11-12 (owner asked): interim provisional heatmap on the Evidence map from the keyword topic/matrix tags (UX-26); EM-8 replaces its tags with A2 fields after EM-4.

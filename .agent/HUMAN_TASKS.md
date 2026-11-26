@@ -34,6 +34,13 @@ The global quality numbers stay blank until a person labels a sample. Round 0 is
 3. When the progress bar reads "Drawn works labelled 160 of 160", close the browser tab and tell the agent "H39 round 0 done".
    The agent then draws the next round of 25 and says when the precision goal is met (at most 350).
 
+### H53. Record the BFFP permission details (Add-on A4, 2 minutes)
+You said BFFP gave explicit permission to use their data. The groups spec asks that the details be on record.
+1. Tell the agent, in one message: the date, whether it was written or verbal, who at BFFP gave it (their role is
+   enough), and any conditions they set (pages, how often, attribution, whether member names may be shown).
+2. If it was by email, saying "by email from <role> on <date>" is enough; do not paste personal addresses.
+- **Done when:** the agent has recorded it under A4-D1 in `.agent/DECISIONS.md`.
+
 ### H28. Review the OPC Solutions track mapping (EM-17, 22 actions, about 15 minutes)
 The Policy page now lists the Ocean Protection Council's 22 early actions. Each action links to a
 Global Plastic Laws topic. That link is a draft the agent proposed, so the page shows a

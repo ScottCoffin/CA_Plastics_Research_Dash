@@ -852,3 +852,58 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
 
 - 2026-11-26 addendum to ADR-AMB-DEPLOY-2026-11-25: owner sign-up exposed two gaps (trailing-slash 404, fixed and redeployed as version b270e988; OEHHA and the State Water Board filed under CalEPA by OpenAlex). Owner approved migration 0005 and a redeploy (version c5ce5c3c): approved institution proposals carry region, domain and type and join the eligible list; oehha.ca.gov and waterboards.ca.gov added to the CalEPA entry via regions/california/ambassador_domains.csv. University gateways may hold mail from a new .live domain (UCR delivered but held); DMARC p=none added by the owner.
 - 2026-11-26: owner approved migration 0006 (additive only, after the lead rejected a 13-table rebuild) and a redeploy (version 1ba0be5b): unlisted-institution sign-up with region trusted email suffixes (QUESTIONS AMB-UNLISTED-EMAIL). Live row count checked before and after (1 active ambassador).
+
+## ADR-A4-INTEGRATION-2026-11-26: Add-on A4 (community groups layer, CG tasks) integrated into the roadmap
+
+- **Context:** the owner supplied `docs/BFFP.md` (Add-on A4 v5: Break Free From Plastic member organisations plus ambassador-suggested groups, tagged by volunteer ambassadors with evidence; organisations only; geography-first tree, network and coverage views; task prefix CG-). The owner stated on 2026-11-26 that the project has explicit permission from BFFP to use its data, and that where the spec conflicts with decisions already made (licences, infrastructure and the like) the existing decisions apply, because the spec was written without full knowledge of the project.
+- **Decision:** CG-0..CG-16 plus optional CG-X1/CG-X2 in `TODO.md` section "CG" (spec §12 order). The spec's decision table is copied below as A4-D0..D24 with status; conflicts with repo decisions are A4-C1..C11 (the repo decision wins in each); open owner items are QUESTIONS A4-Q1..Q8; the permission record is HUMAN_TASKS H53. `scripts/check_a4_scaffold.py` (CI) asserts every ID exists once and CG dependencies are listed in order. The spec file was normalised to LF with trailing whitespace removed; its text is unchanged.
+- **Consequence:** the ambassador knowledge form's group kinds (community_group, volunteer_group, research_network) move to A4's record and suggest-a-group path when CG-6 lands (QUESTIONS AMB-KNOWLEDGE-EXTRAS). No A1-A3 schema, gate, query or gold file changes.
+- **Decided by:** owner (spec decisions and the precedence rule); lead at integration.
+
+## Add-on A4 decisions (register)
+
+Copied from `docs/BFFP.md` §2. Status as of integration; "Owner" means confirmed or resolved by the owner in the spec or on 2026-11-26.
+
+| ID | Decision | Status |
+|---|---|---|
+| A4-D0 | Groups layer is an add-on module; no change to A1-A3 paper-level schemas | Owner (spec: confirmed) |
+| A4-D1 | Roster extraction is built by the agent; BFFP gave the owner permission for retrieval from its site (owner 2026-11-26: "We have EXPLICIT PERMISSION from BFFP to use their data"); discovery precedes extraction | Owner; permission details (form, who, scope, conditions) open as A4-Q1 |
+| A4-D2 | Individuals are excluded from all outputs | Owner (see A4-D20) |
+| A4-D3 | Groups without a plastics focus are shown in a separate, clearly named adjacent layer; Ambassadors can fill in details | Owner |
+| A4-D4 | Taxonomy facets F1-F14 (spec §3); Tier 1 required, Tier 2 optional | Owner 2026-11-26 by deferral to the spec (QUESTIONS AMB-KNOWLEDGE-EXTRAS) |
+| A4-D5 | Evidence rule: URL + date + quote of at most 25 words, or not_stated / cannot_determine | Owner 2026-11-26 by deferral to the spec |
+| A4-D6 | Group-level plastics_centrality reuses A3's graded values with group rules (spec §6.2) | Owner 2026-11-26 by deferral to the spec |
+| A4-D7 | BFFP membership is provenance only | Owner |
+| A4-D8 | Auto-prelabel + review design (v1) | Superseded by A4-D11 |
+| A4-D9 | New dependencies, paid services or backends need owner approval (except A4-D22) | Superseded in this repo by the standing approval A3-Q13 (A4-C7) |
+| A4-D10 | Other directories are link-only; no bulk reuse without a licence check | Owner |
+| A4-D11 | Tagging by volunteer Ambassadors, assigned by region; no scraping- or crawling-based tagging | Owner |
+| A4-D12 | BFFP membership may be shown publicly: "Listed as a BFFP member as of <date>" | Owner |
+| A4-D13 | Submission and queue platform = the existing Ambassador infrastructure (Worker + D1); the CSV contract (§8.3) is the export seam | Owner; interface in docs/ambassador_infrastructure.md (CG-5) |
+| A4-D14 | Ambassador attribution: aggregate by default; named only with consent | Superseded by the existing contribution terms v1 (A4-C4) |
+| A4-D15 | incidental and none go to the adjacent layer | Owner |
+| A4-D16 | Untagged roster entries appear in a searchable roster table with "Help tag this group"; not drawn as graph nodes by default | Owner |
+| A4-D17 | Contributor licence for Ambassador-entered data | Resolved by existing decisions: contribution terms v1 and CC BY-NC 4.0 (A4-C1) |
+| A4-D18 | Visualisation module (§9) | Owner |
+| A4-D19 | Tree default hierarchy geography-first; function-first and centrality-first alternatives ship; each group once under its principal activity, "all activities" toggle shows distinct counts | Owner |
+| A4-D20 | Organisations-only rule (§4.4): positive admission; individuals and single-person practices excluded; excluded entries not retained | Owner |
+| A4-D21 | All extra views in scope: V-SANKEY, V-PART, V-COOC, V-LANG, V-TREE, V-NET, V-COV, V-MAP, V-HEAT, V-COMP, V-EVID | Owner |
+| A4-D22 | The agent may add one small permissively licensed Sankey layout package and one map geometry/centroid asset; log name, version, licence and source here before use | Owner (map asset: reuse the Natural Earth assets already in the repo, A4-C8) |
+| A4-D23 | Raw-cache retention 30 days (or sooner once parsing is verified) | Owner |
+| A4-D24 | No public display or committed record of the count of entries excluded as individuals or single-person practices; methods may state the rule but not a number | Owner |
+
+## Add-on A4 conflicts with repo decisions (register)
+
+| ID | Spec says | Repo decision that applies |
+|---|---|---|
+| A4-C1 | A4-D17 proposes a contributor licence ("CC BY 4.0 candidate"). | The repo already decided: data licence CC BY-NC 4.0 (ADR-LICENSE-DATA-NC) and the ambassador contribution terms v1 (docs/AMBASSADOR_TERMS.md, owner-approved H48). Group tags are ambassador contributions under those terms. |
+| A4-C2 | §5.5 and CG-5 assume the Ambassador infrastructure is unknown. | It is the repo's own Cloudflare Worker + D1 at api.plastiverse.live (ORCID sign-in, institutional email, Resend, moderation queue, daily export pull request; docs/AMBASSADORS_SPEC.md). CG-5 documents it from the repo; CG-6 extends the Worker (new D1 tables need an additive migration and an owner-approved deploy, as before). |
+| A4-C3 | §5.2 proposes UN M49 sub-regions with US-CA as a subnational area. | Ambassador regions are `regions/_registry.yml` (california, norway, belgium, more as they open). Assignment uses those; M49 sub-region is a display level for countries without a region, and region_unknown stays for missing countries (the spec itself says to adopt an existing scheme). |
+| A4-C4 | A4-D14: aggregate credit by default. | Contribution terms v1: public credit is on by default and the ambassador can switch it off ("Confirmed by a local ambassador" otherwise). The existing terms win; the opaque ambassador_id is never published (V9 holds). |
+| A4-C5 | §8.1 puts files under `data/groups/`. | Repo layout (docs/DATA_LAYOUT.md): published files in `site/data/global/groups/` (roster.json, groups.json, derived files, roster_manifest.json); local-only material under ignored `data/raw/bffp/<date>/` and `data/interim/bffp/` (roster_manifest.local.json, roster_quarantine.csv, submissions, audit log). |
+| A4-C6 | §9.0 says derived files are built by Observable Framework data loaders. | The repo builds data with Python scripts that commit JSON (`scripts/build_*.py [--check]`) and the Framework pages read it; keep that pattern. |
+| A4-C7 | A4-D9 requires owner approval for every new dependency. | Standing approval A3-Q13 (2026-11-18): add any dependency a task needs unless it has a major workflow, reusability or security impact; record each with licence and pin here. A4-D22 stays as an explicit approval. |
+| A4-C8 | §9.4 V-MAP asks to choose a map asset. | The repo already ships Natural Earth 1:50m countries (world-atlas `countries-50m`, public domain, `site/assets/world/world.json`) with Natural Earth's default view of disputed lines and a credit line; V-MAP reuses it and the same neutrality note. |
+| A4-C9 | §4.3 asks for a User-Agent with a contact address. | Agent policy: no personal email in requests to outside services without the owner's explicit say-so. The extractor identifies itself as the project with its public site URL; A4-Q2 asks whether BFFP requires an address. |
+| A4-C10 | The spec cites with numbered references. | Repo docs cite (Authors Year) (A3 rule 13); the spec file is kept as delivered. |
+| A4-C11 | §5.2 puts California first in batch priority and CG-15 pilots a California batch. | The project is global since 2026-11-26 (owner: depart from California-only scope); California stays first in the pilot as the region with the most ambassadors, without excluding others. |

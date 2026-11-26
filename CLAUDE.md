@@ -43,6 +43,7 @@ Playwright/WSL browser smoke procedure.
 | Lessons / pitfalls | `grep -n '^## ' .agent/LESSONS.md` (top 10 are already in MEMORY) |
 | Add-on A1 / A2 contract | Numbered plain-text sections, no `#` headings: `grep -nE '^[0-9]+(\.[0-9]*)? [A-Z]' docs/add_on_spec.md` (or `_2.md`), then read only the cited section |
 | Add-on A3 contract (BQ tasks) | `grep -nE -e '^[0-9]+(\.[0-9]+)*\.? [A-Z]' -e '^Module ' docs/add_on_spec_3.md`, then `sed -n` the cited section. Registers: DECISIONS A3-D/A3-C rows, QUESTIONS A3-Q rows; Zotero keys for quote checks in `docs/A3_SOURCES.md` |
+| Add-on A4 contract (CG tasks) | `grep -nE '^[0-9]+(\.[0-9]+)? [A-Z]' docs/BFFP.md`, then `sed -n` the section. Registers: DECISIONS A4-D/A4-C rows (repo decisions win over the spec), QUESTIONS A4-Q rows |
 | Evidence for a finished task | `docs/S<stage>_<task>_VERIFICATION.md`, `docs/api_notes/<source>.md` |
 | Code layout | `agent_docs/project_structure.md` |
 | Data / Parquet / JSON | `wc -l`, `head`, or a pyarrow schema print. Never `cat` |
@@ -67,7 +68,8 @@ Never open `data/`, `output/`, `scratch/`, `site/data/*.json`, `.playwright-cli/
 - CI pre-steps: `py -3.14 scripts/check_doc_links.py`, `py -3.14 scripts/check_a1_scaffold.py`
   and `py -3.14 scripts/check_a2_scaffold.py` (A2 also checks that EM-1..18,
   A2-D/INT and A2-C register IDs exist once and that EM dependencies are listed in order in TODO),
-  and `py -3.14 scripts/check_a3_scaffold.py` (BQ task IDs, A3-D/C/Q registers, BQ dependency order).
+  and `py -3.14 scripts/check_a3_scaffold.py` (BQ task IDs, A3-D/C/Q registers, BQ dependency order),
+  and `py -3.14 scripts/check_a4_scaffold.py` (CG task IDs, A4-D/C/Q registers, CG dependency order).
 - Framework revisit check: `py -3.14 scripts/check_framework_triggers.py` (warns only; also in CI).
   If it reports a fired trigger, raise AT-5/AT-6 with the owner (ADR-FRAMEWORK-REVISIT-2026-11-11).
 - Task acceptance: `py -3.14 scripts/check_s<stage>_<task>.py` (also `check_at1.py`).

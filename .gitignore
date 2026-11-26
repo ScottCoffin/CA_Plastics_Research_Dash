@@ -88,3 +88,9 @@ framework/src/assets/landing/
 worker/.wrangler/
 worker/.dev.vars
 worker/dist/
+
+# Add-on A4 (community groups): local-only roster material, never committed (A4-D23, A4-D24)
+data/raw/bffp/
+data/interim/bffp/
+**/roster_manifest.local.json
+**/roster_quarantine.csv

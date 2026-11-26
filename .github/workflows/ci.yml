@@ -40,6 +40,9 @@ jobs:
       - name: Check Add-on A3 scaffold
         run: python scripts/check_a3_scaffold.py
 
+      - name: Check Add-on A4 scaffold
+        run: python scripts/check_a4_scaffold.py
+
       - name: Check gold releases
         run: python scripts/check_gold_releases.py
 
