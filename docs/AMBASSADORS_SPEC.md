@@ -552,3 +552,48 @@ Status: built in `framework/src/components/ambassador_signup.js` (mounted from `
   region" is a mailto link to the public address; no in-page region form exists yet.
 - **Tests:** `tests/framework_ambassador_signup_runtime.mjs` (pure helpers) and `tests/test_ambassador_signup.py`
   (static). The browser walk ran against mocked API and Turnstile routes only.
+
+## Front end slice 2c (moderation page)
+
+- **Page:** `framework/src/ambassador_moderation.md` (title "Moderation", unlisted, `noindex, nofollow`, not in the
+  navigation, sitemap or llms.txt). Logic in `framework/src/components/ambassador_moderation.js`; styles in
+  `ambassador_moderation.css`. It uses the shared `api()` helper (now exported from `ambassador_signup.js`) and
+  `apiUrl()`, so every call sends credentials.
+- **States:** signed out (link "Sign in with ORCID to moderate"); signed in but not a moderator (403 from the queue:
+  "This page is for the owner and region leads."); moderator (region filter with "All regions" by default, counts,
+  "Estimated time: about N minutes" at one minute per item, one item per screen with its heading focused).
+- **Decisions:** Approve and Reject save at once, with an optional note; the saved state is announced in a live
+  region and the page stays on the item until Next. A self decision shows "You cannot decide your own submission."
+- **Leads and suspension:** a lead form (ambassador id and region) posts to `/moderation/leads`. Suspension asks for
+  confirmation on the page (no `window.confirm`) before it posts; a 403 shows "Only the owner can suspend an account."
+- **Submitted text** is written with `textContent` only. Only http and https values become links, opened in a new tab
+  with `rel="noopener noreferrer nofollow"`.
+- **Open points:** `GET /moderation/queue` does not return `credit_public`, so the submitter's name is not shown until
+  the Worker says it is public (the page never shows a name by default). The Worker has no route to lift a suspension.
+  Proposals carry no region, so they show "Region: not stated".
+- **Tests:** `tests/framework_ambassador_moderation_runtime.mjs` (pure helpers, node) and
+  `tests/test_ambassador_moderation.py` (static).
+
+## Front end slice 2b
+
+Status: built in `framework/src/components/ambassador_workspace.js` (styles appended to `ambassadors.css`), mounted by
+`ambassador_signup.js` after sign-in when the ambassador has an active region. It calls only the Worker routes of
+Backend slice 2b (`POST /cases/answer`, `GET /cases/answers?region=`, `POST /submissions`, `GET /submissions/mine`)
+through the sign-up's `api()` helper, and reads the public `ambassador_cases.json` and `region.json` of the region.
+
+- **Shell:** region chips when several regions are active (no radio buttons or drop-downs for regions); the region
+  name as the heading; stream A and B as cards with counts and "about N minutes" (30 seconds per case, 2 minutes per
+  placeholder); stream C and settings shown as disabled "Coming next" cards.
+- **Stream A:** one case per screen. The admitting terms (quoted place names in affiliation signals, or the local term)
+  are highlighted after escaping. Agree and Unsure save at once; Disagree reveals the correct value (choices for the
+  institution kinds, text otherwise) and Save posts it. The screen stays on the saved case; Next and Previous move on.
+  Progress reads "N of M answered"; a case-type filter; a fresh entry resumes at the first unanswered case. A single
+  answer is shown only as the ambassador's own answer; "Two ambassadors agree" appears only with consensus.
+- **Stream B:** each to_confirm or draft item of region.json is addressed by its `item_id`
+  (`<slug>:<section id>:<index in region.yml>`, see docs/REGION_PAGES.md). Confirm and Not relevant post at once; a
+  correction posts a name, an https address and/or a note. "Sent for review" comes from `GET /submissions/mine`.
+- **Errors:** Worker codes map through `workspaceErrorText()`, which falls back to the sign-up's `errorText()`.
+- **Storage:** nothing is kept in the browser; no localStorage, sessionStorage or cookie.
+- **Not in this slice:** the zoomed region map header, keyboard shortcuts, stream C forms, and settings.
+- **Tests:** `tests/framework_ambassador_workspace_runtime.mjs` (pure helpers) and `tests/test_ambassador_workspace.py`
+  (static wiring). The browser walk ran at 1440 and 390 against mocked API routes only (no real network).

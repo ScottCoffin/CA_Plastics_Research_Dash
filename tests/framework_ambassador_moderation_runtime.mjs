@@ -1,0 +1,139 @@
+// Runtime checks for the moderation page (AMB-1 slice 2c). The pure helpers live in
+// framework/src/components/ambassador_moderation.js; the DOM flow is checked in a browser (mocked API).
+import assert from "node:assert/strict";
+import {
+  checkLead,
+  checkSuspend,
+  countsText,
+  creditName,
+  dateText,
+  decisionBody,
+  estimateMinutes,
+  estimateText,
+  fieldRows,
+  leadBody,
+  moderationErrorText,
+  noteProblem,
+  normaliseItems,
+  pendingItems,
+  queueUrl,
+  safeHref,
+  sortQueue,
+  suspendBody,
+} from "../framework/src/components/ambassador_moderation.js";
+
+let passed = 0;
+const check = (name, fn) => {
+  fn();
+  passed += 1;
+  console.log(`ok - ${name}`);
+};
+
+const QUEUE = {
+  ok: true,
+  region: null,
+  submissions: [
+    {type: "submission", id: 7, region: "norway", stream: "B", kind: "place", payload: {name: "Bergen"}, created_at: 300, submitter: {display_name: "Ada", credit_public: true}, own: false},
+    {type: "submission", id: 3, region: "belgium", stream: "C", kind: "fact", payload: {}, created_at: 100, submitter: {display_name: null}, own: true},
+  ],
+  proposals: [
+    {type: "proposal", id: 2, kind: "institution", payload: {name: "Lab B", url: "https://example.org/lab"}, created_at: 100, submitter: {display_name: "Bo"}, own: false},
+  ],
+};
+
+check("queue ordering: oldest first, submissions before proposals at a tie, then by id", () => {
+  const items = normaliseItems(QUEUE);
+  assert.deepEqual(items.map((i) => `${i.type}:${i.id}`), ["submission:3", "proposal:2", "submission:7"]);
+  assert.deepEqual(sortQueue([{type: "proposal", id: 1, created_at: 5}, {type: "submission", id: 9, created_at: 5}]).map((i) => i.type), ["submission", "proposal"]);
+});
+
+check("proposals carry no region; submissions keep theirs", () => {
+  const items = normaliseItems(QUEUE);
+  assert.equal(items.find((i) => i.type === "proposal").region, null);
+  assert.equal(items.find((i) => i.id === 7).region, "norway");
+});
+
+check("empty or missing queues normalise to an empty list", () => {
+  assert.deepEqual(normaliseItems({}), []);
+  assert.deepEqual(normaliseItems(null), []);
+});
+
+check("estimate text: about one minute per item, with plural rules", () => {
+  assert.equal(estimateMinutes(3), 3);
+  assert.equal(estimateMinutes(-2), 0);
+  assert.equal(estimateText(0), "Nothing is waiting for review.");
+  assert.equal(estimateText(1), "Estimated time: about 1 minute for 1 item.");
+  assert.equal(estimateText(4), "Estimated time: about 4 minutes for 4 items.");
+});
+
+check("counts text counts only undecided items", () => {
+  const items = normaliseItems(QUEUE);
+  assert.equal(countsText(items), "3 items waiting: 2 submissions, 1 proposal.");
+  items[0].status = "approved";
+  assert.equal(pendingItems(items).length, 2);
+  assert.equal(countsText(items), "2 items waiting: 1 submission, 1 proposal.");
+});
+
+check("queue URL filters by region only when one is chosen", () => {
+  assert.equal(queueUrl(""), "/moderation/queue");
+  assert.equal(queueUrl("norway"), "/moderation/queue?region=norway");
+});
+
+check("decision body carries the note only when it has text", () => {
+  assert.deepEqual(decisionBody({type: "submission", id: 7, decision: "approve", note: "  "}), {type: "submission", id: 7, decision: "approve"});
+  assert.deepEqual(decisionBody({type: "proposal", id: 2, decision: "reject", note: " Duplicate "}), {type: "proposal", id: 2, decision: "reject", note: "Duplicate"});
+});
+
+check("note problems: empty is fine; angle brackets, control characters and length are refused", () => {
+  assert.equal(noteProblem(""), null);
+  assert.equal(noteProblem("Looks fine."), null);
+  assert.match(noteProblem("<b>x</b>"), /no < or > signs/);
+  assert.match(noteProblem("a\u0001b"), /plain text/);
+  assert.match(noteProblem("x".repeat(1001)), /1000 characters/);
+});
+
+check("lead and suspend bodies trim the id and check it is present", () => {
+  assert.deepEqual(leadBody({ambassadorId: " abc ", region: "belgium"}), {ambassador_id: "abc", region: "belgium"});
+  assert.deepEqual(suspendBody({ambassadorId: "abc "}), {ambassador_id: "abc"});
+  assert.deepEqual(checkLead({ambassadorId: "", region: ""}).map((e) => e.field), ["lead-id", "lead-region"]);
+  assert.deepEqual(checkLead({ambassadorId: "x", region: "norway"}), []);
+  assert.equal(checkSuspend({ambassadorId: "  "}).length, 1);
+  assert.deepEqual(checkSuspend({ambassadorId: "x"}), []);
+});
+
+check("error text: moderation codes get plain sentences; the 403 text depends on the action", () => {
+  assert.equal(moderationErrorText("self_decision", "decide"), "You cannot decide your own submission.");
+  assert.equal(moderationErrorText("forbidden", "suspend"), "Only the owner can suspend an account.");
+  assert.equal(moderationErrorText("forbidden", "decide"), "This page is for the owner and region leads.");
+  assert.equal(moderationErrorText("is_owner", "lead"), "The owner's account cannot be changed here.");
+  assert.equal(moderationErrorText("network"), "We could not reach the sign-up service. Check your connection and try again.");
+  assert.equal(moderationErrorText("sql_error_xyz"), "Something went wrong on our side. Try again in a few minutes.");
+});
+
+check("submitted fields become label and value rows; objects and arrays are text", () => {
+  assert.deepEqual(fieldRows({place_name: "Bergen", empty: "", none: null}), [{label: "Place name", value: "Bergen", href: null}]);
+  assert.deepEqual(fieldRows({tags: ["a", "b"], meta: {x: 1}}).map((r) => r.value), ["a, b", '{"x":1}']);
+  assert.deepEqual(fieldRows("text"), []);
+});
+
+check("only http and https values become links", () => {
+  assert.equal(safeHref("https://example.org/a"), "https://example.org/a");
+  assert.equal(safeHref("http://example.org"), "http://example.org");
+  assert.equal(safeHref("javascript:alert(1)"), null);
+  assert.equal(safeHref("https://example.org/<x>"), null);
+  assert.equal(safeHref(42), null);
+});
+
+check("credit name shows only when credit is public", () => {
+  assert.equal(creditName({display_name: "Ada", credit_public: true}), "Ada");
+  assert.equal(creditName({display_name: "Ada", credit_public: false}), null);
+  assert.equal(creditName({display_name: "Ada"}), null);
+  assert.equal(creditName({display_name: "  ", credit_public: true}), null);
+});
+
+check("dates are UTC calendar days; bad timestamps have a fallback", () => {
+  assert.equal(dateText(Date.UTC(2026, 10, 25, 12)), "2026-11-25");
+  assert.equal(dateText(undefined), "Date not recorded");
+});
+
+console.log(`${passed} ambassador moderation runtime checks passed`);
