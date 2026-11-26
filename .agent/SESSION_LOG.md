@@ -277,3 +277,4 @@
 | 2026-11-26 | CG-9 | groups.json (cg-v2) and five derived files from the BFFP roster | this commit |
 | 2026-11-26 | CG-13 | Public /groups page: coverage, roster table, group card | this commit |
 | 2026-11-26 | AMB-NAV, AMB-CHOICE-CUES, AMB-FULLWIDTH | Owner UI requests: nav links, chosen-button cues, full-width ambassador pages | this commit |
+| 2026-11-26 | CG-6b | Approved group tags flow from the Worker export into curation CSVs and the groups build | this commit |

@@ -8,6 +8,8 @@ the final --check test.
 from __future__ import annotations
 
 import copy
+import csv
+import importlib.util
 import json
 import re
 import subprocess
@@ -469,3 +471,277 @@ def test_check_passes_against_the_committed_files() -> None:
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+# ---------------------------------------------------------------------------
+# Curated submissions (CG-6b): curation/group_tags.csv and group_affiliations.csv
+# ---------------------------------------------------------------------------
+
+
+def _load_script(name: str, path: Path) -> Any:
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+BUILD = _load_script("build_groups", BUILD_SCRIPT)
+EXPORT = _load_script("ambassador_export_pr", REPO / "scripts" / "ambassador_export_pr.py")
+TAG_HEADER = EXPORT.GROUP_TAG_COLUMNS
+AFFILIATION_HEADER = EXPORT.GROUP_AFFILIATION_COLUMNS
+# 2026-11-26T10:00:00Z in milliseconds (the export's decided_at).
+DECIDED_AT = 1795687200000
+
+
+def _evidence_columns(facet: str, quote: str = "We remove plastic litter from beaches.") -> dict:
+    return {
+        f"evidence_{facet}_url": "https://example.org/about",
+        f"evidence_{facet}_accessed_at": DATE,
+        f"evidence_{facet}_quote": quote,
+        f"evidence_{facet}_not_stated": "false",
+        f"evidence_{facet}_note": "",
+    }
+
+
+CORE_TAG: dict[str, str] = {
+    "group_id": CORE,
+    "status": "ambassador_tagged",
+    "entity_type": "organisation",
+    "sector": "ngo_civil_society",
+    "plastics_centrality": "primary",
+    "primary_activities": "cleanup_removal;education_awareness",
+    "geographic_scope": "local",
+    "places": "US-CA",
+    "website_languages": "en",
+    "themes": "marine_litter",
+    "tagged_at": DATE,
+    "credit": "a local ambassador",
+    **_evidence_columns("plastics_centrality"),
+    **_evidence_columns("primary_activities", "We run beach clean-ups."),
+}
+CORE_AFFILIATION: dict[str, str] = {
+    "group_id": CORE,
+    "target_name": "Example Network",
+    "relation": "member_of",
+    "evidence_url": "https://example.org/partners",
+    "evidence_accessed_at": DATE,
+    "evidence_quote": "We are a member of Example Network.",
+}
+CORE_PAYLOAD: dict[str, Any] = {
+    "group_id": CORE,
+    "status": "ambassador_tagged",
+    "entity_type": "organisation",
+    "sector": "ngo_civil_society",
+    "plastics_centrality": "primary",
+    "primary_activities": ["cleanup_removal", "education_awareness"],
+    "geographic_scope": "local",
+    "places": ["US-CA"],
+    "website_languages": ["en"],
+    "themes": ["marine_litter"],
+    "evidence": [
+        {
+            "facet": "plastics_centrality",
+            "url": "https://example.org/about",
+            "accessed_at": DATE,
+            "quote": "We remove plastic litter from beaches.",
+            "not_stated": False,
+        },
+        {
+            "facet": "primary_activities",
+            "url": "https://example.org/about",
+            "accessed_at": DATE,
+            "quote": "We run beach clean-ups.",
+            "not_stated": False,
+        },
+    ],
+    "stated_affiliations": [
+        {
+            "target_name": "Example Network",
+            "relation": "member_of",
+            "evidence": {
+                "url": "https://example.org/partners",
+                "accessed_at": DATE,
+                "quote": "We are a member of Example Network.",
+            },
+        }
+    ],
+}
+
+
+def _write_rows(path: Path, header: tuple[str, ...], rows: list[dict]) -> None:
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(header), lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({column: row.get(column, "") for column in header})
+
+
+def _curation(root: Path, tags: list[dict] = (), affiliations: list[dict] = ()) -> Path:
+    curation = root / "curation"
+    curation.mkdir(parents=True, exist_ok=True)
+    _write_rows(curation / "group_tags.csv", TAG_HEADER, list(tags))
+    _write_rows(curation / "group_affiliations.csv", AFFILIATION_HEADER, list(affiliations))
+    return curation
+
+
+def _record(outputs: Mapping[str, bytes], group_id: str) -> dict:
+    groups = _json(outputs, "groups.json")["groups"]
+    return next(g for g in groups if g["group_id"] == group_id)
+
+
+def test_committed_curation_headers_match_the_export_contract() -> None:
+    for name, header in (
+        ("group_tags.csv", TAG_HEADER),
+        ("group_affiliations.csv", AFFILIATION_HEADER),
+    ):
+        first = (REPO / "curation" / name).read_text(encoding="utf-8").splitlines()[0]
+        assert first == ",".join(header), name
+
+
+def test_header_only_curation_gives_the_same_bytes_as_no_curation(tmp_path: Path) -> None:
+    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), _curation(tmp_path))
+    assert outputs == _build(None)
+
+
+def test_tagged_row_is_ingested_as_tagged_not_reviewed(tmp_path: Path) -> None:
+    outputs = BUILD.build_outputs(
+        copy.deepcopy(ROSTER), _curation(tmp_path, tags=[CORE_TAG], affiliations=[CORE_AFFILIATION])
+    )
+    record = _record(outputs, CORE)
+    assert record["status"] == "ambassador_tagged"
+    assert record["sector"] == "ngo_civil_society"
+    assert record["primary_activities"] == ["cleanup_removal", "education_awareness"]
+    assert record["places"] == ["US-CA"]
+    assert record["tagged_at"] == DATE
+    assert record["reviewed_at"] is None
+    assert record["layer"] == "core"
+    assert [e["facet"] for e in record["evidence"]] == [
+        "plastics_centrality",
+        "primary_activities",
+    ]
+    # Credit and the not_an_organisation flag are curation columns, never published fields.
+    assert "credit" not in record and "not_an_organisation" not in record
+
+
+def test_affiliation_rows_attach_to_their_group(tmp_path: Path) -> None:
+    outputs = BUILD.build_outputs(
+        copy.deepcopy(ROSTER), _curation(tmp_path, tags=[CORE_TAG], affiliations=[CORE_AFFILIATION])
+    )
+    [stated] = _record(outputs, CORE)["stated_affiliations"]
+    assert stated["target_name"] == "Example Network"
+    assert stated["relation"] == "member_of"
+    assert stated["evidence"] == {
+        "url": "https://example.org/partners",
+        "accessed_at": DATE,
+        "quote": "We are a member of Example Network.",
+        "not_stated": False,
+    }
+
+
+def test_cannot_determine_row_is_ingested_as_untagged_with_its_reason(tmp_path: Path) -> None:
+    row = {
+        "group_id": CD,
+        "status": "cannot_determine",
+        "cannot_determine_reason": "dead_link",
+        "tagged_at": DATE,
+        "credit": "a local ambassador",
+    }
+    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), _curation(tmp_path, tags=[row]))
+    record = _record(outputs, CD)
+    assert record["status"] == "cannot_determine"
+    assert record["cannot_determine_reason"] == "dead_link"
+    assert record["layer"] == "untagged"
+    assert record["evidence"] == []
+
+
+def test_not_an_organisation_removes_the_group_from_every_output(tmp_path: Path) -> None:
+    flag = {
+        "group_id": ADJ,
+        "status": "cannot_determine",
+        "cannot_determine_reason": "not_an_organisation",
+        "not_an_organisation": "true",
+        "tagged_at": DATE,
+    }
+    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), _curation(tmp_path, tags=[flag]))
+    groups = _json(outputs, "groups.json")["groups"]
+    assert ADJ not in {g["group_id"] for g in groups}
+    assert len(groups) == len(ROSTER["records"]) - 1
+    for name, data in outputs.items():
+        assert ADJ.encode() not in data, name
+        assert b"Adjacent Fund" not in data, name
+
+
+def test_rows_for_unknown_groups_are_skipped_with_a_reason(tmp_path: Path, capsys) -> None:
+    unknown = "cg_0000000000000000"
+    outputs = BUILD.build_outputs(
+        copy.deepcopy(ROSTER),
+        _curation(
+            tmp_path / "with_rows",
+            tags=[{**CORE_TAG, "group_id": unknown}],
+            affiliations=[{**CORE_AFFILIATION, "group_id": unknown}],
+        ),
+    )
+    out = capsys.readouterr().out
+    assert f"skip group_tags row: group_id {unknown!r} is not on the roster" in out
+    assert f"skip group_affiliations row: group_id {unknown!r} has no tag row" in out
+    assert outputs == _build(None)
+
+
+def test_malformed_flag_in_the_curation_csv_fails_the_build(tmp_path: Path) -> None:
+    row = {**CORE_TAG, "not_an_organisation": "yes"}
+    with pytest.raises(GroupsBuildError, match="expected true, false or blank"):
+        BUILD.build_outputs(copy.deepcopy(ROSTER), _curation(tmp_path, tags=[row]))
+
+
+def test_export_csv_round_trips_into_the_build(tmp_path: Path) -> None:
+    # The export accepts only cg_ plus 16 hex digits (worker GROUP_ID_RE), so the roster copy
+    # gives the first synthetic organisation a real-format id.
+    real_id = "cg_0123456789abcdef"
+    roster = copy.deepcopy(ROSTER)
+    roster["records"][0]["group_id"] = real_id
+    body = {
+        "ok": True,
+        "submissions": [
+            {
+                "id": 1,
+                "region": "norway",
+                "stream": "knowledge",
+                "kind": "group_tag",
+                "payload": {**CORE_PAYLOAD, "group_id": real_id},
+                "decided_at": DECIDED_AT,
+                "credit_name": "Ada Example",
+            }
+        ],
+        "case_answers": [],
+        "institutions": [],
+    }
+    export = tmp_path / "export.json"
+    export.write_text(json.dumps(body), encoding="utf-8")
+    args = [
+        "--input",
+        str(export),
+        "--since-file",
+        str(tmp_path / "state.json"),
+        "--labels-file",
+        str(tmp_path / "labels.csv"),
+        "--additions-file",
+        str(tmp_path / "additions.csv"),
+        "--regions-dir",
+        str(tmp_path / "regions"),
+        "--group-tags-file",
+        str(tmp_path / "group_tags.csv"),
+        "--group-affiliations-file",
+        str(tmp_path / "group_affiliations.csv"),
+        "--group-suggestions-file",
+        str(tmp_path / "group_suggestions.csv"),
+    ]
+    assert EXPORT.main(args) == 0
+    outputs = BUILD.build_outputs(roster, tmp_path)
+    record = _record(outputs, real_id)
+    assert record["sector"] == "ngo_civil_society"
+    assert record["tagged_at"] == DATE
+    assert record["evidence"][0]["quote"] == "We remove plastic litter from beaches."
+    assert record["stated_affiliations"][0]["target_name"] == "Example Network"
+    # The approving ambassador's credit stays in the curation CSV and is never published.
+    assert all(b"Ada Example" not in data for data in outputs.values())

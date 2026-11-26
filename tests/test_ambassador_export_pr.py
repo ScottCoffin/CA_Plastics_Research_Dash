@@ -11,6 +11,7 @@ import csv
 import importlib.util
 import json
 import shutil
+from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -61,6 +62,12 @@ def _args(root: Path, *extra: str) -> list[str]:
         str(root / "curation" / "ambassador_institution_additions.csv"),
         "--regions-dir",
         str(root / "regions"),
+        "--group-tags-file",
+        str(root / "curation" / "group_tags.csv"),
+        "--group-affiliations-file",
+        str(root / "curation" / "group_affiliations.csv"),
+        "--group-suggestions-file",
+        str(root / "curation" / "group_suggestions.csv"),
         *extra,
     ]
 
@@ -327,3 +334,255 @@ def test_dry_run_leaves_the_additions_file_alone(work: Path, capsys) -> None:
     assert MOD.main(_args(work, "--dry-run")) == 0
     assert path.read_bytes() == before
     assert "skip institution 103: invalid domain" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------- group curation (CG-6b)
+
+GROUP_A = "cg_0123456789abcdef"
+GROUP_B = "cg_fedcba9876543210"
+AMBASSADOR_ID = "amb_SECRET_4242"
+
+
+def _ms(day: str, hour: int = 10) -> int:
+    return int(datetime.fromisoformat(f"{day}T{hour:02d}:00:00+00:00").timestamp() * 1000)
+
+
+def _tag(group_id: str = GROUP_A, **overrides) -> dict:
+    payload = {
+        "group_id": group_id,
+        "status": "ambassador_tagged",
+        "entity_type": "organisation",
+        "sector": "ngo_civil_society",
+        "plastics_centrality": "primary",
+        "primary_activities": ["cleanup_removal", "education_awareness"],
+        "geographic_scope": "local",
+        "places": ["US-CA"],
+        "website_languages": ["en"],
+        "themes": ["marine_litter"],
+        "evidence": [
+            {
+                "facet": "plastics_centrality",
+                "url": "https://example.org/about",
+                "accessed_at": "2026-11-20",
+                "quote": "We remove plastic litter from California beaches.",
+                "not_stated": False,
+            },
+            {
+                "facet": "primary_activities",
+                "url": "https://example.org/about",
+                "accessed_at": "2026-11-20",
+                "quote": "We run beach clean-ups.",
+                "not_stated": False,
+            },
+        ],
+        "stated_affiliations": [
+            {
+                "target_name": "Example Network",
+                "relation": "member_of",
+                "evidence": {
+                    "url": "https://example.org/partners",
+                    "accessed_at": "2026-11-20",
+                    "quote": "We are a member of Example Network.",
+                },
+            }
+        ],
+    }
+    payload.update(overrides)
+    return payload
+
+
+def _sub(
+    sub_id: int, kind: str, payload: dict, decided_at: int, credit: str | None = "Ada Example"
+) -> dict:
+    return {
+        "id": sub_id,
+        "region": "norway",
+        "stream": "knowledge",
+        "kind": kind,
+        "payload": payload,
+        "decided_at": decided_at,
+        "credit_name": credit,
+        "ambassador_id": AMBASSADOR_ID,
+    }
+
+
+def _export(root: Path, submissions: list[dict]) -> int:
+    body = {"ok": True, "submissions": submissions, "case_answers": [], "institutions": []}
+    (root / "export.json").write_text(json.dumps(body), "utf-8")
+    return MOD.main(_args(root))
+
+
+def _csv_of(root: Path, name: str) -> list[dict]:
+    with (root / "curation" / name).open(encoding="utf-8", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def test_group_kinds_never_touch_region_yml(work: Path) -> None:
+    region = work / "regions" / "norway" / "region.yml"
+    before = region.read_bytes()
+    assert (
+        _export(
+            work,
+            [
+                _sub(1, "group_tag", _tag(), _ms("2026-11-20")),
+                _sub(
+                    2,
+                    "group_suggest",
+                    {
+                        "name": "Coast Coalition",
+                        "url": "https://coast.example.org",
+                        "country": "no",
+                        "note": "Found on a municipal page.",
+                    },
+                    _ms("2026-11-21"),
+                ),
+            ],
+        )
+        == 0
+    )
+    assert region.read_bytes() == before
+    assert len(_csv_of(work, "group_tags.csv")) == 1
+    [suggestion] = _csv_of(work, "group_suggestions.csv")
+    assert suggestion["country"] == "NO"
+
+
+def test_newest_tag_wins_within_one_export(work: Path, capsys) -> None:
+    assert (
+        _export(
+            work,
+            [
+                _sub(7, "group_tag", _tag(sector="ngo_civil_society"), _ms("2026-11-22")),
+                _sub(8, "group_tag", _tag(sector="foundation"), _ms("2026-11-20")),
+            ],
+        )
+        == 0
+    )
+    [row] = _csv_of(work, "group_tags.csv")
+    assert row["sector"] == "ngo_civil_society"
+    assert row["tagged_at"] == "2026-11-22"
+    assert "skip submission 8: older than the stored tag for this group" in capsys.readouterr().out
+
+
+def test_later_export_replaces_the_group_tag_and_its_affiliations(work: Path) -> None:
+    assert _export(work, [_sub(1, "group_tag", _tag(), _ms("2026-11-20"))]) == 0
+    assert len(_csv_of(work, "group_affiliations.csv")) == 1
+    newer = _tag(sector="foundation")
+    del newer["stated_affiliations"]
+    assert _export(work, [_sub(2, "group_tag", newer, _ms("2026-11-25"))]) == 0
+    rows = _csv_of(work, "group_tags.csv")
+    assert [(r["group_id"], r["sector"], r["tagged_at"]) for r in rows] == [
+        (GROUP_A, "foundation", "2026-11-25")
+    ]
+    assert _csv_of(work, "group_affiliations.csv") == []
+
+
+def test_no_ambassador_id_or_email_reaches_the_csvs(work: Path) -> None:
+    assert (
+        _export(
+            work,
+            [
+                _sub(1, "group_tag", _tag(), _ms("2026-11-20")),
+                _sub(2, "group_tag", _tag(GROUP_B), _ms("2026-11-20"), credit=None),
+                _sub(
+                    3,
+                    "group_suggest",
+                    {"name": "Coast Group", "url": "https://coast.example.org"},
+                    _ms("2026-11-20"),
+                ),
+            ],
+        )
+        == 0
+    )
+    for name in ("group_tags.csv", "group_affiliations.csv", "group_suggestions.csv"):
+        text = (work / "curation" / name).read_text("utf-8")
+        assert AMBASSADOR_ID not in text
+        assert "@" not in text
+    credits = {r["group_id"]: r["credit"] for r in _csv_of(work, "group_tags.csv")}
+    assert credits == {GROUP_A: "Ada Example", GROUP_B: "a local ambassador"}
+
+
+def test_invalid_group_rows_are_skipped_with_reason(work: Path, capsys) -> None:
+    evidence = _tag()["evidence"]
+    email_quote = {**evidence[0], "quote": "Write to info@example.org for details."}
+    assert (
+        _export(
+            work,
+            [
+                _sub(1, "group_tag", _tag(GROUP_B, sector="not_a_sector"), _ms("2026-11-20")),
+                _sub(2, "group_tag", _tag(GROUP_B, evidence=[evidence[0]]), _ms("2026-11-20")),
+                _sub(
+                    3,
+                    "group_tag",
+                    _tag(GROUP_B, evidence=[email_quote, evidence[1]]),
+                    _ms("2026-11-20"),
+                ),
+                _sub(
+                    4,
+                    "group_suggest",
+                    {"name": "Coast Group", "url": "https://coast.example.org", "country": "USA"},
+                    _ms("2026-11-20"),
+                ),
+                _sub(5, "group_tag", _tag(), _ms("2026-11-20")),
+            ],
+        )
+        == 0
+    )
+    out = capsys.readouterr().out
+    assert "skip submission 1: invalid sector" in out
+    assert "skip submission 2: invalid evidence" in out
+    assert "skip submission 3: invalid email" in out
+    assert "skip submission 4: invalid country" in out
+    assert [r["group_id"] for r in _csv_of(work, "group_tags.csv")] == [GROUP_A]
+    assert not (work / "curation" / "group_suggestions.csv").exists()
+
+
+def test_affiliations_and_suggestions_are_written(work: Path) -> None:
+    suggestion = {
+        "name": "Coast Group",
+        "url": "https://coast.example.org",
+        "country": "no",
+        "note": "Found on a municipal page.",
+    }
+    assert (
+        _export(
+            work,
+            [
+                _sub(1, "group_tag", _tag(), _ms("2026-11-20")),
+                _sub(2, "group_suggest", suggestion, _ms("2026-11-21")),
+            ],
+        )
+        == 0
+    )
+    [aff] = _csv_of(work, "group_affiliations.csv")
+    assert aff["group_id"] == GROUP_A
+    assert aff["target_name"] == "Example Network"
+    assert aff["relation"] == "member_of"
+    assert aff["evidence_quote"] == "We are a member of Example Network."
+    [row] = _csv_of(work, "group_suggestions.csv")
+    assert row["name"] == "Coast Group"
+    assert row["country"] == "NO"
+    assert row["suggested_at"] == "2026-11-21"
+
+
+def test_not_an_organisation_row_is_exported_without_facets(work: Path, capsys) -> None:
+    flag = {
+        "group_id": GROUP_A,
+        "status": "cannot_determine",
+        "cannot_determine_reason": "not_an_organisation",
+        "not_an_organisation": True,
+    }
+    assert (
+        _export(
+            work,
+            [
+                _sub(1, "group_tag", flag, _ms("2026-11-20")),
+                _sub(2, "group_tag", _tag(GROUP_B, not_an_organisation=True), _ms("2026-11-20")),
+            ],
+        )
+        == 0
+    )
+    assert "skip submission 2: invalid entity_type" in capsys.readouterr().out
+    [row] = _csv_of(work, "group_tags.csv")
+    assert row["not_an_organisation"] == "true"
+    assert row["cannot_determine_reason"] == "not_an_organisation"
+    assert row["sector"] == ""

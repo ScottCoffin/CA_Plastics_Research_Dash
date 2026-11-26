@@ -5,6 +5,9 @@ Reads GET {api}/export/approved (or a saved export with --input) and applies:
 - stream ``confirm`` (confirm, correct, not_relevant): edits the item named by ``payload.item_id``
   in ``regions/<slug>/region.yml``. ``item_id`` is ``<slug>:<section or kind>:<0-based index>``.
 - stream ``knowledge``: appends a ``draft`` item to the matching section (``correction`` edits one).
+  Kinds ``group_tag`` and ``group_suggest`` (CG-6b) never touch region.yml: tags go to
+  ``curation/group_tags.csv`` (newest per group_id) with stated affiliations in
+  ``curation/group_affiliations.csv``; suggestions go to ``curation/group_suggestions.csv``.
 - consensus ``case_answers``: rows in ``curation/ambassador_labels.csv``, newest per (region, case).
 - ``institutions`` (optional key, missing means none): approved institution proposals, written to
   ``curation/ambassador_institution_additions.csv``, newest per (region, domain). The builder
@@ -33,13 +36,18 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter
-from datetime import UTC, datetime
+from collections.abc import Callable, Mapping
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from atlas.groups.schema import load_taxonomy  # noqa: E402
+
 DEFAULT_API_URL = "https://api.plastiverse.live"
 DEFAULT_STATE = ROOT / "curation" / "ambassador_export_state.json"
 DEFAULT_LABELS = ROOT / "curation" / "ambassador_labels.csv"
@@ -58,6 +66,9 @@ ADDITION_COLUMNS = (
     "source",
 )
 ADDITION_SOURCE = "approved_proposal"
+DEFAULT_GROUP_TAGS = ROOT / "curation" / "group_tags.csv"
+DEFAULT_GROUP_AFFILIATIONS = ROOT / "curation" / "group_affiliations.csv"
+DEFAULT_GROUP_SUGGESTIONS = ROOT / "curation" / "group_suggestions.csv"
 # The four types the amb-v1 builder treats as eligible (ELIGIBLE_TYPES in src/atlas/build).
 INSTITUTION_TYPES = frozenset({"education", "government", "nonprofit", "facility"})
 # Same pattern as the owner spec for institution domains; the builder also checks registrable form.
@@ -301,6 +312,7 @@ class Applier:
         regions_dir: Path,
         labels: dict[tuple[str, str], dict],
         additions: dict[tuple[str, str], dict],
+        groups: GroupStore,
     ) -> None:
         self.regions_dir = regions_dir
         self.original: dict[str, tuple[str, dict]] = {}
@@ -310,6 +322,7 @@ class Applier:
         self.labels_changed = False
         self.additions = additions
         self.additions_changed = False
+        self.groups = groups
         self.applied: Counter = Counter()
         self.skipped: list[tuple[str, str]] = []
 
@@ -334,6 +347,12 @@ class Applier:
 
     def submission(self, sub: dict, credit: str | None) -> str | None:
         """Apply one approved submission. Returns a skip reason, or None when applied."""
+        if sub.get("stream") == "knowledge" and sub.get("kind") in GROUP_KINDS:
+            # Group curation (CG-6b) goes to curation/*.csv, never to region.yml.
+            reason = self.groups.submission(sub, credit)
+            if reason is None:
+                self.applied[("groups", f"knowledge:{sub['kind']}")] += 1
+            return reason
         slug = sub.get("region")
         if not isinstance(slug, str) or not SLUG_RE.match(slug):
             return "invalid region"
@@ -506,6 +525,586 @@ class Applier:
         return None
 
 
+# ---------------------------------------------------------------- group curation (CG-6b)
+#
+# Approved group_tag and group_suggest submissions never reach region.yml. Tags go to
+# curation/group_tags.csv (docs/BFFP.md section 8.3), stated affiliations to
+# curation/group_affiliations.csv and suggestions to curation/group_suggestions.csv. The checks
+# mirror validateGroupTag and validateGroupSuggest in worker/src/groups.ts; the taxonomy comes from
+# config/groups_taxonomy.yml through atlas.groups.schema.
+
+GROUP_KINDS = frozenset({"group_tag", "group_suggest"})
+GROUP_CREDIT_FALLBACK = "a local ambassador"
+GROUP_STATUSES = ("ambassador_tagged", "cannot_determine")
+GROUP_TIER1 = (
+    "entity_type",
+    "sector",
+    "plastics_centrality",
+    "primary_activities",
+    "geographic_scope",
+)
+GROUP_TIER1_EVIDENCE = ("plastics_centrality", "primary_activities")
+# Facets with their own evidence columns in group_tags.csv, in column order.
+GROUP_EVIDENCE_FACETS = (
+    "entity_type",
+    "sector",
+    "plastics_centrality",
+    "primary_activities",
+    "geographic_scope",
+    "legal_form",
+    "participation_in_science",
+    "website_languages",
+)
+GROUP_EVIDENCE_PARTS = ("url", "accessed_at", "quote", "not_stated", "note")
+# Facets an evidence entry may cite (worker EVIDENCE_FACETS).
+GROUP_CITABLE_FACETS = (
+    "entity_type",
+    "sector",
+    "plastics_centrality",
+    "primary_activities",
+    "geographic_scope",
+    "places",
+    "legal_form",
+    "participation_in_science",
+    "website_languages",
+    "themes",
+    "constituency",
+    "stated_affiliations",
+)
+GROUP_SINGLE_FIELDS = (
+    "entity_type",
+    "sector",
+    "plastics_centrality",
+    "geographic_scope",
+    "legal_form",
+    "participation_in_science",
+)
+GROUP_LIST_BOUNDS = {
+    "primary_activities": (1, 5),  # A4-D26
+    "places": (0, 5),
+    "website_languages": (0, 10),
+    "themes": (0, 10),
+    "constituency": (0, 10),
+}
+# Facet fields that must all be absent when not_an_organisation is true.
+GROUP_FACET_FIELDS = (
+    "entity_type",
+    "sector",
+    "plastics_centrality",
+    "primary_activities",
+    "geographic_scope",
+    "places",
+    "legal_form",
+    "legal_form_note",
+    "participation_in_science",
+    "website_languages",
+    "themes",
+    "constituency",
+    "stated_affiliations",
+    "evidence",
+)
+GROUP_TAG_KEYS = frozenset(
+    {
+        "group_id",
+        "status",
+        "cannot_determine_reason",
+        "not_an_organisation",
+        "legal_form_note",
+        "stated_affiliations",
+        "evidence",
+        "places",
+        "themes",
+        "constituency",
+        "website_languages",
+        *GROUP_FACET_FIELDS,
+    }
+)
+GROUP_EVIDENCE_KEYS = frozenset({"facet", "url", "accessed_at", "quote", "not_stated", "note"})
+GROUP_AFFILIATION_KEYS = frozenset({"target_name", "relation", "evidence"})
+GROUP_CITATION_KEYS = frozenset({"url", "accessed_at", "quote"})
+GROUP_SUGGEST_KEYS = frozenset({"name", "url", "country", "note"})
+GROUP_TAG_MAX_CHARS = 12000
+GROUP_TAG_COLUMNS = (
+    "group_id",
+    "status",
+    "cannot_determine_reason",
+    "not_an_organisation",
+    "entity_type",
+    "sector",
+    "plastics_centrality",
+    "primary_activities",
+    "geographic_scope",
+    "places",
+    "legal_form",
+    "legal_form_note",
+    "participation_in_science",
+    "website_languages",
+    "themes",
+    "constituency",
+    *(
+        f"evidence_{facet}_{part}"
+        for facet in GROUP_EVIDENCE_FACETS
+        for part in GROUP_EVIDENCE_PARTS
+    ),
+    "tagged_at",
+    "credit",
+)
+GROUP_AFFILIATION_COLUMNS = (
+    "group_id",
+    "target_name",
+    "relation",
+    "evidence_url",
+    "evidence_accessed_at",
+    "evidence_quote",
+)
+GROUP_SUGGESTION_COLUMNS = ("name", "url", "country", "note", "suggested_at")
+GROUP_ID_RE = re.compile(r"cg_[0-9a-f]{16}")
+GROUP_PLACE_RE = re.compile(r"[A-Z]{2}(-[A-Z0-9]{1,3})?")
+GROUP_LANGUAGE_RE = re.compile(r"[a-z]{2}")
+GROUP_COUNTRY_RE = re.compile(r"[A-Za-z]{2}")
+GROUP_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
+EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+
+
+def bounded_text(value: Any, limit: int) -> str | None:
+    """Trimmed text of at most ``limit`` characters, without control characters or HTML."""
+    if not isinstance(value, str):
+        return None
+    text = value.strip()
+    if not text or len(text) > limit or CONTROL_OR_HTML_RE.search(text):
+        return None
+    return text
+
+
+def web_url(value: Any) -> str | None:
+    """An http or https URL (group websites and citations), no credentials, no whitespace."""
+    text = bounded_text(value, 500)
+    if text is None or re.search(r"\s", text):
+        return None
+    try:
+        parts = urllib.parse.urlsplit(text)
+    except ValueError:
+        return None
+    if parts.scheme not in ("http", "https") or not parts.hostname:
+        return None
+    if parts.username or parts.password:
+        return None
+    return text
+
+
+def iso_day(value: Any) -> str | None:
+    """A real calendar date written YYYY-MM-DD, or None."""
+    if not isinstance(value, str) or not GROUP_DATE_RE.fullmatch(value):
+        return None
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        return None
+    return value
+
+
+def _one_of(values: tuple[str, ...]) -> Callable[[Any], str | None]:
+    return lambda value: value if isinstance(value, str) and value in values else None
+
+
+def _matching(pattern: re.Pattern[str]) -> Callable[[Any], str | None]:
+    return lambda value: value if isinstance(value, str) and pattern.fullmatch(value) else None
+
+
+def _theme(value: Any) -> str | None:
+    text = bounded_text(value, 80)
+    # ';' separates list values in the CSV, so a theme cannot contain one.
+    return None if text is None or ";" in text else text
+
+
+def text_list(
+    value: Any, low: int, high: int, item: Callable[[Any], str | None]
+) -> list[str] | None:
+    """A list of ``low`` to ``high`` distinct items, each accepted by ``item``, or None."""
+    if not isinstance(value, list) or not low <= len(value) <= high:
+        return None
+    out: list[str] = []
+    for raw in value:
+        text = item(raw)
+        if text is None or text in out:
+            return None
+        out.append(text)
+    return out
+
+
+def _citation(value: Mapping[str, Any], not_stated_allowed: bool) -> dict | None:
+    """url, accessed_at and exactly one of a quote (25 words at most) or not_stated true."""
+    url = web_url(value.get("url"))
+    accessed = iso_day(value.get("accessed_at"))
+    stated = value.get("not_stated")
+    if url is None or accessed is None or (stated is not None and not isinstance(stated, bool)):
+        return None
+    if stated is True:
+        if not not_stated_allowed or value.get("quote") is not None:
+            return None
+        return {"url": url, "accessed_at": accessed, "quote": None, "not_stated": True}
+    quote = bounded_text(value.get("quote"), 400)
+    if quote is None or len(quote.split()) > 25:
+        return None
+    return {"url": url, "accessed_at": accessed, "quote": quote, "not_stated": False}
+
+
+def _evidence_entry(value: Any) -> dict | None:
+    if not isinstance(value, dict) or set(value) - GROUP_EVIDENCE_KEYS:
+        return None
+    facet = value.get("facet")
+    cite = _citation(value, True)
+    if not isinstance(facet, str) or facet not in GROUP_CITABLE_FACETS or cite is None:
+        return None
+    note = value.get("note")
+    if note is not None:
+        note = bounded_text(note, 200)
+        if note is None:
+            return None
+    return {"facet": facet, **cite, "note": note}
+
+
+def _affiliation(value: Any, relations: tuple[str, ...]) -> dict | None:
+    if not isinstance(value, dict) or set(value) - GROUP_AFFILIATION_KEYS:
+        return None
+    name = bounded_text(value.get("target_name"), 200)
+    relation = _one_of(relations)(value.get("relation"))
+    evidence = value.get("evidence")
+    if name is None or relation is None or not isinstance(evidence, dict):
+        return None
+    if set(evidence) - GROUP_CITATION_KEYS:
+        return None
+    cite = _citation(evidence, False)  # affiliations never accept not_stated (V11)
+    if cite is None:
+        return None
+    return {"target_name": name, "relation": relation, "evidence": cite}
+
+
+def _list_items(taxonomy: Mapping[str, tuple[str, ...]]) -> dict[str, Callable[[Any], str | None]]:
+    return {
+        "primary_activities": _one_of(taxonomy["primary_activities"]),
+        "places": _matching(GROUP_PLACE_RE),
+        "website_languages": _matching(GROUP_LANGUAGE_RE),
+        "themes": _theme,
+        "constituency": _one_of(taxonomy["constituency"]),
+    }
+
+
+def _bad(field: str) -> tuple[None, str]:
+    return None, f"invalid {field}"
+
+
+def clean_group_tag(
+    payload: Mapping[str, Any], taxonomy: Mapping[str, tuple[str, ...]]
+) -> tuple[dict | None, str | None]:
+    """Return (normalised tag, None) or (None, skip reason). Mirrors validateGroupTag (worker)."""
+    unknown = sorted(set(payload) - GROUP_TAG_KEYS)
+    if unknown:
+        return None, f"unknown field {unknown[0]}"
+    group_id = payload.get("group_id")
+    status = payload.get("status")
+    if not isinstance(group_id, str) or not GROUP_ID_RE.fullmatch(group_id):
+        return _bad("group_id")
+    if status not in GROUP_STATUSES:
+        return _bad("status")
+    out: dict[str, Any] = {"group_id": group_id, "status": status}
+
+    reason = payload.get("cannot_determine_reason")
+    if status == "cannot_determine":
+        if reason not in taxonomy["cannot_determine_reason"]:
+            return _bad("cannot_determine_reason")
+        out["cannot_determine_reason"] = reason
+    elif reason is not None:
+        return _bad("cannot_determine_reason")
+
+    for key in GROUP_SINGLE_FIELDS:
+        value = payload.get(key)
+        if value is None:
+            continue
+        if value not in taxonomy[key]:
+            return _bad(key)
+        out[key] = value
+    if status == "ambassador_tagged" and out.get("plastics_centrality") == "cannot_determine":
+        return _bad("plastics_centrality")  # V2
+
+    if payload.get("legal_form_note") is not None:
+        note = bounded_text(payload["legal_form_note"], 200)
+        if note is None:
+            return _bad("legal_form_note")
+        out["legal_form_note"] = note
+
+    for key, item in _list_items(taxonomy).items():
+        if payload.get(key) is None:
+            continue
+        low, high = GROUP_LIST_BOUNDS[key]
+        values = text_list(payload[key], low, high, item)
+        if values is None:
+            return _bad(key)
+        out[key] = values
+
+    # V6: participation other than not_applicable needs research_monitoring among the activities.
+    if payload.get("participation_in_science") is not None:
+        activities = out.get("primary_activities", [])
+        if out["participation_in_science"] != "not_applicable" and (
+            "research_monitoring" not in activities
+        ):
+            return _bad("participation_in_science")
+
+    if payload.get("stated_affiliations") is not None:
+        items = payload["stated_affiliations"]
+        if not isinstance(items, list) or len(items) > 10:
+            return _bad("stated_affiliations")
+        parsed = [_affiliation(item, taxonomy["relation"]) for item in items]
+        if any(entry is None for entry in parsed):
+            return _bad("stated_affiliations")
+        out["stated_affiliations"] = parsed
+
+    if payload.get("evidence") is not None:
+        items = payload["evidence"]
+        if not isinstance(items, list) or len(items) > 15:
+            return _bad("evidence")
+        parsed = [_evidence_entry(item) for item in items]
+        if any(entry is None for entry in parsed):
+            return _bad("evidence")
+        out["evidence"] = parsed
+
+    if payload.get("not_an_organisation") is not None:
+        flag = payload["not_an_organisation"]
+        if not isinstance(flag, bool):
+            return _bad("not_an_organisation")
+        if flag:
+            facet = next((k for k in GROUP_FACET_FIELDS if payload.get(k) is not None), None)
+            if facet is not None:
+                return _bad(facet)
+        out["not_an_organisation"] = flag
+
+    # Tier 1 (V2, V4): an ambassador_tagged group has the five core facets and evidence for two.
+    if status == "ambassador_tagged":
+        for key in GROUP_TIER1:
+            if key not in out:
+                return _bad(key)
+        cited = {entry["facet"] for entry in out.get("evidence", [])}
+        if any(facet not in cited for facet in GROUP_TIER1_EVIDENCE):
+            return _bad("evidence")
+
+    stored = json.dumps(out, ensure_ascii=False)
+    if EMAIL_RE.search(stored):
+        return _bad("email")
+    if len(stored) > GROUP_TAG_MAX_CHARS:
+        return _bad("payload")
+    return out, None
+
+
+def clean_group_suggest(payload: Mapping[str, Any]) -> tuple[dict | None, str | None]:
+    """Return (suggestion, None) or (None, skip reason). Mirrors validateGroupSuggest (worker)."""
+    unknown = sorted(set(payload) - GROUP_SUGGEST_KEYS)
+    if unknown:
+        return None, f"unknown field {unknown[0]}"
+    name = bounded_text(payload.get("name"), 200)
+    url = web_url(payload.get("url"))
+    if name is None or url is None:
+        return None, "invalid name or url"
+    country = payload.get("country")
+    if country is not None:
+        if not isinstance(country, str) or not GROUP_COUNTRY_RE.fullmatch(country):
+            return _bad("country")
+        country = country.upper()
+    note = payload.get("note")
+    if note is not None:
+        note = bounded_text(note, 1000)
+        if note is None:
+            return _bad("note")
+    if any(EMAIL_RE.search(text) for text in (name, url, note or "")):
+        return _bad("email")
+    return {"name": name, "url": url, "country": country or "", "note": note or ""}, None
+
+
+def iso_day_of(at: int) -> str:
+    return datetime.fromtimestamp(at / 1000, tz=UTC).date().isoformat()
+
+
+def group_tag_row(tag: Mapping[str, Any], tagged_at: str, credit: str) -> tuple[dict, int]:
+    """One group_tags.csv row. Returns (row, evidence entries the CSV cannot carry)."""
+    row = dict.fromkeys(GROUP_TAG_COLUMNS, "")
+    row["group_id"] = tag["group_id"]
+    row["status"] = tag["status"]
+    row["cannot_determine_reason"] = tag.get("cannot_determine_reason", "")
+    if "not_an_organisation" in tag:
+        row["not_an_organisation"] = "true" if tag["not_an_organisation"] else "false"
+    for key in GROUP_SINGLE_FIELDS:
+        row[key] = tag.get(key, "")
+    for key in GROUP_LIST_BOUNDS:
+        row[key] = ";".join(tag[key]) if key in tag else ""
+    row["legal_form_note"] = tag.get("legal_form_note", "")
+    evidence = tag.get("evidence", [])
+    carried = 0
+    for facet in GROUP_EVIDENCE_FACETS:
+        entry = next((e for e in evidence if e["facet"] == facet), None)
+        if entry is None:
+            continue
+        carried += 1
+        row[f"evidence_{facet}_url"] = entry["url"]
+        row[f"evidence_{facet}_accessed_at"] = entry["accessed_at"]
+        row[f"evidence_{facet}_quote"] = entry["quote"] or ""
+        row[f"evidence_{facet}_not_stated"] = "true" if entry["not_stated"] else "false"
+        row[f"evidence_{facet}_note"] = entry["note"] or ""
+    row["tagged_at"] = tagged_at
+    row["credit"] = credit
+    return row, len(evidence) - carried
+
+
+def affiliation_rows(tag: Mapping[str, Any]) -> list[dict]:
+    return [
+        {
+            "group_id": tag["group_id"],
+            "target_name": item["target_name"],
+            "relation": item["relation"],
+            "evidence_url": item["evidence"]["url"],
+            "evidence_accessed_at": item["evidence"]["accessed_at"],
+            "evidence_quote": item["evidence"]["quote"],
+        }
+        for item in tag.get("stated_affiliations", [])
+    ]
+
+
+class GroupStore:
+    """Group tags, affiliations and suggestions for one export run; nothing is written yet.
+
+    ``tags`` maps group_id to {"ms", "row"}; the newest approval wins and replaces the group's
+    affiliations too. ``suggestions`` maps url to {"ms", "row"}, newest wins.
+    """
+
+    def __init__(
+        self,
+        tags: dict[str, dict],
+        affiliations: dict[str, list[dict]],
+        suggestions: dict[str, dict],
+        taxonomy: Mapping[str, tuple[str, ...]],
+    ) -> None:
+        self.tags = tags
+        self.affiliations = affiliations
+        self.suggestions = suggestions
+        self.taxonomy = taxonomy
+        self.dirty: set[str] = set()
+
+    def submission(self, sub: dict, credit: str | None) -> str | None:
+        payload = payload_of(sub)
+        if payload is None:
+            return "payload is not an object"
+        at = sub["decided_at"]
+        if not 0 <= at <= MAX_MS:
+            return "invalid decided_at"
+        if sub.get("kind") == "group_tag":
+            return self._tag(payload, at, credit)
+        return self._suggest(payload, at)
+
+    def _tag(self, payload: Mapping[str, Any], at: int, credit: str | None) -> str | None:
+        tag, reason = clean_group_tag(payload, self.taxonomy)
+        if tag is None:
+            return reason
+        group_id = tag["group_id"]
+        existing = self.tags.get(group_id)
+        if existing is not None and existing["ms"] > at:
+            return "older than the stored tag for this group"
+        # Credit only when the export gives a public name (credit_name is null when credit is off).
+        name = credit if credit and not EMAIL_RE.search(credit) else GROUP_CREDIT_FALLBACK
+        row, dropped = group_tag_row(tag, iso_day_of(at), name)
+        if dropped:
+            print(f"note: group {group_id}: {dropped} evidence entr(ies) not carried to the CSV")
+        self.tags[group_id] = {"ms": at, "row": row}
+        self.affiliations[group_id] = affiliation_rows(tag)
+        self.dirty.update({"tags", "affiliations"})
+        return None
+
+    def _suggest(self, payload: Mapping[str, Any], at: int) -> str | None:
+        suggestion, reason = clean_group_suggest(payload)
+        if suggestion is None:
+            return reason
+        url = suggestion["url"]
+        existing = self.suggestions.get(url)
+        if existing is not None and existing["ms"] > at:
+            return "older than the stored suggestion for this url"
+        row = {**suggestion, "suggested_at": iso_day_of(at)}
+        self.suggestions[url] = {"ms": at, "row": row}
+        self.dirty.add("suggestions")
+        return None
+
+
+def _csv_rows(path: Path) -> list[dict[str, str]]:
+    if not path.exists():
+        return []
+    with path.open(encoding="utf-8", newline="") as handle:
+        return [{k: v or "" for k, v in row.items() if k} for row in csv.DictReader(handle)]
+
+
+def read_group_tags(path: Path) -> dict[str, dict]:
+    tags: dict[str, dict] = {}
+    for row in _csv_rows(path):
+        if not row.get("group_id"):
+            continue
+        try:
+            ms = ms_from_iso(f"{row['tagged_at']}T00:00:00Z")
+        except (KeyError, TypeError, ValueError):
+            raise ExportError(f"{path.name} has a row with a bad tagged_at") from None
+        tags[row["group_id"]] = {
+            "ms": ms,
+            "row": {col: row.get(col, "") for col in GROUP_TAG_COLUMNS},
+        }
+    return tags
+
+
+def read_group_affiliations(path: Path) -> dict[str, list[dict]]:
+    affiliations: dict[str, list[dict]] = {}
+    for row in _csv_rows(path):
+        if row.get("group_id"):
+            entry = {col: row.get(col, "") for col in GROUP_AFFILIATION_COLUMNS}
+            affiliations.setdefault(row["group_id"], []).append(entry)
+    return affiliations
+
+
+def read_group_suggestions(path: Path) -> dict[str, dict]:
+    suggestions: dict[str, dict] = {}
+    for row in _csv_rows(path):
+        if not row.get("url"):
+            continue
+        try:
+            ms = ms_from_iso(f"{row['suggested_at']}T00:00:00Z")
+        except (KeyError, TypeError, ValueError):
+            raise ExportError(f"{path.name} has a row with a bad suggested_at") from None
+        suggestions[row["url"]] = {
+            "ms": ms,
+            "row": {col: row.get(col, "") for col in GROUP_SUGGESTION_COLUMNS},
+        }
+    return suggestions
+
+
+def write_group_tags(path: Path, tags: dict[str, dict]) -> None:
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=GROUP_TAG_COLUMNS, lineterminator="\n")
+    writer.writeheader()
+    for group_id in sorted(tags):
+        writer.writerow(tags[group_id]["row"])
+    write_text(path, buffer.getvalue())
+
+
+def write_group_affiliations(path: Path, affiliations: dict[str, list[dict]]) -> None:
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=GROUP_AFFILIATION_COLUMNS, lineterminator="\n")
+    writer.writeheader()
+    for group_id in sorted(affiliations):
+        writer.writerows(affiliations[group_id])
+    write_text(path, buffer.getvalue())
+
+
+def write_group_suggestions(path: Path, suggestions: dict[str, dict]) -> None:
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=GROUP_SUGGESTION_COLUMNS, lineterminator="\n")
+    writer.writeheader()
+    for url in sorted(suggestions):
+        writer.writerow(suggestions[url]["row"])
+    write_text(path, buffer.getvalue())
+
+
 # ---------------------------------------------------------------- I/O
 
 
@@ -662,7 +1261,13 @@ def run(args: argparse.Namespace) -> int:
 
     labels = read_labels(args.labels_file)
     additions = read_additions(args.additions_file)
-    applier = Applier(args.regions_dir, labels, additions)
+    groups = GroupStore(
+        read_group_tags(args.group_tags_file),
+        read_group_affiliations(args.group_affiliations_file),
+        read_group_suggestions(args.group_suggestions_file),
+        load_taxonomy(),
+    )
+    applier = Applier(args.regions_dir, labels, additions, groups)
     times: list[int] = []
     sub_times: list[tuple[int, int | None]] = []
 
@@ -749,6 +1354,12 @@ def run(args: argparse.Namespace) -> int:
         write_labels(args.labels_file, applier.labels)
     if applier.additions_changed:
         write_additions(args.additions_file, applier.additions)
+    if "tags" in groups.dirty:
+        write_group_tags(args.group_tags_file, groups.tags)
+    if "affiliations" in groups.dirty:
+        write_group_affiliations(args.group_affiliations_file, groups.affiliations)
+    if "suggestions" in groups.dirty:
+        write_group_suggestions(args.group_suggestions_file, groups.suggestions)
     if args.summary_file:
         write_text(args.summary_file, summary_markdown(applier, since, newest))
     write_text(args.since_file, json.dumps(new_state, indent=2) + "\n")
@@ -769,6 +1380,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--regions-dir", type=Path, default=DEFAULT_REGIONS)
     parser.add_argument("--labels-file", type=Path, default=DEFAULT_LABELS)
     parser.add_argument("--additions-file", type=Path, default=DEFAULT_ADDITIONS)
+    parser.add_argument("--group-tags-file", type=Path, default=DEFAULT_GROUP_TAGS)
+    parser.add_argument("--group-affiliations-file", type=Path, default=DEFAULT_GROUP_AFFILIATIONS)
+    parser.add_argument("--group-suggestions-file", type=Path, default=DEFAULT_GROUP_SUGGESTIONS)
     parser.add_argument("--summary-file", type=Path, help="write a counts-only markdown summary")
     parser.add_argument("--dry-run", action="store_true", help="report only; write nothing")
     return parser
