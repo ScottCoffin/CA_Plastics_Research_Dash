@@ -34,6 +34,14 @@ The global quality numbers stay blank until a person labels a sample. Round 0 is
 3. When the progress bar reads "Drawn works labelled 160 of 160", close the browser tab and tell the agent "H39 round 0 done".
    The agent then draws the next round of 25 and says when the precision goal is met (at most 350).
 
+### H52. Add a DMARC record so sign-in email reaches university inboxes (AMB-1, 2 minutes)
+The first real confirmation email to a ucr.edu address was accepted by Resend but never arrived (not in spam).
+DKIM (resend._domainkey) and SPF (send.plastiverse.live) are set; DMARC is missing, which Google, Yahoo and
+Microsoft now require.
+1. Cloudflare > plastiverse.live > DNS > Records > Add record: Type TXT, Name `_dmarc`, Content `v=DMARC1; p=none;`. Save.
+2. After about 5 minutes, recheck the domain in Resend, then sign up again (the earlier link expired).
+3. If the email still does not arrive, tell the agent its status in Resend > Emails (Delivered, Sent or Bounced and the reason).
+
 ### H51. Be the first real ambassador sign-up (AMB-1, about 5 minutes)
 Sign-up is live and was tested only with stand-in responses. A real run checks ORCID, OpenAlex, Turnstile and
 Resend end to end.
