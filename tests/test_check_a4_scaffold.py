@@ -64,7 +64,10 @@ def _replace_on_task(path: Path, task_id: str, old: str, new: str) -> None:
 
 def _drop_line(path: Path, line_prefix: str) -> None:
     lines = path.read_text(encoding="utf-8").splitlines()
-    kept = [line for line in lines if not line.startswith(line_prefix)]
+    # A done task ("- [x]") matches an open-task prefix too, so ticking a task keeps the test valid.
+    kept = [
+        line for line in lines if not line.replace("- [x] ", "- [ ] ", 1).startswith(line_prefix)
+    ]
     assert len(kept) == len(lines) - 1
     path.write_text("\n".join(kept) + "\n", encoding="utf-8")
 
