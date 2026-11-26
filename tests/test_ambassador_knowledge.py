@@ -32,14 +32,15 @@ def _text(path: Path) -> str:
 
 
 def _worker_knowledge_kinds() -> dict[str, tuple[list[str], list[str]]]:
-    """The Worker's knowledge kinds, minus correction, with required and optional fields."""
+    """The Worker's knowledge kinds shown on this form, with required and optional fields."""
     kinds: dict[str, tuple[list[str], list[str]]] = {}
     for line in _text(WORKER_SUBMISSIONS).splitlines():
         match = WORKER_KIND_RE.match(line)
         if not match or match.group(2) != "knowledge":
             continue
         kind = match.group(1)
-        if kind == "correction":
+        # correction is on the region-page screen, the group kinds on the group screen (CG-6).
+        if kind in ("correction", "group_tag", "group_suggest"):
             continue
         required = re.findall(r'"(\w+)"', match.group(3))
         optional = re.findall(r'"(\w+)"', match.group(4))

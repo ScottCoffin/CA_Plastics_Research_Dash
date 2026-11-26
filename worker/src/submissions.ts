@@ -3,6 +3,13 @@ import type { Env } from "./env";
 import { REGIONS, type Region, isRegion } from "./eligibility";
 import { json } from "./http";
 import { accountWithinLimit, err, plainText, readBody } from "./moderation";
+import {
+  type PayloadResult,
+  holdsGroupLease,
+  releaseLeaseStatement,
+  validateGroupSuggest,
+  validateGroupTag,
+} from "./groups";
 
 const HOUR_MS = 60 * 60 * 1000;
 export const SUBMIT_LIMIT = { limit: 30, windowMs: HOUR_MS };
@@ -29,6 +36,8 @@ interface KindSpec {
   optional: Field[];
   /** At least one of these must be present (beyond the required fields). */
   anyOf?: Field[];
+  /** Own validator for kinds whose payload is not a flat object of short strings (group tags, CG-6a). */
+  validate?: (payload: unknown) => PayloadResult;
 }
 
 /**
@@ -51,6 +60,8 @@ export const KINDS: Record<string, KindSpec> = {
   researcher: { stream: "knowledge", required: ["name", "url"], optional: ["description", "note"] },
   community_knowledge: { stream: "knowledge", required: ["name", "contact_route"], optional: ["url", "description", "note"] },
   correction: { stream: "knowledge", required: ["item_id"], optional: ["name", "url", "description", "note"], anyOf: ["name", "url", "description", "note"] },
+  group_tag: { stream: "knowledge", required: [], optional: [], validate: validateGroupTag },
+  group_suggest: { stream: "knowledge", required: [], optional: [], validate: validateGroupSuggest },
 };
 
 /** https only, no credentials, no whitespace or HTML. The stored value is the trimmed text as sent. */
@@ -67,6 +78,7 @@ export function isHttpsUrl(value: string): boolean {
 
 /** Validates a submission payload against its kind. Returns the stored JSON, or the first failing field. */
 export function validatePayload(spec: KindSpec, payload: unknown): { ok: true; json: string } | { ok: false; field: string } {
+  if (spec.validate) return spec.validate(payload);
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) return { ok: false, field: "payload" };
   const allowed = new Set<string>([...spec.required, ...spec.optional]);
   const clean: Partial<Record<Field, string>> = {};
@@ -218,12 +230,20 @@ export async function handleSubmit(request: Request, env: Env, ctx: Ctx): Promis
     return err("rate_limited", 429);
   }
 
-  const row = await env.DB.prepare(
+  const insert = env.DB.prepare(
     "INSERT INTO submissions (ambassador_id, region, stream, kind, payload, status, created_at) " +
       "VALUES (?1, ?2, ?3, ?4, ?5, 'pending', ?6) RETURNING id",
-  )
-    .bind(a.id, region, kind.stream, body.kind, checked.json, ctx.now)
-    .first<{ id: number }>();
+  ).bind(a.id, region, kind.stream, body.kind, checked.json, ctx.now);
+  let row: { id: number } | null;
+  if (body.kind === "group_tag") {
+    // A tag is accepted only from the ambassador holding the group's lease, and the tag ends that lease (CG-6a).
+    const groupId = (JSON.parse(checked.json) as { group_id: string }).group_id;
+    if (!(await holdsGroupLease(env.DB, a.id, groupId, ctx.now))) return err("not_leased", 403);
+    const [inserted] = await env.DB.batch<{ id: number }>([insert, releaseLeaseStatement(env.DB, a.id, groupId)]);
+    row = inserted.results[0] ?? null;
+  } else {
+    row = await insert.first<{ id: number }>();
+  }
   await audit(env.DB, ctx.now, "submission.create", a.id, { region, stream: kind.stream, kind: body.kind });
   return json({ ok: true, id: row?.id ?? null, status: "pending" }, 201);
 }
