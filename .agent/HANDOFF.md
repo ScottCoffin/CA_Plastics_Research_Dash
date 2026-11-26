@@ -1,37 +1,40 @@
-# Handoff — 2026-11-26 — CG-11, group form redesign, roster QC
+# Handoff — 2026-11-26 (evening) — owner notes recorded, CG-7a and CG-14 done; next is Codex
 
 ## Done
 
-- H56: D1 migration 0007 was applied and Worker `cb95ec35` deployed (commit `94b46e36`). CG-6 is closed.
-- CG-11: the Network section on `/groups`. A build-time layout lives in `groups_graph.json`. It shows an empty state until groups are tagged.
-- AMB-GROUPS-UX (owner feedback): tagging a group now takes 4 clicks, 3 selects and one quote.
-  - Tooltips on lease actions.
-  - Compact activity chips and plain labels (`group_labels.js`).
-  - Place and language pickers by name, with prefills.
-  - One evidence block, and "Their pages do not mention plastics" for incidental or none.
-  - Auto-advance to the next group.
-  - Suggest a missing group has its own card (stream E).
-- GRP-NAME-CLEAN and GRP-ROSTER-QC: display-name cleaning, HTML decode, placeholder quarantine, and same-country legal-form and punctuation merges. The roster went from 2,708 to 2,673 records; ids of kept records are unchanged. `scripts/review_group_roster_app.py` writes `curation/group_merges.csv` and `curation/group_name_corrections.csv`.
-- GRP-NAME-FIX backend: `name_correction` on group_tag (Worker validator, export CSV, applied by the roster and group builds). **The Worker is not deployed and the form has no name field yet.**
+- Owner notes of 2026-11-26 are in the roadmap (commit `05e9d5be`). None of them is started:
+  - **AMB-POOL**: remove Renew lease and Return to the pool. A tagged group leaves every pool. When two people tag the same group, the first tag wins and the later one is kept as a blind second tag, never an error (ADR-AMB-POOL-2026-11-26, QUESTIONS AMB-POOL).
+  - **AMB-ROSTER-QC**: the roster duplicate and name questions move into the tagging form. H58 is now optional; the owner's 5 decisions stay in `curation/group_merges.csv`, which is uncommitted owner work. Leave it alone.
+  - **FAVICON-MAIN**: every page uses the main Plastiverse Live icon, not the paper California.
+  - **GP section**: every California Atlas feature on the main site for every region, with a California regression gate first (ADR-GLOBAL-PARITY-2026-11-26).
+  - **H57**: the owner authorized the Worker deploy.
+- CG-7 is split into 7a and 7b. **CG-7a** is done (`df9232e0`):
+  - `atlas.agreement` has weighted kappa, PABAK, AC1 and a bootstrap.
+  - `precision_card.json` is now cg-precision-v2 and reads two empty curation CSVs.
+- **CG-14** is done (`49e68f38`): a "How this list is made" section on `/groups`, and a pre-filled correction email on the group card.
 
 ## Verification
 
-- Gate in the main checkout: ruff lint and format, design tokens, public text, `build_groups.py --check`, `build_groups_roster.py --check`, links, A1-A4 scaffolds, `git diff --check`, Worker `tsc` and 206 tests.
-- Clean-worktree pytest result: see SESSION_LOG.
-- Browser walks (mocked, offline): CG-11 54/54 and form 130/130. Axe was 0 at 1440 and 390 px. The lead read the screenshots and fixed two CSS specificity bugs that the walks missed.
+- Main checkout: ruff lint and format, compileall, links, A1-A4 scaffolds, public text, design tokens, `build_groups.py --check`, `git diff --check`.
+- Focused tests: 130 (agreement and groups build) and 26 (groups page plus node runtime). `npm run build` passed.
+- Clean-worktree full pytest: see SESSION_LOG.
+- Not done: no browser walk of CG-14. The close-then-scroll from the card to `#gv-methods` is unverified in a browser.
 
-## Next task
+## Next tasks (in order)
 
-1. When the owner answers H57 ("deploy the Worker"): run `npx wrangler deploy` in `worker/`, check `/groups/*` 401s live, then add the optional "Correct the name" field to `ambassador_groups.js` (payload `name_correction`).
-2. When the owner answers H58: run `py -3.14 scripts/build_groups_roster.py` (offline), then `py -3.14 scripts/build_groups.py`, `--check`, and commit the curation CSVs and rebuilt files.
-3. Otherwise CG-7 (now eligible), then CG-12, CG-12b, CG-14, CG-16; then AMB-PARENT-REGION, AMB-MAIL-STYLE, ALERTS-GLOBAL, BQ-S9b, BQ-G3.
+1. **AMB-POOL**, then deploy the Worker (H57 authorized). No D1 migration is needed: reuse `group_leases.expires_at` for the invisible 2-hour hold and leave `renewals` unused. If a migration turns out to be needed, stop and add an owner task.
+   - After the deploy, check that `/groups/*` returns 401 without a session.
+   - Then ship the GRP-NAME-FIX "Correct the name" field in `framework/src/components/ambassador_groups.js` (payload `name_correction`).
+2. **CG-7b**: blind 10% second tags, reviewer sampling, reason-coded edits, audit log (migration 0008), and an export into `curation/group_double_tags.csv` and `curation/group_reviews.csv`. The migration and deploy need a new owner go-ahead; add it to HUMAN_TASKS as H59.
+3. **AMB-ROSTER-QC**, then **FAVICON-MAIN** (size S).
+4. CG-12, then CG-12b. V-EVID reads the v2 card.
+5. **GP-0**: parity inventory `docs/GLOBAL_PARITY.md`, then GP-1 (California regression contract).
+6. Then AMB-PARENT-REGION, AMB-MAIL-STYLE, ALERTS-GLOBAL, BQ-S9b, BQ-G3.
+7. CG-15 is an owner pilot, and CG-16 follows it.
 
-## Claude Code entry
+## Gotchas
 
-Start with [CLAUDE.md](../CLAUDE.md). The owner wants Haiku workers for every bounded task (memory: delegate-to-haiku-first). Tell browser-check workers to read their screenshots. See [resume prompt](RESUME_PROMPT.md).
-
-## Gotchas and owner input
-
-- Harnesses (ignored): `scratch/cg11_walk.py` and `scratch/ambux_walk.py` (build `framework/dist-ambux` first). `scratch/cg6c_walk.py` is outdated.
-- `groups.js` keeps its own centrality wording, so the public card and the form differ slightly. A small follow-up could switch it to `groupLabel`.
-- Open owner items: H57, H58, H39, H28, H42 and H2 in [human tasks](HUMAN_TASKS.md).
+- V14 leak guard: no published key or string may contain "excluded". CG-7a uses `dropped_cannot_determine_n`.
+- Run the clean-worktree pytest with `PYTHONPATH=<worktree>/src` and `--basetemp` outside the repo.
+- Browser harnesses (ignored): `scratch/cg11_walk.py` and `scratch/ambux_walk.py`. Build `framework/dist-ambux` first.
+- Open owner items: H58 (optional), H39, H28, H42, H2.

@@ -277,3 +277,5 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-26 | AMB-GROUPS-UX (verify) | Claude Haiku developer | Browser walk | Completed 104/104 but missed a broken activities grid (geometry-only checks); lead found it in the screenshot and fixed the CSS specificity | 1 session |
 | 2026-11-26 | GRP-ROSTER-QC | Claude Haiku developer | Placeholders, auto-merge, review app | Dispatched | 1 session |
 | 2026-11-26 | AMB-GROUPS-UX (fix) | Claude Haiku developer | Picker prefix match, not-stated plastics, plain labels | Dispatched | 1 session |
+| 2026-11-26 | CG-7a | Claude Haiku developer | Agreement statistics, precision card v2 | Completed; lead checked formulas; 130 focused tests | 1 session |
+| 2026-11-26 | CG-14 | Claude Haiku developer | Groups methods section, correction link | Completed; lead reviewed diff; 26 page tests, build ok | 1 session |
