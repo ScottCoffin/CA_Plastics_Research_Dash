@@ -849,3 +849,5 @@ Each row is an adopted rule; status stays Open until the implementing task's acc
   migrations go through `wrangler d1 migrations apply plastiverse-ambassadors --remote` and redeploys through
   `wrangler deploy`, each only with the owner's go-ahead. Resend must have plastiverse.live verified for mail to send
   from ambassadors@plastiverse.live.
+
+- 2026-11-26 addendum to ADR-AMB-DEPLOY-2026-11-25: owner sign-up exposed two gaps (trailing-slash 404, fixed and redeployed as version b270e988; OEHHA and the State Water Board filed under CalEPA by OpenAlex). Owner approved migration 0005 and a redeploy (version c5ce5c3c): approved institution proposals carry region, domain and type and join the eligible list; oehha.ca.gov and waterboards.ca.gov added to the CalEPA entry via regions/california/ambassador_domains.csv. University gateways may hold mail from a new .live domain (UCR delivered but held); DMARC p=none added by the owner.
