@@ -417,5 +417,25 @@ def test_not_relevant_items_validate_but_leave_the_page() -> None:
     first = config["sections"][0]["items"][0]
     first["status"] = "not_relevant"
     validate_config(config)
-    sections = build_sections(config)
+    sections = build_sections(config, "norway")
     assert first["name"] not in [item["name"] for item in sections[0]["items"]]
+
+
+def test_item_ids_are_positions_in_region_yml_and_survive_a_hidden_item() -> None:
+    """item_id is slug:section:index in region.yml, counted before not_relevant items are hidden."""
+    from atlas.build.region_pages import build_sections
+
+    config = yaml.safe_load(
+        (REPO_ROOT / "regions" / "norway" / "region.yml").read_text(encoding="utf-8")
+    )
+    section = config["sections"][0]
+    assert len(section["items"]) >= 2
+    section["items"][0]["status"] = "not_relevant"
+    shown = build_sections(config, "norway")[0]["items"]
+    # The second item keeps index 1 although the first one is hidden.
+    assert shown[0]["name"] == section["items"][1]["name"]
+    assert shown[0]["item_id"] == f"norway:{section['id']}:1"
+    assert [item["item_id"] for item in shown] == [
+        f"norway:{section['id']}:{index}" for index in range(1, len(section["items"]))
+    ]
+    assert all(set(item) == {"item_id", "name", "url", "kind", "status", "note"} for item in shown)

@@ -198,3 +198,58 @@
 @media (prefers-reduced-motion: reduce) {
   .am .signup, .am .signup * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* Ambassador workspace (AMB-1 front end slice 2b; ambassador_workspace.js). Tokens only; targets 44px. */
+.am .ws { max-width: 760px; }
+.am .ws [hidden] { display: none; }
+.am .ws h2 { margin: 0 0 12px; }
+.am .ws h3 { font-size: 16px; margin: 24px 0 8px; }
+.am .ws p { max-width: 66ch; }
+.am .ws .ws-region { font: 600 14px/1.4 var(--pv-mono); color: var(--pv-ink-2); margin: 0 0 4px; }
+.am .ws .ws-crumb { margin: 0 0 12px; }
+.am .ws .link-btn { min-height: 44px; padding: 8px 0; }
+.am .ws .ws-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
+.am .ws .ws-chip { min-height: 44px; padding: 8px 14px; border: 1px solid var(--pv-ink); background: var(--pv-paper); cursor: pointer; border-radius: 999px; }
+.am .ws .ws-chip[aria-pressed="true"] { background: var(--pv-ink); color: var(--pv-paper); }
+.am .ws .ws-streams { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 12px; }
+.am .ws .ws-stream { display: grid; grid-template-columns: 1fr; gap: 4px; width: 100%; min-height: 44px; padding: 14px 16px; border: 1px solid var(--pv-ink); background: var(--pv-paper); text-align: left; cursor: pointer; }
+.am .ws .ws-stream:hover { background: var(--pv-wash); }
+.am .ws .ws-stream.is-soon { border-style: dashed; color: var(--pv-ink-2); background: var(--pv-ground); cursor: default; }
+.am .ws .ws-stream-name { font-weight: 600; font-size: 17px; }
+.am .ws .ws-stream-count, .am .ws .ws-stream-time { font-size: 14px; color: var(--pv-ink-2); }
+.am .ws .ws-error { color: var(--pv-ink); background: var(--pv-sun); border: 1px solid var(--pv-ink); padding: 8px 12px; margin: 12px 0 0; }
+.am .ws .ws-progress { margin: 8px 0 16px; }
+.am .ws .ws-progress p { margin: 0 0 6px; font-weight: 600; }
+.am .ws progress { width: 100%; height: 12px; accent-color: var(--pv-ink); }
+.am .ws .field { margin-top: 16px; }
+.am .ws .field > label { display: block; font-weight: 600; margin-bottom: 6px; }
+.am .ws select, .am .ws input[type="text"], .am .ws input[type="url"], .am .ws textarea { min-height: 44px; max-width: 100%; width: 100%; padding: 8px 12px; border: 1px solid var(--pv-ink); background: var(--pv-paper); font-size: 16px; }
+.am .ws select { max-width: 360px; }
+.am .ws .ws-count { font-size: 14px; color: var(--pv-ink-2); margin: 0 0 4px; }
+.am .ws .ws-evidence { margin: 14px 0 0; display: grid; gap: 8px; }
+.am .ws .ws-evidence > div { display: grid; grid-template-columns: minmax(120px, 180px) 1fr; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--pv-line); }
+.am .ws .ws-evidence dt { font-size: 14px; color: var(--pv-ink-2); }
+.am .ws .ws-evidence dd { margin: 0; overflow-wrap: anywhere; }
+.am .ws mark { background: var(--pv-sun); color: var(--pv-ink); padding: 0 2px; }
+.am .ws .ws-machine { margin: 14px 0 0; }
+.am .ws .ws-answers, .am .ws .ws-nav, .am .ws .ws-item-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.am .ws .ws-answer, .am .ws .ws-nav .btn, .am .ws .ws-item-actions .btn { min-width: 96px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--pv-ink); background: var(--pv-paper); cursor: pointer; }
+.am .ws .ws-answer[aria-pressed="true"] { background: var(--pv-ink); color: var(--pv-paper); }
+.am .ws .ws-correct { margin-top: 14px; padding: 12px; border: 1px solid var(--pv-line); }
+.am .ws .ws-correct .btn { margin-top: 12px; min-height: 44px; }
+.am .ws .ws-saved, .am .ws .ws-yours { margin: 12px 0 0; font-weight: 600; }
+.am .ws .ws-yours { font-weight: 400; color: var(--pv-ink-2); }
+.am .ws .ws-section { margin-top: 8px; }
+.am .ws .ws-items { list-style: none; margin: 0; padding: 0; }
+.am .ws .ws-item { padding: 12px 0; border-bottom: 1px solid var(--pv-line); }
+.am .ws .ws-item-name { font-weight: 600; margin: 0; }
+.am .ws .ws-edit { margin-top: 10px; padding: 12px; border: 1px solid var(--pv-line); }
+.am .ws .ws-edit textarea { resize: vertical; }
+.am .ws .ws-review { color: var(--pv-ink-2); }
+@media (min-width: 720px) {
+  .am .ws .ws-stream { grid-template-columns: 1fr auto auto; align-items: center; gap: 16px; }
+  .am .ws .ws-evidence > div { grid-template-columns: 180px 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .am .ws, .am .ws * { transition: none !important; animation: none !important; }
+}

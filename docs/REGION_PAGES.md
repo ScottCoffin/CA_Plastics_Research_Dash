@@ -28,9 +28,11 @@ top_institutions [{id, name, ror, type, works}]   15, from authorships with that
 top_researchers  [{id, name, works}]       15, by works with an authorship in the country (public OpenAlex names;
                                            owner green-lit global author names 2026-11-25); no emails or contacts
 partner_countries [{iso, name, works}]     10 countries most often co-authoring
-sections         [{id, title, status, summary, items: [{name, url, kind, status, note}], needs}]
+sections         [{id, title, status, summary, items: [{item_id, name, url, kind, status, note}], needs}]
                  from region.yml; status is "placeholder" | "draft" | "confirmed"; `needs` says what a local
-                 expert should confirm
+                 expert should confirm. `item_id` is `<slug>:<section id>:<index>`, the 0-based position of the
+                 item in its region.yml section, counted before `not_relevant` items are left out, so ids never
+                 shift (ambassador submissions use them; see docs/AMBASSADORS_SPEC.md)
 ambassadors      {status: "recruiting", url: "/ambassadors"}
 ```
 

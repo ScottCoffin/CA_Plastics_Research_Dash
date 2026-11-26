@@ -4,6 +4,7 @@
 // access at import time. Nothing personal is stored: no email in localStorage, and the query string is removed
 // from the URL after it is read.
 import {regionFileUrl} from "./atlas.js";
+import {activeRegions, mountWorkspace} from "./ambassador_workspace.js";
 
 /** The one API base. Every Worker call goes through apiUrl() and api() below. */
 export const API_BASE = "https://api.plastiverse.live";
@@ -189,7 +190,8 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<
 const regionLabel = (slug) => REGION_NAMES[slug] || slug;
 
 /** One API helper for the Worker. Always sends credentials; always parses the JSON body; never throws. */
-async function api(path, {method = "GET", body} = {}) {
+// Exported for ambassador_workspace.js, which calls the Worker through this same helper (credentials included).
+export async function api(path, {method = "GET", body} = {}) {
   let response;
   try {
     response = await fetch(apiUrl(path), {
@@ -484,7 +486,6 @@ function showSignedIn(ambassador) {
   const names = (ambassador.regions || []).map((r) => regionLabel(r.region));
   show(`<h2 tabindex="-1">Signed in as ${esc(ambassador.display_name)}</h2>
     <p>${names.length ? `Regions: ${esc(names.join(", "))}.` : "No region is linked yet."}</p>
-    <p><span class="btn" aria-disabled="true">Workspace coming next</span></p>
     <p class="actions"><button type="button" class="link-btn" data-action="signout">Sign out</button></p>`);
   setStatus(`Signed in as ${ambassador.display_name}.`);
 }
@@ -495,6 +496,10 @@ function showAccount(ambassador, focus = true) {
     showFirstVisit();
     if (!focus) body.querySelector("h2")?.blur();
     return;
+  }
+  if (activeRegions(ambassador).length) {
+    panel.hidden = false;
+    return mountWorkspace(body, ambassador, {focus, announce: setStatus});
   }
   showSignedIn(ambassador);
   if (!focus) body.querySelector("h2")?.blur();

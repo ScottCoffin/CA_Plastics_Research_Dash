@@ -599,6 +599,7 @@
       "summary": "Who pays for plastics research and monitoring in Norway.",
       "items": [
         {
+          "item_id": "norway:funding:0",
           "name": "Research Council of Norway (Forskningsrådet)",
           "url": "https://www.forskningsradet.no/",
           "kind": "funder",
@@ -606,6 +607,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:funding:1",
           "name": "Research Council of Norway project bank (Prosjektbanken)",
           "url": "https://prosjektbanken.forskningsradet.no/",
           "kind": "funder",
@@ -613,6 +615,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:funding:2",
           "name": "EU CORDIS projects with Norwegian partners",
           "url": "https://cordis.europa.eu/",
           "kind": "funder",
@@ -620,6 +623,7 @@
           "note": "URL not checked; shared EU source"
         },
         {
+          "item_id": "norway:funding:3",
           "name": "Handelens Miljøfond (retail environment fund)",
           "url": "https://www.handelensmiljofond.no/",
           "kind": "funder",
@@ -636,6 +640,7 @@
       "summary": "Official programmes that measure litter and microplastics in Norwegian waters and on beaches and seabeds.",
       "items": [
         {
+          "item_id": "norway:monitoring:0",
           "name": "Norwegian Environment Agency monitoring programmes",
           "url": "https://www.miljodirektoratet.no/",
           "kind": "monitoring",
@@ -643,6 +648,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:monitoring:1",
           "name": "Vannmiljø (water environment database)",
           "url": "",
           "kind": "monitoring",
@@ -650,6 +656,7 @@
           "note": "No URL given; a collaborator to name the page"
         },
         {
+          "item_id": "norway:monitoring:2",
           "name": "MOSJ (Svalbard and Norwegian marine monitoring)",
           "url": "https://www.mosj.no/",
           "kind": "monitoring",
@@ -657,6 +664,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:monitoring:3",
           "name": "MAREANO seafloor litter",
           "url": "https://www.mareano.no/",
           "kind": "monitoring",
@@ -664,6 +672,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:monitoring:4",
           "name": "OSPAR beach litter, Norwegian beaches",
           "url": "https://www.ospar.org/",
           "kind": "monitoring",
@@ -680,6 +689,7 @@
       "summary": "National and international rules and plans that shape plastics work in Norway.",
       "items": [
         {
+          "item_id": "norway:policy:0",
           "name": "Norway's national plastics strategy",
           "url": "",
           "kind": "policy",
@@ -687,6 +697,7 @@
           "note": "No URL given; a collaborator to name the document"
         },
         {
+          "item_id": "norway:policy:1",
           "name": "EU single-use plastics directive (EEA rules)",
           "url": "",
           "kind": "policy",
@@ -694,6 +705,7 @@
           "note": "No URL given; applies through the EEA agreement to confirm"
         },
         {
+          "item_id": "norway:policy:2",
           "name": "EU REACH restriction on intentionally added microplastics",
           "url": "",
           "kind": "policy",
@@ -701,6 +713,7 @@
           "note": "No URL given; applies through the EEA agreement to confirm"
         },
         {
+          "item_id": "norway:policy:3",
           "name": "UN plastics treaty negotiations",
           "url": "",
           "kind": "policy",
@@ -717,6 +730,7 @@
       "summary": "Institutes and networks that work on plastics and marine litter in Norway.",
       "items": [
         {
+          "item_id": "norway:research_networks:0",
           "name": "NIVA (Norwegian Institute for Water Research)",
           "url": "https://www.niva.no/",
           "kind": "institute",
@@ -724,6 +738,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:research_networks:1",
           "name": "NILU (Norwegian Institute for Air Research)",
           "url": "https://www.nilu.no/",
           "kind": "institute",
@@ -731,6 +746,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:research_networks:2",
           "name": "SINTEF",
           "url": "https://www.sintef.no/",
           "kind": "institute",
@@ -738,6 +754,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:research_networks:3",
           "name": "Akvaplan-niva",
           "url": "https://www.akvaplan.niva.no/",
           "kind": "institute",
@@ -745,6 +762,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:research_networks:4",
           "name": "NORCE",
           "url": "https://www.norceresearch.no/",
           "kind": "institute",
@@ -752,6 +770,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:research_networks:5",
           "name": "Institute of Marine Research (Havforskningsinstituttet)",
           "url": "https://www.hi.no/",
           "kind": "institute",
@@ -768,6 +787,7 @@
       "summary": "Norwegian words used to search for plastics research beyond the English query.",
       "items": [
         {
+          "item_id": "norway:local_terms:0",
           "name": "mikroplast",
           "url": "",
           "kind": "search_term",
@@ -775,6 +795,7 @@
           "note": "Candidate term; see local_search_terms"
         },
         {
+          "item_id": "norway:local_terms:1",
           "name": "plastforurensning",
           "url": "",
           "kind": "search_term",
@@ -782,6 +803,7 @@
           "note": "Candidate term; see local_search_terms"
         },
         {
+          "item_id": "norway:local_terms:2",
           "name": "marint søppel",
           "url": "",
           "kind": "search_term",
@@ -789,6 +811,7 @@
           "note": "Candidate term; see local_search_terms"
         },
         {
+          "item_id": "norway:local_terms:3",
           "name": "nanoplast",
           "url": "",
           "kind": "search_term",
@@ -805,6 +828,7 @@
       "summary": "The places the page covers - the mainland, Svalbard, and Norway's sea areas.",
       "items": [
         {
+          "item_id": "norway:geography:0",
           "name": "Kartverket (place names and boundaries)",
           "url": "https://www.kartverket.no/",
           "kind": "geography",
@@ -812,6 +836,7 @@
           "note": "URL not checked"
         },
         {
+          "item_id": "norway:geography:1",
           "name": "Norwegian territorial waters and EEZ",
           "url": "",
           "kind": "geography",

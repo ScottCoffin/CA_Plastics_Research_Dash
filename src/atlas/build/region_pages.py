@@ -57,6 +57,8 @@ WHAT_THIS_IS_NOT = (
 PERSON_KEYS = frozenset({"orcid", "email", "affiliation", "raw_author_name", "contact"})
 RESEARCHER_KEYS = frozenset({"id", "name", "works"})
 ITEM_KEYS = frozenset({"name", "url", "kind", "status", "note"})
+# Keys of an item as written to region.json (region.yml keys plus the stable item_id).
+ITEM_PUBLIC_KEYS = frozenset({"item_id", "name", "url", "kind", "status", "note"})
 SECTION_KEYS = frozenset({"id", "title", "summary", "needs", "items"})
 TOP_LEVEL_KEYS = frozenset(
     {
@@ -191,12 +193,20 @@ def section_status(items: Sequence[Mapping[str, Any]]) -> str:
     return "draft"
 
 
-def build_sections(config: Mapping[str, Any]) -> list[dict[str, Any]]:
+def build_sections(config: Mapping[str, Any], slug: str) -> list[dict[str, Any]]:
+    """Local sections for the page.
+
+    ``item_id`` is ``<slug>:<section id>:<index in region.yml>``, counted before
+    ``not_relevant`` items are left out, so an id never shifts when an item is hidden.
+    Ambassador submissions and ``scripts/ambassador_export_pr.py`` address items by it."""
     sections: list[dict[str, Any]] = []
     for section in config["sections"]:
         items = [
-            {key: item[key] for key in ("name", "url", "kind", "status", "note")}
-            for item in section["items"]
+            {
+                "item_id": f"{slug}:{section['id']}:{index}",
+                **{key: item[key] for key in ("name", "url", "kind", "status", "note")},
+            }
+            for index, item in enumerate(section["items"])
             if item["status"] != "not_relevant"
         ]
         sections.append(
@@ -413,7 +423,7 @@ def build_region_payload(
         "top_institutions": institutions_block(iso, work_ids, authorships),
         "top_researchers": researchers_block(iso, work_ids, authorships),
         "partner_countries": partners_block(iso, work_ids, work_countries, names),
-        "sections": build_sections(config),
+        "sections": build_sections(config, slug),
         "ambassadors": dict(AMBASSADORS),
     }
 
@@ -467,6 +477,12 @@ def validate_payload(
         if set(section) != SECTION_KEYS | {"status"}:
             problems.append(f"section {section.get('id')}: keys differ")
         for item in section.get("items") or []:
+            if set(item) != ITEM_PUBLIC_KEYS:
+                problems.append(f"section {section.get('id')}: item keys differ")
+            if not str(item.get("item_id", "")).startswith(
+                f"{payload.get('slug')}:{section.get('id')}:"
+            ):
+                problems.append(f"section {section.get('id')}: item_id does not name this item")
             if item.get("status") not in ITEM_STATUSES:
                 problems.append(
                     f"section {section.get('id')}: item {item.get('name')!r} has no status"
