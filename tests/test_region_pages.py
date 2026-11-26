@@ -378,10 +378,10 @@ def test_unknown_country_fails_loudly() -> None:
 def test_real_region_configs_validate_and_match_the_registry() -> None:
     script = _script()
     slugs = sorted(region.slug for region in script.eligible_regions())
-    assert slugs == ["belgium", "norway"]
+    assert slugs == ["belgium", "california", "norway"]
     for slug in slugs:
-        raw = (REPO_ROOT / "regions" / slug / "region.yml").read_text(encoding="utf-8")
-        config = validate_config(yaml.safe_load(raw))
+        # The builder's loader drops California's site wiring keys before region-v1 validation.
+        config = script._load_config(REPO_ROOT / "regions" / slug / "region.yml")
         assert config["slug"] == slug
         assert [s["id"] for s in config["sections"]] == list(SECTION_IDS)
         for section in config["sections"]:
@@ -439,3 +439,143 @@ def test_item_ids_are_positions_in_region_yml_and_survive_a_hidden_item() -> Non
         f"norway:{section['id']}:{index}" for index in range(1, len(section["items"]))
     ]
     assert all(set(item) == {"item_id", "name", "url", "kind", "status", "note"} for item in shown)
+
+
+# --- REG-CA: the default region (California) page ----------------------------------------------
+
+
+def _slim(author_id, name, countries, institutions):
+    return {
+        "author_id": author_id,
+        "author_name": name,
+        "countries": countries,
+        "institutions": [
+            {"id": i, "name": n, "ror": None, "type": "education", "country_code": c}
+            for i, n, c in institutions
+        ],
+    }
+
+
+def _california_region():
+    script = _script()
+    return next(r for r in script.eligible_regions() if r.slug == "california")
+
+
+def _california_countries() -> dict[str, Any]:
+    years = [{"year": y, "count": 0} for y in range(1970, 2025)]
+    years[-1]["count"] = 2
+    years.append({"year": 2025, "count": 0, "partial": True})
+    registry = {
+        "region": "california",
+        "matched_by": "region_predicate",
+        "tier": "B",
+        "screening_status": "unscreened_query_hit",
+        "works_total": 3,
+        "works_by_year": years,
+        "works_outside_years": 0,
+        "works_with_pmid": 1,
+        "first_year": 1990,
+        "top_primary_topics": [{"id": "T1", "name": "Topic one", "count": 2}],
+    }
+    base = _countries_payload()
+    return {**base, "countries": base["countries"], "registry_regions": [registry]}
+
+
+def test_california_payload_counts_come_from_the_registry_block_and_iso_is_us_ca() -> None:
+    script = _script()
+    region = _california_region()
+    countries = _california_countries()
+    assert script._iso(region) == "US-CA"
+    # W1 and W2 are California-matched; W3 is a US work outside the registry match.
+    work_countries = {
+        "W1": frozenset({"US", "NO"}),
+        "W2": frozenset({"US", "CN"}),
+        "W3": frozenset({"US"}),
+    }
+    authorships = {
+        "W1": [
+            _slim("A1", "Ann", ["US"], [("I1", "Stanford University", "US")]),
+            _slim("A3", "Cy", ["US"], [("I9", "Utah Institute", "US")]),
+        ],
+        "W2": [
+            _slim("A1", "Ann", ["US"], [("I1", "Stanford University", "US")]),
+            _slim("A4", "Di", ["CN"], [("I5", "Peking Institute", "CN")]),
+        ],
+        "W3": [_slim("A9", "Ed", ["US"], [("I1", "Stanford University", "US")])],
+    }
+    payload = script.build_california_payload(
+        region=region,
+        config=_config("US"),
+        countries_payload=countries,
+        work_countries=work_countries,
+        authorships=authorships,
+        registry_works=frozenset({"W1", "W2"}),
+        registry_institutions=frozenset({"I1"}),
+        names={"CN": "China", "NO": "Norway"},
+    )
+    assert payload["iso"] == "US-CA"
+    assert payload["slug"] == "california"
+    assert payload["stats"]["works_total"] == 3
+    assert payload["stats"]["first_year"] == 1990
+    # Institutions: only California registry institutions on the matched works.
+    assert payload["top_institutions"] == [
+        {"id": "I1", "name": "Stanford University", "ror": None, "type": "education", "works": 2}
+    ]
+    # Partners: other countries on the matched works; the US is never listed.
+    assert [p["iso"] for p in payload["partner_countries"]] == ["CN", "NO"]
+    # Researchers: authors with a US institution or country on the matched works.
+    assert [(r["id"], r["works"]) for r in payload["top_researchers"]] == [("A1", 2), ("A3", 1)]
+    assert validate_payload(payload, script._validation_view(region, countries)) == []
+
+
+def test_california_validation_view_points_the_registry_block_at_us_ca() -> None:
+    script = _script()
+    region = _california_region()
+    view = script._validation_view(region, _california_countries())
+    assert [c["iso"] for c in view["countries"]] == ["US-CA"]
+    # Norway and Belgium validate against countries.json unchanged.
+    norway = next(r for r in script.eligible_regions() if r.slug == "norway")
+    assert script._validation_view(norway, _countries_payload())["countries"][0]["iso"] == "NO"
+
+
+def test_real_california_region_json_matches_the_registry_block_and_is_to_confirm() -> None:
+    countries_path = REPO_ROOT / "site" / "data" / "global" / "countries.json"
+    path = REPO_ROOT / "site" / "data" / "california" / "region.json"
+    if not countries_path.is_file() or not path.is_file():
+        pytest.skip("countries.json or california/region.json absent")
+    script = _script()
+    region = _california_region()
+    countries = json.loads(countries_path.read_text(encoding="utf-8"))
+    block = next(r for r in countries["registry_regions"] if r["region"] == "california")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["iso"] == "US-CA"
+    assert payload["stats"]["works_total"] == block["works_total"]
+    assert payload["stats"]["first_year"] == block["first_year"]
+    assert payload["works_by_year"] == series_block_of(block)
+    assert validate_payload(payload, script._validation_view(region, countries)) == []
+    assert [s["id"] for s in payload["sections"]] == list(SECTION_IDS)
+    for section in payload["sections"]:
+        for item in section["items"]:
+            assert item["status"] == "to_confirm"
+            assert item["note"].strip()
+    # No US entry among the partner countries.
+    assert all(p["iso"] != "US" for p in payload["partner_countries"])
+
+
+def test_california_partition_registry_works_equal_the_registry_block() -> None:
+    script = _script()
+    if not (script.DEFAULT_REGIONS.is_file() and script.DEFAULT_WORKS.is_file()):
+        pytest.skip("ignored partition absent")
+    countries = json.loads(
+        (REPO_ROOT / "site" / "data" / "global" / "countries.json").read_text(encoding="utf-8")
+    )
+    block = next(r for r in countries["registry_regions"] if r["region"] == "california")
+    inputs = script._partition_inputs([_california_region()])
+    assert len(inputs.registry_works) == block["works_total"]
+
+
+def series_block_of(entry: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        {"year": row["year"], "count": row["count"], "partial": bool(row.get("partial", False))}
+        for row in entry["works_by_year"]
+    ]

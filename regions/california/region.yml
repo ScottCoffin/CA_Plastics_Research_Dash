@@ -4,6 +4,11 @@ schema_version: 1
 slug: california
 name: California
 tier: A
+# Region-v1 keys (REG-CA, 2026-11-26). The page's iso is "US-CA" (set by scripts/build_region_pages.py);
+# this two-letter code is the country the predicate uses. Only the region-v1 keys are validated.
+iso: "US"
+languages: [en]
+local_search_terms: []
 site_path: /california/
 # Public data directory. Mirrors site_data_dir in regions/_registry.yml (the validated
 # source). Owner decision PLAT3-DATA-PATH (2026-11-25): California lives in site/data/california/.
@@ -64,3 +69,58 @@ name_alias_rules:
 # a sign-up whose institution is not on the eligible list may confirm an address at one of these
 # suffixes (or a subdomain). Norway and Belgium have none yet, so they list no suffixes.
 trusted_email_suffixes: [ca.gov, ca.us, edu, gov]
+sections:
+  - id: funding
+    title: Funding
+    summary: "Who pays for plastics research and monitoring in California, by award count in the repo's grant records."
+    needs: "A California collaborator to confirm which funders and programmes are relevant, to add homepage URLs and to name any missing ones."
+    items:
+      - {name: "National Science Foundation (NSF)", url: "", kind: funder, status: to_confirm, note: "Source: grants.json by_funder_agency, 323 awards as reported; no homepage URL in the repo"}
+      - {name: "National Institutes of Health (NIH)", url: "", kind: funder, status: to_confirm, note: "Source: grants.json by_funder_agency, 126 awards as reported; no homepage URL in the repo"}
+      - {name: "National Oceanic and Atmospheric Administration (NOAA)", url: "", kind: funder, status: to_confirm, note: "Source: grants.json by_funder_agency, 47 awards as reported; no homepage URL in the repo"}
+      - {name: "US Environmental Protection Agency (EPA)", url: "", kind: funder, status: to_confirm, note: "Source: grants.json by_funder_agency, 12 awards as reported; no homepage URL in the repo"}
+      - {name: "California Ocean Protection Council", url: "", kind: funder, status: to_confirm, note: "Source: grants.json by_funder_agency, 8 awards as reported; no homepage URL in the repo"}
+      - {name: "California State Water Resources Control Board", url: "", kind: funder, status: to_confirm, note: "Source: grants.json by_funder_agency, 2 awards as reported; no homepage URL in the repo"}
+      - {name: "National Institute of Standards and Technology (NIST)", url: "", kind: funder, status: to_confirm, note: "Source: grants.json by_funder_agency, 2 awards as reported; no homepage URL in the repo"}
+  - id: monitoring
+    title: Monitoring
+    summary: "Programmes and datasets that measure microplastics and litter in California waters, sediments and drinking water."
+    needs: "A California collaborator to confirm which monitoring programmes and datasets are open and usable."
+    items:
+      - {name: "NOAA NCEI Global Marine Microplastics Database", url: "https://www.ncei.noaa.gov/products/microplastics", kind: monitoring, status: to_confirm, note: "Source: monitoring.json (dataset); URL as listed there"}
+      - {name: "SF Bay and Adjacent Sanctuaries Microplastic and Microparticle Project", url: "https://publish.data.ca.gov/dataset/microplastic-and-microparticle-data-from-surface-water-san-francisco-bay-and-adjacent-sanctuari", kind: monitoring, status: to_confirm, note: "Source: monitoring.json (dataset); URL as listed there"}
+      - {name: "San Francisco Bay Regional Monitoring Program microplastics and CD3 records", url: "https://www.sfei.org/programs/cw/microplastics", kind: monitoring, status: to_confirm, note: "Source: monitoring.json (program); URL as listed there"}
+      - {name: "California Environmental Data Exchange Network microdebris records", url: "https://ceden.org/", kind: monitoring, status: to_confirm, note: "Source: monitoring.json (program); URL as listed there"}
+      - {name: "California SB 1422 drinking-water microplastics monitoring and reporting", url: "https://waterboards.ca.gov/drinking_water/certlic/drinkingwater/microplastics.html", kind: monitoring, status: to_confirm, note: "Source: monitoring.json (program); URL as listed there"}
+      - {name: "SWAMP Stream Pollution Trends Monitoring Program", url: "https://www.waterboards.ca.gov/water_issues/programs/swamp/spot/", kind: monitoring, status: to_confirm, note: "Source: monitoring.json (program); URL as listed there"}
+      - {name: "NOAA Marine Debris Monitoring and Assessment Project", url: "https://marinedebris.noaa.gov/our-work/monitoring/marine-debris-monitoring-and-assessment-project", kind: monitoring, status: to_confirm, note: "Source: monitoring.json (program); URL as listed there"}
+      - {name: "OPC and SWAMP statewide plastics monitoring pilot", url: "https://opc.ca.gov/wp-content/uploads/2026/06/Item-6c-Plastics-Monitoring-508.pdf", kind: monitoring, status: to_confirm, note: "Source: monitoring.json (planned_program); URL as listed there (planned, not yet running)"}
+  - id: policy
+    title: Policy
+    summary: "State and international rules and plans that shape plastics work in California."
+    needs: "A California collaborator to confirm the dates and current status of each item."
+    items:
+      - {name: "DTSC Candidate Chemical List: microplastics (final regulation effective 1 October 2026)", url: "https://dtsc.ca.gov/scp/candidate-chemical-list_microplastics/", kind: policy, status: to_confirm, note: "Source: dtsc_timeline.json entry dtsc-01; date as stated there"}
+      - {name: "DTSC release on the finalized rulemaking adding microplastics to the Candidate Chemicals list", url: "https://dtsc.ca.gov/2026/07/02/california-finalizes-regulation-adding-microplastics-to-candidate-chemicals-list", kind: policy, status: to_confirm, note: "Source: dtsc_timeline.json entry dtsc-02 (2 July 2026)"}
+      - {name: "Ocean Protection Council, Statewide Microplastics Strategy (2022)", url: "https://opc.ca.gov/water-quality/plastics/", kind: policy, status: to_confirm, note: "Source: opc_actions.json strategy; the early actions are listed in that file"}
+      - {name: "Global Plastic Laws database, California search", url: "https://www.globalplasticlaws.org/search?search=california", kind: policy, status: to_confirm, note: "Source: opc_actions.json gpl; a third-party database, not a legal list"}
+  - id: research_networks
+    title: Research networks
+    summary: "Institutes and networks that work on plastics and marine litter in California."
+    needs: "A California collaborator to confirm which institutes and networks to list, and to add any that are missing."
+    items:
+      - {name: "Land to Sea Microplastics Consortium", url: "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution", kind: network, status: to_confirm, note: "Source: research_networks.json NET-1; URL as listed there"}
+      - {name: "Coastal and Marine Sciences Institute, UC Davis", url: "https://marinescience.ucdavis.edu/about", kind: institute, status: to_confirm, note: "Source: research_networks.json NET-1 steward; URL as listed there"}
+  - id: local_terms
+    title: Local search terms
+    summary: "Words used to search for plastics research in California beyond the English query."
+    needs: "A California collaborator to suggest terms and confirm each one."
+    items:
+      - {name: "California", url: "", kind: search_term, status: to_confirm, note: "Source: regions/_registry.yml raw_affiliation_terms; affiliation search term, not a local-language term"}
+      - {name: "UC campus names", url: "", kind: search_term, status: to_confirm, note: "Source: regions/_registry.yml raw_affiliation_terms (UC Berkeley, UC Davis and others); a collaborator to suggest local-language terms"}
+  - id: geography
+    title: Geography
+    summary: "The places the page covers: the state of California and its waters."
+    needs: "A California collaborator to confirm the boundaries used for regional views."
+    items:
+      - {name: "California state boundary (map outline)", url: "", kind: geography, status: to_confirm, note: "Source: site/assets/ca_boundaries.geojson, the repo outline asset; a collaborator to confirm the boundary used for regional views"}

@@ -1,0 +1,846 @@
+{
+  "schema_version": "region-v1",
+  "generated_at": "2026-11-26T01:15:33Z",
+  "slug": "california",
+  "name": "California",
+  "iso": "US-CA",
+  "status": "in_preparation",
+  "screening_status": "unscreened_query_hit",
+  "what_this_is_and_is_not": {
+    "is": "A regional page built from the global set of published plastics research. Each count is an unscreened query hit: an OpenAlex work that matched the plastics search, grouped by the country of its authors' institutions. Nothing has been checked for relevance to this country.",
+    "is_not": "Not a verified list of local funders, monitoring programmes, policies or institutes: every local item is a placeholder until a local collaborator confirms it. Not a share of world research, and not a ranking of people or organisations."
+  },
+  "stats": {
+    "works_total": 1972,
+    "first_year": 1957,
+    "last_complete_year": 2025,
+    "works_with_pmid": 861
+  },
+  "works_by_year": [
+    {
+      "year": 1970,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1971,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1972,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1973,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1974,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1975,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1976,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1977,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1978,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1979,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 1980,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1981,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1982,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 1983,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1984,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1985,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1986,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1987,
+      "count": 3,
+      "partial": false
+    },
+    {
+      "year": 1988,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1989,
+      "count": 3,
+      "partial": false
+    },
+    {
+      "year": 1990,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 1991,
+      "count": 0,
+      "partial": false
+    },
+    {
+      "year": 1992,
+      "count": 2,
+      "partial": false
+    },
+    {
+      "year": 1993,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1994,
+      "count": 3,
+      "partial": false
+    },
+    {
+      "year": 1995,
+      "count": 9,
+      "partial": false
+    },
+    {
+      "year": 1996,
+      "count": 3,
+      "partial": false
+    },
+    {
+      "year": 1997,
+      "count": 1,
+      "partial": false
+    },
+    {
+      "year": 1998,
+      "count": 4,
+      "partial": false
+    },
+    {
+      "year": 1999,
+      "count": 3,
+      "partial": false
+    },
+    {
+      "year": 2000,
+      "count": 5,
+      "partial": false
+    },
+    {
+      "year": 2001,
+      "count": 6,
+      "partial": false
+    },
+    {
+      "year": 2002,
+      "count": 14,
+      "partial": false
+    },
+    {
+      "year": 2003,
+      "count": 8,
+      "partial": false
+    },
+    {
+      "year": 2004,
+      "count": 8,
+      "partial": false
+    },
+    {
+      "year": 2005,
+      "count": 10,
+      "partial": false
+    },
+    {
+      "year": 2006,
+      "count": 3,
+      "partial": false
+    },
+    {
+      "year": 2007,
+      "count": 5,
+      "partial": false
+    },
+    {
+      "year": 2008,
+      "count": 6,
+      "partial": false
+    },
+    {
+      "year": 2009,
+      "count": 16,
+      "partial": false
+    },
+    {
+      "year": 2010,
+      "count": 13,
+      "partial": false
+    },
+    {
+      "year": 2011,
+      "count": 26,
+      "partial": false
+    },
+    {
+      "year": 2012,
+      "count": 21,
+      "partial": false
+    },
+    {
+      "year": 2013,
+      "count": 30,
+      "partial": false
+    },
+    {
+      "year": 2014,
+      "count": 28,
+      "partial": false
+    },
+    {
+      "year": 2015,
+      "count": 32,
+      "partial": false
+    },
+    {
+      "year": 2016,
+      "count": 40,
+      "partial": false
+    },
+    {
+      "year": 2017,
+      "count": 34,
+      "partial": false
+    },
+    {
+      "year": 2018,
+      "count": 53,
+      "partial": false
+    },
+    {
+      "year": 2019,
+      "count": 90,
+      "partial": false
+    },
+    {
+      "year": 2020,
+      "count": 124,
+      "partial": false
+    },
+    {
+      "year": 2021,
+      "count": 130,
+      "partial": false
+    },
+    {
+      "year": 2022,
+      "count": 167,
+      "partial": false
+    },
+    {
+      "year": 2023,
+      "count": 182,
+      "partial": false
+    },
+    {
+      "year": 2024,
+      "count": 254,
+      "partial": false
+    },
+    {
+      "year": 2025,
+      "count": 294,
+      "partial": false
+    },
+    {
+      "year": 2026,
+      "count": 321,
+      "partial": true
+    }
+  ],
+  "top_topics": [
+    {
+      "id": "T10753",
+      "name": "Microplastics and Plastic Pollution",
+      "count": 990
+    },
+    {
+      "id": "T10661",
+      "name": "biodegradable polymer synthesis and properties",
+      "count": 104
+    },
+    {
+      "id": "T10389",
+      "name": "Polymer crystallization and properties",
+      "count": 48
+    },
+    {
+      "id": "T10060",
+      "name": "Smoking Behavior and Cessation",
+      "count": 25
+    },
+    {
+      "id": "T10075",
+      "name": "Atmospheric chemistry and aerosols",
+      "count": 22
+    },
+    {
+      "id": "T10190",
+      "name": "Air Quality and Health Impacts",
+      "count": 21
+    },
+    {
+      "id": "T10435",
+      "name": "Environmental Impact and Sustainability",
+      "count": 18
+    },
+    {
+      "id": "T10659",
+      "name": "Marine animal studies overview",
+      "count": 16
+    },
+    {
+      "id": "T11119",
+      "name": "Urban Stormwater Management Solutions",
+      "count": 16
+    },
+    {
+      "id": "T11108",
+      "name": "Municipal Solid Waste Management",
+      "count": 15
+    }
+  ],
+  "top_institutions": [
+    {
+      "id": "I97018004",
+      "name": "Stanford University",
+      "ror": "https://ror.org/00f54p054",
+      "type": "education",
+      "works": 194
+    },
+    {
+      "id": "I84218800",
+      "name": "University of California, Davis",
+      "ror": "https://ror.org/05rrcem69",
+      "type": "education",
+      "works": 184
+    },
+    {
+      "id": "I95457486",
+      "name": "University of California, Berkeley",
+      "ror": "https://ror.org/01an7q238",
+      "type": "education",
+      "works": 163
+    },
+    {
+      "id": "I103635307",
+      "name": "University of California, Riverside",
+      "ror": "https://ror.org/03nawhv43",
+      "type": "education",
+      "works": 130
+    },
+    {
+      "id": "I36258959",
+      "name": "University of California San Diego",
+      "ror": "https://ror.org/0168r3w48",
+      "type": "education",
+      "works": 109
+    },
+    {
+      "id": "I154570441",
+      "name": "University of California, Santa Barbara",
+      "ror": "https://ror.org/02t274463",
+      "type": "education",
+      "works": 104
+    },
+    {
+      "id": "I161318765",
+      "name": "University of California, Los Angeles",
+      "ror": "https://ror.org/046rm7j60",
+      "type": "education",
+      "works": 100
+    },
+    {
+      "id": "I26538001",
+      "name": "San Diego State University",
+      "ror": "https://ror.org/0264fdx42",
+      "type": "education",
+      "works": 82
+    },
+    {
+      "id": "I150209017",
+      "name": "Scripps Institution of Oceanography",
+      "ror": "https://ror.org/04v7hvq31",
+      "type": "facility",
+      "works": 63
+    },
+    {
+      "id": "I1174212",
+      "name": "University of Southern California",
+      "ror": "https://ror.org/03taz7m60",
+      "type": "education",
+      "works": 61
+    },
+    {
+      "id": "I204250578",
+      "name": "University of California, Irvine",
+      "ror": "https://ror.org/04gyf1771",
+      "type": "education",
+      "works": 51
+    },
+    {
+      "id": "I185103710",
+      "name": "University of California, Santa Cruz",
+      "ror": "https://ror.org/03s65by71",
+      "type": "education",
+      "works": 44
+    },
+    {
+      "id": "I11006740",
+      "name": "Southern California Coastal Water Research Project",
+      "ror": "https://ror.org/00yzwgc71",
+      "type": "facility",
+      "works": 42
+    },
+    {
+      "id": "I149919469",
+      "name": "California Polytechnic State University",
+      "ror": "https://ror.org/001gpfp45",
+      "type": "education",
+      "works": 37
+    },
+    {
+      "id": "I180670191",
+      "name": "University of California, San Francisco",
+      "ror": "https://ror.org/043mz5j54",
+      "type": "education",
+      "works": 34
+    }
+  ],
+  "top_researchers": [
+    {
+      "id": "A5085963115",
+      "name": "Wei‐Min Wu",
+      "works": 56
+    },
+    {
+      "id": "A5015823765",
+      "name": "Win Cowger",
+      "works": 37
+    },
+    {
+      "id": "A5017037052",
+      "name": "Andrew B. Gray",
+      "works": 29
+    },
+    {
+      "id": "A5086442776",
+      "name": "Scott Coffin",
+      "works": 26
+    },
+    {
+      "id": "A5074815942",
+      "name": "Matthew S. Savoca",
+      "works": 25
+    },
+    {
+      "id": "A5081141264",
+      "name": "Thomas E. Novotny",
+      "works": 24
+    },
+    {
+      "id": "A5031423229",
+      "name": "Chelsea M. Rochman",
+      "works": 23
+    },
+    {
+      "id": "A5081541713",
+      "name": "Susanne M. Brander",
+      "works": 23
+    },
+    {
+      "id": "A5060319855",
+      "name": "Sanjay Kumar Mohanty",
+      "works": 20
+    },
+    {
+      "id": "A5076693439",
+      "name": "Craig S. Criddle",
+      "works": 20
+    },
+    {
+      "id": "A5075951652",
+      "name": "Jay J. Gan",
+      "works": 19
+    },
+    {
+      "id": "A5046986222",
+      "name": "Roland Geyer",
+      "works": 18
+    },
+    {
+      "id": "A5012680865",
+      "name": "Brett A. Helms",
+      "works": 16
+    },
+    {
+      "id": "A5004267363",
+      "name": "Jamie Leonard",
+      "works": 15
+    },
+    {
+      "id": "A5023645209",
+      "name": "Eunha Hoh",
+      "works": 15
+    }
+  ],
+  "partner_countries": [
+    {
+      "iso": "CN",
+      "name": "China",
+      "works": 255
+    },
+    {
+      "iso": "CA",
+      "name": "Canada",
+      "works": 159
+    },
+    {
+      "iso": "GB",
+      "name": "United Kingdom",
+      "works": 150
+    },
+    {
+      "iso": "AU",
+      "name": "Australia",
+      "works": 116
+    },
+    {
+      "iso": "DE",
+      "name": "Germany",
+      "works": 101
+    },
+    {
+      "iso": "NL",
+      "name": "Netherlands",
+      "works": 70
+    },
+    {
+      "iso": "IT",
+      "name": "Italy",
+      "works": 66
+    },
+    {
+      "iso": "FR",
+      "name": "France",
+      "works": 63
+    },
+    {
+      "iso": "NO",
+      "name": "Norway",
+      "works": 52
+    },
+    {
+      "iso": "CH",
+      "name": "Switzerland",
+      "works": 51
+    }
+  ],
+  "sections": [
+    {
+      "id": "funding",
+      "title": "Funding",
+      "status": "placeholder",
+      "summary": "Who pays for plastics research and monitoring in California, by award count in the repo's grant records.",
+      "items": [
+        {
+          "item_id": "california:funding:0",
+          "name": "National Science Foundation (NSF)",
+          "url": "",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "Source: grants.json by_funder_agency, 323 awards as reported; no homepage URL in the repo"
+        },
+        {
+          "item_id": "california:funding:1",
+          "name": "National Institutes of Health (NIH)",
+          "url": "",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "Source: grants.json by_funder_agency, 126 awards as reported; no homepage URL in the repo"
+        },
+        {
+          "item_id": "california:funding:2",
+          "name": "National Oceanic and Atmospheric Administration (NOAA)",
+          "url": "",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "Source: grants.json by_funder_agency, 47 awards as reported; no homepage URL in the repo"
+        },
+        {
+          "item_id": "california:funding:3",
+          "name": "US Environmental Protection Agency (EPA)",
+          "url": "",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "Source: grants.json by_funder_agency, 12 awards as reported; no homepage URL in the repo"
+        },
+        {
+          "item_id": "california:funding:4",
+          "name": "California Ocean Protection Council",
+          "url": "",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "Source: grants.json by_funder_agency, 8 awards as reported; no homepage URL in the repo"
+        },
+        {
+          "item_id": "california:funding:5",
+          "name": "California State Water Resources Control Board",
+          "url": "",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "Source: grants.json by_funder_agency, 2 awards as reported; no homepage URL in the repo"
+        },
+        {
+          "item_id": "california:funding:6",
+          "name": "National Institute of Standards and Technology (NIST)",
+          "url": "",
+          "kind": "funder",
+          "status": "to_confirm",
+          "note": "Source: grants.json by_funder_agency, 2 awards as reported; no homepage URL in the repo"
+        }
+      ],
+      "needs": "A California collaborator to confirm which funders and programmes are relevant, to add homepage URLs and to name any missing ones."
+    },
+    {
+      "id": "monitoring",
+      "title": "Monitoring",
+      "status": "placeholder",
+      "summary": "Programmes and datasets that measure microplastics and litter in California waters, sediments and drinking water.",
+      "items": [
+        {
+          "item_id": "california:monitoring:0",
+          "name": "NOAA NCEI Global Marine Microplastics Database",
+          "url": "https://www.ncei.noaa.gov/products/microplastics",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "Source: monitoring.json (dataset); URL as listed there"
+        },
+        {
+          "item_id": "california:monitoring:1",
+          "name": "SF Bay and Adjacent Sanctuaries Microplastic and Microparticle Project",
+          "url": "https://publish.data.ca.gov/dataset/microplastic-and-microparticle-data-from-surface-water-san-francisco-bay-and-adjacent-sanctuari",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "Source: monitoring.json (dataset); URL as listed there"
+        },
+        {
+          "item_id": "california:monitoring:2",
+          "name": "San Francisco Bay Regional Monitoring Program microplastics and CD3 records",
+          "url": "https://www.sfei.org/programs/cw/microplastics",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "Source: monitoring.json (program); URL as listed there"
+        },
+        {
+          "item_id": "california:monitoring:3",
+          "name": "California Environmental Data Exchange Network microdebris records",
+          "url": "https://ceden.org/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "Source: monitoring.json (program); URL as listed there"
+        },
+        {
+          "item_id": "california:monitoring:4",
+          "name": "California SB 1422 drinking-water microplastics monitoring and reporting",
+          "url": "https://waterboards.ca.gov/drinking_water/certlic/drinkingwater/microplastics.html",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "Source: monitoring.json (program); URL as listed there"
+        },
+        {
+          "item_id": "california:monitoring:5",
+          "name": "SWAMP Stream Pollution Trends Monitoring Program",
+          "url": "https://www.waterboards.ca.gov/water_issues/programs/swamp/spot/",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "Source: monitoring.json (program); URL as listed there"
+        },
+        {
+          "item_id": "california:monitoring:6",
+          "name": "NOAA Marine Debris Monitoring and Assessment Project",
+          "url": "https://marinedebris.noaa.gov/our-work/monitoring/marine-debris-monitoring-and-assessment-project",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "Source: monitoring.json (program); URL as listed there"
+        },
+        {
+          "item_id": "california:monitoring:7",
+          "name": "OPC and SWAMP statewide plastics monitoring pilot",
+          "url": "https://opc.ca.gov/wp-content/uploads/2026/06/Item-6c-Plastics-Monitoring-508.pdf",
+          "kind": "monitoring",
+          "status": "to_confirm",
+          "note": "Source: monitoring.json (planned_program); URL as listed there (planned, not yet running)"
+        }
+      ],
+      "needs": "A California collaborator to confirm which monitoring programmes and datasets are open and usable."
+    },
+    {
+      "id": "policy",
+      "title": "Policy",
+      "status": "placeholder",
+      "summary": "State and international rules and plans that shape plastics work in California.",
+      "items": [
+        {
+          "item_id": "california:policy:0",
+          "name": "DTSC Candidate Chemical List: microplastics (final regulation effective 1 October 2026)",
+          "url": "https://dtsc.ca.gov/scp/candidate-chemical-list_microplastics/",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "Source: dtsc_timeline.json entry dtsc-01; date as stated there"
+        },
+        {
+          "item_id": "california:policy:1",
+          "name": "DTSC release on the finalized rulemaking adding microplastics to the Candidate Chemicals list",
+          "url": "https://dtsc.ca.gov/2026/07/02/california-finalizes-regulation-adding-microplastics-to-candidate-chemicals-list",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "Source: dtsc_timeline.json entry dtsc-02 (2 July 2026)"
+        },
+        {
+          "item_id": "california:policy:2",
+          "name": "Ocean Protection Council, Statewide Microplastics Strategy (2022)",
+          "url": "https://opc.ca.gov/water-quality/plastics/",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "Source: opc_actions.json strategy; the early actions are listed in that file"
+        },
+        {
+          "item_id": "california:policy:3",
+          "name": "Global Plastic Laws database, California search",
+          "url": "https://www.globalplasticlaws.org/search?search=california",
+          "kind": "policy",
+          "status": "to_confirm",
+          "note": "Source: opc_actions.json gpl; a third-party database, not a legal list"
+        }
+      ],
+      "needs": "A California collaborator to confirm the dates and current status of each item."
+    },
+    {
+      "id": "research_networks",
+      "title": "Research networks",
+      "status": "placeholder",
+      "summary": "Institutes and networks that work on plastics and marine litter in California.",
+      "items": [
+        {
+          "item_id": "california:research_networks:0",
+          "name": "Land to Sea Microplastics Consortium",
+          "url": "https://marinescience.ucdavis.edu/microplastics-consortium-source-solution",
+          "kind": "network",
+          "status": "to_confirm",
+          "note": "Source: research_networks.json NET-1; URL as listed there"
+        },
+        {
+          "item_id": "california:research_networks:1",
+          "name": "Coastal and Marine Sciences Institute, UC Davis",
+          "url": "https://marinescience.ucdavis.edu/about",
+          "kind": "institute",
+          "status": "to_confirm",
+          "note": "Source: research_networks.json NET-1 steward; URL as listed there"
+        }
+      ],
+      "needs": "A California collaborator to confirm which institutes and networks to list, and to add any that are missing."
+    },
+    {
+      "id": "local_terms",
+      "title": "Local search terms",
+      "status": "placeholder",
+      "summary": "Words used to search for plastics research in California beyond the English query.",
+      "items": [
+        {
+          "item_id": "california:local_terms:0",
+          "name": "California",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "Source: regions/_registry.yml raw_affiliation_terms; affiliation search term, not a local-language term"
+        },
+        {
+          "item_id": "california:local_terms:1",
+          "name": "UC campus names",
+          "url": "",
+          "kind": "search_term",
+          "status": "to_confirm",
+          "note": "Source: regions/_registry.yml raw_affiliation_terms (UC Berkeley, UC Davis and others); a collaborator to suggest local-language terms"
+        }
+      ],
+      "needs": "A California collaborator to suggest terms and confirm each one."
+    },
+    {
+      "id": "geography",
+      "title": "Geography",
+      "status": "placeholder",
+      "summary": "The places the page covers: the state of California and its waters.",
+      "items": [
+        {
+          "item_id": "california:geography:0",
+          "name": "California state boundary (map outline)",
+          "url": "",
+          "kind": "geography",
+          "status": "to_confirm",
+          "note": "Source: site/assets/ca_boundaries.geojson, the repo outline asset; a collaborator to confirm the boundary used for regional views"
+        }
+      ],
+      "needs": "A California collaborator to confirm the boundaries used for regional views."
+    }
+  ],
+  "ambassadors": {
+    "status": "recruiting",
+    "url": "/ambassadors"
+  }
+}
