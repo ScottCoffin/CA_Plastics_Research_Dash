@@ -424,3 +424,8 @@ until it reports.
 - Source "organisation" names can be email addresses (including phone-to-SMS gateways); treat them as personal identifiers and drop them at read time. The `--check` email scan caught it before anything was published.
 - A4-D24 also binds code comments, TODO notes and commit messages: write admitted counts only, never how many entries were dropped.
 - Python's `Path.write_text` on Windows writes CRLF; write `.agent` and docs edits with `write_bytes(s.encode())` (or `newline="\n"`) so diffs stay small.
+
+## 2026-11-26: ambassador group form and browser checks
+- A Playwright walk that checks only geometry passed 104/104 while the Main activities grid was unusable: each checkbox had stretched to the full chip width, with the label one letter wide. Always open the screenshots, and tell workers to look at theirs too.
+- Ambassador CSS cascade: `.am .g-fields input` and `.am .signup .field input` (width 100%, min-height 44px) beat chip checkbox rules of equal or lower specificity. Exclude checkbox and radio from text-input rules, and give chip inputs `label.<class> input[type]`.
+- check_a4_scaffold rejects new `CG-` task IDs that the BFFP spec does not list. Name owner-requested group tasks `GRP-...`.

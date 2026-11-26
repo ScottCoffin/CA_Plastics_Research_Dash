@@ -8,3 +8,4 @@
 - [Plastiverse Live logo and palette](plastiverse-logo-brand.md) — main logo file, palette, and the prompt file for variants
 - [OpenAlex: verified facts over spec](openalex-verified-facts-over-spec.md) — for OpenAlex limits/costs follow repo-verified facts, not spec claims (A3-C1)
 - [Owner priorities 2026-11-25](owner-priorities-2026-11-25.md) — Norway/Belgium pages, then ambassadors; CA design frozen; global author names OK
+- [Ambassador forms under a minute](ambassador-forms-under-a-minute.md) — no codes, pickers by name, prefill, one evidence quote, tooltips, auto-advance

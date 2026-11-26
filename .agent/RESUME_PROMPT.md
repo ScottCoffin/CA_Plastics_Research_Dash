@@ -8,5 +8,5 @@ Session entry (about five reads): `git status --short && git log --oneline -15`;
 read `.agent/HANDOFF.md`; `grep -n '^- \[ \]' .agent/TODO.md`; `git diff HEAD -- .agent/QUESTIONS.md`;
 remind the owner of the "Do now" items in `.agent/HUMAN_TASKS.md`.
 
-Resume at the latest HANDOFF (CG-11 first). Any further production Worker migration or deployment needs the owner's
+Resume at the latest HANDOFF (H57/H58 follow-ups if answered, else CG-7). Any further production Worker migration or deployment needs the owner's
 explicit go-ahead for that change.

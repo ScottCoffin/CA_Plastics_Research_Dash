@@ -12,7 +12,7 @@ import {badgeHTML} from "./ambassador_badge.js";
 import {placeRows} from "./world_map.js";
 import {placeView} from "./ambassadors.js";
 import {mountKnowledge, mySubmissions} from "./ambassador_knowledge.js";
-import {mountGroups} from "./ambassador_groups.js";
+import {mountGroups, mountGroupSuggest} from "./ambassador_groups.js";
 import {mountSettings} from "./ambassador_settings.js";
 import {mountInvite} from "./ambassador_invite.js";
 
@@ -376,7 +376,7 @@ function render({focus = null} = {}) {
   if (!host) return;
   headEl().innerHTML = headerHTML();
   wrap.classList.toggle("is-dash", state.screen === "home" && state.regions.length > 0);
-  if (MODULE_SCREENS.has(state.screen) && (!state.loading || state.screen !== "C")) mountModule(host);
+  if (isModuleScreen(state.screen) && (!state.loading || state.screen !== "C")) mountModule(host);
   else if (state.loading) host.innerHTML = loadingHTML();
   else if (state.screen === "A") host.innerHTML = streamAHTML();
   else if (state.screen === "B") host.innerHTML = streamBHTML();
@@ -387,6 +387,8 @@ function render({focus = null} = {}) {
 
 // Screens drawn by their own modules. Each renders its back link and h2 synchronously and keeps its own state.
 const MODULE_SCREENS = new Set(["C", "D", "settings", "invite"]);
+// Stream E (suggest a missing group) is drawn by its own module too.
+const isModuleScreen = (screen) => MODULE_SCREENS.has(screen) || screen === "E";
 function mountModule(main) {
   // A fresh element per mount, so a module's listeners leave with its screen.
   main.innerHTML = "<div data-ws-module></div>";
@@ -395,6 +397,13 @@ function mountModule(main) {
   if (state.screen === "settings") return mountSettings(host, ctx);
   if (state.screen === "invite") return mountInvite(host, {...ctx, ambassador: state.ambassador});
   if (state.screen === "D") return mountGroups(host, {
+    ...ctx,
+    region: state.region,
+    regionName: regionName(state.region),
+    submissions: state.submissions,
+    onSubmitted: (row) => state.submissions.unshift(row),
+  });
+  if (state.screen === "E") return mountGroupSuggest(host, {
     ...ctx,
     region: state.region,
     regionName: regionName(state.region),
@@ -495,7 +504,8 @@ function homeHTML() {
           empty: "Nothing to confirm",
         })}
         ${plainCard("C", "Add local knowledge", knowledgeStatus(mySubmissions(state.submissions, state.region)), "Add an item")}
-        ${plainCard("D", "Tag local groups", "Tag assigned organisations or suggest a missing group", "Open tasks")}
+        ${plainCard("D", "Tag local groups", "Check assigned organisations' public pages and tag them", "Open tasks")}
+        ${plainCard("E", "Suggest a missing group", "Add an organisation that is missing from the list", "Suggest a group")}
       </ul>
       <h3 class="ws-more-h">More</h3>
       <ul class="ws-cards">

@@ -281,3 +281,4 @@
 | 2026-11-26 | CG-6c | Group-tagging workspace, retry and browser gates, matching public roster rebuild | this commit |
 | 2026-11-26 | CG-10 | Keyboard tree, distinct counts, hash and roster integration, desktop and phone browser gate | this commit |
 | 2026-11-26 | H56 | D1 migration 0007 applied, Worker cb95ec35 deployed, group routes verified live; CG-6 closed | this commit |
+| 2026-11-26 | CG-11, AMB-GROUPS-UX, GRP-NAME-CLEAN, GRP-ROSTER-QC, GRP-NAME-FIX (backend) | Network view; under-a-minute tagging form; roster name cleaning, auto-merge and the owner review app; name-correction backend (deploy pending H57) | this commit |

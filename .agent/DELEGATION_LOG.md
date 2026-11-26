@@ -267,3 +267,13 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-26 | CG-13 | Claude Haiku developer | /groups roster page | Completed; lead registered the page in AT-5, fixed the empty table and the phone overflow found in the browser walk | 1 session |
 | 2026-11-26 | AMB-NAV, AMB-CHOICE-CUES, AMB-FULLWIDTH | Claude Haiku developer | Nav links, pressed states, full-width text | Completed; lead added the groups link on the ambassador pages and found the two remaining width caps (Framework default and style.css 70ch) in the browser walk | 1 session |
 | 2026-11-26 | CG-6b | Claude Haiku developer | Export routing + group ingest | Completed; lead added the group CSVs to the export workflow's staged paths and logged CG-NOT-ORG-REMOVAL | 1 session |
+| 2026-11-26 | CG-11 (A) | Claude Haiku developer | Build-time ForceAtlas2 layout in groups_graph.json | Dispatched | 1 session |
+| 2026-11-26 | CG-11 (B) | Claude Haiku developer | /groups network view (model, sigma mount, runtime test) | Dispatched | 1 session |
+| 2026-11-26 | CG-11 (verify) | Claude Haiku developer | Mocked browser walk of the network view, axe at 1440/390 | Dispatched | 1 session |
+| 2026-11-26 | AMB-GROUPS-UX | Claude Haiku developer | Streamlined tagging form, pickers, shared evidence, separate suggest screen | Dispatched | 1 session |
+| 2026-11-26 | GRP-NAME-CLEAN | Claude Haiku developer | Display-name cleaning at admission, roster rebuild | Completed; lead checked the 5 changed names and unchanged ids | 1 session |
+| 2026-11-26 | GRP-NAME-FIX | Claude Haiku developer | name_correction validator, export CSV, build ingest | Dispatched | 1 session |
+| 2026-11-26 | CG-11 (verify) | Claude Haiku developer | Browser walk | Completed: 54/54, axe 0; tester enabled sigma edge events; lead added the http(s) guard on source links | 1 session |
+| 2026-11-26 | AMB-GROUPS-UX (verify) | Claude Haiku developer | Browser walk | Completed 104/104 but missed a broken activities grid (geometry-only checks); lead found it in the screenshot and fixed the CSS specificity | 1 session |
+| 2026-11-26 | GRP-ROSTER-QC | Claude Haiku developer | Placeholders, auto-merge, review app | Dispatched | 1 session |
+| 2026-11-26 | AMB-GROUPS-UX (fix) | Claude Haiku developer | Picker prefix match, not-stated plastics, plain labels | Dispatched | 1 session |
