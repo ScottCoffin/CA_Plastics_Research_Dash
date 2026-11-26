@@ -83,7 +83,7 @@ describe("GET /invite", () => {
     const before = await invitationCount();
     const res = await api("/invite?t=" + "A".repeat(43), { redirect: "manual" });
     expect(res.status).toBe(302);
-    expect(res.headers.get("Location")).toBe(`${SITE}/ambassadors/?invited=1`);
+    expect(res.headers.get("Location")).toBe(`${SITE}/ambassadors?invited=1`);
     expect(res.headers.get("Set-Cookie")).toBeNull();
     expect(await invitationCount()).toBe(before);
   });

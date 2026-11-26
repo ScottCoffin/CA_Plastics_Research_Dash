@@ -38,7 +38,7 @@ export async function handleCreateInvitation(request: Request, env: Env, ctx: Ct
  * page with ?invited=1.
  */
 export function handleInvite(env: Env): Response {
-  return redirect(`${env.SITE_ORIGIN}/ambassadors/?invited=1`);
+  return redirect(`${env.SITE_ORIGIN}/ambassadors?invited=1`);
 }
 
 /** Counts one sign-up that arrived with an invitation (a count only). Never records who signed up. */

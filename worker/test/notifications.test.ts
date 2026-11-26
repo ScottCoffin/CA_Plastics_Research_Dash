@@ -49,8 +49,8 @@ describe("welcome mail", () => {
   });
 
   it("templates: HTML escapes text and uses no images, scripts or tracking", () => {
-    const links = { settingsUrl: "https://plastiverse.live/ambassadors/#notifications", unsubscribeUrl: "https://api.plastiverse.live/unsubscribe?t=x" };
-    const mail = welcomeMail({ regionName: "Norway", workspaceUrl: "https://plastiverse.live/ambassadors/", links });
+    const links = { settingsUrl: "https://plastiverse.live/ambassadors#notifications", unsubscribeUrl: "https://api.plastiverse.live/unsubscribe?t=x" };
+    const mail = welcomeMail({ regionName: "Norway", workspaceUrl: "https://plastiverse.live/ambassadors", links });
     expect(mail.html).not.toMatch(/<img|<script|<iframe|src=/i);
     expect(escapeHtml(`<a href="x">&'`)).toBe("&lt;a href=&quot;x&quot;&gt;&amp;&#39;");
     expect(listUnsubscribeHeaders(links.unsubscribeUrl)["List-Unsubscribe"]).toBe(`<${links.unsubscribeUrl}>`);

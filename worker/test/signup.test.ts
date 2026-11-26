@@ -8,7 +8,7 @@ import { latestToken, network, outboxCount } from "./helpers";
 // helpers.ts; any other outbound request throws.
 
 const API = "https://api.plastiverse.live";
-const WORKSPACE = "https://plastiverse.live/ambassadors/";
+const WORKSPACE = "https://plastiverse.live/ambassadors";
 const SIGNUP = "__Host-plastiverse_signup";
 const NONCE = "__Host-plastiverse_orcid";
 const SESSION = "__Host-plastiverse_session";

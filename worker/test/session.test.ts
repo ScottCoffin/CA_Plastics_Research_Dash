@@ -2,7 +2,7 @@ import { env } from "cloudflare:test";
 import { describe, expect, it } from "vitest";
 import { api, latestToken, me, signIn, startSignIn, verify } from "./helpers";
 
-const WORKSPACE = "https://plastiverse.live/ambassadors/";
+const WORKSPACE = "https://plastiverse.live/ambassadors";
 
 describe("GET /auth/verify (single-use, expiring links)", () => {
   it("signs in once, redirects to the workspace and sets the session cookie", async () => {

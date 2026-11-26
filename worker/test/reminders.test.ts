@@ -73,7 +73,7 @@ describe("fortnightly reminder", () => {
     expect(mail.subject).toBe("12 open tasks in Norway");
     expect(mail.body).toContain("about 12 minutes");
     expect(mail.body).toContain("Region progress: 0 of 12 Norway cases have a confirmed answer.");
-    expect(mail.body).toContain(`${SITE}/ambassadors/?region=norway&case=${caseId(1)}`);
+    expect(mail.body).toContain(`${SITE}/ambassadors?region=norway&case=${caseId(1)}`);
     expect(mail.body).toContain("#notifications");
     const headers = JSON.parse(mail.headers ?? "{}") as Record<string, string>;
     expect(headers["List-Unsubscribe-Post"]).toBe("List-Unsubscribe=One-Click");
