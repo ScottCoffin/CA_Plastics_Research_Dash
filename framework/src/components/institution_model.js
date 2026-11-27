@@ -1,7 +1,7 @@
 // Institution detail page: pure helpers with no DOM access (INST-PAGE). institution.js renders these;
 // tests/framework_institution_runtime.mjs checks them in Node. Inputs are the per-institution payload
 // (site/data/california/institution_works/<inst_id>.json) and the institution list (site/data/california/institutions.json).
-// Only plastic-related works count toward every statistic, chart and topic size (plastic_related === true).
+// Only plastic-related works count toward every statistic, chart and topic size (countsAsPlastic).
 
 export const SECTION_IDS = ["experts", "publications", "topics"];
 const INST_ID_PATTERN = /^[A-Za-z0-9._-]{1,64}$/;
@@ -33,8 +33,26 @@ export function isMatrixTag(tag) {
   return String(tag || "").startsWith("matrix:");
 }
 
+// The screening rule shared by every institution view. A work counts when it is reviewed as
+// plastic-related (California always carries a boolean), or when a region payload has no relevance
+// review (plastic_related null) and the work is only an unscreened query hit (GP-5).
+export const UNSCREENED_STATUS = "unscreened_query_hit";
+
+export function countsAsPlastic(work) {
+  if (!work) return false;
+  if (work.plastic_related === true) return true;
+  return work.plastic_related == null && work.screening_status === UNSCREENED_STATUS;
+}
+
+// True when any work is an unscreened query hit, so a page must say its counts are not yet reviewed.
+export function hasUnscreenedWorks(works) {
+  return (Array.isArray(works) ? works : []).some((work) => work && work.plastic_related == null && work.screening_status === UNSCREENED_STATUS);
+}
+
+export const UNSCREENED_NOTE = "Works found by the Atlas search; not yet reviewed for relevance.";
+
 export function plasticWorks(works) {
-  return (Array.isArray(works) ? works : []).filter((work) => work && work.plastic_related === true);
+  return (Array.isArray(works) ? works : []).filter(countsAsPlastic);
 }
 
 export function yearOf(work) {

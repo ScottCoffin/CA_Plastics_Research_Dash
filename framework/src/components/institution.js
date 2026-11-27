@@ -2,9 +2,9 @@
 // DOM only: every calculation lives in institution_model.js. The publications list is the shared
 // works table (ev_table.js), limited to this institution's works and to the chosen topic.
 import "./shared/topics.js";
-import {loadJson, escapeHtml, classicUrl} from "./atlas.js";
+import {loadJson, escapeHtml, classicUrl, regionName, REGION_NAMES} from "./atlas.js";
 import {mountWorksTable} from "./ev_table.js";
-import {safeHttpUrl} from "./ev_table_model.js";
+import {normaliseRows, safeHttpUrl} from "./ev_table_model.js";
 import {institutionTypeLabel} from "./shared/labels.js";
 import {icon} from "./shared/icons.js";
 import {
@@ -18,8 +18,10 @@ import {
   networksForInstitution,
   openAlexUrl,
   parseInstitutionHash,
+  hasUnscreenedWorks,
   plasticWorks,
   rorUrl,
+  UNSCREENED_NOTE,
   searchInstitutions,
   summaryStats,
   topJournals,
@@ -68,6 +70,8 @@ async function loadInstitutionList() {
 // Loaded once per page session. A missing file resolves to null (no networks card); a failed
 // request clears the cache so that Retry can try again.
 function loadNetworks() {
+  // Research networks are California-only; region pages make no request (GP-5).
+  if (regionName() !== "California") return Promise.resolve(null);
   if (!state.networksRequest) {
     state.networksRequest = loadJson("research_networks.json", {optional: true}).catch(() => {
       state.networksRequest = null;
@@ -131,14 +135,20 @@ function noticeHtml(message) {
   return `<div class="atlas-callout atlas-callout--info" role="status">${icon("info").outerHTML}<p>${escapeHtml(message)}</p></div>`;
 }
 
+// One plain sentence where a region's counts come from unscreened query hits (GP-5); empty for California.
+function unscreenedNoteHtml(works) {
+  return hasUnscreenedWorks(works) ? `<p class="data-note">${escapeHtml(UNSCREENED_NOTE)}</p>` : "";
+}
+
 function headerHtml(institution) {
   const name = institution.name || institution.inst_id;
   const ror = rorUrl(institution.ror);
   const openAlex = openAlexUrl(institution.inst_id);
-  const location = [institution.city, institution.region].filter(Boolean).join(", ");
+  const location = [institution.city, REGION_NAMES[institution.region] || institution.region].filter(Boolean).join(", ");
+  // Region payloads carry no country per institution, so no out-of-region badge is shown (see institutions.js).
   const scope = institution.ca_flag
     ? `<span class="atlas-badge atlas-badge--good">California</span>`
-    : `<span class="atlas-badge atlas-badge--accent">Collaborator outside California</span>`;
+    : regionName() === "California" ? `<span class="atlas-badge atlas-badge--accent">Collaborator outside California</span>` : "";
   const links = [
     ror ? `<a class="atlas-pill" href="${escapeHtml(ror)}">ROR record</a>` : "",
     openAlex ? `<a class="atlas-pill" href="${escapeHtml(openAlex)}">OpenAlex record</a>` : "",
@@ -154,13 +164,15 @@ function headerHtml(institution) {
     + `</div></header>`;
 }
 
-function tilesHtml(stats) {
+function tilesHtml(stats, hasOpenAccessField = true) {
   const tiles = [
     ["Plastic-related works", fmt(stats.plasticWorks), ""],
     ["Authors", fmt(stats.experts), ""],
     ["Citations to these works", fmt(stats.citations), ""],
-    ["Open access", percent(stats.oaShare), "share of works"],
-    ["California-led", percent(stats.caLedShare), "share of works"],
+    // Open access needs the is_oa field, which region payloads leave null: hide the tile rather than show 0%.
+    ...(hasOpenAccessField ? [["Open access", percent(stats.oaShare), "share of works"]] : []),
+    // California-led needs the California author review, so region pages leave it out.
+    ...(regionName() === "California" ? [["California-led", percent(stats.caLedShare), "share of works"]] : []),
     ["Active years", stats.firstYear === null ? "—" : `${stats.firstYear}–${stats.lastYear}`, ""],
     ["Works in the last 5 full years", fmt(stats.recentWorks), `${stats.recentFrom}–${stats.recentTo}`],
   ];
@@ -242,7 +254,9 @@ function leadsHtml() {
   const toggle = rows.length > LEAD_AUTHOR_LIMIT
     ? `<p><button type="button" class="inst-button" data-leads-toggle aria-expanded="${expanded}">${expanded ? "Show fewer" : `Show all ${fmt(rows.length)}`}</button></p>`
     : "";
-  return `<div class="inst-table-scroll"><table class="inst-table"><caption>Authors ranked by works at this institution</caption>`
+  // Region experts are plain text (no links), so the scrolling table needs a focusable container for keyboard users.
+  const scrollFocus = regionName() === "California" ? "" : ' tabindex="0"';
+  return `<div class="inst-table-scroll"${scrollFocus}><table class="inst-table"><caption>Authors ranked by works at this institution</caption>`
     + `<thead><tr><th scope="col">Name</th><th scope="col" class="num">Works here</th><th scope="col" class="num">First author</th>`
     + `<th scope="col" class="num">Last author</th><th scope="col">Active years</th><th scope="col">Top topics</th></tr></thead>`
     + `<tbody>${body}</tbody></table></div>${toggle}`;
@@ -366,7 +380,7 @@ function renderInstitution(payload, known, networks) {
   const stats = summaryStats(payload);
   root().innerHTML = headerHtml(institution)
     + networksSectionHtml(networksForInstitution(networks, state.instId))
-    + sectionHtml("summary", "Summary", tilesHtml(stats))
+    + sectionHtml("summary", "Summary", tilesHtml(stats, state.works.some((work) => typeof work.is_oa === "boolean")) + unscreenedNoteHtml(payload.works))
     + sectionHtml("years", "Plastic-related works per year", yearsHtml(state.works))
     + sectionHtml("topics", "Topics", `<div id="inst-topics"></div>`)
     + sectionHtml("experts", "Lead authors", `<div id="inst-leads"></div>`)
@@ -374,11 +388,14 @@ function renderInstitution(payload, known, networks) {
     + sectionHtml("journals", "Top journals", journalsHtml())
     + sectionHtml("cited", "Most-cited works", citedHtml())
     + sectionHtml("publications", "Publications", `<p id="inst-publications-note" class="inst-filter-note" aria-live="polite"></p><div id="inst-publications"></div>`,
-      `<p class="data-note">Plastic-related works with a California author. Use the topic tags above to narrow the list.</p>`);
+      `<p class="data-note">Plastic-related works with a ${escapeHtml(regionName())} author. Use the topic tags above to narrow the list.</p>`);
   renderTopics();
   renderLeads();
+  // The table loads the California works_detail.json; region pages have no such file, so they pass
+  // this institution's own works (GP-5). California keeps its loader and its rows.
   state.table = mountWorksTable(pick("#inst-publications"), {
-    hint: "Select a topic above to narrow this list."
+    hint: "Select a topic above to narrow this list.",
+    initialRows: regionName() === "California" ? undefined : normaliseRows(state.works),
   });
   updateTable();
 }

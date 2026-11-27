@@ -3,17 +3,21 @@
 // comparators and hash state). Markup lives in src/institutions.md; the tiers helpers in inst_tiers.js;
 // shared map code in svg_map.js. Nothing touches the DOM until mountInstitutions() runs.
 import "./shared/topics.js";
-import {loadJson, escapeHtml} from "./atlas.js";
+import {loadJson, escapeHtml, regionName, regionSlug, DEFAULT_REGION_SLUG} from "./atlas.js";
 import {monitoringView} from "./monitoring_view.js";
 import {monitoringMap, attachMapInteractions, ensureCaBasemap, caBasemapFeatures, caBasemapState} from "./svg_map.js";
 import {instTiers} from "./inst_tiers.js";
 import {institutionTypeLabel} from "./shared/labels.js";
+import {countsAsPlastic, hasUnscreenedWorks, UNSCREENED_NOTE} from "./institution_model.js";
 
 const $ = (id) => document.getElementById(id);
 // AtlasTopics is set by shared/topics.js (imported above); read it at call time, as experts_model.js does.
 const topics = () => globalThis.AtlasTopics;
 const countFormat = new Intl.NumberFormat("en-US");
 const TIERS_PATH = "bundle/inst_tiers.json";
+// The California-only parts of this page (tiers, the out-of-state filter, the CA basemap and the
+// "California" wording). Region pages (GP-5) show the list and say that locations are not available.
+const caOnly = () => regionSlug() === DEFAULT_REGION_SLUG;
 const LEGACY_TAB = "institutions";
 
 // Page state (classic: the institution* variables and the institution fields of the shared state object).
@@ -38,10 +42,12 @@ const map = {
   lacking: 0, // qualifying institutions without coordinates
   container: null,
 };
+// False when a region payload has no coordinates at all (GP-5): the map then shows a caption.
+let hasLocations = true;
 
 // Pure helpers (DOM-free; exported for tests/test_framework_institutions.py via the runtime check).
 export function taggedWork(work) {
-  return work && work.plastic_related === true;
+  return countsAsPlastic(work);
 }
 
 export function buildInstitutionWorksIndex(index) {
@@ -160,8 +166,10 @@ function topExpertsHtml(institution) {
   return `<div class="top-experts"><h3>Top authors</h3><ul>${items}</ul><a href="${escapeHtml(institutionPageUrl(institution.inst_id, "experts"))}">All authors at this institution</a></div>`;
 }
 
+// Region payloads carry no country per institution, so they cannot say which rows are outside the
+// region; the out-of-region badge is shown on California pages only.
 function collaboratorLine(institution) {
-  if (institution.ca_flag) return "";
+  if (institution.ca_flag || !caOnly()) return "";
   const n = Number(institution.work_count) || 0;
   return `<p class="collab-line"><span class="collab-badge">Collaborator outside California</span> Appears through ${n} ${n === 1 ? "work" : "works"} co-authored with California researchers.</p>`;
 }
@@ -222,10 +230,12 @@ function institutionClusterKey(cluster) {
 
 function drawInstitutionMap() {
   if (!state.data) return;
-  ensureCaBasemap(() => drawInstitutionMap());
+  if (caOnly()) ensureCaBasemap(() => drawInstitutionMap());
   const container = $("institution-map");
   if (!map.points.length) {
-    container.innerHTML = '<p class="empty">No California institutions with coordinates match this filter.</p>';
+    const empty = hasLocations ? `No ${regionName()} institutions with coordinates match this filter.` : "Locations are not available for this region yet.";
+    container.innerHTML = `<p class="empty">${escapeHtml(empty)}</p>`;
+    $("institution-map-note").textContent = "";
     map.rendered = [];
     return;
   }
@@ -248,13 +258,13 @@ function drawInstitutionMap() {
   const basemap = basemapFeatures
     ? `<path class="map-state-waters" fill-rule="evenodd" d="${basemapFeatures.state_waters}"/><path class="map-land" fill-rule="evenodd" d="${basemapFeatures.land}"/>`
     : "";
-  container.innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`California institution map: ${map.points.length} institutions, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}${monitoringMap.placeLabels(view, clusters.map((cluster) => ({ x: cluster.x, y: cluster.y, r: view.width * (0.014 + 0.03 * Math.sqrt(cluster.weight / maxWeight)) })))}<g class="monitoring-markers">${markers}</g></svg>`;
+  container.innerHTML = `<svg class="monitoring-map-svg" viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="${escapeHtml(`${regionName()} institution map: ${map.points.length} institutions, ${clusters.length} markers`)}"><rect class="map-sea" x="${view.x}" y="${view.y}" width="${view.width}" height="${view.height}"/>${basemap}${monitoringMap.placeLabels(view, clusters.map((cluster) => ({ x: cluster.x, y: cluster.y, r: view.width * (0.014 + 0.03 * Math.sqrt(cluster.weight / maxWeight)) })))}<g class="monitoring-markers">${markers}</g></svg>`;
   if (focused !== null) {
     const marker = [...container.querySelectorAll("[data-cluster-key]")].find((item) => item.getAttribute("data-cluster-key") === focused);
     (marker || container).focus({ preventScroll: true });
   }
   const basemapNote = caBasemapState() === "failed" ? " Basemap unavailable; markers only." : basemapFeatures ? "" : " Basemap loading.";
-  $("institution-map-note").textContent = `${state.includeCollaborators ? "The map shows California institutions only; out-of-state collaborators have no California location. " : ""}${map.points.length} California institution${map.points.length === 1 ? "" : "s"} mapped${map.lacking ? `; ${map.lacking} qualifying institution${map.lacking === 1 ? "" : "s"} lack coordinates` : ""}. Zoom ${monitoringMap.zoomScale(view).toFixed(1)}x; nearby institutions are grouped into numbered clusters that split as you zoom in.${basemapNote}`;
+  $("institution-map-note").textContent = `${state.includeCollaborators ? `The map shows ${regionName()} institutions only; out-of-state collaborators have no ${regionName()} location. ` : ""}${map.points.length} ${regionName()} institution${map.points.length === 1 ? "" : "s"} mapped${map.lacking ? `; ${map.lacking} qualifying institution${map.lacking === 1 ? "" : "s"} lack coordinates` : ""}. Zoom ${monitoringMap.zoomScale(view).toFixed(1)}x; nearby institutions are grouped into numbered clusters that split as you zoom in.${basemapNote}`;
 }
 
 function renderInstitutionMapDetails() {
@@ -282,12 +292,13 @@ function selectInstitutionCluster(index) {
 }
 
 function clusterMap(metrics) {
-  const located = metrics.filter((metric) => metric.institution.ca_flag && monitoringView.coordinates({ lat: metric.institution.lat, lon: metric.institution.lon }) !== null);
+  const mappable = (metric) => metric.institution.ca_flag || !caOnly();
+  const located = metrics.filter((metric) => mappable(metric) && monitoringView.coordinates({ lat: metric.institution.lat, lon: metric.institution.lon }) !== null);
   map.points = located.map((metric) => {
     const [x, y] = monitoringMap.project(Number(metric.institution.lon), Number(metric.institution.lat));
     return { x, y, weight: metric.taggedCount, item: metric };
   });
-  map.lacking = metrics.filter((metric) => metric.institution.ca_flag).length - located.length;
+  map.lacking = metrics.filter(mappable).length - located.length;
   if (map.selection) {
     const available = new Set(map.points.map((point) => point.item.institution.inst_id));
     const ids = map.selection.ids.filter((id) => available.has(id));
@@ -316,6 +327,8 @@ function setupInstitutionControls(all) {
 
 function ensureInstitutionTiers() {
   if (tiers.status !== "idle") return;
+  // bundle/inst_tiers.json is California-only; region pages show the list view.
+  if (!caOnly()) { tiers.status = "failed"; return; }
   tiers.status = "loading";
   loadJson(TIERS_PATH)
     .then((payload) => { if (!payload || !Array.isArray(payload.tiers) || !payload.tiers.length) throw new Error("no tiers"); tiers.rows = payload.tiers; tiers.status = "ready"; })
@@ -348,7 +361,7 @@ function institutionCardHtml(metric) {
 function renderInstitutions() {
   if (!state.data) return;
   ensureInstitutionTiers();
-  const all = (state.data.institutions.institutions || []).filter((institution) => state.includeCollaborators || institution.ca_flag).map((institution) => institutionMetrics(institution, state.worksByInst)).filter((metric) => metric.taggedCount > 0);
+  const all = (state.data.institutions.institutions || []).filter((institution) => !caOnly() || state.includeCollaborators || institution.ca_flag).map((institution) => institutionMetrics(institution, state.worksByInst)).filter((metric) => metric.taggedCount > 0);
   $("institution-collab").checked = state.includeCollaborators;
   const types = [...new Set(all.map((metric) => metric.institution.atlas_type || "other"))].sort((a, b) => institutionTypeLabel(a).localeCompare(institutionTypeLabel(b)));
   const selected = state.institutionViewType;
@@ -358,7 +371,12 @@ function renderInstitutions() {
   $("institution-type-chips").innerHTML = [`<button class="chip-button institution-type-chip" type="button" data-institution-type="" aria-pressed="${selected === ""}">All types</button>`, ...types.map((type) => `<button class="chip-button institution-type-chip" type="button" data-institution-type="${escapeHtml(type)}" aria-pressed="${selected === type}">${escapeHtml(institutionTypeLabel(type))}</button>`)].join("");
   const sortLabel = $("institution-sort").selectedOptions[0]?.textContent || "";
   const topicNote = topicFilter ? `; primary topic: ${topics().label(topicFilter)}` : "";
-  $("institution-count").textContent = `${filtered.length} of ${all.length} ${state.includeCollaborators ? "" : "California "}qualifying institution${all.length === 1 ? "" : "s"} shown${topicNote}; sorted by ${sortLabel.toLowerCase()}. Qualifying means at least one plastic-related work; the Overview's California count includes every California institution with any published work.`;
+  const shownText = `${filtered.length} of ${all.length}`;
+  const sortText = `sorted by ${sortLabel.toLowerCase()}`;
+  const countText = caOnly()
+    ? `${shownText} ${state.includeCollaborators ? "" : "California "}qualifying institution${all.length === 1 ? "" : "s"} shown${topicNote}; ${sortText}. Qualifying means at least one plastic-related work; the Overview's California count includes every California institution with any published work.`
+    : `${shownText} ${regionName()} institution${all.length === 1 ? "" : "s"} shown${topicNote}; ${sortText}. Institutions with at least one work found by the Atlas search (not yet reviewed for relevance).`;
+  $("institution-count").textContent = countText;
   $("institution-list").innerHTML = filtered.length ? filtered.map(institutionCardHtml).join("") : '<p class="empty">No qualifying institutions match this type filter.</p>';
   $("institution-type-chips").querySelectorAll(".institution-type-chip").forEach((button) => button.addEventListener("click", () => { state.institutionViewType = button.dataset.institutionType; renderInstitutions(); }));
   $("institution-list").querySelectorAll(".institution-expert-link").forEach((button) => button.addEventListener("click", () => openInstitutionExperts(button.dataset.institutionId)));
@@ -416,6 +434,9 @@ export async function mountInstitutions() {
     if (!index || !Array.isArray(index.authors) || !Array.isArray(index.works)) throw new Error("index.json does not match the S3.1 contract");
     state.data = {index, institutions};
     state.worksByInst = buildInstitutionWorksIndex(index);
+    hasLocations = (institutions.institutions || []).some((row) => monitoringView.coordinates({ lat: row.lat, lon: row.lon }) !== null);
+    if (!caOnly()) document.querySelector(".institution-collab-field").hidden = true;
+    if (hasUnscreenedWorks(index.works)) $("institution-count").insertAdjacentHTML("afterend", `<p class="data-note" id="institution-unscreened-note">${escapeHtml(UNSCREENED_NOTE)}</p>`);
     renderInstitutions();
   } catch (error) {
     $("institution-count").textContent = "Institution data unavailable.";

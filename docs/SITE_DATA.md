@@ -77,3 +77,26 @@ features, and the payload budget without contacting OpenAlex.
 fetches, so the same shell serves the committed fixture and a later real-data
 export without a client build step. The Experts filter state is kept in the URL
 hash; Monitoring and Funding are reserved stubs until their ingestion stages.
+
+## Region institution exports (GP-5)
+
+`scripts/build_region_export.py --region <slug>` writes the California institution
+payloads for a non-default registry region (`norway`, `belgium`) under
+`site/data/<slug>/`: `institutions.json`, `index.json` (only the works and authors
+those institutions reference) and `institution_works/<inst_id>.json`. The keys match
+the California files (`schema_version` `s3.1`), and `tests/fixtures/region_export/california_keys.json`
+pins the California key sets. The module is `src/atlas/build/region_export.py`.
+
+- Input: the ignored global partition (`data/processed/global`). Region works are
+  `work_regions` rows of kind `country` with the region's ISO code; institutions are
+  registry institutions with that `country_code` that appear on a region work.
+- Every work has `screening_status: "unscreened_query_hit"`. `plastic_related`,
+  California labels, paid author metrics and `ca_connection` are null or absent.
+- `domain_tags` and `facet_tags` are empty lists. Expert topics use the OpenAlex
+  primary topic name.
+- `atlas_type` maps the OpenAlex type (company; nonprofit, funder, facility,
+  archive and healthcare to `nonprofit/NGO`). Education and government map to `other`.
+- `lat`, `lon` and `city` are null. `scope` is `region` and `ca_flag` is false.
+- `institutions.json` and `index.json` carry a `method` note with these rules.
+- `--check` validates the committed files and, when the partition exists, fails on
+  any byte difference from a rebuild. `generated_at` is reused from the committed file.

@@ -95,6 +95,17 @@ assert.ok(html.includes("No candidates listed yet."));
 assert.ok(html.includes("Partial year"));
 assert.ok(html.includes('aria-pressed="true"'));
 
+// GP-5: a listed institution links to its institution page only when the region export holds it.
+const listed = {...model, institutions: [
+  {id: "I1", name: "Lab", works: 3},
+  {id: "I2", name: "Other", works: 1},
+]};
+const linked = mod.renderRegion(listed, "/a", new Set(["I1"]));
+assert.ok(linked.includes('href="./institution#inst=I1"'));
+assert.ok(!linked.includes("inst=I2"));
+assert.ok(linked.includes('href="./institutions"'));
+assert.ok(!mod.renderRegion(listed, "/a").includes("./institution#inst="));
+
 // No works: the empty note appears and the page still renders its sections.
 const empty = mod.renderRegion(mod.normalizeRegion({...payload, stats: {works_total: 0}}), "/a");
 assert.ok(empty.includes("No works for this region"));

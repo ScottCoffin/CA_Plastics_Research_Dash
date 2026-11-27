@@ -14,6 +14,13 @@ function pageBase() {
 // the registry; tests/test_region_data_url.py checks it. California is the default region.
 export const REGION_SLUGS = Object.freeze(["california", "norway", "belgium"]);
 export const DEFAULT_REGION_SLUG = "california";
+// Display names for the region slugs (wording on region pages). Keys must match REGION_SLUGS.
+export const REGION_NAMES = Object.freeze({california: "California", norway: "Norway", belgium: "Belgium"});
+
+// The display name of a region slug, or the slug itself when it is not in the registry.
+export function regionName(slug = regionSlug()) {
+  return REGION_NAMES[slug] || String(slug);
+}
 
 // The folder that holds data/, assets/, status.html and feed.xml, as an absolute URL.
 export function siteRoot(base = pageBase()) {

@@ -38,6 +38,8 @@
 #institutions-root .institution-collab-field label { display: flex; align-items: center; gap: 0.45rem; font-weight: 600; }
 #institutions-root .institution-view-field { justify-items: start; }
 #institutions-root .institutions-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr); gap: var(--atlas-space-4); align-items: start; }
+#institutions-root .top-experts li { overflow-wrap: anywhere; }
+#institutions-root .top-experts .topic-chip { max-width: 100%; white-space: normal; }
 #institutions-root .cards { display: grid; gap: var(--atlas-space-3); }
 #institutions-root #institution-list[hidden] { display: none; }
 

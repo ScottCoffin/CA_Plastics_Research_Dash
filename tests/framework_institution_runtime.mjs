@@ -1,6 +1,7 @@
 // Runtime checks for the institution detail page helpers (INST-PAGE, institution_model.js).
 // Run with: node tests/framework_institution_runtime.mjs (driven by tests/test_framework_institution.py).
 import assert from "node:assert/strict";
+import {regionName} from "../framework/src/components/atlas.js";
 import {
   LEAD_AUTHOR_LIMIT,
   barChartLayout,
@@ -16,6 +17,8 @@ import {
   networksForInstitution,
   openAlexUrl,
   parseInstitutionHash,
+  countsAsPlastic,
+  hasUnscreenedWorks,
   plasticWorks,
   recentWindow,
   rorUrl,
@@ -264,5 +267,18 @@ assert.equal(httpsUrl("http://example.org/"), "");
 assert.equal(httpsUrl("javascript:alert(1)"), "");
 assert.equal(httpsUrl("https://"), "");
 assert.equal(httpsUrl(42), "");
+
+// GP-5: region payloads count unscreened query hits; California booleans are unchanged.
+assert.equal(countsAsPlastic({plastic_related: true}), true);
+assert.equal(countsAsPlastic({plastic_related: false, screening_status: "unscreened_query_hit"}), false);
+assert.equal(countsAsPlastic({plastic_related: null, screening_status: "unscreened_query_hit"}), true);
+assert.equal(countsAsPlastic({plastic_related: null, screening_status: "reviewed"}), false);
+assert.equal(countsAsPlastic(null), false);
+assert.equal(plasticWorks([{plastic_related: null, screening_status: "unscreened_query_hit"}, {plastic_related: false}]).length, 1);
+assert.equal(hasUnscreenedWorks([{plastic_related: true}]), false);
+assert.equal(hasUnscreenedWorks([{plastic_related: null, screening_status: "unscreened_query_hit"}]), true);
+assert.equal(regionName("norway"), "Norway");
+assert.equal(regionName("california"), "California");
+assert.equal(regionName("unknown-slug"), "unknown-slug");
 
 console.log("framework institution runtime checks passed");

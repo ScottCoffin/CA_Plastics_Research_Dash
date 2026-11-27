@@ -167,7 +167,9 @@ function sectionHtml(section, ambassadorsHref) {
 }
 
 // The whole page body for one region (the static header and footer live in the Framework page).
-export function renderRegion(model, ambassadorsHref) {
+// knownIds: the inst_ids in the region's institutions.json (GP-5). A listed institution links to its
+// institution page when it is there; otherwise it keeps its ROR link. null means no institution pages.
+export function renderRegion(model, ambassadorsHref, knownIds = null) {
   const years = model.years;
   const lastYear = years.partial ? years.partial.year : model.lastCompleteYear;
   const yearRows = [...years.rows, ...(years.partial ? [years.partial] : [])];
@@ -181,13 +183,17 @@ export function renderRegion(model, ambassadorsHref) {
     topics.map((t) => [publicText(t.name || t.id || ""), formatCount(t.count)]));
   const emptyNote = model.worksTotal === 0
     ? `<p class="rg-state" role="status">No works for this region in the current search yet.</p>` : "";
-  const instList = institutions.length ? `<ol class="rg-list">` + institutions.map((i) => {
+  const instList = (institutions.length ? `<ol class="rg-list">` + institutions.map((i) => {
     const ror = safeUrl(i.ror);
     const name = escapeHtml(publicText(i.name || "Unnamed institution"));
-    return `<li><span class="rg-list-name">${ror ? `<a href="${escapeHtml(ror)}" rel="noreferrer">${name}</a>` : name}</span>` +
+    const id = String(i.id ?? "");
+    const page = knownIds && knownIds.has(id) ? `./institution#inst=${encodeURIComponent(id)}` : "";
+    const link = page ? `<a href="${escapeHtml(page)}">${name}</a>` : ror ? `<a href="${escapeHtml(ror)}" rel="noreferrer">${name}</a>` : name;
+    return `<li><span class="rg-list-name">${link}</span>` +
       `<span class="rg-list-meta">${escapeHtml(publicText(i.type || ""))}</span>` +
       `<span class="rg-list-count">${escapeHtml(formatCount(i.works))} works</span></li>`;
-  }).join("") + `</ol>` : `<p class="rg-state">No institutions listed yet.</p>`;
+  }).join("") + `</ol>` : `<p class="rg-state">No institutions listed yet.</p>`)
+    + (knownIds ? `<p class="rg-state"><a href="./institutions">See all institutions</a></p>` : "");
   const researcherList = researchers.length ? `<ol class="rg-list">` + researchers.map((r) => {
     const url = openalexAuthorUrl(r.id);
     const name = escapeHtml(publicText(r.name || "Unnamed author"));
@@ -241,6 +247,18 @@ export function onToggle(event) {
   for (const panel of group.querySelectorAll(":scope > [data-panel]")) panel.hidden = panel.dataset.panel !== button.dataset.view;
 }
 
+// The inst_ids of the region's institution pages, or null when the region has no institutions.json.
+async function regionInstitutionIds(slug) {
+  try {
+    const response = await fetch(regionFileUrl(slug, "institutions.json"), {cache: "no-cache"});
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return new Set(list(payload?.institutions).map((row) => String(row.inst_id ?? "")));
+  } catch {
+    return null;
+  }
+}
+
 export async function mountRegion(root, slug) {
   root.innerHTML = LOADING;
   root.onclick = onToggle;
@@ -256,5 +274,5 @@ export async function mountRegion(root, slug) {
     return;
   }
   const ambassadorsHref = new URL("ambassadors", siteRoot()).href;
-  root.innerHTML = renderRegion(model, ambassadorsHref);
+  root.innerHTML = renderRegion(model, ambassadorsHref, await regionInstitutionIds(slug));
 }
