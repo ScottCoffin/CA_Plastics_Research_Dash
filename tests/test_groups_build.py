@@ -249,7 +249,7 @@ def test_submission_merge_derives_layer_and_drops_non_https_urls() -> None:
 
 def test_bad_submission_fails_the_build() -> None:
     bad = _core_row()
-    bad["evidence"][0]["quote"] = " ".join(["word"] * 30)
+    bad["evidence"][0]["quote"] = " ".join(["word"] * 51)  # plastics_centrality: max 50 words
     with pytest.raises(GroupsBuildError, match="V3"):
         _build([bad, _adj_row(), _cd_row()])
 

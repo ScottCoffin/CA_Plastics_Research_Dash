@@ -116,7 +116,7 @@ function tag(extra: Record<string, unknown> = {}, n = 1): Record<string, unknown
         facet: "plastics_centrality",
         url: "https://example.org/about",
         accessed_at: "2026-11-20",
-        quote: "We campaign against single-use plastic.",
+        quote: "We campaign against single-use plastic in our city and run monthly beach cleanups.",
       },
       {
         facet: "primary_activities",

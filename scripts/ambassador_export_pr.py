@@ -58,7 +58,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas.groups import admission  # noqa: E402
-from atlas.groups.schema import load_taxonomy  # noqa: E402
+from atlas.groups.schema import (  # noqa: E402
+    MAX_PLASTICS_QUOTE_WORDS,
+    MAX_QUOTE_WORDS,
+    load_taxonomy,
+)
+
+# Worker limit for plastics_centrality quotes (owner rule 2026-11-26).
+PLASTICS_QUOTE_MAX_CHARS = 600
 
 DEFAULT_API_URL = "https://api.plastiverse.live"
 DEFAULT_STATE = ROOT / "curation" / "ambassador_export_state.json"
@@ -778,7 +785,13 @@ def text_list(
     return out
 
 
-def _citation(value: Mapping[str, Any], not_stated_allowed: bool) -> dict | None:
+def _citation(
+    value: Mapping[str, Any],
+    not_stated_allowed: bool,
+    *,
+    max_chars: int = 400,
+    max_words: int = MAX_QUOTE_WORDS,
+) -> dict | None:
     """url, accessed_at and exactly one of a quote (25 words at most) or not_stated true."""
     url = web_url(value.get("url"))
     accessed = iso_day(value.get("accessed_at"))
@@ -789,8 +802,8 @@ def _citation(value: Mapping[str, Any], not_stated_allowed: bool) -> dict | None
         if not not_stated_allowed or value.get("quote") is not None:
             return None
         return {"url": url, "accessed_at": accessed, "quote": None, "not_stated": True}
-    quote = bounded_text(value.get("quote"), 400)
-    if quote is None or len(quote.split()) > 25:
+    quote = bounded_text(value.get("quote"), max_chars)
+    if quote is None or len(quote.split()) > max_words:
         return None
     return {"url": url, "accessed_at": accessed, "quote": quote, "not_stated": False}
 
@@ -799,8 +812,16 @@ def _evidence_entry(value: Any) -> dict | None:
     if not isinstance(value, dict) or set(value) - GROUP_EVIDENCE_KEYS:
         return None
     facet = value.get("facet")
-    cite = _citation(value, True)
-    if not isinstance(facet, str) or facet not in GROUP_CITABLE_FACETS or cite is None:
+    if not isinstance(facet, str) or facet not in GROUP_CITABLE_FACETS:
+        return None
+    # Owner rule (2026-11-26): plastics_centrality quotes may be longer (50 words, 600 characters).
+    if facet == "plastics_centrality":
+        cite = _citation(
+            value, True, max_chars=PLASTICS_QUOTE_MAX_CHARS, max_words=MAX_PLASTICS_QUOTE_WORDS
+        )
+    else:
+        cite = _citation(value, True)
+    if cite is None:
         return None
     note = value.get("note")
     if note is not None:

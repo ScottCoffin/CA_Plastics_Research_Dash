@@ -559,6 +559,35 @@ def test_invalid_group_rows_are_skipped_with_reason(work: Path, capsys) -> None:
     assert not (work / "curation" / "group_suggestions.csv").exists()
 
 
+def test_plastics_quote_of_40_words_is_exported_and_other_facet_skipped(work: Path, capsys) -> None:
+    quote40 = " ".join(["word"] * 40)
+    evidence = _tag()["evidence"]
+    long_plastics = {**evidence[0], "quote": quote40}
+    long_other = {**evidence[1], "quote": quote40}
+    assert (
+        _export(
+            work,
+            [
+                _sub(
+                    1,
+                    "group_tag",
+                    _tag(GROUP_A, evidence=[long_plastics, evidence[1]]),
+                    _ms("2026-11-20"),
+                ),
+                _sub(
+                    2,
+                    "group_tag",
+                    _tag(GROUP_B, evidence=[evidence[0], long_other]),
+                    _ms("2026-11-20"),
+                ),
+            ],
+        )
+        == 0
+    )
+    assert "skip submission 2: invalid evidence" in capsys.readouterr().out
+    assert [r["group_id"] for r in _csv_of(work, "group_tags.csv")] == [GROUP_A]
+
+
 def test_affiliations_and_suggestions_are_written(work: Path) -> None:
     suggestion = {
         "name": "Coast Group",

@@ -962,3 +962,8 @@ The optional public name correction uses the stable group ID and goes through th
 
 - Owner direction: the Community groups map should be interactive like the main app's map (drill-down; every view responds to the region shown) and be the first thing on /groups, ahead of the per-region progress list; the groups data and interface should share the look, shell and navigation of the rest of the site (/explore) instead of a separate style.
 - Recorded as TODO GP-GROUPS inside the global-parity queue (owner: "record these aspects and integrate with the California Atlas feature port"), with a row in docs/GLOBAL_PARITY.md. The CG-12/CG-12b views stay as built until that slice; their pure helpers (coverage rows, anchors, heatmap and flow builders) are the inputs the scoped views reuse.
+
+## ADR-GRP-PLASTICS-QUOTE-2026-11-26
+
+- Owner rule (2026-11-26) overriding A4-D5 for one field: the plastics-focus quote in the group tagging form is 10 to 50 words (at most 600 characters), with a live word counter; when plastics are not part of a group's work, the quote may be general "about" text from the group's pages. Not stated is no longer accepted for that field on a tagged group. Every other quote stays at most 25 words.
+- Enforcement: form and Worker apply 10-50 words; the Python export and schema apply only the 50-word maximum, so stored data validates tolerantly. Deploy order: the Worker first (H63), then the form, so no window rejects 26-50-word quotes.

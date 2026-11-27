@@ -78,7 +78,8 @@ def _set(key: str, value: Any) -> Any:
 
 
 def _long_quote(rec: dict[str, Any]) -> None:
-    rec["evidence"][0]["quote"] = " ".join(["word"] * 26)
+    # evidence[0] is plastics_centrality: 50-word limit (owner rule 2026-11-26).
+    rec["evidence"][0]["quote"] = " ".join(["word"] * 51)
 
 
 def _drop_quote_and_not_stated(rec: dict[str, Any]) -> None:
@@ -234,6 +235,25 @@ def test_v3_quote_of_exactly_25_words_passes() -> None:
     rec = _base()
     rec["evidence"][0]["quote"] = " ".join(["word"] * 25)
     assert validate_group(rec, known_group_ids=KNOWN) == []
+
+
+def test_v3_plastics_quote_may_run_to_50_words() -> None:
+    rec = _base()
+    assert rec["evidence"][0]["facet"] == "plastics_centrality"
+    rec["evidence"][0]["quote"] = " ".join(["word"] * 50)
+    assert validate_group(rec, known_group_ids=KNOWN) == []
+    rec["evidence"][0]["quote"] = " ".join(["word"] * 51)
+    assert any(
+        p.startswith("V3:") and "max 50" in p for p in validate_group(rec, known_group_ids=KNOWN)
+    )
+
+
+def test_v3_other_facet_quote_stays_at_25_words() -> None:
+    rec = _base()
+    rec["evidence"][0]["facet"] = "sector"
+    rec["evidence"][0]["quote"] = " ".join(["word"] * 26)
+    problems = validate_group(rec, known_group_ids=KNOWN)
+    assert any(p.startswith("V3:") and "max 25" in p for p in problems)
 
 
 def test_v5_tagged_record_needs_at_least_one_activity() -> None:

@@ -24,6 +24,9 @@ Last updated: 2026-11-26.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
+### H63. Authorize the plastics-quote Worker deploy (no migration)
+Your 10-to-50-word rule for the plastics quote is built and tested (Worker 244 tests, browser walk 72/72). Reply **H63 approved** to deploy the Worker; the agent then pushes the form change, in that order, so no ambassador's 26-50-word quote is rejected in between.
+
 ### H64. Decide on the LLM tagging pilot (about 3 minutes)
 You asked what it would cost for an inexpensive LLM with web search to fill in the community groups. Findings: `docs/GROUP_LLM_ENRICHMENT.md` (all 2,673 groups about $60-$130; a 100-group pilot about $10-$25). The pilot can only start once ambassadors have tagged about 100 groups, but the decisions can be made now. Reply in one line, for example **"H64: pilot OK, $50 cap, Gemini paid tier, suggestions only, ambassadors check quotes, gold 100"**, or change any part:
 1. Spend cap for the pilot (suggested $50) and the provider to test first (suggested Gemini Flash-Lite on the paid tier, so prompts are not used for Google training).

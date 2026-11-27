@@ -132,7 +132,7 @@ function tag(extra: Record<string, unknown> = {}, n = 1): Record<string, unknown
         facet: "plastics_centrality",
         url: "https://example.org/about",
         accessed_at: "2026-11-20",
-        quote: "We campaign against single-use plastic.",
+        quote: "We campaign against single-use plastic in our city and run monthly beach cleanups.",
       },
       {
         facet: "primary_activities",
@@ -515,11 +515,11 @@ describe("validateGroupTag", () => {
     expect(tagField(tag({ constituency: ["martians"] }))).toBe("constituency");
   });
 
-  it("quotes are at most 25 words, and exactly one of quote or not_stated", () => {
+  it("other quotes are at most 25 words, and exactly one of quote or not_stated", () => {
     const words = (n: number): string => Array.from({ length: n }, () => "word").join(" ");
     const evidence = (extra: Record<string, unknown>): Record<string, unknown>[] => [
-      { facet: "plastics_centrality", url: "https://example.org/a", accessed_at: "2026-11-20", ...extra },
-      tagEvidence()[1],
+      tagEvidence()[0],
+      { facet: "primary_activities", url: "https://example.org/a", accessed_at: "2026-11-20", ...extra },
     ];
     expect(tagField(tag({ evidence: evidence({ quote: words(25) }) }))).toBeUndefined();
     expect(tagField(tag({ evidence: evidence({ quote: words(26) }) }))).toBe("evidence");
@@ -527,11 +527,43 @@ describe("validateGroupTag", () => {
     expect(tagField(tag({ evidence: evidence({}) }))).toBe("evidence");
   });
 
+  it("a plastics_centrality quote is 10 to 50 words (at most 600 characters)", () => {
+    const words = (n: number, word = "word"): string => Array.from({ length: n }, () => word).join(" ");
+    const plastics = (quote: string): Record<string, unknown>[] => [
+      { facet: "plastics_centrality", url: "https://example.org/a", accessed_at: "2026-11-20", quote },
+      tagEvidence()[1],
+    ];
+    expect(tagField(tag({ evidence: plastics(words(9)) }))).toBe("evidence");
+    expect(tagField(tag({ evidence: plastics(words(10)) }))).toBeUndefined();
+    expect(tagField(tag({ evidence: plastics(words(40)) }))).toBeUndefined();
+    expect(tagField(tag({ evidence: plastics(words(50)) }))).toBeUndefined();
+    expect(tagField(tag({ evidence: plastics(words(51)) }))).toBe("evidence");
+    expect(tagField(tag({ evidence: plastics(words(10, "x".repeat(61))) }))).toBe("evidence");
+    expect(tagField(tag({ evidence: plastics(words(30)) }))).toBeUndefined();
+  });
+
+  it("not_stated is refused for plastics_centrality on an ambassador_tagged group, but not on cannot_determine", () => {
+    const notStated = [
+      { facet: "plastics_centrality", url: "https://example.org/a", accessed_at: "2026-11-20", not_stated: true },
+      tagEvidence()[1],
+    ];
+    expect(tagField(tag({ evidence: notStated }))).toBe("evidence");
+    const cannot = { group_id: GID, status: "cannot_determine", cannot_determine_reason: "no_web_presence", evidence: notStated };
+    expect(tagField(cannot)).toBeUndefined();
+  });
+
+  it("a cannot_determine tag still needs a quote of 10 to 50 words for plastics_centrality", () => {
+    const short = [{ facet: "plastics_centrality", url: "https://example.org/a", accessed_at: "2026-11-20", quote: "one two three" }];
+    expect(tagField({ group_id: GID, status: "cannot_determine", cannot_determine_reason: "no_web_presence", evidence: short })).toBe(
+      "evidence",
+    );
+  });
+
   it("evidence URLs are http or https without credentials, and accessed_at is a real date", () => {
     const withUrl = (url: string, accessed = "2026-11-20"): Record<string, unknown> =>
       tag({
         evidence: [
-          { facet: "plastics_centrality", url, accessed_at: accessed, quote: "a short quote" },
+          { facet: "plastics_centrality", url, accessed_at: accessed, quote: "one two three four five six seven eight nine ten" },
           { facet: "primary_activities", url: "https://example.org/p", accessed_at: "2026-11-20", not_stated: true },
         ],
       });

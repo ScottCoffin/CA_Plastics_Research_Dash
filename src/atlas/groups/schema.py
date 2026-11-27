@@ -56,6 +56,8 @@ PERSONAL_KEY_PARTS = ("email", "phone", "ambassador", "person", "contact_person"
 AMBASSADOR_KEYS = frozenset({"ambassador_id", "tagged_by", "reviewed_by"})
 
 MAX_QUOTE_WORDS = 25
+# Owner rule (2026-11-26): plastics_centrality quotes may run to 50 words.
+MAX_PLASTICS_QUOTE_WORDS = 50
 MAX_NOTE_CHARS = 200
 MAX_PLACES = 5
 MAX_PRIMARY_ACTIVITIES = 5  # owner 2026-11-26, A4-D26 (spec: 3)
@@ -317,10 +319,12 @@ def _check_evidence_item(
         problems.append(f"V3: {where} needs exactly one of quote or not_stated=true")
     if has_quote:
         words = quote_word_count(quote)
+        plastics = item.get("facet") == "plastics_centrality"
+        max_words = MAX_PLASTICS_QUOTE_WORDS if plastics else MAX_QUOTE_WORDS
         if words == 0:
             problems.append(f"V3: {where} quote is empty")
-        elif words > MAX_QUOTE_WORDS:
-            problems.append(f"V3: {where} quote has {words} words (max {MAX_QUOTE_WORDS})")
+        elif words > max_words:
+            problems.append(f"V3: {where} quote has {words} words (max {max_words})")
     note = item.get("note")
     if note is not None and (not isinstance(note, str) or len(note) > MAX_NOTE_CHARS):
         problems.append(f"SCHEMA: {where}.note must be a string of at most {MAX_NOTE_CHARS} chars")

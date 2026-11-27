@@ -156,7 +156,7 @@ For each facet you fill, record:
 
 - **url**: the web address of the page you used.
 - **accessed_at**: the date you read the page, as `YYYY-MM-DD`. Autofill this for the user based on current date.
-- **quote**: the exact words from the page that support the value. Use **25 words or fewer**. Copy the words in the page's own language. Do not translate, correct or reword them. If the quote is too long, choose a shorter part of the page.
+- **quote**: the exact words from the page that support the value. Use **25 words or fewer**. The quote for **plastics centrality** is different: use **10 to 50 words** (and at most 600 characters), and it cannot be `not_stated` for a tagged group. Copy the words in the page's own language. Do not translate, correct or reword them. If the quote is too long, choose a shorter part of the page.
 - Or **not_stated**, if the page does not support a value.
 
 You may add:
@@ -237,7 +237,7 @@ Note the lesson of this example: a single mention in a list of topics is `incide
 - Is it a collective organisation? If not, use `not_an_organisation`.
 - Did you stop after about five minutes?
 - Does every value use the exact name from this guide?
-- Does each facet have a URL, a date and a quote of 25 words or fewer, or `not_stated`?
+- Does each facet have a URL, a date and a quote of 25 words or fewer (plastics centrality: 10 to 50 words), or `not_stated` (not for plastics centrality on a tagged group)?
 - Did you record only what the group's own pages say?
 - Do you have a conflict of interest? If so, stop.
 - Is the language one you can read? If not, mark needs language support.

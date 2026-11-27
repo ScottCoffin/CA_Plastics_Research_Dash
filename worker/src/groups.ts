@@ -322,8 +322,20 @@ const TIER1_EVIDENCE = ["plastics_centrality", "primary_activities"];
 const MAX_EVIDENCE = 15;
 const MAX_AFFILIATIONS = 10;
 const MAX_LIST = 10;
-const MAX_QUOTE_CHARS = 400;
-const MAX_QUOTE_WORDS = 25;
+/** Owner rule (2026-11-26): the plastics_centrality quote is 10 to 50 words; every other quote is at most 25. */
+export const PLASTICS_QUOTE_MIN_WORDS = 10;
+export const PLASTICS_QUOTE_MAX_WORDS = 50;
+interface QuoteLimits {
+  minWords: number;
+  maxWords: number;
+  maxChars: number;
+}
+const GENERAL_QUOTE: QuoteLimits = { minWords: 1, maxWords: 25, maxChars: 400 };
+const PLASTICS_QUOTE: QuoteLimits = {
+  minWords: PLASTICS_QUOTE_MIN_WORDS,
+  maxWords: PLASTICS_QUOTE_MAX_WORDS,
+  maxChars: 600,
+};
 /** AMB-ROSTER-QC: answers to "is this the same organisation as ...?" for likely-duplicate roster entries. */
 export const SAME_AS_ANSWERS = ["same", "different", "unsure"];
 const MAX_SAME_AS = 3;
@@ -379,10 +391,10 @@ function isIsoDate(value: string): boolean {
 }
 
 /**
- * The citation shared by evidence entries and affiliations: url, accessed_at, and exactly one of a quote (25 words
- * at most) or not_stated true. Affiliations never accept not_stated (V11).
+ * The citation shared by evidence entries and affiliations: url, accessed_at, and exactly one of a quote (within the
+ * word and character limits) or not_stated true. Affiliations never accept not_stated (V11).
  */
-function citation(value: Obj, notStatedAllowed: boolean): Obj | null {
+function citation(value: Obj, notStatedAllowed: boolean, limits: QuoteLimits): Obj | null {
   const url = value.url;
   const accessed = value.accessed_at;
   if (typeof url !== "string" || !isWebUrl(url)) return null;
@@ -392,16 +404,22 @@ function citation(value: Obj, notStatedAllowed: boolean): Obj | null {
     if (!notStatedAllowed || value.quote !== undefined) return null;
     return { url, accessed_at: accessed, quote: null, not_stated: true };
   }
-  const quote = text(value.quote, MAX_QUOTE_CHARS);
-  if (quote === null || quote.split(/\s+/).length > MAX_QUOTE_WORDS) return null;
+  const quote = text(value.quote, limits.maxChars);
+  if (quote === null) return null;
+  const words = quote.split(/\s+/).length;
+  if (words < limits.minWords || words > limits.maxWords) return null;
   return { url, accessed_at: accessed, quote, not_stated: false };
 }
 
-function evidenceEntry(value: unknown): Obj | null {
+function evidenceEntry(value: unknown, status: string): Obj | null {
   if (!isPlainObject(value) || !keysWithin(value, ["facet", "url", "accessed_at", "quote", "not_stated", "note"])) return null;
   const facet = inVocabulary(EVIDENCE_FACETS)(value.facet);
-  const cite = citation(value, true);
-  if (facet === null || cite === null) return null;
+  if (facet === null) return null;
+  const plastics = facet === "plastics_centrality";
+  // Owner rule (2026-11-26): an ambassador-tagged plastics_centrality entry must quote the page, not mark it not_stated.
+  const notStatedAllowed = !(plastics && status === "ambassador_tagged");
+  const cite = citation(value, notStatedAllowed, plastics ? PLASTICS_QUOTE : GENERAL_QUOTE);
+  if (cite === null) return null;
   const note = value.note === undefined ? null : text(value.note, 200);
   if (value.note !== undefined && note === null) return null;
   return { facet, ...cite, note };
@@ -414,7 +432,7 @@ function affiliation(value: unknown): Obj | null {
   const ev = value.evidence;
   if (name === null || relation === null || !isPlainObject(ev)) return null;
   if (!keysWithin(ev, ["url", "accessed_at", "quote"])) return null;
-  const cite = citation(ev, false);
+  const cite = citation(ev, false, GENERAL_QUOTE);
   return cite === null ? null : { target_name: name, relation, evidence: cite };
 }
 
@@ -521,7 +539,7 @@ export function validateGroupTag(payload: unknown): PayloadResult {
     if (!Array.isArray(p.evidence) || p.evidence.length > MAX_EVIDENCE) return fail("evidence");
     const items: Obj[] = [];
     for (const item of p.evidence) {
-      const parsed = evidenceEntry(item);
+      const parsed = evidenceEntry(item, status);
       if (parsed === null) return fail("evidence");
       items.push(parsed);
     }
