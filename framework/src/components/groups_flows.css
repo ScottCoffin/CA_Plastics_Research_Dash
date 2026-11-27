@@ -1,0 +1,125 @@
+/* Flows, participation and language views on the Community groups page. Colours come from tokens only (tokens.css);
+   bar and cell colours come from the shared palette in JS. Every background is paired with a text colour from a token
+   pair that meets 4.5:1 (checked in tests/test_groups_flows.py). */
+.groups-flows {
+  font-family: var(--atlas-font-body);
+  color: var(--atlas-text);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.groups-flows__section {
+  margin: 1.5rem 0;
+  max-width: 100%;
+}
+
+.groups-flows__section h3 {
+  font-family: var(--atlas-font-display);
+  font-size: 1.15rem;
+  margin: 0 0 0.5rem;
+}
+
+.groups-flows__section h4 {
+  font-size: 1rem;
+  margin: 1rem 0 0.3rem;
+}
+
+.groups-flows__figure {
+  margin: 0 0 1rem;
+  max-width: 100%;
+}
+
+.groups-flows__chart,
+.groups-flows__scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.groups-flows__multiples {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.5rem 1rem;
+}
+
+.groups-flows__multiple {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.groups-flows__summary,
+.groups-flows__note {
+  color: var(--atlas-muted);
+  font-size: 0.9rem;
+  margin: 0.4rem 0 0;
+}
+
+.groups-flows__empty {
+  color: var(--atlas-muted);
+  background: var(--atlas-surface);
+  border-left: 3px solid var(--atlas-boundary);
+  padding: 0.6rem 0.8rem;
+  margin: 0;
+}
+
+.groups-flows__legend {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 0.25rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.groups-flows__swatch {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-right: 0.35rem;
+  vertical-align: -0.1rem;
+  border: 1px solid var(--atlas-line);
+}
+
+.groups-flows__details {
+  margin-top: 0.5rem;
+}
+
+.groups-flows__details summary {
+  cursor: pointer;
+  color: var(--atlas-text);
+}
+
+.groups-flows__table {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.groups-flows__table caption {
+  text-align: left;
+  color: var(--atlas-muted);
+  padding-bottom: 0.3rem;
+}
+
+.groups-flows__table th,
+.groups-flows__table td {
+  border-bottom: 1px solid var(--atlas-line);
+  padding: 0.3rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.groups-flows__muted th,
+.groups-flows__muted td {
+  color: var(--atlas-muted);
+}
+
+/* The combination key and its bars sit side by side on one row, so their rows line up. The scroll region around
+   them takes any overflow on narrow screens rather than wrapping the pair. */
+.groups-flows__pair {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: max-content;
+}

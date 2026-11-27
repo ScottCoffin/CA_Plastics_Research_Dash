@@ -20,6 +20,7 @@ head: |
 <link rel="stylesheet" href="./components/groups.css">
 <link rel="stylesheet" href="./components/groups_coverage.css">
 <link rel="stylesheet" href="./components/groups_composition.css">
+<link rel="stylesheet" href="./components/groups_flows.css">
 
 <div class="gx gv">
 <a class="skip" href="#main">Skip to the content</a>
@@ -46,6 +47,10 @@ head: |
 <section class="gv-panel gv-root" aria-labelledby="gv-composition-title" id="gv-composition">
   <h2 id="gv-composition-title">What the tagged groups look like</h2>
   <div id="groups-composition"><p class="gv-status">Loading charts…</p></div>
+</section>
+<section class="gv-panel gv-root" aria-labelledby="gv-flows-title" id="gv-flows">
+  <h2 id="gv-flows-title">Flows, participation and languages</h2>
+  <div id="groups-flows"><p class="gv-status">Loading charts…</p></div>
 </section>
 <section class="gv-panel gv-net-panel gv-root" aria-labelledby="gv-net-title" id="gv-network">
   <h2 id="gv-net-title">Network</h2>
@@ -107,6 +112,14 @@ import {globalDataUrl as compositionUrl, loadJson as loadCompositionJson} from "
 // Heatmaps, treemap and the evidence and agreement panel; Plot and d3 are Framework's built-ins.
 const compositionPrecision = await loadCompositionJson("groups/precision_card.json", {url: compositionUrl}).catch(() => null);
 mountGroupsComposition(document.getElementById("groups-composition"), {groups: groupsPayload?.groups ?? [], precision: compositionPrecision, Plot, d3});
+```
+
+```js
+import {mountGroupsFlows} from "./components/groups_flows.js";
+import {globalDataUrl as flowsUrl, loadJson as loadFlowsJson} from "./components/atlas.js";
+// Sector-to-activity flows, participation in science, activity combinations and website languages.
+const flowsPayload = await loadFlowsJson("groups/flows.json", {url: flowsUrl}).catch(() => null);
+mountGroupsFlows(document.getElementById("groups-flows"), {flows: flowsPayload, groups: groupsPayload?.groups ?? [], coverage: coveragePayload, Plot});
 ```
 
 ```js
