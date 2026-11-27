@@ -106,9 +106,12 @@ def test_stream_exposes_reviewable_forms_states_and_accessible_hooks() -> None:
         "[data-g-org][aria-pressed",
         "data-g-date-change",
         "data-g-facet-quote",
+        'data-g-field="name_correction"',
     ):
         assert hook in module
     assert "state.drafts[group.group_id]" in module
+    assert 'label for="g-name-correction">Correct the name (optional)</label>' in module
+    assert 'set(".g-name-correction", no)' in module
     assert "aria-live" in module or 'role="status"' in module
     assert 'data-g-field="quote"' in module
     assert 'primary_activities: ["advocacy_campaigning"' in module

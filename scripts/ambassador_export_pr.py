@@ -883,7 +883,7 @@ def clean_group_tag(
                 return _bad(facet)
         out["not_an_organisation"] = flag
 
-    if payload.get("name_correction") is not None:
+    if not out.get("not_an_organisation") and payload.get("name_correction") is not None:
         name = bounded_text(payload["name_correction"], 200)
         if name is None or len(name) < 2 or EMAIL_RE.search(name):
             return _bad("name_correction")
@@ -1028,7 +1028,10 @@ class GroupStore:
         self.tags[group_id] = {"ms": at, "row": row}
         self.affiliations[group_id] = affiliation_rows(tag)
         self.dirty.update({"tags", "affiliations"})
-        if "name_correction" in tag:
+        if tag.get("not_an_organisation"):
+            if self.name_corrections.pop(group_id, None) is not None:
+                self.dirty.add("names")
+        elif "name_correction" in tag:
             name_row = {
                 "group_id": group_id,
                 "name": tag["name_correction"],

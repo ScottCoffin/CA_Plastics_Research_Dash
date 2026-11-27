@@ -630,6 +630,32 @@ def test_name_correction_is_kept_for_cannot_determine(work: Path) -> None:
     ]
 
 
+def test_non_organisation_removal_clears_only_its_name_correction(work: Path) -> None:
+    assert (
+        _export(
+            work,
+            [
+                _sub(1, "group_tag", _tag(name_correction="Old Display Name"), _ms("2026-11-20")),
+                _sub(
+                    2, "group_tag", _tag(GROUP_B, name_correction="Other Group"), _ms("2026-11-20")
+                ),
+            ],
+        )
+        == 0
+    )
+    removal = {
+        "group_id": GROUP_A,
+        "status": "cannot_determine",
+        "cannot_determine_reason": "not_an_organisation",
+        "not_an_organisation": True,
+        "name_correction": "Personal Name",
+    }
+    assert _export(work, [_sub(3, "group_tag", removal, _ms("2026-11-21"))]) == 0
+    assert _names(work) == [
+        {"group_id": GROUP_B, "name": "Other Group", "submitted_at": "2026-11-20"}
+    ]
+
+
 def test_latest_name_correction_wins(work: Path) -> None:
     assert (
         _export(

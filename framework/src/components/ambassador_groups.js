@@ -41,7 +41,7 @@ const ERROR_FIELDS = {
   legal_form: "Legal form", legal_form_note: "Legal form note", participation_in_science: "Participation in science", themes: "Themes",
   constituency: "Constituency", tier2_evidence: "the source for the optional details", stated_affiliations: "Stated affiliations",
   cannot_determine_reason: "Reason", page_url: "Page you read", accessed_at: "Date read", quote: "Quote", payload: "answers",
-  name: "Group name", url: "Public web address", country: "Country", note: "Note",
+  name: "Group name", name_correction: "Correct the name", url: "Public web address", country: "Country", note: "Note",
 };
 const esc = (value) => escapeHtml(String(value ?? ""));
 /** Today's date on the ambassador's own calendar (not UTC), as YYYY-MM-DD. */
@@ -83,13 +83,17 @@ export function groupTagPayload({group, values, today = isoToday()} = {}) {
       group_id: group.group_id, status: "cannot_determine", cannot_determine_reason: "not_an_organisation", not_an_organisation: true,
     }};
   }
+  const correctedName = String(values.name_correction || "").trim();
+  if (correctedName && (correctedName.length < 2 || correctedName.length > 200 || /[<>\u0000-\u001f\u007f]/.test(correctedName) || EMAIL.test(correctedName))) return {error: "name_correction"};
+  const correction = correctedName ? {name_correction: correctedName} : {};
   if (values.status === "cannot_determine") {
     if (!CANNOT_REASONS.includes(values.reason)) return {error: "cannot_determine_reason"};
     return {region: values.region, stream: "knowledge", kind: "group_tag", payload: {
       group_id: group.group_id, status: "cannot_determine", cannot_determine_reason: values.reason,
+      ...correction,
     }};
   }
-  const payload = {group_id: group.group_id, status: "ambassador_tagged"};
+  const payload = {group_id: group.group_id, status: "ambassador_tagged", ...correction};
   // "Their pages do not mention plastics" applies only to incidental or none; the Worker then wants no quote for that row.
   const plasticsNotStated = values.plastics_not_stated === true && NOT_STATED_CENTRALITY.includes(values.plastics_centrality);
   for (const facet of TAG_FACETS) {
@@ -210,6 +214,7 @@ const errorText = (code, fallback) => ERRORS[code] || fallback?.(code) || "Somet
 
 /** Plain-language message for a payload error key from groupTagPayload. */
 function tagErrorMessage(error) {
+  if (error === "name_correction") return "Enter the group's public name in plain text, using 2 to 200 characters.";
   if (error === "quote") return "Add the words from their page that show their work. Use 25 words or fewer.";
   if (error.startsWith("quote-")) return "Check the optional quote for this choice. Use 25 words or fewer.";
   if (error === "page_url") return "Check the page you read. It must be a web address that starts with https://.";
@@ -350,6 +355,7 @@ export function mountGroups(host, ctx) {
         <section class="g-group" aria-labelledby="g-group-name"><h3 id="g-group-name" tabindex="-1">${esc(group.name)}</h3><p class="g-meta">${esc(group.country)}</p>
         ${groupLink ? `<p class="g-open-site"><a class="btn solid" href="${esc(groupLink)}" target="_blank" rel="noopener noreferrer">Open their website<span class="sr"> (opens in a new tab)</span></a></p>` : `<p class="hint">No website is listed for this group. Enter the page you read in the evidence section.</p>`}
         <form data-g-tag-form novalidate aria-busy="${state.busy}">
+        <div class="field g-name-correction"><label for="g-name-correction">Correct the name (optional)</label><input id="g-name-correction" type="text" maxlength="200" autocomplete="off" data-g-field="name_correction" value="${esc(draft.name_correction || "")}" aria-describedby="g-name-correction-hint"><p class="hint" id="g-name-correction-hint">Use the name on the group's public website.</p></div>
         ${orgChoiceHTML({attr: "data-g-org", choice: draft.notOrganisation === true ? "no" : draft.notOrganisation === false ? "yes" : "", question: "Is this a collective organisation, rather than an individual or single-person practice?", yes: "Yes, a collective organisation", no: "No, a personal profile or individual"})}
         <div data-g-tag-fields>${tagFieldsHTML(group, draft, picks)}</div>
         ${tier2HTML(draft)}
@@ -384,6 +390,7 @@ export function mountGroups(host, ctx) {
   /** Reads every field of the tag form into one values object (also the draft shape). */
   function tagValues() {
     const values = {region: ctx.region, notOrganisation: orgChoice() === undefined ? undefined : orgChoice() === "no"};
+    values.name_correction = fieldValue("name_correction");
     values.status = host.querySelector("[data-g-status]")?.value;
     values.reason = host.querySelector("[data-g-reason]")?.value;
     for (const facet of TAG_FACETS) {
@@ -424,6 +431,7 @@ export function mountGroups(host, ctx) {
     const status = host.querySelector("[data-g-status]");
     const cannot = status?.value === "cannot_determine";
     const set = (selector, hidden) => { const el = host.querySelector(selector); if (el) el.hidden = hidden; };
+    set(".g-name-correction", no);
     set("[data-g-tag-fields]", no || cannot);
     set("[data-g-tier2]", no || cannot);
     set("[data-g-reason-wrap]", !cannot);

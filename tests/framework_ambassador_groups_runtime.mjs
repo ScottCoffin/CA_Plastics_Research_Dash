@@ -114,8 +114,21 @@ check("plastics centrality must be a chosen value other than cannot determine", 
   assert.equal(groupTagPayload({group: GROUP, values: base({plastics_centrality: "cannot_determine"})}).error, "plastics_centrality");
 });
 check("not an organisation is a minimal, untaggable status payload", () => {
-  const result = groupTagPayload({group: GROUP, values: {region: "california", notOrganisation: true}});
+  const result = groupTagPayload({group: GROUP, values: {region: "california", notOrganisation: true, name_correction: "A Drafted Name"}});
   assert.deepEqual(result.payload, {group_id: GROUP.group_id, status: "cannot_determine", cannot_determine_reason: "not_an_organisation", not_an_organisation: true});
+});
+check("optional name correction is trimmed, case-preserving, and works with either tag status", () => {
+  const tagged = groupTagPayload({group: GROUP, values: base({name_correction: "  eNGO Example  "})});
+  assert.equal(tagged.payload.name_correction, "eNGO Example");
+  assert.equal(tagged.payload.group_id, GROUP.group_id);
+  const cannot = groupTagPayload({group: GROUP, values: {region: "california", notOrganisation: false, status: "cannot_determine", reason: "dead_link", name_correction: "Correct Name"}});
+  assert.equal(cannot.payload.name_correction, "Correct Name");
+  assert.equal("name_correction" in groupTagPayload({group: GROUP, values: base()}).payload, false);
+});
+check("name correction follows Worker plain-text validation", () => {
+  for (const name_correction of ["x", "<b>Name</b>", "Name\nGroup", "person@example.org", "x".repeat(201)]) {
+    assert.equal(groupTagPayload({group: GROUP, values: base({name_correction})}).error, "name_correction", name_correction);
+  }
 });
 check("cannot determine uses only supported non-COI reasons", () => {
   assert.equal(groupTagPayload({group: GROUP, values: {region: "california", notOrganisation: false, status: "cannot_determine", reason: "language_barrier"}}).payload.cannot_determine_reason, "language_barrier");

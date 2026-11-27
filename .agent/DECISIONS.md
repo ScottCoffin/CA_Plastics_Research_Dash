@@ -925,3 +925,7 @@ Copied from `docs/BFFP.md` §2. Status as of integration; "Owner" means confirme
 | A4-C9 | §4.3 asks for a User-Agent with a contact address. | Agent policy: no personal email in requests to outside services without the owner's explicit say-so. The extractor identifies itself as the project with its public site URL; A4-Q2 asks whether BFFP requires an address. |
 | A4-C10 | The spec cites with numbered references. | Repo docs cite (Authors Year) (A3 rule 13); the spec file is kept as delivered. |
 | A4-C11 | §5.2 puts California first in batch priority and CG-15 pilots a California batch. | The project is global since 2026-11-26 (owner: depart from California-only scope); California stays first in the pilot as the region with the most ambassadors, without excluding others. |
+
+## ADR-GRP-NAME-FIX-2026-11-26
+
+The optional public name correction uses the stable group ID and goes through the normal group tag approval workflow. It is available for any organisation tag status. A non-organisation report omits the name. An approved removal also clears any existing correction for the same ID, so the export keeps only the removal record for that entry.
