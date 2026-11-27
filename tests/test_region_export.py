@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gzip
 import importlib.util
 import json
 import random
@@ -361,7 +362,8 @@ def test_read_inputs_filters_partition_files(tmp_path):
         ),
         part / "institutions.parquet",
     )
-    loaded = rx.read_inputs(part, "NO")
+    raw_dir = _write_raw_pages(tmp_path / "raw", [])
+    loaded = rx.read_inputs(part, "NO", raw_dir=raw_dir)
     assert sorted(w["work_id"] for w in loaded.works) == ["W1", "W2", "W5"]
     assert {a["work_id"] for a in loaded.authorships} == {"W1", "W2", "W5"}
     assert sorted(i["institution_id"] for i in loaded.institutions) == ["I1", "I2", "I3"]
@@ -455,6 +457,8 @@ def test_cli_writes_and_checks_with_sys_executable(tmp_path):
         "--out-dir",
         str(out),
     ]
+    raw_dir = _write_raw_pages(tmp_path / "raw", [])
+    base += ["--raw-dir", str(raw_dir)]
     write = subprocess.run(base, capture_output=True, text=True, check=False, cwd=REPO_ROOT)
     assert write.returncode == 0, write.stderr
     check = subprocess.run(
@@ -475,3 +479,104 @@ def test_committed_region_payloads_are_valid(slug):
 
 def test_budget_constant_is_twenty_megabytes():
     assert rx.REGION_BUDGET_BYTES == 20_000_000
+
+
+# GP-4: domain and facet tags from the reference labeller (title + abstract + topic names).
+TAG_TAXONOMY = {"domain_tags": [{"id": "fixture_tag", "seed_concepts": ["fixture polymer"]}]}
+
+
+def _write_raw_pages(raw_dir, records, fetched="2026-02-01T00:00:00Z"):
+    """A raw store with one gzip page: a page_header line, then one OpenAlex-style work per line."""
+    pages = raw_dir / "pages"
+    pages.mkdir(parents=True, exist_ok=True)
+    header = {
+        "record_type": "page_header",
+        "fetched_utc": fetched,
+        "query_version": "v1",
+        "query_hash": "h1",
+    }
+    name = f"{fetched[:4]}_{len(list(pages.glob('*')))}.jsonl.gz"
+    with gzip.open(pages / name, "wt", encoding="utf-8") as out:
+        out.write(json.dumps(header) + "\n")
+        for record in records:
+            out.write(json.dumps(record) + "\n")
+    return raw_dir
+
+
+def _tag_inputs(raw):
+    works = [_work("W1", 2021, "Plastic debris survey"), _work("W2", 2021, "Other topic")]
+    work_regions = [
+        {
+            "work_id": w,
+            "region_kind": "country",
+            "region_code": "NO",
+            "basis": "institution_country",
+        }
+        for w in ("W1", "W2")
+    ]
+    authorships = [_auth("W1", 1, "A1", "Ada One", "I1"), _auth("W2", 1, "A1", "Ada One", "I1")]
+    institutions = [_inst("I1", "Norwegian Uni", "NO", "education")]
+    return rx.RegionInputs(
+        works,
+        work_regions,
+        authorships,
+        institutions,
+        raw=raw,
+        query_config={},
+        taxonomy=TAG_TAXONOMY,
+    )
+
+
+def test_tags_come_from_the_labeller_abstract_and_roll_up_to_authors_and_institutions():
+    abstract = rx.RawWorkFields(abstract="A fixture polymer was sampled in the fjord.")
+    export = rx.build_region_export(
+        "norway", "NO", _tag_inputs({"W1": abstract}), "2026-11-26T00:00:00+00:00"
+    )
+    by_id = {w["work_id"]: w for w in export.index["works"]}
+    # The title alone does not trigger the tag; the abstract does.
+    assert by_id["W1"]["domain_tags"] == ["fixture_tag"]
+    assert by_id["W2"]["domain_tags"] == []
+    assert by_id["W1"]["screening_status"] == SCREENING_STATUS
+    assert export.institutions["institutions"][0]["domain_tags"] == ["fixture_tag"]
+    author = next(a for a in export.index["authors"] if a["author_id"] == "A1")
+    assert author["domain_tags"] == ["fixture_tag"]
+    # Abstracts are used in memory only: never in any region payload.
+    text = json.dumps([export.index, export.institutions, export.institution_works])
+    assert "fjord" not in text and "fixture polymer" not in text
+    assert {w["abstract"] for w in export.institution_works["I1"]["works"]} == {None}
+
+
+def test_tag_matching_uses_topic_names_too():
+    raw = {"W1": rx.RawWorkFields(topic_names=("Fixture polymer science",))}
+    export = rx.build_region_export("norway", "NO", _tag_inputs(raw), "2026-11-26T00:00:00+00:00")
+    assert {w["work_id"]: w["domain_tags"] for w in export.index["works"]}["W1"] == ["fixture_tag"]
+
+
+def test_read_raw_fields_keeps_the_latest_page_and_decodes_the_abstract(tmp_path):
+    raw_dir = tmp_path / "raw"
+    _write_raw_pages(
+        raw_dir,
+        [{"id": "https://openalex.org/W1", "abstract_inverted_index": {"old": [0]}}],
+        fetched="2026-01-01T00:00:00Z",
+    )
+    _write_raw_pages(
+        raw_dir,
+        [
+            {
+                "id": "https://openalex.org/W1",
+                "abstract_inverted_index": {"Plastic": [1], "A": [0]},
+                "topics": [{"id": "https://openalex.org/T1", "display_name": "Marine litter"}],
+                "primary_topic": {"display_name": "Ocean plastics"},
+            },
+            {"id": "https://openalex.org/W9", "abstract_inverted_index": {"x": [0]}},
+        ],
+        fetched="2026-02-01T00:00:00Z",
+    )
+    found = rx.read_raw_fields(raw_dir, {"W1", "W2"})
+    assert found == {
+        "W1": rx.RawWorkFields(
+            abstract="A Plastic",
+            topic_names=("Marine litter",),
+            primary_topic_name="Ocean plastics",
+        )
+    }

@@ -92,8 +92,12 @@ pins the California key sets. The module is `src/atlas/build/region_export.py`.
   registry institutions with that `country_code` that appear on a region work.
 - Every work has `screening_status: "unscreened_query_hit"`. `plastic_related`,
   California labels, paid author metrics and `ca_connection` are null or absent.
-- `domain_tags` and `facet_tags` are empty lists. Expert topics use the OpenAlex
-  primary topic name.
+- `domain_tags` and `facet_tags` come from the rule labeller (`atlas.nlp.labels`, the
+  same tag list as `config/taxonomy.yml`) run on title, abstract and OpenAlex topic names
+  (GP-4). The abstract is read from the raw pages in memory and never written. Authors
+  take the union of their works' domain tags; institutions take the union of their
+  works' domain and facet tags. Expert topics use the OpenAlex primary topic name.
+  Tags on region pages are plain text, not links to California pages.
 - `atlas_type` maps the OpenAlex type (company; nonprofit, funder, facility,
   archive and healthcare to `nonprofit/NGO`). Education and government map to `other`.
 - `lat`, `lon` and `city` are null. `scope` is `region` and `ca_flag` is false.

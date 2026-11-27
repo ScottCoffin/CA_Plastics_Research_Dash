@@ -14,9 +14,12 @@ Differences, all recorded in the ``method`` note:
 - Works are region works (``work_regions`` rows of kind ``country`` with the region's ISO code).
   Every work carries ``screening_status: "unscreened_query_hit"``; ``plastic_related`` is null
   because no relevance review exists outside the reference region.
-- Reference-only fields (labels, paid author metrics, CA connection) are null. ``domain_tags`` and
-  ``facet_tags`` are empty lists because the reference labels need abstracts and classifiers that
-  the partition does not hold. Expert topics use the OpenAlex primary topic name instead.
+- Reference-only fields (labels, paid author metrics, reference connection) are null.
+  ``domain_tags`` and ``facet_tags`` come from the reference rule labeller (``atlas.nlp.labels``)
+  run on title and abstract, with the OpenAlex topic names, as the reference pipeline does. The
+  abstract comes from the latest raw page and is used in memory only: it is never written here.
+  Authors take the union of their region works' domain tags; institutions take the union of
+  their works' domain and facet tags. Expert topics use the OpenAlex primary topic name instead.
 - ``atlas_type`` maps the OpenAlex institution type to the reference vocabulary. Education and
   government institutions map to ``other`` because the partition does not say whether they are
   public or private, or which government level they belong to.
@@ -38,7 +41,22 @@ from typing import Any
 
 import pyarrow.parquet as pq
 
+from atlas.build.global_graphs import (
+    _abstract_text,
+    _iter_works,
+    _ordered_pages,
+    _short_id,
+)
 from atlas.build.region_pages import SCREENING_STATUS, read_work_countries
+from atlas.ingest.abstract_qc import misattached_abstract_ids
+from atlas.nlp.labels import (
+    PLASTIC_CHEMICALS_TAG,
+    _load_yaml,
+    _raw_topic_info,
+    _taxonomy_tags,
+    always_relevant,
+    classify_plastic_text,
+)
 
 # Same value as atlas.build.export_site.SCHEMA_VERSION (test_region_export pins it).
 SCHEMA_VERSION = "s3.1"
@@ -47,6 +65,9 @@ TOP_EXPERTS = 3
 TOP_TOPICS = 5
 REGION_BUDGET_BYTES = 20_000_000
 OTHER_ATLAS_TYPE = "other"
+REPO_ROOT = Path(__file__).resolve().parents[3]
+DEFAULT_RAW_DIR = REPO_ROOT / "data" / "raw" / "openalex_global"
+DEFAULT_CONFIG_DIR = REPO_ROOT / "config"
 
 # OpenAlex institution ``type`` -> reference atlas_type. The nonprofit/NGO group matches the ROR
 # rule in atlas.ingest.institutions.classify_atlas_type. Anything absent (education, government,
@@ -63,7 +84,8 @@ ATLAS_TYPE_BY_OPENALEX_TYPE = {
 METHOD_NOTE = (
     "Region export (GP-5). Works are region works (country work_regions rows) and are unscreened "
     "query hits (screening_status). plastic_related and reference-only fields are null; "
-    "domain_tags and facet_tags are empty; lat, lon and city are null. atlas_type maps the "
+    "domain_tags and facet_tags come from the reference rule labeller (title and abstract, with "
+    "OpenAlex topic names); lat, lon and city are null. atlas_type maps the "
     "OpenAlex type (education and government map to other). Expert topics are OpenAlex primary "
     "topics."
 )
@@ -200,13 +222,25 @@ AUTHORSHIP_COLUMNS = [
 
 
 @dataclass(frozen=True)
+class RawWorkFields:
+    """Labeller inputs from a work's latest raw page: abstract (in memory only), topic names."""
+
+    abstract: str | None = None
+    topic_names: tuple[str, ...] = ()
+    primary_topic_name: str = ""
+
+
+@dataclass(frozen=True)
 class RegionInputs:
-    """Partition rows for the region: works, work_regions, authorships and institutions."""
+    """Partition rows for the region plus the labeller inputs (raw fields, rule configs)."""
 
     works: list[Mapping[str, Any]]
     work_regions: list[Mapping[str, Any]]
     authorships: list[Mapping[str, Any]]
     institutions: list[Mapping[str, Any]]
+    raw: Mapping[str, RawWorkFields] = field(default_factory=dict)
+    query_config: Mapping[str, Any] = field(default_factory=dict)
+    taxonomy: Mapping[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -251,8 +285,40 @@ def atlas_type_for(openalex_type: object) -> str:
     return ATLAS_TYPE_BY_OPENALEX_TYPE.get(key, OTHER_ATLAS_TYPE)
 
 
-def read_inputs(partition_dir: str | Path, iso: str) -> RegionInputs:
-    """Read the partition files for one country code, filtering works and authorships by region."""
+def _raw_fields(record: Mapping[str, Any]) -> RawWorkFields:
+    topic_names, primary = _raw_topic_info(record)
+    return RawWorkFields(
+        abstract=_text(_abstract_text(record.get("abstract_inverted_index"))),
+        topic_names=tuple(topic_names.values()),
+        primary_topic_name=primary,
+    )
+
+
+def read_raw_fields(raw_dir: str | Path, work_ids: AbstractSet[str]) -> dict[str, RawWorkFields]:
+    """Labeller inputs for the given works from the raw pages; the latest page wins."""
+    wanted = set(work_ids)
+    found: dict[str, RawWorkFields] = {}
+    headers, _, _ = _ordered_pages(raw_dir)
+    for _, path in headers:
+        for record in _iter_works(path):
+            work_id = _short_id(record.get("id"))
+            if work_id in wanted:
+                found[work_id] = _raw_fields(record)
+    return found
+
+
+def read_inputs(
+    partition_dir: str | Path,
+    iso: str,
+    *,
+    raw_dir: str | Path = DEFAULT_RAW_DIR,
+    config_dir: str | Path = DEFAULT_CONFIG_DIR,
+) -> RegionInputs:
+    """Read the partition files for one country code, filtering works and authorships by region.
+
+    Also reads each region work's raw-page fields (abstract, topic names) and the rule configs
+    (``queries.yml``, ``taxonomy.yml``) that the reference labeller uses.
+    """
     folder = Path(partition_dir)
     work_regions = pq.read_table(folder / "work_regions.parquet").to_pylist()
     region_ids = sorted(
@@ -276,9 +342,40 @@ def read_inputs(partition_dir: str | Path, iso: str) -> RegionInputs:
         for row in pq.read_table(folder / "institutions.parquet").to_pylist()
         if _country(row.get("country_code")) == iso.upper()
     ]
+    raw = read_raw_fields(raw_dir, {w["work_id"] for w in works}) if works else {}
     return RegionInputs(
-        works=works, work_regions=work_regions, authorships=authorships, institutions=institutions
+        works=works,
+        work_regions=work_regions,
+        authorships=authorships,
+        institutions=institutions,
+        raw=raw,
+        query_config=_load_yaml(Path(config_dir) / "queries.yml"),
+        taxonomy=_load_yaml(Path(config_dir) / "taxonomy.yml"),
     )
+
+
+def _work_tags(
+    title: str,
+    abstract: str | None,
+    raw: RawWorkFields | None,
+    query_config: Mapping[str, Any],
+    taxonomy: Mapping[str, Any],
+) -> tuple[list[str], list[str]]:
+    """Domain and facet tags for one work: the reference labeller rule on title and abstract."""
+    text = " ".join(value for value in (title, abstract) if value)
+    decision = classify_plastic_text(text, query_config)
+    tier = decision.tier
+    if not decision.related and always_relevant(text, query_config):
+        tier = "always"  # the reference owner rule for micro-nano plastics (label_records)
+    topic_names = [*(raw.topic_names if raw else ()), raw.primary_topic_name if raw else ""]
+    domain_tags, facet_tags = _taxonomy_tags(text, topic_names, taxonomy, title=title)
+    if tier == "chemicals-in-plastics":
+        domain_tags = sorted({*domain_tags, PLASTIC_CHEMICALS_TAG})
+    return domain_tags, facet_tags
+
+
+def _sorted_union(tag_lists: Iterable[Iterable[str]]) -> list[str]:
+    return sorted({tag for tags in tag_lists for tag in tags if tag})
 
 
 def _ordered(rows: Iterable[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
@@ -327,6 +424,17 @@ def build_region_export(
     )
 
     # Per work: ordered distinct authors, institution ids, and a full and index record.
+    # Abstracts OpenAlex attached to unrelated works are blanked before labelling (abstract QC).
+    abstract_of = {w: inputs.raw[w].abstract if w in inputs.raw else None for w in included}
+    shared = misattached_abstract_ids(
+        {
+            "work_id": w,
+            "title": works_by_id[w].get("title"),
+            "doi": works_by_id[w].get("doi"),
+            "abstract": abstract_of[w],
+        }
+        for w in included
+    )
     work_inst: dict[str, set[str]] = {}
     work_authors: dict[str, list[tuple[str | None, str]]] = {}
     full_work: dict[str, dict[str, Any]] = {}
@@ -353,6 +461,11 @@ def build_region_export(
                 works_at[(inst, aid)].add(wid)
         work_inst[wid] = insts
         work_authors[wid] = ordered_authors
+        title = _text(base.get("title")) or ""
+        abstract = None if wid in shared else abstract_of[wid]
+        domain_tags, facet_tags = _work_tags(
+            title, abstract, inputs.raw.get(wid), inputs.query_config, inputs.taxonomy
+        )
         full = {
             "abstract": None,
             "author_ids": [a for a, _ in ordered_authors if a],
@@ -361,8 +474,8 @@ def build_region_export(
             "ca_led": None,
             "cited_by_count": base.get("cited_by_count"),
             "doi": _text(base.get("doi")),
-            "domain_tags": [],
-            "facet_tags": [],
+            "domain_tags": domain_tags,
+            "facet_tags": facet_tags,
             "institution_ids": sorted(insts),
             "is_oa": None,
             "journal": None,
@@ -378,7 +491,7 @@ def build_region_export(
             "pub_date": _text(base.get("publication_date")),
             "screening_status": SCREENING_STATUS,
             "study_type": None,
-            "title": _text(base.get("title")) or "",
+            "title": title,
             "type": _text(base.get("type")),
             "work_id": wid,
             "year": base.get("publication_year"),
@@ -389,6 +502,8 @@ def build_region_export(
     author_rows = _index_authors(included, works_by_id, names, rows_by_work)
     indexed = {a["author_id"] for a in author_rows if a["work_count"] >= MIN_AUTHOR_WORKS}
     authors = [a for a in author_rows if a["author_id"] in indexed]
+    for row in authors:
+        row["domain_tags"] = _sorted_union(full_work[w]["domain_tags"] for w in row["work_ids"])
     inst_name = {i: _text(m.get("display_name")) or i for i, m in inst_meta.items()}
     author_files = _author_files(authors, full_work, rows_by_work, work_authors, inst_name)
 
@@ -414,7 +529,9 @@ def build_region_export(
             "author_count": len(author_count_by_inst.get(inst_id, set())),
             "ca_flag": False,
             "city": None,
-            "domain_tags": [],
+            "domain_tags": _sorted_union(
+                [*full_work[w]["domain_tags"], *full_work[w]["facet_tags"]] for w in here
+            ),
             "inst_id": inst_id,
             "lat": None,
             "lon": None,

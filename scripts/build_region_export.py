@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from atlas.build.region_export import (  # noqa: E402
+    DEFAULT_RAW_DIR,
     REGION_BUDGET_BYTES,
     build_region_export,
     compare_export,
@@ -53,6 +54,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--region", required=True, help="registry slug (not california)")
     parser.add_argument("--check", action="store_true", help="validate; exit 1 on problems")
     parser.add_argument("--partition-dir", type=Path, default=PARTITION)
+    parser.add_argument(
+        "--raw-dir", type=Path, default=DEFAULT_RAW_DIR, help="raw pages (labeller abstracts)"
+    )
     parser.add_argument("--out-dir", type=Path, help="default: the region's site_data_dir")
     parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY_PATH)
     args = parser.parse_args(argv)
@@ -79,19 +83,20 @@ def main(argv: list[str] | None = None) -> int:
     iso = codes[0]
     out_dir = args.out_dir or region_data_dir(region)
     partition_ready = all((args.partition_dir / name).is_file() for name in PARTITION_FILES)
+    raw_ready = (args.raw_dir / "pages").is_dir()
 
     if args.check:
         problems = validate_structure(out_dir) if out_dir.is_dir() else [f"missing {out_dir}"]
-        if partition_ready and not problems:
+        if partition_ready and raw_ready and not problems:
             export = build_region_export(
                 region.slug,
                 iso,
-                read_inputs(args.partition_dir, iso),
+                read_inputs(args.partition_dir, iso, raw_dir=args.raw_dir),
                 existing_generated_at(out_dir) or _now(),
             )
             problems += compare_export(out_dir, export)
-        elif not partition_ready:
-            print("SKIP: staleness check (partition not built)")
+        elif not (partition_ready and raw_ready):
+            print("SKIP: staleness check (partition or raw pages not built)")
         for problem in problems:
             print(f"FAIL: {problem}")
         if problems:
@@ -105,10 +110,13 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 1
+    if not raw_ready:
+        print(f"ERROR: raw pages not found under {args.raw_dir}/pages", file=sys.stderr)
+        return 1
     export = build_region_export(
         region.slug,
         iso,
-        read_inputs(args.partition_dir, iso),
+        read_inputs(args.partition_dir, iso, raw_dir=args.raw_dir),
         existing_generated_at(out_dir) or _now(),
     )
     sizes = write_export(out_dir, export)
