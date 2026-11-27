@@ -3,12 +3,16 @@
 import assert from "node:assert/strict";
 import {
   attachJournalMetrics,
+  authorIdsByName,
   authorLine,
+  authorLineHtml,
+  authorParts,
   citednessText,
   dateLabel,
   escapeHtml,
   filterRows,
   isRecent,
+  noAbstractText,
   normaliseRows,
   pageInfo,
   pageRows,
@@ -284,6 +288,46 @@ assert.equal(escapeHtml(null), "");
   assert.equal(citednessText(null), "");
   assert.equal(citednessText(undefined), "");
   assert.equal(citednessText(Number.NaN), "");
+}
+
+// GP-8b: region author links. Names in the region index map link to the profile; others stay plain text.
+// California passes an empty map, so its byline is the escaped authorLine text.
+{
+  const href = (id) => `expert.html#author=${encodeURIComponent(id)}`;
+  const index = {authors: [
+    {author_id: "A1", name: "Ada Lovelace"},
+    {author_id: "A2", name: "Grace Hopper"},
+    {author_id: "A3", name: "Twin Name"},
+    {author_id: "A4", name: "Twin Name"},
+    {author_id: "", name: "No Id"},
+    {author_id: "A5", name: "  "}
+  ]};
+  const idByName = authorIdsByName(index.authors);
+  assert.deepEqual([...idByName], [["Ada Lovelace", "A1"], ["Grace Hopper", "A2"]], "shared and blank names are not linked");
+
+  const row = work({authors: ["Ada Lovelace", "Twin Name", "Unlisted <Author>"], author_count: 3});
+  assert.equal(
+    authorLineHtml(row, idByName, href),
+    '<a href="expert.html#author=A1">Ada Lovelace</a>, Twin Name, Unlisted &lt;Author&gt;',
+    "region row: only the listed author links"
+  );
+  assert.equal(authorLineHtml(row, new Map(), href), escapeHtml(authorLine(row)), "reference region: plain text only");
+  assert.equal(authorLineHtml(row, null, href), escapeHtml(authorLine(row)));
+
+  const long = work({authors: ["Ada Lovelace", "Grace Hopper"], author_count: 9});
+  assert.equal(authorLine(long), "Ada Lovelace, Grace Hopper et al. (9 authors)");
+  assert.equal(
+    authorLineHtml(long, idByName, href),
+    '<a href="expert.html#author=A1">Ada Lovelace</a>, <a href="expert.html#author=A2">Grace Hopper</a> et al. (9 authors)'
+  );
+  assert.deepEqual(authorParts(long), {names: ["Ada Lovelace", "Grace Hopper"], more: "et al. (9 authors)"});
+  assert.deepEqual(authorParts(work({authors: [], author_count: 0})), {names: [], more: ""});
+  assert.equal(authorLineHtml(work({authors: []}), idByName, href), "");
+
+  // The abstract note: the region wording differs from the reference wording.
+  assert.equal(noAbstractText("norway"), "Abstract not shown for this region yet.");
+  assert.equal(noAbstractText("belgium"), "Abstract not shown for this region yet.");
+  assert.equal(noAbstractText("california"), "No abstract available");
 }
 
 console.log("framework_ev_table_runtime: all checks passed");

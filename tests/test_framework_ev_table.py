@@ -61,7 +61,7 @@ def test_view_reuses_supplied_normalized_rows_and_keeps_fetch_fallback() -> None
         model,
     )
     assert "resolveWorksRows," in view
-    assert "resolveWorksRows(initialRows, loadJson).then(setLoadedRows).catch" in view
+    assert "Promise.all([resolveWorksRows(initialRows, loadJson), authorIdsReady()])" in view
 
 
 def test_view_loads_payloads_lazily_and_imports_shared_helpers() -> None:
@@ -72,8 +72,9 @@ def test_view_loads_payloads_lazily_and_imports_shared_helpers() -> None:
     # The abstracts file is fetched from the abstract toggle, not at mount time.
     assert text.index("function fillAbstract") < text.index("loadAbstracts().then")
     assert text.count('loadJson("work_text/abstracts.json")') == 1
-    assert "No abstract available" in text
+    assert "noAbstractText(regionSlug())" in text
     assert "No works match these filters." in text
+    assert "No abstract available" in MODEL.read_text(encoding="utf-8")
 
 
 def test_view_imports_only_local_modules() -> None:

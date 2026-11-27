@@ -1,14 +1,16 @@
 // Publication table and "New in the last 2 weeks" callout for the Evidence map (EV-TABLE).
 // Plain DOM; the filtering, sorting and paging rules live in ev_table_model.js.
 import "./shared/topics.js";
-import {loadJson, regionSlug} from "./atlas.js";
+import {loadJson, pageUrl, regionSlug} from "./atlas.js";
 import {
   DEFAULT_DIRS,
-  authorLine,
+  authorIdsByName,
+  authorLineHtml,
   citednessText,
   dateLabel,
   escapeHtml,
   filterRows,
+  noAbstractText,
   normaliseRows,
   pageInfo,
   pageRows,
@@ -71,7 +73,7 @@ function linkLinks(row) {
 }
 
 function abstractHtml(row, title) {
-  if (!row.has_abstract) return `<p class="ev-no-abstract">No abstract available</p>`;
+  if (!row.has_abstract) return `<p class="ev-no-abstract">${escapeHtml(noAbstractText(regionSlug()))}</p>`;
   return `<details class="ev-abstract" data-id="${escapeHtml(row.work_id)}">`
     + `<summary>Abstract<span class="ev-sr-only"> for ${escapeHtml(title)}</span></summary>`
     + `<p class="ev-abstract-text">Loading abstract…</p></details>`;
@@ -83,14 +85,28 @@ function citednessHtml(row) {
   return text ? escapeHtml(text) : `<span class="ev-none">&ndash;<span class="ev-sr-only"> no value</span></span>`;
 }
 
-function rowHtml(row, isNew, metricsColumn = false) {
+// Region pages link author names to their profile (expert.html) when the region index lists the author.
+function expertHref(authorId) {
+  return pageUrl(`expert.html#author=${encodeURIComponent(authorId)}`);
+}
+
+// Resolves to the name -> author_id map. California keeps plain names; a failed index load leaves them
+// unlinked and the table still loads.
+function authorIdsReady() {
+  if (regionSlug() === "california") return Promise.resolve(new Map());
+  return loadJson("index.json", {optional: true})
+    .then((payload) => authorIdsByName(payload && payload.authors))
+    .catch(() => new Map());
+}
+
+function rowHtml(row, isNew, metricsColumn = false, authorIds = null) {
   const title = row.title || "Untitled work";
   const badge = isNew ? ` <span class="ev-badge">New</span>` : "";
   const journal = row.journal ? escapeHtml(row.journal) : "";
   return `<tr>`
     + `<td>${escapeHtml(dateLabel(row))}</td>`
     + `<td><span class="ev-title">${escapeHtml(title)}</span>${badge}`
-    + `<div class="ev-authors">${escapeHtml(authorLine(row))}</div>${abstractHtml(row, title)}</td>`
+    + `<div class="ev-authors">${authorLineHtml(row, authorIds, expertHref)}</div>${abstractHtml(row, title)}</td>`
     + `<td>${journal}</td>`
     + `<td><div class="topic-chips">${topicChips(row)}</div></td>`
     + `<td class="num">${row.cited_by_count.toLocaleString("en-US")}</td>`
@@ -167,7 +183,7 @@ export function mountWorksTable(
     next: q("next"),
     range: q("range")
   };
-  const state = {loaded: false, rows: [], ids: null, sortKey: "pub_date", sortDir: DEFAULT_DIRS.pub_date, page: 1};
+  const state = {loaded: false, rows: [], ids: null, authorIds: new Map(), sortKey: "pub_date", sortDir: DEFAULT_DIRS.pub_date, page: 1};
   const openIds = new Set();
 
   const filters = () => ({
@@ -193,7 +209,7 @@ export function mountWorksTable(
         return;
       }
       const text = Object.prototype.hasOwnProperty.call(abstracts, id) ? abstracts[id] : "";
-      target.textContent = typeof text === "string" && text.trim() ? text.trim() : "No abstract available";
+      target.textContent = typeof text === "string" && text.trim() ? text.trim() : noAbstractText(regionSlug());
     });
   }
 
@@ -214,7 +230,7 @@ export function mountWorksTable(
     const items = pageRows(all, info.page);
     const recentIds = new Set(recentRows(all, today).map((row) => row.work_id));
     el.rows.innerHTML = items.length
-      ? items.map((row) => rowHtml(row, recentIds.has(row.work_id), metricsColumn)).join("")
+      ? items.map((row) => rowHtml(row, recentIds.has(row.work_id), metricsColumn, state.authorIds)).join("")
       : `<tr><td class="ev-empty" colspan="${columnCount}">No works match these filters.</td></tr>`;
     el.rows.querySelectorAll("details.ev-abstract").forEach((details) => {
       details.addEventListener("toggle", () => {
@@ -294,10 +310,15 @@ export function mountWorksTable(
     el.status.textContent = "";
     render();
   };
-  const ready = resolveWorksRows(initialRows, loadJson).then(setLoadedRows).catch(() => {
-    el.status.textContent = "The works list is unavailable right now.";
-    el.rows.innerHTML = "";
-  });
+  const ready = Promise.all([resolveWorksRows(initialRows, loadJson), authorIdsReady()])
+    .then(([rows, authorIds]) => {
+      state.authorIds = authorIds;
+      setLoadedRows(rows);
+    })
+    .catch(() => {
+      el.status.textContent = "The works list is unavailable right now.";
+      el.rows.innerHTML = "";
+    });
 
   return {
     ready,

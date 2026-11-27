@@ -239,13 +239,49 @@ export function pageRows(rows, page = 1, size = PAGE_SIZE) {
 }
 
 // "A, B, C et al. (27 authors)" when the byline is longer than max; otherwise the full list.
-export function authorLine(row, max = 6) {
+export function authorParts(row, max = 6) {
   const names = Array.isArray(row && row.authors) ? row.authors : [];
-  if (!names.length) return "";
+  if (!names.length) return {names: [], more: ""};
   const total = Math.max(names.length, Number(row.author_count) || 0);
   const limit = Math.max(1, Math.floor(max));
-  if (total <= limit && names.length <= limit) return names.join(", ");
-  return `${names.slice(0, limit).join(", ")} et al. (${total} authors)`;
+  if (total <= limit && names.length <= limit) return {names, more: ""};
+  return {names: names.slice(0, limit), more: `et al. (${total} authors)`};
+}
+
+export function authorLine(row, max = 6) {
+  const {names, more} = authorParts(row, max);
+  if (!names.length) return "";
+  return more ? `${names.join(", ")} ${more}` : names.join(", ");
+}
+
+// name -> author_id from a region index.json authors list. A name shared by two different authors is
+// left out, so a link never opens the wrong profile. Blank names and ids are skipped.
+export function authorIdsByName(authors) {
+  const byName = new Map();
+  for (const author of Array.isArray(authors) ? authors : []) {
+    const id = textOf(author && author.author_id);
+    const name = textOf(author && author.name);
+    if (!id || !name) continue;
+    const prior = byName.get(name);
+    byName.set(name, prior === undefined || prior === id ? id : null);
+  }
+  return new Map([...byName].filter(([, id]) => id !== null));
+}
+
+// Byline HTML. A name in idByName links to hrefFor(author_id); other names are plain text. With an
+// empty map the result is the escaped authorLine text.
+export function authorLineHtml(row, idByName, hrefFor, max = 6) {
+  const {names, more} = authorParts(row, max);
+  const shown = names.map((name) => {
+    const id = idByName ? idByName.get(name) : undefined;
+    return id ? `<a href="${escapeHtml(hrefFor(id))}">${escapeHtml(name)}</a>` : escapeHtml(name);
+  });
+  return [shown.join(", "), escapeHtml(more)].filter(Boolean).join(" ");
+}
+
+// Region rows never carry abstract text yet, so their wording says the abstract is not shown.
+export function noAbstractText(slug) {
+  return slug === "california" ? "No abstract available" : "Abstract not shown for this region yet.";
 }
 
 // "12 Nov 2026" when the full date is known, otherwise the year, otherwise a plain note.
