@@ -1,29 +1,28 @@
-# Handoff — 2026-11-26 — Reviews applied, favicon, roster QC in tagging, enrichment approved
+# Handoff — 2026-11-26 (late) — Groups views, enrichment, parity plan and California contract
 
-## Done this session
+## Done this session (all pushed, CI green unless noted)
 
-- H59: D1 0008 and Worker 5a5f52e9 (CG-7b sampling, reviews, export); CG-7c review screen live; CG-7 closed. GRP-REVIEW-APPLY (08fcc839): complete reviewer checks publish edited values, status `reviewed`, `reviewed_at`.
-- FAVICON-MAIN (cf7cb43b, 21699abf): `scripts/build_favicons.py [--check]` (pixel-tolerant: Linux and Windows Pillow encode differently); sun crop at small sizes, full mark at 180/512; root favicon.ico and apple-touch-icon.png.
-- GRP-ENRICH spike: `docs/GROUP_ENRICHMENT_OPTIONS.md`; owner H61 "suggestions OK" (ADR-GRP-ENRICH-2026-11-26).
-- AMB-ROSTER-QC (this commit and 5039bc3d, f03f1422): `roster_qc.json` (213 pairs, 31 suspect names; ids and reason codes only); Worker b2e7b4b5 accepts `same_as` and exports per-pair rater tokens (H60); the tagging form asks up to 3 optional duplicate questions and opens the name correction for suspect names; the export records answers in `curation/group_dupe_answers.csv` and appends `group_merges.csv` rows (newest lead/owner answer decides, else two distinct agreeing raters with no dissent; existing rows never change).
-- H62: the owner's 5 review-app merge decisions are committed.
+- CG-7b/7c live (H59: D1 0008, Worker 5a5f52e9); GRP-REVIEW-APPLY; FAVICON-MAIN; AMB-ROSTER-QC (H60: Worker b2e7b4b5); H62 owner merges committed.
+- GRP-ENRICH (H61 suggestions OK, ADR-GRP-ENRICH): slice 1 `suggestions.json` (Wikidata, 319 groups), slice 2 form hints + register links + methods attribution, slice 3 `register_suggestions.json` (IRS EO BMF, 190 US groups, NTEE hints). Register licences: IRS and CRA usable; UK and ACNC need a manual wording check; BE, NO, IN not used.
+- CG-12 and CG-12b: /groups coverage + map, heatmaps, two-level treemap, evidence panel, flows, participation, combinations, languages (browser-verified with a fixture, axe 0 at 1440/390).
+- GP-0 `docs/GLOBAL_PARITY.md` (21 rows, slices GP-2..GP-10); GP-1 `scripts/check_gp1_contract.py` + `config/gp1_california_contract.json` (17 routes, 257,265 links, 0 broken).
+- Owner direction recorded as GP-GROUPS (ADR-GP-GROUPS-2026-11-26): groups map first, /explore-style drill-down, scoped views, shared look.
 
-## State of the repo
+## State
 
-- Strict clean-worktree gates green for every checkpoint; hosted CI green through f6772b1c. Worker 241 tests. Production: Worker b2e7b4b5, D1 0008.
+- Production: Worker b2e7b4b5, D1 0008. Strict clean-worktree gate 4,013 passed at 60b69558.
 
-## Next task
+## Next tasks (eligible, in order)
 
-1. GRP-ENRICH slice 1: `scripts/build_group_suggestions.py [--check]` (Wikidata SPARQL, ≤1 req/s, UA `PlastiverseLive/<ver> (https://plastiverse.live)`, cache under ignored `data/interim/group_enrichment/`; website-domain match first, then English label with a country check, AF = unknown; no any-language search) -> public `site/data/global/groups/suggestions.json` (qid, website, inception year, type). Reuse `scratch/group_enrichment/wikidata_spike.py` (measured 42/47 domain matches correct).
-2. Slice 2: form "Suggestions to check" plus per-country register search links; methods attribution line. Slice 3: IRS NTEE sector suggestions (US); verify BE/NO/IN/Charity Commission licences live first.
-3. Then the remaining CG views (CG-12, CG-12b) and the owner-priority Norway/Belgium work.
+1. GRP-ENRICH slice 3b: show `register_suggestions.json` hints (registered name, EIN link to IRS, ruling year, NTEE-derived sector/activity hints labelled as hints) in the form's suggestions box, like slice 2.
+2. GP-2 (author list + profile per region, L) per docs/GLOBAL_PARITY.md section 4; run `scripts/check_gp1_contract.py --site <assembled>` before and after.
+3. GP-GROUPS after GP-2 or alongside, reusing explore.js shell patterns.
 
 ## Gotchas
 
-- With a local raw cache, `build_groups_roster.py --check` needs `--incremental`. A hand commit of `curation/group_merges.csv` needs `scripts/build_roster_qc.py` rerun (CI checks it).
-- Byte-exact checks of generated images or CRLF-prone text break in clean checkouts or on Linux: compare pixels, write single-line SVG.
-- Never pipe a gate check through tail in an && chain (LESSONS).
+- Tests run on Linux CI: use `sys.executable`, never `py` (LESSONS). Chart views: verify in Chromium with a populated fixture (`scratch/cg12_smoke.py`), node stubs miss Plot/d3 issues (LESSONS).
+- `build_groups_roster.py --check` needs `--incremental` locally; a hand commit of group_merges.csv needs `build_roster_qc.py` rerun.
 
 ## Needs owner input
 
-- None new. Open reviews: H39, H28, H42, H2, H9; H58 optional.
+- None new. Open: H39, H28, H42, H2, H9; H58 optional. Manual check of the UK Charity Commission and ACNC licence wording (pages returned 403 to the agent).
