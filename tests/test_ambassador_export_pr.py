@@ -48,12 +48,17 @@ def work(tmp_path: Path) -> Path:
     )
     (tmp_path / "curation" / "group_double_tags.csv").write_text(DOUBLE_TAG_HEADER, "utf-8")
     (tmp_path / "curation" / "group_reviews.csv").write_text(REVIEW_HEADER, "utf-8")
+    (tmp_path / "curation" / "group_dupe_answers.csv").write_text(DUPE_HEADER, "utf-8")
+    (tmp_path / "curation" / "group_merges.csv").write_text(MERGE_HEADER, "utf-8")
+    (tmp_path / "roster.json").write_text(json.dumps({"records": ROSTER}), "utf-8")
     shutil.copy(FIXTURES / "export.json", tmp_path / "export.json")
     return tmp_path
 
 
 DOUBLE_TAG_HEADER = "group_id,facet,value_a,value_b\n"
 REVIEW_HEADER = "group_id,facet,outcome,reason_code,reviewed_at\n"
+DUPE_HEADER = "group_id_a,group_id_b,rater,answer,by_moderator,answered_at\n"
+MERGE_HEADER = "group_id_keep,group_id_drop,decided_at,decision\n"
 
 
 def _args(root: Path, *extra: str) -> list[str]:
@@ -80,6 +85,12 @@ def _args(root: Path, *extra: str) -> list[str]:
         str(root / "curation" / "group_double_tags.csv"),
         "--group-reviews-file",
         str(root / "curation" / "group_reviews.csv"),
+        "--group-dupe-answers-file",
+        str(root / "curation" / "group_dupe_answers.csv"),
+        "--group-merges-file",
+        str(root / "curation" / "group_merges.csv"),
+        "--roster-file",
+        str(root / "roster.json"),
         *extra,
     ]
 
@@ -1030,3 +1041,345 @@ def test_tier1_order_matches_the_group_build() -> None:
     from atlas.groups.build import TIER1_FACETS
 
     assert tuple(MOD.GROUP_TIER1) == tuple(TIER1_FACETS) == TIER1
+
+
+# ---------------------------------------------------------------- same_as answers and merges
+
+GROUP_C = "cg_aaaaaaaaaaaaaaaa"
+RATER_1 = "1111111111111111"
+RATER_2 = "2222222222222222"
+RATER_3 = "3333333333333333"
+# Keeper rule: a website beats none, then a longer name wins. Ids sort A < B < C.
+ROSTER = [
+    {
+        "group_id": GROUP_A,
+        "name": "Coastal Cleanup Collective",
+        "url": "https://coastal.example/",
+        "country": "US",
+        "name_alt": [],
+    },
+    {
+        "group_id": GROUP_B,
+        "name": "Coast Cleanup",
+        "url": "https://coast.example/",
+        "country": "US",
+        "name_alt": [],
+    },
+    {"group_id": GROUP_C, "name": "Beach Watch Org", "url": None, "country": "US", "name_alt": []},
+]
+
+
+def _answer(other: str, rater: str, answer: str = "same", by_moderator: bool = False) -> dict:
+    return {"group_id": other, "rater": rater, "answer": answer, "by_moderator": by_moderator}
+
+
+def _dry_export(root: Path, submissions: list[dict]) -> int:
+    body = {"ok": True, "submissions": submissions, "case_answers": [], "institutions": []}
+    (root / "export.json").write_text(json.dumps(body), "utf-8")
+    return MOD.main(_args(root, "--dry-run"))
+
+
+def _merge_rows(root: Path) -> list[dict]:
+    return _csv_of(root, "group_merges.csv")
+
+
+def test_answers_are_recorded_and_upserted_per_rater(work: Path) -> None:
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_1)]),
+            _ms("2026-11-20", 10),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_1, "different")]),
+            _ms("2026-11-20", 11),
+        ),
+        _sub(
+            3,
+            "group_tag",
+            _tag(GROUP_B, same_as=[_answer(GROUP_A, RATER_2, "unsure")]),
+            _ms("2026-11-20", 12),
+        ),
+    ]
+    assert _export(work, submissions) == 0
+    assert _csv_of(work, "group_dupe_answers.csv") == [
+        {
+            "group_id_a": GROUP_A,
+            "group_id_b": GROUP_B,
+            "rater": RATER_1,
+            "answer": "different",
+            "by_moderator": "false",
+            "answered_at": "2026-11-20T11:00:00Z",
+        },
+        {
+            "group_id_a": GROUP_A,
+            "group_id_b": GROUP_B,
+            "rater": RATER_2,
+            "answer": "unsure",
+            "by_moderator": "false",
+            "answered_at": "2026-11-20T12:00:00Z",
+        },
+    ]
+    # One rater said different and the other unsure, so the pair has no decision.
+    assert _merge_rows(work) == []
+
+
+def test_two_agreeing_raters_write_a_merge_row_with_the_longer_name_as_keeper(work: Path) -> None:
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_1)]),
+            _ms("2026-11-20", 10),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_B, same_as=[_answer(GROUP_A, RATER_2)]),
+            _ms("2026-11-20", 14),
+        ),
+    ]
+    assert _export(work, submissions) == 0
+    assert _merge_rows(work) == [
+        {
+            "group_id_keep": GROUP_A,
+            "group_id_drop": GROUP_B,
+            "decided_at": "2026-11-20T14:00:00Z",
+            "decision": "same",
+        }
+    ]
+
+
+def test_one_moderator_answer_decides_over_two_raters(work: Path) -> None:
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_C, same_as=[_answer(GROUP_A, RATER_2)]),
+            _ms("2026-11-20", 9),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_C, same_as=[_answer(GROUP_A, RATER_3)]),
+            _ms("2026-11-20", 10),
+        ),
+        _sub(
+            3,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_C, RATER_1, "different", True)]),
+            _ms("2026-11-20", 11),
+        ),
+    ]
+    assert _export(work, submissions) == 0
+    # "different" keeps the smaller id, GROUP_A.
+    assert _merge_rows(work) == [
+        {
+            "group_id_keep": GROUP_A,
+            "group_id_drop": GROUP_C,
+            "decided_at": "2026-11-20T11:00:00Z",
+            "decision": "different",
+        }
+    ]
+
+
+def test_conflicting_answers_give_no_merge_row(work: Path) -> None:
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_1)]),
+            _ms("2026-11-20", 9),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_2)]),
+            _ms("2026-11-20", 10),
+        ),
+        _sub(
+            3,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_3, "different")]),
+            _ms("2026-11-20", 11),
+        ),
+    ]
+    assert _export(work, submissions) == 0
+    assert len(_csv_of(work, "group_dupe_answers.csv")) == 3
+    assert _merge_rows(work) == []
+
+
+def test_unsure_answers_are_ignored_for_the_decision(work: Path) -> None:
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_1)]),
+            _ms("2026-11-20", 9),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_2, "unsure")]),
+            _ms("2026-11-20", 10),
+        ),
+        _sub(
+            3,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_3, "unsure")]),
+            _ms("2026-11-20", 11),
+        ),
+    ]
+    assert _export(work, submissions) == 0
+    assert len(_csv_of(work, "group_dupe_answers.csv")) == 3
+    assert _merge_rows(work) == []
+
+
+def test_existing_decided_pair_is_left_alone(work: Path) -> None:
+    existing = MERGE_HEADER + f"{GROUP_B},{GROUP_A},2026-11-01T00:00:00Z,different\n"
+    (work / "curation" / "group_merges.csv").write_text(existing, "utf-8")
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_1)]),
+            _ms("2026-11-20", 9),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_B, same_as=[_answer(GROUP_A, RATER_2)]),
+            _ms("2026-11-20", 10),
+        ),
+    ]
+    assert _export(work, submissions) == 0
+    assert _text(work, "group_merges.csv") == existing
+
+
+def test_missing_roster_id_skips_the_pair_with_a_reason(work: Path, capsys) -> None:
+    roster = [record for record in ROSTER if record["group_id"] != GROUP_C]
+    (work / "roster.json").write_text(json.dumps({"records": roster}), "utf-8")
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_C, RATER_1)]),
+            _ms("2026-11-20", 9),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_C, same_as=[_answer(GROUP_A, RATER_2)]),
+            _ms("2026-11-20", 10),
+        ),
+    ]
+    assert _export(work, submissions) == 0
+    out = capsys.readouterr().out
+    assert f"skip merge {GROUP_A} / {GROUP_C}: {GROUP_C} is not on the roster" in out
+    assert _merge_rows(work) == []
+
+
+def test_invalid_answers_are_skipped_with_reason_and_the_tag_still_applies(
+    work: Path, capsys
+) -> None:
+    payload = _tag(
+        GROUP_A,
+        same_as=[
+            {"group_id": "cg_nothex", "rater": RATER_1, "answer": "same", "by_moderator": False},
+            _answer(GROUP_B, "xyz"),
+            _answer(GROUP_B, RATER_1, "maybe"),
+            {"group_id": GROUP_B, "rater": RATER_1, "answer": "same", "by_moderator": "yes"},
+            _answer(GROUP_A, RATER_1),
+        ],
+    )
+    assert _export(work, [_sub(1, "group_tag", payload, _ms("2026-11-20"))]) == 0
+    out = capsys.readouterr().out
+    assert "invalid group_id" in out
+    assert "invalid rater" in out
+    assert "invalid answer" in out
+    assert "invalid by_moderator" in out
+    assert out.count("same_as answer skipped") == 5
+    assert [r["group_id"] for r in _csv_of(work, "group_tags.csv")] == [GROUP_A]
+    assert _csv_of(work, "group_dupe_answers.csv") == []
+
+
+def test_same_as_that_is_not_a_list_is_skipped_and_the_tag_applies(work: Path, capsys) -> None:
+    payload = _tag(GROUP_A, same_as="B")
+    assert _export(work, [_sub(1, "group_tag", payload, _ms("2026-11-20"))]) == 0
+    assert "same_as skipped: invalid same_as" in capsys.readouterr().out
+    assert [r["group_id"] for r in _csv_of(work, "group_tags.csv")] == [GROUP_A]
+
+
+def test_no_ambassador_id_or_email_reaches_the_answer_csv(work: Path) -> None:
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_1)]),
+            _ms("2026-11-20", 9),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_B, same_as=[_answer(GROUP_A, RATER_2)]),
+            _ms("2026-11-20", 10),
+        ),
+    ]
+    assert _export(work, submissions) == 0
+    for name in ("group_dupe_answers.csv", "group_merges.csv"):
+        text = _text(work, name)
+        assert AMBASSADOR_ID not in text
+        assert "@" not in text
+
+
+def test_dry_run_writes_no_answer_or_merge_file_and_counts_them(work: Path, capsys) -> None:
+    names = ("group_dupe_answers.csv", "group_merges.csv")
+    before = {name: _text(work, name) for name in names}
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_1)]),
+            _ms("2026-11-20", 9),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_B, same_as=[_answer(GROUP_A, RATER_2)]),
+            _ms("2026-11-20", 10),
+        ),
+    ]
+    assert _dry_export(work, submissions) == 0
+    out = capsys.readouterr().out
+    assert "applied 2 x groups dupe_answer" in out
+    assert "applied 1 x groups merge_decision" in out
+    assert {name: _text(work, name) for name in names} == before
+
+
+def test_existing_merge_rows_keep_their_bytes(work: Path) -> None:
+    existing = (
+        MERGE_HEADER
+        + f"{GROUP_B},{GROUP_C},2026-11-01T00:00:00Z,same\n"
+        + f"{GROUP_C},{GROUP_A},2026-11-02T00:00:00Z,different\n"
+    )
+    (work / "curation" / "group_merges.csv").write_text(existing, "utf-8")
+    submissions = [
+        _sub(
+            1,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_1, "different")]),
+            _ms("2026-11-20", 9),
+        ),
+        _sub(
+            2,
+            "group_tag",
+            _tag(GROUP_A, same_as=[_answer(GROUP_B, RATER_2, "different")]),
+            _ms("2026-11-20", 10),
+        ),
+    ]
+    assert _export(work, submissions) == 0
+    text = _text(work, "group_merges.csv")
+    assert text == existing + f"{GROUP_A},{GROUP_B},2026-11-20T10:00:00Z,different\n"

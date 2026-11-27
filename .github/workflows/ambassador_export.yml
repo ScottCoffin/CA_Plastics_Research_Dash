@@ -92,6 +92,8 @@ jobs:
             curation/group_name_corrections.csv
             curation/group_double_tags.csv
             curation/group_reviews.csv
+            curation/group_dupe_answers.csv
+            curation/group_merges.csv
             site/data/global/groups/roster.json
             site/data/global/groups/roster_manifest.json
             site/data/global/groups/groups.json

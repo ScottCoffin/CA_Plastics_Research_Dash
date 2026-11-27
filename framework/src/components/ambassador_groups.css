@@ -19,6 +19,13 @@
 .am .g-chip-check:has(input:checked), .am .g-radio-chip:has(input:checked) { background: var(--pv-wash); font-weight: 600; }
 .am label.g-chip-check input[type], .am label.g-radio-chip input[type] { display: block; width: 16px; height: 16px; min-width: 16px; margin: 0; padding: 0; flex: none; accent-color: var(--pv-ink); }
 .am .g-radio-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.am .g-same-as { border: 0; border-top: 1px solid var(--pv-line); margin: 22px 0 0; padding: 16px 0 0; min-width: 0; }
+.am .g-same-as > legend { font-weight: 600; padding: 0 8px 0 0; }
+.am .g-same-as > .hint { margin: 0 0 8px; }
+.am .g-same-as-item { border: 0; margin: 14px 0 0; padding: 0; min-width: 0; }
+.am .g-same-as-item > legend { font-size: 15px; font-weight: 600; padding: 0; }
+.am .g-same-as-item > .hint { margin: 4px 0 8px; }
+.am .g-same-as-item a { color: var(--pv-ink); text-decoration: underline; }
 .am .g-fields { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 20px; }
 .am .g-fields .field { min-width: 0; }
 .am .g-fields input:not([type="checkbox"]):not([type="radio"]), .am .g-fields select, .am .g-fields textarea, .am .g-evidence input:not([type="checkbox"]):not([type="radio"]), .am .g-evidence textarea { width: 100%; min-height: 44px; max-width: none; padding: 8px 12px; border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); font: inherit; }

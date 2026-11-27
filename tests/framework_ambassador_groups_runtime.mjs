@@ -1,6 +1,9 @@
 // CG-6c / AMB-GROUPS-UX pure contract checks. Browser interactions run in the shared mocked-API gate.
 import assert from "node:assert/strict";
-import {CANNOT_REASONS, GROUP_TAXONOMY, TIER2_TAXONOMY, groupSuggestionPayload, groupTagPayload} from "../framework/src/components/ambassador_groups.js";
+import {
+  CANNOT_REASONS, GROUP_TAXONOMY, SAME_AS_ANSWERS, TIER2_TAXONOMY, duplicateQuestions, groupSuggestionPayload, groupTagPayload,
+  isSuspectName, rosterLookup, suspectHint,
+} from "../framework/src/components/ambassador_groups.js";
 import {
   COUNTRY_CODES, LANGUAGE_CODES, US_STATES, languageDefaults, languageName, languageOptions, lookupPickerCode, pickerMatch, placeDefaults, placeOptions,
 } from "../framework/src/components/ambassador_groups_pickers.js";
@@ -200,3 +203,73 @@ check("region defaults: languages and places prefill for the region and the rost
   assert.deepEqual(placeDefaults("norway", {country: "NO"}), ["NO"]);
   assert.deepEqual(placeDefaults("elsewhere", {country: "XX"}), []);
 });
+
+// AMB-ROSTER-QC: duplicate questions, suspect-name hints and same_as payloads.
+const OTHER_A = "cg_aaaaaaaaaaaaaaaa";
+const OTHER_B = "cg_bbbbbbbbbbbbbbbb";
+const OTHER_C = "cg_cccccccccccccccc";
+const OTHER_D = "cg_dddddddddddddddd";
+const ROSTER = rosterLookup({records: [
+  {group_id: OTHER_A, name: " Other Coast ", url: "https://other.example.org"},
+  {group_id: OTHER_B, name: "Third Group", url: "javascript:alert(1)"},
+  {group_id: OTHER_C, name: "Fourth Group", url: "https://fourth.example.org"},
+  {group_id: OTHER_D, name: "Fifth Group", url: "https://fifth.example.org"},
+  {group_id: GROUP.group_id, name: GROUP.name, url: GROUP.url},
+]});
+const QC = {schema: "cg-roster-qc-v1", pairs: [
+  {a: GROUP.group_id, b: OTHER_A, reason: "same_domain"},
+  {a: "cg_9999999999999999", b: GROUP.group_id, reason: "similar_name"},
+  {a: OTHER_C, b: GROUP.group_id, reason: "similar_name"},
+  {a: GROUP.group_id, b: OTHER_B, reason: "similar_name"},
+  {a: GROUP.group_id, b: OTHER_D, reason: "similar_name"},
+  {a: OTHER_C, b: OTHER_D, reason: "same_domain"},
+], suspect_names: [{group_id: GROUP.group_id, reasons: ["web_address", "short_one_case", "not_a_code"]}]};
+check("duplicate questions: at most three pairs with the group, names trimmed, unsafe websites dropped, unknown groups skipped", () => {
+  const questions = duplicateQuestions(GROUP.group_id, QC, ROSTER);
+  assert.deepEqual(questions.map((q) => q.group_id), [OTHER_A, OTHER_C, OTHER_B]);
+  assert.deepEqual(questions[0], {group_id: OTHER_A, name: "Other Coast", url: "https://other.example.org", reason: "same_domain"});
+  assert.equal(questions[2].url, null, "a javascript: website is not linked");
+  assert.deepEqual(duplicateQuestions(GROUP.group_id, null, ROSTER), []);
+  assert.deepEqual(duplicateQuestions(GROUP.group_id, QC, new Map()), [], "no roster means no questions");
+  assert.deepEqual(duplicateQuestions(OTHER_A, {pairs: [{a: OTHER_A, b: OTHER_A, reason: "same_domain"}]}, ROSTER), []);
+});
+check("suspect names: flagged groups get one plain hint from known reasons only", () => {
+  assert.equal(isSuspectName(GROUP.group_id, QC), true);
+  assert.equal(isSuspectName(OTHER_A, QC), false);
+  assert.equal(suspectHint(GROUP.group_id, QC), "The name looks like a web address. The name is very short.");
+  assert.equal(suspectHint(OTHER_A, QC), "");
+  assert.equal(suspectHint(GROUP.group_id, {suspect_names: [{group_id: GROUP.group_id, reasons: ["backtick"]}]}), "The name uses a backtick instead of an apostrophe.");
+});
+check("same_as answers are the Worker's three strings", () => {
+  assert.deepEqual(SAME_AS_ANSWERS, ["same", "different", "unsure"]);
+});
+check("same_as is sent only with answers, for every status, and never for the group itself", () => {
+  assert.equal("same_as" in groupTagPayload({group: GROUP, values: base({same_as: []})}).payload, false);
+  assert.equal("same_as" in groupTagPayload({group: GROUP, values: base()}).payload, false);
+  const answers = [{group_id: OTHER_A, answer: "same"}, {group_id: OTHER_C, answer: "unsure"}];
+  assert.deepEqual(groupTagPayload({group: GROUP, values: base({same_as: answers})}).payload.same_as, answers);
+  const cannot = groupTagPayload({group: GROUP, values: {region: "california", notOrganisation: false, status: "cannot_determine", reason: "dead_link", same_as: [{group_id: OTHER_B, answer: "different"}]}});
+  assert.deepEqual(cannot.payload.same_as, [{group_id: OTHER_B, answer: "different"}]);
+  const notOrg = groupTagPayload({group: GROUP, values: {region: "california", notOrganisation: true, same_as: [{group_id: OTHER_D, answer: "same"}]}});
+  assert.deepEqual(notOrg.payload.same_as, [{group_id: OTHER_D, answer: "same"}]);
+  assert.equal(groupTagPayload({group: GROUP, values: base({same_as: [{group_id: GROUP.group_id, answer: "same"}]})}).error, "same_as");
+  assert.equal(groupTagPayload({group: GROUP, values: base({same_as: [{group_id: OTHER_A, answer: "maybe"}]})}).error, "same_as");
+  assert.equal(groupTagPayload({group: GROUP, values: base({same_as: [{group_id: OTHER_A, answer: "same"}, {group_id: OTHER_A, answer: "same"}]})}).error, "same_as");
+  assert.equal(groupTagPayload({group: GROUP, values: base({same_as: [OTHER_A, OTHER_B, OTHER_C, OTHER_D].map((group_id) => ({group_id, answer: "same"}))})}).error, "same_as");
+});
+check("a suspect name left unchanged is not sent, even when it is too short to correct", () => {
+  const short = {...GROUP, name: "X"};
+  assert.equal("name_correction" in groupTagPayload({group: short, values: base({name_correction: "X"})}).payload, false);
+  assert.equal("name_correction" in groupTagPayload({group: GROUP, values: base({name_correction: GROUP.name})}).payload, false);
+  assert.equal(groupTagPayload({group: GROUP, values: base({name_correction: "Coastal Group Inc"})}).payload.name_correction, "Coastal Group Inc");
+});
+
+// The full roster loads only when a batch group has a possible duplicate (lead review, AMB-ROSTER-QC).
+{
+  const {needsRoster} = await import("../framework/src/components/ambassador_groups.js");
+  const qc = {schema: "cg-roster-qc-v1", pairs: [{a: "cg_0000000000000001", b: "cg_0000000000000002", reason: "similar_name"}], suspect_names: []};
+  assert.equal(needsRoster(qc, ["cg_0000000000000002", "cg_0000000000000009"]), true);
+  assert.equal(needsRoster(qc, ["cg_0000000000000009"]), false);
+  assert.equal(needsRoster(null, ["cg_0000000000000001"]), false);
+  console.log("ok - the full roster loads only for batches with a possible duplicate");
+}

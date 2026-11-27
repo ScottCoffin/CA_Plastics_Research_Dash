@@ -10,6 +10,10 @@ Reads GET {api}/export/approved (or a saved export with --input) and applies:
   ``curation/group_affiliations.csv``; suggestions go to ``curation/group_suggestions.csv``.
   A tag's optional ``name_correction`` goes to ``curation/group_name_corrections.csv`` (newest per
   group_id); the group build applies it.
+  A tag's optional ``same_as`` list holds answers to "is this the same organisation?" for another
+  group. Valid answers go to ``curation/group_dupe_answers.csv`` (newest per pair and rater). A pair
+  with no row in ``curation/group_merges.csv`` then gets a decision there: a moderator answer
+  decides, otherwise two raters must agree with no dissent. Only hex rater tokens are written.
 - ``group_pairs`` and ``group_reviews`` (optional keys, missing means none): blind second tags and
   reviewer checks (CG-7a). Pairs become five Tier-1 rows each in ``curation/group_double_tags.csv``;
   reviews become rows in ``curation/group_reviews.csv`` (newest per group and facet, with the
@@ -43,7 +47,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
@@ -53,6 +57,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from atlas.groups import admission  # noqa: E402
 from atlas.groups.schema import load_taxonomy  # noqa: E402
 
 DEFAULT_API_URL = "https://api.plastiverse.live"
@@ -79,6 +84,9 @@ DEFAULT_GROUP_SUGGESTIONS = ROOT / "curation" / "group_suggestions.csv"
 DEFAULT_GROUP_NAME_CORRECTIONS = ROOT / "curation" / "group_name_corrections.csv"
 DEFAULT_GROUP_DOUBLE_TAGS = ROOT / "curation" / "group_double_tags.csv"
 DEFAULT_GROUP_REVIEWS = ROOT / "curation" / "group_reviews.csv"
+DEFAULT_GROUP_DUPE_ANSWERS = ROOT / "curation" / "group_dupe_answers.csv"
+DEFAULT_GROUP_MERGES = ROOT / "curation" / "group_merges.csv"
+DEFAULT_ROSTER = ROOT / "site" / "data" / "global" / "groups" / "roster.json"
 # The four types the amb-v1 builder treats as eligible (ELIGIBLE_TYPES in src/atlas/build).
 INSTITUTION_TYPES = frozenset({"education", "government", "nonprofit", "facility"})
 # Same pattern as the owner spec for institution domains; the builder also checks registrable form.
@@ -683,6 +691,19 @@ GROUP_REVIEW_COLUMNS = (
     "reviewed_value",
 )
 GROUP_REVIEW_OUTCOMES = ("agree", "edit")
+# same_as answers (curation/group_dupe_answers.csv): one row per unordered pair and rater.
+GROUP_DUPE_ANSWER_COLUMNS = (
+    "group_id_a",
+    "group_id_b",
+    "rater",
+    "answer",
+    "by_moderator",
+    "answered_at",
+)
+GROUP_DUPE_ANSWERS = ("same", "different", "unsure")
+GROUP_MERGE_COLUMNS = ("group_id_keep", "group_id_drop", "decided_at", "decision")
+MAX_SAME_AS = 20
+RATER_RE = re.compile(r"[0-9a-f]{16}")
 GROUP_ID_RE = re.compile(r"cg_[0-9a-f]{16}")
 GROUP_PLACE_RE = re.compile(r"[A-Z]{2}(-[A-Z0-9]{1,3})?")
 GROUP_LANGUAGE_RE = re.compile(r"[a-z]{2}")
@@ -1049,6 +1070,7 @@ class GroupStore:
         name_corrections: dict[str, dict] | None = None,
         double_tags: dict[tuple[str, str], dict] | None = None,
         reviews: dict[tuple[str, str], dict] | None = None,
+        dupe_answers: dict[tuple[str, str, str], dict] | None = None,
     ) -> None:
         self.tags = tags
         self.affiliations = affiliations
@@ -1058,6 +1080,9 @@ class GroupStore:
         # double_tags maps (group_id, facet) to its CSV row; reviews maps it to {"ms", "row"}.
         self.double_tags = double_tags if double_tags is not None else {}
         self.reviews = reviews if reviews is not None else {}
+        # dupe_answers maps (group_a, group_b, rater) to {"ms", "row"}; newest answered_at wins.
+        self.dupe_answers = dupe_answers if dupe_answers is not None else {}
+        self.answers_applied = 0
         self.dirty: set[str] = set()
 
     def pair(self, item: Mapping[str, Any]) -> str | None:
@@ -1142,13 +1167,16 @@ class GroupStore:
         return self._suggest(payload, at)
 
     def _tag(self, payload: Mapping[str, Any], at: int, credit: str | None) -> str | None:
-        tag, reason = clean_group_tag(payload, self.taxonomy)
+        # same_as is not a tag field: it is read below and never reaches group_tags.csv.
+        tag_fields = {key: value for key, value in payload.items() if key != "same_as"}
+        tag, reason = clean_group_tag(tag_fields, self.taxonomy)
         if tag is None:
             return reason
         group_id = tag["group_id"]
         existing = self.tags.get(group_id)
         if existing is not None and existing["ms"] > at:
             return "older than the stored tag for this group"
+        self._same_as(group_id, payload.get("same_as"), at)
         # Credit only when the export gives a public name (credit_name is null when credit is off).
         name = credit if credit and not EMAIL_RE.search(credit) else GROUP_CREDIT_FALLBACK
         row, dropped = group_tag_row(tag, iso_day_of(at), name)
@@ -1170,6 +1198,53 @@ class GroupStore:
             if known is None or known["ms"] <= at:
                 self.name_corrections[group_id] = {"ms": at, "row": name_row}
                 self.dirty.add("names")
+        return None
+
+    def _same_as(self, group_id: str, items: Any, at: int) -> None:
+        """Record the valid same-organisation answers of an accepted tag; print the rest."""
+        if items is None:
+            return
+        if not isinstance(items, list) or len(items) > MAX_SAME_AS:
+            print(f"note: group {group_id}: same_as skipped: invalid same_as")
+            return
+        for item in items:
+            reason = self._answer(group_id, item, at)
+            if reason is not None:
+                print(f"note: group {group_id}: same_as answer skipped: {reason}")
+
+    def _answer(self, group_id: str, item: Any, at: int) -> str | None:
+        """Store one answer under its unordered pair and rater; the newest answered_at wins."""
+        if not isinstance(item, dict):
+            return "not an object"
+        other = item.get("group_id")
+        if not isinstance(other, str) or not GROUP_ID_RE.fullmatch(other) or other == group_id:
+            return "invalid group_id"
+        rater = item.get("rater")
+        if not isinstance(rater, str) or not RATER_RE.fullmatch(rater):
+            return "invalid rater"
+        answer = item.get("answer")
+        if answer not in GROUP_DUPE_ANSWERS:
+            return "invalid answer"
+        by_moderator = item.get("by_moderator")
+        if not isinstance(by_moderator, bool):
+            return "invalid by_moderator"
+        first, second = sorted((group_id, other))
+        key = (first, second, rater)
+        existing = self.dupe_answers.get(key)
+        if existing is not None and existing["ms"] > at:
+            return "older than the stored answer for this rater"
+        row = {
+            "group_id_a": first,
+            "group_id_b": second,
+            "rater": rater,
+            "answer": answer,
+            "by_moderator": "true" if by_moderator else "false",
+            "answered_at": iso_from_ms(at),
+        }
+        if existing is None or existing["row"] != row:
+            self.dupe_answers[key] = {"ms": at, "row": row}
+            self.dirty.add("dupe_answers")
+            self.answers_applied += 1
         return None
 
     def _suggest(self, payload: Mapping[str, Any], at: int) -> str | None:
@@ -1332,6 +1407,118 @@ def write_group_reviews(path: Path, reviews: dict[tuple[str, str], dict]) -> Non
     for key in sorted(reviews, key=_tier1_order):
         writer.writerow(reviews[key]["row"])
     write_text(path, buffer.getvalue())
+
+
+def read_dupe_answers(path: Path) -> dict[tuple[str, str, str], dict]:
+    answers: dict[tuple[str, str, str], dict] = {}
+    for row in _csv_rows(path):
+        if not (row.get("group_id_a") and row.get("group_id_b") and row.get("rater")):
+            continue
+        try:
+            ms = ms_from_iso(row["answered_at"])
+        except (KeyError, TypeError, ValueError):
+            raise ExportError(f"{path.name} has a row with a bad answered_at") from None
+        key = (row["group_id_a"], row["group_id_b"], row["rater"])
+        answers[key] = {
+            "ms": ms,
+            "row": {col: row.get(col, "") for col in GROUP_DUPE_ANSWER_COLUMNS},
+        }
+    return answers
+
+
+def write_dupe_answers(path: Path, answers: dict[tuple[str, str, str], dict]) -> None:
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=GROUP_DUPE_ANSWER_COLUMNS, lineterminator="\n")
+    writer.writeheader()
+    for key in sorted(answers):
+        writer.writerow(answers[key]["row"])
+    write_text(path, buffer.getvalue())
+
+
+def pair_decisions(rows: Iterable[Mapping[str, str]]) -> dict[tuple[str, str], tuple[str, str]]:
+    """(group_a, group_b) -> (decision, decided_at) from the stored answers. "unsure" is ignored.
+
+    A moderator answer decides: the newest one. Otherwise "same" or "different" needs at least two
+    distinct raters and no answer for the other decision. decided_at is the newest answer that
+    supports the decision.
+    """
+    by_pair: dict[tuple[str, str], list[Mapping[str, str]]] = {}
+    for row in rows:
+        if row["answer"] != "unsure":
+            by_pair.setdefault((row["group_id_a"], row["group_id_b"]), []).append(row)
+    decisions: dict[tuple[str, str], tuple[str, str]] = {}
+    for pair, answers in sorted(by_pair.items()):
+        moderated = [r for r in answers if r["by_moderator"] == "true"]
+        if moderated:
+            newest = max(moderated, key=lambda r: r["answered_at"])
+            decisions[pair] = (newest["answer"], newest["answered_at"])
+            continue
+        for decision in ("same", "different"):
+            supporting = [r for r in answers if r["answer"] == decision]
+            raters = {r["rater"] for r in supporting}
+            if len(raters) >= 2 and len(supporting) == len(answers):
+                latest = max(r["answered_at"] for r in supporting)
+                decisions[pair] = (decision, latest)
+                break
+    return decisions
+
+
+def read_roster_by_id(path: Path) -> dict[str, dict]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return {record["group_id"]: record for record in data["records"]}
+    except (OSError, ValueError, KeyError, TypeError):
+        raise ExportError(f"{path.name} is not a readable roster") from None
+
+
+def new_merge_rows(
+    decisions: Mapping[tuple[str, str], tuple[str, str]], merges_path: Path, roster_path: Path
+) -> list[dict]:
+    """Rows for pairs that have no row yet. A "same" keeps the record _keeper_rank ranks lowest."""
+    if not decisions:
+        return []
+    try:
+        decided = admission.decided_pairs(admission.read_merges(merges_path))
+    except ValueError as exc:
+        raise ExportError(str(exc)) from None
+    pending = {pair: d for pair, d in decisions.items() if frozenset(pair) not in decided}
+    if not pending:
+        return []
+    roster = read_roster_by_id(roster_path) if any(d == "same" for d, _ in pending.values()) else {}
+    rows: list[dict] = []
+    for (first, second), (decision, decided_at) in sorted(pending.items()):
+        if decision == "same":
+            missing = [gid for gid in (first, second) if gid not in roster]
+            if missing:
+                print(f"skip merge {first} / {second}: {missing[0]} is not on the roster")
+                continue
+            keeper = min((roster[first], roster[second]), key=admission._keeper_rank)
+            keep = keeper["group_id"]
+            drop = second if keep == first else first
+        else:
+            keep, drop = first, second
+        rows.append(
+            {
+                "group_id_keep": keep,
+                "group_id_drop": drop,
+                "decided_at": decided_at,
+                "decision": decision,
+            }
+        )
+    return rows
+
+
+def append_merges(path: Path, rows: list[dict]) -> None:
+    """Append rows; existing bytes are kept. A missing or empty file gets the header first."""
+    existing = path.read_bytes().decode("utf-8") if path.exists() else ""
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=GROUP_MERGE_COLUMNS, lineterminator="\n")
+    if not existing:
+        writer.writeheader()
+    elif not existing.endswith("\n"):
+        buffer.write("\n")
+    writer.writerows(rows)
+    write_text(path, existing + buffer.getvalue())
 
 
 # ---------------------------------------------------------------- I/O
@@ -1498,6 +1685,7 @@ def run(args: argparse.Namespace) -> int:
         read_group_name_corrections(args.group_name_corrections_file),
         read_group_double_tags(args.group_double_tags_file),
         read_group_reviews(args.group_reviews_file),
+        read_dupe_answers(args.group_dupe_answers_file),
     )
     applier = Applier(args.regions_dir, labels, additions, groups)
     times: list[int] = []
@@ -1592,6 +1780,17 @@ def run(args: argparse.Namespace) -> int:
             applier.skip("group_review", reason)
             print(f"skip group review: {reason}")
 
+    if groups.answers_applied:
+        applier.applied[("groups", "dupe_answer")] += groups.answers_applied
+    # Decisions use every stored answer, so a pair decided by earlier answers gets its row once.
+    merge_rows = new_merge_rows(
+        pair_decisions(entry["row"] for entry in groups.dupe_answers.values()),
+        args.group_merges_file,
+        args.roster_file,
+    )
+    if merge_rows:
+        applier.applied[("groups", "merge_decision")] += len(merge_rows)
+
     newest = max([since, *times])
     new_boundary = {sid for at, sid in sub_times if at == newest and sid is not None}
     if newest == since:
@@ -1635,6 +1834,10 @@ def run(args: argparse.Namespace) -> int:
         write_group_double_tags(args.group_double_tags_file, groups.double_tags)
     if "reviews" in groups.dirty:
         write_group_reviews(args.group_reviews_file, groups.reviews)
+    if "dupe_answers" in groups.dirty:
+        write_dupe_answers(args.group_dupe_answers_file, groups.dupe_answers)
+    if merge_rows:
+        append_merges(args.group_merges_file, merge_rows)
     if args.summary_file:
         write_text(args.summary_file, summary_markdown(applier, since, newest))
     write_text(args.since_file, json.dumps(new_state, indent=2) + "\n")
@@ -1663,6 +1866,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--group-double-tags-file", type=Path, default=DEFAULT_GROUP_DOUBLE_TAGS)
     parser.add_argument("--group-reviews-file", type=Path, default=DEFAULT_GROUP_REVIEWS)
+    parser.add_argument("--group-dupe-answers-file", type=Path, default=DEFAULT_GROUP_DUPE_ANSWERS)
+    parser.add_argument("--group-merges-file", type=Path, default=DEFAULT_GROUP_MERGES)
+    parser.add_argument("--roster-file", type=Path, default=DEFAULT_ROSTER)
     parser.add_argument("--summary-file", type=Path, help="write a counts-only markdown summary")
     parser.add_argument("--dry-run", action="store_true", help="report only; write nothing")
     return parser

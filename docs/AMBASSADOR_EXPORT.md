@@ -37,6 +37,11 @@ the group id, facet, values, outcome, reason code and time are written: no ambas
 files feed the group build, so the job rebuilds the precision card whenever they change. A review row's `reviewed_value` is the approved value: once a tagged group has all five Tier-1 rows, the build publishes those values, sets status `reviewed` and re-derives the layer (partial reviews change nothing). The summary counts them
 as `group_pair` and `group_review`. Invalid items are skipped with a printed reason, as the other kinds are.
 
+A tag's optional `same_as` list answers "is this the same organisation as group X?". Each valid answer is one row in
+`curation/group_dupe_answers.csv` (newest `answered_at` per pair and rater; only hex rater tokens, never an ambassador id).
+A pair with no row in `curation/group_merges.csv` then gets a decision there: a moderator answer decides, otherwise two
+raters must agree with no dissent (`unsure` is ignored); a `same` keeps the record the roster ranks highest.
+
 Knowledge kinds map to sections as follows. `community_group`, `volunteer_group` and `community_knowledge`
 go to `research_networks` with item kind `community`, because the region-v1 schema has no `community`
 section (`scripts/build_region_pages.py` requires exactly six sections). Kinds with no section (`event`,

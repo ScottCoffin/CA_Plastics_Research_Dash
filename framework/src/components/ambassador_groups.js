@@ -1,6 +1,6 @@
 // Signed-in group tagging. Assignments use short background holds. Two screens share this module:
 // mountGroups ("Tag local groups") and mountGroupSuggest ("Suggest a missing group").
-import {escapeHtml} from "./atlas.js";
+import {escapeHtml, globalDataUrl} from "./atlas.js";
 import {safeUrl} from "./region_page.js";
 import {
   languageDefaults, languageName, languageOptions, pickerMatch, placeDefaults, placeOptions,
@@ -42,6 +42,7 @@ const ERROR_FIELDS = {
   constituency: "Constituency", tier2_evidence: "the source for the optional details", stated_affiliations: "Stated affiliations",
   cannot_determine_reason: "Reason", page_url: "Page you read", accessed_at: "Date read", quote: "Quote", payload: "answers",
   name: "Group name", name_correction: "Correct the name", url: "Public web address", country: "Country", note: "Note",
+  same_as: "the same-organisation question",
 };
 const esc = (value) => escapeHtml(String(value ?? ""));
 /** Today's date on the ambassador's own calendar (not UTC), as YYYY-MM-DD. */
@@ -57,6 +58,24 @@ const isWebUrl = (value) => {
 /** A quote is non-empty, at most 25 words and 400 characters, with no markup or control characters. */
 const quoteOk = (quote) => quote !== "" && quote.split(/\s+/).length <= 25 && quote.length <= 400 && !/[<>\u0000-\u001f\u007f]/.test(quote);
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
+const GROUP_ID_RE = /^cg_[0-9a-f]{16}$/;
+
+// Roster quality checks (AMB-ROSTER-QC). Answers to "same organisation?" questions go to the Worker as same_as.
+export const SAME_AS_ANSWERS = ["same", "different", "unsure"];
+const SAME_AS_LABELS = {same: "Same", different: "Different", unsure: "Not sure"};
+const MAX_DUPLICATE_QUESTIONS = 3;
+const DUPLICATE_HINTS = {
+  same_domain: "We think these may be duplicates because they share a website.",
+  similar_name: "We think these may be duplicates because their names are very similar.",
+};
+const SUSPECT_NAME_HINTS = {
+  double_question_mark: "The name has a double question mark",
+  broken_character: "The name has a broken character",
+  backtick: "The name uses a backtick instead of an apostrophe",
+  web_address: "The name looks like a web address",
+  domain_only: "The name looks like a website domain",
+  short_one_case: "The name is very short",
+};
 
 // Picker data is computed once. Names are English Intl names; codes are what the Worker stores.
 const LANGUAGE_OPTIONS = languageOptions();
@@ -74,26 +93,93 @@ const PICKERS = {
   },
 };
 
+/**
+ * Duplicate questions for one group: up to three roster pairs that include it, with the other group's name and
+ * safe website from rosterById (a Map of group_id to {name, url}). A pair whose other group is not listed is skipped.
+ */
+export function duplicateQuestions(groupId, qc, rosterById) {
+  const pairs = Array.isArray(qc?.pairs) ? qc.pairs : [];
+  const questions = [];
+  const seen = new Set();
+  for (const pair of pairs) {
+    if (questions.length >= MAX_DUPLICATE_QUESTIONS) break;
+    const other = pair?.a === groupId ? pair.b : pair?.b === groupId ? pair.a : null;
+    if (typeof other !== "string" || other === groupId || seen.has(other)) continue;
+    const record = rosterById?.get?.(other);
+    if (!record?.name) continue;
+    seen.add(other);
+    questions.push({group_id: other, name: record.name, url: safeUrl(record.url), reason: pair.reason});
+  }
+  return questions;
+}
+
+/** Plain hint for a duplicate question, or "" for an unknown reason. */
+export const duplicateHint = (reason) => DUPLICATE_HINTS[reason] || "";
+
+/** True when the roster QC file flags this group's name. */
+export function isSuspectName(groupId, qc) {
+  return (Array.isArray(qc?.suspect_names) ? qc.suspect_names : []).some((item) => item?.group_id === groupId);
+}
+
+/** One plain sentence (or several) built from the known reasons for a suspect name; "" when none is known. */
+export function suspectHint(groupId, qc) {
+  const entry = (Array.isArray(qc?.suspect_names) ? qc.suspect_names : []).find((item) => item?.group_id === groupId);
+  const sentences = [...new Set(Array.isArray(entry?.reasons) ? entry.reasons : [])]
+    .filter((code) => Object.hasOwn(SUSPECT_NAME_HINTS, code)).map((code) => `${SUSPECT_NAME_HINTS[code]}.`);
+  return sentences.join(" ");
+}
+
+/** Roster records keyed by group id, as the duplicate questions read them. */
+export function rosterLookup(roster) {
+  const index = new Map();
+  for (const record of Array.isArray(roster?.records) ? roster.records : []) {
+    if (record?.group_id === undefined || record?.group_id === null) continue;
+    index.set(String(record.group_id), {name: typeof record.name === "string" ? record.name.trim() : "", url: record.url});
+  }
+  return index;
+}
+
+/** Same-organisation answers: only answered questions, at most three, distinct, never the group itself. */
+function sameAsAnswers(group, answers) {
+  if (answers === undefined || answers === null) return {list: []};
+  if (!Array.isArray(answers) || answers.length > MAX_DUPLICATE_QUESTIONS) return {error: "same_as"};
+  const seen = new Set();
+  for (const item of answers) {
+    const other = item?.group_id;
+    if (typeof other !== "string" || !GROUP_ID_RE.test(other) || other === group.group_id || seen.has(other)) return {error: "same_as"};
+    if (!SAME_AS_ANSWERS.includes(item.answer)) return {error: "same_as"};
+    seen.add(other);
+  }
+  return {list: answers.map(({group_id, answer}) => ({group_id, answer}))};
+}
+
 /** Build a tag payload from form values, or return a field key to focus. */
 export function groupTagPayload({group, values, today = isoToday()} = {}) {
   if (!group?.group_id) return {error: "group"};
   if (typeof values.notOrganisation !== "boolean") return {error: "organisation_check"};
+  const sameAs = sameAsAnswers(group, values.same_as);
+  if (sameAs.error) return {error: sameAs.error};
+  const sameAsPart = sameAs.list.length ? {same_as: sameAs.list} : {};
   if (values.notOrganisation) {
     return {region: values.region, stream: "knowledge", kind: "group_tag", payload: {
       group_id: group.group_id, status: "cannot_determine", cannot_determine_reason: "not_an_organisation", not_an_organisation: true,
+      ...sameAsPart,
     }};
   }
+  // The name field starts at the current name, so a name is sent only when it differs from the current one.
+  const currentName = String(group.name || "").trim();
   const correctedName = String(values.name_correction || "").trim();
-  if (correctedName && (correctedName.length < 2 || correctedName.length > 200 || /[<>\u0000-\u001f\u007f]/.test(correctedName) || EMAIL.test(correctedName))) return {error: "name_correction"};
-  const correction = correctedName ? {name_correction: correctedName} : {};
+  const nameChanged = correctedName !== "" && correctedName !== currentName;
+  if (nameChanged && (correctedName.length < 2 || correctedName.length > 200 || /[<>\u0000-\u001f\u007f]/.test(correctedName) || EMAIL.test(correctedName))) return {error: "name_correction"};
+  const correction = nameChanged ? {name_correction: correctedName} : {};
   if (values.status === "cannot_determine") {
     if (!CANNOT_REASONS.includes(values.reason)) return {error: "cannot_determine_reason"};
     return {region: values.region, stream: "knowledge", kind: "group_tag", payload: {
       group_id: group.group_id, status: "cannot_determine", cannot_determine_reason: values.reason,
-      ...correction,
+      ...correction, ...sameAsPart,
     }};
   }
-  const payload = {group_id: group.group_id, status: "ambassador_tagged", ...correction};
+  const payload = {group_id: group.group_id, status: "ambassador_tagged", ...correction, ...sameAsPart};
   // "Their pages do not mention plastics" applies only to incidental or none; the Worker then wants no quote for that row.
   const plasticsNotStated = values.plastics_not_stated === true && NOT_STATED_CENTRALITY.includes(values.plastics_centrality);
   for (const facet of TAG_FACETS) {
@@ -314,6 +400,40 @@ function tier2HTML(draft = {}) {
   </details>`;
 }
 
+/** Same-organisation question: a link to the other group's website (http(s) only) and three answer chips. */
+function sameAsHTML(groupId, questions, draft) {
+  if (!questions.length) return "";
+  const chosen = (other) => (Array.isArray(draft.same_as) ? draft.same_as : []).find((item) => item?.group_id === other)?.answer;
+  const items = questions.map((question, i) => {
+    const link = question.url ? ` (<a href="${esc(question.url)}" target="_blank" rel="noopener noreferrer">their website<span class="sr"> (opens in a new tab)</span></a>)` : "";
+    const hint = duplicateHint(question.reason);
+    return `<fieldset class="g-same-as-item" data-g-same-as-item="${esc(question.group_id)}"><legend>Is this the same organisation as ${esc(question.name)}${link}?</legend>
+      ${hint ? `<p class="hint" id="g-same-as-hint-${i}">${esc(hint)}</p>` : ""}
+      <div class="g-radio-chips">${Object.keys(SAME_AS_LABELS).map((answer) => `<label class="g-radio-chip"><input type="radio" name="g-same-as-${esc(question.group_id)}" value="${esc(answer)}" data-g-same-as="${esc(question.group_id)}"${chosen(question.group_id) === answer ? " checked" : ""}${hint ? ` aria-describedby="g-same-as-hint-${i}"` : ""}><span>${esc(SAME_AS_LABELS[answer])}</span></label>`).join("")}</div></fieldset>`;
+  });
+  return `<fieldset class="g-same-as g-wide" data-g-same-as-wrap><legend>Possible duplicates (optional)</legend><p class="hint">Answer only if you can tell from the pages. Skip any question you are unsure about.</p>${items.join("")}</fieldset>`;
+}
+
+/**
+ * Loads the small quality-check file once per page, and the full roster (about 1 MB) only when a group in the batch
+ * has a possible duplicate, because the question needs the other group's name and website. A failed fetch gives no
+ * questions and no name hints.
+ */
+let qcCache = null;
+let rosterCache = null;
+const getJson = (path) => fetch(globalDataUrl(path), {cache: "no-cache"}).then((response) => (response.ok ? response.json() : null)).catch(() => null);
+export function needsRoster(qc, groupIds) {
+  const ids = new Set(groupIds);
+  return Boolean(qc?.pairs?.some((pair) => ids.has(pair?.a) || ids.has(pair?.b)));
+}
+async function loadRosterChecks(groupIds = []) {
+  if (!qcCache) qcCache = getJson("groups/roster_qc.json").then((qc) => (qc?.schema === "cg-roster-qc-v1" ? qc : null));
+  const qc = await qcCache;
+  if (!needsRoster(qc, groupIds)) return {roster: rosterLookup(null), qc};
+  if (!rosterCache) rosterCache = getJson("groups/roster.json").then(rosterLookup);
+  return {roster: await rosterCache, qc};
+}
+
 /** The "Group work you sent" list, shown on both screens. */
 function sentHTML(ctx) {
   const sent = (ctx.submissions || []).filter((row) => row?.region === ctx.region && row.stream === "knowledge" && ["group_tag", "group_suggest"].includes(row.kind)).sort((a, b) => (Number(b.created_at) || 0) - (Number(a.created_at) || 0));
@@ -328,7 +448,7 @@ const SECOND_TAG_NOTICE = "Someone else just tagged this group. Your answers sti
 
 /** Mounts one assignment at a time and guards detached/stale responses after navigation. */
 export function mountGroups(host, ctx) {
-  const state = {leases: [], remaining: 0, index: 0, loading: true, busy: false, error: "", formError: "", notice: "", generation: 0, drafts: {}, activityOrder: []};
+  const state = {leases: [], remaining: 0, index: 0, loading: true, busy: false, error: "", formError: "", notice: "", generation: 0, drafts: {}, activityOrder: [], checks: {roster: new Map(), qc: null}};
   let alive = true;
   let holdTimer;
   const current = () => state.leases[state.index] || null;
@@ -344,6 +464,12 @@ export function mountGroups(host, ctx) {
     state.activityOrder = Array.isArray(draft.primary_activities) ? [...draft.primary_activities] : [];
     const picks = {places: draft.places ?? placeDefaults(ctx.region, group), website_languages: draft.website_languages ?? languageDefaults(ctx.region)};
     const groupLink = safeUrl(group?.url);
+    const {roster, qc} = state.checks;
+    const questions = group ? duplicateQuestions(group.group_id, qc, roster) : [];
+    const suspect = group ? isSuspectName(group.group_id, qc) : false;
+    const nameHint = suspect && suspectHint(group.group_id, qc)
+      ? `${suspectHint(group.group_id, qc)} Correct it to the name on the group's public website, or leave it as it is.`
+      : "Use the name on the group's public website.";
     host.innerHTML = `${crumb}
       <h2 tabindex="-1">Tag local groups</h2><p class="lede">Check each group's public pages and record what they say about their work in ${esc(ctx.regionName)}. Do not guess.</p>
       <p class="ws-error" role="alert" tabindex="-1" data-g-error${state.error ? "" : " hidden"}>${esc(state.error)}</p>
@@ -355,8 +481,9 @@ export function mountGroups(host, ctx) {
         <section class="g-group" aria-labelledby="g-group-name"><h3 id="g-group-name" tabindex="-1">${esc(group.name)}</h3><p class="g-meta">${esc(group.country)}</p>
         ${groupLink ? `<p class="g-open-site"><a class="btn solid" href="${esc(groupLink)}" target="_blank" rel="noopener noreferrer">Open their website<span class="sr"> (opens in a new tab)</span></a></p>` : `<p class="hint">No website is listed for this group. Enter the page you read in the evidence section.</p>`}
         <form data-g-tag-form novalidate aria-busy="${state.busy}">
-        <div class="field g-name-correction"><label for="g-name-correction">Correct the name (optional)</label><input id="g-name-correction" type="text" maxlength="200" autocomplete="off" data-g-field="name_correction" value="${esc(draft.name_correction || "")}" aria-describedby="g-name-correction-hint"><p class="hint" id="g-name-correction-hint">Use the name on the group's public website.</p></div>
+        <div class="field g-name-correction"><label for="g-name-correction">Correct the name (optional)</label><input id="g-name-correction" type="text" maxlength="200" autocomplete="off" data-g-field="name_correction" value="${esc(draft.name_correction ?? (suspect ? group.name : ""))}" aria-describedby="g-name-correction-hint"><p class="hint" id="g-name-correction-hint">${esc(nameHint)}</p></div>
         ${orgChoiceHTML({attr: "data-g-org", choice: draft.notOrganisation === true ? "no" : draft.notOrganisation === false ? "yes" : "", question: "Is this a collective organisation, rather than an individual or single-person practice?", yes: "Yes, a collective organisation", no: "No, a personal profile or individual"})}
+        ${sameAsHTML(group.group_id, questions, draft)}
         <div data-g-tag-fields>${tagFieldsHTML(group, draft, picks)}</div>
         ${tier2HTML(draft)}
         <div class="field g-status-field"><label for="g-status">Tag status</label><select id="g-status" data-g-status><option value="ambassador_tagged"${draft.status !== "cannot_determine" ? " selected" : ""}>I can tag this group</option><option value="cannot_determine"${draft.status === "cannot_determine" ? " selected" : ""}>I cannot determine this from the available information</option></select></div>
@@ -380,7 +507,10 @@ export function mountGroups(host, ctx) {
     keepHoldOpen();
     const generation = ++state.generation; render();
     const result = await ctx.api(batchPath);
+    const leased = Array.isArray(result?.data?.leases) ? result.data.leases.map((lease) => lease?.group_id) : [];
+    const checks = await loadRosterChecks(leased);
     if (detached() || generation !== state.generation) return;
+    state.checks = checks;
     state.loading = false;
     if (!result?.ok) state.error = actionError(result?.error);
     else { state.leases = Array.isArray(result.data?.leases) ? result.data.leases : []; state.remaining = Number(result.data?.remaining_in_region) || 0; }
@@ -400,6 +530,7 @@ export function mountGroups(host, ctx) {
     }
     values.places = pickerCodes("places");
     values.website_languages = pickerCodes("website_languages");
+    values.same_as = [...host.querySelectorAll("[data-g-same-as]:checked")].map((el) => ({group_id: el.dataset.gSameAs, answer: el.value}));
     values.page_url = fieldValue("page_url");
     values.accessed_at = fieldValue("accessed_at");
     values.quote = fieldValue("quote");

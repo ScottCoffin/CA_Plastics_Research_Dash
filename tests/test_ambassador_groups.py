@@ -20,6 +20,7 @@ WORKSPACE = ROOT / "framework/src/components/ambassador_workspace.js"
 TAXONOMY = ROOT / "worker/src/groups_taxonomy.ts"
 CSS = ROOT / "framework/src/components/ambassador_groups.css"
 RUNTIME = ROOT / "tests/framework_ambassador_groups_runtime.mjs"
+WORKER_GROUPS = ROOT / "worker/src/groups.ts"
 
 
 def _text(path: Path) -> str:
@@ -61,6 +62,17 @@ def test_group_taxonomy_matches_generated_worker_values() -> None:
         assert match, field
         expected = re.findall(r'"([a-z0-9_]+)"', match.group(1))
         assert values == expected, field
+
+
+def test_same_as_answers_match_worker_constant() -> None:
+    pattern = r"export const SAME_AS_ANSWERS = \[(.*?)\];"
+    worker = re.search(pattern, _text(WORKER_GROUPS), re.S)
+    assert worker, "SAME_AS_ANSWERS in worker/src/groups.ts"
+    expected = re.findall(r'"([a-z_]+)"', worker.group(1))
+    assert expected == ["same", "different", "unsure"]
+    module = re.search(pattern, _text(MODULE), re.S)
+    assert module, "SAME_AS_ANSWERS in the group form module"
+    assert re.findall(r'"([a-z_]+)"', module.group(1)) == expected
 
 
 def test_stream_uses_only_authenticated_workspace_api_and_separate_routes() -> None:
