@@ -16,10 +16,11 @@ from __future__ import annotations
 import argparse
 import base64
 import io
+import re
 import sys
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "src" / "Plastiverse Live_ From Pollution to Progress.png"
@@ -72,6 +73,50 @@ def render() -> dict[str, bytes]:
     }
 
 
+# Pillow builds differ in resampling and PNG/ICO encoding, so --check compares decoded pixels:
+# every channel within PIXEL_TOLERANCE (out of 255) and the same sizes and frames.
+PIXEL_TOLERANCE = 8
+SVG_IMAGE_RE = re.compile(rb'href="data:image/png;base64,([A-Za-z0-9+/=]+)"')
+
+
+def _frames(data: bytes) -> list[Image.Image]:
+    image = Image.open(io.BytesIO(data))
+    if image.format == "ICO":
+        return [image.ico.getimage(size).convert("RGBA") for size in sorted(image.ico.sizes())]
+    return [image.convert("RGBA")]
+
+
+def _same_pixels(a: bytes, b: bytes) -> bool:
+    frames_a, frames_b = _frames(a), _frames(b)
+    if [f.size for f in frames_a] != [f.size for f in frames_b]:
+        return False
+    for fa, fb in zip(frames_a, frames_b, strict=True):
+        diff = ImageChops.difference(fa, fb).getextrema()
+        if max(high for _, high in diff) > PIXEL_TOLERANCE:
+            return False
+    return True
+
+
+def matches(path: Path, data: bytes) -> bool:
+    """True when the file at path is the rendered icon (pixels within tolerance; SVG text exact)."""
+    if not path.is_file():
+        return False
+    current = path.read_bytes()
+    if current == data:
+        return True
+    if path.suffix == ".svg":
+        found, wanted = SVG_IMAGE_RE.search(current), SVG_IMAGE_RE.search(data)
+        if not found or not wanted:
+            return False
+        if SVG_IMAGE_RE.sub(b"", current) != SVG_IMAGE_RE.sub(b"", data):
+            return False
+        return _same_pixels(base64.b64decode(found.group(1)), base64.b64decode(wanted.group(1)))
+    try:
+        return _same_pixels(current, data)
+    except OSError:
+        return False
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--check", action="store_true", help="fail when a committed icon differs")
@@ -79,9 +124,7 @@ def main(argv: list[str] | None = None) -> int:
     assets = render()
     files = {OUT / name: data for name, data in assets.items()}
     files.update({SITE / name: assets[source] for name, source in ROOT_COPIES.items()})
-    stale = [
-        name for name, data in files.items() if not name.is_file() or name.read_bytes() != data
-    ]
+    stale = [path for path, data in files.items() if not matches(path, data)]
     if args.check:
         if stale:
             names = ", ".join(path.relative_to(ROOT).as_posix() for path in stale)
