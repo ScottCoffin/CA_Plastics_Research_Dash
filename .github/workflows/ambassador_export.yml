@@ -62,12 +62,13 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/ambassador_export_pr.py --summary-file "$RUNNER_TEMP/ambassador_summary.md"
-          group_paths=(curation/group_tags.csv curation/group_affiliations.csv curation/group_name_corrections.csv curation/group_double_tags.csv curation/group_reviews.csv)
+          group_paths=(curation/group_tags.csv curation/group_affiliations.csv curation/group_name_corrections.csv curation/group_double_tags.csv curation/group_reviews.csv curation/group_merges.csv)
           if [[ -n "$(git status --porcelain -- "${group_paths[@]}")" ]]; then
             python scripts/build_groups_roster.py --apply-curation
             python scripts/build_groups_roster.py --check
             python scripts/build_groups.py
             python scripts/build_groups.py --check
+            python scripts/build_roster_qc.py
           fi
 
       # Opens one pull request per day. Re-runs the same day update the open pull request instead.
@@ -99,6 +100,7 @@ jobs:
             site/data/global/groups/coverage.json
             site/data/global/groups/flows.json
             site/data/global/groups/precision_card.json
+            site/data/global/groups/roster_qc.json
           )
           if [[ -z "$(git status --porcelain -- "${paths[@]}")" ]]; then
             echo "No approved contributions to export; no pull request."

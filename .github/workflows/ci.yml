@@ -54,6 +54,10 @@ jobs:
       - name: Install development dependencies
         run: python -m pip install -c requirements/lock.txt -e ".[dev]"
 
+      # AMB-ROSTER-QC: the committed roster_qc.json must match the committed roster and curation.
+      - name: Check roster QC candidates
+        run: python scripts/build_roster_qc.py --check
+
       - name: Lint
         run: make lint
 

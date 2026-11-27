@@ -30,7 +30,6 @@ import csv
 import io
 import json
 import os
-import re
 import sys
 import tempfile
 from datetime import UTC, datetime
@@ -42,7 +41,7 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
-from atlas.groups import admission  # noqa: E402
+from atlas.groups import admission, roster_qc  # noqa: E402
 
 ROSTER_PATH = ROOT / "site" / "data" / "global" / "groups" / "roster.json"
 DUPES_PATH = ROOT / "data" / "interim" / "bffp" / "dupe_review.csv"
@@ -50,8 +49,6 @@ MERGES_PATH = ROOT / "curation" / "group_merges.csv"
 CORRECTIONS_PATH = ROOT / "curation" / "group_name_corrections.csv"
 STATE_PATH = ROOT / "data" / "interim" / "bffp" / "group_roster_review_state.json"
 QUEUES = ("Likely duplicates", "Suspect names")
-URL_START_RE = re.compile(r"^(?:https?://|www\.)", re.IGNORECASE)
-DOMAIN_RE = re.compile(r"(?:[a-z0-9-]+\.)+[a-z]{2,}", re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
@@ -200,23 +197,18 @@ def duplicate_candidates(
     return cases
 
 
+SUSPECT_SENTENCES = {
+    "double_question_mark": 'the name contains "??"',
+    "broken_character": "the name has a broken character (�)",
+    "backtick": "the name uses a backtick (`) as an apostrophe",
+    "web_address": "a web address is used as the name",
+    "domain_only": "the name is only a domain",
+    "short_one_case": "a short name in one case",
+}
+
+
 def suspect_reasons(name: str) -> list[str]:
-    text = name.strip()
-    reasons: list[str] = []
-    if "??" in text:
-        reasons.append('the name contains "??"')
-    if "�" in text:
-        reasons.append("the name has a broken character (�)")
-    if "`" in text:
-        reasons.append("the name uses a backtick (`) as an apostrophe")
-    if "://" in text or URL_START_RE.match(text):
-        reasons.append("a web address is used as the name")
-    elif DOMAIN_RE.fullmatch(text):
-        reasons.append("the name is only a domain")
-    short = len(text) <= 3 and any(ch.isalpha() for ch in text)
-    if short and (text == text.lower() or text == text.upper()):
-        reasons.append("a short name in one case")
-    return reasons
+    return [SUSPECT_SENTENCES[code] for code in roster_qc.suspect_codes(name)]
 
 
 def suspect_candidates(records: list[dict[str, Any]]) -> list[dict[str, Any]]:

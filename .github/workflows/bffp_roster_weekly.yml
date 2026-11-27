@@ -47,6 +47,7 @@ jobs:
         run: |
           python scripts/build_groups.py
           python scripts/build_groups.py --check
+          python scripts/build_roster_qc.py
 
       - name: Report disabled publication
         if: vars.ENABLE_DATA_COMMITS != 'true'
@@ -68,6 +69,7 @@ jobs:
             site/data/global/groups/coverage.json
             site/data/global/groups/flows.json
             site/data/global/groups/precision_card.json
+            site/data/global/groups/roster_qc.json
           )
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

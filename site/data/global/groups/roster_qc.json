@@ -1,0 +1,1284 @@
+{
+ "generated_from": "2026-11-26",
+ "pairs": [
+  {
+   "a": "cg_0079109c8c04f6ef",
+   "b": "cg_20cf0bd719391c5b",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_0079109c8c04f6ef",
+   "b": "cg_90d22feb8eb9d201",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0090bb08d26ae4fa",
+   "b": "cg_91f841f2681d5aab",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_02f9db5782363982",
+   "b": "cg_939256ed595161a1",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_032a3ba19ef3a772",
+   "b": "cg_64cd66e79a621507",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_05d1f06fb43223d9",
+   "b": "cg_53105c316cb6e654",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_0690c219ddd85789",
+   "b": "cg_58fc1e4b8ab2b6f5",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_06f28b750fe5d830",
+   "b": "cg_8ae10b7c8231e372",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0756c98d1c8d0450",
+   "b": "cg_0e078b36172cb4a6",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_07a787c8f93f9474",
+   "b": "cg_a9cb15b8833a1743",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_07a787c8f93f9474",
+   "b": "cg_f3749f1391ff2c35",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0901b678fc879546",
+   "b": "cg_2ed90847b5c83e2d",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_09c98dcf6796ed26",
+   "b": "cg_1879491694d0dd78",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_09c98dcf6796ed26",
+   "b": "cg_ce8fe1e6e352fd76",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0a3bd1a637c12859",
+   "b": "cg_5d21dd2ebceb7b10",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0ab0b7e1d842848f",
+   "b": "cg_c612b180059e51ee",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0b0268ea7fbd60df",
+   "b": "cg_0d233c884c0a2846",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0b420028ce6de2dc",
+   "b": "cg_7b13bb46a39acf3a",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0b420028ce6de2dc",
+   "b": "cg_b9b2377e3501ee8b",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0bdc1cd326fbbe82",
+   "b": "cg_eb7d489e8078060e",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0d0c1ed4b6897df8",
+   "b": "cg_8d1d02108292688e",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0d0c1ed4b6897df8",
+   "b": "cg_a601f3b83d9f6db4",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0da0b450da90504f",
+   "b": "cg_4de9870a1828f687",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0da38cf5c6247e12",
+   "b": "cg_4676ee2d131b7902",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_0da38cf5c6247e12",
+   "b": "cg_740850b735eebdf3",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_0ee758a15154feaa",
+   "b": "cg_49466d3a4a9de8eb",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_0f90b94b53ef48e5",
+   "b": "cg_4141f5cd977c0572",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_10a7589ebecd02a2",
+   "b": "cg_d641a6ec6d887d46",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_133059ba27f3175f",
+   "b": "cg_f54b2ab1f5c2976a",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_13c5e4ca27580e2d",
+   "b": "cg_9888d4a2c5d3a135",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_13c5e4ca27580e2d",
+   "b": "cg_c6dac00dc0866f89",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_13e6e3adcd6211ba",
+   "b": "cg_7319b887406584b5",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_13e6e3adcd6211ba",
+   "b": "cg_d49d8540cb3b50a9",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_13edbc1adcf4d481",
+   "b": "cg_578953e48936376a",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_147aa0a9e5ed2a63",
+   "b": "cg_680e3a9e4029b06b",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_15722932111253d4",
+   "b": "cg_9216614219c87a86",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_161aace96c03f521",
+   "b": "cg_4d4095ad656252d4",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_1879491694d0dd78",
+   "b": "cg_ce8fe1e6e352fd76",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_18b1f3447ee04b66",
+   "b": "cg_7548b7152e937549",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_19291cd7a4d3ec97",
+   "b": "cg_4f505e80b311f07a",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_192fb17db3b3381d",
+   "b": "cg_97a44432ac71105f",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_1a4cd4f6d097bb82",
+   "b": "cg_5b6390600e89bfc0",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_1ac029139197c02a",
+   "b": "cg_85acde5f9bc14593",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_1acd26a56a9243db",
+   "b": "cg_7736cfc7a421c1c8",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_1b2f51e31dfa1a63",
+   "b": "cg_98ebe4ff9ae30189",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_1da228fdc6b986a9",
+   "b": "cg_38a5e51e0c24c6e1",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_1da228fdc6b986a9",
+   "b": "cg_3cdda1a64e6363ee",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_1da228fdc6b986a9",
+   "b": "cg_b720a7117cede00d",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_1e4e22c2b2e167c3",
+   "b": "cg_3a247c15351e6300",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_1e7b9611b31561fc",
+   "b": "cg_7a31f6efaa0fa1c2",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_1ff7008ab7348d50",
+   "b": "cg_91ff95da9a9cf778",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_21dd81b018f6406e",
+   "b": "cg_467d57b44fe7e535",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_21dd81b018f6406e",
+   "b": "cg_ffe37813c697d421",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_22029ddc58c2cd17",
+   "b": "cg_26588e24d8d45c08",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_22029ddc58c2cd17",
+   "b": "cg_51eb66d3443d0d63",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_22029ddc58c2cd17",
+   "b": "cg_bde66309223da7d8",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_222c4e00bfe28561",
+   "b": "cg_68de842fe1aad842",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_233bf105383745f0",
+   "b": "cg_e1b447e13ebb3214",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_234286752027bdbd",
+   "b": "cg_67364d071f4059fb",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_234286752027bdbd",
+   "b": "cg_d9a3624158d74454",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_239b140581f7e4de",
+   "b": "cg_76cb03ea5bb5ccbd",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_23f1c794d99f4c9b",
+   "b": "cg_824700b7e3693ba2",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_24defd0074260c1b",
+   "b": "cg_58605b915e5179e1",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_264f55068cf5f1b2",
+   "b": "cg_830f55f3bcd80115",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_26588e24d8d45c08",
+   "b": "cg_51eb66d3443d0d63",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_26588e24d8d45c08",
+   "b": "cg_bde66309223da7d8",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_269274c5006077ea",
+   "b": "cg_94134245c5bb6ffc",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_2710ba07edc999a2",
+   "b": "cg_385c500a06a7fd46",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_2710ba07edc999a2",
+   "b": "cg_7cbf3efbc9e67974",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_2710ba07edc999a2",
+   "b": "cg_c0721f28224c1cab",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_281be3230ffa67a2",
+   "b": "cg_43dcbd35f2b6fdfb",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_2949df739582f58d",
+   "b": "cg_b90605eb1c9c94af",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_2a288a86e78fe376",
+   "b": "cg_c20c56a63932951a",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_2a9af1fbab681e30",
+   "b": "cg_b02b9945865bf12c",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_2b08b570b796083a",
+   "b": "cg_3fdef5668fedbed8",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_2ba401a311a74d2b",
+   "b": "cg_6da0de1726524b22",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_3022ef7dcbbb1877",
+   "b": "cg_ed51c2802671cde9",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_302b467a5337cfc4",
+   "b": "cg_85b50466ad350fde",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_31fab55726ad237f",
+   "b": "cg_7d92ec5e2e9d97bc",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_33d24ba6c1686853",
+   "b": "cg_5d24506f8312ee36",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_33da1418cbea2e54",
+   "b": "cg_7447ae1746c86a23",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_362474b528a883de",
+   "b": "cg_fa460754eb4d099a",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_370020d7b1134b39",
+   "b": "cg_c9880272433b148f",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_385c500a06a7fd46",
+   "b": "cg_7cbf3efbc9e67974",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_385c500a06a7fd46",
+   "b": "cg_a832521151347620",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_385c500a06a7fd46",
+   "b": "cg_c0721f28224c1cab",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_38a5e51e0c24c6e1",
+   "b": "cg_3cdda1a64e6363ee",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_38a5e51e0c24c6e1",
+   "b": "cg_b720a7117cede00d",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_38dfbd3191c9e1d6",
+   "b": "cg_ff3d27e853aad05c",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_3a2fe47b740af69d",
+   "b": "cg_875d0fb1b2c1656f",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_3b2b07d006c77ca2",
+   "b": "cg_b79ec3a4aba6adb4",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_3c1ac9f7399950ea",
+   "b": "cg_95a4ff70d51a985d",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_3c2aad29e639e709",
+   "b": "cg_4dea14ac00cb4af1",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_3cdda1a64e6363ee",
+   "b": "cg_b720a7117cede00d",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_3d5724e240fea312",
+   "b": "cg_6e865b2887433afd",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_3dee76df337d72f2",
+   "b": "cg_ee82384d1fa8ac50",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_3e81611bf0b7871b",
+   "b": "cg_f5465b1580fee509",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_3fde57d95d45910d",
+   "b": "cg_7e7e7d05daf9146d",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_40762544b11cba99",
+   "b": "cg_6c2a793bb981a39b",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_40b789aa272d38a0",
+   "b": "cg_8a5f61f87d070360",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_41f6180bbeccea92",
+   "b": "cg_c42cac846fb96f7f",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4204b25577bac5b5",
+   "b": "cg_b2776bd8b6de2252",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_439c20446ae6c56a",
+   "b": "cg_454e993a52268542",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_44d1a7ee8d574da4",
+   "b": "cg_f9f724bb2a35f01f",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_450348e5f8b284a8",
+   "b": "cg_553d89796fd92b9c",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_454e993a52268542",
+   "b": "cg_aa74982f0c693cad",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_454e993a52268542",
+   "b": "cg_fcb9c39e7281a6f6",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_45cb7eb631f1994f",
+   "b": "cg_5090802b52fb9832",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_466d2c49c7650985",
+   "b": "cg_fd4127fe4395bde1",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4676ee2d131b7902",
+   "b": "cg_740850b735eebdf3",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_467d57b44fe7e535",
+   "b": "cg_ffe37813c697d421",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_48be1b2043620d23",
+   "b": "cg_b37222c42f8f1b8b",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_49f2e4f30bc00691",
+   "b": "cg_af53188d44a11e6f",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4b21077758b16981",
+   "b": "cg_5e0ad7454a9716ab",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4b21077758b16981",
+   "b": "cg_b1a1ecf35b4b634d",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4bdb6bc4b2c2fadc",
+   "b": "cg_4ec82cfa40923e5b",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4bdb6bc4b2c2fadc",
+   "b": "cg_8b6ef9cb4450c0b2",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4c7f11b8a8e6e7f8",
+   "b": "cg_e72ecb1f5a567c17",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4d04378fde22dff6",
+   "b": "cg_5f617244d1d672cb",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4ec82cfa40923e5b",
+   "b": "cg_8b6ef9cb4450c0b2",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4f96b5996b545645",
+   "b": "cg_a5cbdd4fbef04de3",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4fa13edb7faccf81",
+   "b": "cg_77a6b051b8f56b6b",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_4fa13edb7faccf81",
+   "b": "cg_a991e0b71c559f64",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_5012ce4da9faf93a",
+   "b": "cg_e5254c414a0307db",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_509b70669d2387b5",
+   "b": "cg_81a37fe6f4950be6",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_51eb66d3443d0d63",
+   "b": "cg_bde66309223da7d8",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_544f03e72fc0eb85",
+   "b": "cg_b238d5c4ae408070",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_54cc1423281359ba",
+   "b": "cg_b774159e108b8933",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_54f224b861f2defc",
+   "b": "cg_ff21532ca0ff91e7",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_57b95cf05690f15d",
+   "b": "cg_e1e9c5a24abab820",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_5811764451454815",
+   "b": "cg_59fa7f2c8623142e",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_58819bc9b928b935",
+   "b": "cg_c99cf6de80895147",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_58819bc9b928b935",
+   "b": "cg_f97e8eaadf69dda3",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_599c0ad28e02cde3",
+   "b": "cg_9275d2c103dfc0c1",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_59b5d195f1984cbf",
+   "b": "cg_64b0dcda936f4e1f",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_5a932d394a8156b0",
+   "b": "cg_a76c621facb86cbc",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_5b52bd2a0a5c98e3",
+   "b": "cg_70ff6b04c703dcc5",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_5be857cb021dc161",
+   "b": "cg_845e25a464bbb87f",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_5cb137c05c0a0207",
+   "b": "cg_7007c6331f2d8dd2",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_5e0ad7454a9716ab",
+   "b": "cg_b1a1ecf35b4b634d",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_60697086954621f3",
+   "b": "cg_e23eb7eeb9532b5e",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_63dc6bc1de5210ab",
+   "b": "cg_bb5e40622a188491",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_67364d071f4059fb",
+   "b": "cg_d9a3624158d74454",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_67d1416eee92cc67",
+   "b": "cg_84bde64658baabf8",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6a66c61c8b725670",
+   "b": "cg_fc8df82b22ef9692",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6acd396f5eca86fc",
+   "b": "cg_f6bc6c1c6515e8bb",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6b0beaaed8e4b818",
+   "b": "cg_8b41c3b866d14c09",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_6b0ccbc80cdc1518",
+   "b": "cg_8e94504bca050ff1",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6c8627bc7bc598aa",
+   "b": "cg_ea0e5ce5fa743aa1",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6ce8b6079c7c5590",
+   "b": "cg_72b328451809dc8e",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6d0fdb38af36b1be",
+   "b": "cg_f354252d06bc08f4",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6e0f04faf1f8343e",
+   "b": "cg_94ca6fb2ca7fa672",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6e0f04faf1f8343e",
+   "b": "cg_ed8f31152fda8fa9",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6e9eeb3ad97a2826",
+   "b": "cg_c0e846a31e03f359",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_6f0bb11912db1b9b",
+   "b": "cg_74b61e6b75d6998b",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_7210fef52594430c",
+   "b": "cg_a07218309c9de64e",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_72376f3ff6704d88",
+   "b": "cg_f38dc1bb3ae1af0c",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_727239f4e0e460bb",
+   "b": "cg_db98213777ed086b",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_733f00437810902d",
+   "b": "cg_d1bd556913dc2716",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_73ac8bd5ef41faa6",
+   "b": "cg_9301c2e2cdf43acf",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_73ac8bd5ef41faa6",
+   "b": "cg_9de744ab2091c9ed",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_73ac8bd5ef41faa6",
+   "b": "cg_b15f14763ab73d0e",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_73ac8bd5ef41faa6",
+   "b": "cg_dcc95e479e4a39b4",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_73ac8bd5ef41faa6",
+   "b": "cg_e04b6f445ea2aa65",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_75164d5d45a13d66",
+   "b": "cg_dda99a19d724b6b0",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_770cdf53e0a11da7",
+   "b": "cg_a33b5a0a775dd520",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_77a6b051b8f56b6b",
+   "b": "cg_a991e0b71c559f64",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_77f6595a1e5f8c5e",
+   "b": "cg_9e942761720c985d",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_7af9a87cc5fa5e16",
+   "b": "cg_b720a7117cede00d",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_7b0d81f6f748489a",
+   "b": "cg_e480a8e144445934",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_7b13bb46a39acf3a",
+   "b": "cg_b9b2377e3501ee8b",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_7cbf3efbc9e67974",
+   "b": "cg_a832521151347620",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_7cbf3efbc9e67974",
+   "b": "cg_c0721f28224c1cab",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_7d919567a2be219b",
+   "b": "cg_cbe0561ef6e3be68",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_846f0d49a402a25e",
+   "b": "cg_ae014a638d843f8c",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_85d1df911ecc9beb",
+   "b": "cg_b863c45154a1d101",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_898f1af602a0e9a2",
+   "b": "cg_9ac1aaafe2ffd33b",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_8a8aceefc6745a0a",
+   "b": "cg_ef0f8f33837ee43c",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_8d1d02108292688e",
+   "b": "cg_a601f3b83d9f6db4",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_8ff93ab383ec007d",
+   "b": "cg_b88190fcc5c6034a",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_9301c2e2cdf43acf",
+   "b": "cg_9de744ab2091c9ed",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_9301c2e2cdf43acf",
+   "b": "cg_b15f14763ab73d0e",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_9301c2e2cdf43acf",
+   "b": "cg_dcc95e479e4a39b4",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_9301c2e2cdf43acf",
+   "b": "cg_e04b6f445ea2aa65",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_94ca6fb2ca7fa672",
+   "b": "cg_ed8f31152fda8fa9",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_94eef77c9827a068",
+   "b": "cg_f8fde5770a6bf5f7",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_963fb71876609fe2",
+   "b": "cg_c52cb2bcbd9eb48c",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_979037226785eb2e",
+   "b": "cg_e1f1e2bbaecb8b19",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_9888d4a2c5d3a135",
+   "b": "cg_c6dac00dc0866f89",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_9ab440c586b30229",
+   "b": "cg_ee8365ae62e91ee2",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_9c76107fe5cb1151",
+   "b": "cg_e62e3d2636776427",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_9de744ab2091c9ed",
+   "b": "cg_b15f14763ab73d0e",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_9de744ab2091c9ed",
+   "b": "cg_dcc95e479e4a39b4",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_9de744ab2091c9ed",
+   "b": "cg_e04b6f445ea2aa65",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_a0a488103e70fad7",
+   "b": "cg_b9bf6b99eaca2282",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_a506da956c9eb5fb",
+   "b": "cg_f937b5a10fded801",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_a832521151347620",
+   "b": "cg_c0721f28224c1cab",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_a9cb15b8833a1743",
+   "b": "cg_f3749f1391ff2c35",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_aa74982f0c693cad",
+   "b": "cg_fcb9c39e7281a6f6",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_aac2867ab68f740c",
+   "b": "cg_ebe9799166c1c605",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_ab56b18ab9d5e5c4",
+   "b": "cg_f8482dd53e5498c5",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_b11f4caf4c318b73",
+   "b": "cg_d6a0273a905ea7fa",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_b15f14763ab73d0e",
+   "b": "cg_dcc95e479e4a39b4",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_b15f14763ab73d0e",
+   "b": "cg_e04b6f445ea2aa65",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_b2471f95b12f039e",
+   "b": "cg_c77535eee1e008aa",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_b368cbedf5e8c5c7",
+   "b": "cg_eb678f70cc673ba7",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_b81dc7566866b64b",
+   "b": "cg_d55e3932f2744de7",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_b9f690a34fa36f4a",
+   "b": "cg_ccba79dd0e7da913",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_bae8b45d46e31193",
+   "b": "cg_c3275ea594137b92",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_baf80a9e1e66e4d9",
+   "b": "cg_db576385fb19d31d",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_bdc92e76e9e649c4",
+   "b": "cg_cb8f905b89eaac1a",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_c3f1463127d1c9bf",
+   "b": "cg_fc6868ae8138bdf6",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_cfb21fd7d2d38c77",
+   "b": "cg_cfed5f63e9c49248",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_dcc95e479e4a39b4",
+   "b": "cg_e04b6f445ea2aa65",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_dfa52791e3f25f69",
+   "b": "cg_ec2fdd4d830153b6",
+   "reason": "same_domain"
+  },
+  {
+   "a": "cg_e746bc10d72241ca",
+   "b": "cg_fa5cba3c6e333bd7",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_e96196323731c5d3",
+   "b": "cg_fb74b776830b5e99",
+   "reason": "similar_name"
+  },
+  {
+   "a": "cg_ec1eb5a4bbe5407d",
+   "b": "cg_f48f6e13d074cc80",
+   "reason": "same_domain"
+  }
+ ],
+ "schema": "cg-roster-qc-v1",
+ "suspect_names": [
+  {
+   "group_id": "cg_1acd26a56a9243db",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_2565f64d0d655829",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_326e8c5312f2d709",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_362474b528a883de",
+   "reasons": [
+    "backtick"
+   ]
+  },
+  {
+   "group_id": "cg_38a829a567a111f9",
+   "reasons": [
+    "backtick"
+   ]
+  },
+  {
+   "group_id": "cg_4062140ceb02fd01",
+   "reasons": [
+    "short_one_case"
+   ]
+  },
+  {
+   "group_id": "cg_43efc14fc8468ffa",
+   "reasons": [
+    "double_question_mark"
+   ]
+  },
+  {
+   "group_id": "cg_4598553b1a062a05",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_4676ee2d131b7902",
+   "reasons": [
+    "backtick"
+   ]
+  },
+  {
+   "group_id": "cg_538da398ac067047",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_54b168e756389f0e",
+   "reasons": [
+    "backtick"
+   ]
+  },
+  {
+   "group_id": "cg_5e505f3234469f16",
+   "reasons": [
+    "double_question_mark"
+   ]
+  },
+  {
+   "group_id": "cg_6988af0a618baff1",
+   "reasons": [
+    "short_one_case"
+   ]
+  },
+  {
+   "group_id": "cg_7736cfc7a421c1c8",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_98c1303e1ca711cd",
+   "reasons": [
+    "short_one_case"
+   ]
+  },
+  {
+   "group_id": "cg_9c99da23c2c63196",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_a39b23bd63d53731",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_ae6403f505fe1de5",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_af9a73d3c85db639",
+   "reasons": [
+    "short_one_case"
+   ]
+  },
+  {
+   "group_id": "cg_b0c512b670cf15c3",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_bbf319255fbcbfc8",
+   "reasons": [
+    "short_one_case"
+   ]
+  },
+  {
+   "group_id": "cg_c65a503090767c76",
+   "reasons": [
+    "web_address"
+   ]
+  },
+  {
+   "group_id": "cg_c838b9f4ecfd0683",
+   "reasons": [
+    "short_one_case"
+   ]
+  },
+  {
+   "group_id": "cg_cd541318a5af50f4",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_cec01abb6eb718dd",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_cfb5b72598c054a9",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_d281fd597857f953",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_dccff5a3992cc72c",
+   "reasons": [
+    "short_one_case"
+   ]
+  },
+  {
+   "group_id": "cg_dd85dd02006ca343",
+   "reasons": [
+    "backtick"
+   ]
+  },
+  {
+   "group_id": "cg_df1bc310bc1647cf",
+   "reasons": [
+    "domain_only"
+   ]
+  },
+  {
+   "group_id": "cg_fa0921aa916d8fe2",
+   "reasons": [
+    "domain_only"
+   ]
+  }
+ ]
+}
