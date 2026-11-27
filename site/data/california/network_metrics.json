@@ -1,9 +1,9 @@
 {
   "schema_version": "bq3-v1",
-  "generated_at": "2026-11-25T20:02:25+00:00",
+  "generated_at": "2026-11-27T19:33:20+00:00",
   "source": {
     "index": "site/data/california/index.json",
-    "index_build_timestamp": "2026-11-25T20:00:41+00:00",
+    "index_build_timestamp": "2026-11-27T19:32:13+00:00",
     "institutions": "site/data/california/institutions.json"
   },
   "method": {
@@ -36,9 +36,9 @@
     "rounding": "Shares, density, clustering, modularity and quantiles are rounded to 4 decimal places. Counts are whole numbers."
   },
   "corpus": {
-    "atlas_authors": 2680,
-    "plastic_related_works": 1607,
-    "works_in_year_windows": 1542,
+    "atlas_authors": 2688,
+    "plastic_related_works": 1611,
+    "works_in_year_windows": 1546,
     "works_before_2011": 65,
     "works_without_year": 0,
     "works_with_no_california_author": 0
@@ -52,17 +52,17 @@
           "window": "all",
           "years": null,
           "partial": false,
-          "works": 1607,
-          "nodes": 2159,
-          "edges": 6666,
-          "components": 476,
-          "components_with_edges": 196,
-          "giant_component_nodes": 1030,
-          "giant_component_share": 0.4771,
+          "works": 1611,
+          "nodes": 2167,
+          "edges": 6694,
+          "components": 477,
+          "components_with_edges": 197,
+          "giant_component_nodes": 1036,
+          "giant_component_share": 0.4781,
           "density": 0.0029,
-          "average_clustering": 0.6846,
+          "average_clustering": 0.6841,
           "isolates": 280,
-          "isolate_share": 0.1297,
+          "isolate_share": 0.1292,
           "degree": {
             "min": 0.0,
             "p25": 2.0,
@@ -71,19 +71,19 @@
             "p90": 14.0,
             "max": 129.0
           },
-          "communities": 214,
-          "modularity": 0.8811,
+          "communities": 216,
+          "modularity": 0.8831,
           "cross_institution": {
-            "fraction": 0.2543,
-            "edges_considered": 6226
+            "fraction": 0.2531,
+            "edges_considered": 6254
           },
           "cross_sector": {
-            "fraction": 0.1453,
-            "edges_considered": 5554
+            "fraction": 0.1446,
+            "edges_considered": 5582
           },
           "out_of_region": {
-            "fraction": 0.3585,
-            "edges_considered": 6477
+            "fraction": 0.3566,
+            "edges_considered": 6505
           }
         },
         {
@@ -123,7 +123,7 @@
             "edges_considered": 333
           },
           "out_of_region": {
-            "fraction": 0.522,
+            "fraction": 0.5194,
             "edges_considered": 387
           }
         },
@@ -164,7 +164,7 @@
             "edges_considered": 875
           },
           "out_of_region": {
-            "fraction": 0.4733,
+            "fraction": 0.4782,
             "edges_considered": 1031
           }
         },
@@ -205,7 +205,7 @@
             "edges_considered": 3357
           },
           "out_of_region": {
-            "fraction": 0.3895,
+            "fraction": 0.3854,
             "edges_considered": 3985
           }
         },
@@ -216,17 +216,17 @@
             2026
           ],
           "partial": true,
-          "works": 288,
-          "nodes": 604,
-          "edges": 1441,
-          "components": 179,
-          "components_with_edges": 94,
+          "works": 292,
+          "nodes": 615,
+          "edges": 1482,
+          "components": 180,
+          "components_with_edges": 95,
           "giant_component_nodes": 54,
-          "giant_component_share": 0.0894,
-          "density": 0.0079,
-          "average_clustering": 0.6935,
+          "giant_component_share": 0.0878,
+          "density": 0.0078,
+          "average_clustering": 0.6939,
           "isolates": 85,
-          "isolate_share": 0.1407,
+          "isolate_share": 0.1382,
           "degree": {
             "min": 0.0,
             "p25": 1.0,
@@ -235,19 +235,19 @@
             "p90": 12.0,
             "max": 31.0
           },
-          "communities": 95,
-          "modularity": 0.9503,
+          "communities": 96,
+          "modularity": 0.9499,
           "cross_institution": {
-            "fraction": 0.1914,
-            "edges_considered": 1374
+            "fraction": 0.1859,
+            "edges_considered": 1415
           },
           "cross_sector": {
-            "fraction": 0.1202,
-            "edges_considered": 1306
+            "fraction": 0.1166,
+            "edges_considered": 1347
           },
           "out_of_region": {
-            "fraction": 0.1224,
-            "edges_considered": 1405
+            "fraction": 0.1245,
+            "edges_considered": 1446
           }
         }
       ]
@@ -260,13 +260,13 @@
           "window": "all",
           "years": null,
           "partial": false,
-          "works": 1607,
-          "nodes": 1913,
-          "edges": 27821,
+          "works": 1611,
+          "nodes": 1914,
+          "edges": 27827,
           "components": 30,
           "components_with_edges": 15,
-          "giant_component_nodes": 1849,
-          "giant_component_share": 0.9665,
+          "giant_component_nodes": 1850,
+          "giant_component_share": 0.9666,
           "density": 0.0152,
           "average_clustering": 0.7807,
           "isolates": 15,
@@ -276,14 +276,14 @@
             "p25": 5.0,
             "median": 10.0,
             "p75": 40.0,
-            "p90": 78.8,
+            "p90": 78.7,
             "max": 389.0
           },
-          "communities": 28,
-          "modularity": 0.524,
+          "communities": 29,
+          "modularity": 0.5126,
           "cross_institution": {
             "fraction": 1.0,
-            "edges_considered": 27821
+            "edges_considered": 27827
           },
           "cross_sector": {
             "fraction": 0.7161,
@@ -291,7 +291,7 @@
           },
           "out_of_region": {
             "fraction": 0.9886,
-            "edges_considered": 27821
+            "edges_considered": 27827
           }
         },
         {
@@ -424,38 +424,38 @@
             2026
           ],
           "partial": true,
-          "works": 288,
-          "nodes": 593,
-          "edges": 3691,
+          "works": 292,
+          "nodes": 596,
+          "edges": 3700,
           "components": 18,
           "components_with_edges": 11,
-          "giant_component_nodes": 552,
-          "giant_component_share": 0.9309,
-          "density": 0.021,
-          "average_clustering": 0.8254,
+          "giant_component_nodes": 555,
+          "giant_component_share": 0.9312,
+          "density": 0.0209,
+          "average_clustering": 0.8256,
           "isolates": 7,
-          "isolate_share": 0.0118,
+          "isolate_share": 0.0117,
           "degree": {
             "min": 0.0,
             "p25": 4.0,
             "median": 7.0,
             "p75": 15.0,
-            "p90": 34.8,
+            "p90": 34.5,
             "max": 127.0
           },
-          "communities": 26,
-          "modularity": 0.6667,
+          "communities": 25,
+          "modularity": 0.6526,
           "cross_institution": {
             "fraction": 1.0,
-            "edges_considered": 3691
+            "edges_considered": 3700
           },
           "cross_sector": {
             "fraction": 0.6667,
             "edges_considered": 93
           },
           "out_of_region": {
-            "fraction": 0.9748,
-            "edges_considered": 3691
+            "fraction": 0.9749,
+            "edges_considered": 3700
           }
         }
       ]

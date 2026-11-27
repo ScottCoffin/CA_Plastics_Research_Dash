@@ -5,7 +5,7 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 
 ## Counts
 
-- Works in the v3.1 corpus: 2067; excluded by `curation/overrides_works.csv` (`exclude` = true): 130.
+- Works in the v3.1 corpus: 2071; excluded by `curation/overrides_works.csv` (`exclude` = true): 130.
 - California institutions with at least one non-excluded v3.1 work: 209.
 - Site institutions (`site/data/california/institutions.json`, ca_flag true, work_count >= 1): 209, one row each in `config/institution_types.csv`.
 - type_source: owner_override 60, owner_reviewed 58, rule 91.
@@ -32,14 +32,14 @@ Check with `py -3.14 scripts/build_institution_types.py --check`.
 | 2 | I97018004 | Stanford University | 183 | private | owner_reviewed | old top 100 |
 | 3 | I95457486 | University of California, Berkeley | 161 | UC | owner_reviewed | old top 100 |
 | 4 | I103635307 | University of California, Riverside | 130 | UC | owner_reviewed | old top 100 |
-| 5 | I36258959 | University of California San Diego | 108 | UC | owner_reviewed | old top 100 |
-| 6 | I154570441 | University of California, Santa Barbara | 107 | UC | owner_reviewed | old top 100 |
-| 7 | I161318765 | University of California, Los Angeles | 101 | UC | owner_reviewed | old top 100 |
-| 8 | I1174212 | University of Southern California | 67 | private | owner_reviewed | old top 100 |
+| 5 | I154570441 | University of California, Santa Barbara | 108 | UC | owner_reviewed | old top 100 |
+| 6 | I36258959 | University of California San Diego | 108 | UC | owner_reviewed | old top 100 |
+| 7 | I161318765 | University of California, Los Angeles | 102 | UC | owner_reviewed | old top 100 |
+| 8 | I1174212 | University of Southern California | 68 | private | owner_reviewed | old top 100 |
 | 9 | I26538001 | San Diego State University | 66 | CSU | owner_reviewed | old top 100 |
 | 10 | I150209017 | Scripps Institution of Oceanography | 63 | UC | owner_reviewed | old top 100 |
 | 11 | I180670191 | University of California, San Francisco | 51 | UC | owner_reviewed | old top 100 |
-| 12 | I204250578 | University of California, Irvine | 46 | UC | owner_reviewed | old top 100 |
+| 12 | I204250578 | University of California, Irvine | 47 | UC | owner_reviewed | old top 100 |
 | 13 | I11006740 | Southern California Coastal Water Research Project | 44 | JPA | owner_override | new |
 | 14 | I185103710 | University of California, Santa Cruz | 44 | UC | owner_reviewed | old top 100 |
 | 15 | I149919469 | California Polytechnic State University | 30 | CSU | owner_reviewed | old top 100 |

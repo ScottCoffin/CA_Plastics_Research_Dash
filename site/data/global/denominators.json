@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-25T20:02:25Z",
+  "generated_at": "2026-11-27T19:33:20Z",
   "metrics": {
-    "as_of": "2026-11-25",
+    "as_of": "2026-11-27",
     "ci_level": 0.95,
     "method": {
       "cagr": "Ordinary least squares of ln(value) on calendar year over the used years, slope b. CAGR = exp(b) - 1. A CAGR needs at least 2 used years; the 95% interval needs at least 3. Interval = exp(b -/+ t * SE(b)) - 1, with SE(b) from the residual scatter and t the two-sided 95% Student t quantile at df = n - 2.",
@@ -6573,7 +6573,7 @@
           "year": 2025
         },
         {
-          "count": 318,
+          "count": 322,
           "partial_year": true,
           "retracted": 0,
           "year": 2026
@@ -7635,7 +7635,7 @@
           "year": 2025
         },
         {
-          "count": 288,
+          "count": 292,
           "partial_year": true,
           "retracted": 0,
           "year": 2026
@@ -7651,10 +7651,10 @@
   ],
   "source": {
     "schema_version": "denominator_series.v1",
-    "sha256": "754381a3474f728732117774b77ce619dec20472085f4e282893af6a6205c5d3"
+    "sha256": "d2efe39413b8d09adf65a09277ab612fb09077cf493ea27656f87df0c6d9a878"
   },
   "version": {
-    "as_of": "2026-11-25",
+    "as_of": "2026-11-27",
     "last_complete_year": 2025,
     "query_version": "plastic-v3.1",
     "window_end": 2025,
