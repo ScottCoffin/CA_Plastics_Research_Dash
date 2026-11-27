@@ -61,8 +61,10 @@ def test_payload_is_loaded_through_site_root_and_lazily() -> None:
     assert "../data/" not in text
     atlas = ATLAS_JS.read_text(encoding="utf-8")
     assert "export async function loadJson" in atlas
-    assert 'dataFolderUrl("data/california/", path)' in atlas
-    assert "new URL(folder, siteRoot())" in atlas
+    # GP-5: the region comes from the page folder; California stays the default region.
+    assert "dataFolderUrl(`data/${regionSlug(base)}/`, path, base)" in atlas
+    assert 'DEFAULT_REGION_SLUG = "california"' in atlas
+    assert "siteRoot(base)" in atlas
     # Lazy: the payload is fetched only when the panel nears the viewport.
     assert "IntersectionObserver" in text and "rootMargin" in text
     assert text.count("loadPanel(panel);") == 2

@@ -10,6 +10,11 @@ function pageBase() {
   return typeof document !== "undefined" ? document.baseURI : "http://localhost/app/";
 }
 
+// Region slugs with a data folder under data/<slug>/ (regions/_registry.yml, tier A). Must match
+// the registry; tests/test_region_data_url.py checks it. California is the default region.
+export const REGION_SLUGS = Object.freeze(["california", "norway", "belgium"]);
+export const DEFAULT_REGION_SLUG = "california";
+
 // The folder that holds data/, assets/, status.html and feed.xml, as an absolute URL.
 export function siteRoot(base = pageBase()) {
   const url = new URL(base);
@@ -27,12 +32,24 @@ export function pageUrl(path, base = pageBase()) {
 // Data folders (docs/DATA_LAYOUT.md). California files live in data/california/, global files in
 // data/global/, and only release.json and status.json sit at data/ itself. Pages build data URLs
 // only through these helpers.
-function dataFolderUrl(folder, path) {
-  return new URL(String(path).replace(/^\/+/, ""), new URL(folder, siteRoot())).href;
+function dataFolderUrl(folder, path, base = pageBase()) {
+  return new URL(String(path).replace(/^\/+/, ""), new URL(folder, siteRoot(base))).href;
 }
 
-export function regionDataUrl(path) {
-  return dataFolderUrl("data/california/", path);
+// The region whose data a page reads: the region folder the page sits in, matched with the same
+// one-folder-deep rule as siteRoot (so /norway/institutions, /app/norway/x and /<prefix>/belgium/x
+// resolve), else California. Global pages such as /explore and / keep California data.
+const REGION_FOLDER = new RegExp(`\\/(${REGION_SLUGS.join("|")})\\/[^/]*$`);
+
+export function regionSlug(base = pageBase()) {
+  const match = REGION_FOLDER.exec(new URL(base).pathname);
+  return match ? match[1] : DEFAULT_REGION_SLUG;
+}
+
+// A region's data file under data/<slug>/ for the page's region (California unless the page is
+// under /norway/ or /belgium/ or another registry region folder).
+export function regionDataUrl(path, base = pageBase()) {
+  return dataFolderUrl(`data/${regionSlug(base)}/`, path, base);
 }
 
 export function globalDataUrl(path) {

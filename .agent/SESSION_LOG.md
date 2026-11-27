@@ -306,3 +306,4 @@
 | 2026-11-26 | GRP-ENRICH slice 3b | IRS register hints shown in the tagging form's suggestions box; browser walk 63/63. | this commit |
 | 2026-11-26 | GRP-LLM research | docs/GROUP_LLM_ENRICHMENT.md: LLM web-search tagging cost (full roster ~$60-$130; pilot ~$10-$25) and self-evolution pilot design; TODO GRP-LLM gated on H64. | this commit |
 | 2026-11-26 | H63 deploy | Worker 665d4543 (plastics quote 10-50 words), then the held form commit pushed; H64 deferred (no budget). | this commit |
+| 2026-11-26 | GP-5 step 1 | regionDataUrl region-aware (REGION_SLUGS checked against the registry); GP-1 contract passed. | this commit |
