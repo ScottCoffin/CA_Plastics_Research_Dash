@@ -4,6 +4,7 @@
 
 - The weekly BFFP refresh is implemented with additive admission, stable IDs and approved curation precedence. The workflow runs Sunday 08:43 UTC or by manual dispatch. It checks the roster and six derived files before publishing.
 - Local live browser probe received a valid organisation list from BFFP's public About page. Clean-worktree tests passed with 3,835 passed and 18 skipped. Focused roster, admission and build tests passed (202).
+- Hosted run 45916544490 timed out before publication. The updated browser waits for navigation to commit and reports the page and API stages on timeout. The revised local live probe and clean gate passed. Repeat the hosted dispatch on the updated commit.
 - AMB-POOL, GRP-NAME-FIX and A4-POLICY passed CI and Pages. Worker version be02af19 uses the existing D1 schema. The published Ambassadors page serves the name correction field.
 
 ## Next task

@@ -287,3 +287,4 @@
 | 2026-11-26 | GRP-NAME-FIX | Optional name field and privacy guard for non-organisation removals; 98 focused tests, clean 3,830 passed / 18 skipped, Framework build and desktop/mobile Chromium checks passed | this commit |
 | 2026-11-26 | A4-POLICY | Published short BFFP permission acknowledgement and recorded removal, agreement and review thresholds. Focused 95 passed. Clean 3,830 passed / 18 skipped. | this commit |
 | 2026-11-26 | BFFP-REFRESH | Weekly additive roster and guarded publication implemented. Focused 202 passed. Clean 3,835 passed / 18 skipped. Local BFFP browser probe passed. GitHub manual run pending. | this commit |
+| 2026-11-26 | BFFP-REFRESH retry | Hosted run 45916544490 timed out before publication. Earlier navigation and page/API diagnostics pass local live and full clean gates. | this commit |

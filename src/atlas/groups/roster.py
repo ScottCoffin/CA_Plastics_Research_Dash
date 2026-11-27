@@ -121,11 +121,19 @@ def page_fetcher(url: str, user_agent: str) -> tuple[int, bytes]:
     from playwright.sync_api import sync_playwright
 
     members_host = urllib.parse.urlsplit(url).hostname
+    navigation_status: int | None = None
+    member_request_failure: str | None = None
+    member_requested = False
+
+    def is_member_url(value: str) -> bool:
+        return value.split("?", 1)[0] == url
 
     def bffp_only(route, request):  # type: ignore[no-untyped-def]
         host = urllib.parse.urlsplit(request.url).hostname or ""
         if host == members_host:
-            if request.url.split("?", 1)[0] == url:
+            if is_member_url(request.url):
+                nonlocal member_requested
+                member_requested = True
                 return route.continue_()
             return route.abort()
         if (
@@ -134,26 +142,37 @@ def page_fetcher(url: str, user_agent: str) -> tuple[int, bytes]:
             return route.continue_()
         return route.abort()
 
+    def record_failure(request):  # type: ignore[no-untyped-def]
+        if is_member_url(request.url):
+            nonlocal member_request_failure
+            member_request_failure = request.failure
+
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
         try:
             context = browser.new_context(user_agent=f"{user_agent} HeadlessChrome")
             context.route("**/*", bffp_only)
             page = context.new_page()
+            page.on("requestfailed", record_failure)
             with page.expect_response(
-                lambda r: r.url.split("?", 1)[0] == url, timeout=PAGE_TIMEOUT_MS
+                lambda r: is_member_url(r.url), timeout=PAGE_TIMEOUT_MS
             ) as info:
-                navigation = page.goto(
-                    BFFP_ABOUT_URL, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS
-                )
+                navigation = page.goto(BFFP_ABOUT_URL, wait_until="commit", timeout=PAGE_TIMEOUT_MS)
                 if navigation is None:
                     raise RosterFetchError("BFFP About page returned no response")
+                navigation_status = navigation.status
                 if not navigation.ok:
-                    raise RosterFetchError(f"BFFP About page: HTTP {navigation.status}")
+                    raise RosterFetchError(f"BFFP About page: HTTP {navigation_status}")
             response = info.value
             return response.status, response.body()
         except PlaywrightTimeoutError as exc:
-            raise RosterFetchError("BFFP member list timed out on the About page") from exc
+            page_result = f"HTTP {navigation_status}" if navigation_status else "no HTTP response"
+            member_result = member_request_failure or (
+                "request pending" if member_requested else "request did not start"
+            )
+            raise RosterFetchError(
+                f"BFFP member list timed out (About page: {page_result}, API: {member_result})"
+            ) from exc
         finally:
             browser.close()
 
