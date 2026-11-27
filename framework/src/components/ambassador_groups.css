@@ -83,6 +83,8 @@
 .am .g-hints-body { padding: 0 14px 14px; }
 .am .g-hints-body > .hint { margin: 0 0 8px; }
 .am .g-hints-body ul { margin: 8px 0 0; padding-left: 18px; }
+.am .g-hints-part { margin: 10px 0 0; }
+.am .g-hints-part > p { margin: 0; }
 .am .g-hints-body a, .am .g-register a { color: var(--pv-ink); text-decoration: underline; }
 .am .g-hints-warn { margin: 0 0 8px; font-weight: 600; }
 .am .g-register { font-size: 14px; margin: 12px 0 0; }

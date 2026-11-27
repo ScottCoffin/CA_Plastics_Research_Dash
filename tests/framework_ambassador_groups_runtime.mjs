@@ -1,8 +1,8 @@
 // CG-6c / AMB-GROUPS-UX pure contract checks. Browser interactions run in the shared mocked-API gate.
 import assert from "node:assert/strict";
 import {
-  CANNOT_REASONS, GROUP_TAXONOMY, SAME_AS_ANSWERS, TIER2_TAXONOMY, duplicateQuestions, groupSuggestionPayload, groupTagPayload,
-  isSuspectName, registerLinks, rosterLookup, suggestionFor, suggestionHTML, suspectHint,
+  CANNOT_REASONS, GROUP_TAXONOMY, SAME_AS_ANSWERS, TIER2_TAXONOMY, duplicateQuestions, formatEin, groupSuggestionPayload, groupTagPayload,
+  isSuspectName, registerLinks, registerSuggestionFor, rosterLookup, suggestionFor, suggestionHTML, suspectHint,
 } from "../framework/src/components/ambassador_groups.js";
 import {
   COUNTRY_CODES, LANGUAGE_CODES, US_STATES, languageDefaults, languageName, languageOptions, lookupPickerCode, pickerMatch, placeDefaults, placeOptions,
@@ -297,7 +297,8 @@ check("a suspect name left unchanged is not sent, even when it is too short to c
   });
   check("the suggestion box is a closed details with the hint line, new-tab links, and plain facts", () => {
     const html = suggestionHTML(GROUP, SUGGESTIONS);
-    assert.ok(html.startsWith('<details class="g-hints"><summary>Suggestions to check (from Wikidata)</summary>'));
+    assert.ok(html.startsWith('<details class="g-hints"><summary>Suggestions to check</summary>'));
+    assert.ok(html.includes("<strong>From Wikidata</strong>"));
     assert.equal(html.includes(" open"), false, "the box is closed by default");
     assert.ok(html.includes("These are hints, not tags. Confirm each value on the group's own pages before you use it."));
     assert.ok(html.includes('href="https://www.wikidata.org/wiki/Q42" target="_blank" rel="noopener noreferrer"'));
@@ -327,5 +328,65 @@ check("a suspect name left unchanged is not sent, even when it is too short to c
     assert.equal(suggestionHTML(GROUP, null).includes("<details"), false);
     assert.equal(suggestionHTML({...GROUP, group_id: "cg_9999999999999999"}, SUGGESTIONS).includes("<details"), false);
     assert.ok(suggestionHTML(GROUP, null).includes("IRS Tax Exempt Organization Search"));
+  });
+
+  // IRS register suggestions (slice 3b): matched by registered name, shown as hints in the same box.
+  const IRS_DATA = {schema: "cg-register-suggestions-v1", source: "IRS Exempt Organizations Business Master File (US government data)", groups: {
+    [GROUP.group_id]: {register: "irs_eo_bmf", ein: "840730811", registered_name: "ECO-CYCLE INC", city: "BOULDER", state: "CO", ruling_year: 1978, ntee_code: "C270", ntee_major: "C", sector_hint: "ngo_civil_society", activity_hints: ["waste_management_recycling", "cleanup_removal"]},
+    cg_3333333333333333: {register: "irs_eo_bmf", ein: "123456789", registered_name: "<img src=x onerror=alert(1)>", city: "", state: "", ruling_year: null, ntee_code: "", ntee_major: "", sector_hint: null, activity_hints: []},
+    cg_4444444444444444: {register: "irs_eo_bmf", ein: "12345", registered_name: "Short EIN Org", city: "", state: "", ruling_year: null, ntee_code: "", ntee_major: "", sector_hint: null, activity_hints: []},
+  }};
+  const HOSTILE_GROUP = {...GROUP, group_id: "cg_3333333333333333"};
+  check("IRS lookup returns a normalised entry with labels, and nothing for unknown or malformed ones", () => {
+    assert.deepEqual(registerSuggestionFor(GROUP.group_id, IRS_DATA), {
+      ein: "840730811", einFormatted: "84-0730811", registeredName: "ECO-CYCLE INC", city: "BOULDER", state: "CO", rulingYear: 1978,
+      sectorLabel: "NGO or civil society", activityLabels: ["Waste management and recycling", "Clean-ups and litter removal"],
+    });
+    assert.equal(registerSuggestionFor("cg_0000000000000000", IRS_DATA), null);
+    assert.equal(registerSuggestionFor("constructor", IRS_DATA), null);
+    assert.equal(registerSuggestionFor("__proto__", IRS_DATA), null);
+    assert.equal(registerSuggestionFor("cg_4444444444444444", IRS_DATA), null, "an EIN that is not nine digits gets no suggestion");
+    assert.equal(registerSuggestionFor(GROUP.group_id, null), null);
+    assert.equal(registerSuggestionFor(GROUP.group_id, {groups: null}), null);
+  });
+  check("EINs are formatted NN-NNNNNNN and other input is returned unchanged", () => {
+    assert.equal(formatEin("840730811"), "84-0730811");
+    assert.equal(formatEin("12345"), "12345");
+    assert.equal(formatEin(undefined), "");
+  });
+  check("the IRS part shows the register facts, a new-tab EIN link, hints, and the name-match caution", () => {
+    const html = suggestionHTML(GROUP, null, IRS_DATA);
+    assert.ok(html.startsWith('<details class="g-hints"><summary>Suggestions to check</summary>'));
+    assert.equal(html.includes(" open"), false, "the box is closed by default");
+    assert.ok(html.includes("<strong>IRS register</strong>"));
+    assert.ok(html.includes("<li>Registered as ECO-CYCLE INC, BOULDER, CO</li>"));
+    assert.ok(html.includes("<li>Tax-exempt since 1978</li>"));
+    assert.ok(html.includes('<a href="https://apps.irs.gov/app/eos/details/?ein=840730811" target="_blank" rel="noopener noreferrer">84-0730811'));
+    assert.ok(html.includes("<li>The register's activity code suggests: NGO or civil society · Waste management and recycling, Clean-ups and litter removal</li>"));
+    assert.ok(html.includes("Matched by registered name. Check that this is the same organisation."));
+    assert.equal(html.includes("From Wikidata"), false, "no Wikidata part without a Wikidata entry");
+    assert.equal(html.includes("Matched by name only"), false);
+  });
+  check("the box is present when only the IRS source has data, and the IRS part is absent without an entry", () => {
+    const html = suggestionHTML(HOSTILE_GROUP, null, IRS_DATA);
+    assert.ok(html.startsWith("<details"), "the IRS source alone opens the box");
+    assert.equal(html.includes("activity code suggests"), false, "no hints line without activity or sector hints");
+    assert.equal(html.includes("Tax-exempt since"), false, "no ruling year means no line");
+    assert.equal(html.includes("<strong>From Wikidata</strong>"), false);
+    assert.equal(suggestionHTML({...GROUP, group_id: "cg_9999999999999999", country: "FR"}, null, IRS_DATA), "", "no entry and no country register means no box");
+    assert.equal(suggestionHTML({...GROUP, group_id: "cg_9999999999999999"}, null, IRS_DATA).includes("IRS register"), false, "no entry means no IRS part");
+    assert.equal(suggestionHTML(GROUP, null, {schema: "cg-register-suggestions-v1", groups: {}}).includes("<details"), false);
+    assert.equal(suggestionHTML(GROUP, null, null).includes("<details"), false, "a missing register file means no IRS part");
+  });
+  check("a hostile registered name is escaped everywhere it appears", () => {
+    const html = suggestionHTML(HOSTILE_GROUP, null, IRS_DATA);
+    assert.ok(html.includes("<li>Registered as &lt;img src=x onerror=alert(1)&gt;</li>"));
+    assert.equal(html.includes("<img"), false);
+  });
+  check("the two sources combine in one box with the Wikidata part first", () => {
+    const html = suggestionHTML(GROUP, SUGGESTIONS, IRS_DATA);
+    assert.equal((html.match(/<details/g) || []).length, 1);
+    assert.ok(html.indexOf("From Wikidata") < html.indexOf("IRS register"));
+    assert.ok(html.includes("Matched by name only") === false && html.includes("Matched by registered name"));
   });
 }

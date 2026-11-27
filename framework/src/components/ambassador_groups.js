@@ -159,28 +159,76 @@ export function suggestionFor(groupId, suggestions) {
   };
 }
 
+/** Formats a nine-digit EIN as NN-NNNNNNN. Any other input is returned as text, unchanged. */
+export function formatEin(ein) {
+  const digits = String(ein ?? "");
+  return /^\d{9}$/.test(digits) ? `${digits.slice(0, 2)}-${digits.slice(2)}` : digits;
+}
+
+/** The IRS register entry for one group (normalised), or null. Needs a nine-digit EIN and a registered name. */
+export function registerSuggestionFor(groupId, data) {
+  const groups = data?.groups;
+  if (!groups || typeof groups !== "object" || !Object.hasOwn(groups, groupId)) return null;
+  const entry = groups[groupId];
+  if (!entry || typeof entry !== "object") return null;
+  const ein = String(entry.ein ?? "");
+  const name = typeof entry.registered_name === "string" ? entry.registered_name.trim() : "";
+  if (!/^\d{9}$/.test(ein) || !name) return null;
+  const text = (value) => (typeof value === "string" ? value.trim() : "");
+  const year = Number(entry.ruling_year);
+  const hints = Array.isArray(entry.activity_hints) ? entry.activity_hints.filter((hint) => typeof hint === "string" && hint.trim()).slice(0, 10) : [];
+  const sector = text(entry.sector_hint);
+  return {
+    ein,
+    einFormatted: formatEin(ein),
+    registeredName: name,
+    city: text(entry.city),
+    state: text(entry.state),
+    rulingYear: Number.isInteger(year) && year > 0 ? year : null,
+    sectorLabel: sector ? groupLabel("sector", sector) : "",
+    activityLabels: hints.map((hint) => groupLabel("primary_activities", hint.trim())),
+  };
+}
+
 /**
- * Suggestions box for the tag form: a closed <details> when Wikidata has a suggestion, plus the register row by country.
- * Returns "" when there is neither. Nothing here fills in a field; the ambassador confirms each value by hand.
+ * Suggestions box for the tag form: a closed <details> when Wikidata or the IRS register has a suggestion, plus the
+ * register row by country. Returns "" when there is none of these. Nothing here fills in a field; the ambassador confirms
+ * each value by hand.
  */
-export function suggestionHTML(group, suggestions) {
+export function suggestionHTML(group, suggestions, registerData) {
   const hit = suggestionFor(group?.group_id, suggestions);
+  const irs = registerSuggestionFor(group?.group_id, registerData);
   const registers = registerLinks(group?.country);
   const register = registers.length
     ? `<p class="g-register">Look it up in an official register: ${registers.map((r) => `<a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${esc(r.label)}<span class="sr"> (opens in a new tab)</span></a>`).join("")}</p>`
     : "";
-  if (!hit) return register;
+  if (!hit && !irs) return register;
   const newTab = '<span class="sr"> (opens in a new tab)</span>';
-  const items = [
-    `<li>Wikidata entry: <a href="${esc(`https://www.wikidata.org/wiki/${hit.qid}`)}" target="_blank" rel="noopener noreferrer">Open the Wikidata entry${newTab}</a></li>`,
-    hit.website ? `<li>Official website: <a href="${esc(hit.website)}" target="_blank" rel="noopener noreferrer">Open their official website${newTab}</a></li>` : "",
-    hit.inceptionYear ? `<li>Founded ${esc(hit.inceptionYear)}</li>` : "",
-    hit.typeLabels.length ? `<li>Listed in Wikidata as: ${esc(hit.typeLabels.join(", "))}</li>` : "",
-  ];
-  const warning = hit.match === "label" ? `<p class="g-hints-warn">Matched by name only. Check that this is the same organisation.</p>` : "";
-  return `<details class="g-hints"><summary>Suggestions to check (from Wikidata)</summary>
-    <div class="g-hints-body"><p class="hint">These are hints, not tags. Confirm each value on the group's own pages before you use it.</p>${warning}
-    <ul>${items.join("")}</ul>${register}</div></details>`;
+  const parts = [];
+  if (hit) {
+    const items = [
+      `<li>Wikidata entry: <a href="${esc(`https://www.wikidata.org/wiki/${hit.qid}`)}" target="_blank" rel="noopener noreferrer">Open the Wikidata entry${newTab}</a></li>`,
+      hit.website ? `<li>Official website: <a href="${esc(hit.website)}" target="_blank" rel="noopener noreferrer">Open their official website${newTab}</a></li>` : "",
+      hit.inceptionYear ? `<li>Founded ${esc(hit.inceptionYear)}</li>` : "",
+      hit.typeLabels.length ? `<li>Listed in Wikidata as: ${esc(hit.typeLabels.join(", "))}</li>` : "",
+    ];
+    const warning = hit.match === "label" ? `<p class="g-hints-warn">Matched by name only. Check that this is the same organisation.</p>` : "";
+    parts.push(`<div class="g-hints-part"><p><strong>From Wikidata</strong></p>${warning}<ul>${items.join("")}</ul></div>`);
+  }
+  if (irs) {
+    const place = [irs.city, irs.state].filter(Boolean).join(", ");
+    const hintParts = [irs.sectorLabel, irs.activityLabels.join(", ")].filter(Boolean).join(" · ");
+    const items = [
+      `<li>Registered as ${esc(irs.registeredName)}${place ? `, ${esc(place)}` : ""}</li>`,
+      irs.rulingYear ? `<li>Tax-exempt since ${esc(irs.rulingYear)}</li>` : "",
+      `<li>Employer Identification Number <a href="${esc(`https://apps.irs.gov/app/eos/details/?ein=${irs.ein}`)}" target="_blank" rel="noopener noreferrer">${esc(irs.einFormatted)}${newTab}</a></li>`,
+      hintParts ? `<li>The register's activity code suggests: ${esc(hintParts)}</li>` : "",
+    ];
+    parts.push(`<div class="g-hints-part"><p><strong>IRS register</strong></p><ul>${items.join("")}</ul><p class="g-hints-warn">Matched by registered name. Check that this is the same organisation.</p></div>`);
+  }
+  return `<details class="g-hints"><summary>Suggestions to check</summary>
+    <div class="g-hints-body"><p class="hint">These are hints, not tags. Confirm each value on the group's own pages before you use it.</p>
+    ${parts.join("")}${register}</div></details>`;
 }
 
 /** Roster records keyed by group id, as the duplicate questions read them. */
@@ -493,6 +541,12 @@ function loadSuggestions() {
   if (!suggestionsCache) suggestionsCache = getJson("groups/suggestions.json").then((data) => (data?.schema === "cg-suggestions-v1" ? data : null));
   return suggestionsCache;
 }
+/** IRS register suggestions, loaded once per page on the same terms as the Wikidata ones. */
+let registerSuggestionsCache = null;
+function loadRegisterSuggestions() {
+  if (!registerSuggestionsCache) registerSuggestionsCache = getJson("groups/register_suggestions.json").then((data) => (data?.schema === "cg-register-suggestions-v1" ? data : null));
+  return registerSuggestionsCache;
+}
 
 /** The "Group work you sent" list, shown on both screens. */
 function sentHTML(ctx) {
@@ -508,7 +562,7 @@ const SECOND_TAG_NOTICE = "Someone else just tagged this group. Your answers sti
 
 /** Mounts one assignment at a time and guards detached/stale responses after navigation. */
 export function mountGroups(host, ctx) {
-  const state = {leases: [], remaining: 0, index: 0, loading: true, busy: false, error: "", formError: "", notice: "", generation: 0, drafts: {}, activityOrder: [], checks: {roster: new Map(), qc: null, suggestions: null}};
+  const state = {leases: [], remaining: 0, index: 0, loading: true, busy: false, error: "", formError: "", notice: "", generation: 0, drafts: {}, activityOrder: [], checks: {roster: new Map(), qc: null, suggestions: null, registerSuggestions: null}};
   let alive = true;
   let holdTimer;
   const current = () => state.leases[state.index] || null;
@@ -541,7 +595,7 @@ export function mountGroups(host, ctx) {
         <section class="g-group" aria-labelledby="g-group-name"><h3 id="g-group-name" tabindex="-1">${esc(group.name)}</h3><p class="g-meta">${esc(group.country)}</p>
         ${groupLink ? `<p class="g-open-site"><a class="btn solid" href="${esc(groupLink)}" target="_blank" rel="noopener noreferrer">Open their website<span class="sr"> (opens in a new tab)</span></a></p>` : `<p class="hint">No website is listed for this group. Enter the page you read in the evidence section.</p>`}
         <form data-g-tag-form novalidate aria-busy="${state.busy}">
-        ${suggestionHTML(group, state.checks.suggestions)}
+        ${suggestionHTML(group, state.checks.suggestions, state.checks.registerSuggestions)}
         <div class="field g-name-correction"><label for="g-name-correction">Correct the name (optional)</label><input id="g-name-correction" type="text" maxlength="200" autocomplete="off" data-g-field="name_correction" value="${esc(draft.name_correction ?? (suspect ? group.name : ""))}" aria-describedby="g-name-correction-hint"><p class="hint" id="g-name-correction-hint">${esc(nameHint)}</p></div>
         ${orgChoiceHTML({attr: "data-g-org", choice: draft.notOrganisation === true ? "no" : draft.notOrganisation === false ? "yes" : "", question: "Is this a collective organisation, rather than an individual or single-person practice?", yes: "Yes, a collective organisation", no: "No, a personal profile or individual"})}
         ${sameAsHTML(group.group_id, questions, draft)}
@@ -569,9 +623,9 @@ export function mountGroups(host, ctx) {
     const generation = ++state.generation; render();
     const result = await ctx.api(batchPath);
     const leased = Array.isArray(result?.data?.leases) ? result.data.leases.map((lease) => lease?.group_id) : [];
-    const [checks, suggestions] = await Promise.all([loadRosterChecks(leased), loadSuggestions()]);
+    const [checks, suggestions, registerSuggestions] = await Promise.all([loadRosterChecks(leased), loadSuggestions(), loadRegisterSuggestions()]);
     if (detached() || generation !== state.generation) return;
-    state.checks = {...checks, suggestions};
+    state.checks = {...checks, suggestions, registerSuggestions};
     state.loading = false;
     if (!result?.ok) state.error = actionError(result?.error);
     else { state.leases = Array.isArray(result.data?.leases) ? result.data.leases : []; state.remaining = Number(result.data?.remaining_in_region) || 0; }

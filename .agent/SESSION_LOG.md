@@ -303,3 +303,4 @@
 | 2026-11-26 | GRP-ENRICH slice 3 | IRS EO BMF register suggestions for 190 US groups (NTEE hints), offline-cached; form display is slice 3b. | this commit |
 | 2026-11-26 | CG-12b + GP-1 | Flows/participation/combinations/languages views (browser-verified); California regression contract recorded (17 routes, 257k links, 0 broken). | this commit |
 | 2026-11-26 | GP-GROUPS recorded | Owner: groups map first and interactive like /explore, scoped views, shared look; recorded in TODO, GLOBAL_PARITY slice plan, ADR-GP-GROUPS. | this commit |
+| 2026-11-26 | GRP-ENRICH slice 3b | IRS register hints shown in the tagging form's suggestions box; browser walk 63/63. | this commit |

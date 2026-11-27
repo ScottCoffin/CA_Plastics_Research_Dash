@@ -189,9 +189,22 @@ def test_suggestion_box_is_optional_hints_loaded_once_and_never_filled() -> None
     module = _text(MODULE)
     assert 'getJson("groups/suggestions.json")' in module
     assert 'data?.schema === "cg-suggestions-v1"' in module
-    assert "Suggestions to check (from Wikidata)" in module
+    assert "Suggestions to check</summary>" in module
+    assert "From Wikidata" in module
     assert "These are hints, not tags. Confirm each value on the group's own pages" in module
     assert "before you use it." in module
     assert "Matched by name only. Check that this is the same organisation." in module
     assert "Look it up in an official register:" in module
+    assert "Suggestions to check" not in _text(CSS)
+
+
+def test_irs_register_suggestions_are_optional_hints_loaded_once() -> None:
+    module = _text(MODULE)
+    assert 'getJson("groups/register_suggestions.json")' in module
+    assert 'data?.schema === "cg-register-suggestions-v1"' in module
+    assert "loadRegisterSuggestions()" in module
+    assert "Registered as " in module
+    assert "https://apps.irs.gov/app/eos/details/?ein=" in module
+    assert "Matched by registered name. Check that this is the same organisation." in module
+    assert "Suggestions to check" in module
     assert "Suggestions to check" not in _text(CSS)
