@@ -90,6 +90,15 @@ The California components already read their data through `regionDataUrl()` (`fr
 
 Order: GP-5 (institutions) first, then GP-2 (authors, registry regions), GP-4 (tags and cross-navigation), GP-8 (works and evidence map). Each slice runs `scripts/check_gp1_contract.py` before and after.
 
+GP-10a adds `/norway/topics`, `/belgium/topics`, and a search page and index for each region.
+After refreshing the region exports, run `scripts/build_topics_json.py --region <slug>` and
+`scripts/build_search_index.py --region <slug>`. Both support `--check` on committed inputs.
+The topic share denominator is the unscreened query hits in the region and year. Co-occurrence
+uses complete years. The rising-share screen uses the available rule labels and institution
+affiliations. Regional owner and model labels and analytic lenses are unavailable. Search indexes
+regional pages, published author profiles, institutions, and topics. Topic results open the
+regional author list with the tag selected. California retains its own published search index.
+
 ## 4. Slice plan (proposed GP-2..GP-10, owner's order)
 
 Each slice must pass the GP-1 California contract unchanged: route list, DOM smoke for each page, link-graph check

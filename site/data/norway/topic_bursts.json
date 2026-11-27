@@ -1,0 +1,410 @@
+{
+  "alpha": 0.05,
+  "as_of": "2026-11-26T01:15:33Z",
+  "bursts": {
+    "reason": "Kleinberg-style bursts are not implemented; the rising-share test is reported separately.",
+    "status": "not_computed"
+  },
+  "flagged": [],
+  "generated_at": "2026-11-27T14:22:58+00:00",
+  "last_complete_year": 2025,
+  "min_window_works": 10,
+  "schema": "bq4-v1",
+  "scope": "norway",
+  "statistical_screen": "Cochran-Armitage screen with a 3-year volume threshold, rule-only tag sensitivity, and leave-one-institution-out checks. The corpus is unscreened OpenAlex query hits; owner/model label variants are not available. No correction is made for multiple testing across tags. Flags are prompts for review, not confirmed findings.",
+  "tags": [
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "occurrence_and_monitoring",
+      "loio": {
+        "institutions_tested": 670,
+        "pass": false,
+        "worst_institution": "I204778367",
+        "worst_p": 0.100287
+      },
+      "reasons_failed": [
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "pass",
+        "owner_model_only": "not_testable",
+        "rule_only": "pass"
+      },
+      "tag": "occurrence_and_monitoring",
+      "total_complete_years": 449,
+      "trend": {
+        "p": 0.008048,
+        "slope_sign": "positive",
+        "z": 2.65
+      },
+      "window_count": 215,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "analytical_methods",
+      "loio": {
+        "institutions_tested": 505,
+        "pass": false,
+        "worst_institution": "I102335020",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "analytical_methods",
+      "total_complete_years": 233,
+      "trend": {
+        "p": 0.885832,
+        "slope_sign": "negative",
+        "z": -0.1436
+      },
+      "window_count": 104,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "fate_transport_and_sorption",
+      "loio": {
+        "institutions_tested": 389,
+        "pass": false,
+        "worst_institution": "I2802939387",
+        "worst_p": 0.193327
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "fate_transport_and_sorption",
+      "total_complete_years": 258,
+      "trend": {
+        "p": 0.069716,
+        "slope_sign": "positive",
+        "z": 1.8138
+      },
+      "window_count": 125,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "wastewater_and_treatment",
+      "loio": {
+        "institutions_tested": 188,
+        "pass": false,
+        "worst_institution": "I4210107808",
+        "worst_p": 0.274083
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "wastewater_and_treatment",
+      "total_complete_years": 110,
+      "trend": {
+        "p": 0.165525,
+        "slope_sign": "positive",
+        "z": 1.3867
+      },
+      "window_count": 56,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "ecotoxicology_and_trophic_transfer",
+      "loio": {
+        "institutions_tested": 252,
+        "pass": false,
+        "worst_institution": "I100930933",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "ecotoxicology_and_trophic_transfer",
+      "total_complete_years": 189,
+      "trend": {
+        "p": 0.013115,
+        "slope_sign": "negative",
+        "z": -2.4806
+      },
+      "window_count": 61,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "soil_and_agriculture",
+      "loio": {
+        "institutions_tested": 312,
+        "pass": false,
+        "worst_institution": "I24603500",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "soil_and_agriculture",
+      "total_complete_years": 178,
+      "trend": {
+        "p": 0.762224,
+        "slope_sign": "positive",
+        "z": 0.3026
+      },
+      "window_count": 83,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "human_exposure_and_health_risk",
+      "loio": {
+        "institutions_tested": 179,
+        "pass": false,
+        "worst_institution": "I100930933",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "human_exposure_and_health_risk",
+      "total_complete_years": 81,
+      "trend": {
+        "p": 0.189895,
+        "slope_sign": "negative",
+        "z": -1.3109
+      },
+      "window_count": 30,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "air",
+      "loio": {
+        "institutions_tested": 190,
+        "pass": false,
+        "worst_institution": "I67061984",
+        "worst_p": 0.340913
+      },
+      "reasons_failed": [
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "pass",
+        "owner_model_only": "not_testable",
+        "rule_only": "pass"
+      },
+      "tag": "air",
+      "total_complete_years": 65,
+      "trend": {
+        "p": 0.017543,
+        "slope_sign": "positive",
+        "z": 2.3751
+      },
+      "window_count": 36,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "risk_assessment",
+      "loio": {
+        "institutions_tested": 214,
+        "pass": false,
+        "worst_institution": "I54009628",
+        "worst_p": 0.125795
+      },
+      "reasons_failed": [
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "risk_assessment",
+      "total_complete_years": 75,
+      "trend": {
+        "p": 0.050071,
+        "slope_sign": "positive",
+        "z": 1.9594
+      },
+      "window_count": 42,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "experimental",
+      "flag": false,
+      "label": "plastisphere",
+      "loio": {
+        "institutions_tested": 38,
+        "pass": false,
+        "worst_institution": "I205237279",
+        "worst_p": 1.0
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "sensitivity:all_sources",
+        "sensitivity:rule_only",
+        "leave_one_institution_out"
+      ],
+      "sensitivity": {
+        "all_sources": "fail",
+        "owner_model_only": "not_testable",
+        "rule_only": "fail"
+      },
+      "tag": "plastisphere",
+      "total_complete_years": 13,
+      "trend": {
+        "p": 0.717531,
+        "slope_sign": "positive",
+        "z": 0.3618
+      },
+      "window_count": 7,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    },
+    {
+      "accuracy_state": "insufficient data",
+      "flag": false,
+      "label": "plastic_associated_chemicals",
+      "loio": {
+        "institutions_tested": 0,
+        "pass": false,
+        "worst_institution": null,
+        "worst_p": null
+      },
+      "reasons_failed": [
+        "volume",
+        "trend",
+        "leave_one_institution_out_not_testable"
+      ],
+      "sensitivity": {
+        "all_sources": "not_testable",
+        "owner_model_only": "not_testable",
+        "rule_only": "not_testable"
+      },
+      "tag": "plastic_associated_chemicals",
+      "total_complete_years": 0,
+      "trend": {
+        "p": 1.0,
+        "slope_sign": "zero",
+        "z": 0.0
+      },
+      "window_count": 0,
+      "window_years": [
+        2023,
+        2024,
+        2025
+      ]
+    }
+  ],
+  "tags_excluded": [],
+  "test": "cochran-armitage-normal-approximation",
+  "version": {
+    "builder": "scripts/build_topics_json.py",
+    "file": "topic_bursts.json",
+    "region": "norway",
+    "schema": "bq4-v1",
+    "source": "region index domain_tags"
+  },
+  "window_years": [
+    2023,
+    2024,
+    2025
+  ]
+}

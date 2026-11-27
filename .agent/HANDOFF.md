@@ -1,36 +1,31 @@
-# Handoff — 2026-11-27 — California feature port to Norway and Belgium (for Codex)
+# Handoff — 2026-11-27 — GP-10a
 
-## Done (all pushed to main; strict clean-worktree gate and GP-1 California contract green at 7bc5b4a6)
+## Done
 
-- Port design ADR-GP-REGION-EXPORT (docs/GLOBAL_PARITY.md section 3b): `regionDataUrl()` resolves `data/<slug>/` from the page folder (`REGION_SLUGS` in framework/src/components/atlas.js); `scripts/build_region_export.py --region <slug> [--check]` writes California-schema payloads to `site/data/<slug>/` from the LOCAL global partition and raw store; thin region pages reuse the California components; California-only fields are null; unscreened works count via `plastic_related == null && screening_status == "unscreened_query_hit"` and are labelled.
-- PLAT-4 slice 4: local `data/processed/global/authorships.parquet` (771,948 rows) and `institutions.parquet` (19,206) via `scripts/partition_global.py`.
-- Ported to Norway and Belgium: GP-5 institutions, GP-2 authors (profiles generated from the California page by `scripts/build_region_profiles.py [--check]`), GP-3 collaboration networks (`scripts/build_network.py --region`), GP-4 topic tags (reference labeller on title + raw-store abstract), GP-8 works table and evidence map, GP-8b author links and abstract wording. GP-1 checker now waits for counts to settle (network page flake fixed).
-- Earlier this session: CG-7b/7c, GRP-REVIEW-APPLY, FAVICON-MAIN, AMB-ROSTER-QC, CG-12/12b, GRP-ENRICH slices 1-3b, GRP-PLASTICS-QUOTE (Worker 665d4543, H63), GP-0/GP-1, GRP-LLM research (H64 deferred: no budget), GP-GROUPS recorded.
+- `/norway/topics`, `/belgium/topics`, and regional search reuse the California renderer and builders. The topic denominator is unscreened query hits. The rising-share screen uses rule labels and institution checks. Search resolves to regional pages, author profiles, institutions and tag-filtered author lists.
+- `scripts/build_topics_json.py --region <slug> [--check]` and `scripts/build_search_index.py --region <slug> [--check]` emit the payloads from the committed region export. Both checks passed for both regions. See [region export design](../docs/GLOBAL_PARITY.md#3b-port-design-region-exports-in-the-california-schema-lead-2026-11-26).
+- GP-1 passed for all 17 California routes with 257,265 checked links and zero broken. All 4,993 assembled files in `california/` and `data/california/` matched the pre-change build byte-for-byte.
+- Chromium verified both regional topics and search routes at 1440 and 390 px with zero axe violations, JavaScript errors, HTTP errors or document overflow. Search loaded its own region's index.
+- Earlier port checkpoints cover institutions, author lists and profiles, networks, topic tags, works and evidence maps (GP-5/2/3/4/8/8b).
 
 ## State
 
-- Production Worker 665d4543 with D1 0008. Working tree clean.
-- Region payloads: Norway 18.1 MB, Belgium 14.3 MB (keep each under ~20 MB).
+- Region export building reads the local global partition and raw cache. The GP-10a builders only require the committed region exports.
+- The committed California search index already reported stale at baseline. Fresh California outputs from the old and new index builders matched byte-for-byte. The published California index was preserved as required by GP-10a.
+- On this Windows checkout, the sandbox can report the ten Norway and Belgium bundle files as deleted and deny esbuild directory traversal. An approved local check confirmed the files are present and unchanged. Use the direct Python executable from [LESSONS.md](LESSONS.md) if the WindowsApps launcher is inaccessible.
+- Observable reports 16 pre-existing unresolved links in the unassembled build (feed paths and Norway/Belgium institutions references). GP-10a introduced zero additional warnings.
 
-## Next tasks (in order)
+## Next checkpoints
 
-1. GP-10a (registry regions): region topics page (`topics_timeseries.json`, `topic_bursts.json`) and region search index (`build_search_index.py --region`, region-aware `site/assets/site_search.js`); add a "Topics" link in `components/region_page.js`. Not started (the agent run stopped before editing anything).
-2. EV-A11Y-SELECT: evidence-map selected-state contrast (shared CSS; also fails on California) — mention to the owner because it touches the frozen California design.
-3. Region shell branding (header still says "CA Plastics Research Atlas") and GP-GROUPS (groups page into the /explore shell, map first).
-4. Every-country scale waits on GX-1 (owner labelling, H39) and R2 (GX-3).
+1. EV-A11Y-SELECT corrects selected evidence heatmap contrast in California, Norway and Belgium. The owner has lifted the California design freeze.
+2. Give Norway and Belgium the Plastiverse Live region shell and local navigation.
+3. GP-GROUPS puts the scoped interactive map first and applies the `/explore` shell to the groups views.
+4. VD-SM transitions the California Atlas to the main site's design. Apply Impeccable and the platform-wide app design in [DESIGN.md](../DESIGN.md).
 
-## How to verify any GP slice
+## Verification
 
-`cd framework && npm run build`; `py -3.14 scripts/assemble_site.py --site site --dist framework/dist --out scratch/<x>_site`; `py -3.14 scripts/check_gp1_contract.py --site scratch/<x>_site` (must pass, California unchanged); Playwright on the region pages (0 errors/404s, no data/california requests, axe 0, no overflow at 390). Then the strict gate in a clean `git worktree` (links, scaffolds, ruff check + format, `git diff --check`, full pytest with an external `--basetemp`), and push only when green.
-
-## Gotchas
-
-- Region exports need the local partition and raw store (not in git); CI validates structure only. Rebuild order: partition_global -> build_region_export -> build_network --region -> build_region_profiles.
-- src/atlas must not gain region names (ratchet test), comments included.
-- Tests run on Linux CI: `sys.executable`, never the `py` launcher. Pipe-free gate checks (LESSONS).
-- Chart views: verify in Chromium with a populated fixture; node stubs miss Plot/d3 problems (LESSONS).
-- Pinned-string tests break when a California call is wrapped in a region guard: update the pin, keep California behaviour.
+Build with `npm run build` in `framework`, then assemble with `scripts/assemble_site.py --site site --dist framework/dist --out scratch/<task>_site`. Run `scripts/check_gp1_contract.py --site scratch/<task>_site` and Chromium at 1440 and 390 px on the affected region routes. Inspect axe, page errors, HTTP errors, region data paths and overflow. Before pushing, run links, scaffolds, Ruff, `git diff --check`, and the full test suite with an external pytest `--basetemp` in a clean worktree.
 
 ## Needs owner input
 
-- H39 (160 global gold works), H9 (gold set), H2 (277 relevance decisions), H42 (43 PubMed records, in progress), H28 (policy mapping, ~15 min); UK Charity Commission and ACNC licence wording (pages blocked the agent). H64 deferred until a budget exists.
+See [HUMAN_TASKS.md](HUMAN_TASKS.md) for H39, H9, H2, H42 and H28. Every-country scale still depends on GX-1 and R2 (GX-3). H64 remains deferred until a budget exists.

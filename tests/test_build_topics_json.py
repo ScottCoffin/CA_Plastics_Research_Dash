@@ -256,3 +256,72 @@ def test_missing_analytics_inputs_name_the_build_commands(
     assert "build_rising_share.py" in message
     assert "build_tag_cooccurrence.py" in message
     assert not (tmp_path / "out").exists()
+
+
+def test_region_topics_use_unscreened_work_denominator_and_reusable_statistics(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(bt, "ROOT", tmp_path)
+    (tmp_path / "site" / "data" / "norway").mkdir(parents=True)
+    (tmp_path / "site" / "assets").mkdir(parents=True)
+    (tmp_path / "config").mkdir()
+    (tmp_path / "site" / "data" / "norway" / "region.json").write_text(
+        json.dumps(
+            {
+                "name": "Norway",
+                "generated_at": "2026-01-01",
+                "works_by_year": [
+                    {"year": 2023, "count": 1, "partial": True},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (tmp_path / "site" / "assets" / "topics.js").write_text(
+        'alpha: { label: "Alpha" }, beta: { label: "Beta" },', encoding="utf-8"
+    )
+    (tmp_path / "config" / "taxonomy.yml").write_text(
+        "domain_tags:\n  - id: alpha\n    label: Alpha\n  - id: beta\n    label: Beta\n",
+        encoding="utf-8",
+    )
+    works = [
+        {
+            "work_id": "W1",
+            "year": 2021,
+            "domain_tags": ["alpha", "beta"],
+            "institution_ids": ["I1"],
+            "plastic_related": None,
+            "screening_status": "unscreened_query_hit",
+        },
+        {
+            "work_id": "W2",
+            "year": 2022,
+            "domain_tags": ["alpha"],
+            "institution_ids": ["I2"],
+            "plastic_related": None,
+            "screening_status": "unscreened_query_hit",
+        },
+        {
+            "work_id": "W3",
+            "year": 2023,
+            "domain_tags": ["beta"],
+            "institution_ids": ["I3"],
+            "plastic_related": None,
+            "screening_status": "unscreened_query_hit",
+        },
+    ]
+    payloads = bt.build_region_payloads({"works": works}, "norway", "now")
+    series = payloads["topics_timeseries.json"]
+    assert series["scope"] == "norway"
+    assert series["plastic_related_by_year"] == [
+        {"year": 2021, "count": 1, "partial": False},
+        {"year": 2022, "count": 1, "partial": False},
+        {"year": 2023, "count": 1, "partial": True},
+    ]
+    assert series["cooccurrence"]["pairs"][0]["n_ab"] == 1
+    assert series["cooccurrence"]["pairs"][0]["N"] == 2
+    bursts = payloads["topic_bursts.json"]
+    assert bursts["test"] == "cochran-armitage-normal-approximation"
+    alpha = next(row for row in bursts["tags"] if row["tag"] == "alpha")
+    assert alpha["sensitivity"]["rule_only"] in {"pass", "fail"}
+    assert alpha["sensitivity"]["owner_model_only"] == "not_testable"

@@ -18,7 +18,7 @@ from typing import Any
 from urllib.parse import quote, urlencode
 
 from atlas.build.seo import load_topic_labels
-from atlas.regions.scope import region_data_rel
+from atlas.regions.scope import DEFAULT_REGION_SLUG
 
 SCHEMA_VERSION = 1
 TYPES = ("page", "expert", "institution", "topic", "funder", "term", "resource")
@@ -108,13 +108,17 @@ def parse_institution_types(labels_js: str) -> dict[str, str]:
     return {key: label for key, label in KEY_VALUE.findall(block.group(1))} if block else {}
 
 
-def _page_items(pages: Iterable[tuple[str, str, str]]) -> list[tuple[str, str, str]]:
-    rows = [(OVERVIEW_PAGE[0], OVERVIEW_PAGE[1], OVERVIEW_PAGE[2])]
+def _page_items(
+    pages: Iterable[tuple[str, str, str]], overview: tuple[str, str, str] = OVERVIEW_PAGE
+) -> list[tuple[str, str, str]]:
+    rows = [overview]
     rows += [(label, group, path) for label, group, path in pages]
     return rows
 
 
-def _expert_items(authors: Iterable[dict]) -> list[tuple[str, str, str]]:
+def _expert_items(
+    authors: Iterable[dict], region_prefix: str = REGION_PREFIX
+) -> list[tuple[str, str, str]]:
     rows = []
     for author in authors:
         name = _text(author.get("name"))
@@ -125,13 +129,17 @@ def _expert_items(authors: Iterable[dict]) -> list[tuple[str, str, str]]:
         if isinstance(affiliations, str):
             affiliations = [affiliations]
         detail = _text(affiliations[0]) if affiliations else ""
-        href = f"{REGION_PREFIX}expert.html#{urlencode({'author': author_id})}"
+        href = f"{region_prefix}expert.html#{urlencode({'author': author_id})}"
         rows.append((name, detail, href))
     return rows
 
 
 def _institution_items(
-    institutions: Iterable[dict], type_labels: dict[str, str]
+    institutions: Iterable[dict],
+    type_labels: dict[str, str],
+    *,
+    region_prefix: str = REGION_PREFIX,
+    all_institutions: bool = False,
 ) -> list[tuple[str, str, str]]:
     rows = []
     for inst in institutions:
@@ -139,11 +147,11 @@ def _institution_items(
         # as collaborators on their pages, so the header search leaves them out.
         inst_id = _text(inst.get("inst_id"))
         name = _text(inst.get("name"))
-        if not _truthy(inst.get("ca_flag")) or not inst_id or not name:
+        if (not all_institutions and not _truthy(inst.get("ca_flag"))) or not inst_id or not name:
             continue
         type_label = type_labels.get(_text(inst.get("atlas_type")), "")
         detail = " · ".join(part for part in (type_label, _text(inst.get("city"))) if part)
-        rows.append((name, detail, _href("institution", inst=inst_id)))
+        rows.append((name, detail, f"{region_prefix}institution#{urlencode({'inst': inst_id})}"))
     return rows
 
 
@@ -211,13 +219,26 @@ def build_search_index(
     grants: dict | None = None,
     glossary: Iterable[tuple[str, str, str]] = (),
     resources: Iterable[dict] = (),
+    region_prefix: str = REGION_PREFIX,
+    overview: tuple[str, str, str] = OVERVIEW_PAGE,
+    all_institutions: bool = False,
 ) -> dict:
     """Build the search index. Output is deterministic for the same inputs."""
     by_type = {
-        "page": _page_items(pages),
-        "expert": _expert_items(authors),
-        "institution": _institution_items(institutions, institution_types or {}),
-        "topic": _topic_items(topic_labels or {}, matrix_labels or {}),
+        "page": _page_items(pages, overview),
+        "expert": _expert_items(authors, region_prefix),
+        "institution": _institution_items(
+            institutions,
+            institution_types or {},
+            region_prefix=region_prefix,
+            all_institutions=all_institutions,
+        ),
+        "topic": [
+            (label, "Research topic", f"{region_prefix}authors#tag={quote(tag, safe='')}")
+            for tag, label in (topic_labels or {}).items()
+        ]
+        if all_institutions
+        else _topic_items(topic_labels or {}, matrix_labels or {}),
         "funder": _funder_items(grants or {}),
         "term": [
             (term, excerpt, f"{REGION_PREFIX}glossary#{quote(term_id, safe='')}")
@@ -244,20 +265,60 @@ def serialize(index: dict) -> str:
     return json.dumps(index, ensure_ascii=False, separators=(",", ":")) + "\n"
 
 
-def load_sources(root: Path) -> dict[str, Any]:
+def load_sources(root: Path, region: str = DEFAULT_REGION_SLUG) -> dict[str, Any]:
     """Read the committed site files and framework sources the index is built from."""
-    data = root / region_data_rel()
+    from atlas.regions.registry import load_registry
+
+    selected = load_registry().get(region)
+    data = root / selected.site_data_dir
     site_index = json.loads((data / "index.json").read_text(encoding="utf-8"))
     institutions = json.loads((data / "institutions.json").read_text(encoding="utf-8"))
     if isinstance(institutions, dict):
         institutions = institutions.get("institutions", [])
-    grants = json.loads((data / "grants.json").read_text(encoding="utf-8"))
-    linkouts = json.loads((data / "linkouts.json").read_text(encoding="utf-8"))
     framework = root / "framework"
-    topics_js = (root / "site" / "assets" / "topics.js").read_text(encoding="utf-8")
     labels_js = (framework / "src" / "components" / "shared" / "labels.js").read_text(
         encoding="utf-8"
     )
+    if region != DEFAULT_REGION_SLUG:
+        prefix = f"{region}/"
+        pages = [
+            (label, "Regional data", f"{prefix}{path}")
+            for label, path in (
+                ("Topics", "topics"),
+                ("Search", "search"),
+                ("Authors", "authors"),
+                ("Institutions", "institutions"),
+                ("Works and evidence map", "evidence"),
+                ("Collaboration network", "network"),
+            )
+        ]
+        topic_labels = load_topic_labels(root / "site" / "assets" / "topics.js")
+        tags = {tag for work in site_index.get("works", []) for tag in work.get("domain_tags", [])}
+        topic_labels = {
+            tag: topic_labels.get(tag, tag.replace("_", " ").title()) for tag in sorted(tags)
+        }
+        return {
+            "generated_at": site_index["generated_at"],
+            "pages": pages,
+            "authors": [
+                author
+                for author in site_index.get("authors", [])
+                if int(author.get("work_count") or 0) >= 2
+            ],
+            "institutions": institutions,
+            "institution_types": parse_institution_types(labels_js),
+            "topic_labels": topic_labels,
+            "matrix_labels": {},
+            "grants": {},
+            "glossary": [],
+            "resources": [],
+            "region_prefix": prefix,
+            "overview": (region.title(), "Home", f"{region}/"),
+            "all_institutions": True,
+        }
+    grants = json.loads((data / "grants.json").read_text(encoding="utf-8"))
+    linkouts = json.loads((data / "linkouts.json").read_text(encoding="utf-8"))
+    topics_js = (root / "site" / "assets" / "topics.js").read_text(encoding="utf-8")
     return {
         "generated_at": site_index["generated_at"],
         "pages": parse_page_groups(

@@ -28,6 +28,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from atlas.regions.registry import load_registry  # noqa: E402
 from atlas.regions.scope import region_data_dir  # noqa: E402
 
 SCHEMA = "bq4-v1"
@@ -275,6 +276,225 @@ def build_payloads(inputs: Mapping[str, Any], generated_at: str) -> dict[str, di
     }
 
 
+def build_region_payloads(
+    index: Mapping[str, Any], region: str, generated_at: str
+) -> dict[str, dict[str, Any]]:
+    """Build the same chart schema from one region's exported, unscreened works."""
+    import json
+
+    region_file = ROOT / "site" / "data" / region / "region.json"
+    region_meta = json.loads(region_file.read_text(encoding="utf-8"))
+    partial_years = {
+        int(row["year"]) for row in region_meta.get("works_by_year", []) if row.get("partial")
+    }
+    works = index.get("works", [])
+    totals: dict[int, int] = {}
+    counts: dict[str, dict[int, int]] = {}
+    for work in works:
+        year = int(work.get("year") or 0)
+        if not year:
+            continue
+        totals[year] = totals.get(year, 0) + 1
+        for tag in set(work.get("domain_tags") or []):
+            counts.setdefault(str(tag), {})[year] = counts.setdefault(str(tag), {}).get(year, 0) + 1
+    years = sorted(totals)
+    labels_path = ROOT / "site" / "assets" / "topics.js"
+    import yaml
+
+    from atlas.analytics.rising_share import evaluate_tags
+    from atlas.analytics.tag_cooccurrence import pair_statistics
+    from atlas.analytics.topic_series import CaWork
+    from atlas.build.seo import load_topic_labels
+
+    labels = load_topic_labels(labels_path)
+    tags = []
+    for tag in sorted(counts):
+        by_year = [
+            {
+                "year": year,
+                "count": counts[tag].get(year, 0),
+                "share": counts[tag].get(year, 0) / totals[year] if totals.get(year) else None,
+                "partial": year in partial_years,
+            }
+            for year in years
+        ]
+        complete = sum(row["count"] for row in by_year if not row["partial"])
+        tags.append(
+            {
+                "tag": tag,
+                "label": labels.get(tag, tag.replace("_", " ").title()),
+                "approval": "unscreened",
+                "status": "unscreened_query_hit",
+                "accuracy_state": INSUFFICIENT if complete < MIN_COMPLETE_WORKS else EXPERIMENTAL,
+                "complete_works": complete,
+                "by_year": by_year,
+                "label_source_totals": {
+                    "all_sources": None,
+                    "owner_model_only": None,
+                    "rule_only": None,
+                },
+            }
+        )
+    year_rows = [
+        {"year": year, "count": totals[year], "partial": year in partial_years} for year in years
+    ]
+    last_complete = max((year for year in years if year not in partial_years), default=None)
+    complete_works = [
+        work
+        for work in works
+        if int(work.get("year") or 0) and int(work["year"]) not in partial_years
+    ]
+    taxonomy = yaml.safe_load((ROOT / "config" / "taxonomy.yml").read_text(encoding="utf-8"))
+    observed = set(counts)
+    region_taxonomy = {
+        **taxonomy,
+        "domain_tags": [
+            entry for entry in taxonomy.get("domain_tags", []) if entry.get("id") in observed
+        ],
+    }
+    complete_tags = sorted(observed)
+    pair_result = pair_statistics(
+        [frozenset(work.get("domain_tags") or []) for work in complete_works], complete_tags
+    )
+    pairs = [
+        {
+            **pair,
+            "label_a": labels.get(pair["a"], pair["a"]),
+            "label_b": labels.get(pair["b"], pair["b"]),
+        }
+        for pair in pair_result["pairs"]
+    ]
+    series = {
+        "schema": SCHEMA,
+        "generated_at": generated_at,
+        "scope": region,
+        "region_name": region_meta.get("name", region),
+        "as_of": region_meta.get("generated_at"),
+        "last_complete_year": last_complete,
+        "unit": f"unscreened {region_meta.get('name', region)} work",
+        "notice": (
+            "These are unscreened OpenAlex query hits. Topic tags are provisional domain labels; "
+            "no regional relevance screening has been applied."
+        ),
+        "page_scope": (
+            f"Counts and shares of unscreened {region_meta.get('name', region)} works by "
+            "publication year. This is not a measure of importance."
+        ),
+        "accuracy_rule": (
+            "Validated requires human-labelled gold data; no regional gold labels are available. "
+            "Small counts are marked insufficient data; other tags are experimental."
+        ),
+        "plastic_related_by_year": year_rows,
+        "tags": tags,
+        "tags_excluded": [],
+        "lens": {
+            "status": "not_available",
+            "message": "No regional analytic lens is computed.",
+            "caption": "Lens counts are not available for this regional export.",
+            "framing_rule": "not computed",
+            "series": [],
+        },
+        "cooccurrence": {
+            "window": "complete_years",
+            "variant": "unscreened_domain_tags",
+            "window_years": {
+                "from": min((year for year in years if year not in partial_years), default=None),
+                "to": last_complete,
+            },
+            "min_pair_n": 5,
+            "pairs": pairs,
+        },
+        "version": {
+            "schema": SCHEMA,
+            "builder": "scripts/build_topics_json.py",
+            "file": "topics_timeseries.json",
+            "source": "region index domain_tags",
+            "region": region,
+        },
+    }
+    ca_works = [
+        CaWork(
+            work_id=str(work.get("work_id") or ""),
+            year=int(work["year"]),
+            plastic_related=True,
+            topic_sources={str(tag): "rule" for tag in (work.get("domain_tags") or [])},
+        )
+        for work in works
+        if work.get("year") and work.get("work_id")
+    ]
+    institution_map = {
+        str(work.get("work_id")): frozenset(
+            str(value) for value in (work.get("institution_ids") or [])
+        )
+        for work in works
+        if work.get("work_id")
+    }
+    rising = evaluate_tags(
+        ca_works,
+        region_taxonomy,
+        last_complete=last_complete or max(years, default=0),
+        institutions=institution_map,
+    )
+    bursts = {
+        "schema": SCHEMA,
+        "generated_at": generated_at,
+        "scope": region,
+        "as_of": region_meta.get("generated_at"),
+        "last_complete_year": last_complete,
+        "test": rising["test"],
+        "alpha": rising["alpha"],
+        "window_years": rising["window_years"],
+        "min_window_works": rising["min_window_works"],
+        "statistical_screen": (
+            "Cochran-Armitage screen with a 3-year volume threshold, rule-only tag sensitivity, "
+            "and leave-one-institution-out checks. The corpus is unscreened OpenAlex query hits; "
+            "owner/model label variants are not available. No correction is made for multiple "
+            "testing across tags. Flags are prompts for review, not confirmed findings."
+        ),
+        "flagged": rising["flagged"],
+        "tags": [
+            {
+                "tag": tag["tag"],
+                "label": tag["label"],
+                "accuracy_state": next(
+                    (row["accuracy_state"] for row in tags if row["tag"] == tag["tag"]),
+                    INSUFFICIENT,
+                ),
+                **{
+                    key: tag[key]
+                    for key in (
+                        "flag",
+                        "reasons_failed",
+                        "trend",
+                        "window_years",
+                        "window_count",
+                        "total_complete_years",
+                        "sensitivity",
+                        "loio",
+                    )
+                },
+            }
+            for tag in rising["tags"]
+        ],
+        "tags_excluded": rising["tags_excluded"],
+        "bursts": {
+            "status": "not_computed",
+            "reason": (
+                "Kleinberg-style bursts are not implemented; the rising-share test is reported "
+                "separately."
+            ),
+        },
+        "version": {
+            "schema": SCHEMA,
+            "builder": "scripts/build_topics_json.py",
+            "file": "topic_bursts.json",
+            "source": "region index domain_tags",
+            "region": region,
+        },
+    }
+    return {"topics_timeseries.json": series, "topic_bursts.json": bursts}
+
+
 def _comparable(payload: Mapping[str, Any]) -> dict[str, Any]:
     return {k: v for k, v in payload.items() if k != "generated_at"}
 
@@ -293,15 +513,25 @@ def main(
     parser.add_argument(
         "--check", action="store_true", help="fail when the committed JSON is stale"
     )
+    parser.add_argument("--region", default="california", help="registry slug (default california)")
     args = parser.parse_args(argv)
-    out_dir = out_dir or region_data_dir()
-    try:
-        inputs = load_inputs(analytics_dir)
-    except FileNotFoundError as error:
-        print(MISSING_MESSAGE.format(names=error))
-        return 1
     generated_at = datetime.now(UTC).isoformat(timespec="seconds")
-    payloads = build_payloads(inputs, generated_at)
+    if args.region == "california":
+        out_dir = out_dir or region_data_dir()
+        try:
+            inputs = load_inputs(analytics_dir)
+        except FileNotFoundError as error:
+            print(MISSING_MESSAGE.format(names=error))
+            return 1
+        payloads = build_payloads(inputs, generated_at)
+    else:
+        try:
+            load_registry().get(args.region)
+        except KeyError as error:
+            parser.error(str(error.args[0]))
+        out_dir = out_dir or ROOT / "site" / "data" / args.region
+        index = json.loads((out_dir / "index.json").read_text(encoding="utf-8"))
+        payloads = build_region_payloads(index, args.region, generated_at)
     if args.check:
         stale = []
         for name, payload in payloads.items():
