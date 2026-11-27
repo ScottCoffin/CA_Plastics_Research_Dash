@@ -210,6 +210,8 @@ export function renderRegion(model, ambassadorsHref, knownIds = null) {
     `<li><span class="rg-list-name">${escapeHtml(publicText(p.name || p.iso || ""))}</span>` +
     `<span class="rg-list-count">${escapeHtml(formatCount(p.works))} works</span></li>`).join("") + `</ol>`
     : `<p class="rg-state">No partner countries listed yet.</p>`;
+  // Reference regions with a collaboration network (GP-3) link to it from the researchers list.
+  const networkLink = regionSlug() === "california" ? "" : `<p class="rg-state"><a href="./network">Collaboration network</a></p>`;
   const scopeNote = [model.is, model.isNot].filter(Boolean).map((t) => `<p>${escapeHtml(t)}</p>`).join("");
   const partialNote = years.partial ? `<p class="rg-note">${escapeHtml(PARTIAL_NOTE)} (${years.partial.year} so far.)</p>` : "";
 
@@ -232,7 +234,7 @@ export function renderRegion(model, ambassadorsHref, knownIds = null) {
     `</section>` +
     `<section class="rg-block" aria-labelledby="rg-inst-h"><h2 id="rg-inst-h">Top institutions</h2>${instList}</section>` +
     `<section class="rg-block" aria-labelledby="rg-res-h"><h2 id="rg-res-h">Top researchers</h2>` +
-    `<p class="rg-note">Public names from OpenAlex, ranked by works with an author in this region. Each name links to the OpenAlex author page.</p>${researcherList}</section>` +
+    `<p class="rg-note">Public names from OpenAlex, ranked by works with an author in this region. Each name links to the OpenAlex author page.</p>${researcherList}${networkLink}</section>` +
     `<section class="rg-block" aria-labelledby="rg-part-h"><h2 id="rg-part-h">Partner countries</h2>` +
     `<p class="rg-note">Countries most often on the same works.</p>${partnerList}</section>` +
     `<div class="rg-local" aria-label="Local sections">` +

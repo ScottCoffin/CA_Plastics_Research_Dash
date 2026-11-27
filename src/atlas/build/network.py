@@ -313,6 +313,31 @@ def build_network(
     }
 
 
+REGION_WORKS_METHOD = (
+    "all region works in the Atlas export (unscreened query hits, no plastic screen)"
+)
+
+
+def unscreened_region_index(index: Mapping[str, Any]) -> dict[str, Any]:
+    """Index view for a reference region (GP-3): region works are unscreened, so every one counts.
+
+    Region exports leave ``plastic_related`` and the plastic counts null. Each work is treated as
+    a plastic-related co-authored work, an author's volume is the region works they appear on
+    (``work_count``) and the tie-break is ``cited_by_count``.
+    Only reference-region exports use this view.
+    """
+    works = [{**w, "plastic_related": True} for w in index.get("works") or []]
+    authors = [
+        {
+            **a,
+            "ca_plastic_works_count": int(a.get("work_count") or 0),
+            "plastic_citations": int(a.get("cited_by_count") or 0),
+        }
+        for a in index.get("authors") or []
+    ]
+    return {**index, "works": works, "authors": authors}
+
+
 def _weight(value: object) -> float:
     try:
         return float(value)  # type: ignore[arg-type]
