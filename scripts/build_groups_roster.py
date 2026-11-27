@@ -2,10 +2,10 @@
 """Build the BFFP organisation roster (Add-on A4, CG-2 and CG-3).
 
 Usage:
-  py -3.14 scripts/build_groups_roster.py --fetch [--acknowledge-drop]   # one live GET (lead only)
+  py -3.14 scripts/build_groups_roster.py --fetch [--incremental]       # one live member-list fetch
   py -3.14 scripts/build_groups_roster.py --input FILE                    # saved JSON or CSV
   py -3.14 scripts/build_groups_roster.py                                 # today's raw cache
-  py -3.14 scripts/build_groups_roster.py --check                         # validate committed files
+  py -3.14 scripts/build_groups_roster.py --check [--incremental]       # validate committed files
 
 Published (committed) files: site/data/global/groups/roster.json and roster_manifest.json.
 Reviewed curation read at build time: curation/group_merges.csv (same/different decisions),
@@ -165,14 +165,10 @@ def _not_organisations(curation_dir: Path, records: list[dict[str, Any]]) -> set
         return excluded
 
 
-def _write_public(
-    paths: Paths, result: admission.AdmissionResult, day: dt.date, excluded_ids: set[str]
-) -> None:
+def _write_public(paths: Paths, records: list[dict[str, Any]], day: dt.date) -> None:
     paths.site_dir.mkdir(parents=True, exist_ok=True)
-    kept = [record for record in result.records if record["group_id"] not in excluded_ids]
-    records = [{key: record[key] for key in PUBLIC_RECORD_KEYS} for record in kept]
     admitted_by_status = {status: 0 for status in admission.ADMITTED_STATUSES}
-    for record in kept:
+    for record in records:
         admitted_by_status[record["org_status"]] += 1
     roster_payload = {
         "schema": SCHEMA,
@@ -188,8 +184,87 @@ def _write_public(
         "source_urls": [roster.BFFP_MEMBERS_ORG_URL],
     }
     # Site JSON is LF-pinned; write LF on Windows too so a rebuild matches the committed bytes.
-    (paths.site_dir / "roster.json").write_bytes(_dump(roster_payload).encode("utf-8"))
-    (paths.site_dir / "roster_manifest.json").write_bytes(_dump(manifest).encode("utf-8"))
+    for path, value in (
+        (paths.site_dir / "roster.json", roster_payload),
+        (paths.site_dir / "roster_manifest.json", manifest),
+    ):
+        data = _dump(value).encode("utf-8")
+        if not path.exists() or path.read_bytes() != data:
+            path.write_bytes(data)
+
+
+def _load_existing(paths: Paths, *, required: bool) -> tuple[list[dict[str, Any]], dt.date | None]:
+    path = paths.site_dir / "roster.json"
+    if (
+        not required
+        and not path.exists()
+        and not (paths.site_dir / "roster_manifest.json").exists()
+    ):
+        return [], None
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict) or payload.get("schema") != SCHEMA:
+        raise ValueError("invalid roster schema")
+    records = payload.get("records")
+    if not isinstance(records, list):
+        raise ValueError("invalid records")
+    problems: list[str] = []
+    for index, row in enumerate(records):
+        _check_record(index, row, problems)
+    if problems or len({row["group_id"] for row in records}) != len(records):
+        raise ValueError("invalid or duplicate roster records")
+    return records, dt.date.fromisoformat(payload["retrieved_at"])
+
+
+def _name_keys(row: dict[str, Any]) -> set[tuple[str, str]]:
+    country = row["country"]
+    if country is None:
+        return set()
+    names = [row["name"], *row["name_alt"]]
+    return {(country, key) for name in names if (key := admission.merge_key(name))}
+
+
+def _incremental_records(
+    existing: list[dict[str, Any]],
+    incoming: list[dict[str, Any]],
+    merges: list[dict[str, str]] | None = None,
+) -> list[dict[str, Any]]:
+    """Overlay current admissions while retaining established roster identities."""
+    result = [dict(row) for row in existing]
+    by_id = {str(row["group_id"]): i for i, row in enumerate(result)}
+    reviewed_same = {
+        merge["group_id_drop"]: merge["group_id_keep"]
+        for merge in merges or []
+        if merge.get("decision") == "same"
+    }
+    reviewed_different = {
+        frozenset((merge["group_id_keep"], merge["group_id_drop"]))
+        for merge in merges or []
+        if merge.get("decision") == "different"
+    }
+    by_name: dict[tuple[str, str], set[int]] = {}
+    for i, row in enumerate(result):
+        for key in _name_keys(row):
+            by_name.setdefault(key, set()).add(i)
+    for candidate in incoming:
+        candidate_id = str(candidate["group_id"])
+        idx = by_id.get(reviewed_same.get(candidate_id, candidate_id))
+        if idx is None:
+            matches: set[int] = set()
+            for key in _name_keys(candidate):
+                matches.update(by_name.get(key, ()))
+            safe = [
+                i
+                for i in matches
+                if frozenset((str(result[i]["group_id"]), candidate_id)) not in reviewed_different
+            ]
+            idx = next(iter(safe)) if len(safe) == 1 else None
+        if idx is None:
+            idx = len(result)
+            result.append(dict(candidate))
+            by_id[candidate_id] = idx
+            for key in _name_keys(candidate):
+                by_name.setdefault(key, set()).add(idx)
+    return result
 
 
 def build(
@@ -200,6 +275,7 @@ def build(
     paths: Paths,
     day: dt.date,
     fetcher: roster.Fetcher | None,
+    incremental: bool = False,
 ) -> int:
     if fetch:
         # Default: view BFFP's public page and keep the list it loads (direct GETs get 403).
@@ -225,13 +301,20 @@ def build(
             print(f"ERROR: {exc}", file=sys.stderr)
             return 1
         meta_request = {"request_count": 0, "status_counts": {}}
+    existing_records: list[dict[str, Any]] = []
+    prior_day = None
     try:
-        roster.check_structural_change(
-            len(entries), _previous_fetched(paths.interim_dir), acknowledge_drop=acknowledge_drop
-        )
+        previous = _previous_fetched(paths.interim_dir)
+        if incremental:
+            existing_records, prior_day = _load_existing(paths, required=fetch)
+            previous = max(previous or 0, len(existing_records))
+        roster.check_structural_change(len(entries), previous, acknowledge_drop=acknowledge_drop)
     except roster.RosterStructureError as exc:
         print(f"GUARD: {exc}", file=sys.stderr)
         return 2
+    except (OSError, ValueError, KeyError, TypeError):
+        print("ERROR: existing roster is invalid; public roster was not written", file=sys.stderr)
+        return 1
     try:
         merges, corrections = _curation_inputs(paths.curation_dir)
     except (OSError, csv.Error, ValueError) as exc:
@@ -242,6 +325,8 @@ def build(
     result = admission.admit(
         entries, retrieved_on=day.isoformat(), registry=load_registry(), merges=merges
     )
+    if incremental:
+        result.records = _incremental_records(existing_records, result.records, merges)
     _apply_corrections(result.records, corrections)
     meta = {
         "retrieved_at": day.isoformat(),
@@ -256,7 +341,13 @@ def build(
     except (OSError, csv.Error, ValueError):
         print("ERROR: invalid group curation; public roster was not written", file=sys.stderr)
         return 1
-    _write_public(paths, result, day, excluded_ids)
+    records = [
+        {key: row[key] for key in PUBLIC_RECORD_KEYS}
+        for row in result.records
+        if row["group_id"] not in excluded_ids
+    ]
+    published_day = prior_day if prior_day is not None and records == existing_records else day
+    _write_public(paths, records, published_day)
     _write_local(paths, result, meta)
     roster.purge_raw_cache(paths.raw_root, dt.datetime.combine(day, dt.time(), tzinfo=dt.UTC))
     # Keep public logs silent about record volumes; the private local manifest retains diagnostics.
@@ -274,9 +365,19 @@ def _check_record(index: int, record: Any, problems: list[str]) -> None:
         problems.append(f"record {index}: bffp_listed must be true")
     if record["country"] is not None and not re.fullmatch(r"[A-Z]{2}", str(record["country"])):
         problems.append(f"record {index}: country must be ISO alpha-2 or null")
+    if not isinstance(record["group_id"], str) or not re.fullmatch(
+        r"cg_[0-9a-f]{16}", record["group_id"]
+    ):
+        problems.append(f"record {index}: invalid group ID")
+    if (
+        not isinstance(record["name"], str)
+        or not isinstance(record["name_alt"], list)
+        or any(not isinstance(name, str) for name in record["name_alt"])
+    ):
+        problems.append(f"record {index}: invalid display or alternate names")
 
 
-def check(paths: Paths) -> int:
+def check(paths: Paths, *, incremental: bool = False) -> int:
     """Validate the committed roster; rebuild and compare when a raw cache exists."""
     roster_path = paths.site_dir / "roster.json"
     manifest_path = paths.site_dir / "roster_manifest.json"
@@ -312,6 +413,21 @@ def check(paths: Paths) -> int:
         problems.append("roster_manifest.json: admitted_by_org_status must list every status")
     elif sum(by_status.values()) != len(records):
         problems.append("roster_manifest.json: admitted counts do not match the records")
+    if incremental:
+        if not problems:
+            try:
+                _, corrections = _curation_inputs(paths.curation_dir)
+                if _not_organisations(paths.curation_dir, records):
+                    problems.append("roster.json: does not apply current group curation")
+                if any(corrections.get(r["group_id"], r["name"]) != r["name"] for r in records):
+                    problems.append("roster.json: does not apply current name corrections")
+            except (OSError, csv.Error, ValueError):
+                problems.append("group curation: invalid")
+        if problems:
+            print("FAIL:\n  " + "\n  ".join(problems))
+            return 1
+        print("PASS (structure and curation)")
+        return 0
     raw = _latest_raw(paths.raw_root)
     if raw is None:
         try:
@@ -402,6 +518,9 @@ def main(
     )
     mode.add_argument("--input", type=Path, help="saved members_org JSON or CSV export")
     mode.add_argument("--check", action="store_true", help="validate committed files")
+    parser.add_argument(
+        "--incremental", action="store_true", help="preserve established roster IDs"
+    )
     mode.add_argument(
         "--apply-curation",
         action="store_true",
@@ -416,7 +535,7 @@ def main(
     args = parser.parse_args(argv)
     resolved = paths or default_paths()
     if args.check:
-        return check(resolved)
+        return check(resolved, incremental=args.incremental)
     if args.apply_curation:
         return apply_curation(resolved)
     day = today or dt.datetime.now(dt.UTC).date()
@@ -427,6 +546,7 @@ def main(
         paths=resolved,
         day=day,
         fetcher=fetcher,
+        incremental=args.incremental,
     )
 
 

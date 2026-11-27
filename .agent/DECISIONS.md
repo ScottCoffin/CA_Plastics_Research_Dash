@@ -936,3 +936,9 @@ The optional public name correction uses the stable group ID and goes through th
 - The owner confirmed removal within 14 days for requests from a group's own domain. Report inter-ambassador agreement at 10 usable pairs per facet. Review each ambassador's first 25 primary group tags, then a random 20%.
 - CG-7b will sample 10% of primary tags per region for an independent blind second tag. This is the planned pilot fraction. AMB-POOL overlap records alone do not constitute the planned sample. Both agreement export CSVs are still header-only.
 - The owner requested weekly BFFP updates. Add new organisations under stable identities and preserve earlier tags and reviewed corrections.
+
+## ADR-BFFP-REFRESH-2026-11-26
+
+- The owner's weekly refresh request supersedes the quarterly cadence proposed in the add-on. Run Sundays at 08:43 UTC ahead of the normal Pages build. A manual dispatch runs the same checks.
+- Preserve established group IDs, original record dates, and prior roster identity fields. Match exact IDs and unambiguous normalised country/name aliases. Honour reviewed same/different decisions and approved removals. Apply curated name changes by stable ID. The scheduled job publishes only changed roster and derived JSON after validation and ENABLE_DATA_COMMITS approval. An ordinary Git push protects against a stale concurrent branch update.
+- Playwright for Python 1.65.2 (Apache-2.0) is pinned for the existing browser extractor in the scheduled workflow. The browser requests the public About page and its organisation-list API. Raw inputs and local review data stay inside the job.

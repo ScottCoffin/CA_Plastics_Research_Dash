@@ -286,3 +286,4 @@
 | 2026-11-26 | AMB-POOL and H57 | Two-hour holds and first-wins blind tags; 211 Worker tests, clean 3,829 passed / 18 skipped, browser and live no-session probes passed; Worker be02af19 deployed without a D1 migration | this commit |
 | 2026-11-26 | GRP-NAME-FIX | Optional name field and privacy guard for non-organisation removals; 98 focused tests, clean 3,830 passed / 18 skipped, Framework build and desktop/mobile Chromium checks passed | this commit |
 | 2026-11-26 | A4-POLICY | Published short BFFP permission acknowledgement and recorded removal, agreement and review thresholds. Focused 95 passed. Clean 3,830 passed / 18 skipped. | this commit |
+| 2026-11-26 | BFFP-REFRESH | Weekly additive roster and guarded publication implemented. Focused 202 passed. Clean 3,835 passed / 18 skipped. Local BFFP browser probe passed. GitHub manual run pending. | this commit |

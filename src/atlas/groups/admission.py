@@ -549,6 +549,8 @@ def _keeper_rank(record: Mapping[str, Any]) -> tuple[bool, bool, int, str]:
 
 def auto_merge(
     records: list[dict[str, Any]],
+    *,
+    reviewed_different: set[frozenset[str]] | None = None,
 ) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
     """Collapse records whose merge keys match within one country. Returns (records, merge log)."""
     clusters: dict[tuple[str, str], list[dict[str, Any]]] = {}
@@ -560,6 +562,9 @@ def auto_merge(
     log: list[dict[str, str]] = []
     for (country, _key), members in clusters.items():
         if len(members) < 2:
+            continue
+        ids = {member["group_id"] for member in members}
+        if any(pair <= ids for pair in reviewed_different or ()):
             continue
         members.sort(key=_keeper_rank)
         keep = members[0]
@@ -821,9 +826,10 @@ def admit(
         }
 
     admitted = sorted(seen.values(), key=lambda r: (r["country"] or "", r["name"]))
-    admitted, auto_log = auto_merge(admitted)
+    different = decided_pairs(merges, "different")
+    admitted, auto_log = auto_merge(admitted, reviewed_different=different)
     admitted, applied, unmatched = apply_reviewed_merges(admitted, merges)
-    dupe_review = _near_duplicates(admitted, decided_pairs(merges, "different"))
+    dupe_review = _near_duplicates(admitted, different)
     records = [{k: v for k, v in r.items() if k != "_domain"} for r in admitted]
     by_status = {status: 0 for status in ADMITTED_STATUSES}
     for record in records:

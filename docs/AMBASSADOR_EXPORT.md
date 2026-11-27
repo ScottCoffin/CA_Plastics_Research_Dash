@@ -9,6 +9,13 @@ pull request, and auto-merge is not enabled.
 Workflow: `.github/workflows/ambassador_export.yml` (daily at 06:23 UTC, and on manual dispatch).
 Script: `scripts/ambassador_export_pr.py`.
 
+The separate BFFP roster refresh runs Sundays at 08:43 UTC or by manual dispatch, using
+`.github/workflows/bffp_roster_weekly.yml`. It commits only the roster, its manifest and the six derived
+group JSON files when the `ENABLE_DATA_COMMITS` repository variable is `true`, then dispatches the data
+build/deploy workflow. Refreshing is additive and preserves stable roster IDs. Owner approvals take precedence
+over roster additions. If a default-branch update races the refresh, rerun after the non-fast-forward push
+failure so the refresh uses the latest inputs.
+
 1. Reads `GET {api}/export/approved?since=<watermark>` from the ambassador Worker with
    `Authorization: Bearer <AMB_EXPORT_TOKEN>`. The watermark is `curation/ambassador_export_state.json`.
 2. Applies each approved item to the repository files:

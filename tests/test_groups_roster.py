@@ -540,3 +540,181 @@ def test_qc_invalid_name_correction_fails_without_writing(tmp_path: Path, capsys
     assert code == 1
     assert not (paths.site_dir / "roster.json").exists()
     assert "invalid group curation" in capsys.readouterr().err
+
+
+def _write_export(path: Path, *rows: tuple[str, str, str]) -> Path:
+    path.write_text(
+        "organization,country,website\n"
+        + "".join(f"{name},{country},{url}\n" for name, country, url in rows),
+        encoding="utf-8",
+    )
+    return path
+
+
+def test_incremental_preserves_established_identity_and_adds_new_admission(tmp_path: Path) -> None:
+    paths = _paths(tmp_path)
+    source = _write_export(
+        tmp_path / "first.csv", ("Example Reef Society", "Norway", "https://old.no")
+    )
+    assert (
+        build_script.main(["--input", str(source), "--incremental"], paths=paths, today=TODAY) == 0
+    )
+    payload_path = paths.site_dir / "roster.json"
+    payload = json.loads(payload_path.read_text("utf-8"))
+    established = payload["records"][0]
+    established["name_alt"] = ["Example Reef Network"]
+    established["group_id"] = "cg_1234567890abcdef"
+    payload_path.write_text(json.dumps(payload), encoding="utf-8")
+    changed = _write_export(
+        tmp_path / "second.csv",
+        ("Example Reef Network", "Norway", "https://new.no"),
+        ("New Coast Alliance", "Belgium", "https://new-coast.be"),
+    )
+    assert (
+        build_script.main(
+            ["--input", str(changed), "--incremental"],
+            paths=paths,
+            today=TODAY + dt.timedelta(days=1),
+        )
+        == 0
+    )
+    result = json.loads(payload_path.read_text("utf-8"))
+    old = next(row for row in result["records"] if row["group_id"] == "cg_1234567890abcdef")
+    assert old["name"] == established["name"]
+    assert old["url"] == established["url"]
+    assert old["roster_retrieved_at"] == established["roster_retrieved_at"]
+    assert any(row["name"] == "New Coast Alliance" for row in result["records"])
+
+
+def test_incremental_applies_name_and_not_org_curation_and_is_idempotent(tmp_path: Path) -> None:
+    paths = _paths(tmp_path)
+    source = _write_export(
+        tmp_path / "export.csv",
+        ("Example Reef Society", "Norway", "https://example-reef.no"),
+        ("Example Bay Network", "Belgium", "https://example-bay.be"),
+    )
+    assert (
+        build_script.main(["--input", str(source), "--incremental"], paths=paths, today=TODAY) == 0
+    )
+    payload = json.loads((paths.site_dir / "roster.json").read_text("utf-8"))
+    ids = {row["name"]: row["group_id"] for row in payload["records"]}
+    paths.curation_dir.mkdir()
+    (paths.curation_dir / "group_tags.csv").write_text(
+        f"group_id,not_an_organisation\n{ids['Example Bay Network']},true\n", encoding="utf-8"
+    )
+    (paths.curation_dir / "group_name_corrections.csv").write_text(
+        "group_id,name,submitted_at\n"
+        f"{ids['Example Reef Society']},Curated Reef Name,2026-11-26T00:00:00Z\n",
+        encoding="utf-8",
+    )
+    assert (
+        build_script.main(["--input", str(source), "--incremental"], paths=paths, today=TODAY) == 0
+    )
+    public_path = paths.site_dir / "roster.json"
+    assert (
+        build_script.main(
+            ["--input", str(source), "--incremental"],
+            paths=paths,
+            today=TODAY + dt.timedelta(days=1),
+        )
+        == 0
+    )
+    before = public_path.read_bytes()
+    assert (
+        build_script.main(
+            ["--input", str(source), "--incremental"],
+            paths=paths,
+            today=TODAY + dt.timedelta(days=1),
+        )
+        == 0
+    )
+    assert public_path.read_bytes() == before
+    rows = json.loads(before)["records"]
+    assert [row["name"] for row in rows] == ["Curated Reef Name"]
+    assert build_script.main(["--check", "--incremental"], paths=paths) == 0
+
+
+def test_incremental_guard_and_duplicate_check_leave_public_files_unchanged(tmp_path: Path) -> None:
+    paths = _paths(tmp_path)
+    assert (
+        build_script.main(["--input", str(SAMPLE), "--incremental"], paths=paths, today=TODAY) == 0
+    )
+    roster_path = paths.site_dir / "roster.json"
+    manifest_path = paths.site_dir / "roster_manifest.json"
+    before = (roster_path.read_bytes(), manifest_path.read_bytes())
+    assert (
+        build_script.main(["--input", str(TRUNCATED), "--incremental"], paths=paths, today=TODAY)
+        == 2
+    )
+    assert (roster_path.read_bytes(), manifest_path.read_bytes()) == before
+    payload = json.loads(roster_path.read_text("utf-8"))
+    payload["records"].append(dict(payload["records"][0]))
+    roster_path.write_text(json.dumps(payload), encoding="utf-8")
+    assert build_script.main(["--check", "--incremental"], paths=paths) == 1
+
+
+def test_incremental_respects_reviewed_distinct_groups_with_same_name(tmp_path: Path) -> None:
+    paths = _paths(tmp_path)
+    name = "Example Reef Society"
+    first = _write_export(tmp_path / "first.csv", (name, "Norway", "https://old.no"))
+    assert build_script.main(["--input", str(first)], paths=paths, today=TODAY) == 0
+    old_id = admission.group_id_for(name, "NO", "old.no")
+    new_id = admission.group_id_for(name, "NO", "new.no")
+    paths.curation_dir.mkdir()
+    (paths.curation_dir / "group_merges.csv").write_text(
+        f"group_id_keep,group_id_drop,decided_at,decision\n{old_id},{new_id},2026-11-26,different\n",
+        encoding="utf-8",
+    )
+    second = _write_export(
+        tmp_path / "second.csv",
+        (name, "Norway", "https://old.no"),
+        (name, "Norway", "https://new.no"),
+    )
+    assert (
+        build_script.main(["--input", str(second), "--incremental"], paths=paths, today=TODAY) == 0
+    )
+    payload = json.loads((paths.site_dir / "roster.json").read_text(encoding="utf-8"))
+    assert {row["group_id"] for row in payload["records"]} == {old_id, new_id}
+
+
+def test_incremental_alias_only_change_keeps_public_bytes_and_rejects_corrupt_base(
+    tmp_path: Path,
+) -> None:
+    paths = _paths(tmp_path)
+    first = _write_export(
+        tmp_path / "first.csv", ("Example Reef Society", "Norway", "https://old.no")
+    )
+    assert (
+        build_script.main(["--input", str(first), "--incremental"], paths=paths, today=TODAY) == 0
+    )
+    roster_path = paths.site_dir / "roster.json"
+    payload = json.loads(roster_path.read_text("utf-8"))
+    row = payload["records"][0]
+    row["name_alt"] = ["Example Reef Network"]
+    roster_path.write_bytes((json.dumps(payload, indent=2, ensure_ascii=False) + "\n").encode())
+    payload_path = paths.site_dir / "roster_manifest.json"
+    before = (roster_path.read_bytes(), payload_path.read_bytes())
+    changed = _write_export(
+        tmp_path / "changed.csv", ("Example Reef Network", "Norway", "https://new.no")
+    )
+    assert (
+        build_script.main(
+            ["--input", str(changed), "--incremental"],
+            paths=paths,
+            today=TODAY + dt.timedelta(days=7),
+        )
+        == 0
+    )
+    assert (roster_path.read_bytes(), payload_path.read_bytes()) == before
+    roster_path.write_text("{broken", encoding="utf-8")
+    before_manifest = payload_path.read_bytes()
+    assert (
+        build_script.main(
+            ["--input", str(changed), "--incremental"],
+            paths=paths,
+            today=TODAY + dt.timedelta(days=8),
+        )
+        == 1
+    )
+    assert roster_path.read_text(encoding="utf-8") == "{broken"
+    assert payload_path.read_bytes() == before_manifest

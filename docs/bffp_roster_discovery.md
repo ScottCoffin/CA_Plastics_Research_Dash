@@ -69,3 +69,7 @@ Permission: the owner reports that BFFP has given the project explicit permissio
 - Headless Chromium (Playwright): 2 loads of the About page, each followed by the page's own 5 `coremember` GETs (10 API requests, all 200). Off-host requests were aborted (fonts.googleapis.com, 1 per load, not sent).
 - Browser sub-resource requests on the BFFP hosts (CSS, JS, images) were not counted individually. The total of 40 may therefore have been exceeded. This is a limitation for the owner to note.
 - No member names or member URLs were saved in the repository. Raw pages and the summary (field names, types, `type` code counts) are in `scratch/cg1/` (gitignored); the summary holds no names.
+
+## Weekly refresh verification (2026-11-26)
+
+The Playwright 1.65.2 browser extractor loaded the public About page and received HTTP 200 from the page's /api/members_org request. The response passed the organisation-list parser. The route allows only that member API request and blocks other hosts and nonessential resources. The GitHub Actions refresh uses the same public page and allow-list. Raw responses and local review files stay outside the published data. [BFFP public member map](https://www.breakfreefromplastic.org/about/)

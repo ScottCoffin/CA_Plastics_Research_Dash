@@ -114,14 +114,23 @@ def page_fetcher(url: str, user_agent: str) -> tuple[int, bytes]:
     The members endpoint answers only requests made by BFFP's own pages ("Origin not allowed"
     otherwise), so no header is set by hand: a headless browser views the public page as a visitor
     would and the response its own script requests is kept (owner decision 2026-11-26, with BFFP's
-    permission, A4-D1). ``url`` names the response to wait for. Off-host requests other than BFFP
-    hosts are not sent. Needs Playwright with Chromium (dev tooling, imported lazily).
+    permission, A4-D1). ``url`` names the only member API request allowed. Needs Playwright with
+    Chromium, imported only for the live fetch.
     """
-    from playwright.sync_api import sync_playwright  # lazy: local tooling, never in CI
+    from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+    from playwright.sync_api import sync_playwright
+
+    members_host = urllib.parse.urlsplit(url).hostname
 
     def bffp_only(route, request):  # type: ignore[no-untyped-def]
         host = urllib.parse.urlsplit(request.url).hostname or ""
-        if host == "breakfreefromplastic.org" or host.endswith(".breakfreefromplastic.org"):
+        if host == members_host:
+            if request.url.split("?", 1)[0] == url:
+                return route.continue_()
+            return route.abort()
+        if (
+            host == "breakfreefromplastic.org" or host.endswith(".breakfreefromplastic.org")
+        ) and request.resource_type in {"document", "script", "xhr", "fetch"}:
             return route.continue_()
         return route.abort()
 
@@ -134,9 +143,17 @@ def page_fetcher(url: str, user_agent: str) -> tuple[int, bytes]:
             with page.expect_response(
                 lambda r: r.url.split("?", 1)[0] == url, timeout=PAGE_TIMEOUT_MS
             ) as info:
-                page.goto(BFFP_ABOUT_URL, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+                navigation = page.goto(
+                    BFFP_ABOUT_URL, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS
+                )
+                if navigation is None:
+                    raise RosterFetchError("BFFP About page returned no response")
+                if not navigation.ok:
+                    raise RosterFetchError(f"BFFP About page: HTTP {navigation.status}")
             response = info.value
             return response.status, response.body()
+        except PlaywrightTimeoutError as exc:
+            raise RosterFetchError("BFFP member list timed out on the About page") from exc
         finally:
             browser.close()
 

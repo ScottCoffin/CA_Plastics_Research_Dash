@@ -282,3 +282,5 @@ sessions and $0 incremental paid API/model or external-service spend.
 | 2026-11-26 | AMB-POOL Worker | Codex Luna | Atomic two-hour holds, blind second tags and routes | Implemented, reviewed and integrated by lead | 1 session |
 | 2026-11-26 | AMB-POOL verification | Codex Luna | D1 concurrency, retries and moderation isolation | 46 focused tests passed; lead ran all 211 Worker tests | 2 dispatches |
 | 2026-11-26 | GRP-NAME-FIX | Codex Luna | Optional tagging field and runtime coverage | Implemented UI; lead added export guard and ran full gates | 1 session |
+| 2026-11-26 | BFFP-REFRESH roster | Codex Luna | Additive ingestion, stable IDs and fixtures | Lead reviewed and tested 202 focused roster/admission/build cases | 1 session |
+| 2026-11-26 | BFFP-REFRESH Actions | Codex Luna | Scheduled guarded publication and operator documentation | Lead checked YAML, Bash and live browser extraction | 1 session |

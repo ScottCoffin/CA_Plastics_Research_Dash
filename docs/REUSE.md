@@ -208,3 +208,4 @@ Contract: `docs/add_on_spec_3.md` §0 rule 14 and §9. Store only metadata, abst
 | Source | URL | Licence or terms | Reused material | Use and attribution |
 |---|---|---|---|---|
 | Break Free From Plastic member organisations | https://www.breakfreefromplastic.org/about/ (data from `coremember.breakfreefromplastic.org/api/members_org`) | No public licence; BFFP gave the owner verbal permission to use all of its data with no conditions (owner, 2026-11-26; A4-D1) | Organisation name, country and website only (allow-list); BFFP's membership tier and every other field are dropped at read time | `site/data/global/groups/roster.json`; shown as "Listed as a BFFP member as of <date>" (A4-D12); the Atlas is independent of BFFP unless BFFP agrees otherwise (spec §10.4) |
+| Playwright for Python 1.65.2 | https://pypi.org/project/playwright/1.65.2/ | Apache-2.0 | Pinned browser automation dependency | Used by the weekly BFFP source refresh to read the public member map. |
