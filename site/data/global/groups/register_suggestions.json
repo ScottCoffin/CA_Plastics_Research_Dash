@@ -1,0 +1,2377 @@
+{
+ "groups": {
+  "cg_0344575e71811d45": {
+   "activity_hints": [
+    "waste_management_recycling"
+   ],
+   "city": "BOULDER",
+   "ein": "840730811",
+   "ntee_code": "C270",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ECO-CYCLE INC",
+   "ruling_year": 1978,
+   "sector_hint": "ngo_civil_society",
+   "state": "CO"
+  },
+  "cg_03e1335b46415679": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "JAMESTOWN",
+   "ein": "050513580",
+   "ntee_code": "C60",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CONANICUT ISLAND SAILING FOUNDATION",
+   "ruling_year": 2001,
+   "sector_hint": "ngo_civil_society",
+   "state": "RI"
+  },
+  "cg_098528d56fd8b933": {
+   "activity_hints": [],
+   "city": "SOMERVILLE",
+   "ein": "453560728",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CLEAN PRODUCTION ACTION",
+   "ruling_year": 2014,
+   "sector_hint": "ngo_civil_society",
+   "state": "MA"
+  },
+  "cg_0ab4bcd16b735632": {
+   "activity_hints": [],
+   "city": "SALEM",
+   "ein": "311594004",
+   "ntee_code": "A23",
+   "ntee_major": "A",
+   "register": "irs_eo_bmf",
+   "registered_name": "STONE SOUP LEADERSHIP INSTITUTE INC",
+   "ruling_year": 1999,
+   "sector_hint": null,
+   "state": "MA"
+  },
+  "cg_0ac7cbfca8a4f4c3": {
+   "activity_hints": [
+    "research_monitoring"
+   ],
+   "city": "ALBANY",
+   "ein": "422215678",
+   "ntee_code": "C05",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BEYOND PLASTICS INC",
+   "ruling_year": 2026,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_0aea2dac4d6248dc": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "ARVADA",
+   "ein": "823445666",
+   "ntee_code": "C01",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "MADHVI4ECOETHICS",
+   "ruling_year": 2018,
+   "sector_hint": "ngo_civil_society",
+   "state": "CO"
+  },
+  "cg_0d233c884c0a2846": {
+   "activity_hints": [],
+   "city": "ITHACA",
+   "ein": "874069238",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ZERO WASTE ITHACA",
+   "ruling_year": 2025,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_0d7dd2c3af456bca": {
+   "activity_hints": [],
+   "city": "VERO BEACH",
+   "ein": "882846001",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "SEA OF LIFE CARIBBEAN INC",
+   "ruling_year": 2022,
+   "sector_hint": "ngo_civil_society",
+   "state": "FL"
+  },
+  "cg_0dadbd17cb4b09b1": {
+   "activity_hints": [],
+   "city": "OAKLAND",
+   "ein": "943149265",
+   "ntee_code": "Z99Z",
+   "ntee_major": "Z",
+   "register": "irs_eo_bmf",
+   "registered_name": "ALL AH WE-ALL OF US",
+   "ruling_year": 1997,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_0ff0fc289b887bfc": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "NEW YORK",
+   "ein": "133831327",
+   "ntee_code": "C010",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "GREEN SCHOOLS ALLIANCE INC",
+   "ruling_year": 1995,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_12949cf54fa38aa3": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "LOS ANGELES",
+   "ein": "812865575",
+   "ntee_code": "C60",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "GLOBAL HIGH SEAS MARINE PRESERVE INC",
+   "ruling_year": 2023,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_1332c7e503426ece": {
+   "activity_hints": [
+    "waste_management_recycling"
+   ],
+   "city": "COCOA",
+   "ein": "462287622",
+   "ntee_code": "C27",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "RECYCLE BREVARD INC",
+   "ruling_year": 2014,
+   "sector_hint": "ngo_civil_society",
+   "state": "FL"
+  },
+  "cg_14f45fbb19ff98b6": {
+   "activity_hints": [],
+   "city": "LONG BEACH",
+   "ein": "222864028",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ALLIANCE FOR A LIVING OCEAN",
+   "ruling_year": 1989,
+   "sector_hint": "ngo_civil_society",
+   "state": "NJ"
+  },
+  "cg_1a09b1359cc8fad9": {
+   "activity_hints": [],
+   "city": "BOULDER",
+   "ein": "851442024",
+   "ntee_code": "C50",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BLUE VERVE PROJECT INC",
+   "ruling_year": 2021,
+   "sector_hint": "ngo_civil_society",
+   "state": "CO"
+  },
+  "cg_1bdb87d479881b4c": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "CHICAGO",
+   "ein": "363765996",
+   "ntee_code": "C012",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CHICAGO RECYCLING COALITION INC",
+   "ruling_year": 1991,
+   "sector_hint": "ngo_civil_society",
+   "state": "IL"
+  },
+  "cg_1e10871e2fb3a158": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "DETROIT",
+   "ein": "274304259",
+   "ntee_code": "C60",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "GREEN LIVING SCIENCE",
+   "ruling_year": 2011,
+   "sector_hint": "ngo_civil_society",
+   "state": "MI"
+  },
+  "cg_1e40772618a811ee": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "SAN FRANCISCO",
+   "ein": "941730465",
+   "ntee_code": "C010",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "EARTHJUSTICE",
+   "ruling_year": 1971,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_1f2c35916bd2e416": {
+   "activity_hints": [],
+   "city": "PORT TOWNSEND",
+   "ein": "270772454",
+   "ntee_code": "I83",
+   "ntee_major": "I",
+   "register": "irs_eo_bmf",
+   "registered_name": "ENVIRONMENTAL DEFENDER LAW CENTER",
+   "ruling_year": 2010,
+   "sector_hint": null,
+   "state": "WA"
+  },
+  "cg_1f651e797a6534f7": {
+   "activity_hints": [],
+   "city": "DENVER",
+   "ein": "205355252",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ENVIRONMENT AMERICA INC",
+   "ruling_year": 2007,
+   "sector_hint": "ngo_civil_society",
+   "state": "CO"
+  },
+  "cg_1fdef21feafc5c97": {
+   "activity_hints": [],
+   "city": "CLEVELAND",
+   "ein": "341402694",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "CUYAHOGA SOIL & WATER CONSERVATION DISTRICT",
+   "ruling_year": 1988,
+   "sector_hint": null,
+   "state": "OH"
+  },
+  "cg_2132d5fa4f3b716f": {
+   "activity_hints": [],
+   "city": "BROOKLYN",
+   "ein": "873249420",
+   "ntee_code": "S20",
+   "ntee_major": "S",
+   "register": "irs_eo_bmf",
+   "registered_name": "LONELY WHALE INC",
+   "ruling_year": 2022,
+   "sector_hint": null,
+   "state": "NY"
+  },
+  "cg_22285c73aba66695": {
+   "activity_hints": [],
+   "city": "FAIRFAX",
+   "ein": "471755679",
+   "ntee_code": "B20",
+   "ntee_major": "B",
+   "register": "irs_eo_bmf",
+   "registered_name": "ROSS VALLEY CHARTER SCHOOL",
+   "ruling_year": 2015,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_2565f64d0d655829": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "BELLE MEAD",
+   "ein": "863561900",
+   "ntee_code": "C01",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "YOUTH IFY",
+   "ruling_year": 2021,
+   "sector_hint": "ngo_civil_society",
+   "state": "NJ"
+  },
+  "cg_2581ac450a61163b": {
+   "activity_hints": [],
+   "city": "PHILADELPHIA",
+   "ein": "232153775",
+   "ntee_code": "E700",
+   "ntee_major": "E",
+   "register": "irs_eo_bmf",
+   "registered_name": "PHYSICIANS FOR SOCIAL RESPONSIBILITY PENNSYLVANIA INC",
+   "ruling_year": 1998,
+   "sector_hint": null,
+   "state": "PA"
+  },
+  "cg_2614f6e61a1c331d": {
+   "activity_hints": [],
+   "city": "WASHINGTON",
+   "ein": "611574670",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ANACOSTIA RIVERKEEPER",
+   "ruling_year": 2009,
+   "sector_hint": "ngo_civil_society",
+   "state": "DC"
+  },
+  "cg_274406bd9a2886e5": {
+   "activity_hints": [],
+   "city": "SALEM",
+   "ein": "861943101",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "SUSTAINABLE ROANOKE INC",
+   "ruling_year": 2021,
+   "sector_hint": null,
+   "state": "VA"
+  },
+  "cg_2a950aa303962092": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "NEW ORLEANS",
+   "ein": "721447742",
+   "ntee_code": "C010",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "HEALTHY GULF",
+   "ruling_year": 1999,
+   "sector_hint": "ngo_civil_society",
+   "state": "LA"
+  },
+  "cg_2af3e880ef78f975": {
+   "activity_hints": [
+    "research_monitoring"
+   ],
+   "city": "ALBANY",
+   "ein": "222360736",
+   "ntee_code": "C052",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ENVIRONMENTAL ADVOCATES NY INC",
+   "ruling_year": 1981,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_2afd31641d542023": {
+   "activity_hints": [],
+   "city": "WASHINGTON",
+   "ein": "710863908",
+   "ntee_code": "C12",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "OCEAN FOUNDATION",
+   "ruling_year": 2002,
+   "sector_hint": "ngo_civil_society",
+   "state": "DC"
+  },
+  "cg_2bd38f182bd03309": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "BETHESDA",
+   "ein": "526072960",
+   "ntee_code": "C013",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "RACHEL CARSON COUNCIL INC",
+   "ruling_year": 1967,
+   "sector_hint": "ngo_civil_society",
+   "state": "MD"
+  },
+  "cg_2c279e5ccb784ea8": {
+   "activity_hints": [],
+   "city": "CHICAGO",
+   "ein": "815394872",
+   "ntee_code": "C12",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "TRIVENI INSTITUTE",
+   "ruling_year": 2017,
+   "sector_hint": "ngo_civil_society",
+   "state": "IL"
+  },
+  "cg_2e89cf2b7345c8fe": {
+   "activity_hints": [],
+   "city": "WASHINGTON",
+   "ein": "320160439",
+   "ntee_code": "K05",
+   "ntee_major": "K",
+   "register": "irs_eo_bmf",
+   "registered_name": "FOOD & WATER WATCH",
+   "ruling_year": 2006,
+   "sector_hint": null,
+   "state": "DC"
+  },
+  "cg_2fe8eb7d2d4a1ea7": {
+   "activity_hints": [],
+   "city": "LAGUNA NIGUEL",
+   "ein": "833372759",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "LAST BEACH CLEANUP",
+   "ruling_year": 2019,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_2ff3c2b77f8a6997": {
+   "activity_hints": [],
+   "city": "WASHINGTON",
+   "ein": "521557765",
+   "ntee_code": "W06Z",
+   "ntee_major": "W",
+   "register": "irs_eo_bmf",
+   "registered_name": "EARTHWORKS",
+   "ruling_year": 1988,
+   "sector_hint": null,
+   "state": "DC"
+  },
+  "cg_30644f420e741ffe": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "ANN ARBOR",
+   "ein": "823030599",
+   "ntee_code": "C60",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "LIVE ZERO WASTE INC",
+   "ruling_year": 2021,
+   "sector_hint": "ngo_civil_society",
+   "state": "MI"
+  },
+  "cg_30a5812207fc4b51": {
+   "activity_hints": [],
+   "city": "COLUMBUS",
+   "ein": "311408723",
+   "ntee_code": "C360",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BUCKEYE ENVIRONMENTAL NETWORK",
+   "ruling_year": 1996,
+   "sector_hint": "ngo_civil_society",
+   "state": "OH"
+  },
+  "cg_3337c547eae09f61": {
+   "activity_hints": [],
+   "city": "RESTON",
+   "ein": "530204616",
+   "ntee_code": "D300",
+   "ntee_major": "D",
+   "register": "irs_eo_bmf",
+   "registered_name": "NATIONAL WILDLIFE FEDERATION",
+   "ruling_year": 1943,
+   "sector_hint": null,
+   "state": "VA"
+  },
+  "cg_33d5c8452226b136": {
+   "activity_hints": [],
+   "city": "HONOLULU",
+   "ein": "452596726",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "SUSTAINABLE COASTLINES HAWAII",
+   "ruling_year": 2012,
+   "sector_hint": "ngo_civil_society",
+   "state": "HI"
+  },
+  "cg_342f937d2b58b29a": {
+   "activity_hints": [],
+   "city": "GREENCASTLE",
+   "ein": "350869045",
+   "ntee_code": "B420",
+   "ntee_major": "B",
+   "register": "irs_eo_bmf",
+   "registered_name": "DEPAUW UNIVERSITY",
+   "ruling_year": 1930,
+   "sector_hint": "academia_research",
+   "state": "IN"
+  },
+  "cg_34dd5d23b9b216e9": {
+   "activity_hints": [],
+   "city": "BIG PINE KEY",
+   "ein": "871155532",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "COASTLOVE INC",
+   "ruling_year": 2022,
+   "sector_hint": "ngo_civil_society",
+   "state": "FL"
+  },
+  "cg_34fe0fad7689b0da": {
+   "activity_hints": [],
+   "city": "SEATTLE",
+   "ein": "201347313",
+   "ntee_code": "B60",
+   "ntee_major": "B",
+   "register": "irs_eo_bmf",
+   "registered_name": "ILEAP",
+   "ruling_year": 2005,
+   "sector_hint": null,
+   "state": "WA"
+  },
+  "cg_35362906f648da44": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "SANTA FE",
+   "ein": "850413563",
+   "ntee_code": "C012",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "NEW MEXICO RECYCLING COALITION",
+   "ruling_year": 1995,
+   "sector_hint": "ngo_civil_society",
+   "state": "NM"
+  },
+  "cg_35e611cf891249e2": {
+   "activity_hints": [],
+   "city": "WASHINGTON",
+   "ein": "452387029",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "AMERICAN SUSTAINABLE BUSINESS COUNCIL INC",
+   "ruling_year": 2012,
+   "sector_hint": null,
+   "state": "DC"
+  },
+  "cg_3670efea1308602d": {
+   "activity_hints": [],
+   "city": "SEATTLE",
+   "ein": "911178790",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "ZERO WASTE WASHINGTON",
+   "ruling_year": 1982,
+   "sector_hint": null,
+   "state": "WA"
+  },
+  "cg_3716fb79dffb7dae": {
+   "activity_hints": [],
+   "city": "PORT JEFFERSON STATION",
+   "ein": "020757008",
+   "ntee_code": "C200",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "COASTAL STEWARD INC",
+   "ruling_year": 2007,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_371f6ab01b575ef1": {
+   "activity_hints": [],
+   "city": "RICHMOND",
+   "ein": "540505965",
+   "ntee_code": "B430",
+   "ntee_major": "B",
+   "register": "irs_eo_bmf",
+   "registered_name": "UNIVERSITY OF RICHMOND",
+   "ruling_year": 1941,
+   "sector_hint": "academia_research",
+   "state": "VA"
+  },
+  "cg_38398b3e27f35599": {
+   "activity_hints": [],
+   "city": "MIAMI",
+   "ein": "800249204",
+   "ntee_code": "O50",
+   "ntee_major": "O",
+   "register": "irs_eo_bmf",
+   "registered_name": "BIG BLUE & YOU INC",
+   "ruling_year": 2009,
+   "sector_hint": null,
+   "state": "FL"
+  },
+  "cg_3b0b51693e1065ee": {
+   "activity_hints": [],
+   "city": "SEBASTOPOL",
+   "ein": "942906265",
+   "ntee_code": "S41",
+   "ntee_major": "S",
+   "register": "irs_eo_bmf",
+   "registered_name": "NORTHERN CALIFORNIA RECYCLING ASSOCIATION",
+   "ruling_year": 2016,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_3b2a059d3f0cd507": {
+   "activity_hints": [
+    "waste_management_recycling"
+   ],
+   "city": "ENGLEWOOD",
+   "ein": "830727049",
+   "ntee_code": "C27",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "NO2PLASTIC",
+   "ruling_year": 2019,
+   "sector_hint": "ngo_civil_society",
+   "state": "CO"
+  },
+  "cg_3bf6e40d37764779": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "LOS ANGELES",
+   "ein": "954444787",
+   "ntee_code": "C010",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "LOS ANGELES WATERKEEPER",
+   "ruling_year": 1994,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_3ccb60c3cc80b323": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "WAILUKU",
+   "ein": "990207417",
+   "ntee_code": "C013",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "PACIFIC WHALE FOUNDATION",
+   "ruling_year": 1985,
+   "sector_hint": "ngo_civil_society",
+   "state": "HI"
+  },
+  "cg_3e12466e4f0c92bf": {
+   "activity_hints": [],
+   "city": "SULPHUR",
+   "ein": "853549698",
+   "ntee_code": "P99",
+   "ntee_major": "P",
+   "register": "irs_eo_bmf",
+   "registered_name": "MICAH SIX EIGHT MISSION",
+   "ruling_year": 2021,
+   "sector_hint": null,
+   "state": "LA"
+  },
+  "cg_3eb88a12618b53be": {
+   "activity_hints": [],
+   "city": "TAMPA",
+   "ein": "873792832",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "PERPETUAL USE INC",
+   "ruling_year": 2023,
+   "sector_hint": "ngo_civil_society",
+   "state": "FL"
+  },
+  "cg_3efafb6e53c57459": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "ANGLETON",
+   "ein": "991891067",
+   "ntee_code": "C01",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CLIMATE CONVERSATION BRAZORIA COUNTY",
+   "ruling_year": 2024,
+   "sector_hint": "ngo_civil_society",
+   "state": "TX"
+  },
+  "cg_3f54a8ee3ad1b02d": {
+   "activity_hints": [],
+   "city": "SAN DIEGO",
+   "ein": "813066017",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CLEAR BLUE SEA",
+   "ruling_year": 2016,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_462634601bfef9e5": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "SANTA MONICA",
+   "ein": "954031055",
+   "ntee_code": "C600",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "HEAL THE BAY",
+   "ruling_year": 1987,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_490445f00a87b439": {
+   "activity_hints": [],
+   "city": "BALTIMORE",
+   "ein": "473172588",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "TRASH FREE MARYLAND",
+   "ruling_year": 2015,
+   "sector_hint": "ngo_civil_society",
+   "state": "MD"
+  },
+  "cg_49a27ec5bc54cfd1": {
+   "activity_hints": [],
+   "city": "LOUISVILLE",
+   "ein": "204740318",
+   "ntee_code": "O99",
+   "ntee_major": "O",
+   "register": "irs_eo_bmf",
+   "registered_name": "SOL CENTER INC",
+   "ruling_year": 2019,
+   "sector_hint": null,
+   "state": "KY"
+  },
+  "cg_4d38e434dfb2ea51": {
+   "activity_hints": [],
+   "city": "MOUNT CLEMENS",
+   "ein": "237128611",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "CLEAN WATER ACTION",
+   "ruling_year": 1973,
+   "sector_hint": null,
+   "state": "MI"
+  },
+  "cg_4dea14ac00cb4af1": {
+   "activity_hints": [],
+   "city": "SAN DIMAS",
+   "ein": "942952782",
+   "ntee_code": "X50",
+   "ntee_major": "X",
+   "register": "irs_eo_bmf",
+   "registered_name": "BUDDHIST TZU CHI FOUNDATION",
+   "ruling_year": 2006,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_4e9050ded57efaf4": {
+   "activity_hints": [],
+   "city": "MEDINA",
+   "ein": "881482880",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "RUST BELT FIBERSHED",
+   "ruling_year": 2022,
+   "sector_hint": "ngo_civil_society",
+   "state": "OH"
+  },
+  "cg_4ec82cfa40923e5b": {
+   "activity_hints": [],
+   "city": "OAKLAND",
+   "ein": "941153307",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "SIERRA CLUB",
+   "ruling_year": 1968,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_513ac8a8399ce9d8": {
+   "activity_hints": [],
+   "city": "COLUMBUS",
+   "ein": "871422137",
+   "ntee_code": "F60",
+   "ntee_major": "F",
+   "register": "irs_eo_bmf",
+   "registered_name": "WAGEP INTERNATIONAL",
+   "ruling_year": 2021,
+   "sector_hint": null,
+   "state": "OH"
+  },
+  "cg_5233f354db57259f": {
+   "activity_hints": [],
+   "city": "MALIBU",
+   "ein": "813778043",
+   "ntee_code": "C32",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "PLASTIC OCEANS INTERNATIONAL",
+   "ruling_year": 2016,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_54f836f1017f51d5": {
+   "activity_hints": [],
+   "city": "AUBURN",
+   "ein": "270240478",
+   "ntee_code": "P20",
+   "ntee_major": "P",
+   "register": "irs_eo_bmf",
+   "registered_name": "PLACER PEOPLE OF FAITH TOGETHER",
+   "ruling_year": 2009,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_557c8a15f103b029": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "DAYTON",
+   "ein": "871109245",
+   "ntee_code": "C60",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BETWEEN THE WATERS",
+   "ruling_year": 2021,
+   "sector_hint": "ngo_civil_society",
+   "state": "OH"
+  },
+  "cg_579842bec2a1f688": {
+   "activity_hints": [],
+   "city": "ROCHESTER",
+   "ein": "823758875",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ELEMENT HOPE INC",
+   "ruling_year": 2020,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_57a2f92eb98ebf2d": {
+   "activity_hints": [],
+   "city": "BROWNSVILLE",
+   "ein": "300093290",
+   "ntee_code": "E70",
+   "ntee_major": "E",
+   "register": "irs_eo_bmf",
+   "registered_name": "HEALTHY COMMUNITIES OF BROWNSVILLE INC",
+   "ruling_year": 2003,
+   "sector_hint": null,
+   "state": "TX"
+  },
+  "cg_5ca21ab48feed4f3": {
+   "activity_hints": [],
+   "city": "FLAGSTAFF",
+   "ein": "810869112",
+   "ntee_code": "P20",
+   "ntee_major": "P",
+   "register": "irs_eo_bmf",
+   "registered_name": "AZULITA PROJECT INC",
+   "ruling_year": 2016,
+   "sector_hint": null,
+   "state": "AZ"
+  },
+  "cg_5d6733fc649f43e7": {
+   "activity_hints": [
+    "research_monitoring"
+   ],
+   "city": "LIGHTHOUSE PT",
+   "ein": "822869115",
+   "ntee_code": "C05",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "OCEAN GRANTS",
+   "ruling_year": 2018,
+   "sector_hint": "ngo_civil_society",
+   "state": "FL"
+  },
+  "cg_5d76c66dc493a31b": {
+   "activity_hints": [],
+   "city": "ATLANTA",
+   "ein": "200890449",
+   "ntee_code": "C32",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "WEST ATLANTA WATERSHED ALLIANCE INC",
+   "ruling_year": 2016,
+   "sector_hint": "ngo_civil_society",
+   "state": "GA"
+  },
+  "cg_5dfaa334e76e0820": {
+   "activity_hints": [],
+   "city": "JUPITER",
+   "ein": "472408442",
+   "ntee_code": "C32",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "WILDBLUESEA INC",
+   "ruling_year": 2014,
+   "sector_hint": "ngo_civil_society",
+   "state": "FL"
+  },
+  "cg_5e15f25d0454fa6e": {
+   "activity_hints": [],
+   "city": "OAKLAND",
+   "ein": "943251981",
+   "ntee_code": "E017",
+   "ntee_major": "E",
+   "register": "irs_eo_bmf",
+   "registered_name": "CENTER FOR ENVIRONMENTAL HEALTH",
+   "ruling_year": 1997,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_604808491a029b8a": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "POINT LOOKOUT",
+   "ein": "471720746",
+   "ntee_code": "C01",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ALL OUR ENERGY INC",
+   "ruling_year": 2015,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_60e332510adb62df": {
+   "activity_hints": [],
+   "city": "MARSHALL",
+   "ein": "272746275",
+   "ntee_code": "D31",
+   "ntee_major": "D",
+   "register": "irs_eo_bmf",
+   "registered_name": "MISSOURI RIVER BIRD OBSERVATORY",
+   "ruling_year": 2010,
+   "sector_hint": null,
+   "state": "MO"
+  },
+  "cg_622b3d695b5bead2": {
+   "activity_hints": [],
+   "city": "SAN DIEGO",
+   "ein": "522283569",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "JUST TRANSITION ALLIANCE",
+   "ruling_year": 2001,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_62f378482d502500": {
+   "activity_hints": [],
+   "city": "SACRAMENTO",
+   "ein": "455552234",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "350 SACRAMENTO",
+   "ruling_year": 2014,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_634b8bc0c1564f9d": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "SEATTLE",
+   "ein": "911214158",
+   "ntee_code": "C012",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "TOXIC-FREE FUTURE",
+   "ruling_year": 1984,
+   "sector_hint": "ngo_civil_society",
+   "state": "WA"
+  },
+  "cg_663cb5a51d561def": {
+   "activity_hints": [],
+   "city": "NEWARK",
+   "ein": "221916086",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "IRONBOUND COMMUNITY CORPORATION",
+   "ruling_year": 1982,
+   "sector_hint": null,
+   "state": "NJ"
+  },
+  "cg_672863e73ed1faab": {
+   "activity_hints": [
+    "waste_management_recycling"
+   ],
+   "city": "HALF MOON BAY",
+   "ein": "831463002",
+   "ntee_code": "C27",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "SEA HUGGER",
+   "ruling_year": 2018,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_67a08b670ad1b452": {
+   "activity_hints": [],
+   "city": "WASHINGTON",
+   "ein": "205036229",
+   "ntee_code": "M99",
+   "ntee_major": "M",
+   "register": "irs_eo_bmf",
+   "registered_name": "HABITABLE",
+   "ruling_year": 2007,
+   "sector_hint": null,
+   "state": "DC"
+  },
+  "cg_67b9e3583229021b": {
+   "activity_hints": [],
+   "city": "SEBASTOPOL",
+   "ein": "261884389",
+   "ntee_code": "C35",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "TRANSITION US",
+   "ruling_year": 2008,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_6840cf501d9bb541": {
+   "activity_hints": [],
+   "city": "ALEXANDRIA",
+   "ein": "541550071",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "THE FRIENDS OF DYKE MARSH INC",
+   "ruling_year": 1990,
+   "sector_hint": null,
+   "state": "VA"
+  },
+  "cg_692b3bb91673b679": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "BOULDER",
+   "ein": "263386082",
+   "ntee_code": "C01",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "GREENLATINOS",
+   "ruling_year": 2009,
+   "sector_hint": "ngo_civil_society",
+   "state": "CO"
+  },
+  "cg_6b0beaaed8e4b818": {
+   "activity_hints": [],
+   "city": "WASHINGTON",
+   "ein": "521733698",
+   "ntee_code": "R01",
+   "ntee_major": "R",
+   "register": "irs_eo_bmf",
+   "registered_name": "LEAGUE OF CONSERVATION VOTERS INC",
+   "ruling_year": 1991,
+   "sector_hint": null,
+   "state": "DC"
+  },
+  "cg_6bccc031ff4e1a69": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "MATTITUCK",
+   "ein": "237295395",
+   "ntee_code": "C010",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "NORTH FORK ENVIRONMENTAL COUNCIL INC",
+   "ruling_year": 1988,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_6c0b04b2720c1374": {
+   "activity_hints": [],
+   "city": "SAN ANTONIO",
+   "ein": "810984252",
+   "ntee_code": "S20",
+   "ntee_major": "S",
+   "register": "irs_eo_bmf",
+   "registered_name": "SOCIETY OF NATIVE NATIONS",
+   "ruling_year": 2016,
+   "sector_hint": null,
+   "state": "TX"
+  },
+  "cg_6e2e1c2f8fe97960": {
+   "activity_hints": [],
+   "city": "VIROQUA",
+   "ein": "842501836",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "VIROQUA PLASTIC FREE INC",
+   "ruling_year": 2022,
+   "sector_hint": "ngo_civil_society",
+   "state": "WI"
+  },
+  "cg_6fbe47bc33f8aa68": {
+   "activity_hints": [],
+   "city": "WASHINGTON",
+   "ein": "942578166",
+   "ntee_code": "C030",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ISLAND PRESS",
+   "ruling_year": 1979,
+   "sector_hint": "ngo_civil_society",
+   "state": "DC"
+  },
+  "cg_703e64e724052140": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "ARLINGTON",
+   "ein": "237039052",
+   "ntee_code": "C60",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ARLINGTON CONSERVATION COUNCIL",
+   "ruling_year": 2019,
+   "sector_hint": "ngo_civil_society",
+   "state": "TX"
+  },
+  "cg_737b3c39c550870e": {
+   "activity_hints": [],
+   "city": "BOSTON",
+   "ein": "202059607",
+   "ntee_code": "S05",
+   "ntee_major": "S",
+   "register": "irs_eo_bmf",
+   "registered_name": "PRODUCT STEWARDSHIP INSTITUTE INC",
+   "ruling_year": 2005,
+   "sector_hint": null,
+   "state": "MA"
+  },
+  "cg_741367c5fa2a68ff": {
+   "activity_hints": [],
+   "city": "PITTSBURGH",
+   "ein": "274447701",
+   "ntee_code": "A25",
+   "ntee_major": "A",
+   "register": "irs_eo_bmf",
+   "registered_name": "PITTSBURGH CENTER FOR CREATIVE REUSE",
+   "ruling_year": 2013,
+   "sector_hint": null,
+   "state": "PA"
+  },
+  "cg_7539d6f7cb5d8dfd": {
+   "activity_hints": [],
+   "city": "WILMINGTON",
+   "ein": "461251038",
+   "ntee_code": "U05",
+   "ntee_major": "U",
+   "register": "irs_eo_bmf",
+   "registered_name": "PLASTIC OCEAN PROJECT INC",
+   "ruling_year": 2014,
+   "sector_hint": null,
+   "state": "NC"
+  },
+  "cg_75b31ab39c9401a9": {
+   "activity_hints": [],
+   "city": "BARNESVILLE",
+   "ein": "204854103",
+   "ntee_code": "S21",
+   "ntee_major": "S",
+   "register": "irs_eo_bmf",
+   "registered_name": "OHIO VALLEY PEACE",
+   "ruling_year": 2009,
+   "sector_hint": null,
+   "state": "OH"
+  },
+  "cg_75bbee60afa60007": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "BOSTON",
+   "ein": "046149986",
+   "ntee_code": "C013",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CONSERVATION LAW FOUNDATION INC",
+   "ruling_year": 1967,
+   "sector_hint": "ngo_civil_society",
+   "state": "MA"
+  },
+  "cg_75d60a4405ac7bd9": {
+   "activity_hints": [],
+   "city": "ANCHORAGE",
+   "ein": "920177082",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ALASKA COMMUNITY ACTION ON TOXICS",
+   "ruling_year": 2001,
+   "sector_hint": "ngo_civil_society",
+   "state": "AK"
+  },
+  "cg_77f6595a1e5f8c5e": {
+   "activity_hints": [],
+   "city": "PORTLAND",
+   "ein": "454715889",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "TRASH FOR PEACE",
+   "ruling_year": 2012,
+   "sector_hint": "ngo_civil_society",
+   "state": "OR"
+  },
+  "cg_797e53196a4a4192": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "CARY",
+   "ein": "844162681",
+   "ntee_code": "C01",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "TOWARD ZERO WASTE NORTH CAROLINA",
+   "ruling_year": 2020,
+   "sector_hint": "ngo_civil_society",
+   "state": "NC"
+  },
+  "cg_7be22da0f565f26d": {
+   "activity_hints": [],
+   "city": "LAKE CHARLES",
+   "ein": "921779463",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "FOR A BETTER BAYOU",
+   "ruling_year": 2023,
+   "sector_hint": "ngo_civil_society",
+   "state": "LA"
+  },
+  "cg_7d573582a881e98a": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "PHILADELPHIA",
+   "ein": "231683461",
+   "ntee_code": "C012",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CLEAN AIR COUNCIL",
+   "ruling_year": 1968,
+   "sector_hint": "ngo_civil_society",
+   "state": "PA"
+  },
+  "cg_81a37fe6f4950be6": {
+   "activity_hints": [],
+   "city": "SANTA MONICA",
+   "ein": "271350279",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "THE 5 GYRES INSTITUTE",
+   "ruling_year": 2010,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_8392f201964a8cc4": {
+   "activity_hints": [],
+   "city": "SACRAMENTO",
+   "ein": "942466279",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "CALIFORNIANS AGAINST WASTE",
+   "ruling_year": 1984,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_83f17dee9aeff74e": {
+   "activity_hints": [],
+   "city": "CORP CHRISTI",
+   "ein": "844118493",
+   "ntee_code": "A99",
+   "ntee_major": "A",
+   "register": "irs_eo_bmf",
+   "registered_name": "INDIGENOUS PEOPLE OF THE COASTAL BEND",
+   "ruling_year": 2025,
+   "sector_hint": null,
+   "state": "TX"
+  },
+  "cg_83f8b874f39dec48": {
+   "activity_hints": [],
+   "city": "MINDEN",
+   "ein": "383886828",
+   "ntee_code": "T20",
+   "ntee_major": "T",
+   "register": "irs_eo_bmf",
+   "registered_name": "BENTLY FOUNDATION",
+   "ruling_year": 2013,
+   "sector_hint": "foundation",
+   "state": "NV"
+  },
+  "cg_84400417e95f5df0": {
+   "activity_hints": [],
+   "city": "COSTA MESA",
+   "ein": "330847892",
+   "ntee_code": "C320",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ORANGE COUNTY COASTKEEPER",
+   "ruling_year": 1999,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_846f0d49a402a25e": {
+   "activity_hints": [],
+   "city": "AMBRIDGE",
+   "ein": "453670363",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BEAVER COUNTY MARCELLUS AWARENESS COMMUNITY",
+   "ruling_year": 2015,
+   "sector_hint": "ngo_civil_society",
+   "state": "PA"
+  },
+  "cg_849ca78cb74ec957": {
+   "activity_hints": [],
+   "city": "POTOMAC",
+   "ein": "852035003",
+   "ntee_code": "O50",
+   "ntee_major": "O",
+   "register": "irs_eo_bmf",
+   "registered_name": "INNOVATION TOWARDS THE FUTURE",
+   "ruling_year": 2020,
+   "sector_hint": null,
+   "state": "MD"
+  },
+  "cg_854b2b7d86f5f913": {
+   "activity_hints": [],
+   "city": "JAX BCH",
+   "ein": "831560070",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BEACHES GO GREEN INC",
+   "ruling_year": 2019,
+   "sector_hint": "ngo_civil_society",
+   "state": "FL"
+  },
+  "cg_8748489e65b05455": {
+   "activity_hints": [],
+   "city": "S SAN FRANCISCO",
+   "ein": "833305529",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "RACE TO ZERO WASTE",
+   "ruling_year": 2019,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_874afe05febf9e44": {
+   "activity_hints": [],
+   "city": "DURANGO",
+   "ein": "320258388",
+   "ntee_code": "V300",
+   "ntee_major": "V",
+   "register": "irs_eo_bmf",
+   "registered_name": "EARTH LAW CENTER",
+   "ruling_year": 2009,
+   "sector_hint": null,
+   "state": "CO"
+  },
+  "cg_888d939f8af6eacb": {
+   "activity_hints": [],
+   "city": "AUSTIN",
+   "ein": "742891025",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "TEXAS CAMPAIGN FOR THE ENVIRONMENT",
+   "ruling_year": 1999,
+   "sector_hint": "ngo_civil_society",
+   "state": "TX"
+  },
+  "cg_88c568ccefd0577e": {
+   "activity_hints": [],
+   "city": "TUCSON",
+   "ein": "860641419",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "SUSTAINABLE TUCSON INC",
+   "ruling_year": 1989,
+   "sector_hint": null,
+   "state": "AZ"
+  },
+  "cg_894225bca59b49f2": {
+   "activity_hints": [],
+   "city": "VACHERIE",
+   "ein": "853094098",
+   "ntee_code": "S20",
+   "ntee_major": "S",
+   "register": "irs_eo_bmf",
+   "registered_name": "THE DESCENDANTS PROJECT",
+   "ruling_year": 2020,
+   "sector_hint": null,
+   "state": "LA"
+  },
+  "cg_894925af23c84cdd": {
+   "activity_hints": [],
+   "city": "BLUE HILL",
+   "ein": "010455007",
+   "ntee_code": "C99Z",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "SHAW INSTITUTE",
+   "ruling_year": 1991,
+   "sector_hint": "ngo_civil_society",
+   "state": "ME"
+  },
+  "cg_8e4c35b3fe46756a": {
+   "activity_hints": [],
+   "city": "PALM BCH GDNS",
+   "ein": "300845635",
+   "ntee_code": "C32",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "FRIENDS OF PALM BEACH INC",
+   "ruling_year": 2015,
+   "sector_hint": "ngo_civil_society",
+   "state": "FL"
+  },
+  "cg_90d22feb8eb9d201": {
+   "activity_hints": [],
+   "city": "DENVER",
+   "ein": "042790740",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "UNITED STATES PUBLIC INTEREST RESEARCH GROUP INC",
+   "ruling_year": 1984,
+   "sector_hint": null,
+   "state": "CO"
+  },
+  "cg_914d89e8b00f1f58": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "NEW YORK",
+   "ein": "134071318",
+   "ntee_code": "C013",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "WATERKEEPER ALLIANCE INC",
+   "ruling_year": 2000,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_92f258f7a6b378d6": {
+   "activity_hints": [],
+   "city": "CHICAGO",
+   "ein": "834084572",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "EARTH HERO",
+   "ruling_year": 2020,
+   "sector_hint": "ngo_civil_society",
+   "state": "IL"
+  },
+  "cg_93dde0eafa19d4e5": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "WASHINGTON",
+   "ein": "251781592",
+   "ntee_code": "C012",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CENTER FOR COALFIELD JUSTICE",
+   "ruling_year": 2000,
+   "sector_hint": "ngo_civil_society",
+   "state": "PA"
+  },
+  "cg_93f1f4a55d15ebb4": {
+   "activity_hints": [],
+   "city": "RICHMOND",
+   "ein": "030458294",
+   "ntee_code": "O50",
+   "ntee_major": "O",
+   "register": "irs_eo_bmf",
+   "registered_name": "YES NATURE TO NEIGHBORHOODS",
+   "ruling_year": 2002,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_94e1b4c01537c670": {
+   "activity_hints": [],
+   "city": "NEW ORLEANS",
+   "ein": "932489494",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CULTURE OF CLEANLINESS",
+   "ruling_year": 2023,
+   "sector_hint": "ngo_civil_society",
+   "state": "LA"
+  },
+  "cg_95772e611901137e": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "CULVER CITY",
+   "ein": "521720329",
+   "ntee_code": "C012",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CONTAINER RECYCLING INSTITUTE",
+   "ruling_year": 1991,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_9589154199dd1ad0": {
+   "activity_hints": [],
+   "city": "LONG BEACH",
+   "ein": "330657882",
+   "ntee_code": "U210",
+   "ntee_major": "U",
+   "register": "irs_eo_bmf",
+   "registered_name": "ALGALITA MARINE RESEARCH AND EDUCATION",
+   "ruling_year": 1995,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_9a51e4b07f740140": {
+   "activity_hints": [],
+   "city": "NEW YORK",
+   "ein": "200654237",
+   "ntee_code": "A31",
+   "ntee_major": "A",
+   "register": "irs_eo_bmf",
+   "registered_name": "GLOBAL GREEN INC",
+   "ruling_year": 2005,
+   "sector_hint": null,
+   "state": "NY"
+  },
+  "cg_9aeed64ae21ac2e9": {
+   "activity_hints": [],
+   "city": "NEW YORK",
+   "ein": "271354631",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "WEST 80S NEIGHBORHOOD ASSOCIATION",
+   "ruling_year": 2010,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_9b9a22a0900546e1": {
+   "activity_hints": [],
+   "city": "FOREST KNOLLS",
+   "ein": "911818080",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "TURTLE ISLAND RESTORATION NETWORK",
+   "ruling_year": 1997,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_9cd04418e34e3179": {
+   "activity_hints": [],
+   "city": "CUMMING",
+   "ein": "852454607",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "GREEN CELL INC",
+   "ruling_year": 2021,
+   "sector_hint": "ngo_civil_society",
+   "state": "GA"
+  },
+  "cg_9cf26a9f17bd2b5b": {
+   "activity_hints": [],
+   "city": "SILVER SPRING",
+   "ein": "522200029",
+   "ntee_code": "Q055",
+   "ntee_major": "Q",
+   "register": "irs_eo_bmf",
+   "registered_name": "INTEGRATIVE STRATEGIES FORUM INC",
+   "ruling_year": 1999,
+   "sector_hint": null,
+   "state": "MD"
+  },
+  "cg_9d40c0a513117b51": {
+   "activity_hints": [
+    "waste_management_recycling"
+   ],
+   "city": "HILO",
+   "ein": "990293381",
+   "ntee_code": "C27Z",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "RECYCLE HAWAII",
+   "ruling_year": 1993,
+   "sector_hint": "ngo_civil_society",
+   "state": "HI"
+  },
+  "cg_9ee25b6eeb24931f": {
+   "activity_hints": [],
+   "city": "LONGMONT",
+   "ein": "841440983",
+   "ntee_code": "E32Z",
+   "ntee_major": "E",
+   "register": "irs_eo_bmf",
+   "registered_name": "PHILANTHROPIECE FOUNDATION INC",
+   "ruling_year": 1998,
+   "sector_hint": null,
+   "state": "CO"
+  },
+  "cg_9f5acfbd21376d51": {
+   "activity_hints": [
+    "research_monitoring"
+   ],
+   "city": "LYNCHBURG",
+   "ein": "030546145",
+   "ntee_code": "C05",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "HAERETICUS ENVIRONMENTAL LABORATORY",
+   "ruling_year": 2006,
+   "sector_hint": "ngo_civil_society",
+   "state": "VA"
+  },
+  "cg_a1bdb0242e933c31": {
+   "activity_hints": [],
+   "city": "HOUSTON",
+   "ein": "760461030",
+   "ntee_code": "C200",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "AIR ALLIANCE HOUSTON",
+   "ruling_year": 1995,
+   "sector_hint": "ngo_civil_society",
+   "state": "TX"
+  },
+  "cg_a33c7f906a04cb37": {
+   "activity_hints": [],
+   "city": "MILL VALLEY",
+   "ein": "831447494",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BARREL BAG",
+   "ruling_year": 2018,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_a5fe46d4a7ba4cae": {
+   "activity_hints": [],
+   "city": "JOHNSTOWN",
+   "ein": "800844297",
+   "ntee_code": "C19",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "FRACTRACKER ALLIANCE",
+   "ruling_year": 2012,
+   "sector_hint": "ngo_civil_society",
+   "state": "PA"
+  },
+  "cg_a829c70ad70d28fc": {
+   "activity_hints": [],
+   "city": "CAPO BEACH",
+   "ein": "852769680",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "STAND UP TO TRASH INC",
+   "ruling_year": 2021,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_a906377b0b6bdcc8": {
+   "activity_hints": [],
+   "city": "BALTIMORE",
+   "ein": "881264725",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "OUR ZERO WASTE FUTURE INCORPORATED",
+   "ruling_year": 2022,
+   "sector_hint": "ngo_civil_society",
+   "state": "MD"
+  },
+  "cg_aaa1a27579efa351": {
+   "activity_hints": [],
+   "city": "SANTA CRUZ",
+   "ein": "942745941",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "SAVE OUR SHORES",
+   "ruling_year": 1982,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_abaa1533e8a54eae": {
+   "activity_hints": [],
+   "city": "WASHINGTON",
+   "ein": "521257057",
+   "ntee_code": "Q055",
+   "ntee_major": "Q",
+   "register": "irs_eo_bmf",
+   "registered_name": "WORLD RESOURCES INSTITUTE",
+   "ruling_year": 1982,
+   "sector_hint": null,
+   "state": "DC"
+  },
+  "cg_ac0c7fe3809a577c": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "PHILADELPHIA",
+   "ein": "990565582",
+   "ntee_code": "C01",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ENERGY JUSTICE NETWORK",
+   "ruling_year": 2024,
+   "sector_hint": "ngo_civil_society",
+   "state": "PA"
+  },
+  "cg_ad6f80ffd51e07bf": {
+   "activity_hints": [],
+   "city": "NESKOWIN",
+   "ein": "237207991",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "NESKOWIN VALLEY SCHOOL",
+   "ruling_year": 1973,
+   "sector_hint": null,
+   "state": "OR"
+  },
+  "cg_afc8182a774eabb6": {
+   "activity_hints": [],
+   "city": "SOLANA BEACH",
+   "ein": "852130034",
+   "ntee_code": "T20",
+   "ntee_major": "T",
+   "register": "irs_eo_bmf",
+   "registered_name": "FUTURES UNBOUND",
+   "ruling_year": 2020,
+   "sector_hint": "foundation",
+   "state": "CA"
+  },
+  "cg_b0c6e15ad90626e6": {
+   "activity_hints": [],
+   "city": "LONGWOOD",
+   "ein": "593131709",
+   "ntee_code": "D013",
+   "ntee_major": "D",
+   "register": "irs_eo_bmf",
+   "registered_name": "SAVE THE MANATEE CLUB INC",
+   "ruling_year": 1993,
+   "sector_hint": null,
+   "state": "FL"
+  },
+  "cg_b16a8178617d001c": {
+   "activity_hints": [],
+   "city": "PITTSBURGH",
+   "ein": "384135485",
+   "ntee_code": "D20",
+   "ntee_major": "D",
+   "register": "irs_eo_bmf",
+   "registered_name": "HUMANE ACTION PITTSBURGH",
+   "ruling_year": 2020,
+   "sector_hint": null,
+   "state": "PA"
+  },
+  "cg_b1f6bb73083e8ddf": {
+   "activity_hints": [],
+   "city": "SANTA CRUZ",
+   "ein": "364515216",
+   "ntee_code": "C34",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "SAVE THE WAVES COALITION",
+   "ruling_year": 2003,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_b3d5b1d30939ad39": {
+   "activity_hints": [],
+   "city": "BOCA RATON",
+   "ein": "043434514",
+   "ntee_code": "E70",
+   "ntee_major": "E",
+   "register": "irs_eo_bmf",
+   "registered_name": "FOOD AND NUTRITION RESOURCES FOUNDATION INC",
+   "ruling_year": 2001,
+   "sector_hint": null,
+   "state": "FL"
+  },
+  "cg_b44cb813fd837b8b": {
+   "activity_hints": [],
+   "city": "WALTHAM",
+   "ein": "042534161",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "CHAPEL HILL-CHAUNCY HALL SCHOOL",
+   "ruling_year": 1974,
+   "sector_hint": null,
+   "state": "MA"
+  },
+  "cg_b65d7f53278b2cb0": {
+   "activity_hints": [],
+   "city": "WILMINGTON",
+   "ein": "852916447",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "PLASTIC FREE DELAWARE",
+   "ruling_year": 2020,
+   "sector_hint": "ngo_civil_society",
+   "state": "DE"
+  },
+  "cg_b6eb807d6e821b8a": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "RICHMOND",
+   "ein": "911767292",
+   "ntee_code": "C600",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "THE WATERSHED PROJECT",
+   "ruling_year": 1997,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_b7d7b4d21ec0a5f7": {
+   "activity_hints": [],
+   "city": "LOS ANGELES",
+   "ein": "954624707",
+   "ntee_code": "E70",
+   "ntee_major": "E",
+   "register": "irs_eo_bmf",
+   "registered_name": "BLACK WOMEN FOR WELLNESS",
+   "ruling_year": 1997,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_b8463909be2c69d5": {
+   "activity_hints": [],
+   "city": "BOSTON",
+   "ein": "042240610",
+   "ntee_code": "X20Z",
+   "ntee_major": "X",
+   "register": "irs_eo_bmf",
+   "registered_name": "BEACON HILL FRIENDS HOUSE INC",
+   "ruling_year": 1959,
+   "sector_hint": null,
+   "state": "MA"
+  },
+  "cg_b8a9b94616502beb": {
+   "activity_hints": [],
+   "city": "BREWSTER",
+   "ein": "813232834",
+   "ntee_code": "B90",
+   "ntee_major": "B",
+   "register": "irs_eo_bmf",
+   "registered_name": "SUSTAINABLE PRACTICES",
+   "ruling_year": 2016,
+   "sector_hint": null,
+   "state": "MA"
+  },
+  "cg_b93648222f3c8637": {
+   "activity_hints": [],
+   "city": "GLOUCESTER",
+   "ein": "474993870",
+   "ntee_code": "C32",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "SEASIDE SUSTAINABILITY INC",
+   "ruling_year": 2016,
+   "sector_hint": "ngo_civil_society",
+   "state": "MA"
+  },
+  "cg_c09adb5ae7d0edd7": {
+   "activity_hints": [],
+   "city": "SEATTLE",
+   "ein": "010918435",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BASEL ACTION NETWORK",
+   "ruling_year": 2009,
+   "sector_hint": "ngo_civil_society",
+   "state": "WA"
+  },
+  "cg_c2fe0198aa13bed4": {
+   "activity_hints": [],
+   "city": "ENGLEWOOD",
+   "ein": "842687103",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "INTO THE SEA",
+   "ruling_year": 2022,
+   "sector_hint": "ngo_civil_society",
+   "state": "CO"
+  },
+  "cg_c52c5b24df3775ba": {
+   "activity_hints": [],
+   "city": "NEW ORLEANS",
+   "ein": "721488935",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "LOUISIANA BUCKET BRIGADE",
+   "ruling_year": 2001,
+   "sector_hint": "ngo_civil_society",
+   "state": "LA"
+  },
+  "cg_c5ce85ed6bc258d1": {
+   "activity_hints": [],
+   "city": "OSSINING",
+   "ein": "133204621",
+   "ntee_code": "C320",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "RIVERKEEPER INC",
+   "ruling_year": 1984,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_ca70ffbfb982140e": {
+   "activity_hints": [],
+   "city": "BROOKLYN",
+   "ein": "464343210",
+   "ntee_code": "B20",
+   "ntee_major": "B",
+   "register": "irs_eo_bmf",
+   "registered_name": "COMPASS CHARTER SCHOOL",
+   "ruling_year": 2015,
+   "sector_hint": null,
+   "state": "NY"
+  },
+  "cg_cbfac6ddf073f652": {
+   "activity_hints": [],
+   "city": "KANSAS CITY",
+   "ein": "440546278",
+   "ntee_code": "B400",
+   "ntee_major": "B",
+   "register": "irs_eo_bmf",
+   "registered_name": "KANSAS CITY ART INSTITUTE",
+   "ruling_year": 1939,
+   "sector_hint": "academia_research",
+   "state": "MO"
+  },
+  "cg_cc1c86a48848ccba": {
+   "activity_hints": [],
+   "city": "NEVADA CITY",
+   "ein": "874362740",
+   "ntee_code": "C99",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BLUE HARMONY FOUNDATION",
+   "ruling_year": 2023,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_cd657dfbb721a72e": {
+   "activity_hints": [],
+   "city": "MELCROFT",
+   "ein": "251730301",
+   "ntee_code": "C320",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "MOUNTAIN WATERSHED ASSOCIATION",
+   "ruling_year": 1995,
+   "sector_hint": "ngo_civil_society",
+   "state": "PA"
+  },
+  "cg_cd65e3b1a219298d": {
+   "activity_hints": [],
+   "city": "DEL MAR",
+   "ein": "770536297",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "WILDCOAST",
+   "ruling_year": 2000,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_cf7f1ac881c07aa6": {
+   "activity_hints": [],
+   "city": "PRESCOTT",
+   "ein": "422449607",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "THE CONSERVATION COALITION",
+   "ruling_year": 2026,
+   "sector_hint": null,
+   "state": "AZ"
+  },
+  "cg_d1d00ffb92ec669c": {
+   "activity_hints": [],
+   "city": "JOLIET",
+   "ein": "362170999",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "UNIVERSITY OF ST FRANCIS",
+   "ruling_year": 1960,
+   "sector_hint": null,
+   "state": "IL"
+  },
+  "cg_d421a0f278eed9c1": {
+   "activity_hints": [],
+   "city": "NEWPORT",
+   "ein": "222646866",
+   "ntee_code": "A26Z",
+   "ntee_major": "A",
+   "register": "irs_eo_bmf",
+   "registered_name": "PERRY COUNTY COUNCIL OF THE ARTS",
+   "ruling_year": 1985,
+   "sector_hint": null,
+   "state": "PA"
+  },
+  "cg_d6c3947abc8358da": {
+   "activity_hints": [],
+   "city": "SALIDA",
+   "ein": "862858249",
+   "ntee_code": "C32",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "UN-BOTTLE AND PROTECT CHAFFEE COUNTY WATER",
+   "ruling_year": 2022,
+   "sector_hint": "ngo_civil_society",
+   "state": "CO"
+  },
+  "cg_dd91a8de9ade5361": {
+   "activity_hints": [],
+   "city": "GREENE",
+   "ein": "472980260",
+   "ntee_code": "E90",
+   "ntee_major": "E",
+   "register": "irs_eo_bmf",
+   "registered_name": "WONDERMENT",
+   "ruling_year": 2016,
+   "sector_hint": null,
+   "state": "RI"
+  },
+  "cg_dda765dacce151bf": {
+   "activity_hints": [],
+   "city": "TUCSON",
+   "ein": "273943866",
+   "ntee_code": "D20",
+   "ntee_major": "D",
+   "register": "irs_eo_bmf",
+   "registered_name": "CENTER FOR BIOLOGICAL DIVERSITY INC",
+   "ruling_year": 2011,
+   "sector_hint": null,
+   "state": "AZ"
+  },
+  "cg_dda99a19d724b6b0": {
+   "activity_hints": [],
+   "city": "NEW YORK",
+   "ein": "462746860",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "ONLY ONE INC",
+   "ruling_year": 2013,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_e111f97bfd415706": {
+   "activity_hints": [],
+   "city": "BEMUS POINT",
+   "ein": "414656702",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CHAUTAUQUA-CONEWANGO CONSORTIUM INC",
+   "ruling_year": 2026,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_e3107d7ac9ee5379": {
+   "activity_hints": [],
+   "city": "REIDSVILLE",
+   "ein": "331777226",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "7 DIRECTIONS OF SERVICE INC",
+   "ruling_year": 2024,
+   "sector_hint": "ngo_civil_society",
+   "state": "NC"
+  },
+  "cg_e405d0012516ca30": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "ARCATA",
+   "ein": "237122386",
+   "ntee_code": "C600",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "NORTHCOAST ENVIRONMENTAL CENTER",
+   "ruling_year": 1971,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_e49c644b09d84bbf": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "NEWARK",
+   "ein": "814338010",
+   "ntee_code": "C01",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "NEW JERSEY ENVIRONMENTAL JUSTICE ALLIANCE INC",
+   "ruling_year": 2017,
+   "sector_hint": "ngo_civil_society",
+   "state": "NJ"
+  },
+  "cg_e5fa1f3d78cc3819": {
+   "activity_hints": [],
+   "city": "WEST TISBURY",
+   "ein": "131935186",
+   "ntee_code": "X900",
+   "ntee_major": "X",
+   "register": "irs_eo_bmf",
+   "registered_name": "THE TEMPLE OF UNDERSTANDING INC",
+   "ruling_year": 1961,
+   "sector_hint": null,
+   "state": "MA"
+  },
+  "cg_e77aeaa12213ea23": {
+   "activity_hints": [],
+   "city": "CATHEDRAL CITY",
+   "ein": "330717794",
+   "ntee_code": "A50",
+   "ntee_major": "A",
+   "register": "irs_eo_bmf",
+   "registered_name": "S C R A P GALLERY",
+   "ruling_year": 1996,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_ec316aaad3d2d6ab": {
+   "activity_hints": [],
+   "city": "GLENSIDE",
+   "ein": "274274692",
+   "ntee_code": "P20",
+   "ntee_major": "P",
+   "register": "irs_eo_bmf",
+   "registered_name": "CENTER FOR SUSTAINABLE AND JUST COMMUNITIES INC",
+   "ruling_year": 2014,
+   "sector_hint": null,
+   "state": "PA"
+  },
+  "cg_ecd167c52e6bb7f4": {
+   "activity_hints": [],
+   "city": "VINEYARD HVN",
+   "ein": "042439882",
+   "ntee_code": "C340",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "VINEYARD CONSERVATION SOCIETY INC",
+   "ruling_year": 1968,
+   "sector_hint": "ngo_civil_society",
+   "state": "MA"
+  },
+  "cg_ed8f31152fda8fa9": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "BERKELEY",
+   "ein": "464334785",
+   "ntee_code": "C60",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "STORY OF STUFF PROJECT",
+   "ruling_year": 2014,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_ee04ad123a0f7baf": {
+   "activity_hints": [],
+   "city": "BEDFORD HILLS",
+   "ein": "320298560",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BEDFORD 2030 INC",
+   "ruling_year": 2010,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_ef1bfe6ed926bcbc": {
+   "activity_hints": [
+    "waste_management_recycling"
+   ],
+   "city": "LOS ANGELES",
+   "ein": "463314343",
+   "ntee_code": "C27",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "HABITS OF WASTE",
+   "ruling_year": 2014,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_f2235e94b02a8081": {
+   "activity_hints": [],
+   "city": "DECATUR",
+   "ein": "473125153",
+   "ntee_code": "C03",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "WILD CUMBERLAND INC",
+   "ruling_year": 2015,
+   "sector_hint": "ngo_civil_society",
+   "state": "GA"
+  },
+  "cg_f4f0fd516309437c": {
+   "activity_hints": [
+    "advocacy_campaigning"
+   ],
+   "city": "WHEELING",
+   "ein": "921873844",
+   "ntee_code": "C01",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "OHIO VALLEY ENVIRONMENTAL ADVOCATES INC",
+   "ruling_year": 2024,
+   "sector_hint": "ngo_civil_society",
+   "state": "WV"
+  },
+  "cg_f67b486cdc0932d7": {
+   "activity_hints": [],
+   "city": "PORTLAND",
+   "ein": "383791803",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "DEFEND OUR HEALTH",
+   "ruling_year": 2010,
+   "sector_hint": "ngo_civil_society",
+   "state": "ME"
+  },
+  "cg_f769d604c8da8841": {
+   "activity_hints": [],
+   "city": "GAINESVILLE",
+   "ein": "454241510",
+   "ntee_code": "A99",
+   "ntee_major": "A",
+   "register": "irs_eo_bmf",
+   "registered_name": "REPURPOSE PROJECT",
+   "ruling_year": 2014,
+   "sector_hint": null,
+   "state": "FL"
+  },
+  "cg_f7ae262657fb35d8": {
+   "activity_hints": [
+    "education_awareness"
+   ],
+   "city": "COMPTON",
+   "ein": "834171891",
+   "ntee_code": "C60",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "BIJOUX FOUNDATION INC",
+   "ruling_year": 2025,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_fb756d3499d487b6": {
+   "activity_hints": [],
+   "city": "OCCIDENTAL",
+   "ein": "680359676",
+   "ntee_code": "C30Z",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "OCCIDENTAL ARTS AND ECOLOGY CENTER",
+   "ruling_year": 1997,
+   "sector_hint": "ngo_civil_society",
+   "state": "CA"
+  },
+  "cg_fcd7f039df741515": {
+   "activity_hints": [],
+   "city": "NEW YORK",
+   "ein": "814694803",
+   "ntee_code": "C20",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "OCEANIC GLOBAL FOUNDATION",
+   "ruling_year": 2018,
+   "sector_hint": "ngo_civil_society",
+   "state": "NY"
+  },
+  "cg_fd76b7899f0c7381": {
+   "activity_hints": [],
+   "city": "LOS GATOS",
+   "ein": "942662529",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "CONGREGATION SHIR HADASH",
+   "ruling_year": 1985,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_fdab72d0c6b63f1a": {
+   "activity_hints": [],
+   "city": "DOWNEY",
+   "ein": "472034270",
+   "ntee_code": "P20",
+   "ntee_major": "P",
+   "register": "irs_eo_bmf",
+   "registered_name": "GREEN GENERATION",
+   "ruling_year": 2015,
+   "sector_hint": null,
+   "state": "CA"
+  },
+  "cg_fde09b7dd7e62362": {
+   "activity_hints": [],
+   "city": "COLUMBUS",
+   "ein": "475411751",
+   "ntee_code": null,
+   "ntee_major": null,
+   "register": "irs_eo_bmf",
+   "registered_name": "RED OAK COMMUNITY SCHOOL",
+   "ruling_year": 2016,
+   "sector_hint": null,
+   "state": "OH"
+  },
+  "cg_fe0b8739ebd81b59": {
+   "activity_hints": [],
+   "city": "DES PLAINES",
+   "ein": "824822640",
+   "ntee_code": "C30",
+   "ntee_major": "C",
+   "register": "irs_eo_bmf",
+   "registered_name": "CLEAN UP - GIVE BACK ORG",
+   "ruling_year": 2023,
+   "sector_hint": "ngo_civil_society",
+   "state": "IL"
+  }
+ },
+ "retrieved_at": "2026-11-26",
+ "schema": "cg-register-suggestions-v1",
+ "source": "IRS Exempt Organizations Business Master File (US government data)"
+}
