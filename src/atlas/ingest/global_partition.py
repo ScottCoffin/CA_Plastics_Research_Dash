@@ -12,6 +12,14 @@ then one unmodified OpenAlex work per line) and writes two ignored Parquet table
   A registry region also matches when an authorship institution id is in the region's
   institution registry (``registry_institution``, PLAT-4b slice 2).
 
+PLAT-4 slice 4 adds two more tables from the same winning record of each work:
+
+- ``authorships.parquet``: one row per (work, author position, institution); an authorship
+  with no institution gets one row with null institution fields. Author names and institutions
+  are published for the global graph; emails are redacted from raw affiliations.
+- ``institutions.parquet``: one row per institution id seen in authorships, with distinct work
+  and author counts and the first and last publication year of its works.
+
 Region names are never written here: predicates come from ``regions/_registry.yml`` through
 ``atlas.regions.scope``. The strict raw-affiliation rule for the default region is the
 engine's existing ``normalize.matches_california_affiliation``, because no scope helper can
@@ -35,7 +43,7 @@ import pyarrow as pa
 import pyarrow.compute as pc
 import pyarrow.parquet as pq
 
-from atlas.ingest.normalize import matches_california_affiliation
+from atlas.ingest.normalize import matches_california_affiliation, redact_emails
 from atlas.regions import scope
 from atlas.regions.registry import Region, load_registry
 
@@ -43,6 +51,10 @@ DEFAULT_RAW_DIR = Path("data/raw/openalex_global")
 DEFAULT_OUT_DIR = Path("data/processed/global")
 WORKS_FILE = "works.parquet"
 WORK_REGIONS_FILE = "work_regions.parquet"
+AUTHORSHIPS_FILE = "authorships.parquet"
+INSTITUTIONS_FILE = "institutions.parquet"
+# Rows are collected per batch so the authorship table never sits in Python memory whole.
+AUTHORSHIP_FLUSH_ROWS = 100_000
 
 SCREENING_UNSCREENED = "unscreened_query_hit"
 REGION_KINDS = ("country", "subdivision", "registry_region")
@@ -92,6 +104,37 @@ WORK_REGIONS_SCHEMA = pa.schema(
     ]
 )
 
+AUTHORSHIPS_SCHEMA = pa.schema(
+    [
+        ("work_id", pa.string()),
+        ("author_position", pa.int32()),
+        ("author_id", pa.string()),
+        ("author_name", pa.string()),
+        ("author_orcid", pa.string()),
+        ("is_corresponding", pa.bool_()),
+        ("institution_id", pa.string()),
+        ("institution_name", pa.string()),
+        ("institution_ror", pa.string()),
+        ("institution_country", pa.string()),
+        ("institution_type", pa.string()),
+        ("raw_affiliation", pa.string()),
+        ("author_countries", pa.list_(pa.string())),
+    ]
+)
+INSTITUTIONS_SCHEMA = pa.schema(
+    [
+        ("institution_id", pa.string()),
+        ("display_name", pa.string()),
+        ("ror", pa.string()),
+        ("country_code", pa.string()),
+        ("type", pa.string()),
+        ("works_n", pa.int64()),
+        ("authors_n", pa.int64()),
+        ("first_year", pa.int32()),
+        ("last_year", pa.int32()),
+    ]
+)
+
 _PMID_TAIL = re.compile(r"(\d+)$")
 _RAW_BOUNDARY = r"(?<![A-Za-z]){}(?![A-Za-z])"
 
@@ -107,6 +150,10 @@ class PartitionResult:
     skipped_records: int
     works_path: Path
     work_regions_path: Path
+    authorships: int = 0
+    institutions: int = 0
+    authorships_path: Path | None = None
+    institutions_path: Path | None = None
 
 
 def raw_page_paths(raw_dir: str | Path) -> list[Path]:
@@ -201,6 +248,116 @@ def _raw_affiliation_strings(authorship: Mapping[str, Any]) -> list[str]:
         if isinstance(affiliation, Mapping):
             values.append(affiliation.get("raw_affiliation_string"))
     return [value for value in values if isinstance(value, str) and value.strip()]
+
+
+def _unique(values: Iterable[str | None]) -> list[str]:
+    seen: dict[str, None] = {}
+    for value in values:
+        if value:
+            seen.setdefault(value, None)
+    return list(seen)
+
+
+def authorship_rows(work: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """``authorships.parquet`` rows for one work; position is the 0-based index in the list."""
+    work_id = _short_id(work.get("id"))
+    if work_id is None:
+        return []
+    rows: list[dict[str, Any]] = []
+    for position, authorship in enumerate(work.get("authorships") or []):
+        if not isinstance(authorship, Mapping):
+            continue
+        author = authorship.get("author") or {}
+        raw = _raw_affiliation_strings(authorship)
+        corresponding = authorship.get("is_corresponding")
+        base = {
+            "work_id": work_id,
+            "author_position": position,
+            "author_id": _short_id(author.get("id")),
+            "author_name": _text(author.get("display_name")),
+            "author_orcid": _text(author.get("orcid")),
+            "is_corresponding": corresponding if isinstance(corresponding, bool) else None,
+            "raw_affiliation": redact_emails(raw[0]) if raw else None,
+            "author_countries": _unique(_country(c) for c in authorship.get("countries") or []),
+        }
+        institutions = [i for i in authorship.get("institutions") or [] if isinstance(i, Mapping)]
+        if not institutions:
+            rows.append(_institution_fields(base, None))
+        for institution in institutions:
+            rows.append(_institution_fields(base, institution))
+    return rows
+
+
+def _institution_fields(base: Mapping[str, Any], institution: Mapping[str, Any] | None) -> dict:
+    if institution is None:
+        fields: dict[str, Any] = {}
+    else:
+        fields = {
+            "institution_id": _short_id(institution.get("id")),
+            "institution_name": _text(institution.get("display_name")),
+            "institution_ror": _text(institution.get("ror")),
+            "institution_country": _country(institution.get("country_code")),
+            "institution_type": _text(institution.get("type")),
+        }
+    empty = {
+        "institution_id": None,
+        "institution_name": None,
+        "institution_ror": None,
+        "institution_country": None,
+        "institution_type": None,
+    }
+    row = {**base, **empty, **fields}
+    if row["institution_name"]:
+        row["institution_name"] = redact_emails(row["institution_name"])
+    if row["author_name"]:
+        row["author_name"] = redact_emails(row["author_name"])
+    return row
+
+
+def institutions_table(authorships: pa.Table, works: pa.Table) -> pa.Table:
+    """One row per institution id: distinct works and authors, first and last year of its works."""
+    years = works.select(["work_id", "publication_year"])
+    with_inst = authorships.filter(pc.is_valid(authorships.column("institution_id")))
+    # List columns cannot ride through a join; keep only the scalar fields the aggregate reads.
+    slim = with_inst.select(
+        [
+            "work_id",
+            "author_id",
+            "institution_id",
+            "institution_name",
+            "institution_ror",
+            "institution_country",
+            "institution_type",
+        ]
+    )
+    joined = slim.join(years, keys="work_id", join_type="left outer")
+    agg = joined.group_by("institution_id").aggregate(
+        [
+            ("work_id", "count_distinct"),
+            ("author_id", "count_distinct"),
+            ("institution_name", "min"),
+            ("institution_ror", "min"),
+            ("institution_country", "min"),
+            ("institution_type", "min"),
+            ("publication_year", "min"),
+            ("publication_year", "max"),
+        ]
+    )
+    table = pa.Table.from_arrays(
+        [
+            agg.column("institution_id"),
+            agg.column("institution_name_min"),
+            agg.column("institution_ror_min"),
+            agg.column("institution_country_min"),
+            agg.column("institution_type_min"),
+            agg.column("work_id_count_distinct"),
+            agg.column("author_id_count_distinct"),
+            agg.column("publication_year_min"),
+            agg.column("publication_year_max"),
+        ],
+        schema=INSTITUTIONS_SCHEMA,
+    )
+    return table.sort_by("institution_id")
 
 
 def _raw_affiliation_hit(region: Region, text: str) -> bool:
@@ -328,8 +485,9 @@ def build_partition(
     }
     rows: dict[str, dict[str, Any]] = {}
     bases: dict[str, dict[tuple[str, str], str]] = {}
+    winner: dict[str, int] = {}  # work_id -> index in ``headers`` of the page that wins
     skipped = 0
-    for header, path in headers:
+    for ordinal, (header, path) in enumerate(headers):
         for work in _read_works(path):
             row = work_row(work, header)
             if row is None:
@@ -337,6 +495,7 @@ def build_partition(
                 continue
             rows[row["work_id"]] = row
             bases[row["work_id"]] = work_region_bases(work, regions, institution_ids)
+            winner[row["work_id"]] = ordinal
 
     works = [rows[key] for key in sorted(rows)]
     region_rows = [
@@ -344,14 +503,58 @@ def build_partition(
         for work_id in sorted(bases)
         for (kind, code), basis in sorted(bases[work_id].items())
     ]
+    authorships = _authorship_table(headers, winner)
+    works_table = pa.Table.from_pylist(works, schema=WORKS_SCHEMA)
+    institutions = institutions_table(authorships, works_table)
+
     out = Path(out_dir)
     works_path = out / WORKS_FILE
     regions_path = out / WORK_REGIONS_FILE
-    _atomic_write_parquet(pa.Table.from_pylist(works, schema=WORKS_SCHEMA), works_path)
+    authorships_path = out / AUTHORSHIPS_FILE
+    institutions_path = out / INSTITUTIONS_FILE
+    _atomic_write_parquet(works_table, works_path)
     _atomic_write_parquet(
         pa.Table.from_pylist(region_rows, schema=WORK_REGIONS_SCHEMA), regions_path
     )
-    return PartitionResult(len(works), len(region_rows), skipped, works_path, regions_path)
+    _atomic_write_parquet(authorships, authorships_path)
+    _atomic_write_parquet(institutions, institutions_path)
+    return PartitionResult(
+        len(works),
+        len(region_rows),
+        skipped,
+        works_path,
+        regions_path,
+        authorships=authorships.num_rows,
+        institutions=institutions.num_rows,
+        authorships_path=authorships_path,
+        institutions_path=institutions_path,
+    )
+
+
+def _authorship_table(
+    headers: Sequence[tuple[Mapping[str, Any], Path]], winner: Mapping[str, int]
+) -> pa.Table:
+    """Authorship rows from the winning record of each work (second pass over the pages).
+
+    Pages are re-read in the same order as the works pass; a line contributes only when its page
+    is the winning page for its work. Within one page the last line for a work wins, as in works.
+    """
+    batches: list[pa.Table] = []
+    pending: list[dict[str, Any]] = []
+    for ordinal, (_, path) in enumerate(headers):
+        page_works: dict[str, Mapping[str, Any]] = {}
+        for work in _read_works(path):
+            work_id = _short_id(work.get("id"))
+            if work_id is not None and winner.get(work_id) == ordinal:
+                page_works[work_id] = work
+        for work in page_works.values():
+            pending.extend(authorship_rows(work))
+        if len(pending) >= AUTHORSHIP_FLUSH_ROWS:
+            batches.append(pa.Table.from_pylist(pending, schema=AUTHORSHIPS_SCHEMA))
+            pending = []
+    if pending or not batches:
+        batches.append(pa.Table.from_pylist(pending, schema=AUTHORSHIPS_SCHEMA))
+    return pa.concat_tables(batches)
 
 
 def check_outputs(out_dir: str | Path = DEFAULT_OUT_DIR) -> list[str]:
@@ -359,15 +562,22 @@ def check_outputs(out_dir: str | Path = DEFAULT_OUT_DIR) -> list[str]:
     out = Path(out_dir)
     problems: list[str] = []
     works_path, regions_path = out / WORKS_FILE, out / WORK_REGIONS_FILE
-    for path in (works_path, regions_path):
+    authorships_path, institutions_path = out / AUTHORSHIPS_FILE, out / INSTITUTIONS_FILE
+    for path in (works_path, regions_path, authorships_path, institutions_path):
         if not path.exists():
             return [f"missing {path}"]
     works = pq.read_table(works_path)
     regions = pq.read_table(regions_path)
+    authorships = pq.read_table(authorships_path)
+    institutions = pq.read_table(institutions_path)
     if not works.schema.equals(WORKS_SCHEMA, check_metadata=False):
         problems.append("works.parquet schema differs from WORKS_SCHEMA")
     if not regions.schema.equals(WORK_REGIONS_SCHEMA, check_metadata=False):
         problems.append("work_regions.parquet schema differs from WORK_REGIONS_SCHEMA")
+    if not authorships.schema.equals(AUTHORSHIPS_SCHEMA, check_metadata=False):
+        problems.append("authorships.parquet schema differs from AUTHORSHIPS_SCHEMA")
+    if not institutions.schema.equals(INSTITUTIONS_SCHEMA, check_metadata=False):
+        problems.append("institutions.parquet schema differs from INSTITUTIONS_SCHEMA")
     if problems:
         return problems
     work_ids = works.column("work_id").to_pylist()
@@ -397,6 +607,36 @@ def check_outputs(out_dir: str | Path = DEFAULT_OUT_DIR) -> list[str]:
     orphans = set(regions.column("work_id").to_pylist()) - set(work_ids)
     if orphans:
         problems.append(f"work_regions rows point at {len(orphans)} unknown works")
+    problems.extend(_check_authorships(works, authorships, institutions))
+    return problems
+
+
+def _check_authorships(works: pa.Table, authorships: pa.Table, institutions: pa.Table) -> list[str]:
+    """Referential and count invariants for the authorship and institution tables."""
+    problems: list[str] = []
+    work_ids = set(works.column("work_id").to_pylist())
+    orphans = set(authorships.column("work_id").to_pylist()) - work_ids
+    if orphans:
+        problems.append(f"authorships rows point at {len(orphans)} unknown works")
+    inst_ids = institutions.column("institution_id").to_pylist()
+    if any(not value for value in inst_ids) or len(set(inst_ids)) != len(inst_ids):
+        problems.append("institutions.institution_id is empty or not unique")
+    with_inst = authorships.filter(pc.is_valid(authorships.column("institution_id")))
+    expected = with_inst.group_by("institution_id").aggregate(
+        [("work_id", "count_distinct"), ("author_id", "count_distinct")]
+    )
+    want = {
+        row["institution_id"]: (row["work_id_count_distinct"], row["author_id_count_distinct"])
+        for row in expected.to_pylist()
+    }
+    got = {
+        row["institution_id"]: (row["works_n"], row["authors_n"])
+        for row in institutions.to_pylist()
+    }
+    if set(want) != set(got):
+        problems.append("institutions do not match the institution ids in authorships")
+    elif want != got:
+        problems.append("institutions.works_n or authors_n differ from authorships")
     return problems
 
 
@@ -405,6 +645,9 @@ def summarize(out_dir: str | Path = DEFAULT_OUT_DIR, top: int = 10) -> dict[str,
     out = Path(out_dir)
     works = pq.read_table(out / WORKS_FILE, columns=["work_id", "pmid"])
     regions = pq.read_table(out / WORK_REGIONS_FILE)
+    authorships = pq.read_table(out / AUTHORSHIPS_FILE, columns=["author_id", "institution_id"])
+    institutions = pq.read_table(out / INSTITUTIONS_FILE, columns=["institution_id"])
+    author_ids = authorships.column("author_id")
     country_rows = regions.filter(pc.equal(regions.column("region_kind"), "country"))
     per_country = Counter(country_rows.column("region_code").to_pylist())
     default_slug = scope.DEFAULT_REGION_SLUG
@@ -420,4 +663,12 @@ def summarize(out_dir: str | Path = DEFAULT_OUT_DIR, top: int = 10) -> dict[str,
         "top_countries": sorted(per_country.items(), key=lambda kv: (-kv[1], kv[0]))[:top],
         "default_region_works": default_rows.num_rows,
         "default_region": default_slug,
+        "authorships": authorships.num_rows,
+        "distinct_authors": pc.count_distinct(author_ids).as_py(),
+        "null_author_id_share": (
+            pc.sum(pc.is_null(author_ids).cast(pa.int64())).as_py() / authorships.num_rows
+            if authorships.num_rows
+            else 0.0
+        ),
+        "institutions": institutions.num_rows,
     }

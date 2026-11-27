@@ -18,3 +18,18 @@ Rules:
   `site/data/california`. Global files keep their explicit `site/data/global/` paths.
 - Front-end code builds data URLs from one helper (California files under `data/california/`), never `data/<file>`.
 - The release snapshot packages the top-level JSON of each data folder; the "no abstracts" rule applies to every folder.
+
+## Local-only global partition (`data/processed/global/`, ignored)
+
+Written by `py -3.14 scripts/partition_global.py` from the ignored raw store `data/raw/openalex_global/pages/`. Nothing here is committed or published; `--check` validates the tables offline and prints SKIP without the raw store. Every work is an unscreened query hit.
+
+- `works.parquet`: one row per OpenAlex work (latest page wins); see `WORKS_SCHEMA` in `src/atlas/ingest/global_partition.py`.
+- `work_regions.parquet`: one row per (work, region kind, region code), with `basis`.
+- `authorships.parquet` (PLAT-4 slice 4): one row per (work, author position, institution), taken from the same winning record as `works.parquet`. An authorship with no institution gets one row with null institution fields, and a null author id is kept.
+  - `work_id`, `author_position` (0-based index in the authorship list), `author_id` (nullable), `author_name` (display name), `author_orcid` (nullable), `is_corresponding` (nullable bool).
+  - `institution_id` (nullable), `institution_name`, `institution_ror`, `institution_country` (ISO2, nullable), `institution_type`.
+  - `raw_affiliation`: the first raw affiliation string, with emails replaced by `[email removed]`.
+  - `author_countries`: list of ISO2 codes from `authorships[].countries`, repeated on every row of that authorship.
+  - Author and institution names are published only through the global graph (owner rule, QUESTIONS GLOBAL-AUTHORS). No email is stored anywhere.
+- `institutions.parquet` (PLAT-4 slice 4): one row per institution id seen in `authorships.parquet`. Columns: `institution_id`, `display_name`, `ror`, `country_code`, `type`, `works_n` (distinct works), `authors_n` (distinct non-null author ids), `first_year` and `last_year` (publication years of those works).
+- `--check` also verifies that every `authorships.work_id` is in `works.parquet` and that `institutions.works_n` and `authors_n` equal the counts recomputed from `authorships.parquet`.
