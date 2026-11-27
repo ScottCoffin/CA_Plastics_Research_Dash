@@ -225,6 +225,66 @@ def merge_records(
     return records
 
 
+REVIEWED_STATUS = "reviewed"
+REVIEW_TARGET_STATUS = "ambassador_tagged"
+PRIMARY_ACTIVITIES_MAX = 5
+
+
+def _reviewed_value(facet: str, text: str, vocab: Mapping[str, Sequence[str]]) -> str | list[str]:
+    """Parse a review row's reviewed_value (the export's CSV form) with the double-tag rules."""
+    allowed = set(vocab[facet])
+    if facet == "primary_activities":
+        parts = [part for part in text.split(";") if part]
+        if (
+            not 1 <= len(parts) <= PRIMARY_ACTIVITIES_MAX
+            or len(set(parts)) != len(parts)
+            or any(part not in allowed for part in parts)
+        ):
+            raise GroupsBuildError(f"reviews: reviewed_value {text!r} is not a valid {facet} value")
+        return parts
+    if text not in allowed:
+        raise GroupsBuildError(f"reviews: reviewed_value {text!r} is not a valid {facet} value")
+    return text
+
+
+def apply_reviews(
+    records: Sequence[dict[str, Any]],
+    reviews: Sequence[Mapping[str, str]],
+    vocab: Mapping[str, Sequence[str]],
+) -> list[dict[str, Any]]:
+    """Publish approved reviewer edits: a tagged group with all five Tier-1 review rows is reviewed.
+
+    Each facet takes its reviewed_value (an agree row with a blank value keeps the tagged value; an
+    edit needs one). Status becomes reviewed, reviewed_at the latest review date, and layer is
+    re-derived from the published plastics_centrality. Partial reviews change nothing, and reviews
+    for groups that are not tagged records are ignored. The newest row per (group, facet) counts.
+    """
+    rows_by_group: dict[str, dict[str, Mapping[str, str]]] = {}
+    for row in reviews:
+        facets = rows_by_group.setdefault(row.get("group_id", ""), {})
+        facet = row.get("facet", "")
+        current = facets.get(facet)
+        if current is None or row.get("reviewed_at", "") >= current.get("reviewed_at", ""):
+            facets[facet] = row
+    for record in records:
+        rows = rows_by_group.get(record["group_id"], {})
+        if record["status"] != REVIEW_TARGET_STATUS or not all(f in rows for f in TIER1_FACETS):
+            continue
+        for facet in TIER1_FACETS:
+            row = rows[facet]
+            text = row.get("reviewed_value", "")
+            if text:
+                record[facet] = _reviewed_value(facet, text, vocab)
+            elif row.get("outcome") == "edit":
+                raise GroupsBuildError(
+                    f"reviews: edit of {facet} for {record['group_id']} needs a reviewed_value"
+                )
+        record["status"] = REVIEWED_STATUS
+        record["reviewed_at"] = max(rows[f].get("reviewed_at", "")[:10] for f in TIER1_FACETS)
+        record["layer"] = derive_layer(record["plastics_centrality"])
+    return list(records)
+
+
 def chapter_problems(records: Iterable[Mapping[str, Any]]) -> list[str]:
     """Return problems with chapter_branch records (rule moved from CG-4).
 
@@ -969,7 +1029,9 @@ def build_groups(
     """
     vocab = dict(taxonomy) if taxonomy is not None else load_taxonomy()
     generated_from = roster["retrieved_at"]
-    records = merge_records(roster["records"], submissions, name_corrections)
+    records = apply_reviews(
+        merge_records(roster["records"], submissions, name_corrections), reviews or (), vocab
+    )
     problems = validate_groups(records, taxonomy=vocab) + chapter_problems(records)
     if problems:
         shown = "; ".join(problems[:20])

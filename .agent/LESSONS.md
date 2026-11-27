@@ -429,3 +429,6 @@ until it reports.
 - A Playwright walk that checks only geometry passed 104/104 while the Main activities grid was unusable: each checkbox had stretched to the full chip width, with the label one letter wide. Always open the screenshots, and tell workers to look at theirs too.
 - Ambassador CSS cascade: `.am .g-fields input` and `.am .signup .field input` (width 100%, min-height 44px) beat chip checkbox rules of equal or lower specificity. Exclude checkbox and radio from text-input rules, and give chip inputs `label.<class> input[type]`.
 - check_a4_scaffold rejects new `CG-` task IDs that the BFFP spec does not list. Name owner-requested group tasks `GRP-...`.
+
+## Never pipe a gate check through tail inside an && chain (2026-11-26)
+`check | tail -1 && git commit` commits even when the check fails, because the pipeline's exit code is tail's. Run gate checks unpiped (or with `set -o pipefail`) before any commit or push in the same command. It let a failing A4 scaffold reach main once (fixed in 8fd9b757).

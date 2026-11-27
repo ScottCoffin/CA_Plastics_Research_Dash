@@ -34,7 +34,7 @@ The optional top-level keys `group_pairs` and `group_reviews` (CG-7a blind secon
 missing means none) become rows in `curation/group_double_tags.csv` (five Tier-1 rows per pair, replaced by a
 later pair for the same group) and `curation/group_reviews.csv` (newest `reviewed_at` per group and facet). Only
 the group id, facet, values, outcome, reason code and time are written: no ambassador id, name or email. Both
-files feed the group build, so the job rebuilds the precision card whenever they change. The summary counts them
+files feed the group build, so the job rebuilds the precision card whenever they change. A review row's `reviewed_value` is the approved value: once a tagged group has all five Tier-1 rows, the build publishes those values, sets status `reviewed` and re-derives the layer (partial reviews change nothing). The summary counts them
 as `group_pair` and `group_review`. Invalid items are skipped with a printed reason, as the other kinds are.
 
 Knowledge kinds map to sections as follows. `community_group`, `volunteer_group` and `community_knowledge`

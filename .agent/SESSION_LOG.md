@@ -292,3 +292,4 @@
 | 2026-11-26 | CG-7b (local) | Migration 0008, group_qa.ts, /groups/reviews, export group_pairs/group_reviews, CSV writers. Worker 239 passed; clean-worktree gate below. Deploy waits for H59. | this commit |
 | 2026-11-26 | CG-7c reviewer screen | Group tag checks on the Moderation page; runtime + pytest + mocked browser smoke passed; live once H59 deploys. | this commit |
 | 2026-11-26 | H59 deploy | D1 0008 applied; Worker 5a5f52e9 deployed; new routes 401 without session. CG-7 closed. | this commit |
+| 2026-11-26 | GRP-REVIEW-APPLY | Complete reviewer checks publish edited values, status reviewed and reviewed_at; group_reviews.csv gains reviewed_value. 136 focused tests; build --check identical. | this commit |

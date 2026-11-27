@@ -821,10 +821,12 @@ def test_reviews_agree_and_edit_are_written_with_iso_time(work: Path) -> None:
         "outcome": "agree",
         "reason_code": "",
         "reviewed_at": "2026-11-25T10:00:00Z",
+        "reviewed_value": "local",
     }
     assert rows[1]["outcome"] == "edit"
     assert rows[1]["reason_code"] == "evidence_contradicts"
     assert rows[1]["reviewed_at"] == "2026-11-25T14:00:00Z"
+    assert rows[1]["reviewed_value"] == "foundation"
 
 
 def test_newest_review_wins_and_an_older_one_is_skipped(work: Path, capsys) -> None:
@@ -840,6 +842,44 @@ def test_newest_review_wins_and_an_older_one_is_skipped(work: Path, capsys) -> N
     assert (row["outcome"], row["reason_code"]) == ("edit", "slip")
     out = capsys.readouterr().out
     assert "skip group review: older than the stored review for this facet" in out
+
+
+REVIEW_COLUMNS_LINE = "group_id,facet,outcome,reason_code,reviewed_at,reviewed_value"
+
+
+def test_reviews_write_the_reviewed_value_column(work: Path) -> None:
+    review = _review(outcome="edit", reason_code="guide_rule", reviewed_value="foundation")
+    assert _group_export(work, None, [review]) == 0
+    assert _text(work, "group_reviews.csv").splitlines()[0] == REVIEW_COLUMNS_LINE
+    [row] = _csv_of(work, "group_reviews.csv")
+    assert row["reviewed_value"] == "foundation"
+
+
+def test_agree_writes_the_joined_activities_as_reviewed_value(work: Path) -> None:
+    activities = ["advocacy_campaigning", "education_awareness"]
+    review = _review(
+        facet="primary_activities",
+        original_value=activities,
+        reviewed_value=activities,
+    )
+    assert _group_export(work, None, [review]) == 0
+    [row] = _csv_of(work, "group_reviews.csv")
+    assert row["outcome"] == "agree"
+    assert row["reviewed_value"] == "advocacy_campaigning;education_awareness"
+
+
+def test_five_column_review_file_is_upgraded_and_keeps_its_rows(work: Path) -> None:
+    old_row = f"{GROUP_A},sector,agree,,{MOD.iso_from_ms(_ms('2026-11-20'))}"
+    (work / "curation" / "group_reviews.csv").write_text(
+        "group_id,facet,outcome,reason_code,reviewed_at\n" + old_row + "\n", "utf-8"
+    )
+    review = _review(facet="geographic_scope", original_value="local", reviewed_value="local")
+    assert _group_export(work, None, [review]) == 0
+    assert _text(work, "group_reviews.csv").splitlines()[0] == REVIEW_COLUMNS_LINE
+    rows = {row["facet"]: row for row in _csv_of(work, "group_reviews.csv")}
+    assert set(rows) == {"sector", "geographic_scope"}
+    assert rows["sector"]["reviewed_value"] == ""
+    assert rows["geographic_scope"]["reviewed_value"] == "local"
 
 
 @pytest.mark.parametrize(

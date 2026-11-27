@@ -12,10 +12,11 @@ Curated submissions (CG-6b, written by scripts/ambassador_export_pr.py) are read
 curation/group_tags.csv and curation/group_affiliations.csv when present. Corrected display names
 come from curation/group_name_corrections.csv (the group_id never changes). Blind second tags
 (curation/group_double_tags.csv) and reviewer checks (curation/group_reviews.csv) feed the
-precision card; a missing file means no rows. A row whose group_id is
-not on the roster is skipped with a printed reason. A tag with not_an_organisation true removes the
-group from the roster used for every output (spec section 4.4, rule 5). Status reviewed is never set
-here; reviews come later.
+precision card; a missing file means no rows. A tagged group with all five Tier-1 review rows is
+published as status reviewed with the reviewed values (partial reviews change nothing). A row whose
+group_id is not on the roster is skipped with a printed reason. A tag with not_an_organisation true
+removes the group from the roster used for every output (spec section 4.4, rule 5). Status
+reviewed is set only by reviews in curation/group_reviews.csv, never by a submission.
 """
 
 from __future__ import annotations
@@ -199,7 +200,8 @@ def load_double_tags(curation_dir: Path) -> list[dict[str, str]]:
 
 
 def load_reviews(curation_dir: Path) -> list[dict[str, str]]:
-    """Reviewer checks (CG-7a): group_id, facet, outcome, reason_code, reviewed_at."""
+    """Reviewer checks (CG-7a, CG-GRP-REVIEW-APPLY): group_id, facet, outcome, reason_code,
+    reviewed_at and reviewed_value (blank in files written before the column existed)."""
     rows = _rows(curation_dir / REVIEWS_FILE)
     for row in rows:
         if row.get("facet", "") not in TIER1_FACETS:

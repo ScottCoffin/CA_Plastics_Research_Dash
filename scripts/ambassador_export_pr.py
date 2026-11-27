@@ -12,7 +12,8 @@ Reads GET {api}/export/approved (or a saved export with --input) and applies:
   group_id); the group build applies it.
 - ``group_pairs`` and ``group_reviews`` (optional keys, missing means none): blind second tags and
   reviewer checks (CG-7a). Pairs become five Tier-1 rows each in ``curation/group_double_tags.csv``;
-  reviews become rows in ``curation/group_reviews.csv`` (newest per group and facet). No ambassador
+  reviews become rows in ``curation/group_reviews.csv`` (newest per group and facet, with the
+  approved value; the group build publishes it once all five facets are reviewed). No ambassador
   id, name or email is written, and the group build reads both files.
 - consensus ``case_answers``: rows in ``curation/ambassador_labels.csv``, newest per (region, case).
 - ``institutions`` (optional key, missing means none): approved institution proposals, written to
@@ -669,10 +670,18 @@ GROUP_AFFILIATION_COLUMNS = (
 )
 GROUP_SUGGESTION_COLUMNS = ("name", "url", "country", "note", "suggested_at")
 GROUP_NAME_CORRECTION_COLUMNS = ("group_id", "name", "submitted_at")
-# CG-7a contract files (scripts/build_groups.py load_double_tags and load_reviews). No value
-# columns in reviews: original_value and reviewed_value are validated but never written.
+# CG-7a contract files (scripts/build_groups.py load_double_tags and load_reviews). original_value
+# is validated but never written. reviewed_value is the approved value (the build publishes it);
+# an older file without that column reads as empty.
 GROUP_DOUBLE_TAG_COLUMNS = ("group_id", "facet", "value_a", "value_b")
-GROUP_REVIEW_COLUMNS = ("group_id", "facet", "outcome", "reason_code", "reviewed_at")
+GROUP_REVIEW_COLUMNS = (
+    "group_id",
+    "facet",
+    "outcome",
+    "reason_code",
+    "reviewed_at",
+    "reviewed_value",
+)
 GROUP_REVIEW_OUTCOMES = ("agree", "edit")
 GROUP_ID_RE = re.compile(r"cg_[0-9a-f]{16}")
 GROUP_PLACE_RE = re.compile(r"[A-Z]{2}(-[A-Z0-9]{1,3})?")
@@ -1115,6 +1124,7 @@ class GroupStore:
             "reason_code": reason_code,
             "reviewed_at": iso_from_ms(at),
         }
+        row["reviewed_value"] = csv_facet(reviewed)
         if existing is None or existing["row"] != row:
             self.dirty.add("reviews")
         self.reviews[key] = {"ms": at, "row": row}

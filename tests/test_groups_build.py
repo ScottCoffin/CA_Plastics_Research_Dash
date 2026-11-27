@@ -848,6 +848,7 @@ def test_committed_curation_headers_match_the_export_contract() -> None:
     for name, header in (
         ("group_tags.csv", TAG_HEADER),
         ("group_affiliations.csv", AFFILIATION_HEADER),
+        ("group_reviews.csv", EXPORT.GROUP_REVIEW_COLUMNS),
     ):
         first = (REPO / "curation" / name).read_text(encoding="utf-8").splitlines()[0]
         assert first == ",".join(header), name
@@ -1131,3 +1132,180 @@ def test_pairs_and_reviews_of_groups_no_longer_on_the_roster_are_ignored(tmp_pat
         ],
     )
     assert BUILD.build_outputs(copy.deepcopy(ROSTER), curation) == _build(None)
+
+
+# ---------------------------------------------------------------- approved reviews (GRP-REVIEW)
+
+CORE_VALUES = {
+    "entity_type": "organisation",
+    "sector": "ngo_civil_society",
+    "plastics_centrality": "primary",
+    "primary_activities": "cleanup_removal;education_awareness",
+    "geographic_scope": "local",
+}
+
+
+def _full_review(
+    edits: Mapping[str, str] | None = None,
+    reviewed_at: str = DATE,
+    group_id: str = CORE,
+) -> list[dict[str, str]]:
+    """Five Tier-1 review rows; each facet in ``edits`` is an edit, the rest agree."""
+    edits = dict(edits or {})
+    return [
+        {
+            "group_id": group_id,
+            "facet": facet,
+            "outcome": "edit" if facet in edits else "agree",
+            "reason_code": "guide_rule" if facet in edits else "",
+            "reviewed_at": reviewed_at,
+            "reviewed_value": edits.get(facet, CORE_VALUES[facet]),
+        }
+        for facet in TIER1_FACETS
+    ]
+
+
+def test_all_agree_review_marks_the_group_reviewed_and_keeps_its_values() -> None:
+    rows = _full_review(reviewed_at="2026-11-25T08:00:00Z")
+    rows[0]["reviewed_at"] = "2026-11-26T09:30:00Z"
+    record = _record(_build_with(reviews=rows), CORE)
+    assert record["status"] == "reviewed"
+    assert record["reviewed_at"] == DATE
+    assert record["sector"] == "ngo_civil_society"
+    assert record["primary_activities"] == ["cleanup_removal", "education_awareness"]
+    assert record["layer"] == "core"
+
+
+def test_edits_publish_their_values_and_re_derive_the_layer() -> None:
+    rows = _full_review(
+        {
+            "sector": "foundation",
+            "primary_activities": "funding_grantmaking;education_awareness",
+            "plastics_centrality": "incidental",
+        }
+    )
+    record = _record(_build_with(reviews=rows), CORE)
+    assert record["status"] == "reviewed"
+    assert record["sector"] == "foundation"
+    assert record["primary_activities"] == ["funding_grantmaking", "education_awareness"]
+    assert record["plastics_centrality"] == "incidental"
+    assert record["layer"] == "adjacent"
+
+
+def test_partial_review_changes_nothing() -> None:
+    rows = _full_review({"sector": "foundation"})[:4]
+    assert _build_with(reviews=rows)["groups.json"] == _build()["groups.json"]
+
+
+def test_reviews_for_untagged_or_cannot_determine_groups_are_skipped() -> None:
+    rows = _full_review(group_id=CD) + _full_review(group_id=UNTAGGED_US)
+    assert _build_with(reviews=rows)["groups.json"] == _build()["groups.json"]
+
+
+@pytest.mark.parametrize(
+    ("facet", "value", "match"),
+    [
+        ("sector", "not_a_sector", "not a valid sector value"),
+        ("sector", "foundation;business", "not a valid sector value"),
+        ("primary_activities", "cleanup_removal;cleanup_removal", "not a valid primary"),
+        ("primary_activities", ";".join(VOCAB["primary_activities"][:6]), "not a valid primary"),
+    ],
+)
+def test_invalid_reviewed_value_raises(facet: str, value: str, match: str) -> None:
+    with pytest.raises(GroupsBuildError, match=match):
+        _build_with(reviews=_full_review({facet: value}))
+
+
+def test_edit_without_a_reviewed_value_raises() -> None:
+    with pytest.raises(GroupsBuildError, match="needs a reviewed_value"):
+        _build_with(reviews=_full_review({"sector": ""}))
+
+
+def test_older_five_column_review_file_still_builds_and_agree_keeps_values(
+    tmp_path: Path,
+) -> None:
+    curation = _curation(tmp_path, tags=[CORE_TAG])
+    _write_rows(
+        curation / "group_reviews.csv",
+        ("group_id", "facet", "outcome", "reason_code", "reviewed_at"),
+        [
+            {"group_id": CORE, "facet": facet, "outcome": "agree", "reviewed_at": DATE}
+            for facet in TIER1_FACETS
+        ],
+    )
+    record = _record(BUILD.build_outputs(copy.deepcopy(ROSTER), curation), CORE)
+    assert record["status"] == "reviewed"
+    assert record["sector"] == CORE_TAG["sector"]
+
+
+def test_precision_reviewed_n_counts_the_published_review() -> None:
+    before = _json(_build(), "precision_card.json")["facets"]["sector"]["reviewed_n"]
+    card = _json(_build_with(reviews=_full_review()), "precision_card.json")
+    assert card["facets"]["sector"]["reviewed_n"] == before + 1
+    assert card["facets"]["sector"]["review"]["audited_n"] == 1
+
+
+def test_export_reviews_round_trip_into_the_published_record(tmp_path: Path) -> None:
+    real_id = "cg_0123456789abcdef"
+    roster = copy.deepcopy(ROSTER)
+    roster["records"][0]["group_id"] = real_id
+    reviews = []
+    for facet in TIER1_FACETS:
+        original = CORE_PAYLOAD[facet]
+        edit = facet == "sector"
+        reviews.append(
+            {
+                "group_id": real_id,
+                "region": "norway",
+                "facet": facet,
+                "outcome": "edit" if edit else "agree",
+                "reason_code": "guide_rule" if edit else None,
+                "original_value": original,
+                "reviewed_value": "foundation" if edit else original,
+                "reviewed_at": DECIDED_AT + 3600000,
+            }
+        )
+    body = {
+        "ok": True,
+        "submissions": [
+            {
+                "id": 1,
+                "region": "norway",
+                "stream": "knowledge",
+                "kind": "group_tag",
+                "payload": {**CORE_PAYLOAD, "group_id": real_id},
+                "decided_at": DECIDED_AT,
+                "credit_name": "Ada Example",
+            }
+        ],
+        "group_reviews": reviews,
+        "case_answers": [],
+        "institutions": [],
+    }
+    export = tmp_path / "export.json"
+    export.write_text(json.dumps(body), encoding="utf-8")
+    args = [
+        "--input",
+        str(export),
+        "--since-file",
+        str(tmp_path / "state.json"),
+        "--labels-file",
+        str(tmp_path / "labels.csv"),
+        "--additions-file",
+        str(tmp_path / "additions.csv"),
+        "--regions-dir",
+        str(tmp_path / "regions"),
+        "--group-tags-file",
+        str(tmp_path / "group_tags.csv"),
+        "--group-affiliations-file",
+        str(tmp_path / "group_affiliations.csv"),
+        "--group-suggestions-file",
+        str(tmp_path / "group_suggestions.csv"),
+        "--group-reviews-file",
+        str(tmp_path / "group_reviews.csv"),
+    ]
+    assert EXPORT.main(args) == 0
+    record = _record(BUILD.build_outputs(roster, tmp_path), real_id)
+    assert record["status"] == "reviewed"
+    assert record["sector"] == "foundation"
+    assert record["reviewed_at"] == "2026-11-26"
