@@ -304,3 +304,4 @@
 | 2026-11-26 | CG-12b + GP-1 | Flows/participation/combinations/languages views (browser-verified); California regression contract recorded (17 routes, 257k links, 0 broken). | this commit |
 | 2026-11-26 | GP-GROUPS recorded | Owner: groups map first and interactive like /explore, scoped views, shared look; recorded in TODO, GLOBAL_PARITY slice plan, ADR-GP-GROUPS. | this commit |
 | 2026-11-26 | GRP-ENRICH slice 3b | IRS register hints shown in the tagging form's suggestions box; browser walk 63/63. | this commit |
+| 2026-11-26 | GRP-LLM research | docs/GROUP_LLM_ENRICHMENT.md: LLM web-search tagging cost (full roster ~$60-$130; pilot ~$10-$25) and self-evolution pilot design; TODO GRP-LLM gated on H64. | this commit |

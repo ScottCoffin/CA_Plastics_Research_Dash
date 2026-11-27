@@ -24,6 +24,13 @@ Last updated: 2026-11-26.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
+### H64. Decide on the LLM tagging pilot (about 3 minutes)
+You asked what it would cost for an inexpensive LLM with web search to fill in the community groups. Findings: `docs/GROUP_LLM_ENRICHMENT.md` (all 2,673 groups about $60-$130; a 100-group pilot about $10-$25). The pilot can only start once ambassadors have tagged about 100 groups, but the decisions can be made now. Reply in one line, for example **"H64: pilot OK, $50 cap, Gemini paid tier, suggestions only, ambassadors check quotes, gold 100"**, or change any part:
+1. Spend cap for the pilot (suggested $50) and the provider to test first (suggested Gemini Flash-Lite on the paid tier, so prompts are not used for Google training).
+2. Suggestions only (an ambassador confirms each value; your rule A4-D11 is unchanged) or published machine tags (would amend A4-D11).
+3. Who checks the quotes: ambassadors when confirming (suggested), or an automatic check that fetches the cited pages.
+4. Gold size: 100 groups for the pilot, about 300 before anything machine-made is published.
+
 ### H58. Review the community groups roster (now optional)
 You do not need to finish this. Ambassadors will answer the same duplicate and name questions while they tag (AMB-ROSTER-QC). Your 5 decisions so far are kept. If you want to spot-check, run `py -3.14 -m streamlit run scripts/review_group_roster_app.py` and click through as many cases as you like; every click saves at once.
 
