@@ -957,3 +957,8 @@ The optional public name correction uses the stable group ID and goes through th
 - Owner answers (H61, written into docs/GROUP_ENRICHMENT_OPTIONS.md): Wikidata and official-register lookups shown to an ambassador as suggestions, each confirmed with evidence, are not "scraping- or crawling-based tagging"; A4-D11 stands unchanged and nothing is tagged automatically.
 - Attribution lines are approved for CC0 (Wikidata), public-domain (IRS EO BMF), OGL (UK Charity Commission, Canada CRA) and CC BY 3.0 AU (ACNC) sources. No OpenCorporates bulk data and no Wikipedia text enter the dataset (share-alike). Candid/GuideStar (paid) is declined.
 - Roster cleanup (duplicates, suspect names, country artefacts such as form-default AF entries) comes before any country-filtered matching; until then GRP-ENRICH treats AF as an unknown country. The agent verifies the Belgium, Norway, India and Charity Commission terms on their live pages before using those registers.
+
+## ADR-GP-GROUPS-2026-11-26
+
+- Owner direction: the Community groups map should be interactive like the main app's map (drill-down; every view responds to the region shown) and be the first thing on /groups, ahead of the per-region progress list; the groups data and interface should share the look, shell and navigation of the rest of the site (/explore) instead of a separate style.
+- Recorded as TODO GP-GROUPS inside the global-parity queue (owner: "record these aspects and integrate with the California Atlas feature port"), with a row in docs/GLOBAL_PARITY.md. The CG-12/CG-12b views stay as built until that slice; their pure helpers (coverage rows, anchors, heatmap and flow builders) are the inputs the scoped views reuse.
