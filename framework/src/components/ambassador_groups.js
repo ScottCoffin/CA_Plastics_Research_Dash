@@ -129,6 +129,60 @@ export function suspectHint(groupId, qc) {
   return sentences.join(" ");
 }
 
+/** Official register search pages by roster country. Links only: no register data is loaded. */
+const REGISTERS = new Map([
+  ["US", {label: "IRS Tax Exempt Organization Search", url: "https://apps.irs.gov/app/eos/"}],
+  ["GB", {label: "Charity Commission register", url: "https://register-of-charities.charitycommission.gov.uk/charity-search"}],
+  ["CA", {label: "Canada Revenue Agency charities listing", url: "https://apps.cra-arc.gc.ca/ebci/hacc/srch/pub/dsplyBscSrch?request_locale=en"}],
+  ["AU", {label: "ACNC Charity Register", url: "https://www.acnc.gov.au/charity/charities"}],
+]);
+
+/** Register search links for a country code: [] for countries without one. */
+export function registerLinks(country) {
+  const entry = REGISTERS.get(String(country ?? "").toUpperCase());
+  return entry ? [entry] : [];
+}
+
+/** The Wikidata suggestion for one group (normalised), or null. Only well-formed entries are used. */
+export function suggestionFor(groupId, suggestions) {
+  const groups = suggestions?.groups;
+  if (!groups || typeof groups !== "object" || !Object.hasOwn(groups, groupId)) return null;
+  const entry = groups[groupId];
+  if (!entry || typeof entry !== "object" || !/^Q\d+$/.test(String(entry.qid ?? ""))) return null;
+  const year = Number(entry.inception_year);
+  return {
+    qid: entry.qid,
+    match: entry.match === "label" ? "label" : "website",
+    website: safeUrl(entry.website),
+    inceptionYear: Number.isInteger(year) && year > 0 ? year : null,
+    typeLabels: (Array.isArray(entry.type_labels) ? entry.type_labels : []).filter((label) => typeof label === "string" && label.trim()).map((label) => label.trim()).slice(0, 10),
+  };
+}
+
+/**
+ * Suggestions box for the tag form: a closed <details> when Wikidata has a suggestion, plus the register row by country.
+ * Returns "" when there is neither. Nothing here fills in a field; the ambassador confirms each value by hand.
+ */
+export function suggestionHTML(group, suggestions) {
+  const hit = suggestionFor(group?.group_id, suggestions);
+  const registers = registerLinks(group?.country);
+  const register = registers.length
+    ? `<p class="g-register">Look it up in an official register: ${registers.map((r) => `<a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${esc(r.label)}<span class="sr"> (opens in a new tab)</span></a>`).join("")}</p>`
+    : "";
+  if (!hit) return register;
+  const newTab = '<span class="sr"> (opens in a new tab)</span>';
+  const items = [
+    `<li>Wikidata entry: <a href="${esc(`https://www.wikidata.org/wiki/${hit.qid}`)}" target="_blank" rel="noopener noreferrer">Open the Wikidata entry${newTab}</a></li>`,
+    hit.website ? `<li>Official website: <a href="${esc(hit.website)}" target="_blank" rel="noopener noreferrer">Open their official website${newTab}</a></li>` : "",
+    hit.inceptionYear ? `<li>Founded ${esc(hit.inceptionYear)}</li>` : "",
+    hit.typeLabels.length ? `<li>Listed in Wikidata as: ${esc(hit.typeLabels.join(", "))}</li>` : "",
+  ];
+  const warning = hit.match === "label" ? `<p class="g-hints-warn">Matched by name only. Check that this is the same organisation.</p>` : "";
+  return `<details class="g-hints"><summary>Suggestions to check (from Wikidata)</summary>
+    <div class="g-hints-body"><p class="hint">These are hints, not tags. Confirm each value on the group's own pages before you use it.</p>${warning}
+    <ul>${items.join("")}</ul>${register}</div></details>`;
+}
+
 /** Roster records keyed by group id, as the duplicate questions read them. */
 export function rosterLookup(roster) {
   const index = new Map();
@@ -433,6 +487,12 @@ async function loadRosterChecks(groupIds = []) {
   if (!rosterCache) rosterCache = getJson("groups/roster.json").then(rosterLookup);
   return {roster: await rosterCache, qc};
 }
+/** Wikidata suggestions, loaded once per page. A failed fetch means no suggestions; nothing else changes. */
+let suggestionsCache = null;
+function loadSuggestions() {
+  if (!suggestionsCache) suggestionsCache = getJson("groups/suggestions.json").then((data) => (data?.schema === "cg-suggestions-v1" ? data : null));
+  return suggestionsCache;
+}
 
 /** The "Group work you sent" list, shown on both screens. */
 function sentHTML(ctx) {
@@ -448,7 +508,7 @@ const SECOND_TAG_NOTICE = "Someone else just tagged this group. Your answers sti
 
 /** Mounts one assignment at a time and guards detached/stale responses after navigation. */
 export function mountGroups(host, ctx) {
-  const state = {leases: [], remaining: 0, index: 0, loading: true, busy: false, error: "", formError: "", notice: "", generation: 0, drafts: {}, activityOrder: [], checks: {roster: new Map(), qc: null}};
+  const state = {leases: [], remaining: 0, index: 0, loading: true, busy: false, error: "", formError: "", notice: "", generation: 0, drafts: {}, activityOrder: [], checks: {roster: new Map(), qc: null, suggestions: null}};
   let alive = true;
   let holdTimer;
   const current = () => state.leases[state.index] || null;
@@ -481,6 +541,7 @@ export function mountGroups(host, ctx) {
         <section class="g-group" aria-labelledby="g-group-name"><h3 id="g-group-name" tabindex="-1">${esc(group.name)}</h3><p class="g-meta">${esc(group.country)}</p>
         ${groupLink ? `<p class="g-open-site"><a class="btn solid" href="${esc(groupLink)}" target="_blank" rel="noopener noreferrer">Open their website<span class="sr"> (opens in a new tab)</span></a></p>` : `<p class="hint">No website is listed for this group. Enter the page you read in the evidence section.</p>`}
         <form data-g-tag-form novalidate aria-busy="${state.busy}">
+        ${suggestionHTML(group, state.checks.suggestions)}
         <div class="field g-name-correction"><label for="g-name-correction">Correct the name (optional)</label><input id="g-name-correction" type="text" maxlength="200" autocomplete="off" data-g-field="name_correction" value="${esc(draft.name_correction ?? (suspect ? group.name : ""))}" aria-describedby="g-name-correction-hint"><p class="hint" id="g-name-correction-hint">${esc(nameHint)}</p></div>
         ${orgChoiceHTML({attr: "data-g-org", choice: draft.notOrganisation === true ? "no" : draft.notOrganisation === false ? "yes" : "", question: "Is this a collective organisation, rather than an individual or single-person practice?", yes: "Yes, a collective organisation", no: "No, a personal profile or individual"})}
         ${sameAsHTML(group.group_id, questions, draft)}
@@ -508,9 +569,9 @@ export function mountGroups(host, ctx) {
     const generation = ++state.generation; render();
     const result = await ctx.api(batchPath);
     const leased = Array.isArray(result?.data?.leases) ? result.data.leases.map((lease) => lease?.group_id) : [];
-    const checks = await loadRosterChecks(leased);
+    const [checks, suggestions] = await Promise.all([loadRosterChecks(leased), loadSuggestions()]);
     if (detached() || generation !== state.generation) return;
-    state.checks = checks;
+    state.checks = {...checks, suggestions};
     state.loading = false;
     if (!result?.ok) state.error = actionError(result?.error);
     else { state.leases = Array.isArray(result.data?.leases) ? result.data.leases : []; state.remaining = Number(result.data?.remaining_in_region) || 0; }

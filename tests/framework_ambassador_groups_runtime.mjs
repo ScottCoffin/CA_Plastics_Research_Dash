@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import {
   CANNOT_REASONS, GROUP_TAXONOMY, SAME_AS_ANSWERS, TIER2_TAXONOMY, duplicateQuestions, groupSuggestionPayload, groupTagPayload,
-  isSuspectName, rosterLookup, suspectHint,
+  isSuspectName, registerLinks, rosterLookup, suggestionFor, suggestionHTML, suspectHint,
 } from "../framework/src/components/ambassador_groups.js";
 import {
   COUNTRY_CODES, LANGUAGE_CODES, US_STATES, languageDefaults, languageName, languageOptions, lookupPickerCode, pickerMatch, placeDefaults, placeOptions,
@@ -272,4 +272,60 @@ check("a suspect name left unchanged is not sent, even when it is too short to c
   assert.equal(needsRoster(qc, ["cg_0000000000000009"]), false);
   assert.equal(needsRoster(null, ["cg_0000000000000001"]), false);
   console.log("ok - the full roster loads only for batches with a possible duplicate");
+}
+
+// Wikidata suggestions and official-register links (ADR-GRP-ENRICH): hints only, escaped, and absent without a suggestion.
+{
+  const SUGGESTIONS = {schema: "cg-suggestions-v1", source: "Wikidata (CC0)", retrieved_at: "2026-11-26", groups: {
+    [GROUP.group_id]: {qid: "Q42", match: "website", website: "https://example.org", inception_year: 1999, types: ["Q1"], type_labels: ["non-profit organization"]},
+    cg_1111111111111111: {qid: "Q7", match: "label", website: "javascript:alert(1)", inception_year: null, types: [], type_labels: ["<img src=x onerror=alert(1)>"]},
+    cg_2222222222222222: {qid: "Pizza", match: "website", website: null, inception_year: null, types: [], type_labels: []},
+  }};
+  const LABEL_GROUP = {...GROUP, group_id: "cg_1111111111111111"};
+  check("suggestion lookup returns a normalised entry and nothing for unknown or malformed ones", () => {
+    assert.deepEqual(suggestionFor(GROUP.group_id, SUGGESTIONS), {qid: "Q42", match: "website", website: "https://example.org", inceptionYear: 1999, typeLabels: ["non-profit organization"]});
+    assert.equal(suggestionFor("cg_0000000000000000", SUGGESTIONS), null);
+    assert.equal(suggestionFor("constructor", SUGGESTIONS), null);
+    assert.equal(suggestionFor("__proto__", SUGGESTIONS), null);
+    assert.equal(suggestionFor("cg_2222222222222222", SUGGESTIONS), null, "a qid that is not Q-digits gets no suggestion");
+    assert.equal(suggestionFor(GROUP.group_id, null), null);
+    assert.equal(suggestionFor(GROUP.group_id, {groups: null}), null);
+  });
+  check("the label-match warning appears only for label matches", () => {
+    assert.equal(suggestionHTML(GROUP, SUGGESTIONS).includes("Matched by name only"), false);
+    assert.ok(suggestionHTML(LABEL_GROUP, SUGGESTIONS).includes("Matched by name only. Check that this is the same organisation."));
+  });
+  check("the suggestion box is a closed details with the hint line, new-tab links, and plain facts", () => {
+    const html = suggestionHTML(GROUP, SUGGESTIONS);
+    assert.ok(html.startsWith('<details class="g-hints"><summary>Suggestions to check (from Wikidata)</summary>'));
+    assert.equal(html.includes(" open"), false, "the box is closed by default");
+    assert.ok(html.includes("These are hints, not tags. Confirm each value on the group's own pages before you use it."));
+    assert.ok(html.includes('href="https://www.wikidata.org/wiki/Q42" target="_blank" rel="noopener noreferrer"'));
+    assert.ok(html.includes('href="https://example.org" target="_blank" rel="noopener noreferrer"'));
+    assert.ok(html.includes("Founded 1999"));
+    assert.ok(html.includes("Listed in Wikidata as: non-profit organization"));
+  });
+  check("type labels are escaped and unsafe website links are dropped", () => {
+    const html = suggestionHTML(LABEL_GROUP, SUGGESTIONS);
+    assert.ok(html.includes("Listed in Wikidata as: &lt;img src=x onerror=alert(1)&gt;"));
+    assert.equal(html.includes("<img"), false);
+    assert.equal(html.includes("javascript:"), false);
+    assert.equal(html.includes("Official website"), false);
+  });
+  check("register links by country: four countries get one link each, others none", () => {
+    assert.deepEqual(registerLinks("US"), [{label: "IRS Tax Exempt Organization Search", url: "https://apps.irs.gov/app/eos/"}]);
+    assert.equal(registerLinks("gb")[0].url, "https://register-of-charities.charitycommission.gov.uk/charity-search");
+    assert.equal(registerLinks("CA")[0].url, "https://apps.cra-arc.gc.ca/ebci/hacc/srch/pub/dsplyBscSrch?request_locale=en");
+    assert.equal(registerLinks("AU")[0].url, "https://www.acnc.gov.au/charity/charities");
+    for (const country of ["FR", "", undefined, null, "constructor"]) assert.deepEqual(registerLinks(country), []);
+    const row = suggestionHTML({...GROUP, country: "AU"}, null);
+    assert.ok(row.startsWith('<p class="g-register">Look it up in an official register: <a href="https://www.acnc.gov.au/charity/charities" target="_blank" rel="noopener noreferrer">'));
+    assert.equal(row.includes("<details"), false, "a register row alone is not a box");
+    assert.equal(suggestionHTML({...GROUP, country: "FR"}, null), "");
+  });
+  check("no suggestion means no suggestions box, and the register row stays", () => {
+    assert.equal(suggestionHTML(GROUP, null).includes("<details"), false);
+    assert.equal(suggestionHTML({...GROUP, group_id: "cg_9999999999999999"}, SUGGESTIONS).includes("<details"), false);
+    assert.ok(suggestionHTML(GROUP, null).includes("IRS Tax Exempt Organization Search"));
+  });
 }

@@ -183,3 +183,15 @@ def test_not_stated_plastics_and_plain_labels_in_the_form() -> None:
     for path in (MODULE, labels):
         visible = _visible_lines(path)
         assert not re.search(r"(CG-\d|A[1-4]-|F\d)", visible), path.name
+
+
+def test_suggestion_box_is_optional_hints_loaded_once_and_never_filled() -> None:
+    module = _text(MODULE)
+    assert 'getJson("groups/suggestions.json")' in module
+    assert 'data?.schema === "cg-suggestions-v1"' in module
+    assert "Suggestions to check (from Wikidata)" in module
+    assert "These are hints, not tags. Confirm each value on the group's own pages" in module
+    assert "before you use it." in module
+    assert "Matched by name only. Check that this is the same organisation." in module
+    assert "Look it up in an official register:" in module
+    assert "Suggestions to check" not in _text(CSS)

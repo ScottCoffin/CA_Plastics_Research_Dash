@@ -78,3 +78,11 @@
 }
 /* The not-stated choice sits in a .field wrapper; keep it an inline chip, box and text on one row. */
 .am .field label.g-not-stated { display: inline-flex; flex-direction: row; align-items: center; width: auto; max-width: 100%; }
+.am .g-hints { border: 1px solid var(--pv-line); background: var(--pv-paper); margin: 0 0 18px; max-width: 760px; }
+.am .g-hints > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; padding: 10px 14px; font-weight: 600; }
+.am .g-hints-body { padding: 0 14px 14px; }
+.am .g-hints-body > .hint { margin: 0 0 8px; }
+.am .g-hints-body ul { margin: 8px 0 0; padding-left: 18px; }
+.am .g-hints-body a, .am .g-register a { color: var(--pv-ink); text-decoration: underline; }
+.am .g-hints-warn { margin: 0 0 8px; font-weight: 600; }
+.am .g-register { font-size: 14px; margin: 12px 0 0; }
