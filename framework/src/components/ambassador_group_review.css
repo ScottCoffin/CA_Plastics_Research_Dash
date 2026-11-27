@@ -1,0 +1,30 @@
+/* Group tag checks on the moderation page (CG-7c). Scoped under .am like ambassador_moderation.css; colours are --pv-* tokens only. */
+.am .grv-title { margin: 0 0 6px; }
+.am .grv-queue { margin-top: 18px; max-width: none; }
+.am .grv-tag { border: 1px solid var(--pv-line); background: var(--pv-paper); padding: 20px; }
+.am .grv-progress { color: var(--pv-ink-2); font-weight: 600; margin: 0 0 8px; }
+.am .grv-heading { font-size: 22px; margin: 0 0 6px; }
+.am .grv-heading:focus { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+.am .grv-site { margin: 0 0 8px; }
+.am .grv-facet { border: 0; border-top: 1px solid var(--pv-line); margin: 16px 0 0; padding: 14px 0 0; min-width: 0; }
+.am .grv-facet legend { font-weight: 600; padding: 0; margin-bottom: 6px; }
+.am .grv-tagged { margin: 0 0 6px; }
+.am .grv-evidence { margin: 0 0 10px; color: var(--pv-ink-2); font-size: 15px; overflow-wrap: anywhere; }
+.am .grv-choice { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.am .grv-option { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-size: 16px; }
+.am .grv-edit { margin-top: 12px; padding: 12px; border: 1px solid var(--pv-line); }
+.am .grv-edit[hidden] { display: none; }
+.am .grv-edit > label { display: block; font-weight: 600; margin: 12px 0 6px; }
+.am .grv-edit > label:first-child { margin-top: 0; }
+.am .grv-edit .hint { margin: 0 0 8px; }
+.am .grv-edit .mod-select { max-width: 100%; }
+.am .grv-activities { display: grid; gap: 4px 16px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.am .grv-activities label { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 15px; }
+.am .grv-tip { margin: 6px 0 0; min-height: 1.5em; }
+.am .grv-tag .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+.am .grv-tag .btn { min-width: 128px; min-height: 44px; }
+.am .grv-result { min-height: 1.5em; margin-top: 12px; }
+.am .grv-result.is-error { color: var(--pv-ink); font-weight: 600; border-left: 3px solid var(--pv-coral-ink); padding-left: 10px; }
+@media (max-width: 480px) {
+  .am .grv-tag { padding: 16px; }
+}

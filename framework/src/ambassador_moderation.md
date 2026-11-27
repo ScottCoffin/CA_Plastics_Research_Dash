@@ -14,6 +14,7 @@ head: '<meta name="robots" content="noindex, nofollow">'
 
 <link rel="stylesheet" href="./components/ambassadors.css">
 <link rel="stylesheet" href="./components/ambassador_moderation.css">
+<link rel="stylesheet" href="./components/ambassador_group_review.css">
 
 <div class="am">
 <a class="skip" href="#main">Skip to the content</a>
@@ -38,6 +39,11 @@ head: '<meta name="robots" content="noindex, nofollow">'
   <div id="mod-body"><p class="status">Loading the queue.</p></div>
 </section>
 
+<section class="sec grv" id="grv-root" aria-label="Group tag checks">
+  <p class="sr" id="grv-status" role="status" aria-live="polite"></p>
+  <div id="grv-body"><p class="status">Loading the group tag checks.</p></div>
+</section>
+
 </main>
 
 <footer class="foot">
@@ -47,5 +53,7 @@ head: '<meta name="robots" content="noindex, nofollow">'
 
 ```js
 import {mountModeration} from "./components/ambassador_moderation.js";
+import {mountGroupReview} from "./components/ambassador_group_review.js";
 mountModeration(document.querySelector(".am")).catch((error) => console.error("moderation:", error));
+mountGroupReview(document.querySelector("#grv-root")).catch((error) => console.error("group checks:", error));
 ```
