@@ -1,3 +1,4 @@
+import {readFileSync} from "node:fs";
 // AT-5 Observable Framework shell (ADR-EM5-FRAMEWORK-2026-11-12, ADR-AT5-SHELL-2026-11-12).
 // Since the owner's H16 switch (2026-11-13) the deploy puts this build at the site root over
 // the classic site/ (scripts/assemble_site.py; /app/, grants.html, sem.html and expert.html
@@ -6,8 +7,10 @@
 // src/index.md is the global Plastiverse Live page. data/ and assets/ stay at the site root, so
 // California pages read ../data/ (atlas.js siteRoot) and postbuild rewrites their head's
 // ./assets/ URLs to ../assets/.
-// VD-25a, VD-27: the brand mark and the favicon are the Overview's paper California: the state
+// VD-25a, VD-27: the header brand mark (CA_MARK) is the Overview's paper California: the state
 // outline cut from four flat planes, one per task (indigo water, vermilion people, gold money, ink evidence).
+// FAVICON-MAIN (owner 2026-11-26): the favicon is the Plastiverse Live sun instead, read from the
+// site/assets icon files (made by scripts/build_favicons.py); the header keeps the paper California.
 const CA_OUTLINE = "M469,474L492,458L469,407L486,379L488,336L523,299L501,280L478,221L0,-221L0,-553L-375,-553L-379,-528L-361,-490L-376,-416L-369,-427L-363,-425L-392,-381L-343,-313L-331,-212L-278,-160L-252,-121L-266,-137L-269,-110L-225,-90L-213,-128L-189,-115L-150,-127L-158,-115L-149,-121L-143,-122L-132,-116L-129,-111L-150,-112L-210,-112L-181,-51L-211,-67L-214,-90L-224,-59L-208,-13L-160,18L-157,31L-176,46L-169,77L-79,173L-78,196L-57,206L-57,269L-40,283L39,286L77,321L132,329L141,360L167,360L221,405L256,494L469,474Z";
 const PLANE_MARK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-400 -560 930 1070" aria-hidden="true" focusable="false">' +
   '<defs><clipPath id="m"><path d="' + CA_OUTLINE + '"/></clipPath></defs><g clip-path="url(#m)">' +
@@ -18,7 +21,9 @@ const PLANE_MARK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-400 -560 9
 const CA_MARK = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK).toString("base64");
 // Base64, like CA_MARK: Framework re-escapes "%" inside head hrefs (%23 became %2523), which turned every
 // fill into an invalid colour and broke the clip, so browsers drew a black square (owner 2026-11-17).
-const FAVICON = "data:image/svg+xml;base64," + Buffer.from(PLANE_MARK.replace(' aria-hidden="true" focusable="false"', "")).toString("base64");
+// Both icons are read from site/assets at config time, so the favicon always matches the files (FAVICON-MAIN).
+const FAVICON = "data:image/svg+xml;base64," + readFileSync(new URL("../site/assets/favicon.svg", import.meta.url)).toString("base64");
+const FAVICON_PNG = "data:image/png;base64," + readFileSync(new URL("../site/assets/favicon-32.png", import.meta.url)).toString("base64");
 const PAGE_GROUPS = [
   {name: "Explore", pages: [
     {name: "Authors", path: "/california/authors"},
@@ -135,7 +140,7 @@ export default {
       }
     </style>
     <link rel="icon" href="${FAVICON}">
-    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFd0lEQVR4nL1XW2hcVRRde59zZyaTTB6TqFipttWKjbWK1mIRDfVBoRRBSuKjopgIYsGv/uiP03wI+iX4I0J9YauQKOqPEBVi/BAt+mEhqQrRSsVH0oxN0mQyM/fsLXtmUmJN2iaNLjj3zpx779nr7PchdHY69PeHq29+7BYCva5BSkpgQHE2CFAFEVTnoHr/T0cPjQE5BnoFK4RHf3tVUpHGNJL17KOM6tLrkckPZSHRBFYBXGNPo8NvnlDoMVUVDXGsEsu/Rwh2BzBL7P6tohXAVzULvWbb3kYpYiNUuLLN6vzZUNMBVBmrBAZyVUGxbyfipKquys4umEBHh5EAVPQu51NpVQlL7P6/ITA01BvMk4upwkshnjvCLvI4lxeuNgFU7DpCv37VX1CR/VUz/1/iUVU/0FeJBFY5riEuAFwjtjQkrryzWgTILjpN9BeAAhHkPPLR4HW6moRWhQDUFvvz6KEZAAPskkyAVGNRMR93bDGoIs651CzpPssh2jeyVMguiwCA3goJmhl/PC4XP5qjJBeUpASPMjzNKsNGQR3PBGDOpZ5v29LzAnW9F5DLkeXolRCghX9yAPcCsn/LvfW3Z0//niJkCgGTApQTpFlUakQNQUOiMeHW7p56ZfNT3+2ztTQHol4z3woJEIDnAD7QCTo1ufGdiGisrLg2Io7mFLcxUZ1YnjJbzAG0SWdTe5Lpv06Gvh+Pte3d0TsUaw68HBK02OS8Jkbu3rw9Rfpia8LfkS/FQkR8piyWVOk+jXkdKJvwfqogA2MF3nPTo0dn+vrgurpgCe284MUmD3R0sGWDetIdTZ5vP1Uulx1ZbCqYFC5W8CUa+ApyVCafPx2XM2neeVk6fPr94WvbTLj2dboVE8DQUIV9mdzBougXUbX06ZndxwBtJKEk2JRNRFF+Oo7TSbe9ORkNjr7VfiV19YfBXIcVu3OClnpQLXvQwQ74jcn2LxPkts6JiClAnQY8AOVG8kZmfhVVjTNp50slPT47o7vWPzZ8TAc7PO0YipenAUMOZCQ28PVXqdKtRRGtdEplAGshaCa3ULiBiPzUTAjO07r6DD4fPdy+zYQbCSyXAJkn50Bftw0fV9WXWyJnbVqopMjrAKbFtcdMbqYQAkCXNqT4s18Ob7rnXCQI50CtLJkp5MTO619rhuueSMdF7oInJlfxiiVWEFVJemZ2VJotysPrHhx+/5tXb4m2Pvlt+YI0YDAfqJi2s9Ot/WS459Tp8GHzDS4ZNRLMxS0o7QVRwFSzcKgSF0oixZJEdQl6b/TQph4T3tdZ+fQMGOdBjYRdKfb07B/Z+I+T44KZosQikMhB6pOkTWnSlgZGNlMd9rulwXFdguAYenlrdHD8g837u/oRLE8sWP/C0AH4ISDOtrW83Zjkh5IJzDWkyNenmDJpokya0ZRmba5naqonaWpw3FhH2ljP3JAizaRdWNPqU8WS7L36kZF3ta+TLVSXU0C8abqtpfkgmLuDKMTUHayNVhELT0sWtSpurat1DJ5JIw94R3FDHfuEx5Effp7YXtO+LIdApXtesybTGseJm1gkIcBuYtpnAWEcFjOrETIfsXsQDcTsHPDEyXz+NQDuopuvbLbpfgZvA+GZyqFF1bLoYmnYaom51PegcN/4+NRoLcKWDfpnI1OtfG3ZbA9InyaiG+1ws4iDly1li8obExOnumtnknglLZUJDbUhtd1GplJRulNVBmpV8+ySXJlT5Y/nzTk/ebEwIpZcEvl8fkrhulW1WCNgz+abSyPKgKQXNry8CgTmUTK1TkxM/AbFADN7InI0n7JVp1X1T1LdsPCj1T4BVNr51tbGrUR+FyScANOYCI85F0+USpSfnJy0zvsM/gZz7pTHJ13uYwAAAABJRU5ErkJggg==">
+    <link rel="icon" type="image/png" sizes="32x32" href="${FAVICON_PNG}">
     <style>@import url("./assets/site_search.css");</style>
     <script>(function(){var s=document.createElement("script");s.src="./assets/site_search.js";document.head.appendChild(s)})();</script>`,
   style: "style.css",

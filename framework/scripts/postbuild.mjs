@@ -25,9 +25,12 @@ const LANDING_FONT_PRELOAD =
 const SKIP_LINK ='<a class="atlas-skip-link" href="#observablehq-main">Skip to content</a>';
 const CONFIG_HEAD = frameworkConfig.head;
 const GLOBAL_FONT_STYLE = CONFIG_HEAD.match(/<style\b[\s\S]*?<\/style>/i)?.[0];
-const GLOBAL_FAVICON = CONFIG_HEAD.match(
-  /<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml[;,])[^>]*>/i
-)?.[0];
+// FAVICON-MAIN: the config head's icon links (SVG sun and 32 px PNG) travel together, so a page with
+// its own head gets both. FAVICON_LINK (the SVG link) is the presence check in addGlobalHead.
+const FAVICON_LINK = /<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml[;,])[^>]*>/i;
+const GLOBAL_FAVICON = [...CONFIG_HEAD.matchAll(/<link\b(?=[^>]*\brel="icon")[^>]*>/gi)]
+  .map(match => match[0])
+  .join("\n");
 // Site search (VD-19) is loaded from the config head too, so pages with their own head get it here.
 // Framework cannot resolve a head <link>/<script src> to site/assets, so the head carries an
 // @import in a <style> and a small loader script instead.
@@ -38,7 +41,7 @@ const GLOBAL_SEARCH_SCRIPT = CONFIG_HEAD.match(
   /<script>[^<]*site_search\.js[^<]*<\/script>/
 )?.[0];
 
-if (!GLOBAL_FONT_STYLE || !GLOBAL_FAVICON || !GLOBAL_SEARCH_STYLE || !GLOBAL_SEARCH_SCRIPT) {
+if (!GLOBAL_FONT_STYLE || !FAVICON_LINK.test(GLOBAL_FAVICON) || !GLOBAL_SEARCH_STYLE || !GLOBAL_SEARCH_SCRIPT) {
   throw new Error(
     "Framework config.head must include the Atlas font faces, data favicon and site search assets"
   );
@@ -71,7 +74,7 @@ function addGlobalHead(html) {
   if (!/@font-face\b[\s\S]*?font-family:\s*["']Archivo["']/i.test(html)) {
     missing.push(GLOBAL_FONT_STYLE);
   }
-  if (!/<link\b(?=[^>]*\brel="icon")(?=[^>]*\bhref="data:image\/svg\+xml[;,])[^>]*>/i.test(html)) {
+  if (!FAVICON_LINK.test(html)) {
     missing.push(GLOBAL_FAVICON);
   }
   if (!/site_search\.css/.test(html)) missing.push(GLOBAL_SEARCH_STYLE);

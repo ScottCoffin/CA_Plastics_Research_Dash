@@ -70,7 +70,8 @@ def test_page_hides_the_framework_shell_and_loads_the_engine() -> None:
         assert key in front
     assert "Schibsted Grotesk" in front and "Martian Mono" in front
     assert "U+2192" in front  # the arrow glyph the subset adds (fonts PROVENANCE.md)
-    assert 'href="data:image/svg+xml;base64,' in front  # sunburst favicon
+    # The Plastiverse Live favicon comes from the config head via postbuild (FAVICON-MAIN).
+    assert 'rel="icon"' not in front
     assert 'from "./components/landing_story.js"' in page
     assert 'href="./ambassadors"' in page
 

@@ -232,6 +232,8 @@ def _page(
         f'<meta name="description" content="{esc(description)}">',
         f'<link rel="canonical" href="{esc(canonical)}">',
         '<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">',
+        '<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">',
+        '<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">',
         f'<meta property="og:type" content="{esc(og_type)}">',
         f'<meta property="og:title" content="{esc(title)}">',
         f'<meta property="og:description" content="{esc(description)}">',
