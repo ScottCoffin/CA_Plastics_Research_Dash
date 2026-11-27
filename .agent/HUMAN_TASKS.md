@@ -24,6 +24,13 @@ Last updated: 2026-11-26.
 
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
+### H61. Decide how far group data may be pre-filled (about 2 minutes)
+You asked about mass-scraping data for the community groups. Findings are in `docs/GROUP_ENRICHMENT_OPTIONS.md`: Wikidata (free, CC0) can suggest a website, founding year and organisation type for about 17% of groups, about 80% correctly; national registers (US IRS, UK Charity Commission, Canada, Australia) add facts for their countries. Wikipedia text and OpenCorporates are share-alike and conflict with the CC BY-NC data licence, and crawling group websites is excluded by your decision A4-D11.
+Reply with one line, for example:
+- **"H61: suggestions OK"**: Wikidata and register lookups may be shown to ambassadors as suggestions they confirm with evidence (A4-D11 is unchanged: nothing is tagged automatically). The agent then builds GRP-ENRICH.
+- **"H61: no"**: keep tagging fully manual.
+- Or say if you want automated tagging, which would replace A4-D11.
+
 ### H58. Review the community groups roster (now optional)
 You do not need to finish this. Ambassadors will answer the same duplicate and name questions while they tag (AMB-ROSTER-QC). Your 5 decisions so far are kept. If you want to spot-check, run `py -3.14 -m streamlit run scripts/review_group_roster_app.py` and click through as many cases as you like; every click saves at once.
 
