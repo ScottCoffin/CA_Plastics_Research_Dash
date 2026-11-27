@@ -338,6 +338,26 @@ def _serve(site: Path) -> ThreadingHTTPServer:
     return server
 
 
+def _settled_count(
+    page, selector: str, step_ms: int = 250, stable_reads: int = 4, cap_ms: int = 10000
+) -> int:
+    """The selector's count once it stops changing for stable_reads consecutive reads (capped).
+
+    Some pages (the network view) keep adding SVG layers after network idle, so a single read
+    right after load could catch a partial render and fail the gate at random.
+    """
+    last = page.locator(selector).count()
+    same = 0
+    waited = 0
+    while waited < cap_ms and same < stable_reads:
+        page.wait_for_timeout(step_ms)
+        waited += step_ms
+        now = page.locator(selector).count()
+        same = same + 1 if now == last else 0
+        last = now
+    return last
+
+
 def _observe_route(context, base: str, route: dict, shots: Path | None) -> dict:
     selector = ROUTE_SELECTORS.get(route["route"], "main")
     stem = route["route"].strip("/").replace("/", "_").replace(".", "_") or "index"
@@ -352,7 +372,7 @@ def _observe_route(context, base: str, route: dict, shots: Path | None) -> dict:
             page.wait_for_load_state("networkidle", timeout=20000)
         except Exception:  # noqa: BLE001 - a slow page is not a failure by itself
             pass
-        count = page.locator(selector).count()
+        count = _settled_count(page, selector)
         main_chars = page.evaluate(
             "() => (document.querySelector('main') || document.body).innerText.length"
         )
