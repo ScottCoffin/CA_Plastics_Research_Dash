@@ -1,5 +1,6 @@
 import { SELF, env } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { validateGroupTag } from "../src/groups";
 import { seedAmbassador } from "./helpers";
 
 // Community-group quality assurance (AMB-1 Add-on A4, CG-7b): sampled blind second tags, holds, reviewer picks, the
@@ -762,5 +763,57 @@ describe("retries", () => {
     const secondRetry = await bodyOf(await submitKind(b.cookie, "group_tag", tag({}, 1)));
     expect(secondRetry.id).toBe(second.id);
     expect(await snapshot()).toEqual(afterSecond);
+  });
+});
+
+describe("roster QC answers (AMB-ROSTER-QC)", () => {
+  it("validates same_as: up to three distinct other groups, answers same, different or unsure", () => {
+    const ok = validateGroupTag(tag({ same_as: [{ group_id: gid(2), answer: "same" }, { group_id: gid(3), answer: "unsure" }] }, 1));
+    expect(ok.ok).toBe(true);
+    if (ok.ok) expect(JSON.parse(ok.json).same_as).toEqual([{ group_id: gid(2), answer: "same" }, { group_id: gid(3), answer: "unsure" }]);
+    const cd = validateGroupTag({ group_id: gid(1), status: "cannot_determine", cannot_determine_reason: "dead_link", same_as: [{ group_id: gid(2), answer: "different" }] });
+    expect(cd.ok).toBe(true);
+    const bad: unknown[] = [
+      "same",
+      [{ group_id: gid(1), answer: "same" }],
+      [{ group_id: gid(2), answer: "maybe" }],
+      [{ group_id: "cg_bad", answer: "same" }],
+      [{ group_id: gid(2), answer: "same" }, { group_id: gid(2), answer: "different" }],
+      [{ group_id: gid(2), answer: "same", note: "x" }],
+      [2, 3, 4, 5].map((n) => ({ group_id: gid(n), answer: "same" })),
+    ];
+    for (const value of bad) {
+      const res = validateGroupTag(tag({ same_as: value }, 1));
+      expect(res.ok ? "ok" : res.field).toBe("same_as");
+    }
+  });
+
+  it("exports answers with a per-pair rater token and the moderator flag, never an ambassador id", async () => {
+    (env as unknown as Record<string, string>).EXPORT_TOKEN = EXPORT_TOKEN;
+    const owner = await seedAmbassador({ orcid: env.OWNER_ORCID, email: "owner@example.org" });
+    const a = await seedAmbassador({ region: "california", email: "a@example.org" });
+    const b = await seedAmbassador({ region: "california", email: "b@example.org" });
+    const lead = await seedAmbassador({ region: "california", email: "lead@example.org", role: "lead" });
+    const ids: number[] = [];
+    // a answers about pair (1,2) twice (once from each side) and about (3,4); b and the lead also answer pair (1,2).
+    ids.push((await bodyOf(await tagAs(a, 1, { same_as: [{ group_id: gid(2), answer: "same" }] }))).id as number);
+    ids.push((await bodyOf(await tagAs(a, 2, { same_as: [{ group_id: gid(1), answer: "same" }] }))).id as number);
+    ids.push((await bodyOf(await tagAs(a, 3, { same_as: [{ group_id: gid(4), answer: "different" }] }))).id as number);
+    ids.push((await bodyOf(await tagAs(b, 5, { same_as: [{ group_id: gid(6), answer: "same" }] }))).id as number);
+    ids.push((await bodyOf(await tagAs(lead, 7, { same_as: [{ group_id: gid(8), answer: "same" }] }))).id as number);
+    for (const id of ids) expect((await decide(owner.cookie, id)).status).toBe(200);
+    const res = await SELF.fetch(`${API}/export/approved?since=0`, { headers: { Authorization: `Bearer ${EXPORT_TOKEN}` } });
+    const text = await res.text();
+    for (const who of [owner, a, b, lead]) expect(text).not.toContain(who.id);
+    const subs = (JSON.parse(text) as { submissions: { payload: { group_id: string; same_as?: Record<string, unknown>[] } }[] }).submissions;
+    const answer = (n: number) => subs.find((s) => s.payload.group_id === gid(n))?.payload.same_as?.[0] as Record<string, unknown>;
+    expect(Object.keys(answer(1)).sort()).toEqual(["answer", "by_moderator", "group_id", "rater"]);
+    expect(answer(1).rater).toMatch(/^[0-9a-f]{16}$/);
+    expect(answer(1).rater).toBe(answer(2).rater); // same ambassador, same pair
+    expect(answer(3).rater).not.toBe(answer(1).rater); // same ambassador, another pair
+    expect(answer(1).by_moderator).toBe(false);
+    expect(answer(7).by_moderator).toBe(true);
+    const stored = await env.DB.prepare("SELECT payload FROM submissions WHERE id = ?1").bind(ids[0]).first<{ payload: string }>();
+    expect(JSON.parse(stored!.payload).same_as).toEqual([{ group_id: gid(2), answer: "same" }]);
   });
 });

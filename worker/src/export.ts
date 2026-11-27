@@ -1,7 +1,7 @@
 import type { Ctx } from "./auth";
 import type { Env } from "./env";
 import { REGIONS, type Region } from "./eligibility";
-import { sha256Hex } from "./crypto";
+import { keyedHash, sha256Hex } from "./crypto";
 import { exportPairs, exportReviews } from "./group_qa";
 import { json } from "./http";
 import { consensusByCase } from "./submissions";
@@ -26,6 +26,9 @@ export async function tokenMatches(presented: string, expected: string): Promise
  * `group_pairs` (CG-7b) lists blind agreement pairs whose primary tag is approved: the Tier-1 values of the primary
  * (value_a) and of the first usable second tag (value_b). `group_reviews` lists reviewer checks per Tier-1 facet with
  * the original and reviewed values and the reason code. Neither carries an ambassador id, a name or the pair basis.
+ * AMB-ROSTER-QC: each `same_as` answer in an approved group_tag gains `rater` (a keyed hash of the ambassador and the
+ * unordered pair: the same ambassador gives the same token for one pair, and tokens cannot be linked across pairs) and
+ * `by_moderator` (the tagger is the owner or a lead). Without SESSION_SIGNING_KEY the answers are left out.
  * Unset EXPORT_TOKEN refuses every request (fail closed).
  */
 export async function handleExport(request: Request, env: Env, ctx: Ctx): Promise<Response> {
@@ -41,7 +44,7 @@ export async function handleExport(request: Request, env: Env, ctx: Ctx): Promis
   if (!Number.isSafeInteger(since)) return json({ ok: false, error: "invalid_since" }, 400);
 
   const approved = await env.DB.prepare(
-    "SELECT s.id, s.region, s.stream, s.kind, s.payload, s.decided_at, " +
+    "SELECT s.id, s.region, s.stream, s.kind, s.payload, s.decided_at, s.ambassador_id, a.role, a.orcid, " +
       "CASE WHEN a.credit_public = 1 THEN a.display_name ELSE NULL END AS credit_name " +
       "FROM submissions s JOIN ambassadors a ON a.id = s.ambassador_id " +
       "WHERE s.status = 'approved' AND s.decided_at >= ?1 " +
@@ -55,8 +58,29 @@ export async function handleExport(request: Request, env: Env, ctx: Ctx): Promis
       kind: string;
       payload: string;
       decided_at: number;
+      ambassador_id: string;
+      role: string;
+      orcid: string | null;
       credit_name: string | null;
     }>();
+
+  const submissions = [];
+  for (const s of approved.results) {
+    const payload = JSON.parse(s.payload) as Record<string, unknown>;
+    if (s.kind === "group_tag" && Array.isArray(payload.same_as)) {
+      payload.same_as = await raterAnswers(env, payload, s.ambassador_id, s.role === "lead" || (s.orcid !== null && s.orcid === env.OWNER_ORCID));
+      if ((payload.same_as as unknown[]).length === 0) delete payload.same_as;
+    }
+    submissions.push({
+      id: s.id,
+      region: s.region,
+      stream: s.stream,
+      kind: s.kind,
+      payload,
+      decided_at: s.decided_at,
+      credit_name: s.credit_name,
+    });
+  }
 
   // Approved institution proposals with their allowlist fields (AMB-1 proposals-to-allowlist, part 1). Rows approved
   // before migration 0005 have no region and are not exported. Only the public name and URL from the payload appear.
@@ -90,15 +114,7 @@ export async function handleExport(request: Request, env: Env, ctx: Ctx): Promis
     ok: true,
     generated_at: ctx.now,
     since,
-    submissions: approved.results.map((s) => ({
-      id: s.id,
-      region: s.region,
-      stream: s.stream,
-      kind: s.kind,
-      payload: JSON.parse(s.payload) as unknown,
-      decided_at: s.decided_at,
-      credit_name: s.credit_name,
-    })),
+    submissions,
     case_answers: caseRows,
     group_pairs: await exportPairs(env.DB, since),
     group_reviews: await exportReviews(env.DB, since),
@@ -115,4 +131,22 @@ export async function handleExport(request: Request, env: Env, ctx: Ctx): Promis
       };
     }),
   });
+}
+
+/** The duplicate answers with an unlinkable per-pair rater token; none when the signing key is unset (fail closed). */
+async function raterAnswers(
+  env: Env,
+  payload: Record<string, unknown>,
+  ambassadorId: string,
+  byModerator: boolean,
+): Promise<Record<string, unknown>[]> {
+  if (!env.SESSION_SIGNING_KEY || typeof payload.group_id !== "string") return [];
+  const out: Record<string, unknown>[] = [];
+  for (const item of payload.same_as as Record<string, unknown>[]) {
+    if (typeof item.group_id !== "string") continue;
+    const pair = [payload.group_id, item.group_id].sort().join("|");
+    const rater = (await keyedHash(env.SESSION_SIGNING_KEY, "roster-qc-rater", `${ambassadorId}|${pair}`)).slice(0, 16);
+    out.push({ group_id: item.group_id, answer: item.answer, rater, by_moderator: byModerator });
+  }
+  return out;
 }

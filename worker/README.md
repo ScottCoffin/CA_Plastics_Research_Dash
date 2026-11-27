@@ -89,6 +89,9 @@ client values; the tests cover the flow with a fake ORCID.
 - `GET /export/approved?since=<ms>` (bearer `EXPORT_TOKEN`, read-only): approved submissions and consensus case answers.
   `group_pairs` (approved primary, Tier-1 `value_a`/`value_b`) and `group_reviews` (per facet: outcome, reason code,
   original and reviewed values) feed `curation/group_double_tags.csv` and `curation/group_reviews.csv`.
+  AMB-ROSTER-QC: a group_tag may carry `same_as` (up to three `{group_id, answer: same|different|unsure}` answers about
+  likely duplicates). The export adds `rater` (keyed hash of the ambassador and the unordered pair, so one person counts
+  once per pair and tokens cannot be linked across pairs) and `by_moderator` to each answer; no ambassador id leaves.
   No emails, email hashes, ambassador ids or ORCID iDs. `institutions` lists approved institution proposals decided
   at or after `since` (region, name, url, domain, institution_type, decided_at).
 - Slice 2c (local): `GET /me/notifications` and `POST /me/notifications` (session) `{reminders?, product_news?}`

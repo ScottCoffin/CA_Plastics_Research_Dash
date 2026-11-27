@@ -283,6 +283,7 @@ const TAG_KEYS = [
   "evidence",
   "not_an_organisation",
   "name_correction",
+  "same_as",
 ];
 /** Facets that must all be absent when not_an_organisation is true. */
 const FACET_KEYS = [
@@ -323,6 +324,9 @@ const MAX_AFFILIATIONS = 10;
 const MAX_LIST = 10;
 const MAX_QUOTE_CHARS = 400;
 const MAX_QUOTE_WORDS = 25;
+/** AMB-ROSTER-QC: answers to "is this the same organisation as ...?" for likely-duplicate roster entries. */
+export const SAME_AS_ANSWERS = ["same", "different", "unsure"];
+const MAX_SAME_AS = 3;
 
 function fail(field: string): PayloadResult {
   return { ok: false, field };
@@ -538,6 +542,21 @@ export function validateGroupTag(payload: unknown): PayloadResult {
     const name = nameCorrection(p.name_correction);
     if (name === null) return fail("name_correction");
     out.name_correction = name;
+  }
+
+  // AMB-ROSTER-QC: any status may answer the duplicate questions (one answer per other group, never itself).
+  if (p.same_as !== undefined) {
+    if (!Array.isArray(p.same_as) || p.same_as.length > MAX_SAME_AS) return fail("same_as");
+    const answers: Obj[] = [];
+    for (const item of p.same_as) {
+      if (!isPlainObject(item) || !keysWithin(item, ["group_id", "answer"])) return fail("same_as");
+      const other = item.group_id;
+      if (typeof other !== "string" || !GROUP_ID_RE.test(other) || other === p.group_id) return fail("same_as");
+      if (answers.some((a) => a.group_id === other)) return fail("same_as");
+      if (typeof item.answer !== "string" || !SAME_AS_ANSWERS.includes(item.answer)) return fail("same_as");
+      answers.push({ group_id: other, answer: item.answer });
+    }
+    out.same_as = answers;
   }
 
   // Tier 1 (V2, V4): an ambassador_tagged group has the five core facets and evidence for two of them.
