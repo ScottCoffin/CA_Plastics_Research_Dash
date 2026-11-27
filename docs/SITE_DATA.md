@@ -100,3 +100,7 @@ pins the California key sets. The module is `src/atlas/build/region_export.py`.
 - `institutions.json` and `index.json` carry a `method` note with these rules.
 - `--check` validates the committed files and, when the partition exists, fails on
   any byte difference from a rebuild. `generated_at` is reused from the committed file.
+
+## Region author files (GP-2)
+
+`scripts/build_region_export.py --region norway|belgium` also writes `site/data/<slug>/authors/<author_id>.json` in the California author-file layout (`author`, `schema_version`, `works`). Only authors with two or more works in the region get a file; they are the only rows in the region `index.json` `authors` list and the only experts with `in_atlas_index: true`, so every author link resolves. California-only values are null (`h_index`, `m_quotient`, rising, `ca_*`, `current_in_ca`, photos, bios); `affiliation_history` lists the region institutions with years. Profiles are `site/<slug>/expert.html` copies of the California profile that read `data/<slug>/`, with the California badge and network files skipped. Region sizes at GP-2: norway about 15.6 MB and belgium about 12.3 MB, both under the 20 MB Pages budget.

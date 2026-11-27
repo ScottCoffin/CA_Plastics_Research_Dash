@@ -2,7 +2,7 @@
 // data/<slug>/region.json (schema region-v1). The front end never branches on the region. The page
 // markup is static in framework/src/<slug>/index.md (header and root div); this module fills the
 // root. Pure helpers are exported for the Node runtime test (tests/test_region_page.py).
-import {escapeHtml, formatCount, regionFileUrl, siteRoot} from "./atlas.js";
+import {escapeHtml, formatCount, pageUrl, regionFileUrl, regionSlug, siteRoot} from "./atlas.js";
 
 export const REGION_SCHEMA = "region-v1";
 // Contract order of the six local sections (docs/REGION_PAGES.md).
@@ -10,6 +10,8 @@ export const SECTION_ORDER = ["funding", "monitoring", "policy", "research_netwo
 export const PLACEHOLDER_BADGE = "To be confirmed by a local researcher";
 export const CONFIRMED_BADGE = "Confirmed by a local researcher";
 export const STATUS_LINE = "In preparation with local collaborators";
+// Region authors with at least this many region works have a profile page (region author files, GP-2).
+const REGION_PROFILE_MIN_WORKS = 2;
 const PARTIAL_NOTE = "Partial year: counts run to the date of the last fetch.";
 
 const list = (value) => (Array.isArray(value) ? value : []);
@@ -197,7 +199,11 @@ export function renderRegion(model, ambassadorsHref, knownIds = null) {
   const researcherList = researchers.length ? `<ol class="rg-list">` + researchers.map((r) => {
     const url = openalexAuthorUrl(r.id);
     const name = escapeHtml(publicText(r.name || "Unnamed author"));
-    return `<li><span class="rg-list-name">${url ? `<a href="${escapeHtml(url)}" rel="noreferrer">${name}</a>` : name}</span>` +
+    // Region authors with an author file (two or more region works, GP-2) link to the region profile.
+    const profile = regionSlug() !== "california" && Number(r.works) >= REGION_PROFILE_MIN_WORKS && r.id
+      ? pageUrl(`expert.html#author=${encodeURIComponent(r.id)}`) : "";
+    const link = profile ? `<a href="${escapeHtml(profile)}">${name}</a>` : url ? `<a href="${escapeHtml(url)}" rel="noreferrer">${name}</a>` : name;
+    return `<li><span class="rg-list-name">${link}</span>` +
       `<span class="rg-list-count">${escapeHtml(formatCount(r.works))} works</span></li>`;
   }).join("") + `</ol>` : `<p class="rg-state">No researchers listed yet.</p>`;
   const partnerList = partners.length ? `<ol class="rg-list">` + partners.map((p) =>

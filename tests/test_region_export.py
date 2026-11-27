@@ -186,18 +186,43 @@ def test_top_experts_follow_california_rule_and_shape():
     assert [e["author_id"] for e in i1["top_experts"]] == ["A1", "A2"]
     assert i1["top_experts"][0] == {
         "author_id": "A1",
-        "in_atlas_index": False,
+        "in_atlas_index": True,
         "name": "Ada One",
         "topic": "Microplastics",
         "works": 2,
     }
 
 
-def test_experts_are_plain_text_until_region_author_pages_exist():
-    # GP-2 adds region author pages; until then no expert may link to an author page.
-    for payload in _export().institution_works.values():
+def test_experts_link_only_to_authors_with_an_author_file():
+    export = _export()
+    assert export.author_files, "fixture should have an author with two or more region works"
+    assert set(export.author_files) == {a["author_id"] for a in export.index["authors"]}
+    for payload in export.institution_works.values():
         assert payload["experts"], "fixture institutions should have experts"
-        assert all(e["in_atlas_index"] is False for e in payload["experts"])
+        for expert in payload["experts"]:
+            assert expert["in_atlas_index"] is (expert["author_id"] in export.author_files)
+
+
+def test_author_files_follow_the_california_layout():
+    export = _export()
+    for author_id, payload in export.author_files.items():
+        assert set(payload) == {"author", "schema_version", "works"}
+        assert set(payload["author"]) == rx.AUTHOR_FILE_KEYS
+        assert payload["author"]["author_id"] == author_id
+        assert payload["author"]["h_index"] is None and payload["author"]["m_quotient"] is None
+        assert len(payload["works"]) >= rx.MIN_AUTHOR_WORKS
+        for work in payload["works"]:
+            assert set(work) == rx.AUTHOR_FILE_WORK_KEYS
+            assert author_id in [a["id"] for a in work["authors"]]
+
+
+def test_author_file_key_sets_match_california_fixture():
+    assert set(CA_KEYS["author_file_top"]) == rx.AUTHOR_FILE_TOP_KEYS
+    assert set(CA_KEYS["author_file_author"]) == rx.AUTHOR_FILE_KEYS
+    # Region works add only the screening key and the author names; the rest is California's.
+    assert set(CA_KEYS["author_file_work"]) | {"author_names", "screening_status"} == (
+        rx.AUTHOR_FILE_WORK_KEYS
+    )
 
 
 def test_null_california_only_fields_and_region_values():
@@ -226,8 +251,8 @@ def test_institution_works_and_index_references_are_consistent():
         assert payload["schema_version"] == rx.SCHEMA_VERSION
         assert payload["institution"]["inst_id"] == inst_id
         assert {w["work_id"] for w in payload["works"]} <= index_ids
-    # Index authors are every author on an included work (co-authors too).
-    assert [a["author_id"] for a in export.index["authors"]] == ["A1", "A2", "A3", "A4"]
+    # Index authors are the authors with an author file (two or more region works).
+    assert [a["author_id"] for a in export.index["authors"]] == ["A1"]
     assert export.index["counts"]["works"] == 2
     assert export.index["counts"]["institutions"] == 2
 

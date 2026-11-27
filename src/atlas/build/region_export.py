@@ -31,6 +31,7 @@ from __future__ import annotations
 import json
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Set as AbstractSet
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -170,6 +171,13 @@ FULL_WORK_KEYS = INDEX_WORK_KEYS | {
 }
 # Top-level keys of institutions.json and index.json; "method" is the region-only note.
 TOP_LEVEL_EXTRA_KEYS = frozenset({"method"})
+# Author files (GP-2): the reference region's author-file layout, with its region-only values null.
+# An author gets a file (and an index row and in_atlas_index true) only with MIN_AUTHOR_WORKS works.
+MIN_AUTHOR_WORKS = 2
+AUTHOR_FILES_FOLDER = "authors"
+AUTHOR_FILE_TOP_KEYS = frozenset({"author", "schema_version", "works"})
+AUTHOR_FILE_KEYS = INDEX_AUTHOR_KEYS | {"affiliation_history", "citations_by_year"}
+AUTHOR_FILE_WORK_KEYS = FULL_WORK_KEYS | {"author_count", "authors", "author_institution_ids"}
 
 WORK_COLUMNS = [
     "work_id",
@@ -209,6 +217,7 @@ class RegionExport:
     institutions: dict[str, Any]
     index: dict[str, Any]
     institution_works: dict[str, dict[str, Any]] = field(default_factory=dict)
+    author_files: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     def files(self) -> dict[str, dict[str, Any]]:
         out: dict[str, dict[str, Any]] = {
@@ -217,6 +226,8 @@ class RegionExport:
         }
         for inst_id, payload in self.institution_works.items():
             out[f"institution_works/{inst_id}.json"] = payload
+        for author_id, payload in self.author_files.items():
+            out[f"{AUTHOR_FILES_FOLDER}/{author_id}.json"] = payload
         return out
 
 
@@ -375,6 +386,12 @@ def build_region_export(
         assert set(full) == FULL_WORK_KEYS, "full work keys drifted from FULL_WORK_KEYS"
         full_work[wid] = full
 
+    author_rows = _index_authors(included, works_by_id, names, rows_by_work)
+    indexed = {a["author_id"] for a in author_rows if a["work_count"] >= MIN_AUTHOR_WORKS}
+    authors = [a for a in author_rows if a["author_id"] in indexed]
+    inst_name = {i: _text(m.get("display_name")) or i for i, m in inst_meta.items()}
+    author_files = _author_files(authors, full_work, rows_by_work, work_authors, inst_name)
+
     institutions_out: list[dict[str, Any]] = []
     institution_works: dict[str, dict[str, Any]] = {}
     author_count_by_inst: dict[str, set[str]] = defaultdict(set)
@@ -390,7 +407,7 @@ def build_region_export(
         years = sorted(
             {full_work[w]["year"] for w in here if isinstance(full_work[w]["year"], int)}
         )
-        experts = _experts(inst_id, here, works_at, full_work, names)
+        experts = _experts(inst_id, here, works_at, full_work, names, indexed)
         ror = _text(meta.get("ror")) or ""
         inst_row = {
             "atlas_type": atlas_type_for(meta.get("type")),
@@ -429,7 +446,6 @@ def build_region_export(
         }
 
     index_works = [{k: full_work[w][k] for k in sorted(INDEX_WORK_KEYS)} for w in sorted(full_work)]
-    authors = _index_authors(included, works_by_id, names, rows_by_work)
     institutions_payload = {
         "generated_at": generated_at,
         "institutions": institutions_out,
@@ -455,6 +471,7 @@ def build_region_export(
         institutions=institutions_payload,
         index=index_payload,
         institution_works=institution_works,
+        author_files=author_files,
     )
 
 
@@ -464,11 +481,12 @@ def _experts(
     works_at: Mapping[tuple[str, str], set[str]],
     full_work: Mapping[str, Mapping[str, Any]],
     names: Mapping[str, str],
+    indexed: AbstractSet[str],
 ) -> list[dict[str, Any]]:
     """Authors at one institution, most works first (the reference expert rule without h-index).
 
-    ``in_atlas_index`` is false for every expert until region author pages exist (GP-2), so the
-    institution page shows them as plain text rather than links to missing author pages.
+    ``in_atlas_index`` is true only for authors with an author file (``indexed``), so the
+    institution page links to a profile only where one exists.
     """
     experts: list[dict[str, Any]] = []
     here = set(work_ids)
@@ -489,7 +507,7 @@ def _experts(
                 "author_id": aid,
                 "first_year": min(years) if years else None,
                 "h_index": None,
-                "in_atlas_index": False,
+                "in_atlas_index": aid in indexed,
                 "last_year": max(years) if years else None,
                 "name": names.get(aid, ""),
                 "plastic_citations": None,
@@ -506,6 +524,56 @@ def _experts(
         )
     experts.sort(key=lambda e: (-e["works_at_institution"], e["name"], e["author_id"]))
     return experts
+
+
+def _author_files(
+    authors: Sequence[Mapping[str, Any]],
+    full_work: Mapping[str, Mapping[str, Any]],
+    rows_by_work: Mapping[str, Sequence[Mapping[str, Any]]],
+    work_authors: Mapping[str, Sequence[tuple[str | None, str]]],
+    inst_name: Mapping[str, str],
+) -> dict[str, dict[str, Any]]:
+    """One reference-layout author file per indexed author, with the author's region works.
+
+    ``affiliation_history`` lists the region institutions the author is recorded with, with years.
+    """
+    files: dict[str, dict[str, Any]] = {}
+    for row in authors:
+        aid = row["author_id"]
+        inst_years: defaultdict[str, set[int]] = defaultdict(set)
+        for wid in row["work_ids"]:
+            year = full_work[wid]["year"]
+            for r in rows_by_work[wid]:
+                inst = _text(r.get("institution_id"))
+                if _text(r.get("author_id")) == aid and inst in inst_name and isinstance(year, int):
+                    inst_years[inst].add(year)
+        ordered_works = sorted(
+            row["work_ids"],
+            key=lambda w: (-(full_work[w]["year"] or 0), full_work[w]["title"], w),
+        )
+        works = []
+        for wid in ordered_works:
+            work = dict(full_work[wid])
+            work["author_count"] = len(work_authors[wid])
+            work["authors"] = [{"id": a, "name": n} for a, n in work_authors[wid] if a]
+            work["author_institution_ids"] = sorted(
+                {
+                    _text(r.get("institution_id"))
+                    for r in rows_by_work[wid]
+                    if _text(r.get("author_id")) == aid
+                }
+                - {None}
+            )
+            assert set(work) == AUTHOR_FILE_WORK_KEYS, "author work keys drifted"
+            works.append(work)
+        history = [
+            {"id": inst, "name": inst_name[inst], "years": sorted(inst_years[inst])}
+            for inst in sorted(inst_years, key=lambda i: (inst_name[i], i))
+        ]
+        author = {**row, "affiliation_history": history, "citations_by_year": []}
+        assert set(author) == AUTHOR_FILE_KEYS, "author file keys drifted"
+        files[aid] = {"author": author, "schema_version": SCHEMA_VERSION, "works": works}
+    return files
 
 
 def _index_authors(
@@ -579,11 +647,12 @@ def write_export(out_dir: str | Path, export: RegionExport) -> dict[str, int]:
         data = encode(payload)
         target.write_bytes(data)
         written[rel] = len(data)
-    works_folder = folder / "institution_works"
-    if works_folder.is_dir():
-        for stale in works_folder.glob("*.json"):
-            if f"institution_works/{stale.name}" not in written:
-                stale.unlink()
+    for name in ("institution_works", AUTHOR_FILES_FOLDER):
+        sub = folder / name
+        if sub.is_dir():
+            for stale in sub.glob("*.json"):
+                if f"{name}/{stale.name}" not in written:
+                    stale.unlink()
     return written
 
 
@@ -610,11 +679,12 @@ def compare_export(out_dir: str | Path, export: RegionExport) -> list[str]:
             problems.append(f"missing {rel}")
         elif path.read_bytes() != encode(payload):
             problems.append(f"stale {rel}")
-    works_folder = folder / "institution_works"
-    if works_folder.is_dir():
-        for stale in sorted(works_folder.glob("*.json")):
-            if f"institution_works/{stale.name}" not in expected:
-                problems.append(f"unexpected institution_works/{stale.name}")
+    for name in ("institution_works", AUTHOR_FILES_FOLDER):
+        sub = folder / name
+        if sub.is_dir():
+            for stale in sorted(sub.glob("*.json")):
+                if f"{name}/{stale.name}" not in expected:
+                    problems.append(f"unexpected {name}/{stale.name}")
     return problems
 
 
@@ -658,6 +728,18 @@ def validate_structure(out_dir: str | Path) -> list[str]:
     files = sorted(works_folder.glob("*.json")) if works_folder.is_dir() else []
     if {p.stem for p in files} != set(ids):
         problems.append("institution_works files do not match institutions.json")
+    author_folder = folder / AUTHOR_FILES_FOLDER
+    author_files = sorted(author_folder.glob("*.json")) if author_folder.is_dir() else []
+    indexed = {a.get("author_id") for a in index_payload.get("authors", [])}
+    if {p.stem for p in author_files} != indexed:
+        problems.append("authors files do not match index.json authors")
+    for path in author_files:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if set(payload) != AUTHOR_FILE_TOP_KEYS or set(payload["author"]) != AUTHOR_FILE_KEYS:
+            problems.append(f"authors/{path.name} keys differ from the reference layout")
+            continue
+        if any(set(w) != AUTHOR_FILE_WORK_KEYS for w in payload["works"]):
+            problems.append(f"authors/{path.name} work keys differ from the reference layout")
     for path in files:
         payload = json.loads(path.read_text(encoding="utf-8"))
         if set(payload) != INSTITUTION_WORKS_FILE_KEYS:
@@ -667,6 +749,8 @@ def validate_structure(out_dir: str | Path) -> list[str]:
             problems.append(f"{path.name} institution keys differ from the reference layout")
         if any(set(e) != EXPERT_KEYS for e in payload["experts"]):
             problems.append(f"{path.name} expert keys differ from the reference layout")
+        if any(e["in_atlas_index"] != (e["author_id"] in indexed) for e in payload["experts"]):
+            problems.append(f"{path.name} in_atlas_index disagrees with the author files")
         for work in payload["works"]:
             if set(work) != FULL_WORK_KEYS or work["work_id"] not in work_ids:
                 problems.append(

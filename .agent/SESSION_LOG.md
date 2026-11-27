@@ -309,3 +309,4 @@
 | 2026-11-26 | GP-5 step 1 | regionDataUrl region-aware (REGION_SLUGS checked against the registry); GP-1 contract passed. | this commit |
 | 2026-11-26 | PLAT-4 slice 4 | Global authorships (771,948 rows) and institutions (19,206) partition tables, local and ignored. | this commit |
 | 2026-11-26 | GP-5 (registry regions) | Norway and Belgium institution lists and profiles from the region export, reusing California components; browser 0 errors / axe 0 at 1440+390; GP-1 passed. | this commit |
+| 2026-11-27 | GP-2 (registry regions) | Norway/Belgium author lists and profiles from the region export; profile pages generated from the California page; links verified; GP-1 passed. | this commit |

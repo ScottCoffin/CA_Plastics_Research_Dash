@@ -6,7 +6,7 @@ import "./shared/topics.js";
 import "./shared/expert_page.js";
 import {icon} from "./shared/icons.js";
 import {institutionTypeLabel} from "./shared/labels.js";
-import {regionDataUrl, escapeHtml} from "./atlas.js";
+import {regionDataUrl, regionSlug, escapeHtml} from "./atlas.js";
 import {
   EMPTY_MATCH_TEXT,
   buildAuthorSearchIndex,
@@ -377,6 +377,16 @@ function exportCsv() {
   URL.revokeObjectURL(url);
 }
 
+// Region author lists (GP-2) have no California basis or current-affiliation data: hide those filters.
+const REGION_ONLY_HIDDEN_FILTERS = ["ca-basis-filter", "now-filter"];
+function hideRegionOnlyControls() {
+  if (regionSlug() === "california") return;
+  for (const id of REGION_ONLY_HIDDEN_FILTERS) {
+    const field = $(id)?.closest(".atlas-field");
+    if (field) field.hidden = true;
+  }
+}
+
 async function loadData() {
   $("expert-count").textContent = "Loading authors…";
   $("expert-list").hidden = true;
@@ -392,6 +402,7 @@ async function loadData() {
     state.summaries = null;
     state.rankSearch = null;
     populateFilters();
+    hideRegionOnlyControls();
     updateViews();
     openPendingAuthor();
   } catch (error) {
