@@ -1,29 +1,29 @@
-# Handoff — 2026-11-26 — Group pool, name corrections and weekly BFFP refresh
+# Handoff — 2026-11-26 — CG-7b blind second tags, reviewer checks and export (local)
 
 ## Done
 
-- AMB-POOL (4babd691) uses invisible two-hour holds. The active form refreshes them every 15 minutes. Retired renew and release routes return 404. Any accepted tag closes ordinary assignment globally, including after moderation rejection. The first accepted tag is the canonical candidate. Later tags from different ambassadors stay private as blind agreement records.
-- H57 deployed Worker be02af19-ebc2-4425-bc43-17a887aaf563 using D1 0007. Both retained batch requests returned 401 without a session. The live Ambassadors page serves GRP-NAME-FIX (0e2d8857). Approved corrections retain the group ID. Approved non-organisation removals omit the proposed name and clear that ID's earlier correction.
-- The live Community groups page credits Break Free From Plastic with permission and confirms removal within 14 days for requests from a group's own domain (9dfd18d9). The owner confirmed 10 usable pairs per facet for agreement reporting and review of each ambassador's first 25 primary group tags, then a random 20%.
-- BFFP-REFRESH (ae073190, 7da916ce) runs Sundays at 08:43 UTC. It admits new groups, preserves established IDs and dates, honours reviewed same/different decisions and applies approved name changes and removals. It stages only the checked roster, manifest and six derived JSON files. The first manual run timed out. The retry fetched and validated successfully and found no changed data. [Hosted verification](https://github.com/ScottCoffin/CA_Plastics_Research_Dash/actions/runs/45917107414)
+- CG-7b is implemented and tested locally (ADR-CG7B-QA-2026-11-26). Additive migration `worker/migrations/0008_group_qa.sql` adds five tables: `group_qa_blocks`, `group_tag_samples`, `group_tag_pairs`, `group_review_picks` and `group_tag_reviews`. The logic is in `worker/src/group_qa.ts`, with hooks in groups.ts, submissions.ts, export.ts and index.ts.
+- Sampling: one random position in each block of 10 usable primary tags per region (10%). The sampled group is held for a different active member of the same region, at most 5 per batch, behind the same two-hour hold and inside the 25-group cap. First-wins and `second_tag_for` are unchanged. The first usable second tag forms the pair, labelled `sample` or `overlap` privately in D1. A cannot_determine second tag reopens the sample.
+- Review: each ambassador's first 25 usable primary tags, then one random tag in each block of 5. Owners and leads use `GET/POST /groups/reviews` on approved tags that are not their own. All five Tier-1 facets are checked at once, and an edit stores the original value, the reviewed value and a `review_reason` code (new taxonomy list). The first complete review wins.
+- Export: `/export/approved` now carries `group_pairs` and `group_reviews` with no ids, names or basis. `scripts/ambassador_export_pr.py` (Haiku) writes `curation/group_double_tags.csv` and `curation/group_reviews.csv`, and the export workflow rebuilds and stages them. `build_groups.py` ignores curated rows for groups that have since left the records. The 10-pair minimum is unchanged.
 
 ## State of the repo
 
-- 211 Worker tests passed. The clean-worktree Python gate passed with 3,835 passed and 18 skipped. The Framework build passed with four existing feed-link warnings. Desktop and phone Chromium checks for tagging and name corrections passed with zero axe violations.
-- AMB-POOL and name corrections passed CI and Pages. Public source and removal wording was verified on the live site. The weekly workflow uses ENABLE_DATA_COMMITS, which is true.
-- curation/group_merges.csv contains the owner's uncommitted decisions. It has stayed outside every index and commit. Both agreement curation CSVs are still header-only.
+- Worker: 239 tests passed, including 28 in `worker/test/group_qa.test.ts` (block draws, races, holds, lapsed holds, pairs, review validation and race, export privacy, retries); tsc clean. Python: the clean-worktree gate result is in SESSION_LOG.
+- Production still runs Worker be02af19 with D1 0007. Migration 0008 has not been applied and nothing is deployed (H59).
+- curation/group_merges.csv still holds the owner's uncommitted decisions and stays outside every commit.
 
 ## Next task
 
-1. CG-7b. Read docs/BFFP.md sections 5.2 and 7 and the A4 decisions before editing. Draft migration 0008 and the Worker changes for deliberate blind assignment to a different active ambassador in the same region. Randomly select 10% of primary tags per region. Keep AMB-POOL's first-wins tag and private second_tag_for link. The current Worker collects overlap records when two ambassadors happen to submit the same group. Record whether each pair came from the deliberate sample or an overlap in the private audit.
-2. Add reviewer selection for each ambassador's first 25 primary group tags and a random 20% thereafter. Preserve the original and reviewed values with a reason code. Deliver group_double_tags.csv and group_reviews.csv using the existing CG-7a contracts. Preserve the 10-usable-pair minimum per facet and keep ambassador identifiers private. Test the assignment and decision races and the export.
-3. H59 is required before applying D1 migration 0008 or deploying the CG-7b Worker. While production awaits approval, use any eligible offline work or continue AMB-ROSTER-QC, then FAVICON-MAIN. Keep one checkpoint at a time.
+1. On "H59 approved": run `npx wrangler d1 migrations apply <db> --remote` for 0008 from `worker/`, then `npx wrangler deploy`. Check that the routes without a session return 401 (`/groups/reviews` GET and POST) and record the version id. Then mark CG-7b done.
+2. Before or while waiting: CG-7c (offline). Add the reviewer screen on the Ambassadors page for `/groups/reviews`: one tag per screen, one click per facet, a reason picker on edit, auto-advance (owner rule: forms under a minute). Then apply approved reviewed values to the published record (status `reviewed`, `reviewed_at`). After that: AMB-ROSTER-QC, then FAVICON-MAIN.
 
 ## Gotchas
 
-- Read CLAUDE.md and spec.md Part B. Use a clean worktree with PYTHONPATH=<worktree>/src and an external pytest --basetemp. The main checkout's ignored denominators input can fail the otherwise green BQ-2.4 check.
-- The BFFP browser reads the member request initiated by BFFP's public About page. The task uses the incremental CLI. A hosted timeout reports the About-page and member-request stages. Public data commits preserve baseline IDs and use a fast-forward push.
+- `group_qa_blocks` has no foreign key. Clear it explicitly in tests (test/helpers.ts TABLES lists it).
+- The SUBMIT_LIMIT of 30 per hour per account: bulk-tag tests clear `rate_limits` between submissions.
+- Python edits on Windows: `Path.write_text` writes CRLF. The repo uses autocrlf with eol=lf attributes, so commits normalise.
 
 ## Needs owner input
 
-- H59 in HUMAN_TASKS for the CG-7b migration and deploy. Other open reviews include H39, H28, H42, H2 and H9. H58 is optional.
+- H59 (migration 0008 + Worker deploy). Other open items include H39, H28, H42, H2 and H9; H58 is optional.

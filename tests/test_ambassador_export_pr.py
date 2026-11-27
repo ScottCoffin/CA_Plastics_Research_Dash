@@ -46,8 +46,14 @@ def work(tmp_path: Path) -> Path:
     (tmp_path / "curation" / "ambassador_institution_additions.csv").write_text(
         "region,name,url,domain,institution_type,approved_at_iso,source\n", "utf-8"
     )
+    (tmp_path / "curation" / "group_double_tags.csv").write_text(DOUBLE_TAG_HEADER, "utf-8")
+    (tmp_path / "curation" / "group_reviews.csv").write_text(REVIEW_HEADER, "utf-8")
     shutil.copy(FIXTURES / "export.json", tmp_path / "export.json")
     return tmp_path
+
+
+DOUBLE_TAG_HEADER = "group_id,facet,value_a,value_b\n"
+REVIEW_HEADER = "group_id,facet,outcome,reason_code,reviewed_at\n"
 
 
 def _args(root: Path, *extra: str) -> list[str]:
@@ -70,6 +76,10 @@ def _args(root: Path, *extra: str) -> list[str]:
         str(root / "curation" / "group_suggestions.csv"),
         "--group-name-corrections-file",
         str(root / "curation" / "group_name_corrections.csv"),
+        "--group-double-tags-file",
+        str(root / "curation" / "group_double_tags.csv"),
+        "--group-reviews-file",
+        str(root / "curation" / "group_reviews.csv"),
         *extra,
     ]
 
@@ -700,3 +710,283 @@ def test_invalid_name_correction_is_skipped_with_reason(work: Path, capsys) -> N
 def test_name_corrections_file_is_not_written_when_there_are_none(work: Path) -> None:
     assert _export(work, [_sub(1, "group_tag", _tag(), _ms("2026-11-20"))]) == 0
     assert (work / "curation" / "group_name_corrections.csv").exists() is False
+
+
+# ---------------------------------------------------------------- group pairs and reviews (CG-7b)
+
+TIER1 = ("entity_type", "sector", "plastics_centrality", "primary_activities", "geographic_scope")
+
+
+def _side(**overrides) -> dict:
+    side = {
+        "entity_type": "organisation",
+        "sector": "ngo_civil_society",
+        "plastics_centrality": "primary",
+        "primary_activities": ["advocacy_campaigning", "education_awareness"],
+        "geographic_scope": "local",
+    }
+    side.update(overrides)
+    return side
+
+
+def _pair(group_id: str = GROUP_A, paired_at: int | None = None, **overrides) -> dict:
+    item = {
+        "group_id": group_id,
+        "region": "california",
+        "paired_at": _ms("2026-11-24") if paired_at is None else paired_at,
+        "value_a": _side(),
+        "value_b": _side(),
+    }
+    item.update(overrides)
+    return item
+
+
+def _review(group_id: str = GROUP_A, facet: str = "sector", **overrides) -> dict:
+    item = {
+        "group_id": group_id,
+        "region": "california",
+        "facet": facet,
+        "outcome": "agree",
+        "reason_code": None,
+        "original_value": "ngo_civil_society",
+        "reviewed_value": "ngo_civil_society",
+        "reviewed_at": _ms("2026-11-25"),
+    }
+    item.update(overrides)
+    return item
+
+
+def _group_export(root: Path, pairs=None, reviews=None, *extra: str) -> int:
+    body: dict = {"ok": True, "submissions": [], "case_answers": [], "institutions": []}
+    if pairs is not None:
+        body["group_pairs"] = pairs
+    if reviews is not None:
+        body["group_reviews"] = reviews
+    (root / "export.json").write_text(json.dumps(body), "utf-8")
+    return MOD.main(_args(root, *extra))
+
+
+def _text(root: Path, name: str) -> str:
+    return (root / "curation" / name).read_text("utf-8")
+
+
+def test_pairs_are_written_as_five_tier1_rows(work: Path) -> None:
+    assert _group_export(work, [_pair()]) == 0
+    rows = _csv_of(work, "group_double_tags.csv")
+    assert [r["facet"] for r in rows] == list(TIER1)
+    assert all(r["group_id"] == GROUP_A for r in rows)
+    by_facet = {r["facet"]: r for r in rows}
+    assert by_facet["primary_activities"]["value_a"] == "advocacy_campaigning;education_awareness"
+    assert by_facet["primary_activities"]["value_b"] == "advocacy_campaigning;education_awareness"
+    assert by_facet["sector"]["value_a"] == "ngo_civil_society"
+
+
+def test_later_export_replaces_a_pair(work: Path) -> None:
+    assert _group_export(work, [_pair()]) == 0
+    newer = _pair(paired_at=_ms("2026-11-26"), value_b=_side(sector="foundation"))
+    assert _group_export(work, [newer]) == 0
+    rows = {r["facet"]: r for r in _csv_of(work, "group_double_tags.csv")}
+    assert len(rows) == 5
+    assert rows["sector"]["value_b"] == "foundation"
+
+
+def test_pairs_in_one_export_keep_the_later_paired_at(work: Path) -> None:
+    later = _pair(paired_at=_ms("2026-11-26"), value_b=_side(sector="foundation"))
+    earlier = _pair(paired_at=_ms("2026-11-24"), value_b=_side(sector="government"))
+    assert _group_export(work, [later, earlier]) == 0
+    rows = {r["facet"]: r for r in _csv_of(work, "group_double_tags.csv")}
+    assert rows["sector"]["value_b"] == "foundation"
+
+
+def test_reviews_agree_and_edit_are_written_with_iso_time(work: Path) -> None:
+    edit = _review(
+        GROUP_B,
+        "sector",
+        outcome="edit",
+        reason_code="evidence_contradicts",
+        original_value="ngo_civil_society",
+        reviewed_value="foundation",
+        reviewed_at=_ms("2026-11-25", 14),
+    )
+    agree = _review(GROUP_A, "geographic_scope", original_value="local", reviewed_value="local")
+    assert _group_export(work, None, [edit, agree]) == 0
+    rows = _csv_of(work, "group_reviews.csv")
+    assert [(r["group_id"], r["facet"]) for r in rows] == [
+        (GROUP_A, "geographic_scope"),
+        (GROUP_B, "sector"),
+    ]
+    assert rows[0] == {
+        "group_id": GROUP_A,
+        "facet": "geographic_scope",
+        "outcome": "agree",
+        "reason_code": "",
+        "reviewed_at": "2026-11-25T10:00:00Z",
+    }
+    assert rows[1]["outcome"] == "edit"
+    assert rows[1]["reason_code"] == "evidence_contradicts"
+    assert rows[1]["reviewed_at"] == "2026-11-25T14:00:00Z"
+
+
+def test_newest_review_wins_and_an_older_one_is_skipped(work: Path, capsys) -> None:
+    newer = _review(
+        outcome="edit",
+        reason_code="slip",
+        reviewed_value="foundation",
+        reviewed_at=_ms("2026-11-26"),
+    )
+    older = _review(outcome="agree", reviewed_at=_ms("2026-11-20"))
+    assert _group_export(work, None, [newer, older]) == 0
+    [row] = _csv_of(work, "group_reviews.csv")
+    assert (row["outcome"], row["reason_code"]) == ("edit", "slip")
+    out = capsys.readouterr().out
+    assert "skip group review: older than the stored review for this facet" in out
+
+
+@pytest.mark.parametrize(
+    ("pair_mutation", "review_mutation", "reason"),
+    [
+        ({"value_b": _side(sector="not_a_sector")}, None, "invalid sector in value_b"),
+        (
+            {"value_a": {k: v for k, v in _side().items() if k != "sector"}},
+            None,
+            "value_a is missing sector",
+        ),
+        (
+            {"value_a": _side(primary_activities=["other", "other"])},
+            None,
+            "invalid primary_activities in value_a",
+        ),
+        (
+            None,
+            {"outcome": "edit", "reason_code": None, "reviewed_value": "foundation"},
+            "edit needs a reason_code from review_reason",
+        ),
+        (
+            None,
+            {"outcome": "edit", "reason_code": "not_a_reason", "reviewed_value": "foundation"},
+            "edit needs a reason_code from review_reason",
+        ),
+        (
+            None,
+            {"outcome": "agree", "reason_code": "slip"},
+            "agree must not carry a reason_code",
+        ),
+        (
+            None,
+            {"outcome": "edit", "reason_code": "slip", "reviewed_value": "ngo_civil_society"},
+            "edit needs reviewed_value different from original_value",
+        ),
+        (None, {"facet": "legal_form"}, "invalid facet"),
+    ],
+)
+def test_invalid_pair_and_review_items_are_skipped_with_a_reason(
+    work: Path, capsys, pair_mutation, review_mutation, reason
+) -> None:
+    pairs = [_pair(**pair_mutation)] if pair_mutation else None
+    reviews = [_review(**review_mutation)] if review_mutation else None
+    assert _group_export(work, pairs, reviews) == 0
+    kind = "pair" if pairs else "review"
+    assert f"skip group {kind}: {reason}" in capsys.readouterr().out
+    assert _text(work, "group_double_tags.csv") == DOUBLE_TAG_HEADER
+    assert _text(work, "group_reviews.csv") == REVIEW_HEADER
+
+
+def test_invalid_group_id_and_missing_time_are_skipped(work: Path, capsys) -> None:
+    bad = _pair("cg_NOT_A_HEX_ID!!!!")
+    no_time = {k: v for k, v in _pair().items() if k != "paired_at"}
+    assert _group_export(work, [bad, no_time]) == 0
+    out = capsys.readouterr().out
+    assert "skip group pair: invalid group_id" in out
+    assert "skip group pair: invalid paired_at" in out
+    assert _text(work, "group_double_tags.csv") == DOUBLE_TAG_HEADER
+
+
+def test_missing_group_keys_leave_both_files_byte_identical(work: Path) -> None:
+    names = ("group_double_tags.csv", "group_reviews.csv")
+    before = {name: (work / "curation" / name).read_bytes() for name in names}
+    assert _group_export(work) == 0
+    for name in names:
+        assert (work / "curation" / name).read_bytes() == before[name]
+
+
+def test_group_pairs_and_reviews_hold_no_ambassador_id_or_email(work: Path) -> None:
+    pair = _pair(ambassador_id=AMBASSADOR_ID, credit_name="Ada Example")
+    review = _review(
+        outcome="edit",
+        reason_code="other",
+        reviewed_value="foundation",
+        note="write to info@example.org",
+        ambassador_id=AMBASSADOR_ID,
+    )
+    assert _group_export(work, [pair], [review]) == 0
+    for name in ("group_double_tags.csv", "group_reviews.csv"):
+        text = _text(work, name)
+        assert AMBASSADOR_ID not in text
+        assert "ambassador" not in text.lower()
+        assert "@" not in text
+        assert "Ada Example" not in text
+
+
+def test_dry_run_writes_no_group_pair_or_review_files(work: Path, capsys) -> None:
+    body = {
+        "ok": True,
+        "submissions": [],
+        "case_answers": [],
+        "institutions": [],
+        "group_pairs": [_pair()],
+        "group_reviews": [_review()],
+    }
+    (work / "export.json").write_text(json.dumps(body), "utf-8")
+    assert MOD.main(_args(work, "--dry-run")) == 0
+    assert _text(work, "group_double_tags.csv") == DOUBLE_TAG_HEADER
+    assert _text(work, "group_reviews.csv") == REVIEW_HEADER
+    assert _state(work)["since"] == 0
+    assert "dry run: nothing written" in capsys.readouterr().out
+
+
+def test_watermark_advances_to_the_newest_paired_or_reviewed_time(work: Path) -> None:
+    pair = _pair(paired_at=_ms("2026-11-22"))
+    review = _review(reviewed_at=_ms("2026-11-25", 16))
+    assert _group_export(work, [pair], [review]) == 0
+    assert _state(work)["since"] == _ms("2026-11-25", 16)
+
+
+def test_group_pairs_before_the_watermark_are_not_reapplied(work: Path) -> None:
+    state = {"since": _ms("2026-11-25"), "boundary_ids": []}
+    (work / "curation" / "ambassador_export_state.json").write_text(json.dumps(state), "utf-8")
+    assert _group_export(work, [_pair(paired_at=_ms("2026-11-20"))]) == 0
+    assert _text(work, "group_double_tags.csv") == DOUBLE_TAG_HEADER
+
+
+def test_summary_counts_group_pairs_and_reviews(work: Path) -> None:
+    summary = work / "summary.md"
+    reviews = [
+        _review(),
+        _review(facet="geographic_scope", original_value="local", reviewed_value="local"),
+    ]
+    code = _group_export(work, [_pair()], reviews, "--summary-file", str(summary))
+    assert code == 0
+    text = summary.read_text("utf-8")
+    assert "| groups | group_pair | 1 |" in text
+    assert "| groups | group_review | 2 |" in text
+
+
+def test_group_loaders_in_build_groups_accept_the_written_files(work: Path) -> None:
+    review = _review(outcome="edit", reason_code="guide_rule", reviewed_value="foundation")
+    assert _group_export(work, [_pair()], [review]) == 0
+    spec = importlib.util.spec_from_file_location(
+        "build_groups", REPO_ROOT / "scripts" / "build_groups.py"
+    )
+    assert spec is not None and spec.loader is not None
+    build_groups = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(build_groups)
+    doubles = build_groups.load_double_tags(work / "curation")
+    reviews = build_groups.load_reviews(work / "curation")
+    assert [r["facet"] for r in doubles] == list(TIER1)
+    assert [(r["outcome"], r["reason_code"]) for r in reviews] == [("edit", "guide_rule")]
+
+
+def test_tier1_order_matches_the_group_build() -> None:
+    from atlas.groups.build import TIER1_FACETS
+
+    assert tuple(MOD.GROUP_TIER1) == tuple(TIER1_FACETS) == TIER1

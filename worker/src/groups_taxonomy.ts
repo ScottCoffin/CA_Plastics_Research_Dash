@@ -131,3 +131,12 @@ export const CANNOT_DETERMINE_REASON: readonly string[] = [
   "not_an_organisation",
   "conflict_of_interest",
 ];
+
+export const REVIEW_REASON: readonly string[] = [
+  "evidence_contradicts",
+  "better_evidence_found",
+  "guide_rule",
+  "activity_order",
+  "slip",
+  "other",
+];

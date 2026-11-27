@@ -138,3 +138,12 @@ cannot_determine_reason:
   - insufficient_information
   - not_an_organisation
   - conflict_of_interest
+
+# section 7.3 (CG-7b): why a reviewer edited an ambassador's Tier-1 value
+review_reason:
+  - evidence_contradicts
+  - better_evidence_found
+  - guide_rule
+  - activity_order
+  - slip
+  - other

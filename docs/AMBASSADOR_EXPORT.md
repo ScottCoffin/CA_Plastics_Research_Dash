@@ -30,6 +30,13 @@ failure so the refresh uses the latest inputs.
 | consensus `case_answers` | a row in `curation/ambassador_labels.csv` with `source = ambassador_consensus`; one row per (region, case), newest answer wins |
 | top-level `institutions` (optional key; missing means none), an institution approved as a proposal | a row in `curation/ambassador_institution_additions.csv` (`region, name, url, domain, institution_type, approved_at_iso, source = approved_proposal`); one row per (region, domain), newest `decided_at` wins. The build adds it to the region's eligible list at the next build (docs/AMBASSADORS_SPEC.md, "Approved proposals join the eligible list (part 2)") |
 
+The optional top-level keys `group_pairs` and `group_reviews` (CG-7a blind second tags and reviewer checks;
+missing means none) become rows in `curation/group_double_tags.csv` (five Tier-1 rows per pair, replaced by a
+later pair for the same group) and `curation/group_reviews.csv` (newest `reviewed_at` per group and facet). Only
+the group id, facet, values, outcome, reason code and time are written: no ambassador id, name or email. Both
+files feed the group build, so the job rebuilds the precision card whenever they change. The summary counts them
+as `group_pair` and `group_review`. Invalid items are skipped with a printed reason, as the other kinds are.
+
 Knowledge kinds map to sections as follows. `community_group`, `volunteer_group` and `community_knowledge`
 go to `research_networks` with item kind `community`, because the region-v1 schema has no `community`
 section (`scripts/build_region_pages.py` requires exactly six sections). Kinds with no section (`event`,

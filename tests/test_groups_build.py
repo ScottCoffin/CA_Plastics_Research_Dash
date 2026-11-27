@@ -1099,3 +1099,35 @@ def test_blank_correction_name_fails_the_build(tmp_path: Path) -> None:
     curation = _names_file(tmp_path, [{"group_id": CORE, "name": "  ", "submitted_at": DATE}])
     with pytest.raises(BUILD.GroupsBuildError, match="no name"):
         BUILD.build_outputs(copy.deepcopy(ROSTER), curation)
+
+
+def test_pairs_and_reviews_of_groups_no_longer_on_the_roster_are_ignored(tmp_path: Path) -> None:
+    """CG-7b: a removed group keeps its curated pair and review rows; the build ignores them."""
+    curation = _curation(tmp_path)
+    gone = "cg_ffffffffffffffff"
+    _write_rows(
+        curation / "group_double_tags.csv",
+        ("group_id", "facet", "value_a", "value_b"),
+        [
+            {
+                "group_id": gone,
+                "facet": "sector",
+                "value_a": "ngo_civil_society",
+                "value_b": "business",
+            }
+        ],
+    )
+    _write_rows(
+        curation / "group_reviews.csv",
+        ("group_id", "facet", "outcome", "reason_code", "reviewed_at"),
+        [
+            {
+                "group_id": gone,
+                "facet": "sector",
+                "outcome": "agree",
+                "reason_code": "",
+                "reviewed_at": "",
+            }
+        ],
+    )
+    assert BUILD.build_outputs(copy.deepcopy(ROSTER), curation) == _build(None)

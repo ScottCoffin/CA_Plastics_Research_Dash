@@ -62,7 +62,7 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/ambassador_export_pr.py --summary-file "$RUNNER_TEMP/ambassador_summary.md"
-          group_paths=(curation/group_tags.csv curation/group_affiliations.csv curation/group_name_corrections.csv)
+          group_paths=(curation/group_tags.csv curation/group_affiliations.csv curation/group_name_corrections.csv curation/group_double_tags.csv curation/group_reviews.csv)
           if [[ -n "$(git status --porcelain -- "${group_paths[@]}")" ]]; then
             python scripts/build_groups_roster.py --apply-curation
             python scripts/build_groups_roster.py --check
@@ -89,6 +89,8 @@ jobs:
             curation/group_affiliations.csv
             curation/group_suggestions.csv
             curation/group_name_corrections.csv
+            curation/group_double_tags.csv
+            curation/group_reviews.csv
             site/data/global/groups/roster.json
             site/data/global/groups/roster_manifest.json
             site/data/global/groups/groups.json

@@ -289,3 +289,4 @@
 | 2026-11-26 | BFFP-REFRESH | Weekly additive roster and guarded publication implemented. Focused 202 passed. Clean 3,835 passed / 18 skipped. Local BFFP browser probe passed. GitHub manual run pending. | this commit |
 | 2026-11-26 | BFFP-REFRESH retry | Hosted run 45916544490 timed out before publication. Earlier navigation and page/API diagnostics pass local live and full clean gates. | this commit |
 | 2026-11-26 | BFFP-REFRESH and Claude Code handoff | Hosted run 45917107414 fetched and checked the roster and six derived group files. No data changes. Weekly schedule active. CG-7b and H59 are next. | this commit |
+| 2026-11-26 | CG-7b (local) | Migration 0008, group_qa.ts, /groups/reviews, export group_pairs/group_reviews, CSV writers. Worker 239 passed; clean-worktree gate below. Deploy waits for H59. | this commit |

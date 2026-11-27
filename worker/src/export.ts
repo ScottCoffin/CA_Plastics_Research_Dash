@@ -2,6 +2,7 @@ import type { Ctx } from "./auth";
 import type { Env } from "./env";
 import { REGIONS, type Region } from "./eligibility";
 import { sha256Hex } from "./crypto";
+import { exportPairs, exportReviews } from "./group_qa";
 import { json } from "./http";
 import { consensusByCase } from "./submissions";
 
@@ -22,6 +23,9 @@ export async function tokenMatches(presented: string, expected: string): Promise
  * and consensus case answers whose latest change is at or after `since`. Never returns emails, email hashes, ambassador
  * ids or ORCID iDs. Ambassador names appear only where the ambassador kept public credit. `institutions` lists approved
  * institution proposals (region, name, url, domain, institution_type, decided_at) and never the applicant.
+ * `group_pairs` (CG-7b) lists blind agreement pairs whose primary tag is approved: the Tier-1 values of the primary
+ * (value_a) and of the first usable second tag (value_b). `group_reviews` lists reviewer checks per Tier-1 facet with
+ * the original and reviewed values and the reason code. Neither carries an ambassador id, a name or the pair basis.
  * Unset EXPORT_TOKEN refuses every request (fail closed).
  */
 export async function handleExport(request: Request, env: Env, ctx: Ctx): Promise<Response> {
@@ -96,6 +100,8 @@ export async function handleExport(request: Request, env: Env, ctx: Ctx): Promis
       credit_name: s.credit_name,
     })),
     case_answers: caseRows,
+    group_pairs: await exportPairs(env.DB, since),
+    group_reviews: await exportReviews(env.DB, since),
     institutions: institutionRows.results.map((p) => {
       const payload = JSON.parse(p.payload) as { name?: unknown; url?: unknown };
       return {

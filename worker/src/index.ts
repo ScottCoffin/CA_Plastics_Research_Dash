@@ -17,6 +17,7 @@ import {
   handleSignupEmail,
   handleSignupLookup,
 } from "./signup";
+import { handleReview, handleReviewQueue } from "./group_qa";
 import { handleGroupBatch } from "./groups";
 import { handleCaseAnswer, handleCaseAnswers, handleMySubmissions, handleSubmit } from "./submissions";
 
@@ -104,6 +105,10 @@ export async function handle(
       case "/groups/batch":
         if (request.method !== "GET") return methodNotAllowed();
         return withCors(await handleGroupBatch(request, env, ctx));
+      case "/groups/reviews":
+        if (request.method === "GET") return withCors(await handleReviewQueue(request, env, ctx));
+        if (request.method === "POST") return withCors(await handleReview(request, env, ctx));
+        return methodNotAllowed();
       case "/moderation/queue":
         if (request.method !== "GET") return methodNotAllowed();
         return withCors(await handleQueue(request, env, ctx));

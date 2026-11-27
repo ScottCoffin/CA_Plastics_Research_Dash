@@ -1,6 +1,7 @@
 import { currentAmbassador, type Ctx } from "./auth";
 import type { Env } from "./env";
 import { REGIONS, type Region, isRegion } from "./eligibility";
+import { HELD_SAMPLES_SQL, claimSamples, refreshSampleHold } from "./group_qa";
 import { json } from "./http";
 import { err, plainText } from "./moderation";
 import type { Fetch } from "./outbound";
@@ -144,12 +145,14 @@ async function isActiveMember(db: D1Database, ambassadorId: string, region: Regi
   return row !== null;
 }
 
+/** The caller's active holds: ordinary leases on untagged groups, plus sampled groups held for a blind second tag. */
 async function activeLeases(db: D1Database, ambassadorId: string, region: Region, now: number): Promise<LeaseRow[]> {
   const rows = await db
     .prepare(
       "SELECT group_id FROM group_leases " +
       "WHERE ambassador_id = ?1 AND region = ?2 AND MIN(expires_at, leased_at + ?4) > ?3 " +
-      "AND NOT EXISTS (SELECT 1 FROM submissions s WHERE s.kind='group_tag' AND json_extract(s.payload,'$.group_id')=group_leases.group_id)",
+      "AND NOT EXISTS (SELECT 1 FROM submissions s WHERE s.kind='group_tag' AND json_extract(s.payload,'$.group_id')=group_leases.group_id) " +
+      `UNION ${HELD_SAMPLES_SQL}`,
     )
     .bind(ambassadorId, region, now, LEASE_MS)
     .all<LeaseRow>();
@@ -181,13 +184,14 @@ async function unclaimedGroups(db: D1Database, roster: RosterGroup[], country: s
 
 /**
  * Upsert that takes over only an expired lease. The WHERE clause makes two concurrent claims safe: a group that
- * another ambassador has just leased is left alone.
+ * another ambassador has just leased is left alone. The cap ?7 counts the caller's sample holds too (CG-7b).
  */
 const UPSERT_LEASE =
   "INSERT INTO group_leases (group_id, ambassador_id, region, leased_at, expires_at, renewals) " +
   "SELECT ?1, ?2, ?3, ?4, ?5, 0 WHERE NOT EXISTS (SELECT 1 FROM submissions s WHERE s.kind='group_tag' " +
   "AND json_extract(s.payload,'$.group_id')=?1) AND (SELECT COUNT(*) FROM group_leases l WHERE l.ambassador_id=?2 " +
-  "AND l.region=?3 AND MIN(l.expires_at,l.leased_at + ?6) > ?4) < ?7 " +
+  "AND l.region=?3 AND MIN(l.expires_at,l.leased_at + ?6) > ?4) + (SELECT COUNT(*) FROM group_tag_samples t " +
+  "WHERE t.assigned_to=?2 AND t.region=?3 AND t.hold_until > ?4) < ?7 " +
   "ON CONFLICT (group_id) DO UPDATE SET ambassador_id = excluded.ambassador_id, region = excluded.region, " +
   "leased_at = excluded.leased_at, expires_at = excluded.expires_at, renewals = 0 " +
   "WHERE MIN(group_leases.expires_at, group_leases.leased_at + ?6) <= ?4";
@@ -221,8 +225,11 @@ export async function handleGroupBatch(request: Request, env: Env, ctx: Ctx): Pr
   const groupId = params.get("group_id");
   if (groupId !== null) {
     if (!GROUP_ID_RE.test(groupId)) return err("invalid_group_id", 400);
-    await env.DB.prepare("UPDATE group_leases SET leased_at = ?1, expires_at = ?2 WHERE group_id = ?3 AND ambassador_id = ?4 AND region = ?5 AND MIN(expires_at, leased_at + ?6) > ?1 AND NOT EXISTS (SELECT 1 FROM submissions s WHERE s.kind='group_tag' AND json_extract(s.payload,'$.group_id')=?3)")
-      .bind(ctx.now, ctx.now + LEASE_MS, groupId, a.id, param, LEASE_MS).run();
+    await env.DB.batch([
+      env.DB.prepare("UPDATE group_leases SET leased_at = ?1, expires_at = ?2 WHERE group_id = ?3 AND ambassador_id = ?4 AND region = ?5 AND MIN(expires_at, leased_at + ?6) > ?1 AND NOT EXISTS (SELECT 1 FROM submissions s WHERE s.kind='group_tag' AND json_extract(s.payload,'$.group_id')=?3)")
+        .bind(ctx.now, ctx.now + LEASE_MS, groupId, a.id, param, LEASE_MS),
+      refreshSampleHold(env.DB, a.id, param, groupId, ctx.now, LEASE_MS),
+    ]);
     return json({ ok: true });
   }
   const roster = await loadRoster(env, ctx.fetch);
@@ -230,6 +237,8 @@ export async function handleGroupBatch(request: Request, env: Env, ctx: Ctx): Pr
 
   const country = REGION_COUNTRY[param];
   if (country !== undefined && (await activeLeases(env.DB, a.id, param, ctx.now)).length === 0) {
+    // Sampled groups first (blind second tags by a different ambassador), then untagged groups up to the cap.
+    await claimSamples(env.DB, a.id, param, ctx.now, LEASE_MS);
     await claimBatch(env.DB, a.id, param, roster, country, ctx.now);
   }
   const byId = new Map((await activeLeases(env.DB, a.id, param, ctx.now)).map((l) => [l.group_id, l]));

@@ -10,6 +10,10 @@ Reads GET {api}/export/approved (or a saved export with --input) and applies:
   ``curation/group_affiliations.csv``; suggestions go to ``curation/group_suggestions.csv``.
   A tag's optional ``name_correction`` goes to ``curation/group_name_corrections.csv`` (newest per
   group_id); the group build applies it.
+- ``group_pairs`` and ``group_reviews`` (optional keys, missing means none): blind second tags and
+  reviewer checks (CG-7a). Pairs become five Tier-1 rows each in ``curation/group_double_tags.csv``;
+  reviews become rows in ``curation/group_reviews.csv`` (newest per group and facet). No ambassador
+  id, name or email is written, and the group build reads both files.
 - consensus ``case_answers``: rows in ``curation/ambassador_labels.csv``, newest per (region, case).
 - ``institutions`` (optional key, missing means none): approved institution proposals, written to
   ``curation/ambassador_institution_additions.csv``, newest per (region, domain). The builder
@@ -72,6 +76,8 @@ DEFAULT_GROUP_TAGS = ROOT / "curation" / "group_tags.csv"
 DEFAULT_GROUP_AFFILIATIONS = ROOT / "curation" / "group_affiliations.csv"
 DEFAULT_GROUP_SUGGESTIONS = ROOT / "curation" / "group_suggestions.csv"
 DEFAULT_GROUP_NAME_CORRECTIONS = ROOT / "curation" / "group_name_corrections.csv"
+DEFAULT_GROUP_DOUBLE_TAGS = ROOT / "curation" / "group_double_tags.csv"
+DEFAULT_GROUP_REVIEWS = ROOT / "curation" / "group_reviews.csv"
 # The four types the amb-v1 builder treats as eligible (ELIGIBLE_TYPES in src/atlas/build).
 INSTITUTION_TYPES = frozenset({"education", "government", "nonprofit", "facility"})
 # Same pattern as the owner spec for institution domains; the builder also checks registrable form.
@@ -663,6 +669,11 @@ GROUP_AFFILIATION_COLUMNS = (
 )
 GROUP_SUGGESTION_COLUMNS = ("name", "url", "country", "note", "suggested_at")
 GROUP_NAME_CORRECTION_COLUMNS = ("group_id", "name", "submitted_at")
+# CG-7a contract files (scripts/build_groups.py load_double_tags and load_reviews). No value
+# columns in reviews: original_value and reviewed_value are validated but never written.
+GROUP_DOUBLE_TAG_COLUMNS = ("group_id", "facet", "value_a", "value_b")
+GROUP_REVIEW_COLUMNS = ("group_id", "facet", "outcome", "reason_code", "reviewed_at")
+GROUP_REVIEW_OUTCOMES = ("agree", "edit")
 GROUP_ID_RE = re.compile(r"cg_[0-9a-f]{16}")
 GROUP_PLACE_RE = re.compile(r"[A-Z]{2}(-[A-Z0-9]{1,3})?")
 GROUP_LANGUAGE_RE = re.compile(r"[a-z]{2}")
@@ -930,6 +941,40 @@ def clean_group_suggest(payload: Mapping[str, Any]) -> tuple[dict | None, str | 
     return {"name": name, "url": url, "country": country or "", "note": note or ""}, None
 
 
+def group_facet_value(
+    facet: str, value: Any, taxonomy: Mapping[str, tuple[str, ...]]
+) -> str | list[str] | None:
+    """One Tier-1 value: a vocab value, or 1-5 distinct primary_activities (a list or ';' text)."""
+    if facet == "primary_activities":
+        items = value.split(";") if isinstance(value, str) else value
+        return text_list(items, 1, 5, _one_of(taxonomy[facet]))
+    return _one_of(taxonomy[facet])(value)
+
+
+def clean_group_pair_side(
+    side: str, value: Any, taxonomy: Mapping[str, tuple[str, ...]]
+) -> tuple[dict | None, str | None]:
+    """All five Tier-1 facets of one side of a pair, or (None, skip reason).
+
+    Extra keys are ignored.
+    """
+    if not isinstance(value, dict):
+        return None, f"{side} is not an object"
+    out: dict[str, Any] = {}
+    for facet in GROUP_TIER1:
+        if value.get(facet) is None:
+            return None, f"{side} is missing {facet}"
+        parsed = group_facet_value(facet, value[facet], taxonomy)
+        if parsed is None:
+            return None, f"invalid {facet} in {side}"
+        out[facet] = parsed
+    return out, None
+
+
+def csv_facet(parsed: str | list[str]) -> str:
+    return ";".join(parsed) if isinstance(parsed, list) else parsed
+
+
 def iso_day_of(at: int) -> str:
     return datetime.fromtimestamp(at / 1000, tz=UTC).date().isoformat()
 
@@ -993,13 +1038,87 @@ class GroupStore:
         suggestions: dict[str, dict],
         taxonomy: Mapping[str, tuple[str, ...]],
         name_corrections: dict[str, dict] | None = None,
+        double_tags: dict[tuple[str, str], dict] | None = None,
+        reviews: dict[tuple[str, str], dict] | None = None,
     ) -> None:
         self.tags = tags
         self.affiliations = affiliations
         self.suggestions = suggestions
         self.taxonomy = taxonomy
         self.name_corrections = name_corrections if name_corrections is not None else {}
+        # double_tags maps (group_id, facet) to its CSV row; reviews maps it to {"ms", "row"}.
+        self.double_tags = double_tags if double_tags is not None else {}
+        self.reviews = reviews if reviews is not None else {}
         self.dirty: set[str] = set()
+
+    def pair(self, item: Mapping[str, Any]) -> str | None:
+        """Apply one approved blind pair: five rows, later item replaces (rows carry no time)."""
+        group_id = item.get("group_id")
+        if not isinstance(group_id, str) or not GROUP_ID_RE.fullmatch(group_id):
+            return "invalid group_id"
+        value_a, reason = clean_group_pair_side("value_a", item.get("value_a"), self.taxonomy)
+        if value_a is None:
+            return reason
+        value_b, reason = clean_group_pair_side("value_b", item.get("value_b"), self.taxonomy)
+        if value_b is None:
+            return reason
+        for facet in GROUP_TIER1:
+            row = {
+                "group_id": group_id,
+                "facet": facet,
+                "value_a": csv_facet(value_a[facet]),
+                "value_b": csv_facet(value_b[facet]),
+            }
+            if self.double_tags.get((group_id, facet)) != row:
+                self.double_tags[(group_id, facet)] = row
+                self.dirty.add("double_tags")
+        return None
+
+    def review(self, item: Mapping[str, Any], at: int) -> str | None:
+        """Apply one approved reviewer check; the newest reviewed_at per (group, facet) wins."""
+        group_id = item.get("group_id")
+        if not isinstance(group_id, str) or not GROUP_ID_RE.fullmatch(group_id):
+            return "invalid group_id"
+        facet = item.get("facet")
+        if not isinstance(facet, str) or facet not in GROUP_TIER1:
+            return "invalid facet"
+        outcome = item.get("outcome")
+        if outcome not in GROUP_REVIEW_OUTCOMES:
+            return "invalid outcome"
+        original = group_facet_value(facet, item.get("original_value"), self.taxonomy)
+        if original is None:
+            return f"invalid original_value for {facet}"
+        reviewed = group_facet_value(facet, item.get("reviewed_value"), self.taxonomy)
+        if reviewed is None:
+            return f"invalid reviewed_value for {facet}"
+        reason = item.get("reason_code")
+        if outcome == "agree":
+            if reason not in (None, ""):
+                return "agree must not carry a reason_code"
+            if reviewed != original:
+                return "agree needs reviewed_value equal to original_value"
+            reason_code = ""
+        else:
+            if reason not in self.taxonomy["review_reason"]:
+                return "edit needs a reason_code from review_reason"
+            if reviewed == original:
+                return "edit needs reviewed_value different from original_value"
+            reason_code = reason
+        key = (group_id, facet)
+        existing = self.reviews.get(key)
+        if existing is not None and existing["ms"] > at:
+            return "older than the stored review for this facet"
+        row = {
+            "group_id": group_id,
+            "facet": facet,
+            "outcome": outcome,
+            "reason_code": reason_code,
+            "reviewed_at": iso_from_ms(at),
+        }
+        if existing is None or existing["row"] != row:
+            self.dirty.add("reviews")
+        self.reviews[key] = {"ms": at, "row": row}
+        return None
 
     def submission(self, sub: dict, credit: str | None) -> str | None:
         payload = payload_of(sub)
@@ -1154,6 +1273,54 @@ def write_group_suggestions(path: Path, suggestions: dict[str, dict]) -> None:
     writer.writeheader()
     for url in sorted(suggestions):
         writer.writerow(suggestions[url]["row"])
+    write_text(path, buffer.getvalue())
+
+
+def read_group_double_tags(path: Path) -> dict[tuple[str, str], dict]:
+    pairs: dict[tuple[str, str], dict] = {}
+    for row in _csv_rows(path):
+        if row.get("group_id") and row.get("facet"):
+            pairs[(row["group_id"], row["facet"])] = {
+                col: row.get(col, "") for col in GROUP_DOUBLE_TAG_COLUMNS
+            }
+    return pairs
+
+
+def read_group_reviews(path: Path) -> dict[tuple[str, str], dict]:
+    reviews: dict[tuple[str, str], dict] = {}
+    for row in _csv_rows(path):
+        if not (row.get("group_id") and row.get("facet")):
+            continue
+        try:
+            ms = ms_from_iso(row["reviewed_at"])
+        except (KeyError, TypeError, ValueError):
+            raise ExportError(f"{path.name} has a row with a bad reviewed_at") from None
+        reviews[(row["group_id"], row["facet"])] = {
+            "ms": ms,
+            "row": {col: row.get(col, "") for col in GROUP_REVIEW_COLUMNS},
+        }
+    return reviews
+
+
+def _tier1_order(key: tuple[str, str]) -> tuple[str, int]:
+    return key[0], GROUP_TIER1.index(key[1])
+
+
+def write_group_double_tags(path: Path, pairs: dict[tuple[str, str], dict]) -> None:
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=GROUP_DOUBLE_TAG_COLUMNS, lineterminator="\n")
+    writer.writeheader()
+    for key in sorted(pairs, key=_tier1_order):
+        writer.writerow(pairs[key])
+    write_text(path, buffer.getvalue())
+
+
+def write_group_reviews(path: Path, reviews: dict[tuple[str, str], dict]) -> None:
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=GROUP_REVIEW_COLUMNS, lineterminator="\n")
+    writer.writeheader()
+    for key in sorted(reviews, key=_tier1_order):
+        writer.writerow(reviews[key]["row"])
     write_text(path, buffer.getvalue())
 
 
@@ -1319,6 +1486,8 @@ def run(args: argparse.Namespace) -> int:
         read_group_suggestions(args.group_suggestions_file),
         load_taxonomy(),
         read_group_name_corrections(args.group_name_corrections_file),
+        read_group_double_tags(args.group_double_tags_file),
+        read_group_reviews(args.group_reviews_file),
     )
     applier = Applier(args.regions_dir, labels, additions, groups)
     times: list[int] = []
@@ -1376,6 +1545,43 @@ def run(args: argparse.Namespace) -> int:
             applier.skip("case", reason)
             print(f"skip case answer ({row.get('region')}): {reason}")
 
+    # Pairs run in paired_at order so that, within one export, the later pair replaces the earlier.
+    pairs = [item for item in export.get("group_pairs") or [] if isinstance(item, dict)]
+    pairs.sort(key=lambda item: item["paired_at"] if is_int(item.get("paired_at")) else -1)
+    for item in pairs:
+        at = item.get("paired_at")
+        if not is_int(at) or not 0 <= at <= MAX_MS:
+            applier.skip("group_pair", "invalid paired_at")
+            print("skip group pair: invalid paired_at")
+            continue
+        times.append(at)
+        if at < since:
+            continue
+        reason = groups.pair(item)
+        if reason is None:
+            applier.applied[("groups", "group_pair")] += 1
+        else:
+            applier.skip("group_pair", reason)
+            print(f"skip group pair: {reason}")
+
+    for item in export.get("group_reviews") or []:
+        if not isinstance(item, dict):
+            continue
+        at = item.get("reviewed_at")
+        if not is_int(at) or not 0 <= at <= MAX_MS:
+            applier.skip("group_review", "invalid reviewed_at")
+            print("skip group review: invalid reviewed_at")
+            continue
+        times.append(at)
+        if at < since:
+            continue
+        reason = groups.review(item, at)
+        if reason is None:
+            applier.applied[("groups", "group_review")] += 1
+        else:
+            applier.skip("group_review", reason)
+            print(f"skip group review: {reason}")
+
     newest = max([since, *times])
     new_boundary = {sid for at, sid in sub_times if at == newest and sid is not None}
     if newest == since:
@@ -1415,6 +1621,10 @@ def run(args: argparse.Namespace) -> int:
         write_group_suggestions(args.group_suggestions_file, groups.suggestions)
     if "names" in groups.dirty:
         write_group_name_corrections(args.group_name_corrections_file, groups.name_corrections)
+    if "double_tags" in groups.dirty:
+        write_group_double_tags(args.group_double_tags_file, groups.double_tags)
+    if "reviews" in groups.dirty:
+        write_group_reviews(args.group_reviews_file, groups.reviews)
     if args.summary_file:
         write_text(args.summary_file, summary_markdown(applier, since, newest))
     write_text(args.since_file, json.dumps(new_state, indent=2) + "\n")
@@ -1441,6 +1651,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--group-name-corrections-file", type=Path, default=DEFAULT_GROUP_NAME_CORRECTIONS
     )
+    parser.add_argument("--group-double-tags-file", type=Path, default=DEFAULT_GROUP_DOUBLE_TAGS)
+    parser.add_argument("--group-reviews-file", type=Path, default=DEFAULT_GROUP_REVIEWS)
     parser.add_argument("--summary-file", type=Path, help="write a counts-only markdown summary")
     parser.add_argument("--dry-run", action="store_true", help="report only; write nothing")
     return parser

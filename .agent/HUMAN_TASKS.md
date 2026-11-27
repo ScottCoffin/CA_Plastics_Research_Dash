@@ -25,7 +25,8 @@ Last updated: 2026-11-26.
 ### H43 is done (2026-11-25): OpenAlex keys added to this machine's `.env`; `gh auth login` done.
 
 ### H59. Authorize the CG-7b D1 migration and Worker deploy
-After the local CG-7b checks pass, approve applying D1 migration 0008 and deploying the Worker for the sampled blind second tags, reviewer checks and audit log. Reply **H59 approved** to authorize both production operations, or specify which one to approve. H57 covered AMB-POOL and the name-correction backend.
+The local CG-7b checks pass (2026-11-26). This step approves two things: applying D1 migration 0008, which only adds five new tables, and deploying the Worker. The new Worker samples 10% of each region's primary group tags for a blind second tag, selects each ambassador's first 25 tags and then 20% for a reviewer check, and exports agreement pairs and review outcomes without ambassador ids. The Ambassadors page does not have a reviewer screen yet (CG-7c). Reply **H59 approved** to authorize both production operations, or specify which one to approve. H57 covered AMB-POOL and the name-correction backend.
+H59 approved (11-26-2026)
 
 ### H58. Review the community groups roster (now optional)
 You do not need to finish this. Ambassadors will answer the same duplicate and name questions while they tag (AMB-ROSTER-QC). Your 5 decisions so far are kept. If you want to spot-check, run `py -3.14 -m streamlit run scripts/review_group_roster_app.py` and click through as many cases as you like; every click saves at once.

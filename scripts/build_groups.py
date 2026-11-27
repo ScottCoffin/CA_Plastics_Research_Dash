@@ -219,12 +219,15 @@ def build_outputs(roster: dict[str, Any], curation_dir: Path) -> dict[str, bytes
     submissions, excluded = load_curated_submissions(curation_dir, roster_ids)
     names = load_name_corrections(curation_dir, roster_ids)
     kept = [record for record in roster["records"] if record.get("group_id") not in excluded]
+    # A group removed from the roster after it was paired or reviewed keeps its curated rows
+    # (the audit trail) but no longer counts toward the precision card (CG-7b).
+    kept_ids = {record.get("group_id") for record in kept}
     return build_groups(
         {**roster, "records": kept},
         submissions,
         name_corrections=names,
-        double_tags=load_double_tags(curation_dir),
-        reviews=load_reviews(curation_dir),
+        double_tags=[r for r in load_double_tags(curation_dir) if r.get("group_id") in kept_ids],
+        reviews=[r for r in load_reviews(curation_dir) if r.get("group_id") in kept_ids],
     )
 
 

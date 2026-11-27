@@ -45,7 +45,7 @@ client values; the tests cover the flow with a fake ORCID.
 - `PUBLIC_SITE_URL` (wrangler.toml `[vars]`, `https://plastiverse.live`): the only host the reminder pass reads case files from.
 - Migrations: `0001_init.sql` (slice 1), `0002_orcid_signup.sql` (slice 2a), `0003_submissions.sql` (slice 2b),
   `0004_notifications.sql` (slice 2c), `0005_proposal_allowlist.sql`, `0006_unlisted_institutions.sql`,
-  `0007_group_leases.sql` (CG-6a; applied remotely 2026-11-26). Read the migration note in 0002 before any
+  `0007_group_leases.sql` (CG-6a; applied remotely 2026-11-26), `0008_group_qa.sql` (CG-7b; local only until H59). Read the migration note in 0002 before any
   remote apply: slice-1 local rows were keyed with `SESSION_SIGNING_KEY` and must be reset, not re-hashed.
 
 ## Routes
@@ -68,6 +68,16 @@ client values; the tests cover the flow with a fake ORCID.
   Payload keys are allowed per kind (`src/submissions.ts`, `KINDS`); https URLs only; no HTML; length limits.
 - `GET /submissions/mine` (session): the caller's submissions with status and decision note.
 - `GET /groups/batch?region=` (session, active member): returns `leases` (group id, name, country, URL) and remaining count; claims up to 25 untagged groups only when the caller has no active holds in that region. Holds expire after two hours. `GET /groups/batch?region=&group_id=` silently refreshes that caller's still-active, untagged hold and returns `{ok:true}` even when it cannot refresh. A group tag is authorized by the caller's own hold in that region (even if expired), a prior tag in that region, or a roster match to the region's country. Every accepted group tag permanently removes the group from all pools; the first tag is canonical and a later tag by another ambassador is retained as a blind `second_tag_for` row.
+  CG-7b: one random position in each block of 10 usable primary tags per region (`ambassador_tagged`, not
+  `not_an_organisation`) is sampled for a blind second tag. The batch first holds up to 5 open samples for a different
+  active member of the region (two-hour hold, refreshed like a lease; the 25-group cap counts them), then fills with
+  untagged groups. The first usable second tag of a usable primary is recorded in `group_tag_pairs` with basis
+  `sample` or `overlap`. Selection runs in the tag's insert batch, so retries and concurrent tags stay consistent.
+- `GET /groups/reviews?region=` (owner or lead): approved primary tags selected for a reviewer check (each
+  ambassador's first 25 usable primaries, then one random position in each block of 5) and not yet reviewed; never
+  the reviewer's own. `POST /groups/reviews` `{submission_id, facets}` checks all five Tier-1 facets at once: each is
+  `{outcome: "agree"}` or `{outcome: "edit", value, reason_code}` (`review_reason` in config/groups_taxonomy.yml).
+  The first complete review wins (`already_reviewed`, 409); original and reviewed values are kept. Audited.
 - `GET /moderation/queue?region=` (owner or lead): pending submissions and proposals. Owner and leads see every region.
 - `POST /moderation/decide` (owner or lead): `{type: submission|proposal, id, decision: approve|reject, note?}`. A
   moderator cannot decide their own item. Audited. Approving an institution proposal also needs `region`, `domain`
@@ -77,6 +87,8 @@ client values; the tests cover the flow with a fake ORCID.
 - `POST /moderation/leads` (owner or lead): `{ambassador_id, region}` promotes an active member of that region to lead.
 - `POST /moderation/suspend` (owner only): `{ambassador_id}` sets `suspended` and deletes their sessions.
 - `GET /export/approved?since=<ms>` (bearer `EXPORT_TOKEN`, read-only): approved submissions and consensus case answers.
+  `group_pairs` (approved primary, Tier-1 `value_a`/`value_b`) and `group_reviews` (per facet: outcome, reason code,
+  original and reviewed values) feed `curation/group_double_tags.csv` and `curation/group_reviews.csv`.
   No emails, email hashes, ambassador ids or ORCID iDs. `institutions` lists approved institution proposals decided
   at or after `since` (region, name, url, domain, institution_type, decided_at).
 - Slice 2c (local): `GET /me/notifications` and `POST /me/notifications` (session) `{reminders?, product_news?}`

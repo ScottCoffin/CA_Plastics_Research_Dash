@@ -164,7 +164,7 @@ describe("export carries approved institutions without personal data", () => {
       expect(res.status).toBe(200);
       const text = await res.text();
       const body = JSON.parse(text) as Record<string, unknown>;
-      expect(Object.keys(body).sort()).toEqual(["case_answers", "generated_at", "institutions", "ok", "since", "submissions"]);
+      expect(Object.keys(body).sort()).toEqual(["case_answers", "generated_at", "group_pairs", "group_reviews", "institutions", "ok", "since", "submissions"]);
       expect(body.institutions).toEqual([
         {
           id,

@@ -1,6 +1,7 @@
 import { audit, currentAmbassador, type AmbassadorRow, type Ctx } from "./auth";
 import type { Env } from "./env";
 import { REGIONS, type Region, isRegion } from "./eligibility";
+import { qaStatements } from "./group_qa";
 import { json } from "./http";
 import { accountWithinLimit, err, plainText, readBody } from "./moderation";
 import {
@@ -262,8 +263,9 @@ export async function handleSubmit(request: Request, env: Env, ctx: Ctx): Promis
       "SELECT id, status, json_extract(payload, '$.second_tag_for') AS second_tag_for FROM submissions " +
       "WHERE ambassador_id=?1 AND kind='group_tag' AND json_extract(payload, '$.group_id')=?2 ORDER BY id LIMIT 1",
     ).bind(a.id, groupId);
+    // CG-7b: sample and review selection for a usable primary, the pair record for a usable second tag.
     const [inserted, , existing] = await env.DB.batch<{ id: number; status: string; second_tag_for: number | null }>(
-      [conditional, clearHold, receipt],
+      [conditional, clearHold, receipt, ...qaStatements(env.DB, a.id, groupId, ctx.now)],
     );
     const saved = inserted.results[0] ?? existing.results[0];
     if (!saved) return err("tag_save_failed", 500);
