@@ -23,7 +23,8 @@
 #evidence-root .topic-dot.hatch { border: 1px solid var(--theme-foreground-faint); }
 #evidence-root .topic-dot.auxiliary { outline: 1px dashed var(--theme-foreground-muted); outline-offset: 1px; }
 #evidence-root .ev-count { margin-left: auto; padding-left: 0.5rem; color: var(--theme-foreground-muted); font-variant-numeric: tabular-nums; }
-#evidence-root .ev-option.ev-zero { opacity: 0.45; }
+#evidence-root .ev-option.ev-zero .ev-option-name,
+#evidence-root .ev-option.ev-zero .ev-count { color: var(--theme-foreground-muted); }
 #evidence-root .ev-summary { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; }
 #evidence-root .ev-count-line { margin: 0; font-weight: 600; }
 #evidence-root .ev-view { margin-top: 1.25rem; }

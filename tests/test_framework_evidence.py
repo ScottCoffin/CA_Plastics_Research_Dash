@@ -152,3 +152,12 @@ def test_impact_factor_is_always_qualified_as_the_open_analogue() -> None:
 def test_recent_box_text_fills_the_box() -> None:
     css = (FW_SRC / "components" / "evidence.css").read_text(encoding="utf-8")
     assert "#evidence-root .ev-recent :is(h2, p, ul, ol, li) { max-width: none; }" in css
+
+
+def test_zero_count_filter_labels_remain_opaque_and_readable() -> None:
+    css = (FW_SRC / "components" / "evidence.css").read_text(encoding="utf-8")
+    assert "#evidence-root .ev-option.ev-zero { opacity:" not in css
+    assert (
+        "#evidence-root .ev-option.ev-zero .ev-option-name,\n"
+        "#evidence-root .ev-option.ev-zero .ev-count { color: var(--theme-foreground-muted); }"
+    ) in css

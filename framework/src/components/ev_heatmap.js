@@ -89,18 +89,21 @@ function tableHtml(model, mode, selected) {
           const cell = model.cells.find((c) => c.row === row && c.col === col.key);
           const fill = colorFor(cell.count, model.max);
           const ink = textInk(fill);
+          const fillStyle =
+            `--ev-heatmap-fill:${fill};--ev-heatmap-soft-fill:color-mix(in srgb, ${fill} 50%, var(--atlas-surface));` +
+            `--ev-heatmap-ink:${ink}`;
           const name = `${labelFor(row)}, ${colLabel(col)}: ${plural(cell.count, "work", "works")}`;
           if (!cell.count) {
             return (
               `<td><button type="button" class="ev-heatmap-cell" data-row="${escapeHtml(row)}" ` +
-              `data-col="${escapeHtml(col.key)}" style="background:${fill};color:${ink}" disabled ` +
+              `data-col="${escapeHtml(col.key)}" style="${fillStyle}" disabled ` +
               `aria-label="${escapeHtml(name)}">${cell.count}</button></td>`
             );
           }
           const pressed = selected.has(cellKey(row, col.key));
           return (
             `<td><button type="button" class="ev-heatmap-cell" data-row="${escapeHtml(row)}" ` +
-            `data-col="${escapeHtml(col.key)}" style="background:${fill};color:${ink}" ` +
+            `data-col="${escapeHtml(col.key)}" style="${fillStyle}" ` +
             `aria-pressed="${pressed}" aria-label="${escapeHtml(name)}">${checkHtml(pressed)}${cell.count}</button></td>`
           );
         })

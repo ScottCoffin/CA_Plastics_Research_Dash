@@ -86,14 +86,18 @@ def test_view_selection_is_visible_without_focus_or_colour() -> None:
     assert "heading.focus(" in text
 
 
-def test_css_dims_unselected_cells_and_rings_selected_ones() -> None:
+def test_css_softens_only_unselected_cell_fills_and_rings_selected_ones() -> None:
     text = re.sub(r"/\*.*?\*/", "", CSS.read_text(encoding="utf-8"), flags=re.DOTALL)
-    dimmed = (
-        ".ev-heatmap.ev-heatmap-selecting .ev-heatmap-cell"
+    assert (
+        ":is(#ev-heatmap, .ev-heatmap) .ev-heatmap-cell { "
+        "background: var(--ev-heatmap-fill); color: var(--ev-heatmap-ink); }"
+    ) in text
+    assert (
+        ":is(#ev-heatmap, .ev-heatmap).ev-heatmap-selecting .ev-heatmap-cell"
         ':not(:disabled):not([aria-pressed="true"])'
-    )
-    assert dimmed in text
-    assert "opacity: 0.45" in text
+    ) in text
+    assert "background: var(--ev-heatmap-soft-fill); color: var(--atlas-text);" in text
+    assert "opacity: 0.45" not in text
     assert "inset 0 0 0 3px var(--atlas-text)" in text
     assert ".ev-heatmap-colbtn" in text
 
@@ -127,4 +131,4 @@ def test_css_is_scoped_to_ev_heatmap() -> None:
         if selector.strip()
     ]
     assert selectors
-    assert all(selector.startswith(".ev-heatmap") for selector in selectors)
+    assert all(selector.startswith((".ev-heatmap", ":is(#ev-heatmap")) for selector in selectors)

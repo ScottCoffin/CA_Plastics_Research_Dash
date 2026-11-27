@@ -1,7 +1,8 @@
-# Handoff — 2026-11-27 — GP-10a
+# Handoff — 2026-11-27 — EV-A11Y-SELECT
 
 ## Done
 
+- The evidence heatmap selection keeps the count ramp and selected ring. Unselected counts and zero-count filter labels use opaque, contrasting ink. Chromium measured a minimum of 5.02:1 for enabled cells after selection and zero axe violations across both modes at 1440 and 390 px in California, Norway and Belgium. Keyboard selection and clear passed. California evidence styling changed with owner approval and its data files matched byte-for-byte.
 - `/norway/topics`, `/belgium/topics`, and regional search reuse the California renderer and builders. The topic denominator is unscreened query hits. The rising-share screen uses rule labels and institution checks. Search resolves to regional pages, author profiles, institutions and tag-filtered author lists.
 - `scripts/build_topics_json.py --region <slug> [--check]` and `scripts/build_search_index.py --region <slug> [--check]` emit the payloads from the committed region export. Both checks passed for both regions. See [region export design](../docs/GLOBAL_PARITY.md#3b-port-design-region-exports-in-the-california-schema-lead-2026-11-26).
 - GP-1 passed for all 17 California routes with 257,265 checked links and zero broken. All 4,993 assembled files in `california/` and `data/california/` matched the pre-change build byte-for-byte.
@@ -17,10 +18,9 @@
 
 ## Next checkpoints
 
-1. EV-A11Y-SELECT corrects selected evidence heatmap contrast in California, Norway and Belgium. The owner has lifted the California design freeze.
-2. Give Norway and Belgium the Plastiverse Live region shell and local navigation.
-3. GP-GROUPS puts the scoped interactive map first and applies the `/explore` shell to the groups views.
-4. VD-SM transitions the California Atlas to the main site's design. Apply Impeccable and the platform-wide app design in [DESIGN.md](../DESIGN.md).
+1. Give Norway and Belgium the Plastiverse Live region shell and local navigation.
+2. GP-GROUPS puts the scoped interactive map first and applies the `/explore` shell to the groups views.
+3. VD-SM transitions the California Atlas to the main site's design. The owner lifted the design freeze. Apply Impeccable and the platform-wide app design in [DESIGN.md](../DESIGN.md).
 
 ## Verification
 

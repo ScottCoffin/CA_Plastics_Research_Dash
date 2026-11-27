@@ -316,3 +316,4 @@
 | 2026-11-27 | GP-8b | Region evidence table author links (name match) and abstract wording; GP-1 passed. | this commit |
 | 2026-11-27 | Wrap-up for Codex | Handoff and resume prompt; next GP-10a. Claude weekly limit nearly used. | this commit |
 | 2026-11-27 | GP-10a | Regional topics and search for Norway and Belgium. Both data builders check current. GP-1 passed and all 4,993 assembled California route and data files matched. | this commit |
+| 2026-11-27 | EV-A11Y-SELECT | Improved evidence map contrast across California, Norway and Belgium. Both heatmap modes passed Chromium at desktop and mobile widths with zero axe violations. | this commit |
