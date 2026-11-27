@@ -29,7 +29,7 @@ def test_sidebar_groups_header_search_and_footer_contract() -> None:
     script = (
         f"import({json.dumps(config_uri)}).then(m => {{"
         "const c=m.default;"
-        "process.stdout.write(JSON.stringify({pages:c.pages,header:c.header({title:'Authors',path:'/california/authors'}),footer:c.footer,home:c.home}));"
+        "process.stdout.write(JSON.stringify({pages:c.pages,header:c.header({title:'Authors',path:'/california/authors'}),footer:c.footer({path:'/california/authors'}),home:c.home}));"
         "})"
     )
     result = subprocess.run(

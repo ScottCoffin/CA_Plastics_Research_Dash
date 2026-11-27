@@ -83,6 +83,6 @@ def test_navigation_places_topics_before_evidence_and_footer_links_it() -> None:
         'path: "/california/evidence"'
     )
     assert 'path: "/california/topics"' in data_group
-    footer = config.split("footer:", 1)[1]
+    footer = config.split("function regionFooter", 1)[1]
     assert 'href="./california/topics"' in footer
     assert '"california/topics":' in POSTBUILD.read_text(encoding="utf-8")

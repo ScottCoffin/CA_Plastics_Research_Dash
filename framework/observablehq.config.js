@@ -119,6 +119,58 @@ function atlasHeader({title, path}) {
     '<script>document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("observablehq-sidebar-toggle"),b=document.getElementById("atlas-menu-button");if(t&&b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))});document.addEventListener("click",e=>{const m=e.target.closest("#atlas-menu-button"),s=e.target.closest("#atlas-search-toggle"),t=document.getElementById("observablehq-sidebar-toggle");if(m&&t){t.click();m.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}if(s){const h=document.getElementById("observablehq-header"),i=document.getElementById("atlas-header-search-input"),x=s.getAttribute("aria-expanded")!=="true";h.classList.toggle("atlas-search-open",x);s.setAttribute("aria-expanded",String(x));s.setAttribute("aria-label",x?"Hide search":"Show search");if(x)i.focus()}if(t&&e.target===t){const b=document.getElementById("atlas-menu-button");if(b)b.setAttribute("aria-expanded",String(t.checked||t.indeterminate))}});' + TOP_NAV_JS + '</script>';
 }
 
+const REGION_SHELLS = {
+  norway: {label: "Norway", path: "norway", routes: [
+    ["Authors", "authors"], ["Institutions", "institutions"], ["Network", "network"],
+    ["Topics", "topics"], ["Evidence", "evidence"], ["Search", "search"],
+  ]},
+  belgium: {label: "Belgium", path: "belgium", routes: [
+    ["Authors", "authors"], ["Institutions", "institutions"], ["Network", "network"],
+    ["Topics", "topics"], ["Evidence", "evidence"], ["Search", "search"],
+  ]},
+};
+
+function regionShell(path) {
+  const normalized = path.replace(/^\/+/, "");
+  const slug = normalized.split("/")[0];
+  const region = REGION_SHELLS[slug];
+  if (!region) return null;
+  const routeLinks = region.routes.map(([label, route]) =>
+    `<li><a href="./${region.path}/${route}"${normalized === `${region.path}/${route}` ? ' aria-current="page"' : ""}>${label}</a></li>`
+  ).join("");
+  return {region, routeLinks, path: normalized};
+}
+
+function regionHeader({title, path}) {
+  const shell = regionShell(path);
+  if (!shell) return atlasHeader({title, path});
+  const {region, routeLinks, path: normalized} = shell;
+  const current = region.routes.find(([, route]) => normalized === `${region.path}/${route}`)?.[0] || title || "Overview";
+  return `<div class="pv-region-header">
+  <a class="pv-region-brand" href="./" aria-label="Plastiverse Live home"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="5"/><g>${Array.from({length: 16}, (_, i) => { const a = i * Math.PI / 8; const x1 = (13 + Math.cos(a) * 7.6).toFixed(2); const y1 = (13 + Math.sin(a) * 7.6).toFixed(2); const x2 = (13 + Math.cos(a) * 10.4).toFixed(2); const y2 = (13 + Math.sin(a) * 10.4).toFixed(2); return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`; }).join("")}</g></svg><span class="pv-region-wordmark">PLASTIVERSE <b>LIVE</b></span></a>
+  <span class="pv-region-context"><a href="./${region.path}/">${region.label}</a><span aria-hidden="true">/</span><span aria-current="page">${current}</span></span>
+  <details class="pv-region-menu"><summary>Menu</summary><nav aria-label="${region.label} header pages"><ul><li><a href="./${region.path}/">${region.label} home</a></li>${routeLinks}</ul><ul class="pv-region-menu-main" aria-label="Main site"><li><a href="./explore">Explore all regions</a></li><li><a href="./groups">Community groups</a></li><li><a href="./ambassadors">Ambassadors</a></li></ul></nav></details>
+  <form class="pv-region-search" action="./search" method="get" role="search" aria-label="Search ${region.label} atlas" data-atlas-site-search><label for="pv-region-q">Search ${region.label}</label><input id="pv-region-q" name="q" type="search" placeholder="Search ${region.label}"/><button type="submit">Search</button></form>
+  <nav class="pv-region-main-links" aria-label="Plastiverse Live"><a href="./explore">Explore</a><a href="./groups">Community groups</a><a href="./ambassadors">Ambassadors</a></nav>
+</div>`;
+}
+
+function regionFooter({path}) {
+  const shell = regionShell(path);
+  if (!shell) return '<p class="atlas-footer__note">Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.</p>' +
+    '<nav aria-label="Footer links"><ul class="atlas-footer__links">' +
+    '<li><a href="./california/about">About</a></li><li><a href="./california/glossary">Glossary</a></li>' +
+    '<li><a href="./california/quality">Quality</a></li><li><a href="./california/topics">Topics</a></li>' +
+    '<li><a href="./california/about#how-to-cite">How to cite</a></li>' +
+    '<li><a href="./california/about#get-updates">Get updates</a></li>' +
+    '<li><a href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction" rel="external">Report a correction</a></li></ul></nav>';
+  const {region, routeLinks} = shell;
+  return `<div class="pv-region-footer"><div class="pv-region-footer-brand"><a href="./">Plastiverse Live</a><img src="./assets/landing/logo_564.webp" width="282" height="247" alt="Plastiverse Live logo: scattered plastic fragments flow into a bright node and a network of research" loading="lazy"><span>${region.label} research atlas</span></div>
+<nav aria-label="${region.label} footer pages"><ul>${routeLinks}</ul></nav>
+<nav aria-label="Main site footer"><ul><li><a href="./explore">Explore all regions</a></li><li><a href="./groups">Community groups</a></li><li><a href="./ambassadors">Become an ambassador</a></li></ul></nav>
+<p>Created by <a href="https://scottcoff.in" rel="noreferrer">Scott Coffin</a>.</p></div>`;
+}
+
 export default {
   title: "CA Plastics Research Atlas",
   root: "src",
@@ -153,13 +205,7 @@ export default {
   home: '<span class="atlas-home-brand"><img src="' + CA_MARK + '" alt=""><span>Plastiverse Live</span></span>',  // links to the global page (/)
   // The sidebar's home link is the global page (/); the California overview is its first entry.
   pages: [{name: "California overview", path: "/california/"}, ...PAGE_GROUPS],
-  header: atlasHeader,
+  header: regionHeader,
   // Owner 2026-11-17: the footer credits the creator instead of the former disclaimer.
-  footer: '<p class="atlas-footer__note">Created by <a href="https://scottcoff.in" target="_blank" rel="noreferrer">Scott Coffin</a>.</p>' +
-    '<nav aria-label="Footer links"><ul class="atlas-footer__links">' +
-    '<li><a href="./california/about">About</a></li><li><a href="./california/glossary">Glossary</a></li>' +
-    '<li><a href="./california/quality">Quality</a></li><li><a href="./california/topics">Topics</a></li>' +
-    '<li><a href="./california/about#how-to-cite">How to cite</a></li>' +
-    '<li><a href="./california/about#get-updates">Get updates</a></li>' +
-    '<li><a href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction" rel="external">Report a correction</a></li></ul></nav>'
+  footer: regionFooter
 };

@@ -392,8 +392,9 @@
       if (input && document.activeElement !== input) input.value = query;
       results.textContent = "";
       if (!query) {
-        status.textContent =
-          "Type a name, institution, topic, funder or glossary term to search the Atlas.";
+        status.textContent = REGION === "california"
+          ? "Type a name, institution, topic, funder or glossary term to search the Atlas."
+          : "Type a name, institution or topic to search the " + REGION.charAt(0).toUpperCase() + REGION.slice(1) + " atlas.";
         return;
       }
       status.textContent = "Searching for " + query + ".";

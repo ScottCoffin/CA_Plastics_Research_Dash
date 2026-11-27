@@ -971,3 +971,7 @@ The optional public name correction uses the stable group ID and goes through th
 ## ADR-GP-REGION-EXPORT-2026-11-26
 
 - Decision (lead): port California features to registry regions by writing California-schema payloads per region from the global partition and making `regionDataUrl()` region-aware, instead of building new region components. California-only fields are null outside California. Registry regions (Norway, Belgium) ship first because they fit in Pages; every-country scale keeps the GX/R2 path. Details: docs/GLOBAL_PARITY.md section 3b. Owner priority 2026-11-26: the California feature port comes first.
+
+## ADR-ATLAS-PLATFORM-DESIGN-2026-11-27
+
+- The owner lifted the California design freeze and confirmed the main global site's typography and colors are the source for Atlas styling. Preserve the `--pv-*` visual definitions, Schibsted Grotesk and Martian Mono. Apply them to the Atlas through the regional shell and VD-SM while keeping route, dataset and interaction contracts intact.

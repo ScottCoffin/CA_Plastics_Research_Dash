@@ -64,7 +64,8 @@ def test_about_limitation_links_to_the_quality_page():
 def test_navigation_and_postbuild_registration():
     config = CONFIG.read_text(encoding="utf-8")
     assert 'path: "/california/quality"' in config
-    assert "/california/quality" in config.split("footer:", 1)[1]
+    assert "footer: regionFooter" in config
+    assert 'href="./california/quality"' in config.split("function regionFooter", 1)[1]
     postbuild = POSTBUILD.read_text(encoding="utf-8")
     assert '"california/quality":' in postbuild
     assert "  quality:" in postbuild

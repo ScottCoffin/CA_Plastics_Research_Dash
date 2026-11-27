@@ -52,6 +52,9 @@ if (!GLOBAL_FONT_STYLE || !FAVICON_LINK.test(GLOBAL_FAVICON) || !GLOBAL_SEARCH_S
 export function fixHtml(html, page) {
   // Add stable page metadata first; fixTemplate then owns the final head ordering.
   let fixed = fixShell(fixTemplate(addGlobalHead(addDescription(html, page))), page);
+  if (/^(norway|belgium)\/(authors|institutions|institution|network|topics|evidence|search)$/.test(page) && !fixed.includes("region_shell.css")) {
+    fixed = fixed.replace("</head>", '<link rel="stylesheet" href="./assets/region_shell.css">\n</head>');
+  }
   // The landing page sets its own faces and never uses Archivo: preload its text face instead
   // (its LCP is header text, so the face must not queue behind the story's images).
   if (page === "index") {
