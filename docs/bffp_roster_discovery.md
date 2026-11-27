@@ -73,3 +73,5 @@ Permission: the owner reports that BFFP has given the project explicit permissio
 ## Weekly refresh verification (2026-11-26)
 
 The Playwright 1.65.2 browser extractor loaded the public About page and received HTTP 200 from the page's /api/members_org request. The response passed the organisation-list parser. The route allows only that member API request and blocks other hosts and nonessential resources. The GitHub Actions refresh uses the same public page and allow-list. Raw responses and local review files stay outside the published data. [BFFP public member map](https://www.breakfreefromplastic.org/about/)
+
+The first hosted attempt timed out. The second run loaded the map and completed the additive build plus both validation commands. The checked outputs matched the current roster and derived files. [Successful hosted workflow run](https://github.com/ScottCoffin/CA_Plastics_Research_Dash/actions/runs/45917107414)
