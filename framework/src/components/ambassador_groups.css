@@ -88,3 +88,6 @@
 .am .g-hints-body a, .am .g-register a { color: var(--pv-ink); text-decoration: underline; }
 .am .g-hints-warn { margin: 0 0 8px; font-weight: 600; }
 .am .g-register { font-size: 14px; margin: 12px 0 0; }
+/* Plastics quote counter: neutral when 10 to 50 words; the caution edge and bold text mark a count still out of range. */
+.am .g-quote-count { margin: 6px 0 0; font-size: 14px; color: var(--pv-ink-2); }
+.am .g-quote-count[data-state="short"], .am .g-quote-count[data-state="long"] { color: var(--pv-ink); font-weight: 600; border-left: 3px solid var(--pv-coral-ink); padding-left: 8px; }

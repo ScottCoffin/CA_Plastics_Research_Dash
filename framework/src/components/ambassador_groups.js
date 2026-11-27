@@ -57,6 +57,28 @@ const isWebUrl = (value) => {
 };
 /** A quote is non-empty, at most 25 words and 400 characters, with no markup or control characters. */
 const quoteOk = (quote) => quote !== "" && quote.split(/\s+/).length <= 25 && quote.length <= 400 && !/[<>\u0000-\u001f\u007f]/.test(quote);
+/** The main plastics quote (the shared evidence quote) is 10 to 50 words and at most 600 characters. */
+export const PLASTICS_QUOTE_MIN_WORDS = 10;
+export const PLASTICS_QUOTE_MAX_WORDS = 50;
+export const PLASTICS_QUOTE_MAX_CHARS = 600;
+/** Whitespace-separated words in a text; 0 for blank text. */
+export function wordCount(text) {
+  const trimmed = String(text ?? "").trim();
+  return trimmed === "" ? 0 : trimmed.split(/\s+/).length;
+}
+const plasticsQuoteOk = (quote) => {
+  const words = wordCount(quote);
+  return words >= PLASTICS_QUOTE_MIN_WORDS && words <= PLASTICS_QUOTE_MAX_WORDS && quote.length <= PLASTICS_QUOTE_MAX_CHARS && !/[<>\u0000-\u001f\u007f]/.test(quote);
+};
+/** Live counter text for the plastics quote: the visible text and the state used to decide when to announce. */
+export function plasticsQuoteStatus(text) {
+  const words = wordCount(text);
+  const label = `${words} ${words === 1 ? "word" : "words"}`;
+  if (words === 0) return {state: "short", text: label};
+  if (words < PLASTICS_QUOTE_MIN_WORDS) return {state: "short", text: `${label} · add at least ${PLASTICS_QUOTE_MIN_WORDS - words} more`};
+  if (words > PLASTICS_QUOTE_MAX_WORDS) return {state: "long", text: `${label} · remove ${words - PLASTICS_QUOTE_MAX_WORDS}`};
+  return {state: "ok", text: label};
+}
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
 const GROUP_ID_RE = /^cg_[0-9a-f]{16}$/;
 
@@ -340,10 +362,11 @@ export function groupTagPayload({group, values, today = isoToday()} = {}) {
   // page does not mention plastics, plastics_centrality; the optional facet quotes add a row only when filled.
   const pageUrl = String(values.page_url ?? group.url ?? "").trim();
   const date = String(values.accessed_at || today);
-  const quote = String(values.quote || "").trim();
+  // Line breaks from a pasted quote become single spaces so the word count and the stored text agree.
+  const quote = String(values.quote || "").replace(/\s+/g, " ").trim();
   if (!isWebUrl(pageUrl)) return {error: "page_url"};
   if (!isIsoDate(date)) return {error: "accessed_at"};
-  if (!quoteOk(quote)) return {error: "quote"};
+  if (!plasticsQuoteOk(quote)) return {error: "quote"};
   for (const facet of TAG_FACETS) {
     if (facet === "plastics_centrality" && plasticsNotStated) {
       evidence.push({facet, url: pageUrl, accessed_at: date, not_stated: true});
@@ -403,7 +426,7 @@ const errorText = (code, fallback) => ERRORS[code] || fallback?.(code) || "Somet
 /** Plain-language message for a payload error key from groupTagPayload. */
 function tagErrorMessage(error) {
   if (error === "name_correction") return "Enter the group's public name in plain text, using 2 to 200 characters.";
-  if (error === "quote") return "Add the words from their page that show their work. Use 25 words or fewer.";
+  if (error === "quote") return "Add 10 to 50 words from their page about plastics, or about the group if plastics are not part of their work.";
   if (error.startsWith("quote-")) return "Check the optional quote for this choice. Use 25 words or fewer.";
   if (error === "page_url") return "Check the page you read. It must be a web address that starts with https://.";
   if (error === "accessed_at") return "Check the date read. Choose a real date.";
@@ -464,7 +487,9 @@ function evidenceHTML(group, draft) {
     <div class="field"><label for="g-page-url">Page you read</label><input id="g-page-url" type="url" maxlength="500" placeholder="https://" data-g-field="page_url" value="${esc(draft.page_url ?? group.url ?? "")}"></div>
     <div class="g-date"><p>Date read: <strong data-g-date-text>${esc(date)}</strong> <button type="button" class="link-btn" data-g-date-change aria-controls="g-date-wrap" aria-expanded="false">change<span class="sr"> the date read</span></button></p>
       <div class="field" id="g-date-wrap" data-g-date-wrap hidden><label for="g-date">Date read</label><input id="g-date" type="date" data-g-field="accessed_at" value="${esc(date)}"></div></div>
-    <div class="field"><label for="g-quote">Words from their page that show their plastics work (up to 25 words)</label><textarea id="g-quote" rows="2" maxlength="400" data-g-field="quote">${esc(draft.quote || "")}</textarea></div>
+    <div class="field"><label for="g-quote">Words from their page about plastics (10 to 50 words)</label><textarea id="g-quote" rows="2" maxlength="${PLASTICS_QUOTE_MAX_CHARS}" data-g-field="quote" aria-describedby="g-quote-hint g-quote-count">${esc(draft.quote || "")}</textarea>
+      <p class="hint" id="g-quote-hint">If plastics are not part of their work, quote what the group says about itself.</p>
+      <p class="g-quote-count" id="g-quote-count" aria-live="polite" data-g-quote-count data-state="${plasticsQuoteStatus(draft.quote).state}"><span aria-hidden="true" data-g-count-text>${plasticsQuoteStatus(draft.quote).text}</span><span class="sr" data-g-count-announce></span></p></div>
     <div class="field" data-g-not-stated-wrap${notStatedShown ? "" : " hidden"}><label class="g-chip-check g-not-stated"><input type="checkbox" data-g-not-stated${draft.plastics_not_stated === true ? " checked" : ""}><span>Their pages do not mention plastics</span></label></div>
   </fieldset>`;
 }
@@ -671,6 +696,15 @@ export function mountGroups(host, ctx) {
     const group = current(); if (!group || !host.querySelector("[data-g-tag-form]")) return;
     state.drafts[group.group_id] = tagValues();
   }
+  /** Updates the plastics quote counter on every keystroke; the polite live text changes only when the state changes. */
+  function updateQuoteCount(text) {
+    const counter = host.querySelector("[data-g-quote-count]"); if (!counter) return;
+    const {state: next, text: visible} = plasticsQuoteStatus(text);
+    counter.querySelector("[data-g-count-text]").textContent = visible;
+    if (counter.dataset.state === next) return;
+    counter.dataset.state = next;
+    counter.querySelector("[data-g-count-announce]").textContent = visible;
+  }
   /** Shows or hides the sections that depend on the organisation check and the tag status. */
   function applyTagVisibility() {
     const no = orgChoice() === "no";
@@ -832,7 +866,10 @@ export function mountGroups(host, ctx) {
     if (target.matches?.("[data-g-status]") || target.matches?.("[data-g-centrality]")) applyTagVisibility();
     saveDraft();
   });
-  host.addEventListener("input", () => saveDraft());
+  host.addEventListener("input", (event) => {
+    if (event.target.matches?.('[data-g-field="quote"]')) updateQuoteCount(event.target.value);
+    saveDraft();
+  });
   host.addEventListener("submit", (event) => {
     if (event.target.matches?.("[data-g-tag-form]")) submitTag(event);
   });

@@ -161,7 +161,11 @@ def test_visible_wording_has_no_iso_codes_or_internal_ids() -> None:
 
 def test_quote_and_picker_wording_is_plain_and_evidence_is_one_block() -> None:
     module = _text(MODULE)
-    assert "Words from their page that show their plastics work (up to 25 words)" in module
+    assert "Words from their page about plastics (10 to 50 words)" in module
+    hint = "If plastics are not part of their work, quote what the group says about itself."
+    assert hint in module
+    assert 'aria-describedby="g-quote-hint g-quote-count"' in module
+    assert "data-g-quote-count" in module
     assert "Add a quote for this" in module
     assert "Page you read" in module
     assert module.count('<fieldset class="g-evidence g-wide"><legend>Evidence</legend>') == 1

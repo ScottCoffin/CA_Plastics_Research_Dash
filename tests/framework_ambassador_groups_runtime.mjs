@@ -1,7 +1,8 @@
 // CG-6c / AMB-GROUPS-UX pure contract checks. Browser interactions run in the shared mocked-API gate.
 import assert from "node:assert/strict";
 import {
-  CANNOT_REASONS, GROUP_TAXONOMY, SAME_AS_ANSWERS, TIER2_TAXONOMY, duplicateQuestions, formatEin, groupSuggestionPayload, groupTagPayload,
+  CANNOT_REASONS, GROUP_TAXONOMY, PLASTICS_QUOTE_MAX_CHARS, PLASTICS_QUOTE_MAX_WORDS, PLASTICS_QUOTE_MIN_WORDS, SAME_AS_ANSWERS, TIER2_TAXONOMY, duplicateQuestions, formatEin, groupSuggestionPayload, groupTagPayload,
+  plasticsQuoteStatus, wordCount,
   isSuspectName, registerLinks, registerSuggestionFor, rosterLookup, suggestionFor, suggestionHTML, suspectHint,
 } from "../framework/src/components/ambassador_groups.js";
 import {
@@ -69,16 +70,58 @@ check("blank optional details add no fields or validation burden", () => {
   assert.equal("legal_form" in result.payload, false);
   assert.equal("stated_affiliations" in result.payload, false);
 });
-check("the shared quote and page are required and validated", () => {
+const words = (n) => Array(n).fill("word").join(" ");
+check("wordCount counts whitespace-separated words and is 0 for blank text", () => {
+  assert.equal(wordCount(""), 0);
+  assert.equal(wordCount("   "), 0);
+  assert.equal(wordCount(undefined), 0);
+  assert.equal(wordCount("  one  two\tthree  "), 3);
+  assert.equal(wordCount("one\n\ntwo\nthree"), 3);
+  assert.equal(wordCount("a   b"), 2);
+});
+check("the plastics quote counter text and state follow the 10 to 50 word range", () => {
+  assert.deepEqual(plasticsQuoteStatus(""), {state: "short", text: "0 words"});
+  assert.deepEqual(plasticsQuoteStatus(words(1)), {state: "short", text: "1 word · add at least 9 more"});
+  assert.deepEqual(plasticsQuoteStatus(words(7)), {state: "short", text: "7 words · add at least 3 more"});
+  assert.deepEqual(plasticsQuoteStatus(words(9)), {state: "short", text: "9 words · add at least 1 more"});
+  assert.deepEqual(plasticsQuoteStatus(words(10)), {state: "ok", text: "10 words"});
+  assert.deepEqual(plasticsQuoteStatus(words(23)), {state: "ok", text: "23 words"});
+  assert.deepEqual(plasticsQuoteStatus(words(50)), {state: "ok", text: "50 words"});
+  assert.deepEqual(plasticsQuoteStatus(words(51)), {state: "long", text: "51 words · remove 1"});
+  assert.deepEqual(plasticsQuoteStatus(words(52)), {state: "long", text: "52 words · remove 2"});
+});
+check("the plastics quote must be 10 to 50 words and at most 600 characters", () => {
+  assert.equal(PLASTICS_QUOTE_MIN_WORDS, 10);
+  assert.equal(PLASTICS_QUOTE_MAX_WORDS, 50);
+  assert.equal(PLASTICS_QUOTE_MAX_CHARS, 600);
   assert.equal(groupTagPayload({group: GROUP, values: base({quote: ""})}).error, "quote");
-  assert.equal(groupTagPayload({group: GROUP, values: base({quote: Array(26).fill("word").join(" ")})}).error, "quote");
+  assert.equal(groupTagPayload({group: GROUP, values: base({quote: words(9)})}).error, "quote");
+  assert.equal(groupTagPayload({group: GROUP, values: base({quote: words(10)})}).error, undefined);
+  assert.equal(groupTagPayload({group: GROUP, values: base({quote: words(50)})}).error, undefined);
+  assert.equal(groupTagPayload({group: GROUP, values: base({quote: words(51)})}).error, "quote");
+  assert.equal(groupTagPayload({group: GROUP, values: base({quote: "word ".repeat(10) + "x".repeat(550)})}).error, undefined);
+  assert.equal(groupTagPayload({group: GROUP, values: base({quote: "word ".repeat(10) + "x".repeat(551)})}).error, "quote");
   assert.equal(groupTagPayload({group: GROUP, values: base({page_url: "javascript:alert(1)"})}).error, "page_url");
   assert.equal(groupTagPayload({group: GROUP, values: base({accessed_at: "2026-02-31"})}).error, "accessed_at");
-  assert.equal(groupTagPayload({group: GROUP, values: base({facet_quotes: {sector: Array(26).fill("word").join(" ")}})}).error, "quote-sector");
 });
-check("the quote may not carry markup or an email address", () => {
-  assert.equal(groupTagPayload({group: GROUP, values: base({quote: "Write to info@example.org today"})}).error, "email");
-  assert.equal(groupTagPayload({group: GROUP, values: base({quote: "<b>bold</b> work"})}).error, "quote");
+check("other quote fields keep the 25 word limit", () => {
+  assert.equal(groupTagPayload({group: GROUP, values: base({facet_quotes: {sector: words(26)}})}).error, "quote-sector");
+  assert.equal(groupTagPayload({group: GROUP, values: base({facet_quotes: {sector: words(25)}})}).error, undefined);
+  assert.equal(groupTagPayload({group: GROUP, values: base({facet_quotes: {sector: words(12)}})}).error, undefined);
+});
+check("the plastics quote may not carry markup or an email address, and line breaks count as spaces", () => {
+  assert.equal(groupTagPayload({group: GROUP, values: base({quote: "Write to info@example.org for more about our plastics work and beach cleanups here."})}).error, "email");
+  assert.equal(groupTagPayload({group: GROUP, values: base({quote: "<b>We</b> run beach cleanups and plastics education in our community today."})}).error, "quote");
+  const folded = groupTagPayload({group: GROUP, values: base({quote: "We run beach cleanups\nand plastics education in\nour community today."})});
+  assert.equal(folded.error, undefined);
+  assert.equal(folded.payload.evidence[0].quote, "We run beach cleanups and plastics education in our community today.");
+});
+check("a 12 word plastics quote is the evidence for plastics_centrality with the page and date", () => {
+  const quote = words(12);
+  const result = groupTagPayload({group: GROUP, values: base({quote}), today: "2026-11-26"});
+  assert.equal(result.error, undefined);
+  assert.deepEqual(result.payload.evidence.find((row) => row.facet === "plastics_centrality"),
+    {facet: "plastics_centrality", url: "https://example.org/about", accessed_at: "2026-11-26", quote, not_stated: false});
 });
 check("place and language codes are validated (five places, ten languages, ISO shapes)", () => {
   assert.equal(groupTagPayload({group: GROUP, values: base({places: ["US", "US-CA", "NO", "BE", "FR", "DE"]})}).error, "places");
