@@ -244,7 +244,7 @@ leak-check works wait for S5.7.
 
 - H61 (2026-11-26): owner answered in docs/GROUP_ENRICHMENT_OPTIONS.md: suggestion-only Wikidata/register lookups are not scraping-based tagging (A4-D11 unchanged); attribution lines approved; no OpenCorporates bulk data or Wikipedia text; paid Candid declined; roster cleanup first. ADR-GRP-ENRICH-2026-11-26.
 
-- H60 (2026-11-26): owner approved the AMB-ROSTER-QC Worker deploy (the agent deploys after slices C and D pass).
+- H60 (2026-11-26): owner approved; the agent deployed Worker b2e7b4b5-efb8-49a8-8ff2-23897501457d (AMB-ROSTER-QC slice B: `same_as` answers in group tags, exported with per-pair rater tokens; no migration). Routes still 401 without a session.
 
 - H59 (2026-11-26): owner approved; the agent applied D1 migration 0008 (5 tables) and deployed Worker version 5a5f52e9-917e-4a0a-8975-82bd3cc83503 (CG-7b sampling, reviews and export; CG-7c screen live). `/groups/reviews` GET and POST return 401 without a session; the export still refuses without its token.
 
