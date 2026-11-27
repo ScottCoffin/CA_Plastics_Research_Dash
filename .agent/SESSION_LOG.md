@@ -301,3 +301,4 @@
 | 2026-11-26 | GRP-ENRICH slice 2 + CG-12 | Form hints + register links; coverage/map and composition/evidence views on /groups; real-browser checks with a 60-group fixture found and fixed treemap NaN layout, ignored Plot lineWidth, overflow and contrast. | this commit |
 | 2026-11-26 | GP-0 | docs/GLOBAL_PARITY.md parity inventory (21 rows) and GP-2..GP-10 slice plan. | this commit |
 | 2026-11-26 | GRP-ENRICH slice 3 | IRS EO BMF register suggestions for 190 US groups (NTEE hints), offline-cached; form display is slice 3b. | this commit |
+| 2026-11-26 | CG-12b + GP-1 | Flows/participation/combinations/languages views (browser-verified); California regression contract recorded (17 routes, 257k links, 0 broken). | this commit |

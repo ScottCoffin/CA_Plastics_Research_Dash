@@ -435,3 +435,6 @@ until it reports.
 
 ## d3.treemap only lays out a root node; Plot axis wrapping needs axis marks (2026-11-26)
 `d3.treemap()(node)` on a non-root node gives NaN coordinates (padding is indexed by depth), so zoomed or nested treemaps must lay out a fresh `d3.hierarchy(node.data)`. In Observable Plot, `lineWidth` (label wrapping) is an option of `Plot.axisX`/`axisY` marks, not of the x/y scale, where it is silently ignored. Both passed node tests with stubs and only showed in a real browser with fixture data: check chart views in Chromium with a populated fixture, not just the live (empty) data.
+
+## Tests run on Linux CI: never call the py launcher (2026-11-26)
+A new test shelled out to `py -3.14`, which passed every Windows gate and failed hosted CI (`FileNotFoundError: 'py'`). Tests use `sys.executable` and `shutil.which("node")`; say so in every worker brief that adds tests.

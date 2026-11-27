@@ -1,0 +1,196 @@
+{
+  "schema": "gp1-v1",
+  "recorded_at": "2026-11-27T03:30:28Z",
+  "note": "Recorded by scripts/check_gp1_contract.py --record. Minimums are 80% of the recorded count (text: 50%). Re-record only when a California change is intended, and say why in the commit.",
+  "viewports": {
+    "desktop": 1440,
+    "mobile": 390
+  },
+  "routes": [
+    {
+      "route": "/california/about",
+      "file": "california/about.html",
+      "selector": "main article",
+      "recorded_count": 12,
+      "min_count": 9,
+      "recorded_main_chars": 9618,
+      "min_main_chars": 4809
+    },
+    {
+      "route": "/california/authors",
+      "file": "california/authors.html",
+      "selector": "#experts-root .expert-card",
+      "recorded_count": 10,
+      "min_count": 8,
+      "recorded_main_chars": 5474,
+      "min_main_chars": 2737
+    },
+    {
+      "route": "/california/evidence",
+      "file": "california/evidence.html",
+      "selector": "main table",
+      "recorded_count": 5,
+      "min_count": 4,
+      "recorded_main_chars": 36630,
+      "min_main_chars": 18315
+    },
+    {
+      "route": "/california/funding",
+      "file": "california/funding.html",
+      "selector": "main table",
+      "recorded_count": 9,
+      "min_count": 7,
+      "recorded_main_chars": 22557,
+      "min_main_chars": 11278
+    },
+    {
+      "route": "/california/glossary",
+      "file": "california/glossary.html",
+      "selector": "main a[href]",
+      "recorded_count": 51,
+      "min_count": 40,
+      "recorded_main_chars": 12455,
+      "min_main_chars": 6227
+    },
+    {
+      "route": "/california/",
+      "file": "california/index.html",
+      "selector": "main a[href]",
+      "recorded_count": 26,
+      "min_count": 20,
+      "recorded_main_chars": 4389,
+      "min_main_chars": 2194
+    },
+    {
+      "route": "/california/institution",
+      "file": "california/institution.html",
+      "selector": "main a[href]",
+      "recorded_count": 51,
+      "min_count": 40,
+      "recorded_main_chars": 2901,
+      "min_main_chars": 1450
+    },
+    {
+      "route": "/california/institutions",
+      "file": "california/institutions.html",
+      "selector": "main article",
+      "recorded_count": 171,
+      "min_count": 136,
+      "recorded_main_chars": 4228,
+      "min_main_chars": 2114
+    },
+    {
+      "route": "/california/monitoring",
+      "file": "california/monitoring.html",
+      "selector": "main table",
+      "recorded_count": 3,
+      "min_count": 2,
+      "recorded_main_chars": 1986,
+      "min_main_chars": 993
+    },
+    {
+      "route": "/california/network",
+      "file": "california/network.html",
+      "selector": "main svg",
+      "recorded_count": 18,
+      "min_count": 14,
+      "recorded_main_chars": 2975,
+      "min_main_chars": 1487
+    },
+    {
+      "route": "/california/policy",
+      "file": "california/policy.html",
+      "selector": "main a[href]",
+      "recorded_count": 68,
+      "min_count": 54,
+      "recorded_main_chars": 10209,
+      "min_main_chars": 5104
+    },
+    {
+      "route": "/california/quality",
+      "file": "california/quality.html",
+      "selector": "main article",
+      "recorded_count": 6,
+      "min_count": 4,
+      "recorded_main_chars": 3725,
+      "min_main_chars": 1862
+    },
+    {
+      "route": "/california/resources",
+      "file": "california/resources.html",
+      "selector": "main a[href]",
+      "recorded_count": 45,
+      "min_count": 36,
+      "recorded_main_chars": 5071,
+      "min_main_chars": 2535
+    },
+    {
+      "route": "/california/search",
+      "file": "california/search.html",
+      "selector": "main h1",
+      "recorded_count": 1,
+      "min_count": 1,
+      "recorded_main_chars": 257,
+      "min_main_chars": 128
+    },
+    {
+      "route": "/california/styleguide",
+      "file": "california/styleguide.html",
+      "selector": "main svg",
+      "recorded_count": 27,
+      "min_count": 21,
+      "recorded_main_chars": 2403,
+      "min_main_chars": 1201
+    },
+    {
+      "route": "/california/topics",
+      "file": "california/topics.html",
+      "selector": "main article",
+      "recorded_count": 20,
+      "min_count": 16,
+      "recorded_main_chars": 37115,
+      "min_main_chars": 18557
+    },
+    {
+      "route": "/california/expert.html",
+      "file": "california/expert.html",
+      "selector": "main a[href]",
+      "recorded_count": 6,
+      "min_count": 4,
+      "recorded_main_chars": 365,
+      "min_main_chars": 182
+    }
+  ],
+  "seo_entity_pages": {},
+  "link_graph": {
+    "total_checked": 257265,
+    "checked": {
+      "author_file.author->institution": 3660,
+      "author_file.author->work": 5220,
+      "author_file.file->author": 2680,
+      "author_file.work->author": 25772,
+      "author_file.work->institution": 23088,
+      "author_file.work->work": 5220,
+      "index.author->author_file": 2680,
+      "index.author->institution": 3660,
+      "index.author->work": 5220,
+      "index.work->author": 5220,
+      "index.work->institution": 7675,
+      "institution_works.expert->author": 3416,
+      "institution_works.file->institution": 2259,
+      "institution_works.work->author": 35283,
+      "institution_works.work->institution": 114406,
+      "institution_works.work->work": 10903,
+      "institutions.top_expert->author": 903
+    },
+    "unlinked_by_design": {
+      "author_file.work->author": 19894,
+      "index.work->author": 7856,
+      "institution_works.expert (not indexed)": 6939,
+      "institution_works.work->author": 116339,
+      "institutions.top_expert (not indexed)": 3399
+    },
+    "broken": 0,
+    "allowlist": []
+  }
+}

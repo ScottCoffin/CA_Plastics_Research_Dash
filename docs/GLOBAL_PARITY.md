@@ -100,3 +100,35 @@ Each slice must pass the GP-1 California contract unchanged: route list, DOM smo
 Overall: about 9 slices, four of them L. The first two (GP-2 and GP-3) carry most of the cost and most of the R2
 decision. GP-6, GP-7 and GP-9 depend on owner-supplied sources, so they should start as soon as the owner names
 the first region's sources.
+
+## GP-1 contract (California regression gate)
+
+Every GP slice must leave the California atlas unchanged. `scripts/check_gp1_contract.py` checks the
+recorded contract in `config/gp1_california_contract.json` (schema `gp1-v1`, recorded 2026-11-26):
+
+- **Routes**: the 16 Framework pages in `framework/src/california/*.md` plus the classic `california/expert.html`
+  must exist in the assembled site.
+- **DOM smoke** (headless Chromium, served on 127.0.0.1 on a free port; every other request is aborted):
+  each page returns HTTP 200 with no `pageerror`, its root selector reaches the recorded minimum count
+  (80% of today's count), its `<main>` text reaches its minimum length, and there is no horizontal
+  overflow at 390 px.
+- **Link graph** (offline, from `data/california/`): every author, institution and work reference that the
+  UI turns into a link resolves. Broken links must be 0 (or listed in the contract `allowlist`).
+  Co-authors who are not in the atlas index are plain text and are reported as "unlinked by design".
+
+Before and after each GP slice (about 1 minute; needs Node for the build and Playwright Chromium):
+
+```bash
+cd framework && npm run build && cd ..
+py -3.14 scripts/assemble_site.py --site site --dist framework/dist --out scratch/gp1_site
+py -3.14 scripts/check_gp1_contract.py --site scratch/gp1_site --screenshots scratch/gp1_shots
+```
+
+Run the first command before the slice to confirm the baseline passes, and again after it. Compare the
+screenshots in `scratch/gp1_shots/` (`<page>-1440.png` and `<page>-390.png`) by eye. `--links-only` runs the
+link graph alone without a browser. `--record` rewrites the contract; use it only for an intended California
+change, and say why in the commit. A failing run exits 1 and lists each problem. The unit tests are in
+`tests/test_gp1_contract.py` and do not need a browser.
+
+Baseline (2026-11-26, the assembled site from the working tree at commit 484a07ad): 17 routes; 257,265 links
+checked, 0 broken, 154,427 unlinked by design; runtime about 50 s in the browser and 2.5 s for the link graph.
