@@ -1,1 +1,6 @@
 group_id_keep,group_id_drop,decided_at,decision
+cg_599c0ad28e02cde3,cg_9275d2c103dfc0c1,2026-11-26T23:05:11Z,same
+cg_c9880272433b148f,cg_370020d7b1134b39,2026-11-26T23:05:24Z,same
+cg_c612b180059e51ee,cg_0ab0b7e1d842848f,2026-11-26T23:05:33Z,same
+cg_06f28b750fe5d830,cg_8ae10b7c8231e372,2026-11-26T23:05:43Z,same
+cg_b863c45154a1d101,cg_85d1df911ecc9beb,2026-11-26T23:06:00Z,different

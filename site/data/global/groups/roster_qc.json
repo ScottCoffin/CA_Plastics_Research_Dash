@@ -37,11 +37,6 @@
    "reason": "same_domain"
   },
   {
-   "a": "cg_06f28b750fe5d830",
-   "b": "cg_8ae10b7c8231e372",
-   "reason": "same_domain"
-  },
-  {
    "a": "cg_0756c98d1c8d0450",
    "b": "cg_0e078b36172cb4a6",
    "reason": "similar_name"
@@ -74,11 +69,6 @@
   {
    "a": "cg_0a3bd1a637c12859",
    "b": "cg_5d21dd2ebceb7b10",
-   "reason": "same_domain"
-  },
-  {
-   "a": "cg_0ab0b7e1d842848f",
-   "b": "cg_c612b180059e51ee",
    "reason": "same_domain"
   },
   {
@@ -412,11 +402,6 @@
    "reason": "similar_name"
   },
   {
-   "a": "cg_370020d7b1134b39",
-   "b": "cg_c9880272433b148f",
-   "reason": "same_domain"
-  },
-  {
    "a": "cg_385c500a06a7fd46",
    "b": "cg_7cbf3efbc9e67974",
    "reason": "similar_name"
@@ -667,11 +652,6 @@
    "reason": "similar_name"
   },
   {
-   "a": "cg_599c0ad28e02cde3",
-   "b": "cg_9275d2c103dfc0c1",
-   "reason": "same_domain"
-  },
-  {
    "a": "cg_59b5d195f1984cbf",
    "b": "cg_64b0dcda936f4e1f",
    "reason": "same_domain"
@@ -874,11 +854,6 @@
   {
    "a": "cg_846f0d49a402a25e",
    "b": "cg_ae014a638d843f8c",
-   "reason": "same_domain"
-  },
-  {
-   "a": "cg_85d1df911ecc9beb",
-   "b": "cg_b863c45154a1d101",
    "reason": "same_domain"
   },
   {

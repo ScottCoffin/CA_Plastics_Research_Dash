@@ -61,8 +61,13 @@ Sample: seed 20261126, stratified by country group (US 73, IN 16, PH 16, GB 12, 
 ## Decisions for the owner
 
 1. **A4-D11 interpretation.** Does a Wikidata or registry lookup shown as a suggestion, and confirmed by the ambassador, count as "scraping- or crawling-based tagging"? Recommended answer: no. If yes, amend A4-D11 to name these lookups explicitly.
+no.
 2. **Attribution text.** Approve an attribution line in the dataset licence for CC0 (Wikidata), public domain (IRS), OGL (UK, Canada) and CC BY 3.0 AU (ACNC).
+yes.
 3. **Share-alike exclusions.** Confirm no OpenCorporates bulk data and no Wikipedia text in the dataset.
+confirmed
 4. **Candid.** Approve or decline a paid subscription (A4-D9). Recommendation: decline for now.
+declide paid.
 5. **Roster cleanup first.** Fix country artefacts (AF), duplicates and person-name groups before the country filter runs.
+yes.
 6. **Licence verification.** Confirm the Belgium, Norway and India terms and the Charity Commission download licence on the live pages; several could not be fetched in this session.

@@ -295,3 +295,4 @@
 | 2026-11-26 | GRP-REVIEW-APPLY | Complete reviewer checks publish edited values, status reviewed and reviewed_at; group_reviews.csv gains reviewed_value. 136 focused tests; build --check identical. | this commit |
 | 2026-11-26 | FAVICON-MAIN | Logo-derived favicons on every page (sun at small sizes, full mark at 180/512); 26 dist pages share one icon set. | this commit |
 | 2026-11-26 | GRP-ENRICH spike | docs/GROUP_ENRICHMENT_OPTIONS.md: Wikidata 64/300 matched (51 correct), domain matches 42/47 correct; registers surveyed; H61 asks the owner. | this commit |
+| 2026-11-26 | H60-H62 answers | H62: owner merges committed, roster_qc 213 pairs; H61: enrichment suggestions approved (ADR-GRP-ENRICH); H60 approved (deploy after slices C, D). | this commit |
