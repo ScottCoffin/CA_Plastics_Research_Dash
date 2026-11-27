@@ -1,0 +1,4199 @@
+{
+ "groups": {
+  "cg_01c0099430d65262": {
+   "inception_year": 1975,
+   "match": "website",
+   "qid": "Q15055136",
+   "type_labels": [
+    "university",
+    "public university"
+   ],
+   "types": [
+    "Q3918",
+    "Q875538"
+   ],
+   "website": "https://www.iub.edu.pk/"
+  },
+  "cg_05c76320051784b2": {
+   "inception_year": 2012,
+   "match": "website",
+   "qid": "Q24189436",
+   "type_labels": [
+    "nonprofit organization",
+    "charitable organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q708676"
+   ],
+   "website": "http://www.afd.org.au"
+  },
+  "cg_074e0e07ab03966c": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q117824156",
+   "type_labels": [
+    "think tank"
+   ],
+   "types": [
+    "Q155271"
+   ],
+   "website": "https://homef.org/"
+  },
+  "cg_07d9fb4f38da59ef": {
+   "inception_year": 1800,
+   "match": "label",
+   "qid": "Q5499251",
+   "type_labels": [
+    "high school"
+   ],
+   "types": [
+    "Q9826"
+   ],
+   "website": null
+  },
+  "cg_09dc261a04b376d3": {
+   "inception_year": 1956,
+   "match": "website",
+   "qid": "Q1049470",
+   "type_labels": [
+    "university in Ontario",
+    "open-access publisher",
+    "public research university",
+    "charitable organization"
+   ],
+   "types": [
+    "Q108403040",
+    "Q45400320",
+    "Q62078547",
+    "Q708676"
+   ],
+   "website": "https://uwaterloo.ca"
+  },
+  "cg_09e7aef25a03338a": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q110892493",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://changingmarkets.org"
+  },
+  "cg_0a28197c7d32f781": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q5059709",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.ciel.org/"
+  },
+  "cg_0a52eb5a92cb2250": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131904375",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.foodandwatereurope.org/"
+  },
+  "cg_0c35f07fbb7a8e2c": {
+   "inception_year": 1945,
+   "match": "label",
+   "qid": "Q7355654",
+   "type_labels": [
+    "high school"
+   ],
+   "types": [
+    "Q9826"
+   ],
+   "website": "http://www.Rockway.ca"
+  },
+  "cg_0c5e611e6f782aaa": {
+   "inception_year": 1979,
+   "match": "label",
+   "qid": "Q30290237",
+   "type_labels": [
+    "facility",
+    "think tank"
+   ],
+   "types": [
+    "Q13226383",
+    "Q155271"
+   ],
+   "website": "http://www.kmfri.co.ke/"
+  },
+  "cg_0f177226d2340022": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q194263",
+   "type_labels": [
+    "mesoregion",
+    "mountain range"
+   ],
+   "types": [
+    "Q3491088",
+    "Q46831"
+   ],
+   "website": "https://tpn.pl/"
+  },
+  "cg_0f55f959562ccafc": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q141548002",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.jreds.org"
+  },
+  "cg_0ff0fc289b887bfc": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q16982680",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.greenschoolsalliance.org/"
+  },
+  "cg_105f16d99aef60b1": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131884651",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.gopha.org/"
+  },
+  "cg_10e85f9bdfbdc43c": {
+   "inception_year": 2020,
+   "match": "label",
+   "qid": "Q136750555",
+   "type_labels": [
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q79913"
+   ],
+   "website": "https://ecct.or.tz/about.php"
+  },
+  "cg_1124656834af9130": {
+   "inception_year": 2017,
+   "match": "website",
+   "qid": "Q117113116",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.zerowasteaustria.at"
+  },
+  "cg_11569e18eff739bf": {
+   "inception_year": 2012,
+   "match": "website",
+   "qid": "Q47499160",
+   "type_labels": [
+    "startup company",
+    "application software",
+    "project"
+   ],
+   "types": [
+    "Q129238",
+    "Q166142",
+    "Q170584"
+   ],
+   "website": "https://www.litterati.org"
+  },
+  "cg_128517efbf526add": {
+   "inception_year": 2006,
+   "match": "website",
+   "qid": "Q138860424",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://sst.org.za"
+  },
+  "cg_13a97fe7ea77f6c1": {
+   "inception_year": 1968,
+   "match": "website",
+   "qid": "Q1974827",
+   "type_labels": [
+    "nonprofit organization",
+    "charitable organization",
+    "Christian organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q708676",
+    "Q94670589"
+   ],
+   "website": "http://www.tearfund.org/"
+  },
+  "cg_1455cca7d1003b53": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q54556743",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.savebay.org"
+  },
+  "cg_14aef4823840b979": {
+   "inception_year": 1998,
+   "match": "website",
+   "qid": "Q17081649",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://ipen.org/"
+  },
+  "cg_15af2f7a4dc05a34": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q136565870",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://gebis.org/"
+  },
+  "cg_15ed94f91de001d4": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q5504331",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733",
+    "Q79913"
+   ],
+   "website": "http://www.foeeurope.org/"
+  },
+  "cg_167c9d3ea0e2f788": {
+   "inception_year": 2011,
+   "match": "website",
+   "qid": "Q140412625",
+   "type_labels": [
+    "month-long observance",
+    "campaign"
+   ],
+   "types": [
+    "Q27940535",
+    "Q6056746"
+   ],
+   "website": "https://www.plasticfreejuly.org/"
+  },
+  "cg_17b0fddcdf72cf57": {
+   "inception_year": 2009,
+   "match": "website",
+   "qid": "Q4848473",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://ebm.si"
+  },
+  "cg_17bf61f8fafc7b76": {
+   "inception_year": 1973,
+   "match": "website",
+   "qid": "Q42759853",
+   "type_labels": [
+    "nonprofit organization",
+    "conservation organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1899015"
+   ],
+   "website": "http://www.tierra.org"
+  },
+  "cg_185b52b98328df5b": {
+   "inception_year": 1909,
+   "match": "website",
+   "qid": "Q502044",
+   "type_labels": [
+    "nonprofit organization",
+    "advocacy group"
+   ],
+   "types": [
+    "Q163740",
+    "Q431603"
+   ],
+   "website": "https://www.naacp.org/"
+  },
+  "cg_193d37480d17c4ed": {
+   "inception_year": 1915,
+   "match": "website",
+   "qid": "Q371924",
+   "type_labels": [
+    "nonprofit organization",
+    "service club",
+    "organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1897098",
+    "Q43229",
+    "Q79913"
+   ],
+   "website": "http://www.jci.cc/"
+  },
+  "cg_19f789cbc4f3d240": {
+   "inception_year": 1984,
+   "match": "label",
+   "qid": "Q5062431",
+   "type_labels": [
+    "organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q43229",
+    "Q79913"
+   ],
+   "website": null
+  },
+  "cg_1a1d650159a7475f": {
+   "inception_year": 2007,
+   "match": "website",
+   "qid": "Q60740327",
+   "type_labels": [
+    "government agency"
+   ],
+   "types": [
+    "Q327333"
+   ],
+   "website": "https://www.nesrea.gov.ng"
+  },
+  "cg_1a4cd4f6d097bb82": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q7826350",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": null
+  },
+  "cg_1baa33f301de2605": {
+   "inception_year": 1872,
+   "match": "website",
+   "qid": "Q65379",
+   "type_labels": [
+    "public educational institution of the United States",
+    "United States senior military college",
+    "university",
+    "land-grant university"
+   ],
+   "types": [
+    "Q23002039",
+    "Q3445354",
+    "Q3918",
+    "Q615150"
+   ],
+   "website": "https://www.vt.edu/"
+  },
+  "cg_1d20eb5529e8a57f": {
+   "inception_year": 1982,
+   "match": "website",
+   "qid": "Q5162941",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://conservationvolunteers.com.au/"
+  },
+  "cg_1dc0dfc3c8e87fb5": {
+   "inception_year": 1927,
+   "match": "website",
+   "qid": "Q136684104",
+   "type_labels": [
+    "organization",
+    "charitable organization"
+   ],
+   "types": [
+    "Q43229",
+    "Q708676"
+   ],
+   "website": "https://aprs.scot/"
+  },
+  "cg_1e40772618a811ee": {
+   "inception_year": 1971,
+   "match": "website",
+   "qid": "Q3046469",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.earthjustice.org/"
+  },
+  "cg_1e4e22c2b2e167c3": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q114556449",
+   "type_labels": [
+    "nonprofit organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q79913"
+   ],
+   "website": null
+  },
+  "cg_1f651e797a6534f7": {
+   "inception_year": 2007,
+   "match": "website",
+   "qid": "Q5381013",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://environmentamerica.org/"
+  },
+  "cg_1fdef21feafc5c97": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q125054823",
+   "type_labels": [
+    "nonprofit organization",
+    "conservation organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1899015"
+   ],
+   "website": "https://www.cuyahogaswcd.org/"
+  },
+  "cg_20cf29cd94094f1e": {
+   "inception_year": 2011,
+   "match": "website",
+   "qid": "Q101816725",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.plasticsoupfoundation.org/"
+  },
+  "cg_2490cc60666fe393": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q15763268",
+   "type_labels": [
+    "scientific journal"
+   ],
+   "types": [
+    "Q5633421"
+   ],
+   "website": "http://fairmontpress.metapress.com/openurl.asp?genre=journal&issn=0199-8595"
+  },
+  "cg_2527fe351c23b450": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q117217148",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://www.savethemed.org/"
+  },
+  "cg_29d31aaa63d74db3": {
+   "inception_year": 1980,
+   "match": "website",
+   "qid": "Q1812381",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.legambiente.it"
+  },
+  "cg_2a950aa303962092": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q55390699",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.healthygulf.org"
+  },
+  "cg_2af3e880ef78f975": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q54834275",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.eany.org/"
+  },
+  "cg_2afd31641d542023": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q54816103",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.oceanfdn.org"
+  },
+  "cg_2b8299c3eb5e6f9f": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q114128448",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://www.ploggingnigeria.org/"
+  },
+  "cg_2bd38f182bd03309": {
+   "inception_year": 1965,
+   "match": "website",
+   "qid": "Q108808199",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://rachelcarsoncouncil.org/"
+  },
+  "cg_2d12802d42fa6b10": {
+   "inception_year": 2000,
+   "match": "website",
+   "qid": "Q5381126",
+   "type_labels": [
+    "organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q43229",
+    "Q79913"
+   ],
+   "website": "http://ejfoundation.org"
+  },
+  "cg_2e02750031801210": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131906454",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.humanrights.at"
+  },
+  "cg_2e89cf2b7345c8fe": {
+   "inception_year": 2005,
+   "match": "website",
+   "qid": "Q5465276",
+   "type_labels": [
+    "nonprofit organization",
+    "food safety organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q30234158",
+    "Q79913"
+   ],
+   "website": "http://www.foodandwaterwatch.org/"
+  },
+  "cg_2e9e9013f23938c5": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q104521340",
+   "type_labels": [
+    "nonprofit organization",
+    "organization",
+    "social movement"
+   ],
+   "types": [
+    "Q163740",
+    "Q43229",
+    "Q49773"
+   ],
+   "website": "https://www.fairfin.be"
+  },
+  "cg_2eb0a01eaf1e3511": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q5381131",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.elaw.org"
+  },
+  "cg_2fe8eb7d2d4a1ea7": {
+   "inception_year": 2018,
+   "match": "website",
+   "qid": "Q126941852",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.lastbeachcleanup.org/"
+  },
+  "cg_2fecb388fedf681d": {
+   "inception_year": 1991,
+   "match": "website",
+   "qid": "Q16948471",
+   "type_labels": [
+    "art museum"
+   ],
+   "types": [
+    "Q207694"
+   ],
+   "website": "http://www.walterandersonmuseum.org"
+  },
+  "cg_309eefebde570aa1": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q108770505",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.momscleanairforce.org/"
+  },
+  "cg_320598c7aeea713f": {
+   "inception_year": 1975,
+   "match": "website",
+   "qid": "Q1204319",
+   "type_labels": [
+    "charitable corporation",
+    "consumer organization",
+    "nonprofit organization",
+    "pressure group",
+    "environmental organization",
+    "conservation organization"
+   ],
+   "types": [
+    "Q113805953",
+    "Q1329436",
+    "Q163740",
+    "Q1666019",
+    "Q1785733",
+    "Q1899015"
+   ],
+   "website": "https://www.duh.de/"
+  },
+  "cg_326e8c5312f2d709": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q54850981",
+   "type_labels": [
+    "information system",
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q121182",
+    "Q163740"
+   ],
+   "website": "http://www.earthday.org/"
+  },
+  "cg_327261fa21631668": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q2986742",
+   "type_labels": [
+    "school board of Quebec"
+   ],
+   "types": [
+    "Q2986739"
+   ],
+   "website": "http://www.cscharlevoix.qc.ca"
+  },
+  "cg_3337c547eae09f61": {
+   "inception_year": 1936,
+   "match": "website",
+   "qid": "Q178231",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization",
+    "advocacy group"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733",
+    "Q431603"
+   ],
+   "website": "http://www.nwf.org/"
+  },
+  "cg_33fa602b5068f73c": {
+   "inception_year": 2018,
+   "match": "website",
+   "qid": "Q111371023",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.wingsoftheocean.com/"
+  },
+  "cg_342f937d2b58b29a": {
+   "inception_year": 1837,
+   "match": "label",
+   "qid": "Q1179599",
+   "type_labels": [
+    "liberal arts college",
+    "private not-for-profit educational institution"
+   ],
+   "types": [
+    "Q1377182",
+    "Q23002054"
+   ],
+   "website": "https://www.depauw.edu/"
+  },
+  "cg_34617da84940a225": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q5453957",
+   "type_labels": [],
+   "types": [],
+   "website": "http://www.fuub.org/"
+  },
+  "cg_348aa519bac765ee": {
+   "inception_year": 1902,
+   "match": "website",
+   "qid": "Q3904",
+   "type_labels": [
+    "city"
+   ],
+   "types": [
+    "Q515"
+   ],
+   "website": "http://www.mbabane.org.sz/"
+  },
+  "cg_35e611cf891249e2": {
+   "inception_year": 2009,
+   "match": "website",
+   "qid": "Q61933300",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://asbcouncil.org/"
+  },
+  "cg_3716e9ee58ee2723": {
+   "inception_year": 2004,
+   "match": "website",
+   "qid": "Q4974367",
+   "type_labels": [
+    "wildlife refuge",
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q1377575",
+    "Q163740"
+   ],
+   "website": "https://www.brooksanctuary.org.nz"
+  },
+  "cg_3716fb79dffb7dae": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q30287197",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": null
+  },
+  "cg_3763b44ac6dab217": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q18606304",
+   "type_labels": [
+    "public aquarium"
+   ],
+   "types": [
+    "Q2281788"
+   ],
+   "website": "http://www.acuariodelrioparana.gob.ar/"
+  },
+  "cg_378d6764b39ba906": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q110063585",
+   "type_labels": [
+    "green party",
+    "political party"
+   ],
+   "types": [
+    "Q3778417",
+    "Q7278"
+   ],
+   "website": "https://www.greenparty.ph/"
+  },
+  "cg_37bd1a37b2cc1d76": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137514750",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.foecanada.org"
+  },
+  "cg_39acff324acb909e": {
+   "inception_year": 1949,
+   "match": "website",
+   "qid": "Q1026926",
+   "type_labels": [
+    "public educational institution of the United States",
+    "public university"
+   ],
+   "types": [
+    "Q23002039",
+    "Q875538"
+   ],
+   "website": "https://www.csulb.edu/"
+  },
+  "cg_3a1b2bcbc51f90d5": {
+   "inception_year": 1997,
+   "match": "website",
+   "qid": "Q111470236",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.udyama.org"
+  },
+  "cg_3b36e2e9cb122103": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q118117361",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://alana.org.br/"
+  },
+  "cg_3b7babf92489d116": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q98382095",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.palwv.org"
+  },
+  "cg_3bf6e40d37764779": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q54857668",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://lawaterkeeper.org/"
+  },
+  "cg_3c36761d4c9b93b9": {
+   "inception_year": 2014,
+   "match": "label",
+   "qid": "Q140725977",
+   "type_labels": [
+    "nonprofit organization",
+    "advocacy group"
+   ],
+   "types": [
+    "Q163740",
+    "Q431603"
+   ],
+   "website": "https://pipelinesafetycoalition.org/"
+  },
+  "cg_3ccb60c3cc80b323": {
+   "inception_year": 1980,
+   "match": "label",
+   "qid": "Q7122770",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.pacificwhale.org/pacific-whale-foundation/"
+  },
+  "cg_3d62fd0f6783770f": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137514795",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.priateliazeme.sk"
+  },
+  "cg_3de5635a5add0eb4": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q141547496",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.mcdvietnam.org"
+  },
+  "cg_40af1f95b4964bae": {
+   "inception_year": 1961,
+   "match": "website",
+   "qid": "Q6053054",
+   "type_labels": [
+    "school"
+   ],
+   "types": [
+    "Q3914"
+   ],
+   "website": "http://www.iszl.ch"
+  },
+  "cg_4283990976c2bede": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q49111",
+   "type_labels": [
+    "city in the United States",
+    "city"
+   ],
+   "types": [
+    "Q1093829",
+    "Q515"
+   ],
+   "website": "https://www.cambridgema.gov/"
+  },
+  "cg_44f3ff5aa215d6a6": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q5381104",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://environmentaldefence.ca/"
+  },
+  "cg_4567a2594b329510": {
+   "inception_year": 1956,
+   "match": "website",
+   "qid": "Q136716883",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.vmch.com.au"
+  },
+  "cg_45e7f9673b37df21": {
+   "inception_year": 1993,
+   "match": "label",
+   "qid": "Q12481855",
+   "type_labels": [
+    "charitable organization"
+   ],
+   "types": [
+    "Q708676"
+   ],
+   "website": "https://www.dompetdhuafa.org/en/"
+  },
+  "cg_462634601bfef9e5": {
+   "inception_year": 1985,
+   "match": "website",
+   "qid": "Q5690167",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.healthebay.org"
+  },
+  "cg_4747b2be8222498e": {
+   "inception_year": 2016,
+   "match": "website",
+   "qid": "Q112287441",
+   "type_labels": [
+    "nonprofit organization",
+    "research institute"
+   ],
+   "types": [
+    "Q163740",
+    "Q31855"
+   ],
+   "website": "https://isea.com.gr"
+  },
+  "cg_48a80b881678ebd1": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137514763",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.foecyprus.org/"
+  },
+  "cg_4a0e4eff518717a6": {
+   "inception_year": 1970,
+   "match": "website",
+   "qid": "Q841895",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.nrdc.org"
+  },
+  "cg_4a4b2c452020ed2a": {
+   "inception_year": 2005,
+   "match": "website",
+   "qid": "Q16849215",
+   "type_labels": [
+    "research institute",
+    "university"
+   ],
+   "types": [
+    "Q31855",
+    "Q3918"
+   ],
+   "website": "http://www.jsg.utexas.edu/"
+  },
+  "cg_4d38e434dfb2ea51": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q5130528",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.cleanwateraction.org"
+  },
+  "cg_4e46c620d821d1d2": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q11087644",
+   "type_labels": [
+    "university institute",
+    "government organization"
+   ],
+   "types": [
+    "Q11946645",
+    "Q2659904"
+   ],
+   "website": "https://cxi.tul.cz"
+  },
+  "cg_4e69c16acfe1ea5c": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q3859231",
+   "type_labels": [
+    "Catholic religious institute",
+    "charitable organization"
+   ],
+   "types": [
+    "Q5135744",
+    "Q708676"
+   ],
+   "website": "http://www.glenmary.org/"
+  },
+  "cg_4fa573617514f5fe": {
+   "inception_year": 2012,
+   "match": "website",
+   "qid": "Q107410316",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://www.parley.tv"
+  },
+  "cg_4fe4c812d989abef": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q141880011",
+   "type_labels": [
+    "school"
+   ],
+   "types": [
+    "Q3914"
+   ],
+   "website": null
+  },
+  "cg_5111852242f1b187": {
+   "inception_year": 2004,
+   "match": "website",
+   "qid": "Q67433419",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.sailorsforthesea.org"
+  },
+  "cg_51840f5e3d027493": {
+   "inception_year": 1993,
+   "match": "website",
+   "qid": "Q141637901",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://fonghana.org/"
+  },
+  "cg_532699f45b913c37": {
+   "inception_year": 1917,
+   "match": "website",
+   "qid": "Q270029",
+   "type_labels": [
+    "nonprofit organization",
+    "service club",
+    "organization",
+    "international organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1897098",
+    "Q43229",
+    "Q484652",
+    "Q79913"
+   ],
+   "website": "https://lionsclubs.org"
+  },
+  "cg_537ca27da68584c0": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q54134",
+   "type_labels": [
+    "city in the United States"
+   ],
+   "types": [
+    "Q1093829"
+   ],
+   "website": "http://www.cityofnewburyport.com/"
+  },
+  "cg_53f5bdd17093e130": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131906188",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.ecorec.gr"
+  },
+  "cg_55732924585d069c": {
+   "inception_year": 1962,
+   "match": "website",
+   "qid": "Q8001314",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.wildlife.org.au"
+  },
+  "cg_5682d02a74d001a2": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q142024200",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://climatereality.ph"
+  },
+  "cg_57039183f4e96f15": {
+   "inception_year": 1987,
+   "match": "website",
+   "qid": "Q7076166",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://oceana.org/"
+  },
+  "cg_572516181e5ccac6": {
+   "inception_year": 1996,
+   "match": "website",
+   "qid": "Q7437713",
+   "type_labels": [
+    "executive non-departmental public body"
+   ],
+   "types": [
+    "Q137322982"
+   ],
+   "website": "https://www.sepa.org.uk"
+  },
+  "cg_58d585960f46df6f": {
+   "inception_year": 2000,
+   "match": "label",
+   "qid": "Q17003845",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.greenpeace.org/indonesia/"
+  },
+  "cg_5aa6d400c763cc25": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q64579513",
+   "type_labels": [
+    "environmental non-governmental organization"
+   ],
+   "types": [
+    "Q3356062"
+   ],
+   "website": "https://www.goldmanprize.org/"
+  },
+  "cg_5b674db82d8916b3": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137514768",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.greens.ge"
+  },
+  "cg_5b6957bb9c28ba24": {
+   "inception_year": 1969,
+   "match": "website",
+   "qid": "Q5504330",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.foe.org"
+  },
+  "cg_5ba833683bf97b4d": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q30256990",
+   "type_labels": [
+    "research institute"
+   ],
+   "types": [
+    "Q31855"
+   ],
+   "website": "http://www.instm.agrinet.tn/"
+  },
+  "cg_5c6da0a661b653fb": {
+   "inception_year": 1992,
+   "match": "website",
+   "qid": "Q4855300",
+   "type_labels": [
+    "nonprofit organization",
+    "organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q43229"
+   ],
+   "website": "https://belabangla.org/"
+  },
+  "cg_5d82969faaf4b624": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q7122442",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.pacificenvironment.org/"
+  },
+  "cg_5e15f25d0454fa6e": {
+   "inception_year": 1996,
+   "match": "website",
+   "qid": "Q19879074",
+   "type_labels": [
+    "advocacy group"
+   ],
+   "types": [
+    "Q431603"
+   ],
+   "website": "http://www.ceh.org/"
+  },
+  "cg_60b5e4cc630e2ba7": {
+   "inception_year": 1937,
+   "match": "website",
+   "qid": "Q4744946",
+   "type_labels": [
+    "nonprofit organization",
+    "school"
+   ],
+   "types": [
+    "Q163740",
+    "Q3914"
+   ],
+   "website": "http://www.earj.com.br/"
+  },
+  "cg_6108142fe41ab08e": {
+   "inception_year": 2014,
+   "match": "website",
+   "qid": "Q65274650",
+   "type_labels": [
+    "science project",
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q1298668",
+    "Q163740"
+   ],
+   "website": "https://exxpedition.com/"
+  },
+  "cg_622b3d695b5bead2": {
+   "inception_year": 1997,
+   "match": "website",
+   "qid": "Q130244412",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://jtalliance.org/"
+  },
+  "cg_634b8bc0c1564f9d": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q54812386",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://toxicfreefuture.org/"
+  },
+  "cg_64ac6ce449715354": {
+   "inception_year": 1999,
+   "match": "website",
+   "qid": "Q112132023",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://probicou.org/"
+  },
+  "cg_64c01abd8a54795a": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131904426",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.sciaena.org"
+  },
+  "cg_652c7288b0765b3a": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q6221",
+   "type_labels": [
+    "comune of Italy"
+   ],
+   "types": [
+    "Q747074"
+   ],
+   "website": "https://www.brescia.eu/it/"
+  },
+  "cg_6590be4c0849a1ab": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q5381027",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.environmentoregon.org/"
+  },
+  "cg_663cb5a51d561def": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q130244397",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://ironboundcc.org/"
+  },
+  "cg_66e7f61d398aa6b9": {
+   "inception_year": 1997,
+   "match": "website",
+   "qid": "Q6747094",
+   "type_labels": [
+    "engineering school"
+   ],
+   "types": [
+    "Q1663017"
+   ],
+   "website": "https://manavrachna.edu.in/"
+  },
+  "cg_67a08b670ad1b452": {
+   "inception_year": 2000,
+   "match": "label",
+   "qid": "Q5691394",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.healthybuilding.net/"
+  },
+  "cg_692b3bb91673b679": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q141112580",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.greenlatinos.org/"
+  },
+  "cg_6988af0a618baff1": {
+   "inception_year": 1875,
+   "match": "website",
+   "qid": "Q1661325",
+   "type_labels": [
+    "public educational institution of the United States",
+    "university"
+   ],
+   "types": [
+    "Q23002039",
+    "Q3918"
+   ],
+   "website": "http://www.iup.edu"
+  },
+  "cg_69d7a8a3fd50bc89": {
+   "inception_year": 1918,
+   "match": "label",
+   "qid": "Q7896720",
+   "type_labels": [
+    "university"
+   ],
+   "types": [
+    "Q3918"
+   ],
+   "website": "http://upcebu.edu.ph/"
+  },
+  "cg_69e19bc8e5f8bc71": {
+   "inception_year": 1984,
+   "match": "website",
+   "qid": "Q1128567",
+   "type_labels": [
+    "foundation",
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q157031",
+    "Q163740"
+   ],
+   "website": "http://www.surfrider.org/"
+  },
+  "cg_6b098ababa0373af": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q2683",
+   "type_labels": [
+    "big city",
+    "medieval commune",
+    "city",
+    "comune of Italy"
+   ],
+   "types": [
+    "Q1549591",
+    "Q5107861",
+    "Q515",
+    "Q747074"
+   ],
+   "website": "https://www.comune.parma.it"
+  },
+  "cg_6b0beaaed8e4b818": {
+   "inception_year": 1969,
+   "match": "website",
+   "qid": "Q6509032",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.lcv.org/"
+  },
+  "cg_6b9e4e26d5c9c083": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q189546",
+   "type_labels": [
+    "municipality of Tunisia",
+    "city"
+   ],
+   "types": [
+    "Q41067667",
+    "Q515"
+   ],
+   "website": "http://www.commune-bizerte.gov.tn/"
+  },
+  "cg_6d9afd717a259ef5": {
+   "inception_year": 2013,
+   "match": "label",
+   "qid": "Q136470260",
+   "type_labels": [
+    "nonprofit organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q79913"
+   ],
+   "website": "https://nipefagio.co.tz/"
+  },
+  "cg_6deb131d0cf9a399": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q141603906",
+   "type_labels": [
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q79913"
+   ],
+   "website": "https://cecicug.org/"
+  },
+  "cg_6e1cec81bce1734c": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137514786",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.propublic.org"
+  },
+  "cg_6edfe11852646c0a": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q9340572",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.sie.org.pl"
+  },
+  "cg_6f7ee804a64d457d": {
+   "inception_year": 1855,
+   "match": "website",
+   "qid": "Q1012550",
+   "type_labels": [
+    "municipality of Brazil"
+   ],
+   "types": [
+    "Q3184121"
+   ],
+   "website": "http://www.lajeado.rs.gov.br/"
+  },
+  "cg_6fbe47bc33f8aa68": {
+   "inception_year": 1984,
+   "match": "website",
+   "qid": "Q1674223",
+   "type_labels": [
+    "book publisher",
+    "nonprofit organization",
+    "publishing house"
+   ],
+   "types": [
+    "Q1320047",
+    "Q163740",
+    "Q2085381"
+   ],
+   "website": "http://www.islandpress.org"
+  },
+  "cg_723ee3d6dd1c284d": {
+   "inception_year": 2007,
+   "match": "website",
+   "qid": "Q117267958",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://rempa.com.mx/"
+  },
+  "cg_724c5e515bdbc039": {
+   "inception_year": 2010,
+   "match": "label",
+   "qid": "Q136141620",
+   "type_labels": [
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q79913"
+   ],
+   "website": "http://www.carboneguinee.org/"
+  },
+  "cg_73c785cdd70308ca": {
+   "inception_year": 1980,
+   "match": "website",
+   "qid": "Q85060",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.ashoka.org"
+  },
+  "cg_7498fdde6ac54f69": {
+   "inception_year": 1974,
+   "match": "website",
+   "qid": "Q694459",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.eeb.org/"
+  },
+  "cg_75bbee60afa60007": {
+   "inception_year": 1966,
+   "match": "website",
+   "qid": "Q5162928",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.clf.org/"
+  },
+  "cg_75d60a4405ac7bd9": {
+   "inception_year": 1997,
+   "match": "website",
+   "qid": "Q61931240",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.akaction.org"
+  },
+  "cg_75f607c9abf9140e": {
+   "inception_year": 2004,
+   "match": "website",
+   "qid": "Q16205360",
+   "type_labels": [
+    "university"
+   ],
+   "types": [
+    "Q3918"
+   ],
+   "website": "http://www.acsenda.com/"
+  },
+  "cg_765d969cc3f95f4b": {
+   "inception_year": 2008,
+   "match": "website",
+   "qid": "Q7427980",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.savelifefoundation.org"
+  },
+  "cg_77e01bf9ceb18d9f": {
+   "inception_year": 1982,
+   "match": "website",
+   "qid": "Q140352095",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://earthwatch.org.au"
+  },
+  "cg_7844faff2799260b": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q6837734",
+   "type_labels": [
+    "academic library"
+   ],
+   "types": [
+    "Q856234"
+   ],
+   "website": "https://lib.msu.edu/"
+  },
+  "cg_7872c2ec948c0831": {
+   "inception_year": 1963,
+   "match": "website",
+   "qid": "Q7449245",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.semesteratsea.org/"
+  },
+  "cg_788f39beb6f29500": {
+   "inception_year": 1904,
+   "match": "label",
+   "qid": "Q7896707",
+   "type_labels": [
+    "university"
+   ],
+   "types": [
+    "Q3918"
+   ],
+   "website": "http://www.uic.edu.ph/webroot/default.cfm"
+  },
+  "cg_797402536b1d6f6a": {
+   "inception_year": 2016,
+   "match": "website",
+   "qid": "Q106171901",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization",
+    "charitable organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733",
+    "Q708676"
+   ],
+   "website": "https://www.oceangeneration.org/"
+  },
+  "cg_79fc7565c716c5b7": {
+   "inception_year": 2005,
+   "match": "label",
+   "qid": "Q50040319",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.seri.de/home/"
+  },
+  "cg_7a5b97fab11ea13a": {
+   "inception_year": 2014,
+   "match": "website",
+   "qid": "Q65955875",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.plasticchange.org/"
+  },
+  "cg_7abe03f638dfb877": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137607733",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://humaninlove.org"
+  },
+  "cg_7add2b2d0a618e2a": {
+   "inception_year": 1991,
+   "match": "website",
+   "qid": "Q3551629",
+   "type_labels": [
+    "university"
+   ],
+   "types": [
+    "Q3918"
+   ],
+   "website": "http://www.maseno.ac.ke/"
+  },
+  "cg_7bd6fd573cad79b9": {
+   "inception_year": 1965,
+   "match": "website",
+   "qid": "Q4824412",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.marineconservation.org.au/"
+  },
+  "cg_7c8b682c7c110347": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q123334568",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.tejasbarrios.org/"
+  },
+  "cg_7d6e6789b031a907": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q142024208",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://earth5r.org"
+  },
+  "cg_7ff8dc598ea3036c": {
+   "inception_year": 2019,
+   "match": "website",
+   "qid": "Q124790661",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.plasticfreeonlus.it/"
+  },
+  "cg_81c9a8c76b7b9444": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q108570307",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://samoaconservationsociety.wordpress.com/"
+  },
+  "cg_8392f201964a8cc4": {
+   "inception_year": 1977,
+   "match": "website",
+   "qid": "Q5021317",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.cawrecycles.org/"
+  },
+  "cg_83f8b874f39dec48": {
+   "inception_year": 2012,
+   "match": "website",
+   "qid": "Q30270953",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://bentlyfoundation.org/"
+  },
+  "cg_84400417e95f5df0": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q54834527",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.coastkeeper.org"
+  },
+  "cg_84ad737e2008d481": {
+   "inception_year": 1991,
+   "match": "website",
+   "qid": "Q125246837",
+   "type_labels": [
+    "foundation"
+   ],
+   "types": [
+    "Q157031"
+   ],
+   "website": "https://fundacionludovica.org.ar/"
+  },
+  "cg_852f66e1b328cab9": {
+   "inception_year": 1964,
+   "match": "website",
+   "qid": "Q10387863",
+   "type_labels": [
+    "public educational institution",
+    "university"
+   ],
+   "types": [
+    "Q23002037",
+    "Q3918"
+   ],
+   "website": "http://www.furb.br"
+  },
+  "cg_857ca8cbee87ba51": {
+   "inception_year": 1905,
+   "match": "website",
+   "qid": "Q5528733",
+   "type_labels": [
+    "secondary school",
+    "boarding school"
+   ],
+   "types": [
+    "Q159334",
+    "Q269770"
+   ],
+   "website": "https://www.gayazahs.sc.ug/"
+  },
+  "cg_85ed80408142c241": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q17141433",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.washedashore.org"
+  },
+  "cg_874afe05febf9e44": {
+   "inception_year": 2008,
+   "match": "website",
+   "qid": "Q16992185",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.earthlawcenter.org/"
+  },
+  "cg_8817ed91c0909360": {
+   "inception_year": 1956,
+   "match": "website",
+   "qid": "Q7415103",
+   "type_labels": [
+    "university"
+   ],
+   "types": [
+    "Q3918"
+   ],
+   "website": "https://www.spcdavao.edu.ph/"
+  },
+  "cg_888d939f8af6eacb": {
+   "inception_year": 1991,
+   "match": "website",
+   "qid": "Q7707545",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization",
+    "advocacy group"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733",
+    "Q431603"
+   ],
+   "website": "https://www.texasenvironment.org/"
+  },
+  "cg_893318671f992000": {
+   "inception_year": 1948,
+   "match": "website",
+   "qid": "Q48268",
+   "type_labels": [
+    "international non-governmental organization",
+    "academic publisher"
+   ],
+   "types": [
+    "Q1194093",
+    "Q96888669"
+   ],
+   "website": "https://iucn.org"
+  },
+  "cg_894925af23c84cdd": {
+   "inception_year": 1990,
+   "match": "website",
+   "qid": "Q62595407",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.shawinstitute.org"
+  },
+  "cg_8acf254a85692814": {
+   "inception_year": 2008,
+   "match": "website",
+   "qid": "Q5132479",
+   "type_labels": [
+    "nonprofit organization",
+    "charitable organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q708676"
+   ],
+   "website": "https://www.clientearth.org/"
+  },
+  "cg_8b2b8e440c8f71f8": {
+   "inception_year": 1972,
+   "match": "website",
+   "qid": "Q17072397",
+   "type_labels": [
+    "nonprofit organization",
+    "business"
+   ],
+   "types": [
+    "Q163740",
+    "Q4830453"
+   ],
+   "website": "https://www.haribon.org.ph/"
+  },
+  "cg_8c2d1e577d0bce5b": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q136754993",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.parakore.maori.nz"
+  },
+  "cg_8ce3b97bce98f1a1": {
+   "inception_year": 2005,
+   "match": "website",
+   "qid": "Q1666864",
+   "type_labels": [
+    "nonprofit organization",
+    "school"
+   ],
+   "types": [
+    "Q163740",
+    "Q3914"
+   ],
+   "website": "https://www.isa-augsburg.com/"
+  },
+  "cg_8d1d02108292688e": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q119170081",
+   "type_labels": [
+    "art exhibition"
+   ],
+   "types": [
+    "Q667276"
+   ],
+   "website": "https://oahu.surfrider.org/"
+  },
+  "cg_8f39922a511b32a6": {
+   "inception_year": 1996,
+   "match": "website",
+   "qid": "Q651061",
+   "type_labels": [
+    "think tank",
+    "party political foundation in Germany",
+    "publishing house",
+    "educational institution",
+    "organization"
+   ],
+   "types": [
+    "Q155271",
+    "Q1695502",
+    "Q2085381",
+    "Q2385804",
+    "Q43229"
+   ],
+   "website": "https://www.boell.de/"
+  },
+  "cg_8f56d9a278af42f8": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137514739",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://awhhe.am/"
+  },
+  "cg_8f7495a002dfe7d8": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q1437147",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://www.oceancare.org"
+  },
+  "cg_914d89e8b00f1f58": {
+   "inception_year": 1999,
+   "match": "website",
+   "qid": "Q7974158",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.waterkeeper.org"
+  },
+  "cg_92f258f7a6b378d6": {
+   "inception_year": 2019,
+   "match": "website",
+   "qid": "Q124828338",
+   "type_labels": [
+    "educational software",
+    "mobile app"
+   ],
+   "types": [
+    "Q1074158",
+    "Q620615"
+   ],
+   "website": "https://www.earthhero.org"
+  },
+  "cg_933e7d42909dab25": {
+   "inception_year": 2012,
+   "match": "website",
+   "qid": "Q30622485",
+   "type_labels": [
+    "school",
+    "academy school"
+   ],
+   "types": [
+    "Q3914",
+    "Q4671329"
+   ],
+   "website": "http://www.shc.ac.uk"
+  },
+  "cg_935b717b9c004820": {
+   "inception_year": 2006,
+   "match": "label",
+   "qid": "Q12318276",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": null
+  },
+  "cg_9363b9c7de91334d": {
+   "inception_year": 1909,
+   "match": "website",
+   "qid": "Q10387826",
+   "type_labels": [
+    "public educational institution",
+    "university",
+    "open-access publisher"
+   ],
+   "types": [
+    "Q23002037",
+    "Q3918",
+    "Q45400320"
+   ],
+   "website": "https://ufla.br/"
+  },
+  "cg_93dde0eafa19d4e5": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q80855690",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.coalfieldjustice.org"
+  },
+  "cg_9583b8d2de41f606": {
+   "inception_year": 1983,
+   "match": "website",
+   "qid": "Q5154688",
+   "type_labels": [
+    "public educational institution of the United States",
+    "university"
+   ],
+   "types": [
+    "Q23002039",
+    "Q3918"
+   ],
+   "website": "http://www.ccaurora.edu"
+  },
+  "cg_95af3e554a56eba6": {
+   "inception_year": 2001,
+   "match": "website",
+   "qid": "Q30263846",
+   "type_labels": [
+    "research institute"
+   ],
+   "types": [
+    "Q31855"
+   ],
+   "website": "https://www.ismar.cnr.it/"
+  },
+  "cg_95ff61f4dd343a35": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q117391531",
+   "type_labels": [
+    "501(c)(3) organization"
+   ],
+   "types": [
+    "Q18325436"
+   ],
+   "website": "https://www.aashe.org/"
+  },
+  "cg_96345f1efde0e335": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137514780",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.foe.ie"
+  },
+  "cg_965de3a8986ace60": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q10302657",
+   "type_labels": [
+    "research institute"
+   ],
+   "types": [
+    "Q31855"
+   ],
+   "website": "http://www.polis.org.br/"
+  },
+  "cg_99955c52e2954623": {
+   "inception_year": 2015,
+   "match": "website",
+   "qid": "Q115270195",
+   "type_labels": [
+    "religious organization",
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q1530022",
+    "Q163740"
+   ],
+   "website": "https://centerforearthethics.org/"
+  },
+  "cg_99bd6bd0927e43c0": {
+   "inception_year": 2013,
+   "match": "website",
+   "qid": "Q111469655",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.hasirudala.in/"
+  },
+  "cg_9a44c102a728af22": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q31833",
+   "type_labels": [
+    "public aquarium"
+   ],
+   "types": [
+    "Q2281788"
+   ],
+   "website": "http://rhodes-aquarium.hcmr.gr/"
+  },
+  "cg_9a809b5d0369d756": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q54826504",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://pathways.org/"
+  },
+  "cg_9b5d463f9f5854d3": {
+   "inception_year": 2003,
+   "match": "website",
+   "qid": "Q5012382",
+   "type_labels": [
+    "radio station"
+   ],
+   "types": [
+    "Q14350"
+   ],
+   "website": "http://www.canoefm.com"
+  },
+  "cg_9b9a22a0900546e1": {
+   "inception_year": 1999,
+   "match": "website",
+   "qid": "Q7856414",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.seaturtles.org"
+  },
+  "cg_9bfbf93fdaff2a9c": {
+   "inception_year": 2010,
+   "match": "website",
+   "qid": "Q30752517",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.surfridermaroc.com/"
+  },
+  "cg_9dc1d8ae49e68a48": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q1122926",
+   "type_labels": [
+    "open-access publisher",
+    "public research university"
+   ],
+   "types": [
+    "Q45400320",
+    "Q62078547"
+   ],
+   "website": "https://www.ulisboa.pt/"
+  },
+  "cg_9dfdb5e1fb1adddd": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q141548033",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.watamumarine.co.ke"
+  },
+  "cg_a0b2cf9f8d89035f": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q136564408",
+   "type_labels": [
+    "charitable organization"
+   ],
+   "types": [
+    "Q708676"
+   ],
+   "website": "https://www.thames21.org.uk/"
+  },
+  "cg_a1a09a50b3d85df7": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q5327025",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://earthecho.org/"
+  },
+  "cg_a2f8ea9454bca8a3": {
+   "inception_year": 1975,
+   "match": "website",
+   "qid": "Q1330208",
+   "type_labels": [
+    "stock exchange",
+    "business"
+   ],
+   "types": [
+    "Q11691",
+    "Q4830453"
+   ],
+   "website": "https://www.set.or.th"
+  },
+  "cg_a39fa371284d1cb0": {
+   "inception_year": 1987,
+   "match": "label",
+   "qid": "Q1089393",
+   "type_labels": [
+    "research institute"
+   ],
+   "types": [
+    "Q31855"
+   ],
+   "website": "http://www.cri.or.th/en/index.php"
+  },
+  "cg_a5fe46d4a7ba4cae": {
+   "inception_year": 2012,
+   "match": "website",
+   "qid": "Q17098398",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization",
+    "community organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733",
+    "Q3269648"
+   ],
+   "website": "http://fractracker.org"
+  },
+  "cg_a6267fd504638eda": {
+   "inception_year": 1968,
+   "match": "label",
+   "qid": "Q5440482",
+   "type_labels": [
+    "open-access publisher",
+    "public research university",
+    "public university"
+   ],
+   "types": [
+    "Q45400320",
+    "Q62078547",
+    "Q875538"
+   ],
+   "website": "http://www.ufscar.br"
+  },
+  "cg_a73e578d16fe2797": {
+   "inception_year": 1996,
+   "match": "website",
+   "qid": "Q16941774",
+   "type_labels": [
+    "university"
+   ],
+   "types": [
+    "Q3918"
+   ],
+   "website": "http://www.unicatolica.edu.co/"
+  },
+  "cg_a7f1726ba58bc3d2": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q43472109",
+   "type_labels": [
+    "social movement"
+   ],
+   "types": [
+    "Q49773"
+   ],
+   "website": "http://www.properstrandlopers.be"
+  },
+  "cg_a8196c6524f3809d": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131907382",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.hej-support.org"
+  },
+  "cg_a833b42efe5203a2": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q2702910",
+   "type_labels": [
+    "district of Peru"
+   ],
+   "types": [
+    "Q2179958"
+   ],
+   "website": "http://www.munisocabaya.gob.pe"
+  },
+  "cg_a892a7b535a6f393": {
+   "inception_year": 1994,
+   "match": "website",
+   "qid": "Q2986468",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://cec.org"
+  },
+  "cg_a910841651bd8968": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q107350007",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://plasticpunchngo.org/"
+  },
+  "cg_a985ce628824992f": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q5602276",
+   "type_labels": [
+    "think tank",
+    "environmental organization"
+   ],
+   "types": [
+    "Q155271",
+    "Q1785733"
+   ],
+   "website": "http://www.green-alliance.org.uk"
+  },
+  "cg_aa7d4d79f0e74e07": {
+   "inception_year": 2018,
+   "match": "website",
+   "qid": "Q104848026",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733",
+    "Q79913"
+   ],
+   "website": "https://pearlprotectors.org"
+  },
+  "cg_aaa1a27579efa351": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q7428043",
+   "type_labels": [
+    "nonprofit organization",
+    "conservation organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1899015"
+   ],
+   "website": "http://www.saveourshores.org/"
+  },
+  "cg_abaa1533e8a54eae": {
+   "inception_year": 1982,
+   "match": "website",
+   "qid": "Q976978",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.wri.org/"
+  },
+  "cg_ac0c7fe3809a577c": {
+   "inception_year": 2001,
+   "match": "website",
+   "qid": "Q66918424",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.energyjustice.net/"
+  },
+  "cg_aea84da1ef80191f": {
+   "inception_year": 2014,
+   "match": "website",
+   "qid": "Q135274031",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://tawea.or.tz/"
+  },
+  "cg_aef728a7d9187c23": {
+   "inception_year": 2008,
+   "match": "website",
+   "qid": "Q137795867",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.dakshin.org"
+  },
+  "cg_af9a73d3c85db639": {
+   "inception_year": 1968,
+   "match": "website",
+   "qid": "Q3080797",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.fne.asso.fr/"
+  },
+  "cg_afe3301ad8d115cc": {
+   "inception_year": 1980,
+   "match": "website",
+   "qid": "Q12361440",
+   "type_labels": [
+    "nonprofit organization",
+    "organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q43229"
+   ],
+   "website": "https://roheline.ee/"
+  },
+  "cg_b0019bf2599cf243": {
+   "inception_year": 1853,
+   "match": "label",
+   "qid": "Q319078",
+   "type_labels": [
+    "open-access publisher",
+    "public university"
+   ],
+   "types": [
+    "Q45400320",
+    "Q875538"
+   ],
+   "website": "https://www.unimelb.edu.au/"
+  },
+  "cg_b0471e720e871b0b": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q124224268",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.greenpeace.org.uk/"
+  },
+  "cg_b0c6e15ad90626e6": {
+   "inception_year": 1981,
+   "match": "website",
+   "qid": "Q7428115",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.savethemanatee.org/"
+  },
+  "cg_b0edcffdd74f99df": {
+   "inception_year": 1987,
+   "match": "label",
+   "qid": "Q140697711",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": null
+  },
+  "cg_b1f6bb73083e8ddf": {
+   "inception_year": 2003,
+   "match": "website",
+   "qid": "Q112057550",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.savethewaves.org/"
+  },
+  "cg_b39125bc870e1df0": {
+   "inception_year": 1966,
+   "match": "website",
+   "qid": "Q5029090",
+   "type_labels": [
+    "university"
+   ],
+   "types": [
+    "Q3918"
+   ],
+   "website": "https://www.ctu.edu.vn"
+  },
+  "cg_b58567cd7dd5e34a": {
+   "inception_year": 2011,
+   "match": "website",
+   "qid": "Q23498262",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://sumofus.org/"
+  },
+  "cg_b6822c45a67768e8": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q142256769",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.tangaroablue.org"
+  },
+  "cg_b6eb807d6e821b8a": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q7773744",
+   "type_labels": [
+    "nonprofit organization",
+    "501(c)(3) organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q18325436"
+   ],
+   "website": "https://thewatershedproject.org/"
+  },
+  "cg_b7d7b4d21ec0a5f7": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q30286343",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": null
+  },
+  "cg_b8463909be2c69d5": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q64616154",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://bhfh.org/"
+  },
+  "cg_b9bebce7fa5a8de3": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q142024233",
+   "type_labels": [
+    "think tank"
+   ],
+   "types": [
+    "Q155271"
+   ],
+   "website": "https://ceedphilippines.com"
+  },
+  "cg_b9c7e47b31c8adce": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q55803187",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.resource-media.org/"
+  },
+  "cg_ba0a80a4ff5d1384": {
+   "inception_year": 1899,
+   "match": "website",
+   "qid": "Q516755",
+   "type_labels": [
+    "nonprofit organization",
+    "conservation organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1899015"
+   ],
+   "website": "https://www.nabu.de/"
+  },
+  "cg_badb5ae460277f41": {
+   "inception_year": 2000,
+   "match": "website",
+   "qid": "Q3106011",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.giliecotrust.com/"
+  },
+  "cg_bb419201f315009d": {
+   "inception_year": 1901,
+   "match": "website",
+   "qid": "Q7894946",
+   "type_labels": [
+    "students' union"
+   ],
+   "types": [
+    "Q877998"
+   ],
+   "website": "https://www.ksu.org.mt/"
+  },
+  "cg_bc4929c022f488b0": {
+   "inception_year": 2010,
+   "match": "website",
+   "qid": "Q114659775",
+   "type_labels": [
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q79913"
+   ],
+   "website": "https://greenfaith.org"
+  },
+  "cg_bc65132b4e131d63": {
+   "inception_year": 1997,
+   "match": "website",
+   "qid": "Q5244550",
+   "type_labels": [
+    "university"
+   ],
+   "types": [
+    "Q3918"
+   ],
+   "website": "http://www.dlsud.edu.ph/"
+  },
+  "cg_bdfc4752bf3c1357": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131906387",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://noharm-europe.org"
+  },
+  "cg_beca64534039de03": {
+   "inception_year": 2001,
+   "match": "website",
+   "qid": "Q55648101",
+   "type_labels": [
+    "nonprofit organization",
+    "voluntary association"
+   ],
+   "types": [
+    "Q163740",
+    "Q48204"
+   ],
+   "website": "http://www.ecoocean.org/"
+  },
+  "cg_bf9b538f90dd978c": {
+   "inception_year": 1956,
+   "match": "label",
+   "qid": "Q478044",
+   "type_labels": [
+    "university",
+    "open-access publisher"
+   ],
+   "types": [
+    "Q3918",
+    "Q45400320"
+   ],
+   "website": "https://www.unhas.ac.id"
+  },
+  "cg_bfd22df4c5baf0c1": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131907966",
+   "type_labels": [
+    "nonprofit organization",
+    "organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q43229"
+   ],
+   "website": "http://ocean-now.org/"
+  },
+  "cg_c09adb5ae7d0edd7": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q809918",
+   "type_labels": [
+    "nonprofit organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q79913"
+   ],
+   "website": "http://ban.org/"
+  },
+  "cg_c0c2ca78d50f1089": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q104666202",
+   "type_labels": [
+    "research institute"
+   ],
+   "types": [
+    "Q31855"
+   ],
+   "website": "https://reefresearch.org/"
+  },
+  "cg_c2cc41fd890f66ab": {
+   "inception_year": 1859,
+   "match": "label",
+   "qid": "Q533235",
+   "type_labels": [
+    "Jesuit university",
+    "research university",
+    "private university"
+   ],
+   "types": [
+    "Q110225820",
+    "Q15936437",
+    "Q902104"
+   ],
+   "website": "https://www.ateneo.edu/"
+  },
+  "cg_c3cabc04257368b1": {
+   "inception_year": 1895,
+   "match": "label",
+   "qid": "Q4118040",
+   "type_labels": [
+    "public educational institution of the United States",
+    "open-access publisher",
+    "public university"
+   ],
+   "types": [
+    "Q23002039",
+    "Q45400320",
+    "Q875538"
+   ],
+   "website": "https://umassd.edu"
+  },
+  "cg_c41cf9ef180939f7": {
+   "inception_year": 1990,
+   "match": "website",
+   "qid": "Q3505321",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://surfrider.eu/"
+  },
+  "cg_c45328cc130d0557": {
+   "inception_year": 1997,
+   "match": "website",
+   "qid": "Q6874557",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "http://www.green.org.il/"
+  },
+  "cg_c50ef0a3ef3a3de1": {
+   "inception_year": 1959,
+   "match": "website",
+   "qid": "Q20858142",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.nrcm.org/"
+  },
+  "cg_c51edf8347af1e45": {
+   "inception_year": 2002,
+   "match": "label",
+   "qid": "Q742241",
+   "type_labels": [
+    "school",
+    "private university"
+   ],
+   "types": [
+    "Q3914",
+    "Q902104"
+   ],
+   "website": "https://covenantuniversity.edu.ng/"
+  },
+  "cg_c52c5b24df3775ba": {
+   "inception_year": 2000,
+   "match": "label",
+   "qid": "Q6689079",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": null
+  },
+  "cg_c5ce85ed6bc258d1": {
+   "inception_year": 1966,
+   "match": "website",
+   "qid": "Q7338240",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.riverkeeper.org/"
+  },
+  "cg_c661ef6329931537": {
+   "inception_year": 2011,
+   "match": "website",
+   "qid": "Q7138591",
+   "type_labels": [
+    "secondary school",
+    "academy school"
+   ],
+   "types": [
+    "Q159334",
+    "Q4671329"
+   ],
+   "website": "http://www.leedseastacademy.org.uk/"
+  },
+  "cg_c838b9f4ecfd0683": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131907176",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://njr.nl"
+  },
+  "cg_c9220da5bec3b734": {
+   "inception_year": 2011,
+   "match": "website",
+   "qid": "Q17056319",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "http://www.osof.org"
+  },
+  "cg_c9b63424cd144d3d": {
+   "inception_year": 1905,
+   "match": "website",
+   "qid": "Q1646000",
+   "type_labels": [
+    "nonprofit organization",
+    "scientific society"
+   ],
+   "types": [
+    "Q163740",
+    "Q748019"
+   ],
+   "website": "https://www.audubon.org/"
+  },
+  "cg_caa9f05cba6fafee": {
+   "inception_year": 1921,
+   "match": "website",
+   "qid": "Q110599628",
+   "type_labels": [
+    "gymnasium",
+    "primary school"
+   ],
+   "types": [
+    "Q55043",
+    "Q9842"
+   ],
+   "website": "https://tancsics16.hu/"
+  },
+  "cg_cbfac6ddf073f652": {
+   "inception_year": 1885,
+   "match": "website",
+   "qid": "Q6364655",
+   "type_labels": [
+    "private not-for-profit educational institution",
+    "art academy"
+   ],
+   "types": [
+    "Q23002054",
+    "Q383092"
+   ],
+   "website": "http://www.kcai.edu"
+  },
+  "cg_cdcd7535266c18bf": {
+   "inception_year": 1988,
+   "match": "website",
+   "qid": "Q1145731",
+   "type_labels": [
+    "nonprofit organization",
+    "public university"
+   ],
+   "types": [
+    "Q163740",
+    "Q875538"
+   ],
+   "website": "https://www.uts.edu.au/"
+  },
+  "cg_ce6cb707d53bf767": {
+   "inception_year": 1962,
+   "match": "website",
+   "qid": "Q5217615",
+   "type_labels": [
+    "public policy school",
+    "faculty"
+   ],
+   "types": [
+    "Q11391922",
+    "Q180958"
+   ],
+   "website": "https://evans.uw.edu/"
+  },
+  "cg_cee57bb8ec5e25f0": {
+   "inception_year": 1984,
+   "match": "website",
+   "qid": "Q110723874",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.eia-international.org"
+  },
+  "cg_cf924a42110cc6ae": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q139554218",
+   "type_labels": [
+    "county government in the United States",
+    "municipal corporation in the United States"
+   ],
+   "types": [
+    "Q102121698",
+    "Q134430903"
+   ],
+   "website": "https://www.nashville.gov/"
+  },
+  "cg_cfb312af283ee924": {
+   "inception_year": 2009,
+   "match": "website",
+   "qid": "Q30594930",
+   "type_labels": [
+    "coalition",
+    "project"
+   ],
+   "types": [
+    "Q124964",
+    "Q170584"
+   ],
+   "website": "https://www.plasticpollutioncoalition.org/"
+  },
+  "cg_d01dc9f114758341": {
+   "inception_year": 1995,
+   "match": "label",
+   "qid": "Q3543938",
+   "type_labels": [
+    "business school",
+    "Catholic university"
+   ],
+   "types": [
+    "Q1143635",
+    "Q557206"
+   ],
+   "website": "http://www.uap.asia"
+  },
+  "cg_d0472435a8cded59": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131907128",
+   "type_labels": [
+    "organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q43229",
+    "Q79913"
+   ],
+   "website": "https://carbonmarketwatch.org/"
+  },
+  "cg_d0cafd076fd87dfc": {
+   "inception_year": 1978,
+   "match": "website",
+   "qid": "Q187052",
+   "type_labels": [
+    "international non-governmental organization",
+    "undesirable foreign organization in Russia",
+    "nonprofit organization",
+    "human rights organization"
+   ],
+   "types": [
+    "Q1194093",
+    "Q137126043",
+    "Q163740",
+    "Q1920810"
+   ],
+   "website": "https://www.hrw.org/"
+  },
+  "cg_d122301573532712": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q49291668",
+   "type_labels": [
+    "charitable organization"
+   ],
+   "types": [
+    "Q708676"
+   ],
+   "website": "https://www.fidra.org.uk"
+  },
+  "cg_d1d00ffb92ec669c": {
+   "inception_year": 1920,
+   "match": "website",
+   "qid": "Q1276380",
+   "type_labels": [
+    "private not-for-profit educational institution",
+    "university"
+   ],
+   "types": [
+    "Q23002054",
+    "Q3918"
+   ],
+   "website": "https://stfrancis.edu/"
+  },
+  "cg_d2d2e5a68f9c64a5": {
+   "inception_year": 2006,
+   "match": "label",
+   "qid": "Q4929822",
+   "type_labels": [
+    "school"
+   ],
+   "types": [
+    "Q3914"
+   ],
+   "website": "http://www.theblueschool.org/"
+  },
+  "cg_d38ff48197f1a553": {
+   "inception_year": 1993,
+   "match": "website",
+   "qid": "Q140819416",
+   "type_labels": [
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q79913"
+   ],
+   "website": "https://erafoen.org/"
+  },
+  "cg_d502da82913894d7": {
+   "inception_year": 2018,
+   "match": "label",
+   "qid": "Q58819597",
+   "type_labels": [
+    "organization",
+    "social movement",
+    "direct action",
+    "grassroots initiative"
+   ],
+   "types": [
+    "Q43229",
+    "Q49773",
+    "Q506259",
+    "Q929651"
+   ],
+   "website": "https://rebellion.global"
+  },
+  "cg_d514bdf46bf55243": {
+   "inception_year": 1870,
+   "match": "website",
+   "qid": "Q755275",
+   "type_labels": [
+    "city in the United States"
+   ],
+   "types": [
+    "Q1093829"
+   ],
+   "website": "https://www.cityoflaurel.org/"
+  },
+  "cg_d578c49064c406a6": {
+   "inception_year": 1866,
+   "match": "label",
+   "qid": "Q1474129",
+   "type_labels": [
+    "public educational institution of the United States",
+    "university"
+   ],
+   "types": [
+    "Q23002039",
+    "Q3918"
+   ],
+   "website": "https://www.towson.edu/"
+  },
+  "cg_d5b526b24d8295ee": {
+   "inception_year": 1961,
+   "match": "website",
+   "qid": "Q7060777",
+   "type_labels": [
+    "community college",
+    "public educational institution of the United States"
+   ],
+   "types": [
+    "Q1336920",
+    "Q23002039"
+   ],
+   "website": "https://norwalk.edu/"
+  },
+  "cg_d65c2724db16b7d5": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137366665",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.wcel.org"
+  },
+  "cg_d8672d0112bf44c0": {
+   "inception_year": 1994,
+   "match": "website",
+   "qid": "Q2592962",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://wecf.org"
+  },
+  "cg_da75406ddb5f3794": {
+   "inception_year": 1983,
+   "match": "website",
+   "qid": "Q177580",
+   "type_labels": [
+    "charitable organization"
+   ],
+   "types": [
+    "Q708676"
+   ],
+   "website": "https://www.mcsuk.org"
+  },
+  "cg_db300432df607dde": {
+   "inception_year": 1961,
+   "match": "website",
+   "qid": "Q5254597",
+   "type_labels": [
+    "public educational institution of the United States"
+   ],
+   "types": [
+    "Q23002039"
+   ],
+   "website": "http://www.delta.edu"
+  },
+  "cg_db6326094b712fe1": {
+   "inception_year": 2013,
+   "match": "website",
+   "qid": "Q111469945",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.reapbenefit.org"
+  },
+  "cg_dc36499f456b038e": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q131846157",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://forourclimate.org/"
+  },
+  "cg_dda765dacce151bf": {
+   "inception_year": 1989,
+   "match": "website",
+   "qid": "Q3196675",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization",
+    "biological database",
+    "online database"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733",
+    "Q4117139",
+    "Q7094076"
+   ],
+   "website": "http://biologicaldiversity.org/"
+  },
+  "cg_de50bf5110355f0e": {
+   "inception_year": 1951,
+   "match": "website",
+   "qid": "Q7074328",
+   "type_labels": [
+    "school"
+   ],
+   "types": [
+    "Q3914"
+   ],
+   "website": "http://www.oakwoodschool.org"
+  },
+  "cg_de64710dc9bb5801": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q55464858",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.cecsb.org/"
+  },
+  "cg_df0c0b4713a76449": {
+   "inception_year": 1868,
+   "match": "website",
+   "qid": "Q3551772",
+   "type_labels": [
+    "public educational institution of the United States",
+    "university"
+   ],
+   "types": [
+    "Q23002039",
+    "Q3918"
+   ],
+   "website": "https://www.uww.edu/"
+  },
+  "cg_df94874a9188e0d5": {
+   "inception_year": 2016,
+   "match": "website",
+   "qid": "Q94550491",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://1dechetparjour.com/"
+  },
+  "cg_df97e051b0b4061d": {
+   "inception_year": 2016,
+   "match": "website",
+   "qid": "Q104056672",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.theseacleaners.org/"
+  },
+  "cg_dfeb424867f6c801": {
+   "inception_year": 1987,
+   "match": "website",
+   "qid": "Q2566447",
+   "type_labels": [
+    "organization",
+    "charitable organization"
+   ],
+   "types": [
+    "Q43229",
+    "Q708676"
+   ],
+   "website": "http://whales.org/"
+  },
+  "cg_e0d1ea451d3ccaa6": {
+   "inception_year": 1845,
+   "match": "label",
+   "qid": "Q644478",
+   "type_labels": [
+    "nonprofit organization",
+    "public university"
+   ],
+   "types": [
+    "Q163740",
+    "Q875538"
+   ],
+   "website": "https://www.ollscoilnagaillimhe.ie/"
+  },
+  "cg_e38e4e4fb6da6102": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q97334821",
+   "type_labels": [
+    "combined school",
+    "primary school"
+   ],
+   "types": [
+    "Q5150914",
+    "Q9842"
+   ],
+   "website": null
+  },
+  "cg_e49c644b09d84bbf": {
+   "inception_year": 2002,
+   "match": "website",
+   "qid": "Q130244398",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://njeja.org/"
+  },
+  "cg_e4f46a25e05ee0ff": {
+   "inception_year": 2013,
+   "match": "website",
+   "qid": "Q65091424",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://buynothingproject.org/"
+  },
+  "cg_e5fa1f3d78cc3819": {
+   "inception_year": 1960,
+   "match": "website",
+   "qid": "Q7698754",
+   "type_labels": [
+    "interfaith organization",
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q104764681",
+    "Q163740"
+   ],
+   "website": "https://templeofunderstanding.org/"
+  },
+  "cg_e67348806396fd6c": {
+   "inception_year": 1995,
+   "match": "website",
+   "qid": "Q15907756",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.sow.org.tw/"
+  },
+  "cg_e6ed681911aca57d": {
+   "inception_year": 1995,
+   "match": "website",
+   "qid": "Q6051239",
+   "type_labels": [
+    "Islamic university",
+    "private university"
+   ],
+   "types": [
+    "Q6082807",
+    "Q902104"
+   ],
+   "website": "http://www.iiuc.ac.bd"
+  },
+  "cg_e8c06aa7cb8f65f7": {
+   "inception_year": 2015,
+   "match": "website",
+   "qid": "Q113622348",
+   "type_labels": [
+    "environmental non-governmental organization",
+    "organization"
+   ],
+   "types": [
+    "Q3356062",
+    "Q43229"
+   ],
+   "website": "https://www.zero.ong"
+  },
+  "cg_e8d3c99ce6943cc2": {
+   "inception_year": 1876,
+   "match": "website",
+   "qid": "Q79842",
+   "type_labels": [
+    "city in the United States",
+    "college town",
+    "county seat"
+   ],
+   "types": [
+    "Q1093829",
+    "Q1187811",
+    "Q62049"
+   ],
+   "website": "https://www.flagstaff.az.gov/"
+  },
+  "cg_e95b54de14064001": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137514742",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://czzs.org/"
+  },
+  "cg_e98aee6dfe5c3008": {
+   "inception_year": 2002,
+   "match": "label",
+   "qid": "Q31708704",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization",
+    "non-governmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733",
+    "Q79913"
+   ],
+   "website": null
+  },
+  "cg_e9c3c559476f32f4": {
+   "inception_year": 1994,
+   "match": "website",
+   "qid": "Q30293768",
+   "type_labels": [
+    "educational institution"
+   ],
+   "types": [
+    "Q2385804"
+   ],
+   "website": "https://www.uci.ac.cr"
+  },
+  "cg_ea3ce9184b4b4f86": {
+   "inception_year": null,
+   "match": "label",
+   "qid": "Q16982701",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.greenpeace.org/usa/"
+  },
+  "cg_ea6cd7cd454e1d91": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q1048898",
+   "type_labels": [
+    "public educational institution of the United States",
+    "open-access publisher",
+    "land-grant university",
+    "public research university"
+   ],
+   "types": [
+    "Q23002039",
+    "Q45400320",
+    "Q615150",
+    "Q62078547"
+   ],
+   "website": "https://www.uvm.edu/"
+  },
+  "cg_eac2426cf68e3679": {
+   "inception_year": 1931,
+   "match": "website",
+   "qid": "Q751289",
+   "type_labels": [
+    "private not-for-profit educational institution",
+    "university"
+   ],
+   "types": [
+    "Q23002054",
+    "Q3918"
+   ],
+   "website": "https://www.ut.edu/"
+  },
+  "cg_ead1f47cef620699": {
+   "inception_year": 1999,
+   "match": "website",
+   "qid": "Q111469482",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://www.chintan-india.org"
+  },
+  "cg_ec0dc9006b1f8ed7": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q91460758",
+   "type_labels": [
+    "historical society"
+   ],
+   "types": [
+    "Q5774403"
+   ],
+   "website": "https://www.susiekingtaylorinstitute.org/"
+  },
+  "cg_eee77bff88667b72": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q136753764",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.sustainablecoastlines.org"
+  },
+  "cg_eefc8c463058fd57": {
+   "inception_year": 1875,
+   "match": "website",
+   "qid": "Q915989",
+   "type_labels": [
+    "nonprofit organization",
+    "university"
+   ],
+   "types": [
+    "Q163740",
+    "Q3918"
+   ],
+   "website": "http://www.qmu.ac.uk"
+  },
+  "cg_efef88d0a58a4f08": {
+   "inception_year": 2020,
+   "match": "website",
+   "qid": "Q106987479",
+   "type_labels": [
+    "environmental organization"
+   ],
+   "types": [
+    "Q1785733"
+   ],
+   "website": "https://www.citytoocean.org/"
+  },
+  "cg_f44be2fab49fe21c": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q137514798",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.groundwork.org.za"
+  },
+  "cg_f5021ff721e1644a": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q4677415",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://ash.org"
+  },
+  "cg_f6ed710e59992ecc": {
+   "inception_year": 2005,
+   "match": "website",
+   "qid": "Q23808450",
+   "type_labels": [
+    "hospital",
+    "pharmacy school",
+    "university",
+    "nursing school",
+    "medical school",
+    "dental school",
+    "state public university"
+   ],
+   "types": [
+    "Q16917",
+    "Q2085148",
+    "Q3918",
+    "Q446901",
+    "Q494230",
+    "Q5259432",
+    "Q7603893"
+   ],
+   "website": "https://www.upums.ac.in"
+  },
+  "cg_f87b1bad495b9ebf": {
+   "inception_year": 1962,
+   "match": "website",
+   "qid": "Q7194466",
+   "type_labels": [
+    "university"
+   ],
+   "types": [
+    "Q3918"
+   ],
+   "website": "http://www.unipiloto.edu.co"
+  },
+  "cg_f8bf9374ccd514cd": {
+   "inception_year": 1989,
+   "match": "website",
+   "qid": "Q1400247",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://www.seas-at-risk.org"
+  },
+  "cg_f9149035564fece1": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q117191709",
+   "type_labels": [
+    "website",
+    "organization"
+   ],
+   "types": [
+    "Q35127",
+    "Q43229"
+   ],
+   "website": "https://materiom.org/"
+  },
+  "cg_f93161ceb3a6ec27": {
+   "inception_year": 1977,
+   "match": "website",
+   "qid": "Q12702286",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733"
+   ],
+   "website": "https://foe-malaysia.org/"
+  },
+  "cg_faaa304156a78f0c": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q4916659",
+   "type_labels": [
+    "school district"
+   ],
+   "types": [
+    "Q398141"
+   ],
+   "website": "https://www.birmingham.k12.mi.us/"
+  },
+  "cg_fb756d3499d487b6": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q55471470",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "http://oaec.org/"
+  },
+  "cg_fc2c122029b4b92c": {
+   "inception_year": 1990,
+   "match": "website",
+   "qid": "Q1176784",
+   "type_labels": [
+    "nonprofit organization",
+    "environmental organization",
+    "charitable organization"
+   ],
+   "types": [
+    "Q163740",
+    "Q1785733",
+    "Q708676"
+   ],
+   "website": "https://davidsuzuki.org/"
+  },
+  "cg_fcc191a3f2ab6149": {
+   "inception_year": 1994,
+   "match": "website",
+   "qid": "Q10545231",
+   "type_labels": [
+    "foundation",
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q157031",
+    "Q163740"
+   ],
+   "website": "http://keystone-foundation.org/"
+  },
+  "cg_fddf99d3abfac1d7": {
+   "inception_year": 1990,
+   "match": "website",
+   "qid": "Q7646100",
+   "type_labels": [
+    "charitable organization"
+   ],
+   "types": [
+    "Q708676"
+   ],
+   "website": "https://www.sas.org.uk"
+  },
+  "cg_fe201441e1cb994a": {
+   "inception_year": 1957,
+   "match": "website",
+   "qid": "Q6970745",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://www.nar.org/"
+  },
+  "cg_fe6fae34bc0394db": {
+   "inception_year": 2013,
+   "match": "website",
+   "qid": "Q131901439",
+   "type_labels": [
+    "organization"
+   ],
+   "types": [
+    "Q43229"
+   ],
+   "website": "https://eyca.org/"
+  },
+  "cg_fe854b430c594e00": {
+   "inception_year": null,
+   "match": "website",
+   "qid": "Q109418747",
+   "type_labels": [
+    "nonprofit organization"
+   ],
+   "types": [
+    "Q163740"
+   ],
+   "website": "https://ecostandard.org/"
+  }
+ },
+ "retrieved_at": "2026-11-26",
+ "schema": "cg-suggestions-v1",
+ "source": "Wikidata (CC0)"
+}
