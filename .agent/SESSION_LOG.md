@@ -285,3 +285,4 @@
 | 2026-11-26 | Owner notes, CG-7a, CG-14 | Roadmap gets AMB-POOL, AMB-ROSTER-QC, FAVICON-MAIN, GP; agreement stats and precision card v2; groups methods section and correction link; clean-worktree pytest 3,829 passed, 18 skipped; handoff to Codex | this commit |
 | 2026-11-26 | AMB-POOL and H57 | Two-hour holds and first-wins blind tags; 211 Worker tests, clean 3,829 passed / 18 skipped, browser and live no-session probes passed; Worker be02af19 deployed without a D1 migration | this commit |
 | 2026-11-26 | GRP-NAME-FIX | Optional name field and privacy guard for non-organisation removals; 98 focused tests, clean 3,830 passed / 18 skipped, Framework build and desktop/mobile Chromium checks passed | this commit |
+| 2026-11-26 | A4-POLICY | Published short BFFP permission acknowledgement and recorded removal, agreement and review thresholds. Focused 95 passed. Clean 3,830 passed / 18 skipped. | this commit |

@@ -97,7 +97,11 @@ def test_methods_section_has_four_topics() -> None:
     assert '<h2 id="gv-methods-title">How this list is made</h2>' in section
     for topic in ("Source", "Organisations only", "Tags", "Corrections and removal"):
         assert f"<h3>{topic}</h3>" in section, topic
-    assert "Break Free From Plastic" in section
+    attribution = (
+        "This list of organisations was informed by Break Free From Plastic (BFFP), "
+        "with permission."
+    )
+    assert attribution in section
     assert "within 14 days" in section
     for badge in ("Volunteer-tagged", "Reviewed", "Confirmed by group"):
         assert badge in section, badge

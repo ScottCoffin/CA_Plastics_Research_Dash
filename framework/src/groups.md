@@ -34,8 +34,7 @@ head: |
 <main id="main" tabindex="-1">
 <div class="gv-intro">
   <h1>Community groups</h1>
-  <p>This list has two sources. Most groups are members of Break Free From Plastic (BFFP). The rest are groups that volunteer ambassadors have suggested. Only organisations are listed. Individual people are not.</p>
-  <p>Volunteer ambassadors add tags from public evidence, such as a group's own website and its public statements. Each group shows the date it was listed as a BFFP member, and the evidence behind each tag. Select a group name to open its card.</p>
+  <p>Only organisations are listed. Volunteer ambassadors add tags from public evidence, such as a group's own website and its public statements. Select a group name to see where it was listed and the evidence behind each tag.</p>
   <p><b>Not yet tagged</b> means the group has not been tagged yet. It never means the group has no plastics work.</p>
 </div>
 <div id="groups-root" class="gv-root"><p class="gv-status">Loading the roster…</p></div>
@@ -47,7 +46,7 @@ head: |
 <section class="gv-panel gv-root" aria-labelledby="gv-methods-title" id="gv-methods">
 <h2 id="gv-methods-title">How this list is made</h2>
 <h3>Source</h3>
-<p>The roster comes from the public member list of Break Free From Plastic (BFFP), used with BFFP's permission. The Atlas is independent of Break Free From Plastic. BFFP membership is shown only as the place a group was listed. It is not evidence of a group's commitment.</p>
+<p>This list of organisations was informed by Break Free From Plastic (BFFP), with permission. The Atlas is independent of Break Free From Plastic.</p>
 <h3>Organisations only</h3>
 <p>Only collective organisations are listed. Individuals and single-person practices, such as a freelance consultant, a sole trader, or an artist trading under their own name, are left out when the list is read and are not kept.</p>
 <h3>Tags</h3>

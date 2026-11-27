@@ -1,29 +1,27 @@
-# Handoff — 2026-11-26 — GRP-NAME-FIX
+# Handoff — 2026-11-26 — A4-POLICY
 
 ## Done
 
-- The optional Correct the name field sends name_correction with an organisation tag and keeps its draft across navigation and retries. H57 previously deployed the Worker validator.
-- An approved non-organisation removal drops the proposed name and clears any older name correction for that ID. Other groups' names and all group IDs stay intact.
-- AMB-POOL is on main at 4babd691. CI and Pages both succeeded. Worker be02af19 uses D1 0007.
+- The public community groups methods section credits Break Free From Plastic with permission. It keeps the Atlas independence statement. The lede describes the collective organisations and evidence the roster displays.
+- The owner confirmed a 14-day removal window, 10 usable pairs per facet for agreement reporting, and a 100% review rate over an ambassador's first 25 primary group tags followed by 20%.
+- AMB-POOL (4babd691) and GRP-NAME-FIX (0e2d8857) are live. Their CI and Pages runs passed. H57 Worker be02af19 uses D1 0007.
 
 ## State of the repo
 
-- Focused Python checks passed (98 tests). Clean-worktree pytest passed (3,830 passed and 18 skipped). Framework build passed with four existing feed-link warnings.
-- Chromium checks passed at 1440 and 390 px, including invalid input focus, per-group drafts, retry and axe.
-- The owner edits in curation/group_merges.csv remain uncommitted.
+- The group methods and agreement tests passed (95 focused tests). The clean-worktree gate passed (3,830 passed and 18 skipped).
+- Agreement export CSVs are header-only. AMB-POOL stores incidental blind overlap tags. Deliberate 10% regional assignment is CG-7b.
+- The owner's edits to curation/group_merges.csv are uncommitted.
 
 ## Next task
 
-1. Record the owner's A4 decisions. Use a short public BFFP permission acknowledgement and record the approved 14-day removal, 10-pair reporting minimum and reviewer sampling.
-2. Implement the weekly BFFP refresh. Use the existing extractor, preserve all prior IDs, apply curated names and removals, and publish additive changes through GitHub Actions.
-3. CG-7b introduces the regional 10% blind second-tag sample, reviewer sampling and the paired export. H59 is required for migration 0008 and the Worker deploy.
+1. BFFP-REFRESH. Use the existing BFFP public About page and organization list. Preserve all established IDs, add new groups and rebuild the derived files. Run its manual GitHub Actions trigger and verify the result.
+2. CG-7b. Implement the planned blind sample, reviewer checks, reason-coded edits and exports. H59 is required for D1 migration 0008 and its Worker deploy.
 
-## Gotchas the next agent must know
+## Gotchas
 
-- Set PYTHONPATH=<worktree>/src and put pytest --basetemp outside the repo. Main checkout denominator inputs can make the BQ-2.4 check stale.
-- ENABLE_DATA_COMMITS was checked on GitHub and is true. Stage only the specific checkpoint paths.
-- Both agreement curation CSVs are still header-only. AMB-POOL stores collision tags privately.
+- ENABLE_DATA_COMMITS is true on GitHub. Guard data commits with it and keep curation out of the scrape publish.
+- The clean-worktree gate uses PYTHONPATH=<worktree>/src and a pytest --basetemp outside the repo.
 
 ## Needs owner input
 
-- H59 for the CG-7b migration and Worker deploy. See HUMAN_TASKS for the other open reviews.
+- H59 and the open reviews in HUMAN_TASKS.

@@ -929,3 +929,10 @@ Copied from `docs/BFFP.md` §2. Status as of integration; "Owner" means confirme
 ## ADR-GRP-NAME-FIX-2026-11-26
 
 The optional public name correction uses the stable group ID and goes through the normal group tag approval workflow. It is available for any organisation tag status. A non-organisation report omits the name. An approved removal also clears any existing correction for the same ID, so the export keeps only the removal record for that entry.
+
+## ADR-A4-POLICY-2026-11-26
+
+- The owner chose a short public acknowledgement that Break Free From Plastic informed the list of organisations, with permission. Keep the existing Atlas independence statement.
+- The owner confirmed removal within 14 days for requests from a group's own domain. Report inter-ambassador agreement at 10 usable pairs per facet. Review each ambassador's first 25 primary group tags, then a random 20%.
+- CG-7b will sample 10% of primary tags per region for an independent blind second tag. This is the planned pilot fraction. AMB-POOL overlap records alone do not constitute the planned sample. Both agreement export CSVs are still header-only.
+- The owner requested weekly BFFP updates. Add new organisations under stable identities and preserve earlier tags and reviewed corrections.

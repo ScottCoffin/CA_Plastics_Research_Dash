@@ -1,3 +1,3 @@
-You are the Claude Code lead for Plastiverse Live. Start with CLAUDE.md, spec.md Part B and the session-entry reads in CLAUDE.md. Continue from .agent/HANDOFF.md. Preserve the uncommitted owner decisions in curation/group_merges.csv and stage only each checkpoint's files.
+You are the Claude Code lead for Plastiverse Live. Start with CLAUDE.md and spec.md Part B, then follow the session-entry reads. Preserve the uncommitted owner decisions in curation/group_merges.csv and stage only each checkpoint's files.
 
-AMB-POOL, H57 and GRP-NAME-FIX are complete. Start the owner A4 policy updates and then the additive weekly GitHub Actions BFFP refresh. CG-7b needs H59 for migration 0008 and the Worker deploy.
+AMB-POOL, H57, GRP-NAME-FIX and A4-POLICY are complete. Start BFFP-REFRESH from .agent/HANDOFF.md. Then take CG-7b and request H59 before D1 migration 0008 or the related Worker deploy.
