@@ -312,3 +312,4 @@
 | 2026-11-27 | GP-2 (registry regions) | Norway/Belgium author lists and profiles from the region export; profile pages generated from the California page; links verified; GP-1 passed. | this commit |
 | 2026-11-27 | GP-3 (registry regions) | Norway/Belgium collaboration networks from the region export; profile links verified; GP-1 passed. | this commit |
 | 2026-11-27 | GP-4 (registry regions) + GP-1 settle fix | Region topic tags (NO 70%, BE 54%); GP-1 waits for counts to settle (network page flake). | this commit |
+| 2026-11-27 | GP-8 (registry regions) | Norway/Belgium works table and evidence map; GP-1 passed; selected-state contrast issue found pre-existing on California (EV-A11Y-SELECT). | this commit |

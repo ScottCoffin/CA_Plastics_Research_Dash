@@ -96,9 +96,10 @@ function inYearRange(year, from, to) {
 // year labels (strings). A year range that matches no label cannot be expressed as a selection
 // (an empty list means "no constraint" to the engine), so it is flagged as impossible instead.
 // The plastic-related facet is always applied, so every count, view and list excludes other works.
-export function selectionFor(state, yearLabels = []) {
+// `plastic` is the relevance labels to keep. Regions without relevance review pass null (no plastic facet).
+export function selectionFor(state, yearLabels = [], {plastic = PLASTIC_ONLY.plastic} = {}) {
   const clean = normalizeState(state);
-  const sel = {plastic: [...PLASTIC_ONLY.plastic]};
+  const sel = plastic ? {plastic: [...plastic]} : {};
   for (const [key, labels] of Object.entries(clean.facets)) {
     if (key !== JOURNAL_FACET) sel[key] = labels;
   }

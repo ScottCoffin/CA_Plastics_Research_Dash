@@ -46,7 +46,8 @@ def test_page_lists_plastic_related_works_only():
     assert "The page lists plastic-related works only." in page
     assert "plastic relevance" not in page
     assert '"Plastic-related"' not in source
-    assert "PLASTIC_ONLY" in model and "sel = {plastic: [...PLASTIC_ONLY.plastic]}" in model
+    assert "PLASTIC_ONLY" in model
+    assert "const sel = plastic ? {plastic: [...plastic]} : {};" in model
     assert "plastic" not in model.split("FACET_KEYS = ")[1].split("\n")[0]
     assert "row.plastic_related === true" in source
 
@@ -117,7 +118,7 @@ def test_journal_metrics_load_is_optional_and_only_the_evidence_table_shows_the_
     institution = (FW_SRC / "components" / "institution.js").read_text(encoding="utf-8")
     assert 'loadJson("journal_metrics.json", {optional: true})' in source
     assert "attachJournalMetrics(plasticWorks, journals)" in source
-    assert "metricsColumn: true" in source
+    assert "metricsColumn: !isRegion()" in source
     assert "metricsColumn" not in institution
     assert (
         'const METRIC_OPTION = ["two_yr_mean_citedness", "2-yr mean citedness (OpenAlex)"];'

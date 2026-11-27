@@ -87,6 +87,14 @@ those institutions reference) and `institution_works/<inst_id>.json`. The keys m
 the California files (`schema_version` `s3.1`), and `tests/fixtures/region_export/california_keys.json`
 pins the California key sets. The module is `src/atlas/build/region_export.py`.
 
+GP-8 adds the evidence page's files to the same folder: `works_detail.json` (one compact row per
+region work, the California publication-table shape, with `plastic_related` null, `has_abstract`
+false and no abstract text) and `bundle/` (the AT-4 facet bundle built from the region's
+`index.json` by `atlas.build.bundle.build_bundle`, with no abstracts). The region evidence page
+lists every region work as an unscreened query hit, omits the California-only trend, pipeline flow
+and CA-led facet, and reads no `journal_metrics.json`. The build writes `bundle/` after the JSON
+files; `--check` requires `bundle/manifest.json`.
+
 - Input: the ignored global partition (`data/processed/global`). Region works are
   `work_regions` rows of kind `country` with the region's ISO code; institutions are
   registry institutions with that `country_code` that appear on a region work.

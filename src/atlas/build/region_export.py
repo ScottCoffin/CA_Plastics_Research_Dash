@@ -81,6 +81,36 @@ ATLAS_TYPE_BY_OPENALEX_TYPE = {
     "healthcare": "nonprofit/NGO",
 }
 
+# Evidence page (GP-8): the publication table's rows, one compact row per region work. Same shape as
+# the reference works_detail.json rows (export_site._write_evidence_works), but no abstracts: the
+# region export never writes abstract text. Authors per work match the reference limit.
+WORKS_DETAIL_FILE = "works_detail.json"
+DETAIL_AUTHORS_PER_WORK = 20
+WORKS_DETAIL_ROW_KEYS = frozenset(
+    {
+        "work_id",
+        "title",
+        "year",
+        "pub_date",
+        "first_seen",
+        "doi",
+        "journal",
+        "type",
+        "cited_by_count",
+        "is_oa",
+        "oa_url",
+        "plastic_related",
+        "ca_led",
+        "domain_tags",
+        "facet_tags",
+        "authors",
+        "author_count",
+        "has_abstract",
+    }
+)
+# Bundle folder written next to index.json (the evidence page's facet index, AT-4 layout).
+BUNDLE_FOLDER = "bundle"
+
 METHOD_NOTE = (
     "Region export (GP-5). Works are region works (country work_regions rows) and are unscreened "
     "query hits (screening_status). plastic_related and reference-only fields are null; "
@@ -252,12 +282,15 @@ class RegionExport:
     index: dict[str, Any]
     institution_works: dict[str, dict[str, Any]] = field(default_factory=dict)
     author_files: dict[str, dict[str, Any]] = field(default_factory=dict)
+    works_detail: dict[str, Any] | None = None
 
     def files(self) -> dict[str, dict[str, Any]]:
         out: dict[str, dict[str, Any]] = {
             "institutions.json": self.institutions,
             "index.json": self.index,
         }
+        if self.works_detail is not None:
+            out[WORKS_DETAIL_FILE] = self.works_detail
         for inst_id, payload in self.institution_works.items():
             out[f"institution_works/{inst_id}.json"] = payload
         for author_id, payload in self.author_files.items():
@@ -563,6 +596,8 @@ def build_region_export(
         }
 
     index_works = [{k: full_work[w][k] for k in sorted(INDEX_WORK_KEYS)} for w in sorted(full_work)]
+    detail_works = [_detail_row(full_work[w]) for w in sorted(full_work)]
+    works_detail = {"schema_version": SCHEMA_VERSION, "works": detail_works}
     institutions_payload = {
         "generated_at": generated_at,
         "institutions": institutions_out,
@@ -589,7 +624,45 @@ def build_region_export(
         index=index_payload,
         institution_works=institution_works,
         author_files=author_files,
+        works_detail=works_detail,
     )
+
+
+def _detail_row(work: Mapping[str, Any]) -> dict[str, Any]:
+    """One evidence-table row. Region works are unscreened, so plastic_related is null."""
+    names = [n for n in work.get("author_names", []) if n]
+    return {
+        "work_id": work["work_id"],
+        "title": work.get("title") or "",
+        "year": work.get("year"),
+        "pub_date": work.get("pub_date") or "",
+        "first_seen": "",
+        "doi": work.get("doi") or "",
+        "journal": work.get("journal") or "",
+        "type": work.get("type") or "",
+        "cited_by_count": work.get("cited_by_count") or 0,
+        "is_oa": False,
+        "oa_url": "",
+        "plastic_related": None,
+        "ca_led": False,
+        "domain_tags": list(work.get("domain_tags", [])),
+        "facet_tags": list(work.get("facet_tags", [])),
+        "authors": names[:DETAIL_AUTHORS_PER_WORK],
+        "author_count": len(names),
+        "has_abstract": False,
+    }
+
+
+def write_bundle(out_dir: str | Path, generated_at: str) -> dict[str, Any]:
+    """Write the evidence page's facet bundle (``bundle/``) from the region's ``index.json``.
+
+    Uses the AT-4 bundle builder with no normalized or analytics inputs, so the bundle carries only
+    the region's works and their tags. The build is atomic (staging folder, then swap).
+    """
+    from atlas.build.bundle import build_bundle
+
+    folder = Path(out_dir)
+    return build_bundle(folder / "index.json", folder / BUNDLE_FOLDER, generated_at=generated_at)
 
 
 def _experts(
@@ -831,6 +904,20 @@ def validate_structure(out_dir: str | Path) -> list[str]:
         if any(set(e) != TOP_EXPERT_KEYS for e in row["top_experts"]):
             problems.append(f"institution {row.get('inst_id')} top_experts keys differ")
             break
+    detail_path = folder / WORKS_DETAIL_FILE
+    if detail_path.is_file():
+        detail = json.loads(detail_path.read_text(encoding="utf-8"))
+        if (
+            set(detail) != {"schema_version", "works"}
+            or detail.get("schema_version") != SCHEMA_VERSION
+        ):
+            problems.append("works_detail.json top-level keys or schema_version differ")
+        for row in detail.get("works", []):
+            if set(row) != WORKS_DETAIL_ROW_KEYS:
+                problems.append(f"works_detail row {row.get('work_id')} keys differ")
+                break
+    else:
+        problems.append(f"missing {WORKS_DETAIL_FILE}")
     work_ids = {w.get("work_id") for w in index_payload.get("works", [])}
     for row in index_payload.get("works", []):
         if set(row) != INDEX_WORK_KEYS or row.get("screening_status") != SCREENING_STATUS:

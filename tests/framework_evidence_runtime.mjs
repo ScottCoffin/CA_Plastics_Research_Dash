@@ -100,6 +100,8 @@ const {BitmaskIndex} = require(fileURLToPath(new URL("../site/assets/facets.js",
   assert.deepEqual(selectionFor({...emptyState(), yearTo: 2014}, years), {sel: {plastic: ["yes"], year: ["2014"]}, impossible: false});
   assert.equal(selectionFor({...emptyState(), yearFrom: 2030}, years).impossible, true);
   assert.deepEqual(selectionFor(emptyState(), years), {sel: {plastic: ["yes"]}, impossible: false});
+  // GP-8: a region without relevance review keeps no plastic facet.
+  assert.deepEqual(selectionFor(emptyState(), years, {plastic: null}), {sel: {}, impossible: false});
 }
 
 // A plastic facet in the state never widens or changes the selection.

@@ -383,7 +383,9 @@ def test_cli_rejects_california_and_checks_without_partition(tmp_path, capsys):
         )
         == 1
     )
-    rx.write_export(out, _export())
+    export = _export()
+    rx.write_export(out, export)
+    rx.write_bundle(out, export.index["generated_at"])
     # Committed files present, no partition: structure passes and the staleness check is skipped.
     assert (
         script.main(
@@ -580,3 +582,36 @@ def test_read_raw_fields_keeps_the_latest_page_and_decodes_the_abstract(tmp_path
             primary_topic_name="Ocean plastics",
         )
     }
+
+
+def test_works_detail_rows_match_the_evidence_table_shape(tmp_path):
+    export = _export()
+    detail = export.works_detail
+    assert detail is not None
+    assert detail["schema_version"] == CA_SCHEMA_VERSION
+    rows = detail["works"]
+    assert rows
+    assert all(set(row) == rx.WORKS_DETAIL_ROW_KEYS for row in rows)
+    # Region works are unscreened: no relevance review, no abstract text, no OA or CA-only fields.
+    assert all(row["plastic_related"] is None and row["has_abstract"] is False for row in rows)
+    assert all(
+        row["is_oa"] is False and row["oa_url"] == "" and row["ca_led"] is False for row in rows
+    )
+    assert [row["work_id"] for row in rows] == sorted(row["work_id"] for row in rows)
+    assert set(detail) == {"schema_version", "works"}
+
+
+def test_write_bundle_and_detail_validation(tmp_path):
+    export = _export()
+    out = tmp_path / "norway"
+    rx.write_export(out, export)
+    assert rx.validate_structure(out) == []
+    (out / rx.WORKS_DETAIL_FILE).unlink()
+    assert rx.validate_structure(out) == [f"missing {rx.WORKS_DETAIL_FILE}"]
+    rx.write_export(out, export)
+
+    rx.write_bundle(out, export.index["generated_at"])
+    manifest = json.loads((out / "bundle" / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["n_works"] == len(export.index["works"])
+    assert (out / "bundle" / "works_index.json").is_file()
+    assert (out / "bundle" / "facets.bin").is_file()

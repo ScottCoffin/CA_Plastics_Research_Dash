@@ -1,7 +1,7 @@
 // Publication table and "New in the last 2 weeks" callout for the Evidence map (EV-TABLE).
 // Plain DOM; the filtering, sorting and paging rules live in ev_table_model.js.
 import "./shared/topics.js";
-import {loadJson} from "./atlas.js";
+import {loadJson, regionSlug} from "./atlas.js";
 import {
   DEFAULT_DIRS,
   authorLine,
@@ -128,7 +128,7 @@ function shellHtml(hint = DEFAULT_HINT, metricsColumn = false) {
     + `</div>`
     + `<p class="ev-status" data-role="status" aria-live="polite">Loading works…</p>`
     + `<div class="ev-table-scroll"><table class="ev-works">`
-    + `<caption>Published works with a California author</caption>`
+    + `<caption>${regionSlug() === "california" ? "Published works with a California author" : "Works found by the Atlas search"}</caption>`
     + `<thead><tr>${header("pub_date", "Published")}${header("title", "Title")}${header("journal", "Journal")}`
     + `<th scope="col">Topics</th>${header("cited_by_count", "Citations", "num")}`
     + `${metricsColumn ? metricHeaderHtml() : ""}<th scope="col">Links</th></tr></thead>`
@@ -257,7 +257,7 @@ export function mountWorksTable(
     const url = URL.createObjectURL(blob);
     const link = doc.createElement("a");
     link.href = url;
-    link.download = "ca-plastics-works.csv";
+    link.download = regionSlug() === "california" ? "ca-plastics-works.csv" : `${regionSlug()}-works.csv`;
     doc.body.appendChild(link);
     link.click();
     link.remove();

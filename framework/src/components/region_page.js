@@ -211,7 +211,7 @@ export function renderRegion(model, ambassadorsHref, knownIds = null) {
     `<span class="rg-list-count">${escapeHtml(formatCount(p.works))} works</span></li>`).join("") + `</ol>`
     : `<p class="rg-state">No partner countries listed yet.</p>`;
   // Reference regions with a collaboration network (GP-3) link to it from the researchers list.
-  const networkLink = regionSlug() === "california" ? "" : `<p class="rg-state"><a href="./network">Collaboration network</a></p>`;
+  const networkLink = regionSlug() === "california" ? "" : `<p class="rg-state"><a href="./network">Collaboration network</a> · <a href="./evidence">Works and evidence map</a></p>`;
   const scopeNote = [model.is, model.isNot].filter(Boolean).map((t) => `<p>${escapeHtml(t)}</p>`).join("");
   const partialNote = years.partial ? `<p class="rg-note">${escapeHtml(PARTIAL_NOTE)} (${years.partial.year} so far.)</p>` : "";
 

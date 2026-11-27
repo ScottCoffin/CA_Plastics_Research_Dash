@@ -6,7 +6,7 @@
 // Pure helpers live in evidence_model.js; this file owns the DOM.
 import "./shared/facets.js";
 import "./shared/topics.js";
-import {regionDataUrl, formatCount, loadJson} from "./atlas.js";
+import {regionDataUrl, formatCount, loadJson, regionSlug} from "./atlas.js";
 import {mountV3Flow} from "./v3_flow.js";
 import {mountV4Trend} from "./v4_trend.js";
 import {mountHeatmap} from "./ev_heatmap.js";
@@ -42,6 +42,14 @@ const FACET_UI = [
 // Keys the form owns: readControls rebuilds them from the controls and keeps every other key from the state.
 const CONTROLLED = new Set([...FACET_UI.map((ui) => ui.key), JOURNAL_FACET]);
 
+// GP-8: a region page (any registry slug but California) lists the works of its region. Those works have no
+// relevance review, so they are listed as unscreened query hits (plastic_related null), and California-only
+// views and facets are left out.
+const isRegion = () => regionSlug() !== "california";
+function listedWork(row) {
+  return isRegion() ? row.plastic_related !== false : row.plastic_related === true;
+}
+
 const app = {
   index: null,
   known: null,
@@ -72,6 +80,7 @@ function optionName(ui, label) {
 
 function buildFilterGroups(container, index) {
   for (const ui of FACET_UI) {
+    if (ui.key === "ca_led" && isRegion()) continue;
     const labels = (index.facets[ui.key] || []).map((item) => item.label);
     // A facet with no options in the bundle gets no group, so the intro never lists a missing filter.
     if (!labels.length) continue;
@@ -199,7 +208,8 @@ function setState(next, {sync = false} = {}) {
 }
 
 function render() {
-  const {sel, impossible} = selectionFor(app.state, app.yearLabels);
+  // A region has no relevance review, so its works are not filtered by the plastic facet.
+  const {sel, impossible} = selectionFor(app.state, app.yearLabels, {plastic: isRegion() ? null : undefined});
   const text = app.state.q ? app.index.searchBits(app.state.q) : undefined;
   // The journal filter is a bit-set over the bundle's works, so every count and list below respects it.
   const extra = andBits(text, journalFilterBits());
@@ -269,6 +279,8 @@ function applyTable() {
 
 // VD-34: journal_metrics.json is optional. Without it the 2-yr mean citedness column is blank; the page still works.
 function loadJournalMetrics() {
+  // A region export has no journal metrics (no journal names in the partition), so it does not request the file.
+  if (isRegion()) return Promise.resolve(null);
   return loadJson("journal_metrics.json", {optional: true}).catch(() => null);
 }
 
@@ -354,7 +366,7 @@ async function loadBundle() {
   app.yearLabels = (index.facets.year || []).map((item) => item.label);
   // VD-34: journal options come from the plastic-related rows, most works first. The filter's labels must be
   // known before the hash is read, so a shared link with journal=... keeps its journals.
-  const plasticRows = detail ? [...detail.values()].filter((row) => row.plastic_related === true) : [];
+  const plasticRows = detail ? [...detail.values()].filter(listedWork) : [];
   const journals = journalOptions(plasticRows);
   app.journalOf = detail ? new Map([...detail].map(([id, row]) => [id, row.journal])) : new Map();
   app.known[JOURNAL_FACET] = new Set(journals.map((item) => item.label));
@@ -397,14 +409,16 @@ async function mountViews(index) {
     [detail, journals] = await Promise.all([loadDetail(), loadJournalMetrics()]);
   } catch {
     $("ev-table").textContent = "Could not load the publication details.";
+    if (isRegion()) return;
     const trendPromise = mountV4Trend($("ev-v4"), index);
     settleSection($("ev-v4"), trendPromise);
     return;
   }
   app.detail = detail;
-  const plasticWorks = [...detail.values()].filter((row) => row.plastic_related === true);
-  const trendPromise = mountV4Trend($("ev-v4"), index, plasticWorks);
-  settleSection($("ev-v4"), trendPromise);
+  const plasticWorks = [...detail.values()].filter(listedWork);
+  // The trend's California share is not meaningful for a region, so a region page keeps the panel hidden.
+  const trendPromise = isRegion() ? Promise.resolve(null) : mountV4Trend($("ev-v4"), index, plasticWorks);
+  if (!isRegion()) settleSection($("ev-v4"), trendPromise);
   renderRecentCallout($("ev-recent"), plasticWorks, new Date());
   app.heatmap = mountHeatmap($("ev-heatmap"), {
     onSelect: (ids) => {
@@ -417,7 +431,7 @@ async function mountViews(index) {
   $("ev-heatmap").closest("section").hidden = false;
   app.table = mountWorksTable($("ev-table"), {
     initialRows: attachJournalMetrics(plasticWorks, journals),
-    metricsColumn: true
+    metricsColumn: !isRegion()
   });
   app.views.push(({rows}) => app.heatmap.update(rows), () => applyTable());
   notifyViews();
@@ -453,6 +467,7 @@ function wireChartViews() {
 export async function mountEvidence() {
   wireChartViews();
   // V-3 (EM-6) needs only the methods card export, so it renders independently of the bundle.
-  mountV3Flow($("ev-v3"));
+  // The pipeline flow is the California methods card; a region page has no flow section.
+  if (!isRegion()) mountV3Flow($("ev-v3"));
   await loadBundle();
 }

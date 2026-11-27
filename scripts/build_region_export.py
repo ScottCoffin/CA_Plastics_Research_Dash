@@ -33,6 +33,7 @@ from atlas.build.region_export import (  # noqa: E402
     existing_generated_at,
     read_inputs,
     validate_structure,
+    write_bundle,
     write_export,
 )
 from atlas.regions.registry import DEFAULT_REGISTRY_PATH, load_registry  # noqa: E402
@@ -87,6 +88,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.check:
         problems = validate_structure(out_dir) if out_dir.is_dir() else [f"missing {out_dir}"]
+        if not (out_dir / "bundle" / "manifest.json").is_file():
+            problems.append("missing bundle/manifest.json (run without --check)")
         if partition_ready and raw_ready and not problems:
             export = build_region_export(
                 region.slug,
@@ -120,6 +123,8 @@ def main(argv: list[str] | None = None) -> int:
         existing_generated_at(out_dir) or _now(),
     )
     sizes = write_export(out_dir, export)
+    write_bundle(out_dir, export.index["generated_at"])
+    sizes.update({f"bundle/{name}": size for name, size in _bundle_sizes(out_dir).items()})
     total = sum(sizes.values())
     print(
         f"{region.slug} ({iso}): {len(export.institutions['institutions'])} institutions, "
@@ -129,6 +134,15 @@ def main(argv: list[str] | None = None) -> int:
     if total > REGION_BUDGET_BYTES:
         print(f"FLAG: {total} bytes is above the {REGION_BUDGET_BYTES}-byte Pages budget")
     return 0
+
+
+def _bundle_sizes(out_dir: Path) -> dict[str, int]:
+    folder = out_dir / "bundle"
+    return {
+        path.relative_to(folder).as_posix(): path.stat().st_size
+        for path in sorted(folder.rglob("*"))
+        if path.is_file()
+    }
 
 
 def _now() -> str:
