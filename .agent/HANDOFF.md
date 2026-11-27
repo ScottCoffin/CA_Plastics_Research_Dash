@@ -14,7 +14,7 @@
 ## Next task
 
 1. On "H59 approved": from `worker/`, run `npx wrangler d1 migrations apply <db> --remote` (0008), then `npx wrangler deploy`. Confirm `/groups/reviews` GET and POST return 401 without a session and record the version id. Mark CG-7b done in TODO and update MEMORY.
-2. Offline meanwhile: CG-7d. Apply approved reviewed edits to the published record: the export writes the reviewed values to curation, and the build sets status `reviewed` and `reviewed_at`. Then AMB-ROSTER-QC, then FAVICON-MAIN.
+2. Offline meanwhile: GRP-REVIEW-APPLY. Apply approved reviewed edits to the published record: the export writes the reviewed values to curation, and the build sets status `reviewed` and `reviewed_at`. Then AMB-ROSTER-QC, then FAVICON-MAIN.
 
 ## Gotchas
 
