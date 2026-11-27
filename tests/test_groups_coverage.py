@@ -10,6 +10,7 @@ from __future__ import annotations
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -74,7 +75,7 @@ def test_visible_sentences_use_no_internal_vocabulary() -> None:
 def test_design_token_audit_passes() -> None:
     script = ROOT / "scripts" / "check_design_tokens.py"
     result = subprocess.run(
-        ["py", "-3.14", str(script)], cwd=ROOT, capture_output=True, text=True, check=False
+        [sys.executable, str(script)], cwd=ROOT, capture_output=True, text=True, check=False
     )
     assert result.returncode == 0, result.stdout + result.stderr
 
