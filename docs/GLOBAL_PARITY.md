@@ -79,6 +79,17 @@ Not found in the files read: outbound links from the funding Sankey (`funding.js
    is 100 MB per file (docs/PLATFORM_ARCHITECTURE.md), but the project's own hosting rule (G-HOST, decided
    2026-11-10) keeps a file on Pages only while it is at most 25 MB; larger files move to R2.
 
+## 3b. Port design: region exports in the California schema (lead, 2026-11-26)
+
+The California components already read their data through `regionDataUrl()` (`framework/src/components/atlas.js`), which is hard-wired to `data/california/`, and `siteRoot()` already understands `/norway/` and `/belgium/` page depth. So the port reuses the components instead of rewriting them:
+
+1. **Region-aware data URL.** `regionDataUrl()` takes the region from the page path (`/california/`, `/norway/`, `/belgium/`, later any registry slug) and defaults to California, so every California URL stays byte-identical (GP-1 gate).
+2. **Region export.** A builder writes California-schema payloads for a registry region from the local global partition (`data/processed/global/works.parquet`, `work_regions.parquet`, and the PLAT-4 slice 4 `authorships.parquet` / `institutions.parquet`): `index.json` (works and authors), `institutions.json`, `institution_works/<id>.json`, author files, and the aggregates each page reads. Fields that need California-only inputs (paid author metrics such as h-index and m-quotient, California relevance review, ca_basis) are null, and every payload says the works are unscreened query hits.
+3. **Thin region pages.** `framework/src/<region>/institutions.md`, `institution.md`, `authors.md` and the works views mount the same components, so the features, links and hashes (`#inst=`, `#author=`, `&section=`) match California.
+4. **Scale.** Norway and Belgium are small (about 1,300-1,400 works each), so their full profiles fit in Pages now. Every-country scale still needs GX-2..GX-4 and R2 (GX-3); this design does not wait for them.
+
+Order: GP-5 (institutions) first, then GP-2 (authors, registry regions), GP-4 (tags and cross-navigation), GP-8 (works and evidence map). Each slice runs `scripts/check_gp1_contract.py` before and after.
+
 ## 4. Slice plan (proposed GP-2..GP-10, owner's order)
 
 Each slice must pass the GP-1 California contract unchanged: route list, DOM smoke for each page, link-graph check

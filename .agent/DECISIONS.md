@@ -967,3 +967,7 @@ The optional public name correction uses the stable group ID and goes through th
 
 - Owner rule (2026-11-26) overriding A4-D5 for one field: the plastics-focus quote in the group tagging form is 10 to 50 words (at most 600 characters), with a live word counter; when plastics are not part of a group's work, the quote may be general "about" text from the group's pages. Not stated is no longer accepted for that field on a tagged group. Every other quote stays at most 25 words.
 - Enforcement: form and Worker apply 10-50 words; the Python export and schema apply only the 50-word maximum, so stored data validates tolerantly. Deploy order: the Worker first (H63), then the form, so no window rejects 26-50-word quotes.
+
+## ADR-GP-REGION-EXPORT-2026-11-26
+
+- Decision (lead): port California features to registry regions by writing California-schema payloads per region from the global partition and making `regionDataUrl()` region-aware, instead of building new region components. California-only fields are null outside California. Registry regions (Norway, Belgium) ship first because they fit in Pages; every-country scale keeps the GX/R2 path. Details: docs/GLOBAL_PARITY.md section 3b. Owner priority 2026-11-26: the California feature port comes first.
