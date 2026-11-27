@@ -432,3 +432,6 @@ until it reports.
 
 ## Never pipe a gate check through tail inside an && chain (2026-11-26)
 `check | tail -1 && git commit` commits even when the check fails, because the pipeline's exit code is tail's. Run gate checks unpiped (or with `set -o pipefail`) before any commit or push in the same command. It let a failing A4 scaffold reach main once (fixed in 8fd9b757).
+
+## d3.treemap only lays out a root node; Plot axis wrapping needs axis marks (2026-11-26)
+`d3.treemap()(node)` on a non-root node gives NaN coordinates (padding is indexed by depth), so zoomed or nested treemaps must lay out a fresh `d3.hierarchy(node.data)`. In Observable Plot, `lineWidth` (label wrapping) is an option of `Plot.axisX`/`axisY` marks, not of the x/y scale, where it is silently ignored. Both passed node tests with stubs and only showed in a real browser with fixture data: check chart views in Chromium with a populated fixture, not just the live (empty) data.

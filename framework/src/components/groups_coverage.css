@@ -1,0 +1,82 @@
+/* CG-12 part 1: coverage bars, weekly line, world map and California panel for /groups (components/groups_coverage.js).
+   Every rule sits under .gc, so the other pages are unchanged. Colours come from the --pv-* and --seq-* tokens; no hex
+   values. Status is carried by the text as well as the colour: each bar has a written count, and muted circles keep
+   their number in the tooltip and the table. Focus is a visible outline. */
+.gc { margin: 0; }
+.gc .gc-block { margin: 1.5rem 0; }
+.gc h3 { font-size: 1rem; margin: 0 0 .35rem; }
+.gc p { margin: .4rem 0; }
+.gc .gc-caption { color: var(--pv-ink-2); font-size: .9rem; max-width: 70ch; }
+.gc .gc-empty { color: var(--pv-ink-2); font-style: italic; }
+.gc :focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+
+/* Legend swatches shared by the bars and the map key. */
+.gc .gc-legend { display: flex; flex-wrap: wrap; gap: .25rem 1rem; list-style: none; padding: 0; margin: .5rem 0; font-size: .85rem; }
+.gc .gc-legend li { display: inline-flex; align-items: center; gap: .4rem; }
+.gc .gc-sw { display: inline-block; width: 14px; height: 14px; border: 1px solid var(--pv-ink-2); }
+
+/* Stacked horizontal bars, one row per region. */
+.gc .gc-rows { list-style: none; padding: 0; margin: 0; }
+.gc [hidden] { display: none !important; }
+/* One region per row: name | bar | "706 groups · 0 tagged". */
+.gc .gc-row { display: grid; grid-template-columns: minmax(9rem, 15rem) minmax(0, 1fr) minmax(9rem, auto); align-items: center; gap: .75rem; margin: .4rem 0; font-size: .9rem; }
+.gc .gc-row-head { display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; }
+.gc .gc-row-count { color: var(--pv-ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.gc .gc-bar { display: flex; height: 16px; border: 1px solid var(--pv-ink-2); background: var(--pv-paper); }
+.gc .gc-seg { display: block; height: 100%; }
+.gc .gc-toggle { min-height: 44px; padding: 0 .9rem; margin: .5rem 0; border: 1px solid var(--pv-ink); background: var(--pv-paper); color: var(--pv-ink); font: inherit; cursor: pointer; }
+.gc .gc-scroll { overflow-x: auto; }
+
+/* Groups not yet tagged: a light neutral fill with a visible border, so the bar length still reads. */
+.gc .seg-unlabelled, .gc .gc-sw.seg-unlabelled { background: var(--pv-line); box-shadow: inset 0 0 0 1px var(--pv-ink-2); }
+.gc .seg-assigned, .gc .gc-sw.seg-assigned { background: var(--seq-200); }
+.gc .seg-ambassador_tagged, .gc .gc-sw.seg-ambassador_tagged { background: var(--seq-500); }
+.gc .seg-reviewed, .gc .gc-sw.seg-reviewed { background: var(--seq-700); }
+.gc .seg-group_confirmed, .gc .gc-sw.seg-group_confirmed { background: var(--pv-slate); }
+.gc .seg-cannot_determine, .gc .gc-sw.seg-cannot_determine { background: var(--pv-wash); background-image: repeating-linear-gradient(45deg, transparent 0 4px, var(--pv-ink-2) 4px 5px); }
+.gc .gc-seg.is-small { opacity: .45; }
+
+/* Weekly cumulative line: Plot draws in currentColor. */
+.gc .gc-weekly { color: var(--seq-700); margin-top: .75rem; }
+
+/* World map. Land and sea follow the ambassadors map; circles use the sequential tokens by tagged share. */
+.gc .gm-mapbox { max-width: 900px; }
+.gc .gm-map { width: 100%; height: auto; display: block; }
+.gc .gm-sea { fill: var(--pv-wash); }
+.gc .gm-land { fill: var(--pv-paper); stroke: var(--pv-slate-2); stroke-width: .5px; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.gc .gm-bd { fill: none; stroke: var(--pv-ink-2); stroke-width: 1.2px; stroke-dasharray: 5 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.gc .gm-pg { fill: none; stroke: var(--pv-slate); stroke-width: 1.4px; stroke-dasharray: 1.5 3; stroke-linecap: round; vector-effect: non-scaling-stroke; pointer-events: none; }
+.gc .gm-dot { stroke: var(--pv-ink); stroke-width: 1px; vector-effect: non-scaling-stroke; fill: var(--seq-200); }
+.gc .gm-dot.band-0 { fill: none; }
+.gc .gm-dot.band-1 { fill: var(--seq-200); }
+.gc .gm-dot.band-2 { fill: var(--seq-400); }
+.gc .gm-dot.band-3 { fill: var(--seq-600); }
+.gc .gm-dot.band-4 { fill: var(--seq-700); }
+.gc .gm-dot.is-small { opacity: .4; stroke-dasharray: 2 2; }
+.gc .gc-sw.band-0 { background: var(--pv-paper); }
+.gc .gc-sw.band-1 { background: var(--seq-200); }
+.gc .gc-sw.band-2 { background: var(--seq-400); }
+.gc .gc-sw.band-3 { background: var(--seq-600); }
+.gc .gc-sw.band-4 { background: var(--seq-700); }
+.gc .gm-key { font-size: .85rem; margin-top: .5rem; }
+.gc .gm-sizes { display: block; overflow: visible; }
+.gc .gm-legend-dot { fill: none; stroke: var(--pv-ink); stroke-width: 1px; }
+.gc .gm-legend-text { font-size: 11px; fill: var(--pv-ink); }
+.gc .gm-key-text { color: var(--pv-ink-2); margin: .25rem 0; }
+.gc .credit { font-size: .8rem; color: var(--pv-ink-2); max-width: 80ch; }
+
+@media (max-width: 40rem) {
+  .gc .gc-row { grid-template-columns: 1fr; gap: .2rem; }
+}
+
+/* Tables behind "Show as a table" and "Show weekly counts as a table". */
+.gc .gc-details { margin: .75rem 0; }
+.gc .gc-details summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--pv-ink); text-decoration: underline; }
+.gc .gc-details table { border-collapse: collapse; width: 100%; max-width: 720px; font-size: .9rem; }
+.gc .gc-details caption { text-align: left; font-weight: 600; padding: .25rem 0; }
+.gc .gc-details th, .gc .gc-details td { text-align: left; padding: .3rem .5rem; border-bottom: 1px solid var(--pv-line); }
+.gc .gc-details td:not(:first-child), .gc .gc-details th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gc * { transition: none !important; animation: none !important; }
+}

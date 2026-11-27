@@ -18,6 +18,8 @@ head: |
 
 <link rel="stylesheet" href="./components/explore.css">
 <link rel="stylesheet" href="./components/groups.css">
+<link rel="stylesheet" href="./components/groups_coverage.css">
+<link rel="stylesheet" href="./components/groups_composition.css">
 
 <div class="gx gv">
 <a class="skip" href="#main">Skip to the content</a>
@@ -37,6 +39,14 @@ head: |
   <p><b>Not yet tagged</b> means the group has not been tagged yet. It never means the group has no plastics work.</p>
 </div>
 <div id="groups-root" class="gv-root"><p class="gv-status">Loading the roster…</p></div>
+<section class="gv-panel gv-root" aria-labelledby="gv-coverage-title" id="gv-coverage">
+  <h2 id="gv-coverage-title">Coverage and map</h2>
+  <div id="groups-coverage"><p class="gv-status">Loading coverage…</p></div>
+</section>
+<section class="gv-panel gv-root" aria-labelledby="gv-composition-title" id="gv-composition">
+  <h2 id="gv-composition-title">What the tagged groups look like</h2>
+  <div id="groups-composition"><p class="gv-status">Loading charts…</p></div>
+</section>
 <section class="gv-panel gv-net-panel gv-root" aria-labelledby="gv-net-title" id="gv-network">
   <h2 id="gv-net-title">Network</h2>
   <p class="gv-caption">This view shows tagged groups only. Each link joins a group to a tag, or shows a stated affiliation that the group has published. A missing link means the data is missing, not that no work exists.</p>
@@ -50,6 +60,7 @@ head: |
 <p>Only collective organisations are listed. Individuals and single-person practices, such as a freelance consultant, a sole trader, or an artist trading under their own name, are left out when the list is read and are not kept.</p>
 <h3>Tags</h3>
 <p>Volunteer ambassadors tag each group from the group's own public pages. Each tag is backed by a quote of at most 25 words from those pages, with a link to the source.</p>
+<p>To help volunteers find a group's details faster, the tagging form shows hints from Wikidata (CC0 public domain dedication) and links to official charity registers (United States Internal Revenue Service, Charity Commission for England and Wales, Canada Revenue Agency, Australian Charities and Not-for-profits Commission). A hint is never published as a tag: a volunteer confirms every value on the group's own pages.</p>
 <p>Untagged groups appear only in the roster table and the counts. The badges mean: <b>Volunteer-tagged</b>, an ambassador tag from public evidence; <b>Reviewed</b>, checked by a reviewer; <b>Confirmed by group</b>, the group has confirmed its own tags.</p>
 <h3>Corrections and removal</h3>
 <p>Anyone can ask for a correction, and a group can ask to be removed. A removal request sent from the group's own web domain is honoured within 14 days and takes precedence over ambassador tags. Other corrections are checked by a reviewer.</p>
@@ -64,15 +75,38 @@ head: |
 </div>
 
 ```js
+// Each payload is fetched once and shared by the roster, coverage and composition blocks (groups.json is ~2.4 MB).
+import {globalDataUrl as payloadUrl, loadJson as loadPayload} from "./components/atlas.js";
+const groupsPayload = await loadPayload("groups/groups.json", {url: payloadUrl}).catch(() => null);
+const coveragePayload = await loadPayload("groups/coverage.json", {url: payloadUrl}).catch(() => null);
+```
+
+```js
 import {mountGroups} from "./components/groups.js";
 import {globalDataUrl, loadJson} from "./components/atlas.js";
 const root = document.getElementById("groups-root");
 await mountGroups(root, async () => ({
   // groups.json is {schema, generated_from, groups: [...]}; the table needs the list.
-  groups: (await loadJson("groups/groups.json", {url: globalDataUrl}))?.groups ?? [],
-  coverage: await loadJson("groups/coverage.json", {url: globalDataUrl}),
+  groups: groupsPayload?.groups ?? [],
+  coverage: coveragePayload,
   tree: await loadJson("groups/groups_tree.json", {url: globalDataUrl}).catch(() => null),
 }));
+```
+
+```js
+import {mountGroupsCoverage} from "./components/groups_coverage.js";
+import {siteRoot} from "./components/atlas.js";
+// Coverage bars and the country map; Plot is Framework's built-in. A missing map file leaves the table view.
+const worldMap = await fetch(new URL("assets/world/world.json", siteRoot())).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+mountGroupsCoverage(document.getElementById("groups-coverage"), {coverage: coveragePayload, groups: groupsPayload, world: worldMap, Plot});
+```
+
+```js
+import {mountGroupsComposition} from "./components/groups_composition.js";
+import {globalDataUrl as compositionUrl, loadJson as loadCompositionJson} from "./components/atlas.js";
+// Heatmaps, treemap and the evidence and agreement panel; Plot and d3 are Framework's built-ins.
+const compositionPrecision = await loadCompositionJson("groups/precision_card.json", {url: compositionUrl}).catch(() => null);
+mountGroupsComposition(document.getElementById("groups-composition"), {groups: groupsPayload?.groups ?? [], precision: compositionPrecision, Plot, d3});
 ```
 
 ```js

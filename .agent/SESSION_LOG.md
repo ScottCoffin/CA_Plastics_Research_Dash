@@ -298,3 +298,4 @@
 | 2026-11-26 | H60-H62 answers | H62: owner merges committed, roster_qc 213 pairs; H61: enrichment suggestions approved (ADR-GRP-ENRICH); H60 approved (deploy after slices C, D). | this commit |
 | 2026-11-26 | AMB-ROSTER-QC done | Slices C (form question, lazy roster, walk 39/39, axe 0) and D (answers -> dupe_answers.csv -> group_merges rows). | this commit |
 | 2026-11-26 | GRP-ENRICH slice 1 | suggestions.json from Wikidata (319 groups; name matches filtered by organisation type labels after review); register licences verified where reachable. | this commit |
+| 2026-11-26 | GRP-ENRICH slice 2 + CG-12 | Form hints + register links; coverage/map and composition/evidence views on /groups; real-browser checks with a 60-group fixture found and fixed treemap NaN layout, ignored Plot lineWidth, overflow and contrast. | this commit |

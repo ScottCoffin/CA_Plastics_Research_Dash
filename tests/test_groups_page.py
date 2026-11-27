@@ -222,7 +222,10 @@ def test_page_source_has_no_inline_scripts_or_handlers() -> None:
 def test_page_passes_the_group_list_not_the_file_object() -> None:
     page = (ROOT / "framework" / "src" / "groups.md").read_text(encoding="utf-8")
     # groups.json wraps the records in {"groups": [...]}; the object alone gave an empty table.
-    assert '(await loadJson("groups/groups.json", {url: globalDataUrl}))?.groups ?? []' in page
+    # CG-12: the payload is fetched once and shared, so every consumer must unwrap the list.
+    assert page.count('loadPayload("groups/groups.json"') == 1
+    assert "groups: groupsPayload?.groups ?? []" in page
+    assert "{groups: groupsPayload?.groups ?? [], precision:" in page
 
 
 def test_table_wrapper_contains_hidden_labels() -> None:
