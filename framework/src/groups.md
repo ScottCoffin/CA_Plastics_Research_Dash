@@ -21,42 +21,49 @@ head: |
 <link rel="stylesheet" href="./components/groups_coverage.css">
 <link rel="stylesheet" href="./components/groups_composition.css">
 <link rel="stylesheet" href="./components/groups_flows.css">
+<link rel="stylesheet" href="./components/groups_scope_map.css">
 
 <div class="gx gv">
 <a class="skip" href="#main">Skip to the content</a>
 <header class="top">
-  <a class="brand" href="./" aria-label="Plastiverse Live home"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="5"/><line x1="2.6" y1="13" x2="23.4" y2="13"/><line x1="13" y1="2.6" x2="13" y2="23.4"/></svg><span class="wm" aria-hidden="true">PLASTI<b>VERSE</b> LIVE</span></a>
+  <a class="brand" href="./" aria-label="Plastiverse Live home"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="5"/><g><line x1="20.60" y1="13.00" x2="23.40" y2="13.00"/><line x1="20.02" y1="15.91" x2="23.72" y2="17.44"/><line x1="18.37" y1="18.37" x2="20.35" y2="20.35"/><line x1="15.91" y1="20.02" x2="17.44" y2="23.72"/><line x1="13.00" y1="20.60" x2="13.00" y2="23.40"/><line x1="10.09" y1="20.02" x2="8.56" y2="23.72"/><line x1="7.63" y1="18.37" x2="5.65" y2="20.35"/><line x1="5.98" y1="15.91" x2="2.28" y2="17.44"/><line x1="5.40" y1="13.00" x2="2.60" y2="13.00"/><line x1="5.98" y1="10.09" x2="2.28" y2="8.56"/><line x1="7.63" y1="7.63" x2="5.65" y2="5.65"/><line x1="10.09" y1="5.98" x2="8.56" y2="2.28"/><line x1="13.00" y1="5.40" x2="13.00" y2="2.60"/><line x1="15.91" y1="5.98" x2="17.44" y2="2.28"/><line x1="18.37" y1="7.63" x2="20.35" y2="5.65"/><line x1="20.02" y1="10.09" x2="23.72" y2="8.56"/></g></svg><span class="wm" aria-hidden="true">PLASTIVERSE <b>LIVE</b></span></a>
   <nav class="nav" aria-label="Main">
+    <a href="./explore">Explore the data</a>
+    <a href="./ambassadors">Ambassadors</a>
+    <a href="./groups" aria-current="page">Community groups</a>
+    <button type="button" class="btn keep" id="groups-regions-btn" aria-expanded="false" aria-controls="groups-regions-pop">Regions <svg width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+    <a href="./california/about#how-works-are-screened">Methods</a>
+    <a href="./california/about">About</a>
+    <a class="btn solid keep" href="#updates">Get updates</a>
+  </nav>
+  <details class="gm-mobile-menu">
+  <summary>Menu</summary>
+  <div class="gm-mobile-links" aria-label="Site links">
     <a href="./explore">Explore the data</a>
     <a href="./groups" aria-current="page">Community groups</a>
     <a href="./ambassadors">Ambassadors</a>
-    <a href="./quality">Data quality</a>
-  </nav>
+    <a href="./california/">California atlas</a>
+    <a href="./norway/">Norway atlas</a>
+    <a href="./california/about#how-works-are-screened">Methods</a>
+    <a href="./california/about">About</a>
+    <a href="#updates">Get updates</a>
+  </div>
+</details>
 </header>
-<main id="main" tabindex="-1">
+<div class="pop" id="groups-regions-pop" hidden style="right:var(--pv-gut);top:64px;position:fixed;width:min(420px, calc(100vw - 32px))">
+  <div class="pop-h">Regional atlases <span>2 regions</span></div>
+  <a class="opt live" href="./california/"><i class="sw live"></i><span>California<small>live atlas, daily build</small></span><span class="go">Open atlas</span></a>
+  <a class="opt" href="./ambassadors"><i class="sw prep"></i><span>Norway<small>in preparation</small></span><span class="go quiet">Help build it</span></a>
+  <a class="opt" href="./ambassadors"><i class="sw ask"></i><span>Your region<small>opens on request</small></span><span class="go quiet">Request</span></a>
+  <p class="pop-note">Every country already has an automatic profile here. A regional atlas adds local researchers, monitoring, funding and policy.</p>
+</div>
+<div id="main" tabindex="-1">
 <div class="gv-intro">
   <h1>Community groups</h1>
-  <p>Only organisations are listed. Volunteer ambassadors add tags from public evidence, such as a group's own website and its public statements. Select a group name to see where it was listed and the evidence behind each tag.</p>
-  <p><b>Not yet tagged</b> means the group has not been tagged yet. It never means the group has no plastics work.</p>
+  <p>Only organisations are listed. Volunteer ambassadors add tags from public evidence. Select a group to see its sources. <b>Not yet tagged</b> means the group has not been tagged yet. It never means the group has no plastics work.</p>
 </div>
-<div id="groups-root" class="gv-root"><p class="gv-status">Loading the roster…</p></div>
-<section class="gv-panel gv-root" aria-labelledby="gv-coverage-title" id="gv-coverage">
-  <h2 id="gv-coverage-title">Coverage and map</h2>
-  <div id="groups-coverage"><p class="gv-status">Loading coverage…</p></div>
-</section>
-<section class="gv-panel gv-root" aria-labelledby="gv-composition-title" id="gv-composition">
-  <h2 id="gv-composition-title">What the tagged groups look like</h2>
-  <div id="groups-composition"><p class="gv-status">Loading charts…</p></div>
-</section>
-<section class="gv-panel gv-root" aria-labelledby="gv-flows-title" id="gv-flows">
-  <h2 id="gv-flows-title">Flows, participation and languages</h2>
-  <div id="groups-flows"><p class="gv-status">Loading charts…</p></div>
-</section>
-<section class="gv-panel gv-net-panel gv-root" aria-labelledby="gv-net-title" id="gv-network">
-  <h2 id="gv-net-title">Network</h2>
-  <p class="gv-caption">This view shows tagged groups only. Each link joins a group to a tag, or shows a stated affiliation that the group has published. A missing link means the data is missing, not that no work exists.</p>
-  <div id="groups-network"></div>
-</section>
+<div id="groups-scope-map" class="gv-root" aria-label="Community groups map"><p class="gv-status">Loading the map and scope counts…</p></div>
+<div id="groups-scope-panels" class="gv-root"><p class="gv-status">Loading scope views…</p></div>
 <section class="gv-panel gv-root" aria-labelledby="gv-methods-title" id="gv-methods">
 <h2 id="gv-methods-title">How this list is made</h2>
 <h3>Source</h3>
@@ -71,67 +78,76 @@ head: |
 <p>Anyone can ask for a correction, and a group can ask to be removed. A removal request sent from the group's own web domain is honoured within 14 days and takes precedence over ambassador tags. Other corrections are checked by a reviewer.</p>
 <p>To ask for a correction or removal, write to <b>theplastiverse@gmail.com</b> with the group name and what should change.</p>
 </section>
-</main>
+</div>
 
-<footer class="foot">
+<footer class="foot" id="updates">
+  <div><img src="./assets/landing/logo_564.webp" width="282" height="247" alt="Plastiverse Live logo: scattered plastic fragments flow into a bright node and a network of research" loading="lazy"></div>
+  <div><b>Get updates</b><br>Weekly email, <a href="./feed.xml">RSS feed</a>, <a href="https://ntfy.sh/plastiverse-california" rel="noreferrer">ntfy alerts</a>.</div>
   <div><b>Plastiverse Live</b><br>Created by <a href="https://scottcoff.in" rel="noreferrer">Scott Coffin</a>. Not a State product.</div>
-  <div><b>Read more</b><br><a href="./california/about">About</a> · <a href="./ambassadors">Become an ambassador</a> · <a href="./explore">Explore the data</a></div>
 </footer>
 </div>
 
 ```js
-// Each payload is fetched once and shared by the roster, coverage and composition blocks (groups.json is ~2.4 MB).
-import {globalDataUrl as payloadUrl, loadJson as loadPayload} from "./components/atlas.js";
-const groupsPayload = await loadPayload("groups/groups.json", {url: payloadUrl}).catch(() => null);
-const coveragePayload = await loadPayload("groups/coverage.json", {url: payloadUrl}).catch(() => null);
-```
+import {globalDataUrl as payloadUrl, loadJson as loadPayload, siteRoot} from "./components/atlas.js";
+import {mountGroupsScopeMap} from "./components/groups_scope_map.js";
+import {mountGroupsScopePanels} from "./components/groups_scope_panels.js";
 
-```js
-import {mountGroups} from "./components/groups.js";
-import {globalDataUrl, loadJson} from "./components/atlas.js";
-const root = document.getElementById("groups-root");
-await mountGroups(root, async () => ({
-  // groups.json is {schema, generated_from, groups: [...]}; the table needs the list.
-  groups: groupsPayload?.groups ?? [],
-  coverage: coveragePayload,
-  tree: await loadJson("groups/groups_tree.json", {url: globalDataUrl}).catch(() => null),
-}));
-```
+const shellEvents = new AbortController();
+const regionsButton = document.getElementById("groups-regions-btn");
+const regionsPopover = document.getElementById("groups-regions-pop");
+const closeRegions = () => { regionsPopover.hidden = true; regionsButton.setAttribute("aria-expanded", "false"); };
+regionsButton.addEventListener("click", () => {
+  const open = regionsPopover.hidden;
+  regionsPopover.hidden = !open;
+  regionsButton.setAttribute("aria-expanded", String(open));
+}, {signal: shellEvents.signal});
+regionsPopover.addEventListener("click", (event) => { if (event.target.closest("a")) closeRegions(); }, {signal: shellEvents.signal});
+document.addEventListener("pointerdown", (event) => {
+  if (!regionsPopover.hidden && !regionsPopover.contains(event.target) && !regionsButton.contains(event.target)) closeRegions();
+}, {signal: shellEvents.signal});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !regionsPopover.hidden) { closeRegions(); regionsButton.focus(); }
+}, {signal: shellEvents.signal});
 
-```js
-import {mountGroupsCoverage} from "./components/groups_coverage.js";
-import {siteRoot} from "./components/atlas.js";
-// Coverage bars and the country map; Plot is Framework's built-in. A missing map file leaves the table view.
-const worldMap = await fetch(new URL("assets/world/world.json", siteRoot())).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-mountGroupsCoverage(document.getElementById("groups-coverage"), {coverage: coveragePayload, groups: groupsPayload, world: worldMap, Plot});
-```
-
-```js
-import {mountGroupsComposition} from "./components/groups_composition.js";
-import {globalDataUrl as compositionUrl, loadJson as loadCompositionJson} from "./components/atlas.js";
-// Heatmaps, treemap and the evidence and agreement panel; Plot and d3 are Framework's built-ins.
-const compositionPrecision = await loadCompositionJson("groups/precision_card.json", {url: compositionUrl}).catch(() => null);
-mountGroupsComposition(document.getElementById("groups-composition"), {groups: groupsPayload?.groups ?? [], precision: compositionPrecision, Plot, d3});
-```
-
-```js
-import {mountGroupsFlows} from "./components/groups_flows.js";
-import {globalDataUrl as flowsUrl, loadJson as loadFlowsJson} from "./components/atlas.js";
-// Sector-to-activity flows, participation in science, activity combinations and website languages.
-const flowsPayload = await loadFlowsJson("groups/flows.json", {url: flowsUrl}).catch(() => null);
-mountGroupsFlows(document.getElementById("groups-flows"), {flows: flowsPayload, groups: groupsPayload?.groups ?? [], coverage: coveragePayload, Plot});
-```
-
-```js
-import {mountGroupsNetwork} from "./components/groups_network.js";
-import {globalDataUrl as networkDataUrl, loadJson as loadNetworkJson} from "./components/atlas.js";
-// The network loads on its own, so a missing graph never blocks the roster. Opening a card reuses the roster's
-// dialog through the hash key group=<id>; the network's own keys (net_*) are kept in the hash.
-mountGroupsNetwork(document.getElementById("groups-network"), await loadNetworkJson("groups/groups_graph.json", {url: networkDataUrl}).catch(() => null), {
-  onOpenGroup: (id) => {
-    const params = new URLSearchParams(location.hash.replace(/^#/, ""));
-    params.set("group", id);
-    location.hash = params.toString();
-  }
+const [groupsPayload, coveragePayload, scopesPayload, explorePayload, treePayload, flowsPayload, graphPayload, precisionPayload, worldMap] = await Promise.all([
+  loadPayload("groups/groups.json", {url: payloadUrl}).catch(() => null),
+  loadPayload("groups/coverage.json", {url: payloadUrl}).catch(() => null),
+  loadPayload("groups/scopes.json", {url: payloadUrl}).catch(() => null),
+  loadPayload("explore.json", {url: payloadUrl}).catch(() => null),
+  loadPayload("groups/groups_tree.json", {url: payloadUrl}).catch(() => null),
+  loadPayload("groups/flows.json", {url: payloadUrl}).catch(() => null),
+  loadPayload("groups/groups_graph.json", {url: payloadUrl}).catch(() => null),
+  loadPayload("groups/precision_card.json", {url: payloadUrl}).catch(() => null),
+  fetch(new URL("assets/world/world.json", siteRoot()), {cache: "no-cache"}).then((r) => r.ok ? r.json() : null).catch(() => null),
+]);
+const groupsAll = groupsPayload?.groups ?? [];
+const updateScopePanels = mountGroupsScopePanels(document.getElementById("groups-scope-panels"), {
+  Plot, d3, graph: graphPayload, precision: precisionPayload,
+});
+const updateForScope = async (scope) => {
+  const ids = Array.isArray(scope?.group_ids) ? new Set(scope.group_ids) : null;
+  const groups = ids ? groupsAll.filter((group) => ids.has(group.group_id)) : groupsAll;
+  await updateScopePanels({
+    scope, groups,
+    coverage: scope?.coverage ?? coveragePayload,
+    tree: scope?.tree ?? treePayload,
+    flows: scope?.flows ?? flowsPayload,
+  });
+};
+let groupsMap = null;
+if (scopesPayload && worldMap) {
+  groupsMap = mountGroupsScopeMap(document.getElementById("groups-scope-map"), {
+    world: worldMap, scopes: scopesPayload, explore: explorePayload, coverage: coveragePayload,
+    onScope: updateForScope,
+  });
+} else {
+  document.getElementById("groups-scope-map").innerHTML = '<p class="gv-status">The interactive map is unavailable. Group views show the world scope.</p>';
+  const worldScope = scopesPayload?.scopes?.find((scope) => scope.key === "world") || {key: "world", kind: "world", label: "World"};
+  await updateForScope(worldScope);
+}
+void invalidation.then(() => {
+  shellEvents.abort();
+  groupsMap?.dispose();
+  updateScopePanels.dispose?.();
 });
 ```

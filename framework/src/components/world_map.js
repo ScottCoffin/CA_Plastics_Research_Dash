@@ -184,6 +184,7 @@ export function mountPlaceSearch(host, {id, rows, onPick, sub, count = () => "",
 // ---- DOM: gestures ---------------------------------------------------------------------------
 // A press anywhere else deactivates the map. Only the most recent map's listener is kept.
 let outsideTap = null;
+let outsideSvg = null;
 // Cooperative gestures for one map svg (spec section 10). The wheel zooms with Ctrl or Cmd, or once the map is
 // active (click, tap or focus); otherwise the page scrolls and the hint explains how. One finger scrolls the page
 // on touch; two fingers pan and pinch. Options:
@@ -209,10 +210,11 @@ export function attachMapGestures(svg, {frame, view, apply, reset, hint, drag = 
   };
   if (outsideTap) document.removeEventListener("pointerdown", outsideTap);
   outsideTap = (e) => {
-    if (!svg.isConnected) { document.removeEventListener("pointerdown", outsideTap); outsideTap = null; return; }
+    if (!svg.isConnected) { document.removeEventListener("pointerdown", outsideTap); outsideTap = null; outsideSvg = null; return; }
     if (!svg.contains(e.target)) setActive("outside");
   };
   document.addEventListener("pointerdown", outsideTap);
+  outsideSvg = svg;
   paintHint();
   const mid = () => {
     const v = [...pts.values()], n = v.length;
@@ -295,5 +297,15 @@ export function attachMapGestures(svg, {frame, view, apply, reset, hint, drag = 
     e.preventDefault();
     keys[e.key]();
   });
-  return {zoomBy, dragged: () => drag.moved};
+  return {
+    zoomBy,
+    dragged: () => drag.moved,
+    dispose: () => {
+      if (outsideSvg === svg && outsideTap) {
+        document.removeEventListener("pointerdown", outsideTap);
+        outsideTap = null;
+        outsideSvg = null;
+      }
+    },
+  };
 }

@@ -545,9 +545,13 @@ function reviewCell(doc, review) {
   return cell;
 }
 
-function evidenceSection(doc, precision) {
+function evidenceSection(doc, precision, globalOnly = false) {
   const section = node(doc, "section", "groups-composition__section");
   section.append(node(doc, "h3", "", "How well are the tags supported?"));
+  if (globalOnly) {
+    section.append(node(doc, "p", "groups-composition__note", "Precision evidence is available for the global tagging sample only; it has not been calculated for this scope."));
+    return section;
+  }
   const rows = evidenceRows(precision);
   const reasons = reasonRows(precision);
   const tagged = rows.length ? rows[0].tagged : 0;
@@ -598,7 +602,7 @@ function evidenceSection(doc, precision) {
  * Charts size to the container (280 to 720 px wide). Without Plot the heatmaps fall back to text summaries;
  * the treemap needs d3. Layout is computed at mount time; it does not re-flow on resize.
  */
-export function mountGroupsComposition(el, {groups = [], precision = null, Plot = null, d3 = null, width = 720} = {}) {
+export function mountGroupsComposition(el, {groups = [], precision = null, Plot = null, d3 = null, width = 720, precisionGlobalOnly = false} = {}) {
   if (!el) return;
   const doc = el.ownerDocument;
   const fit = Math.max(280, Math.min(width, el.clientWidth || width));
@@ -607,6 +611,6 @@ export function mountGroupsComposition(el, {groups = [], precision = null, Plot 
   el.append(
     heatmapSection(doc, groups, Plot, fit),
     d3 ? treemapSection(doc, groups, d3, fit) : node(doc, "section", "groups-composition__section"),
-    evidenceSection(doc, precision),
+    evidenceSection(doc, precision, precisionGlobalOnly),
   );
 }

@@ -1,7 +1,8 @@
-# Handoff — 2026-11-27 — GP-SHELL
+# Handoff — 2026-11-27 — GP-GROUPS
 
 ## Done
 
+- The `/groups` map comes first inside the Explore shell and shares its zoom and pan controls. Its geography ladder updates the roster, counts, coverage, tree, composition, flows and network. Related research links use the selected regional atlas. Chromium ran both the published roster and a populated synthetic fixture at 1440 and 390 px. GP-1 passed and all 5,002 assembled California route and data files matched the previous build.
 - Norway and Belgium feature pages use the Plastiverse Live shell and typography, local menu and search, and global footer styling. The site wordmark links home and the scope menu links to the regional pages. California route and data files matched the preceding checkpoint byte-for-byte. The global landing, Explore, groups, ambassadors and quality HTML matched as well.
 - The evidence heatmap selection keeps the count ramp and selected ring. Unselected counts and zero-count filter labels use opaque, contrasting ink. Chromium measured a minimum of 5.02:1 for enabled cells after selection and zero axe violations across both modes at 1440 and 390 px in California, Norway and Belgium. Keyboard selection and clear passed. California evidence styling changed with owner approval and its data files matched byte-for-byte.
 - `/norway/topics`, `/belgium/topics`, and regional search reuse the California renderer and builders. The topic denominator is unscreened query hits. The rising-share screen uses rule labels and institution checks. Search resolves to regional pages, author profiles, institutions and tag-filtered author lists.
@@ -19,8 +20,7 @@
 
 ## Next checkpoints
 
-1. GP-GROUPS puts the scoped interactive map first and applies the `/explore` shell to the groups views.
-2. VD-SM transitions the California Atlas to the main site's design. The owner lifted the design freeze and confirmed the global typography and colors as the source. Apply Impeccable and the platform-wide app design in [DESIGN.md](../DESIGN.md).
+1. VD-SM transitions the California Atlas to the main site's design. The owner lifted the California design freeze and confirmed the global typography and colors as the source. Apply Impeccable and the platform-wide app design in [DESIGN.md](../DESIGN.md). Delegate to Luna workers with Light effort.
 
 ## Verification
 

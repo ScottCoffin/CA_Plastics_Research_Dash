@@ -22,6 +22,8 @@ TREE_RUNTIME = ROOT / "tests" / "framework_groups_tree_runtime.mjs"
 NETWORK_RUNTIME = ROOT / "tests" / "framework_groups_network_runtime.mjs"
 NETWORK_MODEL = ROOT / "framework" / "src" / "components" / "groups_network_model.js"
 NETWORK = ROOT / "framework" / "src" / "components" / "groups_network.js"
+SCOPE_MAP = ROOT / "framework" / "src" / "components" / "groups_scope_map.js"
+SCOPE_MAP_STYLES = ROOT / "framework" / "src" / "components" / "groups_scope_map.css"
 CONTACT = "theplastiverse@gmail.com"
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
@@ -66,8 +68,43 @@ def test_page_title_and_global_theme() -> None:
     assert text.startswith("---\n")
     assert "title: Community groups · Plastiverse Live" in text
     assert 'href="./components/groups.css"' in text
-    assert 'import {mountGroups} from "./components/groups.js"' in text
+    assert 'import {mountGroupsScopePanels} from "./components/groups_scope_panels.js"' in text
     assert 'aria-current="page">Community groups' in text
+    assert "PLASTIVERSE <b>LIVE</b>" in text
+    assert '<g><line x1="20.60"' in text
+    assert '<details class="gm-mobile-menu">' in text
+    assert 'src="./assets/landing/logo_564.webp"' in text
+    assert '<main id="main"' not in text
+
+
+def test_interactive_scope_map_precedes_group_views() -> None:
+    page = _visible_source(PAGE)
+    assert 'id="groups-scope-map"' in page
+    assert page.index('id="groups-scope-map"') < page.index('id="groups-scope-panels"')
+    assert 'href="./components/groups_scope_map.css"' in page
+    assert 'import {mountGroupsScopeMap} from "./components/groups_scope_map.js"' in page
+    module = _read(SCOPE_MAP)
+    assert "attachMapGestures(map" in module
+    assert 'params.set("scope", selected.key)' in module
+    assert 'currentHash().get("scope")' in module
+    assert "onScope: updateForScope" in page
+
+
+def test_map_has_count_legend_and_real_regional_atlas_links() -> None:
+    module = _read(SCOPE_MAP)
+    styles = _read(SCOPE_MAP_STYLES)
+    assert 'aria-label="Groups listed by country"' in module
+    assert "Groups listed by country</span>" in module
+    assert 'rosterCount === 0 ? "zero"' in module and 'rosterCount < 25 ? "some" : "many"' in module
+    assert ".gm-country--zero { fill: var(--pv-wash); }" in styles
+    assert ".gm-country--many { fill: var(--pv-slate); }" in styles
+    assert 'import {siteRoot} from "./atlas.js"' in module
+    assert "new URL(`${prefix}institutions`, base).href" in module
+    assert "new URL(`${prefix}evidence`, base).href" in module
+    for region in ("california", "norway", "belgium"):
+        assert (ROOT / "framework" / "src" / region / "index.md").is_file()
+        assert (ROOT / "framework" / "src" / region / "institutions.md").is_file()
+        assert (ROOT / "framework" / "src" / region / "evidence.md").is_file()
 
 
 def test_lede_states_who_is_listed_and_what_not_yet_tagged_means() -> None:
@@ -224,8 +261,11 @@ def test_page_passes_the_group_list_not_the_file_object() -> None:
     # groups.json wraps the records in {"groups": [...]}; the object alone gave an empty table.
     # CG-12: the payload is fetched once and shared, so every consumer must unwrap the list.
     assert page.count('loadPayload("groups/groups.json"') == 1
-    assert "groups: groupsPayload?.groups ?? []" in page
-    assert "{groups: groupsPayload?.groups ?? [], precision:" in page
+    assert "const groupsAll = groupsPayload?.groups ?? []" in page
+    assert (
+        "const groups = ids ? groupsAll.filter((group) => ids.has(group.group_id)) : groupsAll"
+        in page
+    )
 
 
 def test_table_wrapper_contains_hidden_labels() -> None:
@@ -252,9 +292,12 @@ def test_network_runtime_helpers_pass() -> None:
 
 def test_network_section_wording_and_hash_keys() -> None:
     page = _visible_source(PAGE)
-    assert '<h2 id="gv-net-title">Network</h2>' in page
-    assert 'id="groups-network"' in page
-    assert "This view shows tagged groups only." in page
+    panels = _read(ROOT / "framework" / "src" / "components" / "groups_scope_panels.js")
+    assert '<h2 id="gv-scope-network-title">Network</h2>' in panels
+    assert 'id="groups-scope-network"' in panels
+    assert "This view shows tagged groups only." in panels
+    assert "graph: graphPayload" in page
+    assert "scope, groups," in page
     module = _read(NETWORK)
     model = _read(NETWORK_MODEL)
     assert "No groups are tagged yet, so there is no network to draw." in module

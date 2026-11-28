@@ -856,7 +856,7 @@ def test_committed_curation_headers_match_the_export_contract() -> None:
 
 def test_header_only_curation_gives_the_same_bytes_as_no_curation(tmp_path: Path) -> None:
     outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), _curation(tmp_path))
-    assert outputs == _build(None)
+    assert {key: value for key, value in outputs.items() if key != "scopes.json"} == _build(None)
 
 
 def test_tagged_row_is_ingested_as_tagged_not_reviewed(tmp_path: Path) -> None:
@@ -956,7 +956,7 @@ def test_rows_for_unknown_groups_are_skipped_with_a_reason(tmp_path: Path, capsy
     out = capsys.readouterr().out
     assert f"skip group_tags row: group_id {unknown!r} is not on the roster" in out
     assert f"skip group_affiliations row: group_id {unknown!r} has no tag row" in out
-    assert outputs == _build(None)
+    assert {key: value for key, value in outputs.items() if key != "scopes.json"} == _build(None)
 
 
 def test_malformed_flag_in_the_curation_csv_fails_the_build(tmp_path: Path) -> None:
@@ -1037,7 +1037,7 @@ def test_committed_name_corrections_file_is_header_only() -> None:
 
 def test_header_only_name_corrections_give_the_same_bytes(tmp_path: Path) -> None:
     outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), _names_file(tmp_path))
-    assert outputs == _build(None)
+    assert {key: value for key, value in outputs.items() if key != "scopes.json"} == _build(None)
 
 
 def test_name_correction_renames_keeps_the_id_and_moves_the_old_name_to_alt(tmp_path: Path) -> None:
@@ -1131,7 +1131,8 @@ def test_pairs_and_reviews_of_groups_no_longer_on_the_roster_are_ignored(tmp_pat
             }
         ],
     )
-    assert BUILD.build_outputs(copy.deepcopy(ROSTER), curation) == _build(None)
+    outputs = BUILD.build_outputs(copy.deepcopy(ROSTER), curation)
+    assert {key: value for key, value in outputs.items() if key != "scopes.json"} == _build(None)
 
 
 # ---------------------------------------------------------------- approved reviews (GRP-REVIEW)

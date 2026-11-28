@@ -157,7 +157,9 @@ function writeTreeHash(state) {
 
 // mount receives the shared group-card and roster-filter callbacks from groups.js.
 export function mountGroupsTree(root, data, {onGroup, onRoster} = {}) {
-  if (!data) return false;
+  if (!data) return () => {};
+  const abort = new AbortController();
+  const {signal} = abort;
   let state = treeHashState(location.hash);
   let query = state.query;
   let indexKey = "";
@@ -237,10 +239,10 @@ export function mountGroupsTree(root, data, {onGroup, onRoster} = {}) {
       indexKey = "";
       persist();
     }
-  });
+  }, {signal});
   root.addEventListener("input", (event) => {
     if (event.target.matches("[data-tree-search]")) applySearch(event.target.value);
-  });
+  }, {signal});
   root.addEventListener("click", (event) => {
     const item = event.target.closest("[data-treeitem]");
     if (!item) return;
@@ -260,7 +262,7 @@ export function mountGroupsTree(root, data, {onGroup, onRoster} = {}) {
       persist();
       root.querySelector(`[data-node-id="${CSS.escape(id)}"]`)?.focus();
     }
-  });
+  }, {signal});
   root.addEventListener("keydown", (event) => {
     const item = event.target.closest?.("[data-treeitem]");
     if (!item) return;
@@ -281,7 +283,7 @@ export function mountGroupsTree(root, data, {onGroup, onRoster} = {}) {
     else if (event.key === "Enter" || event.key === " ") item.click();
     if (next) { event.preventDefault(); next.focus(); }
     if (["ArrowDown", "ArrowUp", "Home", "End", "ArrowRight", "ArrowLeft", "Enter", " "].includes(event.key)) event.preventDefault();
-  });
+  }, {signal});
   root.addEventListener("click", (event) => {
     if (event.target.closest("[data-tree-expand-all]")) {
       state.allExpanded = true;
@@ -294,13 +296,13 @@ export function mountGroupsTree(root, data, {onGroup, onRoster} = {}) {
       state.collapsed = [];
       persist();
     }
-  });
+  }, {signal});
   root.addEventListener("focusin", (event) => {
     const item = event.target.closest?.("[data-treeitem]");
     if (!item) return;
     state.focusId = item.dataset.nodeId;
     root.querySelectorAll("[data-treeitem]").forEach((node) => node.tabIndex = node === item ? 0 : -1);
-  });
-  window.addEventListener("hashchange", () => { state = {...state, ...treeHashState(location.hash)}; query = state.query; render(); });
-  return true;
+  }, {signal});
+  window.addEventListener("hashchange", () => { state = {...state, ...treeHashState(location.hash)}; query = state.query; render(); }, {signal});
+  return () => abort.abort();
 }

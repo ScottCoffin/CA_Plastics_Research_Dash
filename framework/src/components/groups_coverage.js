@@ -329,22 +329,22 @@ function californiaHTML(groups) {
 }
 
 // The whole content of the container as one HTML string, from the three data payloads.
-export function coverageMarkup({coverage, groups, world}) {
+export function coverageMarkup({coverage, groups, world, showMap = true}) {
   const rows = regionRows(coverage);
   const points = weeklyPoints(coverage?.weekly_tagged);
   const cov = coverageHTML(coverage, rows, points);
   const list = Array.isArray(groups) ? groups : (groups?.groups || []);
-  const map = `<div class="gc-block gc-map"><h3>Where the groups are</h3>${mapHTML(countryRows(coverage, world), world)}</div>`;
+  const map = showMap ? `<div class="gc-block gc-map"><h3>Where the groups are</h3>${mapHTML(countryRows(coverage, world), world)}</div>` : "";
   return `${cov}${map}${californiaHTML(list)}`;
 }
 
 // ---- DOM ---------------------------------------------------------------------------------------
 // Fills el with the three blocks, wires the region toggle and draws the weekly line with Plot (Framework's global)
 // when there are points.
-export function mountGroupsCoverage(el, {coverage, groups, world, Plot = null} = {}) {
+export function mountGroupsCoverage(el, {coverage, groups, world, Plot = null, showMap = true} = {}) {
   if (!el) return;
   el.classList.add("gc");
-  el.innerHTML = coverageMarkup({coverage, groups, world});
+  el.innerHTML = coverageMarkup({coverage, groups, world, showMap});
   const toggle = el.querySelector("[data-gc-toggle]");
   if (toggle) {
     const regionCount = regionView(regionRows(coverage)).regionCount;

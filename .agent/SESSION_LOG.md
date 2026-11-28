@@ -318,3 +318,4 @@
 | 2026-11-27 | GP-10a | Regional topics and search for Norway and Belgium. Both data builders check current. GP-1 passed and all 4,993 assembled California route and data files matched. | this commit |
 | 2026-11-27 | EV-A11Y-SELECT | Improved evidence map contrast across California, Norway and Belgium. Both heatmap modes passed Chromium at desktop and mobile widths with zero axe violations. | this commit |
 | 2026-11-27 | GP-SHELL | Branded Norway and Belgium feature pages with the global shell, regional navigation and scoped search. Verified the California and global HTML bytes. | this commit |
+| 2026-11-27 | GP-GROUPS | Added the map-first groups view and scope-aware roster, coverage, tree, composition, flows and network. Verified Chromium with published and populated fixture data. | this commit |

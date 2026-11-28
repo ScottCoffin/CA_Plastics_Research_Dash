@@ -131,6 +131,8 @@ export function parseHash(hash = "") {
 export function formatHash(state = {}) {
   const value = {...DEFAULT_STATE, ...state};
   const params = new URLSearchParams();
+  const current = new URLSearchParams((globalThis.location?.hash || "").replace(/^#/, ""));
+  if (current.has("scope")) params.set("scope", current.get("scope"));
   for (const key of ["q", "region", "country", "status", "group"]) if (value[key]) params.set(key, value[key]);
   if (value.without_tags) params.set("without_tags", "1");
   if (value.sort !== DEFAULT_STATE.sort) params.set("sort", value.sort);
@@ -322,19 +324,19 @@ function resultsHtml(groups, state) {
 }
 
 // Mounts the page into root. load() resolves to {groups, coverage, tree}; tree may be unavailable.
-export async function mountGroups(root, load) {
+export async function mountGroups(root, load, {showCoverage = true} = {}) {
   root.innerHTML = '<p class="gv-status">Loading the roster…</p>';
   let data;
   try {
-    data = await load();
+    data = typeof load === "function" ? await load() : load;
   } catch {
     root.innerHTML = '<p class="gv-status">The roster could not be loaded. Try again later.</p>';
-    return;
+    return () => {};
   }
   const groups = list(data?.groups);
   const byId = new Map(groups.map((group) => [group.group_id, group]));
   let state = {...DEFAULT_STATE, ...parseHash(location.hash)};
-  root.innerHTML = `${coverageHtml(data?.coverage ?? {})}
+  root.innerHTML = `${showCoverage ? coverageHtml(data?.coverage ?? {}) : ""}
     ${groupsTreeHtml(data?.tree, treeHashState(location.hash), treeHashState(location.hash).query)}
     <section class="gv-panel" aria-labelledby="gv-table-title">
       <h2 id="gv-table-title">Roster</h2>
@@ -345,6 +347,8 @@ export async function mountGroups(root, load) {
     <dialog id="gv-card" class="gv-card" aria-labelledby="gv-card-title"></dialog>`;
   const results = root.querySelector("#gv-results");
   const dialog = root.querySelector("#gv-card");
+  const abort = new AbortController();
+  const {signal} = abort;
 
   const syncHash = () => {
     const params = new URLSearchParams(formatHash(state).replace(/^#/, ""));
@@ -352,6 +356,7 @@ export async function mountGroups(root, load) {
     for (const key of ["tree", "tree_all", "tree_open", "tree_closed", "tree_find"]) if (current.has(key)) params.set(key, current.get(key));
     // The network view (groups_network.js) owns the net* keys; keep them too.
     for (const [key, val] of current) if (key === "net" || key.startsWith("net_")) params.set(key, val);
+    if (current.has("scope")) params.set("scope", current.get("scope"));
     const value = params.toString();
     history.replaceState(null, "", `${location.pathname}${location.search}${value ? `#${value}` : ""}`);
   };
@@ -385,7 +390,7 @@ export async function mountGroups(root, load) {
   };
   const refocus = (selector) => root.querySelector(selector)?.focus();
 
-  mountGroupsTree(root, data?.tree, {
+  const treeDispose = mountGroupsTree(root, data?.tree, {
     onGroup: (id) => {
       if (showCard(id)) { state = {...state, group: id}; syncHash(); }
     },
@@ -402,11 +407,11 @@ export async function mountGroups(root, load) {
 
   root.addEventListener("input", (event) => {
     if (event.target.id === "gv-q") setState({q: event.target.value, page: 1, without_tags: false});
-  });
+  }, {signal});
   root.addEventListener("change", (event) => {
     const field = {"gv-region": "region", "gv-country": "country", "gv-status": "status"}[event.target.id];
     if (field) setState({[field]: event.target.value, page: 1, without_tags: false});
-  });
+  }, {signal});
   root.addEventListener("click", (event) => {
     const button = event.target.closest("button");
     if (!button || !root.contains(button)) return;
@@ -429,29 +434,30 @@ export async function mountGroups(root, load) {
       renderResults();
       syncHash();
     }
-  });
+  }, {signal});
   dialog.addEventListener("click", (event) => {
     // The methods link closes the card first, then scrolls to the section without a hash change (a hash change would reset the roster filters).
     const methods = event.target.closest?.("[data-methods]");
     if (methods) event.preventDefault();
     if (event.target === dialog || event.target.closest("[data-close]")) dialog.close();
     if (methods) document.getElementById("gv-methods")?.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"});
-  });
+  }, {signal});
   dialog.addEventListener("close", () => {
     if (state.group) {
       state = {...state, group: ""};
       syncHash();
     }
-  });
+  }, {signal});
   window.addEventListener("hashchange", () => {
     state = {...DEFAULT_STATE, ...parseHash(location.hash)};
     syncControls();
     renderResults();
     if (state.group && byId.has(state.group)) showCard(state.group);
     else if (dialog.open) dialog.close();
-  });
+  }, {signal});
 
   renderResults();
   if (state.group) showCard(state.group);
   syncHash();
+  return () => { abort.abort(); treeDispose?.(); dialog.close?.(); };
 }

@@ -163,6 +163,13 @@ check("markup: the progress, map and California blocks are present; the table ho
   assert.ok(markup.includes('role="img"'));
 });
 
+check("scoped panels can show coverage progress without a second coverage map", () => {
+  const markup = coverageMarkup({coverage, groups, world, showMap: false});
+  assert.ok(markup.includes("Progress by region"));
+  assert.ok(!markup.includes("Where the groups are"));
+  assert.ok(!markup.includes('class="gm-map"'));
+});
+
 check("plural: the noun is singular only for exactly one", () => {
   assert.equal(plural(1, "group"), "1 group");
   assert.equal(plural(0, "group"), "0 groups");

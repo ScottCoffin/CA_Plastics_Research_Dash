@@ -37,6 +37,8 @@ from atlas.groups.build import (  # noqa: E402
     GroupsBuildError,
     build_groups,
 )
+from atlas.groups.schema import load_taxonomy  # noqa: E402
+from atlas.groups.scope import build_scope_payload, scoped_records  # noqa: E402
 
 GROUPS_DIR = ROOT / "site" / "data" / "global" / "groups"
 ROSTER_PATH = GROUPS_DIR / "roster.json"
@@ -224,13 +226,88 @@ def build_outputs(roster: dict[str, Any], curation_dir: Path) -> dict[str, bytes
     # A group removed from the roster after it was paired or reviewed keeps its curated rows
     # (the audit trail) but no longer counts toward the precision card (CG-7b).
     kept_ids = {record.get("group_id") for record in kept}
-    return build_groups(
+    outputs = build_groups(
         {**roster, "records": kept},
         submissions,
         name_corrections=names,
         double_tags=[r for r in load_double_tags(curation_dir) if r.get("group_id") in kept_ids],
         reviews=[r for r in load_reviews(curation_dir) if r.get("group_id") in kept_ids],
     )
+    explore = json.loads((ROOT / "site/data/global/explore.json").read_text(encoding="utf-8"))
+    countries = {item["iso"]: item for item in explore["countries"]}
+    groups_doc = json.loads(outputs["groups.json"])
+    records = groups_doc["groups"]
+    vocab = load_taxonomy()
+    scopes = []
+
+    def add_scope(
+        key: str,
+        kind: str,
+        label: str,
+        parent: str | None,
+        selected: list[dict[str, Any]],
+        iso: str | None = None,
+    ) -> None:
+        ids = {item["group_id"] for item in selected}
+        derived = build_scope_payload(
+            selected,
+            [r for r in records if r["group_id"] in ids],
+            roster["retrieved_at"],
+            vocab,
+        )
+        scopes.append(
+            {
+                "key": key,
+                "kind": kind,
+                "label": label,
+                "parent": parent,
+                **({"iso": iso} if iso else {}),
+                "group_ids": sorted(ids),
+                **derived,
+            }
+        )
+
+    add_scope("world", "world", "World", None, records)
+    by_continent: dict[str, set[str]] = {}
+    for iso, item in countries.items():
+        by_continent.setdefault(item["continent"], set()).add(iso)
+    for continent, isos in sorted(by_continent.items()):
+        selected = scoped_records(records, countries=isos)
+        add_scope(f"continent:{continent}", "continent", continent, "world", selected)
+    for iso, item in sorted(countries.items()):
+        selected = scoped_records(records, countries={iso})
+        add_scope(
+            f"country:{iso}",
+            "country",
+            item["name"],
+            f"continent:{item['continent']}",
+            selected,
+            iso,
+        )
+    # Regional views come from the existing registry; Norway and Belgium are country-only
+    # evidence, while the California adapter additionally requires its explicit subnational place.
+    from atlas.regions.registry import load_registry
+
+    registry = load_registry()
+    for region in registry.regions:
+        if region.slug not in {"california", "norway", "belgium"}:
+            continue
+        if region.slug == "california":
+            selected = scoped_records(records, countries={"US"}, explicit_place="US-CA")
+            parent = "country:US"
+            iso = "US"
+        else:
+            iso = region.predicate.country_codes[0]
+            selected = scoped_records(records, countries={iso})
+            parent = f"country:{iso}"
+        add_scope(f"region:{region.slug}", "region", region.name, parent, selected, iso)
+    outputs["scopes.json"] = (
+        json.dumps(
+            {"schema": "cg-scopes-v1", "scopes": scopes}, ensure_ascii=False, indent=2
+        ).encode("utf-8")
+        + b"\n"
+    )
+    return outputs
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -251,7 +328,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.check:
         stale = [
             name
-            for name in OUTPUT_FILES
+            for name in (*OUTPUT_FILES, "scopes.json")
             if not (GROUPS_DIR / name).exists() or (GROUPS_DIR / name).read_bytes() != outputs[name]
         ]
         if stale:
@@ -261,7 +338,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     GROUPS_DIR.mkdir(parents=True, exist_ok=True)
-    for name in OUTPUT_FILES:
+    for name in (*OUTPUT_FILES, "scopes.json"):
         (GROUPS_DIR / name).write_bytes(outputs[name])
     print(f"OK: wrote {len(outputs)} files to {GROUPS_DIR}")
     return 0
