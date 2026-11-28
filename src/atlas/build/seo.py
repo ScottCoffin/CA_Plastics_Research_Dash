@@ -54,55 +54,55 @@ LASTMOD = re.compile(r"\d{4}-\d{2}-\d{2}")
 # Atlas tokens (framework/src/design/tokens.css, VD-11). tests/test_vd11_classic_pages.py
 # checks that these hex values match that file. Fonts are self-hosted at the site root, so
 # the page never requests a font or stylesheet from another host.
-_DISPLAY_STACK = (
-    '"Barlow Semi Condensed", "Segoe UI Semibold", system-ui, -apple-system, "Segoe UI", Roboto,'
-    ' "Helvetica Neue", sans-serif'
-)
-_BODY_STACK = (
-    'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif'
-)
-_UNICODE_RANGE = (
-    "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,"
-    "U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
-)
-
-
-def _font_face(weight: int, name: str) -> str:
-    return (
-        '@font-face{font-family:"Barlow Semi Condensed";font-style:normal;'
-        f"font-weight:{weight};font-display:swap;"
-        f'src:url("/assets/fonts/BarlowSemiCondensed-{name}-latin.woff2") format("woff2");'
-        f"unicode-range:{_UNICODE_RANGE}}}"
-    )
-
-
+_DISPLAY_STACK = '"Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+_BODY_STACK = '"Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 CSS = "\n".join(
     [
-        _font_face(600, "SemiBold"),
-        _font_face(700, "Bold"),
         ":root{color-scheme:light}",
-        "body{margin:0;line-height:1.6;color:#1f1d1a;background:#ece7dc;"
+        "body{margin:0;line-height:1.6;color:var(--pv-ink);background:var(--pv-ground);"
         f"font-family:{_BODY_STACK}}}",
         ".wrap{max-width:760px;margin:0 auto;padding:16px}",
-        "header.wrap{max-width:none;padding:0;background:#141311;color:#f6f3ec}",
+        "header.wrap{max-width:none;padding:0;background:var(--pv-ground);color:var(--pv-ink)}",
         "header.wrap p{max-width:760px;margin:0 auto;padding:12px 16px;"
         f"font-family:{_DISPLAY_STACK};font-weight:700}}",
-        "header.wrap a{color:#f6f3ec;text-decoration:none}",
-        "header.wrap a:focus-visible{outline-color:#f6dcd5}",
+        "header.wrap a{color:var(--pv-ink);text-decoration:none}",
+        "header.wrap a:focus-visible{outline-color:var(--pv-coral-ink)}",
         f"h1{{font-family:{_DISPLAY_STACK};font-size:clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem);"
-        "font-weight:700;line-height:1.05;color:#141311;margin:.3em 0;text-wrap:balance}",
+        "font-weight:700;line-height:1.05;color:var(--pv-ink);margin:.3em 0;text-wrap:balance}",
         f"h2{{font-family:{_DISPLAY_STACK};font-size:1.375rem;font-weight:700;"
-        "line-height:1.2;color:#141311;margin:1.4em 0 .4em}",
-        "a{color:#23305e}",
-        "a:focus-visible{outline:3px solid #c4361c;outline-offset:2px}",
-        ".muted{color:#4b463e;font-size:.95rem}",
+        "line-height:1.2;color:var(--pv-ink);margin:1.4em 0 .4em}",
+        "a{color:var(--pv-coral-ink)}",
+        "a:focus-visible{outline:3px solid var(--pv-coral-ink);outline-offset:2px}",
+        ".muted{color:var(--pv-ink-2);font-size:.95rem}",
         ".cta{display:inline-block;margin:.6em 0;padding:.6em 1em;border-radius:8px;",
-        "  background:#23305e;color:#f6f3ec;font-weight:600;text-decoration:none}",
+        "  background:var(--pv-ink);color:var(--pv-on-dark);font-weight:600;text-decoration:none}",
         ".skip{position:absolute;left:-999px}",
-        ".skip:focus{left:8px;top:8px;background:#f6f3ec;padding:4px 8px}",
-        "footer.wrap{margin-top:24px;border-top:1px solid #d8d3c5}",
+        ".skip:focus{left:8px;top:8px;background:var(--pv-paper);padding:4px 8px}",
+        "footer.wrap{margin-top:24px;border-top:1px solid var(--pv-line)}",
         "li{margin:.3em 0}",
     ]
+)
+
+_PLV_MARK = (
+    '<svg class="plv-mark" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">'
+    '<circle cx="13" cy="13" r="5"/><g>'
+    '<line x1="20.60" y1="13.00" x2="23.40" y2="13.00"/>'
+    '<line x1="20.02" y1="15.91" x2="23.72" y2="17.44"/>'
+    '<line x1="18.37" y1="18.37" x2="20.35" y2="20.35"/>'
+    '<line x1="15.91" y1="20.02" x2="17.44" y2="23.72"/>'
+    '<line x1="13.00" y1="20.60" x2="13.00" y2="23.40"/>'
+    '<line x1="10.09" y1="20.02" x2="8.56" y2="23.72"/>'
+    '<line x1="7.63" y1="18.37" x2="5.65" y2="20.35"/>'
+    '<line x1="5.98" y1="15.91" x2="2.28" y2="17.44"/>'
+    '<line x1="5.40" y1="13.00" x2="2.60" y2="13.00"/>'
+    '<line x1="5.98" y1="10.09" x2="2.28" y2="8.56"/>'
+    '<line x1="7.63" y1="7.63" x2="5.65" y2="5.65"/>'
+    '<line x1="10.09" y1="5.98" x2="8.56" y2="2.28"/>'
+    '<line x1="13.00" y1="5.40" x2="13.00" y2="2.60"/>'
+    '<line x1="15.91" y1="5.98" x2="17.44" y2="2.28"/>'
+    '<line x1="18.37" y1="7.63" x2="20.35" y2="5.65"/>'
+    '<line x1="20.02" y1="10.09" x2="23.72" y2="8.56"/>'
+    "</g></svg>"
 )
 
 
@@ -215,6 +215,7 @@ def _json_ld(data: dict[str, Any]) -> str:
 
 def _page(
     *,
+    base: str = DEFAULT_BASE_URL,
     title: str,
     description: str,
     canonical: str,
@@ -242,8 +243,9 @@ def _page(
         '<meta name="twitter:card" content="summary">',
         f'<script type="application/ld+json">{_json_ld(schema)}</script>',
         f"<style>{CSS}</style>",
+        f'<link rel="stylesheet" href="{esc(base)}/assets/pv-profile.css">',
         "</head>",
-        "<body>",
+        '<body class="seo-profile">',
         body,
         "</body>",
         "</html>",
@@ -255,8 +257,10 @@ def _page(
 def _chrome_top(base: str) -> list[str]:
     return [
         '<a class="skip" href="#main">Skip to content</a>',
-        f'<header class="wrap"><p><a href="{esc(base)}{REGION_PATH}/">'
-        f"{esc(ATLAS_NAME)}</a></p></header>",
+        f'<header class="wrap"><p><a class="plv-brand" href="{esc(base)}" '
+        f'aria-label="Plastiverse Live home">{_PLV_MARK}'
+        '<span class="plv-wm" aria-hidden="true">PLASTIVERSE <b>LIVE</b></span>'
+        f"</a></p></header>",
         '<main class="wrap" id="main">',
     ]
 
@@ -265,7 +269,11 @@ def _chrome_bottom(base: str) -> list[str]:
     return [
         f'<p><a href="{esc(base)}{REGION_PATH}/">Back to the {esc(ATLAS_NAME)}</a></p>',
         "</main>",
-        f'<footer class="wrap muted"><p>{esc(DISCLAIMER)}</p></footer>',
+        '<footer class="page-footer"><div class="footer-inner">'
+        f'<img class="footer-logo" src="{esc(base)}/assets/landing/logo_282.webp" '
+        'width="282" height="282" '
+        'alt="Plastiverse Live: From Pollution to Progress">'
+        f'<p class="footer-copy">{esc(DISCLAIMER)}</p></div></footer>',
     ]
 
 
@@ -377,6 +385,7 @@ def _expert_page(
     if topics:
         schema["knowsAbout"] = topics
     return _page(
+        base=base,
         title=f"{name} — plastics researcher | {ATLAS_NAME}",
         description=description,
         canonical=url,
@@ -491,6 +500,7 @@ def _institution_page(
     if hosted:
         schema["subOrganization"] = [_sub_organization(n, base) for n in hosted]
     return _page(
+        base=base,
         title=f"{name} — plastics research | {ATLAS_NAME}",
         description=description,
         canonical=url,

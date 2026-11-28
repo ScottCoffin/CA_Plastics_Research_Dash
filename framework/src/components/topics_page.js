@@ -134,7 +134,7 @@ function renderShareTable(root, series) {
   for (const tag of series.tags) for (const row of tag.by_year || []) yearSet.add(row.year);
   const allYears = [...yearSet].sort((a, b) => a - b);
   const partial = new Set(series.tags.flatMap((tag) => (tag.by_year || []).filter((row) => row.partial).map((row) => row.year)));
-  const wrap = el("div", {class: "tp-scroll", tabindex: "0", role: "region", "aria-label": "Scrollable table"});
+  const wrap = el("div", {class: "tp-scroll", tabindex: "0", role: "region", "aria-label": "Share by year table"});
   const table = el("table", {class: "tp-table"});
   table.append(el("caption", {}, "Share of plastic-related California works by topic and year"));
   const head = el("tr");
@@ -162,7 +162,7 @@ function renderTopicList(root, series, bursts) {
   const section = el("section", {class: "tp-block", "aria-labelledby": "topics-list"});
   section.append(el("h2", {id: "topics-list"}, "Topics: accuracy and rising screen"));
   const flags = flaggedTags(bursts);
-  const wrap = el("div", {class: "tp-scroll", tabindex: "0", role: "region", "aria-label": "Scrollable table"});
+  const wrap = el("div", {class: "tp-scroll", tabindex: "0", role: "region", "aria-label": "Topic ranking table"});
   const table = el("table", {class: "tp-table"});
   table.append(el("caption", {}, "Each topic with its accuracy state and rising screen result"));
   const head = el("tr");
@@ -215,7 +215,7 @@ function renderPairs(root, series) {
     ["phi", "Phi"],
     ["status", "Status"],
   ];
-  const wrap = el("div", {class: "tp-scroll", tabindex: "0", role: "region", "aria-label": "Scrollable table"});
+  const wrap = el("div", {class: "tp-scroll", tabindex: "0", role: "region", "aria-label": "Topic co-occurrence table"});
   const table = el("table", {class: "tp-table tp-sortable"});
   table.append(el("caption", {}, "Topic pairs in complete years, all label sources"));
   const head = el("tr");
@@ -286,7 +286,7 @@ function renderLens(root, series) {
       body.append(tr);
     }
     table.append(body);
-    const lensWrap = el("div", {class: "tp-scroll", tabindex: "0", role: "region", "aria-label": "Scrollable table"});
+    const lensWrap = el("div", {class: "tp-scroll", tabindex: "0", role: "region", "aria-label": "Topic lenses table"});
     lensWrap.append(table);
     section.append(lensWrap);
   }

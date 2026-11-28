@@ -120,6 +120,7 @@ function atlasHeader({title, path}) {
 }
 
 const REGION_SHELLS = {
+  california: {label: "California", path: "california", routes: PAGE_GROUPS.flatMap(({pages}) => pages.map(({name, path}) => [name, path.slice("/california/".length)]))},
   norway: {label: "Norway", path: "norway", routes: [
     ["Authors", "authors"], ["Institutions", "institutions"], ["Network", "network"],
     ["Topics", "topics"], ["Evidence", "evidence"], ["Search", "search"],
@@ -134,7 +135,7 @@ function regionShell(path) {
   const normalized = path.replace(/^\/+/, "");
   const slug = normalized.split("/")[0];
   const region = REGION_SHELLS[slug];
-  if (!region) return null;
+  if (!region || (slug === "california" && !normalized.startsWith("california/"))) return null;
   const routeLinks = region.routes.map(([label, route]) =>
     `<li><a href="./${region.path}/${route}"${normalized === `${region.path}/${route}` ? ' aria-current="page"' : ""}>${label}</a></li>`
   ).join("");
@@ -165,8 +166,11 @@ function regionFooter({path}) {
     '<li><a href="./california/about#get-updates">Get updates</a></li>' +
     '<li><a href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction" rel="external">Report a correction</a></li></ul></nav>';
   const {region, routeLinks} = shell;
+  const californiaLinks = region.path === "california"
+    ? '<li><a href="./california/about#how-to-cite">How to cite</a></li><li><a href="./california/about#get-updates">Get updates</a></li><li><a href="mailto:theplastiverse@gmail.com?subject=Atlas%20data%20correction" rel="external">Report a correction</a></li>'
+    : "";
   return `<div class="pv-region-footer"><div class="pv-region-footer-brand"><a href="./">Plastiverse Live</a><img src="./assets/landing/logo_564.webp" width="282" height="247" alt="Plastiverse Live logo: scattered plastic fragments flow into a bright node and a network of research" loading="lazy"><span>${region.label} research atlas</span></div>
-<nav aria-label="${region.label} footer pages"><ul>${routeLinks}</ul></nav>
+<nav aria-label="${region.label} footer pages"><ul>${routeLinks}${californiaLinks}</ul></nav>
 <nav aria-label="Main site footer"><ul><li><a href="./explore">Explore all regions</a></li><li><a href="./groups">Community groups</a></li><li><a href="./ambassadors">Become an ambassador</a></li></ul></nav>
 <p>Created by <a href="https://scottcoff.in" rel="noreferrer">Scott Coffin</a>.</p></div>`;
 }

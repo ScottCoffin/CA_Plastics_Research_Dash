@@ -16,10 +16,10 @@ title: Overview
 <li><a class="overview-door" data-plane="money" href="./funding" style="--c: var(--atlas-task-money)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">See funding</strong><small class="overview-door__count" data-count-group><span data-count="awards" data-suffix=" awards"></span></small></a></li>
 <li><a class="overview-door" data-plane="evidence" href="./evidence" style="--c: var(--atlas-task-evidence)"><span class="overview-door__swatch" aria-hidden="true"></span><strong class="overview-door__task">Explore the evidence</strong><small class="overview-door__count" data-count-group><span data-count="plastic_works" data-suffix=" works"></span></small></a></li>
 </ul>
-<form class="overview-search" action="./search" method="get" role="search" data-atlas-site-search>
+<form class="overview-search" action="./search" method="get" role="search" aria-label="Search from the California overview" data-atlas-site-search>
 <label class="visually-hidden" for="overview-q">Search the whole Atlas</label>
 <p class="overview-caps" aria-hidden="true">Or search the whole Atlas</p>
-<div class="overview-search__field"><input id="overview-q" type="search" name="q" placeholder="Authors, institutions, topics, funders" autocomplete="off"><button type="submit">Search</button></div>
+<div class="overview-search__field"><input id="overview-q" type="search" name="q" placeholder="Authors, topics, places" autocomplete="off"><button type="submit">Search</button></div>
 </form>
 </div>
 <figure class="overview-figure" id="overview-figure" aria-label="California drawn from four planes: researchers, monitoring, funding and evidence">

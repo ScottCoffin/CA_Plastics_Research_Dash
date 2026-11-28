@@ -7,21 +7,24 @@
 // The header's former "Classic site" link was removed at the H16 switch (app at the root).
 // Pages with their own frontmatter head lose the config head, so addGlobalHead restores the
 // font faces, favicon and site search (VD-19) there too.
-import {readdirSync, readFileSync, statSync, writeFileSync} from "node:fs";
+import {copyFileSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync} from "node:fs";
 import {dirname, join, relative, sep} from "node:path";
 import {fileURLToPath} from "node:url";
 import frameworkConfig from "../observablehq.config.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = join(here, "..", process.env.ATLAS_FW_OUT || "dist");
+const siteAssets = join(here, "..", "..", "site", "assets");
+const REGION_SHELL_ASSETS = ["fonts/SchibstedGrotesk-Variable-latin.woff2", "fonts/MartianMono-Regular-latin.woff2"];
 const FONT_PRELOAD =
   '<link rel="preload" href="./assets/fonts/Archivo-Variable-latin.woff2" ' +
   'as="font" type="font/woff2" crossorigin>';
 // Matches the preload at any depth (./ for root pages, ../ after nestAssets), so fixHtml is idempotent.
 const FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["'](?:\.\.?\/)+assets\/fonts\/Archivo-Variable-latin\.woff2["'])[^>]*>\s*/gi;
-const LANDING_FONT_PRELOAD =
+const SCHIBSTED_FONT_PRELOAD =
   '<link rel="preload" href="./assets/fonts/SchibstedGrotesk-Variable-latin.woff2" ' +
   'as="font" type="font/woff2" crossorigin>';
+const REGION_FONT_PRELOAD_PATTERN = /<link\b(?=[^>]*\bhref=["'](?:\.\.?\/)+assets\/fonts\/SchibstedGrotesk-Variable-latin\.woff2["'])[^>]*>\s*/gi;
 const SKIP_LINK ='<a class="atlas-skip-link" href="#observablehq-main">Skip to content</a>';
 const CONFIG_HEAD = frameworkConfig.head;
 const GLOBAL_FONT_STYLE = CONFIG_HEAD.match(/<style\b[\s\S]*?<\/style>/i)?.[0];
@@ -52,14 +55,20 @@ if (!GLOBAL_FONT_STYLE || !FAVICON_LINK.test(GLOBAL_FAVICON) || !GLOBAL_SEARCH_S
 export function fixHtml(html, page) {
   // Add stable page metadata first; fixTemplate then owns the final head ordering.
   let fixed = fixShell(fixTemplate(addGlobalHead(addDescription(html, page))), page);
-  if (/^(norway|belgium)\/(authors|institutions|institution|network|topics|evidence|search)$/.test(page) && !fixed.includes("region_shell.css")) {
+  const regionalPage = /^(california|norway|belgium)\/(index|authors|institutions|institution|network|topics|evidence|search|monitoring|funding|policy|resources|about|glossary|quality|styleguide)$/.test(page);
+  if (regionalPage && !fixed.includes("region_shell.css")) {
     fixed = fixed.replace("</head>", '<link rel="stylesheet" href="./assets/region_shell.css">\n</head>');
+  }
+  if (regionalPage) {
+    fixed = fixed.replace(FONT_PRELOAD_PATTERN, "");
+    if (!REGION_FONT_PRELOAD_PATTERN.test(fixed)) fixed = fixed.replace("</head>", `${SCHIBSTED_FONT_PRELOAD}\n</head>`);
+    REGION_FONT_PRELOAD_PATTERN.lastIndex = 0;
   }
   // The landing page sets its own faces and never uses Archivo: preload its text face instead
   // (its LCP is header text, so the face must not queue behind the story's images).
   if (page === "index") {
     fixed = fixed.replace(FONT_PRELOAD_PATTERN, "");
-    if (!fixed.includes(LANDING_FONT_PRELOAD)) fixed = fixed.replace("</head>", `${LANDING_FONT_PRELOAD}\n</head>`);
+    if (!fixed.includes(SCHIBSTED_FONT_PRELOAD)) fixed = fixed.replace("</head>", `${SCHIBSTED_FONT_PRELOAD}\n</head>`);
   }
   return nestAssets(fixed, page);
 }
@@ -70,6 +79,15 @@ export function nestAssets(html, page) {
   const depth = page.split("/").length - 1;
   if (!depth) return html;
   return html.replace(/(["'(])\.\/assets\//g, `$1${"../".repeat(depth)}assets/`);
+}
+
+// Keep site/assets as the only source of truth, but put the shell stylesheet and its local fonts in
+// Framework's standalone output. Assembly overlays the same files from site/, so deployed URLs match.
+export function copyRegionalShellAssets(output = dist) {
+  const assets = join(output, "assets");
+  mkdirSync(join(assets, "fonts"), {recursive: true});
+  copyFileSync(join(siteAssets, "region_shell.css"), join(assets, "region_shell.css"));
+  for (const asset of REGION_SHELL_ASSETS) copyFileSync(join(siteAssets, asset), join(assets, asset));
 }
 
 function addGlobalHead(html) {
@@ -176,6 +194,7 @@ function walk(dir, out = []) {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  copyRegionalShellAssets(dist);
   let changed = 0;
   for (const file of walk(dist)) {
     const before = readFileSync(file, "utf8");

@@ -64,20 +64,13 @@ def _rules(body: str) -> list[tuple[list[str], str]]:
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
-def test_header_has_four_group_buttons_with_disclosure_attributes() -> None:
+def test_header_has_global_brand_and_california_menu() -> None:
     header = _header("/california/authors")
 
-    for name in GROUPS:
-        matches = [m for m in BUTTON.finditer(header) if m.group(2) == name]
-        assert len(matches) == 1, f"expected one {name} button in the header"
-        attrs = _attributes(matches[0].group(1))
-        assert attrs["type"] == "button"
-        assert attrs["aria-expanded"] == "false"
-        panel_id = attrs["aria-controls"]
-        assert panel_id == f"atlas-topnav-{name.lower()}"
-        assert re.search(
-            rf'<div class="atlas-topnav__panel" id="{re.escape(panel_id)}" hidden>', header
-        ), f"{name} panel must exist and start hidden"
+    assert 'class="pv-region-brand" href="./"' in header
+    assert 'aria-label="California header pages"' in header
+    assert 'href="./california/authors" aria-current="page">Authors</a>' in header
+    assert 'aria-label="Plastiverse Live"' in header
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
@@ -90,29 +83,17 @@ def test_header_has_four_group_buttons_with_disclosure_attributes() -> None:
         ("/california/about", "Reference", "About"),
     ],
 )
-def test_top_nav_marks_the_current_link_and_its_group(path: str, group: str, label: str) -> None:
+def test_region_menu_marks_current_page(path: str, group: str, label: str) -> None:
     header = _header(path)
-
-    current = re.findall(
-        r'<a class="atlas-topnav__link" href="[^"]+"( aria-current="page")?>([^<]+)</a>', header
-    )
-    assert [text for aria, text in current if aria] == [label]
-    highlighted = [
-        m.group(2)
-        for m in BUTTON.finditer(header)
-        if "atlas-topnav__button--current" in _attributes(m.group(1)).get("class", "")
-    ]
-    assert highlighted == [group]
+    assert f'aria-current="page">{label}</a>' in header
+    assert 'href="./california/">California home</a>' in header
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
-def test_top_nav_script_handles_escape_focus_and_outside_clicks() -> None:
+def test_california_uses_native_disclosure_menu() -> None:
     header = _header("/california/authors")
-
-    assert '"Escape"' in header
-    assert "focusout" in header
-    assert ".focus()" in header
-    assert "panel.hidden" in header
+    assert '<details class="pv-region-menu">' in header
+    assert "<summary>Menu</summary>" in header
 
 
 def test_shell_css_hides_the_sidebar_above_52rem() -> None:
@@ -155,12 +136,8 @@ BUILD_OUT = os.environ.get("ATLAS_FW_OUT")
     not BUILD_OUT or not (FRAMEWORK / BUILD_OUT / "california" / "authors.html").is_file(),
     reason="set ATLAS_FW_OUT to a folder built by `npm run build` in framework/",
 )
-def test_built_pages_carry_the_four_group_buttons() -> None:
+def test_built_pages_carry_regional_shell() -> None:
     html = (FRAMEWORK / BUILD_OUT / "california" / "authors.html").read_text(encoding="utf-8")
-
-    for name in GROUPS:
-        pattern = (
-            r'<button [^>]*aria-expanded="false"[^>]*'
-            rf'aria-controls="atlas-topnav-{name.lower()}"[^>]*>{name}</button>'
-        )
-        assert re.search(pattern, html), f"built authors page is missing the {name} group button"
+    assert "pv-region-header" in html
+    assert "PLASTIVERSE" in html
+    assert "region_shell.css" in html

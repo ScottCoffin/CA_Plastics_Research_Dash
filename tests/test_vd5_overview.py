@@ -88,6 +88,46 @@ def test_hero_search_is_the_site_wide_search() -> None:
     assert "data-atlas-expert-search" not in config
 
 
+def test_overview_task_entry_points_precede_geography_and_use_shell_search_landmark() -> None:
+    page = INDEX.read_text(encoding="utf-8")
+    markup = _markup(page)
+
+    assert markup.index('class="overview-doors"') < markup.index('class="overview-search"')
+    assert markup.index('class="overview-search"') < markup.index('<figure class="overview-figure"')
+    assert (
+        'class="overview-search" action="./search" method="get" role="search" '
+        'aria-label="Search from the California overview" data-atlas-site-search>' in markup
+    )
+    assert 'placeholder="Authors, topics, places"' in markup
+
+
+def test_region_shell_maps_atlas_roles_to_the_global_visual_tokens() -> None:
+    shell = (ROOT / "site" / "assets" / "region_shell.css").read_text(encoding="utf-8")
+
+    for role, token in (
+        ("--atlas-page", "--pv-ground"),
+        ("--atlas-ink", "--pv-ink"),
+        ("--atlas-muted", "--pv-ink-2"),
+        ("--atlas-line", "--pv-line"),
+        ("--atlas-surface", "--pv-paper"),
+        ("--atlas-font-display", "--pv-sans"),
+        ("--atlas-font-body", "--pv-sans"),
+        ("--atlas-font-mono", "--pv-mono"),
+    ):
+        assert f"{role}: var({token})" in shell
+    assert "body:has(.pv-region-header)" in shell
+    assert "--pv-coral-ink" in shell
+    assert "--pv-coral-ink" in shell[shell.index(".pv-region-header :focus-visible") :]
+    assert "body:has(.pv-region-header) #observablehq-main .atlas-badge--accent" in shell
+    for selector in (
+        "#observablehq-sidebar",
+        "#observablehq-sidebar-toggle",
+        "#observablehq-sidebar-backdrop",
+        ".atlas-menu-button",
+    ):
+        assert f"body:has(.pv-region-header) {selector}" in shell
+
+
 def test_counts_are_live_placeholders_not_typed_numbers() -> None:
     page = INDEX.read_text(encoding="utf-8")
     markup = _markup(page)

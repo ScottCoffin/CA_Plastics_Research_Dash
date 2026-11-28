@@ -14,7 +14,80 @@
 }
 
 body:has(.pv-region-header) { margin: 0; background: var(--pv-ground); color: var(--pv-ink); font-family: var(--pv-sans); }
+/* Regional Atlas feature pages use the same PV visual roles as the global app. These aliases are
+   scoped by the opt-in region shell so classic and unwrapped routes keep their own styling. */
+body:has(.pv-region-header) {
+  --atlas-ink: var(--pv-ink);
+  --atlas-text: var(--pv-ink);
+  --atlas-muted: var(--pv-ink-2);
+  --atlas-faint: var(--pv-ink-2);
+  --atlas-boundary: var(--pv-line);
+  --atlas-line: var(--pv-line);
+  --atlas-page: var(--pv-ground);
+  --atlas-surface: var(--pv-paper);
+  --atlas-sunken: var(--pv-wash);
+  --atlas-brand: var(--pv-ink);
+  --atlas-brand-strong: var(--pv-ink);
+  --atlas-brand-action: var(--pv-ink);
+  --atlas-brand-tint: var(--pv-wash);
+  --atlas-brand-wash: var(--pv-wash);
+  --atlas-on-brand: var(--pv-paper);
+  --atlas-on-brand-muted: var(--pv-on-dark);
+  --atlas-accent: var(--pv-coral-ink);
+  --atlas-accent-strong: var(--pv-coral-ink);
+  --atlas-accent-wash: var(--pv-wash);
+  --atlas-caution-wash: var(--pv-sun);
+  --atlas-caution-ink: var(--pv-ink);
+  --atlas-caution-line: var(--pv-gold);
+  --atlas-good-wash: var(--pv-mint);
+  --atlas-good-ink: var(--pv-ink);
+  --atlas-vermilion: var(--pv-coral);
+  --atlas-indigo: var(--pv-slate);
+  --atlas-gold: var(--pv-gold);
+  --atlas-plane-ink: var(--pv-ink);
+  --atlas-task-people: var(--pv-slate);
+  --atlas-task-water: var(--pv-slate-2);
+  --atlas-task-money: var(--pv-gold);
+  --atlas-task-evidence: var(--pv-ink);
+  --atlas-head-band: var(--pv-ground);
+  --atlas-chart-grid: var(--pv-grid);
+  --atlas-map-water: var(--pv-slate-2);
+  --atlas-font-display: var(--pv-sans);
+  --atlas-font-body: var(--pv-sans);
+  --atlas-font-mono: var(--pv-mono);
+  --atlas-display-stretch: normal;
+  --atlas-radius-control: 0;
+  --atlas-radius-card: 0;
+  --atlas-shadow-raised: none;
+  --atlas-shadow-float: 0 6px 20px rgba(23, 38, 61, .18);
+  --atlas-rule-strong: 1px solid var(--pv-line);
+  --theme-foreground: var(--pv-ink);
+  --theme-foreground-focus: var(--pv-coral-ink);
+  --theme-background-a: var(--pv-paper);
+  --theme-background: var(--pv-ground);
+  --theme-background-alt: var(--pv-paper);
+  --theme-foreground-muted: var(--pv-ink-2);
+  --theme-foreground-faint: var(--pv-ink-2);
+  --theme-foreground-faintest: var(--pv-line);
+  --serif: var(--pv-sans);
+  --sans-serif: var(--pv-sans);
+  --monospace: var(--pv-mono);
+  accent-color: var(--pv-coral-ink);
+  caret-color: var(--pv-coral-ink);
+  color-scheme: light;
+}
 body:has(.pv-region-header) #observablehq-center { max-width: none; margin: 0; padding: 0; }
+body:has(.pv-region-header) #observablehq-sidebar,
+body:has(.pv-region-header) #observablehq-sidebar-toggle,
+body:has(.pv-region-header) #observablehq-sidebar-backdrop,
+body:has(.pv-region-header) .atlas-menu-button { display: none !important; }
+body:has(.pv-region-header) #observablehq-sidebar-toggle:checked ~ #observablehq-center,
+body:has(.pv-region-header) #observablehq-sidebar-toggle:indeterminate ~ #observablehq-center {
+  --observablehq-inset-left: 0px;
+  --observablehq-inset-right: 0px;
+  padding-left: 0;
+  padding-right: 0;
+}
 body:has(.pv-region-header) #observablehq-header {
   left: 0; right: 0; height: auto; min-height: 60px; margin: 0; padding: 0 var(--pv-gut);
   border: 0; border-bottom: 1px solid var(--pv-line); background: var(--pv-ground); box-shadow: none;
@@ -38,6 +111,7 @@ body:has(.pv-region-header) #observablehq-header {
 .pv-region-menu summary::after { width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; content: ""; transform: rotate(45deg) translateY(-2px); }
 .pv-region-menu[open] summary, .pv-region-menu summary:hover, .pv-region-search button:hover { background: var(--pv-ink); color: var(--pv-paper); }
 .pv-region-menu nav { position: absolute; top: calc(100% + 8px); left: 0; z-index: 10; width: 220px; padding: 5px; border: 1px solid var(--pv-ink); background: var(--pv-paper); }
+.pv-region-menu nav { max-height: min(70vh, 560px); overflow-y: auto; overscroll-behavior: contain; }
 .pv-region-menu ul, .pv-region-footer ul { margin: 0; padding: 0; list-style: none; }
 .pv-region-menu nav a { display: block; padding: 10px; }
 .pv-region-menu nav a:hover, .pv-region-menu nav a[aria-current] { background: var(--pv-wash); }
@@ -65,6 +139,25 @@ body:has(.pv-region-header) #observablehq-main h1 { font-size: clamp(2rem, 1.4re
 body:has(.pv-region-header) #observablehq-main .atlas-page-head__lead { color: var(--pv-ink-2); }
 body:has(.pv-region-header) #observablehq-main a { color: var(--pv-coral-ink); }
 body:has(.pv-region-header) #observablehq-main :focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 3px; }
+/* Keep component link and status colors legible against their own regional surfaces. */
+body:has(.pv-region-header) #observablehq-main .overview-clock a,
+body:has(.pv-region-header) #observablehq-main .overview-clock a:visited { color: var(--pv-mint); }
+body:has(.pv-region-header) #observablehq-main .overview-notes h3 { color: var(--pv-on-dark); }
+body:has(.pv-region-header) #observablehq-main #experts-root .now-badge {
+  border-color: var(--pv-coral-ink);
+  color: var(--pv-ink);
+}
+body:has(.pv-region-header) #observablehq-main .atlas-badge--accent {
+  border-color: var(--pv-coral-ink);
+  color: var(--pv-ink);
+}
+body:has(.pv-region-header) #observablehq-main #institutions-root .institution-type-chip[aria-pressed="true"] {
+  border-color: var(--pv-ink);
+  background: var(--pv-ink);
+  color: var(--pv-paper);
+}
+body:has(.pv-region-header) #observablehq-main #evidence-root .ev-aux-note > a,
+body:has(.pv-region-header) #observablehq-main #evidence-root .ev-recent-list a { color: var(--pv-ink); }
 body:has(.pv-region-header) #observablehq-footer { max-width: none; margin: 0; padding: 48px var(--pv-gut) max(48px, env(safe-area-inset-bottom)); background: var(--pv-night); color: var(--pv-on-dark); font: 400 14px/1.6 var(--pv-sans); }
 .pv-region-footer { max-width: 1344px; display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 24px 48px; margin: auto; }
 .pv-region-footer a { color: var(--pv-mint); text-decoration: underline; text-underline-offset: 3px; }

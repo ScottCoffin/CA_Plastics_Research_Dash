@@ -124,8 +124,14 @@ the first region's sources.
 
 ## GP-1 contract (California regression gate)
 
-Every GP slice must leave the California atlas unchanged. `scripts/check_gp1_contract.py` checks the
-recorded contract in `config/gp1_california_contract.json` (schema `gp1-v1`, recorded 2026-11-26):
+Every GP slice must preserve California's functionality and data contract. The historical byte-for-byte
+California appearance requirement remains in force for GP slices. VD-SM is the explicit owner-approved
+exception: California adopts the Plastiverse Live shell, global typography and colors, footer, and profile
+appearance, so its rendered appearance and shell markup intentionally change. This exception does not waive
+route, content, feature, link, data-path, interaction, runtime, or overflow checks. The GP-1 route/data contract
+does not change for VD-SM; run it without `--record`. Do not weaken the GP checks for later
+slices. `scripts/check_gp1_contract.py` checks the recorded contract in
+`config/gp1_california_contract.json` (schema `gp1-v1`, recorded 2026-11-26):
 
 - **Routes**: the 16 Framework pages in `framework/src/california/*.md` plus the classic `california/expert.html`
   must exist in the assembled site.
@@ -142,13 +148,13 @@ Before and after each GP slice (about 1 minute; needs Node for the build and Pla
 ```bash
 cd framework && npm run build && cd ..
 py -3.14 scripts/assemble_site.py --site site --dist framework/dist --out scratch/gp1_site
-py -3.14 scripts/check_gp1_contract.py --site scratch/gp1_site --screenshots scratch/gp1_shots
+py -3.14 scripts/check_gp1_contract.py --site scratch/gp1_site
 ```
 
-Run the first command before the slice to confirm the baseline passes, and again after it. Compare the
-screenshots in `scratch/gp1_shots/` (`<page>-1440.png` and `<page>-390.png`) by eye. `--links-only` runs the
-link graph alone without a browser. `--record` rewrites the contract; use it only for an intended California
-change, and say why in the commit. A failing run exits 1 and lists each problem. The unit tests are in
+Run the acceptance check after each slice. `--screenshots <dir>` is optional for a side-by-side visual
+review; when supplied, compare `<page>-1440.png` and `<page>-390.png` by eye. `--links-only` runs the
+link graph alone without a browser. VD-SM does not change the GP-1 route/data contract and does not
+require re-recording it. A failing run exits 1 and lists each problem. The unit tests are in
 `tests/test_gp1_contract.py` and do not need a browser.
 
 Baseline (2026-11-26, the assembled site from the working tree at commit 484a07ad): 17 routes; 257,265 links

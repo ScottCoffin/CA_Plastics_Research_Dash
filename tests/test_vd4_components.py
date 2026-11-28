@@ -87,7 +87,7 @@ def test_postbuild_restores_global_head_for_styleguide_once() -> None:
         len(
             re.findall(
                 r'<link\b(?=[^>]*\brel="preload")'
-                r'(?=[^>]*\bhref="\.\.\/assets\/fonts\/Archivo-Variable-latin\.woff2")[^>]*>',
+                r'(?=[^>]*\bhref="\.\.\/assets\/fonts\/SchibstedGrotesk-Variable-latin\.woff2")[^>]*>',
                 once,
             )
         )

@@ -136,6 +136,8 @@ def test_heatmap_cells_are_toggle_buttons_with_pressed_state() -> None:
     # Chart cells are buttons (Enter and Space come with the native button); a selected cell reports
     # aria-pressed.
     assert '<button type="button" class="fv-cell" data-heat="' in viz
+    assert "Visible count: ${n}." in viz
+    assert '${visibleLabel ? `${visibleLabel}. ` : ""}${text}' in viz
     assert 'aria-pressed="${pressed ? "true" : "false"}"' in viz
     assert "button.fv-cell[data-heat]" in viz
     # Each heatmap has a selection line with a Clear control; its Table pane stays plain numbers.

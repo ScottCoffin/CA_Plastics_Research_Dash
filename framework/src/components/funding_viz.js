@@ -202,11 +202,12 @@ export function sankeySvg(graph, width, {T = null, amount = false, focusId = nul
     const first = n.col === 0, last = n.col === graph.ncols - 1;
     const cy = n.y + n.h / 2;
     const prev = lastBottom.has(n.col) ? lastBottom.get(n.col) : -1e9;
-    let label = "";
+    let labelMarkup = "", visibleLabel = "";
     if (cy - 7 >= prev) {
       const maxc = first ? 17 : last ? 24 : 26;
       const name = n.name.length > maxc ? `${n.name.slice(0, maxc - 1)}…` : n.name;
-      label = `<text class="fv-label" x="${first ? n.x - 6 : n.x + n.w + 6}" y="${(cy + 4).toFixed(1)}" text-anchor="${first ? "end" : "start"}">${esc(name)}</text>`;
+      visibleLabel = name;
+      labelMarkup = `<text class="fv-label" x="${first ? n.x - 6 : n.x + n.w + 6}" y="${(cy + 4).toFixed(1)}" text-anchor="${first ? "end" : "start"}">${esc(name)}</text>`;
       lastBottom.set(n.col, cy + 7);
     }
     const share = ((n.value / total) * 100).toFixed(1);
@@ -214,10 +215,10 @@ export function sankeySvg(graph, width, {T = null, amount = false, focusId = nul
       + (n.amountW ? `; ${fmtUsd(n.amountW)} reported (${AMOUNT_CAVEAT})` : "");
     const focused = n.id === focusId;
     const action = focused ? "Selected. Press Enter to show all flows." : "Press Enter to show only flows through this block.";
-    const ariaLabel = `${n.name} (${kindLabel(n)}): ${fmtInt(n.count)} awards. ${action}`;
+    const ariaLabel = `${visibleLabel ? `${visibleLabel}. ` : ""}${text}. ${action}`;
     parts.push(`<g class="fv-node${focused ? " is-focus" : ""}" data-id="${esc(n.id)}" tabindex="0" role="button" `
       + `aria-pressed="${focused ? "true" : "false"}" aria-label="${esc(ariaLabel)}"><title>${esc(text)}</title>`
-      + `<rect x="${n.x}" y="${n.y.toFixed(2)}" width="${n.w}" height="${n.h.toFixed(2)}" fill="${nodeFill(n, T)}"></rect>${label}</g>`);
+      + `<rect x="${n.x}" y="${n.y.toFixed(2)}" width="${n.w}" height="${n.h.toFixed(2)}" fill="${nodeFill(n, T)}"></rect>${labelMarkup}</g>`);
   });
   parts.push("</g></svg>");
   return parts.join("");
@@ -308,7 +309,7 @@ function heatCell(n, max, {plain = false, kind = "", row = "", col = "", label =
   if (plain) return `<td class="num">${n}</td>`;
   const fill = heatFill(n, max);
   const style = `background:${fill};color:${inkFor(fill)}`;
-  const name = `${label}: ${n ? `${n} ${n === 1 ? "award" : "awards"}` : "no awards"}`;
+  const name = `${label}: ${n ? `${n} ${n === 1 ? "award" : "awards"}` : "no awards"}. Visible count: ${n}.`;
   if (!n) return `<td><button type="button" class="fv-cell" style="${style}" disabled aria-label="${esc(name)}">${n}</button></td>`;
   return `<td><button type="button" class="fv-cell" data-heat="${kind}" data-row="${esc(row)}" data-col="${esc(col)}" `
     + `aria-pressed="${pressed ? "true" : "false"}" style="${style}" aria-label="${esc(name)}">`

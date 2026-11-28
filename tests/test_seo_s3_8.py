@@ -183,6 +183,17 @@ def test_head_tags_are_unique_and_canonical_is_absolute(built) -> None:
     assert len(html_module.unescape(description.group(1))) <= 160
 
 
+def test_seo_brand_assets_follow_a_prefixed_deployment_base(tmp_path: Path) -> None:
+    site = _make_site(tmp_path)
+    prefix = "https://example.org/research"
+    build_site(site, prefix)
+    html = (site / "california" / "experts" / "A1" / "index.html").read_text(encoding="utf-8")
+    assert f'href="{prefix}/assets/pv-profile.css"' in html
+    assert f'src="{prefix}/assets/landing/logo_282.webp"' in html
+    assert f'href="{prefix}" aria-label="Plastiverse Live home"' in html
+    assert "fonts/SchibstedGrotesk" not in html
+
+
 def test_expert_page_links_app_and_works_without_leaking_data(built) -> None:
     site, _ = built
     html = (site / "california" / "experts" / "A1" / "index.html").read_text(encoding="utf-8")

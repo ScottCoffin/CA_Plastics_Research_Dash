@@ -1,4 +1,4 @@
-"""VD-11: the classic expert profile and the generated SEO pages use the Atlas tokens and fonts.
+"""VD-11: classic expert profiles and generated SEO pages use the shared Plastiverse tokens.
 
 Presentation only. The colour values are copied from framework/src/design/tokens.css, so these
 tests fail when either side drifts. The hash-routing script in site/expert.html must not change;
@@ -19,10 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TOKENS = ROOT / "framework" / "src" / "design" / "tokens.css"
 EXPERT = ROOT / "site" / "california" / "expert.html"
 SITE = ROOT / "site"
-FONT_FILES = {
-    600: "BarlowSemiCondensed-SemiBold-latin.woff2",
-    700: "BarlowSemiCondensed-Bold-latin.woff2",
-}
+PROFILE_CSS = ROOT / "site" / "assets" / "pv-profile.css"
 # Re-pinned by UX-32: the metrics <small> note moved inside its <dd> (axe definition-list).
 # Re-pinned by PLAT-1 path move: the page moved to site/california/, so its data, asset and
 # list links are relative to that folder (../data/, authors#author=, institution#inst=).
@@ -38,91 +35,88 @@ REMOTE = re.compile(
     re.IGNORECASE,
 )
 
-# expert.html :root variable -> tokens.css variable (main roles).
+# expert.html compatibility aliases -> canonical Plastiverse token variables.
 EXPERT_ROLES = {
-    "--ink": "--atlas-ink",
-    "--text": "--atlas-text",
-    "--muted": "--atlas-muted",
-    "--boundary": "--atlas-boundary",
-    "--brand": "--atlas-brand",
-    "--brand-dark": "--atlas-brand-strong",
-    "--surface": "--atlas-surface",
-    "--canvas": "--atlas-page",
-    "--line": "--atlas-line",
-    "--focus": "--atlas-accent",
+    "--ink": "--pv-ink",
+    "--text": "--pv-ink",
+    "--muted": "--pv-ink-2",
+    "--boundary": "--pv-slate",
+    "--brand": "--pv-coral-ink",
+    "--brand-dark": "--pv-night",
+    "--surface": "--pv-paper",
+    "--canvas": "--pv-ground",
+    "--line": "--pv-line",
+    "--focus": "--pv-coral-ink",
 }
-# Token colours the SEO stylesheet must use for its main roles.
-SEO_ROLES = (
-    "--atlas-text",
-    "--atlas-page",
-    "--atlas-ink",
-    "--atlas-brand",
-    "--atlas-brand-strong",
-    "--atlas-brand-action",
-    "--atlas-accent",
-    "--atlas-muted",
-    "--atlas-line",
-    "--atlas-surface",
-)
 
 
-def _tokens() -> dict[str, str]:
+def _pv_tokens() -> dict[str, str]:
     text = TOKENS.read_text(encoding="utf-8")
-    pairs = re.findall(r"(--atlas-[a-z-]+):\s*(#[0-9a-fA-F]{6});", text)
+    pairs = re.findall(r"^\s*(--pv-[a-z0-9-]+):\s*(#[0-9a-fA-F]{6});", text, re.MULTILINE)
     return {name: value.lower() for name, value in pairs}
 
 
 def _normalise(css: str) -> str:
-    return re.sub(r"\s*:\s*", ":", re.sub(r"\s+", " ", css))
+    collapsed = re.sub(r"\s+", " ", css)
+    return re.sub(r"\s*([:;])\s*", r"\1", collapsed)
 
 
-def _check_font_faces(css: str, url_prefix: str, page_dir: Path) -> None:
-    faces: dict[int, str] = {}
+def _check_font_faces(css: str, page_dir: Path) -> None:
+    faces: dict[str, str] = {}
     for body in FACE.findall(css):
-        match = re.search(r"font-weight:\s*(\d+)", body)
+        match = re.search(r'font-family:\s*"([^"]+)"', body)
         assert match, body
-        faces[int(match.group(1))] = _normalise(body)
-    assert set(faces) == set(FONT_FILES), f"expected 600 and 700 faces, got {sorted(faces)}"
-    for weight, body in faces.items():
-        filename = FONT_FILES[weight]
-        assert 'font-family:"Barlow Semi Condensed"' in body
-        assert "font-display:swap" in body
-        assert f'url("{url_prefix}{filename}") format("woff2")' in body
-        assert (page_dir / url_prefix.lstrip("/") / filename).is_file(), filename
+        faces[match.group(1)] = _normalise(body)
+    expected = {
+        "Schibsted Grotesk": 'font-family:"Schibsted Grotesk";font-style:normal;'
+        "font-weight:400 700;font-display:swap;"
+        'src:url("./fonts/SchibstedGrotesk-Variable-latin.woff2") format("woff2")',
+        "Martian Mono": 'font-family:"Martian Mono";font-style:normal;font-weight:400;'
+        'font-display:swap;src:url("./fonts/MartianMono-Regular-latin.woff2") format("woff2")',
+    }
+    assert set(faces) == set(expected), f"unexpected self-hosted faces: {sorted(faces)}"
+    fonts_dir = page_dir / "assets" / "fonts"
+    for family, declaration in expected.items():
+        assert declaration in faces[family]
+    assert (fonts_dir / "SchibstedGrotesk-Variable-latin.woff2").is_file()
+    assert (fonts_dir / "MartianMono-Regular-latin.woff2").is_file()
 
 
 def test_expert_root_palette_matches_tokens() -> None:
     html = EXPERT.read_text(encoding="utf-8")
     root = re.search(r":root \{([^}]*)\}", html)
     assert root, "expert.html needs a :root palette"
-    values = {
-        name: value.lower()
-        for name, value in re.findall(r"(--[a-z-]+):\s*(#[0-9a-fA-F]{6});", root.group(1))
-    }
-    tokens = _tokens()
+    aliases = dict(re.findall(r"(--[a-z-]+):\s*var\((--pv-[a-z0-9-]+)\);", root.group(1)))
     for local, token in EXPERT_ROLES.items():
-        assert values.get(local) == tokens[token], f"{local} should equal {token} ({tokens[token]})"
-    assert '--font-display: "Barlow Semi Condensed"' in root.group(1)
+        assert aliases.get(local) == token, f"{local} should alias {token}"
+    shared = PROFILE_CSS.read_text(encoding="utf-8")
+    block = re.search(r":root \{([^}]*)\}", shared)
+    assert block, "shared profile CSS embeds canonical --pv tokens"
+    declared = {
+        name: value.lower()
+        for name, value in re.findall(r"(--pv-[a-z0-9-]+):\s*(#[0-9a-fA-F]{6});", block.group(1))
+    }
+    assert declared == _pv_tokens()
+    assert "--font-display: var(--pv-sans)" in root.group(1)
 
 
 def test_seo_stylesheet_uses_only_token_colours() -> None:
-    tokens = _tokens()
-    used = set(HEX.findall(SEO_CSS.lower()))
-    assert used <= set(tokens.values()), f"non-token colours: {sorted(used - set(tokens.values()))}"
-    for name in SEO_ROLES:
-        assert tokens[name] in used, f"SEO CSS should use {name} ({tokens[name]})"
+    shared = PROFILE_CSS.read_text(encoding="utf-8")
+    comments_removed = re.sub(r"/\*.*?\*/", "", shared, flags=re.DOTALL)
+    used = set(HEX.findall(comments_removed.lower()))
+    assert used == set(_pv_tokens().values())
+    assert "var(--pv-" in SEO_CSS
 
 
-def test_expert_page_declares_local_barlow_faces_with_swap() -> None:
+def test_expert_page_loads_shared_self_hosted_faces_with_swap() -> None:
     html = EXPERT.read_text(encoding="utf-8")
-    style = html.split("<style>", 1)[1].split("</style>", 1)[0]
-    _check_font_faces(style, "../assets/fonts/", EXPERT.parent)
-    assert "font-family: var(--font-display);" in style
-    assert "--font-display:" in style
+    assert '<link rel="stylesheet" href="../assets/pv-profile.css">' in html
+    _check_font_faces(PROFILE_CSS.read_text(encoding="utf-8"), SITE)
 
 
-def test_seo_stylesheet_declares_root_relative_barlow_faces() -> None:
-    _check_font_faces(SEO_CSS, "/assets/fonts/", SITE)
+def test_seo_stylesheet_loads_shared_self_hosted_faces() -> None:
+    assert "var(--pv-" in SEO_CSS
+    _check_font_faces(PROFILE_CSS.read_text(encoding="utf-8"), SITE)
 
 
 def test_no_remote_fonts_or_stylesheets() -> None:
@@ -175,9 +169,14 @@ def test_generated_seo_page_carries_tokens_and_keeps_profile_link(tmp_path: Path
     style = re.search(r"<style>(.*?)</style>", page, re.DOTALL)
     assert style, "the generated page keeps one inline stylesheet"
     assert style.group(1) == SEO_CSS
-    _check_font_faces(style.group(1), "/assets/fonts/", SITE)
+    _check_font_faces(PROFILE_CSS.read_text(encoding="utf-8"), SITE)
+    assert 'href="https://plastiverse.live/assets/pv-profile.css"' in page
     assert not REMOTE.search(style.group(1))
     assert 'href="https://plastiverse.live/california/expert.html#author=A1"' in page
+    assert '<span class="plv-wm" aria-hidden="true">PLASTIVERSE <b>LIVE</b></span>' in page
+    assert "<script" in page and page.count("<script") == 1
+    assert '<script type="application/ld+json">' in page
+    assert "<script src=" not in page
     assert "<h1>Ana Lee</h1>" in page
 
 

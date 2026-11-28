@@ -56,18 +56,68 @@ def test_sidebar_groups_header_search_and_footer_contract() -> None:
         {"name": "Quality", "path": "/california/quality"},
     ]
     assert "Plastiverse Live" in data["home"]
-    assert "CA Plastics Research Atlas" in data["header"]
-    assert 'aria-label="Toggle navigation menu"' in data["header"]
+    assert 'class="pv-region-brand" href="./"' in data["header"]
+    assert "PLASTIVERSE <b>LIVE</b>" in data["header"]
+    assert 'aria-label="California header pages"' in data["header"]
+    assert 'aria-current="page">Authors</span>' in data["header"]
     assert 'name="q"' in data["header"]
     assert 'action="./search"' in data["header"]
     assert "data-atlas-site-search" in data["header"]
-    assert "Search the Atlas" in data["header"]
+    assert "Search California" in data["header"]
     assert 'href="./california/about#how-to-cite">How to cite</a>' in data["footer"]
     # NOTIFY-AB: the footer links to the About page's Get updates section.
     assert '<li><a href="./california/about#get-updates">Get updates</a></li>' in data["footer"]
     # Owner 2026-11-17: the footer credits the creator; the former disclaimer was removed.
     assert 'Created by <a href="https://scottcoff.in"' in data["footer"]
     assert "not an official OEHHA" not in data["footer"]
+    assert 'class="pv-region-footer"' in data["footer"]
+    assert "Plastiverse Live logo" in data["footer"]
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
+def test_regional_shell_head_uses_global_font_preload_and_assets() -> None:
+    module_uri = (FRAMEWORK / "scripts" / "postbuild.mjs").resolve().as_uri()
+    script = (
+        f"import({json.dumps(module_uri)}).then(m => {{"
+        f"process.stdout.write(m.fixHtml({json.dumps(SAMPLE)},'california/authors'));"
+        "})"
+    )
+    result = subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        cwd=FRAMEWORK,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    html = result.stdout
+    assert "region_shell.css" in html
+    assert 'href="../assets/fonts/SchibstedGrotesk-Variable-latin.woff2"' in html
+    assert re.search(r'<link\b(?=[^>]*rel="preload")(?=[^>]*Archivo-Variable-latin)', html) is None
+    assert 'rel="icon" href="data:image/svg+xml' in html
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
+def test_postbuild_copies_canonical_regional_shell_and_fonts(tmp_path: Path) -> None:
+    module_uri = (FRAMEWORK / "scripts" / "postbuild.mjs").resolve().as_uri()
+    script = (
+        f"import({json.dumps(module_uri)}).then(m => "
+        f"m.copyRegionalShellAssets({json.dumps(str(tmp_path))}))"
+    )
+    subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        cwd=FRAMEWORK,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assets = tmp_path / "assets"
+    assert (assets / "region_shell.css").read_bytes() == (
+        ROOT / "site/assets/region_shell.css"
+    ).read_bytes()
+    for font in ("SchibstedGrotesk-Variable-latin.woff2", "MartianMono-Regular-latin.woff2"):
+        assert (assets / "fonts" / font).read_bytes() == (
+            ROOT / "site/assets/fonts" / font
+        ).read_bytes()
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")

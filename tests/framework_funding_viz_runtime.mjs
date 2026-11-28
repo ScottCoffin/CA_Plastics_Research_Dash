@@ -223,6 +223,10 @@ for (const topN of [3, 15]) {
   assert.match(svg, /role="group" aria-labelledby="fv-sankey-title"/);
   assert.equal(svg.includes('role="img"'), false, "the Sankey is a group, so its focusable blocks stay reachable");
   assert.equal((svg.match(/class="fv-link"/g) || []).length, graph.links.length);
+  for (const match of svg.matchAll(/<g class="fv-node[^\"]*" data-id="[^\"]+"[^>]*aria-label="([^\"]*)">([\s\S]*?)<\/g>/g)) {
+    const visible = match[2].match(/<text class="fv-label"[^>]*>([\s\S]*?)<\/text>/)?.[1];
+    if (visible) assert.ok(match[1].startsWith(visible), `accessible name starts with visible Sankey label ${visible}`);
+  }
   const table = sankeyTableHtml(graph, false);
   assert.equal((table.match(/<tr>/g) || []).length, graph.links.length + 1, "one table row per ribbon plus the header");
 
@@ -397,7 +401,7 @@ for (const topN of [3, 15]) {
   assert.match(html, /data-heat="topic-year"/);
   const empty = heat.rows.flatMap((r) => r.counts).filter((n) => n === 0).length;
   assert.equal((html.match(/ disabled aria-label=/g) || []).length, empty, "empty cells are disabled");
-  if (empty) assert.match(html, /: no awards"/, "an empty cell is announced as having no awards");
+  if (empty) assert.match(html, /: no awards\. Visible count: 0\.\">0<\/button>/, "an empty cell announces its status and visible count");
   assert.equal(heatTableHtml(heat, T, {plain: true}).includes("<button"), false, "the table pane is plain numbers");
 
   const matrix = buildSectorTopic(V, T);

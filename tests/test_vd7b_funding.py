@@ -222,4 +222,6 @@ def test_page_has_no_facet_disclosures_and_keeps_the_volume_caption_once() -> No
     assert 'class="facet' not in page
     assert page.count('class="data-note volume-caption"') == 1
     assert 'id="grants-basis"' in page
+    assert 'id="grants-basis" role="region"' in page
+    assert 'aria-label="Amount basis by source table, horizontally scrollable" tabindex="0"' in page
     assert "Per-source subtotals" in _read(SCRIPT)

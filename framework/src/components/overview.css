@@ -545,6 +545,199 @@
   }
 }
 
+/* VD-SM: the Atlas entry page follows the live global app inside the regional shell. */
+body:has(.pv-region-header) .atlas-overview {
+  --overview-rule: var(--pv-line);
+  color: var(--pv-ink);
+  font-family: var(--pv-sans);
+}
+
+body:has(.pv-region-header) .atlas-overview :focus-visible {
+  outline: 2px solid var(--pv-coral-ink);
+  outline-offset: 3px;
+}
+
+body:has(.pv-region-header) .overview-hero,
+body:has(.pv-region-header) .overview-band,
+body:has(.pv-region-header) .overview-clock,
+body:has(.pv-region-header) .overview-engine {
+  clip-path: none;
+  box-shadow: none;
+}
+
+body:has(.pv-region-header) .overview-hero,
+body:has(.pv-region-header) .overview-band,
+body:has(.pv-region-header) .overview-engine {
+  background: var(--pv-ground);
+}
+
+body:has(.pv-region-header) .overview-hero {
+  padding-block: 0 32px;
+}
+
+body:has(.pv-region-header) .overview-hero__grid {
+  grid-template-columns: minmax(0, 1.2fr) minmax(240px, .8fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+
+body:has(.pv-region-header) #observablehq-main .overview-title {
+  max-width: 16ch;
+  font: 400 clamp(36px, 4.4vw, 60px)/1.03 var(--pv-sans);
+  letter-spacing: -.03em;
+}
+
+body:has(.pv-region-header) #observablehq-main .overview-lead {
+  max-width: 62ch;
+  margin-top: 16px;
+  color: var(--pv-ink-2);
+  font-size: 17px;
+}
+
+body:has(.pv-region-header) .overview-doors {
+  margin-top: 28px;
+  border-top: 1px solid var(--pv-line);
+}
+
+body:has(.pv-region-header) #observablehq-main .overview-door,
+body:has(.pv-region-header) #observablehq-main .overview-door:hover,
+body:has(.pv-region-header) #observablehq-main .overview-door:focus-visible {
+  grid-template-columns: 12px minmax(0, 1fr) minmax(7rem, max-content);
+  gap: 14px;
+  min-height: 56px;
+  padding: 8px 0;
+  border-color: var(--pv-line);
+  background: transparent;
+  color: var(--pv-ink);
+}
+
+body:has(.pv-region-header) .overview-door__swatch {
+  width: 8px;
+  height: 28px;
+}
+
+body:has(.pv-region-header) .overview-door__task {
+  font: 400 17px/1.4 var(--pv-sans);
+  letter-spacing: 0;
+}
+
+body:has(.pv-region-header) .overview-door__count {
+  color: var(--pv-ink-2);
+  font: 400 12px/1.5 var(--pv-mono);
+}
+
+body:has(.pv-region-header) .overview-door::after { display: none; }
+body:has(.pv-region-header) .overview-door:hover .overview-door__task,
+body:has(.pv-region-header) .overview-door:focus-visible .overview-door__task { text-decoration: underline; text-underline-offset: 4px; }
+
+body:has(.pv-region-header) .overview-search {
+  max-width: 620px;
+  margin-top: 24px;
+}
+
+body:has(.pv-region-header) .overview-caps {
+  color: var(--pv-ink-2);
+  font: 600 13px/1.45 var(--pv-sans);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+body:has(.pv-region-header) .overview-search input {
+  min-height: 44px;
+  border: 1px solid var(--pv-line);
+  border-radius: 0;
+  background: var(--pv-paper);
+  font: 400 15px/1.3 var(--pv-sans);
+}
+
+body:has(.pv-region-header) .overview-search input::placeholder { color: var(--pv-ink-2); }
+body:has(.pv-region-header) .overview-search input:focus-visible { outline: 2px solid var(--pv-coral-ink); outline-offset: 2px; }
+
+body:has(.pv-region-header) .overview-search button {
+  min-height: 44px;
+  border: 1px solid var(--pv-ink);
+  background: var(--pv-ink);
+  color: var(--pv-paper);
+  font: 400 15px/1.2 var(--pv-sans);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+body:has(.pv-region-header) .overview-search button:hover { background: var(--pv-coral-ink); }
+body:has(.pv-region-header) .overview-figure { align-self: center; width: 100%; max-width: 390px; justify-self: end; }
+body:has(.pv-region-header) .overview-figure figcaption { writing-mode: horizontal-tb; color: var(--pv-ink-2); }
+body:has(.pv-region-header) .overview-plane[data-plane="people"] { fill: var(--pv-slate); }
+body:has(.pv-region-header) .overview-plane[data-plane="water"] { fill: var(--pv-mint); }
+body:has(.pv-region-header) .overview-plane[data-plane="money"] { fill: var(--pv-gold); }
+body:has(.pv-region-header) .overview-plane[data-plane="evidence"] { fill: var(--pv-ink); }
+body:has(.pv-region-header) .overview-figure.has-lit .overview-plane:not(.is-lit) { fill: var(--pv-line); }
+body:has(.pv-region-header) .overview-figure .overview-piece[data-plane="people"] > path { fill: var(--pv-coral); }
+
+body:has(.pv-region-header) .overview-band,
+body:has(.pv-region-header) .overview-engine,
+body:has(.pv-region-header) .overview-clock {
+  padding-block: 32px;
+  border-top: 1px solid var(--pv-line);
+}
+
+body:has(.pv-region-header) .overview-band::before { display: none; }
+body:has(.pv-region-header) .overview-band__swatch { min-height: 0; height: 130px; background: var(--pv-paper); }
+body:has(.pv-region-header) #observablehq-main .overview-band__title,
+body:has(.pv-region-header) #observablehq-main .overview-engine__title,
+body:has(.pv-region-header) #observablehq-main .overview-clock__title {
+  color: var(--pv-ink);
+  font: 400 clamp(24px, 2.2vw, 32px)/1.1 var(--pv-sans);
+  letter-spacing: -.03em;
+}
+
+body:has(.pv-region-header) #observablehq-main .overview-band__text,
+body:has(.pv-region-header) #observablehq-main .overview-engine__lead { color: var(--pv-ink-2); }
+body:has(.pv-region-header) .overview-facts b { color: var(--pv-ink); font: 400 12px/1.5 var(--pv-mono); }
+body:has(.pv-region-header) .overview-facts span { color: var(--pv-ink-2); font-size: 14px; }
+body:has(.pv-region-header) #observablehq-main .overview-go a,
+body:has(.pv-region-header) #observablehq-main .overview-go a:visited,
+body:has(.pv-region-header) #observablehq-main .overview-go a:hover {
+  min-height: 40px;
+  border: 1px solid var(--pv-ink);
+  color: var(--pv-ink);
+  font-weight: 400;
+}
+
+body:has(.pv-region-header) #observablehq-main .overview-go a:hover { background: var(--pv-ink); color: var(--pv-paper); }
+body:has(.pv-region-header) #observablehq-main .overview-go a::after { border-left-color: currentColor; }
+body:has(.pv-region-header) .overview-clock { background: var(--pv-night); color: var(--pv-on-dark); }
+body:has(.pv-region-header) #observablehq-main .overview-clock__title { color: var(--pv-on-dark); }
+body:has(.pv-region-header) #observablehq-main .overview-clock__text,
+body:has(.pv-region-header) #observablehq-main .overview-notes p { color: var(--pv-credit); }
+body:has(.pv-region-header) .overview-chart text { fill: var(--pv-on-dark); font-family: var(--pv-sans); }
+body:has(.pv-region-header) .overview-notes { border-color: var(--pv-on-dark-line); }
+body:has(.pv-region-header) .overview-notes h3 { color: var(--pv-on-dark); font: 500 17px/1.3 var(--pv-sans); }
+body:has(.pv-region-header) .overview-clock a,
+body:has(.pv-region-header) .overview-clock a:visited { color: var(--pv-mint); }
+body:has(.pv-region-header) .overview-pipe { border: 1px solid var(--pv-line); border-top-width: 1px; background: var(--pv-paper); transition: none; }
+body:has(.pv-region-header) .overview-pipe:hover,
+body:has(.pv-region-header) .overview-pipe:focus-within { box-shadow: none; transform: none; }
+body:has(.pv-region-header) .overview-pipe__n { background: var(--c); color: var(--pv-ink); font: 500 14px/1 var(--pv-sans); }
+body:has(.pv-region-header) #observablehq-main .overview-pipe h3 { font: 500 17px/1.3 var(--pv-sans); }
+body:has(.pv-region-header) #observablehq-main .overview-pipe .overview-pipe__also { color: var(--pv-ink-2); }
+
+@media (max-width: 64rem) {
+  body:has(.pv-region-header) .overview-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(220px, .7fr); }
+}
+
+@media (max-width: 42rem) {
+  body:has(.pv-region-header) .overview-hero__grid { grid-template-columns: minmax(0, 1fr); }
+  body:has(.pv-region-header) .overview-figure { order: 1; justify-self: start; max-width: 240px; margin-top: 24px; }
+  body:has(.pv-region-header) .overview-figure figcaption { display: block; }
+}
+
+@media (max-width: 26rem) {
+  body:has(.pv-region-header) #observablehq-main .overview-door,
+  body:has(.pv-region-header) #observablehq-main .overview-door:hover,
+  body:has(.pv-region-header) #observablehq-main .overview-door:focus-visible { grid-template-columns: 8px minmax(0, 1fr); padding-right: 0; }
+  body:has(.pv-region-header) .overview-door__count { grid-column: 2; text-align: left; }
+}
+
 /* VD-27 (owner 2026-11-17): what the pipeline does, before the schedule. Four numbered task planes. */
 .overview-engine {
   padding-block: clamp(2.25rem, 5vw, 4rem);

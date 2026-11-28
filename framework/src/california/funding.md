@@ -67,7 +67,7 @@ title: Funding
 <nav class="grants-pager" aria-label="Award table pages"><button id="grants-prev" class="atlas-btn atlas-btn--secondary" type="button">Previous</button><span id="grants-page"></span><button id="grants-next" class="atlas-btn atlas-btn--secondary" type="button">Next</button><label for="grants-page-size">Rows per page (default 50) <select id="grants-page-size" class="atlas-select"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option></select></label></nav>
 </section>
 
-<section aria-labelledby="grants-basis-heading" class="grants-basis"><h2 id="grants-basis-heading">Amount basis by source</h2><div id="grants-basis"></div></section>
+<section aria-labelledby="grants-basis-heading" class="grants-basis"><h2 id="grants-basis-heading">Amount basis by source</h2><div id="grants-basis" role="region" aria-label="Amount basis by source table, horizontally scrollable" tabindex="0"></div></section>
 
 <section aria-labelledby="open-calls-heading" class="open-calls">
 <h2 id="open-calls-heading">Open funding calls</h2>

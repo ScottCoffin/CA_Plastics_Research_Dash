@@ -1,31 +1,34 @@
-# Handoff — 2026-11-27 — GP-GROUPS
+# Handoff — 2026-11-28 — VD-SM
 
 ## Done
 
-- The `/groups` map comes first inside the Explore shell and shares its zoom and pan controls. Its geography ladder updates the roster, counts, coverage, tree, composition, flows and network. Related research links use the selected regional atlas. Chromium ran both the published roster and a populated synthetic fixture at 1440 and 390 px. GP-1 passed and all 5,002 assembled California route and data files matched the previous build.
-- Norway and Belgium feature pages use the Plastiverse Live shell and typography, local menu and search, and global footer styling. The site wordmark links home and the scope menu links to the regional pages. California route and data files matched the preceding checkpoint byte-for-byte. The global landing, Explore, groups, ambassadors and quality HTML matched as well.
-- The evidence heatmap selection keeps the count ramp and selected ring. Unselected counts and zero-count filter labels use opaque, contrasting ink. Chromium measured a minimum of 5.02:1 for enabled cells after selection and zero axe violations across both modes at 1440 and 390 px in California, Norway and Belgium. Keyboard selection and clear passed. California evidence styling changed with owner approval and its data files matched byte-for-byte.
-- `/norway/topics`, `/belgium/topics`, and regional search reuse the California renderer and builders. The topic denominator is unscreened query hits. The rising-share screen uses rule labels and institution checks. Search resolves to regional pages, author profiles, institutions and tag-filtered author lists.
-- `scripts/build_topics_json.py --region <slug> [--check]` and `scripts/build_search_index.py --region <slug> [--check]` emit the payloads from the committed region export. Both checks passed for both regions. See [region export design](../docs/GLOBAL_PARITY.md#3b-port-design-region-exports-in-the-california-schema-lead-2026-11-26).
-- GP-1 passed for all 17 California routes with 257,265 checked links and zero broken. All 4,993 assembled files in `california/` and `data/california/` matched the pre-change build byte-for-byte.
-- Chromium verified both regional topics and search routes at 1440 and 390 px with zero axe violations, JavaScript errors, HTTP errors or document overflow. Search loaded its own region's index.
-- Earlier port checkpoints cover institutions, author lists and profiles, networks, topic tags, works and evidence maps (GP-5/2/3/4/8/8b).
+- The owner lifted California's design freeze and made the global `--pv-*` colors, Schibsted Grotesk and Martian Mono canonical (ADR-ATLAS-PLATFORM-DESIGN-2026-11-27). The shared regional shell now covers California's research routes and styleguide, keeps its local route menu and region-aware search, and uses the black global-logo footer. Classic and SEO profile surfaces adopt the approved shared appearance.
+- California route, data, feature, link and interaction contracts remain intact. The adopted regional pages retain metadata and favicon; postbuild uses one idempotent Schibsted preload and copies the canonical regional CSS and its self-hosted fonts into `framework/dist/assets/` for AT-5 package validation. Site assembly overlays the same canonical `site/assets/` sources.
+- Funding Sankey names include the visible SVG label first and full title details; heatmap names include visible counts; `#grants-basis` is a named keyboard-focusable scroll region. The runtime fixture checks that each displayed Sankey label begins its accessible name.
+- Integrated GP-1 passed all 17 routes and checked 257,655 links with zero broken. AT-5 package/build checks passed; production-style SEO generation and checks passed for 2,688 author pages and 209 institutions. Selected global pages and 7,934 California/Norway/Belgium data files matched baseline. Whole-repository Ruff and Markdown link checks passed. VD-SM is complete.
 
-## State
+## State of the repo
 
-- Region export building reads the local global partition and raw cache. The GP-10a builders only require the committed region exports.
-- The committed California search index already reported stale at baseline. Fresh California outputs from the old and new index builders matched byte-for-byte. The published California index was preserved as required by GP-10a.
-- On this Windows checkout, the sandbox can report the ten Norway and Belgium bundle files as deleted and deny esbuild directory traversal. An approved local check confirmed the files are present and unchanged. Use the direct Python executable from [LESSONS.md](LESSONS.md) if the WindowsApps launcher is inaccessible.
-- Observable reports 16 pre-existing unresolved links in the unassembled build (feed paths and Norway/Belgium institutions references). GP-10a introduced zero additional warnings.
+- Build and assemble with `cd framework && npm run build && cd ..` and `py -3.14 scripts/assemble_site.py --site site --dist framework/dist --out scratch/vd_sm_site`.
+- Check the Observable package with `py -3.14 scripts/check_at5.py --dist dist`.
+- Run `py -3.14 scripts/check_gp1_contract.py --site scratch/vd_sm_site`; it passed for 17 routes and 257,655 links with zero broken. Keep California route, content, link, data-path, interaction, runtime and overflow checks active. The appearance exception is specific to VD-SM; later GP slices retain the historical California-preservation requirement. `--screenshots <dir>` is optional for side-by-side review; no GP-1 re-record is needed.
+- Chromium review covered California research routes, both evidence selection modes, classic/SEO profiles, and representative global pages at 1440 px and 390 px. AT-5 and SEO page generation/checks passed as above.
+- Focused Node checks and runtime fixture passed. Focused shell/Funding pytest passed with the built-page check enabled; Ruff lint/format and documentation links passed. Before pushing, run the strict clean-worktree full-suite gate and confirm the worktree is clean. After pushing, check hosted CI and the Pages deployment, then confirm the deployed site.
+- On this Windows checkout, if `py` is inaccessible, use `C:/Users/scoff/AppData/Local/Python/pythoncore-3.14-64/python.exe`; set pytest `--basetemp` outside the workspace. A local Observable build may fail when esbuild cannot traverse `../..` under the sandbox; the lead's assembled build is the integrated verification path.
 
-## Next checkpoints
+## Next task (suggested)
 
-1. VD-SM transitions the California Atlas to the main site's design. The owner lifted the California design freeze and confirmed the global typography and colors as the source. Apply Impeccable and the platform-wide app design in [DESIGN.md](../DESIGN.md). Delegate to Luna workers with Light effort.
+- Re-read TODO, owner direction and dependencies to choose the next checkpoint. Do not restart GP-10a or choose an arbitrary task.
 
-## Verification
+## Gotchas the next agent must know
 
-Build with `npm run build` in `framework`, then assemble with `scripts/assemble_site.py --site site --dist framework/dist --out scratch/<task>_site`. Run `scripts/check_gp1_contract.py --site scratch/<task>_site` and Chromium at 1440 and 390 px on the affected region routes. Inspect axe, page errors, HTTP errors, region data paths and overflow. Before pushing, run links, scaffolds, Ruff, `git diff --check`, and the full test suite with an external pytest `--basetemp` in a clean worktree.
+- GP-1's appearance exception is deliberate and applies only to VD-SM. Preserve the functional/data contract; keep historical California preservation for all other GP slices.
+- Preserve the global token values and self-hosted font files. California header search relies on `data-atlas-site-search` and its route pathname to select the California search index.
 
 ## Needs owner input
 
-See [HUMAN_TASKS.md](HUMAN_TASKS.md) for H39, H9, H2, H42 and H28. Every-country scale still depends on GX-1 and R2 (GX-3). H64 remains deferred until a budget exists.
+- Optional visual review H25 remains in the existing VD-12 workflow; it does not gate VD-SM. Other owner items remain in [HUMAN_TASKS.md](HUMAN_TASKS.md), including H39. H64 remains deferred until a budget exists.
+
+## Files that are large or unsafe to read whole
+
+- `site/data/` — use the specific region payload or builder/check command; do not bulk-read.
